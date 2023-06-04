@@ -23,7 +23,8 @@
     "type-check": "tsc",
     "dev": "vite",
     "preview": "vite preview",
-    "release": "npm run build && npm publish --access public"
+    "release": "npm run build && npm publish --access public",
+    "prepare": "husky install"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -39,6 +40,8 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.3.4",
+    "husky": "^8.0.0",
+    "lint-staged": "^13.2.2",
     "prettier": "^2.8.8",
     "typescript": "^5.0.2",
     "vite": "^4.3.9"
