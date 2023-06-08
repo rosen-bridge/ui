@@ -1,0 +1,47 @@
+image: node:18.14
+
+stages:
+  - installation
+  - build
+  - type_check
+  - lint
+
+installation:
+  stage: installation
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: push
+    paths:
+      - node_modules
+  script:
+    - npm ci
+
+build:
+  stage: build
+  cache:
+    - key: $CI_COMMIT_REF_NAME
+      policy: pull-push
+      paths:
+        - node_modules
+  script:
+    - npm run build
+
+type_check:
+  stage: type_check
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run type-check
+
+lint:
+  stage: lint
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run lint
