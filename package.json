@@ -5,12 +5,6 @@
     "apps/*",
     "packages/*"
   ],
-  "scripts": {
-    "prepare": "husky install",
-    "type-check": "npm run type-check --workspaces",
-    "prettify": "npm run prettify --workspaces",
-    "lint": "npm run prettify --workspaces"
-  },
   "devDependencies": {
     "husky": "^8.0.0",
     "lint-staged": "^13.2.2",

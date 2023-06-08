@@ -5,6 +5,6 @@ ui_kit:
   stage: triggers
   trigger:
     include: packages/ui-kit/.gitlab-ci.yml
-    rules:
-      - changes:
+  rules:
+    - changes:
         - packages/ui-kit/*
