@@ -1,5 +1,16 @@
 stages:
+  - installation
   - triggers
+
+installation:
+  stage: installation
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: push
+    paths:
+      - node_modules
+  script:
+    - npm ci
 
 ui_kit:
   stage: triggers
