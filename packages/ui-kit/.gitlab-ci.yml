@@ -12,6 +12,8 @@ build:
       policy: pull-push
       paths:
         - node_modules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   script:
     - npm run build --workspace=@rosen-bridge/ui-kit
 
@@ -22,6 +24,8 @@ type_check:
     policy: pull
     paths:
       - node_modules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   script:
     - npm run type-check --workspace=@rosen-bridge/ui-kit
 
@@ -32,5 +36,7 @@ lint:
     policy: pull
     paths:
       - node_modules
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "parent_pipeline"
   script:
     - npm run lint --workspace=@rosen-bridge/ui-kit
