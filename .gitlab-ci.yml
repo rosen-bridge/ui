@@ -24,7 +24,7 @@ build:
       paths:
         - node_modules
   script:
-    - npm run build
+    - npm run build --workspaces --if-present
 
 type_check:
   stage: type_check
@@ -34,7 +34,7 @@ type_check:
     paths:
       - node_modules
   script:
-    - npm run type-check
+    - npm run type-check --workspaces --if-present
 
 lint:
   stage: lint
@@ -44,4 +44,4 @@ lint:
     paths:
       - node_modules
   script:
-    - npm run lint
+    - npm run lint --workspaces --if-present
