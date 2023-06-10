@@ -2,7 +2,9 @@ image: node:18.14
 
 stages:
   - installation
-  - triggers
+  - build
+  - type_check
+  - lint
 
 installation:
   stage: installation
@@ -14,10 +16,32 @@ installation:
   script:
     - npm ci
 
-ui_kit:
-  stage: triggers
-  trigger:
-    include: packages/ui-kit/.gitlab-ci.yml
-  rules:
-    - changes:
-        - packages/ui-kit/*
+build:
+  stage: build
+  cache:
+    - key: $CI_COMMIT_REF_NAME
+      policy: pull-push
+      paths:
+        - node_modules
+  script:
+    - npm run build --workspaces --if-present
+
+type_check:
+  stage: type_check
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run type-check --workspaces --if-present
+
+lint:
+  stage: lint
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run lint --workspaces --if-present
