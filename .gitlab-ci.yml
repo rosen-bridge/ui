@@ -24,7 +24,7 @@ build:
       paths:
         - node_modules
   script:
-    - npm run build --workspaces --if-present
+    - npm run build --workspace packages --if-present
 
 type_check:
   stage: type_check
