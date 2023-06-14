@@ -1,12 +1,15 @@
-export const metadata = {
-  title: 'Watcher',
-  description: 'Rosen Bridge watcher app',
-};
+'use client';
+
+import ThemeProvider from './_theme/ThemeProvider';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ThemeProvider>
+          <main>{children}</main>
+        </ThemeProvider>
+      </body>
     </html>
   );
 };
