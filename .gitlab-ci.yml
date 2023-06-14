@@ -13,6 +13,8 @@ installation:
     policy: push
     paths:
       - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
   script:
     - npm ci
 
@@ -23,6 +25,9 @@ build:
       policy: pull-push
       paths:
         - node_modules
+        - apps/*/node_modules
+        - packages/*/node_modules
+        - packages/*/dist
   script:
     - npm run build --workspace packages --if-present
 
@@ -33,6 +38,9 @@ type_check:
     policy: pull
     paths:
       - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - packages/*/dist
   script:
     - npm run type-check --workspaces --if-present
 
