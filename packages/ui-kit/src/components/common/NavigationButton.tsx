@@ -29,11 +29,16 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
           ? theme.palette.primary.dark
           : theme.palette.secondary.dark,
       backgroundColor:
-        theme.palette.mode === 'light' ? '#fff' : theme.palette.secondary.light,
+        theme.palette.mode === 'light'
+          ? theme.palette.common.white
+          : theme.palette.secondary.light,
     },
   },
   [theme.breakpoints.down('tablet')]: {
-    color: theme.palette.mode === 'light' ? theme.palette.primary.dark : '#fff',
+    color:
+      theme.palette.mode === 'light'
+        ? theme.palette.primary.dark
+        : theme.palette.common.white,
     fontSize: 'xx-small',
     flexBasis: '20%',
     '& .MuiButton-startIcon': {
@@ -43,7 +48,9 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
     '&.active': {
       '& .MuiButton-startIcon': {
         color:
-          theme.palette.mode === 'light' ? theme.palette.primary.dark : '#fff',
+          theme.palette.mode === 'light'
+            ? theme.palette.primary.dark
+            : theme.palette.common.white,
         backgroundColor: 'transparent',
       },
     },
