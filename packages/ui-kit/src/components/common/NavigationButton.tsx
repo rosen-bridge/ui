@@ -64,6 +64,15 @@ interface NavButtonProps {
   isActive?: boolean;
 }
 
+/**
+ * @description renders a navigation button with styles and adopts based on screen size
+ *
+ * @property {string} label - button label
+ * @property {ReactNode} icon - the icon for the button
+ * @property {string} href - href property to set on the button
+ * @property {boolean} isActive - if true the component will be rendered in active state
+ */
+
 export const NavButton: FC<NavButtonProps> = (props) => {
   const { label, icon, isActive, href } = props;
 

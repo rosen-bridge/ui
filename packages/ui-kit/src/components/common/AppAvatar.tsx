@@ -26,6 +26,14 @@ interface AppAvatarProps {
   lightLogoPath: string;
 }
 
+/**
+ * @description renders brand logo and title and changes the logo in dark mode
+ *
+ * @param lightLogoPath - url to the light mode version of the logo
+ * @param darkLogoPath - url to the dark mode version of the logo
+ * @param title - the brand logo title to render under the logo
+ */
+
 export const AppAvatar: FC<AppAvatarProps> = (props) => {
   const { title, darkLogoPath, lightLogoPath } = props;
 
