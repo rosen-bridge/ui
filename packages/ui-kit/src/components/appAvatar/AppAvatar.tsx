@@ -4,7 +4,7 @@ import { Avatar, Typography } from '../base';
 
 import { styled } from '../../styling';
 
-import { useTheme, useIsMobile } from '../../hooks';
+import { useIsMobile, useIsDarkMode } from '../../hooks';
 
 const Brand = styled(Typography)(({ theme }) => ({
   color: theme.palette.mode === 'light' ? '#e5e5e5' : '#ff9b03',
@@ -29,15 +29,13 @@ interface AppAvatarProps {
 export const AppAvatar: FC<AppAvatarProps> = (props) => {
   const { title, darkLogo, lightLogo } = props;
 
-  const theme = useTheme();
+  const isDarkMod = useIsDarkMode();
   const isMobile = useIsMobile();
 
   const sxSize = useMemo(() => {
     const size = isMobile ? 36 : 64;
     return { width: size, height: size };
   }, [isMobile]);
-
-  const isDarkMod = theme.palette.mode === 'dark';
 
   return (
     <>
