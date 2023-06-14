@@ -1,1 +1,0 @@
-export { AppAvatar } from './AppAvatar';

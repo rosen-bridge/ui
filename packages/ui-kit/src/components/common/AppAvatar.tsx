@@ -22,12 +22,12 @@ const Brand = styled(Typography)(({ theme }) => ({
 
 interface AppAvatarProps {
   title: ReactNode;
-  darkLogo: string;
-  lightLogo: string;
+  darkLogoPath: string;
+  lightLogoPath: string;
 }
 
 export const AppAvatar: FC<AppAvatarProps> = (props) => {
-  const { title, darkLogo, lightLogo } = props;
+  const { title, darkLogoPath, lightLogoPath } = props;
 
   const isDarkMod = useIsDarkMode();
   const isMobile = useIsMobile();
@@ -39,7 +39,7 @@ export const AppAvatar: FC<AppAvatarProps> = (props) => {
 
   return (
     <>
-      <Avatar src={isDarkMod ? darkLogo : lightLogo} sx={sxSize} />
+      <Avatar src={isDarkMod ? darkLogoPath : lightLogoPath} sx={sxSize} />
       <Brand>{title}</Brand>
     </>
   );
