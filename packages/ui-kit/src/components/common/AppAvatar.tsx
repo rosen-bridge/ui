@@ -32,7 +32,7 @@ interface AppAvatarProps {
 }
 
 /**
- * @description renders brand logo and title and changes the logo in dark mode
+ * renders brand logo and title and changes the logo in dark mode
  *
  * @param lightLogoPath - url to the light mode version of the logo
  * @param darkLogoPath - url to the dark mode version of the logo

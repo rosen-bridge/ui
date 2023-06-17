@@ -3,7 +3,7 @@ import { Box } from '../base';
 import { styled } from '../../styling';
 
 /**
- * @description renders a appBar wrapper
+ *  renders a appBar wrapper
  * this component set the appBar size and orientation in different screen sizes
  *
  * @property {ReactNode} children - should be the list of react elements that need to be in the toolbar

@@ -6,7 +6,7 @@ interface StyledCardProps {
 }
 
 /**
- * @description renders a wrapper for the widget components to
+ * renders a wrapper for the widget components to
  * keep the  widgets base layout consistent
  *
  * @param color: the background color of the widget, can be any valid color

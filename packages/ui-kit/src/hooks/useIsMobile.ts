@@ -2,7 +2,7 @@ import { useMediaQuery } from './useMediaQuery';
 import { useTheme } from './useTheme';
 
 /**
- * @description returns true if the app is on mobile screen size
+ * returns true if the app is on mobile screen size
  */
 export const useIsMobile = () => {
   const theme = useTheme();

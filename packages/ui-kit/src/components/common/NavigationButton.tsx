@@ -71,7 +71,7 @@ interface NavButtonProps {
 }
 
 /**
- * @description renders a navigation button with styles and adopts based on screen size
+ * renders a navigation button with styles and adopts based on screen size
  *
  * @property {string} label - button label
  * @property {ReactNode} icon - the icon for the button
