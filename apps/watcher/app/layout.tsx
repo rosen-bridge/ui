@@ -36,7 +36,7 @@ const Main = styled('main')(() => ({
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     /**
-     * TODO: get `lang` from url language path segement
+     * TODO: get `lang` from url language path segment
      *
      * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/13
      */
