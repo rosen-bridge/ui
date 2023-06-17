@@ -1,4 +1,4 @@
-import { FC, ReactNode } from 'react';
+import { EventHandler, FC, ReactNode, SyntheticEvent } from 'react';
 import { Button } from '../base';
 
 import { useIsMobile } from '../../hooks';
@@ -66,7 +66,7 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
 interface NavButtonProps {
   label: string;
   icon: ReactNode;
-  href: string;
+  onClick: EventHandler<SyntheticEvent>;
   isActive?: boolean;
 }
 
@@ -79,14 +79,14 @@ interface NavButtonProps {
  * @property {boolean} isActive - if true the component will be rendered in active state
  */
 
-export const NavButton: FC<NavButtonProps> = (props) => {
-  const { label, icon, isActive, href } = props;
+export const NavigationButton: FC<NavButtonProps> = (props) => {
+  const { label, icon, isActive, onClick } = props;
 
   const isMobile = useIsMobile();
 
   return (
     <NavButtonBase
-      href={href}
+      onClick={onClick}
       className={isActive ? 'active' : undefined}
       startIcon={icon}
       variant="text"
