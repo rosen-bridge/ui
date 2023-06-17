@@ -7,19 +7,19 @@ import { styled } from '../../styling';
 import { useIsMobile, useIsDarkMode } from '../../hooks';
 
 const Brand = styled(Typography)(({ theme }) => ({
-  //FIXME: use theme defined values - https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/3
+  //FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
   color: theme.palette.mode === 'light' ? '#e5e5e5' : '#ff9b03',
   textTransform: 'uppercase',
   textAlign: 'center',
   margin: theme.spacing(1),
 
-  //FIXME: use theme defined values - https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/3
+  //FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
   lineHeight: 1.2,
   [theme.breakpoints.up('tablet')]: {
-    //FIXME: use theme defined values - https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/3
+    //FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
     fontSize: '0.75rem',
     '& b': {
-      //FIXME: use theme defined values - https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/3
+      //FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
       fontSize: '108%',
     },
   },
