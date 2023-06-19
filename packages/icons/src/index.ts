@@ -6,6 +6,8 @@ export { ReactComponent as Dashboard } from './icons/dashboard.svg';
 export { ReactComponent as Estate } from './icons/estate.svg';
 export { ReactComponent as Heartbeat } from './icons/heartbeat.svg';
 export { ReactComponent as History } from './icons/history.svg';
+export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
 export { ReactComponent as Moneybag } from './icons/moneybag.svg';
 export { ReactComponent as Newspaper } from './icons/newspaper.svg';
 export { ReactComponent as QrcodeScan } from './icons/qrcode-scan.svg';
+export { ReactComponent as ShieldCheck } from './icons/shield-check.svg';
