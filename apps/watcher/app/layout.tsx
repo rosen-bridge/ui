@@ -1,13 +1,52 @@
 'use client';
 
-import ThemeProvider from './_theme/ThemeProvider';
+import React from 'react';
+
+import { styled } from '@rosen-bridge/ui-kit';
+
+import SideBar from '@/_components/SideBar';
+import ThemeProvider from '@/_theme/ThemeProvider';
+
+const Root = styled('div')(({ theme }) => ({
+  width: '100vw',
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'row',
+  backgroundColor: theme.palette.secondary.dark,
+  backgroundImage:
+    theme.palette.mode === 'light'
+      ? // FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
+        `linear-gradient(180deg, #845ec2 0%, #2c73d2 20%, #0081cf 40%, #0089ba 60%, #008e9b 80%, #008f7a 100%)`
+      : 'none',
+  [theme.breakpoints.down('tablet')]: {
+    flexDirection: 'column',
+    backgroundImage:
+      theme.palette.mode === 'light'
+        ? // FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
+          `linear-gradient(90deg, #845ec2 0%, #2c73d2 20%, #0081cf 40%, #0089ba 60%, #008e9b 80%, #008f7a 100%)`
+        : 'none',
+  },
+}));
+
+const Main = styled('main')(() => ({
+  flexGrow: 1,
+  overflowY: 'auto',
+}));
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
+    /**
+     * TODO: get `lang` from url language path segment
+     *
+     * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/13
+     */
     <html lang="en">
       <body>
         <ThemeProvider>
-          <main>{children}</main>
+          <Root>
+            <SideBar />
+            <Main>{children}</Main>
+          </Root>
         </ThemeProvider>
       </body>
     </html>

@@ -18,6 +18,7 @@ export * from './CssBaseLine';
 export * from './Divider';
 export * from './Dialog';
 export * from './DialogActions';
+export * from './DialogContent';
 export * from './DialogContentText';
 export * from './DialogTitle';
 export * from './Fab';
