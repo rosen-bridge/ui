@@ -43,7 +43,7 @@ const SideBar = () => {
               router.push('/' as Parameters<typeof router.push>[0])
             }
             isActive={pathname === '/'}
-          ></NavigationButton>
+          />
         </Grid>
         <Grid item>
           <NavigationButton
