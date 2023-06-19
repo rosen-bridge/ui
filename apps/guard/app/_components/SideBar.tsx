@@ -1,7 +1,19 @@
-import * as Unicons from '@iconscout/react-unicons';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { AppBar, AppLogo, Grid, NavigationButton } from '@rosen-bridge/ui-kit';
+import {
+  BitcoinCircle,
+  ClipboardNotes,
+  Dashboard,
+  History,
+  Moneybag,
+} from '@rosen-bridge/icons';
+import {
+  AppBar,
+  AppLogo,
+  Grid,
+  NavigationButton,
+  SvgIcon,
+} from '@rosen-bridge/ui-kit';
 
 const SideBar = () => {
   const pathname = usePathname();
@@ -22,7 +34,11 @@ const SideBar = () => {
         <Grid item>
           <NavigationButton
             label="Dashboard"
-            icon={<Unicons.UilDashboard />}
+            icon={
+              <SvgIcon>
+                <Dashboard />
+              </SvgIcon>
+            }
             onClick={() =>
               router.push('/' as Parameters<typeof router.push>[0])
             }
@@ -32,7 +48,11 @@ const SideBar = () => {
         <Grid item>
           <NavigationButton
             label="Events"
-            icon={<Unicons.UilClipboardNotes />}
+            icon={
+              <SvgIcon>
+                <ClipboardNotes />
+              </SvgIcon>
+            }
             onClick={() => router.push('/events')}
             isActive={pathname.startsWith('/events')}
           />
@@ -40,7 +60,11 @@ const SideBar = () => {
         <Grid item>
           <NavigationButton
             label="History"
-            icon={<Unicons.UilHistory />}
+            icon={
+              <SvgIcon>
+                <History />
+              </SvgIcon>
+            }
             onClick={() => router.push('/history')}
             isActive={pathname.startsWith('/history')}
           />
@@ -48,7 +72,11 @@ const SideBar = () => {
         <Grid item>
           <NavigationButton
             label="Assets"
-            icon={<Unicons.UilBitcoinCircle />}
+            icon={
+              <SvgIcon>
+                <BitcoinCircle />
+              </SvgIcon>
+            }
             onClick={() => router.push('/assets')}
             isActive={pathname.startsWith('/assets')}
           />
@@ -56,7 +84,11 @@ const SideBar = () => {
         <Grid item>
           <NavigationButton
             label="Revenues"
-            icon={<Unicons.UilMoneybag />}
+            icon={
+              <SvgIcon>
+                <Moneybag />
+              </SvgIcon>
+            }
             onClick={() => router.push('/revenues')}
             isActive={pathname.startsWith('/revenues')}
           />
