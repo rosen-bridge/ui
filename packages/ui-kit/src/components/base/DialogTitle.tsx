@@ -1,2 +1,2 @@
-export { Dialog } from '@mui/material';
-export type { DialogProps } from '@mui/material';
+export { DialogTitle } from '@mui/material';
+export type { DialogTitleProps } from '@mui/material';
