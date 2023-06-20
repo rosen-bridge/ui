@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Box, Typography, Stack, IconButton } from '../base';
+import { Typography, Stack, Grid } from '../base';
 
 import { styled } from '../../styling';
 
@@ -17,13 +17,13 @@ export const ToolbarActions: React.FC<ToolbarActions> = (props) => {
   const { children } = props;
 
   return (
-    <Box className="toolbar">
+    <div className="toolbar">
       <Stack direction="row">{children}</Stack>
-    </Box>
+    </div>
   );
 };
 
-const Header = styled(Box)(({ theme }) => ({
+const Header = styled(Grid)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
   marginBottom: theme.spacing(3),
@@ -61,10 +61,10 @@ export const Toolbar: React.FC<ToolbarProps> = (props) => {
 
   return (
     <Header>
-      <Box flexGrow={1} {...(isCentered ? { justifyContent: 'center' } : {})}>
+      <Grid flexGrow={1} {...(isCentered ? { justifyContent: 'center' } : {})}>
         <Typography variant="h1">{title}</Typography>
         <Typography color="textSecondary">{description}</Typography>
-      </Box>
+      </Grid>
       {toolbarActions && renderActions()}
     </Header>
   );
