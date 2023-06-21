@@ -1,12 +1,15 @@
 'use client';
 
 import React from 'react';
+import { SWRConfig } from 'swr';
 
 import { styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
+
+import { mockFetcherMiddleware } from './_mock/mockFetcherMiddleware';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -63,7 +66,16 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider>
           <Root>
             <SideBar />
-            <Main>{children}</Main>
+            <SWRConfig
+              value={{
+                use:
+                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                    ? [mockFetcherMiddleware]
+                    : [],
+              }}
+            >
+              <Main>{children}</Main>
+            </SWRConfig>
           </Root>
         </ThemeProvider>
       </body>
