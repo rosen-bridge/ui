@@ -23,6 +23,10 @@ export const ToolbarActions: React.FC<ToolbarActions> = (props) => {
   );
 };
 
+/**
+ * adds basic styling to the component and hides the actions
+ * in tablet and mobile devices
+ */
 const Header = styled(Grid)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'row',
