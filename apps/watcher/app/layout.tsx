@@ -5,6 +5,7 @@ import React from 'react';
 import { styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
+
 import ThemeProvider from '@/_theme/ThemeProvider';
 
 const Root = styled('div')(({ theme }) => ({
@@ -28,9 +29,26 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
-const Main = styled('main')(() => ({
+const Main = styled('main')(({ theme }) => ({
   flexGrow: 1,
   overflowY: 'auto',
+  minHeight: '100%',
+  backgroundColor: theme.palette.background.default,
+  borderTopLeftRadius: theme.shape.borderRadius * 2,
+  borderBottomLeftRadius: theme.shape.borderRadius * 2,
+  paddingTop: theme.shape.borderRadius,
+  paddingBottom: theme.shape.borderRadius * 3,
+  paddingLeft: theme.shape.borderRadius * 2,
+  paddingRight: theme.shape.borderRadius * 2,
+
+  [theme.breakpoints.down('tablet')]: {
+    backgroundColor: theme.palette.background.paper,
+    borderTopRightRadius: theme.shape.borderRadius * 2,
+    borderBottomLeftRadius: 0,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    paddingBottom: theme.shape.borderRadius * 6,
+  },
 }));
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
