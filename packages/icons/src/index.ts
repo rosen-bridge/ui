@@ -11,3 +11,4 @@ export { ReactComponent as Moneybag } from './icons/moneybag.svg';
 export { ReactComponent as Newspaper } from './icons/newspaper.svg';
 export { ReactComponent as QrcodeScan } from './icons/qrcode-scan.svg';
 export { ReactComponent as ShieldCheck } from './icons/shield-check.svg';
+export { ReactComponent as Wallet } from './icons/wallet.svg';
