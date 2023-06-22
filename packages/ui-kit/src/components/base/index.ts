@@ -33,6 +33,7 @@ export * from './ListItemIcon';
 export * from './ListItemText';
 export * from './Menu';
 export * from './MenuItem';
+export * from './NoSsr';
 export * from './Paper';
 export * from './Pagination';
 export * from './Select';
