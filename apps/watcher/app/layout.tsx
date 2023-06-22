@@ -6,6 +6,7 @@ import { SWRConfig } from 'swr';
 import { styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
+import Toolbar from '@/_components/Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
@@ -74,7 +75,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                     : [],
               }}
             >
-              <Main>{children}</Main>
+              <Main>
+                <Toolbar />
+                {children}
+              </Main>
             </SWRConfig>
           </Root>
         </ThemeProvider>
