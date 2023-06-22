@@ -27,6 +27,9 @@ export interface AppThemeProps {
   children: React.ReactNode;
 }
 
+/**
+ * provide theme and color mode
+ */
 const ThemeProvider = ({ children }: AppThemeProps) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
     noSsr: true,

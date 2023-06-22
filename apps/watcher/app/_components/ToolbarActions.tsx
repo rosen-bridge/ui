@@ -5,6 +5,9 @@ import { IconButton, SvgIcon, useIsDarkMode } from '@rosen-bridge/ui-kit';
 
 import { ColorModeContext } from '@/_theme/ThemeProvider';
 
+/**
+ * render some toolbar actions
+ */
 const ToolbarActions = () => {
   const colorMode = useContext(ColorModeContext);
   const isDarkMode = useIsDarkMode();

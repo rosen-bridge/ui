@@ -13,6 +13,9 @@ const pageTitleMap: Record<string, string> = {
   revenues: 'Revenues',
 };
 
+/**
+ * render toolbar containing page title and some actions
+ */
 const Toolbar = () => {
   const page = useSelectedLayoutSegment();
 

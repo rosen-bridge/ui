@@ -15,6 +15,9 @@ import {
   SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
+/**
+ * render sidebar log and navigaiton buttons
+ */
 const SideBar = () => {
   const pathname = usePathname();
 
