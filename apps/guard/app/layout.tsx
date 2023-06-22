@@ -6,6 +6,7 @@ import { styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
 import ThemeProvider from '@/_theme/ThemeProvider';
+import Toolbar from './_components/Toolbar';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -59,7 +60,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
         <ThemeProvider>
           <Root>
             <SideBar />
-            <Main>{children}</Main>
+            <Main>
+              <Toolbar />
+              {children}
+            </Main>
           </Root>
         </ThemeProvider>
       </body>
