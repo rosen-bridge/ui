@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-import { styled } from '@rosen-bridge/ui-kit';
+import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
 import ThemeProvider from '@/_theme/ThemeProvider';
@@ -57,15 +57,17 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
      */
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <Root>
-            <SideBar />
-            <Main>
-              <Toolbar />
-              {children}
-            </Main>
-          </Root>
-        </ThemeProvider>
+        <NoSsr>
+          <ThemeProvider>
+            <Root>
+              <SideBar />
+              <Main>
+                <Toolbar />
+                {children}
+              </Main>
+            </Root>
+          </ThemeProvider>
+        </NoSsr>
       </body>
     </html>
   );
