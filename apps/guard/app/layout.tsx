@@ -2,10 +2,11 @@
 
 import React from 'react';
 
-import { styled } from '@rosen-bridge/ui-kit';
+import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
 import ThemeProvider from '@/_theme/ThemeProvider';
+import Toolbar from './_components/Toolbar';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -26,9 +27,25 @@ const Root = styled('div')(({ theme }) => ({
   },
 }));
 
-const Main = styled('main')(() => ({
+const Main = styled('main')(({ theme }) => ({
   flexGrow: 1,
   overflowY: 'auto',
+  minHeight: '100%',
+  backgroundColor: theme.palette.background.default,
+  borderTopLeftRadius: theme.shape.borderRadius * 2,
+  borderBottomLeftRadius: theme.shape.borderRadius * 2,
+  paddingTop: theme.shape.borderRadius,
+  paddingBottom: theme.shape.borderRadius * 4,
+  paddingLeft: theme.shape.borderRadius * 2,
+  paddingRight: theme.shape.borderRadius * 2,
+
+  [theme.breakpoints.down('tablet')]: {
+    backgroundColor: theme.palette.background.paper,
+    borderTopRightRadius: theme.shape.borderRadius * 2,
+    borderBottomLeftRadius: 0,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+  },
 }));
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
@@ -40,12 +57,17 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
      */
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <Root>
-            <SideBar />
-            <Main>{children}</Main>
-          </Root>
-        </ThemeProvider>
+        <NoSsr>
+          <ThemeProvider>
+            <Root>
+              <SideBar />
+              <Main>
+                <Toolbar />
+                {children}
+              </Main>
+            </Root>
+          </ThemeProvider>
+        </NoSsr>
       </body>
     </html>
   );

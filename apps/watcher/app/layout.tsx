@@ -3,9 +3,10 @@
 import React from 'react';
 import { SWRConfig } from 'swr';
 
-import { styled } from '@rosen-bridge/ui-kit';
+import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from '@/_components/SideBar';
+import Toolbar from '@/_components/Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
@@ -63,21 +64,26 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
      */
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <Root>
-            <SideBar />
-            <SWRConfig
-              value={{
-                use:
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    ? [mockFetcherMiddleware]
-                    : [],
-              }}
-            >
-              <Main>{children}</Main>
-            </SWRConfig>
-          </Root>
-        </ThemeProvider>
+        <NoSsr>
+          <ThemeProvider>
+            <Root>
+              <SideBar />
+              <SWRConfig
+                value={{
+                  use:
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                      ? [mockFetcherMiddleware]
+                      : [],
+                }}
+              >
+                <Main>
+                  <Toolbar />
+                  {children}
+                </Main>
+              </SWRConfig>
+            </Root>
+          </ThemeProvider>
+        </NoSsr>
       </body>
     </html>
   );

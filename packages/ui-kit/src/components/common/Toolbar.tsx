@@ -42,7 +42,7 @@ const Header = styled(Grid)(({ theme }) => ({
 
 export interface ToolbarProps {
   title: string;
-  description: string;
+  description?: string;
   isCentered?: boolean;
   toolbarActions?: ReactNode;
 }
@@ -67,7 +67,9 @@ export const Toolbar: React.FC<ToolbarProps> = (props) => {
     <Header>
       <Grid flexGrow={1} {...(isCentered ? { justifyContent: 'center' } : {})}>
         <Typography variant="h1">{title}</Typography>
-        <Typography color="textSecondary">{description}</Typography>
+        {description && (
+          <Typography color="textSecondary">{description}</Typography>
+        )}
       </Grid>
       {toolbarActions && renderActions()}
     </Header>
