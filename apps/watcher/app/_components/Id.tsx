@@ -9,8 +9,8 @@ interface IdProps {
  * @param id
  */
 const Id = ({ id }: IdProps) => (
-  <Typography noWrap variant="caption">{`${id.slice(0, 30)}...${id.slice(
-    -5
+  <Typography noWrap variant="caption">{`${id.slice(0, 8)}...${id.slice(
+    -8
   )}`}</Typography>
 );
 

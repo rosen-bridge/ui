@@ -24,7 +24,7 @@ const TokenListItemSkeleton = () => {
             <Skeleton animation="wave" height={20} width="10%" />
           </Box>
         }
-        secondary={<Skeleton animation="wave" height={20} width="80%" />}
+        secondary={<Skeleton animation="wave" height={20} width="50%" />}
       />
     </ListItem>
   );
