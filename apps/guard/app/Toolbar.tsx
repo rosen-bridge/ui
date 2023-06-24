@@ -3,14 +3,13 @@ import React from 'react';
 
 import { Toolbar as UiKitToolbar } from '@rosen-bridge/ui-kit';
 
-import ToolbarActions from '@/_components/ToolbarActions';
+import ToolbarActions from './ToolbarActions';
 
 const pageTitleMap: Record<string, string> = {
-  '(home)': 'Home',
-  actions: 'Actions',
+  '(dashboard)': 'Dashboard',
+  assets: 'Assets',
   events: 'Events',
-  health: 'Health',
-  observations: 'Observations',
+  history: 'History',
   revenues: 'Revenues',
 };
 

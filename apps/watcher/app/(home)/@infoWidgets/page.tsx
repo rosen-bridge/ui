@@ -6,7 +6,7 @@ import useSWR from 'swr';
 import { LockAlt, ShieldCheck, Wallet } from '@rosen-bridge/icons';
 import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 
-import InfoWidgetCard from '@/_components/InfoWidgetCard';
+import InfoWidgetCard from './InfoWidgetCard';
 
 import fetcher from '@/_utils/fetcher';
 

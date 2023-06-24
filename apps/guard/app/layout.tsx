@@ -4,9 +4,9 @@ import React from 'react';
 
 import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
-import SideBar from '@/_components/SideBar';
+import SideBar from './SideBar';
 import ThemeProvider from '@/_theme/ThemeProvider';
-import Toolbar from './_components/Toolbar';
+import Toolbar from './Toolbar';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
