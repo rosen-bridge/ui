@@ -5,3 +5,11 @@ export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
 }
+
+export interface TokenInfo {
+  amount: bigint;
+  decimals: number;
+  name?: string;
+  tokenId: string;
+}
+export type ApiAddressAssetsResponse = TokenInfo[];
