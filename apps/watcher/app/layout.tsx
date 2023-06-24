@@ -5,8 +5,8 @@ import { SWRConfig } from 'swr';
 
 import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
-import SideBar from '@/_components/SideBar';
-import Toolbar from '@/_components/Toolbar';
+import SideBar from './SideBar';
+import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 

@@ -4,6 +4,7 @@ import * as mockedFetcherData from './mockedFetcherData';
 
 const fakeResponse: Record<string, any> = {
   '/info': mockedFetcherData.info,
+  '/address/assets': mockedFetcherData.addressAssets,
 };
 
 /**
