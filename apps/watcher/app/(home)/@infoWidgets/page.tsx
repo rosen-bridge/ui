@@ -27,7 +27,7 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop={3}>
         <InfoWidgetCard
           title="Current Balance"
-          value={data?.currentBalance ?? ''}
+          value={data?.currentBalance.toString() ?? ''}
           unit="ERG"
           icon={
             <SvgIcon fontSize="large">
@@ -60,7 +60,7 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop={3}>
         <InfoWidgetCard
           title="Permit"
-          value={data?.permitCount ?? ''}
+          value={data?.permitCount.toString() ?? ''}
           icon={
             <SvgIcon fontSize="large">
               <LockAlt />

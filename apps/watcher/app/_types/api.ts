@@ -1,7 +1,7 @@
 export interface ApiInfoResponse {
-  currentBalance: string;
+  currentBalance: bigint;
   network: string;
-  permitCount: string;
+  permitCount: bigint;
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
 }
