@@ -13,3 +13,12 @@ export interface TokenInfo {
   tokenId: string;
 }
 export type ApiAddressAssetsResponse = TokenInfo[];
+
+export interface TokenChartData {
+  title: string;
+  data: {
+    label: string;
+    amount: string;
+  }[];
+}
+export type ApiRevenueChartResponse = TokenChartData[];

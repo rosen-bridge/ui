@@ -117,21 +117,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 contrastText: '#fff',
               },
               success: {
-                light: '#184c4c',
+                light: '#d9eeeb',
                 main: '#008f7a',
-                dark: '#d9eeeb',
+                dark: '#184c4c',
                 contrastText: '#fff',
               },
               warning: {
-                light: '#5a4b1d',
+                light: '#fff9e2',
                 main: '#c89d09',
-                dark: '#fff9e2',
+                dark: '#5a4b1d',
                 contrastText: '#fff',
               },
               error: {
-                light: '#431616',
+                light: '#eed9d9',
                 main: '#cf1717',
-                dark: '#eed9d9',
+                dark: '#431616',
                 contrastText: '#fff',
               },
               background: {

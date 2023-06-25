@@ -1,4 +1,10 @@
-import { ApiAddressAssetsResponse, ApiInfoResponse } from '@/_types/api';
+import moment from 'moment';
+
+import {
+  ApiAddressAssetsResponse,
+  ApiInfoResponse,
+  ApiRevenueChartResponse,
+} from '@/_types/api';
 
 export const info: ApiInfoResponse = {
   address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
@@ -33,3 +39,91 @@ export const addressAssets: ApiAddressAssetsResponse = [
     decimals: 5,
   },
 ];
+
+const revenueChartWeekly: ApiRevenueChartResponse = [
+  {
+    title: 'erg',
+    data: Array(10)
+      .fill(null)
+      .map((_, index) => ({
+        label: moment()
+          .day(7 * index - 63)
+          .valueOf()
+          .toString(),
+        amount: `${Math.round(Math.random() * 100)}`,
+      })),
+  },
+  {
+    title: 'ada',
+    data: Array(10)
+      .fill(null)
+      .map((_, index) => ({
+        label: moment()
+          .day(7 * index - 63)
+          .valueOf()
+          .toString(),
+        amount: `${Math.round(Math.random() * 500)}`,
+      })),
+  },
+];
+const revenueChartMonthly: ApiRevenueChartResponse = [
+  {
+    title: 'erg',
+    data: Array(10)
+      .fill(null)
+      .map((_, index) => ({
+        label: moment()
+          .month(1 * index - 9)
+          .date(1)
+          .valueOf()
+          .toString(),
+        amount: `${Math.round(Math.random() * 400)}`,
+      })),
+  },
+  {
+    title: 'ada',
+    data: Array(10)
+      .fill(null)
+      .map((_, index) => ({
+        label: moment()
+          .month(1 * index - 9)
+          .date(1)
+          .valueOf()
+          .toString(),
+        amount: `${Math.round(Math.random() * 2000)}`,
+      })),
+  },
+];
+const revenueChartYearly: ApiRevenueChartResponse = [
+  {
+    title: 'erg',
+    data: Array(10)
+      .fill(null)
+      .map((_, index) => ({
+        label: moment()
+          .year(2023 + (1 * index - 9))
+          .dayOfYear(1)
+          .valueOf()
+          .toString(),
+        amount: `${Math.round(Math.random() * 5000)}`,
+      })),
+  },
+  {
+    title: 'erg',
+    data: Array(10)
+      .fill(null)
+      .map((_, index) => ({
+        label: moment()
+          .year(2023 + (1 * index - 9))
+          .dayOfYear(1)
+          .valueOf()
+          .toString(),
+        amount: `${Math.round(Math.random() * 25000)}`,
+      })),
+  },
+];
+export const revenueChart = {
+  week: revenueChartWeekly,
+  month: revenueChartMonthly,
+  year: revenueChartYearly,
+};
