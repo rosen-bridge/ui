@@ -2,9 +2,17 @@ import { Key, Middleware, SWRHook } from 'swr';
 
 import * as mockedFetcherData from './mockedFetcherData';
 
-const fakeResponse: Record<string, any> = {
+import { ChartPeriod } from '@/_types';
+
+const fakeResponseWithStringKey: Record<string, any> = {
   '/info': mockedFetcherData.info,
   '/address/assets': mockedFetcherData.addressAssets,
+};
+
+const fakeResponseWithObjectKey: Record<string, (params: any) => any> = {
+  '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
+    return mockedFetcherData.revenueChart[period];
+  },
 };
 
 /**
@@ -18,7 +26,16 @@ const mockFetcherMiddleware: Middleware =
     const mockedFetcher = (key: Key) =>
       new Promise<any>((resolve, reject) => {
         if (typeof key === 'string') {
-          const response = fakeResponse[key];
+          const response = fakeResponseWithStringKey[key];
+
+          setTimeout(() => {
+            response
+              ? resolve(response)
+              : reject(new Error(`Canot find mocked data for ${key} route`));
+          }, 5000 * Math.random());
+        } else if (Array.isArray(key)) {
+          const [url, params] = key;
+          const response = fakeResponseWithObjectKey[url](params);
 
           setTimeout(() => {
             response
