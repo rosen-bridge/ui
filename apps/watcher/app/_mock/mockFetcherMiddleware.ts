@@ -31,7 +31,7 @@ const mockFetcherMiddleware: Middleware =
           setTimeout(() => {
             response
               ? resolve(response)
-              : reject(new Error(`Canot find mocked data for ${key} route`));
+              : reject(new Error(`Cannot find mocked data for ${key} route`));
           }, 5000 * Math.random());
         } else if (Array.isArray(key)) {
           const [url, params] = key;
@@ -40,7 +40,7 @@ const mockFetcherMiddleware: Middleware =
           setTimeout(() => {
             response
               ? resolve(response)
-              : reject(new Error(`Canot find mocked data for ${key} route`));
+              : reject(new Error(`Cannot find mocked data for ${key} route`));
           }, 5000 * Math.random());
         }
       });
