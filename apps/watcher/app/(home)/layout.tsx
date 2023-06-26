@@ -4,7 +4,13 @@ import { Grid } from '@rosen-bridge/ui-kit';
 
 import { LayoutProps } from '@/_types';
 
-const HomeLayout = ({ actions, infoWidgets, revenue, tokens }: LayoutProps) => (
+const HomeLayout = ({
+  actions,
+  address,
+  infoWidgets,
+  revenue,
+  tokens,
+}: LayoutProps) => (
   <Grid container spacing={{ mobile: 1, tablet: 3 }}>
     <Grid item mobile={12}>
       {infoWidgets}
@@ -17,10 +23,7 @@ const HomeLayout = ({ actions, infoWidgets, revenue, tokens }: LayoutProps) => (
       {tokens}
     </Grid>
     <Grid item mobile={12}>
-      {/**
-       * TODO: address element comes here
-       * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/9
-       */}
+      {address}
     </Grid>
   </Grid>
 );
