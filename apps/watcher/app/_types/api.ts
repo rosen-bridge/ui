@@ -22,3 +22,11 @@ export interface TokenChartData {
   }[];
 }
 export type ApiRevenueChartResponse = TokenChartData[];
+
+export interface HealthParamInfo {
+  id: string;
+  status: 'Healthy' | 'Unstable' | 'Broken';
+  lastCheck: string;
+  description?: string;
+}
+export type ApiHealthStatusResponse = HealthParamInfo[];

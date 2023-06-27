@@ -7,6 +7,7 @@ import { ChartPeriod } from '@/_types';
 const fakeResponseWithStringKey: Record<string, any> = {
   '/info': mockedFetcherData.info,
   '/address/assets': mockedFetcherData.addressAssets,
+  '/health/status': mockedFetcherData.healthStatus,
 };
 
 const fakeResponseWithObjectKey: Record<string, (params: any) => any> = {
