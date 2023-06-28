@@ -32,6 +32,7 @@ export * from './ListItem';
 export * from './ListItemAvatar';
 export * from './ListItemIcon';
 export * from './ListItemText';
+export * from './LoadingButton';
 export * from './Menu';
 export * from './MenuItem';
 export * from './NoSsr';
