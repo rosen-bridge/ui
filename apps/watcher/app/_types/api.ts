@@ -30,3 +30,9 @@ export interface HealthParamInfo {
   description?: string;
 }
 export type ApiHealthStatusResponse = HealthParamInfo[];
+
+export interface ApiWithdrawRequestBody {
+  address: string;
+  tokens: Pick<TokenInfo, 'amount' | 'tokenId'>;
+}
+export type ApiWithdrawResponse = 'OK';

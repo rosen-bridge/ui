@@ -1,28 +1,29 @@
 import { Key, Middleware, SWRHook } from 'swr';
 
-import * as mockedFetcherData from './mockedFetcherData';
+import * as mockedData from './mockedData';
 
 import { ChartPeriod } from '@/_types';
 
 const fakeResponseWithStringKey: Record<string, any> = {
-  '/info': mockedFetcherData.info,
-  '/address/assets': mockedFetcherData.addressAssets,
-  '/health/status': mockedFetcherData.healthStatus,
+  '/info': mockedData.info,
+  '/address/assets': mockedData.addressAssets,
+  '/health/status': mockedData.healthStatus,
+  '/withdraw': mockedData.withdraw,
 };
 
 const fakeResponseWithObjectKey: Record<string, (params: any) => any> = {
   '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
-    return mockedFetcherData.revenueChart[period];
+    return mockedData.revenueChart[period];
   },
 };
 
 /**
- * mock `useSWR` fetcher with a fake version, returning fake data after a random
- * period of time (between 0 to 5 seconds) or rejecting if fake data for the
- * route is not defined
+ * mock `useSWR` fetcher and `useSWRMutation` mutator with a fake version,
+ * returning fake data after a random period of time (between 0 to 5 seconds) or
+ * rejecting if fake data for the route is not defined
  * @param useSWRNext
  */
-const mockFetcherMiddleware: Middleware =
+const mockMiddleware: Middleware =
   (useSWRNext: SWRHook) => (key, fetcher, config) => {
     const mockedFetcher = (key: Key) =>
       new Promise<any>((resolve, reject) => {
@@ -49,4 +50,4 @@ const mockFetcherMiddleware: Middleware =
     return useSWRNext(key, mockedFetcher, config);
   };
 
-export { mockFetcherMiddleware };
+export default mockMiddleware;

@@ -11,9 +11,9 @@ import {
 import TokenListItemAvatar from './TokenListItemAvatar';
 import Id from '@/_components/Id';
 
-import getDecimalString from '@/_utils/getDecimalString';
+import { getDecimalString } from '@/_utils/decimals';
 
-const NAME_PLACEHOLDER = 'unnamed token';
+import { TOKEN_NAME_PLACEHOLDER } from '@/_constants';
 
 interface TokenListItemProps {
   decimals: number;
@@ -37,7 +37,7 @@ const TokenListItem = ({
   name,
   value,
 }: TokenListItemProps) => {
-  const nameOrPlaceholder = name || NAME_PLACEHOLDER;
+  const nameOrPlaceholder = name || TOKEN_NAME_PLACEHOLDER;
 
   return (
     <ListItem disableGutters sx={{ py: 0.5 }}>

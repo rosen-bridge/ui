@@ -14,6 +14,8 @@ import { Box, SvgIcon, ToggleButtonGroup, styled } from '@rosen-bridge/ui-kit';
 
 import ToggleButton from './ToggleButton';
 
+import { LayoutProps } from '@/_types';
+
 /**
  * render a box which is scrollable in mobile devices
  */
@@ -51,7 +53,7 @@ const ActionsDivider = () => (
   />
 );
 
-const Actions = () => {
+const Actions = ({ children }: LayoutProps) => {
   const currentAction = useSelectedLayoutSegment();
 
   const router = useRouter();
@@ -61,66 +63,69 @@ const Actions = () => {
   };
 
   return (
-    <ScrollableContainer>
-      <CustomToggleButtonGroup
-        value={currentAction}
-        exclusive
-        onChange={handleActionChange}
-        fullWidth
-      >
-        <ToggleButton
-          value="withdraw"
-          label="Withdraw"
-          icon={
-            <SvgIcon>
-              <MoneyWithdrawal />
-            </SvgIcon>
-          }
-        />
-        <ActionsDivider />
-        <ToggleButton
-          value="pause"
-          label="Pause"
-          disabled
-          icon={
-            <SvgIcon>
-              <Pause />
-            </SvgIcon>
-          }
-        />
-        <ActionsDivider />
-        <ToggleButton
-          value="stop"
-          label="Stop"
-          disabled
-          icon={
-            <SvgIcon>
-              <SquareShape />
-            </SvgIcon>
-          }
-        />
-        <ActionsDivider />
-        <ToggleButton
-          value="lock"
-          label="Lock"
-          icon={
-            <SvgIcon>
-              <LockAlt />
-            </SvgIcon>
-          }
-        />
-        <ActionsDivider />
-        <ToggleButton
-          value="unlock"
-          label="Unlock"
-          icon={
-            <SvgIcon>
-              <Unlock />
-            </SvgIcon>
-          }
-        />
-      </CustomToggleButtonGroup>
-    </ScrollableContainer>
+    <>
+      <ScrollableContainer>
+        <CustomToggleButtonGroup
+          value={currentAction}
+          exclusive
+          onChange={handleActionChange}
+          fullWidth
+        >
+          <ToggleButton
+            value="withdraw"
+            label="Withdraw"
+            icon={
+              <SvgIcon>
+                <MoneyWithdrawal />
+              </SvgIcon>
+            }
+          />
+          <ActionsDivider />
+          <ToggleButton
+            value="pause"
+            label="Pause"
+            disabled
+            icon={
+              <SvgIcon>
+                <Pause />
+              </SvgIcon>
+            }
+          />
+          <ActionsDivider />
+          <ToggleButton
+            value="stop"
+            label="Stop"
+            disabled
+            icon={
+              <SvgIcon>
+                <SquareShape />
+              </SvgIcon>
+            }
+          />
+          <ActionsDivider />
+          <ToggleButton
+            value="lock"
+            label="Lock"
+            icon={
+              <SvgIcon>
+                <LockAlt />
+              </SvgIcon>
+            }
+          />
+          <ActionsDivider />
+          <ToggleButton
+            value="unlock"
+            label="Unlock"
+            icon={
+              <SvgIcon>
+                <Unlock />
+              </SvgIcon>
+            }
+          />
+        </CustomToggleButtonGroup>
+      </ScrollableContainer>
+      <Box mt={3}>{children}</Box>
+    </>
   );
 };
 

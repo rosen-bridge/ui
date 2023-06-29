@@ -10,7 +10,7 @@ import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
-import { mockFetcherMiddleware } from './_mock/mockFetcherMiddleware';
+import mockMiddleware from './_mock/mockMiddleware';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -72,7 +72,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
                 value={{
                   use:
                     process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                      ? [mockFetcherMiddleware]
+                      ? [mockMiddleware]
                       : [],
                 }}
               >

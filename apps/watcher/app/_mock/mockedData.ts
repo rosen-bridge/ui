@@ -5,6 +5,7 @@ import {
   ApiHealthStatusResponse,
   ApiInfoResponse,
   ApiRevenueChartResponse,
+  ApiWithdrawResponse,
 } from '@/_types/api';
 
 export const info: ApiInfoResponse = {
@@ -165,3 +166,5 @@ export const healthStatus: ApiHealthStatusResponse = [
     id: 'Scanner cardano-koios Sync Check',
   },
 ];
+
+export const withdraw: ApiWithdrawResponse = 'OK';
