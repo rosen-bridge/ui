@@ -10,7 +10,13 @@ import {
   SquareShape,
   Unlock,
 } from '@rosen-bridge/icons';
-import { Box, SvgIcon, ToggleButtonGroup, styled } from '@rosen-bridge/ui-kit';
+import {
+  Box,
+  SvgIcon,
+  ToggleButtonGroup,
+  styled,
+  Grid,
+} from '@rosen-bridge/ui-kit';
 
 import ToggleButton from './ToggleButton';
 
@@ -53,8 +59,8 @@ const ActionsDivider = () => (
   />
 );
 
-const Actions = ({ children }: LayoutProps) => {
-  const currentAction = useSelectedLayoutSegment();
+const Actions = ({ form, text }: LayoutProps) => {
+  const currentAction = useSelectedLayoutSegment('form');
 
   const router = useRouter();
 
@@ -124,7 +130,16 @@ const Actions = ({ children }: LayoutProps) => {
           />
         </CustomToggleButtonGroup>
       </ScrollableContainer>
-      <Box mt={3}>{children}</Box>
+      <Box mt={3}>
+        <Grid container spacing={{ mobile: 0, tablet: 6 }}>
+          <Grid item mobile={12} tablet={6} laptop={4}>
+            {text}
+          </Grid>
+          <Grid item mobile={12} tablet={6} laptop={8}>
+            {form}
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 };

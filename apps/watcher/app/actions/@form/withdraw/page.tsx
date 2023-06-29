@@ -18,13 +18,11 @@ import {
   InputAdornment,
   MenuItem,
   TextField,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
-import ActionText from '../ActionText';
-import AlertCard from '../AlertCard';
-import SubmitButton from '../SubmitButton';
-import TokenAmountTextField from '../TokenAmountTextField';
+import AlertCard from '../../AlertCard';
+import SubmitButton from '../../SubmitButton';
+import TokenAmountTextField from '../../TokenAmountTextField';
 
 import { getNonDecimalString } from '@/_utils/decimals';
 import fetcher from '@/_utils/fetcher';
@@ -44,7 +42,7 @@ interface Form {
   amount: string;
 }
 
-export default function Withdrawal() {
+const WithdrawForm = () => {
   const { data: tokens, isLoading: isTokensListLoading } =
     useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
 
@@ -125,22 +123,6 @@ export default function Withdrawal() {
     }
   };
 
-  const renderActionText = () => (
-    <ActionText>
-      <Typography gutterBottom>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur.
-      </Typography>
-      <Typography sx={{ mb: 2 }}>
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-        officia deserunt mollit anim id est laborum.
-      </Typography>
-    </ActionText>
-  );
-
   const renderAlert = () => (
     <AlertCard
       severity={alertData?.severity}
@@ -188,37 +170,27 @@ export default function Withdrawal() {
   );
 
   return (
-    <Grid container spacing={{ mobile: 0, tablet: 6 }}>
-      <Grid item mobile={12} tablet={6} laptop={4}>
-        {renderActionText()}
-      </Grid>
-      <FormProvider {...formMethods}>
-        <Grid
-          item
-          mobile={12}
-          tablet={6}
-          laptop={8}
-          component="form"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <Box mt={2} />
-          {renderAlert()}
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box mt={2} />
+        {renderAlert()}
 
-          <Grid container item mobile={12}>
-            {renderAddressTextField()}
-          </Grid>
-          <Box mt={2} />
-          <Grid container spacing={2}>
-            <Grid item mobile={12} laptop={6}>
-              {renderTokensListSelect()}
-            </Grid>
-            <Grid item mobile={12} laptop={6}>
-              {renderTokenAmountTextField()}
-            </Grid>
-          </Grid>
-          <SubmitButton loading={isWithdrawPending}>Withdraw</SubmitButton>
+        <Grid container item mobile={12}>
+          {renderAddressTextField()}
         </Grid>
-      </FormProvider>
-    </Grid>
+        <Box mt={2} />
+        <Grid container spacing={2}>
+          <Grid item mobile={12} laptop={6}>
+            {renderTokensListSelect()}
+          </Grid>
+          <Grid item mobile={12} laptop={6}>
+            {renderTokenAmountTextField()}
+          </Grid>
+        </Grid>
+        <SubmitButton loading={isWithdrawPending}>Withdraw</SubmitButton>
+      </form>
+    </FormProvider>
   );
-}
+};
+
+export default WithdrawForm;
