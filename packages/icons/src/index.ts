@@ -19,5 +19,6 @@ export { ReactComponent as ShieldCheck } from './icons/shield-check.svg';
 export { ReactComponent as ShieldExclamation } from './icons/shield-exclamation.svg';
 export { ReactComponent as SquareShape } from './icons/square-shape.svg';
 export { ReactComponent as Sun } from './icons/sun.svg';
+export { ReactComponent as Times } from './icons/times.svg';
 export { ReactComponent as Unlock } from './icons/unlock.svg';
 export { ReactComponent as Wallet } from './icons/wallet.svg';
