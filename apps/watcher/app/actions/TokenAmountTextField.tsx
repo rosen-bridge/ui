@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import { Button, Link, TextField } from '@rosen-bridge/ui-kit';
@@ -16,8 +17,9 @@ interface TokenAmountTextFieldProps {
 }
 /**
  * render a react-hook-form compatible text field for token amount input,
- * handling decimal and maximum available validation for token and enabling user
- * to choose maximum available amount for text field
+ * handling decimal and maximum available validation for token, enabling user to
+ * choose maximum available amount for text field and setting minimum value for
+ * the text field when the `token` prop changes
  *
  * @param disabled
  * @param token
@@ -33,6 +35,15 @@ const TokenAmountTextField = ({
     control: control,
     name: 'amount',
   });
+
+  useEffect(() => {
+    const getMinAmount = () =>
+      token!.decimals ? `0.${'0'.repeat(token!.decimals - 1)}1` : '1';
+
+    if (token) {
+      setValue('amount', getMinAmount());
+    }
+  }, [token, setValue]);
 
   const setAmountFieldValue = (value: string) => setValue('amount', value);
 
