@@ -4,6 +4,7 @@ import {
   ApiAddressAssetsResponse,
   ApiHealthStatusResponse,
   ApiInfoResponse,
+  ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
 } from '@/_types/api';
@@ -14,6 +15,8 @@ export const info: ApiInfoResponse = {
   health: 'Unstable',
   network: 'ergo',
   permitCount: 100n,
+  rsnTokenId:
+    '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
 };
 
 export const addressAssets: ApiAddressAssetsResponse = [
@@ -35,7 +38,7 @@ export const addressAssets: ApiAddressAssetsResponse = [
     decimals: 1,
   },
   {
-    name: 'yet another token',
+    name: 'fakeRSN',
     tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     amount: 20n,
     decimals: 5,
@@ -168,3 +171,6 @@ export const healthStatus: ApiHealthStatusResponse = [
 ];
 
 export const withdraw: ApiWithdrawResponse = 'OK';
+export const permit: ApiPermitResponse = {
+  txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+};

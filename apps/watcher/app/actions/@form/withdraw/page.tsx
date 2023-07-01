@@ -83,17 +83,6 @@ const WithdrawForm = () => {
     }
   }, [tokens, resetField, tokenIdField.value]);
 
-  useEffect(() => {
-    const getMinAmount = () =>
-      selectedToken!.decimals
-        ? `0.${'0'.repeat(selectedToken!.decimals - 1)}1`
-        : '1';
-
-    if (selectedToken) {
-      setValue('amount', getMinAmount());
-    }
-  }, [selectedToken, setValue]);
-
   const onSubmit: SubmitHandler<Form> = async (data) => {
     try {
       const response = await trigger({

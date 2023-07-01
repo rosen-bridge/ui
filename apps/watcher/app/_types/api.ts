@@ -4,6 +4,7 @@ export interface ApiInfoResponse {
   permitCount: bigint;
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
+  rsnTokenId: string;
 }
 
 export interface TokenInfo {
@@ -36,3 +37,10 @@ export interface ApiWithdrawRequestBody {
   tokens: Pick<TokenInfo, 'amount' | 'tokenId'>;
 }
 export type ApiWithdrawResponse = 'OK';
+
+export interface ApiPermitRequestBody {
+  count: string;
+}
+export interface ApiPermitResponse {
+  txId: string;
+}
