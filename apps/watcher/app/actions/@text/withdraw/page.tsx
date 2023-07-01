@@ -8,7 +8,7 @@ import ActionText from '../../ActionText';
 
 const WithdrawalText = () => {
   return (
-    <ActionText>
+    <ActionText title="Withdraw">
       <Typography gutterBottom>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
         tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim

@@ -1,7 +1,13 @@
 import { useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
-import { Button, Link, TextField } from '@rosen-bridge/ui-kit';
+import {
+  Button,
+  CircularProgress,
+  InputAdornment,
+  Link,
+  TextField,
+} from '@rosen-bridge/ui-kit';
 
 import { getDecimalString, getNonDecimalString } from '@/_utils/decimals';
 
@@ -13,19 +19,23 @@ interface TokenAmountCompatibleFormSchema {
 
 interface TokenAmountTextFieldProps {
   disabled: boolean;
+  loading?: boolean;
   token: TokenInfo | undefined;
 }
 /**
  * render a react-hook-form compatible text field for token amount input,
  * handling decimal and maximum available validation for token, enabling user to
- * choose maximum available amount for text field and setting minimum value for
- * the text field when the `token` prop changes
+ * choose maximum available amount for text field, setting minimum value for
+ * the text field when the `token` prop changes and optionally showing a pending
+ * indicator
  *
  * @param disabled
+ * @param loading
  * @param token
  */
 const TokenAmountTextField = ({
   disabled,
+  loading,
   token,
 }: TokenAmountTextFieldProps) => {
   const { control, setValue } =
@@ -94,9 +104,16 @@ const TokenAmountTextField = ({
       }
       InputProps={{
         endAdornment: token && (
-          <Button size="small" onClick={setAmountToMaxAvailable}>
-            Max
-          </Button>
+          <InputAdornment position="end">
+            <Button size="small" onClick={setAmountToMaxAvailable}>
+              Max
+            </Button>
+          </InputAdornment>
+        ),
+        startAdornment: loading && (
+          <InputAdornment position="start">
+            <CircularProgress size={18} color="inherit" />
+          </InputAdornment>
         ),
       }}
     />

@@ -9,6 +9,7 @@ const fakeResponseWithStringKey: Record<string, any> = {
   '/address/assets': mockedData.addressAssets,
   '/health/status': mockedData.healthStatus,
   '/withdraw': mockedData.withdraw,
+  '/permit': mockedData.permit,
 };
 
 const fakeResponseWithObjectKey: Record<string, (params: any) => any> = {
