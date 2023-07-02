@@ -9,7 +9,9 @@ import { AlertProps, Box, Grid } from '@rosen-bridge/ui-kit';
 
 import AlertCard from '../../AlertCard';
 import SubmitButton from '../../SubmitButton';
-import TokenAmountTextField from '../../TokenAmountTextField';
+import TokenAmountTextField, {
+  TokenAmountCompatibleFormSchema,
+} from '../../TokenAmountTextField';
 
 import { getNonDecimalString } from '@/_utils/decimals';
 import fetcher from '@/_utils/fetcher';
@@ -21,10 +23,6 @@ import {
   ApiPermitRequestBody,
   ApiPermitResponse,
 } from '@/_types/api';
-
-interface Form {
-  amount: string;
-}
 
 const LockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -59,7 +57,9 @@ const LockForm = () => {
   });
   const { handleSubmit } = formMethods;
 
-  const onSubmit: SubmitHandler<Form> = async (data) => {
+  const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
+    data
+  ) => {
     try {
       const count = getNonDecimalString(data.amount, rsnToken!.decimals);
 

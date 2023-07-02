@@ -22,7 +22,9 @@ import {
 
 import AlertCard from '../../AlertCard';
 import SubmitButton from '../../SubmitButton';
-import TokenAmountTextField from '../../TokenAmountTextField';
+import TokenAmountTextField, {
+  TokenAmountCompatibleFormSchema,
+} from '../../TokenAmountTextField';
 
 import { getNonDecimalString } from '@/_utils/decimals';
 import fetcher from '@/_utils/fetcher';
@@ -36,10 +38,9 @@ import {
   ApiWithdrawResponse,
 } from '@/_types/api';
 
-interface Form {
+interface Form extends TokenAmountCompatibleFormSchema {
   address: string;
   tokenId: string;
-  amount: string;
 }
 
 const WithdrawForm = () => {

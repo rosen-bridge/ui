@@ -13,7 +13,7 @@ import { getDecimalString, getNonDecimalString } from '@/_utils/decimals';
 
 import { TokenInfo } from '@/_types/api';
 
-interface TokenAmountCompatibleFormSchema {
+export interface TokenAmountCompatibleFormSchema {
   amount: string;
 }
 

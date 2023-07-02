@@ -9,7 +9,9 @@ import { AlertProps, Box, Grid } from '@rosen-bridge/ui-kit';
 
 import AlertCard from '../../AlertCard';
 import SubmitButton from '../../SubmitButton';
-import TokenAmountTextField from '../../TokenAmountTextField';
+import TokenAmountTextField, {
+  TokenAmountCompatibleFormSchema,
+} from '../../TokenAmountTextField';
 
 import fetcher from '@/_utils/fetcher';
 import mutator from '@/_utils/mutator';
@@ -20,10 +22,6 @@ import {
   ApiPermitResponse,
   TokenInfo,
 } from '@/_types/api';
-
-interface Form {
-  amount: string;
-}
 
 const UnlockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -63,7 +61,9 @@ const UnlockForm = () => {
   });
   const { handleSubmit } = formMethods;
 
-  const onSubmit: SubmitHandler<Form> = async (data) => {
+  const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
+    data
+  ) => {
     try {
       const count = data.amount;
       const response = await trigger({ count });
