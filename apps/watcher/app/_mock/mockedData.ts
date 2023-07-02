@@ -171,6 +171,9 @@ export const healthStatus: ApiHealthStatusResponse = [
 ];
 
 export const withdraw: ApiWithdrawResponse = 'OK';
+
 export const permit: ApiPermitResponse = {
   txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
 };
+
+export const permitReturn = permit;

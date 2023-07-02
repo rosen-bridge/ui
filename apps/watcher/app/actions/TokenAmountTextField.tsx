@@ -20,7 +20,7 @@ interface TokenAmountCompatibleFormSchema {
 interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
-  token: TokenInfo | undefined;
+  token: Pick<TokenInfo, 'amount' | 'decimals'> | undefined;
 }
 /**
  * render a react-hook-form compatible text field for token amount input,
