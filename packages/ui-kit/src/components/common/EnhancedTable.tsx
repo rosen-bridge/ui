@@ -49,7 +49,7 @@ type NotPaginatedTableProps = {
 type TablePaginationProps = PaginatedTableProps | NotPaginatedTableProps;
 
 export type EnhancedTableProps<Row> = {
-  ResponsiveHead: TableResponsiveHead;
+  responsiveHead: TableResponsiveHead;
   responsiveRenderRow: TableRowRenderProp<Row>;
   data: Row[];
 } & TablePaginationProps;
@@ -60,7 +60,7 @@ export type EnhancedTableProps<Row> = {
  *
  * @param {Row[]} data - list of rows that should be rendered in the table
  *
- * @param {TableResponsiveHead} ResponsiveHead -this prop is used to define the table header.
+ * @param {TableResponsiveHead} responsiveHead -this prop is used to define the table header.
  *  this prop takes an object with the theme breakpoints as its keys and a list of TableHeadItems as
  *  its value, the correct value will be rendered based on the current screen size.
  *
@@ -86,12 +86,12 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     data,
 
     responsiveRenderRow,
-    ResponsiveHead,
+    responsiveHead,
 
     paginated,
   } = props;
 
-  const tableHead = useResponsiveValue(ResponsiveHead);
+  const tableHead = useResponsiveValue(responsiveHead);
 
   const renderRow = useResponsiveValue(responsiveRenderRow);
 
