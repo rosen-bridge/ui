@@ -3,13 +3,14 @@
 import React from 'react';
 import { SWRConfig } from 'swr';
 
-import { styled } from '@rosen-bridge/ui-kit';
+import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
-import SideBar from '@/_components/SideBar';
+import SideBar from './SideBar';
+import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
-import { mockFetcherMiddleware } from './_mock/mockFetcherMiddleware';
+import mockMiddleware from './_mock/mockMiddleware';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -63,21 +64,26 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
      */
     <html lang="en">
       <body>
-        <ThemeProvider>
-          <Root>
-            <SideBar />
-            <SWRConfig
-              value={{
-                use:
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    ? [mockFetcherMiddleware]
-                    : [],
-              }}
-            >
-              <Main>{children}</Main>
-            </SWRConfig>
-          </Root>
-        </ThemeProvider>
+        <NoSsr>
+          <ThemeProvider>
+            <Root>
+              <SideBar />
+              <SWRConfig
+                value={{
+                  use:
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                      ? [mockMiddleware]
+                      : [],
+                }}
+              >
+                <Main>
+                  <Toolbar />
+                  {children}
+                </Main>
+              </SWRConfig>
+            </Root>
+          </ThemeProvider>
+        </NoSsr>
       </body>
     </html>
   );
