@@ -1,0 +1,25 @@
+{
+  "name": "@rosen-ui/swr-mock",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "prettify": "prettier --write . --ignore-path .gitignore",
+    "lint": "eslint --fix . && npm run prettify",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.8.4",
+    "typescript": "^5.0.0"
+  },
+  "peerDependencies": {
+    "swr": "^2.2.0"
+  }
+}

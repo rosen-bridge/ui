@@ -1,5 +1,8 @@
 import moment from 'moment';
 
+import { SWRConfigProps } from '@rosen-ui/swr-mock';
+
+import { ChartPeriod } from '@/_types';
 import {
   ApiAddressAssetsResponse,
   ApiHealthStatusResponse,
@@ -9,7 +12,7 @@ import {
   ApiWithdrawResponse,
 } from '@/_types/api';
 
-export const info: ApiInfoResponse = {
+const info: ApiInfoResponse = {
   address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
   currentBalance: 150n,
   health: 'Unstable',
@@ -19,7 +22,7 @@ export const info: ApiInfoResponse = {
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
 };
 
-export const addressAssets: ApiAddressAssetsResponse = [
+const addressAssets: ApiAddressAssetsResponse = [
   {
     name: 'awesome token',
     tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
@@ -127,13 +130,13 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       })),
   },
 ];
-export const revenueChart = {
+const revenueChart = {
   week: revenueChartWeekly,
   month: revenueChartMonthly,
   year: revenueChartYearly,
 };
 
-export const healthStatus: ApiHealthStatusResponse = [
+const healthStatus: ApiHealthStatusResponse = [
   {
     status: 'Unstable',
     lastCheck: '2023-06-26T11:15:43.189Z',
@@ -170,10 +173,28 @@ export const healthStatus: ApiHealthStatusResponse = [
   },
 ];
 
-export const withdraw: ApiWithdrawResponse = 'OK';
+const withdraw: ApiWithdrawResponse = 'OK';
 
-export const permit: ApiPermitResponse = {
+const permit: ApiPermitResponse = {
   txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
 };
 
-export const permitReturn = permit;
+const permitReturn = permit;
+
+const mockedData: SWRConfigProps['fakeData'] = {
+  withStringKeys: {
+    '/info': info,
+    '/address/assets': addressAssets,
+    '/health/status': healthStatus,
+    '/withdraw': withdraw,
+    '/permit': permit,
+    '/permit/return': permitReturn,
+  },
+  withObjectKeys: {
+    '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
+      return revenueChart[period];
+    },
+  },
+};
+
+export default mockedData;
