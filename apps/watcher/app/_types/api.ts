@@ -44,3 +44,6 @@ export interface ApiPermitRequestBody {
 export interface ApiPermitResponse {
   txId: string;
 }
+
+export type ApiPermitReturnRequestBody = ApiPermitRequestBody;
+export type ApiPermitReturnResponse = ApiPermitResponse;

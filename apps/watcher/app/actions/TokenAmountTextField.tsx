@@ -13,14 +13,14 @@ import { getDecimalString, getNonDecimalString } from '@/_utils/decimals';
 
 import { TokenInfo } from '@/_types/api';
 
-interface TokenAmountCompatibleFormSchema {
+export interface TokenAmountCompatibleFormSchema {
   amount: string;
 }
 
 interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
-  token: TokenInfo | undefined;
+  token: Pick<TokenInfo, 'amount' | 'decimals'> | undefined;
 }
 /**
  * render a react-hook-form compatible text field for token amount input,
