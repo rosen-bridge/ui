@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { SWRConfig } from 'swr';
+import SWRConfig from '@rosen-ui/swr-mock';
 
 import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
@@ -10,7 +10,7 @@ import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
-import mockMiddleware from './_mock/mockMiddleware';
+import mockedData from './_mock/mockedData';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -69,12 +69,10 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             <Root>
               <SideBar />
               <SWRConfig
-                value={{
-                  use:
-                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                      ? [mockMiddleware]
-                      : [],
-                }}
+                useMockedApis={
+                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                }
+                fakeData={mockedData}
               >
                 <Main>
                   <Toolbar />
