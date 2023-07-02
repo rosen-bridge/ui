@@ -5,3 +5,4 @@ export * from './common/AppBar';
 export * from './common/NavigationButton';
 export * from './common/Toolbar';
 export * from './common/FullCard';
+export * from './common/EnhancedTable';
