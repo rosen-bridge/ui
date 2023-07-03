@@ -4,11 +4,10 @@ import { useCallback } from 'react';
 import useSWR from 'swr';
 
 import { Grid } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import HealthParamCard from './HealthParamCard';
 import HealthParamCardSkeleton from './HealthParamCardSkeleton';
-
-import fetcher from '@/_utils/fetcher';
 
 import { ApiHealthStatusResponse, HealthParamInfo } from '@/_types/api';
 

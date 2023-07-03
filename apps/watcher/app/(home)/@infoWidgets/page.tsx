@@ -3,14 +3,13 @@
 import Image from 'next/image';
 import useSWR from 'swr';
 
-import { healthStatusColorMap } from '@rosen-ui/constants';
 import { LockAlt, ShieldCheck, Wallet } from '@rosen-bridge/icons';
 import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
+import { healthStatusColorMap } from '@rosen-ui/constants';
+import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
 
 import InfoWidgetCard from './InfoWidgetCard';
-
-import fetcher from '@/_utils/fetcher';
 
 import { ApiInfoResponse } from '@/_types/api';
 

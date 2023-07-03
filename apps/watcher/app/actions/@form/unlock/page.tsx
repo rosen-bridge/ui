@@ -6,15 +6,13 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import { AlertProps, Box, Grid } from '@rosen-bridge/ui-kit';
+import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 
 import AlertCard from '../../AlertCard';
 import SubmitButton from '../../SubmitButton';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-
-import fetcher from '@/_utils/fetcher';
-import mutator from '@/_utils/mutator';
 
 import {
   ApiInfoResponse,
