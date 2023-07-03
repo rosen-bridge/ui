@@ -7,8 +7,7 @@ import {
   Typography,
   styled,
 } from '@rosen-bridge/ui-kit';
-
-import { AugmentedPalette } from '@/_types/style';
+import { AugmentedPalette } from '@rosen-ui/types';
 
 interface InfoWidgetCardBaseProps {
   widgetColor: keyof AugmentedPalette;

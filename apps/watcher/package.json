@@ -29,6 +29,7 @@
     "swr": "^2.1.5"
   },
   "devDependencies": {
+    "@rosen-ui/types": "^0.0.1",
     "@types/json-bigint": "^1.0.1",
     "@types/moment": "^2.13.0",
     "@types/node": "20.2.5",

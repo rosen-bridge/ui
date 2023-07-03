@@ -29,6 +29,9 @@ build:
         - packages/*/node_modules
         - packages/*/dist
   script:
+    # FIXME: This needs to be removed when a monorepo build mechanism is added
+    # https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/24
+    - npm run build --workspace packages/ui-kit
     - npm run build --workspace packages --if-present
 
 type_check:

@@ -27,10 +27,13 @@
   "exclude": ["node_modules"],
   "references": [
     {
+      "path": "../../packages/constants"
+    },
+    {
       "path": "../../packages/swr-mock"
     },
     {
-      "path": "../../packages/constants"
+      "path": "../../packages/types"
     }
   ]
 }
