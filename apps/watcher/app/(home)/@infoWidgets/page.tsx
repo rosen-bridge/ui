@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import useSWR from 'swr';
 
+import { healthStatusColorMap } from '@rosen-ui/constants';
 import { LockAlt, ShieldCheck, Wallet } from '@rosen-bridge/icons';
 import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 
@@ -12,12 +13,6 @@ import fetcher from '@/_utils/fetcher';
 
 import { ApiInfoResponse } from '@/_types/api';
 import { AugmentedPalette } from '@/_types/style';
-
-const healthStatusColorMap = {
-  Healthy: 'success',
-  Unstable: 'warning',
-  Broken: 'error',
-};
 
 const InfoWidgets = () => {
   const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
