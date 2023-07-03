@@ -30,6 +30,9 @@
       "path": "../../packages/constants"
     },
     {
+      "path": "../../packages/swr-helpers"
+    },
+    {
       "path": "../../packages/swr-mock"
     },
     {

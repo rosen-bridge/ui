@@ -4,12 +4,11 @@ import React from 'react';
 import useSWR from 'swr';
 
 import { Box, Card, FullCard, Grid, Typography } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import AddressSkeleton from './AddressSkeleton';
 import CopyButton from './CopyButton';
 import QrCodeButton from './QrCodeButton';
-
-import fetcher from '@/_utils/fetcher';
 
 import { ApiInfoResponse } from '@/_types/api';
 

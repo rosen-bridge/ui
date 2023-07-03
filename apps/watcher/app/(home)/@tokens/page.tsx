@@ -3,11 +3,10 @@
 import useSWR from 'swr';
 
 import { Button, FullCard, List } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import TokenListItem from './TokenListItem';
 import TokenListItemSkeleton from './TokenListItemSkeleton';
-
-import fetcher from '@/_utils/fetcher';
 
 import { ApiAddressAssetsResponse } from '@/_types/api';
 

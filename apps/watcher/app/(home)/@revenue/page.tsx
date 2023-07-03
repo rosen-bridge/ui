@@ -4,12 +4,11 @@ import React, { useState } from 'react';
 import useSWR from 'swr';
 
 import { FullCard } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import PeriodSelect from './PeriodSelect';
 import RevenueChart from './RevenueChart';
 import RevenueChartSkeleton from './RevenueChartSkeleton';
-
-import fetcher from '@/_utils/fetcher';
 
 import { ChartPeriod } from '@/_types';
 import { ApiRevenueChartResponse } from '@/_types/api';
