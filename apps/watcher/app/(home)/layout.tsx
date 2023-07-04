@@ -1,8 +1,7 @@
 'use client';
 
 import { Grid } from '@rosen-bridge/ui-kit';
-
-import { LayoutProps } from '@/_types';
+import { LayoutProps } from '@rosen-ui/types';
 
 const HomeLayout = ({
   actions,

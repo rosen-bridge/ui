@@ -11,15 +11,20 @@
     "start": "next start"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
     "@rosen-bridge/icons": "^0.1.0",
     "@rosen-bridge/ui-kit": "^0.1.0",
+    "@rosen-ui/constants": "^0.0.1",
+    "@rosen-ui/swr-helpers": "^0.0.1",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0"
+    "swr": "^2.2.0"
   },
   "devDependencies": {
+    "@rosen-ui/swr-mock": "^0.0.1",
+    "@rosen-ui/types": "^0.0.1",
     "@types/node": "20.2.5",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.4",

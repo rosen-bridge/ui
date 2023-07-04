@@ -2,6 +2,7 @@ import React from 'react';
 
 import {
   Box,
+  Id,
   ListItem,
   ListItemAvatar,
   ListItemText,
@@ -9,7 +10,6 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import TokenListItemAvatar from './TokenListItemAvatar';
-import Id from '@/_components/Id';
 
 import { getDecimalString } from '@/_utils/decimals';
 

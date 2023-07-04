@@ -1,6 +1,6 @@
-import { Typography } from '@rosen-bridge/ui-kit';
+import { Typography } from '../base';
 
-interface IdProps {
+export interface IdProps {
   id: string;
 }
 /**
@@ -8,10 +8,8 @@ interface IdProps {
  * the middle
  * @param id
  */
-const Id = ({ id }: IdProps) => (
+export const Id = ({ id }: IdProps) => (
   <Typography noWrap variant="caption">{`${id.slice(0, 8)}...${id.slice(
     -8
   )}`}</Typography>
 );
-
-export default Id;
