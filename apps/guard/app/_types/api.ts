@@ -1,3 +1,5 @@
+import { TokenChartData } from '@rosen-ui/types';
+
 export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
   hot: {
@@ -9,3 +11,5 @@ export interface ApiInfoResponse {
     balance: string;
   };
 }
+
+export type ApiRevenueChartResponse = TokenChartData[];
