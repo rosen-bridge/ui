@@ -1,3 +1,5 @@
+import { TokenChartData } from '@rosen-ui/types';
+
 export interface ApiInfoResponse {
   currentBalance: bigint;
   network: string;
@@ -15,13 +17,6 @@ export interface TokenInfo {
 }
 export type ApiAddressAssetsResponse = TokenInfo[];
 
-export interface TokenChartData {
-  title: string;
-  data: {
-    label: string;
-    amount: string;
-  }[];
-}
 export type ApiRevenueChartResponse = TokenChartData[];
 
 export interface HealthParamInfo {

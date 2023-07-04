@@ -5,12 +5,12 @@ import useSWR from 'swr';
 
 import { FullCard } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { ChartPeriod } from '@rosen-ui/types';
 
 import PeriodSelect from './PeriodSelect';
 import RevenueChart from './RevenueChart';
 import RevenueChartSkeleton from './RevenueChartSkeleton';
 
-import { ChartPeriod } from '@/_types';
 import { ApiRevenueChartResponse } from '@/_types/api';
 
 const Revenue = () => {

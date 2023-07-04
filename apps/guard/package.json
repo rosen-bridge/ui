@@ -17,6 +17,7 @@
     "@rosen-bridge/ui-kit": "^0.1.0",
     "@rosen-ui/constants": "^0.0.1",
     "@rosen-ui/swr-helpers": "^0.0.1",
+    "moment": "^2.29.4",
     "next": "13.4.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -25,6 +26,7 @@
   "devDependencies": {
     "@rosen-ui/swr-mock": "^0.0.1",
     "@rosen-ui/types": "^0.0.1",
+    "@types/moment": "^2.13.0",
     "@types/node": "20.2.5",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.4",
