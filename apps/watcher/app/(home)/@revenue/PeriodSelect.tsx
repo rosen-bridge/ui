@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 
 import { AngleDown } from '@rosen-bridge/icons';
 import { Box, Button, Menu, MenuItem, SvgIcon } from '@rosen-bridge/ui-kit';
-
-import { ChartPeriod } from '@/_types';
+import { ChartPeriod } from '@rosen-ui/types';
 
 const periodOptions = ['week', 'month', 'year'] as const;
 

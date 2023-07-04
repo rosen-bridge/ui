@@ -3,8 +3,8 @@ import React, { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
+import { ChartPeriod } from '@rosen-ui/types';
 
-import { ChartPeriod } from '@/_types';
 import { ApiRevenueChartResponse } from '@/_types/api';
 
 /**
