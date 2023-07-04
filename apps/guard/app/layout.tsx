@@ -3,10 +3,14 @@
 import React from 'react';
 
 import { NoSsr, styled } from '@rosen-bridge/ui-kit';
+import SWRConfig from '@rosen-ui/swr-mock';
 
 import SideBar from './SideBar';
-import ThemeProvider from '@/_theme/ThemeProvider';
 import Toolbar from './Toolbar';
+
+import ThemeProvider from '@/_theme/ThemeProvider';
+
+import mockedData from './_mock/mockedData';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -61,10 +65,17 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <ThemeProvider>
             <Root>
               <SideBar />
-              <Main>
-                <Toolbar />
-                {children}
-              </Main>
+              <SWRConfig
+                useMockedApis={
+                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                }
+                fakeData={mockedData}
+              >
+                <Main>
+                  <Toolbar />
+                  {children}
+                </Main>
+              </SWRConfig>
             </Root>
           </ThemeProvider>
         </NoSsr>
