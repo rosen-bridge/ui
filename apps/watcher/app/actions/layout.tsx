@@ -20,7 +20,7 @@ import {
 
 import ToggleButton from './ToggleButton';
 
-import { LayoutProps } from '@/_types';
+import { LayoutProps } from '@rosen-ui/types';
 
 /**
  * render a box which is scrollable in mobile devices
