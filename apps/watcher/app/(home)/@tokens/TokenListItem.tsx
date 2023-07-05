@@ -8,10 +8,9 @@ import {
   ListItemText,
   Typography,
 } from '@rosen-bridge/ui-kit';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import TokenListItemAvatar from './TokenListItemAvatar';
-
-import { getDecimalString } from '@/_utils/decimals';
 
 import { TOKEN_NAME_PLACEHOLDER } from '@/_constants';
 

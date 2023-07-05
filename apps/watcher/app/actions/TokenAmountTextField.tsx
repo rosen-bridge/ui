@@ -9,8 +9,7 @@ import {
   TextField,
 } from '@rosen-bridge/ui-kit';
 import { TokenInfo } from '@rosen-ui/types';
-
-import { getDecimalString, getNonDecimalString } from '@/_utils/decimals';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 export interface TokenAmountCompatibleFormSchema {
   amount: string;
