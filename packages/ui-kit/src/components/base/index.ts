@@ -47,6 +47,7 @@ export * from './Stack';
 export * from './SvgIcon';
 export * from './Switch';
 export * from './Tab';
+export * from './Tabs';
 export * from './TextField';
 export * from './Table';
 export * from './TableBody';

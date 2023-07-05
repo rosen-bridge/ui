@@ -11,18 +11,18 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import {
+  AlertCard,
   AlertProps,
   Box,
   CircularProgress,
   Grid,
   InputAdornment,
   MenuItem,
+  SubmitButton,
   TextField,
 } from '@rosen-bridge/ui-kit';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 
-import AlertCard from '../../AlertCard';
-import SubmitButton from '../../SubmitButton';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';

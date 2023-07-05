@@ -3,7 +3,11 @@ import moment from 'moment';
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
 
-import { ApiInfoResponse, ApiRevenueChartResponse } from '@/_types/api';
+import {
+  ApiInfoResponse,
+  ApiRevenueChartResponse,
+  ApiSignResponse,
+} from '@/_types/api';
 
 const info: ApiInfoResponse = {
   health: 'Unstable',
@@ -105,10 +109,13 @@ const revenueChart = {
   year: revenueChartYearly,
 };
 
+const sign: ApiSignResponse = 'OK';
+
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
     '/revenue/chart': revenueChart,
+    '/sign': sign,
   },
   withObjectKeys: {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {

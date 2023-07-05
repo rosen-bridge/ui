@@ -3,7 +3,7 @@ import dts from 'vite-plugin-dts';
 import svgr from 'vite-plugin-svgr';
 
 export default defineConfig({
-  plugins: [dts(), svgr()],
+  plugins: [dts({ entryRoot: './src' }), svgr()],
   build: {
     lib: {
       entry: './src/index.ts',
