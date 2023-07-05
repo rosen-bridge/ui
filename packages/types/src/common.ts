@@ -7,3 +7,10 @@ export interface TokenChartData {
     amount: string;
   }[];
 }
+
+export interface TokenInfo {
+  amount: bigint;
+  decimals: number;
+  name?: string;
+  tokenId: string;
+}
