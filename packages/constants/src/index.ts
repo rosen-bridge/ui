@@ -3,3 +3,5 @@ export const healthStatusColorMap = {
   Unstable: 'warning',
   Broken: 'error',
 };
+
+export const TOKEN_NAME_PLACEHOLDER = 'unnamed token';

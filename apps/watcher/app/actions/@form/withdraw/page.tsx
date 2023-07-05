@@ -21,14 +21,13 @@ import {
   SubmitButton,
   TextField,
 } from '@rosen-bridge/ui-kit';
+import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-
-import { TOKEN_NAME_PLACEHOLDER } from '@/_constants';
 
 import {
   ApiAddressAssetsResponse,
