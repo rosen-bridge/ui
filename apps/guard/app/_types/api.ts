@@ -13,3 +13,8 @@ export interface ApiInfoResponse {
 }
 
 export type ApiRevenueChartResponse = TokenChartData[];
+
+export interface ApiSignRequestBody {
+  tx: string;
+}
+export type ApiSignResponse = 'OK';
