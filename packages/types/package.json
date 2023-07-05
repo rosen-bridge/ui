@@ -12,14 +12,12 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
+    "@mui/material": "^5.13.7",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.8.4",
     "typescript": "^5.0.0"
-  },
-  "peerDependencies": {
-    "@rosen-bridge/ui-kit": "^0.1.0"
   }
 }

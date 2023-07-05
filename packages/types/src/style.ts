@@ -1,4 +1,4 @@
-import { Palette, PaletteColor } from '@rosen-bridge/ui-kit';
+import { Palette, PaletteColor } from '@mui/material';
 
 export type AugmentedPalette = {
   [Key in keyof Palette as Palette[Key] extends PaletteColor
