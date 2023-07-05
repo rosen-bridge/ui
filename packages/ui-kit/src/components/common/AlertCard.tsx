@@ -1,15 +1,9 @@
-import React, { EventHandler, ReactNode, SyntheticEvent } from 'react';
+import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
 import { Times } from '@rosen-bridge/icons';
-import {
-  Alert,
-  AlertProps,
-  Collapse,
-  IconButton,
-  SvgIcon,
-} from '@rosen-bridge/ui-kit';
+import { Alert, AlertProps, Collapse, IconButton, SvgIcon } from '../base';
 
-interface AlertCardProps {
+export interface AlertCardProps {
   severity: AlertProps['severity'] | null;
   onClose: EventHandler<SyntheticEvent>;
   children: ReactNode;
@@ -21,7 +15,7 @@ interface AlertCardProps {
  * @param onClose
  * @param children
  */
-const AlertCard = ({ severity, onClose, children }: AlertCardProps) => {
+export const AlertCard = ({ severity, onClose, children }: AlertCardProps) => {
   return (
     <Collapse in={!!severity}>
       <Alert
@@ -47,5 +41,3 @@ const AlertCard = ({ severity, onClose, children }: AlertCardProps) => {
     </Collapse>
   );
 };
-
-export default AlertCard;

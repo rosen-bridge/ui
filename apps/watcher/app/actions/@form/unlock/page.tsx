@@ -5,10 +5,15 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { AlertProps, Box, Grid, SubmitButton } from '@rosen-bridge/ui-kit';
+import {
+  AlertCard,
+  AlertProps,
+  Box,
+  Grid,
+  SubmitButton,
+} from '@rosen-bridge/ui-kit';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 
-import AlertCard from '../../AlertCard';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';

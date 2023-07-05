@@ -1,3 +1,4 @@
+export * from './AlertCard';
 export * from './AppBar';
 export * from './AppLogo';
 export * from './EnhancedTable';

@@ -11,6 +11,7 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import {
+  AlertCard,
   AlertProps,
   Box,
   CircularProgress,
@@ -22,7 +23,6 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 
-import AlertCard from '../../AlertCard';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
