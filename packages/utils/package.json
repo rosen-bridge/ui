@@ -1,5 +1,5 @@
 {
-  "name": "@rosen-ui/types",
+  "name": "@rosen-ui/utils",
   "version": "0.0.1",
   "private": true,
   "main": "dist/src/index.js",
@@ -12,7 +12,6 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@mui/material": "^5.13.7",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",

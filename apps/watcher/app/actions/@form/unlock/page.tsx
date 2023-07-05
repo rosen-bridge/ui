@@ -13,6 +13,7 @@ import {
   SubmitButton,
 } from '@rosen-bridge/ui-kit';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
+import { TokenInfo } from '@rosen-ui/types';
 
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
@@ -22,7 +23,6 @@ import {
   ApiInfoResponse,
   ApiPermitRequestBody,
   ApiPermitResponse,
-  TokenInfo,
 } from '@/_types/api';
 
 const UnlockForm = () => {

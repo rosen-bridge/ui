@@ -6,4 +6,5 @@ export * from './FullCard';
 export * from './Id';
 export * from './NavigationButton';
 export * from './SubmitButton';
+export * from './TokensCard';
 export * from './Toolbar';
