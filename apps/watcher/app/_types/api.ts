@@ -42,3 +42,27 @@ export interface ApiPermitResponse {
 
 export type ApiPermitReturnRequestBody = ApiPermitRequestBody;
 export type ApiPermitReturnResponse = ApiPermitResponse;
+
+export interface Observation {
+  id: number;
+  fromChain: string;
+  toChain: string;
+  fromAddress: string;
+  toAddress: string;
+  height: number;
+  amount: string;
+  networkFee: string;
+  bridgeFee: string;
+  sourceChainTokenId: string;
+  targetChainTokenId: string;
+  sourceTxId: string;
+  sourceBlockId: string;
+  requestId: string;
+  block: string;
+  extractor: string;
+}
+
+export type ApiObservationResponse = {
+  total: number;
+  items: Observation[];
+};
