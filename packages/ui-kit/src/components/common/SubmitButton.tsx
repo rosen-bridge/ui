@@ -1,18 +1,18 @@
 import { ReactNode } from 'react';
 
-import { LoadingButton } from '@rosen-bridge/ui-kit';
+import { LoadingButton } from '../base';
 
-interface SubmitButtonProps {
+export interface SubmitButtonProps {
   loading: boolean;
   children: ReactNode;
 }
 /**
- * render a submit button to be used in actions page
+ * render a submit button
  *
  * @param loading
  * @param children
  */
-const SubmitButton = ({ loading, children }: SubmitButtonProps) => (
+export const SubmitButton = ({ loading, children }: SubmitButtonProps) => (
   <LoadingButton
     sx={{
       width: { mobile: '100%', laptop: '50%' },
@@ -27,5 +27,3 @@ const SubmitButton = ({ loading, children }: SubmitButtonProps) => (
     {children}
   </LoadingButton>
 );
-
-export default SubmitButton;
