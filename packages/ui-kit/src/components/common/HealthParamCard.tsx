@@ -1,17 +1,14 @@
 import moment from 'moment';
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ShieldCheck, ShieldExclamation } from '@rosen-bridge/icons';
-import {
-  Button,
-  FullCard,
-  SvgIcon,
-  Typography,
-  useTheme,
-} from '@rosen-bridge/ui-kit';
 import { HealthParamInfo } from '@rosen-ui/types';
 
-type HealthParamCardProps = HealthParamInfo & {
+import { FullCard } from '.';
+import { useTheme } from '../../hooks';
+import { Button, SvgIcon, Typography } from '../base';
+
+export type HealthParamCardProps = HealthParamInfo & {
   handleCheckNow: () => void;
 };
 /**
@@ -23,7 +20,7 @@ type HealthParamCardProps = HealthParamInfo & {
  * @param lastCheck
  * @param handleCheckNow
  */
-const HealthParamCard = ({
+export const HealthParamCard = ({
   id,
   status,
   description,
@@ -83,5 +80,3 @@ const HealthParamCard = ({
     </FullCard>
   );
 };
-
-export default HealthParamCard;

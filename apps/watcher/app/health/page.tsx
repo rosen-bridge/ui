@@ -3,12 +3,13 @@
 import { useCallback } from 'react';
 import useSWR from 'swr';
 
-import { Grid } from '@rosen-bridge/ui-kit';
+import {
+  Grid,
+  HealthParamCard,
+  HealthParamCardSkeleton,
+} from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { HealthParamInfo } from '@rosen-ui/types';
-
-import HealthParamCard from './HealthParamCard';
-import HealthParamCardSkeleton from './HealthParamCardSkeleton';
 
 import { ApiHealthStatusResponse } from '@/_types/api';
 
