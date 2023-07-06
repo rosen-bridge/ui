@@ -5,11 +5,12 @@ import useSWR from 'swr';
 
 import { Grid } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { HealthParamInfo } from '@rosen-ui/types';
 
 import HealthParamCard from './HealthParamCard';
 import HealthParamCardSkeleton from './HealthParamCardSkeleton';
 
-import { ApiHealthStatusResponse, HealthParamInfo } from '@/_types/api';
+import { ApiHealthStatusResponse } from '@/_types/api';
 
 const Health = () => {
   const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>(

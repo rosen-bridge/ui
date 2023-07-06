@@ -1,4 +1,4 @@
-import { TokenChartData, TokenInfo } from '@rosen-ui/types';
+import { HealthParamInfo, TokenChartData, TokenInfo } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
   currentBalance: bigint;
@@ -13,12 +13,6 @@ export type ApiAddressAssetsResponse = TokenInfo[];
 
 export type ApiRevenueChartResponse = TokenChartData[];
 
-export interface HealthParamInfo {
-  id: string;
-  status: 'Healthy' | 'Unstable' | 'Broken';
-  lastCheck: string;
-  description?: string;
-}
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
 export interface ApiWithdrawRequestBody {

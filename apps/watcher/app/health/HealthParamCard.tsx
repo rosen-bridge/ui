@@ -9,8 +9,7 @@ import {
   Typography,
   useTheme,
 } from '@rosen-bridge/ui-kit';
-
-import { HealthParamInfo } from '@/_types/api';
+import { HealthParamInfo } from '@rosen-ui/types';
 
 type HealthParamCardProps = HealthParamInfo & {
   handleCheckNow: () => void;
