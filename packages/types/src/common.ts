@@ -14,3 +14,10 @@ export interface TokenInfo {
   name?: string;
   tokenId: string;
 }
+
+export interface HealthParamInfo {
+  id: string;
+  status: 'Healthy' | 'Unstable' | 'Broken';
+  lastCheck: string;
+  description?: string;
+}

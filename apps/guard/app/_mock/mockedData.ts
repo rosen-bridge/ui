@@ -5,6 +5,7 @@ import { ChartPeriod } from '@rosen-ui/types';
 
 import {
   ApiAddressAssetsResponse,
+  ApiHealthStatusResponse,
   ApiInfoResponse,
   ApiRevenueChartResponse,
   ApiSignResponse,
@@ -138,11 +139,49 @@ const assets: ApiAddressAssetsResponse = [
   },
 ];
 
+const healthStatus: ApiHealthStatusResponse = [
+  {
+    status: 'Unstable',
+    lastCheck: '2023-06-26T11:15:43.189Z',
+    id: 'error logs',
+  },
+  {
+    status: 'Healthy',
+    lastCheck: '2023-06-26T11:15:43.642Z',
+    id: 'Wid Check',
+  },
+  {
+    status: 'Healthy',
+    lastCheck: '2023-06-26T11:15:43.509Z',
+    id: 'Native Asset erg Check',
+  },
+  {
+    status: 'Broken',
+    description:
+      'Service has stopped working. [ergo-node] scanner is out of sync.\nPlease check the scanner status, [3487] blocks are created but not scanned.\n',
+    lastCheck: '2023-06-26T11:15:43.544Z',
+    id: 'Scanner ergo-node Sync Check',
+  },
+  {
+    status: 'Healthy',
+    lastCheck: '2023-06-26T11:15:45.206Z',
+    id: 'Ergo Node Sync Check',
+  },
+  {
+    status: 'Broken',
+    description:
+      'Service has stopped working. [cardano-koios] scanner is out of sync.\nPlease check the scanner status, [33283] blocks are created but not scanned.\n',
+    lastCheck: '2023-06-26T11:15:43.553Z',
+    id: 'Scanner cardano-koios Sync Check',
+  },
+];
+
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
     '/revenue/chart': revenueChart,
     '/sign': sign,
+    '/health/status': healthStatus,
   },
   withObjectKeys: {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
