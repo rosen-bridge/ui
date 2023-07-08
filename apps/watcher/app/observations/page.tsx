@@ -1,56 +1,34 @@
 'use client';
-import { useCallback, useMemo, useState } from 'react';
-import useSWR from 'swr';
+import { MouseEvent, useCallback, useMemo } from 'react';
 
-import { EnhancedTable, Grid } from '@rosen-bridge/ui-kit';
+import {
+  EnhancedTable,
+  Grid,
+  useTableDataPagination,
+} from '@rosen-bridge/ui-kit';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
 
-import { fetcher } from '@rosen-ui/swr-helpers';
-
 import { ApiObservationResponse, Observation } from '@/_types/api';
 
-type RowProps = Observation;
-
-const useTableDataPagination = (
-  getKey: typeof getKe,
-  initialPageSize: number = 10,
-  initialPageIndex: number = 0
-) => {
-  const [pageSize, setPageSize] = useState<number>(initialPageSize);
-  const [pageIndex, setPageIndex] = useState<number>(initialPageIndex);
-
-  const handlePageSizeChange = useCallback((newPageSize: number) => {
-    setPageSize(newPageSize);
-    setPageIndex(0);
-  }, []);
-
-  const { data, isLoading } = useSWR<ApiObservationResponse>(
-    getKey(pageIndex * pageSize, pageSize),
-    fetcher
-  );
-
-  return {
-    isLoading,
-    data,
-    setPageSize: handlePageSizeChange,
-    pageSize,
-    pageIndex,
-    setPageIndex,
-  };
-};
-
-const getKe = (offset: number, limit: number) => {
+const getKey = (offset: number, limit: number) => {
   return ['/observation', { offset, limit }];
 };
 
 const Observations = () => {
-  const { data, isLoading, pageIndex, pageSize, setPageIndex, setPageSize } =
-    useTableDataPagination(getKe);
+  const {
+    data,
+    isLoading,
+    pageIndex,
+    pageSize,
+    setPageIndex,
+    setPageSize,
+    isFirstLoad,
+  } = useTableDataPagination<ApiObservationResponse>(getKey);
 
   const handleChangePage = useCallback(
-    (event: unknown, newPage: number) => {
+    (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
     [setPageIndex]
@@ -64,13 +42,13 @@ const Observations = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Observation) => <MobileRow {...rowData} />,
-    []
+    (rowData: Observation) => <MobileRow {...rowData} isLoading={isLoading} />,
+    [isLoading]
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Observation) => <TabletRow {...rowData} />,
-    []
+    (rowData: Observation) => <TabletRow {...rowData} isLoading={isLoading} />,
+    [isLoading]
   );
 
   const tableHeaderProps = useMemo(
@@ -98,6 +76,9 @@ const Observations = () => {
       page: pageIndex,
       onPageChange: handleChangePage,
       onRowsPerPageChange: handleChangeRowsPerPage,
+      nextIconButtonProps: {
+        disabled: isLoading,
+      },
     }),
     [
       data?.total,
@@ -105,10 +86,11 @@ const Observations = () => {
       pageSize,
       handleChangePage,
       handleChangeRowsPerPage,
+      isLoading,
     ]
   );
 
-  return isLoading ? (
+  return isFirstLoad ? (
     <Grid>
       <TableSkeleton numberOfItems={pageSize} />
     </Grid>

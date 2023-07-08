@@ -12,6 +12,7 @@ import { mobileHeader, tabletHeader } from './TableRow';
 interface TableSkeletonProps {
   numberOfItems: number;
 }
+
 const TableSkeleton: FC<TableSkeletonProps> = (props) => {
   const renderMobileRow = useCallback(
     () => (
@@ -56,14 +57,12 @@ const TableSkeleton: FC<TableSkeletonProps> = (props) => {
   );
 
   return (
-    <>
-      <EnhancedTable
-        data={new Array(props.numberOfItems || 5).fill({})}
-        responsiveHead={tableHeaderProps}
-        responsiveRenderRow={tableRenderRowProps}
-        paginated={false}
-      />
-    </>
+    <EnhancedTable
+      data={new Array(props.numberOfItems || 5).fill({})}
+      responsiveHead={tableHeaderProps}
+      responsiveRenderRow={tableRenderRowProps}
+      paginated={false}
+    />
   );
 };
 

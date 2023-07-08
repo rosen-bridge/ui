@@ -11,7 +11,13 @@ export default defineConfig({
       fileName: 'index',
     },
     rollupOptions: {
-      external: ['react', 'react-dom', '@emotion/react', '@emotion/styled'],
+      external: [
+        'react',
+        'react-dom',
+        '@emotion/react',
+        '@emotion/styled',
+        'swr',
+      ],
     },
   },
 });
