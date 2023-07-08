@@ -9,6 +9,7 @@ const pageTitleMap: Record<string, string> = {
   '(dashboard)': 'Dashboard',
   assets: 'Assets',
   events: 'Events',
+  health: 'Health',
   history: 'History',
   revenues: 'Revenues',
 };

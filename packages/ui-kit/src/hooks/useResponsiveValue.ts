@@ -23,7 +23,7 @@ type UseResponsiveValueOptions<
  */
 
 export const useResponsiveValue = <
-  T extends UseResponsiveValueOptions<T[keyof T]>
+  const T extends UseResponsiveValueOptions<T[keyof T]>
 >(
   data: T
 ) => {

@@ -20,5 +20,10 @@
     "useDefineForClassFields": true
   },
   "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "references": [
+    { "path": "./tsconfig.node.json" },
+    { "path": "../constants" },
+    { "path": "../types" },
+    { "path": "../utils" }
+  ]
 }

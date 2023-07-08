@@ -1,4 +1,4 @@
-import { TokenChartData } from '@rosen-ui/types';
+import { HealthParamInfo, TokenChartData, TokenInfo } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
@@ -13,3 +13,12 @@ export interface ApiInfoResponse {
 }
 
 export type ApiRevenueChartResponse = TokenChartData[];
+
+export interface ApiSignRequestBody {
+  tx: string;
+}
+export type ApiSignResponse = 'OK';
+
+export type ApiAddressAssetsResponse = TokenInfo[];
+
+export type ApiHealthStatusResponse = HealthParamInfo[];

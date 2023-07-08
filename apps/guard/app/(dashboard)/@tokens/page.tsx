@@ -1,9 +1,39 @@
 'use client';
 
-/**
- * TODO: Implement component as part of #10
- * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/10
- */
-const Tokens = () => null;
+import useSWR from 'swr';
+
+import { Grid, TokensCard } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+
+import { ApiAddressAssetsResponse } from '@/_types/api';
+
+const Tokens = () => {
+  const { data: ergoTokens, isLoading: isErogTokensLoading } =
+    useSWR<ApiAddressAssetsResponse>(['/assets', , { chain: 'ergo' }], fetcher);
+  const { data: cardanoTokens, isLoading: isCardanoTokensLoading } =
+    useSWR<ApiAddressAssetsResponse>(
+      ['/assets', { chain: 'cardano' }],
+      fetcher
+    );
+
+  return (
+    <>
+      <Grid item mobile={12} tablet={6}>
+        <TokensCard
+          tokens={ergoTokens ?? []}
+          isLoading={isErogTokensLoading}
+          title="Ergo Tokens"
+        />
+      </Grid>
+      <Grid item mobile={12} tablet={6}>
+        <TokensCard
+          tokens={cardanoTokens ?? []}
+          isLoading={isCardanoTokensLoading}
+          title="Cardano Tokens"
+        />
+      </Grid>
+    </>
+  );
+};
 
 export default Tokens;

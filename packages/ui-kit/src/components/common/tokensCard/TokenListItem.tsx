@@ -1,21 +1,17 @@
-import React from 'react';
+import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
+import { getDecimalString } from '@rosen-ui/utils';
 
+import { Id } from '..';
 import {
   Box,
-  Id,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Typography,
-} from '@rosen-bridge/ui-kit';
+} from '../../base';
+import { TokenListItemAvatar } from './TokenListItemAvatar';
 
-import TokenListItemAvatar from './TokenListItemAvatar';
-
-import { getDecimalString } from '@/_utils/decimals';
-
-import { TOKEN_NAME_PLACEHOLDER } from '@/_constants';
-
-interface TokenListItemProps {
+export interface TokenListItemProps {
   decimals: number;
   id: string;
   index: number;
@@ -23,14 +19,14 @@ interface TokenListItemProps {
   value: string;
 }
 /**
- * render a token list item in the home page
+ * render a token list item, showing its name, id, avatar and value
  * @param decimals
  * @param id
  * @param index
  * @param name
  * @param value
  */
-const TokenListItem = ({
+export const TokenListItem = ({
   decimals,
   id,
   index,
@@ -60,5 +56,3 @@ const TokenListItem = ({
     </ListItem>
   );
 };
-
-export default TokenListItem;

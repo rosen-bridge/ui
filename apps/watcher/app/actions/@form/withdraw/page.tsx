@@ -11,25 +11,23 @@ import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import {
+  AlertCard,
   AlertProps,
   Box,
   CircularProgress,
   Grid,
   InputAdornment,
   MenuItem,
+  SubmitButton,
   TextField,
 } from '@rosen-bridge/ui-kit';
+import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
+import { getNonDecimalString } from '@rosen-ui/utils';
 
-import AlertCard from '../../AlertCard';
-import SubmitButton from '../../SubmitButton';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-
-import { getNonDecimalString } from '@/_utils/decimals';
-
-import { TOKEN_NAME_PLACEHOLDER } from '@/_constants';
 
 import {
   ApiAddressAssetsResponse,

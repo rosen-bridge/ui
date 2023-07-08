@@ -4,6 +4,7 @@ import {
   BitcoinCircle,
   ClipboardNotes,
   Dashboard,
+  Heartbeat,
   History,
   Moneybag,
 } from '@rosen-bridge/icons';
@@ -46,6 +47,18 @@ const SideBar = () => {
               router.push('/' as Parameters<typeof router.push>[0])
             }
             isActive={pathname === '/'}
+          />
+        </Grid>
+        <Grid item>
+          <NavigationButton
+            label="Health"
+            icon={
+              <SvgIcon>
+                <Heartbeat />
+              </SvgIcon>
+            }
+            onClick={() => router.push('/health')}
+            isActive={pathname === '/health'}
           />
         </Grid>
         <Grid item>

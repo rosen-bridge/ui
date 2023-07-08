@@ -1,4 +1,6 @@
-import { useIsDarkMode, Avatar } from '@rosen-bridge/ui-kit';
+import { Avatar } from '../../base';
+
+import { useIsDarkMode } from '../../../hooks';
 
 /**
  * FIXME: use theme defined values
@@ -6,17 +8,21 @@ import { useIsDarkMode, Avatar } from '@rosen-bridge/ui-kit';
  */
 const PALETTE = ['#0081cf', '#0089ba', '#008e9b'];
 
-interface TokenListItemAvatarProps {
+export interface TokenListItemAvatarProps {
   name: string;
   index: number;
 }
 /**
  * render an avatar containing the first letter of `name` to be used inside a
  * `TokenListItem`
+ *
  * @param name
  * @param index index used to change background color of avatar
  */
-const TokenListItemAvatar = ({ name, index }: TokenListItemAvatarProps) => {
+export const TokenListItemAvatar = ({
+  name,
+  index,
+}: TokenListItemAvatarProps) => {
   const isDarkMode = useIsDarkMode();
 
   return (
@@ -34,5 +40,3 @@ const TokenListItemAvatar = ({ name, index }: TokenListItemAvatarProps) => {
     </Avatar>
   );
 };
-
-export default TokenListItemAvatar;

@@ -1,17 +1,15 @@
-import React from 'react';
-
 import {
   Box,
   ListItem,
   ListItemAvatar,
   ListItemText,
   Skeleton,
-} from '@rosen-bridge/ui-kit';
+} from '../../base';
 
 /**
  * render a skeleton for `TokenListItem`
  */
-const TokenListItemSkeleton = () => {
+export const TokenListItemSkeleton = () => {
   return (
     <ListItem disableGutters sx={{ py: 0.5 }}>
       <ListItemAvatar>
@@ -29,5 +27,3 @@ const TokenListItemSkeleton = () => {
     </ListItem>
   );
 };
-
-export default TokenListItemSkeleton;

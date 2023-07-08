@@ -7,3 +7,17 @@ export interface TokenChartData {
     amount: string;
   }[];
 }
+
+export interface TokenInfo {
+  amount: bigint;
+  decimals: number;
+  name?: string;
+  tokenId: string;
+}
+
+export interface HealthParamInfo {
+  id: string;
+  status: 'Healthy' | 'Unstable' | 'Broken';
+  lastCheck: string;
+  description?: string;
+}

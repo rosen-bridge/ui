@@ -5,16 +5,19 @@ import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
-import { AlertProps, Box, Grid } from '@rosen-bridge/ui-kit';
+import {
+  AlertCard,
+  AlertProps,
+  Box,
+  Grid,
+  SubmitButton,
+} from '@rosen-bridge/ui-kit';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
+import { getNonDecimalString } from '@rosen-ui/utils';
 
-import AlertCard from '../../AlertCard';
-import SubmitButton from '../../SubmitButton';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-
-import { getNonDecimalString } from '@/_utils/decimals';
 
 import {
   ApiAddressAssetsResponse,
