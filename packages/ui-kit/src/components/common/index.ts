@@ -2,6 +2,7 @@ export * from './AlertCard';
 export * from './AppBar';
 export * from './AppLogo';
 export * from './EnhancedTable';
+export * from './EnhancedTableCell';
 export * from './FullCard';
 export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';

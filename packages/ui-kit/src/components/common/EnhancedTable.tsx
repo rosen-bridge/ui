@@ -15,7 +15,7 @@ import {
   TableCellProps,
 } from '../base';
 
-import { useIsMobile, useResponsiveValue } from '../../hooks';
+import { useResponsiveValue } from '../../hooks';
 
 import type { ResponsiveValueOptionsBase } from '../../@types';
 
@@ -82,20 +82,11 @@ export type EnhancedTableProps<Row> = {
  */
 
 export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
-  const {
-    data,
-
-    responsiveRenderRow,
-    responsiveHead,
-
-    paginated,
-  } = props;
+  const { data, responsiveRenderRow, responsiveHead, paginated } = props;
 
   const tableHead = useResponsiveValue(responsiveHead);
 
   const renderRow = useResponsiveValue(responsiveRenderRow);
-
-  const isMobile = useIsMobile();
 
   const renderHead = () => (
     <TableHead>
@@ -114,13 +105,11 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const renderFooter = () =>
     paginated ? (
       <TableFooter>
-        <TableRow>
-          <TableCell colSpan={isMobile ? 2 : 8} padding="none">
-            <Box py={1}>
-              <TablePagination {...props.tablePaginationProps} />
-            </Box>
-          </TableCell>
-        </TableRow>
+        <TableCell colSpan={tableHead.length} padding="none">
+          <Box py={1}>
+            <TablePagination {...props.tablePaginationProps} />
+          </Box>
+        </TableCell>
       </TableFooter>
     ) : null;
 

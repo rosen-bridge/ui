@@ -7,6 +7,7 @@ import {
   ApiAddressAssetsResponse,
   ApiHealthStatusResponse,
   ApiInfoResponse,
+  ApiObservationResponse,
   ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
@@ -181,6 +182,32 @@ const permit: ApiPermitResponse = {
 
 const permitReturn = permit;
 
+const generateObservationRecords = (numberOfRecords: number) => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    height: 10,
+    amount: '100',
+    networkFee: '0.7',
+    bridgeFee: '0.2',
+    sourceChainTokenId: '123',
+    targetChainTokenId: '456',
+    sourceTxId: 'asdlfsdfasdlf',
+    sourceBlockId: 'sdlfjdfadlfjadlf',
+    requestId: 'sdfsa-dlfadf-lajdf',
+    block: '',
+    extractor: '',
+  }));
+};
+
+const observations: ApiObservationResponse = {
+  total: 100,
+  items: generateObservationRecords(100),
+};
+
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
@@ -189,10 +216,17 @@ const mockedData: SWRConfigProps['fakeData'] = {
     '/withdraw': withdraw,
     '/permit': permit,
     '/permit/return': permitReturn,
+    '/observations': observations,
   },
   withObjectKeys: {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
       return revenueChart[period];
+    },
+    '/observation': ({ offset, limit }) => {
+      return {
+        ...observations,
+        items: observations.items.slice(offset, limit + offset),
+      };
     },
   },
 };
