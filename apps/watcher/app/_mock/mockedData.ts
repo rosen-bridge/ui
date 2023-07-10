@@ -11,6 +11,7 @@ import {
   ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
+  ApiRevenueResponse,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -203,9 +204,37 @@ const generateObservationRecords = (numberOfRecords: number) => {
   }));
 };
 
+const generateRevenueRecords = (numberOfRecords: number) => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    permitTxId:
+      '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockHeight: 100,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '0.1',
+    bridgeFee: '0.002',
+    networkFee: '0.003',
+    tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTxId:
+      '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
+    height: 100,
+    timestamp: Date.now(),
+    status: 'Done',
+  }));
+};
+
 const observations: ApiObservationResponse = {
   total: 100,
   items: generateObservationRecords(100),
+};
+
+const revenues: ApiRevenueResponse = {
+  total: 100,
+  items: generateRevenueRecords(100),
 };
 
 const mockedData: SWRConfigProps['fakeData'] = {
@@ -223,6 +252,12 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return revenueChart[period];
     },
     '/observation': ({ offset, limit }) => {
+      return {
+        ...observations,
+        items: observations.items.slice(offset, limit + offset),
+      };
+    },
+    '/revenue': ({ offset, limit }) => {
       return {
         ...observations,
         items: observations.items.slice(offset, limit + offset),
