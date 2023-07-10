@@ -8,9 +8,11 @@ import {
   ApiHealthStatusResponse,
   ApiInfoResponse,
   ApiObservationResponse,
+  ApiEventResponse,
   ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
+  Event,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -203,9 +205,43 @@ const generateObservationRecords = (numberOfRecords: number) => {
   }));
 };
 
+const generateEventRecords = (numberOfRecords: number): Event[] => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    eventId: `${Math.floor(Date.now() * Math.random())}`,
+    txId: `${Math.floor(Date.now() * Math.random())}`,
+    extractor: 'Extractor Text',
+    boxId: `${Math.floor(Date.now() * Math.random())}`,
+    boxSerialized: '{}',
+    block: 'Block Text',
+    height: 10,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '100',
+    bridgeFee: '0.2',
+    networkFee: '0.03',
+    sourceChainTokenId: '123',
+    sourceChainHeight: 20,
+    targetChainTokenId: 'ab123',
+    sourceTxId: 'ab1234',
+    sourceBlockId: 'cd56789',
+    WIDs: 'WIDs',
+    spendBlock: '',
+    spendHeight: 5,
+    spendTxId: 'spendId1234',
+  }));
+};
+
 const observations: ApiObservationResponse = {
   total: 100,
   items: generateObservationRecords(100),
+};
+
+const events: ApiEventResponse = {
+  total: 100,
+  items: generateEventRecords(100),
 };
 
 const mockedData: SWRConfigProps['fakeData'] = {
@@ -216,7 +252,7 @@ const mockedData: SWRConfigProps['fakeData'] = {
     '/withdraw': withdraw,
     '/permit': permit,
     '/permit/return': permitReturn,
-    '/observations': observations,
+    '/observation': observations,
   },
   withObjectKeys: {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
@@ -226,6 +262,12 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return {
         ...observations,
         items: observations.items.slice(offset, limit + offset),
+      };
+    },
+    '/events': ({ offset, limit }) => {
+      return {
+        ...events,
+        items: events.items.slice(offset, limit + offset),
       };
     },
   },
