@@ -27,14 +27,11 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
   '&.active': {
     opacity: 1,
     '& .MuiButton-startIcon': {
-      color:
-        theme.palette.mode === 'light'
-          ? theme.palette.primary.dark
-          : theme.palette.secondary.dark,
+      color: theme.palette.info.dark,
       backgroundColor:
         theme.palette.mode === 'light'
           ? theme.palette.common.white
-          : theme.palette.secondary.light,
+          : theme.palette.info.light,
     },
   },
   [theme.breakpoints.down('tablet')]: {
