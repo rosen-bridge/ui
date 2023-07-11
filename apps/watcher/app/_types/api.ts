@@ -1,4 +1,9 @@
-import { HealthParamInfo, TokenChartData, TokenInfo } from '@rosen-ui/types';
+import {
+  HealthParamInfo,
+  Paginated,
+  TokenChartData,
+  TokenInfo,
+} from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
   currentBalance: bigint;
@@ -50,10 +55,7 @@ export interface Observation {
   extractor: string;
 }
 
-export type ApiObservationResponse = {
-  total: number;
-  items: Observation[];
-};
+export type ApiObservationResponse = Paginated<Observation>;
 
 export interface Event {
   id: number;
@@ -82,7 +84,25 @@ export interface Event {
   spendTxId?: string;
 }
 
-export type ApiEventResponse = {
-  total: number;
-  items: Event[];
-};
+export type ApiEventResponse = Paginated<Event>;
+
+export interface Revenue {
+  id: number;
+  permitTxId: string;
+  eventId: string;
+  lockHeight: number;
+  fromChain: string;
+  toChain: string;
+  fromAddress: string;
+  toAddress: string;
+  amount: string;
+  bridgeFee: string;
+  networkFee: string;
+  tokenId: string;
+  lockTxId: string;
+  height: number;
+  timestamp: number;
+  status: string;
+}
+
+export type ApiRevenueResponse = Paginated<Revenue>;
