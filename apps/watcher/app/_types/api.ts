@@ -31,6 +31,11 @@ export interface ApiPermitResponse {
 export type ApiPermitReturnRequestBody = ApiPermitRequestBody;
 export type ApiPermitReturnResponse = ApiPermitResponse;
 
+export interface Paginated<T> {
+  total: number;
+  items: T[];
+}
+
 export interface Observation {
   id: number;
   fromChain: string;
@@ -50,10 +55,7 @@ export interface Observation {
   extractor: string;
 }
 
-export type ApiObservationResponse = {
-  total: number;
-  items: Observation[];
-};
+export type ApiObservationResponse = Paginated<Observation>;
 
 export interface Revenue {
   id: number;
@@ -74,7 +76,4 @@ export interface Revenue {
   status: string;
 }
 
-export type ApiRevenueResponse = {
-  total: number;
-  items: Revenue[];
-};
+export type ApiRevenueResponse = Paginated<Revenue>;
