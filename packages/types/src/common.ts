@@ -21,3 +21,8 @@ export interface HealthParamInfo {
   lastCheck: string;
   description?: string;
 }
+
+export interface Paginated<T> {
+  total: number;
+  items: T[];
+}
