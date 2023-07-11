@@ -75,9 +75,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 contrastText: '#fff',
               },
               success: {
-                light: '#6cac9c',
+                light: '#d9eeeb',
                 main: '#008f7a',
-                dark: '#007664',
+                dark: '#006666',
+                contrastText: '#fff',
+              },
+              warning: {
+                light: '#fff9e2',
+                main: '#c89d09',
+                dark: '#8f6f00',
+                contrastText: '#fff',
+              },
+              error: {
+                light: '#eed9d9',
+                main: '#cf1717',
+                dark: '#8f0000',
                 contrastText: '#fff',
               },
               background: {
@@ -105,9 +117,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 contrastText: '#fff',
               },
               success: {
-                light: '#6cac9c',
+                light: '#d9eeeb',
                 main: '#008f7a',
-                dark: '#006453',
+                dark: '#184c4c',
+                contrastText: '#fff',
+              },
+              warning: {
+                light: '#fff9e2',
+                main: '#c89d09',
+                dark: '#5a4b1d',
+                contrastText: '#fff',
+              },
+              error: {
+                light: '#eed9d9',
+                main: '#cf1717',
+                dark: '#431616',
                 contrastText: '#fff',
               },
               background: {
