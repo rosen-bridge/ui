@@ -12,9 +12,14 @@ import {
   AppBar,
   AppLogo,
   Grid,
+  Navigation,
   NavigationButton,
   SvgIcon,
+  useTheme,
+  useMediaQuery,
 } from '@rosen-bridge/ui-kit';
+
+import ToolbarActions from './ToolbarActions';
 
 /**
  * render sidebar log and navigaiton buttons
@@ -24,16 +29,19 @@ const SideBar = () => {
 
   const router = useRouter();
 
+  const theme = useTheme();
+  const shouldShowAppBarActions = useMediaQuery(
+    theme.breakpoints.down('tablet')
+  );
+
   return (
     <AppBar>
       <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
-      <Grid
+      <Navigation
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={1}
-        flexGrow={1}
       >
         <Grid item>
           <NavigationButton
@@ -109,11 +117,8 @@ const SideBar = () => {
             isActive={pathname.startsWith('/revenues')}
           />
         </Grid>
-      </Grid>
-      {/*
-        TODO: implement toolbar component
-        https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/10
-      */}
+      </Navigation>
+      {shouldShowAppBarActions && <ToolbarActions />}
     </AppBar>
   );
 };

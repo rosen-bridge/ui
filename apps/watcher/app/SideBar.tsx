@@ -7,31 +7,42 @@ import {
   Moneybag,
   Newspaper,
 } from '@rosen-bridge/icons';
+
 import {
   AppBar,
   AppLogo,
   Grid,
+  Navigation,
   NavigationButton,
   SvgIcon,
+  useMediaQuery,
+  useTheme,
 } from '@rosen-bridge/ui-kit';
 
+import ToolbarActions from './ToolbarActions';
+
 /**
- * render sidebar log and navigaiton buttons
+ * render sidebar log and navigation buttons
  */
+
 const SideBar = () => {
   const pathname = usePathname();
 
   const router = useRouter();
 
+  const theme = useTheme();
+  const shouldShowAppBarActions = useMediaQuery(
+    theme.breakpoints.down('tablet')
+  );
+
   return (
     <AppBar>
       <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
-      <Grid
+      <Navigation
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
-        spacing={1}
         flexGrow={1}
       >
         <Grid item>
@@ -96,11 +107,8 @@ const SideBar = () => {
             isActive={pathname.startsWith('/revenues')}
           />
         </Grid>
-      </Grid>
-      {/*
-        TODO: implement toolbar component
-        https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/9
-      */}
+      </Navigation>
+      {shouldShowAppBarActions && <ToolbarActions />}
     </AppBar>
   );
 };

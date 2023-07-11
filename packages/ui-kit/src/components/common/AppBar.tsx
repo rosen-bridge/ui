@@ -21,5 +21,6 @@ export const AppBar = styled(Box)(({ theme }) => ({
     //FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
     flexBasis: 64,
     flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 }));
