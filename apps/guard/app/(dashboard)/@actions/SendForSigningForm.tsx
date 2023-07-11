@@ -72,7 +72,7 @@ const SendForSigningForm = () => {
   );
 
   return (
-    <FullCard title="Send for Signing">
+    <FullCard title="Send for Signing" backgroundColor="transparent">
       <form onSubmit={handleSubmit(onSubmit)}>
         {renderAlert()}
 
