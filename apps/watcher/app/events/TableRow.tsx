@@ -1,12 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
-import {
-  Button,
-  EnhancedTableCell,
-  TableRow,
-  TableCell,
-  TableCellProps,
-} from '@rosen-bridge/ui-kit';
+import { Button, EnhancedTableCell, TableRow } from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
