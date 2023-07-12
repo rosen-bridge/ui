@@ -49,6 +49,7 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       })),
   },
 ];
+
 const revenueChartMonthly: ApiRevenueChartResponse = [
   {
     title: 'erg',
@@ -210,6 +211,11 @@ const events: ApiEventResponse = {
   items: generateEventRecords(100),
 };
 
+const history: ApiEventResponse = {
+  total: 100,
+  items: generateEventRecords(100),
+};
+
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
@@ -226,6 +232,12 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return {
         ...events,
         items: events.items.slice(offset, limit + offset),
+      };
+    },
+    '/history': ({ offset, limit }) => {
+      return {
+        ...history,
+        items: history.items.slice(offset, limit + offset),
       };
     },
   },
