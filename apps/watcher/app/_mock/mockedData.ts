@@ -1,19 +1,17 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
-import { ChartPeriod } from '@rosen-ui/types';
+import { ApiEventResponse, ChartPeriod, Event } from '@rosen-ui/types';
 
 import {
   ApiAddressAssetsResponse,
   ApiHealthStatusResponse,
   ApiInfoResponse,
   ApiObservationResponse,
-  ApiEventResponse,
   ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
   ApiRevenueResponse,
-  Event,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {

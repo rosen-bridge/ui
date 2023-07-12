@@ -68,12 +68,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <ThemeProvider>
             <Root>
               <SideBar />
-              <SWRConfig
-                useMockedApis={
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                }
-                fakeData={mockedData}
-              >
+              <SWRConfig useMockedApis={true} fakeData={mockedData}>
                 <Main>
                   <Toolbar />
                   {children}
