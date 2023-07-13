@@ -3,6 +3,7 @@ import {
   Paginated,
   TokenChartData,
   TokenInfo,
+  Event,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
@@ -57,35 +58,6 @@ export interface Observation {
 
 export type ApiObservationResponse = Paginated<Observation>;
 
-export interface Event {
-  id: number;
-  eventId: string;
-  txId: string;
-  extractor: string;
-  boxId: string;
-  boxSerialized: string;
-  block: string;
-  height: number;
-  fromChain: string;
-  toChain: string;
-  fromAddress: string;
-  toAddress: string;
-  amount: string;
-  bridgeFee: string;
-  networkFee: string;
-  sourceChainTokenId: string;
-  sourceChainHeight: number;
-  targetChainTokenId: string;
-  sourceTxId: string;
-  sourceBlockId: string;
-  WIDs: string;
-  spendBlock?: string;
-  spendHeight?: number;
-  spendTxId?: string;
-}
-
-export type ApiEventResponse = Paginated<Event>;
-
 export interface Revenue {
   id: number;
   permitTxId: string;
@@ -106,3 +78,5 @@ export interface Revenue {
 }
 
 export type ApiRevenueResponse = Paginated<Revenue>;
+
+export type ApiEventResponse = Paginated<Event>;

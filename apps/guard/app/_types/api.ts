@@ -1,4 +1,10 @@
-import { HealthParamInfo, TokenChartData, TokenInfo } from '@rosen-ui/types';
+import {
+  HealthParamInfo,
+  TokenChartData,
+  TokenInfo,
+  Paginated,
+  Event,
+} from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
@@ -22,3 +28,7 @@ export type ApiSignResponse = 'OK';
 export type ApiAddressAssetsResponse = TokenInfo[];
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
+
+export type ApiHistoryResponse = Paginated<Event>;
+
+export type ApiEventResponse = Paginated<Event>;
