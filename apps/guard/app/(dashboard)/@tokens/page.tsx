@@ -9,7 +9,8 @@ import { ApiAddressAssetsResponse } from '@/_types/api';
 
 const Tokens = () => {
   const { data: ergoTokens, isLoading: isErogTokensLoading } =
-    useSWR<ApiAddressAssetsResponse>(['/assets', , { chain: 'ergo' }], fetcher);
+    useSWR<ApiAddressAssetsResponse>(['/assets', { chain: 'ergo' }], fetcher);
+
   const { data: cardanoTokens, isLoading: isCardanoTokensLoading } =
     useSWR<ApiAddressAssetsResponse>(
       ['/assets', { chain: 'cardano' }],
@@ -20,14 +21,14 @@ const Tokens = () => {
     <>
       <Grid item mobile={12} tablet={6}>
         <TokensCard
-          tokens={ergoTokens ?? []}
+          tokens={ergoTokens?.items ?? []}
           isLoading={isErogTokensLoading}
           title="Ergo Tokens"
         />
       </Grid>
       <Grid item mobile={12} tablet={6}>
         <TokensCard
-          tokens={cardanoTokens ?? []}
+          tokens={cardanoTokens?.items ?? []}
           isLoading={isCardanoTokensLoading}
           title="Cardano Tokens"
         />

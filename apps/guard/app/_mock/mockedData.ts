@@ -113,29 +113,33 @@ const revenueChart = {
 
 const sign: ApiSignResponse = 'OK';
 
-const assets: ApiAddressAssetsResponse = [
+const assets = [
   {
     name: 'awesome token',
     tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
     amount: 10000n,
     decimals: 2,
+    chain: 'ergo',
   },
   {
     tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
     amount: 2n,
     decimals: 0,
+    chain: 'ergo',
   },
   {
     name: 'another awesome token',
     tokenId: 'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
     amount: 200n,
     decimals: 1,
+    chain: 'ergo',
   },
   {
     name: 'fakeRSN',
     tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     amount: 20n,
     decimals: 5,
+    chain: 'cardano',
   },
 ];
 
@@ -187,7 +191,19 @@ const mockedData: SWRConfigProps['fakeData'] = {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
       return revenueChart[period];
     },
-    '/assets': () => assets,
+    '/assets': ({ offset, limit, chain }): ApiAddressAssetsResponse => {
+      const currentPage =
+        offset && limit ? assets.slice(offset, limit + offset) : assets;
+
+      const currentPageFiltered = chain
+        ? currentPage.filter((asset) => asset.chain === chain)
+        : currentPage;
+
+      return {
+        total: currentPageFiltered.length,
+        items: currentPageFiltered,
+      };
+    },
   },
 };
 
