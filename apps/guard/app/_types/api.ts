@@ -30,3 +30,5 @@ export type ApiAddressAssetsResponse = TokenInfo[];
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
 export type ApiHistoryResponse = Paginated<Event>;
+
+export type ApiEventResponse = Paginated<Event>;

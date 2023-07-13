@@ -3,6 +3,7 @@ import {
   Paginated,
   TokenChartData,
   TokenInfo,
+  Event,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
@@ -77,3 +78,5 @@ export interface Revenue {
 }
 
 export type ApiRevenueResponse = Paginated<Revenue>;
+
+export type ApiEventResponse = Paginated<Event>;

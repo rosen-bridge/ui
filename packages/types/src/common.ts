@@ -53,5 +53,3 @@ export interface Event {
   spendHeight?: number;
   spendTxId?: string;
 }
-
-export type ApiEventResponse = Paginated<Event>;
