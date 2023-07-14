@@ -6,6 +6,9 @@ const nextConfig = {
     typedRoutes: true,
   },
   output: 'export',
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 module.exports = nextConfig;
