@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
-import { ChartPeriod } from '@rosen-ui/types';
+import { ChartPeriod, Event } from '@rosen-ui/types';
 
 import {
   ApiAddressAssetsResponse,
@@ -9,6 +9,8 @@ import {
   ApiInfoResponse,
   ApiRevenueChartResponse,
   ApiSignResponse,
+  ApiEventResponse,
+  ApiHistoryResponse,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -49,6 +51,7 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       })),
   },
 ];
+
 const revenueChartMonthly: ApiRevenueChartResponse = [
   {
     title: 'erg',
@@ -180,6 +183,45 @@ const healthStatus: ApiHealthStatusResponse = [
   },
 ];
 
+const generateEventRecords = (numberOfRecords: number): Event[] => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    eventId: `${Math.floor(Date.now() * Math.random())}`,
+    txId: `${Math.floor(Date.now() * Math.random())}`,
+    extractor: 'Extractor Text',
+    boxId: `${Math.floor(Date.now() * Math.random())}`,
+    boxSerialized: '{}',
+    block: 'Block Text',
+    height: 10,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '100',
+    bridgeFee: '0.2',
+    networkFee: '0.03',
+    sourceChainTokenId: '123',
+    sourceChainHeight: 20,
+    targetChainTokenId: 'ab123',
+    sourceTxId: 'ab1234',
+    sourceBlockId: 'cd56789',
+    WIDs: 'WIDs',
+    spendBlock: '',
+    spendHeight: 5,
+    spendTxId: 'spendId1234',
+  }));
+};
+
+const events: ApiEventResponse = {
+  total: 100,
+  items: generateEventRecords(100),
+};
+
+const history: ApiHistoryResponse = {
+  total: 100,
+  items: generateEventRecords(100),
+};
+
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
@@ -191,6 +233,7 @@ const mockedData: SWRConfigProps['fakeData'] = {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
       return revenueChart[period];
     },
+
     '/assets': ({ offset, limit, chain }): ApiAddressAssetsResponse => {
       const filteredData = chain
         ? assets.filter((asset) => asset.chain === chain)
@@ -204,6 +247,18 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return {
         total: filteredData.length,
         items: pageData,
+      };
+    },
+    '/events': ({ offset, limit }) => {
+      return {
+        ...events,
+        items: events.items.slice(offset, limit + offset),
+      };
+    },
+    '/history': ({ offset, limit }) => {
+      return {
+        ...history,
+        items: history.items.slice(offset, limit + offset),
       };
     },
   },

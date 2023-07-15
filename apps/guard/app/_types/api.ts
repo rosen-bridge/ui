@@ -3,6 +3,7 @@ import {
   TokenChartData,
   TokenInfo,
   Paginated,
+  Event,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
@@ -31,3 +32,7 @@ export type ApiSignResponse = 'OK';
 export type ApiAddressAssetsResponse = Paginated<GuardTokenInfo>;
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
+
+export type ApiHistoryResponse = Paginated<Event>;
+
+export type ApiEventResponse = Paginated<Event>;
