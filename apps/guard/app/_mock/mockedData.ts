@@ -192,16 +192,18 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return revenueChart[period];
     },
     '/assets': ({ offset, limit, chain }): ApiAddressAssetsResponse => {
-      const currentPage =
-        offset && limit ? assets.slice(offset, limit + offset) : assets;
+      const filteredData = chain
+        ? assets.filter((asset) => asset.chain === chain)
+        : assets;
 
-      const currentPageFiltered = chain
-        ? currentPage.filter((asset) => asset.chain === chain)
-        : currentPage;
+      const pageData = filteredData;
+      offset && limit
+        ? filteredData.slice(offset, limit + offset)
+        : filteredData;
 
       return {
-        total: currentPageFiltered.length,
-        items: currentPageFiltered,
+        total: filteredData.length,
+        items: pageData,
       };
     },
   },
