@@ -68,6 +68,7 @@ export const HealthParamCard = ({
             size="small"
             sx={{ fontSize: 'inherit' }}
             onClick={handleCheckNow}
+            color={color}
           >
             Check now
           </Button>
