@@ -8,6 +8,7 @@ import {
   ApiHealthStatusResponse,
   ApiInfoResponse,
   ApiRevenueChartResponse,
+  ApiRevenueResponse,
   ApiSignResponse,
   ApiEventResponse,
   ApiHistoryResponse,
@@ -212,6 +213,34 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
   }));
 };
 
+const generateRevenueRecords = (numberOfRecords: number) => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    rewardTxId:
+      '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockHeight: 100,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '0.1',
+    bridgeFee: '0.002',
+    networkFee: '0.003',
+    tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTxId:
+      '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
+    height: 100,
+    timestamp: Date.now(),
+    status: 'Done',
+  }));
+};
+
+const revenues: ApiRevenueResponse = {
+  total: 100,
+  items: generateRevenueRecords(100),
+};
+
 const events: ApiEventResponse = {
   total: 100,
   items: generateEventRecords(100),
@@ -259,6 +288,12 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return {
         ...history,
         items: history.items.slice(offset, limit + offset),
+      };
+    },
+    '/revenue': ({ offset, limit }) => {
+      return {
+        ...revenues,
+        items: revenues.items.slice(offset, limit + offset),
       };
     },
   },

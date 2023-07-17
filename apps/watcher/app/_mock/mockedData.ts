@@ -294,8 +294,8 @@ const mockedData: SWRConfigProps['fakeData'] = {
     },
     '/revenue': ({ offset, limit }) => {
       return {
-        ...observations,
-        items: observations.items.slice(offset, limit + offset),
+        ...revenues,
+        items: revenues.items.slice(offset, limit + offset),
       };
     },
     '/events': ({ offset, limit }) => {
