@@ -4,9 +4,9 @@ import { Button, EnhancedTableCell, TableRow } from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import { Observation } from '@/_types/api';
+import { Revenue } from '@/_types/api';
 
-interface RowProps extends Observation {
+interface RowProps extends Revenue {
   isLoading?: boolean;
 }
 
@@ -33,13 +33,13 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'From',
+    title: 'From Chain',
     cellProps: {
       width: 250,
     },
   },
   {
-    title: 'To',
+    title: 'To Chain',
     cellProps: {
       width: 150,
     },
@@ -58,13 +58,13 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Network',
+    title: 'Network fee',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Bridge',
+    title: 'Bridge fee',
     cellProps: {
       width: 150,
     },

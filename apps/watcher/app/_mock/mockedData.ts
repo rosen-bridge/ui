@@ -1,9 +1,10 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
-import { ChartPeriod } from '@rosen-ui/types';
+import { ChartPeriod, Event } from '@rosen-ui/types';
 
 import {
+  ApiEventResponse,
   ApiAddressAssetsResponse,
   ApiHealthStatusResponse,
   ApiInfoResponse,
@@ -11,6 +12,7 @@ import {
   ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
+  ApiRevenueResponse,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -203,9 +205,71 @@ const generateObservationRecords = (numberOfRecords: number) => {
   }));
 };
 
+const generateEventRecords = (numberOfRecords: number): Event[] => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    eventId: `${Math.floor(Date.now() * Math.random())}`,
+    txId: `${Math.floor(Date.now() * Math.random())}`,
+    extractor: 'Extractor Text',
+    boxId: `${Math.floor(Date.now() * Math.random())}`,
+    boxSerialized: '{}',
+    block: 'Block Text',
+    height: 10,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '100',
+    bridgeFee: '0.2',
+    networkFee: '0.03',
+    sourceChainTokenId: '123',
+    sourceChainHeight: 20,
+    targetChainTokenId: 'ab123',
+    sourceTxId: 'ab1234',
+    sourceBlockId: 'cd56789',
+    WIDs: 'WIDs',
+    spendBlock: '',
+    spendHeight: 5,
+    spendTxId: 'spendId1234',
+  }));
+};
+
+const generateRevenueRecords = (numberOfRecords: number) => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    permitTxId:
+      '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockHeight: 100,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '0.1',
+    bridgeFee: '0.002',
+    networkFee: '0.003',
+    tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTxId:
+      '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
+    height: 100,
+    timestamp: Date.now(),
+    status: 'Done',
+  }));
+};
+
 const observations: ApiObservationResponse = {
   total: 100,
   items: generateObservationRecords(100),
+};
+
+const revenues: ApiRevenueResponse = {
+  total: 100,
+  items: generateRevenueRecords(100),
+};
+
+const events: ApiEventResponse = {
+  total: 100,
+  items: generateEventRecords(100),
 };
 
 const mockedData: SWRConfigProps['fakeData'] = {
@@ -216,7 +280,7 @@ const mockedData: SWRConfigProps['fakeData'] = {
     '/withdraw': withdraw,
     '/permit': permit,
     '/permit/return': permitReturn,
-    '/observations': observations,
+    '/observation': observations,
   },
   withObjectKeys: {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
@@ -226,6 +290,18 @@ const mockedData: SWRConfigProps['fakeData'] = {
       return {
         ...observations,
         items: observations.items.slice(offset, limit + offset),
+      };
+    },
+    '/revenue': ({ offset, limit }) => {
+      return {
+        ...revenues,
+        items: revenues.items.slice(offset, limit + offset),
+      };
+    },
+    '/events': ({ offset, limit }) => {
+      return {
+        ...events,
+        items: events.items.slice(offset, limit + offset),
       };
     },
   },

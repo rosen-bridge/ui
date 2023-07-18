@@ -4,9 +4,9 @@ import { Button, EnhancedTableCell, TableRow } from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import { Observation } from '@/_types/api';
+import { Event } from '@rosen-ui/types';
 
-interface RowProps extends Observation {
+interface RowProps extends Event {
   isLoading?: boolean;
 }
 
@@ -29,7 +29,7 @@ export const tabletHeader = [
   {
     title: 'ID',
     cellProps: {
-      width: 50,
+      width: 150,
     },
   },
   {
@@ -49,24 +49,6 @@ export const tabletHeader = [
     cellProps: {
       width: 150,
       align: 'right' as const,
-    },
-  },
-  {
-    title: 'Height',
-    cellProps: {
-      width: 150,
-    },
-  },
-  {
-    title: 'Network',
-    cellProps: {
-      width: 150,
-    },
-  },
-  {
-    title: 'Bridge',
-    cellProps: {
-      width: 150,
     },
   },
 ];
@@ -92,7 +74,7 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow className="divider" sx={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.id}</EnhancedTableCell>
+        <EnhancedTableCell>{row.eventId}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
         <EnhancedTableCell tooltipTitle={row.fromChain}>
@@ -109,18 +91,6 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>{row.amount}</EnhancedTableCell>
-          </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Height</EnhancedTableCell>
-            <EnhancedTableCell>{renderValue(row.height)}</EnhancedTableCell>
-          </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Network fee</EnhancedTableCell>
-            <EnhancedTableCell>{renderValue(row.networkFee)}</EnhancedTableCell>
-          </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Bridge fee</EnhancedTableCell>
-            <EnhancedTableCell>{renderValue(row.bridgeFee)}</EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -145,13 +115,10 @@ export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.id}</EnhancedTableCell>
+      <EnhancedTableCell>{row.eventId}</EnhancedTableCell>
       <EnhancedTableCell>{row.fromChain}</EnhancedTableCell>
       <EnhancedTableCell>{row.toChain}</EnhancedTableCell>
       <EnhancedTableCell align="right">{row.amount}</EnhancedTableCell>
-      <EnhancedTableCell>{renderValue(row.height)}</EnhancedTableCell>
-      <EnhancedTableCell>{renderValue(row.networkFee)}</EnhancedTableCell>
-      <EnhancedTableCell>{renderValue(row.bridgeFee)}</EnhancedTableCell>
     </TableRow>
   );
 };
