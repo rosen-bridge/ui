@@ -2,12 +2,6 @@ import { Avatar } from '../../base';
 
 import { useIsDarkMode } from '../../../hooks';
 
-/**
- * FIXME: use theme defined values
- * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
- */
-const PALETTE = ['#0081cf', '#0089ba', '#008e9b'];
-
 export interface TokenListItemAvatarProps {
   name: string;
   index: number;
@@ -28,12 +22,8 @@ export const TokenListItemAvatar = ({
   return (
     <Avatar
       sx={{
-        color: isDarkMode ? 'text.secondary' : 'info.light',
-        /**
-         * FIXME: use theme defined values
-         * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
-         */
-        bgcolor: isDarkMode ? '#00000033' : PALETTE[index % 2],
+        color: isDarkMode ? 'info.light' : 'info.main',
+        bgcolor: isDarkMode ? 'background.shadow' : 'info.light',
       }}
     >
       {name[0]}

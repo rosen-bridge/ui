@@ -21,6 +21,9 @@ declare module '@mui/material/styles' {
     laptop: true;
     desktop: true;
   }
+  interface TypeBackground {
+    shadow: string;
+  }
 }
 
 export interface AppThemeProps {
@@ -95,6 +98,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 default: '#f7f7f7',
                 paper: '#fff',
+                shadow: '#00000033',
               },
             }
           : {
@@ -137,6 +141,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 default: '#1a2f4b',
                 paper: '#28475c',
+                shadow: '#00000033',
               },
             }),
       },
