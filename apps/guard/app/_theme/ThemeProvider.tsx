@@ -24,6 +24,12 @@ declare module '@mui/material/styles' {
   interface TypeBackground {
     shadow: string;
   }
+  interface Palette {
+    background: TypeBackground;
+  }
+  interface PaletteOptions {
+    background?: Partial<TypeBackground>;
+  }
 }
 
 export interface AppThemeProps {
@@ -177,6 +183,12 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
           fontSize: '0.75rem',
           color: theme.palette.text.secondary,
         },
+        subtitle2: {
+          fontSize: '0.625rem',
+          [theme.breakpoints.down('tablet')]: {
+            fontSize: '0.5625rem',
+          },
+        }
       },
       components: {
         MuiCard: {

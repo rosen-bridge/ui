@@ -6,6 +6,7 @@ import {
   createTheme,
   useMediaQuery,
 } from '@rosen-bridge/ui-kit';
+import { ThemeOptions } from '@mui/material/styles';
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
@@ -23,6 +24,12 @@ declare module '@mui/material/styles' {
   }
   interface TypeBackground {
     shadow: string;
+  }
+  interface Palette {
+    background: TypeBackground;
+  }
+  interface PaletteOptions {
+    background?: Partial<TypeBackground>;
   }
 }
 
@@ -156,7 +163,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
           desktop: 1200,
         },
       },
-    });
+    } as ThemeOptions);
 
     return createTheme(baseTheme, {
       typography: {
@@ -178,6 +185,12 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
           fontSize: '0.75rem',
           color: baseTheme.palette.text.secondary,
         },
+        subtitle2: {
+          fontSize: '0.625rem',
+          [theme.breakpoints.down('tablet')]: {
+            fontSize: '0.5625rem',
+          },
+        }
       },
       components: {
         MuiCard: {

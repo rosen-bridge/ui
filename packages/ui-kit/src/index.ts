@@ -12,6 +12,17 @@ declare module '@mui/system' {
     xl: false;
   }
 }
+declare module '@mui/material/styles' {
+  interface TypeBackground {
+    shadow: string;
+  }
+  interface Palette {
+    background: TypeBackground;
+  }
+  interface PaletteOptions {
+    background?: Partial<TypeBackground>;
+  }
+}
 
 export * from './components';
 export * from './hooks';
