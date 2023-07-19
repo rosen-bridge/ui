@@ -57,8 +57,8 @@ const TabsContainer = styled(Box)(({ theme }) => ({
     margin: theme.spacing(-3, -2),
   },
   '& .MuiTabs-root': {
-    paddingTop: 40,
-    paddingBottom: 40,
+    paddingTop: theme.spacing(5),
+    paddingBottom: theme.spacing(5),
     [theme.breakpoints.down('tablet')]: {
       padding: theme.spacing(1, 2, 0, 2),
       backgroundColor: theme.palette.info.dark,
@@ -68,7 +68,7 @@ const TabsContainer = styled(Box)(({ theme }) => ({
       justifyContent: 'start',
       textAlign: 'left',
       color: theme.palette.info.contrastText,
-      fontSize: '0.75rem',
+      fontSize: theme.typography.body2.fontSize,
       [theme.breakpoints.down('tablet')]: {
         width: '10em',
         textAlign: 'center',
