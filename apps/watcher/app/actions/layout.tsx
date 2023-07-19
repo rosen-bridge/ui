@@ -39,8 +39,8 @@ const ScrollableContainer = styled(Box)(({ theme }) => ({
 const CustomToggleButtonGroup = styled(ToggleButtonGroup)(({ theme }) => ({
   background:
     theme.palette.mode === 'light'
-      ? `linear-gradient(180deg, #2c73d2 0%, #0081cf 100%)`
-      : '#ffffff11',
+      ? theme.palette.primary.main
+      : theme.palette.divider,
   padding: theme.spacing(1, 1, 0, 1),
   minWidth: 'fit-content',
 }));

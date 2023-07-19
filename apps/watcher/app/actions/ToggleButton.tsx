@@ -24,7 +24,7 @@ const ToggleButtonBase = styled(UiKitToggleButton)(({ theme }) => ({
   },
   '&.Mui-selected': {
     opacity: 1,
-    color: '#2c73d2',
+    color: theme.palette.primary.main,
     background: `linear-gradient(180deg, ${theme.palette.background.default}aa 0%, ${theme.palette.background.default} 70%)`,
     borderTopLeftRadius: `${theme.shape.borderRadius / 2}px !important`,
     borderTopRightRadius: `${theme.shape.borderRadius / 2}px !important`,

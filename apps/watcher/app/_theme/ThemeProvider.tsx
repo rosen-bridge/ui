@@ -166,12 +166,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         h2: {
           fontSize: '1.5rem',
         },
+        h5: {
+          fontSize: '1rem',
+        },
         body: {
           fontSize: '1rem',
         },
         body2: {
           fontSize: '0.75rem',
           color: baseTheme.palette.text.secondary,
+        },
+        subtitle2: {
+          fontSize: '0.625rem',
+          [baseTheme.breakpoints.down('tablet')]: {
+            fontSize: '0.5625rem',
+          },
         },
       },
       components: {
@@ -183,7 +192,6 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiCardHeader: {
           styleOverrides: {
             title: {
-              fontSize: '1rem',
               fontWeight: 'bold',
             },
           },
