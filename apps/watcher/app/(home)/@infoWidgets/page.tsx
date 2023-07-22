@@ -17,7 +17,7 @@ const InfoWidgets = () => {
   const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   return (
-    <Grid container spacing={{ mobile: 1, teblet: 3 }}>
+    <Grid container spacing={{ mobile: 1, tablet: 3 }}>
       <Grid item mobile={6} tablet={6} laptop={3}>
         <InfoWidgetCard
           title="Current Balance"
@@ -54,7 +54,10 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop={3}>
         <InfoWidgetCard
           title="Permit"
-          value={data?.permitCount.toString() ?? ''}
+          value={
+            `${data?.permitCount.active.toString()} / ${data?.permitCount.total.toString()} ` ??
+            ''
+          }
           icon={
             <SvgIcon fontSize="large">
               <LockAlt />

@@ -9,7 +9,10 @@ import {
 export interface ApiInfoResponse {
   currentBalance: bigint;
   network: string;
-  permitCount: bigint;
+  permitCount: {
+    active: bigint;
+    total: bigint;
+  };
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
   rsnTokenId: string;

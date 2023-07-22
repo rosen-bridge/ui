@@ -37,7 +37,7 @@ const UnlockForm = () => {
     () =>
       info?.permitCount
         ? {
-            amount: info.permitCount,
+            amount: info.permitCount.total,
             decimals: 0,
           }
         : undefined,
