@@ -199,6 +199,8 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiTableContainer: {
           styleOverrides: {
             root: {
+              backgroundColor: theme.palette.background.paper,
+              borderRadius: theme.shape.borderRadius,
               [theme.breakpoints.up('tablet')]: {
                 padding: theme.spacing(0, 2),
               },
