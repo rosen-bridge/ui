@@ -13,7 +13,7 @@ interface ActionText {
 const ActionText = ({ title, children }: ActionText) => (
   <FullCard
     title={title}
-    backgroundColor="#00000011"
+    backgroundColor="divider"
     contentProps={{ sx: { color: (theme) => theme.palette.text.secondary } }}
   >
     {children}
