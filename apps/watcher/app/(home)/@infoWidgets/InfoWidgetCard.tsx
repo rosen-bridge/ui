@@ -36,16 +36,16 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
       gap: theme.spacing(0.5),
     },
     '& .title': {
-      fontSize: '0.8rem',
+      fontSize: theme.typography.body2.fontSize,
       lineHeight: 1,
       opacity: 0.75,
     },
     '& .value': {
-      fontSize: '1.5rem',
+      fontSize: theme.typography.h2.fontSize,
       fontWeight: 'bold',
       lineHeight: 1,
       '& span': {
-        fontSize: '0.8rem',
+        fontSize: '60%',
         fontWeight: 'normal',
         opacity: 0.75,
       },

@@ -9,20 +9,6 @@ import {
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
-declare module '@mui/material/styles' {
-  interface BreakpointOverrides {
-    xs: false;
-    sm: false;
-    md: false;
-    lg: false;
-    xl: false;
-    mobile: true;
-    tablet: true;
-    laptop: true;
-    desktop: true;
-  }
-}
-
 export interface AppThemeProps {
   children: React.ReactNode;
 }
@@ -95,6 +81,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 default: '#f7f7f7',
                 paper: '#fff',
+                shadow: '#00000033',
               },
             }
           : {
@@ -137,6 +124,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 default: '#1a2f4b',
                 paper: '#28475c',
+                shadow: '#00000033',
               },
             }),
       },
@@ -165,12 +153,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         h2: {
           fontSize: '1.5rem',
         },
+        h5: {
+          fontSize: '1rem',
+        },
         body: {
           fontSize: '1rem',
         },
         body2: {
           fontSize: '0.75rem',
           color: theme.palette.text.secondary,
+        },
+        subtitle2: {
+          fontSize: '0.625rem',
+          [theme.breakpoints.down('tablet')]: {
+            fontSize: '0.5625rem',
+          },
         },
       },
       components: {
@@ -205,6 +202,8 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiTableContainer: {
           styleOverrides: {
             root: {
+              backgroundColor: theme.palette.background.paper,
+              borderRadius: theme.shape.borderRadius,
               [theme.breakpoints.up('tablet')]: {
                 padding: theme.spacing(0, 2),
               },

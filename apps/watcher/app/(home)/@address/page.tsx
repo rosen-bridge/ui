@@ -32,10 +32,7 @@ const Address = () => {
                     m: -1,
                     ml: 'auto',
                     flexShrink: 0,
-                    bgcolor: (theme) =>
-                      theme.palette.mode === 'light'
-                        ? '#00000011'
-                        : '#ffffff11',
+                    bgcolor: (theme) => theme.palette.divider,
                     borderLeft: (theme) => `1px solid ${theme.palette.divider}`,
                   }}
                 >

@@ -10,6 +10,7 @@ import {
   Typography,
 } from '../../base';
 import { TokenListItemAvatar } from './TokenListItemAvatar';
+import { useTheme } from '../../../hooks';
 
 export interface TokenListItemProps {
   decimals: number;
@@ -34,6 +35,7 @@ export const TokenListItem = ({
   value,
 }: TokenListItemProps) => {
   const nameOrPlaceholder = name || TOKEN_NAME_PLACEHOLDER;
+  const theme = useTheme();
 
   return (
     <ListItem disableGutters sx={{ py: 0.5 }}>
@@ -50,7 +52,7 @@ export const TokenListItem = ({
         secondary={<Id id={id} />}
         secondaryTypographyProps={{
           component: 'div',
-          style: { fontSize: '0.75rem' },
+          style: { fontSize: theme.typography.body2.fontSize },
         }}
       />
     </ListItem>

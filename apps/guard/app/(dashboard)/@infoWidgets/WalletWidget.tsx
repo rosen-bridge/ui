@@ -31,25 +31,25 @@ const WalletWidgetBase = styled(Card)<WidgetCardProps>(
     color: theme.palette.success.contrastText,
     flexGrow: 1,
     '& .title': {
-      fontSize: '0.8rem',
+      fontSize: theme.typography.h5.fontSize,
       fontWeight: 'bold',
     },
     '& .value': {
-      fontSize: '1.5rem',
+      fontSize: theme.typography.h2.fontSize,
       fontWeight: 'bold',
       textAlign: 'right',
       '& span': {
-        fontSize: '0.8rem',
+        fontSize: '50%',
         fontWeight: 'normal',
       },
     },
     '& .address-container': {
       '& .heading': {
-        fontSize: '0.7rem',
+        fontSize: theme.typography.body2.fontSize,
         opacity: 0.8,
       },
       '& .address': {
-        fontSize: '0.7rem',
+        fontSize: theme.typography.body2.fontSize,
         opacity: 0.8,
       },
       '& .actions': {

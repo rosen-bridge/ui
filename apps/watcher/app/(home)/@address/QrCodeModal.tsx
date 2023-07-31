@@ -25,7 +25,7 @@ const QrCodeModal = ({ handleClose, open, address }: QrCodeModalProps) => {
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="tablet">
       <DialogContent>
-        <Box sx={{ color: '#ddd', textAlign: 'center', my: 3 }}>
+        <Box sx={{ textAlign: 'center', my: 3 }}>
           <QrCode size={200} value={address} />
         </Box>
         <DialogContentText sx={{ wordBreak: 'break-all', textAlign: 'center' }}>

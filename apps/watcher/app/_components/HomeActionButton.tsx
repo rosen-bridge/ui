@@ -15,7 +15,7 @@ const HomeActionButtonBase = styled(Button)(({ theme }) => ({
       ? theme.palette.primary.dark
       : theme.palette.text.primary,
   opacity: 0.8,
-  fontSize: 'x-small',
+  fontSize: theme.typography.subtitle2.fontSize,
   flexBasis: '20%',
   '&:hover': {
     opacity: 1,
