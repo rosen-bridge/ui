@@ -20,15 +20,13 @@ const Root = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
   backgroundImage:
     theme.palette.mode === 'light'
-      ? // FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
-        `linear-gradient(180deg, #845ec2 0%, #2c73d2 20%, #0081cf 40%, #0089ba 60%, #008e9b 80%, #008f7a 100%)`
+      ? `linear-gradient(180deg, ${theme.palette.gradient.a} 0%, ${theme.palette.gradient.b} 20%, ${theme.palette.gradient.c} 40%, ${theme.palette.gradient.d} 60%, ${theme.palette.gradient.e} 80%, ${theme.palette.gradient.f} 100%)`
       : 'none',
   [theme.breakpoints.down('tablet')]: {
     flexDirection: 'column',
     backgroundImage:
       theme.palette.mode === 'light'
-        ? // FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
-          `linear-gradient(90deg, #845ec2 0%, #2c73d2 20%, #0081cf 40%, #0089ba 60%, #008e9b 80%, #008f7a 100%)`
+        ? `linear-gradient(90deg, ${theme.palette.gradient.a} 0%, ${theme.palette.gradient.b} 20%, ${theme.palette.gradient.c} 40%, ${theme.palette.gradient.d} 60%, ${theme.palette.gradient.e} 80%, ${theme.palette.gradient.f} 100%)`
         : 'none',
   },
 }));

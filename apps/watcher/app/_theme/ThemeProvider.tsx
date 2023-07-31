@@ -13,6 +13,23 @@ export interface AppThemeProps {
   children: React.ReactNode;
 }
 
+declare module '@mui/material/styles' {
+  interface TypePaletteGradient {
+    a: string;
+    b: string;
+    c: string;
+    d: string;
+    e: string;
+    f: string;
+  }
+  interface Palette {
+    gradient: TypePaletteGradient;
+  }
+  interface PaletteOptions {
+    gradient?: Partial<TypePaletteGradient>;
+  }
+}
+
 /**
  * provide theme and color mode
  */
@@ -83,6 +100,14 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 paper: '#ffffff',
                 shadow: '#00000033',
               },
+              gradient: {
+                a: '#845ec2',
+                b: '#2c73d2',
+                c: '#0081cf',
+                d: '#0089ba',
+                e: '#008e9b',
+                f: '#008f7a',
+              },
             }
           : {
               primary: {
@@ -125,6 +150,14 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 default: '#2b1f3f',
                 paper: '#2b1f3f',
                 shadow: '#00000033',
+              },
+              gradient: {
+                a: '#845ec2',
+                b: '#2c73d2',
+                c: '#0081cf',
+                d: '#0089ba',
+                e: '#008e9b',
+                f: '#008f7a',
               },
             }),
       },
@@ -180,6 +213,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiCardHeader: {
           styleOverrides: {
             title: {
+              fontSize: '1rem',
               fontWeight: 'bold',
             },
           },

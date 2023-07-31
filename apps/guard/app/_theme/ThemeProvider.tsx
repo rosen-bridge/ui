@@ -179,6 +179,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiCardHeader: {
           styleOverrides: {
             title: {
+              fontSize: '1rem',
               fontWeight: 'bold',
             },
           },
