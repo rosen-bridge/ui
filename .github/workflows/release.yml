@@ -80,7 +80,7 @@ jobs:
           done
           cd -
           cd ./apps/watcher/src-tauri/.bin/tmp
-          chmod +x ./index &&  mv ./index ../watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
+          chmod +x ./watcher-service* && mv ./watcher-service* ../watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
           unzip *
           mv */config/default.yaml ../../config
           cd ..
