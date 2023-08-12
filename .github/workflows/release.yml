@@ -37,13 +37,14 @@ jobs:
       - name: Install Rust
         run: curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | sh -s -- -y
 
-      - name: Install node Dependencies
+      - name: Install node Dependencies and yaml2json
         run: |
           npm ci
           npm run build --workspace packages/constants    
           npm run build --workspace packages/types    
           npm run build --workspace packages/utils    
           npm run build --workspace packages --if-present
+          npm install -g yamljs
 
       - name: Fetch Latest Version of Contract
         id: Contract_latest_tag
@@ -82,7 +83,8 @@ jobs:
           cd ./apps/watcher/src-tauri/.bin/tmp
           chmod +x ./watcher-service* && mv ./watcher-service* ../watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
           unzip *
-          mv */config/default.yaml ../../config
+          yaml2json --pretty --save */config/default.yaml
+          mv */config/default.json ../../config
           cd ..
           rm -rf ./tmp
 
