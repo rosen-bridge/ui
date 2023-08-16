@@ -1,0 +1,98 @@
+name: RELEASE
+
+on:
+  release:
+    types:
+      - 'published'
+
+jobs:
+  build:
+    name: Build Watcher UI
+    permissions: write-all
+    strategy:
+      matrix:
+        node-version: [18.x]
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: install dependencies (ubuntu only)
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install Front Dependencies and yaml2json
+        run: |
+          npm ci
+          npm run build --workspace packages/constants    
+          npm run build --workspace packages/types    
+          npm run build --workspace packages/utils    
+          npm run build --workspace packages --if-present
+          npm install -g yamljs
+
+      - name: Fetch Latest Version of Contract
+        id: Contract_latest_tag
+        run: |
+          download_version=$(curl -s https://api.github.com/repos/rosen-bridge/contract/releases | jq -r 'max_by(.published_at).name')
+          echo "::set-output name=latest_tag::$download_version"
+          
+      - name: Download Contracts Files
+        run: |
+          mkdir -p apps/watcher/src-tauri/config/rosen/
+          cd apps/watcher/src-tauri/config/rosen
+          release_info=$(curl -s "https://api.github.com/repos/rosen-bridge/contract/releases/tags/${{ steps.Contract_latest_tag.outputs.latest_tag }}")
+          asset_urls=$(echo "$release_info" | jq -r --arg name "${{ secrets.RELEASE_NAME }}" '.assets | map(select(.name | test($name))) | .[].browser_download_url')
+          for url in $asset_urls; do
+            curl -LJO "$url"
+          done
+
+      - name: Download Watcher Files
+        run: |
+          mkdir -p ./apps/watcher/src-tauri/.bin/tmp
+          cd ./apps/watcher/src-tauri/.bin/tmp
+          curl -s https://api.github.com/repos/rosen-bridge/watcher/releases/latest | grep -E '"(browser_download_url|zipball_url)"' | cut -d '"' -f 4 | while read -r url; do wget "$url"; done
+
+      - name: Move the Files
+        run: |
+          cd ./apps/watcher/src-tauri/config/rosen/
+          mv ./tokensMap-${{ secrets.RELEASE_NAME }}-${{ steps.Contract_latest_tag.outputs.latest_tag }}.json ./tokens.json
+          files=$(ls contracts-*-${{ secrets.RELEASE_NAME }}-${{ steps.Contract_latest_tag.outputs.latest_tag }}.json)
+          for file in $files; do
+            new_name=$(echo "$file" | awk -F'-' '{print $1"-"$2"-mainnet.json"}')
+            mv "$file" "$new_name"
+          done
+          cd -
+          cd ./apps/watcher/src-tauri/.bin/tmp
+          chmod +x ./watcher-service* && mv ./watcher-service* ../watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
+          unzip *
+          yaml2json --pretty --save */config/default.yaml
+          mv */config/default.json ../../config
+          cd ..
+          rm -rf ./tmp
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: "apps/watcher/"
+
+      - name: Upload File to Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./apps/watcher/src-tauri/target/release/bundle/deb/watcher-app*
+            ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
