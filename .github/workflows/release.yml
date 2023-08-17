@@ -121,17 +121,17 @@ jobs:
 
       - name: Rename the Linux Release File
         if: matrix.platform == 'linux'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app* watcher-service-Linux-${{ github.event.release.tag_name }}
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-service-Linux-${{ github.event.release.tag_name }}.AppImage
         
       - name: Rename the MacOS Release File
         if: matrix.platform == 'macOS'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app* watcher-service-MacOS-${{ github.event.release.tag_name }}
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-service-MacOS-${{ github.event.release.tag_name }}.dmg
         
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            watcher-service-linux-${{ github.event.release.tag_name }}
-            ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*
+            watcher-service-linux-${{ github.event.release.tag_name }}.AppImage
+            watcher-service-MacOS-${{ github.event.release.tag_name }}.dmg
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
