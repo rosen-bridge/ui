@@ -1,4 +1,4 @@
-name: RELEASE UI
+name: RELEASE DESKTOP APPs
 
 on:
   release:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   download:
-    name: Downloading Contracts and Servers
+    name: Downloading Contracts and Service
     runs-on: ubuntu-latest
 
     steps:
@@ -45,7 +45,7 @@ jobs:
           cd ..
           rm -rf ./tmp
 
-      - name: Dist Packages Output artifacts
+      - name: Dist Packages Output Artifacts
         uses: actions/upload-artifact@v3
         with:
           name: artifact
@@ -78,10 +78,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: install Rust stable
+      - name: install Rust Stable
         uses: dtolnay/rust-toolchain@stable
 
-      - name: install dependencies (ubuntu only)
+      - name: install Dependencies (ubuntu only)
         if: matrix.os == 'ubuntu-latest'
         run: |
           sudo apt-get update
@@ -95,7 +95,7 @@ jobs:
           npm run build --workspace packages/utils    
           npm run build --workspace packages --if-present
 
-      - name: Download artifacts
+      - name: Download Artifacts
         uses: actions/download-artifact@v3
         with:
           name: artifact
@@ -119,11 +119,19 @@ jobs:
         with:
           projectPath: "apps/watcher/"
 
+      - name: Rename the Linux Release File
+        if: matrix.platform == 'linux'
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app* watcher-service-Linux-${{ github.event.release.tag_name }}
+        
+      - name: Rename the MacOS Release File
+        if: matrix.platform == 'macOS'
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app* watcher-service-MacOS-${{ github.event.release.tag_name }}
+        
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*
+            watcher-service-linux-${{ github.event.release.tag_name }}
             ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
