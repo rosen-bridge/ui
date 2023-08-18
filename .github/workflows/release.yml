@@ -120,11 +120,11 @@ jobs:
           projectPath: "apps/watcher/"
 
       - name: Rename the Release files
-        if: matrix.platform == 'linux'
+        if: matrix.os == 'ubuntu-latest'
         run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.AppImage
         
       - name: Rename the MacOS Release files
-        if: matrix.platform == 'macOS'
+        if: matrix.os == 'macos-latest'
         run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.dmg
 
       - name: Upload File to Assets
