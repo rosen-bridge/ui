@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Setup node
         uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
 
       - name: Install yaml2json
         run: npm install -g yamljs
@@ -58,13 +56,15 @@ jobs:
     permissions: write-all
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [18.x]
         include:
           - os: macos-latest
             platform: macOS
           - os: ubuntu-latest
             platform: linux
+          - os: windows-latest
+            platform: Windows
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -102,16 +102,26 @@ jobs:
           path: tmp
 
       - name: Move Config Files
+        shell: bash
         run: |
           mkdir -p ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/{contracts,tokens}* ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/default* ./apps/watcher/src-tauri/config
       
-      - name: Move Service File
+      - name: Move Linux and MacOS Service File
+        if: matrix.os != 'windows-latest'
         run: |
           mkdir -p ./apps/watcher/src-tauri/.bin 
           chmod +x ./tmp/watcher-service*
-          mv ./tmp/watcher-service-*-${{ matrix.platform }} ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
+          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
+
+      - name: Move Windows Service File
+        shell: bash
+        if: matrix.os == 'windows-latest'
+        run: |
+          mkdir -p ./apps/watcher/src-tauri/.bin 
+          chmod +x ./tmp/watcher-service*
+          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ').exe
 
       - uses: tauri-apps/tauri-action@v0
         env:
@@ -126,6 +136,11 @@ jobs:
       - name: Rename the MacOS Release files
         if: matrix.os == 'macos-latest'
         run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.dmg
+
+      - name: Rename the Windows Release files
+        if: matrix.os == 'windows-latest'
+        shell: bash
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/nsis/watcher-app*.exe watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.exe
 
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
