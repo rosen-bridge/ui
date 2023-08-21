@@ -106,7 +106,7 @@ jobs:
         run: |
           mkdir -p ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/{contracts,tokens}* ./apps/watcher/src-tauri/config/rosen/
-          mv ./tmp/default* ./apps/watcher/src-tauri/config
+          mv ./tmp/default* ./apps/watcher/src-tauri/config/
       
       - name: Move Linux and MacOS Service File
         if: matrix.os != 'windows-latest'
@@ -131,21 +131,21 @@ jobs:
 
       - name: Rename the Release files
         if: matrix.os == 'ubuntu-latest'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.AppImage
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.AppImage
         
       - name: Rename the MacOS Release files
         if: matrix.os == 'macos-latest'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.dmg
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.dmg
 
       - name: Rename the Windows Release files
         if: matrix.os == 'windows-latest'
         shell: bash
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/nsis/watcher-app*.exe watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.exe
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/nsis/watcher-app*.exe watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.exe
 
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}*
+            watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
