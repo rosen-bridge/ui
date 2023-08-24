@@ -61,10 +61,16 @@ jobs:
         include:
           - os: macos-latest
             platform: macOS
+            output_path: dmg
+            output_prefix: dmg
           - os: ubuntu-latest
             platform: linux
+            output_path: appimage
+            output_prefix: AppImage
           - os: windows-latest
             platform: Windows
+            output_path: nsis
+            output_prefix: exe
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -133,14 +139,9 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.AppImage
         
-      - name: Rename the MacOS Release files
-        if: matrix.os == 'macos-latest'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.dmg
-
-      - name: Rename the Windows Release files
-        if: matrix.os == 'windows-latest'
+      - name: Rename the Release files
         shell: bash
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/nsis/watcher-app*.exe watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.exe
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/${{ matrix.output_path }}/watcher-app*.${{ matrix.output_prefix }} watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.${{ matrix.output_prefix }}
 
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
