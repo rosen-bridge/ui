@@ -1,0 +1,9 @@
+Dockerfile
+.dockerignore
+.git*
+node_modules
+.env
+apps/*/README.md
+apps/*/out
+apps/*/.gitignore
+.idea
