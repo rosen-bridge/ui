@@ -136,10 +136,6 @@ jobs:
           projectPath: "apps/watcher/"
 
       - name: Rename the Release files
-        if: matrix.os == 'ubuntu-latest'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.AppImage
-        
-      - name: Rename the Release files
         shell: bash
         run: mv ./apps/watcher/src-tauri/target/release/bundle/${{ matrix.output_path }}/watcher-app*.${{ matrix.output_prefix }} watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.${{ matrix.output_prefix }}
 
