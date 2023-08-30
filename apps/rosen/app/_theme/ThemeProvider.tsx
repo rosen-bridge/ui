@@ -20,6 +20,7 @@ declare module '@mui/material/styles' {
     paper: string;
     header: string;
     shadow: string;
+    input: string;
   }
 
   interface TypePaletteGradient {
@@ -93,9 +94,10 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 root: '#1A1A1A',
                 content: 'rgba(247, 247, 247, 0.9)',
-                paper: '#fff',
+                paper: 'rgb(247, 247, 247)',
                 header: '#E1E1E1',
                 shadow: 'rgba(0, 0, 0, 0.2)',
+                input: '#fff',
               },
               info: {
                 light: '#f1f5ff',
@@ -108,9 +110,10 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 root: '#0D1721',
                 content: '#2f3a48',
-                paper: '#1F2937',
+                paper: 'rgb(26, 32, 41)',
                 header: '#253041',
                 shadow: 'rgba(0, 0, 0, 0.2)',
+                input: 'rgb(40, 49, 63)',
               },
               info: {
                 light: '#9cbdd9',

@@ -94,7 +94,6 @@ const SideBar = () => {
             }
             onClick={() => router.push('/dashboard')}
             isActive={pathname.startsWith('/dashboard')}
-            disabled
           />
         </Grid>
       </Grid>

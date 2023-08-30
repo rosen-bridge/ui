@@ -12,8 +12,6 @@ const ToolbarActions = () => {
   const colorMode = useContext(ColorModeContext);
   const isDarkMode = useIsDarkMode();
 
-  console.log('@@@@@', colorMode, isDarkMode);
-
   return (
     <IconButton onClick={colorMode.toggle} size="large">
       {isDarkMode ? (

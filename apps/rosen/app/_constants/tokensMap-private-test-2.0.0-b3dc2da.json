@@ -1,0 +1,92 @@
+{
+  "idKeys": {
+    "ergo": "tokenId",
+    "cardano": "fingerprint"
+  },
+  "tokens": [
+    {
+      "ergo": {
+        "tokenId": "ffacb76e5c75bdc72314777e781b9377a54f93654880d4390f7a67a929100898",
+        "tokenName": "rptNEV1",
+        "decimals": 4,
+        "metaData": {
+          "type": "EIP-004",
+          "residency": "native"
+        }
+      },
+      "cardano": {
+        "fingerprint": "asset18wa72zmh35gwunryq0ynaqrr66deckl99yr79k",
+        "policyId": "e0c24b2010068e55bc8f860978d52ee8e62d9af06f106f1fa0d0fd0b",
+        "assetName": "727074574e4556310a",
+        "decimals": 4,
+        "metaData": {
+          "type": "CIP26",
+          "residency": "wrapped"
+        }
+      }
+    },
+    {
+      "ergo": {
+        "tokenId": "0ee806d6547c396946f05cb93b33d3d3648f8e9817b9f2088fdb178392f85539",
+        "tokenName": "rptWNCV1",
+        "decimals": 2,
+        "metaData": {
+          "type": "EIP-004",
+          "residency": "wrapped"
+        }
+      },
+      "cardano": {
+        "fingerprint": "asset1w44j9qx690ua4z9867h7j7ggqsqw3j7asmgfd7",
+        "policyId": "613284c87bc3b4598a48ccc050ff05db3d64a0a30a5c5e0abf5c03ef",
+        "assetName": "7270744e4356310a",
+        "decimals": 2,
+        "metaData": {
+          "type": "CIP26",
+          "residency": "native"
+        }
+      }
+    },
+    {
+      "ergo": {
+        "tokenId": "6cbeec04af6a5047d8818eac2ac6e2b28e1e74a0d339cff96f7641a1a0c3ca9b",
+        "tokenName": "rptWAdaV1",
+        "decimals": 6,
+        "metaData": {
+          "type": "EIP-004",
+          "residency": "wrapped"
+        }
+      },
+      "cardano": {
+        "fingerprint": "lovelace",
+        "policyId": "",
+        "assetName": "414441",
+        "decimals": 6,
+        "metaData": {
+          "type": "native",
+          "residency": "native"
+        }
+      }
+    },
+    {
+      "ergo": {
+        "tokenId": "erg",
+        "tokenName": "erg",
+        "decimals": 9,
+        "metaData": {
+          "type": "native",
+          "residency": "native"
+        }
+      },
+      "cardano": {
+        "fingerprint": "asset12dzcylmey8mzqf4lqx7lu3tlnevwrtq4vurj82",
+        "policyId": "684dd3236fb0b0088bba20710bb8374ec0e933f80a3151cb6051864a",
+        "assetName": "7270745745726756310a",
+        "decimals": 9,
+        "metaData": {
+          "type": "CIP26",
+          "residency": "wrapped"
+        }
+      }
+    }
+  ]
+}

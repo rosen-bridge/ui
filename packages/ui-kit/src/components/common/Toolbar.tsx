@@ -66,9 +66,16 @@ export const Toolbar: React.FC<ToolbarProps> = (props) => {
   return (
     <Header>
       <Grid flexGrow={1} {...(isCentered ? { justifyContent: 'center' } : {})}>
-        <Typography variant="h1">{title}</Typography>
+        <Typography variant="h1" textAlign={isCentered ? 'center' : 'inherit'}>
+          {title}
+        </Typography>
         {description && (
-          <Typography color="textSecondary">{description}</Typography>
+          <Typography
+            color="textSecondary"
+            textAlign={isCentered ? 'center' : 'inherit'}
+          >
+            {description}
+          </Typography>
         )}
       </Grid>
       {toolbarActions && renderActions()}
