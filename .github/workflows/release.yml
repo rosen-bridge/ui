@@ -64,15 +64,16 @@ jobs:
           - os: macos-latest
             platform: macOS
             output_path: dmg
-            output_prefix: dmg
+            output_postfix: dmg
           - os: ubuntu-latest
             platform: linux
             output_path: appimage
-            output_prefix: AppImage
+            output_postfix: AppImage
           - os: windows-latest
             platform: Windows
             output_path: nsis
-            output_prefix: exe
+            output_postfix: exe
+            exec_extention: .exe
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -116,20 +117,12 @@ jobs:
           mv ./tmp/{contracts,tokens}* ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/default* ./apps/watcher/src-tauri/config/
       
-      - name: Move Linux and MacOS Service File
-        if: matrix.os != 'windows-latest'
-        run: |
-          mkdir -p ./apps/watcher/src-tauri/.bin 
-          chmod +x ./tmp/watcher-service*
-          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
-
-      - name: Move Windows Service File
+      - name: Move Service File
         shell: bash
-        if: matrix.os == 'windows-latest'
         run: |
           mkdir -p ./apps/watcher/src-tauri/.bin 
           chmod +x ./tmp/watcher-service*
-          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ').exe
+          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')${{ matrix.exec_extention }}
 
       - uses: tauri-apps/tauri-action@v0
         env:
@@ -139,7 +132,7 @@ jobs:
 
       - name: Rename the Release files
         shell: bash
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/${{ matrix.output_path }}/watcher-app*.${{ matrix.output_prefix }} watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.${{ matrix.output_prefix }}
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/${{ matrix.output_path }}/watcher-app*.${{ matrix.output_postfix }} watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.${{ matrix.output_postfix }}
 
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
