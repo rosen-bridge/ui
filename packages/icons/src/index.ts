@@ -1,12 +1,15 @@
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { ReactComponent as AngleUp } from './icons/angle-up.svg';
+export { ReactComponent as archway } from './icons/archway.svg';
 export { ReactComponent as BitcoinCircle } from './icons/bitcoin-circle.svg';
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { ReactComponent as Copy } from './icons/copy.svg';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
+export { ReactComponent as Exchange } from './icons/exchange.svg';
 export { ReactComponent as Estate } from './icons/estate.svg';
 export { ReactComponent as Heartbeat } from './icons/heartbeat.svg';
+export { ReactComponent as Headphones } from './icons/headphones.svg';
 export { ReactComponent as History } from './icons/history.svg';
 export { ReactComponent as KeySkeleton } from './icons/key-skeleton.svg';
 export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
