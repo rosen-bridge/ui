@@ -1,6 +1,6 @@
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { ReactComponent as AngleUp } from './icons/angle-up.svg';
-export { ReactComponent as archway } from './icons/archway.svg';
+export { ReactComponent as Archway } from './icons/archway.svg';
 export { ReactComponent as BitcoinCircle } from './icons/bitcoin-circle.svg';
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
