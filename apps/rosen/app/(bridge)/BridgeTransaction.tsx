@@ -10,6 +10,8 @@ import {
 
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useTransactionFees from '@/_hooks/useTransactionFees';
+import useWallet from '@/_hooks/useWallet';
+import { useSnackbar } from '@/_contexts/snackbarContext';
 
 import { getTokenNameAndId } from '@/_utils';
 
@@ -26,8 +28,10 @@ const BridgeTransaction = () => {
     tokenValue,
     +amountValue,
   );
+  const { connectToWallet } = useWallet();
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue);
+  const { openSnackbar } = useSnackbar();
 
   const renderFee = (
     title: string,
@@ -93,7 +97,14 @@ const BridgeTransaction = () => {
       </Grid>
 
       <Grid item>
-        <Button sx={{ width: '100%' }} color="primary" variant="contained">
+        <Button
+          sx={{ width: '100%' }}
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            connectToWallet(sourceValue);
+          }}
+        >
           CONNECT WALLET
         </Button>
       </Grid>

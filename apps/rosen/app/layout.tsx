@@ -6,8 +6,10 @@ import { NoSsr, styled } from '@rosen-bridge/ui-kit';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';
+import AppSnackbar from './_common/AppSnackbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
+import { SnackbarProvider } from './_contexts/snackbarContext';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -60,13 +62,16 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <NoSsr>
           <ThemeProvider>
-            <Root>
-              <SideBar />
-              <Main>
-                <Toolbar />
-                {children}
-              </Main>
-            </Root>
+            <SnackbarProvider>
+              <Root>
+                <SideBar />
+                <Main>
+                  <Toolbar />
+                  {children}
+                </Main>
+                <AppSnackbar />
+              </Root>
+            </SnackbarProvider>
           </ThemeProvider>
         </NoSsr>
       </body>

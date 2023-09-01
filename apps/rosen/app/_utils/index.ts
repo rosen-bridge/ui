@@ -24,3 +24,8 @@ export const getTokenNameAndId = (token: RosenChainToken) => {
     tokenId: token.fingerprint,
   };
 };
+
+export const countDecimals = (decimalString: string | null) => {
+  if (!decimalString) return 0;
+  return decimalString.split('.')[1]?.length || 0;
+};

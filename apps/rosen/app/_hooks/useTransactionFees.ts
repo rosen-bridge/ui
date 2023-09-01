@@ -1,9 +1,10 @@
-import { useState, useLayoutEffect, useMemo } from 'react';
+import { useState, useLayoutEffect, useMemo, useEffect, useRef } from 'react';
 import useSWR from 'swr';
 import type { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import useChainHeight from './useChainHeight';
+import { useSnackbar } from '@/_contexts/snackbarContext';
 
 import { getTokenNameAndId } from '@/_utils';
 
@@ -34,32 +35,53 @@ const useTransactionFees = (
   token: RosenChainToken | null,
   amount: number | null,
 ) => {
+  const { openSnackbar } = useSnackbar();
   const { height, isLoading: isLoadingHeights } = useChainHeight(sourceChain);
+  const hasShownTheNextFeeWarning = useRef<boolean>(false);
   const [minFeeObject, setMinFeeObject] = useState<{
     [chain: string]: BridgeMinimumFee;
   }>({});
 
-  const {
-    data: fees,
-    isLoading: isLoadingMinFee,
-    error,
-  } = useSWR(
+  const { data: fees, isLoading: isLoadingMinFee } = useSWR(
     [
       sourceChain,
       token ? getTokenNameAndId(token).tokenId : null,
       Number(height),
     ],
     bridgeFetcher(sourceChain ? minFeeObject?.[sourceChain] : null),
+    {
+      onSuccess: () => {
+        hasShownTheNextFeeWarning.current = false;
+      },
+    },
   );
 
-  const { data: Nextfees, isLoading: isLoadingNextFees } = useSWR(
+  const { data: nextFees, isLoading: isLoadingNextFees } = useSWR(
     [
       sourceChain,
       token ? getTokenNameAndId(token).tokenId : null,
       Number(height) + nextFeeHeight,
     ],
     bridgeFetcher(sourceChain ? minFeeObject?.[sourceChain] : null),
+    {
+      onSuccess: () => {},
+    },
   );
+
+  useEffect(() => {
+    if (!isLoadingMinFee && !isLoadingNextFees) {
+      if (
+        fees?.bridgeFee !== nextFees?.bridgeFee ||
+        fees?.networkFee !== nextFees?.networkFee
+      ) {
+        openSnackbar(
+          'Fees might change depending on the height of mining the transactions.',
+          'warning',
+        );
+        hasShownTheNextFeeWarning.current = true;
+      }
+    }
+  }, [isLoadingMinFee, isLoadingNextFees, fees, nextFees, openSnackbar]);
 
   useLayoutEffect(() => {
     const LoadMinFee = async () => {
