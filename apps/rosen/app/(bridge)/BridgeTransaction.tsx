@@ -1,11 +1,14 @@
 'use client';
 
+import { useTransition } from 'react';
+
 import {
   Grid,
   Typography,
   Button,
   Divider,
   styled,
+  LoadingButton,
 } from '@rosen-bridge/ui-kit';
 
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
@@ -15,13 +18,20 @@ import { useSnackbar } from '@/_contexts/snackbarContext';
 
 import { getTokenNameAndId } from '@/_utils';
 
+import { AddressValidator } from '@/_actions';
+
 const PriceItem = styled('div')(() => ({
   display: 'grid',
   gridTemplateColumns: '1fr auto',
 }));
 
 const BridgeTransaction = () => {
-  const { sourceValue, tokenValue, amountValue } = useTransactionFormData();
+  const {
+    sourceValue,
+    tokenValue,
+    amountValue,
+    formState: { isValidating },
+  } = useTransactionFormData();
 
   const { networkFee, bridgeFee, receivingAmount } = useTransactionFees(
     sourceValue,
@@ -32,6 +42,8 @@ const BridgeTransaction = () => {
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue);
   const { openSnackbar } = useSnackbar();
+
+  const [pending, startTransition] = useTransition();
 
   const renderFee = (
     title: string,
@@ -97,16 +109,17 @@ const BridgeTransaction = () => {
       </Grid>
 
       <Grid item>
-        <Button
+        <LoadingButton
           sx={{ width: '100%' }}
           color="primary"
           variant="contained"
+          loading={isValidating}
           onClick={() => {
             connectToWallet(sourceValue);
           }}
         >
           CONNECT WALLET
-        </Button>
+        </LoadingButton>
       </Grid>
     </Grid>
   );

@@ -2,8 +2,11 @@ import { useController } from 'react-hook-form';
 
 import useTransactionFormData from './useTransactionFormData';
 
+import { AddressValidator } from '@/_actions';
+
 const useBridgeForm = () => {
-  const { control, resetField, reset, setValue } = useTransactionFormData();
+  const { control, resetField, reset, setValue, formState } =
+    useTransactionFormData();
 
   const { field: sourceField } = useController({
     name: 'source',
@@ -28,6 +31,10 @@ const useBridgeForm = () => {
   const { field: addressField } = useController({
     name: 'walletAddress',
     control,
+    rules: {
+      required: true,
+      validate: async (value) => (await AddressValidator(value)).message,
+    },
   });
 
   return {
@@ -39,6 +46,7 @@ const useBridgeForm = () => {
     tokenField,
     amountField,
     addressField,
+    formState,
   };
 };
 

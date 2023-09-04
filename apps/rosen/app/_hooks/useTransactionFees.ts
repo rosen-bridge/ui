@@ -2,11 +2,13 @@ import { useState, useLayoutEffect, useMemo, useEffect, useRef } from 'react';
 import useSWR from 'swr';
 import type { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { TokenMap } from '@rosen-bridge/tokens';
 
 import useChainHeight from './useChainHeight';
 import { useSnackbar } from '@/_contexts/snackbarContext';
 
 import { getTokenNameAndId } from '@/_utils';
+import tokensMap from '@/_configs/tokensMap-private-test-2.0.0-b3dc2da.json';
 
 import {
   Chains,
@@ -30,6 +32,15 @@ const bridgeFetcher =
     return data;
   };
 
+const getTokenId = (sourceChain: string, token: RosenChainToken) => {
+  const Mapper = new TokenMap(tokensMap);
+  const idKey = Mapper.getIdKey(sourceChain);
+  const tokens = Mapper.search(sourceChain, {
+    [idKey]: token[idKey],
+  });
+  return tokens[0].ergo.tokenId;
+};
+
 const useTransactionFees = (
   sourceChain: keyof typeof Chains | null,
   token: RosenChainToken | null,
@@ -45,7 +56,7 @@ const useTransactionFees = (
   const { data: fees, isLoading: isLoadingMinFee } = useSWR(
     [
       sourceChain,
-      token ? getTokenNameAndId(token).tokenId : null,
+      token && sourceChain ? getTokenId(sourceChain, token) : null,
       Number(height),
     ],
     bridgeFetcher(sourceChain ? minFeeObject?.[sourceChain] : null),

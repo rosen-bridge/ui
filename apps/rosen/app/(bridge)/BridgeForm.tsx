@@ -43,6 +43,7 @@ const BridgeForm = () => {
     tokenField,
     amountField,
     addressField,
+    formState: { errors },
   } = useBridgeForm();
 
   const { tokenMapper, allChains } = useMemo(() => {
@@ -178,6 +179,8 @@ const BridgeForm = () => {
         label="Address"
         InputProps={{ disableUnderline: true } as any}
         variant="filled"
+        error={!!errors?.walletAddress}
+        helperText={errors.walletAddress?.message?.toString()}
         {...addressField}
       />
     </FormContainer>
