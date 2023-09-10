@@ -6,10 +6,6 @@ RUN npm run build --workspace packages/constants \
     && npm run build --workspace packages/types \
     && npm run build --workspace packages/utils \
     && npm run build --workspace packages --if-present
-ARG SERVER_NAME
-ARG SERVER_PORT
-RUN sed -i 's/SERVER_NAME_PLACEHOLDER/'"$SERVER_NAME"'/g' nginx.conf \
-    && sed -i 's/SERVER_PORT_PLACEHOLDER/'"$SERVER_PORT"'/g' nginx.conf
 
 FROM builder AS watcher-builder
 WORKDIR /app/apps/watcher
@@ -19,12 +15,18 @@ FROM builder AS guard-builder
 WORKDIR /app/apps/guard
 RUN npm run build
 
-FROM nginx:stable-alpine3.17 AS watcher
+FROM nginx:1.25 AS watcher
 COPY --from=watcher-builder /app/apps/watcher/out/ /usr/share/nginx/html
 COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
-ENTRYPOINT ["nginx", "-g","daemon off;"]
+COPY --from=builder /app/entrypoint.sh ./
+ENV SERVICE_NAME=watcher
+ENV SERVICE_PORT=3000
+ENTRYPOINT ["bash", "entrypoint.sh"]
 
-FROM nginx AS ts-guard
+FROM nginx:1.25 AS guard
 COPY --from=guard-builder /app/apps/guard/out/ /usr/share/nginx/html
 COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
-ENTRYPOINT ["nginx", "-g","daemon off;"]
+COPY --from=builder /app/entrypoint.sh ./
+ENV SERVICE_NAME=guard
+ENV SERVICE_PORT=8080
+ENTRYPOINT ["bash", "entrypoint.sh"]
