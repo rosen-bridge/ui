@@ -19,21 +19,11 @@ jobs:
       - name: Install yaml2json
         run: npm install -g yamljs
       
-      - name: Download Contracts Files
-        run: |
-          download_version=$(curl -s https://api.github.com/repos/rosen-bridge/contract/releases | jq -r 'max_by(.published_at).name')
-          release_info=$(curl -s "https://api.github.com/repos/rosen-bridge/contract/releases/tags/$download_version")
-          asset_urls=$(echo "$release_info" | jq -r --arg name "${{ secrets.RELEASE_NAME }}" '.assets | map(select(.name | test($name))) | .[].browser_download_url')
-          for url in $asset_urls; do
-            curl -LJO "$url"
-          done
-          mv ./tokensMap-${{ secrets.RELEASE_NAME }}-$download_version.json ./tokens.json
-          files=$(ls contracts-*-${{ secrets.RELEASE_NAME }}-$download_version.json)
-          for file in $files; do
-            new_name=$(echo "$file" | awk -F'-' '{print $1"-"$2"-mainnet.json"}')
-            mv "$file" "$new_name"
-          done
-
+      - name: Download Contract Files
+        uses: rosen-bridge/operation@V0.1
+        with:
+          type: ${{ vars.RELEASE_NAME }}
+      
       - name: Download Watcher Files
         run: |
           mkdir tmp && cd ./tmp
