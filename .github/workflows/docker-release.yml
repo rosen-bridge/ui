@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 on:
   release:
     types:
-      'published'
+      - 'published'
 
 jobs:
   build:
@@ -33,7 +33,7 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: arsalanyavari
+          username: rosen-bridge
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
@@ -41,5 +41,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/arsalanyavari/ui-${{ matrix.apps }}:${{ matrix.versions }}
+          tags: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}:${{ matrix.versions }}
           target: ${{ matrix.apps }}
