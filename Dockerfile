@@ -1,19 +1,9 @@
 FROM node:18.12.0 AS builder
 WORKDIR /app
 COPY package*.json .nvmrc .prettierrc ./
-COPY packages/constants/package.json packages/constants/package.json
-COPY packages/icons/package.json packages/icons/package.json
-COPY packages/swr-helpers/package.json packages/swr-helpers/package.json
-COPY packages/swr-mock/package.json packages/swr-mock/package.json
-COPY packages/types/package.json packages/types/package.json
-COPY packages/ui-kit/package.json packages/ui-kit/package.json
-COPY packages/utils/package.json packages/utils/package.json
-COPY apps/guard/package.json apps/guard/package.json
-COPY apps/watcher/package.json apps/watcher/package.json
-RUN npm ci 
-COPY .nvmrc .prettierrc ./
 COPY .husky ./.husky
 COPY packages ./packages
+RUN npm ci 
 RUN npm run build --workspace packages/constants 
 RUN npm run build --workspace packages/types 
 RUN npm run build --workspace packages/utils 
