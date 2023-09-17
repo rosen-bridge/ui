@@ -71,9 +71,10 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
       ...baseChartOptions,
       xaxis: {
         ...baseChartOptions.xaxis,
-        categories: data[0].data.map((datum) =>
-          moment(+datum.label).format(getDateFormat(period))
-        ),
+        categories:
+          data[0]?.data.map((datum) =>
+            moment(+datum.label).format(getDateFormat(period)),
+          ) ?? [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -97,7 +98,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
               theme.palette.error.light,
             ],
     }),
-    [data, period, theme]
+    [data, period, theme],
   );
 
   const apexChartSeries = useMemo(
@@ -106,7 +107,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
         name: tokenData.title,
         data: tokenData.data.map((datum) => +datum.amount),
       })),
-    [data]
+    [data],
   );
 
   return (
