@@ -11,11 +11,13 @@ RUN npm run build --workspace packages --if-present
 
 FROM builder AS watcher-builder
 COPY apps/watcher ./apps/watcher
+RUN npm ci
 WORKDIR /app/apps/watcher
 RUN npm run build
 
 FROM builder AS guard-builder
 COPY apps/guard ./apps/guard
+RUN npm ci
 WORKDIR /app/apps/guard
 RUN npm run build
 
