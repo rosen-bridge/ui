@@ -16,7 +16,10 @@ import { ApiHealthStatusResponse } from '@/_types/api';
 const Health = () => {
   const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>(
     '/health/status',
-    fetcher
+    fetcher,
+    {
+      refreshInterval: 60000,
+    },
   );
 
   /**
@@ -27,11 +30,11 @@ const Health = () => {
   const handleCheckNow = useCallback(
     async (paramId: string) => {
       const newHealthParamInfo: HealthParamInfo = await fetcher(
-        `/health/parameter/${paramId}`
+        `/health/parameter/${paramId}`,
       );
 
       const healthParamIndex = data!.findIndex(
-        (healthParam) => healthParam.id === paramId
+        (healthParam) => healthParam.id === paramId,
       );
 
       mutate([
@@ -40,7 +43,7 @@ const Health = () => {
         ...data!.slice(healthParamIndex + 1),
       ]);
     },
-    [data, mutate]
+    [data, mutate],
   );
 
   return isLoading ? (
