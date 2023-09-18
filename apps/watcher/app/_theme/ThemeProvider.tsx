@@ -30,6 +30,8 @@ declare module '@mui/material/styles' {
   }
 }
 
+type ColorModes = 'light' | 'dark';
+
 /**
  * provide theme and color mode
  */
@@ -38,19 +40,22 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
     noSsr: true,
   });
 
-  const [mode, setMode] = useState<'light' | 'dark'>(
-    prefersDarkMode ? 'dark' : 'light'
+  const preferredColorMode = prefersDarkMode ? 'dark' : 'light';
+
+  const [mode, setMode] = useState<ColorModes>(
+    (localStorage.getItem('colorMode') as ColorModes | null) ||
+      preferredColorMode,
   );
 
   const colorMode = useMemo(
     () => ({
       toggle: () => {
-        setMode((previousMode) =>
-          previousMode === 'light' ? 'dark' : 'light'
-        );
+        const newColorMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newColorMode);
+        localStorage.setItem('colorMode', newColorMode);
       },
     }),
-    []
+    [mode],
   );
 
   const theme = useMemo(() => {
