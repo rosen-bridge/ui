@@ -1,0 +1,45 @@
+name: Build and Push Docker Image
+on:
+  release:
+    types:
+      - 'published'
+
+jobs:
+  build:
+    name: Build and Push Docker Image
+    permissions: write-all
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        versions:
+          - latest
+          - ${{ github.ref_name }}
+        apps:
+          - watcher
+          - guard
+
+    steps:
+      - name: Checkout the Code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Move Config Files
+        run: |
+          mv docker/nginx.conf ./
+          mv docker/entrypoint.sh ./
+
+      - name: Login to Docker Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: rosen-bridge
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}:${{ matrix.versions }}
+          target: ${{ matrix.apps }}
