@@ -1,7 +1,6 @@
 FROM node:18.12.0 AS builder
 WORKDIR /app
 COPY package*.json .nvmrc .prettierrc ./
-COPY .husky ./.husky
 COPY packages ./packages
 RUN npm ci 
 RUN npm run build --workspace packages/constants 
@@ -28,7 +27,7 @@ LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
 COPY --from=watcher-builder /app/apps/watcher/out/ /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh ./
-ENV SERVICE_NAME=watcher
+ENV SERVICE_NAME=service
 ENV SERVICE_PORT=3000
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
@@ -39,6 +38,6 @@ LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
 COPY --from=guard-builder /app/apps/guard/out/ /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY entrypoint.sh ./
-ENV SERVICE_NAME=guard
+ENV SERVICE_NAME=service
 ENV SERVICE_PORT=8080
 ENTRYPOINT ["bash", "entrypoint.sh"]
