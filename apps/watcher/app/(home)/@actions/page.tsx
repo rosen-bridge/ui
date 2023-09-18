@@ -29,6 +29,7 @@ const Actions = () => {
           <HomeActionButton
             action="pause"
             label="Pause"
+            disabled={true}
             icon={
               <SvgIcon>
                 <Pause />
@@ -38,6 +39,7 @@ const Actions = () => {
           <HomeActionButton
             action="stop"
             label="Stop"
+            disabled={true}
             icon={
               <SvgIcon>
                 <SquareShape />
