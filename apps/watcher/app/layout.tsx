@@ -3,7 +3,12 @@
 import React from 'react';
 import SWRConfig from '@rosen-ui/swr-mock';
 
-import { NoSsr, styled } from '@rosen-bridge/ui-kit';
+import {
+  AppSnackbar,
+  NoSsr,
+  styled,
+  SnackbarProvider,
+} from '@rosen-bridge/ui-kit';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';
@@ -64,20 +69,23 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       <body>
         <NoSsr>
           <ThemeProvider>
-            <Root>
-              <SideBar />
-              <SWRConfig
-                useMockedApis={
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                }
-                fakeData={mockedData}
-              >
-                <Main>
-                  <Toolbar />
-                  {children}
-                </Main>
-              </SWRConfig>
-            </Root>
+            <SnackbarProvider>
+              <Root>
+                <SideBar />
+                <SWRConfig
+                  useMockedApis={
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                  }
+                  fakeData={mockedData}
+                >
+                  <Main>
+                    <Toolbar />
+                    {children}
+                    <AppSnackbar />
+                  </Main>
+                </SWRConfig>
+              </Root>
+            </SnackbarProvider>
           </ThemeProvider>
         </NoSsr>
       </body>

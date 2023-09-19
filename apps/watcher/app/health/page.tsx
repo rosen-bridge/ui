@@ -14,12 +14,14 @@ import { HealthParamInfo } from '@rosen-ui/types';
 
 import { ApiHealthStatusResponse } from '@/_types/api';
 
+import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
+
 const Health = () => {
   const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>(
     '/health/status',
     fetcher,
     {
-      refreshInterval: 60000,
+      refreshInterval: HEALTH_DATA_REFRESH_INTERVAL,
     },
   );
 

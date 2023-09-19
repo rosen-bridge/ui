@@ -57,7 +57,7 @@ function snackbarReducer(state: State, action: SnackbarAction) {
  * @param children
  */
 
-function SnackbarProvider({ children }: SnackbarProviderProps) {
+export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
   const [state, dispatch] = useReducer(snackbarReducer, {
     isOpen: false,
     message: '',
@@ -70,6 +70,4 @@ function SnackbarProvider({ children }: SnackbarProviderProps) {
       {children}
     </SnackbarStateContext.Provider>
   );
-}
-
-export default SnackbarProvider;
+};

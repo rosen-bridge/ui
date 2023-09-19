@@ -49,7 +49,7 @@ export const TokenListItem = ({
             <Typography>{getDecimalString(value, decimals)}</Typography>
           </Box>
         }
-        {...(id.length > 64 ? { secondary: <Id id={id} /> } : {})}
+        {...(id.length >= 64 ? { secondary: <Id id={id} /> } : {})}
         secondaryTypographyProps={{
           component: 'div',
           style: { fontSize: theme.typography.body2.fontSize },

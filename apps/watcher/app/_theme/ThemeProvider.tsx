@@ -7,6 +7,8 @@ import {
   useMediaQuery,
 } from '@rosen-bridge/ui-kit';
 
+import { useLocalStorageManager } from '@/_hooks';
+
 export const ColorModeContext = createContext({ toggle: () => {} });
 
 export interface AppThemeProps {
@@ -36,6 +38,8 @@ type ColorModes = 'light' | 'dark';
  * provide theme and color mode
  */
 const ThemeProvider = ({ children }: AppThemeProps) => {
+  const localStorageManager = useLocalStorageManager();
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
     noSsr: true,
   });
@@ -43,8 +47,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
   const preferredColorMode = prefersDarkMode ? 'dark' : 'light';
 
   const [mode, setMode] = useState<ColorModes>(
-    (localStorage.getItem('colorMode') as ColorModes | null) ||
-      preferredColorMode,
+    localStorageManager.get<ColorModes>('colorMode') || preferredColorMode,
   );
 
   const colorMode = useMemo(
@@ -52,10 +55,10 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
       toggle: () => {
         const newColorMode = mode === 'light' ? 'dark' : 'light';
         setMode(newColorMode);
-        localStorage.setItem('colorMode', newColorMode);
+        localStorageManager.set('colorMode', newColorMode);
       },
     }),
-    [mode],
+    [mode, localStorageManager],
   );
 
   const theme = useMemo(() => {
