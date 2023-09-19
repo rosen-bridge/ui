@@ -16,6 +16,7 @@ import {
   Box,
   CircularProgress,
   Grid,
+  Id,
   InputAdornment,
   MenuItem,
   SubmitButton,
@@ -72,7 +73,7 @@ const WithdrawForm = () => {
 
   const selectedToken = useMemo(
     () => tokens?.find((token) => token.tokenId === tokenIdField.value),
-    [tokens, tokenIdField.value]
+    [tokens, tokenIdField.value],
   );
 
   useEffect(() => {
@@ -88,7 +89,7 @@ const WithdrawForm = () => {
         tokens: {
           tokenId: data.tokenId,
           amount: BigInt(
-            getNonDecimalString(data.amount, selectedToken!.decimals)
+            getNonDecimalString(data.amount, selectedToken!.decimals),
           ),
         },
       });
@@ -99,7 +100,7 @@ const WithdrawForm = () => {
         });
       } else {
         throw new Error(
-          'Server responded but the response message was unexpected'
+          'Server responded but the response message was unexpected',
         );
       }
     } catch (error: any) {
@@ -144,6 +145,7 @@ const WithdrawForm = () => {
       {tokens?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
+          &nbsp; (<Id id={token.tokenId} />)
         </MenuItem>
       ))}
     </TextField>
