@@ -47,7 +47,7 @@ const InfoWidgets = () => {
 
     return (
       <InfoWidgetCard
-        title="Permit"
+        title="Allowed/Total Reports"
         value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
         icon={
           <SvgIcon fontSize="large">
@@ -62,19 +62,6 @@ const InfoWidgets = () => {
 
   return (
     <Grid container spacing={{ mobile: 1, teblet: 3 }}>
-      <Grid item mobile={6} tablet={6} laptop>
-        <InfoWidgetCard
-          title="Current Balance"
-          value={data?.currentBalance.toString() ?? ''}
-          unit="ERG"
-          icon={
-            <SvgIcon fontSize="large">
-              <Wallet />
-            </SvgIcon>
-          }
-          isLoading={isInfoLoading}
-        />
-      </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Network"
@@ -100,17 +87,12 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          title="Health"
-          value={data?.health ?? ''}
+          title="ERG"
+          value={data?.currentBalance.toString() ?? ''}
           icon={
             <SvgIcon fontSize="large">
-              <ShieldCheck />
+              <Wallet />
             </SvgIcon>
-          }
-          color={
-            data?.health
-              ? (healthStatusColorMap[data.health] as keyof AugmentedPalette)
-              : 'success'
           }
           isLoading={isInfoLoading}
         />
@@ -129,6 +111,23 @@ const InfoWidgets = () => {
           }
           color="warning"
           isLoading={isRsnTokenLoading}
+        />
+      </Grid>
+      <Grid item mobile={6} tablet={6} laptop>
+        <InfoWidgetCard
+          title="Health"
+          value={data?.health ?? ''}
+          icon={
+            <SvgIcon fontSize="large">
+              <ShieldCheck />
+            </SvgIcon>
+          }
+          color={
+            data?.health
+              ? (healthStatusColorMap[data.health] as keyof AugmentedPalette)
+              : 'success'
+          }
+          isLoading={isInfoLoading}
         />
       </Grid>
     </Grid>
