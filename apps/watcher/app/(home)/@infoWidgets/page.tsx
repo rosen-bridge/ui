@@ -23,6 +23,43 @@ const InfoWidgets = () => {
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
 
+  /**
+   * get allowed and total reports based on permits count and permits per event
+   */
+  const getAllowedAndTotalReports = () => {
+    if (data) {
+      return {
+        total: data.permitCount.total / data.permitsPerEvent,
+        allowed: data.permitCount.active / data.permitsPerEvent,
+      };
+    }
+    return {
+      total: 0n,
+      allowed: 0n,
+    };
+  };
+
+  /**
+   * render reports widget
+   */
+  const renderReportsWidget = () => {
+    const allowedAndTotalPermits = getAllowedAndTotalReports();
+
+    return (
+      <InfoWidgetCard
+        title="Permit"
+        value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
+        icon={
+          <SvgIcon fontSize="large">
+            <LockAlt />
+          </SvgIcon>
+        }
+        color="info"
+        isLoading={isInfoLoading}
+      />
+    );
+  };
+
   return (
     <Grid container spacing={{ mobile: 1, teblet: 3 }}>
       <Grid item mobile={6} tablet={6} laptop>
@@ -59,17 +96,7 @@ const InfoWidgets = () => {
         />
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
-        <InfoWidgetCard
-          title="Permit"
-          value={data?.permitCount.total.toString() ?? ''}
-          icon={
-            <SvgIcon fontSize="large">
-              <LockAlt />
-            </SvgIcon>
-          }
-          color="info"
-          isLoading={isInfoLoading}
-        />
+        {renderReportsWidget()}
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
