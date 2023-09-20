@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import JSONBigInt from 'json-bigint';
+import JSONBigInt from '@rosen-bridge/json-bigint';
 
 /**
  * a utility hook to manage local storage
@@ -7,23 +7,12 @@ import JSONBigInt from 'json-bigint';
 
 export const useLocalStorageManager = () => {
   const set = useCallback(<T>(key: string, value: T) => {
-    localStorage.setItem(
-      key,
-      JSONBigInt({
-        useNativeBigInt: true,
-        alwaysParseAsBig: true,
-      }).stringify(value),
-    );
+    localStorage.setItem(key, JSONBigInt.stringify(value));
   }, []);
 
   const get = useCallback(<T>(key: string) => {
     const rawData = localStorage.getItem(key);
-    return rawData
-      ? (JSONBigInt({
-          useNativeBigInt: true,
-          alwaysParseAsBig: true,
-        }).parse(rawData) as T)
-      : null;
+    return rawData ? (JSONBigInt.parse(rawData) as T) : null;
   }, []);
 
   const remove = useCallback((key: string) => {
