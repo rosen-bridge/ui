@@ -25,31 +25,38 @@ const info: ApiInfoResponse = {
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
 };
 
-const addressAssets: ApiAddressAssetsResponse = [
-  {
-    name: 'awesome token',
-    tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
-    amount: 10000n,
-    decimals: 2,
-  },
-  {
-    tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
-    amount: 2n,
-    decimals: 0,
-  },
-  {
-    name: 'another awesome token',
-    tokenId: 'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
-    amount: 200n,
-    decimals: 1,
-  },
-  {
-    name: 'fakeRSN',
-    tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
-    amount: 20n,
-    decimals: 5,
-  },
-];
+const addressAssets: ApiAddressAssetsResponse = {
+  items: [
+    {
+      name: 'awesome token',
+      tokenId:
+        '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
+      amount: 10000n,
+      decimals: 2,
+    },
+    {
+      tokenId:
+        '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
+      amount: 2n,
+      decimals: 0,
+    },
+    {
+      name: 'another awesome token',
+      tokenId:
+        'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
+      amount: 200n,
+      decimals: 1,
+    },
+    {
+      name: 'fakeRSN',
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      amount: 20n,
+      decimals: 5,
+    },
+  ],
+  total: 4,
+};
 
 const revenueChartWeekly: ApiRevenueChartResponse = [
   {
@@ -275,7 +282,6 @@ const events: ApiEventResponse = {
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
-    '/address/assets': addressAssets,
     '/health/status': healthStatus,
     '/withdraw': withdraw,
     '/permit': permit,
@@ -286,6 +292,16 @@ const mockedData: SWRConfigProps['fakeData'] = {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
       return revenueChart[period];
     },
+
+    '/address/assets': ({ tokenId }: { tokenId: string }) =>
+      tokenId
+        ? {
+            items: addressAssets.items.filter(
+              (asset) => asset.tokenId === tokenId,
+            ),
+            total: 1,
+          }
+        : addressAssets,
     '/observation': ({ offset, limit }) => {
       return {
         ...observations,

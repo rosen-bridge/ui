@@ -8,13 +8,17 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { ApiAddressAssetsResponse } from '@/_types/api';
 
 const Tokens = () => {
-  const { data: tokens, isLoading } = useSWR<ApiAddressAssetsResponse>(
-    '/address/assets',
-    fetcher
+  const { data, isLoading } = useSWR<ApiAddressAssetsResponse>(
+    ['/address/assets', { offset: 0, limit: 10 }],
+    fetcher,
   );
 
   return (
-    <TokensCard tokens={tokens ?? []} isLoading={isLoading} title="Tokens" />
+    <TokensCard
+      tokens={data?.items ?? []}
+      isLoading={isLoading}
+      title="Tokens"
+    />
   );
 };
 
