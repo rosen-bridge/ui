@@ -15,7 +15,7 @@ export interface ApiInfoResponse {
   rsnTokenId: string;
 }
 
-export type ApiAddressAssetsResponse = TokenInfo[];
+export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
 
 export type ApiRevenueChartResponse = TokenChartData[];
 

@@ -42,7 +42,7 @@ interface Form extends TokenAmountCompatibleFormSchema {
 }
 
 const WithdrawForm = () => {
-  const { data: tokens, isLoading: isTokensListLoading } =
+  const { data, isLoading: isTokensListLoading } =
     useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
 
   const [alertData, setAlertData] = useState<{
@@ -60,7 +60,7 @@ const WithdrawForm = () => {
   const formMethods = useForm({
     defaultValues: {
       address: '',
-      tokenId: tokens?.[0].tokenId ?? '',
+      tokenId: data?.items?.[0].tokenId ?? '',
       amount: '',
     },
   });
@@ -72,15 +72,15 @@ const WithdrawForm = () => {
   });
 
   const selectedToken = useMemo(
-    () => tokens?.find((token) => token.tokenId === tokenIdField.value),
-    [tokens, tokenIdField.value],
+    () => data?.items?.find((token) => token.tokenId === tokenIdField.value),
+    [data, tokenIdField.value],
   );
 
   useEffect(() => {
-    if (tokens && !tokenIdField.value) {
-      resetField('tokenId', { defaultValue: tokens[0].tokenId });
+    if (data && !tokenIdField.value) {
+      resetField('tokenId', { defaultValue: data?.items[0].tokenId });
     }
-  }, [tokens, resetField, tokenIdField.value]);
+  }, [data, resetField, tokenIdField.value]);
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
     try {
@@ -142,7 +142,7 @@ const WithdrawForm = () => {
       }}
       {...tokenIdField}
     >
-      {tokens?.map((token) => (
+      {data?.items?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
           &nbsp; (<Id id={token.tokenId} />)

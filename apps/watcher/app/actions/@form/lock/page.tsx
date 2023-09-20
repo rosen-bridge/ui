@@ -1,8 +1,7 @@
 'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import {
@@ -12,33 +11,19 @@ import {
   Grid,
   SubmitButton,
 } from '@rosen-bridge/ui-kit';
-import { fetcher, mutator } from '@rosen-ui/swr-helpers';
+import { mutator } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
-import {
-  ApiAddressAssetsResponse,
-  ApiInfoResponse,
-  ApiPermitRequestBody,
-  ApiPermitResponse,
-} from '@/_types/api';
+import useRsnToken from '@/_hooks/useRsnToken';
+
+import { ApiPermitRequestBody, ApiPermitResponse } from '@/_types/api';
 
 const LockForm = () => {
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
-  const { data: tokens, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
-
-  const rsnToken = useMemo(() => {
-    if (info && tokens) {
-      return tokens.find((token) => token.tokenId === info.rsnTokenId);
-    }
-  }, [tokens, info]);
+  const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
@@ -53,13 +38,13 @@ const LockForm = () => {
   >('/permit', mutator);
 
   useEffect(() => {
-    if (!isTokensListLoading && !isInfoLoading && !rsnToken) {
+    if (!isRsnTokenLoading && !rsnToken) {
       setAlertData({
         severity: 'error',
         message: 'RSN token does not exist',
       });
     }
-  }, [isTokensListLoading, isInfoLoading, rsnToken]);
+  }, [isRsnTokenLoading, rsnToken]);
 
   const formMethods = useForm({
     defaultValues: {
@@ -105,12 +90,12 @@ const LockForm = () => {
     </AlertCard>
   );
 
-  const disabled = isTokensListLoading || isInfoLoading || !rsnToken;
+  const disabled = isRsnTokenLoading || !rsnToken;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
       disabled={disabled}
-      loading={isTokensListLoading || isInfoLoading}
+      loading={isRsnTokenLoading}
       token={rsnToken}
     />
   );
