@@ -35,9 +35,9 @@ const UnlockForm = () => {
     Pick<TokenInfo, 'amount' | 'decimals'> | undefined
   >(
     () =>
-      info?.permitCount
+      info?.permitCount.active
         ? {
-            amount: info.permitCount,
+            amount: info.permitCount.active,
             decimals: 0,
           }
         : undefined,
