@@ -20,7 +20,11 @@ const info: ApiInfoResponse = {
   currentBalance: 150n,
   health: 'Unstable',
   network: 'ergo',
-  permitCount: 100n,
+  permitsPerEvent: 1000n,
+  permitCount: {
+    active: 20n,
+    total: 100n,
+  },
   rsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
 };

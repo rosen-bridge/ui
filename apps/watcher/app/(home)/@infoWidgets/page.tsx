@@ -54,7 +54,7 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop={3}>
         <InfoWidgetCard
           title="Permit"
-          value={data?.permitCount.toString() ?? ''}
+          value={data?.permitCount.total.toString() ?? ''}
           icon={
             <SvgIcon fontSize="large">
               <LockAlt />
