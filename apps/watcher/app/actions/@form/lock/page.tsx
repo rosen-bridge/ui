@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -29,7 +29,7 @@ import {
 const LockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
-    fetcher
+    fetcher,
   );
   const { data: tokens, isLoading: isTokensListLoading } =
     useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
@@ -52,6 +52,15 @@ const LockForm = () => {
     ApiPermitRequestBody
   >('/permit', mutator);
 
+  useEffect(() => {
+    if (!isTokensListLoading && !isInfoLoading && !rsnToken) {
+      setAlertData({
+        severity: 'error',
+        message: 'RSN token does not exist',
+      });
+    }
+  }, [isTokensListLoading, isInfoLoading, rsnToken]);
+
   const formMethods = useForm({
     defaultValues: {
       amount: '',
@@ -60,7 +69,7 @@ const LockForm = () => {
   const { handleSubmit } = formMethods;
 
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
-    data
+    data,
   ) => {
     try {
       const count = getNonDecimalString(data.amount, rsnToken!.decimals);
@@ -76,7 +85,7 @@ const LockForm = () => {
         });
       } else {
         throw new Error(
-          'Server responded but the response message was unexpected'
+          'Server responded but the response message was unexpected',
         );
       }
     } catch (error: any) {
@@ -96,9 +105,11 @@ const LockForm = () => {
     </AlertCard>
   );
 
+  const disabled = isTokensListLoading || isInfoLoading || !rsnToken;
+
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
-      disabled={isTokensListLoading || isInfoLoading}
+      disabled={disabled}
       loading={isTokensListLoading || isInfoLoading}
       token={rsnToken}
     />
@@ -113,7 +124,10 @@ const LockForm = () => {
           {renderTokenAmountTextField()}
         </Grid>
 
-        <SubmitButton loading={isLockPending}>Lock</SubmitButton>
+        <SubmitButton loading={isLockPending} disabled={disabled}>
+          {' '}
+          Lock
+        </SubmitButton>
       </form>
     </FormProvider>
   );

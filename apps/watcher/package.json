@@ -27,6 +27,7 @@
     "react-apexcharts": "^1.4.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.0",
+    "@rosen-bridge/json-bigint": "^0.1.0",
     "swr": "^2.1.5"
   },
   "devDependencies": {
