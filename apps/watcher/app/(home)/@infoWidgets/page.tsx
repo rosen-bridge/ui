@@ -29,8 +29,8 @@ const InfoWidgets = () => {
   const getAllowedAndTotalReports = () => {
     if (data) {
       return {
-        total: data.permitCount.total / data.permitsPerEvent,
-        allowed: data.permitCount.active / data.permitsPerEvent,
+        total: Math.floor(data.permitCount.total / data.permitsPerEvent),
+        allowed: Math.floor(data.permitCount.active / data.permitsPerEvent),
       };
     }
     return {
