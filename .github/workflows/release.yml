@@ -14,25 +14,15 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 18
 
       - name: Install yaml2json
         run: npm install -g yamljs
-      
-      - name: Download Contracts Files
-        run: |
-          download_version=$(curl -s https://api.github.com/repos/rosen-bridge/contract/releases | jq -r 'max_by(.published_at).name')
-          release_info=$(curl -s "https://api.github.com/repos/rosen-bridge/contract/releases/tags/$download_version")
-          asset_urls=$(echo "$release_info" | jq -r --arg name "${{ secrets.RELEASE_NAME }}" '.assets | map(select(.name | test($name))) | .[].browser_download_url')
-          for url in $asset_urls; do
-            curl -LJO "$url"
-          done
-          mv ./tokensMap-${{ secrets.RELEASE_NAME }}-$download_version.json ./tokens.json
-          files=$(ls contracts-*-${{ secrets.RELEASE_NAME }}-$download_version.json)
-          for file in $files; do
-            new_name=$(echo "$file" | awk -F'-' '{print $1"-"$2"-mainnet.json"}')
-            mv "$file" "$new_name"
-          done
+
+      - name: Download Contract Files
+        uses: rosen-bridge/operation@V0.1
+        with:
+          type: ${{ vars.RELEASE_NAME }}
 
       - name: Download Watcher Files
         run: |
@@ -58,13 +48,22 @@ jobs:
     permissions: write-all
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
         node-version: [18.x]
         include:
           - os: macos-latest
             platform: macOS
+            output_path: dmg
+            output_postfix: dmg
           - os: ubuntu-latest
             platform: linux
+            output_path: appimage
+            output_postfix: AppImage
+          - os: windows-latest
+            platform: Windows
+            output_path: nsis
+            output_postfix: exe
+            exec_extention: .exe
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -102,35 +101,33 @@ jobs:
           path: tmp
 
       - name: Move Config Files
+        shell: bash
         run: |
           mkdir -p ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/{contracts,tokens}* ./apps/watcher/src-tauri/config/rosen/
-          mv ./tmp/default* ./apps/watcher/src-tauri/config
-      
+          mv ./tmp/default* ./apps/watcher/src-tauri/config/
+
       - name: Move Service File
+        shell: bash
         run: |
           mkdir -p ./apps/watcher/src-tauri/.bin 
           chmod +x ./tmp/watcher-service*
-          mv ./tmp/watcher-service-*-${{ matrix.platform }} ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')
+          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')${{ matrix.exec_extention }}
 
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectPath: "apps/watcher/"
+          projectPath: 'apps/watcher/'
 
       - name: Rename the Release files
-        if: matrix.os == 'ubuntu-latest'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/appimage/watcher-app*.AppImage watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.AppImage
-        
-      - name: Rename the MacOS Release files
-        if: matrix.os == 'macos-latest'
-        run: mv ./apps/watcher/src-tauri/target/release/bundle/dmg/watcher-app*.dmg watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}.dmg
+        shell: bash
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/${{ matrix.output_path }}/watcher-app*.${{ matrix.output_postfix }} watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.${{ matrix.output_postfix }}
 
       - name: Upload File to Assets
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            watcher-service-${{ matrix.platform }}-${{ github.event.release.tag_name }}*
+            watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}*
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

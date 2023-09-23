@@ -1,0 +1,14 @@
+Dockerfile
+logs
+*.log*
+.dockerignore
+.git*
+node_modules
+README.md
+*.local
+out
+dist
+.idea
+.vscode/*
+!.vscode/extensions.json
+.DS_Store

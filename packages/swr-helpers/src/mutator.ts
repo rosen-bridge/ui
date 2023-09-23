@@ -13,6 +13,7 @@ const mutator = async (url: string, { arg }: { arg: any }) => {
         useNativeBigInt: true,
         alwaysParseAsBig: true,
       }).stringify(data),
+    headers: { 'Content-Type': 'application/json' },
   });
 
   return response.data;

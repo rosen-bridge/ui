@@ -11,3 +11,4 @@ export * from './NavigationButton';
 export * from './SubmitButton';
 export * from './TokensCard';
 export * from './Toolbar';
+export * from './AppSnackbar';

@@ -11,32 +11,63 @@ import { AugmentedPalette } from '@rosen-ui/types';
 
 import InfoWidgetCard from './InfoWidgetCard';
 
+import useRsnToken from '@/_hooks/useRsnToken';
+
 import { ApiInfoResponse } from '@/_types/api';
 
 const InfoWidgets = () => {
-  const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
+  const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
+    '/info',
+    fetcher,
+  );
+
+  const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+
+  /**
+   * get allowed and total reports based on permits count and permits per event
+   */
+  const getAllowedAndTotalReports = () => {
+    if (data) {
+      return {
+        total: data.permitCount.total / data.permitsPerEvent,
+        allowed: data.permitCount.active / data.permitsPerEvent,
+      };
+    }
+    return {
+      total: 0n,
+      allowed: 0n,
+    };
+  };
+
+  /**
+   * render reports widget
+   */
+  const renderReportsWidget = () => {
+    const allowedAndTotalPermits = getAllowedAndTotalReports();
+
+    return (
+      <InfoWidgetCard
+        title="Allowed/Total Reports"
+        value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
+        icon={
+          <SvgIcon fontSize="large">
+            <LockAlt />
+          </SvgIcon>
+        }
+        color="info"
+        isLoading={isInfoLoading}
+      />
+    );
+  };
 
   return (
     <Grid container spacing={{ mobile: 1, teblet: 3 }}>
-      <Grid item mobile={6} tablet={6} laptop={3}>
-        <InfoWidgetCard
-          title="Current Balance"
-          value={data?.currentBalance.toString() ?? ''}
-          unit="ERG"
-          icon={
-            <SvgIcon fontSize="large">
-              <Wallet />
-            </SvgIcon>
-          }
-          isLoading={isLoading}
-        />
-      </Grid>
-      <Grid item mobile={6} tablet={6} laptop={3}>
+      <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Network"
           value={data?.network ?? ''}
           icon={
-            isLoading ? (
+            isInfoLoading ? (
               <Box sx={{ width: 35, height: 35 }} />
             ) : (
               <Image
@@ -48,23 +79,41 @@ const InfoWidgets = () => {
             )
           }
           color="primary"
-          isLoading={isLoading}
+          isLoading={isInfoLoading}
         />
       </Grid>
-      <Grid item mobile={6} tablet={6} laptop={3}>
+      <Grid item mobile={6} tablet={6} laptop>
+        {renderReportsWidget()}
+      </Grid>
+      <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          title="Permit"
-          value={data?.permitCount.toString() ?? ''}
+          title="ERG"
+          value={data?.currentBalance.toString() ?? ''}
           icon={
             <SvgIcon fontSize="large">
-              <LockAlt />
+              <Wallet />
             </SvgIcon>
           }
-          color="info"
-          isLoading={isLoading}
+          isLoading={isInfoLoading}
         />
       </Grid>
-      <Grid item mobile={6} tablet={6} laptop={3}>
+      <Grid item mobile={6} tablet={6} laptop>
+        <InfoWidgetCard
+          title="RSN"
+          value={rsnToken?.amount.toString() ?? ''}
+          icon={
+            <SvgIcon fontSize="large">
+              {/* FIXME: Use an appropriate icon
+                local:ergo/rosen-bridge/ui#64
+               */}
+              <ShieldCheck />
+            </SvgIcon>
+          }
+          color="warning"
+          isLoading={isRsnTokenLoading}
+        />
+      </Grid>
+      <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Health"
           value={data?.health ?? ''}
@@ -78,7 +127,7 @@ const InfoWidgets = () => {
               ? (healthStatusColorMap[data.health] as keyof AugmentedPalette)
               : 'success'
           }
-          isLoading={isLoading}
+          isLoading={isInfoLoading}
         />
       </Grid>
     </Grid>

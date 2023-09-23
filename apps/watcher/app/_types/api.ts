@@ -9,13 +9,17 @@ import {
 export interface ApiInfoResponse {
   currentBalance: bigint;
   network: string;
-  permitCount: bigint;
+  permitsPerEvent: bigint;
+  permitCount: {
+    active: bigint;
+    total: bigint;
+  };
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
   rsnTokenId: string;
 }
 
-export type ApiAddressAssetsResponse = TokenInfo[];
+export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
 
 export type ApiRevenueChartResponse = TokenChartData[];
 
