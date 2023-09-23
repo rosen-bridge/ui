@@ -18,11 +18,11 @@ const fetcher = async (
 ) => {
   const response = await axios.get(typeof key === 'string' ? key : key[0], {
     params: typeof key === 'string' ? undefined : key[1],
-    transformResponse: (data) =>
-      JSONBigInt({
-        useNativeBigInt: true,
-        alwaysParseAsBig: true,
-      }).parse(data),
+    /**
+     * FIXME: Transform response to handle bigint values
+     *
+     * local:ergo/rosen-bridge/ui#65
+     */
   });
 
   return response.data;
