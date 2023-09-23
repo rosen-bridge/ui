@@ -7,12 +7,12 @@ import {
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
-  currentBalance: bigint;
+  currentBalance: number;
   network: string;
-  permitsPerEvent: bigint;
+  permitsPerEvent: number;
   permitCount: {
-    active: bigint;
-    total: bigint;
+    active: number;
+    total: number;
   };
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
@@ -27,7 +27,10 @@ export type ApiHealthStatusResponse = HealthParamInfo[];
 
 export interface ApiWithdrawRequestBody {
   address: string;
-  tokens: Pick<TokenInfo, 'amount' | 'tokenId'>;
+  tokens: {
+    tokenId: string;
+    amount: bigint;
+  };
 }
 export type ApiWithdrawResponse = 'OK';
 
