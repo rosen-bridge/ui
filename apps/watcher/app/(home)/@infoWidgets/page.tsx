@@ -8,10 +8,12 @@ import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import InfoWidgetCard from './InfoWidgetCard';
 
 import useRsnToken from '@/_hooks/useRsnToken';
+import useToken from '@/_hooks/useToken';
 
 import { ApiInfoResponse } from '@/_types/api';
 
@@ -22,6 +24,7 @@ const InfoWidgets = () => {
   );
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
   /**
    * get allowed and total reports based on permits count and permits per event
@@ -88,19 +91,27 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="ERG"
-          value={data?.currentBalance.toString() ?? ''}
+          value={
+            ergToken?.amount
+              ? getDecimalString(ergToken.amount.toString(), ergToken.decimals)
+              : ''
+          }
           icon={
             <SvgIcon fontSize="large">
               <Wallet />
             </SvgIcon>
           }
-          isLoading={isInfoLoading}
+          isLoading={isErgTokenLoading}
         />
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="RSN"
-          value={rsnToken?.amount.toString() ?? ''}
+          value={
+            rsnToken?.amount
+              ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals)
+              : ''
+          }
           icon={
             <SvgIcon fontSize="large">
               {/* FIXME: Use an appropriate icon
