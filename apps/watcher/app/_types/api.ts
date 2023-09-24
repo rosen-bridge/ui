@@ -30,7 +30,7 @@ export interface ApiWithdrawRequestBody {
   tokens: {
     tokenId: string;
     amount: bigint;
-  };
+  }[];
 }
 export type ApiWithdrawResponse = 'OK';
 

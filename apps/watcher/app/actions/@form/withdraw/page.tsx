@@ -86,12 +86,14 @@ const WithdrawForm = () => {
     try {
       const response = await trigger({
         address: data.address,
-        tokens: {
-          tokenId: data.tokenId,
-          amount: BigInt(
-            getNonDecimalString(data.amount, selectedToken!.decimals),
-          ),
-        },
+        tokens: [
+          {
+            tokenId: data.tokenId,
+            amount: BigInt(
+              getNonDecimalString(data.amount, selectedToken!.decimals),
+            ),
+          },
+        ],
       });
       if (response === 'OK') {
         setAlertData({
