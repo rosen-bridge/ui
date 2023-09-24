@@ -2,6 +2,7 @@ import { useCallback, useState } from 'react';
 import useSWR, { Key } from 'swr';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { Paginated } from '@rosen-ui/types';
 
 /**
  * this hook uses swr to to fetch and manage paginated data.
@@ -11,10 +12,10 @@ import { fetcher } from '@rosen-ui/swr-helpers';
  *  it will default to 10 items per page
  * @param initialPageIndex - starting page index, this is an optional parameter and if not provided it will default to 0
  */
-export const useTableDataPagination = <T>(
+export const useTableDataPagination = <T extends Paginated<any>>(
   getKey: (offset: number, limit: number) => Key,
   initialPageSize = 10,
-  initialPageIndex = 0
+  initialPageIndex = 0,
 ) => {
   const [pageSize, setPageSize] = useState<number>(initialPageSize);
   const [pageIndex, setPageIndex] = useState<number>(initialPageIndex);
@@ -29,7 +30,7 @@ export const useTableDataPagination = <T>(
     fetcher,
     {
       keepPreviousData: true,
-    }
+    },
   );
 
   return {
@@ -40,5 +41,7 @@ export const useTableDataPagination = <T>(
     pageIndex,
     setPageIndex,
     isFirstLoad: isLoading && !data,
+    isFirstPage: pageIndex === 0,
+    isLastPage: (pageIndex + 1) * pageSize >= (data?.total ?? 0),
   };
 };
