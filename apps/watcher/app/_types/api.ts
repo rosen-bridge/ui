@@ -7,6 +7,10 @@ import {
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
+  collateral: {
+    erg: number;
+    rsn: number;
+  };
   currentBalance: number;
   network: string;
   permitsPerEvent: number;

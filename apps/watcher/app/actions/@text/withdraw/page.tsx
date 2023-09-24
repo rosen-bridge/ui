@@ -10,15 +10,20 @@ const WithdrawalText = () => {
   return (
     <ActionText title="Withdraw">
       <Typography gutterBottom>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur.
+        All your watcher rewards are deposited to this address, allowing you to
+        withdraw your assets at your convenience. Remember to maintain a
+        sufficient balance of ERGs in your wallet to ensure uninterrupted
+        operation.
       </Typography>
-      <Typography sx={{ mb: 2 }}>
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-        officia deserunt mollit anim id est laborum.
+      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+        Caution
+      </Typography>
+      <Typography sx={{ mt: 2 }}>
+        DO NOT send your WID token to any other addresses, otherwise your
+        watcher won&apos;t work correctly any more. Transferring the WID token
+        to a different address will result in the transfer of all your permits
+        to the new address, along with any rewards and collateral associated
+        with it.
       </Typography>
     </ActionText>
   );

@@ -17,6 +17,10 @@ import {
 
 const info: ApiInfoResponse = {
   address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+  collateral: {
+    erg: 10000000000,
+    rsn: 0,
+  },
   currentBalance: 150,
   health: 'Unstable',
   network: 'ergo',
