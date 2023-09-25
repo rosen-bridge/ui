@@ -25,30 +25,32 @@ const Revenues = () => {
     setPageIndex,
     setPageSize,
     isFirstLoad,
+    isFirstPage,
+    isLastPage,
   } = useTableDataPagination<ApiRevenueResponse>(getKey);
 
   const handleChangePage = useCallback(
     (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
-    [setPageIndex]
+    [setPageIndex],
   );
 
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setPageSize(parseInt(event.target.value, 10));
     },
-    [setPageSize]
+    [setPageSize],
   );
 
   const renderMobileRow = useCallback(
     (rowData: Revenue) => <MobileRow {...rowData} isLoading={isLoading} />,
-    [isLoading]
+    [isLoading],
   );
 
   const renderTabletRow = useCallback(
     (rowData: Revenue) => <TabletRow {...rowData} isLoading={isLoading} />,
-    [isLoading]
+    [isLoading],
   );
 
   const tableHeaderProps = useMemo(
@@ -56,7 +58,7 @@ const Revenues = () => {
       mobile: mobileHeader,
       tablet: tabletHeader,
     }),
-    []
+    [],
   );
 
   const tableRenderRowProps = useMemo(
@@ -64,7 +66,7 @@ const Revenues = () => {
       mobile: renderMobileRow,
       tablet: renderTabletRow,
     }),
-    [renderMobileRow, renderTabletRow]
+    [renderMobileRow, renderTabletRow],
   );
 
   const paginationProps = useMemo(
@@ -77,6 +79,12 @@ const Revenues = () => {
       onPageChange: handleChangePage,
       onRowsPerPageChange: handleChangeRowsPerPage,
       nextIconButtonProps: {
+        disabled: isLoading || isLastPage,
+      },
+      backIconButtonProps: {
+        disabled: isLoading || isFirstPage,
+      },
+      SelectProps: {
         disabled: isLoading,
       },
     }),
@@ -87,7 +95,9 @@ const Revenues = () => {
       handleChangePage,
       handleChangeRowsPerPage,
       isLoading,
-    ]
+      isFirstPage,
+      isLastPage,
+    ],
   );
 
   return isFirstLoad ? (

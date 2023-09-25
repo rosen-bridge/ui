@@ -86,12 +86,14 @@ const WithdrawForm = () => {
     try {
       const response = await trigger({
         address: data.address,
-        tokens: {
-          tokenId: data.tokenId,
-          amount: BigInt(
-            getNonDecimalString(data.amount, selectedToken!.decimals),
-          ),
-        },
+        tokens: [
+          {
+            tokenId: data.tokenId,
+            amount: BigInt(
+              getNonDecimalString(data.amount, selectedToken!.decimals),
+            ),
+          },
+        ],
       });
       if (response === 'OK') {
         setAlertData({
@@ -145,7 +147,12 @@ const WithdrawForm = () => {
       {data?.items?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
-          &nbsp; (<Id id={token.tokenId} />)
+          &nbsp;
+          {token.tokenId.length >= 64 && (
+            <>
+              (<Id id={token.tokenId} />)
+            </>
+          )}
         </MenuItem>
       ))}
     </TextField>

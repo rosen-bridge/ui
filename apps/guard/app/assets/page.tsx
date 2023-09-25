@@ -4,6 +4,7 @@ import { MouseEvent, useCallback, useMemo } from 'react';
 import {
   EnhancedTable,
   Grid,
+  TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
@@ -25,34 +26,36 @@ const Assets = () => {
     setPageIndex,
     setPageSize,
     isFirstLoad,
+    isFirstPage,
+    isLastPage,
   } = useTableDataPagination<ApiAddressAssetsResponse>(getKey);
 
   const handleChangePage = useCallback(
     (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
-    [setPageIndex]
+    [setPageIndex],
   );
 
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setPageSize(parseInt(event.target.value, 10));
     },
-    [setPageSize]
+    [setPageSize],
   );
 
   const renderMobileRow = useCallback(
     (rowData: GuardTokenInfo) => (
       <MobileRow {...rowData} isLoading={isLoading} />
     ),
-    [isLoading]
+    [isLoading],
   );
 
   const renderTabletRow = useCallback(
     (rowData: GuardTokenInfo) => (
       <TabletRow {...rowData} isLoading={isLoading} />
     ),
-    [isLoading]
+    [isLoading],
   );
 
   const tableHeaderProps = useMemo(
@@ -60,7 +63,7 @@ const Assets = () => {
       mobile: mobileHeader,
       tablet: tabletHeader,
     }),
-    []
+    [],
   );
 
   const tableRenderRowProps = useMemo(
@@ -68,10 +71,10 @@ const Assets = () => {
       mobile: renderMobileRow,
       tablet: renderTabletRow,
     }),
-    [renderMobileRow, renderTabletRow]
+    [renderMobileRow, renderTabletRow],
   );
 
-  const paginationProps = useMemo(
+  const paginationProps = useMemo<TablePaginationProps>(
     () => ({
       rowsPerPageOptions: [5, 10, 25],
       component: 'div',
@@ -81,6 +84,12 @@ const Assets = () => {
       onPageChange: handleChangePage,
       onRowsPerPageChange: handleChangeRowsPerPage,
       nextIconButtonProps: {
+        disabled: isLoading || isLastPage,
+      },
+      backIconButtonProps: {
+        disabled: isLoading || isFirstPage,
+      },
+      SelectProps: {
         disabled: isLoading,
       },
     }),
@@ -91,7 +100,9 @@ const Assets = () => {
       handleChangePage,
       handleChangeRowsPerPage,
       isLoading,
-    ]
+      isFirstPage,
+      isLastPage,
+    ],
   );
 
   return isFirstLoad ? (
