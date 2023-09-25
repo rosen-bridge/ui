@@ -12,7 +12,7 @@ import { Paginated } from '@rosen-ui/types';
  *  it will default to 10 items per page
  * @param initialPageIndex - starting page index, this is an optional parameter and if not provided it will default to 0
  */
-export const useTableDataPagination = <T extends Paginated<any>>(
+export const useTableDataPagination = <T extends Paginated<unknown>>(
   getKey: (offset: number, limit: number) => Key,
   initialPageSize = 10,
   initialPageIndex = 0,
