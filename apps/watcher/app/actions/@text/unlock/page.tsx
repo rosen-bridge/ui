@@ -17,7 +17,7 @@ const LockText = () => {
   );
 
   return (
-    <ActionText title="Unlock">
+    <ActionText title="Unlock & Redeem Permit">
       <Typography gutterBottom>
         You can redeem your permits and unlock your RSN tokens. If you redeem
         all of your permits, your collateral will be redeemed automatically.
