@@ -42,7 +42,7 @@ const LockText = () => {
           </Typography>
           <Typography sx={{ mb: 2 }}>
             Currently, the required collateral is{' '}
-            {isInfoLoading && isErgTokenLoading ? (
+            {isInfoLoading || isErgTokenLoading ? (
               <CircularProgress size={12} />
             ) : (
               getDecimalString(
@@ -51,7 +51,7 @@ const LockText = () => {
               )
             )}{' '}
             ERG and{' '}
-            {isInfoLoading && isRsnTokenLoading ? (
+            {isInfoLoading || isRsnTokenLoading ? (
               <CircularProgress size={12} />
             ) : (
               getDecimalString(
@@ -71,7 +71,7 @@ const LockText = () => {
       </Typography>
       <Typography sx={{ mb: 2 }}>
         To acquire each report permit you should lock{' '}
-        {isInfoLoading && isRsnTokenLoading ? (
+        {isInfoLoading || isRsnTokenLoading ? (
           <CircularProgress size={12} />
         ) : (
           requiredRSNs
