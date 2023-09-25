@@ -22,6 +22,9 @@ const LockText = () => {
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
 
+  const rwtPerRsn = 10 ** (rsnToken?.decimals ?? 0);
+  const requiredRSNs = (info?.permitsPerEvent ?? 0) / rwtPerRsn;
+
   return (
     <ActionText title="Lock & Get Permit">
       <Typography gutterBottom>
@@ -67,19 +70,13 @@ const LockText = () => {
         RSN
       </Typography>
       <Typography sx={{ mb: 2 }}>
-        Each RSN is equivalent to{' '}
+        To acquire each report permit you should lock{' '}
         {isInfoLoading && isRsnTokenLoading ? (
           <CircularProgress size={12} />
         ) : (
-          10 ** (rsnToken?.decimals ?? 0)
+          requiredRSNs
         )}{' '}
-        permits, and you need to use{' '}
-        {isInfoLoading ? (
-          <CircularProgress size={12} />
-        ) : (
-          info?.permitsPerEvent ?? 0
-        )}{' '}
-        permits per event report.
+        RSNs.
       </Typography>
     </ActionText>
   );
