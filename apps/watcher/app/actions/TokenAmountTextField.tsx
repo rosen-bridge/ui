@@ -103,7 +103,11 @@ const TokenAmountTextField = ({
       InputProps={{
         endAdornment: token && (
           <InputAdornment position="end">
-            <Button size="small" onClick={setAmountToMaxAvailable}>
+            <Button
+              size="small"
+              onClick={setAmountToMaxAvailable}
+              disabled={disabled}
+            >
               Max
             </Button>
           </InputAdornment>
