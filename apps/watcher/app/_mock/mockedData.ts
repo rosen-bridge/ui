@@ -269,6 +269,22 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     height: 100,
     timestamp: Date.now(),
     status: 'Done',
+    revenues: [
+      {
+        tokenId:
+          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+        amount: 1000,
+        name: 'fakeRSN',
+        decimals: 0,
+      },
+      {
+        tokenId:
+          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
+        amount: 100,
+        name: 'awesome token',
+        decimals: 2,
+      },
+    ],
   }));
 };
 

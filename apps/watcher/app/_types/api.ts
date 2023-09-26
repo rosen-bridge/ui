@@ -86,6 +86,7 @@ export interface Revenue {
   height: number;
   timestamp: number;
   status: string;
+  revenues: TokenInfo[];
 }
 
 export type ApiRevenueResponse = Paginated<Revenue>;

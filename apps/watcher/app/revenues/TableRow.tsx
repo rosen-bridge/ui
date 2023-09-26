@@ -4,6 +4,8 @@ import { Button, EnhancedTableCell, TableRow } from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
+import useRsnToken from '@/_hooks/useRsnToken';
+
 import { Revenue } from '@/_types/api';
 
 interface RowProps extends Revenue {
@@ -27,61 +29,42 @@ export const mobileHeader = [
 
 export const tabletHeader = [
   {
-    title: 'ID',
-    cellProps: {
-      width: 50,
-    },
-  },
-  {
-    title: 'From Chain',
-    cellProps: {
-      width: 250,
-    },
-  },
-  {
-    title: 'To Chain',
+    title: 'Event Id',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Amount',
-    cellProps: {
-      width: 150,
-      align: 'right' as const,
-    },
-  },
-  {
-    title: 'Height',
+    title: 'Token Id',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Network fee',
+    title: 'RSN Income',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Bridge fee',
+    title: 'Token Income',
     cellProps: {
       width: 150,
     },
   },
 ];
 
-const renderValue = (value?: string | number | undefined) => {
-  return value || '-';
-};
-
 export const MobileRow: FC<RowProps> = (props) => {
-  const { isLoading, ...row } = props;
+  const { isLoading: isLoadingProp, ...row } = props;
   const [expand, setExpand] = useState(false);
+
+  const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+
+  const isLoading = isLoadingProp || isRsnTokenLoading;
 
   const rowStyles = useMemo(
     () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading]
+    [isLoading],
   );
 
   const toggleExpand = () => {
@@ -90,37 +73,31 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   return (
     <>
-      <TableRow className="divider" sx={rowStyles}>
-        <EnhancedTableCell>Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.id}</EnhancedTableCell>
+      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+        <EnhancedTableCell>Event Id</EnhancedTableCell>
+        <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
       </TableRow>
-      <TableRow sx={rowStyles}>
-        <EnhancedTableCell tooltipTitle={row.fromChain}>
-          From chain
-        </EnhancedTableCell>
-        <EnhancedTableCell>{row.fromChain}</EnhancedTableCell>
-      </TableRow>
-      <TableRow sx={rowStyles}>
-        <EnhancedTableCell>To chain</EnhancedTableCell>
-        <EnhancedTableCell>{row.toChain}</EnhancedTableCell>
+      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+        <EnhancedTableCell>Token Id</EnhancedTableCell>
+        <EnhancedTableCell>{row.tokenId.slice(0, 8)}</EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-            <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>RSN Income</EnhancedTableCell>
+            <EnhancedTableCell>
+              {row.revenues.find((token) => token.tokenId === rsnToken?.tokenId)
+                ?.amount ?? 0}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Height</EnhancedTableCell>
-            <EnhancedTableCell>{renderValue(row.height)}</EnhancedTableCell>
-          </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Network fee</EnhancedTableCell>
-            <EnhancedTableCell>{renderValue(row.networkFee)}</EnhancedTableCell>
-          </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Bridge fee</EnhancedTableCell>
-            <EnhancedTableCell>{renderValue(row.bridgeFee)}</EnhancedTableCell>
+            <EnhancedTableCell>Token Income</EnhancedTableCell>
+            <EnhancedTableCell>
+              {row.revenues
+                .filter((token) => token.tokenId !== rsnToken?.tokenId)
+                .map((token) => `${token.amount}${token.name}`)
+                .join('+')}
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -142,16 +119,28 @@ export const MobileRow: FC<RowProps> = (props) => {
 };
 
 export const TabletRow: FC<RowProps> = (props) => {
-  const { isLoading, ...row } = props;
+  const { isLoading: isLoadingProp, ...row } = props;
+
+  const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+
+  const isLoading = isLoadingProp || isRsnTokenLoading;
+
+  console.warn(rsnToken?.tokenId);
+
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.id}</EnhancedTableCell>
-      <EnhancedTableCell>{row.fromChain}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toChain}</EnhancedTableCell>
-      <EnhancedTableCell align="right">{row.amount}</EnhancedTableCell>
-      <EnhancedTableCell>{renderValue(row.height)}</EnhancedTableCell>
-      <EnhancedTableCell>{renderValue(row.networkFee)}</EnhancedTableCell>
-      <EnhancedTableCell>{renderValue(row.bridgeFee)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.tokenId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {row.revenues.find((token) => token.tokenId === rsnToken?.tokenId)
+          ?.amount ?? 0}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {row.revenues
+          .filter((token) => token.tokenId !== rsnToken?.tokenId)
+          .map((token) => `${token.amount} ${token.name ?? 'unnamed'}`)
+          .join(' + ')}
+      </EnhancedTableCell>
     </TableRow>
   );
 };
