@@ -92,7 +92,7 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           title="ERG"
           value={
-            ergToken?.amount
+            ergToken?.amount !== undefined
               ? getDecimalString(ergToken.amount.toString(), ergToken.decimals)
               : ''
           }
@@ -108,7 +108,7 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           title="RSN"
           value={
-            rsnToken?.amount
+            rsnToken?.amount !== undefined
               ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals)
               : ''
           }

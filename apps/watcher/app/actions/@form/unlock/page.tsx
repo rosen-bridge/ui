@@ -14,10 +14,13 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
+import { getNonDecimalString } from '@rosen-ui/utils';
 
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
+
+import useRsnToken from '@/_hooks/useRsnToken';
 
 import {
   ApiInfoResponse,
@@ -31,6 +34,8 @@ const UnlockForm = () => {
     fetcher,
   );
 
+  const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+
   const rwtPartialToken = useMemo<
     Pick<TokenInfo, 'amount' | 'decimals'> | undefined
   >(
@@ -38,10 +43,11 @@ const UnlockForm = () => {
       info?.permitCount.active
         ? {
             amount: info.permitCount.active,
-            decimals: 0,
+            decimals: rsnToken?.decimals ?? 0,
+            name: rsnToken?.name,
           }
         : undefined,
-    [info?.permitCount],
+    [info, rsnToken],
   );
 
   const [alertData, setAlertData] = useState<{
@@ -63,24 +69,22 @@ const UnlockForm = () => {
   });
   const { handleSubmit } = formMethods;
 
-  const noRwtToken = !!rwtPartialToken && !rwtPartialToken.amount;
-
   useEffect(() => {
-    if (noRwtToken) {
+    if (!isInfoLoading && !rwtPartialToken?.amount) {
       setAlertData({
         severity: 'error',
-        message: 'no Permit',
+        message: "You don't have any permit tokens",
       });
     } else {
       setAlertData(null);
     }
-  }, [noRwtToken]);
+  }, [isInfoLoading, rwtPartialToken?.amount]);
 
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
     data,
   ) => {
     try {
-      const count = data.amount;
+      const count = getNonDecimalString(data.amount, rsnToken?.decimals ?? 0);
       const response = await trigger({ count });
 
       if (response?.txId) {
@@ -112,10 +116,13 @@ const UnlockForm = () => {
     </AlertCard>
   );
 
+  const disabled =
+    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
-      disabled={isInfoLoading || noRwtToken}
-      loading={isInfoLoading}
+      disabled={disabled}
+      loading={isInfoLoading || isRsnTokenLoading}
       token={rwtPartialToken}
     />
   );
@@ -129,7 +136,7 @@ const UnlockForm = () => {
           {renderTokenAmountTextField()}
         </Grid>
 
-        <SubmitButton loading={isUnlockPending} disabled={noRwtToken}>
+        <SubmitButton loading={isUnlockPending} disabled={disabled}>
           Unlock
         </SubmitButton>
       </form>
