@@ -43,7 +43,12 @@ interface Form extends TokenAmountCompatibleFormSchema {
 
 const WithdrawForm = () => {
   const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
+    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+
+  const tokens = useMemo(
+    () => data?.items.filter((token) => !!token.amount),
+    [data],
+  );
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
@@ -60,7 +65,7 @@ const WithdrawForm = () => {
   const formMethods = useForm({
     defaultValues: {
       address: '',
-      tokenId: data?.items?.[0].tokenId ?? '',
+      tokenId: tokens?.[0]?.tokenId ?? '',
       amount: '',
     },
   });
@@ -72,15 +77,15 @@ const WithdrawForm = () => {
   });
 
   const selectedToken = useMemo(
-    () => data?.items?.find((token) => token.tokenId === tokenIdField.value),
-    [data, tokenIdField.value],
+    () => tokens?.find((token) => token.tokenId === tokenIdField.value),
+    [tokens, tokenIdField.value],
   );
 
   useEffect(() => {
-    if (data && !tokenIdField.value) {
-      resetField('tokenId', { defaultValue: data?.items[0].tokenId });
+    if (tokens && !tokenIdField.value) {
+      resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
     }
-  }, [data, resetField, tokenIdField.value]);
+  }, [tokens, resetField, tokenIdField.value]);
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
     try {
@@ -144,7 +149,7 @@ const WithdrawForm = () => {
       }}
       {...tokenIdField}
     >
-      {data?.items?.map((token) => (
+      {tokens?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
           &nbsp;
