@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { MouseEventHandler, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -58,8 +58,11 @@ const TokenAmountTextField = ({
   const getMaxAvailableTokenAmount = () =>
     getDecimalString(token!.amount.toString(), token!.decimals);
 
-  const setAmountToMaxAvailable = () =>
+  const setAmountToMaxAvailable: MouseEventHandler = (event) => {
+    event.preventDefault();
+
     setAmountFieldValue(getMaxAvailableTokenAmount());
+  };
 
   return (
     <TextField
