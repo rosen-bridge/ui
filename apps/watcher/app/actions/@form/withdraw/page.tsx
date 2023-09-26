@@ -30,6 +30,8 @@ import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
+import useToken from '@/_hooks/useToken';
+
 import {
   ApiAddressAssetsResponse,
   ApiWithdrawRequestBody,
@@ -44,6 +46,8 @@ interface Form extends TokenAmountCompatibleFormSchema {
 const WithdrawForm = () => {
   const { data, isLoading: isTokensListLoading } =
     useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
   const tokens = useMemo(
     () => data?.items.filter((token) => !!token.amount),
@@ -62,6 +66,15 @@ const WithdrawForm = () => {
     ApiWithdrawRequestBody
   >('/withdraw', mutator);
 
+  useEffect(() => {
+    if (!isErgTokenLoading && !ergToken?.amount) {
+      setAlertData({
+        severity: 'error',
+        message: 'Your wallet is empty. There is nothing to withdraw.',
+      });
+    }
+  }, [isErgTokenLoading, ergToken]);
+
   const formMethods = useForm({
     defaultValues: {
       address: '',
@@ -69,7 +82,7 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, setValue } = formMethods;
+  const { handleSubmit, control, resetField, register } = formMethods;
 
   const { field: tokenIdField } = useController({
     control,
@@ -127,10 +140,14 @@ const WithdrawForm = () => {
     </AlertCard>
   );
 
+  const disabled =
+    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+
   const renderAddressTextField = () => (
     <TextField
       autoFocus
       label="Address"
+      disabled={disabled}
       {...register('address', { required: true })}
     />
   );
@@ -139,7 +156,7 @@ const WithdrawForm = () => {
     <TextField
       label="Token"
       select={!isTokensListLoading}
-      disabled={isTokensListLoading}
+      disabled={disabled}
       InputProps={{
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
@@ -164,10 +181,7 @@ const WithdrawForm = () => {
   );
 
   const renderTokenAmountTextField = () => (
-    <TokenAmountTextField
-      disabled={isTokensListLoading}
-      token={selectedToken}
-    />
+    <TokenAmountTextField disabled={disabled} token={selectedToken} />
   );
 
   return (
@@ -188,7 +202,9 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Grid>
         </Grid>
-        <SubmitButton loading={isWithdrawPending}>Withdraw</SubmitButton>
+        <SubmitButton disabled={disabled} loading={isWithdrawPending}>
+          Withdraw
+        </SubmitButton>
       </form>
     </FormProvider>
   );
