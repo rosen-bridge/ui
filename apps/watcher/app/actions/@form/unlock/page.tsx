@@ -69,18 +69,16 @@ const UnlockForm = () => {
   });
   const { handleSubmit } = formMethods;
 
-  const noRwtToken = !!rwtPartialToken && !rwtPartialToken.amount;
-
   useEffect(() => {
-    if (noRwtToken) {
+    if (!isInfoLoading && !rwtPartialToken?.amount) {
       setAlertData({
         severity: 'error',
-        message: 'no Permit',
+        message: "You don't have any permit tokens",
       });
     } else {
       setAlertData(null);
     }
-  }, [noRwtToken]);
+  }, [isInfoLoading, rwtPartialToken?.amount]);
 
   const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
     data,
@@ -118,7 +116,8 @@ const UnlockForm = () => {
     </AlertCard>
   );
 
-  const disabled = isInfoLoading || isRsnTokenLoading || noRwtToken;
+  const disabled =
+    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
