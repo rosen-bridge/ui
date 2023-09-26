@@ -18,7 +18,7 @@ export interface TokenAmountCompatibleFormSchema {
 interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
-  token: Pick<TokenInfo, 'amount' | 'decimals'> | undefined;
+  token: Pick<TokenInfo, 'amount' | 'decimals' | 'name'> | undefined;
 }
 /**
  * render a react-hook-form compatible text field for token amount input,
@@ -96,7 +96,7 @@ const TokenAmountTextField = ({
             <Link component="button" onClick={setAmountToMaxAvailable}>
               {getMaxAvailableTokenAmount()}
             </Link>{' '}
-            available
+            {token.name} available
           </>
         )
       }
