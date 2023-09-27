@@ -1,0 +1,9 @@
+{
+  "extends": "../../packages/tsconfig.novite.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "outDir": "dist",
+    "rootDir": "./"
+  },
+  "include": ["src", "types"]
+}

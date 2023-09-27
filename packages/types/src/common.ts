@@ -53,3 +53,5 @@ export interface Event {
   spendHeight?: number;
   spendTxId?: string;
 }
+
+export type ValueOf<T> = T[keyof T];

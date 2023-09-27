@@ -1,3 +1,5 @@
+export * from './wallets';
+
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { ReactComponent as AngleUp } from './icons/angle-up.svg';
 export { ReactComponent as Archway } from './icons/archway.svg';
