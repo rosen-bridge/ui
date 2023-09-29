@@ -1,3 +1,7 @@
+/**
+ * handles the nami wallet connection
+ */
+
 export const connectWallet = async () => {
   const granted = await cardano.nami?.enable();
 

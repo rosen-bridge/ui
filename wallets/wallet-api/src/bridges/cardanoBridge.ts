@@ -7,6 +7,9 @@ type EncodedAmount = HexString;
 type TxId = HexString;
 type RawUnsignedTx = HexString;
 
+/**
+ * carano wallets interface
+ */
 export interface ConnectorContextApi {
   getUtxos(
     amount?: EncodedAmount,

@@ -7,6 +7,11 @@ import type { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
+/**
+ * search the wallet and return the balance for
+ * the requested token
+ */
+
 export const getBalance = async (token: RosenChainToken) => {
   const tokenTyped = token as CradanoToken;
   const context = await cardano.nami.enable();

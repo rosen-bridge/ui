@@ -5,6 +5,11 @@ import { HexString, Value, PolicyId, AssetEntry } from '../types';
 
 import { AdaEntry } from './assetEntry';
 
+/**
+ * handles the decoding of the wasm values returned by
+ * the cardano wallets
+ */
+
 export function fromWasmValue(value: CardanoWasm.Value): Value {
   const adaEntry = AdaEntry(BigInt(value.coin().to_str()));
   const ma = value.multiasset();

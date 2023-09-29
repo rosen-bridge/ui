@@ -1,5 +1,8 @@
 import { ErgoBridge } from '@rosen-ui/wallet-api';
 
+/**
+ * global type augmentation for nautilus wallet
+ */
 declare global {
   declare let ergoConnector: {
     nautilus: {

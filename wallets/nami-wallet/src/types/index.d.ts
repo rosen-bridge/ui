@@ -6,6 +6,9 @@ export interface ConnectorAPI {
   experimental?: any;
 }
 
+/**
+ * global type augmentation for nami wallet
+ */
 declare global {
   declare let cardano: { [key: string]: ConnectorAPI };
 }

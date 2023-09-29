@@ -12,6 +12,9 @@ import {
   Wallet,
 } from '../types';
 
+/**
+ * cardano token info
+ */
 export interface CradanoToken extends RosenChainToken {
   fingerprint: string;
   policyId: PolicyId;
@@ -19,6 +22,9 @@ export interface CradanoToken extends RosenChainToken {
   decimals: number;
 }
 
+/**
+ * main interface the connect and control ergo wallets
+ */
 export interface CardanoWallet extends Wallet, Prover {
   readonly testnetSwitchGuideUrl?: string;
   readonly getBalance: (token: RosenChainToken) => Promise<ReactNode>;

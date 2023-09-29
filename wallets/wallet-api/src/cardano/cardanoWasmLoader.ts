@@ -1,6 +1,10 @@
 export type CardanoWasm =
   typeof import('@emurgo/cardano-serialization-lib-browser/cardano_serialization_lib');
 
+/**
+ * a class to lazy load and cache encoding and decoding
+ * tools for cardano network
+ */
 class Module {
   _wasm?: CardanoWasm;
 

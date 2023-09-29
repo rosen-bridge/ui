@@ -2,6 +2,11 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { ErgoToken } from '@rosen-ui/wallet-api';
 
+/**
+ * search the wallet and return the balance for
+ * the requested token
+ */
+
 export const getBalance = async (token: RosenChainToken) => {
   if (!ergoConnector?.nautilus) {
     throw new Error('EXTENSION_NOT_FOUND');

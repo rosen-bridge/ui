@@ -1,3 +1,6 @@
+/**
+ * handles the nautilus wallet connection
+ */
 export const connectWallet = async () => {
   if (!ergoConnector?.nautilus) {
     throw new Error('EXTENSION_NOT_FOUND');

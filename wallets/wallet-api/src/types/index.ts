@@ -7,6 +7,10 @@ export enum WalletState {
   CONNECTED,
 }
 
+/**
+ * main wallet type for the bridge, all wallets implement
+ * this interface to unify access and interaction with wallets
+ */
 export interface Wallet {
   icon: FC;
   name: string;

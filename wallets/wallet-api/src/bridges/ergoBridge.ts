@@ -34,6 +34,9 @@ export type UnsignedErgoTxProxy = {
   readonly outputs: ErgoBoxCandidateProxy[];
 };
 
+/**
+ * erog wallets interface
+ */
 export interface ErgoBridge {
   request_read_access: () => Promise<boolean>;
 
