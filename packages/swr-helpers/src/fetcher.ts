@@ -1,5 +1,4 @@
 import axios from 'axios';
-import JSONBigInt from 'json-bigint';
 
 /**
  * FIXME: Remove this in favor of a dynamic baseURL
