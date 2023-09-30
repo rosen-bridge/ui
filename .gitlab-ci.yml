@@ -28,6 +28,8 @@ build:
         - apps/*/node_modules
         - packages/*/node_modules
         - packages/*/dist
+        - wallets/*/node_modules
+        - wallets/*/dist
   script:
     # FIXME: This needs to be removed when a monorepo build mechanism is added
     # https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/24
