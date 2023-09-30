@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@rosen-ui/utils": "^0.0.1",
+    "@rosen-ui/wallet-api": "^0.0.1",
     "@rosen-bridge/icons": "^0.1.0"
   }
 }

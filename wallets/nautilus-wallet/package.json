@@ -12,7 +12,6 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@rosen-ui/wallet-api": "^0.0.1",
     "@rosen-ui/utils": "^0.0.1",
     "@rosen-bridge/tokens": "^0.2.0",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
@@ -23,6 +22,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@rosen-ui/wallet-api": "^0.0.1",
     "@rosen-bridge/icons": "^0.1.0"
   },
   "peerDependencies": {
