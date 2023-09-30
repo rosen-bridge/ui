@@ -49,6 +49,7 @@ type_check:
       - apps/*/node_modules
       - packages/*/node_modules
       - packages/*/dist
+      - wallets/*/dist
   script:
     - npm run type-check --workspaces --if-present
 
