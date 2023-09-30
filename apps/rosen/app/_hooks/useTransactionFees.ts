@@ -1,22 +1,26 @@
 import { useState, useLayoutEffect, useMemo, useEffect, useRef } from 'react';
 import useSWR from 'swr';
 import type { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
-import { RosenChainToken } from '@rosen-bridge/tokens';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
+
+import { useSnackbar } from '@rosen-bridge/ui-kit';
 
 import useChainHeight from './useChainHeight';
-import { useSnackbar } from '@/_contexts/snackbarContext';
 
 import { getTokenNameAndId } from '@/_utils';
+
+// FiXME: use cli to download this file from github directly
+// https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/89
 import tokensMap from '@/_configs/tokensMap-private-test-2.0.0-b3dc2da.json';
 
 import {
-  Chains,
-  ergoSourceChain,
+  Networks,
+  ergoFeeConfigTokenId,
   ergoExplorerUrl,
-  cardanoSourceChain,
+  cardanoFeeConfigTokenId,
   cardanoExplorerUrl,
-  feeRatio,
+  feeRatioDivisor,
   nextFeeHeight,
 } from '@/_constants';
 
@@ -41,10 +45,16 @@ const getTokenId = (sourceChain: string, token: RosenChainToken) => {
   return tokens[0].ergo.tokenId;
 };
 
+const bigIntMax = (...args: bigint[]) => args.reduce((m, e) => (e > m ? e : m));
+
+/**
+ * calculates the fees for a token swap between
+ * two networks
+ */
 const useTransactionFees = (
-  sourceChain: keyof typeof Chains | null,
+  sourceChain: keyof typeof Networks | null,
   token: RosenChainToken | null,
-  amount: number | null,
+  amount: string | null,
 ) => {
   const { openSnackbar } = useSnackbar();
   const { height, isLoading: isLoadingHeights } = useChainHeight(sourceChain);
@@ -70,7 +80,7 @@ const useTransactionFees = (
   const { data: nextFees, isLoading: isLoadingNextFees } = useSWR(
     [
       sourceChain,
-      token ? getTokenNameAndId(token).tokenId : null,
+      token ? getTokenNameAndId(token, sourceChain!)?.tokenId : null,
       Number(height) + nextFeeHeight,
     ],
     bridgeFetcher(sourceChain ? minFeeObject?.[sourceChain] : null),
@@ -94,6 +104,8 @@ const useTransactionFees = (
     }
   }, [isLoadingMinFee, isLoadingNextFees, fees, nextFees, openSnackbar]);
 
+  // FIXME: use server actions instead of this
+  // https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/86
   useLayoutEffect(() => {
     const LoadMinFee = async () => {
       if (typeof window === 'object') {
@@ -103,13 +115,16 @@ const useTransactionFees = (
 
         const cradano = new BridgeMinimumFee(
           cardanoExplorerUrl,
-          cardanoSourceChain,
+          cardanoFeeConfigTokenId,
         );
-        const ergo = new BridgeMinimumFee(ergoExplorerUrl, ergoSourceChain);
+        const ergo = new BridgeMinimumFee(
+          ergoExplorerUrl,
+          ergoFeeConfigTokenId,
+        );
 
         setMinFeeObject({
-          [Chains.ergo]: ergo,
-          [Chains.cardano]: cradano,
+          [Networks.ergo]: ergo,
+          [Networks.cardano]: cradano,
         });
       }
     };
@@ -122,21 +137,40 @@ const useTransactionFees = (
     isLoadingNextFees ||
     (sourceChain && !minFeeObject?.[sourceChain]);
 
+  // TODO: revalidate the transactions Formula
+  //https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/87
   const transactionFees = useMemo(() => {
-    let paymentAmount = (amount || 0) * Math.pow(10, token?.decimals || 0);
-    const networkFee = fees ? Number(fees.networkFee) : -1;
+    let paymentAmount =
+      amount && token
+        ? BigInt(getNonDecimalString(amount, token.decimals))
+        : BigInt(0);
+    const networkFee = fees ? fees.networkFee : null;
     const bridgeFee = fees
-      ? Math.max(Number(fees.bridgeFee), Math.ceil(paymentAmount * feeRatio))
-      : -1;
+      ? bigIntMax(fees.bridgeFee, paymentAmount / feeRatioDivisor)
+      : null;
+
+    const receivingAmountValue = fees
+      ? paymentAmount - (networkFee! + bridgeFee!)
+      : 0n;
+    const minTransferAmountValue = fees
+      ? bigIntMax(bridgeFee! + networkFee!, networkFee! / feeRatioDivisor || 0n)
+      : 0n;
 
     return {
-      bridgeFee,
-      networkFee,
-      receivingAmount: fees ? paymentAmount - (networkFee + bridgeFee) : 0,
-      minTransferAmount: Math.max(
-        bridgeFee + networkFee,
-        Math.ceil(networkFee / (1 - feeRatio)),
+      bridgeFee: getDecimalString(
+        bridgeFee?.toString() || '0',
+        token?.decimals || 1,
       ),
+      networkFee: getDecimalString(
+        networkFee?.toString() || '0',
+        token?.decimals || 1,
+      ),
+      receivingAmount: fees
+        ? getDecimalString(receivingAmountValue.toString(), token?.decimals)
+        : '0',
+      minTransferAmount: minTransferAmountValue
+        ? getDecimalString(minTransferAmountValue.toString(), token?.decimals)
+        : '0',
       isLoading,
     };
   }, [amount, fees, isLoading, token]);

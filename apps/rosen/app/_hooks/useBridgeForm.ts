@@ -2,10 +2,15 @@ import { useController } from 'react-hook-form';
 
 import useTransactionFormData from './useTransactionFormData';
 
-import { AddressValidator } from '@/_actions';
+import { AddressValidator } from '@/_actions/addressValidator';
+
+/**
+ * handles the form field registrations and form state changes
+ * and validations
+ */
 
 const useBridgeForm = () => {
-  const { control, resetField, reset, setValue, formState } =
+  const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
 
   const { field: sourceField } = useController({
@@ -41,6 +46,7 @@ const useBridgeForm = () => {
     reset,
     setValue,
     resetField,
+    setFocus,
     sourceField,
     targetField,
     tokenField,

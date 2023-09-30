@@ -25,7 +25,7 @@ export const useLocalStorageManager = () => {
       get,
       remove,
     }),
-    [set, get, remove],
+    [set, get, remove]
   );
 
   return localStorageManager;

@@ -1,7 +1,13 @@
-import { useWatch, useFormContext } from 'react-hook-form';
+import { useWatch, useFormContext, FieldValues } from 'react-hook-form';
+
+import type { BridgeForm } from '@/(bridge)/page';
+
+/**
+ * provide access to the bridge form context and current form values
+ */
 
 const useTransactionFormData = () => {
-  const { control, ...rest } = useFormContext();
+  const { control, ...rest } = useFormContext<FieldValues, BridgeForm>();
 
   const sourceValue = useWatch({ control, name: 'source' });
   const targetValue = useWatch({ control, name: 'target' });

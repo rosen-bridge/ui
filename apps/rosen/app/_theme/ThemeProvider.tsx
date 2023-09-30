@@ -24,12 +24,12 @@ declare module '@mui/material/styles' {
   }
 
   interface TypePaletteGradient {
-    a: string;
-    b: string;
-    c: string;
-    d: string;
-    e: string;
-    f: string;
+    baseOrange: string;
+    lightOrange: string;
+    lightDarkBackground: string;
+    baseDarkBackground: string;
+    darkBackgroundMid: string;
+    darkBackgroundMain: string;
   }
 
   interface Palette {
@@ -82,12 +82,12 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
           contrastText: '#1A1A1A',
         },
         gradient: {
-          a: '#fc7b41',
-          b: '#e2844a',
-          c: '#52617e',
-          d: '#164b7d',
-          e: '#4a626e',
-          f: '#1e2130',
+          baseOrange: '#fc7b41',
+          lightOrange: '#e2844a',
+          lightDarkBackground: '#52617e',
+          baseDarkBackground: '#164b7d',
+          darkBackgroundMid: '#4a626e',
+          darkBackgroundMain: '#1e2130',
         },
         ...(mode === 'light'
           ? {

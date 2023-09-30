@@ -46,3 +46,13 @@ export const getNonDecimalString = (value: string, decimals: number) => {
     decimalPointIndex + 1 + decimals
   )}${'0'.repeat(decimals - fractionalPartLength)}`.replace(/^0+(\d+)/, '$1');
 };
+
+/**
+ * a utility to count decimal places in number in string type
+ *
+ * @param decimalString
+ */
+export const countDecimals = (decimalString: string | null) => {
+  if (!decimalString) return 0;
+  return decimalString.split('.')[1]?.length || 0;
+};

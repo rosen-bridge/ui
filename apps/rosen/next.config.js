@@ -12,6 +12,9 @@ const nextConfig = {
     };
     return config;
   },
+  env: {
+    test: 'sdfsdfad',
+  },
 };
 
 module.exports = nextConfig;

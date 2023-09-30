@@ -14,7 +14,7 @@ const BridgeContainer = styled(Card)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '3fr auto 2fr',
   minWidth: 0,
-  gap: '10px',
+  gap: theme.spacing(1.5),
   padding: theme.spacing(3),
 
   [theme.breakpoints.up('tablet')]: {
@@ -22,7 +22,7 @@ const BridgeContainer = styled(Card)(({ theme }) => ({
   },
 }));
 
-interface BridgeForm {
+export interface BridgeForm {
   source: string | null;
   target: string | null;
   token: string | null;
@@ -30,6 +30,9 @@ interface BridgeForm {
   amount: number | null;
 }
 
+/**
+ * bridge main layout
+ */
 const RosenBridge = () => {
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',

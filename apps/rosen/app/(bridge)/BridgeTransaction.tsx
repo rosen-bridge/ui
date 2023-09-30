@@ -1,11 +1,9 @@
 'use client';
 
-import { useTransition } from 'react';
-
 import {
+  Avatar,
   Grid,
   Typography,
-  Button,
   Divider,
   styled,
   LoadingButton,
@@ -14,36 +12,47 @@ import {
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useWallet from '@/_hooks/useWallet';
-import { useSnackbar } from '@/_contexts/snackbarContext';
 
 import { getTokenNameAndId } from '@/_utils';
 
-import { AddressValidator } from '@/_actions';
-
-const PriceItem = styled('div')(() => ({
+/**
+ * container component for asset prices
+ */
+const PriceItem = styled('div')(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '1fr auto',
+  gap: theme.spacing(1),
 }));
 
+/**
+ * shows fees to the user and handles wallet transaction
+ * and wallet connection
+ */
 const BridgeTransaction = () => {
   const {
     sourceValue,
     tokenValue,
     amountValue,
     formState: { isValidating },
+    handleSubmit,
   } = useTransactionFormData();
 
-  const { networkFee, bridgeFee, receivingAmount } = useTransactionFees(
-    sourceValue,
-    tokenValue,
-    +amountValue,
-  );
-  const { connectToWallet } = useWallet();
+  const {
+    networkFee,
+    bridgeFee,
+    receivingAmount,
+    isLoading: isLoadingFees,
+  } = useTransactionFees(sourceValue, tokenValue, amountValue);
+  const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
 
-  const tokenInfo = tokenValue && getTokenNameAndId(tokenValue);
-  const { openSnackbar } = useSnackbar();
+  const tokenInfo =
+    tokenValue && getTokenNameAndId(tokenValue, sourceValue.value);
+  const WalletIcon = selectedWallet?.icon;
 
-  const [pending, startTransition] = useTransition();
+  const handleFormSubmit = handleSubmit(() => {
+    //TODO: add create and handle transaction logic
+    // https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/90
+  });
 
   const renderFee = (
     title: string,
@@ -57,15 +66,36 @@ const BridgeTransaction = () => {
 
         <Grid container flexWrap="nowrap">
           <Typography color={color} fontWeight="bold">
-            {' '}
-            {amount}{' '}
+            {isLoadingFees ? 'Pending...' : amount}
           </Typography>
           <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
-            {' '}
-            {unit}{' '}
+            {unit}
           </Typography>
         </Grid>
       </PriceItem>
+    );
+  };
+
+  const renderWalletInfo = () => {
+    if (!WalletIcon) return null;
+    return (
+      <Grid
+        sx={(theme) => ({ margin: theme.spacing(1) })}
+        container
+        alignItems="center"
+        gap={1}
+      >
+        <Avatar
+          sx={{
+            width: 18,
+            height: 18,
+            background: 'transparent',
+          }}
+        >
+          <WalletIcon />
+        </Avatar>
+        <Typography>{selectedWallet.name}</Typography>
+      </Grid>
     );
   };
 
@@ -86,24 +116,20 @@ const BridgeTransaction = () => {
         {renderFee(
           'Transaction Fee',
           tokenInfo?.tokenName,
-          networkFee >= 0
-            ? networkFee / Math.pow(10, tokenValue?.decimals)
-            : 'Pending',
+          networkFee || 'Pending',
           'primary',
         )}
         {renderFee(
           'Bridge Fee',
           tokenInfo?.tokenName,
-          bridgeFee >= 0
-            ? bridgeFee / Math.pow(10, tokenValue?.decimals)
-            : 'Pending',
+          bridgeFee || 'Pending',
           'primary',
         )}
         <Divider />
         {renderFee(
           'You will receive',
           tokenInfo?.tokenName,
-          receivingAmount / Math.pow(10, tokenValue?.decimals),
+          receivingAmount,
           'secondary',
         )}
       </Grid>
@@ -111,15 +137,21 @@ const BridgeTransaction = () => {
       <Grid item>
         <LoadingButton
           sx={{ width: '100%' }}
-          color="primary"
+          color={selectedWallet ? 'success' : 'primary'}
           variant="contained"
           loading={isValidating}
+          disabled={!availableWallets}
           onClick={() => {
-            connectToWallet(sourceValue);
+            if (!selectedWallet) {
+              setSelectedWallet?.(availableWallets?.[0]);
+            } else {
+              handleFormSubmit();
+            }
           }}
         >
-          CONNECT WALLET
+          {!selectedWallet ? 'CONNECT WALLET' : 'START TRANSACTION'}
         </LoadingButton>
+        {renderWalletInfo()}
       </Grid>
     </Grid>
   );

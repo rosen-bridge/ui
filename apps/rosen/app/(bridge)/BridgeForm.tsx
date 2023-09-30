@@ -1,21 +1,34 @@
 'use client';
+import { useCallback, ChangeEvent } from 'react';
+import Image from 'next/image';
+import { countDecimals } from '@rosen-ui/utils';
 
-import { useMemo } from 'react';
-import { TokenMap } from '@rosen-bridge/tokens';
-
-import { Grid, TextField, styled, MenuItem, alpha } from '@rosen-bridge/ui-kit';
+import {
+  alpha,
+  Grid,
+  TextField,
+  Typography,
+  ListItemIcon,
+  styled,
+  MenuItem,
+  Button,
+} from '@rosen-bridge/ui-kit';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
+import useNetwork from '@/_hooks/useNetwork';
 
-import { countDecimals, getTokenNameAndId } from '@/_utils';
+import { getTokenNameAndId } from '@/_utils';
+import useTokenBalance from '@/_hooks/useTokenBalance';
 
-import tokensMap from '@/_configs/tokensMap-private-test-2.0.0-b3dc2da.json';
-
+/**
+ * customized form input
+ */
 const FormInputs = styled(TextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
     overflow: 'hidden',
     borderRadius: theme.spacing(2),
     backgroundColor: theme.palette.background.input,
+    minHeight: theme.spacing(8.5),
 
     transition: theme.transitions.create(['background-color', 'box-shadow']),
     '&:hover': {
@@ -28,11 +41,35 @@ const FormInputs = styled(TextField)(({ theme }) => ({
   },
 }));
 
+/**
+ * max button component container for amount field
+ */
+const MaxButton = styled(Button)(({ theme }) => ({
+  padding: 0,
+  fontSize: theme.spacing(1.5),
+}));
+
+/**
+ * bridge form container comp
+ */
+const SelectedAsset = styled('div')(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(1),
+  alignItems: 'center',
+  margin: theme.spacing(0.5),
+}));
+
+/**
+ * bridge form container comp
+ */
 const FormContainer = styled('div')(({ theme }) => ({
   display: 'grid',
   gap: theme.spacing(2),
 }));
 
+/**
+ * renders the bridge main form
+ */
 const BridgeForm = () => {
   const {
     reset,
@@ -46,23 +83,78 @@ const BridgeForm = () => {
     formState: { errors },
   } = useBridgeForm();
 
-  const { tokenMapper, allChains } = useMemo(() => {
-    const Mapper = new TokenMap(tokensMap);
-    return {
-      tokenMapper: Mapper,
-      allChains: Mapper.getAllChains(),
-    };
-  }, []);
+  const { availableNetworks, tokens, targetNetworks } = useNetwork();
+  const { isLoading, amount } = useTokenBalance();
 
-  const targetChainOptions = useMemo(() => {
-    return tokenMapper.getSupportedChains(sourceField.value);
-  }, [sourceField.value, tokenMapper]);
+  const renderSelectedAsset = (value: unknown) => {
+    const network = availableNetworks.find(
+      (network) => network.name === value,
+    )!;
+    return (
+      <SelectedAsset>
+        <Image src={network.logo} width={24} height={24} alt="network logo" />
+        <Typography variant="button" color="text.secondary">
+          {network.label}
+        </Typography>
+      </SelectedAsset>
+    );
+  };
 
-  const tokens = useMemo(() => {
-    if (!targetField.value || !sourceField.value) return [];
+  const handleTokenChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const currentToken = tokens.find(
+        (token) =>
+          getTokenNameAndId(token, sourceField.value)?.tokenId ===
+          e.target.value,
+      );
+      setValue('token', currentToken, {
+        shouldDirty: true,
+        shouldTouch: true,
+      });
+      setValue('amount', '');
+      resetField('amount');
+    },
+    [setValue, resetField, tokens, sourceField],
+  );
 
-    return tokenMapper.getTokens(sourceField.value, targetField.value);
-  }, [targetField.value, sourceField.value, tokenMapper]);
+  const handleSourceSChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value !== sourceField.value) {
+        reset({
+          target: null,
+          token: null,
+          amount: '',
+          walletAddress: '',
+          source: e.target.value,
+        });
+      }
+    },
+    [reset, sourceField],
+  );
+
+  const handleTargeChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.value !== targetField.value) {
+        reset({
+          source: sourceField.value,
+          target: e.target.value,
+          token: null,
+          amount: '',
+          walletAddress: '',
+        });
+      }
+    },
+    [reset, sourceField, targetField],
+  );
+
+  const handleAmountChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (countDecimals(e.target.value) <= tokenField.value?.decimals) {
+        amountField.onChange(e);
+      }
+    },
+    [amountField, tokenField],
+  );
 
   return (
     <FormContainer>
@@ -73,24 +165,27 @@ const BridgeForm = () => {
             select
             label="Source"
             inputProps={{ 'aria-label': 'Without label' }}
-            InputProps={{ disableUnderline: true } as any}
+            InputProps={{ disableUnderline: true }}
             variant="filled"
             {...sourceField}
-            onChange={(e) => {
-              if (e.target.value !== sourceField.value) {
-                reset({
-                  target: null,
-                  token: null,
-                  amount: '',
-                  walletAddress: '',
-                  source: e.target.value,
-                });
-              }
+            SelectProps={{
+              renderValue: renderSelectedAsset,
             }}
+            onChange={handleSourceSChange}
           >
-            {allChains.map((chain) => (
-              <MenuItem key={chain} value={chain}>
-                {chain}
+            {availableNetworks.map((network) => (
+              <MenuItem key={network.name} value={network.name}>
+                <ListItemIcon>
+                  <Image
+                    src={network.logo}
+                    width={24}
+                    height={24}
+                    alt="network logo"
+                  />
+                </ListItemIcon>
+                <Typography variant="body2" color="text.secondary">
+                  {network.label}
+                </Typography>
               </MenuItem>
             ))}
           </FormInputs>
@@ -101,24 +196,27 @@ const BridgeForm = () => {
             select
             label="Target"
             disabled={!sourceField.value}
-            InputProps={{ disableUnderline: true } as any}
+            InputProps={{ disableUnderline: true }}
             variant="filled"
             {...targetField}
-            onChange={(e) => {
-              if (e.target.value !== targetField.value) {
-                reset({
-                  source: sourceField.value,
-                  target: e.target.value,
-                  token: null,
-                  amount: '',
-                  walletAddress: '',
-                });
-              }
+            SelectProps={{
+              renderValue: renderSelectedAsset,
             }}
+            onChange={handleTargeChange}
           >
-            {targetChainOptions.map((chain) => (
-              <MenuItem key={chain} value={chain}>
-                {chain}
+            {targetNetworks.map((network) => (
+              <MenuItem key={network.name} value={network.name}>
+                <ListItemIcon>
+                  <Image
+                    src={network.logo}
+                    width={24}
+                    height={24}
+                    alt="network logo"
+                  />
+                </ListItemIcon>
+                <Typography variant="body2" color="text.secondary">
+                  {network.label}
+                </Typography>
               </MenuItem>
             ))}
           </FormInputs>
@@ -129,26 +227,21 @@ const BridgeForm = () => {
         select
         label="TOKEN"
         disabled={!tokens.length}
-        InputProps={{ disableUnderline: true } as any}
+        InputProps={{ disableUnderline: true }}
         variant="filled"
         {...tokenField}
         value={
-          tokenField.value ? getTokenNameAndId(tokenField.value).tokenId : ''
+          tokenField.value
+            ? getTokenNameAndId(tokenField.value, sourceField.value)?.tokenId
+            : ''
         }
-        onChange={(e) => {
-          const currentToken = tokens.find(
-            (token) => getTokenNameAndId(token).tokenId === e.target.value,
-          );
-          setValue('token', currentToken, {
-            shouldDirty: true,
-            shouldTouch: true,
-          });
-          setValue('amount', '');
-          resetField('amount');
-        }}
+        onChange={handleTokenChange}
       >
         {tokens.map((token) => {
-          const { tokenId, tokenName } = getTokenNameAndId(token);
+          const { tokenId, tokenName } = getTokenNameAndId(
+            token,
+            sourceField.value,
+          )!;
           return (
             <MenuItem key={tokenId} value={tokenId}>
               {tokenName}
@@ -162,17 +255,36 @@ const BridgeForm = () => {
         size="medium"
         label="Amount"
         placeholder="0.0"
-        InputProps={{ disableUnderline: true } as any}
+        helperText={
+          tokenField.value ? (
+            <Grid container justifyContent="space-between">
+              <Typography color="primary" variant="caption">
+                {' '}
+                {`Balance: ${isLoading ? 'loading...' : amount}`}
+              </Typography>
+              <MaxButton
+                disabled={isLoading}
+                onClick={() => {
+                  setValue('amount', amount, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  });
+                }}
+              >
+                MAX
+              </MaxButton>
+            </Grid>
+          ) : (
+            ''
+          )
+        }
+        InputProps={{ disableUnderline: true }}
         inputProps={{
           style: { fontSize: '2rem' },
         }}
         variant="filled"
         {...amountField}
-        onChange={(e) => {
-          if (countDecimals(e.target.value) <= tokenField.value?.decimals) {
-            amountField.onChange(e);
-          }
-        }}
+        onChange={handleAmountChange}
         disabled={!tokenField.value}
       />
       <FormInputs

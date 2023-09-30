@@ -1,4 +1,5 @@
 import React, { createContext, useMemo, useState } from 'react';
+import { useLocalStorageManager } from '@rosen-ui/utils';
 
 import {
   CssBaseline,
@@ -6,8 +7,6 @@ import {
   createTheme,
   useMediaQuery,
 } from '@rosen-bridge/ui-kit';
-
-import { useLocalStorageManager } from '@/_hooks';
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
