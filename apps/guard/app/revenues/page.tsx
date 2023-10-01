@@ -14,7 +14,7 @@ import TableSkeleton from './TableSkeleton';
 import { ApiRevenueResponse, Revenue } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
-  return ['/revenue', { offset, limit }];
+  return ['/revenue/history', { offset, limit }];
 };
 
 const Revenues = () => {
