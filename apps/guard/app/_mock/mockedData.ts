@@ -278,13 +278,13 @@ const mockedData: SWRConfigProps['fakeData'] = {
         items: pageData,
       };
     },
-    '/events': ({ offset, limit }) => {
+    '/event/ongoing': ({ offset, limit }) => {
       return {
         ...events,
         items: events.items.slice(offset, limit + offset),
       };
     },
-    '/history': ({ offset, limit }) => {
+    '/event/history': ({ offset, limit }) => {
       return {
         ...history,
         items: history.items.slice(offset, limit + offset),

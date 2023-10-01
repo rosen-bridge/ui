@@ -16,7 +16,7 @@ import TableSkeleton from './TableSkeleton';
 import { ApiEventResponse } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
-  return ['/events', { offset, limit }];
+  return ['/event/ongoing', { offset, limit }];
 };
 
 const Events = () => {
