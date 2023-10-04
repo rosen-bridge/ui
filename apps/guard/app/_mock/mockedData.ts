@@ -16,13 +16,49 @@ import {
 
 const info: ApiInfoResponse = {
   health: 'Unstable',
-  hot: {
-    balance: '1000',
-    address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-  },
-  cold: {
-    balance: '10000',
-    address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpX',
+  balances: {
+    hot: [
+      {
+        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        balance: {
+          amount: 100 * 1e9,
+          decimals: 9,
+          tokenId: 'erg',
+          name: 'erg',
+        },
+      },
+      {
+        address:
+          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        balance: {
+          amount: 500 * 1e6,
+          decimals: 6,
+          tokenId: 'ada',
+          name: 'ada',
+        },
+      },
+    ],
+    cold: [
+      {
+        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        balance: {
+          amount: 300 * 1e9,
+          decimals: 9,
+          tokenId: 'erg',
+          name: 'erg',
+        },
+      },
+      {
+        address:
+          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        balance: {
+          amount: 1500 * 1e6,
+          decimals: 6,
+          tokenId: 'ada',
+          name: 'ada',
+        },
+      },
+    ],
   },
 };
 
