@@ -117,7 +117,7 @@ const BridgeForm = () => {
     [setValue, resetField, tokens, sourceField],
   );
 
-  const handleSourceSChange = useCallback(
+  const handleSourceChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.value !== sourceField.value) {
         reset({
@@ -132,7 +132,7 @@ const BridgeForm = () => {
     [reset, sourceField],
   );
 
-  const handleTargeChange = useCallback(
+  const handleTargetChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       if (e.target.value !== targetField.value) {
         reset({
@@ -164,14 +164,14 @@ const BridgeForm = () => {
             id="source"
             select
             label="Source"
-            inputProps={{ 'aria-label': 'Without label' }}
+            inputProps={{ 'aria-label': 'source input' }}
             InputProps={{ disableUnderline: true }}
             variant="filled"
             {...sourceField}
             SelectProps={{
               renderValue: renderSelectedAsset,
             }}
-            onChange={handleSourceSChange}
+            onChange={handleSourceChange}
           >
             {availableNetworks.map((network) => (
               <MenuItem key={network.name} value={network.name}>
@@ -196,13 +196,14 @@ const BridgeForm = () => {
             select
             label="Target"
             disabled={!sourceField.value}
+            inputProps={{ 'aria-label': 'target input' }}
             InputProps={{ disableUnderline: true }}
             variant="filled"
             {...targetField}
             SelectProps={{
               renderValue: renderSelectedAsset,
             }}
-            onChange={handleTargeChange}
+            onChange={handleTargetChange}
           >
             {targetNetworks.map((network) => (
               <MenuItem key={network.name} value={network.name}>
@@ -225,9 +226,10 @@ const BridgeForm = () => {
       <FormInputs
         id="token"
         select
-        label="TOKEN"
+        label="Token"
         disabled={!tokens.length}
         InputProps={{ disableUnderline: true }}
+        inputProps={{ 'aria-label': 'token input' }}
         variant="filled"
         {...tokenField}
         value={
@@ -281,6 +283,7 @@ const BridgeForm = () => {
         InputProps={{ disableUnderline: true }}
         inputProps={{
           style: { fontSize: '2rem' },
+          'aria-label': 'amount input',
         }}
         variant="filled"
         {...amountField}

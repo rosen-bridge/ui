@@ -2,7 +2,7 @@ import { useController } from 'react-hook-form';
 
 import useTransactionFormData from './useTransactionFormData';
 
-import { AddressValidator } from '@/_actions/addressValidator';
+import { validateAddress } from '@/_actions/addressValidator';
 
 /**
  * handles the form field registrations and form state changes
@@ -38,7 +38,7 @@ const useBridgeForm = () => {
     control,
     rules: {
       required: true,
-      validate: async (value) => (await AddressValidator(value)).message,
+      validate: async (value) => (await validateAddress(value)).message,
     },
   });
 

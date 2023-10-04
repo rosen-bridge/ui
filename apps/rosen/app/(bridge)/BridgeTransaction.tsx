@@ -51,7 +51,7 @@ const BridgeTransaction = () => {
 
   const handleFormSubmit = handleSubmit(() => {
     //TODO: add create and handle transaction logic
-    // https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/90
+    //local:ergo/rosen-bridge/ui/-/issues/90
   });
 
   const renderFee = (

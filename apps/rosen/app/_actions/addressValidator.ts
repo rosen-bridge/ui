@@ -5,9 +5,9 @@ import { Address } from 'ergo-lib-wasm-nodejs';
 /**
  * server action to verify the wallet addresses
  * @param walletAddress - wallet address to verify
- * @returns the validation results fort the passed address
+ * @returns the validation results for the passed address
  */
-export const AddressValidator = (walletAddress: string) => {
+export const validateAddress = (walletAddress: string) => {
   try {
     Address.from_base58(walletAddress);
     return { isValid: true };

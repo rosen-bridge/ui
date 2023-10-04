@@ -11,7 +11,7 @@ import useChainHeight from './useChainHeight';
 import { getTokenNameAndId } from '@/_utils';
 
 // FiXME: use cli to download this file from github directly
-// https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/89
+// local:ergo/rosen-bridge/ui/-/issues/89
 import tokensMap from '@/_configs/tokensMap-private-test-2.0.0-b3dc2da.json';
 
 import {
@@ -105,7 +105,7 @@ const useTransactionFees = (
   }, [isLoadingMinFee, isLoadingNextFees, fees, nextFees, openSnackbar]);
 
   // FIXME: use server actions instead of this
-  // https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/86
+  // local:ergo/rosen-bridge/ui/-/issues/86
   useLayoutEffect(() => {
     const LoadMinFee = async () => {
       if (typeof window === 'object') {
@@ -138,7 +138,7 @@ const useTransactionFees = (
     (sourceChain && !minFeeObject?.[sourceChain]);
 
   // TODO: revalidate the transactions Formula
-  //https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/87
+  // local:ergo/rosen-bridge/ui/-/issues/87
   const transactionFees = useMemo(() => {
     let paymentAmount =
       amount && token
