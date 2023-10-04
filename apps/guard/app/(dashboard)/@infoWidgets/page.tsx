@@ -23,15 +23,13 @@ const InfoWidgets = () => {
         <WalletWidget
           title="Hot Wallet"
           color="secondary"
-          value={info?.hot.balance}
-          address={info?.hot.address}
+          tokenInfoWithAddresses={info?.balances.hot ?? []}
           isLoading={isLoading}
         />
         <WalletWidget
           title="Cold Wallet"
           color="info"
-          value={info?.cold.balance}
-          address={info?.cold.address}
+          tokenInfoWithAddresses={info?.balances.cold ?? []}
           isLoading={isLoading}
         />
       </Stack>
