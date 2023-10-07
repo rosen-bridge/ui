@@ -6,9 +6,10 @@
     "prettify": "prettier --write . --ignore-path ./.gitignore",
     "lint": "next lint --fix && npm run prettify",
     "type-check": "tsc --noEmit",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "dev": "npm run get-config && next dev",
+    "build": "npm run get-config && next build",
+    "start": "npm run get-config && next start",
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs"
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
@@ -26,7 +27,8 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.1",
-    "swr": "^2.2.0"
+    "swr": "^2.2.0",
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@types/node": "20.5.7",

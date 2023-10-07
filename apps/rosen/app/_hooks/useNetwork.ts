@@ -2,13 +2,12 @@ import { useMemo } from 'react';
 import { TokenMap } from '@rosen-bridge/tokens';
 
 import useBridgeForm from './useBridgeForm';
+import { useTokensMap } from './useTokensMap';
 
 import ErgoNetwork from '@/_networks/ergo';
 import CardanoNetwork from '@/_networks/cardano';
 
 import { Networks } from '@/_constants';
-
-import tokensMap from '@/_configs/tokensMap-private-test-2.0.0-b3dc2da.json';
 
 const availableNetworks = {
   [Networks.ergo]: ErgoNetwork,
@@ -24,30 +23,31 @@ type SourceFieldValue = Chain & keyof typeof Networks;
  */
 const useNetwork = () => {
   const { sourceField, targetField } = useBridgeForm();
+  const tokensMapObject = useTokensMap();
 
-  const tokenMapper = useMemo(() => {
-    return new TokenMap(tokensMap);
-  }, []);
+  const tokensMap = useMemo(() => {
+    return new TokenMap(tokensMapObject);
+  }, [tokensMapObject]);
 
   const availableNetworkObjects = useMemo(() => {
-    return (tokenMapper.getAllChains() as SourceFieldValue[])
+    return (tokensMap.getAllChains() as SourceFieldValue[])
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [tokenMapper]);
+  }, [tokensMap]);
 
   const targetNetworks = useMemo(() => {
     return (
-      tokenMapper.getSupportedChains(sourceField.value) as SourceFieldValue[]
+      tokensMap.getSupportedChains(sourceField.value) as SourceFieldValue[]
     )
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [sourceField.value, tokenMapper]);
+  }, [sourceField.value, tokensMap]);
 
   const tokens = useMemo(() => {
     if (!targetField.value || !sourceField.value) return [];
 
-    return tokenMapper.getTokens(sourceField.value, targetField.value);
-  }, [targetField.value, sourceField.value, tokenMapper]);
+    return tokensMap.getTokens(sourceField.value, targetField.value);
+  }, [targetField.value, sourceField.value, tokensMap]);
 
   return {
     availableNetworks: availableNetworkObjects,

@@ -1,18 +1,22 @@
-import { useState, useLayoutEffect, useMemo, useEffect, useRef } from 'react';
+import {
+  useState,
+  useLayoutEffect,
+  useMemo,
+  useEffect,
+  useRef,
+  useCallback,
+} from 'react';
 import useSWR from 'swr';
 import type { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
-
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 
+import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
+
 import useChainHeight from './useChainHeight';
+import { useTokensMap } from './useTokensMap';
 
 import { getTokenNameAndId } from '@/_utils';
-
-// FiXME: use cli to download this file from github directly
-// local:ergo/rosen-bridge/ui/-/issues/89
-import tokensMap from '@/_configs/tokensMap-private-test-2.0.0-b3dc2da.json';
 
 import {
   Networks,
@@ -36,15 +40,6 @@ const bridgeFetcher =
     return data;
   };
 
-const getTokenId = (sourceChain: string, token: RosenChainToken) => {
-  const Mapper = new TokenMap(tokensMap);
-  const idKey = Mapper.getIdKey(sourceChain);
-  const tokens = Mapper.search(sourceChain, {
-    [idKey]: token[idKey],
-  });
-  return tokens[0].ergo.tokenId;
-};
-
 const bigIntMax = (...args: bigint[]) => args.reduce((m, e) => (e > m ? e : m));
 
 /**
@@ -62,6 +57,20 @@ const useTransactionFees = (
   const [minFeeObject, setMinFeeObject] = useState<{
     [chain: string]: BridgeMinimumFee;
   }>({});
+
+  const tokensMap = useTokensMap();
+
+  const getTokenId = useCallback(
+    (sourceChain: string, token: RosenChainToken) => {
+      const Mapper = new TokenMap(tokensMap);
+      const idKey = Mapper.getIdKey(sourceChain);
+      const tokens = Mapper.search(sourceChain, {
+        [idKey]: token[idKey],
+      });
+      return tokens[0].ergo.tokenId;
+    },
+    [tokensMap],
+  );
 
   const { data: fees, isLoading: isLoadingMinFee } = useSWR(
     [
