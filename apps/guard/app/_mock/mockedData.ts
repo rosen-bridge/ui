@@ -263,7 +263,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     amount: '0.1',
     bridgeFee: '0.002',
     networkFee: '0.003',
-    tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTokenId:
+      '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockTxId:
       '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
     height: 100,

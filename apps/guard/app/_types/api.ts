@@ -50,7 +50,7 @@ export interface Revenue {
   amount: string;
   bridgeFee: string;
   networkFee: string;
-  tokenId: string;
+  lockTokenId: string;
   lockTxId: string;
   height: number;
   timestamp: number;
