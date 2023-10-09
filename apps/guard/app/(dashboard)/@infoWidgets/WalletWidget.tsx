@@ -104,6 +104,7 @@ const WalletWidget = ({
               {getDecimalString(
                 tokenInfoWithAddress.balance.amount.toString(),
                 tokenInfoWithAddress.balance.decimals,
+                3,
               )}
               <span>{tokenInfoWithAddress.balance.name}</span>
             </>
