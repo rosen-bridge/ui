@@ -8,6 +8,8 @@ export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
 export * from './Id';
 export * from './NavigationButton';
+export * from './QrCodeModal';
+export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
 export * from './TokensCard';
 export * from './Toolbar';

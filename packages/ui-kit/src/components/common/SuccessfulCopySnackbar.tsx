@@ -1,4 +1,4 @@
-import { Alert, Snackbar } from '@rosen-bridge/ui-kit';
+import { Alert, Snackbar } from '../base';
 
 interface SuccessfulCopySnackbarProps {
   open: boolean;
@@ -9,7 +9,7 @@ interface SuccessfulCopySnackbarProps {
  * @param handleClose
  * @param open
  */
-const SuccessfulCopySnackbar = ({
+export const SuccessfulCopySnackbar = ({
   open,
   handleClose,
 }: SuccessfulCopySnackbarProps) => (
@@ -19,5 +19,3 @@ const SuccessfulCopySnackbar = ({
     </Alert>
   </Snackbar>
 );
-
-export default SuccessfulCopySnackbar;

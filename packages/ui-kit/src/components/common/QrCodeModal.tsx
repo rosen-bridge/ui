@@ -7,29 +7,29 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-} from '@rosen-bridge/ui-kit';
+} from '../base';
 
 interface QrCodeModalProps {
-  address: string;
+  text: string;
   handleClose: () => void;
   open: boolean;
 }
 /**
- * render a modal showing qrcode for the provided address
+ * render a modal showing qrcode for the provided text
  *
- * @param address
+ * @param text
  * @param handleClose
  * @param open
  */
-const QrCodeModal = ({ handleClose, open, address }: QrCodeModalProps) => {
+export const QrCodeModal = ({ handleClose, open, text }: QrCodeModalProps) => {
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="tablet">
       <DialogContent>
         <Box sx={{ textAlign: 'center', my: 3 }}>
-          <QrCode size={200} value={address} />
+          <QrCode size={200} value={text} />
         </Box>
         <DialogContentText sx={{ wordBreak: 'break-all', textAlign: 'center' }}>
-          {address}
+          {text}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
@@ -38,5 +38,3 @@ const QrCodeModal = ({ handleClose, open, address }: QrCodeModalProps) => {
     </Dialog>
   );
 };
-
-export default QrCodeModal;
