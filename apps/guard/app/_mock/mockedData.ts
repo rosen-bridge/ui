@@ -20,6 +20,7 @@ const info: ApiInfoResponse = {
     hot: [
       {
         address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        chain: 'Ergo',
         balance: {
           amount: 100 * 1e9,
           decimals: 9,
@@ -30,6 +31,7 @@ const info: ApiInfoResponse = {
       {
         address:
           'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        chain: 'Cardano',
         balance: {
           amount: 500 * 1e6,
           decimals: 6,
@@ -41,6 +43,7 @@ const info: ApiInfoResponse = {
     cold: [
       {
         address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        chain: 'Ergo',
         balance: {
           amount: 300 * 1e9,
           decimals: 9,
@@ -51,6 +54,7 @@ const info: ApiInfoResponse = {
       {
         address:
           'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        chain: 'Cardano',
         balance: {
           amount: 1500 * 1e6,
           decimals: 6,

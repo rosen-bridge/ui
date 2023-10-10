@@ -8,6 +8,7 @@ import {
 
 export interface TokenInfoWithAddress {
   address: string;
+  chain: string;
   balance: TokenInfo;
 }
 

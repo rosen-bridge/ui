@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
+import { Copy, QrcodeScan } from '@rosen-bridge/icons';
 import {
   Box,
   Card,
-  styled,
-  Typography,
-  Id,
   CircularProgress,
+  Grid,
+  IconButton,
+  Id,
+  SvgIcon,
+  Typography,
+  styled,
+  SuccessfulCopySnackbar,
+  QrCodeModal,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -50,6 +57,7 @@ const WalletWidgetBase = styled(Card)<WidgetCardProps>(
       '& .heading': {
         fontSize: theme.typography.body2.fontSize,
         opacity: 0.8,
+        display: 'inline',
       },
       '& .address': {
         fontSize: theme.typography.body2.fontSize,
@@ -58,8 +66,7 @@ const WalletWidgetBase = styled(Card)<WidgetCardProps>(
       '& .actions': {
         visibility: 'hidden',
         float: 'right',
-        marginTop: theme.spacing(1),
-        marginLeft: theme.spacing(1),
+        margin: theme.spacing(0.5),
       },
     },
     '&:hover .address-container': {
@@ -90,39 +97,98 @@ const WalletWidget = ({
   tokenInfoWithAddresses,
   color,
   isLoading,
-}: WalletWidgetProps) => (
-  <WalletWidgetBase widgetColor={color}>
-    <Typography className="title">{title}</Typography>
-    {isLoading ? (
-      <CircularProgress color="inherit" size={16} sx={{ mt: 1 }} />
-    ) : (
-      <>
-        <Typography className="value">
+}: WalletWidgetProps) => {
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [modalAddress, setModalAddress] = React.useState<string | null>(null);
+
+  const handleSnackbarClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: string,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setSnackbarOpen(false);
+  };
+
+  const handleCopy = async () => {
+    setSnackbarOpen(true);
+  };
+
+  return (
+    <WalletWidgetBase widgetColor={color}>
+      <Typography className="title">{title}</Typography>
+      {isLoading ? (
+        <CircularProgress color="inherit" size={16} sx={{ mt: 1 }} />
+      ) : (
+        <>
+          <Typography className="value">
+            {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
+              <>
+                {!!index && ' / '}
+                {getDecimalString(
+                  tokenInfoWithAddress.balance.amount.toString(),
+                  tokenInfoWithAddress.balance.decimals,
+                  3,
+                )}
+                <span>{tokenInfoWithAddress.balance.name}</span>
+              </>
+            ))}
+          </Typography>
           {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
-            <>
-              {!!index && ' / '}
-              {getDecimalString(
-                tokenInfoWithAddress.balance.amount.toString(),
-                tokenInfoWithAddress.balance.decimals,
-                3,
-              )}
-              <span>{tokenInfoWithAddress.balance.name}</span>
-            </>
+            <Box
+              className="address-container"
+              key={tokenInfoWithAddress.address}
+            >
+              <Grid container alignItems="center">
+                <Grid item mobile>
+                  <Typography className="heading">
+                    {`${tokenInfoWithAddress.chain.toUpperCase()}: `}
+                  </Typography>
+                  <Id id={tokenInfoWithAddress.address} />
+                </Grid>
+                <Grid item>
+                  <Box className="address-container">
+                    <Box className="actions">
+                      <CopyToClipboard
+                        text={tokenInfoWithAddress.address}
+                        onCopy={handleCopy}
+                      >
+                        <IconButton size="small">
+                          <SvgIcon fontSize="small">
+                            <Copy />
+                          </SvgIcon>
+                        </IconButton>
+                      </CopyToClipboard>
+                      <IconButton
+                        size="small"
+                        onClick={() =>
+                          setModalAddress(tokenInfoWithAddress.address)
+                        }
+                      >
+                        <SvgIcon fontSize="small">
+                          <QrcodeScan />
+                        </SvgIcon>
+                      </IconButton>
+                    </Box>
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
           ))}
-        </Typography>
-        {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
-          <Box
-            className="address-container"
-            key={tokenInfoWithAddress.address}
-            mt={index ? 1 : 0}
-          >
-            <Typography className="heading">ADDRESS</Typography>
-            <Id id={tokenInfoWithAddress.address} />
-          </Box>
-        ))}
-      </>
-    )}
-  </WalletWidgetBase>
-);
+        </>
+      )}
+      <SuccessfulCopySnackbar
+        open={snackbarOpen}
+        handleClose={handleSnackbarClose}
+      />
+      <QrCodeModal
+        open={!!modalAddress}
+        handleClose={() => setModalAddress(null)}
+        text={modalAddress ?? ''}
+      />
+    </WalletWidgetBase>
+  );
+};
 
 export default WalletWidget;
