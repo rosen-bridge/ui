@@ -1,7 +1,7 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
-import { ChartPeriod, Event } from '@rosen-ui/types';
+import { ChartPeriod } from '@rosen-ui/types';
 
 import {
   ApiAddressAssetsResponse,
@@ -12,6 +12,7 @@ import {
   ApiSignResponse,
   ApiEventResponse,
   ApiHistoryResponse,
+  Event,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {

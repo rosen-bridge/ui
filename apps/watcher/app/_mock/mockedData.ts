@@ -1,7 +1,9 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
-import { ChartPeriod, Event } from '@rosen-ui/types';
+import { ChartPeriod } from '@rosen-ui/types';
+
+import { Event } from '@/_types/api';
 
 import {
   ApiEventResponse,
