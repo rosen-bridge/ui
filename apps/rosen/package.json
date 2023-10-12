@@ -6,7 +6,7 @@
     "prettify": "prettier --write . --ignore-path ./.gitignore",
     "lint": "next lint --fix && npm run prettify",
     "type-check": "tsc --noEmit",
-    "dev": "next dev",
+    "dev": "npm run get-config && next dev",
     "build": "npm run get-config && next build",
     "start": "npm run get-config && next start",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --preRelease "
