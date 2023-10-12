@@ -58,12 +58,6 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Height',
-    cellProps: {
-      width: 150,
-    },
-  },
-  {
     title: 'Amount',
     cellProps: {
       width: 150,
@@ -122,7 +116,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Token Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {row.sourceChainTokenId.slice(0, 8)}
+          {row.sourceChainToken.tokenId.slice(0, 8)}
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -135,13 +129,9 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>To Address</EnhancedTableCell>
             <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Height</EnhancedTableCell>
-            <EnhancedTableCell>{row.height}</EnhancedTableCell>
-          </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+            <EnhancedTableCell>{row.sourceChainToken.amount}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
@@ -193,12 +183,11 @@ export const TabletRow: FC<RowProps> = (props) => {
         </Link>
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {row.sourceChainTokenId.slice(0, 8)}
+        {row.sourceChainToken.tokenId.slice(0, 8)}
       </EnhancedTableCell>
       <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.height}</EnhancedTableCell>
-      <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+      <EnhancedTableCell>{row.sourceChainToken.amount}</EnhancedTableCell>
       <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>

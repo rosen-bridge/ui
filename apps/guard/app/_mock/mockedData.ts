@@ -227,30 +227,21 @@ const healthStatus: ApiHealthStatusResponse = [
 
 const generateEventRecords = (numberOfRecords: number): Event[] => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
-    id: index,
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
-    extractor: 'Extractor Text',
-    boxId: `${Math.floor(Date.now() * Math.random())}`,
-    boxSerialized: '{}',
-    block: 'Block Text',
-    height: 10,
     fromChain: 'Chain A',
     toChain: 'Chain B',
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
-    amount: '100',
     bridgeFee: '0.2',
     networkFee: '0.03',
-    sourceChainTokenId: '123',
-    sourceChainHeight: 20,
-    targetChainTokenId: 'ab123',
-    sourceTxId: 'ab1234',
-    sourceBlockId: 'cd56789',
-    WIDs: 'WIDs',
-    spendBlock: '',
-    spendHeight: 5,
-    spendTxId: 'spendId1234',
+    sourceTxId: 'sourceId1234',
+    sourceChainToken: {
+      amount: 1000,
+      tokenId: '123',
+      decimals: 2,
+      name: 'hello',
+    },
   }));
 };
 
@@ -259,6 +250,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     id: index,
     rewardTxId:
       '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTxId:
+      '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockHeight: 100,
     fromChain: 'Chain A',
@@ -268,13 +261,17 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     amount: '0.1',
     bridgeFee: '0.002',
     networkFee: '0.003',
-    lockTokenId:
-      '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
-    lockTxId:
-      '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
+    lockToken: {
+      tokenId:
+        '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+      amount: 10000,
+      decimals: 3,
+      name: 'hello',
+    },
     height: 100,
     timestamp: Date.now(),
     status: 'Done',
+    revenues: [],
   }));
 };
 

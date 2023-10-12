@@ -36,21 +36,14 @@ export type ApiHealthStatusResponse = HealthParamInfo[];
 
 export interface Event {
   eventId: string;
-  block: string;
-  height: number;
   fromChain: string;
   toChain: string;
   fromAddress: string;
   toAddress: string;
-  amount: string;
   bridgeFee: string;
   networkFee: string;
-  sourceChainTokenId: string;
-  targetChainTokenId: string;
-  sourceChainHeight: number;
-  sourceBlockId: string;
   sourceTxId: string;
-  WIDs: string;
+  sourceChainToken: TokenInfo;
 }
 
 export type ApiHistoryResponse = Paginated<Event>;
@@ -58,7 +51,6 @@ export type ApiHistoryResponse = Paginated<Event>;
 export type ApiEventResponse = Paginated<Event>;
 
 export interface Revenue {
-  id: number;
   rewardTxId: string;
   eventId: string;
   lockHeight: number;
@@ -66,14 +58,16 @@ export interface Revenue {
   toChain: string;
   fromAddress: string;
   toAddress: string;
-  amount: string;
   bridgeFee: string;
   networkFee: string;
-  lockTokenId: string;
+  lockToken: TokenInfo;
   lockTxId: string;
   height: number;
   timestamp: number;
-  status: string;
+  revenues: {
+    revenueType: string;
+    data: TokenInfo;
+  }[];
 }
 
 export type ApiRevenueResponse = Paginated<Revenue>;

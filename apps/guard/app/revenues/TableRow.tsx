@@ -121,7 +121,9 @@ export const MobileRow: FC<RowProps> = (props) => {
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Token Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.lockTokenId.slice(0, 8)}</EnhancedTableCell>
+        <EnhancedTableCell>
+          {row.lockToken.tokenId.slice(0, 8)}
+        </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
@@ -139,7 +141,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+            <EnhancedTableCell>{row.lockToken.amount}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
@@ -190,11 +192,11 @@ export const TabletRow: FC<RowProps> = (props) => {
           {row.lockTxId.slice(0, 8)}
         </Link>
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockTokenId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.lockToken.tokenId.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.lockHeight}</EnhancedTableCell>
-      <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+      <EnhancedTableCell>{row.lockToken.amount}</EnhancedTableCell>
       <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
