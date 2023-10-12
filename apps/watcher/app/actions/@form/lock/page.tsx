@@ -38,7 +38,7 @@ const LockForm = () => {
   >('/permit', mutator);
 
   useEffect(() => {
-    if (!isRsnTokenLoading && !rsnToken) {
+    if (!isRsnTokenLoading && !rsnToken?.amount) {
       setAlertData({
         severity: 'error',
         message: 'RSN token does not exist',
@@ -90,7 +90,7 @@ const LockForm = () => {
     </AlertCard>
   );
 
-  const disabled = isRsnTokenLoading || !rsnToken;
+  const disabled = isRsnTokenLoading || !rsnToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField

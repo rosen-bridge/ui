@@ -9,6 +9,9 @@ import {
   CircularProgress,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
+
+import { TokenInfoWithAddress } from '@/_types/api';
 
 interface WidgetCardProps {
   widgetColor: keyof AugmentedPalette;
@@ -64,13 +67,12 @@ const WalletWidgetBase = styled(Card)<WidgetCardProps>(
         visibility: 'visible',
       },
     },
-  })
+  }),
 );
 
 interface WalletWidgetProps {
   title: string;
-  value?: string;
-  address?: string;
+  tokenInfoWithAddresses: TokenInfoWithAddress[];
   color: keyof AugmentedPalette;
   isLoading: boolean;
 }
@@ -85,8 +87,7 @@ interface WalletWidgetProps {
  */
 const WalletWidget = ({
   title,
-  value,
-  address,
+  tokenInfoWithAddresses,
   color,
   isLoading,
 }: WalletWidgetProps) => (
@@ -97,12 +98,27 @@ const WalletWidget = ({
     ) : (
       <>
         <Typography className="value">
-          {value} <span>ERG</span>
+          {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
+            <>
+              {!!index && ' / '}
+              {getDecimalString(
+                tokenInfoWithAddress.balance.amount.toString(),
+                tokenInfoWithAddress.balance.decimals,
+              )}
+              <span>{tokenInfoWithAddress.balance.name}</span>
+            </>
+          ))}
         </Typography>
-        <Box className="address-container">
-          <Typography className="heading">ADDRESS</Typography>
-          <Id id={address!} />
-        </Box>
+        {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
+          <Box
+            className="address-container"
+            key={tokenInfoWithAddress.address}
+            mt={index ? 1 : 0}
+          >
+            <Typography className="heading">ADDRESS</Typography>
+            <Id id={tokenInfoWithAddress.address} />
+          </Box>
+        ))}
       </>
     )}
   </WalletWidgetBase>

@@ -9,7 +9,7 @@
     "dev": "npm run get-config && next dev",
     "build": "npm run get-config && next build",
     "start": "npm run get-config && next start",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --preRelease "
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs"
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
@@ -19,7 +19,7 @@
     "@rosen-bridge/tokens": "^0.2.0",
     "@rosen-bridge/json-bigint": "^0.1.0",
     "@rosen-ui/utils": "^0.0.1",
-    "@rosen-bridge/cli": "^0.1.0-7fbaa988",
+    "@rosen-bridge/cli": "^0.1.1",
     "@rosen-ui/nami-wallet": "^0.0.1",
     "@rosen-ui/nautilus-wallet": "^0.0.1",
     "@rosen-ui/wallet-api": "^0.0.1",

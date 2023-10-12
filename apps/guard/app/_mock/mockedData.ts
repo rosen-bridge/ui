@@ -16,13 +16,49 @@ import {
 
 const info: ApiInfoResponse = {
   health: 'Unstable',
-  hot: {
-    balance: '1000',
-    address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-  },
-  cold: {
-    balance: '10000',
-    address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpX',
+  balances: {
+    hot: [
+      {
+        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        balance: {
+          amount: 100 * 1e9,
+          decimals: 9,
+          tokenId: 'erg',
+          name: 'erg',
+        },
+      },
+      {
+        address:
+          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        balance: {
+          amount: 500 * 1e6,
+          decimals: 6,
+          tokenId: 'ada',
+          name: 'ada',
+        },
+      },
+    ],
+    cold: [
+      {
+        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        balance: {
+          amount: 300 * 1e9,
+          decimals: 9,
+          tokenId: 'erg',
+          name: 'erg',
+        },
+      },
+      {
+        address:
+          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        balance: {
+          amount: 1500 * 1e6,
+          decimals: 6,
+          tokenId: 'ada',
+          name: 'ada',
+        },
+      },
+    ],
   },
 };
 
@@ -121,27 +157,27 @@ const assets = [
   {
     name: 'awesome token',
     tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
-    amount: 10000n,
+    amount: 10000,
     decimals: 2,
     chain: 'ergo',
   },
   {
     tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
-    amount: 2n,
+    amount: 2,
     decimals: 0,
     chain: 'ergo',
   },
   {
     name: 'another awesome token',
     tokenId: 'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
-    amount: 200n,
+    amount: 200,
     decimals: 1,
     chain: 'ergo',
   },
   {
     name: 'fakeRSN',
     tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
-    amount: 20n,
+    amount: 20,
     decimals: 5,
     chain: 'cardano',
   },
@@ -227,7 +263,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     amount: '0.1',
     bridgeFee: '0.002',
     networkFee: '0.003',
-    tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockTokenId:
+      '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockTxId:
       '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
     height: 100,
@@ -278,19 +315,19 @@ const mockedData: SWRConfigProps['fakeData'] = {
         items: pageData,
       };
     },
-    '/events': ({ offset, limit }) => {
+    '/event/ongoing': ({ offset, limit }) => {
       return {
         ...events,
         items: events.items.slice(offset, limit + offset),
       };
     },
-    '/history': ({ offset, limit }) => {
+    '/event/history': ({ offset, limit }) => {
       return {
         ...history,
         items: history.items.slice(offset, limit + offset),
       };
     },
-    '/revenue': ({ offset, limit }) => {
+    '/revenue/history': ({ offset, limit }) => {
       return {
         ...revenues,
         items: revenues.items.slice(offset, limit + offset),

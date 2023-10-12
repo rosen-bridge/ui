@@ -2,7 +2,9 @@ import useSWR from 'swr';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import { ApiAddressAssetsResponse, ApiInfoResponse } from '@/_types/api';
+import useToken from './useToken';
+
+import { ApiInfoResponse } from '@/_types/api';
 
 /**
  * fetch rsn token info (if present)
@@ -13,22 +15,13 @@ const useRsnToken = () => {
     fetcher,
   );
 
-  const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>(
-      info?.rsnTokenId
-        ? [
-            '/address/assets',
-            {
-              tokenId: info.rsnTokenId,
-            },
-          ]
-        : null,
-      fetcher,
-    );
+  const { token: rsnToken, isLoading: isRsnInfoLoading } = useToken(
+    info?.rsnTokenId,
+  );
 
   return {
-    rsnToken: data?.items[0],
-    isLoading: isInfoLoading || isTokensListLoading,
+    rsnToken,
+    isLoading: isInfoLoading || isRsnInfoLoading,
   };
 };
 

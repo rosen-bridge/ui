@@ -17,13 +17,17 @@ import {
 
 const info: ApiInfoResponse = {
   address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-  currentBalance: 150n,
+  collateral: {
+    erg: 10000000000,
+    rsn: 0,
+  },
+  currentBalance: 150,
   health: 'Unstable',
   network: 'ergo',
-  permitsPerEvent: 1000n,
+  permitsPerEvent: 1000,
   permitCount: {
-    active: 20n,
-    total: 100n,
+    active: 20,
+    total: 100,
   },
   rsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
@@ -35,27 +39,27 @@ const addressAssets: ApiAddressAssetsResponse = {
       name: 'awesome token',
       tokenId:
         '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
-      amount: 10000n,
+      amount: 10000,
       decimals: 2,
     },
     {
       tokenId:
         '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
-      amount: 2n,
+      amount: 2,
       decimals: 0,
     },
     {
       name: 'another awesome token',
       tokenId:
         'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
-      amount: 200n,
+      amount: 200,
       decimals: 1,
     },
     {
       name: 'fakeRSN',
       tokenId:
         '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
-      amount: 20n,
+      amount: 20,
       decimals: 5,
     },
   ],
@@ -265,6 +269,22 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     height: 100,
     timestamp: Date.now(),
     status: 'Done',
+    revenues: [
+      {
+        tokenId:
+          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+        amount: 1000,
+        name: 'fakeRSN',
+        decimals: 0,
+      },
+      {
+        tokenId:
+          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
+        amount: 100,
+        name: 'awesome token',
+        decimals: 2,
+      },
+    ],
   }));
 };
 

@@ -4,6 +4,7 @@ import { MouseEvent, useCallback, useMemo } from 'react';
 import {
   EnhancedTable,
   Grid,
+  TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
@@ -15,7 +16,7 @@ import TableSkeleton from './TableSkeleton';
 import { ApiEventResponse, ApiHistoryResponse } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
-  return ['/history', { offset, limit }];
+  return ['/event/history', { offset, limit }];
 };
 
 const History = () => {
@@ -27,30 +28,32 @@ const History = () => {
     setPageIndex,
     setPageSize,
     isFirstLoad,
+    isFirstPage,
+    isLastPage,
   } = useTableDataPagination<ApiHistoryResponse>(getKey);
 
   const handleChangePage = useCallback(
     (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
       setPageIndex(newPage);
     },
-    [setPageIndex]
+    [setPageIndex],
   );
 
   const handleChangeRowsPerPage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setPageSize(parseInt(event.target.value, 10));
     },
-    [setPageSize]
+    [setPageSize],
   );
 
   const renderMobileRow = useCallback(
     (rowData: Event) => <MobileRow {...rowData} isLoading={isLoading} />,
-    [isLoading]
+    [isLoading],
   );
 
   const renderTabletRow = useCallback(
     (rowData: Event) => <TabletRow {...rowData} isLoading={isLoading} />,
-    [isLoading]
+    [isLoading],
   );
 
   const tableHeaderProps = useMemo(
@@ -58,7 +61,7 @@ const History = () => {
       mobile: mobileHeader,
       tablet: tabletHeader,
     }),
-    []
+    [],
   );
 
   const tableRenderRowProps = useMemo(
@@ -66,10 +69,10 @@ const History = () => {
       mobile: renderMobileRow,
       tablet: renderTabletRow,
     }),
-    [renderMobileRow, renderTabletRow]
+    [renderMobileRow, renderTabletRow],
   );
 
-  const paginationProps = useMemo(
+  const paginationProps = useMemo<TablePaginationProps>(
     () => ({
       rowsPerPageOptions: [5, 10, 25],
       component: 'div',
@@ -79,6 +82,12 @@ const History = () => {
       onPageChange: handleChangePage,
       onRowsPerPageChange: handleChangeRowsPerPage,
       nextIconButtonProps: {
+        disabled: isLoading || isLastPage,
+      },
+      backIconButtonProps: {
+        disabled: isLoading || isFirstPage,
+      },
+      SelectProps: {
         disabled: isLoading,
       },
     }),
@@ -89,7 +98,9 @@ const History = () => {
       handleChangePage,
       handleChangeRowsPerPage,
       isLoading,
-    ]
+      isFirstPage,
+      isLastPage,
+    ],
   );
 
   return isFirstLoad ? (

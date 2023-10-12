@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { MouseEventHandler, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -18,7 +18,7 @@ export interface TokenAmountCompatibleFormSchema {
 interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
-  token: Pick<TokenInfo, 'amount' | 'decimals'> | undefined;
+  token: Pick<TokenInfo, 'amount' | 'decimals' | 'name'> | undefined;
 }
 /**
  * render a react-hook-form compatible text field for token amount input,
@@ -58,8 +58,11 @@ const TokenAmountTextField = ({
   const getMaxAvailableTokenAmount = () =>
     getDecimalString(token!.amount.toString(), token!.decimals);
 
-  const setAmountToMaxAvailable = () =>
+  const setAmountToMaxAvailable: MouseEventHandler = (event) => {
+    event.preventDefault();
+
     setAmountFieldValue(getMaxAvailableTokenAmount());
+  };
 
   return (
     <TextField
@@ -96,14 +99,18 @@ const TokenAmountTextField = ({
             <Link component="button" onClick={setAmountToMaxAvailable}>
               {getMaxAvailableTokenAmount()}
             </Link>{' '}
-            available
+            {token.name} available
           </>
         )
       }
       InputProps={{
         endAdornment: token && (
           <InputAdornment position="end">
-            <Button size="small" onClick={setAmountToMaxAvailable}>
+            <Button
+              size="small"
+              onClick={setAmountToMaxAvailable}
+              disabled={disabled}
+            >
               Max
             </Button>
           </InputAdornment>

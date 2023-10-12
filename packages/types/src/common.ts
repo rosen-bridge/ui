@@ -9,7 +9,7 @@ export interface TokenChartData {
 }
 
 export interface TokenInfo {
-  amount: bigint;
+  amount: number;
   decimals: number;
   name?: string;
   tokenId: string;

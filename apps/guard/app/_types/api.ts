@@ -6,15 +6,16 @@ import {
   Event,
 } from '@rosen-ui/types';
 
+export interface TokenInfoWithAddress {
+  address: string;
+  balance: TokenInfo;
+}
+
 export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
-  hot: {
-    address: string;
-    balance: string;
-  };
-  cold: {
-    address: string;
-    balance: string;
+  balances: {
+    hot: TokenInfoWithAddress[];
+    cold: TokenInfoWithAddress[];
   };
 }
 
@@ -49,7 +50,7 @@ export interface Revenue {
   amount: string;
   bridgeFee: string;
   networkFee: string;
-  tokenId: string;
+  lockTokenId: string;
   lockTxId: string;
   height: number;
   timestamp: number;

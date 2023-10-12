@@ -30,6 +30,8 @@ import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
+import useToken from '@/_hooks/useToken';
+
 import {
   ApiAddressAssetsResponse,
   ApiWithdrawRequestBody,
@@ -43,7 +45,14 @@ interface Form extends TokenAmountCompatibleFormSchema {
 
 const WithdrawForm = () => {
   const { data, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
+    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
+
+  const tokens = useMemo(
+    () => data?.items.filter((token) => !!token.amount),
+    [data],
+  );
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
@@ -57,14 +66,23 @@ const WithdrawForm = () => {
     ApiWithdrawRequestBody
   >('/withdraw', mutator);
 
+  useEffect(() => {
+    if (!isErgTokenLoading && !ergToken?.amount) {
+      setAlertData({
+        severity: 'error',
+        message: 'Your wallet is empty. There is nothing to withdraw.',
+      });
+    }
+  }, [isErgTokenLoading, ergToken]);
+
   const formMethods = useForm({
     defaultValues: {
       address: '',
-      tokenId: data?.items?.[0].tokenId ?? '',
+      tokenId: tokens?.[0]?.tokenId ?? '',
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, setValue } = formMethods;
+  const { handleSubmit, control, resetField, register } = formMethods;
 
   const { field: tokenIdField } = useController({
     control,
@@ -72,26 +90,28 @@ const WithdrawForm = () => {
   });
 
   const selectedToken = useMemo(
-    () => data?.items?.find((token) => token.tokenId === tokenIdField.value),
-    [data, tokenIdField.value],
+    () => tokens?.find((token) => token.tokenId === tokenIdField.value),
+    [tokens, tokenIdField.value],
   );
 
   useEffect(() => {
-    if (data && !tokenIdField.value) {
-      resetField('tokenId', { defaultValue: data?.items[0].tokenId });
+    if (tokens && !tokenIdField.value) {
+      resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
     }
-  }, [data, resetField, tokenIdField.value]);
+  }, [tokens, resetField, tokenIdField.value]);
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
     try {
       const response = await trigger({
         address: data.address,
-        tokens: {
-          tokenId: data.tokenId,
-          amount: BigInt(
-            getNonDecimalString(data.amount, selectedToken!.decimals),
-          ),
-        },
+        tokens: [
+          {
+            tokenId: data.tokenId,
+            amount: BigInt(
+              getNonDecimalString(data.amount, selectedToken!.decimals),
+            ),
+          },
+        ],
       });
       if (response === 'OK') {
         setAlertData({
@@ -120,10 +140,14 @@ const WithdrawForm = () => {
     </AlertCard>
   );
 
+  const disabled =
+    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+
   const renderAddressTextField = () => (
     <TextField
       autoFocus
       label="Address"
+      disabled={disabled}
       {...register('address', { required: true })}
     />
   );
@@ -132,7 +156,7 @@ const WithdrawForm = () => {
     <TextField
       label="Token"
       select={!isTokensListLoading}
-      disabled={isTokensListLoading}
+      disabled={disabled}
       InputProps={{
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
@@ -142,20 +166,22 @@ const WithdrawForm = () => {
       }}
       {...tokenIdField}
     >
-      {data?.items?.map((token) => (
+      {tokens?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
-          &nbsp; (<Id id={token.tokenId} />)
+          &nbsp;
+          {token.tokenId.length >= 64 && (
+            <>
+              (<Id id={token.tokenId} />)
+            </>
+          )}
         </MenuItem>
       ))}
     </TextField>
   );
 
   const renderTokenAmountTextField = () => (
-    <TokenAmountTextField
-      disabled={isTokensListLoading}
-      token={selectedToken}
-    />
+    <TokenAmountTextField disabled={disabled} token={selectedToken} />
   );
 
   return (
@@ -176,7 +202,9 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Grid>
         </Grid>
-        <SubmitButton loading={isWithdrawPending}>Withdraw</SubmitButton>
+        <SubmitButton disabled={disabled} loading={isWithdrawPending}>
+          Withdraw
+        </SubmitButton>
       </form>
     </FormProvider>
   );

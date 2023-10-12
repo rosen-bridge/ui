@@ -1,21 +1,25 @@
+import { trimEnd } from 'lodash-es';
+
 /**
  * convert a raw value to a string representation of the same value but
- * considering decimals
+ * considering decimals (removing any leading redundant zeros)
  *
  * @param value
  * @param decimals
  *
  * @example
  * getDecimalString('123', 2) === '1.23' // true
+ * getDecimalString('1230', 2) === '12.3' // true
  */
 export const getDecimalString = (value: string, decimals: number) => {
   if (!decimals) return value;
 
-  if (value.length > decimals) {
-    return `${value.slice(0, -1 * decimals)}.${value.slice(-1 * decimals)}`;
-  }
+  const untrimmedResult =
+    value.length > decimals
+      ? `${value.slice(0, -decimals)}.${value.slice(-decimals)}`
+      : `0.${value.padStart(decimals, '0')}`;
 
-  return `0.${'0'.repeat(decimals - value.length)}${value}`;
+  return trimEnd(trimEnd(untrimmedResult, '0'), '.') || '0';
 };
 
 /**
