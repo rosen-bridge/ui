@@ -45,8 +45,7 @@ const BridgeTransaction = () => {
   } = useTransactionFees(sourceValue, tokenValue, amountValue);
   const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
 
-  const tokenInfo =
-    tokenValue && getTokenNameAndId(tokenValue, sourceValue.value);
+  const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
   const WalletIcon = selectedWallet?.icon;
 
   const handleFormSubmit = handleSubmit(() => {

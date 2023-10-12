@@ -1,10 +1,9 @@
 import useSWR from 'swr';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import { ergoExplorerUrl, cardanoExplorerUrl, Networks } from '@/_constants';
+import useNetwork from './useNetwork';
 
-const cardanoUrl = cardanoExplorerUrl + '/v0/blocks?limit=1';
-const ergoUrl = ergoExplorerUrl + '/v1/networkState';
+import { Networks } from '@/_constants';
 
 type ErgoHeightResponse = { height: BigInt };
 type CardanoHeightResponse = { block_height: BigInt }[];
@@ -22,11 +21,11 @@ const isErgoNet = (
  * a react hook to fetch latest network height
  */
 
-const useChainHeight = (chain: keyof typeof Networks | null) => {
-  const url = chain === Networks.ergo ? ergoUrl : cardanoUrl;
+const useChainHeight = () => {
+  const { selectedNetwork } = useNetwork();
 
   const { data, ...rest } = useSWR<NetworkHeightResponse>(
-    chain ? url : null,
+    selectedNetwork ? selectedNetwork.api.networkStatusUrl : null,
     fetcher,
   );
 
@@ -40,7 +39,8 @@ const useChainHeight = (chain: keyof typeof Networks | null) => {
   };
 
   return {
-    height: data && chain ? getHeight(data, chain) : null,
+    height:
+      data && selectedNetwork ? getHeight(data, selectedNetwork.name) : null,
     ...rest,
   };
 };

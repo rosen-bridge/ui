@@ -13,12 +13,7 @@ export const getBalance = async (token: RosenChainToken) => {
   }
 
   if (!ergoConnector.nautilus?.getContext) {
-    return (
-      <>
-        Wallet API has changed. Be sure to update your wallet to continue using
-        it
-      </>
-    );
+    return 'Wallet API has changed. Be sure to update your wallet to continue using it';
   }
   const nautilus = ergoConnector.nautilus;
   return (await nautilus.getContext()).get_balance(

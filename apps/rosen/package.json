@@ -6,16 +6,18 @@
     "prettify": "prettier --write . --ignore-path ./.gitignore",
     "lint": "next lint --fix && npm run prettify",
     "type-check": "tsc --noEmit",
-    "dev": "npm run get-config && next dev",
+    "dev": "next dev",
     "build": "npm run get-config && next build",
     "start": "npm run get-config && next start",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs"
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --preRelease "
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cip14-js": "^3.0.1",
     "@rosen-bridge/minimum-fee-browser": "^0.1.3",
+    "@rosen-bridge/minimum-fee": "^0.1.13",
     "@rosen-bridge/tokens": "^0.2.0",
+    "@rosen-bridge/json-bigint": "^0.1.0",
     "@rosen-ui/utils": "^0.0.1",
     "@rosen-bridge/cli": "^0.1.0-7fbaa988",
     "@rosen-ui/nami-wallet": "^0.0.1",

@@ -22,7 +22,6 @@ const toWalletDescriptor = (wallet: Wallet): WalletDescriptor => {
  * handles the wallet connections for all the networks
  * and reconnect to the wallet on app startup
  */
-
 const useWallet = () => {
   const walletGlobalContext = useContext(WalletContext);
   const isConnecting = useRef<boolean>(false);
@@ -30,7 +29,7 @@ const useWallet = () => {
 
   const { selectedNetwork } = useNetwork();
 
-  const toWalletContract = useCallback(
+  const getWallet = useCallback(
     (name: string): Wallet => {
       let wallet: Wallet | undefined;
       wallet = selectedNetwork?.availableWallets.find((w) => w.name === name);
@@ -53,9 +52,9 @@ const useWallet = () => {
     }
 
     return currentWalletDescriptor
-      ? toWalletContract(currentWalletDescriptor.name)
+      ? getWallet(currentWalletDescriptor.name)
       : undefined;
-  }, [selectedNetwork, toWalletContract, get]);
+  }, [selectedNetwork, getWallet, get]);
 
   const setSelectedWallet = useCallback(
     async (wallet: Wallet) => {

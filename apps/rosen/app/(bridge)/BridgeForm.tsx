@@ -296,6 +296,7 @@ const BridgeForm = () => {
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={errors.walletAddress?.message?.toString()}
+        disabled={!sourceField.value}
         {...addressField}
       />
     </FormContainer>

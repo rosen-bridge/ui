@@ -3,7 +3,7 @@ import { ConnectorContextApi } from '@rosen-ui/wallet-api';
 export interface ConnectorAPI {
   enable(): Promise<ConnectorContextApi>;
   isEnabled(): Promise<boolean>;
-  experimental?: any;
+  experimental?: unknown;
 }
 
 /**

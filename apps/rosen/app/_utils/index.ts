@@ -23,21 +23,13 @@ export const getTokenNameAndId = (
 ) => {
   if (network === Networks.ergo) {
     return {
-      tokenName: token.tokenName,
+      tokenName: token.name,
       tokenId: token.tokenId,
     };
   } else if (network === Networks.cardano) {
     return {
-      tokenName: hexToString(token.assetName),
+      tokenName: token.name,
       tokenId: token.fingerprint,
     };
   }
 };
-
-/**
- * gets a list of bigint values and returns the largest value
- *
- * @param args
- * @returns - maximum number
- */
-const bigIntMax = (...args: bigint[]) => args.reduce((m, e) => (e > m ? e : m));

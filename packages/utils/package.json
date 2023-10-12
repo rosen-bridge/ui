@@ -20,6 +20,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "buffer": "^6.0.3"
+    "buffer": "^6.0.3",
+    "@rosen-bridge/json-bigint": "^0.1.0"
   }
 }

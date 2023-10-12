@@ -10,6 +10,10 @@ export interface Network {
   name: ValueOf<typeof Networks>;
   logo: string;
   label: string;
-
   availableWallets: Wallet[];
+  nextHeightInterval: number;
+  api: {
+    explorerUrl: string;
+    networkStatusUrl: string;
+  };
 }

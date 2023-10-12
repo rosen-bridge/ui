@@ -15,7 +15,12 @@ const CardanoNetwork: Network = {
   name: Networks.cardano,
   label: 'Cardano',
   availableWallets: [Nami as unknown as Wallet],
+  nextHeightInterval: 25,
   logo: '/cardano.svg',
+  api: {
+    explorerUrl: 'https://api.koios.rest/api',
+    networkStatusUrl: 'https://api.koios.rest/api/v0/blocks?limit=1',
+  },
 };
 
 export default CardanoNetwork;

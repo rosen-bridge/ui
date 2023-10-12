@@ -14,6 +14,7 @@ class Module {
         '@emurgo/cardano-serialization-lib-browser/cardano_serialization_lib'
       );
     }
+
     return this._wasm!;
   }
 
