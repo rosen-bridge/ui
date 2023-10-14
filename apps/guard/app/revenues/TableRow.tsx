@@ -36,7 +36,7 @@ export const mobileHeader = [
 
 export const tabletHeader = [
   {
-    title: 'Tx Id',
+    title: 'Lock Tx Id',
     cellProps: {
       width: 150,
     },
@@ -120,7 +120,7 @@ export const MobileRow: FC<RowProps> = (props) => {
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-        <EnhancedTableCell>Tx Id</EnhancedTableCell>
+        <EnhancedTableCell>Lock Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.lockTxId}`} target="_blank">
             {row.lockTxId.slice(0, 8)}
