@@ -2,23 +2,36 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { Card, Divider, styled } from '@rosen-bridge/ui-kit';
+import {
+  Card,
+  Divider,
+  styled,
+  useResponsiveValue,
+} from '@rosen-bridge/ui-kit';
 
 import BridgeTransaction from './BridgeTransaction';
 import BridgeForm from './BridgeForm';
 
 const BridgeContainer = styled(Card)(({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -60%)',
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(2),
   margin: '0 auto',
   display: 'grid',
-  gridTemplateColumns: '3fr auto 2fr',
   minWidth: 0,
   gap: theme.spacing(1.5),
   padding: theme.spacing(3),
-
+  width: '100%',
+  gridTemplateColumns: '1fr',
+  gridTemplateRows: '5fr 5px auto',
   [theme.breakpoints.up('tablet')]: {
+    gridTemplateColumns: '3fr auto 2fr',
+    gridTemplateRows: '1fr',
     maxWidth: '45%',
+    width: 'auto',
   },
 }));
 
@@ -34,6 +47,11 @@ export interface BridgeForm {
  * bridge main layout
  */
 const RosenBridge = () => {
+  const separatorOrientation = useResponsiveValue({
+    mobile: 'horizontal',
+    tablet: 'vertical',
+  });
+
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',
     defaultValues: {
@@ -49,7 +67,7 @@ const RosenBridge = () => {
     <FormProvider {...methods}>
       <BridgeContainer>
         <BridgeForm />
-        <Divider orientation="vertical" flexItem />
+        <Divider orientation={separatorOrientation} flexItem />
         <BridgeTransaction />
       </BridgeContainer>
     </FormProvider>

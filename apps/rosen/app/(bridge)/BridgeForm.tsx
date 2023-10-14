@@ -156,6 +156,13 @@ const BridgeForm = () => {
     [amountField, tokenField],
   );
 
+  const handleSelectMax = useCallback(() => {
+    setValue('amount', amount, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  }, [setValue, amount]);
+
   return (
     <FormContainer>
       <Grid container spacing={1}>
@@ -183,9 +190,7 @@ const BridgeForm = () => {
                     alt="network logo"
                   />
                 </ListItemIcon>
-                <Typography variant="body2" color="text.secondary">
-                  {network.label}
-                </Typography>
+                <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
             ))}
           </FormInputs>
@@ -215,9 +220,7 @@ const BridgeForm = () => {
                     alt="network logo"
                   />
                 </ListItemIcon>
-                <Typography variant="body2" color="text.secondary">
-                  {network.label}
-                </Typography>
+                <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
             ))}
           </FormInputs>
@@ -260,19 +263,15 @@ const BridgeForm = () => {
         helperText={
           tokenField.value ? (
             <Grid container justifyContent="space-between">
-              <Typography color="primary" variant="caption">
+              <Typography
+                color="primary"
+                variant="caption"
+                onClick={handleSelectMax}
+              >
                 {' '}
                 {`Balance: ${isLoading ? 'loading...' : amount}`}
               </Typography>
-              <MaxButton
-                disabled={isLoading}
-                onClick={() => {
-                  setValue('amount', amount, {
-                    shouldDirty: true,
-                    shouldTouch: true,
-                  });
-                }}
-              >
+              <MaxButton disabled={isLoading} onClick={handleSelectMax}>
                 MAX
               </MaxButton>
             </Grid>

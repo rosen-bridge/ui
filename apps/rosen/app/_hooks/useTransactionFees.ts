@@ -34,11 +34,6 @@ const useTransactionFees = (
   const { height, isLoading: isLoadingHeights } = useChainHeight();
 
   const feeInfo = useRef<any>(null);
-
-  const [minFeeObject, setMinFeeObject] = useState<{
-    [chain: string]: BridgeMinimumFee;
-  }>({});
-
   const tokensMap = useTokensMap();
 
   const getTokenId = useCallback(
@@ -69,7 +64,7 @@ const useTransactionFees = (
       !pending
     ) {
       startTransition(async () => {
-        const data = await feeCalculator(sourceChain, tokenId, height as any);
+        const data = await feeCalculator(sourceChain, tokenId, height);
         if (data.status === 'success') {
           const parsedData = {
             ...data,
@@ -152,6 +147,7 @@ const useTransactionFees = (
           )
         : '0',
       isLoading,
+      status: feeInfo.current,
     };
   }, [amount, fees, isLoading, token, feeRatioDivisor]);
 

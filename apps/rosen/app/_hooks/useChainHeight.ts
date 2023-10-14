@@ -5,8 +5,8 @@ import useNetwork from './useNetwork';
 
 import { Networks } from '@/_constants';
 
-type ErgoHeightResponse = { height: BigInt };
-type CardanoHeightResponse = { block_height: BigInt }[];
+type ErgoHeightResponse = { height: number };
+type CardanoHeightResponse = { block_height: number }[];
 
 type NetworkHeightResponse = ErgoHeightResponse | CardanoHeightResponse;
 
@@ -33,9 +33,7 @@ const useChainHeight = () => {
     data: NetworkHeightResponse,
     chain: keyof typeof Networks,
   ) => {
-    return isErgoNet(data, chain)
-      ? (data?.height as BigInt)
-      : (data?.[0]?.block_height as BigInt);
+    return isErgoNet(data, chain) ? data?.height : data?.[0]?.block_height;
   };
 
   return {

@@ -37,6 +37,7 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 const Main = styled('main')(({ theme }) => ({
+  position: 'relative',
   flexGrow: 1,
   overflowY: 'auto',
   minHeight: '100%',

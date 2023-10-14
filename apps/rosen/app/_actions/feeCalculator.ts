@@ -43,7 +43,7 @@ const networkObjects = {
 export const feeCalculator = async (
   sourceNetwork: keyof typeof Networks,
   tokenId: string,
-  height: bigint,
+  height: number,
 ) => {
   const chainFeeObject = feeObjects[sourceNetwork];
   const networkObject = networkObjects[sourceNetwork];
@@ -69,10 +69,14 @@ export const feeCalculator = async (
         nextFees,
       }),
     };
-  } catch {
+  } catch (error) {
+    let message = 'Unknown Error';
+    if (error instanceof Error) message = error.message;
+    // we'll proceed, but let's report it
     return {
       tokenId,
       status: 'error',
+      message: message,
     };
   }
 };

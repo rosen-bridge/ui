@@ -33,7 +33,6 @@ const useWallet = () => {
     (name: string): Wallet => {
       let wallet: Wallet | undefined;
       wallet = selectedNetwork?.availableWallets.find((w) => w.name === name);
-
       if (!wallet) {
         throw new Error(`unsupported wallet with name ${name}`);
       }

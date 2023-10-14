@@ -2,8 +2,10 @@
 
 import {
   Avatar,
+  Alert,
   Grid,
   Typography,
+  Tooltip,
   Divider,
   styled,
   LoadingButton,
@@ -25,6 +27,14 @@ const PriceItem = styled('div')(({ theme }) => ({
 }));
 
 /**
+ * container for fees and alert
+ */
+const FeesContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(1),
+}));
+
+/**
  * shows fees to the user and handles wallet transaction
  * and wallet connection
  */
@@ -38,6 +48,7 @@ const BridgeTransaction = () => {
   } = useTransactionFormData();
 
   const {
+    status,
     networkFee,
     bridgeFee,
     receivingAmount,
@@ -78,81 +89,96 @@ const BridgeTransaction = () => {
   const renderWalletInfo = () => {
     if (!WalletIcon) return null;
     return (
-      <Grid
-        sx={(theme) => ({ margin: theme.spacing(1) })}
-        container
-        alignItems="center"
-        gap={1}
-      >
-        <Avatar
-          sx={{
-            width: 18,
-            height: 18,
-            background: 'transparent',
-          }}
-        >
-          <WalletIcon />
-        </Avatar>
-        <Typography>{selectedWallet.name}</Typography>
-      </Grid>
+      <PriceItem sx={(theme) => ({ margin: theme.spacing(1) })}>
+        <Typography>Wallet</Typography>
+        <Grid container alignItems="center" justifyContent="center" gap={1}>
+          <Avatar
+            sx={{
+              width: 18,
+              height: 18,
+              background: 'transparent',
+            }}
+          >
+            <WalletIcon />
+          </Avatar>
+          <Typography>{selectedWallet.name}</Typography>
+        </Grid>
+      </PriceItem>
     );
   };
 
-  return (
-    <Grid
-      container
-      direction="column"
-      justifyContent="space-between"
-      flexWrap="nowrap"
+  const renderAlert = () => (
+    <Alert
+      severity="error"
+      sx={{ maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}
     >
+      <Tooltip title={status?.message}>
+        <Typography
+          sx={{
+            maxWidth: '100%',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
+        >
+          {status?.message}
+        </Typography>
+      </Tooltip>
+    </Alert>
+  );
+
+  return (
+    <>
       <Grid
-        item
         container
         direction="column"
         justifyContent="flex-end"
-        sx={(theme) => ({ height: '100%', padding: theme.spacing(2, 0) })}
+        flexWrap="nowrap"
+        gap={2}
       >
-        {renderFee(
-          'Transaction Fee',
-          tokenInfo?.tokenName,
-          networkFee || 'Pending',
-          'primary',
-        )}
-        {renderFee(
-          'Bridge Fee',
-          tokenInfo?.tokenName,
-          bridgeFee || 'Pending',
-          'primary',
-        )}
-        <Divider />
-        {renderFee(
-          'You will receive',
-          tokenInfo?.tokenName,
-          receivingAmount,
-          'secondary',
-        )}
-      </Grid>
+        <FeesContainer>
+          {renderWalletInfo()}
+          {renderFee(
+            'Transaction Fee',
+            tokenInfo?.tokenName,
+            networkFee || 'Pending',
+            'primary',
+          )}
+          {renderFee(
+            'Bridge Fee',
+            tokenInfo?.tokenName,
+            bridgeFee || 'Pending',
+            'primary',
+          )}
+          <Divider />
+          {renderFee(
+            'You will receive',
+            tokenInfo?.tokenName,
+            receivingAmount,
+            'secondary',
+          )}
+          {status?.status === 'error' && renderAlert()}
+        </FeesContainer>
 
-      <Grid item>
-        <LoadingButton
-          sx={{ width: '100%' }}
-          color={selectedWallet ? 'success' : 'primary'}
-          variant="contained"
-          loading={isValidating}
-          disabled={!availableWallets}
-          onClick={() => {
-            if (!selectedWallet) {
-              setSelectedWallet?.(availableWallets?.[0]);
-            } else {
-              handleFormSubmit();
-            }
-          }}
-        >
-          {!selectedWallet ? 'CONNECT WALLET' : 'START TRANSACTION'}
-        </LoadingButton>
-        {renderWalletInfo()}
+        <Grid item container flexDirection="column">
+          <LoadingButton
+            sx={{ width: '100%' }}
+            color={selectedWallet ? 'success' : 'primary'}
+            variant="contained"
+            loading={isValidating}
+            disabled={!availableWallets}
+            onClick={() => {
+              if (!selectedWallet) {
+                setSelectedWallet?.(availableWallets?.[0]);
+              } else {
+                handleFormSubmit();
+              }
+            }}
+          >
+            {!selectedWallet ? 'CONNECT WALLET' : 'SUBMIT'}
+          </LoadingButton>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

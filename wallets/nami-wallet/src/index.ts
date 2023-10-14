@@ -10,7 +10,7 @@ import { getBalance } from './getBalance';
  */
 const NamiWallet: CardanoWallet = {
   icon: NamiIcon,
-  name: 'Nami Wallet',
+  name: 'Nami',
   connectWallet,
   getBalance,
 };
