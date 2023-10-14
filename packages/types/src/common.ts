@@ -13,6 +13,7 @@ export interface TokenInfo {
   decimals: number;
   name?: string;
   tokenId: string;
+  isNativeToken: boolean;
 }
 
 export interface HealthParamInfo {

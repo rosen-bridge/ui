@@ -27,6 +27,7 @@ const info: ApiInfoResponse = {
           decimals: 9,
           tokenId: 'erg',
           name: 'erg',
+          isNativeToken: true,
         },
       },
       {
@@ -38,6 +39,7 @@ const info: ApiInfoResponse = {
           decimals: 6,
           tokenId: 'ada',
           name: 'ada',
+          isNativeToken: true,
         },
       },
     ],
@@ -50,6 +52,7 @@ const info: ApiInfoResponse = {
           decimals: 9,
           tokenId: 'erg',
           name: 'erg',
+          isNativeToken: true,
         },
       },
       {
@@ -61,6 +64,7 @@ const info: ApiInfoResponse = {
           decimals: 6,
           tokenId: 'ada',
           name: 'ada',
+          isNativeToken: true,
         },
       },
     ],
@@ -165,12 +169,14 @@ const assets = [
     amount: 10000,
     decimals: 2,
     chain: 'ergo',
+    isNativeToken: false,
   },
   {
     tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
     amount: 2,
     decimals: 0,
     chain: 'ergo',
+    isNativeToken: false,
   },
   {
     name: 'another awesome token',
@@ -178,6 +184,7 @@ const assets = [
     amount: 200,
     decimals: 1,
     chain: 'ergo',
+    isNativeToken: false,
   },
   {
     name: 'fakeRSN',
@@ -185,6 +192,7 @@ const assets = [
     amount: 20,
     decimals: 5,
     chain: 'cardano',
+    isNativeToken: false,
   },
 ];
 
@@ -241,6 +249,7 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
       tokenId: '123',
       decimals: 2,
       name: 'hello',
+      isNativeToken: false,
     },
   }));
 };
@@ -267,6 +276,7 @@ const generateRevenueRecords = (numberOfRecords: number) => {
       amount: 10000,
       decimals: 3,
       name: 'hello',
+      isNativeToken: false,
     },
     height: 100,
     timestamp: Date.now(),
