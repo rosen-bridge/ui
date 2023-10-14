@@ -89,6 +89,12 @@ export const tabletHeader = [
       width: 150,
     },
   },
+  {
+    title: 'Reward Tx Id',
+    cellProps: {
+      width: 150,
+    },
+  },
 ];
 
 const renderValue = (value?: string | number | undefined) => {
@@ -166,6 +172,10 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Event Id</EnhancedTableCell>
             <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
           </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Reward Tx Id</EnhancedTableCell>
+            <EnhancedTableCell>{row.rewardTxId.slice(0, 8)}</EnhancedTableCell>
+          </TableRow>
         </>
       )}
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -220,6 +230,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         {getDecimalString(row.networkFee, row.lockToken.decimals)}
       </EnhancedTableCell>
       <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.rewardTxId.slice(0, 8)}</EnhancedTableCell>
     </TableRow>
   );
 };
