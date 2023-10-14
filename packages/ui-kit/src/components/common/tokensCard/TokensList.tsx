@@ -30,6 +30,7 @@ export const TokensList = ({ tokens, isLoading }: TokensListProps) => (
           key={token.tokenId}
           name={token.name}
           value={token.amount.toString()}
+          isNativeToken={token.isNativeToken}
         />
       ))
     )}

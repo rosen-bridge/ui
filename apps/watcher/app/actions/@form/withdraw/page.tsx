@@ -170,7 +170,7 @@ const WithdrawForm = () => {
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
           &nbsp;
-          {token.tokenId.length >= 64 && (
+          {!token.isNativeToken && (
             <>
               (<Id id={token.tokenId} />)
             </>
