@@ -54,6 +54,7 @@
     "@rosen-ui/constants": "^0.0.1",
     "@rosen-ui/swr-helpers": "^0.0.1",
     "@rosen-ui/utils": "^0.0.1",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "qrcode.react": "^3.1.0"
   }
 }

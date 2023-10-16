@@ -16,9 +16,6 @@ const DashboardLayout = ({
     <Grid item mobile={12} laptop={8}>
       {revenue}
     </Grid>
-    <Grid item mobile={12}>
-      {actions}
-    </Grid>
     {tokens}
   </Grid>
 );

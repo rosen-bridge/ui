@@ -3,11 +3,11 @@ import {
   TokenChartData,
   TokenInfo,
   Paginated,
-  Event,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {
   address: string;
+  chain: string;
   balance: TokenInfo;
 }
 
@@ -34,12 +34,23 @@ export type ApiAddressAssetsResponse = Paginated<GuardTokenInfo>;
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
+export interface Event {
+  eventId: string;
+  fromChain: string;
+  toChain: string;
+  fromAddress: string;
+  toAddress: string;
+  bridgeFee: string;
+  networkFee: string;
+  sourceTxId: string;
+  sourceChainToken: TokenInfo;
+}
+
 export type ApiHistoryResponse = Paginated<Event>;
 
 export type ApiEventResponse = Paginated<Event>;
 
 export interface Revenue {
-  id: number;
   rewardTxId: string;
   eventId: string;
   lockHeight: number;
@@ -47,14 +58,16 @@ export interface Revenue {
   toChain: string;
   fromAddress: string;
   toAddress: string;
-  amount: string;
   bridgeFee: string;
   networkFee: string;
-  lockTokenId: string;
+  lockToken: TokenInfo;
   lockTxId: string;
   height: number;
   timestamp: number;
-  status: string;
+  revenues: {
+    revenueType: string;
+    data: TokenInfo;
+  }[];
 }
 
 export type ApiRevenueResponse = Paginated<Revenue>;

@@ -1,7 +1,9 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
-import { ChartPeriod, Event } from '@rosen-ui/types';
+import { ChartPeriod } from '@rosen-ui/types';
+
+import { Event } from '@/_types/api';
 
 import {
   ApiEventResponse,
@@ -41,12 +43,14 @@ const addressAssets: ApiAddressAssetsResponse = {
         '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
       amount: 10000,
       decimals: 2,
+      isNativeToken: false,
     },
     {
       tokenId:
         '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
       amount: 2,
       decimals: 0,
+      isNativeToken: false,
     },
     {
       name: 'another awesome token',
@@ -54,6 +58,7 @@ const addressAssets: ApiAddressAssetsResponse = {
         'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
       amount: 200,
       decimals: 1,
+      isNativeToken: false,
     },
     {
       name: 'fakeRSN',
@@ -61,6 +66,7 @@ const addressAssets: ApiAddressAssetsResponse = {
         '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
       amount: 20,
       decimals: 5,
+      isNativeToken: false,
     },
   ],
   total: 4,
@@ -276,6 +282,7 @@ const generateRevenueRecords = (numberOfRecords: number) => {
         amount: 1000,
         name: 'fakeRSN',
         decimals: 0,
+        isNativeToken: false,
       },
       {
         tokenId:
@@ -283,6 +290,7 @@ const generateRevenueRecords = (numberOfRecords: number) => {
         amount: 100,
         name: 'awesome token',
         decimals: 2,
+        isNativeToken: false,
       },
     ],
   }));

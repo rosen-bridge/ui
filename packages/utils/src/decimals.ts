@@ -2,16 +2,23 @@ import { trimEnd } from 'lodash-es';
 
 /**
  * convert a raw value to a string representation of the same value but
- * considering decimals (removing any leading redundant zeros)
+ * considering decimals (removing any leading redundant zeros) and optionally
+ * truncating to a fixed number of decimal digits
  *
  * @param value
  * @param decimals
+ * @param truncateLength
  *
  * @example
  * getDecimalString('123', 2) === '1.23' // true
  * getDecimalString('1230', 2) === '12.3' // true
+ * getDecimalString('123456', 2, 3) === '12.345' // true
  */
-export const getDecimalString = (value: string, decimals: number) => {
+export const getDecimalString = (
+  value: string,
+  decimals: number,
+  truncateLength?: number
+) => {
   if (!decimals) return value;
 
   const untrimmedResult =
@@ -19,7 +26,12 @@ export const getDecimalString = (value: string, decimals: number) => {
       ? `${value.slice(0, -decimals)}.${value.slice(-decimals)}`
       : `0.${value.padStart(decimals, '0')}`;
 
-  return trimEnd(trimEnd(untrimmedResult, '0'), '.') || '0';
+  const preciseResult = trimEnd(trimEnd(untrimmedResult, '0'), '.') || '0';
+
+  return preciseResult.replace(
+    /\.(.*)/,
+    (_, floatingPart: string) => `.${floatingPart.slice(0, truncateLength)}`
+  );
 };
 
 /**

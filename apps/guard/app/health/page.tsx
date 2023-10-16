@@ -7,6 +7,7 @@ import {
   Grid,
   HealthParamCard,
   HealthParamCardSkeleton,
+  useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { HealthParamInfo } from '@rosen-ui/types';
@@ -24,6 +25,8 @@ const Health = () => {
     },
   );
 
+  const { openSnackbar } = useSnackbar();
+
   /**
    * revalidate info of health param with id `paramId`
    *
@@ -38,6 +41,7 @@ const Health = () => {
       const healthParamIndex = data!.findIndex(
         (healthParam) => healthParam.id === paramId,
       );
+      openSnackbar(paramId + ' status updated', 'info');
 
       mutate([
         ...data!.slice(0, healthParamIndex),
@@ -45,7 +49,7 @@ const Health = () => {
         ...data!.slice(healthParamIndex + 1),
       ]);
     },
-    [data, mutate],
+    [data, mutate, openSnackbar],
   );
 
   return isLoading ? (

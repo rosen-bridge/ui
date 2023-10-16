@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { Copy } from '@rosen-bridge/icons';
-import { IconButton, SvgIcon } from '@rosen-bridge/ui-kit';
-
-import SuccessfulCopySnackbar from './SuccessfulCopySnackbar';
+import {
+  IconButton,
+  SvgIcon,
+  SuccessfulCopySnackbar,
+} from '@rosen-bridge/ui-kit';
 
 interface CopyButtonProps {
   address: string;
@@ -19,7 +21,7 @@ const CopyButton = ({ address }: CopyButtonProps) => {
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
-    reason?: string
+    reason?: string,
   ) => {
     if (reason === 'clickaway') {
       return;

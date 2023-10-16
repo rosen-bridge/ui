@@ -18,6 +18,7 @@ export interface TokenListItemProps {
   index: number;
   name?: string;
   value: string;
+  isNativeToken: boolean;
 }
 /**
  * render a token list item, showing its name, id, avatar and value
@@ -33,6 +34,7 @@ export const TokenListItem = ({
   index,
   name,
   value,
+  isNativeToken,
 }: TokenListItemProps) => {
   const nameOrPlaceholder = name || TOKEN_NAME_PLACEHOLDER;
   const theme = useTheme();
@@ -49,7 +51,7 @@ export const TokenListItem = ({
             <Typography>{getDecimalString(value, decimals)}</Typography>
           </Box>
         }
-        {...(id.length >= 64 ? { secondary: <Id id={id} /> } : {})}
+        {...(!isNativeToken ? { secondary: <Id id={id} /> } : {})}
         secondaryTypographyProps={{
           component: 'div',
           style: { fontSize: theme.typography.body2.fontSize },
