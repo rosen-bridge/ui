@@ -17,7 +17,6 @@ const getDateFormat = (period: ChartPeriod) =>
 const baseChartOptions = {
   chart: {
     height: 350,
-    type: 'line' as const,
     zoom: {
       enabled: false,
     },
@@ -47,7 +46,6 @@ const baseChartOptions = {
   },
   tooltip: {
     enabled: true,
-    shared: true,
     x: {
       show: false,
     },
@@ -111,7 +109,12 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
   );
 
   return (
-    <Chart options={apexChartOptions} series={apexChartSeries} height={240} />
+    <Chart
+      type="bar"
+      options={apexChartOptions}
+      series={apexChartSeries}
+      height={240}
+    />
   );
 };
 
