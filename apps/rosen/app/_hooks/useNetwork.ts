@@ -29,12 +29,20 @@ const useNetwork = () => {
     return new TokenMap(tokensMapObject);
   }, [tokensMapObject]);
 
+  /**
+   * returns the list of available network objects if a and filters out
+   * unsupported networks
+   */
   const availableNetworkObjects = useMemo(() => {
     return (tokensMap.getAllChains() as SourceFieldValue[])
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
   }, [tokensMap]);
 
+  /**
+   * returns the list of available target network objects if a and filters out
+   * unsupported networks
+   */
   const targetNetworks = useMemo(() => {
     return (
       tokensMap.getSupportedChains(sourceField.value) as SourceFieldValue[]
@@ -43,6 +51,9 @@ const useNetwork = () => {
       .map((chain) => availableNetworks[chain]);
   }, [sourceField.value, tokensMap]);
 
+  /**
+   * a list of available tokens in the selected network
+   */
   const tokens = useMemo(() => {
     if (!targetField.value || !sourceField.value) return [];
 

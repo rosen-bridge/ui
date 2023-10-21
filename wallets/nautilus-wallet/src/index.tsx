@@ -11,7 +11,8 @@ import { getBalance } from './getBalance';
 
 const Nautilus: ErgoWallet = {
   icon: NautilusIcon,
-  name: 'Nautilus',
+  name: 'nautilus',
+  label: 'Nautilus',
   connectWallet,
   getBalance,
 };

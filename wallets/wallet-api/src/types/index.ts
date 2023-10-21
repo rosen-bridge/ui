@@ -14,10 +14,10 @@ export enum WalletState {
 export interface Wallet {
   icon: FC;
   name: string;
+  label: string;
   onConnect?: () => void;
   onDisconnect?: () => void;
   connectWallet: () => Promise<boolean | ReactNode>;
-  getBalance: (token: RosenChainToken) => Promise<ReactNode>;
   hidden?: boolean;
 }
 

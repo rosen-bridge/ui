@@ -1,4 +1,3 @@
-import { ReactNode } from 'react';
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Address,
@@ -23,7 +22,7 @@ export interface ErgoToken extends RosenChainToken {
  * main interface the connect and control ergo wallets
  */
 export interface ErgoWallet extends Wallet, Prover {
-  readonly getBalance: (token: RosenChainToken) => Promise<ReactNode>;
+  readonly getBalance: (token: RosenChainToken) => Promise<string>;
   readonly getUsedAddresses?: () => Address[];
   readonly getUnusedAddresses?: () => Address[];
   readonly getChangeAddress?: () => Address;

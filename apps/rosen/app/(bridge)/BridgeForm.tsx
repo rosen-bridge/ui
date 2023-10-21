@@ -163,6 +163,27 @@ const BridgeForm = () => {
     });
   }, [setValue, amount]);
 
+  const renderInputActions = () => (
+    <Grid container justifyContent="space-between">
+      <MaxButton
+        disabled={isLoading || !tokenField.value}
+        onClick={handleSelectMax}
+        color="primary"
+      >
+        <Typography variant="caption">
+          {`Balance: ${isLoading ? 'loading...' : amount}`}
+        </Typography>
+      </MaxButton>
+      <MaxButton
+        disabled={isLoading || !tokenField.value}
+        onClick={handleSelectMax}
+        color="primary"
+      >
+        MAX
+      </MaxButton>
+    </Grid>
+  );
+
   return (
     <FormContainer>
       <Grid container spacing={1}>
@@ -260,25 +281,7 @@ const BridgeForm = () => {
         size="medium"
         label="Amount"
         placeholder="0.0"
-        helperText={
-          tokenField.value ? (
-            <Grid container justifyContent="space-between">
-              <Typography
-                color="primary"
-                variant="caption"
-                onClick={handleSelectMax}
-              >
-                {' '}
-                {`Balance: ${isLoading ? 'loading...' : amount}`}
-              </Typography>
-              <MaxButton disabled={isLoading} onClick={handleSelectMax}>
-                MAX
-              </MaxButton>
-            </Grid>
-          ) : (
-            ''
-          )
-        }
+        helperText={renderInputActions()}
         InputProps={{ disableUnderline: true }}
         inputProps={{
           style: { fontSize: '2rem' },

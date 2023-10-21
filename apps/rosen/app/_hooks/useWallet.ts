@@ -6,11 +6,16 @@ import useNetwork from './useNetwork';
 
 import { WalletContext } from '@/_contexts/walletContext';
 
+import { SupportedWallets } from '@/_types/network';
+
 interface WalletDescriptor {
   readonly name: string;
   readonly expDate: string;
 }
 
+/**
+ * generates and return the wallet object to save in the local storage
+ */
 const toWalletDescriptor = (wallet: Wallet): WalletDescriptor => {
   let expDate = new Date();
   return {
@@ -18,6 +23,7 @@ const toWalletDescriptor = (wallet: Wallet): WalletDescriptor => {
     expDate: expDate.setDate(expDate.getDate() + 2).toString(),
   };
 };
+
 /**
  * handles the wallet connections for all the networks
  * and reconnect to the wallet on app startup
@@ -29,10 +35,17 @@ const useWallet = () => {
 
   const { selectedNetwork } = useNetwork();
 
+  /**
+   * searches in the available wallets in the selected network
+   * and return the wallet object if it finds a match
+   */
   const getWallet = useCallback(
-    (name: string): Wallet => {
-      let wallet: Wallet | undefined;
-      wallet = selectedNetwork?.availableWallets.find((w) => w.name === name);
+    (name: string): SupportedWallets => {
+      let wallet: SupportedWallets | undefined;
+
+      wallet = (
+        selectedNetwork ? [...selectedNetwork.availableWallets] : []
+      ).find((w: SupportedWallets) => w.name === name);
       if (!wallet) {
         throw new Error(`unsupported wallet with name ${name}`);
       }
@@ -42,7 +55,11 @@ const useWallet = () => {
     [selectedNetwork],
   );
 
-  const getCurrentWallet = useCallback((): Wallet | undefined => {
+  /**
+   * searches in local storage for already selected wallets and
+   * returns the wallet object if it finds match
+   */
+  const getCurrentWallet = useCallback((): SupportedWallets | undefined => {
     const currentWalletDescriptor =
       selectedNetwork && get<WalletDescriptor>(selectedNetwork?.name);
 
@@ -55,8 +72,12 @@ const useWallet = () => {
       : undefined;
   }, [selectedNetwork, getWallet, get]);
 
+  /**
+   * disconnects the previously selected wallet and
+   * calls the connection callbacks
+   */
   const setSelectedWallet = useCallback(
-    async (wallet: Wallet) => {
+    async (wallet: SupportedWallets) => {
       const prevWallet = getCurrentWallet();
       const status = await wallet.connectWallet();
 

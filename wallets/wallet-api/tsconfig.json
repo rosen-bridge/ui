@@ -2,7 +2,7 @@
   "extends": "../../packages/tsconfig.novite.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "./"
+    "rootDir": "."
   },
-  "include": ["src"]
+  "include": ["src", "types"]
 }

@@ -10,6 +10,11 @@ type CardanoHeightResponse = { block_height: number }[];
 
 type NetworkHeightResponse = ErgoHeightResponse | CardanoHeightResponse;
 
+/**
+ * a type guard to detect the network it is used to be able to parse different
+ * reposes from different chains,
+ */
+
 const isErgoNet = (
   data: NetworkHeightResponse,
   network: keyof typeof Networks,
@@ -29,6 +34,9 @@ const useChainHeight = () => {
     fetcher,
   );
 
+  /**
+   * parse the request results and return the network
+   */
   const getHeight = (
     data: NetworkHeightResponse,
     chain: keyof typeof Networks,

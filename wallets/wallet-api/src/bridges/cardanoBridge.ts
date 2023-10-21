@@ -1,11 +1,10 @@
-import { HexString, Paging, RawTx } from '../types';
+import { HexString, Paging, RawTx, TxId } from '../types';
 
-type EncodedTxOut = HexString;
-type EncodedBalance = HexString;
-type EncodedAddress = HexString;
-type EncodedAmount = HexString;
-type TxId = HexString;
-type RawUnsignedTx = HexString;
+export type EncodedTxOut = HexString;
+export type EncodedBalance = HexString;
+export type EncodedAddress = HexString;
+export type EncodedAmount = HexString;
+export type RawUnsignedTx = HexString;
 
 /**
  * carano wallets interface

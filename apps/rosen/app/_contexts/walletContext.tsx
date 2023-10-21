@@ -1,16 +1,16 @@
 import { useReducer, createContext } from 'react';
 
-import { Wallet } from '@rosen-ui/wallet-api';
+import { SupportedWallets } from '@/_types/network';
 
 type Action =
   | {
       type: 'set';
-      wallet: Wallet;
+      wallet: SupportedWallets;
     }
   | { type: 'remove' };
 type Dispatch = (action: Action) => void;
 
-type State = { selectedWallet: Wallet | null };
+type State = { selectedWallet: SupportedWallets | null };
 
 /**
  * a context to make wallet state available to all the

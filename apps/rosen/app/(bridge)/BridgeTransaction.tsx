@@ -101,7 +101,7 @@ const BridgeTransaction = () => {
           >
             <WalletIcon />
           </Avatar>
-          <Typography>{selectedWallet.name}</Typography>
+          <Typography>{selectedWallet.label}</Typography>
         </Grid>
       </PriceItem>
     );

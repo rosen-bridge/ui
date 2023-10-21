@@ -1,9 +1,9 @@
 'use server';
 
-import CardanoSerializationLib from '@emurgo/cardano-serialization-lib-browser';
-
 import { Address } from 'ergo-lib-wasm-nodejs';
 import { Networks } from '@/_constants';
+
+const CardanoSerializationLib = require('@emurgo/cardano-serialization-lib-nodejs');
 
 /**
  * server action to verify the wallet addresses

@@ -16,6 +16,11 @@ export type TxHash = Hash32;
 export type Bech32String = string;
 export type Lovelace = bigint;
 
+export type RawTxWitnessSet = HexString;
+export type RawTxOut = string[];
+export type RawValue = string;
+export type RawAddr = HexString;
+
 export declare type Paging = {
   offset: number;
   limit: number;

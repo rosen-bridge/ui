@@ -2,7 +2,10 @@
 const nextConfig = {
   experimental: {
     serverActions: true,
-    serverComponentsExternalPackages: ['ergo-lib-wasm-nodejs'],
+    serverComponentsExternalPackages: [
+      'ergo-lib-wasm-nodejs',
+      '@emurgo/cardano-serialization-lib-nodejs',
+    ],
   },
   webpack: function (config, options) {
     config.experiments = {

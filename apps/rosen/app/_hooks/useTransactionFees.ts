@@ -6,7 +6,7 @@ import {
   useCallback,
   useTransition,
 } from 'react';
-import type { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
+// import { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import JsonBigInt from '@rosen-bridge/json-bigint';
@@ -24,6 +24,7 @@ import { Networks } from '@/_constants';
  * calculates the fees for a token swap between
  * two networks
  */
+// console.log("@@@@@@@", BridgeMinimumFee);
 const useTransactionFees = (
   sourceChain: keyof typeof Networks | null,
   token: RosenChainToken | null,
@@ -36,6 +37,9 @@ const useTransactionFees = (
   const feeInfo = useRef<any>(null);
   const tokensMap = useTokensMap();
 
+  /**
+   * finds and returns a toke id based on supported networks
+   */
   const getTokenId = useCallback(
     (sourceChain: string, token: RosenChainToken) => {
       const tokenMap = new TokenMap(tokensMap);
@@ -48,6 +52,9 @@ const useTransactionFees = (
     [tokensMap],
   );
 
+  /**
+   * current selected token id
+   */
   const tokenId = useMemo(() => {
     if (sourceChain && token) {
       return getTokenId(sourceChain, token);
@@ -55,6 +62,9 @@ const useTransactionFees = (
     return null;
   }, [getTokenId, sourceChain, token]);
 
+  /**
+   * effect to fetch the fess as soon as all the required data is available
+   */
   useEffect(() => {
     if (
       sourceChain &&

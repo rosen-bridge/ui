@@ -3,3 +3,4 @@ export * from './assetEntry';
 export * from './address';
 export * from './txOut';
 export * from './assetClass';
+export * from './loaders';

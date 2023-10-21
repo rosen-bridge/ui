@@ -1,18 +1,18 @@
-import { CardanoWallet } from '@rosen-ui/wallet-api';
 import { NamiIcon } from '@rosen-bridge/icons';
 
+import { createCardanoWallet } from '@rosen-ui/wallet-api';
+
 import { connectWallet } from './connectWallet';
-import { getBalance } from './getBalance';
 
 /**
  * nautilus implementation of the ErgoWallet
  * interface to be able to interact with nautilus wallet
  */
-const NamiWallet: CardanoWallet = {
+const namiWallet = createCardanoWallet({
   icon: NamiIcon,
-  name: 'Nami',
+  name: 'nami',
+  label: 'Nami',
   connectWallet,
-  getBalance,
-};
+});
 
-export default NamiWallet;
+export default namiWallet;

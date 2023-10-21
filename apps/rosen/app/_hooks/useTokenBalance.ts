@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Wallet } from '@rosen-ui/wallet-api';
+import { SupportedWallets } from '@/_types/network';
 
 import useBridgeForm from './useBridgeForm';
 import useWallet from './useWallet';
@@ -23,7 +24,7 @@ const useTokenBalance = () => {
   const token = tokenField.value;
 
   const getAssetBalance = useCallback(
-    async (wallet: Wallet) => {
+    async (wallet: SupportedWallets) => {
       setBalanceState({ isLoading: true, amount: 0, token: null });
       const balance = await wallet.getBalance(token);
       setBalanceState({ isLoading: false, amount: +(balance || 0), token });
