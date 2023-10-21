@@ -15,6 +15,9 @@ const Nautilus: ErgoWallet = {
   label: 'Nautilus',
   connectWallet,
   getBalance,
+  createTransaction: (...args) => {
+    console.log('Ergo Create Transaction. args: ', args);
+  },
 };
 
 export default Nautilus;

@@ -14,6 +14,7 @@ import {
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useWallet from '@/_hooks/useWallet';
+import { useTransaction } from '@/_hooks/useTransaction';
 
 import { getTokenNameAndId } from '@/_utils';
 
@@ -58,10 +59,12 @@ const BridgeTransaction = () => {
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
   const WalletIcon = selectedWallet?.icon;
+  const { startTransaction } = useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
     //TODO: add create and handle transaction logic
     //local:ergo/rosen-bridge/ui/-/issues/90
+    startTransaction(+bridgeFee, +networkFee);
   });
 
   const renderFee = (

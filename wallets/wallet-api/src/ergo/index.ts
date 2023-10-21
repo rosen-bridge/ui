@@ -30,4 +30,11 @@ export interface ErgoWallet extends Wallet, Prover {
   readonly getUtxos?: () => ErgoBox[];
   readonly submitTx?: (tx: ErgoTx) => TxId;
   readonly hidden?: boolean;
+  readonly createTransaction: (
+    token: RosenChainToken,
+    toChain: string,
+    address: Address,
+    bridgeFee: number,
+    networkFee: number
+  ) => void;
 }

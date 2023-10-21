@@ -37,6 +37,13 @@ export interface CardanoWalletRaw extends Wallet {
   readonly getAddresses?: () => Address[];
   readonly getUnusedAddresses?: () => Address[];
   readonly getCollateral?: (amount: bigint) => TxOut[];
+  readonly createTransaction: (
+    token: RosenChainToken,
+    toChain: string,
+    address: Address,
+    bridgeFee: number,
+    networkFee: number
+  ) => void;
 }
 
 /**
@@ -56,6 +63,13 @@ export interface CardanoWallet extends Wallet {
   readonly getAddresses?: () => Address[];
   readonly getUnusedAddresses?: () => Address[];
   readonly getCollateral?: (amount: bigint) => TxOut[];
+  readonly createTransaction: (
+    token: RosenChainToken,
+    toChain: string,
+    address: Address,
+    bridgeFee: number,
+    networkFee: number
+  ) => void;
 }
 
 export * from './address';
