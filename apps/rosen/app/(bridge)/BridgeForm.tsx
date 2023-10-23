@@ -38,6 +38,9 @@ const FormInputs = styled(TextField)(({ theme }) => ({
       backgroundColor: theme.palette.background.header,
       boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
     },
+    'input::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
+      '-webkit-appearance': 'none',
+    },
   },
 }));
 

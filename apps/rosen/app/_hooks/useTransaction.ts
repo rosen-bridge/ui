@@ -11,6 +11,9 @@ import {
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 
+/**
+ * a react hook to create and sign and submit transactions
+ */
 export const useTransaction = () => {
   // all form values can be accessed here and they update when something changes
   const {
@@ -20,13 +23,13 @@ export const useTransaction = () => {
     amountValue,
     walletAddressValue,
     formState: { isValidating },
-    handleSubmit,
   } = useTransactionFormData();
 
   const { selectedWallet } = useWallet();
 
   // source chain height updates when the chain changes
   const { height, isLoading: isLoadingHeights } = useChainHeight();
+  const lockAddress = ' ';
 
   // this is just a simple demonstration you can use wsr or anything else
   // in this hook if needed
@@ -46,6 +49,7 @@ export const useTransaction = () => {
         walletAddressValue,
         bridgeFee,
         networkFee,
+        lockAddress,
       );
     }
   };

@@ -24,7 +24,6 @@ import { Networks } from '@/_constants';
  * calculates the fees for a token swap between
  * two networks
  */
-// console.log("@@@@@@@", BridgeMinimumFee);
 const useTransactionFees = (
   sourceChain: keyof typeof Networks | null,
   token: RosenChainToken | null,

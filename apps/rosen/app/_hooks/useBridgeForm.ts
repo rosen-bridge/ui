@@ -39,7 +39,7 @@ const useBridgeForm = () => {
     rules: {
       required: true,
       validate: async (value) =>
-        (await validateAddress(sourceField.value, value)).message,
+        (await validateAddress(targetField.value, value)).message,
     },
   });
 
