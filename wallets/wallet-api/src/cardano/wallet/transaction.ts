@@ -17,12 +17,21 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 // this function is not using an enable wrapper so the wallet must be full connected before
 // using it, if you use any of the predefined functions this problem is already handled
 
+/**
+ * a low level function to handle transactions in wallet level
+ * @param token
+ * @param toChain
+ * @param toAddress
+ * @param bridgeFee
+ * @param networkFee
+ */
 export const createTransaction = (
   token: RosenChainToken,
   toChain: string,
   toAddress: Address,
   bridgeFee: number,
-  networkFee: number
+  networkFee: number,
+  lockAddress: string
 ) => {
   // only use if absolutely necessary otherwise it is recommended to use the wrapper
   // functions that have been already defined

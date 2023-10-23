@@ -2,7 +2,6 @@ import type { RosenChainToken } from '@rosen-bridge/tokens';
 
 import {
   Address,
-  PolicyId,
   HexString,
   RawTx,
   TxOut,
@@ -14,15 +13,9 @@ import {
 import { RawUnsignedTx } from '../bridges';
 
 /**
- * cardano token info
+ * this interface represents the wallet api without
+ * any wasm decoding
  */
-export interface CradanoToken extends RosenChainToken {
-  fingerprint: string;
-  policyId: PolicyId;
-  assetName: HexString;
-  decimals: number;
-}
-
 export interface CardanoWalletRaw extends Wallet {
   readonly testnetSwitchGuideUrl?: string;
   readonly getBalance: (token: RosenChainToken) => Promise<RawValue>;
@@ -42,7 +35,8 @@ export interface CardanoWalletRaw extends Wallet {
     toChain: string,
     address: Address,
     bridgeFee: number,
-    networkFee: number
+    networkFee: number,
+    lockAddress: string
   ) => void;
 }
 
@@ -68,7 +62,8 @@ export interface CardanoWallet extends Wallet {
     toChain: string,
     address: Address,
     bridgeFee: number,
-    networkFee: number
+    networkFee: number,
+    lockAddress: string
   ) => void;
 }
 

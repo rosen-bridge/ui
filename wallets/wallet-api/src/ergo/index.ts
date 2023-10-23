@@ -35,6 +35,7 @@ export interface ErgoWallet extends Wallet, Prover {
     toChain: string,
     address: Address,
     bridgeFee: number,
-    networkFee: number
+    networkFee: number,
+    lockAddress: string
   ) => void;
 }
