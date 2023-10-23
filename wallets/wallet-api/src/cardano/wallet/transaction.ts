@@ -25,7 +25,7 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
  * @param bridgeFee
  * @param networkFee
  */
-export const createTransaction = (
+export const transfer = (
   token: RosenChainToken,
   toChain: string,
   toAddress: Address,

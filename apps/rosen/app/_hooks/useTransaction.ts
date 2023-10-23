@@ -43,7 +43,7 @@ export const useTransaction = () => {
       bridgeFee &&
       networkFee
     ) {
-      selectedWallet?.createTransaction(
+      selectedWallet?.transfer(
         tokenValue as RosenChainToken,
         targetValue,
         walletAddressValue,

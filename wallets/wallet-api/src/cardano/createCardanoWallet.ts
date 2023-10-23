@@ -3,7 +3,7 @@ import { getBalance } from './wallet/getBalance';
 import { getChangeAddress } from './wallet/getChangeAddr';
 import { sign } from './wallet/sign';
 import { submit } from './wallet/submit';
-import { createTransaction } from './wallet/transaction';
+import { transfer } from './wallet/transaction';
 import { RawTx, Wallet } from '../types';
 
 import { CardanoWalletRaw } from '.';
@@ -27,7 +27,7 @@ export const createCardanoWallet = (wallet: Wallet): CardanoWalletRaw => {
     sign: (tx: RawUnsignedTx, partialSign = false) =>
       enableWrapper(sign, tx, partialSign),
     submit: (tx: RawTx) => enableWrapper(submit, tx),
-    createTransaction,
+    transfer,
     ...wallet,
   };
 };
