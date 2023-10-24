@@ -1,4 +1,4 @@
-import { ConnectorContextApi } from '../../bridges';
+import { CipWalletApi } from '../../types';
 
-export const getChangeAddress = (context: ConnectorContextApi) =>
+export const getChangeAddress = (context: CipWalletApi) =>
   context.getChangeAddress();

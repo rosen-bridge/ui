@@ -1,7 +1,4 @@
-import { HexString, RawTx } from '../../types';
-import { ConnectorContextApi } from '../../bridges';
+import { CipWalletApi, HexString, RawTx } from '../../types';
 
-export const submit = (
-  context: ConnectorContextApi,
-  tx: RawTx
-): Promise<HexString> => context.submitTx(tx);
+export const submit = (context: CipWalletApi, tx: RawTx): Promise<HexString> =>
+  context.submitTx(tx);

@@ -1,7 +1,7 @@
-import { ConnectorContextApi } from '@rosen-ui/wallet-api';
+import { CipWalletApi } from '@rosen-ui/wallet-api';
 
 export interface ConnectorAPI {
-  enable(): Promise<ConnectorContextApi>;
+  enable(): Promise<CipWalletApi>;
   isEnabled(): Promise<boolean>;
   experimental?: unknown;
 }

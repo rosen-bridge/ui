@@ -1,7 +1,7 @@
-import { ConnectorContextApi } from '../src/index';
+import { CipWalletApi } from '../src/index';
 
 export interface ConnectorAPI {
-  enable(): Promise<ConnectorContextApi>;
+  enable(): Promise<CipWalletApi>;
   isEnabled(): Promise<boolean>;
   experimental?: unknown;
 }

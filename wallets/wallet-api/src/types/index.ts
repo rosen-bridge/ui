@@ -24,3 +24,4 @@ export interface Wallet {
 export * from './common';
 export * from './ergo';
 export * from './cardano';
+export * from './cip-wallet-api';

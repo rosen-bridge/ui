@@ -1,9 +1,9 @@
-import { ConnectorContextApi, RawUnsignedTx } from '../../bridges';
+import { CipWalletApi, RawUnsignedTx } from '../../types';
 
 import { RawTxWitnessSet } from '../../types';
 
 export const sign = (
-  context: ConnectorContextApi,
+  context: CipWalletApi,
   tx: RawUnsignedTx,
   partialSign = false
 ): Promise<RawTxWitnessSet> => context.signTx(tx, partialSign);

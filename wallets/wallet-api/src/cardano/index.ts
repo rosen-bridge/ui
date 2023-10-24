@@ -4,13 +4,12 @@ import {
   Address,
   HexString,
   RawTx,
+  RawTxOut,
+  RawUnsignedTx,
+  RawValue,
   TxOut,
   Wallet,
-  RawTxOut,
-  RawValue,
 } from '../types';
-
-import { RawUnsignedTx } from '../bridges';
 
 /**
  * this interface represents the wallet api without
@@ -69,5 +68,5 @@ export interface CardanoWallet extends Wallet {
 
 export * from './address';
 export * from './assetEntry';
-export * from './serlib';
 export * from './createCardanoWallet';
+export * from './serlib';

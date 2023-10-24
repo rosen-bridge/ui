@@ -1,18 +1,16 @@
-import { getUtxos } from './wallet/getUtxos';
+import { CipWalletApi, RawTx, RawUnsignedTx, Wallet } from '../types';
 import { getBalance } from './wallet/getBalance';
 import { getChangeAddress } from './wallet/getChangeAddr';
+import { getUtxos } from './wallet/getUtxos';
 import { sign } from './wallet/sign';
 import { submit } from './wallet/submit';
 import { transfer } from './wallet/transaction';
-import { RawTx, Wallet } from '../types';
 
 import { CardanoWalletRaw } from '.';
 
-import { ConnectorContextApi, RawUnsignedTx } from '../bridges';
-
 export const createCardanoWallet = (wallet: Wallet): CardanoWalletRaw => {
   const enableWrapper = async <T>(
-    fn: (context: ConnectorContextApi, ...rest: any[]) => Promise<T>,
+    fn: (context: CipWalletApi, ...rest: any[]) => Promise<T>,
     ...args: any[]
   ) => {
     const context = await cardano[wallet.name]?.enable();

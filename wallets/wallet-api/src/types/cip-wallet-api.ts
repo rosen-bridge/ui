@@ -1,4 +1,4 @@
-import { HexString, Paging, RawTx, TxId } from '../types';
+import { HexString, Paging, RawTx, TxId } from '.';
 
 export type EncodedTxOut = HexString;
 export type EncodedBalance = HexString;
@@ -9,7 +9,7 @@ export type RawUnsignedTx = HexString;
 /**
  * carano wallets interface
  */
-export interface ConnectorContextApi {
+export interface CipWalletApi {
   getUtxos(
     amount?: EncodedAmount,
     paginate?: Paging
