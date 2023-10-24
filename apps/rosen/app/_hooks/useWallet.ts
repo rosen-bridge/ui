@@ -1,5 +1,5 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
-import { Wallet } from '@rosen-ui/wallet-api';
+import { WalletBase } from '@rosen-ui/wallet-api';
 import { useLocalStorageManager } from '@rosen-ui/utils';
 
 import useNetwork from './useNetwork';
@@ -16,7 +16,7 @@ interface WalletDescriptor {
 /**
  * generates and return the wallet object to save in the local storage
  */
-const toWalletDescriptor = (wallet: Wallet): WalletDescriptor => {
+const toWalletDescriptor = (wallet: WalletBase): WalletDescriptor => {
   let expDate = new Date();
   return {
     name: wallet.name,

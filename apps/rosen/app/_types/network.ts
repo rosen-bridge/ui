@@ -1,5 +1,4 @@
 import { ValueOf } from '@rosen-ui/types';
-import { Wallet } from '@rosen-ui/wallet-api';
 
 import { CardanoWallet, ErgoWallet } from '@rosen-ui/wallet-api';
 

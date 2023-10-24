@@ -1,5 +1,4 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Wallet } from '@rosen-ui/wallet-api';
 import { SupportedWallets } from '@/_types/network';
 
 import useBridgeForm from './useBridgeForm';

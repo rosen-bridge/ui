@@ -1,61 +1,14 @@
 import type { RosenChainToken } from '@rosen-bridge/tokens';
 
-import {
-  Address,
-  HexString,
-  RawTx,
-  RawTxOut,
-  RawUnsignedTx,
-  RawValue,
-  TxOut,
-  Wallet,
-} from '../types';
-
-/**
- * this interface represents the wallet api without
- * any wasm decoding
- */
-export interface CardanoWalletRaw extends Wallet {
-  readonly testnetSwitchGuideUrl?: string;
-  readonly getBalance: (token: RosenChainToken) => Promise<RawValue>;
-  readonly getUtxos: () => Promise<RawTxOut>;
-  readonly getChangeAddress: () => Promise<string>;
-  readonly sign: (
-    tx: RawUnsignedTx,
-    partialSign?: boolean
-  ) => Promise<HexString>;
-  readonly submit: (tx: RawTx) => Promise<HexString>;
-  readonly getUsedAddresses?: () => Address[];
-  readonly getAddresses?: () => Address[];
-  readonly getUnusedAddresses?: () => Address[];
-  readonly getCollateral?: (amount: bigint) => TxOut[];
-  readonly transfer: (
-    token: RosenChainToken,
-    toChain: string,
-    address: Address,
-    bridgeFee: number,
-    networkFee: number,
-    lockAddress: string
-  ) => void;
-}
+import { Address, TxOut, WalletBase } from '../types';
 
 /**
  * main interface the connect and control ergo wallets
  */
-export interface CardanoWallet extends Wallet {
-  readonly testnetSwitchGuideUrl?: string;
+export interface CardanoWallet extends WalletBase {
   readonly getBalance: (token: RosenChainToken) => Promise<number>;
   readonly getChangeAddress: () => Promise<Address>;
   readonly getUtxos: () => Promise<TxOut[]>;
-  readonly submit: (tx: RawTx) => Promise<HexString>;
-  readonly sign: (
-    tx: RawUnsignedTx,
-    partialSign?: boolean
-  ) => Promise<HexString>;
-  readonly getUsedAddresses?: () => Address[];
-  readonly getAddresses?: () => Address[];
-  readonly getUnusedAddresses?: () => Address[];
-  readonly getCollateral?: (amount: bigint) => TxOut[];
   readonly transfer: (
     token: RosenChainToken,
     toChain: string,
@@ -63,10 +16,10 @@ export interface CardanoWallet extends Wallet {
     bridgeFee: number,
     networkFee: number,
     lockAddress: string
-  ) => void;
+  ) => Promise<string>;
 }
 
 export * from './address';
 export * from './assetEntry';
-export * from './createCardanoWallet';
+export * from './createRawCardanoWallet';
 export * from './serlib';

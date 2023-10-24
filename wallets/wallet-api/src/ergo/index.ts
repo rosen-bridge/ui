@@ -6,7 +6,7 @@ import {
   ErgoBox,
   ErgoTx,
   Prover,
-  Wallet,
+  WalletBase,
 } from '../types';
 
 /**
@@ -21,7 +21,7 @@ export interface ErgoToken extends RosenChainToken {
 /**
  * main interface the connect and control ergo wallets
  */
-export interface ErgoWallet extends Wallet, Prover {
+export interface ErgoWallet extends WalletBase, Prover {
   readonly getBalance: (token: RosenChainToken) => Promise<string>;
   readonly getUsedAddresses?: () => Address[];
   readonly getUnusedAddresses?: () => Address[];

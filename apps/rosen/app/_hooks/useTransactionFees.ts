@@ -1,12 +1,4 @@
-import {
-  useState,
-  useMemo,
-  useEffect,
-  useRef,
-  useCallback,
-  useTransition,
-} from 'react';
-// import { BridgeMinimumFee } from '@rosen-bridge/minimum-fee-browser';
+import { useMemo, useEffect, useRef, useCallback, useTransition } from 'react';
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import JsonBigInt from '@rosen-bridge/json-bigint';
@@ -14,9 +6,12 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
 import useChainHeight from './useChainHeight';
+import useNetwork from './useNetwork';
 import { useTokensMap } from './useTokensMap';
 
 import { feeCalculator } from '@/_actions/feeCalculator';
+
+import ErgoNetwork from '@/_networks/ergo';
 
 import { Networks } from '@/_constants';
 
@@ -32,6 +27,7 @@ const useTransactionFees = (
   const [pending, startTransition] = useTransition();
   const { openSnackbar } = useSnackbar();
   const { height, isLoading: isLoadingHeights } = useChainHeight();
+  const { selectedNetwork } = useNetwork();
 
   const feeInfo = useRef<any>(null);
   const tokensMap = useTokensMap();
@@ -61,6 +57,10 @@ const useTransactionFees = (
     return null;
   }, [getTokenId, sourceChain, token]);
 
+  useEffect(() => {
+    feeInfo.current = null;
+  }, [sourceChain]);
+
   /**
    * effect to fetch the fess as soon as all the required data is available
    */
@@ -69,11 +69,18 @@ const useTransactionFees = (
       sourceChain &&
       tokenId &&
       height &&
+      selectedNetwork &&
       tokenId !== feeInfo.current?.tokenId &&
       !pending
     ) {
       startTransition(async () => {
-        const data = await feeCalculator(sourceChain, tokenId, height);
+        const data = await feeCalculator(
+          sourceChain,
+          tokenId,
+          height,
+          ErgoNetwork.api.explorerUrl,
+          selectedNetwork.nextHeightInterval,
+        );
         if (data.status === 'success') {
           const parsedData = {
             ...data,
@@ -96,7 +103,15 @@ const useTransactionFees = (
         }
       });
     }
-  }, [sourceChain, tokenId, height, openSnackbar, pending, feeInfo]);
+  }, [
+    sourceChain,
+    tokenId,
+    height,
+    openSnackbar,
+    pending,
+    feeInfo,
+    selectedNetwork,
+  ]);
 
   const isLoading = pending || isLoadingHeights;
 

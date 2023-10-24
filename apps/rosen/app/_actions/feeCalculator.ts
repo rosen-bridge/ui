@@ -3,67 +3,43 @@
 import { BridgeMinimumFee } from '@rosen-bridge/minimum-fee';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
-import ErgoNetwork from '@/_networks/ergo';
-import CardanoNetwork from '@/_networks/cardano';
-
-import {
-  Networks,
-  ergoFeeConfigTokenId,
-  cardanoFeeConfigTokenId,
-} from '@/_constants';
-
-const cardano = new BridgeMinimumFee(
-  ErgoNetwork.api.explorerUrl,
-  cardanoFeeConfigTokenId,
-);
-
-const ergo = new BridgeMinimumFee(
-  ErgoNetwork.api.explorerUrl,
-  ergoFeeConfigTokenId,
-);
-
-const feeObjects = {
-  [Networks.ergo]: ergo,
-  [Networks.cardano]: cardano,
-};
-
-const networkObjects = {
-  [Networks.ergo]: ErgoNetwork,
-  [Networks.cardano]: CardanoNetwork,
-};
+import { Networks, feeConfigTokenId } from '@/_constants';
 
 /**
  * fetches and return the minimum fee object for a specific token in network
  *
- * @param sourceNetwork : the current selected network
- * @param tokenId: current selected tokenId
- * @param height: current chain height
+ * @param sourceNetwork
+ * @param tokenId
+ * @param height
+ * @param explorerUrl
+ * @param nextHeightInterval
  */
 
 export const feeCalculator = async (
   sourceNetwork: keyof typeof Networks,
   tokenId: string,
   height: number,
+  explorerUrl: string,
+  nextHeightInterval: number,
 ) => {
-  const chainFeeObject = feeObjects[sourceNetwork];
-  const networkObject = networkObjects[sourceNetwork];
+  const minimumFee = new BridgeMinimumFee(explorerUrl, feeConfigTokenId);
+
   const convertedNumber = Number(height);
 
   try {
     const [fees, nextFees] = await Promise.all([
-      chainFeeObject.getFee(tokenId, sourceNetwork, convertedNumber),
-      chainFeeObject.getFee(
+      minimumFee.getFee(tokenId, sourceNetwork, convertedNumber),
+      minimumFee.getFee(
         tokenId,
         sourceNetwork,
-        convertedNumber + networkObject.nextHeightInterval,
+        convertedNumber + nextHeightInterval,
       ),
     ]);
 
-    chainFeeObject.feeRatioDivisor;
     return {
       status: 'success',
       tokenId,
-      feeRatioDivisor: chainFeeObject.feeRatioDivisor,
+      feeRatioDivisor: minimumFee.feeRatioDivisor,
       data: JsonBigInt.stringify({
         fees,
         nextFees,

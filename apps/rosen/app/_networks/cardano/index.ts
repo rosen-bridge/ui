@@ -1,4 +1,4 @@
-import Nami from '@rosen-ui/nami-wallet';
+import namiWallet from '@rosen-ui/nami-wallet';
 
 import { Networks } from '@/_constants';
 
@@ -23,9 +23,9 @@ const CardanoNetwork: Network<CardanoWallet> = {
   label: 'Cardano',
   availableWallets: [
     {
-      ...Nami,
+      ...namiWallet,
       getBalance: async (token: RosenChainToken) => {
-        const rawValue = await Nami.getBalance(token);
+        const rawValue = await namiWallet.api.getBalance();
         const balances = await decodeWasmValue(rawValue);
 
         const amount = balances.find(
@@ -36,15 +36,18 @@ const CardanoNetwork: Network<CardanoWallet> = {
           : 0;
       },
       getChangeAddress: async () => {
-        const rawAddresses = await Nami.getChangeAddress();
+        const rawAddresses = await namiWallet.api.getChangeAddress();
         return await decodeWasmAddress(rawAddresses);
       },
       getUtxos: async () => {
-        const rawUtxo = await Nami.getUtxos();
+        const rawUtxo = (await namiWallet.api.getUtxos()) ?? [];
         const promiseList = rawUtxo.map(
           async (utxo) => await decodeWasmUtxos(utxo),
         );
         return await Promise.all(promiseList);
+      },
+      transfer: async (...args) => {
+        throw new Error('NotImplemented');
       },
     },
   ],
