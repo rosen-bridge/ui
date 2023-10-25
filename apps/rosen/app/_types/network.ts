@@ -1,6 +1,6 @@
 import { ValueOf } from '@rosen-ui/types';
 
-import { CardanoWallet, ErgoWallet } from '@rosen-ui/wallet-api';
+import { Wallet } from '@rosen-ui/wallet-api';
 
 import { Networks } from '@/_constants';
 
@@ -17,5 +17,6 @@ export interface Network<T> {
     explorerUrl: string;
     networkStatusUrl: string;
   };
+  lockAddress: string;
 }
-export type SupportedWallets = CardanoWallet | ErgoWallet;
+export type SupportedWallets = Wallet;

@@ -1,35 +1,21 @@
-import useWallet from './useWallet';
-import useChainHeight from './useChainHeight';
-import useTransactionFormData from './useTransactionFormData';
-
-// cardano server actions for server side decoding
-import {
-  decodeWasmValue,
-  decodeWasmAddress,
-  decodeWasmUtxos,
-} from '../_actions/cardanoDecoder';
-
 import { RosenChainToken } from '@rosen-bridge/tokens';
+
+import useLockAddress from './useLockAddress';
+import useTransactionFormData from './useTransactionFormData';
+import useWallet from './useWallet';
 
 /**
  * a react hook to create and sign and submit transactions
  */
 export const useTransaction = () => {
   // all form values can be accessed here and they update when something changes
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    walletAddressValue,
-    formState: { isValidating },
-  } = useTransactionFormData();
+  const { targetValue, tokenValue, amountValue, walletAddressValue } =
+    useTransactionFormData();
 
   const { selectedWallet } = useWallet();
 
   // source chain height updates when the chain changes
-  const { height, isLoading: isLoadingHeights } = useChainHeight();
-  const lockAddress = ' ';
+  const lockAddress = useLockAddress();
 
   // this is just a simple demonstration you can use wsr or anything else
   // in this hook if needed
@@ -39,12 +25,14 @@ export const useTransaction = () => {
     if (
       tokenValue &&
       targetValue &&
+      amountValue &&
       walletAddressValue &&
       bridgeFee &&
       networkFee
     ) {
       selectedWallet?.transfer(
         tokenValue as RosenChainToken,
+        amountValue,
         targetValue,
         walletAddressValue,
         bridgeFee,

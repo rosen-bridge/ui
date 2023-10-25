@@ -4,12 +4,8 @@ import { Networks } from '@/_constants';
 
 import { Network } from '@/_types/network';
 
-import {
-  decodeWasmValue,
-  decodeWasmAddress,
-  decodeWasmUtxos,
-} from '@/_actions/cardanoDecoder';
-import { CardanoWallet } from '@rosen-ui/wallet-api';
+import { decodeWasmValue } from '@/_actions/cardanoDecoder';
+import { Wallet } from '@rosen-ui/wallet-api';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { getDecimalString } from '@rosen-ui/utils';
 
@@ -18,14 +14,15 @@ import { getDecimalString } from '@rosen-ui/utils';
  * providing access to network info and wallets and network specific
  * functionality
  */
-const CardanoNetwork: Network<CardanoWallet> = {
+const CardanoNetwork: Network<Wallet> = {
   name: Networks.cardano,
   label: 'Cardano',
   availableWallets: [
     {
       ...namiWallet,
       getBalance: async (token: RosenChainToken) => {
-        const rawValue = await namiWallet.api.getBalance();
+        const context = await namiWallet.api.enable();
+        const rawValue = await context.getBalance();
         const balances = await decodeWasmValue(rawValue);
 
         const amount = balances.find(
@@ -35,18 +32,8 @@ const CardanoNetwork: Network<CardanoWallet> = {
           ? Number(getDecimalString(amount.quantity.toString(), token.decimals))
           : 0;
       },
-      getChangeAddress: async () => {
-        const rawAddresses = await namiWallet.api.getChangeAddress();
-        return await decodeWasmAddress(rawAddresses);
-      },
-      getUtxos: async () => {
-        const rawUtxo = (await namiWallet.api.getUtxos()) ?? [];
-        const promiseList = rawUtxo.map(
-          async (utxo) => await decodeWasmUtxos(utxo),
-        );
-        return await Promise.all(promiseList);
-      },
       transfer: async (...args) => {
+        const context = await namiWallet.api.enable();
         throw new Error('NotImplemented');
       },
     },
@@ -57,6 +44,7 @@ const CardanoNetwork: Network<CardanoWallet> = {
     explorerUrl: 'https://api.koios.rest/api',
     networkStatusUrl: 'https://api.koios.rest/api/v0/blocks?limit=1',
   },
+  lockAddress: '',
 };
 
 export default CardanoNetwork;

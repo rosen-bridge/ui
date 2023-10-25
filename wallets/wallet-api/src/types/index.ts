@@ -1,4 +1,5 @@
 import { ReactNode, FC } from 'react';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 export enum WalletState {
   NOT_CONNECTED,
@@ -20,6 +21,19 @@ export interface WalletBase {
   hidden?: boolean;
 }
 
+export interface Wallet extends WalletBase {
+  readonly getBalance: (token: RosenChainToken) => Promise<number>;
+  readonly transfer: (
+    token: RosenChainToken,
+    amount: number,
+    toChain: string,
+    address: string,
+    bridgeFee: number,
+    networkFee: number,
+    lockAddress: string
+  ) => Promise<string>;
+}
+
 export interface RawWallet<Api> extends WalletBase {
   api: Api;
 }
@@ -28,3 +42,4 @@ export * from './common';
 export * from './ergo';
 export * from './cardano';
 export * from './cip-wallet-api';
+export * from './eip-wallet-api';

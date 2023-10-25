@@ -37,7 +37,7 @@ export type UnsignedErgoTxProxy = {
 /**
  * erog wallets interface
  */
-export interface ErgoBridge {
+export interface EipWalletApi {
   request_read_access: () => Promise<boolean>;
 
   check_read_access: () => boolean;
