@@ -1,4 +1,6 @@
-import namiWallet from '@rosen-ui/nami-wallet';
+import { compact } from 'lodash-es';
+
+import getNamiWallet, { isNamiAvailable } from '@rosen-ui/nami-wallet';
 
 import { Networks } from '@/_constants';
 
@@ -17,11 +19,11 @@ import { getDecimalString } from '@rosen-ui/utils';
 const CardanoNetwork: Network<Wallet> = {
   name: Networks.cardano,
   label: 'Cardano',
-  availableWallets: [
-    {
-      ...namiWallet,
+  availableWallets: compact([
+    isNamiAvailable() && {
+      ...getNamiWallet(),
       getBalance: async (token: RosenChainToken) => {
-        const context = await namiWallet.api.enable();
+        const context = await getNamiWallet().api.enable();
         const rawValue = await context.getBalance();
         const balances = await decodeWasmValue(rawValue);
 
@@ -33,11 +35,11 @@ const CardanoNetwork: Network<Wallet> = {
           : 0;
       },
       transfer: async (...args) => {
-        const context = await namiWallet.api.enable();
+        const context = await getNamiWallet().api.enable();
         throw new Error('NotImplemented');
       },
     },
-  ],
+  ]),
   nextHeightInterval: 25,
   logo: '/cardano.svg',
   api: {

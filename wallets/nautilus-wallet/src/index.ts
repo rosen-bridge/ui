@@ -8,14 +8,18 @@ import { connectWallet } from './connectWallet';
  * interface to be able to interact with nautilus wallet
  */
 
-const Nautilus = createRawWallet(
-  {
-    icon: NautilusIcon,
-    name: 'nautilus',
-    label: 'Nautilus',
-    connectWallet,
-  },
-  ergoConnector.nautilus
-);
+const getNautilusWallet = () =>
+  createRawWallet(
+    {
+      icon: NautilusIcon,
+      name: 'Nautilus',
+      label: 'Nautilus',
+      connectWallet,
+    },
+    ergoConnector.nautilus
+  );
 
-export default Nautilus;
+export const isNautilusAvailable = () =>
+  typeof ergoConnector !== 'undefined' && !!ergoConnector.nautilus;
+
+export default getNautilusWallet;

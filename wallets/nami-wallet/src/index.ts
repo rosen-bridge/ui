@@ -8,14 +8,18 @@ import { connectWallet } from './connectWallet';
  * nautilus implementation of the Wallet
  * interface to be able to interact with nautilus wallet
  */
-const Nami = createRawWallet(
-  {
-    icon: NamiIcon,
-    name: 'nami',
-    label: 'Nami',
-    connectWallet,
-  },
-  cardano.nami
-);
+const getNamiWallet = () =>
+  createRawWallet(
+    {
+      icon: NamiIcon,
+      name: 'Nami',
+      label: 'Nami',
+      connectWallet,
+    },
+    cardano.nami
+  );
 
-export default Nami;
+export const isNamiAvailable = () =>
+  typeof cardano !== 'undefined' && cardano?.nami;
+
+export default getNamiWallet;

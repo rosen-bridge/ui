@@ -20,6 +20,4 @@ declare global {
       getContext: () => Promise<EipWalletApi>;
     };
   };
-
-  declare let ergo: EipWalletApi;
 }

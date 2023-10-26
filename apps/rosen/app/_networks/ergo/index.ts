@@ -1,4 +1,7 @@
-import Nautilus from '@rosen-ui/nautilus-wallet';
+import getNautilusWallet, {
+  isNautilusAvailable,
+} from '@rosen-ui/nautilus-wallet';
+import { compact } from 'lodash-es';
 
 import { Networks } from '@/_constants';
 
@@ -13,20 +16,20 @@ import { ErgoToken, Wallet } from '@rosen-ui/wallet-api';
 const ErgoNetwork: Network<Wallet> = {
   name: Networks.ergo,
   label: 'Ergo',
-  availableWallets: [
-    {
-      ...Nautilus,
+  availableWallets: compact([
+    isNautilusAvailable() && {
+      ...getNautilusWallet(),
       getBalance: async (token) => {
-        const context = await Nautilus.api.getContext();
+        const context = await getNautilusWallet().api.getContext();
         const balance = await context.get_balance((token as ErgoToken).tokenId);
         return +balance;
       },
       transfer: async (...args) => {
-        const context = await Nautilus.api.getContext();
+        const context = await getNautilusWallet().api.getContext();
         throw new Error('NotImplemented');
       },
     },
-  ],
+  ]),
   logo: '/ergo.svg',
   nextHeightInterval: 5,
   api: {
