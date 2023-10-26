@@ -33,9 +33,7 @@ const ErgoNetwork: Network<Wallet> = {
         const amount = BigInt(args[1] * 10 ** args[0].decimals);
         const bridgeFee = BigInt(args[4] * 10 ** args[0].decimals);
         const networkFee = BigInt(args[5] * 10 ** args[0].decimals);
-        // const address = 'addr1q8hmp5zjzvv7s7pmgemz3mvrkd2nu7609hwgsqa0auf6h7h3r6x6jn2zrt8xs3enc53f4aqks7v5g5t254fu2n8sz2wsla293a';
-        const lockAddress =
-          'nB3L2PD3JTNGWZVRVuTYLEyHwoSe4EC4zP5Wd7x1f29FimSmwmUPsaR5duxgoZ8bZdyBBpHkEHaAhPMxgaGL2KhQEezsTCdayAoWYX6mLEXDM1hGfv5ZrEq5PWA4aPCcbiefyVyrZGFA5';
+        const lockAddress = args[6];
         const changeAddress = await wallet.get_change_address();
 
         const walletUtxos = await wallet.get_utxos();
@@ -54,7 +52,6 @@ const ErgoNetwork: Network<Wallet> = {
         );
         const signedTx = await wallet.sign_tx(unsignedTx);
         const result = await wallet.submit_tx(signedTx);
-        console.log(result);
         return result;
       },
     },

@@ -48,18 +48,8 @@ const CardanoNetwork: Network<Wallet> = {
         const amount = BigInt(args[1] * 10 ** args[0].decimals);
         const bridgeFee = BigInt(args[4] * 10 ** args[0].decimals);
         const networkFee = BigInt(args[5] * 10 ** args[0].decimals);
-        // const address = '9iD5jMoLjK9azTdigyT8z1QY6qHrA6gVrJamMF8MJ2qt45pJpDc';
-        const lockAddress =
-          'addr1v9kmp9flrq8gzh287q4kku8vmad3vkrw0rwqvjas6vyrf9s9at4dn';
+        const lockAddress = args[6];
         const changeAddressHex = await wallet.getChangeAddress();
-
-        console.log([
-          toChain,
-          toAddress,
-          changeAddressHex,
-          networkFee,
-          bridgeFee,
-        ]);
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(
           toChain,
@@ -87,7 +77,6 @@ const CardanoNetwork: Network<Wallet> = {
         );
 
         const result = await wallet.submitTx(signedTxHex);
-        console.log(result);
         return result;
       },
     },
