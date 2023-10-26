@@ -7,7 +7,6 @@ import { Networks } from '@/_constants';
 
 import { Network } from '@/_types/network';
 import { ErgoToken, Wallet } from '@rosen-ui/wallet-api';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import { generateUnsignedTx } from './transaction/generateTx';
 
 /**
@@ -37,9 +36,14 @@ const ErgoNetwork: Network<Wallet> = {
         // const address = 'addr1q8hmp5zjzvv7s7pmgemz3mvrkd2nu7609hwgsqa0auf6h7h3r6x6jn2zrt8xs3enc53f4aqks7v5g5t254fu2n8sz2wsla293a';
         const lockAddress =
           'nB3L2PD3JTNGWZVRVuTYLEyHwoSe4EC4zP5Wd7x1f29FimSmwmUPsaR5duxgoZ8bZdyBBpHkEHaAhPMxgaGL2KhQEezsTCdayAoWYX6mLEXDM1hGfv5ZrEq5PWA4aPCcbiefyVyrZGFA5';
+        const changeAddress = await wallet.get_change_address();
+
+        const walletUtxos = await wallet.get_utxos();
+        if (!walletUtxos) throw Error(`No box found`);
 
         const unsignedTx = await generateUnsignedTx(
-          wallet,
+          changeAddress,
+          walletUtxos,
           lockAddress,
           toChain,
           toAddress,

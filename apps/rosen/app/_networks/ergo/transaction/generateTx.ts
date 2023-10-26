@@ -1,6 +1,6 @@
 'use server';
 
-import { EipWalletApi, UnsignedErgoTxProxy } from '@rosen-ui/wallet-api';
+import { UnsignedErgoTxProxy } from '@rosen-ui/wallet-api';
 import { fee, minBoxValue } from './consts';
 import { unsignedTransactionToProxy } from './proxyTransformation';
 import { AssetBalance } from './types';
@@ -13,11 +13,13 @@ import {
   subtractAssetBalance,
   sumAssetBalance,
 } from './utils';
-import * as wasm from 'ergo-lib-wasm-browser';
+import * as wasm from 'ergo-lib-wasm-nodejs';
+import { ErgoBoxProxy } from '@rosen-bridge/ergo-box-selection';
 
 /**
  * generates an unsigned lock transaction on Ergo
- * @param wallet
+ * @param changeAddress
+ * @param walletUtxos
  * @param lockAddress
  * @param toChain
  * @param toAddress
@@ -28,7 +30,8 @@ import * as wasm from 'ergo-lib-wasm-browser';
  * @returns
  */
 export const generateUnsignedTx = async (
-  wallet: EipWalletApi,
+  changeAddress: string,
+  walletUtxos: ErgoBoxProxy[],
   lockAddress: string,
   toChain: string,
   toAddress: string,
@@ -37,7 +40,6 @@ export const generateUnsignedTx = async (
   bridgeFee: bigint,
   networkFee: bigint,
 ): Promise<UnsignedErgoTxProxy> => {
-  const changeAddress = await wallet.get_change_address();
   const height = await getHeight();
 
   // generate lock box
@@ -71,13 +73,11 @@ export const generateUnsignedTx = async (
   });
 
   // get input boxes
-  const utxos = await wallet.get_utxos();
-  if (!utxos) throw Error(`No box found`);
   const inputs = await getCoveringBoxes(
     requiredAssets,
     [],
     new Map(),
-    utxos.values(),
+    walletUtxos.values(),
   );
   if (!inputs.covered) throw Error(`Not enough assets`);
   let inputAssets: AssetBalance = {
@@ -95,6 +95,7 @@ export const generateUnsignedTx = async (
 
   // calculate change box assets and transaction fee
   const changeAssets = subtractAssetBalance(inputAssets, lockAssets);
+  changeAssets.nativeToken -= fee;
   const changeBox = createChangeBox(changeAddress, height, changeAssets);
   const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
     wasm.BoxValue.from_i64(wasm.I64.from_str(fee.toString())),
