@@ -8,6 +8,7 @@ import {
   CardanoUtxo,
   TokenInfo,
 } from '@rosen-bridge/cardano-utxo-selection';
+import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 
 /**
  * gets Cardano protocol params
@@ -15,16 +16,33 @@ import {
  */
 export const getCardanoProtocolParams =
   async (): Promise<CardanoProtocolParams> => {
-    // TODO: fetch data from koios
-    return {
-      min_fee_a: 44,
-      min_fee_b: 155381,
-      pool_deposit: '500000000',
-      key_deposit: '2000000',
-      max_value_size: 5000,
-      max_tx_size: 16384,
-      coins_per_utxo_size: '4310',
-    };
+    const koiosClient = cardanoKoiosClientFactory(
+      'https://koios.tosidrop.io/api/v0',
+    );
+    return await koiosClient.getEpochParams().then((epochParams) => {
+      const params = epochParams[0];
+      if (
+        !params.min_fee_a ||
+        !params.min_fee_b ||
+        !params.pool_deposit ||
+        !params.key_deposit ||
+        !params.max_val_size ||
+        !params.max_tx_size ||
+        !params.coins_per_utxo_size
+      )
+        throw Error(
+          `Some required Cardano protocol params fetched from koios are undefined or null `,
+        );
+      return {
+        min_fee_a: params.min_fee_a,
+        min_fee_b: params.min_fee_b,
+        pool_deposit: params.pool_deposit,
+        key_deposit: params.key_deposit,
+        max_value_size: params.max_val_size,
+        max_tx_size: params.max_tx_size,
+        coins_per_utxo_size: params.coins_per_utxo_size,
+      };
+    });
   };
 
 /**
@@ -55,7 +73,7 @@ export const getTxBuilderConfig = (
  * generates metadata for lock transaction
  * @param toChain
  * @param toAddress
- * @param fromAddress
+ * @param fromAddressHex
  * @param networkFee
  * @param bridgeFee
  * @returns
@@ -63,10 +81,14 @@ export const getTxBuilderConfig = (
 export const generateLockAuxiliaryData = (
   toChain: string,
   toAddress: string,
-  fromAddress: string,
+  fromAddressHex: string,
   networkFee: string,
   bridgeFee: string,
-): wasm.AuxiliaryData => {
+): string => {
+  // converts hex address to bech32 address
+  const fromAddress = wasm.Address.from_hex(fromAddressHex).to_bech32();
+
+  // generate metadata json
   const metadataJson = {
     to: toChain,
     bridgeFee: bridgeFee,
@@ -103,7 +125,7 @@ export const generateLockAuxiliaryData = (
   );
   const aux = wasm.AuxiliaryData.new();
   aux.set_metadata(generalTxMetadata);
-  return aux;
+  return aux.to_hex();
 };
 
 /**
@@ -274,4 +296,30 @@ export const generateOutputBox = (
           ),
         )
         .build();
+};
+
+/**
+ * sets witness set into unsigned transaction
+ * @param transactionHex
+ * @param witnessSetHex
+ * @returns hex representation of the signed transaction
+ */
+export const setTxWitnessSet = (
+  transactionHex: string,
+  witnessSetHex: string,
+): string => {
+  const witnessSet = wasm.TransactionWitnessSet.new();
+  const tx = wasm.Transaction.from_hex(transactionHex);
+  const vKeys = wasm.TransactionWitnessSet.from_bytes(
+    Buffer.from(witnessSetHex, 'hex'),
+  ).vkeys();
+  if (vKeys) witnessSet.set_vkeys(vKeys);
+
+  const signedTx = wasm.Transaction.new(
+    tx.body(),
+    witnessSet,
+    tx.auxiliary_data(),
+  );
+
+  return signedTx.to_hex();
 };

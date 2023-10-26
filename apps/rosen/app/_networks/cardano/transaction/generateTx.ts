@@ -14,29 +14,32 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
-import { CipWalletApi } from '@rosen-ui/wallet-api';
 import { ADA_POLICY_ID } from './types';
 
 /**
  * generates a lock transaction on Cardano
  * @param wallet
  * @param lockAddress
- * @param changeAddress
+ * @param changeAddressHex
  * @param policyIdHex
  * @param assetNameHex
  * @param amount
  * @param auxiliaryData
- * @returns
+ * @returns hex representation of the unsigned tx
  */
-export const generateTxBody = async (
-  wallet: CipWalletApi,
+export const generateUnsignedTx = async (
+  walletUtxos: string[],
   lockAddress: string,
-  changeAddress: string,
+  changeAddressHex: string,
   policyIdHex: string,
   assetNameHex: string,
   amount: bigint,
-  auxiliaryData: wasm.AuxiliaryData,
-): Promise<wasm.TransactionBody> => {
+  auxiliaryDataHex: string,
+): Promise<string> => {
+  // converts hex address to bech32 address
+  const changeAddress = wasm.Address.from_hex(changeAddressHex).to_bech32();
+
+  const auxiliaryData = wasm.AuxiliaryData.from_hex(auxiliaryDataHex);
   // generate txBuilder
   const protocolParams = await getCardanoProtocolParams();
   const txBuilder = wasm.TransactionBuilder.new(
@@ -69,12 +72,7 @@ export const generateTxBody = async (
   const requiredAssets: AssetBalance = structuredClone(lockAssets);
   txBuilder.add_output(lockBox);
 
-  // TODO: type is not TxOut!!
-  const utxos = await Promise.all(
-    ((await wallet.getUtxos()) as unknown as string[]).map(
-      walletUtxoToCardanoUtxo,
-    ),
-  );
+  const utxos = await Promise.all(walletUtxos.map(walletUtxoToCardanoUtxo));
   // add required ADA estimation for tx fee and change box
   requiredAssets.nativeToken += 3000000n;
   // get input boxes
@@ -129,5 +127,9 @@ export const generateTxBody = async (
 
   // build transaction
   const txBody = txBuilder.build();
-  return txBody;
+
+  // build unsigned transaction object
+  const witnessSet = wasm.TransactionWitnessSet.new();
+  const tx = wasm.Transaction.new(txBody, witnessSet, auxiliaryData);
+  return tx.to_hex();
 };

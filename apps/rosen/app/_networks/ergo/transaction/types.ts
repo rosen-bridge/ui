@@ -1,5 +1,3 @@
-'use server';
-
 import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 
 export interface TokenInfo {

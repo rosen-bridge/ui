@@ -10,6 +10,11 @@ import { decodeWasmValue } from '@/_actions/cardanoDecoder';
 import { Wallet } from '@rosen-ui/wallet-api';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { getDecimalString } from '@rosen-ui/utils';
+import {
+  generateLockAuxiliaryData,
+  setTxWitnessSet,
+} from './transaction/utils';
+import { generateUnsignedTx } from './transaction/generateTx';
 
 /**
  * the main object for Cardano network
@@ -35,8 +40,55 @@ const CardanoNetwork: Network<Wallet> = {
           : 0;
       },
       transfer: async (...args) => {
-        const context = await getNamiWallet().api.enable();
-        throw new Error('NotImplemented');
+        const wallet = await getNamiWallet().api.enable();
+        const toChain = args[2];
+        const toAddress = args[3];
+        const policyIdHex = args[0].policyId;
+        const assetNameHex = args[0].assetName;
+        const amount = BigInt(args[1] * 10 ** args[0].decimals);
+        const bridgeFee = BigInt(args[4] * 10 ** args[0].decimals);
+        const networkFee = BigInt(args[5] * 10 ** args[0].decimals);
+        // const address = '9iD5jMoLjK9azTdigyT8z1QY6qHrA6gVrJamMF8MJ2qt45pJpDc';
+        const lockAddress =
+          'addr1v9kmp9flrq8gzh287q4kku8vmad3vkrw0rwqvjas6vyrf9s9at4dn';
+        const changeAddressHex = await wallet.getChangeAddress();
+
+        console.log([
+          toChain,
+          toAddress,
+          changeAddressHex,
+          networkFee,
+          bridgeFee,
+        ]);
+
+        const auxiliaryDataHex = generateLockAuxiliaryData(
+          toChain,
+          toAddress,
+          changeAddressHex,
+          networkFee.toString(),
+          bridgeFee.toString(),
+        );
+
+        const walletUtxos = await wallet.getUtxos();
+        if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
+        const unsignedTxHex = await generateUnsignedTx(
+          walletUtxos,
+          lockAddress,
+          changeAddressHex,
+          policyIdHex,
+          assetNameHex,
+          amount,
+          auxiliaryDataHex,
+        );
+
+        const signedTxHex = setTxWitnessSet(
+          unsignedTxHex,
+          await wallet.signTx(unsignedTxHex, false),
+        );
+
+        const result = await wallet.submitTx(signedTxHex);
+        console.log(result);
+        return result;
       },
     },
   ]),

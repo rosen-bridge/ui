@@ -1,5 +1,3 @@
-'use server';
-
 export interface CardanoProtocolParams {
   min_fee_a: number;
   min_fee_b: number;

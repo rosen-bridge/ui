@@ -4,13 +4,17 @@ import * as wasm from 'ergo-lib-wasm-nodejs';
 import { minBoxValue } from './consts';
 import { AssetBalance, BoxInfo, CoveringBoxes, TokenInfo } from './types';
 import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
+import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 
 /**
  * gets Ergo current block height
  * @returns
  */
 export const getHeight = async (): Promise<number> => {
-  return 1111000; // TODO: fix this
+  const explorerClient = ergoExplorerClientFactory(
+    'https://api.ergoplatform.com',
+  );
+  return Number((await explorerClient.v1.getApiV1Networkstate()).height);
 };
 
 /**
