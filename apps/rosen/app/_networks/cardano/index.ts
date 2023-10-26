@@ -61,7 +61,7 @@ const CardanoNetwork: Network<Wallet> = {
           bridgeFee,
         ]);
 
-        const auxiliaryDataHex = generateLockAuxiliaryData(
+        const auxiliaryDataHex = await generateLockAuxiliaryData(
           toChain,
           toAddress,
           changeAddressHex,
@@ -81,7 +81,7 @@ const CardanoNetwork: Network<Wallet> = {
           auxiliaryDataHex,
         );
 
-        const signedTxHex = setTxWitnessSet(
+        const signedTxHex = await setTxWitnessSet(
           unsignedTxHex,
           await wallet.signTx(unsignedTxHex, false),
         );

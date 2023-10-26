@@ -78,13 +78,13 @@ export const getTxBuilderConfig = (
  * @param bridgeFee
  * @returns
  */
-export const generateLockAuxiliaryData = (
+export const generateLockAuxiliaryData = async (
   toChain: string,
   toAddress: string,
   fromAddressHex: string,
   networkFee: string,
   bridgeFee: string,
-): string => {
+): Promise<string> => {
   // converts hex address to bech32 address
   const fromAddress = wasm.Address.from_hex(fromAddressHex).to_bech32();
 
@@ -304,10 +304,10 @@ export const generateOutputBox = (
  * @param witnessSetHex
  * @returns hex representation of the signed transaction
  */
-export const setTxWitnessSet = (
+export const setTxWitnessSet = async (
   transactionHex: string,
   witnessSetHex: string,
-): string => {
+): Promise<string> => {
   const witnessSet = wasm.TransactionWitnessSet.new();
   const tx = wasm.Transaction.from_hex(transactionHex);
   const vKeys = wasm.TransactionWitnessSet.from_bytes(
