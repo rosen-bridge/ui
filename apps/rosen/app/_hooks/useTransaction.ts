@@ -1,4 +1,5 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { useSnackbar } from '@rosen-bridge/ui-kit';
 
 import useLockAddress from './useLockAddress';
 import useTransactionFormData from './useTransactionFormData';
@@ -17,11 +18,13 @@ export const useTransaction = () => {
   // source chain height updates when the chain changes
   const lockAddress = useLockAddress();
 
+  const { openSnackbar } = useSnackbar();
+
   // this is just a simple demonstration you can use wsr or anything else
   // in this hook if needed
   // it is recommended to have all non general wallet specific logic in here
 
-  const startTransaction = (bridgeFee: number, networkFee: number) => {
+  const startTransaction = async (bridgeFee: number, networkFee: number) => {
     if (
       tokenValue &&
       targetValue &&
@@ -30,7 +33,7 @@ export const useTransaction = () => {
       bridgeFee &&
       networkFee
     ) {
-      selectedWallet?.transfer(
+      const txId = await selectedWallet?.transfer(
         tokenValue as RosenChainToken,
         amountValue,
         targetValue,
@@ -39,6 +42,7 @@ export const useTransaction = () => {
         networkFee,
         lockAddress,
       );
+      openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
     }
   };
 
