@@ -223,6 +223,7 @@ const generateObservationRecords = (numberOfRecords: number) => {
     requestId: 'sdfsa-dlfadf-lajdf',
     block: '',
     extractor: '',
+    status: '',
   }));
 };
 

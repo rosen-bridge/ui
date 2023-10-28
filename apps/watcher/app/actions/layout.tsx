@@ -65,7 +65,7 @@ const Actions = ({ form, text }: LayoutProps) => {
   const router = useRouter();
 
   const handleActionChange = (event: SyntheticEvent, action: string) => {
-    router.push(`/actions/${action}`);
+    // router.push(`/actions/${action}`);
   };
 
   return (

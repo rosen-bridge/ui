@@ -64,6 +64,7 @@ export interface Observation {
   requestId: string;
   block: string;
   extractor: string;
+  status: string;
 }
 
 export type ApiObservationResponse = Paginated<Observation>;

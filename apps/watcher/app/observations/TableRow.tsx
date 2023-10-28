@@ -87,6 +87,12 @@ export const tabletHeader = [
       width: 150,
     },
   },
+  {
+    title: 'Status',
+    cellProps: {
+      width: 100,
+    },
+  },
 ];
 
 export const MobileRow: FC<RowProps> = (props) => {
@@ -151,6 +157,10 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Event Id</EnhancedTableCell>
             <EnhancedTableCell>{row.requestId.slice(0, 8)}</EnhancedTableCell>
           </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Status</EnhancedTableCell>
+            <EnhancedTableCell>{row.status}</EnhancedTableCell>
+          </TableRow>
         </>
       )}
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -198,6 +208,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.requestId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.status}</EnhancedTableCell>
     </TableRow>
   );
 };
