@@ -1,10 +1,19 @@
 import { useState, FC, useMemo } from 'react';
 
-import { Button, EnhancedTableCell, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Button,
+  EnhancedTableCell,
+  TableRow,
+  Link,
+} from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import { Event } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
+
+import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
+
+import { Event } from '@/_types/api';
 
 interface RowProps extends Event {
   isLoading?: boolean;
@@ -27,19 +36,25 @@ export const mobileHeader = [
 
 export const tabletHeader = [
   {
-    title: 'ID',
+    title: 'Tx Id',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'From',
+    title: 'Token Id',
     cellProps: {
-      width: 250,
+      width: 150,
     },
   },
   {
-    title: 'To',
+    title: 'From Address',
+    cellProps: {
+      width: 150,
+    },
+  },
+  {
+    title: 'To Address',
     cellProps: {
       width: 150,
     },
@@ -48,7 +63,24 @@ export const tabletHeader = [
     title: 'Amount',
     cellProps: {
       width: 150,
-      align: 'right' as const,
+    },
+  },
+  {
+    title: 'Bridge Fee',
+    cellProps: {
+      width: 150,
+    },
+  },
+  {
+    title: 'Network Fee',
+    cellProps: {
+      width: 150,
+    },
+  },
+  {
+    title: 'Event Id',
+    cellProps: {
+      width: 150,
     },
   },
 ];
@@ -63,34 +95,66 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const rowStyles = useMemo(
     () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading]
+    [isLoading],
   );
 
   const toggleExpand = () => {
     setExpand((prevState) => !prevState);
   };
 
+  const baseTxUrl =
+    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+
   return (
     <>
-      <TableRow className="divider" sx={rowStyles}>
-        <EnhancedTableCell>Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.eventId}</EnhancedTableCell>
-      </TableRow>
-      <TableRow sx={rowStyles}>
-        <EnhancedTableCell tooltipTitle={row.fromChain}>
-          From chain
+      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+        <EnhancedTableCell>Tx Id</EnhancedTableCell>
+        <EnhancedTableCell>
+          <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
+            {row.sourceTxId.slice(0, 8)}
+          </Link>
         </EnhancedTableCell>
-        <EnhancedTableCell>{row.fromChain}</EnhancedTableCell>
       </TableRow>
-      <TableRow sx={rowStyles}>
-        <EnhancedTableCell>To chain</EnhancedTableCell>
-        <EnhancedTableCell>{row.toChain}</EnhancedTableCell>
+      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+        <EnhancedTableCell>Token Id</EnhancedTableCell>
+        <EnhancedTableCell>
+          {row.sourceChainToken.tokenId.slice(0, 8)}
+        </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+            <EnhancedTableCell>From Address</EnhancedTableCell>
+            <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+            <EnhancedTableCell>To Address</EnhancedTableCell>
+            <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(
+                row.sourceChainToken.amount.toString(),
+                row.sourceChainToken.decimals,
+              )}
+            </EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+            </EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Network Fee</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
+            </EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Event Id</EnhancedTableCell>
+            <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -113,12 +177,40 @@ export const MobileRow: FC<RowProps> = (props) => {
 
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
+
+  const baseTxUrl =
+    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.eventId}</EnhancedTableCell>
-      <EnhancedTableCell>{row.fromChain}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toChain}</EnhancedTableCell>
-      <EnhancedTableCell align="right">{row.amount}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Link
+          href={`${baseTxUrl}${row.sourceTxId}`}
+          target="_blank"
+          color="textPrimary"
+          underline="hover"
+        >
+          {row.sourceTxId.slice(0, 8)}
+        </Link>
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {row.sourceChainToken.tokenId.slice(0, 8)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(
+          row.sourceChainToken.amount.toString(),
+          row.sourceChainToken.decimals,
+        )}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
     </TableRow>
   );
 };

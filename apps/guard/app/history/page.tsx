@@ -8,12 +8,10 @@ import {
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
-import { Event } from '@rosen-ui/types';
-
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
 
-import { ApiEventResponse, ApiHistoryResponse } from '@/_types/api';
+import { ApiHistoryResponse, Event } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
   return ['/event/history', { offset, limit }];

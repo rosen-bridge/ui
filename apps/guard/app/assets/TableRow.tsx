@@ -4,6 +4,8 @@ import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
+import { getDecimalString } from '@rosen-ui/utils';
+
 import { GuardTokenInfo } from '@/_types/api';
 
 interface RowProps extends GuardTokenInfo {
@@ -62,7 +64,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const rowStyles = useMemo(
     () => (isLoading ? { opacity: 0.3 } : {}),
-    [isLoading]
+    [isLoading],
   );
 
   const toggleExpand = () => {
@@ -73,7 +75,9 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow className="divider" sx={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.tokenId}</EnhancedTableCell>
+        <EnhancedTableCell>
+          {row.isNativeToken ? '-' : row.tokenId}
+        </EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
         <EnhancedTableCell>Token name</EnhancedTableCell>
@@ -87,7 +91,9 @@ export const MobileRow: FC<RowProps> = (props) => {
         <>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount.toString()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.amount.toString(), row.decimals)}
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -112,10 +118,14 @@ export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.tokenId}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {row.isNativeToken ? '-' : row.tokenId}
+      </EnhancedTableCell>
       <EnhancedTableCell>{row.name}</EnhancedTableCell>
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
-      <EnhancedTableCell>{row.amount.toString()}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.amount.toString(), row.decimals)}
+      </EnhancedTableCell>
     </TableRow>
   );
 };

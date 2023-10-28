@@ -9,6 +9,8 @@ import {
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
+import { getDecimalString } from '@rosen-ui/utils';
+
 import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
 
 import { Revenue } from '@/_types/api';
@@ -34,7 +36,7 @@ export const mobileHeader = [
 
 export const tabletHeader = [
   {
-    title: 'Tx Id',
+    title: 'Lock Tx Id',
     cellProps: {
       width: 150,
     },
@@ -87,6 +89,12 @@ export const tabletHeader = [
       width: 150,
     },
   },
+  {
+    title: 'Reward Tx Id',
+    cellProps: {
+      width: 150,
+    },
+  },
 ];
 
 const renderValue = (value?: string | number | undefined) => {
@@ -112,7 +120,7 @@ export const MobileRow: FC<RowProps> = (props) => {
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-        <EnhancedTableCell>Tx Id</EnhancedTableCell>
+        <EnhancedTableCell>Lock Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.lockTxId}`} target="_blank">
             {row.lockTxId.slice(0, 8)}
@@ -121,7 +129,9 @@ export const MobileRow: FC<RowProps> = (props) => {
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Token Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.lockTokenId.slice(0, 8)}</EnhancedTableCell>
+        <EnhancedTableCell>
+          {row.lockToken.tokenId.slice(0, 8)}
+        </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
@@ -139,19 +149,32 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(
+                row.lockToken.amount.toString(),
+                row.lockToken.decimals,
+              )}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
-            <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
-            <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.networkFee, row.lockToken.decimals)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Event Id</EnhancedTableCell>
             <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Reward Tx Id</EnhancedTableCell>
+            <EnhancedTableCell>{row.rewardTxId.slice(0, 8)}</EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -190,14 +213,24 @@ export const TabletRow: FC<RowProps> = (props) => {
           {row.lockTxId.slice(0, 8)}
         </Link>
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockTokenId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.lockToken.tokenId.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
       <EnhancedTableCell>{row.lockHeight}</EnhancedTableCell>
-      <EnhancedTableCell>{row.amount}</EnhancedTableCell>
-      <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
-      <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(
+          row.lockToken.amount.toString(),
+          row.lockToken.decimals,
+        )}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.networkFee, row.lockToken.decimals)}
+      </EnhancedTableCell>
       <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.rewardTxId.slice(0, 8)}</EnhancedTableCell>
     </TableRow>
   );
 };

@@ -9,9 +9,9 @@ import {
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import { Event } from '@rosen-ui/types';
-
 import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
+
+import { Event } from '@/_types/api';
 
 interface RowProps extends Event {
   isLoading?: boolean;
