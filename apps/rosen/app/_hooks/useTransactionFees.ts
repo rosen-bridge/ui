@@ -121,7 +121,7 @@ const useTransactionFees = (
     : 1;
 
   // TODO: revalidate the transactions Formula
-  // local:ergo/rosen-bridge/ui/-/issues/87
+  // local:ergo/rosen-bridge/ui#87
   const transactionFees = useMemo(() => {
     let paymentAmount =
       amount && token

@@ -63,7 +63,7 @@ const BridgeTransaction = () => {
 
   const handleFormSubmit = handleSubmit(() => {
     //TODO: add create and handle transaction logic
-    //local:ergo/rosen-bridge/ui/-/issues/90
+    //local:ergo/rosen-bridge/ui#90
     startTransaction(+bridgeFee, +networkFee);
   });
 

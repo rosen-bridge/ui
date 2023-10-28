@@ -1,14 +1,14 @@
-import { ValueOf } from '@rosen-ui/types';
-
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import { Networks } from '@/_constants';
+
+type NetworksType = typeof Networks;
 
 /**
  * the main network interface for all supported networks
  */
 export interface Network<T> {
-  name: ValueOf<typeof Networks>;
+  name: NetworksType[keyof NetworksType];
   logo: string;
   label: string;
   availableWallets: T[];

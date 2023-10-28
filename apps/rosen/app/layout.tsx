@@ -14,7 +14,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     /**
      * TODO: get `lang` from url language path segment
      *
-     * local:ergo/rosen-bridge/ui/-/issues/13
+     * local:ergo/rosen-bridge/ui#13
      */
     <html lang="en">
       <body>
