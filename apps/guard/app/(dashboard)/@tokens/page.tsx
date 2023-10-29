@@ -14,7 +14,7 @@ const Tokens = () => {
   const { data: cardanoTokens, isLoading: isCardanoTokensLoading } =
     useSWR<ApiAddressAssetsResponse>(
       ['/assets', { chain: 'cardano' }],
-      fetcher
+      fetcher,
     );
 
   return (

@@ -8,6 +8,7 @@ import { Networks } from '@/_constants';
 import { Network } from '@/_types/network';
 import { ErgoToken, Wallet } from '@rosen-ui/wallet-api';
 import { generateUnsignedTx } from './transaction/generateTx';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 /**
  * the main object for Ergo network
@@ -25,15 +26,20 @@ const ErgoNetwork: Network<Wallet> = {
         const balance = await context.get_balance((token as ErgoToken).tokenId);
         return +balance;
       },
-      transfer: async (...args) => {
+      transfer: async (
+        token: RosenChainToken,
+        decimalAmount: number,
+        toChain: string,
+        toAddress: string,
+        decimalBridgeFee: number,
+        decimalNetworkFee: number,
+        lockAddress: string,
+      ) => {
         const wallet = await getNautilusWallet().api.getContext();
-        const toChain = args[2];
-        const toAddress = args[3];
-        const tokenId = args[0].tokenId;
-        const amount = BigInt(args[1] * 10 ** args[0].decimals);
-        const bridgeFee = BigInt(args[4] * 10 ** args[0].decimals);
-        const networkFee = BigInt(args[5] * 10 ** args[0].decimals);
-        const lockAddress = args[6];
+        const tokenId = token.tokenId;
+        const amount = BigInt(decimalAmount * 10 ** token.decimals);
+        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
+        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
         const changeAddress = await wallet.get_change_address();
 
         const walletUtxos = await wallet.get_utxos();

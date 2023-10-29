@@ -24,7 +24,6 @@
     "@rosen-ui/utils": "^0.0.1"
   },
   "peerDependencies": {
-    "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0"
   }
 }

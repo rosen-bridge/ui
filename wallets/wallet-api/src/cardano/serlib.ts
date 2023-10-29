@@ -1,4 +1,4 @@
-import Wasam from '@emurgo/cardano-serialization-lib-browser';
+import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 
 import { encodeHex, decodeHex } from '@rosen-ui/utils';
 import { HexString, Value, PolicyId, AssetEntry, TxOut } from '../types';
@@ -11,13 +11,13 @@ import { CardanoWasm } from '../types';
  * the cardano wallets
  */
 
-export function fromWasmValue(value: Wasam.Value): Value {
+export function fromWasmValue(value: wasm.Value): Value {
   const adaEntry = AdaEntry(BigInt(value.coin().to_str()));
   const ma = value.multiasset();
   if (ma) {
     const policies = ma.keys();
     const numPolicies = policies.len();
-    const assetsGrouped: [PolicyId, Wasam.Assets][] = [];
+    const assetsGrouped: [PolicyId, wasm.Assets][] = [];
     const totalEntries: AssetEntry[] = [];
     for (let i = 0; i < numPolicies; i++) {
       const p = policies.get(i);
@@ -43,11 +43,11 @@ export function fromWasmValue(value: Wasam.Value): Value {
   return [adaEntry];
 }
 
-export function decodeWasmValue(raw: HexString, R: typeof Wasam): Value {
+export function decodeWasmValue(raw: HexString, R: typeof wasm): Value {
   return fromWasmValue(R.Value.from_bytes(decodeHex(raw)));
 }
 
-export function fromWasmUtxo(wUtxo: Wasam.TransactionUnspentOutput): TxOut {
+export function fromWasmUtxo(wUtxo: wasm.TransactionUnspentOutput): TxOut {
   const txHash = encodeHex(wUtxo.input().transaction_id().to_bytes());
   const index = wUtxo.input().index();
   const value = fromWasmValue(wUtxo.output().amount());

@@ -6,5 +6,3 @@ export * from './input';
 export * from './prover';
 export * from './registers';
 export * from './tokenAmount';
-export * from './unsignedErgoTx';
-export * from './unsignedInput';

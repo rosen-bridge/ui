@@ -9,7 +9,7 @@ import useChainHeight from './useChainHeight';
 import useNetwork from './useNetwork';
 import { useTokensMap } from './useTokensMap';
 
-import { feeCalculator } from '@/_actions/feeCalculator';
+import { calculateFee } from '@/_actions/calculateFee';
 
 import ErgoNetwork from '@/_networks/ergo';
 
@@ -33,7 +33,7 @@ const useTransactionFees = (
   const tokensMap = useTokensMap();
 
   /**
-   * finds and returns a toke id based on supported networks
+   * finds and returns a token id based on supported networks
    */
   const getTokenId = useCallback(
     (sourceChain: string, token: RosenChainToken) => {
@@ -62,7 +62,7 @@ const useTransactionFees = (
   }, [sourceChain]);
 
   /**
-   * effect to fetch the fess as soon as all the required data is available
+   * effect to fetch the fees as soon as all the required data is available
    */
   useEffect(() => {
     if (
@@ -74,7 +74,7 @@ const useTransactionFees = (
       !pending
     ) {
       startTransition(async () => {
-        const data = await feeCalculator(
+        const data = await calculateFee(
           sourceChain,
           tokenId,
           height,

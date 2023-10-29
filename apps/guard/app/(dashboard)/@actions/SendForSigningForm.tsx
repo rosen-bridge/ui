@@ -51,7 +51,7 @@ const SendForSigningForm = () => {
         });
       } else {
         throw new Error(
-          'Server responded but the response message was unexpected'
+          'Server responded but the response message was unexpected',
         );
       }
     } catch (error: any) {

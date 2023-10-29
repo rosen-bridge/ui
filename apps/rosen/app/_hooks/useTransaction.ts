@@ -9,20 +9,14 @@ import useWallet from './useWallet';
  * a react hook to create and sign and submit transactions
  */
 export const useTransaction = () => {
-  // all form values can be accessed here and they update when something changes
   const { targetValue, tokenValue, amountValue, walletAddressValue } =
     useTransactionFormData();
 
   const { selectedWallet } = useWallet();
 
-  // source chain height updates when the chain changes
   const lockAddress = useLockAddress();
 
   const { openSnackbar } = useSnackbar();
-
-  // this is just a simple demonstration you can use wsr or anything else
-  // in this hook if needed
-  // it is recommended to have all non general wallet specific logic in here
 
   const startTransaction = async (bridgeFee: number, networkFee: number) => {
     if (

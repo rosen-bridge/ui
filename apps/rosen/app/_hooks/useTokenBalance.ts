@@ -14,7 +14,6 @@ const useTokenBalance = () => {
     amount: 0,
     token: null,
   });
-  // const { openSnackbar } = useSnackbar();
 
   const { tokenField } = useBridgeForm();
 
@@ -26,7 +25,7 @@ const useTokenBalance = () => {
     async (wallet: SupportedWallets) => {
       setBalanceState({ isLoading: true, amount: 0, token: null });
       const balance = await wallet.getBalance(token);
-      setBalanceState({ isLoading: false, amount: +(balance || 0), token });
+      setBalanceState({ isLoading: false, amount: balance || 0, token });
     },
     [token],
   );

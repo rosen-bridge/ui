@@ -25,14 +25,14 @@ export interface TableHeadItem {
 }
 
 export type TableResponsiveHead<
-  MandatoryBreakpoint extends Breakpoint = 'mobile'
+  MandatoryBreakpoint extends Breakpoint = 'mobile',
 > = {
   [Key in MandatoryBreakpoint]: TableHeadItem[];
 } & ResponsiveValueOptionsBase<TableHeadItem[]>;
 
 export type TableRowRenderProp<
   T,
-  MandatoryBreakpoint extends Breakpoint = 'mobile'
+  MandatoryBreakpoint extends Breakpoint = 'mobile',
 > = {
   [Key in MandatoryBreakpoint]: (rowData: T) => ReactNode;
 } & ResponsiveValueOptionsBase<(rowData: T) => ReactNode>;

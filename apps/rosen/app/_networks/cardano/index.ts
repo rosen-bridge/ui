@@ -39,16 +39,21 @@ const CardanoNetwork: Network<Wallet> = {
           ? Number(getDecimalString(amount.quantity.toString(), token.decimals))
           : 0;
       },
-      transfer: async (...args) => {
+      transfer: async (
+        token: RosenChainToken,
+        decimalAmount: number,
+        toChain: string,
+        toAddress: string,
+        decimalBridgeFee: number,
+        decimalNetworkFee: number,
+        lockAddress: string,
+      ) => {
         const wallet = await getNamiWallet().api.enable();
-        const toChain = args[2];
-        const toAddress = args[3];
-        const policyIdHex = args[0].policyId;
-        const assetNameHex = args[0].assetName;
-        const amount = BigInt(args[1] * 10 ** args[0].decimals);
-        const bridgeFee = BigInt(args[4] * 10 ** args[0].decimals);
-        const networkFee = BigInt(args[5] * 10 ** args[0].decimals);
-        const lockAddress = args[6];
+        const policyIdHex = token.policyId;
+        const assetNameHex = token.assetName;
+        const amount = BigInt(decimalAmount * 10 ** token.decimals);
+        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
+        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
         const changeAddressHex = await wallet.getChangeAddress();
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(

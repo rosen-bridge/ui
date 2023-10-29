@@ -17,7 +17,7 @@ interface PeriodSelectProps {
  */
 const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
   const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
-    null
+    null,
   );
   const open = !!anchorElement;
 

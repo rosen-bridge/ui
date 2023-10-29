@@ -1,18 +1,6 @@
-import { decodeHex } from '@rosen-ui/utils';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { Networks } from '@/_constants';
-
-/**
- * a utility to convert hexString to string
- * @param hex - hex string
- * @returns - parsed string
- */
-export const hexToString = (hex: string) => {
-  if (!hex) return '';
-
-  return new TextDecoder().decode(decodeHex(hex));
-};
 
 /**
  * a utility to make unique interface for accessing token name

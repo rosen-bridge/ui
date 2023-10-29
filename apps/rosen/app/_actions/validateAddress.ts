@@ -3,7 +3,7 @@
 import { Address } from 'ergo-lib-wasm-nodejs';
 import { Networks } from '@/_constants';
 
-const CardanoSerializationLib = require('@emurgo/cardano-serialization-lib-nodejs');
+import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 
 /**
  * server action to verify the wallet addresses
@@ -18,7 +18,7 @@ export const validateAddress = (
     if (chain === Networks.ergo) {
       Address.from_base58(walletAddress);
     } else if (chain === Networks.cardano) {
-      const r = CardanoSerializationLib.Address.from_bech32(walletAddress);
+      wasm.Address.from_bech32(walletAddress);
     }
     return { isValid: true };
   } catch {

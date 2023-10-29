@@ -24,7 +24,7 @@ const TableSkeleton: FC<TableSkeletonProps> = (props) => {
         ))}
       </TableRow>
     ),
-    []
+    [],
   );
 
   const renderTabletRow = useCallback(
@@ -37,7 +37,7 @@ const TableSkeleton: FC<TableSkeletonProps> = (props) => {
         ))}
       </TableRow>
     ),
-    []
+    [],
   );
 
   const tableHeaderProps = useMemo(
@@ -45,7 +45,7 @@ const TableSkeleton: FC<TableSkeletonProps> = (props) => {
       mobile: mobileHeader,
       tablet: tabletHeader,
     }),
-    []
+    [],
   );
 
   const tableRenderRowProps = useMemo(
@@ -53,7 +53,7 @@ const TableSkeleton: FC<TableSkeletonProps> = (props) => {
       mobile: renderMobileRow,
       tablet: renderTabletRow,
     }),
-    [renderMobileRow, renderTabletRow]
+    [renderMobileRow, renderTabletRow],
   );
 
   return (

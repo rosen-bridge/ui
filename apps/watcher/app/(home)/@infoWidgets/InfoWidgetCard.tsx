@@ -57,7 +57,7 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
         textAlign: 'center',
       },
     },
-  })
+  }),
 );
 
 interface InfoWidgetCardProps {

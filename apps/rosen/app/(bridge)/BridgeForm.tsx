@@ -1,4 +1,5 @@
 'use client';
+
 import { useCallback, ChangeEvent } from 'react';
 import Image from 'next/image';
 import { countDecimals } from '@rosen-ui/utils';

@@ -10,6 +10,6 @@ export interface IdProps {
  */
 export const Id = ({ id }: IdProps) => (
   <Typography noWrap variant="caption">{`${id.slice(0, 8)}...${id.slice(
-    -8
+    -8,
   )}`}</Typography>
 );

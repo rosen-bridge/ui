@@ -15,7 +15,7 @@ import { Networks, feeConfigTokenId } from '@/_constants';
  * @param nextHeightInterval
  */
 
-export const feeCalculator = async (
+export const calculateFee = async (
   sourceNetwork: keyof typeof Networks,
   tokenId: string,
   height: number,
@@ -24,16 +24,10 @@ export const feeCalculator = async (
 ) => {
   const minimumFee = new BridgeMinimumFee(explorerUrl, feeConfigTokenId);
 
-  const convertedNumber = Number(height);
-
   try {
     const [fees, nextFees] = await Promise.all([
-      minimumFee.getFee(tokenId, sourceNetwork, convertedNumber),
-      minimumFee.getFee(
-        tokenId,
-        sourceNetwork,
-        convertedNumber + nextHeightInterval,
-      ),
+      minimumFee.getFee(tokenId, sourceNetwork, height),
+      minimumFee.getFee(tokenId, sourceNetwork, height + nextHeightInterval),
     ]);
 
     return {
@@ -46,13 +40,10 @@ export const feeCalculator = async (
       }),
     };
   } catch (error) {
-    let message = 'Unknown Error';
-    if (error instanceof Error) message = error.message;
-    // we'll proceed, but let's report it
     return {
       tokenId,
       status: 'error',
-      message: message,
+      message: error instanceof Error ? error.message : 'Unknown Error',
     };
   }
 };

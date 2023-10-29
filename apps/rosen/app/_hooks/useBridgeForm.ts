@@ -2,7 +2,7 @@ import { useController } from 'react-hook-form';
 
 import useTransactionFormData from './useTransactionFormData';
 
-import { validateAddress } from '@/_actions/addressValidator';
+import { validateAddress } from '@/_actions/validateAddress';
 
 /**
  * handles the form field registrations and form state changes
