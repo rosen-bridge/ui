@@ -75,8 +75,7 @@ fn main() {
                     /*
                      * TODO: Add a mechanism to forward all stdout and stderr
                      * logs to frontend
-                     *
-                     * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/35
+                     * local:ergo/rosen-bridge/ui#35
                      */
                     if let CommandEvent::Stderr(line) = event {
                         println!("{}", line);

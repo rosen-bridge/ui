@@ -13,7 +13,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     /**
      * TODO: get `lang` from url language path segment
-     *
      * local:ergo/rosen-bridge/ui#13
      */
     <html lang="en">

@@ -2,8 +2,7 @@ import axios from 'axios';
 
 /**
  * FIXME: Remove this in favor of a dynamic baseURL
- *
- * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/43
+ * local:ergo/rosen-bridge/ui#43
  */
 axios.defaults.baseURL = '/api';
 
@@ -19,7 +18,6 @@ const fetcher = async (
     params: typeof key === 'string' ? undefined : key[1],
     /**
      * FIXME: Transform response to handle bigint values
-     *
      * local:ergo/rosen-bridge/ui#65
      */
   });

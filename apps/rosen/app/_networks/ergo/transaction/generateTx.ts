@@ -48,8 +48,10 @@ export const generateUnsignedTx = async (
     tokens: [],
   };
   if (tokenId === 'erg') {
-    // TODO: fix ergo native token name
-    // lock ERG
+    /**
+     * TODO: fix ergo native token name
+     * local:ergo/rosen-bridge/ui#100
+     */
     lockAssets.nativeToken = amount;
   } else {
     // lock token

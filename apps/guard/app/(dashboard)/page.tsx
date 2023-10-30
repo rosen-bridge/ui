@@ -2,7 +2,7 @@
 
 /**
  * TODO: Implement component as part of #10
- * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/10
+ * local:ergo/rosen-bridge/ui#10
  */
 const HomePage = () => null;
 

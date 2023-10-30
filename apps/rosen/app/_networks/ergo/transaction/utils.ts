@@ -40,7 +40,10 @@ export const createLockBox = (
   bridgeFee: bigint,
   networkFee: bigint,
 ): wasm.ErgoBoxCandidate => {
-  // TODO: fix erg token id
+  /**
+   * TODO: fix ergo native token id
+   * local:ergo/rosen-bridge/ui#100
+   */
   const boxErgValue = tokenId === 'erg' ? amount : minBoxValue;
   const lockBox = new wasm.ErgoBoxCandidateBuilder(
     wasm.BoxValue.from_i64(wasm.I64.from_str(boxErgValue.toString())),
@@ -59,7 +62,10 @@ export const createLockBox = (
     ]),
   );
 
-  // TODO: fix erg token id
+  /**
+   * TODO: fix ergo native token id
+   * local:ergo/rosen-bridge/ui#100
+   */
   if (tokenId !== 'erg') {
     lockBox.add_token(
       wasm.TokenId.from_str(tokenId),
