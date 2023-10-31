@@ -3,6 +3,7 @@ import {
   TokenChartData,
   TokenInfo,
   Paginated,
+  TokenInfoWithColdAmount,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {
@@ -19,7 +20,7 @@ export interface ApiInfoResponse {
   };
 }
 
-export interface GuardTokenInfo extends TokenInfo {
+export interface GuardTokenInfo extends TokenInfoWithColdAmount {
   chain: string;
 }
 

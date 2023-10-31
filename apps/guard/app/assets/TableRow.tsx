@@ -47,16 +47,18 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Amount',
+    title: 'Amount (Hot)',
+    cellProps: {
+      width: 150,
+    },
+  },
+  {
+    title: 'Amount (Cold)',
     cellProps: {
       width: 150,
     },
   },
 ];
-
-const renderValue = (value?: string | number | undefined) => {
-  return value || '-';
-};
 
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
@@ -90,9 +92,18 @@ export const MobileRow: FC<RowProps> = (props) => {
       {expand && (
         <>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-            <EnhancedTableCell>Amount</EnhancedTableCell>
+            <EnhancedTableCell>Amount (Hot)</EnhancedTableCell>
             <EnhancedTableCell>
               {getDecimalString(row.amount.toString(), row.decimals)}
+            </EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+            <EnhancedTableCell>Amount (Cold)</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(
+                row.coldAmount?.toString() ?? '0',
+                row.decimals,
+              )}
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -125,6 +136,9 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       <EnhancedTableCell>
         {getDecimalString(row.amount.toString(), row.decimals)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.coldAmount?.toString() ?? '0', row.decimals)}
       </EnhancedTableCell>
     </TableRow>
   );
