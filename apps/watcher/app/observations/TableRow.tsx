@@ -111,25 +111,27 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
-            {row.sourceTxId.slice(0, 8)}
+            {row.sourceTxId.slice(0, 10)}
           </Link>
         </EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Token Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {row.sourceChainTokenId.slice(0, 8)}
+          {row.sourceChainTokenId.slice(0, 10)}
         </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {row.fromAddress.slice(0, 10)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Height</EnhancedTableCell>
@@ -149,7 +151,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Event Id</EnhancedTableCell>
-            <EnhancedTableCell>{row.requestId.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>{row.requestId.slice(0, 10)}</EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -185,19 +187,19 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.sourceTxId.slice(0, 8)}
+          {row.sourceTxId.slice(0, 10)}
         </Link>
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {row.sourceChainTokenId.slice(0, 8)}
+        {row.sourceChainTokenId.slice(0, 10)}
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>{row.height}</EnhancedTableCell>
       <EnhancedTableCell>{row.amount}</EnhancedTableCell>
       <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
       <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
-      <EnhancedTableCell>{row.requestId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.requestId.slice(0, 10)}</EnhancedTableCell>
     </TableRow>
   );
 };

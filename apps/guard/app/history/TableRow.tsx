@@ -117,13 +117,13 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+        <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
-            {row.sourceTxId.slice(0, 8)}
+            {row.sourceTxId.slice(0, 10)}
           </Link>
         </EnhancedTableCell>
       </TableRow>
@@ -136,22 +136,24 @@ export const MobileRow: FC<RowProps> = (props) => {
                 href={`${ERGO_BASE_TX_URL}${row.rewardTxId}`}
                 target="_blank"
               >
-                {row.rewardTxId.slice(0, 8)}
+                {row.rewardTxId.slice(0, 10)}
               </Link>
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {row.fromAddress.slice(0, 10)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Token Id</EnhancedTableCell>
             <EnhancedTableCell>
-              {row.sourceChainToken.tokenId.slice(0, 8)}
+              {row.sourceChainToken.tokenId.slice(0, 10)}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -202,7 +204,7 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>
         <Link
           href={`${baseTxUrl}${row.sourceTxId}`}
@@ -210,7 +212,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.sourceTxId.slice(0, 8)}
+          {row.sourceTxId.slice(0, 10)}
         </Link>
       </EnhancedTableCell>
       <EnhancedTableCell>
@@ -220,13 +222,13 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.rewardTxId.slice(0, 8)}
+          {row.rewardTxId.slice(0, 10)}
         </Link>
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>
-        {row.sourceChainToken.tokenId.slice(0, 8)}
+        {row.sourceChainToken.tokenId.slice(0, 10)}
       </EnhancedTableCell>
       <EnhancedTableCell>
         {getDecimalString(

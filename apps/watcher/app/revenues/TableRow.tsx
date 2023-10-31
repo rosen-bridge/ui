@@ -75,11 +75,11 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
+        <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Token Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.tokenId.slice(0, 8)}</EnhancedTableCell>
+        <EnhancedTableCell>{row.tokenId.slice(0, 10)}</EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
@@ -129,8 +129,8 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.tokenId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.tokenId.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>
         {row.revenues.find((token) => token.tokenId === rsnToken?.tokenId)
           ?.amount ?? 0}
