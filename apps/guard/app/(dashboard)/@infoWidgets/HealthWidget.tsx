@@ -34,7 +34,7 @@ const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
       marginLeft: theme.spacing(2),
       marginRight: theme.spacing(1),
     },
-  })
+  }),
 );
 
 /**

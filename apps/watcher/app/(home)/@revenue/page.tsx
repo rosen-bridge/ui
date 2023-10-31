@@ -23,7 +23,7 @@ const Revenue = () => {
   const [period, setPeriod] = useState<ChartPeriod>('week');
   const { data, isLoading } = useSWR<ApiRevenueChartResponse>(
     ['/revenue/chart', { period }],
-    fetcher
+    fetcher,
   );
 
   return (

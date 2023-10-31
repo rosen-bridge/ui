@@ -1,1 +1,1 @@
-export { styled } from '@mui/material';
+export { styled, alpha } from '@mui/material';

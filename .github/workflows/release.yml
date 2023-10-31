@@ -18,12 +18,12 @@ jobs:
 
       - name: Install yaml2json
         run: npm install -g yamljs
-      
+
       - name: Download Contract Files
         uses: rosen-bridge/operation@V0.1
         with:
           type: ${{ vars.RELEASE_NAME }}
-      
+
       - name: Download Watcher Files
         run: |
           mkdir tmp && cd ./tmp
@@ -106,7 +106,7 @@ jobs:
           mkdir -p ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/{contracts,tokens}* ./apps/watcher/src-tauri/config/rosen/
           mv ./tmp/default* ./apps/watcher/src-tauri/config/
-      
+
       - name: Move Service File
         shell: bash
         run: |
@@ -118,7 +118,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          projectPath: "apps/watcher/"
+          projectPath: 'apps/watcher/'
 
       - name: Rename the Release files
         shell: bash
