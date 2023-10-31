@@ -68,7 +68,7 @@ export const TokenListItem = ({
             )}
           </Box>
         }
-        {...(!isNativeToken ? { secondary: <Id id={id} /> } : {})}
+        secondary={isNativeToken ? id : <Id id={id} />}
         secondaryTypographyProps={{
           component: 'div',
           style: { fontSize: theme.typography.body2.fontSize },
