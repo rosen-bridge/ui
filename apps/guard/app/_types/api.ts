@@ -35,7 +35,7 @@ export type ApiAddressAssetsResponse = Paginated<GuardTokenInfo>;
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
-export interface Event {
+export interface EventBase {
   eventId: string;
   fromChain: string;
   toChain: string;
@@ -47,9 +47,19 @@ export interface Event {
   sourceChainToken: TokenInfo;
 }
 
-export type ApiHistoryResponse = Paginated<Event>;
+export interface HistoryEvent extends EventBase {
+  paymentTxId: string;
+  rewardTxId: string;
+}
 
-export type ApiEventResponse = Paginated<Event>;
+export interface OngoingEvent extends EventBase {
+  txId: string;
+  status: string;
+}
+
+export type ApiHistoryResponse = Paginated<HistoryEvent>;
+
+export type ApiEventResponse = Paginated<OngoingEvent>;
 
 export interface Revenue {
   rewardTxId: string;

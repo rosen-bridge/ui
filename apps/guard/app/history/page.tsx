@@ -11,7 +11,7 @@ import {
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
 
-import { ApiHistoryResponse, Event } from '@/_types/api';
+import { ApiHistoryResponse, HistoryEvent } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
   return ['/event/history', { offset, limit }];
@@ -45,12 +45,12 @@ const History = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Event) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: HistoryEvent) => <MobileRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Event) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: HistoryEvent) => <TabletRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 

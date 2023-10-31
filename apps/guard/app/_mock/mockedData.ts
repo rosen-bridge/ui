@@ -10,9 +10,11 @@ import {
   ApiRevenueChartResponse,
   ApiRevenueResponse,
   ApiSignResponse,
-  ApiEventResponse,
-  ApiHistoryResponse,
-  Event,
+  ApiEventResponse as ApiOngoingEventResponse,
+  ApiHistoryResponse as ApiHistoryEventResponse,
+  EventBase,
+  HistoryEvent,
+  OngoingEvent,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -233,7 +235,9 @@ const healthStatus: ApiHealthStatusResponse = [
   },
 ];
 
-const generateEventRecords = (numberOfRecords: number): Event[] => {
+const generateHistoryEventRecords = (
+  numberOfRecords: number,
+): HistoryEvent[] => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
@@ -244,6 +248,32 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     bridgeFee: '0.2',
     networkFee: '0.03',
     sourceTxId: 'sourceId1234',
+    paymentTxId: 'asdsadfasdfasdfsadfasdf',
+    rewardTxId: 'asdfasdfasdfasdfasdfasdfas',
+    sourceChainToken: {
+      amount: 1000,
+      tokenId: '123',
+      decimals: 2,
+      name: 'hello',
+      isNativeToken: false,
+    },
+  }));
+};
+
+const generateOngoingEventRecords = (
+  numberOfRecords: number,
+): OngoingEvent[] => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    eventId: `${Math.floor(Date.now() * Math.random())}`,
+    txId: `${Math.floor(Date.now() * Math.random())}`,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    bridgeFee: '0.2',
+    networkFee: '0.03',
+    sourceTxId: 'sourceId1234',
+    status: 'completed',
     sourceChainToken: {
       amount: 1000,
       tokenId: '123',
@@ -290,14 +320,14 @@ const revenues: ApiRevenueResponse = {
   items: generateRevenueRecords(100),
 };
 
-const events: ApiEventResponse = {
+const events: ApiOngoingEventResponse = {
   total: 100,
-  items: generateEventRecords(100),
+  items: generateOngoingEventRecords(100),
 };
 
-const history: ApiHistoryResponse = {
+const history: ApiHistoryEventResponse = {
   total: 100,
-  items: generateEventRecords(100),
+  items: generateHistoryEventRecords(100),
 };
 
 const mockedData: SWRConfigProps['fakeData'] = {

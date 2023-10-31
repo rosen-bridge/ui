@@ -11,7 +11,7 @@ import {
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
 
-import { ApiEventResponse, Event } from '@/_types/api';
+import { ApiEventResponse, OngoingEvent } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
   return ['/event/ongoing', { offset, limit }];
@@ -45,12 +45,12 @@ const Events = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Event) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: OngoingEvent) => <MobileRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Event) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: OngoingEvent) => <TabletRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
