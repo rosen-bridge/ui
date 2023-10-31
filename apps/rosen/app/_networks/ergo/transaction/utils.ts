@@ -155,27 +155,21 @@ export const getCoveringBoxes = async (
 
     let trackedBox: ErgoBoxProxy | undefined = iteratorResponse.value;
     let boxInfo = getBoxInfo(trackedBox);
-    // logger.debug(`processing box [${boxInfo.id}] for covering`);
 
     // track boxes
     let skipBox = false;
     while (trackMap.has(boxInfo.id)) {
       trackedBox = trackMap.get(boxInfo.id);
       if (!trackedBox) {
-        // logger.debug(`box [${boxInfo.id}] is tracked to nothing`);
         skipBox = true;
         break;
       }
       const previousBoxId = boxInfo.id;
       boxInfo = getBoxInfo(trackedBox);
-      // logger.debug(
-      //   `box [${previousBoxId}] is tracked to box [${boxInfo.id}]`
-      // );
     }
 
     // if tracked to no box or forbidden box, skip it
     if (skipBox || forbiddenBoxIds.includes(boxInfo.id)) {
-      // logger.debug(`box [${boxInfo.id}] is skipped`);
       continue;
     }
 
@@ -190,9 +184,6 @@ export const getCoveringBoxes = async (
         const token = uncoveredTokens[tokenIndex];
         if (token.value > boxToken.value) token.value -= boxToken.value;
         else uncoveredTokens.splice(tokenIndex, 1);
-        // logger.debug(
-        //   `box [${boxInfo.id}] is selected due to need of token [${token.id}]`
-        // );
       }
     });
     if (isUseful || uncoveredNativeToken > 0n) {
@@ -201,8 +192,7 @@ export const getCoveringBoxes = async (
           ? boxInfo.assets.nativeToken
           : uncoveredNativeToken;
       result.push(trackedBox!);
-      // logger.debug(`box [${boxInfo.id}] is selected`);
-    } // else logger.debug(`box [${boxInfo.id}] is ignored`);
+    }
   }
 
   return {
