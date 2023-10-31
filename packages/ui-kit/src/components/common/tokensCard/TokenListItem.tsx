@@ -18,6 +18,7 @@ export interface TokenListItemProps {
   index: number;
   name?: string;
   value: string;
+  coldValue?: string;
   isNativeToken: boolean;
 }
 /**
@@ -34,6 +35,7 @@ export const TokenListItem = ({
   index,
   name,
   value,
+  coldValue,
   isNativeToken,
 }: TokenListItemProps) => {
   const nameOrPlaceholder = name || TOKEN_NAME_PLACEHOLDER;
@@ -49,6 +51,21 @@ export const TokenListItem = ({
           <Box sx={{ display: 'flex' }}>
             <Typography sx={{ flexGrow: 1 }}>{nameOrPlaceholder}</Typography>
             <Typography>{getDecimalString(value, decimals)}</Typography>
+            <Typography variant="caption" mt={0.25}>
+              {coldValue !== undefined && '🔥'}
+            </Typography>
+            {coldValue && (
+              <>
+                <Typography ml={0.5}>
+                  {' '}
+                  / {getDecimalString(coldValue, decimals)}
+                </Typography>
+                <Typography variant="caption" mt={0.5}>
+                  {' '}
+                  ❄️
+                </Typography>
+              </>
+            )}
           </Box>
         }
         {...(!isNativeToken ? { secondary: <Id id={id} /> } : {})}

@@ -1,11 +1,11 @@
-import { TokenInfo } from '@rosen-ui/types';
+import { TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import { List } from '../../base';
 import { TokenListItem } from './TokenListItem';
 import { TokenListItemSkeleton } from './TokenListItemSkeleton';
 
 export interface TokensListProps {
-  tokens: TokenInfo[];
+  tokens: TokenInfoWithColdAmount[];
   isLoading: boolean;
 }
 /**
@@ -30,6 +30,7 @@ export const TokensList = ({ tokens, isLoading }: TokensListProps) => (
           key={token.tokenId}
           name={token.name}
           value={token.amount.toString()}
+          coldValue={token.coldAmount?.toString()}
           isNativeToken={token.isNativeToken}
         />
       ))
