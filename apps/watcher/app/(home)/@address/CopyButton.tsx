@@ -1,4 +1,5 @@
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Copy } from '@rosen-bridge/icons';
 import {
@@ -29,18 +30,15 @@ const CopyButton = ({ address }: CopyButtonProps) => {
     setOpen(false);
   };
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(address);
-    setOpen(true);
-  };
-
   return (
     <>
-      <IconButton onClick={handleCopy} sx={{ borderRadius: 0 }}>
-        <SvgIcon>
-          <Copy />
-        </SvgIcon>
-      </IconButton>
+      <CopyToClipboard text={address} onCopy={() => setOpen(true)}>
+        <IconButton sx={{ borderRadius: 0 }}>
+          <SvgIcon>
+            <Copy />
+          </SvgIcon>
+        </IconButton>
+      </CopyToClipboard>
       <SuccessfulCopySnackbar open={open} handleClose={handleClose} />
     </>
   );
