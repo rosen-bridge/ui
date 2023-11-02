@@ -3,6 +3,7 @@ import {
   TokenChartData,
   TokenInfo,
   Paginated,
+  TokenInfoWithColdAmount,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {
@@ -13,17 +14,21 @@ export interface TokenInfoWithAddress {
 
 export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
+  rsnTokenId: string;
   balances: {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];
   };
 }
 
-export interface GuardTokenInfo extends TokenInfo {
+export interface GuardTokenInfo extends TokenInfoWithColdAmount {
   chain: string;
 }
 
-export type ApiRevenueChartResponse = TokenChartData[];
+interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
+  title: TokenInfo;
+}
+export type ApiRevenueChartResponse = GuardTokenChartData[];
 
 export interface ApiSignRequestBody {
   tx: string;
@@ -34,7 +39,7 @@ export type ApiAddressAssetsResponse = Paginated<GuardTokenInfo>;
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
-export interface Event {
+export interface EventBase {
   eventId: string;
   fromChain: string;
   toChain: string;
@@ -44,11 +49,21 @@ export interface Event {
   networkFee: string;
   sourceTxId: string;
   sourceChainToken: TokenInfo;
+  status: string;
 }
 
-export type ApiHistoryResponse = Paginated<Event>;
+export interface HistoryEvent extends EventBase {
+  paymentTxId: string;
+  rewardTxId: string;
+}
 
-export type ApiEventResponse = Paginated<Event>;
+export interface OngoingEvent extends EventBase {
+  txId: string;
+}
+
+export type ApiHistoryResponse = Paginated<HistoryEvent>;
+
+export type ApiEventResponse = Paginated<OngoingEvent>;
 
 export interface Revenue {
   rewardTxId: string;
@@ -61,6 +76,7 @@ export interface Revenue {
   bridgeFee: string;
   networkFee: string;
   lockToken: TokenInfo;
+  ergoSideTokenId: string;
   lockTxId: string;
   height: number;
   timestamp: number;

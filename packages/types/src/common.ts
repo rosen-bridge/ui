@@ -16,6 +16,10 @@ export interface TokenInfo {
   isNativeToken: boolean;
 }
 
+export interface TokenInfoWithColdAmount extends TokenInfo {
+  coldAmount?: number;
+}
+
 export interface HealthParamInfo {
   id: string;
   status: 'Healthy' | 'Unstable' | 'Broken';

@@ -1,7 +1,9 @@
 import { useState, FC, useMemo } from 'react';
+import useSWR from 'swr';
 
 import {
   Button,
+  CircularProgress,
   EnhancedTableCell,
   Link,
   TableRow,
@@ -9,11 +11,12 @@ import {
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
+import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
 
-import { Revenue } from '@/_types/api';
+import { Revenue, ApiInfoResponse } from '@/_types/api';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;
@@ -36,13 +39,19 @@ export const mobileHeader = [
 
 export const tabletHeader = [
   {
-    title: 'Lock Tx Id',
+    title: 'Event Id',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Token Id',
+    title: 'Lock TX Id',
+    cellProps: {
+      width: 150,
+    },
+  },
+  {
+    title: 'Reward TX Id',
     cellProps: {
       width: 150,
     },
@@ -60,7 +69,7 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Height',
+    title: 'Token Id',
     cellProps: {
       width: 150,
     },
@@ -84,26 +93,21 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Event Id',
-    cellProps: {
-      width: 150,
-    },
-  },
-  {
-    title: 'Reward Tx Id',
+    title: 'RSN Emission',
     cellProps: {
       width: 150,
     },
   },
 ];
 
-const renderValue = (value?: string | number | undefined) => {
-  return value || '-';
-};
-
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
+
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
+    '/info',
+    fetcher,
+  );
 
   const rowStyles = useMemo(
     () => (isLoading ? { opacity: 0.3 } : {}),
@@ -120,32 +124,45 @@ export const MobileRow: FC<RowProps> = (props) => {
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-        <EnhancedTableCell>Lock Tx Id</EnhancedTableCell>
-        <EnhancedTableCell>
-          <Link href={`${baseTxUrl}${row.lockTxId}`} target="_blank">
-            {row.lockTxId.slice(0, 8)}
-          </Link>
-        </EnhancedTableCell>
+        <EnhancedTableCell>Event Id</EnhancedTableCell>
+        <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-        <EnhancedTableCell>Token Id</EnhancedTableCell>
+        <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {row.lockToken.tokenId.slice(0, 8)}
+          <Link href={`${baseTxUrl}${row.lockTxId}`} target="_blank">
+            {row.lockTxId.slice(0, 10)}
+          </Link>
         </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+            <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Link
+                href={`${ERGO_BASE_TX_URL}${row.rewardTxId}`}
+                target="_blank"
+              >
+                {row.rewardTxId.slice(0, 10)}
+              </Link>
+            </EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {row.fromAddress.slice(0, 10)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Height</EnhancedTableCell>
-            <EnhancedTableCell>{row.lockHeight}</EnhancedTableCell>
+          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+            <EnhancedTableCell>Token Id</EnhancedTableCell>
+            <EnhancedTableCell>
+              {row.lockToken.tokenId.slice(0, 10)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
@@ -159,22 +176,51 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+              {getDecimalString(
+                row.revenues
+                  .find(
+                    (revenue) =>
+                      revenue.revenueType === 'bridge-fee' &&
+                      revenue.data.tokenId === row.ergoSideTokenId,
+                  )
+                  ?.data.amount.toString() ?? '',
+                row.lockToken.decimals,
+              )}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.networkFee, row.lockToken.decimals)}
+              {getDecimalString(
+                row.revenues
+                  .find(
+                    (revenue) =>
+                      revenue.revenueType === 'network-fee' &&
+                      revenue.data.tokenId === row.ergoSideTokenId,
+                  )
+                  ?.data.amount.toString() ?? '',
+                row.lockToken.decimals,
+              )}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Event Id</EnhancedTableCell>
-            <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
-          </TableRow>
-          <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Reward Tx Id</EnhancedTableCell>
-            <EnhancedTableCell>{row.rewardTxId.slice(0, 8)}</EnhancedTableCell>
+            <EnhancedTableCell>Emission</EnhancedTableCell>
+            <EnhancedTableCell>
+              {isInfoLoading ? (
+                <CircularProgress color="inherit" size={10} />
+              ) : (
+                getDecimalString(
+                  row.revenues
+                    .find(
+                      (revenue) =>
+                        revenue.revenueType === 'emission' &&
+                        revenue.data.tokenId === info?.rsnTokenId,
+                    )
+                    ?.data.amount.toString() ?? '',
+                  row.lockToken.decimals,
+                )
+              )}
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -198,11 +244,17 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
+    '/info',
+    fetcher,
+  );
+
   const baseTxUrl =
     row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
+      <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>
         <Link
           href={`${baseTxUrl}${row.lockTxId}`}
@@ -210,13 +262,24 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.lockTxId.slice(0, 8)}
+          {row.lockTxId.slice(0, 10)}
         </Link>
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockToken.tokenId.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.fromAddress.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toAddress.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.lockHeight}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Link
+          href={`${ERGO_BASE_TX_URL}${row.rewardTxId}`}
+          target="_blank"
+          color="textPrimary"
+          underline="hover"
+        >
+          {row.rewardTxId.slice(0, 10)}
+        </Link>
+      </EnhancedTableCell>
+      <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {row.lockToken.tokenId.slice(0, 10)}
+      </EnhancedTableCell>
       <EnhancedTableCell>
         {getDecimalString(
           row.lockToken.amount.toString(),
@@ -224,13 +287,45 @@ export const TabletRow: FC<RowProps> = (props) => {
         )}
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+        {getDecimalString(
+          row.revenues
+            .find(
+              (revenue) =>
+                revenue.revenueType === 'bridge-fee' &&
+                revenue.data.tokenId === row.ergoSideTokenId,
+            )
+            ?.data.amount.toString() ?? '',
+          row.lockToken.decimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.networkFee, row.lockToken.decimals)}
+        {getDecimalString(
+          row.revenues
+            .find(
+              (revenue) =>
+                revenue.revenueType === 'network-fee' &&
+                revenue.data.tokenId === row.ergoSideTokenId,
+            )
+            ?.data.amount.toString() ?? '',
+          row.lockToken.decimals,
+        )}
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.eventId.slice(0, 8)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.rewardTxId.slice(0, 8)}</EnhancedTableCell>
+      <EnhancedTableCell sx={{ opacity: isInfoLoading ? 0.3 : 1 }}>
+        {isInfoLoading ? (
+          <CircularProgress color="inherit" size={10} />
+        ) : (
+          getDecimalString(
+            row.revenues
+              .find(
+                (revenue) =>
+                  revenue.revenueType === 'emission' &&
+                  revenue.data.tokenId === info?.rsnTokenId,
+              )
+              ?.data.amount.toString() ?? '',
+            row.lockToken.decimals,
+          )
+        )}
+      </EnhancedTableCell>
     </TableRow>
   );
 };

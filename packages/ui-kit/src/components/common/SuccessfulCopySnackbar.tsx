@@ -13,7 +13,12 @@ export const SuccessfulCopySnackbar = ({
   open,
   handleClose,
 }: SuccessfulCopySnackbarProps) => (
-  <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+  <Snackbar
+    open={open}
+    autoHideDuration={2000}
+    onClose={handleClose}
+    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+  >
     <Alert onClose={handleClose} severity="success" variant="filled">
       Address copied to clipboard!
     </Alert>

@@ -1,11 +1,11 @@
-import { TokenInfo } from '@rosen-ui/types';
+import { TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import { FullCard } from '.';
 import { TokensList } from './tokensCard/TokensList';
 
 export interface TokensCardProps {
   title: string;
-  tokens: TokenInfo[];
+  tokens: TokenInfoWithColdAmount[];
   isLoading: boolean;
 }
 /**

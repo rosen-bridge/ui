@@ -10,9 +10,11 @@ import {
   ApiRevenueChartResponse,
   ApiRevenueResponse,
   ApiSignResponse,
-  ApiEventResponse,
-  ApiHistoryResponse,
-  Event,
+  ApiEventResponse as ApiOngoingEventResponse,
+  ApiHistoryResponse as ApiHistoryEventResponse,
+  EventBase,
+  HistoryEvent,
+  OngoingEvent,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -69,11 +71,18 @@ const info: ApiInfoResponse = {
       },
     ],
   },
+  rsnTokenId:
+    '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
 };
 
 const revenueChartWeekly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: true,
+      tokenId: 'ERG',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -85,7 +94,13 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -100,7 +115,13 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
 
 const revenueChartMonthly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -113,7 +134,13 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -128,7 +155,13 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
 ];
 const revenueChartYearly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -141,7 +174,13 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -233,7 +272,9 @@ const healthStatus: ApiHealthStatusResponse = [
   },
 ];
 
-const generateEventRecords = (numberOfRecords: number): Event[] => {
+const generateHistoryEventRecords = (
+  numberOfRecords: number,
+): HistoryEvent[] => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
@@ -244,6 +285,33 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     bridgeFee: '0.2',
     networkFee: '0.03',
     sourceTxId: 'sourceId1234',
+    paymentTxId: 'asdsadfasdfasdfsadfasdf',
+    rewardTxId: 'asdfasdfasdfasdfasdfasdfas',
+    sourceChainToken: {
+      amount: 1000,
+      tokenId: '123',
+      decimals: 2,
+      name: 'hello',
+      isNativeToken: false,
+    },
+    status: 'completed',
+  }));
+};
+
+const generateOngoingEventRecords = (
+  numberOfRecords: number,
+): OngoingEvent[] => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    eventId: `${Math.floor(Date.now() * Math.random())}`,
+    txId: `${Math.floor(Date.now() * Math.random())}`,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    bridgeFee: '0.2',
+    networkFee: '0.03',
+    sourceTxId: 'sourceId1234',
+    status: 'completed',
     sourceChainToken: {
       amount: 1000,
       tokenId: '123',
@@ -278,6 +346,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
       name: 'hello',
       isNativeToken: false,
     },
+    ergoSideTokenId:
+      '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
     height: 100,
     timestamp: Date.now(),
     status: 'Done',
@@ -290,14 +360,14 @@ const revenues: ApiRevenueResponse = {
   items: generateRevenueRecords(100),
 };
 
-const events: ApiEventResponse = {
+const events: ApiOngoingEventResponse = {
   total: 100,
-  items: generateEventRecords(100),
+  items: generateOngoingEventRecords(100),
 };
 
-const history: ApiHistoryResponse = {
+const history: ApiHistoryEventResponse = {
   total: 100,
-  items: generateEventRecords(100),
+  items: generateHistoryEventRecords(100),
 };
 
 const mockedData: SWRConfigProps['fakeData'] = {
