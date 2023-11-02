@@ -77,7 +77,12 @@ const info: ApiInfoResponse = {
 
 const revenueChartWeekly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: true,
+      tokenId: 'ERG',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -89,7 +94,13 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -104,7 +115,13 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
 
 const revenueChartMonthly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -117,7 +134,13 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -132,7 +155,13 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
 ];
 const revenueChartYearly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -145,7 +174,13 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'erg',
+    title: {
+      amount: 12345,
+      decimals: 3,
+      isNativeToken: false,
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({

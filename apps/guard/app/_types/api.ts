@@ -25,7 +25,10 @@ export interface GuardTokenInfo extends TokenInfoWithColdAmount {
   chain: string;
 }
 
-export type ApiRevenueChartResponse = TokenChartData[];
+interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
+  title: TokenInfo;
+}
+export type ApiRevenueChartResponse = GuardTokenChartData[];
 
 export interface ApiSignRequestBody {
   tx: string;
