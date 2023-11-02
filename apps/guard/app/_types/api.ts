@@ -14,6 +14,7 @@ export interface TokenInfoWithAddress {
 
 export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
+  rsnTokenId: string;
   balances: {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];
@@ -72,6 +73,7 @@ export interface Revenue {
   bridgeFee: string;
   networkFee: string;
   lockToken: TokenInfo;
+  ergoSideTokenId: string;
   lockTxId: string;
   height: number;
   timestamp: number;
