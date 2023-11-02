@@ -49,6 +49,7 @@ export interface EventBase {
   networkFee: string;
   sourceTxId: string;
   sourceChainToken: TokenInfo;
+  status: string;
 }
 
 export interface HistoryEvent extends EventBase {
@@ -58,7 +59,6 @@ export interface HistoryEvent extends EventBase {
 
 export interface OngoingEvent extends EventBase {
   txId: string;
-  status: string;
 }
 
 export type ApiHistoryResponse = Paginated<HistoryEvent>;

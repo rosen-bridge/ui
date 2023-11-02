@@ -177,6 +177,10 @@ export const MobileRow: FC<RowProps> = (props) => {
               {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
             </EnhancedTableCell>
           </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Status</EnhancedTableCell>
+            <EnhancedTableCell>{row.status}</EnhancedTableCell>
+          </TableRow>
         </>
       )}
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -242,6 +246,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
       </EnhancedTableCell>
+      <EnhancedTableCell>{row.status}</EnhancedTableCell>
     </TableRow>
   );
 };

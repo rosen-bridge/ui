@@ -294,6 +294,7 @@ const generateHistoryEventRecords = (
       name: 'hello',
       isNativeToken: false,
     },
+    status: 'completed',
   }));
 };
 
