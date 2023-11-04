@@ -180,11 +180,15 @@ const BridgeForm = () => {
   );
 
   const handleSelectMax = useCallback(() => {
-    setValue('amount', amount, {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  }, [setValue, amount]);
+    setValue(
+      'amount',
+      getDecimalString(amount.toString(), token?.decimals ?? 0),
+      {
+        shouldDirty: true,
+        shouldTouch: true,
+      },
+    );
+  }, [setValue, amount, token?.decimals]);
 
   const renderInputActions = () =>
     tokenField.value && (
