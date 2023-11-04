@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 import Image from 'next/image';
-import { countDecimals } from '@rosen-ui/utils';
+import { getNonDecimalString } from '@rosen-ui/utils';
 
 import {
   alpha,
@@ -152,10 +152,29 @@ const BridgeForm = () => {
   );
 
   const handleAmountChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (countDecimals(e.target.value) <= tokenField.value?.decimals) {
-        amountField.onChange(e);
-      }
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+
+      // match any complete or incomplete decimal number
+      const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+
+      // prevent user from entering invalid numbers
+      const isValueInvalid = !match;
+      if (isValueInvalid) return;
+
+      // prevent user from entering more decimals than token decimals
+      const isDecimalsLarge =
+        (match?.groups?.floatingDigits?.length ?? 0) >
+        tokenField.value?.decimals;
+      if (isDecimalsLarge) return;
+
+      // prevent user from entering more than token amount
+      const isAmountLarge =
+        BigInt(getNonDecimalString(newValue, tokenField.value?.decimals)) >
+        tokenField.value?.amount;
+      if (isAmountLarge) return;
+
+      amountField.onChange(event);
     },
     [amountField, tokenField],
   );
@@ -280,7 +299,6 @@ const BridgeForm = () => {
         })}
       </FormInputs>
       <FormInputs
-        type="number"
         id="amount"
         size="medium"
         label="Amount"
