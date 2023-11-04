@@ -30,8 +30,8 @@ const BridgeContainer = styled(Card)(({ theme }) => ({
   [theme.breakpoints.up('tablet')]: {
     gridTemplateColumns: '3fr auto 2fr',
     gridTemplateRows: '1fr',
-    maxWidth: '45%',
-    width: 'auto',
+    minWidth: '600px',
+    maxWidth: '40vmax',
   },
 }));
 
