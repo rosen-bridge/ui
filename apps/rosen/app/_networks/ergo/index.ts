@@ -68,7 +68,7 @@ const ErgoNetwork: Network<Wallet> = {
     explorerUrl: 'https://api.ergoplatform.com/',
     networkStatusUrl: 'https://api.ergoplatform.com/api/v1/networkState',
   },
-  lockAddress: '',
+  lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
 };
 
 export default ErgoNetwork;
