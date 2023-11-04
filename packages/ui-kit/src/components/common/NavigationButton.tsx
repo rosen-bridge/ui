@@ -57,6 +57,7 @@ interface NavButtonProps {
   icon: ReactNode;
   onClick: EventHandler<SyntheticEvent>;
   isActive?: boolean;
+  disabled?: boolean;
 }
 
 /**
@@ -66,10 +67,11 @@ interface NavButtonProps {
  * @property {ReactNode} icon - the icon for the button
  * @property {string} href - href property to set on the button
  * @property {boolean} isActive - if true the component will be rendered in active state
+ * @property {boolean} disabled - if true the component will be rendered in disabled state
  */
 
 export const NavigationButton: FC<NavButtonProps> = (props) => {
-  const { label, icon, isActive, onClick } = props;
+  const { label, icon, isActive, onClick, disabled } = props;
 
   const isMobile = useIsMobile();
 
@@ -79,6 +81,7 @@ export const NavigationButton: FC<NavButtonProps> = (props) => {
       className={isActive ? 'active' : undefined}
       startIcon={icon}
       variant="text"
+      disabled={disabled}
     >
       {isMobile && isActive ? '⬤' : label}
     </NavButtonBase>
