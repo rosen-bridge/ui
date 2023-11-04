@@ -60,7 +60,7 @@ const BridgeTransaction = () => {
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
   const WalletIcon = selectedWallet?.icon;
-  const { startTransaction } = useTransaction();
+  const { startTransaction, isSubmitting } = useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
     startTransaction(+bridgeFee, +networkFee);
@@ -172,7 +172,7 @@ const BridgeTransaction = () => {
             sx={{ width: '100%' }}
             color={selectedWallet ? 'success' : 'primary'}
             variant="contained"
-            loading={isValidating}
+            loading={isValidating || isSubmitting}
             disabled={!availableWallets}
             onClick={() => {
               if (!selectedWallet) {
