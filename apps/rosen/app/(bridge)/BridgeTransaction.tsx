@@ -68,7 +68,7 @@ const BridgeTransaction = () => {
   const renderFee = (
     title: string,
     unit: string,
-    amount: number | string,
+    amount: string,
     color: string,
   ) => {
     return (
@@ -77,11 +77,13 @@ const BridgeTransaction = () => {
 
         <Grid container flexWrap="nowrap">
           <Typography color={color} fontWeight="bold">
-            {isLoadingFees ? 'Pending...' : amount}
+            {isLoadingFees ? 'Pending...' : +amount ? amount : '-'}
           </Typography>
-          <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
-            {unit}
-          </Typography>
+          {!!+amount && (
+            <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
+              {unit}
+            </Typography>
+          )}
         </Grid>
       </PriceItem>
     );
