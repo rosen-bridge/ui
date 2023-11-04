@@ -42,6 +42,7 @@ const FeesContainer = styled('div')(({ theme }) => ({
 const BridgeTransaction = () => {
   const {
     sourceValue,
+    targetValue,
     tokenValue,
     amountValue,
     formState: { isValidating },
@@ -77,7 +78,11 @@ const BridgeTransaction = () => {
 
         <Grid container flexWrap="nowrap">
           <Typography color={color} fontWeight="bold">
-            {isLoadingFees ? 'Pending...' : +amount ? amount : '-'}
+            {isLoadingFees && sourceValue && targetValue && tokenValue
+              ? 'Pending...'
+              : +amount
+              ? amount
+              : '-'}
           </Typography>
           {!!+amount && (
             <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
