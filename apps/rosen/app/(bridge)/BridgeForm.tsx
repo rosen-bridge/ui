@@ -171,9 +171,7 @@ const BridgeForm = () => {
       // prevent user from entering more than token amount
       const isAmountLarge =
         BigInt(getNonDecimalString(newValue, tokenField.value?.decimals)) >
-        BigInt(
-          getNonDecimalString(amount.toString(), tokenField.value?.decimals),
-        );
+        BigInt(amount.toString());
       if (isAmountLarge) return;
 
       amountField.onChange(event);
