@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 import Image from 'next/image';
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import {
   alpha,
@@ -88,7 +88,7 @@ const BridgeForm = () => {
   } = useBridgeForm();
 
   const { availableNetworks, tokens, targetNetworks } = useNetwork();
-  const { isLoading, amount } = useTokenBalance();
+  const { isLoading, amount, token } = useTokenBalance();
 
   const renderSelectedAsset = (value: unknown) => {
     const network = availableNetworks.find(
@@ -188,26 +188,31 @@ const BridgeForm = () => {
     });
   }, [setValue, amount]);
 
-  const renderInputActions = () => (
-    <Grid container justifyContent="space-between">
-      <MaxButton
-        disabled={isLoading || !tokenField.value}
-        onClick={handleSelectMax}
-        color="primary"
-      >
-        <Typography variant="caption">
-          {`Balance: ${isLoading ? 'loading...' : amount}`}
-        </Typography>
-      </MaxButton>
-      <MaxButton
-        disabled={isLoading || !tokenField.value}
-        onClick={handleSelectMax}
-        color="primary"
-      >
-        MAX
-      </MaxButton>
-    </Grid>
-  );
+  const renderInputActions = () =>
+    tokenField.value && (
+      <Grid container justifyContent="space-between">
+        <MaxButton
+          disabled={isLoading || !tokenField.value}
+          onClick={handleSelectMax}
+          color="primary"
+        >
+          <Typography variant="caption">
+            {`Balance: ${
+              isLoading
+                ? 'loading...'
+                : getDecimalString(amount.toString(), token?.decimals ?? 0)
+            }`}
+          </Typography>
+        </MaxButton>
+        <MaxButton
+          disabled={isLoading || !tokenField.value}
+          onClick={handleSelectMax}
+          color="primary"
+        >
+          MAX
+        </MaxButton>
+      </Grid>
+    );
 
   return (
     <FormContainer>

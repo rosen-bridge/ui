@@ -35,9 +35,7 @@ const CardanoNetwork: Network<Wallet> = {
         const amount = balances.find(
           (asset) => asset.policyId === token.policyId,
         );
-        return amount
-          ? Number(getDecimalString(amount.quantity.toString(), token.decimals))
-          : 0;
+        return amount ? amount.quantity : 0;
       },
       transfer: async (
         token: RosenChainToken,
