@@ -6,12 +6,15 @@ import {
   createTheme,
   useMediaQuery,
 } from '@rosen-bridge/ui-kit';
+import { useLocalStorageManager } from '@rosen-ui/utils';
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
 export interface AppThemeProps {
   children: React.ReactNode;
 }
+
+type ColorModes = 'light' | 'dark';
 
 declare module '@mui/material/styles' {
   interface TypeBackground {
@@ -46,23 +49,27 @@ declare module '@mui/material/styles' {
  * provide theme and color mode
  */
 const ThemeProvider = ({ children }: AppThemeProps) => {
+  const localStorageManager = useLocalStorageManager();
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
     noSsr: true,
   });
 
+  const preferredColorMode = prefersDarkMode ? 'dark' : 'light';
+
   const [mode, setMode] = useState<'light' | 'dark'>(
-    prefersDarkMode ? 'dark' : 'light',
+    localStorageManager.get<ColorModes>('colorMode') || preferredColorMode,
   );
 
   const colorMode = useMemo(
     () => ({
       toggle: () => {
-        setMode((previousMode) =>
-          previousMode === 'light' ? 'dark' : 'light',
-        );
+        const newColorMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newColorMode);
+        localStorageManager.set('colorMode', newColorMode);
       },
     }),
-    [],
+    [localStorageManager, mode],
   );
 
   const theme = useMemo(() => {
