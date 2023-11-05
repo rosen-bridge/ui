@@ -69,6 +69,30 @@ const UnlockForm = () => {
   });
   const { handleSubmit } = formMethods;
 
+  const { amount } = formMethods.watch();
+
+  useEffect(() => {
+    if (
+      info?.permitCount.active !== info?.permitCount.total &&
+      rwtPartialToken &&
+      getNonDecimalString(amount, rwtPartialToken?.decimals) ===
+        info?.permitCount.active.toString()
+    ) {
+      setAlertData({
+        severity: 'warning',
+        message:
+          'Currently you have inactive permits, we recommend not unlocking all your permits to prevent future malfunctioning.',
+      });
+    } else {
+      setAlertData(null);
+    }
+  }, [
+    amount,
+    info?.permitCount.active,
+    info?.permitCount.total,
+    rwtPartialToken,
+  ]);
+
   useEffect(() => {
     if (!isInfoLoading && !rwtPartialToken?.amount) {
       setAlertData({
