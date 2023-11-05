@@ -1,7 +1,13 @@
-import App from './App';
-
 import fs from 'fs';
 import path from 'path';
+
+import { Metadata } from 'next';
+
+import App from './App';
+
+export const metadata: Metadata = {
+  title: 'Rosen Bridge',
+};
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   const tokensMap = JSON.parse(

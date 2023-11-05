@@ -23,7 +23,14 @@ const ErgoNetwork: Network<Wallet> = {
       ...getNautilusWallet(),
       getBalance: async (token) => {
         const context = await getNautilusWallet().api.getContext();
-        const balance = await context.get_balance((token as ErgoToken).tokenId);
+        const tokenId = (token as ErgoToken).tokenId;
+        /**
+         * The following condition is required because nautilus only accepts
+         * uppercase ERG as tokenId for the erg native token
+         */
+        const balance = await context.get_balance(
+          tokenId === 'erg' ? 'ERG' : tokenId,
+        );
         return +balance;
       },
       transfer: async (
@@ -68,7 +75,7 @@ const ErgoNetwork: Network<Wallet> = {
     explorerUrl: 'https://api.ergoplatform.com/',
     networkStatusUrl: 'https://api.ergoplatform.com/api/v1/networkState',
   },
-  lockAddress: '',
+  lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
 };
 
 export default ErgoNetwork;

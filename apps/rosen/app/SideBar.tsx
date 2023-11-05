@@ -58,6 +58,7 @@ const SideBar = () => {
             }
             onClick={() => router.push('/assets')}
             isActive={pathname.startsWith('/assets')}
+            disabled
           />
         </Grid>
         <Grid item>
@@ -70,6 +71,7 @@ const SideBar = () => {
             }
             onClick={() => router.push('/transactions')}
             isActive={pathname === '/transactions'}
+            disabled
           />
         </Grid>
         <Grid item>
@@ -82,6 +84,7 @@ const SideBar = () => {
             }
             onClick={() => router.push('/support')}
             isActive={pathname.startsWith('/support')}
+            disabled
           />
         </Grid>
         <Grid item>
@@ -94,6 +97,7 @@ const SideBar = () => {
             }
             onClick={() => router.push('/dashboard')}
             isActive={pathname.startsWith('/dashboard')}
+            disabled
           />
         </Grid>
       </Grid>

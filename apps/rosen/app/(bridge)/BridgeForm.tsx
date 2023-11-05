@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 import Image from 'next/image';
-import { countDecimals } from '@rosen-ui/utils';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import {
   alpha,
@@ -88,7 +88,7 @@ const BridgeForm = () => {
   } = useBridgeForm();
 
   const { availableNetworks, tokens, targetNetworks } = useNetwork();
-  const { isLoading, amount } = useTokenBalance();
+  const { isLoading, amount, token } = useTokenBalance();
 
   const renderSelectedAsset = (value: unknown) => {
     const network = availableNetworks.find(
@@ -152,41 +152,69 @@ const BridgeForm = () => {
   );
 
   const handleAmountChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (countDecimals(e.target.value) <= tokenField.value?.decimals) {
-        amountField.onChange(e);
-      }
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const newValue = event.target.value;
+
+      // match any complete or incomplete decimal number
+      const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+
+      // prevent user from entering invalid numbers
+      const isValueInvalid = !match;
+      if (isValueInvalid) return;
+
+      // prevent user from entering more decimals than token decimals
+      const isDecimalsLarge =
+        (match?.groups?.floatingDigits?.length ?? 0) >
+        tokenField.value?.decimals;
+      if (isDecimalsLarge) return;
+
+      // prevent user from entering more than token amount
+      const isAmountLarge =
+        BigInt(getNonDecimalString(newValue, tokenField.value?.decimals)) >
+        BigInt(amount.toString());
+      if (isAmountLarge) return;
+
+      amountField.onChange(event);
     },
-    [amountField, tokenField],
+    [amountField, tokenField, amount],
   );
 
   const handleSelectMax = useCallback(() => {
-    setValue('amount', amount, {
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  }, [setValue, amount]);
+    setValue(
+      'amount',
+      getDecimalString(amount.toString(), token?.decimals ?? 0),
+      {
+        shouldDirty: true,
+        shouldTouch: true,
+      },
+    );
+  }, [setValue, amount, token?.decimals]);
 
-  const renderInputActions = () => (
-    <Grid container justifyContent="space-between">
-      <MaxButton
-        disabled={isLoading || !tokenField.value}
-        onClick={handleSelectMax}
-        color="primary"
-      >
-        <Typography variant="caption">
-          {`Balance: ${isLoading ? 'loading...' : amount}`}
-        </Typography>
-      </MaxButton>
-      <MaxButton
-        disabled={isLoading || !tokenField.value}
-        onClick={handleSelectMax}
-        color="primary"
-      >
-        MAX
-      </MaxButton>
-    </Grid>
-  );
+  const renderInputActions = () =>
+    tokenField.value && (
+      <Grid container justifyContent="space-between">
+        <MaxButton
+          disabled={isLoading || !tokenField.value}
+          onClick={handleSelectMax}
+          color="primary"
+        >
+          <Typography variant="caption">
+            {`Balance: ${
+              isLoading
+                ? 'loading...'
+                : getDecimalString(amount.toString(), token?.decimals ?? 0)
+            }`}
+          </Typography>
+        </MaxButton>
+        <MaxButton
+          disabled={isLoading || !tokenField.value}
+          onClick={handleSelectMax}
+          color="primary"
+        >
+          MAX
+        </MaxButton>
+      </Grid>
+    );
 
   return (
     <FormContainer>
@@ -280,7 +308,6 @@ const BridgeForm = () => {
         })}
       </FormInputs>
       <FormInputs
-        type="number"
         id="amount"
         size="medium"
         label="Amount"

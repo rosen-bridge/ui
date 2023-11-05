@@ -42,6 +42,7 @@ const FeesContainer = styled('div')(({ theme }) => ({
 const BridgeTransaction = () => {
   const {
     sourceValue,
+    targetValue,
     tokenValue,
     amountValue,
     formState: { isValidating },
@@ -59,7 +60,7 @@ const BridgeTransaction = () => {
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
   const WalletIcon = selectedWallet?.icon;
-  const { startTransaction } = useTransaction();
+  const { startTransaction, isSubmitting } = useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
     startTransaction(+bridgeFee, +networkFee);
@@ -68,7 +69,7 @@ const BridgeTransaction = () => {
   const renderFee = (
     title: string,
     unit: string,
-    amount: number | string,
+    amount: string,
     color: string,
   ) => {
     return (
@@ -77,11 +78,17 @@ const BridgeTransaction = () => {
 
         <Grid container flexWrap="nowrap">
           <Typography color={color} fontWeight="bold">
-            {isLoadingFees ? 'Pending...' : amount}
+            {isLoadingFees && sourceValue && targetValue && tokenValue
+              ? 'Pending...'
+              : +amount
+              ? amount
+              : '-'}
           </Typography>
-          <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
-            {unit}
-          </Typography>
+          {!!+amount && (
+            <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
+              {unit}
+            </Typography>
+          )}
         </Grid>
       </PriceItem>
     );
@@ -165,7 +172,7 @@ const BridgeTransaction = () => {
             sx={{ width: '100%' }}
             color={selectedWallet ? 'success' : 'primary'}
             variant="contained"
-            loading={isValidating}
+            loading={isValidating || isSubmitting}
             disabled={!availableWallets}
             onClick={() => {
               if (!selectedWallet) {

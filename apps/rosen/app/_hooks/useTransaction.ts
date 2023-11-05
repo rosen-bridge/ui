@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 
@@ -13,6 +15,7 @@ export const useTransaction = () => {
     useTransactionFormData();
 
   const { selectedWallet } = useWallet();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const lockAddress = useLockAddress();
 
@@ -27,20 +30,26 @@ export const useTransaction = () => {
       bridgeFee &&
       networkFee
     ) {
-      const txId = await selectedWallet?.transfer(
-        tokenValue as RosenChainToken,
-        amountValue,
-        targetValue,
-        walletAddressValue,
-        bridgeFee,
-        networkFee,
-        lockAddress,
-      );
-      openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
+      setIsSubmitting(true);
+      try {
+        const txId = await selectedWallet?.transfer(
+          tokenValue as RosenChainToken,
+          amountValue,
+          targetValue,
+          walletAddressValue,
+          bridgeFee,
+          networkFee,
+          lockAddress,
+        );
+        openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
   return {
     startTransaction,
+    isSubmitting,
   };
 };

@@ -35,9 +35,7 @@ const CardanoNetwork: Network<Wallet> = {
         const amount = balances.find(
           (asset) => asset.policyId === token.policyId,
         );
-        return amount
-          ? Number(getDecimalString(amount.quantity.toString(), token.decimals))
-          : 0;
+        return amount ? Number(amount.quantity) : 0;
       },
       transfer: async (
         token: RosenChainToken,
@@ -92,7 +90,7 @@ const CardanoNetwork: Network<Wallet> = {
     explorerUrl: 'https://api.koios.rest/api',
     networkStatusUrl: 'https://api.koios.rest/api/v0/blocks?limit=1',
   },
-  lockAddress: '',
+  lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
 };
 
 export default CardanoNetwork;

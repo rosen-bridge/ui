@@ -37,7 +37,6 @@ const useBridgeForm = () => {
     name: 'walletAddress',
     control,
     rules: {
-      required: true,
       validate: async (value) =>
         (await validateAddress(targetField.value, value)).message,
     },
