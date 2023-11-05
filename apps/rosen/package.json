@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --include-prereleases"
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --include-prereleases",
+    "build:vercel": "./build.sh"
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
