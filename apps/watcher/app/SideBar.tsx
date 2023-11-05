@@ -97,10 +97,6 @@ const SideBar = () => {
           />
         </Grid>
       </Grid>
-      {/*
-        TODO: implement toolbar component
-        local:ergo/rosen-bridge/ui#9
-      */}
     </AppBar>
   );
 };
