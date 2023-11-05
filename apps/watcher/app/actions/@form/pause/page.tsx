@@ -1,8 +1,8 @@
 'use client';
 
 /**
- * TODO: Implement component as part of #9
- * local:ergo/rosen-bridge/ui#9
+ * TODO: add pause form
+ * local:ergo/rosen-bridge/ui#142
  */
 const PauseForm = () => null;
 
