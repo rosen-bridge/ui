@@ -16,6 +16,7 @@ import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
@@ -50,6 +51,8 @@ const UnlockForm = () => {
     [info, rsnToken],
   );
 
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
     message: string;
@@ -67,15 +70,15 @@ const UnlockForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, watch } = formMethods;
 
-  const { amount } = formMethods.watch();
+  const formData = watch();
 
   useEffect(() => {
     if (
       info?.permitCount.active !== info?.permitCount.total &&
       rwtPartialToken &&
-      getNonDecimalString(amount, rwtPartialToken?.decimals) ===
+      getNonDecimalString(formData.amount, rwtPartialToken?.decimals) ===
         info?.permitCount.active.toString()
     ) {
       setAlertData({
@@ -87,7 +90,7 @@ const UnlockForm = () => {
       setAlertData(null);
     }
   }, [
-    amount,
+    formData.amount,
     info?.permitCount.active,
     info?.permitCount.total,
     rwtPartialToken,
@@ -104,11 +107,12 @@ const UnlockForm = () => {
     }
   }, [isInfoLoading, rwtPartialToken?.amount]);
 
-  const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
-    data,
-  ) => {
+  const submit = async () => {
     try {
-      const count = getNonDecimalString(data.amount, rsnToken?.decimals ?? 0);
+      const count = getNonDecimalString(
+        formData.amount,
+        rsnToken?.decimals ?? 0,
+      );
       const response = await trigger({ count });
 
       if (response?.txId) {
@@ -129,6 +133,10 @@ const UnlockForm = () => {
         message: error.message,
       });
     }
+  };
+
+  const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
+    setConfirmationModalOpen(true);
   };
 
   const renderAlert = () => (
@@ -163,6 +171,22 @@ const UnlockForm = () => {
         <SubmitButton loading={isUnlockPending} disabled={disabled}>
           Unlock
         </SubmitButton>
+
+        <ConfirmationModal
+          open={confirmationModalOpen}
+          title="Confirm Unlock"
+          /**
+           * TODO: The content should show the amounts of collateral and
+           * unlocked RSNs
+           * local:ergo/rosen-bridge/ui#104
+           */
+          content={`You are going to unlock ${formData.amount} ${
+            rsnToken?.name ?? 'token'
+          }.`}
+          buttonText="Unlock"
+          handleClose={() => setConfirmationModalOpen(false)}
+          onConfirm={submit}
+        />
       </form>
     </FormProvider>
   );

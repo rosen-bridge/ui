@@ -14,6 +14,7 @@ import {
 import { mutator } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
@@ -24,6 +25,8 @@ import { ApiPermitRequestBody, ApiPermitResponse } from '@/_types/api';
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
@@ -51,13 +54,12 @@ const LockForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit } = formMethods;
+  const { handleSubmit, watch } = formMethods;
 
-  const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async (
-    data,
-  ) => {
+  const formData = watch();
+  const submit = async () => {
     try {
-      const count = getNonDecimalString(data.amount, rsnToken!.decimals);
+      const count = getNonDecimalString(formData.amount, rsnToken!.decimals);
 
       const response = await trigger({ count });
 
@@ -79,6 +81,10 @@ const LockForm = () => {
         message: error.message,
       });
     }
+  };
+
+  const onSubmit: SubmitHandler<TokenAmountCompatibleFormSchema> = async () => {
+    setConfirmationModalOpen(true);
   };
 
   const renderAlert = () => (
@@ -113,6 +119,22 @@ const LockForm = () => {
           {' '}
           Lock
         </SubmitButton>
+
+        <ConfirmationModal
+          open={confirmationModalOpen}
+          title="Confirm Lock"
+          /**
+           * TODO: The content should show the amounts of collateral and
+           * received permits
+           * local:ergo/rosen-bridge/ui#104
+           */
+          content={`You are going to lock ${formData.amount} ${
+            rsnToken?.name ?? 'token'
+          }. You will get some reporting permits in return.`}
+          buttonText="Lock"
+          handleClose={() => setConfirmationModalOpen(false)}
+          onConfirm={submit}
+        />
       </form>
     </FormProvider>
   );

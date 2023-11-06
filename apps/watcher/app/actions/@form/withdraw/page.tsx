@@ -26,6 +26,7 @@ import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
@@ -53,6 +54,8 @@ const WithdrawForm = () => {
     () => data?.items.filter((token) => !!token.amount),
     [data],
   );
+
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
@@ -82,7 +85,9 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register } = formMethods;
+  const { handleSubmit, control, resetField, register, watch } = formMethods;
+
+  const formData = watch();
 
   const { field: tokenIdField } = useController({
     control,
@@ -100,15 +105,15 @@ const WithdrawForm = () => {
     }
   }, [tokens, resetField, tokenIdField.value]);
 
-  const onSubmit: SubmitHandler<Form> = async (data) => {
+  const submit = async () => {
     try {
       const response = await trigger({
-        address: data.address,
+        address: formData.address,
         tokens: [
           {
-            tokenId: data.tokenId,
+            tokenId: formData.tokenId,
             amount: BigInt(
-              getNonDecimalString(data.amount, selectedToken!.decimals),
+              getNonDecimalString(formData.amount, selectedToken!.decimals),
             ),
           },
         ],
@@ -129,6 +134,10 @@ const WithdrawForm = () => {
         message: error.message,
       });
     }
+  };
+
+  const onSubmit: SubmitHandler<Form> = () => {
+    setConfirmationModalOpen(true);
   };
 
   const renderAlert = () => (
@@ -205,6 +214,15 @@ const WithdrawForm = () => {
         <SubmitButton disabled={disabled} loading={isWithdrawPending}>
           Withdraw
         </SubmitButton>
+
+        <ConfirmationModal
+          open={confirmationModalOpen}
+          title="Confirm Withdraw"
+          content={`You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`}
+          buttonText="Withdraw"
+          handleClose={() => setConfirmationModalOpen(false)}
+          onConfirm={submit}
+        />
       </form>
     </FormProvider>
   );
