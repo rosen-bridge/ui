@@ -154,7 +154,10 @@ const WalletWidget = ({
                         text={tokenInfoWithAddress.address}
                         onCopy={handleCopy}
                       >
-                        <IconButton size="small">
+                        <IconButton
+                          size="small"
+                          sx={{ color: (theme) => theme.palette.common.white }}
+                        >
                           <SvgIcon fontSize="small">
                             <Copy />
                           </SvgIcon>
@@ -162,6 +165,7 @@ const WalletWidget = ({
                       </CopyToClipboard>
                       <IconButton
                         size="small"
+                        sx={{ color: (theme) => theme.palette.common.white }}
                         onClick={() =>
                           setModalAddress(tokenInfoWithAddress.address)
                         }
