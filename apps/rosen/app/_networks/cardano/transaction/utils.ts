@@ -17,7 +17,7 @@ import axios from 'axios';
 export const getCardanoProtocolParams =
   async (): Promise<CardanoProtocolParams> => {
     const koiosClient = axios.create({
-      baseURL: 'https://koios.tosidrop.io/api/v0',
+      baseURL: 'https://koios.tosidrop.io/api/v1',
       timeout: 60000,
     });
     return await koiosClient.get('/epoch_params').then((res) => {
