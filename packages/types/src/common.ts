@@ -1,7 +1,7 @@
 export type ChartPeriod = 'week' | 'month' | 'year';
 
 export interface TokenChartData {
-  title: string;
+  title: TokenInfo;
   data: {
     label: string;
     amount: string;
