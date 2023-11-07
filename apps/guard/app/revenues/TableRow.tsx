@@ -81,19 +81,19 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Bridge Fee',
+    title: 'Bridge Fee (RSN)',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Network Fee',
+    title: 'Network Fee (RSN)',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'RSN Emission',
+    title: 'Emission (RSN)',
     cellProps: {
       width: 150,
     },
@@ -174,7 +174,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
+            <EnhancedTableCell>Bridge Fee (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               {getDecimalString(
                 row.revenues
@@ -189,7 +189,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Network Fee</EnhancedTableCell>
+            <EnhancedTableCell>Network Fee (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               {getDecimalString(
                 row.revenues
@@ -204,7 +204,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell>Emission</EnhancedTableCell>
+            <EnhancedTableCell>Emission (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               {isInfoLoading ? (
                 <CircularProgress color="inherit" size={10} />
