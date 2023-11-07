@@ -115,7 +115,7 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
               py: 10,
             }}
           >
-            {props.emptyPlaceholder || 'No data to show'}
+            {props.emptyPlaceholder ?? 'No data to show'}
           </TableCell>
         </TableRow>
       )}
