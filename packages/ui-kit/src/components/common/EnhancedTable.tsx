@@ -52,6 +52,7 @@ export type EnhancedTableProps<Row> = {
   responsiveHead: TableResponsiveHead;
   responsiveRenderRow: TableRowRenderProp<Row>;
   data: Row[];
+  emptyPlaceholder?: string;
 } & TablePaginationProps;
 
 /**
@@ -100,7 +101,26 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     </TableHead>
   );
 
-  const renderBody = () => <TableBody>{data.map(renderRow)}</TableBody>;
+  const renderBody = () => (
+    <TableBody>
+      {data.length ? (
+        data.map(renderRow)
+      ) : (
+        <TableRow>
+          <TableCell
+            colSpan={tableHead.length}
+            sx={{
+              textAlign: 'center',
+              fontSize: (theme) => theme.typography.h4,
+              py: 10,
+            }}
+          >
+            {props.emptyPlaceholder ?? 'No data to show'}
+          </TableCell>
+        </TableRow>
+      )}
+    </TableBody>
+  );
 
   const renderFooter = () =>
     paginated ? (
