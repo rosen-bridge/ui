@@ -4,6 +4,7 @@ import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import { ApiRevenueChartResponse } from '@/_types/api';
 
@@ -103,7 +104,9 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
     () =>
       data.map((tokenData) => ({
         name: tokenData.title.name,
-        data: tokenData.data.map((datum) => +datum.amount),
+        data: tokenData.data.map(
+          (datum) => +getDecimalString(datum.amount, tokenData.title.decimals),
+        ),
       })),
     [data],
   );

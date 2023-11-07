@@ -74,7 +74,12 @@ const addressAssets: ApiAddressAssetsResponse = {
 
 const revenueChartWeekly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -86,7 +91,12 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 0,
+      decimals: 6,
+      isNativeToken: true,
+      tokenId: 'ada',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -100,7 +110,12 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
 ];
 const revenueChartMonthly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -113,7 +128,12 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -128,7 +148,12 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
 ];
 const revenueChartYearly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -141,7 +166,12 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({

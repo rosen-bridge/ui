@@ -104,7 +104,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const apexChartSeries = useMemo(
     () =>
       data.map((tokenData) => ({
-        name: tokenData.title,
+        name: tokenData.title as any,
         data: tokenData.data.map((datum) => +datum.amount),
       })),
     [data],
