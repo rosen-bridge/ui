@@ -78,7 +78,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow className="divider" sx={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {row.isNativeToken ? '-' : row.tokenId}
+          {row.isNativeToken ? '-' : row.tokenId.slice(0, 10)}
         </EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
@@ -130,7 +130,7 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>
-        {row.isNativeToken ? '-' : row.tokenId}
+        {row.isNativeToken ? '-' : row.tokenId.slice(0, 10)}
       </EnhancedTableCell>
       <EnhancedTableCell>{row.name}</EnhancedTableCell>
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
