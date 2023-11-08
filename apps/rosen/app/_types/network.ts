@@ -1,4 +1,4 @@
-import { Wallet } from '@rosen-ui/wallet-api';
+import { Wallet, WalletInfo } from '@rosen-ui/wallet-api';
 
 import { Networks } from '@/_constants';
 
@@ -12,6 +12,7 @@ export interface Network<T> {
   logo: string;
   label: string;
   availableWallets: T[];
+  supportedWallets: WalletInfo[];
   nextHeightInterval: number;
   api: {
     explorerUrl: string;

@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+
 import {
   Avatar,
   Alert,
@@ -11,10 +13,13 @@ import {
   LoadingButton,
 } from '@rosen-bridge/ui-kit';
 
+import { SupportedWalletsModal } from './SupportedWalletsModal';
+
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useWallet from '@/_hooks/useWallet';
 import { useTransaction } from '@/_hooks/useTransaction';
+import useNetwork from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
 
@@ -40,6 +45,8 @@ const FeesContainer = styled('div')(({ theme }) => ({
  * and wallet connection
  */
 const BridgeTransaction = () => {
+  const [modalOpen, setModalOpen] = useState(false);
+
   const {
     sourceValue,
     targetValue,
@@ -57,6 +64,8 @@ const BridgeTransaction = () => {
     isLoading: isLoadingFees,
   } = useTransactionFees(sourceValue, tokenValue, amountValue);
   const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
+
+  const { selectedNetwork } = useNetwork();
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
   const WalletIcon = selectedWallet?.icon;
@@ -176,7 +185,11 @@ const BridgeTransaction = () => {
             disabled={!availableWallets}
             onClick={() => {
               if (!selectedWallet) {
-                setSelectedWallet?.(availableWallets?.[0]);
+                if (availableWallets?.length) {
+                  setSelectedWallet?.(availableWallets[0]);
+                } else {
+                  setModalOpen(true);
+                }
               } else {
                 handleFormSubmit();
               }
@@ -186,6 +199,12 @@ const BridgeTransaction = () => {
           </LoadingButton>
         </Grid>
       </Grid>
+      <SupportedWalletsModal
+        open={modalOpen}
+        chainName={selectedNetwork?.name ?? ''}
+        handleClose={() => setModalOpen(false)}
+        supportedWallets={selectedNetwork?.supportedWallets ?? []}
+      />
     </>
   );
 };

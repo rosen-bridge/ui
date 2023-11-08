@@ -7,14 +7,18 @@ export enum WalletState {
   CONNECTED,
 }
 
+export interface WalletInfo {
+  icon: FC;
+  name: string;
+  label: string;
+  link: string;
+}
+
 /**
  * main wallet type for the bridge, all wallets implement
  * this interface to unify access and interaction with wallets
  */
-export interface WalletBase {
-  icon: FC;
-  name: string;
-  label: string;
+export interface WalletBase extends WalletInfo {
   onConnect?: () => void;
   onDisconnect?: () => void;
   connectWallet: () => Promise<boolean | ReactNode>;
