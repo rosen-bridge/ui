@@ -322,6 +322,7 @@ const BridgeForm = () => {
         {...amountField}
         onChange={handleAmountChange}
         disabled={!tokenField.value}
+        autoComplete="off"
       />
       <FormInputs
         label="Address"
@@ -330,6 +331,7 @@ const BridgeForm = () => {
         error={!!errors?.walletAddress}
         helperText={errors.walletAddress?.message?.toString()}
         disabled={!sourceField.value}
+        autoComplete="off"
         {...addressField}
       />
     </FormContainer>
