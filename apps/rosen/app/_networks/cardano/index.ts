@@ -1,6 +1,9 @@
 import { compact } from 'lodash-es';
 
-import getNamiWallet, { isNamiAvailable } from '@rosen-ui/nami-wallet';
+import getNamiWallet, {
+  isNamiAvailable,
+  walletInfo as namiWalletInfo,
+} from '@rosen-ui/nami-wallet';
 
 import { Networks } from '@/_constants';
 
@@ -24,6 +27,7 @@ import { generateUnsignedTx } from './transaction/generateTx';
 const CardanoNetwork: Network<Wallet> = {
   name: Networks.cardano,
   label: 'Cardano',
+  supportedWallets: [namiWalletInfo],
   availableWallets: compact([
     isNamiAvailable() && {
       ...getNamiWallet(),

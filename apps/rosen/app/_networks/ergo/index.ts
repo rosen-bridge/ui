@@ -1,5 +1,6 @@
 import getNautilusWallet, {
   isNautilusAvailable,
+  walletInfo as nautilusWalletInfo,
 } from '@rosen-ui/nautilus-wallet';
 import { compact } from 'lodash-es';
 
@@ -18,6 +19,7 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 const ErgoNetwork: Network<Wallet> = {
   name: Networks.ergo,
   label: 'Ergo',
+  supportedWallets: [nautilusWalletInfo],
   availableWallets: compact([
     isNautilusAvailable() && {
       ...getNautilusWallet(),

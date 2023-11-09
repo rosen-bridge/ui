@@ -1,8 +1,15 @@
 import { NamiIcon } from '@rosen-bridge/icons';
 
-import { createRawWallet } from '@rosen-ui/wallet-api';
+import { WalletInfo, createRawWallet } from '@rosen-ui/wallet-api';
 
 import { connectWallet } from './connectWallet';
+
+export const walletInfo: WalletInfo = {
+  icon: NamiIcon,
+  name: 'Nami',
+  label: 'Nami',
+  link: 'https://namiwallet.io/',
+};
 
 /**
  * nautilus implementation of the Wallet
@@ -11,9 +18,7 @@ import { connectWallet } from './connectWallet';
 const getNamiWallet = () =>
   createRawWallet(
     {
-      icon: NamiIcon,
-      name: 'Nami',
-      label: 'Nami',
+      ...walletInfo,
       connectWallet,
     },
     cardano.nami

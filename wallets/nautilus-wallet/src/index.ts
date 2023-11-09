@@ -1,7 +1,14 @@
-import { createRawWallet } from '@rosen-ui/wallet-api';
+import { WalletInfo, createRawWallet } from '@rosen-ui/wallet-api';
 import { NautilusIcon } from '@rosen-bridge/icons';
 
 import { connectWallet } from './connectWallet';
+
+export const walletInfo: WalletInfo = {
+  icon: NautilusIcon,
+  name: 'Nautilus',
+  label: 'Nautilus',
+  link: 'https://github.com/nautls/nautilus-wallet',
+};
 
 /**
  * nautilus implementation of the Wallet
@@ -11,9 +18,7 @@ import { connectWallet } from './connectWallet';
 const getNautilusWallet = () =>
   createRawWallet(
     {
-      icon: NautilusIcon,
-      name: 'Nautilus',
-      label: 'Nautilus',
+      ...walletInfo,
       connectWallet,
     },
     ergoConnector.nautilus
