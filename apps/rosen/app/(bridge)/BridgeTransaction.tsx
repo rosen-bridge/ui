@@ -45,7 +45,7 @@ const FeesContainer = styled('div')(({ theme }) => ({
  * and wallet connection
  */
 const BridgeTransaction = () => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [supportedWalletsModalOpen, setSupportedWalletsModalOpen] = useState(false);
 
   const {
     sourceValue,
@@ -188,7 +188,7 @@ const BridgeTransaction = () => {
                 if (availableWallets?.length) {
                   setSelectedWallet?.(availableWallets[0]);
                 } else {
-                  setModalOpen(true);
+                  setSupportedWalletsModalOpen(true);
                 }
               } else {
                 handleFormSubmit();
@@ -200,9 +200,9 @@ const BridgeTransaction = () => {
         </Grid>
       </Grid>
       <SupportedWalletsModal
-        open={modalOpen}
+        open={supportedWalletsModalOpen}
         chainName={selectedNetwork?.name ?? ''}
-        handleClose={() => setModalOpen(false)}
+        handleClose={() => setSupportedWalletsModalOpen(false)}
         supportedWallets={selectedNetwork?.supportedWallets ?? []}
       />
     </>
