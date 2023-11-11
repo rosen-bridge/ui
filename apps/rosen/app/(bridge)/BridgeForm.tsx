@@ -19,7 +19,7 @@ import {
 import useBridgeForm from '@/_hooks/useBridgeForm';
 import useNetwork from '@/_hooks/useNetwork';
 
-import { getTokenNameAndId } from '@/_utils';
+import { getMaxTransferableAmount, getTokenNameAndId } from '@/_utils';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 
@@ -167,13 +167,20 @@ const BridgeForm = () => {
   const handleSelectMax = useCallback(() => {
     setValue(
       'amount',
-      getDecimalString(amount.toString(), token?.decimals ?? 0),
+      getDecimalString(
+        getMaxTransferableAmount(
+          amount,
+          sourceField.value,
+          tokenField.value,
+        ).toString(),
+        token?.decimals ?? 0,
+      ),
       {
         shouldDirty: true,
         shouldTouch: true,
       },
     );
-  }, [setValue, amount, token?.decimals]);
+  }, [setValue, amount, sourceField.value, tokenField.value, token?.decimals]);
 
   const renderInputActions = () => (
     <>
