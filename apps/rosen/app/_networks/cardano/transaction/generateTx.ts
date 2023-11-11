@@ -14,6 +14,7 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
+import { feeAndMinBoxValue } from './consts';
 import { ADA_POLICY_ID } from './types';
 
 /**
@@ -74,7 +75,7 @@ export const generateUnsignedTx = async (
 
   const utxos = await Promise.all(walletUtxos.map(walletUtxoToCardanoUtxo));
   // add required ADA estimation for tx fee and change box
-  requiredAssets.nativeToken += 3000000n;
+  requiredAssets.nativeToken += feeAndMinBoxValue;
   // get input boxes
   const inputs = await selectCardanoUtxos(
     requiredAssets,
