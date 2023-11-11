@@ -45,7 +45,8 @@ const FeesContainer = styled('div')(({ theme }) => ({
  * and wallet connection
  */
 const BridgeTransaction = () => {
-  const [supportedWalletsModalOpen, setSupportedWalletsModalOpen] = useState(false);
+  const [supportedWalletsModalOpen, setSupportedWalletsModalOpen] =
+    useState(false);
 
   const {
     sourceValue,
@@ -62,6 +63,7 @@ const BridgeTransaction = () => {
     bridgeFee,
     receivingAmount,
     isLoading: isLoadingFees,
+    minTransferAmount,
   } = useTransactionFees(sourceValue, tokenValue, amountValue);
   const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
 
@@ -166,6 +168,12 @@ const BridgeTransaction = () => {
             bridgeFee || 'Pending',
             'primary',
           )}
+          {renderFee(
+            'Min transfer',
+            tokenInfo?.tokenName,
+            minTransferAmount || 'Pending',
+            'primary',
+          )}
           <Divider />
           {renderFee(
             'You will receive',
@@ -182,7 +190,7 @@ const BridgeTransaction = () => {
             color={selectedWallet ? 'success' : 'primary'}
             variant="contained"
             loading={isValidating || isSubmitting}
-            disabled={!availableWallets}
+            disabled={!availableWallets || +minTransferAmount > +amountValue}
             onClick={() => {
               if (!selectedWallet) {
                 if (availableWallets?.length) {

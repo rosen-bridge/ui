@@ -164,7 +164,7 @@ const useTransactionFees = (
           : '0',
       minTransferAmount: minTransferAmountValue
         ? getDecimalString(
-            minTransferAmountValue.toString() || '0',
+            (minTransferAmountValue + 1).toString() || '0',
             token?.decimals || 0,
           )
         : '0',
