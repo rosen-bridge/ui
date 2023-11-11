@@ -4,6 +4,8 @@ import useTransactionFormData from './useTransactionFormData';
 
 import { validateAddress } from '@/_actions/validateAddress';
 
+const validationCache = new Map<string, string | undefined>();
+
 /**
  * handles the form field registrations and form state changes
  * and validations
@@ -41,7 +43,17 @@ const useBridgeForm = () => {
         if (!value) {
           return 'Address cannot be empty';
         }
-        return (await validateAddress(targetField.value, value)).message;
+
+        if (validationCache.has(value)) {
+          return validationCache.get(value);
+        }
+
+        const validationResult = (
+          await validateAddress(targetField.value, value)
+        ).message;
+        validationCache.set(value, validationResult);
+
+        return validationResult;
       },
     },
   });

@@ -20,6 +20,7 @@ import useNetwork from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
 import useTokenBalance from '@/_hooks/useTokenBalance';
+import useTransactionFormData from '@/_hooks/useTransactionFormData';
 
 /**
  * customized form input
@@ -86,6 +87,10 @@ const BridgeForm = () => {
     addressField,
     formState: { errors },
   } = useBridgeForm();
+
+  const {
+    formState: { isValidating },
+  } = useTransactionFormData();
 
   const { availableNetworks, tokens, targetNetworks } = useNetwork();
   const { isLoading, amount, token } = useTokenBalance();
@@ -330,7 +335,7 @@ const BridgeForm = () => {
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={errors.walletAddress?.message?.toString()}
-        disabled={!sourceField.value}
+        disabled={!sourceField.value || isValidating}
         autoComplete="off"
         {...addressField}
       />
