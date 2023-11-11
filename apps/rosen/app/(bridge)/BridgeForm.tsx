@@ -13,6 +13,7 @@ import {
   styled,
   MenuItem,
   Button,
+  CircularProgress,
 } from '@rosen-bridge/ui-kit';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
@@ -334,8 +335,14 @@ const BridgeForm = () => {
         InputProps={{ disableUnderline: true } as any}
         variant="filled"
         error={!!errors?.walletAddress}
-        helperText={errors.walletAddress?.message?.toString()}
-        disabled={!sourceField.value || isValidating}
+        helperText={
+          isValidating ? (
+            <CircularProgress size={10} />
+          ) : (
+            errors.walletAddress?.message?.toString()
+          )
+        }
+        disabled={!sourceField.value}
         autoComplete="off"
         {...addressField}
       />
