@@ -60,5 +60,9 @@ export const getNonDecimalString = (value: string, decimals: number) => {
   return `${value.slice(0, decimalPointIndex)}${value.slice(
     decimalPointIndex + 1,
     decimalPointIndex + 1 + decimals
-  )}${'0'.repeat(decimals - fractionalPartLength)}`.replace(/^0+(\d+)/, '$1');
+  )}${
+    fractionalPartLength <= decimals
+      ? '0'.repeat(decimals - fractionalPartLength)
+      : ''
+  }`.replace(/^0+(\d+)/, '$1');
 };

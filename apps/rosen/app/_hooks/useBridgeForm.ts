@@ -1,6 +1,11 @@
+import { useContext } from 'react';
 import { useController } from 'react-hook-form';
 
+import { getNonDecimalString } from '@rosen-ui/utils';
+
 import useTransactionFormData from './useTransactionFormData';
+
+import { WalletContext } from '@/_contexts/walletContext';
 
 import { validateAddress } from '@/_actions/validateAddress';
 
@@ -14,6 +19,8 @@ const validationCache = new Map<string, string | undefined>();
 const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
+
+  const walletGlobalContext = useContext(WalletContext);
 
   const { field: sourceField } = useController({
     name: 'source',
@@ -33,6 +40,37 @@ const useBridgeForm = () => {
   const { field: amountField } = useController({
     name: 'amount',
     control,
+    rules: {
+      validate: async (value) => {
+        // match any complete or incomplete decimal number
+        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+
+        // prevent user from entering invalid numbers
+        const isValueInvalid = !match;
+        if (isValueInvalid) return 'The amount is not valid';
+
+        // prevent user from entering more decimals than token decimals
+        const isDecimalsLarge =
+          (match?.groups?.floatingDigits?.length ?? 0) >
+          tokenField.value?.decimals;
+        if (isDecimalsLarge)
+          return `The current token only supports ${tokenField.value?.decimals} decimals`;
+
+        if (walletGlobalContext!.state.selectedWallet) {
+          // prevent user from entering more than token amount
+          const currentBalance =
+            await walletGlobalContext!.state.selectedWallet.getBalance(
+              tokenField.value,
+            );
+          const isAmountLarge =
+            BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >
+            BigInt(currentBalance.toString());
+          if (isAmountLarge) return 'Balance insufficient';
+        }
+
+        return undefined;
+      },
+    },
   });
 
   const { field: addressField } = useController({
