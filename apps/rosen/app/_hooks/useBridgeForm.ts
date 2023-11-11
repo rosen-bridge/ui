@@ -44,14 +44,16 @@ const useBridgeForm = () => {
           return 'Address cannot be empty';
         }
 
-        if (validationCache.has(value)) {
-          return validationCache.get(value);
+        const cacheKey = `${targetField.value}__${value}`;
+
+        if (validationCache.has(cacheKey)) {
+          return validationCache.get(cacheKey);
         }
 
         const validationResult = (
           await validateAddress(targetField.value, value)
         ).message;
-        validationCache.set(value, validationResult);
+        validationCache.set(cacheKey, validationResult);
 
         return validationResult;
       },
