@@ -42,6 +42,19 @@ export const useTransaction = () => {
           lockAddress,
         );
         openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
+      } catch (error) {
+        /**
+         * FIXME: Customize error messages based on error data
+         * local:ergo/rosen-bridge/ui#169
+         */
+        if (error instanceof Error) {
+          openSnackbar(
+            `An error occurred during submission: ${error.message}`,
+            'error',
+          );
+        } else {
+          openSnackbar(`An unknown error occurred: ${error}`, 'error');
+        }
       } finally {
         setIsSubmitting(false);
       }
