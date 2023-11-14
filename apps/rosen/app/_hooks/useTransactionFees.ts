@@ -121,16 +121,11 @@ const useTransactionFees = (
       : 0;
     const bridgeFee = Math.max(bridgeFeeBase, variableBridgeFee);
 
-    const ratioBasedMinTransferAmount =
-      (feeRatioDivisor * networkFee) / (feeRatioDivisor - feeRatio);
-
     const receivingAmountValue = fees
       ? +paymentAmount - (networkFee! + bridgeFee!)
       : 0;
 
-    const minTransferAmountValue = fees
-      ? Math.max(bridgeFee! + networkFee!, ratioBasedMinTransferAmount)
-      : 0n;
+    const minTransferAmountValue = bridgeFeeBase! + networkFee!;
 
     return {
       bridgeFee: getDecimalString(
