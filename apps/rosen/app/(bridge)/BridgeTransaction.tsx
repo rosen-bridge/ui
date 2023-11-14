@@ -53,7 +53,7 @@ const BridgeTransaction = () => {
     targetValue,
     tokenValue,
     amountValue,
-    formState: { isValidating, isSubmitting: isFormSubmitting },
+    formState: { isSubmitting: isFormSubmitting },
     handleSubmit,
   } = useTransactionFormData();
 
@@ -190,10 +190,9 @@ const BridgeTransaction = () => {
             sx={{ width: '100%' }}
             color={selectedWallet ? 'success' : 'primary'}
             variant="contained"
-            loading={
-              isValidating || isFormSubmitting || isTransactionSubmitting
-            }
+            loading={isFormSubmitting || isTransactionSubmitting}
             disabled={!availableWallets || +minTransferAmount > +amountValue}
+            type="submit"
             onClick={() => {
               if (!selectedWallet) {
                 if (availableWallets?.length) {
