@@ -17,7 +17,7 @@ import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 export const getCardanoProtocolParams =
   async (): Promise<CardanoProtocolParams> => {
     const cardanoKoiosClient = cardanoKoiosClientFactory(
-      'https://api.koios.rest/api/v1',
+      process.env.CARDANO_KOIOS_API!,
     );
     return await cardanoKoiosClient.getEpochParams().then((epochParams) => {
       const params = epochParams[0];
