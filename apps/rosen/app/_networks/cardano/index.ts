@@ -92,7 +92,6 @@ const CardanoNetwork: Network<Wallet> = {
   logo: '/cardano.svg',
   api: {
     explorerUrl: 'https://api.koios.rest/api',
-    networkStatusUrl: 'https://api.koios.rest/api/v0/blocks?limit=1',
   },
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
 };

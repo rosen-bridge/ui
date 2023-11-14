@@ -191,8 +191,8 @@ const BridgeTransaction = () => {
             color={selectedWallet ? 'success' : 'primary'}
             variant="contained"
             loading={isFormSubmitting || isTransactionSubmitting}
-            disabled={!availableWallets || +minTransferAmount > +amountValue}
             type="submit"
+            disabled={!availableWallets}
             onClick={() => {
               if (!selectedWallet) {
                 if (availableWallets?.length) {
