@@ -193,7 +193,7 @@ const BridgeTransaction = () => {
             loading={
               isValidating || isFormSubmitting || isTransactionSubmitting
             }
-            disabled={!availableWallets || +minTransferAmount > +amountValue}
+            disabled={!availableWallets}
             onClick={() => {
               if (!selectedWallet) {
                 if (availableWallets?.length) {

@@ -10,6 +10,7 @@ import { WalletContext } from '@/_contexts/walletContext';
 import { validateAddress } from '@/_actions/validateAddress';
 
 import { getMaxTransferableAmount } from '@/_utils';
+import { getMinTransferAmount } from '@/_utils/index';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -72,6 +73,20 @@ const useBridgeForm = () => {
             BigInt(maxTransferableAmount.toString());
           if (isAmountLarge) return 'Balance insufficient';
         }
+
+        const minTransferableAmount = await getMinTransferAmount(
+          tokenField.value,
+          sourceField.value,
+        );
+        const isAmountSmall =
+          BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
+          BigInt(
+            getNonDecimalString(
+              minTransferableAmount.toString(),
+              tokenField.value.decimals,
+            ),
+          );
+        if (isAmountSmall) return 'Minimum transferable amount not respected';
 
         return undefined;
       },
