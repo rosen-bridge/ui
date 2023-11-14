@@ -5,7 +5,6 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
-import useChainHeight from './useChainHeight';
 import useNetwork from './useNetwork';
 import { useTokensMap } from './useTokensMap';
 
@@ -26,7 +25,6 @@ const useTransactionFees = (
 ) => {
   const [pending, startTransition] = useTransition();
   const { openSnackbar } = useSnackbar();
-  const { height, isLoading: isLoadingHeights } = useChainHeight();
   const { selectedNetwork } = useNetwork();
 
   const feeInfo = useRef<any>(null);
@@ -68,7 +66,6 @@ const useTransactionFees = (
     if (
       sourceChain &&
       tokenId &&
-      height &&
       selectedNetwork &&
       tokenId !== feeInfo.current?.tokenId &&
       !pending
@@ -77,7 +74,6 @@ const useTransactionFees = (
         const data = await calculateFee(
           sourceChain,
           tokenId,
-          height,
           ErgoNetwork.api.explorerUrl,
           selectedNetwork.nextHeightInterval,
         );
@@ -103,17 +99,7 @@ const useTransactionFees = (
         }
       });
     }
-  }, [
-    sourceChain,
-    tokenId,
-    height,
-    openSnackbar,
-    pending,
-    feeInfo,
-    selectedNetwork,
-  ]);
-
-  const isLoading = pending || isLoadingHeights;
+  }, [sourceChain, tokenId, openSnackbar, pending, feeInfo, selectedNetwork]);
 
   const fees = feeInfo.current?.data?.fees;
   const feeRatioDivisor = feeInfo.current
@@ -168,10 +154,10 @@ const useTransactionFees = (
             token?.decimals || 0,
           )
         : '0',
-      isLoading,
+      isLoading: pending,
       status: feeInfo.current,
     };
-  }, [amount, fees, isLoading, token, feeRatioDivisor]);
+  }, [amount, fees, pending, token, feeRatioDivisor]);
 
   return transactionFees;
 };

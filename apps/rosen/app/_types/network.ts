@@ -16,7 +16,6 @@ export interface Network<T> {
   nextHeightInterval: number;
   api: {
     explorerUrl: string;
-    networkStatusUrl: string;
   };
   lockAddress: string;
 }
