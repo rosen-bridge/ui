@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form';
 
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import { useTokensMap } from './useTokensMap';
 import useTransactionFormData from './useTransactionFormData';
 
 import { WalletContext } from '@/_contexts/walletContext';
@@ -10,6 +11,7 @@ import { WalletContext } from '@/_contexts/walletContext';
 import { validateAddress } from '@/_actions/validateAddress';
 
 import { getMaxTransferableAmount } from '@/_utils';
+import { getMinTransferAmount } from '@/_utils/index';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -21,6 +23,8 @@ const validationCache = new Map<string, string | undefined>();
 const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
+
+  const tokensMap = useTokensMap();
 
   const walletGlobalContext = useContext(WalletContext);
 
@@ -72,6 +76,21 @@ const useBridgeForm = () => {
             BigInt(maxTransferableAmount.toString());
           if (isAmountLarge) return 'Balance insufficient';
         }
+
+        const minTransferableAmount = await getMinTransferAmount(
+          tokenField.value,
+          sourceField.value,
+          tokensMap,
+        );
+        const isAmountSmall =
+          BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
+          BigInt(
+            getNonDecimalString(
+              minTransferableAmount.toString(),
+              tokenField.value.decimals,
+            ),
+          );
+        if (isAmountSmall) return 'Minimum transferable amount not respected';
 
         return undefined;
       },

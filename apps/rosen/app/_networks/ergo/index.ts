@@ -75,7 +75,6 @@ const ErgoNetwork: Network<Wallet> = {
   nextHeightInterval: 5,
   api: {
     explorerUrl: 'https://api.ergoplatform.com/',
-    networkStatusUrl: 'https://api.ergoplatform.com/api/v1/networkState',
   },
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
 };

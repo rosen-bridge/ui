@@ -8,7 +8,7 @@ import {
   CardanoUtxo,
   TokenInfo,
 } from '@rosen-bridge/cardano-utxo-selection';
-import axios from 'axios';
+import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 
 /**
  * gets Cardano protocol params
@@ -16,12 +16,11 @@ import axios from 'axios';
  */
 export const getCardanoProtocolParams =
   async (): Promise<CardanoProtocolParams> => {
-    const koiosClient = axios.create({
-      baseURL: 'https://api.koios.rest/api/v1',
-      timeout: 60000,
-    });
-    return await koiosClient.get('/epoch_params').then((res) => {
-      const params = res.data[0];
+    const cardanoKoiosClient = cardanoKoiosClientFactory(
+      process.env.CARDANO_KOIOS_API!,
+    );
+    return await cardanoKoiosClient.getEpochParams().then((epochParams) => {
+      const params = epochParams[0];
       if (
         !params.min_fee_a ||
         !params.min_fee_b ||
