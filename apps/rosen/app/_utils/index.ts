@@ -1,5 +1,5 @@
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { TokenInfo } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
@@ -60,12 +60,20 @@ export const getMaxTransferableAmount = (
  * @param sourceChain
  */
 export const getMinTransferAmount = async (
-  token: TokenInfo,
+  token: RosenChainToken,
   sourceChain: 'cardano' | 'ergo',
+  tokensMap: any,
 ) => {
+  const tokenMap = new TokenMap(tokensMap);
+  const idKey = tokenMap.getIdKey(sourceChain);
+  const tokens = tokenMap.search(sourceChain, {
+    [idKey]: token[idKey],
+  });
+  const ergoTokenId = tokens[0].ergo.tokenId;
+
   const data = await calculateFee(
     sourceChain,
-    token.tokenId,
+    ergoTokenId,
     ErgoNetwork.api.explorerUrl,
     0,
   );

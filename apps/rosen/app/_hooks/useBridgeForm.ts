@@ -3,6 +3,7 @@ import { useController } from 'react-hook-form';
 
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import { useTokensMap } from './useTokensMap';
 import useTransactionFormData from './useTransactionFormData';
 
 import { WalletContext } from '@/_contexts/walletContext';
@@ -22,6 +23,8 @@ const validationCache = new Map<string, string | undefined>();
 const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
+
+  const tokensMap = useTokensMap();
 
   const walletGlobalContext = useContext(WalletContext);
 
@@ -77,6 +80,7 @@ const useBridgeForm = () => {
         const minTransferableAmount = await getMinTransferAmount(
           tokenField.value,
           sourceField.value,
+          tokensMap,
         );
         const isAmountSmall =
           BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
