@@ -96,7 +96,7 @@ const BridgeForm = () => {
   const { availableNetworks, tokens, targetNetworks } = useNetwork();
   const { isLoading, amount, token } = useTokenBalance();
 
-  const renderSelectedAsset = (value: unknown) => {
+  const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
       (network) => network.name === value,
     )!;
@@ -223,7 +223,7 @@ const BridgeForm = () => {
             variant="filled"
             {...sourceField}
             SelectProps={{
-              renderValue: renderSelectedAsset,
+              renderValue: renderSelectedNetwork,
             }}
             onChange={handleSourceChange}
           >
@@ -253,7 +253,7 @@ const BridgeForm = () => {
             variant="filled"
             {...targetField}
             SelectProps={{
-              renderValue: renderSelectedAsset,
+              renderValue: renderSelectedNetwork,
             }}
             onChange={handleTargetChange}
           >
