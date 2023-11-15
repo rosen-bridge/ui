@@ -31,7 +31,7 @@ const BridgeContainer = styled(Card)(({ theme }) => ({
     gridTemplateColumns: '3fr auto 2fr',
     gridTemplateRows: '1fr',
     minWidth: '600px',
-    maxWidth: '40vmax',
+    maxWidth: '50vmax',
   },
 }));
 
