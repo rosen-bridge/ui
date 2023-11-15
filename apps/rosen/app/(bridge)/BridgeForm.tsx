@@ -103,9 +103,7 @@ const BridgeForm = () => {
     return (
       <SelectedAsset>
         <Image src={network.logo} width={24} height={24} alt="network logo" />
-        <Typography variant="button" color="text.secondary">
-          {network.label}
-        </Typography>
+        <Typography color="text.secondary">{network.label}</Typography>
       </SelectedAsset>
     );
   };
