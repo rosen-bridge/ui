@@ -109,7 +109,7 @@ const BridgeTransaction = () => {
   const renderWalletInfo = () => {
     if (!WalletIcon) return null;
     return (
-      <PriceItem sx={(theme) => ({ margin: theme.spacing(1) })}>
+      <PriceItem sx={(theme) => ({ padding: theme.spacing(1.25, 0.5) })}>
         <Typography>Wallet</Typography>
         <Grid container alignItems="center" justifyContent="center" gap={1}>
           <Avatar
