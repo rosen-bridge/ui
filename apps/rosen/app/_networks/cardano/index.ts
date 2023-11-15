@@ -12,12 +12,12 @@ import { Network } from '@/_types/network';
 import { decodeWasmValue } from '@/_actions/cardanoDecoder';
 import { Wallet } from '@rosen-ui/wallet-api';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { getDecimalString } from '@rosen-ui/utils';
 import {
   generateLockAuxiliaryData,
   setTxWitnessSet,
 } from './transaction/utils';
 import { generateUnsignedTx } from './transaction/generateTx';
+import { CardanoIcon } from '@rosen-bridge/icons';
 
 /**
  * the main object for Cardano network
@@ -89,7 +89,7 @@ const CardanoNetwork: Network<Wallet> = {
     },
   ]),
   nextHeightInterval: 25,
-  logo: '/cardano.svg',
+  logo: CardanoIcon,
   api: {
     explorerUrl: 'https://api.koios.rest/api',
   },

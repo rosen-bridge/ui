@@ -1,3 +1,4 @@
+export * from './networks';
 export * from './wallets';
 
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';

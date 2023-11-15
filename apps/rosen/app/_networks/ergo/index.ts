@@ -10,6 +10,7 @@ import { Network } from '@/_types/network';
 import { ErgoToken, Wallet } from '@rosen-ui/wallet-api';
 import { generateUnsignedTx } from './transaction/generateTx';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { ErgoIcon } from '@rosen-bridge/icons';
 
 /**
  * the main object for Ergo network
@@ -71,7 +72,7 @@ const ErgoNetwork: Network<Wallet> = {
       },
     },
   ]),
-  logo: '/ergo.svg',
+  logo: ErgoIcon,
   nextHeightInterval: 5,
   api: {
     explorerUrl: 'https://api.ergoplatform.com/',
