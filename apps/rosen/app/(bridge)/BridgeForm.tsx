@@ -96,16 +96,14 @@ const BridgeForm = () => {
   const { availableNetworks, tokens, targetNetworks } = useNetwork();
   const { isLoading, amount, token } = useTokenBalance();
 
-  const renderSelectedAsset = (value: unknown) => {
+  const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
       (network) => network.name === value,
     )!;
     return (
       <SelectedAsset>
         <Image src={network.logo} width={24} height={24} alt="network logo" />
-        <Typography variant="button" color="text.secondary">
-          {network.label}
-        </Typography>
+        <Typography color="text.secondary">{network.label}</Typography>
       </SelectedAsset>
     );
   };
@@ -225,7 +223,7 @@ const BridgeForm = () => {
             variant="filled"
             {...sourceField}
             SelectProps={{
-              renderValue: renderSelectedAsset,
+              renderValue: renderSelectedNetwork,
             }}
             onChange={handleSourceChange}
           >
@@ -255,7 +253,7 @@ const BridgeForm = () => {
             variant="filled"
             {...targetField}
             SelectProps={{
-              renderValue: renderSelectedAsset,
+              renderValue: renderSelectedNetwork,
             }}
             onChange={handleTargetChange}
           >
