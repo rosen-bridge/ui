@@ -2,24 +2,26 @@
 
 import { useState } from 'react';
 
+import { TokenMap } from '@rosen-bridge/tokens';
 import {
-  Avatar,
   Alert,
-  Grid,
-  Typography,
-  Tooltip,
+  Avatar,
   Divider,
-  styled,
+  Grid,
   LoadingButton,
+  Tooltip,
+  Typography,
+  styled,
 } from '@rosen-bridge/ui-kit';
 
 import { SupportedWalletsModal } from './SupportedWalletsModal';
 
-import useTransactionFormData from '@/_hooks/useTransactionFormData';
-import useTransactionFees from '@/_hooks/useTransactionFees';
-import useWallet from '@/_hooks/useWallet';
-import { useTransaction } from '@/_hooks/useTransaction';
 import useNetwork from '@/_hooks/useNetwork';
+import { useTokensMap } from '@/_hooks/useTokensMap';
+import { useTransaction } from '@/_hooks/useTransaction';
+import useTransactionFees from '@/_hooks/useTransactionFees';
+import useTransactionFormData from '@/_hooks/useTransactionFormData';
+import useWallet from '@/_hooks/useWallet';
 
 import { getTokenNameAndId } from '@/_utils';
 
@@ -57,6 +59,9 @@ const BridgeTransaction = () => {
     handleSubmit,
   } = useTransactionFormData();
 
+  const rawTokenMap = useTokensMap();
+  const tokenMap = new TokenMap(rawTokenMap);
+
   const {
     status,
     networkFee,
@@ -70,6 +75,16 @@ const BridgeTransaction = () => {
   const { selectedNetwork } = useNetwork();
 
   const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
+
+  const idKey = sourceValue && tokenMap.getIdKey(sourceValue);
+  const targetTokenSearchResults =
+    tokenValue &&
+    idKey &&
+    tokenMap.search(sourceValue, {
+      [idKey]: tokenValue[idKey],
+    });
+  const targetTokenInfo = targetTokenSearchResults?.[0]?.[targetValue];
+
   const WalletIcon = selectedWallet?.icon;
   const { startTransaction, isSubmitting: isTransactionSubmitting } =
     useTransaction();
@@ -178,7 +193,7 @@ const BridgeTransaction = () => {
           <Divider />
           {renderFee(
             'You will receive',
-            tokenInfo?.tokenName,
+            targetTokenInfo?.name,
             receivingAmount,
             'secondary',
           )}
