@@ -331,7 +331,7 @@ const BridgeForm = () => {
             errors.walletAddress?.message?.toString()
           )
         }
-        disabled={!sourceField.value}
+        disabled={!targetField.value}
         autoComplete="off"
         {...addressField}
       />
