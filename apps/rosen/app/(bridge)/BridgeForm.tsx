@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, ChangeEvent } from 'react';
-import Image from 'next/image';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import {
@@ -14,6 +13,7 @@ import {
   MenuItem,
   Button,
   CircularProgress,
+  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
@@ -100,9 +100,12 @@ const BridgeForm = () => {
     const network = availableNetworks.find(
       (network) => network.name === value,
     )!;
+    const Logo = network.logo;
     return (
       <SelectedAsset>
-        <Image src={network.logo} width={24} height={24} alt="network logo" />
+        <SvgIcon>
+          <Logo />
+        </SvgIcon>
         <Typography color="text.secondary">{network.label}</Typography>
       </SelectedAsset>
     );
@@ -227,15 +230,12 @@ const BridgeForm = () => {
             }}
             onChange={handleSourceChange}
           >
-            {availableNetworks.map((network) => (
+            {availableNetworks.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
-                  <Image
-                    src={network.logo}
-                    width={24}
-                    height={24}
-                    alt="network logo"
-                  />
+                  <SvgIcon>
+                    <Logo />
+                  </SvgIcon>
                 </ListItemIcon>
                 <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
@@ -257,15 +257,14 @@ const BridgeForm = () => {
             }}
             onChange={handleTargetChange}
           >
-            {targetNetworks.map((network) => (
+            {targetNetworks.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
-                  <Image
-                    src={network.logo}
-                    width={24}
-                    height={24}
-                    alt="network logo"
-                  />
+                  <ListItemIcon>
+                    <SvgIcon>
+                      <Logo />
+                    </SvgIcon>
+                  </ListItemIcon>
                 </ListItemIcon>
                 <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
