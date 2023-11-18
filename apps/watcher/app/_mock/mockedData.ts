@@ -253,6 +253,12 @@ const generateObservationRecords = (numberOfRecords: number) => {
     requestId: 'sdfsa-dlfadf-lajdf',
     block: '',
     extractor: '',
+    lockToken: {
+      amount: 1000000000,
+      decimals: 9,
+      isNativeToken: false,
+      tokenId: 'erg',
+    },
   }));
 };
 
@@ -282,6 +288,12 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     spendBlock: '',
     spendHeight: 5,
     spendTxId: 'spendId1234',
+    lockToken: {
+      amount: 1000000000,
+      decimals: 9,
+      isNativeToken: false,
+      tokenId: 'erg',
+    },
   }));
 };
 

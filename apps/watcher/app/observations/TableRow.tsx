@@ -6,6 +6,7 @@ import {
   Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
@@ -139,15 +140,21 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
-            <EnhancedTableCell>{row.amount}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.amount, row.lockToken.decimals)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
-            <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
-            <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.networkFee, row.lockToken.decimals)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Event Id</EnhancedTableCell>
@@ -196,9 +203,15 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>{row.height}</EnhancedTableCell>
-      <EnhancedTableCell>{row.amount}</EnhancedTableCell>
-      <EnhancedTableCell>{row.bridgeFee}</EnhancedTableCell>
-      <EnhancedTableCell>{row.networkFee}</EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.amount, row.lockToken.decimals)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        {getDecimalString(row.networkFee, row.lockToken.decimals)}
+      </EnhancedTableCell>
       <EnhancedTableCell>{row.requestId.slice(0, 10)}</EnhancedTableCell>
     </TableRow>
   );
