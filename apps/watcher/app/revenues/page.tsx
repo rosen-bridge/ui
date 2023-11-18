@@ -5,6 +5,7 @@ import {
   EnhancedTable,
   Grid,
   useTableDataPagination,
+  TablePaginationProps,
 } from '@rosen-bridge/ui-kit';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
@@ -69,7 +70,7 @@ const Revenues = () => {
     [renderMobileRow, renderTabletRow],
   );
 
-  const paginationProps = useMemo(
+  const paginationProps = useMemo<TablePaginationProps>(
     () => ({
       rowsPerPageOptions: [5, 10, 25],
       component: 'div',
