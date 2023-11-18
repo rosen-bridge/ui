@@ -108,8 +108,8 @@ const BridgeTransaction = () => {
             {isLoadingFees && sourceValue && targetValue && tokenValue
               ? 'Pending...'
               : +amount
-              ? amount
-              : '-'}
+                ? amount
+                : '-'}
           </Typography>
           {!!+amount && (
             <Typography sx={(theme) => ({ margin: theme.spacing(0, 0.5) })}>
@@ -185,7 +185,7 @@ const BridgeTransaction = () => {
             'primary',
           )}
           {renderFee(
-            'Min transfer',
+            'Min Transfer',
             tokenInfo?.tokenName,
             minTransferAmount || 'Pending',
             'primary',
