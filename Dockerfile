@@ -1,4 +1,4 @@
-FROM node:18.12.0 AS builder
+FROM node:18.17.0 AS builder
 WORKDIR /app
 COPY package*.json .nvmrc .prettierrc ./
 COPY packages ./packages
