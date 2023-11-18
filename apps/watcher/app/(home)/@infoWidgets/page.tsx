@@ -50,7 +50,7 @@ const InfoWidgets = () => {
 
     return (
       <InfoWidgetCard
-        title="Allowed/Total Reports"
+        title="Allowed / Total Reports"
         value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
         icon={
           <SvgIcon fontSize="large">
