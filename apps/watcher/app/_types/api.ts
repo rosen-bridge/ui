@@ -64,6 +64,7 @@ export interface Observation {
   requestId: string;
   block: string;
   extractor: string;
+  lockToken: TokenInfo;
 }
 
 export type ApiObservationResponse = Paginated<Observation>;
@@ -115,6 +116,7 @@ export interface Event {
   spendBlock?: string;
   spendHeight?: number;
   spendTxId?: string;
+  lockToken: TokenInfo;
 }
 
 export type ApiEventResponse = Paginated<Event>;
