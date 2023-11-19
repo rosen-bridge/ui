@@ -118,7 +118,7 @@ const InfoWidgets = () => {
               {/* FIXME: Use an appropriate icon
                 local:ergo/rosen-bridge/ui#64
                */}
-              <ShieldCheck />
+              <Wallet />
             </SvgIcon>
           }
           color="warning"
