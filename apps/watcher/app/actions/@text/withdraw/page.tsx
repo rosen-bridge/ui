@@ -8,12 +8,12 @@ import ActionText from '../../ActionText';
 
 const WithdrawalText = () => {
   return (
-    <ActionText title="Withdraw">
+    <ActionText title="Withdrawal">
       <Typography gutterBottom>
-        Withdrawal All your watcher rewards are being deposited to the watcher
-        wallet. You can withdraw your reward tokens to any address. Remember to
-        maintain a sufficient balance of ERGs in your wallet to ensure
-        uninterrupted operation.
+        All your watcher rewards are being deposited to the watcher wallet. You
+        can withdraw your reward tokens to any address. Remember to maintain a
+        sufficient balance of ERGs in your wallet to ensure uninterrupted
+        operation.
       </Typography>
       <Typography fontWeight="bold" sx={{ mt: 2 }}>
         Caution
