@@ -1,9 +1,15 @@
 'use client';
 
+import { upperFirst } from 'lodash-es';
 import Image from 'next/image';
 import useSWR from 'swr';
 
-import { LockAlt, ShieldCheck, Wallet } from '@rosen-bridge/icons';
+import {
+  LockAlt,
+  ShieldCheck,
+  ShieldExclamation,
+  Wallet,
+} from '@rosen-bridge/icons';
 import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -50,7 +56,7 @@ const InfoWidgets = () => {
 
     return (
       <InfoWidgetCard
-        title="Allowed/Total Reports"
+        title="Allowed / Total Reports"
         value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
         icon={
           <SvgIcon fontSize="large">
@@ -68,7 +74,7 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Network"
-          value={data?.network ?? ''}
+          value={upperFirst(data?.network ?? '')}
           icon={
             isInfoLoading ? (
               <Box sx={{ width: 35, height: 35 }} />
@@ -117,7 +123,7 @@ const InfoWidgets = () => {
               {/* FIXME: Use an appropriate icon
                 local:ergo/rosen-bridge/ui#64
                */}
-              <ShieldCheck />
+              <Wallet />
             </SvgIcon>
           }
           color="warning"
@@ -130,7 +136,11 @@ const InfoWidgets = () => {
           value={data?.health ?? ''}
           icon={
             <SvgIcon fontSize="large">
-              <ShieldCheck />
+              {data?.health === 'Healthy' ? (
+                <ShieldCheck />
+              ) : (
+                <ShieldExclamation />
+              )}
             </SvgIcon>
           }
           color={

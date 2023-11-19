@@ -35,7 +35,10 @@ export interface ApiWithdrawRequestBody {
     amount: bigint;
   }[];
 }
-export type ApiWithdrawResponse = 'OK';
+export interface ApiWithdrawResponse {
+  txId: string;
+  status: 'OK';
+}
 
 export interface ApiPermitRequestBody {
   count: string;

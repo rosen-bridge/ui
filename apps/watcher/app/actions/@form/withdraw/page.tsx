@@ -118,10 +118,10 @@ const WithdrawForm = () => {
           },
         ],
       });
-      if (response === 'OK') {
+      if (response.status === 'OK') {
         setAlertData({
           severity: 'success',
-          message: 'withdrawal successful',
+          message: `Withdrawal is successful. Tx [${response.txId}] is in mempool.`,
         });
       } else {
         throw new Error(
