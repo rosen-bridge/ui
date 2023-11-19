@@ -19,7 +19,9 @@ export const AppSnackbar = () => {
       autoHideDuration={5000}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
     >
-      <Alert severity={state.severity!}>{state.message}</Alert>
+      <Alert variant="filled" severity={state.severity!}>
+        {state.message}
+      </Alert>
     </Snackbar>
   ) : null;
 };
