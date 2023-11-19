@@ -1,5 +1,6 @@
 'use client';
 
+import { upperFirst } from 'lodash-es';
 import Image from 'next/image';
 import useSWR from 'swr';
 
@@ -68,7 +69,7 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Network"
-          value={data?.network ?? ''}
+          value={upperFirst(data?.network ?? '')}
           icon={
             isInfoLoading ? (
               <Box sx={{ width: 35, height: 35 }} />
