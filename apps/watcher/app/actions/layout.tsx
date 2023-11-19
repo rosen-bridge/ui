@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSelectedLayoutSegment } from 'next/navigation';
+import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
 import React, { SyntheticEvent } from 'react';
 
 import {
@@ -60,7 +60,7 @@ const ActionsDivider = () => (
 );
 
 const Actions = ({ form, text }: LayoutProps) => {
-  const currentAction = useSelectedLayoutSegment('form');
+  const segments = useSelectedLayoutSegments('form');
 
   const router = useRouter();
 
@@ -72,7 +72,7 @@ const Actions = ({ form, text }: LayoutProps) => {
     <>
       <ScrollableContainer>
         <CustomToggleButtonGroup
-          value={currentAction}
+          value={segments.at(-1)}
           exclusive
           onChange={handleActionChange}
           fullWidth
