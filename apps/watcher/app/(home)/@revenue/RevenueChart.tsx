@@ -114,7 +114,12 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
   );
 
   return (
-    <Chart options={apexChartOptions} series={apexChartSeries} height={240} />
+    <Chart
+      type="bar"
+      options={apexChartOptions}
+      series={apexChartSeries}
+      height={240}
+    />
   );
 };
 
