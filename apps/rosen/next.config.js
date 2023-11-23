@@ -5,7 +5,12 @@ const nextConfig = {
       'ergo-lib-wasm-nodejs',
       '@emurgo/cardano-serialization-lib-nodejs',
     ],
+    instrumentationHook: true,
   },
+  transpilePackages: [
+    '@rosen-bridge/winston-logger',
+    '@rosen-bridge/extended-typeorm',
+  ],
   webpack: function (config, options) {
     config.experiments = {
       asyncWebAssembly: true,
