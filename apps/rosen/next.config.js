@@ -8,8 +8,15 @@ const nextConfig = {
     instrumentationHook: true,
   },
   transpilePackages: [
-    '@rosen-bridge/winston-logger',
+    '@rosen-bridge/abstract-logger',
     '@rosen-bridge/extended-typeorm',
+    '@rosen-bridge/logger-interface',
+    '@rosen-bridge/observation-extractor',
+    '@rosen-bridge/rosen-extractor',
+    '@rosen-bridge/scanner',
+    '@rosen-bridge/winston-logger',
+    '@rosen-clients/ergo-explorer',
+    '@rosen-clients/ergo-node',
   ],
   webpack: function (config, options) {
     config.experiments = {

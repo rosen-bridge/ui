@@ -1,4 +1,5 @@
 import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { BlockEntity, migrations } from '@rosen-bridge/scanner';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -9,6 +10,8 @@ const dataSource = new DataSource({
   database: process.env.POSTGRES_DATABASE || 'postgres',
   synchronize: false,
   logging: false,
+  entities: [BlockEntity],
+  migrations: migrations.postgres,
 });
 
 export default dataSource;
