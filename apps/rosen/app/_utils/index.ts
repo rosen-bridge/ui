@@ -29,7 +29,7 @@ export const getTokenNameAndId = (
   } else if (network === Networks.cardano) {
     return {
       tokenName: token.name,
-      tokenId: token.fingerprint,
+      tokenId: token.tokenId,
     };
   }
 };
