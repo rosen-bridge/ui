@@ -33,6 +33,7 @@
     "@rosen-ui/wallet-api": "^0.0.1",
     "buffer": "^6.0.3",
     "ergo-lib-wasm-nodejs": "^0.24.0",
+    "joi": "^17.11.0",
     "lodash-es": "^4.17.21",
     "next": "14.0.0",
     "pg": "^8.11.3",

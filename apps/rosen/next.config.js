@@ -4,6 +4,7 @@ const nextConfig = {
     serverComponentsExternalPackages: [
       'ergo-lib-wasm-nodejs',
       '@emurgo/cardano-serialization-lib-nodejs',
+      'typeorm',
     ],
     instrumentationHook: true,
   },
