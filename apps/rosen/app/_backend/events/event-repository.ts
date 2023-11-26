@@ -52,6 +52,6 @@ export const getEvents = async (offset: number, limit: number) => {
 
   return {
     items,
-    total: rawItems?.[0].total ?? 0,
+    total: rawItems[0]?.total ?? 0,
   };
 };
