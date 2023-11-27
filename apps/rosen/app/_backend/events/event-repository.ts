@@ -6,8 +6,9 @@ import dataSource from '../dataSource';
 const observationRepository = dataSource.getRepository(ObservationEntity);
 const blockRepository = dataSource.getRepository(BlockEntity);
 
-interface ObservationWithTotal extends Omit<ObservationEntity, 'requestId'> {
+interface EventWithTotal extends Omit<ObservationEntity, 'requestId'> {
   eventId: string;
+  timestamp: number;
   total: number;
 }
 
@@ -15,7 +16,7 @@ interface ObservationWithTotal extends Omit<ObservationEntity, 'requestId'> {
  * remove total field from rawItems returned by query in getEvents
  * @param rawItems
  */
-const getItemsWithoutTotal = (rawItems: ObservationWithTotal[]) =>
+const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
   rawItems.map(({ total, ...item }) => item);
 
 /**
@@ -24,7 +25,7 @@ const getItemsWithoutTotal = (rawItems: ObservationWithTotal[]) =>
  * @param limit
  */
 export const getEvents = async (offset: number, limit: number) => {
-  const rawItems: ObservationWithTotal[] = await observationRepository
+  const rawItems: EventWithTotal[] = await observationRepository
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
     .select([
