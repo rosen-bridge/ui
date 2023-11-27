@@ -42,60 +42,70 @@ export const tabletHeader = [
     title: 'Event Id',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Chain',
     cellProps: {
       width: 250,
+      align: 'center' as const,
     },
   },
   {
     title: 'Height',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Addresses',
     cellProps: {
       width: 300,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Amount',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Time',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
 ];
@@ -217,8 +227,10 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        {row.eventId.slice(0, 10)}
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Link
           href={`${baseTxUrl}${row.sourceTxId}`}
           target="_blank"
@@ -228,32 +240,32 @@ export const TabletRow: FC<RowProps> = (props) => {
           {row.sourceTxId.slice(0, 10)}
         </Link>
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {upperFirst(row.fromChain)}
         <Typography variant="h5" display="inline" mx={1}>
           →
         </Typography>
         {upperFirst(row.toChain)}
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.height}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {row.fromAddress.slice(0, 10)}
         <Typography variant="h5" display="inline" mx={1}>
           →
         </Typography>
         {row.toAddress.slice(0, 10)}
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {getDecimalString(row.amount.toString(), row.lockToken.decimals)}
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {getDecimalString(row.bridgeFee.toString(), row.lockToken.decimals)}
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {getDecimalString(row.networkFee.toString(), row.lockToken.decimals)}
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {moment(row.timestamp * 1000).fromNow()}
       </EnhancedTableCell>
     </TableRow>
