@@ -2,7 +2,7 @@ import { CardanoKoiosObservationExtractor } from '@rosen-bridge/observation-extr
 import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { getRosenTokens } from '../observation-utils';
+import { getRosenTokens } from '@/_utils';
 
 import dataSource from '@/_backend/dataSource';
 
