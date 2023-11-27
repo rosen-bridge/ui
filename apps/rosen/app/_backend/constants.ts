@@ -8,3 +8,5 @@ export const CARDANO_SCANNER_INTERVAL = 30 * 1000;
 
 export const ERGO_SCANNER_LOGGER_NAME = 'ergo-scanner';
 export const CARDANO_SCANNER_LOGGER_NAME = 'cardano-scanner';
+
+export const UNSUPPORTED_TOKEN_NAME = 'Unsupported token';
