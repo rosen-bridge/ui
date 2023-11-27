@@ -29,20 +29,20 @@ export const getEvents = async (offset: number, limit: number) => {
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
     .select([
-      'oe.id AS id',
-      'oe.fromChain AS fromChain',
-      'oe.toChain AS toChain',
-      'oe.fromAddress AS fromAddress',
-      'oe.toAddress AS toAddress',
-      'oe.height AS height',
-      'oe.amount AS amount',
-      'oe.networkFee AS networkFee',
-      'oe.bridgeFee AS bridgeFee',
-      'oe.sourceChainTokenId AS sourceChainTokenId',
-      'oe.sourceTxId AS sourceTxId',
-      'oe.requestId AS eventId',
-      'be.timestamp AS timestamp',
-      'COUNT(*) OVER() AS total',
+      'oe.id AS "id"',
+      'oe.fromChain AS "fromChain"',
+      'oe.toChain AS "toChain"',
+      'oe.fromAddress AS "fromAddress"',
+      'oe.toAddress AS "toAddress"',
+      'oe.height AS "height"',
+      'oe.amount AS "amount"',
+      'oe.networkFee AS "networkFee"',
+      'oe.bridgeFee AS "bridgeFee"',
+      'oe.sourceChainTokenId AS "sourceChainTokenId"',
+      'oe.sourceTxId AS "sourceTxId"',
+      'oe.requestId AS "eventId"',
+      'be.timestamp AS "timestamp"',
+      'COUNT(*) OVER() AS "total"',
     ])
     .orderBy('be.timestamp', 'DESC')
     .offset(offset)
