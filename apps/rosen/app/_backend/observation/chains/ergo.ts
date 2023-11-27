@@ -2,7 +2,7 @@ import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import { ErgoScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
 
-import { getRosenTokens } from '@/_utils';
+import { getRosenTokens } from '@/_backend/utils';
 
 import dataSource from '@/_backend/dataSource';
 

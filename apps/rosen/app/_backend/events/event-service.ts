@@ -1,6 +1,6 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { getRosenTokens } from '@/_utils';
+import { getRosenTokens } from '@/_backend/utils';
 
 import { getEvents } from './event-repository';
 
