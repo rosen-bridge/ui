@@ -25,6 +25,10 @@ const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
  * @param limit
  */
 export const getEvents = async (offset: number, limit: number) => {
+  /**
+   * TODO: convert the query to a view
+   * local:ergo/rosen-bridge/ui#194
+   */
   const rawItems: EventWithTotal[] = await observationRepository
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
