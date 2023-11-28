@@ -3,12 +3,13 @@
 import React from 'react';
 import { RosenTokens } from '@rosen-bridge/tokens';
 
-import {
-  NoSsr,
-  styled,
-  AppSnackbar,
-  SnackbarProvider,
-} from '@rosen-bridge/ui-kit';
+/**
+ * FIXME: import NoSsr from ui-kit
+ * local:ergo/rosen-bridge/ui#193
+ */
+import { NoSsr } from '@mui/material';
+
+import { styled, AppSnackbar, SnackbarProvider } from '@rosen-bridge/ui-kit';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';

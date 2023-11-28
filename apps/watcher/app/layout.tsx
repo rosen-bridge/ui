@@ -3,12 +3,13 @@
 import React from 'react';
 import SWRConfig from '@rosen-ui/swr-mock';
 
-import {
-  AppSnackbar,
-  NoSsr,
-  styled,
-  SnackbarProvider,
-} from '@rosen-bridge/ui-kit';
+/**
+ * FIXME: import NoSsr from ui-kit
+ * local:ergo/rosen-bridge/ui#193
+ */
+import { NoSsr } from '@mui/material';
+
+import { AppSnackbar, styled, SnackbarProvider } from '@rosen-bridge/ui-kit';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';

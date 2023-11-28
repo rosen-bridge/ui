@@ -1,6 +1,6 @@
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { TokenInfo } from '@rosen-ui/types';
+
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from '@/_networks/cardano/transaction/consts';

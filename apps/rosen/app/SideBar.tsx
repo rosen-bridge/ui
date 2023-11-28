@@ -50,6 +50,18 @@ const SideBar = () => {
         </Grid>
         <Grid item>
           <NavigationButton
+            label="Events"
+            icon={
+              <SvgIcon>
+                <Exchange />
+              </SvgIcon>
+            }
+            onClick={() => router.push('/events')}
+            isActive={pathname === '/events'}
+          />
+        </Grid>
+        <Grid item>
+          <NavigationButton
             label="Assets"
             icon={
               <SvgIcon>
@@ -58,19 +70,6 @@ const SideBar = () => {
             }
             onClick={() => router.push('/assets')}
             isActive={pathname.startsWith('/assets')}
-            disabled
-          />
-        </Grid>
-        <Grid item>
-          <NavigationButton
-            label="Transactions"
-            icon={
-              <SvgIcon>
-                <Exchange />
-              </SvgIcon>
-            }
-            onClick={() => router.push('/transactions')}
-            isActive={pathname === '/transactions'}
             disabled
           />
         </Grid>
