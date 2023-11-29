@@ -199,7 +199,9 @@ const revenueChart = {
   year: revenueChartYearly,
 };
 
-const sign: ApiSignResponse = 'OK';
+const sign: ApiSignResponse = {
+  message: 'Ok',
+};
 
 const assets = [
   {
