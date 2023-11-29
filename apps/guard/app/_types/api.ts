@@ -31,9 +31,12 @@ interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
 export type ApiRevenueChartResponse = GuardTokenChartData[];
 
 export interface ApiSignRequestBody {
-  tx: string;
+  chain: string;
+  txJson: string;
 }
-export type ApiSignResponse = 'OK';
+export type ApiSignResponse = {
+  message: 'Ok';
+};
 
 export type ApiAddressAssetsResponse = Paginated<GuardTokenInfo>;
 

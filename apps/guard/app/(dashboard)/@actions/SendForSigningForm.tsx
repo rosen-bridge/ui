@@ -9,13 +9,15 @@ import {
   AlertProps,
   Typography,
   FullCard,
+  MenuItem,
 } from '@rosen-bridge/ui-kit';
 import { mutator } from '@rosen-ui/swr-helpers';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
 
 interface Form {
-  tx: string;
+  chain: string;
+  txJson: string;
 }
 /**
  * render a form for signing a tx
@@ -33,22 +35,24 @@ const SendForSigningForm = () => {
     message: string;
   } | null>(null);
 
-  const { handleSubmit, register } = useForm({
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
-      tx: '',
+      txJson: '',
+      chain: '',
     },
   });
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
     try {
-      const { tx } = data;
-      const response = await trigger({ tx });
+      const { txJson, chain } = data;
+      const response = await trigger({ txJson, chain });
 
-      if (response === 'OK') {
+      if (response.message === 'Ok') {
         setAlertData({
           severity: 'success',
           message: `Sign operation successful.`,
         });
+        reset();
       } else {
         throw new Error(
           'Server responded but the response message was unexpected',
@@ -76,16 +80,22 @@ const SendForSigningForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {renderAlert()}
 
-        <Typography sx={{ mb: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur.
-        </Typography>
-
-        <TextField label="Transaction" multiline rows={5} {...register('tx')} />
+        <TextField
+          select
+          label="Chain"
+          {...register('chain')}
+          sx={{ mb: 2 }}
+          fullWidth
+        >
+          <MenuItem value="ergo">Ergo</MenuItem>
+          <MenuItem value="cardano">Cardano</MenuItem>
+        </TextField>
+        <TextField
+          label="Transaction"
+          multiline
+          rows={5}
+          {...register('txJson')}
+        />
 
         <SubmitButton loading={isSignPending}>Send</SubmitButton>
       </form>
