@@ -20,7 +20,7 @@ const runAndSetInterval = (job: (...args: any[]) => any, interval: number) => {
 const startScannerUpdateJob = (
   scanner: GeneralScanner<any>,
   loggerFileName: string,
-  updateInterval: number,
+  updateInterval: number
 ) => {
   const logger = WinstonLogger.getInstance().getLogger(loggerFileName);
 
@@ -44,7 +44,7 @@ const startScannerUpdateJob = (
 export const startScanner = async (
   scanner: GeneralScanner<any>,
   loggerFileName: string,
-  updateInterval: number,
+  updateInterval: number
 ) => {
   await scanner.initialize();
 

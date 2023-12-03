@@ -1,19 +1,21 @@
 import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import dataSource from '@/_backend/dataSource';
+import dataSource from '../../data-source';
 
 import { startScanner } from '../scanner-utils';
+
+import config from '../../configs';
 
 import {
   CARDANO_KOIOS_URL,
   CARDANO_SCANNER_INTERVAL,
   CARDANO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
-} from '@/_backend/constants';
+} from '../../constants';
 
 const scannerLogger = WinstonLogger.getInstance().getLogger(
-  CARDANO_SCANNER_LOGGER_NAME,
+  CARDANO_SCANNER_LOGGER_NAME
 );
 
 /**
@@ -24,11 +26,11 @@ export const startCardanoScanner = async () => {
   const scanner = new CardanoKoiosScanner(
     {
       dataSource,
-      initialHeight: Number(process.env.CARDANO_INITIAL_HEIGHT) || 0,
+      initialHeight: config.cardano.initialHeight,
       koiosUrl: CARDANO_KOIOS_URL,
       timeout: SCANNER_API_TIMEOUT,
     },
-    scannerLogger,
+    scannerLogger
   );
 
   startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);

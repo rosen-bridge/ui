@@ -1,10 +1,12 @@
 import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import { ErgoScanner } from '@rosen-bridge/scanner';
-import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
+import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { getRosenTokens } from '@/_backend/utils';
+import { getRosenTokens } from '../../utils';
 
-import dataSource from '@/_backend/dataSource';
+import config from '../../configs';
+
+import dataSource from '../../data-source';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -13,17 +15,17 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * @param scanner
  */
 export const registerErgoExtractor = (scanner: ErgoScanner) => {
-  if (!process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS) {
+  if (!config.ergo.lockAddress) {
     throw new Error(
-      'Cardano lock address config is not set. Cannot register a Cardano observation extractor.',
+      'Cardano lock address config is not set. Cannot register a Cardano observation extractor.'
     );
   }
 
   const observationExtractor = new ErgoObservationExtractor(
     dataSource,
     getRosenTokens(),
-    process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
-    logger,
+    config.ergo.lockAddress,
+    logger
   );
 
   scanner.registerExtractor(observationExtractor);

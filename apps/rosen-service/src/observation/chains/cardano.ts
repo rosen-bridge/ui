@@ -2,9 +2,11 @@ import { CardanoKoiosObservationExtractor } from '@rosen-bridge/observation-extr
 import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { getRosenTokens } from '@/_backend/utils';
+import { getRosenTokens } from '../../utils';
 
-import dataSource from '@/_backend/dataSource';
+import config from '../../configs';
+
+import dataSource from '../../data-source';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -13,17 +15,17 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * @param scanner
  */
 export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
-  if (!process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS) {
+  if (!config.cardano.lockAddress) {
     throw new Error(
-      'Cardano lock address config is not set. Cannot register a Cardano observation extractor.',
+      'Cardano lock address config is not set. Cannot register a Cardano observation extractor.'
     );
   }
 
   const observationExtractor = new CardanoKoiosObservationExtractor(
     dataSource,
     getRosenTokens(),
-    process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS,
-    logger,
+    config.cardano.lockAddress,
+    logger
   );
 
   scanner.registerExtractor(observationExtractor);
