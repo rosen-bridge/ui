@@ -4,7 +4,7 @@ import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import scannerService from './scanner/scanner-service';
 
-import dataSource from './dataSource';
+import dataSource from './data-source';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 

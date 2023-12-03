@@ -1,19 +1,21 @@
 import { ErgoNetworkType, ErgoScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import dataSource from '@/_backend/dataSource';
+import dataSource from '../../data-source';
 
-import { startScanner } from '@/_backend/scanner/scanner-utils';
+import { startScanner } from '../../scanner/scanner-utils';
+
+import config from '../../configs';
 
 import {
   ERGO_EXPLORER_URL,
   ERGO_SCANNER_INTERVAL,
   ERGO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
-} from '@/_backend/constants';
+} from '../../constants';
 
 const scannerLogger = WinstonLogger.getInstance().getLogger(
-  ERGO_SCANNER_LOGGER_NAME,
+  ERGO_SCANNER_LOGGER_NAME
 );
 
 /**
@@ -26,10 +28,10 @@ export const startErgoScanner = async () => {
       type: ErgoNetworkType.Explorer,
       url: ERGO_EXPLORER_URL,
       dataSource,
-      initialHeight: Number(process.env.ERGO_INITIAL_HEIGHT) || 0,
+      initialHeight: config.ergo.initialHeight,
       timeout: SCANNER_API_TIMEOUT,
     },
-    scannerLogger,
+    scannerLogger
   );
 
   startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);

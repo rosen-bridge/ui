@@ -24,7 +24,6 @@
     "@rosen-bridge/observation-extractor": "^2.2.3",
     "@rosen-bridge/scanner": "^2.2.1",
     "@rosen-bridge/tokens": "^0.2.0",
-    "@rosen-bridge/winston-logger": "^0.2.1",
     "@rosen-clients/cardano-koios": "^2.0.1",
     "@rosen-clients/ergo-explorer": "^1.0.2",
     "@rosen-ui/nami-wallet": "^0.0.1",

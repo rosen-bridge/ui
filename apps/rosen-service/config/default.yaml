@@ -1,0 +1,12 @@
+logs:
+  - type: 'console'
+    level: 'info'
+ergo:
+  lockAddress:
+  initialHeight:
+cardano:
+  lockAddress:
+  initialHeight:
+postgres:
+  url: # postgresql://username:password@host:port/databasename
+  logging: false
