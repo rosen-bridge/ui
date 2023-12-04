@@ -15,6 +15,7 @@ const dataSource = new DataSource({
   url: config.postgres.url,
   synchronize: false,
   logging: config.postgres.logging,
+  ssl: config.postgres.useSSL,
   entities: [BlockEntity, ObservationEntity],
   migrations: [
     ...observationExtractorMigrations.postgres,

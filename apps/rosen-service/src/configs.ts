@@ -15,6 +15,7 @@ const config = {
   postgres: {
     url: nodeConfig.get<string>('postgres.url'),
     logging: nodeConfig.get<boolean>('postgres.logging'),
+    useSSL: nodeConfig.get<boolean>('postgres.useSSL'),
   },
 };
 
