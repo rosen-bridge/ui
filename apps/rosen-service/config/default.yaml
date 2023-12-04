@@ -10,3 +10,4 @@ cardano:
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false
+  useSSL: false
