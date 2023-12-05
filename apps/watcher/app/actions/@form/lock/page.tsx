@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
+import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
 import {
@@ -11,7 +12,7 @@ import {
   Grid,
   SubmitButton,
 } from '@rosen-bridge/ui-kit';
-import { mutator } from '@rosen-ui/swr-helpers';
+import { mutator, fetcher } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import ConfirmationModal from '../../ConfirmationModal';
@@ -21,10 +22,30 @@ import TokenAmountTextField, {
 
 import useRsnToken from '@/_hooks/useRsnToken';
 
-import { ApiPermitRequestBody, ApiPermitResponse } from '@/_types/api';
+import {
+  ApiPermitRequestBody,
+  ApiPermitResponse,
+  ApiInfoResponse,
+} from '@/_types/api';
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
+    '/info',
+    fetcher,
+  );
+
+  const modifiedRsnTokenConsideringCollateral = useMemo(
+    () =>
+      rsnToken && {
+        ...rsnToken,
+        amount:
+          info && !info.permitCount.total
+            ? Math.max(rsnToken.amount - info.collateral.rsn, 0)
+            : rsnToken.amount,
+      },
+    [info, rsnToken],
+  );
 
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
@@ -96,13 +117,13 @@ const LockForm = () => {
     </AlertCard>
   );
 
-  const disabled = isRsnTokenLoading || !rsnToken?.amount;
+  const disabled = isRsnTokenLoading || isInfoLoading || !rsnToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
       disabled={disabled}
       loading={isRsnTokenLoading}
-      token={rsnToken}
+      token={modifiedRsnTokenConsideringCollateral}
     />
   );
 
