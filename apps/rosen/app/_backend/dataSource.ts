@@ -7,6 +7,10 @@ import {
   BlockEntity,
   migrations as scannerMigrations,
 } from '@rosen-bridge/scanner';
+import {
+  EventTriggerEntity,
+  migrations as eventTriggerExtractorMigrations,
+} from '@rosen-bridge/watcher-data-extractor';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -14,8 +18,9 @@ const dataSource = new DataSource({
   ssl: process.env.POSTGRES_USE_SSL === 'true',
   synchronize: false,
   logging: false,
-  entities: [BlockEntity, ObservationEntity],
+  entities: [BlockEntity, EventTriggerEntity, ObservationEntity],
   migrations: [
+    ...eventTriggerExtractorMigrations.postgres,
     ...observationExtractorMigrations.postgres,
     ...scannerMigrations.postgres,
   ],
