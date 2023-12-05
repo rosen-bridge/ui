@@ -48,7 +48,6 @@ const baseChartOptions = {
   },
   tooltip: {
     enabled: true,
-    shared: true,
     x: {
       show: false,
     },

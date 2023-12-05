@@ -15,7 +15,7 @@ const Tokens = () => {
 
   return (
     <TokensCard
-      tokens={data?.items ?? []}
+      tokens={data?.items.filter((token) => !!token.amount) ?? []}
       isLoading={isLoading}
       title="Tokens"
     />
