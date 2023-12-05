@@ -108,7 +108,20 @@ export const tabletHeader = [
       align: 'center' as const,
     },
   },
+  {
+    title: 'Status',
+    cellProps: {
+      width: 150,
+      align: 'center' as const,
+    },
+  },
 ];
+
+const statusMap = {
+  fraud: 'fraud',
+  processing: 'processing',
+  successful: 'done',
+};
 
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
@@ -200,6 +213,12 @@ export const MobileRow: FC<RowProps> = (props) => {
               {moment(row.timestamp * 1000).fromNow()}
             </EnhancedTableCell>
           </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell>Status</EnhancedTableCell>
+            <EnhancedTableCell>
+              {statusMap[row.status] ?? 'unknown'}
+            </EnhancedTableCell>
+          </TableRow>
         </>
       )}
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -267,6 +286,9 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         {moment(row.timestamp * 1000).fromNow()}
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        {statusMap[row.status] ?? 'unknown'}
       </EnhancedTableCell>
     </TableRow>
   );
