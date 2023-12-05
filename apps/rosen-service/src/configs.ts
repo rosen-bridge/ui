@@ -5,12 +5,28 @@ import { TransportOptions } from '@rosen-bridge/winston-logger';
 const config = {
   logs: nodeConfig.get<TransportOptions[]>('logs'),
   ergo: {
-    lockAddress: nodeConfig.get<string>('ergo.lockAddress'),
+    addresses: {
+      lock: nodeConfig.get<string>('ergo.addresses.lock'),
+      eventTrigger: nodeConfig.get<string>('ergo.addresses.eventTrigger'),
+      permit: nodeConfig.get<string>('ergo.addresses.permit'),
+      fraud: nodeConfig.get<string>('ergo.addresses.fraud'),
+    },
     initialHeight: nodeConfig.get<number>('ergo.initialHeight'),
+    tokens: {
+      rwt: nodeConfig.get<string>('ergo.tokens.rwt'),
+    },
   },
   cardano: {
-    lockAddress: nodeConfig.get<string>('cardano.lockAddress'),
+    addresses: {
+      lock: nodeConfig.get<string>('cardano.addresses.lock'),
+      eventTrigger: nodeConfig.get<string>('cardano.addresses.eventTrigger'),
+      permit: nodeConfig.get<string>('cardano.addresses.permit'),
+      fraud: nodeConfig.get<string>('cardano.addresses.fraud'),
+    },
     initialHeight: nodeConfig.get<number>('cardano.initialHeight'),
+    tokens: {
+      rwt: nodeConfig.get<string>('cardano.tokens.rwt'),
+    },
   },
   postgres: {
     url: nodeConfig.get<string>('postgres.url'),

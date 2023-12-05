@@ -15,7 +15,7 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * @param scanner
  */
 export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
-  if (!config.cardano.lockAddress) {
+  if (!config.cardano.addresses.lock) {
     throw new Error(
       'Cardano lock address config is not set. Cannot register a Cardano observation extractor.'
     );
@@ -24,7 +24,7 @@ export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
   const observationExtractor = new CardanoKoiosObservationExtractor(
     dataSource,
     getRosenTokens(),
-    config.cardano.lockAddress,
+    config.cardano.addresses.lock,
     logger
   );
 

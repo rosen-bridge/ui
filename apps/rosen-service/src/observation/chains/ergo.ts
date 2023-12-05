@@ -15,7 +15,7 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * @param scanner
  */
 export const registerErgoExtractor = (scanner: ErgoScanner) => {
-  if (!config.ergo.lockAddress) {
+  if (!config.ergo.addresses.lock) {
     throw new Error(
       'Cardano lock address config is not set. Cannot register a Cardano observation extractor.'
     );
@@ -24,7 +24,7 @@ export const registerErgoExtractor = (scanner: ErgoScanner) => {
   const observationExtractor = new ErgoObservationExtractor(
     dataSource,
     getRosenTokens(),
-    config.ergo.lockAddress,
+    config.ergo.addresses.lock,
     logger
   );
 

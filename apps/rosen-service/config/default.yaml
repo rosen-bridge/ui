@@ -2,10 +2,22 @@ logs:
   - type: 'console'
     level: 'info'
 ergo:
-  lockAddress:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
   initialHeight:
 cardano:
-  lockAddress:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
   initialHeight:
 postgres:
   url: # postgresql://username:password@host:port/databasename
