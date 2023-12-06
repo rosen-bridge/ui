@@ -67,8 +67,8 @@ const TokenAmountTextField = ({
   return (
     <TextField
       label="Amount"
-      disabled={disabled}
       {...amountField}
+      disabled={disabled}
       onChange={(event) => {
         if (!token) return;
 

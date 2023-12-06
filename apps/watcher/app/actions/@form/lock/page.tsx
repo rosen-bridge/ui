@@ -11,9 +11,10 @@ import {
   Box,
   Grid,
   SubmitButton,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { mutator, fetcher } from '@rosen-ui/swr-helpers';
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
 import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
@@ -21,6 +22,7 @@ import TokenAmountTextField, {
 } from '../../TokenAmountTextField';
 
 import useRsnToken from '@/_hooks/useRsnToken';
+import useToken from '@/_hooks/useToken';
 
 import {
   ApiPermitRequestBody,
@@ -30,6 +32,7 @@ import {
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
     fetcher,
@@ -41,7 +44,7 @@ const LockForm = () => {
         ...rsnToken,
         amount:
           info && !info.permitCount.total
-            ? Math.max(rsnToken.amount - info.collateral.rsn, 0)
+            ? Math.max(rsnToken.amount - info.collateral.rsn - 1, 0)
             : rsnToken.amount,
       },
     [info, rsnToken],
@@ -65,7 +68,7 @@ const LockForm = () => {
     if (!isRsnTokenLoading && !rsnToken?.amount) {
       setAlertData({
         severity: 'error',
-        message: 'RSN token does not exist',
+        message: "You don't have any RSN.",
       });
     }
   }, [isRsnTokenLoading, rsnToken]);
@@ -82,14 +85,14 @@ const LockForm = () => {
     try {
       const count = getNonDecimalString(formData.amount, rsnToken!.decimals);
 
-      const response = await trigger({ count });
+      const response = await trigger({
+        count: (+count + (info?.permitCount.total ? 0 : 1)).toString(),
+      });
 
       if (response?.txId) {
         setAlertData({
           severity: 'success',
-          message: `Lock operation is in progress. ${count} RWT${
-            count === '1' ? '' : 's'
-          } will be reserved for you after tx [${response.txId}] is confirmed.`,
+          message: `Lock operation is in progress. Wait for tx [${response.txId}] to be confirmed by some blocks, so your new permits will be activated.`,
         });
       } else {
         throw new Error(
@@ -117,7 +120,11 @@ const LockForm = () => {
     </AlertCard>
   );
 
-  const disabled = isRsnTokenLoading || isInfoLoading || !rsnToken?.amount;
+  const disabled =
+    isRsnTokenLoading ||
+    isInfoLoading ||
+    isErgTokenLoading ||
+    !rsnToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
@@ -127,6 +134,85 @@ const LockForm = () => {
     />
   );
 
+  const renderCollateralAlert = () =>
+    !info?.permitCount.total &&
+    !isRsnTokenLoading && (
+      <AlertCard severity="info">
+        <Typography>
+          An additional{' '}
+          {getDecimalString(
+            ((info?.collateral.rsn ?? 0) + 1).toString(),
+            rsnToken?.decimals ?? 0,
+          )}{' '}
+          RSN and{' '}
+          {getDecimalString(
+            (info?.collateral.erg ?? 0).toString(),
+            ergToken?.decimals ?? 0,
+          )}{' '}
+          ERG is required to put your collateral. (You need more ERG to pay for
+          transaction fees.)
+        </Typography>
+      </AlertCard>
+    );
+
+  const renderReportsCountAlert = () => {
+    if (
+      !formData.amount ||
+      !info?.collateral.rsn ||
+      !rsnToken?.decimals ||
+      !rsnToken.amount
+    )
+      return null;
+
+    const nonDecimalAmount = +getNonDecimalString(
+      formData.amount,
+      rsnToken!.decimals,
+    );
+
+    const reportsCount = Math.floor(+nonDecimalAmount / info?.permitsPerEvent);
+
+    const nonDecimalRemainder = +nonDecimalAmount % info?.permitsPerEvent;
+    const remainder = +getDecimalString(
+      nonDecimalRemainder.toString(),
+      rsnToken.decimals,
+    );
+
+    if (reportsCount) {
+      if (remainder) {
+        return (
+          <AlertCard severity="info">
+            <Typography>
+              Currently, by locking {formData.amount} RSN, you can report{' '}
+              {reportsCount} events using {+formData.amount - remainder} RSN and{' '}
+              {remainder} RSN will be reserved until you lock more.
+            </Typography>
+          </AlertCard>
+        );
+      }
+      return (
+        <AlertCard severity="info">
+          <Typography>
+            Currently, by locking {formData.amount} RSN, you can report{' '}
+            {reportsCount} events.
+          </Typography>
+        </AlertCard>
+      );
+    }
+    return (
+      <AlertCard severity="info">
+        <Typography>
+          Currently, by locking {remainder} RSN, you cannot report any
+          additional event unless you already have at least{' '}
+          {getDecimalString(
+            (info?.permitsPerEvent - nonDecimalRemainder).toString(),
+            rsnToken.decimals,
+          )}{' '}
+          locked RSN. You can top it up later.
+        </Typography>
+      </AlertCard>
+    );
+  };
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -134,6 +220,11 @@ const LockForm = () => {
         {renderAlert()}
         <Grid item mobile={12} laptop={12}>
           {renderTokenAmountTextField()}
+        </Grid>
+
+        <Grid mt={2}>
+          {renderCollateralAlert()}
+          {renderReportsCountAlert()}
         </Grid>
 
         <SubmitButton loading={isLockPending} disabled={disabled}>
