@@ -59,7 +59,7 @@ const InfoWidgets = () => {
    */
   const renderLockedRsnWidget = () => (
     <InfoWidgetCard
-      title="Available / Total Locked RSNs"
+      title="Available / Total Locked RSN"
       value={
         data
           ? `${getDecimalString(

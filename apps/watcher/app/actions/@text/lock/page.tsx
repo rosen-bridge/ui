@@ -23,7 +23,7 @@ const LockText = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
 
   const rwtPerRsn = 10 ** (rsnToken?.decimals ?? 0);
-  const requiredRSNs = (info?.permitsPerEvent ?? 0) / rwtPerRsn;
+  const requiredRSN = (info?.permitsPerEvent ?? 0) / rwtPerRsn;
 
   return (
     <ActionText title="Lock & Get Permit">
@@ -59,9 +59,9 @@ const LockText = () => {
                 rsnToken?.decimals ?? 0,
               )
             )}{' '}
-            RSN. It is a <b>one-time</b> payment when requesting for the first
-            reporting permit. This collateral is fully refundable with redeeming
-            all of your reporting permits.
+            RSN. It is a <b>one-time</b> payment for registering as a watcher an
+            getting a WID. This collateral is fully refundable with redeeming
+            all of your locked RSN.
           </Typography>
         </>
       )}
@@ -70,13 +70,13 @@ const LockText = () => {
         RSN
       </Typography>
       <Typography sx={{ mb: 2 }}>
-        To acquire each report permit you should lock{' '}
+        Currently, you should lock{' '}
         {isInfoLoading || isRsnTokenLoading ? (
           <CircularProgress size={12} />
         ) : (
-          requiredRSNs
+          requiredRSN
         )}{' '}
-        RSNs.
+        RSN to report an event.
       </Typography>
     </ActionText>
   );

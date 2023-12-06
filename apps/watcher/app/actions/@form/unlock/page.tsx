@@ -100,7 +100,7 @@ const UnlockForm = () => {
     if (!isInfoLoading && !rwtPartialToken?.amount) {
       setAlertData({
         severity: 'error',
-        message: "You don't have any permit tokens",
+        message: "You don't have any locked RSN.",
       });
     } else {
       setAlertData(null);
@@ -118,9 +118,7 @@ const UnlockForm = () => {
       if (response?.txId) {
         setAlertData({
           severity: 'success',
-          message: `Unlock operation is in progress. ${count} RWT${
-            count === '1' ? '' : 's'
-          } will be redeemed after tx [${response.txId}] is confirmed.`,
+          message: `Unlock operation is in progress. Wait for tx [${response.txId}] to be confirmed by some blocks.`,
         });
       } else {
         throw new Error(
@@ -177,7 +175,7 @@ const UnlockForm = () => {
           title="Confirm Unlock"
           /**
            * TODO: The content should show the amounts of collateral and
-           * unlocked RSNs
+           * unlocked RSN
            * local:ergo/rosen-bridge/ui#104
            */
           content={`You are going to unlock ${formData.amount} ${

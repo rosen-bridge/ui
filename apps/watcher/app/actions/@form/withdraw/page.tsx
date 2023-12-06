@@ -121,7 +121,7 @@ const WithdrawForm = () => {
       if (response.status === 'OK') {
         setAlertData({
           severity: 'success',
-          message: `Withdrawal is successful. Tx [${response.txId}] is in mempool.`,
+          message: `Withdrawal is successful. Wait for tx [${response.txId}] to be confirmed.`,
         });
       } else {
         throw new Error(
@@ -165,7 +165,6 @@ const WithdrawForm = () => {
     <TextField
       label="Token"
       select={!isTokensListLoading}
-      disabled={disabled}
       InputProps={{
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
@@ -174,6 +173,7 @@ const WithdrawForm = () => {
         ),
       }}
       {...tokenIdField}
+      disabled={disabled}
     >
       {tokens?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
