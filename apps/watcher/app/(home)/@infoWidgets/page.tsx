@@ -55,6 +55,35 @@ const InfoWidgets = () => {
   };
 
   /**
+   * render locked rsn widget
+   */
+  const renderLockedRsnWidget = () => (
+    <InfoWidgetCard
+      title="Available / Total Locked RSNs"
+      value={
+        data
+          ? `${getDecimalString(
+              data.permitCount.active.toString() ?? '0',
+              rsnToken?.decimals ?? 0,
+              1,
+            )} / ${getDecimalString(
+              data.permitCount.total.toString() ?? '0',
+              rsnToken?.decimals ?? 0,
+              1,
+            )}`
+          : ''
+      }
+      icon={
+        <SvgIcon fontSize="large">
+          <LockAlt />
+        </SvgIcon>
+      }
+      color="info"
+      isLoading={isInfoLoading}
+    />
+  );
+
+  /**
    * render reports widget
    */
   const renderReportsWidget = () => {
@@ -62,7 +91,7 @@ const InfoWidgets = () => {
 
     return (
       <InfoWidgetCard
-        title="Allowed / Total Reports"
+        title="Available / Total Reports"
         value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
         icon={
           <SvgIcon fontSize="large">
@@ -96,6 +125,9 @@ const InfoWidgets = () => {
           color="primary"
           isLoading={isInfoLoading}
         />
+      </Grid>
+      <Grid item mobile={6} tablet={6} laptop>
+        {renderLockedRsnWidget()}
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         {renderReportsWidget()}
