@@ -24,15 +24,23 @@ const startScannerUpdateJob = (
 ) => {
   const logger = WinstonLogger.getInstance().getLogger(loggerFileName);
 
-  const tryUpdating = () => {
+  const tryUpdating = async () => {
     try {
-      scanner.update();
+      await scanner.update();
+      logger.debug('scanner.update called successfully', {
+        scannerName: scanner.name(),
+      });
     } catch (error) {
       logger.warn(`An error occurred while calling scanner update: ${error}`);
     }
   };
 
   runAndSetInterval(tryUpdating, updateInterval);
+
+  logger.debug('scanner update job run successfully', {
+    scannerName: scanner.name(),
+    interval: updateInterval,
+  });
 };
 
 /**
