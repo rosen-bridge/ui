@@ -29,4 +29,8 @@ export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
   );
 
   scanner.registerExtractor(observationExtractor);
+
+  logger.debug('cardano observation extractor registered', {
+    scannerName: scanner.name(),
+  });
 };

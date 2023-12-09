@@ -6,6 +6,7 @@ import configs from '../configs';
 
 import dataSource from '../data-source';
 
+const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const ergoEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
   'ergo-event-trigger-extractor'
 );
@@ -38,6 +39,14 @@ export const registerExtractors = (scanner: ErgoScanner) => {
 
   scanner.registerExtractor(ergoEventTriggerExtractor);
   scanner.registerExtractor(cardanoEventTriggerExtractor);
+
+  logger.debug('event trigger extractors registered', {
+    scannerName: scanner.name(),
+    extractorNames: [
+      ergoEventTriggerExtractor.getId(),
+      cardanoEventTriggerExtractor.getId(),
+    ],
+  });
 };
 
 const eventTriggerService = {

@@ -14,6 +14,7 @@ import {
   SCANNER_API_TIMEOUT,
 } from '../../constants';
 
+const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
   CARDANO_SCANNER_LOGGER_NAME
 );
@@ -33,7 +34,9 @@ export const startCardanoScanner = async () => {
     scannerLogger
   );
 
-  startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
+  await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
+
+  logger.debug('cardano scanner started');
 
   return scanner;
 };

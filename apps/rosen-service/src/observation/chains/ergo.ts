@@ -29,4 +29,8 @@ export const registerErgoExtractor = (scanner: ErgoScanner) => {
   );
 
   scanner.registerExtractor(observationExtractor);
+
+  logger.debug('ergo observation extractor registered', {
+    scannerName: scanner.name(),
+  });
 };
