@@ -14,6 +14,7 @@ import {
   SCANNER_API_TIMEOUT,
 } from '../../constants';
 
+const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
   ERGO_SCANNER_LOGGER_NAME
 );
@@ -34,7 +35,9 @@ export const startErgoScanner = async () => {
     scannerLogger
   );
 
-  startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
+  await startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
+
+  logger.debug('ergo scanner started');
 
   return scanner;
 };

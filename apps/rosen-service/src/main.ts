@@ -9,11 +9,13 @@ import dataSource from './data-source';
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
 await dataSource.initialize();
-logger.info('data source initialized successfully');
+logger.debug('data source initialized successfully');
 
 await dataSource.runMigrations();
+logger.debug('migrations ran successfully');
 
-scannerService.start();
+await scannerService.start();
+logger.info('scanner service started successfully');
 
 process.on('SIGTERM', async () => {
   logger.debug('termination signal received, exiting gracefully');
