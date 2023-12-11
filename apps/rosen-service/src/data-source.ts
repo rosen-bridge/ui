@@ -14,18 +14,40 @@ import {
 
 import config from './configs';
 
-const dataSource = new DataSource({
-  type: 'postgres',
-  url: config.postgres.url,
-  synchronize: false,
-  logging: config.postgres.logging,
-  ssl: config.postgres.useSSL,
-  entities: [BlockEntity, EventTriggerEntity, ObservationEntity],
-  migrations: [
-    ...eventTriggerExtractorMigrations.postgres,
-    ...observationExtractorMigrations.postgres,
-    ...scannerMigrations.postgres,
-  ],
-});
+import AppError from './errors/AppError';
+
+const getDataSource = () => {
+  try {
+    return new DataSource({
+      type: 'postgres',
+      url: config.postgres.url,
+      synchronize: false,
+      logging: config.postgres.logging,
+      ssl: config.postgres.useSSL,
+      entities: [BlockEntity, EventTriggerEntity, ObservationEntity],
+      migrations: [
+        ...eventTriggerExtractorMigrations.postgres,
+        ...observationExtractorMigrations.postgres,
+        ...scannerMigrations.postgres,
+      ],
+    });
+  } catch (error) {
+    throw new AppError(
+      `cannot create data source due to error: ${error}`,
+      false,
+      'error',
+      error instanceof Error ? error.stack : undefined,
+      {
+        db: {
+          url: config.postgres.url,
+          logging: config.postgres.logging,
+          ssl: config.postgres.useSSL,
+        },
+      }
+    );
+  }
+};
+
+const dataSource = getDataSource();
 
 export default dataSource;

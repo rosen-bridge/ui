@@ -14,6 +14,8 @@ import {
   SCANNER_API_TIMEOUT,
 } from '../../constants';
 
+import AppError from '../../errors/AppError';
+
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
   ERGO_SCANNER_LOGGER_NAME
@@ -24,20 +26,29 @@ const scannerLogger = WinstonLogger.getInstance().getLogger(
  * periodically
  */
 export const startErgoScanner = async () => {
-  const scanner = new ErgoScanner(
-    {
-      type: ErgoNetworkType.Explorer,
-      url: ERGO_EXPLORER_URL,
-      dataSource,
-      initialHeight: config.ergo.initialHeight,
-      timeout: SCANNER_API_TIMEOUT,
-    },
-    scannerLogger
-  );
+  try {
+    const scanner = new ErgoScanner(
+      {
+        type: ErgoNetworkType.Explorer,
+        url: ERGO_EXPLORER_URL,
+        dataSource,
+        initialHeight: config.ergo.initialHeight,
+        timeout: SCANNER_API_TIMEOUT,
+      },
+      scannerLogger
+    );
 
-  await startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
+    await startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
 
-  logger.debug('ergo scanner started');
+    logger.debug('ergo scanner started');
 
-  return scanner;
+    return scanner;
+  } catch (error) {
+    throw new AppError(
+      `cannot create or start ergo scanner due to error: ${error}`,
+      false,
+      'error',
+      error instanceof Error ? error.stack : undefined
+    );
+  }
 };
