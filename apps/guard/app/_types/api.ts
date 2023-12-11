@@ -33,9 +33,11 @@ export type ApiRevenueChartResponse = GuardTokenChartData[];
 export interface ApiSignRequestBody {
   chain: string;
   txJson: string;
+  requiredSign: number;
+  overwrite?: boolean;
 }
 export type ApiSignResponse = {
-  message: 'Ok';
+  message: string;
 };
 
 export type ApiAddressAssetsResponse = Paginated<GuardTokenInfo>;
