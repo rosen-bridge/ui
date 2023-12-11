@@ -8,6 +8,8 @@ import config from '../../configs';
 
 import dataSource from '../../data-source';
 
+import AppError from '../../errors/AppError';
+
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
 /**
@@ -15,22 +17,28 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * @param scanner
  */
 export const registerErgoExtractor = (scanner: ErgoScanner) => {
-  if (!config.ergo.addresses.lock) {
-    throw new Error(
-      'Cardano lock address config is not set. Cannot register a Cardano observation extractor.'
+  try {
+    const observationExtractor = new ErgoObservationExtractor(
+      dataSource,
+      getRosenTokens(),
+      config.ergo.addresses.lock,
+      logger
+    );
+
+    scanner.registerExtractor(observationExtractor);
+
+    logger.debug('ergo observation extractor registered', {
+      scannerName: scanner.name(),
+    });
+  } catch (error) {
+    throw new AppError(
+      `cannot create or register ergo observation extractor due to error: ${error}`,
+      false,
+      'error',
+      error instanceof Error ? error.stack : undefined,
+      {
+        scannerName: scanner.name(),
+      }
     );
   }
-
-  const observationExtractor = new ErgoObservationExtractor(
-    dataSource,
-    getRosenTokens(),
-    config.ergo.addresses.lock,
-    logger
-  );
-
-  scanner.registerExtractor(observationExtractor);
-
-  logger.debug('ergo observation extractor registered', {
-    scannerName: scanner.name(),
-  });
 };

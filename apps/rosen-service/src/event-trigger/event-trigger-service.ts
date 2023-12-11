@@ -6,6 +6,8 @@ import configs from '../configs';
 
 import dataSource from '../data-source';
 
+import AppError from '../errors/AppError';
+
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const ergoEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
   'ergo-event-trigger-extractor'
@@ -18,35 +20,47 @@ const cardanoEventTriggerExtractorLogger =
  * @param scanner
  */
 export const registerExtractors = (scanner: ErgoScanner) => {
-  const ergoEventTriggerExtractor = new EventTriggerExtractor(
-    'ergo-extractor',
-    dataSource,
-    configs.ergo.addresses.eventTrigger,
-    configs.ergo.tokens.rwt,
-    configs.ergo.addresses.permit,
-    configs.ergo.addresses.fraud,
-    ergoEventTriggerExtractorLogger
-  );
-  const cardanoEventTriggerExtractor = new EventTriggerExtractor(
-    'cardano-extractor',
-    dataSource,
-    configs.ergo.addresses.eventTrigger,
-    configs.cardano.tokens.rwt,
-    configs.cardano.addresses.permit,
-    configs.cardano.addresses.fraud,
-    cardanoEventTriggerExtractorLogger
-  );
+  try {
+    const ergoEventTriggerExtractor = new EventTriggerExtractor(
+      'ergo-extractor',
+      dataSource,
+      configs.ergo.addresses.eventTrigger,
+      configs.ergo.tokens.rwt,
+      configs.ergo.addresses.permit,
+      configs.ergo.addresses.fraud,
+      ergoEventTriggerExtractorLogger
+    );
+    const cardanoEventTriggerExtractor = new EventTriggerExtractor(
+      'cardano-extractor',
+      dataSource,
+      configs.ergo.addresses.eventTrigger,
+      configs.cardano.tokens.rwt,
+      configs.cardano.addresses.permit,
+      configs.cardano.addresses.fraud,
+      cardanoEventTriggerExtractorLogger
+    );
 
-  scanner.registerExtractor(ergoEventTriggerExtractor);
-  scanner.registerExtractor(cardanoEventTriggerExtractor);
+    scanner.registerExtractor(ergoEventTriggerExtractor);
+    scanner.registerExtractor(cardanoEventTriggerExtractor);
 
-  logger.debug('event trigger extractors registered', {
-    scannerName: scanner.name(),
-    extractorNames: [
-      ergoEventTriggerExtractor.getId(),
-      cardanoEventTriggerExtractor.getId(),
-    ],
-  });
+    logger.debug('event trigger extractors registered', {
+      scannerName: scanner.name(),
+      extractorNames: [
+        ergoEventTriggerExtractor.getId(),
+        cardanoEventTriggerExtractor.getId(),
+      ],
+    });
+  } catch (error) {
+    throw new AppError(
+      `cannot create or register event trigger extractors due to error: ${error}`,
+      false,
+      'error',
+      error instanceof Error ? error.stack : undefined,
+      {
+        scannerName: scanner.name(),
+      }
+    );
+  }
 };
 
 const eventTriggerService = {

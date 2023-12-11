@@ -14,6 +14,8 @@ import {
   SCANNER_API_TIMEOUT,
 } from '../../constants';
 
+import AppError from '../../errors/AppError';
+
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
   CARDANO_SCANNER_LOGGER_NAME
@@ -24,19 +26,28 @@ const scannerLogger = WinstonLogger.getInstance().getLogger(
  * periodically
  */
 export const startCardanoScanner = async () => {
-  const scanner = new CardanoKoiosScanner(
-    {
-      dataSource,
-      initialHeight: config.cardano.initialHeight,
-      koiosUrl: CARDANO_KOIOS_URL,
-      timeout: SCANNER_API_TIMEOUT,
-    },
-    scannerLogger
-  );
+  try {
+    const scanner = new CardanoKoiosScanner(
+      {
+        dataSource,
+        initialHeight: config.cardano.initialHeight,
+        koiosUrl: CARDANO_KOIOS_URL,
+        timeout: SCANNER_API_TIMEOUT,
+      },
+      scannerLogger
+    );
 
-  await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
+    await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
 
-  logger.debug('cardano scanner started');
+    logger.debug('cardano scanner started');
 
-  return scanner;
+    return scanner;
+  } catch (error) {
+    throw new AppError(
+      `cannot create or start cardano scanner due to error: ${error}`,
+      false,
+      'error',
+      error instanceof Error ? error.stack : undefined
+    );
+  }
 };

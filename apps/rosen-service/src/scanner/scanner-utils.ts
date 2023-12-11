@@ -1,6 +1,10 @@
 import { GeneralScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
+import { handleError } from '../utils';
+
+import AppError from '../errors/AppError';
+
 /**
  * run a job periodically, starting from now
  * @param job
@@ -27,11 +31,20 @@ const startScannerUpdateJob = (
   const tryUpdating = async () => {
     try {
       await scanner.update();
-      logger.debug('scanner.update called successfully', {
+      logger.debug('scanner update called successfully', {
         scannerName: scanner.name(),
       });
     } catch (error) {
-      logger.warn(`An error occurred while calling scanner update: ${error}`);
+      const appError = new AppError(
+        `scanner update failed due to error: ${error}`,
+        true,
+        'warn',
+        error instanceof Error ? error.stack : undefined,
+        {
+          scannerName: scanner.name(),
+        }
+      );
+      handleError(appError);
     }
   };
 
