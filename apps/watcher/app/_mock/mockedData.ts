@@ -3,7 +3,7 @@ import moment from 'moment';
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
 
-import { Event } from '@/_types/api';
+import { ApiPermitReturnResponse, Event } from '@/_types/api';
 
 import {
   ApiEventResponse,
@@ -236,7 +236,13 @@ const permit: ApiPermitResponse = {
   txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
 };
 
-const permitReturn = permit;
+const permitReturn: ApiPermitReturnResponse = {
+  txIds: [
+    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f8',
+    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f9',
+  ],
+};
 
 const generateObservationRecords = (numberOfRecords: number) => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({

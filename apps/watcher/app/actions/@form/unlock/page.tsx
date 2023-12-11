@@ -25,8 +25,8 @@ import useRsnToken from '@/_hooks/useRsnToken';
 
 import {
   ApiInfoResponse,
-  ApiPermitRequestBody,
-  ApiPermitResponse,
+  ApiPermitReturnRequestBody,
+  ApiPermitReturnResponse,
 } from '@/_types/api';
 
 const UnlockForm = () => {
@@ -59,10 +59,10 @@ const UnlockForm = () => {
   } | null>(null);
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
-    ApiPermitResponse,
+    ApiPermitReturnResponse,
     any,
     '/permit/return',
-    ApiPermitRequestBody
+    ApiPermitReturnRequestBody
   >('/permit/return', mutator);
 
   const formMethods = useForm({
@@ -115,10 +115,11 @@ const UnlockForm = () => {
       );
       const response = await trigger({ count });
 
-      if (response?.txId) {
+      if (response?.txIds) {
         setAlertData({
           severity: 'success',
-          message: `Unlock operation is in progress. Wait for tx [${response.txId}] to be confirmed by some blocks.`,
+          message: `Unlock operation is in progress. Wait for the following txs to be confirmed by some blocks:
+          ${response.txIds.join(', ')}`,
         });
       } else {
         throw new Error(

@@ -46,9 +46,12 @@ export interface ApiPermitRequestBody {
 export interface ApiPermitResponse {
   txId: string;
 }
-
-export type ApiPermitReturnRequestBody = ApiPermitRequestBody;
-export type ApiPermitReturnResponse = ApiPermitResponse;
+export interface ApiPermitReturnRequestBody {
+  count: string;
+}
+export interface ApiPermitReturnResponse {
+  txIds: string[];
+}
 
 export interface Observation {
   id: number;
