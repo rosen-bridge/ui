@@ -12,6 +12,7 @@ const pageTitleMap: Record<string, string> = {
   health: 'Health',
   history: 'History',
   revenues: 'Revenues',
+  settings: 'Settings',
 };
 
 /**
