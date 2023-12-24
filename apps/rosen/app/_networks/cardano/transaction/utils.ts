@@ -109,7 +109,7 @@ export const generateLockAuxiliaryData = async (
   let i = 0;
   while (i < fromAddress.length) {
     fromAddressList.add(
-      wasm.TransactionMetadatum.new_text(fromAddress.substring(i, 64)),
+      wasm.TransactionMetadatum.new_text(fromAddress.substring(i, i + 64)),
     );
     i += 64;
   }
