@@ -34,7 +34,8 @@ export const startCardanoScanner = async () => {
         koiosUrl: CARDANO_KOIOS_URL,
         timeout: SCANNER_API_TIMEOUT,
       },
-      scannerLogger
+      scannerLogger,
+      config.cardano.koiosAuthToken
     );
 
     await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
