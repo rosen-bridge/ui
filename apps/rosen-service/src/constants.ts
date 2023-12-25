@@ -1,5 +1,5 @@
 export const ERGO_EXPLORER_URL = 'https://api.ergoplatform.com';
-export const CARDANO_KOIOS_URL = 'https://api.koios.rest/api/v1';
+export const CARDANO_KOIOS_URL = 'https://api.koios.rest/api/beta';
 
 export const SCANNER_API_TIMEOUT = 10_000;
 
