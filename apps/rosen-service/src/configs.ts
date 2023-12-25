@@ -33,6 +33,7 @@ const getConfig = () => {
         tokens: {
           rwt: nodeConfig.get<string>('cardano.tokens.rwt'),
         },
+        koiosAuthToken: nodeConfig.get<string>('cardano.koiosAuthToken'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),

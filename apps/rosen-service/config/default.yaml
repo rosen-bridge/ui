@@ -19,6 +19,7 @@ cardano:
   tokens:
     rwt:
   initialHeight:
+  koiosAuthToken:
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false
