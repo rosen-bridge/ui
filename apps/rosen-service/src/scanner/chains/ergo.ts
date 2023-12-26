@@ -5,6 +5,9 @@ import dataSource from '../../data-source';
 
 import { startScanner } from '../../scanner/scanner-utils';
 
+import eventTriggerService from '../../event-trigger/event-trigger-service';
+import observationService from '../../observation/observation-service';
+
 import config from '../../configs';
 
 import {
@@ -37,6 +40,9 @@ export const startErgoScanner = async () => {
       },
       scannerLogger
     );
+
+    observationService.registerErgoExtractor(scanner);
+    eventTriggerService.registerExtractors(scanner);
 
     await startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
 
