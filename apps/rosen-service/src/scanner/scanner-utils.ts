@@ -10,9 +10,13 @@ import AppError from '../errors/AppError';
  * @param job
  * @param interval
  */
-const runAndSetInterval = (job: (...args: any[]) => any, interval: number) => {
-  job();
-  setInterval(job, interval);
+const runAndSetInterval = async (
+  job: (...args: any[]) => any,
+  interval: number
+) => {
+  await job();
+
+  setTimeout(runAndSetInterval, interval);
 };
 
 /**
