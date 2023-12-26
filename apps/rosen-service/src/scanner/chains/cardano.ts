@@ -5,6 +5,8 @@ import dataSource from '../../data-source';
 
 import { startScanner } from '../scanner-utils';
 
+import observationService from '../../observation/observation-service';
+
 import config from '../../configs';
 
 import {
@@ -37,6 +39,8 @@ export const startCardanoScanner = async () => {
       scannerLogger,
       config.cardano.koiosAuthToken
     );
+
+    observationService.registerCardanoExtractor(scanner);
 
     await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
 

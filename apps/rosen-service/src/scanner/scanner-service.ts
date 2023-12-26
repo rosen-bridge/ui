@@ -20,15 +20,9 @@ const start = async () => {
       startCardanoScanner(),
     ]);
 
-    logger.debug('all scanners started', {
+    logger.debug('all scanners started and their extractors registered', {
       scannerNames: [ergoScanner.name(), cardanoScanner.name()],
     });
-
-    observationService.registerErgoExtractor(ergoScanner);
-    observationService.registerCardanoExtractor(cardanoScanner);
-    eventTriggerService.registerExtractors(ergoScanner);
-
-    logger.debug('all extractors registered to their corresponding scanner');
   } catch (error) {
     handleError(error);
   }
