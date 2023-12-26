@@ -16,7 +16,9 @@ const runAndSetInterval = async (
 ) => {
   await job();
 
-  setTimeout(runAndSetInterval, interval);
+  setTimeout(() => {
+    runAndSetInterval(job, interval);
+  }, interval);
 };
 
 /**
