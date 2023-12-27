@@ -33,7 +33,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
     const cardanoEventTriggerExtractor = new EventTriggerExtractor(
       'cardano-extractor',
       dataSource,
-      configs.ergo.addresses.eventTrigger,
+      configs.cardano.addresses.eventTrigger,
       configs.cardano.tokens.rwt,
       configs.cardano.addresses.permit,
       configs.cardano.addresses.fraud,
