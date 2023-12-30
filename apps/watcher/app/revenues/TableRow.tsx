@@ -36,7 +36,7 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Token Id',
+    title: 'Token',
     cellProps: {
       width: 150,
     },
@@ -100,8 +100,8 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-        <EnhancedTableCell>Token Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.tokenId.slice(0, 10)}</EnhancedTableCell>
+        <EnhancedTableCell>Token</EnhancedTableCell>
+        <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
@@ -154,16 +154,16 @@ export const TabletRow: FC<RowProps> = (props) => {
       .filter((token) => token.tokenId !== rsnToken?.tokenId)
       .map(
         (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)}${
+          `${getDecimalString(token.amount.toString(), token.decimals)} ${
             token.name
           }`,
       )
-      .join('+');
+      .join(' + ');
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.tokenId.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
       <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
     </TableRow>

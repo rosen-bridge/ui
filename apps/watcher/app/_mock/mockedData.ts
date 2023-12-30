@@ -320,7 +320,14 @@ const generateRevenueRecords = (numberOfRecords: number) => {
     amount: '0.1',
     bridgeFee: '0.002',
     networkFee: '0.003',
-    tokenId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockToken: {
+      tokenId:
+        '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+      name: 'ERG',
+      decimals: 9,
+      amount: 0,
+      isNativeToken: true,
+    },
     lockTxId:
       '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
     height: 100,
