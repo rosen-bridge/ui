@@ -69,7 +69,7 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Token Id',
+    title: 'Token',
     cellProps: {
       width: 150,
     },
@@ -159,10 +159,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-            <EnhancedTableCell>Token Id</EnhancedTableCell>
-            <EnhancedTableCell>
-              {row.lockToken.tokenId.slice(0, 10)}
-            </EnhancedTableCell>
+            <EnhancedTableCell>Token</EnhancedTableCell>
+            <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
@@ -277,9 +275,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
       <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
-      <EnhancedTableCell>
-        {row.lockToken.tokenId.slice(0, 10)}
-      </EnhancedTableCell>
+      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell>
         {getDecimalString(
           row.lockToken.amount.toString(),
