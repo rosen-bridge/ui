@@ -154,11 +154,11 @@ export const TabletRow: FC<RowProps> = (props) => {
       .filter((token) => token.tokenId !== rsnToken?.tokenId)
       .map(
         (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)}${
+          `${getDecimalString(token.amount.toString(), token.decimals)} ${
             token.name
           }`,
       )
-      .join('+');
+      .join(' + ');
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
