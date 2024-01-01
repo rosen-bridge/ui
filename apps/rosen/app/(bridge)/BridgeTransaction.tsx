@@ -8,6 +8,7 @@ import {
   Avatar,
   Divider,
   Grid,
+  IconButton,
   LoadingButton,
   Tooltip,
   Typography,
@@ -24,6 +25,8 @@ import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
 
 import { getTokenNameAndId } from '@/_utils';
+import { ChooseWalletsModal } from './ChooseWalletModal';
+import { Wallet } from '@rosen-bridge/icons';
 
 /**
  * container component for asset prices
@@ -49,6 +52,8 @@ const FeesContainer = styled('div')(({ theme }) => ({
 const BridgeTransaction = () => {
   const [supportedWalletsModalOpen, setSupportedWalletsModalOpen] =
     useState(false);
+
+  const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
 
   const {
     sourceValue,
@@ -125,19 +130,36 @@ const BridgeTransaction = () => {
     if (!WalletIcon) return null;
     return (
       <PriceItem sx={(theme) => ({ padding: theme.spacing(1.25, 0.5) })}>
-        <Typography>Wallet</Typography>
-        <Grid container alignItems="center" justifyContent="center" gap={1}>
-          <Avatar
-            sx={{
-              width: 18,
-              height: 18,
-              background: 'transparent',
-            }}
-          >
-            <WalletIcon />
-          </Avatar>
-          <Typography>{selectedWallet.label}</Typography>
-        </Grid>
+        <Typography
+          sx={{
+            padding: '5px',
+          }}
+        >
+          Wallet
+        </Typography>
+        <IconButton
+          onClick={() => {
+            setChooseWalletsModalOpen(true);
+          }}
+          sx={{
+            borderRadius: '0',
+            padding: '5px',
+            margin: '0',
+          }}
+        >
+          <Grid container alignItems="center" justifyContent="center" gap={1}>
+            <Avatar
+              sx={{
+                width: 18,
+                height: 18,
+                background: 'transparent',
+              }}
+            >
+              <WalletIcon />
+            </Avatar>
+            <Typography>{selectedWallet.label}</Typography>
+          </Grid>
+        </IconButton>
       </PriceItem>
     );
   };
@@ -211,7 +233,7 @@ const BridgeTransaction = () => {
             onClick={() => {
               if (!selectedWallet) {
                 if (availableWallets?.length) {
-                  setSelectedWallet?.(availableWallets[0]);
+                  setChooseWalletsModalOpen(true);
                 } else {
                   setSupportedWalletsModalOpen(true);
                 }
@@ -229,6 +251,14 @@ const BridgeTransaction = () => {
         chainName={selectedNetwork?.name ?? ''}
         handleClose={() => setSupportedWalletsModalOpen(false)}
         supportedWallets={selectedNetwork?.supportedWallets ?? []}
+      />
+      <ChooseWalletsModal
+        open={chooseWalletsModalOpen}
+        chainName={selectedNetwork?.name ?? ''}
+        setSelectedWallet={setSelectedWallet}
+        handleClose={() => setChooseWalletsModalOpen(false)}
+        supportedWallets={selectedNetwork?.supportedWallets ?? []}
+        availableWallets={availableWallets ?? []}
       />
     </>
   );
