@@ -172,7 +172,7 @@ const BridgeForm = () => {
         getMaxTransferableAmount(
           amount,
           sourceField.value,
-          tokenField.value,
+          tokenField.value.metaData.type === 'native',
         ).toString(),
         token?.decimals ?? 0,
       ),
