@@ -73,7 +73,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
         categories:
           data[0]?.data
             .map((datum) => moment(+datum.label).format(getDateFormat(period)))
-            .toReversed() ?? [],
+            .reverse() ?? [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -110,7 +110,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
               +getDecimalString(datum.amount, tokenData.title.decimals),
           ),
         }))
-        .toReversed(),
+        .reverse(),
     [data],
   );
 
