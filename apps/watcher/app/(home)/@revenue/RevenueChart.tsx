@@ -74,7 +74,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
         categories:
           data[0]?.data
             .map((datum) => moment(+datum.label).format(getDateFormat(period)))
-            .toReversed() ?? [],
+            .reverse() ?? [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -103,7 +103,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
 
   const apexChartSeries = useMemo(
     () =>
-      data.toReversed().map((tokenData) => ({
+      data.reverse().map((tokenData) => ({
         name: tokenData.title.name,
         data: tokenData.data.map(
           (datum) => +getDecimalString(datum.amount, tokenData.title.decimals),
