@@ -130,11 +130,11 @@ const useTransactionFees = (
     return {
       bridgeFee: getDecimalString(
         bridgeFee?.toString() || '0',
-        token?.decimals || 1,
+        token?.decimals || 0,
       ),
       networkFee: getDecimalString(
         networkFee?.toString() || '0',
-        token?.decimals || 1,
+        token?.decimals || 0,
       ),
       receivingAmount:
         fees && receivingAmountValue > 0
