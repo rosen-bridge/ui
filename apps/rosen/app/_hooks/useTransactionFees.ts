@@ -119,7 +119,7 @@ const useTransactionFees = (
     const variableBridgeFee = fees
       ? (paymentAmount * feeRatio) / feeRatioDivisor
       : 0;
-    const bridgeFee = Math.max(bridgeFeeBase, variableBridgeFee);
+    const bridgeFee = Math.max(bridgeFeeBase, Math.ceil(variableBridgeFee));
 
     const receivingAmountValue = fees
       ? +paymentAmount - (networkFee! + bridgeFee!)
