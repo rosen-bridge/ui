@@ -47,7 +47,7 @@ export const getMaxTransferableAmount = (
   isNative: boolean,
 ) => {
   const offsetCandidate = Number(
-    chain === 'ergo' ? ergoFee - ergoMinBoxValue : cardanoFeeAndMinBoxValue,
+    chain === 'ergo' ? ergoFee + ergoMinBoxValue : cardanoFeeAndMinBoxValue,
   );
   const shouldApplyOffset = isNative;
   const offset = shouldApplyOffset ? offsetCandidate : 0;
