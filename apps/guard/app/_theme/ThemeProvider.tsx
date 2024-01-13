@@ -249,6 +249,28 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
             },
           },
         },
+        MuiDialogActions: {
+          styleOverrides: {
+            root: {
+              flexDirection: 'row-reverse',
+              justifyContent: 'end',
+              gap: theme.spacing(1),
+              padding: theme.spacing(1, 3),
+            },
+          },
+        },
+        MuiSnackbar: {
+          defaultProps: {
+            anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+          },
+        },
+        MuiAlert: {
+          styleOverrides: {
+            root: {
+              fontSize: '0.9rem',
+            },
+          },
+        },
       },
     });
   }, [mode]);

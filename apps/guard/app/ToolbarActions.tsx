@@ -5,6 +5,7 @@ import { IconButton, SvgIcon, useIsDarkMode } from '@rosen-bridge/ui-kit';
 
 import { ColorModeContext } from '@/_theme/ThemeProvider';
 import { useRouter } from 'next/navigation';
+import ApiKeyModal from './ApiKeyModal';
 
 /**
  * render some toolbar actions
@@ -16,6 +17,7 @@ const ToolbarActions = () => {
 
   return (
     <Fragment>
+      <ApiKeyModal />
       <IconButton onClick={colorMode.toggle} size="large">
         {isDarkMode ? (
           <SvgIcon sx={{ width: 24 }}>
