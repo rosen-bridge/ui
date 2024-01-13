@@ -28,3 +28,5 @@ export { ReactComponent as Sun } from './icons/sun.svg';
 export { ReactComponent as Times } from './icons/times.svg';
 export { ReactComponent as Unlock } from './icons/unlock.svg';
 export { ReactComponent as Wallet } from './icons/wallet.svg';
+export { ReactComponent as Eye } from './icons/eye.svg';
+export { ReactComponent as EyeSlash } from './icons/eye-slash.svg';
