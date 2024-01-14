@@ -25,8 +25,7 @@ import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
 
 import { getTokenNameAndId } from '@/_utils';
-import { ChooseWalletsModal } from './ChooseWalletModal';
-import { Wallet } from '@rosen-bridge/icons';
+import { ChooseWalletModal } from './ChooseWalletModal';
 
 /**
  * container component for asset prices
@@ -132,7 +131,7 @@ const BridgeTransaction = () => {
       <PriceItem sx={(theme) => ({ padding: theme.spacing(1.25, 0.5) })}>
         <Typography
           sx={{
-            padding: '5px',
+            padding: (theme) => theme.spacing(1, 0),
           }}
         >
           Wallet
@@ -142,9 +141,9 @@ const BridgeTransaction = () => {
             setChooseWalletsModalOpen(true);
           }}
           sx={{
-            borderRadius: '0',
-            padding: '5px',
-            margin: '0',
+            borderRadius: 0,
+            padding: (theme) => theme.spacing(1),
+            margin: (theme) => theme.spacing(0),
           }}
         >
           <Grid container alignItems="center" justifyContent="center" gap={1}>
@@ -252,7 +251,7 @@ const BridgeTransaction = () => {
         handleClose={() => setSupportedWalletsModalOpen(false)}
         supportedWallets={selectedNetwork?.supportedWallets ?? []}
       />
-      <ChooseWalletsModal
+      <ChooseWalletModal
         open={chooseWalletsModalOpen}
         chainName={selectedNetwork?.name ?? ''}
         setSelectedWallet={setSelectedWallet}

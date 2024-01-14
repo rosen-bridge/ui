@@ -12,8 +12,8 @@ export const walletInfo: WalletInfo = {
 };
 
 /**
- * nautilus implementation of the Wallet
- * interface to be able to interact with nautilus wallet
+ * nami implementation of the Wallet
+ * interface to be able to interact with nami wallet
  */
 const getNamiWallet = () =>
   createRawWallet(

@@ -9,7 +9,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { Wallet, WalletInfo } from '@rosen-ui/wallet-api';
 
-interface ChooseWalletsModalProps {
+interface ChooseWalletModalProps {
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
@@ -26,14 +26,14 @@ interface ChooseWalletsModalProps {
  * @param chainName
  * @param supportedWallets
  */
-export const ChooseWalletsModal = ({
+export const ChooseWalletModal = ({
   open,
   handleClose,
   setSelectedWallet,
   chainName,
   supportedWallets,
   availableWallets,
-}: ChooseWalletsModalProps) => {
+}: ChooseWalletModalProps) => {
   const handleConnect = async (wallet: Wallet) => {
     setSelectedWallet && (await setSelectedWallet(wallet));
     handleClose();
@@ -45,7 +45,11 @@ export const ChooseWalletsModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
-        <Grid container justifyContent="center" sx={{ pt: 5 }}>
+        <Grid
+          container
+          justifyContent="center"
+          sx={{ pt: (theme) => theme.spacing(1) }}
+        >
           {supportedWallets.map(
             ({ icon: WalletIcon, label, link, name }, index) => (
               <Tooltip title={name} key={label}>
@@ -56,12 +60,11 @@ export const ChooseWalletsModal = ({
                     height: '8rem',
                     border: (theme) => `1px solid ${theme.palette.divider}`,
                     borderRadius: 1,
-                    padding: 2,
-                    margin: 1,
+                    padding: (theme) => theme.spacing(1),
+                    margin: (theme) => theme.spacing(1),
                     cursor: 'pointer',
-                    display: 'flex', // Added to make the Grid a flex container
-                    flexDirection: 'column', // Stack children vertically
-                    justifyContent: 'space-between', // Space between WalletIcon and button
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
                     '&:hover': {
                       backdropFilter: 'contrast(0.8)',
                     },
@@ -70,12 +73,11 @@ export const ChooseWalletsModal = ({
                   <Grid
                     sx={{
                       width: '100%',
-                      display: 'flex', // Make this a flex container
-                      justifyContent: 'center', // Center children horizontally
-                      alignItems: 'center', // Center children vertically
-                      height: '8rem', // Specify a height for the container
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '8rem',
                       '> *': {
-                        width: '64px',
+                        width: '100%',
                         height: '64px',
                       },
                     }}
@@ -83,16 +85,16 @@ export const ChooseWalletsModal = ({
                     href={link}
                     target="_blank"
                   >
-                    <WalletIcon key={label} />
+                    <WalletIcon />
                   </Grid>
                   <Button
                     onClick={(event) => {
-                      event.preventDefault(); // This will prevent the default action
+                      event.preventDefault();
                       handleConnect(availableWallets[index]);
                     }}
                     variant="contained"
                     size="small"
-                    sx={{ mt: 2 }} // Add margin top to separate from WalletIcon
+                    sx={{ mt: (theme) => theme.spacing(1), width: '100%' }}
                   >
                     Connect
                   </Button>

@@ -12,8 +12,8 @@ export const walletInfo: WalletInfo = {
 };
 
 /**
- * nautilus implementation of the Wallet
- * interface to be able to interact with nautilus wallet
+ * Flint implementation of the Wallet
+ * interface to be able to interact with Flint wallet
  */
 const getFlintWallet = () =>
   createRawWallet(

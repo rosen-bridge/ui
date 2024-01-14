@@ -1,5 +1,5 @@
 /**
- * handles the nami wallet connection
+ * handles the Lace wallet connection
  */
 
 export const connectWallet = async () => {

@@ -12,8 +12,8 @@ export const walletInfo: WalletInfo = {
 };
 
 /**
- * nautilus implementation of the Wallet
- * interface to be able to interact with nautilus wallet
+ * Lace implementation of the Wallet
+ * interface to be able to interact with Lace wallet
  */
 const getLaceWallet = () =>
   createRawWallet(

@@ -1,5 +1,5 @@
 /**
- * handles the nami wallet connection
+ * handles the Vespr wallet connection
  */
 
 export const connectWallet = async () => {
