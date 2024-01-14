@@ -3,61 +3,81 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import useSWRMutation from 'swr/mutation';
 
 import {
-  TextField,
-  SubmitButton,
   AlertCard,
   AlertProps,
-  Typography,
+  Checkbox,
   FullCard,
+  Grid,
+  MenuItem,
+  SubmitButton,
+  TextField,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { mutator } from '@rosen-ui/swr-helpers';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
 
 interface Form {
-  tx: string;
+  chain: string;
+  txJson: string;
+  requiredSign: number;
+  overwrite?: boolean;
 }
 /**
  * render a form for signing a tx
  */
 const SendForSigningForm = () => {
-  const { trigger, isMutating: isSignPending } = useSWRMutation<
-    ApiSignResponse,
-    any,
+  const {
+    trigger,
+    isMutating: isSignPending,
+    error,
+  } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
-    ApiSignRequestBody
-  >('/sign', mutator);
+    mutator,
+  );
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
     message: string;
   } | null>(null);
 
-  const { handleSubmit, register } = useForm({
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
-      tx: '',
+      txJson: '',
+      chain: '',
+      requiredSign: 10,
+      overwrite: undefined,
     },
   });
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
     try {
-      const { tx } = data;
-      const response = await trigger({ tx });
+      const { txJson, chain, requiredSign, overwrite } = data;
+      const response = await trigger({
+        txJson,
+        chain,
+        requiredSign,
+        overwrite,
+      });
 
-      if (response === 'OK') {
+      if (response.message === 'Ok') {
         setAlertData({
           severity: 'success',
           message: `Sign operation successful.`,
         });
+        reset();
       } else {
         throw new Error(
-          'Server responded but the response message was unexpected'
+          'Server responded but the response message was unexpected',
         );
       }
     } catch (error: any) {
       setAlertData({
         severity: 'error',
-        message: error.message,
+        message:
+          error.response?.status === 409
+            ? 'Tx is already sent for signing. If you want to override, click the checkbox and submit again.'
+            : error.message,
       });
     }
   };
@@ -72,20 +92,39 @@ const SendForSigningForm = () => {
   );
 
   return (
-    <FullCard title="Send for Signing">
+    <FullCard title="Send for Signing" backgroundColor="transparent">
       <form onSubmit={handleSubmit(onSubmit)}>
         {renderAlert()}
 
-        <Typography sx={{ mb: 2 }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur.
-        </Typography>
+        <TextField
+          select
+          label="Chain"
+          {...register('chain')}
+          sx={{ mb: 2 }}
+          fullWidth
+        >
+          <MenuItem value="ergo">Ergo</MenuItem>
+          <MenuItem value="cardano">Cardano</MenuItem>
+        </TextField>
+        <TextField
+          label="Transaction"
+          multiline
+          rows={5}
+          {...register('txJson')}
+          sx={{ mb: 2 }}
+        />
+        <TextField
+          label="Required Signs"
+          {...register('requiredSign')}
+          sx={{ mb: 2 }}
+        />
 
-        <TextField label="Transaction" multiline rows={5} {...register('tx')} />
+        {error?.response?.status === 409 && (
+          <Grid container alignItems="center">
+            <Checkbox {...register('overwrite')} />
+            <Typography>Overwrite already sent transaction</Typography>
+          </Grid>
+        )}
 
         <SubmitButton loading={isSignPending}>Send</SubmitButton>
       </form>

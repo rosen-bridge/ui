@@ -15,7 +15,7 @@ const HomeActionButtonBase = styled(Button)(({ theme }) => ({
       ? theme.palette.primary.dark
       : theme.palette.text.primary,
   opacity: 0.8,
-  fontSize: 'x-small',
+  fontSize: theme.typography.subtitle2.fontSize,
   flexBasis: '20%',
   '&:hover': {
     opacity: 1,
@@ -39,20 +39,28 @@ interface HomeActionButtonProps {
   label: string;
   icon: ReactNode;
   action: 'lock' | 'pause' | 'stop' | 'unlock' | 'withdraw';
+  disabled?: boolean;
 }
 /**
  * render an action button in home page
  * @param label
  * @param icon
  * @param action
+ * @param disabled
  */
-const HomeActionButton = ({ label, icon, action }: HomeActionButtonProps) => {
+const HomeActionButton = ({
+  label,
+  icon,
+  action,
+  disabled,
+}: HomeActionButtonProps) => {
   const router = useRouter();
 
   return (
     <HomeActionButtonBase
       startIcon={icon}
       onClick={() => router.push(`/actions/${action}`)}
+      disabled={disabled}
     >
       {label}
     </HomeActionButtonBase>

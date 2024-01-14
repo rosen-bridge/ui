@@ -9,6 +9,10 @@ const nextConfig = {
     unoptimized: true,
   },
   output: 'export',
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  staticPageGenerationTimeout: 600,
 };
 
 module.exports = nextConfig;

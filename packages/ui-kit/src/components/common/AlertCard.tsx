@@ -5,7 +5,7 @@ import { Alert, AlertProps, Collapse, IconButton, SvgIcon } from '../base';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;
-  onClose: EventHandler<SyntheticEvent>;
+  onClose?: EventHandler<SyntheticEvent>;
   children: ReactNode;
 }
 /**
@@ -21,17 +21,19 @@ export const AlertCard = ({ severity, onClose, children }: AlertCardProps) => {
       <Alert
         severity={severity || undefined}
         action={
-          <IconButton
-            aria-label="close"
-            color="inherit"
-            size="small"
-            className="close-button"
-            onClick={onClose}
-          >
-            <SvgIcon>
-              <Times />
-            </SvgIcon>
-          </IconButton>
+          onClose && (
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              className="close-button"
+              onClick={onClose}
+            >
+              <SvgIcon>
+                <Times />
+              </SvgIcon>
+            </IconButton>
+          )
         }
         variant="filled"
         sx={{ mb: 2 }}

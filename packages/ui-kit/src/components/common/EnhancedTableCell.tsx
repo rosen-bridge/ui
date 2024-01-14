@@ -26,7 +26,7 @@ export const EnhancedTableCell: FC<EnhancedTableCellProps> = (props) => {
           }
         : {}),
     }),
-    [isContained]
+    [isContained],
   );
 
   return <TableCell sx={cellStyles} {...cellProps} />;

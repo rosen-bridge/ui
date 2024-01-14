@@ -1,24 +1,82 @@
 'use client';
 
 import React from 'react';
+import useSWR from 'swr';
 
-import { Typography } from '@rosen-bridge/ui-kit';
+import { CircularProgress, Typography } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import ActionText from '../../ActionText';
 
+import useToken from '@/_hooks/useToken';
+import useRsnToken from '@/_hooks/useRsnToken';
+
+import { ApiInfoResponse } from '@/_types/api';
+
 const LockText = () => {
+  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
+    '/info',
+    fetcher,
+  );
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
+  const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+
+  const rwtPerRsn = 10 ** (rsnToken?.decimals ?? 0);
+  const requiredRSN = (info?.permitsPerEvent ?? 0) / rwtPerRsn;
+
   return (
-    <ActionText title="Lock">
+    <ActionText title="Lock & Get Permit">
       <Typography gutterBottom>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur.
+        To activate a watcher, there is a need for some collateral that is fully
+        refundable and safe. On top of that, you&apos;ll need reporting permits
+        to report each event. These reporting permits are at risk of seizure in
+        case of fraudulent reports. Otherwise, they will be returned back to you
+        along with your reporting rewards.
+      </Typography>
+
+      {info && !info.permitCount.total && (
+        <>
+          <Typography fontWeight="bold" sx={{ mt: 2 }}>
+            Collateral
+          </Typography>
+          <Typography sx={{ mb: 2 }}>
+            Currently, the required collateral is{' '}
+            {isInfoLoading || isErgTokenLoading ? (
+              <CircularProgress size={12} />
+            ) : (
+              getDecimalString(
+                info.collateral.erg.toString(),
+                ergToken?.decimals ?? 0,
+              )
+            )}{' '}
+            ERG and{' '}
+            {isInfoLoading || isRsnTokenLoading ? (
+              <CircularProgress size={12} />
+            ) : (
+              getDecimalString(
+                info.collateral.rsn.toString(),
+                rsnToken?.decimals ?? 0,
+              )
+            )}{' '}
+            RSN. It is a <b>one-time</b> payment for registering as a watcher an
+            getting a WID. This collateral is fully refundable with redeeming
+            all of your locked RSN.
+          </Typography>
+        </>
+      )}
+
+      <Typography fontWeight="bold" sx={{ mt: 2 }}>
+        RSN
       </Typography>
       <Typography sx={{ mb: 2 }}>
-        Excepteur sint occaecat cupidatat non proident, sunt in culpa qui
-        officia deserunt mollit anim id est laborum.
+        Currently, you should lock{' '}
+        {isInfoLoading || isRsnTokenLoading ? (
+          <CircularProgress size={12} />
+        ) : (
+          requiredRSN
+        )}{' '}
+        RSN to report an event.
       </Typography>
     </ActionText>
   );

@@ -10,6 +10,7 @@ import {
   Typography,
 } from '../../base';
 import { TokenListItemAvatar } from './TokenListItemAvatar';
+import { useTheme } from '../../../hooks';
 
 export interface TokenListItemProps {
   decimals: number;
@@ -17,6 +18,8 @@ export interface TokenListItemProps {
   index: number;
   name?: string;
   value: string;
+  coldValue?: string;
+  isNativeToken: boolean;
 }
 /**
  * render a token list item, showing its name, id, avatar and value
@@ -32,8 +35,11 @@ export const TokenListItem = ({
   index,
   name,
   value,
+  coldValue,
+  isNativeToken,
 }: TokenListItemProps) => {
   const nameOrPlaceholder = name || TOKEN_NAME_PLACEHOLDER;
+  const theme = useTheme();
 
   return (
     <ListItem disableGutters sx={{ py: 0.5 }}>
@@ -45,12 +51,27 @@ export const TokenListItem = ({
           <Box sx={{ display: 'flex' }}>
             <Typography sx={{ flexGrow: 1 }}>{nameOrPlaceholder}</Typography>
             <Typography>{getDecimalString(value, decimals)}</Typography>
+            <Typography variant="caption" mt={0.25}>
+              {coldValue !== undefined && '🔥'}
+            </Typography>
+            {coldValue && (
+              <>
+                <Typography ml={0.5}>
+                  {' '}
+                  / {getDecimalString(coldValue, decimals)}
+                </Typography>
+                <Typography variant="caption" mt={0.5}>
+                  {' '}
+                  ❄️
+                </Typography>
+              </>
+            )}
           </Box>
         }
-        secondary={<Id id={id} />}
+        secondary={isNativeToken ? id : <Id id={id} />}
         secondaryTypographyProps={{
           component: 'div',
-          style: { fontSize: '0.75rem' },
+          style: { fontSize: theme.typography.body2.fontSize },
         }}
       />
     </ListItem>

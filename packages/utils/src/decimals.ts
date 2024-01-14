@@ -1,21 +1,37 @@
+import { trimEnd } from 'lodash-es';
+
 /**
  * convert a raw value to a string representation of the same value but
- * considering decimals
+ * considering decimals (removing any leading redundant zeros) and optionally
+ * truncating to a fixed number of decimal digits
  *
  * @param value
  * @param decimals
+ * @param truncateLength
  *
  * @example
  * getDecimalString('123', 2) === '1.23' // true
+ * getDecimalString('1230', 2) === '12.3' // true
+ * getDecimalString('123456', 2, 3) === '12.345' // true
  */
-export const getDecimalString = (value: string, decimals: number) => {
+export const getDecimalString = (
+  value: string,
+  decimals: number,
+  truncateLength?: number
+) => {
   if (!decimals) return value;
 
-  if (value.length > decimals) {
-    return `${value.slice(0, -1 * decimals)}.${value.slice(-1 * decimals)}`;
-  }
+  const untrimmedResult =
+    value.length > decimals
+      ? `${value.slice(0, -decimals)}.${value.slice(-decimals)}`
+      : `0.${value.padStart(decimals, '0')}`;
 
-  return `0.${'0'.repeat(decimals - value.length)}${value}`;
+  const preciseResult = trimEnd(trimEnd(untrimmedResult, '0'), '.') || '0';
+
+  return preciseResult.replace(
+    /\.(.*)/,
+    (_, floatingPart: string) => `.${floatingPart.slice(0, truncateLength)}`
+  );
 };
 
 /**
@@ -44,5 +60,23 @@ export const getNonDecimalString = (value: string, decimals: number) => {
   return `${value.slice(0, decimalPointIndex)}${value.slice(
     decimalPointIndex + 1,
     decimalPointIndex + 1 + decimals
-  )}${'0'.repeat(decimals - fractionalPartLength)}`.replace(/^0+(\d+)/, '$1');
+  )}${
+    fractionalPartLength <= decimals
+      ? '0'.repeat(decimals - fractionalPartLength)
+      : ''
+  }`.replace(/^0+(\d+)/, '$1');
+};
+
+/**
+ * gets a number as input and rounds it to the precision according
+ * to the provided precision number and removes the leading zeros.
+ *
+ * @param value
+ * @param precision
+ *
+ * @example
+ * roundToPrecision(1.126, 2) === 1.13 // true
+ */
+export const roundToPrecision = (value: number, precision: number) => {
+  return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
 };

@@ -1,9 +1,7 @@
 import React from 'react';
 
 import { QrcodeScan } from '@rosen-bridge/icons';
-import { IconButton, SvgIcon } from '@rosen-bridge/ui-kit';
-
-import QrCodeModal from './QrCodeModal';
+import { IconButton, SvgIcon, QrCodeModal } from '@rosen-bridge/ui-kit';
 
 interface QrCodeButtonProps {
   address: string;
@@ -26,7 +24,7 @@ const QrCodeButton = ({ address }: QrCodeButtonProps) => {
           <QrcodeScan />
         </SvgIcon>
       </IconButton>
-      <QrCodeModal open={open} handleClose={handleClose} address={address} />
+      <QrCodeModal open={open} handleClose={handleClose} text={address} />
     </>
   );
 };

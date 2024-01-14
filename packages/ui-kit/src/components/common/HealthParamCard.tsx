@@ -68,10 +68,11 @@ export const HealthParamCard = ({
             size="small"
             sx={{ fontSize: 'inherit' }}
             onClick={handleCheckNow}
+            color={color}
           >
             Check now
           </Button>
-          (Last check: {moment(lastCheck).format('DD/MM/YYYY')})
+          (Last check: {moment(lastCheck).format('DD/MM/YYYY kk:mm:ss')})
         </Typography>
       }
     >

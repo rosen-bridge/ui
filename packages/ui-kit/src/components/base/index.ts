@@ -36,7 +36,6 @@ export * from './ListItemText';
 export * from './LoadingButton';
 export * from './Menu';
 export * from './MenuItem';
-export * from './NoSsr';
 export * from './Paper';
 export * from './Pagination';
 export * from './Select';

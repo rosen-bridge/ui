@@ -3,7 +3,10 @@ import moment from 'moment';
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
 
+import { ApiPermitReturnResponse, Event } from '@/_types/api';
+
 import {
+  ApiEventResponse,
   ApiAddressAssetsResponse,
   ApiHealthStatusResponse,
   ApiInfoResponse,
@@ -11,47 +14,72 @@ import {
   ApiPermitResponse,
   ApiRevenueChartResponse,
   ApiWithdrawResponse,
+  ApiRevenueResponse,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
   address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-  currentBalance: 150n,
+  collateral: {
+    erg: 10000000000,
+    rsn: 0,
+  },
+  currentBalance: 150,
   health: 'Unstable',
   network: 'ergo',
-  permitCount: 100n,
+  permitsPerEvent: 1000,
+  permitCount: {
+    active: 20,
+    total: 100,
+  },
   rsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
 };
 
-const addressAssets: ApiAddressAssetsResponse = [
-  {
-    name: 'awesome token',
-    tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
-    amount: 10000n,
-    decimals: 2,
-  },
-  {
-    tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
-    amount: 2n,
-    decimals: 0,
-  },
-  {
-    name: 'another awesome token',
-    tokenId: 'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
-    amount: 200n,
-    decimals: 1,
-  },
-  {
-    name: 'fakeRSN',
-    tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
-    amount: 20n,
-    decimals: 5,
-  },
-];
+const addressAssets: ApiAddressAssetsResponse = {
+  items: [
+    {
+      name: 'awesome token',
+      tokenId:
+        '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
+      amount: 10000,
+      decimals: 2,
+      isNativeToken: false,
+    },
+    {
+      tokenId:
+        '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
+      amount: 2,
+      decimals: 0,
+      isNativeToken: false,
+    },
+    {
+      name: 'another awesome token',
+      tokenId:
+        'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
+      amount: 200,
+      decimals: 1,
+      isNativeToken: false,
+    },
+    {
+      name: 'fakeRSN',
+      tokenId:
+        '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+      amount: 20,
+      decimals: 5,
+      isNativeToken: false,
+    },
+  ],
+  total: 4,
+};
 
 const revenueChartWeekly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -63,7 +91,12 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 0,
+      decimals: 6,
+      isNativeToken: true,
+      tokenId: 'ada',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -77,7 +110,12 @@ const revenueChartWeekly: ApiRevenueChartResponse = [
 ];
 const revenueChartMonthly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -90,7 +128,12 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'ada',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -105,7 +148,12 @@ const revenueChartMonthly: ApiRevenueChartResponse = [
 ];
 const revenueChartYearly: ApiRevenueChartResponse = [
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -118,7 +166,12 @@ const revenueChartYearly: ApiRevenueChartResponse = [
       })),
   },
   {
-    title: 'erg',
+    title: {
+      amount: 0,
+      decimals: 9,
+      isNativeToken: true,
+      tokenId: 'erg',
+    },
     data: Array(10)
       .fill(null)
       .map((_, index) => ({
@@ -174,13 +227,22 @@ const healthStatus: ApiHealthStatusResponse = [
   },
 ];
 
-const withdraw: ApiWithdrawResponse = 'OK';
+const withdraw: ApiWithdrawResponse = {
+  status: 'OK',
+  txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+};
 
 const permit: ApiPermitResponse = {
   txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
 };
 
-const permitReturn = permit;
+const permitReturn: ApiPermitReturnResponse = {
+  txIds: [
+    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f8',
+    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f9',
+  ],
+};
 
 const generateObservationRecords = (numberOfRecords: number) => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
@@ -200,6 +262,95 @@ const generateObservationRecords = (numberOfRecords: number) => {
     requestId: 'sdfsa-dlfadf-lajdf',
     block: '',
     extractor: '',
+    lockToken: {
+      amount: 1000000000,
+      decimals: 9,
+      isNativeToken: false,
+      tokenId: 'erg',
+    },
+  }));
+};
+
+const generateEventRecords = (numberOfRecords: number): Event[] => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    eventId: `${Math.floor(Date.now() * Math.random())}`,
+    txId: `${Math.floor(Date.now() * Math.random())}`,
+    extractor: 'Extractor Text',
+    boxId: `${Math.floor(Date.now() * Math.random())}`,
+    boxSerialized: '{}',
+    block: 'Block Text',
+    height: 10,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '100',
+    bridgeFee: '0.2',
+    networkFee: '0.03',
+    sourceChainTokenId: '123',
+    sourceChainHeight: 20,
+    targetChainTokenId: 'ab123',
+    sourceTxId: 'ab1234',
+    sourceBlockId: 'cd56789',
+    WIDs: 'WIDs',
+    spendBlock: '',
+    spendHeight: 5,
+    spendTxId: 'spendId1234',
+    lockToken: {
+      amount: 1000000000,
+      decimals: 9,
+      isNativeToken: false,
+      tokenId: 'erg',
+    },
+  }));
+};
+
+const generateRevenueRecords = (numberOfRecords: number) => {
+  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+    id: index,
+    permitTxId:
+      '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+    lockHeight: 100,
+    fromChain: 'Chain A',
+    toChain: 'Chain B',
+    fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
+    amount: '0.1',
+    bridgeFee: '0.002',
+    networkFee: '0.003',
+    lockToken: {
+      tokenId:
+        '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
+      name: 'ERG',
+      decimals: 9,
+      amount: 0,
+      isNativeToken: true,
+    },
+    lockTxId:
+      '15baefff2eb9e45b04f8b4e6265e8663773db6db5f9e8e30ce2cae1aa263b90f8',
+    height: 100,
+    timestamp: Date.now(),
+    status: 'Done',
+    revenues: [
+      {
+        tokenId:
+          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+        amount: 1000,
+        name: 'fakeRSN',
+        decimals: 0,
+        isNativeToken: false,
+      },
+      {
+        tokenId:
+          '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
+        amount: 100,
+        name: 'awesome token',
+        decimals: 2,
+        isNativeToken: false,
+      },
+    ],
   }));
 };
 
@@ -208,24 +359,55 @@ const observations: ApiObservationResponse = {
   items: generateObservationRecords(100),
 };
 
+const revenues: ApiRevenueResponse = {
+  total: 100,
+  items: generateRevenueRecords(100),
+};
+
+const events: ApiEventResponse = {
+  total: 100,
+  items: generateEventRecords(100),
+};
+
 const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
-    '/address/assets': addressAssets,
     '/health/status': healthStatus,
     '/withdraw': withdraw,
     '/permit': permit,
     '/permit/return': permitReturn,
-    '/observations': observations,
+    '/observation': observations,
   },
   withObjectKeys: {
     '/revenue/chart': ({ period }: { period: ChartPeriod }) => {
       return revenueChart[period];
     },
+
+    '/address/assets': ({ tokenId }: { tokenId: string }) =>
+      tokenId
+        ? {
+            items: addressAssets.items.filter(
+              (asset) => asset.tokenId === tokenId,
+            ),
+            total: 1,
+          }
+        : addressAssets,
     '/observation': ({ offset, limit }) => {
       return {
         ...observations,
         items: observations.items.slice(offset, limit + offset),
+      };
+    },
+    '/revenue': ({ offset, limit }) => {
+      return {
+        ...revenues,
+        items: revenues.items.slice(offset, limit + offset),
+      };
+    },
+    '/events': ({ offset, limit }) => {
+      return {
+        ...events,
+        items: events.items.slice(offset, limit + offset),
       };
     },
   },

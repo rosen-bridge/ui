@@ -4,6 +4,7 @@ import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
+import { getDecimalString, roundToPrecision } from '@rosen-ui/utils';
 
 import { ApiRevenueChartResponse } from '@/_types/api';
 
@@ -17,7 +18,6 @@ const getDateFormat = (period: ChartPeriod) =>
 const baseChartOptions = {
   chart: {
     height: 350,
-    type: 'line' as const,
     zoom: {
       enabled: false,
     },
@@ -47,7 +47,6 @@ const baseChartOptions = {
   },
   tooltip: {
     enabled: true,
-    shared: true,
     x: {
       show: false,
     },
@@ -66,14 +65,32 @@ interface RevenueChartProps {
 const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const theme = useTheme();
 
+  const reversedData = useMemo(
+    () =>
+      data
+        .map((innerData) => ({
+          ...innerData,
+          data: innerData.data.toReversed(),
+        }))
+        .toReversed(),
+    [data],
+  );
+
   const apexChartOptions = useMemo(
     () => ({
       ...baseChartOptions,
       xaxis: {
         ...baseChartOptions.xaxis,
-        categories: data[0].data.map((datum) =>
-          moment(+datum.label).format(getDateFormat(period))
-        ),
+        categories:
+          reversedData[0]?.data.map((datum) =>
+            moment(+datum.label).format(getDateFormat(period)),
+          ) ?? [],
+      },
+      yaxis: {
+        labels: {
+          formatter: (label: number) =>
+            `${roundToPrecision(label, reversedData[0].title.decimals)}`,
+        },
       },
       theme: {
         mode: theme.palette.mode,
@@ -97,20 +114,27 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
               theme.palette.error.light,
             ],
     }),
-    [data, period, theme]
+    [reversedData, period, theme],
   );
 
   const apexChartSeries = useMemo(
     () =>
-      data.map((tokenData) => ({
-        name: tokenData.title,
-        data: tokenData.data.map((datum) => +datum.amount),
+      reversedData.map((tokenData) => ({
+        name: tokenData.title.name,
+        data: tokenData.data.map(
+          (datum) => +getDecimalString(datum.amount, tokenData.title.decimals),
+        ),
       })),
-    [data]
+    [reversedData],
   );
 
   return (
-    <Chart options={apexChartOptions} series={apexChartSeries} height={240} />
+    <Chart
+      type="bar"
+      options={apexChartOptions}
+      series={apexChartSeries}
+      height={240}
+    />
   );
 };
 

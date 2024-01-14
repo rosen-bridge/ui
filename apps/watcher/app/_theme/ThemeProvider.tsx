@@ -1,4 +1,5 @@
 import React, { createContext, useMemo, useState } from 'react';
+import { useLocalStorageManager } from '@rosen-ui/utils';
 
 import {
   CssBaseline,
@@ -9,45 +10,54 @@ import {
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
-declare module '@mui/material/styles' {
-  interface BreakpointOverrides {
-    xs: false;
-    sm: false;
-    md: false;
-    lg: false;
-    xl: false;
-    mobile: true;
-    tablet: true;
-    laptop: true;
-    desktop: true;
-  }
-}
-
 export interface AppThemeProps {
   children: React.ReactNode;
 }
+
+declare module '@mui/material/styles' {
+  interface TypePaletteGradient {
+    a: string;
+    b: string;
+    c: string;
+    d: string;
+    e: string;
+    f: string;
+  }
+  interface Palette {
+    gradient: TypePaletteGradient;
+  }
+  interface PaletteOptions {
+    gradient?: Partial<TypePaletteGradient>;
+  }
+}
+
+type ColorModes = 'light' | 'dark';
 
 /**
  * provide theme and color mode
  */
 const ThemeProvider = ({ children }: AppThemeProps) => {
+  const localStorageManager = useLocalStorageManager();
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
     noSsr: true,
   });
 
-  const [mode, setMode] = useState<'light' | 'dark'>(
-    prefersDarkMode ? 'dark' : 'light'
+  const preferredColorMode = prefersDarkMode ? 'dark' : 'light';
+
+  const [mode, setMode] = useState<ColorModes>(
+    localStorageManager.get<ColorModes>('colorMode') || preferredColorMode,
   );
 
   const colorMode = useMemo(
     () => ({
       toggle: () => {
-        setMode((previousMode) =>
-          previousMode === 'light' ? 'dark' : 'light'
-        );
+        const newColorMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newColorMode);
+        localStorageManager.set('colorMode', newColorMode);
       },
     }),
-    []
+    [mode, localStorageManager],
   );
 
   const theme = useMemo(() => {
@@ -95,6 +105,15 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 default: '#ffffff',
                 paper: '#ffffff',
+                shadow: '#00000033',
+              },
+              gradient: {
+                a: '#845ec2',
+                b: '#2c73d2',
+                c: '#0081cf',
+                d: '#0089ba',
+                e: '#008e9b',
+                f: '#008f7a',
               },
             }
           : {
@@ -137,6 +156,15 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
               background: {
                 default: '#2b1f3f',
                 paper: '#2b1f3f',
+                shadow: '#00000033',
+              },
+              gradient: {
+                a: '#845ec2',
+                b: '#2c73d2',
+                c: '#0081cf',
+                d: '#0089ba',
+                e: '#008e9b',
+                f: '#008f7a',
               },
             }),
       },
@@ -166,12 +194,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         h2: {
           fontSize: '1.5rem',
         },
+        h5: {
+          fontSize: '1rem',
+        },
         body: {
           fontSize: '1rem',
         },
         body2: {
           fontSize: '0.75rem',
           color: baseTheme.palette.text.secondary,
+        },
+        subtitle2: {
+          fontSize: '0.625rem',
+          [baseTheme.breakpoints.down('tablet')]: {
+            fontSize: '0.5625rem',
+          },
         },
       },
       components: {

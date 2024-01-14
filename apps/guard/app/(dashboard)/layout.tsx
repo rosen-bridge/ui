@@ -1,6 +1,6 @@
 'use client';
 
-import { Grid } from '@rosen-bridge/ui-kit';
+import { Box, Grid } from '@rosen-bridge/ui-kit';
 import { LayoutProps } from '@rosen-ui/types';
 
 const DashboardLayout = ({
@@ -16,9 +16,9 @@ const DashboardLayout = ({
     <Grid item mobile={12} laptop={8}>
       {revenue}
     </Grid>
-    <Grid item mobile={12}>
+    <Box mt={3} width="1">
       {actions}
-    </Grid>
+    </Box>
     {tokens}
   </Grid>
 );

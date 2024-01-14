@@ -28,13 +28,18 @@ build:
         - apps/*/node_modules
         - packages/*/node_modules
         - packages/*/dist
+        - wallets/*/node_modules
+        - wallets/*/dist
   script:
     # FIXME: This needs to be removed when a monorepo build mechanism is added
-    # https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/24
+    # local:ergo/rosen-bridge/ui#24
+    - npm run build --workspace packages/utils
     - npm run build --workspace packages/constants
     - npm run build --workspace packages/types
-    - npm run build --workspace packages/utils
     - npm run build --workspace packages --if-present
+    - npm run build --workspace wallets/wallet-api
+    - npm run build --workspace wallets/nami-wallet
+    - npm run build --workspace wallets/nautilus-wallet
 
 type_check:
   stage: type_check
@@ -46,6 +51,8 @@ type_check:
       - apps/*/node_modules
       - packages/*/node_modules
       - packages/*/dist
+      - wallets/*/node_modules
+      - wallets/*/dist
   script:
     - npm run type-check --workspaces --if-present
 

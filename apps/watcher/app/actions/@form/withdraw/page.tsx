@@ -16,6 +16,7 @@ import {
   Box,
   CircularProgress,
   Grid,
+  Id,
   InputAdornment,
   MenuItem,
   SubmitButton,
@@ -25,9 +26,12 @@ import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutator } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
+
+import useToken from '@/_hooks/useToken';
 
 import {
   ApiAddressAssetsResponse,
@@ -41,8 +45,17 @@ interface Form extends TokenAmountCompatibleFormSchema {
 }
 
 const WithdrawForm = () => {
-  const { data: tokens, isLoading: isTokensListLoading } =
-    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher);
+  const { data, isLoading: isTokensListLoading } =
+    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
+
+  const tokens = useMemo(
+    () => data?.items.filter((token) => !!token.amount),
+    [data],
+  );
+
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
@@ -56,14 +69,25 @@ const WithdrawForm = () => {
     ApiWithdrawRequestBody
   >('/withdraw', mutator);
 
+  useEffect(() => {
+    if (!isErgTokenLoading && !ergToken?.amount) {
+      setAlertData({
+        severity: 'error',
+        message: 'Your wallet is empty. There is nothing to withdraw.',
+      });
+    }
+  }, [isErgTokenLoading, ergToken]);
+
   const formMethods = useForm({
     defaultValues: {
       address: '',
-      tokenId: tokens?.[0].tokenId ?? '',
+      tokenId: tokens?.[0]?.tokenId ?? '',
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, setValue } = formMethods;
+  const { handleSubmit, control, resetField, register, watch } = formMethods;
+
+  const formData = watch();
 
   const { field: tokenIdField } = useController({
     control,
@@ -72,34 +96,36 @@ const WithdrawForm = () => {
 
   const selectedToken = useMemo(
     () => tokens?.find((token) => token.tokenId === tokenIdField.value),
-    [tokens, tokenIdField.value]
+    [tokens, tokenIdField.value],
   );
 
   useEffect(() => {
     if (tokens && !tokenIdField.value) {
-      resetField('tokenId', { defaultValue: tokens[0].tokenId });
+      resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
     }
   }, [tokens, resetField, tokenIdField.value]);
 
-  const onSubmit: SubmitHandler<Form> = async (data) => {
+  const submit = async () => {
     try {
       const response = await trigger({
-        address: data.address,
-        tokens: {
-          tokenId: data.tokenId,
-          amount: BigInt(
-            getNonDecimalString(data.amount, selectedToken!.decimals)
-          ),
-        },
+        address: formData.address,
+        tokens: [
+          {
+            tokenId: formData.tokenId,
+            amount: BigInt(
+              getNonDecimalString(formData.amount, selectedToken!.decimals),
+            ),
+          },
+        ],
       });
-      if (response === 'OK') {
+      if (response.status === 'OK') {
         setAlertData({
           severity: 'success',
-          message: 'withdrawal successful',
+          message: `Withdrawal is successful. Wait for tx [${response.txId}] to be confirmed.`,
         });
       } else {
         throw new Error(
-          'Server responded but the response message was unexpected'
+          'Server responded but the response message was unexpected',
         );
       }
     } catch (error: any) {
@@ -108,6 +134,10 @@ const WithdrawForm = () => {
         message: error.message,
       });
     }
+  };
+
+  const onSubmit: SubmitHandler<Form> = () => {
+    setConfirmationModalOpen(true);
   };
 
   const renderAlert = () => (
@@ -119,10 +149,14 @@ const WithdrawForm = () => {
     </AlertCard>
   );
 
+  const disabled =
+    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+
   const renderAddressTextField = () => (
     <TextField
       autoFocus
       label="Address"
+      disabled={disabled}
       {...register('address', { required: true })}
     />
   );
@@ -131,7 +165,6 @@ const WithdrawForm = () => {
     <TextField
       label="Token"
       select={!isTokensListLoading}
-      disabled={isTokensListLoading}
       InputProps={{
         startAdornment: isTokensListLoading && (
           <InputAdornment position="start">
@@ -140,20 +173,24 @@ const WithdrawForm = () => {
         ),
       }}
       {...tokenIdField}
+      disabled={disabled}
     >
       {tokens?.map((token) => (
         <MenuItem value={token.tokenId} key={token.tokenId}>
           {token.name ?? TOKEN_NAME_PLACEHOLDER}
+          &nbsp;
+          {!token.isNativeToken && (
+            <>
+              (<Id id={token.tokenId} />)
+            </>
+          )}
         </MenuItem>
       ))}
     </TextField>
   );
 
   const renderTokenAmountTextField = () => (
-    <TokenAmountTextField
-      disabled={isTokensListLoading}
-      token={selectedToken}
-    />
+    <TokenAmountTextField disabled={disabled} token={selectedToken} />
   );
 
   return (
@@ -174,7 +211,18 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Grid>
         </Grid>
-        <SubmitButton loading={isWithdrawPending}>Withdraw</SubmitButton>
+        <SubmitButton disabled={disabled} loading={isWithdrawPending}>
+          Withdraw
+        </SubmitButton>
+
+        <ConfirmationModal
+          open={confirmationModalOpen}
+          title="Confirm Withdraw"
+          content={`You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`}
+          buttonText="Withdraw"
+          handleClose={() => setConfirmationModalOpen(false)}
+          onConfirm={submit}
+        />
       </form>
     </FormProvider>
   );

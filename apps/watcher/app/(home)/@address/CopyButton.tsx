@@ -1,9 +1,12 @@
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Copy } from '@rosen-bridge/icons';
-import { IconButton, SvgIcon } from '@rosen-bridge/ui-kit';
-
-import SuccessfulCopySnackbar from './SuccessfulCopySnackbar';
+import {
+  IconButton,
+  SvgIcon,
+  SuccessfulCopySnackbar,
+} from '@rosen-bridge/ui-kit';
 
 interface CopyButtonProps {
   address: string;
@@ -19,7 +22,7 @@ const CopyButton = ({ address }: CopyButtonProps) => {
 
   const handleClose = (
     event: React.SyntheticEvent | Event,
-    reason?: string
+    reason?: string,
   ) => {
     if (reason === 'clickaway') {
       return;
@@ -27,18 +30,15 @@ const CopyButton = ({ address }: CopyButtonProps) => {
     setOpen(false);
   };
 
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(address);
-    setOpen(true);
-  };
-
   return (
     <>
-      <IconButton onClick={handleCopy} sx={{ borderRadius: 0 }}>
-        <SvgIcon>
-          <Copy />
-        </SvgIcon>
-      </IconButton>
+      <CopyToClipboard text={address} onCopy={() => setOpen(true)}>
+        <IconButton sx={{ borderRadius: 0 }}>
+          <SvgIcon>
+            <Copy />
+          </SvgIcon>
+        </IconButton>
+      </CopyToClipboard>
       <SuccessfulCopySnackbar open={open} handleClose={handleClose} />
     </>
   );

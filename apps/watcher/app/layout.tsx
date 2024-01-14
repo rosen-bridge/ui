@@ -3,7 +3,13 @@
 import React from 'react';
 import SWRConfig from '@rosen-ui/swr-mock';
 
-import { NoSsr, styled } from '@rosen-bridge/ui-kit';
+/**
+ * FIXME: import NoSsr from ui-kit
+ * local:ergo/rosen-bridge/ui#193
+ */
+import { NoSsr } from '@mui/material';
+
+import { AppSnackbar, styled, SnackbarProvider } from '@rosen-bridge/ui-kit';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';
@@ -20,15 +26,13 @@ const Root = styled('div')(({ theme }) => ({
   backgroundColor: theme.palette.secondary.dark,
   backgroundImage:
     theme.palette.mode === 'light'
-      ? // FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
-        `linear-gradient(180deg, #845ec2 0%, #2c73d2 20%, #0081cf 40%, #0089ba 60%, #008e9b 80%, #008f7a 100%)`
+      ? `linear-gradient(180deg, ${theme.palette.gradient.a} 0%, ${theme.palette.gradient.b} 20%, ${theme.palette.gradient.c} 40%, ${theme.palette.gradient.d} 60%, ${theme.palette.gradient.e} 80%, ${theme.palette.gradient.f} 100%)`
       : 'none',
   [theme.breakpoints.down('tablet')]: {
     flexDirection: 'column',
     backgroundImage:
       theme.palette.mode === 'light'
-        ? // FIXME: use theme defined values -https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/19
-          `linear-gradient(90deg, #845ec2 0%, #2c73d2 20%, #0081cf 40%, #0089ba 60%, #008e9b 80%, #008f7a 100%)`
+        ? `linear-gradient(90deg, ${theme.palette.gradient.a} 0%, ${theme.palette.gradient.b} 20%, ${theme.palette.gradient.c} 40%, ${theme.palette.gradient.d} 60%, ${theme.palette.gradient.e} 80%, ${theme.palette.gradient.f} 100%)`
         : 'none',
   },
 }));
@@ -59,27 +63,29 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     /**
      * TODO: get `lang` from url language path segment
-     *
-     * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/13
+     * local:ergo/rosen-bridge/ui#13
      */
     <html lang="en">
       <body>
         <NoSsr>
           <ThemeProvider>
-            <Root>
-              <SideBar />
-              <SWRConfig
-                useMockedApis={
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                }
-                fakeData={mockedData}
-              >
-                <Main>
-                  <Toolbar />
-                  {children}
-                </Main>
-              </SWRConfig>
-            </Root>
+            <SnackbarProvider>
+              <Root>
+                <SideBar />
+                <SWRConfig
+                  useMockedApis={
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                  }
+                  fakeData={mockedData}
+                >
+                  <Main>
+                    <Toolbar />
+                    {children}
+                    <AppSnackbar />
+                  </Main>
+                </SWRConfig>
+              </Root>
+            </SnackbarProvider>
           </ThemeProvider>
         </NoSsr>
       </body>

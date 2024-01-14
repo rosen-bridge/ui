@@ -7,7 +7,7 @@ import type { ResponsiveValueOptionsBase } from '../@types';
 
 type UseResponsiveValueOptions<
   T,
-  MandatoryBreakpoint extends Breakpoint = 'mobile'
+  MandatoryBreakpoint extends Breakpoint = 'mobile',
 > = {
   [Key in MandatoryBreakpoint]: NonNullable<T>;
 } & ResponsiveValueOptionsBase<T>;
@@ -23,15 +23,15 @@ type UseResponsiveValueOptions<
  */
 
 export const useResponsiveValue = <
-  const T extends UseResponsiveValueOptions<T[keyof T]>
+  const T extends UseResponsiveValueOptions<T[keyof T]>,
 >(
-  data: T
+  data: T,
 ) => {
   const theme = useTheme();
 
   const isDesktop = useMediaQuery(theme.breakpoints.up('desktop'));
   const isLaptop = useMediaQuery(
-    theme.breakpoints.between('laptop', 'desktop')
+    theme.breakpoints.between('laptop', 'desktop'),
   );
   const isTablet = useMediaQuery(theme.breakpoints.between('tablet', 'laptop'));
 

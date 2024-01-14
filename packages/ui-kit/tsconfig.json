@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "allowImportingTsExtensions": true,
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
@@ -9,10 +8,10 @@
     "inlineSources": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
+    "outDir": "./dist",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "bundler",
-    "noEmit": true,
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,7 +20,6 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "./tsconfig.node.json" },
     { "path": "../constants" },
     { "path": "../types" },
     { "path": "../utils" }

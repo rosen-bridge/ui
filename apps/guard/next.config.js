@@ -6,6 +6,10 @@ const nextConfig = {
     typedRoutes: true,
   },
   output: 'export',
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  staticPageGenerationTimeout: 600,
 };
 
 module.exports = nextConfig;

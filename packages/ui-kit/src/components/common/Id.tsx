@@ -9,7 +9,7 @@ export interface IdProps {
  * @param id
  */
 export const Id = ({ id }: IdProps) => (
-  <Typography noWrap variant="caption">{`${id.slice(0, 8)}...${id.slice(
-    -8
+  <Typography noWrap variant="caption">{`${id.slice(0, 10)}...${id.slice(
+    -8,
   )}`}</Typography>
 );

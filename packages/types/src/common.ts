@@ -1,7 +1,7 @@
 export type ChartPeriod = 'week' | 'month' | 'year';
 
 export interface TokenChartData {
-  title: string;
+  title: TokenInfo;
   data: {
     label: string;
     amount: string;
@@ -9,10 +9,15 @@ export interface TokenChartData {
 }
 
 export interface TokenInfo {
-  amount: bigint;
+  amount: number;
   decimals: number;
   name?: string;
   tokenId: string;
+  isNativeToken: boolean;
+}
+
+export interface TokenInfoWithColdAmount extends TokenInfo {
+  coldAmount?: number;
 }
 
 export interface HealthParamInfo {
@@ -20,4 +25,9 @@ export interface HealthParamInfo {
   status: 'Healthy' | 'Unstable' | 'Broken';
   lastCheck: string;
   description?: string;
+}
+
+export interface Paginated<T> {
+  total: number;
+  items: T[];
 }

@@ -1,0 +1,26 @@
+logs:
+  - type: 'console'
+    level: 'info'
+ergo:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+cardano:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  koiosAuthToken:
+postgres:
+  url: # postgresql://username:password@host:port/databasename
+  logging: false
+  useSSL: false

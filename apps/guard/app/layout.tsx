@@ -2,7 +2,13 @@
 
 import React from 'react';
 
-import { NoSsr, styled } from '@rosen-bridge/ui-kit';
+/**
+ * FIXME: import NoSsr from ui-kit
+ * local:ergo/rosen-bridge/ui#193
+ */
+import { NoSsr } from '@mui/material';
+
+import { styled, SnackbarProvider, AppSnackbar } from '@rosen-bridge/ui-kit';
 import SWRConfig from '@rosen-ui/swr-mock';
 
 import SideBar from './SideBar';
@@ -56,27 +62,29 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     /**
      * TODO: get `lang` from url language path segment
-     *
-     * https://git.ergopool.io/ergo/rosen-bridge/ui/-/issues/13
+     * local:ergo/rosen-bridge/ui#13
      */
     <html lang="en">
       <body>
         <NoSsr>
           <ThemeProvider>
-            <Root>
-              <SideBar />
-              <SWRConfig
-                useMockedApis={
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                }
-                fakeData={mockedData}
-              >
-                <Main>
-                  <Toolbar />
-                  {children}
-                </Main>
-              </SWRConfig>
-            </Root>
+            <SnackbarProvider>
+              <Root>
+                <SideBar />
+                <SWRConfig
+                  useMockedApis={
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                  }
+                  fakeData={mockedData}
+                >
+                  <Main>
+                    <Toolbar />
+                    {children}
+                    <AppSnackbar />
+                  </Main>
+                </SWRConfig>
+              </Root>
+            </SnackbarProvider>
           </ThemeProvider>
         </NoSsr>
       </body>

@@ -7,17 +7,25 @@ import {
   Grid,
   HealthParamCard,
   HealthParamCardSkeleton,
+  useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { HealthParamInfo } from '@rosen-ui/types';
 
 import { ApiHealthStatusResponse } from '@/_types/api';
 
+import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
+
 const Health = () => {
   const { data, isLoading, mutate } = useSWR<ApiHealthStatusResponse>(
     '/health/status',
-    fetcher
+    fetcher,
+    {
+      refreshInterval: HEALTH_DATA_REFRESH_INTERVAL,
+    },
   );
+
+  const { openSnackbar } = useSnackbar();
 
   /**
    * revalidate info of health param with id `paramId`
@@ -27,12 +35,13 @@ const Health = () => {
   const handleCheckNow = useCallback(
     async (paramId: string) => {
       const newHealthParamInfo: HealthParamInfo = await fetcher(
-        `/health/parameter/${paramId}`
+        `/health/parameter/${paramId}`,
       );
 
       const healthParamIndex = data!.findIndex(
-        (healthParam) => healthParam.id === paramId
+        (healthParam) => healthParam.id === paramId,
       );
+      openSnackbar(paramId + ' status updated', 'info');
 
       mutate([
         ...data!.slice(0, healthParamIndex),
@@ -40,7 +49,7 @@ const Health = () => {
         ...data!.slice(healthParamIndex + 1),
       ]);
     },
-    [data, mutate]
+    [data, mutate, openSnackbar],
   );
 
   return isLoading ? (

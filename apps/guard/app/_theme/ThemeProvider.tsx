@@ -6,48 +6,41 @@ import {
   createTheme,
   useMediaQuery,
 } from '@rosen-bridge/ui-kit';
+import { useLocalStorageManager } from '@rosen-ui/utils';
 
 export const ColorModeContext = createContext({ toggle: () => {} });
-
-declare module '@mui/material/styles' {
-  interface BreakpointOverrides {
-    xs: false;
-    sm: false;
-    md: false;
-    lg: false;
-    xl: false;
-    mobile: true;
-    tablet: true;
-    laptop: true;
-    desktop: true;
-  }
-}
 
 export interface AppThemeProps {
   children: React.ReactNode;
 }
 
+type ColorModes = 'light' | 'dark';
+
 /**
  * provide theme and color mode
  */
 const ThemeProvider = ({ children }: AppThemeProps) => {
+  const localStorageManager = useLocalStorageManager();
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
     noSsr: true,
   });
 
-  const [mode, setMode] = useState<'light' | 'dark'>(
-    prefersDarkMode ? 'dark' : 'light'
+  const preferredColorMode = prefersDarkMode ? 'dark' : 'light';
+
+  const [mode, setMode] = useState<ColorModes>(
+    localStorageManager.get<ColorModes>('colorMode') || preferredColorMode,
   );
 
   const colorMode = useMemo(
     () => ({
       toggle: () => {
-        setMode((previousMode) =>
-          previousMode === 'light' ? 'dark' : 'light'
-        );
+        const newColorMode = mode === 'light' ? 'dark' : 'light';
+        setMode(newColorMode);
+        localStorageManager.set('colorMode', newColorMode);
       },
     }),
-    []
+    [localStorageManager, mode],
   );
 
   const theme = useMemo(() => {
@@ -75,14 +68,27 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 contrastText: '#fff',
               },
               success: {
-                light: '#6cac9c',
+                light: '#d9eeeb',
                 main: '#008f7a',
-                dark: '#007664',
+                dark: '#006666',
+                contrastText: '#fff',
+              },
+              warning: {
+                light: '#fff9e2',
+                main: '#c89d09',
+                dark: '#8f6f00',
+                contrastText: '#fff',
+              },
+              error: {
+                light: '#eed9d9',
+                main: '#cf1717',
+                dark: '#8f0000',
                 contrastText: '#fff',
               },
               background: {
                 default: '#f7f7f7',
                 paper: '#fff',
+                shadow: '#00000033',
               },
             }
           : {
@@ -105,14 +111,27 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 contrastText: '#fff',
               },
               success: {
-                light: '#6cac9c',
+                light: '#d9eeeb',
                 main: '#008f7a',
-                dark: '#006453',
+                dark: '#184c4c',
+                contrastText: '#fff',
+              },
+              warning: {
+                light: '#fff9e2',
+                main: '#c89d09',
+                dark: '#5a4b1d',
+                contrastText: '#fff',
+              },
+              error: {
+                light: '#eed9d9',
+                main: '#cf1717',
+                dark: '#431616',
                 contrastText: '#fff',
               },
               background: {
                 default: '#1a2f4b',
                 paper: '#28475c',
+                shadow: '#00000033',
               },
             }),
       },
@@ -141,12 +160,21 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         h2: {
           fontSize: '1.5rem',
         },
+        h5: {
+          fontSize: '1rem',
+        },
         body: {
           fontSize: '1rem',
         },
         body2: {
           fontSize: '0.75rem',
           color: theme.palette.text.secondary,
+        },
+        subtitle2: {
+          fontSize: '0.625rem',
+          [theme.breakpoints.down('tablet')]: {
+            fontSize: '0.5625rem',
+          },
         },
       },
       components: {
@@ -181,6 +209,8 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiTableContainer: {
           styleOverrides: {
             root: {
+              backgroundColor: theme.palette.background.paper,
+              borderRadius: theme.shape.borderRadius,
               [theme.breakpoints.up('tablet')]: {
                 padding: theme.spacing(0, 2),
               },
