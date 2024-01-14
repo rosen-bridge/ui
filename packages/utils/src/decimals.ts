@@ -66,3 +66,17 @@ export const getNonDecimalString = (value: string, decimals: number) => {
       : ''
   }`.replace(/^0+(\d+)/, '$1');
 };
+
+/**
+ * gets a number as input and rounds it to the precision according
+ * to the provided precision number and removes the leading zeros.
+ *
+ * @param value
+ * @param precision
+ *
+ * @example
+ * roundToPrecision(1.126, 2) === 1.13 // true
+ */
+export const roundToPrecision = (value: number, precision: number) => {
+  return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
+};
