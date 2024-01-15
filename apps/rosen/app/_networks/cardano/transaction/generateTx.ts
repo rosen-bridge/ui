@@ -34,9 +34,11 @@ export const generateUnsignedTx = async (
   changeAddressHex: string,
   policyIdHex: string,
   assetNameHex: string,
-  amount: bigint,
+  amountString: string,
   auxiliaryDataHex: string,
 ): Promise<string> => {
+  const amount = BigInt(amountString);
+
   // converts hex address to bech32 address
   const changeAddress = wasm.Address.from_hex(changeAddressHex).to_bech32();
 
