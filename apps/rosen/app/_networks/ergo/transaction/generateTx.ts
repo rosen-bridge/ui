@@ -36,11 +36,15 @@ export const generateUnsignedTx = async (
   toChain: string,
   toAddress: string,
   tokenId: string,
-  amount: bigint,
-  bridgeFee: bigint,
-  networkFee: bigint,
+  amountString: string,
+  bridgeFeeString: string,
+  networkFeeString: string,
 ): Promise<UnsignedErgoTxProxy> => {
   const height = await getHeight();
+
+  const amount = BigInt(amountString);
+  const bridgeFee = BigInt(bridgeFeeString);
+  const networkFee = BigInt(networkFeeString);
 
   // generate lock box
   const lockAssets: AssetBalance = {

@@ -62,9 +62,9 @@ const ErgoNetwork: Network<Wallet> = {
           toChain,
           toAddress,
           tokenId,
-          amount,
-          bridgeFee,
-          networkFee,
+          amount.toString(),
+          bridgeFee.toString(),
+          networkFee.toString(),
         );
         const signedTx = await wallet.sign_tx(unsignedTx);
         const result = await wallet.submit_tx(signedTx);
