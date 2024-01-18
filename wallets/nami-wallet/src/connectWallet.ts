@@ -1,5 +1,5 @@
 /**
- * handles the nami wallet connection
+ * handles the Nami wallet connection
  */
 
 export const connectWallet = async () => {

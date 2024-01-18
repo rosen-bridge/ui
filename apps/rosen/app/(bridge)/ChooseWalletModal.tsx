@@ -48,7 +48,11 @@ export const ChooseWalletModal = ({
         <Grid
           container
           justifyContent="center"
-          sx={{ pt: (theme) => theme.spacing(1) }}
+          sx={{
+            pt: (theme) => theme.spacing(1),
+            gap: (theme) => theme.spacing(2),
+            mt: (theme) => theme.spacing(4),
+          }}
         >
           {supportedWallets.map(
             ({ icon: WalletIcon, label, link, name }, index) => (
@@ -61,9 +65,7 @@ export const ChooseWalletModal = ({
                     border: (theme) => `1px solid ${theme.palette.divider}`,
                     borderRadius: 1,
                     padding: (theme) => theme.spacing(1),
-                    margin: (theme) => theme.spacing(1),
                     cursor: 'pointer',
-                    flexDirection: 'column',
                     justifyContent: 'space-between',
                     '&:hover': {
                       backdropFilter: 'contrast(0.8)',
