@@ -23,8 +23,11 @@ interface ChooseWalletModalProps {
  *
  * @param open
  * @param handleClose
+ * @param setSelectedWallet
  * @param chainName
  * @param supportedWallets
+ * @param availableWallets
+ *
  */
 export const ChooseWalletModal = ({
   open,

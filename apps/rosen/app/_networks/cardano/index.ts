@@ -52,7 +52,6 @@ const CardanoNetwork: Network<Wallet> = {
     laceWalletInfo,
     eternlWalletInfo,
     flintWalletInfo,
-    vesprWalletInfo,
   ],
   availableWallets: compact([
     isNamiAvailable() && {
