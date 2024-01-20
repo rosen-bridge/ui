@@ -15,8 +15,6 @@ import {
   styled,
 } from '@rosen-bridge/ui-kit';
 
-import { SupportedWalletsModal } from './SupportedWalletsModal';
-
 import useNetwork from '@/_hooks/useNetwork';
 import { useTokensMap } from '@/_hooks/useTokensMap';
 import { useTransaction } from '@/_hooks/useTransaction';
@@ -49,9 +47,6 @@ const FeesContainer = styled('div')(({ theme }) => ({
  * and wallet connection
  */
 const BridgeTransaction = () => {
-  const [supportedWalletsModalOpen, setSupportedWalletsModalOpen] =
-    useState(false);
-
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
 
   const {
@@ -231,11 +226,7 @@ const BridgeTransaction = () => {
             disabled={!availableWallets}
             onClick={() => {
               if (!selectedWallet) {
-                if (availableWallets?.length) {
-                  setChooseWalletsModalOpen(true);
-                } else {
-                  setSupportedWalletsModalOpen(true);
-                }
+                setChooseWalletsModalOpen(true);
               } else {
                 handleFormSubmit();
               }
@@ -245,12 +236,6 @@ const BridgeTransaction = () => {
           </LoadingButton>
         </Grid>
       </Grid>
-      <SupportedWalletsModal
-        open={supportedWalletsModalOpen}
-        chainName={selectedNetwork?.name ?? ''}
-        handleClose={() => setSupportedWalletsModalOpen(false)}
-        supportedWallets={selectedNetwork?.supportedWallets ?? []}
-      />
       <ChooseWalletModal
         open={chooseWalletsModalOpen}
         chainName={selectedNetwork?.name ?? ''}

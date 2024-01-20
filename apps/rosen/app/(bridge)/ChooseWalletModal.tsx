@@ -100,6 +100,9 @@ export const ChooseWalletModal = ({
                     variant="contained"
                     size="small"
                     sx={{ mt: (theme) => theme.spacing(1), width: '100%' }}
+                    disabled={
+                      !availableWallets.find((wallet) => wallet.name === name)
+                    }
                   >
                     Connect
                   </Button>

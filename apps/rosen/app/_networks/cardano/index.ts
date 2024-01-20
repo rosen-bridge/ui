@@ -161,7 +161,7 @@ const CardanoNetwork: Network<Wallet> = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount,
+          amount.toString(),
           auxiliaryDataHex,
         );
 
@@ -219,7 +219,7 @@ const CardanoNetwork: Network<Wallet> = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount,
+          amount.toString(),
           auxiliaryDataHex,
         );
 
@@ -277,7 +277,7 @@ const CardanoNetwork: Network<Wallet> = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount,
+          amount.toString(),
           auxiliaryDataHex,
         );
 
@@ -335,7 +335,7 @@ const CardanoNetwork: Network<Wallet> = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount,
+          amount.toString(),
           auxiliaryDataHex,
         );
 
