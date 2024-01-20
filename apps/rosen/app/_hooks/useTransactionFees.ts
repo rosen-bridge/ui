@@ -119,7 +119,7 @@ const useTransactionFees = (
     const variableBridgeFee = fees
       ? (paymentAmount * feeRatio) / feeRatioDivisor
       : 0;
-    const bridgeFee = Math.max(bridgeFeeBase, variableBridgeFee);
+    const bridgeFee = Math.max(bridgeFeeBase, Math.ceil(variableBridgeFee));
 
     const receivingAmountValue = fees
       ? +paymentAmount - (networkFee! + bridgeFee!)
@@ -130,11 +130,11 @@ const useTransactionFees = (
     return {
       bridgeFee: getDecimalString(
         bridgeFee?.toString() || '0',
-        token?.decimals || 1,
+        token?.decimals || 0,
       ),
       networkFee: getDecimalString(
         networkFee?.toString() || '0',
-        token?.decimals || 1,
+        token?.decimals || 0,
       ),
       receivingAmount:
         fees && receivingAmountValue > 0

@@ -13,6 +13,7 @@ import {
   fee as ergoFee,
   minBoxValue as ergoMinBoxValue,
 } from '@/_networks/ergo/transaction/consts';
+import { encode } from 'cbor-x';
 
 /**
  * a utility to make unique interface for accessing token name
@@ -46,7 +47,7 @@ export const getMaxTransferableAmount = (
   isNative: boolean,
 ) => {
   const offsetCandidate = Number(
-    chain === 'ergo' ? ergoFee - ergoMinBoxValue : cardanoFeeAndMinBoxValue,
+    chain === 'ergo' ? ergoFee + ergoMinBoxValue : cardanoFeeAndMinBoxValue,
   );
   const shouldApplyOffset = isNative;
   const offset = shouldApplyOffset ? offsetCandidate : 0;
@@ -95,3 +96,10 @@ export const getMinTransferAmount = async (
       )
     : '0';
 };
+
+/**
+ * convert a hex to cbor
+ * @param hex
+ */
+export const hexToCbor = (hex: string) =>
+  Buffer.from(encode(Buffer.from(hex, 'hex'))).toString('hex');

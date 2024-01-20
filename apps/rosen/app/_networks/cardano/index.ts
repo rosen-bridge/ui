@@ -39,6 +39,8 @@ import {
 import { generateUnsignedTx } from './transaction/generateTx';
 import { CardanoIcon } from '@rosen-bridge/icons';
 
+import { hexToCbor } from '@/_utils';
+
 /**
  * the main object for Cardano network
  * providing access to network info and wallets and network specific
@@ -62,7 +64,9 @@ const CardanoNetwork: Network<Wallet> = {
         const balances = await decodeWasmValue(rawValue);
 
         const amount = balances.find(
-          (asset) => asset.policyId === token.policyId,
+          (asset) =>
+            asset.policyId === token.policyId &&
+            (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
         );
         return amount ? Number(amount.quantity) : 0;
       },
@@ -99,7 +103,7 @@ const CardanoNetwork: Network<Wallet> = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount,
+          amount.toString(),
           auxiliaryDataHex,
         );
 

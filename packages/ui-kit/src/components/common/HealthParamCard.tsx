@@ -72,7 +72,7 @@ export const HealthParamCard = ({
           >
             Check now
           </Button>
-          (Last check: {moment(lastCheck).format('DD/MM/YYYY kk:mm:ss')})
+          (Last check: {moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})
         </Typography>
       }
     >

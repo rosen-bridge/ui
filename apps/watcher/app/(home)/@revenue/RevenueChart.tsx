@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
-import { getDecimalString } from '@rosen-ui/utils';
+import { getDecimalString, roundToPrecision } from '@rosen-ui/utils';
 
 import { ApiRevenueChartResponse } from '@/_types/api';
 
@@ -66,15 +66,32 @@ interface RevenueChartProps {
 const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const theme = useTheme();
 
+  const reversedData = useMemo(
+    () =>
+      data
+        .map((innerData) => ({
+          ...innerData,
+          data: innerData.data.toReversed(),
+        }))
+        .toReversed(),
+    [data],
+  );
+
   const apexChartOptions = useMemo(
     () => ({
       ...baseChartOptions,
       xaxis: {
         ...baseChartOptions.xaxis,
         categories:
-          data[0]?.data
-            .map((datum) => moment(+datum.label).format(getDateFormat(period)))
-            .toReversed() ?? [],
+          reversedData[0]?.data.map((datum) =>
+            moment(+datum.label).format(getDateFormat(period)),
+          ) ?? [],
+      },
+      yaxis: {
+        labels: {
+          formatter: (label: number) =>
+            `${roundToPrecision(label, reversedData[0].title.decimals)}`,
+        },
       },
       theme: {
         mode: theme.palette.mode,
@@ -98,18 +115,18 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
               theme.palette.error.light,
             ],
     }),
-    [data, period, theme],
+    [reversedData, period, theme],
   );
 
   const apexChartSeries = useMemo(
     () =>
-      data.toReversed().map((tokenData) => ({
+      reversedData.toReversed().map((tokenData) => ({
         name: tokenData.title.name,
         data: tokenData.data.map(
           (datum) => +getDecimalString(datum.amount, tokenData.title.decimals),
         ),
       })),
-    [data],
+    [reversedData],
   );
 
   return (
