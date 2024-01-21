@@ -13,7 +13,7 @@ import {
   SubmitButton,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { mutator, fetcher } from '@rosen-ui/swr-helpers';
+import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
 import ConfirmationModal from '../../ConfirmationModal';
@@ -21,6 +21,9 @@ import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
+import { Alert } from '@rosen-bridge/icons';
+
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import useRsnToken from '@/_hooks/useRsnToken';
 import useToken from '@/_hooks/useToken';
 
@@ -37,6 +40,7 @@ const LockForm = () => {
     '/info',
     fetcher,
   );
+  const { apiKey } = useApiKey();
 
   const modifiedRsnTokenConsideringCollateral = useMemo(
     () =>
@@ -57,12 +61,14 @@ const LockForm = () => {
     message: string;
   } | null>(null);
 
-  const { trigger, isMutating: isLockPending } = useSWRMutation<
-    ApiPermitResponse,
-    any,
+  const {
+    trigger,
+    isMutating: isLockPending,
+    error,
+  } = useSWRMutation<ApiPermitResponse, any, '/permit', ApiPermitRequestBody>(
     '/permit',
-    ApiPermitRequestBody
-  >('/permit', mutator);
+    mutatorWithHeaders,
+  );
 
   useEffect(() => {
     if (!isRsnTokenLoading && !rsnToken?.amount) {
@@ -86,7 +92,12 @@ const LockForm = () => {
       const count = getNonDecimalString(formData.amount, rsnToken!.decimals);
 
       const response = await trigger({
-        count: (+count + (info?.permitCount.total ? 0 : 1)).toString(),
+        data: {
+          count: (+count + (info?.permitCount.total ? 0 : 1)).toString(),
+        },
+        headers: {
+          apiKey: apiKey!,
+        },
       });
 
       if (response?.txId) {
@@ -121,6 +132,7 @@ const LockForm = () => {
   );
 
   const disabled =
+    !apiKey ||
     isRsnTokenLoading ||
     isInfoLoading ||
     isErgTokenLoading ||
@@ -226,6 +238,33 @@ const LockForm = () => {
           {renderCollateralAlert()}
           {renderReportsCountAlert()}
         </Grid>
+
+        {!apiKey && (
+          <Grid
+            container
+            alignItems="center"
+            gap={1}
+            sx={(theme) => ({ color: theme.palette.warning.main })}
+          >
+            <Grid item>
+              <Alert />
+            </Grid>
+
+            <Grid item>
+              <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+          </Grid>
+        )}
+
+        {error?.response?.status === 403 && (
+          <Grid
+            container
+            alignItems="center"
+            sx={(theme) => ({ color: theme.palette.warning.main })}
+          >
+            <Typography>The Api key is not correct</Typography>
+          </Grid>
+        )}
 
         <SubmitButton loading={isLockPending} disabled={disabled}>
           {' '}

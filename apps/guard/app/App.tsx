@@ -67,7 +67,12 @@ const App = ({ children }: AppProps) => {
           <ApiKeyContextProvider>
             <Root>
               <SideBar />
-              <SWRConfig useMockedApis={true} fakeData={mockedData}>
+              <SWRConfig
+                useMockedApis={
+                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                }
+                fakeData={mockedData}
+              >
                 <Main>
                   <Toolbar />
                   {children}

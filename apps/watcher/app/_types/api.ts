@@ -29,11 +29,16 @@ export type ApiRevenueChartResponse = TokenChartData[];
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
 export interface ApiWithdrawRequestBody {
-  address: string;
-  tokens: {
-    tokenId: string;
-    amount: bigint;
-  }[];
+  data: {
+    address: string;
+    tokens: {
+      tokenId: string;
+      amount: bigint;
+    }[];
+  };
+  headers: {
+    [headerKeys: string]: string | number;
+  };
 }
 export interface ApiWithdrawResponse {
   txId: string;
@@ -41,13 +46,23 @@ export interface ApiWithdrawResponse {
 }
 
 export interface ApiPermitRequestBody {
-  count: string;
+  data: {
+    count: string;
+  };
+  headers: {
+    [headerKey: string]: string | number;
+  };
 }
 export interface ApiPermitResponse {
   txId: string;
 }
 export interface ApiPermitReturnRequestBody {
-  count: string;
+  data: {
+    count: string;
+  };
+  headers: {
+    [headerKey: string]: string | number;
+  };
 }
 export interface ApiPermitReturnResponse {
   txIds: string[];
