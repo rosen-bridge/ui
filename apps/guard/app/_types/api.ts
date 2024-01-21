@@ -31,10 +31,15 @@ interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
 export type ApiRevenueChartResponse = GuardTokenChartData[];
 
 export interface ApiSignRequestBody {
-  chain: string;
-  txJson: string;
-  requiredSign: number;
-  overwrite?: boolean;
+  data: {
+    chain: string;
+    txJson: string;
+    requiredSign: number;
+    overwrite?: boolean;
+  };
+  headers: {
+    [header_key: string]: string;
+  };
 }
 export type ApiSignResponse = {
   message: string;

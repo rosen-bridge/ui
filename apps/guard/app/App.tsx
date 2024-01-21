@@ -11,6 +11,8 @@ import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
+import { ApiKeyContextProvider } from './_contexts/apiKeyContext';
+
 import mockedData from './_mock/mockedData';
 
 const Root = styled('div')(({ theme }) => ({
@@ -62,16 +64,18 @@ const App = ({ children }: AppProps) => {
     <NoSsr>
       <ThemeProvider>
         <SnackbarProvider>
-          <Root>
-            <SideBar />
-            <SWRConfig useMockedApis={true} fakeData={mockedData}>
-              <Main>
-                <Toolbar />
-                {children}
-                <AppSnackbar />
-              </Main>
-            </SWRConfig>
-          </Root>
+          <ApiKeyContextProvider>
+            <Root>
+              <SideBar />
+              <SWRConfig useMockedApis={true} fakeData={mockedData}>
+                <Main>
+                  <Toolbar />
+                  {children}
+                  <AppSnackbar />
+                </Main>
+              </SWRConfig>
+            </Root>
+          </ApiKeyContextProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </NoSsr>
