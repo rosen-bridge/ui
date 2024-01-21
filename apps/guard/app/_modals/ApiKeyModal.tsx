@@ -18,7 +18,7 @@ import {
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 
-import { useApiKey } from '@/_hooks/useApiKey';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 interface FormValues {
   apiKey: string;

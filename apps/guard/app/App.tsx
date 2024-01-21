@@ -11,7 +11,7 @@ import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 
-import { ApiKeyContextProvider } from './_contexts/apiKeyContext';
+import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
 import mockedData from './_mock/mockedData';
 

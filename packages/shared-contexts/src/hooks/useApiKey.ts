@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 
-import { ApiKeyContext } from '../_contexts/apiKeyContext';
+import { ApiKeyContext } from '../contexts/apiKeyContext';
 
 /**
  * access api key to set on the the server request and mutations

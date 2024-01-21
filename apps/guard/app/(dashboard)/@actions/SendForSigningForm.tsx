@@ -14,11 +14,11 @@ import {
   Typography,
   styled,
 } from '@rosen-bridge/ui-kit';
-import { mutator, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 
 import { Alert } from '@rosen-bridge/icons';
 
-import { useApiKey } from '@/_hooks/useApiKey';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
 
