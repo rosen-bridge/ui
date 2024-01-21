@@ -7,7 +7,7 @@ export interface ConnectorAPI {
 }
 
 /**
- * global type augmentation for Nami wallet
+ * global type augmentation for Eternl wallet
  */
 declare global {
   declare let cardano: { [key: string]: ConnectorAPI };
