@@ -95,7 +95,11 @@ export const ChooseWalletModal = ({
                   <Button
                     onClick={(event) => {
                       event.preventDefault();
-                      handleConnect(availableWallets[index]);
+                      handleConnect(
+                        availableWallets.find(
+                          (wallet) => wallet.name === name,
+                        )!,
+                      );
                     }}
                     variant="contained"
                     size="small"
