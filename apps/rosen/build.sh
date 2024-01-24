@@ -15,6 +15,10 @@ npm run build --workspace packages/shared-contexts
 npm run build --workspace packages --if-present
 npm run build --workspace wallets/wallet-api
 npm run build --workspace wallets/nami-wallet
+npm run build --workspace wallets/lace-wallet
+npm run build --workspace wallets/eternl-wallet
+npm run build --workspace wallets/flint-wallet
+npm run build --workspace wallets/vespr-wallet
 npm run build --workspace wallets/nautilus-wallet
 
 cd apps/rosen

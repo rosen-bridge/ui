@@ -1,0 +1,28 @@
+{
+  "name": "@rosen-ui/lace-wallet",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "prettify": "prettier --write . --ignore-path .gitignore",
+    "lint": "eslint --fix . && npm run prettify",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@rosen-bridge/tokens": "^1.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.2",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@rosen-bridge/icons": "^0.1.0",
+    "@rosen-ui/utils": "^0.0.1",
+    "@rosen-ui/wallet-api": "^0.0.1"
+  }
+}
