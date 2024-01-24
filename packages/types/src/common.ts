@@ -31,3 +31,10 @@ export interface Paginated<T> {
   total: number;
   items: T[];
 }
+
+export interface MutationRequestBodyWithHeaders<Data> {
+  data: Data;
+  headers: {
+    [headerKey: string]: string | number;
+  };
+}

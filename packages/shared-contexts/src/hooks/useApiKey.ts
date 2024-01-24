@@ -21,12 +21,9 @@ export const useApiKey = () => {
     [dispatch],
   );
 
-  const removeApiKey = useCallback(
-    (apiKey: string) => {
-      dispatch({ type: 'remove' });
-    },
-    [dispatch],
-  );
+  const removeApiKey = useCallback(() => {
+    dispatch({ type: 'remove' });
+  }, [dispatch]);
 
   return {
     apiKey: state.selectedApiKey,
