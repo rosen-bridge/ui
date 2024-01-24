@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
 import { useForm, Controller } from 'react-hook-form';
+import { useModalManager } from '@rosen-ui/utils';
 
 import {
   Button,
@@ -25,17 +26,13 @@ interface FormValues {
 }
 
 const ApiKeyModal = () => {
-  const [open, setOpen] = useState(false);
   const { openSnackbar } = useSnackbar();
+  const { apiKey, setApiKey } = useApiKey();
+
+  const { isOpen, handleOpenModal, handleCloseModal } = useModalManager();
 
   const [showKey, setShowKey] = useState(false);
-
-  const handleOpenModal = () => setOpen(true);
-  const handleCloseModal = () => setOpen(false);
-
   const handleToggleShowKey = () => setShowKey((prevState) => !prevState);
-
-  const { apiKey, setApiKey } = useApiKey();
 
   const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
@@ -64,7 +61,7 @@ const ApiKeyModal = () => {
         </SvgIcon>
       </IconButton>
       <Dialog
-        open={open}
+        open={isOpen}
         onClose={handleCloseModal}
         maxWidth="tablet"
         fullWidth
