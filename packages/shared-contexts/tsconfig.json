@@ -19,9 +19,4 @@
     "useDefineForClassFields": true,
   },
   "include": ["src"],
-  "references": [
-    { "path": "../constants" },
-    { "path": "../types" },
-    { "path": "../utils" },
-  ],
 }

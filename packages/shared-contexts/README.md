@@ -1,27 +1,27 @@
-# @rosen-bridge/ui
+# @rosen-bridge/shared-contexts
 
 ## Table of contents
 
-- [@rosen-bridge/ui](#rosen-bridgeui)
+- [@rosen-bridge/shared-contexts](#rosen-bridge/sahred-contexts)
   - [Table of contents](#table-of-contents)
   - [Introduction](#introduction)
   - [Installation](#installation)
 
 ## Introduction
 
-`@rosen-bridge/ui` is a simple ui kit containing react components that are used
-inside other Rosen bridge projects.
+`@rosen-bridge/shared-contexts` is a simple utility package the shares the commonly used
+react contexts between apps.
 
 ## Installation
 
 npm:
 
 ```sh
-npm i @rosen-bridge/ui
+npm i @rosen-bridge/shared-contexts
 ```
 
 yarn:
 
 ```sh
-yarn add @rosen-bridge/ui
+yarn add @rosen-bridge/shared-contexts
 ```
