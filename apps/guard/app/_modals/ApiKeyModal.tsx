@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
 import { useForm, Controller } from 'react-hook-form';
-import { useModalManager } from '@rosen-ui/utils';
+import { useModalManager } from '@rosen-ui/common-hooks';
 
 import {
   Button,

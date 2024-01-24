@@ -31,6 +31,7 @@
     "@rosen-ui/nautilus-wallet": "^0.0.1",
     "@rosen-ui/utils": "^0.0.1",
     "@rosen-ui/wallet-api": "^0.0.1",
+    "@rosen-ui/common-hooks": "^0.1.0",
     "buffer": "^6.0.3",
     "cbor-x": "^1.5.7",
     "ergo-lib-wasm-nodejs": "^0.24.0",
