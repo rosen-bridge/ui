@@ -13,5 +13,8 @@
     "husky": "^8.0.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.1"
   }
 }
