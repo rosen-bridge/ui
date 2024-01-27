@@ -2,6 +2,7 @@ image: node:18.14
 
 stages:
   - installation
+  - changeset
   - build
   - type_check
   - lint
@@ -17,6 +18,18 @@ installation:
       - packages/*/node_modules
   script:
     - npm ci
+
+changeset:
+  stage: changeset
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  script:
+    - npx changeset status --since=origin/dev
 
 build:
   stage: build
