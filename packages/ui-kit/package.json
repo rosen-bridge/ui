@@ -1,6 +1,7 @@
 {
   "name": "@rosen-bridge/ui-kit",
   "description": "ui kit for Rosen projects",
+  "private": "true",
   "version": "0.1.0",
   "type": "module",
   "files": [
