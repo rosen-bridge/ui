@@ -7,7 +7,7 @@ interface GETQueryParams {
 }
 const getQueryParamsSchema = Joi.object<GETQueryParams>().keys({
   offset: Joi.number().min(0).default(0),
-  limit: Joi.number().min(0).default(20),
+  limit: Joi.number().min(0).max(100).default(20),
 });
 
 /**
