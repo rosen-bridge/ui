@@ -74,7 +74,7 @@ const SendForSigningForm = () => {
           overwrite,
         },
         headers: {
-          apiKey,
+          ['API_KEY']: apiKey,
         },
       });
 
@@ -90,13 +90,20 @@ const SendForSigningForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message:
-          error.response?.status === 409
-            ? 'Tx is already sent for signing. If you want to override, click the checkbox and submit again.'
-            : error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message:
+            error.response?.status === 409
+              ? 'Tx is already sent for signing. If you want to override, click the checkbox and submit again.'
+              : error.message,
+        });
+      }
     }
   };
 

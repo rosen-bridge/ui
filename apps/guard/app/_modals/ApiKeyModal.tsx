@@ -43,10 +43,7 @@ const ApiKeyModal = () => {
   const handleSetKey = (values: FormValues) => {
     setApiKey(values.apiKey);
     handleCloseModal();
-    openSnackbar('Api key is set !', 'success', {
-      horizontal: 'right',
-      vertical: 'top',
-    });
+    openSnackbar('Api key is set!', 'success');
   };
 
   return (
