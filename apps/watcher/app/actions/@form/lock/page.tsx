@@ -96,7 +96,7 @@ const LockForm = () => {
           count: (+count + (info?.permitCount.total ? 0 : 1)).toString(),
         },
         headers: {
-          apiKey: apiKey!,
+          ['API_KEY']: apiKey!,
         },
       });
 
@@ -111,10 +111,17 @@ const LockForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message: error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -253,16 +260,6 @@ const LockForm = () => {
             <Grid item>
               <Typography>You need to set an Api Key before sending</Typography>
             </Grid>
-          </Grid>
-        )}
-
-        {error?.response?.status === 403 && (
-          <Grid
-            container
-            alignItems="center"
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Typography>The Api key is not correct</Typography>
           </Grid>
         )}
 

@@ -129,7 +129,7 @@ const WithdrawForm = () => {
           ],
         },
         headers: {
-          apiKey: apiKey!,
+          ['API_KEY']: apiKey!,
         },
       });
       if (response.status === 'OK') {
@@ -143,10 +143,17 @@ const WithdrawForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message: error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -243,15 +250,6 @@ const WithdrawForm = () => {
           </Grid>
         )}
 
-        {error?.response?.status === 403 && (
-          <Grid
-            container
-            alignItems="center"
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Typography>The Api key is not correct</Typography>
-          </Grid>
-        )}
         <SubmitButton disabled={disabled} loading={isWithdrawPending}>
           Withdraw
         </SubmitButton>

@@ -125,7 +125,7 @@ const UnlockForm = () => {
       const response = await trigger({
         data: { count },
         headers: {
-          apiKey: apiKey!,
+          ['API_KEY']: apiKey!,
         },
       });
 
@@ -141,10 +141,17 @@ const UnlockForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message: error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -198,15 +205,6 @@ const UnlockForm = () => {
           </Grid>
         )}
 
-        {error?.response?.status === 403 && (
-          <Grid
-            container
-            alignItems="center"
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Typography>The Api key is not correct</Typography>
-          </Grid>
-        )}
         <SubmitButton loading={isUnlockPending} disabled={disabled}>
           Unlock
         </SubmitButton>
