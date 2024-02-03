@@ -89,7 +89,7 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
       yaxis: {
         labels: {
           formatter: (label: number) =>
-            `${roundToPrecision(label, reversedData[0].title.decimals)}`,
+            `${roundToPrecision(label, reversedData[0]?.title?.decimals || 1)}`,
         },
       },
       theme: {
