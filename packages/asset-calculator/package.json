@@ -1,13 +1,13 @@
 {
-  "name": "asset-calculator",
-  "version": "0.1.0",
+  "name": "@rosen-ui/asset-calculator",
+  "version": "0.0.0",
   "description": "Rosen bridge locked asset calculator",
-  "repository": "",
   "license": "GPL-3.0",
   "author": "Rosen Team",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "private": true,
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "coverage": "npm run test -- --coverage",

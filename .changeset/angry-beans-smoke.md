@@ -1,5 +1,5 @@
 ---
-'asset-calculator': patch
+'@rosen-ui/asset-calculator': minor
 ---
 
-Initialize empty package for locked assets calculation
+Initialize package for locked assets calculation
