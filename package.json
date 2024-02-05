@@ -9,13 +9,13 @@
   "scripts": {
     "prepare": "husky install"
   },
+  "dependencies": {
+    "@changesets/cli": "^2.27.1"
+  },
   "devDependencies": {
     "@rosen-bridge/changeset-formatter": "^0.1.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8"
-  },
-  "dependencies": {
-    "@changesets/cli": "^2.27.1"
   }
 }
