@@ -31,5 +31,10 @@
   },
   "engines": {
     "node": ">=20.11.0"
+  },
+  "dependencies": {
+    "@rosen-bridge/extended-typeorm": "^0.0.2",
+    "@rosen-bridge/winston-logger": "^0.2.1",
+    "typeorm": "^0.3.20"
   }
 }
