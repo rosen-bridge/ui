@@ -3,13 +3,13 @@ import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
 
 @Entity()
 export class AssetEntity {
-  @PrimaryColumn()
+  @PrimaryColumn('varchar')
   id: string;
 
-  @Column()
+  @Column('varchar')
   name: string;
 
-  @Column()
+  @Column('int')
   decimal: number;
 
   @Column({ type: 'bigint', transformer: new BigIntValueTransformer() })
