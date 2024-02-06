@@ -6,8 +6,8 @@
 '@rosen-bridge/icons': minor
 '@rosen-ui/types': minor
 '@rosen-ui/utils': minor
-'@rosen-bridge/watcher-app': minor
-'@rosen-bridge/guard-app': minor
+'@rosen-bridge/watcher-app': major
+'@rosen-bridge/guard-app': major
 ---
 
 add api-key authentication to watcher and guard

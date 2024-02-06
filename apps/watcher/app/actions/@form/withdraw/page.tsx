@@ -129,7 +129,7 @@ const WithdrawForm = () => {
           ],
         },
         headers: {
-          ['API_KEY']: apiKey!,
+          API_KEY: apiKey!,
         },
       });
       if (response.status === 'OK') {

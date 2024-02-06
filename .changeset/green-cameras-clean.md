@@ -3,4 +3,4 @@
 '@rosen-bridge/guard-app': patch
 ---
 
-fix the chart label problems in watcher and guard
+fix the chart label problems in first load
