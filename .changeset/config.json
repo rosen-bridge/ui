@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": "./format.js",
+  "changelog": "@rosen-bridge/changeset-formatter",
   "commit": false,
   "fixed": [],
   "linked": [],
