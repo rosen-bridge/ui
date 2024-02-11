@@ -5,6 +5,7 @@ stages:
   - build
   - type_check
   - lint
+  - unit_test
   - changeset
 
 installation:
@@ -70,6 +71,16 @@ lint:
       - node_modules
   script:
     - npm run lint --workspaces --if-present
+
+unit_tests:
+  stage: unit-tests
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run test-and-exit
 
 changeset:
   stage: changeset
