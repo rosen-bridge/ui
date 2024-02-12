@@ -1,5 +1,8 @@
 import { TokenMap, RosenTokens, RosenChainToken } from '@rosen-bridge/tokens';
 import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from 'typeorm';
+import { difference } from 'lodash-es';
+import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
@@ -8,10 +11,7 @@ import {
   ErgoCalculatorInterface,
 } from './interfaces';
 import { CARDANO_CHAIN, ERGO_CHAIN, NATIVE_TOKEN } from './constants';
-import { DataSource } from 'typeorm';
 import { AssetModel } from './database/asset-model';
-import { difference } from 'lodash-es';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 
 export class AssetCalculator {
   protected readonly tokens: TokenMap;

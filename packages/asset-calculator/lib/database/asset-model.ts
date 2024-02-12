@@ -1,8 +1,8 @@
 import { DataSource, In, Repository } from 'typeorm';
-
-import { AssetEntity } from './asset-entity';
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import JsonBigInt from '@rosen-bridge/json-bigint';
+
+import { AssetEntity } from './asset-entity';
 
 class AssetModel {
   protected readonly assetRepository: Repository<AssetEntity>;
