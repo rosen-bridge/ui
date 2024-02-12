@@ -2,6 +2,7 @@ import { DataSource, In, Repository } from 'typeorm';
 
 import { AssetEntity } from './asset-entity';
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import JsonBigInt from '@rosen-bridge/json-bigint';
 
 class AssetModel {
   protected readonly assetRepository: Repository<AssetEntity>;
@@ -22,8 +23,14 @@ class AssetModel {
       where: { id: asset.id },
     });
     if (savedAsset) {
+      this.logger.debug(
+        `Updated asset [${JsonBigInt.stringify(asset)}] in database`
+      );
       return this.assetRepository.update({ id: asset.id }, asset);
     } else {
+      this.logger.debug(
+        `Inserted asset [${JsonBigInt.stringify(asset)}] in database`
+      );
       return this.assetRepository.insert(asset);
     }
   };
@@ -42,7 +49,8 @@ class AssetModel {
    * @param assetIds
    */
   removeUnusedAssets = async (assetIds: string[]) => {
-    return this.assetRepository.delete({ id: In(assetIds) });
+    await this.assetRepository.delete({ id: In(assetIds) });
+    this.logger.debug(`Deleted assets ${assetIds} in database`);
   };
 }
 

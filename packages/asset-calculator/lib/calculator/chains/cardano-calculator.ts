@@ -25,8 +25,12 @@ export class CardanoCalculator extends AbstractCalculator {
     const assetSummary = await this.koiosApi.postAssetInfo({
       _asset_list: [token.policyId, token.name],
     });
-    if (assetSummary.length && assetSummary[0].total_supply)
+    if (assetSummary.length && assetSummary[0].total_supply) {
+      this.logger.debug(
+        `Total supply of token [${token}] is [${assetSummary[0].total_supply}]`
+      );
       return BigInt(assetSummary[0].total_supply);
+    }
     throw Error('Total supply is not calculable');
   };
 
@@ -38,7 +42,7 @@ export class CardanoCalculator extends AbstractCalculator {
     const assets = await this.koiosApi.postAddressAssets({
       _addresses: this.addresses,
     });
-    return assets
+    const tokenBalance = assets
       .filter(
         (asset) =>
           asset.policy_id == token.policyId &&
@@ -46,5 +50,7 @@ export class CardanoCalculator extends AbstractCalculator {
           asset.quantity
       )
       .reduce((sum, asset) => BigInt(asset.quantity!) + sum, 0n);
+    this.logger.debug(`Total balance of token [${token}] is [${tokenBalance}]`);
+    return tokenBalance;
   };
 }

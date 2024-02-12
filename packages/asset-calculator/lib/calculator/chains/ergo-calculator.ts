@@ -24,7 +24,12 @@ export class ErgoCalculator extends AbstractCalculator {
     const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(
       token.tokenId
     );
-    if (tokenDetail) return tokenDetail.emissionAmount;
+    if (tokenDetail) {
+      this.logger.debug(
+        `Total supply of token [${token}] is [${tokenDetail.emissionAmount}]`
+      );
+      return tokenDetail.emissionAmount;
+    }
     throw Error('Total supply is not calculable');
   };
 
@@ -37,10 +42,15 @@ export class ErgoCalculator extends AbstractCalculator {
     for (const address of this.addresses) {
       const balance =
         await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
-      tokenBalance += balance.tokens!.filter(
+      const addressTokenBalance = balance.tokens!.filter(
         (asset) => asset.tokenId == token.tokenId
       )[0].amount;
+      this.logger.debug(
+        `Balance of token [${token}] in address [${address}] is [${addressTokenBalance}]`
+      );
+      tokenBalance += addressTokenBalance;
     }
+    this.logger.debug(`Total balance of token [${token}] is [${tokenBalance}]`);
     return tokenBalance;
   };
 }
