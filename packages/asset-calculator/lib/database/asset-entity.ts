@@ -14,4 +14,7 @@ export class AssetEntity {
 
   @Column({ type: 'bigint', transformer: new BigIntValueTransformer() })
   amount: bigint;
+
+  @Column('boolean')
+  isNative: boolean;
 }

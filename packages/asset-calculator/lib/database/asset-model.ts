@@ -1,12 +1,15 @@
 import { DataSource, In, Repository } from 'typeorm';
 
 import { AssetEntity } from './asset-entity';
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 
 class AssetModel {
-  private readonly assetRepository: Repository<AssetEntity>;
+  protected readonly assetRepository: Repository<AssetEntity>;
+  protected readonly logger: AbstractLogger;
 
-  constructor(dataSource: DataSource) {
+  constructor(dataSource: DataSource, logger = new DummyLogger()) {
     this.assetRepository = dataSource.getRepository(AssetEntity);
+    this.logger = logger;
   }
 
   /**
