@@ -10,17 +10,21 @@ import {
   AlertProps,
   Box,
   Grid,
+  Typography,
   SubmitButton,
 } from '@rosen-bridge/ui-kit';
-import { fetcher, mutator } from '@rosen-ui/swr-helpers';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
+
+import { Alert } from '@rosen-bridge/icons';
 
 import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import useRsnToken from '@/_hooks/useRsnToken';
 
 import {
@@ -36,6 +40,7 @@ const UnlockForm = () => {
   );
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+  const { apiKey } = useApiKey();
 
   const rwtPartialToken = useMemo<
     Pick<TokenInfo, 'amount' | 'decimals'> | undefined
@@ -58,12 +63,16 @@ const UnlockForm = () => {
     message: string;
   } | null>(null);
 
-  const { trigger, isMutating: isUnlockPending } = useSWRMutation<
+  const {
+    trigger,
+    isMutating: isUnlockPending,
+    error,
+  } = useSWRMutation<
     ApiPermitReturnResponse,
     any,
     '/permit/return',
     ApiPermitReturnRequestBody
-  >('/permit/return', mutator);
+  >('/permit/return', mutatorWithHeaders);
 
   const formMethods = useForm({
     defaultValues: {
@@ -113,7 +122,12 @@ const UnlockForm = () => {
         formData.amount,
         rsnToken?.decimals ?? 0,
       );
-      const response = await trigger({ count });
+      const response = await trigger({
+        data: { count },
+        headers: {
+          API_KEY: apiKey!,
+        },
+      });
 
       if (response?.txIds) {
         setAlertData({
@@ -127,10 +141,17 @@ const UnlockForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message: error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -148,7 +169,7 @@ const UnlockForm = () => {
   );
 
   const disabled =
-    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+    !apiKey || isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
@@ -166,6 +187,23 @@ const UnlockForm = () => {
         <Grid item mobile={12} laptop={12}>
           {renderTokenAmountTextField()}
         </Grid>
+
+        {!apiKey && (
+          <Grid
+            container
+            alignItems="center"
+            gap={1}
+            sx={(theme) => ({ color: theme.palette.warning.main })}
+          >
+            <Grid item>
+              <Alert />
+            </Grid>
+
+            <Grid item>
+              <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+          </Grid>
+        )}
 
         <SubmitButton loading={isUnlockPending} disabled={disabled}>
           Unlock

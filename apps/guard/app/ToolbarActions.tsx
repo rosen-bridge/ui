@@ -4,6 +4,7 @@ import { Moon, Sun } from '@rosen-bridge/icons';
 import { IconButton, SvgIcon, useIsDarkMode } from '@rosen-bridge/ui-kit';
 
 import { ColorModeContext } from '@/_theme/ThemeProvider';
+import ApiKeyModal from './_modals/ApiKeyModal';
 
 /**
  * render some toolbar actions
@@ -13,17 +14,20 @@ const ToolbarActions = () => {
   const isDarkMode = useIsDarkMode();
 
   return (
-    <IconButton onClick={colorMode.toggle} size="large">
-      {isDarkMode ? (
-        <SvgIcon sx={{ width: 24 }}>
-          <Sun />
-        </SvgIcon>
-      ) : (
-        <SvgIcon sx={{ width: 24 }}>
-          <Moon />
-        </SvgIcon>
-      )}
-    </IconButton>
+    <>
+      <ApiKeyModal />
+      <IconButton onClick={colorMode.toggle} size="large">
+        {isDarkMode ? (
+          <SvgIcon sx={{ width: 24 }}>
+            <Sun />
+          </SvgIcon>
+        ) : (
+          <SvgIcon sx={{ width: 24 }}>
+            <Moon />
+          </SvgIcon>
+        )}
+      </IconButton>
+    </>
   );
 };
 

@@ -1,6 +1,6 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
 import { WalletBase } from '@rosen-ui/wallet-api';
-import { useLocalStorageManager } from '@rosen-ui/utils';
+import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
 import useNetwork from './useNetwork';
 

@@ -12,10 +12,19 @@ import {
   SubmitButton,
   TextField,
   Typography,
+  styled,
 } from '@rosen-bridge/ui-kit';
-import { mutator } from '@rosen-ui/swr-helpers';
+import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+
+import { Alert } from '@rosen-bridge/icons';
+
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
+
+const AlertIcon = styled(Alert)((theme) => ({
+  fill: theme.palette.primary.main,
+}));
 
 interface Form {
   chain: string;
@@ -27,13 +36,15 @@ interface Form {
  * render a form for signing a tx
  */
 const SendForSigningForm = () => {
+  const { apiKey } = useApiKey();
+
   const {
     trigger,
     isMutating: isSignPending,
     error,
   } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
-    mutator,
+    mutatorWithHeaders,
   );
 
   const [alertData, setAlertData] = useState<{
@@ -41,7 +52,7 @@ const SendForSigningForm = () => {
     message: string;
   } | null>(null);
 
-  const { handleSubmit, register, reset } = useForm({
+  const { handleSubmit, register, reset, formState } = useForm({
     defaultValues: {
       txJson: '',
       chain: '',
@@ -51,13 +62,20 @@ const SendForSigningForm = () => {
   });
 
   const onSubmit: SubmitHandler<Form> = async (data) => {
+    if (!apiKey) return;
+
     try {
       const { txJson, chain, requiredSign, overwrite } = data;
       const response = await trigger({
-        txJson,
-        chain,
-        requiredSign,
-        overwrite,
+        data: {
+          txJson,
+          chain,
+          requiredSign,
+          overwrite,
+        },
+        headers: {
+          API_KEY: apiKey,
+        },
       });
 
       if (response.message === 'Ok') {
@@ -72,13 +90,20 @@ const SendForSigningForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message:
-          error.response?.status === 409
-            ? 'Tx is already sent for signing. If you want to override, click the checkbox and submit again.'
-            : error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message:
+            error.response?.status === 409
+              ? 'Tx is already sent for signing. If you want to override, click the checkbox and submit again.'
+              : error.message,
+        });
+      }
     }
   };
 
@@ -126,7 +151,36 @@ const SendForSigningForm = () => {
           </Grid>
         )}
 
-        <SubmitButton loading={isSignPending}>Send</SubmitButton>
+        {error?.response?.status === 403 && (
+          <Grid
+            container
+            alignItems="center"
+            sx={(theme) => ({ color: theme.palette.warning.main })}
+          >
+            <Typography>The Api key is not correct</Typography>
+          </Grid>
+        )}
+
+        {!apiKey && (
+          <Grid
+            container
+            alignItems="center"
+            gap={1}
+            sx={(theme) => ({ color: theme.palette.warning.main })}
+          >
+            <Grid item>
+              <Alert />
+            </Grid>
+
+            <Grid item>
+              <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+          </Grid>
+        )}
+
+        <SubmitButton loading={isSignPending} disabled={!apiKey}>
+          Send
+        </SubmitButton>
       </form>
     </FullCard>
   );

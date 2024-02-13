@@ -6,7 +6,7 @@ import {
   createTheme,
   useMediaQuery,
 } from '@rosen-bridge/ui-kit';
-import { useLocalStorageManager } from '@rosen-ui/utils';
+import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
