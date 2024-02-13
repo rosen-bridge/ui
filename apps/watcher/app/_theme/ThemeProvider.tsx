@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useState } from 'react';
-import { useLocalStorageManager } from '@rosen-ui/utils';
+import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
 import {
   CssBaseline,

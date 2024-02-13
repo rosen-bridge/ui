@@ -1,26 +1,36 @@
 import { useReducer, createContext } from 'react';
+import { SnackbarOrigin } from '@mui/material';
 
 export type Severity = 'error' | 'warning' | 'info' | 'success';
+export type SnackbarPosition = SnackbarOrigin;
 
 export type SnackbarAction =
   | {
       type: 'open';
       message: string;
       severity: Severity;
+      position?: SnackbarPosition;
     }
   | { type: 'close' };
+
 type Dispatch = (action: SnackbarAction) => void;
 
 export type State = {
   isOpen: boolean;
   message: string;
   severity: Severity | null;
+  position: SnackbarPosition;
 };
 type SnackbarProviderProps = { children: React.ReactNode };
 
 export const SnackbarStateContext = createContext<
   { state: State; dispatch: Dispatch } | undefined
 >(undefined);
+
+const defaultSnackbarPosition = {
+  vertical: 'top',
+  horizontal: 'right',
+} as const;
 
 /**
  * reducer function for react useReducer hook
@@ -36,6 +46,9 @@ function snackbarReducer(state: State, action: SnackbarAction) {
         isOpen: true,
         message: action.message,
         severity: action.severity,
+        ...(action.position
+          ? { position: action.position }
+          : { position: defaultSnackbarPosition }),
       };
     }
     case 'close': {
@@ -43,6 +56,7 @@ function snackbarReducer(state: State, action: SnackbarAction) {
         isOpen: false,
         message: '',
         severity: null,
+        position: defaultSnackbarPosition,
       };
     }
     default: {
@@ -58,11 +72,16 @@ function snackbarReducer(state: State, action: SnackbarAction) {
  */
 
 export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
-  const [state, dispatch] = useReducer(snackbarReducer, {
-    isOpen: false,
-    message: '',
-    severity: null,
-  });
+  const [state, dispatch] = useReducer<typeof snackbarReducer>(
+    snackbarReducer,
+    {
+      isOpen: false,
+      message: '',
+      severity: null,
+      position: defaultSnackbarPosition,
+    },
+  );
+
   const value = { state, dispatch };
 
   return (

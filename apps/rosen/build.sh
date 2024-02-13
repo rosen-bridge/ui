@@ -11,6 +11,7 @@ echo "building monorepo packages..."
 npm run build --workspace packages/utils
 npm run build --workspace packages/constants
 npm run build --workspace packages/types
+npm run build --workspace packages/shared-contexts
 npm run build --workspace packages --if-present
 npm run build --workspace wallets/wallet-api
 npm run build --workspace wallets/nami-wallet
