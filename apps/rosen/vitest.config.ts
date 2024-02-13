@@ -10,6 +10,7 @@ export default defineConfig({
   },
   test: {
     name: 'rosen-app',
+    include: ['**/*.test.?(c|m)[jt]s?(x)'],
     server: {
       deps: {
         /*
