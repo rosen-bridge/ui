@@ -1,7 +1,7 @@
 {
   "name": "@rosen-bridge/shared-contexts",
   "description": "shared contexts Rosen projects",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "type": "module",
   "private": true,
   "files": [
@@ -21,8 +21,7 @@
     "prettify": "prettier --write . --ignore-path .gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
-    "type-check": "tsc",
-    "release": "npm run build && npm publish --access public"
+    "type-check": "tsc"
   },
   "peerDependencies": {
     "react": "18.2.0",
