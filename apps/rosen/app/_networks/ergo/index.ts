@@ -12,6 +12,8 @@ import { generateUnsignedTx } from './transaction/generateTx';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
+import { convertNumberToBigint } from '@/_utils';
+
 /**
  * the main object for Ergo network
  * providing access to network info and wallets and network specific
@@ -47,9 +49,15 @@ const ErgoNetwork: Network<Wallet> = {
       ) => {
         const wallet = await getNautilusWallet().api.getContext();
         const tokenId = token.tokenId;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddress = await wallet.get_change_address();
 
         const walletUtxos = await wallet.get_utxos();
