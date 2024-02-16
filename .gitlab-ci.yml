@@ -1,0 +1,85 @@
+image: node:18.14
+
+stages:
+  - installation
+  - build
+  - type_check
+  - lint
+  - changeset
+
+installation:
+  stage: installation
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: push
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  script:
+    - npm ci
+
+build:
+  stage: build
+  cache:
+    - key: $CI_COMMIT_REF_NAME
+      policy: pull-push
+      paths:
+        - node_modules
+        - apps/*/node_modules
+        - packages/*/node_modules
+        - packages/*/dist
+        - wallets/*/node_modules
+        - wallets/*/dist
+  script:
+    # FIXME: This needs to be removed when a monorepo build mechanism is added
+    # local:ergo/rosen-bridge/ui#24
+    - npm run build --workspace packages/utils
+    - npm run build --workspace packages/constants
+    - npm run build --workspace packages/types
+    - npm run build --workspace packages/shared-contexts
+    - npm run build --workspace packages --if-present
+    - npm run build --workspace wallets/wallet-api
+    - npm run build --workspace wallets/nami-wallet
+    - npm run build --workspace wallets/lace-wallet
+    - npm run build --workspace wallets/eternl-wallet
+    - npm run build --workspace wallets/flint-wallet
+    - npm run build --workspace wallets/vespr-wallet
+    - npm run build --workspace wallets/nautilus-wallet
+
+type_check:
+  stage: type_check
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - packages/*/dist
+      - wallets/*/node_modules
+      - wallets/*/dist
+  script:
+    - npm run type-check --workspaces --if-present
+
+lint:
+  stage: lint
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run lint --workspaces --if-present
+
+changeset:
+  stage: changeset
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  script:
+    - npx changeset status --since=origin/dev

@@ -1,0 +1,133 @@
+name: RELEASE DESKTOP APPs
+
+on:
+  release:
+    types:
+      - 'published'
+
+jobs:
+  download:
+    name: Downloading Contracts and Service
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install yaml2json
+        run: npm install -g yamljs
+
+      - name: Download Contract Files
+        uses: rosen-bridge/operation@V0.1
+        with:
+          type: ${{ vars.RELEASE_NAME }}
+
+      - name: Download Watcher Files
+        run: |
+          mkdir tmp && cd ./tmp
+          curl -s https://api.github.com/repos/rosen-bridge/watcher/releases/latest | grep -E '"(browser_download_url|zipball_url)"' | cut -d '"' -f 4 | while read -r url; do wget "$url"; done
+          mv watcher* ../
+          unzip *
+          yaml2json --pretty --save */config/default.yaml
+          mv */config/default.json ../
+          cd ..
+          rm -rf ./tmp
+
+      - name: Dist Packages Output Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: artifact
+          path: ./*
+          retention-days: 1
+
+  build:
+    name: Build Watcher UI
+    needs: download
+    permissions: write-all
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node-version: [18.x]
+        include:
+          - os: macos-latest
+            platform: macOS
+            output_path: dmg
+            output_postfix: dmg
+          - os: ubuntu-latest
+            platform: linux
+            output_path: appimage
+            output_postfix: AppImage
+          - os: windows-latest
+            platform: Windows
+            output_path: nsis
+            output_postfix: exe
+            exec_extention: .exe
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout Current Branch
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: install Rust Stable
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: install Dependencies (ubuntu only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: Install Front Dependencies
+        run: |
+          npm ci
+          npm run build --workspace packages/constants    
+          npm run build --workspace packages/types    
+          npm run build --workspace packages/utils    
+          npm run build --workspace packages --if-present
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: artifact
+          path: tmp
+
+      - name: Move Config Files
+        shell: bash
+        run: |
+          mkdir -p ./apps/watcher/src-tauri/config/rosen/
+          mv ./tmp/{contracts,tokens}* ./apps/watcher/src-tauri/config/rosen/
+          mv ./tmp/default* ./apps/watcher/src-tauri/config/
+
+      - name: Move Service File
+        shell: bash
+        run: |
+          mkdir -p ./apps/watcher/src-tauri/.bin 
+          chmod +x ./tmp/watcher-service*
+          mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')${{ matrix.exec_extention }}
+
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          projectPath: 'apps/watcher/'
+
+      - name: Rename the Release files
+        shell: bash
+        run: mv ./apps/watcher/src-tauri/target/release/bundle/${{ matrix.output_path }}/watcher-app*.${{ matrix.output_postfix }} watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}.${{ matrix.output_postfix }}
+
+      - name: Upload File to Assets
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            watcher-app-${{ matrix.platform }}-${{ github.event.release.tag_name }}*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
