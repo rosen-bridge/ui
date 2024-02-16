@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/watcher-app",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ./.gitignore",
@@ -14,14 +14,14 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^0.1.0",
+    "@rosen-bridge/icons": "^0.2.0",
     "@rosen-bridge/json-bigint": "^0.1.0",
-    "@rosen-bridge/ui-kit": "^0.1.0",
-    "@rosen-ui/common-hooks": "^0.0.0",
-    "@rosen-bridge/shared-contexts": "^0.0.0",
-    "@rosen-ui/swr-helpers": "^0.0.1",
+    "@rosen-bridge/ui-kit": "^0.2.0",
+    "@rosen-ui/common-hooks": "^0.1.0",
+    "@rosen-bridge/shared-contexts": "^0.0.1",
+    "@rosen-ui/swr-helpers": "^0.1.0",
     "@rosen-ui/swr-mock": "^0.0.1",
-    "@rosen-ui/utils": "^0.0.1",
+    "@rosen-ui/utils": "^0.1.0",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
     "next": "14.0.0",
@@ -33,7 +33,7 @@
     "swr": "^2.1.5"
   },
   "devDependencies": {
-    "@rosen-ui/types": "^0.0.1",
+    "@rosen-ui/types": "^0.1.0",
     "@tauri-apps/cli": "^1.4.0",
     "@types/lodash-es": "^4.17.11",
     "@types/moment": "^2.13.0",
