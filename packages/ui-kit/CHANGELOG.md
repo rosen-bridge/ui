@@ -5,7 +5,7 @@
 ### Minor Changes
 
 - set a maximum page size of 100 for events api
-- use the shared hooks package instead of utils package to prevent server component problems
+- use the shared hooks package instaed of utils package to prenvet server component problems
 
 ### Patch Changes
 
