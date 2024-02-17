@@ -74,7 +74,7 @@ const SendForSigningForm = () => {
           overwrite,
         },
         headers: {
-          API_KEY: apiKey,
+          'Api-Key': apiKey,
         },
       });
 

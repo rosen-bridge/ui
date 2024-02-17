@@ -1,5 +1,11 @@
 # @rosen-bridge/guard-app
 
+## 1.1.1
+
+### Patch Changes
+
+- change `api_key` header to `Api-Key` to adhere to the standards
+
 ## 1.1.0
 
 ### Minor Changes
