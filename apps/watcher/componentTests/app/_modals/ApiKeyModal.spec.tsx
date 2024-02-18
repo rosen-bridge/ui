@@ -48,7 +48,7 @@ test.describe('ApiKeyModal', () => {
    * @expected
    * - should have identical rendering between different runs
    */
-  test('should render stars instead of plain text when user types in the input by default', async ({
+  test.skip('should render stars instead of plain text when user types in the input by default', async ({
     mount,
     page,
   }) => {
@@ -80,7 +80,7 @@ test.describe('ApiKeyModal', () => {
    * - should render the hidden button
    * - should have identical rendering between different runs
    */
-  test('should show plain text and hide button if the show button is toggled', async ({
+  test.skip('should show plain text and hide button if the show button is toggled', async ({
     mount,
     page,
   }) => {

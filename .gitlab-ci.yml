@@ -3,9 +3,9 @@ image: node:18.14
 stages:
   - installation
   - build
-  - component_tests
   - type_check
   - lint
+  - component_tests
   - changeset
 
 installation:
