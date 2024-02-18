@@ -1,4 +1,9 @@
-import { TokenMap, RosenTokens, RosenChainToken } from '@rosen-bridge/tokens';
+import {
+  TokenMap,
+  RosenTokens,
+  RosenChainToken,
+  NATIVE_RESIDENCY,
+} from '@rosen-bridge/tokens';
 import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from 'typeorm';
 import { difference } from 'lodash-es';
@@ -10,7 +15,7 @@ import {
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
 } from './interfaces';
-import { CARDANO_CHAIN, ERGO_CHAIN, NATIVE_TOKEN } from './constants';
+import { CARDANO_CHAIN, ERGO_CHAIN } from './constants';
 import { AssetModel } from './database/asset-model';
 
 export class AssetCalculator {
@@ -60,7 +65,7 @@ export class AssetCalculator {
     const chainIdKey = this.tokens.getIdKey(sourceChain);
     for (const supportedChain of supportedChains) {
       let emittedAmount = 0n;
-      const targetChainToken = this.tokens.search(supportedChain, {
+      const targetChainToken = this.tokens.search(sourceChain, {
         [chainIdKey]: token[chainIdKey],
       })[0][supportedChain];
       if (supportedChain == ERGO_CHAIN) {
@@ -95,8 +100,8 @@ export class AssetCalculator {
     const chains = this.tokens.getAllChains();
     for (const chain of chains) {
       const chainIdKey = this.tokens.getIdKey(chain);
-      // TODO use native tokens of chains
-      const nativeResidentTokens = this.tokens.getTokens(chain, ERGO_CHAIN);
+      const nativeResidentTokens = this.tokens.getAllNativeTokens(chain);
+      console.log(nativeResidentTokens);
       this.logger.debug(
         `All native resident tokens of ${chain} chain are ${nativeResidentTokens}`
       );
@@ -115,11 +120,10 @@ export class AssetCalculator {
           id: token[chainIdKey],
           name: token.name,
           decimal: token.decimals,
-          isNative: token.metaData.type == NATIVE_TOKEN,
+          isNative: token.metaData.type == NATIVE_RESIDENCY,
           amount: totalLocked,
         };
-        // TODO: update NATIVE_TOKEN
-        this.assetModel.updateAsset(updatedAsset);
+        await this.assetModel.updateAsset(updatedAsset);
         allUpdatesAssets.push(token[chainIdKey]);
         this.logger.info(
           `Updated asset [${token[chainIdKey]}] total locked amount to [${totalLocked}]`
