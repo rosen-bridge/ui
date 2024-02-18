@@ -5,8 +5,8 @@ stages:
   - build
   - type_check
   - lint
-  - changeset
   - component_tests
+  - changeset
 
 installation:
   stage: installation
@@ -73,20 +73,6 @@ lint:
   script:
     - npm run lint --workspaces --if-present
 
-changeset:
-  stage: changeset
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    policy: pull
-    paths:
-      - node_modules
-      - apps/*/node_modules
-      - packages/*/node_modules
-  before_script:
-    - git fetch origin dev
-  script:
-    - npx changeset status --since=origin/dev
-
 component_tests:
   stage: component_tests
   cache:
@@ -100,3 +86,17 @@ component_tests:
     - git fetch origin dev
   script:
     - npm run test-ct --workspace=apps
+
+changeset:
+  stage: changeset
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  before_script:
+    - git fetch origin dev
+  script:
+    - npx changeset status --since=origin/dev
