@@ -75,6 +75,7 @@ lint:
 
 component_tests:
   stage: component_tests
+  image: mcr.microsoft.com/playwright:v1.41.1-jammy
   cache:
     key: $CI_COMMIT_REF_NAME
     policy: pull
@@ -82,9 +83,6 @@ component_tests:
       - node_modules
       - apps/*/node_modules
       - packages/*/node_modules
-  before_script:
-    - npm run install-playwright --workspace=apps --if-present
-    - npm run install-playwright-deps --workspace=apps --if-present
 
   script:
     - npm run test-ct --workspace=apps --if-present
