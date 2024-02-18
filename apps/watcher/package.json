@@ -11,7 +11,8 @@
     "start": "next start",
     "tauri": "tauri",
     "test-ct": "playwright test -c playwright-ct.config.ts ",
-    "install-playwright": "npx playwright install"
+    "install-playwright": "npx playwright install",
+    "install-playwright-deps": "npx playwright install-deps"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

@@ -84,6 +84,7 @@ component_tests:
       - packages/*/node_modules
   before_script:
     - npm run install-playwright --workspace=apps --if-present
+    - npm run install-playwright-deps --workspace=apps --if-present
 
   script:
     - npm run test-ct --workspace=apps --if-present
