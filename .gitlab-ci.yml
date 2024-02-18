@@ -87,8 +87,8 @@ changeset:
   script:
     - npx changeset status --since=origin/dev
 
-component_test:
-  stage: component_test
+component_tests:
+  stage: component_tests
   cache:
     key: $CI_COMMIT_REF_NAME
     policy: pull
