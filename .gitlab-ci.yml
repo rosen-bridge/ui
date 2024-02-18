@@ -6,6 +6,7 @@ stages:
   - type_check
   - lint
   - changeset
+  - component_tests
 
 installation:
   stage: installation
@@ -85,3 +86,16 @@ changeset:
     - git fetch origin dev
   script:
     - npx changeset status --since=origin/dev
+
+component_test:
+  stage: component_test
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+  before_script:
+    - git fetch origin dev
+  script: -npm run test-ct --workspace=apps

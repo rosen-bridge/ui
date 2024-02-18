@@ -34,7 +34,7 @@ const ApiKeyModal = () => {
   const [showKey, setShowKey] = useState(false);
   const handleToggleShowKey = () => setShowKey((prevState) => !prevState);
 
-  const { control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit, setValue } = useForm<FormValues>({
     defaultValues: {
       apiKey: apiKey || '',
     },
@@ -44,6 +44,10 @@ const ApiKeyModal = () => {
     setApiKey(values.apiKey);
     handleCloseModal();
     openSnackbar('Api key is set!', 'success');
+  };
+
+  const handleClear = () => {
+    setValue('apiKey', '');
   };
 
   return (
@@ -81,7 +85,7 @@ const ApiKeyModal = () => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <Tooltip title="Clear">
-                          <IconButton>
+                          <IconButton onClick={handleClear}>
                             <SvgIcon sx={{ width: 24 }}>
                               <Times />
                             </SvgIcon>

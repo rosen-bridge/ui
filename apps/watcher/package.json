@@ -9,12 +9,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "test-ct": "playwright test -c playwright-ct.config.ts "
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@rosen-bridge/icons": "^0.2.0",
+    "@playwright/test": "^1.41.2",
     "@rosen-bridge/json-bigint": "^0.1.0",
     "@rosen-bridge/ui-kit": "^0.2.0",
     "@rosen-ui/common-hooks": "^0.1.0",
@@ -33,6 +35,8 @@
     "swr": "^2.1.5"
   },
   "devDependencies": {
+    "@vitejs/plugin-react-swc": "^3.6.0",
+    "@playwright/experimental-ct-react": "^1.41.2",
     "@rosen-ui/types": "^0.1.0",
     "@tauri-apps/cli": "^1.4.0",
     "@types/lodash-es": "^4.17.11",
