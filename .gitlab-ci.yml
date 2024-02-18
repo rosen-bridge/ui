@@ -98,4 +98,5 @@ component_tests:
       - packages/*/node_modules
   before_script:
     - git fetch origin dev
-  script: -npm run test-ct --workspace=apps
+  script:
+    - npm run test-ct --workspace=apps
