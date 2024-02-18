@@ -81,5 +81,7 @@ changeset:
       - node_modules
       - apps/*/node_modules
       - packages/*/node_modules
+  before_script:
+    - git fetch origin dev
   script:
     - npx changeset status --since=origin/dev

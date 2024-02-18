@@ -96,7 +96,7 @@ const LockForm = () => {
           count: (+count + (info?.permitCount.total ? 0 : 1)).toString(),
         },
         headers: {
-          API_KEY: apiKey!,
+          'Api-Key': apiKey!,
         },
       });
 
