@@ -83,9 +83,10 @@ component_tests:
       - apps/*/node_modules
       - packages/*/node_modules
   before_script:
-    - git fetch origin dev
+    - npm run install-playwright --workspace=apps --if-present
+
   script:
-    - npm run test-ct --workspace=apps
+    - npm run test-ct --workspace=apps --if-present
 
 changeset:
   stage: changeset
