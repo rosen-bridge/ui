@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { getTokenNameAndId } from '../index';
+import { getTokenNameAndId } from '@/_utils';
 
 import { Networks } from '@/_constants';
 
@@ -10,8 +10,6 @@ describe('getTokenNameAndId', () => {
    * an objet containing the token name and token id given different networks
    *
    * @dependencies
-   * - Networks
-   * - RosenChainToken
    *
    * @scenario
    * - loop over all the supported network
@@ -21,7 +19,7 @@ describe('getTokenNameAndId', () => {
    * @expected
    * - it should return an object that contains a tokeId and tokenName
    */
-  it('should return an objet containing the token name and token id given different networks', () => {
+  it('it should return an objet containing the token name and token id given different networks', () => {
     Object.values(Networks).forEach((network, index) => {
       const testToken = {
         name: 'test-' + network,

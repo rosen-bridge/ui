@@ -80,8 +80,17 @@ unit_tests:
     policy: pull
     paths:
       - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - wallets/*/node_modules
   script:
     - npm run test-and-exit
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: '**/coverage/cobertura-coverage.xml'
 
 changeset:
   stage: changeset

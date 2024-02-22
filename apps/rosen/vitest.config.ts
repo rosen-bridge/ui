@@ -13,10 +13,6 @@ export default defineConfig({
     include: ['**/*.test.?(c|m)[jt]s?(x)'],
     server: {
       deps: {
-        /*
-          TODO: because of non standard import in @rosen-bridge/tokens this flag is set to true
-          and it should be removed after the problem is solved
-        */
         inline: true,
       },
     },
