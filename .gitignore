@@ -15,4 +15,5 @@ dist
 .idea
 .DS_Store
 
+coverage
 yarn.lock

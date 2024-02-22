@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { decodeHex, encodeHex } from '../hex';
+import { decodeHex, encodeHex } from '../../src/hex';
 
 describe('hex encoder and decoder', () => {
   /**
