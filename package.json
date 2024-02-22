@@ -9,7 +9,8 @@
   "scripts": {
     "prepare": "husky install",
     "test": "vitest",
-    "test-and-exit": "vitest --run"
+    "test-and-exit": "vitest --run",
+    "version": "npx changeset version && npm i"
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1"

@@ -125,7 +125,7 @@ const UnlockForm = () => {
       const response = await trigger({
         data: { count },
         headers: {
-          API_KEY: apiKey!,
+          'Api-Key': apiKey!,
         },
       });
 

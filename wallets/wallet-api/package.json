@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -21,7 +21,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-ui/utils": "^0.0.1"
+    "@rosen-ui/utils": "^0.1.0"
   },
   "peerDependencies": {
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0"
