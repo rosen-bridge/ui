@@ -6,6 +6,5 @@ export default defineConfig({
       enabled: true,
       provider: 'istanbul',
     },
-    // reporters: ['junit'],
   },
 });
