@@ -25,6 +25,8 @@ import getVesprWallet, {
   walletInfo as vesprWalletInfo,
 } from '@rosen-ui/vespr-wallet';
 
+import { validateDecimalPlaces } from '@rosen-ui/utils';
+
 import { Networks } from '@/_constants';
 
 import { Network } from '@/_types/network';
@@ -79,6 +81,10 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getNamiWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
@@ -143,6 +149,10 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getLaceWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
@@ -207,6 +217,10 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getEternlWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
@@ -271,6 +285,10 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getFlintWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
@@ -335,6 +353,10 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getVesprWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;

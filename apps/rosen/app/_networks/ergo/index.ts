@@ -3,6 +3,7 @@ import getNautilusWallet, {
   walletInfo as nautilusWalletInfo,
 } from '@rosen-ui/nautilus-wallet';
 import { compact } from 'lodash-es';
+import { validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@/_constants';
 
@@ -47,6 +48,10 @@ const ErgoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getNautilusWallet().api.getContext();
         const tokenId = token.tokenId;
         const amount = convertNumberToBigint(
