@@ -84,7 +84,7 @@ unit_tests:
       - packages/*/node_modules
       - wallets/*/node_modules
   script:
-    - npm run test-and-exit
+    - npm run coverage
   coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
   artifacts:
     reports:
