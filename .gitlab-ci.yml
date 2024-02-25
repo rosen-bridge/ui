@@ -90,7 +90,7 @@ unit_tests:
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: '/coverage/**/cobertura-coverage.xml'
+        path: '**/coverage/cobertura-coverage.xml'
 
 changeset:
   stage: changeset
