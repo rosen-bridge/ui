@@ -5,5 +5,6 @@ export function decodeHex(s: string): Uint8Array {
 }
 
 export function encodeHex(arr: Uint8Array): string {
+  console.log('@@@@ test ');
   return Buffer.from(arr).toString('hex');
 }
