@@ -25,6 +25,8 @@ import getVesprWallet, {
   walletInfo as vesprWalletInfo,
 } from '@rosen-ui/vespr-wallet';
 
+import { validateDecimalPlaces } from '@rosen-ui/utils';
+
 import { Networks } from '@/_constants';
 
 import { Network } from '@/_types/network';
@@ -39,7 +41,7 @@ import {
 import { generateUnsignedTx } from './transaction/generateTx';
 import { CardanoIcon } from '@rosen-bridge/icons';
 
-import { hexToCbor } from '@/_utils';
+import { convertNumberToBigint, hexToCbor } from '@/_utils';
 
 /**
  * the main object for Cardano network
@@ -79,12 +81,22 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getNamiWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddressHex = await wallet.getChangeAddress();
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(
@@ -137,12 +149,22 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getLaceWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddressHex = await wallet.getChangeAddress();
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(
@@ -195,12 +217,22 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getEternlWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddressHex = await wallet.getChangeAddress();
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(
@@ -253,12 +285,22 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getFlintWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddressHex = await wallet.getChangeAddress();
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(
@@ -311,12 +353,22 @@ const CardanoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getVesprWallet().api.enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddressHex = await wallet.getChangeAddress();
 
         const auxiliaryDataHex = await generateLockAuxiliaryData(
