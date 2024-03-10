@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
-import { decodeHex, encodeHex } from '../../src/hex';
+import { decodeHex, encodeHex } from '../src/hex';
 
-describe('hex encoder and decoder', () => {
+describe('decodeHex', () => {
   /**
    * @target decodeHex function should return a Uint8Array given a text
    *
@@ -20,7 +20,9 @@ describe('hex encoder and decoder', () => {
     const res = decodeHex('bada55');
     expect(res).toEqual(new Uint8Array([186, 218, 85]));
   });
+});
 
+describe('encodeHex', () => {
   /**
    * @target encodeHex function should return a hexadecimal
    *  string given a uint8array
