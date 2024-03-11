@@ -20,6 +20,7 @@ export interface ApiInfoResponse {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];
   };
+  version: string;
 }
 
 export interface GuardTokenInfo extends TokenInfoWithColdAmount {

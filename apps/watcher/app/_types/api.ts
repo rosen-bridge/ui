@@ -21,6 +21,7 @@ export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
   rsnTokenId: string;
+  version: string;
 }
 
 export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
