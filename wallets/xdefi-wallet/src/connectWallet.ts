@@ -10,7 +10,9 @@ export const connectWallet = async () => {
         message: '',
         purposes: [AddressPurpose.Payment],
       },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onFinish: () => {},
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
       onCancel: () => {},
     });
     return true;
