@@ -294,7 +294,7 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     targetChainTokenId: 'ab123',
     sourceTxId: 'ab1234',
     sourceBlockId: 'cd56789',
-    WIDs: 'WIDs',
+    WIDsCount: 10,
     spendBlock: '',
     spendHeight: 5,
     spendTxId: 'spendId1234',

@@ -172,7 +172,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Reports</EnhancedTableCell>
-            <EnhancedTableCell>{row.WIDs.split(',').length}</EnhancedTableCell>
+            <EnhancedTableCell>{row.WIDsCount}</EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Status</EnhancedTableCell>
@@ -231,7 +231,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         {getDecimalString(row.networkFee, row.lockToken.decimals)}
       </EnhancedTableCell>
       <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.WIDs.split(',').length}</EnhancedTableCell>
+      <EnhancedTableCell>{row.WIDsCount}</EnhancedTableCell>
       <EnhancedTableCell>
         {row.spendBlock ? 'Completed' : 'Incomplete'}
       </EnhancedTableCell>

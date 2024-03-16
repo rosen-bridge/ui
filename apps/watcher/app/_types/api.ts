@@ -131,7 +131,7 @@ export interface Event {
   targetChainTokenId: string;
   sourceTxId: string;
   sourceBlockId: string;
-  WIDs: string;
+  WIDsCount: number;
   spendBlock?: string;
   spendHeight?: number;
   spendTxId?: string;
