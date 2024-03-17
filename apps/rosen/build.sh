@@ -20,6 +20,7 @@ npm run build --workspace wallets/eternl-wallet
 npm run build --workspace wallets/flint-wallet
 npm run build --workspace wallets/vespr-wallet
 npm run build --workspace wallets/nautilus-wallet
+npm run build --workspace wallets/xdefi-wallet
 
 cd apps/rosen
 
