@@ -5,7 +5,7 @@ import getXdefiWallet, {
   BitcoinNetworkType,
   walletInfo as XdefiWalletInfo,
   isXdefiAvailable,
-} from '@rosen-ui/Xdefi-wallet';
+} from '@rosen-ui/xdefi-wallet';
 import { validateDecimalPlaces } from '@rosen-ui/utils';
 import { Wallet } from '@rosen-ui/wallet-api';
 
