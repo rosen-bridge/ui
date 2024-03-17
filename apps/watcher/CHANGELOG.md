@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 2.0.0
+
+### Major Changes
+
+- reflect api upgrades in frontend
+
 ## 1.2.0
 
 ### Minor Changes
