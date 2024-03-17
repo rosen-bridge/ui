@@ -12,7 +12,7 @@ const ergoExplorerClient = ergoExplorerClientFactory(
   process.env.ERGO_EXPLORER_API!,
 );
 
-import { Networks, feeConfigTokenId } from '@/_constants';
+import { Networks, ERGO_EXPLORER_URL, feeConfigTokenId } from '@/_constants';
 
 const GetHeight = {
   cardano: async () => (await cardanoKoiosClient.getTip())[0].block_no,
@@ -46,7 +46,7 @@ export const calculateFee = async (
     };
   }
 
-  const minimumFee = new BridgeMinimumFee(explorerUrl, feeConfigTokenId);
+  const minimumFee = new BridgeMinimumFee(ERGO_EXPLORER_URL, feeConfigTokenId);
 
   try {
     const [fees, nextFees] = await Promise.all([
