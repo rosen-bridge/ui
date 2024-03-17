@@ -18,6 +18,12 @@ const GetHeight = {
   cardano: async () => (await cardanoKoiosClient.getTip())[0].block_no,
   ergo: async () =>
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
+  bitcoin: async (): Promise<number> => {
+    const response = await fetch(
+      `${process.env.BITCOIN_ESPLORA_API}/blocks/tip/height`,
+    );
+    return response.json();
+  },
 };
 
 /**
