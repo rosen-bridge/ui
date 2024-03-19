@@ -238,11 +238,7 @@ const permit: ApiPermitResponse = {
 };
 
 const permitReturn: ApiPermitReturnResponse = {
-  txIds: [
-    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
-    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f8',
-    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f9',
-  ],
+  txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
 };
 
 const generateObservationRecords = (numberOfRecords: number) => {

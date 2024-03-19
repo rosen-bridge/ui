@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 0.5.0
+
+### Minor Changes
+
+- upgrade extractor packages
+
 ## 0.4.0
 
 ### Minor Changes

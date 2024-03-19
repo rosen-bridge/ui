@@ -63,7 +63,7 @@ export type ApiPermitReturnRequestBody =
   MutationRequestBodyWithHeaders<ApiPermitReturnRequestBodyData>;
 
 export interface ApiPermitReturnResponse {
-  txIds: string[];
+  txId: string;
 }
 
 export interface Observation {

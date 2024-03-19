@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 2.0.1
+
+### Patch Changes
+
+- reflect unlock api changes in frontend
+
 ## 2.0.0
 
 ### Major Changes
