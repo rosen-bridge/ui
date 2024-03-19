@@ -14,9 +14,6 @@ export interface Network<T> {
   availableWallets: T[];
   supportedWallets: WalletInfo[];
   nextHeightInterval: number;
-  api: {
-    explorerUrl: string;
-  };
   lockAddress: string;
 }
 export type SupportedWallets = Wallet;
