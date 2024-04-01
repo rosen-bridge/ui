@@ -23,7 +23,7 @@ export class CardanoCalculator extends AbstractCalculator {
    */
   totalSupply = async (token: RosenChainToken): Promise<bigint> => {
     const assetSummary = await this.koiosApi.postAssetInfo({
-      _asset_list: [token.policyId, token.name],
+      _asset_list: [[token.policyId, token.assetName]],
     });
     if (assetSummary.length && assetSummary[0].total_supply) {
       this.logger.debug(
@@ -46,7 +46,7 @@ export class CardanoCalculator extends AbstractCalculator {
       .filter(
         (asset) =>
           asset.policy_id == token.policyId &&
-          asset.asset_name == token.name &&
+          asset.asset_name == token.assetName &&
           asset.quantity
       )
       .reduce((sum, asset) => BigInt(asset.quantity!) + sum, 0n);

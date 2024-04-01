@@ -17,7 +17,8 @@
     "outDir": "./dist",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "composite": true
   },
   "include": ["tests", "lib", "vitest.config.ts"]
 }

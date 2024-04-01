@@ -59,7 +59,7 @@ describe('CardanoCalculator', () => {
       );
       const totalBalance = await cardanoCalculator.totalBalance({
         policyId: 'policyId',
-        name: 'assetName',
+        assetName: 'assetName',
       } as any);
       expect(totalBalance).to.equal(400n);
     });
