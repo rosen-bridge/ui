@@ -1,4 +1,4 @@
-image: node:18.14
+image: node:18.17
 
 stages:
   - installation
@@ -37,6 +37,7 @@ build:
     - npm run build --workspace packages/utils
     - npm run build --workspace packages/constants
     - npm run build --workspace packages/types
+    - npm run build --workspace packages/shared-contexts
     - npm run build --workspace packages --if-present
     - npm run build --workspace wallets/wallet-api
     - npm run build --workspace wallets/nami-wallet
@@ -45,6 +46,7 @@ build:
     - npm run build --workspace wallets/flint-wallet
     - npm run build --workspace wallets/vespr-wallet
     - npm run build --workspace wallets/nautilus-wallet
+    - npm run build --workspace wallets/xdefi-wallet
 
 type_check:
   stage: type_check
@@ -80,5 +82,7 @@ changeset:
       - node_modules
       - apps/*/node_modules
       - packages/*/node_modules
+  before_script:
+    - git fetch origin dev
   script:
     - npx changeset status --since=origin/dev

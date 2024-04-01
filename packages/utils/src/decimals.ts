@@ -80,3 +80,34 @@ export const getNonDecimalString = (value: string, decimals: number) => {
 export const roundToPrecision = (value: number, precision: number) => {
   return Math.round(value * Math.pow(10, precision)) / Math.pow(10, precision);
 };
+
+/**
+ * Counts the number of decimal places in a given number.
+ *
+ * @param {number} inputNumber - The number to analyze.
+ * @returns {number} The number of decimal places found, or 0 if there are none.
+ */
+export const getNumberOfDecimals = (inputNumber: number) => {
+  return `${inputNumber}`.split('.')[1]?.length || 0;
+};
+
+/**
+ * Validates that a number has the specified number of decimal places.
+ * Throws an error if the number of decimal places exceeds the allowed limit.
+ *
+ * @param {number} inputNumber - The number to validate.
+ * @param {number} allowedDecimals - The maximum number of decimal places allowed.
+ * @throws {Error} If the number of decimal places in `inputNumber` exceeds `allowedDecimals`.
+ */
+export const validateDecimalPlaces = (
+  inputNumber: number,
+  allowedDecimals: number
+) => {
+  const currentDecimals = getNumberOfDecimals(inputNumber);
+
+  if (currentDecimals > allowedDecimals) {
+    throw new Error(
+      `Invalid input: The value has ${currentDecimals} decimal places, but only ${allowedDecimals} are allowed. Please enter a value with ${allowedDecimals} decimal places.`
+    );
+  }
+};

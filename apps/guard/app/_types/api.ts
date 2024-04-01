@@ -4,6 +4,7 @@ import {
   TokenInfo,
   Paginated,
   TokenInfoWithColdAmount,
+  MutationRequestBodyWithHeaders,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {
@@ -19,6 +20,7 @@ export interface ApiInfoResponse {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];
   };
+  version: string;
 }
 
 export interface GuardTokenInfo extends TokenInfoWithColdAmount {
@@ -30,12 +32,16 @@ interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
 }
 export type ApiRevenueChartResponse = GuardTokenChartData[];
 
-export interface ApiSignRequestBody {
+export interface ApiSignRequestBodyData {
   chain: string;
   txJson: string;
   requiredSign: number;
   overwrite?: boolean;
 }
+
+export type ApiSignRequestBody =
+  MutationRequestBodyWithHeaders<ApiSignRequestBodyData>;
+
 export type ApiSignResponse = {
   message: string;
 };

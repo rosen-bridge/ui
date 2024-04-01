@@ -20,11 +20,14 @@ import {
   InputAdornment,
   MenuItem,
   SubmitButton,
+  Typography,
   TextField,
 } from '@rosen-bridge/ui-kit';
 import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
-import { fetcher, mutator } from '@rosen-ui/swr-helpers';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
+
+import { Alert } from '@rosen-bridge/icons';
 
 import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
@@ -32,6 +35,7 @@ import TokenAmountTextField, {
 } from '../../TokenAmountTextField';
 
 import useToken from '@/_hooks/useToken';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import {
   ApiAddressAssetsResponse,
@@ -49,6 +53,7 @@ const WithdrawForm = () => {
     useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
+  const { apiKey } = useApiKey();
 
   const tokens = useMemo(
     () => data?.items.filter((token) => !!token.amount),
@@ -62,12 +67,16 @@ const WithdrawForm = () => {
     message: string;
   } | null>(null);
 
-  const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
+  const {
+    trigger,
+    isMutating: isWithdrawPending,
+    error,
+  } = useSWRMutation<
     ApiWithdrawResponse,
     any,
     '/withdraw',
     ApiWithdrawRequestBody
-  >('/withdraw', mutator);
+  >('/withdraw', mutatorWithHeaders);
 
   useEffect(() => {
     if (!isErgTokenLoading && !ergToken?.amount) {
@@ -108,15 +117,20 @@ const WithdrawForm = () => {
   const submit = async () => {
     try {
       const response = await trigger({
-        address: formData.address,
-        tokens: [
-          {
-            tokenId: formData.tokenId,
-            amount: BigInt(
-              getNonDecimalString(formData.amount, selectedToken!.decimals),
-            ),
-          },
-        ],
+        data: {
+          address: formData.address,
+          tokens: [
+            {
+              tokenId: formData.tokenId,
+              amount: BigInt(
+                getNonDecimalString(formData.amount, selectedToken!.decimals),
+              ),
+            },
+          ],
+        },
+        headers: {
+          'Api-Key': apiKey!,
+        },
       });
       if (response.status === 'OK') {
         setAlertData({
@@ -129,10 +143,17 @@ const WithdrawForm = () => {
         );
       }
     } catch (error: any) {
-      setAlertData({
-        severity: 'error',
-        message: error.message,
-      });
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message: error.message,
+        });
+      }
     }
   };
 
@@ -150,7 +171,7 @@ const WithdrawForm = () => {
   );
 
   const disabled =
-    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+    !apiKey || isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
@@ -211,6 +232,24 @@ const WithdrawForm = () => {
             {renderTokenAmountTextField()}
           </Grid>
         </Grid>
+
+        {!apiKey && (
+          <Grid
+            container
+            alignItems="center"
+            gap={1}
+            sx={(theme) => ({ color: theme.palette.warning.main })}
+          >
+            <Grid item>
+              <Alert />
+            </Grid>
+
+            <Grid item>
+              <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+          </Grid>
+        )}
+
         <SubmitButton disabled={disabled} loading={isWithdrawPending}>
           Withdraw
         </SubmitButton>

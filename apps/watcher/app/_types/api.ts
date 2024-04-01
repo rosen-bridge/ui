@@ -3,6 +3,7 @@ import {
   Paginated,
   TokenChartData,
   TokenInfo,
+  MutationRequestBodyWithHeaders,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
@@ -20,6 +21,7 @@ export interface ApiInfoResponse {
   health: 'Healthy' | 'Unstable' | 'Broken';
   address: string;
   rsnTokenId: string;
+  version: string;
 }
 
 export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
@@ -28,29 +30,40 @@ export type ApiRevenueChartResponse = TokenChartData[];
 
 export type ApiHealthStatusResponse = HealthParamInfo[];
 
-export interface ApiWithdrawRequestBody {
+export interface ApiWithdrawRequestBodyData {
   address: string;
   tokens: {
     tokenId: string;
     amount: bigint;
   }[];
 }
+
+export type ApiWithdrawRequestBody =
+  MutationRequestBodyWithHeaders<ApiWithdrawRequestBodyData>;
 export interface ApiWithdrawResponse {
   txId: string;
   status: 'OK';
 }
 
-export interface ApiPermitRequestBody {
+export interface ApiPermitRequestBodyData {
   count: string;
 }
+
+export type ApiPermitRequestBody =
+  MutationRequestBodyWithHeaders<ApiPermitRequestBodyData>;
+
 export interface ApiPermitResponse {
   txId: string;
 }
-export interface ApiPermitReturnRequestBody {
+export interface ApiPermitReturnRequestBodyData {
   count: string;
 }
+
+export type ApiPermitReturnRequestBody =
+  MutationRequestBodyWithHeaders<ApiPermitReturnRequestBodyData>;
+
 export interface ApiPermitReturnResponse {
-  txIds: string[];
+  txId: string;
 }
 
 export interface Observation {
@@ -118,7 +131,7 @@ export interface Event {
   targetChainTokenId: string;
   sourceTxId: string;
   sourceBlockId: string;
-  WIDs: string;
+  WIDsCount: number;
   spendBlock?: string;
   spendHeight?: number;
   spendTxId?: string;

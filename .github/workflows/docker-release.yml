@@ -9,11 +9,6 @@ jobs:
     name: Build and Push Docker Image
     permissions: write-all
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        apps:
-          - watcher
-          - guard
 
     steps:
       - name: Checkout the Code
@@ -42,17 +37,30 @@ jobs:
           username: rosen-bridge
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Check Tag
+        id: check-tag
+        run: |
+          if [[ ${{ github.ref }} =~ ^refs/tags/watcher-app-* ]]; then
+              echo "appName=watcher" >> $GITHUB_OUTPUT
+          elif [[ ${{ github.ref }} =~ ^refs/tags/guard-app-* ]]; then
+              echo "appName=guard" >> $GITHUB_OUTPUT
+          fi
+
       - name: Docker Metadata action
         uses: docker/metadata-action@v5
+        if: steps.check-tag.outputs.appName != null
         id: meta
         with:
-          images: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}
+          images: ghcr.io/rosen-bridge/ui-${{ steps.check-tag.outputs.appName }}
+          tags: |
+            type=match,pattern=\d.\d.\d
 
       - name: Build and push
         uses: docker/build-push-action@v4
+        if: steps.check-tag.outputs.appName != null
         with:
           context: .
           platforms: ${{ vars.PLATFORM_LIST || 'linux/amd64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
-          target: ${{ matrix.apps }}
+          target: ${{ steps.check-tag.outputs.appName }}

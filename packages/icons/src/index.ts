@@ -1,6 +1,7 @@
 export * from './networks';
 export * from './wallets';
 
+export { ReactComponent as Alert } from './icons/alert-triangle.svg';
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { ReactComponent as AngleUp } from './icons/angle-up.svg';
 export { ReactComponent as Archway } from './icons/archway.svg';
@@ -9,6 +10,8 @@ export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { ReactComponent as Copy } from './icons/copy.svg';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
+export { ReactComponent as Eye } from './icons/eye.svg';
+export { ReactComponent as EyeSlash } from './icons/eye-slash.svg';
 export { ReactComponent as Exchange } from './icons/exchange.svg';
 export { ReactComponent as Estate } from './icons/estate.svg';
 export { ReactComponent as Heartbeat } from './icons/heartbeat.svg';

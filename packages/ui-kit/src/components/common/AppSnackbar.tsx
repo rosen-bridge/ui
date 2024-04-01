@@ -17,7 +17,11 @@ export const AppSnackbar = () => {
       open={state.isOpen}
       onClose={closeSnackbar}
       autoHideDuration={5000}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      sx={(theme) => ({ zIndex: theme.zIndex.modal })}
+      anchorOrigin={{
+        vertical: state.position.vertical,
+        horizontal: state.position.horizontal,
+      }}
     >
       <Alert variant="filled" severity={state.severity!}>
         {state.message}
