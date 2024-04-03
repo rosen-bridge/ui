@@ -1,6 +1,6 @@
 {
-  "name": "@rosen-ui/eternl-wallet",
-  "version": "0.0.3",
+  "name": "@rosen-ui/xdefi-wallet",
+  "version": "0.1.1",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -23,6 +23,7 @@
   "dependencies": {
     "@rosen-bridge/icons": "^0.3.0",
     "@rosen-ui/utils": "^0.1.0",
-    "@rosen-ui/wallet-api": "^0.0.2"
+    "@rosen-ui/wallet-api": "^0.0.2",
+    "sats-connect": "^1.4.1"
   }
 }

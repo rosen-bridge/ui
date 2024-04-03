@@ -1,5 +1,18 @@
 # @rosen-bridge/guard-app
 
+## 1.2.0
+
+### Minor Changes
+
+- display service and ui versions in the sidebar
+
+### Patch Changes
+
+- upgrade nextjs version
+- updated dependencies
+  - @rosen-bridge/icons@0.3.0
+  - @rosen-bridge/ui-kit@0.2.1
+
 ## 1.1.1
 
 ### Patch Changes

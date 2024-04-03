@@ -129,11 +129,10 @@ const UnlockForm = () => {
         },
       });
 
-      if (response?.txIds) {
+      if (response?.txId) {
         setAlertData({
           severity: 'success',
-          message: `Unlock operation is in progress. Wait for the following txs to be confirmed by some blocks:
-          ${response.txIds.join(', ')}`,
+          message: `Unlock operation is in progress. Wait for tx ${response.txId} to be confirmed by some blocks.`,
         });
       } else {
         throw new Error(

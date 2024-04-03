@@ -403,9 +403,6 @@ const CardanoNetwork: Network<Wallet> = {
   ]),
   nextHeightInterval: 25,
   logo: CardanoIcon,
-  api: {
-    explorerUrl: 'https://api.koios.rest/api',
-  },
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
 };
 

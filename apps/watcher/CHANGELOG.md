@@ -1,5 +1,30 @@
 # @rosen-bridge/watcher-app
 
+## 2.0.1
+
+### Patch Changes
+
+- reflect unlock api changes in frontend
+
+## 2.0.0
+
+### Major Changes
+
+- reflect api upgrades in frontend
+
+## 1.2.0
+
+### Minor Changes
+
+- display service and ui versions in the sidebar
+
+### Patch Changes
+
+- upgrade nextjs version
+- updated dependencies
+  - @rosen-bridge/icons@0.3.0
+  - @rosen-bridge/ui-kit@0.2.1
+
 ## 1.1.1
 
 ### Patch Changes

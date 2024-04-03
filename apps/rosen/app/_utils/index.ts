@@ -4,11 +4,10 @@ import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from '@/_networks/cardano/transaction/consts';
-import ErgoNetwork from '@/_networks/ergo';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { Networks } from '@/_constants';
+import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
 import {
   fee as ergoFee,
   minBoxValue as ergoMinBoxValue,
@@ -75,7 +74,7 @@ export const getMinTransferAmount = async (
   const data = await calculateFee(
     sourceChain,
     ergoTokenId,
-    ErgoNetwork.api.explorerUrl,
+    ERGO_EXPLORER_URL,
     0,
   );
   const parsedData = {

@@ -87,9 +87,6 @@ const ErgoNetwork: Network<Wallet> = {
   ]),
   logo: ErgoIcon,
   nextHeightInterval: 5,
-  api: {
-    explorerUrl: 'https://api.ergoplatform.com/',
-  },
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
 };
 
