@@ -17,12 +17,12 @@ import {
 } from './interfaces';
 import { CARDANO_CHAIN, ERGO_CHAIN } from './constants';
 import { AssetModel } from './database/asset-model';
+import AbstractCalculator from './calculator/abstract-calculator';
 
 export class AssetCalculator {
   protected readonly tokens: TokenMap;
-  protected readonly ergoAssetCalculator: ErgoCalculator;
-  protected readonly cardanoAssetCalculator: CardanoCalculator;
   protected readonly assetModel: AssetModel;
+  protected calculatorMap: Map<string, AbstractCalculator> = new Map();
 
   constructor(
     tokens: RosenTokens,
@@ -32,17 +32,19 @@ export class AssetCalculator {
     protected readonly logger: AbstractLogger = new DummyLogger()
   ) {
     this.tokens = new TokenMap(tokens);
-    this.ergoAssetCalculator = new ErgoCalculator(
+    const ergoAssetCalculator = new ErgoCalculator(
       ergoCalculator.calculatorAddresses,
       ergoCalculator.explorerUrl,
       logger
     );
-    this.cardanoAssetCalculator = new CardanoCalculator(
+    const cardanoAssetCalculator = new CardanoCalculator(
       cardanoCalculator.calculatorAddresses,
       cardanoCalculator.koiosUrl,
       cardanoCalculator.authToken,
       logger
     );
+    this.calculatorMap.set(ERGO_CHAIN, ergoAssetCalculator);
+    this.calculatorMap.set(CARDANO_CHAIN, cardanoAssetCalculator);
     this.assetModel = new AssetModel(dataSource, logger);
   }
 
@@ -56,7 +58,7 @@ export class AssetCalculator {
    * @param sourceChain
    * @returns total locked amount of token
    */
-  calculateTotalLocked = async (
+  protected calculateTotalLocked = async (
     supportedChains: string[],
     token: RosenChainToken,
     sourceChain: string
@@ -64,23 +66,17 @@ export class AssetCalculator {
     let totalLocked = 0n;
     const chainIdKey = this.tokens.getIdKey(sourceChain);
     for (const supportedChain of supportedChains) {
-      let emittedAmount = 0n;
       const targetChainToken = this.tokens.search(sourceChain, {
         [chainIdKey]: token[chainIdKey],
       })[0][supportedChain];
-      if (supportedChain == ERGO_CHAIN) {
-        emittedAmount =
-          (await this.ergoAssetCalculator.totalSupply(targetChainToken)) -
-          (await this.ergoAssetCalculator.totalBalance(targetChainToken));
-      } else if (supportedChain == CARDANO_CHAIN) {
-        emittedAmount =
-          (await this.cardanoAssetCalculator.totalSupply(targetChainToken)) -
-          (await this.cardanoAssetCalculator.totalBalance(targetChainToken));
-      } else {
+      const calculator = this.calculatorMap.get(supportedChain);
+      if (!calculator)
         throw Error(
           `Chain [${supportedChain}] is not supported in asset calculator`
         );
-      }
+      const emittedAmount =
+        (await calculator.totalSupply(targetChainToken)) -
+        (await calculator.totalBalance(targetChainToken));
       this.logger.debug(
         `Emitted amount of asset ${token[chainIdKey]} in ${supportedChain} is [${emittedAmount}]`
       );
@@ -101,7 +97,6 @@ export class AssetCalculator {
     for (const chain of chains) {
       const chainIdKey = this.tokens.getIdKey(chain);
       const nativeResidentTokens = this.tokens.getAllNativeTokens(chain);
-      console.log(nativeResidentTokens);
       this.logger.debug(
         `All native resident tokens of ${chain} chain are ${nativeResidentTokens}`
       );

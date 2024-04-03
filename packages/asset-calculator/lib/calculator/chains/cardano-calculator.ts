@@ -9,7 +9,7 @@ export class CardanoCalculator extends AbstractCalculator {
 
   constructor(
     addresses: string[],
-    koiosUrl: string,
+    koiosUrl: string = 'https://api.koios.rest/api/v1',
     authToken?: string,
     logger = new DummyLogger()
   ) {
