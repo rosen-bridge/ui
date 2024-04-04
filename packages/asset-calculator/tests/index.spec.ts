@@ -36,10 +36,10 @@ describe('AssetCalculator', () => {
      * by subtracting the bridge balance from the total supply (1000 - 900)
      */
     it('should calculate total locked of ergo native asset', async () => {
-      const calculator: AbstractCalculator = {
+      const calculator = {
         totalSupply: () => Promise.resolve(1000n),
         totalBalance: () => Promise.resolve(900n),
-      } as any;
+      } as unknown as AbstractCalculator;
       const map = new Map([[CARDANO_CHAIN, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateTotalLocked'](
@@ -65,7 +65,7 @@ describe('AssetCalculator', () => {
       const calculator: AbstractCalculator = {
         totalSupply: () => Promise.resolve(1900n),
         totalBalance: () => Promise.resolve(900n),
-      } as any;
+      } as unknown as AbstractCalculator;
       const map = new Map([[ERGO_CHAIN, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateTotalLocked'](
