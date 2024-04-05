@@ -30,6 +30,6 @@ const getXdefiWallet = () =>
 export const isXdefiAvailable = () =>
   typeof xfi !== 'undefined' && !!xfi?.bitcoin;
 
-export { BitcoinNetworkType, AddressPurpose } from 'sats-connect';
+export { BitcoinNetworkType, AddressPurpose, AddressType } from 'sats-connect';
 
 export default getXdefiWallet;
