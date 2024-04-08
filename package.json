@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "prepare": "husky install",
-    "test": "vitest",
+    "test": "NODE_OPTIONS=--loader=extensionless vitest",
+    "test:related": "NODE_OPTIONS=--loader=extensionless vitest related --run",
     "coverage": "npm run test -- --coverage",
     "version": "npx changeset version && npm i"
   },
