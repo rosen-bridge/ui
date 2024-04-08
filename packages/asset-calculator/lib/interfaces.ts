@@ -5,7 +5,7 @@ interface ErgoCalculatorInterface {
 
 interface CardanoCalculatorInterface {
   calculatorAddresses: string[];
-  koiosUrl: string;
+  koiosUrl?: string;
   authToken?: string;
 }
 

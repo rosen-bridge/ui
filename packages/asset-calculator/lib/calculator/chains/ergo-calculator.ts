@@ -1,5 +1,5 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 
 import AbstractCalculator from '../abstract-calculator';
@@ -10,7 +10,7 @@ export class ErgoCalculator extends AbstractCalculator {
   constructor(
     addresses: string[],
     explorerUrl: string,
-    logger = new DummyLogger()
+    logger?: AbstractLogger
   ) {
     super(addresses, logger);
     this.explorerApi = ergoExplorerClientFactory(explorerUrl);

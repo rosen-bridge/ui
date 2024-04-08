@@ -1,5 +1,5 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 
 import AbstractCalculator from '../abstract-calculator';
@@ -9,9 +9,9 @@ export class CardanoCalculator extends AbstractCalculator {
 
   constructor(
     addresses: string[],
-    koiosUrl: string = 'https://api.koios.rest/api/v1',
     authToken?: string,
-    logger = new DummyLogger()
+    logger?: AbstractLogger,
+    koiosUrl: string = 'https://api.koios.rest/api/v1'
   ) {
     super(addresses, logger);
     this.koiosApi = cardanoKoiosClientFactory(koiosUrl, authToken);

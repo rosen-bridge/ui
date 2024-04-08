@@ -55,7 +55,7 @@ describe('CardanoCalculator', () => {
     it('Should calculate the token balance using koios api', async () => {
       const cardanoCalculator = new CardanoCalculator(
         ['hotAddress', 'coldAddress'],
-        'koiosUrl'
+        'authToken'
       );
       const totalBalance = await cardanoCalculator.totalBalance({
         policyId: 'policyId',
@@ -94,7 +94,7 @@ describe('CardanoCalculator', () => {
     it('Should calculate the token balance using koios api', async () => {
       const cardanoCalculator = new CardanoCalculator(
         ['hotAddress', 'coldAddress'],
-        'koiosUrl'
+        'authToken'
       );
       const totalBalance = await cardanoCalculator.totalSupply({
         policyId: 'policyId',

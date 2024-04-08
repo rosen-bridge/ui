@@ -39,9 +39,9 @@ export class AssetCalculator {
     );
     const cardanoAssetCalculator = new CardanoCalculator(
       cardanoCalculator.calculatorAddresses,
-      cardanoCalculator.koiosUrl,
       cardanoCalculator.authToken,
-      logger
+      logger,
+      cardanoCalculator.koiosUrl
     );
     this.calculatorMap.set(ERGO_CHAIN, ergoAssetCalculator);
     this.calculatorMap.set(CARDANO_CHAIN, cardanoAssetCalculator);
