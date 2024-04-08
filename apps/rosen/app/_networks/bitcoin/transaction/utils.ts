@@ -94,7 +94,7 @@ export const getFeeRatio = async (): Promise<number> => {
  * additional fee for adding it to a tx
  * @returns the minimum amount
  */
-export const minimumMeaningfulSatoshi = (feeRatio: number): bigint => {
+export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
   return BigInt(
     Math.ceil(
       (feeRatio * SEGWIT_INPUT_WEIGHT_UNIT) / 4, // estimate fee per weight and convert to virtual size

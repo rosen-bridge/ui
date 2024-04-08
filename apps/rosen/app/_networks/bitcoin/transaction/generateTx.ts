@@ -1,11 +1,11 @@
 'use server';
 
-import { Psbt, Transaction, address, payments } from 'bitcoinjs-lib';
+import { Psbt, address, payments } from 'bitcoinjs-lib';
 import {
   estimateTxWeight,
   getAddressUtxos,
   getFeeRatio,
-  minimumMeaningfulSatoshi,
+  getMinimumMeaningfulSatoshi,
 } from './utils';
 import { BitcoinUtxo, UnsignedPsbtData } from './types';
 import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
@@ -53,7 +53,7 @@ export const generateUnsignedTx = async (
   // fetch inputs
   const utxoIterator = (await getAddressUtxos(fromAddress)).values();
   const feeRatio = await getFeeRatio();
-  const minSatoshi = minimumMeaningfulSatoshi(feeRatio);
+  const minSatoshi = getMinimumMeaningfulSatoshi(feeRatio);
   const coveredBoxes = await selectBitcoinUtxos(
     amount + minSatoshi,
     [],
