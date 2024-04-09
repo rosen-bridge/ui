@@ -23,7 +23,7 @@ describe('ErgoCalculator', () => {
     });
 
     /**
-     * @target ErgoCalculator.totalBalance Should calculate the token balance using explorer api
+     * @target ErgoCalculator.totalBalance should calculate the token balance using explorer api
      * @dependencies
      * - ergoExplorerClientFactory
      * @scenario
@@ -32,7 +32,7 @@ describe('ErgoCalculator', () => {
      * @expected
      * - The token balance should be calculated 2400 since it checks two addresses with 1200 balance each
      */
-    it('Should calculate the token balance using explorer api', async () => {
+    it('should calculate the token balance using explorer api', async () => {
       const ergoCalculator = new ErgoCalculator(
         ['hotAddress', 'coldAddress'],
         'explorerUrl'
@@ -60,7 +60,7 @@ describe('ErgoCalculator', () => {
     });
 
     /**
-     * @target ErgoCalculator.totalSupply Should calculate the token balance using explorer api
+     * @target ErgoCalculator.totalSupply should calculate the token balance using explorer api
      * @dependencies
      * - ergoExplorerClientFactory
      * @scenario
@@ -69,7 +69,7 @@ describe('ErgoCalculator', () => {
      * @expected
      * - The token balance should be calculated 20000
      */
-    it('Should calculate the token balance using explorer api', async () => {
+    it('should calculate the token balance using explorer api', async () => {
       const ergoCalculator = new ErgoCalculator(
         ['hotAddress', 'coldAddress'],
         'explorerUrl'

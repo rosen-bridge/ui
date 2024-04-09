@@ -26,11 +26,11 @@ export class ErgoCalculator extends AbstractCalculator {
     );
     if (tokenDetail) {
       this.logger.debug(
-        `Total supply of token [${token}] is [${tokenDetail.emissionAmount}]`
+        `Total supply of token [${token.tokenId}] is [${tokenDetail.emissionAmount}]`
       );
       return tokenDetail.emissionAmount;
     }
-    throw Error('Total supply is not calculable');
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
   };
 
   /**

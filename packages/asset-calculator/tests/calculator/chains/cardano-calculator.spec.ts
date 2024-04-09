@@ -43,16 +43,16 @@ describe('CardanoCalculator', () => {
     });
 
     /**
-     * @target CardanoCalculator.totalBalance Should calculate the token balance using koios api
+     * @target CardanoCalculator.totalBalance should calculate the token balance using koios api
      * @dependencies
      * - cardanoKoiosClientFactory
      * @scenario
      * - create new instance of CardanoCalculator
      * - call test for mocked token (totalBalance)
      * @expected
-     * - The token balance should be calculated 400 since it checks two addresses with 100 and 200 balance
+     * - The token balance should be calculated 400 since it checks two addresses with 100 and 300 balance
      */
-    it('Should calculate the token balance using koios api', async () => {
+    it('should calculate the token balance using koios api', async () => {
       const cardanoCalculator = new CardanoCalculator(
         ['hotAddress', 'coldAddress'],
         'authToken'
@@ -82,7 +82,7 @@ describe('CardanoCalculator', () => {
     });
 
     /**
-     * @target CardanoCalculator.totalSupply Should calculate the token balance using koios api
+     * @target CardanoCalculator.totalSupply should calculate the token balance using koios api
      * @dependencies
      * - cardanoKoiosClientFactory
      * @scenario
@@ -91,7 +91,7 @@ describe('CardanoCalculator', () => {
      * @expected
      * - The token balance should be calculated 20000
      */
-    it('Should calculate the token balance using koios api', async () => {
+    it('should calculate the token balance using koios api', async () => {
       const cardanoCalculator = new CardanoCalculator(
         ['hotAddress', 'coldAddress'],
         'authToken'

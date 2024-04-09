@@ -36,21 +36,4 @@ const insertAssetRecords = (assets: AssetEntity[]) => {
   return assetRepository.insert(assets);
 };
 
-const assets: AssetEntity[] = [
-  {
-    id: 'id',
-    name: 'name',
-    decimal: 0,
-    amount: 100n,
-    isNative: true,
-  },
-  {
-    id: 'id2',
-    name: 'name2',
-    decimal: 1,
-    amount: 200n,
-    isNative: false,
-  },
-];
-
-export { initDatabase, allAssetRecords, insertAssetRecords, assets };
+export { initDatabase, allAssetRecords, insertAssetRecords };

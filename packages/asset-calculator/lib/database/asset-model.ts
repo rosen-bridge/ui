@@ -24,12 +24,12 @@ class AssetModel {
     });
     if (savedAsset) {
       this.logger.debug(
-        `Updated asset [${JsonBigInt.stringify(asset)}] in database`
+        `Updating asset [${JsonBigInt.stringify(asset)}] in database`
       );
       return this.assetRepository.update({ id: asset.id }, asset);
     } else {
       this.logger.debug(
-        `Inserted asset [${JsonBigInt.stringify(asset)}] in database`
+        `Inserting asset [${JsonBigInt.stringify(asset)}] in database`
       );
       return this.assetRepository.insert(asset);
     }
@@ -48,9 +48,9 @@ class AssetModel {
    * Remove old unused assets from the database
    * @param assetIds
    */
-  removeUnusedAssets = async (assetIds: string[]) => {
+  removeAssets = async (assetIds: string[]) => {
+    this.logger.debug(`Deleting assets ${assetIds} in database`);
     await this.assetRepository.delete({ id: In(assetIds) });
-    this.logger.debug(`Deleted assets ${assetIds} in database`);
   };
 }
 

@@ -1,9 +1,10 @@
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { AssetCalculator } from '../lib';
 import { token1, token2, token3, tokenMap } from './test-data';
-import { assets, initDatabase } from './database/asset-model.mock';
+import { initDatabase } from './database/asset-model.mock';
 import { CARDANO_CHAIN, ERGO_CHAIN } from '../lib/constants';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
+import { assets } from './database/test-data.mock';
 
 describe('AssetCalculator', () => {
   describe('calculateTotalLocked', () => {
@@ -16,10 +17,10 @@ describe('AssetCalculator', () => {
       assetCalculator = new AssetCalculator(
         tokenMap,
         {
-          calculatorAddresses: ['hotAddr', 'coldAddr'],
+          addresses: ['hotAddr', 'coldAddr'],
           explorerUrl: 'explorerUrl',
         },
-        { calculatorAddresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
         dataSource
       );
     });
@@ -97,8 +98,8 @@ describe('AssetCalculator', () => {
       const dataSource = await initDatabase();
       const assetCalculator = new AssetCalculator(
         tokenMap,
-        { calculatorAddresses: ['Addr'], explorerUrl: 'explorerUrl' },
-        { calculatorAddresses: ['Addr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
+        { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
         dataSource
       );
       assetCalculator['calculateTotalLocked'] = () => Promise.resolve(1000n);
@@ -108,7 +109,7 @@ describe('AssetCalculator', () => {
       );
       const removeSpy = vitest.spyOn(
         assetCalculator['assetModel'],
-        'removeUnusedAssets'
+        'removeAssets'
       );
 
       await assetCalculator.update();
@@ -143,8 +144,8 @@ describe('AssetCalculator', () => {
       const dataSource = await initDatabase();
       const assetCalculator = new AssetCalculator(
         tokenMap,
-        { calculatorAddresses: ['Addr'], explorerUrl: 'explorerUrl' },
-        { calculatorAddresses: ['Addr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
+        { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
         dataSource
       );
       await assetCalculator['assetModel']['assetRepository'].insert(assets);
@@ -155,7 +156,7 @@ describe('AssetCalculator', () => {
       );
       const removeSpy = vitest.spyOn(
         assetCalculator['assetModel'],
-        'removeUnusedAssets'
+        'removeAssets'
       );
 
       await assetCalculator.update();

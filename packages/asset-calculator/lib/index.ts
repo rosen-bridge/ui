@@ -19,7 +19,7 @@ import { CARDANO_CHAIN, ERGO_CHAIN } from './constants';
 import { AssetModel } from './database/asset-model';
 import AbstractCalculator from './calculator/abstract-calculator';
 
-export class AssetCalculator {
+class AssetCalculator {
   protected readonly tokens: TokenMap;
   protected readonly assetModel: AssetModel;
   protected calculatorMap: Map<string, AbstractCalculator> = new Map();
@@ -33,12 +33,12 @@ export class AssetCalculator {
   ) {
     this.tokens = new TokenMap(tokens);
     const ergoAssetCalculator = new ErgoCalculator(
-      ergoCalculator.calculatorAddresses,
+      ergoCalculator.addresses,
       ergoCalculator.explorerUrl,
       logger
     );
     const cardanoAssetCalculator = new CardanoCalculator(
-      cardanoCalculator.calculatorAddresses,
+      cardanoCalculator.addresses,
       cardanoCalculator.authToken,
       logger,
       cardanoCalculator.koiosUrl
@@ -65,10 +65,11 @@ export class AssetCalculator {
   ): Promise<bigint> => {
     let totalLocked = 0n;
     const chainIdKey = this.tokens.getIdKey(sourceChain);
+    const rosenChainToken = this.tokens.search(sourceChain, {
+      [chainIdKey]: token[chainIdKey],
+    })[0];
     for (const supportedChain of supportedChains) {
-      const targetChainToken = this.tokens.search(sourceChain, {
-        [chainIdKey]: token[chainIdKey],
-      })[0][supportedChain];
+      const targetChainToken = rosenChainToken[supportedChain];
       const calculator = this.calculatorMap.get(supportedChain);
       if (!calculator)
         throw Error(
@@ -78,7 +79,7 @@ export class AssetCalculator {
         (await calculator.totalSupply(targetChainToken)) -
         (await calculator.totalBalance(targetChainToken));
       this.logger.debug(
-        `Emitted amount of asset ${token[chainIdKey]} in ${supportedChain} is [${emittedAmount}]`
+        `Emitted amount of asset [${token[chainIdKey]}] in chain [${supportedChain}] is [${emittedAmount}]`
       );
       totalLocked += emittedAmount;
     }
@@ -102,34 +103,43 @@ export class AssetCalculator {
       );
       const supportedChains = this.tokens.getSupportedChains(chain);
       for (const token of nativeResidentTokens) {
-        const totalLocked = await this.calculateTotalLocked(
-          supportedChains,
-          token,
-          chain
-        );
-        this.logger.debug(
-          `Asset [${token[chainIdKey]}] total locked amount is [${totalLocked}]`
-        );
+        try {
+          const totalLocked = await this.calculateTotalLocked(
+            supportedChains,
+            token,
+            chain
+          );
+          this.logger.debug(
+            `Asset [${token[chainIdKey]}] total locked amount is [${totalLocked}]`
+          );
 
-        const updatedAsset = {
-          id: token[chainIdKey],
-          name: token.name,
-          decimal: token.decimals,
-          isNative: token.metaData.type == NATIVE_RESIDENCY,
-          amount: totalLocked,
-        };
-        await this.assetModel.updateAsset(updatedAsset);
-        allUpdatesAssets.push(token[chainIdKey]);
-        this.logger.info(
-          `Updated asset [${token[chainIdKey]}] total locked amount to [${totalLocked}]`
-        );
-        this.logger.debug(
-          `Updated asset details for [${JsonBigInt.stringify(updatedAsset)}]`
-        );
+          const updatedAsset = {
+            id: token[chainIdKey],
+            name: token.name,
+            decimal: token.decimals,
+            isNative: token.metaData.type == NATIVE_RESIDENCY,
+            amount: totalLocked,
+          };
+          await this.assetModel.updateAsset(updatedAsset);
+          allUpdatesAssets.push(token[chainIdKey]);
+          this.logger.info(
+            `Updated asset [${token[chainIdKey]}] total locked amount to [${totalLocked}]`
+          );
+          this.logger.debug(
+            `Updated asset details for [${JsonBigInt.stringify(updatedAsset)}]`
+          );
+        } catch (e) {
+          this.logger.warn(
+            `Skipping asset [${token[chainIdKey]}] locked amount update, error: [${e}]`
+          );
+        }
       }
     }
     const oldAssets = difference(allStoredAssets, allUpdatesAssets);
     this.logger.debug(`Removing old assets [${oldAssets}]`);
-    await this.assetModel.removeUnusedAssets(oldAssets);
+    await this.assetModel.removeAssets(oldAssets);
   };
 }
+
+export { AssetCalculator };
+export * from './interfaces';

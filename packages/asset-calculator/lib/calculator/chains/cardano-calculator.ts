@@ -27,11 +27,13 @@ export class CardanoCalculator extends AbstractCalculator {
     });
     if (assetSummary.length && assetSummary[0].total_supply) {
       this.logger.debug(
-        `Total supply of token [${token}] is [${assetSummary[0].total_supply}]`
+        `Total supply of token [${token.policyId}.${token.assetName}] is [${assetSummary[0].total_supply}]`
       );
       return BigInt(assetSummary[0].total_supply);
     }
-    throw Error('Total supply is not calculable');
+    throw Error(
+      `Total supply of token [${token.policyId}.${token.assetName}] is not calculable`
+    );
   };
 
   /**
@@ -50,7 +52,9 @@ export class CardanoCalculator extends AbstractCalculator {
           asset.quantity
       )
       .reduce((sum, asset) => BigInt(asset.quantity!) + sum, 0n);
-    this.logger.debug(`Total balance of token [${token}] is [${tokenBalance}]`);
+    this.logger.debug(
+      `Total balance of token [${token.policyId}.${token.assetName}] is [${tokenBalance}]`
+    );
     return tokenBalance;
   };
 }

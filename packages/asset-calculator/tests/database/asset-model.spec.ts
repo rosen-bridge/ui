@@ -3,10 +3,10 @@ import { expect } from 'vitest';
 
 import {
   allAssetRecords,
-  assets,
   initDatabase,
   insertAssetRecords,
 } from './asset-model.mock';
+import { assets } from './test-data.mock';
 import { AssetModel } from '../../lib/database/asset-model';
 
 describe('AssetModel', () => {
@@ -16,9 +16,9 @@ describe('AssetModel', () => {
     assetModel = new AssetModel(dataSource);
   });
 
-  describe('AssetModel.updateAsset', () => {
+  describe('updateAsset', () => {
     /**
-     * @target AssetModel.updateAsset should insert asset when there is no stored asset with this id
+     * @target updateAsset should insert asset when there is no stored asset with this id
      * @dependencies
      * - database
      * @scenario
@@ -35,7 +35,7 @@ describe('AssetModel', () => {
     });
 
     /**
-     * @target AssetModel.updateAsset should update asset when the asset is already stored in db
+     * @target updateAsset should update asset when the asset is already stored in db
      * @dependencies
      * - database
      * @scenario
@@ -54,9 +54,9 @@ describe('AssetModel', () => {
     });
   });
 
-  describe('AssetModel.getAllStoredAssets', () => {
+  describe('getAllStoredAssets', () => {
     /**
-     * @target AssetModel.getAllStoredAssets should return all asset ids stored in database
+     * @target getAllStoredAssets should return all asset ids stored in database
      * @dependencies
      * - database
      * @scenario
@@ -73,9 +73,9 @@ describe('AssetModel', () => {
     });
   });
 
-  describe('AssetModel.removeUnusedAssets', () => {
+  describe('removeUnusedAssets', () => {
     /**
-     * @target AssetModel.removeUnusedAssets should remove assets with specified id
+     * @target removeUnusedAssets should remove assets with specified id
      * @dependencies
      * - database
      * @scenario
@@ -87,7 +87,7 @@ describe('AssetModel', () => {
      */
     it('should remove assets with specified id', async () => {
       await insertAssetRecords(assets);
-      await assetModel.removeUnusedAssets([assets[1].id]);
+      await assetModel.removeAssets([assets[1].id]);
       const savedAssets = await allAssetRecords();
       expect(savedAssets.length).to.equal(1);
       expect(savedAssets[0]).to.deep.equal(assets[0]);
