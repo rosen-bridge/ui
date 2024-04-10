@@ -1,10 +1,10 @@
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { AssetCalculator } from '../lib';
-import { token1, token2, token3, tokenMap } from './test-data';
+import { tokenMap } from './test-data';
 import { initDatabase } from './database/asset-model.mock';
 import { CARDANO_CHAIN, ERGO_CHAIN } from '../lib/constants';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
-import { assets } from './database/test-data.mock';
+import { assets } from './database/test-data';
 
 describe('AssetCalculator', () => {
   describe('calculateTotalLocked', () => {
@@ -33,7 +33,7 @@ describe('AssetCalculator', () => {
      * - mock cardanoAssetCalculator, totalSupply and totalBalance
      * - run test (call `calculateTotalLocked`)
      * @expected
-     * - should check total emitted tokens in all supported chains (ergo)
+     * - should check total emitted tokens in all supported chains (cardano)
      * by subtracting the bridge balance from the total supply (1000 - 900)
      */
     it('should calculate total locked of ergo native asset', async () => {
@@ -45,7 +45,7 @@ describe('AssetCalculator', () => {
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateTotalLocked'](
         [CARDANO_CHAIN],
-        token1,
+        tokenMap.tokens[0].ergo,
         ERGO_CHAIN
       );
       expect(totalLocked).to.equal(100n);
@@ -59,10 +59,10 @@ describe('AssetCalculator', () => {
      * - mock ergoAssetCalculator, totalSupply and totalBalance
      * - run test (call `calculateTotalLocked`)
      * @expected
-     * - should check total emitted tokens in all supported chains (cardano)
+     * - should check total emitted tokens in all supported chains (ergo)
      * by subtracting the bridge balance from the total supply (1900 - 900)
      */
-    it('should calculate total locked of ergo native asset', async () => {
+    it('should calculate total locked of cardano native asset', async () => {
       const calculator: AbstractCalculator = {
         totalSupply: () => Promise.resolve(1900n),
         totalBalance: () => Promise.resolve(900n),
@@ -71,7 +71,7 @@ describe('AssetCalculator', () => {
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateTotalLocked'](
         [ERGO_CHAIN],
-        token2,
+        tokenMap.tokens[2].cardano,
         CARDANO_CHAIN
       );
       expect(totalLocked).to.equal(1000n);
@@ -118,10 +118,10 @@ describe('AssetCalculator', () => {
       ].getAllStoredAssets();
       expect(updateSpy).to.have.toBeCalledTimes(3);
       expect(removeSpy).to.have.toBeCalledWith([]);
-      expect(allStoredAssets.sort()).to.deep.equal([
-        token1.tokenId,
-        token3.tokenId,
-        token2.tokenId,
+      expect(allStoredAssets.sort()).toEqual([
+        tokenMap.tokens[0].ergo.tokenId,
+        tokenMap.tokens[1].ergo.tokenId,
+        tokenMap.tokens[2].cardano.tokenId,
       ]);
     });
 
@@ -165,10 +165,10 @@ describe('AssetCalculator', () => {
       ].getAllStoredAssets();
       expect(updateSpy).to.have.toBeCalledTimes(3);
       expect(removeSpy).to.have.toBeCalledWith(assets.map((asset) => asset.id));
-      expect(allStoredAssets.sort()).to.deep.equal([
-        token1.tokenId,
-        token3.tokenId,
-        token2.tokenId,
+      expect(allStoredAssets.sort()).toEqual([
+        tokenMap.tokens[0].ergo.tokenId,
+        tokenMap.tokens[1].ergo.tokenId,
+        tokenMap.tokens[2].cardano.tokenId,
       ]);
     });
   });

@@ -40,7 +40,7 @@ describe('ErgoCalculator', () => {
       const totalBalance = await ergoCalculator.totalBalance({
         tokenId: 'tokenId',
       } as any);
-      expect(totalBalance).to.equal(2400n);
+      expect(totalBalance).toEqual(2400n);
     });
   });
 
@@ -77,7 +77,7 @@ describe('ErgoCalculator', () => {
       const totalBalance = await ergoCalculator.totalSupply({
         tokenId: 'tokenId',
       } as any);
-      expect(totalBalance).to.equal(20000n);
+      expect(totalBalance).toEqual(20000n);
     });
   });
 });

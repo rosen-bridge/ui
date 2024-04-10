@@ -6,7 +6,7 @@ import {
   initDatabase,
   insertAssetRecords,
 } from './asset-model.mock';
-import { assets } from './test-data.mock';
+import { assets } from './test-data';
 import { AssetModel } from '../../lib/database/asset-model';
 
 describe('AssetModel', () => {
@@ -30,8 +30,8 @@ describe('AssetModel', () => {
     it('should insert asset when there is no stored asset with this id', async () => {
       await assetModel.updateAsset(assets[0]);
       const savedAssets = await allAssetRecords();
-      expect(savedAssets.length).to.equal(1);
-      expect(savedAssets[0]).to.deep.equal(assets[0]);
+      expect(savedAssets.length).toEqual(1);
+      expect(savedAssets[0]).toEqual(assets[0]);
     });
 
     /**
@@ -49,8 +49,8 @@ describe('AssetModel', () => {
       await insertAssetRecords([{ ...assets[0], amount: 1n }]);
       await assetModel.updateAsset(assets[0]);
       const savedAssets = await allAssetRecords();
-      expect(savedAssets.length).to.equal(1);
-      expect(savedAssets[0]).to.deep.equal(assets[0]);
+      expect(savedAssets.length).toEqual(1);
+      expect(savedAssets[0]).toEqual(assets[0]);
     });
   });
 
@@ -68,8 +68,8 @@ describe('AssetModel', () => {
     it('should return all asset ids stored in database', async () => {
       await insertAssetRecords(assets);
       const savedAssetIds = await assetModel.getAllStoredAssets();
-      expect(savedAssetIds.length).to.equal(2);
-      expect(savedAssetIds).to.deep.equal([assets[0].id, assets[1].id]);
+      expect(savedAssetIds.length).toEqual(2);
+      expect(savedAssetIds).toEqual([assets[0].id, assets[1].id]);
     });
   });
 
@@ -89,8 +89,8 @@ describe('AssetModel', () => {
       await insertAssetRecords(assets);
       await assetModel.removeAssets([assets[1].id]);
       const savedAssets = await allAssetRecords();
-      expect(savedAssets.length).to.equal(1);
-      expect(savedAssets[0]).to.deep.equal(assets[0]);
+      expect(savedAssets.length).toEqual(1);
+      expect(savedAssets[0]).toEqual(assets[0]);
     });
   });
 });

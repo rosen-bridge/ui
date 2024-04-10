@@ -132,6 +132,8 @@ class AssetCalculator {
           this.logger.warn(
             `Skipping asset [${token[chainIdKey]}] locked amount update, error: [${e}]`
           );
+          if (e instanceof Error && e.stack)
+            this.logger.debug(`Error stack trace: [${e.stack}]`);
         }
       }
     }

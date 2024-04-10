@@ -61,7 +61,7 @@ describe('CardanoCalculator', () => {
         policyId: 'policyId',
         assetName: 'assetName',
       } as any);
-      expect(totalBalance).to.equal(400n);
+      expect(totalBalance).toEqual(400n);
     });
   });
 
@@ -100,7 +100,7 @@ describe('CardanoCalculator', () => {
         policyId: 'policyId',
         name: 'assetName',
       } as any);
-      expect(totalBalance).to.equal(20000n);
+      expect(totalBalance).toEqual(20000n);
     });
   });
 });

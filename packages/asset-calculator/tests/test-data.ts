@@ -1,4 +1,4 @@
-import { RosenChainToken, RosenTokens } from '@rosen-bridge/tokens';
+import { RosenTokens } from '@rosen-bridge/tokens';
 
 export const tokenMap: RosenTokens = {
   idKeys: {
@@ -75,36 +75,4 @@ export const tokenMap: RosenTokens = {
       },
     },
   ],
-};
-
-export const token1: RosenChainToken = {
-  tokenId: '1111111111111111111111111111111111111111111111111111111111111111',
-  name: 'test token1',
-  decimals: 0,
-  metaData: {
-    type: 'tokenType',
-    residency: 'native',
-  },
-};
-
-export const token2: RosenChainToken = {
-  tokenId: 'policyId3.assetName3',
-  policyId: 'policyId3',
-  assetName: 'assetName3',
-  name: 'asset3',
-  decimals: 0,
-  metaData: {
-    type: 'tokenType',
-    residency: 'native',
-  },
-};
-
-export const token3: RosenChainToken = {
-  tokenId: '2222222222222222222222222222222222222222222222222222222222222222',
-  name: 'test token2',
-  decimals: 0,
-  metaData: {
-    type: 'tokenType',
-    residency: 'native',
-  },
 };
