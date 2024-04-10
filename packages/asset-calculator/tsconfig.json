@@ -14,7 +14,11 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "strictPropertyInitialization": false,
+    "composite": true
   },
   "include": ["tests", "lib", "vitest.config.ts"]
 }

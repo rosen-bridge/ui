@@ -17,3 +17,5 @@ dist
 
 coverage
 yarn.lock
+*.sqlite
+*.tsbuildinfo
