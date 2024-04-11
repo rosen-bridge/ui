@@ -39,7 +39,9 @@ export const generateOpReturnData = (
 
   // parse toAddress
   const addressHex = encodeAddress(toChain, toAddress);
-  const addressLengthCode = addressHex.length.toString(16).padStart(2, '0');
+  const addressLengthCode = (addressHex.length / 2)
+    .toString(16)
+    .padStart(2, '0');
 
   return (
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex

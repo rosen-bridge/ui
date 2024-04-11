@@ -9,6 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --include-prereleases",
     "build:vercel": "./build.sh"
   },
