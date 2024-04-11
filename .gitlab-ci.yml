@@ -1,10 +1,11 @@
-image: node:18.17
+image: node:20.11.0
 
 stages:
   - installation
   - build
   - type_check
   - lint
+  - unit_tests
   - changeset
 
 installation:
@@ -72,6 +73,25 @@ lint:
       - node_modules
   script:
     - npm run lint --workspaces --if-present
+
+unit_tests:
+  stage: unit_tests
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - wallets/*/node_modules
+  script:
+    - npm run coverage
+  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: 'coverage/cobertura-coverage.xml'
 
 changeset:
   stage: changeset
