@@ -1,14 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Psbt } from 'bitcoinjs-lib';
-import { generateUnsignedTx } from '../../../app/_networks/bitcoin/transaction/generateTx';
+import { generateUnsignedTx } from '../../../../app/_networks/bitcoin/transaction/generateTx';
 const testData = await vi.hoisted(async () => await import('./testData'));
 
 vi.mock(
-  '../../../app/_networks/bitcoin/transaction/utils',
+  '../../../../app/_networks/bitcoin/transaction/utils',
   async (importOriginal) => {
     const mod =
       await importOriginal<
-        typeof import('../../../app/_networks/bitcoin/transaction/utils')
+        typeof import('../../../../app/_networks/bitcoin/transaction/utils')
       >();
     // mock getAddressUtxos
     const getAddressUtxos = vi.fn();
