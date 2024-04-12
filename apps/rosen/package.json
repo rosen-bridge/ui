@@ -9,12 +9,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "test": "vitest",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --include-prereleases",
     "build:vercel": "./build.sh"
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
+    "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/cardano-utxo-selection": "^1.0.0",
     "@rosen-bridge/cli": "^0.2.0",
     "@rosen-bridge/ergo-box-selection": "^0.1.0",
