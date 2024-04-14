@@ -102,8 +102,8 @@ const ApiKeyModal = () => {
             ></Controller>
           </DialogContent>
           <DialogActions>
-            <Button type="submit">Set key</Button>
             <Button onClick={handleCloseModal}>Cancel</Button>
+            <Button type="submit">Set key</Button>
           </DialogActions>
         </form>
       </Dialog>
