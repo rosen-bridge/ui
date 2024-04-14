@@ -48,3 +48,19 @@ export const handleError = (
 
   customHandler?.(error);
 };
+
+/**
+ * run a job periodically, starting from now
+ * @param job
+ * @param interval
+ */
+export const runAndSetInterval = async (
+  job: (...args: any[]) => any,
+  interval: number
+) => {
+  await job();
+
+  setTimeout(() => {
+    runAndSetInterval(job, interval);
+  }, interval);
+};
