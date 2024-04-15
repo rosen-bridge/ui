@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
@@ -28,7 +29,9 @@ const SideBar = () => {
 
   return (
     <AppBar>
-      <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
+      <Link href="/">
+        <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
+      </Link>
       <Grid
         container
         direction="column"
