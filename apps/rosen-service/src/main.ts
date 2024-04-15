@@ -9,6 +9,7 @@ import dataSource from './data-source';
 import { handleError } from './utils';
 
 import AppError from './errors/AppError';
+import calculatorService from './calculator/calculator-service';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -39,6 +40,7 @@ const main = async () => {
     }
 
     await scannerService.start();
+    await calculatorService.start();
     logger.info('scanner service started successfully');
   } catch (error) {
     handleError(error);
