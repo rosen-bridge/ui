@@ -72,7 +72,6 @@ const Revenues = () => {
 
   const paginationProps = useMemo<TablePaginationProps>(
     () => ({
-      rowsPerPageOptions: [5, 10, 25, 100],
       component: 'div',
       count: data?.total ?? 0,
       rowsPerPage: pageSize,
