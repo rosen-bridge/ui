@@ -40,6 +40,12 @@ const getConfig = () => {
         logging: nodeConfig.get<boolean>('postgres.logging'),
         useSSL: nodeConfig.get<boolean>('postgres.useSSL'),
       },
+      calculator: {
+        addresses: {
+          ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
+          cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
+        },
+      },
     };
   } catch (error) {
     throw new AppError(
