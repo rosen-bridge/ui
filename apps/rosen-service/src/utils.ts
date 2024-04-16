@@ -55,7 +55,7 @@ export const handleError = (
  * @param interval
  */
 export const runAndSetInterval = async (
-  job: (...args: any[]) => any,
+  job: () => unknown,
   interval: number
 ) => {
   await job();
