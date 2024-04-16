@@ -73,7 +73,6 @@ const Events = () => {
 
   const paginationProps = useMemo<TablePaginationProps>(
     () => ({
-      rowsPerPageOptions: [5, 10, 25],
       component: 'div',
       count: data?.total ?? 0,
       rowsPerPage: pageSize,
