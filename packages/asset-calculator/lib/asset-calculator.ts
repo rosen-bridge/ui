@@ -119,6 +119,7 @@ class AssetCalculator {
             decimal: token.decimals,
             isNative: token.metaData.type == NATIVE_RESIDENCY,
             amount: totalLocked,
+            chain,
           };
           await this.assetModel.updateAsset(updatedAsset);
           allUpdatesAssets.push(token[chainIdKey]);

@@ -48,6 +48,7 @@ const startUpdateJob = (
  * start asset calculator service
  */
 const start = async () => {
+  const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
   const assetCalculator = new AssetCalculator(
     getRosenTokens(),
     {
@@ -59,7 +60,8 @@ const start = async () => {
       koiosUrl: CARDANO_KOIOS_URL,
       authToken: config.cardano.koiosAuthToken,
     },
-    dataSource
+    dataSource,
+    logger
   );
 
   startUpdateJob(assetCalculator, ASSET_CALCULATOR_INTERVAL);

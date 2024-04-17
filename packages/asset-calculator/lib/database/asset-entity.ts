@@ -17,4 +17,7 @@ export class AssetEntity {
 
   @Column('boolean')
   isNative: boolean;
+
+  @Column('varchar')
+  chain: string;
 }

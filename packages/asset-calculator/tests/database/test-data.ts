@@ -7,6 +7,7 @@ const assets: AssetEntity[] = [
     decimal: 0,
     amount: 100n,
     isNative: true,
+    chain: 'Ergo',
   },
   {
     id: 'id2',
@@ -14,6 +15,7 @@ const assets: AssetEntity[] = [
     decimal: 1,
     amount: 200n,
     isNative: false,
+    chain: 'Cardano',
   },
 ];
 

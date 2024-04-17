@@ -10,7 +10,8 @@ export class Migration1707721120491 implements MigrationInterface {
                 "name" varchar NOT NULL,
                 "decimal" integer NOT NULL,
                 "amount" bigint NOT NULL,
-                "isNative" boolean NOT NULL
+                "isNative" boolean NOT NULL,
+                "chain" varchar NOT NULL
             )
         `);
   }

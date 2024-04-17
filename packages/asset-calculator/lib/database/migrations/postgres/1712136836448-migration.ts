@@ -11,6 +11,7 @@ export class Migration1712136836448 implements MigrationInterface {
                 "decimal" integer NOT NULL,
                 "amount" bigint NOT NULL,
                 "isNative" boolean NOT NULL,
+                "chain" character varying NOT NULL,
                 CONSTRAINT "PK_038b7b28b83db2205747ef9912e" PRIMARY KEY ("id")
             )
         `);
