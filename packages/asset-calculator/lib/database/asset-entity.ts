@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
 
-@Entity()
+@Entity('asset_entity')
 export class AssetEntity {
   @PrimaryColumn('varchar')
   id: string;
