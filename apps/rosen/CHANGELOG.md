@@ -1,5 +1,28 @@
 # @rosen-bridge/rosen-app
 
+## 0.6.0
+
+### Minor Changes
+
+- integrate bitcoin
+- add page size of 100 to tables
+- add Bitcoin network
+- link app logo to the root page
+
+### Patch Changes
+
+- add unit testing
+- Updated dependencies
+  - @rosen-ui/asset-calculator@0.1.0
+  - @rosen-ui/xdefi-wallet@0.2.0
+  - @rosen-ui/utils@0.1.1
+  - @rosen-ui/eternl-wallet@0.0.4
+  - @rosen-ui/flint-wallet@0.0.4
+  - @rosen-ui/lace-wallet@0.0.4
+  - @rosen-ui/nami-wallet@0.0.4
+  - @rosen-ui/nautilus-wallet@0.0.4
+  - @rosen-ui/vespr-wallet@0.0.4
+
 ## 0.5.0
 
 ### Minor Changes

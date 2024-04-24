@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-app
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-bridge/icons@0.4.0
+  - @rosen-ui/utils@0.1.1
+
 ## 0.0.3
 
 ### Patch Changes
