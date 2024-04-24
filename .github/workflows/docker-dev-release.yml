@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        os: [ ubuntu-latest ]
         apps:
           - watcher
           - guard
@@ -21,10 +22,28 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Build dependencies
+        run: |
+          npm ci 
+          npm run build --workspace packages/constants 
+          npm run build --workspace packages/types 
+          npm run build --workspace packages/utils 
+          npm run build --workspace packages --if-present
+
       - name: Move Config Files
         run: |
           mv docker/nginx.conf ./
           mv docker/entrypoint.sh ./
+
+      - name: Build App
+        run: |
+          if [[ ${{ matrix.apps }} == watcher ]]; then
+              cd ./apps/watcher
+              npm run build
+          elif [[ ${{ matrix.apps }} == guard ]]; then
+              cd ./apps/guard
+              npm run build
+          fi
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
