@@ -1,5 +1,20 @@
 # @rosen-bridge/watcher-app
 
+## 2.1.0
+
+### Minor Changes
+
+- add page size of 100 to tables
+- link app logo to the root page
+
+### Patch Changes
+
+- swap the position of action buttons in api key modal
+- Updated dependencies
+  - @rosen-bridge/icons@0.4.0
+  - @rosen-bridge/ui-kit@1.0.0
+  - @rosen-ui/utils@0.1.1
+
 ## 2.0.1
 
 ### Patch Changes

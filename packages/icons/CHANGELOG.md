@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 0.4.0
+
+### Minor Changes
+
+- add Bitcoin icon
+
 ## 0.3.0
 
 ### Minor Changes
