@@ -37,13 +37,8 @@ jobs:
 
       - name: Build App
         run: |
-          if [[ ${{ matrix.apps }} == watcher ]]; then
-              cd ./apps/watcher
-              npm run build
-          elif [[ ${{ matrix.apps }} == guard ]]; then
-              cd ./apps/guard
-              npm run build
-          fi
+          cd ./apps/${{ matrix.apps }}
+          npm run build
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
