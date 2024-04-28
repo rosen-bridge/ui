@@ -25,7 +25,11 @@ interface FormValues {
   apiKey: string;
 }
 
-const ApiKeyModal = () => {
+export interface ApiKeyModalProps {
+  children?: (open: () => void) => React.ReactNode;
+}
+
+const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
   const { apiKey, setApiKey } = useApiKey();
   const { openSnackbar } = useSnackbar();
 
@@ -48,15 +52,17 @@ const ApiKeyModal = () => {
 
   return (
     <>
-      <IconButton
-        onClick={handleOpenModal}
-        size="large"
-        color={apiKey ? 'primary' : 'default'}
-      >
-        <SvgIcon sx={{ width: 24 }}>
-          <KeySkeleton />
-        </SvgIcon>
-      </IconButton>
+      {children?.(handleOpenModal) || (
+        <IconButton
+          onClick={handleOpenModal}
+          size="large"
+          color={apiKey ? 'primary' : 'default'}
+        >
+          <SvgIcon sx={{ width: 24 }}>
+            <KeySkeleton />
+          </SvgIcon>
+        </IconButton>
+      )}
       <Dialog
         open={isOpen}
         onClose={handleCloseModal}

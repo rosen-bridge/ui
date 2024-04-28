@@ -5,6 +5,7 @@ import useSWRMutation from 'swr/mutation';
 import {
   AlertCard,
   AlertProps,
+  Button,
   Checkbox,
   FullCard,
   Grid,
@@ -21,6 +22,7 @@ import { Alert } from '@rosen-bridge/icons';
 import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
+import ApiKeyModal from '@/_modals/ApiKeyModal';
 
 const AlertIcon = styled(Alert)((theme) => ({
   fill: theme.palette.primary.main,
@@ -174,6 +176,12 @@ const SendForSigningForm = () => {
 
             <Grid item>
               <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+
+            <Grid item>
+              <ApiKeyModal>
+                {(open) => <Button onClick={open}>Click To Set</Button>}
+              </ApiKeyModal>
             </Grid>
           </Grid>
         )}

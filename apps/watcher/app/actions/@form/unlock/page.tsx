@@ -12,6 +12,7 @@ import {
   Grid,
   Typography,
   SubmitButton,
+  Button,
 } from '@rosen-bridge/ui-kit';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
@@ -32,6 +33,7 @@ import {
   ApiPermitReturnRequestBody,
   ApiPermitReturnResponse,
 } from '@/_types/api';
+import ApiKeyModal from '@/_modals/ApiKeyModal';
 
 const UnlockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -200,6 +202,12 @@ const UnlockForm = () => {
 
             <Grid item>
               <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+
+            <Grid item>
+              <ApiKeyModal>
+                {(open) => <Button onClick={open}>Click To Set</Button>}
+              </ApiKeyModal>
             </Grid>
           </Grid>
         )}
