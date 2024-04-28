@@ -7,6 +7,19 @@ const nextConfig = {
       'typeorm',
     ],
   },
+  async headers() {
+    return [
+      {
+        source: '/',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+        ],
+      },
+    ];
+  },
   webpack: function (config, options) {
     config.experiments = {
       asyncWebAssembly: true,
