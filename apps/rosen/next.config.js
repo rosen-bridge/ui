@@ -10,7 +10,7 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/',
+        source: '/(.*?)',
         headers: [
           {
             key: 'X-Frame-Options',
