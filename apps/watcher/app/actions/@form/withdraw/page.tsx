@@ -204,7 +204,7 @@ const WithdrawForm = () => {
           &nbsp;
           {!token.isNativeToken && (
             <>
-              (<Id id={token.tokenId} />)
+              (<Id id={token.tokenId} indicator="middle" />)
             </>
           )}
         </MenuItem>
