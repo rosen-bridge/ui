@@ -22,6 +22,7 @@ import {
   SubmitButton,
   Typography,
   TextField,
+  Button,
 } from '@rosen-bridge/ui-kit';
 import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -42,6 +43,7 @@ import {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/_types/api';
+import ApiKeyModal from '@/_modals/ApiKeyModal';
 
 interface Form extends TokenAmountCompatibleFormSchema {
   address: string;
@@ -246,6 +248,12 @@ const WithdrawForm = () => {
 
             <Grid item>
               <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+
+            <Grid item>
+              <ApiKeyModal>
+                {(open) => <Button onClick={open}>Click To Set</Button>}
+              </ApiKeyModal>
             </Grid>
           </Grid>
         )}

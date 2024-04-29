@@ -9,6 +9,7 @@ import {
   AlertCard,
   AlertProps,
   Box,
+  Button,
   Grid,
   SubmitButton,
   Typography,
@@ -32,6 +33,7 @@ import {
   ApiPermitResponse,
   ApiInfoResponse,
 } from '@/_types/api';
+import ApiKeyModal from '@/_modals/ApiKeyModal';
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
@@ -259,6 +261,12 @@ const LockForm = () => {
 
             <Grid item>
               <Typography>You need to set an Api Key before sending</Typography>
+            </Grid>
+
+            <Grid item>
+              <ApiKeyModal>
+                {(open) => <Button onClick={open}>Click To Set</Button>}
+              </ApiKeyModal>
             </Grid>
           </Grid>
         )}
