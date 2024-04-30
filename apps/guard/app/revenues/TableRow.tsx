@@ -5,6 +5,7 @@ import {
   Button,
   CircularProgress,
   EnhancedTableCell,
+  Id,
   Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
@@ -125,13 +126,15 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
+        <EnhancedTableCell>
+          <Id id={row.eventId} />
+        </EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.lockTxId}`} target="_blank">
-            {row.lockTxId.slice(0, 10)}
+            <Id id={row.lockTxId} />
           </Link>
         </EnhancedTableCell>
       </TableRow>
@@ -144,19 +147,21 @@ export const MobileRow: FC<RowProps> = (props) => {
                 href={`${ERGO_BASE_TX_URL}${row.rewardTxId}`}
                 target="_blank"
               >
-                {row.rewardTxId.slice(0, 10)}
+                <Id id={row.rewardTxId} />
               </Link>
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
-              {row.fromAddress.slice(0, 10)}
+              <Id id={row.fromAddress} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Id id={row.toAddress} />
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Token</EnhancedTableCell>
@@ -252,7 +257,9 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.eventId} />
+      </EnhancedTableCell>
       <EnhancedTableCell>
         <Link
           href={`${baseTxUrl}${row.lockTxId}`}
@@ -260,7 +267,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.lockTxId.slice(0, 10)}
+          <Id id={row.lockTxId} />
         </Link>
       </EnhancedTableCell>
       <EnhancedTableCell>
@@ -270,11 +277,15 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.rewardTxId.slice(0, 10)}
+          <Id id={row.rewardTxId} />
         </Link>
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.fromAddress} />
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.toAddress} />
+      </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell>
         {getDecimalString(

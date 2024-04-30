@@ -145,7 +145,7 @@ const WalletWidget = ({
                   <Typography className="heading">
                     {`${tokenInfoWithAddress.chain.toUpperCase()}: `}
                   </Typography>
-                  <Id id={tokenInfoWithAddress.address} />
+                  <Id id={tokenInfoWithAddress.address} indicator="middle" />
                 </Grid>
                 <Grid item>
                   <Box className="address-container">
