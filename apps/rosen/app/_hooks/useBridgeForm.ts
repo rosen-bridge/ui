@@ -80,6 +80,7 @@ const useBridgeForm = () => {
         const minTransferableAmount = await getMinTransferAmount(
           tokenField.value,
           sourceField.value,
+          targetField.value,
           tokensMap,
         );
         const isAmountSmall =

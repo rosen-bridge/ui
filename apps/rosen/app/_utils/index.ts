@@ -56,7 +56,8 @@ export const getMaxTransferableAmount = (
  */
 export const getMinTransferAmount = async (
   token: RosenChainToken,
-  sourceChain: 'cardano' | 'ergo',
+  sourceChain: keyof typeof Networks,
+  targetChain: keyof typeof Networks,
   tokensMap: any,
 ) => {
   const tokenMap = new TokenMap(tokensMap);
@@ -68,6 +69,7 @@ export const getMinTransferAmount = async (
 
   const data = await calculateFee(
     sourceChain,
+    targetChain,
     ergoTokenId,
     ERGO_EXPLORER_URL,
     0,
