@@ -45,7 +45,6 @@ export const calculateFee = async (
   sourceNetwork: keyof typeof Networks,
   targetNetwork: keyof typeof Networks,
   tokenId: string,
-  explorerUrl: string,
   nextHeightInterval: number,
 ) => {
   const height = await GetHeight[sourceNetwork]();

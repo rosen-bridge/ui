@@ -7,7 +7,7 @@ import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from '@/_networks/carda
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
+import { Networks } from '@/_constants';
 import {
   fee as ergoFee,
   minBoxValue as ergoMinBoxValue,
@@ -67,13 +67,7 @@ export const getMinTransferAmount = async (
   });
   const ergoTokenId = tokens[0].ergo.tokenId;
 
-  const data = await calculateFee(
-    sourceChain,
-    targetChain,
-    ergoTokenId,
-    ERGO_EXPLORER_URL,
-    0,
-  );
+  const data = await calculateFee(sourceChain, targetChain, ergoTokenId, 0);
   const parsedData = {
     ...data,
     data: JsonBigInt.parse(data.data!),

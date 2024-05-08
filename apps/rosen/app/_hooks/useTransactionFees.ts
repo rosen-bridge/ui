@@ -10,7 +10,7 @@ import { useTokensMap } from './useTokensMap';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
+import { Networks } from '@/_constants';
 
 /**
  * calculates the fees for a token swap between
@@ -75,7 +75,6 @@ const useTransactionFees = (
           sourceChain,
           targetChain,
           tokenId,
-          ERGO_EXPLORER_URL,
           selectedNetwork.nextHeightInterval,
         );
         if (data.status === 'success') {
