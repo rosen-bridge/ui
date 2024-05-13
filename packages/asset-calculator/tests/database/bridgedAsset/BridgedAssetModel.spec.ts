@@ -5,49 +5,50 @@ import {
   allAssetRecords,
   initDatabase,
   insertAssetRecords,
-} from './asset-model.mock';
-import { assets } from './test-data';
-import { AssetModel } from '../../lib/database/asset-model';
+} from './BridgedAssetModel.mock';
+import { assets } from '../test-data';
+import { BridgedAssetModel } from '../../../lib/database/bridgedAsset/BridgedAssetModel';
 
-describe('AssetModel', () => {
-  let assetModel: AssetModel;
+describe('BridgedAssetModel', () => {
+  let assetModel: BridgedAssetModel;
   beforeEach(async () => {
     const dataSource = await initDatabase();
-    assetModel = new AssetModel(dataSource);
+    assetModel = new BridgedAssetModel(dataSource);
   });
 
-  describe('updateAsset', () => {
+  describe('upsertAsset', () => {
     /**
-     * @target updateAsset should insert asset when there is no stored asset with this id
+     * @target upsertAsset should insert asset when there is no stored asset with this id
      * @dependencies
      * - database
      * @scenario
-     * - run test with mocked asset (call `updateAsset`)
+     * - run test with mocked asset (call `upsertAsset`)
      * - check database
      * @expected
      * - asset should be inserted into db
      */
     it('should insert asset when there is no stored asset with this id', async () => {
-      await assetModel.updateAsset(assets[0]);
+      await insertAssetRecords([]);
+      await assetModel.upsertAsset(assets[0]);
       const savedAssets = await allAssetRecords();
       expect(savedAssets.length).toEqual(1);
       expect(savedAssets[0]).toEqual(assets[0]);
     });
 
     /**
-     * @target updateAsset should update asset when the asset is already stored in db
+     * @target upsertAsset should update asset when the asset is already stored in db
      * @dependencies
      * - database
      * @scenario
      * - insert mocked asset with old amount
-     * - run test with mocked asset (call `updateAsset`)
+     * - run test with mocked asset (call `upsertAsset`)
      * - check database
      * @expected
      * - asset amount should be updated
      */
     it('should update asset when the asset is already stored in db', async () => {
       await insertAssetRecords([{ ...assets[0], amount: 1n }]);
-      await assetModel.updateAsset(assets[0]);
+      await assetModel.upsertAsset(assets[0]);
       const savedAssets = await allAssetRecords();
       expect(savedAssets.length).toEqual(1);
       expect(savedAssets[0]).toEqual(assets[0]);
@@ -56,26 +57,30 @@ describe('AssetModel', () => {
 
   describe('getAllStoredAssets', () => {
     /**
-     * @target getAllStoredAssets should return all asset ids stored in database
+     * @target getAllStoredAssets should return all assets stored in database
      * @dependencies
      * - database
      * @scenario
      * - insert mocked assets
      * - run test (call `getAllStoredAssets`)
      * @expected
-     * - return two stored asset ids
+     * - return two stored assets
      */
-    it('should return all asset ids stored in database', async () => {
+    it('should return all assets stored in database', async () => {
       await insertAssetRecords(assets);
-      const savedAssetIds = await assetModel.getAllStoredAssets();
-      expect(savedAssetIds.length).toEqual(2);
-      expect(savedAssetIds).toEqual([assets[0].id, assets[1].id]);
+      const savedAssets = await assetModel.getAllStoredAssets();
+      expect(savedAssets.length).toEqual(2);
+      expect(savedAssets).toEqual([
+        { chain: assets[0].chain, tokenId: assets[0].tokenId },
+        { chain: assets[1].chain, tokenId: assets[1].tokenId },
+      ]);
     });
   });
 
-  describe('removeUnusedAssets', () => {
+  describe('removeAssets', () => {
     /**
-     * @target removeUnusedAssets should remove assets with specified id
+     * @target removeUnusedAssets should remove assets with specified chain and
+     * tokenId
      * @dependencies
      * - database
      * @scenario
@@ -85,9 +90,11 @@ describe('AssetModel', () => {
      * @expected
      * - exist only one asset
      */
-    it('should remove assets with specified id', async () => {
+    it('should remove assets with specified chain and tokenId', async () => {
       await insertAssetRecords(assets);
-      await assetModel.removeAssets([assets[1].id]);
+      await assetModel.removeAssets([
+        { chain: assets[1].chain, tokenId: assets[1].tokenId },
+      ]);
       const savedAssets = await allAssetRecords();
       expect(savedAssets.length).toEqual(1);
       expect(savedAssets[0]).toEqual(assets[0]);

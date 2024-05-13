@@ -1,16 +1,17 @@
 import { DataSource, Repository } from 'typeorm';
 
-import { AssetEntity } from '../../lib/database/asset-entity';
-import migrations from '../../lib/database/migrations';
+import { BridgedAssetEntity } from '../../../lib/database/bridgedAsset/BridgedAssetEntity';
+import migrations from '../../../lib/database/migrations';
+import { TokenEntity } from '../../../lib';
 
 let dataSource: DataSource;
-let assetRepository: Repository<AssetEntity>;
+let tokenRepository: Repository<TokenEntity>;
 
 const initDatabase = async (): Promise<DataSource> => {
   dataSource = new DataSource({
     type: 'sqlite',
     database: ':memory:',
-    entities: [AssetEntity],
+    entities: [BridgedAssetEntity, TokenEntity],
     migrations: migrations['sqlite'],
     synchronize: false,
     logging: false,
@@ -24,16 +25,16 @@ const initDatabase = async (): Promise<DataSource> => {
     console.error(`An error occurred while initializing test datasource`);
     console.error(err);
   }
-  assetRepository = dataSource.getRepository(AssetEntity);
+  tokenRepository = dataSource.getRepository(TokenEntity);
   return dataSource;
 };
 
-const allAssetRecords = () => {
-  return assetRepository.find();
+const allTokenRecords = () => {
+  return tokenRepository.find();
 };
 
-const insertAssetRecords = (assets: AssetEntity[]) => {
-  return assetRepository.insert(assets);
+const insertTokenRecords = (assets: TokenEntity[]) => {
+  return tokenRepository.insert(assets);
 };
 
-export { initDatabase, allAssetRecords, insertAssetRecords };
+export { initDatabase, allTokenRecords, insertTokenRecords };
