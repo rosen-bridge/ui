@@ -40,14 +40,22 @@ const useTokenBalance = () => {
 
   useEffect(() => {
     const effect = async () => {
-      if (
-        selectedWallet &&
-        tokenField.value &&
-        !balanceState.isLoading &&
-        (balanceState.token !== token ||
-          balanceState.amount !== (await selectedWallet.getBalance(token)))
-      )
-        getAssetBalance(selectedWallet);
+      if (!tokenField.value) return;
+
+      if (balanceState.isLoading) return;
+
+      if (selectedWallet) {
+        if (
+          balanceState.token !== token ||
+          balanceState.amount !== (await selectedWallet.getBalance(token))
+        ) {
+          getAssetBalance(selectedWallet);
+        }
+      } else {
+        if (balanceState.token) {
+          setBalanceState({ isLoading: false, amount: 0, token: null });
+        }
+      }
     };
 
     effect();
