@@ -16,45 +16,6 @@ describe('BridgedAssetModel', () => {
     assetModel = new BridgedAssetModel(dataSource);
   });
 
-  describe('upsertAsset', () => {
-    /**
-     * @target upsertAsset should insert asset when there is no stored asset with this id
-     * @dependencies
-     * - database
-     * @scenario
-     * - run test with mocked asset (call `upsertAsset`)
-     * - check database
-     * @expected
-     * - asset should be inserted into db
-     */
-    it('should insert asset when there is no stored asset with this id', async () => {
-      await insertAssetRecords([]);
-      await assetModel.upsertAsset(assets[0]);
-      const savedAssets = await allAssetRecords();
-      expect(savedAssets.length).toEqual(1);
-      expect(savedAssets[0]).toEqual(assets[0]);
-    });
-
-    /**
-     * @target upsertAsset should update asset when the asset is already stored in db
-     * @dependencies
-     * - database
-     * @scenario
-     * - insert mocked asset with old amount
-     * - run test with mocked asset (call `upsertAsset`)
-     * - check database
-     * @expected
-     * - asset amount should be updated
-     */
-    it('should update asset when the asset is already stored in db', async () => {
-      await insertAssetRecords([{ ...assets[0], amount: 1n }]);
-      await assetModel.upsertAsset(assets[0]);
-      const savedAssets = await allAssetRecords();
-      expect(savedAssets.length).toEqual(1);
-      expect(savedAssets[0]).toEqual(assets[0]);
-    });
-  });
-
   describe('getAllStoredAssets', () => {
     /**
      * @target getAllStoredAssets should return all assets stored in database

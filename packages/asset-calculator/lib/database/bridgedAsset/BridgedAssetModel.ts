@@ -18,25 +18,10 @@ class BridgedAssetModel {
    * @param asset
    */
   upsertAsset = async (asset: BridgedAssetEntity) => {
-    const savedAsset = await this.bridgedAssetRepository.findOne({
-      where: { tokenId: asset.tokenId, chain: asset.chain },
-    });
-    if (savedAsset) {
-      await this.bridgedAssetRepository.update(
-        { tokenId: asset.tokenId, chain: asset.chain },
-        asset
-      );
-      this.logger.debug(
-        `Asset [${JsonBigInt.stringify(asset)}] updated in database`
-      );
-      return;
-    } else {
-      await this.bridgedAssetRepository.insert(asset);
-      this.logger.debug(
-        `Asset [${JsonBigInt.stringify(asset)}] inserted into database`
-      );
-      return;
-    }
+    await this.bridgedAssetRepository.save(asset);
+    this.logger.debug(
+      `Asset [${JsonBigInt.stringify(asset)}] upserted in database`
+    );
   };
 
   /**
