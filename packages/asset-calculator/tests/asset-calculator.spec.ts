@@ -82,8 +82,8 @@ describe('AssetCalculator', () => {
 
   describe('update', () => {
     /**
-     * @target AssetCalculator.update should store asset data for all bridged
-     * tokens on all chains
+     * @target AssetCalculator.update should store asset and token data for all
+     * bridged tokens on all chains
      * @dependencies
      * - database
      * - AssetCalculator.calculateEmissionForChain
@@ -98,7 +98,7 @@ describe('AssetCalculator', () => {
      * - should call assetModel.removeAssets with empty array
      * - should store 3 new tokenMap assets successfully
      */
-    it('should store asset data for all bridged tokens on all chains', async () => {
+    it('should store asset and token data for all bridged tokens on all chains', async () => {
       const dataSource = await initDatabase();
       const assetCalculator = new AssetCalculator(
         tokenMap,
@@ -108,21 +108,29 @@ describe('AssetCalculator', () => {
       );
       assetCalculator['calculateEmissionForChain'] = () =>
         Promise.resolve(1000n);
-      const updateSpy = vitest.spyOn(
+      const upsertAssetSpy = vitest.spyOn(
         assetCalculator['assetModel'],
         'upsertAsset'
       );
-      const removeSpy = vitest.spyOn(
+      const removeAssetSpy = vitest.spyOn(
         assetCalculator['assetModel'],
         'removeAssets'
+      );
+      const insertTokenSpy = vitest.spyOn(
+        assetCalculator['tokenModel'],
+        'insertToken'
       );
 
       await assetCalculator.update();
       const allStoredAssets = await assetCalculator[
         'assetModel'
       ].getAllStoredAssets();
-      expect(updateSpy).to.have.toBeCalledTimes(3);
-      expect(removeSpy).to.have.toBeCalledWith([]);
+      const allStoredTokens = await assetCalculator[
+        'tokenModel'
+      ].getAllStoredTokens();
+      expect(upsertAssetSpy).to.have.toBeCalledTimes(3);
+      expect(removeAssetSpy).to.have.toBeCalledWith([]);
+      expect(insertTokenSpy).toBeCalledTimes(tokenMap.tokens.length);
       expect(
         allStoredAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
       ).toEqual(
@@ -131,6 +139,13 @@ describe('AssetCalculator', () => {
           { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: 'cardano' },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: 'ergo' },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+      );
+      expect(allStoredTokens.sort()).toEqual(
+        [
+          tokenMap.tokens[0].ergo.tokenId,
+          tokenMap.tokens[1].ergo.tokenId,
+          tokenMap.tokens[2].cardano.tokenId,
+        ].sort()
       );
     });
 
