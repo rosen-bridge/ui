@@ -56,8 +56,7 @@ const BitcoinNetwork: Network<Wallet> = {
                 getAddressBalance(address)
                   .then((balance) => resolve(Number(balance)))
                   .catch((e) => reject(e));
-              }
-              reject();
+              } else reject();
             },
             onCancel: () => {
               reject();
@@ -102,7 +101,7 @@ const BitcoinNetwork: Network<Wallet> = {
               );
               if (segwitPaymentAddresses.length > 0)
                 resolve(segwitPaymentAddresses[0].address);
-              reject();
+              else reject();
             },
             onCancel: () => {
               reject();
