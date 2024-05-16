@@ -14,7 +14,7 @@ class TokenModel {
   }
 
   /**
-   * Upsert a token with specified information
+   * Insert a token with specified information
    * @param token
    */
   insertToken = async (token: TokenEntity) => {
