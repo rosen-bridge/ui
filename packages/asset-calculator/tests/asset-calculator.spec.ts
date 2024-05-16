@@ -34,8 +34,7 @@ describe('AssetCalculator', () => {
      * - mock cardanoAssetCalculator, totalSupply and totalBalance
      * - run test (call `calculateEmissionForChain`)
      * @expected
-     * - should check total emitted tokens in all supported chains (cardano)
-     * by subtracting the bridge balance from the total supply (1000 - 900)
+     * - locked amount should be the difference of supply and balance
      */
     it('should calculate cardano emission of a native asset on another chain', async () => {
       const calculator = {
@@ -61,8 +60,7 @@ describe('AssetCalculator', () => {
      * - mock ergoAssetCalculator, totalSupply and totalBalance
      * - run test (call `calculateEmissionForChain`)
      * @expected
-     * - should check total emitted tokens in all supported chains (ergo)
-     * by subtracting the bridge balance from the total supply (1900 - 900)
+     * - locked amount should be the difference of supply and balance
      */
     it('should calculate ergo emission of a native asset on another chain', async () => {
       const calculator: AbstractCalculator = {
