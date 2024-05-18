@@ -89,9 +89,6 @@ const BridgeForm = () => {
     formState: { errors },
   } = useBridgeForm();
 
-  addressField.value ??= '';
-  amountField.value ??= '';
-
   const {
     formState: { isValidating },
   } = useTransactionFormData();
@@ -317,6 +314,7 @@ const BridgeForm = () => {
         }}
         variant="filled"
         {...amountField}
+        value={amountField.value ?? ''}
         onChange={handleAmountChange}
         disabled={!tokenField.value}
         autoComplete="off"
@@ -336,6 +334,7 @@ const BridgeForm = () => {
         disabled={!targetField.value}
         autoComplete="off"
         {...addressField}
+        value={addressField.value ?? ''}
       />
     </FormContainer>
   );
