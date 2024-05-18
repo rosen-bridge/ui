@@ -12,7 +12,8 @@ import {
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
-  AssetEntity,
+  BridgedAssetEntity,
+  TokenEntity,
   migrations as assetCalculatorMigrations,
 } from '@rosen-ui/asset-calculator';
 
@@ -32,7 +33,8 @@ const getDataSource = () => {
         BlockEntity,
         EventTriggerEntity,
         ObservationEntity,
-        AssetEntity,
+        BridgedAssetEntity,
+        TokenEntity,
       ],
       migrations: [
         ...eventTriggerExtractorMigrations.postgres,
