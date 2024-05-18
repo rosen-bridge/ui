@@ -89,6 +89,9 @@ const BridgeForm = () => {
     formState: { errors },
   } = useBridgeForm();
 
+  addressField.value ??= '';
+  amountField.value ??= '';
+
   const {
     formState: { isValidating },
   } = useTransactionFormData();
