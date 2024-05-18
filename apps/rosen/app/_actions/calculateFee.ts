@@ -25,7 +25,7 @@ const GetHeight = {
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
   bitcoin: async (): Promise<number> => {
     const response = await fetch(
-      `${process.env.BITCOIN_ESPLORA_API}/blocks/tip/height`,
+      `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
     );
     return response.json();
   },
