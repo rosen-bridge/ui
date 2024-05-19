@@ -11,11 +11,13 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
+import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
+
 import {
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
 } from './interfaces';
-import { CARDANO_CHAIN, ERGO_CHAIN } from './constants';
+import { BITCOIN_CHAIN, CARDANO_CHAIN, ERGO_CHAIN } from './constants';
 import { AssetModel } from './database/asset-model';
 import AbstractCalculator from './calculator/abstract-calculator';
 
@@ -43,8 +45,10 @@ class AssetCalculator {
       logger,
       cardanoCalculator.koiosUrl
     );
+    const bitcoinAssetCalculator = new BitcoinCalculator([]);
     this.calculatorMap.set(ERGO_CHAIN, ergoAssetCalculator);
     this.calculatorMap.set(CARDANO_CHAIN, cardanoAssetCalculator);
+    this.calculatorMap.set(BITCOIN_CHAIN, bitcoinAssetCalculator);
     this.assetModel = new AssetModel(dataSource, logger);
   }
 
