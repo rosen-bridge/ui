@@ -39,6 +39,12 @@ const useTokenBalance = () => {
   );
 
   useEffect(() => {
+    if (!token) {
+      setBalanceState({ isLoading: false, amount: 0, token: null });
+    }
+  }, [token]);
+
+  useEffect(() => {
     const effect = async () => {
       if (
         selectedWallet &&
