@@ -44,6 +44,7 @@ const getConfig = () => {
         addresses: {
           ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
+          bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
         },
       },
     };

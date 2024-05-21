@@ -1,8 +1,10 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken } from '@rosen-bridge/tokens';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 
 import AbstractCalculator from '../abstract-calculator';
+import { Balance } from '@rosen-clients/ergo-explorer/dist/src/v1/types';
+import { zipWith } from 'lodash-es';
 
 export class ErgoCalculator extends AbstractCalculator {
   private explorerApi;
@@ -52,5 +54,44 @@ export class ErgoCalculator extends AbstractCalculator {
     }
     this.logger.debug(`Total balance of token [${token}] is [${tokenBalance}]`);
     return tokenBalance;
+  };
+
+  /**
+   * extract balance of a specific token from a `Balance` object
+   * @param token
+   * @param addressBalance
+   */
+  private getTokenBalanceFromAddressBalance = (
+    token: RosenChainToken,
+    addressBalance: Balance
+  ) => {
+    if (token.metaData.type === NATIVE_TOKEN) {
+      return addressBalance.nanoErgs;
+    }
+    const tokenBalance = addressBalance.tokens?.find(
+      (addressBalanceToken) => addressBalanceToken.tokenId === token.tokenId
+    );
+
+    return tokenBalance?.amount ?? 0n;
+  };
+
+  /**
+   * returns locked amounts of a specific token for different addresses
+   * @param token
+   */
+  getLockedAmountsPerAddress = async (token: RosenChainToken) => {
+    const addressBalances = await Promise.all(
+      this.addresses.map((address) =>
+        this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address)
+      )
+    );
+    const tokenBalances = addressBalances.map((balance) =>
+      this.getTokenBalanceFromAddressBalance(token, balance)
+    );
+
+    return zipWith(this.addresses, tokenBalances, (address, amount) => ({
+      address,
+      amount,
+    }));
   };
 }
