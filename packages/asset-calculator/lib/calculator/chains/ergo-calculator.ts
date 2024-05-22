@@ -92,6 +92,6 @@ export class ErgoCalculator extends AbstractCalculator {
     return zipWith(this.addresses, tokenBalances, (address, amount) => ({
       address,
       amount,
-    }));
+    })).filter((amountPerAddress) => amountPerAddress.amount);
   };
 }

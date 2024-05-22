@@ -78,7 +78,6 @@ export class CardanoCalculator extends AbstractCalculator {
     const assets = await this.koiosApi.postAddressAssets({
       _addresses: this.addresses,
     });
-    this.koiosApi.postAddressInfo;
 
     return assets
       .filter(

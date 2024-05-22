@@ -60,9 +60,9 @@ export class BitcoinCalculator extends AbstractCalculator {
       return zipWith(this.addresses, balances, (address, amount) => ({
         address,
         amount,
-      }));
+      })).filter((amountPerAddress) => amountPerAddress.amount);
     }
 
-    return this.addresses.map((address) => ({ address, amount: 0n }));
+    return [];
   };
 }
