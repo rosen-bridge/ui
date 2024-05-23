@@ -12,12 +12,7 @@ const ergoExplorerClient = ergoExplorerClientFactory(
   process.env.ERGO_EXPLORER_API!,
 );
 
-import {
-  ERGO_EXPLORER_URL,
-  Networks,
-  feeConfigAddress,
-  feeConfigTokenId,
-} from '@/_constants';
+import { ERGO_EXPLORER_URL, Networks, feeConfigTokenId } from '@/_constants';
 
 const GetHeight = {
   cardano: async () => (await cardanoKoiosClient.getTip())[0].block_no,
@@ -61,7 +56,6 @@ export const calculateFee = async (
     const minFeeBox = new MinimumFeeBox(
       tokenId,
       feeConfigTokenId,
-      feeConfigAddress,
       ErgoNetworkType.explorer,
       ERGO_EXPLORER_URL,
     );
