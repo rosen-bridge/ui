@@ -1,4 +1,15 @@
-import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet-next';
+import { BitcoinIcon } from '@rosen-bridge/icons';
+import {
+  isXdefiAvailable,
+  xdefiWalletCreator,
+  walletInfo as XdefiWalletInfo,
+} from '@rosen-ui/xdefi-wallet-next';
+import { Wallet } from '@rosen-ui/wallet-api';
+
+import { compact } from 'lodash-es';
+
+import { Networks } from '@/_constants';
+import { Network } from '@/_types/network';
 
 import {
   generateOpReturnData,
@@ -12,10 +23,22 @@ import {
  * providing access to network info and wallets and network specific
  * functionality
  */
-export default xdefiWalletCreator({
+const BitcoinNetwork: Network<Wallet> = {
+  name: Networks.bitcoin,
+  label: 'Bitcoin',
+  logo: BitcoinIcon,
+  supportedWallets: [XdefiWalletInfo],
+  availableWallets: compact([
+    isXdefiAvailable() &&
+      xdefiWalletCreator({
+        generateOpReturnData,
+        generateUnsignedTx,
+        getAddressBalance,
+        submitTransaction,
+      }),
+  ]),
+  nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
-  generateOpReturnData,
-  generateUnsignedTx,
-  getAddressBalance,
-  submitTransaction,
-});
+};
+
+export default BitcoinNetwork;

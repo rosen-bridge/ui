@@ -37,12 +37,3 @@ export const estimateTxWeight = (
     outputSize * SEGWIT_OUTPUT_WEIGHT_UNIT; // outputs weights
   return x;
 };
-
-/**
- * remove the decimal points from the input number and
- * convert number to bigInt
- * @param inputNumber
- */
-
-export const convertNumberToBigint = (inputNumber: number) =>
-  BigInt(Math.trunc(inputNumber));
