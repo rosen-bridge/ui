@@ -51,7 +51,7 @@ const BitcoinNetwork: Network<Wallet> = {
               const segwitPaymentAddresses = addresses.filter(
                 (address) =>
                   address.purpose === AddressPurpose.Payment &&
-                  address.addressType === AddressType.p2wpkh,
+                  address.addressType === AddressType.p2wpkh
               );
               if (segwitPaymentAddresses.length === 0) reject();
               const address = segwitPaymentAddresses[0].address;
@@ -71,20 +71,20 @@ const BitcoinNetwork: Network<Wallet> = {
         toAddress: string,
         decimalBridgeFee: number,
         decimalNetworkFee: number,
-        lockAddress: string,
+        lockAddress: string
       ) => {
         validateDecimalPlaces(decimalAmount, token.decimals);
         validateDecimalPlaces(decimalBridgeFee, token.decimals);
         validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
         const amount = convertNumberToBigint(
-          decimalAmount * 10 ** token.decimals,
+          decimalAmount * 10 ** token.decimals
         );
         const bridgeFee = convertNumberToBigint(
-          decimalBridgeFee * 10 ** token.decimals,
+          decimalBridgeFee * 10 ** token.decimals
         );
         const networkFee = convertNumberToBigint(
-          decimalNetworkFee * 10 ** token.decimals,
+          decimalNetworkFee * 10 ** token.decimals
         );
 
         const userAddress: string = await new Promise((resolve, reject) => {
@@ -100,7 +100,7 @@ const BitcoinNetwork: Network<Wallet> = {
               const segwitPaymentAddresses = addresses.filter(
                 (address) =>
                   address.purpose === AddressPurpose.Payment &&
-                  address.addressType === AddressType.p2wpkh,
+                  address.addressType === AddressType.p2wpkh
               );
               if (segwitPaymentAddresses.length > 0)
                 resolve(segwitPaymentAddresses[0].address);
@@ -112,18 +112,18 @@ const BitcoinNetwork: Network<Wallet> = {
           });
         });
 
-        const opReturnData = generateOpReturnData(
+        const opReturnData = await generateOpReturnData(
           toChain,
           toAddress,
           networkFee.toString(),
-          bridgeFee.toString(),
+          bridgeFee.toString()
         );
 
         const psbtData = await generateUnsignedTx(
           lockAddress,
           userAddress,
           amount,
-          opReturnData,
+          opReturnData
         );
 
         const result: string = await new Promise((resolve, reject) => {
