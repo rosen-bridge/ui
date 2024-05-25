@@ -1,13 +1,9 @@
 'use server';
 
-import { generateUnsignedTx as generateUnsignedTxCore } from '@rosen-ui/xdefi-wallet-next/dist/src/transaction/generateTx';
 import {
-  generateOpReturnData as generateOpReturnDataCore,
-  getAddressBalance as getAddressBalanceCore,
-  submitTransaction as submitTransactionCore,
-} from '@rosen-ui/xdefi-wallet-next/dist/src/transaction/utils.server';
+  getBalance as getBalanceCore,
+  transfer as transferCore,
+} from '@rosen-ui/xdefi-wallet-next/dist/src/server';
 
-export const generateOpReturnData = generateOpReturnDataCore;
-export const generateUnsignedTx = generateUnsignedTxCore;
-export const getAddressBalance = getAddressBalanceCore;
-export const submitTransaction = submitTransactionCore;
+export const getBalance = getBalanceCore;
+export const transfer = transferCore;

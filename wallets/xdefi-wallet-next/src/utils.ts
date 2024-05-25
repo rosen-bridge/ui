@@ -2,7 +2,13 @@ import { encodeAddress } from '@rosen-bridge/address-codec';
 import Axios from 'axios';
 import { Psbt } from 'bitcoinjs-lib';
 
-import { CONFIRMATION_TARGET, SUPPORTED_CHAINS } from './constants';
+import {
+  CONFIRMATION_TARGET,
+  SEGWIT_INPUT_WEIGHT_UNIT,
+  SEGWIT_OUTPUT_WEIGHT_UNIT,
+  SUPPORTED_CHAINS,
+} from './constants';
+
 import { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
 
 /**
@@ -83,6 +89,41 @@ export const getFeeRatio = async (): Promise<number> => {
   const FEE_ESTIMATES = `${esploraUrl}/api/fee-estimates`;
   const res = await Axios.get<Record<string, number>>(FEE_ESTIMATES);
   return res.data[CONFIRMATION_TARGET];
+};
+
+/**
+ * gets the minimum amount of satoshi for a utxo that can cover
+ * additional fee for adding it to a tx
+ * @returns the minimum amount
+ */
+export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
+  return BigInt(
+    Math.ceil(
+      (feeRatio * SEGWIT_INPUT_WEIGHT_UNIT) / 4 // estimate fee per weight and convert to virtual size
+    )
+  );
+};
+
+/**
+ * estimates tx weight based on number of inputs and outputs
+ * inputs and outputs required fee are estimated by segwit weight unit
+ * @param inputSize
+ * @param outputSize
+ * @param feeRatio
+ */
+export const estimateTxWeight = (
+  inputSize: number,
+  outputSize: number,
+  opReturnLength: number
+): number => {
+  const x =
+    40 +
+    2 + // all txs include 40W. P2WPKH txs need additional 2W
+    44 + // OP_RETURN output base weight
+    opReturnLength * 2 + // OP_RETURN output data counts as vSize, so weight = hexString length / 2 * 4
+    inputSize * SEGWIT_INPUT_WEIGHT_UNIT + // inputs weights
+    outputSize * SEGWIT_OUTPUT_WEIGHT_UNIT; // outputs weights
+  return x;
 };
 
 /**

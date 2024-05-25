@@ -3,8 +3,12 @@ import { Psbt, address, payments } from 'bitcoinjs-lib';
 
 import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
 import { BitcoinUtxo, UnsignedPsbtData } from './types';
-import { estimateTxWeight, getMinimumMeaningfulSatoshi } from './utils';
-import { getAddressUtxos, getFeeRatio } from './utils.server';
+import {
+  estimateTxWeight,
+  getAddressUtxos,
+  getFeeRatio,
+  getMinimumMeaningfulSatoshi,
+} from './utils';
 
 /**
  * generates bitcoin lock tx
