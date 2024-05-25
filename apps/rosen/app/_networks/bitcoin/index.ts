@@ -109,7 +109,7 @@ const BitcoinNetwork: Network<Wallet> = {
           });
         });
 
-        const opReturnData = generateOpReturnData(
+        const opReturnData = await generateOpReturnData(
           toChain,
           toAddress,
           networkFee.toString(),

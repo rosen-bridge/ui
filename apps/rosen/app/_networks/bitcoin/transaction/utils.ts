@@ -20,12 +20,12 @@ import { encodeAddress } from '@rosen-bridge/address-codec';
  * @param bridgeFee
  * @returns
  */
-export const generateOpReturnData = (
+export const generateOpReturnData = async (
   toChain: string,
   toAddress: string,
   networkFee: string,
   bridgeFee: string,
-): string => {
+): Promise<string> => {
   // parse toChain
   const toChainCode = SUPPORTED_CHAINS.indexOf(toChain);
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
