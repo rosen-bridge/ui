@@ -45,7 +45,8 @@ export const getMaxTransferableAmount = (
   );
   const shouldApplyOffset = isNative;
   const offset = shouldApplyOffset ? offsetCandidate : 0;
-  return balance - offset;
+  const amount = balance - offset;
+  return amount < 0 ? 0 : amount;
 };
 
 /**
