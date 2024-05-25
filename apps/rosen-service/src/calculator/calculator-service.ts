@@ -60,6 +60,9 @@ const start = async () => {
       koiosUrl: CARDANO_KOIOS_URL,
       authToken: config.cardano.koiosAuthToken,
     },
+    {
+      addresses: config.calculator.addresses.bitcoin,
+    },
     dataSource,
     logger
   );

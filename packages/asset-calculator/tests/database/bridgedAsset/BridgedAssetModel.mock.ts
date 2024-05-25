@@ -2,7 +2,7 @@ import { DataSource, Repository } from 'typeorm';
 
 import { BridgedAssetEntity } from '../../../lib/database/bridgedAsset/BridgedAssetEntity';
 import migrations from '../../../lib/database/migrations';
-import { TokenEntity } from '../../../lib';
+import { TokenEntity, LockedAssetEntity } from '../../../lib';
 import { tokens } from '../test-data';
 
 let dataSource: DataSource;
@@ -13,7 +13,7 @@ const initDatabase = async (): Promise<DataSource> => {
   dataSource = new DataSource({
     type: 'sqlite',
     database: ':memory:',
-    entities: [BridgedAssetEntity, TokenEntity],
+    entities: [BridgedAssetEntity, TokenEntity, LockedAssetEntity],
     migrations: migrations['sqlite'],
     synchronize: false,
     logging: false,

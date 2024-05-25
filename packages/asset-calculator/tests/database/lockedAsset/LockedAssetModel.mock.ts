@@ -3,8 +3,10 @@ import { DataSource, Repository } from 'typeorm';
 import { BridgedAssetEntity } from '../../../lib/database/bridgedAsset/BridgedAssetEntity';
 import migrations from '../../../lib/database/migrations';
 import { TokenEntity, LockedAssetEntity } from '../../../lib';
+import { tokens } from '../test-data';
 
 let dataSource: DataSource;
+let assetRepository: Repository<LockedAssetEntity>;
 let tokenRepository: Repository<TokenEntity>;
 
 const initDatabase = async (): Promise<DataSource> => {
@@ -25,16 +27,18 @@ const initDatabase = async (): Promise<DataSource> => {
     console.error(`An error occurred while initializing test datasource`);
     console.error(err);
   }
+  assetRepository = dataSource.getRepository(LockedAssetEntity);
   tokenRepository = dataSource.getRepository(TokenEntity);
   return dataSource;
 };
 
-const allTokenRecords = () => {
-  return tokenRepository.find();
+const allAssetRecords = () => {
+  return assetRepository.find({ relations: ['token'] });
 };
 
-const insertTokenRecords = (assets: TokenEntity[]) => {
-  return tokenRepository.insert(assets);
+const insertAssetRecords = async (assets: LockedAssetEntity[]) => {
+  await tokenRepository.insert(tokens);
+  return assetRepository.insert(assets);
 };
 
-export { initDatabase, allTokenRecords, insertTokenRecords };
+export { initDatabase, allAssetRecords, insertAssetRecords };

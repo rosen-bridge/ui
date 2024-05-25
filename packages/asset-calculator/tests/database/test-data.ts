@@ -1,4 +1,4 @@
-import { TokenEntity } from '../../lib';
+import { LockedAssetEntity, TokenEntity } from '../../lib';
 import { BridgedAssetEntity } from '../../lib/database/bridgedAsset/BridgedAssetEntity';
 
 const tokens: TokenEntity[] = [
@@ -18,7 +18,7 @@ const tokens: TokenEntity[] = [
   },
 ];
 
-const assets: BridgedAssetEntity[] = [
+const bridgedAssets: BridgedAssetEntity[] = [
   {
     token: tokens[0],
     tokenId: tokens[0].id,
@@ -33,4 +33,19 @@ const assets: BridgedAssetEntity[] = [
   },
 ];
 
-export { assets, tokens };
+const lockedAssets: LockedAssetEntity[] = [
+  {
+    token: tokens[0],
+    tokenId: tokens[0].id,
+    amount: 100n,
+    address: 'Addr',
+  },
+  {
+    token: tokens[1],
+    tokenId: tokens[1].id,
+    amount: 200n,
+    address: 'Addr',
+  },
+];
+
+export { lockedAssets, bridgedAssets, tokens };

@@ -1,4 +1,4 @@
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken } from '@rosen-bridge/tokens';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 
@@ -56,5 +56,40 @@ export class CardanoCalculator extends AbstractCalculator {
       `Total balance of token [${token.policyId}.${token.assetName}] is [${tokenBalance}]`
     );
     return tokenBalance;
+  };
+
+  /**
+   * returns locked amounts of a specific token for different addresses
+   * @param token
+   */
+  getLockedAmountsPerAddress = async (token: RosenChainToken) => {
+    if (token.metaData.type === NATIVE_TOKEN) {
+      const addressesInfo = await this.koiosApi.postAddressInfo({
+        _addresses: this.addresses,
+      });
+      return addressesInfo
+        .filter((addressInfo) => addressInfo.address && addressInfo.balance)
+        .map((addressInfo) => ({
+          address: addressInfo.address!,
+          amount: BigInt(addressInfo.balance!),
+        }));
+    }
+
+    const assets = await this.koiosApi.postAddressAssets({
+      _addresses: this.addresses,
+    });
+
+    return assets
+      .filter(
+        (asset) =>
+          asset.policy_id == token.policyId &&
+          asset.asset_name == token.assetName &&
+          asset.quantity &&
+          asset.address
+      )
+      .map((asset) => ({
+        address: asset.address!,
+        amount: BigInt(asset.quantity!),
+      }));
   };
 }
