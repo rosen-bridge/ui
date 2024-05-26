@@ -1,22 +1,51 @@
-import { AssetEntity } from '../../lib/database/asset-entity';
+import { LockedAssetEntity, TokenEntity } from '../../lib';
+import { BridgedAssetEntity } from '../../lib/database/bridgedAsset/BridgedAssetEntity';
 
-const assets: AssetEntity[] = [
+const tokens: TokenEntity[] = [
   {
-    id: 'id',
-    name: 'name',
-    decimal: 0,
-    amount: 100n,
+    id: 'erg',
+    chain: 'ergo',
+    decimal: 9,
     isNative: true,
-    chain: 'Ergo',
+    name: 'ERG',
   },
   {
-    id: 'id2',
-    name: 'name2',
-    decimal: 1,
+    id: 'ada',
+    chain: 'cardano',
+    decimal: 6,
+    isNative: true,
+    name: 'ADA',
+  },
+];
+
+const bridgedAssets: BridgedAssetEntity[] = [
+  {
+    token: tokens[0],
+    tokenId: tokens[0].id,
+    amount: 100n,
+    chain: 'Bitcoin',
+  },
+  {
+    token: tokens[0],
+    tokenId: tokens[0].id,
     amount: 200n,
-    isNative: false,
     chain: 'Cardano',
   },
 ];
 
-export { assets };
+const lockedAssets: LockedAssetEntity[] = [
+  {
+    token: tokens[0],
+    tokenId: tokens[0].id,
+    amount: 100n,
+    address: 'Addr',
+  },
+  {
+    token: tokens[1],
+    tokenId: tokens[1].id,
+    amount: 200n,
+    address: 'Addr',
+  },
+];
+
+export { lockedAssets, bridgedAssets, tokens };
