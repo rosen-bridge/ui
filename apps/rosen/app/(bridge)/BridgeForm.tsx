@@ -314,6 +314,7 @@ const BridgeForm = () => {
         }}
         variant="filled"
         {...amountField}
+        value={amountField.value ?? ''}
         onChange={handleAmountChange}
         disabled={!tokenField.value}
         autoComplete="off"
@@ -333,6 +334,7 @@ const BridgeForm = () => {
         disabled={!targetField.value}
         autoComplete="off"
         {...addressField}
+        value={addressField.value ?? ''}
       />
     </FormContainer>
   );

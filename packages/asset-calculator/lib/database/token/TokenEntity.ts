@@ -1,8 +1,7 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
-import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
 
-@Entity('asset_entity')
-export class AssetEntity {
+@Entity('token_entity')
+export class TokenEntity {
   @PrimaryColumn('varchar')
   id: string;
 
@@ -11,9 +10,6 @@ export class AssetEntity {
 
   @Column('int')
   decimal: number;
-
-  @Column({ type: 'bigint', transformer: new BigIntValueTransformer() })
-  amount: bigint;
 
   @Column('boolean')
   isNative: boolean;
