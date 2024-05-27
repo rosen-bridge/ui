@@ -3,6 +3,7 @@ import getNautilusWallet, {
   walletInfo as nautilusWalletInfo,
 } from '@rosen-ui/nautilus-wallet';
 import { compact } from 'lodash-es';
+import { validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@/_constants';
 
@@ -11,6 +12,8 @@ import { ErgoToken, Wallet } from '@rosen-ui/wallet-api';
 import { generateUnsignedTx } from './transaction/generateTx';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { ErgoIcon } from '@rosen-bridge/icons';
+
+import { convertNumberToBigint } from '@/_utils';
 
 /**
  * the main object for Ergo network
@@ -45,11 +48,21 @@ const ErgoNetwork: Network<Wallet> = {
         decimalNetworkFee: number,
         lockAddress: string,
       ) => {
+        validateDecimalPlaces(decimalAmount, token.decimals);
+        validateDecimalPlaces(decimalBridgeFee, token.decimals);
+        validateDecimalPlaces(decimalNetworkFee, token.decimals);
+
         const wallet = await getNautilusWallet().api.getContext();
         const tokenId = token.tokenId;
-        const amount = BigInt(decimalAmount * 10 ** token.decimals);
-        const bridgeFee = BigInt(decimalBridgeFee * 10 ** token.decimals);
-        const networkFee = BigInt(decimalNetworkFee * 10 ** token.decimals);
+        const amount = convertNumberToBigint(
+          decimalAmount * 10 ** token.decimals,
+        );
+        const bridgeFee = convertNumberToBigint(
+          decimalBridgeFee * 10 ** token.decimals,
+        );
+        const networkFee = convertNumberToBigint(
+          decimalNetworkFee * 10 ** token.decimals,
+        );
         const changeAddress = await wallet.get_change_address();
 
         const walletUtxos = await wallet.get_utxos();
@@ -74,9 +87,6 @@ const ErgoNetwork: Network<Wallet> = {
   ]),
   logo: ErgoIcon,
   nextHeightInterval: 5,
-  api: {
-    explorerUrl: 'https://api.ergoplatform.com/',
-  },
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
 };
 

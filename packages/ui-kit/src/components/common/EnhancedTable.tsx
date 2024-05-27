@@ -82,6 +82,8 @@ export type EnhancedTableProps<Row> = {
  *  to config and manage the table pagination
  */
 
+const DEFAULT_ROWS_PER_PAGE_OPTIONS = [5, 10, 25, 100];
+
 export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const { data, responsiveRenderRow, responsiveHead, paginated } = props;
 
@@ -127,7 +129,10 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
       <TableFooter>
         <TableCell colSpan={tableHead.length} padding="none">
           <Box py={1}>
-            <TablePagination {...props.tablePaginationProps} />
+            <TablePagination
+              rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}
+              {...props.tablePaginationProps}
+            />
           </Box>
         </TableCell>
       </TableFooter>

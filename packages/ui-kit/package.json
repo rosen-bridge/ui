@@ -1,8 +1,8 @@
 {
   "name": "@rosen-bridge/ui-kit",
   "description": "ui kit for Rosen projects",
-  "private": "true",
-  "version": "0.2.0",
+  "private": true,
+  "version": "1.0.0",
   "type": "module",
   "files": [
     "dist"
@@ -46,10 +46,10 @@
   "dependencies": {
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.4",
-    "@rosen-bridge/icons": "^0.2.0",
+    "@rosen-bridge/icons": "^0.4.0",
     "@rosen-ui/constants": "^0.0.1",
     "@rosen-ui/swr-helpers": "^0.1.0",
-    "@rosen-ui/utils": "^0.1.0",
+    "@rosen-ui/utils": "^0.1.1",
     "moment": "^2.29.4",
     "qrcode.react": "^3.1.0"
   }

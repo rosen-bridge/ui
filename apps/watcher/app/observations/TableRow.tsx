@@ -3,6 +3,7 @@ import { useState, FC, useMemo } from 'react';
 import {
   Button,
   EnhancedTableCell,
+  Id,
   Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
@@ -112,7 +113,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
-            {row.sourceTxId.slice(0, 10)}
+            <Id id={row.sourceTxId} />
           </Link>
         </EnhancedTableCell>
       </TableRow>
@@ -125,12 +126,14 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
-              {row.fromAddress.slice(0, 10)}
+              <Id id={row.fromAddress} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
-            <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Id id={row.toAddress} />
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Height</EnhancedTableCell>
@@ -156,7 +159,9 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Event Id</EnhancedTableCell>
-            <EnhancedTableCell>{row.requestId.slice(0, 10)}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Id id={row.requestId} />
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -192,12 +197,16 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.sourceTxId.slice(0, 10)}
+          <Id id={row.sourceTxId} />
         </Link>
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>{row.fromAddress.slice(0, 10)}</EnhancedTableCell>
-      <EnhancedTableCell>{row.toAddress.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.fromAddress} />
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.toAddress} />
+      </EnhancedTableCell>
       <EnhancedTableCell>{row.height}</EnhancedTableCell>
       <EnhancedTableCell>
         {getDecimalString(row.amount, row.lockToken.decimals)}
@@ -208,7 +217,9 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         {getDecimalString(row.networkFee, row.lockToken.decimals)}
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.requestId.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.requestId} />
+      </EnhancedTableCell>
     </TableRow>
   );
 };

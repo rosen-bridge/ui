@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
@@ -10,10 +11,16 @@ import {
 import {
   AppBar,
   AppLogo,
+  CircularProgress,
   Grid,
   NavigationButton,
   SvgIcon,
+  Typography,
 } from '@rosen-bridge/ui-kit';
+
+import useInfo from './_hooks/useInfo';
+
+import packageJson from '../package.json';
 
 /**
  * render sidebar log and navigaiton buttons
@@ -23,9 +30,13 @@ const SideBar = () => {
 
   const router = useRouter();
 
+  const { data: info, isLoading } = useInfo();
+
   return (
     <AppBar>
-      <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
+      <Link href="/">
+        <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
+      </Link>
       <Grid
         container
         direction="column"
@@ -95,6 +106,34 @@ const SideBar = () => {
             onClick={() => router.push('/revenues')}
             isActive={pathname.startsWith('/revenues')}
           />
+        </Grid>
+      </Grid>
+      <Grid container item direction="column">
+        {
+          <Grid item>
+            {!isLoading ? (
+              <Typography
+                textAlign="center"
+                variant="body2"
+                color="textPrimary"
+              >
+                Watcher v{info?.version ?? '?'}
+              </Typography>
+            ) : (
+              <Grid mb={1} container justifyContent="center">
+                <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
+              </Grid>
+            )}
+          </Grid>
+        }
+        <Grid item>
+          <Typography
+            textAlign="center"
+            variant="subtitle2"
+            color="textSecondary"
+          >
+            UI v{packageJson.version}
+          </Typography>
         </Grid>
       </Grid>
     </AppBar>

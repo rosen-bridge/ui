@@ -1,25 +1,9 @@
 import { GeneralScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { handleError } from '../utils';
+import { handleError, runAndSetInterval } from '../utils';
 
 import AppError from '../errors/AppError';
-
-/**
- * run a job periodically, starting from now
- * @param job
- * @param interval
- */
-const runAndSetInterval = async (
-  job: (...args: any[]) => any,
-  interval: number
-) => {
-  await job();
-
-  setTimeout(() => {
-    runAndSetInterval(job, interval);
-  }, interval);
-};
 
 /**
  * run scanner update periodically, handling probably errors

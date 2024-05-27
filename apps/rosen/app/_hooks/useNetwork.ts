@@ -1,17 +1,19 @@
-import { useMemo } from 'react';
 import { TokenMap } from '@rosen-bridge/tokens';
+import { useMemo } from 'react';
 
 import useBridgeForm from './useBridgeForm';
 import { useTokensMap } from './useTokensMap';
 
-import ErgoNetwork from '@/_networks/ergo';
+import BitcoinNetwork from '@/_networks/bitcoin';
 import CardanoNetwork from '@/_networks/cardano';
+import ErgoNetwork from '@/_networks/ergo';
 
 import { Networks } from '@/_constants';
 
 const availableNetworks = {
   [Networks.ergo]: ErgoNetwork,
   [Networks.cardano]: CardanoNetwork,
+  [Networks.bitcoin]: BitcoinNetwork,
 };
 
 type Chain = string;

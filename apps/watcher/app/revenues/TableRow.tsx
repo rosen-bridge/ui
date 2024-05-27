@@ -1,6 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
-import { Button, EnhancedTableCell, TableRow } from '@rosen-bridge/ui-kit';
+import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
@@ -97,7 +97,9 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
+        <EnhancedTableCell>
+          <Id id={row.eventId} />
+        </EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Token</EnhancedTableCell>
@@ -162,7 +164,9 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Id id={row.eventId} />
+      </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
       <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>

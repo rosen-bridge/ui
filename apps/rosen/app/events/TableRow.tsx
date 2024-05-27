@@ -8,6 +8,7 @@ import {
   TableRow,
   Link,
   Typography,
+  Id,
 } from '@rosen-bridge/ui-kit';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
@@ -143,13 +144,15 @@ export const MobileRow: FC<RowProps> = (props) => {
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
-        <EnhancedTableCell>{row.eventId.slice(0, 10)}</EnhancedTableCell>
+        <EnhancedTableCell>
+          <Id id={row.eventId} />
+        </EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
-            {row.sourceTxId.slice(0, 10)}
+            <Id id={row.sourceTxId} />
           </Link>
         </EnhancedTableCell>
       </TableRow>
@@ -172,11 +175,11 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Addresses</EnhancedTableCell>
             <EnhancedTableCell>
-              {row.fromAddress.slice(0, 10)}
+              <Id id={row.fromAddress} />
               <Typography variant="h5" display="inline" mx={1}>
                 →
               </Typography>
-              {row.toAddress.slice(0, 10)}
+              <Id id={row.toAddress} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -247,7 +250,7 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell align="center">
-        {row.eventId.slice(0, 10)}
+        <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Link
@@ -256,7 +259,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           color="textPrimary"
           underline="hover"
         >
-          {row.sourceTxId.slice(0, 10)}
+          <Id id={row.sourceTxId} />
         </Link>
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -268,11 +271,11 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {row.fromAddress.slice(0, 10)}
+        <Id id={row.fromAddress} />
         <Typography variant="h5" display="inline" mx={1}>
           →
         </Typography>
-        {row.toAddress.slice(0, 10)}
+        <Id id={row.toAddress} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">

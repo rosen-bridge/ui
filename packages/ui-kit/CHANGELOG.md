@@ -1,5 +1,24 @@
 # @rosen-bridge/rosen-app
 
+## 1.0.0
+
+### Major Changes
+
+- add default rowsPerPageOptions to EnhancedTable
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-bridge/icons@0.4.0
+  - @rosen-ui/utils@0.1.1
+
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-bridge/icons@0.3.0
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,10 +1,11 @@
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
   Archway,
-  Exchange,
   BitcoinCircle,
   Dashboard,
+  Exchange,
   Headphones,
 } from '@rosen-bridge/icons';
 import {
@@ -13,7 +14,10 @@ import {
   Grid,
   NavigationButton,
   SvgIcon,
+  Typography,
 } from '@rosen-bridge/ui-kit';
+
+import packageJson from '../package.json';
 
 /**
  * render sidebar log and navigaiton buttons
@@ -25,7 +29,9 @@ const SideBar = () => {
 
   return (
     <AppBar>
-      <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
+      <Link href="/">
+        <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png"></AppLogo>
+      </Link>
       <Grid
         container
         direction="column"
@@ -99,6 +105,15 @@ const SideBar = () => {
             disabled
           />
         </Grid>
+      </Grid>
+      <Grid item>
+        <Typography
+          textAlign="center"
+          variant="subtitle2"
+          color="textSecondary"
+        >
+          UI v{packageJson.version}
+        </Typography>
       </Grid>
     </AppBar>
   );

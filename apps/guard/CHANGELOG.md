@@ -1,5 +1,33 @@
 # @rosen-bridge/guard-app
 
+## 1.3.0
+
+### Minor Changes
+
+- add page size of 100 to tables
+- link app logo to the root page
+
+### Patch Changes
+
+- swap the position of action buttons in api key modal
+- Updated dependencies
+  - @rosen-bridge/icons@0.4.0
+  - @rosen-bridge/ui-kit@1.0.0
+  - @rosen-ui/utils@0.1.1
+
+## 1.2.0
+
+### Minor Changes
+
+- display service and ui versions in the sidebar
+
+### Patch Changes
+
+- upgrade nextjs version
+- updated dependencies
+  - @rosen-bridge/icons@0.3.0
+  - @rosen-bridge/ui-kit@0.2.1
+
 ## 1.1.1
 
 ### Patch Changes

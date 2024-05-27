@@ -33,6 +33,7 @@ const info: ApiInfoResponse = {
   },
   rsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
+  version: '2.5.1',
 };
 
 const addressAssets: ApiAddressAssetsResponse = {
@@ -237,11 +238,7 @@ const permit: ApiPermitResponse = {
 };
 
 const permitReturn: ApiPermitReturnResponse = {
-  txIds: [
-    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
-    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f8',
-    '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f9',
-  ],
+  txId: '15baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
 };
 
 const generateObservationRecords = (numberOfRecords: number) => {
@@ -293,7 +290,7 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     targetChainTokenId: 'ab123',
     sourceTxId: 'ab1234',
     sourceBlockId: 'cd56789',
-    WIDs: 'WIDs',
+    WIDsCount: 10,
     spendBlock: '',
     spendHeight: 5,
     spendTxId: 'spendId1234',

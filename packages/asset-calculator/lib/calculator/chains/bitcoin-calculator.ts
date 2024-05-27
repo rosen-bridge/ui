@@ -1,0 +1,68 @@
+import { NATIVE_TOKEN, RosenChainToken } from '@rosen-bridge/tokens';
+import AbstractCalculator from '../abstract-calculator';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import axios, { AxiosInstance } from 'axios';
+import { zipWith } from 'lodash-es';
+
+/**
+ * This type only contains the part of the type that is required here
+ */
+interface PartialEsploraAddress {
+  chain_stats: {
+    funded_txo_sum: number;
+    spent_txo_sum: number;
+  };
+}
+
+export class BitcoinCalculator extends AbstractCalculator {
+  protected client: AxiosInstance;
+
+  constructor(
+    addresses: string[],
+    url: string = 'https://blockstream.info',
+    logger?: AbstractLogger
+  ) {
+    super(addresses, logger);
+    this.client = axios.create({
+      baseURL: url,
+    });
+  }
+
+  /**
+   * @param token Bitcoin chain token supply, always 0
+   */
+  totalSupply = async (): Promise<bigint> => {
+    return 0n;
+  };
+
+  /**
+   * @param token Bitcoin chain token balance, always 0
+   */
+  totalBalance = async (): Promise<bigint> => {
+    return 0n;
+  };
+
+  /**
+   * returns locked amounts of a specific token for different addresses
+   * @param token
+   */
+  getLockedAmountsPerAddress = async (token: RosenChainToken) => {
+    if (token.metaData.type === NATIVE_TOKEN) {
+      const balances = await Promise.all(
+        this.addresses.map(async (address) => {
+          const response = await this.client.get<PartialEsploraAddress>(
+            `/api/address/${address}`
+          );
+          const chainStats = response.data.chain_stats;
+          return BigInt(chainStats.funded_txo_sum - chainStats.spent_txo_sum);
+        })
+      );
+      return zipWith(this.addresses, balances, (address, amount) => ({
+        address,
+        amount,
+      })).filter((amountPerAddress) => amountPerAddress.amount);
+    }
+
+    return [];
+  };
+}
