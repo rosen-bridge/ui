@@ -9,7 +9,7 @@ import {
   SUPPORTED_CHAINS,
 } from './constants';
 
-import { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
+import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
 
 /**
  * generates metadata for lock transaction

@@ -2,43 +2,10 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 import { AddressPurpose, AddressType, BitcoinNetworkType } from 'sats-connect';
 
-import { generateUnsignedTx } from './generateTx';
-import { getXdefiWallet } from './index';
+import { getXdefiWallet } from './getXdefiWallet';
+import { generateUnsignedTx } from './generateUnsignedTx';
 import { SigHash } from './types';
-import {
-  generateOpReturnData,
-  getAddressBalance,
-  submitTransaction,
-} from './utils';
-
-export const getBalance = (): Promise<number> => {
-  return new Promise((resolve, reject) => {
-    getXdefiWallet().api.getAddress({
-      payload: {
-        message: '',
-        network: {
-          type: BitcoinNetworkType.Mainnet,
-        },
-        purposes: [AddressPurpose.Payment],
-      },
-      onFinish: ({ addresses }) => {
-        const segwitPaymentAddresses = addresses.filter(
-          (address) =>
-            address.purpose === AddressPurpose.Payment &&
-            address.addressType === AddressType.p2wpkh
-        );
-        if (segwitPaymentAddresses.length === 0) reject();
-        const address = segwitPaymentAddresses[0].address;
-        getAddressBalance(address)
-          .then((balance) => resolve(Number(balance)))
-          .catch((e) => reject(e));
-      },
-      onCancel: () => {
-        reject();
-      },
-    });
-  });
-};
+import { generateOpReturnData, submitTransaction } from './utils';
 
 export const transfer = async (
   token: RosenChainToken,

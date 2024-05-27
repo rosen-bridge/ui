@@ -1,6 +1,6 @@
 import { AddressPurpose, BitcoinNetworkType, getAddress } from 'sats-connect';
 
-export const connectWallet = async () => {
+export const connectWallet = async (): Promise<boolean> => {
   try {
     await getAddress({
       payload: {

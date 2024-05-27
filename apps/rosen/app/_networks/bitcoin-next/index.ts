@@ -2,7 +2,7 @@ import { BitcoinIcon } from '@rosen-bridge/icons';
 import {
   isXdefiAvailable,
   xdefiWalletCreator,
-  walletInfo as XdefiWalletInfo,
+  xdefiWalletInfo,
 } from '@rosen-ui/xdefi-wallet-next';
 import { Wallet } from '@rosen-ui/wallet-api';
 
@@ -22,7 +22,7 @@ const BitcoinNetwork: Network<Wallet> = {
   name: Networks.bitcoin,
   label: 'Bitcoin',
   logo: BitcoinIcon,
-  supportedWallets: [XdefiWalletInfo],
+  supportedWallets: [xdefiWalletInfo],
   availableWallets: compact([
     isXdefiAvailable() && xdefiWalletCreator({ getBalance, transfer }),
   ]),
