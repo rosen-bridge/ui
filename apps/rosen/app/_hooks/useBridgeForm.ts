@@ -64,7 +64,7 @@ const useBridgeForm = () => {
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
-          const maxTransferableAmount = getMaxTransferableAmount(
+          const maxTransferableAmount = await getMaxTransferableAmount(
             await walletGlobalContext!.state.selectedWallet.getBalance(
               tokenField.value,
             ),

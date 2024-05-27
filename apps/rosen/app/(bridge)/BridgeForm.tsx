@@ -165,22 +165,19 @@ const BridgeForm = () => {
     [amountField],
   );
 
-  const handleSelectMax = useCallback(() => {
-    setValue(
-      'amount',
-      getDecimalString(
-        getMaxTransferableAmount(
-          amount,
-          sourceField.value,
-          tokenField.value.metaData.type === 'native',
-        ).toString(),
-        token?.decimals ?? 0,
-      ),
-      {
-        shouldDirty: true,
-        shouldTouch: true,
-      },
+  const handleSelectMax = useCallback(async () => {
+    const max = await getMaxTransferableAmount(
+      amount,
+      sourceField.value,
+      tokenField.value.metaData.type === 'native',
     );
+
+    const value = getDecimalString(max.toString(), token?.decimals ?? 0);
+
+    setValue('amount', value, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
   }, [setValue, amount, sourceField.value, tokenField.value, token?.decimals]);
 
   const renderInputActions = () => (
