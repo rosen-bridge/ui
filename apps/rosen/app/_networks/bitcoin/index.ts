@@ -49,15 +49,14 @@ const BitcoinNetwork: Network<Wallet> = {
             },
             onFinish: ({ addresses }) => {
               const segwitPaymentAddresses = addresses.filter(
-                (address) =>
-                  address.purpose === AddressPurpose.Payment &&
-                  address.addressType === AddressType.p2wpkh,
+                (address) => address.purpose === AddressPurpose.Payment,
               );
-              if (segwitPaymentAddresses.length === 0) reject();
-              const address = segwitPaymentAddresses[0].address;
-              getAddressBalance(address)
-                .then((balance) => resolve(Number(balance)))
-                .catch((e) => reject(e));
+              if (segwitPaymentAddresses.length > 0) {
+                const address = segwitPaymentAddresses[0].address;
+                getAddressBalance(address)
+                  .then((balance) => resolve(Number(balance)))
+                  .catch((e) => reject(e));
+              } else reject();
             },
             onCancel: () => {
               reject();
@@ -98,13 +97,11 @@ const BitcoinNetwork: Network<Wallet> = {
             },
             onFinish: ({ addresses }) => {
               const segwitPaymentAddresses = addresses.filter(
-                (address) =>
-                  address.purpose === AddressPurpose.Payment &&
-                  address.addressType === AddressType.p2wpkh,
+                (address) => address.purpose === AddressPurpose.Payment,
               );
               if (segwitPaymentAddresses.length > 0)
                 resolve(segwitPaymentAddresses[0].address);
-              reject();
+              else reject();
             },
             onCancel: () => {
               reject();
@@ -112,7 +109,7 @@ const BitcoinNetwork: Network<Wallet> = {
           });
         });
 
-        const opReturnData = generateOpReturnData(
+        const opReturnData = await generateOpReturnData(
           toChain,
           toAddress,
           networkFee.toString(),

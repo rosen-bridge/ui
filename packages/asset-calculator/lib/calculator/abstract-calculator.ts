@@ -16,4 +16,11 @@ export default abstract class AbstractCalculator {
    * returns total balance of a specific token in this network (hot + cold)
    */
   abstract totalBalance: (token: RosenChainToken) => Promise<bigint>;
+
+  /**
+   * returns locked amounts of a specific token for different addresses
+   */
+  abstract getLockedAmountsPerAddress: (
+    token: RosenChainToken
+  ) => Promise<{ address: string; amount: bigint }[]>;
 }

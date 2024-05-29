@@ -14,6 +14,7 @@ import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
 
 import {
+  BitcoinCalculatorInterface,
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
 } from './interfaces';
@@ -21,10 +22,13 @@ import { BITCOIN_CHAIN, CARDANO_CHAIN, ERGO_CHAIN } from './constants';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import AbstractCalculator from './calculator/abstract-calculator';
+import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
+import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
 
 class AssetCalculator {
   protected readonly tokens: TokenMap;
-  protected readonly assetModel: BridgedAssetModel;
+  protected readonly bridgedAssetModel: BridgedAssetModel;
+  protected readonly lockedAssetModel: LockedAssetModel;
   protected readonly tokenModel: TokenModel;
   protected calculatorMap: Map<string, AbstractCalculator> = new Map();
 
@@ -32,6 +36,7 @@ class AssetCalculator {
     tokens: RosenTokens,
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
+    bitcoinCalculator: BitcoinCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger()
   ) {
@@ -47,11 +52,16 @@ class AssetCalculator {
       logger,
       cardanoCalculator.koiosUrl
     );
-    const bitcoinAssetCalculator = new BitcoinCalculator([]);
+    const bitcoinAssetCalculator = new BitcoinCalculator(
+      bitcoinCalculator.addresses,
+      bitcoinCalculator.esploraUrl,
+      logger
+    );
     this.calculatorMap.set(ERGO_CHAIN, ergoAssetCalculator);
     this.calculatorMap.set(CARDANO_CHAIN, cardanoAssetCalculator);
     this.calculatorMap.set(BITCOIN_CHAIN, bitcoinAssetCalculator);
-    this.assetModel = new BridgedAssetModel(dataSource, logger);
+    this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
+    this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);
   }
 
@@ -121,13 +131,54 @@ class AssetCalculator {
   };
 
   /**
+   * Calculate locked amount of a resident token on a chain
+   * @param supportedChains
+   * @param token
+   * @param residencyChain
+   */
+  private calculateLocked = async (
+    token: RosenChainToken,
+    residencyChain: string
+  ) => {
+    const calculator = this.calculatorMap.get(residencyChain);
+
+    if (!calculator)
+      throw Error(
+        `Chain [${residencyChain}] is not supported in asset calculator`
+      );
+
+    const lockedAmountsPerAddress = await calculator.getLockedAmountsPerAddress(
+      token
+    );
+
+    lockedAmountsPerAddress.forEach((lockedAmountPerAddress) =>
+      this.logger.debug(
+        `Locked amount of asset [${this.getTokenIdOnResidentChain(
+          token,
+          residencyChain
+        )}] on address [${lockedAmountPerAddress.address}] is [${
+          lockedAmountPerAddress.amount
+        }]`
+      )
+    );
+
+    return lockedAmountsPerAddress;
+  };
+
+  /**
    * Updates all tokens details in all supported networks and remove unused
    * old tokens from the database
    */
   update = async () => {
-    const allStoredBridgedAssets = await this.assetModel.getAllStoredAssets();
+    const allStoredBridgedAssets =
+      await this.bridgedAssetModel.getAllStoredAssets();
     this.logger.debug(
-      `All current stored assets are ${allStoredBridgedAssets}`
+      `All current stored bridge assets are ${allStoredBridgedAssets}`
+    );
+    const allStoredLockedAssets =
+      await this.lockedAssetModel.getAllStoredAssets();
+    this.logger.debug(
+      `All current stored locked assets are ${allStoredBridgedAssets}`
     );
     const allStoredTokens = await this.tokenModel.getAllStoredTokens();
     this.logger.debug(
@@ -135,6 +186,7 @@ class AssetCalculator {
     );
 
     const allCurrentBridgedAssets = [];
+    const allCurrentLockedAssets: Partial<LockedAssetEntity>[] = [];
     const allCurrentTokens = [];
 
     const residencyChains = this.tokens.getAllChains();
@@ -163,6 +215,34 @@ class AssetCalculator {
         await this.tokenModel.insertToken(newToken);
         allCurrentTokens.push(newToken.id);
 
+        const locked = await this.calculateLocked(
+          nativeResidentToken,
+          residencyChain
+        );
+        await Promise.all(
+          locked.map(async (lockedItem) => {
+            const newLockedAsset = {
+              amount: lockedItem.amount,
+              address: lockedItem.address,
+              token: newToken,
+              tokenId: newToken.id,
+            };
+            await this.lockedAssetModel.upsertAsset(newLockedAsset);
+            allCurrentLockedAssets.push({
+              tokenId: newLockedAsset.tokenId,
+              address: newLockedAsset.address,
+            });
+            this.logger.info(
+              `Updated asset [${nativeResidentToken[chainIdKey]}] total locked amount to [${lockedItem.amount}]`
+            );
+            this.logger.debug(
+              `Updated asset details for [${JsonBigInt.stringify(
+                newLockedAsset
+              )}]`
+            );
+          })
+        );
+
         try {
           for (const chain of chains) {
             const emission = await this.calculateEmissionForChain(
@@ -180,7 +260,7 @@ class AssetCalculator {
               token: newToken,
               tokenId: newToken.id,
             };
-            await this.assetModel.upsertAsset(newBridgedAsset);
+            await this.bridgedAssetModel.upsertAsset(newBridgedAsset);
             allCurrentBridgedAssets.push({
               tokenId: newBridgedAsset.tokenId,
               chain: newBridgedAsset.chain,
@@ -208,8 +288,14 @@ class AssetCalculator {
       allCurrentBridgedAssets,
       isEqual
     );
+    const oldLockedAssets = differenceWith(
+      allStoredLockedAssets,
+      allCurrentLockedAssets,
+      isEqual
+    );
     const oldTokens = difference(allStoredTokens, allCurrentTokens);
-    await this.assetModel.removeAssets(oldBridgedAssets);
+    await this.bridgedAssetModel.removeAssets(oldBridgedAssets);
+    await this.lockedAssetModel.removeAssets(oldLockedAssets);
     await this.tokenModel.removeTokens(oldTokens);
   };
 }

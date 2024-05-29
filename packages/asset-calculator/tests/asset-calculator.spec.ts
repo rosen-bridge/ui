@@ -4,7 +4,7 @@ import { tokenMap } from './test-data';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { CARDANO_CHAIN, ERGO_CHAIN } from '../lib/constants';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
-import { assets, tokens } from './database/test-data';
+import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 
 describe('AssetCalculator', () => {
   describe('calculateEmissionForChain', () => {
@@ -21,6 +21,7 @@ describe('AssetCalculator', () => {
           explorerUrl: 'explorerUrl',
         },
         { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         dataSource
       );
     });
@@ -78,6 +79,55 @@ describe('AssetCalculator', () => {
     });
   });
 
+  describe('calculateLocked', () => {
+    /**
+     * Mock database and create the AssetCalculator instance before each test
+     */
+    let assetCalculator: AssetCalculator;
+    beforeEach(async () => {
+      const dataSource = await initDatabase();
+      assetCalculator = new AssetCalculator(
+        tokenMap,
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          explorerUrl: 'explorerUrl',
+        },
+        { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
+        dataSource
+      );
+    });
+
+    /**
+     * @target AssetCalculator.calculateLocked should calculate locked amount on
+     * any chain
+     * @dependencies
+     * - ergoAssetCalculator
+     * @scenario
+     * - mock ergoAssetCalculator, totalSupply, totalBalance and
+     * getLockedAmountsPerAddress
+     * - run test (call `calculateLocked`)
+     * @expected
+     * - locked amount should be correct
+     */
+    it('should calculate locked amount on any chain', async () => {
+      const calculator = {
+        totalSupply: () => Promise.resolve(1000n),
+        totalBalance: () => Promise.resolve(900n),
+        getLockedAmountsPerAddress: () =>
+          Promise.resolve([{ address: 'hotAddr', amount: 1000n }]),
+      } as unknown as AbstractCalculator;
+      const map = new Map([[ERGO_CHAIN, calculator]]);
+      assetCalculator['calculatorMap'] = map;
+      const totalLocked = await assetCalculator['calculateLocked'](
+        tokenMap.tokens[0].ergo,
+        ERGO_CHAIN
+      );
+      expect(totalLocked[0].address).to.equal('hotAddr');
+      expect(totalLocked[0].amount).to.equal(1000n);
+    });
+  });
+
   describe('update', () => {
     /**
      * @target AssetCalculator.update should store asset and token data for all
@@ -88,12 +138,19 @@ describe('AssetCalculator', () => {
      * @scenario
      * - mock database with empty tables
      * - mock calculateEmissionForChain to return 1000
-     * - spy assetModel.upsertAsset and assetModel.removeAssets to check the
-     * function calls
+     * - mock calculateLocked to return 1000
+     * - spy bridgedAssetModel.upsertAsset and bridgedAssetModel.removeAssets to
+     * check the function calls
+     * - spy lockedAssetModel.upsertAsset and lockedAssetModel.removeAssets to
+     * check the function calls
      * - run test (call `update`)
      * @expected
-     * - should call assetModel.upsertAsset 3 times (for each token in tokenMap)
-     * - should call assetModel.removeAssets with empty array
+     * - should call bridgedAssetModel.upsertAsset 3 times(for each token in
+     * tokenMap)
+     * - should call bridgedAssetModel.removeAssets with empty array
+     * - should call lockedAssetModel.upsertAsset 3 times(for each token in
+     * tokenMap)
+     * - should call lockedAssetModel.removeAssets with empty array
      * - should store 3 new tokenMap assets successfully
      */
     it('should store asset and token data for all bridged tokens on all chains', async () => {
@@ -102,16 +159,27 @@ describe('AssetCalculator', () => {
         tokenMap,
         { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
         { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         dataSource
       );
       assetCalculator['calculateEmissionForChain'] = () =>
         Promise.resolve(1000n);
-      const upsertAssetSpy = vitest.spyOn(
-        assetCalculator['assetModel'],
+      assetCalculator['calculateLocked'] = () =>
+        Promise.resolve([{ address: 'Addr', amount: 1000n }]);
+      const upsertBridgedAssetSpy = vitest.spyOn(
+        assetCalculator['bridgedAssetModel'],
         'upsertAsset'
       );
-      const removeAssetSpy = vitest.spyOn(
-        assetCalculator['assetModel'],
+      const removeBridgedAssetSpy = vitest.spyOn(
+        assetCalculator['bridgedAssetModel'],
+        'removeAssets'
+      );
+      const upsertLockedAssetSpy = vitest.spyOn(
+        assetCalculator['lockedAssetModel'],
+        'upsertAsset'
+      );
+      const removeLockedAssetSpy = vitest.spyOn(
+        assetCalculator['lockedAssetModel'],
         'removeAssets'
       );
       const insertTokenSpy = vitest.spyOn(
@@ -120,22 +188,38 @@ describe('AssetCalculator', () => {
       );
 
       await assetCalculator.update();
-      const allStoredAssets = await assetCalculator[
-        'assetModel'
+      const allStoredBridgedAssets = await assetCalculator[
+        'bridgedAssetModel'
+      ].getAllStoredAssets();
+      const allStoredLockedAssets = await assetCalculator[
+        'lockedAssetModel'
       ].getAllStoredAssets();
       const allStoredTokens = await assetCalculator[
         'tokenModel'
       ].getAllStoredTokens();
-      expect(upsertAssetSpy).to.have.toBeCalledTimes(3);
-      expect(removeAssetSpy).to.have.toBeCalledWith([]);
+      expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
+      expect(removeLockedAssetSpy).to.have.toBeCalledWith([]);
       expect(insertTokenSpy).toBeCalledTimes(tokenMap.tokens.length);
       expect(
-        allStoredAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        allStoredBridgedAssets.sort((a, b) =>
+          a.tokenId.localeCompare(b.tokenId)
+        )
       ).toEqual(
         [
           { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: 'cardano' },
           { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: 'cardano' },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: 'ergo' },
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+      );
+      expect(
+        allStoredLockedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+      ).toEqual(
+        [
+          { tokenId: tokenMap.tokens[0].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMap.tokens[1].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMap.tokens[2].cardano.tokenId, address: 'Addr' },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
       );
       expect(allStoredTokens.sort()).toEqual(
@@ -156,12 +240,18 @@ describe('AssetCalculator', () => {
      * @scenario
      * - mock database with old invalid assets
      * - mock calculateEmissionForChain to return 1000
-     * - spy assetModel.upsertAsset and assetModel.removeAssets to check the
-     * function calls
+     * - spy bridgedAssetModel.upsertAsset and bridgedAssetModel.removeAssets to
+     * check the function calls
+     * - spy lockedAssetModel.upsertAsset and lockedAssetModel.removeAssets to
+     * check the function calls
      * - run test (call `update`)
      * @expected
-     * - should call assetModel.upsertAsset 3 times (for each token in tokenMap)
-     * - should call assetModel.removeAssets with all old asset ids
+     * - should call bridgedAssetModel.upsertAsset 3 times (for each token in
+     * tokenMap)
+     * - should call bridgedAssetModel.removeAssets with all old asset ids
+     * - should call lockedAssetModel.upsertAsset 3 times (for each token in
+     * tokenMap)
+     * - should call lockedAssetModel.removeAssets with all old asset ids
      * - should have only 3 new tokenMap assets (removed the old ones)
      */
     it('should store new asset data and remove the old invalid ones', async () => {
@@ -170,38 +260,78 @@ describe('AssetCalculator', () => {
         tokenMap,
         { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
         { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         dataSource
       );
       await assetCalculator['tokenModel']['tokenRepository'].insert(tokens);
-      await assetCalculator['assetModel']['bridgedAssetRepository'].insert(
-        assets
+      await assetCalculator['bridgedAssetModel'][
+        'bridgedAssetRepository'
+      ].insert(bridgedAssets);
+      await assetCalculator['lockedAssetModel']['lockedAssetRepository'].insert(
+        lockedAssets
       );
       assetCalculator['calculateEmissionForChain'] = () =>
         Promise.resolve(1000n);
-      const updateSpy = vitest.spyOn(
-        assetCalculator['assetModel'],
+      assetCalculator['calculateLocked'] = () =>
+        Promise.resolve([{ address: 'Addr', amount: 1000n }]);
+      const updateBridgedAssetSpy = vitest.spyOn(
+        assetCalculator['bridgedAssetModel'],
         'upsertAsset'
       );
-      const removeSpy = vitest.spyOn(
-        assetCalculator['assetModel'],
+      const removeBridgedAssetsSpy = vitest.spyOn(
+        assetCalculator['bridgedAssetModel'],
+        'removeAssets'
+      );
+      const updateLockedAssetSpy = vitest.spyOn(
+        assetCalculator['lockedAssetModel'],
+        'upsertAsset'
+      );
+      const removeLockedAssetsSpy = vitest.spyOn(
+        assetCalculator['lockedAssetModel'],
         'removeAssets'
       );
 
       await assetCalculator.update();
-      const allStoredAssets = await assetCalculator[
-        'assetModel'
+      const allStoredBridgedAssets = await assetCalculator[
+        'bridgedAssetModel'
       ].getAllStoredAssets();
-      expect(updateSpy).to.have.toBeCalledTimes(3);
-      expect(removeSpy).to.have.toBeCalledWith(
-        assets.map((asset) => ({ tokenId: asset.tokenId, chain: asset.chain }))
+      const allStoredLockedAssets = await assetCalculator[
+        'lockedAssetModel'
+      ].getAllStoredAssets();
+      expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(updateLockedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(removeBridgedAssetsSpy).to.have.toBeCalledWith(
+        bridgedAssets.map((asset) => ({
+          tokenId: asset.tokenId,
+          chain: asset.chain,
+        }))
+      );
+      expect(removeLockedAssetsSpy).to.have.toBeCalledWith(
+        lockedAssets
+          .map((asset) => ({
+            tokenId: asset.tokenId,
+            address: asset.address,
+          }))
+          .sort((a, b) => a.tokenId.localeCompare(b.tokenId))
       );
       expect(
-        allStoredAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        allStoredBridgedAssets.sort((a, b) =>
+          a.tokenId.localeCompare(b.tokenId)
+        )
       ).toEqual(
         [
           { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: 'cardano' },
           { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: 'cardano' },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: 'ergo' },
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+      );
+      expect(
+        allStoredLockedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+      ).toEqual(
+        [
+          { tokenId: tokenMap.tokens[0].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMap.tokens[1].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMap.tokens[2].cardano.tokenId, address: 'Addr' },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
       );
     });

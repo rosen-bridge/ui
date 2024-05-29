@@ -20,12 +20,12 @@ import { encodeAddress } from '@rosen-bridge/address-codec';
  * @param bridgeFee
  * @returns
  */
-export const generateOpReturnData = (
+export const generateOpReturnData = async (
   toChain: string,
   toAddress: string,
   networkFee: string,
   bridgeFee: string,
-): string => {
+): Promise<string> => {
   // parse toChain
   const toChainCode = SUPPORTED_CHAINS.indexOf(toChain);
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
@@ -137,6 +137,7 @@ export const submitTransaction = async (
   const POST_TX = `${esploraUrl}/api/tx`;
 
   const psbt = Psbt.fromBase64(psbtBase64);
+  psbt.finalizeAllInputs();
   const res = await Axios.post<string>(
     POST_TX,
     psbt.extractTransaction().toHex(),

@@ -10,7 +10,7 @@ import { useTokensMap } from './useTokensMap';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
+import { Networks } from '@/_constants';
 
 /**
  * calculates the fees for a token swap between
@@ -18,6 +18,7 @@ import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
  */
 const useTransactionFees = (
   sourceChain: keyof typeof Networks | null,
+  targetChain: keyof typeof Networks | null,
   token: RosenChainToken | null,
   amount: string | null,
 ) => {
@@ -63,6 +64,7 @@ const useTransactionFees = (
   useEffect(() => {
     if (
       sourceChain &&
+      targetChain &&
       tokenId &&
       selectedNetwork &&
       tokenId !== feeInfo.current?.tokenId &&
@@ -71,8 +73,8 @@ const useTransactionFees = (
       startTransition(async () => {
         const data = await calculateFee(
           sourceChain,
+          targetChain,
           tokenId,
-          ERGO_EXPLORER_URL,
           selectedNetwork.nextHeightInterval,
         );
         if (data.status === 'success') {
@@ -97,11 +99,19 @@ const useTransactionFees = (
         }
       });
     }
-  }, [sourceChain, tokenId, openSnackbar, pending, feeInfo, selectedNetwork]);
+  }, [
+    sourceChain,
+    targetChain,
+    tokenId,
+    openSnackbar,
+    pending,
+    feeInfo,
+    selectedNetwork,
+  ]);
 
   const fees = feeInfo.current?.data?.fees;
-  const feeRatioDivisor = feeInfo.current
-    ? Number(feeInfo.current.feeRatioDivisor)
+  const feeRatioDivisor = fees?.feeRatioDivisor
+    ? Number(fees?.feeRatioDivisor)
     : 1;
 
   const transactionFees = useMemo(() => {

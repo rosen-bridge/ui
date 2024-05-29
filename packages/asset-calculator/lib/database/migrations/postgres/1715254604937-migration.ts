@@ -12,7 +12,7 @@ export class Migration1715254604937 implements MigrationInterface {
                 "name" character varying NOT NULL,
                 "decimal" integer NOT NULL,
                 "isNative" boolean NOT NULL,
-                "chain" varchar NOT NULL,
+                "chain" character varying NOT NULL,
                 CONSTRAINT "PK_687443f2a51af49b5472e2c5ddc" PRIMARY KEY ("id")
             )
         `);
