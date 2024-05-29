@@ -68,7 +68,7 @@ const BridgeTransaction = () => {
     receivingAmount,
     isLoading: isLoadingFees,
     minTransferAmount,
-  } = useTransactionFees(sourceValue, tokenValue, amountValue);
+  } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
   const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
 
   const { selectedNetwork } = useNetwork();

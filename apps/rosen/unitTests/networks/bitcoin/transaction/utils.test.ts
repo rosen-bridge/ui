@@ -17,13 +17,13 @@ describe('generateOpReturnData', () => {
    * - length of remaining bytes should be as expected
    * - remaining bytes should be encoded given address
    */
-  it('should generate OP_RETURN data successfully', () => {
+  it('should generate OP_RETURN data successfully', async () => {
     const toChain = Networks.ergo;
     const toAddress = '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd';
     const bridgeFee = '1968503938';
     const networkFee = '9842520';
 
-    const result = generateOpReturnData(
+    const result = await generateOpReturnData(
       toChain,
       toAddress,
       networkFee,
@@ -50,14 +50,14 @@ describe('generateOpReturnData', () => {
    * @expected
    * - it should return Error
    */
-  it('should throw error when toChain is not supported', () => {
+  it('should throw error when toChain is not supported', async () => {
     const toChain = 'invalid-chain';
     const toAddress = '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd';
     const bridgeFee = '1968503938';
     const networkFee = '9842520';
 
-    expect(() => {
-      generateOpReturnData(toChain, toAddress, networkFee, bridgeFee);
-    }).toThrow(Error);
+    await expect(async () => {
+      await generateOpReturnData(toChain, toAddress, networkFee, bridgeFee);
+    }).rejects.toThrow(Error);
   });
 });

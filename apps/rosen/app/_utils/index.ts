@@ -7,7 +7,7 @@ import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from '@/_networks/carda
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
+import { Networks } from '@/_constants';
 import {
   fee as ergoFee,
   minBoxValue as ergoMinBoxValue,
@@ -29,6 +29,11 @@ export const getTokenNameAndId = (
   }
 };
 
+const chainMaxTransferOffset = {
+  ergo: ergoFee + ergoMinBoxValue,
+  cardano: cardanoFeeAndMinBoxValue,
+  bitcoin: 0,
+};
 /**
  * get max transferable amount of a token
  * @param balance
@@ -37,15 +42,14 @@ export const getTokenNameAndId = (
  */
 export const getMaxTransferableAmount = (
   balance: number,
-  chain: 'ergo' | 'cardano',
+  chain: 'ergo' | 'cardano' | 'bitcoin',
   isNative: boolean,
 ) => {
-  const offsetCandidate = Number(
-    chain === 'ergo' ? ergoFee + ergoMinBoxValue : cardanoFeeAndMinBoxValue,
-  );
+  const offsetCandidate = Number(chainMaxTransferOffset[chain]);
   const shouldApplyOffset = isNative;
   const offset = shouldApplyOffset ? offsetCandidate : 0;
-  return balance - offset;
+  const amount = balance - offset;
+  return amount < 0 ? 0 : amount;
 };
 
 /**
@@ -56,7 +60,8 @@ export const getMaxTransferableAmount = (
  */
 export const getMinTransferAmount = async (
   token: RosenChainToken,
-  sourceChain: 'cardano' | 'ergo',
+  sourceChain: keyof typeof Networks,
+  targetChain: keyof typeof Networks,
   tokensMap: any,
 ) => {
   const tokenMap = new TokenMap(tokensMap);
@@ -66,12 +71,7 @@ export const getMinTransferAmount = async (
   });
   const ergoTokenId = tokens[0].ergo.tokenId;
 
-  const data = await calculateFee(
-    sourceChain,
-    ergoTokenId,
-    ERGO_EXPLORER_URL,
-    0,
-  );
+  const data = await calculateFee(sourceChain, targetChain, ergoTokenId, 0);
   const parsedData = {
     ...data,
     data: JsonBigInt.parse(data.data!),
