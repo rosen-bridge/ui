@@ -5,6 +5,7 @@ import {
 } from '@rosen-bridge/observation-extractor';
 import {
   BlockEntity,
+  ExtractorStatusEntity,
   migrations as scannerMigrations,
 } from '@rosen-bridge/scanner';
 import {
@@ -37,6 +38,7 @@ const getDataSource = () => {
         BridgedAssetEntity,
         TokenEntity,
         LockedAssetEntity,
+        ExtractorStatusEntity,
       ],
       migrations: [
         ...eventTriggerExtractorMigrations.postgres,
