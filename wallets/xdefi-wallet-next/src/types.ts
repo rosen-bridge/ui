@@ -56,3 +56,20 @@ export interface UnsignedPsbtData {
   psbt: string;
   inputSize: number;
 }
+
+export type XdefiWalletCreator = {
+  generateOpReturnData(
+    toChain: string,
+    toAddress: string,
+    networkFee: string,
+    bridgeFee: string
+  ): Promise<string>;
+  generateUnsignedTx(
+    lockAddress: string,
+    fromAddress: string,
+    amount: bigint,
+    opReturnData: string
+  ): Promise<UnsignedPsbtData>;
+  submitTransaction(psbtBase64: string): Promise<string>;
+  getAddressBalance(address: string): Promise<bigint>;
+};

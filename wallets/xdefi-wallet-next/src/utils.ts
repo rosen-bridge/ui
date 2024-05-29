@@ -25,7 +25,7 @@ export const generateOpReturnData = (
   toAddress: string,
   networkFee: string,
   bridgeFee: string
-): string => {
+): Promise<string> => {
   // parse toChain
   const toChainCode = SUPPORTED_CHAINS.indexOf(toChain);
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
@@ -43,7 +43,7 @@ export const generateOpReturnData = (
     .toString(16)
     .padStart(2, '0');
 
-  return (
+  return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex
   );
 };

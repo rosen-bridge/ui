@@ -1,14 +1,13 @@
 import { Wallet } from '@rosen-ui/wallet-api';
 
+import { getBalanceCreator } from './getBalance';
 import { getXdefiWallet } from './getXdefiWallet';
-import { type getBalance } from './getBalance';
-import { type transfer } from './transfer';
-
-export type XdefiWalletCreator = {
-  getBalance: typeof getBalance;
-  transfer: typeof transfer;
-};
+import { transferCreator } from './transfer';
+import { XdefiWalletCreator } from './types';
 
 export const xdefiWalletCreator = (config: XdefiWalletCreator): Wallet => {
-  return Object.assign({}, getXdefiWallet(), config);
+  return Object.assign({}, getXdefiWallet(), {
+    getBalance: getBalanceCreator(config),
+    transfer: transferCreator(config),
+  });
 };

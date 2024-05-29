@@ -11,7 +11,12 @@ import { compact } from 'lodash-es';
 import { Networks } from '@/_constants';
 import { Network } from '@/_types/network';
 
-import { getBalance, transfer } from './server';
+import {
+  generateOpReturnData,
+  generateUnsignedTx,
+  submitTransaction,
+  getAddressBalance,
+} from './server';
 
 /**
  * the main object for Bitcoin network
@@ -24,7 +29,13 @@ const BitcoinNetwork: Network<Wallet> = {
   logo: BitcoinIcon,
   supportedWallets: [xdefiWalletInfo],
   availableWallets: compact([
-    isXdefiAvailable() && xdefiWalletCreator({ getBalance, transfer }),
+    isXdefiAvailable() &&
+      xdefiWalletCreator({
+        generateOpReturnData,
+        generateUnsignedTx,
+        submitTransaction,
+        getAddressBalance,
+      }),
   ]),
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
