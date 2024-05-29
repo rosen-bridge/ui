@@ -4,9 +4,9 @@ import Joi from 'joi';
 interface GETQueryParams {
   offset: number;
   limit: number;
-  id: string;
-  name: string;
-  chain: 'ergo' | 'cardano' | 'bitcoin';
+  id?: string;
+  name?: string;
+  chain?: 'ergo' | 'cardano' | 'bitcoin';
 }
 const getQueryParamsSchema = Joi.object<GETQueryParams>().keys({
   offset: Joi.number().min(0).default(0),
