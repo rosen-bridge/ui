@@ -1,6 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
-import { AddressPurpose, AddressType, BitcoinNetworkType } from 'sats-connect';
+import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
 import { SigHash, XdefiWalletCreator } from './types';
@@ -39,13 +39,11 @@ export const transferCreator =
         },
         onFinish: ({ addresses }) => {
           const segwitPaymentAddresses = addresses.filter(
-            (address) =>
-              address.purpose === AddressPurpose.Payment &&
-              address.addressType === AddressType.p2wpkh
+            (address) => address.purpose === AddressPurpose.Payment
           );
           if (segwitPaymentAddresses.length > 0)
             resolve(segwitPaymentAddresses[0].address);
-          reject();
+          else reject();
         },
         onCancel: () => {
           reject();

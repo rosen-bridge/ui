@@ -20,7 +20,7 @@ import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
  * @param bridgeFee
  * @returns
  */
-export const generateOpReturnData = (
+export const generateOpReturnData = async (
   toChain: string,
   toAddress: string,
   networkFee: string,
@@ -137,6 +137,7 @@ export const submitTransaction = async (
   const POST_TX = `${esploraUrl}/api/tx`;
 
   const psbt = Psbt.fromBase64(psbtBase64);
+  psbt.finalizeAllInputs();
   const res = await Axios.post<string>(
     POST_TX,
     psbt.extractTransaction().toHex()
