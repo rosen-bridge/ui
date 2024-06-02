@@ -29,36 +29,6 @@ export const getTokenNameAndId = (
   }
 };
 
-const chainMaxTransferOffset = {
-  async ergo() {
-    return ergoFee + ergoMinBoxValue;
-  },
-  async cardano() {
-    return cardanoFeeAndMinBoxValue;
-  },
-  async bitcoin() {
-    return 0;
-  },
-};
-
-/**
- * get max transferable amount of a token
- * @param balance
- * @param chain
- * @param isNative
- */
-export const getMaxTransferableAmount = async (
-  balance: number,
-  chain: 'ergo' | 'cardano' | 'bitcoin',
-  isNative: boolean,
-) => {
-  const offsetCandidate = Number(await chainMaxTransferOffset[chain]);
-  const shouldApplyOffset = isNative;
-  const offset = shouldApplyOffset ? offsetCandidate : 0;
-  const amount = balance - offset;
-  return amount < 0 ? 0 : amount;
-};
-
 /**
  * get max transferable amount of a token
  * @param token
