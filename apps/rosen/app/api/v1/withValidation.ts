@@ -1,6 +1,8 @@
 import { NextRequest } from 'next/server';
 import { ValidationResult } from 'joi';
 
+import NotFoundError from '@/_errors/NotFoundError';
+
 /**
  * a wrapper around handler returning a function which validates request,
  * converts request data during validation, and return general errors responses
@@ -11,11 +13,14 @@ import { ValidationResult } from 'joi';
  */
 const withValidation =
   <TSchema>(
-    validator: (request: NextRequest) => ValidationResult<TSchema>,
+    validator: (
+      request: NextRequest,
+      context?: { params: any },
+    ) => ValidationResult<TSchema>,
     handler: (value: TSchema) => Promise<any>,
   ) =>
-  async (request: NextRequest) => {
-    const { error, value } = validator(request);
+  async (request: NextRequest, context?: { params: any }) => {
+    const { error, value } = validator(request, context);
 
     if (error) {
       return Response.json(error.message, { status: 400 });
@@ -25,7 +30,13 @@ const withValidation =
       const response = await handler(value);
       return Response.json(response);
     } catch (error) {
-      return Response.json(error, { status: 500 });
+      if (error instanceof NotFoundError) {
+        return Response.json(error.message, { status: 404 });
+      }
+      if (error instanceof Error) {
+        return Response.json(error.message, { status: 500 });
+      }
+      return Response.json(JSON.stringify(error), { status: 500 });
     }
   };
 
