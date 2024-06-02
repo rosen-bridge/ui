@@ -8,7 +8,17 @@ import * as assetDetailsRepository from './asset-details-repository';
 const getAssetDetails = async (id: string) => {
   const assetDetails = await assetDetailsRepository.getAssets(id);
 
-  return assetDetails;
+  return {
+    token: assetDetails.token,
+    locked: assetDetails.locked.map((lockedItem) => ({
+      address: lockedItem.address,
+      amount: lockedItem.amount.toString(),
+    })),
+    bridged: assetDetails.bridged.map((bridgedItem) => ({
+      chain: bridgedItem.chain,
+      amount: bridgedItem.amount.toString(),
+    })),
+  };
 };
 
 const assetDetailsService = {

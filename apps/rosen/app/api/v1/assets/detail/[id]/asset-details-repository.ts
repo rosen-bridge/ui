@@ -17,35 +17,25 @@ const tokenRepository = dataSource.getRepository(TokenEntity);
  * @param id
  */
 export const getAssets = async (id: string) => {
-  const token: TokenEntity | undefined = await tokenRepository
-    .createQueryBuilder()
-    .select('*')
-    .where({
-      id,
-    })
-    .getRawOne();
+  const token = await tokenRepository.findOne({
+    where: { id },
+  });
 
   if (!token) {
     throw new NotFoundError(`Token with id [${id}] not found`);
   }
 
   const bridged: Pick<BridgedAssetEntity, 'amount' | 'chain'>[] =
-    await bridgedAssetRepository
-      .createQueryBuilder()
-      .select(['amount', 'chain'])
-      .where({
-        tokenId: id,
-      })
-      .getRawMany();
+    await bridgedAssetRepository.find({
+      where: { tokenId: id },
+      select: ['amount', 'chain'],
+    });
 
   const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] =
-    await lockedAssetRepository
-      .createQueryBuilder()
-      .select(['amount', 'address'])
-      .where({
-        tokenId: id,
-      })
-      .getRawMany();
+    await lockedAssetRepository.find({
+      where: { tokenId: id },
+      select: ['amount', 'address'],
+    });
 
   return {
     token,
