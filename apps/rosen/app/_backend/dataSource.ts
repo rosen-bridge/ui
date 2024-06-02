@@ -11,6 +11,12 @@ import {
   EventTriggerEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
+import {
+  BridgedAssetEntity,
+  LockedAssetEntity,
+  TokenEntity,
+  migrations as assetCalculatorMigrations,
+} from '@rosen-ui/asset-calculator';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -18,11 +24,19 @@ const dataSource = new DataSource({
   ssl: process.env.POSTGRES_USE_SSL === 'true',
   synchronize: false,
   logging: false,
-  entities: [BlockEntity, EventTriggerEntity, ObservationEntity],
+  entities: [
+    BlockEntity,
+    EventTriggerEntity,
+    ObservationEntity,
+    TokenEntity,
+    LockedAssetEntity,
+    BridgedAssetEntity,
+  ],
   migrations: [
     ...eventTriggerExtractorMigrations.postgres,
     ...observationExtractorMigrations.postgres,
     ...scannerMigrations.postgres,
+    ...assetCalculatorMigrations.postgres,
   ],
 });
 
