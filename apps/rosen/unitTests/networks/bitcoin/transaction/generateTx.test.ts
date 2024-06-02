@@ -3,27 +3,23 @@ import { Psbt } from 'bitcoinjs-lib';
 import { generateUnsignedTx } from '../../../../app/_networks/bitcoin/server';
 const testData = await vi.hoisted(async () => await import('./testData'));
 
-// TODO
-// vi.mock(
-//   '../../../../app/_networks/bitcoin/transaction/utils',
-//   async (importOriginal) => {
-//     const mod =
-//       await importOriginal<
-//         typeof import('../../../../app/_networks/bitcoin/transaction/utils')
-//       >();
-//     // mock getAddressUtxos
-//     const getAddressUtxos = vi.fn();
-//     getAddressUtxos.mockResolvedValue(testData.mockedUtxos);
-//     // mock getFeeRatio
-//     const getFeeRatio = vi.fn();
-//     getFeeRatio.mockResolvedValue(1);
-//     return {
-//       ...mod,
-//       getAddressUtxos,
-//       getFeeRatio,
-//     };
-//   },
-// );
+vi.mock('@rosen-ui/xdefi-wallet/dist/src/utils', async (importOriginal) => {
+  const mod =
+    await importOriginal<
+      typeof import('@rosen-ui/xdefi-wallet/dist/src/utils')
+    >();
+  // mock getAddressUtxos
+  const getAddressUtxos = vi.fn();
+  getAddressUtxos.mockResolvedValue(testData.mockedUtxos);
+  // mock getFeeRatio
+  const getFeeRatio = vi.fn();
+  getFeeRatio.mockResolvedValue(1);
+  return {
+    ...mod,
+    getAddressUtxos,
+    getFeeRatio,
+  };
+});
 
 describe('generateUnsignedTx', () => {
   /**
