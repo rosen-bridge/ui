@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Networks } from '../../../../app/_constants';
-import { generateOpReturnData } from '../../../../app/_networks/bitcoin/transaction/utils';
+import { generateOpReturnData } from '../../../../app/_networks/bitcoin/server';
 
 describe('generateOpReturnData', () => {
   /**
