@@ -1,3 +1,2 @@
-export * from './client';
-export * from './isXdefiAvailable';
+export * from './xdefiWalletCreator';
 export * from './xdefiWalletInfo';

@@ -1,3 +1,10 @@
+import { generateUnsignedTx } from './generateUnsignedTx';
+import type {
+  generateOpReturnData,
+  getAddressBalance,
+  submitTransaction,
+} from './utils';
+
 export interface Status {
   confirmed: boolean;
   block_height?: number;
@@ -58,18 +65,8 @@ export interface UnsignedPsbtData {
 }
 
 export type XdefiWalletCreator = {
-  generateOpReturnData(
-    toChain: string,
-    toAddress: string,
-    networkFee: string,
-    bridgeFee: string
-  ): Promise<string>;
-  generateUnsignedTx(
-    lockAddress: string,
-    fromAddress: string,
-    amount: bigint,
-    opReturnData: string
-  ): Promise<UnsignedPsbtData>;
-  submitTransaction(psbtBase64: string): Promise<string>;
-  getAddressBalance(address: string): Promise<bigint>;
+  generateOpReturnData: typeof generateOpReturnData;
+  generateUnsignedTx: typeof generateUnsignedTx;
+  submitTransaction: typeof submitTransaction;
+  getAddressBalance: typeof getAddressBalance;
 };
