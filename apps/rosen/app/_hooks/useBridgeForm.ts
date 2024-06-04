@@ -10,7 +10,7 @@ import { WalletContext } from '@/_contexts/walletContext';
 
 import { validateAddress } from '@/_actions/validateAddress';
 
-import { getMaxTransferableAmount } from '@/_utils';
+import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransferAmount } from '@/_utils/index';
 
 const validationCache = new Map<string, string | undefined>();
@@ -64,13 +64,18 @@ const useBridgeForm = () => {
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
-          const maxTransferableAmount = getMaxTransferableAmount(
-            await walletGlobalContext!.state.selectedWallet.getBalance(
-              tokenField.value,
-            ),
-            sourceField.value,
-            tokenField.value.metaData.type === 'native',
-          );
+
+          const selectedNetwork =
+            availableNetworks[sourceField.value as AvailableNetworks];
+
+          const maxTransferableAmount =
+            await selectedNetwork.getMaxTransferableAmount(
+              await walletGlobalContext!.state.selectedWallet.getBalance(
+                tokenField.value,
+              ),
+              tokenField.value.metaData.type === 'native',
+            );
+
           const isAmountLarge =
             BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >
             BigInt(maxTransferableAmount.toString());
