@@ -10,10 +10,7 @@ import getLaceWallet, {
   walletInfo as laceWalletInfo,
 } from '@rosen-ui/lace-wallet';
 
-import {
-  // eternlWalletCreator,
-  eternlWalletInfo,
-} from '@rosen-ui/eternl-wallet';
+import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
 
 import getFlintWallet, {
   isFlintAvailable,

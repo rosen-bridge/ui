@@ -14,7 +14,6 @@ export interface CardanoProtocolParams {
 export const ADA_POLICY_ID = '';
 
 export type EternlWalletCreator = {
-  // decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
   generateUnsignedTx: typeof generateUnsignedTx;
   setTxWitnessSet: typeof setTxWitnessSet;

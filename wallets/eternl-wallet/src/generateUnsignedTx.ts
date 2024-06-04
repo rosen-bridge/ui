@@ -1,5 +1,3 @@
-// 'use server'; TODO
-
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import {
   AssetBalance,

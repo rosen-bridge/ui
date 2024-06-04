@@ -1,5 +1,3 @@
-// 'use server'; TODO
-
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import { CardanoProtocolParams } from './types';
 import {
@@ -17,7 +15,7 @@ import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 export const getCardanoProtocolParams =
   async (): Promise<CardanoProtocolParams> => {
     const cardanoKoiosClient = cardanoKoiosClientFactory(
-      process.env.CARDANO_KOIOS_API!
+      process.env.CARDANO_KOIOS_API! // TODO
     );
     return await cardanoKoiosClient.getEpochParams().then((epochParams) => {
       const params = epochParams[0];
