@@ -43,6 +43,8 @@ import { CardanoIcon } from '@rosen-bridge/icons';
 
 import { convertNumberToBigint, hexToCbor } from '@/_utils';
 
+import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/consts';
+
 /**
  * the main object for Cardano network
  * providing access to network info and wallets and network specific
@@ -404,6 +406,13 @@ const CardanoNetwork: Network<Wallet> = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
+  async getMaxTransferableAmount(balance, isNative) {
+    const offsetCandidate = Number(cardanoFeeAndMinBoxValue);
+    const shouldApplyOffset = isNative;
+    const offset = shouldApplyOffset ? offsetCandidate : 0;
+    const amount = balance - offset;
+    return amount < 0 ? 0 : amount;
+  },
 };
 
 export default CardanoNetwork;

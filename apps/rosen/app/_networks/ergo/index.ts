@@ -15,6 +15,11 @@ import { ErgoIcon } from '@rosen-bridge/icons';
 
 import { convertNumberToBigint } from '@/_utils';
 
+import {
+  fee as ergoFee,
+  minBoxValue as ergoMinBoxValue,
+} from './transaction/consts';
+
 /**
  * the main object for Ergo network
  * providing access to network info and wallets and network specific
@@ -88,6 +93,13 @@ const ErgoNetwork: Network<Wallet> = {
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
+  async getMaxTransferableAmount(balance, isNative) {
+    const offsetCandidate = Number(ergoFee + ergoMinBoxValue);
+    const shouldApplyOffset = isNative;
+    const offset = shouldApplyOffset ? offsetCandidate : 0;
+    const amount = balance - offset;
+    return amount < 0 ? 0 : amount;
+  },
 };
 
 export default ErgoNetwork;
