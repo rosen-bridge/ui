@@ -42,6 +42,12 @@ import { convertNumberToBigint, hexToCbor } from '@/_utils';
 
 import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/consts';
 
+import {
+  generateLockAuxiliaryDataEternl,
+  generateUnsignedTxEternl,
+  setTxWitnessSetEternl,
+} from './server';
+
 /**
  * the main object for Cardano network
  * providing access to network info and wallets and network specific
@@ -195,9 +201,11 @@ const CardanoNetwork: Network<Wallet> = {
         return result;
       },
     },
-    // eternlWalletCreator({
-    //   // TODO
-    // }),
+    eternlWalletCreator({
+      generateLockAuxiliaryData: generateLockAuxiliaryDataEternl,
+      generateUnsignedTx: generateUnsignedTxEternl,
+      setTxWitnessSet: setTxWitnessSetEternl,
+    }),
     isFlintAvailable() && {
       ...getFlintWallet(),
       getBalance: async (token: RosenChainToken) => {
