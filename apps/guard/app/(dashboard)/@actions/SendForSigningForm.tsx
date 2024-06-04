@@ -132,6 +132,7 @@ const SendForSigningForm = () => {
         >
           <MenuItem value="ergo">Ergo</MenuItem>
           <MenuItem value="cardano">Cardano</MenuItem>
+          <MenuItem value="bitcoin">Bitcoin</MenuItem>
         </TextField>
         <TextField
           label="Transaction"
