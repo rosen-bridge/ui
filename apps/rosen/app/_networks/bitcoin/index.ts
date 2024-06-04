@@ -158,6 +158,9 @@ const BitcoinNetwork: Network<Wallet> = {
   logo: BitcoinIcon,
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
+  async getMaxTransferableAmount(balance, isNative) {
+    return balance < 0 ? 0 : balance;
+  },
 };
 
 export default BitcoinNetwork;

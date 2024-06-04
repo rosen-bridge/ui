@@ -15,5 +15,9 @@ export interface Network<T> {
   supportedWallets: WalletInfo[];
   nextHeightInterval: number;
   lockAddress: string;
+  getMaxTransferableAmount: (
+    balance: number,
+    isNative: boolean,
+  ) => Promise<number>;
 }
 export type SupportedWallets = Wallet;
