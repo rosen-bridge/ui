@@ -1,5 +1,4 @@
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
-import { CardanoProtocolParams } from './types';
 import {
   AssetBalance,
   CardanoAsset,
@@ -7,6 +6,9 @@ import {
   TokenInfo,
 } from '@rosen-bridge/cardano-utxo-selection';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
+import { decodeWasmValue as decodeWasmValueCore } from '@rosen-ui/wallet-api';
+
+import { CardanoProtocolParams } from './types';
 
 /**
  * gets Cardano protocol params
@@ -320,4 +322,8 @@ export const setTxWitnessSet = async (
   );
 
   return signedTx.to_hex();
+};
+
+export const decodeWasmValue = async (raw: string) => {
+  return decodeWasmValueCore(raw, wasm);
 };

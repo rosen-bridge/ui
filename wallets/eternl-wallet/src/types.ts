@@ -1,5 +1,9 @@
 import { generateUnsignedTx } from './generateUnsignedTx';
-import { generateLockAuxiliaryData, setTxWitnessSet } from './utils';
+import {
+  decodeWasmValue,
+  generateLockAuxiliaryData,
+  setTxWitnessSet,
+} from './utils';
 
 export interface CardanoProtocolParams {
   min_fee_a: number;
@@ -14,6 +18,7 @@ export interface CardanoProtocolParams {
 export const ADA_POLICY_ID = '';
 
 export type EternlWalletCreator = {
+  decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
   generateUnsignedTx: typeof generateUnsignedTx;
   setTxWitnessSet: typeof setTxWitnessSet;

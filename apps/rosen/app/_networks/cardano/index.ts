@@ -43,6 +43,7 @@ import { convertNumberToBigint, hexToCbor } from '@/_utils';
 import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/consts';
 
 import {
+  decodeWasmValue as decodeWasmValueCore,
   generateLockAuxiliaryDataEternl,
   generateUnsignedTxEternl,
   setTxWitnessSetEternl,
@@ -202,6 +203,7 @@ const CardanoNetwork: Network<Wallet> = {
       },
     },
     eternlWalletCreator({
+      decodeWasmValue: decodeWasmValueCore,
       generateLockAuxiliaryData: generateLockAuxiliaryDataEternl,
       generateUnsignedTx: generateUnsignedTxEternl,
       setTxWitnessSet: setTxWitnessSetEternl,
