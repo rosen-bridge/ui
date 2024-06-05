@@ -42,17 +42,17 @@ export const calculateFee = async (
   tokenId: string,
   nextHeightInterval: number,
 ) => {
-  const height = await GetHeight[sourceNetwork]();
-
-  if (!height) {
-    return {
-      tokenId,
-      status: 'error',
-      message: 'Cannot fetch height from the api endpoint',
-    };
-  }
-
   try {
+    const height = await GetHeight[sourceNetwork]();
+
+    if (!height) {
+      return {
+        tokenId,
+        status: 'error',
+        message: 'Cannot fetch height from the api endpoint',
+      };
+    }
+
     const minFeeBox = new MinimumFeeBox(
       tokenId,
       feeConfigTokenId,

@@ -1,15 +1,15 @@
-'use server';
-
+import { encodeAddress } from '@rosen-bridge/address-codec';
 import Axios from 'axios';
 import { Psbt } from 'bitcoinjs-lib';
-import { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
+
 import {
   CONFIRMATION_TARGET,
   SEGWIT_INPUT_WEIGHT_UNIT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
   SUPPORTED_CHAINS,
 } from './constants';
-import { encodeAddress } from '@rosen-bridge/address-codec';
+
+import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
 
 /**
  * generates metadata for lock transaction
@@ -24,7 +24,7 @@ export const generateOpReturnData = async (
   toChain: string,
   toAddress: string,
   networkFee: string,
-  bridgeFee: string,
+  bridgeFee: string
 ): Promise<string> => {
   // parse toChain
   const toChainCode = SUPPORTED_CHAINS.indexOf(toChain);
@@ -43,7 +43,7 @@ export const generateOpReturnData = async (
     .toString(16)
     .padStart(2, '0');
 
-  return (
+  return Promise.resolve(
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex
   );
 };
@@ -54,7 +54,7 @@ export const generateOpReturnData = async (
  * @returns
  */
 export const getAddressUtxos = async (
-  address: string,
+  address: string
 ): Promise<Array<BitcoinUtxo>> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
@@ -99,8 +99,8 @@ export const getFeeRatio = async (): Promise<number> => {
 export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
   return BigInt(
     Math.ceil(
-      (feeRatio * SEGWIT_INPUT_WEIGHT_UNIT) / 4, // estimate fee per weight and convert to virtual size
-    ),
+      (feeRatio * SEGWIT_INPUT_WEIGHT_UNIT) / 4 // estimate fee per weight and convert to virtual size
+    )
   );
 };
 
@@ -114,7 +114,7 @@ export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
 export const estimateTxWeight = (
   inputSize: number,
   outputSize: number,
-  opReturnLength: number,
+  opReturnLength: number
 ): number => {
   const x =
     40 +
@@ -131,7 +131,7 @@ export const estimateTxWeight = (
  * @param psbtBase64 psbt in base64 format
  */
 export const submitTransaction = async (
-  psbtBase64: string,
+  psbtBase64: string
 ): Promise<string> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const POST_TX = `${esploraUrl}/api/tx`;
@@ -140,7 +140,7 @@ export const submitTransaction = async (
   psbt.finalizeAllInputs();
   const res = await Axios.post<string>(
     POST_TX,
-    psbt.extractTransaction().toHex(),
+    psbt.extractTransaction().toHex()
   );
   return res.data;
 };
