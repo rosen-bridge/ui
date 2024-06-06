@@ -1,7 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
   "version": "0.0.2",
-  "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "type": "module",
@@ -9,7 +8,8 @@
     "prettify": "prettier --write . --ignore-path .gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "release": "npm run build && npm publish --access public"
   },
   "devDependencies": {
     "@rosen-bridge/tokens": "^1.0.0",
