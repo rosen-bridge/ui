@@ -12,7 +12,6 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@rosen-bridge/tokens": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
@@ -21,7 +20,11 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
+    "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
     "@rosen-bridge/icons": "^0.4.0",
+    "@rosen-bridge/tokens": "^1.1.0",
+    "@rosen-clients/cardano-koios": "^2.0.3",
     "@rosen-ui/utils": "^0.1.1",
     "@rosen-ui/wallet-api": "^0.0.2"
   }

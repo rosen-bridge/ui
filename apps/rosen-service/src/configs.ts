@@ -35,6 +35,20 @@ const getConfig = () => {
         },
         koiosAuthToken: nodeConfig.get<string>('cardano.koiosAuthToken'),
       },
+      bitcoin: {
+        addresses: {
+          lock: nodeConfig.get<string>('bitcoin.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'bitcoin.addresses.eventTrigger'
+          ),
+          permit: nodeConfig.get<string>('bitcoin.addresses.permit'),
+          fraud: nodeConfig.get<string>('bitcoin.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('bitcoin.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('bitcoin.tokens.rwt'),
+        },
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
