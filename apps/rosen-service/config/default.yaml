@@ -20,6 +20,15 @@ cardano:
     rwt:
   initialHeight:
   koiosAuthToken:
+bitcoin:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false
