@@ -1,15 +1,14 @@
-'use server';
-
+import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
+
+import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
+import { BitcoinUtxo, UnsignedPsbtData } from './types';
 import {
   estimateTxWeight,
   getAddressUtxos,
   getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
-import { BitcoinUtxo, UnsignedPsbtData } from './types';
-import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
-import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
 
 /**
  * generates bitcoin lock tx
@@ -23,7 +22,7 @@ export const generateUnsignedTx = async (
   lockAddress: string,
   fromAddress: string,
   amount: bigint,
-  opReturnData: string,
+  opReturnData: string
 ): Promise<UnsignedPsbtData> => {
   // generate txBuilder
   const psbt = new Psbt();
@@ -62,13 +61,13 @@ export const generateUnsignedTx = async (
     minSatoshi,
     SEGWIT_INPUT_WEIGHT_UNIT,
     estimatedTxWeight,
-    feeRatio,
+    feeRatio
   );
   if (!coveredBoxes.covered) {
     throw new Error(
       `Available boxes didn't cover required assets. BTC: ${
         amount + minSatoshi
-      }`,
+      }`
     );
   }
 
@@ -93,13 +92,13 @@ export const generateUnsignedTx = async (
   estimatedTxWeight = estimateTxWeight(
     psbt.txInputs.length,
     2,
-    opReturnData.length,
+    opReturnData.length
   );
   const estimatedFee = BigInt(
     Math.ceil(
       (estimatedTxWeight / 4) * // estimate tx weight and convert to virtual size
-        feeRatio,
-    ),
+        feeRatio
+    )
   );
   remainingBtc -= estimatedFee;
   psbt.addOutput({

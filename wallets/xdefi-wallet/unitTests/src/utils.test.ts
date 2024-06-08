@@ -1,6 +1,7 @@
+import { Networks } from '@rosen-ui/constants';
 import { describe, expect, it } from 'vitest';
-import { Networks } from '../../../../app/_constants';
-import { generateOpReturnData } from '../../../../app/_networks/bitcoin/transaction/utils';
+
+import { generateOpReturnData } from '../../src/utils';
 
 describe('generateOpReturnData', () => {
   /**
@@ -18,7 +19,7 @@ describe('generateOpReturnData', () => {
    * - remaining bytes should be encoded given address
    */
   it('should generate OP_RETURN data successfully', async () => {
-    const toChain = Networks.ergo;
+    const toChain = Networks.ERGO;
     const toAddress = '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd';
     const bridgeFee = '1968503938';
     const networkFee = '9842520';
@@ -27,7 +28,7 @@ describe('generateOpReturnData', () => {
       toChain,
       toAddress,
       networkFee,
-      bridgeFee,
+      bridgeFee
     );
     // result in hex: 00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339
 
@@ -38,7 +39,7 @@ describe('generateOpReturnData', () => {
     const encodedAddress = result.slice(36);
     expect(encodedAddress.length).toEqual(2 * 33); // 33 bytes, 66 characters in hex
     expect(encodedAddress).toEqual(
-      '03f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339',
+      '03f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339'
     );
   });
 

@@ -9,10 +9,10 @@
     "prettify": "prettier --write . --ignore-path .gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "vitest"
   },
   "devDependencies": {
-    "@rosen-bridge/tokens": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
@@ -21,9 +21,14 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@rosen-bridge/address-codec": "^0.2.1",
+    "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/icons": "^0.4.0",
+    "@rosen-bridge/tokens": "^1.1.0",
+    "@rosen-ui/constants": "^0.0.1",
     "@rosen-ui/utils": "^0.1.1",
     "@rosen-ui/wallet-api": "^0.0.2",
+    "bitcoinjs-lib": "^6.1.5",
     "sats-connect": "^1.4.1"
   }
 }

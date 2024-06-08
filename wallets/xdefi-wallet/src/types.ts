@@ -1,3 +1,10 @@
+import { generateUnsignedTx } from './generateUnsignedTx';
+import type {
+  generateOpReturnData,
+  getAddressBalance,
+  submitTransaction,
+} from './utils';
+
 export interface Status {
   confirmed: boolean;
   block_height?: number;
@@ -56,3 +63,10 @@ export interface UnsignedPsbtData {
   psbt: string;
   inputSize: number;
 }
+
+export type XdefiWalletCreator = {
+  generateOpReturnData: typeof generateOpReturnData;
+  generateUnsignedTx: typeof generateUnsignedTx;
+  submitTransaction: typeof submitTransaction;
+  getAddressBalance: typeof getAddressBalance;
+};

@@ -1,28 +1,22 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Psbt } from 'bitcoinjs-lib';
-import { generateUnsignedTx } from '../../../../app/_networks/bitcoin/transaction/generateTx';
+import { generateUnsignedTx } from '../../src/generateUnsignedTx';
 const testData = await vi.hoisted(async () => await import('./testData'));
 
-vi.mock(
-  '../../../../app/_networks/bitcoin/transaction/utils',
-  async (importOriginal) => {
-    const mod =
-      await importOriginal<
-        typeof import('../../../../app/_networks/bitcoin/transaction/utils')
-      >();
-    // mock getAddressUtxos
-    const getAddressUtxos = vi.fn();
-    getAddressUtxos.mockResolvedValue(testData.mockedUtxos);
-    // mock getFeeRatio
-    const getFeeRatio = vi.fn();
-    getFeeRatio.mockResolvedValue(1);
-    return {
-      ...mod,
-      getAddressUtxos,
-      getFeeRatio,
-    };
-  },
-);
+vi.mock('../../src/utils', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('../../src/utils')>();
+  // mock getAddressUtxos
+  const getAddressUtxos = vi.fn();
+  getAddressUtxos.mockResolvedValue(testData.mockedUtxos);
+  // mock getFeeRatio
+  const getFeeRatio = vi.fn();
+  getFeeRatio.mockResolvedValue(1);
+  return {
+    ...mod,
+    getAddressUtxos,
+    getFeeRatio,
+  };
+});
 
 describe('generateUnsignedTx', () => {
   /**
@@ -53,7 +47,7 @@ describe('generateUnsignedTx', () => {
       lockAddress,
       fromAddress,
       amount,
-      data,
+      data
     );
 
     const psbt = Psbt.fromBase64(result.psbt);
@@ -62,7 +56,7 @@ describe('generateUnsignedTx', () => {
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
     expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId,
+      mockedInput.txId
     );
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
@@ -71,7 +65,7 @@ describe('generateUnsignedTx', () => {
     expect(opReturnUtxo.script.toString('hex')).toEqual(
       '6a' + // OP_RETURN
         (data.length / 2).toString(16).padStart(2, '0') +
-        data,
+        data
     );
     expect(opReturnUtxo.value).toEqual(0);
     const lockUtxo = psbt.txOutputs[1];
@@ -81,7 +75,7 @@ describe('generateUnsignedTx', () => {
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 203n;
     expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - amount - expectedFee),
+      Number(mockedInput.value - amount - expectedFee)
     );
   });
 
