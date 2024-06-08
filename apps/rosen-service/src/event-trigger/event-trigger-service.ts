@@ -14,6 +14,8 @@ const ergoEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
 );
 const cardanoEventTriggerExtractorLogger =
   WinstonLogger.getInstance().getLogger('cardano-event-trigger-extractor');
+const bitcoinEventTriggerExtractorLogger =
+  WinstonLogger.getInstance().getLogger('bitcoin-event-trigger-extractor');
 
 /**
  * register event trigger extractors for all chains
@@ -39,15 +41,26 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.cardano.addresses.fraud,
       cardanoEventTriggerExtractorLogger
     );
+    const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
+      'bitcoin-extractor',
+      dataSource,
+      configs.bitcoin.addresses.eventTrigger,
+      configs.bitcoin.tokens.rwt,
+      configs.bitcoin.addresses.permit,
+      configs.bitcoin.addresses.fraud,
+      bitcoinEventTriggerExtractorLogger
+    );
 
     scanner.registerExtractor(ergoEventTriggerExtractor);
     scanner.registerExtractor(cardanoEventTriggerExtractor);
+    scanner.registerExtractor(bitcoinEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
       extractorNames: [
         ergoEventTriggerExtractor.getId(),
         cardanoEventTriggerExtractor.getId(),
+        bitcoinEventTriggerExtractor.getId(),
       ],
     });
   } catch (error) {
