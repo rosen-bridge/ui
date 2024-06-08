@@ -5,10 +5,7 @@ import getNamiWallet, {
   walletInfo as namiWalletInfo,
 } from '@rosen-ui/nami-wallet';
 
-import getLaceWallet, {
-  isLaceAvailable,
-  walletInfo as laceWalletInfo,
-} from '@rosen-ui/lace-wallet';
+import { laceWalletCreator, laceWalletInfo } from '@rosen-ui/lace-wallet';
 
 import getEternlWallet, {
   isEternlAvailable,
@@ -44,6 +41,12 @@ import { CardanoIcon } from '@rosen-bridge/icons';
 import { convertNumberToBigint, hexToCbor } from '@/_utils';
 
 import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/consts';
+import {
+  decodeWasmValueLace,
+  generateLockAuxiliaryDataLace,
+  generateUnsignedTxLace,
+  setTxWitnessSetLace,
+} from './server';
 
 /**
  * the main object for Cardano network
@@ -130,74 +133,12 @@ const CardanoNetwork: Network<Wallet> = {
         return result;
       },
     },
-    isLaceAvailable() && {
-      ...getLaceWallet(),
-      getBalance: async (token: RosenChainToken) => {
-        const context = await getLaceWallet().api.enable();
-        const rawValue = await context.getBalance();
-        const balances = await decodeWasmValue(rawValue);
-
-        const amount = balances.find(
-          (asset) => asset.policyId === token.policyId,
-        );
-        return amount ? Number(amount.quantity) : 0;
-      },
-      transfer: async (
-        token: RosenChainToken,
-        decimalAmount: number,
-        toChain: string,
-        toAddress: string,
-        decimalBridgeFee: number,
-        decimalNetworkFee: number,
-        lockAddress: string,
-      ) => {
-        validateDecimalPlaces(decimalAmount, token.decimals);
-        validateDecimalPlaces(decimalBridgeFee, token.decimals);
-        validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
-        const wallet = await getLaceWallet().api.enable();
-        const policyIdHex = token.policyId;
-        const assetNameHex = token.assetName;
-        const amount = convertNumberToBigint(
-          decimalAmount * 10 ** token.decimals,
-        );
-        const bridgeFee = convertNumberToBigint(
-          decimalBridgeFee * 10 ** token.decimals,
-        );
-        const networkFee = convertNumberToBigint(
-          decimalNetworkFee * 10 ** token.decimals,
-        );
-        const changeAddressHex = await wallet.getChangeAddress();
-
-        const auxiliaryDataHex = await generateLockAuxiliaryData(
-          toChain,
-          toAddress,
-          changeAddressHex,
-          networkFee.toString(),
-          bridgeFee.toString(),
-        );
-
-        const walletUtxos = await wallet.getUtxos();
-        if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
-        const unsignedTxHex = await generateUnsignedTx(
-          walletUtxos,
-          lockAddress,
-          changeAddressHex,
-          policyIdHex,
-          assetNameHex,
-          amount.toString(),
-          auxiliaryDataHex,
-        );
-
-        const signedTxHex = await setTxWitnessSet(
-          unsignedTxHex,
-          await wallet.signTx(unsignedTxHex, false),
-        );
-
-        const result = await wallet.submitTx(signedTxHex);
-        return result;
-      },
-    },
+    laceWalletCreator({
+      decodeWasmValue: decodeWasmValueLace,
+      generateLockAuxiliaryData: generateLockAuxiliaryDataLace,
+      generateUnsignedTx: generateUnsignedTxLace,
+      setTxWitnessSet: setTxWitnessSetLace,
+    }),
     isEternlAvailable() && {
       ...getEternlWallet(),
       getBalance: async (token: RosenChainToken) => {
