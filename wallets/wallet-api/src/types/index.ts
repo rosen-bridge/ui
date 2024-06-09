@@ -36,6 +36,7 @@ export interface Wallet extends WalletBase {
     networkFee: number,
     lockAddress: string
   ) => Promise<string>;
+  readonly getAddress: () => Promise<string>;
 }
 
 export interface RawWallet<Api> extends WalletBase {
