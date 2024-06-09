@@ -21,6 +21,13 @@ import {
   setTxWitnessSet as setTxWitnessSetLaceCore,
 } from '@rosen-ui/lace-wallet/dist/src/utils';
 
+import { generateUnsignedTx as generateUnsignedTxNamiCore } from '@rosen-ui/nami-wallet/dist/src/generateUnsignedTx';
+import {
+  decodeWasmValue as decodeWasmValueNamiCore,
+  generateLockAuxiliaryData as generateLockAuxiliaryDataNamiCore,
+  setTxWitnessSet as setTxWitnessSetNamiCore,
+} from '@rosen-ui/nami-wallet/dist/src/utils';
+
 export const decodeWasmValueEternl = decodeWasmValueEternlCore;
 export const generateLockAuxiliaryDataEternl =
   generateLockAuxiliaryDataEternlCore;
@@ -37,3 +44,8 @@ export const decodeWasmValueLace = decodeWasmValueLaceCore;
 export const generateLockAuxiliaryDataLace = generateLockAuxiliaryDataLaceCore;
 export const generateUnsignedTxLace = generateUnsignedTxLaceCore;
 export const setTxWitnessSetLace = setTxWitnessSetLaceCore;
+
+export const decodeWasmValueNami = decodeWasmValueNamiCore;
+export const generateLockAuxiliaryDataNami = generateLockAuxiliaryDataNamiCore;
+export const generateUnsignedTxNami = generateUnsignedTxNamiCore;
+export const setTxWitnessSetNami = setTxWitnessSetNamiCore;
