@@ -1,5 +1,3 @@
-'use server';
-
 import { ErgoBoxProxy, UnsignedErgoTxProxy } from '@rosen-ui/wallet-api';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
@@ -11,7 +9,7 @@ import * as wasm from 'ergo-lib-wasm-nodejs';
  */
 export const unsignedTransactionToProxy = (
   unsignedTx: wasm.UnsignedTransaction,
-  inputs: ErgoBoxProxy[],
+  inputs: ErgoBoxProxy[]
 ): UnsignedErgoTxProxy => {
   const unsignedErgoTxProxy = unsignedTx.to_js_eip12();
   unsignedErgoTxProxy.inputs = inputs.map((box) => {
