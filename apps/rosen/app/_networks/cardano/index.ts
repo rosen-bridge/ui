@@ -1,10 +1,5 @@
 import { compact } from 'lodash-es';
 
-import getVesprWallet, {
-  isVesprAvailable,
-  walletInfo as vesprWalletInfo,
-} from '@rosen-ui/vespr-wallet';
-
 import { validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@/_constants';
@@ -56,6 +51,11 @@ import {
   generateUnsignedTxNami,
   setTxWitnessSetNami,
 } from './server';
+
+import getVesprWallet, {
+  isVesprAvailable,
+  walletInfo as vesprWalletInfo,
+} from '@rosen-ui/vespr-wallet';
 
 /**
  * the main object for Cardano network
