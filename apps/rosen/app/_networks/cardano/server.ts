@@ -7,6 +7,13 @@ import {
   setTxWitnessSet as setTxWitnessSetEternlCore,
 } from '@rosen-ui/eternl-wallet/dist/src/utils';
 
+import { generateUnsignedTx as generateUnsignedTxFlintCore } from '@rosen-ui/flint-wallet/dist/src/generateUnsignedTx';
+import {
+  decodeWasmValue as decodeWasmValueFlintCore,
+  generateLockAuxiliaryData as generateLockAuxiliaryDataFlintCore,
+  setTxWitnessSet as setTxWitnessSetFlintCore,
+} from '@rosen-ui/flint-wallet/dist/src/utils';
+
 import { generateUnsignedTx as generateUnsignedTxLaceCore } from '@rosen-ui/lace-wallet/dist/src/generateUnsignedTx';
 import {
   decodeWasmValue as decodeWasmValueLaceCore,
@@ -19,6 +26,12 @@ export const generateLockAuxiliaryDataEternl =
   generateLockAuxiliaryDataEternlCore;
 export const generateUnsignedTxEternl = generateUnsignedTxEternlCore;
 export const setTxWitnessSetEternl = setTxWitnessSetEternlCore;
+
+export const decodeWasmValueFlint = decodeWasmValueFlintCore;
+export const generateLockAuxiliaryDataFlint =
+  generateLockAuxiliaryDataFlintCore;
+export const generateUnsignedTxFlint = generateUnsignedTxFlintCore;
+export const setTxWitnessSetFlint = setTxWitnessSetFlintCore;
 
 export const decodeWasmValueLace = decodeWasmValueLaceCore;
 export const generateLockAuxiliaryDataLace = generateLockAuxiliaryDataLaceCore;
