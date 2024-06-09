@@ -5,15 +5,6 @@ import getNamiWallet, {
   walletInfo as namiWalletInfo,
 } from '@rosen-ui/nami-wallet';
 
-import getLaceWallet, {
-  isLaceAvailable,
-  walletInfo as laceWalletInfo,
-} from '@rosen-ui/lace-wallet';
-
-import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
-
-import { flintWalletCreator, flintWalletInfo } from '@rosen-ui/flint-wallet';
-
 import getVesprWallet, {
   isVesprAvailable,
   walletInfo as vesprWalletInfo,
@@ -38,6 +29,16 @@ import { CardanoIcon } from '@rosen-bridge/icons';
 import { convertNumberToBigint, hexToCbor } from '@/_utils';
 
 import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/consts';
+
+import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
+import {
+  decodeWasmValueEternl,
+  generateLockAuxiliaryDataEternl,
+  generateUnsignedTxEternl,
+  setTxWitnessSetEternl,
+} from './server';
+
+import { flintWalletCreator, flintWalletInfo } from '@rosen-ui/flint-wallet';
 import {
   decodeWasmValueFlint,
   generateLockAuxiliaryDataFlint,
@@ -45,11 +46,12 @@ import {
   setTxWitnessSetFlint,
 } from './server';
 
+import { laceWalletCreator, laceWalletInfo } from '@rosen-ui/lace-wallet';
 import {
-  decodeWasmValueEternl,
-  generateLockAuxiliaryDataEternl,
-  generateUnsignedTxEternl,
-  setTxWitnessSetEternl,
+  decodeWasmValueLace,
+  generateLockAuxiliaryDataLace,
+  generateUnsignedTxLace,
+  setTxWitnessSetLace,
 } from './server';
 
 /**
@@ -61,12 +63,30 @@ const CardanoNetwork: Network<Wallet> = {
   name: Networks.cardano,
   label: 'Cardano',
   supportedWallets: [
-    namiWalletInfo,
-    laceWalletInfo,
     eternlWalletInfo,
     flintWalletInfo,
+    laceWalletInfo,
+    namiWalletInfo,
   ],
   availableWallets: compact([
+    eternlWalletCreator({
+      decodeWasmValue: decodeWasmValueEternl,
+      generateLockAuxiliaryData: generateLockAuxiliaryDataEternl,
+      generateUnsignedTx: generateUnsignedTxEternl,
+      setTxWitnessSet: setTxWitnessSetEternl,
+    }),
+    flintWalletCreator({
+      decodeWasmValue: decodeWasmValueFlint,
+      generateLockAuxiliaryData: generateLockAuxiliaryDataFlint,
+      generateUnsignedTx: generateUnsignedTxFlint,
+      setTxWitnessSet: setTxWitnessSetFlint,
+    }),
+    laceWalletCreator({
+      decodeWasmValue: decodeWasmValueLace,
+      generateLockAuxiliaryData: generateLockAuxiliaryDataLace,
+      generateUnsignedTx: generateUnsignedTxLace,
+      setTxWitnessSet: setTxWitnessSetLace,
+    }),
     isNamiAvailable() && {
       ...getNamiWallet(),
       getBalance: async (token: RosenChainToken) => {
@@ -137,86 +157,6 @@ const CardanoNetwork: Network<Wallet> = {
         return result;
       },
     },
-    isLaceAvailable() && {
-      ...getLaceWallet(),
-      getBalance: async (token: RosenChainToken) => {
-        const context = await getLaceWallet().api.enable();
-        const rawValue = await context.getBalance();
-        const balances = await decodeWasmValue(rawValue);
-
-        const amount = balances.find(
-          (asset) => asset.policyId === token.policyId,
-        );
-        return amount ? Number(amount.quantity) : 0;
-      },
-      transfer: async (
-        token: RosenChainToken,
-        decimalAmount: number,
-        toChain: string,
-        toAddress: string,
-        decimalBridgeFee: number,
-        decimalNetworkFee: number,
-        lockAddress: string,
-      ) => {
-        validateDecimalPlaces(decimalAmount, token.decimals);
-        validateDecimalPlaces(decimalBridgeFee, token.decimals);
-        validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
-        const wallet = await getLaceWallet().api.enable();
-        const policyIdHex = token.policyId;
-        const assetNameHex = token.assetName;
-        const amount = convertNumberToBigint(
-          decimalAmount * 10 ** token.decimals,
-        );
-        const bridgeFee = convertNumberToBigint(
-          decimalBridgeFee * 10 ** token.decimals,
-        );
-        const networkFee = convertNumberToBigint(
-          decimalNetworkFee * 10 ** token.decimals,
-        );
-        const changeAddressHex = await wallet.getChangeAddress();
-
-        const auxiliaryDataHex = await generateLockAuxiliaryData(
-          toChain,
-          toAddress,
-          changeAddressHex,
-          networkFee.toString(),
-          bridgeFee.toString(),
-        );
-
-        const walletUtxos = await wallet.getUtxos();
-        if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
-        const unsignedTxHex = await generateUnsignedTx(
-          walletUtxos,
-          lockAddress,
-          changeAddressHex,
-          policyIdHex,
-          assetNameHex,
-          amount.toString(),
-          auxiliaryDataHex,
-        );
-
-        const signedTxHex = await setTxWitnessSet(
-          unsignedTxHex,
-          await wallet.signTx(unsignedTxHex, false),
-        );
-
-        const result = await wallet.submitTx(signedTxHex);
-        return result;
-      },
-    },
-    eternlWalletCreator({
-      decodeWasmValue: decodeWasmValueEternl,
-      generateLockAuxiliaryData: generateLockAuxiliaryDataEternl,
-      generateUnsignedTx: generateUnsignedTxEternl,
-      setTxWitnessSet: setTxWitnessSetEternl,
-    }),
-    flintWalletCreator({
-      decodeWasmValue: decodeWasmValueFlint,
-      generateLockAuxiliaryData: generateLockAuxiliaryDataFlint,
-      generateUnsignedTx: generateUnsignedTxFlint,
-      setTxWitnessSet: setTxWitnessSetFlint,
-    }),
     isVesprAvailable() && {
       ...getVesprWallet(),
       getBalance: async (token: RosenChainToken) => {
