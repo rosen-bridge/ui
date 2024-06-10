@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/lace-wallet': patch
 '@rosen-bridge/rosen-app': patch
 ---
 

@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/flint-wallet': patch
 '@rosen-bridge/rosen-app': patch
 ---
 
