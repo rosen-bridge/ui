@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/eternl-wallet': patch
 '@rosen-bridge/rosen-app': patch
 ---
 

@@ -1,5 +1,18 @@
 # @rosen-bridge/watcher-app
 
+## 2.2.0
+
+### Minor Changes
+
+- Add a button to trigger ApiKeyModal when it does not set and display a warning
+- The display of IDs was improved
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.1.0
+  - @rosen-ui/utils@0.1.2
+
 ## 2.1.0
 
 ### Minor Changes

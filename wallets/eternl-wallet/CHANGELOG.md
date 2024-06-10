@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-app
 
+## 0.0.5
+
+### Patch Changes
+
+- Refactor the Eternl wallet logic to reside within its own package
+- Updated dependencies
+  - @rosen-ui/utils@0.1.2
+
 ## 0.0.4
 
 ### Patch Changes

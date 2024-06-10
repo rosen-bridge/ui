@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/nami-wallet': patch
 '@rosen-bridge/rosen-app': patch
 ---
 
