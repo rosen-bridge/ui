@@ -42,7 +42,7 @@
     "@rosen-ui/xdefi-wallet": "^0.2.0",
     "buffer": "^6.0.3",
     "cbor-x": "^1.5.7",
-    "ergo-lib-wasm-nodejs": "^0.24.0",
+    "ergo-lib-wasm-nodejs": "^0.24.1",
     "joi": "^17.11.0",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
