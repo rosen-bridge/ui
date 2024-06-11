@@ -1,4 +1,5 @@
 import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
+import { generateUnsignedTx } from './generateUnsignedTx';
 
 export interface TokenInfo {
   id: string;
@@ -19,3 +20,7 @@ export interface CoveringBoxes {
   covered: boolean;
   boxes: Array<ErgoBoxProxy>;
 }
+
+export type NautilusWalletCreator = {
+  generateUnsignedTx: typeof generateUnsignedTx;
+};

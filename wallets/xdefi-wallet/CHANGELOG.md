@@ -1,5 +1,14 @@
 # @rosen-ui/xdefi-wallet
 
+## 0.2.1
+
+### Patch Changes
+
+- Refactor the xdefi-wallet package to encapsulate the logic in its package
+- Updated dependencies
+  - @rosen-ui/constants@0.0.2
+  - @rosen-ui/utils@0.1.2
+
 ## 0.2.0
 
 ### Minor Changes

@@ -3,15 +3,10 @@ import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from '@/_networks/cardano/transaction/consts';
-
 import { calculateFee } from '@/_actions/calculateFee';
 
 import { Networks } from '@/_constants';
-import {
-  fee as ergoFee,
-  minBoxValue as ergoMinBoxValue,
-} from '@/_networks/ergo/transaction/consts';
+
 import { encode } from 'cbor-x';
 
 /**

@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-app
 
+## 1.1.0
+
+### Minor Changes
+
+- The display of IDs was improved
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.0.2
+  - @rosen-ui/utils@0.1.2
+
 ## 1.0.0
 
 ### Major Changes

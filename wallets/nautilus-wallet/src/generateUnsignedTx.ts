@@ -1,8 +1,7 @@
-'use server';
-
 import { UnsignedErgoTxProxy } from '@rosen-ui/wallet-api';
-import { fee, minBoxValue } from './consts';
-import { unsignedTransactionToProxy } from './proxyTransformation';
+
+import { fee, minBoxValue } from './constants';
+import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
 import { AssetBalance } from './types';
 import {
   createChangeBox,
@@ -38,7 +37,7 @@ export const generateUnsignedTx = async (
   tokenId: string,
   amountString: string,
   bridgeFeeString: string,
-  networkFeeString: string,
+  networkFeeString: string
 ): Promise<UnsignedErgoTxProxy> => {
   const height = await getHeight();
 
@@ -70,7 +69,7 @@ export const generateUnsignedTx = async (
     toAddress,
     changeAddress,
     bridgeFee,
-    networkFee,
+    networkFee
   );
   // calculate required assets to get input boxes
   const requiredAssets = sumAssetBalance(lockAssets, {
@@ -83,7 +82,7 @@ export const generateUnsignedTx = async (
     requiredAssets,
     [],
     new Map(),
-    walletUtxos.values(),
+    walletUtxos.values()
   );
   if (!inputs.covered) throw Error(`Not enough assets`);
   let inputAssets: AssetBalance = {
@@ -94,7 +93,7 @@ export const generateUnsignedTx = async (
   const unsignedInputs = new wasm.UnsignedInputs();
   inputs.boxes.forEach((box) => {
     unsignedInputs.add(
-      wasm.UnsignedInput.from_box_id(wasm.BoxId.from_str(box.boxId)),
+      wasm.UnsignedInput.from_box_id(wasm.BoxId.from_str(box.boxId))
     );
     inputAssets = sumAssetBalance(inputAssets, getBoxAssets(box));
   });
@@ -105,7 +104,7 @@ export const generateUnsignedTx = async (
   const changeBox = createChangeBox(changeAddress, height, changeAssets);
   const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
     wasm.BoxValue.from_i64(wasm.I64.from_str(fee.toString())),
-    height,
+    height
   );
 
   const txOutputs = new wasm.ErgoBoxCandidates(lockBox);
@@ -115,7 +114,7 @@ export const generateUnsignedTx = async (
   const unsignedTx = new wasm.UnsignedTransaction(
     unsignedInputs,
     new wasm.DataInputs(),
-    txOutputs,
+    txOutputs
   );
   return unsignedTransactionToProxy(unsignedTx, inputs.boxes);
 };
