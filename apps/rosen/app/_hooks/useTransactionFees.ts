@@ -133,7 +133,7 @@ const useTransactionFees = (
       ? +paymentAmount - (networkFee! + bridgeFee!)
       : 0;
 
-    const minTransferAmountValue = bridgeFeeBase! + networkFee!;
+    const minTransfer = bridgeFeeBase! + networkFee!;
 
     return {
       bridgeFee: getDecimalString(
@@ -151,9 +151,9 @@ const useTransactionFees = (
               token?.decimals || 0,
             )
           : '0',
-      minTransferAmount: minTransferAmountValue
+      minTransfer: minTransfer
         ? getDecimalString(
-            (minTransferAmountValue + 1).toString() || '0',
+            (minTransfer + 1).toString() || '0',
             token?.decimals || 0,
           )
         : '0',

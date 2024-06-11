@@ -3,7 +3,7 @@ import { xdefiWalletCreator, xdefiWalletInfo } from '@rosen-ui/xdefi-wallet';
 
 import { compact } from 'lodash-es';
 
-import getMaxTransferableAmount from './getMaxTransferableAmount';
+import getMaxTransfer from './getMaxTransfer';
 
 import { Networks } from '@/_constants';
 
@@ -36,7 +36,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   ]),
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
-  getMaxTransferableAmount,
+  getMaxTransfer,
 };
 
 export default BitcoinNetwork;

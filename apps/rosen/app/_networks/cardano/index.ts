@@ -167,7 +167,7 @@ const CardanoNetwork: CardanoNetworkType = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
-  async getMaxTransferableAmount({ balance, isNative }) {
+  async getMaxTransfer({ balance, isNative }) {
     const offsetCandidate = Number(cardanoFeeAndMinBoxValue);
     const shouldApplyOffset = isNative;
     const offset = shouldApplyOffset ? offsetCandidate : 0;

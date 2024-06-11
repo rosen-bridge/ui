@@ -20,7 +20,7 @@ const getMaxTransfer = async (
 ) => {
   const max =
     network.name === 'bitcoin'
-      ? await network.getMaxTransferableAmount({
+      ? await network.getMaxTransfer({
           balance: tokenInfo.balance,
           isNative: tokenInfo.isNative,
           eventData: {
@@ -29,7 +29,7 @@ const getMaxTransfer = async (
             toChain: context.toChain,
           },
         })
-      : await network.getMaxTransferableAmount({
+      : await network.getMaxTransfer({
           balance: tokenInfo.balance,
           isNative: tokenInfo.isNative,
         });

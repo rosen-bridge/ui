@@ -12,11 +12,11 @@ import {
 /**
  * get max transfer for bitcoin
  */
-const getMaxTransferableAmount = async ({
+const getMaxTransfer = async ({
   balance,
   isNative,
   eventData,
-}: Parameters<BitcoinNetwork['getMaxTransferableAmount']>[0]) => {
+}: Parameters<BitcoinNetwork['getMaxTransfer']>[0]) => {
   if (!eventData.toAddress) return 0;
 
   const feeRatio = await getFeeRatio();
@@ -53,4 +53,4 @@ const getMaxTransferableAmount = async ({
       balance - estimatedFee - Number(minSatoshi) - utxos.length - 1;
 };
 
-export default getMaxTransferableAmount;
+export default getMaxTransfer;

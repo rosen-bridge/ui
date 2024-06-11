@@ -11,7 +11,7 @@ import { WalletContext } from '@/_contexts/walletContext';
 import { validateAddress } from '@/_actions/validateAddress';
 
 import { AvailableNetworks, availableNetworks } from '@/_networks';
-import { getMinTransferAmount } from '@/_utils/index';
+import { getMinTransfer } from '@/_utils/index';
 import getMaxTransfer from '@/_utils/getMaxTransfer';
 
 const validationCache = new Map<string, string | undefined>();
@@ -69,7 +69,7 @@ const useBridgeForm = () => {
           const selectedNetwork =
             availableNetworks[sourceField.value as AvailableNetworks];
 
-          const maxTransferableAmount = await getMaxTransfer(
+          const maxTransfer = await getMaxTransfer(
             selectedNetwork,
             {
               balance:
@@ -88,11 +88,11 @@ const useBridgeForm = () => {
 
           const isAmountLarge =
             BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >
-            BigInt(maxTransferableAmount.toString());
+            BigInt(maxTransfer.toString());
           if (isAmountLarge) return 'Balance insufficient';
         }
 
-        const minTransferableAmount = await getMinTransferAmount(
+        const minTransfer = await getMinTransfer(
           tokenField.value,
           sourceField.value,
           targetField.value,
@@ -102,11 +102,11 @@ const useBridgeForm = () => {
           BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
           BigInt(
             getNonDecimalString(
-              minTransferableAmount.toString(),
+              minTransfer.toString(),
               tokenField.value.decimals,
             ),
           );
-        if (isAmountSmall) return 'Minimum transferable amount not respected';
+        if (isAmountSmall) return 'Minimum transfer amount not respected';
 
         return undefined;
       },

@@ -33,7 +33,7 @@ const ErgoNetwork: ErgoNetworkType = {
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
-  async getMaxTransferableAmount({ balance, isNative }) {
+  async getMaxTransfer({ balance, isNative }) {
     const offsetCandidate = Number(ergoFee + ergoMinBoxValue);
     const shouldApplyOffset = isNative;
     const offset = shouldApplyOffset ? offsetCandidate : 0;

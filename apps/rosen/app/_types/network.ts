@@ -4,7 +4,7 @@ import { Networks } from '@/_constants';
 
 type NetworksType = typeof Networks;
 
-interface GetMaxTransferableAmountsParams {
+interface GetMaxTransferParams {
   balance: number;
   isNative: boolean;
 }
@@ -14,7 +14,7 @@ interface GetMaxTransferableAmountsParams {
  */
 export interface BaseNetwork<
   NetworkName extends keyof NetworksType,
-  GetMaxTransferableAmountsParamsExtra = {},
+  GetMaxTransferParamsExtra = {},
 > {
   name: NetworkName;
   logo: string;
@@ -23,8 +23,8 @@ export interface BaseNetwork<
   supportedWallets: WalletInfo[];
   nextHeightInterval: number;
   lockAddress: string;
-  getMaxTransferableAmount: (
-    props: GetMaxTransferableAmountsParams & GetMaxTransferableAmountsParamsExtra,
+  getMaxTransfer: (
+    props: GetMaxTransferParams & GetMaxTransferParamsExtra,
   ) => Promise<number>;
 }
 
