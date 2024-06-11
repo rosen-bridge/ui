@@ -13,5 +13,8 @@ export const flintWalletCreator = (
   return Object.assign({}, getFlintWallet(), {
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAddress: async () => {
+      throw new Error('Not implemented');
+    },
   });
 };
