@@ -1,10 +1,10 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/cardano';
 
 import { getLaceWallet } from './getLaceWallet';
-import { LaceWalletCreator } from './types';
 
 export const getBalanceCreator =
-  (config: LaceWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
     const context = await getLaceWallet().api.enable();
     const rawValue = await context.getBalance();

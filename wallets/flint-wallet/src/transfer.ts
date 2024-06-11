@@ -1,15 +1,11 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { validateDecimalPlaces } from '@rosen-ui/utils';
+import { WalletCreatorConfig } from '@rosen-network/cardano';
+import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { getFlintWallet } from './getFlintWallet';
-import { FlintWalletCreator } from './types';
-
-// TODO
-export const convertNumberToBigint = (inputNumber: number) =>
-  BigInt(Math.trunc(inputNumber));
 
 export const transferCreator =
-  (config: FlintWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
     decimalAmount: number,

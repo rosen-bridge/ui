@@ -1,10 +1,10 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/cardano';
 
 import { getFlintWallet } from './getFlintWallet';
-import { FlintWalletCreator } from './types';
 
 export const getBalanceCreator =
-  (config: FlintWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
     const context = await getFlintWallet().api.enable();
     const rawValue = await context.getBalance();
