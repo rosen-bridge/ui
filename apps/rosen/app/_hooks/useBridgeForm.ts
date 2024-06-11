@@ -12,6 +12,7 @@ import { validateAddress } from '@/_actions/validateAddress';
 
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransferAmount } from '@/_utils/index';
+import getMaxTransfer from '@/_utils/getMaxTransfer';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -68,13 +69,22 @@ const useBridgeForm = () => {
           const selectedNetwork =
             availableNetworks[sourceField.value as AvailableNetworks];
 
-          const maxTransferableAmount =
-            await selectedNetwork.getMaxTransferableAmount(
-              await walletGlobalContext!.state.selectedWallet.getBalance(
-                tokenField.value,
-              ),
-              tokenField.value.metaData.type === 'native',
-            );
+          const maxTransferableAmount = await getMaxTransfer(
+            selectedNetwork,
+            {
+              balance:
+                await walletGlobalContext!.state.selectedWallet.getBalance(
+                  tokenField.value,
+                ),
+              isNative: tokenField.value.metaData.type === 'native',
+            },
+            {
+              fromAddress:
+                await walletGlobalContext!.state.selectedWallet.getAddress(),
+              toAddress: addressField.value,
+              toChain: targetField.value,
+            },
+          );
 
           const isAmountLarge =
             BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >

@@ -29,10 +29,9 @@ import { validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@/_constants';
 
-import { Network } from '@/_types/network';
+import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 
 import { decodeWasmValue } from '@/_actions/cardanoDecoder';
-import { Wallet } from '@rosen-ui/wallet-api';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   generateLockAuxiliaryData,
@@ -50,7 +49,7 @@ import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/con
  * providing access to network info and wallets and network specific
  * functionality
  */
-const CardanoNetwork: Network<Wallet> = {
+const CardanoNetwork: CardanoNetworkType = {
   name: Networks.cardano,
   label: 'Cardano',
   supportedWallets: [
@@ -406,7 +405,7 @@ const CardanoNetwork: Network<Wallet> = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
-  async getMaxTransferableAmount(balance, isNative) {
+  async getMaxTransferableAmount({ balance, isNative }) {
     const offsetCandidate = Number(cardanoFeeAndMinBoxValue);
     const shouldApplyOffset = isNative;
     const offset = shouldApplyOffset ? offsetCandidate : 0;

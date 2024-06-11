@@ -7,8 +7,8 @@ import { validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@/_constants';
 
-import { Network } from '@/_types/network';
-import { ErgoToken, Wallet } from '@rosen-ui/wallet-api';
+import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
+import { ErgoToken } from '@rosen-ui/wallet-api';
 import { generateUnsignedTx } from './transaction/generateTx';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { ErgoIcon } from '@rosen-bridge/icons';
@@ -25,7 +25,7 @@ import {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const ErgoNetwork: Network<Wallet> = {
+const ErgoNetwork: ErgoNetworkType = {
   name: Networks.ergo,
   label: 'Ergo',
   supportedWallets: [nautilusWalletInfo],
@@ -93,7 +93,7 @@ const ErgoNetwork: Network<Wallet> = {
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
-  async getMaxTransferableAmount(balance, isNative) {
+  async getMaxTransferableAmount({ balance, isNative }) {
     const offsetCandidate = Number(ergoFee + ergoMinBoxValue);
     const shouldApplyOffset = isNative;
     const offset = shouldApplyOffset ? offsetCandidate : 0;
