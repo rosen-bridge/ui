@@ -1,4 +1,4 @@
-import { Wallet } from '@rosen-ui/wallet-api';
+import { CipWalletApi, Wallet } from '@rosen-ui/wallet-api';
 
 import { generateUnsignedTx } from './generateUnsignedTx';
 import {
@@ -27,3 +27,16 @@ export type WalletCreatorConfig = {
   generateUnsignedTx: typeof generateUnsignedTx;
   setTxWitnessSet: typeof setTxWitnessSet;
 };
+
+export interface ConnectorAPI {
+  enable(): Promise<CipWalletApi>;
+  isEnabled(): Promise<boolean>;
+  experimental?: unknown;
+}
+
+/**
+ * global type augmentation for wallets
+ */
+declare global {
+  let cardano: { [key: string]: ConnectorAPI };
+}
