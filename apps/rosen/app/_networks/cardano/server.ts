@@ -1,11 +1,11 @@
 'use server';
 
-import { generateUnsignedTx as generateUnsignedTxEternlCore } from '@rosen-ui/eternl-wallet/dist/src/generateUnsignedTx';
 import {
   decodeWasmValue as decodeWasmValueEternlCore,
   generateLockAuxiliaryData as generateLockAuxiliaryDataEternlCore,
+  generateUnsignedTx as generateUnsignedTxEternlCore,
   setTxWitnessSet as setTxWitnessSetEternlCore,
-} from '@rosen-ui/eternl-wallet/dist/src/utils';
+} from '@rosen-network/cardano';
 
 import { generateUnsignedTx as generateUnsignedTxFlintCore } from '@rosen-ui/flint-wallet/dist/src/generateUnsignedTx';
 import {
