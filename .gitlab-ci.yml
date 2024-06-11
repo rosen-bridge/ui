@@ -28,6 +28,8 @@ build:
       paths:
         - node_modules
         - apps/*/node_modules
+        - networks/*/node_modules
+        - networks/*/dist
         - packages/*/node_modules
         - packages/*/dist
         - wallets/*/node_modules
@@ -40,6 +42,7 @@ build:
     - npm run build --workspace packages/types
     - npm run build --workspace packages/shared-contexts
     - npm run build --workspace packages --if-present
+    - npm run build --workspace networks/cardano
     - npm run build --workspace wallets/wallet-api
     - npm run build --workspace wallets/nami-wallet
     - npm run build --workspace wallets/lace-wallet
@@ -82,6 +85,7 @@ unit_tests:
     paths:
       - node_modules
       - apps/*/node_modules
+      - networks/*/node_modules
       - packages/*/node_modules
       - wallets/*/node_modules
   script:
