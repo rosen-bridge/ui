@@ -78,12 +78,12 @@ const useBridgeForm = () => {
                 ),
               isNative: tokenField.value.metaData.type === 'native',
             },
-            {
+            async () => ({
               fromAddress:
-                await walletGlobalContext!.state.selectedWallet.getAddress(),
+                await walletGlobalContext!.state.selectedWallet!.getAddress(),
               toAddress: addressField.value,
               toChain: targetField.value,
-            },
+            }),
           );
 
           const isAmountLarge =
