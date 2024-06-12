@@ -11,7 +11,6 @@ import observationService from '../../observation/observation-service';
 import config from '../../configs';
 
 import {
-  ERGO_EXPLORER_URL,
   ERGO_SCANNER_INTERVAL,
   ERGO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -33,7 +32,7 @@ export const startErgoScanner = async () => {
     const scanner = new ErgoScanner(
       {
         type: ErgoNetworkType.Explorer,
-        url: ERGO_EXPLORER_URL,
+        url: config.ergo.explorerUrl,
         dataSource,
         initialHeight: config.ergo.initialHeight,
         timeout: SCANNER_API_TIMEOUT,
