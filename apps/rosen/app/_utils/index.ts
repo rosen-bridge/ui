@@ -25,12 +25,12 @@ export const getTokenNameAndId = (
 };
 
 /**
- * get max transferable amount of a token
+ * get min transfer amount of a token
  * @param token
  * @param amount
  * @param sourceChain
  */
-export const getMinTransferAmount = async (
+export const getMinTransfer = async (
   token: RosenChainToken,
   sourceChain: keyof typeof Networks,
   targetChain: keyof typeof Networks,
@@ -53,11 +53,11 @@ export const getMinTransferAmount = async (
   const networkFee = fees ? Number(fees.networkFee) : 0;
   const bridgeFee = fees ? Number(fees.bridgeFee) : 0;
 
-  const minTransferAmountValue = bridgeFee + networkFee;
+  const minTransfer = bridgeFee + networkFee;
 
-  return minTransferAmountValue
+  return minTransfer
     ? getDecimalString(
-        (minTransferAmountValue + 1).toString() || '0',
+        (minTransfer + 1).toString() || '0',
         token?.decimals || 0,
       )
     : '0';

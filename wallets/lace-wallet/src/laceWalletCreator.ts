@@ -13,5 +13,8 @@ export const laceWalletCreator = (
   return Object.assign({}, getLaceWallet(), {
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAddress: async () => {
+      throw new Error('Not implemented');
+    },
   });
 };

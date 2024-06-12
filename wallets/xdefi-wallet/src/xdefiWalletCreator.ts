@@ -5,6 +5,7 @@ import { getXdefiWallet } from './getXdefiWallet';
 import { isXdefiAvailable } from './isXdefiAvailable';
 import { transferCreator } from './transfer';
 import { XdefiWalletCreator } from './types';
+import { getAddressCreator } from './getAddressCreator';
 
 export const xdefiWalletCreator = (
   config: XdefiWalletCreator
@@ -13,5 +14,6 @@ export const xdefiWalletCreator = (
   return Object.assign({}, getXdefiWallet(), {
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAddress: getAddressCreator(config),
   });
 };
