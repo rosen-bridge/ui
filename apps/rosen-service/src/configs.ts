@@ -19,6 +19,7 @@ const getConfig = () => {
         tokens: {
           rwt: nodeConfig.get<string>('ergo.tokens.rwt'),
         },
+        explorerUrl: nodeConfig.get<string>('ergo.explorerUrl'),
       },
       cardano: {
         addresses: {
@@ -33,6 +34,7 @@ const getConfig = () => {
         tokens: {
           rwt: nodeConfig.get<string>('cardano.tokens.rwt'),
         },
+        koiosUrl: nodeConfig.get<string>('cardano.koiosUrl'),
         koiosAuthToken: nodeConfig.get<string>('cardano.koiosAuthToken'),
       },
       bitcoin: {
@@ -48,6 +50,7 @@ const getConfig = () => {
         tokens: {
           rwt: nodeConfig.get<string>('bitcoin.tokens.rwt'),
         },
+        esploraUrl: nodeConfig.get<string>('bitcoin.esploraUrl'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
