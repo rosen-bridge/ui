@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 1.0.1
+
+### Patch Changes
+
+- Fix issue of supposing all ergo addresses contain all of the supported tokens
+
 ## 1.0.0
 
 ### Major Changes
