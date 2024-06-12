@@ -44,7 +44,7 @@ describe('ErgoCalculator', () => {
     });
   });
 
-  describe('totalBalance', () => {
+  describe('totalSupply', () => {
     /**
      * Mock return value of explorer token information
      */
