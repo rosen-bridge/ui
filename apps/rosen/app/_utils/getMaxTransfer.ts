@@ -12,29 +12,29 @@ const getMaxTransfer = async (
     balance: number;
     isNative: boolean;
   },
-  context: {
+  getContext: () => Promise<{
     fromAddress: string;
     toAddress: string;
     toChain: string;
-  },
+  }>,
 ) => {
-  const max =
-    network.name === 'bitcoin'
-      ? await network.getMaxTransfer({
-          balance: tokenInfo.balance,
-          isNative: tokenInfo.isNative,
-          eventData: {
-            fromAddress: context.fromAddress,
-            toAddress: context.toAddress,
-            toChain: context.toChain,
-          },
-        })
-      : await network.getMaxTransfer({
-          balance: tokenInfo.balance,
-          isNative: tokenInfo.isNative,
-        });
+  if (network.name === 'bitcoin') {
+    const context = await getContext();
+    return network.getMaxTransfer({
+      balance: tokenInfo.balance,
+      isNative: tokenInfo.isNative,
+      eventData: {
+        fromAddress: context.fromAddress,
+        toAddress: context.toAddress,
+        toChain: context.toChain,
+      },
+    });
+  }
 
-  return max;
+  return network.getMaxTransfer({
+    balance: tokenInfo.balance,
+    isNative: tokenInfo.isNative,
+  });
 };
 
 export default getMaxTransfer;
