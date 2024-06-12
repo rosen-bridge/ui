@@ -18,8 +18,7 @@ const useMaxTransfer = () => {
 
   const { selectedNetwork } = useNetwork();
 
-  const { targetField, tokenField, addressField } =
-    useBridgeForm();
+  const { targetField, tokenField, addressField } = useBridgeForm();
 
   const { selectedWallet } = useWallet();
 
@@ -41,11 +40,11 @@ const useMaxTransfer = () => {
             balance: amount,
             isNative: tokenField.value.metaData.type === 'native',
           },
-          {
+          async () => ({
             fromAddress: await selectedWallet.getAddress(),
             toAddress: addressField.value,
             toChain: targetField.value,
-          },
+          }),
         );
         setMax(max);
       } finally {
