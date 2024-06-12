@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 1.0.0
+
+### Major Changes
+
+- Add mandatory `getAddress` to `Wallet` interface, with the purpose of returning the address associated with current wallet
+
 ## 0.3.0
 
 ### Minor Changes
