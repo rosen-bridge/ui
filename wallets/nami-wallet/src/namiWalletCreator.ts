@@ -10,5 +10,8 @@ export const namiWalletCreator: WalletCreator = (config) => {
   return Object.assign({}, getNamiWallet(), {
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAddress: async () => {
+      throw new Error('Not implemented');
+    },
   });
 };

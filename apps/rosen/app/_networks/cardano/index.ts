@@ -4,9 +4,8 @@ import { validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@/_constants';
 
-import { Network } from '@/_types/network';
+import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 
-import { Wallet } from '@rosen-ui/wallet-api';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoIcon } from '@rosen-bridge/icons';
 
@@ -35,7 +34,7 @@ import getVesprWallet, {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const CardanoNetwork: Network<Wallet> = {
+const CardanoNetwork: CardanoNetworkType = {
   name: Networks.cardano,
   label: 'Cardano',
   supportedWallets: [
@@ -141,7 +140,7 @@ const CardanoNetwork: Network<Wallet> = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
-  async getMaxTransferableAmount(balance, isNative) {
+  async getMaxTransfer({ balance, isNative }) {
     const offsetCandidate = Number(feeAndMinBoxValue);
     const shouldApplyOffset = isNative;
     const offset = shouldApplyOffset ? offsetCandidate : 0;

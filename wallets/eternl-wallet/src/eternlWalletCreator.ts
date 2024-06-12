@@ -10,5 +10,8 @@ export const eternlWalletCreator: WalletCreator = (config) => {
   return Object.assign({}, getEternlWallet(), {
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAddress: async () => {
+      throw new Error('Not implemented');
+    },
   });
 };

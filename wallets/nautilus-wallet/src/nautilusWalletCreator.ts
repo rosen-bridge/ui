@@ -13,5 +13,8 @@ export const nautilusWalletCreator = (
   return Object.assign({}, getNautilusWallet(), {
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAddress: async () => {
+      throw new Error('Not implemented');
+    },
   });
 };
