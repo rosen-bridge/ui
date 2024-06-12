@@ -20,7 +20,7 @@ cardano:
   tokens:
     rwt:
   initialHeight:
-  koiosUrl: https://api.koios.rest/api/beta
+  koiosUrl: https://api.koios.rest/api/v1
   koiosAuthToken:
 bitcoin:
   addresses:
