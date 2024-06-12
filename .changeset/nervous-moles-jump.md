@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/nautilus-wallet': patch
 '@rosen-bridge/rosen-app': patch
 ---
 

@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 0.0.5
+
+### Patch Changes
+
+- Refactor the Nautilus wallet logic to reside within its own package
+
 ## 0.0.4
 
 ### Patch Changes
