@@ -18,11 +18,12 @@ import { namiWalletCreator, namiWalletInfo } from '@rosen-ui/nami-wallet';
 
 import {
   decodeWasmValue,
-  feeAndMinBoxValue,
   generateLockAuxiliaryData,
   generateUnsignedTx,
   setTxWitnessSet,
 } from './server';
+
+import { feeAndMinBoxValue } from '@rosen-network/cardano/dist/src/constants';
 
 import getVesprWallet, {
   isVesprAvailable,
