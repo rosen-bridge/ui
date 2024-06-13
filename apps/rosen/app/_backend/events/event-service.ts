@@ -14,16 +14,25 @@ const tokenMap = new TokenMap(getRosenTokens());
  * @param chain
  */
 const getFullTokenData = (tokenId: string, chain: string) => {
-  const token = tokenMap.search(chain, {
-    [tokenMap.getIdKey(chain)]: tokenId,
-  });
+  try {
+    const token = tokenMap.search(chain, {
+      [tokenMap.getIdKey(chain)]: tokenId,
+    });
 
-  return {
-    tokenId: tokenId,
-    name: token[0]?.[chain].name ?? UNSUPPORTED_TOKEN_NAME,
-    decimals: token[0]?.[chain].decimals ?? 0,
-    isNativeToken: token[0]?.[chain].metaData.type === 'native',
-  };
+    return {
+      tokenId: tokenId,
+      name: token[0]?.[chain].name ?? UNSUPPORTED_TOKEN_NAME,
+      decimals: token[0]?.[chain].decimals ?? 0,
+      isNativeToken: token[0]?.[chain].metaData.type === 'native',
+    };
+  } catch {
+    return {
+      tokenId: tokenId,
+      name: UNSUPPORTED_TOKEN_NAME,
+      decimals: 0,
+      isNativeToken: false,
+    };
+  }
 };
 
 /**
