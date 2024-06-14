@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 1.0.1
+
+### Patch Changes
+
+- fix transaction url for networks
+
 ## 1.0.0
 
 ### Major Changes
