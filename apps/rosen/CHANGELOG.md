@@ -1,5 +1,49 @@
 # @rosen-bridge/rosen-app
 
+## 1.0.0
+
+### Major Changes
+
+- upgrade @rosen-bridge/minimum-fee to latest
+- implement Bitcoin max transfer calculation and update network type
+
+### Minor Changes
+
+- Increased security to prevent clickjacking issues
+- Add asset details API for getting details of the asset, plus its locked and bridged data
+- The display of IDs was improved
+- Add assets API for getting data of all supported bridge assets, including their locked and bridged amounts
+
+### Patch Changes
+
+- Refactor the Flint wallet logic to reside within its own package
+- Refactor the Lace wallet logic to reside within its own package
+- Refactor the Nautilus wallet logic to reside within its own package
+- Fix issue of calling unimplemented `getAddress` function for non-Bitcoin wallets
+- Refactor the Eternl wallet logic to reside within its own package
+- Make dynamic calculation for max transferable amount
+- Resolve the stale balance problem, when changing the source/target wallet the balance doesn't reset.
+- fix xDefi wallet getAddress API usage
+- Resolve the negative amount when clicking on the balance with zero value in these states
+
+  - Cardano > Ergo (ADA)
+  - Bitcoin > Ergo (BTC)
+  - Bitcoin > Cardano (BTC)
+
+- Clean the console error in the root page
+- Refactor the xdefi-wallet package to encapsulate the logic in its package
+- Refactor the Nami wallet logic to reside within its own package
+- Updated dependencies
+  - @rosen-ui/nautilus-wallet@0.1.0
+  - @rosen-ui/eternl-wallet@0.1.0
+  - @rosen-ui/flint-wallet@0.1.0
+  - @rosen-ui/xdefi-wallet@0.3.0
+  - @rosen-ui/lace-wallet@0.1.0
+  - @rosen-ui/nami-wallet@0.1.0
+  - @rosen-ui/wallet-api@1.0.0
+  - @rosen-ui/asset-calculator@1.0.1
+  - @rosen-ui/vespr-wallet@0.0.5
+
 ## 0.6.0
 
 ### Minor Changes

@@ -19,7 +19,8 @@ import {
 import useBridgeForm from '@/_hooks/useBridgeForm';
 import useNetwork from '@/_hooks/useNetwork';
 
-import { getMaxTransferableAmount, getTokenNameAndId } from '@/_utils';
+import { getTokenNameAndId } from '@/_utils';
+import useMaxTransfer from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 
@@ -93,8 +94,11 @@ const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { availableNetworks, tokens, targetNetworks } = useNetwork();
+  const { availableNetworks, tokens, targetNetworks, selectedNetwork } =
+    useNetwork();
   const { isLoading, amount, token } = useTokenBalance();
+
+  const { max } = useMaxTransfer();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
@@ -165,27 +169,18 @@ const BridgeForm = () => {
     [amountField],
   );
 
-  const handleSelectMax = useCallback(() => {
-    setValue(
-      'amount',
-      getDecimalString(
-        getMaxTransferableAmount(
-          amount,
-          sourceField.value,
-          tokenField.value.metaData.type === 'native',
-        ).toString(),
-        token?.decimals ?? 0,
-      ),
-      {
-        shouldDirty: true,
-        shouldTouch: true,
-      },
-    );
-  }, [setValue, amount, sourceField.value, tokenField.value, token?.decimals]);
+  const handleSelectMax = useCallback(async () => {
+    const value = getDecimalString(max.toString(), token?.decimals ?? 0);
+
+    setValue('amount', value, {
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  }, [max, token?.decimals, setValue]);
 
   const renderInputActions = () => (
     <>
-      {tokenField.value && (
+      {tokenField.value && !!max && (
         <Grid container justifyContent="space-between">
           <MaxButton
             disabled={isLoading || !tokenField.value}

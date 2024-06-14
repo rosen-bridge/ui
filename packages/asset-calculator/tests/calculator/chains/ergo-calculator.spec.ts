@@ -42,9 +42,52 @@ describe('ErgoCalculator', () => {
       } as any);
       expect(totalBalance).toEqual(2400n);
     });
+
+    /**
+     * @target ErgoCalculator.totalBalance should not suppose that all addresses
+     * contain the asset whose balance is being calculated
+     * @dependencies
+     * - ergoExplorerClientFactory
+     * @scenario
+     * - mock factory in a way that hotAddress contains the token but
+     * coldAddress doesn't
+     * - create new instance of ErgoCalculator
+     * - call test for mocked token (totalBalance)
+     * @expected
+     * - should not throw
+     * - The token balance should be calculated 1200
+     */
+    it('should not suppose that all addresses contain the asset whose balance is being calculated', async () => {
+      vitest.mocked(ergoExplorerClientFactory).mockReturnValue({
+        v1: {
+          getApiV1AddressesP1BalanceConfirmed: async (address: string) => ({
+            tokens:
+              address === 'hotAddress'
+                ? [{ tokenId: 'tokenId', amount: 1200n }]
+                : [],
+            nanoErgs: 120000n,
+          }),
+        },
+      } as any);
+
+      const ergoCalculator = new ErgoCalculator(
+        ['hotAddress', 'coldAddress'],
+        'explorerUrl'
+      );
+
+      expect(() =>
+        ergoCalculator.totalBalance({
+          tokenId: 'tokenId',
+        } as any)
+      ).not.toThrow();
+      const totalBalance = await ergoCalculator.totalBalance({
+        tokenId: 'tokenId',
+      } as any);
+      expect(totalBalance).toEqual(1200n);
+    });
   });
 
-  describe('totalBalance', () => {
+  describe('totalSupply', () => {
     /**
      * Mock return value of explorer token information
      */

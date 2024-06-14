@@ -67,8 +67,8 @@ const BridgeTransaction = () => {
     bridgeFee,
     receivingAmount,
     isLoading: isLoadingFees,
-    minTransferAmount,
-  } = useTransactionFees(sourceValue, tokenValue, amountValue);
+    minTransfer,
+  } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
   const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
 
   const { selectedNetwork } = useNetwork();
@@ -203,7 +203,7 @@ const BridgeTransaction = () => {
           {renderFee(
             'Min Transfer',
             tokenInfo?.tokenName,
-            minTransferAmount || 'Pending',
+            minTransfer || 'Pending',
             'primary',
           )}
           <Divider />

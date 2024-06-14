@@ -65,7 +65,7 @@ describe('CardanoCalculator', () => {
     });
   });
 
-  describe('totalBalance', () => {
+  describe('totalSupply', () => {
     /**
      * Mock return value of koios token information
      */

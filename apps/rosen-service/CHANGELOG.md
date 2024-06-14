@@ -1,5 +1,34 @@
 # @rosen-bridge/rosen-service
 
+## 1.1.0
+
+### Minor Changes
+
+- Make all backend urls configurable
+
+### Patch Changes
+
+- Run scanner and asset calculator services at the same time, as they are independent
+- Updated dependencies
+  - @rosen-ui/asset-calculator@1.0.1
+
+## 1.0.0
+
+### Major Changes
+
+- save asset data individually for all bridged chains
+
+### Minor Changes
+
+- Upgrade to latest scanner and extractor packages
+- Add Bitcoin scanner and its observation and event trigger extractors
+- Store locked asset data in the database based on TokenMap file
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/asset-calculator@1.0.0
+
 ## 0.3.0
 
 ### Minor Changes

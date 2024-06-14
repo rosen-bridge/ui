@@ -1,3 +1,3 @@
 # @rosen-ui/wallet-api
 
-This is a private package used inside rosen bridge-ui
+This is a package used inside rosen bridge-ui

@@ -44,9 +44,9 @@ export class ErgoCalculator extends AbstractCalculator {
     for (const address of this.addresses) {
       const balance =
         await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
-      const addressTokenBalance = balance.tokens!.filter(
-        (asset) => asset.tokenId == token.tokenId
-      )[0].amount;
+      const addressTokenBalance =
+        balance.tokens!.filter((asset) => asset.tokenId == token.tokenId)[0]
+          ?.amount ?? 0n;
       this.logger.debug(
         `Balance of token [${token}] in address [${address}] is [${addressTokenBalance}]`
       );

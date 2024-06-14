@@ -3,15 +3,10 @@ import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from '@/_networks/cardano/transaction/consts';
-
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { ERGO_EXPLORER_URL, Networks } from '@/_constants';
-import {
-  fee as ergoFee,
-  minBoxValue as ergoMinBoxValue,
-} from '@/_networks/ergo/transaction/consts';
+import { Networks } from '@/_constants';
+
 import { encode } from 'cbor-x';
 
 /**
@@ -30,33 +25,15 @@ export const getTokenNameAndId = (
 };
 
 /**
- * get max transferable amount of a token
- * @param balance
- * @param chain
- * @param isNative
- */
-export const getMaxTransferableAmount = (
-  balance: number,
-  chain: 'ergo' | 'cardano',
-  isNative: boolean,
-) => {
-  const offsetCandidate = Number(
-    chain === 'ergo' ? ergoFee + ergoMinBoxValue : cardanoFeeAndMinBoxValue,
-  );
-  const shouldApplyOffset = isNative;
-  const offset = shouldApplyOffset ? offsetCandidate : 0;
-  return balance - offset;
-};
-
-/**
- * get max transferable amount of a token
+ * get min transfer amount of a token
  * @param token
  * @param amount
  * @param sourceChain
  */
-export const getMinTransferAmount = async (
+export const getMinTransfer = async (
   token: RosenChainToken,
-  sourceChain: 'cardano' | 'ergo',
+  sourceChain: keyof typeof Networks,
+  targetChain: keyof typeof Networks,
   tokensMap: any,
 ) => {
   const tokenMap = new TokenMap(tokensMap);
@@ -66,12 +43,7 @@ export const getMinTransferAmount = async (
   });
   const ergoTokenId = tokens[0].ergo.tokenId;
 
-  const data = await calculateFee(
-    sourceChain,
-    ergoTokenId,
-    ERGO_EXPLORER_URL,
-    0,
-  );
+  const data = await calculateFee(sourceChain, targetChain, ergoTokenId, 0);
   const parsedData = {
     ...data,
     data: JsonBigInt.parse(data.data!),
@@ -81,11 +53,11 @@ export const getMinTransferAmount = async (
   const networkFee = fees ? Number(fees.networkFee) : 0;
   const bridgeFee = fees ? Number(fees.bridgeFee) : 0;
 
-  const minTransferAmountValue = bridgeFee + networkFee;
+  const minTransfer = bridgeFee + networkFee;
 
-  return minTransferAmountValue
+  return minTransfer
     ? getDecimalString(
-        (minTransferAmountValue + 1).toString() || '0',
+        (minTransfer + 1).toString() || '0',
         token?.decimals || 0,
       )
     : '0';

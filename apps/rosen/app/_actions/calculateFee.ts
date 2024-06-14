@@ -1,7 +1,7 @@
 'use server';
 
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { BridgeMinimumFee } from '@rosen-bridge/minimum-fee';
+import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 
@@ -12,7 +12,7 @@ const ergoExplorerClient = ergoExplorerClientFactory(
   process.env.ERGO_EXPLORER_API!,
 );
 
-import { Networks, ERGO_EXPLORER_URL, feeConfigTokenId } from '@/_constants';
+import { ERGO_EXPLORER_URL, Networks, feeConfigTokenId } from '@/_constants';
 
 const GetHeight = {
   cardano: async () => (await cardanoKoiosClient.getTip())[0].block_no,
@@ -20,7 +20,7 @@ const GetHeight = {
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
   bitcoin: async (): Promise<number> => {
     const response = await fetch(
-      `${process.env.BITCOIN_ESPLORA_API}/blocks/tip/height`,
+      `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
     );
     return response.json();
   },
@@ -38,32 +38,41 @@ const GetHeight = {
 
 export const calculateFee = async (
   sourceNetwork: keyof typeof Networks,
+  targetNetwork: keyof typeof Networks,
   tokenId: string,
-  explorerUrl: string,
   nextHeightInterval: number,
 ) => {
-  const height = await GetHeight[sourceNetwork]();
-
-  if (!height) {
-    return {
-      tokenId,
-      status: 'error',
-      message: 'Cannot fetch height from the api endpoint',
-    };
-  }
-
-  const minimumFee = new BridgeMinimumFee(ERGO_EXPLORER_URL, feeConfigTokenId);
-
   try {
+    const height = await GetHeight[sourceNetwork]();
+
+    if (!height) {
+      return {
+        tokenId,
+        status: 'error',
+        message: 'Cannot fetch height from the api endpoint',
+      };
+    }
+
+    const minFeeBox = new MinimumFeeBox(
+      tokenId,
+      feeConfigTokenId,
+      ErgoNetworkType.explorer,
+      ERGO_EXPLORER_URL,
+    );
+    await minFeeBox.fetchBox();
+
     const [fees, nextFees] = await Promise.all([
-      minimumFee.getFee(tokenId, sourceNetwork, height),
-      minimumFee.getFee(tokenId, sourceNetwork, height + nextHeightInterval),
+      minFeeBox.getFee(sourceNetwork, height, targetNetwork),
+      minFeeBox.getFee(
+        sourceNetwork,
+        height + nextHeightInterval,
+        targetNetwork,
+      ),
     ]);
 
     return {
       status: 'success',
       tokenId,
-      feeRatioDivisor: minimumFee.feeRatioDivisor,
       data: JsonBigInt.stringify({
         fees,
         nextFees,

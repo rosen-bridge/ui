@@ -10,8 +10,9 @@ import { WalletContext } from '@/_contexts/walletContext';
 
 import { validateAddress } from '@/_actions/validateAddress';
 
-import { getMaxTransferableAmount } from '@/_utils';
-import { getMinTransferAmount } from '@/_utils/index';
+import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { getMinTransfer } from '@/_utils/index';
+import getMaxTransfer from '@/_utils/getMaxTransfer';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -64,33 +65,48 @@ const useBridgeForm = () => {
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
-          const maxTransferableAmount = getMaxTransferableAmount(
-            await walletGlobalContext!.state.selectedWallet.getBalance(
-              tokenField.value,
-            ),
-            sourceField.value,
-            tokenField.value.metaData.type === 'native',
+
+          const selectedNetwork =
+            availableNetworks[sourceField.value as AvailableNetworks];
+
+          const maxTransfer = await getMaxTransfer(
+            selectedNetwork,
+            {
+              balance:
+                await walletGlobalContext!.state.selectedWallet.getBalance(
+                  tokenField.value,
+                ),
+              isNative: tokenField.value.metaData.type === 'native',
+            },
+            async () => ({
+              fromAddress:
+                await walletGlobalContext!.state.selectedWallet!.getAddress(),
+              toAddress: addressField.value,
+              toChain: targetField.value,
+            }),
           );
+
           const isAmountLarge =
             BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >
-            BigInt(maxTransferableAmount.toString());
+            BigInt(maxTransfer.toString());
           if (isAmountLarge) return 'Balance insufficient';
         }
 
-        const minTransferableAmount = await getMinTransferAmount(
+        const minTransfer = await getMinTransfer(
           tokenField.value,
           sourceField.value,
+          targetField.value,
           tokensMap,
         );
         const isAmountSmall =
           BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
           BigInt(
             getNonDecimalString(
-              minTransferableAmount.toString(),
+              minTransfer.toString(),
               tokenField.value.decimals,
             ),
           );
-        if (isAmountSmall) return 'Minimum transferable amount not respected';
+        if (isAmountSmall) return 'Minimum transfer amount not respected';
 
         return undefined;
       },

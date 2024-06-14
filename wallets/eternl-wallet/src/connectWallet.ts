@@ -2,7 +2,7 @@
  * handles the Eternl wallet connection
  */
 
-export const connectWallet = async () => {
+export const connectWallet = async (): Promise<boolean> => {
   const granted = await cardano.eternl?.enable();
 
   if (!granted) {
