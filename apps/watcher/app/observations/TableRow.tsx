@@ -7,11 +7,9 @@ import {
   Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
-import { getDecimalString } from '@rosen-ui/utils';
+import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-
-import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
 
 import { Observation } from '@/_types/api';
 
@@ -104,17 +102,20 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const baseTxUrl =
-    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
 
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
+          {txUrl ? (
+            <Link href={txUrl} target="_blank">
+              <Id id={row.sourceTxId} />
+            </Link>
+          ) : (
             <Id id={row.sourceTxId} />
-          </Link>
+          )}
         </EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -185,20 +186,23 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const baseTxUrl =
-    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>
-        <Link
-          href={`${baseTxUrl}${row.sourceTxId}`}
-          target="_blank"
-          color="textPrimary"
-          underline="hover"
-        >
+        {txUrl ? (
+          <Link
+            href={txUrl}
+            target="_blank"
+            color="textPrimary"
+            underline="hover"
+          >
+            <Id id={row.sourceTxId} />
+          </Link>
+        ) : (
           <Id id={row.sourceTxId} />
-        </Link>
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell>

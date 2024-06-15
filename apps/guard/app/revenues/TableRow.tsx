@@ -13,9 +13,7 @@ import {
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
-
-import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
+import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Revenue, ApiInfoResponse } from '@/_types/api';
 
@@ -119,8 +117,7 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const baseTxUrl =
-    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+  const txUrl = getTxURL(row.fromChain, row.lockTxId);
 
   return (
     <>
@@ -133,9 +130,13 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Link href={`${baseTxUrl}${row.lockTxId}`} target="_blank">
+          {txUrl ? (
+            <Link href={txUrl} target="_blank">
+              <Id id={row.lockTxId} />
+            </Link>
+          ) : (
             <Id id={row.lockTxId} />
-          </Link>
+          )}
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -143,10 +144,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Link
-                href={`${ERGO_BASE_TX_URL}${row.rewardTxId}`}
-                target="_blank"
-              >
+              <Link href={getTxURL('ergo', row.rewardTxId)!} target="_blank">
                 <Id id={row.rewardTxId} />
               </Link>
             </EnhancedTableCell>
@@ -252,8 +250,7 @@ export const TabletRow: FC<RowProps> = (props) => {
     fetcher,
   );
 
-  const baseTxUrl =
-    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+  const txUrl = getTxURL(row.fromChain, row.lockTxId);
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -261,18 +258,22 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Link
-          href={`${baseTxUrl}${row.lockTxId}`}
-          target="_blank"
-          color="textPrimary"
-          underline="hover"
-        >
+        {txUrl ? (
+          <Link
+            href={txUrl}
+            target="_blank"
+            color="textPrimary"
+            underline="hover"
+          >
+            <Id id={row.lockTxId} />
+          </Link>
+        ) : (
           <Id id={row.lockTxId} />
-        </Link>
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Link
-          href={`${ERGO_BASE_TX_URL}${row.rewardTxId}`}
+          href={getTxURL('ergo', row.rewardTxId)!}
           target="_blank"
           color="textPrimary"
           underline="hover"
