@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@rosen-bridge/icons": "^0.4.0",
-    "@rosen-network/ergo": "^0.0.1",
+    "@rosen-network/ergo": "^0.1.0",
     "@rosen-ui/wallet-api": "^1.0.0"
   },
   "peerDependencies": {
