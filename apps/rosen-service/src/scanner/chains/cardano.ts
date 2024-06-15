@@ -10,7 +10,6 @@ import observationService from '../../observation/observation-service';
 import config from '../../configs';
 
 import {
-  CARDANO_KOIOS_URL,
   CARDANO_SCANNER_INTERVAL,
   CARDANO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -33,7 +32,7 @@ export const startCardanoScanner = async () => {
       {
         dataSource,
         initialHeight: config.cardano.initialHeight,
-        koiosUrl: CARDANO_KOIOS_URL,
+        koiosUrl: config.cardano.koiosUrl,
         timeout: SCANNER_API_TIMEOUT,
       },
       scannerLogger,

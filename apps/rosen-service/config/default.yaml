@@ -10,6 +10,7 @@ ergo:
   tokens:
     rwt:
   initialHeight:
+  explorerUrl: https://api.ergoplatform.com
 cardano:
   addresses:
     lock:
@@ -19,6 +20,7 @@ cardano:
   tokens:
     rwt:
   initialHeight:
+  koiosUrl: https://api.koios.rest/api/v1
   koiosAuthToken:
 bitcoin:
   addresses:
@@ -29,6 +31,7 @@ bitcoin:
   tokens:
     rwt:
   initialHeight:
+  esploraUrl: https://blockstream.info
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false

@@ -1,5 +1,16 @@
 # @rosen-ui/xdefi-wallet
 
+## 0.3.0
+
+### Minor Changes
+
+- Add `getAddress` public API for accessing current wallet address
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.0.0
+
 ## 0.2.1
 
 ### Patch Changes

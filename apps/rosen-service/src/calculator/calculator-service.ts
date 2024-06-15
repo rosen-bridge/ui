@@ -3,11 +3,7 @@ import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
 
 import dataSource from '../data-source';
 import config from '../configs';
-import {
-  ASSET_CALCULATOR_INTERVAL,
-  CARDANO_KOIOS_URL,
-  ERGO_EXPLORER_URL,
-} from '../constants';
+import { ASSET_CALCULATOR_INTERVAL } from '../constants';
 import { getRosenTokens, handleError, runAndSetInterval } from '../utils';
 import AppError from '../errors/AppError';
 
@@ -53,15 +49,16 @@ const start = async () => {
     getRosenTokens(),
     {
       addresses: config.calculator.addresses.ergo,
-      explorerUrl: ERGO_EXPLORER_URL,
+      explorerUrl: config.ergo.explorerUrl,
     },
     {
       addresses: config.calculator.addresses.cardano,
-      koiosUrl: CARDANO_KOIOS_URL,
+      koiosUrl: config.cardano.koiosUrl,
       authToken: config.cardano.koiosAuthToken,
     },
     {
       addresses: config.calculator.addresses.bitcoin,
+      esploraUrl: config.bitcoin.esploraUrl,
     },
     dataSource,
     logger

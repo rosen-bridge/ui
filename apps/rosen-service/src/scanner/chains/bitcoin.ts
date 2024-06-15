@@ -10,7 +10,6 @@ import observationService from '../../observation/observation-service';
 import config from '../../configs';
 
 import {
-  BITCOIN_ESPLORA_URL,
   BITCOIN_SCANNER_INTERVAL,
   BITCOIN_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
@@ -31,7 +30,7 @@ export const startBitcoinScanner = async () => {
   try {
     const scanner = new BitcoinEsploraScanner(
       {
-        esploraUrl: BITCOIN_ESPLORA_URL,
+        esploraUrl: config.bitcoin.esploraUrl,
         dataSource,
         initialHeight: config.bitcoin.initialHeight,
         timeout: SCANNER_API_TIMEOUT,

@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-service
 
+## 1.1.0
+
+### Minor Changes
+
+- Make all backend urls configurable
+
+### Patch Changes
+
+- Run scanner and asset calculator services at the same time, as they are independent
+- Updated dependencies
+  - @rosen-ui/asset-calculator@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

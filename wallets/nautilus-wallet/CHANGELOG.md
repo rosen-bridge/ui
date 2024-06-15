@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-app
 
+## 0.1.0
+
+### Minor Changes
+
+- Add `getAddress` public API for accessing current wallet address
+
+### Patch Changes
+
+- Refactor the Nautilus wallet logic to reside within its own package
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.0.0
+
 ## 0.0.4
 
 ### Patch Changes
