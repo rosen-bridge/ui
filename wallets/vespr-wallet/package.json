@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/vespr-wallet",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -23,6 +23,6 @@
   "dependencies": {
     "@rosen-bridge/icons": "^0.4.0",
     "@rosen-ui/utils": "^0.1.1",
-    "@rosen-ui/wallet-api": "^0.0.2"
+    "@rosen-ui/wallet-api": "^1.0.0"
   }
 }
