@@ -22,7 +22,7 @@
   "dependencies": {
     "@rosen-bridge/icons": "^0.4.0",
     "@rosen-bridge/tokens": "^1.1.0",
-    "@rosen-network/cardano": "^0.0.1",
+    "@rosen-network/cardano": "^0.1.0",
     "@rosen-ui/utils": "^0.1.2",
     "@rosen-ui/wallet-api": "^1.0.0",
     "cbor-x": "^1.5.9"
