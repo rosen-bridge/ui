@@ -29,6 +29,7 @@
     "@rosen-bridge/watcher-data-extractor": "^4.0.0",
     "@rosen-clients/cardano-koios": "^2.0.1",
     "@rosen-clients/ergo-explorer": "^1.0.2",
+    "@rosen-network/bitcoin": "^0.0.1",
     "@rosen-network/cardano": "^0.0.1",
     "@rosen-ui/asset-calculator": "^1.0.0",
     "@rosen-ui/common-hooks": "^0.1.0",

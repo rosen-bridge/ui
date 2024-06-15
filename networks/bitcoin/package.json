@@ -1,0 +1,30 @@
+{
+  "name": "@rosen-network/bitcoin",
+  "version": "0.0.1",
+  "private": true,
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "prettify": "prettier --write . --ignore-path .gitignore",
+    "lint": "eslint --fix . && npm run prettify",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rosen-bridge/address-codec": "^0.2.1",
+    "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
+    "@rosen-ui/constants": "^0.0.2",
+    "@rosen-ui/wallet-api": "^0.0.2",
+    "axios": "^1.7.2",
+    "bitcoinjs-lib": "^6.1.6"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.7",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-config-prettier": "^9.0.0",
+    "prettier": "^3.0.2",
+    "typescript": "^5.0.0"
+  }
+}
