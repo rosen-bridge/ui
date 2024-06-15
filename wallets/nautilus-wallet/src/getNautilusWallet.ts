@@ -8,11 +8,12 @@ import { nautilusWalletInfo } from './nautilusWalletInfo';
  * interface to be able to interact with nautilus wallet
  */
 
-export const getNautilusWallet = () =>
-  createRawWallet(
+export const getNautilusWallet = () => {
+  return createRawWallet(
     {
       ...nautilusWalletInfo,
       connectWallet,
     },
-    ergoConnector.nautilus
+    ergoConnector.nautilus as any // TODO
   );
+};

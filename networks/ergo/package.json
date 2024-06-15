@@ -1,6 +1,6 @@
 {
-  "name": "@rosen-ui/nautilus-wallet",
-  "version": "0.1.0",
+  "name": "@rosen-network/ergo",
+  "version": "0.0.1",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -11,22 +11,17 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
+  "dependencies": {
+    "@rosen-clients/ergo-explorer": "^1.1.1",
+    "@rosen-ui/wallet-api": "^1.0.0",
+    "ergo-lib-wasm-nodejs": "^0.26.0"
+  },
   "devDependencies": {
-    "@rosen-bridge/tokens": "^1.1.0",
-    "@rosen-ui/utils": "^0.1.2",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.2",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@rosen-bridge/icons": "^0.4.0",
-    "@rosen-network/ergo": "^0.0.1",
-    "@rosen-ui/wallet-api": "^1.0.0"
-  },
-  "peerDependencies": {
-    "react": "18.2.0"
   }
 }

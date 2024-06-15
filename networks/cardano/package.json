@@ -15,7 +15,7 @@
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
     "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
     "@rosen-clients/cardano-koios": "^2.0.3",
-    "@rosen-ui/wallet-api": "^0.0.2"
+    "@rosen-ui/wallet-api": "^1.0.0"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.7",

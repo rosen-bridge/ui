@@ -15,7 +15,7 @@
     "@rosen-bridge/address-codec": "^0.2.1",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-ui/constants": "^0.0.2",
-    "@rosen-ui/wallet-api": "^0.0.2",
+    "@rosen-ui/wallet-api": "^1.0.0",
     "axios": "^1.7.2",
     "bitcoinjs-lib": "^6.1.6"
   },

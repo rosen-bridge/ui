@@ -12,9 +12,9 @@ import { ErgoIcon } from '@rosen-bridge/icons';
 import {
   fee as ergoFee,
   minBoxValue as ergoMinBoxValue,
-} from '@rosen-ui/nautilus-wallet/dist/src/constants';
+} from '@rosen-network/ergo/dist/src/constants';
 
-import { generateUnsignedTxNautilus } from './server';
+import { generateUnsignedTx } from './server';
 
 /**
  * the main object for Ergo network
@@ -27,8 +27,8 @@ const ErgoNetwork: ErgoNetworkType = {
   supportedWallets: [nautilusWalletInfo],
   availableWallets: compact([
     nautilusWalletCreator({
-      generateUnsignedTx: generateUnsignedTxNautilus,
-    }),
+      generateUnsignedTx,
+    }) as any, // TODO
   ]),
   logo: ErgoIcon,
   nextHeightInterval: 5,
