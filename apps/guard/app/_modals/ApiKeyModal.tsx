@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
 import { useForm, Controller } from 'react-hook-form';
@@ -30,15 +30,15 @@ export interface ApiKeyModalProps {
 }
 
 const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
-  const { openSnackbar } = useSnackbar();
   const { apiKey, setApiKey } = useApiKey();
+  const { openSnackbar } = useSnackbar();
 
   const { isOpen, handleOpenModal, handleCloseModal } = useModalManager();
 
   const [showKey, setShowKey] = useState(false);
   const handleToggleShowKey = () => setShowKey((prevState) => !prevState);
 
-  const { control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit, reset, setValue } = useForm<FormValues>({
     defaultValues: {
       apiKey: apiKey || '',
     },
@@ -49,6 +49,15 @@ const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
     handleCloseModal();
     openSnackbar('Api key is set!', 'success');
   };
+
+  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.stopPropagation();
+    handleSubmit(handleSetKey)(event);
+  };
+
+  useEffect(() => {
+    isOpen && setValue('apiKey', apiKey || '');
+  }, [apiKey, isOpen, setValue]);
 
   return (
     <>
@@ -70,7 +79,7 @@ const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
         fullWidth
       >
         <DialogTitle>Authorization</DialogTitle>
-        <form onSubmit={handleSubmit(handleSetKey)}>
+        <form onSubmit={onSubmit}>
           <DialogContent dividers>
             <Typography gutterBottom>Set API key to access actions</Typography>
             <Controller
@@ -87,7 +96,7 @@ const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <Tooltip title="Clear">
-                          <IconButton>
+                          <IconButton onClick={() => reset()}>
                             <SvgIcon sx={{ width: 24 }}>
                               <Times />
                             </SvgIcon>
