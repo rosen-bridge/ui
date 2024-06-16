@@ -32,7 +32,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
       generateUnsignedTx,
       getAddressBalance,
       submitTransaction,
-    }) as any, // TODO
+    }),
   ]),
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,

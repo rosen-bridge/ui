@@ -28,7 +28,7 @@ const ErgoNetwork: ErgoNetworkType = {
   availableWallets: compact([
     nautilusWalletCreator({
       generateUnsignedTx,
-    }) as any, // TODO
+    }),
   ]),
   logo: ErgoIcon,
   nextHeightInterval: 5,
