@@ -1,10 +1,10 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/cardano';
 
 import { getEternlWallet } from './getEternlWallet';
-import { EternlWalletCreator } from './types';
 
 export const getBalanceCreator =
-  (config: EternlWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
     const context = await getEternlWallet().api.enable();
     const rawValue = await context.getBalance();

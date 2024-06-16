@@ -6,50 +6,24 @@ import { Networks } from '@/_constants';
 
 import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 
-import { decodeWasmValue } from '@/_actions/cardanoDecoder';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import {
-  generateLockAuxiliaryData,
-  setTxWitnessSet,
-} from './transaction/utils';
-import { generateUnsignedTx } from './transaction/generateTx';
 import { CardanoIcon } from '@rosen-bridge/icons';
 
-import { convertNumberToBigint, hexToCbor } from '@/_utils';
-
-import { feeAndMinBoxValue as cardanoFeeAndMinBoxValue } from './transaction/consts';
+import { convertNumberToBigint } from '@/_utils';
 
 import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
-import {
-  decodeWasmValueEternl,
-  generateLockAuxiliaryDataEternl,
-  generateUnsignedTxEternl,
-  setTxWitnessSetEternl,
-} from './server';
-
 import { flintWalletCreator, flintWalletInfo } from '@rosen-ui/flint-wallet';
-import {
-  decodeWasmValueFlint,
-  generateLockAuxiliaryDataFlint,
-  generateUnsignedTxFlint,
-  setTxWitnessSetFlint,
-} from './server';
-
 import { laceWalletCreator, laceWalletInfo } from '@rosen-ui/lace-wallet';
+import { namiWalletCreator, namiWalletInfo } from '@rosen-ui/nami-wallet';
+
 import {
-  decodeWasmValueLace,
-  generateLockAuxiliaryDataLace,
-  generateUnsignedTxLace,
-  setTxWitnessSetLace,
+  decodeWasmValue,
+  generateLockAuxiliaryData,
+  generateUnsignedTx,
+  setTxWitnessSet,
 } from './server';
 
-import { namiWalletCreator, namiWalletInfo } from '@rosen-ui/nami-wallet';
-import {
-  decodeWasmValueNami,
-  generateLockAuxiliaryDataNami,
-  generateUnsignedTxNami,
-  setTxWitnessSetNami,
-} from './server';
+import { feeAndMinBoxValue } from '@rosen-network/cardano/dist/src/constants';
 
 import getVesprWallet, {
   isVesprAvailable,
@@ -72,28 +46,28 @@ const CardanoNetwork: CardanoNetworkType = {
   ],
   availableWallets: compact([
     eternlWalletCreator({
-      decodeWasmValue: decodeWasmValueEternl,
-      generateLockAuxiliaryData: generateLockAuxiliaryDataEternl,
-      generateUnsignedTx: generateUnsignedTxEternl,
-      setTxWitnessSet: setTxWitnessSetEternl,
+      decodeWasmValue: decodeWasmValue,
+      generateLockAuxiliaryData: generateLockAuxiliaryData,
+      generateUnsignedTx: generateUnsignedTx,
+      setTxWitnessSet: setTxWitnessSet,
     }),
     flintWalletCreator({
-      decodeWasmValue: decodeWasmValueFlint,
-      generateLockAuxiliaryData: generateLockAuxiliaryDataFlint,
-      generateUnsignedTx: generateUnsignedTxFlint,
-      setTxWitnessSet: setTxWitnessSetFlint,
+      decodeWasmValue: decodeWasmValue,
+      generateLockAuxiliaryData: generateLockAuxiliaryData,
+      generateUnsignedTx: generateUnsignedTx,
+      setTxWitnessSet: setTxWitnessSet,
     }),
     laceWalletCreator({
-      decodeWasmValue: decodeWasmValueLace,
-      generateLockAuxiliaryData: generateLockAuxiliaryDataLace,
-      generateUnsignedTx: generateUnsignedTxLace,
-      setTxWitnessSet: setTxWitnessSetLace,
+      decodeWasmValue: decodeWasmValue,
+      generateLockAuxiliaryData: generateLockAuxiliaryData,
+      generateUnsignedTx: generateUnsignedTx,
+      setTxWitnessSet: setTxWitnessSet,
     }),
     namiWalletCreator({
-      decodeWasmValue: decodeWasmValueNami,
-      generateLockAuxiliaryData: generateLockAuxiliaryDataNami,
-      generateUnsignedTx: generateUnsignedTxNami,
-      setTxWitnessSet: setTxWitnessSetNami,
+      decodeWasmValue: decodeWasmValue,
+      generateLockAuxiliaryData: generateLockAuxiliaryData,
+      generateUnsignedTx: generateUnsignedTx,
+      setTxWitnessSet: setTxWitnessSet,
     }),
     isVesprAvailable() && {
       ...getVesprWallet(),
@@ -168,7 +142,7 @@ const CardanoNetwork: CardanoNetworkType = {
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
   async getMaxTransfer({ balance, isNative }) {
-    const offsetCandidate = Number(cardanoFeeAndMinBoxValue);
+    const offsetCandidate = Number(feeAndMinBoxValue);
     const shouldApplyOffset = isNative;
     const offset = shouldApplyOffset ? offsetCandidate : 0;
     const amount = balance - offset;

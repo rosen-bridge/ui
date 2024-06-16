@@ -1,3 +1,8 @@
 import { defineWorkspace } from 'vitest/config';
 
-export default defineWorkspace(['apps/*', 'packages/*', 'wallets/*']);
+export default defineWorkspace([
+  'apps/*',
+  'networks/*',
+  'packages/*',
+  'wallets/*',
+]);

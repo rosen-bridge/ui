@@ -1,3 +1,5 @@
+import { CipWalletApi, Wallet } from '@rosen-ui/wallet-api';
+
 import { generateUnsignedTx } from './generateUnsignedTx';
 import {
   decodeWasmValue,
@@ -17,9 +19,24 @@ export interface CardanoProtocolParams {
 
 export const ADA_POLICY_ID = '';
 
-export type LaceWalletCreator = {
+export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
+
+export type WalletCreatorConfig = {
   decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
   generateUnsignedTx: typeof generateUnsignedTx;
   setTxWitnessSet: typeof setTxWitnessSet;
 };
+
+export interface ConnectorAPI {
+  enable(): Promise<CipWalletApi>;
+  isEnabled(): Promise<boolean>;
+  experimental?: unknown;
+}
+
+/**
+ * global type augmentation for wallets
+ */
+declare global {
+  let cardano: { [key: string]: ConnectorAPI };
+}
