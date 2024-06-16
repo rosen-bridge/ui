@@ -1,5 +1,14 @@
 # @rosen-bridge/guard-app
 
+## 1.4.1
+
+### Patch Changes
+
+- Fix URL issue for Bitcoin transactions
+- Updated dependencies
+  - @rosen-ui/utils@0.2.0
+  - @rosen-bridge/ui-kit@1.1.1
+
 ## 1.4.0
 
 ### Minor Changes
