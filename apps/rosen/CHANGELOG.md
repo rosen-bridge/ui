@@ -1,5 +1,20 @@
 # @rosen-bridge/rosen-app
 
+## 1.0.1
+
+### Patch Changes
+
+- Fix URL issue for Bitcoin transactions
+- Updated dependencies
+  - @rosen-ui/utils@0.2.0
+  - @rosen-ui/eternl-wallet@0.1.1
+  - @rosen-ui/flint-wallet@0.1.1
+  - @rosen-ui/lace-wallet@0.1.1
+  - @rosen-ui/nami-wallet@0.1.1
+  - @rosen-ui/vespr-wallet@0.0.6
+  - @rosen-ui/wallet-api@1.0.1
+  - @rosen-ui/xdefi-wallet@0.3.1
+
 ## 1.0.0
 
 ### Major Changes

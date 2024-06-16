@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-app
 
+## 0.1.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/utils@0.2.0
+  - @rosen-ui/wallet-api@1.0.1
+
 ## 0.1.0
 
 ### Minor Changes
