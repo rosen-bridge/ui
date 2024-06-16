@@ -1,15 +1,15 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { encode } from 'cbor-x';
 
 import { getNamiWallet } from './getNamiWallet';
-import { NamiWalletCreator } from './types';
 
 // TODO
 const hexToCbor = (hex: string) =>
   Buffer.from(encode(Buffer.from(hex, 'hex'))).toString('hex');
 
 export const getBalanceCreator =
-  (config: NamiWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
     const context = await getNamiWallet().api.enable();
     const rawValue = await context.getBalance();

@@ -1,6 +1,6 @@
 {
-  "name": "@rosen-ui/vespr-wallet",
-  "version": "0.0.6",
+  "name": "@rosen-network/cardano",
+  "version": "0.1.0",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -11,18 +11,18 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
+  "dependencies": {
+    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
+    "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
+    "@rosen-clients/cardano-koios": "^2.0.3",
+    "@rosen-ui/wallet-api": "^0.0.2"
+  },
   "devDependencies": {
-    "@rosen-bridge/tokens": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.2",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@rosen-bridge/icons": "^0.4.0",
-    "@rosen-ui/utils": "^0.2.0",
-    "@rosen-ui/wallet-api": "^1.0.1"
   }
 }

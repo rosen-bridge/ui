@@ -10,9 +10,7 @@ import {
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import { getDecimalString } from '@rosen-ui/utils';
-
-import { CARDANO_BASE_TX_URL, ERGO_BASE_TX_URL } from '@/_constants';
+import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { OngoingEvent } from '@/_types/api';
 
@@ -111,8 +109,7 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const baseTxUrl =
-    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
 
   return (
     <>
@@ -125,9 +122,13 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Link href={`${baseTxUrl}${row.sourceTxId}`} target="_blank">
+          {txUrl ? (
+            <Link href={txUrl} target="_blank">
+              <Id id={row.sourceTxId} />
+            </Link>
+          ) : (
             <Id id={row.sourceTxId} />
-          </Link>
+          )}
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -135,7 +136,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Link href={`${ERGO_BASE_TX_URL}${row.txId}`} target="_blank">
+              <Link href={getTxURL('ergo', row.txId)!} target="_blank">
                 <Id id={row.txId} />
               </Link>
             </EnhancedTableCell>
@@ -203,8 +204,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const baseTxUrl =
-    row.fromChain === 'ergo' ? ERGO_BASE_TX_URL : CARDANO_BASE_TX_URL;
+  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -212,18 +212,22 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Link
-          href={`${baseTxUrl}${row.sourceTxId}`}
-          target="_blank"
-          color="textPrimary"
-          underline="hover"
-        >
+        {txUrl ? (
+          <Link
+            href={txUrl}
+            target="_blank"
+            color="textPrimary"
+            underline="hover"
+          >
+            <Id id={row.sourceTxId} />
+          </Link>
+        ) : (
           <Id id={row.sourceTxId} />
-        </Link>
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Link
-          href={`${ERGO_BASE_TX_URL}${row.txId}`}
+          href={getTxURL('ergo', row.txId)!}
           target="_blank"
           color="textPrimary"
           underline="hover"
