@@ -1,5 +1,11 @@
 # @rosen-ui/utils
 
+## 0.2.0
+
+### Minor Changes
+
+- Add `getTxUrl` for getting tx url for a tx in a network
+
 ## 0.1.2
 
 ### Patch Changes
