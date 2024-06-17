@@ -14,6 +14,6 @@ export const getNautilusWallet = () => {
       ...nautilusWalletInfo,
       connectWallet,
     },
-    ergoConnector.nautilus as any // TODO
+    ergoConnector.nautilus
   );
 };
