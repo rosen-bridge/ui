@@ -4,13 +4,15 @@ import {
   TokenEntity,
 } from '@rosen-ui/asset-calculator';
 
-import dataSource from '../../../_backend/dataSource';
+import NotFoundError from '@/_errors/NotFoundError';
+
+import dataSource from '../dataSource';
 
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
 const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);
 
-interface AssetWithTotal {
+export interface Asset {
   id: string;
   name: string;
   decimal: number;
@@ -18,18 +20,46 @@ interface AssetWithTotal {
   bridged: string;
   locked: string;
   chain: string;
+}
+
+export type AssetFilters = Partial<Pick<Asset, 'chain' | 'name' | 'id'>>;
+
+interface AssetWithTotal extends Asset {
   total: number;
 }
-export type AssetFilters = Partial<
-  Pick<AssetWithTotal, 'chain' | 'name' | 'id'>
->;
 
 /**
- * remove total field from rawItems returned by query in getAssets
- * @param rawItems
+ * get details of an asset, including its token info, plus locked and bridged
+ * data
+ * @param id
  */
-const getItemsWithoutTotal = (rawItems: AssetWithTotal[]) =>
-  rawItems.map(({ total, ...item }) => item);
+export const getAsset = async (id: string) => {
+  const token = await tokenRepository.findOne({
+    where: { id },
+  });
+
+  if (!token) {
+    throw new NotFoundError(`Token with id [${id}] not found`);
+  }
+
+  const bridged: Pick<BridgedAssetEntity, 'amount' | 'chain'>[] =
+    await bridgedAssetRepository.find({
+      where: { tokenId: id },
+      select: ['amount', 'chain'],
+    });
+
+  const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] =
+    await lockedAssetRepository.find({
+      where: { tokenId: id },
+      select: ['amount', 'address'],
+    });
+
+  return {
+    token,
+    bridged,
+    locked,
+  };
+};
 
 /**
  * get paginated list of assets
@@ -77,10 +107,12 @@ export const getAssets = async (
     .limit(limit)
     .getRawMany();
 
-  const items = getItemsWithoutTotal(rawItems);
+  const items = rawItems.map(({ total, ...item }) => item);
+
+  const total = rawItems[0]?.total ?? 0;
 
   return {
     items,
-    total: rawItems[0]?.total ?? 0,
+    total,
   };
 };

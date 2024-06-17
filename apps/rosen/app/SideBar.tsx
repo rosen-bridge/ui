@@ -76,7 +76,6 @@ const SideBar = () => {
             }
             onClick={() => router.push('/assets')}
             isActive={pathname.startsWith('/assets')}
-            disabled
           />
         </Grid>
         <Grid item>
