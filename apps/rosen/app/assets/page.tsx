@@ -143,14 +143,19 @@ const Assets = () => {
           </FormControl>
         </Grid>
       </Grid>
-      {data && (
-        <EnhancedTable
-          data={data.items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={true}
-          tablePaginationProps={paginationProps}
-        />
+      {isFirstLoad && (
+        <Grid>{/* <TableSkeleton numberOfItems={pageSize} /> */}</Grid>
+      )}
+      {!isFirstLoad && data && (
+        <Grid container>
+          <EnhancedTable
+            data={data.items}
+            responsiveHead={tableHeaderProps}
+            responsiveRenderRow={tableRenderRowProps}
+            paginated={true}
+            tablePaginationProps={paginationProps}
+          />
+        </Grid>
       )}
     </>
   );
