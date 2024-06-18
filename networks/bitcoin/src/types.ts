@@ -1,3 +1,5 @@
+import { Wallet } from '@rosen-ui/wallet-api';
+
 import { generateUnsignedTx } from './generateUnsignedTx';
 import type {
   generateOpReturnData,
@@ -64,7 +66,13 @@ export interface UnsignedPsbtData {
   inputSize: number;
 }
 
-export type XdefiWalletCreator = {
+declare global {
+  let xfi: { bitcoin: unknown };
+}
+
+export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
+
+export type WalletCreatorConfig = {
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: typeof generateUnsignedTx;
   submitTransaction: typeof submitTransaction;

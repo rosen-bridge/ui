@@ -1,10 +1,10 @@
+import { WalletCreatorConfig } from '@rosen-network/bitcoin';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
-import { XdefiWalletCreator } from './types';
 
 export const getAddressCreator =
-  (config: XdefiWalletCreator) => (): Promise<string> => {
+  (config: WalletCreatorConfig) => (): Promise<string> => {
     return new Promise((resolve, reject) => {
       getXdefiWallet().api.getAddress({
         payload: {

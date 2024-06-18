@@ -1,14 +1,11 @@
-import { Wallet } from '@rosen-ui/wallet-api';
+import { WalletCreator } from '@rosen-network/ergo';
 
 import { getBalanceCreator } from './getBalance';
 import { getNautilusWallet } from './getNautilusWallet';
 import { isNautilusAvailable } from './isNautilusAvailable';
 import { transferCreator } from './transfer';
-import { NautilusWalletCreator } from './types';
 
-export const nautilusWalletCreator = (
-  config: NautilusWalletCreator
-): Wallet | undefined => {
+export const nautilusWalletCreator: WalletCreator = (config) => {
   if (!isNautilusAvailable()) return;
   return Object.assign({}, getNautilusWallet(), {
     getBalance: getBalanceCreator(config),

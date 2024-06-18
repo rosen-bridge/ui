@@ -1,12 +1,15 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import {
+  SigHash,
+  WalletCreatorConfig,
+} from '@rosen-network/bitcoin/dist/src/types';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
-import { SigHash, XdefiWalletCreator } from './types';
 
 export const transferCreator =
-  (config: XdefiWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
     decimalAmount: number,
