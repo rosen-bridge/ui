@@ -13,9 +13,10 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { MouseEvent, useCallback, useMemo, useState } from 'react';
 
-import { ApiAssetResponse, Asset } from '@/_types/api';
+import { ApiAssetsResponse, Assets } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import TableSkeleton from './TableSkeleton';
 
 const getKey = (chain: string) => (offset: number, limit: number) => {
   return [
@@ -37,7 +38,7 @@ const Assets = () => {
     isFirstLoad,
     isFirstPage,
     isLastPage,
-  } = useTableDataPagination<ApiAssetResponse>(getKey(network));
+  } = useTableDataPagination<ApiAssetsResponse>(getKey(network));
 
   const handleChangeNetwork = (event: any) => {
     setNetwork(event.target.value as string);
@@ -58,12 +59,12 @@ const Assets = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Asset) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: Assets) => <MobileRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Asset) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: Assets) => <TabletRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
@@ -144,7 +145,9 @@ const Assets = () => {
         </Grid>
       </Grid>
       {isFirstLoad && (
-        <Grid>{/* <TableSkeleton numberOfItems={pageSize} /> */}</Grid>
+        <Grid>
+          <TableSkeleton numberOfItems={pageSize} />
+        </Grid>
       )}
       {!isFirstLoad && data && (
         <Grid container>

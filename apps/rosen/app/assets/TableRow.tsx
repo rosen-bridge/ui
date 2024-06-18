@@ -1,20 +1,26 @@
 import { AngleDown } from '@rosen-bridge/icons';
 import {
+  Avatar,
   Box,
   CircularProgress,
   Collapse,
   Divider,
   EnhancedTableCell,
+  Grid,
   IconButton,
   Id,
+  SvgIcon,
+  Table,
+  TableBody,
+  TableCell,
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { useState, FC, useMemo } from 'react';
 import useSWRMutation from 'swr/mutation';
 
-import { Asset } from '@/_types/api';
+import { ApiAssetResponse, Assets } from '@/_types/api';
 
-interface RowProps extends Asset {
+interface RowProps extends Assets {
   isLoading?: boolean;
 }
 
@@ -38,7 +44,7 @@ export const tabletHeader = [
     title: 'Name',
     cellProps: {
       width: 150,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
   {
@@ -97,28 +103,46 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const [detail, setDetail] = useState<any>();
+  const [detail, setDetail] = useState<ApiAssetResponse>();
 
   const [expanded, setExpanded] = useState(false);
 
   const [loading, setLoading] = useState(false);
 
-  // const { trigger } = useSWRMutation<any, any, any, any>(`/assets/detail/${row.id}`,);
+  const { trigger } = useSWRMutation(`/api/v1/assets/detail/${row.id}`, (url) =>
+    fetch(url, { method: 'GET' }).then((res) => res.json()),
+  );
 
   const handleExpandClick = () => {
     if (expanded) return setExpanded(false);
+
     if (detail) return setExpanded(true);
+
     setLoading(true);
-    // trigger().then((response) => {
-    //   setDetail(response)
-    //   setExpanded(true);
-    // })
+
+    trigger()
+      .then((response) => {
+        setDetail(response);
+        setExpanded(true);
+      })
+      .catch(() => {
+        setExpanded(false);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <>
-      <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-        <EnhancedTableCell align="center">{row.name}</EnhancedTableCell>
+      <TableRow
+        className="divider"
+        sx={{
+          opacity: isLoading ? 0.3 : 1.0,
+          '& > td': { border: 0 },
+        }}
+      >
+        <EnhancedTableCell align="left">{row.name}</EnhancedTableCell>
         <EnhancedTableCell align="left">
           <Id id={row.id} />
         </EnhancedTableCell>
@@ -127,6 +151,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="center">{row.bridged}</EnhancedTableCell>
         <EnhancedTableCell align="center">
           <IconButton
+            size="small"
             disabled={loading}
             sx={{
               transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)',
@@ -142,17 +167,69 @@ export const TabletRow: FC<RowProps> = (props) => {
             {loading ? (
               <CircularProgress color="inherit" size={24} />
             ) : (
-              <AngleDown />
+              <SvgIcon>
+                <AngleDown />
+              </SvgIcon>
             )}
           </IconButton>
         </EnhancedTableCell>
       </TableRow>
-      <TableRow sx={{ '&:last-child td': { border: 0 } }}>
+      <TableRow
+        sx={{
+          opacity: isLoading ? 0.3 : 1.0,
+          '&:last-child td': { border: 0 },
+        }}
+      >
         <EnhancedTableCell colSpan={10} padding="none">
           <Collapse in={expanded} unmountOnExit>
             <Divider variant="middle" sx={{ borderBottomStyle: 'dashed' }} />
             <Box sx={{ m: 2 }}>
-              This Box renders as an HTML section element.
+              {detail && (
+                <Grid container spacing={4}>
+                  <Grid item laptop={6}>
+                    {detail.locked && (
+                      <Table size="small">
+                        <TableBody>
+                          {detail.locked.map((row) => (
+                            <TableRow
+                              key={row.address}
+                              sx={{ '&:last-child td': { border: 0 } }}
+                            >
+                              <TableCell>
+                                <Avatar>T</Avatar>
+                              </TableCell>
+                              <TableCell>
+                                <Id id={row.address} indicator="middle" />
+                              </TableCell>
+                              <TableCell>{row.amount}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </Grid>
+                  <Grid item laptop={6}>
+                    {detail.bridged && (
+                      <Table size="small">
+                        <TableBody>
+                          {detail.bridged.map((item) => (
+                            <TableRow
+                              key={item.chain}
+                              sx={{ '&:last-child td': { border: 0 } }}
+                            >
+                              <TableCell>
+                                <Avatar>T</Avatar>
+                              </TableCell>
+                              <TableCell>{item.chain}</TableCell>
+                              <TableCell>{item.amount}</TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    )}
+                  </Grid>
+                </Grid>
+              )}
             </Box>
           </Collapse>
         </EnhancedTableCell>
