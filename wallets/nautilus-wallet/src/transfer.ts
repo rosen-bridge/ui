@@ -1,11 +1,11 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/ergo';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { getNautilusWallet } from './getNautilusWallet';
-import { NautilusWalletCreator } from './types';
 
 export const transferCreator =
-  (config: NautilusWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
     decimalAmount: number,

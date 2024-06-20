@@ -1,11 +1,11 @@
-import { ErgoToken } from '@rosen-ui/wallet-api';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/ergo';
+import { ErgoToken } from '@rosen-ui/wallet-api';
 
 import { getNautilusWallet } from './getNautilusWallet';
-import { NautilusWalletCreator } from './types';
 
 export const getBalanceCreator =
-  (config: NautilusWalletCreator) =>
+  (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
     const context = await getNautilusWallet().api.getContext();
     const tokenId = (token as ErgoToken).tokenId;
