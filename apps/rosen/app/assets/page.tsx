@@ -25,7 +25,7 @@ const getKey = (chain: string) => (offset: number, limit: number) => {
   ];
 };
 
-const Assets = () => {
+export default function Page() {
   const [network, setNetwork] = useState('all');
 
   const {
@@ -162,6 +162,4 @@ const Assets = () => {
       )}
     </>
   );
-};
-
-export default Assets;
+}
