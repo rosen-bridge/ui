@@ -16,7 +16,7 @@ import { MouseEvent, useCallback, useMemo, useState } from 'react';
 
 import { ApiAssetsResponse, Assets } from '@/_types/api';
 
-import { MobileRow, TabletRow, tabletHeader } from './TableRow';
+import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
 
 const getKey = (chain: string) => (offset: number, limit: number) => {
@@ -118,16 +118,18 @@ export default function Page() {
   return (
     <>
       <Grid
-        container
-        spacing={2}
         alignItems={{ mobile: 'stretch', tablet: 'center' }}
-        justifyContent="space-between"
+        container
         direction={{ mobile: 'column-reverse', tablet: 'row' }}
+        justifyContent="space-between"
+        spacing={2}
       >
         <Grid item>
           <Box
             bgcolor={{ mobile: '#F5D4CA', tablet: 'transparent' }}
-            borderRadius="12px 12px 0 0"
+            borderRadius={(theme) =>
+              `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`
+            }
             padding={{ mobile: 2, tablet: 0 }}
           >
             <Typography variant="h2">List of Locked Assets</Typography>

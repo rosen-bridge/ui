@@ -15,6 +15,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { useState, FC, useMemo } from 'react';
 import useSWRMutation from 'swr/mutation';
@@ -175,12 +176,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow>
         <EnhancedTableCell colSpan={2} padding="none" />
       </TableRow>
-      <DetailsDrawer
-        id={row.id}
-        open={open}
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-      />
+      <DetailsDrawer asset={row} open={open} onClose={() => setOpen(false)} />
     </>
   );
 };
@@ -272,6 +268,7 @@ export const TabletRow: FC<RowProps> = (props) => {
               {detail && (
                 <Grid container spacing={4}>
                   <Grid item laptop={6}>
+                    <Typography variant="body2">Locked</Typography>
                     {detail.locked && (
                       <Table size="small">
                         <TableBody>
@@ -294,6 +291,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                     )}
                   </Grid>
                   <Grid item laptop={6}>
+                    <Typography variant="body2">Bridged</Typography>
                     {detail.bridged && (
                       <Table size="small">
                         <TableBody>
