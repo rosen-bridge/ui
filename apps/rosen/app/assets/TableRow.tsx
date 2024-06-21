@@ -1,7 +1,8 @@
-import { AngleDown } from '@rosen-bridge/icons';
+import { AngleDown, AngleUp, Eye } from '@rosen-bridge/icons';
 import {
   Avatar,
   Box,
+  Button,
   CircularProgress,
   Collapse,
   Divider,
@@ -19,6 +20,8 @@ import { useState, FC, useMemo } from 'react';
 import useSWRMutation from 'swr/mutation';
 
 import { ApiAssetResponse, Assets } from '@/_types/api';
+
+import { DetailsDrawer } from './DetailsDrawer';
 
 interface RowProps extends Assets {
   isLoading?: boolean;
@@ -86,10 +89,19 @@ export const tabletHeader = [
 
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
+
   const [expand, setExpand] = useState(false);
 
+  const [open, setOpen] = useState(false);
+
   const rowStyles = useMemo(
-    () => (isLoading ? { opacity: 0.3 } : {}),
+    () => ({
+      opacity: isLoading ? 0.3 : 1.0,
+      '& > td': {
+        border: 0,
+        padding: 1,
+      },
+    }),
     [isLoading],
   );
 
@@ -97,7 +109,80 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  return <></>;
+  return (
+    <>
+      <TableRow sx={rowStyles}>
+        <EnhancedTableCell sx={{ opacity: '0.6' }}>Name</EnhancedTableCell>
+        <EnhancedTableCell>{row.name}</EnhancedTableCell>
+      </TableRow>
+      <TableRow sx={rowStyles}>
+        <EnhancedTableCell sx={{ opacity: '0.6' }}>Id</EnhancedTableCell>
+        <EnhancedTableCell>
+          <Id id={row.name} />
+        </EnhancedTableCell>
+      </TableRow>
+      <TableRow sx={rowStyles}>
+        <EnhancedTableCell sx={{ opacity: '0.6' }}>Type</EnhancedTableCell>
+        <EnhancedTableCell>{row.chain}</EnhancedTableCell>
+      </TableRow>
+      {expand && (
+        <>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell sx={{ opacity: '0.6' }}>
+              Locked
+            </EnhancedTableCell>
+            <EnhancedTableCell>{row.locked}</EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell sx={{ opacity: '0.6' }}>
+              Bridged
+            </EnhancedTableCell>
+            <EnhancedTableCell>{row.locked}</EnhancedTableCell>
+          </TableRow>
+        </>
+      )}
+      <TableRow
+        sx={{
+          opacity: isLoading ? 0.3 : 1.0,
+          '& > td': {
+            border: 0,
+          },
+        }}
+      >
+        <EnhancedTableCell padding="none">
+          <Button
+            variant="text"
+            sx={{ fontSize: 'inherit' }}
+            endIcon={expand ? <AngleUp /> : <AngleDown />}
+            onClick={toggleExpand}
+          >
+            {expand ? 'Show less' : 'Show more'}
+          </Button>
+        </EnhancedTableCell>
+        <EnhancedTableCell padding="none" align="right">
+          {expand && (
+            <Button
+              variant="text"
+              sx={{ fontSize: 'inherit' }}
+              endIcon={<Eye />}
+              onClick={() => setOpen(true)}
+            >
+              See Tokens
+            </Button>
+          )}
+        </EnhancedTableCell>
+      </TableRow>
+      <TableRow>
+        <EnhancedTableCell colSpan={2} padding="none" />
+      </TableRow>
+      <DetailsDrawer
+        id={row.id}
+        open={open}
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+      />
+    </>
+  );
 };
 
 export const TabletRow: FC<RowProps> = (props) => {

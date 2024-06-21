@@ -1,6 +1,7 @@
 'use client';
 
 import {
+  Box,
   EnhancedTable,
   FormControl,
   Grid,
@@ -15,7 +16,7 @@ import { MouseEvent, useCallback, useMemo, useState } from 'react';
 
 import { ApiAssetsResponse, Assets } from '@/_types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import { MobileRow, TabletRow, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
 
 const getKey = (chain: string) => (offset: number, limit: number) => {
@@ -70,7 +71,7 @@ export default function Page() {
 
   const tableHeaderProps = useMemo(
     () => ({
-      mobile: mobileHeader,
+      mobile: [],
       tablet: tabletHeader,
     }),
     [],
@@ -116,20 +117,33 @@ export default function Page() {
 
   return (
     <>
-      <Grid container alignItems="center" justifyContent="space-between">
+      <Grid
+        container
+        spacing={2}
+        alignItems={{ mobile: 'stretch', tablet: 'center' }}
+        justifyContent="space-between"
+        direction={{ mobile: 'column-reverse', tablet: 'row' }}
+      >
         <Grid item>
-          <Typography variant="h2">List of Locked Assets</Typography>
-          <Typography variant="body2">
-            Showing {paginationProps.page * paginationProps.rowsPerPage + 1} to{' '}
-            {isLastPage
-              ? paginationProps.count
-              : paginationProps.page * paginationProps.rowsPerPage +
-                paginationProps.rowsPerPage}{' '}
-            of {paginationProps.count} Entries{' '}
-          </Typography>
+          <Box
+            bgcolor={{ mobile: '#F5D4CA', tablet: 'transparent' }}
+            borderRadius="12px 12px 0 0"
+            padding={{ mobile: 2, tablet: 0 }}
+          >
+            <Typography variant="h2">List of Locked Assets</Typography>
+            <Typography variant="body2">
+              Showing {paginationProps.page * paginationProps.rowsPerPage + 1}{' '}
+              to{' '}
+              {isLastPage
+                ? paginationProps.count
+                : paginationProps.page * paginationProps.rowsPerPage +
+                  paginationProps.rowsPerPage}{' '}
+              of {paginationProps.count} Entries{' '}
+            </Typography>
+          </Box>
         </Grid>
-        <Grid item>
-          <FormControl sx={{ width: 200 }}>
+        <Grid item width={{ mobile: '100%', tablet: '200px', laptop: '240px' }}>
+          <FormControl fullWidth>
             <InputLabel>Network</InputLabel>
             <Select
               value={network}
@@ -150,15 +164,13 @@ export default function Page() {
         </Grid>
       )}
       {!isFirstLoad && data && (
-        <Grid container>
-          <EnhancedTable
-            data={data.items}
-            responsiveHead={tableHeaderProps}
-            responsiveRenderRow={tableRenderRowProps}
-            paginated={true}
-            tablePaginationProps={paginationProps}
-          />
-        </Grid>
+        <EnhancedTable
+          data={data.items}
+          responsiveHead={tableHeaderProps}
+          responsiveRenderRow={tableRenderRowProps}
+          paginated={true}
+          tablePaginationProps={paginationProps}
+        />
       )}
     </>
   );
