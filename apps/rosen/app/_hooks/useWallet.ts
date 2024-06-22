@@ -33,7 +33,7 @@ const useWallet = () => {
   const isConnecting = useRef<boolean>(false);
   const { get, set } = useLocalStorageManager();
 
-  const { selectedNetwork } = useNetwork();
+  const { selectedNetwork, reload } = useNetwork();
 
   /**
    * searches in the available wallets in the selected network
@@ -126,6 +126,7 @@ const useWallet = () => {
         selectedWallet: walletGlobalContext?.state.selectedWallet,
         availableWallets: selectedNetwork.availableWallets,
         getBalance: walletGlobalContext?.state.selectedWallet?.getBalance,
+        reload,
       }
     : {};
 };

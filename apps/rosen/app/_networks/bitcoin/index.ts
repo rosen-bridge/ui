@@ -21,7 +21,7 @@ import {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const BitcoinNetwork: BitcoinNetworkType = {
+export const createBitcoinNetwork = (): BitcoinNetworkType => ({
   name: Networks.bitcoin,
   label: 'Bitcoin',
   logo: BitcoinIcon,
@@ -37,6 +37,4 @@ const BitcoinNetwork: BitcoinNetworkType = {
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
   getMaxTransfer,
-};
-
-export default BitcoinNetwork;
+});

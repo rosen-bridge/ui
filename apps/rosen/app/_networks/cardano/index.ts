@@ -35,7 +35,7 @@ import getVesprWallet, {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const CardanoNetwork: CardanoNetworkType = {
+export const createCardanoNetwork = (): CardanoNetworkType => ({
   name: Networks.cardano,
   label: 'Cardano',
   supportedWallets: [
@@ -148,6 +148,4 @@ const CardanoNetwork: CardanoNetworkType = {
     const amount = balance - offset;
     return amount < 0 ? 0 : amount;
   },
-};
-
-export default CardanoNetwork;
+});

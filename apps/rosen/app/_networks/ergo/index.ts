@@ -21,7 +21,7 @@ import { generateUnsignedTx } from './server';
  * providing access to network info and wallets and network specific
  * functionality
  */
-const ErgoNetwork: ErgoNetworkType = {
+export const createErgoNetwork = (): ErgoNetworkType => ({
   name: Networks.ergo,
   label: 'Ergo',
   supportedWallets: [nautilusWalletInfo],
@@ -40,6 +40,4 @@ const ErgoNetwork: ErgoNetworkType = {
     const amount = balance - offset;
     return amount < 0 ? 0 : amount;
   },
-};
-
-export default ErgoNetwork;
+});

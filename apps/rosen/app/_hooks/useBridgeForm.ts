@@ -10,9 +10,11 @@ import { WalletContext } from '@/_contexts/walletContext';
 
 import { validateAddress } from '@/_actions/validateAddress';
 
-import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { AvailableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
 import getMaxTransfer from '@/_utils/getMaxTransfer';
+
+import { useAvailableNetworks } from './useAvailableNetworks';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -26,6 +28,8 @@ const useBridgeForm = () => {
     useTransactionFormData();
 
   const tokensMap = useTokensMap();
+
+  const { networks: availableNetworks } = useAvailableNetworks();
 
   const walletGlobalContext = useContext(WalletContext);
 

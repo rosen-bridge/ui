@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 import {
@@ -69,7 +69,9 @@ const BridgeTransaction = () => {
     isLoading: isLoadingFees,
     minTransfer,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
-  const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
+
+  const { setSelectedWallet, availableWallets, selectedWallet, reload } =
+    useWallet();
 
   const { selectedNetwork } = useNetwork();
 
@@ -176,6 +178,14 @@ const BridgeTransaction = () => {
       </Tooltip>
     </Alert>
   );
+
+  useEffect(() => {
+    if (!chooseWalletsModalOpen) return;
+    const timeout = setInterval(() => reload?.(), 2000);
+    return () => {
+      clearInterval(timeout);
+    };
+  }, [chooseWalletsModalOpen, reload]);
 
   return (
     <>

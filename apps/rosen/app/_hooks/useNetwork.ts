@@ -2,10 +2,11 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { useMemo } from 'react';
 
 import { Networks } from '@/_constants';
-import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { AvailableNetworks } from '@/_networks';
 
 import useBridgeForm from './useBridgeForm';
 import { useTokensMap } from './useTokensMap';
+import { useAvailableNetworks } from './useAvailableNetworks';
 
 type Chain = string;
 type SourceFieldValue = Chain & AvailableNetworks;
@@ -17,6 +18,8 @@ type SourceFieldValue = Chain & AvailableNetworks;
 const useNetwork = () => {
   const { sourceField, targetField } = useBridgeForm();
   const tokensMapObject = useTokensMap();
+
+  const { networks: availableNetworks, reload } = useAvailableNetworks();
 
   const tokensMap = useMemo(() => {
     return new TokenMap(tokensMapObject);
@@ -30,7 +33,7 @@ const useNetwork = () => {
     return (tokensMap.getAllChains() as SourceFieldValue[])
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [tokensMap]);
+  }, [availableNetworks, tokensMap]);
 
   /**
    * returns the list of available target network objects if a and filters out
@@ -42,7 +45,7 @@ const useNetwork = () => {
     )
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [sourceField.value, tokensMap]);
+  }, [availableNetworks, sourceField.value, tokensMap]);
 
   /**
    * a list of available tokens in the selected network
@@ -60,6 +63,7 @@ const useNetwork = () => {
       : null,
     targetNetworks: targetNetworks,
     tokens,
+    reload,
   };
 };
 
