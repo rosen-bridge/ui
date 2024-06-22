@@ -221,7 +221,9 @@ const BridgeTransaction = () => {
             sx={{ width: '100%' }}
             color={selectedWallet ? 'success' : 'primary'}
             variant="contained"
-            loading={isFormSubmitting || isTransactionSubmitting}
+            loading={
+              isFormSubmitting || isTransactionSubmitting || isLoadingFees
+            }
             type="submit"
             disabled={!availableWallets}
             onClick={() => {
