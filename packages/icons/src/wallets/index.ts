@@ -5,3 +5,4 @@ export { ReactComponent as LaceIcon } from './lace.svg';
 export { ReactComponent as NautilusIcon } from './nautilus.svg';
 export { ReactComponent as VesprIcon } from './vespr.svg';
 export { ReactComponent as XdefiIcon } from './xdefi.svg';
+export { ReactComponent as Xversecon } from './xverse.svg';
