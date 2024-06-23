@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-app
 
+## 0.1.1
+
+### Patch Changes
+
+- Package the Bitcoin/Ergo logic as a standalone module to ensure its independence and maintainability.
+- Updated dependencies
+  - @rosen-network/ergo@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
