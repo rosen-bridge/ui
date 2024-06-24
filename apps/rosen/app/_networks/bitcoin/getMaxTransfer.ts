@@ -1,13 +1,14 @@
 'use server';
 
-import { BitcoinNetwork } from '@/_types/network';
 import {
-  generateOpReturnData,
   estimateTxWeight,
+  generateOpReturnData,
   getFeeRatio,
   getAddressUtxos,
   getMinimumMeaningfulSatoshi,
-} from '@rosen-ui/xdefi-wallet/dist/src/utils';
+} from '@rosen-network/bitcoin';
+
+import { BitcoinNetwork } from '@/_types/network';
 
 /**
  * get max transfer for bitcoin

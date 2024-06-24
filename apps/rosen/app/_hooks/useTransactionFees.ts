@@ -56,7 +56,7 @@ const useTransactionFees = (
 
   useEffect(() => {
     feeInfo.current = null;
-  }, [sourceChain]);
+  }, [sourceChain, targetChain, token]);
 
   /**
    * effect to fetch the fees as soon as all the required data is available

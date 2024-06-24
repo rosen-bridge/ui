@@ -30,8 +30,8 @@ const BitcoinNetwork: BitcoinNetworkType = {
     xdefiWalletCreator({
       generateOpReturnData,
       generateUnsignedTx,
-      submitTransaction,
       getAddressBalance,
+      submitTransaction,
     }),
   ]),
   nextHeightInterval: 1,

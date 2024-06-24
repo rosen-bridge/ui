@@ -1,6 +1,6 @@
 {
-  "name": "@rosen-ui/flint-wallet",
-  "version": "0.1.2",
+  "name": "@rosen-network/bitcoin",
+  "version": "0.1.1",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -11,6 +11,14 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
+  "dependencies": {
+    "@rosen-bridge/address-codec": "^0.2.1",
+    "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
+    "@rosen-ui/constants": "^0.0.2",
+    "@rosen-ui/wallet-api": "^1.0.0",
+    "axios": "^1.7.2",
+    "bitcoinjs-lib": "^6.1.6"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.26.0",
@@ -18,12 +26,5 @@
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.2",
     "typescript": "^5.0.0"
-  },
-  "dependencies": {
-    "@rosen-bridge/icons": "^0.4.0",
-    "@rosen-bridge/tokens": "^1.1.0",
-    "@rosen-network/cardano": "^0.1.1",
-    "@rosen-ui/utils": "^0.2.0",
-    "@rosen-ui/wallet-api": "^1.0.1"
   }
 }
