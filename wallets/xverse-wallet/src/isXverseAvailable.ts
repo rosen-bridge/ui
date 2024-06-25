@@ -1,3 +1,5 @@
 export const isXverseAvailable = (): boolean => {
-  return typeof xfi !== 'undefined' && !!xfi?.bitcoin;
+  return (
+    typeof XverseProviders !== 'undefined' && !!XverseProviders.BitcoinProvider
+  );
 };

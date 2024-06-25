@@ -1,5 +1,6 @@
 import { BitcoinIcon } from '@rosen-bridge/icons';
 import { xdefiWalletCreator, xdefiWalletInfo } from '@rosen-ui/xdefi-wallet';
+import { xverseWalletCreator, xverseWalletInfo } from '@rosen-ui/xverse-wallet';
 
 import { compact } from 'lodash-es';
 
@@ -25,9 +26,15 @@ const BitcoinNetwork: BitcoinNetworkType = {
   name: Networks.bitcoin,
   label: 'Bitcoin',
   logo: BitcoinIcon,
-  supportedWallets: [xdefiWalletInfo],
+  supportedWallets: [xdefiWalletInfo, xverseWalletInfo],
   availableWallets: compact([
     xdefiWalletCreator({
+      generateOpReturnData,
+      generateUnsignedTx,
+      getAddressBalance,
+      submitTransaction,
+    }),
+    xverseWalletCreator({
       generateOpReturnData,
       generateUnsignedTx,
       getAddressBalance,
