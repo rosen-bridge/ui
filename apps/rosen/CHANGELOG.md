@@ -1,5 +1,28 @@
 # @rosen-bridge/rosen-app
 
+## 1.1.0
+
+### Minor Changes
+
+- Add rate limit mechanism to APIs and server actions
+
+### Patch Changes
+
+- Change submit button state to loading while the fees are being fetched
+- Reset fee data whenever source, target, or token changes
+- Package the Bitcoin/Ergo logic as a standalone module to ensure its independence and maintainability.
+- Package the Cardano logic as a standalone module to ensure its independence and maintainability.
+- Updated dependencies
+  - @rosen-ui/nautilus-wallet@0.1.1
+  - @rosen-ui/xdefi-wallet@0.3.2
+  - @rosen-network/bitcoin@0.1.1
+  - @rosen-network/ergo@0.1.1
+  - @rosen-ui/eternl-wallet@0.1.2
+  - @rosen-ui/flint-wallet@0.1.2
+  - @rosen-ui/lace-wallet@0.1.2
+  - @rosen-ui/nami-wallet@0.1.2
+  - @rosen-network/cardano@0.1.1
+
 ## 1.0.1
 
 ### Patch Changes
