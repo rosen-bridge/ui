@@ -1,5 +1,13 @@
 # @rosen-ui/xdefi-wallet
 
+## 0.3.2
+
+### Patch Changes
+
+- Package the Bitcoin/Ergo logic as a standalone module to ensure its independence and maintainability.
+- Updated dependencies
+  - @rosen-network/bitcoin@0.1.1
+
 ## 0.3.1
 
 ### Patch Changes
