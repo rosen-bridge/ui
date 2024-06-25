@@ -1,7 +1,7 @@
 import { Networks } from '@rosen-ui/constants';
 import { describe, expect, it } from 'vitest';
 
-import { generateOpReturnData } from '@rosen-network/bitcoin';
+import { generateOpReturnData } from '../../src';
 
 describe('generateOpReturnData', () => {
   /**
