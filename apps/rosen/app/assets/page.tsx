@@ -1,3 +1,8 @@
+/**
+ * TODO: Convert this page to SSR mode
+ * local:ergo/rosen-bridge/ui#307
+ */
+
 'use client';
 
 import {

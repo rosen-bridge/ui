@@ -67,7 +67,7 @@ export const getAsset = async (id: string) => {
  * @param limit
  * @param filters
  */
-export const getAssets = async (
+export const getAllAssets = async (
   offset: number,
   limit: number,
   filters: AssetFilters = {},

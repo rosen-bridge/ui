@@ -1,7 +1,7 @@
 import {
   AssetFilters,
-  getAsset as getAssetCore,
-  getAssets as getAssetsCore,
+  getAsset as repositoryGetAsset,
+  getAllAssets as repositoryGetAllAssets,
 } from './repository';
 
 /**
@@ -10,7 +10,7 @@ import {
  * @param limit
  */
 export const getAsset = async (id: string) => {
-  const assetDetails = await getAssetCore(id);
+  const assetDetails = await repositoryGetAsset(id);
 
   return {
     token: assetDetails.token,
@@ -30,12 +30,12 @@ export const getAsset = async (id: string) => {
  * @param offset
  * @param limit
  */
-export const getAssets = async (
+export const getAllAssets = async (
   offset: number,
   limit: number,
   filters: AssetFilters = {},
 ) => {
-  const assets = await getAssetsCore(offset, limit, filters);
+  const assets = await repositoryGetAllAssets(offset, limit, filters);
 
   return {
     total: assets.total,
