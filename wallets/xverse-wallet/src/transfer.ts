@@ -70,14 +70,17 @@ export const transferCreator =
         },
         broadcast: false,
       });
-      // if (response.status === "success") {
-      // } else {
-      //   if (response.error.code === RpcErrorCode.USER_REJECTION) {
-      //   } else {
-      //   }
-      // }
+      if (response.status === 'success') {
+        console.log('signPsbt: handle success response');
+      } else {
+        if (response.error.code === RpcErrorCode.USER_REJECTION) {
+          console.log('signPsbt: handle user request cancelation');
+        } else {
+          console.log('signPsbt: handle error');
+        }
+      }
     } catch (err) {
-      console.log('eeeee', err);
+      console.log('signPsbt: catch', err);
     }
 
     // const result: string = await new Promise((resolve, reject) => {
