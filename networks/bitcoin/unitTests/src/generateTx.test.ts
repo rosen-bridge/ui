@@ -1,13 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Psbt } from 'bitcoinjs-lib';
-import { generateUnsignedTx } from '@rosen-network/bitcoin';
+import { generateUnsignedTx } from '../../src';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
 
-vi.mock('@rosen-network/bitcoin/dist/src/utils', async (importOriginal) => {
-  const mod = await importOriginal<
-    typeof import('@rosen-network/bitcoin/dist/src/utils')
-  >();
+vi.mock('../../src/utils', async (importOriginal) => {
+  const mod = await importOriginal<typeof import('../../src/utils')>();
   // mock getAddressUtxos
   const getAddressUtxos = vi.fn();
   getAddressUtxos.mockResolvedValue(testData.mockedUtxos);

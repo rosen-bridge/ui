@@ -9,8 +9,7 @@
     "prettify": "prettier --write . --ignore-path .gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
-    "type-check": "tsc --noEmit",
-    "test": "vitest"
+    "type-check": "tsc --noEmit"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.7",
@@ -29,7 +28,6 @@
     "@rosen-ui/constants": "^0.0.2",
     "@rosen-ui/utils": "^0.2.0",
     "@rosen-ui/wallet-api": "^1.0.1",
-    "bitcoinjs-lib": "^6.1.5",
     "sats-connect": "^1.4.1"
   }
 }
