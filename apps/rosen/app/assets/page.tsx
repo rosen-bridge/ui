@@ -8,12 +8,10 @@
 import {
   Box,
   EnhancedTable,
-  FormControl,
   Grid,
-  InputLabel,
   MenuItem,
-  Select,
   TablePaginationProps,
+  TextField,
   Typography,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
@@ -131,7 +129,10 @@ export default function Page() {
       >
         <Grid item>
           <Box
-            bgcolor={{ mobile: '#F5D4CA', tablet: 'transparent' }}
+            bgcolor={(theme) => ({
+              mobile: theme.palette.secondary.light,
+              tablet: 'transparent',
+            })}
             borderRadius={(theme) =>
               `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`
             }
@@ -150,19 +151,17 @@ export default function Page() {
           </Box>
         </Grid>
         <Grid item width={{ mobile: '100%', tablet: '200px', laptop: '240px' }}>
-          <FormControl fullWidth>
-            <InputLabel>Network</InputLabel>
-            <Select
-              value={network}
-              label="Network"
-              onChange={handleChangeNetwork}
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="bitcoin">Bitcoin</MenuItem>
-              <MenuItem value="cardano">Cardano</MenuItem>
-              <MenuItem value="ergo">Ergo</MenuItem>
-            </Select>
-          </FormControl>
+          <TextField
+            select
+            label="Network"
+            fullWidth
+            onChange={handleChangeNetwork}
+          >
+            <MenuItem value="all">All</MenuItem>
+            <MenuItem value="bitcoin">Bitcoin</MenuItem>
+            <MenuItem value="cardano">Cardano</MenuItem>
+            <MenuItem value="ergo">Ergo</MenuItem>
+          </TextField>
         </Grid>
       </Grid>
       {isFirstLoad && (

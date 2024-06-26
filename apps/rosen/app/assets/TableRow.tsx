@@ -23,6 +23,7 @@ import useSWRMutation from 'swr/mutation';
 import { ApiAssetResponse, Assets } from '@/_types/api';
 
 import { DetailsDrawer } from './DetailsDrawer';
+import { getDecimalString } from '@rosen-ui/utils';
 
 interface RowProps extends Assets {
   isLoading?: boolean;
@@ -206,9 +207,6 @@ export const TabletRow: FC<RowProps> = (props) => {
         setDetail(response);
         setExpanded(true);
       })
-      .catch(() => {
-        setExpanded(false);
-      })
       .finally(() => {
         setLoading(false);
       });
@@ -228,8 +226,12 @@ export const TabletRow: FC<RowProps> = (props) => {
           <Id id={row.id} />
         </EnhancedTableCell>
         <EnhancedTableCell align="center">{row.chain}</EnhancedTableCell>
-        <EnhancedTableCell align="center">{row.locked}</EnhancedTableCell>
-        <EnhancedTableCell align="center">{row.bridged}</EnhancedTableCell>
+        <EnhancedTableCell align="center">
+          {getDecimalString(row.locked, row.decimal)}
+        </EnhancedTableCell>
+        <EnhancedTableCell align="center">
+          {getDecimalString(row.bridged, row.decimal)}
+        </EnhancedTableCell>
         <EnhancedTableCell align="center">
           <IconButton
             size="small"
