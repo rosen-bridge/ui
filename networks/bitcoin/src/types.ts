@@ -66,10 +66,6 @@ export interface UnsignedPsbtData {
   inputSize: number;
 }
 
-declare global {
-  let xfi: { bitcoin: unknown };
-}
-
 export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
 
 export type WalletCreatorConfig = {
