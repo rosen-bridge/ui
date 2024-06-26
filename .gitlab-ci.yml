@@ -53,6 +53,7 @@ build:
     - npm run build --workspace wallets/vespr-wallet
     - npm run build --workspace wallets/nautilus-wallet
     - npm run build --workspace wallets/xdefi-wallet
+    - npm run build --workspace wallets/xverse-wallet
 
 type_check:
   stage: type_check
