@@ -4,7 +4,11 @@ import {
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
-import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
+import Wallet, {
+  AddressPurpose,
+  BitcoinNetworkType,
+  RpcErrorCode,
+} from 'sats-connect';
 
 import { getXverseWallet } from './getXverseWallet';
 
@@ -31,28 +35,17 @@ export const transferCreator =
       decimalNetworkFee * 10 ** token.decimals
     );
 
-    const userAddress: string = await new Promise((resolve, reject) => {
-      getXverseWallet().api.getAddress({
-        payload: {
-          message: '',
-          network: {
-            type: BitcoinNetworkType.Mainnet,
-          },
-          purposes: [AddressPurpose.Payment],
-        },
-        onFinish: ({ addresses }) => {
-          const segwitPaymentAddresses = addresses.filter(
-            (address) => address.purpose === AddressPurpose.Payment
-          );
-          if (segwitPaymentAddresses.length > 0)
-            resolve(segwitPaymentAddresses[0].address);
-          else reject();
-        },
-        onCancel: () => {
-          reject();
-        },
-      });
-    });
+    const userAddress: string = (() => {
+      const raw = localStorage.getItem('TEST') || '';
+
+      const addresses = JSON.parse(raw) as any[];
+
+      const segwitPaymentAddresses = addresses.filter(
+        (address) => address.purpose === AddressPurpose.Payment
+      );
+
+      return segwitPaymentAddresses[0].address;
+    })();
 
     const opReturnData = await config.generateOpReturnData(
       toChain,
@@ -68,34 +61,53 @@ export const transferCreator =
       opReturnData
     );
 
-    const result: string = await new Promise((resolve, reject) => {
-      getXverseWallet().api.signTransaction({
-        payload: {
-          network: {
-            type: BitcoinNetworkType.Mainnet,
-          },
-          message: 'Sign Transaction',
-          psbtBase64: psbtData.psbt,
-          broadcast: false,
-          inputsToSign: [
-            {
-              address: userAddress,
-              signingIndexes: Array.from(Array(psbtData.inputSize).keys()),
-              sigHash: SigHash.SINGLE | SigHash.DEFAULT_ANYONECANPAY,
-            },
-          ],
+    try {
+      const response = await Wallet.request('signPsbt', {
+        psbt: psbtData.psbt,
+        allowedSignHash: SigHash.ALL,
+        signInputs: {
+          [userAddress]: [0, 1],
         },
-        onFinish: (response) => {
-          const signedPsbtBase64 = response.psbtBase64;
-          config
-            .submitTransaction(signedPsbtBase64)
-            .then((result) => resolve(result))
-            .catch((e) => reject(e));
-        },
-        onCancel: () => {
-          reject();
-        },
+        broadcast: false,
       });
-    });
-    return result;
+      // if (response.status === "success") {
+      // } else {
+      //   if (response.error.code === RpcErrorCode.USER_REJECTION) {
+      //   } else {
+      //   }
+      // }
+    } catch (err) {
+      console.log('eeeee', err);
+    }
+
+    // const result: string = await new Promise((resolve, reject) => {
+    //   getXverseWallet().api.signTransaction({
+    //     payload: {
+    //       network: {
+    //         type: BitcoinNetworkType.Mainnet,
+    //       },
+    //       message: 'Sign Transaction',
+    //       psbtBase64: psbtData.psbt,
+    //       broadcast: false,
+    //       inputsToSign: [
+    //         {
+    //           address: userAddress,
+    //           signingIndexes: Array.from(Array(psbtData.inputSize).keys()),
+    //           sigHash: SigHash.SINGLE | SigHash.DEFAULT_ANYONECANPAY,
+    //         },
+    //       ],
+    //     },
+    //     onFinish: (response) => {
+    //       const signedPsbtBase64 = response.psbtBase64;
+    //       config
+    //         .submitTransaction(signedPsbtBase64)
+    //         .then((result) => resolve(result))
+    //         .catch((e) => reject(e));
+    //     },
+    //     onCancel: () => {
+    //       reject();
+    //     },
+    //   });
+    // });
+    return 'result';
   };
