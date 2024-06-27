@@ -9,7 +9,7 @@ type UseResponsiveValueOptions<
   T,
   MandatoryBreakpoint extends Breakpoint = 'mobile',
 > = {
-  [Key in MandatoryBreakpoint]: NonNullable<T>;
+  [Key in MandatoryBreakpoint]: NonNullable<NoInfer<T>>;
 } & ResponsiveValueOptionsBase<T>;
 
 /**
