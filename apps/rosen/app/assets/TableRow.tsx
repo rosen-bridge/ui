@@ -17,8 +17,9 @@ import {
   TableRow,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { useState, FC, useMemo } from 'react';
-import useSWRMutation from 'swr/mutation';
+import { useState, FC, useMemo, useEffect } from 'react';
+import useSWR from 'swr';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import { ApiAssetResponse, Assets } from '@/_types/api';
 
@@ -189,10 +190,11 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const [expanded, setExpanded] = useState(false);
 
-  const [loading, setLoading] = useState(false);
+  const [shouldFetch, setShouldFetch] = useState(false);
 
-  const { trigger } = useSWRMutation(`/api/v1/assets/detail/${row.id}`, (url) =>
-    fetch(url, { method: 'GET' }).then((res) => res.json()),
+  const { data, isLoading: loading } = useSWR(
+    shouldFetch ? `/v1/assets/detail/${row.id}` : null,
+    fetcher,
   );
 
   const handleExpandClick = () => {
@@ -200,17 +202,14 @@ export const TabletRow: FC<RowProps> = (props) => {
 
     if (detail) return setExpanded(true);
 
-    setLoading(true);
-
-    trigger()
-      .then((response) => {
-        setDetail(response);
-        setExpanded(true);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setShouldFetch(true);
   };
+
+  useEffect(() => {
+    if (!data) return;
+    setDetail(data);
+    setExpanded(true);
+  }, [data]);
 
   return (
     <>

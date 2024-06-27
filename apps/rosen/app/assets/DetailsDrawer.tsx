@@ -11,8 +11,9 @@ import {
   Typography,
   CircularProgress,
 } from '@rosen-bridge/ui-kit';
-import { useEffect, useState } from 'react';
-import useSWRMutation from 'swr/mutation';
+
+import useSWR from 'swr';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import { ApiAssetResponse, Assets } from '@/_types/api';
 
@@ -23,21 +24,10 @@ interface DetailsDrawerProps {
 }
 
 export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
-  const id = asset.id;
-
-  const [detail, setDetail] = useState<ApiAssetResponse>();
-
-  const { isMutating, trigger } = useSWRMutation(
-    `/api/v1/assets/detail/${id}`,
-    (url) => fetch(url, { method: 'GET' }).then((res) => res.json()),
+  const { data, isLoading } = useSWR<ApiAssetResponse>(
+    open ? `/v1/assets/detail/${asset.id}` : null,
+    fetcher,
   );
-
-  useEffect(() => {
-    if (!id || !open) return;
-    trigger()
-      .then(setDetail)
-      .catch(() => onClose());
-  }, [id, open, trigger, onClose]);
 
   return (
     <Drawer
@@ -52,26 +42,26 @@ export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
       onClose={onClose}
     >
       <Box padding={2}>
-        {isMutating && (
+        {isLoading && (
           <Box textAlign="center">
             <CircularProgress size={24} />
           </Box>
         )}
-        {!isMutating && detail && (
+        {!isLoading && data && (
           <Grid container spacing={2} direction="column">
             <Grid item>
               <Typography variant="body2">Name</Typography>
-              <Typography>{detail.token.name}</Typography>
+              <Typography>{data.token.name}</Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2">Id</Typography>
               <Typography style={{ wordBreak: 'break-all' }}>
-                {detail.token.id}
+                {data.token.id}
               </Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2">Type</Typography>
-              <Typography>{detail.token.chain}</Typography>
+              <Typography>{data.token.chain}</Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2">Locked</Typography>
@@ -83,10 +73,10 @@ export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
             </Grid>
             <Grid item>
               <Typography variant="body2">Locked</Typography>
-              {detail.locked && (
+              {data.locked && (
                 <Table size="small">
                   <TableBody>
-                    {detail.locked.map((row) => (
+                    {data.locked.map((row) => (
                       <TableRow
                         key={row.address}
                         sx={{ '&:last-child td': { border: 0 } }}
@@ -106,10 +96,10 @@ export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
             </Grid>
             <Grid item>
               <Typography variant="body2">Bridged</Typography>
-              {detail.bridged && (
+              {data.bridged && (
                 <Table size="small">
                   <TableBody>
-                    {detail.bridged.map((item) => (
+                    {data.bridged.map((item) => (
                       <TableRow
                         key={item.chain}
                         sx={{ '&:last-child td': { border: 0 } }}
