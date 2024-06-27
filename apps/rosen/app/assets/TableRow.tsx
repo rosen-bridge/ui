@@ -134,13 +134,17 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell sx={{ opacity: '0.6' }}>
               Locked
             </EnhancedTableCell>
-            <EnhancedTableCell>{row.locked}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.locked, row.decimal)}
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>
               Bridged
             </EnhancedTableCell>
-            <EnhancedTableCell>{row.locked}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(row.bridged, row.decimal)}
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -273,18 +277,20 @@ export const TabletRow: FC<RowProps> = (props) => {
                     {detail.locked && (
                       <Table size="small">
                         <TableBody>
-                          {detail.locked.map((row) => (
+                          {detail.locked.map((item) => (
                             <TableRow
-                              key={row.address}
+                              key={item.address}
                               sx={{ '&:last-child td': { border: 0 } }}
                             >
                               <TableCell>
                                 <Avatar>T</Avatar>
                               </TableCell>
                               <TableCell>
-                                <Id id={row.address} indicator="middle" />
+                                <Id id={item.address} indicator="middle" />
                               </TableCell>
-                              <TableCell>{row.amount}</TableCell>
+                              <TableCell>
+                                {getDecimalString(item.amount, row.decimal)}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>
@@ -305,7 +311,9 @@ export const TabletRow: FC<RowProps> = (props) => {
                                 <Avatar>T</Avatar>
                               </TableCell>
                               <TableCell>{item.chain}</TableCell>
-                              <TableCell>{item.amount}</TableCell>
+                              <TableCell>
+                                {getDecimalString(item.amount, row.decimal)}
+                              </TableCell>
                             </TableRow>
                           ))}
                         </TableBody>

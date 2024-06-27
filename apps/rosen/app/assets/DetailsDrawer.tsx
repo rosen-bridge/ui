@@ -16,6 +16,7 @@ import useSWR from 'swr';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import { ApiAssetResponse, Assets } from '@/_types/api';
+import { getDecimalString } from '@rosen-ui/utils';
 
 interface DetailsDrawerProps {
   asset: Assets;
@@ -65,11 +66,15 @@ export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
             </Grid>
             <Grid item>
               <Typography variant="body2">Locked</Typography>
-              <Typography>{asset.locked}</Typography>
+              <Typography>
+                {getDecimalString(asset.locked, asset.decimal)}
+              </Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2">Bridged</Typography>
-              <Typography>{asset.bridged}</Typography>
+              <Typography>
+                {getDecimalString(asset.bridged, asset.decimal)}
+              </Typography>
             </Grid>
             <Grid item>
               <Typography variant="body2">Locked</Typography>
@@ -87,7 +92,9 @@ export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
                         <TableCell>
                           <Id id={row.address} indicator="middle" />
                         </TableCell>
-                        <TableCell>{row.amount}</TableCell>
+                        <TableCell>
+                          {getDecimalString(row.amount, asset.decimal)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -99,16 +106,18 @@ export const DetailsDrawer = ({ asset, open, onClose }: DetailsDrawerProps) => {
               {data.bridged && (
                 <Table size="small">
                   <TableBody>
-                    {data.bridged.map((item) => (
+                    {data.bridged.map((row) => (
                       <TableRow
-                        key={item.chain}
+                        key={row.chain}
                         sx={{ '&:last-child td': { border: 0 } }}
                       >
                         <TableCell>
                           <Avatar>T</Avatar>
                         </TableCell>
-                        <TableCell>{item.chain}</TableCell>
-                        <TableCell>{item.amount}</TableCell>
+                        <TableCell>{row.chain}</TableCell>
+                        <TableCell>
+                          {getDecimalString(row.amount, asset.decimal)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
