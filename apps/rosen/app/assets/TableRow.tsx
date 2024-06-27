@@ -190,30 +190,14 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const [detail, setDetail] = useState<ApiAssetResponse>();
-
   const [expanded, setExpanded] = useState(false);
 
-  const [shouldFetch, setShouldFetch] = useState(false);
-
-  const { data, isLoading: loading } = useSWR(
-    shouldFetch ? `/v1/assets/detail/${row.id}` : null,
+  const { data, isLoading: loading } = useSWR<ApiAssetResponse>(
+    expanded ? `/v1/assets/detail/${row.id}` : null,
     fetcher,
   );
 
-  const handleExpandClick = () => {
-    if (expanded) return setExpanded(false);
-
-    if (detail) return setExpanded(true);
-
-    setShouldFetch(true);
-  };
-
-  useEffect(() => {
-    if (!data) return;
-    setDetail(data);
-    setExpanded(true);
-  }, [data]);
+  const open = expanded && data && !loading;
 
   return (
     <>
@@ -240,7 +224,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             size="small"
             disabled={loading}
             sx={{
-              transform: !expanded ? 'rotate(0deg)' : 'rotate(180deg)',
+              transform: !open ? 'rotate(0deg)' : 'rotate(180deg)',
               marginLeft: 'auto',
               transition: (theme) => {
                 return theme.transitions.create('transform', {
@@ -248,7 +232,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                 });
               },
             }}
-            onClick={handleExpandClick}
+            onClick={() => setExpanded(!open)}
           >
             {loading ? (
               <CircularProgress color="inherit" size={24} />
@@ -267,17 +251,17 @@ export const TabletRow: FC<RowProps> = (props) => {
         }}
       >
         <EnhancedTableCell colSpan={10} padding="none">
-          <Collapse in={expanded} unmountOnExit>
+          <Collapse in={open} unmountOnExit>
             <Divider variant="middle" sx={{ borderBottomStyle: 'dashed' }} />
             <Box sx={{ m: 2 }}>
-              {detail && (
+              {data && (
                 <Grid container spacing={4}>
                   <Grid item laptop={6}>
                     <Typography variant="body2">Locked</Typography>
-                    {detail.locked && (
+                    {data.locked && (
                       <Table size="small">
                         <TableBody>
-                          {detail.locked.map((item) => (
+                          {data.locked.map((item) => (
                             <TableRow
                               key={item.address}
                               sx={{ '&:last-child td': { border: 0 } }}
@@ -299,10 +283,10 @@ export const TabletRow: FC<RowProps> = (props) => {
                   </Grid>
                   <Grid item laptop={6}>
                     <Typography variant="body2">Bridged</Typography>
-                    {detail.bridged && (
+                    {data.bridged && (
                       <Table size="small">
                         <TableBody>
-                          {detail.bridged.map((item) => (
+                          {data.bridged.map((item) => (
                             <TableRow
                               key={item.chain}
                               sx={{ '&:last-child td': { border: 0 } }}
