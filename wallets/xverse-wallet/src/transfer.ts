@@ -66,7 +66,7 @@ export const transferCreator =
         psbt: psbtData.psbt,
         allowedSignHash: SigHash.ALL,
         signInputs: {
-          [userAddress]: [0, 1],
+          [userAddress]: [0],
         },
         broadcast: false,
       });
