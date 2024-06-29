@@ -1,4 +1,10 @@
-import { AngleDown, AngleUp, Eye } from '@rosen-bridge/icons';
+import {
+  AngleDown,
+  AngleUp,
+  SquareShape,
+  Eye,
+  OpenInNew,
+} from '@rosen-bridge/icons';
 import {
   Avatar,
   Box,
@@ -10,6 +16,8 @@ import {
   Grid,
   IconButton,
   Id,
+  Link,
+  Stack,
   SvgIcon,
   Table,
   TableBody,
@@ -17,7 +25,7 @@ import {
   TableRow,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { useState, FC, useMemo, useEffect } from 'react';
+import { useState, FC, useMemo } from 'react';
 import useSWR from 'swr';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
@@ -49,19 +57,12 @@ export const tabletHeader = [
   {
     title: 'Name',
     cellProps: {
-      width: 150,
+      width: 200,
       align: 'left' as const,
     },
   },
   {
-    title: 'Id',
-    cellProps: {
-      width: 300,
-      align: 'left' as const,
-    },
-  },
-  {
-    title: 'Type',
+    title: 'Network',
     cellProps: {
       width: 150,
       align: 'center' as const,
@@ -69,6 +70,20 @@ export const tabletHeader = [
   },
   {
     title: 'Locked',
+    cellProps: {
+      width: 150,
+      align: 'center' as const,
+    },
+  },
+  {
+    title: 'Hot',
+    cellProps: {
+      width: 150,
+      align: 'center' as const,
+    },
+  },
+  {
+    title: 'Cold',
     cellProps: {
       width: 150,
       align: 'center' as const,
@@ -208,16 +223,52 @@ export const TabletRow: FC<RowProps> = (props) => {
           '& > td': { border: 0 },
         }}
       >
-        <EnhancedTableCell align="left">{row.name}</EnhancedTableCell>
         <EnhancedTableCell align="left">
-          <Id id={row.id} />
+          <Stack alignItems="center" direction="row" gap={1}>
+            <SvgIcon fontSize="small">
+              <SquareShape />
+            </SvgIcon>
+            <span>{row.name}</span>
+            <Link href={'TODO'} target="_blank">
+              <SvgIcon fontSize="small" sx={{ display: 'block' }}>
+                <OpenInNew />
+              </SvgIcon>
+            </Link>
+          </Stack>
         </EnhancedTableCell>
-        <EnhancedTableCell align="center">{row.chain}</EnhancedTableCell>
+        <EnhancedTableCell align="center">
+          <Stack alignItems="center" direction="row" gap={1}>
+            <SvgIcon fontSize="small">
+              <SquareShape />
+            </SvgIcon>
+            <span>{row.chain}</span>
+          </Stack>
+        </EnhancedTableCell>
         <EnhancedTableCell align="center">
           {getDecimalString(row.locked, row.decimal)}
         </EnhancedTableCell>
         <EnhancedTableCell align="center">
-          {getDecimalString(row.bridged, row.decimal)}
+          {getDecimalString(row.locked, row.decimal)}
+        </EnhancedTableCell>
+        <EnhancedTableCell align="center">
+          <Stack alignItems="center" direction="row" gap={1}>
+            <span>HOT</span>
+            <Link href={'TODO'} target="_blank">
+              <SvgIcon fontSize="small" sx={{ display: 'block' }}>
+                <OpenInNew />
+              </SvgIcon>
+            </Link>
+          </Stack>
+        </EnhancedTableCell>
+        <EnhancedTableCell align="center">
+          <Stack alignItems="center" direction="row" gap={1}>
+            <span>COLD</span>
+            <Link href={'TODO'} target="_blank">
+              <SvgIcon fontSize="small" sx={{ display: 'block' }}>
+                <OpenInNew />
+              </SvgIcon>
+            </Link>
+          </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="center">
           <IconButton
@@ -253,60 +304,47 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell colSpan={10} padding="none">
           <Collapse in={open} unmountOnExit>
             <Divider variant="middle" sx={{ borderBottomStyle: 'dashed' }} />
-            <Box sx={{ m: 2 }}>
-              {data && (
-                <Grid container spacing={4}>
-                  <Grid item laptop={6}>
-                    <Typography variant="body2">Locked</Typography>
-                    {data.locked && (
-                      <Table size="small">
-                        <TableBody>
-                          {data.locked.map((item) => (
-                            <TableRow
-                              key={item.address}
-                              sx={{ '&:last-child td': { border: 0 } }}
-                            >
-                              <TableCell>
-                                <Avatar>T</Avatar>
-                              </TableCell>
-                              <TableCell>
-                                <Id id={item.address} indicator="middle" />
-                              </TableCell>
-                              <TableCell>
-                                {getDecimalString(item.amount, row.decimal)}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    )}
-                  </Grid>
-                  <Grid item laptop={6}>
-                    <Typography variant="body2">Bridged</Typography>
-                    {data.bridged && (
-                      <Table size="small">
-                        <TableBody>
-                          {data.bridged.map((item) => (
-                            <TableRow
-                              key={item.chain}
-                              sx={{ '&:last-child td': { border: 0 } }}
-                            >
-                              <TableCell>
-                                <Avatar>T</Avatar>
-                              </TableCell>
-                              <TableCell>{item.chain}</TableCell>
-                              <TableCell>
-                                {getDecimalString(item.amount, row.decimal)}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    )}
-                  </Grid>
-                </Grid>
-              )}
-            </Box>
+            {data && (
+              <Box sx={{ m: 2 }}>
+                {data.bridged && (
+                  <Table>
+                    <TableBody>
+                      {data.bridged.map((item) => (
+                        <TableRow
+                          key={item.chain}
+                          sx={{ '&:last-child td': { border: 0 } }}
+                        >
+                          <TableCell>
+                            <Stack alignItems="center" direction="row" gap={1}>
+                              <SvgIcon fontSize="small">
+                                <SquareShape />
+                              </SvgIcon>
+                              <span>{item.chain}</span>
+                            </Stack>
+                          </TableCell>
+                          <TableCell>
+                            {getDecimalString(item.amount, row.decimal)}
+                          </TableCell>
+                          <TableCell>
+                            <Stack alignItems="center" direction="row" gap={1}>
+                              <span>ID</span>
+                              <Link href={'TODO'} target="_blank">
+                                <SvgIcon
+                                  fontSize="small"
+                                  sx={{ display: 'block' }}
+                                >
+                                  <OpenInNew />
+                                </SvgIcon>
+                              </Link>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </Box>
+            )}
           </Collapse>
         </EnhancedTableCell>
       </TableRow>

@@ -23,6 +23,7 @@ export { ReactComponent as Moneybag } from './icons/moneybag.svg';
 export { ReactComponent as MoneyWithdrawal } from './icons/money-withdrawal.svg';
 export { ReactComponent as Moon } from './icons/moon.svg';
 export { ReactComponent as Newspaper } from './icons/newspaper.svg';
+export { ReactComponent as OpenInNew } from './icons/open-in-new.svg';
 export { ReactComponent as Pause } from './icons/pause.svg';
 export { ReactComponent as PauseCircle } from './icons/pause-circle.svg';
 export { ReactComponent as QrcodeScan } from './icons/qrcode-scan.svg';
