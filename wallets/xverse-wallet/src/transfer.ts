@@ -4,11 +4,7 @@ import {
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
-import Wallet, {
-  AddressPurpose,
-  BitcoinNetworkType,
-  RpcErrorCode,
-} from 'sats-connect';
+import Wallet, { AddressPurpose, RpcErrorCode } from 'sats-connect';
 
 import { getXverseWallet } from './getXverseWallet';
 
@@ -71,46 +67,25 @@ export const transferCreator =
         broadcast: false,
       });
       if (response.status === 'success') {
-        console.log('signPsbt: handle success response');
+        console.log('signPsbt: handle success response', response);
+        try {
+          const r = await config.submitTransaction(response.result.psbt);
+          console.log('submitTransaction: handle success response', r);
+          return r;
+        } catch (err) {
+          console.log('submitTransaction: handle error', err);
+          throw '';
+        }
       } else {
         if (response.error.code === RpcErrorCode.USER_REJECTION) {
           console.log('signPsbt: handle user request cancelation');
         } else {
           console.log('signPsbt: handle error');
         }
+        throw '';
       }
     } catch (err) {
       console.log('signPsbt: catch', err);
+      throw err;
     }
-
-    // const result: string = await new Promise((resolve, reject) => {
-    //   getXverseWallet().api.signTransaction({
-    //     payload: {
-    //       network: {
-    //         type: BitcoinNetworkType.Mainnet,
-    //       },
-    //       message: 'Sign Transaction',
-    //       psbtBase64: psbtData.psbt,
-    //       broadcast: false,
-    //       inputsToSign: [
-    //         {
-    //           address: userAddress,
-    //           signingIndexes: Array.from(Array(psbtData.inputSize).keys()),
-    //           sigHash: SigHash.SINGLE | SigHash.DEFAULT_ANYONECANPAY,
-    //         },
-    //       ],
-    //     },
-    //     onFinish: (response) => {
-    //       const signedPsbtBase64 = response.psbtBase64;
-    //       config
-    //         .submitTransaction(signedPsbtBase64)
-    //         .then((result) => resolve(result))
-    //         .catch((e) => reject(e));
-    //     },
-    //     onCancel: () => {
-    //       reject();
-    //     },
-    //   });
-    // });
-    return 'result';
   };
