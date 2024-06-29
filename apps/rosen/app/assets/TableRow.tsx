@@ -65,42 +65,42 @@ export const tabletHeader = [
     title: 'Network',
     cellProps: {
       width: 150,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
   {
     title: 'Locked',
     cellProps: {
       width: 150,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
   {
     title: 'Hot',
     cellProps: {
       width: 150,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
   {
     title: 'Cold',
     cellProps: {
       width: 150,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
   {
     title: 'Bridged',
     cellProps: {
       width: 150,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
   {
     title: '',
     cellProps: {
       width: 100,
-      align: 'center' as const,
+      align: 'left' as const,
     },
   },
 ];
@@ -236,7 +236,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             </Link>
           </Stack>
         </EnhancedTableCell>
-        <EnhancedTableCell align="center">
+        <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
             <SvgIcon fontSize="small">
               <SquareShape />
@@ -244,13 +244,10 @@ export const TabletRow: FC<RowProps> = (props) => {
             <span>{row.chain}</span>
           </Stack>
         </EnhancedTableCell>
-        <EnhancedTableCell align="center">
+        <EnhancedTableCell align="left">
           {getDecimalString(row.locked, row.decimal)}
         </EnhancedTableCell>
-        <EnhancedTableCell align="center">
-          {getDecimalString(row.locked, row.decimal)}
-        </EnhancedTableCell>
-        <EnhancedTableCell align="center">
+        <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
             <span>HOT</span>
             <Link href={'TODO'} target="_blank">
@@ -260,7 +257,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             </Link>
           </Stack>
         </EnhancedTableCell>
-        <EnhancedTableCell align="center">
+        <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
             <span>COLD</span>
             <Link href={'TODO'} target="_blank">
@@ -270,7 +267,10 @@ export const TabletRow: FC<RowProps> = (props) => {
             </Link>
           </Stack>
         </EnhancedTableCell>
-        <EnhancedTableCell align="center">
+        <EnhancedTableCell align="left">
+          {getDecimalString(row.bridged, row.decimal)}
+        </EnhancedTableCell>
+        <EnhancedTableCell align="right">
           <IconButton
             size="small"
             disabled={loading}
