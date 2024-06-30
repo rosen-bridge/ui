@@ -5,6 +5,7 @@ import { Networks } from '@rosen-ui/constants';
 
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import { AvailableNetworks } from '@/_networks';
+import { validate } from 'bitcoin-address-validation';
 
 /**
  * server action to verify the wallet addresses
@@ -20,6 +21,10 @@ export const validateAddress = (
       Address.from_base58(walletAddress);
     } else if (chain === Networks.CARDANO) {
       wasm.Address.from_bech32(walletAddress);
+    } else if (chain == Networks.BITCOIN) {
+      if (!validate(walletAddress)) {
+        throw new Error();
+      }
     }
     return { isValid: true };
   } catch {
