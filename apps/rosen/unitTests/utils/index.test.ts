@@ -2,7 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { getTokenNameAndId } from '@/_utils';
 
-import { Networks } from '@/_constants';
+import { Networks } from '@rosen-ui/constants';
+import { AvailableNetworks } from '@/_networks';
 
 describe('getTokenNameAndId', () => {
   /**
@@ -31,7 +32,9 @@ describe('getTokenNameAndId', () => {
         },
       };
 
-      expect(getTokenNameAndId(testToken, network)).toEqual({
+      expect(
+        getTokenNameAndId(testToken, network as AvailableNetworks),
+      ).toEqual({
         tokenName: testToken.name,
         tokenId: testToken.tokenId,
       });

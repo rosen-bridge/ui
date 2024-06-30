@@ -20,8 +20,9 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "buffer": "^6.0.3",
     "@rosen-bridge/json-bigint": "^0.1.0",
+    "buffer": "^6.0.3",
+    "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"
   }
 }

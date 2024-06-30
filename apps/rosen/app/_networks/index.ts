@@ -2,12 +2,15 @@ import BitcoinNetwork from './bitcoin';
 import CardanoNetwork from './cardano';
 import ErgoNetwork from './ergo';
 
-import { Networks } from '@/_constants';
+import { Networks } from '@rosen-ui/constants';
 
 export const availableNetworks = {
-  [Networks.ergo]: ErgoNetwork,
-  [Networks.cardano]: CardanoNetwork,
-  [Networks.bitcoin]: BitcoinNetwork,
-};
+  [Networks.ERGO]: ErgoNetwork,
+  [Networks.CARDANO]: CardanoNetwork,
+  [Networks.BITCOIN]: BitcoinNetwork,
+} as const;
 
-export type AvailableNetworks = keyof typeof Networks;
+export type AvailableNetworks = Exclude<
+  (typeof Networks)[keyof typeof Networks],
+  'ethereum'
+>;
