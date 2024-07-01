@@ -149,14 +149,27 @@ export const submitTransaction = async (
 
 export const isValidAddress = (addr: string) => {
   try {
+    // Decode the address using fromBech32
     const decoded = address.fromBech32(addr);
 
+    // Check if the decoded prefix matches the expected prefix for Bitcoin
     if (decoded.prefix !== 'bc') {
       return false;
     }
 
-    return true;
+    // Ensure the address does not start with 'bc1p' (Taproot)
+    if (addr.startsWith('bc1p')) {
+      return false;
+    }
+
+    // Ensure the address is either P2WPKH or P2WSH
+    if (decoded.version === 0) {
+      return true; // P2WPKH or P2WSH
+    } else {
+      return false;
+    }
   } catch {
+    // If an error is thrown, the address is invalid
     return false;
   }
 };
