@@ -323,7 +323,9 @@ const BridgeForm = () => {
           isValidating ? (
             <CircularProgress size={10} />
           ) : (
-            errors.walletAddress?.message?.toString()
+            errors.walletAddress?.message?.toString() ||
+            (targetField.value == 'bitcoin' &&
+              'Only Native SegWit (P2WPKH) addresses are supported')
           )
         }
         disabled={!targetField.value}
