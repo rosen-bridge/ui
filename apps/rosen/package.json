@@ -45,7 +45,6 @@
     "@rosen-ui/xdefi-wallet": "^0.3.2",
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/kv": "^2.0.0",
-    "bitcoin-address-validation": "^2.2.3",
     "buffer": "^6.0.3",
     "ergo-lib-wasm-nodejs": "^0.24.1",
     "joi": "^17.11.0",

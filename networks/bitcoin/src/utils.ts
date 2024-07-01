@@ -1,6 +1,6 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import Axios from 'axios';
-import { Psbt } from 'bitcoinjs-lib';
+import { Psbt, address } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
@@ -145,4 +145,18 @@ export const submitTransaction = async (
     psbt.extractTransaction().toHex()
   );
   return res.data;
+};
+
+export const isValidAddress = (addr: string) => {
+  try {
+    const decoded = address.fromBech32(addr);
+
+    if (decoded.prefix !== 'bc') {
+      return false;
+    }
+
+    return true;
+  } catch {
+    return false;
+  }
 };
