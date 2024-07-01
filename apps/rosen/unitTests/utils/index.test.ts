@@ -21,10 +21,10 @@ describe('getTokenNameAndId', () => {
    */
   it('it should return an objet containing the token name and token id given different networks', () => {
     Object.values(Networks).forEach((network, index) => {
-    /**
-     * TODO: remove it after fixing the typing in network
-     * local:ergo/rosen-bridge/ui#311
-     */
+      /**
+       * TODO: remove it after fixing the typing in network
+       * local:ergo/rosen-bridge/ui#311
+       */
       if (network == Networks.ETHEREUM) return;
 
       const testToken = {
