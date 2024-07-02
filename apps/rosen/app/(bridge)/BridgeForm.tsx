@@ -14,6 +14,7 @@ import {
   Button,
   CircularProgress,
   SvgIcon,
+  Alert,
 } from '@rosen-bridge/ui-kit';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
@@ -323,9 +324,7 @@ const BridgeForm = () => {
           isValidating ? (
             <CircularProgress size={10} />
           ) : (
-            errors.walletAddress?.message?.toString() ||
-            (targetField.value == 'bitcoin' &&
-              'Only Native SegWit (P2WPKH) addresses are supported')
+            errors.walletAddress?.message?.toString()
           )
         }
         disabled={!targetField.value}
@@ -333,6 +332,11 @@ const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
+      {targetField.value == 'bitcoin' && (
+        <Alert severity="warning">
+          Only Native SegWit (P2WPKH) addresses are supported.
+        </Alert>
+      )}
     </FormContainer>
   );
 };
