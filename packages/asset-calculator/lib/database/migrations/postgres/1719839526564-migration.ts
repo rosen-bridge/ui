@@ -4,15 +4,27 @@ export class Migration1719839526564 implements MigrationInterface {
   name = 'Migration1719839526564';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query('DROP TABLE "bridged_asset_entity"');
     await queryRunner.query(`
-            ALTER TABLE "bridged_asset_entity"
-            ADD "bridgedTokenId" character varying NOT NULL DEFAULT '-'
-        `);
+      CREATE TABLE "bridged_asset_entity" (
+          "amount" bigint NOT NULL,
+          "chain" character varying NOT NULL,
+          "tokenId" character varying NOT NULL,
+          "bridgedTokenId" character varying NOT NULL,
+          CONSTRAINT "PK_8470adda5563029fd48b7cbae09" PRIMARY KEY ("chain", "tokenId")
+      )
+  `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query('DROP TABLE "bridged_asset_entity"');
     await queryRunner.query(`
-            ALTER TABLE "bridged_asset_entity" DROP COLUMN "bridgedTokenId"
-        `);
+      CREATE TABLE "bridged_asset_entity" (
+          "amount" bigint NOT NULL,
+          "chain" character varying NOT NULL,
+          "tokenId" character varying NOT NULL,
+          CONSTRAINT "PK_8470adda5563029fd48b7cbae09" PRIMARY KEY ("chain", "tokenId")
+      )
+  `);
   }
 }
