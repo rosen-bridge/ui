@@ -1,6 +1,6 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import Axios from 'axios';
-import { Psbt } from 'bitcoinjs-lib';
+import { Psbt, address } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
@@ -145,4 +145,31 @@ export const submitTransaction = async (
     psbt.extractTransaction().toHex()
   );
   return res.data;
+};
+
+export const isValidAddress = (addr: string) => {
+  try {
+    // Decode the address using fromBech32
+    const decoded = address.fromBech32(addr);
+
+    // Check if the decoded prefix matches the expected prefix for Bitcoin
+    if (decoded.prefix !== 'bc') {
+      return false;
+    }
+
+    // Ensure the address does not start with 'bc1p' (Taproot)
+    if (addr.startsWith('bc1p')) {
+      return false;
+    }
+
+    // Ensure the address is either P2WPKH or P2WSH
+    if (decoded.version === 0) {
+      return true; // P2WPKH or P2WSH
+    } else {
+      return false;
+    }
+  } catch {
+    // If an error is thrown, the address is invalid
+    return false;
+  }
 };
