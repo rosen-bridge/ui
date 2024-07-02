@@ -1,9 +1,10 @@
 'use server';
 
 import { Address } from 'ergo-lib-wasm-nodejs';
-import { Networks } from '@/_constants';
+import { Networks } from '@rosen-ui/constants';
 
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
+import { AvailableNetworks } from '@/_networks';
 
 /**
  * server action to verify the wallet addresses
@@ -11,13 +12,13 @@ import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
  * @returns the validation results for the passed address
  */
 export const validateAddress = (
-  chain: keyof typeof Networks,
+  chain: AvailableNetworks,
   walletAddress: string,
 ) => {
   try {
-    if (chain === Networks.ergo) {
+    if (chain === Networks.ERGO) {
       Address.from_base58(walletAddress);
-    } else if (chain === Networks.cardano) {
+    } else if (chain === Networks.CARDANO) {
       wasm.Address.from_bech32(walletAddress);
     }
     return { isValid: true };

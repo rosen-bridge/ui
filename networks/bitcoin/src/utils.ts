@@ -27,7 +27,9 @@ export const generateOpReturnData = async (
   bridgeFee: string
 ): Promise<string> => {
   // parse toChain
-  const toChainCode = SUPPORTED_CHAINS.indexOf(toChain);
+  const toChainCode = SUPPORTED_CHAINS.indexOf(
+    toChain as (typeof SUPPORTED_CHAINS)[number]
+  );
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
   const toChainHex = toChainCode.toString(16).padStart(2, '0');
 

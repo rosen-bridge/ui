@@ -5,18 +5,17 @@ import { getDecimalString } from '@rosen-ui/utils';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { Networks } from '@/_constants';
-
-import { encode } from 'cbor-x';
+import { Networks } from '@rosen-ui/constants';
+import { AvailableNetworks } from '@/_networks';
 
 /**
  * a utility to make unique interface for accessing token name
  */
 export const getTokenNameAndId = (
   token: RosenChainToken,
-  network: keyof typeof Networks,
+  network: AvailableNetworks,
 ) => {
-  if ([Networks.ergo, Networks.cardano, Networks.bitcoin].includes(network)) {
+  if ([Networks.ERGO, Networks.CARDANO, Networks.BITCOIN].includes(network)) {
     return {
       tokenName: token.name,
       tokenId: token.tokenId,
@@ -32,8 +31,8 @@ export const getTokenNameAndId = (
  */
 export const getMinTransfer = async (
   token: RosenChainToken,
-  sourceChain: keyof typeof Networks,
-  targetChain: keyof typeof Networks,
+  sourceChain: AvailableNetworks,
+  targetChain: AvailableNetworks,
   tokensMap: any,
 ) => {
   const tokenMap = new TokenMap(tokensMap);
@@ -62,19 +61,3 @@ export const getMinTransfer = async (
       )
     : '0';
 };
-
-/**
- * convert a hex to cbor
- * @param hex
- */
-export const hexToCbor = (hex: string) =>
-  Buffer.from(encode(Buffer.from(hex, 'hex'))).toString('hex');
-
-/**
- * remove the decimal points from the input number and
- * convert number to bigInt
- * @param inputNumber
- */
-
-export const convertNumberToBigint = (inputNumber: number) =>
-  BigInt(Math.trunc(inputNumber));

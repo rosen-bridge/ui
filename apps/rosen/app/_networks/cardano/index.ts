@@ -1,15 +1,13 @@
 import { compact } from 'lodash-es';
 
-import { validateDecimalPlaces } from '@rosen-ui/utils';
+import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
-import { Networks } from '@/_constants';
+import { Networks } from '@rosen-ui/constants';
 
 import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoIcon } from '@rosen-bridge/icons';
-
-import { convertNumberToBigint } from '@/_utils';
 
 import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
 import { flintWalletCreator, flintWalletInfo } from '@rosen-ui/flint-wallet';
@@ -36,7 +34,7 @@ import getVesprWallet, {
  * functionality
  */
 const CardanoNetwork: CardanoNetworkType = {
-  name: Networks.cardano,
+  name: Networks.CARDANO,
   label: 'Cardano',
   supportedWallets: [
     eternlWalletInfo,

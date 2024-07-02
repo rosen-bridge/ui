@@ -10,15 +10,15 @@ import { useTokensMap } from './useTokensMap';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { Networks } from '@/_constants';
+import { AvailableNetworks } from '@/_networks';
 
 /**
  * calculates the fees for a token swap between
  * two networks
  */
 const useTransactionFees = (
-  sourceChain: keyof typeof Networks | null,
-  targetChain: keyof typeof Networks | null,
+  sourceChain: AvailableNetworks | null,
+  targetChain: AvailableNetworks | null,
   token: RosenChainToken | null,
   amount: string | null,
 ) => {

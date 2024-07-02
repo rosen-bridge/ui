@@ -1,8 +1,6 @@
 import { Wallet, WalletInfo } from '@rosen-ui/wallet-api';
 
-import { Networks } from '@/_constants';
-
-type NetworksType = typeof Networks;
+import { AvailableNetworks } from '@/_networks';
 
 interface GetMaxTransferParams {
   balance: number;
@@ -13,7 +11,7 @@ interface GetMaxTransferParams {
  * the main network interface for all supported networks
  */
 export interface BaseNetwork<
-  NetworkName extends keyof NetworksType,
+  NetworkName extends AvailableNetworks,
   GetMaxTransferParamsExtra = {},
 > {
   name: NetworkName;

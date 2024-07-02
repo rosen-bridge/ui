@@ -8,4 +8,4 @@ export const SUPPORTED_CHAINS = [
   Networks.CARDANO,
   Networks.BITCOIN,
   Networks.ETHEREUM,
-];
+] as const;
