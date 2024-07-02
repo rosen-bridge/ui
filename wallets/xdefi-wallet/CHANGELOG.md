@@ -1,5 +1,19 @@
 # @rosen-ui/xdefi-wallet
 
+## 0.4.0
+
+### Minor Changes
+
+- Include the specific global type declaration.
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/utils@0.3.0
+  - @rosen-network/bitcoin@0.2.0
+  - @rosen-ui/constants@0.0.3
+  - @rosen-ui/wallet-api@1.0.2
+
 ## 0.3.2
 
 ### Patch Changes

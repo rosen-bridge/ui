@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/lace-wallet",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -23,7 +23,7 @@
     "@rosen-bridge/icons": "^0.4.0",
     "@rosen-bridge/tokens": "^1.1.0",
     "@rosen-network/cardano": "^0.1.1",
-    "@rosen-ui/utils": "^0.2.0",
-    "@rosen-ui/wallet-api": "^1.0.1"
+    "@rosen-ui/utils": "^0.3.0",
+    "@rosen-ui/wallet-api": "^1.0.2"
   }
 }
