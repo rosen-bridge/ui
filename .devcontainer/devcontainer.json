@@ -1,0 +1,22 @@
+{
+  "name": "Node.js & PostgreSQL",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+
+  "containerEnv": {
+    "VISUAL": "code --wait"
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "zsh",
+        "terminal.integrated.profiles.linux": { "zsh": { "path": "/bin/zsh" } }
+      },
+      "extensions": ["cweijan.vscode-mysql-client2"]
+    }
+  },
+  "features": {
+    "ghcr.io/robbert229/devcontainer-features/postgresql-client:1": {}
+  }
+}
