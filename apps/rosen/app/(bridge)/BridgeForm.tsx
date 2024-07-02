@@ -334,7 +334,7 @@ const BridgeForm = () => {
       />
       {targetField.value == 'bitcoin' && (
         <Alert severity="warning">
-          Only Native SegWit (P2WPKH) addresses are supported.
+          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
     </FormContainer>
