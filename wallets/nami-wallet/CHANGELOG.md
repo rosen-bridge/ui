@@ -1,5 +1,14 @@
 # @rosen-bridge/rosen-app
 
+## 0.1.3
+
+### Patch Changes
+
+- Remove the hexToCbor utility and its associated package, and instead use the equivalent utils provided in the @rosen-ui/utils package.
+- Updated dependencies
+  - @rosen-ui/utils@0.3.0
+  - @rosen-ui/wallet-api@1.0.2
+
 ## 0.1.2
 
 ### Patch Changes

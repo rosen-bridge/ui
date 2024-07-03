@@ -12,7 +12,8 @@
     "test": "NODE_OPTIONS=--loader=extensionless vitest",
     "test:related": "NODE_OPTIONS=--loader=extensionless vitest related --run",
     "coverage": "npm run test -- --coverage",
-    "version": "npx changeset version && npm i"
+    "version": "npx changeset version && npm i && npx changeset --empty",
+    "version:rosen": "npx changeset version --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/guard-app && npm i && npx changeset --empty"
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1"
