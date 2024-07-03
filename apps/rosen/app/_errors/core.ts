@@ -15,7 +15,7 @@ type Unwrap = <Func extends AsyncFunction>(
 /**
  * Interface representing the result of an error.
  */
-export interface WrapError {}
+export interface WrapError extends Error {}
 
 /**
  * Factory function to create wrap and unwrap functions.
