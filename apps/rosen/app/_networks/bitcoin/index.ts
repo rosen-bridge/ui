@@ -5,7 +5,7 @@ import { compact } from 'lodash-es';
 
 import getMaxTransfer from './getMaxTransfer';
 
-import { Networks } from '@/_constants';
+import { Networks } from '@rosen-ui/constants';
 
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
 
@@ -22,7 +22,7 @@ import {
  * functionality
  */
 const BitcoinNetwork: BitcoinNetworkType = {
-  name: Networks.bitcoin,
+  name: Networks.BITCOIN,
   label: 'Bitcoin',
   logo: BitcoinIcon,
   supportedWallets: [xdefiWalletInfo],

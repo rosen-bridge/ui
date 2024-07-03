@@ -1,5 +1,11 @@
 # @rosen-ui/utils
 
+## 0.3.0
+
+### Minor Changes
+
+- Add the hexToCbor utility
+
 ## 0.2.0
 
 ### Minor Changes
