@@ -11,6 +11,7 @@ import { useTokensMap } from './useTokensMap';
 import { calculateFee } from '@/_actions/calculateFee';
 
 import { AvailableNetworks } from '@/_networks';
+import { unwrap } from '@/_errors';
 
 /**
  * calculates the fees for a token swap between
@@ -71,18 +72,18 @@ const useTransactionFees = (
       !pending
     ) {
       startTransition(async () => {
-        const data = await calculateFee(
-          sourceChain,
-          targetChain,
-          tokenId,
-          selectedNetwork.nextHeightInterval,
-        );
-        if (data.status === 'success') {
-          const parsedData = {
-            ...data,
-            data: JsonBigInt.parse(data.data!),
-          };
-          const { fees, nextFees } = parsedData.data;
+        try {
+          const data = await unwrap(calculateFee)(
+            sourceChain,
+            targetChain,
+            tokenId,
+            selectedNetwork.nextHeightInterval,
+          );
+
+          const parsedData = JsonBigInt.parse(data);
+
+          const { fees, nextFees } = parsedData;
+
           if (
             fees.bridgeFee !== nextFees.bridgeFee ||
             fees.networkFee !== nextFees.networkFee
@@ -92,10 +93,19 @@ const useTransactionFees = (
               'warning',
             );
           }
-          feeInfo.current = parsedData;
-        } else if (data.status === 'error') {
+
+          feeInfo.current = {
+            tokenId,
+            tatus: 'success',
+            data: parsedData,
+          };
+        } catch (error: any) {
           openSnackbar('something went wrong! please try again', 'error');
-          feeInfo.current = data;
+          feeInfo.current = {
+            tokenId,
+            status: 'error',
+            message: error?.message || error,
+          };
         }
       });
     }

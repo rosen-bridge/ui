@@ -7,6 +7,7 @@ import { calculateFee } from '@/_actions/calculateFee';
 
 import { Networks } from '@rosen-ui/constants';
 import { AvailableNetworks } from '@/_networks';
+import { unwrap } from '@/_errors';
 
 /**
  * a utility to make unique interface for accessing token name
@@ -42,22 +43,28 @@ export const getMinTransfer = async (
   });
   const ergoTokenId = tokens[0].ergo.tokenId;
 
-  const data = await calculateFee(sourceChain, targetChain, ergoTokenId, 0);
-  const parsedData = {
-    ...data,
-    data: JsonBigInt.parse(data.data!),
-  };
-  const { fees } = parsedData.data;
+  try {
+    const data = await unwrap(calculateFee)(
+      sourceChain,
+      targetChain,
+      ergoTokenId,
+      0,
+    );
 
-  const networkFee = fees ? Number(fees.networkFee) : 0;
-  const bridgeFee = fees ? Number(fees.bridgeFee) : 0;
+    const { fees } = JsonBigInt.parse(data);
 
-  const minTransfer = bridgeFee + networkFee;
+    const networkFee = fees ? Number(fees.networkFee) : 0;
+    const bridgeFee = fees ? Number(fees.bridgeFee) : 0;
 
-  return minTransfer
-    ? getDecimalString(
-        (minTransfer + 1).toString() || '0',
-        token?.decimals || 0,
-      )
-    : '0';
+    const minTransfer = bridgeFee + networkFee;
+
+    return minTransfer
+      ? getDecimalString(
+          (minTransfer + 1).toString() || '0',
+          token?.decimals || 0,
+        )
+      : '0';
+  } catch {
+    return '0';
+  }
 };
