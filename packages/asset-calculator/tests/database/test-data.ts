@@ -24,12 +24,14 @@ const bridgedAssets: BridgedAssetEntity[] = [
     tokenId: tokens[0].id,
     amount: 100n,
     chain: 'Bitcoin',
+    bridgedTokenId: `123${tokens[0].id}`,
   },
   {
     token: tokens[0],
     tokenId: tokens[0].id,
     amount: 200n,
     chain: 'Cardano',
+    bridgedTokenId: `123${tokens[0].id}`,
   },
 ];
 

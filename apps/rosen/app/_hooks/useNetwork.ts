@@ -1,7 +1,7 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 import { useMemo } from 'react';
 
-import { Networks } from '@/_constants';
+import { Networks } from '@rosen-ui/constants';
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 
 import useBridgeForm from './useBridgeForm';
