@@ -21,6 +21,7 @@ export const getAsset = async (id: string) => {
     bridged: assetDetails.bridged.map((bridgedItem) => ({
       chain: bridgedItem.chain,
       amount: bridgedItem.amount.toString(),
+      birdgedTokenId: bridgedItem.bridgedTokenId
     })),
   };
 };

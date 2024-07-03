@@ -42,11 +42,13 @@ export const getAsset = async (id: string) => {
     throw new NotFoundError(`Token with id [${id}] not found`);
   }
 
-  const bridged: Pick<BridgedAssetEntity, 'amount' | 'chain'>[] =
-    await bridgedAssetRepository.find({
-      where: { tokenId: id },
-      select: ['amount', 'chain'],
-    });
+  const bridged: Pick<
+    BridgedAssetEntity,
+    'amount' | 'chain' | 'bridgedTokenId'
+  >[] = await bridgedAssetRepository.find({
+    where: { tokenId: id },
+    select: ['amount', 'chain', 'bridgedTokenId'],
+  });
 
   const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] =
     await lockedAssetRepository.find({
