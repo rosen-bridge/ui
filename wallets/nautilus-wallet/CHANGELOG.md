@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-app
 
+## 0.2.0
+
+### Minor Changes
+
+- Include the specific global type declaration.
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-network/ergo@0.1.2
+  - @rosen-ui/wallet-api@1.0.2
+
 ## 0.1.1
 
 ### Patch Changes
