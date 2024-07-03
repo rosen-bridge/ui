@@ -4,21 +4,17 @@ type Wrap = <Func extends AsyncFunction>(
   func: Func,
 ) => (
   ...args: Parameters<Func>
-) => Promise<Awaited<ReturnType<Func>> | WrapError>;
+) => Promise<Awaited<ReturnType<Func>> | WrapResult>;
 
 type Unwrap = <Func extends AsyncFunction>(
   func: Func,
 ) => (
   ...args: Parameters<Func>
-) => Promise<Exclude<Awaited<ReturnType<Func>>, WrapError>>;
+) => Promise<Exclude<Awaited<ReturnType<Func>>, WrapResult>>;
 
-export const PROPERTY_NAME = '__TYPE__';
+export class WrapResult {}
 
-export class WrapError extends Error {
-  static [PROPERTY_NAME] = 'default';
-}
-
-export const create = (...errors: Array<typeof WrapError>) => {
+export const create = (key: string, errors: Array<any>) => {
   const wrap: Wrap =
     (func) =>
     async (...args) => {
@@ -27,7 +23,7 @@ export const create = (...errors: Array<typeof WrapError>) => {
       } catch (error: any) {
         return {
           message: error.message,
-          [PROPERTY_NAME]: error.constructor[PROPERTY_NAME],
+          [key]: error.constructor[key] || 'unknown',
         };
       }
     };
@@ -40,20 +36,15 @@ export const create = (...errors: Array<typeof WrapError>) => {
       if (Object.prototype.toString.call(result) != '[object Object]')
         return result;
 
+      if (!(key in result)) return result;
+
       for (const err of errors) {
-        if (err[PROPERTY_NAME] != result[PROPERTY_NAME]) continue;
-
-        const error = new err(result.message);
-
-        for (const key in result) {
-          if (!Object.prototype.hasOwnProperty.call(result, key)) continue;
-          (error as any)[key] = result[key];
+        if (err[key] == result[key]) {
+          throw new err(result.message);
         }
-
-        throw error;
       }
 
-      return result;
+      throw new Error(result.message);
     };
 
   return { wrap, unwrap };
