@@ -15,6 +15,27 @@ const rateLimit =
       })
     : undefined;
 
+/**
+ * check if origin is an allowed origin from CORS perspective
+ * @param origin
+ */
+const isOriginAllowed = (origin: string) =>
+  process.env.ALLOWED_ORIGINS?.includes('*') ||
+  process.env.ALLOWED_ORIGINS?.includes(origin);
+
+/**
+ * get a headers object through which CORS can be enabled
+ * @param origin
+ */
+const getCORSHeaders = (origin: string) => {
+  const responseHeaders = new Headers();
+  responseHeaders.append('Access-Control-Allow-Methods', 'GET');
+  responseHeaders.append('Access-Control-Allow-Headers', 'Content-Type');
+  responseHeaders.append('Access-Control-Allow-Origin', origin);
+
+  return responseHeaders;
+};
+
 export async function middleware(request: NextRequest) {
   const ip = request.ip ?? '127.0.0.1';
 
@@ -23,6 +44,12 @@ export async function middleware(request: NextRequest) {
   if (!success) {
     return Response.json('Too many requests', { status: 429 });
   }
+
+  const origin = request.headers.get('Origin');
+  if (request.url.includes('/api') && origin && isOriginAllowed(origin)) {
+    return NextResponse.next({ headers: getCORSHeaders(origin) });
+  }
+
   return NextResponse.next();
 }
 

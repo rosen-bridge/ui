@@ -19,27 +19,6 @@ const nextConfig = {
           },
         ],
       },
-      ...(process.env.ALLOWED_ORIGINS
-        ? [
-            {
-              source: '/api/:path*',
-              headers: [
-                {
-                  key: 'Access-Control-Allow-Origin',
-                  value: process.env.ALLOWED_ORIGINS.slice(','),
-                },
-                {
-                  key: 'Access-Control-Allow-Methods',
-                  value: 'GET',
-                },
-                {
-                  key: 'Access-Control-Allow-Headers',
-                  value: 'Content-Type',
-                },
-              ],
-            },
-          ]
-        : []),
     ];
   },
   webpack: function (config, options) {
