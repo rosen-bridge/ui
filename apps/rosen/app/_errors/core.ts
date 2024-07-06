@@ -1,3 +1,5 @@
+import { isPlainObject } from 'lodash-es';
+
 type AsyncFunction = (...args: any[]) => Promise<any>;
 
 type Wrap = <Func extends AsyncFunction>(
@@ -77,7 +79,7 @@ export const create = (key: string, errors: Array<any>) => {
           };
         }
         return {
-          message: String(error),
+          message: JSON.stringify(error),
           [key]: 'unknown',
         };
       }
@@ -96,8 +98,7 @@ export const create = (key: string, errors: Array<any>) => {
       const result = await func(...args);
 
       // Return result if it not an object.
-      if (Object.prototype.toString.call(result) != '[object Object]')
-        return result;
+      if (!isPlainObject(result)) return result;
 
       // Return result if the key is not in the object.
       if (!(key in result)) return result;
