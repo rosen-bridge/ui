@@ -15,6 +15,7 @@ import {
   submitTransaction,
   getAddressBalance,
 } from './server';
+import { tokenMap } from '../tokenMap';
 
 /**
  * the main object for Bitcoin network
@@ -30,7 +31,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
     xdefiWalletCreator({
       generateOpReturnData,
       generateUnsignedTx,
-      getAddressBalance,
+      getAddressBalance: getAddressBalance(tokenMap),
       submitTransaction,
     }),
   ]),

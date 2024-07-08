@@ -72,5 +72,5 @@ export type WalletCreatorConfig = {
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: typeof generateUnsignedTx;
   submitTransaction: typeof submitTransaction;
-  getAddressBalance: typeof getAddressBalance;
+  getAddressBalance: ReturnType<typeof getAddressBalance>;
 };

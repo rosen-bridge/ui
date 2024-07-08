@@ -7,8 +7,10 @@ import {
   getAddressUtxos,
   getMinimumMeaningfulSatoshi,
 } from '@rosen-network/bitcoin';
+import { Networks } from '@rosen-ui/constants';
 
 import { BitcoinNetwork } from '@/_types/network';
+import { tokenMap } from '../tokenMap';
 
 /**
  * get max transfer for bitcoin
@@ -43,6 +45,12 @@ const getMaxTransfer = async ({
   const estimatedFee = Math.ceil((estimatedTxWeight / 4) * feeRatio);
   const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
 
+  const minSatoshiWrapped = tokenMap.wrapAmount(
+    'btc',
+    minSatoshi,
+    Networks.BITCOIN,
+  );
+
   return balance < 0 || !isNative
     ? 0
     : /**
@@ -51,7 +59,7 @@ const getMaxTransfer = async ({
        *
        * local:ergo/rosen-bridge/utils#204
        */
-      balance - estimatedFee - Number(minSatoshi) - utxos.length - 1;
+      balance - estimatedFee - Number(minSatoshiWrapped) - utxos.length - 1;
 };
 
 export default getMaxTransfer;

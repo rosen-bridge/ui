@@ -1,4 +1,6 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
+import { Networks } from '@rosen-ui/constants';
+import { TokenMap } from '@rosen-bridge/tokens';
 import Axios from 'axios';
 import { Psbt, address } from 'bitcoinjs-lib';
 
@@ -73,14 +75,18 @@ export const getAddressUtxos = async (
  * @param address
  * @returns
  */
-export const getAddressBalance = async (address: string): Promise<bigint> => {
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
-  const GET_ADDRESS = `${esploraUrl}/api/address/${address}`;
-  const res = await Axios.get<EsploraAddress>(GET_ADDRESS);
+export const getAddressBalance =
+  (tokenMap: TokenMap) =>
+  async (address: string): Promise<bigint> => {
+    const esploraUrl = process.env.BITCOIN_ESPLORA_API;
+    const GET_ADDRESS = `${esploraUrl}/api/address/${address}`;
+    const res = await Axios.get<EsploraAddress>(GET_ADDRESS);
 
-  const chainStat = res.data.chain_stats;
-  return BigInt(chainStat.funded_txo_sum - chainStat.spent_txo_sum);
-};
+    const chainStat = res.data.chain_stats;
+    const amount = BigInt(chainStat.funded_txo_sum - chainStat.spent_txo_sum);
+
+    return tokenMap.wrapAmount('btc', amount, Networks.BITCOIN).amount;
+  };
 
 /**
  * gets current fee ratio of the network
