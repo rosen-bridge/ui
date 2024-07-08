@@ -3,10 +3,11 @@ import { xdefiWalletCreator, xdefiWalletInfo } from '@rosen-ui/xdefi-wallet';
 
 import { compact } from 'lodash-es';
 
-import getMaxTransfer from './getMaxTransfer';
+import { getMaxTransfer } from './getMaxTransfer';
 
 import { Networks } from '@rosen-ui/constants';
 
+import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
 
 import {
@@ -28,15 +29,15 @@ const BitcoinNetwork: BitcoinNetworkType = {
   supportedWallets: [xdefiWalletInfo],
   availableWallets: compact([
     xdefiWalletCreator({
-      generateOpReturnData,
-      generateUnsignedTx,
-      getAddressBalance,
-      submitTransaction,
+      generateOpReturnData: unwrap(generateOpReturnData),
+      generateUnsignedTx: unwrap(generateUnsignedTx),
+      getAddressBalance: unwrap(getAddressBalance),
+      submitTransaction: unwrap(submitTransaction),
     }),
   ]),
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
-  getMaxTransfer,
+  getMaxTransfer: unwrap(getMaxTransfer),
 };
 
 export default BitcoinNetwork;
