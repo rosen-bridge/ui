@@ -96,7 +96,7 @@ const useTransactionFees = (
 
           feeInfo.current = {
             tokenId,
-            tatus: 'success',
+            status: 'success',
             data: parsedData,
           };
         } catch (error: any) {
