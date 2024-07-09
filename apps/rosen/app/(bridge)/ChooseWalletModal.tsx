@@ -7,15 +7,14 @@ import {
   Grid,
   Tooltip,
 } from '@rosen-bridge/ui-kit';
-import { Wallet, WalletInfo } from '@rosen-ui/wallet-api';
+import { Wallet } from '@rosen-ui/wallet-api';
 
 interface ChooseWalletModalProps {
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
   chainName: string;
-  supportedWallets: WalletInfo[];
-  availableWallets: Wallet[];
+  wallets: Wallet[];
 }
 
 /**
@@ -25,8 +24,7 @@ interface ChooseWalletModalProps {
  * @param handleClose
  * @param setSelectedWallet
  * @param chainName
- * @param supportedWallets
- * @param availableWallets
+ * @param wallets
  *
  */
 export const ChooseWalletModal = ({
@@ -34,8 +32,7 @@ export const ChooseWalletModal = ({
   handleClose,
   setSelectedWallet,
   chainName,
-  supportedWallets,
-  availableWallets,
+  wallets,
 }: ChooseWalletModalProps) => {
   const handleConnect = async (wallet: Wallet) => {
     setSelectedWallet && (await setSelectedWallet(wallet));
@@ -57,9 +54,10 @@ export const ChooseWalletModal = ({
             mt: (theme) => theme.spacing(4),
           }}
         >
-          {supportedWallets.map(
-            ({ icon: WalletIcon, label, link, name }, index) => (
-              <Tooltip title={name} key={label}>
+          {wallets.map((wallet) => {
+            const WalletIcon = wallet.icon;
+            return (
+              <Tooltip title={wallet.name} key={wallet.label}>
                 <Grid
                   item
                   sx={{
@@ -87,7 +85,7 @@ export const ChooseWalletModal = ({
                       },
                     }}
                     component="a"
-                    href={link}
+                    href={wallet.link}
                     target="_blank"
                   >
                     <WalletIcon />
@@ -95,25 +93,19 @@ export const ChooseWalletModal = ({
                   <Button
                     onClick={(event) => {
                       event.preventDefault();
-                      handleConnect(
-                        availableWallets.find(
-                          (wallet) => wallet.name === name,
-                        )!,
-                      );
+                      handleConnect(wallet);
                     }}
                     variant="contained"
                     size="small"
                     sx={{ mt: (theme) => theme.spacing(1), width: '100%' }}
-                    disabled={
-                      !availableWallets.find((wallet) => wallet.name === name)
-                    }
+                    disabled={!wallet.isAvailable()}
                   >
                     Connect
                   </Button>
                 </Grid>
               </Tooltip>
-            ),
-          )}
+            );
+          })}
         </Grid>
       </DialogContent>
       <DialogActions>

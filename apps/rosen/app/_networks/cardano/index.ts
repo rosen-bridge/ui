@@ -1,3 +1,5 @@
+import { compact } from 'lodash-es';
+
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@rosen-ui/constants';
@@ -34,7 +36,7 @@ import getVesprWallet, {
 const CardanoNetwork: CardanoNetworkType = {
   name: Networks.CARDANO,
   label: 'Cardano',
-  wallets: [
+  wallets: compact([
     eternlWalletCreator({
       decodeWasmValue: decodeWasmValue,
       generateLockAuxiliaryData: generateLockAuxiliaryData,
@@ -62,7 +64,7 @@ const CardanoNetwork: CardanoNetworkType = {
     isVesprAvailable() && {
       ...getVesprWallet(),
       getBalance: async (token: RosenChainToken) => {
-        const context = await getVesprWallet().api.enable();
+        const context = await getVesprWallet().api().enable();
         const rawValue = await context.getBalance();
         const balances = await decodeWasmValue(rawValue);
 
@@ -84,7 +86,7 @@ const CardanoNetwork: CardanoNetworkType = {
         validateDecimalPlaces(decimalBridgeFee, token.decimals);
         validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
-        const wallet = await getVesprWallet().api.enable();
+        const wallet = await getVesprWallet().api().enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
         const amount = convertNumberToBigint(
@@ -127,7 +129,7 @@ const CardanoNetwork: CardanoNetworkType = {
         return result;
       },
     },
-  ],
+  ]),
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,

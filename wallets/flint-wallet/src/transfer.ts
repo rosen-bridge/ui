@@ -19,7 +19,7 @@ export const transferCreator =
     validateDecimalPlaces(decimalBridgeFee, token.decimals);
     validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
-    const wallet = await getFlintWallet().api.enable();
+    const wallet = await getFlintWallet().api().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
     const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
