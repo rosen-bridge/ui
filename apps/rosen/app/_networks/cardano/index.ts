@@ -1,5 +1,3 @@
-import { compact } from 'lodash-es';
-
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@rosen-ui/constants';
@@ -9,10 +7,10 @@ import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoIcon } from '@rosen-bridge/icons';
 
-import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
-import { flintWalletCreator, flintWalletInfo } from '@rosen-ui/flint-wallet';
-import { laceWalletCreator, laceWalletInfo } from '@rosen-ui/lace-wallet';
-import { namiWalletCreator, namiWalletInfo } from '@rosen-ui/nami-wallet';
+import { eternlWalletCreator } from '@rosen-ui/eternl-wallet';
+import { flintWalletCreator } from '@rosen-ui/flint-wallet';
+import { laceWalletCreator } from '@rosen-ui/lace-wallet';
+import { namiWalletCreator } from '@rosen-ui/nami-wallet';
 
 import {
   decodeWasmValue,
@@ -36,13 +34,7 @@ import getVesprWallet, {
 const CardanoNetwork: CardanoNetworkType = {
   name: Networks.CARDANO,
   label: 'Cardano',
-  supportedWallets: [
-    eternlWalletInfo,
-    flintWalletInfo,
-    laceWalletInfo,
-    namiWalletInfo,
-  ],
-  availableWallets: compact([
+  wallets: [
     eternlWalletCreator({
       decodeWasmValue: decodeWasmValue,
       generateLockAuxiliaryData: generateLockAuxiliaryData,
@@ -135,7 +127,7 @@ const CardanoNetwork: CardanoNetworkType = {
         return result;
       },
     },
-  ]),
+  ],
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,

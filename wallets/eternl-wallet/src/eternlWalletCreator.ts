@@ -6,8 +6,8 @@ import { isEternlAvailable } from './isEternlAvailable';
 import { transferCreator } from './transfer';
 
 export const eternlWalletCreator: WalletCreator = (config) => {
-  if (!isEternlAvailable()) return;
   return Object.assign({}, getEternlWallet(), {
+    isAvailable: isEternlAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: async () => {

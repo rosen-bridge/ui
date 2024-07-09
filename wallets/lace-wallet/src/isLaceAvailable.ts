@@ -1,3 +1,3 @@
 export const isLaceAvailable = () => {
-  return typeof cardano !== 'undefined' && cardano?.lace;
+  return typeof cardano !== 'undefined' && !!cardano?.lace;
 };

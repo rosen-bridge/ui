@@ -6,8 +6,8 @@ import { isLaceAvailable } from './isLaceAvailable';
 import { transferCreator } from './transfer';
 
 export const laceWalletCreator: WalletCreator = (config) => {
-  if (!isLaceAvailable()) return;
   return Object.assign({}, getLaceWallet(), {
+    isAvailable: isLaceAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: async () => {

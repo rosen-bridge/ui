@@ -1,4 +1,4 @@
-import { Wallet, WalletInfo } from '@rosen-ui/wallet-api';
+import { Wallet } from '@rosen-ui/wallet-api';
 
 import { AvailableNetworks } from '@/_networks';
 
@@ -17,8 +17,7 @@ export interface BaseNetwork<
   name: NetworkName;
   logo: string;
   label: string;
-  availableWallets: Wallet[];
-  supportedWallets: WalletInfo[];
+  wallets: Wallet[];
   nextHeightInterval: number;
   lockAddress: string;
   getMaxTransfer: (
