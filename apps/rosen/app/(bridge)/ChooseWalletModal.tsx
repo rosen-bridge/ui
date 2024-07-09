@@ -6,8 +6,10 @@ import {
   DialogContentText,
   Grid,
   Tooltip,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { Wallet } from '@rosen-ui/wallet-api';
+import { useEffect, useState } from 'react';
 
 interface ChooseWalletModalProps {
   open: boolean;
@@ -34,10 +36,24 @@ export const ChooseWalletModal = ({
   chainName,
   wallets,
 }: ChooseWalletModalProps) => {
+  const [, forceUpdate] = useState(0);
+
   const handleConnect = async (wallet: Wallet) => {
     setSelectedWallet && (await setSelectedWallet(wallet));
     handleClose();
   };
+
+  useEffect(() => {
+    if (!open) return;
+
+    const timeout = setInterval(() => {
+      forceUpdate((prevState) => prevState + 1);
+    }, 2000);
+
+    return () => {
+      clearInterval(timeout);
+    };
+  }, [open]);
 
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="tablet">
@@ -45,11 +61,18 @@ export const ChooseWalletModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
+        <Typography
+          color={(theme) => theme.palette.warning.light}
+          variant="body1"
+          pt={1}
+        >
+          It may be necessary to reload this page after the following extensions
+          have been installed in order to connect to them.
+        </Typography>
         <Grid
           container
           justifyContent="center"
           sx={{
-            pt: (theme) => theme.spacing(1),
             gap: (theme) => theme.spacing(2),
             mt: (theme) => theme.spacing(4),
           }}

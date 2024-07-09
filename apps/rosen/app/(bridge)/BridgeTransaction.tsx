@@ -69,7 +69,7 @@ const BridgeTransaction = () => {
     isLoading: isLoadingFees,
     minTransfer,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
-  const { setSelectedWallet, availableWallets, selectedWallet } = useWallet();
+  const { setSelectedWallet, wallets, selectedWallet } = useWallet();
 
   const { selectedNetwork } = useNetwork();
 
@@ -225,7 +225,7 @@ const BridgeTransaction = () => {
               isFormSubmitting || isTransactionSubmitting || isLoadingFees
             }
             type="submit"
-            disabled={!availableWallets}
+            disabled={!sourceValue}
             onClick={() => {
               if (!selectedWallet) {
                 setChooseWalletsModalOpen(true);
@@ -243,8 +243,7 @@ const BridgeTransaction = () => {
         chainName={selectedNetwork?.name ?? ''}
         setSelectedWallet={setSelectedWallet}
         handleClose={() => setChooseWalletsModalOpen(false)}
-        supportedWallets={selectedNetwork?.supportedWallets ?? []}
-        availableWallets={availableWallets ?? []}
+        wallets={wallets || []}
       />
     </>
   );
