@@ -13,5 +13,5 @@ export const getFlintWallet = () =>
       ...flintWalletInfo,
       connectWallet,
     },
-    cardano.flint
+    () => cardano.flint
   );

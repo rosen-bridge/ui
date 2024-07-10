@@ -7,8 +7,8 @@ import { transferCreator } from './transfer';
 import { getAddressCreator } from './getAddressCreator';
 
 export const xdefiWalletCreator: WalletCreator = (config) => {
-  if (!isXdefiAvailable()) return;
   return Object.assign({}, getXdefiWallet(), {
+    isAvailable: isXdefiAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: getAddressCreator(config),

@@ -13,6 +13,6 @@ export const getEternlWallet = () => {
       ...eternlWalletInfo,
       connectWallet,
     },
-    cardano.eternl
+    () => cardano.eternl
   );
 };

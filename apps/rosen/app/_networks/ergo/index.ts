@@ -1,11 +1,8 @@
-import {
-  nautilusWalletCreator,
-  nautilusWalletInfo,
-} from '@rosen-ui/nautilus-wallet';
-import { compact } from 'lodash-es';
+import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
 
 import { Networks } from '@rosen-ui/constants';
 
+import { unwrap } from '@/_errors';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
@@ -24,12 +21,11 @@ import { generateUnsignedTx } from './server';
 const ErgoNetwork: ErgoNetworkType = {
   name: Networks.ERGO,
   label: 'Ergo',
-  supportedWallets: [nautilusWalletInfo],
-  availableWallets: compact([
+  wallets: [
     nautilusWalletCreator({
-      generateUnsignedTx,
+      generateUnsignedTx: unwrap(generateUnsignedTx),
     }),
-  ]),
+  ],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
