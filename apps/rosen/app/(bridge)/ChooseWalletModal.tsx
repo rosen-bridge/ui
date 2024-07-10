@@ -36,7 +36,7 @@ export const ChooseWalletModal = ({
   chainName,
   wallets,
 }: ChooseWalletModalProps) => {
-  const [, forceUpdate] = useState(0);
+  const [, forceUpdate] = useState('');
 
   const handleConnect = async (wallet: Wallet) => {
     setSelectedWallet && (await setSelectedWallet(wallet));
@@ -47,13 +47,13 @@ export const ChooseWalletModal = ({
     if (!open) return;
 
     const timeout = setInterval(() => {
-      forceUpdate((prevState) => prevState + 1);
+      forceUpdate(wallets.map((wallet) => wallet.isAvailable()).join(':'));
     }, 2000);
 
     return () => {
       clearInterval(timeout);
     };
-  }, [open]);
+  }, [open, wallets]);
 
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="tablet">

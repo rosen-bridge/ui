@@ -7,7 +7,7 @@ import { getNamiWallet } from './getNamiWallet';
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
-    const context = await getNamiWallet().api().enable();
+    const context = await getNamiWallet().getApi().enable();
     const rawValue = await context.getBalance();
     const balances = await config.decodeWasmValue(rawValue);
 

@@ -65,7 +65,7 @@ const CardanoNetwork: CardanoNetworkType = {
     isVesprAvailable() && {
       ...getVesprWallet(),
       getBalance: async (token: RosenChainToken) => {
-        const context = await getVesprWallet().api().enable();
+        const context = await getVesprWallet().getApi().enable();
         const rawValue = await context.getBalance();
         const balances = await unwrap(decodeWasmValue)(rawValue);
 
@@ -87,7 +87,7 @@ const CardanoNetwork: CardanoNetworkType = {
         validateDecimalPlaces(decimalBridgeFee, token.decimals);
         validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
-        const wallet = await getVesprWallet().api().enable();
+        const wallet = await getVesprWallet().getApi().enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
         const amount = convertNumberToBigint(

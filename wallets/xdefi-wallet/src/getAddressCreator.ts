@@ -7,7 +7,7 @@ export const getAddressCreator =
   (config: WalletCreatorConfig) => (): Promise<string> => {
     return new Promise((resolve, reject) => {
       getXdefiWallet()
-        .api()
+        .getApi()
         .getAddress({
           payload: {
             message: 'Allow Xdefi to expose wallet address',
