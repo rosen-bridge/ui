@@ -19,7 +19,7 @@ export const transferCreator =
     validateDecimalPlaces(decimalBridgeFee, token.decimals);
     validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
-    const wallet = await getLaceWallet().api().enable();
+    const wallet = await getLaceWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
     const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);

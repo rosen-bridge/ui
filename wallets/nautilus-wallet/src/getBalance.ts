@@ -7,7 +7,7 @@ import { getNautilusWallet } from './getNautilusWallet';
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
-    const context = await getNautilusWallet().api().getContext();
+    const context = await getNautilusWallet().getApi().getContext();
     const tokenId = (token as ErgoToken).tokenId;
     /**
      * The following condition is required because nautilus only accepts

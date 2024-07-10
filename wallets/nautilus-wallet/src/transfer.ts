@@ -19,7 +19,7 @@ export const transferCreator =
     validateDecimalPlaces(decimalBridgeFee, token.decimals);
     validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
-    const wallet = await getNautilusWallet().api().getContext();
+    const wallet = await getNautilusWallet().getApi().getContext();
     const tokenId = token.tokenId;
     const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
     const bridgeFee = convertNumberToBigint(

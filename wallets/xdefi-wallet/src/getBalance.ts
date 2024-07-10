@@ -7,7 +7,7 @@ export const getBalanceCreator =
   (config: WalletCreatorConfig) => (): Promise<number> => {
     return new Promise((resolve, reject) => {
       getXdefiWallet()
-        .api()
+        .getApi()
         .getAddress({
           payload: {
             message: '',

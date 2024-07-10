@@ -41,7 +41,7 @@ export interface Wallet extends WalletBase {
 }
 
 export interface RawWallet<Api> extends WalletBase {
-  api: () => Api;
+  getApi: () => Api;
 }
 
 export * from './common';

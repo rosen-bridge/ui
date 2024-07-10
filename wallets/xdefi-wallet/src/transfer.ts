@@ -33,7 +33,7 @@ export const transferCreator =
 
     const userAddress: string = await new Promise((resolve, reject) => {
       getXdefiWallet()
-        .api()
+        .getApi()
         .getAddress({
           payload: {
             message: '',
@@ -72,7 +72,7 @@ export const transferCreator =
 
     const result: string = await new Promise((resolve, reject) => {
       getXdefiWallet()
-        .api()
+        .getApi()
         .signTransaction({
           payload: {
             network: {
