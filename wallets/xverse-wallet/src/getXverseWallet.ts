@@ -14,9 +14,9 @@ export const getXverseWallet = () => {
       ...xverseWalletInfo,
       connectWallet,
     },
-    {
+    () => ({
       getAddress,
       signTransaction,
-    }
+    })
   );
 };

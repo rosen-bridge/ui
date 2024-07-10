@@ -4,9 +4,7 @@ import {
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
-import Wallet, { AddressPurpose, RpcErrorCode } from 'sats-connect';
-
-import { getXverseWallet } from './getXverseWallet';
+import { AddressPurpose, RpcErrorCode, request } from 'sats-connect';
 
 export const transferCreator =
   (config: WalletCreatorConfig) =>
@@ -31,17 +29,26 @@ export const transferCreator =
       decimalNetworkFee * 10 ** token.decimals
     );
 
-    const userAddress: string = (() => {
-      const raw = localStorage.getItem('TEST') || '';
+    let userAddress = '';
 
-      const addresses = JSON.parse(raw) as any[];
+    try {
+      const response = await request('getAddresses', {
+        message: '',
+        purposes: [AddressPurpose.Payment],
+      });
 
-      const segwitPaymentAddresses = addresses.filter(
+      if (response.status == 'error') throw new Error('TODO');
+
+      const addresses = response.result.addresses.filter(
         (address) => address.purpose === AddressPurpose.Payment
       );
 
-      return segwitPaymentAddresses[0].address;
-    })();
+      if (addresses.length == 0) throw new Error('TODO');
+
+      userAddress = addresses[0].address;
+    } catch {
+      throw new Error('TODO');
+    }
 
     const opReturnData = await config.generateOpReturnData(
       toChain,
@@ -58,7 +65,7 @@ export const transferCreator =
     );
 
     try {
-      const response = await Wallet.request('signPsbt', {
+      const response = await request('signPsbt', {
         psbt: psbtData.psbt,
         allowedSignHash: SigHash.ALL,
         signInputs: {

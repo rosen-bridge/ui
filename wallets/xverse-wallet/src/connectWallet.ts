@@ -1,17 +1,14 @@
-import Wallet, { AddressPurpose } from 'sats-connect';
+import { request } from 'sats-connect';
 
 export const connectWallet = async (): Promise<boolean> => {
   try {
-    const response = await Wallet.request('getAccounts', {
-      purposes: [AddressPurpose.Payment],
-      message: 'Cool app wants to know your addresses!',
-    });
+    const response1 = await request('getBalance', undefined);
 
-    if (response.status === 'success') {
-      localStorage.setItem('TEST', JSON.stringify(response.result));
-    }
+    if (response1.status === 'success') return true;
 
-    return true;
+    const response2 = await request('wallet_requestPermissions', undefined);
+
+    return response2.status === 'success';
   } catch {
     return false;
   }

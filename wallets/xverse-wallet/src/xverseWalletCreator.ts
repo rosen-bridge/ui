@@ -7,8 +7,8 @@ import { transferCreator } from './transfer';
 import { getAddressCreator } from './getAddressCreator';
 
 export const xverseWalletCreator: WalletCreator = (config) => {
-  if (!isXverseAvailable()) return;
   return Object.assign({}, getXverseWallet(), {
+    isAvailable: isXverseAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: getAddressCreator(config),

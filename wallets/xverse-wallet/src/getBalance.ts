@@ -1,23 +1,29 @@
 import { WalletCreatorConfig } from '@rosen-network/bitcoin';
-import { AddressPurpose } from 'sats-connect';
+import { AddressPurpose, request } from 'sats-connect';
 
 export const getBalanceCreator =
   (config: WalletCreatorConfig) => (): Promise<number> => {
     return new Promise((resolve, reject) => {
-      const raw = localStorage.getItem('TEST') || '';
+      request('getAddresses', {
+        message: '',
+        purposes: [AddressPurpose.Payment],
+      })
+        .then((response) => {
+          if (response.status == 'error') return reject();
 
-      const addresses = JSON.parse(raw) as any[];
+          const addresses = response.result.addresses.filter(
+            (address) => address.purpose === AddressPurpose.Payment
+          );
 
-      const segwitPaymentAddresses = addresses.filter(
-        (address) => address.purpose === AddressPurpose.Payment
-      );
+          if (addresses.length == 0) return reject();
 
-      if (segwitPaymentAddresses.length > 0) {
-        const address = segwitPaymentAddresses[0].address;
-        config
-          .getAddressBalance(address)
-          .then((balance) => resolve(Number(balance)))
-          .catch((e) => reject(e));
-      } else reject();
+          config
+            .getAddressBalance(addresses[0].address)
+            .then((balance) => resolve(Number(balance)))
+            .catch((e) => reject(e));
+        })
+        .catch((error) => {
+          reject(error);
+        });
     });
   };
