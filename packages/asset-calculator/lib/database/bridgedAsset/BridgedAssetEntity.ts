@@ -20,4 +20,7 @@ export class BridgedAssetEntity {
 
   @ManyToOne(() => TokenEntity, 'id')
   token: TokenEntity;
+
+  @Column('varchar')
+  bridgedTokenId: string;
 }

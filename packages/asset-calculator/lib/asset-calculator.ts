@@ -254,11 +254,20 @@ class AssetCalculator {
               `Asset [${nativeResidentToken[chainIdKey]}] total locked amount is [${emission}]`
             );
 
+            const tokenDataOnAllChains = this.tokens.search(residencyChain, {
+              [chainIdKey]: newToken.id,
+            })[0];
+            const bridgedTokenId = this.tokens.getID(
+              tokenDataOnAllChains,
+              chain
+            );
+
             const newBridgedAsset = {
               amount: emission,
               chain: chain,
               token: newToken,
               tokenId: newToken.id,
+              bridgedTokenId,
             };
             await this.bridgedAssetModel.upsertAsset(newBridgedAsset);
             allCurrentBridgedAssets.push({

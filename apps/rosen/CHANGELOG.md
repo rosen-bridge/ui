@@ -1,5 +1,25 @@
 # @rosen-bridge/rosen-app
 
+## 1.1.1
+
+### Patch Changes
+
+- Refactor the Network constant usage and eliminate unnecessary utilities
+- Implement validation for Bitcoin addresses
+- Prevent the assets page from crashing if tokens file networks mismatch with the project networks
+- Updated dependencies
+  - @rosen-ui/nami-wallet@0.1.3
+  - @rosen-ui/nautilus-wallet@0.2.0
+  - @rosen-ui/xdefi-wallet@0.4.0
+  - @rosen-ui/utils@0.3.0
+  - @rosen-network/bitcoin@0.2.0
+  - @rosen-network/ergo@0.1.2
+  - @rosen-ui/eternl-wallet@0.1.3
+  - @rosen-ui/flint-wallet@0.1.3
+  - @rosen-ui/lace-wallet@0.1.3
+  - @rosen-ui/vespr-wallet@0.0.7
+  - @rosen-ui/wallet-api@1.0.2
+
 ## 1.1.0
 
 ### Minor Changes

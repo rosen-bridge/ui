@@ -14,6 +14,7 @@ import {
   Button,
   CircularProgress,
   SvgIcon,
+  Alert,
 } from '@rosen-bridge/ui-kit';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
@@ -331,6 +332,11 @@ const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
+      {targetField.value == 'bitcoin' && (
+        <Alert severity="warning">
+          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
+        </Alert>
+      )}
     </FormContainer>
   );
 };

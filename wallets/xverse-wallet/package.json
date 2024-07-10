@@ -23,11 +23,11 @@
     "@rosen-bridge/address-codec": "^0.2.1",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/icons": "^0.4.0",
-    "@rosen-bridge/tokens": "^1.1.0",
-    "@rosen-network/bitcoin": "^0.1.0",
-    "@rosen-ui/constants": "^0.0.2",
-    "@rosen-ui/utils": "^0.2.0",
-    "@rosen-ui/wallet-api": "^1.0.1",
-    "sats-connect": "^2.4.1"
+    "@rosen-bridge/tokens": "^1.2.0",
+    "@rosen-network/bitcoin": "^0.2.0",
+    "@rosen-ui/constants": "^0.0.3",
+    "@rosen-ui/utils": "^0.3.0",
+    "@rosen-ui/wallet-api": "^1.0.2",
+    "sats-connect": "^2.5.0"
   }
 }

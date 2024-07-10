@@ -1,12 +1,8 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
-import { encode } from 'cbor-x';
+import { hexToCbor } from '@rosen-ui/utils';
 
 import { getNamiWallet } from './getNamiWallet';
-
-// TODO
-const hexToCbor = (hex: string) =>
-  Buffer.from(encode(Buffer.from(hex, 'hex'))).toString('hex');
 
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>

@@ -13,4 +13,4 @@ export const Networks = {
   ETHEREUM: 'ethereum',
   CARDANO: 'cardano',
   BITCOIN: 'bitcoin',
-};
+} as const;
