@@ -4,6 +4,7 @@ import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { Networks } from '@rosen-ui/constants';
 
+import { unwrap } from '@/_errors';
 import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
@@ -44,35 +45,35 @@ const CardanoNetwork: CardanoNetworkType = {
   ],
   availableWallets: compact([
     eternlWalletCreator({
-      decodeWasmValue: decodeWasmValue,
-      generateLockAuxiliaryData: generateLockAuxiliaryData,
-      generateUnsignedTx: generateUnsignedTx,
-      setTxWitnessSet: setTxWitnessSet,
+      decodeWasmValue: unwrap(decodeWasmValue),
+      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
+      generateUnsignedTx: unwrap(generateUnsignedTx),
+      setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     flintWalletCreator({
-      decodeWasmValue: decodeWasmValue,
-      generateLockAuxiliaryData: generateLockAuxiliaryData,
-      generateUnsignedTx: generateUnsignedTx,
-      setTxWitnessSet: setTxWitnessSet,
+      decodeWasmValue: unwrap(decodeWasmValue),
+      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
+      generateUnsignedTx: unwrap(generateUnsignedTx),
+      setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     laceWalletCreator({
-      decodeWasmValue: decodeWasmValue,
-      generateLockAuxiliaryData: generateLockAuxiliaryData,
-      generateUnsignedTx: generateUnsignedTx,
-      setTxWitnessSet: setTxWitnessSet,
+      decodeWasmValue: unwrap(decodeWasmValue),
+      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
+      generateUnsignedTx: unwrap(generateUnsignedTx),
+      setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     namiWalletCreator({
-      decodeWasmValue: decodeWasmValue,
-      generateLockAuxiliaryData: generateLockAuxiliaryData,
-      generateUnsignedTx: generateUnsignedTx,
-      setTxWitnessSet: setTxWitnessSet,
+      decodeWasmValue: unwrap(decodeWasmValue),
+      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
+      generateUnsignedTx: unwrap(generateUnsignedTx),
+      setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     isVesprAvailable() && {
       ...getVesprWallet(),
       getBalance: async (token: RosenChainToken) => {
         const context = await getVesprWallet().api.enable();
         const rawValue = await context.getBalance();
-        const balances = await decodeWasmValue(rawValue);
+        const balances = await unwrap(decodeWasmValue)(rawValue);
 
         const amount = balances.find(
           (asset) => asset.policyId === token.policyId,
@@ -106,7 +107,7 @@ const CardanoNetwork: CardanoNetworkType = {
         );
         const changeAddressHex = await wallet.getChangeAddress();
 
-        const auxiliaryDataHex = await generateLockAuxiliaryData(
+        const auxiliaryDataHex = await unwrap(generateLockAuxiliaryData)(
           toChain,
           toAddress,
           changeAddressHex,
@@ -116,7 +117,7 @@ const CardanoNetwork: CardanoNetworkType = {
 
         const walletUtxos = await wallet.getUtxos();
         if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
-        const unsignedTxHex = await generateUnsignedTx(
+        const unsignedTxHex = await unwrap(generateUnsignedTx)(
           walletUtxos,
           lockAddress,
           changeAddressHex,
@@ -126,7 +127,7 @@ const CardanoNetwork: CardanoNetworkType = {
           auxiliaryDataHex,
         );
 
-        const signedTxHex = await setTxWitnessSet(
+        const signedTxHex = await unwrap(setTxWitnessSet)(
           unsignedTxHex,
           await wallet.signTx(unsignedTxHex, false),
         );
