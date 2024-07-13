@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 
 import { CardanoCalculator } from '../../../lib/calculator/chains/cardano-calculator';
+import { tokenMap } from '../../test-data';
 
 vitest.mock('@rosen-clients/cardano-koios');
 
@@ -54,6 +56,7 @@ describe('CardanoCalculator', () => {
      */
     it('should calculate the token balance using koios api', async () => {
       const cardanoCalculator = new CardanoCalculator(
+        new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
         'authToken'
       );
@@ -93,6 +96,7 @@ describe('CardanoCalculator', () => {
      */
     it('should calculate the token balance using koios api', async () => {
       const cardanoCalculator = new CardanoCalculator(
+        new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
         'authToken'
       );
