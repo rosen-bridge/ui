@@ -6,7 +6,7 @@ import { getEternlWallet } from './getEternlWallet';
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<number> => {
-    const context = await getEternlWallet().api.enable();
+    const context = await getEternlWallet().getApi().enable();
     const rawValue = await context.getBalance();
     const balances = await config.decodeWasmValue(rawValue);
 

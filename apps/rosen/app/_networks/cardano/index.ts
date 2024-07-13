@@ -10,10 +10,10 @@ import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoIcon } from '@rosen-bridge/icons';
 
-import { eternlWalletCreator, eternlWalletInfo } from '@rosen-ui/eternl-wallet';
-import { flintWalletCreator, flintWalletInfo } from '@rosen-ui/flint-wallet';
-import { laceWalletCreator, laceWalletInfo } from '@rosen-ui/lace-wallet';
-import { namiWalletCreator, namiWalletInfo } from '@rosen-ui/nami-wallet';
+import { eternlWalletCreator } from '@rosen-ui/eternl-wallet';
+import { flintWalletCreator } from '@rosen-ui/flint-wallet';
+import { laceWalletCreator } from '@rosen-ui/lace-wallet';
+import { namiWalletCreator } from '@rosen-ui/nami-wallet';
 
 import {
   decodeWasmValue,
@@ -37,13 +37,7 @@ import getVesprWallet, {
 const CardanoNetwork: CardanoNetworkType = {
   name: Networks.CARDANO,
   label: 'Cardano',
-  supportedWallets: [
-    eternlWalletInfo,
-    flintWalletInfo,
-    laceWalletInfo,
-    namiWalletInfo,
-  ],
-  availableWallets: compact([
+  wallets: compact([
     eternlWalletCreator({
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
@@ -71,7 +65,7 @@ const CardanoNetwork: CardanoNetworkType = {
     isVesprAvailable() && {
       ...getVesprWallet(),
       getBalance: async (token: RosenChainToken) => {
-        const context = await getVesprWallet().api.enable();
+        const context = await getVesprWallet().getApi().enable();
         const rawValue = await context.getBalance();
         const balances = await unwrap(decodeWasmValue)(rawValue);
 
@@ -93,7 +87,7 @@ const CardanoNetwork: CardanoNetworkType = {
         validateDecimalPlaces(decimalBridgeFee, token.decimals);
         validateDecimalPlaces(decimalNetworkFee, token.decimals);
 
-        const wallet = await getVesprWallet().api.enable();
+        const wallet = await getVesprWallet().getApi().enable();
         const policyIdHex = token.policyId;
         const assetNameHex = token.assetName;
         const amount = convertNumberToBigint(

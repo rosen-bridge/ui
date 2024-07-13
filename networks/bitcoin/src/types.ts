@@ -66,7 +66,7 @@ export interface UnsignedPsbtData {
   inputSize: number;
 }
 
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
+export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
   generateOpReturnData: typeof generateOpReturnData;

@@ -1,7 +1,5 @@
 import { BitcoinIcon } from '@rosen-bridge/icons';
-import { xdefiWalletCreator, xdefiWalletInfo } from '@rosen-ui/xdefi-wallet';
-
-import { compact } from 'lodash-es';
+import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
 
 import { getMaxTransfer } from './getMaxTransfer';
 
@@ -26,15 +24,14 @@ const BitcoinNetwork: BitcoinNetworkType = {
   name: Networks.BITCOIN,
   label: 'Bitcoin',
   logo: BitcoinIcon,
-  supportedWallets: [xdefiWalletInfo],
-  availableWallets: compact([
+  wallets: [
     xdefiWalletCreator({
       generateOpReturnData: unwrap(generateOpReturnData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       getAddressBalance: unwrap(getAddressBalance),
       submitTransaction: unwrap(submitTransaction),
     }),
-  ]),
+  ],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(getMaxTransfer),

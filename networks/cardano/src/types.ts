@@ -19,7 +19,7 @@ export interface CardanoProtocolParams {
 
 export const ADA_POLICY_ID = '';
 
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
+export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
   decodeWasmValue: typeof decodeWasmValue;
