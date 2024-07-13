@@ -29,26 +29,26 @@ export const transferCreator =
       decimalNetworkFee * 10 ** token.decimals
     );
 
-    let userAddress = '';
-
-    try {
-      const response = await request('getAddresses', {
+    const userAddress: string = await new Promise((resolve, reject) => {
+      request('getAddresses', {
         message: '',
         purposes: [AddressPurpose.Payment],
-      });
+      })
+        .then((response) => {
+          if (response.status == 'error') return reject();
 
-      if (response.status == 'error') throw new Error('TODO');
+          const segwitPaymentAddresses = response.result.addresses.filter(
+            (address) => address.purpose === AddressPurpose.Payment
+          );
 
-      const addresses = response.result.addresses.filter(
-        (address) => address.purpose === AddressPurpose.Payment
-      );
-
-      if (addresses.length == 0) throw new Error('TODO');
-
-      userAddress = addresses[0].address;
-    } catch {
-      throw new Error('TODO');
-    }
+          if (segwitPaymentAddresses.length > 0)
+            resolve(segwitPaymentAddresses[0].address);
+          else reject();
+        })
+        .catch(() => {
+          reject();
+        });
+    });
 
     const opReturnData = await config.generateOpReturnData(
       toChain,
@@ -64,35 +64,16 @@ export const transferCreator =
       opReturnData
     );
 
-    try {
-      const response = await request('signPsbt', {
-        psbt: psbtData.psbt,
-        allowedSignHash: SigHash.ALL,
-        signInputs: {
-          [userAddress]: [0],
-        },
-        broadcast: false,
-      });
-      if (response.status === 'success') {
-        console.log('signPsbt: handle success response', response);
-        try {
-          const r = await config.submitTransaction(response.result.psbt);
-          console.log('submitTransaction: handle success response', r);
-          return r;
-        } catch (err) {
-          console.log('submitTransaction: handle error', err);
-          throw '';
-        }
-      } else {
-        if (response.error.code === RpcErrorCode.USER_REJECTION) {
-          console.log('signPsbt: handle user request cancelation');
-        } else {
-          console.log('signPsbt: handle error');
-        }
-        throw '';
-      }
-    } catch (err) {
-      console.log('signPsbt: catch', err);
-      throw err;
-    }
+    const response = await request('signPsbt', {
+      psbt: psbtData.psbt,
+      allowedSignHash: SigHash.ALL,
+      signInputs: {
+        [userAddress]: [0],
+      },
+      broadcast: false,
+    });
+
+    if (response.status == 'error') throw undefined;
+
+    return await config.submitTransaction(response.result.psbt);
   };
