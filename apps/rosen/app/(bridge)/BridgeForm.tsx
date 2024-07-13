@@ -95,8 +95,8 @@ const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { availableNetworks, tokens, targetNetworks, selectedNetwork } =
-    useNetwork();
+  const { availableNetworks, tokens, targetNetworks } = useNetwork();
+
   const { isLoading, amount, token } = useTokenBalance();
 
   const { max } = useMaxTransfer();

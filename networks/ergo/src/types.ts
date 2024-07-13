@@ -22,7 +22,7 @@ export interface CoveringBoxes {
   boxes: Array<ErgoBoxProxy>;
 }
 
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
+export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
   generateUnsignedTx: typeof generateUnsignedTx;

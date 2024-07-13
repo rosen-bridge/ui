@@ -44,7 +44,9 @@ const useWallet = () => {
       let wallet: SupportedWallets | undefined;
 
       wallet = (
-        selectedNetwork ? [...selectedNetwork.availableWallets] : []
+        selectedNetwork
+          ? selectedNetwork.wallets.filter((wallet) => wallet.isAvailable())
+          : []
       ).find((w: SupportedWallets) => w.name === name);
       if (!wallet) {
         throw new Error(`unsupported wallet with name ${name}`);
@@ -124,7 +126,7 @@ const useWallet = () => {
     ? {
         setSelectedWallet,
         selectedWallet: walletGlobalContext?.state.selectedWallet,
-        availableWallets: selectedNetwork.availableWallets,
+        wallets: selectedNetwork.wallets,
         getBalance: walletGlobalContext?.state.selectedWallet?.getBalance,
       }
     : {};

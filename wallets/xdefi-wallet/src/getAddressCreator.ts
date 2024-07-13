@@ -6,25 +6,27 @@ import { getXdefiWallet } from './getXdefiWallet';
 export const getAddressCreator =
   (config: WalletCreatorConfig) => (): Promise<string> => {
     return new Promise((resolve, reject) => {
-      getXdefiWallet().api.getAddress({
-        payload: {
-          message: 'Allow Xdefi to expose wallet address',
-          network: {
-            type: BitcoinNetworkType.Mainnet,
+      getXdefiWallet()
+        .getApi()
+        .getAddress({
+          payload: {
+            message: 'Allow Xdefi to expose wallet address',
+            network: {
+              type: BitcoinNetworkType.Mainnet,
+            },
+            purposes: [AddressPurpose.Payment],
           },
-          purposes: [AddressPurpose.Payment],
-        },
-        onFinish: ({ addresses }) => {
-          const segwitPaymentAddresses = addresses.filter(
-            (address) => address.purpose === AddressPurpose.Payment
-          );
-          if (segwitPaymentAddresses.length > 0) {
-            resolve(segwitPaymentAddresses[0].address);
-          } else reject();
-        },
-        onCancel: () => {
-          reject();
-        },
-      });
+          onFinish: ({ addresses }) => {
+            const segwitPaymentAddresses = addresses.filter(
+              (address) => address.purpose === AddressPurpose.Payment
+            );
+            if (segwitPaymentAddresses.length > 0) {
+              resolve(segwitPaymentAddresses[0].address);
+            } else reject();
+          },
+          onCancel: () => {
+            reject();
+          },
+        });
     });
   };
