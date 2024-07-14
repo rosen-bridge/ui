@@ -7,7 +7,7 @@ import useToken from './useToken';
 import { ApiInfoResponse } from '@/_types/api';
 
 /**
- * fetch rsn token info (if present)
+ * fetch ersn token info (if present)
  */
 const useERsnToken = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -15,13 +15,13 @@ const useERsnToken = () => {
     fetcher,
   );
 
-  const { token: eRsnToken, isLoading: isRsnInfoLoading } = useToken(
+  const { token: eRsnToken, isLoading: isERsnInfoLoading } = useToken(
     info?.eRsnTokenId,
   );
 
   return {
     eRsnToken,
-    isLoading: isInfoLoading || isRsnInfoLoading,
+    isLoading: isInfoLoading || isERsnInfoLoading,
   };
 };
 

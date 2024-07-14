@@ -152,7 +152,6 @@ export const TabletRow: FC<RowProps> = (props) => {
     );
 
     const amount = [rsnTokenInfo, eRsnTokenInfo]
-      .filter((info) => !!info)
       .map((info) => {
         return getDecimalString(
           info?.amount.toString() ?? '0',
