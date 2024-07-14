@@ -64,7 +64,7 @@ interface InfoWidgetCardProps {
   color?: keyof AugmentedPalette;
   icon: ReactNode;
   isLoading?: boolean;
-  title: string;
+  title: string | ReactNode;
   unit?: string;
   value: string;
 }
@@ -101,7 +101,11 @@ const InfoWidgetCard = ({
             <span>{unit}</span>
           </Typography>
         )}
-        <Typography className="title">{title}</Typography>
+        {typeof title == 'string' ? (
+          <Typography className="title">{title}</Typography>
+        ) : (
+          title
+        )}
       </Box>
     </InfoWidgetCardBase>
   );
