@@ -166,7 +166,11 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const getTokenIncome = () =>
     row.revenues
-      .filter((token) => token.tokenId !== rsnToken?.tokenId)
+      .filter(
+        (token) =>
+          token.tokenId !== rsnToken?.tokenId &&
+          token.tokenId !== eRsnToken?.tokenId,
+      )
       .map(
         (token) =>
           `${getDecimalString(token.amount.toString(), token.decimals)} ${
