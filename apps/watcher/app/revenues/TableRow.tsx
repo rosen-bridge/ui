@@ -8,6 +8,7 @@ import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import useRsnToken from '@/_hooks/useRsnToken';
 
 import { Revenue } from '@/_types/api';
+import useERsnToken from '@/_hooks/useERsnToken';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;
@@ -42,7 +43,7 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'RSN Income',
+    title: 'Income (RSN/eRSN)',
     cellProps: {
       width: 150,
     },
@@ -138,22 +139,38 @@ export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading: isLoadingProp, ...row } = props;
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+  const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
-  const isLoading = isLoadingProp || isRsnTokenLoading;
+  const isLoading = isLoadingProp || isRsnTokenLoading || isERsnTokenLoading;
 
   const getRSNIncome = () => {
     const rsnTokenInfo = row.revenues.find(
       (token) => token.tokenId === rsnToken?.tokenId,
     );
-    return getDecimalString(
-      rsnTokenInfo?.amount.toString() ?? '0',
-      rsnTokenInfo?.decimals ?? 0,
+    const eRsnTokenInfo = row.revenues.find(
+      (token) => token.tokenId === eRsnToken?.tokenId,
     );
+
+    const amount = [rsnTokenInfo, eRsnTokenInfo]
+      .map((info) => {
+        return getDecimalString(
+          info?.amount.toString() ?? '0',
+          info?.decimals ?? 0,
+        );
+      })
+      .reduce((sum, amount) => sum + parseFloat(amount), 0)
+      .toString();
+
+    return amount;
   };
 
   const getTokenIncome = () =>
     row.revenues
-      .filter((token) => token.tokenId !== rsnToken?.tokenId)
+      .filter(
+        (token) =>
+          token.tokenId !== rsnToken?.tokenId &&
+          token.tokenId !== eRsnToken?.tokenId,
+      )
       .map(
         (token) =>
           `${getDecimalString(token.amount.toString(), token.decimals)} ${
