@@ -41,7 +41,7 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
       opacity: 0.75,
     },
     '& .value': {
-      fontSize: theme.typography.h2.fontSize,
+      fontSize: theme.typography.h6.fontSize,
       fontWeight: 'bold',
       lineHeight: 1,
       '& span': {
@@ -64,7 +64,7 @@ interface InfoWidgetCardProps {
   color?: keyof AugmentedPalette;
   icon: ReactNode;
   isLoading?: boolean;
-  title: string | ReactNode;
+  title: string;
   unit?: string;
   value: string;
 }
@@ -101,11 +101,7 @@ const InfoWidgetCard = ({
             <span>{unit}</span>
           </Typography>
         )}
-        {typeof title == 'string' ? (
-          <Typography className="title">{title}</Typography>
-        ) : (
-          title
-        )}
+        <Typography className="title">{title}</Typography>
       </Box>
     </InfoWidgetCardBase>
   );

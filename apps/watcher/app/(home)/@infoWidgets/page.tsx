@@ -153,14 +153,12 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title={
-            <Typography>
-              {eRsnToken?.amount !== undefined
-                ? getDecimalString(
-                    eRsnToken.amount.toString(),
-                    eRsnToken.decimals,
-                  ) + ' eRSN'
-                : ''}
-            </Typography>
+            eRsnToken?.amount !== undefined
+              ? getDecimalString(
+                  eRsnToken.amount.toString(),
+                  eRsnToken.decimals,
+                ) + ' eRSN'
+              : ''
           }
           value={
             rsnToken?.amount !== undefined
