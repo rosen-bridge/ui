@@ -16,6 +16,7 @@ import { laceWalletCreator } from '@rosen-ui/lace-wallet';
 import { namiWalletCreator } from '@rosen-ui/nami-wallet';
 
 import {
+  getTokenMap,
   decodeWasmValue,
   generateLockAuxiliaryData,
   generateUnsignedTx,
@@ -39,24 +40,28 @@ const CardanoNetwork: CardanoNetworkType = {
   label: 'Cardano',
   wallets: compact([
     eternlWalletCreator({
+      getTokenMap: unwrap(getTokenMap),
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     flintWalletCreator({
+      getTokenMap: unwrap(getTokenMap),
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     laceWalletCreator({
+      getTokenMap: unwrap(getTokenMap),
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     namiWalletCreator({
+      getTokenMap: unwrap(getTokenMap),
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),

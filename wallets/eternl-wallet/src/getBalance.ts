@@ -1,5 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
+import { Networks } from '@rosen-ui/constants';
 
 import { getEternlWallet } from './getEternlWallet';
 
@@ -11,5 +12,12 @@ export const getBalanceCreator =
     const balances = await config.decodeWasmValue(rawValue);
 
     const amount = balances.find((asset) => asset.policyId === token.policyId);
-    return amount ? BigInt(amount.quantity) : 0n;
+
+    if (!amount) return 0n;
+
+    return (await config.getTokenMap()).wrapAmount(
+      'ada',
+      amount.quantity,
+      Networks.CARDANO
+    ).amount;
   };

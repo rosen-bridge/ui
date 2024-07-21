@@ -1,8 +1,8 @@
 import { WalletCreatorConfig } from '@rosen-network/bitcoin';
+import { Networks } from '@rosen-ui/constants';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
-import { Networks } from '@rosen-ui/constants';
 
 export const getBalanceCreator =
   (config: WalletCreatorConfig) => (): Promise<bigint> => {

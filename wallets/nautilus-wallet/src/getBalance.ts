@@ -1,5 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ergo';
+import { Networks } from '@rosen-ui/constants';
 import { ErgoToken } from '@rosen-ui/wallet-api';
 
 import { getNautilusWallet } from './getNautilusWallet';
@@ -16,5 +17,11 @@ export const getBalanceCreator =
     const balance = await context.get_balance(
       tokenId === 'erg' ? 'ERG' : tokenId
     );
-    return BigInt(balance);
+
+    const amount = BigInt(balance);
+
+    if (!amount) return 0n;
+
+    return (await config.getTokenMap()).wrapAmount('erg', amount, Networks.ERGO)
+      .amount;
   };

@@ -11,7 +11,7 @@ import {
   minBoxValue as ergoMinBoxValue,
 } from '@rosen-network/ergo/dist/src/constants';
 
-import { generateUnsignedTx } from './server';
+import { getTokenMap, generateUnsignedTx } from './server';
 
 /**
  * the main object for Ergo network
@@ -23,6 +23,7 @@ const ErgoNetwork: ErgoNetworkType = {
   label: 'Ergo',
   wallets: [
     nautilusWalletCreator({
+      getTokenMap: unwrap(getTokenMap),
       generateUnsignedTx: unwrap(generateUnsignedTx),
     }),
   ],
