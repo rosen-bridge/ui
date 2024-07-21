@@ -8,6 +8,7 @@
     "wallets/*"
   ],
   "scripts": {
+    "build:mono-packages": "./build.sh",
     "prepare": "husky install",
     "test": "NODE_OPTIONS=--loader=extensionless vitest",
     "test:related": "NODE_OPTIONS=--loader=extensionless vitest related --run",

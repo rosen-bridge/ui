@@ -5,7 +5,8 @@ export default defineConfig({
     coverage: {
       enabled: true,
       provider: 'istanbul',
-      reporter: ['cobertura'],
+      reporter: ['cobertura', 'json-summary'],
+      reportOnFailure: true,
     },
   },
 });
