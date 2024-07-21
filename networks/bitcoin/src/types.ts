@@ -71,7 +71,7 @@ export interface UnsignedPsbtData {
 export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
-  tokenMap: TokenMap;
+  getTokenMap(): Promise<TokenMap>;
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: typeof generateUnsignedTx;
   submitTransaction: typeof submitTransaction;

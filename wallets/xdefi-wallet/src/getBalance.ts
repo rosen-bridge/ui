@@ -26,13 +26,15 @@ export const getBalanceCreator =
               config
                 .getAddressBalance(address)
                 .then((balance) =>
-                  resolve(
-                    config.tokenMap.wrapAmount(
-                      'btc',
-                      BigInt(balance),
-                      Networks.BITCOIN
-                    ).amount
-                  )
+                  config.getTokenMap().then((tokenMap) => {
+                    resolve(
+                      tokenMap.wrapAmount(
+                        'btc',
+                        BigInt(balance),
+                        Networks.BITCOIN
+                      ).amount
+                    );
+                  })
                 )
                 .catch((e) => reject(e));
             } else reject();

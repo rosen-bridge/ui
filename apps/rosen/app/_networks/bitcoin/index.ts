@@ -1,9 +1,6 @@
 import { BitcoinIcon } from '@rosen-bridge/icons';
 import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
 
-import { TokenMap } from '@rosen-bridge/tokens';
-import { getRosenTokens } from '@/_backend/utils';
-
 import { getMaxTransfer } from './getMaxTransfer';
 
 import { Networks } from '@rosen-ui/constants';
@@ -12,6 +9,7 @@ import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
 
 import {
+  getTokenMap,
   generateOpReturnData,
   generateUnsignedTx,
   submitTransaction,
@@ -29,7 +27,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   logo: BitcoinIcon,
   wallets: [
     xdefiWalletCreator({
-      tokenMap: new TokenMap(getRosenTokens()),
+      getTokenMap: unwrap(getTokenMap),
       generateOpReturnData: unwrap(generateOpReturnData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       getAddressBalance: unwrap(getAddressBalance),

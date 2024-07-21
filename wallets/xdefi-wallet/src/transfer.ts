@@ -22,7 +22,9 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    const decimals = config.tokenMap.getSignificantDecimals('btc');
+    const tokenMap = await config.getTokenMap();
+
+    const decimals = tokenMap.getSignificantDecimals('btc');
 
     if (decimals === undefined) {
       throw new Error('Impossible behavior');
@@ -75,7 +77,7 @@ export const transferCreator =
       userAddress,
       amount,
       opReturnData,
-      config.tokenMap
+      tokenMap
     );
 
     const result: string = await new Promise((resolve, reject) => {
