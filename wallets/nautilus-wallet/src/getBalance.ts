@@ -6,7 +6,7 @@ import { getNautilusWallet } from './getNautilusWallet';
 
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
-  async (token: RosenChainToken): Promise<number> => {
+  async (token: RosenChainToken): Promise<bigint> => {
     const context = await getNautilusWallet().getApi().getContext();
     const tokenId = (token as ErgoToken).tokenId;
     /**
@@ -16,5 +16,5 @@ export const getBalanceCreator =
     const balance = await context.get_balance(
       tokenId === 'erg' ? 'ERG' : tokenId
     );
-    return +balance;
+    return BigInt(balance);
   };
