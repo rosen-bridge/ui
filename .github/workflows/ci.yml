@@ -23,6 +23,7 @@ jobs:
           cache: 'npm'
 
       - run: npm ci
+      - run: npm run build:mono-packages
       - run: npm run type-check --workspaces --if-present
       - run: npm run lint --workspaces --if-present
 
@@ -58,6 +59,6 @@ jobs:
         with:
           node-version: 18
           cache: 'npm'
-
-      - run: git fetch origin dev
-      - run: npx changeset status --since=origin/dev
+      - run: |
+          git fetch origin dev
+          npx @changesets/cli@2.27.7 status --since=origin/dev
