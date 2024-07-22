@@ -4,6 +4,9 @@ import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { getLaceWallet } from './getLaceWallet';
 
+/**
+ * This function works with WRAPPED-VALUE
+ */
 export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
@@ -15,19 +18,25 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
+    const tokenMap = await config.getTokenMap();
+
+    const decimals = tokenMap.getSignificantDecimals('ada');
+
+    if (decimals === undefined) {
+      throw new Error('Impossible behavior');
+    }
+
+    validateDecimalPlaces(decimalAmount, decimals);
+    validateDecimalPlaces(decimalBridgeFee, decimals);
+    validateDecimalPlaces(decimalNetworkFee, decimals);
 
     const wallet = await getLaceWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(decimalAmount * 10 ** decimals);
+    const bridgeFee = convertNumberToBigint(decimalBridgeFee * 10 ** decimals);
     const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
+      decimalNetworkFee * 10 ** decimals
     );
     const changeAddressHex = await wallet.getChangeAddress();
 
@@ -47,8 +56,9 @@ export const transferCreator =
       changeAddressHex,
       policyIdHex,
       assetNameHex,
-      amount.toString(),
-      auxiliaryDataHex
+      amount,
+      auxiliaryDataHex,
+      tokenMap
     );
 
     const signedTxHex = await config.setTxWitnessSet(

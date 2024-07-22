@@ -16,8 +16,9 @@ import { Networks } from '@rosen-ui/constants';
  * generates bitcoin lock tx
  * @param lockAddress
  * @param fromAddress
- * @param amount this is a WRAPPED-VALUE
+ * @param wrappedAmount this is a WRAPPED-VALUE
  * @param opReturnData
+ * @param tokenMap
  * @returns
  */
 export const generateUnsignedTx = async (
