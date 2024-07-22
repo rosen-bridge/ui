@@ -53,12 +53,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          # check out full history
+          fetch-depth: 0
 
       - name: Run changeset to check versions
         uses: actions/setup-node@v3
         with:
           node-version: 18
           cache: 'npm'
-      - run: |
-          git fetch origin dev
-          npx @changesets/cli@2.27.7 status --since=origin/dev
+      - run: npx @changesets/cli@2.27.7 status --since=origin/dev
