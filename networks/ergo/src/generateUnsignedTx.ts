@@ -20,7 +20,7 @@ import { Networks } from '@rosen-ui/constants';
 /**
  * generates an unsigned lock transaction on Ergo
  * @param changeAddress
- * @param walletUtxos
+ * @param walletUtxos SHOULD BE CONTAINS UNWRAPPED-VALUE
  * @param lockAddress
  * @param toChain
  * @param toAddress
@@ -43,7 +43,7 @@ export const generateUnsignedTx = async (
   networkFeeString: string,
   tokenMap: TokenMap
 ): Promise<UnsignedErgoTxProxy> => {
-  const amount = tokenMap.unwrapAmount(
+  const unwrappedAmount = tokenMap.unwrapAmount(
     'erg',
     wrappedAmount,
     Networks.ERGO
@@ -64,16 +64,16 @@ export const generateUnsignedTx = async (
      * TODO: fix ergo native token name
      * local:ergo/rosen-bridge/ui#100
      */
-    lockAssets.nativeToken = amount;
+    lockAssets.nativeToken = unwrappedAmount;
   } else {
     // lock token
-    lockAssets.tokens.push({ id: tokenId, value: amount });
+    lockAssets.tokens.push({ id: tokenId, value: unwrappedAmount });
   }
   const lockBox = createLockBox(
     lockAddress,
     height,
     tokenId,
-    amount,
+    unwrappedAmount,
     toChain,
     toAddress,
     changeAddress,
