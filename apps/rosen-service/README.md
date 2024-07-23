@@ -1,3 +1,5 @@
-# @rosen-bridge/rosen-service
+# Rosen Service
 
-Rosen service, scanning and extracting data for Rosen App.
+Rosen Service is the backend data provider for Rosen App.
+
+Documentation is currently in development.
