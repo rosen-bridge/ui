@@ -2,6 +2,10 @@
 
 import { generateUnsignedTx as generateUnsignedTxCore } from '@rosen-network/ergo';
 
-import { unwrap } from '@/_errors';
+import { wrap } from '@/_errors';
 
-export const generateUnsignedTx = unwrap(generateUnsignedTxCore);
+import { tokenMap } from '../tokenMap';
+
+export const getTokenMap = wrap(async () => tokenMap);
+
+export const generateUnsignedTx = wrap(generateUnsignedTxCore);

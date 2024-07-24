@@ -9,6 +9,9 @@ import {
 
 import { wrap } from '@/_errors';
 
+import { tokenMap } from '../tokenMap';
+
+export const getTokenMap = wrap(async () => tokenMap);
 export const generateOpReturnData = wrap(generateOpReturnDataCore);
 export const generateUnsignedTx = wrap(generateUnsignedTxCore);
 export const getAddressBalance = wrap(getAddressBalanceCore);

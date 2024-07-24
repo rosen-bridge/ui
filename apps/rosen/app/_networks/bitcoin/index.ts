@@ -9,6 +9,7 @@ import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
 
 import {
+  getTokenMap,
   generateOpReturnData,
   generateUnsignedTx,
   submitTransaction,
@@ -26,6 +27,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   logo: BitcoinIcon,
   wallets: [
     xdefiWalletCreator({
+      getTokenMap: unwrap(getTokenMap),
       generateOpReturnData: unwrap(generateOpReturnData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       getAddressBalance: unwrap(getAddressBalance),
