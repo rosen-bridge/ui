@@ -1,4 +1,8 @@
 ---
+'@rosen-ui/eternl-wallet': major
+'@rosen-ui/flint-wallet': major
+'@rosen-ui/lace-wallet': major
+'@rosen-ui/nami-wallet': major
 '@rosen-ui/xdefi-wallet': major
 ---
 
