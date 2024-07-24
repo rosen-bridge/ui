@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 import { Psbt } from 'bitcoinjs-lib';
 import { generateUnsignedTx } from '../../src';
+import { tokenMap } from '../test-data';
+import { TokenMap } from '@rosen-bridge/tokens';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
 
@@ -48,7 +50,8 @@ describe('generateUnsignedTx', () => {
       lockAddress,
       fromAddress,
       amount,
-      data
+      data,
+      new TokenMap(tokenMap)
     );
 
     const psbt = Psbt.fromBase64(result.psbt);
@@ -98,7 +101,13 @@ describe('generateUnsignedTx', () => {
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
     await expect(async () => {
-      await generateUnsignedTx(lockAddress, fromAddress, amount, data);
+      await generateUnsignedTx(
+        lockAddress,
+        fromAddress,
+        amount,
+        data,
+        new TokenMap(tokenMap)
+      );
     }).rejects.toThrow(Error);
   });
 });
