@@ -42,17 +42,20 @@ class AssetCalculator {
   ) {
     this.tokens = new TokenMap(tokens);
     const ergoAssetCalculator = new ErgoCalculator(
+      this.tokens,
       ergoCalculator.addresses,
       ergoCalculator.explorerUrl,
       logger
     );
     const cardanoAssetCalculator = new CardanoCalculator(
+      this.tokens,
       cardanoCalculator.addresses,
       cardanoCalculator.authToken,
       logger,
       cardanoCalculator.koiosUrl
     );
     const bitcoinAssetCalculator = new BitcoinCalculator(
+      this.tokens,
       bitcoinCalculator.addresses,
       bitcoinCalculator.esploraUrl,
       logger
