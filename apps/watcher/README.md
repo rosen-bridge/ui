@@ -18,9 +18,8 @@ Follow these steps to set up and run your local version of Watcher App:
 3. **Install Dependencies and Build Packages**
    ```bash
    npm install
-   cd apps/rosen
    ./build.sh
-   cd ../watcher
+   cd apps/watcher
    ```
 4. **Launch the App**
    ```bash

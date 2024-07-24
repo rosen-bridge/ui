@@ -21,9 +21,8 @@ Follow these steps to set up and run your local version of Rosen App:
 
    ```bash
    npm install
-   cd apps/rosen
    ./build.sh
-
+   cd apps/rosen
    ```
 
 2. **Fetch Tokens Data**
