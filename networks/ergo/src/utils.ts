@@ -20,7 +20,7 @@ export const getHeight = async (): Promise<number> => {
  * @param lockAddress
  * @param height
  * @param tokenId
- * @param amount
+ * @param unwrappedAmount THIS IS A UNWRAPPED-VALUE
  * @param toChain
  * @param toAddress
  * @param fromAddress
@@ -31,7 +31,7 @@ export const createLockBox = (
   lockAddress: string,
   height: number,
   tokenId: string,
-  amount: bigint,
+  unwrappedAmount: bigint,
   toChain: string,
   toAddress: string,
   fromAddress: string,
@@ -42,7 +42,7 @@ export const createLockBox = (
    * TODO: fix ergo native token id
    * local:ergo/rosen-bridge/ui#100
    */
-  const boxErgValue = tokenId === 'erg' ? amount : minBoxValue;
+  const boxErgValue = tokenId === 'erg' ? unwrappedAmount : minBoxValue;
   const lockBox = new wasm.ErgoBoxCandidateBuilder(
     wasm.BoxValue.from_i64(wasm.I64.from_str(boxErgValue.toString())),
     wasm.Contract.pay_to_address(wasm.Address.from_base58(lockAddress)),
@@ -67,7 +67,7 @@ export const createLockBox = (
   if (tokenId !== 'erg') {
     lockBox.add_token(
       wasm.TokenId.from_str(tokenId),
-      wasm.TokenAmount.from_i64(wasm.I64.from_str(amount.toString()))
+      wasm.TokenAmount.from_i64(wasm.I64.from_str(unwrappedAmount.toString()))
     );
   }
   return lockBox.build();
@@ -75,6 +75,9 @@ export const createLockBox = (
 
 /**
  * creates change box candidate
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param changeAddress
  * @param height
  * @param balance
@@ -102,6 +105,9 @@ export const createChangeBox = (
 
 /**
  * extracts box id and assets of a box
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param box the box
  * @returns an object containing the box id and assets
  */
@@ -120,6 +126,9 @@ const getBoxInfo = (box: ErgoBoxProxy): BoxInfo => {
 
 /**
  * select useful boxes for an address until required assets are satisfied
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param address the address
  * @param requiredAssets the required assets
  * @param forbiddenBoxIds the id of forbidden boxes
@@ -201,6 +210,10 @@ export const getCoveringBoxes = async (
 
 /**
  * sums two AssetBalance
+ *
+ * IT DOESN'T MATTER WHETHER THESE VALUES ARE WRAPPED OR UNWRAPPED;
+ * WHAT TRULY MATTERS IS THE CONTEXT IN WHICH THIS FUNCTION IS USED.
+ *
  * @param a first AssetBalance object
  * @param b second AssetBalance object
  * @returns aggregated AssetBalance
@@ -228,6 +241,10 @@ export const sumAssetBalance = (
 
 /**
  * subtracts two AssetBalance
+ *
+ * IT DOESN'T MATTER WHETHER THESE VALUES ARE WRAPPED OR UNWRAPPED;
+ * WHAT TRULY MATTERS IS THE CONTEXT IN WHICH THIS FUNCTION IS USED.
+ *
  * @param a first AssetBalance object
  * @param b second AssetBalance object
  * @param minimumNativeToken minimum allowed native token
@@ -275,6 +292,9 @@ export const subtractAssetBalance = (
 
 /**
  * calculates box assets
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param utxo
  * @returns
  */
