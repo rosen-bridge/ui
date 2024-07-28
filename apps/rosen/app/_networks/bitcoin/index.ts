@@ -36,6 +36,8 @@ const BitcoinNetwork: BitcoinNetworkType = {
   ],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
+
+  // THIS FUNCTION WORKS WITH WRAPPED-VALUE
   getMaxTransfer: unwrap(getMaxTransfer),
 };
 

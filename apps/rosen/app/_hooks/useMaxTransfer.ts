@@ -9,6 +9,7 @@ import getMaxTransfer from '@/_utils/getMaxTransfer';
 
 /**
  * a hook version of `getMaxTransfer` util
+ * @returns CONTAINS A WRAPPED-VALUE
  */
 const useMaxTransfer = () => {
   const [max, setMax] = useState(0);

@@ -122,8 +122,9 @@ const CardanoNetwork: CardanoNetworkType = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount.toString(),
+          amount,
           auxiliaryDataHex,
+          await unwrap(getTokenMap)(),
         );
 
         const signedTxHex = await unwrap(setTxWitnessSet)(
@@ -139,10 +140,18 @@ const CardanoNetwork: CardanoNetworkType = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
+
+  // THIS FUNCTION WORKS WITH WRAPPED-VALUE
   async getMaxTransfer({ balance, isNative }) {
-    const offsetCandidate = Number(feeAndMinBoxValue);
+    const tokenMap = await unwrap(getTokenMap)();
+    const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
+      'ada',
+      feeAndMinBoxValue,
+      Networks.CARDANO,
+    ).amount;
+    const offsetCandidateWrapped = Number(feeAndMinBoxValueWrapped);
     const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidate : 0;
+    const offset = shouldApplyOffset ? offsetCandidateWrapped : 0;
     const amount = balance - offset;
     return amount < 0 ? 0 : amount;
   },

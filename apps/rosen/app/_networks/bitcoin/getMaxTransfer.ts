@@ -15,6 +15,9 @@ import { tokenMap } from '../tokenMap';
 
 /**
  * get max transfer for bitcoin
+ *
+ * THIS FUNCTION WORKS WITH WRAPPED-VALUE
+ *
  * @returns this is a WRAPPED-VALUE
  */
 export const getMaxTransfer = wrap(
@@ -62,6 +65,6 @@ export const getMaxTransfer = wrap(
          *
          * local:ergo/rosen-bridge/utils#204
          */
-      balance - estimatedFee - Number(minSatoshiWrapped) - utxos.length - 1;
+        balance - estimatedFee - Number(minSatoshiWrapped) - utxos.length - 1;
   },
 );

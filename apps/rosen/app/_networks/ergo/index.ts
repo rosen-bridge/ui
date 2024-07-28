@@ -30,10 +30,18 @@ const ErgoNetwork: ErgoNetworkType = {
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
+
+  // THIS FUNCTION WORKS WITH WRAPPED-VALUE
   async getMaxTransfer({ balance, isNative }) {
-    const offsetCandidate = Number(ergoFee + ergoMinBoxValue);
+    const tokenMap = await unwrap(getTokenMap)();
+    const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
+      'erg',
+      ergoFee + ergoMinBoxValue,
+      Networks.ERGO,
+    ).amount;
+    const offsetCandidateWrapped = Number(feeAndMinBoxValueWrapped);
     const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidate : 0;
+    const offset = shouldApplyOffset ? offsetCandidateWrapped : 0;
     const amount = balance - offset;
     return amount < 0 ? 0 : amount;
   },

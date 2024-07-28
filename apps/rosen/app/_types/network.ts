@@ -20,6 +20,7 @@ export interface BaseNetwork<
   wallets: Wallet[];
   nextHeightInterval: number;
   lockAddress: string;
+  // THIS FUNCTION WORKS WITH WRAPPED-VALUE
   getMaxTransfer: (
     props: GetMaxTransferParams & GetMaxTransferParamsExtra,
   ) => Promise<number>;
