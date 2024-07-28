@@ -6,8 +6,8 @@ import { isFlintAvailable } from './isFlintAvailable';
 import { transferCreator } from './transfer';
 
 export const flintWalletCreator: WalletCreator = (config) => {
-  if (!isFlintAvailable()) return;
   return Object.assign({}, getFlintWallet(), {
+    isAvailable: isFlintAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: async () => {

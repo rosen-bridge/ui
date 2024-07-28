@@ -128,12 +128,16 @@ const useBridgeForm = () => {
           return validationCache.get(cacheKey);
         }
 
-        const validationResult = (
-          await validateAddress(targetField.value, value)
-        ).message;
-        validationCache.set(cacheKey, validationResult);
+        const validationResult = await validateAddress(
+          targetField.value,
+          value,
+        );
 
-        return validationResult;
+        const message = validationResult ? undefined : 'Invalid Address';
+
+        validationCache.set(cacheKey, message);
+
+        return message;
       },
     },
   });

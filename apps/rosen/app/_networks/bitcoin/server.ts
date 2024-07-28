@@ -7,7 +7,9 @@ import {
   submitTransaction as submitTransactionCore,
 } from '@rosen-network/bitcoin';
 
-export const generateOpReturnData = generateOpReturnDataCore;
-export const generateUnsignedTx = generateUnsignedTxCore;
-export const getAddressBalance = getAddressBalanceCore;
-export const submitTransaction = submitTransactionCore;
+import { wrap } from '@/_errors';
+
+export const generateOpReturnData = wrap(generateOpReturnDataCore);
+export const generateUnsignedTx = wrap(generateUnsignedTxCore);
+export const getAddressBalance = wrap(getAddressBalanceCore);
+export const submitTransaction = wrap(submitTransactionCore);

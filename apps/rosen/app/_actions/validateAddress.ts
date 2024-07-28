@@ -12,7 +12,7 @@ import { isValidAddress } from '@rosen-network/bitcoin';
  * @param walletAddress - wallet address to verify
  * @returns the validation results for the passed address
  */
-export const validateAddress = (
+export const validateAddress = async (
   chain: AvailableNetworks,
   walletAddress: string,
 ) => {
@@ -26,8 +26,8 @@ export const validateAddress = (
         throw new Error();
       }
     }
-    return { isValid: true };
+    return true;
   } catch {
-    return { isValid: false, message: 'Invalid Address' };
+    return false;
   }
 };

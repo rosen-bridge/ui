@@ -6,8 +6,8 @@ import { isNamiAvailable } from './isNamiAvailable';
 import { transferCreator } from './transfer';
 
 export const namiWalletCreator: WalletCreator = (config) => {
-  if (!isNamiAvailable()) return;
   return Object.assign({}, getNamiWallet(), {
+    isAvailable: isNamiAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: async () => {

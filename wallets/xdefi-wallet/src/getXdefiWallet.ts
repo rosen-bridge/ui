@@ -14,9 +14,9 @@ export const getXdefiWallet = () => {
       ...xdefiWalletInfo,
       connectWallet,
     },
-    {
+    () => ({
       getAddress,
       signTransaction,
-    }
+    })
   );
 };

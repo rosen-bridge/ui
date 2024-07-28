@@ -41,7 +41,7 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
       opacity: 0.75,
     },
     '& .value': {
-      fontSize: theme.typography.h2.fontSize,
+      fontSize: theme.typography.h6.fontSize,
       fontWeight: 'bold',
       lineHeight: 1,
       '& span': {
