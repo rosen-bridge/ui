@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, ChangeEvent } from 'react';
+import { useCallback, ChangeEvent, useMemo } from 'react';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import {
@@ -24,6 +24,8 @@ import { getTokenNameAndId } from '@/_utils';
 import useMaxTransfer from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
+import { useTokensMap } from '@/_hooks/useTokensMap';
+import { TokenMap } from '@rosen-bridge/tokens';
 
 /**
  * customized form input
@@ -101,6 +103,15 @@ const BridgeForm = () => {
 
   const { max } = useMaxTransfer();
 
+  const tokensMapObject = useTokensMap();
+  const tokensMap = useMemo(() => {
+    return new TokenMap(tokensMapObject);
+  }, [tokensMapObject]);
+  const decimals = useMemo(() => {
+    if (!token) return;
+    return tokensMap.getSignificantDecimals(token.tokenId);
+  }, [token, tokensMap]);
+
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
       (network) => network.name === value,
@@ -165,19 +176,30 @@ const BridgeForm = () => {
 
   const handleAmountChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      amountField.onChange(event);
+      try {
+        const amount = tokensMap
+          .wrapAmount(
+            token!.tokenId,
+            BigInt(event.target.value),
+            sourceField.value,
+          )
+          .amount.toString();
+        amountField.onChange(amount);
+      } catch {
+        amountField.onChange(event);
+      }
     },
-    [amountField],
+    [amountField, sourceField, token, tokensMap],
   );
 
   const handleSelectMax = useCallback(async () => {
-    const value = getDecimalString(max.toString(), token?.decimals ?? 0);
+    const value = getDecimalString(max.toString(), decimals ?? 0);
 
     setValue('amount', value, {
       shouldDirty: true,
       shouldTouch: true,
     });
-  }, [max, token?.decimals, setValue]);
+  }, [max, decimals, setValue]);
 
   const renderInputActions = () => (
     <>
@@ -192,7 +214,7 @@ const BridgeForm = () => {
               {`Balance: ${
                 isLoading
                   ? 'loading...'
-                  : getDecimalString(amount.toString(), token?.decimals ?? 0)
+                  : getDecimalString(amount.toString(), decimals ?? 0)
               }`}
             </Typography>
           </MaxButton>
@@ -310,7 +332,18 @@ const BridgeForm = () => {
         }}
         variant="filled"
         {...amountField}
-        value={amountField.value ?? ''}
+        value={(() => {
+          try {
+            const amount = tokensMap.unwrapAmount(
+              token!.tokenId,
+              amountField.value,
+              sourceField.value,
+            ).amount;
+            return getDecimalString(amount.toString(), decimals ?? 0);
+          } catch {
+            return amountField.value ?? '';
+          }
+        })()}
         onChange={handleAmountChange}
         disabled={!tokenField.value}
         autoComplete="off"

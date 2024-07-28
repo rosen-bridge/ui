@@ -58,11 +58,10 @@ export const getMinTransfer = async (
 
     const minTransfer = bridgeFee + networkFee;
 
+    const decimals = tokenMap.getSignificantDecimals(token.tokenId);
+
     return minTransfer
-      ? getDecimalString(
-          (minTransfer + 1).toString() || '0',
-          token?.decimals || 0,
-        )
+      ? getDecimalString((minTransfer + 1).toString() || '0', decimals || 0)
       : '0';
   } catch {
     return '0';

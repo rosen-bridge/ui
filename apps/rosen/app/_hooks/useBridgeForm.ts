@@ -72,10 +72,11 @@ const useBridgeForm = () => {
           const maxTransfer = await getMaxTransfer(
             selectedNetwork,
             {
-              balance:
+              balance: Number(
                 await walletGlobalContext!.state.selectedWallet.getBalance(
                   tokenField.value,
                 ),
+              ),
               isNative: tokenField.value.metaData.type === 'native',
             },
             async () => ({
