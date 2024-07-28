@@ -88,7 +88,10 @@ export const getAllAssets = async (
     .leftJoin(
       (queryBuilder) =>
         queryBuilder
-          .select(['lae.tokenId AS "tokenId"', 'sum(lae.amount) AS "locked"'])
+          .select([
+            'lae.tokenId AS "tokenId"',
+            `jsonb_agg(to_jsonb(lae) - 'tokenId') AS "lockedPerAddress"`,
+          ])
           .from(lockedAssetRepository.metadata.tableName, 'lae')
           .groupBy('lae.tokenId'),
       'laeq',
@@ -100,7 +103,7 @@ export const getAllAssets = async (
       'decimal',
       '"isNative"',
       '"bridged"',
-      '"locked"',
+      '"lockedPerAddress"',
       'chain',
       'count(*) over() AS total',
     ])
