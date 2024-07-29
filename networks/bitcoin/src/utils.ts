@@ -71,7 +71,7 @@ export const getAddressUtxos = async (
 /**
  * gets address BTC balance from Esplora
  * @param address
- * @returns
+ * @returns this is a UNWRAPPED-VALUE amount
  */
 export const getAddressBalance = async (address: string): Promise<bigint> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
@@ -96,7 +96,7 @@ export const getFeeRatio = async (): Promise<number> => {
 /**
  * gets the minimum amount of satoshi for a utxo that can cover
  * additional fee for adding it to a tx
- * @returns the minimum amount
+ * @returns the minimum UNWRAPPED-VALUE amount
  */
 export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
   return BigInt(

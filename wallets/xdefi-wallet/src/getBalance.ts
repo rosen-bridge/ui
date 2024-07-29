@@ -1,10 +1,14 @@
 import { WalletCreatorConfig } from '@rosen-network/bitcoin';
+import { Networks } from '@rosen-ui/constants';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
 
+/**
+ * @returns this is a WRAPPED-VALUE
+ */
 export const getBalanceCreator =
-  (config: WalletCreatorConfig) => (): Promise<number> => {
+  (config: WalletCreatorConfig) => (): Promise<bigint> => {
     return new Promise((resolve, reject) => {
       getXdefiWallet()
         .getApi()
@@ -24,7 +28,17 @@ export const getBalanceCreator =
               const address = segwitPaymentAddresses[0].address;
               config
                 .getAddressBalance(address)
-                .then((balance) => resolve(Number(balance)))
+                .then((balance) =>
+                  config.getTokenMap().then((tokenMap) => {
+                    resolve(
+                      tokenMap.wrapAmount(
+                        'btc',
+                        balance,
+                        Networks.BITCOIN
+                      ).amount
+                    );
+                  })
+                )
                 .catch((e) => reject(e));
             } else reject();
           },
