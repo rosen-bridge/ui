@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, ChangeEvent, useMemo } from 'react';
-import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import {
   alpha,
@@ -24,8 +24,7 @@ import { getTokenNameAndId } from '@/_utils';
 import useMaxTransfer from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
-import { useTokensMap } from '@/_hooks/useTokensMap';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { useTokenMap } from '@/_hooks/useTokenMap';
 
 /**
  * customized form input
@@ -103,14 +102,12 @@ const BridgeForm = () => {
 
   const { max } = useMaxTransfer();
 
-  const tokensMapObject = useTokensMap();
-  const tokensMap = useMemo(() => {
-    return new TokenMap(tokensMapObject);
-  }, [tokensMapObject]);
+  const tokenMap = useTokenMap();
+
   const decimals = useMemo(() => {
     if (!token) return;
-    return tokensMap.getSignificantDecimals(token.tokenId);
-  }, [token, tokensMap]);
+    return tokenMap.getSignificantDecimals(token.tokenId);
+  }, [token, tokenMap]);
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
@@ -177,19 +174,20 @@ const BridgeForm = () => {
   const handleAmountChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       try {
-        const amount = tokensMap
-          .wrapAmount(
-            token!.tokenId,
-            BigInt(event.target.value),
-            sourceField.value,
-          )
-          .amount.toString();
-        amountField.onChange(amount);
+        const amount = tokenMap.wrapAmount(
+          token!.tokenId,
+          BigInt(event.target.value),
+          sourceField.value,
+        ).amount;
+
+        const value = getDecimalString(amount.toString(), decimals ?? 0);
+
+        amountField.onChange(value);
       } catch {
         amountField.onChange(event);
       }
     },
-    [amountField, sourceField, token, tokensMap],
+    [amountField, decimals, sourceField, token, tokenMap],
   );
 
   const handleSelectMax = useCallback(async () => {
@@ -334,7 +332,7 @@ const BridgeForm = () => {
         {...amountField}
         value={(() => {
           try {
-            const amount = tokensMap.unwrapAmount(
+            const amount = tokenMap.unwrapAmount(
               token!.tokenId,
               amountField.value,
               sourceField.value,

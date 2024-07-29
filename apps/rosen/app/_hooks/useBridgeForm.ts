@@ -13,6 +13,7 @@ import { validateAddress } from '@/_actions/validateAddress';
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
 import getMaxTransfer from '@/_utils/getMaxTransfer';
+import { useTokenMap } from './useTokenMap';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -25,7 +26,9 @@ const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
 
-  const tokensMap = useTokensMap();
+  const tokenMap = useTokenMap();
+
+  const tokensMapObject = useTokensMap();
 
   const walletGlobalContext = useContext(WalletContext);
 
@@ -56,12 +59,15 @@ const useBridgeForm = () => {
         const isValueInvalid = !match;
         if (isValueInvalid) return 'The amount is not valid';
 
+        const decimals = tokenMap.getSignificantDecimals(
+          tokenField.value.tokenId,
+        );
+
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) >
-          tokenField.value?.decimals;
+          (match?.groups?.floatingDigits?.length ?? 0) > (decimals ?? 0);
         if (isDecimalsLarge)
-          return `The current token only supports ${tokenField.value?.decimals} decimals`;
+          return `The current token only supports ${decimals} decimals`;
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
@@ -88,7 +94,7 @@ const useBridgeForm = () => {
           );
 
           const isAmountLarge =
-            BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >
+            BigInt(getNonDecimalString(value, decimals ?? 0)) >
             BigInt(maxTransfer.toString());
           if (isAmountLarge) return 'Balance insufficient';
         }
@@ -97,16 +103,11 @@ const useBridgeForm = () => {
           tokenField.value,
           sourceField.value,
           targetField.value,
-          tokensMap,
+          tokensMapObject,
         );
         const isAmountSmall =
-          BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
-          BigInt(
-            getNonDecimalString(
-              minTransfer.toString(),
-              tokenField.value.decimals,
-            ),
-          );
+          BigInt(getNonDecimalString(value, decimals ?? 0)) <
+          BigInt(getNonDecimalString(minTransfer.toString(), decimals ?? 0));
         if (isAmountSmall) return 'Minimum transfer amount not respected';
 
         return undefined;

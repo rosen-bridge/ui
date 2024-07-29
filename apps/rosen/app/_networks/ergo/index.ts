@@ -6,12 +6,9 @@ import { unwrap } from '@/_errors';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
-import {
-  fee as ergoFee,
-  minBoxValue as ergoMinBoxValue,
-} from '@rosen-network/ergo/dist/src/constants';
-
 import { getTokenMap, generateUnsignedTx } from './server';
+
+import { getMaxTransfer } from './getMaxTransfer';
 
 /**
  * the main object for Ergo network
@@ -32,19 +29,7 @@ const ErgoNetwork: ErgoNetworkType = {
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
 
   // THIS FUNCTION WORKS WITH WRAPPED-VALUE
-  async getMaxTransfer({ balance, isNative }) {
-    const tokenMap = await unwrap(getTokenMap)();
-    const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
-      'erg',
-      ergoFee + ergoMinBoxValue,
-      Networks.ERGO,
-    ).amount;
-    const offsetCandidateWrapped = Number(feeAndMinBoxValueWrapped);
-    const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidateWrapped : 0;
-    const amount = balance - offset;
-    return amount < 0 ? 0 : amount;
-  },
+  getMaxTransfer: unwrap(getMaxTransfer),
 };
 
 export default ErgoNetwork;

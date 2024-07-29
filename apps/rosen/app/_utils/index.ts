@@ -29,6 +29,7 @@ export const getTokenNameAndId = (
  * @param token
  * @param amount
  * @param sourceChain
+ * @returns A WRAPPED-VALUE
  */
 export const getMinTransfer = async (
   token: RosenChainToken,
