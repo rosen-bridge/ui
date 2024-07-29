@@ -12,6 +12,7 @@ import { calculateFee } from '@/_actions/calculateFee';
 
 import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
+import { useTokenMap } from './useTokenMap';
 
 /**
  * calculates the fees for a token swap between
@@ -28,6 +29,7 @@ const useTransactionFees = (
   const { selectedNetwork } = useNetwork();
 
   const feeInfo = useRef<any>(null);
+  const tokenMap = useTokenMap();
   const tokensMap = useTokensMap();
 
   /**
@@ -54,6 +56,11 @@ const useTransactionFees = (
     }
     return null;
   }, [getTokenId, sourceChain, token]);
+
+  const decimals = useMemo(() => {
+    if (!tokenId) return;
+    return tokenMap.getSignificantDecimals(tokenId);
+  }, [tokenId, tokenMap]);
 
   useEffect(() => {
     feeInfo.current = null;
@@ -127,7 +134,7 @@ const useTransactionFees = (
   const transactionFees = useMemo(() => {
     let paymentAmount =
       amount && token
-        ? +getNonDecimalString(amount.toString(), token.decimals)
+        ? +getNonDecimalString(amount.toString(), decimals ?? 0)
         : 0;
 
     const networkFee = fees ? Number(fees.networkFee) : 0;
@@ -146,31 +153,25 @@ const useTransactionFees = (
     const minTransfer = bridgeFeeBase! + networkFee!;
 
     return {
-      bridgeFee: getDecimalString(
-        bridgeFee?.toString() || '0',
-        token?.decimals || 0,
-      ),
+      bridgeFee: getDecimalString(bridgeFee?.toString() || '0', decimals || 0),
       networkFee: getDecimalString(
         networkFee?.toString() || '0',
-        token?.decimals || 0,
+        decimals || 0,
       ),
       receivingAmount:
         fees && receivingAmountValue > 0
           ? getDecimalString(
               receivingAmountValue.toString() || '0',
-              token?.decimals || 0,
+              decimals || 0,
             )
           : '0',
       minTransfer: minTransfer
-        ? getDecimalString(
-            (minTransfer + 1).toString() || '0',
-            token?.decimals || 0,
-          )
+        ? getDecimalString((minTransfer + 1).toString() || '0', decimals || 0)
         : '0',
       isLoading: pending,
       status: feeInfo.current,
     };
-  }, [amount, fees, pending, token, feeRatioDivisor]);
+  }, [amount, fees, pending, token, feeRatioDivisor, decimals]);
 
   return transactionFees;
 };
