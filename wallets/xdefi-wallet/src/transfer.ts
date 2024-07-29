@@ -27,7 +27,7 @@ export const transferCreator =
       const decimals = tokenMap.getSignificantDecimals('btc');
 
       if (decimals === undefined) {
-        throw new Error('Impossible behavior');
+        throw new Error('Impossible behavior: [btc] is not found in token map');
       }
 
       validateDecimalPlaces(decimalWrappedAmount, decimals);
