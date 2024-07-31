@@ -6,14 +6,12 @@ import {
   OpenInNew,
 } from '@rosen-bridge/icons';
 import {
-  Avatar,
   Box,
   Button,
   CircularProgress,
   Collapse,
   Divider,
   EnhancedTableCell,
-  Grid,
   IconButton,
   Id,
   Link,
@@ -23,7 +21,6 @@ import {
   TableBody,
   TableCell,
   TableRow,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 import { useState, FC, useMemo } from 'react';
 import useSWR from 'swr';
@@ -31,12 +28,22 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 
 import { ApiAssetResponse, Assets } from '@/_types/api';
 
-import { DetailsDrawer } from './DetailsDrawer';
-import { getDecimalString } from '@rosen-ui/utils';
+import {
+  getAddressUrl,
+  getDecimalString,
+  getTokenUrl,
+  getTxURL,
+} from '@rosen-ui/utils';
 
 interface RowProps extends Assets {
   isLoading?: boolean;
 }
+
+const LOCK_ADDRESSES = [
+  process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
+  process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
+  process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
+];
 
 export const mobileHeader = [
   {
@@ -127,6 +134,18 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
+  const hot = row.lockedPerAddress.find((item) => {
+    return LOCK_ADDRESSES.includes(item.address) == true;
+  });
+
+  const hotUrl = getAddressUrl(row.chain, hot?.address);
+
+  const cold = row.lockedPerAddress.find((item) => {
+    return LOCK_ADDRESSES.includes(item.address) != true;
+  });
+
+  const coldUrl = getAddressUrl(row.chain, cold?.address);
+
   return (
     <>
       <TableRow sx={rowStyles}>
@@ -134,23 +153,30 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>{row.name}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
-        <EnhancedTableCell sx={{ opacity: '0.6' }}>Id</EnhancedTableCell>
-        <EnhancedTableCell>
-          <Id id={row.name} />
-        </EnhancedTableCell>
+        <EnhancedTableCell sx={{ opacity: '0.6' }}>Network</EnhancedTableCell>
+        <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
-        <EnhancedTableCell sx={{ opacity: '0.6' }}>Type</EnhancedTableCell>
-        <EnhancedTableCell>{row.chain}</EnhancedTableCell>
+        <EnhancedTableCell sx={{ opacity: '0.6' }}>Locked</EnhancedTableCell>
+        <EnhancedTableCell>
+          {getDecimalString(
+            ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+            row.decimal,
+          )}
+        </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell sx={{ opacity: '0.6' }}>
-              Locked
-            </EnhancedTableCell>
+            <EnhancedTableCell sx={{ opacity: '0.6' }}>Hot</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.locked, row.decimal)}
+              {getDecimalString(hot?.amount.toString() || '0', row.decimal)}
+            </EnhancedTableCell>
+          </TableRow>
+          <TableRow sx={rowStyles}>
+            <EnhancedTableCell sx={{ opacity: '0.6' }}>Cold</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getDecimalString(cold?.amount.toString() || '0', row.decimal)}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -158,7 +184,7 @@ export const MobileRow: FC<RowProps> = (props) => {
               Bridged
             </EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridged, row.decimal)}
+              {getDecimalString(row.bridged.toString(), row.decimal)}
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -181,23 +207,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             {expand ? 'Show less' : 'Show more'}
           </Button>
         </EnhancedTableCell>
-        <EnhancedTableCell padding="none" align="right">
-          {expand && (
-            <Button
-              variant="text"
-              sx={{ fontSize: 'inherit' }}
-              endIcon={<Eye />}
-              onClick={() => setOpen(true)}
-            >
-              See Tokens
-            </Button>
-          )}
-        </EnhancedTableCell>
       </TableRow>
-      <TableRow>
-        <EnhancedTableCell colSpan={2} padding="none" />
-      </TableRow>
-      <DetailsDrawer asset={row} open={open} onClose={() => setOpen(false)} />
     </>
   );
 };
@@ -211,6 +221,18 @@ export const TabletRow: FC<RowProps> = (props) => {
     expanded ? `/v1/assets/detail/${row.id}` : null,
     fetcher,
   );
+
+  const hot = row.lockedPerAddress.find((item) => {
+    return LOCK_ADDRESSES.includes(item.address) == true;
+  });
+
+  const hotUrl = getAddressUrl(row.chain, hot?.address);
+
+  const cold = row.lockedPerAddress.find((item) => {
+    return LOCK_ADDRESSES.includes(item.address) != true;
+  });
+
+  const coldUrl = getAddressUrl(row.chain, cold?.address);
 
   const open = expanded && data && !loading;
 
@@ -229,11 +251,16 @@ export const TabletRow: FC<RowProps> = (props) => {
               <SquareShape />
             </SvgIcon>
             <span>{row.name}</span>
-            <Link href={'TODO'} target="_blank">
-              <SvgIcon fontSize="small" sx={{ display: 'block' }}>
-                <OpenInNew />
-              </SvgIcon>
-            </Link>
+            {!row.isNative && (
+              <Link
+                href={getTokenUrl(row.chain, row.id.replace('.', ''))!}
+                target="_blank"
+              >
+                <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
+                  <OpenInNew />
+                </SvgIcon>
+              </Link>
+            )}
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
@@ -245,26 +272,37 @@ export const TabletRow: FC<RowProps> = (props) => {
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          {getDecimalString(row.locked, row.decimal)}
+          {getDecimalString(
+            ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+            row.decimal,
+          )}
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
-            <span>HOT</span>
-            <Link href={'TODO'} target="_blank">
-              <SvgIcon fontSize="small" sx={{ display: 'block' }}>
-                <OpenInNew />
-              </SvgIcon>
-            </Link>
+            <span>
+              {getDecimalString(hot?.amount.toString() || '0', row.decimal)}
+            </span>
+            {hotUrl && (
+              <Link href={hotUrl} target="_blank">
+                <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
+                  <OpenInNew />
+                </SvgIcon>
+              </Link>
+            )}
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
-            <span>COLD</span>
-            <Link href={'TODO'} target="_blank">
-              <SvgIcon fontSize="small" sx={{ display: 'block' }}>
-                <OpenInNew />
-              </SvgIcon>
-            </Link>
+            <span>
+              {getDecimalString(cold?.amount.toString() || '0', row.decimal)}
+            </span>
+            {coldUrl && (
+              <Link href={coldUrl} target="_blank">
+                <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
+                  <OpenInNew />
+                </SvgIcon>
+              </Link>
+            )}
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
@@ -327,10 +365,16 @@ export const TabletRow: FC<RowProps> = (props) => {
                           </TableCell>
                           <TableCell>
                             <Stack alignItems="center" direction="row" gap={1}>
-                              <span>ID</span>
-                              <Link href={'TODO'} target="_blank">
+                              <Id id={item.birdgedTokenId} />
+                              <Link
+                                href={
+                                  getTxURL(item.chain, item.birdgedTokenId) ||
+                                  ''
+                                }
+                                target="_blank"
+                              >
                                 <SvgIcon
-                                  fontSize="small"
+                                  fontSize="inherit"
                                   sx={{ display: 'block' }}
                                 >
                                   <OpenInNew />

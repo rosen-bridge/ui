@@ -74,7 +74,7 @@ export default function Page() {
 
   const tableHeaderProps = useMemo(
     () => ({
-      mobile: [],
+      mobile: mobileHeader,
       tablet: tabletHeader,
     }),
     [],
