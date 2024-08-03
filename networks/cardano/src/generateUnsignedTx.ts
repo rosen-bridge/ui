@@ -41,7 +41,7 @@ export const generateUnsignedTx = async (
   token: RosenChainToken
 ): Promise<string> => {
   const unwrappedAmount = tokenMap.unwrapAmount(
-    token.tokenId,
+    token[tokenMap.getIdKey(Networks.CARDANO)],
     wrappedAmount,
     Networks.CARDANO
   ).amount;

@@ -15,8 +15,10 @@ export const getBalanceCreator =
 
     if (!amount) return 0n;
 
-    return (await config.getTokenMap()).wrapAmount(
-      token.tokenId,
+    const tokenMap = await config.getTokenMap();
+
+    return tokenMap.wrapAmount(
+      token[tokenMap.getIdKey(Networks.CARDANO)],
       amount.quantity,
       Networks.CARDANO
     ).amount;
