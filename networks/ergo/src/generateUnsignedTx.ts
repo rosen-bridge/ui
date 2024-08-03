@@ -14,7 +14,7 @@ import {
 } from './utils';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 import { ErgoBoxProxy } from '@rosen-bridge/ergo-box-selection';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { Networks } from '@rosen-ui/constants';
 
 /**
@@ -24,11 +24,11 @@ import { Networks } from '@rosen-ui/constants';
  * @param lockAddress
  * @param toChain
  * @param toAddress
- * @param tokenId
  * @param wrappedAmount this is a WRAPPED-VALUE
  * @param bridgeFee
  * @param networkFee
  * @param tokenMap
+ * @param token
  * @returns
  */
 export const generateUnsignedTx = async (
@@ -37,12 +37,14 @@ export const generateUnsignedTx = async (
   lockAddress: string,
   toChain: string,
   toAddress: string,
-  tokenId: string,
   wrappedAmount: bigint,
   bridgeFeeString: string,
   networkFeeString: string,
-  tokenMap: TokenMap
+  tokenMap: TokenMap,
+  token: RosenChainToken
 ): Promise<UnsignedErgoTxProxy> => {
+  const tokenId = token[tokenMap.getIdKey(Networks.CARDANO)];
+
   const unwrappedAmount = tokenMap.unwrapAmount(
     tokenId,
     wrappedAmount,

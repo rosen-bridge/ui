@@ -3,6 +3,7 @@ import { WalletCreatorConfig } from '@rosen-network/ergo';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { getNautilusWallet } from './getNautilusWallet';
+import { Networks } from '@rosen-ui/constants';
 
 /**
  * This function works with WRAPPED-VALUE
@@ -20,7 +21,9 @@ export const transferCreator =
   ): Promise<string> => {
     const tokenMap = await config.getTokenMap();
 
-    const decimals = tokenMap.getSignificantDecimals(token.tokenId);
+    const decimals = tokenMap.getSignificantDecimals(
+      token[tokenMap.getIdKey(Networks.CARDANO)]
+    );
 
     if (decimals === undefined) {
       throw new Error('Impossible behavior');
@@ -31,7 +34,6 @@ export const transferCreator =
     validateDecimalPlaces(decimalNetworkFee, decimals);
 
     const wallet = await getNautilusWallet().getApi().getContext();
-    const tokenId = token.tokenId;
     const amount = convertNumberToBigint(decimalAmount * 10 ** decimals);
     const bridgeFee = convertNumberToBigint(decimalBridgeFee * 10 ** decimals);
     const networkFee = convertNumberToBigint(
@@ -48,11 +50,11 @@ export const transferCreator =
       lockAddress,
       toChain,
       toAddress,
-      tokenId,
       amount,
       bridgeFee.toString(),
       networkFee.toString(),
-      tokenMap
+      tokenMap,
+      token
     );
     const signedTx = await wallet.sign_tx(unsignedTx);
     const result = await wallet.submit_tx(signedTx);

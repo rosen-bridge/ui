@@ -1,7 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ergo';
 import { Networks } from '@rosen-ui/constants';
-import { ErgoToken } from '@rosen-ui/wallet-api';
 
 import { getNautilusWallet } from './getNautilusWallet';
 
@@ -9,7 +8,10 @@ export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<bigint> => {
     const context = await getNautilusWallet().getApi().getContext();
-    const tokenId = (token as ErgoToken).tokenId;
+
+    const tokenMap = await config.getTokenMap();
+
+    const tokenId = token[tokenMap.getIdKey(Networks.CARDANO)];
     /**
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
@@ -22,9 +24,5 @@ export const getBalanceCreator =
 
     if (!amount) return 0n;
 
-    return (await config.getTokenMap()).wrapAmount(
-      tokenId,
-      amount,
-      Networks.ERGO
-    ).amount;
+    return tokenMap.wrapAmount(tokenId, amount, Networks.ERGO).amount;
   };
