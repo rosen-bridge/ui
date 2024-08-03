@@ -21,7 +21,7 @@ export const getBalanceCreator =
     if (!amount) return 0n;
 
     return (await config.getTokenMap()).wrapAmount(
-      'ada',
+      token.tokenId,
       amount.quantity,
       Networks.CARDANO
     ).amount;
