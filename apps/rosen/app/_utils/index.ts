@@ -59,7 +59,9 @@ export const getMinTransfer = async (
 
     const minTransfer = bridgeFee + networkFee;
 
-    const decimals = tokenMap.getSignificantDecimals(token.tokenId);
+    const tokenId = token[tokenMap.getIdKey(sourceChain)];
+
+    const decimals = tokenMap.getSignificantDecimals(tokenId);
 
     return minTransfer
       ? getDecimalString((minTransfer + 1).toString() || '0', decimals || 0)

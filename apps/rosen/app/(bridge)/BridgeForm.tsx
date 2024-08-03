@@ -105,9 +105,9 @@ const BridgeForm = () => {
   const tokenMap = useTokenMap();
 
   const decimals = useMemo(() => {
-    if (!token) return;
-    return tokenMap.getSignificantDecimals(token.tokenId);
-  }, [token, tokenMap]);
+    if (!tokenField.value) return;
+    return tokenMap.getSignificantDecimals(tokenField.value.tokenId);
+  }, [tokenField.value, tokenMap]);
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
@@ -175,19 +175,21 @@ const BridgeForm = () => {
     (event: ChangeEvent<HTMLInputElement>) => {
       let value = event.target.value;
 
-      if (!value.endsWith('.')) {
-        value = tokenMap
-          .wrapAmount(
-            token!.tokenId,
-            BigInt(getNonDecimalString(event.target.value, decimals ?? 0)),
-            sourceField.value,
-          )
-          .amount.toString();
-      }
+      try {
+        if (tokenField.value && !value.endsWith('.')) {
+          value = tokenMap
+            .wrapAmount(
+              tokenField.value.tokenId,
+              BigInt(getNonDecimalString(event.target.value, decimals ?? 0)),
+              sourceField.value,
+            )
+            .amount.toString();
+        }
+      } catch {}
 
       amountField.onChange(value);
     },
-    [amountField, decimals, sourceField, token, tokenMap],
+    [amountField, decimals, sourceField, tokenField, tokenMap],
   );
 
   const handleSelectMax = useCallback(async () => {
@@ -332,8 +334,7 @@ const BridgeForm = () => {
         {...amountField}
         value={(() => {
           const value = amountField.value ?? '';
-
-          if (value.endsWith('.')) {
+          if (!value || isNaN(value) || value.endsWith('.')) {
             return value;
           } else {
             return getDecimalString(value, decimals ?? 0);

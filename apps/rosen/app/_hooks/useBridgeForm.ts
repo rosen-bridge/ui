@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useController } from 'react-hook-form';
 
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import { useTokensMap } from './useTokensMap';
 import useTransactionFormData from './useTransactionFormData';
@@ -51,17 +51,19 @@ const useBridgeForm = () => {
     name: 'amount',
     control,
     rules: {
-      validate: async (value) => {
+      validate: async (input) => {
+        const decimals = tokenMap.getSignificantDecimals(
+          tokenField.value.tokenId,
+        );
+
+        const value = getDecimalString(input, decimals ?? 0);
+
         // match any complete or incomplete decimal number
         const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
 
         // prevent user from entering invalid numbers
         const isValueInvalid = !match;
         if (isValueInvalid) return 'The amount is not valid';
-
-        const decimals = tokenMap.getSignificantDecimals(
-          tokenField.value.tokenId,
-        );
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
