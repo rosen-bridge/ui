@@ -20,7 +20,7 @@ export const transferCreator =
   ): Promise<string> => {
     const tokenMap = await config.getTokenMap();
 
-    const decimals = tokenMap.getSignificantDecimals('ada');
+    const decimals = tokenMap.getSignificantDecimals(token.tokenId);
 
     if (decimals === undefined) {
       throw new Error('Impossible behavior');
@@ -58,7 +58,8 @@ export const transferCreator =
       assetNameHex,
       amount,
       auxiliaryDataHex,
-      tokenMap
+      tokenMap,
+      token
     );
 
     const signedTxHex = await config.setTxWitnessSet(

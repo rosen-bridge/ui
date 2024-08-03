@@ -15,6 +15,9 @@ import { tokenMap } from '../tokenMap';
 
 /**
  * get max transfer for bitcoin
+ *
+ * THIS FUNCTION WORKS WITH WRAPPED-VALUE
+ *
  * @returns this is a WRAPPED-VALUE
  */
 export const getMaxTransfer = wrap(
@@ -45,8 +48,14 @@ export const getMaxTransfer = wrap(
       2,
       opRetrunDataLength,
     );
-    const estimatedFee = Math.ceil((estimatedTxWeight / 4) * feeRatio);
+    const estimatedFee = BigInt(Math.ceil((estimatedTxWeight / 4) * feeRatio));
     const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
+
+    const estimatedFeeWrapped = tokenMap.wrapAmount(
+      'btc',
+      estimatedFee,
+      Networks.BITCOIN,
+    ).amount;
 
     const minSatoshiWrapped = tokenMap.wrapAmount(
       'btc',
@@ -62,6 +71,10 @@ export const getMaxTransfer = wrap(
          *
          * local:ergo/rosen-bridge/utils#204
          */
-      balance - estimatedFee - Number(minSatoshiWrapped) - utxos.length - 1;
+      balance -
+      Number(estimatedFeeWrapped) -
+      Number(minSatoshiWrapped) -
+      utxos.length -
+      1;
   },
 );
