@@ -20,7 +20,7 @@ import { Networks } from '@rosen-ui/constants';
 /**
  * generates an unsigned lock transaction on Ergo
  * @param changeAddress
- * @param walletUtxos SHOULD BE CONTAINS UNWRAPPED-VALUE
+ * @param walletUtxos SHOULD CONTAIN UNWRAPPED-VALUEs
  * @param lockAddress
  * @param toChain
  * @param toAddress
