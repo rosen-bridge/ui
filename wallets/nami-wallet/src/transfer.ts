@@ -1,3 +1,4 @@
+import { Networks } from '@rosen-ui/constants';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
@@ -20,7 +21,9 @@ export const transferCreator =
   ): Promise<string> => {
     const tokenMap = await config.getTokenMap();
 
-    const decimals = tokenMap.getSignificantDecimals(token.tokenId);
+    const decimals = tokenMap.getSignificantDecimals(
+      token[tokenMap.getIdKey(Networks.CARDANO)]
+    );
 
     if (decimals === undefined) {
       throw new Error('Impossible behavior');
