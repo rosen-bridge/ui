@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, ChangeEvent, useMemo } from 'react';
-import { getDecimalString } from '@rosen-ui/utils';
+import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import {
   alpha,
@@ -173,19 +173,19 @@ const BridgeForm = () => {
 
   const handleAmountChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
-      try {
-        const amount = tokenMap.wrapAmount(
-          token!.tokenId,
-          BigInt(event.target.value),
-          sourceField.value,
-        ).amount;
+      let value = event.target.value;
 
-        const value = getDecimalString(amount.toString(), decimals ?? 0);
-
-        amountField.onChange(value);
-      } catch {
-        amountField.onChange(event);
+      if (!value.endsWith('.')) {
+        value = tokenMap
+          .wrapAmount(
+            token!.tokenId,
+            BigInt(getNonDecimalString(event.target.value, decimals ?? 0)),
+            sourceField.value,
+          )
+          .amount.toString();
       }
+
+      amountField.onChange(value);
     },
     [amountField, decimals, sourceField, token, tokenMap],
   );
@@ -331,15 +331,12 @@ const BridgeForm = () => {
         variant="filled"
         {...amountField}
         value={(() => {
-          try {
-            const amount = tokenMap.unwrapAmount(
-              token!.tokenId,
-              amountField.value,
-              sourceField.value,
-            ).amount;
-            return getDecimalString(amount.toString(), decimals ?? 0);
-          } catch {
-            return amountField.value ?? '';
+          const value = amountField.value ?? '';
+
+          if (value.endsWith('.')) {
+            return value;
+          } else {
+            return getDecimalString(value, decimals ?? 0);
           }
         })()}
         onChange={handleAmountChange}
