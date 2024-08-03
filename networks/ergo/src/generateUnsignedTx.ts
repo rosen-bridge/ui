@@ -44,7 +44,7 @@ export const generateUnsignedTx = async (
   tokenMap: TokenMap
 ): Promise<UnsignedErgoTxProxy> => {
   const unwrappedAmount = tokenMap.unwrapAmount(
-    'erg',
+    tokenId,
     wrappedAmount,
     Networks.ERGO
   ).amount;
