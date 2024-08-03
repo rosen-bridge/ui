@@ -22,6 +22,9 @@ export const getBalanceCreator =
 
     if (!amount) return 0n;
 
-    return (await config.getTokenMap()).wrapAmount('erg', amount, Networks.ERGO)
-      .amount;
+    return (await config.getTokenMap()).wrapAmount(
+      tokenId,
+      amount,
+      Networks.ERGO
+    ).amount;
   };

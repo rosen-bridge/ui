@@ -20,7 +20,7 @@ export const transferCreator =
   ): Promise<string> => {
     const tokenMap = await config.getTokenMap();
 
-    const decimals = tokenMap.getSignificantDecimals('erg');
+    const decimals = tokenMap.getSignificantDecimals(token.tokenId);
 
     if (decimals === undefined) {
       throw new Error('Impossible behavior');
