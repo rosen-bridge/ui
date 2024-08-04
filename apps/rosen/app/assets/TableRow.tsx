@@ -236,6 +236,13 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const open = expanded && data && !loading;
 
+  const tokenUrl =
+    !row.isNative &&
+    getTokenUrl(
+      row.chain,
+      row.chain == 'cardano' ? row.id.replace('.', '') : row.id,
+    );
+
   return (
     <>
       <TableRow
@@ -251,11 +258,8 @@ export const TabletRow: FC<RowProps> = (props) => {
               <SquareShape />
             </SvgIcon>
             <span>{row.name}</span>
-            {!row.isNative && (
-              <Link
-                href={getTokenUrl(row.chain, row.id.replace('.', ''))!}
-                target="_blank"
-              >
+            {tokenUrl && (
+              <Link href={tokenUrl} target="_blank">
                 <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
                   <OpenInNew />
                 </SvgIcon>
@@ -347,43 +351,50 @@ export const TabletRow: FC<RowProps> = (props) => {
                 {data.bridged && (
                   <Table>
                     <TableBody>
-                      {data.bridged.map((item) => (
-                        <TableRow
-                          key={item.chain}
-                          sx={{ '&:last-child td': { border: 0 } }}
-                        >
-                          <TableCell>
-                            <Stack alignItems="center" direction="row" gap={1}>
-                              <SvgIcon fontSize="small">
-                                <SquareShape />
-                              </SvgIcon>
-                              <span>{item.chain}</span>
-                            </Stack>
-                          </TableCell>
-                          <TableCell>
-                            {getDecimalString(item.amount, row.decimal)}
-                          </TableCell>
-                          <TableCell>
-                            <Stack alignItems="center" direction="row" gap={1}>
-                              <Id id={item.birdgedTokenId} />
-                              <Link
-                                href={
-                                  getTxURL(item.chain, item.birdgedTokenId) ||
-                                  ''
-                                }
-                                target="_blank"
+                      {data.bridged.map((item) => {
+                        const txUrl = getTxURL(item.chain, item.birdgedTokenId);
+                        return (
+                          <TableRow
+                            key={item.chain}
+                            sx={{ '&:last-child td': { border: 0 } }}
+                          >
+                            <TableCell>
+                              <Stack
+                                alignItems="center"
+                                direction="row"
+                                gap={1}
                               >
-                                <SvgIcon
-                                  fontSize="inherit"
-                                  sx={{ display: 'block' }}
-                                >
-                                  <OpenInNew />
+                                <SvgIcon fontSize="small">
+                                  <SquareShape />
                                 </SvgIcon>
-                              </Link>
-                            </Stack>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                                <span>{item.chain}</span>
+                              </Stack>
+                            </TableCell>
+                            <TableCell>
+                              {getDecimalString(item.amount, row.decimal)}
+                            </TableCell>
+                            <TableCell>
+                              <Stack
+                                alignItems="center"
+                                direction="row"
+                                gap={1}
+                              >
+                                <Id id={item.birdgedTokenId} />
+                                {txUrl && (
+                                  <Link href={txUrl} target="_blank">
+                                    <SvgIcon
+                                      fontSize="inherit"
+                                      sx={{ display: 'block' }}
+                                    >
+                                      <OpenInNew />
+                                    </SvgIcon>
+                                  </Link>
+                                )}
+                              </Stack>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
                     </TableBody>
                   </Table>
                 )}
