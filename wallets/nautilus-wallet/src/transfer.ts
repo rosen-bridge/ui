@@ -22,7 +22,7 @@ export const transferCreator =
     const tokenMap = await config.getTokenMap();
 
     const decimals = tokenMap.getSignificantDecimals(
-      token[tokenMap.getIdKey(Networks.CARDANO)]
+      token[tokenMap.getIdKey(Networks.ERGO)]
     );
 
     if (decimals === undefined) {

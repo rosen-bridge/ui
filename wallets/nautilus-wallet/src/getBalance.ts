@@ -11,7 +11,7 @@ export const getBalanceCreator =
 
     const tokenMap = await config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(Networks.CARDANO)];
+    const tokenId = token[tokenMap.getIdKey(Networks.ERGO)];
     /**
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
