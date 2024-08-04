@@ -1,3 +1,4 @@
+import { Networks } from '@rosen-ui/constants';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   SigHash,
@@ -24,10 +25,14 @@ export const transferCreator =
   ): Promise<string> => {
     const tokenMap = await config.getTokenMap();
 
-    const decimals = tokenMap.getSignificantDecimals('btc');
+    const tokenId = token[tokenMap.getIdKey(Networks.BITCOIN)];
+
+    const decimals = tokenMap.getSignificantDecimals(tokenId);
 
     if (decimals === undefined) {
-      throw new Error('Impossible behavior: [btc] is not found in token map');
+      throw new Error(
+        `Impossible behavior: [${tokenId}] is not found in token map`
+      );
     }
 
     validateDecimalPlaces(decimalWrappedAmount, decimals);
@@ -77,7 +82,8 @@ export const transferCreator =
       userAddress,
       amount,
       opReturnData,
-      tokenMap
+      tokenMap,
+      token
     );
 
     const result: string = await new Promise((resolve, reject) => {

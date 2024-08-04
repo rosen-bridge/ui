@@ -9,7 +9,7 @@ import {
   getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { Networks } from '@rosen-ui/constants';
 
 /**
@@ -19,6 +19,7 @@ import { Networks } from '@rosen-ui/constants';
  * @param wrappedAmount this is a WRAPPED-VALUE
  * @param opReturnData
  * @param tokenMap
+ * @param token
  * @returns
  */
 export const generateUnsignedTx = async (
@@ -26,10 +27,11 @@ export const generateUnsignedTx = async (
   fromAddress: string,
   wrappedAmount: bigint,
   opReturnData: string,
-  tokenMap: TokenMap
+  tokenMap: TokenMap,
+  token: RosenChainToken
 ): Promise<UnsignedPsbtData> => {
   const amount = tokenMap.unwrapAmount(
-    'btc',
+    token[tokenMap.getIdKey(Networks.BITCOIN)],
     wrappedAmount,
     Networks.BITCOIN
   ).amount;

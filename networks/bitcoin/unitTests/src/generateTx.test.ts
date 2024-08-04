@@ -51,7 +51,8 @@ describe('generateUnsignedTx', () => {
       fromAddress,
       amount,
       data,
-      new TokenMap(testTokenMap)
+      new TokenMap(testTokenMap),
+      {} as any
     );
 
     const psbt = Psbt.fromBase64(result.psbt);
@@ -108,12 +109,19 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
+    const tokenMap = new TokenMap(multiDecimalTokenMap);
+
+    const chain = tokenMap.getAllChains()[0];
+
+    const token = tokenMap.search(chain, {})[0][chain];
+
     const result = await generateUnsignedTx(
       lockAddress,
       fromAddress,
       wrappedAmount,
       data,
-      new TokenMap(multiDecimalTokenMap)
+      tokenMap,
+      token
     );
 
     const psbt = Psbt.fromBase64(result.psbt);
@@ -168,7 +176,8 @@ describe('generateUnsignedTx', () => {
         fromAddress,
         amount,
         data,
-        new TokenMap(testTokenMap)
+        new TokenMap(testTokenMap),
+        {} as any
       );
     }).rejects.toThrow(Error);
   });
