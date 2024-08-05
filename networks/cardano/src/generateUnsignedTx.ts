@@ -27,6 +27,8 @@ import { Networks } from '@rosen-ui/constants';
  * @param assetNameHex
  * @param wrappedAmount this is a WRAPPED-VALUE
  * @param auxiliaryData
+ * @param tokenMap
+ * @param token
  * @returns hex representation of the unsigned tx
  */
 export const generateUnsignedTx = async (
@@ -41,7 +43,7 @@ export const generateUnsignedTx = async (
   token: RosenChainToken
 ): Promise<string> => {
   const unwrappedAmount = tokenMap.unwrapAmount(
-    token[tokenMap.getIdKey(Networks.CARDANO)],
+    `${policyIdHex}.${assetNameHex}`,
     wrappedAmount,
     Networks.CARDANO
   ).amount;
