@@ -1,10 +1,4 @@
-import {
-  AngleDown,
-  AngleUp,
-  SquareShape,
-  Eye,
-  OpenInNew,
-} from '@rosen-bridge/icons';
+import { AngleDown, AngleUp, OpenInNew } from '@rosen-bridge/icons';
 import {
   Box,
   Button,
@@ -41,8 +35,8 @@ interface RowProps extends Assets {
 
 const LOCK_ADDRESSES = [
   process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
-  process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
-  process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
+  process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS,
+  process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS,
 ];
 
 export const mobileHeader = [
@@ -134,13 +128,13 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const hot = row.lockedPerAddress.find((item) => {
+  const hot = row.lockedPerAddress?.find((item) => {
     return LOCK_ADDRESSES.includes(item.address) == true;
   });
 
   const hotUrl = getAddressUrl(row.chain, hot?.address);
 
-  const cold = row.lockedPerAddress.find((item) => {
+  const cold = row.lockedPerAddress?.find((item) => {
     return LOCK_ADDRESSES.includes(item.address) != true;
   });
 
@@ -218,17 +212,17 @@ export const TabletRow: FC<RowProps> = (props) => {
   const [expanded, setExpanded] = useState(false);
 
   const { data, isLoading: loading } = useSWR<ApiAssetResponse>(
-    expanded ? `/v1/assets/detail/${row.id}` : null,
+    expanded ? `/v1/assets/detail/${row.id.toLowerCase()}` : null,
     fetcher,
   );
 
-  const hot = row.lockedPerAddress.find((item) => {
+  const hot = row.lockedPerAddress?.find((item) => {
     return LOCK_ADDRESSES.includes(item.address) == true;
   });
 
   const hotUrl = getAddressUrl(row.chain, hot?.address);
 
-  const cold = row.lockedPerAddress.find((item) => {
+  const cold = row.lockedPerAddress?.find((item) => {
     return LOCK_ADDRESSES.includes(item.address) != true;
   });
 
@@ -251,12 +245,10 @@ export const TabletRow: FC<RowProps> = (props) => {
           opacity: isLoading ? 0.3 : 1.0,
           '& > td': { border: 0 },
         }}
+        onClick={() => setExpanded(!open)}
       >
         <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
-            <SvgIcon fontSize="small">
-              <SquareShape />
-            </SvgIcon>
             <span>{row.name}</span>
             {tokenUrl && (
               <Link href={tokenUrl} target="_blank">
@@ -267,14 +259,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             )}
           </Stack>
         </EnhancedTableCell>
-        <EnhancedTableCell align="left">
-          <Stack alignItems="center" direction="row" gap={1}>
-            <SvgIcon fontSize="small">
-              <SquareShape />
-            </SvgIcon>
-            <span>{row.chain}</span>
-          </Stack>
-        </EnhancedTableCell>
+        <EnhancedTableCell align="left">{row.chain}</EnhancedTableCell>
         <EnhancedTableCell align="left">
           {getDecimalString(
             ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
@@ -358,18 +343,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                             key={item.chain}
                             sx={{ '&:last-child td': { border: 0 } }}
                           >
-                            <TableCell>
-                              <Stack
-                                alignItems="center"
-                                direction="row"
-                                gap={1}
-                              >
-                                <SvgIcon fontSize="small">
-                                  <SquareShape />
-                                </SvgIcon>
-                                <span>{item.chain}</span>
-                              </Stack>
-                            </TableCell>
+                            <TableCell>{item.chain}</TableCell>
                             <TableCell>
                               {getDecimalString(item.amount, row.decimal)}
                             </TableCell>
