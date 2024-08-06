@@ -3,7 +3,11 @@ import { WalletCreatorConfig } from '@rosen-network/ergo';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { getNautilusWallet } from './getNautilusWallet';
+import { Networks } from '@rosen-ui/constants';
 
+/**
+ * This function works with WRAPPED-VALUE
+ */
 export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
@@ -15,18 +19,25 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
+    const tokenMap = await config.getTokenMap();
+
+    const decimals = tokenMap.getSignificantDecimals(
+      token[tokenMap.getIdKey(Networks.ERGO)]
+    );
+
+    if (decimals === undefined) {
+      throw new Error('Impossible behavior: failed to get significant decimals for the requested token');
+    }
+
+    validateDecimalPlaces(decimalAmount, decimals);
+    validateDecimalPlaces(decimalBridgeFee, decimals);
+    validateDecimalPlaces(decimalNetworkFee, decimals);
 
     const wallet = await getNautilusWallet().getApi().getContext();
-    const tokenId = token.tokenId;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(decimalAmount * 10 ** decimals);
+    const bridgeFee = convertNumberToBigint(decimalBridgeFee * 10 ** decimals);
     const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
+      decimalNetworkFee * 10 ** decimals
     );
     const changeAddress = await wallet.get_change_address();
 
@@ -39,10 +50,11 @@ export const transferCreator =
       lockAddress,
       toChain,
       toAddress,
-      tokenId,
-      amount.toString(),
+      amount,
       bridgeFee.toString(),
-      networkFee.toString()
+      networkFee.toString(),
+      tokenMap,
+      token
     );
     const signedTx = await wallet.sign_tx(unsignedTx);
     const result = await wallet.submit_tx(signedTx);
