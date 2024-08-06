@@ -40,7 +40,7 @@ type Schema = Parameters<typeof validateAddressCore>;
 const schema = Joi.array<Schema>().ordered(
   Joi.string()
     .required()
-    .valid(Networks.BITCOIN, Networks.CARDANO, Networks.ERGO),
+    .valid(...Object.values(Networks)),
   Joi.string().required(),
 );
 
