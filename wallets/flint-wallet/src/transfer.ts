@@ -61,8 +61,7 @@ export const transferCreator =
       assetNameHex,
       amount,
       auxiliaryDataHex,
-      tokenMap,
-      token
+      tokenMap
     );
 
     const signedTxHex = await config.setTxWitnessSet(
