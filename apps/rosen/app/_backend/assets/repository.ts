@@ -18,7 +18,7 @@ export interface Asset {
   decimal: number;
   isNative: boolean;
   bridged: string;
-  lockedPerAddress: Array<{ amount: number; address: string }>;
+  lockedPerAddress?: Array<{ amount: number; address: string }>;
   chain: string;
 }
 
