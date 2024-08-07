@@ -268,7 +268,7 @@ export const subtractAssetBalance = (
 
 /**
  * generates cardano box in TransactionOutput type
- * @param balance THIS IS A UNWRAPPED-VALUE
+ * @param balance THIS IS AN UNWRAPPED-VALUE
  * @param address
  * @returns
  */
