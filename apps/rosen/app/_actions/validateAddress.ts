@@ -6,13 +6,16 @@ import { Networks } from '@rosen-ui/constants';
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import { AvailableNetworks } from '@/_networks';
 import { isValidAddress } from '@rosen-network/bitcoin';
+import { withValidation } from '@/_validation';
+import { wrap } from '@/_errors';
+import Joi from 'joi';
 
 /**
  * server action to verify the wallet addresses
  * @param walletAddress - wallet address to verify
  * @returns the validation results for the passed address
  */
-export const validateAddress = async (
+const validateAddressCore = async (
   chain: AvailableNetworks,
   walletAddress: string,
 ) => {
@@ -31,3 +34,16 @@ export const validateAddress = async (
     return false;
   }
 };
+
+type Schema = Parameters<typeof validateAddressCore>;
+
+const schema = Joi.array<Schema>().ordered(
+  Joi.string()
+    .required()
+    .valid(...Object.values(Networks)),
+  Joi.string().required(),
+);
+
+export const validateAddress = wrap(
+  withValidation(schema, validateAddressCore),
+);
