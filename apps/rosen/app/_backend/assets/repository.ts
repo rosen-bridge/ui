@@ -4,32 +4,64 @@ import {
   TokenEntity,
 } from '@rosen-ui/asset-calculator';
 
-import dataSource from '../../../_backend/dataSource';
+import NotFoundError from '@/_errors/NotFoundError';
+
+import dataSource from '../dataSource';
 
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
 const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);
 
-interface AssetWithTotal {
+export interface Asset {
   id: string;
   name: string;
   decimal: number;
   isNative: boolean;
   bridged: string;
-  locked: string;
+  lockedPerAddress?: Array<{ amount: number; address: string }>;
   chain: string;
+}
+
+export type AssetFilters = Partial<Pick<Asset, 'chain' | 'name' | 'id'>>;
+
+interface AssetWithTotal extends Asset {
   total: number;
 }
-export type AssetFilters = Partial<
-  Pick<AssetWithTotal, 'chain' | 'name' | 'id'>
->;
 
 /**
- * remove total field from rawItems returned by query in getAssets
- * @param rawItems
+ * get details of an asset, including its token info, plus locked and bridged
+ * data
+ * @param id
  */
-const getItemsWithoutTotal = (rawItems: AssetWithTotal[]) =>
-  rawItems.map(({ total, ...item }) => item);
+export const getAsset = async (id: string) => {
+  const token = await tokenRepository.findOne({
+    where: { id },
+  });
+
+  if (!token) {
+    throw new NotFoundError(`Token with id [${id}] not found`);
+  }
+
+  const bridged: Pick<
+    BridgedAssetEntity,
+    'amount' | 'chain' | 'bridgedTokenId'
+  >[] = await bridgedAssetRepository.find({
+    where: { tokenId: id },
+    select: ['amount', 'chain', 'bridgedTokenId'],
+  });
+
+  const locked: Pick<LockedAssetEntity, 'amount' | 'address'>[] =
+    await lockedAssetRepository.find({
+      where: { tokenId: id },
+      select: ['amount', 'address'],
+    });
+
+  return {
+    token,
+    bridged,
+    locked,
+  };
+};
 
 /**
  * get paginated list of assets
@@ -37,7 +69,7 @@ const getItemsWithoutTotal = (rawItems: AssetWithTotal[]) =>
  * @param limit
  * @param filters
  */
-export const getAssets = async (
+export const getAllAssets = async (
   offset: number,
   limit: number,
   filters: AssetFilters = {},
@@ -56,7 +88,10 @@ export const getAssets = async (
     .leftJoin(
       (queryBuilder) =>
         queryBuilder
-          .select(['lae.tokenId AS "tokenId"', 'sum(lae.amount) AS "locked"'])
+          .select([
+            'lae.tokenId AS "tokenId"',
+            `jsonb_agg(to_jsonb(lae) - 'tokenId') AS "lockedPerAddress"`,
+          ])
           .from(lockedAssetRepository.metadata.tableName, 'lae')
           .groupBy('lae.tokenId'),
       'laeq',
@@ -68,7 +103,7 @@ export const getAssets = async (
       'decimal',
       '"isNative"',
       '"bridged"',
-      '"locked"',
+      '"lockedPerAddress"',
       'chain',
       'count(*) over() AS total',
     ])
@@ -77,10 +112,12 @@ export const getAssets = async (
     .limit(limit)
     .getRawMany();
 
-  const items = getItemsWithoutTotal(rawItems);
+  const items = rawItems.map(({ total, ...item }) => item);
+
+  const total = rawItems[0]?.total ?? 0;
 
   return {
     items,
-    total: rawItems[0]?.total ?? 0,
+    total,
   };
 };
