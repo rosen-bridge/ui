@@ -14,18 +14,21 @@ import {
 } from './utils';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 import { ErgoBoxProxy } from '@rosen-bridge/ergo-box-selection';
+import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { Networks } from '@rosen-ui/constants';
 
 /**
  * generates an unsigned lock transaction on Ergo
  * @param changeAddress
- * @param walletUtxos
+ * @param walletUtxos SHOULD CONTAIN UNWRAPPED-VALUEs
  * @param lockAddress
  * @param toChain
  * @param toAddress
- * @param tokenId
- * @param amount
+ * @param wrappedAmount this is a WRAPPED-VALUE
  * @param bridgeFee
  * @param networkFee
+ * @param tokenMap
+ * @param token
  * @returns
  */
 export const generateUnsignedTx = async (
@@ -34,14 +37,22 @@ export const generateUnsignedTx = async (
   lockAddress: string,
   toChain: string,
   toAddress: string,
-  tokenId: string,
-  amountString: string,
+  wrappedAmount: bigint,
   bridgeFeeString: string,
-  networkFeeString: string
+  networkFeeString: string,
+  tokenMap: TokenMap,
+  token: RosenChainToken
 ): Promise<UnsignedErgoTxProxy> => {
+  const tokenId = token[tokenMap.getIdKey(Networks.ERGO)];
+
+  const unwrappedAmount = tokenMap.unwrapAmount(
+    tokenId,
+    wrappedAmount,
+    Networks.ERGO
+  ).amount;
+
   const height = await getHeight();
 
-  const amount = BigInt(amountString);
   const bridgeFee = BigInt(bridgeFeeString);
   const networkFee = BigInt(networkFeeString);
 
@@ -55,16 +66,16 @@ export const generateUnsignedTx = async (
      * TODO: fix ergo native token name
      * local:ergo/rosen-bridge/ui#100
      */
-    lockAssets.nativeToken = amount;
+    lockAssets.nativeToken = unwrappedAmount;
   } else {
     // lock token
-    lockAssets.tokens.push({ id: tokenId, value: amount });
+    lockAssets.tokens.push({ id: tokenId, value: unwrappedAmount });
   }
   const lockBox = createLockBox(
     lockAddress,
     height,
     tokenId,
-    amount,
+    unwrappedAmount,
     toChain,
     toAddress,
     changeAddress,

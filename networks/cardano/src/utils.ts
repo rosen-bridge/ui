@@ -130,6 +130,9 @@ export const generateLockAuxiliaryData = async (
 
 /**
  * converts utxo type from wallet type to CardanoUtxo
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param serializedUtxo serialized hex string of TransactionUnspentOutput
  */
 export const walletUtxoToCardanoUtxo = (
@@ -164,7 +167,11 @@ export const walletUtxoToCardanoUtxo = (
 };
 
 /**
- * sums two AssetBalance
+ * sums two AssetBalance.
+ *
+ * IT DOESN'T MATTER WHETHER THESE VALUES ARE WRAPPED OR UNWRAPPED;
+ * WHAT TRULY MATTERS IS THE CONTEXT IN WHICH THIS FUNCTION IS USED.
+ *
  * @param a first AssetBalance object
  * @param b second AssetBalance object
  * @returns aggregated AssetBalance
@@ -192,6 +199,9 @@ export const sumAssetBalance = (
 
 /**
  * converts CardanoUtxo assets to AssetBalance
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
+ *
  * @param utxo
  * @returns
  */
@@ -207,6 +217,10 @@ export const getUtxoAssets = (utxo: CardanoUtxo): AssetBalance => {
 
 /**
  * subtracts two AssetBalance
+ *
+ * IT DOESN'T MATTER WHETHER THESE VALUES ARE WRAPPED OR UNWRAPPED;
+ * WHAT TRULY MATTERS IS THE CONTEXT IN WHICH THIS FUNCTION IS USED.
+ *
  * @param a first AssetBalance object
  * @param b second AssetBalance object
  * @param minimumNativeToken minimum allowed native token
@@ -254,7 +268,7 @@ export const subtractAssetBalance = (
 
 /**
  * generates cardano box in TransactionOutput type
- * @param balance
+ * @param balance THIS IS AN UNWRAPPED-VALUE
  * @param address
  * @returns
  */

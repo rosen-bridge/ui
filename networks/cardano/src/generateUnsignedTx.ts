@@ -15,6 +15,8 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
+import { TokenMap } from '@rosen-bridge/tokens';
+import { Networks } from '@rosen-ui/constants';
 
 /**
  * generates a lock transaction on Cardano
@@ -23,8 +25,10 @@ import {
  * @param changeAddressHex
  * @param policyIdHex
  * @param assetNameHex
- * @param amount
+ * @param wrappedAmount this is a WRAPPED-VALUE
  * @param auxiliaryData
+ * @param tokenMap
+ * @param token
  * @returns hex representation of the unsigned tx
  */
 export const generateUnsignedTx = async (
@@ -33,10 +37,15 @@ export const generateUnsignedTx = async (
   changeAddressHex: string,
   policyIdHex: string,
   assetNameHex: string,
-  amountString: string,
-  auxiliaryDataHex: string
+  wrappedAmount: bigint,
+  auxiliaryDataHex: string,
+  tokenMap: TokenMap
 ): Promise<string> => {
-  const amount = BigInt(amountString);
+  const unwrappedAmount = tokenMap.unwrapAmount(
+    `${policyIdHex}.${assetNameHex}`,
+    wrappedAmount,
+    Networks.CARDANO
+  ).amount;
 
   // converts hex address to bech32 address
   const changeAddress = wasm.Address.from_hex(changeAddressHex).to_bech32();
@@ -55,12 +64,12 @@ export const generateUnsignedTx = async (
   };
   if (policyIdHex === ADA_POLICY_ID) {
     // lock ADA
-    lockAssets.nativeToken = amount;
+    lockAssets.nativeToken = unwrappedAmount;
   } else {
     // lock asset
     lockAssets.tokens.push({
       id: `${policyIdHex}.${assetNameHex}`,
-      value: amount,
+      value: unwrappedAmount,
     });
   }
   const lockBox = generateOutputBox(
@@ -77,13 +86,16 @@ export const generateUnsignedTx = async (
   const utxos = await Promise.all(walletUtxos.map(walletUtxoToCardanoUtxo));
   // add required ADA estimation for tx fee and change box
   requiredAssets.nativeToken += feeAndMinBoxValue;
+
   // get input boxes
+  // THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
   const inputs = await selectCardanoUtxos(
     requiredAssets,
     [],
     new Map(),
     utxos.values()
   );
+
   if (!inputs.covered) throw Error(`Not enough assets`);
   let inputAssets: AssetBalance = {
     nativeToken: 0n,

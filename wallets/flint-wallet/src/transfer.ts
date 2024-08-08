@@ -1,9 +1,13 @@
+import { Networks } from '@rosen-ui/constants';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 
 import { getFlintWallet } from './getFlintWallet';
 
+/**
+ * This function works with WRAPPED-VALUE
+ */
 export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
@@ -15,19 +19,29 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
+    const tokenMap = await config.getTokenMap();
+
+    const decimals = tokenMap.getSignificantDecimals(
+      token[tokenMap.getIdKey(Networks.CARDANO)]
+    );
+
+    if (decimals === undefined) {
+      throw new Error(
+        'Impossible behavior: failed to get significant decimals for the requested token'
+      );
+    }
+
+    validateDecimalPlaces(decimalAmount, decimals);
+    validateDecimalPlaces(decimalBridgeFee, decimals);
+    validateDecimalPlaces(decimalNetworkFee, decimals);
 
     const wallet = await getFlintWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(decimalAmount * 10 ** decimals);
+    const bridgeFee = convertNumberToBigint(decimalBridgeFee * 10 ** decimals);
     const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
+      decimalNetworkFee * 10 ** decimals
     );
     const changeAddressHex = await wallet.getChangeAddress();
 
@@ -47,8 +61,9 @@ export const transferCreator =
       changeAddressHex,
       policyIdHex,
       assetNameHex,
-      amount.toString(),
-      auxiliaryDataHex
+      amount,
+      auxiliaryDataHex,
+      tokenMap
     );
 
     const signedTxHex = await config.setTxWitnessSet(
