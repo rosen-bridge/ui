@@ -26,7 +26,9 @@ export const transferCreator =
     );
 
     if (decimals === undefined) {
-      throw new Error('Impossible behavior');
+      throw new Error(
+        'Impossible behavior: failed to get significant decimals for the requested token'
+      );
     }
 
     validateDecimalPlaces(decimalAmount, decimals);
@@ -61,8 +63,7 @@ export const transferCreator =
       assetNameHex,
       amount,
       auxiliaryDataHex,
-      tokenMap,
-      token
+      tokenMap
     );
 
     const signedTxHex = await config.setTxWitnessSet(

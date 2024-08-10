@@ -15,7 +15,7 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { TokenMap } from '@rosen-bridge/tokens';
 import { Networks } from '@rosen-ui/constants';
 
 /**
@@ -27,6 +27,8 @@ import { Networks } from '@rosen-ui/constants';
  * @param assetNameHex
  * @param wrappedAmount this is a WRAPPED-VALUE
  * @param auxiliaryData
+ * @param tokenMap
+ * @param token
  * @returns hex representation of the unsigned tx
  */
 export const generateUnsignedTx = async (
@@ -37,11 +39,10 @@ export const generateUnsignedTx = async (
   assetNameHex: string,
   wrappedAmount: bigint,
   auxiliaryDataHex: string,
-  tokenMap: TokenMap,
-  token: RosenChainToken
+  tokenMap: TokenMap
 ): Promise<string> => {
   const unwrappedAmount = tokenMap.unwrapAmount(
-    token[tokenMap.getIdKey(Networks.CARDANO)],
+    `${policyIdHex}.${assetNameHex}`,
     wrappedAmount,
     Networks.CARDANO
   ).amount;

@@ -22,11 +22,13 @@ export const transferCreator =
     const tokenMap = await config.getTokenMap();
 
     const decimals = tokenMap.getSignificantDecimals(
-      token[tokenMap.getIdKey(Networks.CARDANO)]
+      token[tokenMap.getIdKey(Networks.ERGO)]
     );
 
     if (decimals === undefined) {
-      throw new Error('Impossible behavior');
+      throw new Error(
+        'Impossible behavior: failed to get significant decimals for the requested token'
+      );
     }
 
     validateDecimalPlaces(decimalAmount, decimals);

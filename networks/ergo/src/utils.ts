@@ -20,7 +20,7 @@ export const getHeight = async (): Promise<number> => {
  * @param lockAddress
  * @param height
  * @param tokenId
- * @param unwrappedAmount THIS IS A UNWRAPPED-VALUE
+ * @param unwrappedAmount THIS IS AN UNWRAPPED-VALUE
  * @param toChain
  * @param toAddress
  * @param fromAddress

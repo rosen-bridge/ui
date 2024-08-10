@@ -43,7 +43,7 @@ export const generateUnsignedTx = async (
   tokenMap: TokenMap,
   token: RosenChainToken
 ): Promise<UnsignedErgoTxProxy> => {
-  const tokenId = token[tokenMap.getIdKey(Networks.CARDANO)];
+  const tokenId = token[tokenMap.getIdKey(Networks.ERGO)];
 
   const unwrappedAmount = tokenMap.unwrapAmount(
     tokenId,
