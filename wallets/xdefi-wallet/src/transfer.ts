@@ -82,7 +82,6 @@ export const transferCreator =
       userAddress,
       amount,
       opReturnData,
-      tokenMap,
       token
     );
 

@@ -55,7 +55,6 @@ export const transferCreator =
       amount,
       bridgeFee.toString(),
       networkFee.toString(),
-      tokenMap,
       token
     );
     const signedTx = await wallet.sign_tx(unsignedTx);

@@ -27,7 +27,7 @@ export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
   getTokenMap(): Promise<TokenMap>;
-  generateUnsignedTx: typeof generateUnsignedTx;
+  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
 };
 
 /**

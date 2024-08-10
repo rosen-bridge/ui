@@ -3,5 +3,9 @@
 import { generateUnsignedTx as generateUnsignedTxCore } from '@rosen-network/ergo';
 
 import { wrap } from '@/_errors';
+import { TokenMap } from '@rosen-bridge/tokens';
+import { getRosenTokens } from '@/_backend/utils';
 
-export const generateUnsignedTx = wrap(generateUnsignedTxCore);
+const tokenMap = new TokenMap(getRosenTokens());
+
+export const generateUnsignedTx = wrap(generateUnsignedTxCore(tokenMap));

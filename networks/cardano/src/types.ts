@@ -26,7 +26,7 @@ export type WalletCreatorConfig = {
   getTokenMap(): Promise<TokenMap>;
   decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
-  generateUnsignedTx: typeof generateUnsignedTx;
+  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   setTxWitnessSet: typeof setTxWitnessSet;
 };
 

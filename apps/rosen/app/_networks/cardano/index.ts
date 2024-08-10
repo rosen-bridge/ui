@@ -125,7 +125,6 @@ const CardanoNetwork: CardanoNetworkType = {
           assetNameHex,
           amount,
           auxiliaryDataHex,
-          await unwrap(getTokenMap)(),
         );
 
         const signedTxHex = await unwrap(setTxWitnessSet)(
