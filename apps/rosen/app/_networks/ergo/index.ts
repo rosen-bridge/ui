@@ -6,9 +6,10 @@ import { unwrap } from '@/_errors';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
-import { getTokenMap, generateUnsignedTx } from './server';
+import { generateUnsignedTx } from './server';
 
 import { getMaxTransfer } from './getMaxTransfer';
+import { getTokenMap } from '../getTokenMap';
 
 /**
  * the main object for Ergo network
@@ -20,7 +21,7 @@ const ErgoNetwork: ErgoNetworkType = {
   label: 'Ergo',
   wallets: [
     nautilusWalletCreator({
-      getTokenMap: unwrap(getTokenMap),
+      getTokenMap,
       generateUnsignedTx: unwrap(generateUnsignedTx),
     }),
   ],

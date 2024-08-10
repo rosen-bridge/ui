@@ -9,9 +9,6 @@ import {
 
 import { wrap } from '@/_errors';
 
-import { tokenMap } from '../tokenMap';
-
-export const getTokenMap = wrap(async () => tokenMap);
 export const decodeWasmValue = wrap(decodeWasmValueCore);
 export const generateLockAuxiliaryData = wrap(generateLockAuxiliaryDataCore);
 export const generateUnsignedTx = wrap(generateUnsignedTxCore);

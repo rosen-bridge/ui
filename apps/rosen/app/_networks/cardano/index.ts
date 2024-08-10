@@ -16,7 +16,6 @@ import { laceWalletCreator } from '@rosen-ui/lace-wallet';
 import { namiWalletCreator } from '@rosen-ui/nami-wallet';
 
 import {
-  getTokenMap,
   decodeWasmValue,
   generateLockAuxiliaryData,
   generateUnsignedTx,
@@ -30,6 +29,8 @@ import getVesprWallet, {
   walletInfo as vesprWalletInfo,
 } from '@rosen-ui/vespr-wallet';
 
+import { getTokenMap } from '../getTokenMap';
+
 /**
  * the main object for Cardano network
  * providing access to network info and wallets and network specific
@@ -40,28 +41,28 @@ const CardanoNetwork: CardanoNetworkType = {
   label: 'Cardano',
   wallets: compact([
     eternlWalletCreator({
-      getTokenMap: unwrap(getTokenMap),
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     flintWalletCreator({
-      getTokenMap: unwrap(getTokenMap),
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     laceWalletCreator({
-      getTokenMap: unwrap(getTokenMap),
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     namiWalletCreator({
-      getTokenMap: unwrap(getTokenMap),
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
@@ -125,7 +126,6 @@ const CardanoNetwork: CardanoNetworkType = {
           amount,
           auxiliaryDataHex,
           await unwrap(getTokenMap)(),
-          token,
         );
 
         const signedTxHex = await unwrap(setTxWitnessSet)(

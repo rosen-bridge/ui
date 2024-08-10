@@ -11,7 +11,7 @@ import { Networks } from '@rosen-ui/constants';
 
 import { wrap } from '@/_errors';
 import { BitcoinNetwork } from '@/_types/network';
-import { tokenMap } from '../tokenMap';
+import { getTokenMap } from '../getTokenMap';
 
 /**
  * get max transfer for bitcoin
@@ -50,6 +50,8 @@ export const getMaxTransfer = wrap(
     );
     const estimatedFee = BigInt(Math.ceil((estimatedTxWeight / 4) * feeRatio));
     const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
+
+    const tokenMap = await getTokenMap();
 
     const estimatedFeeWrapped = tokenMap.wrapAmount(
       'btc',

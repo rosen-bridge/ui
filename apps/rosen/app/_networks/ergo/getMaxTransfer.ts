@@ -9,7 +9,7 @@ import { Networks } from '@rosen-ui/constants';
 import { wrap } from '@/_errors';
 import { CardanoNetwork } from '@/_types/network';
 
-import { tokenMap } from '../tokenMap';
+import { getTokenMap } from '../getTokenMap';
 
 /**
  * get max transfer for ergo
@@ -23,6 +23,7 @@ export const getMaxTransfer = wrap(
     balance,
     isNative,
   }: Parameters<CardanoNetwork['getMaxTransfer']>[0]) => {
+    const tokenMap = await getTokenMap();
     const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
       'erg',
       ergoFee + ergoMinBoxValue,
