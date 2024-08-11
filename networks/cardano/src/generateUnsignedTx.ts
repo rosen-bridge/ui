@@ -15,6 +15,8 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
+import { TokenMap } from '@rosen-bridge/tokens';
+import { Networks } from '@rosen-ui/constants';
 
 /**
  * generates a lock transaction on Cardano
@@ -27,7 +29,7 @@ import {
  * @param auxiliaryData
  * @returns hex representation of the unsigned tx
  */
-export const generateUnsignedTx = async (
+const generateUnsignedTxCore = async (
   walletUtxos: string[],
   lockAddress: string,
   changeAddressHex: string,
@@ -77,7 +79,7 @@ export const generateUnsignedTx = async (
   const utxos = await Promise.all(walletUtxos.map(walletUtxoToCardanoUtxo));
   // add required ADA estimation for tx fee and change box
   requiredAssets.nativeToken += feeAndMinBoxValue;
-  // get input boxes
+  // get input boxes, THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
   const inputs = await selectCardanoUtxos(
     requiredAssets,
     [],
@@ -134,4 +136,31 @@ export const generateUnsignedTx = async (
   const witnessSet = wasm.TransactionWitnessSet.new();
   const tx = wasm.Transaction.new(txBody, witnessSet, auxiliaryData);
   return tx.to_hex();
+};
+
+export const generateUnsignedTx = (tokenMap: TokenMap) => {
+  return (
+    walletUtxos: string[],
+    lockAddress: string,
+    changeAddressHex: string,
+    policyIdHex: string,
+    assetNameHex: string,
+    wrappedAmount: bigint,
+    auxiliaryDataHex: string
+  ) => {
+    const unwrappedAmount = tokenMap.unwrapAmount(
+      `${policyIdHex}.${assetNameHex}`,
+      wrappedAmount,
+      Networks.CARDANO
+    ).amount;
+    return generateUnsignedTxCore(
+      walletUtxos,
+      lockAddress,
+      changeAddressHex,
+      policyIdHex,
+      assetNameHex,
+      unwrappedAmount.toString(),
+      auxiliaryDataHex
+    );
+  };
 };

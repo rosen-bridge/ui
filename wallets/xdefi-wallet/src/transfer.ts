@@ -19,17 +19,9 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
-    const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(decimalAmount);
+    const bridgeFee = convertNumberToBigint(decimalBridgeFee);
+    const networkFee = convertNumberToBigint(decimalNetworkFee);
 
     const userAddress: string = await new Promise((resolve, reject) => {
       getXdefiWallet()
@@ -67,7 +59,8 @@ export const transferCreator =
       lockAddress,
       userAddress,
       amount,
-      opReturnData
+      opReturnData,
+      token
     );
 
     const result: string = await new Promise((resolve, reject) => {

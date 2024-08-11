@@ -15,20 +15,12 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
     const wallet = await getFlintWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
-    const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(decimalAmount);
+    const bridgeFee = convertNumberToBigint(decimalBridgeFee);
+    const networkFee = convertNumberToBigint(decimalNetworkFee);
     const changeAddressHex = await wallet.getChangeAddress();
 
     const auxiliaryDataHex = await config.generateLockAuxiliaryData(
@@ -47,7 +39,7 @@ export const transferCreator =
       changeAddressHex,
       policyIdHex,
       assetNameHex,
-      amount.toString(),
+      amount,
       auxiliaryDataHex
     );
 

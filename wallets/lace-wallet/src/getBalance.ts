@@ -1,5 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
+import { Networks } from '@rosen-ui/constants';
 
 import { getLaceWallet } from './getLaceWallet';
 
@@ -11,5 +12,16 @@ export const getBalanceCreator =
     const balances = await config.decodeWasmValue(rawValue);
 
     const amount = balances.find((asset) => asset.policyId === token.policyId);
-    return amount ? Number(amount.quantity) : 0;
+
+    if (!amount) return 0;
+
+    const tokenMap = await config.getTokenMap();
+
+    const wrappedAmount = tokenMap.wrapAmount(
+      token[tokenMap.getIdKey(Networks.CARDANO)],
+      amount.quantity,
+      Networks.CARDANO
+    ).amount;
+
+    return Number(wrappedAmount);
   };

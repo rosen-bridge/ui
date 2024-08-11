@@ -15,19 +15,11 @@ export const transferCreator =
     decimalNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
     const wallet = await getNautilusWallet().getApi().getContext();
     const tokenId = token.tokenId;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
-    const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(decimalAmount);
+    const bridgeFee = convertNumberToBigint(decimalBridgeFee);
+    const networkFee = convertNumberToBigint(decimalNetworkFee);
     const changeAddress = await wallet.get_change_address();
 
     const walletUtxos = await wallet.get_utxos();
@@ -39,10 +31,10 @@ export const transferCreator =
       lockAddress,
       toChain,
       toAddress,
-      tokenId,
-      amount.toString(),
+      amount,
       bridgeFee.toString(),
-      networkFee.toString()
+      networkFee.toString(),
+      token
     );
     const signedTx = await wallet.sign_tx(unsignedTx);
     const result = await wallet.submit_tx(signedTx);
