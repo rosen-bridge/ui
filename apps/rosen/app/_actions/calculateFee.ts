@@ -38,6 +38,7 @@ const GetHeight = {
  * @param height
  * @param explorerUrl
  * @param nextHeightInterval
+ * @returns CONTAINS WRAPPED-VALUE
  */
 
 export const calculateFee = wrap(

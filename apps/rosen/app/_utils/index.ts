@@ -29,6 +29,7 @@ export const getTokenNameAndId = (
  * @param token
  * @param amount
  * @param sourceChain
+ * @returns A WRAPPED-VALUE
  */
 export const getMinTransfer = async (
   token: RosenChainToken,
@@ -61,7 +62,9 @@ export const getMinTransfer = async (
     return minTransfer
       ? getDecimalString(
           (minTransfer + 1).toString() || '0',
-          token?.decimals || 0,
+          tokenMap.getSignificantDecimals(
+            token[tokenMap.getIdKey(sourceChain)],
+          ) || 0,
         )
       : '0';
   } catch {
