@@ -6,11 +6,15 @@ import { useSnackbar } from '@rosen-bridge/ui-kit';
 import useLockAddress from './useLockAddress';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
+import { getNonDecimalString } from '@rosen-ui/utils';
+import { useTokenMap } from './useTokenMap';
 
 /**
  * a react hook to create and sign and submit transactions
  */
 export const useTransaction = () => {
+  const tokenMap = useTokenMap();
+  const { sourceValue } = useTransactionFormData();
   const { targetValue, tokenValue, amountValue, walletAddressValue } =
     useTransactionFormData();
 
@@ -32,9 +36,21 @@ export const useTransaction = () => {
     ) {
       setIsSubmitting(true);
       try {
+        const amountValueWrapped = Number(
+          tokenMap.wrapAmount(
+            tokenValue.tokenId,
+            BigInt(
+              getNonDecimalString(
+                amountValue as string,
+                tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+              ),
+            ),
+            sourceValue,
+          ).amount,
+        );
         const txId = await selectedWallet?.transfer(
           tokenValue as RosenChainToken,
-          amountValue,
+          amountValueWrapped,
           targetValue,
           walletAddressValue,
           bridgeFee,

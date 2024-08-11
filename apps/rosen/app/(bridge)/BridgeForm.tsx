@@ -24,6 +24,7 @@ import { getTokenNameAndId } from '@/_utils';
 import useMaxTransfer from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
+import { useTokenMap } from '@/_hooks/useTokenMap';
 
 /**
  * customized form input
@@ -100,6 +101,7 @@ const BridgeForm = () => {
   const { isLoading, amount, token } = useTokenBalance();
 
   const { max } = useMaxTransfer();
+  const tokenMap = useTokenMap();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
@@ -171,13 +173,16 @@ const BridgeForm = () => {
   );
 
   const handleSelectMax = useCallback(async () => {
-    const value = getDecimalString(max.toString(), token?.decimals ?? 0);
+    const value = getDecimalString(
+      max.toString(),
+      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) ?? 0,
+    );
 
     setValue('amount', value, {
       shouldDirty: true,
       shouldTouch: true,
     });
-  }, [max, token?.decimals, setValue]);
+  }, [max, tokenMap, tokenField.value, setValue]);
 
   const renderInputActions = () => (
     <>
@@ -192,7 +197,12 @@ const BridgeForm = () => {
               {`Balance: ${
                 isLoading
                   ? 'loading...'
-                  : getDecimalString(amount.toString(), token?.decimals ?? 0)
+                  : getDecimalString(
+                      amount.toString(),
+                      tokenMap.getSignificantDecimals(
+                        tokenField.value.tokenId,
+                      ) ?? 0,
+                    )
               }`}
             </Typography>
           </MaxButton>

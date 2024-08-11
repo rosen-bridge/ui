@@ -9,7 +9,8 @@ import { SupportedWallets } from '@/_types/network';
 
 interface UseTokenBalance {
   isLoading: boolean;
-  amount: number; // THIS IS A WRAPPED-VALUE
+  // THIS IS A WRAPPED-VALUE
+  amount: number;
   token: TokenInfo | null;
 }
 
@@ -33,7 +34,8 @@ const useTokenBalance = () => {
   const getAssetBalance = useCallback(
     async (wallet: SupportedWallets) => {
       setBalanceState({ isLoading: true, amount: 0, token: null });
-      const balance = await wallet.getBalance(token); // THIS IS A WRAPPED-VALUE
+      // THIS IS A WRAPPED-VALUE
+      const balance = await wallet.getBalance(token);
       setBalanceState({ isLoading: false, amount: balance || 0, token });
     },
     [token],
