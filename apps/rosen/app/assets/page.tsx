@@ -156,6 +156,7 @@ export default function Page() {
             label="Network"
             fullWidth
             onChange={handleChangeNetwork}
+            value={network}
           >
             <MenuItem value="all">All</MenuItem>
             <MenuItem value="bitcoin">Bitcoin</MenuItem>
