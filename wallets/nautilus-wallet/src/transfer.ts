@@ -8,18 +8,18 @@ export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
-    decimalAmount: number,
+    wrappedAmount: number,
     toChain: string,
     toAddress: string,
-    decimalBridgeFee: number,
-    decimalNetworkFee: number,
+    wrappedBridgeFee: number,
+    wrappedNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
     const wallet = await getNautilusWallet().getApi().getContext();
     const tokenId = token.tokenId;
-    const amount = convertNumberToBigint(decimalAmount);
-    const bridgeFee = convertNumberToBigint(decimalBridgeFee);
-    const networkFee = convertNumberToBigint(decimalNetworkFee);
+    const amount = convertNumberToBigint(wrappedAmount);
+    const bridgeFee = convertNumberToBigint(wrappedBridgeFee);
+    const networkFee = convertNumberToBigint(wrappedNetworkFee);
     const changeAddress = await wallet.get_change_address();
 
     const walletUtxos = await wallet.get_utxos();
