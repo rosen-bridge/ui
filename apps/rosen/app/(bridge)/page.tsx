@@ -11,6 +11,7 @@ import {
 
 import BridgeTransaction from './BridgeTransaction';
 import BridgeForm from './BridgeForm';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 const BridgeContainer = styled(Card)(({ theme }) => ({
   position: 'absolute',
@@ -40,7 +41,7 @@ export interface BridgeForm {
   target: string | null;
   token: string | null;
   walletAddress: string | null;
-  amount: number | null;
+  amount: RosenAmountValue | null;
 }
 
 /**

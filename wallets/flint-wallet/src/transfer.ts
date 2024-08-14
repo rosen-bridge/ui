@@ -1,6 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
-import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getFlintWallet } from './getFlintWallet';
 
@@ -8,19 +8,16 @@ export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
-    wrappedAmount: number,
+    amount: RosenAmountValue,
     toChain: string,
     toAddress: string,
-    wrappedBridgeFee: number,
-    wrappedNetworkFee: number,
+    bridgeFee: RosenAmountValue,
+    networkFee: RosenAmountValue,
     lockAddress: string
   ): Promise<string> => {
     const wallet = await getFlintWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
-    const amount = convertNumberToBigint(wrappedAmount);
-    const bridgeFee = convertNumberToBigint(wrappedBridgeFee);
-    const networkFee = convertNumberToBigint(wrappedNetworkFee);
     const changeAddressHex = await wallet.getChangeAddress();
 
     const auxiliaryDataHex = await config.generateLockAuxiliaryData(

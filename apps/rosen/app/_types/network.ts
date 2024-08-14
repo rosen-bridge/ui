@@ -1,9 +1,10 @@
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import { AvailableNetworks } from '@/_networks';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 interface GetMaxTransferParams {
-  balance: number;
+  balance: RosenAmountValue;
   isNative: boolean;
 }
 
@@ -23,7 +24,7 @@ export interface BaseNetwork<
   // THIS FUNCTION WORKS WITH WRAPPED-VALUE
   getMaxTransfer: (
     props: GetMaxTransferParams & GetMaxTransferParamsExtra,
-  ) => Promise<number>;
+  ) => Promise<RosenAmountValue>;
 }
 
 interface BitcoinMaxTransferExtra {

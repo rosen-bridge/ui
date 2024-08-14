@@ -1,12 +1,13 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ergo';
 import { Networks } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getNautilusWallet } from './getNautilusWallet';
 
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
-  async (token: RosenChainToken): Promise<number> => {
+  async (token: RosenChainToken): Promise<RosenAmountValue> => {
     const context = await getNautilusWallet().getApi().getContext();
 
     const tokenMap = await config.getTokenMap();
@@ -22,7 +23,7 @@ export const getBalanceCreator =
 
     const amount = BigInt(balance);
 
-    if (!amount) return 0;
+    if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
       tokenId,
@@ -30,5 +31,5 @@ export const getBalanceCreator =
       Networks.ERGO
     ).amount;
 
-    return Number(wrappedAmount);
+    return wrappedAmount;
   };

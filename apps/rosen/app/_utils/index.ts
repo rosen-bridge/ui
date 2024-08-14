@@ -8,6 +8,7 @@ import { calculateFee } from '@/_actions/calculateFee';
 import { Networks } from '@rosen-ui/constants';
 import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * a utility to make unique interface for accessing token name
@@ -36,7 +37,7 @@ export const getMinTransfer = async (
   sourceChain: AvailableNetworks,
   targetChain: AvailableNetworks,
   tokensMap: any,
-) => {
+): Promise<RosenAmountValue> => {
   const tokenMap = new TokenMap(tokensMap);
   const idKey = tokenMap.getIdKey(sourceChain);
   const tokens = tokenMap.search(sourceChain, {
@@ -54,20 +55,13 @@ export const getMinTransfer = async (
 
     const { fees } = JsonBigInt.parse(data);
 
-    const networkFee = fees ? Number(fees.networkFee) : 0;
-    const bridgeFee = fees ? Number(fees.bridgeFee) : 0;
+    const networkFee = fees ? BigInt(fees.networkFee) : 0n;
+    const bridgeFee = fees ? BigInt(fees.bridgeFee) : 0n;
 
     const minTransfer = bridgeFee + networkFee;
 
-    return minTransfer
-      ? getDecimalString(
-          (minTransfer + 1).toString() || '0',
-          tokenMap.getSignificantDecimals(
-            token[tokenMap.getIdKey(sourceChain)],
-          ) || 0,
-        )
-      : '0';
+    return minTransfer ? minTransfer + 1n : 0n;
   } catch {
-    return '0';
+    return 0n;
   }
 };

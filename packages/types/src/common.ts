@@ -38,3 +38,5 @@ export interface MutationRequestBodyWithHeaders<Data> {
     [headerKey: string]: string | number;
   };
 }
+
+export type RosenAmountValue = bigint;
