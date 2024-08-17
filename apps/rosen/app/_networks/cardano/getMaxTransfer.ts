@@ -6,7 +6,7 @@ import { Networks } from '@rosen-ui/constants';
 import { wrap } from '@/_errors';
 import { CardanoNetwork } from '@/_types/network';
 
-import { getTokenMap } from '../getTokenMap';
+import { getTokenMap } from '../getTokenMap.server';
 
 /**
  * get max transfer for cardano
