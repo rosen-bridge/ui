@@ -15,7 +15,7 @@ import {
   getAddressBalance,
 } from './server';
 
-import { getTokenMap } from '../getTokenMap';
+import { getTokenMap } from '../getTokenMap.client';
 
 /**
  * the main object for Bitcoin network

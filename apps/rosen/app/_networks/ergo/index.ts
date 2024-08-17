@@ -12,7 +12,7 @@ import {
 } from '@rosen-network/ergo/dist/src/constants';
 
 import { generateUnsignedTx } from './server';
-import { getTokenMap } from '../getTokenMap';
+import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
 
 /**

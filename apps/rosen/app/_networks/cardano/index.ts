@@ -28,7 +28,7 @@ import getVesprWallet, {
   isVesprAvailable,
   walletInfo as vesprWalletInfo,
 } from '@rosen-ui/vespr-wallet';
-import { getTokenMap } from '../getTokenMap';
+import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
 
 /**
