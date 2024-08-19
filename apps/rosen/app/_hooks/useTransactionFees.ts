@@ -156,8 +156,7 @@ const useTransactionFees = (
       bridgeFeeRaw: getDecimalString(bridgeFee?.toString() || '0', decimals),
       networkFee: networkFee || 0,
       networkFeeRaw: getDecimalString(networkFee?.toString() || '0', decimals),
-      receivingAmount:
-        fees && receivingAmountValue > 0 ? receivingAmountValue || 0 : 0,
+      receivingAmount: receivingAmountValue,
       receivingAmountRaw:
         fees && receivingAmountValue > 0
           ? getDecimalString(receivingAmountValue.toString() || '0', decimals)
