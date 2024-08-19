@@ -2,6 +2,9 @@
 
 const nextConfig = {
   experimental: {
+    outputFileTracingIncludes: {
+      '/': ['./configs/*'],
+    },
     serverComponentsExternalPackages: [
       'ergo-lib-wasm-nodejs',
       '@emurgo/cardano-serialization-lib-nodejs',

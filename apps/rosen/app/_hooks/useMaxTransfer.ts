@@ -6,12 +6,14 @@ import useBridgeForm from './useBridgeForm';
 import useTokenBalance from './useTokenBalance';
 
 import getMaxTransfer from '@/_utils/getMaxTransfer';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * a hook version of `getMaxTransfer` util
+ * @returns CONTAINS A WRAPPED-VALUE
  */
 const useMaxTransfer = () => {
-  const [max, setMax] = useState(0);
+  const [max, setMax] = useState<RosenAmountValue>(0n);
   const [loading, setLoading] = useState(false);
 
   const { isLoading: isTokenBalanceLoading, amount } = useTokenBalance();

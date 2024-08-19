@@ -3,8 +3,8 @@ import {
   SigHash,
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
-import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getXdefiWallet } from './getXdefiWallet';
 
@@ -12,25 +12,13 @@ export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
-    decimalAmount: number,
+    amount: RosenAmountValue,
     toChain: string,
     toAddress: string,
-    decimalBridgeFee: number,
-    decimalNetworkFee: number,
+    bridgeFee: RosenAmountValue,
+    networkFee: RosenAmountValue,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
-    const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
-    );
-
     const userAddress: string = await new Promise((resolve, reject) => {
       getXdefiWallet()
         .getApi()
@@ -67,7 +55,8 @@ export const transferCreator =
       lockAddress,
       userAddress,
       amount,
-      opReturnData
+      opReturnData,
+      token
     );
 
     const result: string = await new Promise((resolve, reject) => {

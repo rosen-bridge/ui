@@ -12,6 +12,8 @@ import {
 } from '@rosen-network/ergo/dist/src/constants';
 
 import { generateUnsignedTx } from './server';
+import { getTokenMap } from '../getTokenMap.client';
+import { getMaxTransfer } from './getMaxTransfer';
 
 /**
  * the main object for Ergo network
@@ -23,19 +25,14 @@ const ErgoNetwork: ErgoNetworkType = {
   label: 'Ergo',
   wallets: [
     nautilusWalletCreator({
+      getTokenMap,
       generateUnsignedTx: unwrap(generateUnsignedTx),
     }),
   ],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
-  async getMaxTransfer({ balance, isNative }) {
-    const offsetCandidate = Number(ergoFee + ergoMinBoxValue);
-    const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidate : 0;
-    const amount = balance - offset;
-    return amount < 0 ? 0 : amount;
-  },
+  getMaxTransfer: unwrap(getMaxTransfer),
 };
 
 export default ErgoNetwork;

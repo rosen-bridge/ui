@@ -10,6 +10,9 @@ import {
 
 import { wrap } from '@/_errors';
 import { BitcoinNetwork } from '@/_types/network';
+import { Networks } from '@rosen-ui/constants';
+import { getTokenMap } from '../getTokenMap.server';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * get max transfer for bitcoin
@@ -19,8 +22,10 @@ export const getMaxTransfer = wrap(
     balance,
     isNative,
     eventData,
-  }: Parameters<BitcoinNetwork['getMaxTransfer']>[0]) => {
-    if (!eventData.toAddress) return 0;
+  }: Parameters<
+    BitcoinNetwork['getMaxTransfer']
+  >[0]): Promise<RosenAmountValue> => {
+    if (!eventData.toAddress) return 0n;
 
     const feeRatio = await getFeeRatio();
     const opRetrunDataLength = (
@@ -45,14 +50,22 @@ export const getMaxTransfer = wrap(
     const estimatedFee = Math.ceil((estimatedTxWeight / 4) * feeRatio);
     const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
 
-    return balance < 0 || !isNative
-      ? 0
+    const tokenMap = await getTokenMap();
+
+    const offset = tokenMap.wrapAmount(
+      'btc',
+      BigInt(estimatedFee) + minSatoshi,
+      Networks.BITCOIN,
+    ).amount;
+
+    return balance < 0n || !isNative
+      ? 0n
       : /**
          * We need to subtract (utxos.length + 1) from the calculated value because
          * of a bug in bitcoin box selection
          *
          * local:ergo/rosen-bridge/utils#204
          */
-        balance - estimatedFee - Number(minSatoshi) - utxos.length - 1;
+        balance - offset - BigInt(utxos.length + 1);
   },
 );

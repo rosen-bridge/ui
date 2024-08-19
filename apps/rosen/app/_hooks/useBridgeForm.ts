@@ -13,6 +13,8 @@ import { validateAddress } from '@/_actions/validateAddress';
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
 import getMaxTransfer from '@/_utils/getMaxTransfer';
+import { useTokenMap } from './useTokenMap';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -25,6 +27,7 @@ const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
 
+  const tokenMap = useTokenMap();
   const tokensMap = useTokensMap();
 
   const walletGlobalContext = useContext(WalletContext);
@@ -49,6 +52,15 @@ const useBridgeForm = () => {
     control,
     rules: {
       validate: async (value) => {
+        const decimals =
+          tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
+
+        const wrappedAmount = tokenMap.wrapAmount(
+          tokenField.value?.tokenId,
+          BigInt(getNonDecimalString(value, decimals)),
+          sourceField.value,
+        ).amount as RosenAmountValue;
+
         // match any complete or incomplete decimal number
         const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
 
@@ -58,10 +70,9 @@ const useBridgeForm = () => {
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) >
-          tokenField.value?.decimals;
+          (match?.groups?.floatingDigits?.length || 0) > decimals;
         if (isDecimalsLarge)
-          return `The current token only supports ${tokenField.value?.decimals} decimals`;
+          return `The current token only supports ${decimals} decimals`;
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
@@ -86,9 +97,7 @@ const useBridgeForm = () => {
             }),
           );
 
-          const isAmountLarge =
-            BigInt(getNonDecimalString(value, tokenField.value?.decimals)) >
-            BigInt(maxTransfer.toString());
+          const isAmountLarge = wrappedAmount > maxTransfer;
           if (isAmountLarge) return 'Balance insufficient';
         }
 
@@ -98,14 +107,7 @@ const useBridgeForm = () => {
           targetField.value,
           tokensMap,
         );
-        const isAmountSmall =
-          BigInt(getNonDecimalString(value, tokenField.value?.decimals)) <
-          BigInt(
-            getNonDecimalString(
-              minTransfer.toString(),
-              tokenField.value.decimals,
-            ),
-          );
+        const isAmountSmall = wrappedAmount < minTransfer;
         if (isAmountSmall) return 'Minimum transfer amount not respected';
 
         return undefined;

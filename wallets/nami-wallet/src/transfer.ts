@@ -1,6 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
-import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getNamiWallet } from './getNamiWallet';
 
@@ -8,27 +8,16 @@ export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
-    decimalAmount: number,
+    amount: RosenAmountValue,
     toChain: string,
     toAddress: string,
-    decimalBridgeFee: number,
-    decimalNetworkFee: number,
+    bridgeFee: RosenAmountValue,
+    networkFee: RosenAmountValue,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
     const wallet = await getNamiWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
-    const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
-    );
     const changeAddressHex = await wallet.getChangeAddress();
 
     const auxiliaryDataHex = await config.generateLockAuxiliaryData(
@@ -47,7 +36,7 @@ export const transferCreator =
       changeAddressHex,
       policyIdHex,
       assetNameHex,
-      amount.toString(),
+      amount,
       auxiliaryDataHex
     );
 

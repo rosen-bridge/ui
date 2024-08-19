@@ -6,20 +6,23 @@ import useBridgeForm from './useBridgeForm';
 import useWallet from './useWallet';
 
 import { SupportedWallets } from '@/_types/network';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 interface UseTokenBalance {
   isLoading: boolean;
-  amount: number;
+  // THIS IS A WRAPPED-VALUE
+  amount: RosenAmountValue;
   token: TokenInfo | null;
 }
 
 /**
  * returns the amount of currently selected asset
+ * @returns CONTAINS A WRAPPED-VALUE
  */
 const useTokenBalance = () => {
   const [balanceState, setBalanceState] = useState<UseTokenBalance>({
     isLoading: false,
-    amount: 0,
+    amount: 0n,
     token: null,
   });
 
@@ -31,16 +34,17 @@ const useTokenBalance = () => {
 
   const getAssetBalance = useCallback(
     async (wallet: SupportedWallets) => {
-      setBalanceState({ isLoading: true, amount: 0, token: null });
+      setBalanceState({ isLoading: true, amount: 0n, token: null });
+      // THIS IS A WRAPPED-VALUE
       const balance = await wallet.getBalance(token);
-      setBalanceState({ isLoading: false, amount: balance || 0, token });
+      setBalanceState({ isLoading: false, amount: balance || 0n, token });
     },
     [token],
   );
 
   useEffect(() => {
     if (!token) {
-      setBalanceState({ isLoading: false, amount: 0, token: null });
+      setBalanceState({ isLoading: false, amount: 0n, token: null });
     }
   }, [token]);
 
@@ -51,6 +55,7 @@ const useTokenBalance = () => {
         tokenField.value &&
         !balanceState.isLoading &&
         (balanceState.token !== token ||
+          // THIS IS A WRAPPED-VALUE
           balanceState.amount !== (await selectedWallet.getBalance(token)))
       )
         getAssetBalance(selectedWallet);

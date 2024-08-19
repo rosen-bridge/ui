@@ -15,6 +15,8 @@ import {
   getAddressBalance,
 } from './server';
 
+import { getTokenMap } from '../getTokenMap.client';
+
 /**
  * the main object for Bitcoin network
  * providing access to network info and wallets and network specific
@@ -26,6 +28,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   logo: BitcoinIcon,
   wallets: [
     xdefiWalletCreator({
+      getTokenMap,
       generateOpReturnData: unwrap(generateOpReturnData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       getAddressBalance: unwrap(getAddressBalance),
