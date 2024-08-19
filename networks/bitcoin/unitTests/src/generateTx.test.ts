@@ -84,7 +84,7 @@ describe('generateUnsignedTx', () => {
   });
 
   /**
-   * @target generateUnsignedTx should generate lock transaction successfully
+   * @target generateUnsignedTx should generate lock transaction with multi decimals token map successfully
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -100,7 +100,7 @@ describe('generateUnsignedTx', () => {
    * - 2nd output should be to lock address with given amount
    * - 3rd output should be to from address with remaining BTC minus fee
    */
-  it('should generate lock transaction successfully', async () => {
+  it('should generate lock transaction with multi decimals token map successfully', async () => {
     const lockAddress = 'bc1qkgp89fjerymm5ltg0hygnumr0m2qa7n22gyw6h';
     const fromAddress = 'bc1qhuv3dhpnm0wktasd3v0kt6e4aqfqsd0uhfdu7d';
     const wrappedAmount = 5000000n;
