@@ -175,7 +175,7 @@ const BridgeForm = () => {
   const handleSelectMax = useCallback(async () => {
     const value = getDecimalString(
       max.toString(),
-      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) ?? 0,
+      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) || 0,
     );
 
     setValue('amount', value, {
@@ -201,7 +201,7 @@ const BridgeForm = () => {
                       amount.toString(),
                       tokenMap.getSignificantDecimals(
                         tokenField.value.tokenId,
-                      ) ?? 0,
+                      ) || 0,
                     )
               }`}
             </Typography>
