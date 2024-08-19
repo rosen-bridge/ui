@@ -26,8 +26,7 @@ export const getMaxTransfer = wrap(
       Networks.ERGO,
     ).amount;
     const offsetCandidateWrapped = Number(feeAndMinBoxValueWrapped);
-    const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidateWrapped : 0;
+    const offset = isNative ? offsetCandidateWrapped : 0;
     const amount = balance - offset;
     return amount < 0 ? 0 : amount;
   },
