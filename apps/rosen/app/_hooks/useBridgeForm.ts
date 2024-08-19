@@ -70,7 +70,7 @@ const useBridgeForm = () => {
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) > decimals;
+          (match?.groups?.floatingDigits?.length || 0) > decimals;
         if (isDecimalsLarge)
           return `The current token only supports ${decimals} decimals`;
 

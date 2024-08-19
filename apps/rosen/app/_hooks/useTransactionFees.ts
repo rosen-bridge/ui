@@ -58,8 +58,8 @@ const useTransactionFees = (
   }, [getTokenId, sourceChain, token]);
 
   const decimals = useMemo(() => {
-    if (!tokenId) return;
-    return tokenMap.getSignificantDecimals(tokenId);
+    if (!tokenId) return 0;
+    return tokenMap.getSignificantDecimals(tokenId) || 0;
   }, [tokenId, tokenMap]);
 
   useEffect(() => {
@@ -133,7 +133,7 @@ const useTransactionFees = (
 
   const transactionFees = useMemo(() => {
     let paymentAmount = amount
-      ? BigInt(getNonDecimalString(amount.toString(), decimals || 0))
+      ? BigInt(getNonDecimalString(amount.toString(), decimals))
       : 0n;
 
     const networkFee = fees ? BigInt(fees.networkFee) : 0n;
@@ -154,27 +154,17 @@ const useTransactionFees = (
 
     return {
       bridgeFee,
-      bridgeFeeRaw: getDecimalString(
-        bridgeFee?.toString() || '0',
-        decimals || 0,
-      ),
+      bridgeFeeRaw: getDecimalString(bridgeFee?.toString() || '0', decimals),
       networkFee,
-      networkFeeRaw: getDecimalString(
-        networkFee?.toString() || '0',
-        decimals || 0,
-      ),
-      receivingAmount:
-        fees && receivingAmountValue > 0 ? receivingAmountValue || 0 : 0,
+      networkFeeRaw: getDecimalString(networkFee?.toString() || '0', decimals),
+      receivingAmount: receivingAmountValue,
       receivingAmountRaw:
         fees && receivingAmountValue > 0
-          ? getDecimalString(
-              receivingAmountValue.toString() || '0',
-              decimals || 0,
-            )
+          ? getDecimalString(receivingAmountValue.toString() || '0', decimals)
           : '0',
       minTransfer: minTransfer ? minTransfer + 1n || 0n : 0n,
       minTransferRaw: minTransfer
-        ? getDecimalString((minTransfer + 1n).toString() || '0', decimals || 0)
+        ? getDecimalString((minTransfer + 1n).toString() || '0', decimals)
         : '0',
       isLoading: pending,
       status: feeInfo.current,

@@ -25,9 +25,7 @@ export const getMaxTransfer = wrap(
       feeAndMinBoxValue,
       Networks.CARDANO,
     ).amount;
-    const offsetCandidateWrapped = feeAndMinBoxValueWrapped;
-    const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidateWrapped : 0n;
+    const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
     const amount = balance - offset;
     return amount < 0n ? 0n : amount;
   },
