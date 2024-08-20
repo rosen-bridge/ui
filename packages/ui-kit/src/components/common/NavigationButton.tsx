@@ -1,5 +1,5 @@
 import { EventHandler, FC, ReactNode, SyntheticEvent } from 'react';
-import { Button } from '../base';
+import { Badge, Button, SvgIcon } from '../base';
 
 import { useIsMobile } from '../../hooks';
 
@@ -8,27 +8,30 @@ import { styled } from '../../styling';
 const NavButtonBase = styled(Button)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  gap: theme.spacing(0.5),
+  gap: theme.spacing(1),
   fontSize: theme.typography.subtitle2.fontSize,
-  color: theme.palette.primary.contrastText,
+  padding: theme.spacing(1),
+  fontWeight: 700,
+  lineHeight: 1,
+  color: theme.palette.primary.light,
   opacity: 0.8,
   '&:hover': {
     opacity: 1,
   },
   '& .MuiButton-startIcon': {
     backgroundColor: theme.palette.background.shadow,
-    padding: theme.spacing(1),
+    padding: theme.spacing(1.5),
     margin: 0,
     borderRadius: theme.shape.borderRadius,
+  },
+  '& .MuiButton-startIcon > svg': {
+    fontSize: '24px', // TODO
   },
   '&.active': {
     opacity: 1,
     '& .MuiButton-startIcon': {
-      color: theme.palette.info.dark,
-      backgroundColor:
-        theme.palette.mode === 'light'
-          ? theme.palette.common.white
-          : theme.palette.info.light,
+      color: theme.palette.primary.dark,
+      backgroundColor: theme.palette.primary.light,
     },
   },
   [theme.breakpoints.down('tablet')]: {
@@ -58,6 +61,7 @@ interface NavButtonProps {
   onClick: EventHandler<SyntheticEvent>;
   isActive?: boolean;
   disabled?: boolean;
+  badge?: string;
 }
 
 /**
@@ -71,15 +75,24 @@ interface NavButtonProps {
  */
 
 export const NavigationButton: FC<NavButtonProps> = (props) => {
-  const { label, icon, isActive, onClick, disabled } = props;
+  const { badge, label, icon, isActive, onClick, disabled } = props;
 
   const isMobile = useIsMobile();
+
+  let startIcon = <SvgIcon>{icon}</SvgIcon>;
+
+  if (badge)
+    startIcon = (
+      <Badge badgeContent={badge} color="primary">
+        {startIcon}
+      </Badge>
+    );
 
   return (
     <NavButtonBase
       onClick={onClick}
       className={isActive ? 'active' : undefined}
-      startIcon={icon}
+      startIcon={startIcon}
       variant="text"
       disabled={disabled}
     >

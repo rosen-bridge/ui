@@ -10,8 +10,9 @@ import { styled } from '../../styling';
  */
 
 export const AppBar = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
-  flexBasis: 112,
+  padding: theme.spacing(2) + ' 0',
+  flexBasis: 116,
+  flexShrink: 0,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',

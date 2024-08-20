@@ -32,10 +32,9 @@ import { useTokenMap } from '@/_hooks/useTokenMap';
 const FormInputs = styled(TextField)(({ theme }) => ({
   '& .MuiFilledInput-root': {
     overflow: 'hidden',
-    borderRadius: theme.spacing(2),
+    borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.background.input,
     minHeight: theme.spacing(8.5),
-
     transition: theme.transitions.create(['background-color', 'box-shadow']),
     '&:hover': {
       backgroundColor: theme.palette.background.header,

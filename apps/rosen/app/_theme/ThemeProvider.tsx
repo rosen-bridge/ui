@@ -24,15 +24,11 @@ declare module '@mui/material/styles' {
     header: string;
     shadow: string;
     input: string;
+    body: (desktop: boolean) => string;
   }
 
   interface TypePaletteGradient {
-    baseOrange: string;
-    lightOrange: string;
-    lightDarkBackground: string;
-    baseDarkBackground: string;
-    darkBackgroundMid: string;
-    darkBackgroundMain: string;
+    background: string;
   }
 
   interface Palette {
@@ -73,62 +69,129 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
   );
 
   const theme = useMemo(() => {
+    const next =
+      mode == 'light'
+        ? {
+            mode,
+            primary: {
+              main: '#42559E',
+              light: '#D9DDEC',
+              dark: '#28335F',
+              contrastText: '#fff', // TODO
+            },
+            secondary: {
+              main: '#DD704F',
+              light: '#F5D4CA',
+              dark: '#B15A3F',
+              contrastText: '#1A1A1A', // TODO
+            },
+            background: {
+              paper: '#FFFFFF',
+              default: '#EBEDF7',
+              body: (desktop: boolean) =>
+                desktop
+                  ? 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)'
+                  : 'linear-gradient(90deg, #28335F 0%, #B15A3F 100%)',
+              root: '#1A1A1A', // TODO
+              content: 'rgba(247, 247, 247, 0.9)', // TODO
+              header: '#E1E1E1', // TODO
+              shadow: 'rgba(0, 0, 0, 0.2)', // TODO
+              input: '#fff', // TODO
+            },
+            text: {
+              primary: 'rgba(0, 0, 0, 0.87)',
+              secondary: 'rgba(0, 0, 0, 0.60)',
+              disabled: 'rgba(0, 0, 0, 0.38)',
+            },
+            neutral: {
+              main: '#737373',
+              light: '#E6E6E6',
+              dark: '#545454',
+            },
+            error: {
+              main: '#C84242',
+              light: '#F5CFCF',
+              dark: '#9C3030',
+            },
+            warning: {
+              main: '#CD7329',
+              light: '#ECCCB2',
+              dark: '#B65607',
+            },
+            success: {
+              main: '#157E59',
+              light: '#B3E3D2',
+              dark: '#116044',
+            },
+            info: {
+              main: '#42559E',
+              light: '#D9DDEC',
+              dark: '#28335F',
+              // TODO
+              contrastText: '#fff',
+            },
+          }
+        : {
+            mode,
+            primary: {
+              main: '#6877B1',
+              light: '#B3BBD8',
+              dark: '#1A223F',
+              contrastText: '#fff', // TODO
+            },
+            secondary: {
+              main: '#B15A3F',
+              light: '#C48D7C',
+              dark: '#804330',
+              contrastText: '#1A1A1A', // TODO
+            },
+            background: {
+              paper: '#0D1120',
+              default: '#070810',
+              body: (desktop: boolean) => '#14192F',
+              root: '#0D1721', // TODO
+              content: '#2f3a48', // TODO
+              header: '#253041', // TODO
+              shadow: 'rgba(0, 0, 0, 0.2)', // TODO
+              input: 'rgb(40, 49, 63)', // TODO
+            },
+            text: {
+              primary: 'rgba(255, 255, 255, 0.87)',
+              secondary: 'rgba(255, 255, 255, 0.60)',
+              disabled: 'rgba(255, 255, 255, 0.38)',
+            },
+            neutral: {
+              main: '#707070',
+              light: '#B7B7B7',
+              dark: '#424242',
+            },
+            error: {
+              main: '#C04343',
+              light: '#DEADAD',
+              dark: '#7A2D2D',
+            },
+            warning: {
+              main: '#BF783E',
+              light: '#CEB199',
+              dark: '#74451E',
+            },
+            success: {
+              main: '#2B7D60',
+              light: '#A1D7C4',
+              dark: '#0C3426',
+            },
+            info: {
+              main: '#3E70A3',
+              light: '#A3BFDC',
+              dark: '#16385A',
+              contrastText: '#fff', // TODO
+            },
+          };
+
     const baseTheme = createTheme({
       palette: {
         mode,
-        primary: {
-          light: '#d3e1f0',
-          main: '#396da3',
-          dark: '#25476a',
-          contrastText: '#fff',
-        },
-        secondary: {
-          light: '#ffcd38',
-          main: '#ffc107',
-          dark: '#b28704',
-          contrastText: '#1A1A1A',
-        },
-        gradient: {
-          baseOrange: '#fc7b41',
-          lightOrange: '#e2844a',
-          lightDarkBackground: '#52617e',
-          baseDarkBackground: '#164b7d',
-          darkBackgroundMid: '#4a626e',
-          darkBackgroundMain: '#1e2130',
-        },
-        ...(mode === 'light'
-          ? {
-              background: {
-                root: '#1A1A1A',
-                content: 'rgba(247, 247, 247, 0.9)',
-                paper: 'rgb(247, 247, 247)',
-                header: '#E1E1E1',
-                shadow: 'rgba(0, 0, 0, 0.2)',
-                input: '#fff',
-              },
-              info: {
-                light: '#f1f5ff',
-                main: '#5873de',
-                dark: '#384d78',
-                contrastText: '#fff',
-              },
-            }
-          : {
-              background: {
-                root: '#0D1721',
-                content: '#2f3a48',
-                paper: 'rgb(26, 32, 41)',
-                header: '#253041',
-                shadow: 'rgba(0, 0, 0, 0.2)',
-                input: 'rgb(40, 49, 63)',
-              },
-              info: {
-                light: '#9cbdd9',
-                main: '#2c396f',
-                dark: '#132236',
-                contrastText: '#fff',
-              },
-            }),
+        ...(next as any),
       },
       shape: {
         borderRadius: 16,
@@ -148,10 +211,15 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         h1: {
           fontSize: '1.5rem',
           fontWeight: 'bold',
-          color:
-            mode === 'light'
-              ? baseTheme.palette.primary.dark
-              : baseTheme.palette.primary.light,
+          ...(mode === 'light'
+            ? {
+                background: 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
+                '-webkit-background-clip': 'text',
+                '-webkit-text-fill-color': 'transparent',
+              }
+            : {
+                color: baseTheme.palette.secondary.light,
+              }),
         },
         h2: {
           fontSize: '1.5rem',
@@ -171,9 +239,6 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         },
         subtitle2: {
           fontSize: '0.625rem',
-          [baseTheme.breakpoints.down('tablet')]: {
-            fontSize: '0.5625rem',
-          },
         },
       },
       components: {

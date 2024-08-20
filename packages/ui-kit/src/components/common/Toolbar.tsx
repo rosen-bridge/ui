@@ -4,35 +4,12 @@ import { Typography, Stack, Grid } from '../base';
 
 import { styled } from '../../styling';
 
-interface ToolbarActions {
-  children: ReactNode;
-}
-
-/**
- * takes a react node as child and renders it in stack
- *
- * @param children - react node to be rendered in the stack
- */
-export const ToolbarActions: React.FC<ToolbarActions> = (props) => {
-  const { children } = props;
-
-  return (
-    <div className="toolbar">
-      <Stack direction="row">{children}</Stack>
-    </div>
-  );
-};
-
 /**
  * adds basic styling to the component and hides the actions
  * in tablet and mobile devices
  */
-const Header = styled(Grid)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
+const Header = styled('div')(({ theme }) => ({
   marginBottom: theme.spacing(3),
-  marginTop: theme.spacing(2),
-
   [theme.breakpoints.down('tablet')]: {
     '& .toolbar': {
       display: 'none',
@@ -59,26 +36,32 @@ export interface ToolbarProps {
 export const Toolbar: React.FC<ToolbarProps> = (props) => {
   const { title, description, toolbarActions, isCentered } = props;
 
-  const renderActions = () => (
-    <ToolbarActions> {toolbarActions} </ToolbarActions>
-  );
+  const textAlign = isCentered ? 'center' : 'inherit';
 
   return (
     <Header>
-      <Grid flexGrow={1} {...(isCentered ? { justifyContent: 'center' } : {})}>
-        <Typography variant="h1" textAlign={isCentered ? 'center' : 'inherit'}>
-          {title}
-        </Typography>
-        {description && (
-          <Typography
-            color="textSecondary"
-            textAlign={isCentered ? 'center' : 'inherit'}
-          >
-            {description}
+      <Grid container alignItems="center">
+        <Grid
+          flexGrow={1}
+          {...(isCentered ? { justifyContent: 'center' } : {})}
+        >
+          <Typography variant="h1" textAlign={textAlign}>
+            {title}
           </Typography>
+        </Grid>
+        {toolbarActions && (
+          <Grid>
+            <div className="toolbar">
+              <Stack direction="row">{toolbarActions}</Stack>
+            </div>
+          </Grid>
         )}
       </Grid>
-      {toolbarActions && renderActions()}
+      {description && (
+        <Typography color="textSecondary" textAlign={textAlign}>
+          {description}
+        </Typography>
+      )}
     </Header>
   );
 };

@@ -11,19 +11,51 @@ import {
 import {
   AppBar,
   AppLogo,
-  Badge,
   Grid,
   NavigationButton,
-  SvgIcon,
   Typography,
 } from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
 
+const ROUTES = [
+  {
+    label: 'Bridge',
+    path: '/',
+    disabled: false,
+    icon: <Archway />,
+  },
+  {
+    label: 'Events',
+    path: '/events',
+    disabled: false,
+    icon: <Exchange />,
+  },
+  {
+    label: 'Assets',
+    path: '/assets',
+    disabled: false,
+    icon: <BitcoinCircle />,
+    badge: 'Beta',
+  },
+  {
+    label: 'Support',
+    path: '/support',
+    disabled: true,
+    icon: <Headphones />,
+  },
+  {
+    label: 'Dashboard',
+    path: '/dashboard',
+    disabled: true,
+    icon: <Dashboard />,
+  },
+];
+
 /**
  * render sidebar log and navigaiton buttons
  */
-const SideBar = () => {
+export const SideBar = () => {
   const pathname = usePathname();
 
   const router = useRouter();
@@ -41,72 +73,18 @@ const SideBar = () => {
         spacing={1}
         flexGrow={1}
       >
-        <Grid item>
-          <NavigationButton
-            label="Bridge"
-            icon={
-              <SvgIcon>
-                <Archway />
-              </SvgIcon>
-            }
-            onClick={() =>
-              router.push('/' as Parameters<typeof router.push>[0])
-            }
-            isActive={pathname === '/'}
-          />
-        </Grid>
-        <Grid item>
-          <NavigationButton
-            label="Events"
-            icon={
-              <SvgIcon>
-                <Exchange />
-              </SvgIcon>
-            }
-            onClick={() => router.push('/events')}
-            isActive={pathname === '/events'}
-          />
-        </Grid>
-        <Grid item>
-          <NavigationButton
-            label="Assets"
-            icon={
-              <Badge badgeContent="Beta" color="primary">
-                <SvgIcon>
-                  <BitcoinCircle />
-                </SvgIcon>
-              </Badge>
-            }
-            onClick={() => router.push('/assets')}
-            isActive={pathname.startsWith('/assets')}
-          />
-        </Grid>
-        <Grid item>
-          <NavigationButton
-            label="Support"
-            icon={
-              <SvgIcon>
-                <Headphones />
-              </SvgIcon>
-            }
-            onClick={() => router.push('/support')}
-            isActive={pathname.startsWith('/support')}
-            disabled
-          />
-        </Grid>
-        <Grid item>
-          <NavigationButton
-            label="Dashboard"
-            icon={
-              <SvgIcon>
-                <Dashboard />
-              </SvgIcon>
-            }
-            onClick={() => router.push('/dashboard')}
-            isActive={pathname.startsWith('/dashboard')}
-            disabled
-          />
-        </Grid>
+        {ROUTES.map((route) => (
+          <Grid key={route.label} item>
+            <NavigationButton
+              badge={route.badge}
+              disabled={route.disabled}
+              icon={route.icon}
+              isActive={pathname === route.path}
+              label={route.label}
+              onClick={() => router.push(route.path)}
+            />
+          </Grid>
+        ))}
       </Grid>
       <Grid item>
         <Typography
@@ -120,5 +98,3 @@ const SideBar = () => {
     </AppBar>
   );
 };
-
-export default SideBar;
