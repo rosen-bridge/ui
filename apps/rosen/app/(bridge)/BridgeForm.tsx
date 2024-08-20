@@ -186,7 +186,7 @@ const BridgeForm = () => {
 
   const renderInputActions = () => (
     <>
-      {tokenField.value && !!max && !isMaxLoading && (
+      {tokenField.value && !isMaxLoading && (
         <Grid container justifyContent="space-between">
           <MaxButton
             disabled={isLoading || !tokenField.value}
