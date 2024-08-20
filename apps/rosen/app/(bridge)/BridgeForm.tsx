@@ -100,7 +100,7 @@ const BridgeForm = () => {
 
   const { isLoading, amount, token } = useTokenBalance();
 
-  const { max } = useMaxTransfer();
+  const { max, loading: isMaxLoading } = useMaxTransfer();
   const tokenMap = useTokenMap();
 
   const renderSelectedNetwork = (value: unknown) => {
@@ -186,7 +186,7 @@ const BridgeForm = () => {
 
   const renderInputActions = () => (
     <>
-      {tokenField.value && !!max && (
+      {tokenField.value && !!max && !isMaxLoading && (
         <Grid container justifyContent="space-between">
           <MaxButton
             disabled={isLoading || !tokenField.value}
