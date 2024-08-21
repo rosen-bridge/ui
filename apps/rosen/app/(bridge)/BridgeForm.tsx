@@ -307,25 +307,6 @@ const BridgeForm = () => {
         })}
       </FormInputs>
       <FormInputs
-        id="amount"
-        size="medium"
-        label="Amount"
-        placeholder="0.0"
-        error={!!errors?.amount}
-        helperText={renderInputActions()}
-        InputProps={{ disableUnderline: true }}
-        inputProps={{
-          style: { fontSize: '2rem' },
-          'aria-label': 'amount input',
-        }}
-        variant="filled"
-        {...amountField}
-        value={amountField.value ?? ''}
-        onChange={handleAmountChange}
-        disabled={!tokenField.value}
-        autoComplete="off"
-      />
-      <FormInputs
         label="Address"
         InputProps={{ disableUnderline: true } as any}
         variant="filled"
@@ -347,6 +328,25 @@ const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
+      <FormInputs
+        id="amount"
+        size="medium"
+        label="Amount"
+        placeholder="0.0"
+        error={!!errors?.amount}
+        helperText={renderInputActions()}
+        InputProps={{ disableUnderline: true }}
+        inputProps={{
+          style: { fontSize: '2rem' },
+          'aria-label': 'amount input',
+        }}
+        variant="filled"
+        {...amountField}
+        value={amountField.value ?? ''}
+        onChange={handleAmountChange}
+        disabled={!tokenField.value}
+        autoComplete="off"
+      />
     </FormContainer>
   );
 };
