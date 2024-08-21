@@ -33,6 +33,8 @@ const useMaxTransfer = () => {
       )
         return;
 
+      if (!amount) return;
+
       try {
         const max = await getMaxTransfer(
           selectedNetwork,

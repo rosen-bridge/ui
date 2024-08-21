@@ -21,7 +21,7 @@ const getMaxTransfer = async (
 ) => {
   if (network.name === 'bitcoin') {
     const context = await getContext();
-    return network.getMaxTransfer({
+    return await network.getMaxTransfer({
       balance: tokenInfo.balance,
       isNative: tokenInfo.isNative,
       eventData: {
@@ -32,7 +32,7 @@ const getMaxTransfer = async (
     });
   }
 
-  return network.getMaxTransfer({
+  return await network.getMaxTransfer({
     balance: tokenInfo.balance,
     isNative: tokenInfo.isNative,
   });
