@@ -9,12 +9,10 @@ export const cache = <T extends (...args: any[]) => Promise<any>>(
 
     let [result, timestamp] = data[key] || [undefined, 0];
 
-    if (Date.now() < timestamp + expiry) return result;
+    if (Date.now() > timestamp + expiry) {
+      data[key] = [(result = callback(...args)), Date.now()];
+    }
 
-    result = await callback(...args);
-
-    data[key] = [result, Date.now()];
-
-    return result;
+    return await result;
   }) as T;
 };
