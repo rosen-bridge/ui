@@ -22,7 +22,7 @@ const getMaxTransfer = async (
 ): Promise<RosenAmountValue> => {
   if (network.name === 'bitcoin') {
     const context = await getContext();
-    return network.getMaxTransfer({
+    return await network.getMaxTransfer({
       balance: tokenInfo.balance,
       isNative: tokenInfo.isNative,
       eventData: {
@@ -33,7 +33,7 @@ const getMaxTransfer = async (
     });
   }
 
-  return network.getMaxTransfer({
+  return await network.getMaxTransfer({
     balance: tokenInfo.balance,
     isNative: tokenInfo.isNative,
   });

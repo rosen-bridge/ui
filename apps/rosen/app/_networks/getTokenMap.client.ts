@@ -1,6 +1,6 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { getTokenMapObject } from './getTokenMapObject';
+import { getRosenTokens } from '@/_backend/utils';
 
 let tokenMap: TokenMap;
 
@@ -9,7 +9,7 @@ let tokenMap: TokenMap;
  */
 export const getTokenMap = async () => {
   if (tokenMap) return tokenMap;
-  const tokens = await getTokenMapObject();
+  const tokens = await getRosenTokens();
   tokenMap = new TokenMap(tokens);
   return tokenMap;
 };
