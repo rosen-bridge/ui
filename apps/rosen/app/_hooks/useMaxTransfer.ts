@@ -49,8 +49,7 @@ const useMaxTransfer = () => {
           }),
         );
         setMax(max);
-      } finally {
-      }
+      } catch {}
     };
 
     startTransition(effect);
