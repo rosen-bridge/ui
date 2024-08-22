@@ -41,16 +41,10 @@ export const useTransaction = () => {
       setIsSubmitting(true);
       try {
         const amountValueWrapped = BigInt(
-          tokenMap.wrapAmount(
-            tokenValue.tokenId,
-            BigInt(
-              getNonDecimalString(
-                amountValue as string,
-                tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
-              ),
-            ),
-            sourceValue,
-          ).amount,
+          getNonDecimalString(
+            amountValue as string,
+            tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+          ),
         );
         const txId = await selectedWallet?.transfer(
           tokenValue as RosenChainToken,

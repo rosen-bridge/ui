@@ -7,6 +7,7 @@ import { Networks } from '@rosen-ui/constants';
 
 import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
+import { cache } from '@/_utils/cache';
 
 import {
   generateOpReturnData,
@@ -31,7 +32,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
       getTokenMap,
       generateOpReturnData: unwrap(generateOpReturnData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
-      getAddressBalance: unwrap(getAddressBalance),
+      getAddressBalance: cache(unwrap(getAddressBalance), 30000),
       submitTransaction: unwrap(submitTransaction),
     }),
   ],
