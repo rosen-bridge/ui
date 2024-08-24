@@ -279,6 +279,28 @@ const BridgeForm = () => {
         </Grid>
       </Grid>
       <FormInputs
+        label="Address"
+        InputProps={{ disableUnderline: true } as any}
+        variant="filled"
+        error={!!errors?.walletAddress}
+        helperText={
+          isValidating ? (
+            <CircularProgress size={10} />
+          ) : (
+            errors.walletAddress?.message?.toString()
+          )
+        }
+        disabled={!targetField.value}
+        autoComplete="off"
+        {...addressField}
+        value={addressField.value ?? ''}
+      />
+      {targetField.value == 'bitcoin' && (
+        <Alert severity="warning">
+          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
+        </Alert>
+      )}
+      <FormInputs
         id="token"
         select
         label="Token"
@@ -306,28 +328,6 @@ const BridgeForm = () => {
           );
         })}
       </FormInputs>
-      <FormInputs
-        label="Address"
-        InputProps={{ disableUnderline: true } as any}
-        variant="filled"
-        error={!!errors?.walletAddress}
-        helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
-        }
-        disabled={!targetField.value}
-        autoComplete="off"
-        {...addressField}
-        value={addressField.value ?? ''}
-      />
-      {targetField.value == 'bitcoin' && (
-        <Alert severity="warning">
-          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
-        </Alert>
-      )}
       <FormInputs
         id="amount"
         size="medium"
