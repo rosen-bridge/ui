@@ -4,8 +4,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import { Grid } from '@rosen-bridge/ui-kit';
 
-import BridgeTransaction from './BridgeTransaction';
-import BridgeForm from './BridgeForm';
+import { BridgeTransaction } from './BridgeTransaction';
+import { BridgeForm } from './BridgeForm';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 export interface BridgeForm {
