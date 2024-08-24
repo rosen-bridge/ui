@@ -79,7 +79,7 @@ const FormContainer = styled('div')(({ theme }) => ({
 /**
  * renders the bridge main form
  */
-const BridgeForm = () => {
+export const BridgeForm = () => {
   const {
     reset,
     setValue,
@@ -350,5 +350,3 @@ const BridgeForm = () => {
     </FormContainer>
   );
 };
-
-export default BridgeForm;

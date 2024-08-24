@@ -9,8 +9,8 @@ import {
   useResponsiveValue,
 } from '@rosen-bridge/ui-kit';
 
-import BridgeTransaction from './BridgeTransaction';
-import BridgeForm from './BridgeForm';
+import { BridgeTransaction } from './BridgeTransaction';
+import { BridgeForm } from './BridgeForm';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 const BridgeContainer = styled(Card)(({ theme }) => ({
