@@ -132,9 +132,11 @@ const useTransactionFees = (
     : 1n;
 
   const transactionFees = useMemo(() => {
-    let paymentAmount = amount
-      ? BigInt(getNonDecimalString(amount.toString(), decimals))
-      : 0n;
+    let paymentAmount = 0n;
+
+    try {
+      paymentAmount = BigInt(getNonDecimalString(amount!, decimals));
+    } catch {}
 
     const networkFee = fees ? BigInt(fees.networkFee) : 0n;
     const feeRatio = fees ? BigInt(fees?.feeRatio) : 0n;
