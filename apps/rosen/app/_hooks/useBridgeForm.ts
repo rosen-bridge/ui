@@ -68,11 +68,9 @@ const useBridgeForm = () => {
         if (isDecimalsLarge)
           return `The current token only supports ${decimals} decimals`;
 
-        const wrappedAmount = tokenMap.wrapAmount(
-          tokenField.value?.tokenId,
-          BigInt(getNonDecimalString(value, decimals)),
-          sourceField.value,
-        ).amount as RosenAmountValue;
+        const wrappedAmount = BigInt(
+          getNonDecimalString(value, decimals),
+        ) as RosenAmountValue;
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
