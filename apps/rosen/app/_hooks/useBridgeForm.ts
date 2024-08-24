@@ -52,6 +52,13 @@ const useBridgeForm = () => {
     control,
     rules: {
       validate: async (value) => {
+        // match any complete or incomplete decimal number
+        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+
+        // prevent user from entering invalid numbers
+        const isValueInvalid = !match;
+        if (isValueInvalid) return 'The amount is not valid';
+
         const decimals =
           tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
 
@@ -60,13 +67,6 @@ const useBridgeForm = () => {
           BigInt(getNonDecimalString(value, decimals)),
           sourceField.value,
         ).amount as RosenAmountValue;
-
-        // match any complete or incomplete decimal number
-        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
-
-        // prevent user from entering invalid numbers
-        const isValueInvalid = !match;
-        if (isValueInvalid) return 'The amount is not valid';
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
