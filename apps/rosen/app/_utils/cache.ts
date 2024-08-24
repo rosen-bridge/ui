@@ -5,7 +5,7 @@ export const cache = <T extends (...args: any[]) => Promise<any>>(
   expiry: number,
 ): T => {
   return (async (...args) => {
-    const key = args.map((arg) => arg.toString()).join('');
+    const key = args.map((arg) => arg.toString()).join('_');
 
     let [result, timestamp] = data[key] || [undefined, 0];
 
