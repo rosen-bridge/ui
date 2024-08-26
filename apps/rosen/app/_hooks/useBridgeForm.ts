@@ -53,7 +53,7 @@ const useBridgeForm = () => {
     rules: {
       validate: async (value) => {
         // match any complete or incomplete decimal number
-        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
 
         // prevent user from entering invalid numbers
         const isValueInvalid = !match;
