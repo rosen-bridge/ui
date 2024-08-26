@@ -52,27 +52,25 @@ const useBridgeForm = () => {
     control,
     rules: {
       validate: async (value) => {
-        const decimals =
-          tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
-
-        const wrappedAmount = tokenMap.wrapAmount(
-          tokenField.value?.tokenId,
-          BigInt(getNonDecimalString(value, decimals)),
-          sourceField.value,
-        ).amount as RosenAmountValue;
-
         // match any complete or incomplete decimal number
-        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
 
         // prevent user from entering invalid numbers
         const isValueInvalid = !match;
         if (isValueInvalid) return 'The amount is not valid';
+
+        const decimals =
+          tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
           (match?.groups?.floatingDigits?.length || 0) > decimals;
         if (isDecimalsLarge)
           return `The current token only supports ${decimals} decimals`;
+
+        const wrappedAmount = BigInt(
+          getNonDecimalString(value, decimals),
+        ) as RosenAmountValue;
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
