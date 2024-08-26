@@ -28,6 +28,8 @@ import getVesprWallet, {
   isVesprAvailable,
   walletInfo as vesprWalletInfo,
 } from '@rosen-ui/vespr-wallet';
+import { getTokenMap } from '../getTokenMap.client';
+import { getMaxTransfer } from './getMaxTransfer';
 
 /**
  * the main object for Cardano network
@@ -39,24 +41,28 @@ const CardanoNetwork: CardanoNetworkType = {
   label: 'Cardano',
   wallets: compact([
     eternlWalletCreator({
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     flintWalletCreator({
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     laceWalletCreator({
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
       setTxWitnessSet: unwrap(setTxWitnessSet),
     }),
     namiWalletCreator({
+      getTokenMap,
       decodeWasmValue: unwrap(decodeWasmValue),
       generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
@@ -117,7 +123,7 @@ const CardanoNetwork: CardanoNetworkType = {
           changeAddressHex,
           policyIdHex,
           assetNameHex,
-          amount.toString(),
+          amount,
           auxiliaryDataHex,
         );
 
@@ -134,13 +140,7 @@ const CardanoNetwork: CardanoNetworkType = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
-  async getMaxTransfer({ balance, isNative }) {
-    const offsetCandidate = Number(feeAndMinBoxValue);
-    const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidate : 0;
-    const amount = balance - offset;
-    return amount < 0 ? 0 : amount;
-  },
+  getMaxTransfer: unwrap(getMaxTransfer),
 };
 
 export default CardanoNetwork;

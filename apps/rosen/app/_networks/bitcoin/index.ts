@@ -7,6 +7,7 @@ import { Networks } from '@rosen-ui/constants';
 
 import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
+import { cache } from '@/_utils/cache';
 
 import {
   generateOpReturnData,
@@ -14,6 +15,8 @@ import {
   submitTransaction,
   getAddressBalance,
 } from './server';
+
+import { getTokenMap } from '../getTokenMap.client';
 
 /**
  * the main object for Bitcoin network
@@ -26,9 +29,10 @@ const BitcoinNetwork: BitcoinNetworkType = {
   logo: BitcoinIcon,
   wallets: [
     xdefiWalletCreator({
+      getTokenMap,
       generateOpReturnData: unwrap(generateOpReturnData),
       generateUnsignedTx: unwrap(generateUnsignedTx),
-      getAddressBalance: unwrap(getAddressBalance),
+      getAddressBalance: cache(unwrap(getAddressBalance), 30000),
       submitTransaction: unwrap(submitTransaction),
     }),
   ],

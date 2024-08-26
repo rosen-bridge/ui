@@ -1,3 +1,4 @@
+import { TokenMap } from '@rosen-bridge/tokens';
 import { EipWalletApi, ErgoBoxProxy, Wallet } from '@rosen-ui/wallet-api';
 
 import { generateUnsignedTx } from './generateUnsignedTx';
@@ -25,7 +26,8 @@ export interface CoveringBoxes {
 export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
-  generateUnsignedTx: typeof generateUnsignedTx;
+  getTokenMap(): Promise<TokenMap>;
+  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
 };
 
 /**

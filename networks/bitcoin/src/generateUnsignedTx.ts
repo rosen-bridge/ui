@@ -9,6 +9,8 @@ import {
   getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
+import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { Networks } from '@rosen-ui/constants';
 
 /**
  * generates bitcoin lock tx
@@ -18,7 +20,7 @@ import {
  * @param opReturnData
  * @returns
  */
-export const generateUnsignedTx = async (
+const generateUnsignedTxCore = async (
   lockAddress: string,
   fromAddress: string,
   amount: bigint,
@@ -109,5 +111,27 @@ export const generateUnsignedTx = async (
   return {
     psbt: psbt.toBase64(),
     inputSize: psbt.inputCount,
+  };
+};
+
+export const generateUnsignedTx = (tokenMap: TokenMap) => {
+  return (
+    lockAddress: string,
+    fromAddress: string,
+    wrappedAmount: bigint,
+    opReturnData: string,
+    token: RosenChainToken
+  ) => {
+    const unwrappedAmount = tokenMap.unwrapAmount(
+      token[tokenMap.getIdKey(Networks.BITCOIN)],
+      wrappedAmount,
+      Networks.BITCOIN
+    ).amount;
+    return generateUnsignedTxCore(
+      lockAddress,
+      fromAddress,
+      unwrappedAmount,
+      opReturnData
+    );
   };
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 
 import useNetwork from './useNetwork';
 import useWallet from './useWallet';
@@ -9,10 +9,11 @@ import getMaxTransfer from '@/_utils/getMaxTransfer';
 
 /**
  * a hook version of `getMaxTransfer` util
+ * @returns CONTAINS A WRAPPED-VALUE
  */
 const useMaxTransfer = () => {
   const [max, setMax] = useState(0);
-  const [loading, setLoading] = useState(false);
+  const [loading, startTransition] = useTransition();
 
   const { isLoading: isTokenBalanceLoading, amount } = useTokenBalance();
 
@@ -32,8 +33,9 @@ const useMaxTransfer = () => {
       )
         return;
 
+      if (!amount) return;
+
       try {
-        setLoading(true);
         const max = await getMaxTransfer(
           selectedNetwork,
           {
@@ -47,12 +49,10 @@ const useMaxTransfer = () => {
           }),
         );
         setMax(max);
-      } finally {
-        setLoading(false);
-      }
+      } catch {}
     };
 
-    effect();
+    startTransition(effect);
   }, [
     addressField.value,
     amount,

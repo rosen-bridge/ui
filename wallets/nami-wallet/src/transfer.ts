@@ -8,27 +8,19 @@ export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
-    decimalAmount: number,
+    wrappedAmount: number,
     toChain: string,
     toAddress: string,
-    decimalBridgeFee: number,
-    decimalNetworkFee: number,
+    wrappedBridgeFee: number,
+    wrappedNetworkFee: number,
     lockAddress: string
   ): Promise<string> => {
-    validateDecimalPlaces(decimalAmount, token.decimals);
-    validateDecimalPlaces(decimalBridgeFee, token.decimals);
-    validateDecimalPlaces(decimalNetworkFee, token.decimals);
-
     const wallet = await getNamiWallet().getApi().enable();
     const policyIdHex = token.policyId;
     const assetNameHex = token.assetName;
-    const amount = convertNumberToBigint(decimalAmount * 10 ** token.decimals);
-    const bridgeFee = convertNumberToBigint(
-      decimalBridgeFee * 10 ** token.decimals
-    );
-    const networkFee = convertNumberToBigint(
-      decimalNetworkFee * 10 ** token.decimals
-    );
+    const amount = convertNumberToBigint(wrappedAmount);
+    const bridgeFee = convertNumberToBigint(wrappedBridgeFee);
+    const networkFee = convertNumberToBigint(wrappedNetworkFee);
     const changeAddressHex = await wallet.getChangeAddress();
 
     const auxiliaryDataHex = await config.generateLockAuxiliaryData(
@@ -47,7 +39,7 @@ export const transferCreator =
       changeAddressHex,
       policyIdHex,
       assetNameHex,
-      amount.toString(),
+      amount,
       auxiliaryDataHex
     );
 

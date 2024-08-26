@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { TokenMap } from '@rosen-bridge/tokens';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 
 import { ErgoCalculator } from '../../../lib/calculator/chains/ergo-calculator';
+import { tokenMap } from '../../test-data';
 
 vitest.mock('@rosen-clients/ergo-explorer');
 
@@ -34,6 +36,7 @@ describe('ErgoCalculator', () => {
      */
     it('should calculate the token balance using explorer api', async () => {
       const ergoCalculator = new ErgoCalculator(
+        new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
         'explorerUrl'
       );
@@ -71,6 +74,7 @@ describe('ErgoCalculator', () => {
       } as any);
 
       const ergoCalculator = new ErgoCalculator(
+        new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
         'explorerUrl'
       );
@@ -114,6 +118,7 @@ describe('ErgoCalculator', () => {
      */
     it('should calculate the token balance using explorer api', async () => {
       const ergoCalculator = new ErgoCalculator(
+        new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
         'explorerUrl'
       );

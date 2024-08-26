@@ -64,10 +64,12 @@ const BridgeTransaction = () => {
   const {
     status,
     networkFee,
+    networkFeeRaw,
     bridgeFee,
-    receivingAmount,
+    bridgeFeeRaw,
+    receivingAmountRaw,
     isLoading: isLoadingFees,
-    minTransfer,
+    minTransferRaw,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
   const { setSelectedWallet, wallets, selectedWallet } = useWallet();
 
@@ -191,26 +193,26 @@ const BridgeTransaction = () => {
           {renderFee(
             'Transaction Fee',
             tokenInfo?.tokenName,
-            networkFee || 'Pending',
+            networkFeeRaw || 'Pending',
             'primary',
           )}
           {renderFee(
             'Bridge Fee',
             tokenInfo?.tokenName,
-            bridgeFee || 'Pending',
+            bridgeFeeRaw || 'Pending',
             'primary',
           )}
           {renderFee(
             'Min Transfer',
             tokenInfo?.tokenName,
-            minTransfer || 'Pending',
+            minTransferRaw || 'Pending',
             'primary',
           )}
           <Divider />
           {renderFee(
             'You will receive',
             targetTokenInfo?.name,
-            receivingAmount,
+            receivingAmountRaw,
             'secondary',
           )}
           {status?.status === 'error' && renderAlert()}

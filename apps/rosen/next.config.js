@@ -2,6 +2,13 @@
 
 const nextConfig = {
   experimental: {
+    outputFileTracingIncludes: {
+      /**
+       * Transfer the 'configs' directory to the production build to ensure
+       * the 'tokensMap.json' file is accessible in the production environment.
+       */
+      '/': ['./configs/*'],
+    },
     serverComponentsExternalPackages: [
       'ergo-lib-wasm-nodejs',
       '@emurgo/cardano-serialization-lib-nodejs',

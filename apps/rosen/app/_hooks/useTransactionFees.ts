@@ -12,6 +12,7 @@ import { calculateFee } from '@/_actions/calculateFee';
 
 import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
+import { useTokenMap } from './useTokenMap';
 
 /**
  * calculates the fees for a token swap between
@@ -28,6 +29,7 @@ const useTransactionFees = (
   const { selectedNetwork } = useNetwork();
 
   const feeInfo = useRef<any>(null);
+  const tokenMap = useTokenMap();
   const tokensMap = useTokensMap();
 
   /**
@@ -54,6 +56,11 @@ const useTransactionFees = (
     }
     return null;
   }, [getTokenId, sourceChain, token]);
+
+  const decimals = useMemo(() => {
+    if (!tokenId) return 0;
+    return tokenMap.getSignificantDecimals(tokenId) || 0;
+  }, [tokenId, tokenMap]);
 
   useEffect(() => {
     feeInfo.current = null;
@@ -125,10 +132,9 @@ const useTransactionFees = (
     : 1;
 
   const transactionFees = useMemo(() => {
-    let paymentAmount =
-      amount && token
-        ? +getNonDecimalString(amount.toString(), token.decimals)
-        : 0;
+    let paymentAmount = amount
+      ? +getNonDecimalString(amount.toString(), decimals)
+      : 0;
 
     const networkFee = fees ? Number(fees.networkFee) : 0;
     const feeRatio = fees ? Number(fees?.feeRatio) : 0;
@@ -146,31 +152,23 @@ const useTransactionFees = (
     const minTransfer = bridgeFeeBase! + networkFee!;
 
     return {
-      bridgeFee: getDecimalString(
-        bridgeFee?.toString() || '0',
-        token?.decimals || 0,
-      ),
-      networkFee: getDecimalString(
-        networkFee?.toString() || '0',
-        token?.decimals || 0,
-      ),
-      receivingAmount:
+      bridgeFee: bridgeFee || 0,
+      bridgeFeeRaw: getDecimalString(bridgeFee?.toString() || '0', decimals),
+      networkFee: networkFee || 0,
+      networkFeeRaw: getDecimalString(networkFee?.toString() || '0', decimals),
+      receivingAmount: receivingAmountValue,
+      receivingAmountRaw:
         fees && receivingAmountValue > 0
-          ? getDecimalString(
-              receivingAmountValue.toString() || '0',
-              token?.decimals || 0,
-            )
+          ? getDecimalString(receivingAmountValue.toString() || '0', decimals)
           : '0',
-      minTransfer: minTransfer
-        ? getDecimalString(
-            (minTransfer + 1).toString() || '0',
-            token?.decimals || 0,
-          )
+      minTransfer: minTransfer ? minTransfer + 1 || 0 : 0,
+      minTransferRaw: minTransfer
+        ? getDecimalString((minTransfer + 1).toString() || '0', decimals)
         : '0',
       isLoading: pending,
       status: feeInfo.current,
     };
-  }, [amount, fees, pending, token, feeRatioDivisor]);
+  }, [amount, fees, pending, decimals, feeRatioDivisor]);
 
   return transactionFees;
 };

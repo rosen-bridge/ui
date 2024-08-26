@@ -3,8 +3,9 @@ import { BitcoinNetwork, CardanoNetwork, ErgoNetwork } from '@/_types/network';
 /**
  * return max transfer, considering all the context that affects it
  * @param network
- * @param tokenInfo
+ * @param tokenInfo CONTAINS A WRAPPED-VALUE
  * @param context
+ * @returns THIS IS A WRAPPED-VALUE
  */
 const getMaxTransfer = async (
   network: ErgoNetwork | CardanoNetwork | BitcoinNetwork,
@@ -20,7 +21,7 @@ const getMaxTransfer = async (
 ) => {
   if (network.name === 'bitcoin') {
     const context = await getContext();
-    return network.getMaxTransfer({
+    return await network.getMaxTransfer({
       balance: tokenInfo.balance,
       isNative: tokenInfo.isNative,
       eventData: {
@@ -31,7 +32,7 @@ const getMaxTransfer = async (
     });
   }
 
-  return network.getMaxTransfer({
+  return await network.getMaxTransfer({
     balance: tokenInfo.balance,
     isNative: tokenInfo.isNative,
   });
