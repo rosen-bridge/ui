@@ -1,10 +1,9 @@
 'use client';
 
 import { useCallback, ChangeEvent } from 'react';
-import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import {
-  alpha,
   Grid,
   TextField,
   Typography,
@@ -25,29 +24,6 @@ import useMaxTransfer from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
-
-/**
- * customized form input
- */
-const FormInputs = styled(TextField)(({ theme }) => ({
-  '& .MuiFilledInput-root': {
-    overflow: 'hidden',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.background.input,
-    minHeight: theme.spacing(8.5),
-    transition: theme.transitions.create(['background-color', 'box-shadow']),
-    '&:hover': {
-      backgroundColor: theme.palette.background.header,
-    },
-    '&.Mui-focused': {
-      backgroundColor: theme.palette.background.header,
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-    },
-    'input::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
-      '-webkit-appearance': 'none',
-    },
-  },
-}));
 
 /**
  * max button component container for amount field
@@ -222,7 +198,7 @@ export const BridgeForm = () => {
     <FormContainer>
       <Grid container spacing={1}>
         <Grid item mobile={6}>
-          <FormInputs
+          <TextField
             id="source"
             select
             label="Source"
@@ -245,10 +221,10 @@ export const BridgeForm = () => {
                 <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
             ))}
-          </FormInputs>
+          </TextField>
         </Grid>
         <Grid item mobile={6}>
-          <FormInputs
+          <TextField
             id="target"
             select
             label="Target"
@@ -274,10 +250,10 @@ export const BridgeForm = () => {
                 <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
             ))}
-          </FormInputs>
+          </TextField>
         </Grid>
       </Grid>
-      <FormInputs
+      <TextField
         label="Address"
         InputProps={{ disableUnderline: true } as any}
         variant="filled"
@@ -299,7 +275,7 @@ export const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
-      <FormInputs
+      <TextField
         id="token"
         select
         label="Token"
@@ -326,8 +302,8 @@ export const BridgeForm = () => {
             </MenuItem>
           );
         })}
-      </FormInputs>
-      <FormInputs
+      </TextField>
+      <TextField
         id="amount"
         size="medium"
         label="Amount"
