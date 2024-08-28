@@ -9,6 +9,7 @@ import { Networks } from '@rosen-ui/constants';
 import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
 import { RosenAmountValue } from '@rosen-ui/types';
+import { fromSafeData } from '@/_utils/safeData';
 
 /**
  * a utility to make unique interface for accessing token name
@@ -46,7 +47,7 @@ export const getMinTransfer = async (
   const ergoTokenId = tokens[0].ergo.tokenId;
 
   try {
-    const data = await unwrap(calculateFee)(
+    const data = await unwrap(fromSafeData(calculateFee))(
       sourceChain,
       targetChain,
       ergoTokenId,
