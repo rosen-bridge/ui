@@ -30,6 +30,7 @@ import getVesprWallet, {
 } from '@rosen-ui/vespr-wallet';
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
+import { fromSafeData } from '@/_utils/safeData';
 
 /**
  * the main object for Cardano network
@@ -42,38 +43,46 @@ const CardanoNetwork: CardanoNetworkType = {
   wallets: compact([
     eternlWalletCreator({
       getTokenMap,
-      decodeWasmValue: unwrap(decodeWasmValue),
-      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
-      generateUnsignedTx: unwrap(generateUnsignedTx),
-      setTxWitnessSet: unwrap(setTxWitnessSet),
+      decodeWasmValue: unwrap(fromSafeData(decodeWasmValue)),
+      generateLockAuxiliaryData: unwrap(
+        fromSafeData(generateLockAuxiliaryData),
+      ),
+      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+      setTxWitnessSet: unwrap(fromSafeData(setTxWitnessSet)),
     }),
     flintWalletCreator({
       getTokenMap,
-      decodeWasmValue: unwrap(decodeWasmValue),
-      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
-      generateUnsignedTx: unwrap(generateUnsignedTx),
-      setTxWitnessSet: unwrap(setTxWitnessSet),
+      decodeWasmValue: unwrap(fromSafeData(decodeWasmValue)),
+      generateLockAuxiliaryData: unwrap(
+        fromSafeData(generateLockAuxiliaryData),
+      ),
+      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+      setTxWitnessSet: unwrap(fromSafeData(setTxWitnessSet)),
     }),
     laceWalletCreator({
       getTokenMap,
-      decodeWasmValue: unwrap(decodeWasmValue),
-      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
-      generateUnsignedTx: unwrap(generateUnsignedTx),
-      setTxWitnessSet: unwrap(setTxWitnessSet),
+      decodeWasmValue: unwrap(fromSafeData(decodeWasmValue)),
+      generateLockAuxiliaryData: unwrap(
+        fromSafeData(generateLockAuxiliaryData),
+      ),
+      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+      setTxWitnessSet: unwrap(fromSafeData(setTxWitnessSet)),
     }),
     namiWalletCreator({
       getTokenMap,
-      decodeWasmValue: unwrap(decodeWasmValue),
-      generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
-      generateUnsignedTx: unwrap(generateUnsignedTx),
-      setTxWitnessSet: unwrap(setTxWitnessSet),
+      decodeWasmValue: unwrap(fromSafeData(decodeWasmValue)),
+      generateLockAuxiliaryData: unwrap(
+        fromSafeData(generateLockAuxiliaryData),
+      ),
+      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+      setTxWitnessSet: unwrap(fromSafeData(setTxWitnessSet)),
     }),
     isVesprAvailable() && {
       ...getVesprWallet(),
       getBalance: async (token: RosenChainToken) => {
         const context = await getVesprWallet().getApi().enable();
         const rawValue = await context.getBalance();
-        const balances = await unwrap(decodeWasmValue)(rawValue);
+        const balances = await unwrap(fromSafeData(decodeWasmValue))(rawValue);
 
         const amount = balances.find(
           (asset) => asset.policyId === token.policyId,
@@ -107,7 +116,9 @@ const CardanoNetwork: CardanoNetworkType = {
         );
         const changeAddressHex = await wallet.getChangeAddress();
 
-        const auxiliaryDataHex = await unwrap(generateLockAuxiliaryData)(
+        const auxiliaryDataHex = await unwrap(
+          fromSafeData(generateLockAuxiliaryData),
+        )(
           toChain,
           toAddress,
           changeAddressHex,
@@ -117,7 +128,7 @@ const CardanoNetwork: CardanoNetworkType = {
 
         const walletUtxos = await wallet.getUtxos();
         if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
-        const unsignedTxHex = await unwrap(generateUnsignedTx)(
+        const unsignedTxHex = await unwrap(fromSafeData(generateUnsignedTx))(
           walletUtxos,
           lockAddress,
           changeAddressHex,
@@ -127,7 +138,7 @@ const CardanoNetwork: CardanoNetworkType = {
           auxiliaryDataHex,
         );
 
-        const signedTxHex = await unwrap(setTxWitnessSet)(
+        const signedTxHex = await unwrap(fromSafeData(setTxWitnessSet))(
           unsignedTxHex,
           await wallet.signTx(unsignedTxHex, false),
         );
@@ -140,7 +151,7 @@ const CardanoNetwork: CardanoNetworkType = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
-  getMaxTransfer: unwrap(getMaxTransfer),
+  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
 };
 
 export default CardanoNetwork;

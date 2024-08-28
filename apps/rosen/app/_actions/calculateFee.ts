@@ -16,6 +16,7 @@ import { Networks } from '@rosen-ui/constants';
 import { ERGO_EXPLORER_URL, feeConfigTokenId } from '@/_constants';
 import { AvailableNetworks } from '@/_networks';
 import { wrap } from '@/_errors';
+import { toSafeData } from '@/_utils/safeData';
 
 const GetHeight = {
   [Networks.CARDANO]: async () =>
@@ -42,42 +43,46 @@ const GetHeight = {
  */
 
 export const calculateFee = wrap(
-  async (
-    sourceNetwork: AvailableNetworks,
-    targetNetwork: AvailableNetworks,
-    tokenId: string,
-    nextHeightInterval: number,
-  ) => {
-    try {
-      const height = await GetHeight[sourceNetwork]();
+  toSafeData(
+    async (
+      sourceNetwork: AvailableNetworks,
+      targetNetwork: AvailableNetworks,
+      tokenId: string,
+      nextHeightInterval: number,
+    ) => {
+      try {
+        const height = await GetHeight[sourceNetwork]();
 
-      if (!height) {
-        throw new Error('Cannot fetch height from the api endpoint');
+        if (!height) {
+          throw new Error('Cannot fetch height from the api endpoint');
+        }
+
+        const minFeeBox = new MinimumFeeBox(
+          tokenId,
+          feeConfigTokenId,
+          ErgoNetworkType.explorer,
+          ERGO_EXPLORER_URL,
+        );
+        await minFeeBox.fetchBox();
+
+        const [fees, nextFees] = await Promise.all([
+          minFeeBox.getFee(sourceNetwork, height, targetNetwork),
+          minFeeBox.getFee(
+            sourceNetwork,
+            height + nextHeightInterval,
+            targetNetwork,
+          ),
+        ]);
+
+        return JsonBigInt.stringify({
+          fees,
+          nextFees,
+        });
+      } catch (error) {
+        throw new Error(
+          error instanceof Error ? error.message : 'Unknown Error',
+        );
       }
-
-      const minFeeBox = new MinimumFeeBox(
-        tokenId,
-        feeConfigTokenId,
-        ErgoNetworkType.explorer,
-        ERGO_EXPLORER_URL,
-      );
-      await minFeeBox.fetchBox();
-
-      const [fees, nextFees] = await Promise.all([
-        minFeeBox.getFee(sourceNetwork, height, targetNetwork),
-        minFeeBox.getFee(
-          sourceNetwork,
-          height + nextHeightInterval,
-          targetNetwork,
-        ),
-      ]);
-
-      return JsonBigInt.stringify({
-        fees,
-        nextFees,
-      });
-    } catch (error) {
-      throw new Error(error instanceof Error ? error.message : 'Unknown Error');
-    }
-  },
+    },
+  ),
 );

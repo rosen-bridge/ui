@@ -11,25 +11,28 @@ import { CardanoNetwork } from '@/_types/network';
 
 import { getTokenMap } from '../getTokenMap.server';
 import { RosenAmountValue } from '@rosen-ui/types';
+import { toSafeData } from '@/_utils/safeData';
 
 /**
  * get max transfer for ergo
  */
 export const getMaxTransfer = wrap(
-  async ({
-    balance,
-    isNative,
-  }: Parameters<
-    CardanoNetwork['getMaxTransfer']
-  >[0]): Promise<RosenAmountValue> => {
-    const tokenMap = await getTokenMap();
-    const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
-      'erg',
-      ergoFee + ergoMinBoxValue,
-      Networks.ERGO,
-    ).amount;
-    const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
-    const amount = balance - offset;
-    return amount < 0n ? 0n : amount;
-  },
+  toSafeData(
+    async ({
+      balance,
+      isNative,
+    }: Parameters<
+      CardanoNetwork['getMaxTransfer']
+    >[0]): Promise<RosenAmountValue> => {
+      const tokenMap = await getTokenMap();
+      const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
+        'erg',
+        ergoFee + ergoMinBoxValue,
+        Networks.ERGO,
+      ).amount;
+      const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
+      const amount = balance - offset;
+      return amount < 0n ? 0n : amount;
+    },
+  ),
 );
