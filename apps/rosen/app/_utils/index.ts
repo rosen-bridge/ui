@@ -1,7 +1,5 @@
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-
-import { getDecimalString } from '@rosen-ui/utils';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
@@ -10,6 +8,7 @@ import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { fromSafeData } from '@/_utils/safeData';
+import { getTokenMap } from '@/_networks/getTokenMap.client';
 
 /**
  * a utility to make unique interface for accessing token name
@@ -37,9 +36,8 @@ export const getMinTransfer = async (
   token: RosenChainToken,
   sourceChain: AvailableNetworks,
   targetChain: AvailableNetworks,
-  tokensMap: any,
 ): Promise<RosenAmountValue> => {
-  const tokenMap = new TokenMap(tokensMap);
+  const tokenMap = await getTokenMap();
   const idKey = tokenMap.getIdKey(sourceChain);
   const tokens = tokenMap.search(sourceChain, {
     [idKey]: token[idKey],

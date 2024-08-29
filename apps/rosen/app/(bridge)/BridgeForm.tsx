@@ -21,7 +21,7 @@ import useBridgeForm from '@/_hooks/useBridgeForm';
 import useNetwork from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
-import useMaxTransfer from '@/_hooks/useMaxTransfer';
+import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';

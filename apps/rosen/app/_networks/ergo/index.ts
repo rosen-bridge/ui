@@ -6,15 +6,15 @@ import { unwrap } from '@/_errors';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
-import {
-  fee as ergoFee,
-  minBoxValue as ergoMinBoxValue,
-} from '@rosen-network/ergo/dist/src/constants';
-
 import { generateUnsignedTx } from './server';
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
 import { fromSafeData } from '@/_utils/safeData';
+
+const config = {
+  getTokenMap,
+  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+};
 
 /**
  * the main object for Ergo network
@@ -24,12 +24,7 @@ import { fromSafeData } from '@/_utils/safeData';
 const ErgoNetwork: ErgoNetworkType = {
   name: Networks.ERGO,
   label: 'Ergo',
-  wallets: [
-    nautilusWalletCreator({
-      getTokenMap,
-      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
-    }),
-  ],
+  wallets: [nautilusWalletCreator(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
