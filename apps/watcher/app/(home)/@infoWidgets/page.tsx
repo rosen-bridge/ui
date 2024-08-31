@@ -183,10 +183,10 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Health"
-          value={data?.health ?? ''}
+          value={data?.health.status ?? ''}
           icon={
             <SvgIcon fontSize="large">
-              {data?.health === 'Healthy' ? (
+              {data?.health.status === 'Healthy' ? (
                 <ShieldCheck />
               ) : (
                 <ShieldExclamation />
@@ -195,7 +195,9 @@ const InfoWidgets = () => {
           }
           color={
             data?.health
-              ? (healthStatusColorMap[data.health] as keyof AugmentedPalette)
+              ? (healthStatusColorMap[
+                  data.health.status
+                ] as keyof AugmentedPalette)
               : 'success'
           }
           isLoading={isInfoLoading}
