@@ -20,10 +20,11 @@ import useBridgeForm from '@/_hooks/useBridgeForm';
 import useNetwork from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
-import useMaxTransfer from '@/_hooks/useMaxTransfer';
+import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
+import useWallet from '@/_hooks/useWallet';
 
 /**
  * max button component container for amount field
@@ -77,6 +78,8 @@ export const BridgeForm = () => {
 
   const { max, loading: isMaxLoading } = useMaxTransfer();
   const tokenMap = useTokenMap();
+
+  const { selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
@@ -161,7 +164,7 @@ export const BridgeForm = () => {
 
   const renderInputActions = () => (
     <>
-      {tokenField.value && !isMaxLoading && (
+      {tokenField.value && !isMaxLoading && selectedWallet && (
         <Grid container justifyContent="space-between">
           <MaxButton
             disabled={isLoading || !tokenField.value}

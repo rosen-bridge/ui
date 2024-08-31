@@ -1,73 +1,84 @@
-import { useEffect, useState, useTransition } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 
-import useNetwork from './useNetwork';
-import useWallet from './useWallet';
-import useBridgeForm from './useBridgeForm';
-import useTokenBalance from './useTokenBalance';
-
-import getMaxTransfer from '@/_utils/getMaxTransfer';
 import { RosenAmountValue } from '@rosen-ui/types';
 
-/**
- * a hook version of `getMaxTransfer` util
- * @returns CONTAINS A WRAPPED-VALUE
- */
-const useMaxTransfer = () => {
-  const [max, setMax] = useState<RosenAmountValue>(0n);
-  const [loading, startTransition] = useTransition();
+import { Networks } from '@rosen-ui/constants';
 
-  const { isLoading: isTokenBalanceLoading, amount } = useTokenBalance();
+import useNetwork from './useNetwork';
+import useTokenBalance from './useTokenBalance';
+import useTransactionFormData from './useTransactionFormData';
+import useWallet from './useWallet';
+
+/**
+ * Manage the maximum transferable amount.
+ */
+export const useMaxTransfer = () => {
+  const [error, setError] = useState(false);
+
+  const [max, setMax] = useState<RosenAmountValue>(0n);
+
+  const [isTransitionLoading, startTransition] = useTransition();
+
+  const { targetValue, tokenValue, walletAddressValue } =
+    useTransactionFormData();
 
   const { selectedNetwork } = useNetwork();
 
-  const { targetField, tokenField, addressField } = useBridgeForm();
+  const { isLoading: isTokenBalanceLoading, amount } = useTokenBalance();
 
   const { selectedWallet } = useWallet();
 
-  useEffect(() => {
-    const effect = async () => {
-      if (
-        !selectedNetwork ||
-        !selectedWallet ||
-        isTokenBalanceLoading ||
-        !tokenField.value
-      )
-        return;
+  const loading = isTokenBalanceLoading || isTransitionLoading;
 
-      if (!amount) return;
+  const load = useCallback(async () => {
+    const skip =
+      !amount ||
+      isTokenBalanceLoading ||
+      !selectedNetwork ||
+      !selectedWallet ||
+      !tokenValue;
 
-      try {
-        const max = await getMaxTransfer(
-          selectedNetwork,
-          {
-            balance: amount,
-            isNative: tokenField.value.metaData.type === 'native',
-          },
-          async () => ({
-            fromAddress: await selectedWallet.getAddress(),
-            toAddress: addressField.value,
-            toChain: targetField.value,
-          }),
-        );
-        setMax(max);
-      } catch {}
-    };
+    if (skip) return;
 
-    startTransition(effect);
+    setError(false);
+
+    try {
+      let eventData: any;
+
+      if (selectedNetwork.name === Networks.BITCOIN) {
+        eventData = {
+          fromAddress: await selectedWallet.getAddress(),
+          toAddress: walletAddressValue,
+          toChain: targetValue,
+        };
+      }
+
+      const max = await selectedNetwork.getMaxTransfer({
+        balance: amount,
+        isNative: tokenValue.metaData.type === 'native',
+        eventData,
+      });
+
+      setMax(max);
+    } catch {
+      setError(true);
+    }
   }, [
-    addressField.value,
     amount,
     isTokenBalanceLoading,
     selectedNetwork,
     selectedWallet,
-    targetField.value,
-    tokenField.value,
+    targetValue,
+    tokenValue,
+    walletAddressValue,
   ]);
 
+  useEffect(() => startTransition(load), [load]);
+
   return {
+    error,
+    loading,
     max,
-    loading: loading || isTokenBalanceLoading,
+    load,
   };
 };
-
-export default useMaxTransfer;

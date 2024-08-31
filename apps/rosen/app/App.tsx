@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { RosenTokens } from '@rosen-bridge/tokens';
 
 /**
  * FIXME: import NoSsr from ui-kit
@@ -16,7 +15,6 @@ import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 import { WalletContextProvider } from './_contexts/walletContext';
-import { TokensMapProvider } from './_contexts/tokenMapProvider';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -39,26 +37,23 @@ const Main = styled('main')(({ theme }) => ({
 
 interface AppProps {
   children?: React.ReactNode;
-  tokensMap: RosenTokens;
 }
 
-const App = ({ children, tokensMap }: AppProps) => {
+const App = ({ children }: AppProps) => {
   return (
     <NoSsr>
       <ThemeProvider>
         <SnackbarProvider>
-          <TokensMapProvider tokensMap={tokensMap}>
-            <WalletContextProvider>
-              <Root>
-                <SideBar />
-                <Main>
-                  <Toolbar />
-                  {children}
-                </Main>
-                <AppSnackbar />
-              </Root>
-            </WalletContextProvider>
-          </TokensMapProvider>
+          <WalletContextProvider>
+            <Root>
+              <SideBar />
+              <Main>
+                <Toolbar />
+                {children}
+              </Main>
+              <AppSnackbar />
+            </Root>
+          </WalletContextProvider>
         </SnackbarProvider>
       </ThemeProvider>
     </NoSsr>

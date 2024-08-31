@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-import { TokenMap } from '@rosen-bridge/tokens';
 import {
   Alert,
   Avatar,
@@ -15,7 +14,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import useNetwork from '@/_hooks/useNetwork';
-import { useTokensMap } from '@/_hooks/useTokensMap';
+import { useTokenMap } from '@/_hooks/useTokenMap';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
@@ -51,8 +50,7 @@ export const BridgeTransaction = () => {
   const { sourceValue, targetValue, tokenValue, amountValue } =
     useTransactionFormData();
 
-  const rawTokenMap = useTokensMap();
-  const tokenMap = new TokenMap(rawTokenMap);
+  const tokenMap = useTokenMap();
 
   const {
     status,
