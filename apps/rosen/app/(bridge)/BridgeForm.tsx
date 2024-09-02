@@ -226,16 +226,20 @@ const BridgeForm = () => {
             }}
             onChange={handleSourceChange}
           >
-            {availableNetworks.filter(network => network.name !== 'cardano').map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <SvgIcon>
-                    <Logo />
-                  </SvgIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
+            {availableNetworks
+              .filter((network) => network.name !== 'cardano')
+              .map(({ logo: Logo, ...network }) => (
+                <MenuItem key={network.name} value={network.name}>
+                  <ListItemIcon>
+                    <SvgIcon>
+                      <Logo />
+                    </SvgIcon>
+                  </ListItemIcon>
+                  <Typography color="text.secondary">
+                    {network.label}
+                  </Typography>
+                </MenuItem>
+              ))}
           </FormInputs>
         </Grid>
         <Grid item mobile={6}>
