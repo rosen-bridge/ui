@@ -226,7 +226,7 @@ const BridgeForm = () => {
             }}
             onChange={handleSourceChange}
           >
-            {availableNetworks.map(({ logo: Logo, ...network }) => (
+            {availableNetworks.filter(network => network.name !== 'cardano').map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
                   <SvgIcon>
