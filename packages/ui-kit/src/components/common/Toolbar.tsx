@@ -9,7 +9,7 @@ import { styled } from '../../styling';
  * in tablet and mobile devices
  */
 const Header = styled('div')(({ theme }) => ({
-  marginBottom: theme.spacing(3),
+  marginBottom: theme.spacing(4),
   [theme.breakpoints.down('tablet')]: {
     '& .toolbar': {
       display: 'none',

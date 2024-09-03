@@ -1,4 +1,5 @@
 import {
+  Alert,
   Button,
   Dialog,
   DialogActions,
@@ -61,14 +62,6 @@ export const ChooseWalletModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
-        <Typography
-          color={(theme) => theme.palette.warning.light}
-          variant="body1"
-          pt={1}
-        >
-          It may be necessary to reload this page after the following extensions
-          have been installed in order to connect to them.
-        </Typography>
         <Grid
           container
           justifyContent="center"
@@ -130,6 +123,10 @@ export const ChooseWalletModal = ({
             );
           })}
         </Grid>
+        <Alert severity="warning">
+          It may be necessary to reload this page after the following extensions
+          have been installed in order to connect to them.
+        </Alert>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Close</Button>

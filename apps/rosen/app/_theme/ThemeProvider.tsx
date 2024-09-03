@@ -6,8 +6,15 @@ import {
   ThemeProvider as UiKitThemeProvider,
   createTheme,
   useMediaQuery,
+  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 import { useLocalStorageManager } from '@rosen-ui/common-hooks';
+import {
+  CheckCircle,
+  ExclamationCircle,
+  ExclamationTriangle,
+  InfoCircle,
+} from '@rosen-bridge/icons';
 
 export const ColorModeContext = createContext({ toggle: () => {} });
 
@@ -304,22 +311,56 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
           },
         },
         MuiSnackbar: {
-          defaultProps: {
-            anchorOrigin: { vertical: 'bottom', horizontal: 'center' },
+          styleOverrides: {
+            root: {
+              left: '116px',
+            },
           },
         },
         MuiAlert: {
+          defaultProps: {
+            iconMapping: {
+              error: (
+                <SvgIcon>
+                  <ExclamationTriangle fontSize="inherit" />
+                </SvgIcon>
+              ),
+              info: (
+                <SvgIcon>
+                  <InfoCircle fontSize="inherit" />
+                </SvgIcon>
+              ),
+              success: (
+                <SvgIcon>
+                  <CheckCircle fontSize="inherit" />
+                </SvgIcon>
+              ),
+              warning: (
+                <SvgIcon>
+                  <ExclamationCircle fontSize="inherit" />
+                </SvgIcon>
+              ),
+            },
+          },
           styleOverrides: {
             root: {
-              fontSize: '0.9rem',
+              fontSize: '0.875rem',
             },
-            filledSuccess: {
-              color: baseTheme.palette.success.dark,
+            standardError: {
+              color: baseTheme.palette.error.main,
+              backgroundColor: baseTheme.palette.error.light,
+            },
+            standardInfo: {
+              color: baseTheme.palette.info.main,
+              backgroundColor: baseTheme.palette.info.light,
+            },
+            standardSuccess: {
+              color: baseTheme.palette.success.main,
               backgroundColor: baseTheme.palette.success.light,
             },
-            filledError: {
-              color: baseTheme.palette.error.dark,
-              backgroundColor: baseTheme.palette.error.light,
+            standardWarning: {
+              color: baseTheme.palette.warning.main,
+              backgroundColor: baseTheme.palette.warning.light,
             },
           },
         },

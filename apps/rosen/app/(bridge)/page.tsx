@@ -12,12 +12,19 @@ import { useState } from 'react';
 
 const BridgeContainer = styled('div')(({ theme }) => ({
   display: 'grid',
-  gap: theme.spacing(2.5),
+  gap: theme.spacing(3),
   gridTemplateColumns: '8fr 4fr',
   gridTemplateRows: '1fr auto',
   '& > button': {
     width: '50%',
     justifySelf: 'flex-end',
+  },
+  [theme.breakpoints.down('laptop')]: {
+    gridTemplateColumns: '1fr',
+    gridTemplateRows: 'auto auto auto',
+    '& > button': {
+      width: '100%',
+    },
   },
 }));
 

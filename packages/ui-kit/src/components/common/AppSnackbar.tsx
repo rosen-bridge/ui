@@ -23,9 +23,7 @@ export const AppSnackbar = () => {
         horizontal: state.position.horizontal,
       }}
     >
-      <Alert variant="filled" severity={state.severity!}>
-        {state.message}
-      </Alert>
+      <Alert severity={state.severity!}>{state.message}</Alert>
     </Snackbar>
   ) : null;
 };

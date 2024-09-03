@@ -29,7 +29,7 @@ export const SnackbarStateContext = createContext<
 
 const defaultSnackbarPosition = {
   vertical: 'top',
-  horizontal: 'right',
+  horizontal: 'center',
 } as const;
 
 /**
