@@ -1,6 +1,7 @@
 export * from './AlertCard';
 export * from './AppBar';
 export * from './AppLogo';
+export * from './EnhancedDialogTitle';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './FullCard';

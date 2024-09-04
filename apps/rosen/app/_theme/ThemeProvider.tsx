@@ -268,6 +268,14 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
             },
           },
         },
+        MuiDialogTitle: {
+          styleOverrides: {
+            root: {
+              color: baseTheme.palette.secondary.dark,
+              fontSize: baseTheme.spacing(3),
+            },
+          },
+        },
         MuiLoadingButton: {
           defaultProps: {
             variant: 'contained',

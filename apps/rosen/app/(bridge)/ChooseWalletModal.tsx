@@ -1,16 +1,20 @@
+import { useEffect, useState } from 'react';
+
+import { Wallet as WalletIcon } from '@rosen-bridge/icons';
 import {
   Alert,
+  Box,
   Button,
+  Card,
+  CardContent,
   Dialog,
-  DialogActions,
   DialogContent,
   DialogContentText,
+  EnhancedDialogTitle,
   Grid,
   Tooltip,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 import { Wallet } from '@rosen-ui/wallet-api';
-import { useEffect, useState } from 'react';
 
 interface ChooseWalletModalProps {
   open: boolean;
@@ -57,69 +61,54 @@ export const ChooseWalletModal = ({
   }, [open, wallets]);
 
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="tablet">
+    <Dialog open={open} maxWidth="laptop" onClose={handleClose}>
+      <EnhancedDialogTitle
+        closeable
+        icon={<WalletIcon />}
+        onClose={handleClose}
+      >
+        Choose Wallet
+      </EnhancedDialogTitle>
       <DialogContent>
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
-        <Grid
-          container
-          justifyContent="center"
-          sx={{
-            gap: (theme) => theme.spacing(2),
-            mt: (theme) => theme.spacing(4),
-          }}
-        >
+        <Grid container justifyContent="center" gap={2} my={2}>
           {wallets.map((wallet) => {
-            const WalletIcon = wallet.icon;
+            const Icon = wallet.icon;
             return (
-              <Tooltip title={wallet.name} key={wallet.label}>
-                <Grid
-                  item
-                  sx={{
-                    width: '8rem',
-                    height: '8rem',
-                    border: (theme) => `1px solid ${theme.palette.divider}`,
-                    borderRadius: 1,
-                    padding: (theme) => theme.spacing(1),
-                    cursor: 'pointer',
-                    justifyContent: 'space-between',
-                    '&:hover': {
-                      backdropFilter: 'contrast(0.8)',
-                    },
-                  }}
-                >
-                  <Grid
-                    sx={{
-                      width: '100%',
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      height: '8rem',
-                      '> *': {
-                        width: '100%',
-                        height: '64px',
-                      },
-                    }}
-                    component="a"
-                    href={wallet.link}
-                    target="_blank"
-                  >
-                    <WalletIcon />
-                  </Grid>
-                  <Button
-                    onClick={(event) => {
-                      event.preventDefault();
-                      handleConnect(wallet);
-                    }}
-                    variant="contained"
-                    size="small"
-                    sx={{ mt: (theme) => theme.spacing(1), width: '100%' }}
-                    disabled={!wallet.isAvailable()}
-                  >
-                    Connect
-                  </Button>
-                </Grid>
-              </Tooltip>
+              <Card key={wallet.label}>
+                <CardContent>
+                  <Tooltip title={wallet.name}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        gap: 3,
+                        alignItems: 'center',
+                        flexDirection: 'column',
+                        svg: {
+                          height: (theme) => theme.spacing(13),
+                          width: (theme) => theme.spacing(13),
+                        },
+                      }}
+                    >
+                      <Icon />
+                      <Button
+                        variant="contained"
+                        size="small"
+                        sx={{ width: '100%' }}
+                        disabled={!wallet.isAvailable()}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          handleConnect(wallet);
+                        }}
+                      >
+                        Connect
+                      </Button>
+                    </Box>
+                  </Tooltip>
+                </CardContent>
+              </Card>
             );
           })}
         </Grid>
@@ -128,9 +117,6 @@ export const ChooseWalletModal = ({
           have been installed in order to connect to them.
         </Alert>
       </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Close</Button>
-      </DialogActions>
     </Dialog>
   );
 };

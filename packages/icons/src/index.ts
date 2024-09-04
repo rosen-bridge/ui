@@ -9,6 +9,7 @@ export { ReactComponent as BitcoinCircle } from './icons/bitcoin-circle.svg';
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
+export { ReactComponent as CommentAltExclamation } from './icons/comment-alt-exclamation.svg';
 export { ReactComponent as Copy } from './icons/copy.svg';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
 export { ReactComponent as Eye } from './icons/eye.svg';
