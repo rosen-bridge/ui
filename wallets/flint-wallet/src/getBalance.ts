@@ -1,19 +1,25 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { Networks } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
+import { hexToCbor } from '@rosen-ui/utils';
 
 import { getFlintWallet } from './getFlintWallet';
 
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
-  async (token: RosenChainToken): Promise<number> => {
+  async (token: RosenChainToken): Promise<RosenAmountValue> => {
     const context = await getFlintWallet().getApi().enable();
     const rawValue = await context.getBalance();
     const balances = await config.decodeWasmValue(rawValue);
 
-    const amount = balances.find((asset) => asset.policyId === token.policyId);
+    const amount = balances.find(
+      (asset) =>
+        asset.policyId === token.policyId &&
+        (asset.nameHex === hexToCbor(token.assetName) || !token.policyId)
+    );
 
-    if (!amount) return 0;
+    if (!amount) return 0n;
 
     const tokenMap = await config.getTokenMap();
 
@@ -23,5 +29,5 @@ export const getBalanceCreator =
       Networks.CARDANO
     ).amount;
 
-    return Number(wrappedAmount);
+    return wrappedAmount;
   };

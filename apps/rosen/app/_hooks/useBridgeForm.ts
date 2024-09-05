@@ -14,6 +14,7 @@ import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
 import getMaxTransfer from '@/_utils/getMaxTransfer';
 import { useTokenMap } from './useTokenMap';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -51,21 +52,25 @@ const useBridgeForm = () => {
     control,
     rules: {
       validate: async (value) => {
-        const decimals =
-          tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
-
         // match any complete or incomplete decimal number
-        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
 
         // prevent user from entering invalid numbers
         const isValueInvalid = !match;
         if (isValueInvalid) return 'The amount is not valid';
+
+        const decimals =
+          tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
           (match?.groups?.floatingDigits?.length || 0) > decimals;
         if (isDecimalsLarge)
           return `The current token only supports ${decimals} decimals`;
+
+        const wrappedAmount = BigInt(
+          getNonDecimalString(value, decimals),
+        ) as RosenAmountValue;
 
         if (walletGlobalContext!.state.selectedWallet) {
           // prevent user from entering more than token amount
@@ -90,9 +95,7 @@ const useBridgeForm = () => {
             }),
           );
 
-          const isAmountLarge =
-            BigInt(getNonDecimalString(value, decimals)) >
-            BigInt(maxTransfer.toString());
+          const isAmountLarge = wrappedAmount > maxTransfer;
           if (isAmountLarge) return 'Balance insufficient';
         }
 
@@ -102,9 +105,7 @@ const useBridgeForm = () => {
           targetField.value,
           tokensMap,
         );
-        const isAmountSmall =
-          BigInt(getNonDecimalString(value, decimals)) <
-          BigInt(getNonDecimalString(minTransfer.toString(), decimals));
+        const isAmountSmall = wrappedAmount < minTransfer;
         if (isAmountSmall) return 'Minimum transfer amount not respected';
 
         return undefined;

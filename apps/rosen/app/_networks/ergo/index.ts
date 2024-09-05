@@ -14,6 +14,7 @@ import {
 import { generateUnsignedTx } from './server';
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
+import { fromSafeData } from '@/_utils/safeData';
 
 /**
  * the main object for Ergo network
@@ -26,13 +27,13 @@ const ErgoNetwork: ErgoNetworkType = {
   wallets: [
     nautilusWalletCreator({
       getTokenMap,
-      generateUnsignedTx: unwrap(generateUnsignedTx),
+      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
     }),
   ],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
-  getMaxTransfer: unwrap(getMaxTransfer),
+  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
 };
 
 export default ErgoNetwork;

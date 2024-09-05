@@ -1,4 +1,5 @@
 import { BitcoinNetwork, CardanoNetwork, ErgoNetwork } from '@/_types/network';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * return max transfer, considering all the context that affects it
@@ -10,7 +11,7 @@ import { BitcoinNetwork, CardanoNetwork, ErgoNetwork } from '@/_types/network';
 const getMaxTransfer = async (
   network: ErgoNetwork | CardanoNetwork | BitcoinNetwork,
   tokenInfo: {
-    balance: number;
+    balance: RosenAmountValue;
     isNative: boolean;
   },
   getContext: () => Promise<{
@@ -18,7 +19,7 @@ const getMaxTransfer = async (
     toAddress: string;
     toChain: string;
   }>,
-) => {
+): Promise<RosenAmountValue> => {
   if (network.name === 'bitcoin') {
     const context = await getContext();
     return await network.getMaxTransfer({

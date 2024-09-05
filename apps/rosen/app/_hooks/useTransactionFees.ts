@@ -13,6 +13,7 @@ import { calculateFee } from '@/_actions/calculateFee';
 import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
 import { useTokenMap } from './useTokenMap';
+import { fromSafeData } from '@/_utils/safeData';
 
 /**
  * calculates the fees for a token swap between
@@ -80,7 +81,7 @@ const useTransactionFees = (
     ) {
       startTransition(async () => {
         try {
-          const data = await unwrap(calculateFee)(
+          const data = await unwrap(fromSafeData(calculateFee))(
             sourceChain,
             targetChain,
             tokenId,
@@ -128,42 +129,45 @@ const useTransactionFees = (
 
   const fees = feeInfo.current?.data?.fees;
   const feeRatioDivisor = fees?.feeRatioDivisor
-    ? Number(fees?.feeRatioDivisor)
-    : 1;
+    ? BigInt(fees?.feeRatioDivisor)
+    : 1n;
 
   const transactionFees = useMemo(() => {
-    let paymentAmount = amount
-      ? +getNonDecimalString(amount.toString(), decimals)
-      : 0;
+    let paymentAmount = 0n;
 
-    const networkFee = fees ? Number(fees.networkFee) : 0;
-    const feeRatio = fees ? Number(fees?.feeRatio) : 0;
+    try {
+      paymentAmount = BigInt(getNonDecimalString(amount!, decimals));
+    } catch {}
 
-    const bridgeFeeBase = fees ? Number(fees.bridgeFee) : 0;
+    const networkFee = fees ? BigInt(fees.networkFee) : 0n;
+    const feeRatio = fees ? BigInt(fees?.feeRatio) : 0n;
+
+    const bridgeFeeBase = fees ? BigInt(fees.bridgeFee) : 0n;
     const variableBridgeFee = fees
       ? (paymentAmount * feeRatio) / feeRatioDivisor
-      : 0;
-    const bridgeFee = Math.max(bridgeFeeBase, Math.ceil(variableBridgeFee));
+      : 0n;
+    const bridgeFee =
+      bridgeFeeBase > variableBridgeFee ? bridgeFeeBase : variableBridgeFee;
 
     const receivingAmountValue = fees
-      ? +paymentAmount - (networkFee! + bridgeFee!)
-      : 0;
+      ? paymentAmount - (networkFee + bridgeFee!)
+      : 0n;
 
     const minTransfer = bridgeFeeBase! + networkFee!;
 
     return {
-      bridgeFee: bridgeFee || 0,
+      bridgeFee,
       bridgeFeeRaw: getDecimalString(bridgeFee?.toString() || '0', decimals),
-      networkFee: networkFee || 0,
+      networkFee,
       networkFeeRaw: getDecimalString(networkFee?.toString() || '0', decimals),
       receivingAmount: receivingAmountValue,
       receivingAmountRaw:
         fees && receivingAmountValue > 0
           ? getDecimalString(receivingAmountValue.toString() || '0', decimals)
           : '0',
-      minTransfer: minTransfer ? minTransfer + 1 || 0 : 0,
+      minTransfer: minTransfer ? minTransfer + 1n || 0n : 0n,
       minTransferRaw: minTransfer
-        ? getDecimalString((minTransfer + 1).toString() || '0', decimals)
+        ? getDecimalString((minTransfer + 1n).toString() || '0', decimals)
         : '0',
       isLoading: pending,
       status: feeInfo.current,

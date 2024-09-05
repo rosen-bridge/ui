@@ -8,6 +8,7 @@ import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
 import { getNonDecimalString } from '@rosen-ui/utils';
 import { useTokenMap } from './useTokenMap';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * a react hook to create and sign and submit transactions
@@ -25,7 +26,10 @@ export const useTransaction = () => {
 
   const { openSnackbar } = useSnackbar();
 
-  const startTransaction = async (bridgeFee: number, networkFee: number) => {
+  const startTransaction = async (
+    bridgeFee: RosenAmountValue,
+    networkFee: RosenAmountValue,
+  ) => {
     if (
       tokenValue &&
       targetValue &&
@@ -36,7 +40,7 @@ export const useTransaction = () => {
     ) {
       setIsSubmitting(true);
       try {
-        const amountValueWrapped = Number(
+        const amountValueWrapped = BigInt(
           getNonDecimalString(
             amountValue as string,
             tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,

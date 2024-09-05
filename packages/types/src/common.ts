@@ -40,3 +40,6 @@ export interface MutationRequestBodyWithHeaders<Data> {
     [headerKey: string]: string | number;
   };
 }
+
+// This is the Rosen wrapped-value
+export type RosenAmountValue = bigint;

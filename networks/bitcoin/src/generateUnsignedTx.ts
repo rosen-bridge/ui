@@ -11,6 +11,7 @@ import {
 } from './utils';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { Networks } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * generates bitcoin lock tx
@@ -118,7 +119,7 @@ export const generateUnsignedTx = (tokenMap: TokenMap) => {
   return (
     lockAddress: string,
     fromAddress: string,
-    wrappedAmount: bigint,
+    wrappedAmount: RosenAmountValue,
     opReturnData: string,
     token: RosenChainToken
   ) => {

@@ -1,6 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ergo';
-import { convertNumberToBigint, validateDecimalPlaces } from '@rosen-ui/utils';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getNautilusWallet } from './getNautilusWallet';
 
@@ -8,18 +8,15 @@ export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
-    wrappedAmount: number,
+    amount: RosenAmountValue,
     toChain: string,
     toAddress: string,
-    wrappedBridgeFee: number,
-    wrappedNetworkFee: number,
+    bridgeFee: RosenAmountValue,
+    networkFee: RosenAmountValue,
     lockAddress: string
   ): Promise<string> => {
     const wallet = await getNautilusWallet().getApi().getContext();
     const tokenId = token.tokenId;
-    const amount = convertNumberToBigint(wrappedAmount);
-    const bridgeFee = convertNumberToBigint(wrappedBridgeFee);
-    const networkFee = convertNumberToBigint(wrappedNetworkFee);
     const changeAddress = await wallet.get_change_address();
 
     const walletUtxos = await wallet.get_utxos();

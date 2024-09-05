@@ -17,6 +17,7 @@ import {
 } from './utils';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { Networks } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * generates a lock transaction on Cardano
@@ -145,7 +146,7 @@ export const generateUnsignedTx = (tokenMap: TokenMap) => {
     changeAddressHex: string,
     policyIdHex: string,
     assetNameHex: string,
-    wrappedAmount: bigint,
+    wrappedAmount: RosenAmountValue,
     auxiliaryDataHex: string
   ) => {
     const unwrappedAmount = tokenMap.unwrapAmount(

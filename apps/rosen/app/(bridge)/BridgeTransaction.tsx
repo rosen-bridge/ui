@@ -91,7 +91,7 @@ const BridgeTransaction = () => {
     useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
-    startTransaction(+bridgeFee, +networkFee);
+    startTransaction(bridgeFee, networkFee);
   });
 
   const renderFee = (

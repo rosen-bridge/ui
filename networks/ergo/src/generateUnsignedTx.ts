@@ -16,6 +16,7 @@ import * as wasm from 'ergo-lib-wasm-nodejs';
 import { ErgoBoxProxy } from '@rosen-bridge/ergo-box-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { Networks } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * generates an unsigned lock transaction on Ergo
@@ -128,7 +129,7 @@ export const generateUnsignedTx = (tokenMap: TokenMap) => {
     lockAddress: string,
     toChain: string,
     toAddress: string,
-    wrappedAmount: bigint,
+    wrappedAmount: RosenAmountValue,
     bridgeFeeString: string,
     networkFeeString: string,
     token: RosenChainToken
