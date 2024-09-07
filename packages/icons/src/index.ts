@@ -5,6 +5,7 @@ export { ReactComponent as Alert } from './icons/alert-triangle.svg';
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { ReactComponent as AngleUp } from './icons/angle-up.svg';
 export { ReactComponent as Archway } from './icons/archway.svg';
+export { ReactComponent as ArrowRight } from './icons/arrow-right.svg';
 export { ReactComponent as BitcoinCircle } from './icons/bitcoin-circle.svg';
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';

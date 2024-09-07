@@ -20,7 +20,9 @@ export type EnhancedDialogTitleProps = {
  * renders an enhanced version of material ui DialogTitle
  */
 export const EnhancedDialogTitle = ({
+  closeable,
   icon,
+  onClose,
   ...props
 }: EnhancedDialogTitleProps) => {
   return (
@@ -31,8 +33,8 @@ export const EnhancedDialogTitle = ({
         </IconContainer>
       )}
       <span style={{ flexGrow: 1 }}>{props.children}</span>
-      {props.closeable && (
-        <IconButton onClick={props.onClose}>
+      {closeable && (
+        <IconButton onClick={onClose}>
           <SvgIcon>
             <Times />
           </SvgIcon>

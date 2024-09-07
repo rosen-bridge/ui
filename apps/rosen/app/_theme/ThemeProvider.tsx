@@ -25,6 +25,12 @@ export interface AppThemeProps {
 type ColorModes = 'light' | 'dark';
 
 declare module '@mui/material/styles' {
+  interface TypeNeutral {
+    main: string;
+    light: string;
+    dark: string;
+  }
+
   interface TypeBackground {
     root: string;
     content: string;
@@ -42,10 +48,12 @@ declare module '@mui/material/styles' {
   interface Palette {
     gradient: TypePaletteGradient;
     background: TypeBackground;
+    neutral: TypeNeutral;
   }
   interface PaletteOptions {
     gradient?: Partial<TypePaletteGradient>;
     background?: Partial<TypeBackground>;
+    neutral?: Partial<TypeNeutral>;
   }
 }
 
@@ -260,11 +268,11 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         },
         MuiButton: {
           styleOverrides: {
-            textPrimary: {
-              color:
-                mode === 'light'
-                  ? baseTheme.palette.primary.main
-                  : baseTheme.palette.primary.light,
+            containedSecondary: {
+              backgroundColor: baseTheme.palette.neutral.light,
+              '&:hover': {
+                backgroundColor: baseTheme.palette.neutral.light,
+              },
             },
           },
         },
@@ -273,6 +281,13 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
             root: {
               color: baseTheme.palette.secondary.dark,
               fontSize: baseTheme.spacing(3),
+            },
+          },
+        },
+        MuiDialogActions: {
+          styleOverrides: {
+            root: {
+              padding: baseTheme.spacing(3),
             },
           },
         },

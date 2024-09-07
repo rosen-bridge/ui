@@ -13,6 +13,7 @@ import { AvailableNetworks } from '@/_networks';
 import { unwrap } from '@/_errors';
 import { useTokenMap } from './useTokenMap';
 import { fromSafeData } from '@/_utils/safeData';
+import { cache } from '@/_utils/cache';
 
 /**
  * calculates the fees for a token swap between
@@ -78,7 +79,7 @@ const useTransactionFees = (
     ) {
       startTransition(async () => {
         try {
-          const data = await unwrap(fromSafeData(calculateFee))(
+          const data = await unwrap(fromSafeData(cache(calculateFee, 2500)))(
             sourceChain,
             targetChain,
             tokenId,
