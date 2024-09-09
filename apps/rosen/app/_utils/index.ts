@@ -18,7 +18,14 @@ export const getTokenNameAndId = (
   token: RosenChainToken,
   network: AvailableNetworks,
 ) => {
-  if ([Networks.ERGO, Networks.CARDANO, Networks.BITCOIN].includes(network)) {
+  if (
+    [
+      Networks.ERGO,
+      Networks.ETHEREUM,
+      Networks.CARDANO,
+      Networks.BITCOIN,
+    ].includes(network)
+  ) {
     return {
       tokenName: token.name,
       tokenId: token.tokenId,

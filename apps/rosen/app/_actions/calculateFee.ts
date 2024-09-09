@@ -4,6 +4,7 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { getHeight as ethereumGetHeight } from '@rosen-network/ethereum';
 
 const cardanoKoiosClient = cardanoKoiosClientFactory(
   process.env.CARDANO_KOIOS_API!,
@@ -19,6 +20,7 @@ import { wrap } from '@/_errors';
 import { toSafeData } from '@/_utils/safeData';
 
 const GetHeight = {
+  [Networks.ETHEREUM]: ethereumGetHeight,
   [Networks.CARDANO]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
   [Networks.ERGO]: async () =>
