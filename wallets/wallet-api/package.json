@@ -21,7 +21,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-ui/utils": "^0.3.0"
+    "@rosen-ui/utils": "^0.4.0"
   },
   "peerDependencies": {
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0"
