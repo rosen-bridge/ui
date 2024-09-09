@@ -12,8 +12,6 @@
 - Update README
 - Fix the bug that prevents the Clear button from working correctly in the text field of the API key modal. Ensure that submitting the form does not trigger the parent forms, which would subsequently open a dialog that relies on them.
 - Updated dependencies
-- Updated dependencies
-- Updated dependencies
   - @rosen-bridge/ui-kit@1.2.0
   - @rosen-ui/utils@0.4.0
 
