@@ -1,5 +1,11 @@
 # @rosen-ui/utils
 
+## 0.4.0
+
+### Minor Changes
+
+- Implement a utility function to retrieve the link associated with an address in the chain.
+
 ## 0.3.0
 
 ### Minor Changes

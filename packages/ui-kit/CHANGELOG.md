@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-app
 
+## 1.2.0
+
+### Minor Changes
+
+- Update the HealthParam context to incorporate the latest API enhancements.
+- Implement the drawer UI component.
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/utils@0.4.0
+
 ## 1.1.2
 
 ### Patch Changes
