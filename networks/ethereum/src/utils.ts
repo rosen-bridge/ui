@@ -1,5 +1,4 @@
-import { JsonRpcProvider } from 'ethers';
-import { isHexString } from 'ethers';
+import { isAddress, JsonRpcProvider } from 'ethers';
 
 /**
  * gets Ethereum current block height
@@ -17,5 +16,5 @@ export const getHeight = async (): Promise<number> => {
  * @returns
  */
 export const isValidAddress = (addr: string) => {
-  return isHexString(addr);
+  return isAddress(addr);
 };
