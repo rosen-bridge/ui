@@ -15,5 +15,5 @@ export const transferCreator =
     networkFee: RosenAmountValue,
     lockAddress: string
   ): Promise<string> => {
-    throw new Error('Hadi should consider implementing this logic');
+    throw new Error('Not Implemented');
   };

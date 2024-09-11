@@ -18,7 +18,7 @@ export const getBalanceCreator =
 
     if (!accounts?.length) return 0n;
 
-    const amount = await provider.request({
+    const amount = await provider.request<string>({
       method: 'eth_getBalance',
       params: [accounts[0], 'latest'],
     });
@@ -29,7 +29,7 @@ export const getBalanceCreator =
 
     const wrappedAmount = tokenMap.wrapAmount(
       token[tokenMap.getIdKey(Networks.ETHEREUM)],
-      BigInt(amount as string),
+      BigInt(amount),
       Networks.ETHEREUM
     ).amount;
 
