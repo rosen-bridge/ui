@@ -6,7 +6,6 @@ import { unwrap } from '@/_errors';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types/network';
 import { EthereumIcon } from '@rosen-bridge/icons';
 
-import {} from './server';
 import { getMaxTransfer } from './getMaxTransfer';
 import { fromSafeData } from '@/_utils/safeData';
 import { getTokenMap } from '../getTokenMap.client';

@@ -20,7 +20,10 @@ export const getMaxTransfer = wrap(
     }: Parameters<
       EthereumNetwork['getMaxTransfer']
     >[0]): Promise<RosenAmountValue> => {
-      // TODO: This code is expected to be completed by Hadi.
+      /**
+       * TODO: This code is expected to be fully complete
+       * local:ergo/rosen-bridge/ui#352
+       */
       const tokenMap = await getTokenMap();
       const amount = tokenMap.wrapAmount(
         'eth',
