@@ -6,7 +6,7 @@ import { HealthParamInfo } from '@rosen-ui/types';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
-import { Button, SvgIcon, Typography } from '../base';
+import { Alert, Button, SvgIcon, Typography } from '../base';
 
 export type HealthParamCardProps = HealthParamInfo & {
   handleCheckNow: () => void;
@@ -15,6 +15,8 @@ export type HealthParamCardProps = HealthParamInfo & {
  * render a healt param card to be used in health page
  *
  * @param id
+ * @param title
+ * @param details
  * @param status
  * @param description
  * @param lastCheck
@@ -22,6 +24,8 @@ export type HealthParamCardProps = HealthParamInfo & {
  */
 export const HealthParamCard = ({
   id,
+  title,
+  details,
   status,
   description,
   lastCheck,
@@ -76,8 +80,16 @@ export const HealthParamCard = ({
         </Typography>
       }
     >
-      <Typography gutterBottom>{id}</Typography>
+      <Typography gutterBottom>{title}</Typography>
       <Typography variant="body2">{description}</Typography>
+      {details && (
+        <Alert
+          variant="filled"
+          sx={{ bgcolor: `${color}.main`, color: `${color}.light`, mt: 2 }}
+        >
+          {details}
+        </Alert>
+      )}
     </FullCard>
   );
 };

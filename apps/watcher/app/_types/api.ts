@@ -18,7 +18,10 @@ export interface ApiInfoResponse {
     active: number;
     total: number;
   };
-  health: 'Healthy' | 'Unstable' | 'Broken';
+  health: {
+    status: 'Healthy' | 'Unstable' | 'Broken';
+    trialErrors: string[];
+  };
   address: string;
   rsnTokenId: string;
   eRsnTokenId: string;

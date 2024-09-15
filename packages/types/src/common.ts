@@ -22,6 +22,8 @@ export interface TokenInfoWithColdAmount extends TokenInfo {
 
 export interface HealthParamInfo {
   id: string;
+  title: string;
+  details?: string;
   status: 'Healthy' | 'Unstable' | 'Broken';
   lastCheck: string;
   description?: string;

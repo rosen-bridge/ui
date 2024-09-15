@@ -26,7 +26,7 @@
     "@rosen-bridge/tokens": "^1.2.1",
     "@rosen-network/bitcoin": "^0.2.0",
     "@rosen-ui/constants": "^0.0.3",
-    "@rosen-ui/utils": "^0.3.0",
+    "@rosen-ui/utils": "^0.4.0",
     "@rosen-ui/wallet-api": "^1.0.2",
     "sats-connect": "^1.4.1"
   }

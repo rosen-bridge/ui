@@ -35,6 +35,7 @@ interface BitcoinMaxTransferExtra {
   };
 }
 
+export interface EthereumNetwork extends BaseNetwork<'ethereum'> {}
 export interface ErgoNetwork extends BaseNetwork<'ergo'> {}
 export interface CardanoNetwork extends BaseNetwork<'cardano'> {}
 export interface BitcoinNetwork

@@ -15,8 +15,10 @@ npm run build --workspace wallets/wallet-api
 npm run build --workspace networks/bitcoin
 npm run build --workspace networks/cardano
 npm run build --workspace networks/ergo
+npm run build --workspace networks/ethereum
 npm run build --workspace wallets/nami-wallet
 npm run build --workspace wallets/lace-wallet
+npm run build --workspace wallets/metamask-wallet
 npm run build --workspace wallets/eternl-wallet
 npm run build --workspace wallets/flint-wallet
 npm run build --workspace wallets/vespr-wallet
