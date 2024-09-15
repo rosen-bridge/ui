@@ -1,4 +1,9 @@
-import { BitcoinNetwork, CardanoNetwork, ErgoNetwork } from '@/_types/network';
+import {
+  BitcoinNetwork,
+  CardanoNetwork,
+  ErgoNetwork,
+  EthereumNetwork,
+} from '@/_types/network';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
@@ -9,7 +14,7 @@ import { RosenAmountValue } from '@rosen-ui/types';
  * @returns THIS IS A WRAPPED-VALUE
  */
 const getMaxTransfer = async (
-  network: ErgoNetwork | CardanoNetwork | BitcoinNetwork,
+  network: ErgoNetwork | CardanoNetwork | BitcoinNetwork | EthereumNetwork,
   tokenInfo: {
     balance: RosenAmountValue;
     isNative: boolean;
