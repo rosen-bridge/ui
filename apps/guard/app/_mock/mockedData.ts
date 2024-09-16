@@ -18,7 +18,10 @@ import {
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
-  health: 'Unstable',
+  health: {
+    status: 'Unstable',
+    trialErrors: [],
+  },
   balances: {
     hot: [
       {

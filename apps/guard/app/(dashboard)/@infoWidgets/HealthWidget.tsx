@@ -47,7 +47,7 @@ const HealthWidget = () => {
     <HealthWidgetBase
       widgetColor={
         info?.health
-          ? (healthStatusColorMap[info.health] as keyof AugmentedPalette)
+          ? (healthStatusColorMap[info.health.status] as keyof AugmentedPalette)
           : 'secondary'
       }
     >
@@ -60,7 +60,7 @@ const HealthWidget = () => {
               <ShieldCheck />
             </SvgIcon>
             <span>Health is</span>
-            <strong>{info.health}</strong>
+            <strong>{info.health.status}</strong>
           </>
         )
       )}
