@@ -1,4 +1,4 @@
-import { isAddress, JsonRpcProvider } from 'ethers';
+import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
 import { SUPPORTED_CHAINS } from './constants';
 import { encodeAddress } from '@rosen-bridge/address-codec';
 
@@ -49,6 +49,14 @@ export const getHeight = async (): Promise<number> => {
   return await new JsonRpcProvider(
     process.env.ETHEREUM_BLAST_API
   ).getBlockNumber();
+};
+
+/**
+ * gets Ethereum fee data
+ * @returns
+ */
+export const getFeeData = async (): Promise<FeeData> => {
+  return await new JsonRpcProvider(process.env.ETHEREUM_BLAST_API).getFeeData();
 };
 
 /**

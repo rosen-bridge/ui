@@ -26,6 +26,7 @@ export const generateTxParametersCore = async (
       to: lockAddress,
       from: fromAddress,
       data: '0x' + rosenData,
+      value: amount,
     };
   } else {
     const contract = new Contract(tokenId, transferABI, undefined);
