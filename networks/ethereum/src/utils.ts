@@ -36,7 +36,7 @@ export const generateLockData = async (
     .toString(16)
     .padStart(2, '0');
 
-  return Promise.resolve(
+  return (
     toChainHex + bridgeFeeHex + networkFeeHex + addressLengthCode + addressHex
   );
 };
