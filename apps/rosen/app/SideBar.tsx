@@ -11,6 +11,7 @@ import {
 import {
   AppBar,
   AppLogo,
+  Badge,
   Grid,
   NavigationButton,
   SvgIcon,
@@ -70,13 +71,14 @@ const SideBar = () => {
           <NavigationButton
             label="Assets"
             icon={
-              <SvgIcon>
-                <BitcoinCircle />
-              </SvgIcon>
+              <Badge badgeContent="Beta" color="primary">
+                <SvgIcon>
+                  <BitcoinCircle />
+                </SvgIcon>
+              </Badge>
             }
             onClick={() => router.push('/assets')}
             isActive={pathname.startsWith('/assets')}
-            disabled
           />
         </Grid>
         <Grid item>

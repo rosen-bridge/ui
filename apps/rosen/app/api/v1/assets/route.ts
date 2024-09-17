@@ -1,17 +1,12 @@
 import { pick } from 'lodash-es';
 
-import assetService from './assets-service';
-
-import withValidation from '../withValidation';
-
-import EventsValidations from './validations';
+import { getAllAssets } from '@/_backend/assets';
 
 import '../initialize-datasource-if-needed';
+import withValidation from '../withValidation';
 
-export const GET = withValidation(EventsValidations.GET, (value) =>
-  assetService.getAssets(
-    value.offset,
-    value.limit,
-    pick(value, 'chain', 'name', 'id'),
-  ),
+import { validateGet } from './validations';
+
+export const GET = withValidation(validateGet, (value) =>
+  getAllAssets(value.offset, value.limit, pick(value, 'chain', 'name', 'id')),
 );
