@@ -14,7 +14,10 @@ export interface TokenInfoWithAddress {
 }
 
 export interface ApiInfoResponse {
-  health: 'Healthy' | 'Unstable' | 'Broken';
+  health: {
+    status: 'Healthy' | 'Unstable' | 'Broken';
+    trialErrors: string[];
+  };
   rsnTokenId: string;
   balances: {
     hot: TokenInfoWithAddress[];
