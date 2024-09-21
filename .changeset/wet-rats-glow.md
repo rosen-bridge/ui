@@ -1,5 +1,4 @@
 ---
-'@rosen-bridge/watcher-app': patch
 '@rosen-bridge/guard-app': patch
 ---
 

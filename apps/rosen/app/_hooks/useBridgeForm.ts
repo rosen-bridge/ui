@@ -11,7 +11,7 @@ import { validateAddress } from '@/_actions/validateAddress';
 
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
-import { Networks } from '@rosen-ui/constants';
+import { getMaxTransfer } from '@/_utils/getMaxTransfer';
 import { useTokenMap } from './useTokenMap';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -77,21 +77,22 @@ const useBridgeForm = () => {
           const selectedNetwork =
             availableNetworks[sourceField.value as AvailableNetworks];
 
-          const maxTransfer = await selectedNetwork.getMaxTransfer({
-            balance: await walletGlobalContext.state.selectedWallet.getBalance(
-              tokenField.value,
-            ),
-            isNative: tokenField.value.metaData.type === 'native',
-            eventData:
-              selectedNetwork.name !== Networks.BITCOIN
-                ? undefined
-                : ({
-                    fromAddress:
-                      await walletGlobalContext.state.selectedWallet!.getAddress(),
-                    toAddress: addressField.value,
-                    toChain: targetField.value,
-                  } as any),
-          });
+          const maxTransfer = await getMaxTransfer(
+            selectedNetwork,
+            {
+              balance:
+                await walletGlobalContext!.state.selectedWallet.getBalance(
+                  tokenField.value,
+                ),
+              isNative: tokenField.value.metaData.type === 'native',
+            },
+            async () => ({
+              fromAddress:
+                await walletGlobalContext!.state.selectedWallet!.getAddress(),
+              toAddress: addressField.value,
+              toChain: targetField.value,
+            }),
+          );
 
           const isAmountLarge = wrappedAmount > maxTransfer;
           if (isAmountLarge) return 'Balance insufficient';

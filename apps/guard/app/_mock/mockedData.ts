@@ -18,7 +18,10 @@ import {
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
-  health: 'Unstable',
+  health: {
+    status: 'Unstable',
+    trialErrors: [],
+  },
   balances: {
     hot: [
       {
@@ -243,16 +246,19 @@ const healthStatus: ApiHealthStatusResponse = [
     status: 'Unstable',
     lastCheck: '2023-06-26T11:15:43.189Z',
     id: 'error logs',
+    title: 'Error Logs',
   },
   {
     status: 'Healthy',
     lastCheck: '2023-06-26T11:15:43.642Z',
     id: 'Wid Check',
+    title: 'Wid Check',
   },
   {
     status: 'Healthy',
     lastCheck: '2023-06-26T11:15:43.509Z',
     id: 'Native Asset erg Check',
+    title: 'Native Asset erg Check',
   },
   {
     status: 'Broken',
@@ -260,11 +266,13 @@ const healthStatus: ApiHealthStatusResponse = [
       'Service has stopped working. [ergo-node] scanner is out of sync.\nPlease check the scanner status, [3487] blocks are created but not scanned.\n',
     lastCheck: '2023-06-26T11:15:43.544Z',
     id: 'Scanner ergo-node Sync Check',
+    title: 'Scanner ergo-node Sync Check',
   },
   {
     status: 'Healthy',
     lastCheck: '2023-06-26T11:15:45.206Z',
     id: 'Ergo Node Sync Check',
+    title: 'Ergo Node Sync Check',
   },
   {
     status: 'Broken',
@@ -272,6 +280,7 @@ const healthStatus: ApiHealthStatusResponse = [
       'Service has stopped working. [cardano-koios] scanner is out of sync.\nPlease check the scanner status, [33283] blocks are created but not scanned.\n',
     lastCheck: '2023-06-26T11:15:43.553Z',
     id: 'Scanner cardano-koios Sync Check',
+    title: 'Scanner cardano-koios Sync Check',
   },
 ];
 
