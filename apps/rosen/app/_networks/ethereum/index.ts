@@ -9,6 +9,7 @@ import { EthereumIcon } from '@rosen-bridge/icons';
 import { getMaxTransfer } from './getMaxTransfer';
 import { fromSafeData } from '@/_utils/safeData';
 import { getTokenMap } from '../getTokenMap.client';
+import { generateLockData, generateTxParameters } from './server';
 
 /**
  * the main object for Ethereum network
@@ -21,6 +22,8 @@ const EthereumNetwork: EthereumNetworkType = {
   wallets: [
     metaMaskWalletCreator({
       getTokenMap,
+      generateLockData: unwrap(generateLockData),
+      generateTxParameters: unwrap(fromSafeData(generateTxParameters)),
     }),
   ],
   logo: EthereumIcon,

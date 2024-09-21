@@ -20,7 +20,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.2.1",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/icons": "^0.4.0",
     "@rosen-bridge/tokens": "^1.2.1",
