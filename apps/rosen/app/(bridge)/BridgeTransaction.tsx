@@ -2,28 +2,26 @@
 
 import { useState } from 'react';
 
-import { TokenMap } from '@rosen-bridge/tokens';
 import {
   Alert,
   Avatar,
   Divider,
   Grid,
   IconButton,
-  LoadingButton,
   Tooltip,
   Typography,
   styled,
 } from '@rosen-bridge/ui-kit';
 
 import useNetwork from '@/_hooks/useNetwork';
-import { useTokensMap } from '@/_hooks/useTokensMap';
-import { useTransaction } from '@/_hooks/useTransaction';
+import { useTokenMap } from '@/_hooks/useTokenMap';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
 
 import { getTokenNameAndId } from '@/_utils';
 import { ChooseWalletModal } from './ChooseWalletModal';
+import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
 
 /**
  * container component for asset prices
@@ -46,26 +44,17 @@ const FeesContainer = styled('div')(({ theme }) => ({
  * shows fees to the user and handles wallet transaction
  * and wallet connection
  */
-const BridgeTransaction = () => {
+export const BridgeTransaction = () => {
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    formState: { isSubmitting: isFormSubmitting },
-    handleSubmit,
-  } = useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue, amountValue } =
+    useTransactionFormData();
 
-  const rawTokenMap = useTokensMap();
-  const tokenMap = new TokenMap(rawTokenMap);
+  const tokenMap = useTokenMap();
 
   const {
     status,
-    networkFee,
     networkFeeRaw,
-    bridgeFee,
     bridgeFeeRaw,
     receivingAmountRaw,
     isLoading: isLoadingFees,
@@ -87,12 +76,6 @@ const BridgeTransaction = () => {
   const targetTokenInfo = targetTokenSearchResults?.[0]?.[targetValue];
 
   const WalletIcon = selectedWallet?.icon;
-  const { startTransaction, isSubmitting: isTransactionSubmitting } =
-    useTransaction();
-
-  const handleFormSubmit = handleSubmit(() => {
-    startTransaction(bridgeFee, networkFee);
-  });
 
   const renderFee = (
     title: string,
@@ -219,25 +202,9 @@ const BridgeTransaction = () => {
         </FeesContainer>
 
         <Grid item container flexDirection="column">
-          <LoadingButton
-            sx={{ width: '100%' }}
-            color={selectedWallet ? 'success' : 'primary'}
-            variant="contained"
-            loading={
-              isFormSubmitting || isTransactionSubmitting || isLoadingFees
-            }
-            type="submit"
-            disabled={!sourceValue}
-            onClick={() => {
-              if (!selectedWallet) {
-                setChooseWalletsModalOpen(true);
-              } else {
-                handleFormSubmit();
-              }
-            }}
-          >
-            {!selectedWallet ? 'CONNECT WALLET' : 'SUBMIT'}
-          </LoadingButton>
+          <ConnectOrSubmitButton
+            setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+          />
         </Grid>
       </Grid>
       <ChooseWalletModal
@@ -250,5 +217,3 @@ const BridgeTransaction = () => {
     </>
   );
 };
-
-export default BridgeTransaction;

@@ -3,7 +3,6 @@ import { useController } from 'react-hook-form';
 
 import { getNonDecimalString } from '@rosen-ui/utils';
 
-import { useTokensMap } from './useTokensMap';
 import useTransactionFormData from './useTransactionFormData';
 
 import { WalletContext } from '@/_contexts/walletContext';
@@ -12,7 +11,7 @@ import { validateAddress } from '@/_actions/validateAddress';
 
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
-import getMaxTransfer from '@/_utils/getMaxTransfer';
+import { getMaxTransfer } from '@/_utils/getMaxTransfer';
 import { useTokenMap } from './useTokenMap';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -28,7 +27,6 @@ const useBridgeForm = () => {
     useTransactionFormData();
 
   const tokenMap = useTokenMap();
-  const tokensMap = useTokensMap();
 
   const walletGlobalContext = useContext(WalletContext);
 
@@ -59,6 +57,7 @@ const useBridgeForm = () => {
         const isValueInvalid = !match;
         if (isValueInvalid) return 'The amount is not valid';
 
+        if (!tokenMap) return 'Token map config is unavailable';
         const decimals =
           tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
 
@@ -72,7 +71,7 @@ const useBridgeForm = () => {
           getNonDecimalString(value, decimals),
         ) as RosenAmountValue;
 
-        if (walletGlobalContext!.state.selectedWallet) {
+        if (walletGlobalContext?.state.selectedWallet) {
           // prevent user from entering more than token amount
 
           const selectedNetwork =
@@ -103,7 +102,6 @@ const useBridgeForm = () => {
           tokenField.value,
           sourceField.value,
           targetField.value,
-          tokensMap,
         );
         const isAmountSmall = wrappedAmount < minTransfer;
         if (isAmountSmall) return 'Minimum transfer amount not respected';

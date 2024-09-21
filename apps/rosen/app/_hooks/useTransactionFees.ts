@@ -1,12 +1,11 @@
 import { useMemo, useEffect, useRef, useCallback, useTransition } from 'react';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
 import useNetwork from './useNetwork';
-import { useTokensMap } from './useTokensMap';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
@@ -31,21 +30,19 @@ const useTransactionFees = (
 
   const feeInfo = useRef<any>(null);
   const tokenMap = useTokenMap();
-  const tokensMap = useTokensMap();
 
   /**
    * finds and returns a token id based on supported networks
    */
   const getTokenId = useCallback(
     (sourceChain: string, token: RosenChainToken) => {
-      const tokenMap = new TokenMap(tokensMap);
       const idKey = tokenMap.getIdKey(sourceChain);
       const tokens = tokenMap.search(sourceChain, {
         [idKey]: token[idKey],
       });
       return tokens[0].ergo.tokenId;
     },
-    [tokensMap],
+    [tokenMap],
   );
 
   /**

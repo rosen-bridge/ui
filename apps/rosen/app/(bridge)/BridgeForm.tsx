@@ -21,7 +21,7 @@ import useBridgeForm from '@/_hooks/useBridgeForm';
 import useNetwork from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
-import useMaxTransfer from '@/_hooks/useMaxTransfer';
+import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
@@ -80,7 +80,7 @@ const FormContainer = styled('div')(({ theme }) => ({
 /**
  * renders the bridge main form
  */
-const BridgeForm = () => {
+export const BridgeForm = () => {
   const {
     reset,
     setValue,
@@ -353,5 +353,3 @@ const BridgeForm = () => {
     </FormContainer>
   );
 };
-
-export default BridgeForm;

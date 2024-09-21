@@ -1,17 +1,23 @@
-import { useMemo } from 'react';
+import { useEffect, useState, useTransition } from 'react';
+
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { useTokensMap } from './useTokensMap';
+import { getTokenMap } from '@/_networks/getTokenMap.client';
 
 /**
  * return TokenMap instance
  */
-export const useTokenMap = () => {
-  const tokensMapObject = useTokensMap();
+export const useTokenMap = (): TokenMap => {
+  const [tokenMap, setTokenMap] = useState<TokenMap>(
+    new TokenMap({ idKeys: {}, tokens: [] }),
+  );
 
-  const tokenMap = useMemo(() => {
-    return new TokenMap(tokensMapObject);
-  }, [tokensMapObject]);
+  const [, startTransition] = useTransition();
+  useEffect(() => {
+    startTransition(async () => {
+      setTokenMap(await getTokenMap());
+    });
+  }, []);
 
-  return tokenMap;
+  return tokenMap!;
 };

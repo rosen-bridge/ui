@@ -4,6 +4,7 @@ import {
   ErgoNetwork,
   EthereumNetwork,
 } from '@/_types/network';
+import { Networks } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
@@ -13,7 +14,7 @@ import { RosenAmountValue } from '@rosen-ui/types';
  * @param context
  * @returns THIS IS A WRAPPED-VALUE
  */
-const getMaxTransfer = async (
+export const getMaxTransfer = async (
   network: ErgoNetwork | CardanoNetwork | BitcoinNetwork | EthereumNetwork,
   tokenInfo: {
     balance: RosenAmountValue;
@@ -25,7 +26,7 @@ const getMaxTransfer = async (
     toChain: string;
   }>,
 ): Promise<RosenAmountValue> => {
-  if (network.name === 'bitcoin') {
+  if (network.name === Networks.BITCOIN) {
     const context = await getContext();
     return await network.getMaxTransfer({
       balance: tokenInfo.balance,
@@ -43,5 +44,3 @@ const getMaxTransfer = async (
     isNative: tokenInfo.isNative,
   });
 };
-
-export default getMaxTransfer;

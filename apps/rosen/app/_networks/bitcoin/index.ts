@@ -19,6 +19,14 @@ import {
 import { getTokenMap } from '../getTokenMap.client';
 import { fromSafeData } from '@/_utils/safeData';
 
+const config = {
+  getTokenMap,
+  generateOpReturnData: unwrap(fromSafeData(generateOpReturnData)),
+  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+  getAddressBalance: cache(unwrap(fromSafeData(getAddressBalance)), 30000),
+  submitTransaction: unwrap(fromSafeData(submitTransaction)),
+};
+
 /**
  * the main object for Bitcoin network
  * providing access to network info and wallets and network specific
@@ -28,15 +36,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   name: Networks.BITCOIN,
   label: 'Bitcoin',
   logo: BitcoinIcon,
-  wallets: [
-    xdefiWalletCreator({
-      getTokenMap,
-      generateOpReturnData: unwrap(fromSafeData(generateOpReturnData)),
-      generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
-      getAddressBalance: cache(unwrap(fromSafeData(getAddressBalance)), 30000),
-      submitTransaction: unwrap(fromSafeData(submitTransaction)),
-    }),
-  ],
+  wallets: [xdefiWalletCreator(config)],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),

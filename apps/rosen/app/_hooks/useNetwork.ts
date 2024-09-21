@@ -1,11 +1,10 @@
-import { TokenMap } from '@rosen-bridge/tokens';
 import { useMemo } from 'react';
 
 import { Networks } from '@rosen-ui/constants';
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 
 import useBridgeForm from './useBridgeForm';
-import { useTokensMap } from './useTokensMap';
+import { useTokenMap } from './useTokenMap';
 
 type Chain = string;
 type SourceFieldValue = Chain & AvailableNetworks;
@@ -16,21 +15,17 @@ type SourceFieldValue = Chain & AvailableNetworks;
  */
 const useNetwork = () => {
   const { sourceField, targetField } = useBridgeForm();
-  const tokensMapObject = useTokensMap();
-
-  const tokensMap = useMemo(() => {
-    return new TokenMap(tokensMapObject);
-  }, [tokensMapObject]);
+  const tokenMap = useTokenMap();
 
   /**
    * returns the list of available network objects if a and filters out
    * unsupported networks
    */
   const availableNetworkObjects = useMemo(() => {
-    return (tokensMap.getAllChains() as SourceFieldValue[])
+    return (tokenMap.getAllChains() as SourceFieldValue[])
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [tokensMap]);
+  }, [tokenMap]);
 
   /**
    * returns the list of available target network objects if a and filters out
@@ -38,11 +33,11 @@ const useNetwork = () => {
    */
   const targetNetworks = useMemo(() => {
     return (
-      tokensMap.getSupportedChains(sourceField.value) as SourceFieldValue[]
+      tokenMap.getSupportedChains(sourceField.value) as SourceFieldValue[]
     )
       .filter((chain) => Object.values<Chain>(Networks).includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [sourceField.value, tokensMap]);
+  }, [sourceField.value, tokenMap]);
 
   /**
    * a list of available tokens in the selected network
@@ -50,8 +45,8 @@ const useNetwork = () => {
   const tokens = useMemo(() => {
     if (!targetField.value || !sourceField.value) return [];
 
-    return tokensMap.getTokens(sourceField.value, targetField.value);
-  }, [targetField.value, sourceField.value, tokensMap]);
+    return tokenMap.getTokens(sourceField.value, targetField.value);
+  }, [targetField.value, sourceField.value, tokenMap]);
 
   return {
     availableNetworks: availableNetworkObjects,
