@@ -6,11 +6,13 @@ import { Networks } from '@rosen-ui/constants';
 
 import useNetwork from './useNetwork';
 import useTokenBalance from './useTokenBalance';
+import { getMaxTransfer } from '@/_utils/getMaxTransfer';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
 
 /**
- * Manage the maximum transferable amount.
+ * a hook version of `getMaxTransfer` util
+ * @returns CONTAINS A WRAPPED-VALUE
  */
 export const useMaxTransfer = () => {
   const [error, setError] = useState(false);
@@ -53,11 +55,18 @@ export const useMaxTransfer = () => {
         };
       }
 
-      const max = await selectedNetwork.getMaxTransfer({
-        balance: amount,
-        isNative: tokenValue.metaData.type === 'native',
-        eventData,
-      });
+      const max = await getMaxTransfer(
+        selectedNetwork,
+        {
+          balance: amount,
+          isNative: tokenValue.metaData.type === 'native',
+        },
+        async () => ({
+          fromAddress: await selectedWallet.getAddress(),
+          toAddress: walletAddressValue,
+          toChain: targetValue,
+        }),
+      );
 
       setMax(max);
     } catch {
