@@ -1,12 +1,13 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import Axios from 'axios';
 import { Psbt, address } from 'bitcoinjs-lib';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 import {
   CONFIRMATION_TARGET,
   SEGWIT_INPUT_WEIGHT_UNIT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
-  SUPPORTED_CHAINS,
 } from './constants';
 
 import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
@@ -21,14 +22,14 @@ import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
  * @returns
  */
 export const generateOpReturnData = async (
-  toChain: string,
+  toChain: Network,
   toAddress: string,
   networkFee: string,
   bridgeFee: string
 ): Promise<string> => {
   // parse toChain
-  const toChainCode = SUPPORTED_CHAINS.indexOf(
-    toChain as (typeof SUPPORTED_CHAINS)[number]
+  const toChainCode = NETWORK_VALUES.indexOf(
+    toChain as (typeof NETWORK_VALUES)[number]
   );
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
   const toChainHex = toChainCode.toString(16).padStart(2, '0');

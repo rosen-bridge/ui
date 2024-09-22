@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, useTransition } from 'react';
 
 import { RosenAmountValue } from '@rosen-ui/types';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import useNetwork from './useNetwork';
 import useTokenBalance from './useTokenBalance';
@@ -47,7 +47,7 @@ export const useMaxTransfer = () => {
     try {
       let eventData: any;
 
-      if (selectedNetwork.name === Networks.BITCOIN) {
+      if (selectedNetwork.name === NETWORKS.BITCOIN) {
         eventData = {
           fromAddress: await selectedWallet.getAddress(),
           toAddress: walletAddressValue,

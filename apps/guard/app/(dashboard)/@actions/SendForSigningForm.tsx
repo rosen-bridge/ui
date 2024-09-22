@@ -23,13 +23,15 @@ import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
 import ApiKeyModal from '@/_modals/ApiKeyModal';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 const AlertIcon = styled(Alert)((theme) => ({
   fill: theme.palette.primary.main,
 }));
 
 interface Form {
-  chain: string;
+  chain: Network;
   txJson: string;
   requiredSign: number;
   overwrite?: boolean;
@@ -57,7 +59,7 @@ const SendForSigningForm = () => {
   const { handleSubmit, register, reset, formState } = useForm({
     defaultValues: {
       txJson: '',
-      chain: '',
+      chain: '' as Network,
       requiredSign: 10,
       overwrite: undefined,
     },
@@ -130,9 +132,11 @@ const SendForSigningForm = () => {
           sx={{ mb: 2 }}
           fullWidth
         >
-          <MenuItem value="ergo">Ergo</MenuItem>
-          <MenuItem value="cardano">Cardano</MenuItem>
-          <MenuItem value="bitcoin">Bitcoin</MenuItem>
+          {Object.keys(NETWORKS).map((key) => (
+            <MenuItem key={key} value={NETWORKS[key as keyof typeof NETWORKS]}>
+              {NETWORK_LABELS[key as keyof typeof NETWORKS]}
+            </MenuItem>
+          ))}
         </TextField>
         <TextField
           label="Transaction"

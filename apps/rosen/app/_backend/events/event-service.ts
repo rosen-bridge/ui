@@ -1,4 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
+import { Network } from '@rosen-ui/types';
 
 import { getRosenTokens } from '@/_backend/utils';
 
@@ -13,7 +14,7 @@ const tokenMap = new TokenMap(getRosenTokens());
  * @param tokenId
  * @param chain
  */
-const getFullTokenData = (tokenId: string, chain: string) => {
+const getFullTokenData = (tokenId: string, chain: Network) => {
   try {
     const token = tokenMap.search(chain, {
       [tokenMap.getIdKey(chain)]: tokenId,
@@ -47,7 +48,10 @@ const getEventsWithFullTokenData = async (offset: number, limit: number) => {
     total: events.total,
     items: events.items.map(({ sourceChainTokenId, ...item }) => ({
       ...item,
-      lockToken: getFullTokenData(sourceChainTokenId, item.fromChain),
+      lockToken: getFullTokenData(
+        sourceChainTokenId,
+        item.fromChain as Network,
+      ),
     })),
   };
 };

@@ -3,6 +3,7 @@ import { Psbt } from 'bitcoinjs-lib';
 import { generateUnsignedTx } from '../../src';
 import { testTokenMap, multiDecimalTokenMap } from '../test-data';
 import { TokenMap } from '@rosen-bridge/tokens';
+import { Network } from '@rosen-ui/types';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
 
@@ -110,7 +111,7 @@ describe('generateUnsignedTx', () => {
 
     const tokenMap = new TokenMap(multiDecimalTokenMap);
 
-    const chain = tokenMap.getAllChains()[0];
+    const chain = tokenMap.getAllChains()[0] as Network;
 
     const token = tokenMap.search(chain, {})[0][chain];
 

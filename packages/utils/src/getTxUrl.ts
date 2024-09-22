@@ -1,3 +1,6 @@
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
+
 /**
  * TODO: This util is temporary and its logic should be moved to individual
  * network packages
@@ -5,13 +8,14 @@
  * local:ergo/rosen-bridge/ui#296
  */
 
-const baseTxURLs = {
-  ergo: 'https://explorer.ergoplatform.com/transactions',
-  cardano: 'https://cardanoscan.io/transaction',
-  bitcoin: 'https://mempool.space/tx',
+const baseTxURLs: { [key in Network]: string } = {
+  [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/transactions',
+  [NETWORKS.CARDANO]: 'https://cardanoscan.io/transaction',
+  [NETWORKS.BITCOIN]: 'https://mempool.space/tx',
+  [NETWORKS.ETHEREUM]: '',
 };
 
-export const getTxURL = (network: string, tx: string) => {
+export const getTxURL = (network: Network, tx: string) => {
   const baseURL = baseTxURLs[network as keyof typeof baseTxURLs];
 
   if (!baseURL) return null;

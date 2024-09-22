@@ -209,7 +209,7 @@ export const BridgeTransaction = () => {
       </Grid>
       <ChooseWalletModal
         open={chooseWalletsModalOpen}
-        chainName={selectedNetwork?.name ?? ''}
+        chainName={selectedNetwork?.name}
         setSelectedWallet={setSelectedWallet}
         handleClose={() => setChooseWalletsModalOpen(false)}
         wallets={wallets || []}

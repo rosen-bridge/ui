@@ -1,6 +1,6 @@
 import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
 import { unwrap } from '@/_errors';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
@@ -22,8 +22,8 @@ const config = {
  * functionality
  */
 const ErgoNetwork: ErgoNetworkType = {
-  name: Networks.ERGO,
-  label: 'Ergo',
+  name: NETWORKS.ERGO,
+  label: NETWORK_LABELS.ERGO,
   wallets: [nautilusWalletCreator(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,

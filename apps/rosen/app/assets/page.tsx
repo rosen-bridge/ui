@@ -21,16 +21,15 @@ import { ApiAssetsResponse, Assets } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
-const getKey = (chain: string) => (offset: number, limit: number) => {
-  return [
-    '/v1/assets',
-    { offset, limit, chain: chain == 'all' ? undefined : chain },
-  ];
+const getKey = (chain?: Network) => (offset: number, limit: number) => {
+  return ['/v1/assets', { offset, limit, chain }];
 };
 
 export default function Page() {
-  const [network, setNetwork] = useState('all');
+  const [network, setNetwork] = useState<Network>();
 
   const {
     data,
@@ -45,7 +44,7 @@ export default function Page() {
   } = useTableDataPagination<ApiAssetsResponse>(getKey(network));
 
   const handleChangeNetwork = (event: any) => {
-    setNetwork(event.target.value as string);
+    setNetwork(event.target.value as Network);
   };
 
   const handleChangePage = useCallback(
@@ -158,10 +157,15 @@ export default function Page() {
             onChange={handleChangeNetwork}
             value={network}
           >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="bitcoin">Bitcoin</MenuItem>
-            <MenuItem value="cardano">Cardano</MenuItem>
-            <MenuItem value="ergo">Ergo</MenuItem>
+            <MenuItem value="">All</MenuItem>
+            {Object.keys(NETWORKS).map((key) => (
+              <MenuItem
+                key={key}
+                value={NETWORKS[key as keyof typeof NETWORKS]}
+              >
+                {NETWORK_LABELS[key as keyof typeof NETWORKS]}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
       </Grid>

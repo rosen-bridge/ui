@@ -16,6 +16,7 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Revenue, ApiInfoResponse } from '@/_types/api';
+import { NETWORKS } from '@rosen-ui/constants';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;
@@ -144,7 +145,10 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Link href={getTxURL('ergo', row.rewardTxId)!} target="_blank">
+              <Link
+                href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+                target="_blank"
+              >
                 <Id id={row.rewardTxId} />
               </Link>
             </EnhancedTableCell>
@@ -273,7 +277,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Link
-          href={getTxURL('ergo', row.rewardTxId)!}
+          href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
           target="_blank"
           color="textPrimary"
           underline="hover"

@@ -16,7 +16,7 @@ import {
   walletUtxoToCardanoUtxo,
 } from './utils';
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
@@ -152,7 +152,7 @@ export const generateUnsignedTx = (tokenMap: TokenMap) => {
     const unwrappedAmount = tokenMap.unwrapAmount(
       `${policyIdHex}.${assetNameHex}`,
       wrappedAmount,
-      Networks.CARDANO
+      NETWORKS.CARDANO
     ).amount;
     return generateUnsignedTxCore(
       walletUtxos,

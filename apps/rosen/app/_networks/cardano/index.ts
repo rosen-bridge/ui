@@ -1,4 +1,4 @@
-import { Networks } from '@rosen-ui/constants';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
 import { unwrap } from '@/_errors';
 import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
@@ -35,8 +35,8 @@ const config = {
  * functionality
  */
 const CardanoNetwork: CardanoNetworkType = {
-  name: Networks.CARDANO,
-  label: 'Cardano',
+  name: NETWORKS.CARDANO,
+  label: NETWORK_LABELS.CARDANO,
   wallets: [
     eternlWalletCreator(config),
     flintWalletCreator(config),

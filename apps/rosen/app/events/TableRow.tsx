@@ -13,6 +13,7 @@ import {
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
+import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Event } from '@/_types/api';
@@ -135,7 +136,7 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
+  const txUrl = getTxURL(row.fromChain as Network, row.sourceTxId);
 
   return (
     <>
@@ -162,11 +163,11 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              {upperFirst(row.fromChain)}
+              {upperFirst(row.fromChain as Network)}
               <Typography variant="h5" display="inline" mx={1}>
                 →
               </Typography>
-              {upperFirst(row.toChain)}
+              {upperFirst(row.toChain as Network)}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -245,7 +246,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
+  const txUrl = getTxURL(row.fromChain as Network, row.sourceTxId);
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -267,11 +268,11 @@ export const TabletRow: FC<RowProps> = (props) => {
         )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {upperFirst(row.fromChain)}
+        {upperFirst(row.fromChain as Network)}
         <Typography variant="h5" display="inline" mx={1}>
           →
         </Typography>
-        {upperFirst(row.toChain)}
+        {upperFirst(row.toChain as Network)}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">

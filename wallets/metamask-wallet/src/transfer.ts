@@ -1,16 +1,16 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ethereum';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { getMetaMaskWallet } from './getMetaMaskWallet';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
     token: RosenChainToken,
     amount: RosenAmountValue,
-    toChain: string,
+    toChain: Network,
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,
@@ -37,7 +37,7 @@ export const transferCreator =
     );
 
     const tokenMap = await config.getTokenMap();
-    const tokenId = token[tokenMap.getIdKey(Networks.ETHEREUM)];
+    const tokenId = token[tokenMap.getIdKey(NETWORKS.ETHEREUM)];
 
     const transactionParameters = await config.generateTxParameters(
       tokenId,
