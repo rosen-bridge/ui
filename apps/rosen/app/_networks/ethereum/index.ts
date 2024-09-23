@@ -30,6 +30,7 @@ const EthereumNetwork: EthereumNetworkType = {
   nextHeightInterval: 0,
   lockAddress: process.env.NEXT_PUBLIC_ETHEREUM_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  toSafeAddress: (address) => address.toLowerCase(),
 };
 
 export default EthereumNetwork;

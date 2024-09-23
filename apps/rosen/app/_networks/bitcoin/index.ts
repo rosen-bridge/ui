@@ -40,6 +40,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  toSafeAddress: (address) => address,
 };
 
 export default BitcoinNetwork;
