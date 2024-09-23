@@ -47,6 +47,7 @@ const CardanoNetwork: CardanoNetworkType = {
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  toSafeAddress: (address) => address,
 };
 
 export default CardanoNetwork;

@@ -8,6 +8,7 @@ import { useTokenMap } from './useTokenMap';
 
 type Chain = string;
 type SourceFieldValue = Chain & AvailableNetworks;
+type TargetFieldValue = Chain & AvailableNetworks;
 
 /**
  * handles network related operations and provide list of
@@ -55,6 +56,9 @@ const useNetwork = () => {
       : null,
     targetNetworks: targetNetworks,
     tokens,
+    selectedTargetNetwork: targetField.value
+      ? availableNetworks[targetField.value as TargetFieldValue]
+      : null,
   };
 };
 
