@@ -136,6 +136,10 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
+  /**
+   * TODO: remove the type assertion after addressing this issue
+   * https://git.ergopool.io/ergo/rosen-bridge/scanner/-/issues/132
+   */
   const txUrl = getTxURL(row.fromChain as Network, row.sourceTxId);
 
   return (
@@ -246,6 +250,10 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
+  /**
+   * TODO: remove the type assertion after addressing this issue
+   * https://git.ergopool.io/ergo/rosen-bridge/scanner/-/issues/132
+   */
   const txUrl = getTxURL(row.fromChain as Network, row.sourceTxId);
 
   return (

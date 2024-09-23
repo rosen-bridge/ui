@@ -10,8 +10,8 @@ import { Network } from '@rosen-ui/types';
 const useTransactionFormData = () => {
   const { control, ...rest } = useFormContext<FieldValues, BridgeForm>();
 
-  const sourceValue = useWatch({ control, name: 'source' }) as Network;
-  const targetValue = useWatch({ control, name: 'target' }) as Network;
+  const sourceValue = useWatch({ control, name: 'source' }) as Network | null;
+  const targetValue = useWatch({ control, name: 'target' }) as Network | null;
   const tokenValue = useWatch({ control, name: 'token' });
   const amountValue = useWatch({ control, name: 'amount' });
   const walletAddressValue = useWatch({ control, name: 'walletAddress' });

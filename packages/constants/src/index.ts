@@ -8,6 +8,10 @@ export const TOKEN_NAME_PLACEHOLDER = 'unnamed token';
 
 export const HEALTH_DATA_REFRESH_INTERVAL = 60000;
 
+/**
+ * The order should be Ergo, Cardano, Bitcoin, Ethereum.
+ * This sequence should be consistently used as the SUPPORTED_CHAINS.
+ */
 export const NETWORKS = {
   ERGO: 'ergo',
   CARDANO: 'cardano',
@@ -26,4 +30,4 @@ export const NETWORK_LABELS: { [key in keyof typeof NETWORKS]: string } = {
   CARDANO: 'Cardano',
   BITCOIN: 'Bitcoin',
   ETHEREUM: 'Ethereum',
-} as const;
+};

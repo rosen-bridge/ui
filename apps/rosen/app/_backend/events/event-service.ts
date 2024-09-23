@@ -50,6 +50,10 @@ const getEventsWithFullTokenData = async (offset: number, limit: number) => {
       ...item,
       lockToken: getFullTokenData(
         sourceChainTokenId,
+        /**
+         * TODO: remove the type assertion after addressing this issue
+         * https://git.ergopool.io/ergo/rosen-bridge/scanner/-/issues/132
+         */
         item.fromChain as Network,
       ),
     })),

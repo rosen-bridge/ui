@@ -38,6 +38,7 @@ export const useMaxTransfer = () => {
       isTokenBalanceLoading ||
       !selectedNetwork ||
       !selectedWallet ||
+      !targetValue ||
       !tokenValue;
 
     if (skip) return;
