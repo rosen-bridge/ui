@@ -51,6 +51,9 @@ const useNetwork = () => {
       : null,
     targetNetworks: targetNetworks,
     tokens,
+    selectedTargetNetwork: targetField.value
+      ? availableNetworks[targetField.value as Network]
+      : null,
   };
 };
 

@@ -29,6 +29,7 @@ const ErgoNetwork: ErgoNetworkType = {
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  toSafeAddress: (address) => address,
 };
 
 export default ErgoNetwork;

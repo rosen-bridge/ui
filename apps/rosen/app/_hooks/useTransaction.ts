@@ -15,7 +15,7 @@ import { RosenAmountValue } from '@rosen-ui/types';
  */
 export const useTransaction = () => {
   const tokenMap = useTokenMap();
-  const { selectedNetwork } = useNetwork();
+  const { selectedNetwork, selectedTargetNetwork } = useNetwork();
   const { targetValue, tokenValue, amountValue, walletAddressValue } =
     useTransactionFormData();
 
@@ -37,7 +37,8 @@ export const useTransaction = () => {
       walletAddressValue &&
       bridgeFee &&
       networkFee &&
-      tokenMap
+      tokenMap &&
+      selectedTargetNetwork
     ) {
       setIsSubmitting(true);
       try {
@@ -51,7 +52,7 @@ export const useTransaction = () => {
           tokenValue as RosenChainToken,
           amountValueWrapped,
           targetValue,
-          walletAddressValue,
+          selectedTargetNetwork.toSafeAddress(walletAddressValue),
           bridgeFee,
           networkFee,
           lockAddress,

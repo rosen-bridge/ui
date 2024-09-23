@@ -128,7 +128,7 @@ const useBridgeForm = () => {
 
         const validationResult = await validateAddress(
           targetField.value,
-          value,
+          availableNetworks[targetField.value as Network].toSafeAddress(value),
         );
 
         const message = validationResult ? undefined : 'Invalid Address';

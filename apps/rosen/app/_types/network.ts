@@ -24,6 +24,7 @@ export interface BaseNetwork<
   getMaxTransfer: (
     props: GetMaxTransferParams & GetMaxTransferParamsExtra,
   ) => Promise<RosenAmountValue>;
+  toSafeAddress: (address: string) => string;
 }
 
 interface BitcoinMaxTransferExtra {
