@@ -136,6 +136,10 @@ class AssetCalculator {
       throw Error(`Chain [${chain}] is not supported in asset calculator`);
 
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);
+    if (!chainToken) {
+      this.logger.debug(`Token ${token.name} is not supported in ${chain}`);
+      return 0n;
+    }
     const emission =
       (await calculator.totalSupply(chainToken)) -
       (await calculator.totalBalance(chainToken));
@@ -271,8 +275,14 @@ class AssetCalculator {
               residencyChain
             );
             this.logger.debug(
-              `Asset [${nativeResidentToken[chainIdKey]}] total locked amount is [${emission}]`
+              `Asset [${nativeResidentToken[chainIdKey]}] total emitted amount is [${emission}]`
             );
+            if (!emission) {
+              this.logger.debug(
+                `Total emitted amount of asset ${nativeResidentToken.name} on ${chain} is zero. skipping bridged asset update.`
+              );
+              continue;
+            }
 
             const tokenDataOnAllChains = this.tokens.search(residencyChain, {
               [chainIdKey]: newToken.id,
