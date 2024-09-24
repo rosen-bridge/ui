@@ -17,13 +17,20 @@ import {
   BitcoinCalculatorInterface,
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
+  EthereumCalculatorInterface,
 } from './interfaces';
-import { BITCOIN_CHAIN, CARDANO_CHAIN, ERGO_CHAIN } from './constants';
+import {
+  BITCOIN_CHAIN,
+  CARDANO_CHAIN,
+  ERGO_CHAIN,
+  ETHEREUM_CHAIN,
+} from './constants';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import AbstractCalculator from './calculator/abstract-calculator';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
+import { EvmCalculator } from './calculator/chains/evm-calculator';
 
 class AssetCalculator {
   protected readonly tokens: TokenMap;
@@ -37,6 +44,7 @@ class AssetCalculator {
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
     bitcoinCalculator: BitcoinCalculatorInterface,
+    ethereumCalculator: EthereumCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger()
   ) {
@@ -60,9 +68,18 @@ class AssetCalculator {
       bitcoinCalculator.esploraUrl,
       logger
     );
+    const ethereumAssetCalculator = new EvmCalculator(
+      ETHEREUM_CHAIN,
+      this.tokens,
+      ethereumCalculator.addresses,
+      ethereumCalculator.rpcUrl,
+      ethereumCalculator.authToken,
+      logger
+    );
     this.calculatorMap.set(ERGO_CHAIN, ergoAssetCalculator);
     this.calculatorMap.set(CARDANO_CHAIN, cardanoAssetCalculator);
     this.calculatorMap.set(BITCOIN_CHAIN, bitcoinAssetCalculator);
+    this.calculatorMap.set(ETHEREUM_CHAIN, ethereumAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);

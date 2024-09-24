@@ -38,6 +38,7 @@
     "@rosen-clients/cardano-koios": "^2.0.1",
     "@rosen-clients/ergo-explorer": "^1.0.3",
     "axios": "^1.7.0",
+    "ethers": "^6.13.2",
     "lodash-es": "^4.17.21",
     "typeorm": "^0.3.20"
   }
