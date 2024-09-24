@@ -1,14 +1,20 @@
 import moment from 'moment';
 import { useMemo } from 'react';
 
-import { ShieldCheck, ShieldExclamation } from '@rosen-bridge/icons';
+import {
+  Alert as AlertIcon,
+  ShieldCheck,
+  ShieldExclamation,
+  ShieldQuestion,
+} from '@rosen-bridge/icons';
 import { HealthParamInfo } from '@rosen-ui/types';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, Button, SvgIcon, Typography } from '../base';
+import { Alert, Button, SvgIcon, Tooltip, Typography } from '../base';
 
 export type HealthParamCardProps = HealthParamInfo & {
+  checking?: boolean;
   handleCheckNow: () => void;
 };
 /**
@@ -29,11 +35,15 @@ export const HealthParamCard = ({
   status,
   description,
   lastCheck,
+  lastTrialErrorMessage,
+  lastTrialErrorTime,
+  checking,
   handleCheckNow,
 }: HealthParamCardProps) => {
   const theme = useTheme();
 
   const color = useMemo(() => {
+    if (!lastCheck) return 'warning';
     switch (status) {
       case 'Healthy':
         return 'success';
@@ -42,23 +52,44 @@ export const HealthParamCard = ({
       default:
         return 'error';
     }
-  }, [status]);
+  }, [lastCheck, status]);
+
+  const Icon = useMemo(() => {
+    if (!lastCheck) return ShieldQuestion;
+    if (status === 'Healthy') return ShieldCheck;
+    return ShieldExclamation;
+  }, [lastCheck, status]);
 
   return (
     <FullCard
       backgroundColor={`${color}.${theme.palette.mode}`}
       headerProps={{
-        title: status,
+        title: (
+          <>
+            {lastCheck ? status : 'Unknown'}
+            {lastTrialErrorTime && (
+              <Tooltip title={lastTrialErrorMessage}>
+                <SvgIcon color="warning">
+                  <AlertIcon />
+                </SvgIcon>
+              </Tooltip>
+            )}
+          </>
+        ),
         avatar: (
           <SvgIcon>
-            {status === 'Healthy' ? <ShieldCheck /> : <ShieldExclamation />}
+            <Icon />
           </SvgIcon>
         ),
         sx: {
           color: `${color}.${
             theme.palette.mode === 'light' ? 'dark' : 'light'
           }`,
-          '& span': { color: 'inherit' },
+          '& span': {
+            color: 'inherit',
+            display: 'flex',
+            justifyContent: 'space-between',
+          },
         },
       }}
       contentProps={{
@@ -69,14 +100,16 @@ export const HealthParamCard = ({
           {/* Note that "Check now" feature only works with a real watcher
           instance and its functionality cannot be mocked now */}
           <Button
+            disabled={checking}
             size="small"
             sx={{ fontSize: 'inherit' }}
             onClick={handleCheckNow}
             color={color}
           >
-            Check now
+            {checking ? 'Checking' : 'Check now'}
           </Button>
-          (Last check: {moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})
+          {lastCheck &&
+            `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
         </Typography>
       }
     >

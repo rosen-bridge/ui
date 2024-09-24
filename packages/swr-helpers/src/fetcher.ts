@@ -12,9 +12,12 @@ axios.defaults.baseURL = '/api';
  * @param params
  */
 const fetcher = async (
-  key: [url: string, params?: Record<string, any>] | string
+  key:
+    | [url: string, params?: Record<string, any>, method?: 'get' | 'put']
+    | string
 ) => {
-  const response = await axios.get(typeof key === 'string' ? key : key[0], {
+  const method = (typeof key !== 'string' && key[2]) || 'get';
+  const response = await axios[method](typeof key === 'string' ? key : key[0], {
     params: typeof key === 'string' ? undefined : key[1],
     /**
      * FIXME: Transform response to handle bigint values

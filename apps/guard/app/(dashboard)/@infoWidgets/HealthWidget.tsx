@@ -1,8 +1,14 @@
 import React from 'react';
 import useSWR from 'swr';
 
-import { ShieldCheck } from '@rosen-bridge/icons';
-import { Card, CircularProgress, SvgIcon, styled } from '@rosen-bridge/ui-kit';
+import { Alert, ShieldCheck } from '@rosen-bridge/icons';
+import {
+  Card,
+  CircularProgress,
+  SvgIcon,
+  Tooltip,
+  styled,
+} from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
@@ -34,6 +40,9 @@ const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
       marginLeft: theme.spacing(2),
       marginRight: theme.spacing(1),
     },
+    '& strong': {
+      flexGrow: 1,
+    },
   }),
 );
 
@@ -61,6 +70,13 @@ const HealthWidget = () => {
             </SvgIcon>
             <span>Health is</span>
             <strong>{info.health.status}</strong>
+            {!!info.health.trialErrors.length && (
+              <Tooltip title={info.health.trialErrors.join('. ')}>
+                <SvgIcon>
+                  <Alert />
+                </SvgIcon>
+              </Tooltip>
+            )}
           </>
         )
       )}

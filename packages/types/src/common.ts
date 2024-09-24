@@ -25,8 +25,10 @@ export interface HealthParamInfo {
   title: string;
   details?: string;
   status: 'Healthy' | 'Unstable' | 'Broken';
-  lastCheck: string;
-  description?: string;
+  lastCheck?: string;
+  description: string;
+  lastTrialErrorMessage?: string;
+  lastTrialErrorTime?: string;
 }
 
 export interface Paginated<T> {
