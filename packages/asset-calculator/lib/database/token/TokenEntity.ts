@@ -1,3 +1,4 @@
+import { Network } from '@rosen-ui/types';
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('token_entity')
@@ -15,5 +16,5 @@ export class TokenEntity {
   isNative: boolean;
 
   @Column('varchar')
-  chain: string;
+  chain: Network;
 }

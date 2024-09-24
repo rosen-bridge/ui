@@ -3,28 +3,17 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { Networks } from '@rosen-ui/constants';
-import { AvailableNetworks } from '@/_networks';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { unwrap } from '@/_errors';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { fromSafeData } from '@/_utils/safeData';
 import { getTokenMap } from '@/_networks/getTokenMap.client';
 
 /**
  * a utility to make unique interface for accessing token name
  */
-export const getTokenNameAndId = (
-  token: RosenChainToken,
-  network: AvailableNetworks,
-) => {
-  if (
-    [
-      Networks.ERGO,
-      Networks.ETHEREUM,
-      Networks.CARDANO,
-      Networks.BITCOIN,
-    ].includes(network)
-  ) {
+export const getTokenNameAndId = (token: RosenChainToken, network: Network) => {
+  if (NETWORK_VALUES.includes(network)) {
     return {
       tokenName: token.name,
       tokenId: token.tokenId,
@@ -41,8 +30,8 @@ export const getTokenNameAndId = (
  */
 export const getMinTransfer = async (
   token: RosenChainToken,
-  sourceChain: AvailableNetworks,
-  targetChain: AvailableNetworks,
+  sourceChain: Network,
+  targetChain: Network,
 ): Promise<RosenAmountValue> => {
   const tokenMap = await getTokenMap();
   const idKey = tokenMap.getIdKey(sourceChain);

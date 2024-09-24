@@ -1,7 +1,7 @@
 'use server';
 
 import { feeAndMinBoxValue } from '@rosen-network/cardano/dist/src/constants';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_errors';
 import { CardanoNetwork } from '@/_types/network';
@@ -25,7 +25,7 @@ export const getMaxTransfer = wrap(
       const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
         'ada',
         feeAndMinBoxValue,
-        Networks.CARDANO,
+        NETWORKS.CARDANO,
       ).amount;
       const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
       const amount = balance - offset;

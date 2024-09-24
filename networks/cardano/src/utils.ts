@@ -6,6 +6,7 @@ import {
   TokenInfo,
 } from '@rosen-bridge/cardano-utxo-selection';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
+import { Network } from '@rosen-ui/types';
 import { decodeWasmValue as decodeWasmValueCore } from '@rosen-ui/wallet-api';
 
 import { CardanoProtocolParams } from './types';
@@ -79,7 +80,7 @@ export const getTxBuilderConfig = (
  * @returns
  */
 export const generateLockAuxiliaryData = async (
-  toChain: string,
+  toChain: Network,
   toAddress: string,
   fromAddressHex: string,
   networkFee: string,

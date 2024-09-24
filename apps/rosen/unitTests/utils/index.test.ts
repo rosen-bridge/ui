@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { getTokenNameAndId } from '@/_utils';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
 
 describe('getTokenNameAndId', () => {
   /**
@@ -20,12 +20,12 @@ describe('getTokenNameAndId', () => {
    * - it should return an object that contains a tokeId and tokenName
    */
   it('it should return an objet containing the token name and token id given different networks', () => {
-    Object.values(Networks).forEach((network, index) => {
+    NETWORK_VALUES.forEach((network, index) => {
       /**
        * TODO: remove it after fixing the typing in network
        * local:ergo/rosen-bridge/ui#311
        */
-      if (network == Networks.ETHEREUM) return;
+      if (network == NETWORKS.ETHEREUM) return;
 
       const testToken = {
         name: 'test-' + network,

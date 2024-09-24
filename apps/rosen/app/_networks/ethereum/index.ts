@@ -1,6 +1,6 @@
 import { metaMaskWalletCreator } from '@rosen-ui/metamask-wallet';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
 import { unwrap } from '@/_errors';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types/network';
@@ -17,8 +17,8 @@ import { generateLockData, generateTxParameters } from './server';
  * functionality
  */
 const EthereumNetwork: EthereumNetworkType = {
-  name: Networks.ETHEREUM,
-  label: 'Ethereum',
+  name: NETWORKS.ETHEREUM,
+  label: NETWORK_LABELS.ETHEREUM,
   wallets: [
     metaMaskWalletCreator({
       getTokenMap,

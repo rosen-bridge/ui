@@ -7,6 +7,7 @@ import {
 import NotFoundError from '@/_errors/NotFoundError';
 
 import dataSource from '../dataSource';
+import { Network } from '@rosen-ui/types';
 
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
 const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
@@ -19,7 +20,7 @@ export interface Asset {
   isNative: boolean;
   bridged: string;
   lockedPerAddress?: Array<{ amount: number; address: string }>;
-  chain: string;
+  chain: Network;
 }
 
 export type AssetFilters = Partial<Pick<Asset, 'chain' | 'name' | 'id'>>;

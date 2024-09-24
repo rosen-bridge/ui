@@ -10,7 +10,7 @@ import {
   getMinimumMeaningfulSatoshi,
 } from './utils';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
@@ -124,9 +124,9 @@ export const generateUnsignedTx = (tokenMap: TokenMap) => {
     token: RosenChainToken
   ) => {
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(Networks.BITCOIN)],
+      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
       wrappedAmount,
-      Networks.BITCOIN
+      NETWORKS.BITCOIN
     ).amount;
     return generateUnsignedTxCore(
       lockAddress,

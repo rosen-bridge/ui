@@ -3,7 +3,7 @@ import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
 
 import { getMaxTransfer } from './getMaxTransfer';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
 import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
@@ -33,8 +33,8 @@ const config = {
  * functionality
  */
 const BitcoinNetwork: BitcoinNetworkType = {
-  name: Networks.BITCOIN,
-  label: 'Bitcoin',
+  name: NETWORKS.BITCOIN,
+  label: NETWORK_LABELS.BITCOIN,
   logo: BitcoinIcon,
   wallets: [xdefiWalletCreator(config)],
   nextHeightInterval: 1,
