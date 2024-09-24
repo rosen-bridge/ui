@@ -1,6 +1,7 @@
 import { ObservationEntity } from '@rosen-bridge/observation-extractor';
 import { BlockEntity } from '@rosen-bridge/scanner';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import { Network } from '@rosen-ui/types';
 
 import dataSource from '../dataSource';
 
@@ -13,6 +14,8 @@ interface EventWithTotal extends Omit<ObservationEntity, 'requestId'> {
   timestamp: number;
   total: number;
   status: 'fraud' | 'processing' | 'successful';
+  fromChain: Network;
+  toChain: Network;
 }
 
 /**
