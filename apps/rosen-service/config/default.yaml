@@ -32,6 +32,17 @@ bitcoin:
     rwt:
   initialHeight:
   esploraUrl: https://blockstream.info
+ethereum:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  rpcUrl: https://eth-mainnet.public.blastapi.io
+  rpcAuthToken:
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false

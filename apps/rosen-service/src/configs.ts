@@ -52,6 +52,22 @@ const getConfig = () => {
         },
         esploraUrl: nodeConfig.get<string>('bitcoin.esploraUrl'),
       },
+      ethereum: {
+        addresses: {
+          lock: nodeConfig.get<string>('ethereum.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'ethereum.addresses.eventTrigger'
+          ),
+          permit: nodeConfig.get<string>('ethereum.addresses.permit'),
+          fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('ethereum.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('ethereum.tokens.rwt'),
+        },
+        rpcUrl: nodeConfig.get<string>('ethereum.rpcUrl'),
+        rpcAuthToken: nodeConfig.get<string>('ethereum.rpcAuthToken'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
