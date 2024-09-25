@@ -107,10 +107,12 @@ const InfoWidgetCard = ({
             <div>
               {value}
               &nbsp;
-              <span>{unit}dsds</span>
+              <span>{unit}</span>
             </div>
             {warning && (
-              <Tooltip title={warning}>
+              <Tooltip
+                title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
+              >
                 <SvgIcon>
                   <Alert />
                 </SvgIcon>

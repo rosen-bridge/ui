@@ -71,7 +71,13 @@ const HealthWidget = () => {
             <span>Health is</span>
             <strong>{info.health.status}</strong>
             {!!info.health.trialErrors.length && (
-              <Tooltip title={info.health.trialErrors.join('. ')}>
+              <Tooltip
+                title={
+                  <div style={{ whiteSpace: 'pre' }}>
+                    {info.health.trialErrors.join('\n')}
+                  </div>
+                }
+              >
                 <SvgIcon>
                   <Alert />
                 </SvgIcon>

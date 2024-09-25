@@ -11,7 +11,7 @@ import { HealthParamInfo } from '@rosen-ui/types';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, Button, SvgIcon, Tooltip, Typography } from '../base';
+import { Alert, LoadingButton, SvgIcon, Tooltip, Typography } from '../base';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;
@@ -43,7 +43,7 @@ export const HealthParamCard = ({
   const theme = useTheme();
 
   const color = useMemo(() => {
-    if (!lastCheck) return 'warning';
+    if (!lastCheck) return 'primary';
     switch (status) {
       case 'Healthy':
         return 'success';
@@ -99,15 +99,16 @@ export const HealthParamCard = ({
         <Typography variant="body2">
           {/* Note that "Check now" feature only works with a real watcher
           instance and its functionality cannot be mocked now */}
-          <Button
-            disabled={checking}
+          <LoadingButton
+            loading={checking}
             size="small"
+            variant="text"
             sx={{ fontSize: 'inherit' }}
             onClick={handleCheckNow}
             color={color}
           >
             {checking ? 'Checking' : 'Check now'}
-          </Button>
+          </LoadingButton>
           {lastCheck &&
             `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
         </Typography>
