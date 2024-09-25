@@ -40,6 +40,11 @@ const info: ApiInfoResponse = {
   eRsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
   version: '2.5.1',
+  versions: {
+    app: '',
+    contract: '',
+    tokensMap: '',
+  },
 };
 
 const addressAssets: ApiAddressAssetsResponse = {
