@@ -5,13 +5,14 @@ import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { zipWith } from 'lodash-es';
 import { ethers, JsonRpcProvider } from 'ethers';
+import { Network } from '@rosen-ui/types';
 
 export class EvmCalculator extends AbstractCalculator {
-  readonly chain;
+  readonly chain: Network;
   private readonly provider: JsonRpcProvider;
 
   constructor(
-    chain: string,
+    chain: Network,
     tokenMap: TokenMap,
     addresses: string[],
     url: string,
