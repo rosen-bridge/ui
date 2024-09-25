@@ -13,6 +13,7 @@ import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { OngoingEvent } from '@/_types/api';
+import { NETWORKS } from '@rosen-ui/constants';
 
 interface RowProps extends OngoingEvent {
   isLoading?: boolean;
@@ -136,7 +137,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Link href={getTxURL('ergo', row.txId)!} target="_blank">
+              <Link href={getTxURL(NETWORKS.ERGO, row.txId)!} target="_blank">
                 <Id id={row.txId} />
               </Link>
             </EnhancedTableCell>
@@ -227,7 +228,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Link
-          href={getTxURL('ergo', row.txId)!}
+          href={getTxURL(NETWORKS.ERGO, row.txId)!}
           target="_blank"
           color="textPrimary"
           underline="hover"

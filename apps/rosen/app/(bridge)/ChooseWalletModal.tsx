@@ -8,6 +8,7 @@ import {
   Tooltip,
   Typography,
 } from '@rosen-bridge/ui-kit';
+import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 import { useEffect, useState } from 'react';
 
@@ -15,7 +16,7 @@ interface ChooseWalletModalProps {
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
-  chainName: string;
+  chainName?: Network;
   wallets: Wallet[];
 }
 

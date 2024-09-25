@@ -1,8 +1,8 @@
+import { NETWORKS } from '@rosen-ui/constants';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { AssetCalculator } from '../lib';
 import { tokenMap } from './test-data';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
-import { CARDANO_CHAIN, ERGO_CHAIN } from '../lib/constants';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 
@@ -43,12 +43,12 @@ describe('AssetCalculator', () => {
         totalSupply: () => Promise.resolve(1000n),
         totalBalance: () => Promise.resolve(900n),
       } as unknown as AbstractCalculator;
-      const map = new Map([[CARDANO_CHAIN, calculator]]);
+      const map = new Map([[NETWORKS.CARDANO, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMap.tokens[0].ergo,
-        CARDANO_CHAIN,
-        ERGO_CHAIN
+        NETWORKS.CARDANO,
+        NETWORKS.ERGO
       );
       expect(totalLocked).to.equal(100n);
     });
@@ -69,12 +69,12 @@ describe('AssetCalculator', () => {
         totalSupply: () => Promise.resolve(1900n),
         totalBalance: () => Promise.resolve(900n),
       } as unknown as AbstractCalculator;
-      const map = new Map([[ERGO_CHAIN, calculator]]);
+      const map = new Map([[NETWORKS.ERGO, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMap.tokens[2].cardano,
-        ERGO_CHAIN,
-        CARDANO_CHAIN
+        NETWORKS.ERGO,
+        NETWORKS.CARDANO
       );
       expect(totalLocked).to.equal(1000n);
     });
@@ -119,11 +119,11 @@ describe('AssetCalculator', () => {
         getLockedAmountsPerAddress: () =>
           Promise.resolve([{ address: 'hotAddr', amount: 1000n }]),
       } as unknown as AbstractCalculator;
-      const map = new Map([[ERGO_CHAIN, calculator]]);
+      const map = new Map([[NETWORKS.ERGO, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateLocked'](
         tokenMap.tokens[0].ergo,
-        ERGO_CHAIN
+        NETWORKS.ERGO
       );
       expect(totalLocked[0].address).to.equal('hotAddr');
       expect(totalLocked[0].amount).to.equal(1000n);
@@ -211,9 +211,9 @@ describe('AssetCalculator', () => {
         )
       ).toEqual(
         [
-          { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: 'cardano' },
-          { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: 'cardano' },
-          { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: 'ergo' },
+          { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: NETWORKS.CARDANO },
+          { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: NETWORKS.CARDANO },
+          { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: NETWORKS.ERGO },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
       );
       expect(
@@ -324,9 +324,9 @@ describe('AssetCalculator', () => {
         )
       ).toEqual(
         [
-          { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: 'cardano' },
-          { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: 'cardano' },
-          { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: 'ergo' },
+          { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: NETWORKS.CARDANO },
+          { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: NETWORKS.CARDANO },
+          { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: NETWORKS.ERGO },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
       );
       expect(

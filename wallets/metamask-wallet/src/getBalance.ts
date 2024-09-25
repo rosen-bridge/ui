@@ -1,6 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ethereum';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getMetaMaskWallet } from './getMetaMaskWallet';
@@ -28,9 +28,9 @@ export const getBalanceCreator =
     const tokenMap = await config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(Networks.ETHEREUM)],
+      token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
       BigInt(amount),
-      Networks.ETHEREUM
+      NETWORKS.ETHEREUM
     ).amount;
 
     return wrappedAmount;

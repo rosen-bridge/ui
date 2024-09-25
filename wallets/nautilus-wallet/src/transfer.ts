@@ -1,6 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ergo';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { getNautilusWallet } from './getNautilusWallet';
 
@@ -9,7 +9,7 @@ export const transferCreator =
   async (
     token: RosenChainToken,
     amount: RosenAmountValue,
-    toChain: string,
+    toChain: Network,
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,

@@ -3,6 +3,7 @@ import { minBoxValue } from './constants';
 import { AssetBalance, BoxInfo, CoveringBoxes, TokenInfo } from './types';
 import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { Network } from '@rosen-ui/types';
 
 /**
  * gets Ergo current block height
@@ -32,7 +33,7 @@ export const createLockBox = (
   height: number,
   tokenId: string,
   amount: bigint,
-  toChain: string,
+  toChain: Network,
   toAddress: string,
   fromAddress: string,
   bridgeFee: bigint,

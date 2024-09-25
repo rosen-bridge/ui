@@ -13,19 +13,19 @@ const ergoExplorerClient = ergoExplorerClientFactory(
   process.env.ERGO_EXPLORER_API!,
 );
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { ERGO_EXPLORER_URL, feeConfigTokenId } from '@/_constants';
-import { AvailableNetworks } from '@/_networks';
+import { Network } from '@rosen-ui/types';
 import { wrap } from '@/_errors';
 import { toSafeData } from '@/_utils/safeData';
 
 const GetHeight = {
-  [Networks.ETHEREUM]: ethereumGetHeight,
-  [Networks.CARDANO]: async () =>
+  [NETWORKS.ETHEREUM]: ethereumGetHeight,
+  [NETWORKS.CARDANO]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
-  [Networks.ERGO]: async () =>
+  [NETWORKS.ERGO]: async () =>
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
-  [Networks.BITCOIN]: async (): Promise<number> => {
+  [NETWORKS.BITCOIN]: async (): Promise<number> => {
     const response = await fetch(
       `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
     );
@@ -47,8 +47,8 @@ const GetHeight = {
 export const calculateFee = wrap(
   toSafeData(
     async (
-      sourceNetwork: AvailableNetworks,
-      targetNetwork: AvailableNetworks,
+      sourceNetwork: Network,
+      targetNetwork: Network,
       tokenId: string,
       nextHeightInterval: number,
     ) => {

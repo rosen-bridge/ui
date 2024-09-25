@@ -3,9 +3,11 @@ import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 
 import AbstractCalculator from '../abstract-calculator';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 export class CardanoCalculator extends AbstractCalculator {
-  readonly chain: string = 'cardano';
+  readonly chain: Network = NETWORKS.CARDANO;
 
   private koiosApi;
 

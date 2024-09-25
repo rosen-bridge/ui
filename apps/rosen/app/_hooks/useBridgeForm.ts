@@ -9,11 +9,11 @@ import { WalletContext } from '@/_contexts/walletContext';
 
 import { validateAddress } from '@/_actions/validateAddress';
 
-import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { availableNetworks } from '@/_networks';
 import { getMinTransfer } from '@/_utils/index';
 import { getMaxTransfer } from '@/_utils/getMaxTransfer';
 import { useTokenMap } from './useTokenMap';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 const validationCache = new Map<string, string | undefined>();
 
@@ -75,7 +75,7 @@ const useBridgeForm = () => {
           // prevent user from entering more than token amount
 
           const selectedNetwork =
-            availableNetworks[sourceField.value as AvailableNetworks];
+            availableNetworks[sourceField.value as Network];
 
           const maxTransfer = await getMaxTransfer(
             selectedNetwork,
@@ -90,7 +90,7 @@ const useBridgeForm = () => {
               fromAddress:
                 await walletGlobalContext!.state.selectedWallet!.getAddress(),
               toAddress: addressField.value,
-              toChain: targetField.value,
+              toChain: targetField.value as Network,
             }),
           );
 
@@ -128,7 +128,7 @@ const useBridgeForm = () => {
 
         const validationResult = await validateAddress(
           targetField.value,
-          value,
+          availableNetworks[targetField.value as Network].toSafeAddress(value),
         );
 
         const message = validationResult ? undefined : 'Invalid Address';

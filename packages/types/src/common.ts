@@ -1,3 +1,5 @@
+import { NETWORKS } from '@rosen-ui/constants';
+
 export type ChartPeriod = 'week' | 'month' | 'year';
 
 export interface TokenChartData {
@@ -43,3 +45,5 @@ export interface MutationRequestBodyWithHeaders<Data> {
 
 // This is the Rosen wrapped-value
 export type RosenAmountValue = bigint;
+
+export type Network = (typeof NETWORKS)[keyof typeof NETWORKS];

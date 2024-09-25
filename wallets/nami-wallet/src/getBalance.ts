@@ -1,7 +1,7 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { hexToCbor } from '@rosen-ui/utils';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getNamiWallet } from './getNamiWallet';
@@ -24,9 +24,9 @@ export const getBalanceCreator =
     const tokenMap = await config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(Networks.CARDANO)],
+      token[tokenMap.getIdKey(NETWORKS.CARDANO)],
       amount.quantity,
-      Networks.CARDANO
+      NETWORKS.CARDANO
     ).amount;
 
     return wrappedAmount;

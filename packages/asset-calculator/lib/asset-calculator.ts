@@ -19,12 +19,8 @@ import {
   ErgoCalculatorInterface,
   EthereumCalculatorInterface,
 } from './interfaces';
-import {
-  BITCOIN_CHAIN,
-  CARDANO_CHAIN,
-  ERGO_CHAIN,
-  ETHEREUM_CHAIN,
-} from './constants';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import AbstractCalculator from './calculator/abstract-calculator';
@@ -69,17 +65,17 @@ class AssetCalculator {
       logger
     );
     const ethereumAssetCalculator = new EvmCalculator(
-      ETHEREUM_CHAIN,
+      NETWORKS.ETHEREUM,
       this.tokens,
       ethereumCalculator.addresses,
       ethereumCalculator.rpcUrl,
       ethereumCalculator.authToken,
       logger
     );
-    this.calculatorMap.set(ERGO_CHAIN, ergoAssetCalculator);
-    this.calculatorMap.set(CARDANO_CHAIN, cardanoAssetCalculator);
-    this.calculatorMap.set(BITCOIN_CHAIN, bitcoinAssetCalculator);
-    this.calculatorMap.set(ETHEREUM_CHAIN, ethereumAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ERGO, ergoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.CARDANO, cardanoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.BITCOIN, bitcoinAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ETHEREUM, ethereumAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);
@@ -92,7 +88,7 @@ class AssetCalculator {
    */
   private getTokenIdOnResidentChain = (
     token: RosenChainToken,
-    residencyChain: string
+    residencyChain: Network
   ): string => {
     const chainIdKey = this.tokens.getIdKey(residencyChain);
 
@@ -107,8 +103,8 @@ class AssetCalculator {
    */
   private getTokenDataForChain = (
     residentToken: RosenChainToken,
-    residencyChain: string,
-    chain: string
+    residencyChain: Network,
+    chain: Network
   ) => {
     const chainIdKey = this.tokens.getIdKey(residencyChain);
     const tokenDataOnAllChains = this.tokens.search(residencyChain, {
@@ -127,8 +123,8 @@ class AssetCalculator {
    */
   private calculateEmissionForChain = async (
     token: RosenChainToken,
-    chain: string,
-    residencyChain: string
+    chain: Network,
+    residencyChain: Network
   ): Promise<bigint> => {
     const calculator = this.calculatorMap.get(chain);
 
@@ -162,7 +158,7 @@ class AssetCalculator {
    */
   private calculateLocked = async (
     token: RosenChainToken,
-    residencyChain: string
+    residencyChain: Network
   ) => {
     const calculator = this.calculatorMap.get(residencyChain);
 
@@ -213,7 +209,7 @@ class AssetCalculator {
     const allCurrentLockedAssets: Partial<LockedAssetEntity>[] = [];
     const allCurrentTokens = [];
 
-    const residencyChains = this.tokens.getAllChains();
+    const residencyChains = this.tokens.getAllChains() as Network[];
 
     for (const residencyChain of residencyChains) {
       const chainIdKey = this.tokens.getIdKey(residencyChain);
@@ -226,7 +222,9 @@ class AssetCalculator {
         )}`
       );
 
-      const chains = this.tokens.getSupportedChains(residencyChain);
+      const chains = this.tokens.getSupportedChains(
+        residencyChain
+      ) as Network[];
 
       for (const nativeResidentToken of nativeResidentTokens) {
         const newToken = {

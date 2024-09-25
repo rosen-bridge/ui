@@ -1,6 +1,7 @@
 import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
-import { SUPPORTED_CHAINS } from './constants';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { encodeAddress } from '@rosen-bridge/address-codec';
+import { Network } from '@rosen-ui/types';
 
 /**
  * generates metadata for lock transaction
@@ -12,14 +13,14 @@ import { encodeAddress } from '@rosen-bridge/address-codec';
  * @returns
  */
 export const generateLockData = async (
-  toChain: string,
+  toChain: Network,
   toAddress: string,
   networkFee: string,
   bridgeFee: string
 ): Promise<string> => {
   // parse toChain
-  const toChainCode = SUPPORTED_CHAINS.indexOf(
-    toChain as (typeof SUPPORTED_CHAINS)[number]
+  const toChainCode = NETWORK_VALUES.indexOf(
+    toChain as (typeof NETWORK_VALUES)[number]
   );
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
   const toChainHex = toChainCode.toString(16).padStart(2, '0');

@@ -1,5 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import JsonBigInt from '@rosen-bridge/json-bigint';
+import { Network } from '@rosen-ui/types';
 import { DataSource, Repository } from 'typeorm';
 
 import { BridgedAssetEntity } from './BridgedAssetEntity';
@@ -28,7 +29,7 @@ class BridgedAssetModel {
    * Return all stored asset primary keys (tokenId+chain combination)
    */
   getAllStoredAssets = async (): Promise<
-    { tokenId: string; chain: string }[]
+    { tokenId: string; chain: Network }[]
   > => {
     return (
       await this.bridgedAssetRepository.find({ select: ['chain', 'tokenId'] })
@@ -39,7 +40,7 @@ class BridgedAssetModel {
    * Remove old unused assets from the database
    * @param assetIds
    */
-  removeAssets = async (assets: { tokenId: string; chain: string }[]) => {
+  removeAssets = async (assets: { tokenId: string; chain: Network }[]) => {
     await Promise.all(
       assets.map(async (asset) =>
         this.bridgedAssetRepository.delete({
