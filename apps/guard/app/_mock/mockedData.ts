@@ -1,6 +1,7 @@
 import moment from 'moment';
 
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
+import { NETWORKS } from '@rosen-ui/constants';
 import { ChartPeriod } from '@rosen-ui/types';
 
 import {
@@ -26,7 +27,7 @@ const info: ApiInfoResponse = {
     hot: [
       {
         address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-        chain: 'Ergo',
+        chain: NETWORKS.ERGO,
         balance: {
           amount: 100 * 1e9,
           decimals: 9,
@@ -38,7 +39,7 @@ const info: ApiInfoResponse = {
       {
         address:
           'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
-        chain: 'Cardano',
+        chain: NETWORKS.CARDANO,
         balance: {
           amount: 500 * 1e6,
           decimals: 6,
@@ -51,7 +52,7 @@ const info: ApiInfoResponse = {
     cold: [
       {
         address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-        chain: 'Ergo',
+        chain: NETWORKS.ERGO,
         balance: {
           amount: 300 * 1e9,
           decimals: 9,
@@ -63,7 +64,7 @@ const info: ApiInfoResponse = {
       {
         address:
           'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
-        chain: 'Cardano',
+        chain: NETWORKS.CARDANO,
         balance: {
           amount: 1500 * 1e6,
           decimals: 6,
@@ -213,14 +214,14 @@ const assets = [
     tokenId: '2162efc108a0aeba2c040a3a29b1e8573dc6b6d746d33e5fe9cf9ccc1796f630',
     amount: 10000,
     decimals: 2,
-    chain: 'ergo',
+    chain: NETWORKS.ERGO,
     isNativeToken: false,
   },
   {
     tokenId: '91e9086194cd9144a1661c5820dd53869afd1711d4c5a305b568a452e86f81b1',
     amount: 2,
     decimals: 0,
-    chain: 'ergo',
+    chain: NETWORKS.ERGO,
     isNativeToken: false,
   },
   {
@@ -228,7 +229,7 @@ const assets = [
     tokenId: 'c6cce2d65182c2e4343d942000263b75d103e6d56fea08ded6dfc25548c2d34d',
     amount: 200,
     decimals: 1,
-    chain: 'ergo',
+    chain: NETWORKS.ERGO,
     isNativeToken: false,
   },
   {
@@ -236,7 +237,7 @@ const assets = [
     tokenId: '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
     amount: 20,
     decimals: 5,
-    chain: 'cardano',
+    chain: NETWORKS.CARDANO,
     isNativeToken: false,
   },
 ];
@@ -294,8 +295,8 @@ const generateHistoryEventRecords = (
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     bridgeFee: '0.2',
@@ -320,8 +321,8 @@ const generateOngoingEventRecords = (
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     bridgeFee: '0.2',
@@ -347,8 +348,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
       '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockHeight: 100,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     amount: '0.1',

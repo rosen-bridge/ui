@@ -1,6 +1,6 @@
 import { ReactNode, FC } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 export enum WalletState {
   NOT_CONNECTED,
@@ -31,7 +31,7 @@ export interface Wallet extends WalletBase {
   readonly transfer: (
     token: RosenChainToken,
     amount: RosenAmountValue,
-    toChain: string,
+    toChain: Network,
     address: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,

@@ -4,6 +4,7 @@ import {
   TokenChartData,
   TokenInfo,
   MutationRequestBodyWithHeaders,
+  Network,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
@@ -72,8 +73,8 @@ export interface ApiPermitReturnResponse {
 
 export interface Observation {
   id: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   height: number;
@@ -97,8 +98,8 @@ export interface Revenue {
   permitTxId: string;
   eventId: string;
   lockHeight: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   amount: string;
@@ -123,8 +124,8 @@ export interface Event {
   boxSerialized: string;
   block: string;
   height: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   amount: string;

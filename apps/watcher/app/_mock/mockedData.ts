@@ -1,5 +1,6 @@
 import moment from 'moment';
 
+import { NETWORKS } from '@rosen-ui/constants';
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
 
@@ -28,7 +29,7 @@ const info: ApiInfoResponse = {
     status: 'Unstable',
     trialErrors: [],
   },
-  network: 'ergo',
+  network: NETWORKS.ERGO,
   permitsPerEvent: 1000,
   permitCount: {
     active: 20,
@@ -259,8 +260,8 @@ const permitReturn: ApiPermitReturnResponse = {
 const generateObservationRecords = (numberOfRecords: number) => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
     id: index,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     height: 10,
@@ -293,8 +294,8 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     boxSerialized: '{}',
     block: 'Block Text',
     height: 10,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     amount: '100',
@@ -325,8 +326,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
       '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockHeight: 100,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     amount: '0.1',

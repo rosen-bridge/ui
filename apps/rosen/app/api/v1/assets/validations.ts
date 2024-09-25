@@ -1,12 +1,14 @@
 import { NextRequest } from 'next/server';
 import Joi from 'joi';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 interface GETQueryParams {
   offset: number;
   limit: number;
   id?: string;
   name?: string;
-  chain?: 'ergo' | 'cardano' | 'bitcoin';
+  chain?: Network;
 }
 
 const getQueryParamsSchema = Joi.object<GETQueryParams>().keys({
@@ -14,7 +16,7 @@ const getQueryParamsSchema = Joi.object<GETQueryParams>().keys({
   limit: Joi.number().min(0).max(100).default(20),
   id: Joi.string(),
   name: Joi.string(),
-  chain: Joi.string().valid('ergo', 'cardano', 'bitcoin'),
+  chain: Joi.string().valid(...NETWORK_VALUES),
 });
 
 /**

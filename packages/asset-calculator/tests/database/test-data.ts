@@ -1,17 +1,19 @@
+import { NETWORKS } from '@rosen-ui/constants';
+
 import { LockedAssetEntity, TokenEntity } from '../../lib';
 import { BridgedAssetEntity } from '../../lib/database/bridgedAsset/BridgedAssetEntity';
 
 const tokens: TokenEntity[] = [
   {
     id: 'erg',
-    chain: 'ergo',
+    chain: NETWORKS.ERGO,
     decimal: 9,
     isNative: true,
     name: 'ERG',
   },
   {
     id: 'ada',
-    chain: 'cardano',
+    chain: NETWORKS.CARDANO,
     decimal: 6,
     isNative: true,
     name: 'ADA',
@@ -23,14 +25,14 @@ const bridgedAssets: BridgedAssetEntity[] = [
     token: tokens[0],
     tokenId: tokens[0].id,
     amount: 100n,
-    chain: 'Bitcoin',
+    chain: NETWORKS.BITCOIN,
     bridgedTokenId: `123${tokens[0].id}`,
   },
   {
     token: tokens[0],
     tokenId: tokens[0].id,
     amount: 200n,
-    chain: 'Cardano',
+    chain: NETWORKS.CARDANO,
     bridgedTokenId: `123${tokens[0].id}`,
   },
 ];

@@ -26,6 +26,7 @@ import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
 import useWallet from '@/_hooks/useWallet';
+import { NETWORKS } from '@rosen-ui/constants';
 
 /**
  * customized form input
@@ -298,7 +299,7 @@ export const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {targetField.value == 'bitcoin' && (
+      {targetField.value == NETWORKS.BITCOIN && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>

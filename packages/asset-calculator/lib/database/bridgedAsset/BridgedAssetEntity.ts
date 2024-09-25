@@ -1,4 +1,5 @@
 import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
+import { Network } from '@rosen-ui/types';
 import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 import { TokenEntity } from '../token/TokenEntity';
@@ -9,7 +10,7 @@ export class BridgedAssetEntity {
   amount: bigint;
 
   @PrimaryColumn('varchar')
-  chain: string;
+  chain: Network;
 
   /**
    * In order to create a foreign key primary column, we need to include the

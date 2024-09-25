@@ -1,4 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
+import { Network } from '@rosen-ui/types';
 
 import { getRosenTokens } from '@/_backend/utils';
 
@@ -13,7 +14,7 @@ const tokenMap = new TokenMap(getRosenTokens());
  * @param tokenId
  * @param chain
  */
-const getFullTokenData = (tokenId: string, chain: string) => {
+const getFullTokenData = (tokenId: string, chain: Network) => {
   try {
     const token = tokenMap.search(chain, {
       [tokenMap.getIdKey(chain)]: tokenId,

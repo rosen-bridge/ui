@@ -1,14 +1,11 @@
 import { useMemo } from 'react';
 
-import { Networks } from '@rosen-ui/constants';
-import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { availableNetworks } from '@/_networks';
 
 import useBridgeForm from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
-
-type Chain = string;
-type SourceFieldValue = Chain & AvailableNetworks;
-type TargetFieldValue = Chain & AvailableNetworks;
+import { Network } from '@rosen-ui/types';
 
 /**
  * handles network related operations and provide list of
@@ -23,8 +20,8 @@ const useNetwork = () => {
    * unsupported networks
    */
   const availableNetworkObjects = useMemo(() => {
-    return (tokenMap.getAllChains() as SourceFieldValue[])
-      .filter((chain) => Object.values<Chain>(Networks).includes(chain))
+    return (tokenMap.getAllChains() as Network[])
+      .filter((chain) => NETWORK_VALUES.includes(chain))
       .map((chain) => availableNetworks[chain]);
   }, [tokenMap]);
 
@@ -33,10 +30,8 @@ const useNetwork = () => {
    * unsupported networks
    */
   const targetNetworks = useMemo(() => {
-    return (
-      tokenMap.getSupportedChains(sourceField.value) as SourceFieldValue[]
-    )
-      .filter((chain) => Object.values<Chain>(Networks).includes(chain))
+    return (tokenMap.getSupportedChains(sourceField.value) as Network[])
+      .filter((chain) => NETWORK_VALUES.includes(chain))
       .map((chain) => availableNetworks[chain]);
   }, [sourceField.value, tokenMap]);
 
@@ -52,12 +47,12 @@ const useNetwork = () => {
   return {
     availableNetworks: availableNetworkObjects,
     selectedNetwork: sourceField.value
-      ? availableNetworks[sourceField.value as SourceFieldValue]
+      ? availableNetworks[sourceField.value as Network]
       : null,
     targetNetworks: targetNetworks,
     tokens,
     selectedTargetNetwork: targetField.value
-      ? availableNetworks[targetField.value as TargetFieldValue]
+      ? availableNetworks[targetField.value as Network]
       : null,
   };
 };

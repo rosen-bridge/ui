@@ -5,9 +5,11 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import AbstractCalculator from '../abstract-calculator';
 import { Balance } from '@rosen-clients/ergo-explorer/dist/src/v1/types';
 import { zipWith } from 'lodash-es';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 export class ErgoCalculator extends AbstractCalculator {
-  readonly chain: string = 'ergo';
+  readonly chain: Network = NETWORKS.ERGO;
 
   private explorerApi;
 

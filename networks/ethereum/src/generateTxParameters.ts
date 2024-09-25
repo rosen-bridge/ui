@@ -1,6 +1,6 @@
 import { RosenAmountValue } from '@rosen-ui/types';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { ETH, transferABI } from './constants';
 import { Contract } from 'ethers';
 
@@ -55,9 +55,9 @@ export const generateTxParameters = (tokenMap: TokenMap) => {
     token: RosenChainToken
   ) => {
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(Networks.ETHEREUM)],
+      token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
       wrappedAmount,
-      Networks.ETHEREUM
+      NETWORKS.ETHEREUM
     ).amount;
     return generateTxParametersCore(
       tokenId,
