@@ -10,6 +10,11 @@ interface BitcoinCalculatorInterface extends CalculatorInterface {
   esploraUrl?: string;
 }
 
+interface EthereumCalculatorInterface extends CalculatorInterface {
+  rpcUrl: string;
+  authToken?: string;
+}
+
 interface CalculatorInterface {
   addresses: string[];
 }
@@ -18,4 +23,5 @@ export {
   ErgoCalculatorInterface,
   CardanoCalculatorInterface,
   BitcoinCalculatorInterface,
+  EthereumCalculatorInterface,
 };
