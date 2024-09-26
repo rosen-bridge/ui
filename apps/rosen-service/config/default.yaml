@@ -42,7 +42,7 @@ ethereum:
     rwt:
   initialHeight:
   rpcUrl: https://eth-mainnet.public.blastapi.io
-  rpcAuthToken:
+  # rpcAuthToken:
 postgres:
   url: # postgresql://username:password@host:port/databasename
   logging: false

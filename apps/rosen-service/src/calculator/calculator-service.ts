@@ -63,7 +63,7 @@ const start = async () => {
     {
       addresses: config.calculator.addresses.ethereum,
       rpcUrl: config.ethereum.rpcUrl,
-      authToken: config.ethereum.rpcAuthToken ?? undefined,
+      authToken: config.ethereum.rpcAuthToken,
     },
     dataSource,
     logger

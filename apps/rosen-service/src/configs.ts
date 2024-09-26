@@ -4,6 +4,15 @@ import { TransportOptions } from '@rosen-bridge/winston-logger';
 
 import AppError from './errors/AppError';
 
+/**
+ * Checks the config path and return the configuration if it exists
+ * @param path
+ * @returns
+ */
+const getOptionalString = (path: string): string | undefined => {
+  return nodeConfig.has(path) ? nodeConfig.get<string>(path) : undefined;
+};
+
 const getConfig = () => {
   try {
     return {
@@ -66,7 +75,7 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('ethereum.tokens.rwt'),
         },
         rpcUrl: nodeConfig.get<string>('ethereum.rpcUrl'),
-        rpcAuthToken: nodeConfig.get<string>('ethereum.rpcAuthToken'),
+        rpcAuthToken: getOptionalString('ethereum.rpcAuthToken'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
