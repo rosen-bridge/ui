@@ -60,6 +60,11 @@ const start = async () => {
       addresses: config.calculator.addresses.bitcoin,
       esploraUrl: config.bitcoin.esploraUrl,
     },
+    {
+      addresses: config.calculator.addresses.ethereum,
+      rpcUrl: config.ethereum.rpcUrl,
+      authToken: config.ethereum.rpcAuthToken,
+    },
     dataSource,
     logger
   );

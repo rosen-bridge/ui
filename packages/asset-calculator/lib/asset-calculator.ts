@@ -17,6 +17,7 @@ import {
   BitcoinCalculatorInterface,
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
+  EthereumCalculatorInterface,
 } from './interfaces';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -25,6 +26,7 @@ import { TokenModel } from './database/token/TokenModel';
 import AbstractCalculator from './calculator/abstract-calculator';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
+import { EvmCalculator } from './calculator/chains/evm-calculator';
 
 class AssetCalculator {
   protected readonly tokens: TokenMap;
@@ -38,6 +40,7 @@ class AssetCalculator {
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
     bitcoinCalculator: BitcoinCalculatorInterface,
+    ethereumCalculator: EthereumCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger()
   ) {
@@ -61,9 +64,18 @@ class AssetCalculator {
       bitcoinCalculator.esploraUrl,
       logger
     );
+    const ethereumAssetCalculator = new EvmCalculator(
+      NETWORKS.ETHEREUM,
+      this.tokens,
+      ethereumCalculator.addresses,
+      ethereumCalculator.rpcUrl,
+      ethereumCalculator.authToken,
+      logger
+    );
     this.calculatorMap.set(NETWORKS.ERGO, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.CARDANO, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.BITCOIN, bitcoinAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ETHEREUM, ethereumAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);
@@ -120,6 +132,10 @@ class AssetCalculator {
       throw Error(`Chain [${chain}] is not supported in asset calculator`);
 
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);
+    if (!chainToken) {
+      this.logger.debug(`Token ${token.name} is not supported in ${chain}`);
+      return 0n;
+    }
     const emission =
       (await calculator.totalSupply(chainToken)) -
       (await calculator.totalBalance(chainToken));
@@ -257,8 +273,14 @@ class AssetCalculator {
               residencyChain
             );
             this.logger.debug(
-              `Asset [${nativeResidentToken[chainIdKey]}] total locked amount is [${emission}]`
+              `Asset [${nativeResidentToken[chainIdKey]}] total emitted amount is [${emission}]`
             );
+            if (!emission) {
+              this.logger.debug(
+                `Total emitted amount of asset ${nativeResidentToken.name} on ${chain} is zero. skipping bridged asset update.`
+              );
+              continue;
+            }
 
             const tokenDataOnAllChains = this.tokens.search(residencyChain, {
               [chainIdKey]: newToken.id,

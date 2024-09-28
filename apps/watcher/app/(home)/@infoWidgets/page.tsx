@@ -201,6 +201,7 @@ const InfoWidgets = () => {
               : 'success'
           }
           isLoading={isInfoLoading}
+          warning={data?.health.trialErrors.join('\n')}
         />
       </Grid>
     </Grid>

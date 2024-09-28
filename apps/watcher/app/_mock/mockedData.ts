@@ -40,6 +40,11 @@ const info: ApiInfoResponse = {
   eRsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
   version: '2.5.1',
+  versions: {
+    app: '',
+    contract: '',
+    tokensMap: '',
+  },
 };
 
 const addressAssets: ApiAddressAssetsResponse = {
@@ -200,18 +205,21 @@ const revenueChart = {
 const healthStatus: ApiHealthStatusResponse = [
   {
     status: 'Unstable',
+    description: 'Error Logs Description',
     lastCheck: '2023-06-26T11:15:43.189Z',
     id: 'error logs',
     title: 'Error Logs',
   },
   {
     status: 'Healthy',
+    description: 'Wid Check Description',
     lastCheck: '2023-06-26T11:15:43.642Z',
     id: 'Wid Check',
     title: 'Wid Check',
   },
   {
     status: 'Healthy',
+    description: 'Native Asset erg Check Description',
     lastCheck: '2023-06-26T11:15:43.509Z',
     id: 'Native Asset erg Check',
     title: 'Native Asset erg Check',
@@ -226,6 +234,7 @@ const healthStatus: ApiHealthStatusResponse = [
   },
   {
     status: 'Healthy',
+    description: 'Ergo Node Sync Check Description',
     lastCheck: '2023-06-26T11:15:45.206Z',
     id: 'Ergo Node Sync Check',
     title: 'Ergo Node Sync Check',
