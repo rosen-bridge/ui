@@ -25,6 +25,11 @@ export interface ApiInfoResponse {
     cold: TokenInfoWithAddress[];
   };
   version: string;
+  versions: {
+    app: string;
+    contract: string;
+    tokensMap: string;
+  };
 }
 
 export interface GuardTokenInfo extends TokenInfoWithColdAmount {

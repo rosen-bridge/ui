@@ -27,6 +27,11 @@ export interface ApiInfoResponse {
   rsnTokenId: string;
   eRsnTokenId: string;
   version: string;
+  versions: {
+    app: string;
+    contract: string;
+    tokensMap: string;
+  };
 }
 
 export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
