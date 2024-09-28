@@ -193,16 +193,22 @@ class AssetCalculator {
     const allStoredBridgedAssets =
       await this.bridgedAssetModel.getAllStoredAssets();
     this.logger.debug(
-      `All current stored bridge assets are ${allStoredBridgedAssets}`
+      `All current stored bridge assets are ${JsonBigInt.stringify(
+        allStoredBridgedAssets
+      )}`
     );
     const allStoredLockedAssets =
       await this.lockedAssetModel.getAllStoredAssets();
     this.logger.debug(
-      `All current stored locked assets are ${allStoredBridgedAssets}`
+      `All current stored locked assets are ${JsonBigInt.stringify(
+        allStoredBridgedAssets
+      )}`
     );
     const allStoredTokens = await this.tokenModel.getAllStoredTokens();
     this.logger.debug(
-      `All current stored tokens are ${allStoredBridgedAssets}`
+      `All current stored tokens are ${JsonBigInt.stringify(
+        allStoredBridgedAssets
+      )}`
     );
 
     const allCurrentBridgedAssets = [];
