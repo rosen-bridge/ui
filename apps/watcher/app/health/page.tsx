@@ -54,7 +54,7 @@ const Health = () => {
           currentHealthParamInfo.lastTrialErrorTime ===
             newHealthParamInfo.lastTrialErrorTime
         ) {
-          return void setTimeout(trying, 5000);
+          return void setTimeout(trying, 1000);
         }
 
         setChecking((checking) => checking.filter((item) => item != paramId));
@@ -62,7 +62,7 @@ const Health = () => {
         const healthParamIndex = data!.findIndex(
           (healthParam) => healthParam.id === paramId,
         );
-        openSnackbar(paramId + ' status updated', 'info');
+        openSnackbar(currentHealthParamInfo.title + ' status updated', 'info');
 
         mutate([
           ...data!.slice(0, healthParamIndex),

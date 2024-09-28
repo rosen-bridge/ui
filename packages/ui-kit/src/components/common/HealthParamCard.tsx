@@ -43,7 +43,6 @@ export const HealthParamCard = ({
   const theme = useTheme();
 
   const color = useMemo(() => {
-    if (!lastCheck) return 'primary';
     switch (status) {
       case 'Healthy':
         return 'success';
@@ -52,7 +51,30 @@ export const HealthParamCard = ({
       default:
         return 'error';
     }
-  }, [lastCheck, status]);
+  }, [status]);
+
+  const colors = useMemo(() => {
+    if (lastCheck) {
+      return {
+        cardBackground: `${color}.${theme.palette.mode}`,
+        cardColor: `${color}.${
+          theme.palette.mode === 'light' ? 'dark' : 'light'
+        }`,
+        button: color,
+        alertBackground: `${color}.main`,
+        alert: `${color}.light`,
+      };
+    } else {
+      return {
+        cardBackground:
+          theme.palette.grey[theme.palette.mode == 'light' ? 200 : 800],
+        cardColor: 'inherit',
+        button: 'inherit',
+        alertBackground: 'inherit',
+        alert: 'inherit',
+      };
+    }
+  }, [color, lastCheck, theme]);
 
   const Icon = useMemo(() => {
     if (!lastCheck) return ShieldQuestion;
@@ -62,7 +84,7 @@ export const HealthParamCard = ({
 
   return (
     <FullCard
-      backgroundColor={`${color}.${theme.palette.mode}`}
+      backgroundColor={colors.cardBackground}
       headerProps={{
         title: (
           <>
@@ -82,9 +104,7 @@ export const HealthParamCard = ({
           </SvgIcon>
         ),
         sx: {
-          color: `${color}.${
-            theme.palette.mode === 'light' ? 'dark' : 'light'
-          }`,
+          color: colors.cardColor,
           '& span': {
             color: 'inherit',
             display: 'flex',
@@ -103,9 +123,8 @@ export const HealthParamCard = ({
             loading={checking}
             size="small"
             variant="text"
-            sx={{ fontSize: 'inherit' }}
+            sx={{ color: colors.button, fontSize: 'inherit' }}
             onClick={handleCheckNow}
-            color={color}
           >
             {checking ? 'Checking' : 'Check now'}
           </LoadingButton>
@@ -119,7 +138,12 @@ export const HealthParamCard = ({
       {details && (
         <Alert
           variant="filled"
-          sx={{ bgcolor: `${color}.main`, color: `${color}.light`, mt: 2 }}
+          sx={{
+            bgcolor: colors.alertBackground,
+            color: colors.alert,
+            mt: 2,
+            wordBreak: 'break-all',
+          }}
         >
           {details}
         </Alert>
