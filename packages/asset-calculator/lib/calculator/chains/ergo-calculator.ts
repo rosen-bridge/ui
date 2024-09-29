@@ -53,11 +53,13 @@ export class ErgoCalculator extends AbstractCalculator {
         balance.tokens!.filter((asset) => asset.tokenId == token.tokenId)[0]
           ?.amount ?? 0n;
       this.logger.debug(
-        `Balance of token [${token}] in address [${address}] is [${addressTokenBalance}]`
+        `Balance of token [${token.name}] in address [${address}] is [${addressTokenBalance}]`
       );
       tokenBalance += addressTokenBalance;
     }
-    this.logger.debug(`Total balance of token [${token}] is [${tokenBalance}]`);
+    this.logger.debug(
+      `Total balance of token [${token.name}] is [${tokenBalance}]`
+    );
     return tokenBalance;
   };
 
