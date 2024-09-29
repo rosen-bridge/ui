@@ -7,7 +7,7 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_errors';
-import { CardanoNetwork } from '@/_types/network';
+import { ErgoNetwork } from '@/_types/network';
 
 import { getTokenMap } from '../getTokenMap.server';
 import { RosenAmountValue } from '@rosen-ui/types';
@@ -22,7 +22,7 @@ export const getMaxTransfer = wrap(
       balance,
       isNative,
     }: Parameters<
-      CardanoNetwork['getMaxTransfer']
+      ErgoNetwork['getMaxTransfer']
     >[0]): Promise<RosenAmountValue> => {
       const tokenMap = await getTokenMap();
       const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(

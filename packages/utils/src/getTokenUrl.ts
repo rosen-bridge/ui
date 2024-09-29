@@ -5,7 +5,7 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/en/token',
   [NETWORKS.CARDANO]: 'https://cardanoscan.io/token',
   [NETWORKS.BITCOIN]: '',
-  [NETWORKS.ETHEREUM]: '',
+  [NETWORKS.ETHEREUM]: 'https://etherscan.io/token',
 };
 
 export const getTokenUrl = (network: Network, tokenId?: string) => {
