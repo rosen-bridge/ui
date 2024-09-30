@@ -48,22 +48,21 @@ export const TokenListItem = ({
       </ListItemAvatar>
       <ListItemText
         primary={
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ flexGrow: 1 }}>{nameOrPlaceholder}</Typography>
-            <Typography>{getDecimalString(value, decimals)}</Typography>
-            <Typography variant="caption" mt={0.25}>
+            <Typography variant="caption">
+              {getDecimalString(value, decimals)}
+            </Typography>
+            <Typography variant="caption">
               {coldValue !== undefined && '🔥'}
             </Typography>
             {coldValue && (
               <>
-                <Typography ml={0.5}>
+                <Typography variant="caption">
                   {' '}
                   / {getDecimalString(coldValue, decimals)}
                 </Typography>
-                <Typography variant="caption" mt={0.5}>
-                  {' '}
-                  ❄️
-                </Typography>
+                <Typography variant="caption"> ❄️</Typography>
               </>
             )}
           </Box>
