@@ -26,7 +26,6 @@ export interface ApiInfoResponse {
   address: string;
   rsnTokenId: string;
   eRsnTokenId: string;
-  version: string;
   versions: {
     app: string;
     contract: string;
