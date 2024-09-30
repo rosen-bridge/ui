@@ -180,7 +180,7 @@ export const MobileRow: FC<RowProps> = (props) => {
               Bridged
             </EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridged.toString(), row.decimal)}
+              {getDecimalString(row.bridged || '0', row.decimal)}
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -297,7 +297,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          {getDecimalString(row.bridged, row.decimal)}
+          {getDecimalString(row.bridged || '0', row.decimal)}
         </EnhancedTableCell>
         <EnhancedTableCell align="right">
           <IconButton
