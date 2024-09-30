@@ -125,7 +125,7 @@ const SideBar = () => {
         <Grid item>
           {!isLoading ? (
             <Typography textAlign="center" variant="body2" color="textPrimary">
-              Guard v{info?.version ?? '?'}
+              Guard v{info?.versions?.app ?? '?'}
             </Typography>
           ) : (
             <Grid mb={1} container justifyContent="center">

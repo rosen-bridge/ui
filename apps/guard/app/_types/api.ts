@@ -24,7 +24,6 @@ export interface ApiInfoResponse {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];
   };
-  version: string;
   versions: {
     app: string;
     contract: string;

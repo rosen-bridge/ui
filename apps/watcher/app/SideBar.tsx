@@ -117,7 +117,7 @@ const SideBar = () => {
                 variant="body2"
                 color="textPrimary"
               >
-                Watcher v{info?.version ?? '?'}
+                Watcher v{info?.versions?.app ?? '?'}
               </Typography>
             ) : (
               <Grid mb={1} container justifyContent="center">
