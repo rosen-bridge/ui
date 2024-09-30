@@ -14,8 +14,8 @@ import { getMinTransfer } from '@/_utils/index';
 import { getMaxTransfer } from '@/_utils/getMaxTransfer';
 import { useTokenMap } from './useTokenMap';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
-
-const validationCache = new Map<string, string | undefined>();
+import { unwrap } from '@/_errors';
+import { cache } from '@/_utils/cache';
 
 /**
  * handles the form field registrations and form state changes
@@ -119,23 +119,16 @@ const useBridgeForm = () => {
         if (!value) {
           return 'Address cannot be empty';
         }
-
-        const cacheKey = `${targetField.value}__${value}`;
-
-        if (validationCache.has(cacheKey)) {
-          return validationCache.get(cacheKey);
+        try {
+          await cache(unwrap(validateAddress), 60 * 60 * 1000)(
+            targetField.value as Network,
+            availableNetworks[targetField.value as Network].toSafeAddress(
+              value,
+            ),
+          );
+        } catch {
+          return 'Invalid Address';
         }
-
-        const validationResult = await validateAddress(
-          targetField.value,
-          availableNetworks[targetField.value as Network].toSafeAddress(value),
-        );
-
-        const message = validationResult ? undefined : 'Invalid Address';
-
-        validationCache.set(cacheKey, message);
-
-        return message;
       },
     },
   });

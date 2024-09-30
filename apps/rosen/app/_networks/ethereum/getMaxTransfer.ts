@@ -31,7 +31,9 @@ export const getMaxTransfer = wrap(
         estimatedFee,
         NETWORKS.ETHEREUM,
       ).amount;
-      return balance - wrappedFee;
+      const offset = isNative ? wrappedFee : 0n;
+      const amount = balance - offset;
+      return amount < 0n ? 0n : amount;
     },
   ),
 );

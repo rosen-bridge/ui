@@ -5,7 +5,7 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/en/addresses',
   [NETWORKS.CARDANO]: 'https://cardanoscan.io/address',
   [NETWORKS.BITCOIN]: 'https://mempool.space/address',
-  [NETWORKS.ETHEREUM]: '',
+  [NETWORKS.ETHEREUM]: 'https://etherscan.io/address',
 };
 
 export const getAddressUrl = (network: Network, address?: string) => {

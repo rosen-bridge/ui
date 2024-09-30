@@ -12,7 +12,7 @@ const baseTxURLs: { [key in Network]: string } = {
   [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/transactions',
   [NETWORKS.CARDANO]: 'https://cardanoscan.io/transaction',
   [NETWORKS.BITCOIN]: 'https://mempool.space/tx',
-  [NETWORKS.ETHEREUM]: '',
+  [NETWORKS.ETHEREUM]: 'https://etherscan.io/tx',
 };
 
 export const getTxURL = (network: Network, tx: string) => {
