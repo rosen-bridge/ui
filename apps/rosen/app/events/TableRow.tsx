@@ -191,7 +191,10 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.amount.toString(), row.lockToken.decimals)}
+              {getDecimalString(
+                row.amount.toString(),
+                row.lockToken.significantDecimals,
+              )}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -199,7 +202,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               {getDecimalString(
                 row.bridgeFee.toString(),
-                row.lockToken.decimals,
+                row.lockToken.significantDecimals,
               )}
             </EnhancedTableCell>
           </TableRow>
@@ -208,7 +211,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               {getDecimalString(
                 row.networkFee.toString(),
-                row.lockToken.decimals,
+                row.lockToken.significantDecimals,
               )}
             </EnhancedTableCell>
           </TableRow>
@@ -284,13 +287,22 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(row.amount.toString(), row.lockToken.decimals)}
+        {getDecimalString(
+          row.amount.toString(),
+          row.lockToken.significantDecimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(row.bridgeFee.toString(), row.lockToken.decimals)}
+        {getDecimalString(
+          row.bridgeFee.toString(),
+          row.lockToken.significantDecimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(row.networkFee.toString(), row.lockToken.decimals)}
+        {getDecimalString(
+          row.networkFee.toString(),
+          row.lockToken.significantDecimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         {moment(row.timestamp * 1000).fromNow()}
