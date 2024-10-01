@@ -70,7 +70,8 @@ export const ConnectOrSubmitButton = ({
   );
   const TargetLogo = target?.logo;
 
-  const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
+  const tokenInfo =
+    tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
 
   return (
     <>

@@ -50,7 +50,8 @@ export const BridgeTransaction = ({
 
   const { selectedNetwork } = useNetwork();
 
-  const tokenInfo = tokenValue && getTokenNameAndId(tokenValue, sourceValue);
+  const tokenInfo =
+    tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
 
   const idKey = sourceValue && tokenMap.getIdKey(sourceValue);
   const targetTokenSearchResults =
@@ -59,7 +60,8 @@ export const BridgeTransaction = ({
     tokenMap.search(sourceValue, {
       [idKey]: tokenValue[idKey],
     });
-  const targetTokenInfo = targetTokenSearchResults?.[0]?.[targetValue];
+  const targetTokenInfo =
+    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
   const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
 
@@ -134,7 +136,7 @@ export const BridgeTransaction = ({
       </Card>
       <ChooseWalletModal
         open={chooseWalletsModalOpen}
-        chainName={selectedNetwork?.name ?? ''}
+        chainName={selectedNetwork?.name}
         setSelectedWallet={setSelectedWallet}
         handleClose={() => setChooseWalletsModalOpen(false)}
         wallets={wallets || []}

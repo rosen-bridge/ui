@@ -19,5 +19,8 @@
     "eslint-config-prettier": "^9.0.0",
     "prettier": "^3.0.2",
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@rosen-ui/constants": "^0.0.3"
   }
 }

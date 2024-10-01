@@ -5,11 +5,12 @@ import {
   Paginated,
   TokenInfoWithColdAmount,
   MutationRequestBodyWithHeaders,
+  Network,
 } from '@rosen-ui/types';
 
 export interface TokenInfoWithAddress {
   address: string;
-  chain: string;
+  chain: Network;
   balance: TokenInfo;
 }
 
@@ -23,11 +24,15 @@ export interface ApiInfoResponse {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];
   };
-  version: string;
+  versions: {
+    app: string;
+    contract: string;
+    tokensMap: string;
+  };
 }
 
 export interface GuardTokenInfo extends TokenInfoWithColdAmount {
-  chain: string;
+  chain: Network;
 }
 
 interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
@@ -36,7 +41,7 @@ interface GuardTokenChartData extends Omit<TokenChartData, 'title'> {
 export type ApiRevenueChartResponse = GuardTokenChartData[];
 
 export interface ApiSignRequestBodyData {
-  chain: string;
+  chain: Network;
   txJson: string;
   requiredSign: number;
   overwrite?: boolean;
@@ -55,8 +60,8 @@ export type ApiHealthStatusResponse = HealthParamInfo[];
 
 export interface EventBase {
   eventId: string;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   bridgeFee: string;
@@ -83,8 +88,8 @@ export interface Revenue {
   rewardTxId: string;
   eventId: string;
   lockHeight: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   bridgeFee: string;

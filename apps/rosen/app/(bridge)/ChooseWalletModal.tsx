@@ -14,13 +14,14 @@ import {
   Grid,
   Tooltip,
 } from '@rosen-bridge/ui-kit';
+import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 interface ChooseWalletModalProps {
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
-  chainName: string;
+  chainName?: Network;
   wallets: Wallet[];
 }
 

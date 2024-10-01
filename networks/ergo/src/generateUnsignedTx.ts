@@ -15,8 +15,8 @@ import {
 import * as wasm from 'ergo-lib-wasm-nodejs';
 import { ErgoBoxProxy } from '@rosen-bridge/ergo-box-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
-import { Networks } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * generates an unsigned lock transaction on Ergo
@@ -35,7 +35,7 @@ const generateUnsignedTxCore = async (
   changeAddress: string,
   walletUtxos: ErgoBoxProxy[],
   lockAddress: string,
-  toChain: string,
+  toChain: Network,
   toAddress: string,
   tokenId: string,
   amountString: string,
@@ -127,18 +127,18 @@ export const generateUnsignedTx = (tokenMap: TokenMap) => {
     changeAddress: string,
     walletUtxos: ErgoBoxProxy[],
     lockAddress: string,
-    toChain: string,
+    toChain: Network,
     toAddress: string,
     wrappedAmount: RosenAmountValue,
     bridgeFeeString: string,
     networkFeeString: string,
     token: RosenChainToken
   ) => {
-    const tokenId = token[tokenMap.getIdKey(Networks.ERGO)];
+    const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
     const unwrappedAmount = tokenMap.unwrapAmount(
       tokenId,
       wrappedAmount,
-      Networks.ERGO
+      NETWORKS.ERGO
     ).amount;
     return generateUnsignedTxCore(
       changeAddress,

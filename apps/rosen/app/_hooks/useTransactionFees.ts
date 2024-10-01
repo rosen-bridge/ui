@@ -9,7 +9,7 @@ import useNetwork from './useNetwork';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { AvailableNetworks } from '@/_networks';
+import { Network } from '@rosen-ui/types';
 import { unwrap } from '@/_errors';
 import { useTokenMap } from './useTokenMap';
 import { fromSafeData } from '@/_utils/safeData';
@@ -20,8 +20,8 @@ import { cache } from '@/_utils/cache';
  * two networks
  */
 const useTransactionFees = (
-  sourceChain: AvailableNetworks | null,
-  targetChain: AvailableNetworks | null,
+  sourceChain: Network | null,
+  targetChain: Network | null,
   token: RosenChainToken | null,
   amount: string | null,
 ) => {
@@ -36,7 +36,7 @@ const useTransactionFees = (
    * finds and returns a token id based on supported networks
    */
   const getTokenId = useCallback(
-    (sourceChain: string, token: RosenChainToken) => {
+    (sourceChain: Network, token: RosenChainToken) => {
       const idKey = tokenMap.getIdKey(sourceChain);
       const tokens = tokenMap.search(sourceChain, {
         [idKey]: token[idKey],

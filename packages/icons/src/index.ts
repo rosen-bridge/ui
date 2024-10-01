@@ -38,6 +38,7 @@ export { ReactComponent as Setting } from './icons/setting.svg';
 export { ReactComponent as Share } from './icons/share.svg';
 export { ReactComponent as ShieldCheck } from './icons/shield-check.svg';
 export { ReactComponent as ShieldExclamation } from './icons/shield-exclamation.svg';
+export { ReactComponent as ShieldQuestion } from './icons/shield-question.svg';
 export { ReactComponent as SquareShape } from './icons/square-shape.svg';
 export { ReactComponent as StopCircle } from './icons/stop-circle.svg';
 export { ReactComponent as Sun } from './icons/sun.svg';

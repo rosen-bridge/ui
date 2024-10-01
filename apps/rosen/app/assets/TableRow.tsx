@@ -28,6 +28,7 @@ import {
   getTokenUrl,
   getTxURL,
 } from '@rosen-ui/utils';
+import { NETWORKS } from '@rosen-ui/constants';
 
 interface RowProps extends Assets {
   isLoading?: boolean;
@@ -37,6 +38,7 @@ const LOCK_ADDRESSES = [
   process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
   process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS,
   process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS,
+  process.env.NEXT_PUBLIC_ETHEREUM_LOCK_ADDRESS,
 ];
 
 export const mobileHeader = [
@@ -178,7 +180,7 @@ export const MobileRow: FC<RowProps> = (props) => {
               Bridged
             </EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridged.toString(), row.decimal)}
+              {getDecimalString(row.bridged || '0', row.decimal)}
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -234,7 +236,7 @@ export const TabletRow: FC<RowProps> = (props) => {
     !row.isNative &&
     getTokenUrl(
       row.chain,
-      row.chain == 'cardano' ? row.id.replace('.', '') : row.id,
+      row.chain == NETWORKS.CARDANO ? row.id.replace('.', '') : row.id,
     );
 
   return (
@@ -295,7 +297,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          {getDecimalString(row.bridged, row.decimal)}
+          {getDecimalString(row.bridged || '0', row.decimal)}
         </EnhancedTableCell>
         <EnhancedTableCell align="right">
           <IconButton

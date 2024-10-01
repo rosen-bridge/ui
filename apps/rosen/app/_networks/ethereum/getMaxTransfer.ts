@@ -1,6 +1,6 @@
 'use server';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_errors';
 import { EthereumNetwork } from '@/_types/network';
@@ -29,9 +29,11 @@ export const getMaxTransfer = wrap(
       const wrappedFee = tokenMap.wrapAmount(
         'eth',
         estimatedFee,
-        Networks.ETHEREUM,
+        NETWORKS.ETHEREUM,
       ).amount;
-      return balance - wrappedFee;
+      const offset = isNative ? wrappedFee : 0n;
+      const amount = balance - offset;
+      return amount < 0n ? 0n : amount;
     },
   ),
 );

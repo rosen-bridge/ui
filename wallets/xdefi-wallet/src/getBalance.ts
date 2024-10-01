@@ -1,6 +1,6 @@
 import { WalletCreatorConfig } from '@rosen-network/bitcoin';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -31,9 +31,9 @@ export const getBalanceCreator =
                 .then((balance) =>
                   config.getTokenMap().then((tokenMap) => {
                     const wrappedAmount = tokenMap.wrapAmount(
-                      token[tokenMap.getIdKey(Networks.BITCOIN)],
+                      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
                       balance,
-                      Networks.BITCOIN
+                      NETWORKS.BITCOIN
                     ).amount;
                     resolve(wrappedAmount);
                   })

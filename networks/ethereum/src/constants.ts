@@ -1,15 +1,7 @@
-import { Networks } from '@rosen-ui/constants';
 import { InterfaceAbi } from 'ethers';
 
 export const ETH = 'eth';
 export const ETH_TRANSFER_GAS = 21000n;
-
-export const SUPPORTED_CHAINS = [
-  Networks.ERGO,
-  Networks.CARDANO,
-  Networks.BITCOIN,
-  Networks.ETHEREUM,
-] as const;
 
 export const transferABI: InterfaceAbi = [
   {
@@ -28,6 +20,53 @@ export const transferABI: InterfaceAbi = [
     outputs: [],
     payable: false,
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+];
+
+export const tokenABI = [
+  {
+    constant: true,
+    inputs: [],
+    name: 'name',
+    outputs: [
+      {
+        name: '',
+        type: 'string',
+      },
+    ],
+    payable: false,
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'decimals',
+    outputs: [
+      {
+        name: '',
+        type: 'uint8',
+      },
+    ],
+    payable: false,
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: '_owner',
+        type: 'address',
+      },
+    ],
+    name: 'balanceOf',
+    outputs: [
+      {
+        name: 'balance',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
     type: 'function',
   },
 ];

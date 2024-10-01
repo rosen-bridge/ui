@@ -1,8 +1,9 @@
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { Network } from '@rosen-ui/types';
 
 export default abstract class AbstractCalculator {
-  abstract readonly chain: string;
+  abstract readonly chain: Network;
 
   constructor(
     protected readonly addresses: string[],

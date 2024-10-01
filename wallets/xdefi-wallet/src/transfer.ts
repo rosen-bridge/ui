@@ -4,7 +4,7 @@ import {
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
 import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { getXdefiWallet } from './getXdefiWallet';
 
@@ -13,7 +13,7 @@ export const transferCreator =
   async (
     token: RosenChainToken,
     amount: RosenAmountValue,
-    toChain: string,
+    toChain: Network,
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,

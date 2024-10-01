@@ -1,5 +1,6 @@
 import moment from 'moment';
 
+import { NETWORKS } from '@rosen-ui/constants';
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
 
@@ -28,7 +29,7 @@ const info: ApiInfoResponse = {
     status: 'Unstable',
     trialErrors: [],
   },
-  network: 'ergo',
+  network: NETWORKS.ERGO,
   permitsPerEvent: 1000,
   permitCount: {
     active: 20,
@@ -38,7 +39,11 @@ const info: ApiInfoResponse = {
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf1',
   eRsnTokenId:
     '6c1526b2a5ef010edb622719d9d7fbde8437a39543547c3effbe72ad33504cf2',
-  version: '2.5.1',
+  versions: {
+    app: '',
+    contract: '',
+    tokensMap: '',
+  },
 };
 
 const addressAssets: ApiAddressAssetsResponse = {
@@ -199,18 +204,21 @@ const revenueChart = {
 const healthStatus: ApiHealthStatusResponse = [
   {
     status: 'Unstable',
+    description: 'Error Logs Description',
     lastCheck: '2023-06-26T11:15:43.189Z',
     id: 'error logs',
     title: 'Error Logs',
   },
   {
     status: 'Healthy',
+    description: 'Wid Check Description',
     lastCheck: '2023-06-26T11:15:43.642Z',
     id: 'Wid Check',
     title: 'Wid Check',
   },
   {
     status: 'Healthy',
+    description: 'Native Asset erg Check Description',
     lastCheck: '2023-06-26T11:15:43.509Z',
     id: 'Native Asset erg Check',
     title: 'Native Asset erg Check',
@@ -225,6 +233,7 @@ const healthStatus: ApiHealthStatusResponse = [
   },
   {
     status: 'Healthy',
+    description: 'Ergo Node Sync Check Description',
     lastCheck: '2023-06-26T11:15:45.206Z',
     id: 'Ergo Node Sync Check',
     title: 'Ergo Node Sync Check',
@@ -255,8 +264,8 @@ const permitReturn: ApiPermitReturnResponse = {
 const generateObservationRecords = (numberOfRecords: number) => {
   return new Array(numberOfRecords).fill(null).map((data, index) => ({
     id: index,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     height: 10,
@@ -289,8 +298,8 @@ const generateEventRecords = (numberOfRecords: number): Event[] => {
     boxSerialized: '{}',
     block: 'Block Text',
     height: 10,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     amount: '100',
@@ -321,8 +330,8 @@ const generateRevenueRecords = (numberOfRecords: number) => {
       '95baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     eventId: '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90f7',
     lockHeight: 100,
-    fromChain: 'Chain A',
-    toChain: 'Chain B',
+    fromChain: NETWORKS.ERGO,
+    toChain: NETWORKS.CARDANO,
     fromAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     toAddress: '3WvuxxkcM5gRhfktbKTn3Wvux',
     amount: '0.1',

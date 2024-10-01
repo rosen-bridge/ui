@@ -4,6 +4,15 @@ import { TransportOptions } from '@rosen-bridge/winston-logger';
 
 import AppError from './errors/AppError';
 
+/**
+ * Checks the config path and return the configuration if it exists
+ * @param path
+ * @returns
+ */
+const getOptionalString = (path: string): string | undefined => {
+  return nodeConfig.has(path) ? nodeConfig.get<string>(path) : undefined;
+};
+
 const getConfig = () => {
   try {
     return {
@@ -52,6 +61,22 @@ const getConfig = () => {
         },
         esploraUrl: nodeConfig.get<string>('bitcoin.esploraUrl'),
       },
+      ethereum: {
+        addresses: {
+          lock: nodeConfig.get<string>('ethereum.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'ethereum.addresses.eventTrigger'
+          ),
+          permit: nodeConfig.get<string>('ethereum.addresses.permit'),
+          fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('ethereum.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('ethereum.tokens.rwt'),
+        },
+        rpcUrl: nodeConfig.get<string>('ethereum.rpcUrl'),
+        rpcAuthToken: getOptionalString('ethereum.rpcAuthToken'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -62,6 +87,7 @@ const getConfig = () => {
           ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
+          ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
         },
       },
     };

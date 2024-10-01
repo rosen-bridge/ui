@@ -1,14 +1,20 @@
 import moment from 'moment';
 import { useMemo } from 'react';
 
-import { ShieldCheck, ShieldExclamation } from '@rosen-bridge/icons';
+import {
+  Alert as AlertIcon,
+  ShieldCheck,
+  ShieldExclamation,
+  ShieldQuestion,
+} from '@rosen-bridge/icons';
 import { HealthParamInfo } from '@rosen-ui/types';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, Button, SvgIcon, Typography } from '../base';
+import { Alert, LoadingButton, SvgIcon, Tooltip, Typography } from '../base';
 
 export type HealthParamCardProps = HealthParamInfo & {
+  checking?: boolean;
   handleCheckNow: () => void;
 };
 /**
@@ -29,6 +35,9 @@ export const HealthParamCard = ({
   status,
   description,
   lastCheck,
+  lastTrialErrorMessage,
+  lastTrialErrorTime,
+  checking,
   handleCheckNow,
 }: HealthParamCardProps) => {
   const theme = useTheme();
@@ -44,21 +53,63 @@ export const HealthParamCard = ({
     }
   }, [status]);
 
+  const colors = useMemo(() => {
+    if (lastCheck) {
+      return {
+        cardBackground: `${color}.${theme.palette.mode}`,
+        cardColor: `${color}.${
+          theme.palette.mode === 'light' ? 'dark' : 'light'
+        }`,
+        button: color,
+        alertBackground: `${color}.main`,
+        alert: `${color}.light`,
+      };
+    } else {
+      return {
+        cardBackground:
+          theme.palette.grey[theme.palette.mode == 'light' ? 200 : 800],
+        cardColor: 'inherit',
+        button: 'inherit',
+        alertBackground: 'inherit',
+        alert: 'inherit',
+      };
+    }
+  }, [color, lastCheck, theme]);
+
+  const Icon = useMemo(() => {
+    if (!lastCheck) return ShieldQuestion;
+    if (status === 'Healthy') return ShieldCheck;
+    return ShieldExclamation;
+  }, [lastCheck, status]);
+
   return (
     <FullCard
-      backgroundColor={`${color}.${theme.palette.mode}`}
+      backgroundColor={colors.cardBackground}
       headerProps={{
-        title: status,
+        title: (
+          <>
+            {lastCheck ? status : 'Unknown'}
+            {lastTrialErrorTime && (
+              <Tooltip title={lastTrialErrorMessage}>
+                <SvgIcon color="warning">
+                  <AlertIcon />
+                </SvgIcon>
+              </Tooltip>
+            )}
+          </>
+        ),
         avatar: (
           <SvgIcon>
-            {status === 'Healthy' ? <ShieldCheck /> : <ShieldExclamation />}
+            <Icon />
           </SvgIcon>
         ),
         sx: {
-          color: `${color}.${
-            theme.palette.mode === 'light' ? 'dark' : 'light'
-          }`,
-          '& span': { color: 'inherit' },
+          color: colors.cardColor,
+          '& span': {
+            color: 'inherit',
+            display: 'flex',
+            justifyContent: 'space-between',
+          },
         },
       }}
       contentProps={{
@@ -68,15 +119,17 @@ export const HealthParamCard = ({
         <Typography variant="body2">
           {/* Note that "Check now" feature only works with a real watcher
           instance and its functionality cannot be mocked now */}
-          <Button
+          <LoadingButton
+            loading={checking}
             size="small"
-            sx={{ fontSize: 'inherit' }}
+            variant="text"
+            sx={{ color: colors.button, fontSize: 'inherit' }}
             onClick={handleCheckNow}
-            color={color}
           >
-            Check now
-          </Button>
-          (Last check: {moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})
+            {checking ? 'Checking' : 'Check now'}
+          </LoadingButton>
+          {lastCheck &&
+            `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
         </Typography>
       }
     >
@@ -85,7 +138,12 @@ export const HealthParamCard = ({
       {details && (
         <Alert
           variant="filled"
-          sx={{ bgcolor: `${color}.main`, color: `${color}.light`, mt: 2 }}
+          sx={{
+            bgcolor: colors.alertBackground,
+            color: colors.alert,
+            mt: 2,
+            wordBreak: 'break-all',
+          }}
         >
           {details}
         </Alert>

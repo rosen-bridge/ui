@@ -1,3 +1,5 @@
+import { NETWORKS } from '@rosen-ui/constants';
+
 export type ChartPeriod = 'week' | 'month' | 'year';
 
 export interface TokenChartData {
@@ -25,8 +27,10 @@ export interface HealthParamInfo {
   title: string;
   details?: string;
   status: 'Healthy' | 'Unstable' | 'Broken';
-  lastCheck: string;
-  description?: string;
+  lastCheck?: string;
+  description: string;
+  lastTrialErrorMessage?: string;
+  lastTrialErrorTime?: string;
 }
 
 export interface Paginated<T> {
@@ -43,3 +47,5 @@ export interface MutationRequestBodyWithHeaders<Data> {
 
 // This is the Rosen wrapped-value
 export type RosenAmountValue = bigint;
+
+export type Network = (typeof NETWORKS)[keyof typeof NETWORKS];

@@ -3,6 +3,8 @@ import AbstractCalculator from '../abstract-calculator';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import axios, { AxiosInstance } from 'axios';
 import { zipWith } from 'lodash-es';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 /**
  * This type only contains the part of the type that is required here
@@ -15,7 +17,7 @@ interface PartialEsploraAddress {
 }
 
 export class BitcoinCalculator extends AbstractCalculator {
-  readonly chain: string = 'bitcoin';
+  readonly chain: Network = NETWORKS.BITCOIN;
 
   protected client: AxiosInstance;
 

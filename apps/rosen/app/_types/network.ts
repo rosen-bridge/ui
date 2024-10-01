@@ -1,7 +1,6 @@
 import { Wallet } from '@rosen-ui/wallet-api';
 
-import { AvailableNetworks } from '@/_networks';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 interface GetMaxTransferParams {
   balance: RosenAmountValue;
@@ -12,7 +11,7 @@ interface GetMaxTransferParams {
  * the main network interface for all supported networks
  */
 export interface BaseNetwork<
-  NetworkName extends AvailableNetworks,
+  NetworkName extends Network,
   GetMaxTransferParamsExtra = {},
 > {
   name: NetworkName;
@@ -25,11 +24,12 @@ export interface BaseNetwork<
   getMaxTransfer: (
     props: GetMaxTransferParams & GetMaxTransferParamsExtra,
   ) => Promise<RosenAmountValue>;
+  toSafeAddress: (address: string) => string;
 }
 
 interface BitcoinMaxTransferExtra {
   eventData: {
-    toChain: string;
+    toChain: Network;
     fromAddress: string;
     toAddress: string;
   };
