@@ -24,6 +24,7 @@ const getFullTokenData = (tokenId: string, chain: Network) => {
       tokenId: tokenId,
       name: token[0]?.[chain].name ?? UNSUPPORTED_TOKEN_NAME,
       decimals: token[0]?.[chain].decimals ?? 0,
+      significantDecimals: tokenMap.getSignificantDecimals(tokenId) || 0,
       isNativeToken: token[0]?.[chain].metaData.type === 'native',
     };
   } catch {
@@ -31,6 +32,7 @@ const getFullTokenData = (tokenId: string, chain: Network) => {
       tokenId: tokenId,
       name: UNSUPPORTED_TOKEN_NAME,
       decimals: 0,
+      significantDecimals: 0,
       isNativeToken: false,
     };
   }
