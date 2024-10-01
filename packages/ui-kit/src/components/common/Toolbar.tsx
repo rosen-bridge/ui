@@ -2,6 +2,7 @@ import { ReactNode } from 'react';
 
 import { Typography, Stack, Grid } from '../base';
 
+import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { styled } from '../../styling';
 
 /**
@@ -9,7 +10,8 @@ import { styled } from '../../styling';
  * in tablet and mobile devices
  */
 const Header = styled('div')(({ theme }) => ({
-  marginBottom: theme.spacing(4),
+  marginBottom: isLegacyTheme(theme) ? theme.spacing(3) : theme.spacing(4),
+  marginTop: isLegacyTheme(theme) ? theme.spacing(2) : 0,
   [theme.breakpoints.down('tablet')]: {
     '& .toolbar': {
       display: 'none',
@@ -36,11 +38,12 @@ export interface ToolbarProps {
 export const Toolbar: React.FC<ToolbarProps> = (props) => {
   const { title, description, toolbarActions, isCentered } = props;
 
+  const theme = useTheme();
   const textAlign = isCentered ? 'center' : 'inherit';
 
   return (
     <Header>
-      <Grid container alignItems="center">
+      <Grid container alignItems={isLegacyTheme(theme) ? 'stretch' : 'center'}>
         <Grid
           flexGrow={1}
           {...(isCentered ? { justifyContent: 'center' } : {})}

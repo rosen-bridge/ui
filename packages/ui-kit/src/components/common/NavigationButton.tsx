@@ -2,36 +2,50 @@ import { EventHandler, FC, ReactNode, SyntheticEvent } from 'react';
 import { Badge, Button, SvgIcon } from '../base';
 
 import { useIsMobile } from '../../hooks';
+import { isLegacyTheme } from '../../hooks/useTheme';
 
 import { styled } from '../../styling';
 
 const NavButtonBase = styled(Button)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  gap: theme.spacing(1),
   fontSize: theme.typography.subtitle2.fontSize,
-  padding: theme.spacing(1),
-  fontWeight: 700,
-  lineHeight: 1,
-  color: theme.palette.primary.light,
+  ...(isLegacyTheme(theme)
+    ? {
+        gap: theme.spacing(0.5),
+        color: theme.palette.primary.contrastText,
+      }
+    : {
+        gap: theme.spacing(1),
+        color: theme.palette.primary.light,
+        padding: theme.spacing(1),
+        fontWeight: 700,
+        lineHeight: 1,
+      }),
   opacity: 0.8,
   '&:hover': {
     opacity: 1,
   },
   '& .MuiButton-startIcon': {
     backgroundColor: theme.palette.background.shadow,
-    padding: theme.spacing(1.5),
+    padding: isLegacyTheme(theme) ? theme.spacing(1) : theme.spacing(1.5),
     margin: 0,
     borderRadius: theme.shape.borderRadius,
   },
   '& .MuiButton-startIcon > svg': {
-    fontSize: '24px', // TODO
+    fontSize: isLegacyTheme(theme) ? null : '24px',
   },
   '&.active': {
     opacity: 1,
     '& .MuiButton-startIcon': {
-      color: theme.palette.primary.dark,
-      backgroundColor: theme.palette.primary.light,
+      color: isLegacyTheme(theme)
+        ? theme.palette.info.dark
+        : theme.palette.primary.dark,
+      backgroundColor: isLegacyTheme(theme)
+        ? theme.palette.mode === 'light'
+          ? theme.palette.common.white
+          : theme.palette.info.light
+        : theme.palette.primary.light,
     },
   },
   [theme.breakpoints.down('tablet')]: {

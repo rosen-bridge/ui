@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { ArrowRight, CommentAltExclamation } from '@rosen-bridge/icons';
 import {
   Box,
-  Button,
   Card,
   Dialog,
   DialogActions,
@@ -182,21 +181,24 @@ export const ConnectOrSubmitButton = ({
           </Typography>
         </Card>
         <DialogActions>
-          <Button
+          <LoadingButton
             color="secondary"
             variant="contained"
             sx={{ flexGrow: 2 }}
             onClick={() => setOpen(false)}
           >
             Cancel
-          </Button>
-          <Button
+          </LoadingButton>
+          <LoadingButton
             variant="contained"
             sx={{ flexGrow: 5 }}
+            loading={
+              isFormSubmitting || isTransactionSubmitting || isLoadingFees
+            }
             onClick={handleFormSubmit}
           >
             Confirm
-          </Button>
+          </LoadingButton>
         </DialogActions>
       </Dialog>
     </>
