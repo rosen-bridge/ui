@@ -32,12 +32,8 @@ declare module '@mui/material/styles' {
   }
 
   interface TypeBackground {
-    root: string;
-    content: string;
     paper: string;
-    header: string;
     shadow: string;
-    input: string;
     body: (desktop: boolean) => string;
   }
 
@@ -94,13 +90,11 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 main: '#42559E',
                 light: '#D9DDEC',
                 dark: '#28335F',
-                contrastText: '#fff', // TODO
               },
               secondary: {
                 main: '#DD704F',
                 light: '#F5D4CA',
                 dark: '#B15A3F',
-                contrastText: '#1A1A1A', // TODO
               },
               background: {
                 paper: '#FFFFFF',
@@ -109,11 +103,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                   desktop
                     ? 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)'
                     : 'linear-gradient(90deg, #28335F 0%, #B15A3F 100%)',
-                root: '#1A1A1A', // TODO
-                content: 'rgba(247, 247, 247, 0.9)', // TODO
-                header: '#E1E1E1', // TODO
                 shadow: 'rgba(0, 0, 0, 0.2)', // TODO
-                input: '#fff', // TODO
               },
               text: {
                 primary: 'rgba(0, 0, 0, 0.87)',
@@ -144,8 +134,6 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 main: '#42559E',
                 light: '#D9DDEC',
                 dark: '#28335F',
-                // TODO
-                contrastText: '#fff',
               },
             }
           : {
@@ -153,23 +141,17 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 main: '#6877B1',
                 light: '#B3BBD8',
                 dark: '#1A223F',
-                contrastText: '#fff', // TODO
               },
               secondary: {
                 main: '#B15A3F',
                 light: '#C48D7C',
                 dark: '#804330',
-                contrastText: '#1A1A1A', // TODO
               },
               background: {
                 paper: '#0D1120',
                 default: '#070810',
                 body: (desktop: boolean) => '#14192F',
-                root: '#0D1721', // TODO
-                content: '#2f3a48', // TODO
-                header: '#253041', // TODO
                 shadow: 'rgba(0, 0, 0, 0.2)', // TODO
-                input: 'rgb(40, 49, 63)', // TODO
               },
               text: {
                 primary: 'rgba(255, 255, 255, 0.87)',
@@ -200,7 +182,6 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 main: '#3E70A3',
                 light: '#A3BFDC',
                 dark: '#16385A',
-                contrastText: '#fff', // TODO
               },
             }),
       },

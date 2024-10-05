@@ -13,7 +13,7 @@ const IconContainer = styled('div')(({ theme }) => ({
 export type EnhancedDialogTitleProps = {
   closeable?: boolean;
   icon?: JSX.Element;
-  onClose?: (event: {}) => void;
+  onClose?: React.MouseEventHandler<HTMLButtonElement>;
 } & DialogTitleProps;
 
 /**
