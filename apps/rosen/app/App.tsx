@@ -10,7 +10,7 @@ import { NoSsr } from '@mui/material';
 
 import { styled, AppSnackbar, SnackbarProvider } from '@rosen-bridge/ui-kit';
 
-import SideBar from './SideBar';
+import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
