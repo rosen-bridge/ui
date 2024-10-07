@@ -339,7 +339,12 @@ export const TabletRow: FC<RowProps> = (props) => {
                   <Table>
                     <TableBody>
                       {data.bridged.map((item) => {
-                        const txUrl = getTxURL(item.chain, item.birdgedTokenId);
+                        const tokenUrl = getTokenUrl(
+                          item.chain,
+                          item.chain == NETWORKS.CARDANO
+                            ? item.birdgedTokenId.replace('.', '')
+                            : item.birdgedTokenId,
+                        );
                         return (
                           <TableRow
                             key={item.chain}
@@ -356,8 +361,8 @@ export const TabletRow: FC<RowProps> = (props) => {
                                 gap={1}
                               >
                                 <Id id={item.birdgedTokenId} />
-                                {txUrl && (
-                                  <Link href={txUrl} target="_blank">
+                                {tokenUrl && (
+                                  <Link href={tokenUrl} target="_blank">
                                     <SvgIcon
                                       fontSize="inherit"
                                       sx={{ display: 'block' }}
