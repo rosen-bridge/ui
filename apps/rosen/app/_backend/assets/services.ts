@@ -1,8 +1,14 @@
+import { TokenMap } from '@rosen-bridge/tokens';
+
+import { getRosenTokens } from '@/_backend/utils';
+
 import {
   AssetFilters,
   getAsset as repositoryGetAsset,
   getAllAssets as repositoryGetAllAssets,
 } from './repository';
+
+const tokenMap = new TokenMap(getRosenTokens());
 
 /**
  * return asset details
@@ -21,7 +27,7 @@ export const getAsset = async (id: string) => {
     bridged: assetDetails.bridged.map((bridgedItem) => ({
       chain: bridgedItem.chain,
       amount: bridgedItem.amount.toString(),
-      birdgedTokenId: bridgedItem.bridgedTokenId
+      birdgedTokenId: bridgedItem.bridgedTokenId,
     })),
   };
 };
@@ -40,9 +46,16 @@ export const getAllAssets = async (
 
   return {
     total: assets.total,
-    items: assets.items.map((asset) => ({
-      ...asset,
-      id: asset.isNative ? asset.name : asset.id,
-    })),
+    items: assets.items.map((asset) => {
+      const id = asset.isNative ? asset.name : asset.id;
+
+      const significantDecimals = tokenMap.getSignificantDecimals(id) || 0;
+
+      return {
+        ...asset,
+        id,
+        significantDecimals,
+      };
+    }),
   };
 };
