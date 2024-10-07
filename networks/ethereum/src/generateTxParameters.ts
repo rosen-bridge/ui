@@ -6,47 +6,12 @@ import { Contract } from 'ethers';
 
 /**
  * generates ethereum lock tx
- * @param tokenId
- * @param lockAddress
- * @param fromAddress
- * @param amount
- * @param rosenData
+ * @param tokenMap
  * @returns
  */
-export const generateTxParametersCore = async (
-  tokenId: string,
-  lockAddress: string,
-  fromAddress: string,
-  amount: RosenAmountValue,
-  rosenData: string
-) => {
-  let transactionParameters;
-  if (tokenId === ETH) {
-    transactionParameters = {
-      to: lockAddress,
-      from: fromAddress,
-      data: '0x' + rosenData,
-      value: amount.toString(16),
-    };
-  } else {
-    const contract = new Contract(tokenId, transferABI, undefined);
-    const data = contract.interface.encodeFunctionData('transfer', [
-      lockAddress,
-      amount.toString(),
-    ]);
-
-    transactionParameters = {
-      to: tokenId,
-      from: fromAddress,
-      data: data + rosenData,
-    };
-  }
-
-  return transactionParameters;
-};
-
-export const generateTxParameters = (tokenMap: TokenMap) => {
-  return (
+export const generateTxParameters =
+  (tokenMap: TokenMap) =>
+  async (
     tokenId: string,
     lockAddress: string,
     fromAddress: string,
@@ -59,12 +24,28 @@ export const generateTxParameters = (tokenMap: TokenMap) => {
       wrappedAmount,
       NETWORKS.ETHEREUM
     ).amount;
-    return generateTxParametersCore(
-      tokenId,
-      lockAddress,
-      fromAddress,
-      unwrappedAmount,
-      rosenData
-    );
+
+    let transactionParameters;
+    if (tokenId === ETH) {
+      transactionParameters = {
+        to: lockAddress,
+        from: fromAddress,
+        data: '0x' + rosenData,
+        value: unwrappedAmount.toString(16),
+      };
+    } else {
+      const contract = new Contract(tokenId, transferABI, undefined);
+      const data = contract.interface.encodeFunctionData('transfer', [
+        lockAddress,
+        unwrappedAmount.toString(),
+      ]);
+
+      transactionParameters = {
+        to: tokenId,
+        from: fromAddress,
+        data: data + rosenData,
+      };
+    }
+
+    return transactionParameters;
   };
-};
