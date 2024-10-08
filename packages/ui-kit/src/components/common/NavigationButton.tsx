@@ -1,5 +1,5 @@
 import { EventHandler, FC, ReactNode, SyntheticEvent } from 'react';
-import { Button } from '../base';
+import { Badge, Button, SvgIcon } from '../base';
 
 import { useIsMobile } from '../../hooks';
 
@@ -58,6 +58,7 @@ interface NavButtonProps {
   onClick: EventHandler<SyntheticEvent>;
   isActive?: boolean;
   disabled?: boolean;
+  badge?: string;
 }
 
 /**
@@ -71,15 +72,24 @@ interface NavButtonProps {
  */
 
 export const NavigationButton: FC<NavButtonProps> = (props) => {
-  const { label, icon, isActive, onClick, disabled } = props;
+  const { badge, label, icon, isActive, onClick, disabled } = props;
 
   const isMobile = useIsMobile();
+
+  let startIcon = <SvgIcon>{icon}</SvgIcon>;
+
+  if (badge)
+    startIcon = (
+      <Badge badgeContent={badge} color="primary">
+        {startIcon}
+      </Badge>
+    );
 
   return (
     <NavButtonBase
       onClick={onClick}
       className={isActive ? 'active' : undefined}
-      startIcon={icon}
+      startIcon={startIcon}
       variant="text"
       disabled={disabled}
     >
