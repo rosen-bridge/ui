@@ -265,13 +265,16 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="left">
           {getDecimalString(
             ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
-            row.decimal,
+            row.significantDecimals,
           )}
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
             <span>
-              {getDecimalString(hot?.amount.toString() || '0', row.decimal)}
+              {getDecimalString(
+                hot?.amount.toString() || '0',
+                row.significantDecimals,
+              )}
             </span>
             {hotUrl && (
               <Link href={hotUrl} target="_blank">
@@ -285,7 +288,10 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="left">
           <Stack alignItems="center" direction="row" gap={1}>
             <span>
-              {getDecimalString(cold?.amount.toString() || '0', row.decimal)}
+              {getDecimalString(
+                cold?.amount.toString() || '0',
+                row.significantDecimals,
+              )}
             </span>
             {coldUrl && (
               <Link href={coldUrl} target="_blank">
@@ -339,7 +345,12 @@ export const TabletRow: FC<RowProps> = (props) => {
                   <Table>
                     <TableBody>
                       {data.bridged.map((item) => {
-                        const txUrl = getTxURL(item.chain, item.birdgedTokenId);
+                        const tokenUrl = getTokenUrl(
+                          item.chain,
+                          item.chain == NETWORKS.CARDANO
+                            ? item.birdgedTokenId.replace('.', '')
+                            : item.birdgedTokenId,
+                        );
                         return (
                           <TableRow
                             key={item.chain}
@@ -356,8 +367,8 @@ export const TabletRow: FC<RowProps> = (props) => {
                                 gap={1}
                               >
                                 <Id id={item.birdgedTokenId} />
-                                {txUrl && (
-                                  <Link href={txUrl} target="_blank">
+                                {tokenUrl && (
+                                  <Link href={tokenUrl} target="_blank">
                                     <SvgIcon
                                       fontSize="inherit"
                                       sx={{ display: 'block' }}

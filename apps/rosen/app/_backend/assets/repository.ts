@@ -109,6 +109,7 @@ export const getAllAssets = async (
       'count(*) over() AS total',
     ])
     .where(filters)
+    .orderBy('name', 'ASC')
     .offset(offset)
     .limit(limit)
     .getRawMany();
