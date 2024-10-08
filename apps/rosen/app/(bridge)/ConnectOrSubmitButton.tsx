@@ -45,6 +45,7 @@ export const ConnectOrSubmitButton = ({
     networkFee,
     networkFeeRaw,
     bridgeFee,
+    bridgeFeeRaw,
     isLoading: isLoadingFees,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
 
@@ -103,17 +104,11 @@ export const ConnectOrSubmitButton = ({
       </LoadingButton>
       <Dialog open={open} maxWidth="tablet" onClose={() => setOpen(false)}>
         <EnhancedDialogTitle
-          closeable
           icon={<CommentAltExclamation />}
           onClose={() => setOpen(false)}
         >
           Confirm Transaction
         </EnhancedDialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Are you sure you want to connect to bridge the following assets?
-          </DialogContentText>
-        </DialogContent>
         <Card
           sx={{
             backgroundColor: (theme) =>
@@ -135,7 +130,7 @@ export const ConnectOrSubmitButton = ({
               gridTemplateColumns: 'auto auto auto',
               justifyContent: 'center',
               columnGap: 2,
-              rowGap: 0,
+              rowGap: 0.5,
               my: 3,
             }}
           >
@@ -178,6 +173,13 @@ export const ConnectOrSubmitButton = ({
           </Typography>
           <Typography>
             {networkFeeRaw} {tokenInfo?.tokenName}
+          </Typography>
+          <Box height={(theme) => theme.spacing(1)} />
+          <Typography variant="body2" color="text.secondary">
+            Bridge fee
+          </Typography>
+          <Typography>
+            {bridgeFeeRaw} {tokenInfo?.tokenName}
           </Typography>
         </Card>
         <DialogActions>

@@ -103,7 +103,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                   desktop
                     ? 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)'
                     : 'linear-gradient(90deg, #28335F 0%, #B15A3F 100%)',
-                shadow: 'rgba(0, 0, 0, 0.2)', // TODO
+                shadow: 'rgba(0, 0, 0, 0.2)',
               },
               text: {
                 primary: 'rgba(0, 0, 0, 0.87)',
@@ -151,7 +151,7 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
                 paper: '#0D1120',
                 default: '#070810',
                 body: (desktop: boolean) => '#14192F',
-                shadow: 'rgba(0, 0, 0, 0.2)', // TODO
+                shadow: 'rgba(0, 0, 0, 0.2)',
               },
               text: {
                 primary: 'rgba(255, 255, 255, 0.87)',
@@ -250,10 +250,14 @@ const ThemeProvider = ({ children }: AppThemeProps) => {
         MuiButton: {
           styleOverrides: {
             containedSecondary: {
+              color: baseTheme.palette.text.primary,
               backgroundColor: baseTheme.palette.neutral.light,
               '&:hover': {
                 backgroundColor: baseTheme.palette.neutral.light,
               },
+            },
+            root: {
+              padding: baseTheme.spacing(1) + ' ' + baseTheme.spacing(2),
             },
           },
         },

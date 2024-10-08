@@ -63,11 +63,7 @@ export const ChooseWalletModal = ({
 
   return (
     <Dialog open={open} maxWidth="laptop" onClose={handleClose}>
-      <EnhancedDialogTitle
-        closeable
-        icon={<WalletIcon />}
-        onClose={handleClose}
-      >
+      <EnhancedDialogTitle icon={<WalletIcon />} onClose={handleClose}>
         Choose Wallet
       </EnhancedDialogTitle>
       <DialogContent>

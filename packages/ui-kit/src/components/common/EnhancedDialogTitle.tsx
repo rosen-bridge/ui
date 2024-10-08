@@ -11,7 +11,6 @@ const IconContainer = styled('div')(({ theme }) => ({
 }));
 
 export type EnhancedDialogTitleProps = {
-  closeable?: boolean;
   icon?: JSX.Element;
   onClose?: React.MouseEventHandler<HTMLButtonElement>;
 } & DialogTitleProps;
@@ -20,7 +19,6 @@ export type EnhancedDialogTitleProps = {
  * renders an enhanced version of material ui DialogTitle
  */
 export const EnhancedDialogTitle = ({
-  closeable,
   icon,
   onClose,
   ...props
@@ -33,7 +31,7 @@ export const EnhancedDialogTitle = ({
         </IconContainer>
       )}
       <span style={{ flexGrow: 1 }}>{props.children}</span>
-      {closeable && (
+      {onClose && (
         <IconButton onClick={onClose}>
           <SvgIcon>
             <Times />
