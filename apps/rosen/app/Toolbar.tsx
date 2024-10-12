@@ -24,6 +24,7 @@ const Toolbar = () => {
     <UiKitToolbar
       title={page ? pageTitleMap[page] ?? '' : ''}
       toolbarActions={<ToolbarThemeTogglerAction />}
+      isCentered
     />
   );
 };
