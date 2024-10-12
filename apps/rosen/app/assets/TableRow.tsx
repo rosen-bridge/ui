@@ -253,7 +253,11 @@ export const TabletRow: FC<RowProps> = (props) => {
           <Stack alignItems="center" direction="row" gap={1}>
             <span>{row.name}</span>
             {tokenUrl && (
-              <Link href={tokenUrl} target="_blank">
+              <Link
+                href={tokenUrl}
+                target="_blank"
+                onClick={(event) => event.stopPropagation()}
+              >
                 <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
                   <OpenInNew />
                 </SvgIcon>
@@ -277,7 +281,11 @@ export const TabletRow: FC<RowProps> = (props) => {
               )}
             </span>
             {hotUrl && (
-              <Link href={hotUrl} target="_blank">
+              <Link
+                href={hotUrl}
+                target="_blank"
+                onClick={(event) => event.stopPropagation()}
+              >
                 <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
                   <OpenInNew />
                 </SvgIcon>
@@ -294,7 +302,11 @@ export const TabletRow: FC<RowProps> = (props) => {
               )}
             </span>
             {coldUrl && (
-              <Link href={coldUrl} target="_blank">
+              <Link
+                href={coldUrl}
+                target="_blank"
+                onClick={(event) => event.stopPropagation()}
+              >
                 <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
                   <OpenInNew />
                 </SvgIcon>
@@ -368,7 +380,11 @@ export const TabletRow: FC<RowProps> = (props) => {
                               >
                                 <Id id={item.birdgedTokenId} />
                                 {tokenUrl && (
-                                  <Link href={tokenUrl} target="_blank">
+                                  <Link
+                                    href={tokenUrl}
+                                    target="_blank"
+                                    onClick={(event) => event.stopPropagation()}
+                                  >
                                     <SvgIcon
                                       fontSize="inherit"
                                       sx={{ display: 'block' }}
