@@ -40,5 +40,3 @@ export interface ErgoNetwork extends BaseNetwork<'ergo'> {}
 export interface CardanoNetwork extends BaseNetwork<'cardano'> {}
 export interface BitcoinNetwork
   extends BaseNetwork<'bitcoin', BitcoinMaxTransferExtra> {}
-
-export type SupportedWallets = Wallet;

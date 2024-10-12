@@ -3,7 +3,7 @@ import { Network } from '@rosen-ui/types';
 
 import { getRosenTokens } from '@/_backend/utils';
 
-import { getEvents } from './event-repository';
+import { getEvents } from './repository';
 
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
 
@@ -41,7 +41,10 @@ const getFullTokenData = (tokenId: string, chain: Network) => {
  * @param offset
  * @param limit
  */
-const getEventsWithFullTokenData = async (offset: number, limit: number) => {
+export const getEventsWithFullTokenData = async (
+  offset: number,
+  limit: number,
+) => {
   const events = await getEvents(offset, limit);
 
   return {
@@ -52,9 +55,3 @@ const getEventsWithFullTokenData = async (offset: number, limit: number) => {
     })),
   };
 };
-
-const eventService = {
-  getEventsWithFullTokenData,
-};
-
-export default eventService;

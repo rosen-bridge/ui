@@ -5,7 +5,7 @@ import { TokenInfo } from '@rosen-ui/types';
 import useBridgeForm from './useBridgeForm';
 import useWallet from './useWallet';
 
-import { SupportedWallets } from '@/_types/network';
+import { Wallet } from '@rosen-ui/wallet-api';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 interface UseTokenBalance {
@@ -33,7 +33,7 @@ const useTokenBalance = () => {
   const token = tokenField.value;
 
   const getAssetBalance = useCallback(
-    async (wallet: SupportedWallets) => {
+    async (wallet: Wallet) => {
       setBalanceState({ isLoading: true, amount: 0n, token: null });
       // THIS IS A WRAPPED-VALUE
       const balance = await wallet.getBalance(token);
