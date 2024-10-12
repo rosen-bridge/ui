@@ -8,12 +8,18 @@ import React from 'react';
  */
 import { NoSsr } from '@mui/material';
 
-import { styled, AppSnackbar, SnackbarProvider } from '@rosen-bridge/ui-kit';
+import {
+  styled,
+  AppSnackbar,
+  SnackbarProvider,
+  CssBaseline,
+  ThemeProvider,
+} from '@rosen-bridge/ui-kit';
 
 import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
 
-import ThemeProvider from '@/_theme/ThemeProvider';
+import { theme } from '@/_theme/theme';
 import { WalletContextProvider } from './_contexts/walletContext';
 
 const Root = styled('div')(({ theme }) => ({
@@ -64,19 +70,22 @@ interface AppProps {
 const App = ({ children }: AppProps) => {
   return (
     <NoSsr>
-      <ThemeProvider>
-        <SnackbarProvider>
-          <WalletContextProvider>
-            <Root>
-              <SideBar />
-              <Main>
-                <Toolbar />
-                {children}
-              </Main>
-              <AppSnackbar />
-            </Root>
-          </WalletContextProvider>
-        </SnackbarProvider>
+      <ThemeProvider theme={theme}>
+        <>
+          <CssBaseline />
+          <SnackbarProvider>
+            <WalletContextProvider>
+              <Root>
+                <SideBar />
+                <Main>
+                  <Toolbar />
+                  {children}
+                </Main>
+                <AppSnackbar />
+              </Root>
+            </WalletContextProvider>
+          </SnackbarProvider>
+        </>
       </ThemeProvider>
     </NoSsr>
   );
