@@ -5,6 +5,7 @@ import { createContext, useState } from 'react';
 
 export const ThemeTogglerContext = createContext({
   mode: 'light',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   toggle: () => {},
 });
 
