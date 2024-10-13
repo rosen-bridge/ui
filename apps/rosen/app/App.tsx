@@ -12,6 +12,8 @@ import { styled, AppSnackbar, SnackbarProvider } from '@rosen-bridge/ui-kit';
 
 import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
+import ToolbarActions from './ToolbarActions';
+import Layout from '../../../packages/ui-kit/src/components/common/Layout';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
 import { WalletContextProvider } from './_contexts/walletContext';
@@ -70,8 +72,12 @@ const App = ({ children }: AppProps) => {
             <Root>
               <SideBar />
               <Main>
-                <Toolbar />
-                {children}
+                <Layout
+                  toolbar={<Toolbar />}
+                  toolbarActions={<ToolbarActions />}
+                >
+                  {children}
+                </Layout>
               </Main>
               <AppSnackbar />
             </Root>

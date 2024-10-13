@@ -22,8 +22,7 @@ const Toolbar = () => {
   return (
     <UiKitToolbar
       title={page ? pageTitleMap[page] ?? '' : ''}
-      toolbarActions={<ToolbarActions />}
-      isCentered
+      description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
     />
   );
 };

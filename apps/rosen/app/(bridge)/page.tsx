@@ -15,9 +15,9 @@ import { RosenAmountValue } from '@rosen-ui/types';
 
 const BridgeContainer = styled(Card)(({ theme }) => ({
   position: 'absolute',
-  top: '50%',
+  top: '20%',
   left: '50%',
-  transform: 'translate(-50%, -60%)',
+  transform: 'translateX(-50%)',
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(2),
   margin: '0 auto',
