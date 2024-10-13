@@ -6,8 +6,7 @@ import {
   Card,
   Dialog,
   DialogActions,
-  DialogContent,
-  DialogContentText,
+  Divider,
   EnhancedDialogTitle,
   Grid,
   LoadingButton,
@@ -21,6 +20,8 @@ import useTransactionFees from '@/_hooks/useTransactionFees';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
 import { getTokenNameAndId } from '@/_utils';
+import { useTokenMap } from '@/_hooks/useTokenMap';
+import { Fee } from './Fee';
 
 interface ConnectOrSubmitButtonProps {
   setChooseWalletsModalOpen: (open: boolean) => void;
@@ -30,6 +31,8 @@ export const ConnectOrSubmitButton = ({
   setChooseWalletsModalOpen,
 }: ConnectOrSubmitButtonProps) => {
   const [open, setOpen] = useState(false);
+
+  const tokenMap = useTokenMap();
 
   const {
     sourceValue,
@@ -46,6 +49,7 @@ export const ConnectOrSubmitButton = ({
     networkFeeRaw,
     bridgeFee,
     bridgeFeeRaw,
+    receivingAmountRaw,
     isLoading: isLoadingFees,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
 
@@ -72,6 +76,16 @@ export const ConnectOrSubmitButton = ({
 
   const tokenInfo =
     tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
+
+  const idKey = sourceValue && tokenMap.getIdKey(sourceValue);
+  const targetTokenSearchResults =
+    tokenValue &&
+    idKey &&
+    tokenMap.search(sourceValue, {
+      [idKey]: tokenValue[idKey],
+    });
+  const targetTokenInfo =
+    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
   return (
     <>
@@ -134,13 +148,6 @@ export const ConnectOrSubmitButton = ({
               my: 3,
             }}
           >
-            <Typography variant="body2" color="text.secondary">
-              From
-            </Typography>
-            <div></div>
-            <Typography variant="body2" color="text.secondary">
-              To
-            </Typography>
             <Grid container alignItems="center" gap={1}>
               {SourceLogo && (
                 <SvgIcon>
@@ -161,25 +168,30 @@ export const ConnectOrSubmitButton = ({
               <Typography color="text.primary">{target?.label}</Typography>
             </Grid>
           </Box>
+          <Divider sx={{ my: 2 }} />
+          <Fee
+            title="Transaction Fee"
+            amount={networkFeeRaw}
+            unit={tokenInfo?.tokenName}
+          />
+          <Box sx={{ my: 2 }} />
+          <Fee
+            title="Bridge Fee"
+            amount={bridgeFeeRaw}
+            unit={tokenInfo?.tokenName}
+          />
+          <Box sx={{ my: 2 }} />
+          <Fee
+            title="Received amount"
+            amount={receivingAmountRaw}
+            unit={targetTokenInfo?.name}
+          />
+          <Divider sx={{ my: 2 }} />
           <Typography variant="body2" color="text.secondary">
             Destination address
           </Typography>
           <Typography sx={{ wordBreak: 'break-all' }}>
             {walletAddressValue}
-          </Typography>
-          <Box height={(theme) => theme.spacing(1)} />
-          <Typography variant="body2" color="text.secondary">
-            Transaction fee
-          </Typography>
-          <Typography>
-            {networkFeeRaw} {tokenInfo?.tokenName}
-          </Typography>
-          <Box height={(theme) => theme.spacing(1)} />
-          <Typography variant="body2" color="text.secondary">
-            Bridge fee
-          </Typography>
-          <Typography>
-            {bridgeFeeRaw} {tokenInfo?.tokenName}
           </Typography>
         </Card>
         <DialogActions>

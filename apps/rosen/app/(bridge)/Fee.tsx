@@ -2,7 +2,7 @@ import { Grid, Typography } from '@rosen-bridge/ui-kit';
 
 export interface FeeProps {
   amount: string;
-  loading: boolean;
+  loading?: boolean;
   title: string;
   unit: string;
 }
