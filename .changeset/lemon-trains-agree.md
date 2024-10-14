@@ -4,4 +4,4 @@
 '@rosen-bridge/watcher-app': patch
 ---
 
-Disregarding the inclusion of the .env file in all UI applications.
+The .env files are included in the .gitignore file for all UI applications to ensure sensitive information remains secure
