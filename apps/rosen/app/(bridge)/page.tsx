@@ -81,8 +81,9 @@ const RosenBridge = () => {
         </BridgeContainer>
         {methods.getValues().source == NETWORKS.ETHEREUM && (
           <Alert severity="warning" sx={{ textAlign: 'justify', mt: 2 }}>
-            If you are using Ledger, you may need to enable "Blind signing" and
-            "Debug data" in the Ledger (Ethereum &gt; Settings) due to{' '}
+            If you are using Ledger, you may need to enable &apos;Blind
+            signing&apos; and &apos;Debug data&apos; in the Ledger (Ethereum
+            &gt; Settings) due to{' '}
             <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
               a known issue in Ledger and MetaMask interaction
             </a>
