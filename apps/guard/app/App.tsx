@@ -3,13 +3,19 @@
 import React from 'react';
 import { NoSsr } from '@mui/material';
 
-import { styled, SnackbarProvider, AppSnackbar } from '@rosen-bridge/ui-kit';
+import {
+  styled,
+  SnackbarProvider,
+  AppSnackbar,
+  CssBaseline,
+  ThemeProvider,
+} from '@rosen-bridge/ui-kit';
 import SWRConfig from '@rosen-ui/swr-mock';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';
 
-import ThemeProvider from '@/_theme/ThemeProvider';
+import { theme } from '@/_theme/theme';
 
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
@@ -62,26 +68,29 @@ interface AppProps {
 const App = ({ children }: AppProps) => {
   return (
     <NoSsr>
-      <ThemeProvider>
-        <SnackbarProvider>
-          <ApiKeyContextProvider>
-            <Root>
-              <SideBar />
-              <SWRConfig
-                useMockedApis={
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                }
-                fakeData={mockedData}
-              >
-                <Main>
-                  <Toolbar />
-                  {children}
-                  <AppSnackbar />
-                </Main>
-              </SWRConfig>
-            </Root>
-          </ApiKeyContextProvider>
-        </SnackbarProvider>
+      <ThemeProvider theme={theme}>
+        <>
+          <CssBaseline />
+          <SnackbarProvider>
+            <ApiKeyContextProvider>
+              <Root>
+                <SideBar />
+                <SWRConfig
+                  useMockedApis={
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                  }
+                  fakeData={mockedData}
+                >
+                  <Main>
+                    <Toolbar />
+                    {children}
+                    <AppSnackbar />
+                  </Main>
+                </SWRConfig>
+              </Root>
+            </ApiKeyContextProvider>
+          </SnackbarProvider>
+        </>
       </ThemeProvider>
     </NoSsr>
   );
