@@ -3,6 +3,7 @@
 import { useForm, FormProvider } from 'react-hook-form';
 
 import {
+  Alert,
   Card,
   Divider,
   styled,
@@ -12,27 +13,33 @@ import {
 import { BridgeTransaction } from './BridgeTransaction';
 import { BridgeForm } from './BridgeForm';
 import { RosenAmountValue } from '@rosen-ui/types';
+import { NETWORKS } from '@rosen-ui/constants';
 
-const BridgeContainer = styled(Card)(({ theme }) => ({
+const Root = styled('div')(({ theme }) => ({
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -60%)',
+  margin: '0 auto',
+  minWidth: 0,
+  width: '100%',
+  [theme.breakpoints.up('tablet')]: {
+    minWidth: '600px',
+    maxWidth: '50vmax',
+  },
+}));
+
+const BridgeContainer = styled(Card)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   borderRadius: theme.spacing(2),
-  margin: '0 auto',
   display: 'grid',
-  minWidth: 0,
   gap: theme.spacing(1.5),
   padding: theme.spacing(3),
-  width: '100%',
   gridTemplateColumns: '1fr',
   gridTemplateRows: '5fr 5px auto',
   [theme.breakpoints.up('tablet')]: {
     gridTemplateColumns: '3fr auto 2fr',
     gridTemplateRows: '1fr',
-    minWidth: '600px',
-    maxWidth: '50vmax',
   },
 }));
 
@@ -66,11 +73,23 @@ const RosenBridge = () => {
 
   return (
     <FormProvider {...methods}>
-      <BridgeContainer>
-        <BridgeForm />
-        <Divider orientation={separatorOrientation} flexItem />
-        <BridgeTransaction />
-      </BridgeContainer>
+      <Root>
+        <BridgeContainer>
+          <BridgeForm />
+          <Divider orientation={separatorOrientation} flexItem />
+          <BridgeTransaction />
+        </BridgeContainer>
+        {methods.getValues().source == NETWORKS.ETHEREUM && (
+          <Alert severity="warning" sx={{ textAlign: 'justify', mt: 2 }}>
+            If you are using Ledger, you may need to enable "Blind signing" and
+            "Debug data" in the Ledger (Ethereum &gt; Settings) due to{' '}
+            <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
+              a known issue in Ledger and MetaMask interaction
+            </a>
+            .
+          </Alert>
+        )}
+      </Root>
     </FormProvider>
   );
 };
