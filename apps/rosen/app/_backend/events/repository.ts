@@ -5,6 +5,8 @@ import { Network } from '@rosen-ui/types';
 
 import dataSource from '../dataSource';
 
+import '../initialize-datasource-if-needed';
+
 const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);

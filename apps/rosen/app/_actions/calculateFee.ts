@@ -14,7 +14,6 @@ const ergoExplorerClient = ergoExplorerClientFactory(
 );
 
 import { NETWORKS } from '@rosen-ui/constants';
-import { ERGO_EXPLORER_URL, feeConfigTokenId } from '@/_constants';
 import { Network } from '@rosen-ui/types';
 import { wrap } from '@/_errors';
 import { toSafeData } from '@/_utils/safeData';
@@ -61,9 +60,9 @@ export const calculateFee = wrap(
 
         const minFeeBox = new MinimumFeeBox(
           tokenId,
-          feeConfigTokenId,
+          process.env.NEXT_PUBLIC_FEE_CONFIG_TOKEN_ID!,
           ErgoNetworkType.explorer,
-          ERGO_EXPLORER_URL,
+          process.env.ERGO_EXPLORER_API!,
         );
         await minFeeBox.fetchBox();
 
