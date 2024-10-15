@@ -1,4 +1,15 @@
-# @rosen-bridge/rosen-app
+# @rosen-ui/nautilus-wallet
+
+## 1.0.0
+
+### Major Changes
+
+- Change the output type of the `getBalance` function from an `UNWRAPPED-VALUE` to a `WRAPPED-VALUE`.
+
+### Patch Changes
+
+- Revise the wallet creation logic and update the access type for each API.
+- Strengthen type safety and enforce robust typing for Chain and Network types
 
 ## 0.2.0
 

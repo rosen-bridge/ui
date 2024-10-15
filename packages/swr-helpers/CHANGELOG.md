@@ -1,5 +1,11 @@
 # @rosen-ui/swr-helpers
 
+## 0.2.0
+
+### Minor Changes
+
+- Implement support for the PUT method in the fetcher utilities
+
 ## 0.1.0
 
 ### Minor Changes

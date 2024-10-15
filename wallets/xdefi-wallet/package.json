@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/xdefi-wallet",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -21,12 +21,12 @@
   },
   "dependencies": {
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
-    "@rosen-bridge/icons": "^0.4.0",
+    "@rosen-bridge/icons": "^0.5.0",
     "@rosen-bridge/tokens": "^1.2.1",
-    "@rosen-network/bitcoin": "^0.2.0",
-    "@rosen-ui/constants": "^0.0.3",
-    "@rosen-ui/utils": "^0.4.0",
-    "@rosen-ui/wallet-api": "^1.0.2",
+    "@rosen-network/bitcoin": "^1.0.0",
+    "@rosen-ui/constants": "^0.0.4",
+    "@rosen-ui/utils": "^0.4.1",
+    "@rosen-ui/wallet-api": "^1.0.3",
     "sats-connect": "^1.4.1"
   }
 }
