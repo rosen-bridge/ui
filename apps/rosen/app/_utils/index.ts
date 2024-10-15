@@ -1,21 +1,19 @@
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-
-import { getDecimalString } from '@rosen-ui/utils';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
-import { Networks } from '@rosen-ui/constants';
-import { AvailableNetworks } from '@/_networks';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { unwrap } from '@/_errors';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
+import { fromSafeData } from '@/_utils/safeData';
+import { getTokenMap } from '@/_networks/getTokenMap.client';
 
 /**
  * a utility to make unique interface for accessing token name
  */
-export const getTokenNameAndId = (
-  token: RosenChainToken,
-  network: AvailableNetworks,
-) => {
-  if ([Networks.ERGO, Networks.CARDANO, Networks.BITCOIN].includes(network)) {
+export const getTokenNameAndId = (token: RosenChainToken, network: Network) => {
+  if (NETWORK_VALUES.includes(network)) {
     return {
       tokenName: token.name,
       tokenId: token.tokenId,
@@ -28,36 +26,37 @@ export const getTokenNameAndId = (
  * @param token
  * @param amount
  * @param sourceChain
+ * @returns A WRAPPED-VALUE
  */
 export const getMinTransfer = async (
   token: RosenChainToken,
-  sourceChain: AvailableNetworks,
-  targetChain: AvailableNetworks,
-  tokensMap: any,
-) => {
-  const tokenMap = new TokenMap(tokensMap);
+  sourceChain: Network,
+  targetChain: Network,
+): Promise<RosenAmountValue> => {
+  const tokenMap = await getTokenMap();
   const idKey = tokenMap.getIdKey(sourceChain);
   const tokens = tokenMap.search(sourceChain, {
     [idKey]: token[idKey],
   });
   const ergoTokenId = tokens[0].ergo.tokenId;
 
-  const data = await calculateFee(sourceChain, targetChain, ergoTokenId, 0);
-  const parsedData = {
-    ...data,
-    data: JsonBigInt.parse(data.data!),
-  };
-  const { fees } = parsedData.data;
+  try {
+    const data = await unwrap(fromSafeData(calculateFee))(
+      sourceChain,
+      targetChain,
+      ergoTokenId,
+      0,
+    );
 
-  const networkFee = fees ? Number(fees.networkFee) : 0;
-  const bridgeFee = fees ? Number(fees.bridgeFee) : 0;
+    const { fees } = JsonBigInt.parse(data);
 
-  const minTransfer = bridgeFee + networkFee;
+    const networkFee = fees ? BigInt(fees.networkFee) : 0n;
+    const bridgeFee = fees ? BigInt(fees.bridgeFee) : 0n;
 
-  return minTransfer
-    ? getDecimalString(
-        (minTransfer + 1).toString() || '0',
-        token?.decimals || 0,
-      )
-    : '0';
+    const minTransfer = bridgeFee + networkFee;
+
+    return minTransfer ? minTransfer + 1n : 0n;
+  } catch {
+    return 0n;
+  }
 };

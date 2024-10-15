@@ -4,10 +4,13 @@ import {
   Box,
   Card,
   CircularProgress,
+  SvgIcon,
+  Tooltip,
   Typography,
   styled,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
+import { Alert } from '@rosen-bridge/icons';
 
 interface InfoWidgetCardBaseProps {
   widgetColor: keyof AugmentedPalette;
@@ -41,9 +44,12 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
       opacity: 0.75,
     },
     '& .value': {
-      fontSize: theme.typography.h2.fontSize,
+      fontSize: theme.typography.h6.fontSize,
       fontWeight: 'bold',
       lineHeight: 1,
+      display: 'flex',
+      justifyContent: 'space-between',
+      alignItems: 'center',
       '& span': {
         fontSize: '60%',
         fontWeight: 'normal',
@@ -67,6 +73,7 @@ interface InfoWidgetCardProps {
   title: string;
   unit?: string;
   value: string;
+  warning?: string;
 }
 /**
  * render an info widget card containing data
@@ -85,6 +92,7 @@ const InfoWidgetCard = ({
   title,
   unit,
   value,
+  warning,
 }: InfoWidgetCardProps) => {
   return (
     <InfoWidgetCardBase widgetColor={color}>
@@ -96,9 +104,20 @@ const InfoWidgetCard = ({
           </div>
         ) : (
           <Typography className="value">
-            {value}
-            &nbsp;
-            <span>{unit}</span>
+            <div>
+              {value}
+              &nbsp;
+              <span>{unit}</span>
+            </div>
+            {warning && (
+              <Tooltip
+                title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
+              >
+                <SvgIcon>
+                  <Alert />
+                </SvgIcon>
+              </Tooltip>
+            )}
           </Typography>
         )}
         <Typography className="title">{title}</Typography>

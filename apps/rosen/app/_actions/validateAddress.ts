@@ -1,33 +1,30 @@
 'use server';
 
-import { Address } from 'ergo-lib-wasm-nodejs';
-import { Networks } from '@rosen-ui/constants';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
-import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
-import { AvailableNetworks } from '@/_networks';
-import { isValidAddress } from '@rosen-network/bitcoin';
+import { withValidation } from '@/_validation';
+import { wrap } from '@/_errors';
+import Joi from 'joi';
+import { validateAddress as validate } from '@rosen-bridge/address-codec';
 
 /**
  * server action to verify the wallet addresses
  * @param walletAddress - wallet address to verify
  * @returns the validation results for the passed address
  */
-export const validateAddress = (
-  chain: AvailableNetworks,
-  walletAddress: string,
-) => {
-  try {
-    if (chain === Networks.ERGO) {
-      Address.from_base58(walletAddress);
-    } else if (chain === Networks.CARDANO) {
-      wasm.Address.from_bech32(walletAddress);
-    } else if (chain == Networks.BITCOIN) {
-      if (!isValidAddress(walletAddress)) {
-        throw new Error();
-      }
-    }
-    return { isValid: true };
-  } catch {
-    return { isValid: false, message: 'Invalid Address' };
-  }
-};
+const validateAddressCore = async (chain: Network, walletAddress: string) =>
+  validate(chain, walletAddress);
+
+type Schema = Parameters<typeof validateAddressCore>;
+
+const schema = Joi.array<Schema>().ordered(
+  Joi.string()
+    .required()
+    .valid(...NETWORK_VALUES),
+  Joi.string().required(),
+);
+
+export const validateAddress = wrap(
+  withValidation(schema, validateAddressCore),
+);

@@ -4,6 +4,7 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { getHeight as ethereumGetHeight } from '@rosen-network/ethereum';
 
 const cardanoKoiosClient = cardanoKoiosClientFactory(
   process.env.CARDANO_KOIOS_API!,
@@ -12,16 +13,18 @@ const ergoExplorerClient = ergoExplorerClientFactory(
   process.env.ERGO_EXPLORER_API!,
 );
 
-import { Networks } from '@rosen-ui/constants';
-import { ERGO_EXPLORER_URL, feeConfigTokenId } from '@/_constants';
-import { AvailableNetworks } from '@/_networks';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
+import { wrap } from '@/_errors';
+import { toSafeData } from '@/_utils/safeData';
 
 const GetHeight = {
-  [Networks.CARDANO]: async () =>
+  [NETWORKS.ETHEREUM]: ethereumGetHeight,
+  [NETWORKS.CARDANO]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
-  [Networks.ERGO]: async () =>
+  [NETWORKS.ERGO]: async () =>
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
-  [Networks.BITCOIN]: async (): Promise<number> => {
+  [NETWORKS.BITCOIN]: async (): Promise<number> => {
     const response = await fetch(
       `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
     );
@@ -37,55 +40,50 @@ const GetHeight = {
  * @param height
  * @param explorerUrl
  * @param nextHeightInterval
+ * @returns CONTAINS WRAPPED-VALUE
  */
 
-export const calculateFee = async (
-  sourceNetwork: AvailableNetworks,
-  targetNetwork: AvailableNetworks,
-  tokenId: string,
-  nextHeightInterval: number,
-) => {
-  try {
-    const height = await GetHeight[sourceNetwork]();
+export const calculateFee = wrap(
+  toSafeData(
+    async (
+      sourceNetwork: Network,
+      targetNetwork: Network,
+      tokenId: string,
+      nextHeightInterval: number,
+    ) => {
+      try {
+        const height = await GetHeight[sourceNetwork]();
 
-    if (!height) {
-      return {
-        tokenId,
-        status: 'error',
-        message: 'Cannot fetch height from the api endpoint',
-      };
-    }
+        if (!height) {
+          throw new Error('Cannot fetch height from the api endpoint');
+        }
 
-    const minFeeBox = new MinimumFeeBox(
-      tokenId,
-      feeConfigTokenId,
-      ErgoNetworkType.explorer,
-      ERGO_EXPLORER_URL,
-    );
-    await minFeeBox.fetchBox();
+        const minFeeBox = new MinimumFeeBox(
+          tokenId,
+          process.env.NEXT_PUBLIC_FEE_CONFIG_TOKEN_ID!,
+          ErgoNetworkType.explorer,
+          process.env.ERGO_EXPLORER_API!,
+        );
+        await minFeeBox.fetchBox();
 
-    const [fees, nextFees] = await Promise.all([
-      minFeeBox.getFee(sourceNetwork, height, targetNetwork),
-      minFeeBox.getFee(
-        sourceNetwork,
-        height + nextHeightInterval,
-        targetNetwork,
-      ),
-    ]);
+        const [fees, nextFees] = await Promise.all([
+          minFeeBox.getFee(sourceNetwork, height, targetNetwork),
+          minFeeBox.getFee(
+            sourceNetwork,
+            height + nextHeightInterval,
+            targetNetwork,
+          ),
+        ]);
 
-    return {
-      status: 'success',
-      tokenId,
-      data: JsonBigInt.stringify({
-        fees,
-        nextFees,
-      }),
-    };
-  } catch (error) {
-    return {
-      tokenId,
-      status: 'error',
-      message: error instanceof Error ? error.message : 'Unknown Error',
-    };
-  }
-};
+        return JsonBigInt.stringify({
+          fees,
+          nextFees,
+        });
+      } catch (error) {
+        throw new Error(
+          error instanceof Error ? error.message : 'Unknown Error',
+        );
+      }
+    },
+  ),
+);

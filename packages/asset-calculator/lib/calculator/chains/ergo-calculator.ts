@@ -1,20 +1,25 @@
-import { NATIVE_TOKEN, RosenChainToken } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 
 import AbstractCalculator from '../abstract-calculator';
 import { Balance } from '@rosen-clients/ergo-explorer/dist/src/v1/types';
 import { zipWith } from 'lodash-es';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 export class ErgoCalculator extends AbstractCalculator {
+  readonly chain: Network = NETWORKS.ERGO;
+
   private explorerApi;
 
   constructor(
+    tokenMap: TokenMap,
     addresses: string[],
     explorerUrl: string,
     logger?: AbstractLogger
   ) {
-    super(addresses, logger);
+    super(addresses, logger, tokenMap);
     this.explorerApi = ergoExplorerClientFactory(explorerUrl);
   }
 
@@ -22,7 +27,7 @@ export class ErgoCalculator extends AbstractCalculator {
    * @param token Ergo chain token info
    * @returns total supply of the token in Ergo
    */
-  totalSupply = async (token: RosenChainToken): Promise<bigint> => {
+  totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
     const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(
       token.tokenId
     );
@@ -39,7 +44,7 @@ export class ErgoCalculator extends AbstractCalculator {
    * @param token Ergo chain token info
    * @returns total balance in hot and cold wallets
    */
-  totalBalance = async (token: RosenChainToken): Promise<bigint> => {
+  totalRawBalance = async (token: RosenChainToken): Promise<bigint> => {
     let tokenBalance = 0n;
     for (const address of this.addresses) {
       const balance =
@@ -48,11 +53,13 @@ export class ErgoCalculator extends AbstractCalculator {
         balance.tokens!.filter((asset) => asset.tokenId == token.tokenId)[0]
           ?.amount ?? 0n;
       this.logger.debug(
-        `Balance of token [${token}] in address [${address}] is [${addressTokenBalance}]`
+        `Balance of token [${token.name}] in address [${address}] is [${addressTokenBalance}]`
       );
       tokenBalance += addressTokenBalance;
     }
-    this.logger.debug(`Total balance of token [${token}] is [${tokenBalance}]`);
+    this.logger.debug(
+      `Total balance of token [${token.name}] is [${tokenBalance}]`
+    );
     return tokenBalance;
   };
 
@@ -79,7 +86,7 @@ export class ErgoCalculator extends AbstractCalculator {
    * returns locked amounts of a specific token for different addresses
    * @param token
    */
-  getLockedAmountsPerAddress = async (token: RosenChainToken) => {
+  getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
     const addressBalances = await Promise.all(
       this.addresses.map((address) =>
         this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address)

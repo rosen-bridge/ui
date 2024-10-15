@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ['master', 'dev']
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  type-lint:
+    name: type-check and lint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build:mono-packages
+      - run: npm run type-check --workspaces --if-present
+      - run: npm run lint --workspaces --if-present
+
+  test:
+    name: 'build and test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18, 20]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Build and test using Node.js v${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build:mono-packages
+      - run: npm run coverage
+
+  changeset:
+    name: 'changeset'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          # check out full history
+          fetch-depth: 0
+
+      - name: Run changeset to check versions
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npx @changesets/cli@2.27.7 status --since=origin/dev

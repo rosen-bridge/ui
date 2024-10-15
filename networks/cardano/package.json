@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/cardano",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -15,7 +15,7 @@
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
     "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
     "@rosen-clients/cardano-koios": "^2.0.3",
-    "@rosen-ui/wallet-api": "^1.0.0"
+    "@rosen-ui/wallet-api": "^1.0.3"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.30.7",

@@ -21,7 +21,7 @@ const getVesprWallet = () =>
       ...walletInfo,
       connectWallet,
     },
-    cardano.vespr
+    () => cardano.vespr
   );
 
 export const isVesprAvailable = () =>

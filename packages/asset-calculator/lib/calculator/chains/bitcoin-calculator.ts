@@ -1,8 +1,10 @@
-import { NATIVE_TOKEN, RosenChainToken } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import AbstractCalculator from '../abstract-calculator';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import axios, { AxiosInstance } from 'axios';
 import { zipWith } from 'lodash-es';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 /**
  * This type only contains the part of the type that is required here
@@ -15,14 +17,17 @@ interface PartialEsploraAddress {
 }
 
 export class BitcoinCalculator extends AbstractCalculator {
+  readonly chain: Network = NETWORKS.BITCOIN;
+
   protected client: AxiosInstance;
 
   constructor(
+    tokenMap: TokenMap,
     addresses: string[],
     url: string = 'https://blockstream.info',
     logger?: AbstractLogger
   ) {
-    super(addresses, logger);
+    super(addresses, logger, tokenMap);
     this.client = axios.create({
       baseURL: url,
     });
@@ -31,14 +36,14 @@ export class BitcoinCalculator extends AbstractCalculator {
   /**
    * @param token Bitcoin chain token supply, always 0
    */
-  totalSupply = async (): Promise<bigint> => {
+  totalRawSupply = async (): Promise<bigint> => {
     return 0n;
   };
 
   /**
    * @param token Bitcoin chain token balance, always 0
    */
-  totalBalance = async (): Promise<bigint> => {
+  totalRawBalance = async (): Promise<bigint> => {
     return 0n;
   };
 
@@ -46,7 +51,7 @@ export class BitcoinCalculator extends AbstractCalculator {
    * returns locked amounts of a specific token for different addresses
    * @param token
    */
-  getLockedAmountsPerAddress = async (token: RosenChainToken) => {
+  getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
     if (token.metaData.type === NATIVE_TOKEN) {
       const balances = await Promise.all(
         this.addresses.map(async (address) => {

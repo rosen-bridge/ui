@@ -6,8 +6,8 @@ import { isNautilusAvailable } from './isNautilusAvailable';
 import { transferCreator } from './transfer';
 
 export const nautilusWalletCreator: WalletCreator = (config) => {
-  if (!isNautilusAvailable()) return;
   return Object.assign({}, getNautilusWallet(), {
+    isAvailable: isNautilusAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
     getAddress: async () => {

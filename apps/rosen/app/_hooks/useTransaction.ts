@@ -3,40 +3,56 @@ import { useState } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 
-import useLockAddress from './useLockAddress';
+import useNetwork from './useNetwork';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
+import { getNonDecimalString } from '@rosen-ui/utils';
+import { useTokenMap } from './useTokenMap';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * a react hook to create and sign and submit transactions
  */
 export const useTransaction = () => {
+  const tokenMap = useTokenMap();
+  const { selectedNetwork, selectedTargetNetwork } = useNetwork();
   const { targetValue, tokenValue, amountValue, walletAddressValue } =
     useTransactionFormData();
 
   const { selectedWallet } = useWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const lockAddress = useLockAddress();
+  const lockAddress = selectedNetwork?.lockAddress ?? '';
 
   const { openSnackbar } = useSnackbar();
 
-  const startTransaction = async (bridgeFee: number, networkFee: number) => {
+  const startTransaction = async (
+    bridgeFee: RosenAmountValue,
+    networkFee: RosenAmountValue,
+  ) => {
     if (
       tokenValue &&
       targetValue &&
       amountValue &&
       walletAddressValue &&
       bridgeFee &&
-      networkFee
+      networkFee &&
+      tokenMap &&
+      selectedTargetNetwork
     ) {
       setIsSubmitting(true);
       try {
+        const amountValueWrapped = BigInt(
+          getNonDecimalString(
+            amountValue as string,
+            tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+          ),
+        );
         const txId = await selectedWallet?.transfer(
           tokenValue as RosenChainToken,
-          amountValue,
+          amountValueWrapped,
           targetValue,
-          walletAddressValue,
+          selectedTargetNetwork.toSafeAddress(walletAddressValue),
           bridgeFee,
           networkFee,
           lockAddress,

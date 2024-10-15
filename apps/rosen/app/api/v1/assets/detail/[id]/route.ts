@@ -1,11 +1,7 @@
-import assetDetailsService from './asset-details-service';
+import { getAsset } from '@/_backend/assets';
 
 import withValidation from '../../../withValidation';
 
-import AssetDetailsValidations from './validations';
+import { validateGet } from './validations';
 
-import '../../../initialize-datasource-if-needed';
-
-export const GET = withValidation(AssetDetailsValidations.GET, (value) =>
-  assetDetailsService.getAssetDetails(value.id),
-);
+export const GET = withValidation(validateGet, (value) => getAsset(value.id));

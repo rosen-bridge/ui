@@ -1,4 +1,17 @@
-# @rosen-bridge/rosen-app
+# @rosen-ui/eternl-wallet
+
+## 1.0.0
+
+### Major Changes
+
+- Modify the `transferCreator` function parameter to accept `WRAPPED-VALUE`.
+- Change the output type of the `getBalance` function from an `UNWRAPPED-VALUE` to a `WRAPPED-VALUE`.
+
+### Patch Changes
+
+- Revise the wallet creation logic and update the access type for each API.
+- Strengthen type safety and enforce robust typing for Chain and Network types
+- Resolve the issue by replacing the incorrect token retrieval method using policyId with a more accurate approach that retrieves the token by both nameHex and policyId.
 
 ## 0.1.3
 

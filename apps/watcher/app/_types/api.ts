@@ -4,6 +4,7 @@ import {
   TokenChartData,
   TokenInfo,
   MutationRequestBodyWithHeaders,
+  Network,
 } from '@rosen-ui/types';
 
 export interface ApiInfoResponse {
@@ -18,10 +19,18 @@ export interface ApiInfoResponse {
     active: number;
     total: number;
   };
-  health: 'Healthy' | 'Unstable' | 'Broken';
+  health: {
+    status: 'Healthy' | 'Unstable' | 'Broken';
+    trialErrors: string[];
+  };
   address: string;
   rsnTokenId: string;
-  version: string;
+  eRsnTokenId: string;
+  versions: {
+    app: string;
+    contract: string;
+    tokensMap: string;
+  };
 }
 
 export type ApiAddressAssetsResponse = Paginated<TokenInfo>;
@@ -68,8 +77,8 @@ export interface ApiPermitReturnResponse {
 
 export interface Observation {
   id: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   height: number;
@@ -93,8 +102,8 @@ export interface Revenue {
   permitTxId: string;
   eventId: string;
   lockHeight: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   amount: string;
@@ -119,8 +128,8 @@ export interface Event {
   boxSerialized: string;
   block: string;
   height: number;
-  fromChain: string;
-  toChain: string;
+  fromChain: Network;
+  toChain: Network;
   fromAddress: string;
   toAddress: string;
   amount: string;

@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/bitcoin",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -13,10 +13,10 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.2.1",
+    "@rosen-bridge/address-codec": "^0.3.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
-    "@rosen-ui/constants": "^0.0.3",
-    "@rosen-ui/wallet-api": "^1.0.2",
+    "@rosen-ui/constants": "^0.0.4",
+    "@rosen-ui/wallet-api": "^1.0.3",
     "axios": "^1.7.2",
     "bitcoinjs-lib": "^6.1.6"
   },

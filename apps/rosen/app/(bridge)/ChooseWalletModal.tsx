@@ -6,16 +6,18 @@ import {
   DialogContentText,
   Grid,
   Tooltip,
+  Typography,
 } from '@rosen-bridge/ui-kit';
-import { Wallet, WalletInfo } from '@rosen-ui/wallet-api';
+import { Network } from '@rosen-ui/types';
+import { Wallet } from '@rosen-ui/wallet-api';
+import { useEffect, useState } from 'react';
 
 interface ChooseWalletModalProps {
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
-  chainName: string;
-  supportedWallets: WalletInfo[];
-  availableWallets: Wallet[];
+  chainName?: Network;
+  wallets: Wallet[];
 }
 
 /**
@@ -25,8 +27,7 @@ interface ChooseWalletModalProps {
  * @param handleClose
  * @param setSelectedWallet
  * @param chainName
- * @param supportedWallets
- * @param availableWallets
+ * @param wallets
  *
  */
 export const ChooseWalletModal = ({
@@ -34,13 +35,26 @@ export const ChooseWalletModal = ({
   handleClose,
   setSelectedWallet,
   chainName,
-  supportedWallets,
-  availableWallets,
+  wallets,
 }: ChooseWalletModalProps) => {
+  const [, forceUpdate] = useState('');
+
   const handleConnect = async (wallet: Wallet) => {
     setSelectedWallet && (await setSelectedWallet(wallet));
     handleClose();
   };
+
+  useEffect(() => {
+    if (!open) return;
+
+    const timeout = setInterval(() => {
+      forceUpdate(wallets.map((wallet) => wallet.isAvailable()).join(':'));
+    }, 2000);
+
+    return () => {
+      clearInterval(timeout);
+    };
+  }, [open, wallets]);
 
   return (
     <Dialog onClose={handleClose} open={open} maxWidth="tablet">
@@ -48,18 +62,26 @@ export const ChooseWalletModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
+        <Typography
+          color={(theme) => theme.palette.warning.light}
+          variant="body1"
+          pt={1}
+        >
+          It may be necessary to reload this page after the following extensions
+          have been installed in order to connect to them.
+        </Typography>
         <Grid
           container
           justifyContent="center"
           sx={{
-            pt: (theme) => theme.spacing(1),
             gap: (theme) => theme.spacing(2),
             mt: (theme) => theme.spacing(4),
           }}
         >
-          {supportedWallets.map(
-            ({ icon: WalletIcon, label, link, name }, index) => (
-              <Tooltip title={name} key={label}>
+          {wallets.map((wallet) => {
+            const WalletIcon = wallet.icon;
+            return (
+              <Tooltip title={wallet.name} key={wallet.label}>
                 <Grid
                   item
                   sx={{
@@ -87,7 +109,7 @@ export const ChooseWalletModal = ({
                       },
                     }}
                     component="a"
-                    href={link}
+                    href={wallet.link}
                     target="_blank"
                   >
                     <WalletIcon />
@@ -95,25 +117,19 @@ export const ChooseWalletModal = ({
                   <Button
                     onClick={(event) => {
                       event.preventDefault();
-                      handleConnect(
-                        availableWallets.find(
-                          (wallet) => wallet.name === name,
-                        )!,
-                      );
+                      handleConnect(wallet);
                     }}
                     variant="contained"
                     size="small"
                     sx={{ mt: (theme) => theme.spacing(1), width: '100%' }}
-                    disabled={
-                      !availableWallets.find((wallet) => wallet.name === name)
-                    }
+                    disabled={!wallet.isAvailable()}
                   >
                     Connect
                   </Button>
                 </Grid>
               </Tooltip>
-            ),
-          )}
+            );
+          })}
         </Grid>
       </DialogContent>
       <DialogActions>

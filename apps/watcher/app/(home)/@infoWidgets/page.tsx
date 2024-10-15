@@ -10,7 +10,7 @@ import {
   ShieldExclamation,
   Wallet,
 } from '@rosen-bridge/icons';
-import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
+import { Box, Grid, SvgIcon, Typography } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
@@ -19,6 +19,7 @@ import { getDecimalString } from '@rosen-ui/utils';
 import InfoWidgetCard from './InfoWidgetCard';
 
 import useRsnToken from '@/_hooks/useRsnToken';
+import useERsnToken from '@/_hooks/useERsnToken';
 import useToken from '@/_hooks/useToken';
 
 import { ApiInfoResponse } from '@/_types/api';
@@ -30,6 +31,7 @@ const InfoWidgets = () => {
   );
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
+  const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
   /**
@@ -150,10 +152,20 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          title="RSN"
+          title={
+            eRsnToken?.amount !== undefined
+              ? getDecimalString(
+                  eRsnToken.amount.toString(),
+                  eRsnToken.decimals,
+                ) + ' eRSN'
+              : ''
+          }
           value={
             rsnToken?.amount !== undefined
-              ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals)
+              ? getDecimalString(
+                  rsnToken.amount.toString(),
+                  rsnToken.decimals,
+                ) + ' RSN'
               : ''
           }
           icon={
@@ -165,16 +177,16 @@ const InfoWidgets = () => {
             </SvgIcon>
           }
           color="warning"
-          isLoading={isRsnTokenLoading}
+          isLoading={isRsnTokenLoading || isERsnTokenLoading}
         />
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title="Health"
-          value={data?.health ?? ''}
+          value={data?.health.status ?? ''}
           icon={
             <SvgIcon fontSize="large">
-              {data?.health === 'Healthy' ? (
+              {data?.health.status === 'Healthy' ? (
                 <ShieldCheck />
               ) : (
                 <ShieldExclamation />
@@ -183,10 +195,13 @@ const InfoWidgets = () => {
           }
           color={
             data?.health
-              ? (healthStatusColorMap[data.health] as keyof AugmentedPalette)
+              ? (healthStatusColorMap[
+                  data.health.status
+                ] as keyof AugmentedPalette)
               : 'success'
           }
           isLoading={isInfoLoading}
+          warning={data?.health.trialErrors.join('\n')}
         />
       </Grid>
     </Grid>

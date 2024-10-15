@@ -3,6 +3,7 @@ import { minBoxValue } from './constants';
 import { AssetBalance, BoxInfo, CoveringBoxes, TokenInfo } from './types';
 import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { Network } from '@rosen-ui/types';
 
 /**
  * gets Ergo current block height
@@ -20,7 +21,7 @@ export const getHeight = async (): Promise<number> => {
  * @param lockAddress
  * @param height
  * @param tokenId
- * @param amount
+ * @param amount THIS IS AN UNWRAPPED-VALUE
  * @param toChain
  * @param toAddress
  * @param fromAddress
@@ -32,7 +33,7 @@ export const createLockBox = (
   height: number,
   tokenId: string,
   amount: bigint,
-  toChain: string,
+  toChain: Network,
   toAddress: string,
   fromAddress: string,
   bridgeFee: bigint,
@@ -75,6 +76,9 @@ export const createLockBox = (
 
 /**
  * creates change box candidate
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param changeAddress
  * @param height
  * @param balance
@@ -102,6 +106,9 @@ export const createChangeBox = (
 
 /**
  * extracts box id and assets of a box
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param box the box
  * @returns an object containing the box id and assets
  */
@@ -120,6 +127,9 @@ const getBoxInfo = (box: ErgoBoxProxy): BoxInfo => {
 
 /**
  * select useful boxes for an address until required assets are satisfied
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param address the address
  * @param requiredAssets the required assets
  * @param forbiddenBoxIds the id of forbidden boxes
@@ -201,6 +211,10 @@ export const getCoveringBoxes = async (
 
 /**
  * sums two AssetBalance
+ *
+ * IT DOESN'T MATTER WHETHER THESE VALUES ARE WRAPPED OR UNWRAPPED;
+ * WHAT TRULY MATTERS IS THE CONTEXT IN WHICH THIS FUNCTION IS USED.
+ *
  * @param a first AssetBalance object
  * @param b second AssetBalance object
  * @returns aggregated AssetBalance
@@ -228,6 +242,10 @@ export const sumAssetBalance = (
 
 /**
  * subtracts two AssetBalance
+ *
+ * IT DOESN'T MATTER WHETHER THESE VALUES ARE WRAPPED OR UNWRAPPED;
+ * WHAT TRULY MATTERS IS THE CONTEXT IN WHICH THIS FUNCTION IS USED.
+ *
  * @param a first AssetBalance object
  * @param b second AssetBalance object
  * @param minimumNativeToken minimum allowed native token
@@ -275,6 +293,9 @@ export const subtractAssetBalance = (
 
 /**
  * calculates box assets
+ *
+ * THIS FUNCTION WORKS WITH UNWRAPPED VALUES
+ *
  * @param utxo
  * @returns
  */

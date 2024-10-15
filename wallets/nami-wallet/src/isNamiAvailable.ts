@@ -1,3 +1,3 @@
 export const isNamiAvailable = () => {
-  return typeof cardano !== 'undefined' && cardano?.nami;
+  return typeof cardano !== 'undefined' && !!cardano?.nami;
 };

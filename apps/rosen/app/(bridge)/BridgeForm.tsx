@@ -21,9 +21,12 @@ import useBridgeForm from '@/_hooks/useBridgeForm';
 import useNetwork from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
-import useMaxTransfer from '@/_hooks/useMaxTransfer';
+import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
 import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
+import { useTokenMap } from '@/_hooks/useTokenMap';
+import useWallet from '@/_hooks/useWallet';
+import { NETWORKS } from '@rosen-ui/constants';
 
 /**
  * customized form input
@@ -78,7 +81,7 @@ const FormContainer = styled('div')(({ theme }) => ({
 /**
  * renders the bridge main form
  */
-const BridgeForm = () => {
+export const BridgeForm = () => {
   const {
     reset,
     setValue,
@@ -95,11 +98,14 @@ const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { availableNetworks, tokens, targetNetworks, selectedNetwork } =
-    useNetwork();
+  const { availableNetworks, tokens, targetNetworks } = useNetwork();
+
   const { isLoading, amount, token } = useTokenBalance();
 
-  const { max } = useMaxTransfer();
+  const { max, loading: isMaxLoading } = useMaxTransfer();
+  const tokenMap = useTokenMap();
+
+  const { selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
@@ -171,17 +177,20 @@ const BridgeForm = () => {
   );
 
   const handleSelectMax = useCallback(async () => {
-    const value = getDecimalString(max.toString(), token?.decimals ?? 0);
+    const value = getDecimalString(
+      max.toString(),
+      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) || 0,
+    );
 
     setValue('amount', value, {
       shouldDirty: true,
       shouldTouch: true,
     });
-  }, [max, token?.decimals, setValue]);
+  }, [max, tokenMap, tokenField.value, setValue]);
 
   const renderInputActions = () => (
     <>
-      {tokenField.value && !!max && (
+      {tokenField.value && !isMaxLoading && selectedWallet && (
         <Grid container justifyContent="space-between">
           <MaxButton
             disabled={isLoading || !tokenField.value}
@@ -192,7 +201,12 @@ const BridgeForm = () => {
               {`Balance: ${
                 isLoading
                   ? 'loading...'
-                  : getDecimalString(amount.toString(), token?.decimals ?? 0)
+                  : getDecimalString(
+                      amount.toString(),
+                      tokenMap.getSignificantDecimals(
+                        tokenField.value.tokenId,
+                      ) || 0,
+                    )
               }`}
             </Typography>
           </MaxButton>
@@ -269,6 +283,28 @@ const BridgeForm = () => {
         </Grid>
       </Grid>
       <FormInputs
+        label="Address"
+        InputProps={{ disableUnderline: true } as any}
+        variant="filled"
+        error={!!errors?.walletAddress}
+        helperText={
+          isValidating ? (
+            <CircularProgress size={10} />
+          ) : (
+            errors.walletAddress?.message?.toString()
+          )
+        }
+        disabled={!targetField.value}
+        autoComplete="off"
+        {...addressField}
+        value={addressField.value ?? ''}
+      />
+      {targetField.value == NETWORKS.BITCOIN && (
+        <Alert severity="warning">
+          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
+        </Alert>
+      )}
+      <FormInputs
         id="token"
         select
         label="Token"
@@ -315,30 +351,6 @@ const BridgeForm = () => {
         disabled={!tokenField.value}
         autoComplete="off"
       />
-      <FormInputs
-        label="Address"
-        InputProps={{ disableUnderline: true } as any}
-        variant="filled"
-        error={!!errors?.walletAddress}
-        helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
-        }
-        disabled={!targetField.value}
-        autoComplete="off"
-        {...addressField}
-        value={addressField.value ?? ''}
-      />
-      {targetField.value == 'bitcoin' && (
-        <Alert severity="warning">
-          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
-        </Alert>
-      )}
     </FormContainer>
   );
 };
-
-export default BridgeForm;

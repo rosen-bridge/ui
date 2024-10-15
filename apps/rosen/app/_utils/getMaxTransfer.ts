@@ -1,26 +1,34 @@
-import { BitcoinNetwork, CardanoNetwork, ErgoNetwork } from '@/_types/network';
+import {
+  BitcoinNetwork,
+  CardanoNetwork,
+  ErgoNetwork,
+  EthereumNetwork,
+} from '@/_types/network';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * return max transfer, considering all the context that affects it
  * @param network
- * @param tokenInfo
+ * @param tokenInfo CONTAINS A WRAPPED-VALUE
  * @param context
+ * @returns THIS IS A WRAPPED-VALUE
  */
-const getMaxTransfer = async (
-  network: ErgoNetwork | CardanoNetwork | BitcoinNetwork,
+export const getMaxTransfer = async (
+  network: ErgoNetwork | CardanoNetwork | BitcoinNetwork | EthereumNetwork,
   tokenInfo: {
-    balance: number;
+    balance: RosenAmountValue;
     isNative: boolean;
   },
   getContext: () => Promise<{
     fromAddress: string;
     toAddress: string;
-    toChain: string;
+    toChain: Network;
   }>,
-) => {
-  if (network.name === 'bitcoin') {
+): Promise<RosenAmountValue> => {
+  if (network.name === NETWORKS.BITCOIN) {
     const context = await getContext();
-    return network.getMaxTransfer({
+    return await network.getMaxTransfer({
       balance: tokenInfo.balance,
       isNative: tokenInfo.isNative,
       eventData: {
@@ -31,10 +39,8 @@ const getMaxTransfer = async (
     });
   }
 
-  return network.getMaxTransfer({
+  return await network.getMaxTransfer({
     balance: tokenInfo.balance,
     isNative: tokenInfo.isNative,
   });
 };
-
-export default getMaxTransfer;

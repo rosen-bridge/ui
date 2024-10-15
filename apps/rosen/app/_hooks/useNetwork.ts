@@ -1,14 +1,11 @@
-import { TokenMap } from '@rosen-bridge/tokens';
 import { useMemo } from 'react';
 
-import { Networks } from '@rosen-ui/constants';
-import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { availableNetworks } from '@/_networks';
 
 import useBridgeForm from './useBridgeForm';
-import { useTokensMap } from './useTokensMap';
-
-type Chain = string;
-type SourceFieldValue = Chain & AvailableNetworks;
+import { useTokenMap } from './useTokenMap';
+import { Network } from '@rosen-ui/types';
 
 /**
  * handles network related operations and provide list of
@@ -16,33 +13,27 @@ type SourceFieldValue = Chain & AvailableNetworks;
  */
 const useNetwork = () => {
   const { sourceField, targetField } = useBridgeForm();
-  const tokensMapObject = useTokensMap();
-
-  const tokensMap = useMemo(() => {
-    return new TokenMap(tokensMapObject);
-  }, [tokensMapObject]);
+  const tokenMap = useTokenMap();
 
   /**
    * returns the list of available network objects if a and filters out
    * unsupported networks
    */
   const availableNetworkObjects = useMemo(() => {
-    return (tokensMap.getAllChains() as SourceFieldValue[])
-      .filter((chain) => Object.values<Chain>(Networks).includes(chain))
+    return (tokenMap.getAllChains() as Network[])
+      .filter((chain) => NETWORK_VALUES.includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [tokensMap]);
+  }, [tokenMap]);
 
   /**
    * returns the list of available target network objects if a and filters out
    * unsupported networks
    */
   const targetNetworks = useMemo(() => {
-    return (
-      tokensMap.getSupportedChains(sourceField.value) as SourceFieldValue[]
-    )
-      .filter((chain) => Object.values<Chain>(Networks).includes(chain))
+    return (tokenMap.getSupportedChains(sourceField.value) as Network[])
+      .filter((chain) => NETWORK_VALUES.includes(chain))
       .map((chain) => availableNetworks[chain]);
-  }, [sourceField.value, tokensMap]);
+  }, [sourceField.value, tokenMap]);
 
   /**
    * a list of available tokens in the selected network
@@ -50,16 +41,19 @@ const useNetwork = () => {
   const tokens = useMemo(() => {
     if (!targetField.value || !sourceField.value) return [];
 
-    return tokensMap.getTokens(sourceField.value, targetField.value);
-  }, [targetField.value, sourceField.value, tokensMap]);
+    return tokenMap.getTokens(sourceField.value, targetField.value);
+  }, [targetField.value, sourceField.value, tokenMap]);
 
   return {
     availableNetworks: availableNetworkObjects,
     selectedNetwork: sourceField.value
-      ? availableNetworks[sourceField.value as SourceFieldValue]
+      ? availableNetworks[sourceField.value as Network]
       : null,
     targetNetworks: targetNetworks,
     tokens,
+    selectedTargetNetwork: targetField.value
+      ? availableNetworks[targetField.value as Network]
+      : null,
   };
 };
 

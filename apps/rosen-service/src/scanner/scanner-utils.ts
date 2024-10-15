@@ -11,7 +11,7 @@ import AppError from '../errors/AppError';
  * @param loggerFileName
  * @param updateInterval
  */
-const startScannerUpdateJob = (
+export const startScanner = (
   scanner: GeneralScanner<any>,
   loggerFileName: string,
   updateInterval: number
@@ -44,20 +44,4 @@ const startScannerUpdateJob = (
     scannerName: scanner.name(),
     interval: updateInterval,
   });
-};
-
-/**
- * start a scanner, initializing it and calling its update method periodically
- * @param scanner
- * @param loggerFileName
- * @param updateInterval
- */
-export const startScanner = async (
-  scanner: GeneralScanner<any>,
-  loggerFileName: string,
-  updateInterval: number
-) => {
-  await scanner.initialize();
-
-  startScannerUpdateJob(scanner, loggerFileName, updateInterval);
 };

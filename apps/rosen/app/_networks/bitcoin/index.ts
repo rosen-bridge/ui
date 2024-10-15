@@ -1,13 +1,13 @@
 import { BitcoinIcon } from '@rosen-bridge/icons';
-import { xdefiWalletCreator, xdefiWalletInfo } from '@rosen-ui/xdefi-wallet';
+import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
 
-import { compact } from 'lodash-es';
+import { getMaxTransfer } from './getMaxTransfer';
 
-import getMaxTransfer from './getMaxTransfer';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
-import { Networks } from '@rosen-ui/constants';
-
+import { unwrap } from '@/_errors';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
+import { cache } from '@/_utils/cache';
 
 import {
   generateOpReturnData,
@@ -16,27 +16,31 @@ import {
   getAddressBalance,
 } from './server';
 
+import { getTokenMap } from '../getTokenMap.client';
+import { fromSafeData } from '@/_utils/safeData';
+
+const config = {
+  getTokenMap,
+  generateOpReturnData: unwrap(fromSafeData(generateOpReturnData)),
+  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+  getAddressBalance: cache(unwrap(fromSafeData(getAddressBalance)), 30000),
+  submitTransaction: unwrap(fromSafeData(submitTransaction)),
+};
+
 /**
  * the main object for Bitcoin network
  * providing access to network info and wallets and network specific
  * functionality
  */
 const BitcoinNetwork: BitcoinNetworkType = {
-  name: Networks.BITCOIN,
-  label: 'Bitcoin',
+  name: NETWORKS.BITCOIN,
+  label: NETWORK_LABELS.BITCOIN,
   logo: BitcoinIcon,
-  supportedWallets: [xdefiWalletInfo],
-  availableWallets: compact([
-    xdefiWalletCreator({
-      generateOpReturnData,
-      generateUnsignedTx,
-      getAddressBalance,
-      submitTransaction,
-    }),
-  ]),
+  wallets: [xdefiWalletCreator(config)],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
-  getMaxTransfer,
+  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  toSafeAddress: (address) => address,
 };
 
 export default BitcoinNetwork;

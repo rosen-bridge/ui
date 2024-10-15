@@ -9,13 +9,19 @@ import SWRConfig from '@rosen-ui/swr-mock';
  */
 import { NoSsr } from '@mui/material';
 
-import { AppSnackbar, styled, SnackbarProvider } from '@rosen-bridge/ui-kit';
+import {
+  AppSnackbar,
+  styled,
+  SnackbarProvider,
+  ThemeProvider,
+  CssBaseline,
+} from '@rosen-bridge/ui-kit';
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
 import SideBar from './SideBar';
 import Toolbar from './Toolbar';
 
-import ThemeProvider from '@/_theme/ThemeProvider';
+import { theme } from './_theme/theme';
 
 import mockedData from './_mock/mockedData';
 
@@ -69,26 +75,29 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
     <html lang="en">
       <body>
         <NoSsr>
-          <ThemeProvider>
-            <SnackbarProvider>
-              <ApiKeyContextProvider>
-                <Root>
-                  <SideBar />
-                  <SWRConfig
-                    useMockedApis={
-                      process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    }
-                    fakeData={mockedData}
-                  >
-                    <Main>
-                      <Toolbar />
-                      {children}
-                      <AppSnackbar />
-                    </Main>
-                  </SWRConfig>
-                </Root>
-              </ApiKeyContextProvider>
-            </SnackbarProvider>
+          <ThemeProvider theme={theme}>
+            <>
+              <CssBaseline />
+              <SnackbarProvider>
+                <ApiKeyContextProvider>
+                  <Root>
+                    <SideBar />
+                    <SWRConfig
+                      useMockedApis={
+                        process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                      }
+                      fakeData={mockedData}
+                    >
+                      <Main>
+                        <Toolbar />
+                        {children}
+                        <AppSnackbar />
+                      </Main>
+                    </SWRConfig>
+                  </Root>
+                </ApiKeyContextProvider>
+              </SnackbarProvider>
+            </>
           </ThemeProvider>
         </NoSsr>
       </body>

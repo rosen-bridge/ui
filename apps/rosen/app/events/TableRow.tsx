@@ -13,6 +13,7 @@ import {
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
+import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Event } from '@/_types/api';
@@ -162,11 +163,11 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              {upperFirst(row.fromChain)}
+              {upperFirst(row.fromChain as Network)}
               <Typography variant="h5" display="inline" mx={1}>
                 →
               </Typography>
-              {upperFirst(row.toChain)}
+              {upperFirst(row.toChain as Network)}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -190,7 +191,10 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.amount.toString(), row.lockToken.decimals)}
+              {getDecimalString(
+                row.amount.toString(),
+                row.lockToken.significantDecimals,
+              )}
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -198,7 +202,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               {getDecimalString(
                 row.bridgeFee.toString(),
-                row.lockToken.decimals,
+                row.lockToken.significantDecimals,
               )}
             </EnhancedTableCell>
           </TableRow>
@@ -207,7 +211,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               {getDecimalString(
                 row.networkFee.toString(),
-                row.lockToken.decimals,
+                row.lockToken.significantDecimals,
               )}
             </EnhancedTableCell>
           </TableRow>
@@ -267,11 +271,11 @@ export const TabletRow: FC<RowProps> = (props) => {
         )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {upperFirst(row.fromChain)}
+        {upperFirst(row.fromChain as Network)}
         <Typography variant="h5" display="inline" mx={1}>
           →
         </Typography>
-        {upperFirst(row.toChain)}
+        {upperFirst(row.toChain as Network)}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -283,13 +287,22 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(row.amount.toString(), row.lockToken.decimals)}
+        {getDecimalString(
+          row.amount.toString(),
+          row.lockToken.significantDecimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(row.bridgeFee.toString(), row.lockToken.decimals)}
+        {getDecimalString(
+          row.bridgeFee.toString(),
+          row.lockToken.significantDecimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(row.networkFee.toString(), row.lockToken.decimals)}
+        {getDecimalString(
+          row.networkFee.toString(),
+          row.lockToken.significantDecimals,
+        )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         {moment(row.timestamp * 1000).fromNow()}

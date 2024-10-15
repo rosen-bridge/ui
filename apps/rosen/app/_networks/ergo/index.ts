@@ -1,20 +1,20 @@
-import {
-  nautilusWalletCreator,
-  nautilusWalletInfo,
-} from '@rosen-ui/nautilus-wallet';
-import { compact } from 'lodash-es';
+import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
 
-import { Networks } from '@rosen-ui/constants';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
+import { unwrap } from '@/_errors';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
-import {
-  fee as ergoFee,
-  minBoxValue as ergoMinBoxValue,
-} from '@rosen-network/ergo/dist/src/constants';
-
 import { generateUnsignedTx } from './server';
+import { getTokenMap } from '../getTokenMap.client';
+import { getMaxTransfer } from './getMaxTransfer';
+import { fromSafeData } from '@/_utils/safeData';
+
+const config = {
+  getTokenMap,
+  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+};
 
 /**
  * the main object for Ergo network
@@ -22,24 +22,14 @@ import { generateUnsignedTx } from './server';
  * functionality
  */
 const ErgoNetwork: ErgoNetworkType = {
-  name: Networks.ERGO,
-  label: 'Ergo',
-  supportedWallets: [nautilusWalletInfo],
-  availableWallets: compact([
-    nautilusWalletCreator({
-      generateUnsignedTx,
-    }),
-  ]),
+  name: NETWORKS.ERGO,
+  label: NETWORK_LABELS.ERGO,
+  wallets: [nautilusWalletCreator(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
-  async getMaxTransfer({ balance, isNative }) {
-    const offsetCandidate = Number(ergoFee + ergoMinBoxValue);
-    const shouldApplyOffset = isNative;
-    const offset = shouldApplyOffset ? offsetCandidate : 0;
-    const amount = balance - offset;
-    return amount < 0 ? 0 : amount;
-  },
+  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  toSafeAddress: (address) => address,
 };
 
 export default ErgoNetwork;

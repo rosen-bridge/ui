@@ -1,3 +1,4 @@
+import { TokenMap } from '@rosen-bridge/tokens';
 import { CipWalletApi, Wallet } from '@rosen-ui/wallet-api';
 
 import { generateUnsignedTx } from './generateUnsignedTx';
@@ -19,12 +20,13 @@ export interface CardanoProtocolParams {
 
 export const ADA_POLICY_ID = '';
 
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet | undefined;
+export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {
+  getTokenMap(): Promise<TokenMap>;
   decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
-  generateUnsignedTx: typeof generateUnsignedTx;
+  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   setTxWitnessSet: typeof setTxWitnessSet;
 };
 

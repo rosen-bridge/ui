@@ -1,5 +1,21 @@
 # @rosen-bridge/guard-app
 
+## 1.5.0
+
+### Minor Changes
+
+- Revise the theme provider code to incorporate the latest updates from the design system
+- Update the ApiInfoResponse interface to incorporate the latest API enhancements.
+- Enhance the app to incorporate the latest updates in API functionality and design
+- Integrate a token list for the Ethereum network into the dashboard.
+
+### Patch Changes
+
+- Strengthen type safety and enforce robust typing for Chain and Network types
+- Address the issue related to retrieving the app version property from the API
+- The .env files are included in the .gitignore file for all UI applications to ensure sensitive information remains secure
+- Fix the bug that prevents the Clear button from working correctly in the text field of the API key modal. Ensure that submitting the form does not trigger the parent forms, which would subsequently open a dialog that relies on them.
+
 ## 1.4.1
 
 ### Patch Changes

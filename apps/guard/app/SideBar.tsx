@@ -122,23 +122,17 @@ const SideBar = () => {
         </Grid>
       </Grid>
       <Grid container item direction="column">
-        {
-          <Grid item>
-            {!isLoading ? (
-              <Typography
-                textAlign="center"
-                variant="body2"
-                color="textPrimary"
-              >
-                Guard v{info?.version ?? '?'}
-              </Typography>
-            ) : (
-              <Grid mb={1} container justifyContent="center">
-                <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
-              </Grid>
-            )}
-          </Grid>
-        }
+        <Grid item>
+          {!isLoading ? (
+            <Typography textAlign="center" variant="body2" color="textPrimary">
+              Guard v{info?.versions?.app ?? '?'}
+            </Typography>
+          ) : (
+            <Grid mb={1} container justifyContent="center">
+              <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
+            </Grid>
+          )}
+        </Grid>
         <Grid item>
           <Typography
             textAlign="center"
@@ -148,6 +142,33 @@ const SideBar = () => {
             UI v{packageJson.version}
           </Typography>
         </Grid>
+        <Grid item>
+          {!isLoading ? (
+            <Typography
+              textAlign="center"
+              variant="subtitle2"
+              color="textSecondary"
+            >
+              Contract v{info?.versions?.contract ?? '?'}
+            </Typography>
+          ) : (
+            <Grid mb={1} container justifyContent="center">
+              <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
+            </Grid>
+          )}
+        </Grid>
+        {!isLoading &&
+          info?.versions?.contract !== info?.versions?.tokensMap && (
+            <Grid item>
+              <Typography
+                textAlign="center"
+                variant="subtitle2"
+                color="textSecondary"
+              >
+                Tokens v{info?.versions?.tokensMap ?? '?'}
+              </Typography>
+            </Grid>
+          )}
       </Grid>
     </AppBar>
   );
