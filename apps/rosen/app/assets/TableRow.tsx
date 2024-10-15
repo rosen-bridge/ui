@@ -315,7 +315,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           </Stack>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          {getDecimalString(row.bridged || '0', row.decimal)}
+          {getDecimalString(row.bridged || '0', row.significantDecimals)}
         </EnhancedTableCell>
         <EnhancedTableCell align="right">
           <IconButton
@@ -370,7 +370,10 @@ export const TabletRow: FC<RowProps> = (props) => {
                           >
                             <TableCell>{item.chain}</TableCell>
                             <TableCell>
-                              {getDecimalString(item.amount, row.decimal)}
+                              {getDecimalString(
+                                item.amount,
+                                row.significantDecimals,
+                              )}
                             </TableCell>
                             <TableCell>
                               <Stack
