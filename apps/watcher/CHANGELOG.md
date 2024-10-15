@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 2.4.1
+
+### Patch Changes
+
+- Add Ethereum icon svg file
+
 ## 2.4.0
 
 ### Minor Changes
