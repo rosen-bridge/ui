@@ -1,5 +1,15 @@
 # @rosen-ui/types
 
+## 0.3.0
+
+### Minor Changes
+
+- Revise the HealthParamInfo model to align with the latest API updates
+
+### Patch Changes
+
+- Strengthen type safety and enforce robust typing for Chain and Network types
+
 ## 0.2.0
 
 ### Minor Changes

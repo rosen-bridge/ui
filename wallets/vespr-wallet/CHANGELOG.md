@@ -1,4 +1,10 @@
-# @rosen-bridge/rosen-app
+# @rosen-ui/vespr-wallet
+
+## 0.0.8
+
+### Patch Changes
+
+- Revise the wallet creation logic and update the access type for each API.
 
 ## 0.0.7
 

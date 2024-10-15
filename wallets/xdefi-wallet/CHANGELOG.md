@@ -1,5 +1,18 @@
 # @rosen-ui/xdefi-wallet
 
+## 1.0.0
+
+### Major Changes
+
+- Modify the `transferCreator` function parameter to accept `WRAPPED-VALUE`.
+- Change the output type of the `getBalance` function from an `UNWRAPPED-VALUE` to a `WRAPPED-VALUE`.
+
+### Patch Changes
+
+- Revise the wallet creation logic and update the access type for each API.
+- remove redundant package dependency
+- Strengthen type safety and enforce robust typing for Chain and Network types
+
 ## 0.4.0
 
 ### Minor Changes

@@ -1,5 +1,16 @@
 # @rosen-bridge/rosen-service
 
+## 2.0.0
+
+### Major Changes
+
+- initialize Ethereum scanner and Extractor
+
+### Patch Changes
+
+- Fix scanner initialization bug
+- Fix observation entity no metadata error
+
 ## 1.1.0
 
 ### Minor Changes

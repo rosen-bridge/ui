@@ -1,5 +1,12 @@
 # @rosen-bridge/icons
 
+## 0.5.0
+
+### Minor Changes
+
+- Add Ethereum and MetaMask icons
+- Add the ShieldQuestion icon
+
 ## 0.4.0
 
 ### Minor Changes
