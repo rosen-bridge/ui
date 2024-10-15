@@ -49,9 +49,9 @@ export const SideBar = () => {
         {
           label: 'Assets',
           path: '/assets',
-          disabled: false,
+          disabled: true,
           icon: <BitcoinCircle />,
-          badge: 'Beta',
+          // badge: 'Beta',
         },
         {
           label: 'Support',
