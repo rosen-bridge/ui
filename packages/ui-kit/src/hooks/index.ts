@@ -5,3 +5,4 @@ export * from './useIsDarkMode';
 export * from './useResponsiveValue';
 export * from './useTablePagination';
 export * from './useSnackbar';
+export * from './useThemeToggler';

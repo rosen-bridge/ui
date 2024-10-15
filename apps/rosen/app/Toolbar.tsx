@@ -1,9 +1,10 @@
 import { useSelectedLayoutSegment } from 'next/navigation';
 import React from 'react';
 
-import { Toolbar as UiKitToolbar } from '@rosen-bridge/ui-kit';
-
-import ToolbarActions from './ToolbarActions';
+import {
+  ToolbarThemeTogglerAction,
+  Toolbar as UiKitToolbar,
+} from '@rosen-bridge/ui-kit';
 
 const pageTitleMap: Record<string, string> = {
   '(bridge)': 'Rosen Bridge',
@@ -22,7 +23,7 @@ const Toolbar = () => {
   return (
     <UiKitToolbar
       title={page ? pageTitleMap[page] ?? '' : ''}
-      toolbarActions={<ToolbarActions />}
+      toolbarActions={<ToolbarThemeTogglerAction />}
       isCentered
     />
   );
