@@ -12,7 +12,7 @@ import { NoSsr } from '@mui/material';
 import { AppSnackbar, styled, SnackbarProvider } from '@rosen-bridge/ui-kit';
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
-import SideBar from './SideBar';
+import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
 
 import ThemeProvider from '@/_theme/ThemeProvider';
