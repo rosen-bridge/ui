@@ -15,6 +15,7 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  WithExternalLink,
 } from '@rosen-bridge/ui-kit';
 import { useState, FC, useMemo } from 'react';
 import useSWR from 'swr';
@@ -250,20 +251,9 @@ export const TabletRow: FC<RowProps> = (props) => {
         onClick={() => setExpanded(!open)}
       >
         <EnhancedTableCell align="left">
-          <Stack alignItems="center" direction="row" gap={1}>
-            <span>{row.name}</span>
-            {tokenUrl && (
-              <Link
-                href={tokenUrl}
-                target="_blank"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
-                  <OpenInNew />
-                </SvgIcon>
-              </Link>
-            )}
-          </Stack>
+          <WithExternalLink url={tokenUrl ? tokenUrl : undefined}>
+            {row.name}
+          </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">{row.chain}</EnhancedTableCell>
         <EnhancedTableCell align="left">
@@ -273,46 +263,20 @@ export const TabletRow: FC<RowProps> = (props) => {
           )}
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          <Stack alignItems="center" direction="row" gap={1}>
-            <span>
-              {getDecimalString(
-                hot?.amount.toString() || '0',
-                row.significantDecimals,
-              )}
-            </span>
-            {hotUrl && (
-              <Link
-                href={hotUrl}
-                target="_blank"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
-                  <OpenInNew />
-                </SvgIcon>
-              </Link>
+          <WithExternalLink url={hotUrl}>
+            {getDecimalString(
+              hot?.amount.toString() || '0',
+              row.significantDecimals,
             )}
-          </Stack>
+          </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          <Stack alignItems="center" direction="row" gap={1}>
-            <span>
-              {getDecimalString(
-                cold?.amount.toString() || '0',
-                row.significantDecimals,
-              )}
-            </span>
-            {coldUrl && (
-              <Link
-                href={coldUrl}
-                target="_blank"
-                onClick={(event) => event.stopPropagation()}
-              >
-                <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
-                  <OpenInNew />
-                </SvgIcon>
-              </Link>
+          <WithExternalLink url={coldUrl}>
+            {getDecimalString(
+              cold?.amount.toString() || '0',
+              row.significantDecimals,
             )}
-          </Stack>
+          </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           {getDecimalString(row.bridged || '0', row.significantDecimals)}
