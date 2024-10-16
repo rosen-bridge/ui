@@ -81,19 +81,19 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Bridge Fee (RSN)',
+    title: 'Bridge Fee (RSN/eRSN)',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Network Fee (RSN)',
+    title: 'Network Fee (RSN/eRSN)',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Emission (RSN)',
+    title: 'Emission (RSN/eRSN)',
     cellProps: {
       width: 150,
     },
@@ -328,12 +328,14 @@ export const TabletRow: FC<RowProps> = (props) => {
         ) : (
           getDecimalString(
             row.revenues
-              .find(
+              .filter(
                 (revenue) =>
                   revenue.revenueType === 'emission' &&
-                  revenue.data.tokenId === info?.rsnTokenId,
+                  (revenue.data.tokenId === info?.rsnTokenId ||
+                    revenue.data.tokenId === info?.emissionTokenId),
               )
-              ?.data.amount.toString() ?? '',
+              .reduce((sum, revenue) => sum + revenue.data.amount, 0)
+              .toString() ?? '',
             row.lockToken.decimals,
           )
         )}
