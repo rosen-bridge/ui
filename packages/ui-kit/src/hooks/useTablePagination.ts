@@ -14,7 +14,7 @@ import { Paginated } from '@rosen-ui/types';
  */
 export const useTableDataPagination = <T extends Paginated<unknown>>(
   getKey: (offset: number, limit: number) => Key,
-  initialPageSize = 10,
+  initialPageSize = 25,
   initialPageIndex = 0,
 ) => {
   const [pageSize, setPageSize] = useState<number>(initialPageSize);
