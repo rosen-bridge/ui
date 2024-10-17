@@ -27,6 +27,8 @@ import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
 import useWallet from '@/_hooks/useWallet';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Autocomplete } from '@mui/material';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 /**
  * customized form input
@@ -49,6 +51,39 @@ const FormInputs = styled(TextField)(({ theme }) => ({
     'input::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
       '-webkit-appearance': 'none',
     },
+  },
+}));
+
+/**
+ * customized form token input
+ */
+const FormTokenInput = styled(Autocomplete<RosenChainToken>)(({ theme }) => ({
+  '.MuiInputLabel-root': {
+    transform: 'translate(12px, 16px) scale(1)',
+    '&.MuiInputLabel-shrink': {
+      transform: 'translate(12px, 7px) scale(0.75)',
+    },
+  },
+  '.MuiAutocomplete-input': {
+    transform: 'translateY(8px)',
+  },
+  '& .MuiOutlinedInput-root': {
+    overflow: 'hidden',
+    borderRadius: theme.spacing(2),
+    backgroundColor: theme.palette.background.input,
+    minHeight: theme.spacing(8.5),
+
+    transition: theme.transitions.create(['background-color', 'box-shadow']),
+    '&:hover': {
+      backgroundColor: theme.palette.background.header,
+    },
+    '&.Mui-focused': {
+      backgroundColor: theme.palette.background.header,
+      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
+    },
+  },
+  '& fieldset': {
+    border: 'none',
   },
 }));
 
@@ -123,12 +158,8 @@ export const BridgeForm = () => {
   };
 
   const handleTokenChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const currentToken = tokens.find(
-        (token) =>
-          getTokenNameAndId(token, sourceField.value)?.tokenId ===
-          e.target.value,
-      );
+    (e: React.SyntheticEvent, value: RosenChainToken | null) => {
+      const currentToken = value || undefined;
       setValue('token', currentToken, {
         shouldDirty: true,
         shouldTouch: true,
@@ -136,7 +167,7 @@ export const BridgeForm = () => {
       setValue('amount', '');
       resetField('amount');
     },
-    [setValue, resetField, tokens, sourceField],
+    [setValue, resetField],
   );
 
   const handleSourceChange = useCallback(
@@ -304,34 +335,26 @@ export const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
-      <FormInputs
-        id="token"
-        select
-        label="Token"
+      <FormTokenInput
+        aria-label="token input"
         disabled={!tokens.length}
-        InputProps={{ disableUnderline: true }}
-        inputProps={{ 'aria-label': 'token input' }}
-        variant="filled"
-        {...tokenField}
-        value={
-          tokenField.value
-            ? getTokenNameAndId(tokenField.value, sourceField.value)?.tokenId
-            : ''
-        }
-        onChange={handleTokenChange}
-      >
-        {tokens.map((token) => {
-          const { tokenId, tokenName } = getTokenNameAndId(
-            token,
-            sourceField.value,
-          )!;
+        id="token"
+        clearIcon={false}
+        disablePortal
+        options={tokens}
+        value={tokenField.value}
+        getOptionLabel={(option) => option.name || ''}
+        isOptionEqualToValue={(option, value) => {
           return (
-            <MenuItem key={tokenId} value={tokenId}>
-              {tokenName}
-            </MenuItem>
+            getTokenNameAndId(option, sourceField.value)?.tokenId ===
+            getTokenNameAndId(value, sourceField.value)?.tokenId
           );
-        })}
-      </FormInputs>
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label="Token" name={tokenField.name} />
+        )}
+        onChange={handleTokenChange}
+      />
       <FormInputs
         id="amount"
         size="medium"
