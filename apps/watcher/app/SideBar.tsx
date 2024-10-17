@@ -2,11 +2,11 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
 import {
-  Archway,
-  BitcoinCircle,
-  Dashboard,
-  Exchange,
-  Headphones,
+  Estate,
+  Heartbeat,
+  Newspaper,
+  ClipboardNotes,
+  Moneybag,
 } from '@rosen-bridge/icons';
 import { AppBar, AppLogo } from '@rosen-bridge/ui-kit';
 
@@ -27,23 +27,23 @@ export const SideBar = () => {
   const versions = [
     {
       title: 'Watcher',
-      value: info?.versions.app || '',
+      value: info?.versions.app as string,
       important: true,
     },
     {
       title: 'UI',
-      value: packageJson.version || '',
+      value: packageJson.version,
     },
     {
       title: 'Contract',
-      value: info?.versions.contract || '',
+      value: info?.versions.contract as string,
     },
   ];
 
-  if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
+  if (!isLoading && info!.versions.contract !== info!.versions.tokensMap) {
     versions.push({
       title: 'Tokens',
-      value: info?.versions.tokensMap || '',
+      value: info!.versions.tokensMap as string,
     });
   }
 
@@ -57,35 +57,34 @@ export const SideBar = () => {
       versions={versions}
       routes={[
         {
-          label: 'Bridge',
+          label: 'HOME',
           path: '/',
           disabled: false,
-          icon: <Archway />,
+          icon: <Estate />,
         },
         {
-          label: 'Events',
+          label: 'HEALTH',
+          path: '/health',
+          disabled: false,
+          icon: <Heartbeat />,
+        },
+        {
+          label: 'OBSERVATIONS',
+          path: '/observations',
+          disabled: false,
+          icon: <Newspaper />,
+        },
+        {
+          label: 'EVENTS',
           path: '/events',
           disabled: false,
-          icon: <Exchange />,
+          icon: <ClipboardNotes />,
         },
         {
-          label: 'Assets',
-          path: '/assets',
+          label: 'REVENUES',
+          path: '/revenues',
           disabled: false,
-          icon: <BitcoinCircle />,
-          badge: 'Beta',
-        },
-        {
-          label: 'Support',
-          path: '/support',
-          disabled: true,
-          icon: <Headphones />,
-        },
-        {
-          label: 'Dashboard',
-          path: '/dashboard',
-          disabled: true,
-          icon: <Dashboard />,
+          icon: <Moneybag />,
         },
       ]}
       isActive={(route) => pathname === route.path}
