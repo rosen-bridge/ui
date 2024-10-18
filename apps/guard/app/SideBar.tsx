@@ -41,7 +41,7 @@ export const SideBar = () => {
     },
   ];
 
-  if (!isLoading && info!.versions.contract !== info!.versions.tokensMap) {
+  if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
     versions.push({
       title: 'Tokens',
       value: info!.versions.tokensMap as string,
