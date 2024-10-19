@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 2.1.0
+
+### Minor Changes
+
+- Improve the token selection in the bridge form by incorporating a search functionality
+
 ## 2.0.0
 
 ### Major Changes
