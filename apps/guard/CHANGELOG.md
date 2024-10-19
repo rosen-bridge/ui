@@ -1,5 +1,12 @@
 # @rosen-bridge/guard-app
 
+## 1.6.0
+
+### Minor Changes
+
+- Remove the eRSN title from the network and bridge fee columns on the revenues page
+- Integrate support for the eRSN token on the Revenue page
+
 ## 1.5.0
 
 ### Minor Changes

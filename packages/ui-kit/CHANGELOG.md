@@ -1,5 +1,12 @@
 # @rosen-bridge/ui-kit
 
+## 1.4.0
+
+### Minor Changes
+
+- Update the default page size in the design system from 10 to 25
+- Integrate a component called 'WithExternalLink' to concatenate an element with an external link
+
 ## 1.3.0
 
 ### Minor Changes
