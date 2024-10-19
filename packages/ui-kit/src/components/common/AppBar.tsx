@@ -24,7 +24,7 @@ interface Route {
 interface Version {
   important?: boolean;
   title: string;
-  value: string;
+  value?: string;
 }
 
 const Root = styled(Box)(({ theme }) => ({

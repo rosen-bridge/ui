@@ -28,7 +28,7 @@ export const SideBar = () => {
   const versions = [
     {
       title: 'Guard',
-      value: info?.versions.app as string,
+      value: info?.versions.app,
       important: true,
     },
     {
@@ -37,14 +37,14 @@ export const SideBar = () => {
     },
     {
       title: 'Contract',
-      value: info?.versions.contract as string,
+      value: info?.versions.contract,
     },
   ];
 
   if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
     versions.push({
       title: 'Tokens',
-      value: info!.versions.tokensMap as string,
+      value: info?.versions.tokensMap,
     });
   }
 
