@@ -81,13 +81,13 @@ export const tabletHeader = [
     },
   },
   {
-    title: 'Bridge Fee (RSN/eRSN)',
+    title: 'Bridge Fee',
     cellProps: {
       width: 150,
     },
   },
   {
-    title: 'Network Fee (RSN/eRSN)',
+    title: 'Network Fee',
     cellProps: {
       width: 150,
     },
