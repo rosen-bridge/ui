@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, ChangeEvent } from 'react';
+import { useCallback, ChangeEvent, useEffect, useState } from 'react';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
 import {
@@ -142,6 +142,8 @@ export const BridgeForm = () => {
 
   const { selectedWallet } = useWallet();
 
+  const [sortedTokens, setSortedTokens] = useState<RosenChainToken[]>([]);
+
   const renderSelectedNetwork = (value: unknown) => {
     const network = availableNetworks.find(
       (network) => network.name === value,
@@ -254,6 +256,28 @@ export const BridgeForm = () => {
     </>
   );
 
+  useEffect(() => {
+    if (!selectedWallet) {
+      setSortedTokens(tokens);
+      return;
+    }
+    selectedWallet.getAssets().then((assets) => {
+      if (!assets.length) {
+        setSortedTokens(tokens);
+        return;
+      }
+      const sorted = tokens
+        .reverse()
+        .reduce<RosenChainToken[]>((tokens, token) => {
+          const tokenNameAndId = getTokenNameAndId(token, sourceField.value);
+          const exist =
+            tokenNameAndId && assets.includes(tokenNameAndId.tokenName);
+          return exist ? [token, ...tokens] : [...tokens, token];
+        }, []);
+      setSortedTokens(sorted);
+    });
+  }, [selectedWallet, sourceField.value, tokens]);
+
   return (
     <FormContainer>
       <Grid container spacing={1}>
@@ -337,11 +361,11 @@ export const BridgeForm = () => {
       )}
       <FormTokenInput
         aria-label="token input"
-        disabled={!tokens.length}
+        disabled={!sortedTokens.length}
         id="token"
         clearIcon={false}
         disablePortal
-        options={tokens}
+        options={sortedTokens}
         value={tokenField.value}
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => {

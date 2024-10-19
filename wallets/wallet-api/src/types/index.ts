@@ -28,6 +28,7 @@ export interface WalletBase extends WalletInfo {
 
 export interface Wallet extends WalletBase {
   readonly getBalance: (token: RosenChainToken) => Promise<RosenAmountValue>;
+  readonly getAssets: () => Promise<string[]>;
   readonly transfer: (
     token: RosenChainToken,
     amount: RosenAmountValue,

@@ -4,12 +4,14 @@ import { getBalanceCreator } from './getBalance';
 import { getMetaMaskWallet } from './getMetaMaskWallet';
 import { isMetaMaskAvailable } from './isMetaMaskAvailable';
 import { transferCreator } from './transfer';
+import { getAssets } from './getAssets';
 
 export const metaMaskWalletCreator: WalletCreator = (config) => {
   return Object.assign({}, getMetaMaskWallet(), {
     isAvailable: isMetaMaskAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
+    getAssets: getAssets(config),
     getAddress: async () => {
       throw new Error('Not implemented');
     },
