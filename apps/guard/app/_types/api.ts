@@ -20,6 +20,7 @@ export interface ApiInfoResponse {
     trialErrors: string[];
   };
   rsnTokenId: string;
+  emissionTokenId: string;
   balances: {
     hot: TokenInfoWithAddress[];
     cold: TokenInfoWithAddress[];

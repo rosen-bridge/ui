@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
@@ -11,11 +11,16 @@ import {
   Box,
   Button,
   Grid,
+  Link,
   SubmitButton,
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
-import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
+import {
+  getNonDecimalString,
+  getDecimalString,
+  getTxURL,
+} from '@rosen-ui/utils';
 
 import ConfirmationModal from '../../ConfirmationModal';
 import TokenAmountTextField, {
@@ -34,6 +39,7 @@ import {
   ApiInfoResponse,
 } from '@/_types/api';
 import ApiKeyModal from '@/_modals/ApiKeyModal';
+import { NETWORKS } from '@rosen-ui/constants';
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
@@ -60,7 +66,7 @@ const LockForm = () => {
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string;
+    message: string | ReactNode;
   } | null>(null);
 
   const {
@@ -105,7 +111,19 @@ const LockForm = () => {
       if (response?.txId) {
         setAlertData({
           severity: 'success',
-          message: `Lock operation is in progress. Wait for tx [${response.txId}] to be confirmed by some blocks, so your new permits will be activated.`,
+          message: (
+            <>
+              Lock operation is in progress. Wait for tx [
+              <Link
+                target="_blank"
+                href={getTxURL(NETWORKS.ERGO, response.txId)!}
+              >
+                {response.txId}
+              </Link>
+              ] to be confirmed by some blocks, so your new permits will be
+              activated.
+            </>
+          ),
         });
       } else {
         throw new Error(

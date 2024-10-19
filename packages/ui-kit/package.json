@@ -2,7 +2,7 @@
   "name": "@rosen-bridge/ui-kit",
   "description": "ui kit for Rosen projects",
   "private": true,
-  "version": "1.3.0",
+  "version": "1.4.0",
   "type": "module",
   "files": [
     "dist"

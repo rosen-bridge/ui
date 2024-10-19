@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 2.5.0
+
+### Minor Changes
+
+- Connect the transaction Id to the explorer following the permit in the lock action
+
 ## 2.4.1
 
 ### Patch Changes
