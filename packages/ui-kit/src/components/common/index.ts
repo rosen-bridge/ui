@@ -16,3 +16,4 @@ export * from './TokensCard';
 export * from './Toolbar';
 export * from './AppSnackbar';
 export * from './ToolbarThemeTogglerAction';
+export * from './WithExternalLink';

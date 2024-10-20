@@ -1,12 +1,20 @@
 import { useState, FC, useMemo } from 'react';
 
-import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Button,
+  EnhancedTableCell,
+  Id,
+  TableRow,
+  WithExternalLink,
+} from '@rosen-bridge/ui-kit';
 
+import { NETWORKS } from '@rosen-ui/constants';
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import { getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 
 import { GuardTokenInfo } from '@/_types/api';
+import { useAddresses } from '@/_hooks/useAddresses';
 
 interface RowProps extends GuardTokenInfo {
   isLoading?: boolean;
@@ -127,18 +135,36 @@ export const MobileRow: FC<RowProps> = (props) => {
 
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
+
+  const addresses = useAddresses();
+
+  const tokenUrl = getTokenUrl(
+    row.chain,
+    row.chain == NETWORKS.CARDANO ? row.tokenId.replace('.', '') : row.tokenId,
+  );
+
+  const coldUrl = getAddressUrl(row.chain, addresses.cold[row?.chain]);
+
+  const hotUrl = getAddressUrl(row.chain, addresses.hot[row?.chain]);
+
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>
-        {row.isNativeToken ? '-' : <Id id={row.tokenId} />}
+        <WithExternalLink url={row.isNativeToken ? undefined : tokenUrl}>
+          {row.isNativeToken ? '-' : <Id id={row.tokenId} />}
+        </WithExternalLink>
       </EnhancedTableCell>
       <EnhancedTableCell>{row.name}</EnhancedTableCell>
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.amount.toString(), row.decimals)}
+        <WithExternalLink url={hotUrl}>
+          {getDecimalString(row.amount.toString(), row.decimals)}
+        </WithExternalLink>
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.coldAmount?.toString() ?? '0', row.decimals)}
+        <WithExternalLink url={coldUrl}>
+          {getDecimalString(row.coldAmount?.toString() ?? '0', row.decimals)}
+        </WithExternalLink>
       </EnhancedTableCell>
     </TableRow>
   );

@@ -9,6 +9,8 @@ import NotFoundError from '@/_errors/NotFoundError';
 import dataSource from '../dataSource';
 import { Network } from '@rosen-ui/types';
 
+import '../initialize-datasource-if-needed';
+
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
 const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);

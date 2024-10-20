@@ -221,6 +221,43 @@ const create = (baseTheme: Theme) =>
           fullWidth: true,
         },
       },
+      MuiAutocomplete: {
+        styleOverrides: {
+          root: {
+            '.MuiInputLabel-root': {
+              transform: 'translate(12px, 16px) scale(1)',
+              '&.MuiInputLabel-shrink': {
+                transform: 'translate(12px, 7px) scale(0.75)',
+              },
+            },
+            '.MuiAutocomplete-input': {
+              transform: 'translateY(8px)',
+            },
+            '.MuiOutlinedInput-root': {
+              overflow: 'hidden',
+              borderRadius: baseTheme.spacing(2),
+              backgroundColor: alpha(baseTheme.palette.background.paper, 0.75),
+              minHeight: baseTheme.spacing(8.5),
+              transition: baseTheme.transitions.create([
+                'background-color',
+                'box-shadow',
+              ]),
+              '&:hover': {
+                backgroundColor: alpha(baseTheme.palette.background.paper, 1.0),
+              },
+              '&.Mui-disabled': {
+                backgroundColor: alpha(baseTheme.palette.background.paper, 0.5),
+              },
+              '&.Mui-focused': {
+                backgroundColor: alpha(baseTheme.palette.background.paper, 1.0),
+              },
+            },
+            fieldset: {
+              border: 'none',
+            },
+          },
+        },
+      },
       MuiFilledInput: {
         styleOverrides: {
           root: {

@@ -1,9 +1,12 @@
 import { useSelectedLayoutSegment } from 'next/navigation';
 import React from 'react';
 
-import { Toolbar as UiKitToolbar } from '@rosen-bridge/ui-kit';
+import {
+  ToolbarThemeTogglerAction,
+  Toolbar as UiKitToolbar,
+} from '@rosen-bridge/ui-kit';
 
-import ToolbarActions from './ToolbarActions';
+import ApiKeyModal from './_modals/ApiKeyModal';
 
 const pageTitleMap: Record<string, string> = {
   '(home)': 'Home',
@@ -23,7 +26,12 @@ const Toolbar = () => {
   return (
     <UiKitToolbar
       title={page ? pageTitleMap[page] ?? '' : ''}
-      toolbarActions={<ToolbarActions />}
+      toolbarActions={
+        <>
+          <ApiKeyModal />
+          <ToolbarThemeTogglerAction />
+        </>
+      }
     />
   );
 };

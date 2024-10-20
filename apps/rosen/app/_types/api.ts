@@ -1,8 +1,8 @@
 import { getAsset, getAllAssets } from '@/_backend/assets';
-import eventService from '@/_backend/events/event-service';
+import { getEventsWithFullTokenData } from '@/_backend/events';
 
 export type ApiEventResponse = Awaited<
-  ReturnType<typeof eventService.getEventsWithFullTokenData>
+  ReturnType<typeof getEventsWithFullTokenData>
 >;
 type ArrayElement<T> = T extends (infer Element)[] ? Element : never;
 export type Event = ArrayElement<ApiEventResponse['items']>;

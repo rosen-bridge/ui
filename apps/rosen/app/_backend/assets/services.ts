@@ -46,16 +46,9 @@ export const getAllAssets = async (
 
   return {
     total: assets.total,
-    items: assets.items.map((asset) => {
-      const id = asset.isNative ? asset.name : asset.id;
-
-      const significantDecimals = tokenMap.getSignificantDecimals(id) || 0;
-
-      return {
-        ...asset,
-        id,
-        significantDecimals,
-      };
-    }),
+    items: assets.items.map((asset) => ({
+      ...asset,
+      significantDecimals: tokenMap.getSignificantDecimals(asset.id) || 0,
+    })),
   };
 };

@@ -1,5 +1,30 @@
 # @rosen-bridge/watcher-app
 
+## 2.5.0
+
+### Minor Changes
+
+- Connect the transaction Id to the explorer following the permit in the lock action
+
+## 2.4.1
+
+### Patch Changes
+
+- Add Ethereum icon svg file
+
+## 2.4.0
+
+### Minor Changes
+
+- Revise the theme provider code to incorporate the latest updates from the design system
+- Enhance the app to incorporate the latest updates in API functionality and design
+
+### Patch Changes
+
+- Strengthen type safety and enforce robust typing for Chain and Network types
+- Address the issue related to retrieving the app version property from the API
+- The .env files are included in the .gitignore file for all UI applications to ensure sensitive information remains secure
+
 ## 2.3.0
 
 ### Minor Changes

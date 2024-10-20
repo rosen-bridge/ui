@@ -1,5 +1,51 @@
 # @rosen-bridge/rosen-app
 
+## 2.1.0
+
+### Minor Changes
+
+- Improve the token selection in the bridge form by incorporating a search functionality
+
+## 2.0.0
+
+### Major Changes
+
+- Update the `getMaxTransfer` server action in the networks to return a `WRAPPED-VALUE`.
+- integrate Ethereum
+- Transform the Rosen amount type from a numerical format to a bigint data type.
+
+### Minor Changes
+
+- Implement logic for automatic detection of installed wallets in runtime without the need to refresh the page.
+- Revise the theme provider code to incorporate the latest updates from the design system
+- Add token id of the bridged asset to asset details API response
+- Improve the sidebar component to accept child elements as specific props, enhancing maintainability and enabling future implementation of responsive design
+- Enable CORS headers for allowing certain origins to access APIs
+- Set up an alert for the ledger whenever the Ethereum source network is selected
+- Develop a utility to validate the arguments for server actions.
+- Integrate the MetaMask wallet package into the Rosen app.
+- Develop a responsive assets page that allows users to view detailed information about each asset, ensuring a seamless user experience across various devices and screen sizes.
+- Implement an error handling utility for the server actions
+
+### Patch Changes
+
+- Fix issue of "All" network item not being selected in assets page in first load
+- Refine and strengthen the validation process for network addresses to ensure greater accuracy and reliability.
+- Fix the external token link within the assets page
+- Revise the bridge form to enhance maintainability.
+- Sort the results of the query on the assets repository service by the name property
+- Strengthen type safety and enforce robust typing for Chain and Network types
+- Address the issue concerning the display of hot, cold, and locked amount values on the assets page
+- Implement utility functions to facilitate the transfer of the BigInt data type between the server and client in server actions.
+- Implement cache utility to optimize performance for server actions and Display a zero balance when the wallet balance is zero or when the token is unsupported.
+- The .env files are included in the .gitignore file for all UI applications to ensure sensitive information remains secure
+- Improve the error handling for the validateAddress function and implement result caching using centralized cache utilities
+- Add the tokenMap configuration to the wallet creator's setup.
+- Update server actions for error handling based on new error handling module
+- Refined Rosen app code for better maintainability by unifying environment variable access, reviewing database service code in assets and events, and enhancing type usage throughout the application.
+- Update the asset user interface to align with the latest API changes.
+- Fix the Events page in the Rosen app to ensure accurate display of amounts and fees with the correct decimal places
+
 ## 1.1.1
 
 ### Patch Changes

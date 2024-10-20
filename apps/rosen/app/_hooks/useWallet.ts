@@ -1,12 +1,10 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
-import { WalletBase } from '@rosen-ui/wallet-api';
+import { Wallet, WalletBase } from '@rosen-ui/wallet-api';
 import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
 import useNetwork from './useNetwork';
 
 import { WalletContext } from '@/_contexts/walletContext';
-
-import { SupportedWallets } from '@/_types/network';
 
 interface WalletDescriptor {
   readonly name: string;
@@ -40,14 +38,14 @@ const useWallet = () => {
    * and return the wallet object if it finds a match
    */
   const getWallet = useCallback(
-    (name: string): SupportedWallets => {
-      let wallet: SupportedWallets | undefined;
+    (name: string): Wallet => {
+      let wallet: Wallet | undefined;
 
       wallet = (
         selectedNetwork
           ? selectedNetwork.wallets.filter((wallet) => wallet.isAvailable())
           : []
-      ).find((w: SupportedWallets) => w.name === name);
+      ).find((w: Wallet) => w.name === name);
       if (!wallet) {
         throw new Error(`unsupported wallet with name ${name}`);
       }
@@ -61,7 +59,7 @@ const useWallet = () => {
    * searches in local storage for already selected wallets and
    * returns the wallet object if it finds match
    */
-  const getCurrentWallet = useCallback((): SupportedWallets | undefined => {
+  const getCurrentWallet = useCallback((): Wallet | undefined => {
     const currentWalletDescriptor =
       selectedNetwork && get<WalletDescriptor>(selectedNetwork?.name);
 
@@ -79,7 +77,7 @@ const useWallet = () => {
    * calls the connection callbacks
    */
   const setSelectedWallet = useCallback(
-    async (wallet: SupportedWallets) => {
+    async (wallet: Wallet) => {
       const prevWallet = getCurrentWallet();
       const status = await wallet.connectWallet();
 

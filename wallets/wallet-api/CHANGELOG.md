@@ -1,4 +1,11 @@
-# @rosen-bridge/rosen-app
+# @rosen-ui/wallet-api
+
+## 1.0.3
+
+### Patch Changes
+
+- Revise the wallet creation logic and update the access type for each API.
+- Strengthen type safety and enforce robust typing for Chain and Network types
 
 ## 1.0.2
 

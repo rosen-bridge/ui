@@ -10,7 +10,6 @@ import {
   ListItemIcon,
   styled,
   MenuItem,
-  Button,
   CircularProgress,
   SvgIcon,
   Alert,
@@ -27,6 +26,8 @@ import { useTokenMap } from '@/_hooks/useTokenMap';
 import useWallet from '@/_hooks/useWallet';
 import { UseAllAmount } from './UseAllAmount';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Autocomplete } from '@mui/material';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 /**
  * bridge form container comp
@@ -93,12 +94,8 @@ export const BridgeForm = () => {
   };
 
   const handleTokenChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const currentToken = tokens.find(
-        (token) =>
-          getTokenNameAndId(token, sourceField.value)?.tokenId ===
-          e.target.value,
-      );
+    (e: React.SyntheticEvent, value: RosenChainToken | null) => {
+      const currentToken = value || undefined;
       setValue('token', currentToken, {
         shouldDirty: true,
         shouldTouch: true,
@@ -106,7 +103,7 @@ export const BridgeForm = () => {
       setValue('amount', '');
       resetField('amount');
     },
-    [setValue, resetField, tokens, sourceField],
+    [setValue, resetField],
   );
 
   const handleSourceChange = useCallback(
@@ -239,34 +236,26 @@ export const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
-      <TextField
-        id="token"
-        select
-        label="Token"
+      <Autocomplete
+        aria-label="token input"
         disabled={!tokens.length}
-        InputProps={{ disableUnderline: true }}
-        inputProps={{ 'aria-label': 'token input' }}
-        variant="filled"
-        {...tokenField}
-        value={
-          tokenField.value
-            ? getTokenNameAndId(tokenField.value, sourceField.value)?.tokenId
-            : ''
-        }
-        onChange={handleTokenChange}
-      >
-        {tokens.map((token) => {
-          const { tokenId, tokenName } = getTokenNameAndId(
-            token,
-            sourceField.value,
-          )!;
+        id="token"
+        clearIcon={false}
+        disablePortal
+        options={tokens}
+        value={tokenField.value}
+        getOptionLabel={(option) => option.name || ''}
+        isOptionEqualToValue={(option, value) => {
           return (
-            <MenuItem key={tokenId} value={tokenId}>
-              {tokenName}
-            </MenuItem>
+            getTokenNameAndId(option, sourceField.value)?.tokenId ===
+            getTokenNameAndId(value, sourceField.value)?.tokenId
           );
-        })}
-      </TextField>
+        }}
+        renderInput={(params) => (
+          <TextField {...params} label="Token" name={tokenField.name} />
+        )}
+        onChange={handleTokenChange}
+      />
       <TextField
         id="amount"
         size="medium"
