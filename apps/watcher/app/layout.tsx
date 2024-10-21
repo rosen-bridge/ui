@@ -12,10 +12,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       network.charAt(0).toUpperCase() + network.slice(1);
 
     const networkTitle = isLoading
-      ? 'Rosen Watcher'
-      : `${
-          info?.network ? capitalizeFirstLetter(info.network) : ''
-        } Rosen Watcher`;
+      ? 'Watcher'
+      : `{${info?.network ? capitalizeFirstLetter(info.network) : ''}} Watcher`;
 
     document.title = networkTitle;
   }, [isLoading, info]);
