@@ -7,7 +7,8 @@ export default function Success() {
   const [id, setId] = useState('');
   async function load() {
     const response = await fetch(
-      `https://jsonplaceholder.typicode.com/todos/${id}`,
+      `/success/api?id=${id}`,
+      // `https://jsonplaceholder.typicode.com/todos/${id}`,
     );
     if (!response.ok) {
       throw new Error('THIS IS AN ERROR FROM CLIENT');
