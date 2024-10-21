@@ -13,7 +13,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
     const networkTitle = isLoading
       ? 'Watcher'
-      : `{${info?.network ? capitalizeFirstLetter(info.network) : ''}} Watcher`;
+      : `[${info?.network ? capitalizeFirstLetter(info.network) : ''}] Watcher`;
 
     document.title = networkTitle;
   }, [isLoading, info]);
