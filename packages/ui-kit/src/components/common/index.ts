@@ -1,4 +1,5 @@
 export * from './AlertCard';
+export * from './Amount';
 export * from './AppBar';
 export * from './AppLogo';
 export * from './EnhancedDialogTitle';

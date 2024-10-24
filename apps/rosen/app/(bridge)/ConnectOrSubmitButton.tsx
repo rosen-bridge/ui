@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import { ArrowRight, CommentAltExclamation } from '@rosen-bridge/icons';
 import {
+  Amount,
   Box,
   Card,
   Dialog,
@@ -21,7 +22,6 @@ import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
 import { getTokenNameAndId } from '@/_utils';
 import { useTokenMap } from '@/_hooks/useTokenMap';
-import { Fee } from './Fee';
 
 interface ConnectOrSubmitButtonProps {
   setChooseWalletsModalOpen: (open: boolean) => void;
@@ -134,9 +134,12 @@ export const ConnectOrSubmitButton = ({
             mx: 3,
           }}
         >
-          <Grid container gap={1} alignItems="flex-end" justifyContent="center">
-            <Typography variant="h2">{amountValue || 0}</Typography>
-            <Typography>{tokenInfo?.tokenName}</Typography>
+          <Grid container justifyContent="center">
+            <Amount
+              value={amountValue || 0}
+              size="large"
+              unit={tokenInfo?.tokenName}
+            />
           </Grid>
           <Box
             sx={{
@@ -169,21 +172,21 @@ export const ConnectOrSubmitButton = ({
             </Grid>
           </Box>
           <Divider sx={{ my: 2 }} />
-          <Fee
+          <Amount
             title="Transaction Fee"
-            amount={networkFeeRaw}
+            value={networkFeeRaw}
             unit={tokenInfo?.tokenName}
           />
           <Box sx={{ my: 2 }} />
-          <Fee
+          <Amount
             title="Bridge Fee"
-            amount={bridgeFeeRaw}
+            value={bridgeFeeRaw}
             unit={tokenInfo?.tokenName}
           />
           <Box sx={{ my: 2 }} />
-          <Fee
+          <Amount
             title="Received amount"
-            amount={receivingAmountRaw}
+            value={receivingAmountRaw}
             unit={targetTokenInfo?.name}
           />
           <Divider sx={{ my: 2 }} />

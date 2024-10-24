@@ -2,6 +2,7 @@
 
 import {
   Alert,
+  Amount,
   Card,
   Divider,
   Tooltip,
@@ -17,7 +18,6 @@ import useWallet from '@/_hooks/useWallet';
 import { getTokenNameAndId } from '@/_utils';
 import { ChooseWalletModal } from './ChooseWalletModal';
 import { Dispatch, SetStateAction } from 'react';
-import { Fee } from './Fee';
 import { WalletInfo } from './WalletInfo';
 
 export interface BridgeTransactionProps {
@@ -86,28 +86,28 @@ export const BridgeTransaction = ({
           onClick={() => setChooseWalletsModalOpen(true)}
         />
         <div style={{ flexGrow: '1' }} />
-        <Fee
+        <Amount
           title="Transaction Fee"
-          amount={networkFeeRaw}
+          value={networkFeeRaw}
           unit={tokenInfo?.tokenName}
           loading={isPending}
         />
-        <Fee
+        <Amount
           title="Bridge Fee"
-          amount={bridgeFeeRaw}
+          value={bridgeFeeRaw}
           unit={tokenInfo?.tokenName}
           loading={isPending}
         />
-        <Fee
+        <Amount
           title="Min Transfer"
-          amount={minTransferRaw}
+          value={minTransferRaw}
           unit={tokenInfo?.tokenName}
           loading={isPending}
         />
         <Divider sx={{ borderStyle: 'dashed' }} />
-        <Fee
+        <Amount
           title="You Will Receive"
-          amount={receivingAmountRaw}
+          value={receivingAmountRaw}
           unit={targetTokenInfo?.name}
           loading={isPending}
         />
