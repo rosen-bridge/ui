@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import SWRConfig from '@rosen-ui/swr-mock';
 
 /**
@@ -24,6 +24,7 @@ import Toolbar from './Toolbar';
 import { theme } from './_theme/theme';
 
 import mockedData from './_mock/mockedData';
+import useInfo from './_hooks/useInfo';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -71,6 +72,19 @@ interface AppProps {
 }
 
 const App = ({ children }: AppProps) => {
+  const { data: info, isLoading } = useInfo();
+
+  useEffect(() => {
+    const capitalizeFirstLetter = (network: string) =>
+      network.charAt(0).toUpperCase() + network.slice(1);
+
+    const networkTitle = isLoading
+      ? 'Watcher'
+      : `[${info?.network ? capitalizeFirstLetter(info.network) : ''}] Watcher`;
+
+    document.title = networkTitle;
+  }, [isLoading, info]);
+
   return (
     <NoSsr>
       <ThemeProvider theme={theme}>

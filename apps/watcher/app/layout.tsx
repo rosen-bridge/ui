@@ -1,23 +1,12 @@
-'use client';
-
-import React, { useEffect } from 'react';
+import React from 'react';
 import App from './App';
-import useInfo from './_hooks/useInfo';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Watcher',
+};
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  const { data: info, isLoading } = useInfo();
-
-  useEffect(() => {
-    const capitalizeFirstLetter = (network: string) =>
-      network.charAt(0).toUpperCase() + network.slice(1);
-
-    const networkTitle = isLoading
-      ? 'Watcher'
-      : `[${info?.network ? capitalizeFirstLetter(info.network) : ''}] Watcher`;
-
-    document.title = networkTitle;
-  }, [isLoading, info]);
-
   return (
     /**
      * TODO: get `lang` from url language path segment
