@@ -8,6 +8,7 @@ import {
 
 const pageTitleMap: Record<string, string> = {
   '(bridge)': 'Rosen Bridge',
+  events: 'Events',
   assets: 'Assets',
   dashboard: 'Dashboard',
   support: 'Support',
@@ -24,7 +25,6 @@ const Toolbar = () => {
     <UiKitToolbar
       title={page ? pageTitleMap[page] ?? '' : ''}
       toolbarActions={<ToolbarThemeTogglerAction />}
-      isCentered
     />
   );
 };

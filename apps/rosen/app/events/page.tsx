@@ -9,7 +9,7 @@ import { MouseEvent, useCallback, useMemo } from 'react';
 
 import {
   EnhancedTable,
-  Grid,
+  Paper,
   TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
@@ -106,22 +106,21 @@ const Events = () => {
     ],
   );
 
-  return isFirstLoad ? (
-    <Grid>
-      <TableSkeleton numberOfItems={pageSize} />
-    </Grid>
-  ) : (
-    data && (
-      <Grid container>
-        <EnhancedTable
-          data={data.items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={true}
-          tablePaginationProps={paginationProps}
-        />
-      </Grid>
-    )
+  return (
+    <>
+      <Paper sx={{ overflow: 'hidden' }}>
+        {isFirstLoad && <TableSkeleton numberOfItems={pageSize} />}
+        {!isFirstLoad && data && (
+          <EnhancedTable
+            data={data.items}
+            responsiveHead={tableHeaderProps}
+            responsiveRenderRow={tableRenderRowProps}
+            paginated={true}
+            tablePaginationProps={paginationProps}
+          />
+        )}
+      </Paper>
+    </>
   );
 };
 
