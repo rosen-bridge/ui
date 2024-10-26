@@ -58,37 +58,37 @@ export const SideBar = () => {
       versions={versions}
       routes={[
         {
-          label: 'DASHBOARD',
+          label: 'Dashboard',
           path: '/',
           disabled: false,
           icon: <Dashboard />,
         },
         {
-          label: 'HEALTH',
+          label: 'Health',
           path: '/health',
           disabled: false,
           icon: <Heartbeat />,
         },
         {
-          label: 'EVENTS',
+          label: 'Events',
           path: '/events',
           disabled: false,
           icon: <ClipboardNotes />,
         },
         {
-          label: 'HISTORY',
+          label: 'History',
           path: '/history',
           disabled: false,
           icon: <History />,
         },
         {
-          label: 'ASSETS',
+          label: 'Assets',
           path: '/assets',
           disabled: false,
           icon: <BitcoinCircle />,
         },
         {
-          label: 'REVENUES',
+          label: 'Revenues',
           path: '/revenues',
           disabled: false,
           icon: <Moneybag />,

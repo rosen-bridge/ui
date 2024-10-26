@@ -2,4 +2,4 @@
 '@rosen-bridge/ui-kit': patch
 ---
 
-Updated the version.map key for the Rosen app
+Address the warning regarding the absence of a unique key in the map function for array versions within the AppBar component

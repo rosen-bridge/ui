@@ -57,31 +57,31 @@ export const SideBar = () => {
       versions={versions}
       routes={[
         {
-          label: 'HOME',
+          label: 'Home',
           path: '/',
           disabled: false,
           icon: <Estate />,
         },
         {
-          label: 'HEALTH',
+          label: 'Health',
           path: '/health',
           disabled: false,
           icon: <Heartbeat />,
         },
         {
-          label: 'OBSERVATIONS',
+          label: 'Observations',
           path: '/observations',
           disabled: false,
           icon: <Newspaper />,
         },
         {
-          label: 'EVENTS',
+          label: 'Events',
           path: '/events',
           disabled: false,
           icon: <ClipboardNotes />,
         },
         {
-          label: 'REVENUES',
+          label: 'Revenues',
           path: '/revenues',
           disabled: false,
           icon: <Moneybag />,
