@@ -85,11 +85,20 @@ const App = ({ children }: AppProps) => {
     document.title = networkTitle;
 
     const setFavicon = (network: string) => {
-      const faviconLink = document.querySelector(
+      let faviconLink = document.querySelector(
         "link[rel~='icon']",
-      ) as HTMLLinkElement | null;
-      if (faviconLink && network) {
+      ) as HTMLLinkElement;
+
+      if (!faviconLink) {
+        faviconLink = document.createElement('link');
+        faviconLink.rel = 'icon';
+        document.head.appendChild(faviconLink);
+      }
+
+      if (network) {
         faviconLink.href = `/chains/${network.toLowerCase()}.svg`;
+      } else {
+        faviconLink.removeAttribute('href');
       }
     };
 
