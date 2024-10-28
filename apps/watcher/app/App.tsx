@@ -74,6 +74,10 @@ interface AppProps {
 const App = ({ children }: AppProps) => {
   const { data: info, isLoading } = useInfo();
 
+  /**
+   * TODO: In the next phase, refactor this React hook to utilize SSR and data fetching
+   * local:ergo/rosen-bridge/ui#408
+   */
   useEffect(() => {
     const capitalizeFirstLetter = (network: string) =>
       network.charAt(0).toUpperCase() + network.slice(1);
