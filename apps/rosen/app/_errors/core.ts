@@ -71,6 +71,10 @@ export const create = (key: string, errors: Array<any>) => {
         // Attempt to execute the asynchronous function with the provided arguments.
         return await func(...args);
       } catch (error: unknown) {
+        if (process.env.NEXT_RUNTIME === 'nodejs') {
+          // const { logger } = await import('@/_utils/logger');
+          // logger.getLogger('wrapper').error('errrrooorrr ' + Date.now());
+        }
         // If an error is thrown, return a WrapError object.
         if (error instanceof Error) {
           return {
