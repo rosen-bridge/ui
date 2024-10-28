@@ -3,4 +3,4 @@
 '@rosen-bridge/guard-app': minor
 ---
 
-Updated the sidebar component, receive version data from the API, ensuring a cleaner interface with less code for both Guard and Watcher component
+improve Guard and Watcher sidebar component with cleaner code, receive version data from API
