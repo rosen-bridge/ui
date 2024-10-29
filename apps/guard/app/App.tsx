@@ -12,7 +12,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import SWRConfig from '@rosen-ui/swr-mock';
 
-import SideBar from './SideBar';
+import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
 
 import { theme } from '@/_theme/theme';
