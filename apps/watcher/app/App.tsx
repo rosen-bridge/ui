@@ -25,6 +25,7 @@ import { theme } from './_theme/theme';
 
 import mockedData from './_mock/mockedData';
 import useInfo from './_hooks/useInfo';
+import { upperFirst } from 'lodash-es';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -79,12 +80,9 @@ const App = ({ children }: AppProps) => {
    * local:ergo/rosen-bridge/ui#408
    */
   useEffect(() => {
-    const capitalizeFirstLetter = (network: string) =>
-      network.charAt(0).toUpperCase() + network.slice(1);
-
     const networkTitle = isLoading
       ? 'Watcher'
-      : `[${info?.network ? capitalizeFirstLetter(info.network) : ''}] Watcher`;
+      : `[${info?.network ? upperFirst(info.network) : ''}] Watcher`;
 
     document.title = networkTitle;
   }, [isLoading, info]);
