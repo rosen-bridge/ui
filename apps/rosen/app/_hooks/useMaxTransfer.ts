@@ -89,6 +89,6 @@ export const useMaxTransfer = () => {
     error,
     loading,
     max,
-    load,
+    load: () => startTransition(load),
   };
 };
