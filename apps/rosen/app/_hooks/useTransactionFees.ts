@@ -10,10 +10,8 @@ import useNetwork from './useNetwork';
 import { calculateFee } from '@/_actions/calculateFee';
 
 import { Network } from '@rosen-ui/types';
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { useTokenMap } from './useTokenMap';
-import { fromSafeData } from '@/_utils/safeData';
-import { cache } from '@/_utils/cache';
 
 /**
  * calculates the fees for a token swap between
@@ -79,7 +77,7 @@ const useTransactionFees = (
     ) {
       startTransition(async () => {
         try {
-          const data = await unwrap(fromSafeData(cache(calculateFee, 2500)))(
+          const data = await unwrap(calculateFee)(
             sourceChain,
             targetChain,
             tokenId,

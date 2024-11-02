@@ -1,3 +1,5 @@
+const BIGINT_KEY = 'BIGINT:';
+
 type AsyncFunction = (...args: any[]) => Promise<any>;
 
 type FromSafeData = <Func extends AsyncFunction>(
@@ -36,8 +38,6 @@ const processDataType = (
 
   return result;
 };
-
-const BIGINT_KEY = 'BIGINT:';
 
 const from = <T>(input: T): T =>
   processDataType(input, (value, type) => {

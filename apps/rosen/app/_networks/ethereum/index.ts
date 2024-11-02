@@ -2,12 +2,11 @@ import { metaMaskWalletCreator } from '@rosen-ui/metamask-wallet';
 
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types/network';
 import { EthereumIcon } from '@rosen-bridge/icons';
 
 import { getMaxTransfer } from './getMaxTransfer';
-import { fromSafeData } from '@/_utils/safeData';
 import { getTokenMap } from '../getTokenMap.client';
 import { generateLockData, generateTxParameters } from './server';
 
@@ -23,13 +22,13 @@ const EthereumNetwork: EthereumNetworkType = {
     metaMaskWalletCreator({
       getTokenMap,
       generateLockData: unwrap(generateLockData),
-      generateTxParameters: unwrap(fromSafeData(generateTxParameters)),
+      generateTxParameters: unwrap(generateTxParameters),
     }),
   ],
   logo: EthereumIcon,
   nextHeightInterval: 0,
   lockAddress: process.env.NEXT_PUBLIC_ETHEREUM_LOCK_ADDRESS!,
-  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address.toLowerCase(),
 };
 

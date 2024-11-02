@@ -7,14 +7,13 @@ import {
   submitTransaction as submitTransactionCore,
 } from '@rosen-network/bitcoin';
 
-import { wrap } from '@/_errors';
+import { wrap } from '@/_safeServerAction';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { getRosenTokens } from '@/_backend/utils';
-import { toSafeData } from '@/_utils/safeData';
 
-export const generateOpReturnData = wrap(toSafeData(generateOpReturnDataCore));
+export const generateOpReturnData = wrap(generateOpReturnDataCore);
 export const generateUnsignedTx = wrap(
-  toSafeData(generateUnsignedTxCore(new TokenMap(getRosenTokens()))),
+  generateUnsignedTxCore(new TokenMap(getRosenTokens())),
 );
-export const getAddressBalance = wrap(toSafeData(getAddressBalanceCore));
-export const submitTransaction = wrap(toSafeData(submitTransactionCore));
+export const getAddressBalance = wrap(getAddressBalanceCore, { cache: 3000 });
+export const submitTransaction = wrap(submitTransactionCore);

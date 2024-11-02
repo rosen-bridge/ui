@@ -7,16 +7,13 @@ import {
   setTxWitnessSet as setTxWitnessSetCore,
 } from '@rosen-network/cardano';
 
-import { wrap } from '@/_errors';
+import { wrap } from '@/_safeServerAction';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { getRosenTokens } from '@/_backend/utils';
-import { toSafeData } from '@/_utils/safeData';
 
-export const decodeWasmValue = wrap(toSafeData(decodeWasmValueCore));
-export const generateLockAuxiliaryData = wrap(
-  toSafeData(generateLockAuxiliaryDataCore),
-);
+export const decodeWasmValue = wrap(decodeWasmValueCore);
+export const generateLockAuxiliaryData = wrap(generateLockAuxiliaryDataCore);
 export const generateUnsignedTx = wrap(
-  toSafeData(generateUnsignedTxCore(new TokenMap(getRosenTokens()))),
+  generateUnsignedTxCore(new TokenMap(getRosenTokens())),
 );
-export const setTxWitnessSet = wrap(toSafeData(setTxWitnessSetCore));
+export const setTxWitnessSet = wrap(setTxWitnessSetCore);
