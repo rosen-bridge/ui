@@ -10,26 +10,25 @@ import { wrap } from '@/_safeServerAction';
 import { ErgoNetwork } from '@/_types/network';
 
 import { getTokenMap } from '../getTokenMap.server';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * get max transfer for ergo
  */
-export const getMaxTransfer = wrap(
-  async ({
-    balance,
-    isNative,
-  }: Parameters<
-    ErgoNetwork['getMaxTransfer']
-  >[0]): Promise<RosenAmountValue> => {
-    const tokenMap = await getTokenMap();
-    const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
-      'erg',
-      ergoFee + ergoMinBoxValue,
-      NETWORKS.ERGO,
-    ).amount;
-    const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
-    const amount = balance - offset;
-    return amount < 0n ? 0n : amount;
-  },
-);
+const getMaxTransferCore: ErgoNetwork['getMaxTransfer'] = async ({
+  balance,
+  isNative,
+}) => {
+  const tokenMap = await getTokenMap();
+  const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
+    'erg',
+    ergoFee + ergoMinBoxValue,
+    NETWORKS.ERGO,
+  ).amount;
+  const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
+  const amount = balance - offset;
+  return amount < 0n ? 0n : amount;
+};
+
+export const getMaxTransfer = wrap(getMaxTransferCore, {
+  traceKey: 'getMaxTransferErgo',
+});

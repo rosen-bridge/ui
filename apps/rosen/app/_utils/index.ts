@@ -1,4 +1,3 @@
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { calculateFee } from '@/_actions/calculateFee';
@@ -40,17 +39,15 @@ export const getMinTransfer = async (
   const ergoTokenId = tokens[0].ergo.tokenId;
 
   try {
-    const data = await unwrap(calculateFee)(
+    const { fees } = await unwrap(calculateFee)(
       sourceChain,
       targetChain,
       ergoTokenId,
       0,
     );
 
-    const { fees } = JsonBigInt.parse(data);
-
-    const networkFee = fees ? BigInt(fees.networkFee) : 0n;
-    const bridgeFee = fees ? BigInt(fees.bridgeFee) : 0n;
+    const networkFee = fees?.networkFee ?? 0n;
+    const bridgeFee = fees?.bridgeFee ?? 0n;
 
     const minTransfer = bridgeFee + networkFee;
 

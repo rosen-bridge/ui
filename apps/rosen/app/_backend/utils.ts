@@ -27,4 +27,5 @@ export const getRosenTokens = () => {
 
 export const getRosenTokensWithCache = wrap(getRosenTokens, {
   cache: 60 * 1000,
+  traceKey: 'getRosenTokens',
 });

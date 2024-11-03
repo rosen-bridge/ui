@@ -57,6 +57,8 @@ const DEFAULT_CONFIG: Partial<CreateSafeActionConfig> = {
 export const createSafeAction = (config: CreateSafeActionConfig) => {
   config = Object.assign({}, DEFAULT_CONFIG, config);
 
+  const actions = new Map<Function, number>();
+
   const caches: Record<
     string,
     {
@@ -94,8 +96,15 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
   };
 
   const unwrap: Unwrap = (action) => {
+    if (!actions.has(action)) {
+      actions.set(action, Math.random());
+    }
+
     return async (...args) => {
-      const key = args.map((arg) => arg.toString()).join('_');
+      const key = [
+        actions.get(action),
+        ...args.map((arg) => arg.toString()),
+      ].join('_');
 
       const handler = fromSafeData(action);
 
@@ -115,9 +124,6 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
 
       const unwrapResult = await caches[key].promise;
 
-      caches[key].cache = unwrapResult.cache;
-      caches[key].initiated = true;
-
       if (unwrapResult.serializedError) {
         delete caches[key];
 
@@ -127,6 +133,10 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
 
         throw error;
       }
+
+      caches[key].cache = unwrapResult.cache;
+
+      caches[key].initiated = true;
 
       return unwrapResult.result;
     };
