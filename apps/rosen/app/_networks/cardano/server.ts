@@ -12,6 +12,7 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { getRosenTokens } from '@/_backend/utils';
 
 export const decodeWasmValue = wrap(decodeWasmValueCore, {
+  cache: Infinity,
   traceKey: 'decodeWasmValue',
 });
 
