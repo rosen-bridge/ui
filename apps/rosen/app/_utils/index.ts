@@ -4,9 +4,8 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { calculateFee } from '@/_actions/calculateFee';
 
 import { NETWORK_VALUES } from '@rosen-ui/constants';
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
-import { fromSafeData } from '@/_utils/safeData';
 import { getTokenMap } from '@/_networks/getTokenMap.client';
 
 /**
@@ -41,7 +40,7 @@ export const getMinTransfer = async (
   const ergoTokenId = tokens[0].ergo.tokenId;
 
   try {
-    const data = await unwrap(fromSafeData(calculateFee))(
+    const data = await unwrap(calculateFee)(
       sourceChain,
       targetChain,
       ergoTokenId,

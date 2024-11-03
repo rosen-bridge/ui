@@ -2,18 +2,17 @@ import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
 
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
 import { ErgoIcon } from '@rosen-bridge/icons';
 
 import { generateUnsignedTx } from './server';
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
-import { fromSafeData } from '@/_utils/safeData';
 
 const config = {
   getTokenMap,
-  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
+  generateUnsignedTx: unwrap(generateUnsignedTx),
 };
 
 /**
@@ -28,7 +27,7 @@ const ErgoNetwork: ErgoNetworkType = {
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
-  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
 
