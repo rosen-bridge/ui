@@ -10,8 +10,7 @@ import { WalletContext } from '@/_contexts/walletContext';
 import { validateAddress } from '@/_actions/validateAddress';
 
 import { availableNetworks } from '@/_networks';
-import { getMinTransfer } from '@/_utils/index';
-import { getMaxTransfer } from '@/_utils/getMaxTransfer';
+import { getMaxTransfer, getMinTransfer } from '@/_utils';
 import { useTokenMap } from './useTokenMap';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { unwrap } from '@/_safeServerAction';
