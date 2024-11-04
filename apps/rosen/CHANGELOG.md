@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-app
 
+## 2.2.0
+
+### Minor Changes
+
+- Ensure the code is compatible with the latest design
+- Implement a new utility called `safeServerAction`, phase out the previous version, and update all server actions to ensure compatibility with the latest enhancements.
+- Enhance server actions to align with the latest updates to the wrap/unwrap utility in preparation for the logger
+
+### Patch Changes
+
+- Updated the .env.example file with the latest data from the .env file
+
 ## 2.1.0
 
 ### Minor Changes

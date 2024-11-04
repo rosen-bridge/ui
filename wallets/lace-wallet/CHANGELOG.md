@@ -1,5 +1,11 @@
 # @rosen-ui/lace-wallet
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated the @rosen-bridge/icons@0.6.0 dependency
+
 ## 1.0.0
 
 ### Major Changes

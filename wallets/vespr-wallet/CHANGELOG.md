@@ -1,5 +1,11 @@
 # @rosen-ui/vespr-wallet
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated the @rosen-bridge/icons@0.6.0 dependency
+
 ## 0.0.8
 
 ### Patch Changes

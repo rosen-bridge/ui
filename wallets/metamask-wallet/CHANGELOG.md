@@ -1,5 +1,11 @@
 # @rosen-ui/metamask-wallet
 
+## 0.1.2
+
+### Patch Changes
+
+- Updated the @rosen-bridge/icons@0.6.0 dependency
+
 ## 0.1.1
 
 ### Patch Changes

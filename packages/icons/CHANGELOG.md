@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 0.6.0
+
+### Minor Changes
+
+- Add the ArrowRight, CheckCircle, CommentAltExclamation, ExclamationCircle, ExclamationTriangle, InfoCircle, SyncProblem icons
+
 ## 0.5.0
 
 ### Minor Changes

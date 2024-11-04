@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 2.6.0
+
+### Minor Changes
+
+- improve the sidebar component with less and cleaner code, receive version data from API
+
 ## 2.5.0
 
 ### Minor Changes

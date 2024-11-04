@@ -1,5 +1,11 @@
 # @rosen-bridge/guard-app
 
+## 1.7.0
+
+### Minor Changes
+
+- improve the sidebar component with less and cleaner code, receive version data from API
+
 ## 1.6.0
 
 ### Minor Changes
