@@ -1,5 +1,11 @@
 # @rosen-ui/flint-wallet
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated the @rosen-bridge/icons@0.6.0 dependency
+
 ## 1.0.0
 
 ### Major Changes
@@ -75,8 +81,8 @@
 
 ### Minor Changes
 
-- set a maximum page size of 100 for events api
-- use the shared hooks package instead of utils package to prevent server component problems
+- Set a maximum page size of 100 for events api
+- Use the shared hooks package instead of utils package to prevent server component problems
 
 ### Patch Changes
 

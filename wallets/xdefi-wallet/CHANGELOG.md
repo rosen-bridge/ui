@@ -1,5 +1,11 @@
 # @rosen-ui/xdefi-wallet
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated the @rosen-bridge/icons@0.6.0 dependency
+
 ## 1.0.0
 
 ### Major Changes
@@ -10,7 +16,7 @@
 ### Patch Changes
 
 - Revise the wallet creation logic and update the access type for each API.
-- remove redundant package dependency
+- Remove redundant package dependency
 - Strengthen type safety and enforce robust typing for Chain and Network types
 
 ## 0.4.0
@@ -67,11 +73,11 @@
 
 ### Minor Changes
 
-- export some types from sats-connect
+- Export some types from sats-connect
 
 ### Patch Changes
 
-- export AddressType from sats-connect lib
+- Export AddressType from sats-connect lib
 - Updated dependencies
   - @rosen-bridge/icons@0.4.0
   - @rosen-ui/utils@0.1.1
