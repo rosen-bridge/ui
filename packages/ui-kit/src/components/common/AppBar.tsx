@@ -24,7 +24,7 @@ interface Route {
 interface Version {
   important?: boolean;
   title: string;
-  value: string;
+  value?: string;
 }
 
 const Root = styled(Box)(({ theme }) => ({
@@ -76,7 +76,7 @@ export const AppBar: FC<AppBarProps> = (props) => {
       )}
       {versions &&
         versions.map((version) => (
-          <Grid item>
+          <Grid key={version.title} item>
             {version.value && (
               <Typography
                 color={version.important ? 'textPrimary' : 'textSecondary'}

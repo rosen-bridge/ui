@@ -10,6 +10,7 @@ import {
   EnhancedTable,
   Grid,
   MenuItem,
+  Paper,
   TablePaginationProps,
   TextField,
   Typography,
@@ -128,6 +129,7 @@ export default function Page() {
         direction={{ mobile: 'column-reverse', tablet: 'row' }}
         justifyContent="space-between"
         spacing={2}
+        sx={{ marginBottom: 2 }}
       >
         <Grid item>
           <Box
@@ -172,20 +174,18 @@ export default function Page() {
           </TextField>
         </Grid>
       </Grid>
-      {isFirstLoad && (
-        <Grid>
-          <TableSkeleton numberOfItems={pageSize} />
-        </Grid>
-      )}
-      {!isFirstLoad && data && (
-        <EnhancedTable
-          data={data.items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={true}
-          tablePaginationProps={paginationProps}
-        />
-      )}
+      <Paper sx={{ overflow: 'hidden' }}>
+        {isFirstLoad && <TableSkeleton numberOfItems={pageSize} />}
+        {!isFirstLoad && data && (
+          <EnhancedTable
+            data={data.items}
+            responsiveHead={tableHeaderProps}
+            responsiveRenderRow={tableRenderRowProps}
+            paginated={true}
+            tablePaginationProps={paginationProps}
+          />
+        )}
+      </Paper>
     </>
   );
 }

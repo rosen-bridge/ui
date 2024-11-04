@@ -1,6 +1,6 @@
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
 
 import { CardanoIcon } from '@rosen-bridge/icons';
@@ -19,14 +19,13 @@ import {
 
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
-import { fromSafeData } from '@/_utils/safeData';
 
 const config = {
   getTokenMap,
-  decodeWasmValue: unwrap(fromSafeData(decodeWasmValue)),
-  generateLockAuxiliaryData: unwrap(fromSafeData(generateLockAuxiliaryData)),
-  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
-  setTxWitnessSet: unwrap(fromSafeData(setTxWitnessSet)),
+  decodeWasmValue: unwrap(decodeWasmValue),
+  generateLockAuxiliaryData: unwrap(generateLockAuxiliaryData),
+  generateUnsignedTx: unwrap(generateUnsignedTx),
+  setTxWitnessSet: unwrap(setTxWitnessSet),
 };
 
 /**
@@ -46,7 +45,7 @@ const CardanoNetwork: CardanoNetworkType = {
   nextHeightInterval: 25,
   logo: CardanoIcon,
   lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
-  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
 

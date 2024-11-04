@@ -18,7 +18,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
-import SideBar from './SideBar';
+import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
 
 import { theme } from './_theme/theme';

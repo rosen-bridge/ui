@@ -1,17 +1,15 @@
 'use client';
 
 import { useCallback, ChangeEvent } from 'react';
-import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import {
-  alpha,
   Grid,
   TextField,
   Typography,
   ListItemIcon,
   styled,
   MenuItem,
-  Button,
   CircularProgress,
   SvgIcon,
   Alert,
@@ -26,74 +24,10 @@ import useTokenBalance from '@/_hooks/useTokenBalance';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
 import useWallet from '@/_hooks/useWallet';
+import { UseAllAmount } from './UseAllAmount';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Autocomplete } from '@mui/material';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-
-/**
- * customized form input
- */
-const FormInputs = styled(TextField)(({ theme }) => ({
-  '& .MuiFilledInput-root': {
-    overflow: 'hidden',
-    borderRadius: theme.spacing(2),
-    backgroundColor: theme.palette.background.input,
-    minHeight: theme.spacing(8.5),
-
-    transition: theme.transitions.create(['background-color', 'box-shadow']),
-    '&:hover': {
-      backgroundColor: theme.palette.background.header,
-    },
-    '&.Mui-focused': {
-      backgroundColor: theme.palette.background.header,
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-    },
-    'input::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
-      '-webkit-appearance': 'none',
-    },
-  },
-}));
-
-/**
- * customized form token input
- */
-const FormTokenInput = styled(Autocomplete<RosenChainToken>)(({ theme }) => ({
-  '.MuiInputLabel-root': {
-    transform: 'translate(12px, 16px) scale(1)',
-    '&.MuiInputLabel-shrink': {
-      transform: 'translate(12px, 7px) scale(0.75)',
-    },
-  },
-  '.MuiAutocomplete-input': {
-    transform: 'translateY(8px)',
-  },
-  '& .MuiOutlinedInput-root': {
-    overflow: 'hidden',
-    borderRadius: theme.spacing(2),
-    backgroundColor: theme.palette.background.input,
-    minHeight: theme.spacing(8.5),
-
-    transition: theme.transitions.create(['background-color', 'box-shadow']),
-    '&:hover': {
-      backgroundColor: theme.palette.background.header,
-    },
-    '&.Mui-focused': {
-      backgroundColor: theme.palette.background.header,
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-    },
-  },
-  '& fieldset': {
-    border: 'none',
-  },
-}));
-
-/**
- * max button component container for amount field
- */
-const MaxButton = styled(Button)(({ theme }) => ({
-  padding: 0,
-  fontSize: theme.spacing(1.5),
-}));
 
 /**
  * bridge form container comp
@@ -130,6 +64,8 @@ export const BridgeForm = () => {
   } = useBridgeForm();
 
   const {
+    sourceValue,
+    tokenValue,
     formState: { isValidating },
   } = useTransactionFormData();
 
@@ -137,7 +73,7 @@ export const BridgeForm = () => {
 
   const { isLoading, amount, token } = useTokenBalance();
 
-  const { max, loading: isMaxLoading } = useMaxTransfer();
+  const { error, max, loading: isMaxLoading, load } = useMaxTransfer();
   const tokenMap = useTokenMap();
 
   const { selectedWallet } = useWallet();
@@ -219,46 +155,11 @@ export const BridgeForm = () => {
     });
   }, [max, tokenMap, tokenField.value, setValue]);
 
-  const renderInputActions = () => (
-    <>
-      {tokenField.value && !isMaxLoading && selectedWallet && (
-        <Grid container justifyContent="space-between">
-          <MaxButton
-            disabled={isLoading || !tokenField.value}
-            onClick={handleSelectMax}
-            color="primary"
-          >
-            <Typography variant="caption">
-              {`Balance: ${
-                isLoading
-                  ? 'loading...'
-                  : getDecimalString(
-                      amount.toString(),
-                      tokenMap.getSignificantDecimals(
-                        tokenField.value.tokenId,
-                      ) || 0,
-                    )
-              }`}
-            </Typography>
-          </MaxButton>
-          <MaxButton
-            disabled={isLoading || !tokenField.value}
-            onClick={handleSelectMax}
-            color="primary"
-          >
-            MAX
-          </MaxButton>
-        </Grid>
-      )}
-      {errors.amount?.message?.toString()}
-    </>
-  );
-
   return (
     <FormContainer>
       <Grid container spacing={1}>
         <Grid item mobile={6}>
-          <FormInputs
+          <TextField
             id="source"
             select
             label="Source"
@@ -281,10 +182,10 @@ export const BridgeForm = () => {
                 <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
             ))}
-          </FormInputs>
+          </TextField>
         </Grid>
         <Grid item mobile={6}>
-          <FormInputs
+          <TextField
             id="target"
             select
             label="Target"
@@ -310,10 +211,10 @@ export const BridgeForm = () => {
                 <Typography color="text.secondary">{network.label}</Typography>
               </MenuItem>
             ))}
-          </FormInputs>
+          </TextField>
         </Grid>
       </Grid>
-      <FormInputs
+      <TextField
         label="Address"
         InputProps={{ disableUnderline: true } as any}
         variant="filled"
@@ -335,7 +236,7 @@ export const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
-      <FormTokenInput
+      <Autocomplete
         aria-label="token input"
         disabled={!tokens.length}
         id="token"
@@ -355,14 +256,35 @@ export const BridgeForm = () => {
         )}
         onChange={handleTokenChange}
       />
-      <FormInputs
+      <TextField
         id="amount"
         size="medium"
         label="Amount"
         placeholder="0.0"
         error={!!errors?.amount}
-        helperText={renderInputActions()}
-        InputProps={{ disableUnderline: true }}
+        helperText={errors.amount?.message?.toString()}
+        InputProps={{
+          disableUnderline: true,
+          endAdornment: tokenField.value && selectedWallet && (
+            <UseAllAmount
+              error={error}
+              loading={isLoading || isMaxLoading}
+              value={getDecimalString(
+                amount.toString(),
+                tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0,
+              )}
+              unit={
+                (
+                  tokenValue &&
+                  sourceValue &&
+                  getTokenNameAndId(tokenValue, sourceValue)
+                )?.tokenName
+              }
+              onClick={handleSelectMax}
+              onRetry={load}
+            />
+          ),
+        }}
         inputProps={{
           style: { fontSize: '2rem' },
           'aria-label': 'amount input',

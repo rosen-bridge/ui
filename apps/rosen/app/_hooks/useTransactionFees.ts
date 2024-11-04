@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useCallback, useTransition } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
@@ -10,9 +9,8 @@ import useNetwork from './useNetwork';
 import { calculateFee } from '@/_actions/calculateFee';
 
 import { Network } from '@rosen-ui/types';
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { useTokenMap } from './useTokenMap';
-import { fromSafeData } from '@/_utils/safeData';
 
 /**
  * calculates the fees for a token swap between
@@ -78,14 +76,12 @@ const useTransactionFees = (
     ) {
       startTransition(async () => {
         try {
-          const data = await unwrap(fromSafeData(calculateFee))(
+          const parsedData = await unwrap(calculateFee)(
             sourceChain,
             targetChain,
             tokenId,
             selectedNetwork.nextHeightInterval,
           );
-
-          const parsedData = JsonBigInt.parse(data);
 
           const { fees, nextFees } = parsedData;
 

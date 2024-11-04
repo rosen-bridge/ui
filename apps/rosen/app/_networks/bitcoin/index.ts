@@ -5,9 +5,8 @@ import { getMaxTransfer } from './getMaxTransfer';
 
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 
-import { unwrap } from '@/_errors';
+import { unwrap } from '@/_safeServerAction';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
-import { cache } from '@/_utils/cache';
 
 import {
   generateOpReturnData,
@@ -17,14 +16,13 @@ import {
 } from './server';
 
 import { getTokenMap } from '../getTokenMap.client';
-import { fromSafeData } from '@/_utils/safeData';
 
 const config = {
   getTokenMap,
-  generateOpReturnData: unwrap(fromSafeData(generateOpReturnData)),
-  generateUnsignedTx: unwrap(fromSafeData(generateUnsignedTx)),
-  getAddressBalance: cache(unwrap(fromSafeData(getAddressBalance)), 30000),
-  submitTransaction: unwrap(fromSafeData(submitTransaction)),
+  generateOpReturnData: unwrap(generateOpReturnData),
+  generateUnsignedTx: unwrap(generateUnsignedTx),
+  getAddressBalance: unwrap(getAddressBalance),
+  submitTransaction: unwrap(submitTransaction),
 };
 
 /**
@@ -39,7 +37,7 @@ const BitcoinNetwork: BitcoinNetworkType = {
   wallets: [xdefiWalletCreator(config)],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
-  getMaxTransfer: unwrap(fromSafeData(getMaxTransfer)),
+  getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
 

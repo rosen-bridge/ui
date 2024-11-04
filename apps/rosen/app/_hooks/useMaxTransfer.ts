@@ -6,7 +6,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 
 import useNetwork from './useNetwork';
 import useTokenBalance from './useTokenBalance';
-import { getMaxTransfer } from '@/_utils/getMaxTransfer';
+import { getMaxTransfer } from '@/_utils';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
 
@@ -89,6 +89,6 @@ export const useMaxTransfer = () => {
     error,
     loading,
     max,
-    load,
+    load: () => startTransition(load),
   };
 };
