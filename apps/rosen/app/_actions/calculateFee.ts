@@ -1,6 +1,5 @@
 'use server';
 
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
@@ -13,9 +12,10 @@ const ergoExplorerClient = ergoExplorerClientFactory(
   process.env.ERGO_EXPLORER_API!,
 );
 
-import { NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { wrap } from '@/_safeServerAction';
+import Joi from 'joi';
 
 const GetHeight = {
   [NETWORKS.ETHEREUM]: ethereumGetHeight,
@@ -42,46 +42,52 @@ const GetHeight = {
  * @returns CONTAINS WRAPPED-VALUE
  */
 
-export const calculateFeeCore = async (
+const calculateFeeCore = async (
   sourceNetwork: Network,
   targetNetwork: Network,
   tokenId: string,
   nextHeightInterval: number,
 ) => {
-  try {
-    const height = await GetHeight[sourceNetwork]();
+  const height = await GetHeight[sourceNetwork]();
 
-    if (!height) {
-      throw new Error('Cannot fetch height from the api endpoint');
-    }
-
-    const minFeeBox = new MinimumFeeBox(
-      tokenId,
-      process.env.NEXT_PUBLIC_FEE_CONFIG_TOKEN_ID!,
-      ErgoNetworkType.explorer,
-      process.env.ERGO_EXPLORER_API!,
-    );
-    await minFeeBox.fetchBox();
-
-    const [fees, nextFees] = await Promise.all([
-      minFeeBox.getFee(sourceNetwork, height, targetNetwork),
-      minFeeBox.getFee(
-        sourceNetwork,
-        height + nextHeightInterval,
-        targetNetwork,
-      ),
-    ]);
-
-    return JsonBigInt.stringify({
-      fees,
-      nextFees,
-    });
-  } catch (error) {
-    throw new Error(error instanceof Error ? error.message : 'Unknown Error');
+  if (!height) {
+    throw new Error('Cannot fetch height from the api endpoint');
   }
+
+  const minFeeBox = new MinimumFeeBox(
+    tokenId,
+    process.env.NEXT_PUBLIC_FEE_CONFIG_TOKEN_ID!,
+    ErgoNetworkType.explorer,
+    process.env.ERGO_EXPLORER_API!,
+  );
+  await minFeeBox.fetchBox();
+
+  const [fees, nextFees] = await Promise.all([
+    minFeeBox.getFee(sourceNetwork, height, targetNetwork),
+    minFeeBox.getFee(sourceNetwork, height + nextHeightInterval, targetNetwork),
+  ]);
+
+  return {
+    fees,
+    nextFees,
+  };
 };
+
+type Schema = Parameters<typeof calculateFeeCore>;
+
+const schema = Joi.array<Schema>().ordered(
+  Joi.string()
+    .required()
+    .valid(...NETWORK_VALUES),
+  Joi.string()
+    .required()
+    .valid(...NETWORK_VALUES),
+  Joi.string().required(),
+  Joi.number().required(),
+);
 
 export const calculateFee = wrap(calculateFeeCore, {
   cache: 10 * 60 * 1000,
   traceKey: 'calculateFee',
+  schema,
 });

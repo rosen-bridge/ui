@@ -1,7 +1,6 @@
 import { useMemo, useEffect, useRef, useCallback, useTransition } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
@@ -77,14 +76,12 @@ const useTransactionFees = (
     ) {
       startTransition(async () => {
         try {
-          const data = await unwrap(calculateFee)(
+          const parsedData = await unwrap(calculateFee)(
             sourceChain,
             targetChain,
             tokenId,
             selectedNetwork.nextHeightInterval,
           );
-
-          const parsedData = JsonBigInt.parse(data);
 
           const { fees, nextFees } = parsedData;
 
