@@ -9,7 +9,13 @@ import { wrap } from '@/_safeServerAction';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { getRosenTokens } from '@/_backend/utils';
 
-export const generateLockData = wrap(generateLockDataCore);
+export const generateLockData = wrap(generateLockDataCore, {
+  traceKey: 'generateLockData',
+});
+
 export const generateTxParameters = wrap(
   generateTxParametersCore(new TokenMap(getRosenTokens())),
+  {
+    traceKey: 'generateTxParameters',
+  },
 );

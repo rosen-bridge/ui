@@ -8,4 +8,7 @@ import { getRosenTokens } from '@/_backend/utils';
 
 export const generateUnsignedTx = wrap(
   generateUnsignedTxCore(new TokenMap(getRosenTokens())),
+  {
+    traceKey: 'generateUnsignedTx',
+  },
 );
