@@ -27,7 +27,7 @@ export const SideBar = () => {
   const ShowLoading =
     isLoading || !info?.versions.app || !info?.versions.contract;
 
-  const versions = !ShowLoading
+  const versions = !isLoading
     ? [
         {
           title: 'Watcher',
@@ -94,7 +94,7 @@ export const SideBar = () => {
       ]}
       isActive={(route) => pathname === route.path}
       onNavigate={(route) => router.push(route.path)}
-      ShowLoading={ShowLoading}
+      isLoading={isLoading}
     />
   );
 };
