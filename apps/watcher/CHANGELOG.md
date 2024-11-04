@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- improve the sidebar component with less and cleaner code, receive version data from API
+- Improve the sidebar component with less and cleaner code, receive version data from API
 
 ## 2.5.0
 
@@ -72,12 +72,12 @@
 
 ### Minor Changes
 
-- add page size of 100 to tables
-- link app logo to the root page
+- Add page size of 100 to tables
+- Link app logo to the root page
 
 ### Patch Changes
 
-- swap the position of action buttons in api key modal
+- Swap the position of action buttons in api key modal
 - Updated dependencies
   - @rosen-bridge/icons@0.4.0
   - @rosen-bridge/ui-kit@1.0.0
@@ -87,24 +87,24 @@
 
 ### Patch Changes
 
-- reflect unlock api changes in frontend
+- Reflect unlock api changes in frontend
 
 ## 2.0.0
 
 ### Major Changes
 
-- reflect api upgrades in frontend
+- Reflect api upgrades in frontend
 
 ## 1.2.0
 
 ### Minor Changes
 
-- display service and ui versions in the sidebar
+- Display service and ui versions in the sidebar
 
 ### Patch Changes
 
-- upgrade nextjs version
-- updated dependencies
+- Upgrade nextjs version
+- Updated dependencies
   - @rosen-bridge/icons@0.3.0
   - @rosen-bridge/ui-kit@0.2.1
 
@@ -112,17 +112,17 @@
 
 ### Patch Changes
 
-- change `api_key` header to `Api-Key` to adhere to the standards
+- Change `api_key` header to `Api-Key` to adhere to the standards
 
 ## 1.1.0
 
 ### Minor Changes
 
-- add api-key authentication for server mutations
+- Add api-key authentication for server mutations
 
 ### Patch Changes
 
-- fix the chart label problems in first load
+- Fix the chart label problems in first load
 - Update dependencies
   - @rosen-bridge/icons@0.2.0
   - @rosen-bridge/shared-contexts@0.0.1

@@ -73,7 +73,7 @@
 
 ### Major Changes
 
-- add default rowsPerPageOptions to EnhancedTable
+- Add default rowsPerPageOptions to EnhancedTable
 
 ### Patch Changes
 
@@ -92,12 +92,12 @@
 
 ### Minor Changes
 
-- set a maximum page size of 100 for events api
-- use the shared hooks package instaed of utils package to prenvet server component problems
+- Set a maximum page size of 100 for events api
+- Use the shared hooks package instaed of utils package to prenvet server component problems
 
 ### Patch Changes
 
-- fix app crash when a token fetched from database is not found
+- Fix app crash when a token fetched from database is not found
 - Update dependencies
   - @rosen-ui/common-hooks@0.1.0
   - @rosen-ui/utils@0.1.0

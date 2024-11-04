@@ -23,7 +23,7 @@
 ### Major Changes
 
 - Update the `getMaxTransfer` server action in the networks to return a `WRAPPED-VALUE`.
-- integrate Ethereum
+- Integrate Ethereum
 - Transform the Rosen amount type from a numerical format to a bigint data type.
 
 ### Minor Changes
@@ -120,8 +120,8 @@
 
 ### Major Changes
 
-- upgrade @rosen-bridge/minimum-fee to latest
-- implement Bitcoin max transfer calculation and update network type
+- Upgrade @rosen-bridge/minimum-fee to latest
+- Implement Bitcoin max transfer calculation and update network type
 
 ### Minor Changes
 
@@ -139,7 +139,7 @@
 - Refactor the Eternl wallet logic to reside within its own package
 - Make dynamic calculation for max transferable amount
 - Resolve the stale balance problem, when changing the source/target wallet the balance doesn't reset.
-- fix xDefi wallet getAddress API usage
+- Fix xDefi wallet getAddress API usage
 - Resolve the negative amount when clicking on the balance with zero value in these states
 
   - Cardano > Ergo (ADA)
@@ -164,14 +164,14 @@
 
 ### Minor Changes
 
-- integrate bitcoin
-- add page size of 100 to tables
-- add Bitcoin network
-- link app logo to the root page
+- Integrate bitcoin
+- Add page size of 100 to tables
+- Add Bitcoin network
+- Link app logo to the root page
 
 ### Patch Changes
 
-- add unit testing
+- Add unit testing
 - Updated dependencies
   - @rosen-ui/asset-calculator@0.1.0
   - @rosen-ui/xdefi-wallet@0.2.0
@@ -187,19 +187,19 @@
 
 ### Minor Changes
 
-- upgrade extractor packages
+- Upgrade extractor packages
 
 ## 0.4.0
 
 ### Minor Changes
 
-- display service and ui versions in the sidebar
+- Display service and ui versions in the sidebar
 
 ### Patch Changes
 
-- fix the floating point number conversion to bigint problem
-- upgrade nextjs version
-- updated dependencies
+- Fix the floating point number conversion to bigint problem
+- Upgrade nextjs version
+- Updated dependencies
   - @rosen-ui/eternl-wallet@0.0.3
   - @rosen-ui/flint-wallet@0.0.3
   - @rosen-ui/lace-wallet@0.0.3
@@ -211,12 +211,12 @@
 
 ### Minor Changes
 
-- set a maximum page size of 100 for events api
-- use the shared hooks package instead of utils package to prevent server component problems
+- Set a maximum page size of 100 for events api
+- Use the shared hooks package instead of utils package to prevent server component problems
 
 ### Patch Changes
 
-- fix app crash when a token fetched from database is not found
+- Fix app crash when a token fetched from database is not found
 - Update dependencies
   - @rosen-ui/common-hooks@0.1.0
   - @rosen-ui/utils@0.1.0

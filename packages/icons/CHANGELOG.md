@@ -17,16 +17,16 @@
 
 ### Minor Changes
 
-- add Bitcoin icon
+- Add Bitcoin icon
 
 ## 0.3.0
 
 ### Minor Changes
 
-- add XDeFi wallet icon
+- Add XDeFi wallet icon
 
 ## 0.2.0
 
 ### Minor Changes
 
-- add eye and eye-slash icon
+- Add eye and eye-slash icon
