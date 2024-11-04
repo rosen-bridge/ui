@@ -49,7 +49,7 @@ export const SideBar = () => {
   if (!ShowLoading && info?.versions.contract !== info?.versions.tokensMap) {
     versions.push({
       title: 'Tokens',
-      value: info?.versions.tokensMap,
+      value: info!.versions.tokensMap,
     });
   }
 
@@ -101,7 +101,7 @@ export const SideBar = () => {
       ]}
       isActive={(route) => pathname === route.path}
       onNavigate={(route) => router.push(route.path)}
-      isLoading={ShowLoading}
+      ShowLoading={ShowLoading}
     />
   );
 };

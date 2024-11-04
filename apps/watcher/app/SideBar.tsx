@@ -94,7 +94,7 @@ export const SideBar = () => {
       ]}
       isActive={(route) => pathname === route.path}
       onNavigate={(route) => router.push(route.path)}
-      isLoading={ShowLoading}
+      ShowLoading={ShowLoading}
     />
   );
 };
