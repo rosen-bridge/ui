@@ -11,6 +11,7 @@ interface AppBarProps {
   versions?: Version[];
   isActive?: (route: Route) => boolean;
   onNavigate?: (route: Route) => void;
+  isLoading?: boolean;
 }
 
 interface Route {
@@ -46,7 +47,8 @@ const Root = styled(Box)(({ theme }) => ({
  * this component set the appBar size and orientation in different screen sizes
  */
 export const AppBar: FC<AppBarProps> = (props) => {
-  const { children, logo, routes, versions, isActive, onNavigate } = props;
+  const { children, logo, routes, versions, isActive, onNavigate, isLoading } =
+    props;
   return (
     <Root>
       {children}
@@ -86,7 +88,7 @@ export const AppBar: FC<AppBarProps> = (props) => {
                 {version.title} v{version.value}
               </Typography>
             )}
-            {!version.value && (
+            {isLoading && (
               <Grid mb={1} container justifyContent="center">
                 <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
               </Grid>
