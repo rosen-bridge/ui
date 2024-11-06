@@ -73,19 +73,29 @@ interface AppProps {
 }
 
 const App = ({ children }: AppProps) => {
-  const { data: info, isLoading } = useInfo();
+  const { data: info } = useInfo();
 
   /**
    * TODO: In the next phase, refactor this React hook to utilize SSR and data fetching
    * local:ergo/rosen-bridge/ui#408
    */
   useEffect(() => {
-    const networkTitle = isLoading
-      ? 'Watcher'
-      : `[${info?.network ? upperFirst(info.network) : ''}] Watcher`;
+    if (!info) return;
 
-    document.title = networkTitle;
-  }, [isLoading, info]);
+    document.title = `[${upperFirst(info.network)}] Watcher`;
+
+    let faviconLink = document.querySelector(
+      "link[rel~='icon']",
+    ) as HTMLLinkElement;
+
+    if (!faviconLink) {
+      faviconLink = document.createElement('link');
+      faviconLink.rel = 'icon';
+      document.head.appendChild(faviconLink);
+    }
+
+    faviconLink.href = `/chains/${info.network.toLowerCase()}.svg`;
+  }, [info]);
 
   return (
     <NoSsr>
