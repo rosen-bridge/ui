@@ -11,7 +11,6 @@ interface AppBarProps {
   versions?: Version[];
   isActive?: (route: Route) => boolean;
   onNavigate?: (route: Route) => void;
-  isLoading?: boolean;
 }
 
 interface Route {
@@ -46,55 +45,57 @@ const Root = styled(Box)(({ theme }) => ({
  * renders a appBar wrapper
  * this component set the appBar size and orientation in different screen sizes
  */
-export const AppBar: FC<AppBarProps> = (props) => {
-  const { children, logo, routes, versions, isActive, onNavigate, isLoading } =
-    props;
-  return (
-    <Root>
-      {children}
-      {logo}
-      {routes && (
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignItems="center"
-          spacing={1}
-          flexGrow={1}
-        >
-          {routes.map((route) => (
-            <Grid key={route.label} item>
-              <NavigationButton
-                badge={route.badge}
-                disabled={route.disabled}
-                icon={route.icon}
-                isActive={isActive?.(route)}
-                label={route.label}
-                onClick={() => onNavigate?.(route)}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      )}
-      {versions &&
-        versions.map((version) => (
-          <Grid key={version.title} item>
-            {version.value && (
-              <Typography
-                color={version.important ? 'textPrimary' : 'textSecondary'}
-                textAlign="center"
-                variant={version.important ? 'body2' : 'subtitle2'}
-              >
-                {version.title} v{version.value}
-              </Typography>
-            )}
+export const AppBar: FC<AppBarProps> = ({
+  children,
+  logo,
+  routes,
+  versions,
+  isActive,
+  onNavigate,
+}) => (
+  <Root>
+    {children}
+    {logo}
+    {routes && (
+      <Grid
+        container
+        direction="column"
+        justifyContent="center"
+        alignItems="center"
+        spacing={1}
+        flexGrow={1}
+      >
+        {routes.map((route) => (
+          <Grid key={route.label} item>
+            <NavigationButton
+              badge={route.badge}
+              disabled={route.disabled}
+              icon={route.icon}
+              isActive={isActive?.(route)}
+              label={route.label}
+              onClick={() => onNavigate?.(route)}
+            />
           </Grid>
         ))}
-      {isLoading && (
-        <Grid mb={1} container justifyContent="center">
-          <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
-        </Grid>
-      )}
-    </Root>
-  );
-};
+      </Grid>
+    )}
+    {versions?.map((version) => (
+      <Grid key={version.title} item>
+        {version.value && (
+          <Typography
+            color={version.important ? 'textPrimary' : 'textSecondary'}
+            textAlign="center"
+            variant={version.important ? 'body2' : 'subtitle2'}
+          >
+            {version.title} v{version.value}
+          </Typography>
+        )}
+      </Grid>
+    ))}
+    {versions && versions.length === 0 && (
+      <Grid mb={1} container justifyContent="center">
+        <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
+      </Grid>
+    )}
+  </Root>
+);

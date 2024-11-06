@@ -23,16 +23,13 @@ export const SideBar = () => {
 
   const router = useRouter();
 
-  const { data: info, isLoading } = useInfo();
+  const { data: info } = useInfo();
 
-  const ShowLoading =
-    isLoading || !info?.versions.app || !info?.versions.contract;
-
-  const versions = !isLoading
+  const versions = info?.versions
     ? [
         {
           title: 'Guard',
-          value: info?.versions.app,
+          value: info.versions.app,
           important: true,
         },
         {
@@ -41,15 +38,15 @@ export const SideBar = () => {
         },
         {
           title: 'Contract',
-          value: info?.versions.contract,
+          value: info.versions.contract,
         },
       ]
     : [];
 
-  if (!ShowLoading && info?.versions.contract !== info?.versions.tokensMap) {
+  if (info?.versions && info.versions.contract !== info.versions.tokensMap) {
     versions.push({
       title: 'Tokens',
-      value: info!.versions.tokensMap,
+      value: info.versions.tokensMap,
     });
   }
 
@@ -101,7 +98,6 @@ export const SideBar = () => {
       ]}
       isActive={(route) => pathname === route.path}
       onNavigate={(route) => router.push(route.path)}
-      isLoading={isLoading}
     />
   );
 };
