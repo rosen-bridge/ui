@@ -85,6 +85,28 @@ const App = ({ children }: AppProps) => {
       : `[${info?.network ? upperFirst(info.network) : ''}] Watcher`;
 
     document.title = networkTitle;
+
+    const setFavicon = (network: string) => {
+      let faviconLink = document.querySelector(
+        "link[rel~='icon']",
+      ) as HTMLLinkElement;
+
+      if (!faviconLink) {
+        faviconLink = document.createElement('link');
+        faviconLink.rel = 'icon';
+        document.head.appendChild(faviconLink);
+      }
+
+      if (network) {
+        faviconLink.href = `/chains/${network.toLowerCase()}.svg`;
+      } else {
+        faviconLink.removeAttribute('href');
+      }
+    };
+
+    if (info?.network) {
+      setFavicon(info.network);
+    }
   }, [isLoading, info]);
 
   return (
