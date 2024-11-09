@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-app",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ./.gitignore",

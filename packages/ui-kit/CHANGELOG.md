@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 1.5.1
+
+### Patch Changes
+
+- Address the issue concerning the display of values in the Amount component
+
 ## 1.5.0
 
 ### Minor Changes

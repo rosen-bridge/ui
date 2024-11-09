@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 2.3.0
+
+### Minor Changes
+
+- Updated all applications to include a favicon for browser display
+
 ## 2.2.0
 
 ### Minor Changes
