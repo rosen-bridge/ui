@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- Updated all applications to include a favicon for browser display
+- Add a favicon to enhance browser visibility
 
 ## 2.2.0
 
