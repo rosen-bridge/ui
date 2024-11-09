@@ -20,10 +20,10 @@ export const NETWORKS = {
 } as const;
 
 export const NATIVE_TOKENS = {
-  [NETWORKS.ERGO]: 'erg',
-  [NETWORKS.CARDANO]: 'ada',
-  [NETWORKS.BITCOIN]: 'btc',
-  [NETWORKS.ETHEREUM]: 'eth',
+  ERGO: 'erg',
+  CARDANO: 'ada',
+  BITCOIN: 'btc',
+  ETHEREUM: 'eth',
 } as const;
 
 /**

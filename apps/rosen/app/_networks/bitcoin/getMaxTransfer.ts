@@ -49,7 +49,7 @@ const getMaxTransferCore: BitcoinNetwork['getMaxTransfer'] = async ({
   const tokenMap = await getTokenMap();
 
   const offset = tokenMap.wrapAmount(
-    NATIVE_TOKENS[NETWORKS.BITCOIN],
+    NATIVE_TOKENS.BITCOIN,
     BigInt(estimatedFee) + minSatoshi,
     NETWORKS.BITCOIN,
   ).amount;

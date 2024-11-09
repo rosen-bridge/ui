@@ -22,7 +22,7 @@ const getMaxTransferCore: EthereumNetwork['getMaxTransfer'] = async ({
   const tokenMap = await getTokenMap();
 
   const wrappedFee = tokenMap.wrapAmount(
-    NATIVE_TOKENS[NETWORKS.ETHEREUM],
+    NATIVE_TOKENS.ETHEREUM,
     estimatedFee,
     NETWORKS.ETHEREUM,
   ).amount;

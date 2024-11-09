@@ -20,7 +20,7 @@ const getMaxTransferCore: ErgoNetwork['getMaxTransfer'] = async ({
 }) => {
   const tokenMap = await getTokenMap();
   const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
-    NATIVE_TOKENS[NETWORKS.ERGO],
+    NATIVE_TOKENS.ERGO,
     ergoFee + ergoMinBoxValue,
     NETWORKS.ERGO,
   ).amount;

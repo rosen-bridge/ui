@@ -17,7 +17,7 @@ const getMaxTransferCore: CardanoNetwork['getMaxTransfer'] = async ({
 }) => {
   const tokenMap = await getTokenMap();
   const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
-    NATIVE_TOKENS[NETWORKS.CARDANO],
+    NATIVE_TOKENS.CARDANO,
     feeAndMinBoxValue,
     NETWORKS.CARDANO,
   ).amount;
