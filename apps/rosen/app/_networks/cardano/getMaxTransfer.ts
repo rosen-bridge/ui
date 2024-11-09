@@ -1,7 +1,7 @@
 'use server';
 
 import { feeAndMinBoxValue } from '@rosen-network/cardano/dist/src/constants';
-import { NETWORKS } from '@rosen-ui/constants';
+import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
 import { CardanoNetwork } from '@/_types/network';
@@ -17,7 +17,7 @@ const getMaxTransferCore: CardanoNetwork['getMaxTransfer'] = async ({
 }) => {
   const tokenMap = await getTokenMap();
   const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
-    'ada',
+    NATIVE_TOKENS[NETWORKS.CARDANO],
     feeAndMinBoxValue,
     NETWORKS.CARDANO,
   ).amount;

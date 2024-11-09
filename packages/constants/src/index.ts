@@ -23,6 +23,13 @@ export const NETWORKS = {
  * The order should be Ergo, Cardano, Bitcoin, Ethereum.
  * This sequence should be consistently used as the SUPPORTED_CHAINS.
  */
+export const NATIVE_TOKENS = {
+  [NETWORKS.ERGO]: 'erg',
+  [NETWORKS.CARDANO]: 'ada',
+  [NETWORKS.BITCOIN]: 'btc',
+  [NETWORKS.ETHEREUM]: 'eth',
+} as const;
+
 export const NETWORK_VALUES = Object.values(NETWORKS);
 
 export const NETWORK_LABELS: { [key in keyof typeof NETWORKS]: string } = {
