@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 2.3.0
+
+### Minor Changes
+
+- Add a favicon to enhance browser visibility
+
 ## 2.2.0
 
 ### Minor Changes
