@@ -50,9 +50,9 @@ export const Amount = ({
               color="text.primary"
               variant={size == 'normal' ? 'body1' : 'h2'}
             >
-              {+number ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
+              {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
             </Typography>
-            {!!+number && (
+            {!!+value && (
               <>
                 {!!decimals && (
                   <Typography

@@ -1,6 +1,11 @@
 import React from 'react';
+import { Metadata } from 'next';
 
 import App from './App';
+
+export const metadata: Metadata = {
+  title: 'Rosen Guard',
+};
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
