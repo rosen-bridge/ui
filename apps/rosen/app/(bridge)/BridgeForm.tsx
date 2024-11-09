@@ -94,7 +94,12 @@ export const BridgeForm = () => {
   };
 
   const handleTokenChange = useCallback(
-    (e: React.SyntheticEvent, value: RosenChainToken | null) => {
+    (
+      e: React.SyntheticEvent,
+      value: RosenChainToken | null,
+      reason: string,
+    ) => {
+      if (reason == 'clear') return;
       const currentToken = value || undefined;
       setValue('token', currentToken, {
         shouldDirty: true,
