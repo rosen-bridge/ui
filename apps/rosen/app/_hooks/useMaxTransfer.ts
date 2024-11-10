@@ -4,7 +4,7 @@ import { RosenAmountValue } from '@rosen-ui/types';
 
 import { NETWORKS } from '@rosen-ui/constants';
 
-import useNetwork from './useNetwork';
+import { useNetwork } from './useNetwork';
 import useTokenBalance from './useTokenBalance';
 import { getMaxTransfer } from '@/_utils';
 import useTransactionFormData from './useTransactionFormData';
@@ -24,7 +24,7 @@ export const useMaxTransfer = () => {
   const { targetValue, tokenValue, walletAddressValue } =
     useTransactionFormData();
 
-  const { selectedNetwork } = useNetwork();
+  const { selectedSource } = useNetwork();
 
   const { isLoading: isTokenBalanceLoading, amount } = useTokenBalance();
 
@@ -36,7 +36,7 @@ export const useMaxTransfer = () => {
     const skip =
       !amount ||
       isTokenBalanceLoading ||
-      !selectedNetwork ||
+      !selectedSource ||
       !selectedWallet ||
       !targetValue ||
       !tokenValue;
@@ -48,7 +48,7 @@ export const useMaxTransfer = () => {
     try {
       let eventData: any;
 
-      if (selectedNetwork.name === NETWORKS.BITCOIN) {
+      if (selectedSource.name === NETWORKS.BITCOIN) {
         eventData = {
           fromAddress: await selectedWallet.getAddress(),
           toAddress: walletAddressValue,
@@ -57,7 +57,7 @@ export const useMaxTransfer = () => {
       }
 
       const max = await getMaxTransfer(
-        selectedNetwork,
+        selectedSource,
         {
           balance: amount,
           isNative: tokenValue.metaData.type === 'native',
@@ -76,7 +76,7 @@ export const useMaxTransfer = () => {
   }, [
     amount,
     isTokenBalanceLoading,
-    selectedNetwork,
+    selectedSource,
     selectedWallet,
     targetValue,
     tokenValue,

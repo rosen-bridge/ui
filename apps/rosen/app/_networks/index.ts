@@ -11,3 +11,6 @@ export const availableNetworks = {
   [NETWORKS.CARDANO]: CardanoNetwork,
   [NETWORKS.BITCOIN]: BitcoinNetwork,
 } as const;
+
+export type AvailableNetworks =
+  (typeof availableNetworks)[keyof typeof availableNetworks];

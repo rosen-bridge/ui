@@ -9,7 +9,7 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 
-import useNetwork from '@/_hooks/useNetwork';
+import { useNetwork } from '@/_hooks/useNetwork';
 import { useTokenMap } from '@/_hooks/useTokenMap';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
@@ -48,7 +48,7 @@ export const BridgeTransaction = ({
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
   const { setSelectedWallet, wallets, selectedWallet } = useWallet();
 
-  const { selectedNetwork } = useNetwork();
+  const { selectedSource } = useNetwork();
 
   const tokenInfo =
     tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
@@ -136,7 +136,7 @@ export const BridgeTransaction = ({
       </Card>
       <ChooseWalletModal
         open={chooseWalletsModalOpen}
-        chainName={selectedNetwork?.name}
+        chainName={selectedSource?.name}
         setSelectedWallet={setSelectedWallet}
         handleClose={() => setChooseWalletsModalOpen(false)}
         wallets={wallets || []}

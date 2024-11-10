@@ -16,7 +16,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
-import useNetwork from '@/_hooks/useNetwork';
+import { useNetwork } from '@/_hooks/useNetwork';
 
 import { getTokenNameAndId } from '@/_utils';
 import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
@@ -69,7 +69,8 @@ export const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { availableNetworks, tokens, targetNetworks } = useNetwork();
+  const { sources, availableSources, availableTargets, availableTokens } =
+    useNetwork();
 
   const { isLoading, amount, token } = useTokenBalance();
 
@@ -79,9 +80,7 @@ export const BridgeForm = () => {
   const { selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
-    const network = availableNetworks.find(
-      (network) => network.name === value,
-    )!;
+    const network = sources.find((network) => network.name === value)!;
     const Logo = network.logo;
     return (
       <SelectedAsset>
@@ -172,7 +171,7 @@ export const BridgeForm = () => {
             }}
             onChange={handleSourceChange}
           >
-            {availableNetworks.map(({ logo: Logo, ...network }) => (
+            {availableSources.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
                   <SvgIcon>
@@ -199,7 +198,7 @@ export const BridgeForm = () => {
             }}
             onChange={handleTargetChange}
           >
-            {targetNetworks.map(({ logo: Logo, ...network }) => (
+            {availableTargets.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
                   <ListItemIcon>
@@ -238,11 +237,11 @@ export const BridgeForm = () => {
       )}
       <Autocomplete
         aria-label="token input"
-        disabled={!tokens.length}
+        disabled={!availableTokens.length}
         id="token"
         clearIcon={false}
         disablePortal
-        options={tokens}
+        options={availableTokens}
         value={tokenField.value}
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => {

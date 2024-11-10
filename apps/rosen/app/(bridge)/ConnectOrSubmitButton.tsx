@@ -15,7 +15,7 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 
-import useNetwork from '@/_hooks/useNetwork';
+import { useNetwork } from '@/_hooks/useNetwork';
 import { useTransaction } from '@/_hooks/useTransaction';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
@@ -62,14 +62,14 @@ export const ConnectOrSubmitButton = ({
     startTransaction(bridgeFee, networkFee);
   });
 
-  const { availableNetworks } = useNetwork();
+  const { availableSources } = useNetwork();
 
-  const source = availableNetworks.find(
+  const source = availableSources.find(
     (availableNetwork) => availableNetwork.name == sourceValue,
   );
   const SourceLogo = source?.logo;
 
-  const target = availableNetworks.find(
+  const target = availableSources.find(
     (availableNetwork) => availableNetwork.name == targetValue,
   );
   const TargetLogo = target?.logo;
