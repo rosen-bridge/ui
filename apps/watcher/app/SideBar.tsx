@@ -22,30 +22,28 @@ export const SideBar = () => {
 
   const router = useRouter();
 
-  const { data: info } = useInfo();
+  const { data: info, isLoading } = useInfo();
 
-  const versions = info?.versions
-    ? [
-        {
-          title: 'Watcher',
-          value: info.versions.app,
-          important: true,
-        },
-        {
-          title: 'UI',
-          value: packageJson.version,
-        },
-        {
-          title: 'Contract',
-          value: info.versions.contract,
-        },
-      ]
-    : [];
+  const versions = [
+    {
+      title: 'Watcher',
+      value: info?.versions.app,
+      important: true,
+    },
+    {
+      title: 'UI',
+      value: packageJson.version,
+    },
+    {
+      title: 'Contract',
+      value: info?.versions.contract,
+    },
+  ];
 
-  if (info?.versions && info.versions.contract !== info.versions.tokensMap) {
+  if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
     versions.push({
       title: 'Tokens',
-      value: info.versions.tokensMap,
+      value: info!.versions.tokensMap,
     });
   }
 

@@ -49,53 +49,55 @@ export const AppBar: FC<AppBarProps> = ({
   children,
   logo,
   routes,
-  versions,
+  versions = [],
   isActive,
   onNavigate,
-}) => (
-  <Root>
-    {children}
-    {logo}
-    {routes && (
-      <Grid
-        container
-        direction="column"
-        justifyContent="center"
-        alignItems="center"
-        spacing={1}
-        flexGrow={1}
-      >
-        {routes.map((route) => (
-          <Grid key={route.label} item>
-            <NavigationButton
-              badge={route.badge}
-              disabled={route.disabled}
-              icon={route.icon}
-              isActive={isActive?.(route)}
-              label={route.label}
-              onClick={() => onNavigate?.(route)}
-            />
+}) => {
+  const loadingVersions = versions.every((version) => version.value);
+  return (
+    <Root>
+      {children}
+      {logo}
+      {routes && (
+        <Grid
+          container
+          direction="column"
+          justifyContent="center"
+          alignItems="center"
+          spacing={1}
+          flexGrow={1}
+        >
+          {routes.map((route) => (
+            <Grid key={route.label} item>
+              <NavigationButton
+                badge={route.badge}
+                disabled={route.disabled}
+                icon={route.icon}
+                isActive={isActive?.(route)}
+                label={route.label}
+                onClick={() => onNavigate?.(route)}
+              />
+            </Grid>
+          ))}
+        </Grid>
+      )}
+      {loadingVersions ? (
+        versions.map((version) => (
+          <Grid key={version.title} item>
+            <Typography
+              color={version.important ? 'textPrimary' : 'textSecondary'}
+              textAlign="center"
+              variant={version.important ? 'body2' : 'subtitle2'}
+            >
+              {version.title} v{version.value}
+            </Typography>
           </Grid>
-        ))}
-      </Grid>
-    )}
-    {versions?.map((version) => (
-      <Grid key={version.title} item>
-        {version.value && (
-          <Typography
-            color={version.important ? 'textPrimary' : 'textSecondary'}
-            textAlign="center"
-            variant={version.important ? 'body2' : 'subtitle2'}
-          >
-            {version.title} v{version.value}
-          </Typography>
-        )}
-      </Grid>
-    ))}
-    {versions && versions.length === 0 && (
-      <Grid mb={1} container justifyContent="center">
-        <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
-      </Grid>
-    )}
-  </Root>
-);
+        ))
+      ) : (
+        <Grid mb={1} container justifyContent="center">
+          <CircularProgress size={8} sx={{ alignSelf: 'center' }} />
+        </Grid>
+      )}
+    </Root>
+  );
+};
