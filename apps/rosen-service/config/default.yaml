@@ -31,7 +31,10 @@ bitcoin:
   tokens:
     rwt:
   initialHeight:
-  esploraUrl: https://blockstream.info
+  rpc:
+    url:
+    username:
+    password:
 ethereum:
   addresses:
     lock:
