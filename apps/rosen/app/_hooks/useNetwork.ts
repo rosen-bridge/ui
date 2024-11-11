@@ -73,6 +73,10 @@ export const useNetwork = () => {
   useEffect(() => {
     if (!blacklist) return;
 
+    const sources = new Set<AvailableNetworks>(),
+      targets = new Set<AvailableNetworks>(),
+      tokens = new Set<RosenChainToken>();
+
     for (const fromChain of tokenMap.getAllChains()) {
       if (!NETWORK_VALUES.includes(fromChain as Network)) continue;
 
@@ -91,28 +95,22 @@ export const useNetwork = () => {
 
           if (isBlocked) continue;
 
-          setAvailableSources((sources) =>
-            Array.from(
-              new Set(sources.concat(availableNetworks[fromChain as Network])),
-            ),
-          );
+          sources.add(availableNetworks[fromChain as Network]);
 
           if (sourceField.value != fromChain) continue;
 
-          setAvailableTargets((targets) =>
-            Array.from(
-              new Set(targets.concat(availableNetworks[toChain as Network])),
-            ),
-          );
+          targets.add(availableNetworks[toChain as Network]);
 
           if (targetField.value != toChain) continue;
 
-          setAvailableTokens((tokens) =>
-            Array.from(new Set(tokens.concat(token))),
-          );
+          tokens.add(token);
         }
       }
     }
+
+    setAvailableSources(Array.from(sources));
+    setAvailableTargets(Array.from(targets));
+    setAvailableTokens(Array.from(tokens));
   }, [blacklist, tokenMap, sourceField.value, targetField.value]);
 
   useEffect(() => {
