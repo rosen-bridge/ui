@@ -19,6 +19,13 @@ export const NETWORKS = {
   ETHEREUM: 'ethereum',
 } as const;
 
+export const NATIVE_TOKENS = {
+  ERGO: 'erg',
+  CARDANO: 'ada',
+  BITCOIN: 'btc',
+  ETHEREUM: 'eth',
+} as const;
+
 /**
  * The order should be Ergo, Cardano, Bitcoin, Ethereum.
  * This sequence should be consistently used as the SUPPORTED_CHAINS.
