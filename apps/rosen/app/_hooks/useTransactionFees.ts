@@ -120,10 +120,9 @@ const useTransactionFees = (
     selectedNetwork,
   ]);
 
-  const fees = feeInfo.current?.data?.fees;
-  const feeRatioDivisor = fees?.feeRatioDivisor
-    ? BigInt(fees?.feeRatioDivisor)
-    : 1n;
+  const fees = tokenId && feeInfo.current?.data?.fees;
+  const feeRatioDivisor =
+    tokenId && fees?.feeRatioDivisor ? BigInt(fees?.feeRatioDivisor) : 1n;
 
   const transactionFees = useMemo(() => {
     let paymentAmount = 0n;
