@@ -4,7 +4,7 @@ import { useSnackbar } from '@rosen-bridge/ui-kit';
 
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
-import useNetwork from './useNetwork';
+import { useNetwork } from './useNetwork';
 
 import { calculateFee } from '@/_actions/calculateFee';
 
@@ -24,7 +24,7 @@ const useTransactionFees = (
 ) => {
   const [pending, startTransition] = useTransition();
   const { openSnackbar } = useSnackbar();
-  const { selectedNetwork } = useNetwork();
+  const { selectedSource } = useNetwork();
 
   const feeInfo = useRef<any>(null);
   const tokenMap = useTokenMap();
@@ -70,7 +70,7 @@ const useTransactionFees = (
       sourceChain &&
       targetChain &&
       tokenId &&
-      selectedNetwork &&
+      selectedSource &&
       tokenId !== feeInfo.current?.tokenId &&
       !pending
     ) {
@@ -80,7 +80,7 @@ const useTransactionFees = (
             sourceChain,
             targetChain,
             tokenId,
-            selectedNetwork.nextHeightInterval,
+            selectedSource.nextHeightInterval,
           );
 
           const { fees, nextFees } = parsedData;
@@ -117,7 +117,7 @@ const useTransactionFees = (
     openSnackbar,
     pending,
     feeInfo,
-    selectedNetwork,
+    selectedSource,
   ]);
 
   const fees = tokenId && feeInfo.current?.data?.fees;
