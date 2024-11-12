@@ -31,6 +31,8 @@ bitcoin:
   tokens:
     rwt:
   initialHeight:
+  esplora:
+    url: https://mempool.space
   rpc:
     url:
     username:
