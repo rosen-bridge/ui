@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 
 import { data, singletonInstance } from '../data';
+import { getDatabaseClient } from '../databaseClient';
 
 export async function GET() {
   data[Math.random()] = Date.now().toString();
@@ -9,5 +10,12 @@ export async function GET() {
   singletonInstance.setData({
     [Math.random()]: Date.now().toString(),
   });
-  return NextResponse.json({ data: 'Helo, World! This is CRON route.' });
+  getDatabaseClient().setData({
+    [Math.random()]: Date.now().toString(),
+  });
+  return NextResponse.json({
+    data: 'Helo, World! This is CRON route.',
+    singletonData: singletonInstance.getData(),
+    getDatabaseClient: getDatabaseClient().getData(),
+  });
 }
