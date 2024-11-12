@@ -3,5 +3,5 @@ import { NextResponse } from 'next/server';
 import { data } from '../data';
 
 export async function GET() {
-  return NextResponse.json({ data });
+  return NextResponse.json({ data, fakedata: (globalThis as any)['fakedata'] });
 }
