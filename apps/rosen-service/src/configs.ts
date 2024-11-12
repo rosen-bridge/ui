@@ -59,7 +59,7 @@ const getConfig = () => {
         tokens: {
           rwt: nodeConfig.get<string>('bitcoin.tokens.rwt'),
         },
-        esploraUrl: nodeConfig.get<string>('bitcoin.esplora.url'),
+        esploraUrl: nodeConfig.get<string>('bitcoin.esploraUrl'),
         rpcUrl: nodeConfig.get<string>('bitcoin.rpc.url'),
         rpcUsername: getOptionalString('bitcoin.rpc.username'),
         rpcPassword: getOptionalString('bitcoin.rpc.password'),
