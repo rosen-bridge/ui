@@ -14,8 +14,12 @@ class DatabaseClient {
 let instance: DatabaseClient;
 
 export function getDatabaseClient() {
+  const has = !!instance;
   if (!instance) {
     instance = new DatabaseClient();
   }
-  return instance;
+  return {
+    has,
+    instance,
+  };
 }

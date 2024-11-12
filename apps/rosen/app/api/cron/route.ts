@@ -10,12 +10,13 @@ export async function GET() {
   singletonInstance.setData({
     [Math.random()]: Date.now().toString(),
   });
-  getDatabaseClient().setData({
+  getDatabaseClient().instance.setData({
     [Math.random()]: Date.now().toString(),
   });
   return NextResponse.json({
-    data: 'Helo, World! This is CRON route.',
+    data,
+    globalThis: (globalThis as any)['fakedata'],
     singletonData: singletonInstance.getData(),
-    getDatabaseClient: getDatabaseClient().getData(),
+    getDatabaseClient: getDatabaseClient().instance.getData(),
   });
 }
