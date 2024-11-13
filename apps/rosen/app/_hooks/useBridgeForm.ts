@@ -11,14 +11,14 @@ import { unwrap } from '@/_safeServerAction';
 import { getMaxTransfer, getMinTransfer } from '@/_utils';
 
 import { useTokenMap } from './useTokenMap';
-import useTransactionFormData from './useTransactionFormData';
+import { useTransactionFormData } from './useTransactionFormData';
 
 /**
  * handles the form field registrations and form state changes
  * and validations
  */
 
-const useBridgeForm = () => {
+export const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus } =
     useTransactionFormData();
 
@@ -141,5 +141,3 @@ const useBridgeForm = () => {
     formState,
   };
 };
-
-export default useBridgeForm;

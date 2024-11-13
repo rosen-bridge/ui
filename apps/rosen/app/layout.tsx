@@ -1,12 +1,16 @@
 import { Metadata } from 'next';
 
-import App from './App';
+import { App } from './App';
 
 export const metadata: Metadata = {
   title: 'Rosen Bridge',
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     /**
      * TODO: get `lang` from url language path segment
@@ -18,6 +22,4 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
       </body>
     </html>
   );
-};
-
-export default RootLayout;
+}

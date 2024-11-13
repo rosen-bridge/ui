@@ -19,7 +19,7 @@ import { theme } from '@/_theme/theme';
 
 import { WalletContextProvider } from './_contexts/walletContext';
 import { SideBar } from './SideBar';
-import Toolbar from './Toolbar';
+import { Toolbar } from './Toolbar';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -44,7 +44,7 @@ interface AppProps {
   children?: React.ReactNode;
 }
 
-const App = ({ children }: AppProps) => {
+export const App = ({ children }: AppProps) => {
   return (
     <NoSsr>
       <ThemeProvider theme={theme}>
@@ -67,5 +67,3 @@ const App = ({ children }: AppProps) => {
     </NoSsr>
   );
 };
-
-export default App;

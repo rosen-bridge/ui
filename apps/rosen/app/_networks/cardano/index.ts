@@ -30,7 +30,7 @@ const config = {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const CardanoNetwork: CardanoNetworkType = {
+export const CardanoNetwork: CardanoNetworkType = {
   name: NETWORKS.CARDANO,
   label: NETWORK_LABELS.CARDANO,
   wallets: [
@@ -45,5 +45,3 @@ const CardanoNetwork: CardanoNetworkType = {
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
-
-export default CardanoNetwork;

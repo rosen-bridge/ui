@@ -15,7 +15,7 @@ import { useTokenMap } from './useTokenMap';
  * calculates the fees for a token swap between
  * two networks
  */
-const useTransactionFees = (
+export const useTransactionFees = (
   sourceChain: Network | null,
   targetChain: Network | null,
   token: RosenChainToken | null,
@@ -167,5 +167,3 @@ const useTransactionFees = (
 
   return transactionFees;
 };
-
-export default useTransactionFees;

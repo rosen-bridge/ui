@@ -1,5 +1,5 @@
 'use client';
 
-const Support = () => null;
-
-export default Support;
+export default function Support() {
+  return null;
+}

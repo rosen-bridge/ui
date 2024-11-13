@@ -16,13 +16,13 @@ import {
 import { ApiEventResponse, Event } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
-import TableSkeleton from './TableSkeleton';
+import { TableSkeleton } from './TableSkeleton';
 
 const getKey = (offset: number, limit: number) => {
   return ['/v1/events', { offset, limit }];
 };
 
-const Events = () => {
+export default function Events() {
   const {
     data,
     isLoading,
@@ -121,6 +121,4 @@ const Events = () => {
       </Paper>
     </>
   );
-};
-
-export default Events;
+}

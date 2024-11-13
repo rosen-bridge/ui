@@ -14,7 +14,7 @@ import { generateLockData, generateTxParameters } from './server';
  * providing access to network info and wallets and network specific
  * functionality
  */
-const EthereumNetwork: EthereumNetworkType = {
+export const EthereumNetwork: EthereumNetworkType = {
   name: NETWORKS.ETHEREUM,
   label: NETWORK_LABELS.ETHEREUM,
   wallets: [
@@ -30,5 +30,3 @@ const EthereumNetwork: EthereumNetworkType = {
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address.toLowerCase(),
 };
-
-export default EthereumNetwork;

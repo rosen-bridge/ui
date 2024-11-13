@@ -5,9 +5,9 @@ import {
 } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';
 
-import NotFoundError from '@/_errors/NotFoundError';
+import { NotFoundError } from '@/_errors/NotFoundError';
 
-import dataSource from '../dataSource';
+import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);

@@ -23,7 +23,7 @@ import { Network } from '@rosen-ui/types';
 import { ApiAssetsResponse, Assets } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
-import TableSkeleton from './TableSkeleton';
+import { TableSkeleton } from './TableSkeleton';
 
 const getKey = (chain: Network | 'all') => (offset: number, limit: number) => {
   return [

@@ -1,9 +1,9 @@
 import { NETWORKS } from '@rosen-ui/constants';
 
-import BitcoinNetwork from './bitcoin';
-import CardanoNetwork from './cardano';
-import ErgoNetwork from './ergo';
-import EthereumNetwork from './ethereum';
+import { BitcoinNetwork } from './bitcoin';
+import { CardanoNetwork } from './cardano';
+import { ErgoNetwork } from './ergo';
+import { EthereumNetwork } from './ethereum';
 
 export const availableNetworks = {
   [NETWORKS.ERGO]: ErgoNetwork,

@@ -19,7 +19,7 @@ const config = {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const ErgoNetwork: ErgoNetworkType = {
+export const ErgoNetwork: ErgoNetworkType = {
   name: NETWORKS.ERGO,
   label: NETWORK_LABELS.ERGO,
   wallets: [nautilusWalletCreator(config)],
@@ -29,5 +29,3 @@ const ErgoNetwork: ErgoNetworkType = {
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
-
-export default ErgoNetwork;
