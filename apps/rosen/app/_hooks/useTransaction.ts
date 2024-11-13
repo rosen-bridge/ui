@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { RosenAmountValue } from '@rosen-ui/types';
+import { getNonDecimalString } from '@rosen-ui/utils';
 
 import { useNetwork } from './useNetwork';
+import { useTokenMap } from './useTokenMap';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
-import { getNonDecimalString } from '@rosen-ui/utils';
-import { useTokenMap } from './useTokenMap';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * a react hook to create and sign and submit transactions

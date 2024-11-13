@@ -1,10 +1,11 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
-import { Wallet, WalletBase } from '@rosen-ui/wallet-api';
-import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
-import { useNetwork } from './useNetwork';
+import { useLocalStorageManager } from '@rosen-ui/common-hooks';
+import { Wallet, WalletBase } from '@rosen-ui/wallet-api';
 
 import { WalletContext } from '@/_contexts/walletContext';
+
+import { useNetwork } from './useNetwork';
 
 interface WalletDescriptor {
   readonly name: string;

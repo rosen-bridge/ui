@@ -1,6 +1,5 @@
-import { Wallet } from '@rosen-ui/wallet-api';
-
 import { Network, RosenAmountValue } from '@rosen-ui/types';
+import { Wallet } from '@rosen-ui/wallet-api';
 
 interface GetMaxTransferParams {
   balance: RosenAmountValue;

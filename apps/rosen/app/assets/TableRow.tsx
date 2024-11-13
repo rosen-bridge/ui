@@ -1,3 +1,5 @@
+import { useState, FC, useMemo } from 'react';
+
 import { AngleDown, AngleUp, OpenInNew } from '@rosen-bridge/icons';
 import {
   Box,
@@ -17,19 +19,17 @@ import {
   TableRow,
   WithExternalLink,
 } from '@rosen-bridge/ui-kit';
-import { useState, FC, useMemo } from 'react';
-import useSWR from 'swr';
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-
-import { ApiAssetResponse, Assets } from '@/_types/api';
-
 import {
   getAddressUrl,
   getDecimalString,
   getTokenUrl,
   getTxURL,
 } from '@rosen-ui/utils';
-import { NETWORKS } from '@rosen-ui/constants';
+import useSWR from 'swr';
+
+import { ApiAssetResponse, Assets } from '@/_types/api';
 
 interface RowProps extends Assets {
   isLoading?: boolean;
@@ -118,7 +118,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const rowStyles = useMemo(
     () => ({
-      opacity: isLoading ? 0.3 : 1.0,
+      'opacity': isLoading ? 0.3 : 1.0,
       '& > td': {
         border: 0,
         padding: 1,
@@ -188,7 +188,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       )}
       <TableRow
         sx={{
-          opacity: isLoading ? 0.3 : 1.0,
+          'opacity': isLoading ? 0.3 : 1.0,
           '& > td': {
             border: 0,
           },
@@ -245,7 +245,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <TableRow
         className="divider"
         sx={{
-          opacity: isLoading ? 0.3 : 1.0,
+          'opacity': isLoading ? 0.3 : 1.0,
           '& > td': { border: 0 },
         }}
         onClick={() => setExpanded(!open)}
@@ -308,7 +308,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       </TableRow>
       <TableRow
         sx={{
-          opacity: isLoading ? 0.3 : 1.0,
+          'opacity': isLoading ? 0.3 : 1.0,
           '&:last-child td': { border: 0 },
         }}
       >

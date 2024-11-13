@@ -1,13 +1,12 @@
 'use server';
 
+import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
 import { EthereumNetwork } from '@/_types/network';
 
 import { getTokenMap } from '../getTokenMap.server';
-import { RosenAmountValue } from '@rosen-ui/types';
-import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
 
 /**
  * get max transfer for ethereum

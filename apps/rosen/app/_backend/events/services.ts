@@ -3,9 +3,8 @@ import { Network } from '@rosen-ui/types';
 
 import { getRosenTokens } from '@/_backend/utils';
 
-import { getEvents } from './repository';
-
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
+import { getEvents } from './repository';
 
 const tokenMap = new TokenMap(getRosenTokens());
 

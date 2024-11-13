@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, ChangeEvent } from 'react';
-import { getDecimalString } from '@rosen-ui/utils';
 
+import { Autocomplete } from '@mui/material';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
   TextField,
@@ -14,20 +15,19 @@ import {
   SvgIcon,
   Alert,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
-import { useNetwork } from '@/_hooks/useNetwork';
-
-import { getTokenNameAndId } from '@/_utils';
 import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
+import { useNetwork } from '@/_hooks/useNetwork';
 import useTokenBalance from '@/_hooks/useTokenBalance';
-import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
+import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
+import { getTokenNameAndId } from '@/_utils';
+
 import { UseAllAmount } from './UseAllAmount';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Autocomplete } from '@mui/material';
-import { RosenChainToken } from '@rosen-bridge/tokens';
 
 /**
  * bridge form container comp
@@ -290,7 +290,7 @@ export const BridgeForm = () => {
           ),
         }}
         inputProps={{
-          style: { fontSize: '2rem' },
+          'style': { fontSize: '2rem' },
           'aria-label': 'amount input',
         }}
         variant="filled"

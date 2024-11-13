@@ -1,3 +1,15 @@
 {
-  "singleQuote": true
+  "quoteProps": "consistent",
+  "singleQuote": true,
+  "importOrder": [
+    "^(@?react|@?next)",
+    "<THIRD_PARTY_MODULES>",
+    "^@/(.*)$",
+    "^[.](.*)"
+  ],
+  "importOrderCaseInsensitive": true,
+  "importOrderParserPlugins": ["typescript", "jsx"],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": false,
+  "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

@@ -1,7 +1,6 @@
-import { upperFirst } from 'lodash-es';
-import moment from 'moment';
 import { useState, FC, useMemo } from 'react';
 
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Button,
   EnhancedTableCell,
@@ -10,11 +9,10 @@ import {
   Typography,
   Id,
 } from '@rosen-bridge/ui-kit';
-
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-
 import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { upperFirst } from 'lodash-es';
+import moment from 'moment';
 
 import { Event } from '@/_types/api';
 
