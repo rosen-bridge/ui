@@ -6,7 +6,7 @@ import {
   Toolbar as UiKitToolbar,
 } from '@rosen-bridge/ui-kit';
 
-import ApiKeyModal from './_modals/ApiKeyModal';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 
 const pageTitleMap: Record<string, string> = {
   '(dashboard)': 'Dashboard',

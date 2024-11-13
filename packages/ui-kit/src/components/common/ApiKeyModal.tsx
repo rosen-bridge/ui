@@ -16,10 +16,10 @@ import {
   SvgIcon,
   TextField,
   Typography,
-  useSnackbar,
-} from '@rosen-bridge/ui-kit';
+} from '../base';
 
 import { useApiKey } from '@rosen-bridge/shared-contexts';
+import { useSnackbar } from '../../hooks';
 
 interface FormValues {
   apiKey: string;
@@ -29,7 +29,7 @@ export interface ApiKeyModalProps {
   children?: (open: () => void) => React.ReactNode;
 }
 
-const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
+export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
   const { apiKey, setApiKey } = useApiKey();
   const { openSnackbar } = useSnackbar();
 
@@ -47,7 +47,7 @@ const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
   const handleSetKey = (values: FormValues) => {
     setApiKey(values.apiKey);
     handleCloseModal();
-    openSnackbar('Api key is set!', 'success');
+    openSnackbar('API key is set!', 'success');
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -125,5 +125,3 @@ const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
     </>
   );
 };
-
-export default ApiKeyModal;

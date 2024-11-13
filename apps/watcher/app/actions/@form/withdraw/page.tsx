@@ -43,7 +43,7 @@ import {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/_types/api';
-import ApiKeyModal from '@/_modals/ApiKeyModal';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 
 interface Form extends TokenAmountCompatibleFormSchema {
   address: string;
