@@ -1,7 +1,8 @@
 import { NextRequest } from 'next/server';
-import Joi from 'joi';
+
 import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+import Joi from 'joi';
 
 interface GETQueryParams {
   offset: number;

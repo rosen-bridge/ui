@@ -1,14 +1,13 @@
-import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
-
+import { ErgoIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
-import { ErgoIcon } from '@rosen-bridge/icons';
 
-import { generateUnsignedTx } from './server';
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';
+import { generateUnsignedTx } from './server';
 
 const config = {
   getTokenMap,

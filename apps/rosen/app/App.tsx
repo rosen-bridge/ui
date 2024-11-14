@@ -1,13 +1,12 @@
 'use client';
 
-import React from 'react';
-
 /**
  * FIXME: import NoSsr from ui-kit
  * local:ergo/rosen-bridge/ui#193
  */
-import { NoSsr } from '@mui/material';
+import React from 'react';
 
+import { NoSsr } from '@mui/material';
 import {
   styled,
   AppSnackbar,
@@ -16,11 +15,11 @@ import {
   ThemeProvider,
 } from '@rosen-bridge/ui-kit';
 
+import { theme } from '@/_theme/theme';
+
+import { WalletContextProvider } from './_contexts/walletContext';
 import { SideBar } from './SideBar';
 import Toolbar from './Toolbar';
-
-import { theme } from '@/_theme/theme';
-import { WalletContextProvider } from './_contexts/walletContext';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',

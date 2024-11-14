@@ -1,10 +1,9 @@
+'use client';
+
 /**
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-
-'use client';
-
 import { MouseEvent, useCallback, useMemo } from 'react';
 
 import {
@@ -14,10 +13,10 @@ import {
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
+import { ApiEventResponse, Event } from '@/_types/api';
+
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
-
-import { ApiEventResponse, Event } from '@/_types/api';
 
 const getKey = (offset: number, limit: number) => {
   return ['/v1/events', { offset, limit }];

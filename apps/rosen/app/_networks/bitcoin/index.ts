@@ -1,21 +1,18 @@
 import { BitcoinIcon } from '@rosen-bridge/icons';
-import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
-
-import { getMaxTransfer } from './getMaxTransfer';
-
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
 
+import { getTokenMap } from '../getTokenMap.client';
+import { getMaxTransfer } from './getMaxTransfer';
 import {
   generateOpReturnData,
   generateUnsignedTx,
   submitTransaction,
   getAddressBalance,
 } from './server';
-
-import { getTokenMap } from '../getTokenMap.client';
 
 const config = {
   getTokenMap,

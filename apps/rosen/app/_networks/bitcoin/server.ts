@@ -1,5 +1,6 @@
 'use server';
 
+import { TokenMap } from '@rosen-bridge/tokens';
 import {
   generateOpReturnData as generateOpReturnDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
@@ -7,9 +8,8 @@ import {
   submitTransaction as submitTransactionCore,
 } from '@rosen-network/bitcoin';
 
-import { wrap } from '@/_safeServerAction';
-import { TokenMap } from '@rosen-bridge/tokens';
 import { getRosenTokens } from '@/_backend/utils';
+import { wrap } from '@/_safeServerAction';
 
 export const generateOpReturnData = wrap(generateOpReturnDataCore, {
   traceKey: 'generateOpReturnData',

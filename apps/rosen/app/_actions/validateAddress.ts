@@ -1,11 +1,11 @@
 'use server';
 
+import { validateAddress as validate } from '@rosen-bridge/address-codec';
 import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+import Joi from 'joi';
 
 import { wrap } from '@/_safeServerAction';
-import Joi from 'joi';
-import { validateAddress as validate } from '@rosen-bridge/address-codec';
 
 /**
  * server action to verify the wallet addresses

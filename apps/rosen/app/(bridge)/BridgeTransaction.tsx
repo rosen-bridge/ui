@@ -1,5 +1,7 @@
 'use client';
 
+import { Dispatch, SetStateAction } from 'react';
+
 import {
   Alert,
   Amount,
@@ -14,10 +16,9 @@ import { useTokenMap } from '@/_hooks/useTokenMap';
 import useTransactionFees from '@/_hooks/useTransactionFees';
 import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
-
 import { getTokenNameAndId } from '@/_utils';
+
 import { ChooseWalletModal } from './ChooseWalletModal';
-import { Dispatch, SetStateAction } from 'react';
 import { WalletInfo } from './WalletInfo';
 
 export interface BridgeTransactionProps {
