@@ -1,5 +1,11 @@
 # @rosen-network/bitcoin
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated the @rosen-ui/constants@0.0.5 dependency
+
 ## 1.0.0
 
 ### Major Changes
