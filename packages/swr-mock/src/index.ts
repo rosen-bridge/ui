@@ -1,1 +1,1 @@
-export { default, SWRConfigProps } from './SWRConfig';
+export { SWRConfig, SWRConfigProps } from './SWRConfig';

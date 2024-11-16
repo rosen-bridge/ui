@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Copy, QrcodeScan } from '@rosen-bridge/icons';
@@ -92,7 +92,7 @@ interface WalletWidgetProps {
  * @param color
  * @param isLoading
  */
-const WalletWidget = ({
+export const WalletWidget = ({
   title,
   tokenInfoWithAddresses,
   color,
@@ -194,5 +194,3 @@ const WalletWidget = ({
     </WalletWidgetBase>
   );
 };
-
-export default WalletWidget;

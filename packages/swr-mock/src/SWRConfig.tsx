@@ -1,5 +1,5 @@
 import { SWRConfig as SWRConfigBase } from 'swr';
-import mockMiddlewareFactory from './mockMiddlewareFactory';
+import { mockMiddlewareFactory } from './mockMiddlewareFactory';
 
 export interface SWRConfigProps {
   children: React.ReactNode;
@@ -17,7 +17,11 @@ export interface SWRConfigProps {
  * @param useMockedApis whether to use mocked apis instead of main ones
  * @param fakeData mocked data to use in mocked apis
  */
-const SWRConfig = ({ children, useMockedApis, fakeData }: SWRConfigProps) => (
+export const SWRConfig = ({
+  children,
+  useMockedApis,
+  fakeData,
+}: SWRConfigProps) => (
   <SWRConfigBase
     value={{
       use: useMockedApis ? [mockMiddlewareFactory(fakeData)] : [],
@@ -26,5 +30,3 @@ const SWRConfig = ({ children, useMockedApis, fakeData }: SWRConfigProps) => (
     {children}
   </SWRConfigBase>
 );
-
-export default SWRConfig;

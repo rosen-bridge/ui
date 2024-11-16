@@ -13,7 +13,6 @@ import {
   ApiSignResponse,
   ApiEventResponse as ApiOngoingEventResponse,
   ApiHistoryResponse as ApiHistoryEventResponse,
-  EventBase,
   HistoryEvent,
   OngoingEvent,
 } from '@/_types/api';
@@ -392,7 +391,7 @@ const history: ApiHistoryEventResponse = {
   items: generateHistoryEventRecords(100),
 };
 
-const mockedData: SWRConfigProps['fakeData'] = {
+export const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
     '/revenue/chart': revenueChart,
@@ -439,5 +438,3 @@ const mockedData: SWRConfigProps['fakeData'] = {
     },
   },
 };
-
-export default mockedData;
