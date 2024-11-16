@@ -6,7 +6,7 @@ import {
   CardanoNetwork,
   ErgoNetwork,
   EthereumNetwork,
-} from '@/_types/network';
+} from '@/_types';
 
 /**
  * return max transfer, considering all the context that affects it

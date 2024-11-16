@@ -10,7 +10,7 @@ import {
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
-import { BitcoinNetwork } from '@/_types/network';
+import { BitcoinNetwork } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.server';
 

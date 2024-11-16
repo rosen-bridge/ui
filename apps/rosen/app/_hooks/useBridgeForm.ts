@@ -4,7 +4,7 @@ import { useController } from 'react-hook-form';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
-import { validateAddress } from '@/_actions/validateAddress';
+import { validateAddress } from '@/_actions';
 import { WalletContext } from '@/_contexts/walletContext';
 import { availableNetworks } from '@/_networks';
 import { unwrap } from '@/_safeServerAction';

@@ -3,7 +3,7 @@ import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
 
 import { unwrap } from '@/_safeServerAction';
-import { ErgoNetwork as ErgoNetworkType } from '@/_types/network';
+import { ErgoNetwork as ErgoNetworkType } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';

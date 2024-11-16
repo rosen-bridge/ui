@@ -4,7 +4,7 @@ import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
-import { EthereumNetwork } from '@/_types/network';
+import { EthereumNetwork } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.server';
 

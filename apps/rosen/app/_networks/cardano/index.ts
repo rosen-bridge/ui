@@ -6,7 +6,7 @@ import { laceWalletCreator } from '@rosen-ui/lace-wallet';
 import { namiWalletCreator } from '@rosen-ui/nami-wallet';
 
 import { unwrap } from '@/_safeServerAction';
-import { CardanoNetwork as CardanoNetworkType } from '@/_types/network';
+import { CardanoNetwork as CardanoNetworkType } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';

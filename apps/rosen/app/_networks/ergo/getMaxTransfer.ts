@@ -7,7 +7,7 @@ import {
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
-import { ErgoNetwork } from '@/_types/network';
+import { ErgoNetwork } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.server';
 
