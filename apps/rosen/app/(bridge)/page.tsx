@@ -40,7 +40,7 @@ export interface BridgeForm {
 /**
  * bridge main layout
  */
-export default function RosenBridge() {
+const RosenBridge = () => {
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
 
   const methods = useForm<BridgeForm>({
@@ -82,4 +82,6 @@ export default function RosenBridge() {
       </BridgeContainer>
     </FormProvider>
   );
-}
+};
+
+export default RosenBridge;

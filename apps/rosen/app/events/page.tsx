@@ -22,7 +22,7 @@ const getKey = (offset: number, limit: number) => {
   return ['/v1/events', { offset, limit }];
 };
 
-export default function Events() {
+const Events = () => {
   const {
     data,
     isLoading,
@@ -121,4 +121,6 @@ export default function Events() {
       </Paper>
     </>
   );
-}
+};
+
+export default Events;

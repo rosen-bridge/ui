@@ -20,7 +20,7 @@ import {
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
-import { ApiAssetsResponse, Assets } from '@/_types/api';
+import { ApiAssetsResponse, Assets as AssetsModel } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
@@ -32,7 +32,7 @@ const getKey = (chain: Network | 'all') => (offset: number, limit: number) => {
   ];
 };
 
-export default function Page() {
+const Assets = () => {
   const [network, setNetwork] = useState<Network | 'all'>('all');
 
   const {
@@ -66,12 +66,12 @@ export default function Page() {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Assets) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: AssetsModel) => <MobileRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Assets) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: AssetsModel) => <TabletRow {...rowData} isLoading={isLoading} />,
     [isLoading],
   );
 
@@ -188,4 +188,6 @@ export default function Page() {
       </Paper>
     </>
   );
-}
+};
+
+export default Assets;

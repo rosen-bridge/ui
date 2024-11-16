@@ -1,5 +1,5 @@
 'use client';
 
-export default function Dashboard() {
-  return null;
-}
+const Dashboard = () => null;
+
+export default Dashboard;
