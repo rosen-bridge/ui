@@ -1,5 +1,18 @@
 # @rosen-bridge/rosen-app
 
+## 2.4.0
+
+### Minor Changes
+
+- Develop a filtering mechanism for the bridge page that excludes tokens listed on a blacklist
+- Revise the Prettier configuration to ensure that imports are sorted
+
+### Patch Changes
+
+- Replaced token strings with NATIVE_TOKENS constants
+- Update scanner packages
+- Resolve the issue concerning token removal in the autocomplete input field, ensuring accurate recalculation and display of fees
+
 ## 2.3.0
 
 ### Minor Changes

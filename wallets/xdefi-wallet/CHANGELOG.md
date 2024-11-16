@@ -1,5 +1,13 @@
 # @rosen-ui/xdefi-wallet
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.0.5
+  - @rosen-network/bitcoin@1.0.1
+
 ## 1.0.1
 
 ### Patch Changes
