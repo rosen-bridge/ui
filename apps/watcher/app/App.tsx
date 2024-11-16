@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import SWRConfig from '@rosen-ui/swr-mock';
+import { SWRConfig } from '@rosen-ui/swr-mock';
 
 /**
  * FIXME: import NoSsr from ui-kit
