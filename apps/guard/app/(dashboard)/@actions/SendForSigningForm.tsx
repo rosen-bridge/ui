@@ -22,7 +22,7 @@ import { Alert } from '@rosen-bridge/icons';
 import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
-import ApiKeyModal from '@/_modals/ApiKeyModal';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 

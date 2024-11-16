@@ -38,7 +38,7 @@ import {
   ApiPermitResponse,
   ApiInfoResponse,
 } from '@/_types/api';
-import ApiKeyModal from '@/_modals/ApiKeyModal';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
 const LockForm = () => {

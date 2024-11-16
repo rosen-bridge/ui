@@ -33,7 +33,7 @@ import {
   ApiPermitReturnRequestBody,
   ApiPermitReturnResponse,
 } from '@/_types/api';
-import ApiKeyModal from '@/_modals/ApiKeyModal';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 
 const UnlockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
