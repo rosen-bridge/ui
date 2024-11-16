@@ -1,4 +1,4 @@
-import { BitcoinEsploraScanner } from '@rosen-bridge/bitcoin-esplora-scanner';
+import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import dataSource from '../../data-source';
@@ -28,12 +28,14 @@ const scannerLogger = WinstonLogger.getInstance().getLogger(
  */
 export const startBitcoinScanner = async () => {
   try {
-    const scanner = new BitcoinEsploraScanner(
+    const scanner = new BitcoinRpcScanner(
       {
-        esploraUrl: config.bitcoin.esploraUrl,
+        rpcUrl: config.bitcoin.rpcUrl,
         dataSource,
         initialHeight: config.bitcoin.initialHeight,
         timeout: SCANNER_API_TIMEOUT,
+        username: config.bitcoin.rpcUsername,
+        password: config.bitcoin.rpcPassword,
       },
       scannerLogger
     );

@@ -1,6 +1,7 @@
 import { ErgoScanner } from '@rosen-bridge/scanner';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import WinstonLogger from '@rosen-bridge/winston-logger';
+import { ErgoNetworkType } from '@rosen-bridge/abstract-extractor';
 
 import configs from '../configs';
 
@@ -28,6 +29,8 @@ export const registerExtractors = (scanner: ErgoScanner) => {
     const ergoEventTriggerExtractor = new EventTriggerExtractor(
       'ergo-extractor',
       dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
       configs.ergo.addresses.eventTrigger,
       configs.ergo.tokens.rwt,
       configs.ergo.addresses.permit,
@@ -37,6 +40,8 @@ export const registerExtractors = (scanner: ErgoScanner) => {
     const cardanoEventTriggerExtractor = new EventTriggerExtractor(
       'cardano-extractor',
       dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
       configs.cardano.addresses.eventTrigger,
       configs.cardano.tokens.rwt,
       configs.cardano.addresses.permit,
@@ -46,6 +51,8 @@ export const registerExtractors = (scanner: ErgoScanner) => {
     const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
       'bitcoin-extractor',
       dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
       configs.bitcoin.addresses.eventTrigger,
       configs.bitcoin.tokens.rwt,
       configs.bitcoin.addresses.permit,
@@ -55,6 +62,8 @@ export const registerExtractors = (scanner: ErgoScanner) => {
     const ethereumEventTriggerExtractor = new EventTriggerExtractor(
       'ethereum-extractor',
       dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
       configs.ethereum.addresses.eventTrigger,
       configs.ethereum.tokens.rwt,
       configs.ethereum.addresses.permit,
