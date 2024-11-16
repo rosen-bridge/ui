@@ -3,4 +3,4 @@
 '@rosen-bridge/guard-app': patch
 ---
 
-Removed duplicate ApiKeyModal files and updated all related imports
+Cleaned up duplicate ApiKeyModal files, moved to the design system, and updated the related imports
