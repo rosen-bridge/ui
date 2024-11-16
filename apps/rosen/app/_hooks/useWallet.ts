@@ -1,10 +1,11 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
-import { Wallet, WalletBase } from '@rosen-ui/wallet-api';
-import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
-import useNetwork from './useNetwork';
+import { useLocalStorageManager } from '@rosen-ui/common-hooks';
+import { Wallet, WalletBase } from '@rosen-ui/wallet-api';
 
 import { WalletContext } from '@/_contexts/walletContext';
+
+import { useNetwork } from './useNetwork';
 
 interface WalletDescriptor {
   readonly name: string;
@@ -31,7 +32,7 @@ const useWallet = () => {
   const isConnecting = useRef<boolean>(false);
   const { get, set } = useLocalStorageManager();
 
-  const { selectedNetwork } = useNetwork();
+  const { selectedSource } = useNetwork();
 
   /**
    * searches in the available wallets in the selected network
@@ -42,8 +43,8 @@ const useWallet = () => {
       let wallet: Wallet | undefined;
 
       wallet = (
-        selectedNetwork
-          ? selectedNetwork.wallets.filter((wallet) => wallet.isAvailable())
+        selectedSource
+          ? selectedSource.wallets.filter((wallet) => wallet.isAvailable())
           : []
       ).find((w: Wallet) => w.name === name);
       if (!wallet) {
@@ -52,7 +53,7 @@ const useWallet = () => {
 
       return wallet;
     },
-    [selectedNetwork],
+    [selectedSource],
   );
 
   /**
@@ -61,7 +62,7 @@ const useWallet = () => {
    */
   const getCurrentWallet = useCallback((): Wallet | undefined => {
     const currentWalletDescriptor =
-      selectedNetwork && get<WalletDescriptor>(selectedNetwork?.name);
+      selectedSource && get<WalletDescriptor>(selectedSource?.name);
 
     if (!currentWalletDescriptor) {
       return undefined;
@@ -70,7 +71,7 @@ const useWallet = () => {
     return currentWalletDescriptor
       ? getWallet(currentWalletDescriptor.name)
       : undefined;
-  }, [selectedNetwork, getWallet, get]);
+  }, [selectedSource, getWallet, get]);
 
   /**
    * disconnects the previously selected wallet and
@@ -84,14 +85,11 @@ const useWallet = () => {
       if (typeof status === 'boolean' && status) {
         prevWallet?.onDisconnect && prevWallet.onDisconnect();
         wallet.onConnect && wallet.onConnect();
-        set<WalletDescriptor>(
-          selectedNetwork!.name,
-          toWalletDescriptor(wallet),
-        );
+        set<WalletDescriptor>(selectedSource!.name, toWalletDescriptor(wallet));
         walletGlobalContext?.dispatch({ type: 'set', wallet });
       }
     },
-    [selectedNetwork, getCurrentWallet, walletGlobalContext, set],
+    [selectedSource, getCurrentWallet, walletGlobalContext, set],
   );
 
   const handleConnection = useCallback(async () => {
@@ -120,11 +118,11 @@ const useWallet = () => {
     }
   }, [handleConnection]);
 
-  return selectedNetwork
+  return selectedSource
     ? {
         setSelectedWallet,
         selectedWallet: walletGlobalContext?.state.selectedWallet,
-        wallets: selectedNetwork.wallets,
+        wallets: selectedSource.wallets,
         getBalance: walletGlobalContext?.state.selectedWallet?.getBalance,
       }
     : {};

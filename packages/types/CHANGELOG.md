@@ -1,5 +1,11 @@
 # @rosen-ui/types
 
+## 0.3.1
+
+### Patch Changes
+
+- Updated the @rosen-ui/constants@0.0.5 dependency
+
 ## 0.3.0
 
 ### Minor Changes

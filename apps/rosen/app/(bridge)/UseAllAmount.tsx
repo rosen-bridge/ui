@@ -1,3 +1,4 @@
+import { SyncProblem } from '@rosen-bridge/icons';
 import {
   Button,
   CircularProgress,
@@ -7,7 +8,6 @@ import {
   SvgIcon,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { SyncProblem } from '@rosen-bridge/icons';
 
 export interface UseAllAmountProps {
   error: boolean;

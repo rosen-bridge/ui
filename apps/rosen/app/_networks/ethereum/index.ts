@@ -1,13 +1,12 @@
-import { metaMaskWalletCreator } from '@rosen-ui/metamask-wallet';
-
+import { EthereumIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { metaMaskWalletCreator } from '@rosen-ui/metamask-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types/network';
-import { EthereumIcon } from '@rosen-bridge/icons';
 
-import { getMaxTransfer } from './getMaxTransfer';
 import { getTokenMap } from '../getTokenMap.client';
+import { getMaxTransfer } from './getMaxTransfer';
 import { generateLockData, generateTxParameters } from './server';
 
 /**

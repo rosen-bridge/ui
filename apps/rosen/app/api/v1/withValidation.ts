@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+
 import { ValidationResult } from 'joi';
 
 import NotFoundError from '@/_errors/NotFoundError';

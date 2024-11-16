@@ -1,4 +1,5 @@
 import { NextRequest } from 'next/server';
+
 import Joi from 'joi';
 
 interface GETQueryParams {

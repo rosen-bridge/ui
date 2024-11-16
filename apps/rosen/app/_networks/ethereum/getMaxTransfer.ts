@@ -1,13 +1,12 @@
 'use server';
 
-import { NETWORKS } from '@rosen-ui/constants';
+import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
+import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
 import { EthereumNetwork } from '@/_types/network';
 
 import { getTokenMap } from '../getTokenMap.server';
-import { RosenAmountValue } from '@rosen-ui/types';
-import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
 
 /**
  * get max transfer for ethereum
@@ -22,7 +21,7 @@ const getMaxTransferCore: EthereumNetwork['getMaxTransfer'] = async ({
   const tokenMap = await getTokenMap();
 
   const wrappedFee = tokenMap.wrapAmount(
-    'eth',
+    NATIVE_TOKENS.ETHEREUM,
     estimatedFee,
     NETWORKS.ETHEREUM,
   ).amount;

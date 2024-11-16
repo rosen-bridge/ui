@@ -1,4 +1,4 @@
-import { BitcoinEsploraObservationExtractor } from '@rosen-bridge/bitcoin-observation-extractor';
+import { BitcoinRpcObservationExtractor } from '@rosen-bridge/bitcoin-observation-extractor';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import { getRosenTokens } from '../../utils';
@@ -8,7 +8,7 @@ import config from '../../configs';
 import dataSource from '../../data-source';
 
 import AppError from '../../errors/AppError';
-import { BitcoinEsploraScanner } from '@rosen-bridge/bitcoin-esplora-scanner';
+import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -16,9 +16,9 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerBitcoinExtractor = (scanner: BitcoinEsploraScanner) => {
+export const registerBitcoinExtractor = (scanner: BitcoinRpcScanner) => {
   try {
-    const observationExtractor = new BitcoinEsploraObservationExtractor(
+    const observationExtractor = new BitcoinRpcObservationExtractor(
       config.bitcoin.addresses.lock,
       dataSource,
       getRosenTokens(),

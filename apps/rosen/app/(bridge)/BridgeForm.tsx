@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, ChangeEvent } from 'react';
-import { getDecimalString } from '@rosen-ui/utils';
 
+import { Autocomplete } from '@mui/material';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
   TextField,
@@ -14,20 +15,19 @@ import {
   SvgIcon,
   Alert,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import useBridgeForm from '@/_hooks/useBridgeForm';
-import useNetwork from '@/_hooks/useNetwork';
-
-import { getTokenNameAndId } from '@/_utils';
 import { useMaxTransfer } from '@/_hooks/useMaxTransfer';
+import { useNetwork } from '@/_hooks/useNetwork';
 import useTokenBalance from '@/_hooks/useTokenBalance';
-import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import { useTokenMap } from '@/_hooks/useTokenMap';
+import useTransactionFormData from '@/_hooks/useTransactionFormData';
 import useWallet from '@/_hooks/useWallet';
+import { getTokenNameAndId } from '@/_utils';
+
 import { UseAllAmount } from './UseAllAmount';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Autocomplete } from '@mui/material';
-import { RosenChainToken } from '@rosen-bridge/tokens';
 
 /**
  * bridge form container comp
@@ -69,7 +69,8 @@ export const BridgeForm = () => {
     formState: { isValidating },
   } = useTransactionFormData();
 
-  const { availableNetworks, tokens, targetNetworks } = useNetwork();
+  const { sources, availableSources, availableTargets, availableTokens } =
+    useNetwork();
 
   const { isLoading, amount, token } = useTokenBalance();
 
@@ -79,9 +80,7 @@ export const BridgeForm = () => {
   const { selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
-    const network = availableNetworks.find(
-      (network) => network.name === value,
-    )!;
+    const network = sources.find((network) => network.name === value)!;
     const Logo = network.logo;
     return (
       <SelectedAsset>
@@ -94,7 +93,12 @@ export const BridgeForm = () => {
   };
 
   const handleTokenChange = useCallback(
-    (e: React.SyntheticEvent, value: RosenChainToken | null) => {
+    (
+      e: React.SyntheticEvent,
+      value: RosenChainToken | null,
+      reason: string,
+    ) => {
+      if (reason == 'clear') return;
       const currentToken = value || undefined;
       setValue('token', currentToken, {
         shouldDirty: true,
@@ -172,7 +176,7 @@ export const BridgeForm = () => {
             }}
             onChange={handleSourceChange}
           >
-            {availableNetworks.map(({ logo: Logo, ...network }) => (
+            {availableSources.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
                   <SvgIcon>
@@ -199,7 +203,7 @@ export const BridgeForm = () => {
             }}
             onChange={handleTargetChange}
           >
-            {targetNetworks.map(({ logo: Logo, ...network }) => (
+            {availableTargets.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
                 <ListItemIcon>
                   <ListItemIcon>
@@ -238,11 +242,11 @@ export const BridgeForm = () => {
       )}
       <Autocomplete
         aria-label="token input"
-        disabled={!tokens.length}
+        disabled={!availableTokens.length}
         id="token"
         clearIcon={false}
         disablePortal
-        options={tokens}
+        options={availableTokens}
         value={tokenField.value}
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => {
@@ -286,7 +290,7 @@ export const BridgeForm = () => {
           ),
         }}
         inputProps={{
-          style: { fontSize: '2rem' },
+          'style': { fontSize: '2rem' },
           'aria-label': 'amount input',
         }}
         variant="filled"

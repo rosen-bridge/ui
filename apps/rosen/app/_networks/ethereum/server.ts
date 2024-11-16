@@ -1,13 +1,13 @@
 'use server';
 
+import { TokenMap } from '@rosen-bridge/tokens';
 import {
   generateLockData as generateLockDataCore,
   generateTxParameters as generateTxParametersCore,
 } from '@rosen-network/ethereum';
 
-import { wrap } from '@/_safeServerAction';
-import { TokenMap } from '@rosen-bridge/tokens';
 import { getRosenTokens } from '@/_backend/utils';
+import { wrap } from '@/_safeServerAction';
 
 export const generateLockData = wrap(generateLockDataCore, {
   traceKey: 'generateLockData',

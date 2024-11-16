@@ -1,9 +1,10 @@
+'use client';
+
 /**
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-
-'use client';
+import { MouseEvent, useCallback, useMemo, useState } from 'react';
 
 import {
   Box,
@@ -16,14 +17,13 @@ import {
   Typography,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
-import { MouseEvent, useCallback, useMemo, useState } from 'react';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 import { ApiAssetsResponse, Assets } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import TableSkeleton from './TableSkeleton';
-import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 
 const getKey = (chain: Network | 'all') => (offset: number, limit: number) => {
   return [

@@ -2,27 +2,27 @@ import { useState } from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { RosenAmountValue } from '@rosen-ui/types';
+import { getNonDecimalString } from '@rosen-ui/utils';
 
-import useNetwork from './useNetwork';
+import { useNetwork } from './useNetwork';
+import { useTokenMap } from './useTokenMap';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
-import { getNonDecimalString } from '@rosen-ui/utils';
-import { useTokenMap } from './useTokenMap';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * a react hook to create and sign and submit transactions
  */
 export const useTransaction = () => {
   const tokenMap = useTokenMap();
-  const { selectedNetwork, selectedTargetNetwork } = useNetwork();
+  const { selectedSource, selectedTarget } = useNetwork();
   const { targetValue, tokenValue, amountValue, walletAddressValue } =
     useTransactionFormData();
 
   const { selectedWallet } = useWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const lockAddress = selectedNetwork?.lockAddress ?? '';
+  const lockAddress = selectedSource?.lockAddress ?? '';
 
   const { openSnackbar } = useSnackbar();
 
@@ -38,7 +38,7 @@ export const useTransaction = () => {
       bridgeFee &&
       networkFee &&
       tokenMap &&
-      selectedTargetNetwork
+      selectedTarget
     ) {
       setIsSubmitting(true);
       try {
@@ -52,7 +52,7 @@ export const useTransaction = () => {
           tokenValue as RosenChainToken,
           amountValueWrapped,
           targetValue,
-          selectedTargetNetwork.toSafeAddress(walletAddressValue),
+          selectedTarget.toSafeAddress(walletAddressValue),
           bridgeFee,
           networkFee,
           lockAddress,
