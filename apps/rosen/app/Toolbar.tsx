@@ -8,11 +8,11 @@ import {
 
 const pageTitleMap: Record<string, string> = {
   '(bridge)': 'Rosen Bridge',
-  events: 'Events',
-  assets: 'Assets',
-  dashboard: 'Dashboard',
-  support: 'Support',
-  transactions: 'Transactions',
+  'events': 'Events',
+  'assets': 'Assets',
+  'dashboard': 'Dashboard',
+  'support': 'Support',
+  'transactions': 'Transactions',
 };
 
 /**

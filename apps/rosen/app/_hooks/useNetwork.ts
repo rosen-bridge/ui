@@ -1,12 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
+
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 
 import useBridgeForm from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
-import { Network } from '@rosen-ui/types';
-import { RosenChainToken } from '@rosen-bridge/tokens';
 
 type BlackList = {
   fromChain: Network;

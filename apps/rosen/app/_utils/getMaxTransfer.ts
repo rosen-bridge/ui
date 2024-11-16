@@ -1,11 +1,12 @@
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
+
 import {
   BitcoinNetwork,
   CardanoNetwork,
   ErgoNetwork,
   EthereumNetwork,
 } from '@/_types/network';
-import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * return max transfer, considering all the context that affects it

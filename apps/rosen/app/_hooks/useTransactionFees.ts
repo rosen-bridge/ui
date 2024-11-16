@@ -1,15 +1,14 @@
 import { useMemo, useEffect, useRef, useCallback, useTransition } from 'react';
+
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-
+import { Network } from '@rosen-ui/types';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
-import { useNetwork } from './useNetwork';
-
 import { calculateFee } from '@/_actions/calculateFee';
-
-import { Network } from '@rosen-ui/types';
 import { unwrap } from '@/_safeServerAction';
+
+import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
 
 /**

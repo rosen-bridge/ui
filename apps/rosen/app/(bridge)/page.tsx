@@ -7,22 +7,22 @@ import { Alert, styled } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
-import { BridgeTransaction } from './BridgeTransaction';
 import { BridgeForm } from './BridgeForm';
+import { BridgeTransaction } from './BridgeTransaction';
 import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
 
 const BridgeContainer = styled('div')(({ theme }) => ({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  maxWidth: theme.breakpoints.values.desktop,
-  width: '100%',
-  gap: theme.spacing(3),
-  padding: theme.spacing(4),
-  display: 'grid',
-  gridTemplateColumns: '8fr 4fr',
-  gridTemplateRows: '1fr auto auto',
+  'position': 'absolute',
+  'top': '50%',
+  'left': '50%',
+  'transform': 'translate(-50%, -50%)',
+  'maxWidth': theme.breakpoints.values.desktop,
+  'width': '100%',
+  'gap': theme.spacing(3),
+  'padding': theme.spacing(4),
+  'display': 'grid',
+  'gridTemplateColumns': '8fr 4fr',
+  'gridTemplateRows': '1fr auto auto',
   '& > button': {
     width: '50%',
     justifySelf: 'flex-end',

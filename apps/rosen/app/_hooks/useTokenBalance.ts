@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
 import { TokenInfo } from '@rosen-ui/types';
+import { RosenAmountValue } from '@rosen-ui/types';
+import { Wallet } from '@rosen-ui/wallet-api';
 
 import useBridgeForm from './useBridgeForm';
 import useWallet from './useWallet';
-
-import { Wallet } from '@rosen-ui/wallet-api';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 interface UseTokenBalance {
   isLoading: boolean;

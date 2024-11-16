@@ -1,19 +1,17 @@
 import { useContext } from 'react';
 import { useController } from 'react-hook-form';
 
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
-import useTransactionFormData from './useTransactionFormData';
-
-import { WalletContext } from '@/_contexts/walletContext';
-
 import { validateAddress } from '@/_actions/validateAddress';
-
+import { WalletContext } from '@/_contexts/walletContext';
 import { availableNetworks } from '@/_networks';
-import { getMaxTransfer, getMinTransfer } from '@/_utils';
-import { useTokenMap } from './useTokenMap';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { unwrap } from '@/_safeServerAction';
+import { getMaxTransfer, getMinTransfer } from '@/_utils';
+
+import { useTokenMap } from './useTokenMap';
+import useTransactionFormData from './useTransactionFormData';
 
 /**
  * handles the form field registrations and form state changes

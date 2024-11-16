@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useState, useTransition } from 'react';
 
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
-import { NETWORKS } from '@rosen-ui/constants';
+import { getMaxTransfer } from '@/_utils';
 
 import { useNetwork } from './useNetwork';
 import useTokenBalance from './useTokenBalance';
-import { getMaxTransfer } from '@/_utils';
 import useTransactionFormData from './useTransactionFormData';
 import useWallet from './useWallet';
 

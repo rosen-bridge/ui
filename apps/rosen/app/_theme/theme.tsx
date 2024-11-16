@@ -185,8 +185,8 @@ const create = (baseTheme: Theme) =>
       MuiButton: {
         styleOverrides: {
           containedSecondary: {
-            color: baseTheme.palette.text.primary,
-            backgroundColor: baseTheme.palette.neutral.light,
+            'color': baseTheme.palette.text.primary,
+            'backgroundColor': baseTheme.palette.neutral.light,
             '&:hover': {
               backgroundColor: baseTheme.palette.neutral.light,
             },
@@ -225,7 +225,7 @@ const create = (baseTheme: Theme) =>
         styleOverrides: {
           root: {
             '.MuiInputLabel-root': {
-              transform: 'translate(12px, 16px) scale(1)',
+              'transform': 'translate(12px, 16px) scale(1)',
               '&.MuiInputLabel-shrink': {
                 transform: 'translate(12px, 7px) scale(0.75)',
               },
@@ -234,11 +234,14 @@ const create = (baseTheme: Theme) =>
               transform: 'translateY(8px)',
             },
             '.MuiOutlinedInput-root': {
-              overflow: 'hidden',
-              borderRadius: baseTheme.spacing(2),
-              backgroundColor: alpha(baseTheme.palette.background.paper, 0.75),
-              minHeight: baseTheme.spacing(8.5),
-              transition: baseTheme.transitions.create([
+              'overflow': 'hidden',
+              'borderRadius': baseTheme.spacing(2),
+              'backgroundColor': alpha(
+                baseTheme.palette.background.paper,
+                0.75,
+              ),
+              'minHeight': baseTheme.spacing(8.5),
+              'transition': baseTheme.transitions.create([
                 'background-color',
                 'box-shadow',
               ]),
@@ -252,7 +255,7 @@ const create = (baseTheme: Theme) =>
                 backgroundColor: alpha(baseTheme.palette.background.paper, 1.0),
               },
             },
-            fieldset: {
+            'fieldset': {
               border: 'none',
             },
           },
@@ -261,11 +264,11 @@ const create = (baseTheme: Theme) =>
       MuiFilledInput: {
         styleOverrides: {
           root: {
-            overflow: 'hidden',
-            borderRadius: baseTheme.shape.borderRadius,
-            backgroundColor: alpha(baseTheme.palette.background.paper, 0.75),
-            minHeight: baseTheme.spacing(8.5),
-            transition: baseTheme.transitions.create([
+            'overflow': 'hidden',
+            'borderRadius': baseTheme.shape.borderRadius,
+            'backgroundColor': alpha(baseTheme.palette.background.paper, 0.75),
+            'minHeight': baseTheme.spacing(8.5),
+            'transition': baseTheme.transitions.create([
               'background-color',
               'box-shadow',
             ]),
@@ -350,7 +353,7 @@ const create = (baseTheme: Theme) =>
         fontWeight: 'bold',
         ...(baseTheme.palette.mode === 'light'
           ? {
-              background: 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
+              'background': 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
               '-webkit-background-clip': 'text',
               '-webkit-text-fill-color': 'transparent',
             }
