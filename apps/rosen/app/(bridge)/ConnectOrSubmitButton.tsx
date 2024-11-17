@@ -18,9 +18,9 @@ import {
 import { useNetwork } from '@/_hooks/useNetwork';
 import { useTokenMap } from '@/_hooks/useTokenMap';
 import { useTransaction } from '@/_hooks/useTransaction';
-import useTransactionFees from '@/_hooks/useTransactionFees';
-import useTransactionFormData from '@/_hooks/useTransactionFormData';
-import useWallet from '@/_hooks/useWallet';
+import { useTransactionFees } from '@/_hooks/useTransactionFees';
+import { useTransactionFormData } from '@/_hooks/useTransactionFormData';
+import { useWallet } from '@/_hooks/useWallet';
 import { getTokenNameAndId } from '@/_utils';
 
 interface ConnectOrSubmitButtonProps {

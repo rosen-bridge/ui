@@ -6,7 +6,7 @@ import { Network } from '@rosen-ui/types';
 
 import { AvailableNetworks, availableNetworks } from '@/_networks';
 
-import useBridgeForm from './useBridgeForm';
+import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
 
 type BlackList = {

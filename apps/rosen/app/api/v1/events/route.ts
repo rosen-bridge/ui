@@ -1,8 +1,8 @@
 import { getEventsWithFullTokenData } from '@/_backend/events';
 
-import withValidation from '../withValidation';
-import EventsValidations from './validations';
+import { withValidation } from '../withValidation';
+import { validateGet } from './validations';
 
-export const GET = withValidation(EventsValidations.GET, (value) =>
+export const GET = withValidation(validateGet, (value) =>
   getEventsWithFullTokenData(value.offset, value.limit),
 );

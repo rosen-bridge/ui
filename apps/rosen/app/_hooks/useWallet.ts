@@ -27,7 +27,7 @@ const toWalletDescriptor = (wallet: WalletBase): WalletDescriptor => {
  * handles the wallet connections for all the networks
  * and reconnect to the wallet on app startup
  */
-const useWallet = () => {
+export const useWallet = () => {
   const walletGlobalContext = useContext(WalletContext);
   const isConnecting = useRef<boolean>(false);
   const { get, set } = useLocalStorageManager();
@@ -127,5 +127,3 @@ const useWallet = () => {
       }
     : {};
 };
-
-export default useWallet;

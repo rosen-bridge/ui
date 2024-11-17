@@ -27,7 +27,7 @@ const config = {
  * providing access to network info and wallets and network specific
  * functionality
  */
-const BitcoinNetwork: BitcoinNetworkType = {
+export const BitcoinNetwork: BitcoinNetworkType = {
   name: NETWORKS.BITCOIN,
   label: NETWORK_LABELS.BITCOIN,
   logo: BitcoinIcon,
@@ -37,5 +37,3 @@ const BitcoinNetwork: BitcoinNetworkType = {
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
-
-export default BitcoinNetwork;

@@ -18,7 +18,7 @@ import {
   migrations as assetCalculatorMigrations,
 } from '@rosen-ui/asset-calculator';
 
-const dataSource = new DataSource({
+export const dataSource = new DataSource({
   type: 'postgres',
   url: process.env.POSTGRES_URL,
   ssl: process.env.POSTGRES_USE_SSL === 'true',
@@ -39,5 +39,3 @@ const dataSource = new DataSource({
     ...assetCalculatorMigrations.postgres,
   ],
 });
-
-export default dataSource;

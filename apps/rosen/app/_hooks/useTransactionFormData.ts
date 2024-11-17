@@ -8,7 +8,7 @@ import type { BridgeForm } from '@/(bridge)/page';
  * provide access to the bridge form context and current form values
  */
 
-const useTransactionFormData = () => {
+export const useTransactionFormData = () => {
   const { control, ...rest } = useFormContext<FieldValues, BridgeForm>();
 
   const sourceValue = useWatch({ control, name: 'source' }) as Network | null;
@@ -27,5 +27,3 @@ const useTransactionFormData = () => {
     ...rest,
   };
 };
-
-export default useTransactionFormData;

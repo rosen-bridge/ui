@@ -3,7 +3,7 @@ import { BlockEntity } from '@rosen-bridge/scanner';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
-import dataSource from '../dataSource';
+import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
 const blockRepository = dataSource.getRepository(BlockEntity);

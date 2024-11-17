@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 
 import { ValidationResult } from 'joi';
 
-import NotFoundError from '@/_errors/NotFoundError';
+import { NotFoundError } from '@/_errors/NotFoundError';
 
 /**
  * a wrapper around handler returning a function which validates request,
@@ -12,7 +12,7 @@ import NotFoundError from '@/_errors/NotFoundError';
  * @param validator
  * @param handler
  */
-const withValidation =
+export const withValidation =
   <TSchema>(
     validator: (
       request: NextRequest,
@@ -40,5 +40,3 @@ const withValidation =
       return Response.json(JSON.stringify(error), { status: 500 });
     }
   };
-
-export default withValidation;
