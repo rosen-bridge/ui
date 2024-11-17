@@ -1,6 +1,5 @@
 'use server';
 
-import { TokenMap } from '@rosen-bridge/tokens';
 import {
   generateOpReturnData as generateOpReturnDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
@@ -8,19 +7,16 @@ import {
   submitTransaction as submitTransactionCore,
 } from '@rosen-network/bitcoin';
 
-import { getRosenTokens } from '@/_backend/utils';
 import { wrap } from '@/_safeServerAction';
+import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 export const generateOpReturnData = wrap(generateOpReturnDataCore, {
   traceKey: 'generateOpReturnData',
 });
 
-export const generateUnsignedTx = wrap(
-  generateUnsignedTxCore(new TokenMap(getRosenTokens())),
-  {
-    traceKey: 'generateUnsignedTx',
-  },
-);
+export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap()), {
+  traceKey: 'generateUnsignedTx',
+});
 
 export const getAddressBalance = wrap(getAddressBalanceCore, {
   cache: 3000,

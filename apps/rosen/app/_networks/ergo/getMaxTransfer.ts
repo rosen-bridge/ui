@@ -7,9 +7,8 @@ import {
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
+import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 import { ErgoNetwork } from '@/_types';
-
-import { getTokenMap } from '../getTokenMap.server';
 
 /**
  * get max transfer for ergo
@@ -18,7 +17,7 @@ const getMaxTransferCore: ErgoNetwork['getMaxTransfer'] = async ({
   balance,
   isNative,
 }) => {
-  const tokenMap = await getTokenMap();
+  const tokenMap = getTokenMap();
   const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
     NATIVE_TOKENS.ERGO,
     ergoFee + ergoMinBoxValue,

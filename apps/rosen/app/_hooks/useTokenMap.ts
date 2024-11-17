@@ -2,7 +2,7 @@ import { useEffect, useState, useTransition } from 'react';
 
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { getTokenMap } from '@/_networks/getTokenMap.client';
+import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 
 /**
  * return TokenMap instance
