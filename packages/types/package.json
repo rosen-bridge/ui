@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
@@ -21,6 +21,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-ui/constants": "^0.0.4"
+    "@rosen-ui/constants": "^0.0.5"
   }
 }

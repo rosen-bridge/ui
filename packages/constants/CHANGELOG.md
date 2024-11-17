@@ -1,5 +1,11 @@
 # @rosen-ui/constants
 
+## 0.0.5
+
+### Patch Changes
+
+- Introduced a new constant for NATIVE_TOKENS
+
 ## 0.0.4
 
 ### Patch Changes
