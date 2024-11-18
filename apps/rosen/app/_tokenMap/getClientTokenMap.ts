@@ -1,7 +1,8 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { getRosenTokensWithCache } from '@/_backend/utils';
 import { unwrap } from '@/_safeServerAction';
+
+import { getRosenTokensWithCache } from './getRosenTokens';
 
 let tokenMap: TokenMap;
 

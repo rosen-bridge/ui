@@ -1,6 +1,4 @@
-import { TokenMap } from '@rosen-bridge/tokens';
-
-import { getRosenTokens } from '@/_backend/utils';
+import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 import {
   AssetFilters,
@@ -8,7 +6,7 @@ import {
   getAllAssets as repositoryGetAllAssets,
 } from './repository';
 
-const tokenMap = new TokenMap(getRosenTokens());
+const tokenMap = getTokenMap();
 
 /**
  * return asset details

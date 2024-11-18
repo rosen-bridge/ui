@@ -10,9 +10,8 @@ import {
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
+import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 import { BitcoinNetwork } from '@/_types';
-
-import { getTokenMap } from '../getTokenMap.server';
 
 /**
  * get max transfer for bitcoin
@@ -47,7 +46,7 @@ const getMaxTransferCore: BitcoinNetwork['getMaxTransfer'] = async ({
   const estimatedFee = Math.ceil((estimatedTxWeight / 4) * feeRatio);
   const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
 
-  const tokenMap = await getTokenMap();
+  const tokenMap = getTokenMap();
 
   const offset = tokenMap.wrapAmount(
     NATIVE_TOKENS.BITCOIN,

@@ -2,8 +2,6 @@ import { NextRequest } from 'next/server';
 
 import { ValidationResult } from 'joi';
 
-import { NotFoundError } from '@/_errors/NotFoundError';
-
 /**
  * a wrapper around handler returning a function which validates request,
  * converts request data during validation, and return general errors responses
@@ -31,7 +29,7 @@ export const withValidation =
       const response = await handler(value);
       return Response.json(response);
     } catch (error) {
-      if (error instanceof NotFoundError) {
+      if (error instanceof ReferenceError) {
         return Response.json(error.message, { status: 404 });
       }
       if (error instanceof Error) {

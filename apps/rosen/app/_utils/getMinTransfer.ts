@@ -2,8 +2,8 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { calculateFee } from '@/_actions';
-import { getTokenMap } from '@/_networks/getTokenMap.client';
 import { unwrap } from '@/_safeServerAction';
+import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 
 /**
  * get min transfer amount of a token
