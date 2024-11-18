@@ -12,7 +12,7 @@ interface TabPanelProps {
  * @param in
  * @param children
  */
-const TabPanel = ({ in: isIn, children }: TabPanelProps) => {
+export const TabPanel = ({ in: isIn, children }: TabPanelProps) => {
   return (
     <Slide
       direction="up"
@@ -28,5 +28,3 @@ const TabPanel = ({ in: isIn, children }: TabPanelProps) => {
     </Slide>
   );
 };
-
-export default TabPanel;

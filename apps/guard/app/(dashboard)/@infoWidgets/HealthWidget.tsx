@@ -49,7 +49,7 @@ const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
 /**
  * render a widget showing health status or a pending indicator
  */
-const HealthWidget = () => {
+export const HealthWidget = () => {
   const { data: info, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   return (
@@ -89,5 +89,3 @@ const HealthWidget = () => {
     </HealthWidgetBase>
   );
 };
-
-export default HealthWidget;

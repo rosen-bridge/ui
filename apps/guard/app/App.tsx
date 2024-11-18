@@ -10,16 +10,16 @@ import {
   CssBaseline,
   ThemeProvider,
 } from '@rosen-bridge/ui-kit';
-import SWRConfig from '@rosen-ui/swr-mock';
+import { SWRConfig } from '@rosen-ui/swr-mock';
 
 import { SideBar } from './SideBar';
-import Toolbar from './Toolbar';
+import { Toolbar } from './Toolbar';
 
 import { theme } from '@/_theme/theme';
 
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
-import mockedData from './_mock/mockedData';
+import { mockedData } from './_mock/mockedData';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',
@@ -65,7 +65,7 @@ interface AppProps {
   children?: React.ReactNode;
 }
 
-const App = ({ children }: AppProps) => {
+export const App = ({ children }: AppProps) => {
   return (
     <NoSsr>
       <ThemeProvider theme={theme}>
@@ -95,5 +95,3 @@ const App = ({ children }: AppProps) => {
     </NoSsr>
   );
 };
-
-export default App;

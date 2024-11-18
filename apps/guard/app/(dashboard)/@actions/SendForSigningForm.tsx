@@ -39,7 +39,7 @@ interface Form {
 /**
  * render a form for signing a tx
  */
-const SendForSigningForm = () => {
+export const SendForSigningForm = () => {
   const { apiKey } = useApiKey();
 
   const {
@@ -198,5 +198,3 @@ const SendForSigningForm = () => {
     </FullCard>
   );
 };
-
-export default SendForSigningForm;

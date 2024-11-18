@@ -11,7 +11,7 @@ import {
 } from '@rosen-bridge/icons';
 import { AppBar, AppLogo } from '@rosen-bridge/ui-kit';
 
-import useInfo from './_hooks/useInfo';
+import { useInfo } from './_hooks/useInfo';
 
 import packageJson from '../package.json';
 

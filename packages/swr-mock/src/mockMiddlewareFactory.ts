@@ -12,7 +12,7 @@ interface FakeData {
  *
  * @param fakeData
  */
-const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
+export const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
   (fakeData) => (useSWRNext: SWRHook) => (key, fetcher, config) => {
     const mockedFetcher = (key: Key) =>
       new Promise<any>((resolve, reject) => {
@@ -38,5 +38,3 @@ const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
 
     return useSWRNext(key, mockedFetcher, config);
   };
-
-export default mockMiddlewareFactory;
