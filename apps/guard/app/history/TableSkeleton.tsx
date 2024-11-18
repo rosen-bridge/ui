@@ -13,7 +13,7 @@ interface TableSkeletonProps {
   numberOfItems: number;
 }
 
-const TableSkeleton: FC<TableSkeletonProps> = (props) => {
+export const TableSkeleton: FC<TableSkeletonProps> = (props) => {
   const renderMobileRow = useCallback(
     () => (
       <TableRow>
@@ -65,5 +65,3 @@ const TableSkeleton: FC<TableSkeletonProps> = (props) => {
     />
   );
 };
-
-export default TableSkeleton;

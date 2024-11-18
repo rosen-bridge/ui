@@ -20,8 +20,8 @@ import {
   useResponsiveValue,
 } from '@rosen-bridge/ui-kit';
 
-import SendForSigningForm from './SendForSigningForm';
-import TabPanel from './TabPanel';
+import { SendForSigningForm } from './SendForSigningForm';
+import { TabPanel } from './TabPanel';
 
 /**
  * render root of page

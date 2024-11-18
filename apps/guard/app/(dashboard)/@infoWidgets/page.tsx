@@ -5,8 +5,8 @@ import useSWR from 'swr';
 import { Stack } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import HealthWidget from './HealthWidget';
-import WalletWidget from './WalletWidget';
+import { HealthWidget } from './HealthWidget';
+import { WalletWidget } from './WalletWidget';
 
 import { ApiInfoResponse } from '@/_types/api';
 
