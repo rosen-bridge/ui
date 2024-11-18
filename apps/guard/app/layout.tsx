@@ -7,11 +7,7 @@ export const metadata: Metadata = {
   title: 'Rosen Guard',
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     /**
      * TODO: get `lang` from url language path segment
@@ -23,4 +19,6 @@ export default function RootLayout({
       </body>
     </html>
   );
-}
+};
+
+export default RootLayout;
