@@ -6,6 +6,4 @@ import { ApiInfoResponse } from '@/_types/api';
 /**
  * wrap useSWR for fetching info api
  */
-const useInfo = () => useSWR<ApiInfoResponse>('/info', fetcher);
-
-export default useInfo;
+export const useInfo = () => useSWR<ApiInfoResponse>('/info', fetcher);

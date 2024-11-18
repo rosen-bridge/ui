@@ -6,7 +6,7 @@ import useSWR from 'swr';
 import { Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import ActionText from '../../ActionText';
+import { ActionText } from '../../ActionText';
 
 import { ApiInfoResponse } from '@/_types/api';
 

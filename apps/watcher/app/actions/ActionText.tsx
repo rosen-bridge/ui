@@ -10,7 +10,7 @@ interface ActionText {
  * render a card showing some text to be used in actions page
  * @param children
  */
-const ActionText = ({ title, children }: ActionText) => (
+export const ActionText = ({ title, children }: ActionText) => (
   <FullCard
     title={title}
     backgroundColor="divider"
@@ -19,5 +19,3 @@ const ActionText = ({ title, children }: ActionText) => (
     {children}
   </FullCard>
 );
-
-export default ActionText;

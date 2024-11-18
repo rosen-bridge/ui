@@ -30,12 +30,13 @@ import { getNonDecimalString } from '@rosen-ui/utils';
 
 import { Alert } from '@rosen-bridge/icons';
 
-import ConfirmationModal from '../../ConfirmationModal';
-import TokenAmountTextField, {
+import { ConfirmationModal } from '../../ConfirmationModal';
+import {
+  TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
 
-import useToken from '@/_hooks/useToken';
+import { useToken } from '@/_hooks/useToken';
 import { useApiKey } from '@rosen-bridge/shared-contexts';
 
 import {

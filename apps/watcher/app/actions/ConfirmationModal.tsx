@@ -27,7 +27,7 @@ interface ConfirmationModalProps {
  * @param onConfirm
  * @param handleClose
  */
-const ConfirmationModal = ({
+export const ConfirmationModal = ({
   open,
   title,
   content,
@@ -66,5 +66,3 @@ const ConfirmationModal = ({
     </Dialog>
   );
 };
-
-export default ConfirmationModal;
