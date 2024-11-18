@@ -3,7 +3,7 @@ import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
 
 import { unwrap } from '@/_safeServerAction';
-import { BitcoinNetwork as BitcoinNetworkType } from '@/_types/network';
+import { BitcoinNetwork as BitcoinNetworkType } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.client';
 import { getMaxTransfer } from './getMaxTransfer';

@@ -4,7 +4,7 @@ import { feeAndMinBoxValue } from '@rosen-network/cardano/dist/src/constants';
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
-import { CardanoNetwork } from '@/_types/network';
+import { CardanoNetwork } from '@/_types';
 
 import { getTokenMap } from '../getTokenMap.server';
 

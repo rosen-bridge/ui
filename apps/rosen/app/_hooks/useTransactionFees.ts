@@ -5,7 +5,7 @@ import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
-import { calculateFee } from '@/_actions/calculateFee';
+import { calculateFee } from '@/_actions';
 import { unwrap } from '@/_safeServerAction';
 
 import { useNetwork } from './useNetwork';

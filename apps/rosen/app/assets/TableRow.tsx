@@ -29,7 +29,7 @@ import {
 } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
-import { ApiAssetResponse, Assets } from '@/_types/api';
+import { ApiAssetResponse, Assets } from '@/_types';
 
 interface RowProps extends Assets {
   isLoading?: boolean;
