@@ -2,4 +2,4 @@
 '@rosen-bridge/watcher-app': patch
 ---
 
-Update modules to adopt named exports, ensuring greater consistency
+Update the modules to utilize named exports, enhancing maintainability and aligning with our policy to ensure greater consistency
