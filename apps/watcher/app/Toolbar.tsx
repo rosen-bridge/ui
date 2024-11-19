@@ -20,7 +20,7 @@ const pageTitleMap: Record<string, string> = {
 /**
  * render toolbar containing page title and some actions
  */
-const Toolbar = () => {
+export const Toolbar = () => {
   const page = useSelectedLayoutSegment();
 
   return (
@@ -35,5 +35,3 @@ const Toolbar = () => {
     />
   );
 };
-
-export default Toolbar;

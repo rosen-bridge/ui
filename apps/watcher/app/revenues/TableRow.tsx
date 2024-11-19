@@ -5,10 +5,10 @@ import { getDecimalString } from '@rosen-ui/utils';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
-import useRsnToken from '@/_hooks/useRsnToken';
+import { useRsnToken } from '@/_hooks/useRsnToken';
 
 import { Revenue } from '@/_types/api';
-import useERsnToken from '@/_hooks/useERsnToken';
+import { useERsnToken } from '@/_hooks/useERsnToken';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;

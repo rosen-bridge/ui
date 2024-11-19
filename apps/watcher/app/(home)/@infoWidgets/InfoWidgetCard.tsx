@@ -85,7 +85,7 @@ interface InfoWidgetCardProps {
  * @param unit
  * @param value
  */
-const InfoWidgetCard = ({
+export const InfoWidgetCard = ({
   color = 'secondary',
   icon,
   isLoading,
@@ -125,5 +125,3 @@ const InfoWidgetCard = ({
     </InfoWidgetCardBase>
   );
 };
-
-export default InfoWidgetCard;

@@ -48,7 +48,7 @@ interface HomeActionButtonProps {
  * @param action
  * @param disabled
  */
-const HomeActionButton = ({
+export const HomeActionButton = ({
   label,
   icon,
   action,
@@ -66,5 +66,3 @@ const HomeActionButton = ({
     </HomeActionButtonBase>
   );
 };
-
-export default HomeActionButton;

@@ -9,7 +9,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
-import TableSkeleton from './TableSkeleton';
+import { TableSkeleton } from './TableSkeleton';
 
 import { ApiEventResponse, Event } from '@/_types/api';
 

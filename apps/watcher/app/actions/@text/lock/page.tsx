@@ -7,10 +7,10 @@ import { CircularProgress, Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import ActionText from '../../ActionText';
+import { ActionText } from '../../ActionText';
 
-import useToken from '@/_hooks/useToken';
-import useRsnToken from '@/_hooks/useRsnToken';
+import { useToken } from '@/_hooks/useToken';
+import { useRsnToken } from '@/_hooks/useRsnToken';
 
 import { ApiInfoResponse } from '@/_types/api';
 

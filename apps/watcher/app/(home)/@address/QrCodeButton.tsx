@@ -11,7 +11,7 @@ interface QrCodeButtonProps {
  * provided address when clicked
  * @param address
  */
-const QrCodeButton = ({ address }: QrCodeButtonProps) => {
+export const QrCodeButton = ({ address }: QrCodeButtonProps) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -28,5 +28,3 @@ const QrCodeButton = ({ address }: QrCodeButtonProps) => {
     </>
   );
 };
-
-export default QrCodeButton;

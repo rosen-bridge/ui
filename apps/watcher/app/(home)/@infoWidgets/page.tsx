@@ -10,17 +10,17 @@ import {
   ShieldExclamation,
   Wallet,
 } from '@rosen-bridge/icons';
-import { Box, Grid, SvgIcon, Typography } from '@rosen-bridge/ui-kit';
+import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import InfoWidgetCard from './InfoWidgetCard';
+import { InfoWidgetCard } from './InfoWidgetCard';
 
-import useRsnToken from '@/_hooks/useRsnToken';
-import useERsnToken from '@/_hooks/useERsnToken';
-import useToken from '@/_hooks/useToken';
+import { useRsnToken } from '@/_hooks/useRsnToken';
+import { useERsnToken } from '@/_hooks/useERsnToken';
+import { useToken } from '@/_hooks/useToken';
 
 import { ApiInfoResponse } from '@/_types/api';
 

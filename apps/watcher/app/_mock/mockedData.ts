@@ -386,7 +386,7 @@ const events: ApiEventResponse = {
   items: generateEventRecords(100),
 };
 
-const mockedData: SWRConfigProps['fakeData'] = {
+export const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
     '/health/status': healthStatus,
@@ -429,5 +429,3 @@ const mockedData: SWRConfigProps['fakeData'] = {
     },
   },
 };
-
-export default mockedData;

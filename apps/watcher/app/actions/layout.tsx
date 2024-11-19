@@ -18,7 +18,7 @@ import {
   Grid,
 } from '@rosen-bridge/ui-kit';
 
-import ToggleButton from './ToggleButton';
+import { ToggleButton } from './ToggleButton';
 
 import { LayoutProps } from '@rosen-ui/types';
 

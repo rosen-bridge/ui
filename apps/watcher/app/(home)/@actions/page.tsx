@@ -9,7 +9,7 @@ import {
 } from '@rosen-bridge/icons';
 import { FullCard, SvgIcon } from '@rosen-bridge/ui-kit';
 
-import HomeActionButton from '@/_components/HomeActionButton';
+import { HomeActionButton } from '@/_components/HomeActionButton';
 
 const Actions = () => {
   return (

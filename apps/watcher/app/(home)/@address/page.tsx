@@ -6,9 +6,9 @@ import useSWR from 'swr';
 import { Box, Card, FullCard, Grid, Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import AddressSkeleton from './AddressSkeleton';
-import CopyButton from './CopyButton';
-import QrCodeButton from './QrCodeButton';
+import { AddressSkeleton } from './AddressSkeleton';
+import { CopyButton } from './CopyButton';
+import { QrCodeButton } from './QrCodeButton';
 
 import { ApiInfoResponse } from '@/_types/api';
 

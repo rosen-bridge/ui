@@ -17,7 +17,7 @@ interface CopyButtonProps {
  *
  * @param address
  */
-const CopyButton = ({ address }: CopyButtonProps) => {
+export const CopyButton = ({ address }: CopyButtonProps) => {
   const [open, setOpen] = React.useState(false);
 
   const handleClose = (
@@ -43,5 +43,3 @@ const CopyButton = ({ address }: CopyButtonProps) => {
     </>
   );
 };
-
-export default CopyButton;

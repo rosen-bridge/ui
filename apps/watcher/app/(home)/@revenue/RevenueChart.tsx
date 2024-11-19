@@ -63,7 +63,7 @@ interface RevenueChartProps {
  * @param period
  * @param data
  */
-const RevenueChart = ({ period, data }: RevenueChartProps) => {
+export const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const theme = useTheme();
 
   const reversedData = useMemo(
@@ -138,5 +138,3 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
     />
   );
 };
-
-export default RevenueChart;

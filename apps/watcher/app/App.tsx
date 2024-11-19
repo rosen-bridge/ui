@@ -19,12 +19,12 @@ import {
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 
 import { SideBar } from './SideBar';
-import Toolbar from './Toolbar';
+import { Toolbar } from './Toolbar';
 
 import { theme } from './_theme/theme';
 
-import mockedData from './_mock/mockedData';
-import useInfo from './_hooks/useInfo';
+import { mockedData } from './_mock/mockedData';
+import { useInfo } from './_hooks/useInfo';
 import { upperFirst } from 'lodash-es';
 
 const Root = styled('div')(({ theme }) => ({
@@ -72,7 +72,7 @@ interface AppProps {
   children?: React.ReactNode;
 }
 
-const App = ({ children }: AppProps) => {
+export const App = ({ children }: AppProps) => {
   const { data: info } = useInfo();
 
   /**
@@ -126,5 +126,3 @@ const App = ({ children }: AppProps) => {
     </NoSsr>
   );
 };
-
-export default App;

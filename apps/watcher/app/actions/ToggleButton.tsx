@@ -43,7 +43,7 @@ interface CustomToggleButtonProps extends ToggleButtonProps {
  * @param label
  * @param icon
  */
-const ToggleButton = ({
+export const ToggleButton = ({
   label,
   icon,
   ...restProps
@@ -54,5 +54,3 @@ const ToggleButton = ({
     </ToggleButtonBase>
   );
 };
-
-export default ToggleButton;

@@ -2,14 +2,14 @@ import useSWR from 'swr';
 
 import { fetcher } from '@rosen-ui/swr-helpers';
 
-import useToken from './useToken';
+import { useToken } from './useToken';
 
 import { ApiInfoResponse } from '@/_types/api';
 
 /**
  * fetch ersn token info (if present)
  */
-const useERsnToken = () => {
+export const useERsnToken = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
     fetcher,
@@ -24,5 +24,3 @@ const useERsnToken = () => {
     isLoading: isInfoLoading || isERsnInfoLoading,
   };
 };
-
-export default useERsnToken;

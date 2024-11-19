@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Typography } from '@rosen-bridge/ui-kit';
 
-import ActionText from '../../ActionText';
+import { ActionText } from '../../ActionText';
 
 const WithdrawalText = () => {
   return (
