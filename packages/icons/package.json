@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/icons",
-  "description": "An icon set wrapping Unicons",
+  "description": "A react icon set wrapping Unicons, used in Rosen apps",
   "private": "true",
   "version": "0.6.0",
   "type": "module",
