@@ -23,6 +23,7 @@ yarn.lock
 .bin
 .env
 .next
+out
 build
 config
 configs
