@@ -11,6 +11,6 @@ export const xdefiWalletCreator: WalletCreator = (config) => {
     isAvailable: isXdefiAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
-    getAddress: getAddressCreator(config),
+    getAddress: getAddressCreator(),
   });
 };
