@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build:mono-packages": "./build.sh",
+    "prettify": "prettier --write . --ignore-path ./.gitignore",
     "prepare": "husky install",
     "test": "NODE_OPTIONS=--loader=extensionless vitest",
     "test:related": "NODE_OPTIONS=--loader=extensionless vitest related --run",

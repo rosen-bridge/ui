@@ -6,7 +6,6 @@
   "types": "dist/src/index.d.ts",
   "type": "module",
   "scripts": {
-    "prettify": "prettier --write . --ignore-path .gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
@@ -17,7 +16,6 @@
     "@typescript-eslint/parser": "^5.26.0",
     "eslint": "^8.16.0",
     "eslint-config-prettier": "^9.0.0",
-    "prettier": "^3.0.2",
     "typescript": "^5.0.0"
   },
   "dependencies": {
