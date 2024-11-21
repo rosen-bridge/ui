@@ -19,3 +19,13 @@ coverage
 yarn.lock
 *.sqlite
 *.tsbuildinfo
+
+.bin
+.env
+.next
+out
+build
+config
+configs
+next-env.d.ts 
+!config/default.yaml
