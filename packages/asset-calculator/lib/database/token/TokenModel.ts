@@ -23,13 +23,13 @@ class TokenModel {
     });
     if (savedToken) {
       this.logger.debug(
-        `Token [${JsonBigInt.stringify(token)}] already exists in the database`
+        `Token [${JsonBigInt.stringify(token)}] already exists in the database`,
       );
       return;
     }
     await this.tokenRepository.insert(token);
     this.logger.debug(
-      `Token [${JsonBigInt.stringify(token)}] inserted into database`
+      `Token [${JsonBigInt.stringify(token)}] inserted into database`,
     );
     return token;
   };
@@ -39,7 +39,7 @@ class TokenModel {
    */
   getAllStoredTokens = async (): Promise<string[]> => {
     return (await this.tokenRepository.find({ select: ['id'] })).map(
-      (token) => token.id
+      (token) => token.id,
     );
   };
 

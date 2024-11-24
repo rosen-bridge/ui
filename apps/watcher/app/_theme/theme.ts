@@ -243,7 +243,7 @@ const create = (baseTheme: Theme) =>
           },
           body: {
             [baseTheme.breakpoints.down('tablet')]: {
-              verticalAlign: 'top',
+              'verticalAlign': 'top',
               '&:not(.MuiTableCell-paddingNone)': {
                 padding: baseTheme.spacing(1),
               },
@@ -253,12 +253,12 @@ const create = (baseTheme: Theme) =>
             },
           },
           head: {
-            backgroundColor:
+            'backgroundColor':
               baseTheme.palette.mode === 'light'
                 ? baseTheme.palette.primary.dark
                 : '#ffffff11',
-            color: baseTheme.palette.primary.contrastText,
-            whiteSpace: 'noWrap',
+            'color': baseTheme.palette.primary.contrastText,
+            'whiteSpace': 'noWrap',
             '&:nth-of-type(1)': {
               borderTopLeftRadius: baseTheme.shape.borderRadius,
               borderBottomLeftRadius: baseTheme.shape.borderRadius / 2,
@@ -272,7 +272,7 @@ const create = (baseTheme: Theme) =>
             },
           },
           footer: {
-            backgroundColor:
+            'backgroundColor':
               baseTheme.palette.mode === 'light' ? '#00000011' : '#ffffff11',
             '&:nth-of-type(1)': {
               borderTopLeftRadius: baseTheme.shape.borderRadius / 2,

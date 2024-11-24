@@ -3,8 +3,8 @@ import {
   SigHash,
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
-import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
+import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
 
@@ -17,7 +17,7 @@ export const transferCreator =
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,
-    lockAddress: string
+    lockAddress: string,
   ): Promise<string> => {
     const userAddress: string = await new Promise((resolve, reject) => {
       getXdefiWallet()
@@ -32,7 +32,7 @@ export const transferCreator =
           },
           onFinish: ({ addresses }) => {
             const segwitPaymentAddresses = addresses.filter(
-              (address) => address.purpose === AddressPurpose.Payment
+              (address) => address.purpose === AddressPurpose.Payment,
             );
             if (segwitPaymentAddresses.length > 0)
               resolve(segwitPaymentAddresses[0].address);
@@ -48,7 +48,7 @@ export const transferCreator =
       toChain,
       toAddress,
       networkFee.toString(),
-      bridgeFee.toString()
+      bridgeFee.toString(),
     );
 
     const psbtData = await config.generateUnsignedTx(
@@ -56,7 +56,7 @@ export const transferCreator =
       userAddress,
       amount,
       opReturnData,
-      token
+      token,
     );
 
     const result: string = await new Promise((resolve, reject) => {

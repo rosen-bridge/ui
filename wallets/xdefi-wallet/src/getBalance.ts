@@ -1,8 +1,8 @@
-import { WalletCreatorConfig } from '@rosen-network/bitcoin';
-import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
-import { NETWORKS } from '@rosen-ui/constants';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { WalletCreatorConfig } from '@rosen-network/bitcoin';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
+import { AddressPurpose, BitcoinNetworkType } from 'sats-connect';
 
 import { getXdefiWallet } from './getXdefiWallet';
 
@@ -22,7 +22,7 @@ export const getBalanceCreator =
           },
           onFinish: ({ addresses }) => {
             const segwitPaymentAddresses = addresses.filter(
-              (address) => address.purpose === AddressPurpose.Payment
+              (address) => address.purpose === AddressPurpose.Payment,
             );
             if (segwitPaymentAddresses.length > 0) {
               const address = segwitPaymentAddresses[0].address;
@@ -33,10 +33,10 @@ export const getBalanceCreator =
                     const wrappedAmount = tokenMap.wrapAmount(
                       token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
                       balance,
-                      NETWORKS.BITCOIN
+                      NETWORKS.BITCOIN,
                     ).amount;
                     resolve(wrappedAmount);
-                  })
+                  }),
                 )
                 .catch((e) => reject(e));
             } else reject();

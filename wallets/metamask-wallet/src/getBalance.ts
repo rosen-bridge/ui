@@ -37,7 +37,7 @@ export const getBalanceCreator =
       const contract = new Contract(
         tokenId,
         tokenABI,
-        await browserProvider.getSigner()
+        await browserProvider.getSigner(),
       );
 
       amount = await contract.balanceOf(accounts[0]);
@@ -48,7 +48,7 @@ export const getBalanceCreator =
     const wrappedAmount = tokenMap.wrapAmount(
       token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
       BigInt(amount),
-      NETWORKS.ETHEREUM
+      NETWORKS.ETHEREUM,
     ).amount;
 
     return wrappedAmount;

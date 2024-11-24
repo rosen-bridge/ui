@@ -1,10 +1,11 @@
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import AbstractCalculator from '../abstract-calculator';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import axios, { AxiosInstance } from 'axios';
-import { zipWith } from 'lodash-es';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+import axios, { AxiosInstance } from 'axios';
+import { zipWith } from 'lodash-es';
+
+import AbstractCalculator from '../abstract-calculator';
 
 /**
  * This type only contains the part of the type that is required here
@@ -25,7 +26,7 @@ export class BitcoinCalculator extends AbstractCalculator {
     tokenMap: TokenMap,
     addresses: string[],
     url: string = 'https://blockstream.info',
-    logger?: AbstractLogger
+    logger?: AbstractLogger,
   ) {
     super(addresses, logger, tokenMap);
     this.client = axios.create({
@@ -56,11 +57,11 @@ export class BitcoinCalculator extends AbstractCalculator {
       const balances = await Promise.all(
         this.addresses.map(async (address) => {
           const response = await this.client.get<PartialEsploraAddress>(
-            `/api/address/${address}`
+            `/api/address/${address}`,
           );
           const chainStats = response.data.chain_stats;
           return BigInt(chainStats.funded_txo_sum - chainStats.spent_txo_sum);
-        })
+        }),
       );
       return zipWith(this.addresses, balances, (address, amount) => ({
         address,

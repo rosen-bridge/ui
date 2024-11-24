@@ -17,10 +17,9 @@ import {
   styled,
   Grid,
 } from '@rosen-bridge/ui-kit';
+import { LayoutProps } from '@rosen-ui/types';
 
 import { ToggleButton } from './ToggleButton';
-
-import { LayoutProps } from '@rosen-ui/types';
 
 /**
  * render a box which is scrollable in mobile devices

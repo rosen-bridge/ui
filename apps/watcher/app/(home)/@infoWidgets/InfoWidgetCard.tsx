@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import { Alert } from '@rosen-bridge/icons';
 import {
   Box,
   Card,
@@ -10,7 +11,6 @@ import {
   styled,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
-import { Alert } from '@rosen-bridge/icons';
 
 interface InfoWidgetCardBaseProps {
   widgetColor: keyof AugmentedPalette;
@@ -27,11 +27,11 @@ interface InfoWidgetCardBaseProps {
  */
 const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
   ({ theme, ...props }) => ({
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette[props.widgetColor].main,
-    color: theme.palette[props.widgetColor].contrastText,
-    display: 'flex',
-    gap: theme.spacing(2),
+    'padding': theme.spacing(2),
+    'backgroundColor': theme.palette[props.widgetColor].main,
+    'color': theme.palette[props.widgetColor].contrastText,
+    'display': 'flex',
+    'gap': theme.spacing(2),
     '& .column': {
       display: 'flex',
       flexDirection: 'column',
@@ -44,12 +44,12 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
       opacity: 0.75,
     },
     '& .value': {
-      fontSize: theme.typography.h6.fontSize,
-      fontWeight: 'bold',
-      lineHeight: 1,
-      display: 'flex',
-      justifyContent: 'space-between',
-      alignItems: 'center',
+      'fontSize': theme.typography.h6.fontSize,
+      'fontWeight': 'bold',
+      'lineHeight': 1,
+      'display': 'flex',
+      'justifyContent': 'space-between',
+      'alignItems': 'center',
       '& span': {
         fontSize: '60%',
         fontWeight: 'normal',
@@ -57,8 +57,8 @@ const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
       },
     },
     [theme.breakpoints.down('tablet')]: {
-      flexDirection: 'column',
-      alignItems: 'center',
+      'flexDirection': 'column',
+      'alignItems': 'center',
       '& p': {
         textAlign: 'center',
       },

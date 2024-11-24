@@ -5,16 +5,15 @@ import {
   ToolbarThemeTogglerAction,
   Toolbar as UiKitToolbar,
 } from '@rosen-bridge/ui-kit';
-
 import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 
 const pageTitleMap: Record<string, string> = {
   '(home)': 'Home',
-  actions: 'Actions',
-  events: 'Events',
-  health: 'Health',
-  observations: 'Observations',
-  revenues: 'Revenues',
+  'actions': 'Actions',
+  'events': 'Events',
+  'health': 'Health',
+  'observations': 'Observations',
+  'revenues': 'Revenues',
 };
 
 /**
@@ -25,7 +24,7 @@ export const Toolbar = () => {
 
   return (
     <UiKitToolbar
-      title={page ? pageTitleMap[page] ?? '' : ''}
+      title={page ? (pageTitleMap[page] ?? '') : ''}
       toolbarActions={
         <>
           <ApiKeyModal />

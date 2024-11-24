@@ -1,13 +1,13 @@
 import { beforeEach, describe, it } from '@vitest/runner';
 import { expect } from 'vitest';
 
+import { LockedAssetModel } from '../../../lib/database/lockedAsset/LockedAssetModel';
+import { lockedAssets } from '../test-data';
 import {
   allAssetRecords,
   initDatabase,
   insertAssetRecords,
 } from './LockedAssetModel.mock';
-import { lockedAssets } from '../test-data';
-import { LockedAssetModel } from '../../../lib/database/lockedAsset/LockedAssetModel';
 
 describe('LockedAssetModel', () => {
   let assetModel: LockedAssetModel;
@@ -32,7 +32,7 @@ describe('LockedAssetModel', () => {
       const savedAssets = await assetModel.getAllStoredAssets();
       expect(savedAssets.length).toEqual(2);
       expect(
-        savedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        savedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       ).toEqual(
         [
           {
@@ -43,7 +43,7 @@ describe('LockedAssetModel', () => {
             address: lockedAssets[1].address,
             tokenId: lockedAssets[1].tokenId,
           },
-        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
     });
   });

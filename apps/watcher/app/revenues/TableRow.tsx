@@ -1,14 +1,12 @@
 import { useState, FC, useMemo } from 'react';
 
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-
-import { useRsnToken } from '@/_hooks/useRsnToken';
-
-import { Revenue } from '@/_types/api';
 import { useERsnToken } from '@/_hooks/useERsnToken';
+import { useRsnToken } from '@/_hooks/useRsnToken';
+import { Revenue } from '@/_types/api';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;

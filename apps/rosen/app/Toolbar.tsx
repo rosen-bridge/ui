@@ -23,7 +23,7 @@ export const Toolbar = () => {
 
   return (
     <UiKitToolbar
-      title={page ? pageTitleMap[page] ?? '' : ''}
+      title={page ? (pageTitleMap[page] ?? '') : ''}
       toolbarActions={<ToolbarThemeTogglerAction />}
     />
   );

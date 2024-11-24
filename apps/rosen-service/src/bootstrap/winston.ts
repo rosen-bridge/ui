@@ -1,7 +1,6 @@
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import config from '../configs';
-
 import AppError from '../errors/AppError';
 
 try {
@@ -12,6 +11,6 @@ try {
     false,
     'error',
     error instanceof Error ? error.stack : undefined,
-    config.logs
+    config.logs,
   );
 }

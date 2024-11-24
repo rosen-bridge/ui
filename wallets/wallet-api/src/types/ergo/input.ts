@@ -1,5 +1,4 @@
 import { BoxId } from '../common';
-
 import { ProverResult } from './prover';
 
 export type Input = {

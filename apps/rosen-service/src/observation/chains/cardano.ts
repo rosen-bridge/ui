@@ -2,13 +2,10 @@ import { CardanoKoiosObservationExtractor } from '@rosen-bridge/observation-extr
 import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { getRosenTokens } from '../../utils';
-
 import config from '../../configs';
-
 import dataSource from '../../data-source';
-
 import AppError from '../../errors/AppError';
+import { getRosenTokens } from '../../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -22,7 +19,7 @@ export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
       dataSource,
       getRosenTokens(),
       config.cardano.addresses.lock,
-      logger
+      logger,
     );
 
     scanner.registerExtractor(observationExtractor);
@@ -38,7 +35,7 @@ export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
       error instanceof Error ? error.stack : undefined,
       {
         scannerName: scanner.name(),
-      }
+      },
     );
   }
 };

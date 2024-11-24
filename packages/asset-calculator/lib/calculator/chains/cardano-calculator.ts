@@ -1,10 +1,10 @@
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
-
-import AbstractCalculator from '../abstract-calculator';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+
+import AbstractCalculator from '../abstract-calculator';
 
 export class CardanoCalculator extends AbstractCalculator {
   readonly chain: Network = NETWORKS.CARDANO;
@@ -16,7 +16,7 @@ export class CardanoCalculator extends AbstractCalculator {
     addresses: string[],
     authToken?: string,
     logger?: AbstractLogger,
-    koiosUrl: string = 'https://api.koios.rest/api/v1'
+    koiosUrl: string = 'https://api.koios.rest/api/v1',
   ) {
     super(addresses, logger, tokenMap);
     this.koiosApi = cardanoKoiosClientFactory(koiosUrl, authToken);
@@ -32,12 +32,12 @@ export class CardanoCalculator extends AbstractCalculator {
     });
     if (assetSummary.length && assetSummary[0].total_supply) {
       this.logger.debug(
-        `Total supply of token [${token.policyId}.${token.assetName}] is [${assetSummary[0].total_supply}]`
+        `Total supply of token [${token.policyId}.${token.assetName}] is [${assetSummary[0].total_supply}]`,
       );
       return BigInt(assetSummary[0].total_supply);
     }
     throw Error(
-      `Total supply of token [${token.policyId}.${token.assetName}] is not calculable`
+      `Total supply of token [${token.policyId}.${token.assetName}] is not calculable`,
     );
   };
 
@@ -54,11 +54,11 @@ export class CardanoCalculator extends AbstractCalculator {
         (asset) =>
           asset.policy_id == token.policyId &&
           asset.asset_name == token.assetName &&
-          asset.quantity
+          asset.quantity,
       )
       .reduce((sum, asset) => BigInt(asset.quantity!) + sum, 0n);
     this.logger.debug(
-      `Total balance of token [${token.policyId}.${token.assetName}] is [${tokenBalance}]`
+      `Total balance of token [${token.policyId}.${token.assetName}] is [${tokenBalance}]`,
     );
     return tokenBalance;
   };
@@ -90,7 +90,7 @@ export class CardanoCalculator extends AbstractCalculator {
           asset.policy_id == token.policyId &&
           asset.asset_name == token.assetName &&
           asset.quantity &&
-          asset.address
+          asset.address,
       )
       .map((asset) => ({
         address: asset.address!,

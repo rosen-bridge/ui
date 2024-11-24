@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { useMemo } from 'react';
 
 import {
@@ -8,6 +7,7 @@ import {
   ShieldQuestion,
 } from '@rosen-bridge/icons';
 import { HealthParamInfo } from '@rosen-ui/types';
+import moment from 'moment';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
@@ -106,7 +106,7 @@ export const HealthParamCard = ({
           </SvgIcon>
         ),
         sx: {
-          color: colors.cardColor,
+          'color': colors.cardColor,
           '& span': {
             color: 'inherit',
             display: 'flex',

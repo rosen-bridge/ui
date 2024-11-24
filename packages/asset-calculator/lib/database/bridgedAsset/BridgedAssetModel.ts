@@ -21,7 +21,7 @@ class BridgedAssetModel {
   upsertAsset = async (asset: BridgedAssetEntity) => {
     await this.bridgedAssetRepository.save(asset);
     this.logger.debug(
-      `Asset [${JsonBigInt.stringify(asset)}] upserted in database`
+      `Asset [${JsonBigInt.stringify(asset)}] upserted in database`,
     );
   };
 
@@ -46,12 +46,12 @@ class BridgedAssetModel {
         this.bridgedAssetRepository.delete({
           tokenId: asset.tokenId,
           chain: asset.chain,
-        })
-      )
+        }),
+      ),
     );
     assets.length &&
       this.logger.debug(
-        `Deleted assets ${JsonBigInt.stringify(assets)} from database`
+        `Deleted assets ${JsonBigInt.stringify(assets)} from database`,
       );
   };
 }

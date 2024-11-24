@@ -1,8 +1,7 @@
-import moment from 'moment';
-
-import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { NETWORKS } from '@rosen-ui/constants';
+import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
+import moment from 'moment';
 
 import {
   ApiAddressAssetsResponse,

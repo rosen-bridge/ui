@@ -1,11 +1,10 @@
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
 
+import { handleError } from '../utils';
 import { startBitcoinScanner } from './chains/bitcoin';
 import { startCardanoScanner } from './chains/cardano';
 import { startErgoScanner } from './chains/ergo';
 import { startEthereumScanner } from './chains/ethereum';
-
-import { handleError } from '../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 

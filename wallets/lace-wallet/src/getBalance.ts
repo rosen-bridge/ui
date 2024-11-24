@@ -16,7 +16,7 @@ export const getBalanceCreator =
     const amount = balances.find(
       (asset) =>
         asset.policyId === token.policyId &&
-        (asset.nameHex === hexToCbor(token.assetName) || !token.policyId)
+        (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
     );
 
     if (!amount) return 0n;
@@ -26,7 +26,7 @@ export const getBalanceCreator =
     const wrappedAmount = tokenMap.wrapAmount(
       token[tokenMap.getIdKey(NETWORKS.CARDANO)],
       amount.quantity,
-      NETWORKS.CARDANO
+      NETWORKS.CARDANO,
     ).amount;
 
     return wrappedAmount;

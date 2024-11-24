@@ -1,7 +1,8 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 import { Wallet } from '@rosen-ui/wallet-api';
-import { generateLockData } from './utils';
+
 import { generateTxParameters } from './generateTxParameters';
+import { generateLockData } from './utils';
 
 export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 

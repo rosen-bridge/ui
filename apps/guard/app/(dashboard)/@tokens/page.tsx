@@ -1,12 +1,11 @@
 'use client';
 
+import { Grid, TokensCard } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
+import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { Grid, TokensCard } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
-
 import { ApiAddressAssetsResponse } from '@/_types/api';
-import { NETWORKS } from '@rosen-ui/constants';
 
 const Tokens = () => {
   const { data: ergoTokens, isLoading: isErogTokensLoading } =

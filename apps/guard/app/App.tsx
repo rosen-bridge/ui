@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { NoSsr } from '@mui/material';
 
+import { NoSsr } from '@mui/material';
+import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 import {
   styled,
   SnackbarProvider,
@@ -12,14 +13,11 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { SWRConfig } from '@rosen-ui/swr-mock';
 
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
-
 import { theme } from '@/_theme/theme';
 
-import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
-
 import { mockedData } from './_mock/mockedData';
+import { SideBar } from './SideBar';
+import { Toolbar } from './Toolbar';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',

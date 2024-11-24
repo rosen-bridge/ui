@@ -1,10 +1,11 @@
 import { NETWORKS } from '@rosen-ui/constants';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
+
 import { AssetCalculator } from '../lib';
-import { tokenMap } from './test-data';
-import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
+import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
+import { tokenMap } from './test-data';
 
 describe('AssetCalculator', () => {
   describe('calculateEmissionForChain', () => {
@@ -23,7 +24,7 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
-        dataSource
+        dataSource,
       );
     });
 
@@ -48,7 +49,7 @@ describe('AssetCalculator', () => {
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMap.tokens[0].ergo,
         NETWORKS.CARDANO,
-        NETWORKS.ERGO
+        NETWORKS.ERGO,
       );
       expect(totalLocked).to.equal(100n);
     });
@@ -74,7 +75,7 @@ describe('AssetCalculator', () => {
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMap.tokens[2].cardano,
         NETWORKS.ERGO,
-        NETWORKS.CARDANO
+        NETWORKS.CARDANO,
       );
       expect(totalLocked).to.equal(1000n);
     });
@@ -96,7 +97,7 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
-        dataSource
+        dataSource,
       );
     });
 
@@ -123,7 +124,7 @@ describe('AssetCalculator', () => {
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateLocked'](
         tokenMap.tokens[0].ergo,
-        NETWORKS.ERGO
+        NETWORKS.ERGO,
       );
       expect(totalLocked[0].address).to.equal('hotAddr');
       expect(totalLocked[0].amount).to.equal(1000n);
@@ -163,7 +164,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
-        dataSource
+        dataSource,
       );
       assetCalculator['calculateEmissionForChain'] = () =>
         Promise.resolve(1000n);
@@ -171,35 +172,32 @@ describe('AssetCalculator', () => {
         Promise.resolve([{ address: 'Addr', amount: 1000n }]);
       const upsertBridgedAssetSpy = vitest.spyOn(
         assetCalculator['bridgedAssetModel'],
-        'upsertAsset'
+        'upsertAsset',
       );
       const removeBridgedAssetSpy = vitest.spyOn(
         assetCalculator['bridgedAssetModel'],
-        'removeAssets'
+        'removeAssets',
       );
       const upsertLockedAssetSpy = vitest.spyOn(
         assetCalculator['lockedAssetModel'],
-        'upsertAsset'
+        'upsertAsset',
       );
       const removeLockedAssetSpy = vitest.spyOn(
         assetCalculator['lockedAssetModel'],
-        'removeAssets'
+        'removeAssets',
       );
       const insertTokenSpy = vitest.spyOn(
         assetCalculator['tokenModel'],
-        'insertToken'
+        'insertToken',
       );
 
       await assetCalculator.update();
-      const allStoredBridgedAssets = await assetCalculator[
-        'bridgedAssetModel'
-      ].getAllStoredAssets();
-      const allStoredLockedAssets = await assetCalculator[
-        'lockedAssetModel'
-      ].getAllStoredAssets();
-      const allStoredTokens = await assetCalculator[
-        'tokenModel'
-      ].getAllStoredTokens();
+      const allStoredBridgedAssets =
+        await assetCalculator['bridgedAssetModel'].getAllStoredAssets();
+      const allStoredLockedAssets =
+        await assetCalculator['lockedAssetModel'].getAllStoredAssets();
+      const allStoredTokens =
+        await assetCalculator['tokenModel'].getAllStoredTokens();
       expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(3);
       expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
@@ -207,30 +205,32 @@ describe('AssetCalculator', () => {
       expect(insertTokenSpy).toBeCalledTimes(tokenMap.tokens.length);
       expect(
         allStoredBridgedAssets.sort((a, b) =>
-          a.tokenId.localeCompare(b.tokenId)
-        )
+          a.tokenId.localeCompare(b.tokenId),
+        ),
       ).toEqual(
         [
           { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: NETWORKS.CARDANO },
           { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: NETWORKS.CARDANO },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: NETWORKS.ERGO },
-        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(
-        allStoredLockedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        allStoredLockedAssets.sort((a, b) =>
+          a.tokenId.localeCompare(b.tokenId),
+        ),
       ).toEqual(
         [
           { tokenId: tokenMap.tokens[0].ergo.tokenId, address: 'Addr' },
           { tokenId: tokenMap.tokens[1].ergo.tokenId, address: 'Addr' },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, address: 'Addr' },
-        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(allStoredTokens.sort()).toEqual(
         [
           tokenMap.tokens[0].ergo.tokenId,
           tokenMap.tokens[1].ergo.tokenId,
           tokenMap.tokens[2].cardano.tokenId,
-        ].sort()
+        ].sort(),
       );
     });
 
@@ -265,14 +265,14 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
-        dataSource
+        dataSource,
       );
       await assetCalculator['tokenModel']['tokenRepository'].insert(tokens);
       await assetCalculator['bridgedAssetModel'][
         'bridgedAssetRepository'
       ].insert(bridgedAssets);
       await assetCalculator['lockedAssetModel']['lockedAssetRepository'].insert(
-        lockedAssets
+        lockedAssets,
       );
       assetCalculator['calculateEmissionForChain'] = () =>
         Promise.resolve(1000n);
@@ -280,35 +280,33 @@ describe('AssetCalculator', () => {
         Promise.resolve([{ address: 'Addr', amount: 1000n }]);
       const updateBridgedAssetSpy = vitest.spyOn(
         assetCalculator['bridgedAssetModel'],
-        'upsertAsset'
+        'upsertAsset',
       );
       const removeBridgedAssetsSpy = vitest.spyOn(
         assetCalculator['bridgedAssetModel'],
-        'removeAssets'
+        'removeAssets',
       );
       const updateLockedAssetSpy = vitest.spyOn(
         assetCalculator['lockedAssetModel'],
-        'upsertAsset'
+        'upsertAsset',
       );
       const removeLockedAssetsSpy = vitest.spyOn(
         assetCalculator['lockedAssetModel'],
-        'removeAssets'
+        'removeAssets',
       );
 
       await assetCalculator.update();
-      const allStoredBridgedAssets = await assetCalculator[
-        'bridgedAssetModel'
-      ].getAllStoredAssets();
-      const allStoredLockedAssets = await assetCalculator[
-        'lockedAssetModel'
-      ].getAllStoredAssets();
+      const allStoredBridgedAssets =
+        await assetCalculator['bridgedAssetModel'].getAllStoredAssets();
+      const allStoredLockedAssets =
+        await assetCalculator['lockedAssetModel'].getAllStoredAssets();
       expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(3);
       expect(updateLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetsSpy).to.have.toBeCalledWith(
         bridgedAssets.map((asset) => ({
           tokenId: asset.tokenId,
           chain: asset.chain,
-        }))
+        })),
       );
       expect(removeLockedAssetsSpy).to.have.toBeCalledWith(
         lockedAssets
@@ -316,27 +314,29 @@ describe('AssetCalculator', () => {
             tokenId: asset.tokenId,
             address: asset.address,
           }))
-          .sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+          .sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(
         allStoredBridgedAssets.sort((a, b) =>
-          a.tokenId.localeCompare(b.tokenId)
-        )
+          a.tokenId.localeCompare(b.tokenId),
+        ),
       ).toEqual(
         [
           { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: NETWORKS.CARDANO },
           { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: NETWORKS.CARDANO },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: NETWORKS.ERGO },
-        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(
-        allStoredLockedAssets.sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        allStoredLockedAssets.sort((a, b) =>
+          a.tokenId.localeCompare(b.tokenId),
+        ),
       ).toEqual(
         [
           { tokenId: tokenMap.tokens[0].ergo.tokenId, address: 'Addr' },
           { tokenId: tokenMap.tokens[1].ergo.tokenId, address: 'Addr' },
           { tokenId: tokenMap.tokens[2].cardano.tokenId, address: 'Addr' },
-        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId))
+        ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
     });
   });

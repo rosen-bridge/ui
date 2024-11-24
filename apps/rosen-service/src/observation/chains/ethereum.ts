@@ -1,14 +1,11 @@
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
+import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { getRosenTokens } from '../../utils';
-
 import config from '../../configs';
-
 import dataSource from '../../data-source';
-
 import AppError from '../../errors/AppError';
-import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import { getRosenTokens } from '../../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -22,7 +19,7 @@ export const registerEthereumExtractor = (scanner: EvmRpcScanner) => {
       config.ethereum.addresses.lock,
       dataSource,
       getRosenTokens(),
-      logger
+      logger,
     );
 
     scanner.registerExtractor(observationExtractor);
@@ -38,7 +35,7 @@ export const registerEthereumExtractor = (scanner: EvmRpcScanner) => {
       error instanceof Error ? error.stack : undefined,
       {
         scannerName: scanner.name(),
-      }
+      },
     );
   }
 };

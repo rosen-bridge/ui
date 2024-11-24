@@ -1,6 +1,6 @@
 import { useState, FC, useMemo } from 'react';
-import useSWR from 'swr';
 
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Button,
   CircularProgress,
@@ -9,14 +9,12 @@ import {
   Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
-
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
 import { Revenue, ApiInfoResponse } from '@/_types/api';
-import { NETWORKS } from '@rosen-ui/constants';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;

@@ -7,7 +7,7 @@
   "types": "dist/src/index.d.ts",
   "type": "module",
   "scripts": {
-    "prettify": "prettier --write . --ignore-path .gitignore",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
     "type-check": "tsc --noEmit",

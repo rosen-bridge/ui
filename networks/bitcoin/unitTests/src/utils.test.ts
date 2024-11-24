@@ -29,7 +29,7 @@ describe('generateOpReturnData', () => {
       toChain,
       toAddress,
       networkFee,
-      bridgeFee
+      bridgeFee,
     );
     // result in hex: 00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339
 
@@ -40,7 +40,7 @@ describe('generateOpReturnData', () => {
     const encodedAddress = result.slice(36);
     expect(encodedAddress.length).toEqual(2 * 33); // 33 bytes, 66 characters in hex
     expect(encodedAddress).toEqual(
-      '03f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339'
+      '03f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339',
     );
   });
 

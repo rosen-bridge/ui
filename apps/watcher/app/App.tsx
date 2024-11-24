@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import { SWRConfig } from '@rosen-ui/swr-mock';
 
 /**
  * FIXME: import NoSsr from ui-kit
  * local:ergo/rosen-bridge/ui#193
  */
 import { NoSsr } from '@mui/material';
-
+import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
 import {
   AppSnackbar,
   styled,
@@ -16,16 +15,14 @@ import {
   ThemeProvider,
   CssBaseline,
 } from '@rosen-bridge/ui-kit';
-import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
+import { SWRConfig } from '@rosen-ui/swr-mock';
+import { upperFirst } from 'lodash-es';
 
+import { useInfo } from './_hooks/useInfo';
+import { mockedData } from './_mock/mockedData';
+import { theme } from './_theme/theme';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
-
-import { theme } from './_theme/theme';
-
-import { mockedData } from './_mock/mockedData';
-import { useInfo } from './_hooks/useInfo';
-import { upperFirst } from 'lodash-es';
 
 const Root = styled('div')(({ theme }) => ({
   width: '100vw',

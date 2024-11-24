@@ -1,7 +1,7 @@
-import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
-import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { encodeAddress } from '@rosen-bridge/address-codec';
+import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
 
 /**
  * generates metadata for lock transaction
@@ -16,11 +16,11 @@ export const generateLockData = async (
   toChain: Network,
   toAddress: string,
   networkFee: string,
-  bridgeFee: string
+  bridgeFee: string,
 ): Promise<string> => {
   // parse toChain
   const toChainCode = NETWORK_VALUES.indexOf(
-    toChain as (typeof NETWORK_VALUES)[number]
+    toChain as (typeof NETWORK_VALUES)[number],
   );
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
   const toChainHex = toChainCode.toString(16).padStart(2, '0');
@@ -48,7 +48,7 @@ export const generateLockData = async (
  */
 export const getHeight = async (): Promise<number> => {
   return await new JsonRpcProvider(
-    process.env.ETHEREUM_BLAST_API
+    process.env.ETHEREUM_BLAST_API,
   ).getBlockNumber();
 };
 

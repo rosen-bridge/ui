@@ -1,10 +1,9 @@
+import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { fetcher } from '@rosen-ui/swr-helpers';
+import { ApiInfoResponse } from '@/_types/api';
 
 import { useToken } from './useToken';
-
-import { ApiInfoResponse } from '@/_types/api';
 
 /**
  * fetch rsn token info (if present)

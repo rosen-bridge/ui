@@ -1,8 +1,6 @@
 'use client';
 
-import { upperFirst } from 'lodash-es';
 import Image from 'next/image';
-import useSWR from 'swr';
 
 import {
   LockAlt,
@@ -15,14 +13,15 @@ import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
+import { upperFirst } from 'lodash-es';
+import useSWR from 'swr';
+
+import { useERsnToken } from '@/_hooks/useERsnToken';
+import { useRsnToken } from '@/_hooks/useRsnToken';
+import { useToken } from '@/_hooks/useToken';
+import { ApiInfoResponse } from '@/_types/api';
 
 import { InfoWidgetCard } from './InfoWidgetCard';
-
-import { useRsnToken } from '@/_hooks/useRsnToken';
-import { useERsnToken } from '@/_hooks/useERsnToken';
-import { useToken } from '@/_hooks/useToken';
-
-import { ApiInfoResponse } from '@/_types/api';
 
 const InfoWidgets = () => {
   const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
