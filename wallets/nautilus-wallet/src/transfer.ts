@@ -13,10 +13,9 @@ export const transferCreator =
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,
-    lockAddress: string
+    lockAddress: string,
   ): Promise<string> => {
     const wallet = await getNautilusWallet().getApi().getContext();
-    const tokenId = token.tokenId;
     const changeAddress = await wallet.get_change_address();
 
     const walletUtxos = await wallet.get_utxos();
@@ -31,7 +30,7 @@ export const transferCreator =
       amount,
       bridgeFee.toString(),
       networkFee.toString(),
-      token
+      token,
     );
     const signedTx = await wallet.sign_tx(unsignedTx);
     const result = await wallet.submit_tx(signedTx);

@@ -32,7 +32,6 @@ export type HealthParamCardProps = HealthParamInfo & {
  * @param handleCheckNow
  */
 export const HealthParamCard = ({
-  id,
   title,
   details,
   status,
