@@ -13,7 +13,7 @@ export default {
       while (directory !== process.cwd()) {
         if (fs.existsSync(path.join(directory, 'package.json'))) {
           packages.add(
-            `tsc --noEmit --project ${path.relative(process.cwd(), directory)}`,
+            `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`,
           );
           break;
         }
