@@ -4,7 +4,7 @@
 declare global {
   let ethereum: {
     isMetaMask: boolean;
-    _metamask: any;
+    _metamask: unknown;
   };
 }
 

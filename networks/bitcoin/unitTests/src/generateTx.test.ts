@@ -52,7 +52,12 @@ describe('generateUnsignedTx', () => {
       fromAddress,
       amount,
       data,
-      {} as any
+      /**
+       * TODO: remove the inline ESLint comment
+       * local:ergo/rosen-bridge/ui#441
+       */
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      {} as any,
     );
 
     const psbt = Psbt.fromBase64(result.psbt);
@@ -61,7 +66,7 @@ describe('generateUnsignedTx', () => {
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
     expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId
+      mockedInput.txId,
     );
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
@@ -70,7 +75,7 @@ describe('generateUnsignedTx', () => {
     expect(opReturnUtxo.script.toString('hex')).toEqual(
       '6a' + // OP_RETURN
         (data.length / 2).toString(16).padStart(2, '0') +
-        data
+        data,
     );
     expect(opReturnUtxo.value).toEqual(0);
     const lockUtxo = psbt.txOutputs[1];
@@ -80,7 +85,7 @@ describe('generateUnsignedTx', () => {
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 203n;
     expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - amount - expectedFee)
+      Number(mockedInput.value - amount - expectedFee),
     );
   });
 
@@ -120,7 +125,7 @@ describe('generateUnsignedTx', () => {
       fromAddress,
       wrappedAmount,
       data,
-      token
+      token,
     );
 
     const psbt = Psbt.fromBase64(result.psbt);
@@ -129,7 +134,7 @@ describe('generateUnsignedTx', () => {
     expect(psbt.inputCount).toEqual(1);
     const mockedInput = testData.mockedUtxos[0];
     expect(psbt.txInputs[0].hash.reverse().toString('hex')).toEqual(
-      mockedInput.txId
+      mockedInput.txId,
     );
     expect(psbt.txInputs[0].index).toEqual(mockedInput.index);
 
@@ -138,7 +143,7 @@ describe('generateUnsignedTx', () => {
     expect(opReturnUtxo.script.toString('hex')).toEqual(
       '6a' + // OP_RETURN
         (data.length / 2).toString(16).padStart(2, '0') +
-        data
+        data,
     );
     expect(opReturnUtxo.value).toEqual(0);
     const lockUtxo = psbt.txOutputs[1];
@@ -148,7 +153,7 @@ describe('generateUnsignedTx', () => {
     expect(changeUtxo.address).toEqual(fromAddress);
     const expectedFee = 203n;
     expect(changeUtxo.value).toEqual(
-      Number(mockedInput.value - unwrappedAmount - expectedFee)
+      Number(mockedInput.value - unwrappedAmount - expectedFee),
     );
   });
 
@@ -175,7 +180,12 @@ describe('generateUnsignedTx', () => {
         fromAddress,
         amount,
         data,
-        {} as any
+        /**
+         * TODO: remove the inline ESLint comment
+         * local:ergo/rosen-bridge/ui#441
+         */
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        {} as any,
       );
     }).rejects.toThrow(Error);
   });

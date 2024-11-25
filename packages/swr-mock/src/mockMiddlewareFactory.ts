@@ -1,3 +1,9 @@
+/**
+ * TODO: remove the inline ESLint comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/* eslint-disable */
+
 import { Key, Middleware, SWRHook } from 'swr';
 
 interface FakeData {

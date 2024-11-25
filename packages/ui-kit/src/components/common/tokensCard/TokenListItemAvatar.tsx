@@ -13,10 +13,7 @@ export interface TokenListItemAvatarProps {
  * @param name
  * @param index index used to change background color of avatar
  */
-export const TokenListItemAvatar = ({
-  name,
-  index,
-}: TokenListItemAvatarProps) => {
+export const TokenListItemAvatar = ({ name }: TokenListItemAvatarProps) => {
   const isDarkMode = useIsDarkMode();
 
   return (

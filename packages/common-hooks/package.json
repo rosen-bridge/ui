@@ -14,16 +14,11 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.9",
-    "@typescript-eslint/eslint-plugin": "^5.30.7",
-    "@typescript-eslint/parser": "^5.26.0",
-    "eslint": "^8.16.0",
-    "eslint-config-prettier": "^9.0.0",
-    "prettier": "^3.0.2",
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "buffer": "^6.0.3",
     "@rosen-bridge/json-bigint": "^0.1.0",
+    "buffer": "^6.0.3",
     "lodash-es": "^4.17.21"
   }
 }
