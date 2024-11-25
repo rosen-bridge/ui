@@ -12,6 +12,10 @@ axios.defaults.baseURL = '/api';
  * @param params
  */
 const fetcher = async (
+  /**
+   * TODO: remove the inline ESLint comment
+   * local:ergo/rosen-bridge/ui#441
+   */
   key: // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [url: string, params?: Record<string, any>, method?: 'get' | 'put'] | string,
 ) => {

@@ -67,6 +67,10 @@ export default [
       ...reactHooks.configs.recommended.rules,
     },
   },
+  /**
+   * TODO: revise the global ESLint configuration rules
+   * local:ergo/rosen-bridge/ui#442
+   */
   {
     rules: {
       'no-undef': 'off',

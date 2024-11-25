@@ -52,6 +52,10 @@ describe('generateUnsignedTx', () => {
       fromAddress,
       amount,
       data,
+      /**
+       * TODO: remove the inline ESLint comment
+       * local:ergo/rosen-bridge/ui#441
+       */
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       {} as any,
     );
@@ -176,6 +180,10 @@ describe('generateUnsignedTx', () => {
         fromAddress,
         amount,
         data,
+        /**
+         * TODO: remove the inline ESLint comment
+         * local:ergo/rosen-bridge/ui#441
+         */
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         {} as any,
       );
