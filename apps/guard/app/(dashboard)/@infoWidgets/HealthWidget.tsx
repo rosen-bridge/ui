@@ -1,5 +1,4 @@
 import React from 'react';
-import useSWR from 'swr';
 
 import { Alert, ShieldCheck } from '@rosen-bridge/icons';
 import {
@@ -12,6 +11,7 @@ import {
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
+import useSWR from 'swr';
 
 import { ApiInfoResponse } from '@/_types/api';
 
@@ -25,17 +25,17 @@ interface HealthWidgetBaseProps {
  */
 const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
   ({ theme, ...props }) => ({
-    padding: theme.spacing(2),
-    backgroundColor: theme.palette[props.widgetColor].main,
-    color: theme.palette[props.widgetColor].contrastText,
-    backgroundImage:
+    'padding': theme.spacing(2),
+    'backgroundColor': theme.palette[props.widgetColor].main,
+    'color': theme.palette[props.widgetColor].contrastText,
+    'backgroundImage':
       theme.palette.mode === 'light'
         ? `linear-gradient(180deg, ${
             theme.palette[props.widgetColor].main
           } 0%, ${theme.palette[props.widgetColor].dark} 100%)`
         : 'none',
-    display: 'flex',
-    alignItems: 'center',
+    'display': 'flex',
+    'alignItems': 'center',
     '& span': {
       marginLeft: theme.spacing(2),
       marginRight: theme.spacing(1),
@@ -49,7 +49,7 @@ const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
 /**
  * render a widget showing health status or a pending indicator
  */
-const HealthWidget = () => {
+export const HealthWidget = () => {
   const { data: info, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   return (
@@ -89,5 +89,3 @@ const HealthWidget = () => {
     </HealthWidgetBase>
   );
 };
-
-export default HealthWidget;

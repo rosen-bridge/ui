@@ -20,8 +20,8 @@ import {
   useResponsiveValue,
 } from '@rosen-bridge/ui-kit';
 
-import SendForSigningForm from './SendForSigningForm';
-import TabPanel from './TabPanel';
+import { SendForSigningForm } from './SendForSigningForm';
+import { TabPanel } from './TabPanel';
 
 /**
  * render root of page
@@ -50,15 +50,15 @@ const Root = styled(Box)(({ theme }) => ({
  * render a container for tabs
  */
 const TabsContainer = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  height: 'calc(100% + 32px)',
-  margin: theme.spacing(-2, 0),
+  'position': 'relative',
+  'height': 'calc(100% + 32px)',
+  'margin': theme.spacing(-2, 0),
   [theme.breakpoints.down('tablet')]: {
     margin: theme.spacing(-3, -2),
   },
   '& .MuiTabs-root': {
-    paddingTop: theme.spacing(5),
-    paddingBottom: theme.spacing(5),
+    'paddingTop': theme.spacing(5),
+    'paddingBottom': theme.spacing(5),
     [theme.breakpoints.down('tablet')]: {
       padding: theme.spacing(1, 2, 0, 2),
       backgroundColor: theme.palette.info.dark,
@@ -91,11 +91,11 @@ const TabsContainer = styled(Box)(({ theme }) => ({
     },
   },
   '& .card': {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
+    'position': 'absolute',
+    'width': '100%',
+    'height': '100%',
+    'display': 'flex',
+    'flexDirection': 'column',
     [theme.breakpoints.down('tablet')]: {
       display: 'none',
     },

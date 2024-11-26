@@ -1,6 +1,6 @@
 import { HexString, Hash32, TxHash } from '../common';
-import { Value } from './value';
 import { Addr } from './address';
+import { Value } from './value';
 
 export type TxOut = {
   txHash: TxHash;

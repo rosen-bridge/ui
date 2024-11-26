@@ -1,13 +1,13 @@
 import { beforeEach, describe, it } from '@vitest/runner';
 import { expect } from 'vitest';
 
+import { BridgedAssetModel } from '../../../lib/database/bridgedAsset/BridgedAssetModel';
+import { bridgedAssets } from '../test-data';
 import {
   allAssetRecords,
   initDatabase,
   insertAssetRecords,
 } from './BridgedAssetModel.mock';
-import { bridgedAssets } from '../test-data';
-import { BridgedAssetModel } from '../../../lib/database/bridgedAsset/BridgedAssetModel';
 
 describe('BridgedAssetModel', () => {
   let assetModel: BridgedAssetModel;

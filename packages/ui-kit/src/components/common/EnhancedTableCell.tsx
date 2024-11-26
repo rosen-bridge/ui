@@ -1,4 +1,5 @@
 import { FC, useMemo } from 'react';
+
 import { TableCell, TableCellProps } from '../base';
 
 export interface EnhancedTableCellProps extends TableCellProps {

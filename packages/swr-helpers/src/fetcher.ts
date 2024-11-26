@@ -12,9 +12,12 @@ axios.defaults.baseURL = '/api';
  * @param params
  */
 const fetcher = async (
-  key:
-    | [url: string, params?: Record<string, any>, method?: 'get' | 'put']
-    | string
+  /**
+   * TODO: remove the inline ESLint comment
+   * local:ergo/rosen-bridge/ui#441
+   */
+  key: // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [url: string, params?: Record<string, any>, method?: 'get' | 'put'] | string,
 ) => {
   const method = (typeof key !== 'string' && key[2]) || 'get';
   const response = await axios[method](typeof key === 'string' ? key : key[0], {

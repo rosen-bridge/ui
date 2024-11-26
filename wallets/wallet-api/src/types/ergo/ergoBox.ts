@@ -1,8 +1,7 @@
 import { BoxId, TxId } from '../common';
-
-import { TokenAmountProxy } from './tokenAmount';
-import { Registers } from './registers';
 import { ErgoTree } from './ergoTree';
+import { Registers } from './registers';
+import { TokenAmountProxy } from './tokenAmount';
 
 export type ErgoBoxProxy = {
   readonly boxId: BoxId;

@@ -1,3 +1,8 @@
+/**
+ * TODO: remove the inline ESLint comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+/* eslint-disable */
 import { Key, Middleware, SWRHook } from 'swr';
 
 interface FakeData {
@@ -12,7 +17,7 @@ interface FakeData {
  *
  * @param fakeData
  */
-const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
+export const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
   (fakeData) => (useSWRNext: SWRHook) => (key, fetcher, config) => {
     const mockedFetcher = (key: Key) =>
       new Promise<any>((resolve, reject) => {
@@ -38,5 +43,3 @@ const mockMiddlewareFactory: (fakeData: FakeData) => Middleware =
 
     return useSWRNext(key, mockedFetcher, config);
   };
-
-export default mockMiddlewareFactory;

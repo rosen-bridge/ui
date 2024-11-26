@@ -1,11 +1,11 @@
-import AbstractCalculator from '../abstract-calculator';
-import { PartialERC20ABI } from '../../constants';
-
-import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { zipWith } from 'lodash-es';
-import { ethers, JsonRpcProvider } from 'ethers';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { Network } from '@rosen-ui/types';
+import { ethers, JsonRpcProvider } from 'ethers';
+import { zipWith } from 'lodash-es';
+
+import { PartialERC20ABI } from '../../constants';
+import AbstractCalculator from '../abstract-calculator';
 
 export class EvmCalculator extends AbstractCalculator {
   readonly chain: Network;
@@ -17,7 +17,7 @@ export class EvmCalculator extends AbstractCalculator {
     addresses: string[],
     url: string,
     authToken?: string,
-    logger?: AbstractLogger
+    logger?: AbstractLogger,
   ) {
     super(addresses, logger, tokenMap);
     this.chain = chain;
@@ -34,17 +34,17 @@ export class EvmCalculator extends AbstractCalculator {
     const contract = new ethers.Contract(
       token[this.idKey],
       PartialERC20ABI,
-      this.provider
+      this.provider,
     );
     const totalSupply = await contract.totalSupply();
     if (totalSupply) {
       this.logger.debug(
-        `Total supply of token [${token[this.idKey]}] is [${totalSupply}]`
+        `Total supply of token [${token[this.idKey]}] is [${totalSupply}]`,
       );
       return totalSupply;
     }
     throw Error(
-      `Total supply of token [${token[this.idKey]}] is not calculable`
+      `Total supply of token [${token[this.idKey]}] is not calculable`,
     );
   };
 
@@ -57,19 +57,19 @@ export class EvmCalculator extends AbstractCalculator {
     const contract = new ethers.Contract(
       token[this.idKey],
       PartialERC20ABI,
-      this.provider
+      this.provider,
     );
     for (const address of this.addresses) {
       const balance = await contract.balanceOf(address);
       this.logger.debug(
         `Balance of token [${
           token[this.idKey]
-        }] in address [${address}] is [${balance}]`
+        }] in address [${address}] is [${balance}]`,
       );
       tokenBalance += balance;
     }
     this.logger.debug(
-      `Total balance of token [${token[this.idKey]}] is [${tokenBalance}]`
+      `Total balance of token [${token[this.idKey]}] is [${tokenBalance}]`,
     );
     return tokenBalance;
   };
@@ -88,12 +88,12 @@ export class EvmCalculator extends AbstractCalculator {
         const contract = new ethers.Contract(
           token[this.idKey],
           PartialERC20ABI,
-          this.provider
+          this.provider,
         );
         balance = await contract.balanceOf(address);
       }
       this.logger.debug(
-        `balance of token [${token.name}] for address [${address}] is [${balance}]`
+        `balance of token [${token.name}] for address [${address}] is [${balance}]`,
       );
       tokenBalances.push(balance);
     }

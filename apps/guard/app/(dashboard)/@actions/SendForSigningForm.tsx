@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import useSWRMutation from 'swr/mutation';
 
+import { Alert } from '@rosen-bridge/icons';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -15,16 +16,13 @@ import {
   Typography,
   styled,
 } from '@rosen-bridge/ui-kit';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
+import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-
-import { Alert } from '@rosen-bridge/icons';
-
-import { useApiKey } from '@rosen-bridge/shared-contexts';
+import { Network } from '@rosen-ui/types';
+import useSWRMutation from 'swr/mutation';
 
 import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
-import ApiKeyModal from '@/_modals/ApiKeyModal';
-import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 
 const AlertIcon = styled(Alert)((theme) => ({
   fill: theme.palette.primary.main,
@@ -39,7 +37,7 @@ interface Form {
 /**
  * render a form for signing a tx
  */
-const SendForSigningForm = () => {
+export const SendForSigningForm = () => {
   const { apiKey } = useApiKey();
 
   const {
@@ -198,5 +196,3 @@ const SendForSigningForm = () => {
     </FullCard>
   );
 };
-
-export default SendForSigningForm;

@@ -1,18 +1,17 @@
 'use client';
 
 import React from 'react';
-import useSWR from 'swr';
 
 import { CircularProgress, Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
-import ActionText from '../../ActionText';
-
-import useToken from '@/_hooks/useToken';
-import useRsnToken from '@/_hooks/useRsnToken';
-
+import { useRsnToken } from '@/_hooks/useRsnToken';
+import { useToken } from '@/_hooks/useToken';
 import { ApiInfoResponse } from '@/_types/api';
+
+import { ActionText } from '../../ActionText';
 
 const LockText = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(

@@ -1,11 +1,9 @@
-import moment from 'moment';
-
 import { NETWORKS } from '@rosen-ui/constants';
 import { SWRConfigProps } from '@rosen-ui/swr-mock';
 import { ChartPeriod } from '@rosen-ui/types';
+import moment from 'moment';
 
 import { ApiPermitReturnResponse, Event } from '@/_types/api';
-
 import {
   ApiEventResponse,
   ApiAddressAssetsResponse,
@@ -386,7 +384,7 @@ const events: ApiEventResponse = {
   items: generateEventRecords(100),
 };
 
-const mockedData: SWRConfigProps['fakeData'] = {
+export const mockedData: SWRConfigProps['fakeData'] = {
   withStringKeys: {
     '/info': info,
     '/health/status': healthStatus,
@@ -429,5 +427,3 @@ const mockedData: SWRConfigProps['fakeData'] = {
     },
   },
 };
-
-export default mockedData;

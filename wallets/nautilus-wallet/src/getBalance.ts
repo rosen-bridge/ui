@@ -18,7 +18,7 @@ export const getBalanceCreator =
      * uppercase ERG as tokenId for the erg native token
      */
     const balance = await context.get_balance(
-      tokenId === 'erg' ? 'ERG' : tokenId
+      tokenId === 'erg' ? 'ERG' : tokenId,
     );
 
     const amount = BigInt(balance);
@@ -28,7 +28,7 @@ export const getBalanceCreator =
     const wrappedAmount = tokenMap.wrapAmount(
       tokenId,
       amount,
-      NETWORKS.ERGO
+      NETWORKS.ERGO,
     ).amount;
 
     return wrappedAmount;

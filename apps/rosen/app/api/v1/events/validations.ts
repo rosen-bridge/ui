@@ -15,12 +15,6 @@ const getQueryParamsSchema = Joi.object<GETQueryParams>().keys({
  * validate get requests
  * @param request
  */
-const validateGet = ({ nextUrl: { searchParams } }: NextRequest) => {
+export const validateGet = ({ nextUrl: { searchParams } }: NextRequest) => {
   return getQueryParamsSchema.validate(Object.fromEntries(searchParams));
 };
-
-const EventsValidations = {
-  GET: validateGet,
-};
-
-export default EventsValidations;

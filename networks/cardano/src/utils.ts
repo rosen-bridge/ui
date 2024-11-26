@@ -18,7 +18,7 @@ import { CardanoProtocolParams } from './types';
 export const getCardanoProtocolParams =
   async (): Promise<CardanoProtocolParams> => {
     const cardanoKoiosClient = cardanoKoiosClientFactory(
-      process.env.CARDANO_KOIOS_API! // TODO
+      process.env.CARDANO_KOIOS_API!, // TODO
     );
     return await cardanoKoiosClient.getEpochParams().then((epochParams) => {
       const params = epochParams[0];
@@ -32,7 +32,7 @@ export const getCardanoProtocolParams =
         !params.coins_per_utxo_size
       )
         throw Error(
-          `Some required Cardano protocol params fetched from koios are undefined or null `
+          `Some required Cardano protocol params fetched from koios are undefined or null `,
         );
       return {
         min_fee_a: params.min_fee_a,
@@ -52,14 +52,14 @@ export const getCardanoProtocolParams =
  * @returns
  */
 export const getTxBuilderConfig = (
-  params: CardanoProtocolParams
+  params: CardanoProtocolParams,
 ): wasm.TransactionBuilderConfig => {
   return wasm.TransactionBuilderConfigBuilder.new()
     .fee_algo(
       wasm.LinearFee.new(
         wasm.BigNum.from_str(params.min_fee_a.toString()),
-        wasm.BigNum.from_str(params.min_fee_b.toString())
-      )
+        wasm.BigNum.from_str(params.min_fee_b.toString()),
+      ),
     )
     .pool_deposit(wasm.BigNum.from_str(params.pool_deposit))
     .key_deposit(wasm.BigNum.from_str(params.key_deposit))
@@ -84,7 +84,7 @@ export const generateLockAuxiliaryData = async (
   toAddress: string,
   fromAddressHex: string,
   networkFee: string,
-  bridgeFee: string
+  bridgeFee: string,
 ): Promise<string> => {
   // converts hex address to bech32 address
   const fromAddress = wasm.Address.from_hex(fromAddressHex).to_bech32();
@@ -101,8 +101,8 @@ export const generateLockAuxiliaryData = async (
     map.insert(
       wasm.TransactionMetadatum.new_text(key),
       wasm.TransactionMetadatum.new_text(
-        metadataJson[key as keyof typeof metadataJson]
-      )
+        metadataJson[key as keyof typeof metadataJson],
+      ),
     );
   }
 
@@ -110,19 +110,19 @@ export const generateLockAuxiliaryData = async (
   let i = 0;
   while (i < fromAddress.length) {
     fromAddressList.add(
-      wasm.TransactionMetadatum.new_text(fromAddress.substring(i, i + 64))
+      wasm.TransactionMetadatum.new_text(fromAddress.substring(i, i + 64)),
     );
     i += 64;
   }
 
   map.insert(
     wasm.TransactionMetadatum.new_text('fromAddress'),
-    wasm.TransactionMetadatum.new_list(fromAddressList)
+    wasm.TransactionMetadatum.new_list(fromAddressList),
   );
   const generalTxMetadata = wasm.GeneralTransactionMetadata.new();
   generalTxMetadata.insert(
     wasm.BigNum.from_str('0'),
-    wasm.TransactionMetadatum.new_map(map)
+    wasm.TransactionMetadatum.new_map(map),
   );
   const aux = wasm.AuxiliaryData.new();
   aux.set_metadata(generalTxMetadata);
@@ -137,7 +137,7 @@ export const generateLockAuxiliaryData = async (
  * @param serializedUtxo serialized hex string of TransactionUnspentOutput
  */
 export const walletUtxoToCardanoUtxo = (
-  serializedUtxo: string
+  serializedUtxo: string,
 ): CardanoUtxo => {
   const utxo = wasm.TransactionUnspentOutput.from_hex(serializedUtxo);
   const assets: Array<CardanoAsset> = [];
@@ -179,7 +179,7 @@ export const walletUtxoToCardanoUtxo = (
  */
 export const sumAssetBalance = (
   a: AssetBalance,
-  b: AssetBalance
+  b: AssetBalance,
 ): AssetBalance => {
   // sum native token
   const nativeToken = a.nativeToken + b.nativeToken;
@@ -232,7 +232,7 @@ export const subtractAssetBalance = (
   a: AssetBalance,
   b: AssetBalance,
   minimumNativeToken = 0n,
-  allowNegativeNativeToken = false
+  allowNegativeNativeToken = false,
 ): AssetBalance => {
   // sum native token
   let nativeToken = 0n;
@@ -241,7 +241,7 @@ export const subtractAssetBalance = (
   else if (allowNegativeNativeToken) nativeToken = 0n;
   else
     throw new Error(
-      `Cannot reduce native token: [${a.nativeToken.toString()}] is less than [${b.nativeToken.toString()} + ${minimumNativeToken.toString()}]`
+      `Cannot reduce native token: [${a.nativeToken.toString()}] is less than [${b.nativeToken.toString()} + ${minimumNativeToken.toString()}]`,
     );
 
   // reduce all `b` tokens
@@ -255,7 +255,7 @@ export const subtractAssetBalance = (
         throw new Error(
           `Cannot reduce token [${token.id}]: [${tokens[
             index
-          ].value.toString()}] is less than [${token.value.toString()}]`
+          ].value.toString()}] is less than [${token.value.toString()}]`,
         );
     } else
       throw new Error(`Cannot reduce token [${token.id}]: Token not found`);
@@ -276,7 +276,7 @@ export const subtractAssetBalance = (
 export const generateOutputBox = (
   balance: AssetBalance,
   address: string,
-  coinsPerUtxoByte: string
+  coinsPerUtxoByte: string,
 ): wasm.TransactionOutput => {
   const changeBoxBuilder = wasm.TransactionOutputBuilder.new()
     .with_address(wasm.Address.from_bech32(address))
@@ -290,7 +290,7 @@ export const generateOutputBox = (
     multiAsset.set_asset(
       policyId,
       assetName,
-      wasm.BigNum.from_str(token.value.toString())
+      wasm.BigNum.from_str(token.value.toString()),
     );
   });
 
@@ -299,16 +299,16 @@ export const generateOutputBox = (
         .with_value(
           wasm.Value.new_with_assets(
             wasm.BigNum.from_str(balance.nativeToken.toString()),
-            multiAsset
-          )
+            multiAsset,
+          ),
         )
         .build()
     : changeBoxBuilder
         .with_asset_and_min_required_coin_by_utxo_cost(
           multiAsset,
           wasm.DataCost.new_coins_per_byte(
-            wasm.BigNum.from_str(coinsPerUtxoByte)
-          )
+            wasm.BigNum.from_str(coinsPerUtxoByte),
+          ),
         )
         .build();
 };
@@ -321,19 +321,19 @@ export const generateOutputBox = (
  */
 export const setTxWitnessSet = async (
   transactionHex: string,
-  witnessSetHex: string
+  witnessSetHex: string,
 ): Promise<string> => {
   const witnessSet = wasm.TransactionWitnessSet.new();
   const tx = wasm.Transaction.from_hex(transactionHex);
   const vKeys = wasm.TransactionWitnessSet.from_bytes(
-    Buffer.from(witnessSetHex, 'hex')
+    Buffer.from(witnessSetHex, 'hex'),
   ).vkeys();
   if (vKeys) witnessSet.set_vkeys(vKeys);
 
   const signedTx = wasm.Transaction.new(
     tx.body(),
     witnessSet,
-    tx.auxiliary_data()
+    tx.auxiliary_data(),
   );
 
   return signedTx.to_hex();

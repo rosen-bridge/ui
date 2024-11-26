@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import useSWR from 'swr';
 
 import { Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-
-import ActionText from '../../ActionText';
+import useSWR from 'swr';
 
 import { ApiInfoResponse } from '@/_types/api';
+
+import { ActionText } from '../../ActionText';
 
 const LockText = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(

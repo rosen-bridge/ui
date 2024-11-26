@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import useSWR from 'swr';
 
 import {
   Grid,
@@ -9,12 +8,12 @@ import {
   HealthParamCardSkeleton,
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
+import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { HealthParamInfo } from '@rosen-ui/types';
+import useSWR from 'swr';
 
 import { ApiHealthStatusResponse } from '@/_types/api';
-
-import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 
 const Health = () => {
   const [checking, setChecking] = useState<string[]>([]);

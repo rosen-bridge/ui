@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 1.5.3
+
+### Patch Changes
+
+- Relocated the ApiKeyModal component for better organization
+
 ## 1.5.2
 
 ### Patch Changes

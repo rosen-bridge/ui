@@ -5,9 +5,7 @@ import {
 } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';
 
-import NotFoundError from '@/_errors/NotFoundError';
-
-import dataSource from '../dataSource';
+import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
@@ -41,7 +39,7 @@ export const getAsset = async (id: string) => {
   });
 
   if (!token) {
-    throw new NotFoundError(`Token with id [${id}] not found`);
+    throw new ReferenceError(`Token with id [${id}] not found`);
   }
 
   const bridged: Pick<

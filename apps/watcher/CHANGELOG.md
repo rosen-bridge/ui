@@ -1,5 +1,25 @@
 # @rosen-bridge/watcher-app
 
+## 3.0.0
+
+### Major Changes
+
+- Split layout.tsx into layout.tsx and App.tsx files, Implemented a dynamic title feature to display the network
+
+### Minor Changes
+
+- Implemented a dynamic title system that automatically displays the network's name
+- Add a meta tag title to ensure an appropriate title is displayed in browsers
+- Add a favicon to enhance browser visibility
+
+### Patch Changes
+
+- Update the modules to utilize named exports, enhancing maintainability and aligning with our policy to ensure greater consistency
+- Cleaned up duplicate ApiKeyModal files, moved to the design system, and updated the related imports
+- Updated dependencies
+  - @rosen-ui/swr-mock@0.0.2
+  - @rosen-bridge/ui-kit@1.5.3
+
 ## 2.6.0
 
 ### Minor Changes

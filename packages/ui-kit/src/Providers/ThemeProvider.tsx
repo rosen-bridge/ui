@@ -1,7 +1,8 @@
+import { createContext, useState } from 'react';
+
 import { Theme, useMediaQuery } from '@mui/material';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import { useLocalStorageManager } from '@rosen-ui/common-hooks';
-import { createContext, useState } from 'react';
 
 export const ThemeTogglerContext = createContext({
   mode: 'light',

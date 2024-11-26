@@ -1,10 +1,10 @@
-import moment from 'moment';
 import React, { useMemo } from 'react';
 import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
 import { getDecimalString, roundToPrecision } from '@rosen-ui/utils';
+import moment from 'moment';
 
 import { ApiRevenueChartResponse } from '@/_types/api';
 
@@ -63,7 +63,7 @@ interface RevenueChartProps {
  * @param period
  * @param data
  */
-const RevenueChart = ({ period, data }: RevenueChartProps) => {
+export const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const theme = useTheme();
 
   const reversedData = useMemo(
@@ -138,5 +138,3 @@ const RevenueChart = ({ period, data }: RevenueChartProps) => {
     />
   );
 };
-
-export default RevenueChart;

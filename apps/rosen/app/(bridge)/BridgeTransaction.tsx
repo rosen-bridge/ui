@@ -11,11 +11,13 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 
-import { useNetwork } from '@/_hooks/useNetwork';
-import { useTokenMap } from '@/_hooks/useTokenMap';
-import useTransactionFees from '@/_hooks/useTransactionFees';
-import useTransactionFormData from '@/_hooks/useTransactionFormData';
-import useWallet from '@/_hooks/useWallet';
+import {
+  useNetwork,
+  useTokenMap,
+  useTransactionFees,
+  useTransactionFormData,
+  useWallet,
+} from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
 import { ChooseWalletModal } from './ChooseWalletModal';

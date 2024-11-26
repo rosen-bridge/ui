@@ -6,6 +6,11 @@ import JSONBigInt from 'json-bigint';
  * @param url
  * @param params
  */
+/**
+ * TODO: remove the inline ESLint comment
+ * local:ergo/rosen-bridge/ui#441
+ */
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mutator = async (url: string, { arg }: { arg: any }) => {
   const response = await axios.post(url, arg, {
     transformRequest: (data) =>
@@ -38,7 +43,7 @@ export interface MutatorWithHeadersArgs<Data> {
 
 export const mutatorWithHeaders = async <Data>(
   url: string,
-  { arg }: { arg: MutatorWithHeadersArgs<Data> }
+  { arg }: { arg: MutatorWithHeadersArgs<Data> },
 ) => {
   const response = await axios.post(url, arg.data, {
     transformRequest: (data) =>

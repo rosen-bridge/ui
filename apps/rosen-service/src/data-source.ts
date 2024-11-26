@@ -20,7 +20,6 @@ import {
 } from '@rosen-ui/asset-calculator';
 
 import config from './configs';
-
 import AppError from './errors/AppError';
 
 const getDataSource = () => {
@@ -59,7 +58,7 @@ const getDataSource = () => {
           logging: config.postgres.logging,
           ssl: config.postgres.useSSL,
         },
-      }
+      },
     );
   }
 };

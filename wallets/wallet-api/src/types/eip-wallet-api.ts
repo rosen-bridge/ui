@@ -45,7 +45,7 @@ export interface EipWalletApi {
   get_utxos: (
     amount?: NErg,
     token_id?: TokenId,
-    paginate?: Paging
+    paginate?: Paging,
   ) => Promise<ErgoBoxProxy[] | undefined>;
 
   get_balance: (token_id: TokenId) => Promise<string>;

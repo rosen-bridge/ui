@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { CardanoCalculator } from '../../../lib/calculator/chains/cardano-calculator';
 import { tokenMap } from '../../test-data';
@@ -58,7 +58,7 @@ describe('CardanoCalculator', () => {
       const cardanoCalculator = new CardanoCalculator(
         new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
-        'authToken'
+        'authToken',
       );
       const totalBalance = await cardanoCalculator.totalBalance({
         policyId: 'policyId',
@@ -98,7 +98,7 @@ describe('CardanoCalculator', () => {
       const cardanoCalculator = new CardanoCalculator(
         new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
-        'authToken'
+        'authToken',
       );
       const totalBalance = await cardanoCalculator.totalSupply({
         policyId: 'policyId',

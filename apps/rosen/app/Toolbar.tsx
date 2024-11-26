@@ -18,15 +18,13 @@ const pageTitleMap: Record<string, string> = {
 /**
  * render toolbar containing page title and some actions
  */
-const Toolbar = () => {
+export const Toolbar = () => {
   const page = useSelectedLayoutSegment();
 
   return (
     <UiKitToolbar
-      title={page ? pageTitleMap[page] ?? '' : ''}
+      title={page ? (pageTitleMap[page] ?? '') : ''}
       toolbarActions={<ToolbarThemeTogglerAction />}
     />
   );
 };
-
-export default Toolbar;

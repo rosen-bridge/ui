@@ -1,9 +1,10 @@
-import * as wasm from 'ergo-lib-wasm-nodejs';
-import { minBoxValue } from './constants';
-import { AssetBalance, BoxInfo, CoveringBoxes, TokenInfo } from './types';
-import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { Network } from '@rosen-ui/types';
+import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
+import * as wasm from 'ergo-lib-wasm-nodejs';
+
+import { minBoxValue } from './constants';
+import { AssetBalance, BoxInfo, CoveringBoxes, TokenInfo } from './types';
 
 /**
  * gets Ergo current block height
@@ -11,7 +12,7 @@ import { Network } from '@rosen-ui/types';
  */
 export const getHeight = async (): Promise<number> => {
   const explorerClient = ergoExplorerClientFactory(
-    'https://api.ergoplatform.com'
+    'https://api.ergoplatform.com',
   );
   return Number((await explorerClient.v1.getApiV1Networkstate()).height);
 };
@@ -37,7 +38,7 @@ export const createLockBox = (
   toAddress: string,
   fromAddress: string,
   bridgeFee: bigint,
-  networkFee: bigint
+  networkFee: bigint,
 ): wasm.ErgoBoxCandidate => {
   /**
    * TODO: fix ergo native token id
@@ -47,7 +48,7 @@ export const createLockBox = (
   const lockBox = new wasm.ErgoBoxCandidateBuilder(
     wasm.BoxValue.from_i64(wasm.I64.from_str(boxErgValue.toString())),
     wasm.Contract.pay_to_address(wasm.Address.from_base58(lockAddress)),
-    height
+    height,
   );
 
   lockBox.set_register_value(
@@ -58,7 +59,7 @@ export const createLockBox = (
       Buffer.from(networkFee.toString()),
       Buffer.from(bridgeFee.toString()),
       Buffer.from(fromAddress.toString()),
-    ])
+    ]),
   );
 
   /**
@@ -68,7 +69,7 @@ export const createLockBox = (
   if (tokenId !== 'erg') {
     lockBox.add_token(
       wasm.TokenId.from_str(tokenId),
-      wasm.TokenAmount.from_i64(wasm.I64.from_str(amount.toString()))
+      wasm.TokenAmount.from_i64(wasm.I64.from_str(amount.toString())),
     );
   }
   return lockBox.build();
@@ -87,18 +88,18 @@ export const createLockBox = (
 export const createChangeBox = (
   changeAddress: string,
   height: number,
-  balance: AssetBalance
+  balance: AssetBalance,
 ): wasm.ErgoBoxCandidate => {
   const changeBox = new wasm.ErgoBoxCandidateBuilder(
     wasm.BoxValue.from_i64(wasm.I64.from_str(balance.nativeToken.toString())),
     wasm.Contract.pay_to_address(wasm.Address.from_base58(changeAddress)),
-    height
+    height,
   );
 
   balance.tokens.forEach((token) => {
     changeBox.add_token(
       wasm.TokenId.from_str(token.id),
-      wasm.TokenAmount.from_i64(wasm.I64.from_str(token.value.toString()))
+      wasm.TokenAmount.from_i64(wasm.I64.from_str(token.value.toString())),
     );
   });
   return changeBox.build();
@@ -140,18 +141,17 @@ export const getCoveringBoxes = async (
   requiredAssets: AssetBalance,
   forbiddenBoxIds: Array<string>,
   trackMap: Map<string, ErgoBoxProxy | undefined>,
-  boxIterator: Iterator<ErgoBoxProxy, undefined>
+  boxIterator: Iterator<ErgoBoxProxy, undefined>,
 ): Promise<CoveringBoxes> => {
   let uncoveredNativeToken = requiredAssets.nativeToken;
   const uncoveredTokens = requiredAssets.tokens.filter(
-    (info) => info.value > 0n
+    (info) => info.value > 0n,
   );
 
   const isRequirementRemaining = () => {
     return uncoveredTokens.length > 0 || uncoveredNativeToken > 0n;
   };
 
-  const offset = 0;
   const result: Array<ErgoBoxProxy> = [];
 
   // get boxes until requirements are satisfied
@@ -172,7 +172,6 @@ export const getCoveringBoxes = async (
         skipBox = true;
         break;
       }
-      const previousBoxId = boxInfo.id;
       boxInfo = getBoxInfo(trackedBox);
     }
 
@@ -185,7 +184,7 @@ export const getCoveringBoxes = async (
     let isUseful = false;
     boxInfo.assets.tokens.forEach((boxToken) => {
       const tokenIndex = uncoveredTokens.findIndex(
-        (requiredToken) => requiredToken.id === boxToken.id
+        (requiredToken) => requiredToken.id === boxToken.id,
       );
       if (tokenIndex !== -1) {
         isUseful = true;
@@ -221,7 +220,7 @@ export const getCoveringBoxes = async (
  */
 export const sumAssetBalance = (
   a: AssetBalance,
-  b: AssetBalance
+  b: AssetBalance,
 ): AssetBalance => {
   // sum native token
   const nativeToken = a.nativeToken + b.nativeToken;
@@ -256,7 +255,7 @@ export const subtractAssetBalance = (
   a: AssetBalance,
   b: AssetBalance,
   minimumNativeToken = 0n,
-  allowNegativeNativeToken = false
+  allowNegativeNativeToken = false,
 ): AssetBalance => {
   // sum native token
   let nativeToken = 0n;
@@ -265,7 +264,7 @@ export const subtractAssetBalance = (
   else if (allowNegativeNativeToken) nativeToken = 0n;
   else
     throw new Error(
-      `Cannot reduce native token: [${a.nativeToken.toString()}] is less than [${b.nativeToken.toString()} + ${minimumNativeToken.toString()}]`
+      `Cannot reduce native token: [${a.nativeToken.toString()}] is less than [${b.nativeToken.toString()} + ${minimumNativeToken.toString()}]`,
     );
 
   // reduce all `b` tokens
@@ -279,7 +278,7 @@ export const subtractAssetBalance = (
         throw new Error(
           `Cannot reduce token [${token.id}]: [${tokens[
             index
-          ].value.toString()}] is less than [${token.value.toString()}]`
+          ].value.toString()}] is less than [${token.value.toString()}]`,
         );
     } else
       throw new Error(`Cannot reduce token [${token.id}]: Token not found`);

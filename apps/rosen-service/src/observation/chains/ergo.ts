@@ -2,13 +2,10 @@ import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import { ErgoScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { getRosenTokens } from '../../utils';
-
 import config from '../../configs';
-
 import dataSource from '../../data-source';
-
 import AppError from '../../errors/AppError';
+import { getRosenTokens } from '../../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -22,7 +19,7 @@ export const registerErgoExtractor = (scanner: ErgoScanner) => {
       dataSource,
       getRosenTokens(),
       config.ergo.addresses.lock,
-      logger
+      logger,
     );
 
     scanner.registerExtractor(observationExtractor);
@@ -38,7 +35,7 @@ export const registerErgoExtractor = (scanner: ErgoScanner) => {
       error instanceof Error ? error.stack : undefined,
       {
         scannerName: scanner.name(),
-      }
+      },
     );
   }
 };

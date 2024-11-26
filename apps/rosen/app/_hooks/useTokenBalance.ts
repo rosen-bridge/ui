@@ -4,8 +4,8 @@ import { TokenInfo } from '@rosen-ui/types';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 
-import useBridgeForm from './useBridgeForm';
-import useWallet from './useWallet';
+import { useBridgeForm } from './useBridgeForm';
+import { useWallet } from './useWallet';
 
 interface UseTokenBalance {
   isLoading: boolean;
@@ -18,7 +18,7 @@ interface UseTokenBalance {
  * returns the amount of currently selected asset
  * @returns CONTAINS A WRAPPED-VALUE
  */
-const useTokenBalance = () => {
+export const useTokenBalance = () => {
   const [balanceState, setBalanceState] = useState<UseTokenBalance>({
     isLoading: false,
     amount: 0n,
@@ -65,5 +65,3 @@ const useTokenBalance = () => {
 
   return balanceState;
 };
-
-export default useTokenBalance;

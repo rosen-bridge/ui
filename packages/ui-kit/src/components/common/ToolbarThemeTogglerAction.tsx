@@ -1,4 +1,5 @@
 import { Moon, Sun } from '@rosen-bridge/icons';
+
 import { useIsDarkMode, useThemeToggler } from '../../hooks';
 import { IconButton, SvgIcon } from '../base';
 

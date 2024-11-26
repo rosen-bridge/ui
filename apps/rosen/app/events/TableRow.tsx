@@ -14,7 +14,7 @@ import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 import { upperFirst } from 'lodash-es';
 import moment from 'moment';
 
-import { Event } from '@/_types/api';
+import { Event } from '@/_types';
 
 interface RowProps extends Event {
   isLoading?: boolean;

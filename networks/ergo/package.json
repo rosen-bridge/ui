@@ -2,11 +2,12 @@
   "name": "@rosen-network/ergo",
   "version": "1.0.0",
   "private": true,
+  "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/src/index.js",
   "types": "dist/src/index.d.ts",
   "type": "module",
   "scripts": {
-    "prettify": "prettier --write . --ignore-path .gitignore",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
@@ -17,11 +18,6 @@
     "ergo-lib-wasm-nodejs": "^0.24.1"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^5.30.7",
-    "@typescript-eslint/parser": "^5.26.0",
-    "eslint": "^8.16.0",
-    "eslint-config-prettier": "^9.0.0",
-    "prettier": "^3.0.2",
     "typescript": "^5.0.0"
   }
 }

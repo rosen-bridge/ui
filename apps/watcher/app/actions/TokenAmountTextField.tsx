@@ -31,7 +31,7 @@ interface TokenAmountTextFieldProps {
  * @param loading
  * @param token
  */
-const TokenAmountTextField = ({
+export const TokenAmountTextField = ({
   disabled,
   loading,
   token,
@@ -124,5 +124,3 @@ const TokenAmountTextField = ({
     />
   );
 };
-
-export default TokenAmountTextField;

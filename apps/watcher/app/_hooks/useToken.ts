@@ -1,13 +1,12 @@
-import useSWR from 'swr';
-
 import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { ApiAddressAssetsResponse } from '@/_types/api';
 
 /**
  * fetch a token info (if present)
  */
-const useToken = (tokenId: string | undefined) => {
+export const useToken = (tokenId: string | undefined) => {
   const { data, isLoading } = useSWR<ApiAddressAssetsResponse>(
     tokenId
       ? [
@@ -25,5 +24,3 @@ const useToken = (tokenId: string | undefined) => {
     isLoading,
   };
 };
-
-export default useToken;

@@ -1,16 +1,14 @@
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
 
 import dataSource from '../data-source';
-
-import { handleError } from '../utils';
-
 import AppError from '../errors/AppError';
+import { handleError } from '../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
 process.on('SIGTERM', async () => {
   logger.debug(
-    'termination signal received, graceful shutdown process starting'
+    'termination signal received, graceful shutdown process starting',
   );
   await dataSource.destroy();
   logger.debug('data source destroyed');
@@ -26,7 +24,7 @@ process.on('uncaughtException', async (error) => {
           `an uncaught exception occurred, exiting immediately: ${error}`,
           false,
           'error',
-          error instanceof Error ? error.stack : undefined
+          error instanceof Error ? error.stack : undefined,
         );
 
   handleError(appError);

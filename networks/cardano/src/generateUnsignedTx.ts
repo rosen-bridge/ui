@@ -3,6 +3,9 @@ import {
   AssetBalance,
   selectCardanoUtxos,
 } from '@rosen-bridge/cardano-utxo-selection';
+import { TokenMap } from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 
 import { feeAndMinBoxValue } from './constants';
 import { ADA_POLICY_ID } from './types';
@@ -15,9 +18,6 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
-import { TokenMap } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * generates a lock transaction on Cardano
@@ -33,12 +33,12 @@ export const generateUnsignedTx =
     policyIdHex: string,
     assetNameHex: string,
     wrappedAmount: RosenAmountValue,
-    auxiliaryDataHex: string
+    auxiliaryDataHex: string,
   ): Promise<string> => {
     const unwrappedAmount = tokenMap.unwrapAmount(
       `${policyIdHex}.${assetNameHex}`,
       wrappedAmount,
-      NETWORKS.CARDANO
+      NETWORKS.CARDANO,
     ).amount;
 
     // converts hex address to bech32 address
@@ -48,7 +48,7 @@ export const generateUnsignedTx =
     // generate txBuilder
     const protocolParams = await getCardanoProtocolParams();
     const txBuilder = wasm.TransactionBuilder.new(
-      getTxBuilderConfig(protocolParams)
+      getTxBuilderConfig(protocolParams),
     );
 
     // generate lock box
@@ -69,7 +69,7 @@ export const generateUnsignedTx =
     const lockBox = generateOutputBox(
       lockAssets,
       lockAddress,
-      protocolParams.coins_per_utxo_size
+      protocolParams.coins_per_utxo_size,
     );
 
     // add lock box to tx and calculate required assets to get input boxes
@@ -85,7 +85,7 @@ export const generateUnsignedTx =
       requiredAssets,
       [],
       new Map(),
-      utxos.values()
+      utxos.values(),
     );
     if (!inputs.covered) throw Error(`Not enough assets`);
     let inputAssets: AssetBalance = {
@@ -99,9 +99,9 @@ export const generateUnsignedTx =
         wasm.Address.from_bech32(utxo.address),
         wasm.TransactionInput.new(
           wasm.TransactionHash.from_hex(utxo.txId),
-          utxo.index
+          utxo.index,
         ),
-        lockBox.amount()
+        lockBox.amount(),
       );
     });
 
@@ -114,7 +114,7 @@ export const generateUnsignedTx =
     const tempChangeBox = generateOutputBox(
       changeAssets,
       changeAddress,
-      protocolParams.coins_per_utxo_size
+      protocolParams.coins_per_utxo_size,
     );
     const fee = txBuilder
       .min_fee()
@@ -123,7 +123,7 @@ export const generateUnsignedTx =
     const changeBox = generateOutputBox(
       changeAssets,
       changeAddress,
-      protocolParams.coins_per_utxo_size
+      protocolParams.coins_per_utxo_size,
     );
     txBuilder.add_output(changeBox);
 

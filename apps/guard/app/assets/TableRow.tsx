@@ -1,5 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Button,
   EnhancedTableCell,
@@ -7,14 +8,11 @@ import {
   TableRow,
   WithExternalLink,
 } from '@rosen-bridge/ui-kit';
-
 import { NETWORKS } from '@rosen-ui/constants';
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-
 import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 
-import { GuardTokenInfo } from '@/_types/api';
 import { useAddresses } from '@/_hooks/useAddresses';
+import { GuardTokenInfo } from '@/_types/api';
 
 interface RowProps extends GuardTokenInfo {
   isLoading?: boolean;

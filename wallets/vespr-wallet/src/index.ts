@@ -1,5 +1,4 @@
 import { VesprIcon } from '@rosen-bridge/icons';
-
 import { WalletInfo, createRawWallet } from '@rosen-ui/wallet-api';
 
 import { connectWallet } from './connectWallet';
@@ -21,7 +20,7 @@ const getVesprWallet = () =>
       ...walletInfo,
       connectWallet,
     },
-    () => cardano.vespr
+    () => cardano.vespr,
   );
 
 export const isVesprAvailable = () =>

@@ -10,15 +10,15 @@ import {
  * wrap `UiKitToggleButton` to add some styling
  */
 const ToggleButtonBase = styled(UiKitToggleButton)(({ theme }) => ({
-  minWidth: 100,
-  borderWidth: 0,
-  borderBottomRightRadius: 0,
-  borderBottomLeftRadius: 0,
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(1),
-  color: 'white',
-  opacity: 0.8,
+  'minWidth': 100,
+  'borderWidth': 0,
+  'borderBottomRightRadius': 0,
+  'borderBottomLeftRadius': 0,
+  'display': 'flex',
+  'flexDirection': 'column',
+  'gap': theme.spacing(1),
+  'color': 'white',
+  'opacity': 0.8,
   '&:hover': {
     opacity: 1,
   },
@@ -43,7 +43,7 @@ interface CustomToggleButtonProps extends ToggleButtonProps {
  * @param label
  * @param icon
  */
-const ToggleButton = ({
+export const ToggleButton = ({
   label,
   icon,
   ...restProps
@@ -54,5 +54,3 @@ const ToggleButton = ({
     </ToggleButtonBase>
   );
 };
-
-export default ToggleButton;

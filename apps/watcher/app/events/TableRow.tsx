@@ -1,5 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Button,
   EnhancedTableCell,
@@ -8,8 +9,6 @@ import {
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
-
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 
 import { Event } from '@/_types/api';
 

@@ -7,16 +7,16 @@ import { Button, styled } from '@rosen-bridge/ui-kit';
  * render an action button containing some possible children
  */
 const HomeActionButtonBase = styled(Button)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  gap: theme.spacing(0.5),
-  color:
+  'display': 'flex',
+  'flexDirection': 'column',
+  'gap': theme.spacing(0.5),
+  'color':
     theme.palette.mode === 'light'
       ? theme.palette.primary.dark
       : theme.palette.text.primary,
-  opacity: 0.8,
-  fontSize: theme.typography.subtitle2.fontSize,
-  flexBasis: '20%',
+  'opacity': 0.8,
+  'fontSize': theme.typography.subtitle2.fontSize,
+  'flexBasis': '20%',
   '&:hover': {
     opacity: 1,
     backgroundColor: 'transparent',
@@ -48,7 +48,7 @@ interface HomeActionButtonProps {
  * @param action
  * @param disabled
  */
-const HomeActionButton = ({
+export const HomeActionButton = ({
   label,
   icon,
   action,
@@ -66,5 +66,3 @@ const HomeActionButton = ({
     </HomeActionButtonBase>
   );
 };
-
-export default HomeActionButton;

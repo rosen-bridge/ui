@@ -1,15 +1,14 @@
 import { EventHandler, FC, ReactNode, SyntheticEvent } from 'react';
-import { Badge, Button, SvgIcon } from '../base';
 
 import { useIsMobile } from '../../hooks';
 import { isLegacyTheme } from '../../hooks/useTheme';
-
 import { styled } from '../../styling';
+import { Badge, Button, SvgIcon } from '../base';
 
 const NavButtonBase = styled(Button)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  fontSize: theme.typography.subtitle2.fontSize,
+  'display': 'flex',
+  'flexDirection': 'column',
+  'fontSize': theme.typography.subtitle2.fontSize,
   ...(isLegacyTheme(theme)
     ? {
         gap: theme.spacing(0.5),
@@ -22,7 +21,7 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
         fontWeight: 700,
         lineHeight: 1,
       }),
-  opacity: 0.8,
+  'opacity': 0.8,
   '&:hover': {
     opacity: 1,
   },
@@ -36,7 +35,7 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
     fontSize: isLegacyTheme(theme) ? null : '24px',
   },
   '&.active': {
-    opacity: 1,
+    'opacity': 1,
     '& .MuiButton-startIcon': {
       color: isLegacyTheme(theme)
         ? theme.palette.info.dark
@@ -49,7 +48,7 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
     },
   },
   [theme.breakpoints.down('tablet')]: {
-    color:
+    'color':
       theme.palette.mode === 'light'
         ? theme.palette.primary.dark
         : theme.palette.common.white,

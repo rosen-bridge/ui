@@ -1,12 +1,11 @@
-import { TokenMap } from '@rosen-bridge/tokens';
 import { Network } from '@rosen-ui/types';
 
-import { getRosenTokens } from '@/_backend/utils';
+import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
 import { getEvents } from './repository';
 
-const tokenMap = new TokenMap(getRosenTokens());
+const tokenMap = getTokenMap();
 
 /**
  * get full token data associated with a tokenId and a chain

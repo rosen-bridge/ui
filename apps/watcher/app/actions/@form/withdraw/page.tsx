@@ -7,9 +7,9 @@ import {
   useController,
   useForm,
 } from 'react-hook-form';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
+import { Alert } from '@rosen-bridge/icons';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -24,26 +24,25 @@ import {
   TextField,
   Button,
 } from '@rosen-bridge/ui-kit';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
-import { Alert } from '@rosen-bridge/icons';
-
-import ConfirmationModal from '../../ConfirmationModal';
-import TokenAmountTextField, {
-  TokenAmountCompatibleFormSchema,
-} from '../../TokenAmountTextField';
-
-import useToken from '@/_hooks/useToken';
-import { useApiKey } from '@rosen-bridge/shared-contexts';
-
+import { useToken } from '@/_hooks/useToken';
 import {
   ApiAddressAssetsResponse,
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/_types/api';
-import ApiKeyModal from '@/_modals/ApiKeyModal';
+
+import { ConfirmationModal } from '../../ConfirmationModal';
+import {
+  TokenAmountTextField,
+  TokenAmountCompatibleFormSchema,
+} from '../../TokenAmountTextField';
 
 interface Form extends TokenAmountCompatibleFormSchema {
   address: string;

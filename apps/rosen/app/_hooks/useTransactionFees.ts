@@ -5,7 +5,7 @@ import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
-import { calculateFee } from '@/_actions/calculateFee';
+import { calculateFee } from '@/_actions';
 import { unwrap } from '@/_safeServerAction';
 
 import { useNetwork } from './useNetwork';
@@ -15,7 +15,7 @@ import { useTokenMap } from './useTokenMap';
  * calculates the fees for a token swap between
  * two networks
  */
-const useTransactionFees = (
+export const useTransactionFees = (
   sourceChain: Network | null,
   targetChain: Network | null,
   token: RosenChainToken | null,
@@ -167,5 +167,3 @@ const useTransactionFees = (
 
   return transactionFees;
 };
-
-export default useTransactionFees;

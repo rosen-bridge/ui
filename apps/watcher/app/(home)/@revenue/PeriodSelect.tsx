@@ -15,7 +15,7 @@ interface PeriodSelectProps {
  * @param period
  * @param setPeriod
  */
-const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
+export const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
   const [anchorElement, setAnchorElement] = useState<HTMLButtonElement | null>(
     null,
   );
@@ -84,5 +84,3 @@ const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
     </Box>
   );
 };
-
-export default PeriodSelect;

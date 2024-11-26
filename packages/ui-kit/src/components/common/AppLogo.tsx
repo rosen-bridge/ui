@@ -1,8 +1,7 @@
 import { FC } from 'react';
 
-import { styled } from '../../styling';
-
 import { useIsDarkMode } from '../../hooks';
+import { styled } from '../../styling';
 
 const Image = styled('img')(({ theme }) => ({
   width: 64,

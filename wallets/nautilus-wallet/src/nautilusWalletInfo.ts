@@ -1,5 +1,5 @@
-import { WalletInfo } from '@rosen-ui/wallet-api';
 import { NautilusIcon } from '@rosen-bridge/icons';
+import { WalletInfo } from '@rosen-ui/wallet-api';
 
 export const nautilusWalletInfo: WalletInfo = {
   icon: NautilusIcon,

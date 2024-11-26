@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 
-import App from './App';
+import { App } from './App';
 
 export const metadata: Metadata = {
   title: 'Rosen Bridge',

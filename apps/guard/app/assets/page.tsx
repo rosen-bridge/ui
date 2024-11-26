@@ -1,4 +1,5 @@
 'use client';
+
 import { MouseEvent, useCallback, useMemo } from 'react';
 
 import {
@@ -8,10 +9,10 @@ import {
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
-import TableSkeleton from './TableSkeleton';
-
 import { ApiAddressAssetsResponse, GuardTokenInfo } from '@/_types/api';
+
+import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
+import { TableSkeleton } from './TableSkeleton';
 
 const getKey = (offset: number, limit: number) => {
   return ['/assets', { offset, limit }];
