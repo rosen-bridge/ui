@@ -38,6 +38,10 @@ const Main = styled('main')(({ theme }) => ({
   borderTopLeftRadius: theme.shape.borderRadius * 2,
   borderBottomLeftRadius: theme.shape.borderRadius * 2,
   padding: theme.spacing(4),
+  backgroundImage: `url(./background-${theme.palette.mode}.png)`,
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center center',
+  backgroundSize: 'cover',
 }));
 
 interface AppProps {
