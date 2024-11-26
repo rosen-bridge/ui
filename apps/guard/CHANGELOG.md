@@ -1,5 +1,18 @@
 # @rosen-bridge/guard-app
 
+## 1.8.0
+
+### Minor Changes
+
+- Add a meta tag title to ensure an appropriate title is displayed in browsers
+- Add a favicon to enhance browser visibility
+
+### Patch Changes
+
+- Restructure modules to use named exports, enhancing clarity and consistency
+- Cleaned up duplicate ApiKeyModal files, moved to the design system, and updated the related imports
+- Updated the @rosen-bridge/ui-kit@1.5.3 dependency
+
 ## 1.7.0
 
 ### Minor Changes
