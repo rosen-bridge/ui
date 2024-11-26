@@ -11,7 +11,18 @@ import { BridgeForm } from './BridgeForm';
 import { BridgeTransaction } from './BridgeTransaction';
 import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
 
+const Background = styled('div')(({ theme }) => ({
+  position: 'absolute',
+  inset: 0,
+  backgroundImage: `url(./background-${theme.palette.mode}.png)`,
+  backgroundRepeat: 'no-repeat',
+  backgroundPosition: 'center center',
+  backgroundSize: 'cover',
+  zIndex: '0',
+}));
+
 const BridgeContainer = styled('div')(({ theme }) => ({
+  'zIndex': '3',
   'position': 'absolute',
   'top': '50%',
   'left': '50%',
@@ -55,32 +66,35 @@ const RosenBridge = () => {
   });
 
   return (
-    <FormProvider {...methods}>
-      <BridgeContainer>
-        <BridgeForm />
-        <BridgeTransaction
-          chooseWalletsModalOpen={chooseWalletsModalOpen}
-          setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-        />
-        {methods.getValues().source == NETWORKS.ETHEREUM && (
-          <Alert
-            severity="warning"
-            sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
-          >
-            If you are using Ledger, you may need to enable &apos;Blind
-            signing&apos; and &apos;Debug data&apos; in the Ledger (Ethereum
-            &gt; Settings) due to{' '}
-            <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
-              a known issue in Ledger and MetaMask interaction
-            </a>
-            .
-          </Alert>
-        )}
-        <ConnectOrSubmitButton
-          setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-        />
-      </BridgeContainer>
-    </FormProvider>
+    <>
+      <Background />
+      <FormProvider {...methods}>
+        <BridgeContainer>
+          <BridgeForm />
+          <BridgeTransaction
+            chooseWalletsModalOpen={chooseWalletsModalOpen}
+            setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+          />
+          {methods.getValues().source == NETWORKS.ETHEREUM && (
+            <Alert
+              severity="warning"
+              sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
+            >
+              If you are using Ledger, you may need to enable &apos;Blind
+              signing&apos; and &apos;Debug data&apos; in the Ledger (Ethereum
+              &gt; Settings) due to{' '}
+              <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
+                a known issue in Ledger and MetaMask interaction
+              </a>
+              .
+            </Alert>
+          )}
+          <ConnectOrSubmitButton
+            setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+          />
+        </BridgeContainer>
+      </FormProvider>
+    </>
   );
 };
 
