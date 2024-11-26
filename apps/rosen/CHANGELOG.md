@@ -1,5 +1,17 @@
 # @rosen-bridge/rosen-app
 
+## 2.5.0
+
+### Minor Changes
+
+- Enhance the Rosen Bridge page by incorporating a captivating background image
+
+### Patch Changes
+
+- Refactor default exports to named exports in JavaScript modules for enhanced code clarity and maintainability
+- Improve maintainability by incorporating an index file in each directory to streamline the export of all controlled values
+- Enhance the Rosen app's source code by reorganizing, relocating, and renaming certain files and methods
+
 ## 2.4.0
 
 ### Minor Changes
