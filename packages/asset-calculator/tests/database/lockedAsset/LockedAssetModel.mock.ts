@@ -1,8 +1,8 @@
 import { DataSource, Repository } from 'typeorm';
 
+import { TokenEntity, LockedAssetEntity } from '../../../lib';
 import { BridgedAssetEntity } from '../../../lib/database/bridgedAsset/BridgedAssetEntity';
 import migrations from '../../../lib/database/migrations';
-import { TokenEntity, LockedAssetEntity } from '../../../lib';
 import { tokens } from '../test-data';
 
 let dataSource: DataSource;

@@ -13,7 +13,7 @@ export const transferCreator =
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,
-    lockAddress: string
+    lockAddress: string,
   ): Promise<string> => {
     const wallet = await getEternlWallet().getApi().enable();
     const policyIdHex = token.policyId;
@@ -25,7 +25,7 @@ export const transferCreator =
       toAddress,
       changeAddressHex,
       networkFee.toString(),
-      bridgeFee.toString()
+      bridgeFee.toString(),
     );
 
     const walletUtxos = await wallet.getUtxos();
@@ -37,12 +37,12 @@ export const transferCreator =
       policyIdHex,
       assetNameHex,
       amount,
-      auxiliaryDataHex
+      auxiliaryDataHex,
     );
 
     const signedTxHex = await config.setTxWitnessSet(
       unsignedTxHex,
-      await wallet.signTx(unsignedTxHex, false)
+      await wallet.signTx(unsignedTxHex, false),
     );
 
     const result = await wallet.submitTx(signedTxHex);

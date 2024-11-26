@@ -4,7 +4,7 @@ class AppError extends Error {
     public canBeHandled = true,
     public severity: 'error' | 'warn' | 'info' | 'debug',
     public stack = '',
-    public context?: any
+    public context?: any,
   ) {
     super(message);
     if (stack) {

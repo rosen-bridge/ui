@@ -1,9 +1,8 @@
 'use client';
 
-import { Snackbar, Alert } from '../base';
-
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
+import { Snackbar, Alert } from '../base';
 
 /**
  * global snackbar component that connects to snackbar context and shows and

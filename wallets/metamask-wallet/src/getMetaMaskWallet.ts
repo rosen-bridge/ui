@@ -21,6 +21,6 @@ export const getMetaMaskWallet = () => {
       ...metaMaskWalletInfo,
       connectWallet,
     },
-    () => metaMaskSDK
+    () => metaMaskSDK,
   );
 };

@@ -18,7 +18,7 @@
   "license": "GPL-3.0",
   "author": "Rosen Team",
   "scripts": {
-    "prettify": "prettier --write . --ignore-path .gitignore",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
     "type-check": "tsc"

@@ -1,4 +1,5 @@
 import { useReducer, createContext } from 'react';
+
 import { SnackbarOrigin } from '@mui/material';
 
 export type Severity = 'error' | 'warning' | 'info' | 'success';

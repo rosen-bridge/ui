@@ -1,5 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Button,
   EnhancedTableCell,
@@ -7,13 +8,10 @@ import {
   Link,
   Id,
 } from '@rosen-bridge/ui-kit';
-
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-
+import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { HistoryEvent } from '@/_types/api';
-import { NETWORKS } from '@rosen-ui/constants';
 
 interface RowProps extends HistoryEvent {
   isLoading?: boolean;

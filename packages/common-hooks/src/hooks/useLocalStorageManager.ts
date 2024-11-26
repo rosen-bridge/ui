@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+
 import JSONBigInt from '@rosen-bridge/json-bigint';
 
 /**
@@ -25,7 +26,7 @@ export const useLocalStorageManager = () => {
       get,
       remove,
     }),
-    [set, get, remove]
+    [set, get, remove],
   );
 
   return localStorageManager;

@@ -20,7 +20,7 @@ class LockedAssetModel {
   upsertAsset = async (asset: LockedAssetEntity) => {
     await this.lockedAssetRepository.save(asset);
     this.logger.debug(
-      `Asset [${JsonBigInt.stringify(asset)}] upserted in database`
+      `Asset [${JsonBigInt.stringify(asset)}] upserted in database`,
     );
   };
 
@@ -45,12 +45,12 @@ class LockedAssetModel {
         this.lockedAssetRepository.delete({
           tokenId: asset.tokenId,
           address: asset.address,
-        })
-      )
+        }),
+      ),
     );
     assets.length &&
       this.logger.debug(
-        `Deleted assets ${JsonBigInt.stringify(assets)} from database`
+        `Deleted assets ${JsonBigInt.stringify(assets)} from database`,
       );
   };
 }

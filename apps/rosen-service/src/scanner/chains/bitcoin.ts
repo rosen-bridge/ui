@@ -1,25 +1,20 @@
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import dataSource from '../../data-source';
-
-import { startScanner } from '../scanner-utils';
-
-import observationService from '../../observation/observation-service';
-
 import config from '../../configs';
-
 import {
   BITCOIN_SCANNER_INTERVAL,
   BITCOIN_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
 } from '../../constants';
-
+import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
+import observationService from '../../observation/observation-service';
+import { startScanner } from '../scanner-utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
-  BITCOIN_SCANNER_LOGGER_NAME
+  BITCOIN_SCANNER_LOGGER_NAME,
 );
 
 /**
@@ -37,7 +32,7 @@ export const startBitcoinScanner = async () => {
         username: config.bitcoin.rpcUsername,
         password: config.bitcoin.rpcPassword,
       },
-      scannerLogger
+      scannerLogger,
     );
 
     observationService.registerBitcoinExtractor(scanner);
@@ -52,7 +47,7 @@ export const startBitcoinScanner = async () => {
       `cannot create or start bitcoin scanner due to error: ${error}`,
       false,
       'error',
-      error instanceof Error ? error.stack : undefined
+      error instanceof Error ? error.stack : undefined,
     );
   }
 };

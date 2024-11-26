@@ -1,4 +1,5 @@
 import type { RosenChainToken } from '@rosen-bridge/tokens';
+
 import { Address, AssetName } from '../types';
 
 /**

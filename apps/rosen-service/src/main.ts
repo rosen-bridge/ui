@@ -1,15 +1,11 @@
-import './bootstrap';
-
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import scannerService from './scanner/scanner-service';
-
-import dataSource from './data-source';
-
-import { handleError } from './utils';
-
-import AppError from './errors/AppError';
+import './bootstrap';
 import calculatorService from './calculator/calculator-service';
+import dataSource from './data-source';
+import AppError from './errors/AppError';
+import scannerService from './scanner/scanner-service';
+import { handleError } from './utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -23,7 +19,7 @@ const main = async () => {
         `cannot initialize data source due to error: ${error}`,
         false,
         'error',
-        error instanceof Error ? error.stack : undefined
+        error instanceof Error ? error.stack : undefined,
       );
     }
 
@@ -35,7 +31,7 @@ const main = async () => {
         `cannot run database migrations due to error: ${error}`,
         false,
         'error',
-        error instanceof Error ? error.stack : undefined
+        error instanceof Error ? error.stack : undefined,
       );
     }
 

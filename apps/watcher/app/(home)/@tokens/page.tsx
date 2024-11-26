@@ -1,9 +1,8 @@
 'use client';
 
-import useSWR from 'swr';
-
 import { TokensCard } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { ApiAddressAssetsResponse } from '@/_types/api';
 

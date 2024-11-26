@@ -2,6 +2,7 @@ import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { Id } from '..';
+import { useTheme } from '../../../hooks';
 import {
   Box,
   ListItem,
@@ -10,7 +11,6 @@ import {
   Typography,
 } from '../../base';
 import { TokenListItemAvatar } from './TokenListItemAvatar';
-import { useTheme } from '../../../hooks';
 
 export interface TokenListItemProps {
   decimals: number;

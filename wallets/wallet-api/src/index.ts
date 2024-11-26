@@ -2,7 +2,7 @@ import { RawWallet, WalletBase } from './types';
 
 export const createRawWallet = <T>(
   wallet: WalletBase,
-  getApi: () => T
+  getApi: () => T,
 ): RawWallet<T> => {
   return {
     ...wallet,

@@ -216,7 +216,7 @@ const create = (baseTheme: Theme) =>
           },
           body: {
             [baseTheme.breakpoints.down('tablet')]: {
-              verticalAlign: 'top',
+              'verticalAlign': 'top',
               '&:not(.MuiTableCell-paddingNone)': {
                 padding: baseTheme.spacing(1),
               },

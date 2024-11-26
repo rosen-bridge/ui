@@ -1,25 +1,20 @@
 import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import dataSource from '../../data-source';
-
-import { startScanner } from '../scanner-utils';
-
-import observationService from '../../observation/observation-service';
-
 import config from '../../configs';
-
 import {
   CARDANO_SCANNER_INTERVAL,
   CARDANO_SCANNER_LOGGER_NAME,
   SCANNER_API_TIMEOUT,
 } from '../../constants';
-
+import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
+import observationService from '../../observation/observation-service';
+import { startScanner } from '../scanner-utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
-  CARDANO_SCANNER_LOGGER_NAME
+  CARDANO_SCANNER_LOGGER_NAME,
 );
 
 /**
@@ -36,7 +31,7 @@ export const startCardanoScanner = async () => {
         timeout: SCANNER_API_TIMEOUT,
       },
       scannerLogger,
-      config.cardano.koiosAuthToken
+      config.cardano.koiosAuthToken,
     );
 
     observationService.registerCardanoExtractor(scanner);
@@ -51,7 +46,7 @@ export const startCardanoScanner = async () => {
       `cannot create or start cardano scanner due to error: ${error}`,
       false,
       'error',
-      error instanceof Error ? error.stack : undefined
+      error instanceof Error ? error.stack : undefined,
     );
   }
 };

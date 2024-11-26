@@ -1,4 +1,7 @@
 import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
+import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
 
 import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
@@ -9,9 +12,6 @@ import {
   getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 /**
  * generates bitcoin lock tx
@@ -25,12 +25,12 @@ export const generateUnsignedTx =
     fromAddress: string,
     wrappedAmount: RosenAmountValue,
     opReturnData: string,
-    token: RosenChainToken
+    token: RosenChainToken,
   ): Promise<UnsignedPsbtData> => {
     const unwrappedAmount = tokenMap.unwrapAmount(
       token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
       wrappedAmount,
-      NETWORKS.BITCOIN
+      NETWORKS.BITCOIN,
     ).amount;
 
     // generate txBuilder
@@ -70,13 +70,13 @@ export const generateUnsignedTx =
       minSatoshi,
       SEGWIT_INPUT_WEIGHT_UNIT,
       estimatedTxWeight,
-      feeRatio
+      feeRatio,
     );
     if (!coveredBoxes.covered) {
       throw new Error(
         `Available boxes didn't cover required assets. BTC: ${
           unwrappedAmount + minSatoshi
-        }`
+        }`,
       );
     }
 
@@ -101,13 +101,13 @@ export const generateUnsignedTx =
     estimatedTxWeight = estimateTxWeight(
       psbt.txInputs.length,
       2,
-      opReturnData.length
+      opReturnData.length,
     );
     const estimatedFee = BigInt(
       Math.ceil(
         (estimatedTxWeight / 4) * // estimate tx weight and convert to virtual size
-          feeRatio
-      )
+          feeRatio,
+      ),
     );
     remainingBtc -= estimatedFee;
     psbt.addOutput({

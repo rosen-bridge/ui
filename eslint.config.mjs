@@ -1,10 +1,10 @@
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
-import globals from 'globals';
 import pluginJs from '@eslint/js';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
 import prettier from 'eslint-config-prettier';
-import reactRefresh from 'eslint-plugin-react-refresh';
 import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import globals from 'globals';
 
 export default [
   {

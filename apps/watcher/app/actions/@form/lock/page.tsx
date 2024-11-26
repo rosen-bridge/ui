@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
+import { Alert } from '@rosen-bridge/icons';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -15,32 +15,30 @@ import {
   SubmitButton,
   Typography,
 } from '@rosen-bridge/ui-kit';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
 import {
   getNonDecimalString,
   getDecimalString,
   getTxURL,
 } from '@rosen-ui/utils';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+
+import { useRsnToken } from '@/_hooks/useRsnToken';
+import { useToken } from '@/_hooks/useToken';
+import {
+  ApiPermitRequestBody,
+  ApiPermitResponse,
+  ApiInfoResponse,
+} from '@/_types/api';
 
 import { ConfirmationModal } from '../../ConfirmationModal';
 import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-
-import { Alert } from '@rosen-bridge/icons';
-
-import { useApiKey } from '@rosen-bridge/shared-contexts';
-import { useRsnToken } from '@/_hooks/useRsnToken';
-import { useToken } from '@/_hooks/useToken';
-
-import {
-  ApiPermitRequestBody,
-  ApiPermitResponse,
-  ApiInfoResponse,
-} from '@/_types/api';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();

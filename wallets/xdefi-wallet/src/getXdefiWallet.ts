@@ -17,6 +17,6 @@ export const getXdefiWallet = () => {
     () => ({
       getAddress,
       signTransaction,
-    })
+    }),
   );
 };

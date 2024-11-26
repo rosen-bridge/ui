@@ -2,9 +2,9 @@
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import useSWR from 'swr';
-import useSWRMutation from 'swr/mutation';
 
+import { Alert } from '@rosen-bridge/icons';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -14,27 +14,25 @@ import {
   SubmitButton,
   Button,
 } from '@rosen-bridge/ui-kit';
+import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
 
-import { Alert } from '@rosen-bridge/icons';
+import { useRsnToken } from '@/_hooks/useRsnToken';
+import {
+  ApiInfoResponse,
+  ApiPermitReturnRequestBody,
+  ApiPermitReturnResponse,
+} from '@/_types/api';
 
 import { ConfirmationModal } from '../../ConfirmationModal';
 import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-
-import { useApiKey } from '@rosen-bridge/shared-contexts';
-import { useRsnToken } from '@/_hooks/useRsnToken';
-
-import {
-  ApiInfoResponse,
-  ApiPermitReturnRequestBody,
-  ApiPermitReturnResponse,
-} from '@/_types/api';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 
 const UnlockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(

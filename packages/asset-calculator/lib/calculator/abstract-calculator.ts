@@ -1,5 +1,5 @@
-import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { Network } from '@rosen-ui/types';
 
 export default abstract class AbstractCalculator {
@@ -8,7 +8,7 @@ export default abstract class AbstractCalculator {
   constructor(
     protected readonly addresses: string[],
     protected readonly logger: AbstractLogger = new DummyLogger(),
-    protected tokenMap: TokenMap
+    protected tokenMap: TokenMap,
   ) {}
 
   get idKey() {
@@ -24,7 +24,7 @@ export default abstract class AbstractCalculator {
     return this.tokenMap.wrapAmount(
       token[this.idKey],
       await this.totalRawSupply(token),
-      this.chain
+      this.chain,
     ).amount;
   };
 
@@ -37,7 +37,7 @@ export default abstract class AbstractCalculator {
     return this.tokenMap.wrapAmount(
       token[this.idKey],
       await this.totalRawBalance(token),
-      this.chain
+      this.chain,
     ).amount;
   };
 
@@ -45,11 +45,11 @@ export default abstract class AbstractCalculator {
    * returns locked amounts of a specific token for different addresses
    */
   abstract getRawLockedAmountsPerAddress: (
-    token: RosenChainToken
+    token: RosenChainToken,
   ) => Promise<{ address: string; amount: bigint }[]>;
 
   getLockedAmountsPerAddress = async (
-    token: RosenChainToken
+    token: RosenChainToken,
   ): Promise<{ address: string; amount: bigint }[]> => {
     const amounts = await this.getRawLockedAmountsPerAddress(token);
     return amounts.map((amount) => ({
@@ -57,7 +57,7 @@ export default abstract class AbstractCalculator {
       amount: this.tokenMap.wrapAmount(
         token[this.idKey],
         amount.amount,
-        this.chain
+        this.chain,
       ).amount,
     }));
   };

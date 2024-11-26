@@ -1,9 +1,8 @@
 import { ReactNode } from 'react';
 
-import { Typography, Stack, Grid } from '../base';
-
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { styled } from '../../styling';
+import { Typography, Stack, Grid } from '../base';
 
 /**
  * adds basic styling to the component and hides the actions

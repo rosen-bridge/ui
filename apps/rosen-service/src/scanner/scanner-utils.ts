@@ -1,9 +1,8 @@
 import { GeneralScanner } from '@rosen-bridge/scanner';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
-import { handleError, runAndSetInterval } from '../utils';
-
 import AppError from '../errors/AppError';
+import { handleError, runAndSetInterval } from '../utils';
 
 /**
  * run scanner update periodically, handling probably errors
@@ -14,7 +13,7 @@ import AppError from '../errors/AppError';
 export const startScanner = (
   scanner: GeneralScanner<any>,
   loggerFileName: string,
-  updateInterval: number
+  updateInterval: number,
 ) => {
   const logger = WinstonLogger.getInstance().getLogger(loggerFileName);
 
@@ -32,7 +31,7 @@ export const startScanner = (
         error instanceof Error ? error.stack : undefined,
         {
           scannerName: scanner.name(),
-        }
+        },
       );
       handleError(appError);
     }

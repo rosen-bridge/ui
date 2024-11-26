@@ -1,8 +1,7 @@
+import WinstonLogger from '@rosen-bridge/winston-logger';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-
-import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import AppError from './errors/AppError';
 
@@ -14,14 +13,14 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 export const getRosenTokens = () => {
   const tokensMapFilePath = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
-    '../config/tokensMap.json'
+    '../config/tokensMap.json',
   );
 
   if (fs.existsSync(tokensMapFilePath)) {
     const tokensMap = JSON.parse(
       fs.readFileSync(tokensMapFilePath, {
         encoding: 'utf-8',
-      })
+      }),
     );
     return tokensMap;
   }
@@ -31,13 +30,13 @@ export const getRosenTokens = () => {
 
 export const handleError = (
   error: unknown,
-  customHandler?: (error: AppError) => void
+  customHandler?: (error: AppError) => void,
 ) => {
   if (!(error instanceof AppError) || !error.canBeHandled) {
     logger.error('an error occurred that cannot be handled');
     logger.error(
       `${error}`,
-      error instanceof AppError ? error.context : undefined
+      error instanceof AppError ? error.context : undefined,
     );
     logger.error('shutting down service');
     process.exit(1);
@@ -56,7 +55,7 @@ export const handleError = (
  */
 export const runAndSetInterval = async (
   job: () => unknown,
-  interval: number
+  interval: number,
 ) => {
   await job();
 

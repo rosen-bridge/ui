@@ -1,6 +1,7 @@
 import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
 import { Times } from '@rosen-bridge/icons';
+
 import { Alert, AlertProps, Collapse, IconButton, SvgIcon } from '../base';
 
 export interface AlertCardProps {

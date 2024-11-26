@@ -1,9 +1,8 @@
 import { Breakpoint } from '@mui/material';
 
+import type { ResponsiveValueOptionsBase } from '../@types';
 import { useMediaQuery } from './useMediaQuery';
 import { useTheme } from './useTheme';
-
-import type { ResponsiveValueOptionsBase } from '../@types';
 
 type UseResponsiveValueOptions<
   T,

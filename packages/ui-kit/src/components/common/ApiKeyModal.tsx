@@ -1,9 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
 
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
-import { useForm, Controller } from 'react-hook-form';
+import { useApiKey } from '@rosen-bridge/shared-contexts';
 import { useModalManager } from '@rosen-ui/common-hooks';
 
+import { useSnackbar } from '../../hooks';
 import {
   Button,
   Dialog,
@@ -17,9 +19,6 @@ import {
   TextField,
   Typography,
 } from '../base';
-
-import { useApiKey } from '@rosen-bridge/shared-contexts';
-import { useSnackbar } from '../../hooks';
 
 interface FormValues {
   apiKey: string;

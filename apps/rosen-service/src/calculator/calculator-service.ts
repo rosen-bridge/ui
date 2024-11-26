@@ -1,11 +1,11 @@
-import { AssetCalculator } from '@rosen-ui/asset-calculator';
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
+import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
-import dataSource from '../data-source';
 import config from '../configs';
 import { ASSET_CALCULATOR_INTERVAL } from '../constants';
-import { getRosenTokens, handleError, runAndSetInterval } from '../utils';
+import dataSource from '../data-source';
 import AppError from '../errors/AppError';
+import { getRosenTokens, handleError, runAndSetInterval } from '../utils';
 
 /**
  * run asset calculator update periodically, handling probable errors
@@ -14,7 +14,7 @@ import AppError from '../errors/AppError';
  */
 const startUpdateJob = (
   calculator: AssetCalculator,
-  updateInterval: number
+  updateInterval: number,
 ) => {
   const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -27,7 +27,7 @@ const startUpdateJob = (
         `asset calculator update failed due to error: ${error}`,
         true,
         'warn',
-        error instanceof Error ? error.stack : undefined
+        error instanceof Error ? error.stack : undefined,
       );
       handleError(appError);
     }
@@ -66,7 +66,7 @@ const start = async () => {
       authToken: config.ethereum.rpcAuthToken,
     },
     dataSource,
-    logger
+    logger,
   );
 
   startUpdateJob(assetCalculator, ASSET_CALCULATOR_INTERVAL);

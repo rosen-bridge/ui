@@ -1,8 +1,9 @@
-import { RosenAmountValue } from '@rosen-ui/types';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { ETH, transferABI } from './constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 import { Contract } from 'ethers';
+
+import { ETH, transferABI } from './constants';
 
 /**
  * generates ethereum lock tx
@@ -17,12 +18,12 @@ export const generateTxParameters =
     fromAddress: string,
     wrappedAmount: RosenAmountValue,
     rosenData: string,
-    token: RosenChainToken
+    token: RosenChainToken,
   ) => {
     const unwrappedAmount = tokenMap.unwrapAmount(
       token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
       wrappedAmount,
-      NETWORKS.ETHEREUM
+      NETWORKS.ETHEREUM,
     ).amount;
 
     let transactionParameters;

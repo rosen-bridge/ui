@@ -1,4 +1,5 @@
 import { ReactNode, FC } from 'react';
+
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
@@ -35,7 +36,7 @@ export interface Wallet extends WalletBase {
     address: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,
-    lockAddress: string
+    lockAddress: string,
   ) => Promise<string>;
   readonly getAddress: () => Promise<string>;
   readonly isAvailable: () => boolean;

@@ -1,17 +1,15 @@
+import { ErgoNetworkType } from '@rosen-bridge/abstract-extractor';
 import { ErgoScanner } from '@rosen-bridge/scanner';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import WinstonLogger from '@rosen-bridge/winston-logger';
-import { ErgoNetworkType } from '@rosen-bridge/abstract-extractor';
 
 import configs from '../configs';
-
 import dataSource from '../data-source';
-
 import AppError from '../errors/AppError';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const ergoEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
-  'ergo-event-trigger-extractor'
+  'ergo-event-trigger-extractor',
 );
 const cardanoEventTriggerExtractorLogger =
   WinstonLogger.getInstance().getLogger('cardano-event-trigger-extractor');
@@ -35,7 +33,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.ergo.tokens.rwt,
       configs.ergo.addresses.permit,
       configs.ergo.addresses.fraud,
-      ergoEventTriggerExtractorLogger
+      ergoEventTriggerExtractorLogger,
     );
     const cardanoEventTriggerExtractor = new EventTriggerExtractor(
       'cardano-extractor',
@@ -46,7 +44,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.cardano.tokens.rwt,
       configs.cardano.addresses.permit,
       configs.cardano.addresses.fraud,
-      cardanoEventTriggerExtractorLogger
+      cardanoEventTriggerExtractorLogger,
     );
     const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
       'bitcoin-extractor',
@@ -57,7 +55,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.bitcoin.tokens.rwt,
       configs.bitcoin.addresses.permit,
       configs.bitcoin.addresses.fraud,
-      bitcoinEventTriggerExtractorLogger
+      bitcoinEventTriggerExtractorLogger,
     );
     const ethereumEventTriggerExtractor = new EventTriggerExtractor(
       'ethereum-extractor',
@@ -68,7 +66,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.ethereum.tokens.rwt,
       configs.ethereum.addresses.permit,
       configs.ethereum.addresses.fraud,
-      ethereumEventTriggerExtractorLogger
+      ethereumEventTriggerExtractorLogger,
     );
 
     scanner.registerExtractor(ergoEventTriggerExtractor);
@@ -93,7 +91,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       error instanceof Error ? error.stack : undefined,
       {
         scannerName: scanner.name(),
-      }
+      },
     );
   }
 };

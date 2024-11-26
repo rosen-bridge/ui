@@ -17,7 +17,7 @@ import { trimEnd } from 'lodash-es';
 export const getDecimalString = (
   value: string,
   decimals: number,
-  truncateLength?: number
+  truncateLength?: number,
 ) => {
   if (!decimals) return value;
 
@@ -30,7 +30,7 @@ export const getDecimalString = (
 
   return preciseResult.replace(
     /\.(.*)/,
-    (_, floatingPart: string) => `.${floatingPart.slice(0, truncateLength)}`
+    (_, floatingPart: string) => `.${floatingPart.slice(0, truncateLength)}`,
   );
 };
 
@@ -59,7 +59,7 @@ export const getNonDecimalString = (value: string, decimals: number) => {
 
   return `${value.slice(0, decimalPointIndex)}${value.slice(
     decimalPointIndex + 1,
-    decimalPointIndex + 1 + decimals
+    decimalPointIndex + 1 + decimals,
   )}${
     fractionalPartLength <= decimals
       ? '0'.repeat(decimals - fractionalPartLength)
@@ -101,13 +101,13 @@ export const getNumberOfDecimals = (inputNumber: number) => {
  */
 export const validateDecimalPlaces = (
   inputNumber: number,
-  allowedDecimals: number
+  allowedDecimals: number,
 ) => {
   const currentDecimals = getNumberOfDecimals(inputNumber);
 
   if (currentDecimals > allowedDecimals) {
     throw new Error(
-      `Invalid input: The value has ${currentDecimals} decimal places, but only ${allowedDecimals} are allowed. Please enter a value with ${allowedDecimals} decimal places.`
+      `Invalid input: The value has ${currentDecimals} decimal places, but only ${allowedDecimals} are allowed. Please enter a value with ${allowedDecimals} decimal places.`,
     );
   }
 };

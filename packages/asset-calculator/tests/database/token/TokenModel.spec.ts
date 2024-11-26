@@ -1,13 +1,13 @@
 import { beforeEach, describe, it } from '@vitest/runner';
 import { expect } from 'vitest';
 
+import { TokenModel } from '../../../lib/database/token/TokenModel';
+import { tokens } from '../test-data';
 import {
   allTokenRecords,
   initDatabase,
   insertTokenRecords,
 } from './TokenModel.mock';
-import { tokens } from '../test-data';
-import { TokenModel } from '../../../lib/database/token/TokenModel';
 
 describe('TokenModel', () => {
   let tokenModel: TokenModel;

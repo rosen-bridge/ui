@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
 import { TokenMap } from '@rosen-bridge/tokens';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { ErgoCalculator } from '../../../lib/calculator/chains/ergo-calculator';
 import { tokenMap } from '../../test-data';
@@ -38,7 +38,7 @@ describe('ErgoCalculator', () => {
       const ergoCalculator = new ErgoCalculator(
         new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
-        'explorerUrl'
+        'explorerUrl',
       );
       const totalBalance = await ergoCalculator.totalBalance({
         tokenId: 'tokenId',
@@ -76,13 +76,13 @@ describe('ErgoCalculator', () => {
       const ergoCalculator = new ErgoCalculator(
         new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
-        'explorerUrl'
+        'explorerUrl',
       );
 
       expect(() =>
         ergoCalculator.totalBalance({
           tokenId: 'tokenId',
-        } as any)
+        } as any),
       ).not.toThrow();
       const totalBalance = await ergoCalculator.totalBalance({
         tokenId: 'tokenId',
@@ -120,7 +120,7 @@ describe('ErgoCalculator', () => {
       const ergoCalculator = new ErgoCalculator(
         new TokenMap(tokenMap),
         ['hotAddress', 'coldAddress'],
-        'explorerUrl'
+        'explorerUrl',
       );
       const totalBalance = await ergoCalculator.totalSupply({
         tokenId: 'tokenId',

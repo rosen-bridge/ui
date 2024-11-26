@@ -12,7 +12,7 @@ export type RawUnsignedTx = HexString;
 export interface CipWalletApi {
   getUtxos(
     amount?: EncodedAmount,
-    paginate?: Paging
+    paginate?: Paging,
   ): Promise<EncodedTxOut[] | undefined>;
   getCollateral(params?: {
     amount?: EncodedAmount;

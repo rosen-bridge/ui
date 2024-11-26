@@ -1,6 +1,5 @@
-import { Avatar } from '../../base';
-
 import { useIsDarkMode } from '../../../hooks';
+import { Avatar } from '../../base';
 
 export interface TokenListItemAvatarProps {
   name: string;

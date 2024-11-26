@@ -1,9 +1,9 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/ethereum';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { getMetaMaskWallet } from './getMetaMaskWallet';
-import { NETWORKS } from '@rosen-ui/constants';
 
 export const transferCreator =
   (config: WalletCreatorConfig) =>
@@ -14,7 +14,7 @@ export const transferCreator =
     toAddress: string,
     bridgeFee: RosenAmountValue,
     networkFee: RosenAmountValue,
-    lockAddress: string
+    lockAddress: string,
   ): Promise<string> => {
     const provider = getMetaMaskWallet().getApi().getProvider();
 
@@ -33,7 +33,7 @@ export const transferCreator =
       toChain,
       toAddress,
       networkFee.toString(),
-      bridgeFee.toString()
+      bridgeFee.toString(),
     );
 
     const tokenMap = await config.getTokenMap();
@@ -45,7 +45,7 @@ export const transferCreator =
       accounts[0],
       amount,
       rosenData,
-      token
+      token,
     );
     const result = await provider.request<string>({
       method: 'eth_sendTransaction',
