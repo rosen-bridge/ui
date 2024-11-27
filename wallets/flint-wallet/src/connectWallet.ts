@@ -3,7 +3,7 @@
  */
 
 export const connectWallet = async () => {
-  const granted = await cardano.flint?.enable();
+  const granted = await window.cardano.flint?.enable();
 
   if (!granted) {
     console.error('Failed to connect!');

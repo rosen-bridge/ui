@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React from 'react';
 
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { styled } from '../../styling';
@@ -22,7 +22,7 @@ export interface ToolbarProps {
   title: string;
   description?: string;
   isCentered?: boolean;
-  toolbarActions?: ReactNode;
+  toolbarActions?: React.ReactNode;
 }
 
 /**

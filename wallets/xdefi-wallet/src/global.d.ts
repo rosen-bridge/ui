@@ -1,5 +1,7 @@
 declare global {
-  declare let xfi: { bitcoin: unknown };
+  interface Window {
+    xfi: { bitcoin: unknown };
+  }
 }
 
 export {};

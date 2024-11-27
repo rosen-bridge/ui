@@ -2,14 +2,14 @@
  * handles the nautilus wallet connection
  */
 export const connectWallet = async () => {
-  if (!ergoConnector?.nautilus) {
+  if (!window.ergoConnector?.nautilus) {
     throw new Error('EXTENSION_NOT_FOUND');
   }
 
-  if (!ergoConnector.nautilus?.getContext) {
+  if (!window.ergoConnector.nautilus?.getContext) {
     return 'Wallet API has changed. Be sure to update your wallet to continue using it';
   }
 
-  const nautilus = ergoConnector.nautilus;
+  const nautilus = window.ergoConnector.nautilus;
   return await nautilus.connect({ createErgoObject: false });
 };

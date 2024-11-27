@@ -1,3 +1,3 @@
 export const isXdefiAvailable = (): boolean => {
-  return typeof xfi !== 'undefined' && !!xfi?.bitcoin;
+  return typeof window.xfi !== 'undefined' && !!window.xfi.bitcoin;
 };

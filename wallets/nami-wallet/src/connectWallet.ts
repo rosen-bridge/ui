@@ -3,7 +3,7 @@
  */
 
 export const connectWallet = async () => {
-  const granted = await cardano.nami?.enable();
+  const granted = await window.cardano.nami?.enable();
 
   if (!granted) {
     console.error('Failed to connect!');

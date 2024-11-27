@@ -3,7 +3,7 @@
  */
 
 export const connectWallet = async () => {
-  const granted = await cardano.lace?.enable();
+  const granted = await window.cardano.lace?.enable();
 
   if (!granted) {
     console.error('Failed to connect!');

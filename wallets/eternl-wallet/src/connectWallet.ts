@@ -3,7 +3,7 @@
  */
 
 export const connectWallet = async (): Promise<boolean> => {
-  const granted = await cardano.eternl?.enable();
+  const granted = await window.cardano.eternl?.enable();
 
   if (!granted) {
     console.error('Failed to connect!');
