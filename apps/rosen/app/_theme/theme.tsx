@@ -282,7 +282,7 @@ const create = (baseTheme: Theme) =>
               backgroundColor: alpha(baseTheme.palette.background.paper, 1.0),
             },
             '&::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
-              '-webkit-appearance': 'none',
+              WebkitAppearance: 'none',
             },
           },
           input: {
@@ -353,9 +353,9 @@ const create = (baseTheme: Theme) =>
         fontWeight: 'bold',
         ...(baseTheme.palette.mode === 'light'
           ? {
-              'background': 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
-              '-webkit-background-clip': 'text',
-              '-webkit-text-fill-color': 'transparent',
+              background: 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
             }
           : {
               color: baseTheme.palette.secondary.light,

@@ -50,12 +50,16 @@ const Events = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Event) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: Event) => (
+      <MobileRow key={rowData.id} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Event) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: Event) => (
+      <TabletRow key={rowData.id} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
@@ -78,7 +82,7 @@ const Events = () => {
   const paginationProps = useMemo<TablePaginationProps>(
     () => ({
       component: 'div',
-      count: data?.total ?? 0,
+      count: Number(data?.total ?? 0),
       rowsPerPage: pageSize,
       page: pageIndex,
       onPageChange: handleChangePage,

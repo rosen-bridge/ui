@@ -94,7 +94,11 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     <TableHead>
       <TableRow>
         {tableHead.map((headItem) => (
-          <TableCell {...(headItem.cellProps ? headItem.cellProps : {})}>
+          <TableCell
+            key={headItem.title}
+            variant="head"
+            {...(headItem.cellProps ? headItem.cellProps : {})}
+          >
             {headItem.title}
           </TableCell>
         ))}
@@ -126,14 +130,16 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const renderFooter = () =>
     paginated ? (
       <TableFooter>
-        <TableCell colSpan={tableHead.length} padding="none">
-          <Box py={1}>
-            <TablePagination
-              rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}
-              {...props.tablePaginationProps}
-            />
-          </Box>
-        </TableCell>
+        <TableRow>
+          <TableCell variant="footer" colSpan={tableHead.length} padding="none">
+            <Box py={1}>
+              <TablePagination
+                rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}
+                {...props.tablePaginationProps}
+              />
+            </Box>
+          </TableCell>
+        </TableRow>
       </TableFooter>
     ) : null;
 
