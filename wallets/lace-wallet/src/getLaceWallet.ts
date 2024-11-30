@@ -13,6 +13,6 @@ export const getLaceWallet = () => {
       ...laceWalletInfo,
       connectWallet,
     },
-    () => cardano.lace,
+    () => window.cardano.lace,
   );
 };

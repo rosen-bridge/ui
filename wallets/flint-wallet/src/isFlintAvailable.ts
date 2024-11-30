@@ -1,3 +1,3 @@
 export const isFlintAvailable = (): boolean => {
-  return typeof cardano !== 'undefined' && !!cardano?.flint;
+  return typeof window.cardano !== 'undefined' && !!window.cardano?.flint;
 };

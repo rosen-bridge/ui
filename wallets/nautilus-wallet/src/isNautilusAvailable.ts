@@ -1,3 +1,6 @@
 export const isNautilusAvailable = (): boolean => {
-  return typeof ergoConnector !== 'undefined' && !!ergoConnector.nautilus;
+  return (
+    typeof window.ergoConnector !== 'undefined' &&
+    !!window.ergoConnector.nautilus
+  );
 };

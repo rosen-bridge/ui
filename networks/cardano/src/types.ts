@@ -40,5 +40,7 @@ export interface ConnectorAPI {
  * global type augmentation for wallets
  */
 declare global {
-  let cardano: { [key: string]: ConnectorAPI };
+  interface Window {
+    cardano: { [key: string]: ConnectorAPI };
+  }
 }

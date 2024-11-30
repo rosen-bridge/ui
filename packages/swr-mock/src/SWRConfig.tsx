@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { SWRConfig as SWRConfigBase } from 'swr';
 
 import { mockMiddlewareFactory } from './mockMiddlewareFactory';

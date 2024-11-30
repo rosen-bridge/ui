@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { styled } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
@@ -11,7 +13,7 @@ const IconContainer = styled('div')(({ theme }) => ({
 }));
 
 export type EnhancedDialogTitleProps = {
-  icon?: JSX.Element;
+  icon?: React.ReactNode;
   onClose?: React.MouseEventHandler<HTMLButtonElement>;
 } & DialogTitleProps;
 

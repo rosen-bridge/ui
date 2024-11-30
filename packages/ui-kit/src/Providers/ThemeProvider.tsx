@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 import { Theme, useMediaQuery } from '@mui/material';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
@@ -6,12 +6,11 @@ import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
 export const ThemeTogglerContext = createContext({
   mode: 'light',
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   toggle: () => {},
 });
 
 export interface ThemeProviderProps {
-  children: JSX.Element;
+  children: React.ReactNode;
   theme:
     | Theme
     | {

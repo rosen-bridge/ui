@@ -1,3 +1,3 @@
 export const isEternlAvailable = (): boolean => {
-  return typeof cardano !== 'undefined' && !!cardano?.eternl;
+  return typeof window.cardano !== 'undefined' && !!window.cardano?.eternl;
 };
