@@ -14,6 +14,14 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
      */
     <html lang="en">
       <body>
+        <div>VERCEL_BRANCH_URL: {process.env.VERCEL_BRANCH_URL}</div>
+        <div>
+          NEXT_PUBLIC_ROOT_DOMAIN: {process.env.NEXT_PUBLIC_ROOT_DOMAIN}
+        </div>
+        <div>
+          NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX:
+          {process.env.NEXT_PUBLIC_VERCEL_DEPLOYMENT_SUFFIX}
+        </div>
         <App>{children}</App>
       </body>
     </html>
