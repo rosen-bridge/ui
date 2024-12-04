@@ -1,3 +1,4 @@
+export { ReactComponent as CtrlIcon } from './ctrl.svg';
 export { ReactComponent as NamiIcon } from './nami.svg';
 export { ReactComponent as FlintIcon } from './flint.svg';
 export { ReactComponent as EternlIcon } from './eternl.svg';

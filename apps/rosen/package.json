@@ -34,6 +34,7 @@
     "@rosen-network/ergo": "^1.0.0",
     "@rosen-ui/asset-calculator": "^2.0.0",
     "@rosen-ui/common-hooks": "^0.1.0",
+    "@rosen-ui/ctrl-wallet": "^1.0.2",
     "@rosen-ui/eternl-wallet": "^1.0.1",
     "@rosen-ui/flint-wallet": "^1.0.1",
     "@rosen-ui/lace-wallet": "^1.0.1",

@@ -24,3 +24,4 @@ npm run build --workspace wallets/flint-wallet
 npm run build --workspace wallets/vespr-wallet
 npm run build --workspace wallets/nautilus-wallet
 npm run build --workspace wallets/xdefi-wallet
+npm run build --workspace wallets/ctrl-wallet
