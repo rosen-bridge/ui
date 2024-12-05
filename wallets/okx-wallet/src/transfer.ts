@@ -1,5 +1,5 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { Encoding, WalletCreatorConfig } from '@rosen-network/bitcoin';
+import { WalletCreatorConfig } from '@rosen-network/bitcoin';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 export const transferCreator =
@@ -42,6 +42,6 @@ export const transferCreator =
         ),
       },
     );
-    const txId = await config.submitTransaction(signedPsbtHex, Encoding.hex);
+    const txId = await config.submitTransaction(signedPsbtHex, 'hex');
     return txId;
   };

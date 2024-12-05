@@ -10,7 +10,6 @@ import {
   SEGWIT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
 import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
-import { Encoding } from './types';
 
 /**
  * generates metadata for lock transaction
@@ -136,13 +135,13 @@ export const estimateTxWeight = (
  */
 export const submitTransaction = async (
   serializedPsbt: string,
-  encoding: Encoding,
+  encoding: 'base64' | 'hex',
 ): Promise<string> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const POST_TX = `${esploraUrl}/api/tx`;
 
   const psbt =
-    encoding === Encoding.base64
+    encoding === 'base64'
       ? Psbt.fromBase64(serializedPsbt)
       : Psbt.fromHex(serializedPsbt);
   psbt.finalizeAllInputs();

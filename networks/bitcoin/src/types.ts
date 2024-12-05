@@ -70,11 +70,6 @@ export interface UnsignedPsbtData {
   inputSize: number;
 }
 
-export enum Encoding {
-  base64 = 'base64',
-  hex = 'hex',
-}
-
 export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
 
 export type WalletCreatorConfig = {

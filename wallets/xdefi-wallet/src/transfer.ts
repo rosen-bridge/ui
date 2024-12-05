@@ -1,6 +1,5 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
-  Encoding,
   SigHash,
   WalletCreatorConfig,
 } from '@rosen-network/bitcoin/dist/src/types';
@@ -82,7 +81,7 @@ export const transferCreator =
           onFinish: (response) => {
             const signedPsbtBase64 = response.psbtBase64;
             config
-              .submitTransaction(signedPsbtBase64, Encoding.base64)
+              .submitTransaction(signedPsbtBase64, 'base64')
               .then((result) => resolve(result))
               .catch((e) => reject(e));
           },
