@@ -1,3 +1,3 @@
 export const isOKXAvailable = (): boolean => {
-  return true;
+  return typeof (window as any).okxwallet !== 'undefined';
 };

@@ -2,5 +2,7 @@
  * global type augmentation for the wallet
  */
 declare global {
-  interface Window {}
+  interface Window {
+    okxwallet: any;
+  }
 }
