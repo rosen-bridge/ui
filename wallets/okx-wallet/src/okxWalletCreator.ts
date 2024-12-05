@@ -1,5 +1,6 @@
 import { WalletCreator } from '@rosen-network/bitcoin';
 
+import { getAddressCreator } from './getAddressCreator';
 import { getBalanceCreator } from './getBalance';
 import { getOKXWallet } from './getOKXWallet';
 import { isOKXAvailable } from './isOKXAvailable';
@@ -10,8 +11,6 @@ export const okxWalletCreator: WalletCreator = (config) => {
     isAvailable: isOKXAvailable,
     getBalance: getBalanceCreator(config),
     transfer: transferCreator(config),
-    getAddress: async () => {
-      throw new Error('Not implemented');
-    },
+    getAddress: getAddressCreator(),
   });
 };

@@ -5,5 +5,6 @@ import { getOKXWallet } from './getOKXWallet';
  */
 
 export const connectWallet = async (): Promise<boolean> => {
-  return false;
+  await window.okxwallet.bitcoin.connect();
+  return true;
 };

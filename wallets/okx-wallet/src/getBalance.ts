@@ -10,5 +10,15 @@ import { getOKXWallet } from './getOKXWallet';
 export const getBalanceCreator =
   (config: WalletCreatorConfig) =>
   async (token: RosenChainToken): Promise<RosenAmountValue> => {
-    return 0n;
+    let res = await window.okxwallet.bitcoin.getBalance();
+    return await new Promise((resolve, reject) => {
+      config.getTokenMap().then((tokenMap) => {
+        const amount = tokenMap.wrapAmount(
+          token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+          BigInt(res.confirmed),
+          NETWORKS.BITCOIN,
+        ).amount;
+        resolve(amount);
+      });
+    });
   };

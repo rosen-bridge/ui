@@ -16,5 +16,40 @@ export const transferCreator =
     networkFee: RosenAmountValue,
     lockAddress: string,
   ): Promise<string> => {
-    return '';
+    const userAddress = (await window.okxwallet.bitcoin.getAccounts())[0];
+
+    const opReturnData = await config.generateOpReturnData(
+      toChain,
+      toAddress,
+      networkFee.toString(),
+      bridgeFee.toString(),
+    );
+
+    const psbtData = await config.generateUnsignedTx(
+      lockAddress,
+      userAddress,
+      amount,
+      opReturnData,
+      token,
+    );
+
+    let result = await window.okxwallet.bitcoin.signPsbt(psbtData.psbt, {
+      autoFinalized: true,
+      toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
+        (index) => ({
+          address: userAddress,
+          index: index,
+        }),
+      ),
+    });
+
+    console.log(result);
+
+    let txid = await window.okxwallet.bitcoin.pushTx(result);
+
+    // config
+    //   .submitTransaction(result)
+    //   .then((result) => resolve(result))
+    //   .catch((e) => reject(e));
+    return txid;
   };

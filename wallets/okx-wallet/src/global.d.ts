@@ -6,3 +6,5 @@ declare global {
     okxwallet: any;
   }
 }
+
+export {};
