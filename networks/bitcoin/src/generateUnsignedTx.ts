@@ -116,7 +116,10 @@ export const generateUnsignedTx =
     });
 
     return {
-      psbt: psbt.toBase64(),
+      psbt: {
+        base64: psbt.toBase64(),
+        hex: psbt.toHex()
+      },
       inputSize: psbt.inputCount,
     };
   };
