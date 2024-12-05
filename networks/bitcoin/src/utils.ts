@@ -9,7 +9,8 @@ import {
   SEGWIT_INPUT_WEIGHT_UNIT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
-import { BitcoinUtxo, Encoding, EsploraAddress, EsploraUtxo } from './types';
+import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
+import { Encoding } from './types';
 
 /**
  * generates metadata for lock transaction
@@ -135,12 +136,15 @@ export const estimateTxWeight = (
  */
 export const submitTransaction = async (
   serializedPsbt: string,
-  encoding: Encoding
+  encoding: Encoding,
 ): Promise<string> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const POST_TX = `${esploraUrl}/api/tx`;
 
-  const psbt = (encoding === Encoding.base64) ? Psbt.fromBase64(serializedPsbt) : Psbt.fromHex(serializedPsbt);
+  const psbt =
+    encoding === Encoding.base64
+      ? Psbt.fromBase64(serializedPsbt)
+      : Psbt.fromHex(serializedPsbt);
   psbt.finalizeAllInputs();
   const res = await Axios.post<string>(
     POST_TX,

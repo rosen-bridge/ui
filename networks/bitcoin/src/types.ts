@@ -64,15 +64,15 @@ export enum SigHash {
 
 export interface UnsignedPsbtData {
   psbt: {
-    base64: string,
-    hex: string
+    base64: string;
+    hex: string;
   };
   inputSize: number;
 }
 
 export enum Encoding {
   base64 = 'base64',
-  hex = 'hex'
+  hex = 'hex',
 }
 
 export type WalletCreator = (config: WalletCreatorConfig) => Wallet;

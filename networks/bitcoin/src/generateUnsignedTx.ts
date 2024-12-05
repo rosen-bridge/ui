@@ -118,7 +118,7 @@ export const generateUnsignedTx =
     return {
       psbt: {
         base64: psbt.toBase64(),
-        hex: psbt.toHex()
+        hex: psbt.toHex(),
       },
       inputSize: psbt.inputCount,
     };

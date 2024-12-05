@@ -30,15 +30,18 @@ export const transferCreator =
       token,
     );
 
-    const signedPsbtHex = await window.okxwallet.bitcoin.signPsbt(psbtData.psbt.hex, {
-      autoFinalized: false,
-      toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-        (index) => ({
-          address: userAddress,
-          index: index,
-        }),
-      ),
-    });
+    const signedPsbtHex = await window.okxwallet.bitcoin.signPsbt(
+      psbtData.psbt.hex,
+      {
+        autoFinalized: false,
+        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
+          (index) => ({
+            address: userAddress,
+            index: index,
+          }),
+        ),
+      },
+    );
     const txId = await config.submitTransaction(signedPsbtHex, Encoding.hex);
     return txId;
   };
