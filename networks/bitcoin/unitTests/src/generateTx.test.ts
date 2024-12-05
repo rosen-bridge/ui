@@ -61,7 +61,7 @@ describe('generateUnsignedTx', () => {
       {} as any,
     );
 
-    const psbt = Psbt.fromBase64(result.psbt);
+    const psbt = Psbt.fromBase64(result.psbt.base64);
     expect(result.inputSize).toEqual(psbt.inputCount);
 
     expect(psbt.inputCount).toEqual(1);
@@ -129,7 +129,7 @@ describe('generateUnsignedTx', () => {
       token,
     );
 
-    const psbt = Psbt.fromBase64(result.psbt);
+    const psbt = Psbt.fromBase64(result.psbt.base64);
     expect(result.inputSize).toEqual(psbt.inputCount);
 
     expect(psbt.inputCount).toEqual(1);

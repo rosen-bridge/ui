@@ -1,5 +1,5 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/bitcoin';
+import { Encoding, WalletCreatorConfig } from '@rosen-network/bitcoin';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 export const transferCreator =
@@ -30,15 +30,18 @@ export const transferCreator =
       token,
     );
 
-    const result = await window.okxwallet.bitcoin.signPsbt(psbtData.psbt, {
-      autoFinalized: false,
-      toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-        (index) => ({
-          address: userAddress,
-          index: index,
-        }),
-      ),
-    });
-    const txId = await config.submitTransaction(result);
+    const signedPsbtHex = await window.okxwallet.bitcoin.signPsbt(
+      psbtData.psbt.hex,
+      {
+        autoFinalized: false,
+        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
+          (index) => ({
+            address: userAddress,
+            index: index,
+          }),
+        ),
+      },
+    );
+    const txId = await config.submitTransaction(signedPsbtHex, Encoding.hex);
     return txId;
   };
