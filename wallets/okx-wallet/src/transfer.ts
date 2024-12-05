@@ -2,6 +2,8 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/bitcoin';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
+import { getAddressCreator } from './getAddressCreator';
+
 export const transferCreator =
   (config: WalletCreatorConfig) =>
   async (
@@ -13,7 +15,7 @@ export const transferCreator =
     networkFee: RosenAmountValue,
     lockAddress: string,
   ): Promise<string> => {
-    const userAddress = (await window.okxwallet.bitcoin.getAccounts())[0];
+    const userAddress = await getAddressCreator()();
 
     const opReturnData = await config.generateOpReturnData(
       toChain,
@@ -42,6 +44,8 @@ export const transferCreator =
         ),
       },
     );
+
     const txId = await config.submitTransaction(signedPsbtHex, 'hex');
+
     return txId;
   };

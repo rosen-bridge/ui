@@ -1,9 +1,9 @@
-import { Alert } from '@rosen-bridge/icons';
+import { OKXIcon } from '@rosen-bridge/icons';
 import { WalletInfo } from '@rosen-ui/wallet-api';
 
 export const okxWalletInfo: WalletInfo = {
-  icon: Alert,
+  icon: OKXIcon,
   name: 'OKX',
   label: 'OKX',
-  link: 'https://okx.io/',
+  link: 'https://www.okx.com/',
 };
