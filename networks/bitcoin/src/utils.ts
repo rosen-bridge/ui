@@ -76,9 +76,7 @@ export const getAddressUtxos = async (
 export const getAddressBalance = async (address: string): Promise<bigint> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const GET_ADDRESS = `${esploraUrl}/api/address/${address}`;
-  console.log(`get address url: ${GET_ADDRESS}`);
   const res = await Axios.get<EsploraAddress>(GET_ADDRESS);
-  console.log(`res: ${JSON.stringify(res.data)}`);
 
   const chainStat = res.data.chain_stats;
   return BigInt(chainStat.funded_txo_sum - chainStat.spent_txo_sum);
