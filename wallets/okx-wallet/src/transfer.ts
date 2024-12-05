@@ -1,9 +1,6 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { WalletCreatorConfig } from '@rosen-network/bitcoin';
-import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
-
-import { getOKXWallet } from './getOKXWallet';
 
 export const transferCreator =
   (config: WalletCreatorConfig) =>
@@ -33,8 +30,8 @@ export const transferCreator =
       token,
     );
 
-    let result = await window.okxwallet.bitcoin.signPsbt(psbtData.psbt, {
-      autoFinalized: true,
+    const result = await window.okxwallet.bitcoin.signPsbt(psbtData.psbt, {
+      autoFinalized: false,
       toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
         (index) => ({
           address: userAddress,
@@ -42,14 +39,6 @@ export const transferCreator =
         }),
       ),
     });
-
-    console.log(result);
-
-    let txid = await window.okxwallet.bitcoin.pushTx(result);
-
-    // config
-    //   .submitTransaction(result)
-    //   .then((result) => resolve(result))
-    //   .catch((e) => reject(e));
-    return txid;
+    const txId = await config.submitTransaction(result);
+    return txId;
   };
