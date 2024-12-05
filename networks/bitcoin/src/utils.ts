@@ -9,7 +9,8 @@ import {
   SEGWIT_INPUT_WEIGHT_UNIT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
-import { BitcoinUtxo, Encoding, EsploraAddress, EsploraUtxo } from './types';
+import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
+import { Encoding } from './types';
 
 /**
  * generates metadata for lock transaction
