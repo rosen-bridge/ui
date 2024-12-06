@@ -68,7 +68,7 @@ export const transferCreator =
               type: BitcoinNetworkType.Mainnet,
             },
             message: 'Sign Transaction',
-            psbtBase64: psbtData.psbt,
+            psbtBase64: psbtData.psbt.base64,
             broadcast: false,
             inputsToSign: [
               {
@@ -81,7 +81,7 @@ export const transferCreator =
           onFinish: (response) => {
             const signedPsbtBase64 = response.psbtBase64;
             config
-              .submitTransaction(signedPsbtBase64)
+              .submitTransaction(signedPsbtBase64, 'base64')
               .then((result) => resolve(result))
               .catch((e) => reject(e));
           },
