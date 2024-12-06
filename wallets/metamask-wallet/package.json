@@ -20,6 +20,7 @@
     "@rosen-bridge/icons": "^0.6.0",
     "@rosen-bridge/tokens": "^1.2.1",
     "@rosen-network/ethereum": "^0.1.1",
+    "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/utils": "^0.4.1",
     "@rosen-ui/wallet-api": "^1.0.3"
   }
