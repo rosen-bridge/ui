@@ -1,7 +1,7 @@
 {
   "name": "@rosen-bridge/shared-contexts",
   "description": "shared contexts Rosen projects",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "private": true,
   "files": [

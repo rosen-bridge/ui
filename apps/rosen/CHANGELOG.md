@@ -1,5 +1,26 @@
 # @rosen-bridge/rosen-app
 
+## 2.6.0
+
+### Minor Changes
+
+- Include a warning regarding the Bitcoin value in the source field of the Bridge form
+
+### Patch Changes
+
+- Revise the calculation logic for determining the cold amount on the assets page
+- Identify and rectify the issues that caused console warnings and errors
+- Updated dependencies
+  - @rosen-ui/nautilus-wallet@1.0.2
+  - @rosen-ui/eternl-wallet@1.0.2
+  - @rosen-ui/flint-wallet@1.0.2
+  - @rosen-ui/vespr-wallet@0.0.10
+  - @rosen-ui/xdefi-wallet@1.0.3
+  - @rosen-ui/lace-wallet@1.0.2
+  - @rosen-ui/nami-wallet@1.0.2
+  - @rosen-network/cardano@1.0.1
+  - @rosen-network/bitcoin@1.1.0
+
 ## 2.5.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @rosen-network/cardano
 
+## 1.0.1
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+
 ## 1.0.0
 
 ### Major Changes

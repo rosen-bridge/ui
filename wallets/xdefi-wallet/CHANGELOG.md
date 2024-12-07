@@ -1,5 +1,14 @@
 # @rosen-ui/xdefi-wallet
 
+## 1.0.3
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+- Updated dependencies
+  - @rosen-bridge/icons@0.7.0
+  - @rosen-network/bitcoin@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes

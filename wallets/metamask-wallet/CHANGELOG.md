@@ -1,5 +1,12 @@
 # @rosen-ui/metamask-wallet
 
+## 0.1.3
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+- Updated the @rosen-bridge/icons@0.7.0 dependency
+
 ## 0.1.2
 
 ### Patch Changes
