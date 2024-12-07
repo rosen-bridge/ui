@@ -63,7 +63,10 @@ export enum SigHash {
 }
 
 export interface UnsignedPsbtData {
-  psbt: string;
+  psbt: {
+    base64: string;
+    hex: string;
+  };
   inputSize: number;
 }
 

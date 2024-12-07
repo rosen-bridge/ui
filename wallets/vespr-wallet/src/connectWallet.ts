@@ -3,7 +3,7 @@
  */
 
 export const connectWallet = async () => {
-  const granted = await cardano.vespr?.enable();
+  const granted = await window.cardano.vespr?.enable();
 
   if (!granted) {
     console.error('Failed to connect!');

@@ -225,9 +225,15 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const hotUrl = getAddressUrl(row.chain, hot?.address);
 
-  const cold = row.lockedPerAddress?.find((item) => {
-    return LOCK_ADDRESSES.includes(item.address) != true;
-  });
+  /**
+   * TODO: utilize an appropriate method to identify the cold address and its corresponding amounts
+   * local:ergo/rosen-bridge/ui#453
+   */
+  const cold = [...(row.lockedPerAddress || [])]
+    .sort((a, b) => b.address.localeCompare(a.address))
+    .find((item) => {
+      return LOCK_ADDRESSES.includes(item.address) != true;
+    });
 
   const coldUrl = getAddressUrl(row.chain, cold?.address);
 

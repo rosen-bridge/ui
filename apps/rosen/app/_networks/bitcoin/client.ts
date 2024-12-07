@@ -1,6 +1,6 @@
 import { BitcoinIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { xdefiWalletCreator } from '@rosen-ui/xdefi-wallet';
+import { okxWalletCreator } from '@rosen-ui/okx-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
@@ -31,7 +31,7 @@ export const BitcoinNetwork: BitcoinNetworkType = {
   name: NETWORKS.BITCOIN,
   label: NETWORK_LABELS.BITCOIN,
   logo: BitcoinIcon,
-  wallets: [xdefiWalletCreator(config)],
+  wallets: [okxWalletCreator(config)],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(getMaxTransfer),

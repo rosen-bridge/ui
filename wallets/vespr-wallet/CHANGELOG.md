@@ -1,5 +1,12 @@
 # @rosen-ui/vespr-wallet
 
+## 0.0.10
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+- Updated the @rosen-bridge/icons@0.7.0 dependency
+
 ## 0.0.9
 
 ### Patch Changes

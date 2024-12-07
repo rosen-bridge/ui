@@ -13,6 +13,6 @@ export const getNamiWallet = () => {
       ...namiWalletInfo,
       connectWallet,
     },
-    () => cardano.nami,
+    () => window.cardano.nami,
   );
 };

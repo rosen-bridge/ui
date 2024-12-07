@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';

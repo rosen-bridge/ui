@@ -200,6 +200,8 @@ export const BridgeForm = () => {
             InputProps={{ disableUnderline: true }}
             variant="filled"
             {...targetField}
+            // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
+            value={targetField.value ?? ''}
             SelectProps={{
               renderValue: renderSelectedNetwork,
             }}

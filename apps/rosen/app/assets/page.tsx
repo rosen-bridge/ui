@@ -66,12 +66,16 @@ const Assets = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: AssetsModel) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: AssetsModel) => (
+      <MobileRow key={rowData.id} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: AssetsModel) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: AssetsModel) => (
+      <TabletRow key={rowData.id} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
@@ -94,7 +98,7 @@ const Assets = () => {
   const paginationProps = useMemo<TablePaginationProps>(
     () => ({
       component: 'div',
-      count: data?.total ?? 0,
+      count: Number(data?.total ?? 0),
       rowsPerPage: pageSize,
       page: pageIndex,
       onPageChange: handleChangePage,

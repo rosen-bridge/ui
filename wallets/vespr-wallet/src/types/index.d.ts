@@ -10,5 +10,7 @@ export interface ConnectorAPI {
  * global type augmentation for Vespr wallet
  */
 declare global {
-  declare let cardano: { [key: string]: ConnectorAPI };
+  interface Window {
+    cardano: { [key: string]: ConnectorAPI };
+  }
 }

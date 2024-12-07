@@ -1,5 +1,12 @@
 # @rosen-ui/nautilus-wallet
 
+## 1.0.2
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+- Updated the @rosen-bridge/icons@0.7.0 dependency
+
 ## 1.0.1
 
 ### Patch Changes

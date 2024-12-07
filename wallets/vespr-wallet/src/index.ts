@@ -20,10 +20,10 @@ const getVesprWallet = () =>
       ...walletInfo,
       connectWallet,
     },
-    () => cardano.vespr,
+    () => window.cardano.vespr,
   );
 
 export const isVesprAvailable = () =>
-  typeof cardano !== 'undefined' && cardano?.vespr;
+  typeof window.cardano !== 'undefined' && window.cardano?.vespr;
 
 export default getVesprWallet;

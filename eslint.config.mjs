@@ -7,28 +7,38 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 
 export default [
+  // General Ignore Patterns
   {
     ignores: ['**/dist/*'],
   },
+
+  // Base Configuration for JS/TS Files
   {
-    files: [
-      'networks/**/*.{js,jsx,ts,tsx}',
-      'packages/**/*.{js,jsx,ts,tsx}',
-      'wallets/**/*.{js,jsx,ts,tsx}',
-    ],
-    rules: {
-      ...pluginJs.configs.recommended.rules,
-      ...typescriptEslint.configs.recommended.rules,
-    },
-    plugins: {
-      '@typescript-eslint': typescriptEslint,
-    },
+    files: ['{networks,packages,wallets}/**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       parser: typescriptParser,
       ecmaVersion: 'latest',
       sourceType: 'module',
     },
+    plugins: {
+      '@typescript-eslint': typescriptEslint,
+    },
+    rules: {
+      ...pluginJs.configs.recommended.rules,
+      ...typescriptEslint.configs.recommended.rules,
+    },
   },
+
+  // Browser-Specific Globals
+  {
+    files: ['{packages,wallets}/**/*.{js,jsx,ts,tsx}'],
+    ignores: ['packages/asset-calculator/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: globals.browser,
+    },
+  },
+
+  // Node-Specific Globals
   {
     files: [
       'networks/**/*.{js,jsx,ts,tsx}',
@@ -38,21 +48,8 @@ export default [
       globals: globals.node,
     },
   },
-  {
-    files: [
-      'packages/common-hooks/**/*.{js,jsx,ts,tsx}',
-      'packages/constants/**/*.{js,jsx,ts,tsx}',
-      'packages/icons/**/*.{js,jsx,ts,tsx}',
-      'packages/swr-helpers/**/*.{js,jsx,ts,tsx}',
-      'packages/swr-mock/**/*.{js,jsx,ts,tsx}',
-      'packages/types/**/*.{js,jsx,ts,tsx}',
-      'packages/utils/**/*.{js,jsx,ts,tsx}',
-      'wallets/**/*.{js,jsx,ts,tsx}',
-    ],
-    languageOptions: {
-      globals: globals.browser,
-    },
-  },
+
+  // React-Specific Rules and Plugins
   {
     files: [
       'packages/shared-contexts/**/*.{js,jsx,ts,tsx}',
@@ -67,15 +64,17 @@ export default [
       ...reactHooks.configs.recommended.rules,
     },
   },
-  /**
-   * TODO: revise the global ESLint configuration rules
-   * local:ergo/rosen-bridge/ui#442
-   */
+
+  // Additional Global Rules
   {
     rules: {
-      'no-undef': 'off',
-      '@typescript-eslint/no-unused-expressions': 'off',
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        { allowShortCircuit: true },
+      ],
     },
   },
+
+  // Integrate Prettier for Formatting
   prettier,
 ];
