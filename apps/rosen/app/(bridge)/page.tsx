@@ -19,24 +19,34 @@ const Background = styled('div')(({ theme }) => ({
   backgroundPosition: 'center center',
   backgroundSize: 'cover',
   zIndex: '0',
+  [theme.breakpoints.down('tablet')]: {
+    display: 'none',
+  },
 }));
 
 const BridgeContainer = styled('div')(({ theme }) => ({
-  'zIndex': '3',
-  'position': 'absolute',
-  'top': '50%',
-  'left': '50%',
-  'transform': 'translate(-50%, -50%)',
-  'maxWidth': theme.breakpoints.values.desktop,
-  'width': '100%',
-  'gap': theme.spacing(3),
-  'padding': theme.spacing(4),
-  'display': 'grid',
-  'gridTemplateColumns': '8fr 4fr',
-  'gridTemplateRows': '1fr auto auto',
-  '& > button': {
-    width: '50%',
-    justifySelf: 'flex-end',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(3),
+  [theme.breakpoints.up('tablet')]: {
+    'zIndex': '3',
+    'position': 'absolute',
+    'top': '50%',
+    'left': '50%',
+    'transform': 'translate(-50%, -50%)',
+    'maxWidth': theme.breakpoints.values.desktop,
+    'width': '100%',
+    'padding': theme.spacing(4),
+    'display': 'grid',
+    'gridTemplateColumns': '1fr 1fr',
+    'gridTemplateRows': '1fr auto auto',
+    '& > button': {
+      width: '50%',
+      justifySelf: 'flex-end',
+    },
+  },
+  [theme.breakpoints.up('laptop')]: {
+    gridTemplateColumns: '8fr 4fr',
   },
 }));
 

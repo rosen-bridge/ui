@@ -346,6 +346,27 @@ const create = (baseTheme: Theme) =>
           },
         },
       },
+      RosenNavigationBar: {
+        styleOverrides: {
+          root: {
+            [baseTheme.breakpoints.down('tablet')]: {
+              borderColor: baseTheme.palette.primary.light,
+              background: baseTheme.palette.background.paper,
+              boxShadow: `0px 8px 8px 0px ${baseTheme.palette.background.default}`,
+            },
+          },
+        },
+      },
+      RosenApp: {
+        styleOverrides: {
+          root: {
+            background: baseTheme.palette.background.body(true),
+            [baseTheme.breakpoints.down('tablet')]: {
+              background: baseTheme.palette.background.body(false),
+            },
+          },
+        },
+      },
     },
     typography: {
       h1: {
