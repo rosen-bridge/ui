@@ -37,6 +37,7 @@
     "@types/react-dom": "18.2.4"
   },
   "dependencies": {
+    "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.4",
     "@rosen-bridge/icons": "^0.6.0",
     "@rosen-bridge/shared-contexts": "^0.0.1",
@@ -44,6 +45,7 @@
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/swr-helpers": "^0.2.0",
     "@rosen-ui/utils": "^0.4.1",
-    "moment": "^2.29.4"
+    "moment": "^2.29.4",
+    "qrcode.react": "^3.1.0"
   }
 }

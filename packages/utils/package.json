@@ -19,6 +19,8 @@
   "dependencies": {
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/types": "^0.3.1",
+    "buffer": "^6.0.3",
+    "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"
   }
 }
