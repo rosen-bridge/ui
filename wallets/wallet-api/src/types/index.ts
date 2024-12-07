@@ -46,6 +46,28 @@ export interface RawWallet<Api> extends WalletBase {
   getApi: () => Api;
 }
 
+export interface WalletNext {
+  icon: FC;
+  name: string;
+  label: string;
+  link: string;
+  connect(): Promise<boolean>;
+  getAddress(): Promise<string>;
+  getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
+  isAvailable(): boolean;
+  transfer(params: WalletNextTransferParams): Promise<string>;
+}
+
+export interface WalletNextTransferParams {
+  token: RosenChainToken;
+  amount: RosenAmountValue;
+  toChain: Network;
+  address: string;
+  bridgeFee: RosenAmountValue;
+  networkFee: RosenAmountValue;
+  lockAddress: string;
+}
+
 export * from './common';
 export * from './ergo';
 export * from './cardano';
