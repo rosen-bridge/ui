@@ -1,5 +1,13 @@
 # @rosen-bridge/ui-kit
 
+## 1.5.4
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+- Identify and rectify the issues that caused console warnings and errors
+- Updated the @rosen-bridge/icons@0.7.0 dependency
+
 ## 1.5.3
 
 ### Patch Changes
