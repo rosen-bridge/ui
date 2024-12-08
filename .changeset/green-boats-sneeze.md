@@ -6,7 +6,6 @@
 '@rosen-ui/eternl-wallet': patch
 '@rosen-ui/flint-wallet': patch
 '@rosen-ui/vespr-wallet': patch
-'@rosen-ui/xdefi-wallet': patch
 '@rosen-ui/lace-wallet': patch
 '@rosen-ui/nami-wallet': patch
 '@rosen-bridge/ui-kit': patch

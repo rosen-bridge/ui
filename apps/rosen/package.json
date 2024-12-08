@@ -50,7 +50,6 @@
     "@rosen-ui/utils": "^0.4.1",
     "@rosen-ui/vespr-wallet": "^0.0.10",
     "@rosen-ui/wallet-api": "^1.0.3",
-    "@rosen-ui/xdefi-wallet": "^1.0.3",
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/kv": "^2.0.0",
     "buffer": "^6.0.3",
