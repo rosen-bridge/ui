@@ -2,7 +2,7 @@
   "name": "@rosen-bridge/ui-kit",
   "description": "ui kit for Rosen projects",
   "private": true,
-  "version": "1.5.3",
+  "version": "1.5.4",
   "type": "module",
   "files": [
     "dist"
@@ -32,15 +32,15 @@
     "swr": "^2.1.5"
   },
   "devDependencies": {
-    "@rosen-ui/types": "^0.3.1",
+    "@rosen-ui/types": "^0.3.2",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.4"
   },
   "dependencies": {
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.4",
-    "@rosen-bridge/icons": "^0.6.0",
-    "@rosen-bridge/shared-contexts": "^0.0.1",
+    "@rosen-bridge/icons": "^0.7.0",
+    "@rosen-bridge/shared-contexts": "^0.0.2",
     "@rosen-ui/common-hooks": "^0.1.0",
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/swr-helpers": "^0.2.0",

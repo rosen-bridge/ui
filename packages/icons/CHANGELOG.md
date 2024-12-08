@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 0.7.0
+
+### Minor Changes
+
+- Add the OKX icon
+
 ## 0.6.0
 
 ### Minor Changes

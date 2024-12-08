@@ -1,6 +1,6 @@
 {
-  "name": "@rosen-network/cardano",
-  "version": "1.0.1",
+  "name": "@rosen-ui/okx-wallet",
+  "version": "0.1.0",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/src/index.js",
@@ -12,13 +12,15 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "dependencies": {
-    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
-    "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
-    "@rosen-clients/cardano-koios": "^2.0.3",
-    "@rosen-ui/wallet-api": "^1.0.3"
-  },
   "devDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@rosen-bridge/icons": "^0.7.0",
+    "@rosen-bridge/tokens": "^1.2.1",
+    "@rosen-network/bitcoin": "^1.1.0",
+    "@rosen-ui/constants": "^0.0.5",
+    "@rosen-ui/types": "^0.3.2",
+    "@rosen-ui/wallet-api": "^1.0.3"
   }
 }

@@ -1,5 +1,11 @@
 # @rosen-network/bitcoin
 
+## 1.1.0
+
+### Minor Changes
+
+- Enhance the `submitTransaction` function to support both `Base64` and `hex` encoding
+
 ## 1.0.1
 
 ### Patch Changes
