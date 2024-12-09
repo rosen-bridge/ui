@@ -15,4 +15,4 @@
 '@rosen-bridge/rosen-app': patch
 ---
 
-All packages checked and some missing dependencies were installed and unused packeges were uninstalled
+Fix missing dependencies and remove unused packages
