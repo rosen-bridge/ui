@@ -9,7 +9,12 @@ import {
   Moneybag,
   ClipboardNotes,
 } from '@rosen-bridge/icons';
-import { AppBar, AppLogo } from '@rosen-bridge/ui-kit';
+import {
+  AppBar,
+  AppLogo,
+  NavigationBar,
+  NavigationButton,
+} from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
 import { useInfo } from './_hooks/useInfo';
@@ -21,6 +26,39 @@ export const SideBar = () => {
   const pathname = usePathname();
 
   const router = useRouter();
+
+  const routes = [
+    {
+      label: 'Dashboard',
+      path: '/',
+      icon: <Dashboard />,
+    },
+    {
+      label: 'Health',
+      path: '/health',
+      icon: <Heartbeat />,
+    },
+    {
+      label: 'Events',
+      path: '/events',
+      icon: <ClipboardNotes />,
+    },
+    {
+      label: 'History',
+      path: '/history',
+      icon: <History />,
+    },
+    {
+      label: 'Assets',
+      path: '/assets',
+      icon: <BitcoinCircle />,
+    },
+    {
+      label: 'Revenues',
+      path: '/revenues',
+      icon: <Moneybag />,
+    },
+  ];
 
   const { data: info, isLoading } = useInfo();
 
@@ -51,50 +89,28 @@ export const SideBar = () => {
     <AppBar
       logo={
         <Link href="/">
-          <AppLogo darkLogoPath="/dark.png" lightLogoPath="/light.png" />
+          <AppLogo
+            darkLogoPath="/logo-dark-desktop.png"
+            lightLogoPath="/logo-light-desktop.png"
+            darkLogoMobilePath="/logo-dark-mobile.png"
+            lightLogoMobilePath="/logo-light-mobile.png"
+          />
         </Link>
       }
       versions={versions}
-      routes={[
-        {
-          label: 'Dashboard',
-          path: '/',
-          disabled: false,
-          icon: <Dashboard />,
-        },
-        {
-          label: 'Health',
-          path: '/health',
-          disabled: false,
-          icon: <Heartbeat />,
-        },
-        {
-          label: 'Events',
-          path: '/events',
-          disabled: false,
-          icon: <ClipboardNotes />,
-        },
-        {
-          label: 'History',
-          path: '/history',
-          disabled: false,
-          icon: <History />,
-        },
-        {
-          label: 'Assets',
-          path: '/assets',
-          disabled: false,
-          icon: <BitcoinCircle />,
-        },
-        {
-          label: 'Revenues',
-          path: '/revenues',
-          disabled: false,
-          icon: <Moneybag />,
-        },
-      ]}
-      isActive={(route) => pathname === route.path}
-      onNavigate={(route) => router.push(route.path)}
+      navigationBar={
+        <NavigationBar>
+          {routes.map((route) => (
+            <NavigationButton
+              key={route.label}
+              icon={route.icon}
+              isActive={pathname === route.path}
+              label={route.label}
+              onClick={() => router.push(route.path)}
+            />
+          ))}
+        </NavigationBar>
+      }
     />
   );
 };

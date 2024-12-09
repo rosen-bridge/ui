@@ -1,6 +1,7 @@
 export * from './AlertCard';
 export * from './Amount';
 export * from './ApiKeyModal';
+export * from './App';
 export * from './AppBar';
 export * from './AppLogo';
 export * from './EnhancedDialogTitle';
@@ -10,6 +11,7 @@ export * from './FullCard';
 export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
 export * from './Id';
+export * from './NavigationBar';
 export * from './NavigationButton';
 export * from './QrCodeModal';
 export * from './SuccessfulCopySnackbar';
