@@ -3,12 +3,12 @@ import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/ethereum/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
+import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
 import { WalletConfig } from './types';
 
-export class MetaMaskWallet implements WalletNext {
+export class MetaMaskWallet implements Wallet {
   icon = MetaMaskIcon;
 
   name = 'MetaMask';
@@ -97,7 +97,7 @@ export class MetaMaskWallet implements WalletNext {
     );
   }
 
-  async transfer(params: WalletNextTransferParams): Promise<string> {
+  async transfer(params: WalletTransferParams): Promise<string> {
     const provider = this.api.getProvider();
 
     if (!provider) throw Error(`Failed to interact with metamask`);

@@ -15,7 +15,6 @@
   "dependencies": {
     "@rosen-bridge/address-codec": "^0.3.0",
     "@rosen-bridge/tokens": "^1.2.1",
-    "@rosen-ui/wallet-api": "^1.0.3",
     "ethers": "^6.13.2"
   },
   "devDependencies": {

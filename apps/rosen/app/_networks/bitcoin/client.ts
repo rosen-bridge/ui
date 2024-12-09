@@ -6,7 +6,6 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types';
 
-import { createWallet } from '../createWallet';
 import { getMaxTransfer } from './getMaxTransfer';
 import {
   generateOpReturnData,
@@ -32,7 +31,7 @@ export const BitcoinNetwork: BitcoinNetworkType = {
   name: NETWORKS.BITCOIN,
   label: NETWORK_LABELS.BITCOIN,
   logo: BitcoinIcon,
-  wallets: [createWallet(new OKXWallet(config))],
+  wallets: [new OKXWallet(config)],
   nextHeightInterval: 1,
   lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(getMaxTransfer),

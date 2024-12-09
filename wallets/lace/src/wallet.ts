@@ -2,11 +2,11 @@ import { LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { hexToCbor } from '@rosen-ui/utils';
-import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
+import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
-export class LaceWallet implements WalletNext {
+export class LaceWallet implements Wallet {
   icon = LaceIcon;
 
   name = 'Lace';
@@ -59,7 +59,7 @@ export class LaceWallet implements WalletNext {
     return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
   }
 
-  async transfer(params: WalletNextTransferParams): Promise<string> {
+  async transfer(params: WalletTransferParams): Promise<string> {
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();

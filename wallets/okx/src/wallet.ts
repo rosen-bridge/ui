@@ -1,11 +1,11 @@
 import { OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
+import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
-export class OKXWallet implements WalletNext {
+export class OKXWallet implements Wallet {
   icon = OKXIcon;
 
   name = 'OKX';
@@ -55,7 +55,7 @@ export class OKXWallet implements WalletNext {
     );
   }
 
-  async transfer(params: WalletNextTransferParams): Promise<string> {
+  async transfer(params: WalletTransferParams): Promise<string> {
     const userAddress = await this.getAddress();
 
     const opReturnData = await this.config.generateOpReturnData(

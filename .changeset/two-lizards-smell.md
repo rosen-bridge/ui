@@ -3,7 +3,6 @@
 '@rosen-ui/nautilus-wallet': major
 '@rosen-ui/okx-wallet': major
 '@rosen-ui/eternl-wallet': major
-'@rosen-ui/flint-wallet': major
 '@rosen-ui/lace-wallet': major
 '@rosen-ui/nami-wallet': major
 ---

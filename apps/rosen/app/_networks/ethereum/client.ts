@@ -6,7 +6,6 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types';
 
-import { createWallet } from '../createWallet';
 import { getMaxTransfer } from './getMaxTransfer';
 import { generateLockData, generateTxParameters } from './server';
 
@@ -19,13 +18,11 @@ export const EthereumNetwork: EthereumNetworkType = {
   name: NETWORKS.ETHEREUM,
   label: NETWORK_LABELS.ETHEREUM,
   wallets: [
-    createWallet(
-      new MetaMaskWallet({
-        getTokenMap,
-        generateLockData: unwrap(generateLockData),
-        generateTxParameters: unwrap(generateTxParameters),
-      }),
-    ),
+    new MetaMaskWallet({
+      getTokenMap,
+      generateLockData: unwrap(generateLockData),
+      generateTxParameters: unwrap(generateTxParameters),
+    }),
   ],
   logo: EthereumIcon,
   nextHeightInterval: 0,

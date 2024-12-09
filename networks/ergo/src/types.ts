@@ -1,7 +1,4 @@
-import { TokenMap } from '@rosen-bridge/tokens';
-import { ErgoBoxProxy, Wallet } from '@rosen-ui/wallet-api';
-
-import { generateUnsignedTx } from './generateUnsignedTx';
+import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 
 export interface TokenInfo {
   id: string;
@@ -22,10 +19,3 @@ export interface CoveringBoxes {
   covered: boolean;
   boxes: Array<ErgoBoxProxy>;
 }
-
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
-
-export type WalletCreatorConfig = {
-  getTokenMap(): Promise<TokenMap>;
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-};

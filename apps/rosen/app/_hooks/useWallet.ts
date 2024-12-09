@@ -1,7 +1,7 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
 
 import { useLocalStorageManager } from '@rosen-ui/common-hooks';
-import { Wallet, WalletBase } from '@rosen-ui/wallet-api';
+import { Wallet } from '@rosen-ui/wallet-api';
 
 import { WalletContext } from '@/_contexts/walletContext';
 
@@ -15,7 +15,7 @@ interface WalletDescriptor {
 /**
  * generates and return the wallet object to save in the local storage
  */
-const toWalletDescriptor = (wallet: WalletBase): WalletDescriptor => {
+const toWalletDescriptor = (wallet: Wallet): WalletDescriptor => {
   let expDate = new Date();
   return {
     name: wallet.name,
@@ -80,11 +80,11 @@ export const useWallet = () => {
   const setSelectedWallet = useCallback(
     async (wallet: Wallet) => {
       const prevWallet = getCurrentWallet();
-      const status = await wallet.connectWallet();
+      const status = await wallet.connect();
 
       if (typeof status === 'boolean' && status) {
-        prevWallet?.onDisconnect && prevWallet.onDisconnect();
-        wallet.onConnect && wallet.onConnect();
+        // prevWallet?.onDisconnect && prevWallet.onDisconnect();
+        // wallet.onConnect && wallet.onConnect();
         set<WalletDescriptor>(selectedSource!.name, toWalletDescriptor(wallet));
         walletGlobalContext?.dispatch({ type: 'set', wallet });
       }
@@ -98,7 +98,7 @@ export const useWallet = () => {
       selectedWallet?.name !== walletGlobalContext?.state.selectedWallet?.name
     ) {
       if (selectedWallet) {
-        const status = await selectedWallet.connectWallet();
+        const status = await selectedWallet.connect();
         if (typeof status === 'boolean' && status) {
           walletGlobalContext?.dispatch({
             type: 'set',

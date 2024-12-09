@@ -6,7 +6,6 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types';
 
-import { createWallet } from '../createWallet';
 import { getMaxTransfer } from './getMaxTransfer';
 import { generateUnsignedTx } from './server';
 
@@ -23,7 +22,7 @@ const config = {
 export const ErgoNetwork: ErgoNetworkType = {
   name: NETWORKS.ERGO,
   label: NETWORK_LABELS.ERGO,
-  wallets: [createWallet(new NautilusWallet(config))],
+  wallets: [new NautilusWallet(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,

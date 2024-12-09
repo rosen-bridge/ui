@@ -1,11 +1,11 @@
 import { NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
+import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
-export class NautilusWallet implements WalletNext {
+export class NautilusWallet implements Wallet {
   icon = NautilusIcon;
 
   name = 'Nautilus';
@@ -71,7 +71,7 @@ export class NautilusWallet implements WalletNext {
     );
   }
 
-  async transfer(params: WalletNextTransferParams): Promise<string> {
+  async transfer(params: WalletTransferParams): Promise<string> {
     const wallet = await this.api.getContext();
 
     const changeAddress = await this.getAddress();
