@@ -17,7 +17,7 @@ npm run build --workspace networks/cardano
 npm run build --workspace networks/ergo
 npm run build --workspace networks/ethereum
 npm run build --workspace wallets/nami-wallet
-npm run build --workspace wallets/lace-wallet
+npm run build --workspace wallets/lace
 npm run build --workspace wallets/metamask-wallet
 npm run build --workspace wallets/eternl
 npm run build --workspace wallets/flint

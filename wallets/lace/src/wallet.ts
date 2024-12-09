@@ -1,11 +1,12 @@
 import { LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { NETWORKS } from '@rosen-ui/constants';
 import { hexToCbor } from '@rosen-ui/utils';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
 
-export class laceWallet implements WalletNext {
+import { WalletConfig } from './types';
+
+export class LaceWallet implements WalletNext {
   icon = LaceIcon;
 
   name = 'Lace';
@@ -18,7 +19,7 @@ export class laceWallet implements WalletNext {
     return window.cardano.lace;
   }
 
-  constructor(private config: WalletCreatorConfig) {}
+  constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
     return !!(await this.api.enable());
@@ -55,13 +56,13 @@ export class laceWallet implements WalletNext {
   }
 
   isAvailable(): boolean {
-    return typeof window.cardano !== 'undefined' && !!window.cardano?.lace;
+    return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
   }
 
   async transfer(params: WalletNextTransferParams): Promise<string> {
     const wallet = await this.api.enable();
 
-    const changeAddressHex = await wallet.getChangeAddress();
+    const changeAddressHex = await this.getAddress();
 
     const auxiliaryDataHex = await this.config.generateLockAuxiliaryData(
       params.toChain,
@@ -91,6 +92,7 @@ export class laceWallet implements WalletNext {
     );
 
     const result = await wallet.submitTx(signedTxHex);
+
     return result;
   }
 }

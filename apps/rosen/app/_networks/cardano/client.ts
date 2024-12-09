@@ -2,7 +2,7 @@ import { CardanoIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { EtrnlWallet } from '@rosen-ui/eternl-wallet';
 import { FlintWallet } from '@rosen-ui/flint-wallet';
-import { laceWalletCreator } from '@rosen-ui/lace-wallet';
+import { LaceWallet } from '@rosen-ui/lace-wallet';
 import { namiWalletCreator } from '@rosen-ui/nami-wallet';
 
 import { unwrap } from '@/_safeServerAction';
@@ -37,7 +37,7 @@ export const CardanoNetwork: CardanoNetworkType = {
   wallets: [
     createWallet(new EtrnlWallet(config)),
     createWallet(new FlintWallet(config)),
-    laceWalletCreator(config),
+    createWallet(new LaceWallet(config)),
     namiWalletCreator(config),
   ],
   nextHeightInterval: 25,
