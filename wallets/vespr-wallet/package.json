@@ -13,7 +13,6 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@rosen-bridge/tokens": "^1.2.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {

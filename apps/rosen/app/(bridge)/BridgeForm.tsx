@@ -2,7 +2,6 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Autocomplete } from '@mui/material';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -14,6 +13,7 @@ import {
   CircularProgress,
   SvgIcon,
   Alert,
+  Autocomplete,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
