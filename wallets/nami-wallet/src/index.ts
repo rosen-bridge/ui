@@ -1,2 +1,1 @@
-export * from './namiWalletCreator';
-export * from './namiWalletInfo';
+export * from './wallet';
