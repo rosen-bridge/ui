@@ -22,5 +22,5 @@ npm run build --workspace wallets/metamask
 npm run build --workspace wallets/eternl
 npm run build --workspace wallets/flint
 npm run build --workspace wallets/vespr-wallet
-npm run build --workspace wallets/nautilus-wallet
+npm run build --workspace wallets/nautilus
 npm run build --workspace wallets/okx-wallet

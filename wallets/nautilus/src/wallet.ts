@@ -1,8 +1,9 @@
 import { NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/ergo';
 import { NETWORKS } from '@rosen-ui/constants';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
+
+import { WalletConfig } from './types';
 
 export class NautilusWallet implements WalletNext {
   icon = NautilusIcon;
@@ -17,7 +18,7 @@ export class NautilusWallet implements WalletNext {
     return window.ergoConnector.nautilus;
   }
 
-  constructor(private config: WalletCreatorConfig) {}
+  constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
     if (!this.api) {
@@ -42,6 +43,10 @@ export class NautilusWallet implements WalletNext {
 
     const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
 
+    /**
+     * The following condition is required because nautilus only accepts
+     * uppercase ERG as tokenId for the erg native token
+     */
     const balance = await context.get_balance(
       tokenId === 'erg' ? 'ERG' : tokenId,
     );
@@ -68,9 +73,11 @@ export class NautilusWallet implements WalletNext {
 
   async transfer(params: WalletNextTransferParams): Promise<string> {
     const wallet = await this.api.getContext();
-    const changeAddress = await wallet.get_change_address();
+
+    const changeAddress = await this.getAddress();
 
     const walletUtxos = await wallet.get_utxos();
+
     if (!walletUtxos) throw Error(`No box found`);
 
     const unsignedTx = await this.config.generateUnsignedTx(
@@ -84,8 +91,11 @@ export class NautilusWallet implements WalletNext {
       params.networkFee.toString(),
       params.token,
     );
+
     const signedTx = await wallet.sign_tx(unsignedTx);
+
     const result = await wallet.submit_tx(signedTx);
+
     return result;
   }
 }
