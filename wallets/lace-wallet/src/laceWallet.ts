@@ -5,7 +5,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { hexToCbor } from '@rosen-ui/utils';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
 
-export class flintWallet implements WalletNext {
+export class laceWallet implements WalletNext {
   icon = LaceIcon;
 
   name = 'Lace';
