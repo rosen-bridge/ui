@@ -21,7 +21,7 @@ export class OkxWallet implements WalletNext {
 
   async connect(): Promise<boolean> {
     try {
-      await window.okxwallet.bitcoin.connect();
+      await this.api.connect();
       return true;
     } catch {
       return false;
@@ -29,9 +29,7 @@ export class OkxWallet implements WalletNext {
   }
 
   async getAddress(): Promise<string> {
-    return window.okxwallet.bitcoin
-      .getAccounts()
-      .then((accounts: string[]) => accounts[0]);
+    return this.api.getAccounts().then((accounts: string[]) => accounts[0]);
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
@@ -74,18 +72,15 @@ export class OkxWallet implements WalletNext {
       params.token,
     );
 
-    const signedPsbtHex = await window.okxwallet.bitcoin.signPsbt(
-      psbtData.psbt.hex,
-      {
-        autoFinalized: false,
-        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-          (index) => ({
-            address: userAddress,
-            index: index,
-          }),
-        ),
-      },
-    );
+    const signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
+      autoFinalized: false,
+      toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
+        (index) => ({
+          address: userAddress,
+          index: index,
+        }),
+      ),
+    });
 
     const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
 

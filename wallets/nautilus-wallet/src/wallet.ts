@@ -20,17 +20,15 @@ export class NautilusWallet implements WalletNext {
   constructor(private config: WalletCreatorConfig) {}
 
   async connect(): Promise<boolean> {
-    if (!window.ergoConnector?.nautilus) {
+    if (!this.api) {
       throw new Error('EXTENSION_NOT_FOUND');
     }
 
-    if (!window.ergoConnector.nautilus?.getContext) {
+    if (!this.api.getContext) {
       console.warn('Wallet API has changed. Please update your wallet.');
     }
 
-    const nautilus = window.ergoConnector.nautilus;
-
-    return await nautilus.connect({ createErgoObject: false });
+    return await this.api.connect({ createErgoObject: false });
   }
 
   async getAddress(): Promise<string> {
