@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { createTheme } from '@rosen-bridge/ui-kit';
+import { createTheme, Theme } from '@rosen-bridge/ui-kit';
 
 declare module '@mui/material/styles' {
   interface TypePaletteGradient {
