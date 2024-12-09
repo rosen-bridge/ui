@@ -20,7 +20,7 @@ npm run build --workspace wallets/nami-wallet
 npm run build --workspace wallets/lace-wallet
 npm run build --workspace wallets/metamask-wallet
 npm run build --workspace wallets/eternl
-npm run build --workspace wallets/flint-wallet
+npm run build --workspace wallets/flint
 npm run build --workspace wallets/vespr-wallet
 npm run build --workspace wallets/nautilus-wallet
 npm run build --workspace wallets/okx-wallet
