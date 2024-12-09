@@ -1,11 +1,10 @@
-import { Theme } from '@mui/material';
 import {
   CheckCircle,
   ExclamationCircle,
   ExclamationTriangle,
   InfoCircle,
 } from '@rosen-bridge/icons';
-import { alpha, createTheme, SvgIcon } from '@rosen-bridge/ui-kit';
+import { alpha, createTheme, SvgIcon, Theme } from '@rosen-bridge/ui-kit';
 
 declare module '@mui/material/styles' {
   interface TypeNeutral {
