@@ -1,11 +1,12 @@
 import { EternlIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { NETWORKS } from '@rosen-ui/constants';
 import { hexToCbor } from '@rosen-ui/utils';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
 
-export class EtrnlWallet2 implements WalletNext {
+import { WalletConfig } from './types';
+
+export class EtrnlWallet implements WalletNext {
   icon = EternlIcon;
 
   name = 'Eternl';
@@ -18,7 +19,7 @@ export class EtrnlWallet2 implements WalletNext {
     return window.cardano.eternl;
   }
 
-  constructor(private config: WalletCreatorConfig) {}
+  constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
     return !!(await this.api.enable());
@@ -31,27 +32,27 @@ export class EtrnlWallet2 implements WalletNext {
   async getBalance(token: RosenChainToken): Promise<bigint> {
     const context = await this.api.enable();
 
-    const raw = await context.getBalance();
+    const rawValue = await context.getBalance();
 
-    const balances = await this.config.decodeWasmValue(raw);
+    const balances = await this.config.decodeWasmValue(rawValue);
 
-    const balance = balances.find(
+    const amount = balances.find(
       (asset) =>
         asset.policyId === token.policyId &&
         (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
     );
 
-    if (!balance) return 0n;
+    if (!amount) return 0n;
 
     const tokenMap = await this.config.getTokenMap();
 
-    const value = tokenMap.wrapAmount(
+    const wrappedAmount = tokenMap.wrapAmount(
       token[tokenMap.getIdKey(NETWORKS.CARDANO)],
-      balance.quantity,
+      amount.quantity,
       NETWORKS.CARDANO,
     ).amount;
 
-    return value;
+    return wrappedAmount;
   }
 
   isAvailable(): boolean {
