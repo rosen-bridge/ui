@@ -1,9 +1,10 @@
 import { NamiIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/cardano';
 import { NETWORKS } from '@rosen-ui/constants';
 import { hexToCbor } from '@rosen-ui/utils';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
+
+import { WalletConfig } from './types';
 
 export class NamiWallet implements WalletNext {
   icon = NamiIcon;
@@ -18,7 +19,7 @@ export class NamiWallet implements WalletNext {
     return window.cardano.nami;
   }
 
-  constructor(private config: WalletCreatorConfig) {}
+  constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
     return !!(await this.api.enable());
@@ -30,7 +31,9 @@ export class NamiWallet implements WalletNext {
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
     const context = await this.api.enable();
+
     const rawValue = await context.getBalance();
+
     const balances = await this.config.decodeWasmValue(rawValue);
 
     const amount = balances.find(
@@ -53,13 +56,13 @@ export class NamiWallet implements WalletNext {
   }
 
   isAvailable(): boolean {
-    return typeof window.cardano !== 'undefined' && !!window.cardano?.nami;
+    return typeof window.cardano !== 'undefined' && !!window.cardano.nami;
   }
 
   async transfer(params: WalletNextTransferParams): Promise<string> {
     const wallet = await this.api.enable();
 
-    const changeAddressHex = await wallet.getChangeAddress();
+    const changeAddressHex = await this.getAddress();
 
     const auxiliaryDataHex = await this.config.generateLockAuxiliaryData(
       params.toChain,
@@ -72,6 +75,7 @@ export class NamiWallet implements WalletNext {
     const walletUtxos = await wallet.getUtxos();
 
     if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
+
     const unsignedTxHex = await this.config.generateUnsignedTx(
       walletUtxos,
       params.lockAddress,
@@ -88,6 +92,7 @@ export class NamiWallet implements WalletNext {
     );
 
     const result = await wallet.submitTx(signedTxHex);
+
     return result;
   }
 }
