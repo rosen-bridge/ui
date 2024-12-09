@@ -1,5 +1,18 @@
 # @rosen-bridge/guard-app
 
+## 1.9.0
+
+### Minor Changes
+
+- Update the root layout to incorporate the latest changes from the UI kit, enhancing its responsiveness
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.6.0
+  - @rosen-ui/utils@0.4.2
+
 ## 1.8.0
 
 ### Minor Changes

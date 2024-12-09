@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.0.1
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+
 ## 2.0.0
 
 ### Major Changes

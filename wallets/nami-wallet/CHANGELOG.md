@@ -1,5 +1,12 @@
 # @rosen-ui/nami-wallet
 
+## 1.0.3
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated the @rosen-ui/utils@0.4.2 dependency
+
 ## 1.0.2
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @rosen-ui/vespr-wallet
 
+## 0.0.11
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated the @rosen-ui/utils@0.4.2 dependency
+
 ## 0.0.10
 
 ### Patch Changes
