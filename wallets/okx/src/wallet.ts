@@ -1,10 +1,11 @@
 import { OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/bitcoin';
 import { NETWORKS } from '@rosen-ui/constants';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
 
-export class OkxWallet implements WalletNext {
+import { WalletConfig } from './types';
+
+export class OKXWallet implements WalletNext {
   icon = OKXIcon;
 
   name = 'OKX';
@@ -17,7 +18,7 @@ export class OkxWallet implements WalletNext {
     return window.okxwallet.bitcoin;
   }
 
-  constructor(private config: WalletCreatorConfig) {}
+  constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
     try {
