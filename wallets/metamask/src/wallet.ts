@@ -1,15 +1,14 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { WalletCreatorConfig } from '@rosen-network/ethereum';
 import { tokenABI } from '@rosen-network/ethereum/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { WalletNext, WalletNextTransferParams } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
-import { getMetaMaskWallet } from './getMetaMaskWallet';
+import { WalletConfig } from './types';
 
-export class MetamaskWallet implements WalletNext {
+export class MetaMaskWallet implements WalletNext {
   icon = MetaMaskIcon;
 
   name = 'MetaMask';
@@ -18,29 +17,27 @@ export class MetamaskWallet implements WalletNext {
 
   link = 'https://metamask.io/';
 
-  api: MetaMaskSDK;
-  constructor(private config: WalletCreatorConfig) {
-    this.api = new MetaMaskSDK({
-      dappMetadata: {
-        name: 'Rosen Bridge',
-      },
-      enableAnalytics: false,
-    });
-  }
+  connecWaiting?: Promise<unknown>;
+
+  private api = new MetaMaskSDK({
+    dappMetadata: {
+      name: 'Rosen Bridge',
+    },
+    enableAnalytics: false,
+  });
+
+  constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
-    let waiting;
-    if (!waiting) {
-      waiting = getMetaMaskWallet().getApi().connect();
+    this.connecWaiting ||= this.api.connect();
+    try {
+      await this.connecWaiting;
+      this.connecWaiting = undefined;
+      return true;
+    } catch {
+      this.connecWaiting = undefined;
+      return false;
     }
-
-    const success = await waiting.then(
-      () => true,
-      () => false,
-    );
-
-    waiting = undefined;
-    return success;
   }
 
   getAddress(): Promise<string> {
@@ -48,7 +45,7 @@ export class MetamaskWallet implements WalletNext {
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
-    const provider = getMetaMaskWallet().getApi().getProvider();
+    const provider = this.api.getProvider();
 
     if (!provider) return 0n;
 
@@ -101,7 +98,7 @@ export class MetamaskWallet implements WalletNext {
   }
 
   async transfer(params: WalletNextTransferParams): Promise<string> {
-    const provider = getMetaMaskWallet().getApi().getProvider();
+    const provider = this.api.getProvider();
 
     if (!provider) throw Error(`Failed to interact with metamask`);
 
@@ -111,6 +108,7 @@ export class MetamaskWallet implements WalletNext {
 
     if (!accounts?.length)
       throw Error(`Failed to fetch accounts from metamask`);
+
     if (!accounts[0])
       throw Error(`Failed to get address of first account from metamask`);
 
@@ -122,6 +120,7 @@ export class MetamaskWallet implements WalletNext {
     );
 
     const tokenMap = await this.config.getTokenMap();
+
     const tokenId = params.token[tokenMap.getIdKey(NETWORKS.ETHEREUM)];
 
     const transactionParameters = await this.config.generateTxParameters(
@@ -132,6 +131,7 @@ export class MetamaskWallet implements WalletNext {
       rosenData,
       params.token,
     );
+
     const result = await provider.request<string>({
       method: 'eth_sendTransaction',
       params: [transactionParameters],

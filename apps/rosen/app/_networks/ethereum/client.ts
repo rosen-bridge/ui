@@ -1,11 +1,12 @@
 import { EthereumIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { metaMaskWalletCreator } from '@rosen-ui/metamask-wallet';
+import { MetaMaskWallet } from '@rosen-ui/metamask-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types';
 
+import { createWallet } from '../createWallet';
 import { getMaxTransfer } from './getMaxTransfer';
 import { generateLockData, generateTxParameters } from './server';
 
@@ -18,11 +19,13 @@ export const EthereumNetwork: EthereumNetworkType = {
   name: NETWORKS.ETHEREUM,
   label: NETWORK_LABELS.ETHEREUM,
   wallets: [
-    metaMaskWalletCreator({
-      getTokenMap,
-      generateLockData: unwrap(generateLockData),
-      generateTxParameters: unwrap(generateTxParameters),
-    }),
+    createWallet(
+      new MetaMaskWallet({
+        getTokenMap,
+        generateLockData: unwrap(generateLockData),
+        generateTxParameters: unwrap(generateTxParameters),
+      }),
+    ),
   ],
   logo: EthereumIcon,
   nextHeightInterval: 0,
