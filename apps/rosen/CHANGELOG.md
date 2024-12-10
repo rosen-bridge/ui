@@ -1,5 +1,31 @@
 # @rosen-bridge/rosen-app
 
+## 3.0.0
+
+### Major Changes
+
+- Discontinue support for the Xdefi wallet extension
+
+### Minor Changes
+
+- Update the root layout to incorporate the latest changes from the UI kit, enhancing its responsiveness
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated dependencies
+  - @rosen-ui/asset-calculator@2.0.1
+  - @rosen-ui/metamask-wallet@0.1.4
+  - @rosen-ui/nautilus-wallet@1.0.3
+  - @rosen-ui/common-hooks@0.1.1
+  - @rosen-ui/eternl-wallet@1.0.3
+  - @rosen-ui/flint-wallet@1.0.3
+  - @rosen-ui/vespr-wallet@0.0.11
+  - @rosen-ui/lace-wallet@1.0.3
+  - @rosen-ui/nami-wallet@1.0.3
+  - @rosen-bridge/ui-kit@1.6.0
+  - @rosen-ui/utils@0.4.2
+
 ## 2.6.0
 
 ### Minor Changes

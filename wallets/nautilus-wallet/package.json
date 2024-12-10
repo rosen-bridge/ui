@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/nautilus-wallet",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/src/index.js",
@@ -21,7 +21,7 @@
     "@rosen-network/ergo": "^1.0.0",
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/types": "^0.3.1",
-    "@rosen-ui/utils": "^0.4.1",
+    "@rosen-ui/utils": "^0.4.2",
     "@rosen-ui/wallet-api": "^1.0.3"
   }
 }
