@@ -5,13 +5,23 @@ import { isLegacyTheme } from '../../hooks/useTheme';
 import { styled } from '../../styling';
 import { Badge, Button, SvgIcon } from '../base';
 
+const NavigationButtonIndicator = styled('div', {
+  name: 'RosenNavigationButton',
+  slot: 'indicator',
+  overridesResolver: (props, styles) => styles.root,
+})(({ theme }) => ({
+  height: theme.spacing(1),
+  width: theme.spacing(3),
+  borderRadius: theme.spacing(1),
+  backgroundColor: theme.palette.primary.main,
+}));
+
 const NavButtonBase = styled(Button)(({ theme }) => ({
-  'display': 'flex',
   'flexDirection': 'column',
   'fontSize': theme.typography.subtitle2.fontSize,
+  'gap': theme.spacing(0.5),
   ...(isLegacyTheme(theme)
     ? {
-        gap: theme.spacing(0.5),
         color: theme.palette.primary.contrastText,
       }
     : {
@@ -32,19 +42,22 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
   },
   '& .MuiButton-startIcon > svg': {
-    fontSize: isLegacyTheme(theme) ? null : '24px',
+    fontSize: '24px',
   },
   '&.active': {
     'opacity': 1,
     '& .MuiButton-startIcon': {
-      color: isLegacyTheme(theme)
+      'color': isLegacyTheme(theme)
         ? theme.palette.info.dark
         : theme.palette.primary.dark,
-      backgroundColor: isLegacyTheme(theme)
+      'backgroundColor': isLegacyTheme(theme)
         ? theme.palette.mode === 'light'
           ? theme.palette.common.white
           : theme.palette.info.light
         : theme.palette.primary.light,
+      '&  > svg': {
+        fontSize: '32px',
+      },
     },
   },
   [theme.breakpoints.down('tablet')]: {
@@ -109,7 +122,7 @@ export const NavigationButton: FC<NavButtonProps> = (props) => {
       variant="text"
       disabled={disabled}
     >
-      {isMobile && isActive ? '⬤' : label}
+      {isMobile && isActive ? <NavigationButtonIndicator /> : label}
     </NavButtonBase>
   );
 };

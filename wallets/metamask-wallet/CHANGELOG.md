@@ -1,5 +1,11 @@
 # @rosen-ui/metamask-wallet
 
+## 0.1.4
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+
 ## 0.1.3
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @rosen-bridge/ui-kit
 
+## 1.6.0
+
+### Minor Changes
+
+- Implement an App component that integrates common Context providers and supports a default layout
+- Enhance the AppBar and AppLogo components to ensure it is fully responsive
+- Introduce a new component called NavigationBar to manage its styles wherever it is utilized
+- Revise the NavigationButton components to reflect the latest design changes
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated dependencies
+  - @rosen-ui/common-hooks@0.1.1
+  - @rosen-ui/utils@0.4.2
+
 ## 1.5.4
 
 ### Patch Changes

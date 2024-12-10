@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/common-hooks",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/src/index.js",
@@ -13,12 +13,9 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.9",
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-bridge/json-bigint": "^0.1.0",
-    "buffer": "^6.0.3",
-    "lodash-es": "^4.17.21"
+    "@rosen-bridge/json-bigint": "^0.1.0"
   }
 }

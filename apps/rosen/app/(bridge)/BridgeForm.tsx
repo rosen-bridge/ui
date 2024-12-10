@@ -2,7 +2,6 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Autocomplete } from '@mui/material';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -14,6 +13,7 @@ import {
   CircularProgress,
   SvgIcon,
   Alert,
+  Autocomplete,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -163,8 +163,8 @@ export const BridgeForm = () => {
 
   return (
     <FormContainer>
-      <Grid container spacing={1}>
-        <Grid item mobile={6}>
+      <Grid container spacing={2}>
+        <Grid item mobile={6} tablet={12} laptop={6}>
           <TextField
             id="source"
             select
@@ -190,7 +190,7 @@ export const BridgeForm = () => {
             ))}
           </TextField>
         </Grid>
-        <Grid item mobile={6}>
+        <Grid item mobile={6} tablet={12} laptop={6}>
           <TextField
             id="target"
             select

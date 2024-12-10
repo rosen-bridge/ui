@@ -1,5 +1,11 @@
 # @rosen-ui/utils
 
+## 0.4.2
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+
 ## 0.4.1
 
 ### Patch Changes

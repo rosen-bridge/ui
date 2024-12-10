@@ -1,5 +1,11 @@
 # @rosen-ui/common-hooks
 
+## 0.1.1
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+
 ## 0.1.0
 
 ### Minor Changes
