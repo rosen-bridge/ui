@@ -9,7 +9,7 @@ import AppError from '../errors/AppError';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const ergoEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
-  'ergo-event-trigger-extractor',
+  'ergo-event-trigger-extractor'
 );
 const cardanoEventTriggerExtractorLogger =
   WinstonLogger.getInstance().getLogger('cardano-event-trigger-extractor');
@@ -17,6 +17,8 @@ const bitcoinEventTriggerExtractorLogger =
   WinstonLogger.getInstance().getLogger('bitcoin-event-trigger-extractor');
 const ethereumEventTriggerExtractorLogger =
   WinstonLogger.getInstance().getLogger('ethereum-event-trigger-extractor');
+const binanceEventTriggerExtractorLogger =
+  WinstonLogger.getInstance().getLogger('binance-event-trigger-extractor');
 
 /**
  * register event trigger extractors for all chains
@@ -33,7 +35,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.ergo.tokens.rwt,
       configs.ergo.addresses.permit,
       configs.ergo.addresses.fraud,
-      ergoEventTriggerExtractorLogger,
+      ergoEventTriggerExtractorLogger
     );
     const cardanoEventTriggerExtractor = new EventTriggerExtractor(
       'cardano-extractor',
@@ -44,7 +46,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.cardano.tokens.rwt,
       configs.cardano.addresses.permit,
       configs.cardano.addresses.fraud,
-      cardanoEventTriggerExtractorLogger,
+      cardanoEventTriggerExtractorLogger
     );
     const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
       'bitcoin-extractor',
@@ -55,7 +57,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.bitcoin.tokens.rwt,
       configs.bitcoin.addresses.permit,
       configs.bitcoin.addresses.fraud,
-      bitcoinEventTriggerExtractorLogger,
+      bitcoinEventTriggerExtractorLogger
     );
     const ethereumEventTriggerExtractor = new EventTriggerExtractor(
       'ethereum-extractor',
@@ -66,13 +68,25 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       configs.ethereum.tokens.rwt,
       configs.ethereum.addresses.permit,
       configs.ethereum.addresses.fraud,
-      ethereumEventTriggerExtractorLogger,
+      ethereumEventTriggerExtractorLogger
+    );
+    const binanceEventTriggerExtractor = new EventTriggerExtractor(
+      'binance-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.binance.addresses.eventTrigger,
+      configs.binance.tokens.rwt,
+      configs.binance.addresses.permit,
+      configs.binance.addresses.fraud,
+      binanceEventTriggerExtractorLogger
     );
 
     scanner.registerExtractor(ergoEventTriggerExtractor);
     scanner.registerExtractor(cardanoEventTriggerExtractor);
     scanner.registerExtractor(bitcoinEventTriggerExtractor);
     scanner.registerExtractor(ethereumEventTriggerExtractor);
+    scanner.registerExtractor(binanceEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
@@ -91,7 +105,7 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       error instanceof Error ? error.stack : undefined,
       {
         scannerName: scanner.name(),
-      },
+      }
     );
   }
 };
