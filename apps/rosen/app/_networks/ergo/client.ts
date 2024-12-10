@@ -1,6 +1,6 @@
 import { ErgoIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { nautilusWalletCreator } from '@rosen-ui/nautilus-wallet';
+import { NautilusWallet } from '@rosen-ui/nautilus-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
@@ -22,7 +22,7 @@ const config = {
 export const ErgoNetwork: ErgoNetworkType = {
   name: NETWORKS.ERGO,
   label: NETWORK_LABELS.ERGO,
-  wallets: [nautilusWalletCreator(config)],
+  wallets: [new NautilusWallet(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,

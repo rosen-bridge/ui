@@ -1,13 +1,3 @@
-import { TokenMap } from '@rosen-bridge/tokens';
-import { Wallet } from '@rosen-ui/wallet-api';
-
-import { generateUnsignedTx } from './generateUnsignedTx';
-import type {
-  generateOpReturnData,
-  getAddressBalance,
-  submitTransaction,
-} from './utils';
-
 export interface Status {
   confirmed: boolean;
   block_height?: number;
@@ -69,13 +59,3 @@ export interface UnsignedPsbtData {
   };
   inputSize: number;
 }
-
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
-
-export type WalletCreatorConfig = {
-  getTokenMap(): Promise<TokenMap>;
-  generateOpReturnData: typeof generateOpReturnData;
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-  submitTransaction: typeof submitTransaction;
-  getAddressBalance: typeof getAddressBalance;
-};

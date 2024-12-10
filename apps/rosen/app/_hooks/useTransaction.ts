@@ -48,15 +48,15 @@ export const useTransaction = () => {
             tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
           ),
         );
-        const txId = await selectedWallet?.transfer(
-          tokenValue as RosenChainToken,
-          amountValueWrapped,
-          targetValue,
-          selectedTarget.toSafeAddress(walletAddressValue),
+        const txId = await selectedWallet?.transfer({
+          token: tokenValue as RosenChainToken,
+          amount: amountValueWrapped,
+          toChain: targetValue,
+          address: selectedTarget.toSafeAddress(walletAddressValue),
           bridgeFee,
           networkFee,
           lockAddress,
-        );
+        });
         openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
       } catch (error) {
         /**
