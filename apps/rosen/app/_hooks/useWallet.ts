@@ -39,19 +39,10 @@ export const useWallet = () => {
    * and return the wallet object if it finds a match
    */
   const getWallet = useCallback(
-    (name: string): Wallet => {
-      let wallet: Wallet | undefined;
-
-      wallet = (
-        selectedSource
-          ? selectedSource.wallets.filter((wallet) => wallet.isAvailable())
-          : []
-      ).find((w: Wallet) => w.name === name);
-      if (!wallet) {
-        throw new Error(`unsupported wallet with name ${name}`);
-      }
-
-      return wallet;
+    (name: string) => {
+      return selectedSource?.wallets
+        .filter((wallet) => wallet.isAvailable())
+        .find((wallet) => wallet.name === name);
     },
     [selectedSource],
   );

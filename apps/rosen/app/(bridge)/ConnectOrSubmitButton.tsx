@@ -61,7 +61,7 @@ export const ConnectOrSubmitButton = ({
     useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
-    startTransaction(bridgeFee, networkFee);
+    startTransaction(bridgeFee, networkFee).then(() => setOpen(false));
   });
 
   const { availableSources } = useNetwork();
