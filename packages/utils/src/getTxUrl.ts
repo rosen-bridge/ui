@@ -9,6 +9,7 @@ import { Network } from '@rosen-ui/types';
  */
 
 const baseTxURLs: { [key in Network]: string } = {
+  [NETWORKS.BINANCE]: 'TODO',
   [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/transactions',
   [NETWORKS.CARDANO]: 'https://cardanoscan.io/transaction',
   [NETWORKS.BITCOIN]: 'https://mempool.space/tx',

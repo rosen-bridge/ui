@@ -18,6 +18,7 @@ const ergoExplorerClient = ergoExplorerClientFactory(
 );
 
 const GetHeight = {
+  [NETWORKS.BINANCE]: () => -1,
   [NETWORKS.ETHEREUM]: ethereumGetHeight,
   [NETWORKS.CARDANO]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
