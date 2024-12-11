@@ -1,5 +1,6 @@
-import { AdaAssetName, AdaAssetNameHex, AdaPolicyId } from '../constants';
-import { AssetEntry, Lovelace } from '../types';
+import { Lovelace } from '../types';
+import { AdaAssetName, AdaAssetNameHex, AdaPolicyId } from './constants';
+import { AssetEntry } from './types';
 
 export function AdaEntry(quantity: Lovelace): AssetEntry {
   return {
