@@ -2,6 +2,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
 const baseTokenURLs: { [key in Network]: string } = {
+  [NETWORKS.BINANCE]: 'TODO',
   [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/en/token',
   [NETWORKS.CARDANO]: 'https://cardanoscan.io/token',
   [NETWORKS.BITCOIN]: '',
