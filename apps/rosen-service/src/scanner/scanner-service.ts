@@ -1,6 +1,7 @@
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
 
 import { handleError } from '../utils';
+import { startBinanceScanner } from './chains/binance';
 import { startBitcoinScanner } from './chains/bitcoin';
 import { startCardanoScanner } from './chains/cardano';
 import { startErgoScanner } from './chains/ergo';
@@ -13,13 +14,19 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  */
 const start = async () => {
   try {
-    const [ergoScanner, cardanoScanner, bitcoinScanner, ethereumScanner] =
-      await Promise.all([
-        startErgoScanner(),
-        startCardanoScanner(),
-        startBitcoinScanner(),
-        startEthereumScanner(),
-      ]);
+    const [
+      ergoScanner,
+      cardanoScanner,
+      bitcoinScanner,
+      ethereumScanner,
+      binanceScanner,
+    ] = await Promise.all([
+      startErgoScanner(),
+      startCardanoScanner(),
+      startBitcoinScanner(),
+      startEthereumScanner(),
+      startBinanceScanner(),
+    ]);
 
     logger.debug('all scanners started and their extractors registered', {
       scannerNames: [
@@ -27,6 +34,7 @@ const start = async () => {
         cardanoScanner.name(),
         bitcoinScanner.name(),
         ethereumScanner.name(),
+        binanceScanner.name(),
       ],
     });
   } catch (error) {
