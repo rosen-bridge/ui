@@ -41,7 +41,7 @@ export const ConnectOrSubmitButton = ({
     targetValue,
     tokenValue,
     amountValue,
-    formState: { isSubmitting: isFormSubmitting, errors },
+    formState: { isSubmitting: isFormSubmitting, errors, isValidating },
     walletAddressValue,
     handleSubmit,
   } = useTransactionFormData();
@@ -61,7 +61,7 @@ export const ConnectOrSubmitButton = ({
     useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
-    startTransaction(bridgeFee, networkFee);
+    startTransaction(bridgeFee, networkFee).then(() => setOpen(false));
   });
 
   const { availableSources } = useNetwork();
@@ -89,6 +89,19 @@ export const ConnectOrSubmitButton = ({
   const targetTokenInfo =
     targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
+  const disabled = selectedWallet
+    ? !sourceValue ||
+      !targetValue ||
+      !tokenValue ||
+      !amountValue ||
+      !walletAddressValue ||
+      !bridgeFee ||
+      !networkFee ||
+      !!errors.amount ||
+      !!errors.walletAddress ||
+      isValidating
+    : !sourceValue;
+
   return (
     <>
       <LoadingButton
@@ -97,22 +110,12 @@ export const ConnectOrSubmitButton = ({
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
-        disabled={!sourceValue}
+        disabled={disabled}
         onClick={() => {
-          if (!selectedWallet) {
-            setChooseWalletsModalOpen(true);
-          } else if (
-            sourceValue &&
-            targetValue &&
-            tokenValue &&
-            amountValue &&
-            walletAddressValue &&
-            bridgeFee &&
-            networkFee &&
-            !errors.amount &&
-            !errors.walletAddress
-          ) {
+          if (selectedWallet) {
             setOpen(true);
+          } else {
+            setChooseWalletsModalOpen(true);
           }
         }}
       >
