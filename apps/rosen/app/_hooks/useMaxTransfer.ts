@@ -33,6 +33,8 @@ export const useMaxTransfer = () => {
   const loading = isTokenBalanceLoading || isTransitionLoading;
 
   const load = useCallback(async () => {
+    setMax(0n);
+
     const skip =
       !amount ||
       isTokenBalanceLoading ||

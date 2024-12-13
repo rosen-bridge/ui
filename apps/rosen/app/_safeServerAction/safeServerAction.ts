@@ -103,7 +103,13 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
     return async (...args) => {
       const key = [
         actions.get(action),
-        ...args.map((arg) => arg.toString()),
+        ...args.map((arg) => {
+          try {
+            return JSON.stringify(arg);
+          } catch {
+            return arg.toString();
+          }
+        }),
       ].join('_');
 
       const handler = fromSafeData(action);
