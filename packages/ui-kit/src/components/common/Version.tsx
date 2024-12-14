@@ -7,7 +7,7 @@ import { CircularProgress } from '../base';
 interface VersionProps {
   label: string;
   value?: string;
-  sub?: Array<{ label: string; value?: string }>;
+  sub?: { label: string; value?: string };
 }
 
 const Root = styled('div', {
@@ -37,7 +37,9 @@ const Root = styled('div', {
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [versionValue, setVersionValue] = useState<string | undefined>(value);
-  const [subValues, setSubValues] = useState(sub);
+  const [subValues, setSubValues] = useState<
+    { label: string; value?: string }[]
+  >(sub ? [sub] : []);
 
   const isMobile = useIsMobile();
 
@@ -47,10 +49,17 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
 
       setVersionValue((prev) => prev || '?');
       setSubValues((prev) =>
-        prev?.map((item) => ({
-          label: item.label,
-          value: item.value || '?',
-        })),
+        prev?.map((item) =>
+          item
+            ? {
+                label: item.label,
+                value: item.value,
+              }
+            : {
+                label: '?',
+                value: '?',
+              },
+        ),
       );
     }, 15000);
 
