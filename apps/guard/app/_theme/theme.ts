@@ -70,7 +70,7 @@ const dark = createTheme({
       contrastText: '#fff',
     },
     secondary: {
-      light: '#fa9384',
+      light: '#ffd8d2',
       main: '#71353b',
       dark: '#71353b',
       contrastText: '#fff',
