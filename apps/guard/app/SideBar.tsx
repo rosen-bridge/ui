@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -93,7 +94,9 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={<Version label="Guard" value={info?.versions.app} sub={sub} />}
+      versions={[
+        <Version label="Guard" value={info?.versions.app} sub={sub} />,
+      ]}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (

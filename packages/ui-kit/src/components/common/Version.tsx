@@ -7,7 +7,7 @@ import { CircularProgress } from '../base';
 interface VersionProps {
   label: string;
   value?: string;
-  sub?: { label: string; value?: string };
+  sub?: Array<{ label: string; value?: string }>;
 }
 
 const Root = styled('div', {
@@ -39,7 +39,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const [versionValue, setVersionValue] = useState<string | undefined>(value);
   const [subValues, setSubValues] = useState<
     { label: string; value?: string }[]
-  >(sub ? [sub] : []);
+  >(sub ? sub : []);
 
   const isMobile = useIsMobile();
 
