@@ -1,10 +1,13 @@
 import { BinanceIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { MetaMaskWallet } from '@rosen-ui/metamask-wallet';
 
 import { unwrap } from '@/_safeServerAction';
+import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { BinanceNetwork as BinanceNetworkType } from '@/_types';
 
 import { getMaxTransfer } from './getMaxTransfer';
+import { generateLockData, generateTxParameters } from './server';
 
 /**
  * the main object for Binance network
@@ -14,7 +17,13 @@ import { getMaxTransfer } from './getMaxTransfer';
 export const BinanceNetwork: BinanceNetworkType = {
   name: NETWORKS.BINANCE,
   label: NETWORK_LABELS.BINANCE,
-  wallets: [],
+  wallets: [
+    new MetaMaskWallet({
+      getTokenMap,
+      generateLockData: unwrap(generateLockData),
+      generateTxParameters: unwrap(generateTxParameters),
+    }),
+  ],
   nextHeightInterval: -1,
   logo: BinanceIcon,
   lockAddress: process.env.NEXT_PUBLIC_BINANCE_LOCK_ADDRESS!,
