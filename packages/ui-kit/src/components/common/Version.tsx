@@ -1,5 +1,6 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 
+import { useIsMobile } from '../../hooks';
 import { styled } from '../../styling';
 import { CircularProgress } from '../base';
 
@@ -7,7 +8,6 @@ interface VersionProps {
   label: string;
   value?: string;
   sub?: Array<{ label: string; value?: string }>;
-  important?: boolean;
 }
 
 const Root = styled('div', {
@@ -22,7 +22,7 @@ const Root = styled('div', {
   fontWeight: '400px',
   fontSize: '12px',
   lineHeight: '14.06px',
-  color: '#ffffff',
+  color: theme.palette.secondary.light,
   [theme.breakpoints.down('tablet')]: {
     flexDirection: 'row',
     justifyContent: 'start',
@@ -34,10 +34,12 @@ const Root = styled('div', {
   },
 }));
 
-export const NewVersion: FC<VersionProps> = ({ label, value, sub }) => {
+export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [versionValue, setVersionValue] = useState<string | undefined>(value);
   const [subValues, setSubValues] = useState(sub);
+
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -55,11 +57,9 @@ export const NewVersion: FC<VersionProps> = ({ label, value, sub }) => {
     return () => clearTimeout(timer);
   }, [value, sub]);
 
-  const isTablet = window.innerWidth <= 640;
-
-  const formattedSub = subValues
-    ?.map((item) => `${item.label} v${item.value}`)
-    .join(', ');
+  const formattedSub = useMemo(() => {
+    return subValues?.map((item) => `${item.label} v${item.value}`).join(', ');
+  }, [subValues]);
 
   return (
     <Root>
@@ -72,7 +72,7 @@ export const NewVersion: FC<VersionProps> = ({ label, value, sub }) => {
           </span>
 
           {formattedSub &&
-            (isTablet
+            (isMobile
               ? ` (${formattedSub})`
               : subValues?.map((item, index) => (
                   <span key={index}>

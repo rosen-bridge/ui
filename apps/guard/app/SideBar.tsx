@@ -15,7 +15,7 @@ import {
   AppLogo,
   NavigationBar,
   NavigationButton,
-  NewVersion,
+  Version,
 } from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
@@ -64,8 +64,6 @@ export const SideBar = () => {
 
   const { data: info, isLoading } = useInfo();
 
-  const [value, setValue] = useState();
-
   const sub = [
     {
       label: 'UI',
@@ -96,9 +94,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={
-        <NewVersion label="Guard" value={info?.versions.app} sub={sub} />
-      }
+      versions={<Version label="Guard" value={info?.versions.app} sub={sub} />}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (
