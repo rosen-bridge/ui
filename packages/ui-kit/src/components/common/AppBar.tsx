@@ -5,7 +5,7 @@ import { Box } from '../base';
 
 interface AppBarProps {
   logo?: ReactNode;
-  versions?: ReactNode[];
+  versions?: [ReactNode | ReactNode];
   navigationBar?: ReactNode;
 }
 
