@@ -72,13 +72,15 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
           </span>
 
           {formattedSub &&
-            (isMobile
-              ? ` (${formattedSub})`
-              : subValues?.map((item, index) => (
-                  <span key={index}>
-                    {item.label} v{item.value}
-                  </span>
-                )))}
+            (isMobile ? (
+              <span> ({formattedSub}) </span>
+            ) : (
+              subValues?.map((item, index) => (
+                <span key={index}>
+                  {item.label} v{item.value}
+                </span>
+              ))
+            ))}
         </>
       )}
     </Root>
