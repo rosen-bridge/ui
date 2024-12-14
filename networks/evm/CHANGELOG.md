@@ -1,4 +1,4 @@
-# @rosen-network/ethereum
+# @rosen-network/evm
 
 ## 0.1.1
 

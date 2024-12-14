@@ -25,7 +25,7 @@ export const NATIVE_TOKENS = {
   CARDANO: 'ada',
   BITCOIN: 'btc',
   ETHEREUM: 'eth',
-  BINANCE: 'TODO',
+  BINANCE: 'bnb',
 } as const;
 
 /**

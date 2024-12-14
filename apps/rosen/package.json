@@ -34,7 +34,7 @@
     "@rosen-network/bitcoin": "^1.1.0",
     "@rosen-network/cardano": "^1.0.1",
     "@rosen-network/ergo": "^1.0.0",
-    "@rosen-network/ethereum": "^0.1.1",
+    "@rosen-network/evm": "^0.1.1",
     "@rosen-ui/asset-calculator": "^2.0.1",
     "@rosen-ui/common-hooks": "^0.1.1",
     "@rosen-ui/constants": "^0.0.5",

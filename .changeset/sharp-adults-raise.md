@@ -1,5 +1,5 @@
 ---
-'@rosen-network/ethereum': major
+'@rosen-network/evm': major
 '@rosen-network/bitcoin': major
 '@rosen-network/cardano': major
 '@rosen-network/ergo': major

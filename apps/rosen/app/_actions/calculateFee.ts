@@ -3,7 +3,7 @@
 import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { getHeight as ethereumGetHeight } from '@rosen-network/ethereum';
+import { getHeight as ethereumGetHeight } from '@rosen-network/evm';
 import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Joi from 'joi';

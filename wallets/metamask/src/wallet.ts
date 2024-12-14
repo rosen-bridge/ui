@@ -1,7 +1,7 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { tokenABI } from '@rosen-network/ethereum/dist/src/constants';
+import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';

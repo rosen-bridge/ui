@@ -1,6 +1,6 @@
 'use server';
 
-import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
+import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/evm';
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
