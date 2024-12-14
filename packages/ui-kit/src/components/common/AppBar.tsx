@@ -9,12 +9,6 @@ interface AppBarProps {
   navigationBar?: ReactNode;
 }
 
-// interface Version {
-//   important?: boolean;
-//   title: string;
-//   value?: string;
-// }
-
 const Root = styled(Box)(({ theme }) => ({
   position: 'relative',
   padding: theme.spacing(2) + ' 0',

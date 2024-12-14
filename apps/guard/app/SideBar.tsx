@@ -63,7 +63,7 @@ export const SideBar = () => {
 
   const { data: info, isLoading } = useInfo();
 
-  const sub = [
+  const sub: { label: string; value: string | undefined }[] = [
     {
       label: 'UI',
       value: packageJson.version,
