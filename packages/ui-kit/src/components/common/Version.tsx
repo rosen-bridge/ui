@@ -37,9 +37,7 @@ const Root = styled('div', {
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [versionValue, setVersionValue] = useState<string | undefined>(value);
-  const [subValues, setSubValues] = useState<
-    { label: string; value?: string }[]
-  >(sub ? sub : []);
+  const [subValues, setSubValues] = useState(sub);
 
   const isMobile = useIsMobile();
 
@@ -49,17 +47,10 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
 
       setVersionValue((prev) => prev || '?');
       setSubValues((prev) =>
-        prev?.map((item) =>
-          item
-            ? {
-                label: item.label,
-                value: item.value,
-              }
-            : {
-                label: '?',
-                value: '?',
-              },
-        ),
+        prev?.map((item) => ({
+          label: item.label,
+          value: item.value || '?',
+        })),
       );
     }, 15000);
 
