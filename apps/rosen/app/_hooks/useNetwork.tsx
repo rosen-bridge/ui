@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORK_VALUES } from '@rosen-ui/constants';
@@ -9,17 +16,42 @@ import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
 
+/**
+ * handles network related operations and provide list of
+ * available tokens in network
+ */
+export const useNetwork = () => {
+  const context = useContext(NetworkContext);
+
+  if (!context) {
+    throw new Error('useNetwork must be used within NetworkProvider');
+  }
+
+  return context;
+};
+
+export type NetworkContextType = {
+  sources: AvailableNetworks[];
+  availableSources: AvailableNetworks[];
+  selectedSource?: AvailableNetworks;
+
+  targets: AvailableNetworks[];
+  availableTargets: AvailableNetworks[];
+  selectedTarget?: AvailableNetworks;
+
+  tokens: RosenChainToken[];
+  availableTokens: RosenChainToken[];
+};
+
+export const NetworkContext = createContext<NetworkContextType | null>(null);
+
 type BlackList = {
   fromChain: Network;
   toChain: Network;
   tokenName: string;
 };
 
-/**
- * handles network related operations and provide list of
- * available tokens in network
- */
-export const useNetwork = () => {
+export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const { sourceField, targetField } = useBridgeForm();
 
   const tokenMap = useTokenMap();
@@ -133,7 +165,7 @@ export const useNetwork = () => {
     setBlacklist(blacklist);
   }, []);
 
-  return {
+  const state = {
     sources,
     availableSources,
     selectedSource,
@@ -145,4 +177,8 @@ export const useNetwork = () => {
     tokens,
     availableTokens,
   };
+
+  return (
+    <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>
+  );
 };

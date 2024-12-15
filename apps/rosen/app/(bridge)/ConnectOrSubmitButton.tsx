@@ -55,7 +55,7 @@ export const ConnectOrSubmitButton = ({
     isLoading: isLoadingFees,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const { startTransaction, isSubmitting: isTransactionSubmitting } =
     useTransaction();

@@ -19,10 +19,10 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import {
+  useBalance,
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenBalance,
   useTokenMap,
   useTransactionFormData,
   useWallet,
@@ -74,12 +74,17 @@ export const BridgeForm = () => {
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
 
-  const { isLoading, amount, token } = useTokenBalance();
+  const { isLoading, amount } = useBalance();
 
-  const { error, max, loading: isMaxLoading, load } = useMaxTransfer();
+  const {
+    error,
+    amount: max,
+    isLoading: isMaxLoading,
+    load,
+  } = useMaxTransfer();
   const tokenMap = useTokenMap();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;

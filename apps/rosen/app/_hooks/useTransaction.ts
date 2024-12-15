@@ -19,7 +19,7 @@ export const useTransaction = () => {
   const { targetValue, tokenValue, amountValue, walletAddressValue } =
     useTransactionFormData();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const lockAddress = selectedSource?.lockAddress ?? '';

@@ -10,7 +10,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {
-  error: boolean;
+  error: unknown;
   loading: boolean;
   value: string;
   unit: string;
@@ -57,7 +57,7 @@ export const UseAllAmount = ({
             </span>
           </Button>
         )}
-        {error && !loading && (
+        {!!error && !loading && (
           <IconButton sx={{ verticalAlign: 'middle' }} onClick={onRetry}>
             <SvgIcon color="error" sx={{ width: 24 }}>
               <SyncProblem />

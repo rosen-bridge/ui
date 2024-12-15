@@ -50,7 +50,11 @@ export const BridgeTransaction = ({
     isLoading: isLoadingFees,
     minTransferRaw,
   } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
-  const { setSelectedWallet, wallets, selectedWallet } = useWallet();
+  const {
+    select: setSelectedWallet,
+    wallets,
+    selected: selectedWallet,
+  } = useWallet();
 
   const { selectedSource } = useNetwork();
 

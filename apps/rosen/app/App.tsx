@@ -9,9 +9,9 @@ import React from 'react';
 import { NoSsr } from '@mui/material';
 import { App as AppBase } from '@rosen-bridge/ui-kit';
 
+import { TokenMapProvider } from '@/_hooks';
 import { theme } from '@/_theme/theme';
 
-import { WalletContextProvider } from './_contexts/walletContext';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
@@ -19,7 +19,7 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
   return (
     <NoSsr>
       <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-        <WalletContextProvider>{children}</WalletContextProvider>
+        <TokenMapProvider>{children}</TokenMapProvider>
       </AppBase>
     </NoSsr>
   );
