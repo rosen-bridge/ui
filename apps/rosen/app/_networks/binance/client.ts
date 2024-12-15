@@ -24,7 +24,7 @@ export const BinanceNetwork: BinanceNetworkType = {
       generateTxParameters: unwrap(generateTxParameters),
     }),
   ],
-  nextHeightInterval: -1,
+  nextHeightInterval: 200,
   logo: BinanceIcon,
   lockAddress: process.env.NEXT_PUBLIC_BINANCE_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(getMaxTransfer),

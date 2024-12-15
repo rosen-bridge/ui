@@ -25,7 +25,7 @@ export const EthereumNetwork: EthereumNetworkType = {
     }),
   ],
   logo: EthereumIcon,
-  nextHeightInterval: 0,
+  nextHeightInterval: 50,
   lockAddress: process.env.NEXT_PUBLIC_ETHEREUM_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address.toLowerCase(),
