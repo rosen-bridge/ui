@@ -1,9 +1,10 @@
 import { ReactNode } from 'react';
 
 import { SnackbarProvider } from '../../contexts';
+import { useMediaQuery } from '../../hooks';
 import { ThemeProvider, ThemeProviderProps } from '../../Providers';
 import { styled } from '../../styling';
-import { CssBaseline } from '../base';
+import { Box, CssBaseline } from '../base';
 import { AppSnackbar } from './AppSnackbar';
 
 const Root = styled('div', {
@@ -49,15 +50,33 @@ interface AppProps {
 }
 
 export const App = ({ children, sideBar, theme, toolbar }: AppProps) => {
+  const isMobile = useMediaQuery(
+    ('light' in theme ? theme.light : theme).breakpoints.down('tablet'),
+  );
   return (
     <ThemeProvider theme={theme}>
       <>
         <CssBaseline />
         <SnackbarProvider>
           <Root>
-            {sideBar}
+            {isMobile ? (
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                {sideBar}
+                {toolbar}
+              </Box>
+            ) : (
+              sideBar
+            )}
             <Main>
-              <div style={{ position: 'relative', zIndex: '1' }}>{toolbar}</div>
+              {!isMobile && (
+                <div style={{ position: 'relative', zIndex: '1' }}>
+                  {toolbar}
+                </div>
+              )}
               {children}
             </Main>
             <AppSnackbar />
