@@ -3,6 +3,8 @@ import { NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
 
+import { EvmChains } from './types';
+
 /**
  * generates metadata for lock transaction
  * @param toChain
@@ -43,21 +45,19 @@ export const generateLockData = async (
 };
 
 /**
- * gets Ethereum current block height
+ * gets EVM chain current block height
  * @returns
  */
-export const getHeight = async (): Promise<number> => {
-  return await new JsonRpcProvider(
-    process.env.ETHEREUM_BLAST_API,
-  ).getBlockNumber();
+export const getHeight = async (chain: EvmChains): Promise<number> => {
+  return await new JsonRpcProvider(getChainRpcUrl(chain)).getBlockNumber();
 };
 
 /**
- * gets Ethereum fee data
+ * gets EVM chain fee data
  * @returns
  */
-export const getFeeData = async (): Promise<FeeData> => {
-  return await new JsonRpcProvider(process.env.ETHEREUM_BLAST_API).getFeeData();
+export const getFeeData = async (chain: EvmChains): Promise<FeeData> => {
+  return await new JsonRpcProvider(getChainRpcUrl(chain)).getFeeData();
 };
 
 /**
@@ -67,4 +67,19 @@ export const getFeeData = async (): Promise<FeeData> => {
  */
 export const isValidAddress = (addr: string) => {
   return isAddress(addr);
+};
+
+/**
+ * returns the corresponding chain RPC url
+ * @param chain
+ */
+const getChainRpcUrl = (chain: EvmChains) => {
+  switch (chain) {
+    case EvmChains.ETHEREUM:
+      return process.env.ETHEREUM_RPC_API;
+    case EvmChains.BINANCE:
+      return process.env.BINANCE_RPC_API;
+    default:
+      throw Error(`chain [${chain}] is registered as an EVM chain`);
+  }
 };
