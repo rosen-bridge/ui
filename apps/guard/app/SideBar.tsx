@@ -94,9 +94,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={[
-        <Version label="Guard" value={info?.versions.app} sub={sub} />,
-      ]}
+      versions={<Version label="Guard" value={info?.versions.app} sub={sub} />}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (
