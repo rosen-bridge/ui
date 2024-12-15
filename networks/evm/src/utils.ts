@@ -80,6 +80,6 @@ const getChainRpcUrl = (chain: EvmChains) => {
     case EvmChains.BINANCE:
       return process.env.BINANCE_RPC_API;
     default:
-      throw Error(`chain [${chain}] is registered as an EVM chain`);
+      throw Error(`chain [${chain}] is not registered as an EVM chain`);
   }
 };
