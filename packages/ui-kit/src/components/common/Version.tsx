@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 
 import { useIsMobile } from '../../hooks';
 import { styled } from '../../styling';
@@ -36,30 +36,25 @@ const Root = styled('div', {
 
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const [isLoading, setIsLoading] = useState(true);
-  const [versionValue, setVersionValue] = useState<string | undefined>(value);
-  const [subValues, setSubValues] = useState(sub);
 
   const isMobile = useIsMobile();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
+  const { versionValue, subValues, formattedSub } = useMemo(() => {
+    const versionValue = value || '?';
+    const subValues = sub?.map((item) => ({
+      label: item.label,
+      value: item.value || '?',
+    }));
+    const formattedSub = subValues
+      ?.map((item) => `${item.label} v${item.value}`)
+      .join(', ');
 
-      setVersionValue((prev) => prev || '?');
-      setSubValues((prev) =>
-        prev?.map((item) => ({
-          label: item.label,
-          value: item.value || '?',
-        })),
-      );
-    }, 15000);
+    if (isLoading) {
+      setTimeout(() => setIsLoading(false), 15000);
+    }
 
-    return () => clearTimeout(timer);
-  }, [value, sub]);
-
-  const formattedSub = useMemo(() => {
-    return subValues?.map((item) => `${item.label} v${item.value}`).join(', ');
-  }, [subValues]);
+    return { versionValue, subValues, formattedSub };
+  }, [value, sub, isLoading]);
 
   return (
     <Root>
