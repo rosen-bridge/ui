@@ -48,16 +48,6 @@ export const useMaxTransfer = () => {
     setError(false);
 
     try {
-      let eventData: any;
-
-      if (selectedSource.name === NETWORKS.BITCOIN) {
-        eventData = {
-          fromAddress: await selectedWallet.getAddress(),
-          toAddress: walletAddressValue,
-          toChain: targetValue,
-        };
-      }
-
       const max = await getMaxTransfer(
         selectedSource,
         {
