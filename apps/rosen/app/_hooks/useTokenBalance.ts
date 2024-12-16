@@ -34,9 +34,13 @@ export const useTokenBalance = () => {
   const getAssetBalance = useCallback(
     async (wallet: Wallet) => {
       setBalanceState({ isLoading: true, amount: 0n, token: null });
-      // THIS IS A WRAPPED-VALUE
-      const balance = await wallet.getBalance(token);
-      setBalanceState({ isLoading: false, amount: balance || 0n, token });
+      try {
+        // THIS IS A WRAPPED-VALUE
+        const balance = await wallet.getBalance(token);
+        setBalanceState({ isLoading: false, amount: balance || 0n, token });
+      } catch {
+        setBalanceState({ isLoading: false, amount: 0n, token });
+      }
     },
     [token],
   );
