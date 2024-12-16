@@ -7,7 +7,6 @@ import {
   useState,
 } from 'react';
 
-import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import { useNetwork } from './useNetwork';
@@ -35,8 +34,6 @@ export type WalletContextType = {
 export const WalletContext = createContext<WalletContextType | null>(null);
 
 export const WalletProvider = ({ children }: { children: ReactNode }) => {
-  const { get, set } = useLocalStorageManager();
-
   const { selectedSource } = useNetwork();
 
   const [selected, setSelected] = useState<Wallet>();
@@ -53,15 +50,15 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
       if (!selectedSource) return;
 
-      set('rosen:wallet:' + selectedSource.name, wallet.name);
+      localStorage.setItem('rosen:wallet:' + selectedSource.name, wallet.name);
     },
-    [selected, selectedSource, set, setSelected],
+    [selected, selectedSource, setSelected],
   );
 
   useEffect(() => {
     if (!selectedSource) return;
 
-    const name = get('rosen:wallet:' + selectedSource.name);
+    const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
 
     const selected = selectedSource.wallets.find(
       (wallet) => wallet.name === name && wallet.isAvailable(),
@@ -70,7 +67,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     if (!selected) return;
 
     select(selected);
-  }, [get, select, selectedSource]);
+  }, [select, selectedSource]);
 
   const state = {
     select,
