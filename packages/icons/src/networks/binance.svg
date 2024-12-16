@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
-  <style>
-    .st1 {
-      fill: #fff
-    }
-  </style>
-  <g id="Icon">
-    <circle cx="512" cy="512" r="512" />
+  <g>
     <path class="st1" d="M404.9 468 512 360.9l107.1 107.2 62.3-62.3L512 236.3 342.6 405.7z" />
     <path transform="rotate(-45.001 298.629 511.998)" class="st1" d="M254.6 467.9h88.1V556h-88.1z" />
     <path class="st1" d="M404.9 556 512 663.1l107.1-107.2 62.4 62.3h-.1L512 787.7 342.6 618.3l-.1-.1z" />
