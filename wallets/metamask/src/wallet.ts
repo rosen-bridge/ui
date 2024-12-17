@@ -3,6 +3,7 @@ import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
@@ -95,6 +96,47 @@ export class MetaMaskWallet implements Wallet {
       window.ethereum.isMetaMask &&
       !!window.ethereum._metamask
     );
+  }
+
+  async switchChain(chain: Network): Promise<void> {
+    const provider = this.api.getProvider();
+
+    if (!provider) throw new Error(`Failed to interact with metamask`);
+
+    const chains = {
+      [NETWORKS.BINANCE]: '0x38',
+      [NETWORKS.ETHEREUM]: '0x1',
+    } as { [key in Network]?: string };
+
+    const chainId = chains[chain];
+
+    if (!chainId)
+      throw new Error(
+        `The chain [${chain}] is currently unsupported for switching`,
+      );
+
+    try {
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId }],
+      });
+      /**
+       * TODO: replace the any type
+       * local:ergo/rosen-bridge/ui#471
+       */
+      // eslint-disable-next-line
+    } catch (error: any) {
+      switch (error.code) {
+        case 4001:
+          throw new Error(`User rejected the request`);
+        case 4902:
+          throw new Error(
+            `The chain [${chain}] has not been added to your MetaMask wallet. Please add it using the MetaMask extension and try again`,
+          );
+        default:
+          throw error;
+      }
+    }
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {

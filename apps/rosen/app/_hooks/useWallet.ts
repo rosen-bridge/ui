@@ -1,5 +1,6 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
 
+import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 import { Wallet } from '@rosen-ui/wallet-api';
 
@@ -11,6 +12,9 @@ interface WalletDescriptor {
   readonly name: string;
   readonly expDate: string;
 }
+
+let lastTry: number;
+let errorOnSwitching: string;
 
 /**
  * generates and return the wallet object to save in the local storage
@@ -33,6 +37,7 @@ export const useWallet = () => {
   const { get, set } = useLocalStorageManager();
 
   const { selectedSource } = useNetwork();
+  const { openSnackbar } = useSnackbar();
 
   /**
    * searches in the available wallets in the selected network
@@ -74,6 +79,7 @@ export const useWallet = () => {
       const status = await wallet.connect();
 
       if (typeof status === 'boolean' && status) {
+        errorOnSwitching = '';
         set<WalletDescriptor>(selectedSource!.name, toWalletDescriptor(wallet));
         walletGlobalContext?.dispatch({ type: 'set', wallet });
       }
@@ -107,10 +113,47 @@ export const useWallet = () => {
     }
   }, [handleConnection]);
 
+  useEffect(() => {
+    const run = async () => {
+      if (!selectedSource) return;
+
+      if (!walletGlobalContext?.state?.selectedWallet?.switchChain) return;
+
+      if (lastTry > Date.now()) return;
+
+      const key =
+        selectedSource.name + walletGlobalContext.state.selectedWallet.name;
+
+      if (errorOnSwitching === key) return;
+
+      lastTry = Date.now() + 500;
+
+      try {
+        await walletGlobalContext.state.selectedWallet.switchChain(
+          selectedSource.name,
+        );
+        errorOnSwitching = '';
+        /**
+         * TODO: replace the any type
+         * local:ergo/rosen-bridge/ui#471
+         */
+        // eslint-disable-next-line
+      } catch (error: any) {
+        errorOnSwitching = key;
+        walletGlobalContext.dispatch({ type: 'remove' });
+        openSnackbar(error.message, 'error');
+      }
+    };
+
+    run();
+  }, [selectedSource, walletGlobalContext, openSnackbar]);
+
   return selectedSource
     ? {
         setSelectedWallet,
-        selectedWallet: walletGlobalContext?.state.selectedWallet,
+        selectedWallet: errorOnSwitching
+          ? null
+          : walletGlobalContext?.state.selectedWallet,
         wallets: selectedSource.wallets,
         getBalance: walletGlobalContext?.state.selectedWallet?.getBalance,
       }
