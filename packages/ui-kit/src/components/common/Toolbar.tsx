@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { useIsMobile } from '../../hooks';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { styled } from '../../styling';
 import { Typography, Stack, Grid } from '../base';
@@ -39,6 +40,15 @@ export const Toolbar: React.FC<ToolbarProps> = (props) => {
 
   const theme = useTheme();
   const textAlign = isCentered ? 'center' : 'inherit';
+
+  const isMobile = useIsMobile();
+
+  if (isMobile)
+    return (
+      <div className="toolbar">
+        <Stack direction="row">{toolbarActions}</Stack>
+      </div>
+    );
 
   return (
     <Header>
