@@ -2,6 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
+import { Paste } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -14,6 +15,8 @@ import {
   SvgIcon,
   Alert,
   Autocomplete,
+  InputAdornment,
+  IconButton,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -224,7 +227,29 @@ export const BridgeForm = () => {
       </Grid>
       <TextField
         label="Address"
-        InputProps={{ disableUnderline: true } as any}
+        InputProps={
+          {
+            disableUnderline: true,
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  sx={{ cursor: 'pointer' }}
+                  onClick={async () => {
+                    try {
+                      const clipboardText =
+                        await navigator.clipboard.readText();
+                      addressField.onChange(clipboardText);
+                    } catch (err) {
+                      console.error('Failed to read clipboard: ', err);
+                    }
+                  }}
+                >
+                  <Paste />
+                </IconButton>
+              </InputAdornment>
+            ),
+          } as any
+        }
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={
