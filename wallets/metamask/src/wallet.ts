@@ -61,7 +61,7 @@ export class MetaMaskWallet implements Wallet {
 
     let amount;
 
-    if (tokenId == 'eth') {
+    if (token.metaData.type === 'native') {
       amount = await provider.request<string>({
         method: 'eth_getBalance',
         params: [accounts[0], 'latest'],
