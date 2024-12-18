@@ -30,6 +30,7 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
+import { theme } from '@/_theme/theme';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
@@ -233,7 +234,13 @@ export const BridgeForm = () => {
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
-                  sx={{ cursor: 'pointer' }}
+                  sx={{
+                    cursor: 'pointer',
+                    color: (theme) =>
+                      theme.palette.mode === 'light'
+                        ? theme.palette.text.secondary
+                        : theme.palette.text.secondary,
+                  }}
                   onClick={async () => {
                     try {
                       const clipboardText =
