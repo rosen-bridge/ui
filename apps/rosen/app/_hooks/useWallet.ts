@@ -119,12 +119,20 @@ export const useWallet = () => {
 
       if (!walletGlobalContext?.state?.selectedWallet?.switchChain) return;
 
-      if (lastTry > Date.now()) return;
-
       const key =
         selectedSource.name + walletGlobalContext.state.selectedWallet.name;
 
       if (errorOnSwitching === key) return;
+
+      if (
+        !selectedSource.wallets.find(
+          (wallet) =>
+            wallet.name === walletGlobalContext.state.selectedWallet!.name,
+        )
+      )
+        return;
+
+      if (lastTry > Date.now()) return;
 
       lastTry = Date.now() + 500;
 
