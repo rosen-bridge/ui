@@ -16,7 +16,7 @@
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
-    "@rosen-bridge/address-codec": "^0.3.0",
+    "@rosen-bridge/address-codec": "^0.5.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/cardano-utxo-selection": "^1.0.0",
     "@rosen-bridge/cli": "^0.2.0",
