@@ -28,5 +28,5 @@ export const BinanceNetwork: BinanceNetworkType = {
   logo: BinanceIcon,
   lockAddress: process.env.NEXT_PUBLIC_BINANCE_LOCK_ADDRESS!,
   getMaxTransfer: unwrap(getMaxTransfer),
-  toSafeAddress: (address) => address,
+  toSafeAddress: (address) => address.toLowerCase(),
 };
