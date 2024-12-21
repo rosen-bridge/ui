@@ -119,6 +119,7 @@ export class MetaMaskWallet implements Wallet {
       if (silent) {
         const permissions = (await provider.request({
           method: 'wallet_getPermissions',
+          params: [],
         })) as { caveats: { type: string; value: string[] }[] }[];
 
         const has = permissions
@@ -130,7 +131,7 @@ export class MetaMaskWallet implements Wallet {
               caveat.value.includes(chainId),
           );
 
-        if (!has) return;
+        if (!has) throw new Error();
       }
 
       await provider.request({
