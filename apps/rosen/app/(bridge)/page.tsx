@@ -7,6 +7,8 @@ import { Alert, styled } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
+import { WalletProvider } from '@/_hooks';
+
 import { BridgeForm } from './BridgeForm';
 import { BridgeTransaction } from './BridgeTransaction';
 import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
@@ -79,30 +81,32 @@ const RosenBridge = () => {
     <>
       <Background />
       <FormProvider {...methods}>
-        <BridgeContainer>
-          <BridgeForm />
-          <BridgeTransaction
-            chooseWalletsModalOpen={chooseWalletsModalOpen}
-            setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-          />
-          {methods.getValues().source == NETWORKS.ETHEREUM && (
-            <Alert
-              severity="warning"
-              sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
-            >
-              If you are using Ledger, you may need to enable &apos;Blind
-              signing&apos; and &apos;Debug data&apos; in the Ledger (Ethereum
-              &gt; Settings) due to{' '}
-              <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
-                a known issue in Ledger and MetaMask interaction
-              </a>
-              .
-            </Alert>
-          )}
-          <ConnectOrSubmitButton
-            setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-          />
-        </BridgeContainer>
+        <WalletProvider>
+          <BridgeContainer>
+            <BridgeForm />
+            <BridgeTransaction
+              chooseWalletsModalOpen={chooseWalletsModalOpen}
+              setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+            />
+            {methods.getValues().source == NETWORKS.ETHEREUM && (
+              <Alert
+                severity="warning"
+                sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
+              >
+                If you are using Ledger, you may need to enable &apos;Blind
+                signing&apos; and &apos;Debug data&apos; in the Ledger (Ethereum
+                &gt; Settings) due to{' '}
+                <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
+                  a known issue in Ledger and MetaMask interaction
+                </a>
+                .
+              </Alert>
+            )}
+            <ConnectOrSubmitButton
+              setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+            />
+          </BridgeContainer>
+        </WalletProvider>
       </FormProvider>
     </>
   );

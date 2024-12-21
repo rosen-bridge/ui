@@ -98,7 +98,7 @@ export class MetaMaskWallet implements Wallet {
     );
   }
 
-  async switchChain(chain: Network): Promise<void> {
+  async switchChain(chain: Network, silent?: boolean): Promise<void> {
     const provider = this.api.getProvider();
 
     if (!provider) throw new Error(`Failed to interact with metamask`);
@@ -116,6 +116,23 @@ export class MetaMaskWallet implements Wallet {
       );
 
     try {
+      if (silent) {
+        const permissions = (await provider.request({
+          method: 'wallet_getPermissions',
+        })) as { caveats: { type: string; value: string[] }[] }[];
+
+        const has = permissions
+          .map((permission) => permission.caveats)
+          .flat()
+          .some(
+            (caveat) =>
+              caveat.type === 'restrictNetworkSwitching' &&
+              caveat.value.includes(chainId),
+          );
+
+        if (!has) return;
+      }
+
       await provider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId }],
