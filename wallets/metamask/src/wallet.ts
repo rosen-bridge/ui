@@ -18,8 +18,6 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
-  connecWaiting?: Promise<unknown>;
-
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',
@@ -27,16 +25,21 @@ export class MetaMaskWallet implements Wallet {
     enableAnalytics: false,
   });
 
+  private get provider() {
+    const provider = this.api.getProvider();
+
+    if (!provider) throw new Error(`Failed to interact with metamask`);
+
+    return provider;
+  }
+
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<boolean> {
-    this.connecWaiting ||= this.api.connect();
     try {
-      await this.connecWaiting;
-      this.connecWaiting = undefined;
+      await this.api.connect();
       return true;
     } catch {
-      this.connecWaiting = undefined;
       return false;
     }
   }
@@ -46,11 +49,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
-    const provider = this.api.getProvider();
-
-    if (!provider) return 0n;
-
-    const accounts = await provider.request<string[]>({
+    const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
     });
 
@@ -63,7 +62,7 @@ export class MetaMaskWallet implements Wallet {
     let amount;
 
     if (token.metaData.type === 'native') {
-      amount = await provider.request<string>({
+      amount = await this.provider.request<string>({
         method: 'eth_getBalance',
         params: [accounts[0], 'latest'],
       });
@@ -91,18 +90,10 @@ export class MetaMaskWallet implements Wallet {
   }
 
   isAvailable(): boolean {
-    return (
-      typeof window.ethereum !== 'undefined' &&
-      window.ethereum.isMetaMask &&
-      !!window.ethereum._metamask
-    );
+    return this.api.isExtensionActive();
   }
 
   async switchChain(chain: Network, silent?: boolean): Promise<void> {
-    const provider = this.api.getProvider();
-
-    if (!provider) throw new Error(`Failed to interact with metamask`);
-
     const chains = {
       [NETWORKS.BINANCE]: '0x38',
       [NETWORKS.ETHEREUM]: '0x1',
@@ -117,7 +108,7 @@ export class MetaMaskWallet implements Wallet {
 
     try {
       if (silent) {
-        const permissions = (await provider.request({
+        const permissions = (await this.provider.request({
           method: 'wallet_getPermissions',
           params: [],
         })) as { caveats: { type: string; value: string[] }[] }[];
@@ -134,7 +125,7 @@ export class MetaMaskWallet implements Wallet {
         if (!has) throw new Error();
       }
 
-      await provider.request({
+      await this.provider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId }],
       });
@@ -158,11 +149,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
-    const provider = this.api.getProvider();
-
-    if (!provider) throw Error(`Failed to interact with metamask`);
-
-    const accounts = await provider.request<string[]>({
+    const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
     });
 
@@ -192,7 +179,7 @@ export class MetaMaskWallet implements Wallet {
       params.token,
     );
 
-    const result = await provider.request<string>({
+    const result = await this.provider.request<string>({
       method: 'eth_sendTransaction',
       params: [transactionParameters],
     });
