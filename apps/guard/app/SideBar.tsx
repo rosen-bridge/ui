@@ -20,6 +20,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
+import { useInfo } from './_hooks/useInfo';
 
 /**
  * render sidebar log and navigation buttons
@@ -62,7 +63,7 @@ export const SideBar = () => {
     },
   ];
 
-  const [info, setInfo] = useState<any>(null);
+  const { data: info, isLoading } = useInfo();
 
   const sub = useMemo(() => {
     const result = [
@@ -75,14 +76,14 @@ export const SideBar = () => {
         value: info?.versions.contract,
       },
     ];
-    if (info && info?.versions.contract !== info?.versions.tokensMap) {
+    if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
       result.push({
         label: 'Tokens',
         value: info?.versions.tokensMap,
       });
     }
     return result;
-  }, [info]);
+  }, [info, isLoading]);
 
   return (
     <AppBar
