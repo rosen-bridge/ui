@@ -236,10 +236,6 @@ export const BridgeForm = () => {
                 <IconButton
                   sx={{
                     cursor: 'pointer',
-                    color: (theme) =>
-                      theme.palette.mode === 'light'
-                        ? theme.palette.text.secondary
-                        : theme.palette.text.secondary,
                   }}
                   onClick={async () => {
                     try {
