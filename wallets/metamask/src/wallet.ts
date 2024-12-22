@@ -4,7 +4,16 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import {
+  ChainNotAddedError,
+  ChainSwitchingRejectedError,
+  UnsupportedChainError,
+  Wallet,
+  InteractionError,
+  WalletTransferParams,
+  AddressRetrievalError,
+  ConnectionRejectedError,
+} from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
 import { WalletConfig } from './types';
@@ -28,24 +37,37 @@ export class MetaMaskWallet implements Wallet {
   private get provider() {
     const provider = this.api.getProvider();
 
-    if (!provider) throw new Error(`Failed to interact with metamask`);
+    if (!provider) throw new InteractionError(this.name);
 
     return provider;
   }
 
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
+  async connect(): Promise<void> {
     try {
       await this.api.connect();
-      return true;
-    } catch {
-      return false;
+    } catch (error) {
+      if (error instanceof Object && 'code' in error) {
+        switch (error.code) {
+          case 4001:
+            throw new ConnectionRejectedError(this.name, error);
+        }
+      }
+      throw error;
     }
   }
 
-  getAddress(): Promise<string> {
-    throw new Error('Not implemented');
+  async getAddress(): Promise<string> {
+    const accounts = await this.provider.request<string[]>({
+      method: 'eth_accounts',
+    });
+
+    const account = accounts?.at(0);
+
+    if (!account) throw new AddressRetrievalError(this.name);
+
+    return account;
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
@@ -101,63 +123,46 @@ export class MetaMaskWallet implements Wallet {
 
     const chainId = chains[chain];
 
-    if (!chainId)
-      throw new Error(
-        `The chain [${chain}] is currently unsupported for switching`,
-      );
+    if (!chainId) throw new UnsupportedChainError(this.name, chain);
+
+    if (silent) {
+      const permissions = (await this.provider.request({
+        method: 'wallet_getPermissions',
+        params: [],
+      })) as { caveats: { type: string; value: string[] }[] }[];
+
+      const has = permissions
+        .map((permission) => permission.caveats)
+        .flat()
+        .some(
+          (caveat) =>
+            caveat.type === 'restrictNetworkSwitching' &&
+            caveat.value.includes(chainId),
+        );
+
+      if (!has) throw new Error();
+    }
 
     try {
-      if (silent) {
-        const permissions = (await this.provider.request({
-          method: 'wallet_getPermissions',
-          params: [],
-        })) as { caveats: { type: string; value: string[] }[] }[];
-
-        const has = permissions
-          .map((permission) => permission.caveats)
-          .flat()
-          .some(
-            (caveat) =>
-              caveat.type === 'restrictNetworkSwitching' &&
-              caveat.value.includes(chainId),
-          );
-
-        if (!has) throw new Error();
-      }
-
       await this.provider.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId }],
       });
-      /**
-       * TODO: replace the any type
-       * local:ergo/rosen-bridge/ui#471
-       */
-      // eslint-disable-next-line
-    } catch (error: any) {
-      switch (error.code) {
-        case 4001:
-          throw new Error(`User rejected the request`);
-        case 4902:
-          throw new Error(
-            `The chain [${chain}] has not been added to your MetaMask wallet. Please add it using the MetaMask extension and try again`,
-          );
-        default:
-          throw error;
+    } catch (error) {
+      if (error instanceof Object && 'code' in error) {
+        switch (error.code) {
+          case 4001:
+            throw new ChainSwitchingRejectedError(this.name, chain, error);
+          case 4902:
+            throw new ChainNotAddedError(this.name, chain, error);
+        }
       }
+      throw error;
     }
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
-    const accounts = await this.provider.request<string[]>({
-      method: 'eth_accounts',
-    });
-
-    if (!accounts?.length)
-      throw Error(`Failed to fetch accounts from metamask`);
-
-    if (!accounts[0])
-      throw Error(`Failed to get address of first account from metamask`);
+    const address = await this.getAddress();
 
     const rosenData = await this.config.generateLockData(
       params.toChain,
@@ -173,7 +178,7 @@ export class MetaMaskWallet implements Wallet {
     const transactionParameters = await this.config.generateTxParameters(
       tokenId,
       params.lockAddress,
-      accounts[0],
+      address,
       params.amount,
       rosenData,
       params.token,
