@@ -59,3 +59,17 @@ export class ConnectionRejectedError extends Error {
     });
   }
 }
+
+export class UserDeniedTransactionSignatureError extends Error {
+  constructor(
+    public wallet: string,
+    public cause: unknown,
+  ) {
+    super(
+      `Transaction signature denied by the user for the [${wallet}] wallet`,
+      {
+        cause,
+      },
+    );
+  }
+}

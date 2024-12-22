@@ -3,7 +3,7 @@ import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
   ChainNotAddedError,
   ChainSwitchingRejectedError,
@@ -13,6 +13,7 @@ import {
   WalletTransferParams,
   AddressRetrievalError,
   ConnectionRejectedError,
+  UserDeniedTransactionSignatureError,
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
@@ -44,6 +45,17 @@ export class MetaMaskWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private dispatchError(error: any, cases: { [key: number]: () => Error }) {
+    if (error?.code in cases) {
+      throw cases[error.code]();
+    }
+    if (error.message) {
+      throw new Error(error.message, { cause: error });
+    }
+    throw error;
+  }
+
   private async permissions() {
     return (await this.provider.request({
       method: 'wallet_getPermissions',
@@ -55,13 +67,9 @@ export class MetaMaskWallet implements Wallet {
     try {
       await this.api.connect();
     } catch (error) {
-      if (error instanceof Object && 'code' in error) {
-        switch (error.code) {
-          case 4001:
-            throw new ConnectionRejectedError(this.name, error);
-        }
-      }
-      throw error;
+      this.dispatchError(error, {
+        4001: () => new ConnectionRejectedError(this.name, error),
+      });
     }
   }
 
@@ -77,12 +85,8 @@ export class MetaMaskWallet implements Wallet {
     return account;
   }
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
-    const accounts = await this.provider.request<string[]>({
-      method: 'eth_accounts',
-    });
-
-    if (!accounts?.length) return 0n;
+  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    const address = await this.getAddress();
 
     const tokenMap = await this.config.getTokenMap();
 
@@ -93,7 +97,7 @@ export class MetaMaskWallet implements Wallet {
     if (token.metaData.type === 'native') {
       amount = await this.provider.request<string>({
         method: 'eth_getBalance',
-        params: [accounts[0], 'latest'],
+        params: [address, 'latest'],
       });
     } else {
       const browserProvider = new BrowserProvider(window.ethereum!);
@@ -104,7 +108,7 @@ export class MetaMaskWallet implements Wallet {
         await browserProvider.getSigner(),
       );
 
-      amount = await contract.balanceOf(accounts[0]);
+      amount = await contract.balanceOf(address);
     }
 
     if (!amount) return 0n;
@@ -155,15 +159,10 @@ export class MetaMaskWallet implements Wallet {
         params: [{ chainId }],
       });
     } catch (error) {
-      if (error instanceof Object && 'code' in error) {
-        switch (error.code) {
-          case 4001:
-            throw new ChainSwitchingRejectedError(this.name, chain, error);
-          case 4902:
-            throw new ChainNotAddedError(this.name, chain, error);
-        }
-      }
-      throw error;
+      this.dispatchError(error, {
+        4001: () => new ChainSwitchingRejectedError(this.name, chain, error),
+        4902: () => new ChainNotAddedError(this.name, chain, error),
+      });
     }
   }
 
@@ -190,11 +189,18 @@ export class MetaMaskWallet implements Wallet {
       params.token,
     );
 
-    const result = await this.provider.request<string>({
-      method: 'eth_sendTransaction',
-      params: [transactionParameters],
-    });
+    try {
+      return (await this.provider.request<string>({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      }))!;
+    } catch (error) {
+      this.dispatchError(error, {
+        4001: () => new UserDeniedTransactionSignatureError(this.name, error),
+        // 4100: () =>  ,
+      });
+    }
 
-    return result ?? '';
+    return '';
   }
 }
