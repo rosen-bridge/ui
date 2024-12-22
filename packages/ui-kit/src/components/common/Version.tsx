@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useIsMobile } from '../../hooks';
 import { styled } from '../../styling';
@@ -22,7 +22,7 @@ const Root = styled('div', {
   fontWeight: '400px',
   fontSize: '12px',
   lineHeight: '14.06px',
-  color: theme.palette.secondary.light,
+  color: theme.palette.text.secondary,
   [theme.breakpoints.down('tablet')]: {
     flexDirection: 'row',
     justifyContent: 'start',
@@ -35,26 +35,31 @@ const Root = styled('div', {
 }));
 
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
-  const [isLoading, setIsLoading] = useState(true);
+  const $timeout = useRef<number>();
 
   const isMobile = useIsMobile();
 
-  const { versionValue, subValues, formattedSub } = useMemo(() => {
-    const versionValue = value || '?';
-    const subValues = sub?.map((item) => ({
-      label: item.label,
-      value: item.value || '?',
-    }));
-    const formattedSub = subValues
-      ?.map((item) => `${item.label} v${item.value}`)
-      .join(', ');
+  const [timeout, setTimeout] = useState(false);
 
-    if (isLoading) {
-      setTimeout(() => setIsLoading(false), 15000);
+  const loaded = useMemo(() => {
+    if (sub) {
+      return !!value && !!sub.every((item) => !!item.value);
+    } else {
+      return !!value;
     }
+  }, [value, sub]);
 
-    return { versionValue, subValues, formattedSub };
-  }, [value, sub, isLoading]);
+  const isLoading = !(loaded || timeout);
+
+  useEffect(() => {
+    clearTimeout($timeout.current);
+    $timeout.current = window.setTimeout(() => {
+      setTimeout(true);
+    }, 5000);
+    return () => {
+      clearTimeout($timeout.current);
+    };
+  }, [value, sub]);
 
   return (
     <Root>
@@ -63,19 +68,25 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
       ) : (
         <>
           <span>
-            {label} v{versionValue}
+            {label} v{value || '?'}
           </span>
-
-          {formattedSub &&
-            (isMobile ? (
-              <span> ({formattedSub}) </span>
-            ) : (
-              subValues?.map((item, index) => (
-                <span key={index}>
-                  {item.label} v{item.value}
+          {isMobile && sub ? (
+            <span>
+              (
+              {sub
+                ?.map((item) => `${item.label} v${item.value || '?'}`)
+                .join(', ')}
+              )
+            </span>
+          ) : (
+            <>
+              {sub?.map((item) => (
+                <span key={item.label}>
+                  {item.label} v{item.value || '?'}
                 </span>
-              ))
-            ))}
+              ))}
+            </>
+          )}
         </>
       )}
     </Root>

@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useMemo, useState } from 'react';
 
 import {
   BitcoinCircle,
@@ -19,7 +20,6 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
-import { useInfo } from './_hooks/useInfo';
 
 /**
  * render sidebar log and navigation buttons
@@ -62,25 +62,27 @@ export const SideBar = () => {
     },
   ];
 
-  const { data: info, isLoading } = useInfo();
+  const [info, setInfo] = useState<any>(null);
 
-  const sub: { label: string; value: string | undefined }[] = [
-    {
-      label: 'UI',
-      value: packageJson.version,
-    },
-    {
-      label: 'Contract',
-      value: info?.versions.contract,
-    },
-  ];
-
-  if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
-    sub.push({
-      label: 'Tokens',
-      value: info?.versions.tokensMap,
-    });
-  }
+  const sub = useMemo(() => {
+    const result = [
+      {
+        label: 'UI',
+        value: packageJson.version,
+      },
+      {
+        label: 'Contract',
+        value: info?.versions.contract,
+      },
+    ];
+    if (info && info?.versions.contract !== info?.versions.tokensMap) {
+      result.push({
+        label: 'Tokens',
+        value: info?.versions.tokensMap,
+      });
+    }
+    return result;
+  }, [info]);
 
   return (
     <AppBar
