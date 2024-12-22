@@ -3,4 +3,4 @@
 '@rosen-bridge/rosen-app': patch
 ---
 
-Check theme colors in figma and Rosen App and fix mismatches
+Review theme colors in Figma and ensure consistency by identifying and fixing any mismatches
