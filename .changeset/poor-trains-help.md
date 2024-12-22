@@ -4,4 +4,4 @@
 '@rosen-bridge/rosen-app': patch
 ---
 
-Used Version Component in 3 Watcher,Gaurd,Rosen app to display version for desktop and mobile size
+Integrated the Version component in the SideBar to display version information optimized for both desktop and mobile views.
