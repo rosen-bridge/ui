@@ -44,6 +44,13 @@ export class MetaMaskWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
+  private async permissions() {
+    return (await this.provider.request({
+      method: 'wallet_getPermissions',
+      params: [],
+    })) as { caveats: { type: string; value: string[] }[] }[];
+  }
+
   async connect(): Promise<void> {
     try {
       await this.api.connect();
@@ -115,6 +122,10 @@ export class MetaMaskWallet implements Wallet {
     return this.api.isExtensionActive();
   }
 
+  async isConnected(): Promise<boolean> {
+    return !!(await this.permissions()).length;
+  }
+
   async switchChain(chain: Network, silent?: boolean): Promise<void> {
     const chains = {
       [NETWORKS.BINANCE]: '0x38',
@@ -126,12 +137,7 @@ export class MetaMaskWallet implements Wallet {
     if (!chainId) throw new UnsupportedChainError(this.name, chain);
 
     if (silent) {
-      const permissions = (await this.provider.request({
-        method: 'wallet_getPermissions',
-        params: [],
-      })) as { caveats: { type: string; value: string[] }[] }[];
-
-      const has = permissions
+      const has = (await this.permissions())
         .map((permission) => permission.caveats)
         .flat()
         .some(

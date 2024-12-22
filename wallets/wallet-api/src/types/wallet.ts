@@ -16,6 +16,7 @@ export interface Wallet {
   getAddress(): Promise<string>;
   getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
   isAvailable(): boolean;
+  isConnected?(): Promise<boolean>;
   switchChain?(chain: Network, silent?: boolean): Promise<void>;
   transfer(params: WalletTransferParams): Promise<string>;
 }
