@@ -1,5 +1,38 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.0
+
+### Major Changes
+
+- Discontinue support for the Flint and Vespr wallets
+
+### Minor Changes
+
+- Enhance error handling on the bridge form and automatically close the transaction modal upon successful processing
+- Revise the wallet-related logic to align with the latest updates in the wallet packages
+- Improve the transaction dialog confirmation to enhance its responsiveness and user experience
+
+### Patch Changes
+
+- Review theme colors in Figma and ensure consistency by identifying and fixing any mismatches
+- Refactor the token map hook to enhance efficiency
+- Add a paste button to the address field in the bridge form
+- Address the issue where selecting a token with assets and then switching to a token without any causes the 'use all' button to display an incorrect amount instead of zero
+- Integrated the Version component in the SideBar to display version information optimized for both desktop and mobile views.
+- Updated dependencies
+  - @rosen-bridge/icons@1.0.0
+  - @rosen-bridge/ui-kit@1.7.0
+  - @rosen-network/ethereum@1.0.0
+  - @rosen-network/bitcoin@2.0.0
+  - @rosen-network/cardano@2.0.0
+  - @rosen-network/ergo@2.0.0
+  - @rosen-ui/metamask-wallet@1.0.0
+  - @rosen-ui/nautilus-wallet@2.0.0
+  - @rosen-ui/okx-wallet@1.0.0
+  - @rosen-ui/eternl-wallet@2.0.0
+  - @rosen-ui/lace-wallet@2.0.0
+  - @rosen-ui/nami-wallet@2.0.0
+
 ## 3.0.0
 
 ### Major Changes

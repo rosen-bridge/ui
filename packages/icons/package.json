@@ -2,7 +2,7 @@
   "name": "@rosen-bridge/icons",
   "description": "A react icon set wrapping Unicons, used in Rosen apps",
   "private": "true",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "type": "module",
   "types": "./dist/index.d.ts",
   "files": [
