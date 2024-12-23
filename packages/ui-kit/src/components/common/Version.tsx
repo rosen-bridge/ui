@@ -55,7 +55,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
     clearTimeout($timeout.current);
     $timeout.current = window.setTimeout(() => {
       setTimeout(true);
-    }, 5000);
+    }, 15000);
     return () => {
       clearTimeout($timeout.current);
     };
