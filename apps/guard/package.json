@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -14,9 +14,9 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^0.7.0",
+    "@rosen-bridge/icons": "^1.0.0",
     "@rosen-bridge/shared-contexts": "^0.0.2",
-    "@rosen-bridge/ui-kit": "^1.6.0",
+    "@rosen-bridge/ui-kit": "^1.7.0",
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/swr-helpers": "^0.2.0",
     "@rosen-ui/utils": "^0.4.2",
