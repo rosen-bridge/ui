@@ -1,11 +1,6 @@
-import { Metadata } from 'next';
 import React from 'react';
 
 import { App } from './App';
-
-export const metadata: Metadata = {
-  title: 'Watcher',
-};
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (

@@ -13,6 +13,7 @@ import {
   AppLogo,
   NavigationBar,
   NavigationButton,
+  Version,
 } from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
@@ -71,12 +72,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={[
-        {
-          title: 'UI',
-          value: packageJson.version,
-        },
-      ]}
+      versions={<Version label="UI" value={packageJson.version} />}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (

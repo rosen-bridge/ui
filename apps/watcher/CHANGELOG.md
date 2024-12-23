@@ -1,5 +1,15 @@
 # @rosen-bridge/watcher-app
 
+## 3.1.1
+
+### Patch Changes
+
+- Resolve the dynamic title glitch that occurs when navigating between pages
+- Integrated the Version component in the SideBar to display version information optimized for both desktop and mobile views.
+- Updated dependencies
+  - @rosen-bridge/icons@1.0.0
+  - @rosen-bridge/ui-kit@1.7.0
+
 ## 3.1.0
 
 ### Minor Changes
