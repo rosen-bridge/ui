@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
