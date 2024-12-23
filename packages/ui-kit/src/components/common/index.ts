@@ -14,6 +14,7 @@ export * from './HealthParamCardSkeleton';
 export * from './Id';
 export * from './NavigationBar';
 export * from './NavigationButton';
+export * from './Version';
 export * from './QrCodeModal';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
