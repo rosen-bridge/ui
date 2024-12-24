@@ -59,31 +59,8 @@ export const useTransaction = () => {
         });
         openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
       } catch (error: any) {
-        /**
-         * FIXME: Customize error messages based on error data
-         * local:ergo/rosen-bridge/ui#169
-         */
-        const data = {
-          message: '',
-          details: '',
-        };
-
-        if (error.code && error.info) {
-          data.message = 'An error occurred during submission';
-          data.details = error.info;
-        } else if (error.code && error.message) {
-          data.message = 'An error occurred during submission';
-          data.details = error.message;
-        } else if (error instanceof Error) {
-          data.message = 'An error occurred during submission';
-          data.details = error.message;
-        } else {
-          data.message = 'An unknown error occurred';
-          data.details = error;
-        }
-
         openSnackbar(
-          data.message + (data.details ? ` (${data.details})` : ''),
+          error?.info ?? error?.message ?? JSON.stringify(error),
           'error',
         );
       } finally {
