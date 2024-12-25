@@ -9,12 +9,12 @@
   "types": "dist/main.d.ts",
   "scripts": {
     "start": "tsx watch ./src/main.ts",
-    "start:prod": "node ./dist/main.js",
+    "start:prod": "tsx ./src/main.ts",
     "type-check": "tsc --noEmit",
-    "typeorm": "tsx -r tsconfig-paths/register ../../node_modules/typeorm/cli.js",
+    "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
     "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out config --include-prereleases"
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config"
   },
   "dependencies": {
     "@rosen-bridge/abstract-extractor": "^0.3.1",
@@ -32,9 +32,7 @@
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
-    "@types/node": "^18.11.18",
-    "ts-node": "^10.7.0",
-    "tsconfig-paths": "^4.1.2",
+    "@types/node": "^20.11.0",
     "tsx": "^4.19.2",
     "typescript": "^5.0.0"
   }
