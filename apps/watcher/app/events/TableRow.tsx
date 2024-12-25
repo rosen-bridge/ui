@@ -113,20 +113,15 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
-
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {txUrl ? (
-            <Link href={txUrl} target="_blank">
-              <Id id={row.sourceTxId} />
-            </Link>
-          ) : (
-            <Id id={row.sourceTxId} />
-          )}
+          <Id
+            id={row.sourceTxId}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
+          />
         </EnhancedTableCell>
       </TableRow>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -207,23 +202,13 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
-
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>
-        {txUrl ? (
-          <Link
-            href={txUrl}
-            target="_blank"
-            color="textPrimary"
-            underline="hover"
-          >
-            <Id id={row.sourceTxId} />
-          </Link>
-        ) : (
-          <Id id={row.sourceTxId} />
-        )}
+        <Id
+          id={row.sourceTxId}
+          href={getTxURL(row.fromChain, row.sourceTxId)}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell>

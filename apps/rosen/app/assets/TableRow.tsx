@@ -351,21 +351,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                                 direction="row"
                                 gap={1}
                               >
-                                <Id id={item.birdgedTokenId} />
-                                {tokenUrl && (
-                                  <Link
-                                    href={tokenUrl}
-                                    target="_blank"
-                                    onClick={(event) => event.stopPropagation()}
-                                  >
-                                    <SvgIcon
-                                      fontSize="inherit"
-                                      sx={{ display: 'block' }}
-                                    >
-                                      <OpenInNew />
-                                    </SvgIcon>
-                                  </Link>
-                                )}
+                                <Id id={item.birdgedTokenId} href={tokenUrl} />
                               </Stack>
                             </TableCell>
                           </TableRow>

@@ -116,8 +116,6 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const txUrl = getTxURL(row.fromChain, row.lockTxId);
-
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -129,13 +127,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {txUrl ? (
-            <Link href={txUrl} target="_blank">
-              <Id id={row.lockTxId} />
-            </Link>
-          ) : (
-            <Id id={row.lockTxId} />
-          )}
+          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -143,12 +135,10 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Link
+              <Id
+                id={row.rewardTxId}
                 href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
-                target="_blank"
-              >
-                <Id id={row.rewardTxId} />
-              </Link>
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -252,36 +242,19 @@ export const TabletRow: FC<RowProps> = (props) => {
     fetcher,
   );
 
-  const txUrl = getTxURL(row.fromChain, row.lockTxId);
-
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {txUrl ? (
-          <Link
-            href={txUrl}
-            target="_blank"
-            color="textPrimary"
-            underline="hover"
-          >
-            <Id id={row.lockTxId} />
-          </Link>
-        ) : (
-          <Id id={row.lockTxId} />
-        )}
+        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Link
+        <Id
+          id={row.rewardTxId}
           href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
-          target="_blank"
-          color="textPrimary"
-          underline="hover"
-        >
-          <Id id={row.rewardTxId} />
-        </Link>
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id id={row.fromAddress} />
