@@ -1,7 +1,4 @@
-import { TokenMap } from '@rosen-bridge/tokens';
-import { EipWalletApi, ErgoBoxProxy, Wallet } from '@rosen-ui/wallet-api';
-
-import { generateUnsignedTx } from './generateUnsignedTx';
+import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 
 export interface TokenInfo {
   id: string;
@@ -21,18 +18,4 @@ export interface BoxInfo {
 export interface CoveringBoxes {
   covered: boolean;
   boxes: Array<ErgoBoxProxy>;
-}
-
-export type WalletCreator = (config: WalletCreatorConfig) => Wallet;
-
-export type WalletCreatorConfig = {
-  getTokenMap(): Promise<TokenMap>;
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-};
-
-/**
- * global type augmentation for nautilus wallet
- */
-declare global {
-  let ergo: EipWalletApi;
 }

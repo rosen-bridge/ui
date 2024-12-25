@@ -1,5 +1,14 @@
 # @rosen-bridge/guard-app
 
+## 1.9.1
+
+### Patch Changes
+
+- Integrated the Version component in the SideBar to display version information optimized for both desktop and mobile views.
+- Updated dependencies
+  - @rosen-bridge/icons@1.0.0
+  - @rosen-bridge/ui-kit@1.7.0
+
 ## 1.9.0
 
 ### Minor Changes

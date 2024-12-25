@@ -1,5 +1,11 @@
 # @rosen-network/ethereum
 
+## 1.0.0
+
+### Major Changes
+
+- Eliminate the reliance on the @rosen-ui/wallet-api package and remove any unrelated type definitions
+
 ## 0.1.1
 
 ### Patch Changes

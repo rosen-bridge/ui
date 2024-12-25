@@ -48,29 +48,44 @@ export const useTransaction = () => {
             tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
           ),
         );
-        const txId = await selectedWallet?.transfer(
-          tokenValue as RosenChainToken,
-          amountValueWrapped,
-          targetValue,
-          selectedTarget.toSafeAddress(walletAddressValue),
+        const txId = await selectedWallet?.transfer({
+          token: tokenValue as RosenChainToken,
+          amount: amountValueWrapped,
+          toChain: targetValue,
+          address: selectedTarget.toSafeAddress(walletAddressValue),
           bridgeFee,
           networkFee,
           lockAddress,
-        );
+        });
         openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
-      } catch (error) {
+      } catch (error: any) {
         /**
          * FIXME: Customize error messages based on error data
          * local:ergo/rosen-bridge/ui#169
          */
-        if (error instanceof Error) {
-          openSnackbar(
-            `An error occurred during submission: ${error.message}`,
-            'error',
-          );
+        const data = {
+          message: '',
+          details: '',
+        };
+
+        if (error.code && error.info) {
+          data.message = 'An error occurred during submission';
+          data.details = error.info;
+        } else if (error.code && error.message) {
+          data.message = 'An error occurred during submission';
+          data.details = error.message;
+        } else if (error instanceof Error) {
+          data.message = 'An error occurred during submission';
+          data.details = error.message;
         } else {
-          openSnackbar(`An unknown error occurred: ${error}`, 'error');
+          data.message = 'An unknown error occurred';
+          data.details = error;
         }
+
+        openSnackbar(
+          data.message + (data.details ? ` (${data.details})` : ''),
+          'error',
+        );
       } finally {
         setIsSubmitting(false);
       }

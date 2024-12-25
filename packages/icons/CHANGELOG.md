@@ -1,5 +1,15 @@
 # @rosen-bridge/icons
 
+## 1.0.0
+
+### Major Changes
+
+- Drop the Flint wallet icon
+
+### Patch Changes
+
+- Implement new Paste icon
+
 ## 0.7.0
 
 ### Minor Changes
