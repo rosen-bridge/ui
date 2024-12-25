@@ -80,7 +80,7 @@ export const BridgeTransaction = ({
           backgroundColor: (theme) =>
             theme.palette.mode === 'light'
               ? theme.palette.primary.light
-              : theme.palette.primary.dark,
+              : theme.palette.background.paper,
           padding: (theme) => theme.spacing(3),
         }}
       >

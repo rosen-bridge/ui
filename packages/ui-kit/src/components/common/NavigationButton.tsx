@@ -109,7 +109,7 @@ export const NavigationButton: FC<NavButtonProps> = (props) => {
 
   if (badge)
     startIcon = (
-      <Badge badgeContent={badge} color="primary">
+      <Badge badgeContent={badge} color="secondary">
         {startIcon}
       </Badge>
     );

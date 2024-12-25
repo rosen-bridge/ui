@@ -12,6 +12,7 @@ import { App as AppBase } from '@rosen-bridge/ui-kit';
 import { theme } from '@/_theme/theme';
 
 import { WalletContextProvider } from './_contexts/walletContext';
+import { TokenMapProvider } from './_hooks';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
@@ -19,7 +20,9 @@ export const App = ({ children }: { children?: React.ReactNode }) => {
   return (
     <NoSsr>
       <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-        <WalletContextProvider>{children}</WalletContextProvider>
+        <TokenMapProvider>
+          <WalletContextProvider>{children}</WalletContextProvider>
+        </TokenMapProvider>
       </AppBase>
     </NoSsr>
   );

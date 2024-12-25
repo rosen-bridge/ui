@@ -1,6 +1,6 @@
 import { EthereumIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { metaMaskWalletCreator } from '@rosen-ui/metamask-wallet';
+import { MetaMaskWallet } from '@rosen-ui/metamask-wallet';
 
 import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
@@ -18,7 +18,7 @@ export const EthereumNetwork: EthereumNetworkType = {
   name: NETWORKS.ETHEREUM,
   label: NETWORK_LABELS.ETHEREUM,
   wallets: [
-    metaMaskWalletCreator({
+    new MetaMaskWallet({
       getTokenMap,
       generateLockData: unwrap(generateLockData),
       generateTxParameters: unwrap(generateTxParameters),

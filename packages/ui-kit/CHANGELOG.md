@@ -1,5 +1,19 @@
 # @rosen-bridge/ui-kit
 
+## 1.7.0
+
+### Minor Changes
+
+- Revise the default layout to incorporate toolbar buttons into the sidebar for mobile devices
+- Create an improved dialogue that aligns with our Figma design and ensures responsiveness
+
+### Patch Changes
+
+- Review theme colors in Figma and ensure consistency by identifying and fixing any mismatches
+- Implement Version component to display versions
+- Updated dependencies
+- Updated the @rosen-bridge/icons@1.0.0 dependency
+
 ## 1.6.0
 
 ### Minor Changes

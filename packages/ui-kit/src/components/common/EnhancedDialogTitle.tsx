@@ -3,6 +3,7 @@ import React from 'react';
 import { styled } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
+import { useIsMobile } from '../../hooks';
 import { DialogTitle, DialogTitleProps, IconButton, SvgIcon } from '../base';
 
 const IconContainer = styled('div')(({ theme }) => ({
@@ -25,15 +26,22 @@ export const EnhancedDialogTitle = ({
   onClose,
   ...props
 }: EnhancedDialogTitleProps) => {
+  const isMobile = useIsMobile();
   return (
-    <DialogTitle {...props} display="flex" alignItems="center" gap={2}>
-      {icon && (
+    <DialogTitle
+      {...props}
+      display="flex"
+      alignItems="center"
+      flexDirection={isMobile ? 'column' : 'row'}
+      gap={2}
+    >
+      {!isMobile && icon && (
         <IconContainer>
           <SvgIcon sx={{ height: 20, width: 20 }}>{icon}</SvgIcon>
         </IconContainer>
       )}
       <span style={{ flexGrow: 1 }}>{props.children}</span>
-      {onClose && (
+      {!isMobile && onClose && (
         <IconButton onClick={onClose}>
           <SvgIcon>
             <Times />

@@ -26,6 +26,8 @@ export const App = ({ children }: { children?: ReactNode }) => {
    * local:ergo/rosen-bridge/ui#408
    */
   useEffect(() => {
+    document.title = `Watcher`;
+
     if (!info) return;
 
     document.title = `[${upperFirst(info.network)}] Watcher`;
