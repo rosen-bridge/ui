@@ -197,7 +197,6 @@ export class MetaMaskWallet implements Wallet {
     } catch (error) {
       this.dispatchError(error, {
         4001: () => new UserDeniedTransactionSignatureError(this.name, error),
-        // 4100: () =>  ,
       });
     }
 
