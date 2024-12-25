@@ -1,11 +1,10 @@
-import { Theme } from '@mui/material';
 import {
   CheckCircle,
   ExclamationCircle,
   ExclamationTriangle,
   InfoCircle,
 } from '@rosen-bridge/icons';
-import { alpha, createTheme, SvgIcon } from '@rosen-bridge/ui-kit';
+import { alpha, createTheme, SvgIcon, Theme } from '@rosen-bridge/ui-kit';
 
 declare module '@mui/material/styles' {
   interface TypeNeutral {
@@ -343,6 +342,27 @@ const create = (baseTheme: Theme) =>
           standardWarning: {
             color: baseTheme.palette.warning.main,
             backgroundColor: baseTheme.palette.warning.light,
+          },
+        },
+      },
+      RosenNavigationBar: {
+        styleOverrides: {
+          root: {
+            [baseTheme.breakpoints.down('tablet')]: {
+              borderColor: baseTheme.palette.primary.light,
+              background: baseTheme.palette.background.paper,
+              boxShadow: `0px 8px 8px 0px ${baseTheme.palette.background.default}`,
+            },
+          },
+        },
+      },
+      RosenApp: {
+        styleOverrides: {
+          root: {
+            background: baseTheme.palette.background.body(true),
+            [baseTheme.breakpoints.down('tablet')]: {
+              background: baseTheme.palette.background.body(false),
+            },
           },
         },
       },

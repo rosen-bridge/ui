@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-service
 
+## 2.2.0
+
+### Minor Changes
+
+- Add binance chain scanner with observation and event trigger extractors
+
 ## 2.1.0
 
 ### Minor Changes

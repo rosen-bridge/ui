@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { createTheme } from '@rosen-bridge/ui-kit';
+import { createTheme, Theme } from '@rosen-bridge/ui-kit';
 
 declare module '@mui/material/styles' {}
 
@@ -249,6 +248,39 @@ const create = (baseTheme: Theme) =>
           },
           footer: {
             borderTop: `1px solid ${baseTheme.palette.divider}`,
+          },
+        },
+      },
+      RosenNavigationBar: {
+        styleOverrides: {
+          root: {
+            [baseTheme.breakpoints.down('tablet')]: {},
+          },
+        },
+      },
+      RosenApp: {
+        styleOverrides: {
+          root: {
+            backgroundColor: baseTheme.palette.info.dark,
+            backgroundImage:
+              baseTheme.palette.mode === 'light'
+                ? `linear-gradient(180deg, ${baseTheme.palette.info.main} 0%, ${baseTheme.palette.secondary.dark} 100%)`
+                : 'none',
+            [baseTheme.breakpoints.down('tablet')]: {
+              backgroundImage:
+                baseTheme.palette.mode === 'light'
+                  ? `linear-gradient(90deg, ${baseTheme.palette.info.main} 0%, ${baseTheme.palette.secondary.dark} 100%)`
+                  : 'none',
+            },
+          },
+          main: {
+            paddingTop: baseTheme.shape.borderRadius,
+            paddingBottom: baseTheme.shape.borderRadius * 4,
+            paddingLeft: baseTheme.shape.borderRadius * 2,
+            paddingRight: baseTheme.shape.borderRadius * 2,
+            [baseTheme.breakpoints.down('tablet')]: {
+              backgroundColor: baseTheme.palette.background.paper,
+            },
           },
         },
       },

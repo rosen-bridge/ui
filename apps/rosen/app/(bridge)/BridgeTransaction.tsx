@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import {
   useNetwork,
@@ -79,7 +80,7 @@ export const BridgeTransaction = ({
           backgroundColor: (theme) =>
             theme.palette.mode === 'light'
               ? theme.palette.primary.light
-              : theme.palette.primary.dark,
+              : theme.palette.background.paper,
           padding: (theme) => theme.spacing(3),
         }}
       >
@@ -88,6 +89,12 @@ export const BridgeTransaction = ({
           label={selectedWallet?.label}
           onClick={() => setChooseWalletsModalOpen(true)}
         />
+        {sourceValue == NETWORKS.BITCOIN && (
+          <Alert severity="warning" icon={false}>
+            We only support native SegWit addresses (P2WPKH or P2WSH) for the
+            source address.
+          </Alert>
+        )}
         <div style={{ flexGrow: '1' }} />
         <Amount
           title="Transaction Fee"

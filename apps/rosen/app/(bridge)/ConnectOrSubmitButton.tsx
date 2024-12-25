@@ -5,9 +5,10 @@ import {
   Amount,
   Box,
   Card,
-  Dialog,
   DialogActions,
+  DialogContent,
   Divider,
+  EnhancedDialog,
   EnhancedDialogTitle,
   Grid,
   LoadingButton,
@@ -41,7 +42,7 @@ export const ConnectOrSubmitButton = ({
     targetValue,
     tokenValue,
     amountValue,
-    formState: { isSubmitting: isFormSubmitting, errors },
+    formState: { isSubmitting: isFormSubmitting, errors, isValidating },
     walletAddressValue,
     handleSubmit,
   } = useTransactionFormData();
@@ -61,7 +62,7 @@ export const ConnectOrSubmitButton = ({
     useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
-    startTransaction(bridgeFee, networkFee);
+    startTransaction(bridgeFee, networkFee).then(() => setOpen(false));
   });
 
   const { availableSources } = useNetwork();
@@ -89,6 +90,19 @@ export const ConnectOrSubmitButton = ({
   const targetTokenInfo =
     targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
+  const disabled = selectedWallet
+    ? !sourceValue ||
+      !targetValue ||
+      !tokenValue ||
+      !amountValue ||
+      !walletAddressValue ||
+      !bridgeFee ||
+      !networkFee ||
+      !!errors.amount ||
+      !!errors.walletAddress ||
+      isValidating
+    : !sourceValue;
+
   return (
     <>
       <LoadingButton
@@ -97,108 +111,104 @@ export const ConnectOrSubmitButton = ({
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
-        disabled={!sourceValue}
+        disabled={disabled}
         onClick={() => {
-          if (!selectedWallet) {
-            setChooseWalletsModalOpen(true);
-          } else if (
-            sourceValue &&
-            targetValue &&
-            tokenValue &&
-            amountValue &&
-            walletAddressValue &&
-            bridgeFee &&
-            networkFee &&
-            !errors.amount &&
-            !errors.walletAddress
-          ) {
+          if (selectedWallet) {
             setOpen(true);
+          } else {
+            setChooseWalletsModalOpen(true);
           }
         }}
       >
         {!selectedWallet ? 'CONNECT WALLET' : 'SUBMIT'}
       </LoadingButton>
-      <Dialog open={open} maxWidth="tablet" onClose={() => setOpen(false)}>
+      <EnhancedDialog
+        open={open}
+        maxWidth="tablet"
+        scroll="paper"
+        onClose={() => setOpen(false)}
+      >
         <EnhancedDialogTitle
           icon={<CommentAltExclamation />}
           onClose={() => setOpen(false)}
         >
           Confirm Transaction
         </EnhancedDialogTitle>
-        <Card
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.primary.light
-                : theme.palette.primary.dark,
-            px: 2,
-            py: 3,
-            mx: 3,
-          }}
-        >
-          <Grid container justifyContent="center">
-            <Amount
-              value={amountValue || 0}
-              size="large"
-              unit={tokenInfo?.tokenName}
-            />
-          </Grid>
-          <Box
+        <DialogContent sx={{ py: 0 }}>
+          <Card
             sx={{
-              display: 'grid',
-              gridTemplateColumns: 'auto auto auto',
-              justifyContent: 'center',
-              columnGap: 2,
-              rowGap: 0.5,
-              my: 3,
+              backgroundColor: (theme) =>
+                theme.palette.mode === 'light'
+                  ? theme.palette.primary.light
+                  : theme.palette.primary.dark,
+              px: 2,
+              py: 3,
             }}
           >
-            <Grid container alignItems="center" gap={1}>
-              {SourceLogo && (
-                <SvgIcon>
-                  <SourceLogo />
-                </SvgIcon>
-              )}
-              <Typography color="text.primary">{source?.label}</Typography>
+            <Grid container justifyContent="center">
+              <Amount
+                value={amountValue || 0}
+                size="large"
+                unit={tokenInfo?.tokenName}
+              />
             </Grid>
-            <SvgIcon>
-              <ArrowRight />
-            </SvgIcon>
-            <Grid container alignItems="center" gap={1}>
-              {TargetLogo && (
-                <SvgIcon>
-                  <TargetLogo />
-                </SvgIcon>
-              )}
-              <Typography color="text.primary">{target?.label}</Typography>
-            </Grid>
-          </Box>
-          <Divider sx={{ my: 2 }} />
-          <Amount
-            title="Transaction Fee"
-            value={networkFeeRaw}
-            unit={tokenInfo?.tokenName}
-          />
-          <Box sx={{ my: 2 }} />
-          <Amount
-            title="Bridge Fee"
-            value={bridgeFeeRaw}
-            unit={tokenInfo?.tokenName}
-          />
-          <Box sx={{ my: 2 }} />
-          <Amount
-            title="Received amount"
-            value={receivingAmountRaw}
-            unit={targetTokenInfo?.name}
-          />
-          <Divider sx={{ my: 2 }} />
-          <Typography variant="body2" color="text.secondary">
-            Destination address
-          </Typography>
-          <Typography sx={{ wordBreak: 'break-all' }}>
-            {walletAddressValue}
-          </Typography>
-        </Card>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: 'auto auto auto',
+                justifyContent: 'center',
+                columnGap: 2,
+                rowGap: 0.5,
+                my: 3,
+              }}
+            >
+              <Grid container alignItems="center" gap={1}>
+                {SourceLogo && (
+                  <SvgIcon>
+                    <SourceLogo />
+                  </SvgIcon>
+                )}
+                <Typography color="text.primary">{source?.label}</Typography>
+              </Grid>
+              <SvgIcon>
+                <ArrowRight />
+              </SvgIcon>
+              <Grid container alignItems="center" gap={1}>
+                {TargetLogo && (
+                  <SvgIcon>
+                    <TargetLogo />
+                  </SvgIcon>
+                )}
+                <Typography color="text.primary">{target?.label}</Typography>
+              </Grid>
+            </Box>
+            <Divider sx={{ my: 2 }} />
+            <Amount
+              title="Transaction Fee"
+              value={networkFeeRaw}
+              unit={tokenInfo?.tokenName}
+            />
+            <Box sx={{ my: 2 }} />
+            <Amount
+              title="Bridge Fee"
+              value={bridgeFeeRaw}
+              unit={tokenInfo?.tokenName}
+            />
+            <Box sx={{ my: 2 }} />
+            <Amount
+              title="Received amount"
+              value={receivingAmountRaw}
+              unit={targetTokenInfo?.name}
+            />
+            <Divider sx={{ my: 2 }} />
+            <Typography variant="body2" color="text.secondary">
+              Destination address
+            </Typography>
+            <Typography sx={{ wordBreak: 'break-all' }}>
+              {walletAddressValue}
+            </Typography>
+          </Card>
+        </DialogContent>
         <DialogActions>
           <LoadingButton
             color="secondary"
@@ -219,7 +229,7 @@ export const ConnectOrSubmitButton = ({
             Confirm
           </LoadingButton>
         </DialogActions>
-      </Dialog>
+      </EnhancedDialog>
     </>
   );
 };

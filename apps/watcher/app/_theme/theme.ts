@@ -1,5 +1,4 @@
-import { Theme } from '@mui/material';
-import { createTheme } from '@rosen-bridge/ui-kit';
+import { createTheme, Theme } from '@rosen-bridge/ui-kit';
 
 declare module '@mui/material/styles' {
   interface TypePaletteGradient {
@@ -302,6 +301,40 @@ const create = (baseTheme: Theme) =>
           filledError: {
             color: baseTheme.palette.error.dark,
             backgroundColor: baseTheme.palette.error.light,
+          },
+        },
+      },
+      RosenNavigationBar: {
+        styleOverrides: {
+          root: {
+            [baseTheme.breakpoints.down('tablet')]: {},
+          },
+        },
+      },
+      RosenApp: {
+        styleOverrides: {
+          root: {
+            backgroundColor: baseTheme.palette.secondary.dark,
+            backgroundImage:
+              baseTheme.palette.mode === 'light'
+                ? `linear-gradient(180deg, ${baseTheme.palette.gradient.a} 0%, ${baseTheme.palette.gradient.b} 20%, ${baseTheme.palette.gradient.c} 40%, ${baseTheme.palette.gradient.d} 60%, ${baseTheme.palette.gradient.e} 80%, ${baseTheme.palette.gradient.f} 100%)`
+                : 'none',
+            [baseTheme.breakpoints.down('tablet')]: {
+              backgroundImage:
+                baseTheme.palette.mode === 'light'
+                  ? `linear-gradient(90deg, ${baseTheme.palette.gradient.a} 0%, ${baseTheme.palette.gradient.b} 20%, ${baseTheme.palette.gradient.c} 40%, ${baseTheme.palette.gradient.d} 60%, ${baseTheme.palette.gradient.e} 80%, ${baseTheme.palette.gradient.f} 100%)`
+                  : 'none',
+            },
+          },
+          main: {
+            paddingTop: baseTheme.shape.borderRadius,
+            paddingBottom: baseTheme.shape.borderRadius * 3,
+            paddingLeft: baseTheme.shape.borderRadius * 2,
+            paddingRight: baseTheme.shape.borderRadius * 2,
+            [baseTheme.breakpoints.down('tablet')]: {
+              backgroundColor: baseTheme.palette.background.paper,
+              paddingBottom: baseTheme.shape.borderRadius * 6,
+            },
           },
         },
       },

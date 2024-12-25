@@ -1,5 +1,17 @@
 # @rosen-network/cardano
 
+## 2.0.0
+
+### Major Changes
+
+- Eliminate the reliance on the @rosen-ui/wallet-api package and remove any unrelated type definitions
+
+## 1.0.1
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+
 ## 1.0.0
 
 ### Major Changes

@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Autocomplete } from '@mui/material';
+import { Paste } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -14,6 +14,9 @@ import {
   CircularProgress,
   SvgIcon,
   Alert,
+  Autocomplete,
+  InputAdornment,
+  IconButton,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -27,6 +30,7 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
+import { theme } from '@/_theme/theme';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
@@ -163,8 +167,8 @@ export const BridgeForm = () => {
 
   return (
     <FormContainer>
-      <Grid container spacing={1}>
-        <Grid item mobile={6}>
+      <Grid container spacing={2}>
+        <Grid item mobile={6} tablet={12} laptop={6}>
           <TextField
             id="source"
             select
@@ -190,7 +194,7 @@ export const BridgeForm = () => {
             ))}
           </TextField>
         </Grid>
-        <Grid item mobile={6}>
+        <Grid item mobile={6} tablet={12} laptop={6}>
           <TextField
             id="target"
             select
@@ -224,7 +228,32 @@ export const BridgeForm = () => {
       </Grid>
       <TextField
         label="Address"
-        InputProps={{ disableUnderline: true } as any}
+        InputProps={
+          {
+            disableUnderline: true,
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'secondary',
+                  }}
+                  onClick={async () => {
+                    try {
+                      const clipboardText =
+                        await navigator.clipboard.readText();
+                      addressField.onChange(clipboardText);
+                    } catch (err) {
+                      console.error('Failed to read clipboard: ', err);
+                    }
+                  }}
+                >
+                  <Paste />
+                </IconButton>
+              </InputAdornment>
+            ),
+          } as any
+        }
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={

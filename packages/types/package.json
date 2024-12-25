@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/src/index.js",

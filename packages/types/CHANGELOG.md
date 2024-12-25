@@ -1,5 +1,11 @@
 # @rosen-ui/types
 
+## 0.3.2
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+
 ## 0.3.1
 
 ### Patch Changes
