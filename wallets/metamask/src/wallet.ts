@@ -57,9 +57,7 @@ export class MetaMaskWallet implements Wallet {
     try {
       await this.api.connect();
     } catch (error) {
-      dispatchError(error, {
-        4001: () => new ConnectionRejectedError(this.name, error),
-      });
+      throw new ConnectionRejectedError(this.name, error);
     }
   }
 
@@ -185,12 +183,7 @@ export class MetaMaskWallet implements Wallet {
         params: [transactionParameters],
       }))!;
     } catch (error) {
-      dispatchError(error, {
-        4001: () => new UserDeniedTransactionSignatureError(this.name, error),
-        // 4100: () =>  ,
-      });
+      throw new UserDeniedTransactionSignatureError(this.name, error);
     }
-
-    return '';
   }
 }
