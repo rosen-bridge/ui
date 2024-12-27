@@ -2,7 +2,6 @@ import React, { createContext, useState } from 'react';
 
 import { Theme, useMediaQuery } from '@mui/material';
 import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 
 export const ThemeTogglerContext = createContext({
   mode: 'light',
@@ -23,8 +22,6 @@ export const ThemeProvider = ({
   children,
   theme: input,
 }: ThemeProviderProps) => {
-  const localStorageManager = useLocalStorageManager();
-
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)', {
     noSsr: true,
   });
@@ -32,7 +29,12 @@ export const ThemeProvider = ({
   const preferredMode = prefersDarkMode ? 'dark' : 'light';
 
   const [mode, setMode] = useState<'light' | 'dark'>(
-    localStorageManager.get<'light' | 'dark'>('colorMode') || preferredMode,
+    (() => {
+      const rawData = window.localStorage.getItem('colorMode');
+      return rawData
+        ? (JSON.parse(rawData) as 'light' | 'dark')
+        : preferredMode;
+    })(),
   );
 
   const theme: Theme =
@@ -41,7 +43,7 @@ export const ThemeProvider = ({
   const toggle = () => {
     const nextMode = mode === 'light' ? 'dark' : 'light';
     setMode(nextMode);
-    localStorageManager.set('colorMode', nextMode);
+    window.localStorage.setItem('colorMode', nextMode);
   };
 
   return (
