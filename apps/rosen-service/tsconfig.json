@@ -16,8 +16,5 @@
     "strict": true,
     "target": "esnext"
   },
-  "include": ["src"],
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["src"]
 }
