@@ -23,7 +23,7 @@
     "typescript": "^5.1.6"
   },
   "engines": {
-    "node": ">=20.11.0"
+    "node": ">=20.18.1"
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^1.0.0",
