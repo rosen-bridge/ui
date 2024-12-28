@@ -33,6 +33,7 @@ export const useWallet = () => {
   const { get, set } = useLocalStorageManager();
 
   const { selectedSource } = useNetwork();
+
   /**
    * searches in the available wallets in the selected network
    * and return the wallet object if it finds a match
