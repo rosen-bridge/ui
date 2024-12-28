@@ -1,5 +1,6 @@
 import { useEffect, useContext, useCallback, useRef } from 'react';
 
+import { useLocalStorageManager } from '@rosen-ui/common-hooks';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import { WalletContext } from '@/_contexts/walletContext';
@@ -29,18 +30,9 @@ const toWalletDescriptor = (wallet: Wallet): WalletDescriptor => {
 export const useWallet = () => {
   const walletGlobalContext = useContext(WalletContext);
   const isConnecting = useRef<boolean>(false);
+  const { get, set } = useLocalStorageManager();
 
   const { selectedSource } = useNetwork();
-
-  const setLocalStorage = useCallback(<T>(key: string, value: T) => {
-    window.localStorage.setItem(key, JSON.stringify(value));
-  }, []);
-
-  const getLocalStorage = useCallback(<T>(key: string): T | null => {
-    const rawData = window.localStorage.getItem(key);
-    return rawData ? (JSON.parse(rawData) as T) : null;
-  }, []);
-
   /**
    * searches in the available wallets in the selected network
    * and return the wallet object if it finds a match
@@ -60,7 +52,7 @@ export const useWallet = () => {
    */
   const getCurrentWallet = useCallback((): Wallet | undefined => {
     const currentWalletDescriptor =
-      selectedSource && getLocalStorage<WalletDescriptor>(selectedSource?.name);
+      selectedSource && get<WalletDescriptor>(selectedSource?.name);
 
     if (!currentWalletDescriptor) {
       return undefined;
@@ -69,7 +61,7 @@ export const useWallet = () => {
     return currentWalletDescriptor
       ? getWallet(currentWalletDescriptor.name)
       : undefined;
-  }, [selectedSource, getWallet, getLocalStorage]);
+  }, [selectedSource, getWallet, get]);
 
   /**
    * disconnects the previously selected wallet and
@@ -81,14 +73,11 @@ export const useWallet = () => {
       const status = await wallet.connect();
 
       if (typeof status === 'boolean' && status) {
-        setLocalStorage<WalletDescriptor>(
-          selectedSource!.name,
-          toWalletDescriptor(wallet),
-        );
+        set<WalletDescriptor>(selectedSource!.name, toWalletDescriptor(wallet));
         walletGlobalContext?.dispatch({ type: 'set', wallet });
       }
     },
-    [selectedSource, getCurrentWallet, walletGlobalContext, setLocalStorage],
+    [selectedSource, getCurrentWallet, walletGlobalContext, set],
   );
 
   const handleConnection = useCallback(async () => {
