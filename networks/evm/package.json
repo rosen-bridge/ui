@@ -1,6 +1,6 @@
 {
-  "name": "@rosen-network/ethereum",
-  "version": "1.0.0",
+  "name": "@rosen-network/evm",
+  "version": "0.1.1",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/src/index.js",
@@ -13,7 +13,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.3.0",
+    "@rosen-bridge/address-codec": "^0.4.0",
     "@rosen-bridge/tokens": "^1.2.1",
     "ethers": "^6.13.2"
   },
