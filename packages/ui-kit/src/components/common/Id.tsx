@@ -6,7 +6,7 @@ import { SvgIcon } from '../base/SvgIcon';
 export interface IdProps {
   id: string;
   indicator?: 'middle';
-  href?: string;
+  href?: string | null;
 }
 /**
  * render some starting and ending characters of an id and showing ellipsis in
