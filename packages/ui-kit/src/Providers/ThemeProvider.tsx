@@ -29,12 +29,9 @@ export const ThemeProvider = ({
   const preferredMode = prefersDarkMode ? 'dark' : 'light';
 
   const [mode, setMode] = useState<'light' | 'dark'>(
-    (() => {
-      const rawData = window.localStorage.getItem('colorMode');
-      return rawData
-        ? (JSON.parse(rawData) as 'light' | 'dark')
-        : preferredMode;
-    })(),
+    () =>
+      (window.localStorage.getItem('colorMode') as 'light' | 'dark') ||
+      preferredMode,
   );
 
   const theme: Theme =
