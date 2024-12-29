@@ -2,4 +2,4 @@
 '@rosen-bridge/ui-kit': patch
 ---
 
-Refactor Id component to improve code quality and avoid repetition
+Enhance the ID component by adding a tooltip, a link with an icon, and improve its overall functionality

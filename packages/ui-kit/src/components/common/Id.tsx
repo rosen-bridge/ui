@@ -6,7 +6,7 @@ import { SvgIcon } from '../base/SvgIcon';
 export interface IdProps {
   id: string;
   indicator?: 'middle';
-  href?: string | null;
+  href?: string;
 }
 /**
  * render some starting and ending characters of an id and showing ellipsis in
@@ -27,6 +27,7 @@ export const Id = ({ id, indicator, href }: IdProps) => {
           href={href}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={(event) => event.stopPropagation()}
           style={{
             textDecoration: 'none',
             color: 'inherit',

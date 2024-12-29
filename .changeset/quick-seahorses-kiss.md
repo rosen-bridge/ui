@@ -4,4 +4,4 @@
 '@rosen-bridge/rosen-app': patch
 ---
 
-Update the usage of the ID component across all three applications
+Update the usage of the ID component
