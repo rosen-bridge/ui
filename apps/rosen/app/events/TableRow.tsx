@@ -6,8 +6,8 @@ import {
   EnhancedTableCell,
   TableRow,
   Link,
-  Typography,
   Id,
+  ChainAddress,
 } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
@@ -161,11 +161,11 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              {upperFirst(row.fromChain as Network)}
-              <Typography variant="h5" display="inline" mx={1}>
-                →
-              </Typography>
-              {upperFirst(row.toChain as Network)}
+              <ChainAddress
+                from={upperFirst(row.fromChain as Network)}
+                to={upperFirst(row.toChain as Network)}
+                isChain
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -175,11 +175,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Addresses</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.fromAddress} />
-              <Typography variant="h5" display="inline" mx={1}>
-                →
-              </Typography>
-              <Id id={row.toAddress} />
+              <ChainAddress from={row.fromAddress} to={row.toAddress} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -269,19 +265,15 @@ export const TabletRow: FC<RowProps> = (props) => {
         )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {upperFirst(row.fromChain as Network)}
-        <Typography variant="h5" display="inline" mx={1}>
-          →
-        </Typography>
-        {upperFirst(row.toChain as Network)}
+        <ChainAddress
+          from={upperFirst(row.fromChain as Network)}
+          to={upperFirst(row.toChain as Network)}
+          isChain
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.fromAddress} />
-        <Typography variant="h5" display="inline" mx={1}>
-          →
-        </Typography>
-        <Id id={row.toAddress} />
+        <ChainAddress from={row.fromAddress} to={row.toAddress} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
