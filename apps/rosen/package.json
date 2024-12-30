@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out configs --include-prereleases",
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
     "build:vercel": "cd ../../ && ./build.sh && cd apps/rosen && npm run build"
   },
   "dependencies": {
@@ -19,7 +19,6 @@
     "@rosen-bridge/address-codec": "^0.3.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/cardano-utxo-selection": "^1.0.0",
-    "@rosen-bridge/cli": "^0.2.0",
     "@rosen-bridge/ergo-box-selection": "^0.1.0",
     "@rosen-bridge/extended-typeorm": "^0.0.3",
     "@rosen-bridge/icons": "^1.0.0",

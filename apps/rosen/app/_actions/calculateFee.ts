@@ -10,6 +10,8 @@ import Joi from 'joi';
 
 import { wrap } from '@/_safeServerAction';
 
+import { FEE_CONFIG_TOKEN_ID } from '../../configs';
+
 const cardanoKoiosClient = cardanoKoiosClientFactory(
   process.env.CARDANO_KOIOS_API!,
 );
@@ -56,7 +58,7 @@ const calculateFeeCore = async (
 
   const minFeeBox = new MinimumFeeBox(
     tokenId,
-    process.env.NEXT_PUBLIC_FEE_CONFIG_TOKEN_ID!,
+    FEE_CONFIG_TOKEN_ID,
     ErgoNetworkType.explorer,
     process.env.ERGO_EXPLORER_API!,
   );

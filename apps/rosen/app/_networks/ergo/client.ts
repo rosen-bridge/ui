@@ -6,6 +6,7 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types';
 
+import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './getMaxTransfer';
 import { generateUnsignedTx } from './server';
 
@@ -25,7 +26,7 @@ export const ErgoNetwork: ErgoNetworkType = {
   wallets: [new NautilusWallet(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,
-  lockAddress: process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS!,
+  lockAddress: LOCK_ADDRESSES.ERGO,
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };
