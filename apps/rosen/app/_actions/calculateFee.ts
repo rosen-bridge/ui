@@ -3,7 +3,7 @@
 import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { getHeight as ethereumGetHeight } from '@rosen-network/ethereum';
+import { EvmChains, getHeight } from '@rosen-network/evm';
 import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Joi from 'joi';
@@ -20,7 +20,8 @@ const ergoExplorerClient = ergoExplorerClientFactory(
 );
 
 const GetHeight = {
-  [NETWORKS.ETHEREUM]: ethereumGetHeight,
+  [NETWORKS.BINANCE]: () => getHeight(EvmChains.BINANCE),
+  [NETWORKS.ETHEREUM]: () => getHeight(EvmChains.ETHEREUM),
   [NETWORKS.CARDANO]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
   [NETWORKS.ERGO]: async () =>

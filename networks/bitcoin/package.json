@@ -14,7 +14,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.3.0",
+    "@rosen-bridge/address-codec": "^0.4.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-ui/constants": "^0.0.5",
     "axios": "^1.7.2",

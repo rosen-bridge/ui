@@ -38,7 +38,7 @@ export const CardanoNetwork: CardanoNetworkType = {
     new LaceWallet(config),
     new NamiWallet(config),
   ],
-  nextHeightInterval: 25,
+  nextHeightInterval: 30,
   logo: CardanoIcon,
   lockAddress: LOCK_ADDRESSES.CARDANO,
   getMaxTransfer: unwrap(getMaxTransfer),

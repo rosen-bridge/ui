@@ -16,7 +16,7 @@
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
-    "@rosen-bridge/address-codec": "^0.3.0",
+    "@rosen-bridge/address-codec": "^0.4.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
     "@rosen-bridge/cardano-utxo-selection": "^1.0.0",
     "@rosen-bridge/ergo-box-selection": "^0.1.0",
@@ -33,7 +33,7 @@
     "@rosen-network/bitcoin": "^2.0.0",
     "@rosen-network/cardano": "^2.0.0",
     "@rosen-network/ergo": "^2.0.0",
-    "@rosen-network/ethereum": "^1.0.0",
+    "@rosen-network/evm": "^0.1.1",
     "@rosen-ui/asset-calculator": "^2.0.1",
     "@rosen-ui/common-hooks": "^0.1.1",
     "@rosen-ui/constants": "^0.0.5",
@@ -64,7 +64,7 @@
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.10",
-    "@types/node": "20.5.7",
+    "@types/node": "^20.17.10",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.4",
     "eslint": "8.42.0",

@@ -1,9 +1,20 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { tokenABI } from '@rosen-network/ethereum/dist/src/constants';
+import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
+import {
+  ChainNotAddedError,
+  ChainSwitchingRejectedError,
+  UnsupportedChainError,
+  Wallet,
+  InteractionError,
+  WalletTransferParams,
+  AddressRetrievalError,
+  ConnectionRejectedError,
+  UserDeniedTransactionSignatureError,
+} from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
 import { WalletConfig } from './types';
@@ -17,8 +28,6 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
-  connecWaiting?: Promise<unknown>;
-
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',
@@ -26,34 +35,58 @@ export class MetaMaskWallet implements Wallet {
     enableAnalytics: false,
   });
 
+  private get provider() {
+    const provider = this.api.getProvider();
+
+    if (!provider) throw new InteractionError(this.name);
+
+    return provider;
+  }
+
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
-    this.connecWaiting ||= this.api.connect();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private dispatchError(error: any, cases: { [key: number]: () => Error }) {
+    if (error?.code in cases) {
+      throw cases[error.code]();
+    }
+    if (error.message) {
+      throw new Error(error.message, { cause: error });
+    }
+    throw error;
+  }
+
+  private async permissions() {
+    return (await this.provider.request({
+      method: 'wallet_getPermissions',
+      params: [],
+    })) as { caveats: { type: string; value: string[] }[] }[];
+  }
+
+  async connect(): Promise<void> {
     try {
-      await this.connecWaiting;
-      this.connecWaiting = undefined;
-      return true;
-    } catch {
-      this.connecWaiting = undefined;
-      return false;
+      await this.api.connect();
+    } catch (error) {
+      this.dispatchError(error, {
+        4001: () => new ConnectionRejectedError(this.name, error),
+      });
     }
   }
 
-  getAddress(): Promise<string> {
-    throw new Error('Not implemented');
-  }
-
-  async getBalance(token: RosenChainToken): Promise<bigint> {
-    const provider = this.api.getProvider();
-
-    if (!provider) return 0n;
-
-    const accounts = await provider.request<string[]>({
+  async getAddress(): Promise<string> {
+    const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
     });
 
-    if (!accounts?.length) return 0n;
+    const account = accounts?.at(0);
+
+    if (!account) throw new AddressRetrievalError(this.name);
+
+    return account;
+  }
+
+  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    const address = await this.getAddress();
 
     const tokenMap = await this.config.getTokenMap();
 
@@ -61,10 +94,10 @@ export class MetaMaskWallet implements Wallet {
 
     let amount;
 
-    if (tokenId == 'eth') {
-      amount = await provider.request<string>({
+    if (token.metaData.type === 'native') {
+      amount = await this.provider.request<string>({
         method: 'eth_getBalance',
-        params: [accounts[0], 'latest'],
+        params: [address, 'latest'],
       });
     } else {
       const browserProvider = new BrowserProvider(window.ethereum!);
@@ -75,7 +108,7 @@ export class MetaMaskWallet implements Wallet {
         await browserProvider.getSigner(),
       );
 
-      amount = await contract.balanceOf(accounts[0]);
+      amount = await contract.balanceOf(address);
     }
 
     if (!amount) return 0n;
@@ -90,27 +123,51 @@ export class MetaMaskWallet implements Wallet {
   }
 
   isAvailable(): boolean {
-    return (
-      typeof window.ethereum !== 'undefined' &&
-      window.ethereum.isMetaMask &&
-      !!window.ethereum._metamask
-    );
+    return this.api.isExtensionActive();
+  }
+
+  async isConnected(): Promise<boolean> {
+    return !!(await this.permissions()).length;
+  }
+
+  async switchChain(chain: Network, silent?: boolean): Promise<void> {
+    const chains = {
+      [NETWORKS.BINANCE]: '0x38',
+      [NETWORKS.ETHEREUM]: '0x1',
+    } as { [key in Network]?: string };
+
+    const chainId = chains[chain];
+
+    if (!chainId) throw new UnsupportedChainError(this.name, chain);
+
+    if (silent) {
+      const has = (await this.permissions())
+        .map((permission) => permission.caveats)
+        .flat()
+        .some(
+          (caveat) =>
+            caveat.type === 'restrictNetworkSwitching' &&
+            caveat.value.includes(chainId),
+        );
+
+      if (!has) throw new Error();
+    }
+
+    try {
+      await this.provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId }],
+      });
+    } catch (error) {
+      this.dispatchError(error, {
+        4001: () => new ChainSwitchingRejectedError(this.name, chain, error),
+        4902: () => new ChainNotAddedError(this.name, chain, error),
+      });
+    }
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
-    const provider = this.api.getProvider();
-
-    if (!provider) throw Error(`Failed to interact with metamask`);
-
-    const accounts = await provider.request<string[]>({
-      method: 'eth_accounts',
-    });
-
-    if (!accounts?.length)
-      throw Error(`Failed to fetch accounts from metamask`);
-
-    if (!accounts[0])
-      throw Error(`Failed to get address of first account from metamask`);
+    const address = await this.getAddress();
 
     const rosenData = await this.config.generateLockData(
       params.toChain,
@@ -126,17 +183,23 @@ export class MetaMaskWallet implements Wallet {
     const transactionParameters = await this.config.generateTxParameters(
       tokenId,
       params.lockAddress,
-      accounts[0],
+      address,
       params.amount,
       rosenData,
       params.token,
     );
 
-    const result = await provider.request<string>({
-      method: 'eth_sendTransaction',
-      params: [transactionParameters],
-    });
+    try {
+      return (await this.provider.request<string>({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      }))!;
+    } catch (error) {
+      this.dispatchError(error, {
+        4001: () => new UserDeniedTransactionSignatureError(this.name, error),
+      });
+    }
 
-    return result ?? '';
+    return '';
   }
 }
