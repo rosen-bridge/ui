@@ -24,7 +24,7 @@ import {
   BitcoinCalculatorInterface,
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
-  EthereumCalculatorInterface,
+  EvmCalculatorInterface,
 } from './interfaces';
 
 class AssetCalculator {
@@ -39,7 +39,8 @@ class AssetCalculator {
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
     bitcoinCalculator: BitcoinCalculatorInterface,
-    ethereumCalculator: EthereumCalculatorInterface,
+    ethereumCalculator: EvmCalculatorInterface,
+    binanceCalculator: EvmCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
   ) {
@@ -71,10 +72,19 @@ class AssetCalculator {
       ethereumCalculator.authToken,
       logger,
     );
+    const binanceAssetCalculator = new EvmCalculator(
+      NETWORKS.BINANCE,
+      this.tokens,
+      binanceCalculator.addresses,
+      binanceCalculator.rpcUrl,
+      binanceCalculator.authToken,
+      logger,
+    );
     this.calculatorMap.set(NETWORKS.ERGO, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.CARDANO, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.BITCOIN, bitcoinAssetCalculator);
     this.calculatorMap.set(NETWORKS.ETHEREUM, ethereumAssetCalculator);
+    this.calculatorMap.set(NETWORKS.BINANCE, binanceAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);
