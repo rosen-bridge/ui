@@ -67,21 +67,23 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
 
       const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
 
-      const selected = selectedSource.wallets.find(
+      const wallet = selectedSource.wallets.find(
         (wallet) => wallet.name === name && wallet.isAvailable(),
       );
 
-      if (!selected) return;
+      if (!wallet) return;
 
-      if ((await selected.isConnected?.()) === false) return;
-
-      if (!selected.switchChain) return setSelected(selected);
+      if ((await wallet.isConnected?.()) === false) return;
 
       try {
-        await selected.switchChain(selectedSource.name, true);
-        setSelected(selected);
-      } catch {
+        await wallet.connect();
+
+        await wallet.switchChain?.(selectedSource.name, true);
+
+        setSelected(wallet);
+      } catch (error) {
         setSelected(undefined);
+        throw error;
       }
     })();
   }, [selectedSource, setSelected]);

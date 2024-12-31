@@ -33,7 +33,7 @@ const getConfig = () => {
         addresses: {
           lock: nodeConfig.get<string>('cardano.addresses.lock'),
           eventTrigger: nodeConfig.get<string>(
-            'cardano.addresses.eventTrigger'
+            'cardano.addresses.eventTrigger',
           ),
           permit: nodeConfig.get<string>('cardano.addresses.permit'),
           fraud: nodeConfig.get<string>('cardano.addresses.fraud'),
@@ -49,7 +49,7 @@ const getConfig = () => {
         addresses: {
           lock: nodeConfig.get<string>('bitcoin.addresses.lock'),
           eventTrigger: nodeConfig.get<string>(
-            'bitcoin.addresses.eventTrigger'
+            'bitcoin.addresses.eventTrigger',
           ),
           permit: nodeConfig.get<string>('bitcoin.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin.addresses.fraud'),
@@ -67,7 +67,7 @@ const getConfig = () => {
         addresses: {
           lock: nodeConfig.get<string>('ethereum.addresses.lock'),
           eventTrigger: nodeConfig.get<string>(
-            'ethereum.addresses.eventTrigger'
+            'ethereum.addresses.eventTrigger',
           ),
           permit: nodeConfig.get<string>('ethereum.addresses.permit'),
           fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
@@ -83,7 +83,7 @@ const getConfig = () => {
         addresses: {
           lock: nodeConfig.get<string>('binance.addresses.lock'),
           eventTrigger: nodeConfig.get<string>(
-            'binance.addresses.eventTrigger'
+            'binance.addresses.eventTrigger',
           ),
           permit: nodeConfig.get<string>('binance.addresses.permit'),
           fraud: nodeConfig.get<string>('binance.addresses.fraud'),
@@ -106,6 +106,7 @@ const getConfig = () => {
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
+          binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
         },
       },
     };
@@ -114,7 +115,7 @@ const getConfig = () => {
       `an error occurred reading some service configs: ${error}`,
       false,
       'error',
-      error instanceof Error ? error.stack : undefined
+      error instanceof Error ? error.stack : undefined,
     );
   }
 };
