@@ -4,10 +4,13 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
+  AddressRetrievalError,
   ConnectionRejectedError,
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  UtxoFetchError,
   Wallet,
   WalletTransferParams,
-  dispatchError,
 } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
@@ -31,20 +34,23 @@ export class LaceWallet implements Wallet {
     try {
       await this.api.enable();
     } catch (error) {
-      dispatchError(error, {
-        '-3': () => new ConnectionRejectedError(this.name, error),
-      });
+      throw new ConnectionRejectedError(this.name, error);
     }
   }
 
   async getAddress(): Promise<string> {
-    return this.api.enable().then((wallet) => wallet.getChangeAddress());
+    try {
+      const wallet = await this.api.enable();
+      return await wallet.getChangeAddress();
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
-    const context = await this.api.enable();
+    const wallet = await this.api.enable();
 
-    const rawValue = await context.getBalance();
+    const rawValue = await wallet.getBalance();
 
     const balances = await this.config.decodeWasmValue(rawValue);
 
@@ -90,7 +96,7 @@ export class LaceWallet implements Wallet {
 
     const walletUtxos = await wallet.getUtxos();
 
-    if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
+    if (!walletUtxos) throw new UtxoFetchError(this.name);
 
     const unsignedTxHex = await this.config.generateUnsignedTx(
       walletUtxos,
@@ -102,13 +108,23 @@ export class LaceWallet implements Wallet {
       auxiliaryDataHex,
     );
 
+    let witnessSetHex: string;
+
+    try {
+      witnessSetHex = await wallet.signTx(unsignedTxHex, false);
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+
     const signedTxHex = await this.config.setTxWitnessSet(
       unsignedTxHex,
-      await wallet.signTx(unsignedTxHex, false),
+      witnessSetHex,
     );
 
-    const result = await wallet.submitTx(signedTxHex);
-
-    return result;
+    try {
+      return await wallet.submitTx(signedTxHex);
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   }
 }
