@@ -146,7 +146,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id
-            href={getTxURL(row.fromChain, row.sourceTxId)}
+            href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
             id={row.sourceTxId}
           />
         </EnhancedTableCell>
@@ -249,7 +249,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Id
-          href={getTxURL(row.fromChain, row.sourceTxId)}
+          href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
           id={row.sourceTxId}
         />
       </EnhancedTableCell>

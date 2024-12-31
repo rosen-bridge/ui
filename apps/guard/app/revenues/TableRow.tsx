@@ -127,7 +127,10 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
+          <Id
+            id={row.lockTxId}
+            href={getTxURL(row.fromChain, row.lockTxId) || undefined}
+          />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -248,7 +251,10 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
+        <Id
+          id={row.lockTxId}
+          href={getTxURL(row.fromChain, row.lockTxId) || undefined}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id
