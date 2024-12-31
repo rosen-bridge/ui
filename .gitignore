@@ -26,6 +26,7 @@ yarn.lock
 out
 build
 config
-configs
+**/configs/*.json
+**/configs/*.yaml
 next-env.d.ts 
 !config/default.yaml
