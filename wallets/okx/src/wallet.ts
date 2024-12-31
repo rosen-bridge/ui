@@ -1,7 +1,12 @@
 import { OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import {
+  ConnectionRejectedError,
+  Wallet,
+  WalletTransferParams,
+  dispatchError,
+} from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
@@ -20,12 +25,13 @@ export class OKXWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
+  async connect(): Promise<void> {
     try {
       await this.api.connect();
-      return true;
-    } catch {
-      return false;
+    } catch (error) {
+      dispatchError(error, {
+        4001: () => new ConnectionRejectedError(this.name, error),
+      });
     }
   }
 
@@ -53,6 +59,10 @@ export class OKXWallet implements Wallet {
     return (
       typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin
     );
+  }
+
+  async isConnected(): Promise<boolean> {
+    return !!this.api.selectedAccount;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {

@@ -1,8 +1,14 @@
 import { LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import {
+  ConnectionRejectedError,
+  Wallet,
+  WalletTransferParams,
+  dispatchError,
+} from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
@@ -21,15 +27,21 @@ export class LaceWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
-    return !!(await this.api.enable());
+  async connect(): Promise<void> {
+    try {
+      await this.api.enable();
+    } catch (error) {
+      dispatchError(error, {
+        '-3': () => new ConnectionRejectedError(this.name, error),
+      });
+    }
   }
 
   async getAddress(): Promise<string> {
     return this.api.enable().then((wallet) => wallet.getChangeAddress());
   }
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
+  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
     const context = await this.api.enable();
 
     const rawValue = await context.getBalance();
@@ -57,6 +69,10 @@ export class LaceWallet implements Wallet {
 
   isAvailable(): boolean {
     return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
+  }
+
+  async isConnected(): Promise<boolean> {
+    return await this.api.isEnabled();
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {

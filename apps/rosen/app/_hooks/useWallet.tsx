@@ -44,10 +44,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const select = useCallback(
     async (wallet: Wallet) => {
       try {
-        const isConnected = await wallet.connect();
-
-        if (isConnected === false) return;
-
+        await wallet.connect();
         await wallet.switchChain?.(selectedSource.name);
       } catch (error: any) {
         return openSnackbar(error.message, 'error');

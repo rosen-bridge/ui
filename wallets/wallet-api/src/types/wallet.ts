@@ -12,7 +12,7 @@ export interface Wallet {
   name: string;
   label: string;
   link: string;
-  connect(): Promise<boolean | void>;
+  connect(): Promise<void>;
   getAddress(): Promise<string>;
   getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
   isAvailable(): boolean;

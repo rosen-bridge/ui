@@ -1,7 +1,12 @@
 import { NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import { RosenAmountValue } from '@rosen-ui/types';
+import {
+  ConnectionRejectedError,
+  Wallet,
+  WalletTransferParams,
+} from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
@@ -20,23 +25,19 @@ export class NautilusWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
-    if (!this.api) {
-      throw new Error('EXTENSION_NOT_FOUND');
-    }
+  async connect(): Promise<void> {
+    const isConnected = await this.api.connect({ createErgoObject: false });
 
-    if (!this.api.getContext) {
-      console.warn('Wallet API has changed. Please update your wallet.');
-    }
+    if (isConnected) return;
 
-    return await this.api.connect({ createErgoObject: false });
+    throw new ConnectionRejectedError(this.name);
   }
 
   async getAddress(): Promise<string> {
     return this.api.getContext().then((wallet) => wallet.get_change_address());
   }
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
+  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
     const context = await this.api.getContext();
 
     const tokenMap = await this.config.getTokenMap();
@@ -69,6 +70,10 @@ export class NautilusWallet implements Wallet {
       typeof window.ergoConnector !== 'undefined' &&
       !!window.ergoConnector.nautilus
     );
+  }
+
+  async isConnected(): Promise<boolean> {
+    return await this.api.isAuthorized();
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
