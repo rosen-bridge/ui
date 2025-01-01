@@ -1,4 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import {
+  ReactNode,
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORK_VALUES } from '@rosen-ui/constants';
@@ -9,22 +16,39 @@ import { AvailableNetworks, availableNetworks } from '@/_networks';
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
 
-type BlackList = {
-  fromChain: Network;
-  toChain: Network;
-  tokenName: string;
-};
-
 /**
  * handles network related operations and provide list of
  * available tokens in network
  */
 export const useNetwork = () => {
+  const context = useContext(NetworkContext);
+
+  if (!context) {
+    throw new Error('useNetwork must be used within NetworkProvider');
+  }
+
+  return context;
+};
+
+export type NetworkContextType = {
+  sources: AvailableNetworks[];
+  availableSources: AvailableNetworks[];
+  selectedSource?: AvailableNetworks;
+
+  targets: AvailableNetworks[];
+  availableTargets: AvailableNetworks[];
+  selectedTarget?: AvailableNetworks;
+
+  tokens: RosenChainToken[];
+  availableTokens: RosenChainToken[];
+};
+
+export const NetworkContext = createContext<NetworkContextType | null>(null);
+
+export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const { sourceField, targetField } = useBridgeForm();
 
   const tokenMap = useTokenMap();
-
-  const [blacklist, setBlacklist] = useState<BlackList[]>();
 
   const [availableSources, setAvailableSources] = useState<AvailableNetworks[]>(
     [],
@@ -35,6 +59,25 @@ export const useNetwork = () => {
   );
 
   const [availableTokens, setAvailableTokens] = useState<RosenChainToken[]>([]);
+
+  const blacklist = useMemo(
+    () =>
+      (process.env.NEXT_PUBLIC_BLOCKED_TOKENS || '')
+        .split(';')
+        .map((raw) => raw.trim())
+        .filter(Boolean)
+        .map((raw) => {
+          const [fromChain, toChain, tokenName] = raw
+            .split(',')
+            .map((value) => value.trim());
+          return {
+            fromChain,
+            toChain,
+            tokenName,
+          };
+        }),
+    [],
+  );
 
   /**
    * returns the list of available network objects if a and filters out
@@ -65,11 +108,9 @@ export const useNetwork = () => {
     return tokenMap.getTokens(sourceField.value, targetField.value);
   }, [targetField.value, sourceField.value, tokenMap]);
 
-  const selectedSource =
-    availableNetworks[sourceField.value as Network] || null;
+  const selectedSource = availableNetworks[sourceField.value as Network];
 
-  const selectedTarget =
-    availableNetworks[targetField.value as Network] || null;
+  const selectedTarget = availableNetworks[targetField.value as Network];
 
   useEffect(() => {
     if (!blacklist) return;
@@ -114,26 +155,7 @@ export const useNetwork = () => {
     setAvailableTokens(Array.from(tokens));
   }, [blacklist, tokenMap, sourceField.value, targetField.value]);
 
-  useEffect(() => {
-    const blacklist = (process.env.NEXT_PUBLIC_BLOCKED_TOKENS || '')
-      .split(';')
-      .map((raw) => raw.trim())
-      .filter((raw) => !!raw)
-      .reduce((items, raw) => {
-        const [fromChain, toChain, tokenName] = raw
-          .split(',')
-          .map((value) => value.trim());
-        const item = {
-          fromChain: fromChain as Network,
-          toChain: toChain as Network,
-          tokenName,
-        };
-        return items.concat(item);
-      }, [] as BlackList[]);
-    setBlacklist(blacklist);
-  }, []);
-
-  return {
+  const state = {
     sources,
     availableSources,
     selectedSource,
@@ -145,4 +167,8 @@ export const useNetwork = () => {
     tokens,
     availableTokens,
   };
+
+  return (
+    <NetworkContext.Provider value={state}>{children}</NetworkContext.Provider>
+  );
 };
