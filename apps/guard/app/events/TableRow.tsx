@@ -9,6 +9,7 @@ import {
   Id,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { OngoingEvent } from '@/_types/api';
@@ -95,6 +96,11 @@ export const tabletHeader = [
   },
 ];
 
+const getSafeTxURL = (network: Network, tx: string): string | undefined => {
+  const url = getTxURL(network, tx);
+  return url ? url : undefined;
+};
+
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
@@ -120,7 +126,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id
-            href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
+            href={getSafeTxURL(row.fromChain, row.sourceTxId)}
             id={row.sourceTxId}
           />
         </EnhancedTableCell>
@@ -130,7 +136,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
+              <Id id={row.txId} href={getSafeTxURL(NETWORKS.ERGO, row.txId)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -203,12 +209,12 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id
-          href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
+          href={getSafeTxURL(row.fromChain, row.sourceTxId)}
           id={row.sourceTxId}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
+        <Id id={row.txId} href={getSafeTxURL(NETWORKS.ERGO, row.txId)} />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id id={row.fromAddress} />

@@ -121,6 +121,11 @@ const statusMap = {
   successful: 'done',
 };
 
+const getSafeTxURL = (network: Network, tx: string): string | undefined => {
+  const url = getTxURL(network, tx);
+  return url ? url : undefined;
+};
+
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
@@ -146,7 +151,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id
-            href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
+            href={getSafeTxURL(row.fromChain, row.sourceTxId)}
             id={row.sourceTxId}
           />
         </EnhancedTableCell>
@@ -249,7 +254,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Id
-          href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
+          href={getSafeTxURL(row.fromChain, row.sourceTxId)}
           id={row.sourceTxId}
         />
       </EnhancedTableCell>

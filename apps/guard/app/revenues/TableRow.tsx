@@ -11,6 +11,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
@@ -98,6 +99,11 @@ export const tabletHeader = [
   },
 ];
 
+const getSafeTxURL = (network: Network, tx: string): string | undefined => {
+  const url = getTxURL(network, tx);
+  return url ? url : undefined;
+};
+
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
@@ -129,7 +135,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>
           <Id
             id={row.lockTxId}
-            href={getTxURL(row.fromChain, row.lockTxId) || undefined}
+            href={getSafeTxURL(row.fromChain, row.lockTxId)}
           />
         </EnhancedTableCell>
       </TableRow>
@@ -140,7 +146,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Id
                 id={row.rewardTxId}
-                href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+                href={getSafeTxURL(NETWORKS.ERGO, row.rewardTxId)}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -253,13 +259,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id
           id={row.lockTxId}
-          href={getTxURL(row.fromChain, row.lockTxId) || undefined}
+          href={getSafeTxURL(row.fromChain, row.lockTxId)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id
           id={row.rewardTxId}
-          href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+          href={getSafeTxURL(NETWORKS.ERGO, row.rewardTxId)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>

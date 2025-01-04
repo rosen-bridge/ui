@@ -8,6 +8,7 @@ import {
   Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
+import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Event } from '@/_types/api';
@@ -100,6 +101,11 @@ export const tabletHeader = [
   },
 ];
 
+const getSafeTxURL = (network: Network, tx: string): string | undefined => {
+  const url = getTxURL(network, tx);
+  return url ? url : undefined;
+};
+
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
@@ -120,7 +126,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>
           <Id
             id={row.sourceTxId}
-            href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
+            href={getSafeTxURL(row.fromChain, row.sourceTxId)}
           />
         </EnhancedTableCell>
       </TableRow>
@@ -207,7 +213,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id
           id={row.sourceTxId}
-          href={getTxURL(row.fromChain, row.sourceTxId) || undefined}
+          href={getSafeTxURL(row.fromChain, row.sourceTxId)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
