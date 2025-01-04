@@ -1,7 +1,17 @@
 import { NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import { RosenAmountValue } from '@rosen-ui/types';
+import {
+  AddressRetrievalError,
+  ConnectionRejectedError,
+  ErgoTxProxy,
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  UtxoFetchError,
+  Wallet,
+  WalletTransferParams,
+} from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
@@ -20,24 +30,25 @@ export class NautilusWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
-    if (!this.api) {
-      throw new Error('EXTENSION_NOT_FOUND');
-    }
+  async connect(): Promise<void> {
+    const isConnected = await this.api.connect({ createErgoObject: false });
 
-    if (!this.api.getContext) {
-      console.warn('Wallet API has changed. Please update your wallet.');
-    }
+    if (isConnected) return;
 
-    return await this.api.connect({ createErgoObject: false });
+    throw new ConnectionRejectedError(this.name);
   }
 
   async getAddress(): Promise<string> {
-    return this.api.getContext().then((wallet) => wallet.get_change_address());
+    try {
+      const wallet = await this.api.getContext();
+      return await wallet.get_change_address();
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
   }
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
-    const context = await this.api.getContext();
+  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    const wallet = await this.api.getContext();
 
     const tokenMap = await this.config.getTokenMap();
 
@@ -47,7 +58,7 @@ export class NautilusWallet implements Wallet {
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
-    const balance = await context.get_balance(
+    const balance = await wallet.get_balance(
       tokenId === 'erg' ? 'ERG' : tokenId,
     );
 
@@ -71,6 +82,10 @@ export class NautilusWallet implements Wallet {
     );
   }
 
+  async isConnected(): Promise<boolean> {
+    return await this.api.isAuthorized();
+  }
+
   async transfer(params: WalletTransferParams): Promise<string> {
     const wallet = await this.api.getContext();
 
@@ -78,7 +93,7 @@ export class NautilusWallet implements Wallet {
 
     const walletUtxos = await wallet.get_utxos();
 
-    if (!walletUtxos) throw Error(`No box found`);
+    if (!walletUtxos) throw new UtxoFetchError(this.name);
 
     const unsignedTx = await this.config.generateUnsignedTx(
       changeAddress,
@@ -92,10 +107,17 @@ export class NautilusWallet implements Wallet {
       params.token,
     );
 
-    const signedTx = await wallet.sign_tx(unsignedTx);
+    let signedTx: ErgoTxProxy;
 
-    const result = await wallet.submit_tx(signedTx);
-
-    return result;
+    try {
+      signedTx = await wallet.sign_tx(unsignedTx);
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+    try {
+      return await wallet.submit_tx(signedTx);
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   }
 }

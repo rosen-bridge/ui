@@ -16,6 +16,7 @@ declare global {
       nautilus: {
         connect: (params: { createErgoObject: boolean }) => Promise<boolean>;
         getContext: () => Promise<EipWalletApi>;
+        isAuthorized: () => Promise<boolean>;
       };
     };
   }

@@ -17,6 +17,7 @@ export const NETWORKS = {
   CARDANO: 'cardano',
   BITCOIN: 'bitcoin',
   ETHEREUM: 'ethereum',
+  BINANCE: 'binance',
 } as const;
 
 export const NATIVE_TOKENS = {
@@ -24,6 +25,7 @@ export const NATIVE_TOKENS = {
   CARDANO: 'ada',
   BITCOIN: 'btc',
   ETHEREUM: 'eth',
+  BINANCE: 'bnb',
 } as const;
 
 /**
@@ -37,4 +39,5 @@ export const NETWORK_LABELS: { [key in keyof typeof NETWORKS]: string } = {
   CARDANO: 'Cardano',
   BITCOIN: 'Bitcoin',
   ETHEREUM: 'Ethereum',
+  BINANCE: 'Binance',
 };

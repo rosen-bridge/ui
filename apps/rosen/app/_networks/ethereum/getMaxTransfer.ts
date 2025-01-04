@@ -1,6 +1,10 @@
 'use server';
 
-import { ETH_TRANSFER_GAS, getFeeData } from '@rosen-network/ethereum';
+import {
+  EvmChains,
+  NATIVE_TOKEN_TRANSFER_GAS,
+  getFeeData,
+} from '@rosen-network/evm';
 import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
 
 import { wrap } from '@/_safeServerAction';
@@ -14,9 +18,9 @@ const getMaxTransferCore: EthereumNetwork['getMaxTransfer'] = async ({
   balance,
   isNative,
 }) => {
-  const feeData = await getFeeData();
+  const feeData = await getFeeData(EvmChains.ETHEREUM);
   if (!feeData.gasPrice) throw Error(`gas price is null`);
-  const estimatedFee = feeData.gasPrice * ETH_TRANSFER_GAS;
+  const estimatedFee = feeData.gasPrice * NATIVE_TOKEN_TRANSFER_GAS;
   const tokenMap = getTokenMap();
 
   const wrappedFee = tokenMap.wrapAmount(

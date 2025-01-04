@@ -3,7 +3,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Contract } from 'ethers';
 
-import { ETH, transferABI } from './constants';
+import { transferABI } from './constants';
 
 /**
  * generates ethereum lock tx
@@ -27,7 +27,7 @@ export const generateTxParameters =
     ).amount;
 
     let transactionParameters;
-    if (tokenId === ETH) {
+    if (token.metaData.type === 'native') {
       transactionParameters = {
         to: lockAddress,
         from: fromAddress,

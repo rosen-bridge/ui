@@ -8,13 +8,13 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
-    "start": "node --watch --experimental-specifier-resolution=node --loader ./ts-node-esm-loader.js ./src/main.ts",
-    "start:prod": "node --experimental-specifier-resolution=node ./dist/main.js",
+    "start": "tsx watch ./src/main.ts",
+    "start:prod": "tsx ./src/main.ts",
     "type-check": "tsc --noEmit",
-    "typeorm": "NODE_OPTIONS=--experimental-specifier-resolution=node typeorm-ts-node-esm",
+    "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
     "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out config --include-prereleases"
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config"
   },
   "dependencies": {
     "@rosen-bridge/abstract-extractor": "^0.3.1",
@@ -32,9 +32,8 @@
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
-    "@types/node": "^18.11.18",
-    "ts-node": "^10.7.0",
-    "tsconfig-paths": "^4.1.2",
+    "@types/node": "^20.17.10",
+    "tsx": "^4.19.2",
     "typescript": "^5.0.0"
   }
 }

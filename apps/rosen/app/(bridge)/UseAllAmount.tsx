@@ -53,7 +53,7 @@ export const UseAllAmount = ({
             <span>
               Use all
               <br />
-              {value} <small>{unit}</small>
+              {value} <small style={{ textTransform: 'none' }}>{unit}</small>
             </span>
           </Button>
         )}
