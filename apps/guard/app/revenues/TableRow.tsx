@@ -6,7 +6,6 @@ import {
   CircularProgress,
   EnhancedTableCell,
   Id,
-  Link,
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';

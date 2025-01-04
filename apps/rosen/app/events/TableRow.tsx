@@ -5,7 +5,6 @@ import {
   Button,
   EnhancedTableCell,
   TableRow,
-  Link,
   Typography,
   Id,
 } from '@rosen-bridge/ui-kit';

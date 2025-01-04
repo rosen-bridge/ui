@@ -1,13 +1,7 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import {
-  Button,
-  EnhancedTableCell,
-  Id,
-  Link,
-  TableRow,
-} from '@rosen-bridge/ui-kit';
+import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
