@@ -7,7 +7,7 @@ import {
   TableRow,
   Link,
   Id,
-  ChainAddress,
+  Connector,
 } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
@@ -161,10 +161,9 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              <ChainAddress
-                from={upperFirst(row.fromChain as Network)}
-                to={upperFirst(row.toChain as Network)}
-                isChain
+              <Connector
+                start={upperFirst(row.fromChain as Network)}
+                end={upperFirst(row.toChain as Network)}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -175,7 +174,10 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Addresses</EnhancedTableCell>
             <EnhancedTableCell>
-              <ChainAddress from={row.fromAddress} to={row.toAddress} />
+              <Connector
+                start={<Id id={row.fromAddress} />}
+                end={<Id id={row.toAddress} />}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -265,15 +267,17 @@ export const TabletRow: FC<RowProps> = (props) => {
         )}
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <ChainAddress
-          from={upperFirst(row.fromChain as Network)}
-          to={upperFirst(row.toChain as Network)}
-          isChain
+        <Connector
+          start={upperFirst(row.fromChain as Network)}
+          end={upperFirst(row.toChain as Network)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <ChainAddress from={row.fromAddress} to={row.toAddress} />
+        <Connector
+          start={<Id id={row.fromAddress} />}
+          end={<Id id={row.toAddress} />}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">

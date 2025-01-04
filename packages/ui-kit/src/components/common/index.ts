@@ -4,7 +4,7 @@ export * from './ApiKeyModal';
 export * from './App';
 export * from './AppBar';
 export * from './AppLogo';
-export * from './ChainAddress';
+export * from './Connector';
 export * from './EnhancedDialog';
 export * from './EnhancedDialogTitle';
 export * from './EnhancedTable';
