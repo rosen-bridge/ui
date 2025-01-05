@@ -1,5 +1,5 @@
 import {
-  ReactNode,
+  PropsWithChildren,
   createContext,
   useContext,
   useEffect,
@@ -28,7 +28,7 @@ export type TokenMapContextType = TokenMap;
 
 export const TokenMapContext = createContext<TokenMap | null>(null);
 
-export const TokenMapProvider = ({ children }: { children: ReactNode }) => {
+export const TokenMapProvider = ({ children }: PropsWithChildren) => {
   const [tokenMap, setTokenMap] = useState(
     new TokenMap({ idKeys: {}, tokens: [] }),
   );
