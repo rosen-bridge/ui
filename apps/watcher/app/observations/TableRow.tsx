@@ -83,11 +83,6 @@ export const tabletHeader = [
   },
 ];
 
-const getSafeTxURL = (network: Network, tx: string): string | undefined => {
-  const url = getTxURL(network, tx);
-  return url ? url : undefined;
-};
-
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
@@ -108,7 +103,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>
           <Id
             id={row.sourceTxId}
-            href={getSafeTxURL(row.fromChain, row.sourceTxId)}
+            href={getTxURL(row.fromChain, row.sourceTxId)!}
           />
         </EnhancedTableCell>
       </TableRow>
@@ -185,7 +180,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id
           id={row.sourceTxId}
-          href={getSafeTxURL(row.fromChain, row.sourceTxId)}
+          href={getTxURL(row.fromChain, row.sourceTxId)!}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>

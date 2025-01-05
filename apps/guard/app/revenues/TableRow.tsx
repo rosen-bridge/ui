@@ -98,11 +98,6 @@ export const tabletHeader = [
   },
 ];
 
-const getSafeTxURL = (network: Network, tx: string): string | undefined => {
-  const url = getTxURL(network, tx);
-  return url ? url : undefined;
-};
-
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
@@ -132,10 +127,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id
-            id={row.lockTxId}
-            href={getSafeTxURL(row.fromChain, row.lockTxId)}
-          />
+          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)!} />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -145,7 +137,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Id
                 id={row.rewardTxId}
-                href={getSafeTxURL(NETWORKS.ERGO, row.rewardTxId)}
+                href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -256,15 +248,12 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id
-          id={row.lockTxId}
-          href={getSafeTxURL(row.fromChain, row.lockTxId)}
-        />
+        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)!} />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id
           id={row.rewardTxId}
-          href={getSafeTxURL(NETWORKS.ERGO, row.rewardTxId)}
+          href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
