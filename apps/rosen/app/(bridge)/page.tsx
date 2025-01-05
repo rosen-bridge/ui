@@ -40,15 +40,20 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'width': '100%',
     'padding': theme.spacing(4),
     'display': 'grid',
-    'gridTemplateColumns': '1fr 1fr',
-    'gridTemplateRows': '1fr auto auto',
+    'gridTemplateColumns': '1fr',
+    'gridTemplateRows': 'auto auto auto',
+    'alignItems': 'center',
+    'justifyContent': 'center',
+    'rowGap': theme.spacing(4),
     '& > button': {
       width: '50%',
-      justifySelf: 'flex-end',
+      justifySelf: 'center',
     },
   },
   [theme.breakpoints.up('laptop')]: {
     gridTemplateColumns: '8fr 4fr',
+    alignItems: 'unset',
+    justifyContent: 'unset',
   },
 }));
 
