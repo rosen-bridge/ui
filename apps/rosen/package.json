@@ -11,7 +11,7 @@
     "start": "next start",
     "test": "vitest",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
-    "build:vercel": "cd ../../ && ./build.sh && cd apps/rosen && npm run build"
+    "build:vercel": "cd ../../ && ./build.sh && cd apps/rosen && node ./configs/generate.mjs && npm run build"
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
