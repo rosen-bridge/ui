@@ -6,6 +6,7 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types';
 
+import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './getMaxTransfer';
 import { generateLockData, generateTxParameters } from './server';
 
@@ -26,7 +27,7 @@ export const EthereumNetwork: EthereumNetworkType = {
   ],
   logo: EthereumIcon,
   nextHeightInterval: 50,
-  lockAddress: process.env.NEXT_PUBLIC_ETHEREUM_LOCK_ADDRESS!,
+  lockAddress: LOCK_ADDRESSES.ETHEREUM,
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address.toLowerCase(),
 };

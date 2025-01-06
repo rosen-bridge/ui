@@ -11,7 +11,7 @@
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
     "type-check": "tsc --noEmit",
-    "test": "vitest"
+    "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
     "@rosen-bridge/address-codec": "^0.4.0",
@@ -21,6 +21,7 @@
     "bitcoinjs-lib": "^6.1.6"
   },
   "devDependencies": {
+    "tsx": "^4.19.2",
     "typescript": "^5.0.0"
   }
 }

@@ -65,6 +65,11 @@ const start = async () => {
       rpcUrl: config.ethereum.rpcUrl,
       authToken: config.ethereum.rpcAuthToken,
     },
+    {
+      addresses: config.calculator.addresses.binance,
+      rpcUrl: config.binance.rpcUrl,
+      authToken: config.binance.rpcAuthToken,
+    },
     dataSource,
     logger,
   );

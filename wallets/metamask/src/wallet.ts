@@ -14,6 +14,7 @@ import {
   AddressRetrievalError,
   ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
+  dispatchError,
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
@@ -45,17 +46,6 @@ export class MetaMaskWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private dispatchError(error: any, cases: { [key: number]: () => Error }) {
-    if (error?.code in cases) {
-      throw cases[error.code]();
-    }
-    if (error.message) {
-      throw new Error(error.message, { cause: error });
-    }
-    throw error;
-  }
-
   private async permissions() {
     return (await this.provider.request({
       method: 'wallet_getPermissions',
@@ -67,9 +57,7 @@ export class MetaMaskWallet implements Wallet {
     try {
       await this.api.connect();
     } catch (error) {
-      this.dispatchError(error, {
-        4001: () => new ConnectionRejectedError(this.name, error),
-      });
+      throw new ConnectionRejectedError(this.name, error);
     }
   }
 
@@ -159,7 +147,7 @@ export class MetaMaskWallet implements Wallet {
         params: [{ chainId }],
       });
     } catch (error) {
-      this.dispatchError(error, {
+      dispatchError(error, {
         4001: () => new ChainSwitchingRejectedError(this.name, chain, error),
         4902: () => new ChainNotAddedError(this.name, chain, error),
       });
@@ -195,11 +183,7 @@ export class MetaMaskWallet implements Wallet {
         params: [transactionParameters],
       }))!;
     } catch (error) {
-      this.dispatchError(error, {
-        4001: () => new UserDeniedTransactionSignatureError(this.name, error),
-      });
+      throw new UserDeniedTransactionSignatureError(this.name, error);
     }
-
-    return '';
   }
 }
