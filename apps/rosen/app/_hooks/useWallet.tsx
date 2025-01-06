@@ -45,7 +45,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     async (wallet: Wallet) => {
       try {
         await wallet.connect();
-        await wallet.switchChain?.(selectedSource.name);
+        if (wallet.switchChain && selectedSource) {
+          await wallet.switchChain(selectedSource.name);
+        }
       } catch (error: any) {
         return openSnackbar(error.message, 'error');
       }
