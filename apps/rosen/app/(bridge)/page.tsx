@@ -14,8 +14,6 @@ import { BridgeTransaction } from './BridgeTransaction';
 import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
 
 const Background = styled('div')(({ theme }) => ({
-  height: '100vh',
-  width: '100vw',
   position: 'absolute',
   inset: 0,
   backgroundImage: `url(./background-${theme.palette.mode}.png)`,
@@ -23,6 +21,9 @@ const Background = styled('div')(({ theme }) => ({
   backgroundPosition: 'center center',
   backgroundSize: 'cover',
   zIndex: '0',
+  [theme.breakpoints.up('tablet')]: {
+    overflowY: 'auto',
+  },
   [theme.breakpoints.down('tablet')]: {
     display: 'none',
   },
@@ -31,8 +32,8 @@ const Background = styled('div')(({ theme }) => ({
 const BridgeContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+
   gap: theme.spacing(3),
-  boxSizing: 'border-box',
   [theme.breakpoints.up('tablet')]: {
     'zIndex': '3',
     'position': 'absolute',
@@ -46,7 +47,9 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'gridTemplateColumns': '1fr',
     'gridTemplateRows': 'auto auto auto',
     'alignItems': 'center',
-    'justifyContent': 'center',
+    'justifyContent': 'flex-start',
+    'overflowY': 'auto',
+    'maxHeight': '70vh',
     'rowGap': theme.spacing(4),
     '& > button': {
       width: '50%',
