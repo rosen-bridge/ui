@@ -74,14 +74,11 @@ export const BridgeTransaction = ({
       <Card
         sx={{
           display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          gap: (theme) => theme.spacing(2),
+          padding: '12px 24px',
           backgroundColor: (theme) =>
             theme.palette.mode === 'light'
               ? theme.palette.primary.light
               : theme.palette.background.paper,
-          padding: (theme) => theme.spacing(3),
         }}
       >
         <WalletInfo
@@ -96,6 +93,21 @@ export const BridgeTransaction = ({
           </Alert>
         )}
         <div style={{ flexGrow: '1' }} />
+      </Card>
+      <Card
+        sx={{
+          marginTop: '16px',
+          display: 'flex',
+          flexDirection: 'column',
+          height: '64%',
+          gap: (theme) => theme.spacing(3),
+          backgroundColor: (theme) =>
+            theme.palette.mode === 'light'
+              ? theme.palette.primary.light
+              : theme.palette.background.paper,
+          padding: (theme) => theme.spacing(3),
+        }}
+      >
         <Amount
           title="Transaction Fee"
           value={networkFeeRaw}

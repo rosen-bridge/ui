@@ -29,6 +29,7 @@ const Background = styled('div')(({ theme }) => ({
 const BridgeContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  boxSizing: 'border-box',
   gap: theme.spacing(3),
   [theme.breakpoints.up('tablet')]: {
     'zIndex': '3',
@@ -42,6 +43,10 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'display': 'grid',
     'gridTemplateColumns': '1fr 1fr',
     'gridTemplateRows': '1fr auto auto',
+    'gridTemplateAreas': `
+    "form transaction"
+    "button transaction"
+  `,
     '& > button': {
       width: '50%',
       justifySelf: 'flex-end',
@@ -84,33 +89,46 @@ const RosenBridge = () => {
         <NetworkProvider>
           <WalletProvider>
             <BridgeContainer>
-              <BridgeForm />
-              <BridgeTransaction
-                chooseWalletsModalOpen={chooseWalletsModalOpen}
-                setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-              />
-              {/* 
+              <div style={{ gridArea: 'form' }}>
+                <BridgeForm />
+              </div>
+
+              <div style={{ gridArea: 'transaction' }}>
+                <BridgeTransaction
+                  chooseWalletsModalOpen={chooseWalletsModalOpen}
+                  setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+                />
+                {/* 
               TODO: Add a condition that activates this alert specifically when MetaMask is selected
               local:ergo/rosen-bridge/ui#486
             */}
-              {(methods.getValues().source == NETWORKS.BINANCE ||
-                methods.getValues().source == NETWORKS.ETHEREUM) && (
-                <Alert
-                  severity="warning"
-                  sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
-                >
-                  If you are using Ledger, you may need to enable &apos;Blind
-                  signing&apos; and &apos;Debug data&apos; in the Ledger
-                  (Ethereum &gt; Settings) due to{' '}
-                  <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
-                    a known issue in Ledger and MetaMask interaction
-                  </a>
-                  .
-                </Alert>
-              )}
-              <ConnectOrSubmitButton
-                setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-              />
+                {(methods.getValues().source == NETWORKS.BINANCE ||
+                  methods.getValues().source == NETWORKS.ETHEREUM) && (
+                  <Alert
+                    severity="warning"
+                    sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
+                  >
+                    If you are using Ledger, you may need to enable &apos;Blind
+                    signing&apos; and &apos;Debug data&apos; in the Ledger
+                    (Ethereum &gt; Settings) due to{' '}
+                    <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
+                      a known issue in Ledger and MetaMask interaction
+                    </a>
+                    .
+                  </Alert>
+                )}
+              </div>
+              <div
+                style={{
+                  display: 'grid',
+                  gridArea: 'button',
+                  justifyItems: 'end',
+                }}
+              >
+                <ConnectOrSubmitButton
+                  setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+                />
+              </div>
             </BridgeContainer>
           </WalletProvider>
         </NetworkProvider>
