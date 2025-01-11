@@ -77,7 +77,7 @@ export const BridgeTransaction = ({
           padding: '12px 24px',
           backgroundColor: (theme) =>
             theme.palette.mode === 'light'
-              ? theme.palette.primary.light
+              ? theme.palette.secondary.light
               : theme.palette.background.paper,
         }}
       >
@@ -108,6 +108,7 @@ export const BridgeTransaction = ({
           padding: (theme) => theme.spacing(3),
         }}
       >
+        <div style={{ flexGrow: '1' }} />
         <Amount
           title="Transaction Fee"
           value={networkFeeRaw}
