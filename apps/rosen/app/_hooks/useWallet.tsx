@@ -1,5 +1,5 @@
 import {
-  ReactNode,
+  PropsWithChildren,
   createContext,
   useCallback,
   useContext,
@@ -34,7 +34,7 @@ export type WalletContextType = {
 
 export const WalletContext = createContext<WalletContextType | null>(null);
 
-export const WalletProvider = ({ children }: { children: ReactNode }) => {
+export const WalletProvider = ({ children }: PropsWithChildren) => {
   const { selectedSource } = useNetwork();
 
   const { openSnackbar } = useSnackbar();
@@ -45,7 +45,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     async (wallet: Wallet) => {
       try {
         await wallet.connect();
-        await wallet.switchChain?.(selectedSource.name);
+        if (wallet.switchChain && selectedSource) {
+          await wallet.switchChain(selectedSource.name);
+        }
       } catch (error: any) {
         return openSnackbar(error.message, 'error');
       }
