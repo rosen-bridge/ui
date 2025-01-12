@@ -3,7 +3,6 @@ import { useState, FC, useMemo } from 'react';
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import { Button, EnhancedTableCell, TableRow, Id } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { OngoingEvent } from '@/_types/api';
