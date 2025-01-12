@@ -1,7 +1,6 @@
 import { OpenInNew } from '@rosen-bridge/icons';
 
-import { Typography, Tooltip } from '../base';
-import { SvgIcon } from '../base/SvgIcon';
+import { Typography, Tooltip, SvgIcon } from '../base';
 
 export interface IdProps {
   id: string;
