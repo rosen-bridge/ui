@@ -2,4 +2,4 @@
 '@rosen-bridge/rosen-app': patch
 ---
 
-Implemented the connector component, removed redundant code for cleaner code
+Used connector component and removed redundant code for cleaner code
