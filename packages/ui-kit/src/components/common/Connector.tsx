@@ -8,17 +8,13 @@ export interface ConnectorProps {
 }
 
 export const Connector: FC<ConnectorProps> = ({ start, end }) => {
-  const renderNode = (node: ReactNode): ReactNode => {
-    return node;
-  };
-
   return (
     <>
-      {renderNode(start)}
+      {start}
       <Typography variant="h5" display="inline" mx={1}>
         →
       </Typography>
-      {renderNode(end)}
+      {end}
     </>
   );
 };
