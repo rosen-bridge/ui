@@ -31,8 +31,13 @@ const InfoWidgets = () => {
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
+
+  // const rsnToken = { amount: 20000000000000000, decimals: 18 };
+  // const eRsnToken = { amount: 3000000000000, decimals: 18 };
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
+  console.log(eRsnToken?.amount?.toString());
+  console.log(rsnToken?.amount.toString());
   /**
    * get allowed and total reports based on permits count and permits per event
    */
@@ -152,27 +157,35 @@ const InfoWidgets = () => {
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
           title={
-            eRsnToken?.amount !== undefined
-              ? getDecimalString(
-                  eRsnToken.amount.toString(),
-                  eRsnToken.decimals,
-                ) + ' eRSN'
-              : ''
+            rsnToken?.amount === 0 && eRsnToken?.amount === 0
+              ? ''
+              : rsnToken?.amount !== 0 && eRsnToken?.amount === 0
+                ? ''
+                : eRsnToken?.amount !== 0 && rsnToken?.amount === 0
+                  ? ''
+                  : rsnToken?.amount !== undefined &&
+                      eRsnToken?.amount !== undefined
+                    ? `${getDecimalString(eRsnToken.amount.toString(), eRsnToken.decimals ?? 0)} eRSN`
+                    : ''
           }
           value={
-            rsnToken?.amount !== undefined
-              ? getDecimalString(
-                  rsnToken.amount.toString(),
-                  rsnToken.decimals,
-                ) + ' RSN'
-              : ''
+            rsnToken?.amount === 0 && eRsnToken?.amount !== 0
+              ? `${getDecimalString(eRsnToken?.amount?.toString() as string, eRsnToken?.decimals ?? 0)} eRSN`
+              : eRsnToken?.amount === 0 && rsnToken?.amount !== 0
+                ? `${getDecimalString(rsnToken?.amount?.toString() as string, rsnToken?.decimals ?? 0)} RSN`
+                : rsnToken?.amount === 0 && eRsnToken?.amount === 0
+                  ? `${getDecimalString(rsnToken?.amount.toString(), rsnToken?.decimals ?? 0)} RSN`
+                  : rsnToken?.amount !== undefined &&
+                      eRsnToken?.amount !== undefined
+                    ? `${getDecimalString(rsnToken.amount.toString(), rsnToken.decimals ?? 0)} RSN`
+                    : ''
           }
           icon={
             <SvgIcon fontSize="large">
+              <Wallet />
               {/* FIXME: Use an appropriate icon
                 local:ergo/rosen-bridge/ui#64
                */}
-              <Wallet />
             </SvgIcon>
           }
           color="warning"
