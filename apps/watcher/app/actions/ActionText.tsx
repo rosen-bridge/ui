@@ -1,19 +1,16 @@
-import { PropsWithChildren } from 'react';
+import { ReactNode } from 'react';
 
 import { FullCard } from '@rosen-bridge/ui-kit';
 
 interface ActionText {
   title: string;
-  children: PropsWithChildren;
+  children: ReactNode;
 }
 /**
  * render a card showing some text to be used in actions page
  * @param children
  */
-export const ActionText = ({
-  title,
-  children,
-}: PropsWithChildren<ActionText>) => (
+export const ActionText = ({ title, children }: ActionText) => (
   <FullCard
     title={title}
     backgroundColor="divider"

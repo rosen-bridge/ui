@@ -1,10 +1,10 @@
-import { PropsWithChildren } from 'react';
+import { ReactNode } from 'react';
 
 import { Slide, Box } from '@rosen-bridge/ui-kit';
 
 interface TabPanelProps {
   in: boolean;
-  children?: PropsWithChildren;
+  children?: ReactNode;
 }
 /**
  * render the content of a tab in actions page
@@ -12,10 +12,7 @@ interface TabPanelProps {
  * @param in
  * @param children
  */
-export const TabPanel = ({
-  in: isIn,
-  children,
-}: PropsWithChildren<TabPanelProps>) => {
+export const TabPanel = ({ in: isIn, children }: TabPanelProps) => {
   return (
     <Slide
       direction="up"
