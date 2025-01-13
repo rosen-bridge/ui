@@ -37,6 +37,10 @@ export class MetaMaskWallet implements Wallet {
     enableAnalytics: false,
   });
 
+  /**
+   * TODO: centralized definition
+   * local:ergo/rosen-bridge/ui#510
+   */
   private chains = {
     [NETWORKS.BINANCE]: '0x38',
     [NETWORKS.ETHEREUM]: '0x1',
