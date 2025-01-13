@@ -1,13 +1,7 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import {
-  Button,
-  EnhancedTableCell,
-  TableRow,
-  Link,
-  Id,
-} from '@rosen-bridge/ui-kit';
+import { Button, EnhancedTableCell, TableRow, Id } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
@@ -108,8 +102,6 @@ export const MobileRow: FC<RowProps> = (props) => {
     setExpand((prevState) => !prevState);
   };
 
-  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
-
   return (
     <>
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -121,13 +113,10 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {txUrl ? (
-            <Link href={txUrl} target="_blank">
-              <Id id={row.sourceTxId} />
-            </Link>
-          ) : (
-            <Id id={row.sourceTxId} />
-          )}
+          <Id
+            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            id={row.sourceTxId}
+          />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -135,9 +124,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Link href={getTxURL(NETWORKS.ERGO, row.txId)!} target="_blank">
-                <Id id={row.txId} />
-              </Link>
+              <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -203,36 +190,19 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const txUrl = getTxURL(row.fromChain, row.sourceTxId);
-
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
       <EnhancedTableCell>
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {txUrl ? (
-          <Link
-            href={txUrl}
-            target="_blank"
-            color="textPrimary"
-            underline="hover"
-          >
-            <Id id={row.sourceTxId} />
-          </Link>
-        ) : (
-          <Id id={row.sourceTxId} />
-        )}
+        <Id
+          href={getTxURL(row.fromChain, row.sourceTxId)!}
+          id={row.sourceTxId}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Link
-          href={getTxURL(NETWORKS.ERGO, row.txId)!}
-          target="_blank"
-          color="textPrimary"
-          underline="hover"
-        >
-          <Id id={row.txId} />
-        </Link>
+        <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id id={row.fromAddress} />

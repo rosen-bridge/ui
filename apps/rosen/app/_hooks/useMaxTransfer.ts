@@ -5,8 +5,8 @@ import { RosenAmountValue } from '@rosen-ui/types';
 
 import { getMaxTransfer } from '@/_utils';
 
+import { useBalance } from './useBalance';
 import { useNetwork } from './useNetwork';
-import { useTokenBalance } from './useTokenBalance';
 import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
 
@@ -26,7 +26,7 @@ export const useMaxTransfer = () => {
 
   const { selectedSource } = useNetwork();
 
-  const { isLoading: isTokenBalanceLoading, amount } = useTokenBalance();
+  const { isLoading: isTokenBalanceLoading, amount } = useBalance();
 
   const { selectedWallet } = useWallet();
 
