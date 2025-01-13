@@ -99,6 +99,17 @@ export class UtxoFetchError extends Error {
   }
 }
 
+export class CurrentChainError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`Can not detect current chain from the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
 export class SubmitTransactionError extends Error {
   constructor(
     public wallet: string,
