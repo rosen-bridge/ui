@@ -32,12 +32,8 @@ const InfoWidgets = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
-  // const rsnToken = { amount: 20000000000000000, decimals: 18 };
-  // const eRsnToken = { amount: 3000000000000, decimals: 18 };
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
-  console.log(eRsnToken?.amount?.toString());
-  console.log(rsnToken?.amount.toString());
   /**
    * get allowed and total reports based on permits count and permits per event
    */
