@@ -1,5 +1,15 @@
 # @rosen-ui/wallet-api
 
+## 1.1.0
+
+### Minor Changes
+
+- Implement standardized error messages for wallets to centralize and streamline error reporting
+- Implement the isConnected method to verify whether the connection to the wallet extension is established
+- Implement the custom error class named CurrentChainError
+- Integrate the identified errors for use in wallets
+- Introduce a utility to normalize errors and ensure consistency across all custom error classes
+
 ## 1.0.3
 
 ### Patch Changes

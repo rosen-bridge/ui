@@ -1,5 +1,13 @@
 # @rosen-bridge/watcher-app
 
+## 3.1.2
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Update the usage of the ID component
+- Updated dependency @rosen-bridge/ui-kit@1.7.1
+
 ## 3.1.1
 
 ### Patch Changes
