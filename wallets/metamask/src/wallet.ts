@@ -15,6 +15,7 @@ import {
   ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   dispatchError,
+  CurrentChainError,
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
@@ -35,6 +36,25 @@ export class MetaMaskWallet implements Wallet {
     },
     enableAnalytics: false,
   });
+
+  /**
+   * TODO: centralized definition
+   * local:ergo/rosen-bridge/ui#510
+   */
+  private chains = {
+    [NETWORKS.BINANCE]: '0x38',
+    [NETWORKS.ETHEREUM]: '0x1',
+  } as { [key in Network]?: string };
+
+  private get currentChain() {
+    const chain = Object.entries(this.chains)
+      .find(([, chainId]) => chainId == this.provider.chainId)
+      ?.at(0) as Network | undefined;
+
+    if (!chain) throw new CurrentChainError(this.name);
+
+    return chain;
+  }
 
   private get provider() {
     const provider = this.api.getProvider();
@@ -78,7 +98,7 @@ export class MetaMaskWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ETHEREUM)];
+    const tokenId = token[tokenMap.getIdKey(this.currentChain)];
 
     let amount;
 
@@ -102,9 +122,9 @@ export class MetaMaskWallet implements Wallet {
     if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
+      token[tokenMap.getIdKey(this.currentChain)],
       BigInt(amount),
-      NETWORKS.ETHEREUM,
+      this.currentChain,
     ).amount;
 
     return wrappedAmount;
@@ -119,12 +139,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async switchChain(chain: Network, silent?: boolean): Promise<void> {
-    const chains = {
-      [NETWORKS.BINANCE]: '0x38',
-      [NETWORKS.ETHEREUM]: '0x1',
-    } as { [key in Network]?: string };
-
-    const chainId = chains[chain];
+    const chainId = this.chains[chain];
 
     if (!chainId) throw new UnsupportedChainError(this.name, chain);
 
@@ -166,7 +181,7 @@ export class MetaMaskWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = params.token[tokenMap.getIdKey(NETWORKS.ETHEREUM)];
+    const tokenId = params.token[tokenMap.getIdKey(this.currentChain)];
 
     const transactionParameters = await this.config.generateTxParameters(
       tokenId,
