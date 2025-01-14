@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useIsMobile } from '../../hooks';
 import { styled } from '../../styling';
-import { CircularProgress } from '../base';
+import { CircularProgress, Tooltip } from '../base';
 
 interface VersionProps {
   label: string;
@@ -61,32 +61,78 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
     };
   }, [value, sub]);
 
+  const truncateString = (str: string | undefined, maxLength: number) => {
+    if (str && str.length > maxLength) {
+      return str?.substring(0, 5) + '...';
+    }
+    return str;
+  };
+
   return (
     <Root>
       {isLoading ? (
         <CircularProgress sx={{ mt: 0.5 }} size={8} />
       ) : (
         <>
-          <span>
-            {label} v{value || '?'}
-          </span>
-          {isMobile && sub ? (
-            <span>
-              (
-              {sub
-                ?.map((item) => `${item.label} v${item.value || '?'}`)
-                .join(', ')}
-              )
-            </span>
-          ) : (
-            <>
-              {sub?.map((item) => (
-                <span key={item.label}>
-                  {item.label} v{item.value || '?'}
+          <Tooltip
+            title={
+              <div>
+                <span>
+                  {label} v{value || '?'}
                 </span>
-              ))}
-            </>
-          )}
+                {isMobile && sub ? (
+                  <span>
+                    (
+                    {sub
+                      ?.map((item) => `${item.label} v${item.value || '?'}`)
+                      .join(', ')}
+                    )
+                  </span>
+                ) : (
+                  <>
+                    {sub?.map((item) => (
+                      <span key={item.label}>
+                        {item.label} v{item.value || '?'}
+                      </span>
+                    ))}
+                  </>
+                )}
+              </div>
+            }
+          >
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: isMobile ? 'row' : 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <span>
+                {label} v{value || '?'}
+              </span>
+              {isMobile && sub ? (
+                <span>
+                  (
+                  {sub
+                    ?.map(
+                      (item) =>
+                        `${item.label} v${truncateString(item.value, 7) || '?'}`,
+                    )
+                    .join(', ')}
+                  )
+                </span>
+              ) : (
+                <>
+                  {sub?.map((item) => (
+                    <span key={item.label}>
+                      {item.label} v{truncateString(item.value, 7) || '?'}
+                    </span>
+                  ))}
+                </>
+              )}
+            </div>
+          </Tooltip>
         </>
       )}
     </Root>
