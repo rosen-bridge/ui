@@ -1,5 +1,14 @@
 # @rosen-bridge/ui-kit
 
+## 1.7.1
+
+### Patch Changes
+
+- Used useState directly instead of useModelManger hook
+- Develop a Reusable Connector Component to Display Two Texts with an Arrow (→) in Between
+- Enhance the ID component by adding a tooltip, a link with an icon, and improve its overall functionality
+- Remove the useLocalStorage and interact directly with window.localStorage instead
+
 ## 1.7.0
 
 ### Minor Changes
