@@ -180,7 +180,7 @@ const InfoWidgets = () => {
             </SvgIcon>
           }
           color="warning"
-          // isLoading={isRsnTokenLoading || isERsnTokenLoading}
+          isLoading={isRsnTokenLoading || isERsnTokenLoading}
         />
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
