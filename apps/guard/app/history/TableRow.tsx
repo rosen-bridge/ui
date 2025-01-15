@@ -10,6 +10,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { upperFirst } from 'lodash-es';
 
 import { HistoryEvent } from '@/_types/api';
 
@@ -141,7 +142,10 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              <Connector start={row.fromChain} end={row.toChain} />
+              <Connector
+                start={upperFirst(row.fromChain)}
+                end={upperFirst(row.toChain)}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -222,7 +226,10 @@ export const TabletRow: FC<RowProps> = (props) => {
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Connector start={row.fromChain} end={row.toChain} />
+        <Connector
+          start={upperFirst(row.fromChain)}
+          end={upperFirst(row.toChain)}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
