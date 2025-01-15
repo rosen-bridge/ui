@@ -1,9 +1,16 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Button, EnhancedTableCell, TableRow, Id } from '@rosen-bridge/ui-kit';
+import {
+  Button,
+  EnhancedTableCell,
+  TableRow,
+  Id,
+  Connector,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { upperFirst } from 'lodash-es';
 
 import { OngoingEvent } from '@/_types/api';
 
@@ -30,61 +37,63 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
     title: 'Trigger TX Id',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
-    title: 'From Address',
+    title: 'Chain',
     cellProps: {
-      width: 150,
+      width: 175,
+      align: 'center' as const,
     },
   },
   {
-    title: 'To Address',
+    title: 'Addresses',
     cellProps: {
-      width: 150,
+      width: 250,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
     title: 'Amount',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
   {
     title: 'Status',
     cellProps: {
-      width: 150,
+      width: 120,
     },
   },
 ];
@@ -128,15 +137,21 @@ export const MobileRow: FC<RowProps> = (props) => {
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-            <EnhancedTableCell>From Address</EnhancedTableCell>
+            <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.fromAddress} />
+              <Connector
+                start={upperFirst(row.fromChain)}
+                end={upperFirst(row.toChain)}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
-            <EnhancedTableCell>To Address</EnhancedTableCell>
+            <EnhancedTableCell>Addresses</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.toAddress} />
+              <Connector
+                start={<Id id={row.fromAddress} />}
+                end={<Id id={row.toAddress} />}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -204,11 +219,17 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
       </EnhancedTableCell>
-      <EnhancedTableCell>
-        <Id id={row.fromAddress} />
+      <EnhancedTableCell align="center">
+        <Connector
+          start={upperFirst(row.fromChain)}
+          end={upperFirst(row.toChain)}
+        />
       </EnhancedTableCell>
-      <EnhancedTableCell>
-        <Id id={row.toAddress} />
+      <EnhancedTableCell align="center">
+        <Connector
+          start={<Id id={row.fromAddress} />}
+          end={<Id id={row.toAddress} />}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.sourceChainToken.name}</EnhancedTableCell>
       <EnhancedTableCell>
