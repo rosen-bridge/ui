@@ -1,5 +1,15 @@
 # @rosen-bridge/watcher-app
 
+## 3.1.3
+
+### Patch Changes
+
+- Enhance the React components by using the `PropsWithChildren` type instead of creating a custom type definition for scenarios that only require children props
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
 ## 3.1.2
 
 ### Patch Changes

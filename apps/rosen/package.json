@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-app",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -26,7 +26,7 @@
     "@rosen-bridge/observation-extractor": "^5.0.8",
     "@rosen-bridge/scanner": "^5.0.0",
     "@rosen-bridge/tokens": "^1.2.1",
-    "@rosen-bridge/ui-kit": "^1.7.1",
+    "@rosen-bridge/ui-kit": "^1.7.2",
     "@rosen-bridge/watcher-data-extractor": "^9.0.0",
     "@rosen-clients/cardano-koios": "^2.0.1",
     "@rosen-clients/ergo-explorer": "^1.0.2",
@@ -45,7 +45,7 @@
     "@rosen-ui/okx-wallet": "^1.1.0",
     "@rosen-ui/swr-helpers": "^0.2.0",
     "@rosen-ui/types": "^0.3.1",
-    "@rosen-ui/utils": "^0.4.2",
+    "@rosen-ui/utils": "^0.4.3",
     "@rosen-ui/wallet-api": "^1.1.0",
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/kv": "^2.0.0",
@@ -63,7 +63,7 @@
     "swr": "^2.2.0"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.10",
+    "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.17.10",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.4",

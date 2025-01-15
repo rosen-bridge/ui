@@ -1,5 +1,14 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.2
+
+### Patch Changes
+
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
 ## 4.0.1
 
 ### Patch Changes

@@ -30,7 +30,7 @@ export const ThemeProvider = ({
 
   const [mode, setMode] = useState<'light' | 'dark'>(
     () =>
-      (window.localStorage.getItem('colorMode') as 'light' | 'dark') ||
+      (window.localStorage.getItem('rosen:theme') as 'light' | 'dark') ||
       preferredMode,
   );
 
@@ -40,7 +40,7 @@ export const ThemeProvider = ({
   const toggle = () => {
     const nextMode = mode === 'light' ? 'dark' : 'light';
     setMode(nextMode);
-    window.localStorage.setItem('colorMode', nextMode);
+    window.localStorage.setItem('rosen:theme', nextMode);
   };
 
   return (
