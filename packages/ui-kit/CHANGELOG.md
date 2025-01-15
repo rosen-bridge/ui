@@ -1,5 +1,13 @@
 # @rosen-bridge/ui-kit
 
+## 1.7.2
+
+### Patch Changes
+
+- Update the rows per page options to remove the number 5 from the display
+- Update the theme key in local storage to resolve the initialization loading bug
+- Updated dependency @rosen-ui/utils@0.4.3
+
 ## 1.7.1
 
 ### Patch Changes
