@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 
 /**
  * FIXME: import NoSsr from ui-kit
@@ -18,7 +18,7 @@ import { theme } from './_theme/theme';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
-export const App = ({ children }: { children?: ReactNode }) => {
+export const App = ({ children }: PropsWithChildren) => {
   const { data: info } = useInfo();
 
   /**
