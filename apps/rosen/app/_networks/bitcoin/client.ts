@@ -6,6 +6,7 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { BitcoinNetwork as BitcoinNetworkType } from '@/_types';
 
+import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './getMaxTransfer';
 import {
   generateOpReturnData,
@@ -33,7 +34,7 @@ export const BitcoinNetwork: BitcoinNetworkType = {
   logo: BitcoinIcon,
   wallets: [new OKXWallet(config)],
   nextHeightInterval: 1,
-  lockAddress: process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS!,
+  lockAddress: LOCK_ADDRESSES.BITCOIN,
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };

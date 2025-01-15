@@ -31,16 +31,11 @@ import useSWR from 'swr';
 
 import { ApiAssetResponse, Assets } from '@/_types';
 
+import { LOCK_ADDRESSES } from '../../configs';
+
 interface RowProps extends Assets {
   isLoading?: boolean;
 }
-
-const LOCK_ADDRESSES = [
-  process.env.NEXT_PUBLIC_ERGO_LOCK_ADDRESS,
-  process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS,
-  process.env.NEXT_PUBLIC_BITCOIN_LOCK_ADDRESS,
-  process.env.NEXT_PUBLIC_ETHEREUM_LOCK_ADDRESS,
-];
 
 export const mobileHeader = [
   {
@@ -132,13 +127,13 @@ export const MobileRow: FC<RowProps> = (props) => {
   };
 
   const hot = row.lockedPerAddress?.find((item) => {
-    return LOCK_ADDRESSES.includes(item.address) == true;
+    return Object.values(LOCK_ADDRESSES).includes(item.address) == true;
   });
 
   const hotUrl = getAddressUrl(row.chain, hot?.address);
 
   const cold = row.lockedPerAddress?.find((item) => {
-    return LOCK_ADDRESSES.includes(item.address) != true;
+    return Object.values(LOCK_ADDRESSES).includes(item.address) != true;
   });
 
   const coldUrl = getAddressUrl(row.chain, cold?.address);
@@ -220,7 +215,7 @@ export const TabletRow: FC<RowProps> = (props) => {
   );
 
   const hot = row.lockedPerAddress?.find((item) => {
-    return LOCK_ADDRESSES.includes(item.address) == true;
+    return Object.values(LOCK_ADDRESSES).includes(item.address) == true;
   });
 
   const hotUrl = getAddressUrl(row.chain, hot?.address);
@@ -232,7 +227,7 @@ export const TabletRow: FC<RowProps> = (props) => {
   const cold = [...(row.lockedPerAddress || [])]
     .sort((a, b) => b.address.localeCompare(a.address))
     .find((item) => {
-      return LOCK_ADDRESSES.includes(item.address) != true;
+      return Object.values(LOCK_ADDRESSES).includes(item.address) != true;
     });
 
   const coldUrl = getAddressUrl(row.chain, cold?.address);
@@ -351,21 +346,10 @@ export const TabletRow: FC<RowProps> = (props) => {
                                 direction="row"
                                 gap={1}
                               >
-                                <Id id={item.birdgedTokenId} />
-                                {tokenUrl && (
-                                  <Link
-                                    href={tokenUrl}
-                                    target="_blank"
-                                    onClick={(event) => event.stopPropagation()}
-                                  >
-                                    <SvgIcon
-                                      fontSize="inherit"
-                                      sx={{ display: 'block' }}
-                                    >
-                                      <OpenInNew />
-                                    </SvgIcon>
-                                  </Link>
-                                )}
+                                <Id
+                                  id={item.birdgedTokenId}
+                                  href={tokenUrl || undefined}
+                                />
                               </Stack>
                             </TableCell>
                           </TableRow>

@@ -8,6 +8,7 @@ import { unwrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { CardanoNetwork as CardanoNetworkType } from '@/_types';
 
+import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './getMaxTransfer';
 import {
   decodeWasmValue,
@@ -37,9 +38,9 @@ export const CardanoNetwork: CardanoNetworkType = {
     new LaceWallet(config),
     new NamiWallet(config),
   ],
-  nextHeightInterval: 25,
+  nextHeightInterval: 30,
   logo: CardanoIcon,
-  lockAddress: process.env.NEXT_PUBLIC_CARDANO_LOCK_ADDRESS!,
+  lockAddress: LOCK_ADDRESSES.CARDANO,
   getMaxTransfer: unwrap(getMaxTransfer),
   toSafeAddress: (address) => address,
 };

@@ -1,7 +1,6 @@
 import { InterfaceAbi } from 'ethers';
 
-export const ETH = 'eth';
-export const ETH_TRANSFER_GAS = 21000n;
+export const NATIVE_TOKEN_TRANSFER_GAS = 21000n;
 
 export const transferABI: InterfaceAbi = [
   {

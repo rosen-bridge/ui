@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "1.9.1",
+  "version": "1.9.2",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -16,7 +16,7 @@
     "@emotion/styled": "^11.11.0",
     "@rosen-bridge/icons": "^1.0.0",
     "@rosen-bridge/shared-contexts": "^0.0.2",
-    "@rosen-bridge/ui-kit": "^1.7.0",
+    "@rosen-bridge/ui-kit": "^1.7.1",
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/swr-helpers": "^0.2.0",
     "@rosen-ui/utils": "^0.4.2",
@@ -35,7 +35,7 @@
     "@rosen-ui/types": "^0.3.2",
     "@tauri-apps/cli": "^1.4.0",
     "@types/moment": "^2.13.0",
-    "@types/node": "20.2.5",
+    "@types/node": "^20.17.10",
     "@types/react": "18.2.12",
     "@types/react-copy-to-clipboard": "^5.0.5",
     "@types/react-dom": "18.2.4",

@@ -1,8 +1,17 @@
 import { NamiIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
-import { Wallet, WalletTransferParams } from '@rosen-ui/wallet-api';
+import {
+  AddressRetrievalError,
+  ConnectionRejectedError,
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  UtxoFetchError,
+  Wallet,
+  WalletTransferParams,
+} from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
@@ -21,15 +30,24 @@ export class NamiWallet implements Wallet {
 
   constructor(private config: WalletConfig) {}
 
-  async connect(): Promise<boolean> {
-    return !!(await this.api.enable());
+  async connect(): Promise<void> {
+    try {
+      await this.api.enable();
+    } catch (error) {
+      throw new ConnectionRejectedError(this.name, error);
+    }
   }
 
   async getAddress(): Promise<string> {
-    return this.api.enable().then((wallet) => wallet.getChangeAddress());
+    try {
+      const context = await this.api.enable();
+      return await context.getChangeAddress();
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
   }
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
+  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
     const context = await this.api.enable();
 
     const rawValue = await context.getBalance();
@@ -59,6 +77,10 @@ export class NamiWallet implements Wallet {
     return typeof window.cardano !== 'undefined' && !!window.cardano.nami;
   }
 
+  async isConnected(): Promise<boolean> {
+    return await this.api.isEnabled();
+  }
+
   async transfer(params: WalletTransferParams): Promise<string> {
     const wallet = await this.api.enable();
 
@@ -74,7 +96,7 @@ export class NamiWallet implements Wallet {
 
     const walletUtxos = await wallet.getUtxos();
 
-    if (!walletUtxos) throw Error(`Failed to fetch wallet utxos`);
+    if (!walletUtxos) throw new UtxoFetchError(this.name);
 
     const unsignedTxHex = await this.config.generateUnsignedTx(
       walletUtxos,
@@ -86,13 +108,23 @@ export class NamiWallet implements Wallet {
       auxiliaryDataHex,
     );
 
+    let witnessSetHex: string;
+
+    try {
+      witnessSetHex = await wallet.signTx(unsignedTxHex, false);
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+
     const signedTxHex = await this.config.setTxWitnessSet(
       unsignedTxHex,
-      await wallet.signTx(unsignedTxHex, false),
+      witnessSetHex,
     );
 
-    const result = await wallet.submitTx(signedTxHex);
-
-    return result;
+    try {
+      return await wallet.submitTx(signedTxHex);
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   }
 }
