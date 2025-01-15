@@ -32,6 +32,17 @@ const InfoWidgets = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
+  let valueRSN =
+    rsnToken?.amount !== undefined
+      ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
+      : '';
+
+  let titleERSN =
+    eRsnToken?.amount !== undefined
+      ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
+        ' eRSN'
+      : '';
+
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
   /**
@@ -152,30 +163,14 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          title={
-            rsnToken?.amount === 0 && eRsnToken?.amount === 0
-              ? ''
-              : rsnToken?.amount !== 0 && eRsnToken?.amount === 0
-                ? ''
-                : eRsnToken?.amount !== 0 && rsnToken?.amount === 0
-                  ? ''
-                  : rsnToken?.amount !== undefined &&
-                      eRsnToken?.amount !== undefined
-                    ? `${getDecimalString(eRsnToken.amount.toString(), eRsnToken.decimals ?? 0)} eRSN`
-                    : ''
-          }
           value={
-            rsnToken?.amount === 0 && eRsnToken?.amount !== 0
-              ? `${getDecimalString(eRsnToken?.amount?.toString() as string, eRsnToken?.decimals ?? 0)} eRSN`
-              : eRsnToken?.amount === 0 && rsnToken?.amount !== 0
-                ? `${getDecimalString(rsnToken?.amount?.toString() as string, rsnToken?.decimals ?? 0)} RSN`
-                : rsnToken?.amount === 0 && eRsnToken?.amount === 0
-                  ? `${getDecimalString(rsnToken?.amount.toString(), rsnToken?.decimals ?? 0)} RSN`
-                  : rsnToken?.amount !== undefined &&
-                      eRsnToken?.amount !== undefined
-                    ? `${getDecimalString(rsnToken.amount.toString(), rsnToken.decimals ?? 0)} RSN`
-                    : ''
+            rsnToken?.amount === 0 && eRsnToken?.amount === 0
+              ? valueRSN
+              : rsnToken?.amount === 0
+                ? titleERSN
+                : valueRSN
           }
+          title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">
               <Wallet />
@@ -185,7 +180,7 @@ const InfoWidgets = () => {
             </SvgIcon>
           }
           color="warning"
-          isLoading={isRsnTokenLoading || isERsnTokenLoading}
+          // isLoading={isRsnTokenLoading || isERsnTokenLoading}
         />
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
