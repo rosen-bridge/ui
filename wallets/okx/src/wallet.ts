@@ -67,7 +67,7 @@ export class OKXWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
-    return !!this.api.selectedAccount;
+    return !!window.okxwallet.selectedAddress;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
