@@ -9,7 +9,6 @@ import {
 } from 'react-hook-form';
 
 import { Alert } from '@rosen-bridge/icons';
-import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -23,6 +22,7 @@ import {
   Typography,
   TextField,
   Button,
+  useApiKey,
 } from '@rosen-bridge/ui-kit';
 import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
