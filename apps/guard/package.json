@@ -15,7 +15,6 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@rosen-bridge/icons": "^1.0.0",
-    "@rosen-bridge/shared-contexts": "^0.0.2",
     "@rosen-bridge/ui-kit": "^1.7.2",
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/swr-helpers": "^0.2.0",

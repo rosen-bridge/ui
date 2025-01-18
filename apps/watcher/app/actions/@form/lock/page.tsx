@@ -4,7 +4,6 @@ import React, { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import { Alert } from '@rosen-bridge/icons';
-import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -14,6 +13,7 @@ import {
   Link,
   SubmitButton,
   Typography,
+  useApiKey,
 } from '@rosen-bridge/ui-kit';
 import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
