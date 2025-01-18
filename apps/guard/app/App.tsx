@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
 import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
@@ -13,7 +13,7 @@ import { mockedData } from './_mock/mockedData';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
-export const App = ({ children }: { children?: ReactNode }) => {
+export const App = ({ children }: PropsWithChildren) => {
   return (
     <NoSsr>
       <ApiKeyContextProvider>

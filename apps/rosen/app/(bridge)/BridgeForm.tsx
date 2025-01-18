@@ -80,7 +80,12 @@ export const BridgeForm = () => {
 
   const { isLoading, amount } = useBalance();
 
-  const { error, max, loading: isMaxLoading, load } = useMaxTransfer();
+  const {
+    error,
+    amount: max,
+    isLoading: isMaxLoading,
+    load,
+  } = useMaxTransfer();
   const tokenMap = useTokenMap();
 
   const { selectedWallet } = useWallet();
@@ -304,7 +309,7 @@ export const BridgeForm = () => {
           disableUnderline: true,
           endAdornment: tokenField.value && selectedWallet && (
             <UseAllAmount
-              error={error}
+              error={!!error}
               loading={isLoading || isMaxLoading}
               value={getDecimalString(
                 amount.toString(),
