@@ -232,7 +232,7 @@ export const BridgeForm = () => {
         </Grid>
       </Grid>
       <TextField
-        label="Address"
+        label="Target Address"
         InputProps={
           {
             disableUnderline: true,
