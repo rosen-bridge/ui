@@ -38,6 +38,18 @@ export class NautilusWallet implements Wallet {
     throw new ConnectionRejectedError(this.name);
   }
 
+  async disconnect(): Promise<void> {
+    if (!this.isAvailable()) {
+      console.log('window.ergoConnector is not available');
+    }
+    try {
+      this.api.disconnect();
+    } catch (err) {
+      console.error(err);
+      throw new Error('An error occurred while disconnecting from the wallet.');
+    }
+  }
+
   async getAddress(): Promise<string> {
     try {
       const wallet = await this.api.getContext();
