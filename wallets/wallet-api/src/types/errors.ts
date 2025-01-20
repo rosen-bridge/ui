@@ -74,6 +74,31 @@ export class ConnectionRejectedError extends Error {
   }
 }
 
+export class DisconnectRejectedError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`An error occurred while disconnecting from the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
+export class DisconnectManuallyRejectedError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(
+      `An error occurred while disconnecting from the [${wallet}] wallet. Please remove the connection manually in your wallet Go to: Settings > dApps > Remove.`,
+      {
+        cause,
+      },
+    );
+  }
+}
+
 export class UserDeniedTransactionSignatureError extends Error {
   constructor(
     public wallet: string,

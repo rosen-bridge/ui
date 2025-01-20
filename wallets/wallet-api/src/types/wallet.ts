@@ -19,7 +19,7 @@ export interface Wallet {
   isConnected?(): Promise<boolean>;
   switchChain?(chain: Network, silent?: boolean): Promise<void>;
   transfer(params: WalletTransferParams): Promise<string>;
-  disconnect?(): Promise<void>;
+  disconnect(): Promise<void>;
 }
 
 export interface WalletTransferParams {

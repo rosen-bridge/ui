@@ -102,26 +102,6 @@ export const ChooseWalletModal = ({
                       >
                         Connect
                       </Button>
-                      <Button
-                        variant="contained"
-                        size="small"
-                        sx={{ width: '100%' }}
-                        disabled={!wallet.isAvailable()}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          console.log(wallet);
-                          if (wallet.disconnect) {
-                            try {
-                              wallet.disconnect();
-                              console.log('disconnected successfully');
-                            } catch (err) {
-                              console.error('Failed to disconnect', err);
-                            }
-                          }
-                        }}
-                      >
-                        disconnect
-                      </Button>
                     </Box>
                   </Tooltip>
                 </CardContent>

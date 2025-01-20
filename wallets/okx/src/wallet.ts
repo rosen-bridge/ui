@@ -2,6 +2,7 @@ import { OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
+  DisconnectRejectedError,
   AddressRetrievalError,
   ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
@@ -31,6 +32,16 @@ export class OKXWallet implements Wallet {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    if (window.okxwallet !== undefined && !!window.okxwallet.bitcoin) {
+      try {
+        this.api.disconnect();
+      } catch (error) {
+        throw new DisconnectRejectedError(this.name, error);
+      }
     }
   }
 

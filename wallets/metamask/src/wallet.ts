@@ -5,6 +5,7 @@ import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
+  DisconnectRejectedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
   UnsupportedChainError,
@@ -78,6 +79,16 @@ export class MetaMaskWallet implements Wallet {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    if (window.ethereum !== undefined) {
+      try {
+        this.api.disconnect();
+      } catch (error) {
+        throw new DisconnectRejectedError(this.name, error);
+      }
     }
   }
 

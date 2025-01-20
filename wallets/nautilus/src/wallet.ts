@@ -3,6 +3,7 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import {
+  DisconnectRejectedError,
   AddressRetrievalError,
   ConnectionRejectedError,
   ErgoTxProxy,
@@ -39,14 +40,12 @@ export class NautilusWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
-    if (!this.isAvailable()) {
-      console.log('window.ergoConnector is not available');
-    }
-    try {
-      this.api.disconnect();
-    } catch (err) {
-      console.error(err);
-      throw new Error('An error occurred while disconnecting from the wallet.');
+    if (window.ergoConnector !== undefined) {
+      try {
+        this.api.disconnect();
+      } catch (error) {
+        throw new DisconnectRejectedError(this.name, error);
+      }
     }
   }
 
