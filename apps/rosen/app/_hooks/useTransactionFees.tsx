@@ -1,8 +1,16 @@
-import { useMemo, useEffect, useRef, useCallback, useTransition } from 'react';
+import {
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
+import { RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
 import { calculateFee } from '@/_actions';
@@ -10,160 +18,197 @@ import { unwrap } from '@/_safeServerAction';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
+import { useTransactionFormData } from './useTransactionFormData';
 
 /**
  * calculates the fees for a token swap between
  * two networks
  */
-export const useTransactionFees = (
-  sourceChain: Network | null,
-  targetChain: Network | null,
-  token: RosenChainToken | null,
-  amount: string | null,
-) => {
-  const [pending, startTransition] = useTransition();
-  const { openSnackbar } = useSnackbar();
+export const useTransactionFees = () => {
+  const context = useContext(TransactionFeesContext);
+
+  if (!context) {
+    throw new Error(
+      'useTransactionFees must be used within TransactionFeesProvider',
+    );
+  }
+
+  return context;
+};
+
+export type TransactionFeesContextType = {
+  bridgeFee: RosenAmountValue;
+  bridgeFeeRaw: string;
+  networkFee: RosenAmountValue;
+  networkFeeRaw: string;
+  receivingAmount: RosenAmountValue;
+  receivingAmountRaw: string;
+  minTransfer: RosenAmountValue;
+  minTransferRaw: string;
+  error: unknown;
+  isLoading: boolean;
+};
+
+export const TransactionFeesContext =
+  createContext<TransactionFeesContextType | null>(null);
+
+export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const { selectedSource } = useNetwork();
 
-  const feeInfo = useRef<any>(null);
+  const { openSnackbar } = useSnackbar();
+
   const tokenMap = useTokenMap();
 
-  /**
-   * finds and returns a token id based on supported networks
-   */
-  const getTokenId = useCallback(
-    (sourceChain: Network, token: RosenChainToken) => {
-      const idKey = tokenMap.getIdKey(sourceChain);
-      const tokens = tokenMap.search(sourceChain, {
-        [idKey]: token[idKey],
-      });
-      return tokens[0].ergo.tokenId;
-    },
-    [tokenMap],
-  );
+  const { sourceValue, targetValue, tokenValue, amountValue } =
+    useTransactionFormData();
 
-  /**
-   * current selected token id
-   */
+  const [error, setError] = useState<unknown>();
+
+  const [feesInfo, setFeesInfo] = useState<{
+    tokenId: string;
+    bridgeFee?: RosenAmountValue;
+    networkFee?: RosenAmountValue;
+  }>();
+
+  const [isLoading, startTransition] = useTransition();
+
   const tokenId = useMemo(() => {
-    if (sourceChain && token) {
-      return getTokenId(sourceChain, token);
-    }
-    return null;
-  }, [getTokenId, sourceChain, token]);
+    if (!sourceValue || !tokenValue) return;
+
+    const idKey = tokenMap.getIdKey(sourceValue);
+
+    const tokens = tokenMap.search(sourceValue, { [idKey]: tokenValue[idKey] });
+
+    return tokens[0].ergo.tokenId as string;
+  }, [sourceValue, tokenValue, tokenMap]);
 
   const decimals = useMemo(() => {
     if (!tokenId) return 0;
     return tokenMap.getSignificantDecimals(tokenId) || 0;
   }, [tokenId, tokenMap]);
 
-  useEffect(() => {
-    feeInfo.current = null;
-  }, [sourceChain, targetChain, token]);
+  const state = useMemo(() => {
+    const fees = Object.assign(
+      {
+        bridgeFee: 0n,
+        feeRatio: 0n,
+        feeRatioDivisor: 1n,
+        networkFee: 0n,
+      },
+      feesInfo,
+    );
 
-  /**
-   * effect to fetch the fees as soon as all the required data is available
-   */
-  useEffect(() => {
-    if (
-      sourceChain &&
-      targetChain &&
-      tokenId &&
-      selectedSource &&
-      tokenId !== feeInfo.current?.tokenId &&
-      !pending
-    ) {
-      startTransition(async () => {
-        try {
-          const parsedData = await unwrap(calculateFee)(
-            sourceChain,
-            targetChain,
-            tokenId,
-            selectedSource.nextHeightInterval,
-          );
+    const paymentAmount = (() => {
+      try {
+        return BigInt(getNonDecimalString(amountValue, decimals));
+      } catch {
+        return 0n;
+      }
+    })();
 
-          const { fees, nextFees } = parsedData;
+    const variableBridgeFee =
+      (paymentAmount * fees.feeRatio) / fees.feeRatioDivisor;
 
-          if (
-            fees.bridgeFee !== nextFees.bridgeFee ||
-            fees.networkFee !== nextFees.networkFee
-          ) {
-            openSnackbar(
-              'Fees might change depending on the height of mining the transactions.',
-              'warning',
-            );
-          }
-
-          feeInfo.current = {
-            tokenId,
-            status: 'success',
-            data: parsedData,
-          };
-        } catch (error: any) {
-          openSnackbar('something went wrong! please try again', 'error');
-          feeInfo.current = {
-            tokenId,
-            status: 'error',
-            message: error?.message || error,
-          };
-        }
-      });
-    }
-  }, [
-    sourceChain,
-    targetChain,
-    tokenId,
-    openSnackbar,
-    pending,
-    feeInfo,
-    selectedSource,
-  ]);
-
-  const fees = tokenId && feeInfo.current?.data?.fees;
-  const feeRatioDivisor =
-    tokenId && fees?.feeRatioDivisor ? BigInt(fees?.feeRatioDivisor) : 1n;
-
-  const transactionFees = useMemo(() => {
-    let paymentAmount = 0n;
-
-    try {
-      paymentAmount = BigInt(getNonDecimalString(amount!, decimals));
-    } catch {}
-
-    const networkFee = fees ? BigInt(fees.networkFee) : 0n;
-    const feeRatio = fees ? BigInt(fees?.feeRatio) : 0n;
-
-    const bridgeFeeBase = fees ? BigInt(fees.bridgeFee) : 0n;
-    const variableBridgeFee = fees
-      ? (paymentAmount * feeRatio) / feeRatioDivisor
-      : 0n;
     const bridgeFee =
-      bridgeFeeBase > variableBridgeFee ? bridgeFeeBase : variableBridgeFee;
+      fees.bridgeFee > variableBridgeFee ? fees.bridgeFee : variableBridgeFee;
 
-    const receivingAmountValue = fees
-      ? paymentAmount - (networkFee + bridgeFee!)
+    const bridgeFeeRaw = getDecimalString(bridgeFee.toString(), decimals);
+
+    const networkFee = fees.networkFee;
+
+    const networkFeeRaw = getDecimalString(
+      fees.networkFee.toString(),
+      decimals,
+    );
+
+    const receivingAmount = feesInfo
+      ? paymentAmount - (fees.networkFee + bridgeFee!)
       : 0n;
 
-    const minTransfer = bridgeFeeBase! + networkFee!;
+    const receivingAmountRaw =
+      receivingAmount > 0
+        ? getDecimalString(receivingAmount.toString(), decimals)
+        : '0';
+
+    const minTransferBase = fees.bridgeFee + fees.networkFee;
+
+    const minTransfer = minTransferBase ? minTransferBase + 1n : 0n;
+
+    const minTransferRaw = getDecimalString(minTransfer.toString(), decimals);
 
     return {
       bridgeFee,
-      bridgeFeeRaw: getDecimalString(bridgeFee?.toString() || '0', decimals),
+      bridgeFeeRaw,
       networkFee,
-      networkFeeRaw: getDecimalString(networkFee?.toString() || '0', decimals),
-      receivingAmount: receivingAmountValue,
-      receivingAmountRaw:
-        fees && receivingAmountValue > 0
-          ? getDecimalString(receivingAmountValue.toString() || '0', decimals)
-          : '0',
-      minTransfer: minTransfer ? minTransfer + 1n || 0n : 0n,
-      minTransferRaw: minTransfer
-        ? getDecimalString((minTransfer + 1n).toString() || '0', decimals)
-        : '0',
-      isLoading: pending,
-      status: feeInfo.current,
+      networkFeeRaw,
+      receivingAmount,
+      receivingAmountRaw,
+      minTransfer,
+      minTransferRaw,
+      error,
+      isLoading,
     };
-  }, [amount, fees, pending, decimals, feeRatioDivisor]);
+  }, [amountValue, decimals, error, feesInfo, isLoading]);
 
-  return transactionFees;
+  const load = useCallback(() => {
+    if (isLoading) return;
+
+    setError(undefined);
+
+    setFeesInfo(undefined);
+
+    if (!selectedSource || !sourceValue || !targetValue || !tokenId) return;
+
+    startTransition(async () => {
+      try {
+        const parsedData = await unwrap(calculateFee)(
+          sourceValue,
+          targetValue,
+          tokenId,
+          selectedSource.nextHeightInterval,
+        );
+
+        if (
+          parsedData.fees.bridgeFee !== parsedData.nextFees.bridgeFee ||
+          parsedData.fees.networkFee !== parsedData.nextFees.networkFee
+        ) {
+          openSnackbar(
+            'Fees might change depending on the height of mining the transactions.',
+            'warning',
+          );
+        }
+
+        setFeesInfo({ tokenId, ...parsedData.fees });
+      } catch (error) {
+        setFeesInfo({ tokenId });
+
+        openSnackbar('something went wrong! please try again', 'error');
+
+        setError(error);
+      }
+    });
+  }, [
+    isLoading,
+    selectedSource,
+    sourceValue,
+    targetValue,
+    tokenId,
+    openSnackbar,
+  ]);
+
+  useEffect(() => {
+    if (tokenId && tokenId !== feesInfo?.tokenId) {
+      load();
+    }
+  }, [feesInfo, tokenId, load]);
+
+  useEffect(() => {
+    setFeesInfo(undefined);
+  }, [sourceValue, targetValue, tokenValue]);
+
+  return (
+    <TransactionFeesContext.Provider value={state}>
+      {children}
+    </TransactionFeesContext.Provider>
+  );
 };

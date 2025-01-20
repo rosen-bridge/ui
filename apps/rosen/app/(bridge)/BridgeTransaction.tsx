@@ -43,14 +43,19 @@ export const BridgeTransaction = ({
   const tokenMap = useTokenMap();
 
   const {
-    status,
+    error,
     networkFeeRaw,
     bridgeFeeRaw,
     receivingAmountRaw,
     isLoading: isLoadingFees,
     minTransferRaw,
-  } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
-  const { setSelectedWallet, wallets, selectedWallet } = useWallet();
+  } = useTransactionFees();
+
+  const {
+    select: setSelectedWallet,
+    wallets,
+    selected: selectedWallet,
+  } = useWallet();
 
   const { selectedSource } = useNetwork();
 
@@ -121,7 +126,7 @@ export const BridgeTransaction = ({
           unit={targetTokenInfo?.name}
           loading={isPending}
         />
-        {status?.status === 'error' && (
+        {!!error && (
           <Alert
             severity="error"
             sx={{
@@ -130,15 +135,16 @@ export const BridgeTransaction = ({
               textOverflow: 'ellipsis',
             }}
           >
-            <Tooltip title={status?.message}>
+            <Tooltip title={(error as any)?.message}>
               <Typography
                 sx={{
                   maxWidth: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                {status?.message}
+                {(error as any)?.message}
               </Typography>
             </Tooltip>
           </Alert>

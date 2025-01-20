@@ -4,13 +4,16 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
   useTransition,
 } from 'react';
 
 import { RosenAmountValue } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import { useBridgeForm } from './useBridgeForm';
+import { useTokenMap } from './useTokenMap';
 import { useWallet } from './useWallet';
 
 /**
@@ -30,6 +33,7 @@ export type BalanceContextType = {
   amount: RosenAmountValue;
   error: unknown;
   isLoading: boolean;
+  raw: string;
 };
 
 export const BalanceContext = createContext<BalanceContextType | null>(null);
@@ -39,13 +43,23 @@ export const BalanceProvider = ({ children }: PropsWithChildren) => {
     tokenField: { value: token },
   } = useBridgeForm();
 
-  const { selectedWallet } = useWallet();
+  const tokenMap = useTokenMap();
+
+  const { selected: selectedWallet } = useWallet();
 
   const [amount, setAmount] = useState<RosenAmountValue>(0n);
 
   const [error, setError] = useState<unknown>();
 
   const [isLoading, startTransition] = useTransition();
+
+  const raw = useMemo(() => {
+    if (!amount || !tokenMap || !token) return '0';
+    return getDecimalString(
+      amount.toString(),
+      tokenMap.getSignificantDecimals(token.tokenId) || 0,
+    );
+  }, [amount, tokenMap, token]);
 
   const load = useCallback(() => {
     setAmount(0n);
@@ -69,6 +83,7 @@ export const BalanceProvider = ({ children }: PropsWithChildren) => {
     amount,
     error,
     isLoading,
+    raw,
   };
 
   return (

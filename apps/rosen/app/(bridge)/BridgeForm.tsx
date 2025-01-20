@@ -19,7 +19,6 @@ import {
   IconButton,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getDecimalString } from '@rosen-ui/utils';
 
 import {
   useBalance,
@@ -30,7 +29,6 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
-import { theme } from '@/_theme/theme';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
@@ -78,17 +76,17 @@ export const BridgeForm = () => {
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
 
-  const { isLoading, amount } = useBalance();
+  const { isLoading, raw: balanceRaw } = useBalance();
 
   const {
     error,
     amount: max,
     isLoading: isMaxLoading,
+    raw,
     load,
   } = useMaxTransfer();
-  const tokenMap = useTokenMap();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
@@ -158,17 +156,12 @@ export const BridgeForm = () => {
     [amountField],
   );
 
-  const handleSelectMax = useCallback(async () => {
-    const value = getDecimalString(
-      max.toString(),
-      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) || 0,
-    );
-
-    setValue('amount', value, {
+  const handleSelectMax = useCallback(() => {
+    setValue('amount', raw, {
       shouldDirty: true,
       shouldTouch: true,
     });
-  }, [max, tokenMap, tokenField.value, setValue]);
+  }, [raw, setValue]);
 
   return (
     <FormContainer>
@@ -311,10 +304,7 @@ export const BridgeForm = () => {
             <UseAllAmount
               error={!!error}
               loading={isLoading || isMaxLoading}
-              value={getDecimalString(
-                amount.toString(),
-                tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0,
-              )}
+              value={balanceRaw}
               unit={
                 (
                   tokenValue &&
