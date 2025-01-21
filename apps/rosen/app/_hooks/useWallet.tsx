@@ -27,8 +27,8 @@ export const useWallet = () => {
 };
 
 export type WalletContextType = {
-  setSelectedWallet: (wallet: Wallet) => Promise<void>;
-  selectedWallet?: Wallet;
+  select: (wallet: Wallet) => Promise<void>;
+  selected?: Wallet;
   wallets: Wallet[];
 };
 
@@ -91,8 +91,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
   }, [selectedSource, setSelected]);
 
   const state = {
-    setSelectedWallet: select,
-    selectedWallet: selected,
+    select,
+    selected,
     wallets: selectedSource?.wallets || [],
   };
 

@@ -67,7 +67,7 @@ export const useBridgeForm = () => {
           getNonDecimalString(value, decimals),
         ) as RosenAmountValue;
 
-        if (walletGlobalContext?.selectedWallet) {
+        if (walletGlobalContext?.selected) {
           // prevent user from entering more than token amount
 
           const selectedNetwork =
@@ -76,14 +76,13 @@ export const useBridgeForm = () => {
           const maxTransfer = await getMaxTransfer(
             selectedNetwork,
             {
-              balance: await walletGlobalContext!.selectedWallet.getBalance(
+              balance: await walletGlobalContext!.selected.getBalance(
                 tokenField.value,
               ),
               isNative: tokenField.value.metaData.type === 'native',
             },
             async () => ({
-              fromAddress:
-                await walletGlobalContext!.selectedWallet!.getAddress(),
+              fromAddress: await walletGlobalContext!.selected!.getAddress(),
               toAddress: addressField.value,
               toChain: targetField.value as Network,
             }),

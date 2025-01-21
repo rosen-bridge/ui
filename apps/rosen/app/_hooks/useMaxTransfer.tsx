@@ -4,16 +4,19 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
   useTransition,
 } from 'react';
 
 import { RosenAmountValue } from '@rosen-ui/types';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import { getMaxTransfer } from '@/_utils';
 
 import { useBalance } from './useBalance';
 import { useNetwork } from './useNetwork';
+import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
 
@@ -34,6 +37,7 @@ export type MaxTransferContextType = {
   amount: RosenAmountValue;
   error: unknown;
   isLoading: boolean;
+  raw: string;
   load: () => void;
 };
 
@@ -46,10 +50,12 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
 
   const { selectedSource } = useNetwork();
 
+  const tokenMap = useTokenMap();
+
   const { targetValue, tokenValue, walletAddressValue } =
     useTransactionFormData();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const [amount, setAmount] = useState<RosenAmountValue>(0n);
 
@@ -58,6 +64,14 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
   const [isTransitionLoading, startTransition] = useTransition();
 
   const isLoading = isBalanceLoading || isTransitionLoading;
+
+  const raw = useMemo(() => {
+    if (!amount || !tokenMap || !tokenValue) return '0';
+    return getDecimalString(
+      amount.toString(),
+      tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+    );
+  }, [amount, tokenMap, tokenValue]);
 
   const load = useCallback(() => {
     setAmount(0n);
@@ -110,6 +124,7 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
     amount,
     error,
     isLoading,
+    raw,
     load,
   };
 
