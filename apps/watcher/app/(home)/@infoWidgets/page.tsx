@@ -32,13 +32,13 @@ const InfoWidgets = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
-  let valueRSN =
-    rsnToken?.amount !== undefined
+  let titleRSN =
+    rsnToken?.amount !== undefined && rsnToken?.amount !== 0
       ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
       : '';
 
   let titleERSN =
-    eRsnToken?.amount !== undefined
+    eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
       ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
         ' eRSN'
       : '';
@@ -163,13 +163,7 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          value={
-            rsnToken?.amount === 0 && eRsnToken?.amount === 0
-              ? valueRSN
-              : rsnToken?.amount === 0
-                ? titleERSN
-                : valueRSN
-          }
+          value={titleRSN || titleERSN}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">
