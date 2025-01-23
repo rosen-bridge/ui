@@ -4,11 +4,14 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { Wallet } from '@rosen-ui/wallet-api';
+
+import * as availableWallets from '@/_wallets';
 
 import { useNetwork } from './useNetwork';
 
@@ -41,6 +44,13 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
   const [selected, setSelected] = useState<Wallet>();
 
+  const wallets = useMemo(() => {
+    if (!selectedSource) return [];
+    return Object.values<Wallet>(availableWallets).filter((wallet) => {
+      return wallet.supportedChains.includes(selectedSource.name);
+    });
+  }, [selectedSource]);
+
   const select = useCallback(
     async (wallet: Wallet) => {
       try {
@@ -69,18 +79,20 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
 
-      const wallet = selectedSource.wallets.find(
-        (wallet) => wallet.name === name && wallet.isAvailable(),
-      );
+      const wallet = availableWallets[name as keyof typeof availableWallets];
 
       if (!wallet) return;
 
-      if ((await wallet.isConnected?.()) === false) return;
+      if (!wallet.isAvailable()) return;
+
+      if ('isConnected' in wallet && !(await wallet.isConnected())) return;
 
       try {
         await wallet.connect();
 
-        await wallet.switchChain?.(selectedSource.name, true);
+        if ('switchChain' in wallet) {
+          await wallet.switchChain(selectedSource.name, true);
+        }
 
         setSelected(wallet);
       } catch (error) {
@@ -93,7 +105,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
   const state = {
     select,
     selected,
-    wallets: selectedSource?.wallets || [],
+    wallets,
   };
 
   return (
