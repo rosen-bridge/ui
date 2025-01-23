@@ -24,6 +24,8 @@ export class EtrnlWallet implements Wallet {
 
   link = 'https://eternl.io';
 
+  supportedChains = [NETWORKS.CARDANO];
+
   private get api() {
     return window.cardano.eternl;
   }
