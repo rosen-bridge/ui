@@ -5,7 +5,7 @@ import { tokenABI } from '@rosen-network/evm/dist/src/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
-  DisconnectRejectedError,
+  DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
   UnsupportedChainError,
@@ -83,12 +83,10 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
-    if (window.ethereum !== undefined) {
-      try {
-        this.api.disconnect();
-      } catch (error) {
-        throw new DisconnectRejectedError(this.name, error);
-      }
+    await this.api.disconnect();
+
+    if (!this.api.disconnect()) {
+      throw new DisconnectionFailedError(this.name);
     }
   }
 

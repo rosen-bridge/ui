@@ -4,7 +4,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
-  DisconnectManuallyRejectedError,
+  ManualWalletDisconnectRequiredError,
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
@@ -40,7 +40,7 @@ export class NamiWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
-    throw new DisconnectManuallyRejectedError(this.name);
+    throw new ManualWalletDisconnectRequiredError(this.name);
   }
 
   async getAddress(): Promise<string> {
