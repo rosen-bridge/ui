@@ -4,6 +4,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
+  ManualWalletDisconnectRequiredError,
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
@@ -40,8 +41,9 @@ export class LaceWallet implements Wallet {
 
   async disconnect(): Promise<void> {
     const massage =
-      'We cannot disconnect the Nami wallet programmatically. Please disconnect it manually by following these steps: Click the user icon > Go to Settings > Select Remove Wallet > Confirm by clicking Remove Wallet in the prompt.';
-    throw new Error(massage);
+      'Click the user icon > Go to Settings > Select Remove Wallet > Confirm by clicking Remove Wallet in the prompt.';
+
+    throw new ManualWalletDisconnectRequiredError(this.name, massage);
   }
 
   async getAddress(): Promise<string> {

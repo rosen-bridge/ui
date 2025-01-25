@@ -4,6 +4,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
+  ManualWalletDisconnectRequiredError,
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
@@ -40,9 +41,9 @@ export class NamiWallet implements Wallet {
 
   async disconnect(): Promise<void> {
     const message =
-      'We cannot disconnect the Nami wallet programmatically. Please disconnect it manually by following these steps: Click on the user icon > Go to Settings > Click on Whitelisted Sites > Close sites which are connected.';
+      'Click on the user icon > Go to Settings > Click on Whitelisted Sites > Close sites which are connected.';
 
-    throw new Error(message);
+    throw new ManualWalletDisconnectRequiredError(this.name, message);
   }
 
   async getAddress(): Promise<string> {

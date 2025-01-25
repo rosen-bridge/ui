@@ -4,6 +4,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
+  ManualWalletDisconnectRequiredError,
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
@@ -40,8 +41,9 @@ export class EtrnlWallet implements Wallet {
 
   async disconnect(): Promise<void> {
     const massage =
-      'We cannot disconnect the Nami wallet programmatically. Please disconnect it manually by following these steps:Go to Settings > Connected Apps, find the app, and click Disconnect.';
-    throw new Error(massage);
+      'Go to Settings > Connected Apps, find the app, and click Disconnect.';
+
+    throw new ManualWalletDisconnectRequiredError(this.name, massage);
   }
 
   async getAddress(): Promise<string> {
