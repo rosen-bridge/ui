@@ -85,31 +85,6 @@ export class DisconnectionFailedError extends Error {
   }
 }
 
-export class ManualWalletDisconnectRequiredError extends Error {
-  private static readonly WALLET_DISCONNECT_INSTRUCTIONS: Record<
-    string,
-    string
-  > = {
-    Eternl:
-      'Go to Settings > Connected Apps, find the app, and click Disconnect.',
-    Nami: 'Click on the user icon > Go to Settings > Click on Whitelisted Sites > Close sites which are connected',
-    Lace: 'Click the user icon > Go to Settings > Select Remove Wallet > Confirm by clicking Remove Wallet in the prompt.',
-  };
-
-  constructor(
-    public wallet: string,
-    public cause?: unknown,
-  ) {
-    const instructions =
-      ManualWalletDisconnectRequiredError.WALLET_DISCONNECT_INSTRUCTIONS[
-        wallet
-      ];
-    super(
-      `We cannot disconnect the [${wallet}] wallet programmatically. Please disconnect it manually by following these steps: ${instructions}`,
-      { cause },
-    );
-  }
-}
 export class UserDeniedTransactionSignatureError extends Error {
   constructor(
     public wallet: string,
