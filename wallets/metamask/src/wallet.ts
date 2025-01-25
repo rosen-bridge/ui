@@ -30,6 +30,8 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
+  supportedChains = [NETWORKS.BINANCE, NETWORKS.ETHEREUM];
+
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',

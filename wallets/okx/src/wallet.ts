@@ -20,6 +20,8 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
+  supportedChains = [NETWORKS.BITCOIN];
+
   private get api() {
     return window.okxwallet.bitcoin;
   }
