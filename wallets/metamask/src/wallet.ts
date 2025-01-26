@@ -76,10 +76,12 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async connect(): Promise<void> {
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
+    if (this.isAvailable()) {
+      try {
+        await this.api.connect();
+      } catch (error) {
+        throw new ConnectionRejectedError(this.name, error);
+      }
     }
   }
 

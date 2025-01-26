@@ -29,37 +29,45 @@ export class OKXWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
+    if (this.isAvailable()) {
+      try {
+        await this.api.connect();
+      } catch (error) {
+        throw new ConnectionRejectedError(this.name, error);
+      }
     }
   }
 
   async getAddress(): Promise<string> {
-    const accounts = await this.api.getAccounts();
+    if (this.isAvailable()) {
+      const accounts = await this.api.getAccounts();
 
-    const account = accounts?.at(0);
+      const account = accounts?.at(0);
 
-    if (!account) throw new AddressRetrievalError(this.name);
+      if (!account) throw new AddressRetrievalError(this.name);
 
-    return account;
+      return account;
+    }
+    return '';
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
-    const amount = await this.api.getBalance();
+    if (this.isAvailable()) {
+      const amount = await this.api.getBalance();
 
-    if (!amount.confirmed) return 0n;
+      if (!amount.confirmed) return 0n;
 
-    const tokenMap = await this.config.getTokenMap();
+      const tokenMap = await this.config.getTokenMap();
 
-    const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
-      BigInt(amount.confirmed),
-      NETWORKS.BITCOIN,
-    ).amount;
+      const wrappedAmount = tokenMap.wrapAmount(
+        token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+        BigInt(amount.confirmed),
+        NETWORKS.BITCOIN,
+      ).amount;
 
-    return wrappedAmount;
+      return wrappedAmount;
+    }
+    return 0n;
   }
 
   isAvailable(): boolean {
@@ -92,18 +100,20 @@ export class OKXWallet implements Wallet {
 
     let signedPsbtHex;
 
-    try {
-      signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
-        autoFinalized: false,
-        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-          (index) => ({
-            address: userAddress,
-            index: index,
-          }),
-        ),
-      });
-    } catch (error) {
-      throw new UserDeniedTransactionSignatureError(this.name, error);
+    if (this.isAvailable()) {
+      try {
+        signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
+          autoFinalized: false,
+          toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
+            (index) => ({
+              address: userAddress,
+              index: index,
+            }),
+          ),
+        });
+      } catch (error) {
+        throw new UserDeniedTransactionSignatureError(this.name, error);
+      }
     }
 
     const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');

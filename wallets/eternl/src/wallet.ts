@@ -33,46 +33,55 @@ export class EtrnlWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
-    try {
-      await this.api.enable();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
+    if (this.isAvailable()) {
+      try {
+        await this.api.enable();
+      } catch (error) {
+        throw new ConnectionRejectedError(this.name, error);
+      }
     }
   }
 
   async getAddress(): Promise<string> {
-    try {
-      const wallet = await this.api.enable();
-      return await wallet.getChangeAddress();
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
+    if (this.isAvailable()) {
+      try {
+        const wallet = await this.api.enable();
+        return await wallet.getChangeAddress();
+      } catch (error) {
+        throw new AddressRetrievalError(this.name, error);
+      }
     }
+    return '';
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
-    const wallet = await this.api.enable();
+    if (this.isAvailable()) {
+      const wallet = await this.api.enable();
 
-    const rawValue = await wallet.getBalance();
+      const rawValue = await wallet.getBalance();
 
-    const balances = await this.config.decodeWasmValue(rawValue);
+      const balances = await this.config.decodeWasmValue(rawValue);
 
-    const amount = balances.find(
-      (asset) =>
-        asset.policyId === token.policyId &&
-        (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
-    );
+      const amount = balances.find(
+        (asset) =>
+          asset.policyId === token.policyId &&
+          (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
+      );
 
-    if (!amount) return 0n;
+      if (!amount) return 0n;
 
-    const tokenMap = await this.config.getTokenMap();
+      const tokenMap = await this.config.getTokenMap();
 
-    const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.CARDANO)],
-      amount.quantity,
-      NETWORKS.CARDANO,
-    ).amount;
+      const wrappedAmount = tokenMap.wrapAmount(
+        token[tokenMap.getIdKey(NETWORKS.CARDANO)],
+        amount.quantity,
+        NETWORKS.CARDANO,
+      ).amount;
 
-    return wrappedAmount;
+      return wrappedAmount;
+    }
+
+    return 0n;
   }
 
   isAvailable(): boolean {
@@ -80,49 +89,52 @@ export class EtrnlWallet implements Wallet {
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
-    const wallet = await this.api.enable();
+    if (this.isAvailable()) {
+      const wallet = await this.api.enable();
 
-    const changeAddressHex = await this.getAddress();
+      const changeAddressHex = await this.getAddress();
 
-    const auxiliaryDataHex = await this.config.generateLockAuxiliaryData(
-      params.toChain,
-      params.address,
-      changeAddressHex,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
+      const auxiliaryDataHex = await this.config.generateLockAuxiliaryData(
+        params.toChain,
+        params.address,
+        changeAddressHex,
+        params.networkFee.toString(),
+        params.bridgeFee.toString(),
+      );
 
-    const walletUtxos = await wallet.getUtxos();
+      const walletUtxos = await wallet.getUtxos();
 
-    if (!walletUtxos) throw new UtxoFetchError(this.name);
+      if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTxHex = await this.config.generateUnsignedTx(
-      walletUtxos,
-      params.lockAddress,
-      changeAddressHex,
-      params.token.policyId,
-      params.token.assetName,
-      params.amount,
-      auxiliaryDataHex,
-    );
+      const unsignedTxHex = await this.config.generateUnsignedTx(
+        walletUtxos,
+        params.lockAddress,
+        changeAddressHex,
+        params.token.policyId,
+        params.token.assetName,
+        params.amount,
+        auxiliaryDataHex,
+      );
 
-    let witnessSetHex: string;
+      let witnessSetHex: string;
 
-    try {
-      witnessSetHex = await wallet.signTx(unsignedTxHex, false);
-    } catch (error) {
-      throw new UserDeniedTransactionSignatureError(this.name, error);
+      try {
+        witnessSetHex = await wallet.signTx(unsignedTxHex, false);
+      } catch (error) {
+        throw new UserDeniedTransactionSignatureError(this.name, error);
+      }
+
+      const signedTxHex = await this.config.setTxWitnessSet(
+        unsignedTxHex,
+        witnessSetHex,
+      );
+
+      try {
+        return await wallet.submitTx(signedTxHex);
+      } catch (error) {
+        throw new SubmitTransactionError(this.name, error);
+      }
     }
-
-    const signedTxHex = await this.config.setTxWitnessSet(
-      unsignedTxHex,
-      witnessSetHex,
-    );
-
-    try {
-      return await wallet.submitTx(signedTxHex);
-    } catch (error) {
-      throw new SubmitTransactionError(this.name, error);
-    }
+    return '';
   }
 }

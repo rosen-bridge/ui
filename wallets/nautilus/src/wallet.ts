@@ -33,48 +33,56 @@ export class NautilusWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
-    const isConnected = await this.api.connect({ createErgoObject: false });
+    if (this.isAvailable()) {
+      const isConnected = await this.api.connect({ createErgoObject: false });
 
-    if (isConnected) return;
+      if (isConnected) return;
 
-    throw new ConnectionRejectedError(this.name);
-  }
-
-  async getAddress(): Promise<string> {
-    try {
-      const wallet = await this.api.getContext();
-      return await wallet.get_change_address();
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
+      throw new ConnectionRejectedError(this.name);
     }
   }
 
+  async getAddress(): Promise<string> {
+    if (this.isAvailable()) {
+      try {
+        const wallet = await this.api.getContext();
+        return await wallet.get_change_address();
+      } catch (error) {
+        throw new AddressRetrievalError(this.name, error);
+      }
+    }
+    return '';
+  }
+
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
-    const wallet = await this.api.getContext();
+    if (this.isAvailable()) {
+      const wallet = await this.api.getContext();
 
-    const tokenMap = await this.config.getTokenMap();
+      const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
+      const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
 
-    /**
-     * The following condition is required because nautilus only accepts
-     * uppercase ERG as tokenId for the erg native token
-     */
-    const balance = await wallet.get_balance(
-      tokenId === 'erg' ? 'ERG' : tokenId,
-    );
+      /**
+       * The following condition is required because nautilus only accepts
+       * uppercase ERG as tokenId for the erg native token
+       */
+      const balance = await wallet.get_balance(
+        tokenId === 'erg' ? 'ERG' : tokenId,
+      );
 
-    const amount = BigInt(balance);
+      const amount = BigInt(balance);
 
-    if (!amount) return 0n;
+      if (!amount) return 0n;
 
-    const wrappedAmount = tokenMap.wrapAmount(
-      tokenId,
-      amount,
-      NETWORKS.ERGO,
-    ).amount;
+      const wrappedAmount = tokenMap.wrapAmount(
+        tokenId,
+        amount,
+        NETWORKS.ERGO,
+      ).amount;
 
-    return wrappedAmount;
+      return wrappedAmount;
+    }
+    return 0n;
   }
 
   isAvailable(): boolean {
@@ -85,41 +93,47 @@ export class NautilusWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
-    return await this.api.isAuthorized();
+    if (this.isAvailable()) {
+      return await this.api.isAuthorized();
+    }
+    return false;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
-    const wallet = await this.api.getContext();
+    if (this.isAvailable()) {
+      const wallet = await this.api.getContext();
 
-    const changeAddress = await this.getAddress();
+      const changeAddress = await this.getAddress();
 
-    const walletUtxos = await wallet.get_utxos();
+      const walletUtxos = await wallet.get_utxos();
 
-    if (!walletUtxos) throw new UtxoFetchError(this.name);
+      if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTx = await this.config.generateUnsignedTx(
-      changeAddress,
-      walletUtxos,
-      params.lockAddress,
-      params.toChain,
-      params.address,
-      params.amount,
-      params.bridgeFee.toString(),
-      params.networkFee.toString(),
-      params.token,
-    );
+      const unsignedTx = await this.config.generateUnsignedTx(
+        changeAddress,
+        walletUtxos,
+        params.lockAddress,
+        params.toChain,
+        params.address,
+        params.amount,
+        params.bridgeFee.toString(),
+        params.networkFee.toString(),
+        params.token,
+      );
 
-    let signedTx: ErgoTxProxy;
+      let signedTx: ErgoTxProxy;
 
-    try {
-      signedTx = await wallet.sign_tx(unsignedTx);
-    } catch (error) {
-      throw new UserDeniedTransactionSignatureError(this.name, error);
+      try {
+        signedTx = await wallet.sign_tx(unsignedTx);
+      } catch (error) {
+        throw new UserDeniedTransactionSignatureError(this.name, error);
+      }
+      try {
+        return await wallet.submit_tx(signedTx);
+      } catch (error) {
+        throw new SubmitTransactionError(this.name, error);
+      }
     }
-    try {
-      return await wallet.submit_tx(signedTx);
-    } catch (error) {
-      throw new SubmitTransactionError(this.name, error);
-    }
+    return '';
   }
 }
