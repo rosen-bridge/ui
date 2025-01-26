@@ -85,7 +85,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       if (!wallet.isAvailable()) return;
 
-      if ('isConnected' in wallet && !(await wallet.isConnected())) return;
+      if (Object.hasOwn(wallet, 'isConnected') && !(await wallet.isConnected())) return;
 
       try {
         await wallet.connect();
