@@ -78,6 +78,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       if (!selectedSource) return;
 
       const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
+      if (!name) return;
 
       const wallet = availableWallets[name as keyof typeof availableWallets];
 
