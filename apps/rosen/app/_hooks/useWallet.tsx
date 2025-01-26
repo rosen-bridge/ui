@@ -90,7 +90,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       try {
         await wallet.connect();
 
-        if ('switchChain' in wallet) {
+        if (Object.hasOwn(wallet, 'switchChain')) {
           await wallet.switchChain(selectedSource.name, true);
         }
 
