@@ -40,7 +40,6 @@
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.4",
     "@rosen-bridge/icons": "^1.0.0",
-    "@rosen-ui/common-hooks": "^0.1.1",
     "@rosen-ui/constants": "^0.0.5",
     "@rosen-ui/swr-helpers": "^0.2.0",
     "@rosen-ui/utils": "^0.4.3",
