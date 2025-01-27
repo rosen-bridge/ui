@@ -240,7 +240,10 @@ export const BridgeForm = () => {
                     try {
                       const clipboardText =
                         await navigator.clipboard.readText();
-                      addressField.onChange(clipboardText);
+                      setValue('walletAddress', clipboardText, {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      });
                     } catch (err) {
                       console.error('Failed to read clipboard: ', err);
                     }
