@@ -78,20 +78,21 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       if (!selectedSource) return;
 
       const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
+
       if (!name) return;
 
-      const wallet = availableWallets[name as keyof typeof availableWallets];
+      const wallet = availableWallets[
+        name as keyof typeof availableWallets
+      ] as Wallet;
 
       if (!wallet || !wallet.isAvailable()) return;
 
-      if (Object.hasOwn(wallet, 'isConnected') && !(await wallet.isConnected())) return;
+      if ((await wallet.isConnected?.()) === false) return;
 
       try {
         await wallet.connect();
 
-        if (Object.hasOwn(wallet, 'switchChain')) {
-          await wallet.switchChain(selectedSource.name, true);
-        }
+        await wallet.switchChain?.(selectedSource.name, true);
 
         setSelected(wallet);
       } catch (error) {
