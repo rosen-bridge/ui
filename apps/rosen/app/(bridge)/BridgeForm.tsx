@@ -18,6 +18,7 @@ import {
   InputAdornment,
   IconButton,
   useResponsiveValue,
+  Box,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -259,7 +260,7 @@ export const BridgeForm = () => {
         helperText={
           <>
             {targetField.value === NETWORKS.BITCOIN && (
-              <Grid
+              <Box
                 sx={(theme) => ({
                   color: theme.palette.warning.main,
                   display: 'flex',
@@ -268,20 +269,17 @@ export const BridgeForm = () => {
                   gap: '5px',
                 })}
               >
-                <InfoCircle
-                  style={{ width: '20px' }}
-                  sx={(theme: any) => ({
-                    [theme.breakpoints.down('tablet')]: {
-                      paddingBottom: '20px',
-                    },
-                  })}
-                  // fill={(theme: any) => theme.palette.warning.main}
-                  fill="#CD7329"
-                />
+                <Box sx={{ paddingTop: '5px' }}>
+                  <InfoCircle
+                    // fill={(theme: any) => theme.palette.warning.main}
+                    fill="#CD7329"
+                  />
+                </Box>
+
                 <p>
                   Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
                 </p>
-              </Grid>
+              </Box>
             )}
             {isValidating ? (
               <CircularProgress size={10} />
