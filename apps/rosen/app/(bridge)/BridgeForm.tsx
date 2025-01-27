@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Paste } from '@rosen-bridge/icons';
+import { InfoCircle, Paste } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -17,6 +17,7 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  useResponsiveValue,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -29,6 +30,7 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
+import { theme } from '@/_theme/theme';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
@@ -255,22 +257,49 @@ export const BridgeForm = () => {
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
+          <>
+            {targetField.value === NETWORKS.BITCOIN && (
+              <Grid
+                sx={(theme) => ({
+                  color: theme.palette.warning.main,
+                  display: 'flex',
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: '5px',
+                })}
+              >
+                <InfoCircle
+                  style={{ width: '20px' }}
+                  sx={(theme: any) => ({
+                    [theme.breakpoints.down('tablet')]: {
+                      paddingBottom: '20px',
+                    },
+                  })}
+                  // fill={(theme: any) => theme.palette.warning.main}
+                  fill="#CD7329"
+                />
+                <p>
+                  Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
+                </p>
+              </Grid>
+            )}
+            {isValidating ? (
+              <CircularProgress size={10} />
+            ) : (
+              errors.walletAddress?.message?.toString()
+            )}
+          </>
         }
         disabled={!targetField.value}
         autoComplete="off"
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {targetField.value == NETWORKS.BITCOIN && (
+      {/* {targetField.value == NETWORKS.BITCOIN && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
-      )}
+      )} */}
       <Autocomplete
         aria-label="token input"
         disabled={!availableTokens.length}
