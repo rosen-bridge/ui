@@ -5,7 +5,7 @@ import { unwrap } from '@/_safeServerAction';
 import { EthereumNetwork as EthereumNetworkType } from '@/_types';
 
 import { LOCK_ADDRESSES } from '../../../configs';
-import { getMaxTransfer } from './getMaxTransfer';
+import { getMaxTransfer } from './server';
 
 /**
  * the main object for Ethereum network
