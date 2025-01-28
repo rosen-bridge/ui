@@ -22,12 +22,16 @@ declare global {
     okxwallet: {
       selectedAddress?: string;
       bitcoin: {
-        /**
-         * TODO: replace the any type with an interface
-         * local:ergo/rosen-bridge/ui#456
-         */
-        // eslint-disable-next-line
-        [key: string]: any;
+        connect(): Promise<void>;
+        getAccounts(): Promise<string>;
+        getBalance(): Promise<{ confirmed: string }>;
+        signPsbt(
+          psbtHex: string,
+          options: {
+            autoFinalized: boolean;
+            toSignInputs: { address: string; index: number }[];
+          },
+        ): Promise<string>;
       };
     };
   }
