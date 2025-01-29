@@ -40,8 +40,8 @@ const light = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#42559E',
-      light: '#D9DDEC',
+      main: '#D9DDEC',
+      light: '#42559E',
       dark: '#28335F',
     },
     secondary: {
