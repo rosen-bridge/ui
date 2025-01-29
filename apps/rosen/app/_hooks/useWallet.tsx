@@ -11,7 +11,7 @@ import {
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { Wallet } from '@rosen-ui/wallet-api';
 
-import * as availableWallets from '@/_wallets';
+import { availableWallets } from '@/_wallets';
 
 import { useNetwork } from './useNetwork';
 
