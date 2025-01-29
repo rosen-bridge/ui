@@ -16,6 +16,7 @@ export * from './Id';
 export * from './NavigationBar';
 export * from './NavigationButton';
 export * from './Version';
+export * from './PageHeading';
 export * from './QrCodeModal';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';

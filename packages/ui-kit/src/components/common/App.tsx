@@ -73,7 +73,9 @@ export const App = ({ children, sideBar, theme, toolbar }: AppProps) => {
             )}
             <Main>
               {!isMobile && (
-                <div style={{ position: 'relative', zIndex: '1' }}>
+                <div
+                  style={{ position: 'relative', zIndex: '1', float: 'right' }}
+                >
                   {toolbar}
                 </div>
               )}
