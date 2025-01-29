@@ -19,25 +19,27 @@ export const getMaxTransferCreator =
   }: {
     balance: RosenAmountValue;
     isNative: boolean;
-    eventData: {
+    eventData: () => Promise<{
       toChain: Network;
       fromAddress: string;
       toAddress: string;
-    };
+    }>;
   }) => {
-    if (!eventData.toAddress) return 0n;
+    const data = await eventData();
+
+    if (!data.toAddress) return 0n;
 
     const feeRatio = await getFeeRatio();
     const opRetrunDataLength = (
       await generateOpReturnData(
-        eventData.toChain,
-        eventData.toAddress,
+        data.toChain,
+        data.toAddress,
         // We don't care about the actual op return data and only need the length
         '0',
         '0',
       )
     ).length;
-    const utxos = await getAddressUtxos(eventData.fromAddress);
+    const utxos = await getAddressUtxos(data.fromAddress);
     const estimatedTxWeight = await estimateTxWeight(
       /**
        * When getting max transfer, probably all of the utxos are going to be
