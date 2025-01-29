@@ -1,0 +1,24 @@
+import { TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
+import { RosenAmountValue } from '@rosen-ui/types';
+
+import { feeAndMinBoxValue } from './constants';
+
+export const getMaxTransferCreator =
+  (tokenMap: TokenMap) =>
+  async ({
+    balance,
+    isNative,
+  }: {
+    balance: RosenAmountValue;
+    isNative: boolean;
+  }) => {
+    const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
+      NATIVE_TOKENS.CARDANO,
+      feeAndMinBoxValue,
+      NETWORKS.CARDANO,
+    ).amount;
+    const offset = isNative ? feeAndMinBoxValueWrapped : 0n;
+    const amount = balance - offset;
+    return amount < 0n ? 0n : amount;
+  };

@@ -5,7 +5,7 @@ import { unwrap } from '@/_safeServerAction';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types';
 
 import { LOCK_ADDRESSES } from '../../../configs';
-import { getMaxTransfer } from './getMaxTransfer';
+import { getMaxTransfer } from './server';
 
 /**
  * the main object for Ergo network

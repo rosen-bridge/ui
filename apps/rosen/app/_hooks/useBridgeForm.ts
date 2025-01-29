@@ -7,7 +7,7 @@ import { getNonDecimalString } from '@rosen-ui/utils';
 import { validateAddress } from '@/_actions';
 import { availableNetworks } from '@/_networks';
 import { unwrap } from '@/_safeServerAction';
-import { getMaxTransfer, getMinTransfer } from '@/_utils';
+import { getMinTransfer } from '@/_utils';
 
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
@@ -73,20 +73,17 @@ export const useBridgeForm = () => {
           const selectedNetwork =
             availableNetworks[sourceField.value as Network];
 
-          const maxTransfer = await getMaxTransfer(
-            selectedNetwork,
-            {
-              balance: await walletGlobalContext!.selected.getBalance(
-                tokenField.value,
-              ),
-              isNative: tokenField.value.metaData.type === 'native',
-            },
-            async () => ({
+          const maxTransfer = await selectedNetwork.getMaxTransfer({
+            balance: await walletGlobalContext!.selected.getBalance(
+              tokenField.value,
+            ),
+            isNative: tokenField.value.metaData.type === 'native',
+            eventData: async () => ({
               fromAddress: await walletGlobalContext!.selected!.getAddress(),
               toAddress: addressField.value,
               toChain: targetField.value as Network,
             }),
-          );
+          });
 
           const isAmountLarge = wrappedAmount > maxTransfer;
           if (isAmountLarge) return 'Balance insufficient';

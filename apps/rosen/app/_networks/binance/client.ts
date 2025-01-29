@@ -4,7 +4,7 @@ import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
 import { unwrap } from '@/_safeServerAction';
 import { BinanceNetwork as BinanceNetworkType } from '@/_types';
 
-import { getMaxTransfer } from './getMaxTransfer';
+import { getMaxTransfer } from './server';
 
 /**
  * the main object for Binance network
