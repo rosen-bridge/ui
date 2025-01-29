@@ -374,13 +374,13 @@ export const darkThemeOptions: ThemeOptions = {
     mode: 'dark',
     primary: {
       main: '#6877B1',
-      light: '#1A223F',
+      light: '#131725',
       dark: '#B3BBD8',
       contrastText: '#000000',
     },
     secondary: {
       main: '#B15A3F',
-      light: '#804330',
+      light: '#251718',
       dark: '#C48D7C',
       contrastText: '#000000',
     },
@@ -391,13 +391,13 @@ export const darkThemeOptions: ThemeOptions = {
     },
     neutral: {
       main: '#707070',
-      light: '#424242',
+      light: '#333333',
       dark: '#B7B7B7',
       contrastText: '#FFFFFF',
     },
     error: {
       main: '#C04343',
-      light: '#7A2D2D',
+      light: '#331313',
       dark: '#DEADAD',
     },
     warning: {
@@ -407,7 +407,7 @@ export const darkThemeOptions: ThemeOptions = {
     },
     success: {
       main: '#2B7D60',
-      light: '#0C3426',
+      light: '#09261C',
       dark: '#A1D7C4',
     },
     info: {
