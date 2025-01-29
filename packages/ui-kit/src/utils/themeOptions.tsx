@@ -20,6 +20,7 @@ declare module '@mui/material/styles' {
     main: string;
     light: string;
     dark: string;
+    contrastText: string;
   }
 
   interface TypeBackground {
@@ -70,11 +71,13 @@ export const lightThemeOptions: ThemeOptions = {
       main: '#42559E',
       light: '#D9DDEC',
       dark: '#28335F',
+      contrastText: '#FFFFFF',
     },
     secondary: {
       main: '#DD704F',
       light: '#F5D4CA',
       dark: '#B15A3F',
+      contrastText: '#FFFFFF',
     },
     background: {
       paper: '#FFFFFF',
@@ -85,6 +88,7 @@ export const lightThemeOptions: ThemeOptions = {
       main: '#737373',
       light: '#E6E6E6',
       dark: '#545454',
+      contrastText: '#000000',
     },
     error: {
       main: '#C84242',
@@ -351,12 +355,12 @@ export const lightThemeOptions: ThemeOptions = {
           background:
             theme.palette.mode === 'light'
               ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-              : theme.palette.primary.dark,
+              : theme.palette.primary.light,
           [theme.breakpoints.down('tablet')]: {
             background:
               theme.palette.mode === 'light'
                 ? `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-                : theme.palette.primary.dark,
+                : theme.palette.primary.light,
           },
         }),
       },
@@ -370,13 +374,15 @@ export const darkThemeOptions: ThemeOptions = {
     mode: 'dark',
     primary: {
       main: '#6877B1',
-      light: '#B3BBD8',
-      dark: '#1A223F',
+      light: '#1A223F',
+      dark: '#B3BBD8',
+      contrastText: '#000000',
     },
     secondary: {
       main: '#B15A3F',
-      light: '#C48D7C',
-      dark: '#804330',
+      light: '#804330',
+      dark: '#C48D7C',
+      contrastText: '#000000',
     },
     background: {
       paper: '#0D1120',
@@ -385,28 +391,29 @@ export const darkThemeOptions: ThemeOptions = {
     },
     neutral: {
       main: '#707070',
-      light: '#B7B7B7',
-      dark: '#424242',
+      light: '#424242',
+      dark: '#B7B7B7',
+      contrastText: '#FFFFFF',
     },
     error: {
       main: '#C04343',
-      light: '#DEADAD',
-      dark: '#7A2D2D',
+      light: '#7A2D2D',
+      dark: '#DEADAD',
     },
     warning: {
       main: '#BF783E',
-      light: '#CEB199',
-      dark: '#74451E',
+      light: '#331E0D',
+      dark: '#CEB199',
     },
     success: {
       main: '#2B7D60',
-      light: '#A1D7C4',
-      dark: '#0C3426',
+      light: '#0C3426',
+      dark: '#A1D7C4',
     },
     info: {
       main: '#3E70A3',
-      light: '#A3BFDC',
-      dark: '#16385A',
+      light: '#16385A',
+      dark: '#A3BFDC',
     },
   },
 };
