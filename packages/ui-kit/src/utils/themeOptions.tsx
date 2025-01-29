@@ -1,0 +1,412 @@
+import {
+  alpha,
+  ComponentsOverrides,
+  ComponentsVariants,
+  SvgIcon,
+  Theme,
+  ThemeOptions,
+} from '@mui/material';
+import {
+  CheckCircle,
+  ExclamationCircle,
+  ExclamationTriangle,
+  InfoCircle,
+} from '@rosen-bridge/icons';
+
+import { AppProps, LoadingButtonProps } from '../components';
+
+declare module '@mui/material/styles' {
+  interface TypeNeutral {
+    main: string;
+    light: string;
+    dark: string;
+  }
+
+  interface TypeBackground {
+    shadow: string;
+  }
+
+  interface Palette {
+    background: TypeBackground;
+    neutral: TypeNeutral;
+  }
+
+  interface PaletteOptions {
+    neutral?: Partial<TypeNeutral>;
+  }
+
+  interface ComponentNameToClassKey {
+    MuiLoadingButton: 'text' | 'outlined' | 'contained';
+    RosenApp: 'root' | 'main';
+    RosenNavigationBar: 'root';
+  }
+
+  interface ComponentsPropsList {
+    MuiLoadingButton: Partial<LoadingButtonProps>;
+    RosenApp: Partial<AppProps>;
+  }
+
+  interface Components {
+    MuiLoadingButton?: {
+      defaultProps?: ComponentsPropsList['MuiLoadingButton'];
+      styleOverrides?: ComponentsOverrides<Theme>['MuiLoadingButton'];
+      variants?: ComponentsVariants['MuiLoadingButton'];
+    };
+    RosenApp?: {
+      defaultProps?: ComponentsPropsList['RosenApp'];
+      styleOverrides?: ComponentsOverrides<Theme>['RosenApp'];
+      variants?: ComponentsVariants['RosenApp'];
+    };
+    RosenNavigationBar?: {
+      styleOverrides?: ComponentsOverrides<Theme>['RosenNavigationBar'];
+    };
+  }
+}
+
+export const lightThemeOptions: ThemeOptions = {
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#42559E',
+      light: '#D9DDEC',
+      dark: '#28335F',
+    },
+    secondary: {
+      main: '#DD704F',
+      light: '#F5D4CA',
+      dark: '#B15A3F',
+    },
+    background: {
+      paper: '#FFFFFF',
+      default: '#EBEDF7',
+      shadow: 'rgba(0, 0, 0, 0.2)',
+    },
+    neutral: {
+      main: '#737373',
+      light: '#E6E6E6',
+      dark: '#545454',
+    },
+    error: {
+      main: '#C84242',
+      light: '#F5CFCF',
+      dark: '#9C3030',
+    },
+    warning: {
+      main: '#CD7329',
+      light: '#ECCCB2',
+      dark: '#B65607',
+    },
+    success: {
+      main: '#157E59',
+      light: '#B3E3D2',
+      dark: '#116044',
+    },
+    info: {
+      main: '#42559E',
+      light: '#D9DDEC',
+      dark: '#28335F',
+    },
+  },
+  shape: {
+    borderRadius: 16,
+  },
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      laptop: 1024,
+      desktop: 1200,
+    },
+  },
+  typography: {
+    h1: {
+      fontSize: '1.5rem',
+      fontWeight: 'bold',
+    },
+    h2: {
+      fontSize: '1.5rem',
+    },
+    h3: {
+      fontSize: '1.5rem',
+    },
+    h5: {
+      fontSize: '1rem',
+    },
+    body1: {
+      fontSize: '1rem',
+    },
+    body2: {
+      fontSize: '0.75rem',
+    },
+    subtitle2: {
+      fontSize: '0.625rem',
+    },
+  },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        h1: ({ theme }: { theme: Theme }) =>
+          theme.palette.mode === 'light'
+            ? {
+                background: 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
+                backgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }
+            : {
+                color: theme.palette.secondary.light,
+              },
+        body2: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.text.secondary,
+        }),
+      },
+    },
+    MuiCard: {
+      defaultProps: {
+        elevation: 0,
+      },
+    },
+    MuiCardHeader: {
+      styleOverrides: {
+        title: {
+          fontSize: '1rem',
+          fontWeight: 'bold',
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        containedSecondary: ({ theme }: { theme: Theme }) => ({
+          'color': theme.palette.text.primary,
+          'backgroundColor': theme.palette.neutral.light,
+          '&:hover': {
+            backgroundColor: theme.palette.neutral.light,
+          },
+        }),
+        root: ({ theme }: { theme: Theme }) => ({
+          padding: theme.spacing(1, 2),
+        }),
+      },
+    },
+    MuiDialogTitle: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.secondary.dark,
+          fontSize: theme.spacing(3),
+        }),
+      },
+    },
+    MuiDialogActions: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          padding: theme.spacing(3),
+        }),
+      },
+    },
+    MuiLoadingButton: {
+      defaultProps: {
+        variant: 'contained',
+      },
+    },
+    MuiTextField: {
+      defaultProps: {
+        fullWidth: true,
+      },
+    },
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          '.MuiInputLabel-root': {
+            'transform': 'translate(12px, 16px) scale(1)',
+            '&.MuiInputLabel-shrink': {
+              transform: 'translate(12px, 7px) scale(0.75)',
+            },
+          },
+          '.MuiAutocomplete-input': {
+            transform: 'translateY(8px)',
+          },
+          '.MuiOutlinedInput-root': {
+            'overflow': 'hidden',
+            'borderRadius': theme.spacing(2),
+            'backgroundColor': alpha(theme.palette.background.paper, 0.75),
+            'minHeight': theme.spacing(8.5),
+            'transition': theme.transitions.create([
+              'background-color',
+              'box-shadow',
+            ]),
+            '&:hover': {
+              backgroundColor: alpha(theme.palette.background.paper, 1.0),
+            },
+            '&.Mui-disabled': {
+              backgroundColor: alpha(theme.palette.background.paper, 0.5),
+            },
+            '&.Mui-focused': {
+              backgroundColor: alpha(theme.palette.background.paper, 1.0),
+            },
+          },
+          'fieldset': {
+            border: 'none',
+          },
+        }),
+      },
+    },
+    MuiFilledInput: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          'overflow': 'hidden',
+          'borderRadius': theme.shape.borderRadius,
+          'backgroundColor': alpha(theme.palette.background.paper, 0.75),
+          'minHeight': theme.spacing(8.5),
+          'transition': theme.transitions.create([
+            'background-color',
+            'box-shadow',
+          ]),
+          '&:hover': {
+            backgroundColor: alpha(theme.palette.background.paper, 1.0),
+          },
+          '&.Mui-disabled': {
+            backgroundColor: alpha(theme.palette.background.paper, 0.5),
+          },
+          '&.Mui-focused': {
+            backgroundColor: alpha(theme.palette.background.paper, 1.0),
+          },
+          '&::-webkit-outer-spin-button,input::-webkit-inner-spin-button': {
+            WebkitAppearance: 'none',
+          },
+        }),
+        input: {
+          '&:focus': {
+            backgroundColor: 'inherit',
+          },
+        },
+      },
+    },
+    MuiSnackbar: {
+      styleOverrides: {
+        root: {
+          left: '116px',
+        },
+      },
+    },
+    MuiAlert: {
+      defaultProps: {
+        iconMapping: {
+          error: (
+            <SvgIcon>
+              <ExclamationTriangle fontSize="inherit" />
+            </SvgIcon>
+          ),
+          info: (
+            <SvgIcon>
+              <InfoCircle fontSize="inherit" />
+            </SvgIcon>
+          ),
+          success: (
+            <SvgIcon>
+              <CheckCircle fontSize="inherit" />
+            </SvgIcon>
+          ),
+          warning: (
+            <SvgIcon>
+              <ExclamationCircle fontSize="inherit" />
+            </SvgIcon>
+          ),
+        },
+      },
+      styleOverrides: {
+        root: {
+          fontSize: '0.875rem',
+        },
+        standardError: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.error.main,
+          backgroundColor: theme.palette.error.light,
+        }),
+        standardInfo: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.info.main,
+          backgroundColor: theme.palette.info.light,
+        }),
+        standardSuccess: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.success.main,
+          backgroundColor: theme.palette.success.light,
+        }),
+        standardWarning: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.warning.main,
+          backgroundColor: theme.palette.warning.light,
+        }),
+      },
+    },
+    RosenNavigationBar: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          [theme.breakpoints.down('tablet')]: {
+            borderColor: theme.palette.primary.light,
+            background: theme.palette.background.paper,
+            boxShadow: `0px 8px 8px 0px ${theme.palette.background.default}`,
+          },
+        }),
+      },
+    },
+    RosenApp: {
+      styleOverrides: {
+        root: ({ theme }: { theme: Theme }) => ({
+          background:
+            theme.palette.mode === 'light'
+              ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
+              : theme.palette.primary.dark,
+          [theme.breakpoints.down('tablet')]: {
+            background:
+              theme.palette.mode === 'light'
+                ? `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
+                : theme.palette.primary.dark,
+          },
+        }),
+      },
+    },
+  },
+};
+
+export const darkThemeOptions: ThemeOptions = {
+  ...lightThemeOptions,
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#6877B1',
+      light: '#B3BBD8',
+      dark: '#1A223F',
+    },
+    secondary: {
+      main: '#B15A3F',
+      light: '#C48D7C',
+      dark: '#804330',
+    },
+    background: {
+      paper: '#0D1120',
+      default: '#070810',
+      shadow: 'rgba(0, 0, 0, 0.2)',
+    },
+    neutral: {
+      main: '#707070',
+      light: '#B7B7B7',
+      dark: '#424242',
+    },
+    error: {
+      main: '#C04343',
+      light: '#DEADAD',
+      dark: '#7A2D2D',
+    },
+    warning: {
+      main: '#BF783E',
+      light: '#CEB199',
+      dark: '#74451E',
+    },
+    success: {
+      main: '#2B7D60',
+      light: '#A1D7C4',
+      dark: '#0C3426',
+    },
+    info: {
+      main: '#3E70A3',
+      light: '#A3BFDC',
+      dark: '#16385A',
+    },
+  },
+};
