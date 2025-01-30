@@ -25,11 +25,11 @@ export interface BaseNetwork<
 }
 
 interface BitcoinMaxTransferExtra {
-  eventData: () => Promise<{
+  eventData: {
     toChain: Network;
     fromAddress: string;
     toAddress: string;
-  }>;
+  };
 }
 
 export interface BinanceNetwork extends BaseNetwork<'binance'> {}
