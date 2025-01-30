@@ -23,7 +23,7 @@ declare global {
       selectedAddress?: string;
       bitcoin: {
         connect(): Promise<void>;
-        getAccounts(): Promise<string>;
+        getAccounts(): Promise<string[]>;
         getBalance(): Promise<{ confirmed: string }>;
         signPsbt(
           psbtHex: string,
