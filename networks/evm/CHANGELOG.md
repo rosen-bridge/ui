@@ -1,5 +1,11 @@
 # @rosen-network/evm
 
+## 0.2.0
+
+### Minor Changes
+
+- Define the getMaxTransfer function to enhance maintainability and achieve better encapsulation
+
 ## 0.1.1
 
 ### Patch Changes

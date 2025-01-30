@@ -1,5 +1,15 @@
 # @rosen-network/bitcoin
 
+## 2.1.0
+
+### Minor Changes
+
+- Define the getMaxTransfer function to enhance maintainability and achieve better encapsulation
+
+### Patch Changes
+
+- Updated @rosen-ui/constants@0.1.0 dependency
+
 ## 2.0.1
 
 ### Patch Changes
