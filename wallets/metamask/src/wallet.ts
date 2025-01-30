@@ -83,10 +83,10 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
-    await this.api.disconnect();
-
-    if (!this.api.disconnect()) {
-      throw new DisconnectionFailedError(this.name);
+    try {
+      await this.api.disconnect();
+    } catch (error) {
+      throw new DisconnectionFailedError(this.name, error);
     }
   }
 

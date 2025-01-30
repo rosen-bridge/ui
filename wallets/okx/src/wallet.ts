@@ -36,9 +36,9 @@ export class OKXWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
-    await this.api.disconnect();
+    const result = await this.api.disconnect();
 
-    if (!this.api.disconnect()) {
+    if (!result) {
       throw new DisconnectionFailedError(this.name);
     }
   }
