@@ -91,11 +91,11 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
         const amount = await selectedSource.getMaxTransfer({
           balance: balanceAmount,
           isNative: tokenValue.metaData.type === 'native',
-          eventData: async () => ({
+          eventData: {
             fromAddress: await selectedWallet.getAddress(),
             toAddress: walletAddressValue,
             toChain: targetValue,
-          }),
+          },
         });
 
         setAmount(amount);

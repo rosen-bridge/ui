@@ -78,11 +78,11 @@ export const useBridgeForm = () => {
               tokenField.value,
             ),
             isNative: tokenField.value.metaData.type === 'native',
-            eventData: async () => ({
+            eventData: {
               fromAddress: await walletGlobalContext!.selected!.getAddress(),
               toAddress: addressField.value,
               toChain: targetField.value as Network,
-            }),
+            },
           });
 
           const isAmountLarge = wrappedAmount > maxTransfer;
