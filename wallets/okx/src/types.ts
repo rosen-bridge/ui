@@ -22,9 +22,17 @@ declare global {
     okxwallet: {
       selectedAddress?: string;
       bitcoin: {
-        connect(): Promise<void>;
+        connect(): Promise<{
+          address: string;
+          compressedPublicKey: string;
+          publicKey: string;
+        }>;
         getAccounts(): Promise<string[]>;
-        getBalance(): Promise<{ confirmed: string }>;
+        getBalance(): Promise<{
+          confirmed: number;
+          total: number;
+          unconfirmed: number;
+        }>;
         signPsbt(
           psbtHex: string,
           options: {
