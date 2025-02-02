@@ -14,7 +14,7 @@ declare global {
   interface Window {
     ergoConnector: {
       nautilus: {
-        disconnect: () => Promise<void>;
+        disconnect: () => Promise<boolean>;
         connect: (params: { createErgoObject: boolean }) => Promise<boolean>;
         getContext: () => Promise<EipWalletApi>;
         isAuthorized: () => Promise<boolean>;

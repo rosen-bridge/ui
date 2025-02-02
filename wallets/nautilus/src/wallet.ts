@@ -40,10 +40,10 @@ export class NautilusWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
-    try {
-      await this.api.disconnect();
-    } catch (error) {
-      throw new DisconnectionFailedError(this.name, error);
+    const result = await this.api.disconnect();
+
+    if (!result) {
+      throw new DisconnectionFailedError(this.name);
     }
   }
 
