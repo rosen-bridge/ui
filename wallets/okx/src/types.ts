@@ -27,6 +27,7 @@ declare global {
           compressedPublicKey: string;
           publicKey: string;
         }>;
+        disconnect(): Promise<void>;
         getAccounts(): Promise<string[]>;
         getBalance(): Promise<{
           confirmed: number;
