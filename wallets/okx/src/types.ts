@@ -20,6 +20,7 @@ export type WalletConfig = {
 declare global {
   interface Window {
     okxwallet: {
+      selectedAddress?: string;
       bitcoin: {
         /**
          * TODO: replace the any type with an interface

@@ -1,5 +1,16 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.1.0
+
+### Minor Changes
+
+- Revise the connect method to align with the Wallet interface, and implement a new method called icConnected to determine whether the application has access to the wallet extension
+
+### Patch Changes
+
+- Convert unknown errors into identifiable ones to ensure consistent error messaging, making it easier to manage errors at higher levels
+- Updated dependency @rosen-ui/wallet-api@1.1.0
+
 ## 2.0.0
 
 ### Major Changes

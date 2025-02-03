@@ -24,6 +24,8 @@ export class NamiWallet implements Wallet {
 
   link = 'https://namiwallet.io/';
 
+  supportedChains = [NETWORKS.CARDANO];
+
   private get api() {
     return window.cardano.nami;
   }

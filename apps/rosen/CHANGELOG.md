@@ -1,5 +1,40 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.2
+
+### Patch Changes
+
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
+## 4.0.1
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Enhance the React components by using the `PropsWithChildren` type instead of creating a custom type definition for scenarios that only require children props
+- Enhance the useNetwork hook to boost performance
+- Disable the forced uppercase format for token name in the balance field
+- Improve the wallet connection logic and implement more effective error handling within the transaction process
+- Use connector component to eliminating redundant code for a cleaner code
+- Update the usage of the ID component
+- Eliminate the dependency on the extensionless package and ensure that Viteset is compatible with the TSX package
+- Optimize the utilization of variable environments through automated processes
+- Enhance the useBalance hook to boost performance
+- Updated dependencies
+  - @rosen-ui/asset-calculator@2.1.0
+  - @rosen-ui/metamask-wallet@1.1.0
+  - @rosen-ui/nautilus-wallet@2.1.0
+  - @rosen-ui/eternl-wallet@2.1.0
+  - @rosen-ui/lace-wallet@2.1.0
+  - @rosen-ui/nami-wallet@2.1.0
+  - @rosen-ui/okx-wallet@1.1.0
+  - @rosen-bridge/ui-kit@1.7.1
+  - @rosen-ui/wallet-api@1.1.0
+  - @rosen-network/bitcoin@2.0.1
+
 ## 4.0.0
 
 ### Major Changes

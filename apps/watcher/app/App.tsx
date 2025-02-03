@@ -1,14 +1,13 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { PropsWithChildren, useEffect } from 'react';
 
 /**
  * FIXME: import NoSsr from ui-kit
  * local:ergo/rosen-bridge/ui#193
  */
 import { NoSsr } from '@mui/material';
-import { ApiKeyContextProvider } from '@rosen-bridge/shared-contexts';
-import { App as AppBase } from '@rosen-bridge/ui-kit';
+import { App as AppBase, ApiKeyProvider } from '@rosen-bridge/ui-kit';
 import { SWRConfig } from '@rosen-ui/swr-mock';
 import { upperFirst } from 'lodash-es';
 
@@ -18,7 +17,7 @@ import { theme } from './_theme/theme';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
-export const App = ({ children }: { children?: ReactNode }) => {
+export const App = ({ children }: PropsWithChildren) => {
   const { data: info } = useInfo();
 
   /**
@@ -47,7 +46,7 @@ export const App = ({ children }: { children?: ReactNode }) => {
 
   return (
     <NoSsr>
-      <ApiKeyContextProvider>
+      <ApiKeyProvider>
         <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
           <SWRConfig
             useMockedApis={process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'}
@@ -56,7 +55,7 @@ export const App = ({ children }: { children?: ReactNode }) => {
             {children}
           </SWRConfig>
         </AppBase>
-      </ApiKeyContextProvider>
+      </ApiKeyProvider>
     </NoSsr>
   );
 };

@@ -31,6 +31,18 @@ const InfoWidgets = () => {
 
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
+
+  let titleRSN =
+    rsnToken?.amount !== undefined && rsnToken?.amount !== 0
+      ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
+      : '';
+
+  let titleERSN =
+    eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
+      ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
+        ' eRSN'
+      : '';
+
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
   /**
@@ -151,28 +163,14 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          title={
-            eRsnToken?.amount !== undefined
-              ? getDecimalString(
-                  eRsnToken.amount.toString(),
-                  eRsnToken.decimals,
-                ) + ' eRSN'
-              : ''
-          }
-          value={
-            rsnToken?.amount !== undefined
-              ? getDecimalString(
-                  rsnToken.amount.toString(),
-                  rsnToken.decimals,
-                ) + ' RSN'
-              : ''
-          }
+          value={titleRSN || titleERSN}
+          title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">
+              <Wallet />
               {/* FIXME: Use an appropriate icon
                 local:ergo/rosen-bridge/ui#64
                */}
-              <Wallet />
             </SvgIcon>
           }
           color="warning"

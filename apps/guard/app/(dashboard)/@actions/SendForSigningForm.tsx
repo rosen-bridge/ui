@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { Alert } from '@rosen-bridge/icons';
-import { useApiKey } from '@rosen-bridge/shared-contexts';
 import {
   AlertCard,
   AlertProps,
@@ -15,6 +14,7 @@ import {
   TextField,
   Typography,
   styled,
+  useApiKey,
 } from '@rosen-bridge/ui-kit';
 import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';

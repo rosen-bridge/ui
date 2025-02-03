@@ -1,19 +1,11 @@
 import { ErgoIcon } from '@rosen-bridge/icons';
 import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
-import { NautilusWallet } from '@rosen-ui/nautilus-wallet';
 
 import { unwrap } from '@/_safeServerAction';
-import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { ErgoNetwork as ErgoNetworkType } from '@/_types';
 
 import { LOCK_ADDRESSES } from '../../../configs';
-import { getMaxTransfer } from './getMaxTransfer';
-import { generateUnsignedTx } from './server';
-
-const config = {
-  getTokenMap,
-  generateUnsignedTx: unwrap(generateUnsignedTx),
-};
+import { getMaxTransfer } from './server';
 
 /**
  * the main object for Ergo network
@@ -23,7 +15,6 @@ const config = {
 export const ErgoNetwork: ErgoNetworkType = {
   name: NETWORKS.ERGO,
   label: NETWORK_LABELS.ERGO,
-  wallets: [new NautilusWallet(config)],
   logo: ErgoIcon,
   nextHeightInterval: 5,
   lockAddress: LOCK_ADDRESSES.ERGO,
