@@ -1,5 +1,11 @@
 # @rosen-network/bitcoin
 
+## 2.0.1
+
+### Patch Changes
+
+- Eliminate the dependency on the extensionless package and ensure that Viteset is compatible with the TSX package
+
 ## 2.0.0
 
 ### Major Changes

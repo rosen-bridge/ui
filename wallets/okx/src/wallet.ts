@@ -20,6 +20,8 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
+  supportedChains = [NETWORKS.BITCOIN];
+
   private get api() {
     return window.okxwallet.bitcoin;
   }
@@ -67,7 +69,7 @@ export class OKXWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
-    return !!this.api.selectedAccount;
+    return !!window.okxwallet.selectedAddress;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {

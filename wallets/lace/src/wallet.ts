@@ -24,6 +24,8 @@ export class LaceWallet implements Wallet {
 
   link = 'https://www.lace.io/';
 
+  supportedChains = [NETWORKS.CARDANO];
+
   private get api() {
     return window.cardano.lace;
   }

@@ -30,3 +30,5 @@ config
 **/configs/*.yaml
 next-env.d.ts 
 !config/default.yaml
+
+.devcontainer

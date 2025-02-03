@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/src/index.js",

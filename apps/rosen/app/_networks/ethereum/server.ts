@@ -1,20 +1,13 @@
 'use server';
 
-import {
-  generateLockData as generateLockDataCore,
-  generateTxParameters as generateTxParametersCore,
-} from '@rosen-network/evm';
+import { EvmChains, getMaxTransferCreator } from '@rosen-network/evm';
 
 import { wrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
-export const generateLockData = wrap(generateLockDataCore, {
-  traceKey: 'generateLockData',
-});
-
-export const generateTxParameters = wrap(
-  generateTxParametersCore(getTokenMap()),
+export const getMaxTransfer = wrap(
+  getMaxTransferCreator(getTokenMap(), EvmChains.ETHEREUM),
   {
-    traceKey: 'generateTxParameters',
+    traceKey: 'getMaxTransfer',
   },
 );
