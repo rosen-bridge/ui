@@ -106,7 +106,7 @@ export const ConnectOrSubmitButton = ({
   return (
     <>
       <LoadingButton
-        sx={{ width: '50%' }}
+        sx={{ width: '100%' }}
         color={selectedWallet ? 'success' : 'primary'}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}

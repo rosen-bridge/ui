@@ -35,7 +35,6 @@ const Background = styled('div')(({ theme }) => ({
 const BridgeContainer = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  boxSizing: 'border-box',
   gap: theme.spacing(3),
   [theme.breakpoints.up('tablet')]: {
     'zIndex': '3',
@@ -49,10 +48,6 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'display': 'grid',
     'gridTemplateColumns': '1fr 1fr',
     'gridTemplateRows': '1fr auto auto',
-    'gridTemplateAreas': `
-    "form transaction"
-    "button transaction"
-  `,
     '& > button': {
       width: '50%',
       justifySelf: 'flex-end',
@@ -99,6 +94,7 @@ const RosenBridge = () => {
                 <TransactionFeesProvider>
                   <BridgeContainer>
                     <BridgeForm />
+
                     <BridgeTransaction
                       chooseWalletsModalOpen={chooseWalletsModalOpen}
                       setChooseWalletsModalOpen={setChooseWalletsModalOpen}

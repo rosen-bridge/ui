@@ -13,6 +13,7 @@ export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { ReactComponent as CommentAltExclamation } from './icons/comment-alt-exclamation.svg';
 export { ReactComponent as Copy } from './icons/copy.svg';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
+export { ReactComponent as Disconnect } from './icons/disconnect.svg';
 export { ReactComponent as Eye } from './icons/eye.svg';
 export { ReactComponent as EyeSlash } from './icons/eye-slash.svg';
 export { ReactComponent as Exchange } from './icons/exchange.svg';

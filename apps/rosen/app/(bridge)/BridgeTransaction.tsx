@@ -76,93 +76,95 @@ export const BridgeTransaction = ({
 
   return (
     <>
-      <Card
-        sx={{
-          display: 'flex',
-          padding: '12px 24px',
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.secondary.light
-              : theme.palette.background.paper,
-        }}
-      >
-        <WalletInfo
-          icon={selectedWallet?.icon}
-          label={selectedWallet?.label}
-          onClick={() => setChooseWalletsModalOpen(true)}
-        />
-        {sourceValue == NETWORKS.BITCOIN && (
-          <Alert severity="warning" icon={false}>
-            We only support native SegWit addresses (P2WPKH or P2WSH) for the
-            source address.
-          </Alert>
-        )}
-        <div style={{ flexGrow: '1' }} />
-      </Card>
-      <Card
-        sx={{
-          marginTop: '16px',
-          display: 'flex',
-          flexDirection: 'column',
-          height: '64%',
-          gap: (theme) => theme.spacing(3),
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.primary.light
-              : theme.palette.background.paper,
-          padding: (theme) => theme.spacing(3),
-        }}
-      >
-        <div style={{ flexGrow: '1' }} />
-        <Amount
-          title="Transaction Fee"
-          value={networkFeeRaw}
-          unit={tokenInfo?.tokenName}
-          loading={isPending}
-        />
-        <Amount
-          title="Bridge Fee"
-          value={bridgeFeeRaw}
-          unit={tokenInfo?.tokenName}
-          loading={isPending}
-        />
-        <Amount
-          title="Min Transfer"
-          value={minTransferRaw}
-          unit={tokenInfo?.tokenName}
-          loading={isPending}
-        />
-        <Divider sx={{ borderStyle: 'dashed' }} />
-        <Amount
-          title="You Will Receive"
-          value={receivingAmountRaw}
-          unit={targetTokenInfo?.name}
-          loading={isPending}
-        />
-        {!!error && (
-          <Alert
-            severity="error"
-            sx={{
-              maxWidth: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            <Tooltip title={(error as any)?.message}>
-              <Typography
-                sx={{
-                  maxWidth: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {(error as any)?.message}
-              </Typography>
-            </Tooltip>
-          </Alert>
-        )}
-      </Card>
+      <div>
+        <Card
+          sx={{
+            marginBottom: '18px',
+            display: 'flex',
+            padding: '12px 25px',
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.secondary.light
+                : theme.palette.background.paper,
+          }}
+        >
+          <WalletInfo
+            icon={selectedWallet?.icon}
+            label={selectedWallet?.label}
+            onClick={() => setChooseWalletsModalOpen(true)}
+          />
+        </Card>
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '75%',
+            gap: (theme) => theme.spacing(1),
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.primary.light
+                : theme.palette.background.paper,
+            padding: (theme) => theme.spacing(3),
+          }}
+        >
+          {sourceValue == NETWORKS.BITCOIN && (
+            <Alert severity="warning" icon={false}>
+              We only support native SegWit addresses (P2WPKH or P2WSH) for the
+              source address.
+            </Alert>
+          )}
+          <div style={{ flexGrow: '1' }} />
+          <Amount
+            title="Transaction Fee"
+            value={networkFeeRaw}
+            unit={tokenInfo?.tokenName}
+            loading={isPending}
+          />
+          <Amount
+            title="Bridge Fee"
+            value={bridgeFeeRaw}
+            unit={tokenInfo?.tokenName}
+            loading={isPending}
+          />
+          <Amount
+            title="Min Transfer"
+            value={minTransferRaw}
+            unit={tokenInfo?.tokenName}
+            loading={isPending}
+          />
+          <Divider sx={{ borderStyle: 'dashed' }} />
+          <Amount
+            title="You Will Receive"
+            value={receivingAmountRaw}
+            unit={targetTokenInfo?.name}
+            loading={isPending}
+          />
+          {!!error && (
+            <Alert
+              severity="error"
+              sx={{
+                maxWidth: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              <Tooltip title={(error as any)?.message}>
+                <Typography
+                  sx={{
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {(error as any)?.message}
+                </Typography>
+              </Tooltip>
+            </Alert>
+          )}
+        </Card>
+      </div>
+
       <ChooseWalletModal
         open={chooseWalletsModalOpen}
         chainName={selectedSource?.name}
