@@ -1,4 +1,4 @@
-import { ErgoNetwork } from '@rosen-network/ergo/dist/src/client';
+import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 
 import { unwrap } from '@/_safeServerAction';
 

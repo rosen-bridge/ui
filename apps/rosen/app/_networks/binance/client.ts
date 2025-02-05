@@ -1,4 +1,4 @@
-import { BinanceNetwork } from '@rosen-network/binance/dist/src/client';
+import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 
 import { unwrap } from '@/_safeServerAction';
 

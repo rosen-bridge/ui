@@ -1,4 +1,4 @@
-import { CardanoNetwork } from '@rosen-network/cardano/dist/src/client';
+import { CardanoNetwork } from '@rosen-network/cardano/dist/client';
 
 import { unwrap } from '@/_safeServerAction';
 

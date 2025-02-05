@@ -1,4 +1,4 @@
-import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/src/client';
+import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 
 import { unwrap } from '@/_safeServerAction';
 

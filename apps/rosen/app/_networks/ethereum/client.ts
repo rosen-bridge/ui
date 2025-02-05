@@ -1,4 +1,4 @@
-import { EthereumNetwork } from '@rosen-network/ethereum/dist/src/client';
+import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 
 import { unwrap } from '@/_safeServerAction';
 
