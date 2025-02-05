@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useIsMobile } from '../../hooks';
+import { InfoCircle } from '@rosen-bridge/icons';
+
 import { styled } from '../../styling';
-import { CircularProgress, Tooltip } from '../base';
+import { Box, CircularProgress, Divider, IconButton, Tooltip } from '../base';
 
 interface VersionProps {
   label: string;
@@ -10,34 +11,16 @@ interface VersionProps {
   sub?: Array<{ label: string; value?: string }>;
 }
 
-const Root = styled('div', {
-  name: 'RosenVersion',
-  slot: 'Root',
-  overridesResolver: (props, styles) => styles.root,
-})(({ theme }) => ({
+const TooltipContent = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'start',
-  fontWeight: '400px',
-  fontSize: '12px',
-  lineHeight: '14.06px',
-  color: theme.palette.text.secondary,
-  [theme.breakpoints.down('tablet')]: {
-    flexDirection: 'row',
-    justifyContent: 'start',
-    position: 'absolute',
-    left: '46px',
-    top: '32px',
-    lineHeight: '12px',
-    gap: theme.spacing(1),
-  },
+  background: theme.palette.background.default,
+  color: 'black',
+  gap: '4px',
 }));
 
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const $timeout = useRef<number>();
-
-  const isMobile = useIsMobile();
 
   const [timeout, setTimeout] = useState(false);
 
@@ -61,80 +44,49 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
     };
   }, [value, sub]);
 
-  const truncateString = (str: string | undefined, maxLength: number) => {
-    if (str && str.length > maxLength) {
-      return str?.substring(0, 5) + '...';
-    }
-    return str;
-  };
-
   return (
-    <Root>
+    <>
       {isLoading ? (
-        <CircularProgress sx={{ mt: 0.5 }} size={8} />
+        <CircularProgress sx={{ mt: 0.5 }} size={15} />
       ) : (
         <>
           <Tooltip
+            placement="right-start"
+            arrow
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                  color: 'black',
+                },
+              },
+              arrow: {
+                sx: {
+                  color: (theme) => theme.palette.background.paper,
+                },
+              },
+            }}
             title={
-              <div>
+              <TooltipContent>
+                <span>Versions</span>
+                <Divider variant="middle" />
                 <span>
                   {label} v{value || '?'}
                 </span>
-                {isMobile && sub ? (
-                  <span>
-                    (
-                    {sub
-                      ?.map((item) => `${item.label} v${item.value || '?'}`)
-                      .join(', ')}
-                    )
+                {sub?.map((item) => (
+                  <span key={item.label}>
+                    {item.label} v{item.value || '?'}
                   </span>
-                ) : (
-                  <>
-                    {sub?.map((item) => (
-                      <span key={item.label}>
-                        {item.label} v{item.value || '?'}
-                      </span>
-                    ))}
-                  </>
-                )}
-              </div>
+                ))}
+              </TooltipContent>
             }
           >
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: isMobile ? 'row' : 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-            >
-              <span>
-                {label} v{value || '?'}
-              </span>
-              {isMobile && sub ? (
-                <span>
-                  (
-                  {sub
-                    ?.map(
-                      (item) =>
-                        `${item.label} v${truncateString(item.value, 7) || '?'}`,
-                    )
-                    .join(', ')}
-                  )
-                </span>
-              ) : (
-                <>
-                  {sub?.map((item) => (
-                    <span key={item.label}>
-                      {item.label} v{truncateString(item.value, 7) || '?'}
-                    </span>
-                  ))}
-                </>
-              )}
-            </div>
+            <IconButton>
+              <InfoCircle fill="currentColor" />
+            </IconButton>
           </Tooltip>
         </>
       )}
-    </Root>
+    </>
   );
 };
