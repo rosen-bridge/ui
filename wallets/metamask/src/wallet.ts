@@ -1,7 +1,7 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { tokenABI } from '@rosen-network/evm/dist/src/constants';
+import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS, NETWORK_IDS_WITH_KEY } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
