@@ -58,6 +58,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
                 sx: {
                   backgroundColor: (theme) => theme.palette.background.paper,
                   color: 'black',
+                  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
                 },
               },
               arrow: {
