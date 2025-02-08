@@ -30,6 +30,6 @@ export class BinanceNetwork implements Network {
   }
 
   public toSafeAddress(address: string): string {
-    return address;
+    return address.toLowerCase();
   }
 }
