@@ -7,6 +7,7 @@ import {
   TableRow,
   Id,
   Connector,
+  Amount,
 } from '@rosen-bridge/ui-kit';
 import { NETWORK_LABELS_WITH_KEY } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
@@ -180,28 +181,40 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.amount.toString(),
-                row.lockToken.significantDecimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.amount.toString(),
+                  row.lockToken.significantDecimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.bridgeFee.toString(),
-                row.lockToken.significantDecimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.bridgeFee.toString(),
+                  row.lockToken.significantDecimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.networkFee.toString(),
-                row.lockToken.significantDecimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.networkFee.toString(),
+                  row.lockToken.significantDecimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -264,22 +277,34 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(
-          row.amount.toString(),
-          row.lockToken.significantDecimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.amount.toString(),
+            row.lockToken.significantDecimals,
+          )}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(
-          row.bridgeFee.toString(),
-          row.lockToken.significantDecimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.bridgeFee.toString(),
+            row.lockToken.significantDecimals,
+          )}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(
-          row.networkFee.toString(),
-          row.lockToken.significantDecimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.networkFee.toString(),
+            row.lockToken.significantDecimals,
+          )}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         {moment(row.timestamp * 1000).fromNow()}
