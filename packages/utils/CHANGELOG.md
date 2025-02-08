@@ -1,5 +1,17 @@
 # @rosen-ui/utils
 
+## 0.4.3
+
+### Patch Changes
+
+- Update the Lodash version to the latest release to enhance consistency
+
+## 0.4.2
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+
 ## 0.4.1
 
 ### Patch Changes

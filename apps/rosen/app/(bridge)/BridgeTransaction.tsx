@@ -10,6 +10,7 @@ import {
   Tooltip,
   Typography,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import {
   useNetwork,
@@ -42,14 +43,19 @@ export const BridgeTransaction = ({
   const tokenMap = useTokenMap();
 
   const {
-    status,
+    error,
     networkFeeRaw,
     bridgeFeeRaw,
     receivingAmountRaw,
     isLoading: isLoadingFees,
     minTransferRaw,
-  } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
-  const { setSelectedWallet, wallets, selectedWallet } = useWallet();
+  } = useTransactionFees();
+
+  const {
+    select: setSelectedWallet,
+    wallets,
+    selected: selectedWallet,
+  } = useWallet();
 
   const { selectedSource } = useNetwork();
 
@@ -79,7 +85,7 @@ export const BridgeTransaction = ({
           backgroundColor: (theme) =>
             theme.palette.mode === 'light'
               ? theme.palette.primary.light
-              : theme.palette.primary.dark,
+              : theme.palette.background.paper,
           padding: (theme) => theme.spacing(3),
         }}
       >
@@ -88,6 +94,12 @@ export const BridgeTransaction = ({
           label={selectedWallet?.label}
           onClick={() => setChooseWalletsModalOpen(true)}
         />
+        {sourceValue == NETWORKS.BITCOIN && (
+          <Alert severity="warning" icon={false}>
+            We only support native SegWit addresses (P2WPKH or P2WSH) for the
+            source address.
+          </Alert>
+        )}
         <div style={{ flexGrow: '1' }} />
         <Amount
           title="Transaction Fee"
@@ -114,7 +126,7 @@ export const BridgeTransaction = ({
           unit={targetTokenInfo?.name}
           loading={isPending}
         />
-        {status?.status === 'error' && (
+        {!!error && (
           <Alert
             severity="error"
             sx={{
@@ -123,15 +135,16 @@ export const BridgeTransaction = ({
               textOverflow: 'ellipsis',
             }}
           >
-            <Tooltip title={status?.message}>
+            <Tooltip title={(error as any)?.message}>
               <Typography
                 sx={{
                   maxWidth: '100%',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
-                {status?.message}
+                {(error as any)?.message}
               </Typography>
             </Tooltip>
           </Alert>

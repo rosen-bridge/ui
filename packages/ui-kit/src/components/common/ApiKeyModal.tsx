@@ -2,10 +2,8 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
-import { useApiKey } from '@rosen-bridge/shared-contexts';
-import { useModalManager } from '@rosen-ui/common-hooks';
 
-import { useSnackbar } from '../../hooks';
+import { useApiKey, useSnackbar } from '../../hooks';
 import {
   Button,
   Dialog,
@@ -32,7 +30,9 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
   const { apiKey, setApiKey } = useApiKey();
   const { openSnackbar } = useSnackbar();
 
-  const { isOpen, handleOpenModal, handleCloseModal } = useModalManager();
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOpenModal = () => setIsOpen(true);
+  const handleCloseModal = () => setIsOpen(false);
 
   const [showKey, setShowKey] = useState(false);
   const handleToggleShowKey = () => setShowKey((prevState) => !prevState);

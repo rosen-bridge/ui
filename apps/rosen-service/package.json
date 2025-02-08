@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-service",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "private": true,
   "license": "GPL-3.0",
   "author": "Rosen Team",
@@ -8,33 +8,32 @@
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
-    "start": "node --watch --experimental-specifier-resolution=node --loader ./ts-node-esm-loader.js ./src/main.ts",
-    "start:prod": "node --experimental-specifier-resolution=node ./dist/main.js",
+    "start": "tsx watch ./src/main.ts",
+    "start:prod": "tsx ./src/main.ts",
     "type-check": "tsc --noEmit",
-    "typeorm": "NODE_OPTIONS=--experimental-specifier-resolution=node typeorm-ts-node-esm",
+    "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
     "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type mainnet --out config --include-prereleases"
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config"
   },
   "dependencies": {
     "@rosen-bridge/abstract-extractor": "^0.3.1",
     "@rosen-bridge/bitcoin-observation-extractor": "^4.0.8",
     "@rosen-bridge/bitcoin-rpc-scanner": "^1.0.0",
-    "@rosen-bridge/evm-observation-extractor": "^3.1.0",
+    "@rosen-bridge/evm-observation-extractor": "^3.1.2",
     "@rosen-bridge/evm-rpc-scanner": "^2.0.0",
     "@rosen-bridge/extended-typeorm": "^0.0.3",
-    "@rosen-bridge/observation-extractor": "^5.0.8",
+    "@rosen-bridge/observation-extractor": "^5.0.10",
     "@rosen-bridge/scanner": "^5.0.0",
     "@rosen-bridge/watcher-data-extractor": "^9.0.0",
     "@rosen-bridge/winston-logger": "^0.2.1",
-    "@rosen-ui/asset-calculator": "^2.0.0",
+    "@rosen-ui/asset-calculator": "^2.1.0",
     "config": "^3.3.7"
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
-    "@types/node": "^18.11.18",
-    "ts-node": "^10.7.0",
-    "tsconfig-paths": "^4.1.2",
+    "@types/node": "^20.17.10",
+    "tsx": "^4.19.2",
     "typescript": "^5.0.0"
   }
 }

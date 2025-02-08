@@ -5,13 +5,13 @@ import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import { validateAddress } from '@/_actions';
-import { WalletContext } from '@/_contexts/walletContext';
 import { availableNetworks } from '@/_networks';
 import { unwrap } from '@/_safeServerAction';
-import { getMaxTransfer, getMinTransfer } from '@/_utils';
+import { getMinTransfer } from '@/_utils';
 
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
+import { WalletContext } from './useWallet';
 
 /**
  * handles the form field registrations and form state changes
@@ -67,28 +67,23 @@ export const useBridgeForm = () => {
           getNonDecimalString(value, decimals),
         ) as RosenAmountValue;
 
-        if (walletGlobalContext?.state.selectedWallet) {
+        if (walletGlobalContext?.selected) {
           // prevent user from entering more than token amount
 
           const selectedNetwork =
             availableNetworks[sourceField.value as Network];
 
-          const maxTransfer = await getMaxTransfer(
-            selectedNetwork,
-            {
-              balance:
-                await walletGlobalContext!.state.selectedWallet.getBalance(
-                  tokenField.value,
-                ),
-              isNative: tokenField.value.metaData.type === 'native',
-            },
-            async () => ({
-              fromAddress:
-                await walletGlobalContext!.state.selectedWallet!.getAddress(),
+          const maxTransfer = await selectedNetwork.getMaxTransfer({
+            balance: await walletGlobalContext!.selected.getBalance(
+              tokenField.value,
+            ),
+            isNative: tokenField.value.metaData.type === 'native',
+            eventData: {
+              fromAddress: await walletGlobalContext!.selected!.getAddress(),
               toAddress: addressField.value,
               toChain: targetField.value as Network,
-            }),
-          );
+            },
+          });
 
           const isAmountLarge = wrappedAmount > maxTransfer;
           if (isAmountLarge) return 'Balance insufficient';

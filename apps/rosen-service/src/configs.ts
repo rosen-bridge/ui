@@ -79,6 +79,22 @@ const getConfig = () => {
         rpcUrl: nodeConfig.get<string>('ethereum.rpcUrl'),
         rpcAuthToken: getOptionalString('ethereum.rpcAuthToken'),
       },
+      binance: {
+        addresses: {
+          lock: nodeConfig.get<string>('binance.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'binance.addresses.eventTrigger',
+          ),
+          permit: nodeConfig.get<string>('binance.addresses.permit'),
+          fraud: nodeConfig.get<string>('binance.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('binance.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('binance.tokens.rwt'),
+        },
+        rpcUrl: nodeConfig.get<string>('binance.rpcUrl'),
+        rpcAuthToken: getOptionalString('binance.rpcAuthToken'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -90,6 +106,7 @@ const getConfig = () => {
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
+          binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
         },
       },
     };

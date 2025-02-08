@@ -1,5 +1,22 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.0
+
+### Minor Changes
+
+- Add binance chain asset calculator
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Eliminate the dependency on the extensionless package and ensure that Viteset is compatible with the TSX package
+
+## 2.0.1
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+
 ## 2.0.0
 
 ### Major Changes

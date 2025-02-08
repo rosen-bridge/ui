@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/utils",
-  "version": "0.4.1",
+  "version": "0.4.3",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/src/index.js",
@@ -13,11 +13,12 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.9",
+    "@types/lodash-es": "^4.17.12",
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-bridge/json-bigint": "^0.1.0",
+    "@rosen-ui/constants": "^0.0.5",
+    "@rosen-ui/types": "^0.3.1",
     "buffer": "^6.0.3",
     "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"

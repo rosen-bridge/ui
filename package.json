@@ -10,13 +10,13 @@
   "scripts": {
     "build:mono-packages": "./build.sh",
     "prepare": "husky install",
-    "test": "NODE_OPTIONS=--loader=extensionless vitest",
-    "test:related": "NODE_OPTIONS=--loader=extensionless vitest related --run",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "test:related": "NODE_OPTIONS='--import tsx' vitest related --run",
     "coverage": "npm run test -- --coverage",
     "version": "npx changeset version && npm i && npx changeset --empty",
     "version:rosen": "npx changeset version --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/guard-app && npm i && npx changeset --empty",
-    "version:watcher": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/rosen-app --ignore @rosen-bridge/guard-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/flint-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/nami-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/xdefi-wallet --ignore @rosen-ui/vespr-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty",
-    "version:guard": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/rosen-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/flint-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/nami-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/xdefi-wallet --ignore @rosen-ui/vespr-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty"
+    "version:watcher": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/rosen-app --ignore @rosen-bridge/guard-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nami-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty",
+    "version:guard": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/rosen-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nami-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty"
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1"
@@ -26,7 +26,7 @@
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@typescript-eslint/eslint-plugin": "^8.15.0",
     "@typescript-eslint/parser": "^8.15.0",
-    "@vitest/coverage-istanbul": "^1.3.1",
+    "@vitest/coverage-istanbul": "^2.1.8",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-react-hooks": "^5.0.0",
@@ -35,6 +35,7 @@
     "husky": "^8.0.0",
     "lint-staged": "^13.2.2",
     "prettier": "^3.3.3",
-    "vitest": "^1.2.2"
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8"
   }
 }

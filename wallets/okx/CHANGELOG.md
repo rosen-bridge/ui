@@ -1,0 +1,36 @@
+# @rosen-ui/okx-wallet
+
+## 1.1.0
+
+### Minor Changes
+
+- Revise the connect method to align with the Wallet interface, and implement a new method called icConnected to determine whether the application has access to the wallet extension
+
+### Patch Changes
+
+- Convert unknown errors into identifiable ones to ensure consistent error messaging, making it easier to manage errors at higher levels
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.1.0
+  - @rosen-network/bitcoin@2.0.1
+
+## 1.0.0
+
+### Major Changes
+
+- Encapsulate wallet functionalities into a single class following a unified interface to simplify maintenance and enable quick addition of new wallet types by implementing the interface.
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-bridge/icons@1.0.0
+  - @rosen-network/bitcoin@2.0.0
+
+## 0.1.0
+
+### Minor Changes
+
+- Implement the OKX wallet package
+
+### Patch Changes
+
+- Updated the @rosen-bridge/icons@0.7.0 dependency

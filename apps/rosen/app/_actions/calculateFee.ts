@@ -3,12 +3,14 @@
 import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { getHeight as ethereumGetHeight } from '@rosen-network/ethereum';
+import { EvmChains, getHeight } from '@rosen-network/evm';
 import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Joi from 'joi';
 
 import { wrap } from '@/_safeServerAction';
+
+import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 
 const cardanoKoiosClient = cardanoKoiosClientFactory(
   process.env.CARDANO_KOIOS_API!,
@@ -18,7 +20,8 @@ const ergoExplorerClient = ergoExplorerClientFactory(
 );
 
 const GetHeight = {
-  [NETWORKS.ETHEREUM]: ethereumGetHeight,
+  [NETWORKS.BINANCE]: () => getHeight(EvmChains.BINANCE),
+  [NETWORKS.ETHEREUM]: () => getHeight(EvmChains.ETHEREUM),
   [NETWORKS.CARDANO]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
   [NETWORKS.ERGO]: async () =>
@@ -56,7 +59,7 @@ const calculateFeeCore = async (
 
   const minFeeBox = new MinimumFeeBox(
     tokenId,
-    process.env.NEXT_PUBLIC_FEE_CONFIG_TOKEN_ID!,
+    FEE_CONFIG_TOKEN_ID,
     ErgoNetworkType.explorer,
     process.env.ERGO_EXPLORER_API!,
   );

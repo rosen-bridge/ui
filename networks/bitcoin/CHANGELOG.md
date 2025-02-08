@@ -1,5 +1,23 @@
 # @rosen-network/bitcoin
 
+## 2.0.1
+
+### Patch Changes
+
+- Eliminate the dependency on the extensionless package and ensure that Viteset is compatible with the TSX package
+
+## 2.0.0
+
+### Major Changes
+
+- Eliminate the reliance on the @rosen-ui/wallet-api package and remove any unrelated type definitions
+
+## 1.1.0
+
+### Minor Changes
+
+- Enhance the `submitTransaction` function to support both `Base64` and `hex` encoding
+
 ## 1.0.1
 
 ### Patch Changes

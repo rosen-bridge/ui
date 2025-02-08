@@ -1,5 +1,47 @@
 # @rosen-bridge/watcher-app
 
+## 3.1.3
+
+### Patch Changes
+
+- Enhance the React components by using the `PropsWithChildren` type instead of creating a custom type definition for scenarios that only require children props
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
+## 3.1.2
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Update the usage of the ID component
+- Updated dependency @rosen-bridge/ui-kit@1.7.1
+
+## 3.1.1
+
+### Patch Changes
+
+- Resolve the dynamic title glitch that occurs when navigating between pages
+- Integrated the Version component in the SideBar to display version information optimized for both desktop and mobile views.
+- Updated dependencies
+  - @rosen-bridge/icons@1.0.0
+  - @rosen-bridge/ui-kit@1.7.0
+
+## 3.1.0
+
+### Minor Changes
+
+- Update the root layout to incorporate the latest changes from the UI kit, enhancing its responsiveness
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated dependencies
+  - @rosen-ui/common-hooks@0.1.1
+  - @rosen-bridge/ui-kit@1.6.0
+  - @rosen-ui/utils@0.4.2
+
 ## 3.0.0
 
 ### Major Changes

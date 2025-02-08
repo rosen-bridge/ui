@@ -1,4 +1,4 @@
-image: node:20.11.0
+image: node:20.18.1
 
 stages:
   - installation
@@ -17,6 +17,8 @@ installation:
       - node_modules
       - apps/*/node_modules
       - packages/*/node_modules
+      - networks/*/node_modules
+      - wallets/*/node_modules
   script:
     - npm ci
 

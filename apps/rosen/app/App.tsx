@@ -4,68 +4,23 @@
  * FIXME: import NoSsr from ui-kit
  * local:ergo/rosen-bridge/ui#193
  */
-import React from 'react';
+import { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
-import {
-  styled,
-  AppSnackbar,
-  SnackbarProvider,
-  CssBaseline,
-  ThemeProvider,
-} from '@rosen-bridge/ui-kit';
+import { App as AppBase } from '@rosen-bridge/ui-kit';
 
 import { theme } from '@/_theme/theme';
 
-import { WalletContextProvider } from './_contexts/walletContext';
+import { TokenMapProvider } from './_hooks';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
-const Root = styled('div')(({ theme }) => ({
-  width: '100vw',
-  height: '100vh',
-  display: 'flex',
-  flexDirection: 'row',
-  background: theme.palette.background.body(true),
-}));
-
-const Main = styled('main')(({ theme }) => ({
-  position: 'relative',
-  flexGrow: 1,
-  overflowY: 'auto',
-  minHeight: '100%',
-  backgroundColor: theme.palette.background.default,
-  borderTopLeftRadius: theme.shape.borderRadius * 2,
-  borderBottomLeftRadius: theme.shape.borderRadius * 2,
-  padding: theme.spacing(4),
-}));
-
-interface AppProps {
-  children?: React.ReactNode;
-}
-
-export const App = ({ children }: AppProps) => {
+export const App = ({ children }: PropsWithChildren) => {
   return (
     <NoSsr>
-      <ThemeProvider theme={theme}>
-        <>
-          <CssBaseline />
-          <SnackbarProvider>
-            <WalletContextProvider>
-              <Root>
-                <SideBar />
-                <Main>
-                  <div style={{ position: 'relative', zIndex: '1' }}>
-                    <Toolbar />
-                  </div>
-                  {children}
-                </Main>
-                <AppSnackbar />
-              </Root>
-            </WalletContextProvider>
-          </SnackbarProvider>
-        </>
-      </ThemeProvider>
+      <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
+        <TokenMapProvider>{children}</TokenMapProvider>
+      </AppBase>
     </NoSsr>
   );
 };

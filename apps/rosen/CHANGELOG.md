@@ -1,5 +1,120 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.2
+
+### Patch Changes
+
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
+## 4.0.1
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Enhance the React components by using the `PropsWithChildren` type instead of creating a custom type definition for scenarios that only require children props
+- Enhance the useNetwork hook to boost performance
+- Disable the forced uppercase format for token name in the balance field
+- Improve the wallet connection logic and implement more effective error handling within the transaction process
+- Use connector component to eliminating redundant code for a cleaner code
+- Update the usage of the ID component
+- Eliminate the dependency on the extensionless package and ensure that Viteset is compatible with the TSX package
+- Optimize the utilization of variable environments through automated processes
+- Enhance the useBalance hook to boost performance
+- Updated dependencies
+  - @rosen-ui/asset-calculator@2.1.0
+  - @rosen-ui/metamask-wallet@1.1.0
+  - @rosen-ui/nautilus-wallet@2.1.0
+  - @rosen-ui/eternl-wallet@2.1.0
+  - @rosen-ui/lace-wallet@2.1.0
+  - @rosen-ui/nami-wallet@2.1.0
+  - @rosen-ui/okx-wallet@1.1.0
+  - @rosen-bridge/ui-kit@1.7.1
+  - @rosen-ui/wallet-api@1.1.0
+  - @rosen-network/bitcoin@2.0.1
+
+## 4.0.0
+
+### Major Changes
+
+- Discontinue support for the Flint and Vespr wallets
+
+### Minor Changes
+
+- Enhance error handling on the bridge form and automatically close the transaction modal upon successful processing
+- Revise the wallet-related logic to align with the latest updates in the wallet packages
+- Improve the transaction dialog confirmation to enhance its responsiveness and user experience
+
+### Patch Changes
+
+- Review theme colors in Figma and ensure consistency by identifying and fixing any mismatches
+- Refactor the token map hook to enhance efficiency
+- Add a paste button to the address field in the bridge form
+- Address the issue where selecting a token with assets and then switching to a token without any causes the 'use all' button to display an incorrect amount instead of zero
+- Integrated the Version component in the SideBar to display version information optimized for both desktop and mobile views.
+- Updated dependencies
+  - @rosen-bridge/icons@1.0.0
+  - @rosen-bridge/ui-kit@1.7.0
+  - @rosen-network/ethereum@1.0.0
+  - @rosen-network/bitcoin@2.0.0
+  - @rosen-network/cardano@2.0.0
+  - @rosen-network/ergo@2.0.0
+  - @rosen-ui/metamask-wallet@1.0.0
+  - @rosen-ui/nautilus-wallet@2.0.0
+  - @rosen-ui/okx-wallet@1.0.0
+  - @rosen-ui/eternl-wallet@2.0.0
+  - @rosen-ui/lace-wallet@2.0.0
+  - @rosen-ui/nami-wallet@2.0.0
+
+## 3.0.0
+
+### Major Changes
+
+- Discontinue support for the Xdefi wallet extension
+
+### Minor Changes
+
+- Update the root layout to incorporate the latest changes from the UI kit, enhancing its responsiveness
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated dependencies
+  - @rosen-ui/asset-calculator@2.0.1
+  - @rosen-ui/metamask-wallet@0.1.4
+  - @rosen-ui/nautilus-wallet@1.0.3
+  - @rosen-ui/common-hooks@0.1.1
+  - @rosen-ui/eternl-wallet@1.0.3
+  - @rosen-ui/flint-wallet@1.0.3
+  - @rosen-ui/vespr-wallet@0.0.11
+  - @rosen-ui/lace-wallet@1.0.3
+  - @rosen-ui/nami-wallet@1.0.3
+  - @rosen-bridge/ui-kit@1.6.0
+  - @rosen-ui/utils@0.4.2
+
+## 2.6.0
+
+### Minor Changes
+
+- Include a warning regarding the Bitcoin value in the source field of the Bridge form
+
+### Patch Changes
+
+- Revise the calculation logic for determining the cold amount on the assets page
+- Identify and rectify the issues that caused console warnings and errors
+- Updated dependencies
+  - @rosen-ui/nautilus-wallet@1.0.2
+  - @rosen-ui/eternl-wallet@1.0.2
+  - @rosen-ui/flint-wallet@1.0.2
+  - @rosen-ui/vespr-wallet@0.0.10
+  - @rosen-ui/xdefi-wallet@1.0.3
+  - @rosen-ui/lace-wallet@1.0.2
+  - @rosen-ui/nami-wallet@1.0.2
+  - @rosen-network/cardano@1.0.1
+  - @rosen-network/bitcoin@1.1.0
+
 ## 2.5.0
 
 ### Minor Changes

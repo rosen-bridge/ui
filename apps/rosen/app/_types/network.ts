@@ -1,5 +1,4 @@
 import { Network, RosenAmountValue } from '@rosen-ui/types';
-import { Wallet } from '@rosen-ui/wallet-api';
 
 interface GetMaxTransferParams {
   balance: RosenAmountValue;
@@ -16,7 +15,6 @@ export interface BaseNetwork<
   name: NetworkName;
   logo: string;
   label: string;
-  wallets: Wallet[];
   nextHeightInterval: number;
   lockAddress: string;
   // THIS FUNCTION WORKS WITH WRAPPED-VALUE
@@ -34,6 +32,7 @@ interface BitcoinMaxTransferExtra {
   };
 }
 
+export interface BinanceNetwork extends BaseNetwork<'binance'> {}
 export interface EthereumNetwork extends BaseNetwork<'ethereum'> {}
 export interface ErgoNetwork extends BaseNetwork<'ergo'> {}
 export interface CardanoNetwork extends BaseNetwork<'cardano'> {}

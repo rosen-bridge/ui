@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Autocomplete } from '@mui/material';
+import { Paste } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -14,15 +14,17 @@ import {
   CircularProgress,
   SvgIcon,
   Alert,
+  Autocomplete,
+  InputAdornment,
+  IconButton,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getDecimalString } from '@rosen-ui/utils';
 
 import {
+  useBalance,
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenBalance,
   useTokenMap,
   useTransactionFormData,
   useWallet,
@@ -74,12 +76,17 @@ export const BridgeForm = () => {
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
 
-  const { isLoading, amount, token } = useTokenBalance();
+  const { isLoading, raw: balanceRaw } = useBalance();
 
-  const { error, max, loading: isMaxLoading, load } = useMaxTransfer();
-  const tokenMap = useTokenMap();
+  const {
+    error,
+    amount: max,
+    isLoading: isMaxLoading,
+    raw,
+    load,
+  } = useMaxTransfer();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
@@ -149,22 +156,17 @@ export const BridgeForm = () => {
     [amountField],
   );
 
-  const handleSelectMax = useCallback(async () => {
-    const value = getDecimalString(
-      max.toString(),
-      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) || 0,
-    );
-
-    setValue('amount', value, {
+  const handleSelectMax = useCallback(() => {
+    setValue('amount', raw, {
       shouldDirty: true,
       shouldTouch: true,
     });
-  }, [max, tokenMap, tokenField.value, setValue]);
+  }, [raw, setValue]);
 
   return (
     <FormContainer>
-      <Grid container spacing={1}>
-        <Grid item mobile={6}>
+      <Grid container spacing={2}>
+        <Grid item mobile={6} tablet={12} laptop={6}>
           <TextField
             id="source"
             select
@@ -190,7 +192,7 @@ export const BridgeForm = () => {
             ))}
           </TextField>
         </Grid>
-        <Grid item mobile={6}>
+        <Grid item mobile={6} tablet={12} laptop={6}>
           <TextField
             id="target"
             select
@@ -223,8 +225,36 @@ export const BridgeForm = () => {
         </Grid>
       </Grid>
       <TextField
-        label="Address"
-        InputProps={{ disableUnderline: true } as any}
+        label="Target Address"
+        InputProps={
+          {
+            disableUnderline: true,
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'secondary',
+                  }}
+                  onClick={async () => {
+                    try {
+                      const clipboardText =
+                        await navigator.clipboard.readText();
+                      setValue('walletAddress', clipboardText, {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                      });
+                    } catch (err) {
+                      console.error('Failed to read clipboard: ', err);
+                    }
+                  }}
+                >
+                  <Paste />
+                </IconButton>
+              </InputAdornment>
+            ),
+          } as any
+        }
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={
@@ -275,12 +305,9 @@ export const BridgeForm = () => {
           disableUnderline: true,
           endAdornment: tokenField.value && selectedWallet && (
             <UseAllAmount
-              error={error}
+              error={!!error}
               loading={isLoading || isMaxLoading}
-              value={getDecimalString(
-                amount.toString(),
-                tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0,
-              )}
+              value={balanceRaw}
               unit={
                 (
                   tokenValue &&

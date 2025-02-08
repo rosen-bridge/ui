@@ -1,5 +1,60 @@
 # @rosen-bridge/ui-kit
 
+## 1.7.2
+
+### Patch Changes
+
+- Update the rows per page options to remove the number 5 from the display
+- Update the theme key in local storage to resolve the initialization loading bug
+- Updated dependency @rosen-ui/utils@0.4.3
+
+## 1.7.1
+
+### Patch Changes
+
+- Used useState directly instead of useModelManger hook
+- Develop a Reusable Connector Component to Display Two Texts with an Arrow (→) in Between
+- Enhance the ID component by adding a tooltip, a link with an icon, and improve its overall functionality
+- Remove the useLocalStorage and interact directly with window.localStorage instead
+
+## 1.7.0
+
+### Minor Changes
+
+- Revise the default layout to incorporate toolbar buttons into the sidebar for mobile devices
+- Create an improved dialogue that aligns with our Figma design and ensures responsiveness
+
+### Patch Changes
+
+- Review theme colors in Figma and ensure consistency by identifying and fixing any mismatches
+- Implement Version component to display versions
+- Updated dependencies
+- Updated the @rosen-bridge/icons@1.0.0 dependency
+
+## 1.6.0
+
+### Minor Changes
+
+- Implement an App component that integrates common Context providers and supports a default layout
+- Enhance the AppBar and AppLogo components to ensure it is fully responsive
+- Introduce a new component called NavigationBar to manage its styles wherever it is utilized
+- Revise the NavigationButton components to reflect the latest design changes
+
+### Patch Changes
+
+- Fix missing dependencies and remove unused packages
+- Updated dependencies
+  - @rosen-ui/common-hooks@0.1.1
+  - @rosen-ui/utils@0.4.2
+
+## 1.5.4
+
+### Patch Changes
+
+- Update the source code to address the issues identified by the new ESLint rules configuration
+- Identify and rectify the issues that caused console warnings and errors
+- Updated the @rosen-bridge/icons@0.7.0 dependency
+
 ## 1.5.3
 
 ### Patch Changes

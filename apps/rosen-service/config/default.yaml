@@ -46,6 +46,16 @@ ethereum:
     rwt:
   initialHeight:
   rpcUrl: https://eth-mainnet.public.blastapi.io
+binance:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  rpcUrl: https://bsc-mainnet.public.blastapi.io/
   # rpcAuthToken:
 postgres:
   url: # postgresql://username:password@host:port/databasename
@@ -57,3 +67,4 @@ calculator:
     cardano: []
     bitcoin: []
     ethereum: []
+    binance: []
