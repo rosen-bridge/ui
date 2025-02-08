@@ -13,11 +13,9 @@ import {
   MenuItem,
   CircularProgress,
   SvgIcon,
-  Alert,
   Autocomplete,
   InputAdornment,
   IconButton,
-  useResponsiveValue,
   Box,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -27,11 +25,9 @@ import {
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenMap,
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
-import { theme } from '@/_theme/theme';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
@@ -270,10 +266,7 @@ export const BridgeForm = () => {
                 })}
               >
                 <Box sx={{ paddingTop: '5px' }}>
-                  <InfoCircle
-                    // fill={(theme: any) => theme.palette.warning.main}
-                    fill="#CD7329"
-                  />
+                  <InfoCircle fill="#CD7329" />
                 </Box>
 
                 <p>
@@ -293,11 +286,6 @@ export const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {/* {targetField.value == NETWORKS.BITCOIN && (
-        <Alert severity="warning">
-          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
-        </Alert>
-      )} */}
       <Autocomplete
         aria-label="token input"
         disabled={!availableTokens.length}
