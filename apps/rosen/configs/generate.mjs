@@ -58,7 +58,7 @@ if (!!process.env.DISCORD_NOTIFICATION_WEBHOOK_URL) {
       {
         name: '🌍 Branch URL',
         value: process.env.VERCEL_BRANCH_URL
-          ? `[${process.env.VERCEL_BRANCH_URL}](${process.env.VERCEL_BRANCH_URL})`
+          ? `[${process.env.VERCEL_BRANCH_URL}](https://${process.env.VERCEL_BRANCH_URL})`
           : 'N/A',
         inline: false,
       },
