@@ -1,4 +1,5 @@
 import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { WebhookClient } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
 import * as url from 'url';
@@ -43,3 +44,18 @@ const content = [
 fs.writeFileSync(path.join(__dirname, './index.ts'), content.join('\n'));
 
 contracts.forEach((contract) => fs.rmSync(path.join(__dirname, contract.file)));
+
+if (!!process.env.DISCORD_NOTIFICATION_WEBHOOK_URL) {
+  const webhookClient = new WebhookClient({
+    url: process.env.DISCORD_NOTIFICATION_WEBHOOK_URL,
+  });
+
+  webhookClient.send({
+    content: [
+      `PULL_REQUEST_ID: ${process.env.VERCEL_GIT_PULL_REQUEST_ID}`,
+      `COMMIT_MESSAGE: ${process.env.VERCEL_GIT_COMMIT_MESSAGE}`,
+      `COMMIT_REF: ${process.env.VERCEL_GIT_COMMIT_REF}`,
+      `REPO_SLUG: ${process.env.VERCEL_GIT_REPO_SLUG}`,
+    ].join('\n'),
+  });
+}
