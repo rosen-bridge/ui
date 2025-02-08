@@ -3,7 +3,14 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { InfoCircle } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { Box, CircularProgress, Divider, IconButton, Tooltip } from '../base';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '../base';
 
 interface VersionProps {
   label: string;
@@ -12,10 +19,9 @@ interface VersionProps {
 }
 
 const TooltipContent = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
+  display: 'block',
   background: theme.palette.background.default,
-  color: 'black',
+  padding: '4px',
   gap: '4px',
 }));
 
@@ -69,15 +75,31 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
             }}
             title={
               <TooltipContent>
-                <span>Versions</span>
-                <Divider variant="middle" />
-                <span>
-                  {label} v{value || '?'}
-                </span>
+                <Typography variant="subtitle2" color="text.secondary">
+                  VERSIONS
+                </Typography>
+                <Divider sx={{ marginBottom: '4px' }} />
+                <div>
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    component="span"
+                  >
+                    {label}
+                  </Typography>
+                  <span> v{value || '?'}</span>
+                </div>
                 {sub?.map((item) => (
-                  <span key={item.label}>
-                    {item.label} v{item.value || '?'}
-                  </span>
+                  <div key={item.label}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      component="span"
+                    >
+                      {item.label}
+                    </Typography>
+                    <span> v{item.value || '?'}</span>
+                  </div>
                 ))}
               </TooltipContent>
             }
