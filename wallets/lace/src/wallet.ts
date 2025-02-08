@@ -4,7 +4,6 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
-  ManualWalletDisconnectRequiredError,
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
@@ -39,12 +38,7 @@ export class LaceWallet implements Wallet {
     }
   }
 
-  async disconnect(): Promise<void> {
-    const massage =
-      'Click the user icon > Go to Settings > Select Remove Wallet > Confirm by clicking Remove Wallet in the prompt.';
-
-    throw new ManualWalletDisconnectRequiredError(this.name, massage);
-  }
+  async disconnect(): Promise<void> {}
 
   async getAddress(): Promise<string> {
     try {

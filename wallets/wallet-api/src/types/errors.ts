@@ -85,19 +85,6 @@ export class DisconnectionFailedError extends Error {
   }
 }
 
-export class ManualWalletDisconnectRequiredError extends Error {
-  constructor(
-    public wallet: string,
-    public message: string,
-    public cause?: unknown,
-  ) {
-    super(
-      `We cannot disconnect the [${wallet}] wallet programmatically. Please disconnect it manually by following these steps: ${message}`,
-      { cause },
-    );
-  }
-}
-
 export class UserDeniedTransactionSignatureError extends Error {
   constructor(
     public wallet: string,

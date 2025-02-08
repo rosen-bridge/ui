@@ -7,4 +7,4 @@
 '@rosen-ui/okx-wallet': minor
 ---
 
-Implement disconnect method and proper error handling to manage rejection cases during the disconnection process.
+Implement a new method to handle wallet disconnections.
