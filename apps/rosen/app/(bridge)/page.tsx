@@ -49,7 +49,7 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'alignItems': 'center',
     'justifyContent': 'flex-start',
     'overflowY': 'auto',
-    'maxHeight': '70vh',
+    'maxHeight': '80vh',
     'rowGap': theme.spacing(4),
     '& > button': {
       width: '50%',
@@ -58,8 +58,6 @@ const BridgeContainer = styled('div')(({ theme }) => ({
   },
   [theme.breakpoints.up('laptop')]: {
     gridTemplateColumns: '8fr 4fr',
-    alignItems: 'unset',
-    justifyContent: 'unset',
   },
 }));
 
