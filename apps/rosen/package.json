@@ -49,6 +49,7 @@
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/kv": "^2.0.0",
     "buffer": "^6.0.3",
+    "discord.js": "^14.17.3",
     "ergo-lib-wasm-nodejs": "^0.24.1",
     "joi": "^17.11.0",
     "lodash-es": "^4.17.21",
