@@ -1,5 +1,21 @@
 # @rosen-ui/okx-wallet
 
+## 1.2.0
+
+### Minor Changes
+
+- Add a supportedChains feature to display which chains/networks are supported by the wallet
+
+### Patch Changes
+
+- Resolve the issue concerning the detection of the wallet's connection status
+- Improve OKXwallet code base by define an interface
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.2.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-network/bitcoin@2.1.0
+  - @rosen-ui/types@0.3.3
+
 ## 1.1.0
 
 ### Minor Changes

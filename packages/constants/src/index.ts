@@ -41,3 +41,23 @@ export const NETWORK_LABELS: { [key in keyof typeof NETWORKS]: string } = {
   ETHEREUM: 'Ethereum',
   BINANCE: 'Binance',
 };
+
+export const NETWORK_LABELS_WITH_KEY: {
+  [key in (typeof NETWORKS)[keyof typeof NETWORKS]]: string;
+} = {
+  [NETWORKS.ERGO]: NETWORK_LABELS.ERGO,
+  [NETWORKS.CARDANO]: NETWORK_LABELS.CARDANO,
+  [NETWORKS.BITCOIN]: NETWORK_LABELS.BITCOIN,
+  [NETWORKS.ETHEREUM]: NETWORK_LABELS.ETHEREUM,
+  [NETWORKS.BINANCE]: NETWORK_LABELS.BINANCE,
+};
+
+export const NETWORK_IDS_WITH_KEY: {
+  [key in (typeof NETWORKS)[keyof typeof NETWORKS]]: string;
+} = {
+  [NETWORKS.ERGO]: '',
+  [NETWORKS.CARDANO]: '',
+  [NETWORKS.BITCOIN]: '',
+  [NETWORKS.ETHEREUM]: '0x1',
+  [NETWORKS.BINANCE]: '0x38',
+};

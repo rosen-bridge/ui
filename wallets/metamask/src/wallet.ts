@@ -1,8 +1,8 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { tokenABI } from '@rosen-network/evm/dist/src/constants';
-import { NETWORKS } from '@rosen-ui/constants';
+import { tokenABI } from '@rosen-network/evm/dist/constants';
+import { NETWORKS, NETWORK_IDS_WITH_KEY } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
   ChainNotAddedError,
@@ -30,6 +30,8 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
+  supportedChains: Network[] = [NETWORKS.BINANCE, NETWORKS.ETHEREUM];
+
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',
@@ -37,17 +39,8 @@ export class MetaMaskWallet implements Wallet {
     enableAnalytics: false,
   });
 
-  /**
-   * TODO: centralized definition
-   * local:ergo/rosen-bridge/ui#510
-   */
-  private chains = {
-    [NETWORKS.BINANCE]: '0x38',
-    [NETWORKS.ETHEREUM]: '0x1',
-  } as { [key in Network]?: string };
-
   private get currentChain() {
-    const chain = Object.entries(this.chains)
+    const chain = Object.entries(NETWORK_IDS_WITH_KEY)
       .find(([, chainId]) => chainId == this.provider.chainId)
       ?.at(0) as Network | undefined;
 
@@ -139,9 +132,11 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async switchChain(chain: Network, silent?: boolean): Promise<void> {
-    const chainId = this.chains[chain];
+    if (!this.supportedChains.includes(chain)) {
+      throw new UnsupportedChainError(this.name, chain);
+    }
 
-    if (!chainId) throw new UnsupportedChainError(this.name, chain);
+    const chainId = NETWORK_IDS_WITH_KEY[chain];
 
     if (silent) {
       const has = (await this.permissions())

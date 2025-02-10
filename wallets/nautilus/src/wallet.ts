@@ -24,6 +24,8 @@ export class NautilusWallet implements Wallet {
 
   link = 'https://github.com/nautls/nautilus-wallet';
 
+  supportedChains = [NETWORKS.ERGO];
+
   private get api() {
     return window.ergoConnector.nautilus;
   }

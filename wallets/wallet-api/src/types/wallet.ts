@@ -12,6 +12,7 @@ export interface Wallet {
   name: string;
   label: string;
   link: string;
+  supportedChains: Network[];
   connect(): Promise<void>;
   getAddress(): Promise<string>;
   getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
