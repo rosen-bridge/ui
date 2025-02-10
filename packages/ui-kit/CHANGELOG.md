@@ -1,5 +1,20 @@
 # @rosen-bridge/ui-kit
 
+## 1.8.0
+
+### Minor Changes
+
+- Refine the definition of the ApiKey's hook and provider to eliminate reliance on external package
+
+### Patch Changes
+
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Move common theme options into ui kit
+- Ensure words do not break inconsistently across different screen sizes in Health tab.
+- Updated dependencies
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
 ## 1.7.2
 
 ### Patch Changes
