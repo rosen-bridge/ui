@@ -2,10 +2,11 @@ import { OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
+  AddressRetrievalError,
   ConnectionRejectedError,
+  UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
-  dispatchError,
 } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
@@ -19,6 +20,8 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
+  supportedChains = [NETWORKS.BITCOIN];
+
   private get api() {
     return window.okxwallet.bitcoin;
   }
@@ -29,14 +32,18 @@ export class OKXWallet implements Wallet {
     try {
       await this.api.connect();
     } catch (error) {
-      dispatchError(error, {
-        4001: () => new ConnectionRejectedError(this.name, error),
-      });
+      throw new ConnectionRejectedError(this.name, error);
     }
   }
 
   async getAddress(): Promise<string> {
-    return this.api.getAccounts().then((accounts: string[]) => accounts[0]);
+    const accounts = await this.api.getAccounts();
+
+    const account = accounts?.at(0);
+
+    if (!account) throw new AddressRetrievalError(this.name);
+
+    return account;
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
@@ -62,7 +69,7 @@ export class OKXWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
-    return !!this.api.selectedAccount;
+    return !!window.okxwallet.selectedAddress;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
@@ -83,15 +90,21 @@ export class OKXWallet implements Wallet {
       params.token,
     );
 
-    const signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
-      autoFinalized: false,
-      toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-        (index) => ({
-          address: userAddress,
-          index: index,
-        }),
-      ),
-    });
+    let signedPsbtHex;
+
+    try {
+      signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
+        autoFinalized: false,
+        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
+          (index) => ({
+            address: userAddress,
+            index: index,
+          }),
+        ),
+      });
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
 
     const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
 

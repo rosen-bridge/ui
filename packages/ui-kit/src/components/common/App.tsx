@@ -42,7 +42,7 @@ const Main = styled('div', {
   },
 }));
 
-interface AppProps {
+export interface AppProps {
   children: ReactNode;
   sideBar: ReactNode;
   theme: ThemeProviderProps['theme'];

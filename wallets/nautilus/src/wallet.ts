@@ -3,7 +3,12 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import {
+  AddressRetrievalError,
   ConnectionRejectedError,
+  ErgoTxProxy,
+  SubmitTransactionError,
+  UserDeniedTransactionSignatureError,
+  UtxoFetchError,
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
@@ -18,6 +23,8 @@ export class NautilusWallet implements Wallet {
   label = 'Nautilus';
 
   link = 'https://github.com/nautls/nautilus-wallet';
+
+  supportedChains = [NETWORKS.ERGO];
 
   private get api() {
     return window.ergoConnector.nautilus;
@@ -34,11 +41,16 @@ export class NautilusWallet implements Wallet {
   }
 
   async getAddress(): Promise<string> {
-    return this.api.getContext().then((wallet) => wallet.get_change_address());
+    try {
+      const wallet = await this.api.getContext();
+      return await wallet.get_change_address();
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
-    const context = await this.api.getContext();
+    const wallet = await this.api.getContext();
 
     const tokenMap = await this.config.getTokenMap();
 
@@ -48,7 +60,7 @@ export class NautilusWallet implements Wallet {
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
-    const balance = await context.get_balance(
+    const balance = await wallet.get_balance(
       tokenId === 'erg' ? 'ERG' : tokenId,
     );
 
@@ -83,7 +95,7 @@ export class NautilusWallet implements Wallet {
 
     const walletUtxos = await wallet.get_utxos();
 
-    if (!walletUtxos) throw Error(`No box found`);
+    if (!walletUtxos) throw new UtxoFetchError(this.name);
 
     const unsignedTx = await this.config.generateUnsignedTx(
       changeAddress,
@@ -97,10 +109,17 @@ export class NautilusWallet implements Wallet {
       params.token,
     );
 
-    const signedTx = await wallet.sign_tx(unsignedTx);
+    let signedTx: ErgoTxProxy;
 
-    const result = await wallet.submit_tx(signedTx);
-
-    return result;
+    try {
+      signedTx = await wallet.sign_tx(unsignedTx);
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
+    try {
+      return await wallet.submit_tx(signedTx);
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   }
 }

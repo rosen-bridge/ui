@@ -1,5 +1,22 @@
 # @rosen-bridge/ui-kit
 
+## 1.7.2
+
+### Patch Changes
+
+- Update the rows per page options to remove the number 5 from the display
+- Update the theme key in local storage to resolve the initialization loading bug
+- Updated dependency @rosen-ui/utils@0.4.3
+
+## 1.7.1
+
+### Patch Changes
+
+- Used useState directly instead of useModelManger hook
+- Develop a Reusable Connector Component to Display Two Texts with an Arrow (→) in Between
+- Enhance the ID component by adding a tooltip, a link with an icon, and improve its overall functionality
+- Remove the useLocalStorage and interact directly with window.localStorage instead
+
 ## 1.7.0
 
 ### Minor Changes

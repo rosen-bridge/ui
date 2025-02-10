@@ -88,11 +88,44 @@ export class UserDeniedTransactionSignatureError extends Error {
   }
 }
 
+export class UtxoFetchError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`Failed to fetch wallet UTXOs from the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
+export class CurrentChainError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`Can not detect current chain from the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
+export class SubmitTransactionError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`Transaction failed for the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
 export function dispatchError(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
   cases: { [key: number]: () => Error },
-) {
+): never {
   if (error?.code in cases) {
     throw cases[error.code]();
   }

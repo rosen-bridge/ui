@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import { App } from './App';
 
@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   title: 'Rosen Guard',
 };
 
-const RootLayout = ({ children }: { children: React.ReactNode }) => {
+const RootLayout = ({ children }: PropsWithChildren) => {
   return (
     /**
      * TODO: get `lang` from url language path segment
