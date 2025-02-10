@@ -50,7 +50,6 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'justifyContent': 'flex-start',
     'overflowY': 'auto',
     'maxHeight': '80vh',
-    'rowGap': theme.spacing(4),
     '& > button': {
       width: '50%',
       justifySelf: 'center',
