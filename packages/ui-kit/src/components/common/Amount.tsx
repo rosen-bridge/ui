@@ -47,7 +47,7 @@ export const Amount = ({
         {!loading && (
           <>
             <Typography
-              color="text.primary"
+              color="text.secondary"
               variant={size == 'normal' ? 'body1' : 'h2'}
             >
               {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
