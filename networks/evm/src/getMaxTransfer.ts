@@ -20,9 +20,11 @@ export const getMaxTransferCreator =
     const estimatedFee = feeData.gasPrice * NATIVE_TOKEN_TRANSFER_GAS;
 
     const wrappedFee = tokenMap.wrapAmount(
-      NATIVE_TOKENS.BINANCE,
+      chain == EvmChains.BINANCE
+        ? NATIVE_TOKENS.BINANCE
+        : NATIVE_TOKENS.ETHEREUM,
       estimatedFee,
-      NETWORKS.BINANCE,
+      chain == EvmChains.BINANCE ? NETWORKS.BINANCE : NETWORKS.ETHEREUM,
     ).amount;
     const offset = isNative ? wrappedFee : 0n;
     const amount = balance - offset;
