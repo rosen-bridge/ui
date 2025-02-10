@@ -11,7 +11,7 @@ import {
 } from './utils';
 
 export const getMaxTransferCreator =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async ({
     balance,
     isNative,
@@ -25,6 +25,7 @@ export const getMaxTransferCreator =
       toAddress: string;
     };
   }) => {
+    const tokenMap = await getTokenMap();
     if (!eventData.toAddress) return 0n;
 
     const feeRatio = await getFeeRatio();

@@ -20,11 +20,11 @@ import {
 
 /**
  * generates an unsigned lock transaction on Ergo
- * @param tokenMap
+ * @param getTokenMap
  * @returns
  */
 export const generateUnsignedTx =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async (
     changeAddress: string,
     walletUtxos: ErgoBoxProxy[],
@@ -36,6 +36,7 @@ export const generateUnsignedTx =
     networkFeeString: string,
     token: RosenChainToken,
   ): Promise<UnsignedErgoTxProxy> => {
+    const tokenMap = await getTokenMap();
     const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
     const unwrappedAmount = tokenMap.unwrapAmount(
       tokenId,

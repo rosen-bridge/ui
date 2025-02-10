@@ -21,11 +21,11 @@ import {
 
 /**
  * generates a lock transaction on Cardano
- * @param tokenMap
+ * @param getTokenMap
  * @returns a function that provides the hex representation of the unsigned tx upon invocation
  */
 export const generateUnsignedTx =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async (
     walletUtxos: string[],
     lockAddress: string,
@@ -35,6 +35,8 @@ export const generateUnsignedTx =
     wrappedAmount: RosenAmountValue,
     auxiliaryDataHex: string,
   ): Promise<string> => {
+    const tokenMap = await getTokenMap();
+
     const unwrappedAmount = tokenMap.unwrapAmount(
       `${policyIdHex}.${assetNameHex}`,
       wrappedAmount,
