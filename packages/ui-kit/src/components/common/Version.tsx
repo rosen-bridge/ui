@@ -8,6 +8,7 @@ import {
   CircularProgress,
   Divider,
   IconButton,
+  SvgIcon,
   Tooltip,
   Typography,
 } from '../base';
@@ -20,7 +21,7 @@ interface VersionProps {
 
 const TooltipContent = styled(Box)(({ theme }) => ({
   display: 'block',
-  background: theme.palette.background.default,
+  background: theme.palette.primary.light,
   padding: '4px',
   gap: '4px',
 }));
@@ -62,14 +63,14 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
             componentsProps={{
               tooltip: {
                 sx: {
-                  backgroundColor: (theme) => theme.palette.background.paper,
-                  color: 'black',
+                  backgroundColor: (theme) => theme.palette.primary.light,
+                  color: (theme) => theme.palette.text.primary,
                   boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
                 },
               },
               arrow: {
                 sx: {
-                  color: (theme) => theme.palette.background.paper,
+                  color: (theme) => theme.palette.primary.light,
                 },
               },
             }}
@@ -104,8 +105,10 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
               </TooltipContent>
             }
           >
-            <IconButton>
-              <InfoCircle fill="currentColor" />
+            <IconButton sx={{ padding: '12px' }}>
+              <SvgIcon sx={{ width: 24 }}>
+                <InfoCircle fill="currentColor" />
+              </SvgIcon>
             </IconButton>
           </Tooltip>
         </>

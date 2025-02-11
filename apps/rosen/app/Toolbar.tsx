@@ -4,7 +4,11 @@ import React from 'react';
 import {
   ToolbarThemeTogglerAction,
   Toolbar as UiKitToolbar,
+  useIsMobile,
+  Version,
 } from '@rosen-bridge/ui-kit';
+
+import packageJson from '../package.json';
 
 const pageTitleMap: Record<string, string> = {
   '(bridge)': 'Rosen Bridge',
@@ -20,11 +24,17 @@ const pageTitleMap: Record<string, string> = {
  */
 export const Toolbar = () => {
   const page = useSelectedLayoutSegment();
+  const isMobile = useIsMobile();
 
   return (
     <UiKitToolbar
       title={page ? (pageTitleMap[page] ?? '') : ''}
-      toolbarActions={<ToolbarThemeTogglerAction />}
+      toolbarActions={
+        <>
+          {isMobile && <Version label="UI" value={packageJson.version} />}
+          <ToolbarThemeTogglerAction />
+        </>
+      }
     />
   );
 };

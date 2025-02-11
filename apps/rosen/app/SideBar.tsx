@@ -13,6 +13,7 @@ import {
   AppLogo,
   NavigationBar,
   NavigationButton,
+  useIsMobile,
   Version,
 } from '@rosen-bridge/ui-kit';
 
@@ -23,6 +24,8 @@ import packageJson from '../package.json';
  */
 export const SideBar = () => {
   const pathname = usePathname();
+
+  const isMobile = useIsMobile();
 
   const router = useRouter();
 
@@ -72,7 +75,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={<Version label="UI" value={packageJson.version} />}
+      versions={!isMobile && <Version label="UI" value={packageJson.version} />}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (

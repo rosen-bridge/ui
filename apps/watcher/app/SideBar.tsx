@@ -14,6 +14,7 @@ import {
   AppLogo,
   NavigationBar,
   NavigationButton,
+  useIsMobile,
   Version,
 } from '@rosen-bridge/ui-kit';
 
@@ -77,6 +78,8 @@ export const SideBar = () => {
     return result;
   }, [info, isLoading]);
 
+  const isMobile = useIsMobile();
+
   return (
     <AppBar
       logo={
@@ -90,7 +93,9 @@ export const SideBar = () => {
         </Link>
       }
       versions={
-        <Version label="Watcher" value={info?.versions.app} sub={sub} />
+        !isMobile && (
+          <Version label="Watcher" value={info?.versions.app} sub={sub} />
+        )
       }
       navigationBar={
         <NavigationBar>

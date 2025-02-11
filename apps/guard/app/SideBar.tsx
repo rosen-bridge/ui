@@ -15,6 +15,7 @@ import {
   AppLogo,
   NavigationBar,
   NavigationButton,
+  useIsMobile,
   Version,
 } from '@rosen-bridge/ui-kit';
 
@@ -62,6 +63,7 @@ export const SideBar = () => {
     },
   ];
 
+  const isMobile = useIsMobile();
   const { data: info, isLoading } = useInfo();
 
   const sub = useMemo(() => {
@@ -96,7 +98,11 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={<Version label="Guard" value={info?.versions.app} sub={sub} />}
+      versions={
+        !isMobile && (
+          <Version label="Guard" value={info?.versions.app} sub={sub} />
+        )
+      }
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (
