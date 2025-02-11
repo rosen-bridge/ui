@@ -40,6 +40,8 @@ export class EtrnlWallet implements Wallet {
     }
   }
 
+  async disconnect(): Promise<void> {}
+
   async getAddress(): Promise<string> {
     try {
       const wallet = await this.api.enable();

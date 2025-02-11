@@ -40,6 +40,8 @@ export class NamiWallet implements Wallet {
     }
   }
 
+  async disconnect(): Promise<void> {}
+
   async getAddress(): Promise<string> {
     try {
       const context = await this.api.enable();
