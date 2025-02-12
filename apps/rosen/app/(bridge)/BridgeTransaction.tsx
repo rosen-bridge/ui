@@ -82,10 +82,7 @@ export const BridgeTransaction = ({
           flexDirection: 'column',
           height: '100%',
           gap: (theme) => theme.spacing(2),
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.primary.light
-              : theme.palette.background.paper,
+          backgroundColor: 'primary.light',
           padding: (theme) => theme.spacing(3),
         }}
       >
