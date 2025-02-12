@@ -70,6 +70,14 @@ export const Amount = ({
                     &nbsp;{unit}
                   </Typography>
                 )}
+                {!!unit && (
+                  <Typography
+                    color="text.secondary"
+                    variant={size == 'normal' ? 'caption' : 'body2'}
+                  >
+                    &nbsp;{unit}
+                  </Typography>
+                )}
               </>
             )}
           </>
