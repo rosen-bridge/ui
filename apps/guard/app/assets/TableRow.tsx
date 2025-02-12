@@ -2,6 +2,7 @@ import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
+  Amount,
   Button,
   EnhancedTableCell,
   Id,
@@ -100,16 +101,24 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount (Hot)</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.amount.toString(), row.decimals)}
+              <Amount
+                value={getDecimalString(row.amount.toString(), row.decimals)}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount (Cold)</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.coldAmount?.toString() ?? '0',
-                row.decimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.coldAmount?.toString() ?? '0',
+                  row.decimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -156,12 +165,23 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       <EnhancedTableCell>
         <WithExternalLink url={hotUrl}>
-          {getDecimalString(row.amount.toString(), row.decimals)}
+          <Amount
+            value={getDecimalString(row.amount.toString(), row.decimals)}
+            size="normal"
+            loading={isLoading}
+          />
         </WithExternalLink>
       </EnhancedTableCell>
       <EnhancedTableCell>
         <WithExternalLink url={coldUrl}>
-          {getDecimalString(row.coldAmount?.toString() ?? '0', row.decimals)}
+          <Amount
+            value={getDecimalString(
+              row.coldAmount?.toString() ?? '0',
+              row.decimals,
+            )}
+            size="normal"
+            loading={isLoading}
+          />
         </WithExternalLink>
       </EnhancedTableCell>
     </TableRow>

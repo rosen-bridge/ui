@@ -7,6 +7,7 @@ import {
   TableRow,
   Id,
   Connector,
+  Amount,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORK_LABELS_WITH_KEY } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
@@ -160,22 +161,40 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.sourceChainToken.amount.toString(),
-                row.sourceChainToken.decimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.sourceChainToken.amount.toString(),
+                  row.sourceChainToken.decimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+              <Amount
+                value={getDecimalString(
+                  row.bridgeFee,
+                  row.sourceChainToken.decimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
+              <Amount
+                value={getDecimalString(
+                  row.networkFee,
+                  row.sourceChainToken.decimals,
+                )}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -232,16 +251,31 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell>{row.sourceChainToken.name}</EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(
-          row.sourceChainToken.amount.toString(),
-          row.sourceChainToken.decimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.sourceChainToken.amount.toString(),
+            row.sourceChainToken.decimals,
+          )}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+        <Amount
+          value={getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
+        <Amount
+          value={getDecimalString(
+            row.networkFee,
+            row.sourceChainToken.decimals,
+          )}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.status}</EnhancedTableCell>
     </TableRow>
