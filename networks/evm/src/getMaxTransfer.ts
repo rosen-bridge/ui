@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 import { NATIVE_TOKEN_TRANSFER_GAS } from './constants';
@@ -21,11 +21,9 @@ export const getMaxTransferCreator =
     const estimatedFee = feeData.gasPrice * NATIVE_TOKEN_TRANSFER_GAS;
 
     const wrappedFee = tokenMap.wrapAmount(
-      chain == EvmChains.BINANCE
-        ? NATIVE_TOKENS.BINANCE
-        : NATIVE_TOKENS.ETHEREUM,
+      NETWORKS[chain].nativeToken,
       estimatedFee,
-      chain == EvmChains.BINANCE ? NETWORKS.BINANCE : NETWORKS.ETHEREUM,
+      chain,
     ).amount;
     const offset = isNative ? wrappedFee : 0n;
     const amount = balance - offset;

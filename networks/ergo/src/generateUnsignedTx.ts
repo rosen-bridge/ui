@@ -37,11 +37,11 @@ export const generateUnsignedTx =
     token: RosenChainToken,
   ): Promise<UnsignedErgoTxProxy> => {
     const tokenMap = await getTokenMap();
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
+    const tokenId = token[tokenMap.getIdKey(NETWORKS.ergo.key)];
     const unwrappedAmount = tokenMap.unwrapAmount(
       tokenId,
       wrappedAmount,
-      NETWORKS.ERGO,
+      NETWORKS.ergo.key,
     ).amount;
 
     const height = await getHeight();

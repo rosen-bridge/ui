@@ -6,7 +6,7 @@ import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './server';
 
 export const ergoNetwork = new ErgoNetwork({
-  lockAddress: LOCK_ADDRESSES.ERGO,
+  lockAddress: LOCK_ADDRESSES.ergo,
   nextHeightInterval: 5,
   getMaxTransfer: unwrap(getMaxTransfer),
 });

@@ -10,19 +10,19 @@ import { ApiAddressAssetsResponse } from '@/_types/api';
 const Tokens = () => {
   const { data: ergoTokens, isLoading: isErogTokensLoading } =
     useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.ERGO }],
+      ['/assets', { chain: NETWORKS.ergo.key }],
       fetcher,
     );
 
   const { data: cardanoTokens, isLoading: isCardanoTokensLoading } =
     useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.CARDANO }],
+      ['/assets', { chain: NETWORKS.cardano.key }],
       fetcher,
     );
 
   const { data: ethereumTokens, isLoading: isEthereumTokensLoading } =
     useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.ETHEREUM }],
+      ['/assets', { chain: NETWORKS.ethereum.key }],
       fetcher,
     );
 

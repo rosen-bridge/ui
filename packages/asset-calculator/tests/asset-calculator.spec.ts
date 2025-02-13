@@ -45,12 +45,12 @@ describe('AssetCalculator', () => {
         totalSupply: () => Promise.resolve(1000n),
         totalBalance: () => Promise.resolve(900n),
       } as unknown as AbstractCalculator;
-      const map = new Map([[NETWORKS.CARDANO, calculator]]);
+      const map = new Map([[NETWORKS.cardano.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMap.tokens[0].ergo,
-        NETWORKS.CARDANO,
-        NETWORKS.ERGO,
+        NETWORKS.cardano.key,
+        NETWORKS.ergo.key,
       );
       expect(totalLocked).to.equal(100n);
     });
@@ -71,12 +71,12 @@ describe('AssetCalculator', () => {
         totalSupply: () => Promise.resolve(1900n),
         totalBalance: () => Promise.resolve(900n),
       } as unknown as AbstractCalculator;
-      const map = new Map([[NETWORKS.ERGO, calculator]]);
+      const map = new Map([[NETWORKS.ergo.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMap.tokens[2].cardano,
-        NETWORKS.ERGO,
-        NETWORKS.CARDANO,
+        NETWORKS.ergo.key,
+        NETWORKS.cardano.key,
       );
       expect(totalLocked).to.equal(1000n);
     });
@@ -122,11 +122,11 @@ describe('AssetCalculator', () => {
         getLockedAmountsPerAddress: () =>
           Promise.resolve([{ address: 'hotAddr', amount: 1000n }]),
       } as unknown as AbstractCalculator;
-      const map = new Map([[NETWORKS.ERGO, calculator]]);
+      const map = new Map([[NETWORKS.ergo.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateLocked'](
         tokenMap.tokens[0].ergo,
-        NETWORKS.ERGO,
+        NETWORKS.ergo.key,
       );
       expect(totalLocked[0].address).to.equal('hotAddr');
       expect(totalLocked[0].amount).to.equal(1000n);
@@ -212,9 +212,18 @@ describe('AssetCalculator', () => {
         ),
       ).toEqual(
         [
-          { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: NETWORKS.CARDANO },
-          { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: NETWORKS.CARDANO },
-          { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: NETWORKS.ERGO },
+          {
+            tokenId: tokenMap.tokens[0].ergo.tokenId,
+            chain: NETWORKS.cardano.key,
+          },
+          {
+            tokenId: tokenMap.tokens[1].ergo.tokenId,
+            chain: NETWORKS.cardano.key,
+          },
+          {
+            tokenId: tokenMap.tokens[2].cardano.tokenId,
+            chain: NETWORKS.ergo.key,
+          },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(
@@ -326,9 +335,18 @@ describe('AssetCalculator', () => {
         ),
       ).toEqual(
         [
-          { tokenId: tokenMap.tokens[0].ergo.tokenId, chain: NETWORKS.CARDANO },
-          { tokenId: tokenMap.tokens[1].ergo.tokenId, chain: NETWORKS.CARDANO },
-          { tokenId: tokenMap.tokens[2].cardano.tokenId, chain: NETWORKS.ERGO },
+          {
+            tokenId: tokenMap.tokens[0].ergo.tokenId,
+            chain: NETWORKS.cardano.key,
+          },
+          {
+            tokenId: tokenMap.tokens[1].ergo.tokenId,
+            chain: NETWORKS.cardano.key,
+          },
+          {
+            tokenId: tokenMap.tokens[2].cardano.tokenId,
+            chain: NETWORKS.ergo.key,
+          },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(
