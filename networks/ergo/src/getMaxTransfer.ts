@@ -5,7 +5,7 @@ import { RosenAmountValue } from '@rosen-ui/types';
 import { fee as ergoFee, minBoxValue as ergoMinBoxValue } from './constants';
 
 export const getMaxTransferCreator =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async ({
     balance,
     isNative,
@@ -13,6 +13,7 @@ export const getMaxTransferCreator =
     balance: RosenAmountValue;
     isNative: boolean;
   }) => {
+    const tokenMap = await getTokenMap();
     const feeAndMinBoxValueWrapped = tokenMap.wrapAmount(
       NATIVE_TOKENS.ERGO,
       ergoFee + ergoMinBoxValue,

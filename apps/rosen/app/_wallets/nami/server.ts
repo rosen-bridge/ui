@@ -19,7 +19,7 @@ export const generateLockAuxiliaryData = wrap(generateLockAuxiliaryDataCore, {
   traceKey: 'generateLockAuxiliaryData',
 });
 
-export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap()), {
+export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
   traceKey: 'generateUnsignedTx',
 });
 

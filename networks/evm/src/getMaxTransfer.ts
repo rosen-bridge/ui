@@ -7,7 +7,7 @@ import { EvmChains } from './types';
 import { getFeeData } from './utils';
 
 export const getMaxTransferCreator =
-  (tokenMap: TokenMap, chain: EvmChains) =>
+  (getTokenMap: () => Promise<TokenMap>, chain: EvmChains) =>
   async ({
     balance,
     isNative,
@@ -15,6 +15,7 @@ export const getMaxTransferCreator =
     balance: RosenAmountValue;
     isNative: boolean;
   }) => {
+    const tokenMap = await getTokenMap();
     const feeData = await getFeeData(chain);
     if (!feeData.gasPrice) throw Error(`gas price is null`);
     const estimatedFee = feeData.gasPrice * NATIVE_TOKEN_TRANSFER_GAS;
