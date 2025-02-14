@@ -1,7 +1,13 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Amount,
+  Button,
+  EnhancedTableCell,
+  Id,
+  TableRow,
+} from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useERsnToken } from '@/_hooks/useERsnToken';
@@ -108,11 +114,23 @@ export const MobileRow: FC<RowProps> = (props) => {
         <>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>RSN Income</EnhancedTableCell>
-            <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Amount
+                value={getRSNIncome()}
+                size="normal"
+                loading={isLoading}
+              />
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Token Income</EnhancedTableCell>
-            <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Amount
+                value={getTokenIncome()}
+                size="normal"
+                loading={isLoading}
+              />
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -183,8 +201,12 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
-      <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Amount value={getRSNIncome()} size="normal" loading={isLoading} />
+      </EnhancedTableCell>
+      <EnhancedTableCell>
+        <Amount value={getTokenIncome()} size="normal" loading={isLoading} />
+      </EnhancedTableCell>
     </TableRow>
   );
 };

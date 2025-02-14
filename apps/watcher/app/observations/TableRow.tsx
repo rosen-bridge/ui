@@ -1,7 +1,13 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Amount,
+  Button,
+  EnhancedTableCell,
+  Id,
+  TableRow,
+} from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
@@ -132,19 +138,31 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.amount, row.lockToken.decimals)}
+              <Amount
+                value={getDecimalString(row.amount, row.lockToken.decimals)}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+              <Amount
+                value={getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.networkFee, row.lockToken.decimals)}
+              <Amount
+                value={getDecimalString(row.networkFee, row.lockToken.decimals)}
+                size="normal"
+                loading={isLoading}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -192,13 +210,25 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell>{row.height}</EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.amount, row.lockToken.decimals)}
+        <Amount
+          value={getDecimalString(row.amount, row.lockToken.decimals)}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+        <Amount
+          value={getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        {getDecimalString(row.networkFee, row.lockToken.decimals)}
+        <Amount
+          value={getDecimalString(row.networkFee, row.lockToken.decimals)}
+          size="normal"
+          loading={isLoading}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id id={row.requestId} />
