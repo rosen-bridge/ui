@@ -27,9 +27,6 @@ const Background = styled('div')(({ theme }) => ({
   backgroundPosition: 'center center',
   backgroundSize: 'cover',
   zIndex: '0',
-  [theme.breakpoints.up('tablet')]: {
-    overflowY: 'auto',
-  },
   [theme.breakpoints.down('tablet')]: {
     display: 'none',
   },
