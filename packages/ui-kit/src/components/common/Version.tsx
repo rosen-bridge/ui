@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
 import { InfoCircle } from '@rosen-bridge/icons';
 
+import { useIsMobile } from '../../hooks';
 import { styled } from '../../styling';
 import {
   Box,
@@ -20,13 +21,13 @@ interface VersionProps {
 }
 
 const TooltipContent = styled(Box)(({ theme }) => ({
-  display: 'block',
-  background: theme.palette.primary.light,
+  background: theme.palette.background.paper,
   padding: '4px',
-  gap: '4px',
 }));
 
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
+  const isMobile = useIsMobile();
+
   const $timeout = useRef<number>();
 
   const [timeout, setTimeout] = useState(false);
@@ -54,23 +55,33 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   return (
     <>
       {isLoading ? (
-        <CircularProgress sx={{ mt: 0.5 }} size={15} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '12px',
+          }}
+        >
+          <CircularProgress size={15} />
+        </Box>
       ) : (
         <>
           <Tooltip
-            placement="right-start"
+            placement={isMobile ? 'left-start' : 'right-start'}
             arrow
             componentsProps={{
               tooltip: {
                 sx: {
-                  backgroundColor: (theme) => theme.palette.primary.light,
+                  backgroundColor: (theme) => theme.palette.background.paper,
                   color: (theme) => theme.palette.text.primary,
-                  boxShadow: '0px 4px 12px rgba(0, 0, 0, 0.25)',
+                  boxShadow: (theme) =>
+                    `0px 4px 12px ${theme.palette.background.shadow}`,
                 },
               },
               arrow: {
                 sx: {
-                  color: (theme) => theme.palette.primary.light,
+                  color: (theme) => theme.palette.background.paper,
                 },
               },
             }}
