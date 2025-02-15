@@ -14,7 +14,6 @@
 '@rosen-bridge/watcher-app': patch
 '@rosen-network/evm': patch
 '@rosen-ui/lace-wallet': patch
-'@rosen-ui/nami-wallet': patch
 '@rosen-ui/okx-wallet': patch
 '@rosen-bridge/guard-app': patch
 '@rosen-bridge/rosen-app': patch
