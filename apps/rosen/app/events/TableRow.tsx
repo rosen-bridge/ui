@@ -187,7 +187,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.significantDecimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -200,7 +199,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.significantDecimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -213,7 +211,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.significantDecimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -283,7 +280,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.lockToken.significantDecimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -293,7 +289,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.lockToken.significantDecimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -303,7 +298,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.lockToken.significantDecimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
