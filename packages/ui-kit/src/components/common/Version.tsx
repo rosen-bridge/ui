@@ -3,7 +3,6 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import { InfoCircle } from '@rosen-bridge/icons';
 
 import { useIsMobile } from '../../hooks';
-import { styled } from '../../styling';
 import {
   Box,
   CircularProgress,
@@ -19,11 +18,6 @@ interface VersionProps {
   value?: string;
   sub?: Array<{ label: string; value?: string }>;
 }
-
-const TooltipContent = styled(Box)(({ theme }) => ({
-  background: theme.palette.background.paper,
-  padding: '4px',
-}));
 
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const isMobile = useIsMobile();
@@ -86,7 +80,12 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
               },
             }}
             title={
-              <TooltipContent>
+              <Box
+                sx={(theme) => ({
+                  background: theme.palette.background.paper,
+                  padding: '4px',
+                })}
+              >
                 <Typography variant="subtitle2" color="text.secondary">
                   VERSIONS
                 </Typography>
@@ -113,7 +112,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
                     <span> v{item.value || '?'}</span>
                   </div>
                 ))}
-              </TooltipContent>
+              </Box>
             }
           >
             <IconButton sx={{ padding: '12px' }}>
