@@ -20,7 +20,8 @@ import {
   useResponsiveValue,
 } from '@rosen-bridge/ui-kit';
 
-import { SendForSigningForm } from './SendForSigningForm';
+import { RequestAnOrderForm } from './RequestAnOrderForm';
+import { RequestToSignForm } from './RequestToSignForm';
 import { TabPanel } from './TabPanel';
 
 /**
@@ -186,7 +187,16 @@ const Actions = () => {
         />
         <Tab
           iconPosition={iconPosition}
-          label="Send for Signing"
+          label="Request To Sign"
+          icon={
+            <SvgIcon fontSize="small">
+              <Share />
+            </SvgIcon>
+          }
+        />
+        <Tab
+          iconPosition={iconPosition}
+          label="Request An Order"
           icon={
             <SvgIcon fontSize="small">
               <Share />
@@ -223,10 +233,13 @@ const Actions = () => {
       <TabPanel in={tab === 1}></TabPanel>
       <TabPanel in={tab === 2}></TabPanel>
       <TabPanel in={tab === 3}>
-        <SendForSigningForm />
+        <RequestToSignForm />
       </TabPanel>
-      <TabPanel in={tab === 4}></TabPanel>
+      <TabPanel in={tab === 4}>
+        <RequestAnOrderForm />
+      </TabPanel>
       <TabPanel in={tab === 5}></TabPanel>
+      <TabPanel in={tab === 6}></TabPanel>
     </>
   );
 

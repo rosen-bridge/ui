@@ -1,6 +1,7 @@
 export * from './AlertCard';
 export * from './Amount';
 export * from './ApiKeyModal';
+export * from './ApiKeyModalWarning';
 export * from './App';
 export * from './AppBar';
 export * from './AppLogo';

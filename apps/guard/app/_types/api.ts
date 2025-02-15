@@ -48,10 +48,23 @@ export interface ApiSignRequestBodyData {
   overwrite?: boolean;
 }
 
+export interface ApiOrderRequestBodyData {
+  id: string;
+  chain: Network;
+  orderJson: string;
+}
+
 export type ApiSignRequestBody =
   MutationRequestBodyWithHeaders<ApiSignRequestBodyData>;
 
+export type ApiOrderRequestBody =
+  MutationRequestBodyWithHeaders<ApiOrderRequestBodyData>;
+
 export type ApiSignResponse = {
+  message: string;
+};
+
+export type ApiOrderResponse = {
   message: string;
 };
 
