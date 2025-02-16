@@ -10,6 +10,8 @@ import {
   Share,
   StopCircle,
 } from '@rosen-bridge/icons';
+import { ReceiptAlt } from '@rosen-bridge/icons';
+import { FileEditAlt } from '@rosen-bridge/icons';
 import {
   Box,
   Grid,
@@ -190,7 +192,7 @@ const Actions = () => {
           label="Request To Sign"
           icon={
             <SvgIcon fontSize="small">
-              <Share />
+              <FileEditAlt />
             </SvgIcon>
           }
         />
@@ -199,7 +201,7 @@ const Actions = () => {
           label="Request An Order"
           icon={
             <SvgIcon fontSize="small">
-              <Share />
+              <ReceiptAlt />
             </SvgIcon>
           }
         />
