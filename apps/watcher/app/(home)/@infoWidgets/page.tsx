@@ -175,7 +175,6 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           value={(() => {
             const amountValue = (titleRSN || titleERSN).split(' ');
-            console.log('Amount value:', amountValue);
             return (
               <Amount
                 value={amountValue[0]}

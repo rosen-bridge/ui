@@ -104,11 +104,14 @@ export const InfoWidgetCard = ({
           </div>
         ) : (
           <Typography className="value">
-            <div>
-              {value}
-              &nbsp;
-              <span>{unit}</span>
-            </div>
+            {unit ? (
+              <div>
+                {value}
+                <span>{unit}</span>
+              </div>
+            ) : (
+              value
+            )}
             {warning && (
               <Tooltip
                 title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
