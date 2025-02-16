@@ -72,7 +72,7 @@ interface InfoWidgetCardProps {
   isLoading?: boolean;
   title: string;
   unit?: string;
-  value: string;
+  value: string | ReactNode;
   warning?: string;
 }
 /**

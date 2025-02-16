@@ -8,7 +8,7 @@ import {
   ShieldExclamation,
   Wallet,
 } from '@rosen-bridge/icons';
-import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
+import { Amount, Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
@@ -149,9 +149,17 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           title="ERG"
           value={
-            ergToken?.amount !== undefined
-              ? getDecimalString(ergToken.amount.toString(), ergToken.decimals)
-              : ''
+            <Amount
+              value={
+                ergToken?.amount !== undefined
+                  ? getDecimalString(
+                      ergToken.amount.toString(),
+                      ergToken.decimals,
+                    )
+                  : ''
+              }
+              size="normal"
+            />
           }
           icon={
             <SvgIcon fontSize="large">
@@ -163,7 +171,7 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          value={titleRSN || titleERSN}
+          value={<Amount value={titleRSN || titleERSN} size="normal" />}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">

@@ -1,7 +1,13 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Amount,
+  Button,
+  EnhancedTableCell,
+  Id,
+  TableRow,
+} from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useERsnToken } from '@/_hooks/useERsnToken';
@@ -75,22 +81,30 @@ export const MobileRow: FC<RowProps> = (props) => {
     const rsnTokenInfo = row.revenues.find(
       (token) => token.tokenId === rsnToken?.tokenId,
     );
-    return getDecimalString(
-      rsnTokenInfo?.amount.toString() ?? '0',
-      rsnTokenInfo?.decimals ?? 0,
+
+    if (!rsnTokenInfo) {
+      // If rsnTokenInfo is not found, return a default value (like '0')
+      return '0';
+    }
+
+    const income = getDecimalString(
+      rsnTokenInfo.amount?.toString() ?? '0', // Ensure that amount is a valid string
+      rsnTokenInfo.decimals ?? 0, // Default to 0 decimals if not provided
     );
+
+    console.log('RSN Income:', typeof income, income);
+
+    // Return the value directly or handle any specific formatting you need
+    return income;
   };
 
   const getTokenIncome = () =>
     row.revenues
       .filter((token) => token.tokenId !== rsnToken?.tokenId)
-      .map(
-        (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)}${
-            token.name
-          }`,
-      )
-      .join('+');
+      .map((token) => ({
+        value: getDecimalString(token.amount.toString(), token.decimals),
+        title: token.name,
+      }));
 
   return (
     <>
@@ -108,11 +122,27 @@ export const MobileRow: FC<RowProps> = (props) => {
         <>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>RSN Income</EnhancedTableCell>
-            <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Amount
+                value={getRSNIncome()}
+                size="normal"
+                loading={isLoading}
+              />
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Token Income</EnhancedTableCell>
-            <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              {getTokenIncome().map((tokenIncome, index) => (
+                <Amount
+                  key={index}
+                  value={tokenIncome.value}
+                  title={tokenIncome.title}
+                  size="normal"
+                  loading={isLoading}
+                />
+              ))}
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -169,13 +199,10 @@ export const TabletRow: FC<RowProps> = (props) => {
           token.tokenId !== rsnToken?.tokenId &&
           token.tokenId !== eRsnToken?.tokenId,
       )
-      .map(
-        (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)} ${
-            token.name
-          }`,
-      )
-      .join(' + ');
+      .map((token) => ({
+        value: getDecimalString(token.amount.toString(), token.decimals),
+        title: token.name,
+      }));
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -183,8 +210,23 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
-      <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Amount value={getRSNIncome()} size="normal" loading={isLoading} />
+      </EnhancedTableCell>
+      {getTokenIncome().map((tokenIncome, index) => (
+        <EnhancedTableCell
+          key={index}
+          sx={{
+            display: 'flex',
+
+            gap: '5px',
+            alignItems: 'center',
+          }}
+        >
+          <Amount value={tokenIncome.value} size="normal" loading={isLoading} />
+          <span>{tokenIncome.title}</span>
+        </EnhancedTableCell>
+      ))}
     </TableRow>
   );
 };
