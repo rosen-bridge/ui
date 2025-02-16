@@ -234,7 +234,12 @@ export const TabletRow: FC<RowProps> = (props) => {
           size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell></EnhancedTableCell>
+      <EnhancedTableCell>
+        <Amount
+          value={getDecimalString(row.bridgeFee, row.lockToken.decimals)}
+          size="normal"
+        />
+      </EnhancedTableCell>
       <EnhancedTableCell>
         <Amount
           value={getDecimalString(row.networkFee, row.lockToken.decimals)}

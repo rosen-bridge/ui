@@ -18,17 +18,7 @@ export const Amount = ({
   title,
   unit,
 }: AmountProps) => {
-  console.log('Received value:', value);
-
   const [number, decimals] = value.split('.');
-
-  console.log('Extracted number:', number);
-  console.log('Extracted decimals:', decimals);
-  console.log('Condition (+value):', +value);
-  console.log(
-    'Formatted output:',
-    +value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-',
-  );
 
   return (
     <Box
@@ -61,7 +51,11 @@ export const Amount = ({
               color="text.primary"
               variant={size == 'normal' ? 'body1' : 'h2'}
             >
-              {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
+              {value === '0'
+                ? '0'
+                : +value
+                  ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  : '-'}
             </Typography>
             {!!+value && (
               <>
@@ -73,14 +67,14 @@ export const Amount = ({
                     .{decimals}
                   </Typography>
                 )}
-                {unit ? (
+                {!!unit && (
                   <Typography
                     color="text.secondary"
                     variant={size == 'normal' ? 'caption' : 'body2'}
                   >
-                    {unit ? `\u00A0${unit}` : ''}
+                    &nbsp;{unit}
                   </Typography>
-                ) : null}
+                )}
               </>
             )}
           </>

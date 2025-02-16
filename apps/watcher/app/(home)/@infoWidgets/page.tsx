@@ -36,12 +36,14 @@ const InfoWidgets = () => {
     rsnToken?.amount !== undefined && rsnToken?.amount !== 0
       ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
       : '';
+  console.log('titleRSN', titleRSN);
 
   let titleERSN =
     eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
       ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
         ' eRSN'
       : '';
+  console.log('titleERSN', titleERSN);
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 
@@ -171,13 +173,17 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          value={
-            <Amount
-              value={titleRSN || titleERSN}
-              loading={isErgTokenLoading}
-              size="normal"
-            />
-          }
+          value={(() => {
+            const amountValue = (titleRSN || titleERSN).split(' ');
+            console.log('Amount value:', amountValue);
+            return (
+              <Amount
+                value={amountValue[0]}
+                unit={amountValue[1]}
+                size="normal"
+              />
+            );
+          })()}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">
