@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 1.8.1
+
+### Patch Changes
+
+- Fixes dark palette and background color of brdige transaction card
+
 ## 1.8.0
 
 ### Minor Changes
