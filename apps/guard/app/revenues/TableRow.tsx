@@ -166,7 +166,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.decimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -185,7 +184,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.decimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -204,7 +202,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.decimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -226,7 +223,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                     row.lockToken.decimals,
                   )}
                   size="normal"
-                  loading={isLoading}
                 />
               )}
             </EnhancedTableCell>
@@ -286,7 +282,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.lockToken.decimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
@@ -302,7 +297,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.lockToken.decimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
@@ -318,7 +312,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.lockToken.decimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell sx={{ opacity: isInfoLoading ? 0.3 : 1 }}>
@@ -339,7 +332,6 @@ export const TabletRow: FC<RowProps> = (props) => {
               row.lockToken.decimals,
             )}
             size="normal"
-            loading={isLoading}
           />
         )}
       </EnhancedTableCell>

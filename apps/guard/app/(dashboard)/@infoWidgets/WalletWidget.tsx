@@ -123,21 +123,27 @@ export const WalletWidget = ({
         <CircularProgress color="inherit" size={16} sx={{ mt: 1 }} />
       ) : (
         <>
-          <Typography className="value">
+          <Typography
+            className="value"
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              justifyContent: 'end',
+              gap: '3px',
+            }}
+          >
             {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
               <>
-                {/* {!!index && ' / '} */}
+                {!!index && ' / '}
                 <Amount
-                  title={tokenInfoWithAddress.balance.name}
+                  unit={tokenInfoWithAddress.balance.name}
                   value={getDecimalString(
                     tokenInfoWithAddress.balance.amount.toString(),
                     tokenInfoWithAddress.balance.decimals,
                     3,
                   )}
-                  size="normal"
-                  loading={isLoading}
+                  size="large"
                 />
-                {/* <span>{tokenInfoWithAddress.balance.name}</span> */}
               </>
             ))}
           </Typography>

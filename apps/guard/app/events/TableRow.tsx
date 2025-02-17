@@ -167,7 +167,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.sourceChainToken.decimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -180,7 +179,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.sourceChainToken.decimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -193,7 +191,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.sourceChainToken.decimals,
                 )}
                 size="normal"
-                loading={isLoading}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -257,14 +254,12 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.sourceChainToken.decimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Amount
           value={getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
@@ -274,7 +269,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.sourceChainToken.decimals,
           )}
           size="normal"
-          loading={isLoading}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.status}</EnhancedTableCell>

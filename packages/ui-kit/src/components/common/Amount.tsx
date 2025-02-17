@@ -19,6 +19,7 @@ export const Amount = ({
   unit,
 }: AmountProps) => {
   const [number, decimals] = value.split('.');
+
   return (
     <Box
       sx={{
@@ -29,7 +30,7 @@ export const Amount = ({
     >
       {!!title && (
         <Typography
-          color="text.secondary"
+          color="inherit"
           variant={size == 'normal' ? 'body2' : 'body1'}
         >
           {title}
@@ -38,7 +39,7 @@ export const Amount = ({
       <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
         {loading && (
           <Typography
-            color="text.primary"
+            color="inherit"
             variant={size == 'normal' ? 'body1' : 'h2'}
           >
             Pending...
@@ -47,16 +48,20 @@ export const Amount = ({
         {!loading && (
           <>
             <Typography
-              color="text.primary"
+              color="inherit"
               variant={size == 'normal' ? 'body1' : 'h2'}
             >
-              {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
+              {value === '0'
+                ? '0'
+                : +value
+                  ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  : '-'}
             </Typography>
             {!!+value && (
               <>
                 {!!decimals && (
                   <Typography
-                    color="text.primary"
+                    color="inherit"
                     variant={size == 'normal' ? 'caption' : 'body2'}
                   >
                     .{decimals}
@@ -64,7 +69,7 @@ export const Amount = ({
                 )}
                 {!!unit && (
                   <Typography
-                    color="text.secondary"
+                    color="inherit"
                     variant={size == 'normal' ? 'caption' : 'body2'}
                   >
                     &nbsp;{unit}
