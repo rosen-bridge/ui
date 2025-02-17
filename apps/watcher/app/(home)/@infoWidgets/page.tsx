@@ -36,14 +36,12 @@ const InfoWidgets = () => {
     rsnToken?.amount !== undefined && rsnToken?.amount !== 0
       ? getDecimalString(rsnToken.amount.toString(), rsnToken.decimals) + ' RSN'
       : '';
-  console.log('titleRSN', titleRSN);
 
   let titleERSN =
     eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
       ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
         ' eRSN'
       : '';
-  console.log('titleERSN', titleERSN);
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
 

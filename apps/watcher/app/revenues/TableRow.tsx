@@ -103,7 +103,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       .filter((token) => token.tokenId !== rsnToken?.tokenId)
       .map((token) => ({
         value: getDecimalString(token.amount.toString(), token.decimals),
-        title: token.name,
+        unit: token.name,
       }));
 
   return (
@@ -134,7 +134,7 @@ export const MobileRow: FC<RowProps> = (props) => {
                   <Amount
                     key={index}
                     value={tokenIncome.value}
-                    unit={tokenIncome.title}
+                    unit={tokenIncome.unit}
                     size="normal"
                   />
                 ))}
@@ -198,7 +198,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       )
       .map((token) => ({
         value: getDecimalString(token.amount.toString(), token.decimals),
-        title: token.name,
+        unit: token.name,
       }));
 
   return (
@@ -215,7 +215,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           <Amount
             value={tokenIncome.value}
             size="normal"
-            unit={tokenIncome.title}
+            unit={tokenIncome.unit}
           />
         </EnhancedTableCell>
       ))}
