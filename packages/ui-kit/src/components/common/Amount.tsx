@@ -30,7 +30,7 @@ export const Amount = ({
     >
       {!!title && (
         <Typography
-          color="text.secondary"
+          color="inherit"
           variant={size == 'normal' ? 'body2' : 'body1'}
         >
           {title}
@@ -39,7 +39,7 @@ export const Amount = ({
       <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
         {loading && (
           <Typography
-            color="text.primary"
+            color="inherit"
             variant={size == 'normal' ? 'body1' : 'h2'}
           >
             Pending...
@@ -48,7 +48,7 @@ export const Amount = ({
         {!loading && (
           <>
             <Typography
-              color="text.primary"
+              color="inherit"
               variant={size == 'normal' ? 'body1' : 'h2'}
             >
               {value === '0'
@@ -61,7 +61,7 @@ export const Amount = ({
               <>
                 {!!decimals && (
                   <Typography
-                    color="text.primary"
+                    color="inherit"
                     variant={size == 'normal' ? 'caption' : 'body2'}
                   >
                     .{decimals}
@@ -69,7 +69,7 @@ export const Amount = ({
                 )}
                 {!!unit && (
                   <Typography
-                    color="text.secondary"
+                    color="inherit"
                     variant={size == 'normal' ? 'caption' : 'body2'}
                   >
                     &nbsp;{unit}
