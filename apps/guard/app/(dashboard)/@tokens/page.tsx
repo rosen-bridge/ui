@@ -26,27 +26,40 @@ const Tokens = () => {
       fetcher,
     );
 
+  const { data: binanceTokens, isLoading: isBinanceTokensLoading } =
+    useSWR<ApiAddressAssetsResponse>(
+      ['/assets', { chain: NETWORKS.BINANCE }],
+      fetcher,
+    );
+
   return (
     <>
-      <Grid item mobile={12} tablet={6} desktop={4}>
+      <Grid item mobile={12} tablet={6}>
         <TokensCard
           tokens={ergoTokens?.items ?? []}
           isLoading={isErogTokensLoading}
           title="Ergo Tokens"
         />
       </Grid>
-      <Grid item mobile={12} tablet={6} desktop={4}>
+      <Grid item mobile={12} tablet={6}>
         <TokensCard
           tokens={cardanoTokens?.items ?? []}
           isLoading={isCardanoTokensLoading}
           title="Cardano Tokens"
         />
       </Grid>
-      <Grid item mobile={12} tablet={6} desktop={4}>
+      <Grid item mobile={12} tablet={6}>
         <TokensCard
           tokens={ethereumTokens?.items ?? []}
           isLoading={isEthereumTokensLoading}
           title="Ethereum Tokens"
+        />
+      </Grid>
+      <Grid item mobile={12} tablet={6}>
+        <TokensCard
+          tokens={binanceTokens?.items ?? []}
+          isLoading={isBinanceTokensLoading}
+          title="Binance Tokens"
         />
       </Grid>
     </>

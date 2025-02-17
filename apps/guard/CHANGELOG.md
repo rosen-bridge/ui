@@ -1,5 +1,15 @@
 # @rosen-bridge/guard-app
 
+## 1.11.0
+
+### Minor Changes
+
+- Add the Binance Tokens card to the dashboard
+
+### Patch Changes
+
+- Updated @rosen-bridge/ui-kit@1.8.1 dependency
+
 ## 1.10.1
 
 ### Patch Changes

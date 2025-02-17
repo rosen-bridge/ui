@@ -5,7 +5,6 @@
 '@rosen-network/cardano': patch
 '@rosen-network/ergo': patch
 '@rosen-network/evm': patch
-'@rosen-bridge/rosen-app': patch
 ---
 
 Update server functions to work with the asynchronously loaded token map

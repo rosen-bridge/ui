@@ -1,5 +1,15 @@
 # @rosen-bridge/watcher-app
 
+## 3.2.0
+
+### Minor Changes
+
+- Add the Binance icon
+
+### Patch Changes
+
+- Correct the display of zero RSN tokens in the dashboard
+
 ## 3.1.4
 
 ### Patch Changes
