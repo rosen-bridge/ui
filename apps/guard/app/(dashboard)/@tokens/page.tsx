@@ -28,7 +28,7 @@ const Tokens = () => {
 
   const { data: binanceTokens, isLoading: isBinanceTokensLoading } =
     useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.BINANCE }],
+      ['/assets', { chain: NETWORKS.binance.key }],
       fetcher,
     );
 
