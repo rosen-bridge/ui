@@ -91,7 +91,7 @@ export const BridgeTransaction = ({
           label={selectedWallet?.label}
           onClick={() => setChooseWalletsModalOpen(true)}
         />
-        {sourceValue == NETWORKS.BITCOIN && (
+        {sourceValue == NETWORKS.bitcoin.key && (
           <Alert severity="warning" icon={false}>
             We only support native SegWit addresses (P2WPKH or P2WSH) for the
             source address.

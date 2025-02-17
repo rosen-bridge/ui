@@ -17,7 +17,7 @@ import {
   useApiKey,
 } from '@rosen-bridge/ui-kit';
 import { ApiKeyModal } from '@rosen-bridge/ui-kit';
-import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { Network } from '@rosen-ui/types';
 import useSWRMutation from 'swr/mutation';
@@ -130,9 +130,9 @@ export const SendForSigningForm = () => {
           sx={{ mb: 2 }}
           fullWidth
         >
-          {Object.keys(NETWORKS).map((key) => (
-            <MenuItem key={key} value={NETWORKS[key as keyof typeof NETWORKS]}>
-              {NETWORK_LABELS[key as keyof typeof NETWORKS]}
+          {NETWORKS_KEYS.map((key) => (
+            <MenuItem key={key} value={key}>
+              {NETWORKS[key].label}
             </MenuItem>
           ))}
         </TextField>
