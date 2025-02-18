@@ -6,7 +6,7 @@ import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './server';
 
 export const ethereumNetwork = new EthereumNetwork({
-  lockAddress: LOCK_ADDRESSES.ETHEREUM,
+  lockAddress: LOCK_ADDRESSES.ethereum,
   nextHeightInterval: 50,
   getMaxTransfer: unwrap(getMaxTransfer),
 });

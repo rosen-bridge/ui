@@ -1,5 +1,37 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.3
+
+### Patch Changes
+
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Refactor the network context into dedicated packages to decouple it from the application, enhancing maintainability
+- Enhance the useMaxTransfer hook to boost performance
+- Change the label of 'Address' to 'Target Address' in BridgeForm component
+- Enhance the paste button functionality for the Target Address field by implementing validation for pasted addresses.
+- Fix the issue related to getting the max amount for the transfer
+- Address the issue of automatic wallet reconnection after selecting the source network
+- Decouple the network type from the wallets to enable the separation of networks within their packages, thereby improving code quality
+- Transfer the getMaxTransfer functions to their respective packages
+- Enhance UI hooks to boost performance and improve maintainability
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/wallet-api@1.2.0
+  - @rosen-ui/metamask-wallet@1.2.0
+  - @rosen-ui/nautilus-wallet@2.2.0
+  - @rosen-ui/eternl-wallet@2.2.0
+  - @rosen-ui/lace-wallet@2.2.0
+  - @rosen-ui/nami-wallet@2.2.0
+  - @rosen-ui/okx-wallet@1.2.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-network/bitcoin@2.1.0
+  - @rosen-network/cardano@2.1.0
+  - @rosen-network/ergo@2.1.0
+  - @rosen-network/evm@0.2.0
+  - @rosen-ui/asset-calculator@2.1.1
+  - @rosen-ui/types@0.3.3
+  - @rosen-ui/utils@0.4.4
+
 ## 4.0.2
 
 ### Patch Changes

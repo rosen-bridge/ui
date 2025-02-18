@@ -8,7 +8,7 @@ import {
   Id,
   Connector,
 } from '@rosen-bridge/ui-kit';
-import { NETWORK_LABELS_WITH_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 import moment from 'moment';
 
@@ -155,8 +155,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
               <Connector
-                start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-                end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+                start={NETWORKS[row.fromChain].label}
+                end={NETWORKS[row.toChain].label}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -251,8 +251,8 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
-          start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-          end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+          start={NETWORKS[row.fromChain].label}
+          end={NETWORKS[row.toChain].label}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>

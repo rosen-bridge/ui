@@ -107,12 +107,13 @@ export const BridgeTransaction = ({
             padding: (theme) => theme.spacing(3),
           }}
         >
-          {sourceValue == NETWORKS.BITCOIN && (
+          {sourceValue == NETWORKS.bitcoin.key && (
             <Alert severity="warning" icon={false}>
               We only support native SegWit addresses (P2WPKH or P2WSH) for the
               source address.
             </Alert>
           )}
+
           <div style={{ flexGrow: '1' }} />
           <Amount
             title="Transaction Fee"

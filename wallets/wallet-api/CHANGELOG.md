@@ -1,5 +1,17 @@
 # @rosen-ui/wallet-api
 
+## 1.2.0
+
+### Minor Changes
+
+- Add a supportedChains feature to display which chains/networks are supported by the wallet
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/types@0.3.3
+  - @rosen-ui/utils@0.4.4
+
 ## 1.1.0
 
 ### Minor Changes

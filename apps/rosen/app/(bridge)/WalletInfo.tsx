@@ -19,7 +19,6 @@ export const WalletInfo = ({ icon: Icon, label, onClick }: WalletInfoProps) => {
   const selected = Icon && label;
   return (
     <Grid container alignItems="center" justifyContent="space-between">
-      {/* <Typography lineHeight={2.5}>Wallet</Typography> */}
       {selected ? (
         <IconButton
           sx={{

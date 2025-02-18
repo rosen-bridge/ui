@@ -48,4 +48,4 @@ export interface MutationRequestBodyWithHeaders<Data> {
 // This is the Rosen wrapped-value
 export type RosenAmountValue = bigint;
 
-export type Network = (typeof NETWORKS)[keyof typeof NETWORKS];
+export type Network = keyof typeof NETWORKS;

@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { NATIVE_TOKENS, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import {
@@ -11,7 +11,7 @@ import {
 } from './utils';
 
 export const getMaxTransferCreator =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async ({
     balance,
     isNative,
@@ -25,6 +25,7 @@ export const getMaxTransferCreator =
       toAddress: string;
     };
   }) => {
+    const tokenMap = await getTokenMap();
     if (!eventData.toAddress) return 0n;
 
     const feeRatio = await getFeeRatio();
@@ -51,9 +52,9 @@ export const getMaxTransferCreator =
     const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
 
     const offset = tokenMap.wrapAmount(
-      NATIVE_TOKENS.BITCOIN,
+      NETWORKS.bitcoin.nativeToken,
       BigInt(estimatedFee) + minSatoshi,
-      NETWORKS.BITCOIN,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     return balance < 0n || !isNative

@@ -1,5 +1,12 @@
 # @rosen-ui/constants
 
+## 0.1.0
+
+### Minor Changes
+
+- Enhance the implementation by integrating the NETWORK_LABELS_WITH_KEY constant to effectively retrieve the label linked to the network key
+- Define a constant for the networks ID
+
 ## 0.0.5
 
 ### Patch Changes

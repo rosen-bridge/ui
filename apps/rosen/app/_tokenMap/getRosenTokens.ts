@@ -8,7 +8,7 @@ import { wrap } from '@/_safeServerAction';
 /**
  * get rosen tokens object from tokensMap file or throw error if file is missing
  */
-export const getRosenTokens = () => {
+export const getRosenTokens = async () => {
   const tokensMapFilePath = path.resolve(
     process.cwd(),
     'configs/tokensMap.json',
