@@ -3,7 +3,6 @@
 '@rosen-ui/nautilus-wallet': minor
 '@rosen-ui/eternl-wallet': minor
 '@rosen-ui/lace-wallet': minor
-'@rosen-ui/nami-wallet': minor
 '@rosen-ui/okx-wallet': minor
 ---
 
