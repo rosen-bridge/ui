@@ -1,68 +1,72 @@
 'use client';
 
-import { Grid, TokensCard } from '@rosen-bridge/ui-kit';
+import {
+  Carousel,
+  CarouselButton,
+  CarouselIndicators,
+  CarouselItem,
+  CarouselProvider,
+  Grid,
+  Stack,
+  TokensCard,
+  Typography,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { Network } from '@rosen-ui/types';
 import useSWR from 'swr';
 
 import { ApiAddressAssetsResponse } from '@/_types/api';
 
-const Tokens = () => {
-  const { data: ergoTokens, isLoading: isErogTokensLoading } =
-    useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.ergo.key }],
-      fetcher,
-    );
-
-  const { data: cardanoTokens, isLoading: isCardanoTokensLoading } =
-    useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.cardano.key }],
-      fetcher,
-    );
-
-  const { data: ethereumTokens, isLoading: isEthereumTokensLoading } =
-    useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.ethereum.key }],
-      fetcher,
-    );
-
-  const { data: binanceTokens, isLoading: isBinanceTokensLoading } =
-    useSWR<ApiAddressAssetsResponse>(
-      ['/assets', { chain: NETWORKS.binance.key }],
-      fetcher,
-    );
-
+const Token = ({ chain }: { chain: Network }) => {
+  const { data, isLoading } = useSWR<ApiAddressAssetsResponse>(
+    ['/assets', { chain }],
+    fetcher,
+  );
   return (
-    <>
-      <Grid item mobile={12} tablet={6}>
-        <TokensCard
-          tokens={ergoTokens?.items ?? []}
-          isLoading={isErogTokensLoading}
-          title="Ergo Tokens"
-        />
-      </Grid>
-      <Grid item mobile={12} tablet={6}>
-        <TokensCard
-          tokens={cardanoTokens?.items ?? []}
-          isLoading={isCardanoTokensLoading}
-          title="Cardano Tokens"
-        />
-      </Grid>
-      <Grid item mobile={12} tablet={6}>
-        <TokensCard
-          tokens={ethereumTokens?.items ?? []}
-          isLoading={isEthereumTokensLoading}
-          title="Ethereum Tokens"
-        />
-      </Grid>
-      <Grid item mobile={12} tablet={6}>
-        <TokensCard
-          tokens={binanceTokens?.items ?? []}
-          isLoading={isBinanceTokensLoading}
-          title="Binance Tokens"
-        />
-      </Grid>
-    </>
+    <TokensCard
+      tokens={data?.items ?? []}
+      isLoading={isLoading}
+      title={NETWORKS[chain].label}
+    />
+  );
+};
+
+const Tokens = () => {
+  return (
+    <Grid item mobile={12}>
+      <CarouselProvider>
+        <Stack gap="0.5rem">
+          <Stack
+            direction="row"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography variant="h5" fontWeight="bold">
+              Tokens
+            </Typography>
+            <Stack direction="row" alignItems="center" gap="0.5rem">
+              <CarouselButton type="prev" />
+              <CarouselIndicators />
+              <CarouselButton type="next" />
+            </Stack>
+          </Stack>
+          <Carousel>
+            {Object.values(NETWORKS)
+              .filter((network) => network.hasTokenSupport)
+              .sort((a, b) => a.index - b.index)
+              .map((network) => (
+                <CarouselItem
+                  key={network.key}
+                  size="clamp(400px, calc(50% - 0.75rem), 600px)"
+                >
+                  <Token chain={network.key} />
+                </CarouselItem>
+              ))}
+          </Carousel>
+        </Stack>
+      </CarouselProvider>
+    </Grid>
   );
 };
 

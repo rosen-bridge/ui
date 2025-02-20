@@ -15,6 +15,7 @@ export const NETWORKS = {
     label: 'Binance',
     nativeToken: 'bnb',
     id: '0x38',
+    hasTokenSupport: true,
   },
   bitcoin: {
     index: 2,
@@ -22,6 +23,7 @@ export const NETWORKS = {
     label: 'Bitcoin',
     nativeToken: 'btc',
     id: '',
+    hasTokenSupport: false,
   },
   cardano: {
     index: 1,
@@ -29,6 +31,7 @@ export const NETWORKS = {
     label: 'Cardano',
     nativeToken: 'ada',
     id: '',
+    hasTokenSupport: true,
   },
   ergo: {
     index: 0,
@@ -36,6 +39,7 @@ export const NETWORKS = {
     label: 'Ergo',
     nativeToken: 'erg',
     id: '',
+    hasTokenSupport: true,
   },
   ethereum: {
     index: 3,
@@ -43,6 +47,7 @@ export const NETWORKS = {
     label: 'Ethereum',
     nativeToken: 'eth',
     id: '0x1',
+    hasTokenSupport: true,
   },
 } as const;
 
