@@ -54,6 +54,7 @@ const Tokens = () => {
           <Carousel>
             {Object.values(NETWORKS)
               .filter((network) => network.hasTokenSupport)
+              .sort((a, b) => a.index - b.index)
               .map((network) => (
                 <CarouselItem
                   key={network.key}
