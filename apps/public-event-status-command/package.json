@@ -1,0 +1,24 @@
+{
+  "name": "@rosen-bridge/public-event-status-command",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "lint": "next lint --fix && npm run prettify",
+    "type-check": "tsc --noEmit",
+    "dev": "next dev",
+    "build": "next build"
+  },
+  "dependencies": {
+    "@rosen-bridge/public-event-status-logic": "file:../../packages/public-event-status-logic",
+    "@upstash/ratelimit": "^1.2.1",
+    "@vercel/kv": "^2.0.0",
+    "joi": "^17.11.0",
+    "next": "14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.2.12"
+  }
+}

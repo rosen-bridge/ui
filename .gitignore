@@ -28,7 +28,7 @@ build
 config
 **/configs/*.json
 **/configs/*.yaml
-next-env.d.ts 
+next-env.d.ts
 !config/default.yaml
 
 .devcontainer
