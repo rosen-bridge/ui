@@ -1,51 +1,40 @@
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
-import { Alert } from '@rosen-bridge/icons';
 import {
   AlertCard,
   AlertProps,
-  Button,
-  Checkbox,
+  ApiKeyModalWarning,
   FullCard,
   Grid,
   MenuItem,
   SubmitButton,
   TextField,
   Typography,
-  styled,
   useApiKey,
 } from '@rosen-bridge/ui-kit';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
-import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { Network } from '@rosen-ui/types';
 import useSWRMutation from 'swr/mutation';
 
-import { ApiSignRequestBody, ApiSignResponse } from '@/_types/api';
-
-const AlertIcon = styled(Alert)((theme) => ({
-  fill: theme.palette.primary.main,
-}));
+import { ApiOrderRequestBody, ApiOrderResponse } from '@/_types/api';
 
 interface Form {
+  id: string;
   chain: Network;
-  txJson: string;
-  requiredSign: number;
-  overwrite?: boolean;
+  orderJson: string;
 }
-/**
- * render a form for signing a tx
- */
-export const SendForSigningForm = () => {
+
+export const RequestAnOrderForm = () => {
   const { apiKey } = useApiKey();
 
   const {
     trigger,
-    isMutating: isSignPending,
+    isMutating: isOrderPending,
     error,
-  } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
-    '/sign',
+  } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
+    '/order',
     mutatorWithHeaders,
   );
 
@@ -54,12 +43,11 @@ export const SendForSigningForm = () => {
     message: string;
   } | null>(null);
 
-  const { handleSubmit, register, reset, formState } = useForm({
+  const { handleSubmit, register, reset } = useForm({
     defaultValues: {
-      txJson: '',
+      id: '',
       chain: '' as Network,
-      requiredSign: 10,
-      overwrite: undefined,
+      orderJson: '',
     },
   });
 
@@ -67,14 +55,8 @@ export const SendForSigningForm = () => {
     if (!apiKey) return;
 
     try {
-      const { txJson, chain, requiredSign, overwrite } = data;
       const response = await trigger({
-        data: {
-          txJson,
-          chain,
-          requiredSign,
-          overwrite,
-        },
+        data,
         headers: {
           'Api-Key': apiKey,
         },
@@ -83,7 +65,7 @@ export const SendForSigningForm = () => {
       if (response.message === 'Ok') {
         setAlertData({
           severity: 'success',
-          message: `Sign operation successful.`,
+          message: `The order is received successfully.`,
         });
         reset();
       } else {
@@ -102,7 +84,7 @@ export const SendForSigningForm = () => {
           severity: 'error',
           message:
             error.response?.status === 409
-              ? 'Tx is already sent for signing. If you want to override, click the checkbox and submit again.'
+              ? `An order is already exist with id [${data.id}].`
               : error.message,
         });
       }
@@ -119,10 +101,11 @@ export const SendForSigningForm = () => {
   );
 
   return (
-    <FullCard title="Send for Signing" backgroundColor="transparent">
+    <FullCard title="Request An Order" backgroundColor="transparent">
       <form onSubmit={handleSubmit(onSubmit)}>
         {renderAlert()}
 
+        <TextField label="Id" {...register('id')} sx={{ mb: 2 }} />
         <TextField
           select
           label="Chain"
@@ -130,31 +113,19 @@ export const SendForSigningForm = () => {
           sx={{ mb: 2 }}
           fullWidth
         >
-          {Object.keys(NETWORKS).map((key) => (
-            <MenuItem key={key} value={NETWORKS[key as keyof typeof NETWORKS]}>
-              {NETWORK_LABELS[key as keyof typeof NETWORKS]}
+          {NETWORKS_KEYS.map((key) => (
+            <MenuItem key={key} value={key}>
+              {NETWORKS[key].label}
             </MenuItem>
           ))}
         </TextField>
         <TextField
-          label="Transaction"
+          label="Order"
           multiline
           rows={5}
-          {...register('txJson')}
+          {...register('orderJson')}
           sx={{ mb: 2 }}
         />
-        <TextField
-          label="Required Signs"
-          {...register('requiredSign')}
-          sx={{ mb: 2 }}
-        />
-
-        {error?.response?.status === 409 && (
-          <Grid container alignItems="center">
-            <Checkbox {...register('overwrite')} />
-            <Typography>Overwrite already sent transaction</Typography>
-          </Grid>
-        )}
 
         {error?.response?.status === 403 && (
           <Grid
@@ -166,30 +137,9 @@ export const SendForSigningForm = () => {
           </Grid>
         )}
 
-        {!apiKey && (
-          <Grid
-            container
-            alignItems="center"
-            gap={1}
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Grid item>
-              <Alert />
-            </Grid>
+        <ApiKeyModalWarning />
 
-            <Grid item>
-              <Typography>You need to set an Api Key before sending</Typography>
-            </Grid>
-
-            <Grid item>
-              <ApiKeyModal>
-                {(open) => <Button onClick={open}>Click To Set</Button>}
-              </ApiKeyModal>
-            </Grid>
-          </Grid>
-        )}
-
-        <SubmitButton loading={isSignPending} disabled={!apiKey}>
+        <SubmitButton loading={isOrderPending} disabled={!apiKey}>
           Send
         </SubmitButton>
       </form>

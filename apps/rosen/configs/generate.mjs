@@ -1,4 +1,4 @@
-import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 import { EmbedBuilder, WebhookClient } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
@@ -24,13 +24,12 @@ const content = [
   ' * THIS FILE IS AUTO-GENERATED. PLEASE DO NOT EDIT IT',
   ' * MANUALLY OR COMMIT IT TO THE REPOSITORY HOSTING SERVICE',
   ' **************************************************/',
-  '',
   `import { NETWORKS } from '@rosen-ui/constants';`,
   '',
   `export const FEE_CONFIG_TOKEN_ID = '${contracts.at(0)?.json.tokens.RSNRatioNFT || ''}';`,
   '',
   `export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {`,
-  ...NETWORK_VALUES.map((network) => {
+  ...NETWORKS_KEYS.map((network) => {
     const contract = contracts.find((contract) => contract.name == network);
 
     const value = contract ? contract.json.addresses.lock : '';

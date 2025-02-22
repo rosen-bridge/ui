@@ -7,7 +7,7 @@ import { Network } from '@rosen-ui/types';
 import AbstractCalculator from '../abstract-calculator';
 
 export class CardanoCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.CARDANO;
+  readonly chain: Network = NETWORKS.cardano.key;
 
   private koiosApi;
 

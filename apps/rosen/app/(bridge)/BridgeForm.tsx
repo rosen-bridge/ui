@@ -269,7 +269,7 @@ export const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {targetField.value == NETWORKS.BITCOIN && (
+      {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>

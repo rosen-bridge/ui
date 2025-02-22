@@ -1,5 +1,25 @@
 # @rosen-bridge/guard-app
 
+## 1.11.0
+
+### Minor Changes
+
+- Add the Binance Tokens card to the dashboard
+
+### Patch Changes
+
+- Updated @rosen-bridge/ui-kit@1.8.1 dependency
+
+## 1.10.1
+
+### Patch Changes
+
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
 ## 1.10.0
 
 ### Minor Changes

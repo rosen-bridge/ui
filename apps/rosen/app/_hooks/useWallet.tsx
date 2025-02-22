@@ -33,6 +33,7 @@ export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
   selected?: Wallet;
   wallets: Wallet[];
+  setSelected?: React.Dispatch<React.SetStateAction<Wallet | undefined>>;
 };
 
 export const WalletContext = createContext<WalletContextType | null>(null);
@@ -106,6 +107,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     select,
     selected,
     wallets,
+    setSelected,
   };
 
   return (

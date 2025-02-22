@@ -138,7 +138,9 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const tokenUrl = getTokenUrl(
     row.chain,
-    row.chain == NETWORKS.CARDANO ? row.tokenId.replace('.', '') : row.tokenId,
+    row.chain == NETWORKS.cardano.key
+      ? row.tokenId.replace('.', '')
+      : row.tokenId,
   );
 
   const coldUrl = getAddressUrl(row.chain, addresses.cold[row?.chain]);
