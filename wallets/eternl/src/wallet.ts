@@ -24,7 +24,7 @@ export class EtrnlWallet implements Wallet {
 
   link = 'https://eternl.io';
 
-  supportedChains = [NETWORKS.CARDANO];
+  supportedChains = [NETWORKS.cardano.key];
 
   private get api() {
     return window.cardano.eternl;
@@ -39,6 +39,8 @@ export class EtrnlWallet implements Wallet {
       throw new ConnectionRejectedError(this.name, error);
     }
   }
+
+  async disconnect(): Promise<void> {}
 
   async getAddress(): Promise<string> {
     try {
@@ -67,9 +69,9 @@ export class EtrnlWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.CARDANO)],
+      token[tokenMap.getIdKey(NETWORKS.cardano.key)],
       amount.quantity,
-      NETWORKS.CARDANO,
+      NETWORKS.cardano.key,
     ).amount;
 
     return wrappedAmount;

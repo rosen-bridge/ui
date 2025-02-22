@@ -48,7 +48,9 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
-    const result = await generateUnsignedTx(new TokenMap(testTokenMap))(
+    const result = await generateUnsignedTx(() => {
+      return Promise.resolve(new TokenMap(testTokenMap));
+    })(
       lockAddress,
       fromAddress,
       amount,
@@ -121,7 +123,7 @@ describe('generateUnsignedTx', () => {
 
     const token = tokenMap.search(chain, {})[0][chain];
 
-    const result = await generateUnsignedTx(tokenMap)(
+    const result = await generateUnsignedTx(() => Promise.resolve(tokenMap))(
       lockAddress,
       fromAddress,
       wrappedAmount,
@@ -176,7 +178,9 @@ describe('generateUnsignedTx', () => {
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
     await expect(async () => {
-      await generateUnsignedTx(new TokenMap(testTokenMap))(
+      await generateUnsignedTx(() =>
+        Promise.resolve(new TokenMap(testTokenMap)),
+      )(
         lockAddress,
         fromAddress,
         amount,

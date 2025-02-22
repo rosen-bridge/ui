@@ -6,14 +6,14 @@ import { BridgedAssetEntity } from '../../lib/database/bridgedAsset/BridgedAsset
 const tokens: TokenEntity[] = [
   {
     id: 'erg',
-    chain: NETWORKS.ERGO,
+    chain: NETWORKS.ergo.key,
     decimal: 9,
     isNative: true,
     name: 'ERG',
   },
   {
     id: 'ada',
-    chain: NETWORKS.CARDANO,
+    chain: NETWORKS.cardano.key,
     decimal: 6,
     isNative: true,
     name: 'ADA',
@@ -25,14 +25,14 @@ const bridgedAssets: BridgedAssetEntity[] = [
     token: tokens[0],
     tokenId: tokens[0].id,
     amount: 100n,
-    chain: NETWORKS.BITCOIN,
+    chain: NETWORKS.bitcoin.key,
     bridgedTokenId: `123${tokens[0].id}`,
   },
   {
     token: tokens[0],
     tokenId: tokens[0].id,
     amount: 200n,
-    chain: NETWORKS.CARDANO,
+    chain: NETWORKS.cardano.key,
     bridgedTokenId: `123${tokens[0].id}`,
   },
 ];

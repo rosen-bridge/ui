@@ -1,5 +1,26 @@
 # @rosen-bridge/watcher-app
 
+## 3.2.0
+
+### Minor Changes
+
+- Add the Binance icon
+
+### Patch Changes
+
+- Correct the display of zero RSN tokens in the dashboard
+
+## 3.1.4
+
+### Patch Changes
+
+- Update the RSN box in main page to fix how RSN and eRSN are displayed
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
 ## 3.1.3
 
 ### Patch Changes

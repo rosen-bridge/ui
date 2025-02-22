@@ -1,10 +1,11 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { tokenABI } from '@rosen-network/evm/dist/src/constants';
+import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
+  DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
   UnsupportedChainError,
@@ -30,7 +31,7 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
-  supportedChains = [NETWORKS.BINANCE, NETWORKS.ETHEREUM];
+  supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
   private api = new MetaMaskSDK({
     dappMetadata: {
@@ -39,19 +40,10 @@ export class MetaMaskWallet implements Wallet {
     enableAnalytics: false,
   });
 
-  /**
-   * TODO: centralized definition
-   * local:ergo/rosen-bridge/ui#510
-   */
-  private chains = {
-    [NETWORKS.BINANCE]: '0x38',
-    [NETWORKS.ETHEREUM]: '0x1',
-  } as { [key in Network]?: string };
-
   private get currentChain() {
-    const chain = Object.entries(this.chains)
-      .find(([, chainId]) => chainId == this.provider.chainId)
-      ?.at(0) as Network | undefined;
+    const chain = Object.values(NETWORKS).find(
+      (network) => network.id == this.provider.chainId,
+    )?.key;
 
     if (!chain) throw new CurrentChainError(this.name);
 
@@ -80,6 +72,14 @@ export class MetaMaskWallet implements Wallet {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    try {
+      await this.api.disconnect();
+    } catch (error) {
+      throw new DisconnectionFailedError(this.name, error);
     }
   }
 
@@ -141,9 +141,11 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async switchChain(chain: Network, silent?: boolean): Promise<void> {
-    const chainId = this.chains[chain];
+    if (!this.supportedChains.includes(chain)) {
+      throw new UnsupportedChainError(this.name, chain);
+    }
 
-    if (!chainId) throw new UnsupportedChainError(this.name, chain);
+    const chainId = NETWORKS[chain].id;
 
     if (silent) {
       const has = (await this.permissions())

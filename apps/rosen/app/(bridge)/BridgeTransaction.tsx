@@ -82,10 +82,7 @@ export const BridgeTransaction = ({
           flexDirection: 'column',
           height: '100%',
           gap: (theme) => theme.spacing(2),
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.primary.light
-              : theme.palette.background.paper,
+          backgroundColor: 'primary.light',
           padding: (theme) => theme.spacing(3),
         }}
       >
@@ -94,7 +91,7 @@ export const BridgeTransaction = ({
           label={selectedWallet?.label}
           onClick={() => setChooseWalletsModalOpen(true)}
         />
-        {sourceValue == NETWORKS.BITCOIN && (
+        {sourceValue == NETWORKS.bitcoin.key && (
           <Alert severity="warning" icon={false}>
             We only support native SegWit addresses (P2WPKH or P2WSH) for the
             source address.
