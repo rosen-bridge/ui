@@ -1,5 +1,12 @@
 # @rosen-network/evm
 
+## 0.2.0
+
+### Minor Changes
+
+- Encapsulate the network context within a class to enhance maintainability and simplify future modifications
+- Define the getMaxTransfer function to enhance maintainability and achieve better encapsulation
+
 ## 0.1.1
 
 ### Patch Changes

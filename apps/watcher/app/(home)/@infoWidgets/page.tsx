@@ -163,7 +163,7 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          value={titleRSN || titleERSN}
+          value={titleRSN || titleERSN || '0 RSN'}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">

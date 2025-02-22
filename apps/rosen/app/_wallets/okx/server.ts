@@ -14,7 +14,7 @@ export const generateOpReturnData = wrap(generateOpReturnDataCore, {
   traceKey: 'generateOpReturnData',
 });
 
-export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap()), {
+export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
   traceKey: 'generateUnsignedTx',
 });
 

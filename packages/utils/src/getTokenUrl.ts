@@ -2,11 +2,11 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
 const baseTokenURLs: { [key in Network]: string } = {
-  [NETWORKS.BINANCE]: 'https://bscscan.com/token',
-  [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/en/token',
-  [NETWORKS.CARDANO]: 'https://cardanoscan.io/token',
-  [NETWORKS.BITCOIN]: '',
-  [NETWORKS.ETHEREUM]: 'https://etherscan.io/token',
+  [NETWORKS.binance.key]: 'https://bscscan.com/token',
+  [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/en/token',
+  [NETWORKS.cardano.key]: 'https://cardanoscan.io/token',
+  [NETWORKS.bitcoin.key]: '',
+  [NETWORKS.ethereum.key]: 'https://etherscan.io/token',
 };
 
 export const getTokenUrl = (network: Network, tokenId?: string) => {

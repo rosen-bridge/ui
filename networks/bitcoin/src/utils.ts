@@ -1,5 +1,5 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
-import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Axios from 'axios';
 import { Psbt, address } from 'bitcoinjs-lib';
@@ -27,9 +27,7 @@ export const generateOpReturnData = async (
   bridgeFee: string,
 ): Promise<string> => {
   // parse toChain
-  const toChainCode = NETWORK_VALUES.indexOf(
-    toChain as (typeof NETWORK_VALUES)[number],
-  );
+  const toChainCode = (NETWORKS[toChain]?.index ?? -1) as number;
   if (toChainCode === -1) throw Error(`invalid toChain [${toChain}]`);
   const toChainHex = toChainCode.toString(16).padStart(2, '0');
 
