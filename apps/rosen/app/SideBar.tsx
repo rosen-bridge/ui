@@ -75,7 +75,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={!isMobile && <Version label="UI" value={packageJson.version} />}
+      versions={<Version label="UI" value={packageJson.version} />}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (
