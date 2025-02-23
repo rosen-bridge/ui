@@ -18,7 +18,9 @@ export const Amount = ({
   title,
   unit,
 }: AmountProps) => {
-  const [number, decimals] = value.split('.');
+  const [number, decimals] = value.includes('.')
+    ? value.split('.')
+    : [value, '0'];
 
   return (
     <Box
@@ -51,13 +53,13 @@ export const Amount = ({
               color="inherit"
               variant={size == 'normal' ? 'body1' : 'h2'}
             >
-              {value === '0'
+              {parseFloat(value) === 0
                 ? '0'
                 : +value
                   ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                   : '-'}
             </Typography>
-            {!!+value && (
+            {(parseFloat(value) === 0 || !!+value) && (
               <>
                 {!!decimals && (
                   <Typography

@@ -315,25 +315,22 @@ export const TabletRow: FC<RowProps> = (props) => {
         />
       </EnhancedTableCell>
       <EnhancedTableCell sx={{ opacity: isInfoLoading ? 0.3 : 1 }}>
-        {isInfoLoading ? (
-          <CircularProgress color="inherit" size={10} />
-        ) : (
-          <Amount
-            value={getDecimalString(
-              row.revenues
-                .filter(
-                  (revenue) =>
-                    revenue.revenueType === 'emission' &&
-                    (revenue.data.tokenId === info?.rsnTokenId ||
-                      revenue.data.tokenId === info?.emissionTokenId),
-                )
-                .reduce((sum, revenue) => sum + revenue.data.amount, 0)
-                .toString() ?? '',
-              row.lockToken.decimals,
-            )}
-            size="normal"
-          />
-        )}
+        <Amount
+          value={getDecimalString(
+            row.revenues
+              .filter(
+                (revenue) =>
+                  revenue.revenueType === 'emission' &&
+                  (revenue.data.tokenId === info?.rsnTokenId ||
+                    revenue.data.tokenId === info?.emissionTokenId),
+              )
+              .reduce((sum, revenue) => sum + revenue.data.amount, 0)
+              .toString() ?? '',
+            row.lockToken.decimals,
+          )}
+          size="normal"
+          loading={isInfoLoading}
+        />
       </EnhancedTableCell>
     </TableRow>
   );
