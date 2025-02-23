@@ -1,4 +1,4 @@
-import { EthereumIcon } from '@rosen-bridge/icons';
+import { Ethereum as EthereumIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,

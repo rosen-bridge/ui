@@ -1,4 +1,4 @@
-import { ErgoIcon } from '@rosen-bridge/icons';
+import { Ergo as ErgoIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,

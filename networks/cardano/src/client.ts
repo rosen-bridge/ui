@@ -1,4 +1,4 @@
-import { CardanoIcon } from '@rosen-bridge/icons';
+import { Cardano as CardanoIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,

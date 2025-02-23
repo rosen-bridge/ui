@@ -1,4 +1,4 @@
-import { EternlIcon } from '@rosen-bridge/icons';
+import { Eternl as EternlIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
