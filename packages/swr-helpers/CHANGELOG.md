@@ -1,5 +1,11 @@
 # @rosen-ui/swr-helpers
 
+## 0.2.1
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+
 ## 0.2.0
 
 ### Minor Changes

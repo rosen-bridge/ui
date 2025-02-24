@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/swr-mock",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/index.js",
