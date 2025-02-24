@@ -1,5 +1,14 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.2
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/types@0.3.4
+
 ## 2.1.1
 
 ### Patch Changes
