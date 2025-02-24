@@ -1,4 +1,4 @@
-import { BinanceIcon } from '@rosen-bridge/icons';
+import { Binance as BinanceIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,
