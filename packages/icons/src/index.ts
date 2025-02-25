@@ -47,3 +47,7 @@ export { ReactComponent as SyncProblem } from './icons/sync-problem.svg';
 export { ReactComponent as Times } from './icons/times.svg';
 export { ReactComponent as Unlock } from './icons/unlock.svg';
 export { ReactComponent as Wallet } from './icons/wallet.svg';
+export { ReactComponent as FileEditAlt } from './icons/file-edit-alt.svg';
+export { ReactComponent as ReceiptAlt } from './icons/receipt-alt.svg';
+export { ReactComponent as AngleLeft } from './icons/angle-left.svg';
+export { ReactComponent as AngleRight } from './icons/angle-right.svg';

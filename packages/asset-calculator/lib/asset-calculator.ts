@@ -65,7 +65,7 @@ class AssetCalculator {
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
-      NETWORKS.ETHEREUM,
+      NETWORKS.ethereum.key,
       this.tokens,
       ethereumCalculator.addresses,
       ethereumCalculator.rpcUrl,
@@ -73,18 +73,18 @@ class AssetCalculator {
       logger,
     );
     const binanceAssetCalculator = new EvmCalculator(
-      NETWORKS.BINANCE,
+      NETWORKS.binance.key,
       this.tokens,
       binanceCalculator.addresses,
       binanceCalculator.rpcUrl,
       binanceCalculator.authToken,
       logger,
     );
-    this.calculatorMap.set(NETWORKS.ERGO, ergoAssetCalculator);
-    this.calculatorMap.set(NETWORKS.CARDANO, cardanoAssetCalculator);
-    this.calculatorMap.set(NETWORKS.BITCOIN, bitcoinAssetCalculator);
-    this.calculatorMap.set(NETWORKS.ETHEREUM, ethereumAssetCalculator);
-    this.calculatorMap.set(NETWORKS.BINANCE, binanceAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
+    this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);

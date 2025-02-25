@@ -7,11 +7,11 @@ import { ergoNetwork } from './ergo';
 import { ethereumNetwork } from './ethereum';
 
 export const availableNetworks = {
-  [NETWORKS.BINANCE]: binanceNetwork,
-  [NETWORKS.BITCOIN]: bitcoinNetwork,
-  [NETWORKS.CARDANO]: cardanoNetwork,
-  [NETWORKS.ERGO]: ergoNetwork,
-  [NETWORKS.ETHEREUM]: ethereumNetwork,
+  [NETWORKS.binance.key]: binanceNetwork,
+  [NETWORKS.bitcoin.key]: bitcoinNetwork,
+  [NETWORKS.cardano.key]: cardanoNetwork,
+  [NETWORKS.ergo.key]: ergoNetwork,
+  [NETWORKS.ethereum.key]: ethereumNetwork,
 } as const;
 
 export type AvailableNetworks =
