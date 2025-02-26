@@ -9,7 +9,7 @@ import { zipWith } from 'lodash-es';
 import AbstractCalculator from '../abstract-calculator';
 
 export class ErgoCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.ERGO;
+  readonly chain: Network = NETWORKS.ergo.key;
 
   private explorerApi;
 

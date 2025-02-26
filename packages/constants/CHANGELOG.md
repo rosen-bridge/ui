@@ -1,5 +1,16 @@
 # @rosen-ui/constants
 
+## 0.2.0
+
+### Minor Changes
+
+- Add the `hasTokenSupport` property for each network to identify which networks support non-native tokens
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+
 ## 0.1.0
 
 ### Minor Changes

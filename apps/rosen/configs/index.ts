@@ -6,5 +6,6 @@ import { NETWORKS } from '@rosen-ui/constants';
 
 export const FEE_CONFIG_TOKEN_ID = '';
 
-export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } =
-  {} as any;
+export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {
+  //
+} as any;

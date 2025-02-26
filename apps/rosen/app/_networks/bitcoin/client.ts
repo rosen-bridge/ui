@@ -6,7 +6,7 @@ import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './server';
 
 export const bitcoinNetwork = new BitcoinNetwork({
-  lockAddress: LOCK_ADDRESSES.BITCOIN,
+  lockAddress: LOCK_ADDRESSES.bitcoin,
   nextHeightInterval: 1,
   getMaxTransfer: unwrap(getMaxTransfer),
 });
