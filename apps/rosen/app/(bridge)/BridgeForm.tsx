@@ -160,6 +160,7 @@ export const BridgeForm = () => {
     setValue('amount', raw, {
       shouldDirty: true,
       shouldTouch: true,
+      shouldValidate: true,
     });
   }, [raw, setValue]);
 
@@ -243,6 +244,7 @@ export const BridgeForm = () => {
                       setValue('walletAddress', clipboardText, {
                         shouldDirty: true,
                         shouldTouch: true,
+                        shouldValidate: true,
                       });
                     } catch (err) {
                       console.error('Failed to read clipboard: ', err);
@@ -269,7 +271,7 @@ export const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {targetField.value == NETWORKS.BITCOIN && (
+      {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>

@@ -40,7 +40,7 @@ export const generateUnsignedTx =
     const unwrappedAmount = tokenMap.unwrapAmount(
       `${policyIdHex}.${assetNameHex}`,
       wrappedAmount,
-      NETWORKS.CARDANO,
+      NETWORKS.cardano.key,
     ).amount;
 
     // converts hex address to bech32 address

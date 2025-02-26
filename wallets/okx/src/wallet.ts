@@ -21,7 +21,7 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
-  supportedChains = [NETWORKS.BITCOIN];
+  supportedChains = [NETWORKS.bitcoin.key];
 
   private get api() {
     return window.okxwallet.bitcoin;
@@ -63,9 +63,9 @@ export class OKXWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+      token[tokenMap.getIdKey(NETWORKS.bitcoin.key)],
       BigInt(amount.confirmed),
-      NETWORKS.BITCOIN,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     return wrappedAmount;

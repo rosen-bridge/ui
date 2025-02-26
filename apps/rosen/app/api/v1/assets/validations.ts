@@ -1,6 +1,6 @@
 import { NextRequest } from 'next/server';
 
-import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Joi from 'joi';
 
@@ -17,7 +17,7 @@ const getQueryParamsSchema = Joi.object<GETQueryParams>().keys({
   limit: Joi.number().min(0).max(100).default(20),
   id: Joi.string(),
   name: Joi.string(),
-  chain: Joi.string().valid(...NETWORK_VALUES),
+  chain: Joi.string().valid(...NETWORKS_KEYS),
 });
 
 /**

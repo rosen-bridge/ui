@@ -1,5 +1,28 @@
 # @rosen-bridge/watcher-app
 
+## 3.2.1
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/swr-mock@0.0.4
+  - @rosen-ui/utils@0.4.5
+  - @rosen-bridge/ui-kit@1.9.0
+
+## 3.2.0
+
+### Minor Changes
+
+- Add the Binance icon
+
+### Patch Changes
+
+- Correct the display of zero RSN tokens in the dashboard
+
 ## 3.1.4
 
 ### Patch Changes

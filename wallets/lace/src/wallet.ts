@@ -24,7 +24,7 @@ export class LaceWallet implements Wallet {
 
   link = 'https://www.lace.io/';
 
-  supportedChains = [NETWORKS.CARDANO];
+  supportedChains = [NETWORKS.cardano.key];
 
   private get api() {
     return window.cardano.lace;
@@ -69,9 +69,9 @@ export class LaceWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.CARDANO)],
+      token[tokenMap.getIdKey(NETWORKS.cardano.key)],
       amount.quantity,
-      NETWORKS.CARDANO,
+      NETWORKS.cardano.key,
     ).amount;
 
     return wrappedAmount;

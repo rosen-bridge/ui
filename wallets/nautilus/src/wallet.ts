@@ -25,7 +25,7 @@ export class NautilusWallet implements Wallet {
 
   link = 'https://github.com/nautls/nautilus-wallet';
 
-  supportedChains = [NETWORKS.ERGO];
+  supportedChains = [NETWORKS.ergo.key];
 
   private get api() {
     return window.ergoConnector.nautilus;
@@ -63,7 +63,7 @@ export class NautilusWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ERGO)];
+    const tokenId = token[tokenMap.getIdKey(NETWORKS.ergo.key)];
 
     /**
      * The following condition is required because nautilus only accepts
@@ -80,7 +80,7 @@ export class NautilusWallet implements Wallet {
     const wrappedAmount = tokenMap.wrapAmount(
       tokenId,
       amount,
-      NETWORKS.ERGO,
+      NETWORKS.ergo.key,
     ).amount;
 
     return wrappedAmount;

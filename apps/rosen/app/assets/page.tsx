@@ -17,7 +17,7 @@ import {
   Typography,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
-import { NETWORK_LABELS, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
 import { ApiAssetsResponse, Assets as AssetsModel } from '@/_types/api';
@@ -167,12 +167,9 @@ const Assets = () => {
             value={network}
           >
             <MenuItem value="all">All</MenuItem>
-            {Object.keys(NETWORKS).map((key) => (
-              <MenuItem
-                key={key}
-                value={NETWORKS[key as keyof typeof NETWORKS]}
-              >
-                {NETWORK_LABELS[key as keyof typeof NETWORKS]}
+            {NETWORKS_KEYS.map((key) => (
+              <MenuItem key={key} value={key}>
+                {NETWORKS[key].label}
               </MenuItem>
             ))}
           </TextField>

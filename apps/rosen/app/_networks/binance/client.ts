@@ -6,7 +6,7 @@ import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './server';
 
 export const binanceNetwork = new BinanceNetwork({
-  lockAddress: LOCK_ADDRESSES.BINANCE,
+  lockAddress: LOCK_ADDRESSES.binance,
   nextHeightInterval: 200,
   getMaxTransfer: unwrap(getMaxTransfer),
 });
