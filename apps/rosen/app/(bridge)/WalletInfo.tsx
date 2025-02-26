@@ -8,25 +8,21 @@ import {
   IconButton,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { Wallet } from '@rosen-ui/wallet-api';
-
-import { useWallet } from '@/_hooks';
 
 export interface WalletInfoProps {
   icon?: FunctionComponent;
   label?: string;
-  wallet?: Wallet;
+  disconnect: () => void;
   onClick: () => void;
 }
 
 export const WalletInfo = ({
   icon: Icon,
   label,
-  wallet,
+  disconnect,
   onClick,
 }: WalletInfoProps) => {
   const selected = Icon && label;
-  const { setSelected } = useWallet();
 
   return (
     <Grid container alignItems="center" justifyContent="space-between">
@@ -39,17 +35,15 @@ export const WalletInfo = ({
           onClick={onClick}
         >
           <Grid container alignItems="center" justifyContent="center" gap={1}>
-            {Icon && (
-              <Avatar
-                sx={{
-                  width: 18,
-                  height: 18,
-                  background: 'transparent',
-                }}
-              >
-                <Icon />
-              </Avatar>
-            )}
+            <Avatar
+              sx={{
+                width: 18,
+                height: 18,
+                background: 'transparent',
+              }}
+            >
+              <Icon />
+            </Avatar>
             <Typography>{label}</Typography>
           </Grid>
         </IconButton>
@@ -63,12 +57,9 @@ export const WalletInfo = ({
             borderRadius: 1,
             margin: 0,
           }}
-          startIcon={<Disconnect />}
+          startIcon={<Disconnect width="24px" />}
           onClick={() => {
-            if (wallet) {
-              wallet.disconnect();
-              setSelected?.(undefined);
-            }
+            disconnect();
           }}
         >
           Disconnect

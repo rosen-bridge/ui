@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
+import { disconnect } from 'process';
 
 import {
   useNetwork,
@@ -55,6 +56,7 @@ export const BridgeTransaction = ({
     select: setSelectedWallet,
     wallets,
     selected: selectedWallet,
+    disconnect,
   } = useWallet();
 
   const { selectedSource } = useNetwork();
@@ -91,7 +93,7 @@ export const BridgeTransaction = ({
           <WalletInfo
             icon={selectedWallet?.icon}
             label={selectedWallet?.label}
-            wallet={selectedWallet}
+            disconnect={disconnect}
             onClick={() => setChooseWalletsModalOpen(true)}
           />
         </Card>
