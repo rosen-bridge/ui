@@ -4,17 +4,17 @@ import {
   NetworkConfig,
   NetworkMaxTransferParams,
 } from '@rosen-network/base';
-import { NETWORKS, NETWORK_LABELS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 export class EthereumNetwork implements Network {
-  public label = NETWORK_LABELS.ETHEREUM;
+  public label = NETWORKS.ethereum.label;
 
   public lockAddress: string;
 
   public logo = EthereumIcon;
 
-  public name = NETWORKS.ETHEREUM;
+  public name = NETWORKS.ethereum.key;
 
   public nextHeightInterval: number;
 

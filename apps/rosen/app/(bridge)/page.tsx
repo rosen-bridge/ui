@@ -102,8 +102,8 @@ const RosenBridge = () => {
                     TODO: Add a condition that activates this alert specifically when MetaMask is selected
                     local:ergo/rosen-bridge/ui#486
                     */}
-                    {(methods.getValues().source == NETWORKS.BINANCE ||
-                      methods.getValues().source == NETWORKS.ETHEREUM) && (
+                    {(methods.getValues().source == NETWORKS.binance.key ||
+                      methods.getValues().source == NETWORKS.ethereum.key) && (
                       <Alert
                         severity="warning"
                         sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}

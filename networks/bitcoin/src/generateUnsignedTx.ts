@@ -29,9 +29,9 @@ export const generateUnsignedTx =
   ): Promise<UnsignedPsbtData> => {
     const tokenMap = await getTokenMap();
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+      token[tokenMap.getIdKey(NETWORKS.bitcoin.key)],
       wrappedAmount,
-      NETWORKS.BITCOIN,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     // generate txBuilder

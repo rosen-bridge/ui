@@ -1,5 +1,15 @@
 # @rosen-bridge/icons
 
+## 1.1.0
+
+### Minor Changes
+
+- Add the `file-edit-alt`, `receipt-alt`, `angle-left`, and `angle-right` icons
+
+### Patch Changes
+
+- Discontinue support for the Nami extension wallet
+
 ## 1.0.0
 
 ### Major Changes

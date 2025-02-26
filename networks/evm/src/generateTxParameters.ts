@@ -23,9 +23,9 @@ export const generateTxParameters =
     const tokenMap = await getTokenMap();
 
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
+      token[tokenMap.getIdKey(NETWORKS.ethereum.key)],
       wrappedAmount,
-      NETWORKS.ETHEREUM,
+      NETWORKS.ethereum.key,
     ).amount;
 
     let transactionParameters;
