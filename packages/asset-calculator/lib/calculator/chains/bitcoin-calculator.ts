@@ -18,7 +18,7 @@ interface PartialEsploraAddress {
 }
 
 export class BitcoinCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.BITCOIN;
+  readonly chain: Network = NETWORKS.bitcoin.key;
 
   protected client: AxiosInstance;
 
