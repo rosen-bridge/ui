@@ -1,4 +1,4 @@
 import DatabaseActionMock from './db/mocked/EventStatusActor.mock';
 
 // mock database
-await DatabaseActionMock.initDatabase();
+await DatabaseActionMock.init();

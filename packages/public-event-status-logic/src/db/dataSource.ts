@@ -2,7 +2,8 @@
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
-import { StatusChangedEntity } from './entities/StatusChangedEntity';
+import { OverallStatusChangedEntity } from './entities/OverallStatusChangedEntity';
+import { TxEntity } from './entities/TxEntity';
 import migrations from './migrations';
 
 function getString(key: string): string {
@@ -19,7 +20,7 @@ export const dataSource = new DataSource({
   type: 'postgres',
   url: config.postgresUrl,
   ssl: config.postgresUseSSL,
-  entities: [StatusChangedEntity, GuardStatusChangedEntity],
+  entities: [OverallStatusChangedEntity, GuardStatusChangedEntity, TxEntity],
   migrations: [...migrations.postgres],
   synchronize: false,
   logging: false,

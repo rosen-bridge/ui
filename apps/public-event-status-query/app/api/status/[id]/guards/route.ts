@@ -1,6 +1,7 @@
-import { guardStatusChangedToDTO } from '@rosen-bridge/public-event-status-logic';
-
-import { EventStatusActions } from '@/_backend/actions';
+import {
+  EventStatusActions,
+  guardStatusChangedToDTO,
+} from '@/_backend/actions';
 import { withValidation } from '@/api/withValidation';
 
 import { Params, validator } from './validator';

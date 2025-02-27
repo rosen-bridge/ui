@@ -1,5 +1,5 @@
-import { Migration1739867581065 } from './postgres/1739867581065-migration';
+import { Migration1740674459019 } from './postgres/1740674459019-migration';
 
 export default {
-  postgres: [Migration1739867581065],
+  postgres: [Migration1740674459019],
 };

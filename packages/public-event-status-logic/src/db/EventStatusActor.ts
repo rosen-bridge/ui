@@ -8,68 +8,97 @@ import {
   TxType,
 } from '../constants';
 import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
-import { StatusChangedEntity } from './entities/StatusChangedEntity';
+import { OverallStatusChangedEntity } from './entities/OverallStatusChangedEntity';
+import { TxEntity } from './entities/TxEntity';
 
+/**
+ * methods that operate on a single entity belong here
+ */
 export class EventStatusActor {
   private static instance: EventStatusActor;
   dataSource: DataSource;
-  statusChangedRepository: Repository<StatusChangedEntity>;
+  overallStatusChangedRepository: Repository<OverallStatusChangedEntity>;
   guardStatusChangedRepository: Repository<GuardStatusChangedEntity>;
+  txRepository: Repository<TxEntity>;
 
   protected constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
-    this.statusChangedRepository =
-      this.dataSource.getRepository(StatusChangedEntity);
+    this.overallStatusChangedRepository = this.dataSource.getRepository(
+      OverallStatusChangedEntity,
+    );
     this.guardStatusChangedRepository = this.dataSource.getRepository(
       GuardStatusChangedEntity,
     );
+    this.txRepository = this.dataSource.getRepository(TxEntity);
   }
 
+  /**
+   * inits EventStatusActor
+   * @param dataSource
+   * @returns EventStatusActor instance
+   */
   static init = (dataSource: DataSource): EventStatusActor => {
     EventStatusActor.instance = new EventStatusActor(dataSource);
     return EventStatusActor.instance;
   };
 
+  /**
+   * gets the instance of EventStatusActor (throws error if it doesn't exist)
+   * @returns EventStatusActor instance
+   */
   static getInstance = (): EventStatusActor => {
     if (!EventStatusActor.instance)
-      throw Error(`Database is not instantiated yet`);
+      throw Error(`EventStatusActor is not instantiated yet`);
     return EventStatusActor.instance;
   };
 
-  insertStatus = async (
+  /**
+   * inserts an OverallStatusChangedEntity into database if it differs from its last value
+   * @param insertedAt
+   * @param eventId
+   * @param status
+   * @param txId
+   * @param txStatus
+   * @returns promise of void
+   */
+  insertOverallStatus = async (
     insertedAt: number,
     eventId: string,
     status: AggregateEventStatus,
     txId?: string,
-    txType?: TxType,
     txStatus?: AggregateTxStatus,
   ): Promise<void> => {
-    const lastValue = await this.getLastStatus(eventId);
+    const lastValue = await this.getLastOverallStatus(eventId);
 
     if (
       lastValue &&
       status === lastValue.status &&
-      txId === lastValue.txId &&
-      txStatus === lastValue.txStatus
+      txId === lastValue.tx?.txId &&
+      txStatus === (lastValue.txStatus ?? undefined)
     ) {
       return;
     }
 
-    await this.statusChangedRepository.insert({
+    await this.overallStatusChangedRepository.insert({
       insertedAt,
       eventId,
       status,
-      txId,
-      txType,
+      tx: txId ? { txId } : undefined,
       txStatus,
     });
   };
 
-  getLastStatus = async (
+  /**
+   * gets last OverallStatusChangedEntity by eventId
+   * @param eventId
+   * @returns promise of OverallStatusChangedEntity or null
+   */
+  getLastOverallStatus = async (
     eventId: string,
-  ): Promise<StatusChangedEntity | null> => {
-    return await this.statusChangedRepository
+  ): Promise<OverallStatusChangedEntity | null> => {
+    return await this.overallStatusChangedRepository
       .createQueryBuilder('record')
+      .leftJoinAndSelect('record.tx', 'tx')
       .where('record.eventId = :eventId', {
         eventId,
       })
@@ -77,11 +106,17 @@ export class EventStatusActor {
       .getOne();
   };
 
-  getStatusTimeline = async (
+  /**
+   * gets all OverallStatusChangedEntity records (timeline) by eventId
+   * @param eventId
+   * @returns promise of OverallStatusChangedEntity array
+   */
+  getOverallStatusTimeline = async (
     eventId: string,
-  ): Promise<StatusChangedEntity[]> => {
-    return await this.statusChangedRepository
+  ): Promise<OverallStatusChangedEntity[]> => {
+    return await this.overallStatusChangedRepository
       .createQueryBuilder('record')
+      .leftJoinAndSelect('record.tx', 'tx')
       .where('record.eventId = :eventId', {
         eventId,
       })
@@ -89,12 +124,17 @@ export class EventStatusActor {
       .getMany();
   };
 
-  getStatusesById = async (
+  /**
+   * gets array of last OverallStatusChangedEntity by eventIds
+   * @param eventIds
+   * @returns promise of OverallStatusChangedEntity array
+   */
+  getLastOverallStatusesByEventIds = async (
     eventIds: string[],
-  ): Promise<StatusChangedEntity[]> => {
-    return await this.statusChangedRepository
+  ): Promise<OverallStatusChangedEntity[]> => {
+    return await this.overallStatusChangedRepository
       .createQueryBuilder('record')
-      .select()
+      .leftJoinAndSelect('record.tx', 'tx')
       .where('record.eventId IN (:...eventIds)', {
         eventIds,
       })
@@ -104,13 +144,22 @@ export class EventStatusActor {
       .getMany();
   };
 
+  /**
+   * inserts a GuardStatusChangedEntity into database if it differs from its last value
+   * @param insertedAt
+   * @param guardPk
+   * @param eventId
+   * @param status
+   * @param txId
+   * @param txStatus
+   * @returns promise of void
+   */
   insertGuardStatus = async (
     insertedAt: number,
     guardPk: string,
     eventId: string,
     status: EventStatus,
     txId?: string,
-    txType?: TxType,
     txStatus?: TxStatus,
   ): Promise<void> => {
     const lastValue = await this.getLastGuardStatus(eventId, guardPk);
@@ -118,8 +167,8 @@ export class EventStatusActor {
     if (
       lastValue &&
       status === lastValue.status &&
-      txId === lastValue.txId &&
-      txStatus === lastValue.txStatus
+      txId === lastValue.tx?.txId &&
+      txStatus === (lastValue.txStatus ?? undefined)
     ) {
       return;
     }
@@ -129,18 +178,24 @@ export class EventStatusActor {
       guardPk,
       eventId,
       status,
-      txId,
-      txType,
+      tx: txId ? { txId } : undefined,
       txStatus,
     });
   };
 
+  /**
+   * gets last GuardStatusChangedEntity by eventId and guardPk
+   * @param eventId
+   * @param guardPk
+   * @returns promise of GuardStatusChangedEntity or null
+   */
   getLastGuardStatus = async (
     eventId: string,
     guardPk: string,
   ): Promise<GuardStatusChangedEntity | null> => {
     return await this.guardStatusChangedRepository
       .createQueryBuilder('record')
+      .leftJoinAndSelect('record.tx', 'tx')
       .where('record.eventId = :eventId AND record.guardPk = :guardPk', {
         eventId,
         guardPk,
@@ -149,12 +204,19 @@ export class EventStatusActor {
       .getOne();
   };
 
+  /**
+   * gets all GuardStatusChangedEntity records (timeline) by eventId and guardPks
+   * @param eventId
+   * @param guardPks
+   * @returns promise of GuardStatusChangedEntity array
+   */
   getGuardStatusTimeline = async (
     eventId: string,
     guardPks: string[],
   ): Promise<GuardStatusChangedEntity[]> => {
     return await this.guardStatusChangedRepository
       .createQueryBuilder('record')
+      .leftJoinAndSelect('record.tx', 'tx')
       .where('record.eventId = :eventId AND record.guardPk IN (:...guardPks)', {
         eventId,
         guardPks,
@@ -163,11 +225,17 @@ export class EventStatusActor {
       .getMany();
   };
 
+  /**
+   * gets last GuardStatusChangedEntity records by eventId distinctOn guardPk
+   * @param eventId
+   * @returns promise of GuardStatusChangedEntity array
+   */
   getGuardsLastStatus = async (
     eventId: string,
   ): Promise<GuardStatusChangedEntity[]> => {
     return await this.guardStatusChangedRepository
       .createQueryBuilder('record')
+      .leftJoinAndSelect('record.tx', 'tx')
       .where('record.eventId = :eventId', {
         eventId,
       })
@@ -175,5 +243,32 @@ export class EventStatusActor {
       .distinctOn(['record.guardPk'])
       .addOrderBy('record.insertedAt', 'DESC')
       .getMany();
+  };
+
+  /**
+   * inserts a TxEntity into database if it doesn't already exist
+   * @param txId
+   * @param eventId
+   * @param insertedAt
+   * @param txType
+   * @returns promise of void
+   */
+  insertTx = async (
+    txId: string,
+    eventId: string,
+    insertedAt: number,
+    txType: TxType,
+  ): Promise<void> => {
+    const exists = await this.txRepository.findOneBy({
+      txId,
+    });
+    if (exists) return;
+
+    await this.txRepository.insert({
+      txId,
+      eventId,
+      insertedAt,
+      txType,
+    });
   };
 }

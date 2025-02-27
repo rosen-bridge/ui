@@ -1,20 +1,16 @@
 import { DataSource } from 'typeorm';
 
-import { EventStatus, TxType, TxStatus } from '../../../src/constants';
 import { GuardStatusChangedEntity } from '../../../src/db/entities/GuardStatusChangedEntity';
-import { StatusChangedEntity } from '../../../src/db/entities/StatusChangedEntity';
+import { OverallStatusChangedEntity } from '../../../src/db/entities/OverallStatusChangedEntity';
+import { TxEntity } from '../../../src/db/entities/TxEntity';
 import { EventStatusActor } from '../../../src/db/EventStatusActor';
 import migrations from '../../../src/db/migrations';
-import {
-  eventStatusToAggregate,
-  txStatusToAggregate,
-} from '../../../src/utils';
 import testConfig from '../../testConfig';
 
 class EventStatusActorMock {
   static testDataSource = new DataSource({
     type: 'postgres',
-    entities: [StatusChangedEntity, GuardStatusChangedEntity],
+    entities: [OverallStatusChangedEntity, GuardStatusChangedEntity, TxEntity],
     migrations: [...migrations.postgres],
     synchronize: false,
     logging: false,
@@ -24,9 +20,12 @@ class EventStatusActorMock {
     password: testConfig.password,
     database: testConfig.database,
   });
-  static testDatabase: EventStatusActor;
+  static actor: EventStatusActor;
 
-  static initDatabase = async () => {
+  /**
+   * initializes test datasource and actor
+   */
+  static init = async () => {
     try {
       await this.testDataSource.initialize();
       await this.testDataSource.runMigrations();
@@ -36,16 +35,17 @@ class EventStatusActorMock {
       console.error(err.stack);
     }
     EventStatusActor.init(this.testDataSource);
-    this.testDatabase = EventStatusActor.getInstance();
+    this.actor = EventStatusActor.getInstance();
   };
 
+  /**
+   * deletes every record from every table
+   */
   static clearTables = async () => {
-    const entities = this.testDatabase.dataSource.entityMetadatas;
+    const entities = this.actor.dataSource.entityMetadatas;
 
     for (const entity of entities) {
-      const repository = this.testDatabase.dataSource.getRepository(
-        entity.name,
-      );
+      const repository = this.actor.dataSource.getRepository(entity.name);
 
       await repository.query(
         `TRUNCATE ${entity.tableName} RESTART IDENTITY CASCADE;`,
@@ -53,49 +53,27 @@ class EventStatusActorMock {
     }
   };
 
-  static insertFakeStatusChangedRecords = async (
-    records: {
-      timestamp: number;
-      eventId: string;
-      status: EventStatus;
-      txId?: string;
-      txType?: TxType;
-      txStatus?: TxStatus;
-    }[],
+  /**
+   * inserts array of OverallStatusChangedEntity in database
+   * @param records
+   */
+  static populateOverallStatusChanged = async (
+    records: Omit<OverallStatusChangedEntity, 'id'>[],
   ) => {
     for (const record of records) {
-      await this.testDatabase.statusChangedRepository.insert({
-        insertedAt: record.timestamp + 2,
-        eventId: record.eventId,
-        status: eventStatusToAggregate(record.status),
-        txId: record.txId,
-        txType: record.txType,
-        txStatus: record.txStatus && txStatusToAggregate(record.txStatus),
-      });
+      await this.actor.overallStatusChangedRepository.insert(record);
     }
   };
 
-  static insertFakeGuardStatusChangedRecords = async (
-    records: {
-      timestamp: number;
-      guardPk: string;
-      eventId: string;
-      status: EventStatus;
-      txId?: string;
-      txType?: TxType;
-      txStatus?: TxStatus;
-    }[],
+  /**
+   * inserts array of OverallStatusChangedEntity in database
+   * @param records
+   */
+  static populateGuardStatusChanged = async (
+    records: Omit<GuardStatusChangedEntity, 'id'>[],
   ) => {
     for (const record of records) {
-      await this.testDatabase.guardStatusChangedRepository.insert({
-        insertedAt: record.timestamp + 2,
-        eventId: record.eventId,
-        guardPk: record.guardPk,
-        status: record.status,
-        txId: record.txId,
-        txType: record.txType,
-        txStatus: record.txStatus,
-      });
+      await this.actor.guardStatusChangedRepository.insert(record);
     }
   };
 }

@@ -6,11 +6,11 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { EventStatus, TxStatus } from '../../constants';
+import { AggregateTxStatus, AggregateEventStatus } from '../../constants';
 import { TxEntity } from './TxEntity';
 
 @Entity()
-export class GuardStatusChangedEntity {
+export class OverallStatusChangedEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,18 +18,14 @@ export class GuardStatusChangedEntity {
   @Index()
   eventId: string;
 
-  @Column('varchar')
-  @Index()
-  guardPk: string;
-
   @Column('integer')
   @Index()
   insertedAt: number;
 
   @Column('varchar')
-  status: EventStatus;
+  status: AggregateEventStatus;
 
-  @ManyToOne(() => TxEntity, (tx) => tx.guardStatusChangedRecords, {
+  @ManyToOne(() => TxEntity, (tx) => tx.overallStatusChangedRecords, {
     cascade: true,
     nullable: true,
     eager: true,
@@ -39,5 +35,5 @@ export class GuardStatusChangedEntity {
   @Column('varchar', {
     nullable: true,
   })
-  txStatus: TxStatus | null;
+  txStatus: AggregateTxStatus | null;
 }

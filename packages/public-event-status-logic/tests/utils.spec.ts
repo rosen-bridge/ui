@@ -1,97 +1,108 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { describe, expect, it } from 'vitest';
 
 import {
   AggregateEventStatus,
+  AggregateTxStatus,
   EventStatus,
   TxStatus,
-  TxType,
 } from '../src/constants';
-import { GuardStatusChangedEntity } from '../src/db/entities/GuardStatusChangedEntity';
-import { getMajorityFromStatuses } from '../src/utils';
+import { Utils, StatusForAggregate } from '../src/utils';
+import { guardPk0, guardPk1, guardPk2, id0 } from './testData';
 
-describe('utils', () => {
-  describe('getMajorityFromStatuses', () => {
-    it('should return waitingForConfirmation for event status if no threshold is triggered and undefined for tx status', async () => {
-      let statuses: GuardStatusChangedEntity[] = [];
-
-      let result = getMajorityFromStatuses(statuses);
-
-      expect(result.status).toBe(AggregateEventStatus.waitingForConfirmation);
-      expect(result.txId).toBeUndefined();
-      expect(result.txType).toBeUndefined();
-      expect(result.txStatus).toBeUndefined();
-
-      //
-
-      statuses = [
+describe('Utils', () => {
+  describe('calcAggregatedStatus', () => {
+    /**
+     * @target Utils.calcAggregatedStatus should return waitingForConfirmation status if
+     * no threshold is triggered
+     * @dependencies
+     * @scenario
+     * - call calcAggregatedStatus with 3 different values
+     * @expected
+     * - each call of calcAggregatedStatus should have returned its correct value
+     */
+    it('should return waitingForConfirmation status if no threshold is triggered', async () => {
+      // arrange
+      const statuses0: StatusForAggregate[] = [];
+      const statuses1: StatusForAggregate[] = [
         {
-          id: 0,
-          eventId:
-            '0000000000000000000000000000000000000000000000000000000000000000',
-          guardPk:
-            '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1',
-          insertedAt: 0,
+          guardPk: guardPk0,
           status: EventStatus.pendingPayment,
         },
       ];
+      const statuses2: StatusForAggregate[] = [
+        {
+          guardPk: guardPk0,
+          status: EventStatus.inPayment,
+          txId: id0,
+          txStatus: TxStatus.approved,
+        },
+      ];
 
-      result = getMajorityFromStatuses(statuses);
+      // act
+      const result0 = Utils.calcAggregatedStatus(statuses0);
+      const result1 = Utils.calcAggregatedStatus(statuses1);
+      const result2 = Utils.calcAggregatedStatus(statuses2);
 
-      expect(result.status).toBe(AggregateEventStatus.waitingForConfirmation);
-      expect(result.txId).toBeUndefined();
-      expect(result.txType).toBeUndefined();
-      expect(result.txStatus).toBeUndefined();
+      // assert
+      expect(result0).toMatchObject({
+        status: AggregateEventStatus.waitingForConfirmation,
+        txId: undefined,
+        txStatus: AggregateTxStatus.waitingForConfirmation,
+      });
+
+      expect(result1).toMatchObject({
+        status: AggregateEventStatus.waitingForConfirmation,
+        txId: undefined,
+        txStatus: AggregateTxStatus.waitingForConfirmation,
+      });
+
+      expect(result2).toMatchObject({
+        status: AggregateEventStatus.waitingForConfirmation,
+        txId: undefined,
+        txStatus: AggregateTxStatus.waitingForConfirmation,
+      });
     });
 
-    it('should return the correct event status', async () => {
-      let statuses: GuardStatusChangedEntity[] = [
+    /**
+     * @target calcAggregatedStatus should return the correct aggregated status
+     * @dependencies
+     * @scenario
+     * - call calcAggregatedStatus with array of statuses that won't result in waitingForConfirmation
+     * @expected
+     * - should have returned the correct value
+     */
+    it('should return the correct aggregated status', async () => {
+      // arrange
+      const statuses: StatusForAggregate[] = [
         {
-          id: 0,
-          eventId:
-            '0000000000000000000000000000000000000000000000000000000000000000',
-          guardPk:
-            '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e0',
-          insertedAt: 0,
+          guardPk: guardPk0,
           status: EventStatus.inReward,
-          txId: '0000000000000000000000000000000000000000000000000000000000000000',
-          txType: TxType.reward,
+          txId: id0,
           txStatus: TxStatus.signed,
         },
         {
-          id: 1,
-          eventId:
-            '0000000000000000000000000000000000000000000000000000000000000000',
-          guardPk:
-            '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1',
-          insertedAt: 1,
+          guardPk: guardPk1,
           status: EventStatus.inReward,
-          txId: '0000000000000000000000000000000000000000000000000000000000000000',
-          txType: TxType.reward,
+          txId: id0,
           txStatus: TxStatus.signed,
         },
         {
-          id: 2,
-          eventId:
-            '0000000000000000000000000000000000000000000000000000000000000000',
-          guardPk:
-            '0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e2',
-          insertedAt: 2,
+          guardPk: guardPk2,
           status: EventStatus.inReward,
-          txId: '0000000000000000000000000000000000000000000000000000000000000000',
-          txType: TxType.reward,
+          txId: id0,
           txStatus: TxStatus.signed,
         },
       ];
 
-      let result = getMajorityFromStatuses(statuses);
+      // act
+      const result = Utils.calcAggregatedStatus(statuses);
 
-      expect(result.status).toBe(AggregateEventStatus.inReward);
-      expect(result.txId).toBe(
-        '0000000000000000000000000000000000000000000000000000000000000000',
-      );
-      expect(result.txType).toBe(TxType.reward);
-      expect(result.txStatus).toBe(TxStatus.signed);
+      // assert
+      expect(result).toMatchObject({
+        status: AggregateEventStatus.inReward,
+        txId: id0,
+        txStatus: AggregateTxStatus.signed,
+      });
     });
   });
 });

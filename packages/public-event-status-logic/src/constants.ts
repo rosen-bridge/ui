@@ -45,7 +45,7 @@ export enum AggregateTxStatus {
   invalid = 'invalid',
   sent = 'sent',
   signed = 'signed',
-  sign = 'sign',
+  inSign = 'in-sign',
   waitingForConfirmation = 'waiting-for-confirmation',
 }
 

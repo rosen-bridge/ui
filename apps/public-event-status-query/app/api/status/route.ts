@@ -1,19 +1,18 @@
 import {
-  StatusChangedDTO,
-  statusChangedToDTO,
-} from '@rosen-bridge/public-event-status-logic';
-
-import { EventStatusActions } from '@/_backend/actions';
+  EventStatusActions,
+  OverallStatusChangedDTO,
+  overallStatusChangedToDTO,
+} from '@/_backend/actions';
 import { withValidation } from '@/api/withValidation';
 
 import { validator, Params } from './validator';
 
-type GetManyStatusResponse = Record<string, StatusChangedDTO>;
+type GetManyStatusResponse = Record<string, OverallStatusChangedDTO>;
 
 async function handler(params: Params) {
   const records = await EventStatusActions.getStatusesById(params.eventIds);
   return records.reduce((dict, record) => {
-    dict[record.eventId] = statusChangedToDTO(record);
+    dict[record.eventId] = overallStatusChangedToDTO(record);
     return dict;
   }, {} as GetManyStatusResponse);
 }

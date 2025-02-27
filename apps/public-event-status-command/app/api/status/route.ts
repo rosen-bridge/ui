@@ -23,6 +23,7 @@ async function handler(params: Params) {
 
   // verify signature
   const verified = await ecdsa.verify(
+    // TODO: extract
     `${params.eventId}${params.status}${params.txId ?? ''}${params.txType ?? ''}${params.txStatus ?? ''}${timestamp}`,
     params.signature,
     params.pk,
@@ -32,7 +33,7 @@ async function handler(params: Params) {
   }
 
   await EventStatusActions.insertStatus(
-    timestamp,
+    now,
     params.pk,
     params.eventId,
     params.status,

@@ -3,199 +3,174 @@ import {
   AggregateTxStatus,
   EventStatus,
   TxStatus,
-  TxType,
 } from './constants';
-import { GuardStatusChangedEntity } from './db/entities/GuardStatusChangedEntity';
-import { StatusChangedEntity } from './db/entities/StatusChangedEntity';
 import { eventStatusThresholds, txStatusThresholds } from './thresholds';
 
-export type MajorityStatus = {
+/**
+ * result of aggregate calculation
+ */
+export type AggregatedStatus = {
   status: AggregateEventStatus;
   txId?: string;
-  txType?: TxType;
-  txStatus?: AggregateTxStatus;
+  txStatus: AggregateTxStatus;
 };
 
-export function majorityMatch(s1: MajorityStatus, s2: MajorityStatus): boolean {
-  return (
-    s1.status === s2.status &&
-    s1.txId === s2.txId &&
-    s1.txType === s2.txType &&
-    s1.txStatus === s2.txStatus
-  );
-}
+/**
+ * input type used for calculating aggregate
+ */
+export type StatusForAggregate = {
+  guardPk: string;
+  status: EventStatus;
+  txId?: string;
+  txStatus?: TxStatus;
+};
 
-export function getMajorityFromStatuses(
-  statuses: GuardStatusChangedEntity[],
-): MajorityStatus {
-  const majority: MajorityStatus = {
-    status: AggregateEventStatus.waitingForConfirmation,
-    txId: undefined,
-    txType: undefined,
-    txStatus: undefined,
-  };
+export class Utils {
+  /**
+   * compares two records of AggregatedStatus
+   * @param s1
+   * @param s2
+   * @returns boolean
+   */
+  static aggregatedStatusesMatch(
+    s1: AggregatedStatus,
+    s2: AggregatedStatus,
+  ): boolean {
+    return (
+      s1.status === s2.status &&
+      s1.txId === s2.txId &&
+      s1.txStatus === s2.txStatus
+    );
+  }
 
-  if (statuses.length > 0) {
-    const statusesCount: Record<AggregateEventStatus, number> = {
-      [AggregateEventStatus.pendingPayment]: 0,
-      [AggregateEventStatus.pendingReward]: 0,
-      [AggregateEventStatus.inPayment]: 0,
-      [AggregateEventStatus.inReward]: 0,
-      [AggregateEventStatus.finished]: 0,
-      [AggregateEventStatus.rejected]: 0,
-      [AggregateEventStatus.timeout]: 0,
-      [AggregateEventStatus.reachedLimit]: 0,
-      [AggregateEventStatus.paymentWaiting]: 0,
-      [AggregateEventStatus.rewardWaiting]: 0,
-      [AggregateEventStatus.waitingForConfirmation]: 0,
+  /**
+   * calculates the aggregated status
+   * @param statuses
+   * @returns AggregatedStatus
+   */
+  static calcAggregatedStatus(
+    statuses: StatusForAggregate[],
+  ): AggregatedStatus {
+    const aggregatedStatus: AggregatedStatus = {
+      status: AggregateEventStatus.waitingForConfirmation,
+      txId: undefined,
+      txStatus: AggregateTxStatus.waitingForConfirmation,
     };
 
+    if (statuses.length === 0) {
+      return aggregatedStatus;
+    }
+
+    const statusesCount = Object.values(AggregateEventStatus).reduce(
+      (obj, status) => {
+        obj[status] = 0;
+        return obj;
+      },
+      {} as Record<AggregateEventStatus, number>,
+    );
+
     const txIdCount: Record<string, number> = {};
-    const txIdType: Record<string, TxType> = {};
     const txStatusesCount: Record<
       string,
       Record<AggregateTxStatus, number>
     > = {};
 
-    for (const guardStatus of statuses) {
-      statusesCount[eventStatusToAggregate(guardStatus.status)] += 1;
+    for (const status of statuses) {
+      statusesCount[this.eventStatusToAggregate(status.status)] += 1;
 
-      if (!guardStatus.txId) continue;
-
-      if (!txStatusesCount[guardStatus.txId]) {
-        txIdCount[guardStatus.txId] = 0;
-        txIdType[guardStatus.txId] = guardStatus.txType!;
-        txStatusesCount[guardStatus.txId] = {
-          [AggregateTxStatus.completed]: 0,
-          [AggregateTxStatus.sign]: 0,
-          [AggregateTxStatus.signed]: 0,
-          [AggregateTxStatus.sent]: 0,
-          [AggregateTxStatus.invalid]: 0,
-          [AggregateTxStatus.waitingForConfirmation]: 0,
-        };
+      if (!status.txId) continue;
+      if (!txStatusesCount[status.txId]) {
+        txIdCount[status.txId] = 0;
+        txStatusesCount[status.txId] = Object.values(AggregateTxStatus).reduce(
+          (obj, status) => {
+            obj[status] = 0;
+            return obj;
+          },
+          {} as Record<AggregateTxStatus, number>,
+        );
       }
 
-      txIdCount[guardStatus.txId] += 1;
+      txIdCount[status.txId] += 1;
 
-      txStatusesCount[guardStatus.txId][
-        txStatusToAggregate(guardStatus.txStatus!)
+      txStatusesCount[status.txId][
+        this.txStatusToAggregate(status.txStatus!)
       ] += 1;
     }
 
     for (const threshold of eventStatusThresholds) {
-      if (statusesCount[threshold[0]] >= threshold[1]) {
-        majority.status = threshold[0];
+      if (statusesCount[threshold.status] >= threshold.count) {
+        aggregatedStatus.status = threshold.status;
         break;
       }
     }
 
     if (Object.keys(txIdCount).length > 0) {
-      // TODO: select tx by majority?
-      majority.txId = Object.entries(txIdCount).toSorted(
-        (a, b) => b[1] - a[1],
-      )[0][0];
-      majority.txType = txIdType[majority.txId];
-
-      for (const threshold of txStatusThresholds) {
-        if (txStatusesCount[majority.txId!][threshold[0]] >= threshold[1]) {
-          majority.txStatus = threshold[0];
-          break;
+      for (const txId in txIdCount) {
+        if (txIdCount[txId] === 0) continue;
+        for (const threshold of txStatusThresholds) {
+          if (txStatusesCount[txId][threshold.status] >= threshold.count) {
+            aggregatedStatus.txId = txId;
+            aggregatedStatus.txStatus = threshold.status;
+            break;
+          }
         }
       }
+    }
 
-      if (!majority.txStatus) {
-        majority.txStatus = AggregateTxStatus.waitingForConfirmation;
-      }
+    return aggregatedStatus;
+  }
+
+  /**
+   * helper function to map EventStatus to AggregateEventStatus
+   * @param status
+   * @returns AggregateEventStatus
+   */
+  static eventStatusToAggregate(status: EventStatus): AggregateEventStatus {
+    switch (status) {
+      case EventStatus.inPayment:
+        return AggregateEventStatus.inPayment;
+      case EventStatus.pendingPayment:
+        return AggregateEventStatus.pendingPayment;
+      case EventStatus.pendingReward:
+        return AggregateEventStatus.pendingReward;
+      case EventStatus.inReward:
+        return AggregateEventStatus.inReward;
+      case EventStatus.completed:
+        return AggregateEventStatus.finished;
+      case EventStatus.spent:
+        return AggregateEventStatus.finished;
+      case EventStatus.rejected:
+        return AggregateEventStatus.rejected;
+      case EventStatus.timeout:
+        return AggregateEventStatus.timeout;
+      case EventStatus.reachedLimit:
+        return AggregateEventStatus.reachedLimit;
+      case EventStatus.paymentWaiting:
+        return AggregateEventStatus.paymentWaiting;
+      case EventStatus.rewardWaiting:
+        return AggregateEventStatus.rewardWaiting;
     }
   }
 
-  return majority;
-}
-
-export function eventStatusToAggregate(
-  status: EventStatus,
-): AggregateEventStatus {
-  switch (status) {
-    case EventStatus.inPayment:
-      return AggregateEventStatus.inPayment;
-    case EventStatus.pendingPayment:
-      return AggregateEventStatus.pendingPayment;
-    case EventStatus.pendingReward:
-      return AggregateEventStatus.pendingReward;
-    case EventStatus.inReward:
-      return AggregateEventStatus.inReward;
-    case EventStatus.completed:
-      return AggregateEventStatus.finished;
-    case EventStatus.spent:
-      return AggregateEventStatus.finished;
-    case EventStatus.rejected:
-      return AggregateEventStatus.rejected;
-    case EventStatus.timeout:
-      return AggregateEventStatus.timeout;
-    case EventStatus.reachedLimit:
-      return AggregateEventStatus.reachedLimit;
-    case EventStatus.paymentWaiting:
-      return AggregateEventStatus.paymentWaiting;
-    case EventStatus.rewardWaiting:
-      return AggregateEventStatus.rewardWaiting;
+  /**
+   * helper function to map TxStatus to AggregateTxStatus
+   * @param status
+   * @returns AggregateTxStatus
+   */
+  static txStatusToAggregate(status: TxStatus): AggregateTxStatus {
+    switch (status) {
+      case TxStatus.approved:
+        return AggregateTxStatus.inSign;
+      case TxStatus.inSign:
+        return AggregateTxStatus.inSign;
+      case TxStatus.signFailed:
+        return AggregateTxStatus.inSign;
+      case TxStatus.signed:
+        return AggregateTxStatus.signed;
+      case TxStatus.sent:
+        return AggregateTxStatus.sent;
+      case TxStatus.invalid:
+        return AggregateTxStatus.invalid;
+    }
   }
-}
-
-export function txStatusToAggregate(status: TxStatus): AggregateTxStatus {
-  switch (status) {
-    case TxStatus.approved:
-      return AggregateTxStatus.sign;
-    case TxStatus.inSign:
-      return AggregateTxStatus.sign;
-    case TxStatus.signFailed:
-      return AggregateTxStatus.sign;
-    case TxStatus.signed:
-      return AggregateTxStatus.signed;
-    case TxStatus.sent:
-      return AggregateTxStatus.sent;
-    case TxStatus.invalid:
-      return AggregateTxStatus.invalid;
-  }
-}
-
-export type StatusChangedDTO = {
-  insertedAt: number;
-  status: AggregateEventStatus;
-  txId?: string;
-  txType?: TxType;
-  txStatus?: AggregateTxStatus;
-};
-
-export function statusChangedToDTO(
-  record: StatusChangedEntity,
-): StatusChangedDTO {
-  return {
-    insertedAt: record.insertedAt,
-    status: record.status,
-    txId: record.txId,
-    txType: record.txType,
-    txStatus: record.txStatus,
-  };
-}
-
-export type GuardStatusChangedDTO = {
-  guardPk: string;
-  insertedAt: number;
-  status: EventStatus;
-  txId?: string;
-  txType?: TxType;
-  txStatus?: TxStatus;
-};
-
-export function guardStatusChangedToDTO(
-  record: GuardStatusChangedEntity,
-): GuardStatusChangedDTO {
-  return {
-    guardPk: record.guardPk,
-    insertedAt: record.insertedAt,
-    status: record.status,
-    txId: record.txId,
-    txType: record.txType,
-    txStatus: record.txStatus,
-  };
 }

@@ -1,93 +1,138 @@
 import { EventStatus, TxType, TxStatus } from '../constants';
-import { getMajorityFromStatuses, majorityMatch } from '../utils';
+import { StatusForAggregate, Utils } from '../utils';
 import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
-import { StatusChangedEntity } from './entities/StatusChangedEntity';
+import { OverallStatusChangedEntity } from './entities/OverallStatusChangedEntity';
 import { EventStatusActor } from './EventStatusActor';
 
-export async function insertStatus(
-  insertedAt: number,
-  pk: string,
-  eventId: string,
-  status: EventStatus,
-  txId?: string,
-  txType?: TxType,
-  txStatus?: TxStatus,
-): Promise<void> {
-  let guardStatuses =
-    await EventStatusActor.getInstance().getGuardsLastStatus(eventId);
+/**
+ * entry point of data layer (aggregate root)
+ * also methods that span multiple entities belong here
+ */
+export class EventStatusActions {
+  /**
+   * inserts a guard status and an overall status changed if it change the aggregated status
+   * @param insertedAt
+   * @param pk
+   * @param eventId
+   * @param status
+   * @param txId
+   * @param txType
+   * @param txStatus
+   * @returns promise of void
+   */
+  static insertStatus = async (
+    insertedAt: number,
+    pk: string,
+    eventId: string,
+    status: EventStatus,
+    txId?: string,
+    txType?: TxType,
+    txStatus?: TxStatus,
+  ): Promise<void> => {
+    const eventStatusActor = EventStatusActor.getInstance();
 
-  let majority;
-  if (guardStatuses.length > 0) {
-    // calc previous aggregated status
-    majority = getMajorityFromStatuses(guardStatuses);
-  }
+    if (txId && txType) {
+      await eventStatusActor.insertTx(txId, eventId, insertedAt, txType);
+    }
 
-  // taking into account the new status
-  const newStatuses = guardStatuses.filter((status) => status.guardPk !== pk);
-  newStatuses.push({
-    id: -1,
-    eventId,
-    guardPk: pk,
-    insertedAt,
-    status,
-    txId,
-    txType,
-    txStatus,
-  });
+    const guardsLastStatus =
+      await eventStatusActor.getGuardsLastStatus(eventId);
 
-  const majorityNew = getMajorityFromStatuses(newStatuses);
+    const statuses: StatusForAggregate[] = guardsLastStatus.map((record) => ({
+      guardPk: record.guardPk,
+      status: record.status,
+      txId: record.tx?.txId,
+      txStatus: record.txStatus ?? undefined,
+    }));
 
-  if (guardStatuses.length > 0 && majorityMatch(majority!, majorityNew)) {
-    await EventStatusActor.getInstance().insertGuardStatus(
-      insertedAt,
-      pk,
-      eventId,
+    let aggregatedStatus;
+    if (statuses.length > 0) {
+      // calc previous aggregated status
+      aggregatedStatus = Utils.calcAggregatedStatus(statuses);
+    }
+
+    // taking into account the new status
+    const newStatuses = statuses.filter((status) => status.guardPk !== pk);
+    newStatuses.push({
+      guardPk: pk,
       status,
       txId,
-      txType,
       txStatus,
-    );
-  } else {
-    await Promise.all([
-      EventStatusActor.getInstance().insertStatus(
-        insertedAt,
-        eventId,
-        majorityNew.status,
-        majorityNew.txId,
-        majorityNew.txType,
-        majorityNew.txStatus,
-      ),
-      EventStatusActor.getInstance().insertGuardStatus(
+    });
+
+    const aggregatedStatusNew = Utils.calcAggregatedStatus(newStatuses);
+
+    if (
+      statuses.length > 0 &&
+      Utils.aggregatedStatusesMatch(aggregatedStatus!, aggregatedStatusNew)
+    ) {
+      await eventStatusActor.insertGuardStatus(
         insertedAt,
         pk,
         eventId,
         status,
         txId,
-        txType,
+        txStatus,
+      );
+      return;
+    }
+
+    await Promise.all([
+      eventStatusActor.insertOverallStatus(
+        insertedAt,
+        eventId,
+        aggregatedStatusNew.status,
+        aggregatedStatusNew.txId,
+        aggregatedStatusNew.txStatus,
+      ),
+      eventStatusActor.insertGuardStatus(
+        insertedAt,
+        pk,
+        eventId,
+        status,
+        txId,
         txStatus,
       ),
     ]);
-  }
-}
+  };
 
-export function getStatusTimeline(
-  eventId: string,
-): Promise<StatusChangedEntity[]> {
-  return EventStatusActor.getInstance().getStatusTimeline(eventId);
-}
+  /**
+   * gets all OverallStatusChangedEntity records (timeline) by eventId
+   * @param eventId
+   * @returns promise of OverallStatusChangedEntity array
+   */
+  static getStatusTimeline = (
+    eventId: string,
+  ): Promise<OverallStatusChangedEntity[]> => {
+    return EventStatusActor.getInstance().getOverallStatusTimeline(eventId);
+  };
 
-export function getStatusesById(
-  eventIds: string[],
-): Promise<StatusChangedEntity[]> {
-  return EventStatusActor.getInstance().getStatusesById(eventIds);
-}
+  /**
+   * gets array of last OverallStatusChangedEntity by eventIds
+   * @param eventIds
+   * @returns promise of OverallStatusChangedEntity array
+   */
+  static getStatusesById = (
+    eventIds: string[],
+  ): Promise<OverallStatusChangedEntity[]> => {
+    return EventStatusActor.getInstance().getLastOverallStatusesByEventIds(
+      eventIds,
+    );
+  };
 
-export function getGuardStatusTimeline(
-  eventId: string,
-  guardPks: string[],
-): Promise<GuardStatusChangedEntity[]> {
-  return EventStatusActor.getInstance().getGuardStatusTimeline(
-    eventId,
-    guardPks,
-  );
+  /**
+   * gets all GuardStatusChangedEntity records (timeline) by eventId and guardPks
+   * @param eventId
+   * @param guardPks
+   * @returns promise of GuardStatusChangedEntity array
+   */
+  static getGuardStatusTimeline = (
+    eventId: string,
+    guardPks: string[],
+  ): Promise<GuardStatusChangedEntity[]> => {
+    return EventStatusActor.getInstance().getGuardStatusTimeline(
+      eventId,
+      guardPks,
+    );
+  };
 }

@@ -81,6 +81,7 @@ async function submitStatus(params) {
 
   const signature = sign(
     secret,
+    // TODO: extract
     `${eventId}${status}${txId ?? ''}${txType ?? ''}${txStatus ?? ''}${timestamp}`,
   );
 
@@ -219,8 +220,7 @@ async function testValidRequest() {
   assert.equal(response.data[eventId] !== undefined, true);
   assert(response.data[eventId].insertedAt >= timestamp);
   assert.equal(response.data[eventId].status, 'waiting-for-confirmation');
-  assert.equal(response.data[eventId].txId, id0);
-  assert.equal(response.data[eventId].txType, 'payment');
+  assert.equal(response.data[eventId].txId, undefined);
   assert.equal(response.data[eventId].txStatus, 'waiting-for-confirmation');
 
   console.log(`testValidRequest: Passed`);
@@ -248,14 +248,14 @@ async function testValidRequest2() {
   assert.equal(response.data[eventId] !== undefined, true);
   assert(response.data[eventId].insertedAt >= timestamp);
   assert.equal(response.data[eventId].status, 'waiting-for-confirmation');
-  assert.equal(response.data[eventId].txId, id1);
-  assert.equal(response.data[eventId].txType, 'payment');
+  assert.equal(response.data[eventId].txId, undefined);
   assert.equal(response.data[eventId].txStatus, 'waiting-for-confirmation');
 
   console.log(`testValidRequest2: Passed`);
 }
 
 async function testDuplicateRequest() {
+  await new Promise((r) => setTimeout(r, 1000));
   const timestamp = getTime();
   const eventId = id1;
 
@@ -279,14 +279,13 @@ async function testDuplicateRequest() {
   assert.equal(response.data[eventId] !== undefined, true);
   assert(response.data[eventId].insertedAt < timestamp); // <
   assert.equal(response.data[eventId].status, 'waiting-for-confirmation');
-  assert.equal(response.data[eventId].txId, id1);
-  assert.equal(response.data[eventId].txType, 'payment');
+  assert.equal(response.data[eventId].txId, undefined);
   assert.equal(response.data[eventId].txStatus, 'waiting-for-confirmation');
 
   console.log(`testDuplicateRequest: Passed`);
 }
 
-async function testAggregateStateChange() {
+async function testAggregateStatusChange() {
   const eventId = id2;
 
   // submit guard 0
@@ -312,8 +311,7 @@ async function testAggregateStateChange() {
   assert(response.data[eventId].insertedAt >= timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
   assert.equal(event.txId, undefined);
-  assert.equal(event.txType, undefined);
-  assert.equal(event.txStatus, undefined);
+  assert.equal(event.txStatus, 'waiting-for-confirmation');
 
   // submit guard 1
   await sleep(1000);
@@ -339,8 +337,7 @@ async function testAggregateStateChange() {
   assert(event.insertedAt < timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
   assert.equal(event.txId, undefined);
-  assert.equal(event.txType, undefined);
-  assert.equal(event.txStatus, undefined);
+  assert.equal(event.txStatus, 'waiting-for-confirmation');
 
   // submit guard 3
   await sleep(1000);
@@ -366,8 +363,7 @@ async function testAggregateStateChange() {
   assert(event.insertedAt >= timestamp);
   assert.equal(event.status, 'pending-payment');
   assert.equal(event.txId, undefined);
-  assert.equal(event.txType, undefined);
-  assert.equal(event.txStatus, undefined);
+  assert.equal(event.txStatus, 'waiting-for-confirmation');
 
   ////////////////////////////////////////////////////////////////////
 
@@ -394,8 +390,7 @@ async function testAggregateStateChange() {
   assert.equal(event !== undefined, true);
   assert(event.insertedAt >= timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
-  assert.equal(event.txId, id0);
-  assert.equal(event.txType, 'reward');
+  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
 
   // submit guard 1
@@ -421,8 +416,7 @@ async function testAggregateStateChange() {
   assert.equal(event !== undefined, true);
   assert(event.insertedAt < timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
-  assert.equal(event.txId, id0);
-  assert.equal(event.txType, 'reward');
+  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
 
   // submit guard 3
@@ -449,10 +443,9 @@ async function testAggregateStateChange() {
   assert(event.insertedAt >= timestamp);
   assert.equal(event.status, 'in-reward');
   assert.equal(event.txId, id0);
-  assert.equal(event.txType, 'reward');
   assert.equal(event.txStatus, 'signed');
 
-  console.log(`testAggregateStateChange: Passed`);
+  console.log(`testAggregateStatusChange: Passed`);
 }
 
 async function testGetInvalidEventIds() {
@@ -514,7 +507,8 @@ function resetDB() {
   );
 
   p.stdin.write('BEGIN;\n');
-  p.stdin.write('TRUNCATE TABLE status_changed_entity;\n');
+  p.stdin.write('TRUNCATE TABLE tx_entity RESTART IDENTITY CASCADE;\n');
+  p.stdin.write('TRUNCATE TABLE overall_status_changed_entity;\n');
   p.stdin.write('TRUNCATE TABLE guard_status_changed_entity;\n');
   p.stdin.write('COMMIT;\n');
 
@@ -603,7 +597,7 @@ async function run() {
       await testValidRequest();
       await testValidRequest2();
       await testDuplicateRequest();
-      await testAggregateStateChange();
+      await testAggregateStatusChange();
       await testGetInvalidEventIds();
       await testGetInvalidEventTimeline();
       await testGetValidEventTimeline();

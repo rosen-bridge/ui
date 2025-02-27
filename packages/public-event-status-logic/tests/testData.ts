@@ -1,11 +1,21 @@
-import { TxType, TxStatus, EventStatus } from '../src/constants';
+import {
+  TxType,
+  TxStatus,
+  EventStatus,
+  AggregateEventStatus,
+} from '../src/constants';
+import { GuardStatusChangedEntity } from '../src/db/entities/GuardStatusChangedEntity';
+import { OverallStatusChangedEntity } from '../src/db/entities/OverallStatusChangedEntity';
+import { TxEntity } from '../src/db/entities/TxEntity';
 
-export const eventId0 =
+export const id0 =
   '0000000000000000000000000000000000000000000000000000000000000000';
-export const eventId1 =
+export const id1 =
   '0000000000000000000000000000000000000000000000000000000000000001';
-export const eventId2 =
+export const id2 =
   '0000000000000000000000000000000000000000000000000000000000000002';
+export const id3 =
+  '0000000000000000000000000000000000000000000000000000000000000003';
 
 export const guardSecret0 =
   'a7bcd47224d594830d53558848d88f7eb89d9a3b944a59cda11f478e803039eb';
@@ -20,10 +30,10 @@ export const guardPk2 =
 export const guardPk3 =
   '03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c8';
 
-type InsertStatusRequestType = {
-  timestamp: number;
+type InsertStatusRequest = {
+  insertedAt: number;
   guardPk: string;
-  signature: string;
+  // signature: string;
   eventId: string;
   status: EventStatus;
   txId?: string;
@@ -31,147 +41,218 @@ type InsertStatusRequestType = {
   txStatus?: TxStatus;
 };
 
-export const fakeInsertStatusRequests: InsertStatusRequestType[] = [
+// used in EventStatusActions
+export const fakeInsertStatusRequests: InsertStatusRequest[] = [
   {
-    timestamp: 1000,
+    insertedAt: 1000,
     guardPk: guardPk0,
-    signature: '',
-    eventId: eventId0,
+    eventId: id0,
     status: EventStatus.pendingPayment,
-    txId: '',
+    txId: id0,
     txType: TxType.payment,
     txStatus: TxStatus.signed,
   },
   {
-    timestamp: 1005,
+    insertedAt: 1005,
     guardPk: guardPk0,
-    signature: '',
-    eventId: eventId0,
+    eventId: id0,
     status: EventStatus.completed,
-    txId: '',
+    txId: id0,
     txType: TxType.payment,
     txStatus: TxStatus.signed,
   },
   {
-    timestamp: 1010,
+    insertedAt: 1010,
     guardPk: guardPk1,
-    signature: '',
-    eventId: eventId1,
+    eventId: id1,
     status: EventStatus.pendingPayment,
-    txId: '',
+    txId: id1,
     txType: TxType.payment,
     txStatus: TxStatus.signed,
   },
   {
-    timestamp: 1001,
+    insertedAt: 1001,
     guardPk: guardPk0,
-    signature: '',
-    eventId: eventId0,
+    eventId: id0,
     status: EventStatus.timeout,
-    txId: '',
+    txId: id0,
     txType: TxType.payment,
     txStatus: TxStatus.signed,
   },
   {
-    timestamp: 1001,
+    insertedAt: 1001,
     guardPk: guardPk0,
-    signature: '',
-    eventId: eventId2,
+    eventId: id2,
     status: EventStatus.timeout,
-    txId: '',
+    txId: id2,
     txType: TxType.payment,
     txStatus: TxStatus.signed,
   },
   {
-    timestamp: 1001,
+    insertedAt: 1001,
     guardPk: guardPk1,
-    signature: '',
-    eventId: eventId0,
+    eventId: id0,
     status: EventStatus.timeout,
-    txId: '',
+    txId: id0,
     txType: TxType.payment,
     txStatus: TxStatus.signed,
   },
 ];
 
-export const majorityInsertStatusRequests: InsertStatusRequestType[] = [
+// used in EventStatusActions
+export const aggregateTestInsertStatusRequests: InsertStatusRequest[] = [
   {
-    eventId: eventId0,
-    timestamp: 900,
+    eventId: id0,
+    insertedAt: 900,
     status: EventStatus.pendingReward,
-    txId: eventId0,
-    txType: TxType.payment,
-    txStatus: TxStatus.inSign,
+    txId: undefined,
+    txType: undefined,
+    txStatus: undefined,
     guardPk: guardPk3,
-    signature: '',
   },
   {
-    eventId: eventId0,
-    timestamp: 1000,
+    eventId: id0,
+    insertedAt: 1000,
     status: EventStatus.inReward,
-    txId: eventId0,
-    txType: TxType.payment,
+    txId: id0,
+    txType: TxType.reward,
     txStatus: TxStatus.signed,
     guardPk: guardPk0,
-    signature: '',
   },
   {
-    eventId: eventId0,
-    timestamp: 1005,
+    eventId: id0,
+    insertedAt: 1005,
     status: EventStatus.inReward,
-    txId: eventId0,
-    txType: TxType.payment,
+    txId: id0,
+    txType: TxType.reward,
     txStatus: TxStatus.signed,
     guardPk: guardPk1,
-    signature: '',
   },
   {
-    eventId: eventId0,
-    timestamp: 1006,
+    eventId: id0,
+    insertedAt: 1006,
     status: EventStatus.inReward,
-    txId: eventId0,
-    txType: TxType.payment,
+    txId: id0,
+    txType: TxType.reward,
     txStatus: TxStatus.signed,
     guardPk: guardPk2,
-    signature: '',
+  },
+  {
+    eventId: id0,
+    insertedAt: 1010,
+    status: EventStatus.pendingReward,
+    txId: undefined,
+    txType: undefined,
+    txStatus: undefined,
+    guardPk: guardPk1,
+  },
+  {
+    eventId: id0,
+    insertedAt: 1012,
+    status: EventStatus.inReward,
+    txId: id0,
+    txType: TxType.reward,
+    txStatus: TxStatus.signed,
+    guardPk: guardPk3,
   },
 ];
 
-export const fakeInsertGuardStatusRequests: InsertStatusRequestType[] = [
+// used in EventStatusActor
+export const fakeOverallStatuses: Omit<OverallStatusChangedEntity, 'id'>[] = [
   {
-    eventId: eventId0,
-    txType: TxType.payment,
-    timestamp: 1000,
-    status: EventStatus.pendingPayment,
-    txStatus: TxStatus.signed,
-    guardPk: guardPk0,
-    signature: '',
+    insertedAt: 1000,
+    eventId: id0,
+    status: AggregateEventStatus.pendingPayment,
+    tx: null,
+    txStatus: null,
   },
   {
-    eventId: eventId1,
-    txType: TxType.payment,
-    timestamp: 1010,
-    status: EventStatus.pendingPayment,
-    txStatus: TxStatus.signed,
-    guardPk: guardPk0,
-    signature: '',
+    insertedAt: 1005,
+    eventId: id0,
+    status: AggregateEventStatus.finished,
+    tx: null,
+    txStatus: null,
   },
   {
-    eventId: eventId0,
-    txType: TxType.payment,
-    timestamp: 1005,
+    insertedAt: 1010,
+    eventId: id1,
+    status: AggregateEventStatus.pendingPayment,
+    tx: null,
+    txStatus: null,
+  },
+  {
+    insertedAt: 1001,
+    eventId: id0,
+    status: AggregateEventStatus.timeout,
+    tx: null,
+    txStatus: null,
+  },
+  {
+    insertedAt: 1001,
+    eventId: id2,
+    status: AggregateEventStatus.timeout,
+    tx: null,
+    txStatus: null,
+  },
+];
+
+// used in EventStatusActor
+export const fakeGuardStatuses: Omit<GuardStatusChangedEntity, 'id'>[] = [
+  {
+    eventId: id0,
+    insertedAt: 1000,
+    status: EventStatus.pendingPayment,
+    tx: null,
+    txStatus: null,
+    guardPk: guardPk0,
+  },
+  {
+    eventId: id1,
+    insertedAt: 1010,
+    status: EventStatus.pendingPayment,
+    tx: null,
+    txStatus: null,
+    guardPk: guardPk0,
+  },
+  {
+    eventId: id0,
+    insertedAt: 1005,
     status: EventStatus.completed,
-    txStatus: TxStatus.signed,
+    tx: null,
+    txStatus: null,
     guardPk: guardPk0,
-    signature: '',
   },
   {
-    eventId: eventId0,
-    txType: TxType.payment,
-    timestamp: 1001,
+    eventId: id0,
+    insertedAt: 1001,
     status: EventStatus.timeout,
-    txStatus: TxStatus.signed,
+    tx: null,
+    txStatus: null,
     guardPk: guardPk1,
-    signature: '',
+  },
+];
+
+// used in EventStatusActor
+export const fakeTx: Omit<
+  TxEntity,
+  'overallStatusChangedRecords' | 'guardStatusChangedRecords'
+>[] = [
+  {
+    txId: id0,
+    eventId: id0,
+    insertedAt: 1000,
+    txType: TxType.payment,
+  },
+  {
+    txId: id1,
+    eventId: id0,
+    insertedAt: 1100,
+    txType: TxType.reward,
+  },
+  {
+    txId: id2,
+    eventId: id2,
+    insertedAt: 1005,
+    txType: TxType.payment,
   },
 ];
