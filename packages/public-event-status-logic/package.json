@@ -14,6 +14,7 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit",
     "coverage": "npm run test -- --coverage",
+    "typeorm:generate:sqlite": "npm run typeorm migration:generate src/db/migrations/sqlite/migration -- -p -d tests/db/mocked/testDataSource.ts",
     "typeorm:generate:postgres": "npm run typeorm migration:generate src/db/migrations/postgres/migration -- -p -d src/db/dataSource.ts",
     "typeorm:migrate": "npm run typeorm migration:run -- -d src/db/dataSource.ts",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
@@ -24,6 +25,7 @@
     "@rosen-bridge/extended-typeorm": "^0.0.3",
     "@sinclair/typebox": "^0.30.4",
     "pg": "^8.4.0",
-    "reflect-metadata": "^0.2.2"
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7"
   }
 }

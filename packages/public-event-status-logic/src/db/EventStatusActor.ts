@@ -138,9 +138,20 @@ export class EventStatusActor {
       .where('record.eventId IN (:...eventIds)', {
         eventIds,
       })
+      .innerJoin(
+        (subQuery) =>
+          subQuery
+            .select('"eventId"')
+            .addSelect('MAX("insertedAt")', 'max_inserted_at')
+            .from(OverallStatusChangedEntity, 'sub_record')
+            .where('sub_record.eventId IN (:...eventIds)', {
+              eventIds,
+            })
+            .groupBy('sub_record.eventId'),
+        'sub_record',
+        'record.eventId = sub_record."eventId" AND record.insertedAt = sub_record.max_inserted_at',
+      )
       .orderBy('record.eventId', 'ASC')
-      .distinctOn(['record.eventId'])
-      .addOrderBy('record.insertedAt', 'DESC')
       .getMany();
   };
 
@@ -239,9 +250,20 @@ export class EventStatusActor {
       .where('record.eventId = :eventId', {
         eventId,
       })
+      .innerJoin(
+        (subQuery) =>
+          subQuery
+            .select('"guardPk"')
+            .addSelect('MAX("insertedAt")', 'max_inserted_at')
+            .from(GuardStatusChangedEntity, 'sub_record')
+            .where('sub_record.eventId = :eventId', {
+              eventId,
+            })
+            .groupBy('sub_record.guardPk'),
+        'sub_record',
+        'record.guardPk = sub_record."guardPk" AND record.insertedAt = sub_record.max_inserted_at',
+      )
       .orderBy('record.guardPk', 'DESC')
-      .distinctOn(['record.guardPk'])
-      .addOrderBy('record.insertedAt', 'DESC')
       .getMany();
   };
 

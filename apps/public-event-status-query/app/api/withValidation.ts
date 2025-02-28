@@ -35,9 +35,10 @@ export const withValidation =
         return Response.json(error.message, { status: 404 });
       }
       if (error instanceof Error) {
+        console.error(error.message.toString());
         return Response.json(error.message, { status: 500 });
       }
-      return Response.json(JSON.stringify(error), { status: 500 });
+      console.error(JSON.stringify(error));
     }
   };
 

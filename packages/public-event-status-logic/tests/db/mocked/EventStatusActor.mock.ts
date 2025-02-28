@@ -1,25 +1,10 @@
-import { DataSource } from 'typeorm';
-
 import { GuardStatusChangedEntity } from '../../../src/db/entities/GuardStatusChangedEntity';
 import { OverallStatusChangedEntity } from '../../../src/db/entities/OverallStatusChangedEntity';
-import { TxEntity } from '../../../src/db/entities/TxEntity';
 import { EventStatusActor } from '../../../src/db/EventStatusActor';
-import migrations from '../../../src/db/migrations';
-import testConfig from '../../testConfig';
+import { testDataSource } from './testDataSource';
 
 class EventStatusActorMock {
-  static testDataSource = new DataSource({
-    type: 'postgres',
-    entities: [OverallStatusChangedEntity, GuardStatusChangedEntity, TxEntity],
-    migrations: [...migrations.postgres],
-    synchronize: false,
-    logging: false,
-    host: testConfig.host,
-    port: testConfig.port,
-    username: testConfig.user,
-    password: testConfig.password,
-    database: testConfig.database,
-  });
+  static testDataSource = testDataSource;
   static actor: EventStatusActor;
 
   /**
@@ -48,7 +33,8 @@ class EventStatusActorMock {
       const repository = this.actor.dataSource.getRepository(entity.name);
 
       await repository.query(
-        `TRUNCATE ${entity.tableName} RESTART IDENTITY CASCADE;`,
+        `DELETE FROM ${entity.tableName};
+        DELETE FROM sqlite_sequence WHERE name='${entity.tableName}';`,
       );
     }
   };
