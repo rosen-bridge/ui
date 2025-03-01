@@ -30,7 +30,7 @@ export const Amount = ({
       {!!title && (
         <Typography
           color="text.secondary"
-          variant={size == 'normal' ? 'body2' : 'body1'}
+          sx={{ fontSize: size == 'normal' ? '0.75rem' : '1rem' }}
         >
           {title}
         </Typography>
@@ -39,7 +39,7 @@ export const Amount = ({
         {loading && (
           <Typography
             color="text.primary"
-            variant={size == 'normal' ? 'body1' : 'h2'}
+            sx={{ fontSize: size == 'normal' ? '1rem' : '1.5rem' }}
           >
             Pending...
           </Typography>
@@ -47,8 +47,8 @@ export const Amount = ({
         {!loading && (
           <>
             <Typography
-              color="text.secondary"
-              variant={size == 'normal' ? 'body1' : 'h2'}
+              color="text.primary"
+              sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.5rem' }}
             >
               {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
             </Typography>
@@ -56,8 +56,8 @@ export const Amount = ({
               <>
                 {!!decimals && (
                   <Typography
-                    color="text.primary"
-                    variant={size == 'normal' ? 'caption' : 'body2'}
+                    color="text.secondary"
+                    sx={{ fontSize: size == 'normal' ? '0.75em' : '1.125rem' }}
                   >
                     .{decimals}
                   </Typography>
@@ -65,7 +65,7 @@ export const Amount = ({
                 {!!unit && (
                   <Typography
                     color="text.secondary"
-                    variant={size == 'normal' ? 'caption' : 'body2'}
+                    sx={{ fontSize: size == 'normal' ? '0.75em' : '1.125rem' }}
                   >
                     &nbsp;{unit}
                   </Typography>
