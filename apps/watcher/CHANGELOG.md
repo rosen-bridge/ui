@@ -1,5 +1,57 @@
 # @rosen-bridge/watcher-app
 
+## 3.2.1
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/swr-mock@0.0.4
+  - @rosen-ui/utils@0.4.5
+  - @rosen-bridge/ui-kit@1.9.0
+
+## 3.2.0
+
+### Minor Changes
+
+- Add the Binance icon
+
+### Patch Changes
+
+- Correct the display of zero RSN tokens in the dashboard
+
+## 3.1.4
+
+### Patch Changes
+
+- Update the RSN box in main page to fix how RSN and eRSN are displayed
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
+## 3.1.3
+
+### Patch Changes
+
+- Enhance the React components by using the `PropsWithChildren` type instead of creating a custom type definition for scenarios that only require children props
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
+## 3.1.2
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Update the usage of the ID component
+- Updated dependency @rosen-bridge/ui-kit@1.7.1
+
 ## 3.1.1
 
 ### Patch Changes

@@ -1,18 +1,13 @@
-import { NETWORKS } from '@rosen-ui/constants';
+import { binance } from './binance';
+import { bitcoin } from './bitcoin';
+import { cardano } from './cardano';
+import { ergo } from './ergo';
+import { ethereum } from './ethereum';
 
-import { BinanceNetwork } from './binance';
-import { BitcoinNetwork } from './bitcoin';
-import { CardanoNetwork } from './cardano';
-import { ErgoNetwork } from './ergo';
-import { EthereumNetwork } from './ethereum';
-
-export const availableNetworks = {
-  [NETWORKS.BINANCE]: BinanceNetwork,
-  [NETWORKS.ERGO]: ErgoNetwork,
-  [NETWORKS.ETHEREUM]: EthereumNetwork,
-  [NETWORKS.CARDANO]: CardanoNetwork,
-  [NETWORKS.BITCOIN]: BitcoinNetwork,
+export const networks = {
+  [binance.name]: binance,
+  [bitcoin.name]: bitcoin,
+  [cardano.name]: cardano,
+  [ergo.name]: ergo,
+  [ethereum.name]: ethereum,
 } as const;
-
-export type AvailableNetworks =
-  (typeof availableNetworks)[keyof typeof availableNetworks];

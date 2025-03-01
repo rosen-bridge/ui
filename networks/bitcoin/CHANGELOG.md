@@ -1,5 +1,33 @@
 # @rosen-network/bitcoin
 
+## 2.1.1
+
+### Patch Changes
+
+- Update server functions to work with the asynchronously loaded token map
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-ui/constants@0.2.0
+
+## 2.1.0
+
+### Minor Changes
+
+- Encapsulate the network context within a class to enhance maintainability and simplify future modifications
+- Define the getMaxTransfer function to enhance maintainability and achieve better encapsulation
+
+### Patch Changes
+
+- Fix the issue related to getting the max amount for the transfer
+- Updated @rosen-ui/constants@0.1.0 dependency
+
+## 2.0.1
+
+### Patch Changes
+
+- Eliminate the dependency on the extensionless package and ensure that Viteset is compatible with the TSX package
+
 ## 2.0.0
 
 ### Major Changes

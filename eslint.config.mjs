@@ -51,10 +51,7 @@ export default [
 
   // React-Specific Rules and Plugins
   {
-    files: [
-      'packages/shared-contexts/**/*.{js,jsx,ts,tsx}',
-      'packages/ui-kit/**/*.{js,jsx,ts,tsx}',
-    ],
+    files: ['packages/ui-kit/**/*.{js,jsx,ts,tsx}'],
     plugins: {
       'react-refresh': reactRefresh,
       'react-hooks': reactHooks,

@@ -68,7 +68,7 @@ jobs:
         with:
           images: ghcr.io/rosen-bridge/ui-${{ steps.build-app.outputs.appName }}
           tags: |
-            type=match,pattern=\d.\d.\d
+            type=match,pattern=\d+\.\d+\.\d+
 
       - name: Build and push
         uses: docker/build-push-action@v4

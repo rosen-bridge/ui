@@ -1,5 +1,37 @@
 # @rosen-ui/wallet-api
 
+## 1.2.1
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Implement proper error to manage rejection cases during the disconnection process.
+- Updated dependencies
+  - @rosen-ui/types@0.3.4
+  - @rosen-ui/utils@0.4.5
+
+## 1.2.0
+
+### Minor Changes
+
+- Add a supportedChains feature to display which chains/networks are supported by the wallet
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/types@0.3.3
+  - @rosen-ui/utils@0.4.4
+
+## 1.1.0
+
+### Minor Changes
+
+- Implement standardized error messages for wallets to centralize and streamline error reporting
+- Implement the isConnected method to verify whether the connection to the wallet extension is established
+- Implement the custom error class named CurrentChainError
+- Integrate the identified errors for use in wallets
+- Introduce a utility to normalize errors and ensure consistency across all custom error classes
+
 ## 1.0.3
 
 ### Patch Changes

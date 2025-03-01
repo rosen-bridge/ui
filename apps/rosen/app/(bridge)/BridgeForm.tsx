@@ -19,18 +19,16 @@ import {
   IconButton,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getDecimalString } from '@rosen-ui/utils';
 
 import {
+  useBalance,
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenBalance,
   useTokenMap,
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
-import { theme } from '@/_theme/theme';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
@@ -78,12 +76,17 @@ export const BridgeForm = () => {
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
 
-  const { isLoading, amount, token } = useTokenBalance();
+  const { isLoading, raw: balanceRaw } = useBalance();
 
-  const { error, max, loading: isMaxLoading, load } = useMaxTransfer();
-  const tokenMap = useTokenMap();
+  const {
+    error,
+    amount: max,
+    isLoading: isMaxLoading,
+    raw,
+    load,
+  } = useMaxTransfer();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
@@ -153,17 +156,13 @@ export const BridgeForm = () => {
     [amountField],
   );
 
-  const handleSelectMax = useCallback(async () => {
-    const value = getDecimalString(
-      max.toString(),
-      tokenMap.getSignificantDecimals(tokenField.value?.tokenId) || 0,
-    );
-
-    setValue('amount', value, {
+  const handleSelectMax = useCallback(() => {
+    setValue('amount', raw, {
       shouldDirty: true,
       shouldTouch: true,
+      shouldValidate: true,
     });
-  }, [max, tokenMap, tokenField.value, setValue]);
+  }, [raw, setValue]);
 
   return (
     <FormContainer>
@@ -227,7 +226,7 @@ export const BridgeForm = () => {
         </Grid>
       </Grid>
       <TextField
-        label="Address"
+        label="Target Address"
         InputProps={
           {
             disableUnderline: true,
@@ -242,7 +241,11 @@ export const BridgeForm = () => {
                     try {
                       const clipboardText =
                         await navigator.clipboard.readText();
-                      addressField.onChange(clipboardText);
+                      setValue('walletAddress', clipboardText, {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                        shouldValidate: true,
+                      });
                     } catch (err) {
                       console.error('Failed to read clipboard: ', err);
                     }
@@ -268,7 +271,7 @@ export const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {targetField.value == NETWORKS.BITCOIN && (
+      {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
@@ -304,12 +307,9 @@ export const BridgeForm = () => {
           disableUnderline: true,
           endAdornment: tokenField.value && selectedWallet && (
             <UseAllAmount
-              error={error}
+              error={!!error}
               loading={isLoading || isMaxLoading}
-              value={getDecimalString(
-                amount.toString(),
-                tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0,
-              )}
+              value={balanceRaw}
               unit={
                 (
                   tokenValue &&

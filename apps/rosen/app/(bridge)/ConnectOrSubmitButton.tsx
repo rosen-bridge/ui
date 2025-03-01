@@ -54,15 +54,15 @@ export const ConnectOrSubmitButton = ({
     bridgeFeeRaw,
     receivingAmountRaw,
     isLoading: isLoadingFees,
-  } = useTransactionFees(sourceValue, targetValue, tokenValue, amountValue);
+  } = useTransactionFees();
 
-  const { selectedWallet } = useWallet();
+  const { selected: selectedWallet } = useWallet();
 
   const { startTransaction, isSubmitting: isTransactionSubmitting } =
     useTransaction();
 
   const handleFormSubmit = handleSubmit(() => {
-    startTransaction(bridgeFee, networkFee).then(() => setOpen(false));
+    startTransaction().then(() => setOpen(false));
   });
 
   const { availableSources } = useNetwork();
@@ -106,7 +106,7 @@ export const ConnectOrSubmitButton = ({
   return (
     <>
       <LoadingButton
-        sx={{ width: '50%' }}
+        sx={{ width: '100%' }}
         color={selectedWallet ? 'success' : 'primary'}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}

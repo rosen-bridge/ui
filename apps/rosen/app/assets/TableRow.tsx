@@ -238,7 +238,7 @@ export const TabletRow: FC<RowProps> = (props) => {
     !row.isNative &&
     getTokenUrl(
       row.chain,
-      row.chain == NETWORKS.CARDANO ? row.id.replace('.', '') : row.id,
+      row.chain == NETWORKS.cardano.key ? row.id.replace('.', '') : row.id,
     );
 
   return (
@@ -324,7 +324,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                       {data.bridged.map((item) => {
                         const tokenUrl = getTokenUrl(
                           item.chain,
-                          item.chain == NETWORKS.CARDANO
+                          item.chain == NETWORKS.cardano.key
                             ? item.birdgedTokenId.replace('.', '')
                             : item.birdgedTokenId,
                         );
@@ -346,21 +346,10 @@ export const TabletRow: FC<RowProps> = (props) => {
                                 direction="row"
                                 gap={1}
                               >
-                                <Id id={item.birdgedTokenId} />
-                                {tokenUrl && (
-                                  <Link
-                                    href={tokenUrl}
-                                    target="_blank"
-                                    onClick={(event) => event.stopPropagation()}
-                                  >
-                                    <SvgIcon
-                                      fontSize="inherit"
-                                      sx={{ display: 'block' }}
-                                    >
-                                      <OpenInNew />
-                                    </SvgIcon>
-                                  </Link>
-                                )}
+                                <Id
+                                  id={item.birdgedTokenId}
+                                  href={tokenUrl || undefined}
+                                />
                               </Stack>
                             </TableCell>
                           </TableRow>

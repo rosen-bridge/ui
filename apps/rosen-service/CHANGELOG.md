@@ -1,5 +1,18 @@
 # @rosen-bridge/rosen-service
 
+## 3.0.0
+
+### Major Changes
+
+- Update the Node.js version dependency from 18.17 to 20
+
+### Patch Changes
+
+- Update evm-observation-extractor to support binance
+- Add binance chain asset calculator
+- Install a reliable and consistent version of the @types/node npm package
+- Updated dependency @rosen-ui/asset-calculator@2.1.0
+
 ## 2.2.0
 
 ### Minor Changes

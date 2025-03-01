@@ -1,5 +1,29 @@
 # @rosen-ui/utils
 
+## 0.4.5
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/types@0.3.4
+
+## 0.4.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/types@0.3.3
+
+## 0.4.3
+
+### Patch Changes
+
+- Update the Lodash version to the latest release to enhance consistency
+
 ## 0.4.2
 
 ### Patch Changes

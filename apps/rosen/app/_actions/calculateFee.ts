@@ -4,7 +4,7 @@ import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { EvmChains, getHeight } from '@rosen-network/evm';
-import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Joi from 'joi';
 
@@ -20,13 +20,13 @@ const ergoExplorerClient = ergoExplorerClientFactory(
 );
 
 const GetHeight = {
-  [NETWORKS.BINANCE]: () => getHeight(EvmChains.BINANCE),
-  [NETWORKS.ETHEREUM]: () => getHeight(EvmChains.ETHEREUM),
-  [NETWORKS.CARDANO]: async () =>
+  [NETWORKS.binance.key]: () => getHeight(EvmChains.BINANCE),
+  [NETWORKS.ethereum.key]: () => getHeight(EvmChains.ETHEREUM),
+  [NETWORKS.cardano.key]: async () =>
     (await cardanoKoiosClient.getTip())[0].block_no,
-  [NETWORKS.ERGO]: async () =>
+  [NETWORKS.ergo.key]: async () =>
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
-  [NETWORKS.BITCOIN]: async (): Promise<number> => {
+  [NETWORKS.bitcoin.key]: async (): Promise<number> => {
     const response = await fetch(
       `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
     );
@@ -81,10 +81,10 @@ type Schema = Parameters<typeof calculateFeeCore>;
 const schema = Joi.array<Schema>().ordered(
   Joi.string()
     .required()
-    .valid(...NETWORK_VALUES),
+    .valid(...NETWORKS_KEYS),
   Joi.string()
     .required()
-    .valid(...NETWORK_VALUES),
+    .valid(...NETWORKS_KEYS),
   Joi.string().required(),
   Joi.number().required(),
 );

@@ -65,7 +65,7 @@ class AssetCalculator {
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
-      NETWORKS.ETHEREUM,
+      NETWORKS.ethereum.key,
       this.tokens,
       ethereumCalculator.addresses,
       ethereumCalculator.rpcUrl,
@@ -73,18 +73,18 @@ class AssetCalculator {
       logger,
     );
     const binanceAssetCalculator = new EvmCalculator(
-      NETWORKS.BINANCE,
+      NETWORKS.binance.key,
       this.tokens,
       binanceCalculator.addresses,
       binanceCalculator.rpcUrl,
       binanceCalculator.authToken,
       logger,
     );
-    this.calculatorMap.set(NETWORKS.ERGO, ergoAssetCalculator);
-    this.calculatorMap.set(NETWORKS.CARDANO, cardanoAssetCalculator);
-    this.calculatorMap.set(NETWORKS.BITCOIN, bitcoinAssetCalculator);
-    this.calculatorMap.set(NETWORKS.ETHEREUM, ethereumAssetCalculator);
-    this.calculatorMap.set(NETWORKS.BINANCE, binanceAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
+    this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
+    this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
+    this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);
@@ -241,6 +241,9 @@ class AssetCalculator {
       ) as Network[];
 
       for (const nativeResidentToken of nativeResidentTokens) {
+        this.logger.info(
+          `Started calculating values for ${nativeResidentToken.name} native on chain ${residencyChain}`,
+        );
         const newToken = {
           id: nativeResidentToken[chainIdKey],
           decimal: nativeResidentToken.decimals,
@@ -269,7 +272,7 @@ class AssetCalculator {
               address: newLockedAsset.address,
             });
             this.logger.info(
-              `Updated asset [${nativeResidentToken[chainIdKey]}] total locked amount to [${lockedItem.amount}]`,
+              `Updated asset [${nativeResidentToken[chainIdKey]}] locked amount to [${lockedItem.amount}] for address [${lockedItem.address}]`,
             );
             this.logger.debug(
               `Updated asset details for [${JsonBigInt.stringify(
@@ -287,11 +290,11 @@ class AssetCalculator {
               residencyChain,
             );
             this.logger.debug(
-              `Asset [${nativeResidentToken[chainIdKey]}] total emitted amount is [${emission}]`,
+              `Asset [${nativeResidentToken[chainIdKey]}] emitted amount on chain ${chain} is [${emission}]`,
             );
             if (!emission) {
               this.logger.debug(
-                `Total emitted amount of asset ${nativeResidentToken.name} on ${chain} is zero. skipping bridged asset update.`,
+                `Emitted amount of asset ${nativeResidentToken.name} on ${chain} is zero. skipping bridged asset update.`,
               );
               continue;
             }
@@ -317,17 +320,17 @@ class AssetCalculator {
               chain: newBridgedAsset.chain,
             });
             this.logger.info(
-              `Updated asset [${nativeResidentToken[chainIdKey]}] total locked amount to [${emission}]`,
+              `Updated asset [${nativeResidentToken[chainIdKey]}] bridged amount on chain ${chain} to [${emission}]`,
             );
             this.logger.debug(
-              `Updated asset details for [${JsonBigInt.stringify(
+              `Updated bridged asset details for [${JsonBigInt.stringify(
                 newBridgedAsset,
               )}]`,
             );
           }
         } catch (e) {
           this.logger.warn(
-            `Skipping asset [${nativeResidentToken[chainIdKey]}] locked amount update, error: [${e}]`,
+            `Skipping asset [${nativeResidentToken[chainIdKey]}] bridged amount update, error: [${e}]`,
           );
           if (e instanceof Error && e.stack)
             this.logger.debug(`Error stack trace: [${e.stack}]`);

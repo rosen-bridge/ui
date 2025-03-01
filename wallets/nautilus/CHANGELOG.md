@@ -1,5 +1,49 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.3.0
+
+### Minor Changes
+
+- Implement a new method to handle wallet disconnections.
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-network/ergo@2.1.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/wallet-api@1.2.1
+  - @rosen-ui/types@0.3.4
+  - @rosen-ui/utils@0.4.5
+
+## 2.2.0
+
+### Minor Changes
+
+- Add a supportedChains feature to display which chains/networks are supported by the wallet
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.2.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-network/ergo@2.1.0
+  - @rosen-ui/types@0.3.3
+  - @rosen-ui/utils@0.4.4
+
+## 2.1.0
+
+### Minor Changes
+
+- Revise the connect method to align with the Wallet interface, and implement a new method called icConnected to determine whether the application has access to the wallet extension
+
+### Patch Changes
+
+- Convert unknown errors into identifiable ones to ensure consistent error messaging, making it easier to manage errors at higher levels
+- Updated dependency @rosen-ui/wallet-api@1.1.0
+
 ## 2.0.0
 
 ### Major Changes

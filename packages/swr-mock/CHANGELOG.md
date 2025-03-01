@@ -1,5 +1,11 @@
 # @rosen-ui/swr-mock
 
+## 0.0.4
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+
 ## 0.0.3
 
 ### Patch Changes

@@ -1,5 +1,64 @@
 # @rosen-bridge/guard-app
 
+## 1.12.0
+
+### Minor Changes
+
+- Integrate support for the 'Request An Order' form into the app
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Enhance token display in the dashboard with a carousel component
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/utils@0.4.5
+  - @rosen-bridge/ui-kit@1.9.0
+
+## 1.11.0
+
+### Minor Changes
+
+- Add the Binance Tokens card to the dashboard
+
+### Patch Changes
+
+- Updated @rosen-bridge/ui-kit@1.8.1 dependency
+
+## 1.10.1
+
+### Patch Changes
+
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
+## 1.10.0
+
+### Minor Changes
+
+- Add Chain and Addresses columns to the table on the Events and History pages
+
+### Patch Changes
+
+- Enhance the React components by using the `PropsWithChildren` type instead of creating a custom type definition for scenarios that only require children props
+- Update the Lodash version to the latest release to enhance consistency
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.7.2
+  - @rosen-ui/utils@0.4.3
+
+## 1.9.2
+
+### Patch Changes
+
+- Install a reliable and consistent version of the @types/node npm package
+- Update the usage of the ID component
+- Updated dependency @rosen-bridge/ui-kit@1.7.1
+
 ## 1.9.1
 
 ### Patch Changes

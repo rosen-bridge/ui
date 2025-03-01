@@ -1,10 +1,11 @@
 import { MetaMaskSDK } from '@metamask/sdk';
-import { MetaMaskIcon } from '@rosen-bridge/icons';
+import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { tokenABI } from '@rosen-network/evm/dist/src/constants';
+import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
+  DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
   UnsupportedChainError,
@@ -15,6 +16,7 @@ import {
   ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   dispatchError,
+  CurrentChainError,
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
@@ -29,12 +31,24 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
+  supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
+
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',
     },
     enableAnalytics: false,
   });
+
+  private get currentChain() {
+    const chain = Object.values(NETWORKS).find(
+      (network) => network.id == this.provider.chainId,
+    )?.key;
+
+    if (!chain) throw new CurrentChainError(this.name);
+
+    return chain;
+  }
 
   private get provider() {
     const provider = this.api.getProvider();
@@ -61,6 +75,14 @@ export class MetaMaskWallet implements Wallet {
     }
   }
 
+  async disconnect(): Promise<void> {
+    try {
+      await this.api.disconnect();
+    } catch (error) {
+      throw new DisconnectionFailedError(this.name, error);
+    }
+  }
+
   async getAddress(): Promise<string> {
     const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
@@ -78,7 +100,7 @@ export class MetaMaskWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ETHEREUM)];
+    const tokenId = token[tokenMap.getIdKey(this.currentChain)];
 
     let amount;
 
@@ -102,9 +124,9 @@ export class MetaMaskWallet implements Wallet {
     if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
+      token[tokenMap.getIdKey(this.currentChain)],
       BigInt(amount),
-      NETWORKS.ETHEREUM,
+      this.currentChain,
     ).amount;
 
     return wrappedAmount;
@@ -119,14 +141,11 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async switchChain(chain: Network, silent?: boolean): Promise<void> {
-    const chains = {
-      [NETWORKS.BINANCE]: '0x38',
-      [NETWORKS.ETHEREUM]: '0x1',
-    } as { [key in Network]?: string };
+    if (!this.supportedChains.includes(chain)) {
+      throw new UnsupportedChainError(this.name, chain);
+    }
 
-    const chainId = chains[chain];
-
-    if (!chainId) throw new UnsupportedChainError(this.name, chain);
+    const chainId = NETWORKS[chain].id;
 
     if (silent) {
       const has = (await this.permissions())
@@ -166,7 +185,7 @@ export class MetaMaskWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = params.token[tokenMap.getIdKey(NETWORKS.ETHEREUM)];
+    const tokenId = params.token[tokenMap.getIdKey(this.currentChain)];
 
     const transactionParameters = await this.config.generateTxParameters(
       tokenId,

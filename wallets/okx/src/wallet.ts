@@ -1,7 +1,8 @@
-import { OKXIcon } from '@rosen-bridge/icons';
+import { Okx as OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
+  DisconnectionFailedError,
   AddressRetrievalError,
   ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
@@ -20,6 +21,8 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
+  supportedChains = [NETWORKS.bitcoin.key];
+
   private get api() {
     return window.okxwallet.bitcoin;
   }
@@ -31,6 +34,14 @@ export class OKXWallet implements Wallet {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    try {
+      await this.api.disconnect();
+    } catch (error) {
+      throw new DisconnectionFailedError(this.name, error);
     }
   }
 
@@ -52,9 +63,9 @@ export class OKXWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+      token[tokenMap.getIdKey(NETWORKS.bitcoin.key)],
       BigInt(amount.confirmed),
-      NETWORKS.BITCOIN,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     return wrappedAmount;
@@ -67,7 +78,7 @@ export class OKXWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
-    return !!this.api.selectedAccount;
+    return !!window.okxwallet.selectedAddress;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
