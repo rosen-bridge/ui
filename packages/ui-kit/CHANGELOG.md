@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 1.9.1
+
+### Patch Changes
+
+- Resolve the issue with the page title in dark theme mode
+
 ## 1.9.0
 
 ### Minor Changes
