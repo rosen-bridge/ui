@@ -23,13 +23,13 @@ export const generateTxParameters =
     const tokenMap = await getTokenMap();
 
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.ethereum.key)],
+      token.tokenId,
       wrappedAmount,
       NETWORKS.ethereum.key,
     ).amount;
 
     let transactionParameters;
-    if (token.metaData.type === 'native') {
+    if (token.type === 'native') {
       transactionParameters = {
         to: lockAddress,
         from: fromAddress,

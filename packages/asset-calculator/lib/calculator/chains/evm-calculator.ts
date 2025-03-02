@@ -32,20 +32,18 @@ export class EvmCalculator extends AbstractCalculator {
    */
   totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
     const contract = new ethers.Contract(
-      token[this.idKey],
+      token.tokenId,
       PartialERC20ABI,
       this.provider,
     );
     const totalSupply = await contract.totalSupply();
     if (totalSupply) {
       this.logger.debug(
-        `Total supply of token [${token[this.idKey]}] is [${totalSupply}]`,
+        `Total supply of token [${token.tokenId}] is [${totalSupply}]`,
       );
       return totalSupply;
     }
-    throw Error(
-      `Total supply of token [${token[this.idKey]}] is not calculable`,
-    );
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
   };
 
   /**
@@ -55,7 +53,7 @@ export class EvmCalculator extends AbstractCalculator {
   totalRawBalance = async (token: RosenChainToken): Promise<bigint> => {
     let tokenBalance = 0n;
     const contract = new ethers.Contract(
-      token[this.idKey],
+      token.tokenId,
       PartialERC20ABI,
       this.provider,
     );
@@ -63,13 +61,13 @@ export class EvmCalculator extends AbstractCalculator {
       const balance = await contract.balanceOf(address);
       this.logger.debug(
         `Balance of token [${
-          token[this.idKey]
+          token.tokenId
         }] in address [${address}] is [${balance}]`,
       );
       tokenBalance += balance;
     }
     this.logger.debug(
-      `Total balance of token [${token[this.idKey]}] is [${tokenBalance}]`,
+      `Total balance of token [${token.tokenId}] is [${tokenBalance}]`,
     );
     return tokenBalance;
   };
@@ -82,11 +80,11 @@ export class EvmCalculator extends AbstractCalculator {
     let tokenBalances: bigint[] = [];
     for (const address of this.addresses) {
       let balance = 0n;
-      if (token.metaData.type == NATIVE_TOKEN) {
+      if (token.type == NATIVE_TOKEN) {
         balance = await this.provider.getBalance(address);
       } else {
         const contract = new ethers.Contract(
-          token[this.idKey],
+          token.tokenId,
           PartialERC20ABI,
           this.provider,
         );

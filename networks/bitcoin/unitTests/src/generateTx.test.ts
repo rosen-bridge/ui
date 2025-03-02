@@ -48,8 +48,10 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
-    const result = await generateUnsignedTx(() => {
-      return Promise.resolve(new TokenMap(testTokenMap));
+    const result = await generateUnsignedTx(async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(testTokenMap);
+      return tokenMap;
     })(
       lockAddress,
       fromAddress,
@@ -117,7 +119,9 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
-    const tokenMap = new TokenMap(multiDecimalTokenMap);
+    const tokenMap = new TokenMap();
+
+    await tokenMap.updateConfigByJson(multiDecimalTokenMap);
 
     const chain = tokenMap.getAllChains()[0] as Network;
 
@@ -178,9 +182,11 @@ describe('generateUnsignedTx', () => {
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
     await expect(async () => {
-      await generateUnsignedTx(() =>
-        Promise.resolve(new TokenMap(testTokenMap)),
-      )(
+      await generateUnsignedTx(async () => {
+        const tokenMap = new TokenMap();
+        await tokenMap.updateConfigByJson(testTokenMap);
+        return tokenMap;
+      })(
         lockAddress,
         fromAddress,
         amount,

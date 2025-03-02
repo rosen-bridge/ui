@@ -34,6 +34,9 @@ const nextConfig = {
       syncWebAssembly: true,
       layers: true,
     };
+    if (!options.isServer) {
+      config.resolve.fallback.fs = false;
+    }
     return config;
   },
 };

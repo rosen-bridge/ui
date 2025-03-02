@@ -18,9 +18,8 @@ export const getMinTransfer = async (
   targetChain: Network,
 ): Promise<RosenAmountValue> => {
   const tokenMap = await getTokenMap();
-  const idKey = tokenMap.getIdKey(sourceChain);
   const tokens = tokenMap.search(sourceChain, {
-    [idKey]: token[idKey],
+    tokenId: token.tokenId,
   });
   const ergoTokenId = tokens[0].ergo.tokenId;
 
