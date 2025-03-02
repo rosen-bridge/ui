@@ -2,14 +2,7 @@
 
 import React, { SyntheticEvent, useState } from 'react';
 
-import {
-  KeySkeleton,
-  Pause,
-  PauseCircle,
-  Redo,
-  Share,
-  StopCircle,
-} from '@rosen-bridge/icons';
+import { KeySkeleton, Pause, Redo, StopCircle } from '@rosen-bridge/icons';
 import { ReceiptAlt } from '@rosen-bridge/icons';
 import { FileEditAlt } from '@rosen-bridge/icons';
 import {
@@ -183,7 +176,7 @@ const Actions = () => {
           label="Pause Network"
           icon={
             <SvgIcon fontSize="small">
-              <PauseCircle />
+              <Pause />
             </SvgIcon>
           }
         />

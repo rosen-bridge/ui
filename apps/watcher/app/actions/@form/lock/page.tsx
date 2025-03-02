@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Alert } from '@rosen-bridge/icons';
+import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   AlertCard,
   AlertProps,
@@ -273,7 +273,7 @@ const LockForm = () => {
             sx={(theme) => ({ color: theme.palette.warning.main })}
           >
             <Grid item>
-              <Alert />
+              <ExclamationTriangle />
             </Grid>
 
             <Grid item>

@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Paste } from '@rosen-bridge/icons';
+import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -251,7 +251,9 @@ export const BridgeForm = () => {
                     }
                   }}
                 >
-                  <Paste />
+                  <SvgIcon sx={{ opacity: '0.6' }}>
+                    <ClipboardNotes />
+                  </SvgIcon>
                 </IconButton>
               </InputAdornment>
             ),

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Alert, ShieldCheck } from '@rosen-bridge/icons';
+import { ExclamationTriangle, ShieldCheck } from '@rosen-bridge/icons';
 import {
   Card,
   CircularProgress,
@@ -79,7 +79,7 @@ export const HealthWidget = () => {
                 }
               >
                 <SvgIcon>
-                  <Alert />
+                  <ExclamationTriangle />
                 </SvgIcon>
               </Tooltip>
             )}

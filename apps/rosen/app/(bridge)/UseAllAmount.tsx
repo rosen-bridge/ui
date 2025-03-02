@@ -1,4 +1,4 @@
-import { SyncProblem } from '@rosen-bridge/icons';
+import { SyncExclamation } from '@rosen-bridge/icons';
 import {
   Button,
   CircularProgress,
@@ -60,7 +60,7 @@ export const UseAllAmount = ({
         {error && !loading && (
           <IconButton sx={{ verticalAlign: 'middle' }} onClick={onRetry}>
             <SvgIcon color="error" sx={{ width: 24 }}>
-              <SyncProblem />
+              <SyncExclamation />
             </SvgIcon>
           </IconButton>
         )}
