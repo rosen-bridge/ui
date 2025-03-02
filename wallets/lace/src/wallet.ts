@@ -1,4 +1,4 @@
-import { LaceIcon } from '@rosen-bridge/icons';
+import { Lace as LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';

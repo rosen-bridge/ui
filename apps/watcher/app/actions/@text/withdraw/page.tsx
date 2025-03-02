@@ -19,10 +19,21 @@ const WithdrawalText = () => {
         Caution
       </Typography>
       <Typography sx={{ mt: 2 }}>
-        DO NOT send your WID token to any other addresses. Otherwise, your
-        watcher won&apos;t work correctly anymore. Transferring the WID token to
-        a different address will result in moving all your permits to the new
-        address, along with any associated rewards and collateral.
+        To secure your assets, send two of your three WID tokens to another
+        wallet (preferably a cold wallet) as soon as possible after setting up
+        this Watcher.
+        <ul>
+          <li>
+            <strong>Do not</strong> send all three WIDs—you must keep one here
+            for your Watcher to function correctly.
+          </li>
+          <li>
+            <strong>Moving all WIDs</strong> transfers your permits, rewards,
+            and collateral to the new address.
+          </li>
+        </ul>
+        To unlock permits, move one WID back here, unlock, and then immediately
+        send it back to your secure wallet. This keeps your assets protected.
       </Typography>
     </ActionText>
   );

@@ -1,5 +1,5 @@
 import { MetaMaskSDK } from '@metamask/sdk';
-import { MetaMaskIcon } from '@rosen-bridge/icons';
+import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';

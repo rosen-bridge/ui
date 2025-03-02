@@ -8,10 +8,11 @@ import {
 } from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { Network } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import { Network as NetworkKey } from '@rosen-ui/types';
 
-import { AvailableNetworks, availableNetworks } from '@/_networks';
+import { networks } from '@/_networks';
 
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
@@ -31,13 +32,13 @@ export const useNetwork = () => {
 };
 
 export type NetworkContextType = {
-  sources: AvailableNetworks[];
-  availableSources: AvailableNetworks[];
-  selectedSource?: AvailableNetworks;
+  sources: Network[];
+  availableSources: Network[];
+  selectedSource?: Network;
 
-  targets: AvailableNetworks[];
-  availableTargets: AvailableNetworks[];
-  selectedTarget?: AvailableNetworks;
+  targets: Network[];
+  availableTargets: Network[];
+  selectedTarget?: Network;
 
   tokens: RosenChainToken[];
   availableTokens: RosenChainToken[];
@@ -50,13 +51,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
   const tokenMap = useTokenMap();
 
-  const [availableSources, setAvailableSources] = useState<AvailableNetworks[]>(
-    [],
-  );
+  const [availableSources, setAvailableSources] = useState<Network[]>([]);
 
-  const [availableTargets, setAvailableTargets] = useState<AvailableNetworks[]>(
-    [],
-  );
+  const [availableTargets, setAvailableTargets] = useState<Network[]>([]);
 
   const [availableTokens, setAvailableTokens] = useState<RosenChainToken[]>([]);
 
@@ -84,9 +81,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
    * unsupported networks
    */
   const sources = useMemo(() => {
-    return (tokenMap.getAllChains() as Network[])
+    return (tokenMap.getAllChains() as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => availableNetworks[chain]);
+      .map((chain) => networks[chain]);
   }, [tokenMap]);
 
   /**
@@ -94,9 +91,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
    * unsupported networks
    */
   const targets = useMemo(() => {
-    return (tokenMap.getSupportedChains(sourceField.value) as Network[])
+    return (tokenMap.getSupportedChains(sourceField.value) as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => availableNetworks[chain]);
+      .map((chain) => networks[chain]);
   }, [sourceField.value, tokenMap]);
 
   /**
@@ -108,22 +105,22 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     return tokenMap.getTokens(sourceField.value, targetField.value);
   }, [targetField.value, sourceField.value, tokenMap]);
 
-  const selectedSource = availableNetworks[sourceField.value as Network];
+  const selectedSource = networks[sourceField.value as NetworkKey];
 
-  const selectedTarget = availableNetworks[targetField.value as Network];
+  const selectedTarget = networks[targetField.value as NetworkKey];
 
   useEffect(() => {
     if (!blacklist) return;
 
-    const sources = new Set<AvailableNetworks>(),
-      targets = new Set<AvailableNetworks>(),
+    const sources = new Set<Network>(),
+      targets = new Set<Network>(),
       tokens = new Set<RosenChainToken>();
 
     for (const fromChain of tokenMap.getAllChains()) {
-      if (!NETWORKS[fromChain as Network]) continue;
+      if (!NETWORKS[fromChain as NetworkKey]) continue;
 
       for (const toChain of tokenMap.getSupportedChains(fromChain)) {
-        if (!NETWORKS[toChain as Network]) continue;
+        if (!NETWORKS[toChain as NetworkKey]) continue;
 
         for (const token of tokenMap.getTokens(fromChain, toChain)) {
           const isBlocked = blacklist.some(
@@ -137,11 +134,11 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
           if (isBlocked) continue;
 
-          sources.add(availableNetworks[fromChain as Network]);
+          sources.add(networks[fromChain as NetworkKey]);
 
           if (sourceField.value != fromChain) continue;
 
-          targets.add(availableNetworks[toChain as Network]);
+          targets.add(networks[toChain as NetworkKey]);
 
           if (targetField.value != toChain) continue;
 

@@ -1,5 +1,22 @@
 # @rosen-bridge/guard-app
 
+## 1.12.0
+
+### Minor Changes
+
+- Integrate support for the 'Request An Order' form into the app
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Enhance token display in the dashboard with a carousel component
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/utils@0.4.5
+  - @rosen-bridge/ui-kit@1.9.0
+
 ## 1.11.0
 
 ### Minor Changes

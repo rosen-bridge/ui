@@ -1,4 +1,4 @@
-import { OKXIcon } from '@rosen-bridge/icons';
+import { Okx as OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
