@@ -18,8 +18,8 @@ const Root = styled(Box)(({ theme }) => ({
   flexDirection: 'column',
   alignItems: 'center',
   [theme.breakpoints.down('tablet')]: {
-    padding: theme.spacing(1),
-    flexBasis: 64,
+    padding: theme.spacing(0),
+    flexBasis: 56,
     flexDirection: 'row',
   },
 }));
