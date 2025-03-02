@@ -40,6 +40,9 @@ export { default as CopyRaw } from './icons/copy.svg?raw';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
 export { default as DashboardRaw } from './icons/dashboard.svg?raw';
 
+export { ReactComponent as Disconnect } from './icons/disconnect.svg';
+export { default as DisconnectRaw } from './icons/disconnect.svg?raw';
+
 export { ReactComponent as Estate } from './icons/estate.svg';
 export { default as EstateRaw } from './icons/estate.svg?raw';
 
