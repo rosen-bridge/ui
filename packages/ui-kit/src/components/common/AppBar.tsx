@@ -1,5 +1,6 @@
 import { FC, ReactNode } from 'react';
 
+import { useIsMobile } from '../../hooks';
 import { styled } from '../../styling';
 import { Box } from '../base';
 
@@ -29,11 +30,13 @@ const Root = styled(Box)(({ theme }) => ({
  * this component set the appBar size and orientation in different screen sizes
  */
 export const AppBar: FC<AppBarProps> = ({ logo, versions, navigationBar }) => {
+  const isMobile = useIsMobile();
+
   return (
     <Root>
       {logo}
       {navigationBar}
-      {versions}
+      {!isMobile && versions}
     </Root>
   );
 };

@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { useMemo, useState } from 'react';
 
 import {
   BitcoinCircle,
@@ -15,11 +14,9 @@ import {
   AppLogo,
   NavigationBar,
   NavigationButton,
-  Version,
 } from '@rosen-bridge/ui-kit';
 
-import packageJson from '../package.json';
-import { useInfo } from './_hooks/useInfo';
+import { VersionConfig } from './VersionConfig';
 
 /**
  * render sidebar log and navigation buttons
@@ -62,28 +59,6 @@ export const SideBar = () => {
     },
   ];
 
-  const { data: info, isLoading } = useInfo();
-
-  const sub = useMemo(() => {
-    const result = [
-      {
-        label: 'UI',
-        value: packageJson.version,
-      },
-      {
-        label: 'Contract',
-        value: info?.versions.contract,
-      },
-    ];
-    if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
-      result.push({
-        label: 'Tokens',
-        value: info?.versions.tokensMap,
-      });
-    }
-    return result;
-  }, [info, isLoading]);
-
   return (
     <AppBar
       logo={
@@ -96,7 +71,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={<Version label="Guard" value={info?.versions.app} sub={sub} />}
+      versions={<VersionConfig />}
       navigationBar={
         <NavigationBar>
           {routes.map((route) => (
