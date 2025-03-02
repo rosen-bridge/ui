@@ -167,7 +167,7 @@ export const BridgeForm = () => {
   return (
     <FormContainer>
       <Grid container spacing={2}>
-        <Grid item mobile={6} tablet={12} laptop={6}>
+        <Grid item mobile={6} tablet={6} laptop={6}>
           <TextField
             id="source"
             select
@@ -193,7 +193,7 @@ export const BridgeForm = () => {
             ))}
           </TextField>
         </Grid>
-        <Grid item mobile={6} tablet={12} laptop={6}>
+        <Grid item mobile={6} tablet={6} laptop={6}>
           <TextField
             id="target"
             select
