@@ -18,15 +18,13 @@ const getFullTokenData = (
   chain: Network,
 ) => {
   try {
-    const token = tokenMap.search(chain, {
-      [tokenMap.getIdKey(chain)]: tokenId,
-    });
+    const token = tokenMap.search(chain, { tokenId });
 
     return {
       tokenId: tokenId,
       name: token[0]?.[chain].name ?? UNSUPPORTED_TOKEN_NAME,
       significantDecimals: tokenMap.getSignificantDecimals(tokenId) || 0,
-      isNativeToken: token[0]?.[chain].metaData.type === 'native',
+      isNativeToken: token[0]?.[chain].type === 'native',
     };
   } catch {
     return {

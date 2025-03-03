@@ -1,3 +1,4 @@
+import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
@@ -5,7 +6,7 @@ import { AssetCalculator } from '../lib';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
 import { initDatabase } from './database/bridgedAsset/BridgedAssetModel.mock';
 import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
-import { tokenMap } from './test-data';
+import { tokenMapData } from './test-data';
 
 describe('AssetCalculator', () => {
   describe('calculateEmissionForChain', () => {
@@ -15,6 +16,8 @@ describe('AssetCalculator', () => {
     let assetCalculator: AssetCalculator;
     beforeEach(async () => {
       const dataSource = await initDatabase();
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       assetCalculator = new AssetCalculator(
         tokenMap,
         {
@@ -48,7 +51,7 @@ describe('AssetCalculator', () => {
       const map = new Map([[NETWORKS.cardano.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
-        tokenMap.tokens[0].ergo,
+        tokenMapData[0].ergo,
         NETWORKS.cardano.key,
         NETWORKS.ergo.key,
       );
@@ -74,7 +77,7 @@ describe('AssetCalculator', () => {
       const map = new Map([[NETWORKS.ergo.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
-        tokenMap.tokens[2].cardano,
+        tokenMapData[2].cardano,
         NETWORKS.ergo.key,
         NETWORKS.cardano.key,
       );
@@ -89,6 +92,8 @@ describe('AssetCalculator', () => {
     let assetCalculator: AssetCalculator;
     beforeEach(async () => {
       const dataSource = await initDatabase();
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       assetCalculator = new AssetCalculator(
         tokenMap,
         {
@@ -125,7 +130,7 @@ describe('AssetCalculator', () => {
       const map = new Map([[NETWORKS.ergo.key, calculator]]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateLocked'](
-        tokenMap.tokens[0].ergo,
+        tokenMapData[0].ergo,
         NETWORKS.ergo.key,
       );
       expect(totalLocked[0].address).to.equal('hotAddr');
@@ -160,6 +165,8 @@ describe('AssetCalculator', () => {
      */
     it('should store asset and token data for all bridged tokens on all chains', async () => {
       const dataSource = await initDatabase();
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       const assetCalculator = new AssetCalculator(
         tokenMap,
         { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
@@ -205,7 +212,7 @@ describe('AssetCalculator', () => {
       expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
       expect(removeLockedAssetSpy).to.have.toBeCalledWith([]);
-      expect(insertTokenSpy).toBeCalledTimes(tokenMap.tokens.length);
+      expect(insertTokenSpy).toBeCalledTimes(tokenMapData.length);
       expect(
         allStoredBridgedAssets.sort((a, b) =>
           a.tokenId.localeCompare(b.tokenId),
@@ -213,15 +220,15 @@ describe('AssetCalculator', () => {
       ).toEqual(
         [
           {
-            tokenId: tokenMap.tokens[0].ergo.tokenId,
+            tokenId: tokenMapData[0].ergo.tokenId,
             chain: NETWORKS.cardano.key,
           },
           {
-            tokenId: tokenMap.tokens[1].ergo.tokenId,
+            tokenId: tokenMapData[1].ergo.tokenId,
             chain: NETWORKS.cardano.key,
           },
           {
-            tokenId: tokenMap.tokens[2].cardano.tokenId,
+            tokenId: tokenMapData[2].cardano.tokenId,
             chain: NETWORKS.ergo.key,
           },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
@@ -232,16 +239,16 @@ describe('AssetCalculator', () => {
         ),
       ).toEqual(
         [
-          { tokenId: tokenMap.tokens[0].ergo.tokenId, address: 'Addr' },
-          { tokenId: tokenMap.tokens[1].ergo.tokenId, address: 'Addr' },
-          { tokenId: tokenMap.tokens[2].cardano.tokenId, address: 'Addr' },
+          { tokenId: tokenMapData[0].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMapData[1].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMapData[2].cardano.tokenId, address: 'Addr' },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
       expect(allStoredTokens.sort()).toEqual(
         [
-          tokenMap.tokens[0].ergo.tokenId,
-          tokenMap.tokens[1].ergo.tokenId,
-          tokenMap.tokens[2].cardano.tokenId,
+          tokenMapData[0].ergo.tokenId,
+          tokenMapData[1].ergo.tokenId,
+          tokenMapData[2].cardano.tokenId,
         ].sort(),
       );
     });
@@ -271,6 +278,8 @@ describe('AssetCalculator', () => {
      */
     it('should store new asset data and remove the old invalid ones', async () => {
       const dataSource = await initDatabase();
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       const assetCalculator = new AssetCalculator(
         tokenMap,
         { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
@@ -336,15 +345,15 @@ describe('AssetCalculator', () => {
       ).toEqual(
         [
           {
-            tokenId: tokenMap.tokens[0].ergo.tokenId,
+            tokenId: tokenMapData[0].ergo.tokenId,
             chain: NETWORKS.cardano.key,
           },
           {
-            tokenId: tokenMap.tokens[1].ergo.tokenId,
+            tokenId: tokenMapData[1].ergo.tokenId,
             chain: NETWORKS.cardano.key,
           },
           {
-            tokenId: tokenMap.tokens[2].cardano.tokenId,
+            tokenId: tokenMapData[2].cardano.tokenId,
             chain: NETWORKS.ergo.key,
           },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
@@ -355,9 +364,9 @@ describe('AssetCalculator', () => {
         ),
       ).toEqual(
         [
-          { tokenId: tokenMap.tokens[0].ergo.tokenId, address: 'Addr' },
-          { tokenId: tokenMap.tokens[1].ergo.tokenId, address: 'Addr' },
-          { tokenId: tokenMap.tokens[2].cardano.tokenId, address: 'Addr' },
+          { tokenId: tokenMapData[0].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMapData[1].ergo.tokenId, address: 'Addr' },
+          { tokenId: tokenMapData[2].cardano.tokenId, address: 'Addr' },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
     });

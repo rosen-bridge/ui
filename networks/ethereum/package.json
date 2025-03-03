@@ -13,6 +13,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@rosen-bridge/tokens": "^3.0.0",
     "@rosen-network/base": "^0.2.1",
     "@rosen-network/evm": "^0.2.1"
   },

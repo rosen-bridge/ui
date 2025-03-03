@@ -1,3 +1,4 @@
+import { TokenMap } from '@rosen-bridge/tokens';
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
 import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
@@ -45,8 +46,10 @@ const startUpdateJob = (
  */
 const start = async () => {
   const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+  const tokenMap = new TokenMap();
+  await tokenMap.updateConfigByJson(getRosenTokens());
   const assetCalculator = new AssetCalculator(
-    getRosenTokens(),
+    tokenMap,
     {
       addresses: config.calculator.addresses.ergo,
       explorerUrl: config.ergo.explorerUrl,

@@ -63,14 +63,12 @@ export class NautilusWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ergo.key)];
-
     /**
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
     const balance = await wallet.get_balance(
-      tokenId === 'erg' ? 'ERG' : tokenId,
+      token.tokenId === 'erg' ? 'ERG' : token.tokenId,
     );
 
     const amount = BigInt(balance);
@@ -78,7 +76,7 @@ export class NautilusWallet implements Wallet {
     if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
-      tokenId,
+      token.tokenId,
       amount,
       NETWORKS.ergo.key,
     ).amount;

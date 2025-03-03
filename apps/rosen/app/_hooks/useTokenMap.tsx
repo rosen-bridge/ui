@@ -29,9 +29,7 @@ export type TokenMapContextType = TokenMap;
 export const TokenMapContext = createContext<TokenMap | null>(null);
 
 export const TokenMapProvider = ({ children }: PropsWithChildren) => {
-  const [tokenMap, setTokenMap] = useState(
-    new TokenMap({ idKeys: {}, tokens: [] }),
-  );
+  const [tokenMap, setTokenMap] = useState(new TokenMap());
 
   const [, startTransition] = useTransition();
 
