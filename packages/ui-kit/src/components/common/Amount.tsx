@@ -24,7 +24,7 @@ export const Amount = ({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: title ? 'space-between' : 'space-around',
       }}
     >
       {!!title && (
@@ -56,8 +56,13 @@ export const Amount = ({
               <>
                 {!!decimals && (
                   <Typography
-                    color="text.primary"
-                    sx={{ fontSize: size == 'normal' ? '0.75em' : '1.125rem' }}
+                    color="text.secondary"
+                    sx={{
+                      fontSize:
+                        size == 'normal'
+                          ? 'calc(0.75rem * 0.75)'
+                          : 'calc(1.5rem * 0.75)',
+                    }}
                   >
                     .{decimals}
                   </Typography>
