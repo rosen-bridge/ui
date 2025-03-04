@@ -208,7 +208,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.networkFee.toString(),
                   row.lockToken.significantDecimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
