@@ -40,9 +40,6 @@ export { default as CopyRaw } from './icons/copy.svg?raw';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
 export { default as DashboardRaw } from './icons/dashboard.svg?raw';
 
-export { ReactComponent as Disconnect } from './icons/disconnect.svg';
-export { default as DisconnectRaw } from './icons/disconnect.svg?raw';
-
 export { ReactComponent as Estate } from './icons/estate.svg';
 export { default as EstateRaw } from './icons/estate.svg?raw';
 
@@ -78,6 +75,9 @@ export { default as InfoCircleRaw } from './icons/info-circle.svg?raw';
 
 export { ReactComponent as KeySkeleton } from './icons/key-skeleton.svg';
 export { default as KeySkeletonRaw } from './icons/key-skeleton.svg?raw';
+
+export { ReactComponent as LinkBroken } from './icons/link-broken.svg';
+export { default as LinkBrokenRaw } from './icons/link-broken.svg?raw';
 
 export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
 export { default as LockAltRaw } from './icons/lock-alt.svg?raw';

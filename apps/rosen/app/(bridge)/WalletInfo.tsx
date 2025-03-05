@@ -1,6 +1,6 @@
 import { FunctionComponent } from 'react';
 
-import { Disconnect } from '@rosen-bridge/icons';
+import { LinkBroken } from '@rosen-bridge/icons';
 import {
   Avatar,
   Button,
@@ -56,7 +56,7 @@ export const WalletInfo = ({
             borderRadius: 1,
             margin: 0,
           }}
-          startIcon={<Disconnect width="24px" />}
+          startIcon={<LinkBroken width="24px" />}
           onClick={() => {
             disconnect();
           }}

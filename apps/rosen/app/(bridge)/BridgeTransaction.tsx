@@ -11,7 +11,6 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { disconnect } from 'process';
 
 import {
   useNetwork,
