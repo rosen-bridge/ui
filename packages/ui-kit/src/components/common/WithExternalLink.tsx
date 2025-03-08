@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { OpenInNew } from '@rosen-bridge/icons';
+import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
 import { Link, Stack, SvgIcon } from '../base';
 
@@ -26,7 +26,7 @@ export const WithExternalLink = ({ children, url }: WithExternalLinkProps) => {
           onClick={(event) => event.stopPropagation()}
         >
           <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
-            <OpenInNew />
+            <ExternalLinkAlt />
           </SvgIcon>
         </Link>
       )}
