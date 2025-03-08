@@ -1,10 +1,13 @@
 {
   "name": "@rosen-bridge/public-event-status-logic",
   "version": "0.0.1",
-  "description": "",
-  "repository": "",
-  "license": "ISC",
-  "author": "",
+  "description": "Core logic package of public event status",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
+  "license": "GPL-3.0",
+  "author": "Rosen Team",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
