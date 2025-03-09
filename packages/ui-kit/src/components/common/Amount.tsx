@@ -24,7 +24,10 @@ export const Amount = ({
       sx={{
         display: 'flex',
         alignItems: 'center',
-        justifyContent: title ? 'space-between' : 'space-around',
+        justifyContent: {
+          mobile: 'space-between',
+          tablet: title ? 'space-between' : 'space-around',
+        },
       }}
     >
       {!!title && (
@@ -48,7 +51,7 @@ export const Amount = ({
           <>
             <Typography
               color="text.primary"
-              sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.5rem' }}
+              sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.375rem' }}
             >
               {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
             </Typography>
@@ -70,7 +73,12 @@ export const Amount = ({
                 {!!unit && (
                   <Typography
                     color="text.secondary"
-                    sx={{ fontSize: size == 'normal' ? '0.75em' : '1.125rem' }}
+                    sx={{
+                      fontSize:
+                        size == 'normal'
+                          ? 'calc(0.75rem * 0.75)'
+                          : 'calc(1.5rem * 0.75)',
+                    }}
                   >
                     &nbsp;{unit}
                   </Typography>
