@@ -64,8 +64,6 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
       ) : (
         <>
           <Tooltip
-            onClose={() => setTooltipOpen(false)}
-            open={tooltipOpen}
             placement={isMobile ? 'left-start' : 'right-start'}
             arrow
             componentsProps={{
