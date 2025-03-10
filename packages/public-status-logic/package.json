@@ -1,0 +1,34 @@
+{
+  "name": "@rosen-bridge/public-status-logic",
+  "version": "0.0.1",
+  "description": "Core logic package of public status",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
+  "license": "GPL-3.0",
+  "author": "Rosen Team",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prettify": "prettier --write . --ignore-path ./.gitignore",
+    "lint": "eslint --fix . && npm run prettify",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit",
+    "coverage": "npm run test -- --coverage",
+    "typeorm:generate:sqlite": "npm run typeorm migration:generate src/db/migrations/sqlite/migration -- -p -d tests/db/mocked/testDataSource.ts",
+    "typeorm:generate:postgres": "npm run typeorm migration:generate src/db/migrations/postgres/migration -- -p -d src/db/dataSource.ts",
+    "typeorm:migrate": "npm run typeorm migration:run -- -d src/db/dataSource.ts",
+    "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
+    "test": "NODE_OPTIONS='--import tsx' vitest"
+  },
+  "dependencies": {
+    "@rosen-bridge/encryption": "^0.1.0",
+    "@rosen-bridge/extended-typeorm": "^0.0.3",
+    "@sinclair/typebox": "^0.30.4",
+    "pg": "^8.4.0",
+    "reflect-metadata": "^0.2.2",
+    "sqlite3": "^5.1.7"
+  }
+}

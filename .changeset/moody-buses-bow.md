@@ -1,7 +1,7 @@
 ---
-'@rosen-bridge/public-event-status-logic': minor
-'@rosen-bridge/public-event-status-command': minor
-'@rosen-bridge/public-event-status-query': minor
+'@rosen-bridge/public-status-logic': minor
+'@rosen-bridge/public-status-command': minor
+'@rosen-bridge/public-status-query': minor
 ---
 
-Implement public event status apis and core logic package
+Implement public status apis and core logic package
