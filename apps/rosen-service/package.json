@@ -24,7 +24,7 @@
     "@rosen-bridge/evm-rpc-scanner": "^2.0.2",
     "@rosen-bridge/extended-typeorm": "^0.0.3",
     "@rosen-bridge/observation-extractor": "^7.0.0",
-    "@rosen-bridge/scanner": "^5.0.2",
+    "@rosen-bridge/scanner": "^5.1.0",
     "@rosen-bridge/tokens": "^3.0.0",
     "@rosen-bridge/watcher-data-extractor": "^12.0.0",
     "@rosen-bridge/winston-logger": "^0.2.1",

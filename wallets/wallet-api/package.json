@@ -22,6 +22,6 @@
     "@rosen-ui/utils": "^0.4.5"
   },
   "peerDependencies": {
-    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0"
+    "@emurgo/cardano-serialization-lib-nodejs": "^13.2.1"
   }
 }
