@@ -2,6 +2,7 @@ import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
+  Amount,
   Box,
   Button,
   CircularProgress,
@@ -10,7 +11,6 @@ import {
   EnhancedTableCell,
   IconButton,
   Id,
-  Link,
   Stack,
   SvgIcon,
   Table,
@@ -21,12 +21,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import {
-  getAddressUrl,
-  getDecimalString,
-  getTokenUrl,
-  getTxURL,
-} from '@rosen-ui/utils';
+import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { ApiAssetResponse, Assets } from '@/_types';
@@ -151,10 +146,13 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow sx={rowStyles}>
         <EnhancedTableCell sx={{ opacity: '0.6' }}>Locked</EnhancedTableCell>
         <EnhancedTableCell>
-          {getDecimalString(
-            ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
-            row.decimal,
-          )}
+          <Amount
+            value={getDecimalString(
+              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              row.decimal,
+            )}
+            justifyContent="flex-start"
+          />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
@@ -162,13 +160,25 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>Hot</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(hot?.amount.toString() || '0', row.decimal)}
+              <Amount
+                value={getDecimalString(
+                  hot?.amount.toString() || '0',
+                  row.decimal,
+                )}
+                justifyContent="flex-start"
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>Cold</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(cold?.amount.toString() || '0', row.decimal)}
+              <Amount
+                value={getDecimalString(
+                  cold?.amount.toString() || '0',
+                  row.decimal,
+                )}
+                justifyContent="flex-start"
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -176,7 +186,10 @@ export const MobileRow: FC<RowProps> = (props) => {
               Bridged
             </EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridged || '0', row.decimal)}
+              <Amount
+                value={getDecimalString(row.bridged || '0', row.decimal)}
+                justifyContent="flex-start"
+              />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -258,29 +271,44 @@ export const TabletRow: FC<RowProps> = (props) => {
         </EnhancedTableCell>
         <EnhancedTableCell align="left">{row.chain}</EnhancedTableCell>
         <EnhancedTableCell align="left">
-          {getDecimalString(
-            ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
-            row.significantDecimals,
-          )}
+          <Amount
+            value={getDecimalString(
+              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              row.significantDecimals,
+            )}
+            justifyContent="flex-start"
+          />
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <WithExternalLink url={hotUrl}>
-            {getDecimalString(
-              hot?.amount.toString() || '0',
-              row.significantDecimals,
-            )}
+            <Amount
+              value={getDecimalString(
+                hot?.amount.toString() || '0',
+                row.significantDecimals,
+              )}
+              justifyContent="flex-start"
+            />
           </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <WithExternalLink url={coldUrl}>
-            {getDecimalString(
-              cold?.amount.toString() || '0',
-              row.significantDecimals,
-            )}
+            <Amount
+              value={getDecimalString(
+                cold?.amount.toString() || '0',
+                row.significantDecimals,
+              )}
+              justifyContent="flex-start"
+            />
           </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
-          {getDecimalString(row.bridged || '0', row.significantDecimals)}
+          <Amount
+            value={getDecimalString(
+              row.bridged || '0',
+              row.significantDecimals,
+            )}
+            justifyContent="flex-start"
+          />
         </EnhancedTableCell>
         <EnhancedTableCell align="right">
           <IconButton
@@ -335,10 +363,13 @@ export const TabletRow: FC<RowProps> = (props) => {
                           >
                             <TableCell>{item.chain}</TableCell>
                             <TableCell>
-                              {getDecimalString(
-                                item.amount,
-                                row.significantDecimals,
-                              )}
+                              <Amount
+                                value={getDecimalString(
+                                  item.amount,
+                                  row.significantDecimals,
+                                )}
+                                justifyContent="flex-start"
+                              />
                             </TableCell>
                             <TableCell>
                               <Stack
