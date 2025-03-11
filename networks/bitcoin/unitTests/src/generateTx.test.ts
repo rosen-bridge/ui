@@ -8,6 +8,12 @@ import { testTokenMap, multiDecimalTokenMap } from '../test-data';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
 
+const getTokenMap = async () => {
+  const tokenMap = new TokenMap();
+  await tokenMap.updateConfigByJson(testTokenMap);
+  return tokenMap;
+};
+
 vi.mock('../../src/utils', async (importOriginal) => {
   const mod = await importOriginal<typeof import('../../src/utils')>();
   // mock getAddressUtxos
@@ -48,11 +54,7 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
-    const result = await generateUnsignedTx(async () => {
-      const tokenMap = new TokenMap();
-      await tokenMap.updateConfigByJson(testTokenMap);
-      return tokenMap;
-    })(
+    const result = await generateUnsignedTx(getTokenMap)(
       lockAddress,
       fromAddress,
       amount,
@@ -182,11 +184,7 @@ describe('generateUnsignedTx', () => {
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
     await expect(async () => {
-      await generateUnsignedTx(async () => {
-        const tokenMap = new TokenMap();
-        await tokenMap.updateConfigByJson(testTokenMap);
-        return tokenMap;
-      })(
+      await generateUnsignedTx(getTokenMap)(
         lockAddress,
         fromAddress,
         amount,
