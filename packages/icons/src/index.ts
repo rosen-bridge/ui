@@ -1,6 +1,3 @@
-export { ReactComponent as Alert } from './icons/alert.svg';
-export { default as AlertRaw } from './icons/alert.svg?raw';
-
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { default as AngleDownRaw } from './icons/angle-down.svg?raw';
 
@@ -52,6 +49,9 @@ export { default as ExclamationCircleRaw } from './icons/exclamation-circle.svg?
 export { ReactComponent as ExclamationTriangle } from './icons/exclamation-triangle.svg';
 export { default as ExclamationTriangleRaw } from './icons/exclamation-triangle.svg?raw';
 
+export { ReactComponent as ExternalLinkAlt } from './icons/external-link-alt.svg';
+export { default as ExternalLinkAltRaw } from './icons/external-link-alt.svg?raw';
+
 export { ReactComponent as EyeSlash } from './icons/eye-slash.svg';
 export { default as EyeSlashRaw } from './icons/eye-slash.svg?raw';
 
@@ -90,12 +90,6 @@ export { default as MoonRaw } from './icons/moon.svg?raw';
 
 export { ReactComponent as Newspaper } from './icons/newspaper.svg';
 export { default as NewspaperRaw } from './icons/newspaper.svg?raw';
-
-export { ReactComponent as OpenInNew } from './icons/open-in-new.svg';
-export { default as OpenInNewRaw } from './icons/open-in-new.svg?raw';
-
-export { ReactComponent as Paste } from './icons/paste.svg';
-export { default as PasteRaw } from './icons/paste.svg?raw';
 
 export { ReactComponent as PauseCircle } from './icons/pause-circle.svg';
 export { default as PauseCircleRaw } from './icons/pause-circle.svg?raw';
@@ -136,8 +130,8 @@ export { default as StopCircleRaw } from './icons/stop-circle.svg?raw';
 export { ReactComponent as Sun } from './icons/sun.svg';
 export { default as SunRaw } from './icons/sun.svg?raw';
 
-export { ReactComponent as SyncProblem } from './icons/sync-problem.svg';
-export { default as SyncProblemRaw } from './icons/sync-problem.svg?raw';
+export { ReactComponent as SyncExclamation } from './icons/sync-exclamation.svg';
+export { default as SyncExclamationRaw } from './icons/sync-exclamation.svg?raw';
 
 export { ReactComponent as Times } from './icons/times.svg';
 export { default as TimesRaw } from './icons/times.svg?raw';
@@ -177,6 +171,3 @@ export { default as NautilusRaw } from './wallets/nautilus.svg?raw';
 
 export { ReactComponent as Okx } from './wallets/okx.svg';
 export { default as OkxRaw } from './wallets/okx.svg?raw';
-
-export { ReactComponent as Vespr } from './wallets/vespr.svg';
-export { default as VesprRaw } from './wallets/vespr.svg?raw';

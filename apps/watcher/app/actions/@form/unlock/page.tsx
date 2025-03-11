@@ -3,18 +3,15 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Alert } from '@rosen-bridge/icons';
 import {
   AlertCard,
   AlertProps,
   Box,
   Grid,
-  Typography,
   SubmitButton,
-  Button,
   useApiKey,
+  ApiKeyModalWarning,
 } from '@rosen-bridge/ui-kit';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
@@ -188,28 +185,7 @@ const UnlockForm = () => {
           {renderTokenAmountTextField()}
         </Grid>
 
-        {!apiKey && (
-          <Grid
-            container
-            alignItems="center"
-            gap={1}
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Grid item>
-              <Alert />
-            </Grid>
-
-            <Grid item>
-              <Typography>You need to set an Api Key before sending</Typography>
-            </Grid>
-
-            <Grid item>
-              <ApiKeyModal>
-                {(open) => <Button onClick={open}>Click To Set</Button>}
-              </ApiKeyModal>
-            </Grid>
-          </Grid>
-        )}
+        <ApiKeyModalWarning />
 
         <SubmitButton loading={isUnlockPending} disabled={disabled}>
           Unlock
