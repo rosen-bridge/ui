@@ -33,6 +33,7 @@ export * from './Link';
 export * from './List';
 export * from './ListItem';
 export * from './ListItemAvatar';
+export * from './ListItemButton';
 export * from './ListItemIcon';
 export * from './ListItemText';
 export * from './LoadingButton';

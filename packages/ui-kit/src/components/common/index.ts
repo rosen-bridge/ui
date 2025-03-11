@@ -1,4 +1,5 @@
 export * from './carousel';
+export * from './searchableFilter';
 export * from './AlertCard';
 export * from './Amount';
 export * from './ApiKeyModal';
