@@ -97,7 +97,7 @@ export const generateUnsignedTx =
     // add input boxes to transaction
     inputs.boxes.forEach((utxo) => {
       inputAssets = sumAssetBalance(inputAssets, getUtxoAssets(utxo));
-      txBuilder.add_input(
+      txBuilder.add_regular_input(
         wasm.Address.from_bech32(utxo.address),
         wasm.TransactionInput.new(
           wasm.TransactionHash.from_hex(utxo.txId),
