@@ -2,6 +2,7 @@ import {
   ChangeEvent,
   FocusEvent,
   KeyboardEvent,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -33,11 +34,6 @@ const Container = styled('div')(() => ({
   '.MuiChip-root': {
     borderRadius: 0,
   },
-}));
-
-const PickerRoot = styled('div')(() => ({
-  border: '1px solid lightgray',
-  borderRadius: 1,
 }));
 
 export type SearchableFilterProps = {
@@ -164,7 +160,7 @@ export const SearchableFilter = ({
     });
   }, [flows, selectedValidatedWithCurrent]);
 
-  const pickerRaw = useMemo<Input | undefined>(() => {
+  const pickerRaw = useMemo<Input>(() => {
     if (!current) {
       return {
         type: 'select',
@@ -195,16 +191,14 @@ export const SearchableFilter = ({
       };
     }
 
-    if (!Object.hasOwn(current, 'value')) {
-      const context = {
-        operator: current.operator!,
-      };
+    const context = {
+      operator: current.operator!,
+    };
 
-      const input =
-        typeof flow.input === 'function' ? flow.input(context) : flow.input;
+    const input =
+      typeof flow.input === 'function' ? flow.input(context) : flow.input;
 
-      return input;
-    }
+    return input;
   }, [current, selectedValidated, flows]);
 
   const picker = useMemo<Input | undefined>(() => {
@@ -223,18 +217,12 @@ export const SearchableFilter = ({
     }
   }, [query, pickerRaw]);
 
-  useEffect(() => {
-    if (pickerRaw == undefined) return;
-    if (pickerRaw.type != 'select') return;
-    if (pickerRaw.options.length != 1) return;
-    handleSelect(pickerRaw.options.at(0)!.value);
-  }, [pickerRaw]);
-
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   };
 
   const handleClose = () => {
+    setCurrent(undefined);
     setAnchorElement(undefined);
   };
 
@@ -282,67 +270,70 @@ export const SearchableFilter = ({
     setCurrent(undefined);
   };
 
-  const handleSelect = (value: Selected['value']) => {
-    anchorElement?.focus({ preventScroll: true });
+  const handleSelect = useCallback(
+    (value: Selected['value']) => {
+      anchorElement?.focus({ preventScroll: true });
 
-    if (!current) {
-      return setCurrent({ flow: value as string });
-    }
+      if (!current) {
+        setCurrent({ flow: value as string });
+        return;
+      }
 
-    if (!Object.hasOwn(current, 'operator')) {
-      return setCurrent({ ...current, operator: value as string });
-    }
+      if (!Object.hasOwn(current, 'operator')) {
+        setCurrent({ ...current, operator: value as string });
+        return;
+      }
 
-    if (!Object.hasOwn(current, 'value')) {
-      setCurrent(undefined);
+      if (pickerRaw?.type == 'multiple') {
+        setCurrent({ ...current, value });
+        return;
+      }
 
-      onChange([...selectedValidated, { ...current, value } as Selected]);
-    }
-  };
+      if (!Object.hasOwn(current, 'value')) {
+        setCurrent(undefined);
+        onChange([...selectedValidated, { ...current, value } as Selected]);
+        return;
+      }
+    },
+    [anchorElement, current, pickerRaw, selectedValidated, onChange],
+  );
+
+  useEffect(() => {
+    if (pickerRaw == undefined) return;
+    if (pickerRaw.type != 'select') return;
+    if (pickerRaw.options.length != 1) return;
+    handleSelect(pickerRaw.options.at(0)!.value);
+  }, [pickerRaw, handleSelect]);
 
   return (
-    <>
-      <div>
-        <br />
-        <br />
-        <br />
-        <ClickAwayListener onClickAway={handleClose}>
-          <Root>
-            <Container>
-              <Chips value={chips} />
-              <input
-                value={query}
-                autoComplete="off"
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onKeyDown={handleKeyDown}
-              />
-            </Container>
-            <Popper
-              anchorEl={anchorElement}
-              open={Boolean(anchorElement) && !!picker}
-              placement="bottom-start"
-              modifiers={[
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [0, 5],
-                  },
-                },
-              ]}
-            >
-              {picker && (
-                <PickerRoot>
-                  <Picker value={picker} onSelect={handleSelect} />
-                </PickerRoot>
-              )}
-            </Popper>
-          </Root>
-        </ClickAwayListener>
-        <br />
-        <br />
-        <br />
-      </div>
-    </>
+    <ClickAwayListener onClickAway={handleClose}>
+      <Root>
+        <Container>
+          <Chips value={chips} />
+          <input
+            value={query}
+            autoComplete="off"
+            onChange={handleChange}
+            onFocus={handleFocus}
+            onKeyDown={handleKeyDown}
+          />
+        </Container>
+        <Popper
+          anchorEl={anchorElement}
+          open={Boolean(anchorElement) && !!picker}
+          placement="bottom-start"
+          modifiers={[
+            {
+              name: 'offset',
+              options: {
+                offset: [0, 8],
+              },
+            },
+          ]}
+        >
+          {picker && <Picker value={picker} onSelect={handleSelect} />}
+        </Popper>
+      </Root>
+    </ClickAwayListener>
   );
 };

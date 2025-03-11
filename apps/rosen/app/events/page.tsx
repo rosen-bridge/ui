@@ -4,17 +4,20 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import { MouseEvent, useCallback, useMemo } from 'react';
+import { MouseEvent, useCallback, useMemo, useState } from 'react';
 
 import {
   EnhancedTable,
   Paper,
+  SearchableFilter,
+  Selected,
   TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
 import { ApiEventResponse, Event } from '@/_types';
 
+import { flows } from './flows';
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
@@ -23,6 +26,8 @@ const getKey = (offset: number, limit: number) => {
 };
 
 const Events = () => {
+  const [selected, setSelected] = useState<Selected[]>([]);
+
   const {
     data,
     isLoading,
@@ -111,6 +116,12 @@ const Events = () => {
 
   return (
     <>
+      <SearchableFilter
+        flows={flows}
+        selected={selected}
+        onChange={setSelected}
+      />
+      <br />
       <Paper sx={{ overflow: 'hidden' }}>
         {isFirstLoad && <TableSkeleton numberOfItems={pageSize} />}
         {!isFirstLoad && data && (
