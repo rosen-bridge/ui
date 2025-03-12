@@ -232,7 +232,7 @@ export const lightThemeOptions: ThemeOptions = {
             'overflow': 'hidden',
             'borderRadius': theme.spacing(2),
             'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-            'minHeight': theme.spacing(8.5),
+            'minHeight': theme.spacing(7),
             'transition': theme.transitions.create([
               'background-color',
               'box-shadow',
@@ -259,7 +259,7 @@ export const lightThemeOptions: ThemeOptions = {
           'overflow': 'hidden',
           'borderRadius': theme.shape.borderRadius,
           'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-          'minHeight': theme.spacing(8.5),
+          'minHeight': theme.spacing(7),
           'transition': theme.transitions.create([
             'background-color',
             'box-shadow',

@@ -40,7 +40,7 @@ const SelectedAsset = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(1),
   alignItems: 'center',
-  margin: theme.spacing(0.5),
+  marginBottom: '-1px',
 }));
 
 /**
