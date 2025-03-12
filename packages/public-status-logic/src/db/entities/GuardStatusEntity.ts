@@ -22,7 +22,10 @@ export class GuardStatusEntity {
     nullable: true,
     eager: true,
   })
-  @JoinColumn({ name: 'txId' })
+  @JoinColumn([
+    { name: 'txId', referencedColumnName: 'txId' },
+    { name: 'txChain', referencedColumnName: 'chain' },
+  ])
   tx: TxEntity | null;
 
   @Column('varchar', {

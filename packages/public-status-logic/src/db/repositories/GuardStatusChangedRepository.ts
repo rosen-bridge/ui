@@ -1,3 +1,5 @@
+import { In } from 'typeorm';
+
 import { EventStatus, TxStatus } from '../../constants';
 import { dataSource } from '../dataSource';
 import { GuardStatusChangedEntity } from '../entities/GuardStatusChangedEntity';
@@ -6,49 +8,41 @@ export const GuardStatusChangedRepository = dataSource
   .getRepository(GuardStatusChangedEntity)
   .extend({
     /**
-     * gets last GuardStatusChangedEntity
+     * retrieves the most recent GuardStatusChangedEntity for a given eventId and guardPk
      * @param eventId
      * @param guardPk
-     * @returns promise of GuardStatusChangedEntity or null
+     * @returns a promise resolving to the most recent GuardStatusChangedEntity or null if no matching entity is found
      */
     async getLast(
       eventId: string,
       guardPk: string,
     ): Promise<GuardStatusChangedEntity | null> {
-      return await this.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .where('record.eventId = :eventId AND record.guardPk = :guardPk', {
-          eventId,
-          guardPk,
-        })
-        .orderBy('record.insertedAt', 'DESC')
-        .getOne();
+      return this.findOne({
+        where: { eventId, guardPk },
+        relations: ['tx'],
+        order: { insertedAt: 'DESC' },
+      });
     },
 
     /**
-     * gets array of GuardStatusChangedEntity (timeline)
-     * empty guardPks will be ignored
+     * retrieves multiple GuardStatusChangedEntity objects for a given eventId and guardPks array (timeline)
+     * empty guardPks will be ignored from filter
      * @param eventId
      * @param guardPks
-     * @returns promise of GuardStatusChangedEntity array
+     * @returns a promise that resolves to an array of GuardStatusChangedEntity objects
      */
     async getMany(
       eventId: string,
       guardPks: string[],
     ): Promise<GuardStatusChangedEntity[]> {
-      const query = this.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .where('record.eventId = :eventId', {
-          eventId,
-        });
+      const whereClause =
+        guardPks.length > 0 ? { eventId, guardPk: In(guardPks) } : { eventId };
 
-      if (guardPks.length > 0) {
-        query.andWhere('record.guardPk IN (:...guardPks)', {
-          guardPks,
-        });
-      }
-
-      return await query.orderBy('record.insertedAt', 'DESC').getMany();
+      return this.find({
+        where: whereClause,
+        relations: ['tx'],
+        order: { insertedAt: 'DESC' },
+      });
     },
 
     /**
@@ -57,25 +51,28 @@ export const GuardStatusChangedRepository = dataSource
      * @param guardPk
      * @param insertedAt
      * @param status
-     * @param txId
-     * @param txStatus
-     * @returns promise of void
+     * @param tx
+     * @returns a promise that resolves to void
      */
     async insertOne(
       eventId: string,
       guardPk: string,
       insertedAt: number,
       status: EventStatus,
-      txId?: string,
-      txStatus?: TxStatus,
+      tx?: {
+        txId: string;
+        chain: string;
+        txStatus: TxStatus;
+      },
     ): Promise<void> {
       const lastValue = await this.getLast(eventId, guardPk);
 
       if (
         lastValue &&
         status === lastValue.status &&
-        txId === lastValue.tx?.txId &&
-        txStatus === (lastValue.txStatus ?? undefined)
+        tx?.txId === lastValue.tx?.txId &&
+        tx?.chain === lastValue.tx?.chain &&
+        tx?.txStatus === (lastValue.txStatus ?? undefined)
       ) {
         return;
       }
@@ -85,8 +82,8 @@ export const GuardStatusChangedRepository = dataSource
         guardPk,
         insertedAt,
         status,
-        tx: txId ? { txId } : undefined,
-        txStatus,
+        tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
+        txStatus: tx?.txStatus ?? null,
       });
     },
   });

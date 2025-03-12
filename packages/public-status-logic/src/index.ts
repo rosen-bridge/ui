@@ -1,8 +1,7 @@
 import 'reflect-metadata';
 
-export * from './utils';
-
 export * from './constants';
+export { Utils } from './utils';
 export { AggregatedStatusChangedEntity } from './db/entities/AggregatedStatusChangedEntity';
 export { AggregatedStatusEntity } from './db/entities/AggregatedStatusEntity';
 export { GuardStatusChangedEntity } from './db/entities/GuardStatusChangedEntity';

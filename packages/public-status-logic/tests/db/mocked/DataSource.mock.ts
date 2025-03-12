@@ -26,7 +26,7 @@ export class DataSourceMock {
   };
 
   /**
-   * populate AggregatedStatusChangedEntity table with fake records
+   * populate AggregatedStatusChangedEntity table with mock records
    * @param records
    */
   static populateAggregatedStatusChanged = async (
@@ -40,7 +40,7 @@ export class DataSourceMock {
   };
 
   /**
-   * populate AggregatedStatusEntity table with fake records
+   * populate AggregatedStatusEntity table with mock records
    * @param records
    */
   static populateAggregatedStatus = async (
@@ -54,7 +54,7 @@ export class DataSourceMock {
   };
 
   /**
-   * populate GuardStatusChangedEntity table with fake records
+   * populate GuardStatusChangedEntity table with mock records
    * @param records
    */
   static populateGuardStatusChanged = async (
@@ -68,7 +68,7 @@ export class DataSourceMock {
   };
 
   /**
-   * populate GuardStatusEntity table with fake records
+   * populate GuardStatusEntity table with mock records
    * @param records
    */
   static populateGuardStatus = async (

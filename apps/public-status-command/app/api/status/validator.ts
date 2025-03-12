@@ -10,16 +10,32 @@ import {
 } from '@rosen-bridge/public-status-logic';
 import Joi from 'joi';
 
+export interface TxParams {
+  txId: string;
+  chain: string;
+  txType: TxType;
+  txStatus: TxStatus;
+}
+
 export interface Params {
   date: Date;
   eventId: string;
   status: EventStatus;
-  txId?: string;
-  txType?: TxType;
-  txStatus?: TxStatus;
   pk: string;
   signature: string;
+  tx?: TxParams;
 }
+
+const TxSchema = Joi.object<TxParams>().keys({
+  txId: Joi.string().length(64).required(),
+  chain: Joi.string().min(1).max(20).required(),
+  txType: Joi.string()
+    .valid(...txTypes)
+    .required(),
+  txStatus: Joi.string()
+    .valid(...txStatuses)
+    .required(),
+});
 
 const ParamsSchema = Joi.object<Params>().keys({
   date: Joi.date().timestamp('unix').required(),
@@ -27,13 +43,7 @@ const ParamsSchema = Joi.object<Params>().keys({
   status: Joi.string()
     .valid(...eventStatuses)
     .required(),
-  txId: Joi.string().length(64).optional(),
-  txType: Joi.string()
-    .valid(...txTypes)
-    .optional(),
-  txStatus: Joi.string()
-    .valid(...txStatuses)
-    .optional(),
+  tx: TxSchema.optional(),
   pk: Joi.string().length(66).required(),
   signature: Joi.string().required(), // TODO: validation?
 });

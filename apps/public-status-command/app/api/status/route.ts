@@ -6,7 +6,14 @@ import { AccessDeniedError, withValidation } from '@/api/withValidation';
 
 import { validator, Params } from './validator';
 
+// generating an ECDSA encryption object with no secret only for verification
 const ecdsa = new ECDSA('');
+
+function paramsToSignMessage(params: Params, timestampSeconds: number): string {
+  return params.tx
+    ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${timestampSeconds}`
+    : `${params.eventId}${params.status}${timestampSeconds}`;
+}
 
 async function handler(params: Params) {
   // check if pk is allowed
@@ -26,8 +33,7 @@ async function handler(params: Params) {
 
   // verify signature
   const verified = await ecdsa.verify(
-    // TODO: extract
-    `${params.eventId}${params.status}${params.txId ?? ''}${params.txType ?? ''}${params.txStatus ?? ''}${timestampSeconds}`,
+    paramsToSignMessage(params, timestampSeconds),
     params.signature,
     params.pk,
   );
@@ -40,9 +46,7 @@ async function handler(params: Params) {
     params.pk,
     nowSeconds,
     params.status,
-    params.txId,
-    params.txType,
-    params.txStatus,
+    params.tx,
   );
 
   return {};

@@ -3,9 +3,9 @@ import { NextRequest } from 'next/server';
 
 import { ValidationResult } from 'joi';
 
-type ValidatorType<TSchema> = (
+type ValidatorType<TSchema, TParams> = (
   request: NextRequest,
-  params: unknown,
+  params: TParams,
 ) => Promise<ValidationResult<TSchema>>;
 
 type HandlerType<TSchema> = (value: TSchema) => Promise<any>;
@@ -19,8 +19,11 @@ type HandlerType<TSchema> = (value: TSchema) => Promise<any>;
  * @param handler
  */
 export const withValidation =
-  <TSchema>(validator: ValidatorType<TSchema>, handler: HandlerType<TSchema>) =>
-  async (request: NextRequest, { params }: { params: Promise<unknown> }) => {
+  <TSchema, TParams>(
+    validator: ValidatorType<TSchema, TParams>,
+    handler: HandlerType<TSchema>,
+  ) =>
+  async (request: NextRequest, { params }: { params: Promise<TParams> }) => {
     const { error, value } = await validator(request, await params);
 
     if (error) {

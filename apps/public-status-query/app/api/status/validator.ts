@@ -7,7 +7,7 @@ export interface Params {
 }
 
 const ParamsSchema = Joi.object<Params>().keys({
-  eventIds: Joi.array().items(Joi.string().length(64)).default([]),
+  eventIds: Joi.array().items(Joi.string().length(64)).required().min(1),
 });
 
 export const validator = async (request: NextRequest) => {

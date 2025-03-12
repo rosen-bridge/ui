@@ -1,13 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-  TxType,
-} from '../../src/constants';
-import { TxEntity } from '../../src/db/entities/TxEntity';
+import { AggregateEventStatus, AggregateTxStatus } from '../../src/constants';
 import { PublicStatusActions } from '../../src/db/PublicStatusActions';
 import { AggregatedStatusChangedRepository } from '../../src/db/repositories/AggregatedStatusChangedRepository';
 import { AggregatedStatusRepository } from '../../src/db/repositories/AggregatedStatusRepository';
@@ -16,13 +7,9 @@ import { GuardStatusRepository } from '../../src/db/repositories/GuardStatusRepo
 import { TxRepository } from '../../src/db/repositories/TxRepository';
 import { Utils } from '../../src/utils';
 import {
-  id0,
-  aggregateTestInsertStatusRequests,
-  fakeInsertStatusRequests,
-  guardPk3,
-  guardPk1,
-  guardPk0,
-  guardPk2,
+  mockInsertStatusRequestsForAggregateTest,
+  mockInsertStatusRequests,
+  insertStatusTestData,
 } from '../testData';
 import { DataSourceMock } from './mocked/DataSource.mock';
 
@@ -84,11 +71,11 @@ describe('PublicStatusActions', () => {
         .spyOn(Utils, 'calcAggregatedStatus')
         .mockReturnValue({
           status: AggregateEventStatus.waitingForConfirmation,
-          txId: undefined,
           txStatus: AggregateTxStatus.waitingForConfirmation,
+          tx: undefined,
         });
 
-      const request0 = fakeInsertStatusRequests[0];
+      const request0 = mockInsertStatusRequests[0];
 
       // act
       await PublicStatusActions.insertStatus(
@@ -96,56 +83,64 @@ describe('PublicStatusActions', () => {
         request0.guardPk,
         request0.timestampSeconds,
         request0.status,
-        request0.txId,
-        request0.txType,
-        request0.txStatus,
+        request0.tx,
       );
 
       // assert
       expect(insertTxSpy).toHaveBeenCalledWith(
-        request0.txId,
+        request0.tx?.txId,
+        request0.tx?.chain,
         request0.eventId,
         request0.timestampSeconds,
-        request0.txType,
+        request0.tx?.txType,
       );
       expect(getGuardsStatusesSpy).toHaveBeenCalledWith(request0.eventId, []);
       expect(calcAggregatedStatusSpy).toHaveBeenCalledWith([
         {
           guardPk: request0.guardPk,
           status: request0.status,
-          txId: request0.txId,
-          txStatus: request0.txStatus,
+          tx: {
+            chain: request0.tx!.chain,
+            txId: request0.tx!.txId,
+            txStatus: request0.tx!.txStatus,
+          },
         },
       ]);
       expect(insertAggregatedStatusChangedSpy).toHaveBeenCalledWith(
         request0.eventId,
         request0.timestampSeconds,
         AggregateEventStatus.waitingForConfirmation,
-        undefined,
         AggregateTxStatus.waitingForConfirmation,
+        undefined,
       );
       expect(upsertAggregatedStatusSpy).toHaveBeenCalledWith(
         request0.eventId,
         request0.timestampSeconds,
         AggregateEventStatus.waitingForConfirmation,
-        undefined,
         AggregateTxStatus.waitingForConfirmation,
+        undefined,
       );
       expect(insertGuardStatusChangedSpy).toHaveBeenCalledWith(
         request0.eventId,
         request0.guardPk,
         request0.timestampSeconds,
         request0.status,
-        request0.txId,
-        request0.txStatus,
+        {
+          chain: request0.tx!.chain,
+          txId: request0.tx!.txId,
+          txStatus: request0.tx!.txStatus,
+        },
       );
       expect(upsertGuardStatusSpy).toHaveBeenCalledWith(
         request0.eventId,
         request0.guardPk,
         request0.timestampSeconds,
         request0.status,
-        request0.txId,
-        request0.txStatus,
+        {
+          chain: request0.tx!.chain,
+          txId: request0.tx!.txId,
+          txStatus: request0.tx!.txStatus,
+        },
       );
     });
 
@@ -175,484 +170,7 @@ describe('PublicStatusActions', () => {
      */
     it('should only create AggregatedStatusChangedEntity when aggregated status changes', async () => {
       // arrange
-      const returningValues = {
-        getGuardsStatuses: [
-          [],
-          [
-            {
-              id: 1,
-              eventId: id0,
-              guardPk: guardPk3,
-              updatedAt: 900,
-              status: EventStatus.pendingReward,
-              tx: null,
-              txStatus: null,
-            },
-          ],
-          [
-            {
-              id: 1,
-              eventId: id0,
-              guardPk: guardPk3,
-              updatedAt: 900,
-              status: EventStatus.pendingReward,
-              tx: null,
-              txStatus: null,
-            },
-            {
-              id: 2,
-              eventId: id0,
-              guardPk: guardPk0,
-              updatedAt: 1000,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-          ],
-          [
-            {
-              id: 1,
-              eventId: id0,
-              guardPk: guardPk3,
-              updatedAt: 900,
-              status: EventStatus.pendingReward,
-              tx: null,
-              txStatus: null,
-            },
-            {
-              id: 2,
-              eventId: id0,
-              guardPk: guardPk0,
-              updatedAt: 1000,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-            {
-              id: 3,
-              eventId: id0,
-              guardPk: guardPk1,
-              updatedAt: 1005,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-          ],
-          [
-            {
-              id: 1,
-              eventId: id0,
-              guardPk: guardPk3,
-              updatedAt: 900,
-              status: EventStatus.pendingReward,
-              tx: null,
-              txStatus: null,
-            },
-            {
-              id: 2,
-              eventId: id0,
-              guardPk: guardPk0,
-              updatedAt: 1000,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-            {
-              id: 3,
-              eventId: id0,
-              guardPk: guardPk1,
-              updatedAt: 1005,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-            {
-              id: 4,
-              eventId: id0,
-              guardPk: guardPk2,
-              updatedAt: 1006,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-          ],
-          [
-            {
-              id: 1,
-              eventId: id0,
-              guardPk: guardPk3,
-              updatedAt: 900,
-              status: EventStatus.pendingReward,
-              tx: null,
-              txStatus: null,
-            },
-            {
-              id: 2,
-              eventId: id0,
-              guardPk: guardPk0,
-              updatedAt: 1000,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-            {
-              id: 4,
-              eventId: id0,
-              guardPk: guardPk2,
-              updatedAt: 1006,
-              status: EventStatus.inReward,
-              tx: { txId: id0, txType: TxType.reward } as unknown as TxEntity,
-              txStatus: TxStatus.signed,
-            },
-            {
-              id: 5,
-              eventId: id0,
-              guardPk: guardPk1,
-              updatedAt: 1010,
-              status: EventStatus.pendingReward,
-              tx: null,
-              txStatus: null,
-            },
-          ],
-        ],
-        calcAggregatedStatus: [
-          {
-            status: AggregateEventStatus.waitingForConfirmation,
-            txId: undefined,
-            txStatus: AggregateTxStatus.waitingForConfirmation,
-          },
-          {
-            status: AggregateEventStatus.waitingForConfirmation,
-            txId: undefined,
-            txStatus: AggregateTxStatus.waitingForConfirmation,
-          },
-          {
-            status: AggregateEventStatus.waitingForConfirmation,
-            txId: undefined,
-            txStatus: AggregateTxStatus.waitingForConfirmation,
-          },
-          {
-            status: AggregateEventStatus.inReward,
-            txId: id0,
-            txStatus: AggregateTxStatus.signed,
-          },
-          {
-            status: AggregateEventStatus.waitingForConfirmation,
-            txId: undefined,
-            txStatus: AggregateTxStatus.waitingForConfirmation,
-          },
-          {
-            status: AggregateEventStatus.inReward,
-            txId: id0,
-            txStatus: AggregateTxStatus.signed,
-          },
-        ],
-      };
-
-      const expectingSequence = {
-        insertTx: [
-          undefined,
-          [id0, id0, 1000, TxType.reward],
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-        ],
-        getGuardsStatuses: [
-          [id0, []],
-          [id0, []],
-          [id0, []],
-          [id0, []],
-          [id0, []],
-          [id0, []],
-        ],
-        insertAggregatedStatusChanged: [
-          [
-            id0,
-            900,
-            AggregateEventStatus.waitingForConfirmation,
-            undefined,
-            AggregateTxStatus.waitingForConfirmation,
-          ],
-          undefined,
-          undefined,
-          [
-            id0,
-            1006,
-            AggregateEventStatus.inReward,
-            id0,
-            AggregateTxStatus.signed,
-          ],
-          [
-            id0,
-            1010,
-            AggregateEventStatus.waitingForConfirmation,
-            undefined,
-            AggregateTxStatus.waitingForConfirmation,
-          ],
-          [
-            id0,
-            1012,
-            AggregateEventStatus.inReward,
-            id0,
-            AggregateTxStatus.signed,
-          ],
-        ],
-        insertGuardStatusChanged: [
-          [id0, guardPk3, 900, EventStatus.pendingReward, undefined, undefined],
-          [id0, guardPk0, 1000, EventStatus.inReward, id0, TxStatus.signed],
-          [id0, guardPk1, 1005, EventStatus.inReward, id0, TxStatus.signed],
-          [id0, guardPk2, 1006, EventStatus.inReward, id0, TxStatus.signed],
-          [
-            id0,
-            guardPk1,
-            1010,
-            EventStatus.pendingReward,
-            undefined,
-            undefined,
-          ],
-          [id0, guardPk3, 1012, EventStatus.inReward, id0, TxStatus.signed],
-        ],
-        calcAggregatedStatus: [
-          undefined,
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk2,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk2,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk2,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk3,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk2,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-            ],
-          ],
-          [
-            [
-              {
-                guardPk: guardPk0,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk2,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-              {
-                guardPk: guardPk1,
-                status: EventStatus.pendingReward,
-                txId: undefined,
-                txStatus: undefined,
-              },
-              {
-                guardPk: guardPk3,
-                status: EventStatus.inReward,
-                txId: id0,
-                txStatus: TxStatus.signed,
-              },
-            ],
-          ],
-        ],
-      };
+      const { returningValues, expectingSequence } = insertStatusTestData;
 
       const insertTxSpy = vi
         .spyOn(TxRepository, 'insertOne')
@@ -670,8 +188,12 @@ describe('PublicStatusActions', () => {
         .spyOn(GuardStatusRepository, 'upsertOne')
         .mockResolvedValue();
 
-      for (let i = 0; i < aggregateTestInsertStatusRequests.length; i += 1) {
-        const req = aggregateTestInsertStatusRequests[i];
+      for (
+        let i = 0;
+        i < mockInsertStatusRequestsForAggregateTest.length;
+        i += 1
+      ) {
+        const req = mockInsertStatusRequestsForAggregateTest[i];
 
         insertTxSpy.mockClear();
         insertAggregatedStatusChangedSpy.mockClear();
@@ -685,14 +207,14 @@ describe('PublicStatusActions', () => {
 
         const calcAggregatedStatusSpy = vi.spyOn(Utils, 'calcAggregatedStatus');
 
-        if (i > 0) {
-          calcAggregatedStatusSpy
-            .mockReturnValueOnce(returningValues.calcAggregatedStatus[i])
-            .mockReturnValueOnce(returningValues.calcAggregatedStatus[i - 1]);
-        } else {
+        if (i === 0) {
           calcAggregatedStatusSpy.mockReturnValueOnce(
             returningValues.calcAggregatedStatus[i],
           );
+        } else {
+          calcAggregatedStatusSpy
+            .mockReturnValueOnce(returningValues.calcAggregatedStatus[i])
+            .mockReturnValueOnce(returningValues.calcAggregatedStatus[i - 1]);
         }
 
         // act
@@ -701,9 +223,7 @@ describe('PublicStatusActions', () => {
           req.guardPk,
           req.timestampSeconds,
           req.status,
-          req.txId,
-          req.txType,
-          req.txStatus,
+          req.tx,
         );
 
         // assert
@@ -719,17 +239,25 @@ describe('PublicStatusActions', () => {
           );
         }
 
+        if (i > 0) {
+          expect(calcAggregatedStatusSpy).toHaveBeenCalledTimes(2);
+        } else {
+          expect(calcAggregatedStatusSpy).toHaveBeenCalledTimes(1);
+        }
+
         const calcAggregatedStatusArgs =
-          expectingSequence.calcAggregatedStatus[i * 2];
+          expectingSequence.calcAggregatedStatus[i * 2 + 1];
         if (calcAggregatedStatusArgs) {
-          expect(calcAggregatedStatusSpy).toHaveBeenCalledWith(
+          expect(calcAggregatedStatusSpy).toHaveBeenNthCalledWith(
+            1,
             ...calcAggregatedStatusArgs,
           );
         }
         const calcAggregatedStatusArgs2 =
-          expectingSequence.calcAggregatedStatus[i * 2 + 1];
+          expectingSequence.calcAggregatedStatus[i * 2];
         if (calcAggregatedStatusArgs2) {
-          expect(calcAggregatedStatusSpy).toHaveBeenCalledWith(
+          expect(calcAggregatedStatusSpy).toHaveBeenNthCalledWith(
+            calcAggregatedStatusArgs ? 2 : 1,
             ...calcAggregatedStatusArgs2,
           );
         }

@@ -10,6 +10,6 @@ const ParamsSchema = Joi.object<Params>().keys({
   id: Joi.string().length(64).required(),
 });
 
-export const validator = async (request: NextRequest, params: any) => {
+export const validator = async (request: NextRequest, params: Params) => {
   return ParamsSchema.validate(params);
 };

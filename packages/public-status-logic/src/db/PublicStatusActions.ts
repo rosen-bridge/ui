@@ -1,5 +1,6 @@
 import { EventStatus, TxStatus, TxType } from '../constants';
-import { StatusForAggregate, Utils } from '../utils';
+import { StatusForAggregate } from '../types';
+import { Utils } from '../utils';
 import { dataSource } from './dataSource';
 import { AggregatedStatusChangedEntity } from './entities/AggregatedStatusChangedEntity';
 import { AggregatedStatusEntity } from './entities/AggregatedStatusEntity';
@@ -21,19 +22,20 @@ export class PublicStatusActions {
    * @param pk
    * @param timestampSeconds
    * @param status
-   * @param txId
-   * @param txType
-   * @param txStatus
-   * @returns promise of void
+   * @param tx
+   * @returns a promise that resolves to void
    */
   static insertStatus = async (
     eventId: string,
     pk: string,
     timestampSeconds: number,
     status: EventStatus,
-    txId?: string,
-    txType?: TxType,
-    txStatus?: TxStatus,
+    tx?: {
+      txId: string;
+      chain: string;
+      txType: TxType;
+      txStatus: TxStatus;
+    },
   ): Promise<void> => {
     await dataSource.manager.transaction(async (entityManager) => {
       // get repositories from transactional entity manager
@@ -52,29 +54,37 @@ export class PublicStatusActions {
       const txRepository = entityManager.withRepository(TxRepository);
 
       // if request has tx info specified
-      if (txId && txType) {
+      if (tx) {
         // insert tx if it doesn't exist
-        await txRepository.insertOne(txId, eventId, timestampSeconds, txType);
+        await txRepository.insertOne(
+          tx.txId,
+          tx.chain,
+          eventId,
+          timestampSeconds,
+          tx.txType,
+        );
       }
 
       // get last statuses of all guards
       const guardsStatus = await guardStatusRepository.getMany(eventId, []);
 
-      // map guard's statuses
-      const statuses: StatusForAggregate[] = guardsStatus.map((record) => ({
-        guardPk: record.guardPk,
-        status: record.status,
-        txId: record.tx?.txId,
-        txStatus: record.txStatus ?? undefined,
-      }));
+      // map guards statuses to remove their unused properties
+      const statuses: StatusForAggregate[] = guardsStatus.map(
+        Utils.mapGuardStatusForAggregate,
+      );
 
       // taking into account the new status
       const newStatuses = statuses.filter((status) => status.guardPk !== pk);
       newStatuses.push({
         guardPk: pk,
         status,
-        txId,
-        txStatus,
+        tx: tx
+          ? {
+              txId: tx.txId,
+              chain: tx.chain,
+              txStatus: tx.txStatus,
+            }
+          : undefined,
       });
 
       // calc new aggregated status
@@ -86,16 +96,18 @@ export class PublicStatusActions {
           pk,
           timestampSeconds,
           status,
-          txId,
-          txStatus,
+          tx
+            ? { txId: tx.txId, chain: tx.chain, txStatus: tx.txStatus }
+            : undefined,
         ),
         guardStatusChangedRepository.insertOne(
           eventId,
           pk,
           timestampSeconds,
           status,
-          txId,
-          txStatus,
+          tx
+            ? { txId: tx.txId, chain: tx.chain, txStatus: tx.txStatus }
+            : undefined,
         ),
       ];
 
@@ -112,15 +124,25 @@ export class PublicStatusActions {
             eventId,
             timestampSeconds,
             aggregatedStatusNew.status,
-            aggregatedStatusNew.txId,
             aggregatedStatusNew.txStatus,
+            aggregatedStatusNew.tx
+              ? {
+                  txId: aggregatedStatusNew.tx.txId,
+                  chain: aggregatedStatusNew.tx.chain,
+                }
+              : undefined,
           ),
           aggregatedStatusChangedRepository.insertOne(
             eventId,
             timestampSeconds,
             aggregatedStatusNew.status,
-            aggregatedStatusNew.txId,
             aggregatedStatusNew.txStatus,
+            aggregatedStatusNew.tx
+              ? {
+                  txId: aggregatedStatusNew.tx.txId,
+                  chain: aggregatedStatusNew.tx.chain,
+                }
+              : undefined,
           ),
         );
       }

@@ -1,10 +1,8 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { TxType } from '../../../src/constants';
+import { EventStatus, TxStatus, TxType } from '../../../src/constants';
 import { GuardStatusRepository } from '../../../src/db/repositories/GuardStatusRepository';
 import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import {
-  fakeGuardStatusRecords,
+  mockGuardStatusRecords,
   guardPk0,
   guardPk1,
   guardPk2,
@@ -16,8 +14,6 @@ import { DataSourceMock } from '../mocked/DataSource.mock';
 describe('GuardStatusRepository', () => {
   beforeEach(async () => {
     await DataSourceMock.clearTables();
-    // insert a fake tx, required to satisfy relation
-    await TxRepository.insertOne(id1, id1, 0, TxType.reward);
   });
 
   describe('getOne', () => {
@@ -41,18 +37,24 @@ describe('GuardStatusRepository', () => {
      * @target GuardStatusRepository.getOne should return only the requested GuardStatusEntity record
      * @dependencies
      * @scenario
-     * - populate GuardStatusEntity with multiple records
+     * - populate TxEntity table with a record, required to satisfy relation
+     * - populate GuardStatusEntity table with multiple records
      * - call getOne for multiple id pk pair
      * @expected
-     * - should have returned the correct values
+     * - for id0,guardPk0 should have returned the status1 object
+     * - for id1,guardPk0 should have returned the status0 object
+     * - for id0,guardPk1 should have returned the status2 object
+     * - for id0,guardPk2 should have returned null
      */
     it('should return only the requested GuardStatusEntity record', async () => {
       // arrange
-      await DataSourceMock.populateGuardStatus(fakeGuardStatusRecords);
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
 
-      const status0 = fakeGuardStatusRecords[0];
-      const status1 = fakeGuardStatusRecords[1];
-      const status2 = fakeGuardStatusRecords[2];
+      await DataSourceMock.populateGuardStatus(mockGuardStatusRecords);
+
+      const status0 = mockGuardStatusRecords[0];
+      const status1 = mockGuardStatusRecords[1];
+      const status2 = mockGuardStatusRecords[2];
 
       // act
       const currentStatus0 = await GuardStatusRepository.getOne(id0, guardPk0);
@@ -91,18 +93,24 @@ describe('GuardStatusRepository', () => {
      * @target GuardStatusRepository.getMany should return array of GuardStatus records
      * @dependencies
      * @scenario
-     * - populate GuardStatus
+     * - populate TxEntity table with a record, required to satisfy relation
+     * - populate GuardStatusEntity table with multiple records
      * - call getMany for multiple id pk pair
      * @expected
-     * - should have returned correct values
+     * - for id0,guardPk0 should have returned 1 record
+     * - for id1,guardPks 0,2 should have returned 1 record
+     * - for id0,guardPk1 should have returned 1 record
+     * - for id0,guardPks 0,1 should have returned 2 records
      */
     it('should return array of GuardStatus records', async () => {
       // arrange
-      await DataSourceMock.populateGuardStatus(fakeGuardStatusRecords);
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
 
-      const status0 = fakeGuardStatusRecords[0];
-      const status1 = fakeGuardStatusRecords[1];
-      const status2 = fakeGuardStatusRecords[2];
+      await DataSourceMock.populateGuardStatus(mockGuardStatusRecords);
+
+      const status0 = mockGuardStatusRecords[0];
+      const status1 = mockGuardStatusRecords[1];
+      const status2 = mockGuardStatusRecords[2];
 
       // act
       const records0 = await GuardStatusRepository.getMany(id0, [guardPk0]);
@@ -131,18 +139,18 @@ describe('GuardStatusRepository', () => {
 
   describe('upsertOne', () => {
     /**
-     * @target GuardStatusRepository.upsertOne should insert record in database when eventId is new
+     * @target GuardStatusRepository.upsertOne should insert record in database when eventId pk pair is new
      * @dependencies
      * @scenario
      * - call upsertOne with 2 different eventIds
      * - get database records
      * @expected
-     * - database should have contained 2 records, one for each eventId
+     * - database should have contained 2 records, one for each eventId pk pair
      */
-    it('should insert record in database when eventId is new', async () => {
+    it('should insert record in database when eventId pk pair is new', async () => {
       // arrange
-      const status0 = fakeGuardStatusRecords[0];
-      const status2 = fakeGuardStatusRecords[2];
+      const status0 = mockGuardStatusRecords[0];
+      const status2 = mockGuardStatusRecords[2];
 
       // act
       await GuardStatusRepository.upsertOne(
@@ -150,26 +158,98 @@ describe('GuardStatusRepository', () => {
         status0.guardPk,
         status0.updatedAt,
         status0.status,
-        status0.tx?.txId,
-        status0.txStatus ?? undefined,
+        status0.tx
+          ? {
+              txId: status0.tx.txId,
+              chain: status0.tx.chain,
+              txStatus: status0.txStatus!,
+            }
+          : undefined,
       );
       await GuardStatusRepository.upsertOne(
         status2.eventId,
         status2.guardPk,
         status2.updatedAt,
         status2.status,
-        status2.tx?.txId,
-        status2.txStatus ?? undefined,
+        status2.tx
+          ? {
+              txId: status2.tx.txId,
+              chain: status2.tx.chain,
+              txStatus: status2.txStatus!,
+            }
+          : undefined,
       );
-      const records = await GuardStatusRepository.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .orderBy('record.updatedAt', 'DESC')
-        .getMany();
+      const records = await GuardStatusRepository.find({
+        relations: ['tx'],
+        order: { updatedAt: 'DESC' },
+      });
 
       // assert
       expect(records).toHaveLength(2);
       expect(records[0]).toMatchObject(status0);
       expect(records[1]).toMatchObject(status2);
+    });
+
+    /**
+     * @target GuardStatusRepository.upsertOne should update record in database when eventId pk pair exists
+     * @dependencies
+     * @scenario
+     * - populate TxEntity table with a record, required to satisfy relation
+     * - populate GuardStatusEntity table with 3 records with different eventId pk pairs
+     * - call upsertOne with updated values for 2 of the inserted records
+     * - get database records
+     * @expected
+     * - database should have contained 3 records with 2 of them updated
+     */
+    it('should update record in database when eventId pk pair exists', async () => {
+      // arrange
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+
+      await DataSourceMock.populateGuardStatus(mockGuardStatusRecords);
+
+      const status0 = mockGuardStatusRecords[0];
+      const status1 = mockGuardStatusRecords[1];
+      const status2 = mockGuardStatusRecords[2];
+
+      // act
+      await GuardStatusRepository.upsertOne(
+        status1.eventId,
+        status1.guardPk,
+        10,
+        EventStatus.paymentWaiting,
+        undefined,
+      );
+      await GuardStatusRepository.upsertOne(
+        status2.eventId,
+        status2.guardPk,
+        20,
+        EventStatus.reachedLimit,
+        { txId: id1, chain: 'c1', txStatus: TxStatus.sent },
+      );
+      const records = await GuardStatusRepository.find({
+        relations: ['tx'],
+        order: { updatedAt: 'DESC' },
+      });
+
+      // assert
+      expect(records).toHaveLength(3);
+      expect(records[0]).toMatchObject(status0);
+      expect(records[1]).toMatchObject({
+        eventId: status2.eventId,
+        guardPk: status2.guardPk,
+        updatedAt: 20,
+        status: EventStatus.reachedLimit,
+        txStatus: TxStatus.sent,
+        tx: { txId: id1, chain: 'c1' },
+      });
+      expect(records[2]).toMatchObject({
+        eventId: status1.eventId,
+        guardPk: status1.guardPk,
+        updatedAt: 10,
+        status: EventStatus.paymentWaiting,
+        txStatus: null,
+        tx: null,
+      });
     });
 
     /**
@@ -186,24 +266,34 @@ describe('GuardStatusRepository', () => {
      */
     it('should not update database value when guard status is not changed', async () => {
       // arrange
-      const status0 = fakeGuardStatusRecords[0];
-      const status2 = fakeGuardStatusRecords[2];
+      const status0 = mockGuardStatusRecords[0];
+      const status2 = mockGuardStatusRecords[2];
 
       await GuardStatusRepository.upsertOne(
         status0.eventId,
         status0.guardPk,
         status0.updatedAt,
         status0.status,
-        status0.tx?.txId,
-        status0.txStatus ?? undefined,
+        status0.tx
+          ? {
+              txId: status0.tx.txId,
+              chain: status0.tx.chain,
+              txStatus: status0.txStatus!,
+            }
+          : undefined,
       );
       await GuardStatusRepository.upsertOne(
         status2.eventId,
         status2.guardPk,
         status2.updatedAt,
         status2.status,
-        status2.tx?.txId,
-        status2.txStatus ?? undefined,
+        status2.tx
+          ? {
+              txId: status2.tx.txId,
+              chain: status2.tx.chain,
+              txStatus: status2.txStatus!,
+            }
+          : undefined,
       );
 
       const repositoryUpsertSpy = vi.spyOn(GuardStatusRepository, 'upsert');
@@ -214,21 +304,31 @@ describe('GuardStatusRepository', () => {
         status2.guardPk,
         status2.updatedAt + 5,
         status2.status,
-        status2.tx?.txId,
-        status2.txStatus ?? undefined,
+        status2.tx
+          ? {
+              txId: status2.tx.txId,
+              chain: status2.tx.chain,
+              txStatus: status2.txStatus!,
+            }
+          : undefined,
       );
       await GuardStatusRepository.upsertOne(
         status0.eventId,
         status0.guardPk,
         status0.updatedAt + 5,
         status0.status,
-        status0.tx?.txId,
-        status0.txStatus ?? undefined,
+        status0.tx
+          ? {
+              txId: status0.tx.txId,
+              chain: status0.tx.chain,
+              txStatus: status0.txStatus!,
+            }
+          : undefined,
       );
-      const records = await GuardStatusRepository.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .orderBy('record.updatedAt', 'DESC')
-        .getMany();
+      const records = await GuardStatusRepository.find({
+        relations: ['tx'],
+        order: { updatedAt: 'DESC' },
+      });
 
       // assert
       expect(repositoryUpsertSpy).not.toHaveBeenCalled();

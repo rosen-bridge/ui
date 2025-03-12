@@ -6,60 +6,61 @@ export const AggregatedStatusChangedRepository = dataSource
   .getRepository(AggregatedStatusChangedEntity)
   .extend({
     /**
-     * gets last AggregatedStatusChangedEntity
+     * retrieves the most recent AggregatedStatusChangedEntity for a given eventId
      * @param eventId
-     * @returns promise of AggregatedStatusChangedEntity or null
+     * @returns a promise resolving to the most recent AggregatedStatusChangedEntity or null if no matching entity is found
      */
     async getLast(
       eventId: string,
     ): Promise<AggregatedStatusChangedEntity | null> {
-      return await this.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .where('record.eventId = :eventId', {
-          eventId,
-        })
-        .orderBy('record.insertedAt', 'DESC')
-        .getOne();
+      return this.findOne({
+        where: { eventId },
+        relations: ['tx'],
+        order: { insertedAt: 'DESC' },
+      });
     },
 
     /**
-     * gets array of AggregatedStatusChangedEntity (timeline)
+     * retrieves multiple AggregatedStatusChangedEntity objects for a given eventId (timeline)
      * @param eventId
-     * @returns promise of AggregatedStatusChangedEntity array
+     * @returns a promise that resolves to an array of AggregatedStatusChangedEntity objects
      */
     async getMany(eventId: string): Promise<AggregatedStatusChangedEntity[]> {
-      return await this.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .where('record.eventId = :eventId', {
-          eventId,
-        })
-        .orderBy('record.insertedAt', 'DESC')
-        .getMany();
+      return this.find({
+        where: { eventId },
+        relations: ['tx'],
+        order: { insertedAt: 'DESC' },
+      });
     },
 
     /**
-     * inserts an AggregatedStatusChangedEntity into database if it differs from its last value
+     * inserts a single AggregatedStatusChangedEntity record if it differs in status or transaction
+     * information from its last value
      * @param eventId
      * @param insertedAt
      * @param status
-     * @param txId
      * @param txStatus
-     * @returns promise of void
+     * @param tx
+     * @returns a promise that resolves to void
      */
     async insertOne(
       eventId: string,
       insertedAt: number,
       status: AggregateEventStatus,
-      txId?: string,
-      txStatus?: AggregateTxStatus,
+      txStatus: AggregateTxStatus,
+      tx?: {
+        txId: string;
+        chain: string;
+      },
     ): Promise<void> {
       const lastValue = await this.getLast(eventId);
 
       if (
         lastValue &&
         status === lastValue.status &&
-        txId === lastValue.tx?.txId &&
-        txStatus === (lastValue.txStatus ?? undefined)
+        txStatus === lastValue.txStatus &&
+        tx?.txId === lastValue.tx?.txId &&
+        tx?.chain === lastValue.tx?.chain
       ) {
         return;
       }
@@ -68,8 +69,8 @@ export const AggregatedStatusChangedRepository = dataSource
         eventId,
         insertedAt,
         status,
-        tx: txId ? { txId } : undefined,
         txStatus,
+        tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
       });
     },
   });

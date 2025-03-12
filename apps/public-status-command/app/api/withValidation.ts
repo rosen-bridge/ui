@@ -5,7 +5,6 @@ import { ValidationResult } from 'joi';
 
 type ValidatorType<TSchema> = (
   request: NextRequest,
-  params: unknown,
 ) => Promise<ValidationResult<TSchema>>;
 
 type HandlerType<TSchema> = (value: TSchema) => Promise<any>;
@@ -27,8 +26,8 @@ export class AccessDeniedError extends Error {
  */
 export const withValidation =
   <TSchema>(validator: ValidatorType<TSchema>, handler: HandlerType<TSchema>) =>
-  async (request: NextRequest, { params }: { params: Promise<unknown> }) => {
-    const { error, value } = await validator(request, await params);
+  async (request: NextRequest) => {
+    const { error, value } = await validator(request);
 
     if (error) {
       return Response.json(error.message, { status: 400 });

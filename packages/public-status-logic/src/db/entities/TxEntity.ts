@@ -11,6 +11,9 @@ export class TxEntity {
   @PrimaryColumn('varchar')
   txId: string;
 
+  @PrimaryColumn('varchar')
+  chain: string;
+
   @Column('varchar')
   eventId: string;
 

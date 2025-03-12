@@ -1,3 +1,5 @@
+import { In } from 'typeorm';
+
 import { AggregateEventStatus, AggregateTxStatus } from '../../constants';
 import { dataSource } from '../dataSource';
 import { AggregatedStatusEntity } from '../entities/AggregatedStatusEntity';
@@ -6,32 +8,28 @@ export const AggregatedStatusRepository = dataSource
   .getRepository(AggregatedStatusEntity)
   .extend({
     /**
-     * gets one AggregatedStatusEntity
+     * retrieves one AggregatedStatusEntity matching the specified eventId
      * @param eventId
-     * @returns promise of AggregatedStatusEntity or null
+     * @returns a promise that resolves to an AggregatedStatusEntity or null if no matching entity is found
      */
     async getOne(eventId: string): Promise<AggregatedStatusEntity | null> {
-      return await this.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .where('record.eventId = :eventId', {
-          eventId,
-        })
-        .getOne();
+      return this.findOne({
+        where: { eventId },
+        relations: ['tx'],
+      });
     },
 
     /**
-     * gets array of AggregatedStatusEntity
+     * retrieves multiple AggregatedStatusEntity objects for the given eventIds array
      * @param eventIds
-     * @returns promise of AggregatedStatusEntity array
+     * @returns a promise that resolves to an array of AggregatedStatusEntity objects
      */
     async getMany(eventIds: string[]): Promise<AggregatedStatusEntity[]> {
-      return await this.createQueryBuilder('record')
-        .leftJoinAndSelect('record.tx', 'tx')
-        .where('record.eventId IN (:...eventIds)', {
-          eventIds,
-        })
-        .orderBy('record.eventId', 'ASC')
-        .getMany();
+      return this.find({
+        where: { eventId: In(eventIds) },
+        relations: ['tx'],
+        order: { eventId: 'ASC' },
+      });
     },
 
     /**
@@ -39,24 +37,28 @@ export const AggregatedStatusRepository = dataSource
      * @param eventId
      * @param updatedAt
      * @param status
-     * @param txId
      * @param txStatus
-     * @returns promise of void
+     * @param tx
+     * @returns a promise that resolves to void
      */
     async upsertOne(
       eventId: string,
       updatedAt: number,
       status: AggregateEventStatus,
-      txId?: string,
-      txStatus?: AggregateTxStatus,
+      txStatus: AggregateTxStatus,
+      tx?: {
+        txId: string;
+        chain: string;
+      },
     ): Promise<void> {
       const storedValue = await this.getOne(eventId);
 
       if (
         storedValue &&
         status === storedValue.status &&
-        txId === storedValue.tx?.txId &&
-        txStatus === (storedValue.txStatus ?? undefined)
+        txStatus === storedValue.txStatus &&
+        tx?.txId === storedValue.tx?.txId &&
+        tx?.chain === storedValue.tx?.chain
       ) {
         return;
       }
@@ -67,8 +69,8 @@ export const AggregatedStatusRepository = dataSource
             eventId,
             updatedAt,
             status,
-            tx: txId ? { txId } : undefined,
             txStatus,
+            tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
           },
         ],
         ['eventId'],

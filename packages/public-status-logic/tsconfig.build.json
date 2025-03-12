@@ -4,8 +4,7 @@
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
     "outDir": "dist",
-    "rootDir": ".",
-    "types": ["vitest/globals"]
+    "rootDir": "./src"
   },
-  "include": ["node_modules/vitest/globals.d.ts", "src", "tests"]
+  "include": ["src"]
 }

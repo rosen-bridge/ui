@@ -1,10 +1,8 @@
-import { describe, beforeEach, it, expect, vi } from 'vitest';
-
-import { TxStatus, TxType } from '../../../src/constants';
+import { TxType } from '../../../src/constants';
 import { AggregatedStatusChangedRepository } from '../../../src/db/repositories/AggregatedStatusChangedRepository';
 import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import {
-  fakeAggregatedStatusChangedRecords,
+  mockAggregatedStatusChangedRecords,
   id0,
   id1,
   id3,
@@ -14,8 +12,6 @@ import { DataSourceMock } from '../mocked/DataSource.mock';
 describe('AggregatedStatusChangedRepository', () => {
   beforeEach(async () => {
     await DataSourceMock.clearTables();
-    // insert a fake tx, required to satisfy relation
-    await TxRepository.insertOne(id1, id1, 0, TxType.reward);
   });
 
   describe('getLast', () => {
@@ -39,19 +35,24 @@ describe('AggregatedStatusChangedRepository', () => {
      * @target AggregatedStatusChangedRepository.getLast should return the last AggregatedStatusChanged record
      * @dependencies
      * @scenario
-     * - populate AggregatedStatusChanged with multiple records
+     * - populate TxEntity table with a record, required to satisfy relation
+     * - populate AggregatedStatusChangedEntity table with multiple records
      * - call getLast for multiple ids
      * @expected
-     * - should have returned the correct values
+     * - for id0 should have returned the status1 object
+     * - for id1 should have returned the status2 object
+     * - for id3 should have returned null
      */
     it('should return the last AggregatedStatusChanged record', async () => {
       // arrange
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+
       await DataSourceMock.populateAggregatedStatusChanged(
-        fakeAggregatedStatusChangedRecords,
+        mockAggregatedStatusChangedRecords,
       );
 
-      const status1 = fakeAggregatedStatusChangedRecords[1];
-      const status2 = fakeAggregatedStatusChangedRecords[2];
+      const status1 = mockAggregatedStatusChangedRecords[1];
+      const status2 = mockAggregatedStatusChangedRecords[2];
 
       // act
       const lastStatus0 = await AggregatedStatusChangedRepository.getLast(id0);
@@ -86,24 +87,38 @@ describe('AggregatedStatusChangedRepository', () => {
      * @target AggregatedStatusChangedRepository.getMany should return array of AggregatedStatusChanged records
      * @dependencies
      * @scenario
-     * - populate AggregatedStatusChanged
+     * - populate TxEntity table with a record, required to satisfy relation
+     * - populate AggregatedStatusChangedEntity table with multiple records
      * - call getMany for multiple ids
      * @expected
-     * - should have returned correct values
+     * - for id0 should have returned 2 records
+     * - for id1 should have returned 1 record
+     * - for id3 should have returned an empty array
      */
     it('should return array of AggregatedStatusChanged records', async () => {
       // arrange
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+
+      const status0 = mockAggregatedStatusChangedRecords[0];
+      const status1 = mockAggregatedStatusChangedRecords[1];
+      const status2 = mockAggregatedStatusChangedRecords[2];
+
       await DataSourceMock.populateAggregatedStatusChanged(
-        fakeAggregatedStatusChangedRecords,
+        mockAggregatedStatusChangedRecords,
       );
 
       // act
       const records0 = await AggregatedStatusChangedRepository.getMany(id0);
       const records1 = await AggregatedStatusChangedRepository.getMany(id1);
+      const records2 = await AggregatedStatusChangedRepository.getMany(id3);
 
       // assert
       expect(records0).toHaveLength(2);
+      expect(records0[0]).toMatchObject(status1);
+      expect(records0[1]).toMatchObject(status0);
       expect(records1).toHaveLength(1);
+      expect(records1[0]).toMatchObject(status2);
+      expect(records2).toHaveLength(0);
     });
   });
 
@@ -112,6 +127,7 @@ describe('AggregatedStatusChangedRepository', () => {
      * @target AggregatedStatusChangedRepository.insertOne should insert record in database when status is changed
      * @dependencies
      * @scenario
+     * - populate TxEntity table with a record, required to satisfy relation
      * - spy on AggregatedStatusChangedRepository.insert
      * - call insertOne
      * - call insertOne again with a new status
@@ -122,8 +138,10 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should insert record in database when status is changed', async () => {
       // arrange
-      const status0 = fakeAggregatedStatusChangedRecords[0];
-      const status1 = fakeAggregatedStatusChangedRecords[1];
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+
+      const status0 = mockAggregatedStatusChangedRecords[0];
+      const status1 = mockAggregatedStatusChangedRecords[1];
 
       const repositoryInsertSpy = vi.spyOn(
         AggregatedStatusChangedRepository,
@@ -135,35 +153,31 @@ describe('AggregatedStatusChangedRepository', () => {
         status0.eventId,
         status0.insertedAt,
         status0.status,
-        status0.tx?.txId,
-        status0.txStatus ?? undefined,
+        status0.txStatus,
+        status0.tx ?? undefined,
       );
       await AggregatedStatusChangedRepository.insertOne(
         status1.eventId,
         status1.insertedAt,
         status1.status,
-        status1.tx?.txId,
-        status1.txStatus ?? undefined,
+        status1.txStatus,
+        status1.tx ?? undefined,
       );
-      const records =
-        await AggregatedStatusChangedRepository.createQueryBuilder('record')
-          .leftJoinAndSelect('record.tx', 'tx')
-          .orderBy('record.insertedAt', 'DESC')
-          .getMany();
+      const records = await AggregatedStatusChangedRepository.find({
+        relations: ['tx'],
+        order: { insertedAt: 'DESC' },
+      });
 
       // assert
       expect(repositoryInsertSpy).toHaveBeenCalledTimes(2);
       expect(repositoryInsertSpy).toHaveBeenNthCalledWith(1, {
         ...status0,
         id: 1, // TODO: fix spy issue
-        tx: undefined,
-        txStatus: undefined,
+        tx: null,
       });
       expect(repositoryInsertSpy).toHaveBeenNthCalledWith(2, {
         ...status1,
         id: 2, // TODO: fix spy issue
-        tx: { txId: id1 },
-        txStatus: TxStatus.signed,
       });
 
       expect(records).toHaveLength(2);
@@ -175,6 +189,7 @@ describe('AggregatedStatusChangedRepository', () => {
      * @target AggregatedStatusChangedRepository.insertOne should not insert record in database when status is not changed
      * @dependencies
      * @scenario
+     * - populate TxEntity table with a record, required to satisfy relation
      * - call insertOne to populate database with 2 different records
      * - spy on AggregatedStatusChangedRepository.insert
      * - call insertOne again with the same values
@@ -185,22 +200,24 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should not insert record in database when status is not changed', async () => {
       // arrange
-      const status1 = fakeAggregatedStatusChangedRecords[1];
-      const status3 = fakeAggregatedStatusChangedRecords[3];
+      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+
+      const status1 = mockAggregatedStatusChangedRecords[1];
+      const status3 = mockAggregatedStatusChangedRecords[3];
 
       await AggregatedStatusChangedRepository.insertOne(
         status1.eventId,
         status1.insertedAt,
         status1.status,
-        status1.tx?.txId,
-        status1.txStatus ?? undefined,
+        status1.txStatus,
+        status1.tx ?? undefined,
       );
       await AggregatedStatusChangedRepository.insertOne(
         status3.eventId,
         status3.insertedAt,
         status3.status,
-        status3.tx?.txId,
-        status3.txStatus ?? undefined,
+        status3.txStatus,
+        status3.tx ?? undefined,
       );
 
       const repositoryInsertSpy = vi.spyOn(
@@ -213,21 +230,20 @@ describe('AggregatedStatusChangedRepository', () => {
         status3.eventId,
         status3.insertedAt + 5,
         status3.status,
-        status3.tx?.txId,
-        status3.txStatus ?? undefined,
+        status3.txStatus,
+        status3.tx ?? undefined,
       );
       await AggregatedStatusChangedRepository.insertOne(
         status1.eventId,
         status1.insertedAt + 5,
         status1.status,
-        status1.tx?.txId,
-        status1.txStatus ?? undefined,
+        status1.txStatus,
+        status1.tx ?? undefined,
       );
-      const records =
-        await AggregatedStatusChangedRepository.createQueryBuilder('record')
-          .leftJoinAndSelect('record.tx', 'tx')
-          .orderBy('record.insertedAt', 'DESC')
-          .getMany();
+      const records = await AggregatedStatusChangedRepository.find({
+        relations: ['tx'],
+        order: { insertedAt: 'DESC' },
+      });
 
       // assert
       expect(repositoryInsertSpy).not.toHaveBeenCalled();

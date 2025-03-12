@@ -1,7 +1,5 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import { TxRepository } from '../../../src/db/repositories/TxRepository';
-import { fakeTxs } from '../../testData';
+import { mockTxs } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
 
 describe('TxRepository', () => {
@@ -11,7 +9,7 @@ describe('TxRepository', () => {
 
   describe('insertOne', () => {
     /**
-     * @target TxRepository.insertOne should insert record in database when txId is new
+     * @target TxRepository.insertOne should insert record in database when tx is new
      * @dependencies
      * @scenario
      * - spy on TxRepository.findOneBy
@@ -23,26 +21,28 @@ describe('TxRepository', () => {
      * - insertSpy should have been called with correct arguments
      * - tx should have been inserted into database
      */
-    it('should insert record in database when txId is new', async () => {
+    it('should insert record in database when tx is new', async () => {
       // arrange
       const findOneBySpy = vi.spyOn(TxRepository, 'findOneBy');
       const insertSpy = vi.spyOn(TxRepository, 'insert');
-      const tx0 = fakeTxs[0];
+      const tx0 = mockTxs[0];
 
       // act
       await TxRepository.insertOne(
         tx0.txId,
+        tx0.chain,
         tx0.eventId,
         tx0.insertedAt,
         tx0.txType,
       );
 
-      const records = await TxRepository.createQueryBuilder('record').getMany();
+      const records = await TxRepository.find();
 
       // assert
       expect(findOneBySpy).toHaveBeenCalledTimes(1);
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
+        chain: tx0.chain,
       });
 
       expect(insertSpy).toHaveBeenCalledTimes(1);
@@ -68,9 +68,10 @@ describe('TxRepository', () => {
      */
     it('should not insert record when tx exists in database', async () => {
       // arrange
-      const tx0 = fakeTxs[0];
+      const tx0 = mockTxs[0];
       await TxRepository.insertOne(
         tx0.txId,
+        tx0.chain,
         tx0.eventId,
         tx0.insertedAt,
         tx0.txType,
@@ -82,16 +83,18 @@ describe('TxRepository', () => {
       // act
       await TxRepository.insertOne(
         tx0.txId,
+        tx0.chain,
         tx0.eventId,
         tx0.insertedAt + 10,
         tx0.txType,
       );
 
-      const records = await TxRepository.createQueryBuilder('record').getMany();
+      const records = await TxRepository.find();
 
       // assert
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
+        chain: tx0.chain,
       });
       expect(insertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(1);
@@ -114,7 +117,7 @@ describe('TxRepository', () => {
      */
     it('should throw when findOneBy throws', async () => {
       // arrange
-      const tx0 = fakeTxs[0];
+      const tx0 = mockTxs[0];
       const findOneBySpy = vi
         .spyOn(TxRepository, 'findOneBy')
         .mockRejectedValue(new Error('custom_error'));
@@ -125,16 +128,18 @@ describe('TxRepository', () => {
         async () =>
           await TxRepository.insertOne(
             tx0.txId,
+            tx0.chain,
             tx0.eventId,
             tx0.insertedAt,
             tx0.txType,
           ),
       ).rejects.toThrowError('custom_error');
 
-      const records = await TxRepository.createQueryBuilder('record').getMany();
+      const records = await TxRepository.find();
 
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
+        chain: tx0.chain,
       });
       expect(insertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(0);
@@ -156,7 +161,7 @@ describe('TxRepository', () => {
      */
     it('should throw when insert throws', async () => {
       // arrange
-      const tx0 = fakeTxs[0];
+      const tx0 = mockTxs[0];
       const findOneBySpy = vi
         .spyOn(TxRepository, 'findOneBy')
         .mockResolvedValue(null);
@@ -169,16 +174,18 @@ describe('TxRepository', () => {
         async () =>
           await TxRepository.insertOne(
             tx0.txId,
+            tx0.chain,
             tx0.eventId,
             tx0.insertedAt,
             tx0.txType,
           ),
       ).rejects.toThrowError('custom_error');
 
-      const records = await TxRepository.createQueryBuilder('record').getMany();
+      const records = await TxRepository.find();
 
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
+        chain: tx0.chain,
       });
       expect(insertSpy).toHaveBeenCalledWith(tx0);
       expect(records).toHaveLength(0);

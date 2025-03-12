@@ -4,26 +4,9 @@ import {
   EventStatus,
   TxStatus,
 } from './constants';
+import { GuardStatusEntity } from './db/entities/GuardStatusEntity';
 import { eventStatusThresholds, txStatusThresholds } from './thresholds';
-
-/**
- * result of aggregate calculation
- */
-export type AggregatedStatus = {
-  status: AggregateEventStatus;
-  txId?: string;
-  txStatus: AggregateTxStatus;
-};
-
-/**
- * input type used for calculating aggregate
- */
-export type StatusForAggregate = {
-  guardPk: string;
-  status: EventStatus;
-  txId?: string;
-  txStatus?: TxStatus;
-};
+import { AggregatedStatus, StatusForAggregate } from './types';
 
 export class Utils {
   /**
@@ -38,9 +21,32 @@ export class Utils {
   ): boolean {
     return (
       s1.status === s2.status &&
-      s1.txId === s2.txId &&
-      s1.txStatus === s2.txStatus
+      s1.txStatus === s2.txStatus &&
+      s1.tx?.txId === s2.tx?.txId &&
+      s1.tx?.chain === s2.tx?.chain
     );
+  }
+
+  /**
+   * maps a GuardStatusEntity to StatusForAggregate
+   * @param guardStatus
+   * @returns StatusForAggregate
+   */
+  static mapGuardStatusForAggregate(
+    guardStatus: GuardStatusEntity,
+  ): StatusForAggregate {
+    return {
+      guardPk: guardStatus.guardPk,
+      status: guardStatus.status,
+      tx:
+        guardStatus.tx && guardStatus.txStatus
+          ? {
+              txId: guardStatus.tx.txId,
+              chain: guardStatus.tx.chain,
+              txStatus: guardStatus.txStatus,
+            }
+          : undefined,
+    };
   }
 
   /**
@@ -53,8 +59,8 @@ export class Utils {
   ): AggregatedStatus {
     const aggregatedStatus: AggregatedStatus = {
       status: AggregateEventStatus.waitingForConfirmation,
-      txId: undefined,
       txStatus: AggregateTxStatus.waitingForConfirmation,
+      tx: undefined,
     };
 
     if (statuses.length === 0) {
@@ -70,7 +76,7 @@ export class Utils {
       {} as Record<AggregateEventStatus, number>,
     );
 
-    const txIdCount: Record<string, number> = {};
+    const txKeyCount: Record<string, number> = {};
     const txStatusesCount: Record<
       string,
       Record<AggregateTxStatus, number>
@@ -79,11 +85,17 @@ export class Utils {
     for (const status of statuses) {
       statusesCount[this.eventStatusToAggregate(status.status)] += 1;
 
-      if (!status.txId) continue;
-      if (!txStatusesCount[status.txId]) {
-        txIdCount[status.txId] = 0;
+      if (!status.tx) continue;
+
+      const txKey = JSON.stringify({
+        txId: status.tx!.txId,
+        chain: status.tx!.chain,
+      });
+
+      if (!txStatusesCount[txKey]) {
+        txKeyCount[txKey] = 0;
         // for each case of AggregateTxStatus init its count to 0
-        txStatusesCount[status.txId] = Object.values(AggregateTxStatus).reduce(
+        txStatusesCount[txKey] = Object.values(AggregateTxStatus).reduce(
           (obj, status) => {
             obj[status] = 0;
             return obj;
@@ -92,11 +104,9 @@ export class Utils {
         );
       }
 
-      txIdCount[status.txId] += 1;
-
-      txStatusesCount[status.txId][
-        this.txStatusToAggregate(status.txStatus!)
-      ] += 1;
+      txKeyCount[txKey] += 1;
+      txStatusesCount[txKey][this.txStatusToAggregate(status.tx!.txStatus)] +=
+        1;
     }
 
     for (const threshold of eventStatusThresholds) {
@@ -106,12 +116,12 @@ export class Utils {
       }
     }
 
-    if (Object.keys(txIdCount).length > 0) {
-      for (const txId in txIdCount) {
-        if (txIdCount[txId] === 0) continue;
+    if (Object.keys(txKeyCount).length > 0) {
+      for (const txKey in txKeyCount) {
+        if (txKeyCount[txKey] === 0) continue;
         for (const threshold of txStatusThresholds) {
-          if (txStatusesCount[txId][threshold.status] >= threshold.count) {
-            aggregatedStatus.txId = txId;
+          if (txStatusesCount[txKey][threshold.status] >= threshold.count) {
+            aggregatedStatus.tx = JSON.parse(txKey);
             aggregatedStatus.txStatus = threshold.status;
             break;
           }
@@ -174,5 +184,30 @@ export class Utils {
       case TxStatus.invalid:
         return AggregateTxStatus.invalid;
     }
+  }
+
+  /**
+   * clones an object omitting the specified fields
+   *
+   * @typeParam T - the type of the input object
+   * @typeParam K - the keys of the object to omit
+   * @param obj - the source object to clone
+   * @param fieldsToOmit - an array containing keys that should be omitted from the clone
+   * @returns a new object that includes all keys of the original object except for those specified in fieldsToOmit
+   */
+  static cloneOmitting<T extends object, K extends keyof T>(
+    obj: T,
+    fieldsToOmit: K[],
+  ): Omit<T, K> {
+    const result = {} as Omit<T, K>;
+
+    (Object.keys(obj) as (keyof T)[]).forEach((key) => {
+      if (!fieldsToOmit.includes(key as K)) {
+        const typedKey = key as Exclude<keyof T, K>;
+        result[typedKey] = obj[typedKey];
+      }
+    });
+
+    return result;
   }
 }

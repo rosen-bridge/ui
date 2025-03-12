@@ -26,16 +26,17 @@ export class AggregatedStatusChangedEntity {
   @Column('varchar')
   status: AggregateEventStatus;
 
+  @Column('varchar')
+  txStatus: AggregateTxStatus;
+
   @ManyToOne(() => TxEntity, (tx) => tx.aggregatedStatusChangedRecords, {
     cascade: false,
     nullable: true,
     eager: true,
   })
-  @JoinColumn({ name: 'txId' })
+  @JoinColumn([
+    { name: 'txId', referencedColumnName: 'txId' },
+    { name: 'txChain', referencedColumnName: 'chain' },
+  ])
   tx: TxEntity | null;
-
-  @Column('varchar', {
-    nullable: true,
-  })
-  txStatus: AggregateTxStatus | null;
 }

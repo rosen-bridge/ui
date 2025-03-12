@@ -41,15 +41,39 @@ const guardSecret3 =
 const guardPk3 =
   '03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099';
 
-const commandApiBaseUrl = 'http://localhost:3000';
-const queryApiBaseUrl = 'http://localhost:3001';
+const commandApiBaseUrl = 'http://localhost:3001';
+const queryApiBaseUrl = 'http://localhost:3002';
+const tx0 = {
+  txId: id0,
+  chain: 'c1',
+  txType: 'payment',
+  txStatus: 'signed',
+};
+const tx1 = {
+  txId: id1,
+  chain: 'c1',
+  txType: 'payment',
+  txStatus: 'signed',
+};
+const tx2 = {
+  txId: id2,
+  chain: 'c1',
+  txType: 'reward',
+  txStatus: 'signed',
+};
 
 function getTime() {
   return Math.floor(Date.now() / 1000);
 }
 
+function paramsToSignMessage(params) {
+  return params.tx
+    ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${params.timestamp}`
+    : `${params.eventId}${params.status}${params.timestamp}`;
+}
+
 async function submitStatus(params) {
-  const { timestamp, eventId, status, txId, txType, txStatus, guard } = params;
+  const { guard, timestamp, eventId, status, tx } = params;
 
   let pk = guardPk0;
   let secret = guardPk0;
@@ -79,34 +103,26 @@ async function submitStatus(params) {
       throw new Error('invalid guard');
   }
 
-  const signature = sign(
-    secret,
-    // TODO: extract
-    `${eventId}${status}${txId ?? ''}${txType ?? ''}${txStatus ?? ''}${timestamp}`,
-  );
+  const signature = sign(secret, paramsToSignMessage(params));
 
   return axios.post(`${commandApiBaseUrl}/api/status`, {
     date: timestamp,
     eventId,
     status,
-    txId,
-    txType,
-    txStatus,
     pk,
     signature,
+    tx,
   });
 }
 
 async function testInvalidTimestampPast() {
   try {
     const response = await submitStatus({
+      guard: 0,
       timestamp: getTime() - 30,
       eventId: id0,
       status: 'completed',
-      txId: id0,
-      txType: 'payment',
-      txStatus: 'signed',
-      guard: 0,
+      tx: tx0,
     });
 
     assert.equal(response.status, 403);
@@ -124,13 +140,11 @@ async function testInvalidTimestampPast() {
 async function testInvalidTimestampFuture() {
   try {
     const response = await submitStatus({
+      guard: 0,
       timestamp: getTime() + 1,
       eventId: id0,
       status: 'completed',
-      txId: id0,
-      txType: 'payment',
-      txStatus: 'signed',
-      guard: 0,
+      tx: tx0,
     });
 
     assert.equal(response.status, 403);
@@ -148,13 +162,11 @@ async function testInvalidTimestampFuture() {
 async function testNotAllowedPk() {
   try {
     const response = await submitStatus({
+      guard: 2,
       timestamp: getTime(),
       eventId: id0,
       status: 'completed',
-      txId: id0,
-      txType: 'payment',
-      txStatus: 'signed',
-      guard: 2,
+      tx: tx0,
     });
 
     assert.equal(response.status, 403);
@@ -175,13 +187,11 @@ async function testSignatureInvalid() {
 
   try {
     const response = await submitStatus({
+      guard: 0,
       timestamp: getTime(),
       eventId: id0,
       status: 'completed',
-      txId: id0,
-      txType: 'payment',
-      txStatus: 'signed',
-      guard: 0,
+      tx: tx0,
     });
 
     assert.equal(response.status, 403);
@@ -203,16 +213,15 @@ async function testValidRequest() {
   const eventId = id0;
 
   let response = await submitStatus({
+    guard: 0,
     timestamp,
     eventId,
     status: 'completed',
-    txId: id0,
-    txType: 'payment',
-    txStatus: 'signed',
-    guard: 0,
+    tx: tx0,
   });
   assert.equal(response.status, 200);
 
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -220,8 +229,8 @@ async function testValidRequest() {
   assert.equal(response.data[eventId] !== undefined, true);
   assert(response.data[eventId].updatedAt >= timestamp);
   assert.equal(response.data[eventId].status, 'waiting-for-confirmation');
-  assert.equal(response.data[eventId].txId, undefined);
   assert.equal(response.data[eventId].txStatus, 'waiting-for-confirmation');
+  assert.equal(response.data[eventId].tx, undefined);
 
   console.log(`testValidRequest: Passed`);
 }
@@ -231,16 +240,15 @@ async function testValidRequest2() {
   const eventId = id1;
 
   let response = await submitStatus({
+    guard: 1,
     timestamp,
     eventId,
     status: 'pending-payment',
-    txId: id1,
-    txType: 'payment',
-    txStatus: 'signed',
-    guard: 1,
+    tx: tx1,
   });
   assert.equal(response.status, 200);
 
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -248,8 +256,8 @@ async function testValidRequest2() {
   assert.equal(response.data[eventId] !== undefined, true);
   assert(response.data[eventId].updatedAt >= timestamp);
   assert.equal(response.data[eventId].status, 'waiting-for-confirmation');
-  assert.equal(response.data[eventId].txId, undefined);
   assert.equal(response.data[eventId].txStatus, 'waiting-for-confirmation');
+  assert.equal(response.data[eventId].tx, undefined);
 
   console.log(`testValidRequest2: Passed`);
 }
@@ -261,26 +269,26 @@ async function testDuplicateRequest() {
 
   for (let i = 0; i < 10; i += 1) {
     const response = await submitStatus({
+      guard: 1,
       timestamp: getTime(),
       eventId,
       status: 'pending-payment',
-      txId: id1,
-      txType: 'payment',
-      txStatus: 'signed',
-      guard: 1,
+      tx: tx1,
     });
     assert.equal(response.status, 200);
   }
 
+  // get aggregated status of this eventId
   const response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
   assert.equal(response.status, 200);
-  assert.equal(response.data[eventId] !== undefined, true);
-  assert(response.data[eventId].updatedAt < timestamp); // <
-  assert.equal(response.data[eventId].status, 'waiting-for-confirmation');
-  assert.equal(response.data[eventId].txId, undefined);
-  assert.equal(response.data[eventId].txStatus, 'waiting-for-confirmation');
+  let event = response.data[eventId];
+  assert.equal(event !== undefined, true);
+  assert(event.updatedAt < timestamp); // <
+  assert.equal(event.status, 'waiting-for-confirmation');
+  assert.equal(event.txStatus, 'waiting-for-confirmation');
+  assert.equal(event.tx, undefined);
 
   console.log(`testDuplicateRequest: Passed`);
 }
@@ -291,43 +299,39 @@ async function testAggregateStatusChange() {
   // submit guard 0
   let timestamp = getTime();
   let response = await submitStatus({
+    guard: 0,
     timestamp,
     eventId,
     status: 'pending-payment',
-    txId: undefined,
-    txType: undefined,
-    txStatus: undefined,
-    guard: 0,
+    tx: undefined,
   });
   assert.equal(response.status, 200);
 
-  // get
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
   assert.equal(response.status, 200);
   let event = response.data[eventId];
   assert.equal(event !== undefined, true);
-  assert(response.data[eventId].updatedAt >= timestamp);
+  assert(event.updatedAt >= timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
-  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
+  assert.equal(event.tx, undefined);
 
   // submit guard 1
   await sleep(1000);
   timestamp = getTime();
   response = await submitStatus({
+    guard: 1,
     timestamp,
     eventId,
     status: 'pending-payment',
-    txId: undefined,
-    txType: undefined,
-    txStatus: undefined,
-    guard: 1,
+    tx: undefined,
   });
   assert.equal(response.status, 200);
 
-  // get
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -336,24 +340,22 @@ async function testAggregateStatusChange() {
   assert.equal(event !== undefined, true);
   assert(event.updatedAt < timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
-  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
+  assert.equal(event.tx, undefined);
 
   // submit guard 3
   await sleep(1000);
   timestamp = getTime();
   response = await submitStatus({
+    guard: 3,
     timestamp,
     eventId,
     status: 'pending-payment',
-    txId: undefined,
-    txType: undefined,
-    txStatus: undefined,
-    guard: 3,
+    tx: undefined,
   });
   assert.equal(response.status, 200);
 
-  // get
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -362,8 +364,8 @@ async function testAggregateStatusChange() {
   assert.equal(event !== undefined, true);
   assert(event.updatedAt >= timestamp);
   assert.equal(event.status, 'pending-payment');
-  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
+  assert.equal(event.tx, undefined);
 
   ////////////////////////////////////////////////////////////////////
 
@@ -371,17 +373,15 @@ async function testAggregateStatusChange() {
   await sleep(1000);
   timestamp = getTime();
   response = await submitStatus({
+    guard: 0,
     timestamp,
     eventId,
     status: 'in-reward',
-    txId: id0,
-    txType: 'reward',
-    txStatus: 'signed',
-    guard: 0,
+    tx: tx2,
   });
   assert.equal(response.status, 200);
 
-  // get
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -390,24 +390,22 @@ async function testAggregateStatusChange() {
   assert.equal(event !== undefined, true);
   assert(event.updatedAt >= timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
-  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
+  assert.equal(event.tx, undefined);
 
   // submit guard 1
   await sleep(1000);
   timestamp = getTime();
   response = await submitStatus({
+    guard: 1,
     timestamp,
     eventId,
     status: 'in-reward',
-    txId: id0,
-    txType: 'reward',
-    txStatus: 'signed',
-    guard: 1,
+    tx: tx2,
   });
   assert.equal(response.status, 200);
 
-  // get
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -416,24 +414,22 @@ async function testAggregateStatusChange() {
   assert.equal(event !== undefined, true);
   assert(event.updatedAt < timestamp);
   assert.equal(event.status, 'waiting-for-confirmation');
-  assert.equal(event.txId, undefined);
   assert.equal(event.txStatus, 'waiting-for-confirmation');
+  assert.equal(event.tx, undefined);
 
   // submit guard 3
   await sleep(1000);
   timestamp = getTime();
   response = await submitStatus({
+    guard: 3,
     timestamp,
     eventId,
     status: 'in-reward',
-    txId: id0,
-    txType: 'reward',
-    txStatus: 'signed',
-    guard: 3,
+    tx: tx2,
   });
   assert.equal(response.status, 200);
 
-  // get
+  // get aggregated status of this eventId
   response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [eventId],
   });
@@ -442,13 +438,16 @@ async function testAggregateStatusChange() {
   assert.equal(event !== undefined, true);
   assert(event.updatedAt >= timestamp);
   assert.equal(event.status, 'in-reward');
-  assert.equal(event.txId, id0);
-  assert.equal(event.txStatus, 'signed');
+  assert.equal(event.txStatus, tx2.txStatus);
+  assert.equal(event.tx.txId, tx2.txId);
+  assert.equal(event.tx.chain, tx2.chain);
+  assert.equal(event.tx.txType, tx2.txType);
 
   console.log(`testAggregateStatusChange: Passed`);
 }
 
 async function testGetInvalidEventIds() {
+  // get aggregated status
   const response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [id3],
   });
@@ -504,9 +503,7 @@ async function testGetValidGuardEventTimeline() {
 
 function resetDB() {
   console.log('resetting db');
-  const p = $`psql -p 5432 -U postgres -d public_event_status_test`.stdio(
-    'pipe',
-  );
+  const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
 
   p.stdin.write('BEGIN;\n');
   p.stdin.write('TRUNCATE TABLE tx_entity RESTART IDENTITY CASCADE;\n');
@@ -522,22 +519,22 @@ function resetDB() {
 }
 
 async function resetSchema() {
-  await $`psql -p 5432 -U postgres -d public_event_status_test <<EOF
+  await $`psql -p 5432 -U postgres -d public_status_test <<EOF
   DROP SCHEMA public CASCADE;
   CREATE SCHEMA public;
-  GRANT ALL ON SCHEMA public TO public_event_status_test_user;
-  ALTER ROLE public_event_status_test_user SET search_path = public;
+  GRANT ALL ON SCHEMA public TO public_status_test_user;
+  ALTER ROLE public_status_test_user SET search_path = public;
   EOF`;
 }
 
 async function setupDB() {
   await $`psql -p 5432 -U postgres -d postgres <<EOF
-  DROP DATABASE public_event_status_test;
-  CREATE DATABASE public_event_status_test;
-  CREATE USER public_event_status_test_user;
-  GRANT ALL PRIVILEGES ON DATABASE public_event_status_test TO public_event_status_test_user;
-  \c public_event_status_test postgres;
-  GRANT ALL ON SCHEMA public TO public_event_status_test_user;
+  DROP DATABASE public_status_test;
+  CREATE DATABASE public_status_test;
+  CREATE USER public_status_test_user;
+  GRANT ALL PRIVILEGES ON DATABASE public_status_test TO public_status_test_user;
+  \c public_status_test postgres;
+  GRANT ALL ON SCHEMA public TO public_status_test_user;
   EOF`;
 }
 
@@ -551,7 +548,7 @@ async function startCommandApi() {
     cd(`apps/public-status-command`);
 
     await $`export ALLOWED_PKS="0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1,03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6,03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099"`;
-    await $`export POSTGRES_URL="postgresql://public_event_status_test_user@localhost:5432/public_event_status_test"`;
+    await $`export POSTGRES_URL="postgresql://public_status_test_user@localhost:5432/public_status_test"`;
     await $`export POSTGRES_USE_SSL="false"`;
 
     commandApi = $`npm run dev`;
@@ -573,7 +570,7 @@ async function startQueryApi() {
 
     cd(`../public-status-query`);
 
-    await $`export POSTGRES_URL="postgresql://public_event_status_test_user@localhost:5432/public_event_status_test"`;
+    await $`export POSTGRES_URL="postgresql://public_status_test_user@localhost:5432/public_status_test"`;
     await $`export POSTGRES_USE_SSL="false"`;
 
     queryApi = $`npm run dev`;
@@ -585,6 +582,8 @@ async function startQueryApi() {
     console.log('query api ready');
   });
 }
+
+// TODO: add cli arg to start APIs
 
 async function run() {
   await spinner('running tests', async () => {
