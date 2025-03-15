@@ -1,10 +1,10 @@
 import {
   ChangeEvent,
-  FocusEvent,
   KeyboardEvent,
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
@@ -47,13 +47,27 @@ export const SearchableFilter = ({
   selected,
   onChange,
 }: SearchableFilterProps) => {
-  const [anchorElement, setAnchorElement] = useState<HTMLElement>();
+  const $anchor = useRef<HTMLInputElement | null>(null);
 
   const [current, setCurrent] = useState<Partial<Selected>>();
 
   const [query, setQuery] = useState('');
 
-  const [items, setItems] = useState<Array<string | number>>();
+  const state = useMemo<
+    'idle' | 'flow' | 'operator' | 'value' | 'complete'
+  >(() => {
+    if (!current) return 'idle';
+
+    if (!Object.hasOwn(current, 'flow')) return 'flow';
+
+    if (!Object.hasOwn(current, 'operator')) return 'operator';
+
+    if (!Object.hasOwn(current, 'value')) return 'value';
+
+    if (Array.isArray(current.value)) return 'value';
+
+    return 'complete';
+  }, [current]);
 
   const selectedValidated = useMemo<Selected[]>(() => {
     return selected
@@ -76,7 +90,7 @@ export const SearchableFilter = ({
           typeof flow.input === 'function' ? flow.input(context) : flow.input;
 
         switch (input.type) {
-          case 'multiple':
+          case 'multiple': {
             if (!Array.isArray(current.value) || !current.value.length) return;
 
             for (let i = 0; i < current.value.length; i++) {
@@ -90,6 +104,8 @@ export const SearchableFilter = ({
             }
 
             break;
+          }
+
           case 'select': {
             const option = input.options.find(
               (option) => option.value === current.value,
@@ -97,6 +113,10 @@ export const SearchableFilter = ({
 
             if (!option) return;
 
+            break;
+          }
+
+          case 'text': {
             break;
           }
         }
@@ -114,19 +134,21 @@ export const SearchableFilter = ({
     return selectedValidatedWithCurrent.map((current) => {
       const labels = [] as (string | string[])[];
 
-      if (!Object.hasOwn(current, 'flow')) return labels;
+      const flow = flows.find((flow) => flow.name === current.flow);
 
-      const flow = flows.find((flow) => flow.name === current.flow)!;
+      if (!flow) return labels;
 
       labels.push(flow.label);
 
-      if (!Object.hasOwn(current, 'operator')) return labels;
-
       const operator = flow.operators.find(
         (operator) => operator.value == current.operator,
-      )!;
+      );
+
+      if (!operator) return labels;
 
       labels.push(operator.label);
+
+      if (!operator) return labels;
 
       if (!Object.hasOwn(current, 'value')) return labels;
 
@@ -156,68 +178,89 @@ export const SearchableFilter = ({
 
           break;
         }
+        case 'text': {
+          labels.push(current.value as string);
+          break;
+        }
       }
 
       return labels;
     });
   }, [flows, selectedValidatedWithCurrent]);
 
-  const pickerRaw = useMemo<Input>(() => {
-    if (!current) {
-      return {
-        type: 'select',
-        options: flows
-          .filter((flow) => {
-            return (
-              !flow.unique ||
-              !selectedValidated.find((item) => item.flow == flow.name)
-            );
-          })
-          .map((flow) => {
-            return {
+  const pickerRaw = useMemo<Input | undefined>(() => {
+    switch (state) {
+      case 'idle': {
+        return;
+      }
+      case 'flow': {
+        return {
+          type: 'select',
+          options: flows
+            .filter(
+              (flow) =>
+                !flow.unique ||
+                !selectedValidated.find((item) => item.flow == flow.name),
+            )
+            .map((flow) => ({
               label: flow.label,
               value: flow.name,
               post: flow.post,
               pre: flow.pre,
-            };
-          }),
-      };
+            })),
+        };
+      }
+      case 'operator': {
+        const flow = flows.find((flow) => flow.name === current!.flow)!;
+
+        return {
+          type: 'select',
+          options: flow.operators,
+        };
+      }
+      case 'value': {
+        const flow = flows.find((flow) => flow.name === current!.flow)!;
+
+        const context = {
+          operator: current!.operator!,
+        };
+
+        const input =
+          typeof flow.input === 'function' ? flow.input(context) : flow.input;
+
+        return input;
+      }
     }
-
-    const flow = flows.find((flow) => flow.name === current.flow)!;
-
-    if (!Object.hasOwn(current, 'operator')) {
-      return {
-        type: 'select',
-        options: flow.operators,
-      };
-    }
-
-    const context = {
-      operator: current.operator!,
-    };
-
-    const input =
-      typeof flow.input === 'function' ? flow.input(context) : flow.input;
-
-    return input;
-  }, [current, selectedValidated, flows]);
+  }, [current, flows, selectedValidated, state]);
 
   const picker = useMemo<Input | undefined>(() => {
     if (!query) return pickerRaw;
+
     switch (pickerRaw?.type) {
       case 'multiple':
-      case 'select':
+      case 'select': {
         return {
           ...pickerRaw,
           options: pickerRaw.options.filter((option) => {
             return option.value.toLowerCase().includes(query.toLowerCase());
           }),
         };
-      default:
+      }
+      default: {
         return pickerRaw;
+      }
     }
   }, [query, pickerRaw]);
+
+  const change = useCallback(() => {
+    setQuery('');
+
+    setCurrent({});
+
+    const next = [...selectedValidated, current as Selected];
+
+    onChange(next);
+  }, [current, selectedValidated, onChange]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -226,99 +269,96 @@ export const SearchableFilter = ({
   const handleClose = () => {
     setCurrent(undefined);
 
-    setAnchorElement(undefined);
+    if (!Array.isArray(current?.value)) return;
 
-    if (
-      current &&
-      Object.hasOwn(current, 'flow') &&
-      Object.hasOwn(current, 'operator') &&
-      pickerRaw?.type == 'multiple' &&
-      items?.length
-    ) {
-      onChange([
-        ...selectedValidated,
-        { ...current, value: items } as Selected,
-      ]);
-    }
+    if (!current?.value.length) return;
+
+    change();
   };
 
-  const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
-    setAnchorElement(event.currentTarget);
+  const handleFocus = () => {
+    setCurrent({});
   };
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (query) return;
+    switch (event.key) {
+      case 'Enter': {
+        if (picker?.type === 'text') {
+          setCurrent({ ...current, value: query });
+        }
+        break;
+      }
+      case 'Backspace':
+      case 'Delete': {
+        if (query) return;
+        switch (state) {
+          case 'idle':
+          case 'flow': {
+            if (!selectedValidated.length) return;
 
-    if (event.key != 'Delete' && event.key != 'Backspace') return;
+            const last = selectedValidated.at(-1)!;
 
-    if (!current) {
-      if (!selectedValidated.length) return;
+            setCurrent({
+              flow: last.flow,
+              operator: last.operator,
+            });
 
-      const last = selectedValidated.at(-1)!;
+            onChange(selectedValidated.slice(0, -1));
 
-      setCurrent({
-        flow: last.flow,
-        operator: last.operator,
-      });
+            break;
+          }
+          case 'operator': {
+            setCurrent({});
+            break;
+          }
+          case 'value': {
+            const moreTwoSteps =
+              (flows.find((flow) => flow.name == current!.flow)?.operators
+                .length || 0) > 1;
 
-      setAnchorElement(event.currentTarget);
-
-      onChange(selectedValidated.slice(0, -1));
-
-      return;
+            if (moreTwoSteps) {
+              setCurrent({ flow: current!.flow });
+            } else {
+              setCurrent(undefined);
+            }
+            break;
+          }
+          case 'complete': {
+            setCurrent({
+              flow: current!.flow,
+              operator: current!.operator,
+            });
+            break;
+          }
+        }
+        break;
+      }
     }
-
-    if (Object.hasOwn(current, 'value')) {
-      setCurrent({
-        flow: current.flow,
-        operator: current.operator,
-      });
-      return;
-    }
-
-    if (Object.hasOwn(current, 'operator')) {
-      setCurrent({
-        flow: current.flow,
-      });
-      return;
-    }
-
-    setCurrent(undefined);
   };
 
   const handleSelect = useCallback(
     (value: Selected['value']) => {
-      anchorElement?.focus({ preventScroll: true });
+      if (state == 'idle') return;
 
-      if (!current) {
-        setCurrent({ flow: value as string });
-        return;
-      }
+      $anchor.current?.focus({ preventScroll: true });
 
-      if (!Object.hasOwn(current, 'operator')) {
-        setCurrent({ ...current, operator: value as string });
-        return;
-      }
-
-      if (pickerRaw?.type == 'multiple') {
-        setItems(value as Array<string | number>);
-        return;
-      }
-
-      if (!Object.hasOwn(current, 'value')) {
-        setCurrent(undefined);
-        onChange([...selectedValidated, { ...current, value } as Selected]);
-        return;
-      }
+      setCurrent(Object.assign({}, current, { [state]: value }));
     },
-    [anchorElement, current, pickerRaw, selectedValidated, onChange],
+    [current, state],
   );
 
   useEffect(() => {
-    if (pickerRaw == undefined) return;
-    if (pickerRaw.type != 'select') return;
-    if (pickerRaw.options.length != 1) return;
-    handleSelect(pickerRaw.options.at(0)!.value);
+    if (state != 'complete') return;
+
+    if (pickerRaw?.type == 'multiple') return;
+
+    change();
+  }, [current, pickerRaw, selectedValidated, state, change, onChange]);
+
+  useEffect(() => {
+    if (pickerRaw?.type == 'select' && pickerRaw?.options.length == 1) {
+      handleSelect(pickerRaw.options.at(0)!.value);
+    }
   }, [pickerRaw, handleSelect]);
 
   return (
@@ -327,6 +367,7 @@ export const SearchableFilter = ({
         <Container>
           <Chips value={chips} />
           <input
+            ref={$anchor}
             value={query}
             autoComplete="off"
             onChange={handleChange}
@@ -335,8 +376,8 @@ export const SearchableFilter = ({
           />
         </Container>
         <Popper
-          anchorEl={anchorElement}
-          open={Boolean(anchorElement) && !!picker}
+          anchorEl={$anchor.current}
+          open={!!picker}
           placement="bottom-start"
           modifiers={[
             {

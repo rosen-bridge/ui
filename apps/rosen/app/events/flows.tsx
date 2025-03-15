@@ -1,4 +1,4 @@
-import { Flow, OPERATORS_EQUALITY } from '@rosen-bridge/ui-kit';
+import { Flow, OPERATOR_BEEN, OPERATORS_EQUALITY } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const flows: Flow[] = [
@@ -101,6 +101,14 @@ export const flows: Flow[] = [
           value: '60',
         },
       ],
+    },
+  },
+  {
+    name: 'search-for-this-text',
+    label: 'Search for this text',
+    operators: [OPERATOR_BEEN],
+    input: {
+      type: 'text',
     },
   },
 ];

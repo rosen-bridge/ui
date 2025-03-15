@@ -13,12 +13,15 @@ export type Operator = {
 
 export type Input =
   | {
+      type: 'multiple';
+      options: SelectOption[];
+    }
+  | {
       type: 'select';
       options: SelectOption[];
     }
   | {
-      type: 'multiple';
-      options: SelectOption[];
+      type: 'text';
     };
 
 export type SelectOption = {
