@@ -37,7 +37,6 @@ const BridgeContainer = styled('div')(({ theme }) => ({
   flexDirection: 'column',
   gap: theme.spacing(3),
   [theme.breakpoints.up('tablet')]: {
-    'gap': theme.spacing(2),
     'zIndex': '3',
     'position': 'absolute',
     'top': '50%',
@@ -51,15 +50,11 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'gridTemplateRows': 'auto auto auto',
     'alignItems': 'center',
     'justifyContent': 'flex-start',
-    'overflowY': 'auto',
-    'maxHeight': '80vh',
     '& > button': {
-      width: '50%',
       justifySelf: 'center',
     },
   },
   [theme.breakpoints.up('laptop')]: {
-    gap: theme.spacing(2),
     gridTemplateColumns: '8fr 4fr',
   },
 }));
@@ -116,7 +111,7 @@ const RosenBridge = () => {
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
-                        gap: 1,
+                        gap: 3,
                       }}
                     >
                       {(methods.getValues().source == NETWORKS.binance.key ||
@@ -140,11 +135,11 @@ const RosenBridge = () => {
                       <Box
                         sx={(theme) => ({
                           [theme.breakpoints.up('laptop')]: {
-                            width: '35%',
-                            marginRight: theme.spacing(5),
+                            width: '33%',
+                            marginRight: theme.spacing(4),
                           },
                           [theme.breakpoints.up('tablet')]: {
-                            width: '45%',
+                            width: '48%',
                           },
                           [theme.breakpoints.up('mobile')]: {
                             width: '100%',
