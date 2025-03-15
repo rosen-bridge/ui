@@ -24,6 +24,7 @@ export enum TxStatus {
   signed = 'signed',
   sent = 'sent',
   invalid = 'invalid',
+  completed = 'completed',
 }
 
 export enum AggregateEventStatus {
@@ -43,7 +44,7 @@ export enum AggregateEventStatus {
 export enum AggregateTxStatus {
   inSign = 'in-sign', // approved, inSign, signFailed
   signed = 'signed',
-  completed = 'completed', // TODO: not used !
+  completed = 'completed',
   sent = 'sent',
   invalid = 'invalid',
   waitingForConfirmation = 'waiting-for-confirmation',

@@ -158,6 +158,8 @@ export class Utils {
         return AggregateTxStatus.sent;
       case TxStatus.invalid:
         return AggregateTxStatus.invalid;
+      case TxStatus.completed:
+        return AggregateTxStatus.completed;
     }
   }
 
