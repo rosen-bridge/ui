@@ -28,15 +28,19 @@ export const Chips = ({ value }: ChipsProps) => {
   return (
     <Root>
       {value.map((flow) => (
-        <div className="flow">
+        <div key={JSON.stringify(flow)} className="flow">
           {flow.map((value) => {
             if (typeof value === 'string') {
-              return <div className="item">{value}</div>;
+              return (
+                <div key={value} className="item">
+                  {value}
+                </div>
+              );
             }
             return (
-              <div className="item">
+              <div key={JSON.stringify(value)} className="item">
                 {value.map((value, index, values) => (
-                  <div className="value">
+                  <div key={value} className="value">
                     {value}
                     {values.length > 1 && values.length > index + 1 ? ', ' : ''}
                   </div>

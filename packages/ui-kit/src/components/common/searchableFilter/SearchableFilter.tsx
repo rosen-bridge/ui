@@ -53,6 +53,8 @@ export const SearchableFilter = ({
 
   const [query, setQuery] = useState('');
 
+  const [items, setItems] = useState<Array<string | number>>();
+
   const selectedValidated = useMemo<Selected[]>(() => {
     return selected
       .map((current) => {
@@ -223,7 +225,21 @@ export const SearchableFilter = ({
 
   const handleClose = () => {
     setCurrent(undefined);
+
     setAnchorElement(undefined);
+
+    if (
+      current &&
+      Object.hasOwn(current, 'flow') &&
+      Object.hasOwn(current, 'operator') &&
+      pickerRaw?.type == 'multiple' &&
+      items?.length
+    ) {
+      onChange([
+        ...selectedValidated,
+        { ...current, value: items } as Selected,
+      ]);
+    }
   };
 
   const handleFocus = (event: FocusEvent<HTMLInputElement>) => {
@@ -285,7 +301,7 @@ export const SearchableFilter = ({
       }
 
       if (pickerRaw?.type == 'multiple') {
-        setCurrent({ ...current, value });
+        setItems(value as Array<string | number>);
         return;
       }
 

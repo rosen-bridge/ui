@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { styled } from '../../../styling';
 import {
   List,
@@ -27,6 +29,8 @@ export type PickerProps = {
 };
 
 export const Picker = ({ value, onSelect }: PickerProps) => {
+  const [items, setItems] = useState(new Set<string>());
+
   if (value.type == 'multiple') {
     return (
       <PickerRoot>
@@ -34,7 +38,19 @@ export const Picker = ({ value, onSelect }: PickerProps) => {
           {value.options.map((option) => (
             <ListItem
               key={option.value}
-              onClick={() => onSelect([option.value])}
+              onClick={() => {
+                if (items.has(option.value)) {
+                  items.delete(option.value);
+                } else {
+                  items.add(option.value);
+                }
+
+                const next = new Set(items);
+
+                setItems(next);
+
+                onSelect(Array.from(next.values()));
+              }}
             >
               <ListItemButton>
                 <ListItemText primary={option.label} />
@@ -45,6 +61,7 @@ export const Picker = ({ value, onSelect }: PickerProps) => {
       </PickerRoot>
     );
   }
+
   if (value.type == 'select') {
     return (
       <PickerRoot>
