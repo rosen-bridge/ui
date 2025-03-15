@@ -100,11 +100,9 @@ export class MetaMaskWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(this.currentChain)];
-
     let amount;
 
-    if (token.metaData.type === 'native') {
+    if (token.type === 'native') {
       amount = await this.provider.request<string>({
         method: 'eth_getBalance',
         params: [address, 'latest'],
@@ -113,7 +111,7 @@ export class MetaMaskWallet implements Wallet {
       const browserProvider = new BrowserProvider(window.ethereum!);
 
       const contract = new Contract(
-        tokenId,
+        token.tokenId,
         tokenABI,
         await browserProvider.getSigner(),
       );
@@ -124,7 +122,7 @@ export class MetaMaskWallet implements Wallet {
     if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(this.currentChain)],
+      token.tokenId,
       BigInt(amount),
       this.currentChain,
     ).amount;
@@ -183,12 +181,8 @@ export class MetaMaskWallet implements Wallet {
       params.bridgeFee.toString(),
     );
 
-    const tokenMap = await this.config.getTokenMap();
-
-    const tokenId = params.token[tokenMap.getIdKey(this.currentChain)];
-
     const transactionParameters = await this.config.generateTxParameters(
-      tokenId,
+      params.token.tokenId,
       params.lockAddress,
       address,
       params.amount,

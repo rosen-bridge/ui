@@ -4,7 +4,7 @@ import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { CardanoCalculator } from '../../../lib/calculator/chains/cardano-calculator';
-import { tokenMap } from '../../test-data';
+import { tokenMapData } from '../../test-data';
 
 vitest.mock('@rosen-clients/cardano-koios');
 
@@ -55,14 +55,18 @@ describe('CardanoCalculator', () => {
      * - The token balance should be calculated 400 since it checks two addresses with 100 and 300 balance
      */
     it('should calculate the token balance using koios api', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       const cardanoCalculator = new CardanoCalculator(
-        new TokenMap(tokenMap),
+        tokenMap,
         ['hotAddress', 'coldAddress'],
         'authToken',
       );
       const totalBalance = await cardanoCalculator.totalBalance({
-        policyId: 'policyId',
-        assetName: 'assetName',
+        extra: {
+          policyId: 'policyId',
+          assetName: 'assetName',
+        },
       } as any);
       expect(totalBalance).toEqual(400n);
     });
@@ -95,14 +99,18 @@ describe('CardanoCalculator', () => {
      * - The token balance should be calculated 20000
      */
     it('should calculate the token balance using koios api', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       const cardanoCalculator = new CardanoCalculator(
-        new TokenMap(tokenMap),
+        tokenMap,
         ['hotAddress', 'coldAddress'],
         'authToken',
       );
       const totalBalance = await cardanoCalculator.totalSupply({
-        policyId: 'policyId',
-        name: 'assetName',
+        extra: {
+          policyId: 'policyId',
+          name: 'assetName',
+        },
       } as any);
       expect(totalBalance).toEqual(20000n);
     });

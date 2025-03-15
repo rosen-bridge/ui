@@ -62,12 +62,12 @@ export const BridgeTransaction = ({
   const tokenInfo =
     tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
 
-  const idKey = sourceValue && tokenMap.getIdKey(sourceValue);
   const targetTokenSearchResults =
+    sourceValue &&
     tokenValue &&
-    idKey &&
+    tokenValue.tokenId &&
     tokenMap.search(sourceValue, {
-      [idKey]: tokenValue[idKey],
+      tokenId: tokenValue.tokenId,
     });
   const targetTokenInfo =
     targetValue && targetTokenSearchResults?.[0]?.[targetValue];

@@ -76,7 +76,7 @@ export const useBridgeForm = () => {
             balance: await walletGlobalContext!.selected.getBalance(
               tokenField.value,
             ),
-            isNative: tokenField.value.metaData.type === 'native',
+            isNative: tokenField.value.type === 'native',
             eventData: {
               fromAddress: await walletGlobalContext!.selected!.getAddress(),
               toAddress: addressField.value,
