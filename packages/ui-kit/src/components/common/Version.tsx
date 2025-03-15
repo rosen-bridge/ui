@@ -122,8 +122,8 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
             <IconButton
               sx={{ padding: '12px' }}
               onClick={() => setTooltipOpen(!tooltipOpen)}
-              onMouseEnter={() => setTooltipOpen(true)}
-              onMouseLeave={() => setTooltipOpen(false)}
+              onMouseEnter={() => !isMobile && setTooltipOpen(true)}
+              onMouseLeave={() => !isMobile && setTooltipOpen(false)}
             >
               <SvgIcon sx={{ width: 24 }}>
                 <InfoCircle fill="currentColor" />
