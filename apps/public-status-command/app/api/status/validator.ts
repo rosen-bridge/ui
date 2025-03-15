@@ -27,7 +27,10 @@ export interface Params {
 }
 
 const TxSchema = Joi.object<TxParams>().keys({
-  txId: Joi.string().length(64).required(),
+  txId: Joi.string()
+    .length(64)
+    .pattern(/^[a-fA-F0-9]+$/)
+    .required(),
   chain: Joi.string().min(1).max(20).required(),
   txType: Joi.string()
     .valid(...txTypes)
@@ -39,13 +42,22 @@ const TxSchema = Joi.object<TxParams>().keys({
 
 const ParamsSchema = Joi.object<Params>().keys({
   date: Joi.date().timestamp('unix').required(),
-  eventId: Joi.string().length(64).required(),
+  eventId: Joi.string()
+    .length(64)
+    .pattern(/^[a-fA-F0-9]+$/)
+    .required(),
   status: Joi.string()
     .valid(...eventStatuses)
     .required(),
   tx: TxSchema.optional(),
-  pk: Joi.string().length(66).required(),
-  signature: Joi.string().required(), // TODO: validation?
+  pk: Joi.string()
+    .length(66)
+    .pattern(/^[a-fA-F0-9]+$/)
+    .required(),
+  signature: Joi.string()
+    .length(128)
+    .pattern(/^[a-fA-F0-9]+$/)
+    .required(),
 });
 
 export const validator = async (request: NextRequest) => {

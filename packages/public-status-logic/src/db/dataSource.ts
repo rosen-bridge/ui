@@ -1,4 +1,3 @@
-/* global process */
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { AggregatedStatusChangedEntity } from './entities/AggregatedStatusChangedEntity';

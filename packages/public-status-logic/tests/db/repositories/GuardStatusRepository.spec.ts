@@ -8,6 +8,7 @@ import {
   guardPk2,
   id0,
   id1,
+  txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
 
@@ -63,9 +64,9 @@ describe('GuardStatusRepository', () => {
       const currentStatus3 = await GuardStatusRepository.getOne(id0, guardPk2);
 
       // assert
-      expect(currentStatus0).toMatchObject(status1);
-      expect(currentStatus1).toMatchObject(status0);
-      expect(currentStatus2).toMatchObject(status2);
+      expect(currentStatus0).toEqual({ ...status1, tx: txEntityRecord });
+      expect(currentStatus1).toEqual(status0);
+      expect(currentStatus2).toEqual(status2);
       expect(currentStatus3).toBeNull();
     });
   });
@@ -126,14 +127,14 @@ describe('GuardStatusRepository', () => {
 
       // assert
       expect(records0).toHaveLength(1);
-      expect(records0[0]).toMatchObject(status1);
+      expect(records0[0]).toEqual({ ...status1, tx: txEntityRecord });
       expect(records1).toHaveLength(1);
-      expect(records1[0]).toMatchObject(status0);
+      expect(records1[0]).toEqual(status0);
       expect(records2).toHaveLength(1);
-      expect(records2[0]).toMatchObject(status2);
+      expect(records2[0]).toEqual(status2);
       expect(records3).toHaveLength(2);
-      expect(records3[0]).toMatchObject(status1);
-      expect(records3[1]).toMatchObject(status2);
+      expect(records3[0]).toEqual({ ...status1, tx: txEntityRecord });
+      expect(records3[1]).toEqual(status2);
     });
   });
 
@@ -186,8 +187,8 @@ describe('GuardStatusRepository', () => {
 
       // assert
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status0);
-      expect(records[1]).toMatchObject(status2);
+      expect(records[0]).toEqual(status0);
+      expect(records[1]).toEqual(status2);
     });
 
     /**
@@ -233,16 +234,16 @@ describe('GuardStatusRepository', () => {
 
       // assert
       expect(records).toHaveLength(3);
-      expect(records[0]).toMatchObject(status0);
-      expect(records[1]).toMatchObject({
+      expect(records[0]).toEqual(status0);
+      expect(records[1]).toEqual({
         eventId: status2.eventId,
         guardPk: status2.guardPk,
         updatedAt: 20,
         status: EventStatus.reachedLimit,
         txStatus: TxStatus.sent,
-        tx: { txId: id1, chain: 'c1' },
+        tx: txEntityRecord,
       });
-      expect(records[2]).toMatchObject({
+      expect(records[2]).toEqual({
         eventId: status1.eventId,
         guardPk: status1.guardPk,
         updatedAt: 10,
@@ -333,8 +334,8 @@ describe('GuardStatusRepository', () => {
       // assert
       expect(repositoryUpsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status0);
-      expect(records[1]).toMatchObject(status2);
+      expect(records[0]).toEqual(status0);
+      expect(records[1]).toEqual(status2);
     });
   });
 });

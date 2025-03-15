@@ -8,6 +8,7 @@ import {
   guardPk2,
   id0,
   id1,
+  txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
 
@@ -77,9 +78,9 @@ describe('GuardStatusChangedRepository', () => {
       );
 
       // assert
-      expect(lastStatus0).toMatchObject(status2);
-      expect(lastStatus1).toMatchObject(status1);
-      expect(lastStatus2).toMatchObject(status3);
+      expect(lastStatus0).toEqual({ ...status2, id: 3, tx: txEntityRecord });
+      expect(lastStatus1).toEqual({ ...status1, id: 2 });
+      expect(lastStatus2).toEqual({ ...status3, id: 4 });
       expect(lastStatus3).toBeNull();
     });
   });
@@ -146,16 +147,16 @@ describe('GuardStatusChangedRepository', () => {
 
       // assert
       expect(records0).toHaveLength(2);
-      expect(records0[0]).toMatchObject(status2);
-      expect(records0[1]).toMatchObject(status0);
+      expect(records0[0]).toEqual({ ...status2, id: 3, tx: txEntityRecord });
+      expect(records0[1]).toEqual({ ...status0, id: 1 });
       expect(records1).toHaveLength(1);
-      expect(records1[0]).toMatchObject(status1);
+      expect(records1[0]).toEqual({ ...status1, id: 2 });
       expect(records2).toHaveLength(1);
-      expect(records2[0]).toMatchObject(status3);
+      expect(records2[0]).toEqual({ ...status3, id: 4 });
       expect(records3).toHaveLength(3);
-      expect(records3[0]).toMatchObject(status2);
-      expect(records3[1]).toMatchObject(status3);
-      expect(records3[2]).toMatchObject(status0);
+      expect(records3[0]).toEqual({ ...status2, id: 3, tx: txEntityRecord });
+      expect(records3[1]).toEqual({ ...status3, id: 4 });
+      expect(records3[2]).toEqual({ ...status0, id: 1 });
     });
   });
 
@@ -233,8 +234,8 @@ describe('GuardStatusChangedRepository', () => {
       });
 
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status2);
-      expect(records[1]).toMatchObject(status0);
+      expect(records[0]).toEqual({ ...status2, id: 2, tx: txEntityRecord });
+      expect(records[1]).toEqual({ ...status0, id: 1 });
     });
 
     /**
@@ -320,8 +321,8 @@ describe('GuardStatusChangedRepository', () => {
       // assert
       expect(repositoryInsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status3);
-      expect(records[1]).toMatchObject(status0);
+      expect(records[0]).toEqual({ ...status3, id: 2 });
+      expect(records[1]).toEqual({ ...status0, id: 1 });
     });
   });
 });

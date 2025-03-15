@@ -1,299 +1,717 @@
-import { AggregateEventStatus, AggregateTxStatus } from '../../src/constants';
+// should be imported before PublicStatusActions
+import * as mocks from '@/tests/db/mocked/DataLayer.mock';
+
 import { PublicStatusActions } from '../../src/db/PublicStatusActions';
-import { AggregatedStatusChangedRepository } from '../../src/db/repositories/AggregatedStatusChangedRepository';
-import { AggregatedStatusRepository } from '../../src/db/repositories/AggregatedStatusRepository';
-import { GuardStatusChangedRepository } from '../../src/db/repositories/GuardStatusChangedRepository';
-import { GuardStatusRepository } from '../../src/db/repositories/GuardStatusRepository';
-import { TxRepository } from '../../src/db/repositories/TxRepository';
-import { Utils } from '../../src/utils';
 import {
-  mockInsertStatusRequestsForAggregateTest,
-  mockInsertStatusRequests,
-  insertStatusTestData,
+  mockExistingGuardStatus,
+  mockGuardStatusTx,
+  mockAggregatedStatus,
+  mockAggregatedStatusOld,
+  mockTxDTO,
+  mockNewGuardStatus,
+  mockNewGuardStatusWithTx,
 } from '../testData';
-import { DataSourceMock } from './mocked/DataSource.mock';
 
 describe('PublicStatusActions', () => {
-  beforeEach(async () => {
-    await DataSourceMock.clearTables();
-  });
-
   describe('insertStatus', () => {
+    beforeEach(() => {
+      // reset all mocks for each test
+      vi.clearAllMocks();
+    });
+
     /**
-     * @target PublicStatusActions.insertStatus should insert AggregatedStatusChangedEntity and
-     * GuardStatusChangedEntity when eventId is new
-     * @dependencies
+     * @target PublicStatusActions.insertStatus should update aggregated status and
+     * guard status when no guard statuses exist for this eventId, tx info not provided
      * @scenario
-     * - stub TxRepository.insertOne to return
-     * - stub GuardStatusRepository.getMany to return empty array
-     * - stub AggregatedStatusChangedRepository.insertOne to return
-     * - stub AggregatedStatusRepository.upsertOne to return
-     * - stub GuardStatusChangedRepository.insertOne to return
+     * - spy on TxRepository.insertOne
+     * - stub GuardStatusRepository.getMany to return an empty array
+     * - stub mocks.Utils.cloneFilterPush to return an array with the new GuardStatusEntity object
+     * - stub mocks.Utils.calcAggregatedStatus to return mock aggregated status
      * - stub GuardStatusRepository.upsertOne to return
-     * - stub Utils.calcAggregatedStatus to return mocked aggregated status
+     * - stub GuardStatusChangedRepository.insertOne to return
+     * - stub AggregatedStatusRepository.upsertOne to return
+     * - stub AggregatedStatusChangedRepository.insertOne to return
      * - call insertStatus
      * @expected
-     * - insertTxSpy should have been called with the correct tx information
-     * - getGuardsStatusesSpy should have been called with requested eventId and an empty array for guard pks
-     * - calcAggregatedStatusSpy should have been called ONCE with array of mapped guard statuses
-     * - insertAggregatedStatusChangedSpy should have been called with the correct arguments
-     * - insertAggregatedStatusSpy should have been called with the correct arguments
-     * - insertGuardStatusChangedSpy should have been called with the correct arguments
-     * - insertGuardStatusSpy should have been called with the correct arguments
+     * - TxRepository.insertOne should not have been called
+     * - GuardStatusRepository.getMany should have been called once with eventId and []
+     * - Utils.cloneFilterPush should have been called once with empty guards status array, 'guardPk', pk and the new status object
+     * - Utils.calcAggregatedStatus should have been called once with array containing new status object
+     * - GuardStatusRepository.upsertOne should have been called once with guard status info
+     * - GuardStatusChangedRepository.insertOne should have been called once with guard status info
+     * - AggregatedStatusRepository.upsertOne should have been called once with mock aggregated status info
+     * - AggregatedStatusChangedRepository.insertOne should have been called once with mock aggregated status info
      */
-    it('should insert AggregatedStatusChangedEntity and GuardStatusChangedEntity when eventId is new', async () => {
+    it('should update aggregated status and guard status when no guard statuses exist for this eventId, tx info not provided', async () => {
       // arrange
-      const insertTxSpy = vi
-        .spyOn(TxRepository, 'insertOne')
-        .mockResolvedValue();
-
-      const getGuardsStatusesSpy = vi
-        .spyOn(GuardStatusRepository, 'getMany')
-        .mockResolvedValue([]);
-
-      const insertAggregatedStatusChangedSpy = vi
-        .spyOn(AggregatedStatusChangedRepository, 'insertOne')
-        .mockResolvedValue();
-
-      const upsertAggregatedStatusSpy = vi
-        .spyOn(AggregatedStatusRepository, 'upsertOne')
-        .mockResolvedValue();
-
-      const insertGuardStatusChangedSpy = vi
-        .spyOn(GuardStatusChangedRepository, 'insertOne')
-        .mockResolvedValue();
-
-      const upsertGuardStatusSpy = vi
-        .spyOn(GuardStatusRepository, 'upsertOne')
-        .mockResolvedValue();
-
-      const calcAggregatedStatusSpy = vi
-        .spyOn(Utils, 'calcAggregatedStatus')
-        .mockReturnValue({
-          status: AggregateEventStatus.waitingForConfirmation,
-          txStatus: AggregateTxStatus.waitingForConfirmation,
-          tx: undefined,
-        });
-
-      const request0 = mockInsertStatusRequests[0];
+      mocks.GuardStatusRepository.getMany.mockResolvedValueOnce([]);
+      mocks.Utils.cloneFilterPush.mockReturnValueOnce([mockNewGuardStatus]);
 
       // act
       await PublicStatusActions.insertStatus(
-        request0.eventId,
-        request0.guardPk,
-        request0.timestampSeconds,
-        request0.status,
-        request0.tx,
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
       );
 
       // assert
-      expect(insertTxSpy).toHaveBeenCalledWith(
-        request0.tx?.txId,
-        request0.tx?.chain,
-        request0.eventId,
-        request0.timestampSeconds,
-        request0.tx?.txType,
+      expect(mocks.TxRepository.insertOne).not.toHaveBeenCalled();
+
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledWith(
+        'eventId0',
+        [],
       );
-      expect(getGuardsStatusesSpy).toHaveBeenCalledWith(request0.eventId, []);
-      expect(calcAggregatedStatusSpy).toHaveBeenCalledWith([
-        {
-          guardPk: request0.guardPk,
-          status: request0.status,
-          tx: {
-            chain: request0.tx!.chain,
-            txId: request0.tx!.txId,
-            txStatus: request0.tx!.txStatus,
-          },
-        },
+
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledWith(
+        [],
+        'guardPk',
+        'guardPk0',
+        mockNewGuardStatus,
+      );
+
+      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledWith([
+        mockNewGuardStatus,
       ]);
-      expect(insertAggregatedStatusChangedSpy).toHaveBeenCalledWith(
-        request0.eventId,
-        request0.timestampSeconds,
-        AggregateEventStatus.waitingForConfirmation,
-        AggregateTxStatus.waitingForConfirmation,
+
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
         undefined,
       );
-      expect(upsertAggregatedStatusSpy).toHaveBeenCalledWith(
-        request0.eventId,
-        request0.timestampSeconds,
-        AggregateEventStatus.waitingForConfirmation,
-        AggregateTxStatus.waitingForConfirmation,
+
+      expect(
+        mocks.GuardStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusChangedRepository.insertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
         undefined,
       );
-      expect(insertGuardStatusChangedSpy).toHaveBeenCalledWith(
-        request0.eventId,
-        request0.guardPk,
-        request0.timestampSeconds,
-        request0.status,
-        {
-          chain: request0.tx!.chain,
-          txId: request0.tx!.txId,
-          txStatus: request0.tx!.txStatus,
-        },
+
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledTimes(
+        1,
       );
-      expect(upsertGuardStatusSpy).toHaveBeenCalledWith(
-        request0.eventId,
-        request0.guardPk,
-        request0.timestampSeconds,
-        request0.status,
-        {
-          chain: request0.tx!.chain,
-          txId: request0.tx!.txId,
-          txStatus: request0.tx!.txStatus,
-        },
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
+
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
       );
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should only create AggregatedStatusChangedEntity when
-     * aggregated status changes
-     * @dependencies
+     * @target PublicStatusActions.insertStatus should update aggregated status and
+     * guard status when no guard statuses exist for this eventId, tx info provided
      * @scenario
      * - stub TxRepository.insertOne to return
-     * - stub AggregatedStatusChangedRepository.insertOne to return
-     * - stub AggregatedStatusRepository.upsertOne to return
-     * - stub GuardStatusChangedRepository.insertOne to return
+     * - stub GuardStatusRepository.getMany to return an empty array
+     * - stub mocks.Utils.cloneFilterPush to return an array with the new GuardStatusEntity object
+     * - stub mocks.Utils.calcAggregatedStatus to return mock aggregated status
      * - stub GuardStatusRepository.upsertOne to return
-     * - for each of the statuses:
-     *   - stub GuardStatusRepository.getMany to return from sequence
-     *   - stub Utils.calcAggregatedStatus to return from sequence
-     *   - call insertStatus
+     * - stub GuardStatusChangedRepository.insertOne to return
+     * - stub AggregatedStatusRepository.upsertOne to return
+     * - stub AggregatedStatusChangedRepository.insertOne to return
+     * - call insertStatus
      * @expected
-     * - assert in the loop:
-     *   - insertTxSpy should have been called with the correct arguments from expecting sequence
-     *   - getGuardsStatusesSpy should have been called with the correct arguments from expecting sequence
-     *   - calcAggregatedStatusSpy should have been called with the correct arguments from expecting sequence
-     *   - insertAggregatedStatusChangedSpy should have been called with the correct arguments from expecting sequence
-     *   - insertAggregatedStatusSpy should have been called with the correct arguments from expecting sequence
-     *   - insertGuardStatusChangedSpy should have been called with the correct arguments from expecting sequence
-     *   - insertGuardStatusSpy should have been called with the correct arguments from expecting sequence
+     * - TxRepository.insertOne should have been called once with tx info
+     * - GuardStatusRepository.getMany should have been called once with eventId and []
+     * - Utils.cloneFilterPush should have been called once with empty guards status array, 'guardPk', pk and the new status object with the tx info
+     * - Utils.calcAggregatedStatus should have been called once with array containing new status object
+     * - GuardStatusRepository.upsertOne should have been called once with guard status info
+     * - GuardStatusChangedRepository.insertOne should have been called once with guard status info
+     * - AggregatedStatusRepository.upsertOne should have been called once with mock aggregated status info
+     * - AggregatedStatusChangedRepository.insertOne should have been called once with mock aggregated status info
      */
-    it('should only create AggregatedStatusChangedEntity when aggregated status changes', async () => {
+    it('should update aggregated status and guard status when no guard statuses exist for this eventId, tx info provided', async () => {
       // arrange
-      const { returningValues, expectingSequence } = insertStatusTestData;
+      mocks.TxRepository.insertOne = vi.fn(() => Promise.resolve());
+      mocks.GuardStatusRepository.getMany.mockResolvedValueOnce([]);
+      mocks.Utils.cloneFilterPush.mockReturnValueOnce([
+        mockNewGuardStatusWithTx,
+      ]);
 
-      const insertTxSpy = vi
-        .spyOn(TxRepository, 'insertOne')
-        .mockResolvedValue();
-      const insertAggregatedStatusChangedSpy = vi
-        .spyOn(AggregatedStatusChangedRepository, 'insertOne')
-        .mockResolvedValue();
-      const upsertAggregatedStatusSpy = vi
-        .spyOn(AggregatedStatusRepository, 'upsertOne')
-        .mockResolvedValue();
-      const insertGuardStatusChangedSpy = vi
-        .spyOn(GuardStatusChangedRepository, 'insertOne')
-        .mockResolvedValue();
-      const upsertGuardStatusSpy = vi
-        .spyOn(GuardStatusRepository, 'upsertOne')
-        .mockResolvedValue();
+      // act
+      await PublicStatusActions.insertStatus(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockTxDTO,
+      );
 
-      for (
-        let i = 0;
-        i < mockInsertStatusRequestsForAggregateTest.length;
-        i += 1
-      ) {
-        const req = mockInsertStatusRequestsForAggregateTest[i];
+      // assert
+      expect(mocks.TxRepository.insertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.TxRepository.insertOne).toHaveBeenCalledWith(
+        mockTxDTO.txId,
+        mockTxDTO.chain,
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockTxDTO.txType,
+      );
 
-        insertTxSpy.mockClear();
-        insertAggregatedStatusChangedSpy.mockClear();
-        upsertAggregatedStatusSpy.mockClear();
-        insertGuardStatusChangedSpy.mockClear();
-        upsertGuardStatusSpy.mockClear();
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledWith(
+        'eventId0',
+        [],
+      );
 
-        const getGuardsStatusesSpy = vi
-          .spyOn(GuardStatusRepository, 'getMany')
-          .mockResolvedValue(returningValues.getGuardsStatuses[i]);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledWith(
+        [],
+        'guardPk',
+        'guardPk0',
+        mockNewGuardStatusWithTx,
+      );
 
-        const calcAggregatedStatusSpy = vi.spyOn(Utils, 'calcAggregatedStatus');
+      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledWith([
+        mockNewGuardStatusWithTx,
+      ]);
 
-        if (i === 0) {
-          calcAggregatedStatusSpy.mockReturnValueOnce(
-            returningValues.calcAggregatedStatus[i],
-          );
-        } else {
-          calcAggregatedStatusSpy
-            .mockReturnValueOnce(returningValues.calcAggregatedStatus[i])
-            .mockReturnValueOnce(returningValues.calcAggregatedStatus[i - 1]);
-        }
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockGuardStatusTx,
+      );
 
-        // act
-        await PublicStatusActions.insertStatus(
-          req.eventId,
-          req.guardPk,
-          req.timestampSeconds,
-          req.status,
-          req.tx,
-        );
+      expect(
+        mocks.GuardStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusChangedRepository.insertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockGuardStatusTx,
+      );
 
-        // assert
-        const insertTxArgs = expectingSequence.insertTx[i];
-        if (insertTxArgs) {
-          expect(insertTxSpy).toHaveBeenCalledWith(...insertTxArgs);
-        }
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
 
-        const getGuardsStatusArgs = expectingSequence.getGuardsStatuses[i];
-        if (getGuardsStatusArgs) {
-          expect(getGuardsStatusesSpy).toHaveBeenCalledWith(
-            ...getGuardsStatusArgs,
-          );
-        }
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
+    });
 
-        if (i > 0) {
-          expect(calcAggregatedStatusSpy).toHaveBeenCalledTimes(2);
-        } else {
-          expect(calcAggregatedStatusSpy).toHaveBeenCalledTimes(1);
-        }
+    /**
+     * @target PublicStatusActions.insertStatus should only update guard status and not
+     * aggregated status when guard statuses exist and aggregated status is not
+     * changed, tx info not provided
+     * @scenario
+     * - spy on TxRepository.insertOne
+     * - stub GuardStatusRepository.getMany to return an array with a mock record
+     * - stub mocks.Utils.cloneFilterPush to return an array with the new GuardStatusEntity object added to it
+     * - stub mocks.Utils.calcAggregatedStatus to return mock aggregated status
+     * - stub mocks.Utils.aggregatedStatusesMatch to return true
+     * - stub GuardStatusRepository.upsertOne to return
+     * - stub GuardStatusChangedRepository.insertOne to return
+     * - spy on AggregatedStatusRepository.upsertOne
+     * - spy on AggregatedStatusChangedRepository.insertOne
+     * - call insertStatus
+     * @expected
+     * - TxRepository.insertOne should not have been called
+     * - GuardStatusRepository.getMany should have been called once with eventId and []
+     * - Utils.cloneFilterPush should have been called once with guards status array, 'guardPk', pk and the new status object
+     * - Utils.calcAggregatedStatus should have been called twice, first with array containing new status object, then with original guards status array
+     * - Utils.aggregatedStatusesMatch should have been called once with 2 mock records
+     * - GuardStatusRepository.upsertOne should have been called once with guard status info
+     * - GuardStatusChangedRepository.insertOne should have been called once with guard status info
+     * - AggregatedStatusRepository.upsertOne should not have been called
+     * - AggregatedStatusChangedRepository.insertOne should not have been called
+     */
+    it('should only update guard status and not aggregated status when guard statuses exist and aggregated status is not changed, tx info not provided', async () => {
+      // arrange
+      mocks.GuardStatusRepository.getMany.mockResolvedValueOnce([
+        mockExistingGuardStatus,
+      ]);
+      mocks.Utils.cloneFilterPush.mockReturnValueOnce([
+        mockExistingGuardStatus,
+        mockNewGuardStatus,
+      ]);
+      mocks.Utils.calcAggregatedStatus
+        .mockReturnValueOnce(mockAggregatedStatus) // for new statuses
+        .mockReturnValueOnce(mockAggregatedStatusOld); // for original statuses
+      mocks.Utils.aggregatedStatusesMatch.mockReturnValueOnce(true);
 
-        const calcAggregatedStatusArgs =
-          expectingSequence.calcAggregatedStatus[i * 2 + 1];
-        if (calcAggregatedStatusArgs) {
-          expect(calcAggregatedStatusSpy).toHaveBeenNthCalledWith(
-            1,
-            ...calcAggregatedStatusArgs,
-          );
-        }
-        const calcAggregatedStatusArgs2 =
-          expectingSequence.calcAggregatedStatus[i * 2];
-        if (calcAggregatedStatusArgs2) {
-          expect(calcAggregatedStatusSpy).toHaveBeenNthCalledWith(
-            calcAggregatedStatusArgs ? 2 : 1,
-            ...calcAggregatedStatusArgs2,
-          );
-        }
+      // act
+      await PublicStatusActions.insertStatus(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
+      );
 
-        const insertAggregatedStatusChangedArgs =
-          expectingSequence.insertAggregatedStatusChanged[i];
-        if (insertAggregatedStatusChangedArgs) {
-          expect(insertAggregatedStatusChangedSpy).toHaveBeenCalledWith(
-            ...insertAggregatedStatusChangedArgs,
-          );
-        }
+      // assert
+      expect(mocks.TxRepository.insertOne).not.toHaveBeenCalled();
 
-        const upsertAggregatedStatusArgs =
-          expectingSequence.insertAggregatedStatusChanged[i];
-        if (upsertAggregatedStatusArgs) {
-          expect(upsertAggregatedStatusSpy).toHaveBeenCalledWith(
-            ...upsertAggregatedStatusArgs,
-          );
-        }
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledWith(
+        'eventId0',
+        [],
+      );
 
-        const insertGuardStatusChangedArgs =
-          expectingSequence.insertGuardStatusChanged[i];
-        if (insertGuardStatusChangedArgs) {
-          expect(insertGuardStatusChangedSpy).toHaveBeenCalledWith(
-            ...insertGuardStatusChangedArgs,
-          );
-        }
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledWith(
+        [mockExistingGuardStatus],
+        'guardPk',
+        'guardPk0',
+        mockNewGuardStatus,
+      );
 
-        const upsertGuardStatusArgs =
-          expectingSequence.insertGuardStatusChanged[i];
-        if (upsertGuardStatusArgs) {
-          expect(upsertGuardStatusSpy).toHaveBeenCalledWith(
-            ...upsertGuardStatusArgs,
-          );
-        }
-      }
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
+        [mockExistingGuardStatus, mockNewGuardStatus],
+      ]);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
+        [mockExistingGuardStatus],
+      ]);
+
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledWith(
+        mockAggregatedStatusOld,
+        mockAggregatedStatus,
+      );
+
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
+      );
+
+      expect(
+        mocks.GuardStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusChangedRepository.insertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
+      );
+
+      expect(mocks.AggregatedStatusRepository.upsertOne).not.toHaveBeenCalled();
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).not.toHaveBeenCalled();
+    });
+
+    /**
+     * @target PublicStatusActions.insertStatus should update guard status and
+     * aggregated status when guard statuses exist and aggregated status is
+     * changed, tx info not provided
+     * @scenario
+     * - spy on TxRepository.insertOne
+     * - stub GuardStatusRepository.getMany to return an array with a mock record
+     * - stub mocks.Utils.cloneFilterPush to return an array with the new GuardStatusEntity object added to it
+     * - stub mocks.Utils.calcAggregatedStatus to return mock aggregated status
+     * - stub mocks.Utils.aggregatedStatusesMatch to return false
+     * - stub GuardStatusRepository.upsertOne to return
+     * - stub GuardStatusChangedRepository.insertOne to return
+     * - stub AggregatedStatusRepository.upsertOne to return
+     * - stub AggregatedStatusChangedRepository.insertOne to return
+     * - call insertStatus
+     * @expected
+     * - TxRepository.insertOne should not have been called
+     * - GuardStatusRepository.getMany should have been called once with eventId and []
+     * - Utils.cloneFilterPush should have been called once with guards status array, 'guardPk', pk and the new status object
+     * - Utils.calcAggregatedStatus should have been called twice, first with array containing new status object, then with original guards status array
+     * - Utils.aggregatedStatusesMatch should have been called once with 2 mock records
+     * - GuardStatusRepository.upsertOne should have been called once with guard status info
+     * - GuardStatusChangedRepository.insertOne should have been called once with guard status info
+     * - AggregatedStatusRepository.upsertOne should have been called once with mock aggregated status info
+     * - AggregatedStatusChangedRepository.insertOne should have been called once with mock aggregated status info
+     */
+    it('should update guard status and aggregated status when guard statuses exist and aggregated status is changed, tx info not provided', async () => {
+      // arrange
+      mocks.GuardStatusRepository.getMany.mockResolvedValueOnce([
+        mockExistingGuardStatus,
+      ]);
+      mocks.Utils.cloneFilterPush.mockReturnValueOnce([
+        mockExistingGuardStatus,
+        mockNewGuardStatus,
+      ]);
+      mocks.Utils.calcAggregatedStatus
+        .mockReturnValueOnce(mockAggregatedStatus) // for new statuses
+        .mockReturnValueOnce(mockAggregatedStatusOld); // for original statuses
+      mocks.Utils.aggregatedStatusesMatch.mockReturnValueOnce(false);
+
+      // act
+      await PublicStatusActions.insertStatus(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
+      );
+
+      // assert
+      expect(mocks.TxRepository.insertOne).not.toHaveBeenCalled();
+
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledWith(
+        'eventId0',
+        [],
+      );
+
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledWith(
+        [mockExistingGuardStatus],
+        'guardPk',
+        'guardPk0',
+        mockNewGuardStatus,
+      );
+
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
+        [mockExistingGuardStatus, mockNewGuardStatus],
+      ]);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
+        [mockExistingGuardStatus],
+      ]);
+
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledWith(
+        mockAggregatedStatusOld,
+        mockAggregatedStatus,
+      );
+
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
+      );
+
+      expect(
+        mocks.GuardStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusChangedRepository.insertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.guardPk,
+        mockNewGuardStatus.updatedAt,
+        mockNewGuardStatus.status,
+        undefined,
+      );
+
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
+
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledWith(
+        mockNewGuardStatus.eventId,
+        mockNewGuardStatus.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
+    });
+
+    /**
+     * @target PublicStatusActions.insertStatus should only update guard status and not
+     * aggregated status when guard statuses exist and aggregated status is not
+     * changed, tx info provided
+     * @scenario
+     * - stub TxRepository.insertOne to return
+     * - stub GuardStatusRepository.getMany to return an array with a mock record
+     * - stub mocks.Utils.cloneFilterPush to return an array with the new GuardStatusEntity object added to it
+     * - stub mocks.Utils.calcAggregatedStatus to return mock aggregated status
+     * - stub mocks.Utils.aggregatedStatusesMatch to return true
+     * - stub GuardStatusRepository.upsertOne to return
+     * - stub GuardStatusChangedRepository.insertOne to return
+     * - spy on AggregatedStatusRepository.upsertOne
+     * - spy on AggregatedStatusChangedRepository.insertOne
+     * - call insertStatus
+     * @expected
+     * - TxRepository.insertOne should have been called once with tx info
+     * - GuardStatusRepository.getMany should have been called once with eventId and []
+     * - Utils.cloneFilterPush should have been called once with guards status array, 'guardPk', pk and the new status object with the tx info
+     * - Utils.calcAggregatedStatus should have been called twice, first with array containing new status object, then with original guards status array
+     * - Utils.aggregatedStatusesMatch should have been called once with 2 mock records
+     * - GuardStatusRepository.upsertOne should have been called once with guard status info
+     * - GuardStatusChangedRepository.insertOne should have been called once with guard status info
+     * - AggregatedStatusRepository.upsertOne should not have been called
+     * - AggregatedStatusChangedRepository.insertOne should not have been called
+     */
+    it('should only update guard status and not aggregated status when guard statuses exist and aggregated status is not changed, tx info provided', async () => {
+      // arrange
+      mocks.TxRepository.insertOne = vi.fn(() => Promise.resolve());
+      mocks.GuardStatusRepository.getMany.mockResolvedValueOnce([
+        mockExistingGuardStatus,
+      ]);
+      mocks.Utils.cloneFilterPush.mockReturnValueOnce([
+        mockExistingGuardStatus,
+        mockNewGuardStatusWithTx,
+      ]);
+      mocks.Utils.calcAggregatedStatus
+        .mockReturnValueOnce(mockAggregatedStatus) // for new statuses
+        .mockReturnValueOnce(mockAggregatedStatusOld); // for original statuses
+      mocks.Utils.aggregatedStatusesMatch.mockReturnValueOnce(true);
+
+      // act
+      await PublicStatusActions.insertStatus(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockTxDTO,
+      );
+
+      // assert
+      expect(mocks.TxRepository.insertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.TxRepository.insertOne).toHaveBeenCalledWith(
+        mockTxDTO.txId,
+        mockTxDTO.chain,
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockTxDTO.txType,
+      );
+
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledWith(
+        'eventId0',
+        [],
+      );
+
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledWith(
+        [mockExistingGuardStatus],
+        'guardPk',
+        'guardPk0',
+        mockNewGuardStatusWithTx,
+      );
+
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
+        [mockExistingGuardStatus, mockNewGuardStatusWithTx],
+      ]);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
+        [mockExistingGuardStatus],
+      ]);
+
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledWith(
+        mockAggregatedStatusOld,
+        mockAggregatedStatus,
+      );
+
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockGuardStatusTx,
+      );
+
+      expect(
+        mocks.GuardStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusChangedRepository.insertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockGuardStatusTx,
+      );
+
+      expect(mocks.AggregatedStatusRepository.upsertOne).not.toHaveBeenCalled();
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).not.toHaveBeenCalled();
+    });
+
+    /**
+     * @target PublicStatusActions.insertStatus should update guard status and aggregated
+     * status when guard statuses exist and aggregated status is changed, tx info provided
+     * @scenario
+     * - stub TxRepository.insertOne to return
+     * - stub GuardStatusRepository.getMany to return an array with a mock record
+     * - stub mocks.Utils.cloneFilterPush to return an array with the new GuardStatusEntity object added to it
+     * - stub mocks.Utils.calcAggregatedStatus to return mock aggregated status
+     * - stub mocks.Utils.aggregatedStatusesMatch to return false
+     * - stub GuardStatusRepository.upsertOne to return
+     * - stub GuardStatusChangedRepository.insertOne to return
+     * - stub AggregatedStatusRepository.upsertOne to return
+     * - stub AggregatedStatusChangedRepository.insertOne to return
+     * - call insertStatus
+     * @expected
+     * - TxRepository.insertOne should have been called once with tx info
+     * - GuardStatusRepository.getMany should have been called once with eventId and []
+     * - Utils.cloneFilterPush should have been called once with guards status array, 'guardPk', pk and the new status object with the tx info
+     * - Utils.calcAggregatedStatus should have been called twice, first with array containing new status object, then with original guards status array
+     * - Utils.aggregatedStatusesMatch should have been called once with 2 mock records
+     * - GuardStatusRepository.upsertOne should have been called once with guard status info
+     * - GuardStatusChangedRepository.insertOne should have been called once with guard status info
+     * - AggregatedStatusRepository.upsertOne should have been called once with mock aggregated status info
+     * - AggregatedStatusChangedRepository.insertOne should have been called once with mock aggregated status info
+     */
+    it('should update guard status and aggregated status when guard statuses exist and aggregated status is changed, tx info provided', async () => {
+      // arrange
+      mocks.TxRepository.insertOne = vi.fn(() => Promise.resolve());
+      mocks.GuardStatusRepository.getMany.mockResolvedValueOnce([
+        mockExistingGuardStatus,
+      ]);
+      mocks.Utils.cloneFilterPush.mockReturnValueOnce([
+        mockExistingGuardStatus,
+        mockNewGuardStatusWithTx,
+      ]);
+      mocks.Utils.calcAggregatedStatus
+        .mockReturnValueOnce(mockAggregatedStatus) // for new statuses
+        .mockReturnValueOnce(mockAggregatedStatusOld); // for original statuses
+      mocks.Utils.aggregatedStatusesMatch.mockReturnValueOnce(false);
+
+      // act
+      await PublicStatusActions.insertStatus(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockTxDTO,
+      );
+
+      // assert
+      expect(mocks.TxRepository.insertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.TxRepository.insertOne).toHaveBeenCalledWith(
+        mockTxDTO.txId,
+        mockTxDTO.chain,
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockTxDTO.txType,
+      );
+
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.getMany).toHaveBeenCalledWith(
+        'eventId0',
+        [],
+      );
+
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.cloneFilterPush).toHaveBeenCalledWith(
+        [mockExistingGuardStatus],
+        'guardPk',
+        'guardPk0',
+        mockNewGuardStatusWithTx,
+      );
+
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
+        [mockExistingGuardStatus, mockNewGuardStatusWithTx],
+      ]);
+      expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
+        [mockExistingGuardStatus],
+      ]);
+
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
+      expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledWith(
+        mockAggregatedStatusOld,
+        mockAggregatedStatus,
+      );
+
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockGuardStatusTx,
+      );
+
+      expect(
+        mocks.GuardStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(mocks.GuardStatusChangedRepository.insertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.guardPk,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockNewGuardStatusWithTx.status,
+        mockGuardStatusTx,
+      );
+
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(mocks.AggregatedStatusRepository.upsertOne).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
+
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        mocks.AggregatedStatusChangedRepository.insertOne,
+      ).toHaveBeenCalledWith(
+        mockNewGuardStatusWithTx.eventId,
+        mockNewGuardStatusWithTx.updatedAt,
+        mockAggregatedStatus.status,
+        mockAggregatedStatus.txStatus,
+        mockAggregatedStatus.tx,
+      );
     });
   });
 });

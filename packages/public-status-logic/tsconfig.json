@@ -5,7 +5,10 @@
     "useUnknownInCatchVariables": false,
     "outDir": "dist",
     "rootDir": ".",
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "include": ["node_modules/vitest/globals.d.ts", "src", "tests"]
 }

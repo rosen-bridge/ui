@@ -1,10 +1,11 @@
 import { EventStatus, TxStatus, TxType } from '../constants';
-import { StatusForAggregate } from '../types';
 import { Utils } from '../utils';
 import { dataSource } from './dataSource';
 import { AggregatedStatusChangedEntity } from './entities/AggregatedStatusChangedEntity';
 import { AggregatedStatusEntity } from './entities/AggregatedStatusEntity';
 import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
+import { GuardStatusEntity } from './entities/GuardStatusEntity';
+import { TxEntity } from './entities/TxEntity';
 import { AggregatedStatusChangedRepository } from './repositories/AggregatedStatusChangedRepository';
 import { AggregatedStatusRepository } from './repositories/AggregatedStatusRepository';
 import { GuardStatusChangedRepository } from './repositories/GuardStatusChangedRepository';
@@ -37,6 +38,7 @@ export class PublicStatusActions {
       txStatus: TxStatus;
     },
   ): Promise<void> => {
+    // perform operations in a db transaction
     await dataSource.manager.transaction(async (entityManager) => {
       // get repositories from transactional entity manager
       const guardStatusRepository = entityManager.withRepository(
@@ -55,7 +57,7 @@ export class PublicStatusActions {
 
       // if request has tx info specified
       if (tx) {
-        // insert tx if it doesn't exist
+        // try to insert tx
         await txRepository.insertOne(
           tx.txId,
           tx.chain,
@@ -65,30 +67,42 @@ export class PublicStatusActions {
         );
       }
 
-      // get last statuses of all guards
+      // get array of last status of all guards
       const guardsStatus = await guardStatusRepository.getMany(eventId, []);
 
-      // map guards statuses to remove their unused properties
-      const statuses: StatusForAggregate[] = guardsStatus.map(
-        Utils.mapGuardStatusForAggregate,
-      );
-
-      // taking into account the new status
-      const newStatuses = statuses.filter((status) => status.guardPk !== pk);
-      newStatuses.push({
+      const newGuardStatus: GuardStatusEntity = {
+        eventId,
         guardPk: pk,
+        updatedAt: timestampSeconds,
         status,
         tx: tx
-          ? {
+          ? ({
               txId: tx.txId,
               chain: tx.chain,
-              txStatus: tx.txStatus,
-            }
-          : undefined,
-      });
+            } as TxEntity)
+          : null,
+        txStatus: tx?.txStatus ?? null,
+      };
 
-      // calc new aggregated status
+      // inserts or replaces a status with matching pk (if exists) with the new status
+      // without mutating the original array
+      const newStatuses = Utils.cloneFilterPush(
+        guardsStatus,
+        'guardPk',
+        pk,
+        newGuardStatus,
+      );
+
+      // calculate aggregated status with the new status
       const aggregatedStatusNew = Utils.calcAggregatedStatus(newStatuses);
+
+      const guardStatusTx = tx
+        ? {
+            txId: tx.txId,
+            chain: tx.chain,
+            txStatus: tx.txStatus,
+          }
+        : undefined;
 
       let promises = [
         guardStatusRepository.upsertOne(
@@ -96,53 +110,46 @@ export class PublicStatusActions {
           pk,
           timestampSeconds,
           status,
-          tx
-            ? { txId: tx.txId, chain: tx.chain, txStatus: tx.txStatus }
-            : undefined,
+          guardStatusTx,
         ),
         guardStatusChangedRepository.insertOne(
           eventId,
           pk,
           timestampSeconds,
           status,
-          tx
-            ? { txId: tx.txId, chain: tx.chain, txStatus: tx.txStatus }
-            : undefined,
+          guardStatusTx,
         ),
       ];
 
       // if eventId is new or aggregated status has changed, update the aggregated status
       if (
-        statuses.length === 0 ||
+        guardsStatus.length === 0 ||
         Utils.aggregatedStatusesMatch(
-          Utils.calcAggregatedStatus(statuses),
+          Utils.calcAggregatedStatus(guardsStatus),
           aggregatedStatusNew,
         ) === false
       ) {
+        const aggregatedStatusTx = aggregatedStatusNew.tx
+          ? {
+              txId: aggregatedStatusNew.tx.txId,
+              chain: aggregatedStatusNew.tx.chain,
+            }
+          : undefined;
+
         promises.push(
           aggregatedStatusRepository.upsertOne(
             eventId,
             timestampSeconds,
             aggregatedStatusNew.status,
             aggregatedStatusNew.txStatus,
-            aggregatedStatusNew.tx
-              ? {
-                  txId: aggregatedStatusNew.tx.txId,
-                  chain: aggregatedStatusNew.tx.chain,
-                }
-              : undefined,
+            aggregatedStatusTx,
           ),
           aggregatedStatusChangedRepository.insertOne(
             eventId,
             timestampSeconds,
             aggregatedStatusNew.status,
             aggregatedStatusNew.txStatus,
-            aggregatedStatusNew.tx
-              ? {
-                  txId: aggregatedStatusNew.tx.txId,
-                  chain: aggregatedStatusNew.tx.chain,
-                }
-              : undefined,
+            aggregatedStatusTx,
           ),
         );
       }

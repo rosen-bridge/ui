@@ -11,6 +11,7 @@ import {
   id1,
   id2,
   id3,
+  txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
 
@@ -65,8 +66,8 @@ describe('AggregatedStatusRepository', () => {
       const currentStatus2 = await AggregatedStatusRepository.getOne(id3);
 
       // assert
-      expect(currentStatus0).toMatchObject(status0);
-      expect(currentStatus1).toMatchObject(status1);
+      expect(currentStatus0).toEqual({ ...status0, tx: txEntityRecord });
+      expect(currentStatus1).toEqual(status1);
       expect(currentStatus2).toBeNull();
     });
   });
@@ -125,10 +126,10 @@ describe('AggregatedStatusRepository', () => {
 
       // assert
       expect(records0).toHaveLength(2);
-      expect(records0[0]).toMatchObject(status0);
-      expect(records0[1]).toMatchObject(status2);
+      expect(records0[0]).toEqual({ ...status0, tx: txEntityRecord });
+      expect(records0[1]).toEqual(status2);
       expect(records1).toHaveLength(1);
-      expect(records1[0]).toMatchObject(status1);
+      expect(records1[0]).toEqual(status1);
       expect(records2).toHaveLength(0);
     });
   });
@@ -173,8 +174,8 @@ describe('AggregatedStatusRepository', () => {
 
       // assert
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status0);
-      expect(records[1]).toMatchObject(status2);
+      expect(records[0]).toEqual({ ...status0, tx: txEntityRecord });
+      expect(records[1]).toEqual(status2);
     });
 
     /**
@@ -222,16 +223,16 @@ describe('AggregatedStatusRepository', () => {
 
       // assert
       expect(records).toHaveLength(3);
-      expect(records[0]).toMatchObject(status1);
-      expect(records[1]).toMatchObject({
-        eventId: id2,
+      expect(records[0]).toEqual(status1);
+      expect(records[1]).toEqual({
+        eventId: status2.eventId,
         updatedAt: 20,
         status: AggregateEventStatus.reachedLimit,
         txStatus: AggregateTxStatus.sent,
-        tx: { txId: id1, chain: 'c1' },
+        tx: txEntityRecord,
       });
-      expect(records[2]).toMatchObject({
-        eventId: id0,
+      expect(records[2]).toEqual({
+        eventId: status0.eventId,
         updatedAt: 10,
         status: AggregateEventStatus.paymentWaiting,
         txStatus: AggregateTxStatus.invalid,
@@ -302,8 +303,8 @@ describe('AggregatedStatusRepository', () => {
       // assert
       expect(repositoryUpsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status0);
-      expect(records[1]).toMatchObject(status2);
+      expect(records[0]).toEqual({ ...status0, tx: txEntityRecord });
+      expect(records[1]).toEqual(status2);
     });
   });
 });

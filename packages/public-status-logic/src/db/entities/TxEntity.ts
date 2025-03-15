@@ -24,14 +24,14 @@ export class TxEntity {
   txType: TxType;
 
   @OneToMany(() => AggregatedStatusEntity, (record) => record.tx)
-  aggregatedStatusRecords: Promise<AggregatedStatusEntity[]>;
+  aggregatedStatusRecords?: Promise<AggregatedStatusEntity[]>;
 
   @OneToMany(() => AggregatedStatusChangedEntity, (record) => record.tx)
-  aggregatedStatusChangedRecords: Promise<AggregatedStatusChangedEntity[]>;
+  aggregatedStatusChangedRecords?: Promise<AggregatedStatusChangedEntity[]>;
 
   @OneToMany(() => GuardStatusEntity, (record) => record.tx)
-  guardStatusRecords: Promise<GuardStatusEntity[]>;
+  guardStatusRecords?: Promise<GuardStatusEntity[]>;
 
   @OneToMany(() => GuardStatusChangedEntity, (record) => record.tx)
-  guardStatusChangedRecords: Promise<GuardStatusChangedEntity[]>;
+  guardStatusChangedRecords?: Promise<GuardStatusChangedEntity[]>;
 }

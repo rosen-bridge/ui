@@ -6,7 +6,7 @@ import {
 } from './constants';
 import { GuardStatusEntity } from './db/entities/GuardStatusEntity';
 import { eventStatusThresholds, txStatusThresholds } from './thresholds';
-import { AggregatedStatus, StatusForAggregate } from './types';
+import { AggregatedStatus } from './types';
 
 export class Utils {
   /**
@@ -28,35 +28,11 @@ export class Utils {
   }
 
   /**
-   * maps a GuardStatusEntity to StatusForAggregate
-   * @param guardStatus
-   * @returns StatusForAggregate
-   */
-  static mapGuardStatusForAggregate(
-    guardStatus: GuardStatusEntity,
-  ): StatusForAggregate {
-    return {
-      guardPk: guardStatus.guardPk,
-      status: guardStatus.status,
-      tx:
-        guardStatus.tx && guardStatus.txStatus
-          ? {
-              txId: guardStatus.tx.txId,
-              chain: guardStatus.tx.chain,
-              txStatus: guardStatus.txStatus,
-            }
-          : undefined,
-    };
-  }
-
-  /**
    * calculates the aggregated status
    * @param statuses
    * @returns AggregatedStatus
    */
-  static calcAggregatedStatus(
-    statuses: StatusForAggregate[],
-  ): AggregatedStatus {
+  static calcAggregatedStatus(statuses: GuardStatusEntity[]): AggregatedStatus {
     const aggregatedStatus: AggregatedStatus = {
       status: AggregateEventStatus.waitingForConfirmation,
       txStatus: AggregateTxStatus.waitingForConfirmation,
@@ -105,8 +81,7 @@ export class Utils {
       }
 
       txKeyCount[txKey] += 1;
-      txStatusesCount[txKey][this.txStatusToAggregate(status.tx!.txStatus)] +=
-        1;
+      txStatusesCount[txKey][this.txStatusToAggregate(status.txStatus!)] += 1;
     }
 
     for (const threshold of eventStatusThresholds) {
@@ -209,5 +184,27 @@ export class Utils {
     });
 
     return result;
+  }
+
+  /**
+   * clones an array by filtering out objects where the specified key matches a given value and then pushes a new object into the cloned array
+   *
+   * @template T - the type of elements in the array
+   * @template K - a key from the type T
+   * @param arr - the original array to be cloned
+   * @param key - the property key to compare against the value
+   * @param value - the value to filter out from the array
+   * @param newObj - the new object to push into the cloned array
+   * @returns a new array that is a clone of the original, with the specified objects filtered out and the new object added
+   */
+  static cloneFilterPush<T, K extends keyof T>(
+    arr: T[],
+    key: K,
+    value: T[K],
+    newObj: T,
+  ): T[] {
+    const clonedArray = arr.filter((item) => item[key] !== value);
+    clonedArray.push(newObj);
+    return clonedArray;
   }
 }

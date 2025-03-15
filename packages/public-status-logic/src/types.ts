@@ -1,9 +1,4 @@
-import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-} from './constants';
+import { AggregateEventStatus, AggregateTxStatus } from './constants';
 
 /**
  * used for defining aggregated status thresholds of both event and tx
@@ -22,18 +17,5 @@ export type AggregatedStatus = {
   tx?: {
     txId: string;
     chain: string;
-  };
-};
-
-/**
- * input type used for calculating aggregate
- */
-export type StatusForAggregate = {
-  guardPk: string;
-  status: EventStatus;
-  tx?: {
-    txId: string;
-    chain: string;
-    txStatus: TxStatus;
   };
 };

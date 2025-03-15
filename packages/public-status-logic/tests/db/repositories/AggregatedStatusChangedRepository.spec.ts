@@ -6,6 +6,7 @@ import {
   id0,
   id1,
   id3,
+  txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
 
@@ -60,8 +61,8 @@ describe('AggregatedStatusChangedRepository', () => {
       const lastStatus3 = await AggregatedStatusChangedRepository.getLast(id3);
 
       // assert
-      expect(lastStatus0).toMatchObject(status1);
-      expect(lastStatus1).toMatchObject(status2);
+      expect(lastStatus0).toEqual({ ...status1, id: 2, tx: txEntityRecord });
+      expect(lastStatus1).toEqual({ ...status2, id: 3 });
       expect(lastStatus3).toBeNull();
     });
   });
@@ -114,10 +115,10 @@ describe('AggregatedStatusChangedRepository', () => {
 
       // assert
       expect(records0).toHaveLength(2);
-      expect(records0[0]).toMatchObject(status1);
-      expect(records0[1]).toMatchObject(status0);
+      expect(records0[0]).toEqual({ ...status1, id: 2, tx: txEntityRecord });
+      expect(records0[1]).toEqual({ ...status0, id: 1 });
       expect(records1).toHaveLength(1);
-      expect(records1[0]).toMatchObject(status2);
+      expect(records1[0]).toEqual({ ...status2, id: 3 });
       expect(records2).toHaveLength(0);
     });
   });
@@ -170,19 +171,19 @@ describe('AggregatedStatusChangedRepository', () => {
 
       // assert
       expect(repositoryInsertSpy).toHaveBeenCalledTimes(2);
-      expect(repositoryInsertSpy).toHaveBeenNthCalledWith(1, {
+      expect(repositoryInsertSpy.mock.calls[0][0]).toEqual({
         ...status0,
         id: 1, // TODO: fix spy issue
         tx: null,
       });
-      expect(repositoryInsertSpy).toHaveBeenNthCalledWith(2, {
+      expect(repositoryInsertSpy.mock.calls[1][0]).toEqual({
         ...status1,
         id: 2, // TODO: fix spy issue
       });
 
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status1);
-      expect(records[1]).toMatchObject(status0);
+      expect(records[0]).toEqual({ ...status1, id: 2, tx: txEntityRecord });
+      expect(records[1]).toEqual({ ...status0, id: 1 });
     });
 
     /**
@@ -248,8 +249,8 @@ describe('AggregatedStatusChangedRepository', () => {
       // assert
       expect(repositoryInsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);
-      expect(records[0]).toMatchObject(status1);
-      expect(records[1]).toMatchObject(status3);
+      expect(records[0]).toEqual({ ...status1, id: 1, tx: txEntityRecord });
+      expect(records[1]).toEqual({ ...status3, id: 2 });
     });
   });
 });

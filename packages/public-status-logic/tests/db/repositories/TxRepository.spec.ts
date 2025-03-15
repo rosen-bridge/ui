@@ -49,7 +49,7 @@ describe('TxRepository', () => {
       expect(insertSpy).toHaveBeenNthCalledWith(1, tx0);
 
       expect(records).toHaveLength(1);
-      expect(records[0]).toMatchObject(tx0);
+      expect(records[0]).toEqual(tx0);
     });
 
     /**
@@ -98,7 +98,7 @@ describe('TxRepository', () => {
       });
       expect(insertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(1);
-      expect(records[0]).toMatchObject(tx0);
+      expect(records[0]).toEqual(tx0);
     });
 
     /**
