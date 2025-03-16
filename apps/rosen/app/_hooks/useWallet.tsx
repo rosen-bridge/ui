@@ -73,9 +73,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
   );
 
   const disconnect = useCallback(() => {
-    if (!selected) {
-      throw new Error('no wallet is selected.');
-    }
+    if (!selected) return;
+
     selected.disconnect();
 
     localStorage.removeItem('rosen:wallet:' + selected.name);

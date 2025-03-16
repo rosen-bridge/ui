@@ -53,6 +53,7 @@ export const WalletInfo = ({
         <Button
           sx={{
             color: (theme) => theme.palette.secondary.dark,
+            fill: (theme) => theme.palette.secondary.dark,
             borderRadius: 1,
             margin: 0,
           }}
