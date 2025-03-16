@@ -8,32 +8,35 @@ import {
   useState,
 } from 'react';
 
-import { ClickAwayListener, Popper } from '@mui/material';
+import { ClickAwayListener } from '@mui/material';
 
 import { styled } from '../../../styling';
 import { Chips, ChipsProps } from './Chips';
+import { History } from './History';
 import { Picker } from './Picker';
 import { Flow, Input, Selected } from './types';
 
-const Root = styled('div')(() => ({}));
-
-const Container = styled('div')(() => ({
-  'display': 'flex',
-  'alignItems': 'center',
-  'border': 'solid 1px lightgray',
-  'borderRadius': '2px',
-  'background': 'white',
-  'padding': '0.25rem 0.25rem',
-  'input': {
+const Root = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  flexGrow: 1,
+  border: 'solid 1px lightgray',
+  borderRadius: '2px',
+  background: 'white',
+  padding: '0.25rem 0.25rem',
+  input: {
     border: 'none',
     flexGrow: 1,
     outline: 0,
     background: 'transparent',
     padding: '0.25rem',
   },
-  '.MuiChip-root': {
-    borderRadius: 0,
-  },
+}));
+
+const Container = styled('div')(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  flexGrow: 1,
 }));
 
 export type SearchableFilterProps = {
@@ -362,35 +365,34 @@ export const SearchableFilter = ({
   }, [pickerRaw, handleSelect]);
 
   return (
-    <ClickAwayListener onClickAway={handleClose}>
+    <>
       <Root>
-        <Container>
-          <Chips value={chips} />
-          <input
-            ref={$anchor}
-            value={query}
-            autoComplete="off"
-            onChange={handleChange}
-            onFocus={handleFocus}
-            onKeyDown={handleKeyDown}
-          />
-        </Container>
-        <Popper
-          anchorEl={$anchor.current}
-          open={!!picker}
-          placement="bottom-start"
-          modifiers={[
-            {
-              name: 'offset',
-              options: {
-                offset: [0, 8],
-              },
-            },
-          ]}
-        >
-          {picker && <Picker value={picker} onSelect={handleSelect} />}
-        </Popper>
+        <History />
+        <ClickAwayListener onClickAway={handleClose}>
+          <Container>
+            <Chips value={chips} />
+            <input
+              ref={$anchor}
+              value={query}
+              autoComplete="off"
+              placeholder={
+                selectedValidatedWithCurrent.length
+                  ? ''
+                  : 'Search or filter results…'
+              }
+              onChange={handleChange}
+              onFocus={handleFocus}
+              onKeyDown={handleKeyDown}
+            />
+            <Picker
+              anchorEl={$anchor.current}
+              open={!!picker}
+              value={picker}
+              onSelect={handleSelect}
+            />
+          </Container>
+        </ClickAwayListener>
       </Root>
-    </ClickAwayListener>
+    </>
   );
 };

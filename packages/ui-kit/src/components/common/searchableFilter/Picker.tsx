@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { styled } from '../../../styling';
 import {
   List,
   ListItem,
@@ -8,32 +7,24 @@ import {
   ListItemIcon,
   ListItemText,
 } from '../../base';
+import { Popup } from './Popup';
 import { Input, Selected } from './types';
 
-const PickerRoot = styled('div')(() => ({
-  'border': '1px solid lightgray',
-  'borderRadius': 1,
-  'background': 'white',
-  '.MuiListItem-root': {
-    padding: '0.25rem',
-  },
-  '.MuiListItemButton-root': {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-}));
-
 export type PickerProps = {
-  value: Input;
+  anchorEl?: HTMLElement | null;
+  open?: boolean;
+  value?: Input;
   onSelect: (value: Selected['value']) => void;
 };
 
-export const Picker = ({ value, onSelect }: PickerProps) => {
+export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
   const [items, setItems] = useState(new Set<string>());
 
-  if (value.type == 'multiple') {
-    return (
-      <PickerRoot>
+  if (!value) return null;
+
+  return (
+    <Popup anchorEl={anchorEl} open={open}>
+      {value.type == 'multiple' && (
         <List>
           {value.options.map((option) => (
             <ListItem
@@ -58,13 +49,8 @@ export const Picker = ({ value, onSelect }: PickerProps) => {
             </ListItem>
           ))}
         </List>
-      </PickerRoot>
-    );
-  }
-
-  if (value.type == 'select') {
-    return (
-      <PickerRoot>
+      )}
+      {value.type == 'select' && (
         <List>
           {value.options.map((option) => (
             <ListItem key={option.value}>
@@ -76,8 +62,7 @@ export const Picker = ({ value, onSelect }: PickerProps) => {
             </ListItem>
           ))}
         </List>
-      </PickerRoot>
-    );
-  }
-  return null;
+      )}
+    </Popup>
+  );
 };
