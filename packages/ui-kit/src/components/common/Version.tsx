@@ -1,8 +1,17 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
+import { InfoCircle } from '@rosen-bridge/icons';
+
 import { useIsMobile } from '../../hooks';
-import { styled } from '../../styling';
-import { CircularProgress } from '../base';
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  IconButton,
+  SvgIcon,
+  Tooltip,
+  Typography,
+} from '../base';
 
 interface VersionProps {
   label: string;
@@ -10,34 +19,12 @@ interface VersionProps {
   sub?: Array<{ label: string; value?: string }>;
 }
 
-const Root = styled('div', {
-  name: 'RosenVersion',
-  slot: 'Root',
-  overridesResolver: (props, styles) => styles.root,
-})(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'start',
-  fontWeight: '400px',
-  fontSize: '12px',
-  lineHeight: '14.06px',
-  color: theme.palette.text.secondary,
-  [theme.breakpoints.down('tablet')]: {
-    flexDirection: 'row',
-    justifyContent: 'start',
-    position: 'absolute',
-    left: '46px',
-    top: '32px',
-    lineHeight: '12px',
-    gap: theme.spacing(1),
-  },
-}));
-
 export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   const $timeout = useRef<number>();
 
   const isMobile = useIsMobile();
+
+  const [tooltipOpen, setTooltipOpen] = useState(false);
 
   const [timeout, setTimeout] = useState(false);
 
@@ -62,33 +49,89 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
   }, [value, sub]);
 
   return (
-    <Root>
+    <>
       {isLoading ? (
-        <CircularProgress sx={{ mt: 0.5 }} size={8} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: '12px',
+          }}
+        >
+          <CircularProgress size={15} />
+        </Box>
       ) : (
         <>
-          <span>
-            {label} v{value || '?'}
-          </span>
-          {isMobile && sub ? (
-            <span>
-              (
-              {sub
-                ?.map((item) => `${item.label} v${item.value || '?'}`)
-                .join(', ')}
-              )
-            </span>
-          ) : (
-            <>
-              {sub?.map((item) => (
-                <span key={item.label}>
-                  {item.label} v{item.value || '?'}
-                </span>
-              ))}
-            </>
-          )}
+          <Tooltip
+            onClose={() => setTooltipOpen(false)}
+            open={tooltipOpen}
+            placement={isMobile ? 'left-start' : 'right-start'}
+            arrow
+            componentsProps={{
+              tooltip: {
+                sx: {
+                  backgroundColor: (theme) => theme.palette.background.paper,
+                  color: (theme) => theme.palette.text.primary,
+                  boxShadow: (theme) =>
+                    `0px 4px 12px ${theme.palette.background.shadow}`,
+                },
+              },
+              arrow: {
+                sx: {
+                  color: (theme) => theme.palette.background.paper,
+                },
+              },
+            }}
+            title={
+              <Box
+                sx={(theme) => ({
+                  background: theme.palette.background.paper,
+                  padding: '4px',
+                })}
+              >
+                <Typography variant="subtitle2" color="text.secondary">
+                  VERSIONS
+                </Typography>
+                <Divider sx={{ marginBottom: '4px' }} />
+                <div>
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    component="span"
+                  >
+                    {label}
+                  </Typography>
+                  <span> v{value || '?'}</span>
+                </div>
+                {sub?.map((item) => (
+                  <div key={item.label}>
+                    <Typography
+                      variant="subtitle2"
+                      color="text.secondary"
+                      component="span"
+                    >
+                      {item.label}
+                    </Typography>
+                    <span> v{item.value || '?'}</span>
+                  </div>
+                ))}
+              </Box>
+            }
+          >
+            <IconButton
+              sx={{ padding: '12px' }}
+              onClick={() => setTooltipOpen(!tooltipOpen)}
+              onMouseEnter={() => !isMobile && setTooltipOpen(true)}
+              onMouseLeave={() => !isMobile && setTooltipOpen(false)}
+            >
+              <SvgIcon sx={{ width: 24 }}>
+                <InfoCircle fill="currentColor" />
+              </SvgIcon>
+            </IconButton>
+          </Tooltip>
         </>
       )}
-    </Root>
+    </>
   );
 };

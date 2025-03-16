@@ -34,6 +34,7 @@ export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
   selected?: Wallet;
   wallets: Wallet[];
+  disconnect: () => void;
 };
 
 export const WalletContext = createContext<WalletContextType | null>(null);
@@ -71,6 +72,15 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     },
     [selectedSource, openSnackbar, setSelected],
   );
+
+  const disconnect = useCallback(() => {
+    if (!selected) return;
+
+    selected.disconnect();
+
+    localStorage.removeItem('rosen:wallet:' + selected.name);
+    setSelected(undefined);
+  }, [selected]);
 
   useEffect(() => {
     (async () => {
@@ -132,6 +142,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     select,
     selected,
     wallets: filtered,
+    disconnect,
   };
 
   return (

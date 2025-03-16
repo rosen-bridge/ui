@@ -76,6 +76,9 @@ export { default as InfoCircleRaw } from './icons/info-circle.svg?raw';
 export { ReactComponent as KeySkeleton } from './icons/key-skeleton.svg';
 export { default as KeySkeletonRaw } from './icons/key-skeleton.svg?raw';
 
+export { ReactComponent as LinkBroken } from './icons/link-broken.svg';
+export { default as LinkBrokenRaw } from './icons/link-broken.svg?raw';
+
 export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
 export { default as LockAltRaw } from './icons/lock-alt.svg?raw';
 
