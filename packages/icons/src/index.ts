@@ -58,6 +58,9 @@ export { default as EyeSlashRaw } from './icons/eye-slash.svg?raw';
 export { ReactComponent as Eye } from './icons/eye.svg';
 export { default as EyeRaw } from './icons/eye.svg?raw';
 
+export { ReactComponent as Favorite } from './icons/favorite.svg';
+export { default as FavoriteRaw } from './icons/favorite.svg?raw';
+
 export { ReactComponent as FileEditAlt } from './icons/file-edit-alt.svg';
 export { default as FileEditAltRaw } from './icons/file-edit-alt.svg?raw';
 

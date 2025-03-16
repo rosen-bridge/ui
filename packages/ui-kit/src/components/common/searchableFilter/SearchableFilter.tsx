@@ -13,9 +13,10 @@ import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { Chips, ChipsProps } from './Chips';
-import { History } from './History';
+import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Flow, Input, Selected } from './types';
+import { aaaaa } from './utils';
 
 const Root = styled('div')(() => ({
   display: 'flex',
@@ -42,16 +43,18 @@ const Container = styled('div')(() => ({
 
 export type SearchableFilterProps = {
   flows: Flow[];
-  namespace?: string;
+  namespace: string;
   onChange: (selected: Selected[]) => void;
 };
 
 export const SearchableFilter = ({
   flows,
-  // namespace,
+  namespace,
   onChange,
 }: SearchableFilterProps) => {
-  const $anchor = useRef<HTMLInputElement | null>(null);
+  const $anchor = useRef<HTMLInputElement>(null);
+
+  const $history = useRef<HistoryRef>(null);
 
   const [selected, setSelected] = useState<Selected[]>([]);
 
@@ -78,53 +81,21 @@ export const SearchableFilter = ({
   const selectedValidated = useMemo<Selected[]>(() => {
     return selected
       .map((current) => {
-        const flow = flows.find((flow) => flow.name === current.flow);
+        const parsed = aaaaa(flows, current);
 
-        if (!flow) return;
+        if (!parsed) return;
 
-        const operator = flow.operators.find(
-          (operator) => operator.value == current.operator,
-        );
+        if (!parsed.flow) return;
 
-        if (!operator) return;
+        if (!parsed.operator) return;
 
-        const context = {
-          operator: current.operator,
-        };
+        if (!parsed.value) return;
 
-        const input =
-          typeof flow.input === 'function' ? flow.input(context) : flow.input;
-
-        switch (input.type) {
-          case 'multiple': {
-            if (!Array.isArray(current.value) || !current.value.length) return;
-
-            for (let i = 0; i < current.value.length; i++) {
-              const value = current.value[i];
-
-              const option = input.options.find(
-                (option) => option.value === value,
-              );
-
-              if (!option) return;
-            }
-
-            break;
-          }
-
-          case 'select': {
-            const option = input.options.find(
-              (option) => option.value === current.value,
-            );
-
-            if (!option) return;
-
-            break;
-          }
-
-          case 'text': {
-            break;
-          }
+        if (Array.isArray(parsed.value)) {
+          if (!Array.isArray(current.value)) return;
+          if (!current.value.length) return;
+          if (!parsed.value.length) return;
+          if (parsed.value.length != current.value.length) return;
         }
 
         return current;
@@ -140,55 +111,23 @@ export const SearchableFilter = ({
     return selectedValidatedWithCurrent.map((current) => {
       const labels = [] as (string | string[])[];
 
-      const flow = flows.find((flow) => flow.name === current.flow);
+      const parsed = aaaaa(flows, current);
 
-      if (!flow) return labels;
+      if (!parsed) return labels;
 
-      labels.push(flow.label);
+      parsed.flow && labels.push(parsed.flow.label);
 
-      const operator = flow.operators.find(
-        (operator) => operator.value == current.operator,
-      );
+      parsed.operator && labels.push(parsed.operator.label);
 
-      if (!operator) return labels;
+      if (!Object.hasOwn(parsed, 'value')) return labels;
 
-      labels.push(operator.label);
-
-      if (!operator) return labels;
-
-      if (!Object.hasOwn(current, 'value')) return labels;
-
-      const context = {
-        operator: current.operator!,
-      };
-
-      const input =
-        typeof flow?.input === 'function' ? flow.input(context) : flow?.input;
-
-      switch (input?.type) {
-        case 'multiple': {
-          const options = input.options
-            .filter((option) => [current.value].flat().includes(option.value))
-            .map((option) => option.label);
-
-          labels.push(options);
-
-          break;
+      [parsed.value].flat().forEach((value) => {
+        if (typeof value == 'object' && 'label' in value) {
+          labels.push(value.label);
+        } else {
+          labels.push(`${value}`);
         }
-        case 'select': {
-          const option = input.options.find(
-            (option) => option.value === current.value,
-          )!;
-
-          labels.push(option.label);
-
-          break;
-        }
-        case 'text': {
-          labels.push(current.value as string);
-          break;
-        }
-      }
+      });
 
       return labels;
     });
@@ -355,6 +294,9 @@ export const SearchableFilter = ({
 
   const handleSearch = () => {
     setCurrent(undefined);
+
+    $history.current?.add(selected);
+
     onChange(selected);
   };
 
@@ -375,7 +317,12 @@ export const SearchableFilter = ({
   return (
     <>
       <Root>
-        <History />
+        <History
+          flows={flows}
+          namespace={namespace}
+          ref={$history}
+          onSelect={setSelected}
+        />
         <ClickAwayListener onClickAway={handleClose}>
           <Container>
             <Chips value={chips} />
