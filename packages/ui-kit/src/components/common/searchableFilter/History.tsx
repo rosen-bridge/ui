@@ -15,7 +15,7 @@ export const History = () => {
     <ClickAwayListener onClickAway={() => setOpen(false)}>
       <div>
         <IconButton ref={$anchor} onClick={() => setOpen(!open)}>
-          <SvgIcon fontSize="small">
+          <SvgIcon>
             <HistoryIcon />
           </SvgIcon>
         </IconButton>

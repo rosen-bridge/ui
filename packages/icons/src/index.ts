@@ -106,6 +106,9 @@ export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';
 export { ReactComponent as Redo } from './icons/redo.svg';
 export { default as RedoRaw } from './icons/redo.svg?raw';
 
+export { ReactComponent as Search } from './icons/search.svg';
+export { default as SearchRaw } from './icons/search.svg?raw';
+
 export { ReactComponent as Setting } from './icons/setting.svg';
 export { default as SettingRaw } from './icons/setting.svg?raw';
 

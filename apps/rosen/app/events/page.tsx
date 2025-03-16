@@ -10,7 +10,6 @@ import {
   EnhancedTable,
   Paper,
   SearchableFilter,
-  Selected,
   TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
@@ -26,8 +25,6 @@ const getKey = (offset: number, limit: number) => {
 };
 
 const Events = () => {
-  const [selected, setSelected] = useState<Selected[]>([]);
-
   const {
     data,
     isLoading,
@@ -118,8 +115,9 @@ const Events = () => {
     <>
       <SearchableFilter
         flows={flows}
-        selected={selected}
-        onChange={setSelected}
+        onChange={() => {
+          alert('hi');
+        }}
       />
       <br />
       <Paper sx={{ overflow: 'hidden' }}>

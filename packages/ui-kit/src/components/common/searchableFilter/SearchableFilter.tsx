@@ -8,7 +8,8 @@ import {
   useState,
 } from 'react';
 
-import { ClickAwayListener } from '@mui/material';
+import { ClickAwayListener, IconButton, SvgIcon } from '@mui/material';
+import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { Chips, ChipsProps } from './Chips';
@@ -41,16 +42,18 @@ const Container = styled('div')(() => ({
 
 export type SearchableFilterProps = {
   flows: Flow[];
-  selected: Selected[];
+  namespace?: string;
   onChange: (selected: Selected[]) => void;
 };
 
 export const SearchableFilter = ({
   flows,
-  selected,
+  // namespace,
   onChange,
 }: SearchableFilterProps) => {
   const $anchor = useRef<HTMLInputElement | null>(null);
+
+  const [selected, setSelected] = useState<Selected[]>([]);
 
   const [current, setCurrent] = useState<Partial<Selected>>();
 
@@ -262,8 +265,8 @@ export const SearchableFilter = ({
 
     const next = [...selectedValidated, current as Selected];
 
-    onChange(next);
-  }, [current, selectedValidated, onChange]);
+    setSelected(next);
+  }, [current, selectedValidated]);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -306,7 +309,7 @@ export const SearchableFilter = ({
               operator: last.operator,
             });
 
-            onChange(selectedValidated.slice(0, -1));
+            setSelected(selectedValidated.slice(0, -1));
 
             break;
           }
@@ -350,13 +353,18 @@ export const SearchableFilter = ({
     [current, state],
   );
 
+  const handleSearch = () => {
+    setCurrent(undefined);
+    onChange(selected);
+  };
+
   useEffect(() => {
     if (state != 'complete') return;
 
     if (pickerRaw?.type == 'multiple') return;
 
     change();
-  }, [current, pickerRaw, selectedValidated, state, change, onChange]);
+  }, [current, pickerRaw, selectedValidated, state, change]);
 
   useEffect(() => {
     if (pickerRaw?.type == 'select' && pickerRaw?.options.length == 1) {
@@ -384,6 +392,11 @@ export const SearchableFilter = ({
               onFocus={handleFocus}
               onKeyDown={handleKeyDown}
             />
+            <IconButton onClick={handleSearch}>
+              <SvgIcon>
+                <Search />
+              </SvgIcon>
+            </IconButton>
             <Picker
               anchorEl={$anchor.current}
               open={!!picker}
