@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Paste } from '@rosen-bridge/icons';
+import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -40,7 +40,7 @@ const SelectedAsset = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(1),
   alignItems: 'center',
-  margin: theme.spacing(0.5),
+  marginBottom: '-1px',
 }));
 
 /**
@@ -160,6 +160,7 @@ export const BridgeForm = () => {
     setValue('amount', raw, {
       shouldDirty: true,
       shouldTouch: true,
+      shouldValidate: true,
     });
   }, [raw, setValue]);
 
@@ -243,13 +244,16 @@ export const BridgeForm = () => {
                       setValue('walletAddress', clipboardText, {
                         shouldDirty: true,
                         shouldTouch: true,
+                        shouldValidate: true,
                       });
                     } catch (err) {
                       console.error('Failed to read clipboard: ', err);
                     }
                   }}
                 >
-                  <Paste />
+                  <SvgIcon sx={{ opacity: '0.6' }}>
+                    <ClipboardNotes />
+                  </SvgIcon>
                 </IconButton>
               </InputAdornment>
             ),

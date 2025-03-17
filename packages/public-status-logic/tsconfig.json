@@ -1,14 +1,14 @@
 {
-  "extends": "../../tsconfig.novite.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "noFallthroughCasesInSwitch": true,
     "useUnknownInCatchVariables": false,
     "outDir": "dist",
     "rootDir": ".",
-    "types": ["vitest/globals"],
+    "types": ["../../node_modules/vitest/globals"],
     "paths": {
       "@/*": ["./*"]
     }
   },
-  "include": ["node_modules/vitest/globals.d.ts", "src", "tests"]
+  "include": ["src", "tests"]
 }

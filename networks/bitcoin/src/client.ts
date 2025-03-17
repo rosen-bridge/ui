@@ -1,4 +1,4 @@
-import { BitcoinIcon } from '@rosen-bridge/icons';
+import { Bitcoin as BitcoinIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,

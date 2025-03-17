@@ -1,3 +1,4 @@
+export * from './carousel';
 export * from './AlertCard';
 export * from './Amount';
 export * from './ApiKeyModal';

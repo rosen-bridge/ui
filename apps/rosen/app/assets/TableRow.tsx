@@ -1,6 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
-import { AngleDown, AngleUp, OpenInNew } from '@rosen-bridge/icons';
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Box,
   Button,

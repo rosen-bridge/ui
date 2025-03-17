@@ -1,5 +1,13 @@
 # @rosen-network/evm
 
+## 0.2.1
+
+### Patch Changes
+
+- Update server functions to work with the asynchronously loaded token map
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+
 ## 0.2.0
 
 ### Minor Changes

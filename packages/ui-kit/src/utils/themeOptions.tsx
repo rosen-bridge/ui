@@ -152,12 +152,12 @@ export const lightThemeOptions: ThemeOptions = {
         h1: ({ theme }: { theme: Theme }) =>
           theme.palette.mode === 'light'
             ? {
-                background: 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
+                background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
                 backgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }
             : {
-                color: theme.palette.secondary.light,
+                color: theme.palette.secondary.dark,
               },
         body2: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.text.secondary,
@@ -232,7 +232,7 @@ export const lightThemeOptions: ThemeOptions = {
             'overflow': 'hidden',
             'borderRadius': theme.spacing(2),
             'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-            'minHeight': theme.spacing(8.5),
+            'minHeight': theme.spacing(7),
             'transition': theme.transitions.create([
               'background-color',
               'box-shadow',
@@ -259,7 +259,7 @@ export const lightThemeOptions: ThemeOptions = {
           'overflow': 'hidden',
           'borderRadius': theme.shape.borderRadius,
           'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-          'minHeight': theme.spacing(8.5),
+          'minHeight': theme.spacing(7),
           'transition': theme.transitions.create([
             'background-color',
             'box-shadow',
