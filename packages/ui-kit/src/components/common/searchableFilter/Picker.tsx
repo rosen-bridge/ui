@@ -54,11 +54,14 @@ export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
       {value.type == 'select' && (
         <List>
           {value.options.map((option) => (
-            <ListItem key={option.value} disablePadding>
+            <ListItem
+              key={option.value}
+              disablePadding
+              secondaryAction={option.post}
+            >
               <ListItemButton onClick={() => onSelect(option.value)}>
                 {option.pre && <ListItemIcon>{option.pre}</ListItemIcon>}
                 <ListItemText primary={option.label} />
-                {option.post}
               </ListItemButton>
             </ListItem>
           ))}
