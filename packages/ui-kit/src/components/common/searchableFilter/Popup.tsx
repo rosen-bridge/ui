@@ -1,6 +1,13 @@
 import { ReactNode } from 'react';
 
-import { Card, Popper } from '@mui/material';
+import { Popper, styled } from '@mui/material';
+
+const Root = styled('div')(({ theme }) => ({
+  borderRadius: theme.shape.borderRadius,
+  background: theme.palette.background.paper,
+  boxShadow: theme.shadows[8],
+  overflow: 'hidden',
+}));
 
 export type PopupProps = {
   anchorEl?: HTMLElement | null;
@@ -23,7 +30,7 @@ export const Popup = ({ anchorEl, children, open }: PopupProps) => {
         },
       ]}
     >
-      <Card elevation={8}>{children}</Card>
+      <Root>{children}</Root>
     </Popper>
   );
 };
