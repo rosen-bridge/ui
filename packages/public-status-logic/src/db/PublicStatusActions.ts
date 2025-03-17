@@ -58,13 +58,19 @@ export class PublicStatusActions {
       // if request has tx info specified
       if (tx) {
         // try to insert tx
-        await txRepository.insertOne(
-          tx.txId,
-          tx.chain,
-          eventId,
-          timestampSeconds,
-          tx.txType,
-        );
+        try {
+          await txRepository.insertOne(
+            tx.txId,
+            tx.chain,
+            eventId,
+            timestampSeconds,
+            tx.txType,
+          );
+        } catch (e) {
+          if (!(e instanceof Error && e.message === 'tx_exists')) {
+            throw e;
+          }
+        }
       }
 
       // get array of last status of all guards

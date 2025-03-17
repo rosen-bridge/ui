@@ -4,7 +4,7 @@ import { TxEntity } from '../entities/TxEntity';
 
 export const TxRepository = dataSource.getRepository(TxEntity).extend({
   /**
-   * inserts a TxEntity into database if it doesn't already exist
+   * inserts a TxEntity into database or throw if it exists
    * @param txId
    * @param chain
    * @param eventId
@@ -23,7 +23,8 @@ export const TxRepository = dataSource.getRepository(TxEntity).extend({
       txId,
       chain,
     });
-    if (exists) return;
+
+    if (exists) throw new Error('tx_exists');
 
     await this.insert({
       txId,

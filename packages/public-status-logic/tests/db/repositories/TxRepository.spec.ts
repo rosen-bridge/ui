@@ -53,7 +53,7 @@ describe('TxRepository', () => {
     });
 
     /**
-     * @target TxRepository.insertOne should not insert record when tx exists in database
+     * @target TxRepository.insertOne should throw when tx exists in database
      * @dependencies
      * @scenario
      * - insert a tx
@@ -64,9 +64,9 @@ describe('TxRepository', () => {
      * @expected
      * - findOneBySpy should have been called with correct arguments
      * - insertSpy should not have been called
-     * - second tx should not have been inserted into database
+     * - database should have contained only the original record
      */
-    it('should not insert record when tx exists in database', async () => {
+    it('should throw when tx exists in database', async () => {
       // arrange
       const tx0 = mockTxs[0];
       await TxRepository.insertOne(
@@ -80,18 +80,19 @@ describe('TxRepository', () => {
       const findOneBySpy = vi.spyOn(TxRepository, 'findOneBy');
       const insertSpy = vi.spyOn(TxRepository, 'insert');
 
-      // act
-      await TxRepository.insertOne(
-        tx0.txId,
-        tx0.chain,
-        tx0.eventId,
-        tx0.insertedAt + 10,
-        tx0.txType,
-      );
+      // act and assert
+      await expect(async () => {
+        await TxRepository.insertOne(
+          tx0.txId,
+          tx0.chain,
+          tx0.eventId,
+          tx0.insertedAt + 10,
+          tx0.txType,
+        );
+      }).rejects.toThrowError('tx_exists');
 
       const records = await TxRepository.find();
 
-      // assert
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
         chain: tx0.chain,
