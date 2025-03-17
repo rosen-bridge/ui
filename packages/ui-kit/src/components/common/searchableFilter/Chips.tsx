@@ -1,21 +1,22 @@
+import { Typography } from '@mui/material';
+
 import { styled } from '../../../styling';
 
-const Root = styled('div')(() => ({
+const Root = styled('div')(({ theme }) => ({
   'display': 'flex',
-  'gap': '4px',
+  'gap': theme.spacing(1),
   '.flow': {
     display: 'flex',
     alignItems: 'center',
-    gap: '1px',
+    gap: theme.spacing(0.25),
   },
   '.item': {
     display: 'flex',
     gap: '2px',
     alignItems: 'center',
-    padding: '0.25rem 0.5rem',
-    fontSize: '12px',
-    borderRadius: '2px',
-    background: 'lightgray',
+    padding: theme.spacing(0.5, 1),
+    borderRadius: theme.shape.borderRadius / 4,
+    background: theme.palette.neutral.light,
   },
   '.multiple': {},
 }));
@@ -32,9 +33,9 @@ export const Chips = ({ value }: ChipsProps) => {
           {flow.map((value) => {
             if (typeof value === 'string') {
               return (
-                <div key={value} className="item">
+                <Typography key={value} className="item">
                   {value}
-                </div>
+                </Typography>
               );
             }
             return (

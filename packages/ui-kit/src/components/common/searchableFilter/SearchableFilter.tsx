@@ -8,7 +8,13 @@ import {
   useState,
 } from 'react';
 
-import { ClickAwayListener, IconButton, SvgIcon } from '@mui/material';
+import {
+  Card,
+  ClickAwayListener,
+  Divider,
+  IconButton,
+  SvgIcon,
+} from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
@@ -18,26 +24,26 @@ import { Picker } from './Picker';
 import { Flow, Input, Selected } from './types';
 import { aaaaa } from './utils';
 
-const Root = styled('div')(() => ({
+const Root = styled(Card)(({ theme }) => ({
+  flexGrow: 1,
   display: 'flex',
   alignItems: 'center',
-  flexGrow: 1,
-  border: 'solid 1px lightgray',
-  borderRadius: '2px',
-  background: 'white',
-  padding: '0.25rem 0.25rem',
+  gap: theme.spacing(0.5),
+  padding: theme.spacing(1, 0.5),
   input: {
     border: 'none',
     flexGrow: 1,
     outline: 0,
     background: 'transparent',
-    padding: '0.25rem',
+    padding: theme.spacing(0.5),
+    fontSize: '1rem',
   },
 }));
 
-const Container = styled('div')(() => ({
+const Container = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
+  padding: theme.spacing(0, 0.5),
   flexGrow: 1,
 }));
 
@@ -323,6 +329,7 @@ export const SearchableFilter = ({
           ref={$history}
           onSelect={setSelected}
         />
+        <Divider orientation="vertical" flexItem />
         <ClickAwayListener onClickAway={handleClose}>
           <Container>
             <Chips value={chips} />
