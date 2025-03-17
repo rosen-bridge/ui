@@ -35,8 +35,9 @@ const Root = styled(Card)(({ theme }) => ({
     flexGrow: 1,
     outline: 0,
     background: 'transparent',
-    padding: theme.spacing(0.5),
+    padding: theme.spacing(1),
     fontSize: '1rem',
+    lineHeight: 1.5,
   },
 }));
 

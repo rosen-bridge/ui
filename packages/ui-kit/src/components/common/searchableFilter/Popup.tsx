@@ -1,19 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Popper, styled } from '@mui/material';
-
-const Root = styled('div')(() => ({
-  'border': '1px solid lightgray',
-  'borderRadius': 1,
-  'background': 'white',
-  '.MuiListItem-root': {
-    padding: '0.25rem',
-  },
-  '.MuiListItemButton-root': {
-    paddingTop: 0,
-    paddingBottom: 0,
-  },
-}));
+import { Card, Popper } from '@mui/material';
 
 export type PopupProps = {
   anchorEl?: HTMLElement | null;
@@ -36,7 +23,7 @@ export const Popup = ({ anchorEl, children, open }: PopupProps) => {
         },
       ]}
     >
-      <Root>{children}</Root>
+      <Card elevation={8}>{children}</Card>
     </Popper>
   );
 };

@@ -10,6 +10,7 @@ import {
 
 import {
   ClickAwayListener,
+  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -147,34 +148,38 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
             {!!bookmarks.length && (
-              <List subheader={<ListSubheader>Bookmark</ListSubheader>}>
-                {bookmarks.map((item) => (
-                  <ListItem
-                    key={getKey(item)}
-                    secondaryAction={
-                      <IconButton
-                        edge="end"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          remove(item);
-                        }}
-                      >
-                        <SvgIcon>
-                          <Times />
-                        </SvgIcon>
-                      </IconButton>
-                    }
-                    onClick={() => {
-                      onSelect(item.selected);
-                      setOpen(false);
-                    }}
-                  >
-                    <ListItemButton>
-                      <ListItemText primary={getTitle(item)} />
-                    </ListItemButton>
-                  </ListItem>
-                ))}
-              </List>
+              <>
+                <List subheader={<ListSubheader>Bookmark</ListSubheader>}>
+                  {bookmarks.map((item) => (
+                    <ListItem
+                      disablePadding
+                      key={getKey(item)}
+                      secondaryAction={
+                        <IconButton
+                          edge="end"
+                          onClick={(event) => {
+                            event.stopPropagation();
+                            remove(item);
+                          }}
+                        >
+                          <SvgIcon>
+                            <Times />
+                          </SvgIcon>
+                        </IconButton>
+                      }
+                      onClick={() => {
+                        onSelect(item.selected);
+                        setOpen(false);
+                      }}
+                    >
+                      <ListItemButton>
+                        <ListItemText primary={getTitle(item)} />
+                      </ListItemButton>
+                    </ListItem>
+                  ))}
+                </List>
+                <Divider />
+              </>
             )}
             <List subheader={<ListSubheader>Recent searches</ListSubheader>}>
               {!recent.length && (
@@ -184,6 +189,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
               )}
               {recent.map((item) => (
                 <ListItem
+                  disablePadding
                   key={getKey(item)}
                   secondaryAction={
                     <IconButton
