@@ -13,6 +13,7 @@ import {
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
+import { ConnectionTimeoutError } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
@@ -34,7 +35,13 @@ export class NautilusWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
-    const isConnected = await this.api.connect({ createErgoObject: false });
+    let isConnected: boolean;
+
+    try {
+      isConnected = await this.api.connect({ createErgoObject: false });
+    } catch (error) {
+      throw new ConnectionTimeoutError(this.name, error);
+    }
 
     if (isConnected) return;
 
