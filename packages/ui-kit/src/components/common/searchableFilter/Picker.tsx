@@ -1,11 +1,14 @@
 import { useState } from 'react';
 
+import { Check } from '@rosen-bridge/icons';
+
 import {
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  SvgIcon,
 } from '../../base';
 import { Popup } from './Popup';
 import { Input, Selected } from './types';
@@ -28,8 +31,9 @@ export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
         <List>
           {value.options.map((option) => (
             <ListItem
-              disablePadding
               key={option.value}
+              disablePadding
+              secondaryAction={option.post}
               onClick={() => {
                 if (items.has(option.value)) {
                   items.delete(option.value);
@@ -45,6 +49,9 @@ export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
               }}
             >
               <ListItemButton>
+                <ListItemIcon>
+                  <SvgIcon>{items.has(option.value) && <Check />}</SvgIcon>
+                </ListItemIcon>
                 <ListItemText primary={option.label} />
               </ListItemButton>
             </ListItem>

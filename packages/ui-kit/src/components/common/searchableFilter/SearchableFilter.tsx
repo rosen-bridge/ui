@@ -63,6 +63,8 @@ export const SearchableFilter = ({
 
   const $history = useRef<HistoryRef>(null);
 
+  const $last = useRef<Selected[]>([]);
+
   const [selected, setSelected] = useState<Selected[]>([]);
 
   const [current, setCurrent] = useState<Partial<Selected>>();
@@ -237,6 +239,8 @@ export const SearchableFilter = ({
       case 'Enter': {
         if (picker?.type === 'text') {
           setCurrent({ ...current, value: query });
+        } else if (!query) {
+          handleSearch();
         }
         break;
       }
@@ -300,6 +304,12 @@ export const SearchableFilter = ({
   );
 
   const handleSearch = () => {
+    if ($last.current == selected) return;
+
+    $last.current = selected;
+
+    $anchor.current?.blur();
+
     setCurrent(undefined);
 
     $history.current?.add(selected);

@@ -57,6 +57,10 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
       [items],
     );
 
+    const getKey = useCallback((selected: Selected[]) => {
+      return JSON.stringify(selected);
+    }, []);
+
     const load = useCallback(() => {
       const raw = window.localStorage.getItem(
         `rosen:searchable-filter:${namespace}`,
@@ -74,10 +78,17 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
     const add = useCallback(
       (selected: Selected[]) => {
+        const key = getKey(selected);
+
+        const has = items.some((item) => getKey(item.selected) == key);
+
+        if (has) return;
+
         setItems([...items, { bookmark: false, selected }]);
+
         save();
       },
-      [items, save],
+      [items, getKey, save],
     );
 
     const book = useCallback(
@@ -105,10 +116,6 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
       },
       [items, save],
     );
-
-    const getKey = (item: Item) => {
-      return JSON.stringify(item);
-    };
 
     const getTitle = (item: Item) => {
       return item.selected
@@ -153,7 +160,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                   {bookmarks.map((item) => (
                     <ListItem
                       disablePadding
-                      key={getKey(item)}
+                      key={getKey(item.selected)}
                       secondaryAction={
                         <IconButton
                           edge="end"
@@ -190,7 +197,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
               {recent.map((item) => (
                 <ListItem
                   disablePadding
-                  key={getKey(item)}
+                  key={getKey(item.selected)}
                   secondaryAction={
                     <IconButton
                       edge="end"

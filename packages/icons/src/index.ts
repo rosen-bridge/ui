@@ -25,6 +25,9 @@ export { default as BitcoinSignRaw } from './icons/bitcoin-sign.svg?raw';
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';
 export { default as CheckCircleRaw } from './icons/check-circle.svg?raw';
 
+export { ReactComponent as Check } from './icons/check.svg';
+export { default as CheckRaw } from './icons/check.svg?raw';
+
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { default as ClipboardNotesRaw } from './icons/clipboard-notes.svg?raw';
 

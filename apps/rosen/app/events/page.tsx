@@ -116,8 +116,8 @@ const Events = () => {
       <SearchableFilter
         flows={flows}
         namespace="events"
-        onChange={() => {
-          alert('hi');
+        onChange={(selected) => {
+          console.log('selected', selected);
         }}
       />
       <br />
