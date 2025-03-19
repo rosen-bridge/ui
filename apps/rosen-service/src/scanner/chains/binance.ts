@@ -14,7 +14,7 @@ import { startScanner } from '../scanner-utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 const scannerLogger = WinstonLogger.getInstance().getLogger(
-  BINANCE_SCANNER_LOGGER_NAME
+  BINANCE_SCANNER_LOGGER_NAME,
 );
 
 /**
@@ -32,10 +32,10 @@ export const startBinanceScanner = async () => {
         timeout: SCANNER_API_TIMEOUT,
       },
       scannerLogger,
-      config.binance.rpcAuthToken
+      config.binance.rpcAuthToken,
     );
 
-    observationService.registerBinanceExtractor(scanner);
+    await observationService.registerBinanceExtractor(scanner);
 
     await startScanner(scanner, import.meta.url, BINANCE_SCANNER_INTERVAL);
 
@@ -47,7 +47,7 @@ export const startBinanceScanner = async () => {
       `cannot create or start binance scanner due to error: ${error}`,
       false,
       'error',
-      error instanceof Error ? error.stack : undefined
+      error instanceof Error ? error.stack : undefined,
     );
   }
 };

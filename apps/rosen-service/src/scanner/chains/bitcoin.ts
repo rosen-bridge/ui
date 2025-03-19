@@ -35,7 +35,7 @@ export const startBitcoinScanner = async () => {
       scannerLogger,
     );
 
-    observationService.registerBitcoinExtractor(scanner);
+    await observationService.registerBitcoinExtractor(scanner);
 
     await startScanner(scanner, import.meta.url, BITCOIN_SCANNER_INTERVAL);
 
