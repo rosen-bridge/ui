@@ -23,6 +23,7 @@ import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Flow, Input, Selected } from './types';
 import { aaaaa } from './utils';
+import { VirtualScroll } from './VirtualScroll';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
@@ -45,7 +46,6 @@ const Container = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 0.5),
-  flexGrow: 1,
 }));
 
 export type SearchableFilterProps = {
@@ -341,35 +341,37 @@ export const SearchableFilter = ({
           onSelect={setSelected}
         />
         <Divider orientation="vertical" flexItem />
-        <ClickAwayListener onClickAway={handleClose}>
-          <Container>
-            <Chips value={chips} />
-            <input
-              ref={$anchor}
-              value={query}
-              autoComplete="off"
-              placeholder={
-                selectedValidatedWithCurrent.length
-                  ? ''
-                  : 'Search or filter results…'
-              }
-              onChange={handleChange}
-              onFocus={handleFocus}
-              onKeyDown={handleKeyDown}
-            />
-            <IconButton onClick={handleSearch}>
-              <SvgIcon>
-                <Search />
-              </SvgIcon>
-            </IconButton>
-            <Picker
-              anchorEl={$anchor.current}
-              open={!!picker}
-              value={picker}
-              onSelect={handleSelect}
-            />
-          </Container>
-        </ClickAwayListener>
+        <VirtualScroll>
+          <ClickAwayListener onClickAway={handleClose}>
+            <Container>
+              <Chips value={chips} />
+              <input
+                ref={$anchor}
+                value={query}
+                autoComplete="off"
+                placeholder={
+                  selectedValidatedWithCurrent.length
+                    ? ''
+                    : 'Search or filter results…'
+                }
+                onChange={handleChange}
+                onFocus={handleFocus}
+                onKeyDown={handleKeyDown}
+              />
+              <Picker
+                anchorEl={$anchor.current}
+                open={!!picker}
+                value={picker}
+                onSelect={handleSelect}
+              />
+            </Container>
+          </ClickAwayListener>
+        </VirtualScroll>
+        <IconButton onClick={handleSearch}>
+          <SvgIcon>
+            <Search />
+          </SvgIcon>
+        </IconButton>
       </Root>
     </>
   );

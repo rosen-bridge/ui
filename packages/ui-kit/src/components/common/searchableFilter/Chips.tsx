@@ -5,6 +5,8 @@ import { styled } from '../../../styling';
 const Root = styled('div')(({ theme }) => ({
   'display': 'flex',
   'gap': theme.spacing(1),
+  'whiteSpace': 'nowrap',
+  'userSelect': 'none',
   '.flow': {
     display: 'flex',
     alignItems: 'center',
