@@ -47,8 +47,7 @@ export const Amount = ({
       const sections = value.split('.');
 
       number = sections.at(0)!.toLocaleString();
-
-      decimals = sections.at(1);
+      decimals = sections.at(1) || '0';
 
       break;
     }
