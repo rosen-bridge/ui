@@ -151,7 +151,6 @@ export const MobileRow: FC<RowProps> = (props) => {
               ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
               row.decimal,
             )}
-            justifyContent="flex-start"
           />
         </EnhancedTableCell>
       </TableRow>
@@ -165,7 +164,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   hot?.amount.toString() || '0',
                   row.decimal,
                 )}
-                justifyContent="flex-start"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -177,7 +175,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   cold?.amount.toString() || '0',
                   row.decimal,
                 )}
-                justifyContent="flex-start"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -188,7 +185,6 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(row.bridged || '0', row.decimal)}
-                justifyContent="flex-start"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -276,7 +272,6 @@ export const TabletRow: FC<RowProps> = (props) => {
               ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
               row.significantDecimals,
             )}
-            justifyContent="flex-start"
           />
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
@@ -286,7 +281,6 @@ export const TabletRow: FC<RowProps> = (props) => {
                 hot?.amount.toString() || '0',
                 row.significantDecimals,
               )}
-              justifyContent="flex-start"
             />
           </WithExternalLink>
         </EnhancedTableCell>
@@ -297,7 +291,6 @@ export const TabletRow: FC<RowProps> = (props) => {
                 cold?.amount.toString() || '0',
                 row.significantDecimals,
               )}
-              justifyContent="flex-start"
             />
           </WithExternalLink>
         </EnhancedTableCell>
@@ -307,7 +300,6 @@ export const TabletRow: FC<RowProps> = (props) => {
               row.bridged || '0',
               row.significantDecimals,
             )}
-            justifyContent="flex-start"
           />
         </EnhancedTableCell>
         <EnhancedTableCell align="right">
@@ -368,7 +360,6 @@ export const TabletRow: FC<RowProps> = (props) => {
                                   item.amount,
                                   row.significantDecimals,
                                 )}
-                                justifyContent="flex-start"
                               />
                             </TableCell>
                             <TableCell>

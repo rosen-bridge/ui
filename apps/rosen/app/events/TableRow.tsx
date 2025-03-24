@@ -94,7 +94,7 @@ export const tabletHeader = [
   {
     title: 'Network Fee',
     cellProps: {
-      width: 150,
+      width: 220,
       align: 'center' as const,
     },
   },
@@ -186,7 +186,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.amount.toString(),
                   row.lockToken.significantDecimals,
                 )}
-                justifyContent="flex-start"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -198,7 +197,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.bridgeFee.toString(),
                   row.lockToken.significantDecimals,
                 )}
-                justifyContent="flex-start"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -210,7 +208,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.networkFee.toString(),
                   row.lockToken.significantDecimals,
                 )}
-                justifyContent="flex-start"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -279,7 +276,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.amount.toString(),
             row.lockToken.significantDecimals,
           )}
-          justifyContent="center"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -288,7 +284,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.bridgeFee.toString(),
             row.lockToken.significantDecimals,
           )}
-          justifyContent="center"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -297,7 +292,6 @@ export const TabletRow: FC<RowProps> = (props) => {
             row.networkFee.toString(),
             row.lockToken.significantDecimals,
           )}
-          justifyContent="center"
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
