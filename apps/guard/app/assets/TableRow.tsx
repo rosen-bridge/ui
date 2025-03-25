@@ -103,7 +103,6 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(row.amount.toString(), row.decimals)}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -115,7 +114,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.coldAmount?.toString() ?? '0',
                   row.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -167,7 +165,6 @@ export const TabletRow: FC<RowProps> = (props) => {
         <WithExternalLink url={hotUrl}>
           <Amount
             value={getDecimalString(row.amount.toString(), row.decimals)}
-            size="normal"
           />
         </WithExternalLink>
       </EnhancedTableCell>
@@ -178,7 +175,6 @@ export const TabletRow: FC<RowProps> = (props) => {
               row.coldAmount?.toString() ?? '0',
               row.decimals,
             )}
-            size="normal"
           />
         </WithExternalLink>
       </EnhancedTableCell>

@@ -70,30 +70,35 @@ export const tabletHeader = [
     title: 'Token',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Amount',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Status',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
 ];
@@ -169,7 +174,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.sourceChainToken.amount.toString(),
                   row.sourceChainToken.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -181,7 +185,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.bridgeFee,
                   row.sourceChainToken.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -193,7 +196,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.networkFee,
                   row.sourceChainToken.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -252,32 +254,31 @@ export const TabletRow: FC<RowProps> = (props) => {
           end={<Id id={row.toAddress} />}
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.sourceChainToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        {row.sourceChainToken.name}
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
             row.sourceChainToken.amount.toString(),
             row.sourceChainToken.decimals,
           )}
-          size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
-          size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
             row.networkFee,
             row.sourceChainToken.decimals,
           )}
-          size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.status}</EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.status}</EnhancedTableCell>
     </TableRow>
   );
 };

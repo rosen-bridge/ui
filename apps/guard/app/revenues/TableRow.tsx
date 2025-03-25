@@ -70,30 +70,35 @@ export const tabletHeader = [
     title: 'Token',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Amount',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Emission (RSN/eRSN)',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
 ];
@@ -165,7 +170,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                   row.lockToken.amount.toString(),
                   row.lockToken.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -183,7 +187,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                     ?.data.amount.toString() ?? '',
                   row.lockToken.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -201,7 +204,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                     ?.data.amount.toString() ?? '',
                   row.lockToken.decimals,
                 )}
-                size="normal"
               />
             </EnhancedTableCell>
           </TableRow>
@@ -222,7 +224,6 @@ export const MobileRow: FC<RowProps> = (props) => {
                       ?.data.amount.toString() ?? '',
                     row.lockToken.decimals,
                   )}
-                  size="normal"
                 />
               )}
             </EnhancedTableCell>
@@ -274,17 +275,19 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id id={row.toAddress} />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        {' '}
+        {row.lockToken.name}
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
             row.lockToken.amount.toString(),
             row.lockToken.decimals,
           )}
-          size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
             row.revenues
@@ -296,10 +299,9 @@ export const TabletRow: FC<RowProps> = (props) => {
               ?.data.amount.toString() ?? '',
             row.lockToken.decimals,
           )}
-          size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
             row.revenues
@@ -311,10 +313,12 @@ export const TabletRow: FC<RowProps> = (props) => {
               ?.data.amount.toString() ?? '',
             row.lockToken.decimals,
           )}
-          size="normal"
         />
       </EnhancedTableCell>
-      <EnhancedTableCell sx={{ opacity: isInfoLoading ? 0.3 : 1 }}>
+      <EnhancedTableCell
+        align="center"
+        sx={{ opacity: isInfoLoading ? 0.3 : 1 }}
+      >
         <Amount
           value={getDecimalString(
             row.revenues
@@ -328,7 +332,6 @@ export const TabletRow: FC<RowProps> = (props) => {
               .toString() ?? '',
             row.lockToken.decimals,
           )}
-          size="normal"
           loading={isInfoLoading}
         />
       </EnhancedTableCell>
