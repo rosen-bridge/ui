@@ -24,7 +24,7 @@ const binanceEventTriggerExtractorLogger =
  * register event trigger extractors for all chains
  * @param scanner
  */
-export const registerExtractors = (scanner: ErgoScanner) => {
+export const registerExtractors = async (scanner: ErgoScanner) => {
   try {
     const ergoEventTriggerExtractor = new EventTriggerExtractor(
       'ergo-extractor',
@@ -82,11 +82,11 @@ export const registerExtractors = (scanner: ErgoScanner) => {
       binanceEventTriggerExtractorLogger,
     );
 
-    scanner.registerExtractor(ergoEventTriggerExtractor);
-    scanner.registerExtractor(cardanoEventTriggerExtractor);
-    scanner.registerExtractor(bitcoinEventTriggerExtractor);
-    scanner.registerExtractor(ethereumEventTriggerExtractor);
-    scanner.registerExtractor(binanceEventTriggerExtractor);
+    await scanner.registerExtractor(ergoEventTriggerExtractor);
+    await scanner.registerExtractor(cardanoEventTriggerExtractor);
+    await scanner.registerExtractor(bitcoinEventTriggerExtractor);
+    await scanner.registerExtractor(ethereumEventTriggerExtractor);
+    await scanner.registerExtractor(binanceEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
