@@ -13,7 +13,7 @@ export const generateLockData = wrap(generateLockDataCore, {
 });
 
 export const generateTxParameters = wrap(
-  generateTxParametersCore(getTokenMap()),
+  generateTxParametersCore(getTokenMap),
   {
     traceKey: 'generateTxParameters',
   },

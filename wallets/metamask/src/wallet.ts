@@ -1,8 +1,8 @@
 import { MetaMaskSDK } from '@metamask/sdk';
-import { MetaMaskIcon } from '@rosen-bridge/icons';
+import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
-import { NETWORKS, NETWORK_IDS_WITH_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
@@ -31,7 +31,7 @@ export class MetaMaskWallet implements Wallet {
 
   link = 'https://metamask.io/';
 
-  supportedChains: Network[] = [NETWORKS.BINANCE, NETWORKS.ETHEREUM];
+  supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
   private api = new MetaMaskSDK({
     dappMetadata: {
@@ -41,9 +41,9 @@ export class MetaMaskWallet implements Wallet {
   });
 
   private get currentChain() {
-    const chain = Object.entries(NETWORK_IDS_WITH_KEY)
-      .find(([, chainId]) => chainId == this.provider.chainId)
-      ?.at(0) as Network | undefined;
+    const chain = Object.values(NETWORKS).find(
+      (network) => network.id == this.provider.chainId,
+    )?.key;
 
     if (!chain) throw new CurrentChainError(this.name);
 
@@ -100,11 +100,9 @@ export class MetaMaskWallet implements Wallet {
 
     const tokenMap = await this.config.getTokenMap();
 
-    const tokenId = token[tokenMap.getIdKey(this.currentChain)];
-
     let amount;
 
-    if (token.metaData.type === 'native') {
+    if (token.type === 'native') {
       amount = await this.provider.request<string>({
         method: 'eth_getBalance',
         params: [address, 'latest'],
@@ -113,7 +111,7 @@ export class MetaMaskWallet implements Wallet {
       const browserProvider = new BrowserProvider(window.ethereum!);
 
       const contract = new Contract(
-        tokenId,
+        token.tokenId,
         tokenABI,
         await browserProvider.getSigner(),
       );
@@ -124,7 +122,7 @@ export class MetaMaskWallet implements Wallet {
     if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(this.currentChain)],
+      token.tokenId,
       BigInt(amount),
       this.currentChain,
     ).amount;
@@ -145,7 +143,7 @@ export class MetaMaskWallet implements Wallet {
       throw new UnsupportedChainError(this.name, chain);
     }
 
-    const chainId = NETWORK_IDS_WITH_KEY[chain];
+    const chainId = NETWORKS[chain].id;
 
     if (silent) {
       const has = (await this.permissions())
@@ -183,12 +181,8 @@ export class MetaMaskWallet implements Wallet {
       params.bridgeFee.toString(),
     );
 
-    const tokenMap = await this.config.getTokenMap();
-
-    const tokenId = params.token[tokenMap.getIdKey(this.currentChain)];
-
     const transactionParameters = await this.config.generateTxParameters(
-      tokenId,
+      params.token.tokenId,
       params.lockAddress,
       address,
       params.amount,

@@ -4,6 +4,6 @@ import {
   getMaxTransferCreator as getMaxTransferCreatorBase,
 } from '@rosen-network/evm';
 
-export const getMaxTransferCreator = (tokenMap: TokenMap) => {
-  return getMaxTransferCreatorBase(tokenMap, EvmChains.ETHEREUM);
+export const getMaxTransferCreator = (getTokenMap: () => Promise<TokenMap>) => {
+  return getMaxTransferCreatorBase(getTokenMap, EvmChains.ETHEREUM);
 };

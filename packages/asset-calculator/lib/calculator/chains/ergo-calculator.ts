@@ -9,7 +9,7 @@ import { zipWith } from 'lodash-es';
 import AbstractCalculator from '../abstract-calculator';
 
 export class ErgoCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.ERGO;
+  readonly chain: Network = NETWORKS.ergo.key;
 
   private explorerApi;
 
@@ -72,7 +72,7 @@ export class ErgoCalculator extends AbstractCalculator {
     token: RosenChainToken,
     addressBalance: Balance,
   ) => {
-    if (token.metaData.type === NATIVE_TOKEN) {
+    if (token.type === NATIVE_TOKEN) {
       return addressBalance.nanoErgs;
     }
     const tokenBalance = addressBalance.tokens?.find(

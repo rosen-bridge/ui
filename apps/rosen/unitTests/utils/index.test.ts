@@ -1,4 +1,4 @@
-import { NETWORKS, NETWORK_VALUES } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { describe, expect, it } from 'vitest';
 
 import { getTokenNameAndId } from '@/_utils';
@@ -19,21 +19,20 @@ describe('getTokenNameAndId', () => {
    * - it should return an object that contains a tokeId and tokenName
    */
   it('it should return an objet containing the token name and token id given different networks', () => {
-    NETWORK_VALUES.forEach((network, index) => {
+    NETWORKS_KEYS.forEach((network, index) => {
       /**
        * TODO: remove it after fixing the typing in network
        * local:ergo/rosen-bridge/ui#311
        */
-      if (network == NETWORKS.ETHEREUM) return;
+      if (network == NETWORKS.ethereum.key) return;
 
       const testToken = {
         name: 'test-' + network,
         tokenId: '123456' + index,
         decimals: 2,
-        metaData: {
-          type: network,
-          residency: '',
-        },
+        type: network,
+        residency: '',
+        extra: {},
       };
 
       expect(getTokenNameAndId(testToken, network)).toEqual({

@@ -7,9 +7,10 @@ let tokenMap: TokenMap;
 /**
  * get a TokenMap instance using the Rosen TokenMapObject in the server.
  */
-export const getTokenMap = () => {
+export const getTokenMap = async () => {
   if (tokenMap) return tokenMap;
-  const tokens = getRosenTokens();
-  tokenMap = new TokenMap(tokens);
+  const tokens = await getRosenTokens();
+  tokenMap = new TokenMap();
+  await tokenMap.updateConfigByJson(tokens);
   return tokenMap;
 };

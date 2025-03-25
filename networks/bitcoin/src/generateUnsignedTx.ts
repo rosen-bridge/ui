@@ -15,11 +15,11 @@ import {
 
 /**
  * generates bitcoin lock tx
- * @param tokenMap
+ * @param getTokenMap
  * @returns
  */
 export const generateUnsignedTx =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async (
     lockAddress: string,
     fromAddress: string,
@@ -27,10 +27,11 @@ export const generateUnsignedTx =
     opReturnData: string,
     token: RosenChainToken,
   ): Promise<UnsignedPsbtData> => {
+    const tokenMap = await getTokenMap();
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+      token.tokenId,
       wrappedAmount,
-      NETWORKS.BITCOIN,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     // generate txBuilder

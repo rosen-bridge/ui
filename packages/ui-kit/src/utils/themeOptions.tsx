@@ -20,6 +20,7 @@ declare module '@mui/material/styles' {
     main: string;
     light: string;
     dark: string;
+    contrastText: string;
   }
 
   interface TypeBackground {
@@ -70,11 +71,13 @@ export const lightThemeOptions: ThemeOptions = {
       main: '#42559E',
       light: '#D9DDEC',
       dark: '#28335F',
+      contrastText: '#FFFFFF',
     },
     secondary: {
       main: '#DD704F',
       light: '#F5D4CA',
       dark: '#B15A3F',
+      contrastText: '#FFFFFF',
     },
     background: {
       paper: '#FFFFFF',
@@ -85,6 +88,7 @@ export const lightThemeOptions: ThemeOptions = {
       main: '#737373',
       light: '#E6E6E6',
       dark: '#545454',
+      contrastText: '#000000',
     },
     error: {
       main: '#C84242',
@@ -148,12 +152,12 @@ export const lightThemeOptions: ThemeOptions = {
         h1: ({ theme }: { theme: Theme }) =>
           theme.palette.mode === 'light'
             ? {
-                background: 'linear-gradient(180deg, #28335F 0%, #B15A3F 100%)',
+                background: `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
                 backgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }
             : {
-                color: theme.palette.secondary.light,
+                color: theme.palette.secondary.dark,
               },
         body2: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.text.secondary,
@@ -228,7 +232,7 @@ export const lightThemeOptions: ThemeOptions = {
             'overflow': 'hidden',
             'borderRadius': theme.spacing(2),
             'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-            'minHeight': theme.spacing(8.5),
+            'minHeight': theme.spacing(7),
             'transition': theme.transitions.create([
               'background-color',
               'box-shadow',
@@ -255,7 +259,7 @@ export const lightThemeOptions: ThemeOptions = {
           'overflow': 'hidden',
           'borderRadius': theme.shape.borderRadius,
           'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-          'minHeight': theme.spacing(8.5),
+          'minHeight': theme.spacing(7),
           'transition': theme.transitions.create([
             'background-color',
             'box-shadow',
@@ -351,12 +355,12 @@ export const lightThemeOptions: ThemeOptions = {
           background:
             theme.palette.mode === 'light'
               ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-              : theme.palette.primary.dark,
+              : theme.palette.primary.light,
           [theme.breakpoints.down('tablet')]: {
             background:
               theme.palette.mode === 'light'
                 ? `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-                : theme.palette.primary.dark,
+                : theme.palette.primary.light,
           },
         }),
       },
@@ -370,13 +374,15 @@ export const darkThemeOptions: ThemeOptions = {
     mode: 'dark',
     primary: {
       main: '#6877B1',
-      light: '#B3BBD8',
-      dark: '#1A223F',
+      light: '#131725',
+      dark: '#B3BBD8',
+      contrastText: '#000000',
     },
     secondary: {
       main: '#B15A3F',
-      light: '#C48D7C',
-      dark: '#804330',
+      light: '#251718',
+      dark: '#C48D7C',
+      contrastText: '#000000',
     },
     background: {
       paper: '#0D1120',
@@ -385,28 +391,29 @@ export const darkThemeOptions: ThemeOptions = {
     },
     neutral: {
       main: '#707070',
-      light: '#B7B7B7',
-      dark: '#424242',
+      light: '#333333',
+      dark: '#B7B7B7',
+      contrastText: '#FFFFFF',
     },
     error: {
       main: '#C04343',
-      light: '#DEADAD',
-      dark: '#7A2D2D',
+      light: '#331313',
+      dark: '#DEADAD',
     },
     warning: {
       main: '#BF783E',
-      light: '#CEB199',
-      dark: '#74451E',
+      light: '#331E0D',
+      dark: '#CEB199',
     },
     success: {
       main: '#2B7D60',
-      light: '#A1D7C4',
-      dark: '#0C3426',
+      light: '#09261C',
+      dark: '#A1D7C4',
     },
     info: {
       main: '#3E70A3',
-      light: '#A3BFDC',
-      dark: '#16385A',
+      light: '#16385A',
+      dark: '#A3BFDC',
     },
   },
 };

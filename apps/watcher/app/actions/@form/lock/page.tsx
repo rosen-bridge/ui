@@ -3,19 +3,17 @@
 import React, { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
-import { Alert } from '@rosen-bridge/icons';
 import {
   AlertCard,
   AlertProps,
+  ApiKeyModalWarning,
   Box,
-  Button,
   Grid,
   Link,
   SubmitButton,
   Typography,
   useApiKey,
 } from '@rosen-bridge/ui-kit';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { mutatorWithHeaders, fetcher } from '@rosen-ui/swr-helpers';
 import {
@@ -115,7 +113,7 @@ const LockForm = () => {
               Lock operation is in progress. Wait for tx [
               <Link
                 target="_blank"
-                href={getTxURL(NETWORKS.ERGO, response.txId)!}
+                href={getTxURL(NETWORKS.ergo.key, response.txId)!}
               >
                 {response.txId}
               </Link>
@@ -265,28 +263,7 @@ const LockForm = () => {
           {renderReportsCountAlert()}
         </Grid>
 
-        {!apiKey && (
-          <Grid
-            container
-            alignItems="center"
-            gap={1}
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Grid item>
-              <Alert />
-            </Grid>
-
-            <Grid item>
-              <Typography>You need to set an Api Key before sending</Typography>
-            </Grid>
-
-            <Grid item>
-              <ApiKeyModal>
-                {(open) => <Button onClick={open}>Click To Set</Button>}
-              </ApiKeyModal>
-            </Grid>
-          </Grid>
-        )}
+        <ApiKeyModalWarning />
 
         <SubmitButton loading={isLockPending} disabled={disabled}>
           {' '}

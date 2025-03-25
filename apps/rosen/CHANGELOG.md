@@ -1,5 +1,33 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.4
+
+### Patch Changes
+
+- Discontinue support for the Nami extension wallet
+- Update server functions to work with the asynchronously loaded token map
+- Update the usage of network constants to enhance maintainability
+- Fixes dark palette and background color of brdige transaction card
+- Trigger validation for the `address` and `amount` fields when the user clicks `Paste` in the address input and `Use All` in the amount input
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-network/bitcoin@2.1.1
+  - @rosen-network/cardano@2.1.1
+  - @rosen-network/ergo@2.1.1
+  - @rosen-network/evm@0.2.1
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/wallet-api@1.2.1
+  - @rosen-ui/metamask-wallet@1.3.0
+  - @rosen-ui/nautilus-wallet@2.3.0
+  - @rosen-ui/types@0.3.4
+  - @rosen-ui/utils@0.4.5
+  - @rosen-ui/eternl-wallet@2.3.0
+  - @rosen-ui/lace-wallet@2.3.0
+  - @rosen-ui/okx-wallet@1.3.0
+  - @rosen-bridge/ui-kit@1.9.0
+  - @rosen-ui/asset-calculator@2.1.2
+
 ## 4.0.3
 
 ### Patch Changes

@@ -5,8 +5,8 @@ import { unwrap } from '@/_safeServerAction';
 import { LOCK_ADDRESSES } from '../../../configs';
 import { getMaxTransfer } from './server';
 
-export const ethereumNetwork = new EthereumNetwork({
-  lockAddress: LOCK_ADDRESSES.ETHEREUM,
+export const ethereum = new EthereumNetwork({
+  lockAddress: LOCK_ADDRESSES.ethereum,
   nextHeightInterval: 50,
   getMaxTransfer: unwrap(getMaxTransfer),
 });

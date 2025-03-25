@@ -14,8 +14,11 @@ import {
   Grid,
   Tooltip,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
+
+import { useTransactionFormData } from '@/_hooks';
 
 interface ChooseWalletModalProps {
   open: boolean;
@@ -44,6 +47,8 @@ export const ChooseWalletModal = ({
 }: ChooseWalletModalProps) => {
   const [, forceUpdate] = useState('');
 
+  const { sourceValue } = useTransactionFormData();
+
   const handleConnect = async (wallet: Wallet) => {
     setSelectedWallet && (await setSelectedWallet(wallet));
     handleClose();
@@ -70,7 +75,17 @@ export const ChooseWalletModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
-        <Grid container justifyContent="center" gap={2} my={2}>
+        <Alert severity="warning" sx={{ my: '1rem' }}>
+          It may be necessary to reload this page after the following extensions
+          have been installed in order to connect to them.
+        </Alert>
+        {sourceValue == NETWORKS.bitcoin.key && (
+          <Alert severity="warning" sx={{ my: '1rem' }}>
+            We only support native SegWit addresses (P2WPKH or P2WSH) for the
+            source address.
+          </Alert>
+        )}
+        <Grid container justifyContent="center" gap={2}>
           {wallets.map((wallet) => {
             const Icon = wallet.icon;
             return (
@@ -109,10 +124,6 @@ export const ChooseWalletModal = ({
             );
           })}
         </Grid>
-        <Alert severity="warning">
-          It may be necessary to reload this page after the following extensions
-          have been installed in order to connect to them.
-        </Alert>
       </DialogContent>
     </Dialog>
   );

@@ -9,11 +9,11 @@ import { Network } from '@rosen-ui/types';
  */
 
 const baseTxURLs: { [key in Network]: string } = {
-  [NETWORKS.BINANCE]: 'https://bscscan.com/tx',
-  [NETWORKS.ERGO]: 'https://explorer.ergoplatform.com/transactions',
-  [NETWORKS.CARDANO]: 'https://cardanoscan.io/transaction',
-  [NETWORKS.BITCOIN]: 'https://mempool.space/tx',
-  [NETWORKS.ETHEREUM]: 'https://etherscan.io/tx',
+  [NETWORKS.binance.key]: 'https://bscscan.com/tx',
+  [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/transactions',
+  [NETWORKS.cardano.key]: 'https://cardanoscan.io/transaction',
+  [NETWORKS.bitcoin.key]: 'https://mempool.space/tx',
+  [NETWORKS.ethereum.key]: 'https://etherscan.io/tx',
 };
 
 export const getTxURL = (network: Network, tx: string) => {

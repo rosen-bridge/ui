@@ -20,7 +20,7 @@ describe('generateOpReturnData', () => {
    * - remaining bytes should be encoded given address
    */
   it('should generate OP_RETURN data successfully', async () => {
-    const toChain = NETWORKS.ERGO;
+    const toChain = NETWORKS.ergo.key;
     const toAddress = '9iMjQx8PzwBKXRvsFUJFJAPoy31znfEeBUGz8DRkcnJX4rJYjVd';
     const bridgeFee = '1968503938';
     const networkFee = '9842520';

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Alert } from '@rosen-bridge/icons';
+import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   Box,
   Card,
@@ -117,7 +117,7 @@ export const InfoWidgetCard = ({
                 title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
               >
                 <SvgIcon>
-                  <Alert />
+                  <ExclamationTriangle />
                 </SvgIcon>
               </Tooltip>
             )}

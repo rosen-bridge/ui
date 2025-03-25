@@ -17,6 +17,7 @@ import { upperFirst } from 'lodash-es';
 import useSWR from 'swr';
 
 import { useERsnToken } from '@/_hooks/useERsnToken';
+import { useIcon } from '@/_hooks/useIcon';
 import { useRsnToken } from '@/_hooks/useRsnToken';
 import { useToken } from '@/_hooks/useToken';
 import { ApiInfoResponse } from '@/_types/api';
@@ -24,6 +25,8 @@ import { ApiInfoResponse } from '@/_types/api';
 import { InfoWidgetCard } from './InfoWidgetCard';
 
 const InfoWidgets = () => {
+  const icon = useIcon('light');
+
   const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
     fetcher,
@@ -124,15 +127,10 @@ const InfoWidgets = () => {
           title="Network"
           value={upperFirst(data?.network ?? '')}
           icon={
-            isInfoLoading ? (
+            !icon ? (
               <Box sx={{ width: 35, height: 35 }} />
             ) : (
-              <Image
-                src={`/chains/${data?.network ?? ''}.svg`}
-                alt="network"
-                width={35}
-                height={35}
-              />
+              <Image src={icon} alt="network" width={35} height={35} />
             )
           }
           color="primary"

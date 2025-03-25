@@ -1,7 +1,7 @@
 'use server';
 
 import { validateAddress as validate } from '@rosen-bridge/address-codec';
-import { NETWORK_VALUES } from '@rosen-ui/constants';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Joi from 'joi';
 
@@ -25,7 +25,7 @@ type Schema = Parameters<typeof validateAddressCore>;
 const schema = Joi.array<Schema>().ordered(
   Joi.string()
     .required()
-    .valid(...NETWORK_VALUES),
+    .valid(...NETWORKS_KEYS),
   Joi.string().required(),
 );
 
