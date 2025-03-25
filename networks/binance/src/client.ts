@@ -1,20 +1,20 @@
-import { BinanceIcon } from '@rosen-bridge/icons';
+import { Binance as BinanceIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,
   NetworkMaxTransferParams,
 } from '@rosen-network/base';
-import { NETWORKS, NETWORK_LABELS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 export class BinanceNetwork implements Network {
-  public label = NETWORK_LABELS.BINANCE;
+  public label = NETWORKS.binance.label;
 
   public lockAddress: string;
 
   public logo = BinanceIcon;
 
-  public name = NETWORKS.BINANCE;
+  public name = NETWORKS.binance.key;
 
   public nextHeightInterval: number;
 

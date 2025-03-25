@@ -11,10 +11,6 @@ export default abstract class AbstractCalculator {
     protected tokenMap: TokenMap,
   ) {}
 
-  get idKey() {
-    return this.tokenMap.getIdKey(this.chain);
-  }
-
   abstract totalRawSupply: (token: RosenChainToken) => Promise<bigint>;
 
   /**
@@ -22,7 +18,7 @@ export default abstract class AbstractCalculator {
    */
   totalSupply = async (token: RosenChainToken): Promise<bigint> => {
     return this.tokenMap.wrapAmount(
-      token[this.idKey],
+      token.tokenId,
       await this.totalRawSupply(token),
       this.chain,
     ).amount;
@@ -35,7 +31,7 @@ export default abstract class AbstractCalculator {
    */
   totalBalance = async (token: RosenChainToken): Promise<bigint> => {
     return this.tokenMap.wrapAmount(
-      token[this.idKey],
+      token.tokenId,
       await this.totalRawBalance(token),
       this.chain,
     ).amount;
@@ -54,11 +50,8 @@ export default abstract class AbstractCalculator {
     const amounts = await this.getRawLockedAmountsPerAddress(token);
     return amounts.map((amount) => ({
       address: amount.address,
-      amount: this.tokenMap.wrapAmount(
-        token[this.idKey],
-        amount.amount,
-        this.chain,
-      ).amount,
+      amount: this.tokenMap.wrapAmount(token.tokenId, amount.amount, this.chain)
+        .amount,
     }));
   };
 }

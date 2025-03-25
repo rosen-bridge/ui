@@ -1,6 +1,6 @@
 import { useState, FC, useMemo } from 'react';
 
-import { AngleDown, AngleUp, OpenInNew } from '@rosen-bridge/icons';
+import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Box,
   Button,
@@ -238,7 +238,7 @@ export const TabletRow: FC<RowProps> = (props) => {
     !row.isNative &&
     getTokenUrl(
       row.chain,
-      row.chain == NETWORKS.CARDANO ? row.id.replace('.', '') : row.id,
+      row.chain == NETWORKS.cardano.key ? row.id.replace('.', '') : row.id,
     );
 
   return (
@@ -324,7 +324,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                       {data.bridged.map((item) => {
                         const tokenUrl = getTokenUrl(
                           item.chain,
-                          item.chain == NETWORKS.CARDANO
+                          item.chain == NETWORKS.cardano.key
                             ? item.birdgedTokenId.replace('.', '')
                             : item.birdgedTokenId,
                         );

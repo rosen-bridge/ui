@@ -9,7 +9,7 @@ import {
   Connector,
   Amount,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS, NETWORK_LABELS_WITH_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { OngoingEvent } from '@/_types/api';
@@ -133,15 +133,15 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
+              <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)!} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
               <Connector
-                start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-                end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+                start={NETWORKS[row.fromChain].label}
+                end={NETWORKS[row.toChain].label}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -232,12 +232,12 @@ export const TabletRow: FC<RowProps> = (props) => {
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id id={row.txId} href={getTxURL(NETWORKS.ERGO, row.txId)!} />
+        <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)!} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
-          start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-          end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+          start={NETWORKS[row.fromChain].label}
+          end={NETWORKS[row.toChain].label}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">

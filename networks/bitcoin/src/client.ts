@@ -1,20 +1,20 @@
-import { BitcoinIcon } from '@rosen-bridge/icons';
+import { Bitcoin as BitcoinIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,
   NetworkMaxTransferParams,
 } from '@rosen-network/base';
-import { NETWORKS, NETWORK_LABELS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 export class BitcoinNetwork implements Network {
-  public label = NETWORK_LABELS.BITCOIN;
+  public label = NETWORKS.bitcoin.label;
 
   public lockAddress: string;
 
   public logo = BitcoinIcon;
 
-  public name = NETWORKS.BITCOIN;
+  public name = NETWORKS.bitcoin.key;
 
   public nextHeightInterval: number;
 

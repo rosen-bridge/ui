@@ -21,11 +21,11 @@ import {
 
 /**
  * generates a lock transaction on Cardano
- * @param tokenMap
+ * @param getTokenMap
  * @returns a function that provides the hex representation of the unsigned tx upon invocation
  */
 export const generateUnsignedTx =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async (
     walletUtxos: string[],
     lockAddress: string,
@@ -35,10 +35,12 @@ export const generateUnsignedTx =
     wrappedAmount: RosenAmountValue,
     auxiliaryDataHex: string,
   ): Promise<string> => {
+    const tokenMap = await getTokenMap();
+
     const unwrappedAmount = tokenMap.unwrapAmount(
       `${policyIdHex}.${assetNameHex}`,
       wrappedAmount,
-      NETWORKS.CARDANO,
+      NETWORKS.cardano.key,
     ).amount;
 
     // converts hex address to bech32 address
@@ -95,7 +97,7 @@ export const generateUnsignedTx =
     // add input boxes to transaction
     inputs.boxes.forEach((utxo) => {
       inputAssets = sumAssetBalance(inputAssets, getUtxoAssets(utxo));
-      txBuilder.add_input(
+      txBuilder.add_regular_input(
         wasm.Address.from_bech32(utxo.address),
         wasm.TransactionInput.new(
           wasm.TransactionHash.from_hex(utxo.txId),

@@ -8,19 +8,19 @@ import { wrap } from '@/_safeServerAction';
 /**
  * get rosen tokens object from tokensMap file or throw error if file is missing
  */
-export const getRosenTokens = () => {
+export const getRosenTokens = async () => {
   const tokensMapFilePath = path.resolve(
     process.cwd(),
     'configs/tokensMap.json',
   );
 
   if (fs.existsSync(tokensMapFilePath)) {
-    const tokensMap = JSON.parse(
+    const { tokens } = JSON.parse(
       fs.readFileSync(tokensMapFilePath, {
         encoding: 'utf-8',
       }),
     );
-    return tokensMap;
+    return tokens;
   }
 
   throw new Error(`Tokens map file not found in the path ${tokensMapFilePath}`);

@@ -74,6 +74,31 @@ export class ConnectionRejectedError extends Error {
   }
 }
 
+export class ConnectionTimeoutError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(
+      `The wallet [${wallet}] extension has timed out, and the user has neither confirmed nor rejected it`,
+      {
+        cause,
+      },
+    );
+  }
+}
+
+export class DisconnectionFailedError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`An error occurred while disconnecting from the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
 export class UserDeniedTransactionSignatureError extends Error {
   constructor(
     public wallet: string,

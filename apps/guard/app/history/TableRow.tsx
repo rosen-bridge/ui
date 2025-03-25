@@ -9,7 +9,7 @@ import {
   Connector,
   Amount,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS, NETWORK_LABELS_WITH_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { HistoryEvent } from '@/_types/api';
@@ -135,7 +135,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Id
                 id={row.rewardTxId}
-                href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+                href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -143,8 +143,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
               <Connector
-                start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-                end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+                start={NETWORKS[row.fromChain].label}
+                end={NETWORKS[row.toChain].label}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -237,13 +237,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id
           id={row.rewardTxId}
-          href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+          href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
-          start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-          end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+          start={NETWORKS[row.fromChain].label}
+          end={NETWORKS[row.toChain].label}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">

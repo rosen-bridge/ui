@@ -137,7 +137,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Id
                 id={row.rewardTxId}
-                href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+                href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -265,7 +265,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Id
           id={row.rewardTxId}
-          href={getTxURL(NETWORKS.ERGO, row.rewardTxId)!}
+          href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
