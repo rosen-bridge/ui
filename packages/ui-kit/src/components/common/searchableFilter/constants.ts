@@ -24,6 +24,23 @@ export const OPERATOR_IS_ONE_OF: Operator = {
   symbol: '=',
 };
 
+export const OPERATOR_GREATER_THAN_OR_EQUAL: Operator = {
+  value: 'greater-than-or-equal',
+  label: 'Greater Than Or Equal',
+  symbol: '>=',
+};
+
+export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
+  value: 'less-than-or-equal',
+  label: 'Less Than Or Equal',
+  symbol: '<=',
+};
+
+export const OPERATORS_COMPARATIVE: Operator[] = [
+  OPERATOR_LESS_THAN_OR_EQUAL,
+  OPERATOR_GREATER_THAN_OR_EQUAL,
+];
+
 export const OPERATORS_EQUALITY: Operator[] = [
   OPERATOR_IS,
   OPERATOR_NOT,

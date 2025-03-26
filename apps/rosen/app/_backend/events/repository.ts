@@ -34,6 +34,12 @@ const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
  * @param limit
  */
 export const getEvents = async (filters: Filters) => {
+  const where = filtersToTypeormWhere(
+    filters,
+    ['fromChain', 'toChain', 'fromAddress', 'toAddress'],
+    (key) => 'oe.' + key,
+  );
+
   /**
    * TODO: convert the query to a view
    * local:ergo/rosen-bridge/ui#194
@@ -75,7 +81,7 @@ export const getEvents = async (filters: Filters) => {
        */
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
     ])
-    .where(filtersToTypeormWhere(filters, 'oe'))
+    .where(where)
     .distinct(true)
     .orderBy(
       `be.${filters.sort?.key || 'timestamp'}`,

@@ -120,7 +120,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     const getTitle = (item: Item) => {
       return item.selected
         .map((current) => {
-          const parsed = aaaaa(flows, current)!;
+          const parsed = aaaaa(flows, current);
+
+          if (!parsed) return;
 
           const sections = [parsed.flow.label, parsed.operator!.label];
 
@@ -140,9 +142,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     useEffect(() => load, [load]);
 
     useImperativeHandle(ref, () => {
-      return {
-        add,
-      };
+      return { add };
     }, [add]);
 
     return (

@@ -1,4 +1,9 @@
-import { Flow, OPERATORS_EQUALITY, OPERATOR_IS } from '@rosen-bridge/ui-kit';
+import {
+  Flow,
+  OPERATORS_COMPARATIVE,
+  OPERATORS_EQUALITY,
+  OPERATOR_IS,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const flows: Flow[] = [
@@ -28,6 +33,14 @@ export const flows: Flow[] = [
       })),
     }),
   },
+  {
+    name: 'height',
+    label: 'Height',
+    operators: OPERATORS_COMPARATIVE,
+    input: {
+      type: 'text',
+    },
+  },
   // {
   //   name: 'token',
   //   label: 'Token',
@@ -38,37 +51,37 @@ export const flows: Flow[] = [
   //     options: [],
   //   }),
   // },
-  {
-    name: 'status',
-    label: 'Status',
-    unique: true,
-    operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
-      options: [
-        {
-          label: 'Fraud',
-          value: 'fraud',
-        },
-        {
-          label: 'Processing',
-          value: null,
-        },
-        {
-          label: 'Done',
-          value: 'successful',
-        },
-      ],
-    }),
-  },
-  {
-    name: 'search',
-    label: 'Search for this text',
-    operators: [OPERATOR_IS],
-    input: {
-      type: 'text',
-    },
-  },
+  // {
+  //   name: 'amount',
+  //   label: 'Amount',
+  //   operators: OPERATORS_COMPARATIVE,
+  //   input: {
+  //     type: 'text',
+  //   },
+  // },
+  // {
+  //   name: 'status',
+  //   label: 'Status',
+  //   unique: true,
+  //   operators: OPERATORS_EQUALITY,
+  //   input: (context) => ({
+  //     type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+  //     options: [
+  //       {
+  //         label: 'Fraud',
+  //         value: 'fraud',
+  //       },
+  //       {
+  //         label: 'Processing',
+  //         value: null,
+  //       },
+  //       {
+  //         label: 'Done',
+  //         value: 'successful',
+  //       },
+  //     ],
+  //   }),
+  // },
   {
     name: 'in',
     label: 'Search whithin',
@@ -77,14 +90,6 @@ export const flows: Flow[] = [
       type: 'select',
       options: [
         {
-          label: 'From Address',
-          value: 'fromAddress',
-        },
-        {
-          label: 'To Address',
-          value: 'toAddress',
-        },
-        {
           label: 'Event Id',
           value: 'requestId',
         },
@@ -92,7 +97,23 @@ export const flows: Flow[] = [
           label: 'Lock TX Id',
           value: 'sourceTxId',
         },
+        {
+          label: 'From Address',
+          value: 'fromAddress',
+        },
+        {
+          label: 'To Address',
+          value: 'toAddress',
+        },
       ],
+    },
+  },
+  {
+    name: 'search',
+    label: 'Search for this text',
+    operators: [OPERATOR_IS],
+    input: {
+      type: 'text',
     },
   },
 ];

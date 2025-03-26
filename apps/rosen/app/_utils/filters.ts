@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 type Fields = {
   key: string;
-  operator: '=' | '!' | '<' | '>';
+  operator: '=' | '!' | '<=' | '>=';
   value: boolean | number | string | (number | string)[];
 };
 
@@ -40,7 +40,7 @@ export const filtersSchema = Joi.object<Filters>({
     .items(
       Joi.object({
         key: Joi.string().required(),
-        operator: Joi.string().valid('=', '!', '<', '>').required(),
+        operator: Joi.string().valid('=', '!', '<=', '>=').required(),
         value: Joi.alternatives(
           Joi.boolean(),
           Joi.number(),
@@ -100,9 +100,19 @@ export const extractFiltersFromSearchParams = (
   searchParams.forEach((value, key) => {
     const isArray = key.endsWith('[]') || key.slice(0, -1).endsWith('[]');
 
-    const hasOperator = ['!', '<', '>'].includes(key.at(-1)!);
+    let operator: Fields['operator'] = '=';
 
-    const operator = (hasOperator ? key.at(-1)! : '=') as Fields['operator'];
+    switch (key.at(-1)) {
+      case '!':
+        operator = '!';
+        break;
+      case '<':
+        operator = '<=';
+        break;
+      case '>':
+        operator = '>=';
+        break;
+    }
 
     const name = key
       ?.match(/^(.*?)(?:''|!|<|>|\[\]|\[\]!|\[\]<|\[\]>|$)/)
@@ -120,29 +130,49 @@ export const extractFiltersFromSearchParams = (
   return filters;
 };
 
-export const filtersToTypeormWhere = (filters: Filters, pre?: string) => {
-  pre = pre ? pre + '.' : '';
-
+export const filtersToTypeormWhere = (
+  filters: Filters,
+  searchFields: string[],
+  mapper: (key: string) => string,
+) => {
   const sections: string[] = [];
 
   for (const field of filters.fields) {
+    const key = mapper(field.key);
+
     const values = [field.value]
       .flat()
       .map((value) => `'${value}'`)
       .join(', ');
-    sections.push(
-      `(${pre}${field.key}${field.operator == '=' ? ' ' : ' NOT '}IN (${values}))`,
-    );
+
+    switch (field.operator) {
+      case '!': {
+        sections.push(`(${key} NOT IN (${values}))`);
+        break;
+      }
+      case '<=': {
+        sections.push(`(${key} <= ${field.value})`);
+        break;
+      }
+      case '=': {
+        sections.push(`(${key} IN (${values}))`);
+        break;
+      }
+      case '>=': {
+        sections.push(`(${key} >= ${field.value})`);
+        break;
+      }
+    }
   }
 
   if (filters.search?.query) {
-    if (filters.search.in) {
-      sections.push(
-        `(${pre}${filters.search.in} LIKE '%${filters.search.query}%')`,
-      );
-    } else {
-      // TODO
-    }
+    const fields = filters.search.in ? [filters.search.in] : searchFields;
+
+    const query = fields
+      .map((field) => `(${mapper(field)} LIKE '%${filters.search?.query}%')`)
+      .join(' OR ');
+
+    sections.push(`(${query})`);
   }
 
   const where = sections.join(' AND ');
