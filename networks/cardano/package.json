@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/cardano",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
@@ -13,8 +13,9 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
+    "@emurgo/cardano-serialization-lib-nodejs": "^13.2.1",
     "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
+    "@rosen-bridge/tokens": "^3.0.0",
     "@rosen-clients/cardano-koios": "^2.0.3"
   },
   "devDependencies": {

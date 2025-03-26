@@ -35,7 +35,7 @@ export const startEthereumScanner = async () => {
       config.ethereum.rpcAuthToken,
     );
 
-    observationService.registerEthereumExtractor(scanner);
+    await observationService.registerEthereumExtractor(scanner);
 
     await startScanner(scanner, import.meta.url, ETHEREUM_SCANNER_INTERVAL);
 

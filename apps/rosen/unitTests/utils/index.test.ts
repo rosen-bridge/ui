@@ -30,10 +30,9 @@ describe('getTokenNameAndId', () => {
         name: 'test-' + network,
         tokenId: '123456' + index,
         decimals: 2,
-        metaData: {
-          type: network,
-          residency: '',
-        },
+        type: network,
+        residency: '',
+        extra: {},
       };
 
       expect(getTokenNameAndId(testToken, network)).toEqual({

@@ -1,4 +1,4 @@
-import { OKXIcon } from '@rosen-bridge/icons';
+import { Okx as OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
@@ -63,7 +63,7 @@ export class OKXWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.bitcoin.key)],
+      token.tokenId,
       BigInt(amount.confirmed),
       NETWORKS.bitcoin.key,
     ).amount;

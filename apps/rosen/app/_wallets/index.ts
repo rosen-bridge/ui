@@ -4,7 +4,7 @@ import { metamask } from './metamask';
 import { nautilus } from './nautilus';
 import { okx } from './okx';
 
-export const availableWallets = {
+export const wallets = {
   [eternl.name]: eternl,
   [lace.name]: lace,
   [metamask.name]: metamask,

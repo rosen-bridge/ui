@@ -5,7 +5,7 @@ import WinstonLogger from '@rosen-bridge/winston-logger';
 import config from '../../configs';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
-import { getRosenTokens } from '../../utils';
+import { getTokenMap } from '../../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -13,16 +13,18 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerCardanoExtractor = (scanner: CardanoKoiosScanner) => {
+export const registerCardanoExtractor = async (
+  scanner: CardanoKoiosScanner,
+) => {
   try {
     const observationExtractor = new CardanoKoiosObservationExtractor(
       dataSource,
-      getRosenTokens(),
+      await getTokenMap(),
       config.cardano.addresses.lock,
       logger,
     );
 
-    scanner.registerExtractor(observationExtractor);
+    await scanner.registerExtractor(observationExtractor);
 
     logger.debug('cardano observation extractor registered', {
       scannerName: scanner.name(),

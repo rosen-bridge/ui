@@ -5,14 +5,14 @@ import config from '../configs';
 import { ASSET_CALCULATOR_INTERVAL } from '../constants';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
-import { getRosenTokens, handleError, runAndSetInterval } from '../utils';
+import { getTokenMap, handleError, runAndSetInterval } from '../utils';
 
 /**
  * run asset calculator update periodically, handling probable errors
  * @param calculator
  * @param updateInterval
  */
-const startUpdateJob = (
+const startUpdateJob = async (
   calculator: AssetCalculator,
   updateInterval: number,
 ) => {
@@ -33,7 +33,7 @@ const startUpdateJob = (
     }
   };
 
-  runAndSetInterval(tryUpdating, updateInterval);
+  await runAndSetInterval(tryUpdating, updateInterval);
 
   logger.debug('asset calculator update job was successful', {
     interval: updateInterval,
@@ -46,7 +46,7 @@ const startUpdateJob = (
 const start = async () => {
   const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
   const assetCalculator = new AssetCalculator(
-    getRosenTokens(),
+    await getTokenMap(),
     {
       addresses: config.calculator.addresses.ergo,
       explorerUrl: config.ergo.explorerUrl,
@@ -74,7 +74,7 @@ const start = async () => {
     logger,
   );
 
-  startUpdateJob(assetCalculator, ASSET_CALCULATOR_INTERVAL);
+  await startUpdateJob(assetCalculator, ASSET_CALCULATOR_INTERVAL);
 };
 
 const calculatorService = {

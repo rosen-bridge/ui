@@ -10,6 +10,7 @@ let tokenMap: TokenMap;
 export const getTokenMap = async () => {
   if (tokenMap) return tokenMap;
   const tokens = await getRosenTokens();
-  tokenMap = new TokenMap(tokens);
+  tokenMap = new TokenMap();
+  await tokenMap.updateConfigByJson(tokens);
   return tokenMap;
 };

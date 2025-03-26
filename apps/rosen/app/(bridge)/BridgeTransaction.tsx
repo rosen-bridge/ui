@@ -10,7 +10,6 @@ import {
   Tooltip,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
 
 import {
   useNetwork,
@@ -55,6 +54,7 @@ export const BridgeTransaction = ({
     select: setSelectedWallet,
     wallets,
     selected: selectedWallet,
+    disconnect,
   } = useWallet();
 
   const { selectedSource } = useNetwork();
@@ -62,12 +62,12 @@ export const BridgeTransaction = ({
   const tokenInfo =
     tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
 
-  const idKey = sourceValue && tokenMap.getIdKey(sourceValue);
   const targetTokenSearchResults =
+    sourceValue &&
     tokenValue &&
-    idKey &&
+    tokenValue.tokenId &&
     tokenMap.search(sourceValue, {
-      [idKey]: tokenValue[idKey],
+      tokenId: tokenValue.tokenId,
     });
   const targetTokenInfo =
     targetValue && targetTokenSearchResults?.[0]?.[targetValue];
@@ -76,77 +76,86 @@ export const BridgeTransaction = ({
 
   return (
     <>
-      <Card
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-          gap: (theme) => theme.spacing(2),
-          backgroundColor: 'primary.light',
-          padding: (theme) => theme.spacing(3),
-        }}
-      >
-        <WalletInfo
-          icon={selectedWallet?.icon}
-          label={selectedWallet?.label}
-          onClick={() => setChooseWalletsModalOpen(true)}
-        />
-        {sourceValue == NETWORKS.bitcoin.key && (
-          <Alert severity="warning" icon={false}>
-            We only support native SegWit addresses (P2WPKH or P2WSH) for the
-            source address.
-          </Alert>
-        )}
-        <div style={{ flexGrow: '1' }} />
-        <Amount
-          title="Transaction Fee"
-          value={networkFeeRaw}
-          unit={tokenInfo?.tokenName}
-          loading={isPending}
-        />
-        <Amount
-          title="Bridge Fee"
-          value={bridgeFeeRaw}
-          unit={tokenInfo?.tokenName}
-          loading={isPending}
-        />
-        <Amount
-          title="Min Transfer"
-          value={minTransferRaw}
-          unit={tokenInfo?.tokenName}
-          loading={isPending}
-        />
-        <Divider sx={{ borderStyle: 'dashed' }} />
-        <Amount
-          title="You Will Receive"
-          value={receivingAmountRaw}
-          unit={targetTokenInfo?.name}
-          loading={isPending}
-        />
-        {!!error && (
-          <Alert
-            severity="error"
-            sx={{
-              maxWidth: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            <Tooltip title={(error as any)?.message}>
-              <Typography
-                sx={{
-                  maxWidth: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {(error as any)?.message}
-              </Typography>
-            </Tooltip>
-          </Alert>
-        )}
-      </Card>
+      <div>
+        <Card
+          sx={{
+            marginBottom: '18px',
+            display: 'flex',
+            padding: '12px 25px',
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.secondary.light
+                : theme.palette.background.paper,
+          }}
+        >
+          <WalletInfo
+            icon={selectedWallet?.icon}
+            label={selectedWallet?.label}
+            disconnect={disconnect}
+            onClick={() => setChooseWalletsModalOpen(true)}
+          />
+        </Card>
+        <Card
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            height: '75%',
+            gap: (theme) => theme.spacing(1),
+            backgroundColor: 'primary.light',
+            padding: (theme) => theme.spacing(3),
+          }}
+        >
+          <div style={{ flexGrow: '1' }} />
+          <Amount
+            title="Transaction Fee"
+            value={networkFeeRaw}
+            unit={tokenInfo?.tokenName}
+            loading={isPending}
+          />
+          <Amount
+            title="Bridge Fee"
+            value={bridgeFeeRaw}
+            unit={tokenInfo?.tokenName}
+            loading={isPending}
+          />
+          <Amount
+            title="Min Transfer"
+            value={minTransferRaw}
+            unit={tokenInfo?.tokenName}
+            loading={isPending}
+          />
+          <Divider sx={{ borderStyle: 'dashed' }} />
+          <Amount
+            title="You Will Receive"
+            value={receivingAmountRaw}
+            unit={targetTokenInfo?.name}
+            loading={isPending}
+          />
+          {!!error && (
+            <Alert
+              severity="error"
+              sx={{
+                maxWidth: '100%',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              <Tooltip title={(error as any)?.message}>
+                <Typography
+                  sx={{
+                    maxWidth: '100%',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {(error as any)?.message}
+                </Typography>
+              </Tooltip>
+            </Alert>
+          )}
+        </Card>
+      </div>
       <ChooseWalletModal
         open={chooseWalletsModalOpen}
         chainName={selectedSource?.name}
