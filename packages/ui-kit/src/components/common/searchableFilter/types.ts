@@ -7,6 +7,7 @@ export type Context = {
 export type Operator = {
   value: string;
   label: string;
+  symbol: string;
   pre?: ReactNode;
   post?: ReactNode;
 };
@@ -25,7 +26,7 @@ export type Input =
     };
 
 export type SelectOption = {
-  value: string;
+  value: boolean | null | number | string;
   label: string;
   pre?: ReactNode;
   post?: ReactNode;
@@ -44,5 +45,10 @@ export type Flow = {
 export type Selected = {
   flow: string;
   operator: string;
-  value: string | number | boolean | Array<string | number>;
+  value:
+    | boolean
+    | null
+    | number
+    | string
+    | Array<boolean | null | number | string>;
 };

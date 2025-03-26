@@ -1,14 +1,14 @@
-import { Flow, OPERATOR_BEEN, OPERATORS_EQUALITY } from '@rosen-bridge/ui-kit';
+import { Flow, OPERATORS_EQUALITY, OPERATOR_IS } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const flows: Flow[] = [
   {
-    name: 'from-chain',
+    name: 'fromChain',
     label: 'From Chain',
     unique: true,
     operators: OPERATORS_EQUALITY,
     input: (context) => ({
-      type: context.operator == 'is' ? 'select' : 'multiple',
+      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
@@ -16,99 +16,83 @@ export const flows: Flow[] = [
     }),
   },
   {
-    name: 'to-chain',
+    name: 'toChain',
     label: 'To Chain',
     unique: true,
     operators: OPERATORS_EQUALITY,
     input: (context) => ({
-      type: context.operator == 'is' ? 'select' : 'multiple',
+      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
       })),
     }),
   },
-  {
-    name: 'token',
-    label: 'Token',
-    unique: true,
-    operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator == 'is' ? 'select' : 'multiple',
-      options: [],
-    }),
-  },
+  // {
+  //   name: 'token',
+  //   label: 'Token',
+  //   unique: true,
+  //   operators: OPERATORS_EQUALITY,
+  //   input: (context) => ({
+  //     type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+  //     options: [],
+  //   }),
+  // },
   {
     name: 'status',
     label: 'Status',
     unique: true,
     operators: OPERATORS_EQUALITY,
     input: (context) => ({
-      type: context.operator == 'is' ? 'select' : 'multiple',
+      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
       options: [
         {
+          label: 'Fraud',
+          value: 'fraud',
+        },
+        {
           label: 'Processing',
-          value: 'processing',
+          value: null,
         },
         {
           label: 'Done',
-          value: 'done',
+          value: 'successful',
         },
       ],
     }),
   },
   {
-    name: 'initial-time',
-    label: 'Initial Time',
-    unique: true,
-    operators: [
-      { label: 'Before', value: 'before' },
-      { label: 'After', value: 'after' },
-    ],
+    name: 'search',
+    label: 'Search for this text',
+    operators: [OPERATOR_IS],
+    input: {
+      type: 'text',
+    },
+  },
+  {
+    name: 'in',
+    label: 'Search whithin',
+    operators: [OPERATOR_IS],
     input: {
       type: 'select',
       options: [
         {
-          label: '1 Day',
-          value: '1',
+          label: 'From Address',
+          value: 'fromAddress',
         },
         {
-          label: '2 Day',
-          value: '2',
+          label: 'To Address',
+          value: 'toAddress',
         },
         {
-          label: '5 Days',
-          value: '5',
+          label: 'Event Id',
+          value: 'requestId',
         },
         {
-          label: '1 Week',
-          value: '7',
-        },
-        {
-          label: '2 Week',
-          value: '14',
-        },
-        {
-          label: '3 Week',
-          value: '21',
-        },
-        {
-          label: '1 Month',
-          value: '30',
-        },
-        {
-          label: '2 Months',
-          value: '60',
+          label: 'Lock TX Id',
+          value: 'sourceTxId',
         },
       ],
-    },
-  },
-  {
-    name: 'search-for-this-text',
-    label: 'Search for this text',
-    operators: [OPERATOR_BEEN],
-    input: {
-      type: 'text',
     },
   },
 ];

@@ -51,7 +51,7 @@ const Container = styled('div')(({ theme }) => ({
 export type SearchableFilterProps = {
   flows: Flow[];
   namespace: string;
-  onChange: (selected: Selected[]) => void;
+  onChange: (result: { selected: Selected[]; query: string }) => void;
 };
 
 export const SearchableFilter = ({
@@ -196,7 +196,10 @@ export const SearchableFilter = ({
         return {
           ...pickerRaw,
           options: pickerRaw.options.filter((option) => {
-            return option.value.toLowerCase().includes(query.toLowerCase());
+            return option.value
+              ?.toString()
+              .toLowerCase()
+              .includes(query.toLowerCase());
           }),
         };
       }
@@ -314,7 +317,21 @@ export const SearchableFilter = ({
 
     $history.current?.add(selected);
 
-    onChange(selected);
+    const query = selected
+      .map((item) => {
+        const parsed = aaaaa(flows, item)!;
+
+        const operator = parsed.operator!.symbol;
+
+        const array = Array.isArray(item.value) ? '[]' : '';
+
+        const value = [item.value].flat().join(',');
+
+        return `${item.flow}${array}${operator}${value}`;
+      })
+      .join('&');
+
+    onChange({ query, selected });
   };
 
   useEffect(() => {

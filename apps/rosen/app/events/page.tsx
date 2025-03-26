@@ -20,11 +20,17 @@ import { flows } from './flows';
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
-const getKey = (offset: number, limit: number) => {
-  return ['/v1/events', { offset, limit }];
+const getKey = (filters: string) => (offset: number, limit: number) => {
+  // return ['/v1/events', filters];
+
+  return [
+    `/v1/events?offset=${offset}&limit=${limit}${filters ? '&' : ''}${filters}`,
+  ];
 };
 
 const Events = () => {
+  const [filters, setFilters] = useState('');
+
   const {
     data,
     isLoading,
@@ -35,7 +41,7 @@ const Events = () => {
     isFirstLoad,
     isFirstPage,
     isLastPage,
-  } = useTableDataPagination<ApiEventResponse>(getKey);
+  } = useTableDataPagination<ApiEventResponse>(getKey(filters));
 
   const handleChangePage = useCallback(
     (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -118,6 +124,7 @@ const Events = () => {
         namespace="events"
         onChange={(selected) => {
           console.log('selected', selected);
+          setFilters(selected.query);
         }}
       />
       <br />

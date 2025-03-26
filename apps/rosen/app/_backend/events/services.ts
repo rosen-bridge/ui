@@ -2,6 +2,7 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { Network } from '@rosen-ui/types';
 
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
+import { Filters } from '@/_utils/filters';
 
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
 import { getEvents } from './repository';
@@ -40,16 +41,12 @@ const getFullTokenData = (
 
 /**
  * return events with full token data
- * @param offset
- * @param limit
+ * @param filters
  */
-export const getEventsWithFullTokenData = async (
-  offset: number,
-  limit: number,
-) => {
+export const getEventsWithFullTokenData = async (filters: Filters) => {
   const tokenMap = await getTokenMap();
 
-  const events = await getEvents(offset, limit);
+  const events = await getEvents(filters);
 
   return {
     total: events.total,

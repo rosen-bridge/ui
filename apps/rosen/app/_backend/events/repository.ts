@@ -3,6 +3,8 @@ import { BlockEntity } from '@rosen-bridge/scanner';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
+import { Filters, filtersToTypeormWhere } from '@/_utils/filters';
+
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
@@ -31,7 +33,7 @@ const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
  * @param offset
  * @param limit
  */
-export const getEvents = async (offset: number, limit: number) => {
+export const getEvents = async (filters: Filters) => {
   /**
    * TODO: convert the query to a view
    * local:ergo/rosen-bridge/ui#194
@@ -73,10 +75,14 @@ export const getEvents = async (offset: number, limit: number) => {
        */
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
     ])
+    .where(filtersToTypeormWhere(filters, 'oe'))
     .distinct(true)
-    .orderBy('be.timestamp', 'DESC')
-    .offset(offset)
-    .limit(limit)
+    .orderBy(
+      `be.${filters.sort?.key || 'timestamp'}`,
+      filters.sort?.order || 'DESC',
+    )
+    .offset(filters.pagination.offset)
+    .limit(filters.pagination.limit)
     .getRawMany();
 
   const items = getItemsWithoutTotal(rawItems);

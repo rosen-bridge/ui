@@ -21,7 +21,9 @@ export type PickerProps = {
 };
 
 export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
-  const [items, setItems] = useState(new Set<string>());
+  const [items, setItems] = useState(
+    new Set<string | number | boolean | null>(),
+  );
 
   if (!value) return null;
 
@@ -31,7 +33,7 @@ export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
         <List>
           {value.options.map((option) => (
             <ListItem
-              key={option.value}
+              key={`${option.value}`}
               disablePadding
               secondaryAction={option.post}
               onClick={() => {
@@ -62,7 +64,7 @@ export const Picker = ({ anchorEl, open, value, onSelect }: PickerProps) => {
         <List>
           {value.options.map((option) => (
             <ListItem
-              key={option.value}
+              key={`${option.value}`}
               disablePadding
               secondaryAction={option.post}
             >
