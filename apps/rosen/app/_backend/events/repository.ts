@@ -37,7 +37,14 @@ export const getEvents = async (filters: Filters) => {
   const where = filtersToTypeormWhere(
     filters,
     ['fromChain', 'toChain', 'fromAddress', 'toAddress'],
-    (key) => 'oe.' + key,
+    (key) => {
+      switch (key) {
+        case 'timestamp':
+          return 'be.' + key;
+        default:
+          return 'oe.' + key;
+      }
+    },
   );
 
   /**
@@ -84,7 +91,7 @@ export const getEvents = async (filters: Filters) => {
     .where(where)
     .distinct(true)
     .orderBy(
-      `be.${filters.sort?.key || 'timestamp'}`,
+      `${filters.sort?.key ? 'oe.' + filters.sort?.key : 'be.timestamp'}`,
       filters.sort?.order || 'DESC',
     )
     .offset(filters.pagination.offset)

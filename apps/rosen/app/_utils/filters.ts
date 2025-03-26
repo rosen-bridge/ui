@@ -94,6 +94,20 @@ export const extractFiltersFromSearchParams = (
   }
 
   if (searchParams.has('sort')) {
+    const raw = searchParams.get('sort')!;
+
+    filters.sort ||= { key: raw };
+
+    if (raw.endsWith('-asc')) {
+      filters.sort.key = raw.replace('-asc', '');
+      filters.sort.order = 'ASC';
+    }
+
+    if (raw.endsWith('-desc')) {
+      filters.sort.key = raw.replace('-desc', '');
+      filters.sort.order = 'DESC';
+    }
+
     searchParams.delete('sort');
   }
 
