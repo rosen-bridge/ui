@@ -1,5 +1,20 @@
 # @rosen-bridge/watcher-app
 
+## 3.3.0
+
+### Minor Changes
+
+- Implement a themeable favicon, and automatically load the chain icon from the dedicated icon package
+
+### Patch Changes
+
+- Update the content of the Caution section on the Withdraw page
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Implement a Version component to display detailed version information for the application.
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.9.2
+  - @rosen-bridge/icons@1.2.0
+
 ## 3.2.1
 
 ### Patch Changes

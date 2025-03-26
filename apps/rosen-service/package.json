@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-service",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "private": true,
   "license": "GPL-3.0",
   "author": "Rosen Team",
@@ -28,7 +28,7 @@
     "@rosen-bridge/tokens": "^3.0.0",
     "@rosen-bridge/watcher-data-extractor": "^12.0.0",
     "@rosen-bridge/winston-logger": "^0.2.1",
-    "@rosen-ui/asset-calculator": "^2.1.2",
+    "@rosen-ui/asset-calculator": "^2.1.3",
     "config": "^3.3.7"
   },
   "devDependencies": {

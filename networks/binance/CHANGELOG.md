@@ -1,5 +1,14 @@
 # @rosen-network/binance
 
+## 0.2.2
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+- Updated dependencies
+  - @rosen-network/base@0.2.2
+  - @rosen-network/evm@0.2.2
+
 ## 0.2.1
 
 ### Patch Changes

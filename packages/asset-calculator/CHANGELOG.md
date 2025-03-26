@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.3
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+
 ## 2.1.2
 
 ### Patch Changes

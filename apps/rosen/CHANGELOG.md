@@ -1,5 +1,32 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.5
+
+### Patch Changes
+
+- Implement responsive design for the tablet view to ensure optimal user interface experience across devices
+- Update the display of warnings for selecting Bitcoin as the source network
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+- Fixes the height of inputs
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Implement a Version component to display detailed version information for the application
+- Update the UI with a new design for the wallet disconnect feature
+- Upgrade Next.js to the latest version (14.2.25) to resolve vulnerabilities associated with the CVE-2025-29927
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.9.2
+  - @rosen-bridge/icons@1.2.0
+  - @rosen-ui/asset-calculator@2.1.3
+  - @rosen-ui/wallet-api@1.3.0
+  - @rosen-network/bitcoin@2.1.2
+  - @rosen-network/cardano@2.1.2
+  - @rosen-ui/metamask-wallet@1.3.1
+  - @rosen-ui/nautilus-wallet@2.3.1
+  - @rosen-ui/eternl-wallet@2.3.1
+  - @rosen-network/ergo@2.1.2
+  - @rosen-network/evm@0.2.2
+  - @rosen-ui/lace-wallet@2.3.1
+  - @rosen-ui/okx-wallet@1.3.1
+
 ## 4.0.4
 
 ### Patch Changes
