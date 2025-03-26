@@ -8,6 +8,7 @@ import {
   DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
+  UnavailableApiError,
   UnsupportedChainError,
   Wallet,
   InteractionError,
@@ -51,6 +52,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   private get provider() {
+    this.requireAvailable();
     const provider = this.api.getProvider();
 
     if (!provider) throw new InteractionError(this.name);
@@ -68,6 +70,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
@@ -76,6 +79,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
@@ -132,6 +136,10 @@ export class MetaMaskWallet implements Wallet {
 
   isAvailable(): boolean {
     return this.api.isExtensionActive();
+  }
+
+  requireAvailable() {
+    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async isConnected(): Promise<boolean> {

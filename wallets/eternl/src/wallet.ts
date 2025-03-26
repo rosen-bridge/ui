@@ -7,6 +7,7 @@ import {
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
+  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -33,6 +34,7 @@ export class EtrnlWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
@@ -43,6 +45,7 @@ export class EtrnlWallet implements Wallet {
   async disconnect(): Promise<void> {}
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     try {
       const wallet = await this.api.enable();
       return await wallet.getChangeAddress();
@@ -52,6 +55,8 @@ export class EtrnlWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
@@ -82,7 +87,13 @@ export class EtrnlWallet implements Wallet {
     return typeof window.cardano !== 'undefined' && !!window.cardano.eternl;
   }
 
+  requireAvailable() {
+    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
+  }
+
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();
