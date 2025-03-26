@@ -1,5 +1,15 @@
 # @rosen-bridge/guard-app
 
+## 1.12.1
+
+### Patch Changes
+
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Implement a Version component to display detailed version information for the application.
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.9.2
+  - @rosen-bridge/icons@1.2.0
+
 ## 1.12.0
 
 ### Minor Changes

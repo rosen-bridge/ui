@@ -1,5 +1,14 @@
 # @rosen-bridge/ui-kit
 
+## 1.9.2
+
+### Patch Changes
+
+- Update the UI of the version section to properly display all information and ensure it is fully responsive
+- Fixes the height of inputs
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Updated @rosen-bridge/icons@1.2.0 dependency
+
 ## 1.9.1
 
 ### Patch Changes

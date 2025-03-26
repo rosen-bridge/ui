@@ -1,5 +1,16 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.3.1
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+- Handle the `ConnectionTimeoutError` exception during the connection process
+- Updated dependencies
+  - @rosen-bridge/icons@1.2.0
+  - @rosen-ui/wallet-api@1.3.0
+  - @rosen-network/ergo@2.1.2
+
 ## 2.3.0
 
 ### Minor Changes
