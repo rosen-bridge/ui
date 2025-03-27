@@ -15,7 +15,7 @@
   "dependencies": {
     "@rosen-bridge/address-codec": "^0.3.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.3.0",
-    "@rosen-ui/constants": "^0.0.4",
+    "@rosen-ui/constants": "file:../../packages/constants",
     "@rosen-ui/wallet-api": "^1.0.3",
     "@rosen-bridge/tokens": "^3.0.0",
     "axios": "^1.7.2",

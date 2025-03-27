@@ -11,6 +11,7 @@ import {
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
+import { DOGE_NETWORK } from './constants';
 
 /**
  * generates bitcoin lock tx
@@ -27,13 +28,13 @@ export const generateUnsignedTx =
     token: RosenChainToken
   ): Promise<UnsignedPsbtData> => {
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.DOGE)],
+      tokenMap.getAllNativeTokens(NETWORKS.DOGE)[0].tokenId,
       wrappedAmount,
       NETWORKS.DOGE
     ).amount;
 
     // generate txBuilder
-    const psbt = new Psbt();
+    const psbt = new Psbt({ network: DOGE_NETWORK });
 
     // generate OP_RETURN box
     const opReturnPayment = payments.embed({
