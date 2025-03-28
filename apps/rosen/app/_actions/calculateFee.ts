@@ -32,6 +32,12 @@ const GetHeight = {
     );
     return response.json();
   },
+  [NETWORKS.doge.key]: async (): Promise<number> => {
+    const response = await fetch(
+      `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}/blocks/tip/height`,
+    );
+    return response.json();
+  },
 } as const;
 
 /**
