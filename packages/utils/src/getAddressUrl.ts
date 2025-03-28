@@ -7,6 +7,7 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/address',
   [NETWORKS.bitcoin.key]: 'https://mempool.space/address',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/address',
+  [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/address',
 };
 
 export const getAddressUrl = (network: Network, address?: string) => {
