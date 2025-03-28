@@ -4,14 +4,14 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
 
-import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
-import { BitcoinUtxo, UnsignedPsbtData } from './types';
+import { DogeUtxo, UnsignedPsbtData } from './types';
 import {
   estimateTxWeight,
   getAddressUtxos,
   getFeeRatio,
-  getMinimumMeaningfulSatoshi,
+  getMinimumMeaningfulDoge,
 } from './utils';
+import { DOGE_NETWORK, DOGE_INPUT_SIZE } from './constants';
 
 /**
  * generates bitcoin lock tx
@@ -35,7 +35,7 @@ export const generateUnsignedTx =
     ).amount;
 
     // generate txBuilder
-    const psbt = new Psbt();
+    const psbt = new Psbt({ network: DOGE_NETWORK });
 
     // generate OP_RETURN box
     const opReturnPayment = payments.embed({
@@ -62,21 +62,21 @@ export const generateUnsignedTx =
     // fetch inputs
     const utxoIterator = (await getAddressUtxos(fromAddress)).values();
     const feeRatio = await getFeeRatio();
-    const minSatoshi = getMinimumMeaningfulSatoshi(feeRatio);
+    const minDoge = getMinimumMeaningfulDoge(feeRatio);
     const coveredBoxes = await selectBitcoinUtxos(
-      unwrappedAmount + minSatoshi,
+      unwrappedAmount + minDoge,
       [],
-      new Map<string, BitcoinUtxo | undefined>(),
+      new Map<string, DogeUtxo | undefined>(),
       utxoIterator,
-      minSatoshi,
-      SEGWIT_INPUT_WEIGHT_UNIT,
+      minDoge,
+      DOGE_INPUT_SIZE,
       estimatedTxWeight,
       feeRatio,
     );
     if (!coveredBoxes.covered) {
       throw new Error(
         `Available boxes didn't cover required assets. BTC: ${
-          unwrappedAmount + minSatoshi
+          unwrappedAmount + minDoge
         }`,
       );
     }
@@ -91,6 +91,12 @@ export const generateUnsignedTx =
           script: fromAddressScript,
           value: Number(box.value),
         },
+      });
+      psbt.addInput({
+        hash: box.txId,
+        index: box.index,
+        nonWitnessUtxo: Buffer.from(txToHex[box.txId], 'hex'),
+        redeemScript: fromAddressScript,
       });
     });
 

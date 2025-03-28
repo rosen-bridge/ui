@@ -1,4 +1,4 @@
-import { Bitcoin as BitcoinIcon } from '@rosen-bridge/icons';
+import { Bitcoin as DogeIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,
@@ -12,9 +12,9 @@ export class BitcoinNetwork implements Network {
 
   public lockAddress: string;
 
-  public logo = BitcoinIcon;
+  public logo = DogeIcon;
 
-  public name = NETWORKS.bitcoin.key;
+  public name = NETWORKS.doge.key;
 
   public nextHeightInterval: number;
 

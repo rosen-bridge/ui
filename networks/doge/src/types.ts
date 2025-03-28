@@ -12,7 +12,7 @@ export interface EsploraUtxo {
   value: number;
 }
 
-export interface BitcoinUtxo {
+export interface DogeUtxo {
   txId: string;
   index: number;
   value: bigint;

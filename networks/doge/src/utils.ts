@@ -6,10 +6,12 @@ import { Psbt, address } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
-  SEGWIT_INPUT_WEIGHT_UNIT,
-  SEGWIT_OUTPUT_WEIGHT_UNIT,
+  DOGE_TX_BASE_SIZE,
+  DOGE_INPUT_SIZE,
+  MINIMUM_UTXO_VALUE,
+  DOGE_OUTPUT_SIZE,
 } from './constants';
-import type { BitcoinUtxo, EsploraAddress, EsploraUtxo } from './types';
+import type { DogeUtxo, EsploraAddress, EsploraUtxo } from './types';
 
 /**
  * generates metadata for lock transaction
@@ -55,7 +57,7 @@ export const generateOpReturnData = async (
  */
 export const getAddressUtxos = async (
   address: string,
-): Promise<Array<BitcoinUtxo>> => {
+): Promise<Array<DogeUtxo>> => {
   const esploraUrl = process.env.BITCOIN_ESPLORA_API;
   const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
   const res = await Axios.get<Array<EsploraUtxo>>(GET_ADDRESS_UTXOS);
@@ -85,7 +87,7 @@ export const getAddressBalance = async (address: string): Promise<bigint> => {
  * @returns
  */
 export const getFeeRatio = async (): Promise<number> => {
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
+  const esploraUrl = process.env.DOGE_ESPLORA_API;
   const FEE_ESTIMATES = `${esploraUrl}/api/fee-estimates`;
   const res = await Axios.get<Record<string, number>>(FEE_ESTIMATES);
   return res.data[CONFIRMATION_TARGET];
@@ -96,10 +98,10 @@ export const getFeeRatio = async (): Promise<number> => {
  * additional fee for adding it to a tx
  * @returns the minimum UNWRAPPED-VALUE amount
  */
-export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
+export const getMinimumMeaningfulDoge = (feeRatio: number): bigint => {
   return BigInt(
     Math.ceil(
-      (feeRatio * SEGWIT_INPUT_WEIGHT_UNIT) / 4, // estimate fee per weight and convert to virtual size
+      (feeRatio * DOGE_INPUT_SIZE), // estimate fee per weight and convert to virtual size
     ),
   );
 };
@@ -117,12 +119,12 @@ export const estimateTxWeight = (
   opReturnLength: number,
 ): number => {
   const x =
-    40 +
+    DOGE_TX_BASE_SIZE +
     2 + // all txs include 40W. P2WPKH txs need additional 2W
     44 + // OP_RETURN output base weight
     opReturnLength * 2 + // OP_RETURN output data counts as vSize, so weight = hexString length / 2 * 4
-    inputSize * SEGWIT_INPUT_WEIGHT_UNIT + // inputs weights
-    outputSize * SEGWIT_OUTPUT_WEIGHT_UNIT; // outputs weights
+    inputSize * DOGE_INPUT_SIZE + // inputs weights
+    outputSize * DOGE_OUTPUT_SIZE; // outputs weights
   return x;
 };
 
