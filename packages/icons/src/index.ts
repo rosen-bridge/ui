@@ -154,6 +154,9 @@ export { default as BitcoinRaw } from './networks/bitcoin.svg?raw';
 export { ReactComponent as Cardano } from './networks/cardano.svg';
 export { default as CardanoRaw } from './networks/cardano.svg?raw';
 
+export { ReactComponent as Doge } from './networks/doge.svg';
+export { default as DogeRaw } from './networks/doge.svg?raw';
+
 export { ReactComponent as Ergo } from './networks/ergo.svg';
 export { default as ErgoRaw } from './networks/ergo.svg?raw';
 
