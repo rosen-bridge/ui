@@ -8,7 +8,7 @@ import {
   ShieldExclamation,
   Wallet,
 } from '@rosen-bridge/icons';
-import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
+import { Amount, Box, Grid, styled, SvgIcon } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
@@ -25,6 +25,12 @@ import { ApiInfoResponse } from '@/_types/api';
 import { InfoWidgetCard } from './InfoWidgetCard';
 
 const InfoWidgets = () => {
+  const StyledBox = styled(Box)({
+    '& *': {
+      color: '#ffffff !important',
+    },
+  });
+
   const icon = useIcon('light');
 
   const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -77,17 +83,24 @@ const InfoWidgets = () => {
     <InfoWidgetCard
       title="Available / Total Locked RSN"
       value={
-        data
-          ? `${getDecimalString(
-              data.permitCount.active.toString() ?? '0',
-              rsnToken?.decimals ?? 0,
-              1,
-            )} / ${getDecimalString(
-              data.permitCount.total.toString() ?? '0',
-              rsnToken?.decimals ?? 0,
-              1,
-            )}`
-          : ''
+        <StyledBox>
+          <Amount
+            value={
+              data
+                ? `${getDecimalString(
+                    data.permitCount.active.toString() ?? '0',
+                    rsnToken?.decimals ?? 0,
+                    1,
+                  )} / ${getDecimalString(
+                    data.permitCount.total.toString() ?? '0',
+                    rsnToken?.decimals ?? 0,
+                    1,
+                  )}`
+                : undefined
+            }
+            size="large"
+          />
+        </StyledBox>
       }
       icon={
         <SvgIcon fontSize="large">
@@ -108,7 +121,14 @@ const InfoWidgets = () => {
     return (
       <InfoWidgetCard
         title="Available / Total Reports"
-        value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
+        value={
+          <StyledBox>
+            <Amount
+              value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
+              size="large"
+            />
+          </StyledBox>
+        }
         icon={
           <SvgIcon fontSize="large">
             <LockAlt />
@@ -147,9 +167,19 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           title="ERG"
           value={
-            ergToken?.amount !== undefined
-              ? getDecimalString(ergToken.amount.toString(), ergToken.decimals)
-              : ''
+            <StyledBox>
+              <Amount
+                size="large"
+                value={
+                  ergToken?.amount !== undefined
+                    ? getDecimalString(
+                        ergToken.amount.toString(),
+                        ergToken.decimals,
+                      )
+                    : undefined
+                }
+              />
+            </StyledBox>
           }
           icon={
             <SvgIcon fontSize="large">
@@ -161,7 +191,18 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          value={titleRSN || titleERSN || '0 RSN'}
+          value={(() => {
+            const amountValue = (titleRSN || titleERSN).split(' ');
+            return (
+              <StyledBox>
+                <Amount
+                  value={amountValue[0]}
+                  unit={amountValue[1]}
+                  size="large"
+                />
+              </StyledBox>
+            );
+          })()}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
             <SvgIcon fontSize="large">

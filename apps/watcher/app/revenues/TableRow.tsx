@@ -1,7 +1,15 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Amount,
+  Box,
+  Button,
+  EnhancedTableCell,
+  Id,
+  styled,
+  TableRow,
+} from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useERsnToken } from '@/_hooks/useERsnToken';
@@ -55,6 +63,15 @@ export const tabletHeader = [
 ];
 
 export const MobileRow: FC<RowProps> = (props) => {
+  const StyledBox = styled(Box)({
+    'display': 'flex',
+    'alignItems': 'center',
+    '& > div:not(:last-child)::after': {
+      content: '"+"',
+      margin: '0 4px',
+    },
+  });
+
   const { isLoading: isLoadingProp, ...row } = props;
   const [expand, setExpand] = useState(false);
 
@@ -84,13 +101,10 @@ export const MobileRow: FC<RowProps> = (props) => {
   const getTokenIncome = () =>
     row.revenues
       .filter((token) => token.tokenId !== rsnToken?.tokenId)
-      .map(
-        (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)}${
-            token.name
-          }`,
-      )
-      .join('+');
+      .map((token) => ({
+        value: getDecimalString(token.amount.toString(), token.decimals),
+        unit: token.name,
+      }));
 
   return (
     <>
@@ -108,11 +122,23 @@ export const MobileRow: FC<RowProps> = (props) => {
         <>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>RSN Income</EnhancedTableCell>
-            <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Amount value={getRSNIncome()} />
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Token Income</EnhancedTableCell>
-            <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <StyledBox>
+                {getTokenIncome().map((tokenIncome, index) => (
+                  <Amount
+                    key={index}
+                    value={tokenIncome.value}
+                    unit={tokenIncome.unit}
+                  />
+                ))}
+              </StyledBox>
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -169,13 +195,10 @@ export const TabletRow: FC<RowProps> = (props) => {
           token.tokenId !== rsnToken?.tokenId &&
           token.tokenId !== eRsnToken?.tokenId,
       )
-      .map(
-        (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)} ${
-            token.name
-          }`,
-      )
-      .join(' + ');
+      .map((token) => ({
+        value: getDecimalString(token.amount.toString(), token.decimals),
+        unit: token.name,
+      }));
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -183,8 +206,18 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
-      <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+      <EnhancedTableCell>
+        <Amount value={getRSNIncome()} size="normal" />
+      </EnhancedTableCell>
+      {getTokenIncome().map((tokenIncome, index) => (
+        <EnhancedTableCell key={index}>
+          <Amount
+            value={tokenIncome.value}
+            size="normal"
+            unit={tokenIncome.unit}
+          />
+        </EnhancedTableCell>
+      ))}
     </TableRow>
   );
 };
