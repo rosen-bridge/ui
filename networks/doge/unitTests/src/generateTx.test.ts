@@ -3,7 +3,7 @@ import { Network } from '@rosen-ui/types';
 import { Psbt } from 'bitcoinjs-lib';
 import { describe, expect, it, vi } from 'vitest';
 
-import { generateUnsignedTx } from '../../src';
+import { DOGE_NETWORK, generateUnsignedTx } from '../../src';
 import { testTokenMap, multiDecimalTokenMap } from '../test-data';
 
 const testData = await vi.hoisted(async () => await import('./testData'));
@@ -19,13 +19,18 @@ vi.mock('../../src/utils', async (importOriginal) => {
   // mock getAddressUtxos
   const getAddressUtxos = vi.fn();
   getAddressUtxos.mockResolvedValue(testData.mockedUtxos);
+
+  const getTxHex = vi.fn();
+  getTxHex.mockResolvedValue(testData.txHex1);
+
   // mock getFeeRatio
   const getFeeRatio = vi.fn();
-  getFeeRatio.mockResolvedValue(1);
+  getFeeRatio.mockResolvedValue(1000);
   return {
     ...mod,
     getAddressUtxos,
     getFeeRatio,
+    getTxHex,
   };
 });
 
@@ -43,14 +48,14 @@ describe('generateUnsignedTx', () => {
    * - input count should be 1
    * - 1st input should be 1st mocked utxo
    * - output count should be 3 (OP_RETURN, lock and change utxos)
-   * - 1st output should be OP_RETURN utxo with given data and no BTC
+   * - 1st output should be OP_RETURN utxo with given data and no Doge
    * - 2nd output should be to lock address with given amount
-   * - 3rd output should be to from address with remaining BTC minus fee
+   * - 3rd output should be to from address with remaining Doge minus fee
    */
   it('should generate lock transaction successfully', async () => {
     const lockAddress = 'DHTom1rFwsgAn5raKU1nok8E5MdQ4GBkAN';
     const fromAddress = 'DMm8bk6atCBoVBX9c3zgiF16ggE31hLmQm';
-    const amount = 500000000n;
+    const amount = 100000000n;
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
@@ -67,7 +72,7 @@ describe('generateUnsignedTx', () => {
       {} as any,
     );
 
-    const psbt = Psbt.fromBase64(result.psbt.base64);
+    const psbt = Psbt.fromBase64(result.psbt.base64, { network: DOGE_NETWORK });
     expect(result.inputSize).toEqual(psbt.inputCount);
 
     expect(psbt.inputCount).toEqual(1);
@@ -90,7 +95,7 @@ describe('generateUnsignedTx', () => {
     expect(lockUtxo.value).toEqual(Number(amount));
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
-    const expectedFee = 203n;
+    const expectedFee = 476000n;
     expect(changeUtxo.value).toEqual(
       Number(mockedInput.value - amount - expectedFee),
     );
@@ -109,15 +114,15 @@ describe('generateUnsignedTx', () => {
    * - input count should be 1
    * - 1st input should be 1st mocked utxo
    * - output count should be 3 (OP_RETURN, lock and change utxos)
-   * - 1st output should be OP_RETURN utxo with given data and no BTC
+   * - 1st output should be OP_RETURN utxo with given data and no Doge
    * - 2nd output should be to lock address with given amount
-   * - 3rd output should be to from address with remaining BTC minus fee
+   * - 3rd output should be to from address with remaining Doge minus fee
    */
   it('should generate lock transaction with multi decimals token map successfully', async () => {
-    const lockAddress = 'bc1qkgp89fjerymm5ltg0hygnumr0m2qa7n22gyw6h';
-    const fromAddress = 'bc1qhuv3dhpnm0wktasd3v0kt6e4aqfqsd0uhfdu7d';
-    const wrappedAmount = 5000000n;
-    const unwrappedAmount = 500000000n;
+    const lockAddress = 'DHTom1rFwsgAn5raKU1nok8E5MdQ4GBkAN';
+    const fromAddress = 'DMm8bk6atCBoVBX9c3zgiF16ggE31hLmQm';
+    const wrappedAmount = 1000000n;
+    const unwrappedAmount = 100000000n;
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
@@ -137,7 +142,7 @@ describe('generateUnsignedTx', () => {
       token,
     );
 
-    const psbt = Psbt.fromBase64(result.psbt.base64);
+    const psbt = Psbt.fromBase64(result.psbt.base64, { network: DOGE_NETWORK });
     expect(result.inputSize).toEqual(psbt.inputCount);
 
     expect(psbt.inputCount).toEqual(1);
@@ -160,14 +165,14 @@ describe('generateUnsignedTx', () => {
     expect(lockUtxo.value).toEqual(Number(unwrappedAmount));
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
-    const expectedFee = 203n;
+    const expectedFee = 476000n;
     expect(changeUtxo.value).toEqual(
       Number(mockedInput.value - unwrappedAmount - expectedFee),
     );
   });
 
   /**
-   * @target generateUnsignedTx should throw error when address utxos cannot cover required BTC
+   * @target generateUnsignedTx should throw error when address utxos cannot cover required Doge
    * @dependencies
    * - utils.getAddressUtxos
    * - utils.getFeeRatio
@@ -176,10 +181,10 @@ describe('generateUnsignedTx', () => {
    * @expected
    * - it should throw Error
    */
-  it('should throw error when address utxos cannot cover required BTC', async () => {
-    const lockAddress = 'bc1qkgp89fjerymm5ltg0hygnumr0m2qa7n22gyw6h';
-    const fromAddress = 'bc1qhuv3dhpnm0wktasd3v0kt6e4aqfqsd0uhfdu7d';
-    const amount = 3500000000n;
+  it('should throw error when address utxos cannot cover required Doge', async () => {
+    const lockAddress = 'DHTom1rFwsgAn5raKU1nok8E5MdQ4GBkAN';
+    const fromAddress = 'DMm8bk6atCBoVBX9c3zgiF16ggE31hLmQm';
+    const amount = 350000000000n;
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 

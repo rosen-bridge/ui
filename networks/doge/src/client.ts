@@ -1,4 +1,4 @@
-import { Bitcoin as DogeIcon } from '@rosen-bridge/icons';
+import { Doge as DogeIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,
@@ -7,8 +7,8 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
-export class BitcoinNetwork implements Network {
-  public label = NETWORKS.bitcoin.label;
+export class DogeNetwork implements Network {
+  public label = NETWORKS.doge.label;
 
   public lockAddress: string;
 

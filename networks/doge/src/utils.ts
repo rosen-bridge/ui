@@ -82,7 +82,7 @@ export const getTxHex = async (txId: string): Promise<string> => {
 };
 
 /**
- * gets address BTC balance from Esplora
+ * gets address Doge balance from Esplora
  * @param address
  * @returns this is a UNWRAPPED-VALUE amount
  */
@@ -165,7 +165,6 @@ export const isValidAddress = (addr: string) => {
   try {
     address.toOutputScript(addr, DOGE_NETWORK);
     return true;
-
   } catch {
     // If an error is thrown, the address is invalid
     return false;
