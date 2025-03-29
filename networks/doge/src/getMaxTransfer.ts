@@ -7,7 +7,7 @@ import {
   generateOpReturnData,
   getFeeRatio,
   getAddressUtxos,
-  getMinimumMeaningfulSatoshi,
+  getMinimumMeaningfulDoge,
 } from './utils';
 
 export const getMaxTransferCreator =
@@ -48,20 +48,20 @@ export const getMaxTransferCreator =
       2,
       opRetrunDataLength,
     );
-    const estimatedFee = Math.ceil((estimatedTxWeight / 4) * feeRatio);
-    const minSatoshi = await getMinimumMeaningfulSatoshi(feeRatio);
+    const estimatedFee = Math.ceil(estimatedTxWeight * feeRatio);
+    const minDoge = getMinimumMeaningfulDoge(feeRatio);
 
     const offset = tokenMap.wrapAmount(
-      NETWORKS.bitcoin.nativeToken,
-      BigInt(estimatedFee) + minSatoshi,
-      NETWORKS.bitcoin.key,
+      NETWORKS.doge.nativeToken,
+      BigInt(estimatedFee) + minDoge,
+      NETWORKS.doge.key,
     ).amount;
 
     return balance < 0n || !isNative
       ? 0n
       : /**
          * We need to subtract (utxos.length + 1) from the calculated value because
-         * of a bug in bitcoin box selection
+         * of a bug in doge box selection
          *
          * local:ergo/rosen-bridge/utils#204
          */

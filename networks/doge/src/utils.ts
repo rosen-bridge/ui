@@ -10,6 +10,7 @@ import {
   DOGE_INPUT_SIZE,
   MINIMUM_UTXO_VALUE,
   DOGE_OUTPUT_SIZE,
+  DOGE_NETWORK,
 } from './constants';
 import type { DogeUtxo, EsploraAddress, EsploraUtxo } from './types';
 
@@ -58,8 +59,8 @@ export const generateOpReturnData = async (
 export const getAddressUtxos = async (
   address: string,
 ): Promise<Array<DogeUtxo>> => {
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
-  const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
+  const esploraUrl = `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}`;
+  const GET_ADDRESS_UTXOS = `${esploraUrl}/address/${address}/utxo`;
   const res = await Axios.get<Array<EsploraUtxo>>(GET_ADDRESS_UTXOS);
   return res.data.map((utxo) => ({
     txId: utxo.txid,
@@ -69,13 +70,25 @@ export const getAddressUtxos = async (
 };
 
 /**
+ * gets tx hex by txId from Esplora
+ * @param txId
+ * @returns
+ */
+export const getTxHex = async (txId: string): Promise<string> => {
+  const esploraUrl = `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}`;
+  const GET_TX_HEX = `${esploraUrl}/tx/${txId}/hex`;
+  const res = await Axios.get<string>(GET_TX_HEX);
+  return res.data;
+};
+
+/**
  * gets address BTC balance from Esplora
  * @param address
  * @returns this is a UNWRAPPED-VALUE amount
  */
 export const getAddressBalance = async (address: string): Promise<bigint> => {
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
-  const GET_ADDRESS = `${esploraUrl}/api/address/${address}`;
+  const esploraUrl = `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}`;
+  const GET_ADDRESS = `${esploraUrl}/address/${address}`;
   const res = await Axios.get<EsploraAddress>(GET_ADDRESS);
 
   const chainStat = res.data.chain_stats;
@@ -87,8 +100,8 @@ export const getAddressBalance = async (address: string): Promise<bigint> => {
  * @returns
  */
 export const getFeeRatio = async (): Promise<number> => {
-  const esploraUrl = process.env.DOGE_ESPLORA_API;
-  const FEE_ESTIMATES = `${esploraUrl}/api/fee-estimates`;
+  const esploraUrl = `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}`;
+  const FEE_ESTIMATES = `${esploraUrl}/fee-estimates`;
   const res = await Axios.get<Record<string, number>>(FEE_ESTIMATES);
   return res.data[CONFIRMATION_TARGET];
 };
@@ -99,11 +112,7 @@ export const getFeeRatio = async (): Promise<number> => {
  * @returns the minimum UNWRAPPED-VALUE amount
  */
 export const getMinimumMeaningfulDoge = (feeRatio: number): bigint => {
-  return BigInt(
-    Math.ceil(
-      (feeRatio * DOGE_INPUT_SIZE), // estimate fee per weight and convert to virtual size
-    ),
-  );
+  return BigInt(Math.ceil(feeRatio * DOGE_INPUT_SIZE) + MINIMUM_UTXO_VALUE);
 };
 
 /**
@@ -137,8 +146,8 @@ export const submitTransaction = async (
   serializedPsbt: string,
   encoding: 'base64' | 'hex',
 ): Promise<string> => {
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
-  const POST_TX = `${esploraUrl}/api/tx`;
+  const esploraUrl = `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}`;
+  const POST_TX = `${esploraUrl}/tx`;
 
   const psbt =
     encoding === 'base64'
@@ -154,25 +163,9 @@ export const submitTransaction = async (
 
 export const isValidAddress = (addr: string) => {
   try {
-    // Decode the address using fromBech32
-    const decoded = address.fromBech32(addr);
+    address.toOutputScript(addr, DOGE_NETWORK);
+    return true;
 
-    // Check if the decoded prefix matches the expected prefix for Bitcoin
-    if (decoded.prefix !== 'bc') {
-      return false;
-    }
-
-    // Ensure the address does not start with 'bc1p' (Taproot)
-    if (addr.startsWith('bc1p')) {
-      return false;
-    }
-
-    // Ensure the address is either P2WPKH or P2WSH
-    if (decoded.version === 0) {
-      return true; // P2WPKH or P2WSH
-    } else {
-      return false;
-    }
   } catch {
     // If an error is thrown, the address is invalid
     return false;

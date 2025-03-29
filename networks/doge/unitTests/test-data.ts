@@ -23,6 +23,14 @@ export const multiDecimalTokenMap: RosenTokens = JSON.parse(`
         "type": "native",
         "residency": "native",
         "extra": {}
+      },
+      "doge": {
+        "tokenId": "doge",
+        "name": "DOGE",
+        "decimals": 8,
+        "type": "native",
+        "residency": "native",
+        "extra": {}
       }
     }
   ]

@@ -48,8 +48,8 @@ describe('generateUnsignedTx', () => {
    * - 3rd output should be to from address with remaining BTC minus fee
    */
   it('should generate lock transaction successfully', async () => {
-    const lockAddress = 'bc1qkgp89fjerymm5ltg0hygnumr0m2qa7n22gyw6h';
-    const fromAddress = 'bc1qhuv3dhpnm0wktasd3v0kt6e4aqfqsd0uhfdu7d';
+    const lockAddress = 'DHTom1rFwsgAn5raKU1nok8E5MdQ4GBkAN';
+    const fromAddress = 'DMm8bk6atCBoVBX9c3zgiF16ggE31hLmQm';
     const amount = 500000000n;
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';

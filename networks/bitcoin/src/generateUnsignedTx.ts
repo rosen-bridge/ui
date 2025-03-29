@@ -83,7 +83,7 @@ export const generateUnsignedTx =
 
     // add inputs
     const fromAddressScript = address.toOutputScript(fromAddress);
-    for (const box of coveredBoxes.boxes) {
+    coveredBoxes.boxes.forEach((box) => {
       psbt.addInput({
         hash: box.txId,
         index: box.index,
@@ -92,7 +92,7 @@ export const generateUnsignedTx =
           value: Number(box.value),
         },
       });
-    }
+    });
 
     // calculate input boxes assets
     let remainingBtc =
