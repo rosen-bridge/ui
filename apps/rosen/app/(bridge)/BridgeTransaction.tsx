@@ -161,6 +161,8 @@ export const BridgeTransaction = ({
         </Card>
       </div>
       <ChooseWalletModal
+        selectedWallet={selectedWallet}
+        disconnect={disconnect}
         open={chooseWalletsModalOpen}
         chainName={selectedSource?.name}
         setSelectedWallet={setSelectedWallet}
