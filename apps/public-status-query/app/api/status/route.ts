@@ -5,11 +5,11 @@ import {
 } from '@/_backend/actions';
 import { withValidation } from '@/api/withValidation';
 
-import { validator, Params } from './validator';
+import { validator, GetAggregatedStatusesRequestBody } from './validator';
 
 type GetManyStatusResponse = Record<string, AggregatedStatusDTO>;
 
-async function handler(params: Params) {
+async function handler(params: GetAggregatedStatusesRequestBody) {
   const records = await PublicStatusActions.getAggregatedStatuses(
     params.eventIds,
   );

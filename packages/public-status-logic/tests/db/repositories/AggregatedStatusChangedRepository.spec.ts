@@ -187,7 +187,7 @@ describe('AggregatedStatusChangedRepository', () => {
     });
 
     /**
-     * @target AggregatedStatusChangedRepository.insertOne should not insert record in database when status is not changed
+     * @target AggregatedStatusChangedRepository.insertOne should throw when `aggregated status changed` record exist in database and its status is not changed
      * @dependencies
      * @scenario
      * - populate TxEntity table with a record, required to satisfy relation
@@ -196,10 +196,11 @@ describe('AggregatedStatusChangedRepository', () => {
      * - call insertOne again with the same values
      * - get db records
      * @expected
+     * - both insertOne calls should have thrown `aggregated_status_not_changed` error
      * - repositoryInsertSpy should not have been called
      * - database should have contained the correct statuses
      */
-    it('should not insert record in database when status is not changed', async () => {
+    it('should throw when `aggregated status changed` record exist in database and its status is not changed', async () => {
       // arrange
       await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
 
@@ -226,27 +227,31 @@ describe('AggregatedStatusChangedRepository', () => {
         'insert',
       );
 
-      // act
-      await AggregatedStatusChangedRepository.insertOne(
-        status3.eventId,
-        status3.insertedAt + 5,
-        status3.status,
-        status3.txStatus,
-        status3.tx ?? undefined,
-      );
-      await AggregatedStatusChangedRepository.insertOne(
-        status1.eventId,
-        status1.insertedAt + 5,
-        status1.status,
-        status1.txStatus,
-        status1.tx ?? undefined,
-      );
+      // act and assert
+      await expect(async () => {
+        await AggregatedStatusChangedRepository.insertOne(
+          status3.eventId,
+          status3.insertedAt + 5,
+          status3.status,
+          status3.txStatus,
+          status3.tx ?? undefined,
+        );
+      }).rejects.toThrowError('aggregated_status_not_changed');
+      await expect(async () => {
+        await AggregatedStatusChangedRepository.insertOne(
+          status1.eventId,
+          status1.insertedAt + 5,
+          status1.status,
+          status1.txStatus,
+          status1.tx ?? undefined,
+        );
+      }).rejects.toThrowError('aggregated_status_not_changed');
+
       const records = await AggregatedStatusChangedRepository.find({
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
 
-      // assert
       expect(repositoryInsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);
       expect(records[0]).toEqual({ ...status1, id: 1, tx: txEntityRecord });

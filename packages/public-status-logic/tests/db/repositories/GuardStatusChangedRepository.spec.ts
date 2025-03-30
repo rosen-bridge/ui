@@ -239,7 +239,7 @@ describe('GuardStatusChangedRepository', () => {
     });
 
     /**
-     * @target GuardStatusChangedRepository.insertOne should not insert record in database when guard status is not changed
+     * @target GuardStatusChangedRepository.insertOne should throw when `guard status changed` record exist in database and its status is not changed
      * @dependencies
      * @scenario
      * - call insertOne to populate database with 2 different records
@@ -247,10 +247,11 @@ describe('GuardStatusChangedRepository', () => {
      * - call insertOne again with the same values
      * - get database records
      * @expected
+     * - both insertOne calls should have thrown `guard_status_not_changed` error
      * - repositoryInsertSpy should not have been called
      * - database should have contained the initial values
      */
-    it('should not insert record in database when guard status is not changed', async () => {
+    it('should throw when `guard status changed` record exist in database and its status is not changed', async () => {
       // arrange
       const status0 = mockGuardStatusChangedRecords[0];
       const status3 = mockGuardStatusChangedRecords[3];
@@ -286,39 +287,43 @@ describe('GuardStatusChangedRepository', () => {
         'insert',
       );
 
-      // act
-      await GuardStatusChangedRepository.insertOne(
-        status3.eventId,
-        status3.guardPk,
-        status3.insertedAt + 5,
-        status3.status,
-        status3.tx
-          ? {
-              txId: status3.tx.txId,
-              chain: status3.tx.chain,
-              txStatus: status3.txStatus!,
-            }
-          : undefined,
-      );
-      await GuardStatusChangedRepository.insertOne(
-        status0.eventId,
-        status0.guardPk,
-        status0.insertedAt + 5,
-        status0.status,
-        status0.tx
-          ? {
-              txId: status0.tx.txId,
-              chain: status0.tx.chain,
-              txStatus: status0.txStatus!,
-            }
-          : undefined,
-      );
+      // act and assert
+      await expect(async () => {
+        await GuardStatusChangedRepository.insertOne(
+          status3.eventId,
+          status3.guardPk,
+          status3.insertedAt + 5,
+          status3.status,
+          status3.tx
+            ? {
+                txId: status3.tx.txId,
+                chain: status3.tx.chain,
+                txStatus: status3.txStatus!,
+              }
+            : undefined,
+        );
+      }).rejects.toThrowError('guard_status_not_changed');
+      await expect(async () => {
+        await GuardStatusChangedRepository.insertOne(
+          status0.eventId,
+          status0.guardPk,
+          status0.insertedAt + 5,
+          status0.status,
+          status0.tx
+            ? {
+                txId: status0.tx.txId,
+                chain: status0.tx.chain,
+                txStatus: status0.txStatus!,
+              }
+            : undefined,
+        );
+      }).rejects.toThrowError('guard_status_not_changed');
+
       const records = await GuardStatusChangedRepository.find({
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
 
-      // assert
       expect(repositoryInsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);
       expect(records[0]).toEqual({ ...status3, id: 2 });

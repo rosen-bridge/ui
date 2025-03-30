@@ -2,14 +2,17 @@ import { NextRequest } from 'next/server';
 
 import Joi from 'joi';
 
-export interface Params {
+export interface GetAggregatedStatusTimelineRouteParam {
   id: string;
 }
 
-const ParamsSchema = Joi.object<Params>().keys({
+const ParamsSchema = Joi.object<GetAggregatedStatusTimelineRouteParam>().keys({
   id: Joi.string().length(64).required(),
 });
 
-export const validator = async (request: NextRequest, params: Params) => {
+export const validator = async (
+  request: NextRequest,
+  params: GetAggregatedStatusTimelineRouteParam,
+) => {
   return ParamsSchema.validate(params);
 };

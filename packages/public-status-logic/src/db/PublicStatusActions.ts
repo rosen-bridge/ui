@@ -160,7 +160,21 @@ export class PublicStatusActions {
         );
       }
 
-      await Promise.all(promises);
+      try {
+        await Promise.all(promises);
+      } catch (e) {
+        if (
+          !(
+            e instanceof Error &&
+            [
+              'aggregated_status_not_changed',
+              'guard_status_not_changed',
+            ].includes(e.message)
+          )
+        ) {
+          throw e;
+        }
+      }
     });
   };
 

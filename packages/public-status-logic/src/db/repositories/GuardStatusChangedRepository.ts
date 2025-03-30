@@ -74,7 +74,7 @@ export const GuardStatusChangedRepository = dataSource
         tx?.chain === lastValue.tx?.chain &&
         tx?.txStatus === (lastValue.txStatus ?? undefined)
       ) {
-        return;
+        throw new Error('guard_status_not_changed');
       }
 
       await this.insert({

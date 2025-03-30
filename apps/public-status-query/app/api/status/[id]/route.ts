@@ -4,9 +4,9 @@ import {
 } from '@/_backend/actions';
 import { withValidation } from '@/api/withValidation';
 
-import { Params, validator } from './validator';
+import { GetAggregatedStatusTimelineRouteParam, validator } from './validator';
 
-async function handler(params: Params) {
+async function handler(params: GetAggregatedStatusTimelineRouteParam) {
   return (await PublicStatusActions.getAggregatedStatusTimeline(params.id)).map(
     aggregatedStatusChangedToDTO,
   );

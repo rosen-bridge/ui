@@ -62,7 +62,7 @@ export const AggregatedStatusChangedRepository = dataSource
         tx?.txId === lastValue.tx?.txId &&
         tx?.chain === lastValue.tx?.chain
       ) {
-        return;
+        throw new Error('aggregated_status_not_changed');
       }
 
       await this.insert({
