@@ -11,6 +11,7 @@ export type SnackbarAction =
       message: string;
       severity: Severity;
       position?: SnackbarPosition;
+      more?: () => string;
     }
   | { type: 'close' };
 
@@ -21,6 +22,7 @@ export type State = {
   message: string;
   severity: Severity | null;
   position: SnackbarPosition;
+  more?: () => string;
 };
 type SnackbarProviderProps = { children: React.ReactNode };
 
@@ -50,6 +52,7 @@ function snackbarReducer(state: State, action: SnackbarAction) {
         ...(action.position
           ? { position: action.position }
           : { position: defaultSnackbarPosition }),
+        more: action.more,
       };
     }
     case 'close': {
