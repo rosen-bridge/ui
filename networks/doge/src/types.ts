@@ -5,31 +5,37 @@ export interface Status {
   block_time?: number;
 }
 
-export interface EsploraUtxo {
-  txid: string;
-  vout: number;
-  status: Status;
-  value: number;
-}
-
 export interface DogeUtxo {
   txId: string;
   index: number;
   value: bigint;
 }
 
-export interface EsploraAddress {
+// BlockCypher types that match our needs
+export interface BlockCypherAddress {
   address: string;
-  chain_stats: Stats;
-  mempool_stats: Stats;
+  total_received: number;
+  total_sent: number;
+  balance: number;
+  unconfirmed_balance: number;
+  final_balance: number;
+  n_tx: number;
+  unconfirmed_n_tx: number;
+  final_n_tx: number;
+  txrefs: BlockCypherTxRef[];
 }
 
-export interface Stats {
-  funded_txo_count: number;
-  funded_txo_sum: number;
-  spent_txo_count: number;
-  spent_txo_sum: number;
-  tx_count: number;
+export interface BlockCypherTxRef {
+  tx_hash: string;
+  block_height: number;
+  tx_input_n: number;
+  tx_output_n: number;
+  value: number;
+  ref_balance: number;
+  spent: boolean;
+  confirmations: number;
+  confirmed: string;
+  double_spend: boolean;
 }
 
 // from @scure/btc-signer package

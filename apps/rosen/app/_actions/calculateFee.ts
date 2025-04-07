@@ -34,9 +34,10 @@ const GetHeight = {
   },
   [NETWORKS.doge.key]: async (): Promise<number> => {
     const response = await fetch(
-      `${process.env.DOGE_ESPLORA_API}${process.env.DOGE_ESPLORA_API_PREFIX}/blocks/tip/height`,
+      `${process.env.DOGE_BLOCKCYPHER_API}/v1/doge/main`,
     );
-    return response.json();
+    const data = await response.json();
+    return data.height;
   },
 } as const;
 
