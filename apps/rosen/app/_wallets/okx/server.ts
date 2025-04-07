@@ -1,28 +1,59 @@
 'use server';
 
 import {
-  generateOpReturnData as generateOpReturnDataCore,
-  generateUnsignedTx as generateUnsignedTxCore,
-  getAddressBalance as getAddressBalanceCore,
-  submitTransaction as submitTransactionCore,
+  generateOpReturnData as bitcoinGenerateOpReturnData,
+  generateUnsignedTx as bitcoinGenerateUnsignedTx,
+  getAddressBalance as bitcoinGetAddressBalance,
+  submitTransaction as bitcoinSubmitTransaction,
 } from '@rosen-network/bitcoin';
+import {
+  generateOpReturnData as dogeGenerateOpReturnData,
+  generateUnsignedTx as dogeGenerateUnsignedTx,
+  getAddressBalance as dogeGetAddressBalance,
+  submitTransaction as dogeSubmitTransaction,
+} from '@rosen-network/doge';
 
 import { wrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
-export const generateOpReturnData = wrap(generateOpReturnDataCore, {
-  traceKey: 'generateOpReturnData',
+// Bitcoin functions
+export const generateBitcoinOpReturnData = wrap(bitcoinGenerateOpReturnData, {
+  traceKey: 'generateBitcoinOpReturnData',
 });
 
-export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'generateUnsignedTx',
-});
+export const generateBitcoinUnsignedTx = wrap(
+  bitcoinGenerateUnsignedTx(getTokenMap),
+  {
+    traceKey: 'generateBitcoinUnsignedTx',
+  },
+);
 
-export const getAddressBalance = wrap(getAddressBalanceCore, {
+export const getBitcoinAddressBalance = wrap(bitcoinGetAddressBalance, {
   cache: 3000,
-  traceKey: 'getAddressBalance',
+  traceKey: 'getBitcoinAddressBalance',
 });
 
-export const submitTransaction = wrap(submitTransactionCore, {
-  traceKey: 'submitTransaction',
+export const submitBitcoinTransaction = wrap(bitcoinSubmitTransaction, {
+  traceKey: 'submitBitcoinTransaction',
+});
+
+// Dogecoin functions
+export const generateDogeOpReturnData = wrap(dogeGenerateOpReturnData, {
+  traceKey: 'generateDogeOpReturnData',
+});
+
+export const generateDogeUnsignedTx = wrap(
+  dogeGenerateUnsignedTx(getTokenMap),
+  {
+    traceKey: 'generateDogeUnsignedTx',
+  },
+);
+
+export const getDogeAddressBalance = wrap(dogeGetAddressBalance, {
+  cache: 3000,
+  traceKey: 'getDogeAddressBalance',
+});
+
+export const submitDogeTransaction = wrap(dogeSubmitTransaction, {
+  traceKey: 'submitDogeTransaction',
 });
