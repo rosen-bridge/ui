@@ -7,6 +7,8 @@ const Root = styled('div')(({ theme }) => ({
   background: theme.palette.background.paper,
   boxShadow: theme.shadows[8],
   overflow: 'hidden',
+  overflowY: 'auto',
+  maxHeight: '25rem',
 }));
 
 export type PopupProps = {

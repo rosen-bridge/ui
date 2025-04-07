@@ -66,7 +66,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
         `rosen:searchable-filter:${namespace}`,
       );
 
-      const json = JSON.parse(raw || '[]');
+      const json = trim(JSON.parse(raw || '[]'));
 
       setItems(json);
     }, [namespace]);
@@ -82,6 +82,18 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
       [namespace],
     );
 
+    const trim = (items: Item[]) => {
+      const booked = items.filter((item) => item.bookmark);
+
+      const unbooked = items
+        .filter((item) => !item.bookmark)
+        .reverse()
+        .slice(0, 10)
+        .reverse();
+
+      return [...booked, ...unbooked];
+    };
+
     const add = useCallback(
       (selected: Selected[]) => {
         if (!selected.length) return;
@@ -92,7 +104,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
         if (has) return;
 
-        const next = [...items, { bookmark: false, selected }];
+        const next = trim([...items, { bookmark: false, selected }]);
 
         setItems(next);
 
@@ -103,11 +115,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
     const book = useCallback(
       (item: Item) => {
-        const index = items.findIndex((current) => current === item);
+        const filtered = items.filter((current) => current != item);
 
-        items.splice(index, 1, { ...item, bookmark: true });
-
-        const next = [...items];
+        const next = trim([...filtered, { ...item, bookmark: true }]);
 
         setItems(next);
 
@@ -118,11 +128,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
     const remove = useCallback(
       (item: Item) => {
-        const index = items.findIndex((current) => current === item);
+        const filtered = items.filter((current) => current != item);
 
-        items.splice(index, 1, { ...item, bookmark: false });
-
-        const next = [...items];
+        const next = trim([...filtered, { ...item, bookmark: false }]);
 
         setItems(next);
 
