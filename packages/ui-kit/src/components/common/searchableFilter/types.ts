@@ -18,6 +18,9 @@ export type Input =
       options: SelectOption[];
     }
   | {
+      type: 'number';
+    }
+  | {
       type: 'select';
       options: SelectOption[];
     }

@@ -71,22 +71,32 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
       setItems(json);
     }, [namespace]);
 
-    const save = useCallback(() => {
-      const raw = JSON.stringify(items);
-      window.localStorage.setItem(`rosen:searchable-filter:${namespace}`, raw);
-    }, [items, namespace]);
+    const save = useCallback(
+      (items: Item[]) => {
+        const raw = JSON.stringify(items);
+        window.localStorage.setItem(
+          `rosen:searchable-filter:${namespace}`,
+          raw,
+        );
+      },
+      [namespace],
+    );
 
     const add = useCallback(
       (selected: Selected[]) => {
+        if (!selected.length) return;
+
         const key = getKey(selected);
 
         const has = items.some((item) => getKey(item.selected) == key);
 
         if (has) return;
 
-        setItems([...items, { bookmark: false, selected }]);
+        const next = [...items, { bookmark: false, selected }];
 
-        save();
+        setItems(next);
+
+        save(next);
       },
       [items, getKey, save],
     );
@@ -97,9 +107,11 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
         items.splice(index, 1, { ...item, bookmark: true });
 
-        setItems([...items]);
+        const next = [...items];
 
-        save();
+        setItems(next);
+
+        save(next);
       },
       [items, save],
     );
@@ -110,9 +122,11 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
 
         items.splice(index, 1, { ...item, bookmark: false });
 
-        setItems([...items]);
+        const next = [...items];
 
-        save();
+        setItems(next);
+
+        save(next);
       },
       [items, save],
     );

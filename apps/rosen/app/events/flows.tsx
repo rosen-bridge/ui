@@ -38,7 +38,7 @@ export const flows: Flow[] = [
     label: 'Height',
     operators: OPERATORS_COMPARATIVE,
     input: {
-      type: 'text',
+      type: 'number',
     },
   },
   // {

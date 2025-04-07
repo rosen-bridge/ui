@@ -32,6 +32,13 @@ export const aaaaa = (flows: Flow[], current: Partial<Selected>) => {
               .map((option) => option),
       };
     }
+    case 'number': {
+      return {
+        flow,
+        operator,
+        value: current.value as number,
+      };
+    }
     case 'select': {
       return {
         flow,
@@ -43,7 +50,7 @@ export const aaaaa = (flows: Flow[], current: Partial<Selected>) => {
       return {
         flow,
         operator,
-        value: current.value as string | number | boolean,
+        value: current.value as string,
       };
     }
   }

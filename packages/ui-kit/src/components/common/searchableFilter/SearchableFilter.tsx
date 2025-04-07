@@ -39,6 +39,7 @@ const Root = styled(Card)(({ theme }) => ({
     padding: theme.spacing(1),
     fontSize: '1rem',
     lineHeight: 1.5,
+    color: 'currentColor',
   },
 }));
 
@@ -63,7 +64,11 @@ export const SearchableFilter = ({
 
   const $history = useRef<HistoryRef>(null);
 
+  const $search = useRef<HTMLButtonElement>(null);
+
   const $last = useRef<Selected[]>([]);
+
+  const timeout = useRef<number>();
 
   const [selected, setSelected] = useState<Selected[]>([]);
 
@@ -142,7 +147,7 @@ export const SearchableFilter = ({
     });
   }, [flows, selectedValidatedWithCurrent]);
 
-  const pickerRaw = useMemo<Input | undefined>(() => {
+  const picker = useMemo<Input | undefined>(() => {
     switch (state) {
       case 'idle': {
         return;
@@ -187,31 +192,7 @@ export const SearchableFilter = ({
     }
   }, [current, flows, selectedValidated, state]);
 
-  const picker = useMemo<Input | undefined>(() => {
-    if (!query) return pickerRaw;
-
-    switch (pickerRaw?.type) {
-      case 'multiple':
-      case 'select': {
-        return {
-          ...pickerRaw,
-          options: pickerRaw.options.filter((option) => {
-            return option.value
-              ?.toString()
-              .toLowerCase()
-              .includes(query.toLowerCase());
-          }),
-        };
-      }
-      default: {
-        return pickerRaw;
-      }
-    }
-  }, [query, pickerRaw]);
-
   const change = useCallback(() => {
-    setQuery('');
-
     setCurrent({});
 
     const next = [...selectedValidated, current as Selected];
@@ -219,30 +200,30 @@ export const SearchableFilter = ({
     setSelected(next);
   }, [current, selectedValidated]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
-  };
+  }, []);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
+    if (Array.isArray(current?.value) && current?.value.length) {
+      change();
+    }
     setCurrent(undefined);
+  }, [current, change]);
 
-    if (!Array.isArray(current?.value)) return;
+  const handleBlur = useCallback(() => {
+    clearTimeout(timeout.current);
+    timeout.current = window.setTimeout(handleClose, 250);
+  }, [handleClose]);
 
-    if (!current?.value.length) return;
-
-    change();
-  };
-
-  const handleFocus = () => {
+  const handleFocus = useCallback(() => {
     setCurrent({});
-  };
+  }, []);
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
       case 'Enter': {
-        if (picker?.type === 'text') {
-          setCurrent({ ...current, value: query });
-        } else if (!query) {
+        if (state == 'flow' && !query) {
           handleSearch();
         }
         break;
@@ -297,6 +278,8 @@ export const SearchableFilter = ({
 
   const handleSelect = useCallback(
     (value: Selected['value']) => {
+      clearTimeout(timeout.current);
+
       if (state == 'idle') return;
 
       $anchor.current?.focus({ preventScroll: true });
@@ -306,12 +289,14 @@ export const SearchableFilter = ({
     [current, state],
   );
 
-  const handleSearch = () => {
+  const handleSearch = useCallback(() => {
     if ($last.current == selected) return;
+
+    if (!$last.current.length && !selected.length) return;
 
     $last.current = selected;
 
-    $anchor.current?.blur();
+    $search.current?.focus({ preventScroll: true });
 
     setCurrent(undefined);
 
@@ -332,21 +317,19 @@ export const SearchableFilter = ({
       .join('&');
 
     onChange({ query, selected });
-  };
+  }, [flows, selected, onChange]);
+
+  useEffect(() => {
+    setQuery('');
+  }, [current]);
 
   useEffect(() => {
     if (state != 'complete') return;
 
-    if (pickerRaw?.type == 'multiple') return;
+    if (picker?.type == 'multiple') return;
 
     change();
-  }, [current, pickerRaw, selectedValidated, state, change]);
-
-  useEffect(() => {
-    if (pickerRaw?.type == 'select' && pickerRaw?.options.length == 1) {
-      handleSelect(pickerRaw.options.at(0)!.value);
-    }
-  }, [pickerRaw, handleSelect]);
+  }, [picker, state, change]);
 
   return (
     <>
@@ -371,12 +354,14 @@ export const SearchableFilter = ({
                     ? ''
                     : 'Search or filter results…'
                 }
+                onBlur={handleBlur}
                 onChange={handleChange}
                 onFocus={handleFocus}
                 onKeyDown={handleKeyDown}
               />
               <Picker
                 anchorEl={$anchor.current}
+                query={query}
                 open={!!picker}
                 value={picker}
                 onSelect={handleSelect}
@@ -384,7 +369,7 @@ export const SearchableFilter = ({
             </Container>
           </ClickAwayListener>
         </VirtualScroll>
-        <IconButton onClick={handleSearch}>
+        <IconButton ref={$search} onClick={handleSearch}>
           <SvgIcon>
             <Search />
           </SvgIcon>
