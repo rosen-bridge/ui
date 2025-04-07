@@ -1,5 +1,52 @@
 # @rosen-bridge/guard-app
 
+## 1.12.1
+
+### Patch Changes
+
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Implement a Version component to display detailed version information for the application.
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.9.2
+  - @rosen-bridge/icons@1.2.0
+
+## 1.12.0
+
+### Minor Changes
+
+- Integrate support for the 'Request An Order' form into the app
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Enhance token display in the dashboard with a carousel component
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/utils@0.4.5
+  - @rosen-bridge/ui-kit@1.9.0
+
+## 1.11.0
+
+### Minor Changes
+
+- Add the Binance Tokens card to the dashboard
+
+### Patch Changes
+
+- Updated @rosen-bridge/ui-kit@1.8.1 dependency
+
+## 1.10.1
+
+### Patch Changes
+
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
 ## 1.10.0
 
 ### Minor Changes

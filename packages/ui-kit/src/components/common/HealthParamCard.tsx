@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
 import {
-  Alert as AlertIcon,
+  ExclamationTriangle,
   ShieldCheck,
   ShieldExclamation,
   ShieldQuestion,
@@ -94,7 +94,7 @@ export const HealthParamCard = ({
             {lastTrialErrorTime && (
               <Tooltip title={lastTrialErrorMessage}>
                 <SvgIcon color="warning">
-                  <AlertIcon />
+                  <ExclamationTriangle />
                 </SvgIcon>
               </Tooltip>
             )}
@@ -144,7 +144,7 @@ export const HealthParamCard = ({
             bgcolor: colors.alertBackground,
             color: colors.alert,
             mt: 2,
-            wordBreak: 'break-all',
+            wordBreak: 'break-word',
           }}
         >
           {details}

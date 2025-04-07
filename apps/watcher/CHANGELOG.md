@@ -1,5 +1,54 @@
 # @rosen-bridge/watcher-app
 
+## 3.3.0
+
+### Minor Changes
+
+- Implement a themeable favicon, and automatically load the chain icon from the dedicated icon package
+
+### Patch Changes
+
+- Update the content of the Caution section on the Withdraw page
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Implement a Version component to display detailed version information for the application.
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.9.2
+  - @rosen-bridge/icons@1.2.0
+
+## 3.2.1
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/swr-mock@0.0.4
+  - @rosen-ui/utils@0.4.5
+  - @rosen-bridge/ui-kit@1.9.0
+
+## 3.2.0
+
+### Minor Changes
+
+- Add the Binance icon
+
+### Patch Changes
+
+- Correct the display of zero RSN tokens in the dashboard
+
+## 3.1.4
+
+### Patch Changes
+
+- Update the RSN box in main page to fix how RSN and eRSN are displayed
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.8.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
 ## 3.1.3
 
 ### Patch Changes

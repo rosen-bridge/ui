@@ -1,4 +1,4 @@
-import { LaceIcon } from '@rosen-bridge/icons';
+import { Lace as LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
@@ -7,6 +7,7 @@ import {
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
+  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -24,6 +25,8 @@ export class LaceWallet implements Wallet {
 
   link = 'https://www.lace.io/';
 
+  supportedChains = [NETWORKS.cardano.key];
+
   private get api() {
     return window.cardano.lace;
   }
@@ -31,6 +34,7 @@ export class LaceWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
@@ -38,7 +42,10 @@ export class LaceWallet implements Wallet {
     }
   }
 
+  async disconnect(): Promise<void> {}
+
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     try {
       const wallet = await this.api.enable();
       return await wallet.getChangeAddress();
@@ -48,6 +55,8 @@ export class LaceWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
@@ -56,8 +65,9 @@ export class LaceWallet implements Wallet {
 
     const amount = balances.find(
       (asset) =>
-        asset.policyId === token.policyId &&
-        (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
+        asset.policyId === token.extra.policyId &&
+        (asset.nameHex === hexToCbor(token.extra.assetName as string) ||
+          !token.extra.policyId),
     );
 
     if (!amount) return 0n;
@@ -65,9 +75,9 @@ export class LaceWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.CARDANO)],
+      token.tokenId,
       amount.quantity,
-      NETWORKS.CARDANO,
+      NETWORKS.cardano.key,
     ).amount;
 
     return wrappedAmount;
@@ -77,11 +87,17 @@ export class LaceWallet implements Wallet {
     return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
   }
 
+  requireAvailable() {
+    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
+  }
+
   async isConnected(): Promise<boolean> {
+    this.requireAvailable();
     return await this.api.isEnabled();
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();
@@ -102,8 +118,8 @@ export class LaceWallet implements Wallet {
       walletUtxos,
       params.lockAddress,
       changeAddressHex,
-      params.token.policyId,
-      params.token.assetName,
+      params.token.extra.policyId as string,
+      params.token.extra.assetName as string,
       params.amount,
       auxiliaryDataHex,
     );

@@ -7,7 +7,7 @@ import { Network } from '@rosen-ui/types';
 import AbstractCalculator from '../abstract-calculator';
 
 export class CardanoCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.CARDANO;
+  readonly chain: Network = NETWORKS.cardano.key;
 
   private koiosApi;
 
@@ -28,16 +28,18 @@ export class CardanoCalculator extends AbstractCalculator {
    */
   totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
     const assetSummary = await this.koiosApi.postAssetInfo({
-      _asset_list: [[token.policyId, token.assetName]],
+      _asset_list: [
+        [token.extra.policyId as string, token.extra.assetName as string],
+      ],
     });
     if (assetSummary.length && assetSummary[0].total_supply) {
       this.logger.debug(
-        `Total supply of token [${token.policyId}.${token.assetName}] is [${assetSummary[0].total_supply}]`,
+        `Total supply of token [${token.extra.policyId}.${token.extra.assetName}] is [${assetSummary[0].total_supply}]`,
       );
       return BigInt(assetSummary[0].total_supply);
     }
     throw Error(
-      `Total supply of token [${token.policyId}.${token.assetName}] is not calculable`,
+      `Total supply of token [${token.extra.policyId}.${token.extra.assetName}] is not calculable`,
     );
   };
 
@@ -52,13 +54,13 @@ export class CardanoCalculator extends AbstractCalculator {
     const tokenBalance = assets
       .filter(
         (asset) =>
-          asset.policy_id == token.policyId &&
-          asset.asset_name == token.assetName &&
+          asset.policy_id == token.extra.policyId &&
+          asset.asset_name == token.extra.assetName &&
           asset.quantity,
       )
       .reduce((sum, asset) => BigInt(asset.quantity!) + sum, 0n);
     this.logger.debug(
-      `Total balance of token [${token.policyId}.${token.assetName}] is [${tokenBalance}]`,
+      `Total balance of token [${token.extra.policyId}.${token.extra.assetName}] is [${tokenBalance}]`,
     );
     return tokenBalance;
   };
@@ -68,7 +70,7 @@ export class CardanoCalculator extends AbstractCalculator {
    * @param token
    */
   getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
-    if (token.metaData.type === NATIVE_TOKEN) {
+    if (token.type === NATIVE_TOKEN) {
       const addressesInfo = await this.koiosApi.postAddressInfo({
         _addresses: this.addresses,
       });
@@ -87,8 +89,8 @@ export class CardanoCalculator extends AbstractCalculator {
     return assets
       .filter(
         (asset) =>
-          asset.policy_id == token.policyId &&
-          asset.asset_name == token.assetName &&
+          asset.policy_id == token.extra.policyId &&
+          asset.asset_name == token.extra.assetName &&
           asset.quantity &&
           asset.address,
       )

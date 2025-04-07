@@ -18,7 +18,7 @@ interface PartialEsploraAddress {
 }
 
 export class BitcoinCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.BITCOIN;
+  readonly chain: Network = NETWORKS.bitcoin.key;
 
   protected client: AxiosInstance;
 
@@ -53,7 +53,7 @@ export class BitcoinCalculator extends AbstractCalculator {
    * @param token
    */
   getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
-    if (token.metaData.type === NATIVE_TOKEN) {
+    if (token.type === NATIVE_TOKEN) {
       const balances = await Promise.all(
         this.addresses.map(async (address) => {
           const response = await this.client.get<PartialEsploraAddress>(

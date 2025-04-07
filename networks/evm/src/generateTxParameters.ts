@@ -7,11 +7,11 @@ import { transferABI } from './constants';
 
 /**
  * generates ethereum lock tx
- * @param tokenMap
+ * @param getTokenMap
  * @returns
  */
 export const generateTxParameters =
-  (tokenMap: TokenMap) =>
+  (getTokenMap: () => Promise<TokenMap>) =>
   async (
     tokenId: string,
     lockAddress: string,
@@ -20,14 +20,16 @@ export const generateTxParameters =
     rosenData: string,
     token: RosenChainToken,
   ) => {
+    const tokenMap = await getTokenMap();
+
     const unwrappedAmount = tokenMap.unwrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.ETHEREUM)],
+      token.tokenId,
       wrappedAmount,
-      NETWORKS.ETHEREUM,
+      NETWORKS.ethereum.key,
     ).amount;
 
     let transactionParameters;
-    if (token.metaData.type === 'native') {
+    if (token.type === 'native') {
       transactionParameters = {
         to: lockAddress,
         from: fromAddress,

@@ -12,8 +12,6 @@ import {
 import { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { getMaxTransfer } from '@/_utils';
-
 import { useBalance } from './useBalance';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -90,18 +88,15 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
 
     startTransition(async () => {
       try {
-        const amount = await getMaxTransfer(
-          selectedSource,
-          {
-            balance: balanceAmount,
-            isNative: tokenValue.metaData.type === 'native',
-          },
-          async () => ({
+        const amount = await selectedSource.getMaxTransfer({
+          balance: balanceAmount,
+          isNative: tokenValue.type === 'native',
+          eventData: {
             fromAddress: await selectedWallet.getAddress(),
             toAddress: walletAddressValue,
             toChain: targetValue,
-          }),
-        );
+          },
+        });
 
         setAmount(amount);
       } catch (error) {

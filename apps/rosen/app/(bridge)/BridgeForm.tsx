@@ -2,7 +2,7 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { Paste } from '@rosen-bridge/icons';
+import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -40,7 +40,7 @@ const SelectedAsset = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(1),
   alignItems: 'center',
-  margin: theme.spacing(0.5),
+  marginBottom: '-1px',
 }));
 
 /**
@@ -160,13 +160,14 @@ export const BridgeForm = () => {
     setValue('amount', raw, {
       shouldDirty: true,
       shouldTouch: true,
+      shouldValidate: true,
     });
   }, [raw, setValue]);
 
   return (
     <FormContainer>
       <Grid container spacing={2}>
-        <Grid item mobile={6} tablet={12} laptop={6}>
+        <Grid item mobile={6} tablet={6} laptop={6}>
           <TextField
             id="source"
             select
@@ -192,7 +193,7 @@ export const BridgeForm = () => {
             ))}
           </TextField>
         </Grid>
-        <Grid item mobile={6} tablet={12} laptop={6}>
+        <Grid item mobile={6} tablet={6} laptop={6}>
           <TextField
             id="target"
             select
@@ -240,13 +241,19 @@ export const BridgeForm = () => {
                     try {
                       const clipboardText =
                         await navigator.clipboard.readText();
-                      addressField.onChange(clipboardText);
+                      setValue('walletAddress', clipboardText, {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                        shouldValidate: true,
+                      });
                     } catch (err) {
                       console.error('Failed to read clipboard: ', err);
                     }
                   }}
                 >
-                  <Paste />
+                  <SvgIcon sx={{ opacity: '0.6' }}>
+                    <ClipboardNotes />
+                  </SvgIcon>
                 </IconButton>
               </InputAdornment>
             ),
@@ -266,7 +273,7 @@ export const BridgeForm = () => {
         {...addressField}
         value={addressField.value ?? ''}
       />
-      {targetField.value == NETWORKS.BITCOIN && (
+      {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>

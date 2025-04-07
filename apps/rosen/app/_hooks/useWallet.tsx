@@ -4,11 +4,15 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from 'react';
 
 import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Wallet } from '@rosen-ui/wallet-api';
+
+import { wallets } from '@/_wallets';
 
 import { useNetwork } from './useNetwork';
 
@@ -30,6 +34,7 @@ export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
   selected?: Wallet;
   wallets: Wallet[];
+  disconnect: () => void;
 };
 
 export const WalletContext = createContext<WalletContextType | null>(null);
@@ -40,6 +45,13 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
   const { openSnackbar } = useSnackbar();
 
   const [selected, setSelected] = useState<Wallet>();
+
+  const filtered = useMemo(() => {
+    if (!selectedSource) return [];
+    return Object.values<Wallet>(wallets).filter((wallet) => {
+      return wallet.supportedChains.includes(selectedSource.name);
+    });
+  }, [selectedSource]);
 
   const select = useCallback(
     async (wallet: Wallet) => {
@@ -61,6 +73,15 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     [selectedSource, openSnackbar, setSelected],
   );
 
+  const disconnect = useCallback(() => {
+    if (!selected) return;
+
+    selected.disconnect();
+
+    localStorage.removeItem('rosen:wallet:' + selected.name);
+    setSelected(undefined);
+  }, [selected]);
+
   useEffect(() => {
     (async () => {
       setSelected(undefined);
@@ -69,11 +90,11 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
 
-      const wallet = selectedSource.wallets.find(
-        (wallet) => wallet.name === name && wallet.isAvailable(),
-      );
+      if (!name) return;
 
-      if (!wallet) return;
+      const wallet = wallets[name as keyof typeof wallets] as Wallet;
+
+      if (!wallet || !wallet.isAvailable()) return;
 
       if ((await wallet.isConnected?.()) === false) return;
 
@@ -90,10 +111,38 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     })();
   }, [selectedSource, setSelected]);
 
+  /**
+   * TODO: update or move this logic
+   * local:ergo/rosen-bridge/ui#577
+   */
+  useEffect(() => {
+    if (!selected) return;
+
+    if (!selectedSource) return;
+
+    if (selectedSource.name !== NETWORKS.bitcoin.key) return;
+
+    const start = async () => {
+      const address = await selected.getAddress();
+
+      const isValid = address.toLowerCase().startsWith('bc1q');
+
+      if (isValid) return;
+
+      openSnackbar(
+        'The source address of the selected wallet is not native SegWit (P2WPKH or P2WSH).',
+        'error',
+      );
+    };
+
+    start();
+  }, [selected, selectedSource]);
+
   const state = {
     select,
     selected,
-    wallets: selectedSource?.wallets || [],
+    wallets: filtered,
+    disconnect,
   };
 
   return (

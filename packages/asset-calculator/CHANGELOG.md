@@ -1,5 +1,29 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.3
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+
+## 2.1.2
+
+### Patch Changes
+
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/types@0.3.4
+
+## 2.1.1
+
+### Patch Changes
+
+- Improve base calculator logs
+- Updated dependencies
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/types@0.3.3
+
 ## 2.1.0
 
 ### Minor Changes

@@ -5,7 +5,7 @@ import WinstonLogger from '@rosen-bridge/winston-logger';
 import config from '../../configs';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
-import { getRosenTokens } from '../../utils';
+import { getTokenMap } from '../../utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
@@ -13,16 +13,16 @@ const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerErgoExtractor = (scanner: ErgoScanner) => {
+export const registerErgoExtractor = async (scanner: ErgoScanner) => {
   try {
     const observationExtractor = new ErgoObservationExtractor(
       dataSource,
-      getRosenTokens(),
+      await getTokenMap(),
       config.ergo.addresses.lock,
       logger,
     );
 
-    scanner.registerExtractor(observationExtractor);
+    await scanner.registerExtractor(observationExtractor);
 
     logger.debug('ergo observation extractor registered', {
       scannerName: scanner.name(),

@@ -19,12 +19,14 @@ export const useSnackbar = () => {
     message: string,
     severity: Severity,
     position?: SnackbarPosition,
+    more?: () => string,
   ) => {
     context.dispatch({
       type: 'open',
       message,
       severity,
       position,
+      more,
     });
   };
 

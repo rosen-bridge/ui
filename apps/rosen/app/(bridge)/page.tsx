@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { Alert, styled } from '@rosen-bridge/ui-kit';
+import { Alert, Box, styled } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -46,11 +46,12 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'width': '100%',
     'padding': theme.spacing(4),
     'display': 'grid',
-    'gridTemplateColumns': '1fr 1fr',
-    'gridTemplateRows': '1fr auto auto',
+    'gridTemplateColumns': '1fr',
+    'gridTemplateRows': 'auto auto auto',
+    'alignItems': 'center',
+    'justifyContent': 'flex-start',
     '& > button': {
-      width: '50%',
-      justifySelf: 'flex-end',
+      justifySelf: 'center',
     },
   },
   [theme.breakpoints.up('laptop')]: {
@@ -102,24 +103,54 @@ const RosenBridge = () => {
                     TODO: Add a condition that activates this alert specifically when MetaMask is selected
                     local:ergo/rosen-bridge/ui#486
                     */}
-                    {(methods.getValues().source == NETWORKS.BINANCE ||
-                      methods.getValues().source == NETWORKS.ETHEREUM) && (
-                      <Alert
-                        severity="warning"
-                        sx={{ gridColumn: '1 / span 2', textAlign: 'justify' }}
+
+                    <Box
+                      sx={{
+                        gridColumn: '1 / -1',
+                        width: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 3,
+                      }}
+                    >
+                      {(methods.getValues().source == NETWORKS.binance.key ||
+                        methods.getValues().source ==
+                          NETWORKS.ethereum.key) && (
+                        <Alert
+                          severity="warning"
+                          sx={{
+                            textAlign: 'justify',
+                          }}
+                        >
+                          If you are using Ledger, you may need to enable
+                          &apos;Blind signing&apos; and &apos;Debug data&apos;
+                          in the Ledger (Ethereum &gt; Settings) due to{' '}
+                          <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
+                            a known issue in Ledger and MetaMask interaction
+                          </a>
+                          .
+                        </Alert>
+                      )}
+                      <Box
+                        sx={(theme) => ({
+                          [theme.breakpoints.up('laptop')]: {
+                            width: '33%',
+                            marginRight: theme.spacing(4),
+                          },
+                          [theme.breakpoints.up('tablet')]: {
+                            width: '48%',
+                          },
+                          [theme.breakpoints.up('mobile')]: {
+                            width: '100%',
+                          },
+                        })}
                       >
-                        If you are using Ledger, you may need to enable
-                        &apos;Blind signing&apos; and &apos;Debug data&apos; in
-                        the Ledger (Ethereum &gt; Settings) due to{' '}
-                        <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
-                          a known issue in Ledger and MetaMask interaction
-                        </a>
-                        .
-                      </Alert>
-                    )}
-                    <ConnectOrSubmitButton
-                      setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-                    />
+                        <ConnectOrSubmitButton
+                          setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+                        />
+                      </Box>
+                    </Box>
                   </BridgeContainer>
                 </TransactionFeesProvider>
               </MaxTransferProvider>

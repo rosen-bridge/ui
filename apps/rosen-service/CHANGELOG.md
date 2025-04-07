@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-service
 
+## 3.0.1
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+- Correct the usage of the token map in the Rosen service
+- Updated @rosen-ui/asset-calculator@2.1.3 dependency
+
 ## 3.0.0
 
 ### Major Changes

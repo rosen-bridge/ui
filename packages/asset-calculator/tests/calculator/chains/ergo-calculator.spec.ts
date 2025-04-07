@@ -4,7 +4,7 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { ErgoCalculator } from '../../../lib/calculator/chains/ergo-calculator';
-import { tokenMap } from '../../test-data';
+import { tokenMapData } from '../../test-data';
 
 vitest.mock('@rosen-clients/ergo-explorer');
 
@@ -35,8 +35,10 @@ describe('ErgoCalculator', () => {
      * - The token balance should be calculated 2400 since it checks two addresses with 1200 balance each
      */
     it('should calculate the token balance using explorer api', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       const ergoCalculator = new ErgoCalculator(
-        new TokenMap(tokenMap),
+        tokenMap,
         ['hotAddress', 'coldAddress'],
         'explorerUrl',
       );
@@ -73,8 +75,12 @@ describe('ErgoCalculator', () => {
         },
       } as any);
 
+      const tokenMap = new TokenMap();
+
+      await tokenMap.updateConfigByJson(tokenMapData);
+
       const ergoCalculator = new ErgoCalculator(
-        new TokenMap(tokenMap),
+        tokenMap,
         ['hotAddress', 'coldAddress'],
         'explorerUrl',
       );
@@ -117,8 +123,10 @@ describe('ErgoCalculator', () => {
      * - The token balance should be calculated 20000
      */
     it('should calculate the token balance using explorer api', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
       const ergoCalculator = new ErgoCalculator(
-        new TokenMap(tokenMap),
+        tokenMap,
         ['hotAddress', 'coldAddress'],
         'explorerUrl',
       );

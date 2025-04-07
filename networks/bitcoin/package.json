@@ -1,10 +1,10 @@
 {
   "name": "@rosen-network/bitcoin",
-  "version": "2.0.1",
+  "version": "2.1.2",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -14,9 +14,10 @@
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.4.0",
+    "@rosen-bridge/address-codec": "^0.5.1",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.2.0",
-    "@rosen-ui/constants": "^0.0.5",
+    "@rosen-bridge/tokens": "^3.0.0",
+    "@rosen-ui/constants": "^0.2.0",
     "axios": "^1.7.2",
     "bitcoinjs-lib": "^6.1.6"
   },

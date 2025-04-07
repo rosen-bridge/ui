@@ -1,5 +1,37 @@
 # @rosen-ui/wallet-api
 
+## 1.3.0
+
+### Minor Changes
+
+- Define an error named `ConnectionTimeoutError` to handle connection timeouts for wallet extensions
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+
+## 1.2.1
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Implement proper error to manage rejection cases during the disconnection process.
+- Updated dependencies
+  - @rosen-ui/types@0.3.4
+  - @rosen-ui/utils@0.4.5
+
+## 1.2.0
+
+### Minor Changes
+
+- Add a supportedChains feature to display which chains/networks are supported by the wallet
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/types@0.3.3
+  - @rosen-ui/utils@0.4.4
+
 ## 1.1.0
 
 ### Minor Changes

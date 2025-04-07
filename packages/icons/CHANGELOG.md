@@ -1,5 +1,27 @@
 # @rosen-bridge/icons
 
+## 1.2.0
+
+### Minor Changes
+
+- Add raw string icons and enable automatic gathering of icon files
+
+### Patch Changes
+
+- Implement a new Icon as 'LinkBroken' for disconnecting wallets
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Resolve the issue with generating the automatic icons index.ts file on Windows
+
+## 1.1.0
+
+### Minor Changes
+
+- Add the `file-edit-alt`, `receipt-alt`, `angle-left`, and `angle-right` icons
+
+### Patch Changes
+
+- Discontinue support for the Nami extension wallet
+
 ## 1.0.0
 
 ### Major Changes

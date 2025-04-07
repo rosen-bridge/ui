@@ -2,13 +2,14 @@ import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
+  Amount,
   Button,
   EnhancedTableCell,
   TableRow,
   Id,
   Connector,
 } from '@rosen-bridge/ui-kit';
-import { NETWORK_LABELS_WITH_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 import moment from 'moment';
 
@@ -88,6 +89,7 @@ export const tabletHeader = [
     cellProps: {
       width: 150,
       align: 'center' as const,
+      style: { whiteSpace: 'nowrap' as const },
     },
   },
   {
@@ -95,6 +97,7 @@ export const tabletHeader = [
     cellProps: {
       width: 150,
       align: 'center' as const,
+      style: { whiteSpace: 'nowrap' as const },
     },
   },
   {
@@ -155,8 +158,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Chain</EnhancedTableCell>
             <EnhancedTableCell>
               <Connector
-                start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-                end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+                start={NETWORKS[row.fromChain].label}
+                end={NETWORKS[row.toChain].label}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -180,28 +183,34 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.amount.toString(),
-                row.lockToken.significantDecimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.amount.toString(),
+                  row.lockToken.significantDecimals,
+                )}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.bridgeFee.toString(),
-                row.lockToken.significantDecimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.bridgeFee.toString(),
+                  row.lockToken.significantDecimals,
+                )}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.networkFee.toString(),
-                row.lockToken.significantDecimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.networkFee.toString(),
+                  row.lockToken.significantDecimals,
+                )}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -251,8 +260,8 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
-          start={NETWORK_LABELS_WITH_KEY[row.fromChain]}
-          end={NETWORK_LABELS_WITH_KEY[row.toChain]}
+          start={NETWORKS[row.fromChain].label}
+          end={NETWORKS[row.toChain].label}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
@@ -264,22 +273,28 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(
-          row.amount.toString(),
-          row.lockToken.significantDecimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.amount.toString(),
+            row.lockToken.significantDecimals,
+          )}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(
-          row.bridgeFee.toString(),
-          row.lockToken.significantDecimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.bridgeFee.toString(),
+            row.lockToken.significantDecimals,
+          )}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        {getDecimalString(
-          row.networkFee.toString(),
-          row.lockToken.significantDecimals,
-        )}
+        <Amount
+          value={getDecimalString(
+            row.networkFee.toString(),
+            row.lockToken.significantDecimals,
+          )}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         {moment(row.timestamp * 1000).fromNow()}

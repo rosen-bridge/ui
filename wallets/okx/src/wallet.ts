@@ -1,9 +1,11 @@
-import { OKXIcon } from '@rosen-bridge/icons';
+import { Okx as OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
+  DisconnectionFailedError,
   AddressRetrievalError,
   ConnectionRejectedError,
+  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
@@ -20,6 +22,8 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
+  supportedChains = [NETWORKS.bitcoin.key];
+
   private get api() {
     return window.okxwallet.bitcoin;
   }
@@ -27,6 +31,7 @@ export class OKXWallet implements Wallet {
   constructor(private config: WalletConfig) {}
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
@@ -34,7 +39,17 @@ export class OKXWallet implements Wallet {
     }
   }
 
+  async disconnect(): Promise<void> {
+    this.requireAvailable();
+    try {
+      await this.api.disconnect();
+    } catch (error) {
+      throw new DisconnectionFailedError(this.name, error);
+    }
+  }
+
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     const accounts = await this.api.getAccounts();
 
     const account = accounts?.at(0);
@@ -45,6 +60,7 @@ export class OKXWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
+    this.requireAvailable();
     const amount = await this.api.getBalance();
 
     if (!amount.confirmed) return 0n;
@@ -52,9 +68,9 @@ export class OKXWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.BITCOIN)],
+      token.tokenId,
       BigInt(amount.confirmed),
-      NETWORKS.BITCOIN,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     return wrappedAmount;
@@ -66,11 +82,16 @@ export class OKXWallet implements Wallet {
     );
   }
 
+  requireAvailable() {
+    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
+  }
+
   async isConnected(): Promise<boolean> {
     return !!window.okxwallet.selectedAddress;
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
     const userAddress = await this.getAddress();
 
     const opReturnData = await this.config.generateOpReturnData(

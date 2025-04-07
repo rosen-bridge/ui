@@ -1,5 +1,47 @@
 # @rosen-ui/metamask-wallet
 
+## 1.3.1
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+- Updated dependencies
+  - @rosen-bridge/icons@1.2.0
+  - @rosen-ui/wallet-api@1.3.0
+  - @rosen-network/evm@0.2.2
+
+## 1.3.0
+
+### Minor Changes
+
+- Implement a new method to handle wallet disconnections.
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-network/evm@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/wallet-api@1.2.1
+  - @rosen-ui/types@0.3.4
+
+## 1.2.0
+
+### Minor Changes
+
+- Add a supportedChains feature to display which chains/networks are supported by the wallet
+
+### Patch Changes
+
+- Revise the utilization of the networks Id
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.2.0
+  - @rosen-ui/constants@0.1.0
+  - @rosen-network/evm@0.2.0
+  - @rosen-ui/types@0.3.3
+
 ## 1.1.0
 
 ### Minor Changes

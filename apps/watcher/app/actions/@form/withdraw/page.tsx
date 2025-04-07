@@ -8,7 +8,6 @@ import {
   useForm,
 } from 'react-hook-form';
 
-import { Alert } from '@rosen-bridge/icons';
 import {
   AlertCard,
   AlertProps,
@@ -19,12 +18,10 @@ import {
   InputAdornment,
   MenuItem,
   SubmitButton,
-  Typography,
   TextField,
-  Button,
   useApiKey,
+  ApiKeyModalWarning,
 } from '@rosen-bridge/ui-kit';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
 import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { getNonDecimalString } from '@rosen-ui/utils';
@@ -234,28 +231,7 @@ const WithdrawForm = () => {
           </Grid>
         </Grid>
 
-        {!apiKey && (
-          <Grid
-            container
-            alignItems="center"
-            gap={1}
-            sx={(theme) => ({ color: theme.palette.warning.main })}
-          >
-            <Grid item>
-              <Alert />
-            </Grid>
-
-            <Grid item>
-              <Typography>You need to set an Api Key before sending</Typography>
-            </Grid>
-
-            <Grid item>
-              <ApiKeyModal>
-                {(open) => <Button onClick={open}>Click To Set</Button>}
-              </ApiKeyModal>
-            </Grid>
-          </Grid>
-        )}
+        <ApiKeyModalWarning />
 
         <SubmitButton disabled={disabled} loading={isWithdrawPending}>
           Withdraw

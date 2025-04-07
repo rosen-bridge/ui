@@ -6,8 +6,6 @@ import {
   getAllAssets as repositoryGetAllAssets,
 } from './repository';
 
-const tokenMap = getTokenMap();
-
 /**
  * return asset details
  * @param offset
@@ -40,6 +38,8 @@ export const getAllAssets = async (
   limit: number,
   filters: AssetFilters = {},
 ) => {
+  const tokenMap = await getTokenMap();
+
   const assets = await repositoryGetAllAssets(offset, limit, filters);
 
   return {

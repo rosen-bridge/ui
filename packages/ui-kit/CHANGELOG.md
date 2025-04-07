@@ -1,5 +1,56 @@
 # @rosen-bridge/ui-kit
 
+## 1.9.2
+
+### Patch Changes
+
+- Update the UI of the version section to properly display all information and ensure it is fully responsive
+- Fixes the height of inputs
+- Ensure that icons are consistent in terms of name, color, size, and other attributes
+- Updated @rosen-bridge/icons@1.2.0 dependency
+
+## 1.9.1
+
+### Patch Changes
+
+- Resolve the issue with the page title in dark theme mode
+
+## 1.9.0
+
+### Minor Changes
+
+- Add a component named ApiKeyModalWarning to handle reusable API key modal warning errors across all applications where it is used.
+- Implement a lightweight carousel using the `embla-carousel-react` library
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-bridge/icons@1.1.0
+  - @rosen-ui/swr-helpers@0.2.1
+  - @rosen-ui/constants@0.2.0
+  - @rosen-ui/utils@0.4.5
+
+## 1.8.1
+
+### Patch Changes
+
+- Fixes dark palette and background color of brdige transaction card
+
+## 1.8.0
+
+### Minor Changes
+
+- Refine the definition of the ApiKey's hook and provider to eliminate reliance on external package
+
+### Patch Changes
+
+- Uninstall `@rosen-ui/common-hooks` to reduce dependencies
+- Move common theme options into ui kit
+- Ensure words do not break inconsistently across different screen sizes in Health tab.
+- Updated dependencies
+  - @rosen-ui/constants@0.1.0
+  - @rosen-ui/utils@0.4.4
+
 ## 1.7.2
 
 ### Patch Changes

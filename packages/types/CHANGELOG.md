@@ -1,5 +1,19 @@
 # @rosen-ui/types
 
+## 0.3.4
+
+### Patch Changes
+
+- Standardize tsconfig.json file and eliminate the src directory from the output path
+- Update the usage of network constants to enhance maintainability
+- Updated @rosen-ui/constants@0.2.0 dependency
+
+## 0.3.3
+
+### Patch Changes
+
+- Updated @rosen-ui/constants@0.1.0 dependency
+
 ## 0.3.2
 
 ### Patch Changes

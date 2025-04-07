@@ -5,9 +5,9 @@ import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import { validateAddress } from '@/_actions';
-import { availableNetworks } from '@/_networks';
+import { networks } from '@/_networks';
 import { unwrap } from '@/_safeServerAction';
-import { getMaxTransfer, getMinTransfer } from '@/_utils';
+import { getMinTransfer } from '@/_utils';
 
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
@@ -70,23 +70,19 @@ export const useBridgeForm = () => {
         if (walletGlobalContext?.selected) {
           // prevent user from entering more than token amount
 
-          const selectedNetwork =
-            availableNetworks[sourceField.value as Network];
+          const selectedNetwork = networks[sourceField.value as Network];
 
-          const maxTransfer = await getMaxTransfer(
-            selectedNetwork,
-            {
-              balance: await walletGlobalContext!.selected.getBalance(
-                tokenField.value,
-              ),
-              isNative: tokenField.value.metaData.type === 'native',
-            },
-            async () => ({
+          const maxTransfer = await selectedNetwork.getMaxTransfer({
+            balance: await walletGlobalContext!.selected.getBalance(
+              tokenField.value,
+            ),
+            isNative: tokenField.value.type === 'native',
+            eventData: {
               fromAddress: await walletGlobalContext!.selected!.getAddress(),
               toAddress: addressField.value,
               toChain: targetField.value as Network,
-            }),
-          );
+            },
+          });
 
           const isAmountLarge = wrappedAmount > maxTransfer;
           if (isAmountLarge) return 'Balance insufficient';
@@ -116,7 +112,7 @@ export const useBridgeForm = () => {
 
         const isValid = await unwrap(validateAddress)(
           targetField.value as Network,
-          availableNetworks[targetField.value as Network].toSafeAddress(value),
+          networks[targetField.value as Network].toSafeAddress(value),
         );
 
         if (isValid) return;
