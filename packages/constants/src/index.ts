@@ -50,7 +50,7 @@ export const NETWORKS = {
     hasTokenSupport: true,
   },
   doge: {
-    index: 2,
+    index: 5,
     key: 'doge',
     label: 'Doge',
     nativeToken: 'doge',

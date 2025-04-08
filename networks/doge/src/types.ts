@@ -38,26 +38,6 @@ export interface BlockCypherTxRef {
   double_spend: boolean;
 }
 
-// from @scure/btc-signer package
-enum SignatureHash {
-  DEFAULT,
-  ALL,
-  NONE,
-  SINGLE,
-  ANYONECANPAY = 0x80,
-}
-
-export enum SigHash {
-  DEFAULT = SignatureHash.DEFAULT,
-  ALL = SignatureHash.ALL,
-  NONE = SignatureHash.NONE,
-  SINGLE = SignatureHash.SINGLE,
-  DEFAULT_ANYONECANPAY = SignatureHash.DEFAULT | SignatureHash.ANYONECANPAY,
-  ALL_ANYONECANPAY = SignatureHash.ALL | SignatureHash.ANYONECANPAY,
-  NONE_ANYONECANPAY = SignatureHash.NONE | SignatureHash.ANYONECANPAY,
-  SINGLE_ANYONECANPAY = SignatureHash.SINGLE | SignatureHash.ANYONECANPAY,
-}
-
 export interface UnsignedPsbtData {
   psbt: {
     base64: string;

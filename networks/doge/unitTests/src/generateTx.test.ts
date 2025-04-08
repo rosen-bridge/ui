@@ -19,10 +19,8 @@ vi.mock('../../src/utils', async (importOriginal) => {
   // mock getAddressUtxos
   const getAddressUtxos = vi.fn();
   getAddressUtxos.mockResolvedValue(testData.mockedUtxos);
-
   const getTxHex = vi.fn();
   getTxHex.mockResolvedValue(testData.txHex1);
-
   // mock getFeeRatio
   const getFeeRatio = vi.fn();
   getFeeRatio.mockResolvedValue(1000);

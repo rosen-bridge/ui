@@ -7,6 +7,6 @@ import { getMaxTransfer } from './server';
 
 export const doge = new DogeNetwork({
   lockAddress: LOCK_ADDRESSES.doge,
-  nextHeightInterval: 1,
+  nextHeightInterval: 10,
   getMaxTransfer: unwrap(getMaxTransfer),
 });

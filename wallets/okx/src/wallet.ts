@@ -9,6 +9,9 @@ import {
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
+  UnsupportedChainError,
+  ChainNotAddedError,
+  SubmitTransactionError,
 } from '@rosen-ui/wallet-api';
 
 import { WalletConfig, ChainConfig } from './types';
@@ -43,7 +46,7 @@ export class OKXWallet implements Wallet {
   private getCurrentChainConfig(): ChainConfig {
     const chainConfig = this.config[this.currentChain];
     if (!chainConfig) {
-      throw new Error(`Chain configuration for ${this.currentChain} not found`);
+      throw new ChainNotAddedError(this.name, this.currentChain);
     }
     return chainConfig;
   }
@@ -92,10 +95,17 @@ export class OKXWallet implements Wallet {
   }
 
   isAvailable(): boolean {
-    return (
-      typeof window.okxwallet !== 'undefined' &&
-      (!!window.okxwallet.bitcoin || !!window.okxwallet.doge)
-    );
+    if (typeof window.okxwallet === 'undefined') {
+      return false;
+    }
+
+    if (this.currentChain === NETWORKS.doge.key) {
+      return !!window.okxwallet.doge;
+    } else if (this.currentChain === NETWORKS.bitcoin.key) {
+      return !!window.okxwallet.bitcoin;
+    }
+
+    return false;
   }
 
   async isConnected(): Promise<boolean> {
@@ -105,7 +115,7 @@ export class OKXWallet implements Wallet {
   async switchChain(chain: Network, silent: boolean = false): Promise<void> {
     if (!this.supportedChains.includes(chain)) {
       if (!silent) {
-        throw new Error(`Chain ${chain} is not supported by ${this.name}`);
+        throw new UnsupportedChainError(this.name, chain);
       }
       return;
     }
@@ -113,7 +123,7 @@ export class OKXWallet implements Wallet {
     // Check if the chain configuration exists
     if (!this.config[chain]) {
       if (!silent) {
-        throw new Error(`Chain configuration for ${chain} not found`);
+        throw new ChainNotAddedError(this.name, chain);
       }
       return;
     }
@@ -121,14 +131,14 @@ export class OKXWallet implements Wallet {
     // Check if the wallet supports the selected chain
     if (chain === NETWORKS.doge.key && !window.okxwallet.doge) {
       if (!silent) {
-        throw new Error(`OKX wallet does not support Dogecoin`);
+        throw new UnsupportedChainError(this.name, chain);
       }
       return;
     }
 
     if (chain === NETWORKS.bitcoin.key && !window.okxwallet.bitcoin) {
       if (!silent) {
-        throw new Error(`OKX wallet does not support Bitcoin`);
+        throw new UnsupportedChainError(this.name, chain);
       }
       return;
     }
@@ -174,8 +184,11 @@ export class OKXWallet implements Wallet {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const txId = await chainConfig.submitTransaction(signedPsbtHex, 'hex');
-
-    return txId;
+    try {
+      const txId = await chainConfig.submitTransaction(signedPsbtHex, 'hex');
+      return txId;
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   }
 }

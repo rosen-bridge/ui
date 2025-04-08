@@ -71,6 +71,8 @@ export const generateUnsignedTx =
       DOGE_INPUT_SIZE,
       estimatedTxWeight,
       feeRatio,
+      undefined,
+      1,
     );
     if (!coveredBoxes.covered) {
       throw new Error(
@@ -82,12 +84,16 @@ export const generateUnsignedTx =
 
     // add inputs
     const fromAddressScript = address.toOutputScript(fromAddress, DOGE_NETWORK);
+    const txToHex: Record<string, string> = {};
     for (const box of coveredBoxes.boxes) {
-      const boxTxHex = await getTxHex(box.txId);
+      if (!txToHex[box.txId]) {
+        const boxTxHex = await getTxHex(box.txId);
+        txToHex[box.txId] = boxTxHex;
+      }
       psbt.addInput({
         hash: box.txId,
         index: box.index,
-        nonWitnessUtxo: Buffer.from(boxTxHex, 'hex'),
+        nonWitnessUtxo: Buffer.from(txToHex[box.txId], 'hex'),
         redeemScript: fromAddressScript,
       });
     }
