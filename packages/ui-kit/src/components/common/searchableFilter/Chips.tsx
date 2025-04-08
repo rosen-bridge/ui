@@ -10,15 +10,16 @@ const Root = styled('div')(({ theme }) => ({
   '.flow': {
     display: 'flex',
     alignItems: 'center',
-    gap: theme.spacing(0.25),
+    gap: theme.spacing(0.75),
+    padding: theme.spacing(0.5, 1),
+    borderRadius: theme.shape.borderRadius / 2,
+    background: theme.palette.divider,
   },
   '.item': {
     display: 'flex',
     gap: '2px',
     alignItems: 'center',
-    padding: theme.spacing(0.5, 1),
-    borderRadius: theme.shape.borderRadius / 4,
-    background: theme.palette.neutral.light,
+    padding: theme.spacing(0.5, 0),
   },
   '.multiple': {},
 }));
