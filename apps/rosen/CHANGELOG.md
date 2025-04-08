@@ -1,5 +1,22 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.6
+
+### Patch Changes
+
+- Utilize the Amount component to ensure clear presentation of financial data.
+- Display error details in the Snackbar when transaction submission fails
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.10.0
+  - @rosen-ui/wallet-api@1.3.1
+  - @rosen-network/cardano@2.1.3
+  - @rosen-ui/metamask-wallet@1.3.2
+  - @rosen-ui/nautilus-wallet@2.3.2
+  - @rosen-ui/eternl-wallet@2.3.2
+  - @rosen-ui/lace-wallet@2.3.2
+  - @rosen-ui/okx-wallet@1.3.2
+  - @rosen-bridge/icons@1.3.0
+
 ## 4.0.5
 
 ### Patch Changes
