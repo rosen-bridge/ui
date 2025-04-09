@@ -1,6 +1,7 @@
 import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import {
   AssetBalance,
+  CardanoUtxo,
   selectCardanoUtxos,
 } from '@rosen-bridge/cardano-utxo-selection';
 import { TokenMap } from '@rosen-bridge/tokens';
@@ -8,7 +9,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 import { feeAndMinBoxValue } from './constants';
-import { ADA_POLICY_ID } from './types';
+import { ADA_POLICY_ID, CardanoProtocolParams } from './types';
 import {
   generateOutputBox,
   getCardanoProtocolParams,
@@ -46,14 +47,10 @@ export const generateUnsignedTx =
     // converts hex address to bech32 address
     const changeAddress = wasm.Address.from_hex(changeAddressHex).to_bech32();
 
-    const auxiliaryData = wasm.AuxiliaryData.from_hex(auxiliaryDataHex);
     // generate txBuilder
     const protocolParams = await getCardanoProtocolParams();
-    const txBuilder = wasm.TransactionBuilder.new(
-      getTxBuilderConfig(protocolParams),
-    );
 
-    // generate lock box
+    // calculate lock assets
     const lockAssets: AssetBalance = {
       nativeToken: 0n,
       tokens: [],
@@ -74,10 +71,9 @@ export const generateUnsignedTx =
       protocolParams.coins_per_utxo_size,
     );
 
-    // add lock box to tx and calculate required assets to get input boxes
+    // calculate required assets to get input boxes
     lockAssets.nativeToken = BigInt(lockBox.amount().coin().to_str());
     const requiredAssets: AssetBalance = structuredClone(lockAssets);
-    txBuilder.add_output(lockBox);
 
     const utxos = await Promise.all(walletUtxos.map(walletUtxoToCardanoUtxo));
     // add required ADA estimation for tx fee and change box
@@ -90,47 +86,114 @@ export const generateUnsignedTx =
       utxos.values(),
     );
     if (!inputs.covered) throw Error(`Not enough assets`);
-    let inputAssets: AssetBalance = {
-      nativeToken: 0n,
-      tokens: [],
-    };
-    // add input boxes to transaction
-    inputs.boxes.forEach((utxo) => {
-      inputAssets = sumAssetBalance(inputAssets, getUtxoAssets(utxo));
-      txBuilder.add_regular_input(
-        wasm.Address.from_bech32(utxo.address),
-        wasm.TransactionInput.new(
-          wasm.TransactionHash.from_hex(utxo.txId),
-          utxo.index,
-        ),
-        lockBox.amount(),
-      );
-    });
 
-    // set temp fee and auxiliary data
-    txBuilder.set_fee(txBuilder.min_fee());
-    txBuilder.set_auxiliary_data(auxiliaryData);
-
-    // calculate change box assets and transaction fee
-    const changeAssets = subtractAssetBalance(inputAssets, lockAssets);
-    const tempChangeBox = generateOutputBox(
-      changeAssets,
+    return generateTx(
+      lockAssets,
+      inputs.boxes,
+      lockAddress,
       changeAddress,
-      protocolParams.coins_per_utxo_size,
+      policyIdHex,
+      assetNameHex,
+      unwrappedAmount,
+      auxiliaryDataHex,
+      protocolParams,
     );
-    const fee = txBuilder
-      .min_fee()
-      .checked_add(txBuilder.fee_for_output(tempChangeBox));
-    changeAssets.nativeToken -= BigInt(fee.to_str());
-    const changeBox = generateOutputBox(
-      changeAssets,
-      changeAddress,
-      protocolParams.coins_per_utxo_size,
-    );
-    txBuilder.add_output(changeBox);
+  };
 
-    // set tx fee
-    txBuilder.set_fee(fee);
+/**
+ * generates a lock transaction on Cardano and returns it with it's required fee
+ * @param lockAssets
+ * @param inputs
+ * @param lockAddress
+ * @param changeAddress
+ * @param policyIdHex
+ * @param assetNameHex
+ * @param unwrappedAmount
+ * @param auxiliaryDataHex
+ * @param protocolParams
+ * @param fee
+ * @returns
+ */
+const generateTx = (
+  lockAssets: AssetBalance,
+  inputs: CardanoUtxo[],
+  lockAddress: string,
+  changeAddress: string,
+  policyIdHex: string,
+  assetNameHex: string,
+  unwrappedAmount: bigint,
+  auxiliaryDataHex: string,
+  protocolParams: CardanoProtocolParams,
+  fee?: bigint,
+): string => {
+  const auxiliaryData = wasm.AuxiliaryData.from_hex(auxiliaryDataHex);
+  const txBuilder = wasm.TransactionBuilder.new(
+    getTxBuilderConfig(protocolParams),
+  );
+
+  // generate lock box
+  const lockBox = generateOutputBox(
+    lockAssets,
+    lockAddress,
+    protocolParams.coins_per_utxo_size,
+  );
+
+  // add lock box to tx and calculate required assets to get input boxes
+  lockAssets.nativeToken = BigInt(lockBox.amount().coin().to_str());
+  const requiredAssets: AssetBalance = structuredClone(lockAssets);
+  txBuilder.add_output(lockBox);
+
+  // add required ADA estimation for tx fee and change box
+  requiredAssets.nativeToken += feeAndMinBoxValue;
+  // get input boxes, THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
+  let inputAssets: AssetBalance = {
+    nativeToken: 0n,
+    tokens: [],
+  };
+  // add input boxes to transaction
+  inputs.forEach((utxo) => {
+    inputAssets = sumAssetBalance(inputAssets, getUtxoAssets(utxo));
+    txBuilder.add_regular_input(
+      wasm.Address.from_bech32(utxo.address),
+      wasm.TransactionInput.new(
+        wasm.TransactionHash.from_hex(utxo.txId),
+        utxo.index,
+      ),
+      lockBox.amount(),
+    );
+  });
+
+  // set auxiliary data
+  txBuilder.set_auxiliary_data(auxiliaryData);
+
+  // add the change box
+  const changeAssets = subtractAssetBalance(inputAssets, lockAssets);
+  changeAssets.nativeToken -= fee ?? 0n;
+  const changeBox = generateOutputBox(
+    changeAssets,
+    changeAddress,
+    protocolParams.coins_per_utxo_size,
+  );
+  txBuilder.add_output(changeBox);
+
+  // if fee is not provided, the transaction will be generated again once fee is estimated
+  if (!fee) {
+    // generate the tx again with the estimated fee
+    return generateTx(
+      lockAssets,
+      inputs,
+      lockAddress,
+      changeAddress,
+      policyIdHex,
+      assetNameHex,
+      unwrappedAmount,
+      auxiliaryDataHex,
+      protocolParams,
+      BigInt(txBuilder.min_fee().to_str()),
+    );
+  } else {
+    // set tx fee and auxiliary data
+    txBuilder.set_fee(wasm.BigNum.from_str(fee.toString()));
 
     // build transaction
     const txBody = txBuilder.build();
@@ -139,4 +202,5 @@ export const generateUnsignedTx =
     const witnessSet = wasm.TransactionWitnessSet.new();
     const tx = wasm.Transaction.new(txBody, witnessSet, auxiliaryData);
     return tx.to_hex();
-  };
+  }
+};

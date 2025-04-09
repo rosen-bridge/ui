@@ -108,26 +108,30 @@ export const BridgeTransaction = ({
           <div style={{ flexGrow: '1' }} />
           <Amount
             title="Transaction Fee"
-            value={networkFeeRaw}
+            value={!tokenValue ? undefined : networkFeeRaw}
             unit={tokenInfo?.tokenName}
             loading={isPending}
           />
           <Amount
             title="Bridge Fee"
-            value={bridgeFeeRaw}
+            value={!tokenValue ? undefined : bridgeFeeRaw}
             unit={tokenInfo?.tokenName}
             loading={isPending}
           />
           <Amount
             title="Min Transfer"
-            value={minTransferRaw}
+            value={!tokenValue ? undefined : minTransferRaw}
             unit={tokenInfo?.tokenName}
             loading={isPending}
           />
           <Divider sx={{ borderStyle: 'dashed' }} />
           <Amount
             title="You Will Receive"
-            value={receivingAmountRaw}
+            value={
+              !tokenValue || receivingAmountRaw === '0'
+                ? undefined
+                : receivingAmountRaw
+            }
             unit={targetTokenInfo?.name}
             loading={isPending}
           />

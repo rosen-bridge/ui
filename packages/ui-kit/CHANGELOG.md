@@ -1,5 +1,16 @@
 # @rosen-bridge/ui-kit
 
+## 1.10.0
+
+### Minor Changes
+
+- Add a 'More' button to display additional details in the snackbar context
+
+### Patch Changes
+
+- Improve the styling and adjust font sizes in the Amount component for a better appearance.
+- Updated @rosen-bridge/icons@1.3.0 dependency
+
 ## 1.9.2
 
 ### Patch Changes
