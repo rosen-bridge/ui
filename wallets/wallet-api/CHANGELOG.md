@@ -1,5 +1,11 @@
 # @rosen-ui/wallet-api
 
+## 1.3.1
+
+### Patch Changes
+
+- Implement proper error to ensure graceful failure when the wallet API is unavailable.
+
 ## 1.3.0
 
 ### Minor Changes
