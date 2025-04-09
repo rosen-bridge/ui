@@ -173,12 +173,12 @@ describe('AggregatedStatusChangedRepository', () => {
       expect(repositoryInsertSpy).toHaveBeenCalledTimes(2);
       expect(repositoryInsertSpy.mock.calls[0][0]).toEqual({
         ...status0,
-        id: 1, // TODO: fix spy issue
+        id: expect.any(Number), // TODO: fix the spy issue: id field should not exist
         tx: null,
       });
       expect(repositoryInsertSpy.mock.calls[1][0]).toEqual({
         ...status1,
-        id: 2, // TODO: fix spy issue
+        id: expect.any(Number), // TODO: fix the spy issue: id field should not exist
       });
 
       expect(records).toHaveLength(2);

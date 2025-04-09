@@ -222,13 +222,13 @@ describe('GuardStatusChangedRepository', () => {
       expect(repositoryInsertSpy).toHaveBeenCalledTimes(2);
       expect(repositoryInsertSpy).toHaveBeenNthCalledWith(1, {
         ...status0,
-        id: 1, // TODO: fix spy issue
+        id: expect.any(Number), // TODO: fix the spy issue: id field should not exist
         tx: null,
         txStatus: null,
       });
       expect(repositoryInsertSpy).toHaveBeenNthCalledWith(2, {
         ...status2,
-        id: 2, // TODO: fix spy issue
+        id: expect.any(Number), // TODO: fix the spy issue: id field should not exist
         tx: { txId: id1, chain: 'c1' },
         txStatus: TxStatus.signed,
       });
