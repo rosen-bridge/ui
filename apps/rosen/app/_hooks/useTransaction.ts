@@ -3,7 +3,10 @@ import { useState } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { getNonDecimalString } from '@rosen-ui/utils';
+import { UserDeniedTransactionSignatureError } from '@rosen-ui/wallet-api';
 import { serializeError } from 'serialize-error';
+
+import { logger } from '@/_actions';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -47,22 +50,22 @@ export const useTransaction = () => {
 
     setIsSubmitting(true);
 
-    try {
-      const parameters = {
-        token: tokenValue as RosenChainToken,
-        amount: BigInt(
-          getNonDecimalString(
-            amountValue as string,
-            tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
-          ),
+    const parameters = {
+      token: tokenValue as RosenChainToken,
+      amount: BigInt(
+        getNonDecimalString(
+          amountValue as string,
+          tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
         ),
-        toChain: targetValue,
-        address: selectedTarget.toSafeAddress(walletAddressValue),
-        bridgeFee,
-        networkFee,
-        lockAddress: selectedSource.lockAddress,
-      };
+      ),
+      toChain: targetValue,
+      address: selectedTarget.toSafeAddress(walletAddressValue),
+      bridgeFee,
+      networkFee,
+      lockAddress: selectedSource.lockAddress,
+    };
 
+    try {
       const txId = await selectedWallet.transfer(parameters);
 
       openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
@@ -73,6 +76,12 @@ export const useTransaction = () => {
         undefined,
         () => JSON.stringify(serializeError(error), null, 2),
       );
+
+      if (error instanceof UserDeniedTransactionSignatureError) return;
+
+      try {
+        await logger('transfer', parameters, serializeError(error));
+      } catch {}
     } finally {
       setIsSubmitting(false);
     }
