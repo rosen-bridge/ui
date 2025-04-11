@@ -52,49 +52,49 @@ export const tabletHeader = [
     title: 'Name',
     cellProps: {
       width: 200,
-      align: 'left' as const,
+      align: 'center' as const,
     },
   },
   {
     title: 'Network',
     cellProps: {
       width: 150,
-      align: 'left' as const,
+      align: 'center' as const,
     },
   },
   {
     title: 'Locked',
     cellProps: {
       width: 150,
-      align: 'left' as const,
+      align: 'center' as const,
     },
   },
   {
     title: 'Hot',
     cellProps: {
       width: 150,
-      align: 'left' as const,
+      align: 'center' as const,
     },
   },
   {
     title: 'Cold',
     cellProps: {
       width: 150,
-      align: 'left' as const,
+      align: 'center' as const,
     },
   },
   {
     title: 'Bridged',
     cellProps: {
       width: 150,
-      align: 'left' as const,
+      align: 'center' as const,
     },
   },
   {
     title: '',
     cellProps: {
       width: 100,
-      align: 'left' as const,
+      align: 'center ' as const,
     },
   },
 ];
@@ -260,13 +260,13 @@ export const TabletRow: FC<RowProps> = (props) => {
         }}
         onClick={() => setExpanded(!open)}
       >
-        <EnhancedTableCell align="left">
+        <EnhancedTableCell align="center">
           <WithExternalLink url={tokenUrl ? tokenUrl : undefined}>
             {row.name}
           </WithExternalLink>
         </EnhancedTableCell>
-        <EnhancedTableCell align="left">{row.chain}</EnhancedTableCell>
-        <EnhancedTableCell align="left">
+        <EnhancedTableCell align="center">{row.chain}</EnhancedTableCell>
+        <EnhancedTableCell align="center">
           <Amount
             value={getDecimalString(
               ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
@@ -274,7 +274,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             )}
           />
         </EnhancedTableCell>
-        <EnhancedTableCell align="left">
+        <EnhancedTableCell align="center">
           <WithExternalLink url={hotUrl}>
             <Amount
               value={getDecimalString(
@@ -284,7 +284,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             />
           </WithExternalLink>
         </EnhancedTableCell>
-        <EnhancedTableCell align="left">
+        <EnhancedTableCell align="center">
           <WithExternalLink url={coldUrl}>
             <Amount
               value={getDecimalString(
@@ -294,7 +294,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             />
           </WithExternalLink>
         </EnhancedTableCell>
-        <EnhancedTableCell align="left">
+        <EnhancedTableCell align="center">
           <Amount
             value={getDecimalString(
               row.bridged || '0',
@@ -302,7 +302,7 @@ export const TabletRow: FC<RowProps> = (props) => {
             )}
           />
         </EnhancedTableCell>
-        <EnhancedTableCell align="right">
+        <EnhancedTableCell align="center">
           <IconButton
             size="small"
             disabled={loading}

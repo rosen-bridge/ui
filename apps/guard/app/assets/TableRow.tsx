@@ -36,33 +36,23 @@ export const mobileHeader = [
 export const tabletHeader = [
   {
     title: 'ID',
-    cellProps: {
-      width: 200,
-    },
+    cellProps: { align: 'center' as const },
   },
   {
     title: 'Token name',
-    cellProps: {
-      width: 250,
-    },
+    cellProps: { align: 'center' as const },
   },
   {
     title: 'Chain',
-    cellProps: {
-      width: 150,
-    },
+    cellProps: { align: 'center' as const },
   },
   {
     title: 'Amount (Hot)',
-    cellProps: {
-      width: 150,
-    },
+    cellProps: { align: 'center' as const },
   },
   {
     title: 'Amount (Cold)',
-    cellProps: {
-      width: 150,
-    },
+    cellProps: { align: 'center' as const },
   },
 ];
 
@@ -149,19 +139,19 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <WithExternalLink url={row.isNativeToken ? undefined : tokenUrl}>
           {row.isNativeToken ? '-' : <Id id={row.tokenId} />}
         </WithExternalLink>
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.name}</EnhancedTableCell>
-      <EnhancedTableCell>{row.chain}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.name}</EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.chain}</EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <WithExternalLink url={hotUrl}>
           {getDecimalString(row.amount.toString(), row.decimals)}
         </WithExternalLink>
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <WithExternalLink url={coldUrl}>
           {getDecimalString(row.coldAmount?.toString() ?? '0', row.decimals)}
         </WithExternalLink>

@@ -38,61 +38,61 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Reward TX Id',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'From Address',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'To Address',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Amount',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
-    title: 'Emission (RSN/eRSN)',
+    title: 'Emission(RSN/eRSN)',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
 ];
@@ -243,32 +243,32 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.eventId} />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)!} />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id
           id={row.rewardTxId}
           href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.fromAddress} />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.toAddress} />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {getDecimalString(
           row.lockToken.amount.toString(),
           row.lockToken.decimals,
         )}
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {getDecimalString(
           row.revenues
             .find(
@@ -280,7 +280,7 @@ export const TabletRow: FC<RowProps> = (props) => {
           row.lockToken.decimals,
         )}
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         {getDecimalString(
           row.revenues
             .find(
@@ -292,7 +292,10 @@ export const TabletRow: FC<RowProps> = (props) => {
           row.lockToken.decimals,
         )}
       </EnhancedTableCell>
-      <EnhancedTableCell sx={{ opacity: isInfoLoading ? 0.3 : 1 }}>
+      <EnhancedTableCell
+        align="center"
+        sx={{ opacity: isInfoLoading ? 0.3 : 1 }}
+      >
         {isInfoLoading ? (
           <CircularProgress color="inherit" size={10} />
         ) : (

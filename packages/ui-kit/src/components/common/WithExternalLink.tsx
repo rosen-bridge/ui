@@ -17,7 +17,7 @@ export interface WithExternalLinkProps {
  */
 export const WithExternalLink = ({ children, url }: WithExternalLinkProps) => {
   return (
-    <Stack alignItems="center" direction="row" gap={1}>
+    <Stack alignItems="center" justifyContent="center" direction="row" gap={1}>
       <span>{children}</span>
       {url && (
         <Link

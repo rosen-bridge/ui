@@ -31,25 +31,25 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Income (RSN/eRSN)',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token Income',
     cellProps: {
-      width: 150,
+      align: 'center' as const,
     },
   },
 ];
@@ -179,12 +179,12 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.eventId} />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
-      <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
+      <EnhancedTableCell align="center">{getRSNIncome()}</EnhancedTableCell>
+      <EnhancedTableCell align="center">{getTokenIncome()}</EnhancedTableCell>
     </TableRow>
   );
 };

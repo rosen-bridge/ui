@@ -38,56 +38,48 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
   {
     title: 'Chain',
     cellProps: {
-      width: 250,
       align: 'center' as const,
     },
   },
   {
     title: 'Height',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
   {
     title: 'Addresses',
     cellProps: {
-      width: 300,
       align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
   {
     title: 'Amount',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
-      width: 150,
       align: 'center' as const,
       style: { whiteSpace: 'nowrap' as const },
     },
@@ -95,7 +87,6 @@ export const tabletHeader = [
   {
     title: 'Network Fee',
     cellProps: {
-      width: 150,
       align: 'center' as const,
       style: { whiteSpace: 'nowrap' as const },
     },
@@ -103,14 +94,12 @@ export const tabletHeader = [
   {
     title: 'Time',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
   {
     title: 'Status',
     cellProps: {
-      width: 150,
       align: 'center' as const,
     },
   },
