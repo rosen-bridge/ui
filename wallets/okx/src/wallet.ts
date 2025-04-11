@@ -1,20 +1,17 @@
 import { Okx as OKXIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
   AddressRetrievalError,
   ConnectionRejectedError,
+  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
-  UnsupportedChainError,
-  ChainNotAddedError,
-  SubmitTransactionError,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig, ChainConfig } from './types';
+import { WalletConfig } from './types';
 
 export class OKXWallet implements Wallet {
   icon = OKXIcon;
@@ -25,33 +22,16 @@ export class OKXWallet implements Wallet {
 
   link = 'https://www.okx.com/';
 
-  supportedChains: Network[] = [NETWORKS.bitcoin.key, NETWORKS.doge.key];
+  supportedChains = [NETWORKS.bitcoin.key];
 
   private get api() {
-    // Use the appropriate API based on the current chain
-    if (this.currentChain === NETWORKS.doge.key && window.okxwallet.doge) {
-      return window.okxwallet.doge;
-    }
     return window.okxwallet.bitcoin;
   }
 
-  private currentChain: Network = NETWORKS.bitcoin.key;
-
   constructor(private config: WalletConfig) {}
 
-  /**
-   * Get the chain configuration for the current chain
-   * @throws Error if the configuration doesn't exist
-   */
-  private getCurrentChainConfig(): ChainConfig {
-    const chainConfig = this.config[this.currentChain];
-    if (!chainConfig) {
-      throw new ChainNotAddedError(this.name, this.currentChain);
-    }
-    return chainConfig;
-  }
-
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
@@ -60,6 +40,7 @@ export class OKXWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
@@ -68,6 +49,7 @@ export class OKXWallet implements Wallet {
   }
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     const accounts = await this.api.getAccounts();
 
     const account = accounts?.at(0);
@@ -78,89 +60,48 @@ export class OKXWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
+    this.requireAvailable();
     const amount = await this.api.getBalance();
 
     if (!amount.confirmed) return 0n;
 
-    const chainConfig = this.getCurrentChainConfig();
-    const tokenMap = await chainConfig.getTokenMap();
+    const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
       token.tokenId,
       BigInt(amount.confirmed),
-      this.currentChain,
+      NETWORKS.bitcoin.key,
     ).amount;
 
     return wrappedAmount;
   }
 
   isAvailable(): boolean {
-    if (typeof window.okxwallet === 'undefined') {
-      return false;
-    }
+    return (
+      typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin
+    );
+  }
 
-    if (this.currentChain === NETWORKS.doge.key) {
-      return !!window.okxwallet.doge;
-    } else if (this.currentChain === NETWORKS.bitcoin.key) {
-      return !!window.okxwallet.bitcoin;
-    }
-
-    return false;
+  requireAvailable() {
+    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async isConnected(): Promise<boolean> {
     return !!window.okxwallet.selectedAddress;
   }
 
-  async switchChain(chain: Network, silent: boolean = false): Promise<void> {
-    if (!this.supportedChains.includes(chain)) {
-      if (!silent) {
-        throw new UnsupportedChainError(this.name, chain);
-      }
-      return;
-    }
-
-    // Check if the chain configuration exists
-    if (!this.config[chain]) {
-      if (!silent) {
-        throw new ChainNotAddedError(this.name, chain);
-      }
-      return;
-    }
-
-    // Check if the wallet supports the selected chain
-    if (chain === NETWORKS.doge.key && !window.okxwallet.doge) {
-      if (!silent) {
-        throw new UnsupportedChainError(this.name, chain);
-      }
-      return;
-    }
-
-    if (chain === NETWORKS.bitcoin.key && !window.okxwallet.bitcoin) {
-      if (!silent) {
-        throw new UnsupportedChainError(this.name, chain);
-      }
-      return;
-    }
-
-    this.currentChain = chain;
-    // OKX wallet's bitcoin interface handles both Bitcoin and Dogecoin
-    // No actual chain switching is needed as the API remains the same
-    // but we track which chain is selected for other operations
-  }
-
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
     const userAddress = await this.getAddress();
 
-    const chainConfig = this.getCurrentChainConfig();
-    const opReturnData = await chainConfig.generateOpReturnData(
+    const opReturnData = await this.config.generateOpReturnData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await chainConfig.generateUnsignedTx(
+    const psbtData = await this.config.generateUnsignedTx(
       params.lockAddress,
       userAddress,
       params.amount,
@@ -184,11 +125,8 @@ export class OKXWallet implements Wallet {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    try {
-      const txId = await chainConfig.submitTransaction(signedPsbtHex, 'hex');
-      return txId;
-    } catch (error) {
-      throw new SubmitTransactionError(this.name, error);
-    }
+    const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
+
+    return txId;
   }
 }

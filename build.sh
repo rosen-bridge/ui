@@ -24,3 +24,4 @@ npm run build --workspace wallets/lace
 npm run build --workspace wallets/metamask
 npm run build --workspace wallets/nautilus
 npm run build --workspace wallets/okx
+npm run build --workspace wallets/my-doge

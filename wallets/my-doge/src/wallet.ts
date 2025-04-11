@@ -3,7 +3,6 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import {
   DisconnectionFailedError,
-  AddressRetrievalError,
   ConnectionRejectedError,
   UnavailableApiError,
   UserDeniedTransactionSignatureError,
@@ -22,7 +21,7 @@ export class MyDogeWallet implements Wallet {
 
   link = 'https://www.mydoge.com/';
 
-  supportedChains = [NETWORKS.bitcoin.key];
+  supportedChains = [NETWORKS.doge.key];
 
   private get api() {
     return window.doge;
@@ -50,36 +49,27 @@ export class MyDogeWallet implements Wallet {
 
   async getAddress(): Promise<string> {
     this.requireAvailable();
-    const accounts = await this.api.getAccounts();
-
-    const account = accounts?.at(0);
-
-    if (!account) throw new AddressRetrievalError(this.name);
-
-    return account;
+    const account = await this.api.getConnectionStatus();
+    return account.selectedWalletAddress;
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
     this.requireAvailable();
     const amount = await this.api.getBalance();
 
-    if (!amount.confirmed) return 0n;
-
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
       token.tokenId,
-      BigInt(amount.confirmed),
-      NETWORKS.bitcoin.key,
+      BigInt(amount.balance),
+      NETWORKS.doge.key,
     ).amount;
 
     return wrappedAmount;
   }
 
   isAvailable(): boolean {
-    return (
-      typeof window.doge !== 'undefined' && !!window.doge
-    );
+    return typeof window.doge !== 'undefined' && !!window.doge;
   }
 
   requireAvailable() {
@@ -113,24 +103,17 @@ export class MyDogeWallet implements Wallet {
       params.token,
     );
 
-    let signedPsbtHex;
-
     try {
-      signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
-        autoFinalized: false,
-        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-          (index) => ({
-            address: userAddress,
-            index: index,
-          }),
-        ),
-      });
+      const txId = (
+        await this.api.requestPsbt({
+          signOnly: false,
+          indexes: Array.from(Array(psbtData.inputSize).keys()),
+          rawTx: psbtData.psbt.hex,
+        })
+      ).txId;
+      return txId;
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
-
-    const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
-
-    return txId;
   }
 }

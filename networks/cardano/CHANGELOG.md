@@ -1,5 +1,11 @@
 # @rosen-network/cardano
 
+## 2.1.3
+
+### Patch Changes
+
+- Temporary fix for transaction fee calculation
+
 ## 2.1.2
 
 ### Patch Changes

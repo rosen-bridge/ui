@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { getNonDecimalString } from '@rosen-ui/utils';
+import { serializeError } from 'serialize-error';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -69,6 +70,8 @@ export const useTransaction = () => {
       openSnackbar(
         error?.info ?? error?.message ?? JSON.stringify(error),
         'error',
+        undefined,
+        () => JSON.stringify(serializeError(error), null, 2),
       );
     } finally {
       setIsSubmitting(false);

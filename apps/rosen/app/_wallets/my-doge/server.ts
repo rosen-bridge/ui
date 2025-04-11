@@ -5,7 +5,7 @@ import {
   generateUnsignedTx as generateUnsignedTxCore,
   getAddressBalance as getAddressBalanceCore,
   submitTransaction as submitTransactionCore,
-} from '@rosen-network/bitcoin';
+} from '@rosen-network/doge';
 
 import { wrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';

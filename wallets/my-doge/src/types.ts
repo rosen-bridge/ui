@@ -4,19 +4,14 @@ import type {
   generateOpReturnData,
   getAddressBalance,
   submitTransaction,
-} from '@rosen-network/bitcoin';
-import { Network } from '@rosen-ui/types';
+} from '@rosen-network/doge';
 
-export type ChainConfig = {
+export type WalletConfig = {
   getTokenMap(): Promise<TokenMap>;
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   submitTransaction: typeof submitTransaction;
   getAddressBalance: typeof getAddressBalance;
-};
-
-export type WalletConfig = {
-  [chain in Network]?: ChainConfig;
 };
 
 /**
@@ -37,7 +32,7 @@ declare global {
         indexes: number[];
         signOnly: boolean;
       }) => Promise<{
-        signedRawTx: string;
+        txId: string;
       }>;
       getBalance: () => Promise<{
         address: string;
