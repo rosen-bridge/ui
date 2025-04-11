@@ -161,6 +161,11 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
         .join(' ');
     };
 
+    const handleClick = (item: Item) => {
+      onSelect(item.selected);
+      setOpen(false);
+    };
+
     useEffect(() => load, [load]);
 
     useImperativeHandle(ref, () => {
@@ -196,10 +201,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                           </SvgIcon>
                         </IconButton>
                       }
-                      onClick={() => {
-                        onSelect(item.selected);
-                        setOpen(false);
-                      }}
+                      onClick={() => handleClick(item)}
                     >
                       <ListItemButton>
                         <ListItemText primary={getTitle(item)} />
@@ -233,10 +235,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                       </SvgIcon>
                     </IconButton>
                   }
-                  onClick={() => {
-                    onSelect(item.selected);
-                    setOpen(false);
-                  }}
+                  onClick={() => handleClick(item)}
                 >
                   <ListItemButton>
                     <ListItemText primary={getTitle(item)} />

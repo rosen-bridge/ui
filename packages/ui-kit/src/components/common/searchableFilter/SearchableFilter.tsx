@@ -202,6 +202,39 @@ export const SearchableFilter = ({
     setSelected(next);
   }, [current, selectedValidated]);
 
+  const search = useCallback(
+    (selected: Selected[]) => {
+      if ($last.current == selected) return;
+
+      if (!$last.current.length && !selected.length) return;
+
+      $last.current = selected;
+
+      $search.current?.focus({ preventScroll: true });
+
+      setCurrent(undefined);
+
+      $history.current?.add(selected);
+
+      const query = selected
+        .map((item) => {
+          const parsed = aaaaa(flows, item)!;
+
+          const operator = parsed.operator!.symbol;
+
+          const array = Array.isArray(item.value) ? '[]' : '';
+
+          const value = [item.value].flat().join(',');
+
+          return `${item.flow}${array}${operator}${value}`;
+        })
+        .join('&');
+
+      onChange({ query, selected });
+    },
+    [flows, onChange],
+  );
+
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   }, []);
@@ -226,7 +259,7 @@ export const SearchableFilter = ({
     switch (event.key) {
       case 'Enter': {
         if (state == 'flow' && !query) {
-          handleSearch();
+          search(selected);
         }
         break;
       }
@@ -291,36 +324,6 @@ export const SearchableFilter = ({
     [current, state],
   );
 
-  const handleSearch = useCallback(() => {
-    if ($last.current == selected) return;
-
-    if (!$last.current.length && !selected.length) return;
-
-    $last.current = selected;
-
-    $search.current?.focus({ preventScroll: true });
-
-    setCurrent(undefined);
-
-    $history.current?.add(selected);
-
-    const query = selected
-      .map((item) => {
-        const parsed = aaaaa(flows, item)!;
-
-        const operator = parsed.operator!.symbol;
-
-        const array = Array.isArray(item.value) ? '[]' : '';
-
-        const value = [item.value].flat().join(',');
-
-        return `${item.flow}${array}${operator}${value}`;
-      })
-      .join('&');
-
-    onChange({ query, selected });
-  }, [flows, selected, onChange]);
-
   useEffect(() => {
     setQuery('');
   }, [current]);
@@ -340,7 +343,10 @@ export const SearchableFilter = ({
           flows={flows}
           namespace={namespace}
           ref={$history}
-          onSelect={setSelected}
+          onSelect={(selected) => {
+            setSelected(selected);
+            search(selected);
+          }}
         />
         <Divider orientation="vertical" flexItem />
         <VirtualScroll>
@@ -371,7 +377,7 @@ export const SearchableFilter = ({
             </Container>
           </ClickAwayListener>
         </VirtualScroll>
-        <IconButton ref={$search} onClick={handleSearch}>
+        <IconButton ref={$search} onClick={() => search(selected)}>
           <SvgIcon>
             <Search />
           </SvgIcon>
