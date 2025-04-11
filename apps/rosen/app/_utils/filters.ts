@@ -1,8 +1,10 @@
 import Joi from 'joi';
 
+const OPERATORS = ['==', '!=', '<=', '>=', '*=', '^=', '$='] as const;
+
 type Fields = {
   key: string;
-  operator: '=' | '!' | '<=' | '>=';
+  operator: (typeof OPERATORS)[number];
   value: boolean | number | string | (number | string)[];
 };
 
@@ -40,7 +42,9 @@ export const filtersSchema = Joi.object<Filters>({
     .items(
       Joi.object({
         key: Joi.string().required(),
-        operator: Joi.string().valid('=', '!', '<=', '>=').required(),
+        operator: Joi.string()
+          .valid(...OPERATORS)
+          .required(),
         value: Joi.alternatives(
           Joi.boolean(),
           Joi.number(),
@@ -114,23 +118,12 @@ export const extractFiltersFromSearchParams = (
   searchParams.forEach((value, key) => {
     const isArray = key.endsWith('[]') || key.slice(0, -1).endsWith('[]');
 
-    let operator: Fields['operator'] = '=';
+    const operator =
+      OPERATORS.find((operator) => key.at(-1) === operator.at(0)) || '==';
 
-    switch (key.at(-1)) {
-      case '!':
-        operator = '!';
-        break;
-      case '<':
-        operator = '<=';
-        break;
-      case '>':
-        operator = '>=';
-        break;
-    }
-
-    const name = key
-      ?.match(/^(.*?)(?:''|!|<|>|\[\]|\[\]!|\[\]<|\[\]>|$)/)
-      ?.at(1)!;
+    const name = (key + '=')
+      .split(`${isArray ? '[]' : ''}${operator.at(0)}`)
+      .at(0)!;
 
     filters.fields ||= [];
 
@@ -160,7 +153,7 @@ export const filtersToTypeormWhere = (
       .join(', ');
 
     switch (field.operator) {
-      case '!': {
+      case '!=': {
         sections.push(`(${key} NOT IN (${values}))`);
         break;
       }
@@ -168,12 +161,24 @@ export const filtersToTypeormWhere = (
         sections.push(`(${key} <= ${field.value})`);
         break;
       }
-      case '=': {
+      case '==': {
         sections.push(`(${key} IN (${values}))`);
         break;
       }
       case '>=': {
         sections.push(`(${key} >= ${field.value})`);
+        break;
+      }
+      case '*=': {
+        sections.push(`(${key} ILIKE '%${field.value}%')`);
+        break;
+      }
+      case '^=': {
+        sections.push(`(${key} ILIKE '${field.value}%')`);
+        break;
+      }
+      case '$=': {
+        sections.push(`(${key} ILIKE '%${field.value}')`);
         break;
       }
     }
@@ -183,7 +188,7 @@ export const filtersToTypeormWhere = (
     const fields = filters.search.in ? [filters.search.in] : searchFields;
 
     const query = fields
-      .map((field) => `(${mapper(field)} LIKE '%${filters.search?.query}%')`)
+      .map((field) => `(${mapper(field)} ILIKE '%${filters.search?.query}%')`)
       .join(' OR ');
 
     sections.push(`(${query})`);

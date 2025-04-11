@@ -3,10 +3,38 @@ import {
   OPERATORS_COMPARATIVE,
   OPERATORS_EQUALITY,
   OPERATOR_IS,
+  OPERATORS_STRING,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const flows: Flow[] = [
+  {
+    name: 'requestId',
+    label: 'Event Id',
+    unique: true,
+    operators: OPERATORS_STRING,
+    input: {
+      type: 'text',
+    },
+  },
+  {
+    name: 'fromAddress',
+    label: 'From Address',
+    unique: true,
+    operators: OPERATORS_STRING,
+    input: {
+      type: 'text',
+    },
+  },
+  {
+    name: 'toAddress',
+    label: 'To Address',
+    unique: true,
+    operators: OPERATORS_STRING,
+    input: {
+      type: 'text',
+    },
+  },
   {
     name: 'fromChain',
     label: 'From Chain',

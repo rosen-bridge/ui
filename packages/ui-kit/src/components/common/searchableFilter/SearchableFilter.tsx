@@ -122,29 +122,31 @@ export const SearchableFilter = ({
   }, [current, selectedValidated]);
 
   const chips = useMemo<ChipsProps['value']>(() => {
-    return selectedValidatedWithCurrent.map((current) => {
-      const labels = [] as (string | string[])[];
+    return selectedValidatedWithCurrent
+      .map((current) => {
+        const labels = [] as (string | string[])[];
 
-      const parsed = aaaaa(flows, current);
+        const parsed = aaaaa(flows, current);
 
-      if (!parsed) return labels;
+        if (!parsed) return labels;
 
-      parsed.flow && labels.push(parsed.flow.label);
+        parsed.flow && labels.push(parsed.flow.label);
 
-      parsed.operator && labels.push(parsed.operator.label);
+        parsed.operator && labels.push(parsed.operator.label);
 
-      if (!Object.hasOwn(parsed, 'value')) return labels;
+        if (!Object.hasOwn(parsed, 'value')) return labels;
 
-      [parsed.value].flat().forEach((value) => {
-        if (typeof value == 'object' && 'label' in value) {
-          labels.push(value.label);
-        } else {
-          labels.push(`${value}`);
-        }
-      });
+        [parsed.value].flat().forEach((value) => {
+          if (typeof value == 'object' && 'label' in value) {
+            labels.push(value.label);
+          } else {
+            labels.push(`${value}`);
+          }
+        });
 
-      return labels;
-    });
+        return labels;
+      })
+      .filter((item) => !!item.length);
   }, [flows, selectedValidatedWithCurrent]);
 
   const picker = useMemo<Input | undefined>(() => {

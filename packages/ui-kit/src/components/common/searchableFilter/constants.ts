@@ -36,6 +36,24 @@ export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
   symbol: '<=',
 };
 
+export const OPERATOR_CONTAINS: Operator = {
+  value: 'contains',
+  label: 'Contains',
+  symbol: '*=',
+};
+
+export const OPERATOR_STARTS_WITH: Operator = {
+  value: 'startsWith',
+  label: 'Starts With',
+  symbol: '^=',
+};
+
+export const OPERATOR_ENDS_WITH: Operator = {
+  value: 'endsWith',
+  label: 'Ends With',
+  symbol: '$=',
+};
+
 export const OPERATORS_COMPARATIVE: Operator[] = [
   OPERATOR_LESS_THAN_OR_EQUAL,
   OPERATOR_GREATER_THAN_OR_EQUAL,
@@ -46,6 +64,12 @@ export const OPERATORS_EQUALITY: Operator[] = [
   OPERATOR_NOT,
   OPERATOR_IS_NOT_ONE_OF,
   OPERATOR_IS_ONE_OF,
+];
+
+export const OPERATORS_STRING: Operator[] = [
+  OPERATOR_CONTAINS,
+  OPERATOR_STARTS_WITH,
+  OPERATOR_ENDS_WITH,
 ];
 
 export const VALUES_YESNO: Input = {
