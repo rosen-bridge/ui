@@ -7,7 +7,6 @@ import {
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -16,7 +15,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class EtrnlWallet implements Wallet {
+export class EtrnlWallet extends Wallet {
   icon = EternlIcon;
 
   name = 'Eternl';
@@ -31,7 +30,9 @@ export class EtrnlWallet implements Wallet {
     return window.cardano.eternl;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
     this.requireAvailable();
@@ -85,10 +86,6 @@ export class EtrnlWallet implements Wallet {
 
   isAvailable(): boolean {
     return typeof window.cardano !== 'undefined' && !!window.cardano.eternl;
-  }
-
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {

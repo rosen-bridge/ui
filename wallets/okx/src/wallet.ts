@@ -5,7 +5,6 @@ import {
   DisconnectionFailedError,
   AddressRetrievalError,
   ConnectionRejectedError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
@@ -13,7 +12,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class OKXWallet implements Wallet {
+export class OKXWallet extends Wallet {
   icon = OKXIcon;
 
   name = 'OKX';
@@ -28,7 +27,9 @@ export class OKXWallet implements Wallet {
     return window.okxwallet.bitcoin;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
     this.requireAvailable();
@@ -80,10 +81,6 @@ export class OKXWallet implements Wallet {
     return (
       typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin
     );
-  }
-
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async isConnected(): Promise<boolean> {

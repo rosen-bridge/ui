@@ -7,7 +7,6 @@ import {
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -16,7 +15,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class LaceWallet implements Wallet {
+export class LaceWallet extends Wallet {
   icon = LaceIcon;
 
   name = 'Lace';
@@ -31,7 +30,9 @@ export class LaceWallet implements Wallet {
     return window.cardano.lace;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
     this.requireAvailable();
@@ -85,10 +86,6 @@ export class LaceWallet implements Wallet {
 
   isAvailable(): boolean {
     return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
-  }
-
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async isConnected(): Promise<boolean> {
