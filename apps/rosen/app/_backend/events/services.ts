@@ -1,8 +1,8 @@
 import { TokenMap } from '@rosen-bridge/tokens';
+import { Filters } from '@rosen-bridge/ui-kit/dist/server';
 import { Network } from '@rosen-ui/types';
 
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
-import { Filters } from '@/_utils/filters';
 
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
 import { getEvents } from './repository';

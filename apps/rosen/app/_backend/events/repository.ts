@@ -1,9 +1,11 @@
 import { ObservationEntity } from '@rosen-bridge/observation-extractor';
 import { BlockEntity } from '@rosen-bridge/scanner';
+import {
+  Filters,
+  filtersToTypeormWhere,
+} from '@rosen-bridge/ui-kit/dist/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
-
-import { Filters, filtersToTypeormWhere } from '@/_utils/filters';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';

@@ -1,9 +1,9 @@
 import { NextRequest } from 'next/server';
 
 import {
-  filtersSchema,
   extractFiltersFromSearchParams,
-} from '@/_utils/filters';
+  filtersSchema,
+} from '@rosen-bridge/ui-kit/dist/server';
 
 /**
  * validate get requests
