@@ -32,6 +32,11 @@ export class MyDogeWallet implements Wallet {
   async connect(): Promise<void> {
     this.requireAvailable();
     try {
+      const isConnected = await this.isConnected();
+      if (isConnected) {
+        return;
+      }
+
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
