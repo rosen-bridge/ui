@@ -25,12 +25,6 @@ import { ApiInfoResponse } from '@/_types/api';
 import { InfoWidgetCard } from './InfoWidgetCard';
 
 const InfoWidgets = () => {
-  const StyledBox = styled(Box)({
-    '& *': {
-      color: '#ffffff !important',
-    },
-  });
-
   const icon = useIcon('light');
 
   const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -83,24 +77,22 @@ const InfoWidgets = () => {
     <InfoWidgetCard
       title="Available / Total Locked RSN"
       value={
-        <StyledBox>
-          <Amount
-            value={
-              data
-                ? `${getDecimalString(
-                    data.permitCount.active.toString() ?? '0',
-                    rsnToken?.decimals ?? 0,
-                    1,
-                  )} / ${getDecimalString(
-                    data.permitCount.total.toString() ?? '0',
-                    rsnToken?.decimals ?? 0,
-                    1,
-                  )}`
-                : undefined
-            }
-            size="large"
-          />
-        </StyledBox>
+        <Amount
+          value={
+            data
+              ? `${getDecimalString(
+                  data.permitCount.active.toString() ?? '0',
+                  rsnToken?.decimals ?? 0,
+                  1,
+                )} / ${getDecimalString(
+                  data.permitCount.total.toString() ?? '0',
+                  rsnToken?.decimals ?? 0,
+                  1,
+                )}`
+              : undefined
+          }
+          size="large"
+        />
       }
       icon={
         <SvgIcon fontSize="large">
@@ -122,12 +114,10 @@ const InfoWidgets = () => {
       <InfoWidgetCard
         title="Available / Total Reports"
         value={
-          <StyledBox>
-            <Amount
-              value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
-              size="large"
-            />
-          </StyledBox>
+          <Amount
+            value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
+            size="large"
+          />
         }
         icon={
           <SvgIcon fontSize="large">
@@ -167,19 +157,17 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           title="ERG"
           value={
-            <StyledBox>
-              <Amount
-                size="large"
-                value={
-                  ergToken?.amount !== undefined
-                    ? getDecimalString(
-                        ergToken.amount.toString(),
-                        ergToken.decimals,
-                      )
-                    : undefined
-                }
-              />
-            </StyledBox>
+            <Amount
+              size="large"
+              value={
+                ergToken?.amount !== undefined
+                  ? getDecimalString(
+                      ergToken.amount.toString(),
+                      ergToken.decimals,
+                    )
+                  : undefined
+              }
+            />
           }
           icon={
             <SvgIcon fontSize="large">
@@ -194,13 +182,11 @@ const InfoWidgets = () => {
           value={(() => {
             const amountValue = (titleRSN || titleERSN).split(' ');
             return (
-              <StyledBox>
-                <Amount
-                  value={amountValue[0]}
-                  unit={amountValue[1]}
-                  size="large"
-                />
-              </StyledBox>
+              <Amount
+                value={amountValue[0]}
+                unit={amountValue[1]}
+                size="large"
+              />
             );
           })()}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
