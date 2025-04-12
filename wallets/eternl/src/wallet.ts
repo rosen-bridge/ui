@@ -15,7 +15,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class EtrnlWallet implements Wallet {
+export class EtrnlWallet extends Wallet {
   icon = EternlIcon;
 
   name = 'Eternl';
@@ -30,9 +30,12 @@ export class EtrnlWallet implements Wallet {
     return window.cardano.eternl;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
@@ -43,6 +46,7 @@ export class EtrnlWallet implements Wallet {
   async disconnect(): Promise<void> {}
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     try {
       const wallet = await this.api.enable();
       return await wallet.getChangeAddress();
@@ -52,6 +56,8 @@ export class EtrnlWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
@@ -83,6 +89,8 @@ export class EtrnlWallet implements Wallet {
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();

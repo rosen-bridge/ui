@@ -15,7 +15,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class LaceWallet implements Wallet {
+export class LaceWallet extends Wallet {
   icon = LaceIcon;
 
   name = 'Lace';
@@ -30,9 +30,12 @@ export class LaceWallet implements Wallet {
     return window.cardano.lace;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
@@ -43,6 +46,7 @@ export class LaceWallet implements Wallet {
   async disconnect(): Promise<void> {}
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     try {
       const wallet = await this.api.enable();
       return await wallet.getChangeAddress();
@@ -52,6 +56,8 @@ export class LaceWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
@@ -83,10 +89,12 @@ export class LaceWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
+    this.requireAvailable();
     return await this.api.isEnabled();
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();

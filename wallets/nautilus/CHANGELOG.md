@@ -1,5 +1,14 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.3.2
+
+### Patch Changes
+
+- Improve wallet integrations by adding robust availability checks and gracefully handling unsupported or inaccessible wallets.
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.3.1
+  - @rosen-bridge/icons@1.3.0
+
 ## 2.3.1
 
 ### Patch Changes

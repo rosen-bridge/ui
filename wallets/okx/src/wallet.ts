@@ -12,7 +12,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class OKXWallet implements Wallet {
+export class OKXWallet extends Wallet {
   icon = OKXIcon;
 
   name = 'OKX';
@@ -27,9 +27,12 @@ export class OKXWallet implements Wallet {
     return window.okxwallet.bitcoin;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
@@ -38,6 +41,7 @@ export class OKXWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
@@ -46,6 +50,7 @@ export class OKXWallet implements Wallet {
   }
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     const accounts = await this.api.getAccounts();
 
     const account = accounts?.at(0);
@@ -56,6 +61,7 @@ export class OKXWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<bigint> {
+    this.requireAvailable();
     const amount = await this.api.getBalance();
 
     if (!amount.confirmed) return 0n;
@@ -82,6 +88,7 @@ export class OKXWallet implements Wallet {
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
     const userAddress = await this.getAddress();
 
     const opReturnData = await this.config.generateOpReturnData(
