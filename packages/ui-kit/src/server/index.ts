@@ -102,13 +102,13 @@ export const extractFiltersFromSearchParams = (
 
     filters.sort ||= { key: raw };
 
-    if (raw.endsWith('-asc')) {
-      filters.sort.key = raw.replace('-asc', '');
+    if (raw.endsWith('-ASC')) {
+      filters.sort.key = raw.replace('-ASC', '');
       filters.sort.order = 'ASC';
     }
 
-    if (raw.endsWith('-desc')) {
-      filters.sort.key = raw.replace('-desc', '');
+    if (raw.endsWith('-DESC')) {
+      filters.sort.key = raw.replace('-DESC', '');
       filters.sort.order = 'DESC';
     }
 
@@ -137,7 +137,7 @@ export const extractFiltersFromSearchParams = (
   return filters;
 };
 
-export const filtersToTypeormWhere = (
+export const filtersToTypeorm = (
   filters: Filters,
   searchFields: string[],
   mapper: (key: string) => string,
@@ -196,5 +196,9 @@ export const filtersToTypeormWhere = (
 
   const where = sections.join(' AND ');
 
-  return where;
+  const sort = filters.sort?.key
+    ? Object.assign({}, filters.sort, { key: mapper(filters.sort.key) })
+    : filters.sort;
+
+  return { sort, where };
 };

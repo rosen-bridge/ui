@@ -130,6 +130,12 @@ export { default as ShieldExclamationRaw } from './icons/shield-exclamation.svg?
 export { ReactComponent as ShieldQuestion } from './icons/shield-question.svg';
 export { default as ShieldQuestionRaw } from './icons/shield-question.svg?raw';
 
+export { ReactComponent as SortAmountDown } from './icons/sort-amount-down.svg';
+export { default as SortAmountDownRaw } from './icons/sort-amount-down.svg?raw';
+
+export { ReactComponent as SortAmountUp } from './icons/sort-amount-up.svg';
+export { default as SortAmountUpRaw } from './icons/sort-amount-up.svg?raw';
+
 export { ReactComponent as SquareShape } from './icons/square-shape.svg';
 export { default as SquareShapeRaw } from './icons/square-shape.svg?raw';
 

@@ -16,7 +16,7 @@ import {
 
 import { ApiEventResponse, Event } from '@/_types';
 
-import { flows } from './flows';
+import { flows, sortDefault, sorts } from './flows';
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
@@ -121,6 +121,8 @@ const Events = () => {
     <>
       <SearchableFilter
         flows={flows}
+        sortItems={sorts}
+        sortDefault={sortDefault}
         namespace="events"
         onChange={(selected) => {
           console.log('selected', selected);

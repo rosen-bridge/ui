@@ -1,9 +1,6 @@
 import { ObservationEntity } from '@rosen-bridge/observation-extractor';
 import { BlockEntity } from '@rosen-bridge/scanner';
-import {
-  Filters,
-  filtersToTypeormWhere,
-} from '@rosen-bridge/ui-kit/dist/server';
+import { Filters, filtersToTypeorm } from '@rosen-bridge/ui-kit/dist/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
@@ -36,7 +33,7 @@ const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
  * @param limit
  */
 export const getEvents = async (filters: Filters) => {
-  const where = filtersToTypeormWhere(
+  const { sort, where } = filtersToTypeorm(
     filters,
     ['fromChain', 'toChain', 'fromAddress', 'toAddress'],
     (key) => {
@@ -92,10 +89,7 @@ export const getEvents = async (filters: Filters) => {
     ])
     .where(where)
     .distinct(true)
-    .orderBy(
-      `${filters.sort?.key ? 'oe.' + filters.sort?.key : 'be.timestamp'}`,
-      filters.sort?.order || 'DESC',
-    )
+    .orderBy(sort?.key || 'be.timestamp', sort?.order || 'DESC')
     .offset(filters.pagination.offset)
     .limit(filters.pagination.limit)
     .getRawMany();

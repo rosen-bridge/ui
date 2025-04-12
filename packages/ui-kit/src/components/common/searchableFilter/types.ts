@@ -55,3 +55,8 @@ export type Selected = {
     | string
     | Array<boolean | null | number | string>;
 };
+
+export type Sort = {
+  key?: string;
+  order?: 'ASC' | 'DESC';
+};

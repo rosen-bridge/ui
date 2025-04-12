@@ -12,16 +12,19 @@ import {
   Card,
   ClickAwayListener,
   Divider,
+  Grid,
   IconButton,
+  MenuItem,
   SvgIcon,
+  TextField,
 } from '@mui/material';
-import { Search } from '@rosen-bridge/icons';
+import { Search, SortAmountDown, SortAmountUp } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { Chips, ChipsProps } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
-import { Flow, Input, Selected } from './types';
+import { Flow, Input, Selected, Sort } from './types';
 import { aaaaa } from './utils';
 import { VirtualScroll } from './VirtualScroll';
 
@@ -49,14 +52,34 @@ const Container = styled('div')(({ theme }) => ({
   padding: theme.spacing(0, 0.5),
 }));
 
+const SortTextField = styled(TextField)(({ theme }) => ({
+  '.MuiSelect-icon': {
+    right: theme.spacing(10),
+  },
+  '.MuiInputBase-root': {
+    backgroundColor: theme.palette.background.paper,
+  },
+  'fieldset': {
+    border: 'none',
+  },
+}));
+
 export type SearchableFilterProps = {
   flows: Flow[];
+  sortDefault?: Sort;
+  sortItems?: Array<{ label: string; value: string }>;
   namespace: string;
-  onChange: (result: { selected: Selected[]; query: string }) => void;
+  onChange: (result: {
+    selected: Selected[];
+    query: string;
+    sort?: Sort;
+  }) => void;
 };
 
 export const SearchableFilter = ({
   flows,
+  sortDefault,
+  sortItems,
   namespace,
   onChange,
 }: SearchableFilterProps) => {
@@ -66,15 +89,17 @@ export const SearchableFilter = ({
 
   const $search = useRef<HTMLButtonElement>(null);
 
-  const $last = useRef<Selected[]>([]);
-
   const timeout = useRef<number>();
-
-  const [selected, setSelected] = useState<Selected[]>([]);
 
   const [current, setCurrent] = useState<Partial<Selected>>();
 
+  const [filters, setFilters] = useState<Selected[]>([]);
+
   const [query, setQuery] = useState('');
+
+  const [selected, setSelected] = useState<Selected[]>([]);
+
+  const [sort, setSort] = useState<Sort | undefined>(sortDefault);
 
   const state = useMemo<
     'idle' | 'flow' | 'operator' | 'value' | 'complete'
@@ -202,39 +227,6 @@ export const SearchableFilter = ({
     setSelected(next);
   }, [current, selectedValidated]);
 
-  const search = useCallback(
-    (selected: Selected[]) => {
-      if ($last.current == selected) return;
-
-      if (!$last.current.length && !selected.length) return;
-
-      $last.current = selected;
-
-      $search.current?.focus({ preventScroll: true });
-
-      setCurrent(undefined);
-
-      $history.current?.add(selected);
-
-      const query = selected
-        .map((item) => {
-          const parsed = aaaaa(flows, item)!;
-
-          const operator = parsed.operator!.symbol;
-
-          const array = Array.isArray(item.value) ? '[]' : '';
-
-          const value = [item.value].flat().join(',');
-
-          return `${item.flow}${array}${operator}${value}`;
-        })
-        .join('&');
-
-      onChange({ query, selected });
-    },
-    [flows, onChange],
-  );
-
   const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
   }, []);
@@ -259,7 +251,7 @@ export const SearchableFilter = ({
     switch (event.key) {
       case 'Enter': {
         if (state == 'flow' && !query) {
-          search(selected);
+          setFilters(selected);
         }
         break;
       }
@@ -324,6 +316,25 @@ export const SearchableFilter = ({
     [current, state],
   );
 
+  const handleSortChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const key = event.target.value;
+
+      const sort = { key };
+
+      setSort(sort);
+    },
+    [],
+  );
+
+  const handleSortOrderChange = useCallback(() => {
+    const next = sort || {};
+
+    next.order = next.order == 'ASC' ? 'DESC' : 'ASC';
+
+    setSort({ ...next });
+  }, [sort]);
+
   useEffect(() => {
     setQuery('');
   }, [current]);
@@ -336,53 +347,137 @@ export const SearchableFilter = ({
     change();
   }, [picker, state, change]);
 
+  useEffect(() => {
+    setSort(sortDefault);
+  }, [sortDefault]);
+
+  useEffect(() => {
+    $search.current?.focus({ preventScroll: true });
+
+    setCurrent(undefined);
+
+    $history.current?.add(filters);
+
+    const query = filters
+      .map((item) => {
+        const parsed = aaaaa(flows, item)!;
+
+        const operator = parsed.operator!.symbol;
+
+        const array = Array.isArray(item.value) ? '[]' : '';
+
+        const value = [item.value].flat().join(',');
+
+        return `${item.flow}${array}${operator}${value}`;
+      })
+      .concat(
+        sort ? [`sort=${sort.key}${sort.order ? '-' + sort.order : ''}`] : [],
+      )
+      .join('&');
+
+    onChange({ query, selected: filters, sort });
+  }, [filters, flows, sort, onChange]);
+
   return (
-    <>
-      <Root>
-        <History
-          flows={flows}
-          namespace={namespace}
-          ref={$history}
-          onSelect={(selected) => {
-            setSelected(selected);
-            search(selected);
+    <Grid alignItems="center" container gap={2}>
+      <Grid item flexGrow={1}>
+        <Root>
+          <History
+            flows={flows}
+            namespace={namespace}
+            ref={$history}
+            onSelect={(selected) => {
+              setSelected(selected);
+              setFilters(selected);
+            }}
+          />
+          <Divider orientation="vertical" flexItem />
+          <VirtualScroll>
+            <ClickAwayListener onClickAway={handleClose}>
+              <Container>
+                <Chips value={chips} />
+                <input
+                  ref={$anchor}
+                  value={query}
+                  autoComplete="off"
+                  placeholder={
+                    selectedValidatedWithCurrent.length
+                      ? ''
+                      : 'Search or filter results…'
+                  }
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  onFocus={handleFocus}
+                  onKeyDown={handleKeyDown}
+                />
+                <Picker
+                  anchorEl={$anchor.current}
+                  query={query}
+                  open={!!picker}
+                  value={picker}
+                  onSelect={handleSelect}
+                />
+              </Container>
+            </ClickAwayListener>
+          </VirtualScroll>
+          <IconButton ref={$search} onClick={() => setFilters(selected)}>
+            <SvgIcon>
+              <Search />
+            </SvgIcon>
+          </IconButton>
+        </Root>
+      </Grid>
+      <Grid item mobile={12} tablet="auto">
+        <SortTextField
+          select
+          fullWidth
+          SelectProps={{
+            MenuProps: {
+              PaperProps: {
+                style: {
+                  marginTop: '4px',
+                },
+              },
+            },
           }}
-        />
-        <Divider orientation="vertical" flexItem />
-        <VirtualScroll>
-          <ClickAwayListener onClickAway={handleClose}>
-            <Container>
-              <Chips value={chips} />
-              <input
-                ref={$anchor}
-                value={query}
-                autoComplete="off"
-                placeholder={
-                  selectedValidatedWithCurrent.length
-                    ? ''
-                    : 'Search or filter results…'
-                }
-                onBlur={handleBlur}
-                onChange={handleChange}
-                onFocus={handleFocus}
-                onKeyDown={handleKeyDown}
-              />
-              <Picker
-                anchorEl={$anchor.current}
-                query={query}
-                open={!!picker}
-                value={picker}
-                onSelect={handleSelect}
-              />
-            </Container>
-          </ClickAwayListener>
-        </VirtualScroll>
-        <IconButton ref={$search} onClick={() => search(selected)}>
-          <SvgIcon>
-            <Search />
-          </SvgIcon>
-        </IconButton>
-      </Root>
-    </>
+          value={sort?.key || ''}
+          style={{ minWidth: 250 }}
+          InputProps={{
+            endAdornment: (
+              <Grid
+                container
+                alignItems="center"
+                justifyContent="space-between"
+                wrap="nowrap"
+                width="auto"
+                gap={1}
+              >
+                <Grid item alignSelf="stretch">
+                  <Divider orientation="vertical" />
+                </Grid>
+                <Grid item>
+                  <IconButton ref={$search} onClick={handleSortOrderChange}>
+                    <SvgIcon>
+                      {sort?.order == 'ASC' ? (
+                        <SortAmountDown />
+                      ) : (
+                        <SortAmountUp />
+                      )}
+                    </SvgIcon>
+                  </IconButton>
+                </Grid>
+              </Grid>
+            ),
+          }}
+          onChange={handleSortChange}
+        >
+          {sortItems?.map((item) => (
+            <MenuItem key={item.value} value={item.value}>
+              {item.label}
+            </MenuItem>
+          ))}
+        </SortTextField>
+      </Grid>
+    </Grid>
   );
 };
