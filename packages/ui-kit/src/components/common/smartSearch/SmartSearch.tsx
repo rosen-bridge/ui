@@ -22,9 +22,10 @@ import { Search, SortAmountDown, SortAmountUp } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { Chips, ChipsProps } from './Chips';
+import { SORT_QUERY_KEY } from './constants';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
-import { Flow, Input, Selected, Sort } from './types';
+import { Filter, Input, Selected, Sort } from './types';
 import { aaaaa } from './utils';
 import { VirtualScroll } from './VirtualScroll';
 
@@ -64,25 +65,31 @@ const SortTextField = styled(TextField)(({ theme }) => ({
   },
 }));
 
-export type SearchableFilterProps = {
-  flows: Flow[];
-  sortDefault?: Sort;
-  sortItems?: Array<{ label: string; value: string }>;
+type SmartSearchState = 'idle' | 'flow' | 'operator' | 'value' | 'complete';
+
+export type SmartSearchProps = {
+  defaultSort?: Sort;
+  filters: Filter[];
   namespace: string;
+  sorts: Array<{ label: string; value: string }>;
   onChange: (result: {
-    selected: Selected[];
+    filters: Selected[];
     query: string;
+    search?: {
+      query?: string;
+      in?: string;
+    };
     sort?: Sort;
   }) => void;
 };
 
-export const SearchableFilter = ({
-  flows,
-  sortDefault,
-  sortItems,
+export const SmartSearch = ({
+  defaultSort,
+  filters: filtersInput,
   namespace,
+  sorts,
   onChange,
-}: SearchableFilterProps) => {
+}: SmartSearchProps) => {
   const $anchor = useRef<HTMLInputElement>(null);
 
   const $history = useRef<HistoryRef>(null);
@@ -99,11 +106,9 @@ export const SearchableFilter = ({
 
   const [selected, setSelected] = useState<Selected[]>([]);
 
-  const [sort, setSort] = useState<Sort | undefined>(sortDefault);
+  const [sort, setSort] = useState<Sort | undefined>(defaultSort);
 
-  const state = useMemo<
-    'idle' | 'flow' | 'operator' | 'value' | 'complete'
-  >(() => {
+  const state = useMemo<SmartSearchState>(() => {
     if (!current) return 'idle';
 
     if (!Object.hasOwn(current, 'flow')) return 'flow';
@@ -120,7 +125,7 @@ export const SearchableFilter = ({
   const selectedValidated = useMemo<Selected[]>(() => {
     return selected
       .map((current) => {
-        const parsed = aaaaa(flows, current);
+        const parsed = aaaaa(filtersInput, current);
 
         if (!parsed) return;
 
@@ -140,7 +145,7 @@ export const SearchableFilter = ({
         return current;
       })
       .filter(Boolean) as Selected[];
-  }, [flows, selected]);
+  }, [filtersInput, selected]);
 
   const selectedValidatedWithCurrent = useMemo<Partial<Selected>[]>(() => {
     return current ? [...selectedValidated, current] : selectedValidated;
@@ -151,7 +156,7 @@ export const SearchableFilter = ({
       .map((current) => {
         const labels = [] as (string | string[])[];
 
-        const parsed = aaaaa(flows, current);
+        const parsed = aaaaa(filtersInput, current);
 
         if (!parsed) return labels;
 
@@ -172,7 +177,7 @@ export const SearchableFilter = ({
         return labels;
       })
       .filter((item) => !!item.length);
-  }, [flows, selectedValidatedWithCurrent]);
+  }, [filtersInput, selectedValidatedWithCurrent]);
 
   const picker = useMemo<Input | undefined>(() => {
     switch (state) {
@@ -182,7 +187,7 @@ export const SearchableFilter = ({
       case 'flow': {
         return {
           type: 'select',
-          options: flows
+          options: filtersInput
             .filter(
               (flow) =>
                 !flow.unique ||
@@ -197,7 +202,7 @@ export const SearchableFilter = ({
         };
       }
       case 'operator': {
-        const flow = flows.find((flow) => flow.name === current!.flow)!;
+        const flow = filtersInput.find((flow) => flow.name === current!.flow)!;
 
         return {
           type: 'select',
@@ -205,7 +210,7 @@ export const SearchableFilter = ({
         };
       }
       case 'value': {
-        const flow = flows.find((flow) => flow.name === current!.flow)!;
+        const flow = filtersInput.find((flow) => flow.name === current!.flow)!;
 
         const context = {
           operator: current!.operator!,
@@ -217,7 +222,7 @@ export const SearchableFilter = ({
         return input;
       }
     }
-  }, [current, flows, selectedValidated, state]);
+  }, [current, filtersInput, selectedValidated, state]);
 
   const change = useCallback(() => {
     setCurrent({});
@@ -227,83 +232,89 @@ export const SearchableFilter = ({
     setSelected(next);
   }, [current, selectedValidated]);
 
-  const handleChange = useCallback((event: ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
-  }, []);
-
-  const handleClose = useCallback(() => {
+  const handleClickAway = useCallback(() => {
     if (Array.isArray(current?.value) && current?.value.length) {
       change();
     }
     setCurrent(undefined);
   }, [current, change]);
 
-  const handleBlur = useCallback(() => {
-    clearTimeout(timeout.current);
-    timeout.current = window.setTimeout(handleClose, 250);
-  }, [handleClose]);
+  const handleInputChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setQuery(event.target.value);
+    },
+    [],
+  );
 
-  const handleFocus = useCallback(() => {
+  const handleInputBlur = useCallback(() => {
+    clearTimeout(timeout.current);
+    timeout.current = window.setTimeout(handleClickAway, 250);
+  }, [handleClickAway]);
+
+  const handleInputFocus = useCallback(() => {
     setCurrent({});
   }, []);
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    switch (event.key) {
-      case 'Enter': {
-        if (state == 'flow' && !query) {
-          setFilters(selected);
+  const handleInputKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLInputElement>) => {
+      switch (event.key) {
+        case 'Enter': {
+          if (state == 'flow' && !query) {
+            setFilters(selected);
+          }
+          break;
         }
-        break;
-      }
-      case 'Backspace':
-      case 'Delete': {
-        if (query) return;
-        switch (state) {
-          case 'idle':
-          case 'flow': {
-            if (!selectedValidated.length) return;
+        case 'Backspace':
+        case 'Delete': {
+          if (query) return;
+          switch (state) {
+            case 'idle':
+            case 'flow': {
+              if (!selectedValidated.length) return;
 
-            const last = selectedValidated.at(-1)!;
+              const last = selectedValidated.at(-1)!;
 
-            setCurrent({
-              flow: last.flow,
-              operator: last.operator,
-            });
+              setCurrent({
+                flow: last.flow,
+                operator: last.operator,
+              });
 
-            setSelected(selectedValidated.slice(0, -1));
+              setSelected(selectedValidated.slice(0, -1));
 
-            break;
-          }
-          case 'operator': {
-            setCurrent({});
-            break;
-          }
-          case 'value': {
-            const moreTwoSteps =
-              (flows.find((flow) => flow.name == current!.flow)?.operators
-                .length || 0) > 1;
-
-            if (moreTwoSteps) {
-              setCurrent({ flow: current!.flow });
-            } else {
-              setCurrent(undefined);
+              break;
             }
-            break;
-          }
-          case 'complete': {
-            setCurrent({
-              flow: current!.flow,
-              operator: current!.operator,
-            });
-            break;
-          }
-        }
-        break;
-      }
-    }
-  };
+            case 'operator': {
+              setCurrent({});
+              break;
+            }
+            case 'value': {
+              const moreTwoSteps =
+                (filtersInput.find((flow) => flow.name == current!.flow)
+                  ?.operators.length || 0) > 1;
 
-  const handleSelect = useCallback(
+              if (moreTwoSteps) {
+                setCurrent({ flow: current!.flow });
+              } else {
+                setCurrent(undefined);
+              }
+              break;
+            }
+            case 'complete': {
+              setCurrent({
+                flow: current!.flow,
+                operator: current!.operator,
+              });
+              break;
+            }
+          }
+          break;
+        }
+      }
+    },
+    [current, filtersInput, query, selected, selectedValidated, state],
+  );
+
+  const handlePickerSelect = useCallback(
     (value: Selected['value']) => {
       clearTimeout(timeout.current);
 
@@ -340,16 +351,16 @@ export const SearchableFilter = ({
   }, [current]);
 
   useEffect(() => {
+    setSort(defaultSort);
+  }, [defaultSort]);
+
+  useEffect(() => {
     if (state != 'complete') return;
 
     if (picker?.type == 'multiple') return;
 
     change();
   }, [picker, state, change]);
-
-  useEffect(() => {
-    setSort(sortDefault);
-  }, [sortDefault]);
 
   useEffect(() => {
     $search.current?.focus({ preventScroll: true });
@@ -360,7 +371,7 @@ export const SearchableFilter = ({
 
     const query = filters
       .map((item) => {
-        const parsed = aaaaa(flows, item)!;
+        const parsed = aaaaa(filtersInput, item)!;
 
         const operator = parsed.operator!.symbol;
 
@@ -371,19 +382,23 @@ export const SearchableFilter = ({
         return `${item.flow}${array}${operator}${value}`;
       })
       .concat(
-        sort ? [`sort=${sort.key}${sort.order ? '-' + sort.order : ''}`] : [],
+        sort
+          ? [
+              `${SORT_QUERY_KEY}=${sort.key}${sort.order ? '-' + sort.order : ''}`,
+            ]
+          : [],
       )
       .join('&');
 
-    onChange({ query, selected: filters, sort });
-  }, [filters, flows, sort, onChange]);
+    onChange({ filters, query, search: undefined, sort });
+  }, [filters, filtersInput, sort, onChange]);
 
   return (
     <Grid alignItems="center" container gap={2}>
       <Grid item flexGrow={1}>
         <Root>
           <History
-            flows={flows}
+            filter={filtersInput}
             namespace={namespace}
             ref={$history}
             onSelect={(selected) => {
@@ -393,7 +408,7 @@ export const SearchableFilter = ({
           />
           <Divider orientation="vertical" flexItem />
           <VirtualScroll>
-            <ClickAwayListener onClickAway={handleClose}>
+            <ClickAwayListener onClickAway={handleClickAway}>
               <Container>
                 <Chips value={chips} />
                 <input
@@ -405,17 +420,17 @@ export const SearchableFilter = ({
                       ? ''
                       : 'Search or filter results…'
                   }
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  onFocus={handleFocus}
-                  onKeyDown={handleKeyDown}
+                  onBlur={handleInputBlur}
+                  onChange={handleInputChange}
+                  onFocus={handleInputFocus}
+                  onKeyDown={handleInputKeyDown}
                 />
                 <Picker
                   anchorEl={$anchor.current}
                   query={query}
                   open={!!picker}
                   value={picker}
-                  onSelect={handleSelect}
+                  onSelect={handlePickerSelect}
                 />
               </Container>
             </ClickAwayListener>
@@ -456,7 +471,7 @@ export const SearchableFilter = ({
                   <Divider orientation="vertical" />
                 </Grid>
                 <Grid item>
-                  <IconButton ref={$search} onClick={handleSortOrderChange}>
+                  <IconButton onClick={handleSortOrderChange}>
                     <SvgIcon>
                       {sort?.order == 'ASC' ? (
                         <SortAmountDown />
@@ -471,7 +486,7 @@ export const SearchableFilter = ({
           }}
           onChange={handleSortChange}
         >
-          {sortItems?.map((item) => (
+          {sorts.map((item) => (
             <MenuItem key={item.value} value={item.value}>
               {item.label}
             </MenuItem>

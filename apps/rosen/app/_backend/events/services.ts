@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Filters } from '@rosen-bridge/ui-kit/dist/server';
+import { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { Network } from '@rosen-ui/types';
 
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';

@@ -1,5 +1,7 @@
 import { Input, Operator } from './types';
 
+export const SORT_QUERY_KEY = 'sort';
+
 export const OPERATOR_IS: Operator = {
   value: 'is',
   label: 'Is',

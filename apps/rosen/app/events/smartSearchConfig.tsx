@@ -1,14 +1,14 @@
 import {
-  Flow,
   OPERATORS_COMPARATIVE,
   OPERATORS_EQUALITY,
   OPERATOR_IS,
   OPERATORS_STRING,
+  Filter,
   Sort,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
-export const flows: Flow[] = [
+export const filters: Filter[] = [
   {
     name: 'requestId',
     label: 'Event Id',
@@ -153,4 +153,4 @@ export const sorts = [
   { label: 'To Chain', value: 'toChain' },
 ];
 
-export const sortDefault: Sort = { key: 'timestamp', order: 'DESC' };
+export const defaultSort: Sort = { key: 'timestamp', order: 'DESC' };

@@ -1,29 +1,29 @@
-import { Flow, Selected } from './types';
+import { Filter, Selected } from './types';
 
-export const aaaaa = (flows: Flow[], current: Partial<Selected>) => {
-  const flow = flows.find((flow) => flow.name === current.flow);
+export const aaaaa = (filters: Filter[], current: Partial<Selected>) => {
+  const filter = filters.find((filter) => filter.name === current.flow);
 
-  if (!flow) return;
+  if (!filter) return;
 
-  const operator = flow.operators.find(
+  const operator = filter.operators.find(
     (operator) => operator.value == current.operator,
   );
 
-  if (!operator) return { flow };
+  if (!operator) return { flow: filter };
 
-  if (!Object.hasOwn(current, 'value')) return { flow, operator };
+  if (!Object.hasOwn(current, 'value')) return { flow: filter, operator };
 
   const context = {
     operator: current.operator!,
   };
 
   const input =
-    typeof flow.input === 'function' ? flow.input(context) : flow.input;
+    typeof filter.input === 'function' ? filter.input(context) : filter.input;
 
   switch (input.type) {
     case 'multiple': {
       return {
-        flow,
+        flow: filter,
         operator,
         value: !Array.isArray(current.value)
           ? []
@@ -34,21 +34,21 @@ export const aaaaa = (flows: Flow[], current: Partial<Selected>) => {
     }
     case 'number': {
       return {
-        flow,
+        flow: filter,
         operator,
         value: current.value as number,
       };
     }
     case 'select': {
       return {
-        flow,
+        flow: filter,
         operator,
         value: input.options.find((option) => option.value === current.value),
       };
     }
     case 'text': {
       return {
-        flow,
+        flow: filter,
         operator,
         value: current.value as string,
       };

@@ -1,6 +1,9 @@
 import { ObservationEntity } from '@rosen-bridge/observation-extractor';
 import { BlockEntity } from '@rosen-bridge/scanner';
-import { Filters, filtersToTypeorm } from '@rosen-bridge/ui-kit/dist/server';
+import {
+  Filters,
+  filtersToTypeorm,
+} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 

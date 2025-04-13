@@ -35,7 +35,7 @@ export type SelectOption = {
   post?: ReactNode;
 };
 
-export type Flow = {
+export type Filter = {
   name: string;
   label: string;
   pre?: ReactNode;
@@ -59,4 +59,9 @@ export type Selected = {
 export type Sort = {
   key?: string;
   order?: 'ASC' | 'DESC';
+};
+
+export type Search = {
+  query?: string;
+  in?: string;
 };

@@ -9,14 +9,14 @@ import { MouseEvent, useCallback, useMemo, useState } from 'react';
 import {
   EnhancedTable,
   Paper,
-  SearchableFilter,
+  SmartSearch,
   TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';
 
 import { ApiEventResponse, Event } from '@/_types';
 
-import { flows, sortDefault, sorts } from './flows';
+import { defaultSort, filters, sorts } from './smartSearchConfig';
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
@@ -29,7 +29,7 @@ const getKey = (filters: string) => (offset: number, limit: number) => {
 };
 
 const Events = () => {
-  const [filters, setFilters] = useState('');
+  const [query, setQuery] = useState('');
 
   const {
     data,
@@ -41,7 +41,7 @@ const Events = () => {
     isFirstLoad,
     isFirstPage,
     isLastPage,
-  } = useTableDataPagination<ApiEventResponse>(getKey(filters));
+  } = useTableDataPagination<ApiEventResponse>(getKey(query));
 
   const handleChangePage = useCallback(
     (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
@@ -119,14 +119,14 @@ const Events = () => {
 
   return (
     <>
-      <SearchableFilter
-        flows={flows}
-        sortItems={sorts}
-        sortDefault={sortDefault}
+      <SmartSearch
         namespace="events"
+        filters={filters}
+        sorts={sorts}
+        defaultSort={defaultSort}
         onChange={(selected) => {
           console.log('selected', selected);
-          setFilters(selected.query);
+          setQuery(selected.query);
         }}
       />
       <br />

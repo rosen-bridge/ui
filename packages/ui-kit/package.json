@@ -10,7 +10,7 @@
   "main": "./dist/index.js",
   "exports": {
     ".": "./dist/index.js",
-    "./dist/server": "./dist/server/index.js"
+    "./dist/components/common/smartSearch/server": "./dist/components/common/smartSearch/server.js"
   },
   "repository": {
     "type": "git",

@@ -21,7 +21,7 @@ import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
 import { IconButton, SvgIcon } from '../../base';
 import { Popup } from './Popup';
-import { Flow, Selected } from './types';
+import { Filter, Selected } from './types';
 import { aaaaa } from './utils';
 
 type Item = {
@@ -34,13 +34,13 @@ export type HistoryRef = {
 };
 
 export type HistoryProps = {
-  flows: Flow[];
+  filter: Filter[];
   namespace: string;
   onSelect: (selected: Selected[]) => void;
 };
 
 export const History = forwardRef<HistoryRef, HistoryProps>(
-  ({ flows, namespace, onSelect }, ref) => {
+  ({ filter, namespace, onSelect }, ref) => {
     const $anchor = useRef<HTMLButtonElement | null>(null);
 
     const [open, setOpen] = useState(false);
@@ -142,7 +142,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     const getTitle = (item: Item) => {
       return item.selected
         .map((current) => {
-          const parsed = aaaaa(flows, current);
+          const parsed = aaaaa(filter, current);
 
           if (!parsed) return;
 

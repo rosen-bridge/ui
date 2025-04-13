@@ -2,15 +2,21 @@ import Joi from 'joi';
 
 const OPERATORS = ['==', '!=', '<=', '>=', '*=', '^=', '$='] as const;
 
+const SEARCH_QUERY_KEY = 'search';
+
+const SEARCH_IN_QUERY_KEY = 'in';
+
+const SORT_QUERY_KEY = 'sort';
+
 type Fields = {
   key: string;
   operator: (typeof OPERATORS)[number];
   value: boolean | number | string | (number | string)[];
 };
 
-type Pagination = {
-  offset: number;
-  limit: number;
+type Sort = {
+  key?: string;
+  order?: 'ASC' | 'DESC';
 };
 
 type Search = {
@@ -18,9 +24,9 @@ type Search = {
   in?: string;
 };
 
-type Sort = {
-  key?: string;
-  order?: 'ASC' | 'DESC';
+type Pagination = {
+  offset: number;
+  limit: number;
 };
 
 export type Filters = {
@@ -73,10 +79,10 @@ export const extractFiltersFromSearchParams = (
 ): FiltersRaw => {
   const filters: FiltersRaw = {};
 
-  if (searchParams.has('in')) {
+  if (searchParams.has(SEARCH_IN_QUERY_KEY)) {
     filters.search ||= {};
-    filters.search.in = searchParams.get('in')!;
-    searchParams.delete('in');
+    filters.search.in = searchParams.get(SEARCH_IN_QUERY_KEY)!;
+    searchParams.delete(SEARCH_IN_QUERY_KEY);
   }
 
   if (searchParams.has('limit')) {
@@ -91,14 +97,14 @@ export const extractFiltersFromSearchParams = (
     searchParams.delete('offset');
   }
 
-  if (searchParams.has('search')) {
+  if (searchParams.has(SEARCH_QUERY_KEY)) {
     filters.search ||= {};
-    filters.search.query = searchParams.get('search')!;
-    searchParams.delete('search');
+    filters.search.query = searchParams.get(SEARCH_QUERY_KEY)!;
+    searchParams.delete(SEARCH_QUERY_KEY);
   }
 
-  if (searchParams.has('sort')) {
-    const raw = searchParams.get('sort')!;
+  if (searchParams.has(SORT_QUERY_KEY)) {
+    const raw = searchParams.get(SORT_QUERY_KEY)!;
 
     filters.sort ||= { key: raw };
 
@@ -112,7 +118,7 @@ export const extractFiltersFromSearchParams = (
       filters.sort.order = 'DESC';
     }
 
-    searchParams.delete('sort');
+    searchParams.delete(SORT_QUERY_KEY);
   }
 
   searchParams.forEach((value, key) => {

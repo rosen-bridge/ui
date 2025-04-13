@@ -7,19 +7,19 @@ const Root = styled('div')(({ theme }) => ({
   'gap': theme.spacing(1),
   'whiteSpace': 'nowrap',
   'userSelect': 'none',
-  '.flow': {
+  '.item': {
+    display: 'flex',
+    gap: '2px',
+    alignItems: 'center',
+    padding: theme.spacing(0.5, 0),
+  },
+  '.items': {
     display: 'flex',
     alignItems: 'center',
     gap: theme.spacing(0.75),
     padding: theme.spacing(0.5, 1),
     borderRadius: theme.shape.borderRadius / 2,
     background: theme.palette.divider,
-  },
-  '.item': {
-    display: 'flex',
-    gap: '2px',
-    alignItems: 'center',
-    padding: theme.spacing(0.5, 0),
   },
   '.multiple': {},
 }));
@@ -31,9 +31,9 @@ export type ChipsProps = {
 export const Chips = ({ value }: ChipsProps) => {
   return (
     <Root>
-      {value.map((flow) => (
-        <div key={JSON.stringify(flow)} className="flow">
-          {flow.map((value) => {
+      {value.map((items) => (
+        <div key={JSON.stringify(items)} className="items">
+          {items.map((value) => {
             if (typeof value === 'string') {
               return (
                 <Typography key={value} className="item">
