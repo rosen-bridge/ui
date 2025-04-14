@@ -4,7 +4,7 @@
  **************************************************/
 import { NETWORKS } from '@rosen-ui/constants';
 
-export const FEE_CONFIG_TOKEN_ID = 'e2ed4d64393222db666f20e67803e9e6fbe6d64531e14ff52ddd95615b0cbf17';
+export const FEE_CONFIG_TOKEN_ID = '';
 
 export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {
   binance: '0x34c9f8a268df15fb38811800cb6e7f6a109cd0e7',
