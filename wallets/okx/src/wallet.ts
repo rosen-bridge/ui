@@ -31,25 +31,25 @@ export class OKXWallet extends Wallet {
     super();
   }
 
-  async connect(): Promise<void> {
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
-  }
+  };
 
-  async disconnect(): Promise<void> {
+  disconnect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
       throw new DisconnectionFailedError(this.name, error);
     }
-  }
+  };
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
     const accounts = await this.api.getAccounts();
 
@@ -58,9 +58,9 @@ export class OKXWallet extends Wallet {
     if (!account) throw new AddressRetrievalError(this.name);
 
     return account;
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
+  getBalance = async (token: RosenChainToken): Promise<bigint> => {
     this.requireAvailable();
     const amount = await this.api.getBalance();
 
@@ -75,19 +75,19 @@ export class OKXWallet extends Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return (
       typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin
     );
-  }
+  };
 
-  async isConnected(): Promise<boolean> {
+  isConnected = async (): Promise<boolean> => {
     return !!window.okxwallet.selectedAddress;
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
     const userAddress = await this.getAddress();
 
@@ -125,5 +125,5 @@ export class OKXWallet extends Wallet {
     const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
 
     return txId;
-  }
+  };
 }

@@ -34,18 +34,18 @@ export class EtrnlWallet extends Wallet {
     super();
   }
 
-  async connect(): Promise<void> {
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
-  }
+  };
 
-  async disconnect(): Promise<void> {}
+  disconnect = async (): Promise<void> => {};
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
     try {
       const wallet = await this.api.enable();
@@ -53,15 +53,13 @@ export class EtrnlWallet extends Wallet {
     } catch (error) {
       throw new AddressRetrievalError(this.name, error);
     }
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
 
     const wallet = await this.api.enable();
-
     const rawValue = await wallet.getBalance();
-
     const balances = await this.config.decodeWasmValue(rawValue);
 
     const amount = balances.find(
@@ -74,7 +72,6 @@ export class EtrnlWallet extends Wallet {
     if (!amount) return 0n;
 
     const tokenMap = await this.config.getTokenMap();
-
     const wrappedAmount = tokenMap.wrapAmount(
       token.tokenId,
       amount.quantity,
@@ -82,17 +79,16 @@ export class EtrnlWallet extends Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return typeof window.cardano !== 'undefined' && !!window.cardano.eternl;
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
 
     const wallet = await this.api.enable();
-
     const changeAddressHex = await this.getAddress();
 
     const auxiliaryDataHex = await this.config.generateLockAuxiliaryData(
@@ -104,7 +100,6 @@ export class EtrnlWallet extends Wallet {
     );
 
     const walletUtxos = await wallet.getUtxos();
-
     if (!walletUtxos) throw new UtxoFetchError(this.name);
 
     const unsignedTxHex = await this.config.generateUnsignedTx(
@@ -135,5 +130,5 @@ export class EtrnlWallet extends Wallet {
     } catch (error) {
       throw new SubmitTransactionError(this.name, error);
     }
-  }
+  };
 }
