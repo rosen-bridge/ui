@@ -39,8 +39,8 @@ const guardSecret3 =
 const guardPk3 =
   '03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099';
 
-const commandApiBaseUrl = 'http://localhost:3001';
-const queryApiBaseUrl = 'http://localhost:3002';
+const commandApiBaseUrl = 'http://localhost:3000';
+const queryApiBaseUrl = 'http://localhost:3001';
 const mockTx0 = {
   txId: id0,
   chain: 'c1',
@@ -1098,14 +1098,16 @@ function getShouldStartApis() {
   }
 
   const arg = process.argv[3].toLowerCase();
-  console.error(arg);
+
   if (arg === 'true' || arg === '1') {
     return true;
   } else if (arg === 'false' || arg === '0') {
     return false;
   } else {
-    console.error(`Invalid boolean value: ${arg}`);
-    process.exit(1);
+    console.error(
+      `Invalid boolean value for shouldStartApis: ${arg}, ignoring`,
+    );
+    return false;
   }
 }
 
