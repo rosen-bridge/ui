@@ -31,16 +31,9 @@ describe('generateOpReturnData', () => {
       networkFee,
       bridgeFee,
     );
-    // result in hex: 00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339
 
-    expect(result.slice(0, 2)).toEqual('00');
-    expect(result.slice(2, 18)).toEqual('000000007554fc82');
-    expect(result.slice(18, 34)).toEqual('0000000000962f58');
-    expect(result.slice(34, 36)).toEqual('21'); // 33 bytes
-    const encodedAddress = result.slice(36);
-    expect(encodedAddress.length).toEqual(2 * 33); // 33 bytes, 66 characters in hex
-    expect(encodedAddress).toEqual(
-      '03f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339',
+    expect(result).toEqual(
+      '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339',
     );
   });
 
