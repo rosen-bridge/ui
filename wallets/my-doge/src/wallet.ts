@@ -4,7 +4,6 @@ import { NETWORKS } from '@rosen-ui/constants';
 import {
   DisconnectionFailedError,
   ConnectionRejectedError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
@@ -12,7 +11,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class MyDogeWallet implements Wallet {
+export class MyDogeWallet extends Wallet {
   icon = MyDogeIcon;
 
   name = 'MyDoge';
@@ -27,7 +26,9 @@ export class MyDogeWallet implements Wallet {
     return window.doge;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
     this.requireAvailable();
@@ -75,10 +76,6 @@ export class MyDogeWallet implements Wallet {
 
   isAvailable(): boolean {
     return typeof window.doge !== 'undefined' && !!window.doge;
-  }
-
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async isConnected(): Promise<boolean> {
