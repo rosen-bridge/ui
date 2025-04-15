@@ -37,31 +37,31 @@ export const tabletHeader = [
   {
     title: 'ID',
     cellProps: {
-      width: 200,
+      width: '20%',
     },
   },
   {
     title: 'Token name',
     cellProps: {
-      width: 250,
+      width: '28%',
     },
   },
   {
     title: 'Chain',
     cellProps: {
-      width: 150,
+      width: '17%',
     },
   },
   {
     title: 'Amount (Hot)',
     cellProps: {
-      width: 150,
+      width: '17%',
     },
   },
   {
     title: 'Amount (Cold)',
     cellProps: {
-      width: 150,
+      width: '18%',
     },
   },
 ];

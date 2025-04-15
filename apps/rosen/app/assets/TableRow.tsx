@@ -51,49 +51,49 @@ export const tabletHeader = [
   {
     title: 'Name',
     cellProps: {
-      width: 200,
+      width: '20%',
       align: 'left' as const,
     },
   },
   {
     title: 'Network',
     cellProps: {
-      width: 150,
+      width: '15%',
       align: 'left' as const,
     },
   },
   {
     title: 'Locked',
     cellProps: {
-      width: 150,
+      width: '15%',
       align: 'left' as const,
     },
   },
   {
     title: 'Hot',
     cellProps: {
-      width: 150,
+      width: '15%',
       align: 'left' as const,
     },
   },
   {
     title: 'Cold',
     cellProps: {
-      width: 150,
+      width: '15%',
       align: 'left' as const,
     },
   },
   {
     title: 'Bridged',
     cellProps: {
-      width: 150,
+      width: '15%',
       align: 'left' as const,
     },
   },
   {
     title: '',
     cellProps: {
-      width: 100,
+      width: '5%',
       align: 'left' as const,
     },
   },

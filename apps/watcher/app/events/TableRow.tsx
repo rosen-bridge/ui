@@ -30,67 +30,67 @@ export const tabletHeader = [
   {
     title: 'Tx Id',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'From Address',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'To Address',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Height',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Amount',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Reports',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
   {
     title: 'Status',
     cellProps: {
-      width: 150,
+      width: '9.09%',
     },
   },
 ];

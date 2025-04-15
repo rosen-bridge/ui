@@ -38,61 +38,61 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Reward TX Id',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'From Address',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'To Address',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Amount',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
   {
     title: 'Emission (RSN/eRSN)',
     cellProps: {
-      width: 150,
+      width: '10%',
     },
   },
 ];

@@ -36,63 +36,63 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Reward TX Id',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Chain',
     cellProps: {
-      width: 175,
+      width: '12%',
       align: 'center' as const,
     },
   },
   {
     title: 'Addresses',
     cellProps: {
-      width: 250,
+      width: '18%',
       align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Amount',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
   {
     title: 'Status',
     cellProps: {
-      width: 120,
+      width: '9%',
     },
   },
 ];

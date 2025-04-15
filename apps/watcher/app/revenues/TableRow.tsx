@@ -31,25 +31,25 @@ export const tabletHeader = [
   {
     title: 'Event Id',
     cellProps: {
-      width: 150,
+      width: '25%',
     },
   },
   {
     title: 'Token',
     cellProps: {
-      width: 150,
+      width: '25%',
     },
   },
   {
     title: 'Income (RSN/eRSN)',
     cellProps: {
-      width: 150,
+      width: '25%',
     },
   },
   {
     title: 'Token Income',
     cellProps: {
-      width: 150,
+      width: '25%',
     },
   },
 ];
