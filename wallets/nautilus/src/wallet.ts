@@ -8,7 +8,6 @@ import {
   ConnectionRejectedError,
   ErgoTxProxy,
   SubmitTransactionError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -18,7 +17,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class NautilusWallet implements Wallet {
+export class NautilusWallet extends Wallet {
   icon = NautilusIcon;
 
   name = 'Nautilus';
@@ -33,7 +32,9 @@ export class NautilusWallet implements Wallet {
     return window.ergoConnector.nautilus;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
     this.requireAvailable();
@@ -101,10 +102,6 @@ export class NautilusWallet implements Wallet {
       typeof window.ergoConnector !== 'undefined' &&
       !!window.ergoConnector.nautilus
     );
-  }
-
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
   }
 
   async isConnected(): Promise<boolean> {
