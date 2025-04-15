@@ -44,7 +44,7 @@ const BridgeContainer = styled('div')(({ theme }) => ({
     'transform': 'translate(-50%, -50%)',
     'maxWidth': theme.breakpoints.values.desktop,
     'width': '100%',
-    'padding': theme.spacing(4),
+    'padding': ` 0 ${theme.spacing(4)} 0 ${theme.spacing(4)}`,
     'display': 'grid',
     'gridTemplateColumns': '1fr',
     'gridTemplateRows': 'auto auto auto',
