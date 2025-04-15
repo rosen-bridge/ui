@@ -75,7 +75,7 @@ export const Amount = ({
       {loading && (
         <Typography
           color="text.primary"
-          sx={{ fontSize: size == 'normal' ? '1rem' : '1.5rem' }}
+          sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.375rem' }}
         >
           Pending...
         </Typography>
