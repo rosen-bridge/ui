@@ -21,6 +21,8 @@ import { Wallet } from '@rosen-ui/wallet-api';
 import { useTransactionFormData } from '@/_hooks';
 
 interface ChooseWalletModalProps {
+  selectedWallet: Wallet | undefined;
+  disconnect: () => void;
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
@@ -39,6 +41,8 @@ interface ChooseWalletModalProps {
  *
  */
 export const ChooseWalletModal = ({
+  selectedWallet,
+  disconnect,
   open,
   handleClose,
   setSelectedWallet,
@@ -88,6 +92,7 @@ export const ChooseWalletModal = ({
         <Grid container justifyContent="center" gap={2}>
           {wallets.map((wallet) => {
             const Icon = wallet.icon;
+            const isConnected = selectedWallet?.name === wallet.name;
             return (
               <Card key={wallet.label}>
                 <CardContent>
@@ -105,18 +110,33 @@ export const ChooseWalletModal = ({
                       }}
                     >
                       <Icon />
-                      <Button
-                        variant="contained"
-                        size="small"
-                        sx={{ width: '100%' }}
-                        disabled={!wallet.isAvailable()}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleConnect(wallet);
-                        }}
-                      >
-                        Connect
-                      </Button>
+                      {isConnected ? (
+                        <Button
+                          variant="contained"
+                          color="inherit"
+                          size="small"
+                          sx={{ width: '100%' }}
+                          onClick={() => {
+                            disconnect();
+                            handleClose();
+                          }}
+                        >
+                          Disconnect
+                        </Button>
+                      ) : (
+                        <Button
+                          variant="contained"
+                          size="small"
+                          sx={{ width: '100%' }}
+                          disabled={!wallet.isAvailable()}
+                          onClick={(event) => {
+                            event.preventDefault();
+                            handleConnect(wallet);
+                          }}
+                        >
+                          Connect
+                        </Button>
+                      )}
                     </Box>
                   </Tooltip>
                 </CardContent>
