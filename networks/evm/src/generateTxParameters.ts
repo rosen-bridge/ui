@@ -25,7 +25,7 @@ export const generateTxParameters =
     const unwrappedAmount = tokenMap.unwrapAmount(
       token.tokenId,
       wrappedAmount,
-      NETWORKS.ethereum.key,
+      NETWORKS.binance.key,
     ).amount;
 
     let transactionParameters;
