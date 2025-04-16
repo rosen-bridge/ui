@@ -1,5 +1,15 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.3.3
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.3.2
+  - @rosen-bridge/icons@1.3.1
+  - @rosen-network/ergo@2.1.3
+
 ## 2.3.2
 
 ### Patch Changes

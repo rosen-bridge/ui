@@ -1,5 +1,11 @@
 # @rosen-network/evm
 
+## 0.2.3
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+
 ## 0.2.2
 
 ### Patch Changes

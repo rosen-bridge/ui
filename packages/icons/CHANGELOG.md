@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 1.3.1
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+
 ## 1.3.0
 
 ### Minor Changes

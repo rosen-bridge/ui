@@ -1,5 +1,14 @@
 # @rosen-network/ethereum
 
+## 0.2.3
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+- Updated dependencies
+  - @rosen-network/base@0.2.3
+  - @rosen-network/evm@0.2.3
+
 ## 0.2.2
 
 ### Patch Changes

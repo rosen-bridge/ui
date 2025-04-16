@@ -1,5 +1,13 @@
 # @rosen-bridge/ui-kit
 
+## 1.10.1
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+- Updated dependencies
+  - @rosen-bridge/icons@1.3.1
+
 ## 1.10.0
 
 ### Minor Changes

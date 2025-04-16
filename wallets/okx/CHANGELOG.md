@@ -1,5 +1,15 @@
 # @rosen-ui/okx-wallet
 
+## 1.3.3
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.3.2
+  - @rosen-network/bitcoin@2.1.3
+  - @rosen-bridge/icons@1.3.1
+
 ## 1.3.2
 
 ### Patch Changes

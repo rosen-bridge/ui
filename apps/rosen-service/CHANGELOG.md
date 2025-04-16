@@ -1,5 +1,13 @@
 # @rosen-bridge/rosen-service
 
+## 3.0.2
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+- Updated dependencies
+  - @rosen-ui/asset-calculator@2.1.4
+
 ## 3.0.1
 
 ### Patch Changes

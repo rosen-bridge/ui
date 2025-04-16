@@ -1,5 +1,25 @@
 # @rosen-bridge/rosen-app
 
+## 4.0.7
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+- Updated dependencies
+  - @rosen-ui/asset-calculator@2.1.4
+  - @rosen-ui/wallet-api@1.3.2
+  - @rosen-network/bitcoin@2.1.3
+  - @rosen-network/cardano@2.1.4
+  - @rosen-ui/metamask-wallet@1.3.3
+  - @rosen-ui/nautilus-wallet@2.3.3
+  - @rosen-bridge/ui-kit@1.10.1
+  - @rosen-bridge/icons@1.3.1
+  - @rosen-ui/eternl-wallet@2.3.3
+  - @rosen-network/ergo@2.1.3
+  - @rosen-network/evm@0.2.3
+  - @rosen-ui/lace-wallet@2.3.3
+  - @rosen-ui/okx-wallet@1.3.3
+
 ## 4.0.6
 
 ### Patch Changes

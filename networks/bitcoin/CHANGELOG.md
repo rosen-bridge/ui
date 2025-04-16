@@ -1,5 +1,11 @@
 # @rosen-network/bitcoin
 
+## 2.1.3
+
+### Patch Changes
+
+- Temporarily fix the generateTxParameters function for EVM networks
+
 ## 2.1.2
 
 ### Patch Changes
