@@ -109,6 +109,81 @@ const getConfig = () => {
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
         },
       },
+      healthCheck: {
+        ergoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.ergoScannerWarnDiff',
+        ),
+        ergoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.ergoScannerCriticalDiff',
+        ),
+        cardanoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.cardanoScannerWarnDiff',
+        ),
+        cardanoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.cardanoScannerCriticalDiff',
+        ),
+        bitcoinScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.bitcoinScannerWarnDiff',
+        ),
+        bitcoinScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.bitcoinScannerCriticalDiff',
+        ),
+        dogeScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerWarnDiff',
+        ),
+        dogeScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerCriticalDiff',
+        ),
+        ethereumScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.ethereumScannerWarnDiff',
+        ),
+        ethereumScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.ethereumScannerCriticalDiff',
+        ),
+        binanceScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.binanceScannerWarnDiff',
+        ),
+        binanceScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.binanceScannerCriticalDiff',
+        ),
+        ergoNodeMaxHeightDiff: nodeConfig.get<number>(
+          'healthCheck.ergoNodeMaxHeightDiff',
+        ),
+        ergoNodeMaxBlockTime: nodeConfig.get<number>(
+          'healthCheck.ergoNodeMaxBlockTime',
+        ),
+        ergoNodeMinPeerCount: nodeConfig.get<number>(
+          'healthCheck.ergoNodeMinPeerCount',
+        ),
+        ergoNodeMaxPeerHeightDifference: nodeConfig.get<number>(
+          'healthCheck.ergoNodeMaxPeerHeightDifference',
+        ),
+        updateInterval: nodeConfig.get<number>('healthCheck.updateInterval'),
+        logDuration: nodeConfig.get<number>('healthCheck.logDuration'),
+        errorLogAllowedCount: nodeConfig.get<number>(
+          'healthCheck.errorLogAllowedCount',
+        ),
+        warnLogAllowedCount: nodeConfig.get<number>(
+          'healthCheck.warnLogAllowedCount',
+        ),
+      },
+      notification: {
+        discordWebHookUrl: nodeConfig.get<string>(
+          'notification.discordWebhookUrl',
+        ),
+        historyCleanupTimeout: nodeConfig.get<number>(
+          'notification.historyCleanupTimeout',
+        ),
+        hasBeenUnstableForAWhileWindowDuration: nodeConfig.get<number>(
+          'notification.windowDurations.hasBeenUnstableForAWhile',
+        ),
+        hasBeenUnknownForAWhileWindowDuration: nodeConfig.get<number>(
+          'notification.windowDurations.hasBeenUnknownForAWhile',
+        ),
+        isStillUnhealthyWindowDuration: nodeConfig.get<number>(
+          'notification.windowDurations.isStillUnhealthy',
+        ),
+      },
     };
   } catch (error) {
     throw new AppError(
