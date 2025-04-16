@@ -69,8 +69,6 @@ calculator:
     ethereum: []
     binance: []
 healthCheck:
-  ergWarnThreshold: '1000000000'
-  ergCriticalThreshold: '500000000'
   ergoScannerWarnDiff: 3
   ergoScannerCriticalDiff: 5
   cardanoScannerWarnDiff: 3
