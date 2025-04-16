@@ -49,6 +49,14 @@ export const NETWORKS = {
     id: '0x1',
     hasTokenSupport: true,
   },
+  doge: {
+    index: 5,
+    key: 'doge',
+    label: 'Doge',
+    nativeToken: 'doge',
+    id: '',
+    hasTokenSupport: false,
+  },
 } as const;
 
 export const NETWORKS_KEYS = Object.values(NETWORKS).map(
