@@ -1,6 +1,6 @@
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { Contract } from 'ethers';
 
 import { transferABI } from './constants';
@@ -19,13 +19,14 @@ export const generateTxParameters =
     wrappedAmount: RosenAmountValue,
     rosenData: string,
     token: RosenChainToken,
+    fromChain: Network,
   ) => {
     const tokenMap = await getTokenMap();
 
     const unwrappedAmount = tokenMap.unwrapAmount(
       token.tokenId,
       wrappedAmount,
-      NETWORKS.ethereum.key,
+      NETWORKS[fromChain].key,
     ).amount;
 
     let transactionParameters;

@@ -8,6 +8,7 @@ import { UnavailableApiError } from './errors';
 export interface WalletTransferParams {
   token: RosenChainToken;
   amount: RosenAmountValue;
+  fromChain: Network;
   toChain: Network;
   address: string;
   bridgeFee: RosenAmountValue;

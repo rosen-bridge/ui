@@ -23,8 +23,13 @@ export const useTransaction = () => {
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const { targetValue, tokenValue, amountValue, walletAddressValue } =
-    useTransactionFormData();
+  const {
+    sourceValue,
+    targetValue,
+    tokenValue,
+    amountValue,
+    walletAddressValue,
+  } = useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -35,6 +40,7 @@ export const useTransaction = () => {
       !amountValue ||
       !bridgeFee ||
       !networkFee ||
+      !sourceValue ||
       !targetValue ||
       !tokenMap ||
       !tokenValue ||
@@ -56,6 +62,7 @@ export const useTransaction = () => {
             tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
           ),
         ),
+        fromChain: sourceValue,
         toChain: targetValue,
         address: selectedTarget.toSafeAddress(walletAddressValue),
         bridgeFee,
