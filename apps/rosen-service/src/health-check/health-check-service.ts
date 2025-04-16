@@ -106,4 +106,8 @@ const start = async () => {
   }
 };
 
-export default { start };
+const healthCheckService = {
+  start,
+};
+
+export default healthCheckService;
