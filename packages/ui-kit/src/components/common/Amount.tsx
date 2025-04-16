@@ -63,8 +63,9 @@ export const Amount = ({
     >
       {!!title && (
         <Typography
-          color="text.secondary"
+          color="inherit"
           sx={{
+            opacity: 0.6,
             flexGrow: 1,
             fontSize: size == 'normal' ? '0.75rem' : '1rem',
           }}
@@ -74,15 +75,15 @@ export const Amount = ({
       )}
       {loading && (
         <Typography
-          color="text.primary"
-          sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.375rem' }}
+          color="inherit"
+          sx={{ fontSize: size == 'normal' ? '1rem' : '1.5rem' }}
         >
           Pending...
         </Typography>
       )}
       {!loading && (
         <Typography
-          color="text.primary"
+          color="inherit"
           sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.375rem' }}
         >
           {number || '-'}
@@ -90,8 +91,9 @@ export const Amount = ({
       )}
       {!loading && !!decimals && (
         <Typography
-          color="text.secondary"
+          color="inherit"
           sx={{
+            opacity: 0.6,
             fontSize:
               size == 'normal' ? 'calc(0.75rem * 0.75)' : 'calc(1.5rem * 0.75)',
           }}
@@ -101,8 +103,9 @@ export const Amount = ({
       )}
       {!loading && !!unit && !!number && (
         <Typography
-          color="text.secondary"
+          color="inherit"
           sx={{
+            opacity: 0.6,
             fontSize:
               size == 'normal' ? 'calc(0.75rem * 0.75)' : 'calc(1.5rem * 0.75)',
           }}

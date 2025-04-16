@@ -14,6 +14,7 @@ import {
   styled,
   SuccessfulCopySnackbar,
   QrCodeModal,
+  Amount,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -126,12 +127,15 @@ export const WalletWidget = ({
             {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
               <>
                 {!!index && ' / '}
-                {getDecimalString(
-                  tokenInfoWithAddress.balance.amount.toString(),
-                  tokenInfoWithAddress.balance.decimals,
-                  3,
-                )}
-                <span>{tokenInfoWithAddress.balance.name}</span>
+                <Amount
+                  unit={tokenInfoWithAddress.balance.name}
+                  value={getDecimalString(
+                    tokenInfoWithAddress.balance.amount.toString(),
+                    tokenInfoWithAddress.balance.decimals,
+                    3,
+                  )}
+                  size="large"
+                />
               </>
             ))}
           </Typography>
