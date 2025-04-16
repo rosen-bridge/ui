@@ -110,9 +110,18 @@ export const useBridgeForm = () => {
           return 'Address cannot be empty';
         }
 
+        const trimmedValue = value.trim();
+        if (value !== trimmedValue) {
+          setValue('walletAddress', trimmedValue, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+          });
+        }
+
         const isValid = await unwrap(validateAddress)(
           targetField.value as Network,
-          networks[targetField.value as Network].toSafeAddress(value),
+          networks[targetField.value as Network].toSafeAddress(trimmedValue),
         );
 
         if (isValid) return;

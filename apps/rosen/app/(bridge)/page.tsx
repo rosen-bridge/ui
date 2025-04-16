@@ -74,7 +74,7 @@ const RosenBridge = () => {
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
 
   const methods = useForm<BridgeForm>({
-    mode: 'onBlur',
+    mode: 'onChange',
     defaultValues: {
       source: '',
       target: '',
