@@ -68,3 +68,33 @@ calculator:
     bitcoin: []
     ethereum: []
     binance: []
+healthCheck:
+  ergWarnThreshold: '1000000000'  # use string if > JS max safe int
+  ergCriticalThreshold: '500000000'
+  ergoScannerWarnDiff: 3
+  ergoScannerCriticalDiff: 5
+  cardanoScannerWarnDiff: 3
+  cardanoScannerCriticalDiff: 5
+  bitcoinScannerWarnDiff: 3
+  bitcoinScannerCriticalDiff: 5
+  dogeScannerWarnDiff: 3
+  dogeScannerCriticalDiff: 5
+  ethereumScannerWarnDiff: 3
+  ethereumScannerCriticalDiff: 5
+  binanceScannerWarnDiff: 3
+  binanceScannerCriticalDiff: 5
+  ergoNodeMaxHeightDiff: 2
+  ergoNodeMaxBlockTime: 300
+  ergoNodeMinPeerCount: 5
+  ergoNodeMaxPeerHeightDifference: 2
+  updateInterval: 60
+  logDuration: 600
+  errorLogAllowedCount: 3
+  warnLogAllowedCount: 5
+notification:
+  discordWebhookUrl: '' # discord notification webhook
+  historyCleanupThreshold: # notification history cleanup threshold (in seconds, uses default if not set)
+  windowDurations:
+    hasBeenUnstableForAWhile: # window duration to notify when service has been unstable for a while (in seconds, uses default if not set)
+    hasBeenUnknownForAWhile:  # window duration to notify when service has been in unknown status for a while (in seconds, uses default if not set)
+    isStillUnhealthy:  # window duration to notify when service is still unhealthy (in seconds, uses default if not set)
