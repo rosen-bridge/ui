@@ -23,6 +23,9 @@ import { getLastSavedBlock } from './health-check-utils';
 
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
+/**
+ * start all scanner-health-check and register their in a healthCheck with DiscordNotification
+ */
 const start = async () => {
   let notify;
   let notificationConfig;
