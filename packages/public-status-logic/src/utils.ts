@@ -15,24 +15,26 @@ export class Utils {
    * @param s2
    * @returns boolean
    */
-  static aggregatedStatusesMatch(
+  static aggregatedStatusesMatch = (
     s1: AggregatedStatus,
     s2: AggregatedStatus,
-  ): boolean {
+  ): boolean => {
     return (
       s1.status === s2.status &&
       s1.txStatus === s2.txStatus &&
       s1.tx?.txId === s2.tx?.txId &&
       s1.tx?.chain === s2.tx?.chain
     );
-  }
+  };
 
   /**
    * calculates the aggregated status
    * @param statuses
    * @returns AggregatedStatus
    */
-  static calcAggregatedStatus(statuses: GuardStatusEntity[]): AggregatedStatus {
+  static calcAggregatedStatus = (
+    statuses: GuardStatusEntity[],
+  ): AggregatedStatus => {
     const aggregatedStatus: AggregatedStatus = {
       status: AggregateEventStatus.waitingForConfirmation,
       txStatus: AggregateTxStatus.waitingForConfirmation,
@@ -105,14 +107,16 @@ export class Utils {
     }
 
     return aggregatedStatus;
-  }
+  };
 
   /**
    * helper function to map EventStatus to AggregateEventStatus
    * @param status
    * @returns AggregateEventStatus
    */
-  static eventStatusToAggregate(status: EventStatus): AggregateEventStatus {
+  static eventStatusToAggregate = (
+    status: EventStatus,
+  ): AggregateEventStatus => {
     switch (status) {
       case EventStatus.inPayment:
         return AggregateEventStatus.inPayment;
@@ -137,14 +141,14 @@ export class Utils {
       case EventStatus.rewardWaiting:
         return AggregateEventStatus.rewardWaiting;
     }
-  }
+  };
 
   /**
    * helper function to map TxStatus to AggregateTxStatus
    * @param status
    * @returns AggregateTxStatus
    */
-  static txStatusToAggregate(status: TxStatus): AggregateTxStatus {
+  static txStatusToAggregate = (status: TxStatus): AggregateTxStatus => {
     switch (status) {
       case TxStatus.approved:
         return AggregateTxStatus.inSign;
@@ -161,7 +165,7 @@ export class Utils {
       case TxStatus.completed:
         return AggregateTxStatus.completed;
     }
-  }
+  };
 
   /**
    * clones an object omitting the specified fields
@@ -172,10 +176,10 @@ export class Utils {
    * @param fieldsToOmit - an array containing keys that should be omitted from the clone
    * @returns a new object that includes all keys of the original object except for those specified in fieldsToOmit
    */
-  static cloneOmitting<T extends object, K extends keyof T>(
+  static cloneOmitting = <T extends object, K extends keyof T>(
     obj: T,
     fieldsToOmit: K[],
-  ): Omit<T, K> {
+  ): Omit<T, K> => {
     const result = {} as Omit<T, K>;
 
     (Object.keys(obj) as (keyof T)[]).forEach((key) => {
@@ -186,7 +190,7 @@ export class Utils {
     });
 
     return result;
-  }
+  };
 
   /**
    * clones an array by filtering out objects where the specified key matches a given value and then pushes a new object into the cloned array
@@ -199,14 +203,14 @@ export class Utils {
    * @param newObj - the new object to push into the cloned array
    * @returns a new array that is a clone of the original, with the specified objects filtered out and the new object added
    */
-  static cloneFilterPush<T, K extends keyof T>(
+  static cloneFilterPush = <T, K extends keyof T>(
     arr: T[],
     key: K,
     value: T[K],
     newObj: T,
-  ): T[] {
+  ): T[] => {
     const clonedArray = arr.filter((item) => item[key] !== value);
     clonedArray.push(newObj);
     return clonedArray;
-  }
+  };
 }

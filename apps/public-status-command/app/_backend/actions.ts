@@ -1,5 +1,4 @@
-import { PublicStatusActions } from '@rosen-bridge/public-status-logic';
-
+// sort-imports-ignore
 import './initialize-if-needed';
 
-export { PublicStatusActions };
+export { PublicStatusActions } from '@rosen-bridge/public-status-logic';

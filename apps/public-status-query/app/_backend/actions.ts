@@ -1,12 +1,14 @@
+// sort-imports-ignore
+import './initialize-if-needed';
+
+export { PublicStatusActions } from '@rosen-bridge/public-status-logic';
+
 import {
-  PublicStatusActions,
   AggregatedStatusChangedEntity,
   GuardStatusChangedEntity,
   AggregatedStatusEntity,
   Utils,
 } from '@rosen-bridge/public-status-logic';
-
-import './initialize-if-needed';
 
 /**
  * a response type used in api
@@ -21,11 +23,11 @@ export type AggregatedStatusChangedDTO = Omit<
  * @param record
  * @returns AggregatedStatusChangedDTO
  */
-export function aggregatedStatusChangedToDTO(
+export const aggregatedStatusChangedToDTO = (
   record: AggregatedStatusChangedEntity,
-): AggregatedStatusChangedDTO {
+): AggregatedStatusChangedDTO => {
   return Utils.cloneOmitting(record, ['id', 'eventId']);
-}
+};
 
 /**
  * a response type used in api
@@ -37,11 +39,11 @@ export type AggregatedStatusDTO = Omit<AggregatedStatusEntity, 'eventId'>;
  * @param record
  * @returns AggregatedStatusDTO
  */
-export function aggregatedStatusToDTO(
+export const aggregatedStatusToDTO = (
   record: AggregatedStatusEntity,
-): AggregatedStatusDTO {
+): AggregatedStatusDTO => {
   return Utils.cloneOmitting(record, ['eventId']);
-}
+};
 
 /**
  * a response type used in api
@@ -56,10 +58,8 @@ export type GuardStatusChangedDTO = Omit<
  * @param record
  * @returns GuardStatusChangedDTO
  */
-export function guardStatusChangedToDTO(
+export const guardStatusChangedToDTO = (
   record: GuardStatusChangedEntity,
-): GuardStatusChangedDTO {
+): GuardStatusChangedDTO => {
   return Utils.cloneOmitting(record, ['id', 'eventId']);
-}
-
-export { PublicStatusActions };
+};

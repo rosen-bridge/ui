@@ -1,12 +1,11 @@
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { In } from 'typeorm';
 
 import { EventStatus, TxStatus } from '../../constants';
-import { dataSource } from '../dataSource';
 import { GuardStatusEntity } from '../entities/GuardStatusEntity';
 
-export const GuardStatusRepository = dataSource
-  .getRepository(GuardStatusEntity)
-  .extend({
+export const createGuardStatusRepository = (dataSource: DataSource) => {
+  return dataSource.getRepository(GuardStatusEntity).extend({
     /**
      * retrieves one GuardStatusEntity matching the specified eventId and guardPk
      * @param eventId
@@ -91,3 +90,8 @@ export const GuardStatusRepository = dataSource
       );
     },
   });
+};
+
+export type GuardStatusRepository = ReturnType<
+  typeof createGuardStatusRepository
+>;

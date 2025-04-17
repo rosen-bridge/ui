@@ -54,16 +54,26 @@ const dataSource = {
     },
   },
 };
+const DataSourceHandler = {
+  DataSourceHandler: {
+    getInstance: () => ({
+      dataSource,
+      aggregatedStatusChangedRepository: AggregatedStatusChangedRepository,
+      aggregatedStatusRepository: AggregatedStatusRepository,
+      guardStatusChangedRepository: GuardStatusChangedRepository,
+      guardStatusRepository: GuardStatusRepository,
+      txRepository: TxRepository,
+    }),
+  },
+};
 
 vi.mock('../../../src/utils', () => {
   return {
     Utils,
   };
 });
-vi.mock('../../../src/db/dataSource', () => {
-  return {
-    dataSource,
-  };
+vi.mock('../../../src/db/DataSourceHandler', () => {
+  return DataSourceHandler;
 });
 vi.mock('../../../src/db/repositories/TxRepository', () => {
   return {
@@ -96,7 +106,7 @@ vi.mock(
 
 export {
   Utils,
-  dataSource,
+  DataSourceHandler,
   TxRepository,
   GuardStatusRepository,
   GuardStatusChangedRepository,

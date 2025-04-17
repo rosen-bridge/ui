@@ -1,6 +1,4 @@
 import { TxStatus, TxType } from '../../../src/constants';
-import { GuardStatusChangedRepository } from '../../../src/db/repositories/GuardStatusChangedRepository';
-import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import {
   mockGuardStatusChangedRecords,
   guardPk0,
@@ -11,6 +9,18 @@ import {
   txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
+
+vi.mock('../../../src/db/DataSourceHandler', async () => {
+  const { DataSourceMock } = await import('../mocked/DataSource.mock');
+
+  return {
+    DataSourceHandler: {
+      getInstance: () => ({
+        dataSource: DataSourceMock.testDataSource,
+      }),
+    },
+  };
+});
 
 describe('GuardStatusChangedRepository', () => {
   beforeEach(async () => {
@@ -28,7 +38,8 @@ describe('GuardStatusChangedRepository', () => {
      */
     it('should return null if no record is available', async () => {
       // act
-      const lastStatus = await GuardStatusChangedRepository.getLast(id0, 'pk');
+      const lastStatus =
+        await DataSourceMock.guardStatusChangedRepository.getLast(id0, 'pk');
 
       // assert
       expect(lastStatus).toBeNull();
@@ -49,7 +60,13 @@ describe('GuardStatusChangedRepository', () => {
      */
     it('should return the last GuardStatusChangedEntity record', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateGuardStatusChanged(
         mockGuardStatusChangedRecords,
@@ -60,22 +77,26 @@ describe('GuardStatusChangedRepository', () => {
       const status3 = mockGuardStatusChangedRecords[3];
 
       // act
-      const lastStatus0 = await GuardStatusChangedRepository.getLast(
-        id0,
-        guardPk0,
-      );
-      const lastStatus1 = await GuardStatusChangedRepository.getLast(
-        id1,
-        guardPk0,
-      );
-      const lastStatus2 = await GuardStatusChangedRepository.getLast(
-        id0,
-        guardPk1,
-      );
-      const lastStatus3 = await GuardStatusChangedRepository.getLast(
-        id0,
-        guardPk2,
-      );
+      const lastStatus0 =
+        await DataSourceMock.guardStatusChangedRepository.getLast(
+          id0,
+          guardPk0,
+        );
+      const lastStatus1 =
+        await DataSourceMock.guardStatusChangedRepository.getLast(
+          id1,
+          guardPk0,
+        );
+      const lastStatus2 =
+        await DataSourceMock.guardStatusChangedRepository.getLast(
+          id0,
+          guardPk1,
+        );
+      const lastStatus3 =
+        await DataSourceMock.guardStatusChangedRepository.getLast(
+          id0,
+          guardPk2,
+        );
 
       // assert
       expect(lastStatus0).toEqual({ ...status2, id: 3, tx: txEntityRecord });
@@ -96,8 +117,10 @@ describe('GuardStatusChangedRepository', () => {
      */
     it('should return empty array if no record is available', async () => {
       // act
-      const records0 = await GuardStatusChangedRepository.getMany(id0, []);
-      const records1 = await GuardStatusChangedRepository.getMany(id0, ['pk']);
+      const records0 =
+        await DataSourceMock.guardStatusChangedRepository.getMany(id0, []);
+      const records1 =
+        await DataSourceMock.guardStatusChangedRepository.getMany(id0, ['pk']);
 
       // assert
       expect(records0).toHaveLength(0);
@@ -119,7 +142,13 @@ describe('GuardStatusChangedRepository', () => {
      */
     it('should return array of GuardStatusChangedEntity records', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateGuardStatusChanged(
         mockGuardStatusChangedRecords,
@@ -131,19 +160,23 @@ describe('GuardStatusChangedRepository', () => {
       const status3 = mockGuardStatusChangedRecords[3];
 
       // act
-      const records0 = await GuardStatusChangedRepository.getMany(id0, [
-        guardPk0,
-      ]);
-      const records1 = await GuardStatusChangedRepository.getMany(id1, [
-        guardPk0,
-      ]);
-      const records2 = await GuardStatusChangedRepository.getMany(id0, [
-        guardPk1,
-      ]);
-      const records3 = await GuardStatusChangedRepository.getMany(id0, [
-        guardPk0,
-        guardPk1,
-      ]);
+      const records0 =
+        await DataSourceMock.guardStatusChangedRepository.getMany(id0, [
+          guardPk0,
+        ]);
+      const records1 =
+        await DataSourceMock.guardStatusChangedRepository.getMany(id1, [
+          guardPk0,
+        ]);
+      const records2 =
+        await DataSourceMock.guardStatusChangedRepository.getMany(id0, [
+          guardPk1,
+        ]);
+      const records3 =
+        await DataSourceMock.guardStatusChangedRepository.getMany(id0, [
+          guardPk0,
+          guardPk1,
+        ]);
 
       // assert
       expect(records0).toHaveLength(2);
@@ -176,18 +209,24 @@ describe('GuardStatusChangedRepository', () => {
      */
     it('should insert record in database when guard status is changed', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       const status0 = mockGuardStatusChangedRecords[0];
       const status2 = mockGuardStatusChangedRecords[2];
 
       const repositoryInsertSpy = vi.spyOn(
-        GuardStatusChangedRepository,
+        DataSourceMock.guardStatusChangedRepository,
         'insert',
       );
 
       // act
-      await GuardStatusChangedRepository.insertOne(
+      await DataSourceMock.guardStatusChangedRepository.insertOne(
         status0.eventId,
         status0.guardPk,
         status0.insertedAt,
@@ -200,7 +239,7 @@ describe('GuardStatusChangedRepository', () => {
             }
           : undefined,
       );
-      await GuardStatusChangedRepository.insertOne(
+      await DataSourceMock.guardStatusChangedRepository.insertOne(
         status2.eventId,
         status2.guardPk,
         status2.insertedAt,
@@ -213,7 +252,7 @@ describe('GuardStatusChangedRepository', () => {
             }
           : undefined,
       );
-      const records = await GuardStatusChangedRepository.find({
+      const records = await DataSourceMock.guardStatusChangedRepository.find({
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });
@@ -255,7 +294,7 @@ describe('GuardStatusChangedRepository', () => {
       // arrange
       const status0 = mockGuardStatusChangedRecords[0];
       const status3 = mockGuardStatusChangedRecords[3];
-      await GuardStatusChangedRepository.insertOne(
+      await DataSourceMock.guardStatusChangedRepository.insertOne(
         status0.eventId,
         status0.guardPk,
         status0.insertedAt,
@@ -268,7 +307,7 @@ describe('GuardStatusChangedRepository', () => {
             }
           : undefined,
       );
-      await GuardStatusChangedRepository.insertOne(
+      await DataSourceMock.guardStatusChangedRepository.insertOne(
         status3.eventId,
         status3.guardPk,
         status3.insertedAt,
@@ -283,13 +322,13 @@ describe('GuardStatusChangedRepository', () => {
       );
 
       const repositoryInsertSpy = vi.spyOn(
-        GuardStatusChangedRepository,
+        DataSourceMock.guardStatusChangedRepository,
         'insert',
       );
 
       // act and assert
       await expect(async () => {
-        await GuardStatusChangedRepository.insertOne(
+        await DataSourceMock.guardStatusChangedRepository.insertOne(
           status3.eventId,
           status3.guardPk,
           status3.insertedAt + 5,
@@ -304,7 +343,7 @@ describe('GuardStatusChangedRepository', () => {
         );
       }).rejects.toThrowError('guard_status_not_changed');
       await expect(async () => {
-        await GuardStatusChangedRepository.insertOne(
+        await DataSourceMock.guardStatusChangedRepository.insertOne(
           status0.eventId,
           status0.guardPk,
           status0.insertedAt + 5,
@@ -319,7 +358,7 @@ describe('GuardStatusChangedRepository', () => {
         );
       }).rejects.toThrowError('guard_status_not_changed');
 
-      const records = await GuardStatusChangedRepository.find({
+      const records = await DataSourceMock.guardStatusChangedRepository.find({
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
       });

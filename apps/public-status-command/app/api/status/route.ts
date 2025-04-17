@@ -9,13 +9,16 @@ import { validator, Params } from './validator';
 // generating an ECDSA encryption object with no secret only for verification
 const ecdsa = new ECDSA('');
 
-function paramsToSignMessage(params: Params, timestampSeconds: number): string {
+const paramsToSignMessage = (
+  params: Params,
+  timestampSeconds: number,
+): string => {
   return params.tx
     ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${timestampSeconds}`
     : `${params.eventId}${params.status}${timestampSeconds}`;
-}
+};
 
-async function handler(params: Params) {
+const handler = async (params: Params) => {
   // check if pk is allowed
   if (!configs.allowedPks.includes(params.pk)) {
     throw new AccessDeniedError('access_denied');
@@ -50,6 +53,6 @@ async function handler(params: Params) {
   );
 
   return {};
-}
+};
 
 export const POST = withValidation(validator, handler);

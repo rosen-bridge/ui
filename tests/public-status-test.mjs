@@ -5,14 +5,14 @@ import assert from 'assert';
 import axios from 'axios';
 import pkg from 'secp256k1';
 
-function sign(secret, message) {
+const sign = (secret, message) => {
   const key = Uint8Array.from(Buffer.from(secret, 'hex'));
   const bytes = blake2b(message, {
     dkLen: 32,
   });
   const signed = pkg.ecdsaSign(bytes, key);
   return Buffer.from(signed.signature).toString('hex');
-}
+};
 
 const id0 = '0000000000000000000000000000000000000000000000000000000000000000';
 const id1 = '0000000000000000000000000000000000000000000000000000000000000001';
@@ -61,20 +61,20 @@ const mockTx2 = {
 };
 let validRequest2Timestamp;
 
-function getTime() {
+const getTime = () => {
   return Math.floor(Date.now() / 1000);
-}
+};
 
-function assertObjectsMatch(o1, o2) {
+const assertObjectsMatch = (o1, o2) => {
   const o1String = JSON.stringify(o1);
   const o2String = JSON.stringify(o2);
   if (o1String !== o2String) {
     console.error({ o1, o2 });
     throw new Error('assertObjectsMatch failed');
   }
-}
+};
 
-function getMockTxExpectation(tx, eventId, insertedAt) {
+const getMockTxExpectation = (tx, eventId, insertedAt) => {
   return {
     txId: tx.txId,
     chain: tx.chain,
@@ -82,15 +82,15 @@ function getMockTxExpectation(tx, eventId, insertedAt) {
     insertedAt,
     txType: tx.txType,
   };
-}
+};
 
-function paramsToSignMessage(params) {
+const paramsToSignMessage = (params) => {
   return params.tx
     ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${params.timestamp}`
     : `${params.eventId}${params.status}${params.timestamp}`;
-}
+};
 
-async function submitStatus(params) {
+const submitStatus = async (params) => {
   const { guard, timestamp, eventId, status, tx } = params;
 
   let pk = guardPk0;
@@ -131,9 +131,9 @@ async function submitStatus(params) {
     signature,
     tx,
   });
-}
+};
 
-async function testInvalidTimestampPast() {
+const testInvalidTimestampPast = async () => {
   try {
     const response = await submitStatus({
       guard: 0,
@@ -153,9 +153,9 @@ async function testInvalidTimestampPast() {
   }
 
   console.log('testInvalidTimestampPast: Passed');
-}
+};
 
-async function testInvalidTimestampFuture() {
+const testInvalidTimestampFuture = async () => {
   try {
     const response = await submitStatus({
       guard: 0,
@@ -175,9 +175,9 @@ async function testInvalidTimestampFuture() {
   }
 
   console.log('testInvalidTimestampFuture: Passed');
-}
+};
 
-async function testNotAllowedPk() {
+const testNotAllowedPk = async () => {
   try {
     const response = await submitStatus({
       guard: 2,
@@ -197,9 +197,9 @@ async function testNotAllowedPk() {
   }
 
   console.log('testNotAllowedPk: Passed');
-}
+};
 
-async function testSignatureInvalid() {
+const testSignatureInvalid = async () => {
   const temp = guardSecret0;
   guardSecret0 = guardSecret1;
 
@@ -224,9 +224,9 @@ async function testSignatureInvalid() {
   guardSecret0 = temp;
 
   console.log('testSignatureInvalid: Passed');
-}
+};
 
-async function testValidRequest() {
+const testValidRequest = async () => {
   const timestamp = getTime();
   const eventId = id0;
 
@@ -282,9 +282,9 @@ async function testValidRequest() {
   });
 
   console.log(`testValidRequest: Passed`);
-}
+};
 
-async function testValidRequest2() {
+const testValidRequest2 = async () => {
   const timestamp = getTime() - 20;
   const eventId = id1;
 
@@ -364,9 +364,9 @@ async function testValidRequest2() {
   });
 
   console.log(`testValidRequest2: Passed`);
-}
+};
 
-async function testDuplicateRequest() {
+const testDuplicateRequest = async () => {
   await new Promise((r) => setTimeout(r, 1000));
   const timestamp = getTime();
   const eventId = id1;
@@ -425,9 +425,9 @@ async function testDuplicateRequest() {
   });
 
   console.log(`testDuplicateRequest: Passed`);
-}
+};
 
-async function testAggregateStatusChange() {
+const testAggregateStatusChange = async () => {
   const eventId = id2;
 
   // =======
@@ -939,9 +939,9 @@ async function testAggregateStatusChange() {
   });
 
   console.log(`testAggregateStatusChange: Passed`);
-}
+};
 
-async function testGetInvalidEventIds() {
+const testGetInvalidEventIds = async () => {
   // get aggregated status
   const response = await axios.post(`${queryApiBaseUrl}/api/status`, {
     eventIds: [id3],
@@ -950,17 +950,17 @@ async function testGetInvalidEventIds() {
   assert(Object.keys(response.data).length === 0);
 
   console.log(`testGetInvalidEventIds: Passed`);
-}
+};
 
-async function testGetInvalidEventTimeline() {
+const testGetInvalidEventTimeline = async () => {
   const response = await axios.get(`${queryApiBaseUrl}/api/status/${id3}`);
   assert(response.status === 200);
   assert(response.data.length === 0);
 
   console.log(`testGetInvalidEventTimeline: Passed`);
-}
+};
 
-async function testGetValidEventTimeline() {
+const testGetValidEventTimeline = async () => {
   const response = await axios.get(`${queryApiBaseUrl}/api/status/${id1}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
@@ -972,9 +972,9 @@ async function testGetValidEventTimeline() {
   });
 
   console.log(`testGetValidEventTimeline: Passed`);
-}
+};
 
-async function testGetInvalidGuardEventTimeline() {
+const testGetInvalidGuardEventTimeline = async () => {
   const response = await axios.post(
     `${queryApiBaseUrl}/api/status/${id3}/guards`,
     {
@@ -985,9 +985,9 @@ async function testGetInvalidGuardEventTimeline() {
   assert(response.data.length === 0);
 
   console.log(`testGetInvalidGuardEventTimeline: Passed`);
-}
+};
 
-async function testGetValidGuardEventTimeline() {
+const testGetValidGuardEventTimeline = async () => {
   const response = await axios.post(
     `${queryApiBaseUrl}/api/status/${id1}/guards`,
     {
@@ -1005,9 +1005,9 @@ async function testGetValidGuardEventTimeline() {
   });
 
   console.log(`testGetValidGuardEventTimeline: Passed`);
-}
+};
 
-function resetDB() {
+const resetDB = () => {
   console.log('resetting db');
   const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
 
@@ -1022,20 +1022,20 @@ function resetDB() {
   p.stdin.end();
 
   console.log('done resetting db');
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function resetSchema() {
+const resetSchema = async () => {
   await $`psql -p 5432 -U postgres -d public_status_test <<EOF
   DROP SCHEMA public CASCADE;
   CREATE SCHEMA public;
   GRANT ALL ON SCHEMA public TO public_status_test_user;
   ALTER ROLE public_status_test_user SET search_path = public;
   EOF`;
-}
+};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-async function setupDB() {
+const setupDB = async () => {
   await $`psql -p 5432 -U postgres -d postgres <<EOF
   DROP DATABASE public_status_test;
   CREATE DATABASE public_status_test;
@@ -1044,10 +1044,10 @@ async function setupDB() {
   \c public_status_test postgres;
   GRANT ALL ON SCHEMA public TO public_status_test_user;
   EOF`;
-}
+};
 
 let commandApi;
-async function startCommandApi() {
+const startCommandApi = async () => {
   await within(async () => {
     console.log('starting command api');
 
@@ -1067,10 +1067,10 @@ async function startCommandApi() {
 
     console.log('command api ready');
   });
-}
+};
 
 let queryApi;
-async function startQueryApi() {
+const startQueryApi = async () => {
   await within(async () => {
     console.log('starting query api');
 
@@ -1089,9 +1089,9 @@ async function startQueryApi() {
 
     console.log('query api ready');
   });
-}
+};
 
-function getShouldStartApis() {
+const getShouldStartApis = () => {
   if (process.argv.length < 4) {
     console.log('expecting the apis are up and running');
     return false;
@@ -1109,9 +1109,9 @@ function getShouldStartApis() {
     );
     return false;
   }
-}
+};
 
-async function run() {
+const run = async () => {
   await spinner('running tests', async () => {
     const shouldStartApis = getShouldStartApis();
 
@@ -1152,6 +1152,6 @@ async function run() {
       process.exitCode = 1;
     }
   });
-}
+};
 
 await run();

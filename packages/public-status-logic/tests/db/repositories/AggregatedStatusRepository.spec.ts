@@ -3,8 +3,6 @@ import {
   AggregateTxStatus,
   TxType,
 } from '../../../src/constants';
-import { AggregatedStatusRepository } from '../../../src/db/repositories/AggregatedStatusRepository';
-import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import {
   mockAggregatedStatusRecords,
   id0,
@@ -14,6 +12,18 @@ import {
   txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
+
+vi.mock('../../../src/db/DataSourceHandler', async () => {
+  const { DataSourceMock } = await import('../mocked/DataSource.mock');
+
+  return {
+    DataSourceHandler: {
+      getInstance: () => ({
+        dataSource: DataSourceMock.testDataSource,
+      }),
+    },
+  };
+});
 
 describe('AggregatedStatusRepository', () => {
   beforeEach(async () => {
@@ -31,7 +41,8 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should return null if no record is available', async () => {
       // act
-      const currentStatus = await AggregatedStatusRepository.getOne(id0);
+      const currentStatus =
+        await DataSourceMock.aggregatedStatusRepository.getOne(id0);
 
       // assert
       expect(currentStatus).toBeNull();
@@ -51,7 +62,13 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should return only the requested AggregatedStatusEntity record', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateAggregatedStatus(
         mockAggregatedStatusRecords,
@@ -61,9 +78,12 @@ describe('AggregatedStatusRepository', () => {
       const status1 = mockAggregatedStatusRecords[1];
 
       // act
-      const currentStatus0 = await AggregatedStatusRepository.getOne(id0);
-      const currentStatus1 = await AggregatedStatusRepository.getOne(id1);
-      const currentStatus2 = await AggregatedStatusRepository.getOne(id3);
+      const currentStatus0 =
+        await DataSourceMock.aggregatedStatusRepository.getOne(id0);
+      const currentStatus1 =
+        await DataSourceMock.aggregatedStatusRepository.getOne(id1);
+      const currentStatus2 =
+        await DataSourceMock.aggregatedStatusRepository.getOne(id3);
 
       // assert
       expect(currentStatus0).toEqual({ ...status0, tx: txEntityRecord });
@@ -83,8 +103,12 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should return empty array if no record is available', async () => {
       // act
-      const records0 = await AggregatedStatusRepository.getMany([]);
-      const records1 = await AggregatedStatusRepository.getMany([id0]);
+      const records0 = await DataSourceMock.aggregatedStatusRepository.getMany(
+        [],
+      );
+      const records1 = await DataSourceMock.aggregatedStatusRepository.getMany([
+        id0,
+      ]);
 
       // assert
       expect(records0).toHaveLength(0);
@@ -105,7 +129,13 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should return array of AggregatedStatusEntity records', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateAggregatedStatus(
         mockAggregatedStatusRecords,
@@ -116,13 +146,17 @@ describe('AggregatedStatusRepository', () => {
       const status2 = mockAggregatedStatusRecords[2];
 
       // act
-      const records0 = await AggregatedStatusRepository.getMany([
+      const records0 = await DataSourceMock.aggregatedStatusRepository.getMany([
         id0,
         id2,
         id3,
       ]);
-      const records1 = await AggregatedStatusRepository.getMany([id1]);
-      const records2 = await AggregatedStatusRepository.getMany([id3]);
+      const records1 = await DataSourceMock.aggregatedStatusRepository.getMany([
+        id1,
+      ]);
+      const records2 = await DataSourceMock.aggregatedStatusRepository.getMany([
+        id3,
+      ]);
 
       // assert
       expect(records0).toHaveLength(2);
@@ -147,27 +181,33 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should insert record in database when eventId is new', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       const status0 = mockAggregatedStatusRecords[0];
       const status2 = mockAggregatedStatusRecords[2];
 
       // act
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status0.eventId,
         status0.updatedAt,
         status0.status,
         status0.txStatus,
         status0.tx ?? undefined,
       );
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status2.eventId,
         status2.updatedAt,
         status2.status,
         status2.txStatus,
         status2.tx ?? undefined,
       );
-      const records = await AggregatedStatusRepository.find({
+      const records = await DataSourceMock.aggregatedStatusRepository.find({
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
       });
@@ -191,7 +231,13 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should update record in database when eventId exists', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateAggregatedStatus(
         mockAggregatedStatusRecords,
@@ -202,21 +248,21 @@ describe('AggregatedStatusRepository', () => {
       const status2 = mockAggregatedStatusRecords[2];
 
       // act
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status0.eventId,
         10,
         AggregateEventStatus.paymentWaiting,
         AggregateTxStatus.invalid,
         undefined,
       );
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status2.eventId,
         20,
         AggregateEventStatus.reachedLimit,
         AggregateTxStatus.sent,
         { txId: id1, chain: 'c1' },
       );
-      const records = await AggregatedStatusRepository.find({
+      const records = await DataSourceMock.aggregatedStatusRepository.find({
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
       });
@@ -255,19 +301,25 @@ describe('AggregatedStatusRepository', () => {
      */
     it('should not update database value when status is not changed', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       const status0 = mockAggregatedStatusRecords[0];
       const status2 = mockAggregatedStatusRecords[2];
 
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status0.eventId,
         status0.updatedAt,
         status0.status,
         status0.txStatus,
         status0.tx ?? undefined,
       );
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status2.eventId,
         status2.updatedAt,
         status2.status,
@@ -276,26 +328,26 @@ describe('AggregatedStatusRepository', () => {
       );
 
       const repositoryUpsertSpy = vi.spyOn(
-        AggregatedStatusRepository,
+        DataSourceMock.aggregatedStatusRepository,
         'upsert',
       );
 
       // act
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status2.eventId,
         status2.updatedAt + 5,
         status2.status,
         status2.txStatus,
         status2.tx ?? undefined,
       );
-      await AggregatedStatusRepository.upsertOne(
+      await DataSourceMock.aggregatedStatusRepository.upsertOne(
         status0.eventId,
         status0.updatedAt + 5,
         status0.status,
         status0.txStatus,
         status0.tx ?? undefined,
       );
-      const records = await AggregatedStatusRepository.find({
+      const records = await DataSourceMock.aggregatedStatusRepository.find({
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
       });

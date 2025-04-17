@@ -9,7 +9,7 @@ import { validator, GetAggregatedStatusesRequestBody } from './validator';
 
 type GetManyStatusResponse = Record<string, AggregatedStatusDTO>;
 
-async function handler(params: GetAggregatedStatusesRequestBody) {
+const handler = async (params: GetAggregatedStatusesRequestBody) => {
   const records = await PublicStatusActions.getAggregatedStatuses(
     params.eventIds,
   );
@@ -17,6 +17,6 @@ async function handler(params: GetAggregatedStatusesRequestBody) {
     dict[record.eventId] = aggregatedStatusToDTO(record);
     return dict;
   }, {} as GetManyStatusResponse);
-}
+};
 
 export const POST = withValidation(validator, handler);

@@ -8,9 +8,9 @@ import { Threshold } from './types';
  * @returns the parsed Threshold value or undefined if the environment variable is not defined
  * @throws will throw an error if the JSON is invalid, or if the parsed value does not match the Threshold type
  */
-export function getThresholdFromEnv<T>(
+export const getThresholdFromEnv = <T>(
   envKey: string,
-): Threshold<T> | undefined {
+): Threshold<T> | undefined => {
   const envValue = process.env[envKey];
 
   if (!envValue) {
@@ -51,7 +51,7 @@ export function getThresholdFromEnv<T>(
 
   // Use type assertion because we've validated the structure.
   return parsed as Threshold<T>;
-}
+};
 
 export const eventStatusThresholds: Threshold<AggregateEventStatus> =
   getThresholdFromEnv('EVENT_STATUS_THRESHOLDS') ?? [

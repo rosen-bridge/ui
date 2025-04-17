@@ -1,6 +1,4 @@
 import { EventStatus, TxStatus, TxType } from '../../../src/constants';
-import { GuardStatusRepository } from '../../../src/db/repositories/GuardStatusRepository';
-import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import {
   mockGuardStatusRecords,
   guardPk0,
@@ -11,6 +9,18 @@ import {
   txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
+
+vi.mock('../../../src/db/DataSourceHandler', async () => {
+  const { DataSourceMock } = await import('../mocked/DataSource.mock');
+
+  return {
+    DataSourceHandler: {
+      getInstance: () => ({
+        dataSource: DataSourceMock.testDataSource,
+      }),
+    },
+  };
+});
 
 describe('GuardStatusRepository', () => {
   beforeEach(async () => {
@@ -28,7 +38,10 @@ describe('GuardStatusRepository', () => {
      */
     it('should return null if no record is available', async () => {
       // act
-      const currentStatus = await GuardStatusRepository.getOne(id0, 'pk');
+      const currentStatus = await DataSourceMock.guardStatusRepository.getOne(
+        id0,
+        'pk',
+      );
 
       // assert
       expect(currentStatus).toBeNull();
@@ -49,7 +62,13 @@ describe('GuardStatusRepository', () => {
      */
     it('should return only the requested GuardStatusEntity record', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateGuardStatus(mockGuardStatusRecords);
 
@@ -58,10 +77,22 @@ describe('GuardStatusRepository', () => {
       const status2 = mockGuardStatusRecords[2];
 
       // act
-      const currentStatus0 = await GuardStatusRepository.getOne(id0, guardPk0);
-      const currentStatus1 = await GuardStatusRepository.getOne(id1, guardPk0);
-      const currentStatus2 = await GuardStatusRepository.getOne(id0, guardPk1);
-      const currentStatus3 = await GuardStatusRepository.getOne(id0, guardPk2);
+      const currentStatus0 = await DataSourceMock.guardStatusRepository.getOne(
+        id0,
+        guardPk0,
+      );
+      const currentStatus1 = await DataSourceMock.guardStatusRepository.getOne(
+        id1,
+        guardPk0,
+      );
+      const currentStatus2 = await DataSourceMock.guardStatusRepository.getOne(
+        id0,
+        guardPk1,
+      );
+      const currentStatus3 = await DataSourceMock.guardStatusRepository.getOne(
+        id0,
+        guardPk2,
+      );
 
       // assert
       expect(currentStatus0).toEqual({ ...status1, tx: txEntityRecord });
@@ -82,8 +113,13 @@ describe('GuardStatusRepository', () => {
      */
     it('should return empty array if no record is available', async () => {
       // act
-      const records0 = await GuardStatusRepository.getMany(id0, []);
-      const records1 = await GuardStatusRepository.getMany(id0, ['pk']);
+      const records0 = await DataSourceMock.guardStatusRepository.getMany(
+        id0,
+        [],
+      );
+      const records1 = await DataSourceMock.guardStatusRepository.getMany(id0, [
+        'pk',
+      ]);
 
       // assert
       expect(records0).toHaveLength(0);
@@ -105,7 +141,13 @@ describe('GuardStatusRepository', () => {
      */
     it('should return array of GuardStatus records', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateGuardStatus(mockGuardStatusRecords);
 
@@ -114,13 +156,17 @@ describe('GuardStatusRepository', () => {
       const status2 = mockGuardStatusRecords[2];
 
       // act
-      const records0 = await GuardStatusRepository.getMany(id0, [guardPk0]);
-      const records1 = await GuardStatusRepository.getMany(id1, [
+      const records0 = await DataSourceMock.guardStatusRepository.getMany(id0, [
+        guardPk0,
+      ]);
+      const records1 = await DataSourceMock.guardStatusRepository.getMany(id1, [
         guardPk0,
         guardPk2,
       ]);
-      const records2 = await GuardStatusRepository.getMany(id0, [guardPk1]);
-      const records3 = await GuardStatusRepository.getMany(id0, [
+      const records2 = await DataSourceMock.guardStatusRepository.getMany(id0, [
+        guardPk1,
+      ]);
+      const records3 = await DataSourceMock.guardStatusRepository.getMany(id0, [
         guardPk0,
         guardPk1,
       ]);
@@ -154,7 +200,7 @@ describe('GuardStatusRepository', () => {
       const status2 = mockGuardStatusRecords[2];
 
       // act
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status0.eventId,
         status0.guardPk,
         status0.updatedAt,
@@ -167,7 +213,7 @@ describe('GuardStatusRepository', () => {
             }
           : undefined,
       );
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status2.eventId,
         status2.guardPk,
         status2.updatedAt,
@@ -180,7 +226,7 @@ describe('GuardStatusRepository', () => {
             }
           : undefined,
       );
-      const records = await GuardStatusRepository.find({
+      const records = await DataSourceMock.guardStatusRepository.find({
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
       });
@@ -204,7 +250,13 @@ describe('GuardStatusRepository', () => {
      */
     it('should update record in database when eventId pk pair exists', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateGuardStatus(mockGuardStatusRecords);
 
@@ -213,21 +265,21 @@ describe('GuardStatusRepository', () => {
       const status2 = mockGuardStatusRecords[2];
 
       // act
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status1.eventId,
         status1.guardPk,
         10,
         EventStatus.paymentWaiting,
         undefined,
       );
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status2.eventId,
         status2.guardPk,
         20,
         EventStatus.reachedLimit,
         { txId: id1, chain: 'c1', txStatus: TxStatus.sent },
       );
-      const records = await GuardStatusRepository.find({
+      const records = await DataSourceMock.guardStatusRepository.find({
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
       });
@@ -270,7 +322,7 @@ describe('GuardStatusRepository', () => {
       const status0 = mockGuardStatusRecords[0];
       const status2 = mockGuardStatusRecords[2];
 
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status0.eventId,
         status0.guardPk,
         status0.updatedAt,
@@ -283,7 +335,7 @@ describe('GuardStatusRepository', () => {
             }
           : undefined,
       );
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status2.eventId,
         status2.guardPk,
         status2.updatedAt,
@@ -297,10 +349,13 @@ describe('GuardStatusRepository', () => {
           : undefined,
       );
 
-      const repositoryUpsertSpy = vi.spyOn(GuardStatusRepository, 'upsert');
+      const repositoryUpsertSpy = vi.spyOn(
+        DataSourceMock.guardStatusRepository,
+        'upsert',
+      );
 
       // act
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status2.eventId,
         status2.guardPk,
         status2.updatedAt + 5,
@@ -313,7 +368,7 @@ describe('GuardStatusRepository', () => {
             }
           : undefined,
       );
-      await GuardStatusRepository.upsertOne(
+      await DataSourceMock.guardStatusRepository.upsertOne(
         status0.eventId,
         status0.guardPk,
         status0.updatedAt + 5,
@@ -326,7 +381,7 @@ describe('GuardStatusRepository', () => {
             }
           : undefined,
       );
-      const records = await GuardStatusRepository.find({
+      const records = await DataSourceMock.guardStatusRepository.find({
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
       });

@@ -1,6 +1,4 @@
 import { TxType } from '../../../src/constants';
-import { AggregatedStatusChangedRepository } from '../../../src/db/repositories/AggregatedStatusChangedRepository';
-import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import {
   mockAggregatedStatusChangedRecords,
   id0,
@@ -9,6 +7,18 @@ import {
   txEntityRecord,
 } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
+
+vi.mock('../../../src/db/DataSourceHandler', async () => {
+  const { DataSourceMock } = await import('../mocked/DataSource.mock');
+
+  return {
+    DataSourceHandler: {
+      getInstance: () => ({
+        dataSource: DataSourceMock.testDataSource,
+      }),
+    },
+  };
+});
 
 describe('AggregatedStatusChangedRepository', () => {
   beforeEach(async () => {
@@ -26,7 +36,8 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should return null if no record is available', async () => {
       // act
-      const lastStatus = await AggregatedStatusChangedRepository.getLast(id0);
+      const lastStatus =
+        await DataSourceMock.aggregatedStatusChangedRepository.getLast(id0);
 
       // assert
       expect(lastStatus).toBeNull();
@@ -46,7 +57,13 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should return the last AggregatedStatusChanged record', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       await DataSourceMock.populateAggregatedStatusChanged(
         mockAggregatedStatusChangedRecords,
@@ -56,9 +73,12 @@ describe('AggregatedStatusChangedRepository', () => {
       const status2 = mockAggregatedStatusChangedRecords[2];
 
       // act
-      const lastStatus0 = await AggregatedStatusChangedRepository.getLast(id0);
-      const lastStatus1 = await AggregatedStatusChangedRepository.getLast(id1);
-      const lastStatus3 = await AggregatedStatusChangedRepository.getLast(id3);
+      const lastStatus0 =
+        await DataSourceMock.aggregatedStatusChangedRepository.getLast(id0);
+      const lastStatus1 =
+        await DataSourceMock.aggregatedStatusChangedRepository.getLast(id1);
+      const lastStatus3 =
+        await DataSourceMock.aggregatedStatusChangedRepository.getLast(id3);
 
       // assert
       expect(lastStatus0).toEqual({ ...status1, id: 2, tx: txEntityRecord });
@@ -78,7 +98,8 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should return empty array if no record is available', async () => {
       // act
-      const records = await AggregatedStatusChangedRepository.getMany(id0);
+      const records =
+        await DataSourceMock.aggregatedStatusChangedRepository.getMany(id0);
 
       // assert
       expect(records).toHaveLength(0);
@@ -98,7 +119,13 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should return array of AggregatedStatusChanged records', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       const status0 = mockAggregatedStatusChangedRecords[0];
       const status1 = mockAggregatedStatusChangedRecords[1];
@@ -109,9 +136,12 @@ describe('AggregatedStatusChangedRepository', () => {
       );
 
       // act
-      const records0 = await AggregatedStatusChangedRepository.getMany(id0);
-      const records1 = await AggregatedStatusChangedRepository.getMany(id1);
-      const records2 = await AggregatedStatusChangedRepository.getMany(id3);
+      const records0 =
+        await DataSourceMock.aggregatedStatusChangedRepository.getMany(id0);
+      const records1 =
+        await DataSourceMock.aggregatedStatusChangedRepository.getMany(id1);
+      const records2 =
+        await DataSourceMock.aggregatedStatusChangedRepository.getMany(id3);
 
       // assert
       expect(records0).toHaveLength(2);
@@ -139,35 +169,42 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should insert record in database when status is changed', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       const status0 = mockAggregatedStatusChangedRecords[0];
       const status1 = mockAggregatedStatusChangedRecords[1];
 
       const repositoryInsertSpy = vi.spyOn(
-        AggregatedStatusChangedRepository,
+        DataSourceMock.aggregatedStatusChangedRepository,
         'insert',
       );
 
       // act
-      await AggregatedStatusChangedRepository.insertOne(
+      await DataSourceMock.aggregatedStatusChangedRepository.insertOne(
         status0.eventId,
         status0.insertedAt,
         status0.status,
         status0.txStatus,
         status0.tx ?? undefined,
       );
-      await AggregatedStatusChangedRepository.insertOne(
+      await DataSourceMock.aggregatedStatusChangedRepository.insertOne(
         status1.eventId,
         status1.insertedAt,
         status1.status,
         status1.txStatus,
         status1.tx ?? undefined,
       );
-      const records = await AggregatedStatusChangedRepository.find({
-        relations: ['tx'],
-        order: { insertedAt: 'DESC' },
-      });
+      const records =
+        await DataSourceMock.aggregatedStatusChangedRepository.find({
+          relations: ['tx'],
+          order: { insertedAt: 'DESC' },
+        });
 
       // assert
       expect(repositoryInsertSpy).toHaveBeenCalledTimes(2);
@@ -202,19 +239,25 @@ describe('AggregatedStatusChangedRepository', () => {
      */
     it('should throw when `aggregated status changed` record exist in database and its status is not changed', async () => {
       // arrange
-      await TxRepository.insertOne(id1, 'c1', id1, 0, TxType.reward);
+      await DataSourceMock.txRepository.insertOne(
+        id1,
+        'c1',
+        id1,
+        0,
+        TxType.reward,
+      );
 
       const status1 = mockAggregatedStatusChangedRecords[1];
       const status3 = mockAggregatedStatusChangedRecords[3];
 
-      await AggregatedStatusChangedRepository.insertOne(
+      await DataSourceMock.aggregatedStatusChangedRepository.insertOne(
         status1.eventId,
         status1.insertedAt,
         status1.status,
         status1.txStatus,
         status1.tx ?? undefined,
       );
-      await AggregatedStatusChangedRepository.insertOne(
+      await DataSourceMock.aggregatedStatusChangedRepository.insertOne(
         status3.eventId,
         status3.insertedAt,
         status3.status,
@@ -223,13 +266,13 @@ describe('AggregatedStatusChangedRepository', () => {
       );
 
       const repositoryInsertSpy = vi.spyOn(
-        AggregatedStatusChangedRepository,
+        DataSourceMock.aggregatedStatusChangedRepository,
         'insert',
       );
 
       // act and assert
       await expect(async () => {
-        await AggregatedStatusChangedRepository.insertOne(
+        await DataSourceMock.aggregatedStatusChangedRepository.insertOne(
           status3.eventId,
           status3.insertedAt + 5,
           status3.status,
@@ -238,7 +281,7 @@ describe('AggregatedStatusChangedRepository', () => {
         );
       }).rejects.toThrowError('aggregated_status_not_changed');
       await expect(async () => {
-        await AggregatedStatusChangedRepository.insertOne(
+        await DataSourceMock.aggregatedStatusChangedRepository.insertOne(
           status1.eventId,
           status1.insertedAt + 5,
           status1.status,
@@ -247,10 +290,11 @@ describe('AggregatedStatusChangedRepository', () => {
         );
       }).rejects.toThrowError('aggregated_status_not_changed');
 
-      const records = await AggregatedStatusChangedRepository.find({
-        relations: ['tx'],
-        order: { insertedAt: 'DESC' },
-      });
+      const records =
+        await DataSourceMock.aggregatedStatusChangedRepository.find({
+          relations: ['tx'],
+          order: { insertedAt: 'DESC' },
+        });
 
       expect(repositoryInsertSpy).not.toHaveBeenCalled();
       expect(records).toHaveLength(2);

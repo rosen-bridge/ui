@@ -1,10 +1,12 @@
+import { DataSource } from '@rosen-bridge/extended-typeorm';
+
 import { AggregateEventStatus, AggregateTxStatus } from '../../constants';
-import { dataSource } from '../dataSource';
 import { AggregatedStatusChangedEntity } from '../entities/AggregatedStatusChangedEntity';
 
-export const AggregatedStatusChangedRepository = dataSource
-  .getRepository(AggregatedStatusChangedEntity)
-  .extend({
+export const createAggregatedStatusChangedRepository = (
+  dataSource: DataSource,
+) => {
+  return dataSource.getRepository(AggregatedStatusChangedEntity).extend({
     /**
      * retrieves the most recent AggregatedStatusChangedEntity for a given eventId
      * @param eventId
@@ -74,3 +76,8 @@ export const AggregatedStatusChangedRepository = dataSource
       });
     },
   });
+};
+
+export type AggregatedStatusChangedRepository = ReturnType<
+  typeof createAggregatedStatusChangedRepository
+>;

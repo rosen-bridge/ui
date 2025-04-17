@@ -18,8 +18,8 @@
     "type-check": "tsc --noEmit",
     "coverage": "npm run test -- --coverage",
     "typeorm:generate:sqlite": "npm run typeorm migration:generate src/db/migrations/sqlite/migration -- -p -d tests/db/mocked/testDataSource.ts",
-    "typeorm:generate:postgres": "npm run typeorm migration:generate src/db/migrations/postgres/migration -- -p -d src/db/dataSource.ts",
-    "typeorm:migrate": "npm run typeorm migration:run -- -d src/db/dataSource.ts",
+    "typeorm:generate:postgres": "npm run typeorm migration:generate src/db/migrations/postgres/migration -- -p -d tests/db/mocked/pgTestDataSource.ts",
+    "typeorm:migrate": "npm run typeorm migration:run -- -d tests/db/mocked/pgTestDataSource.ts",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },

@@ -1,6 +1,17 @@
-import { TxRepository } from '../../../src/db/repositories/TxRepository';
 import { mockTxs } from '../../testData';
 import { DataSourceMock } from '../mocked/DataSource.mock';
+
+vi.mock('../../../src/db/DataSourceHandler', async () => {
+  const { DataSourceMock } = await import('../mocked/DataSource.mock');
+
+  return {
+    DataSourceHandler: {
+      getInstance: () => ({
+        dataSource: DataSourceMock.testDataSource,
+      }),
+    },
+  };
+});
 
 describe('TxRepository', () => {
   beforeEach(async () => {
@@ -23,12 +34,12 @@ describe('TxRepository', () => {
      */
     it('should insert record in database when tx is new', async () => {
       // arrange
-      const findOneBySpy = vi.spyOn(TxRepository, 'findOneBy');
-      const insertSpy = vi.spyOn(TxRepository, 'insert');
+      const findOneBySpy = vi.spyOn(DataSourceMock.txRepository, 'findOneBy');
+      const insertSpy = vi.spyOn(DataSourceMock.txRepository, 'insert');
       const tx0 = mockTxs[0];
 
       // act
-      await TxRepository.insertOne(
+      await DataSourceMock.txRepository.insertOne(
         tx0.txId,
         tx0.chain,
         tx0.eventId,
@@ -36,7 +47,7 @@ describe('TxRepository', () => {
         tx0.txType,
       );
 
-      const records = await TxRepository.find();
+      const records = await DataSourceMock.txRepository.find();
 
       // assert
       expect(findOneBySpy).toHaveBeenCalledTimes(1);
@@ -69,7 +80,7 @@ describe('TxRepository', () => {
     it('should throw when tx exists in database', async () => {
       // arrange
       const tx0 = mockTxs[0];
-      await TxRepository.insertOne(
+      await DataSourceMock.txRepository.insertOne(
         tx0.txId,
         tx0.chain,
         tx0.eventId,
@@ -77,12 +88,12 @@ describe('TxRepository', () => {
         tx0.txType,
       );
 
-      const findOneBySpy = vi.spyOn(TxRepository, 'findOneBy');
-      const insertSpy = vi.spyOn(TxRepository, 'insert');
+      const findOneBySpy = vi.spyOn(DataSourceMock.txRepository, 'findOneBy');
+      const insertSpy = vi.spyOn(DataSourceMock.txRepository, 'insert');
 
       // act and assert
       await expect(async () => {
-        await TxRepository.insertOne(
+        await DataSourceMock.txRepository.insertOne(
           tx0.txId,
           tx0.chain,
           tx0.eventId,
@@ -91,7 +102,7 @@ describe('TxRepository', () => {
         );
       }).rejects.toThrowError('tx_exists');
 
-      const records = await TxRepository.find();
+      const records = await DataSourceMock.txRepository.find();
 
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
@@ -120,14 +131,14 @@ describe('TxRepository', () => {
       // arrange
       const tx0 = mockTxs[0];
       const findOneBySpy = vi
-        .spyOn(TxRepository, 'findOneBy')
+        .spyOn(DataSourceMock.txRepository, 'findOneBy')
         .mockRejectedValue(new Error('custom_error'));
-      const insertSpy = vi.spyOn(TxRepository, 'insert');
+      const insertSpy = vi.spyOn(DataSourceMock.txRepository, 'insert');
 
       // act and assert
       await expect(
         async () =>
-          await TxRepository.insertOne(
+          await DataSourceMock.txRepository.insertOne(
             tx0.txId,
             tx0.chain,
             tx0.eventId,
@@ -136,7 +147,7 @@ describe('TxRepository', () => {
           ),
       ).rejects.toThrowError('custom_error');
 
-      const records = await TxRepository.find();
+      const records = await DataSourceMock.txRepository.find();
 
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
@@ -164,16 +175,16 @@ describe('TxRepository', () => {
       // arrange
       const tx0 = mockTxs[0];
       const findOneBySpy = vi
-        .spyOn(TxRepository, 'findOneBy')
+        .spyOn(DataSourceMock.txRepository, 'findOneBy')
         .mockResolvedValue(null);
       const insertSpy = vi
-        .spyOn(TxRepository, 'insert')
+        .spyOn(DataSourceMock.txRepository, 'insert')
         .mockRejectedValue(new Error('custom_error'));
 
       // act and assert
       await expect(
         async () =>
-          await TxRepository.insertOne(
+          await DataSourceMock.txRepository.insertOne(
             tx0.txId,
             tx0.chain,
             tx0.eventId,
@@ -182,7 +193,7 @@ describe('TxRepository', () => {
           ),
       ).rejects.toThrowError('custom_error');
 
-      const records = await TxRepository.find();
+      const records = await DataSourceMock.txRepository.find();
 
       expect(findOneBySpy).toHaveBeenCalledWith({
         txId: tx0.txId,
