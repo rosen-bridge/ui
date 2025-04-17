@@ -140,6 +140,7 @@ const getConfig = () => {
         binanceScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.binanceScannerCriticalDiff',
         ),
+        updateInterval: nodeConfig.get<number>('healthCheck.interval'),
       },
       notification: {
         discordWebHookUrl: nodeConfig.get<string>(
