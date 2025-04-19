@@ -129,20 +129,19 @@ const start = async () => {
 
     registerAllHealthChecks(healthCheck);
 
-    try {
-      await healthCheck.update();
-      logger.debug('first health check update successfully');
-    } catch (error) {
-      logger.debug('health check update has error', error);
-    }
-
     const interval = config.healthCheck.updateInterval * 1000;
     setInterval(async () => {
       try {
         await healthCheck.update();
         logger.debug('periodic health check update done');
-      } catch (error) {
-        logger.debug('periodic health check update error', error);
+      } catch (e) {
+        if (e instanceof AggregateError) {
+          logger.warn(
+            `Health check update job failed: ${e.errors.map(
+              (error) => error.message,
+            )}`,
+          );
+        } else logger.warn(`Health check update job failed: ${e}`);
       }
     }, interval);
   } catch (error) {

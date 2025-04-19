@@ -2,4 +2,4 @@
 '@rosen-bridge/rosen-service': minor
 ---
 
-Add health-check-scanner parameters to evaluate its health periodically and add notification manager to notify us of any possible issues
+Add scanner health parameters to evaluate its health periodically and add notification manager to notify us of any possible issues
