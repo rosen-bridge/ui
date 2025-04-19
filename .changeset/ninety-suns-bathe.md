@@ -3,4 +3,4 @@
 '@rosen-bridge/guard-app': patch
 ---
 
-Fixes guard theme based on ui-kit
+Fixes ui-kit theme options and connects guard theme to it
