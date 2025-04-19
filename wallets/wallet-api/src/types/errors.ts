@@ -37,6 +37,17 @@ export class UnsupportedChainError extends Error {
   }
 }
 
+export class UnavailableApiError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`The [${wallet}] wallet API is not available.`, {
+      cause,
+    });
+  }
+}
+
 export class ChainSwitchingRejectedError extends Error {
   constructor(
     public wallet: string,
@@ -71,6 +82,20 @@ export class ConnectionRejectedError extends Error {
     super(`User rejected the connection request for the [${wallet}] wallet`, {
       cause,
     });
+  }
+}
+
+export class ConnectionTimeoutError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(
+      `The wallet [${wallet}] extension has timed out, and the user has neither confirmed nor rejected it`,
+      {
+        cause,
+      },
+    );
   }
 }
 

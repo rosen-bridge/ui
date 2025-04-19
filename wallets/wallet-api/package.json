@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
-  "version": "1.2.1",
+  "version": "1.3.1",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
@@ -14,14 +14,14 @@
     "release": "npm run build && npm publish --access public"
   },
   "devDependencies": {
-    "@rosen-bridge/tokens": "^1.2.1",
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@rosen-bridge/tokens": "^3.0.0",
     "@rosen-ui/types": "^0.3.4",
     "@rosen-ui/utils": "^0.4.5"
   },
   "peerDependencies": {
-    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0"
+    "@emurgo/cardano-serialization-lib-nodejs": "^13.2.1"
   }
 }

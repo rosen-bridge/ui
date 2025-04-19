@@ -1,5 +1,25 @@
 # @rosen-ui/eternl-wallet
 
+## 2.3.2
+
+### Patch Changes
+
+- Improve wallet integrations by adding robust availability checks and gracefully handling unsupported or inaccessible wallets.
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.3.1
+  - @rosen-network/cardano@2.1.3
+  - @rosen-bridge/icons@1.3.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+- Updated dependencies
+  - @rosen-bridge/icons@1.2.0
+  - @rosen-ui/wallet-api@1.3.0
+  - @rosen-network/cardano@2.1.2
+
 ## 2.3.0
 
 ### Minor Changes

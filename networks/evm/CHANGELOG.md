@@ -1,5 +1,11 @@
 # @rosen-network/evm
 
+## 0.2.2
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+
 ## 0.2.1
 
 ### Patch Changes

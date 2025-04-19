@@ -37,9 +37,8 @@ export const generateUnsignedTx =
     token: RosenChainToken,
   ): Promise<UnsignedErgoTxProxy> => {
     const tokenMap = await getTokenMap();
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ergo.key)];
     const unwrappedAmount = tokenMap.unwrapAmount(
-      tokenId,
+      token.tokenId,
       wrappedAmount,
       NETWORKS.ergo.key,
     ).amount;
@@ -54,7 +53,7 @@ export const generateUnsignedTx =
       nativeToken: minBoxValue,
       tokens: [],
     };
-    if (tokenId === 'erg') {
+    if (token.tokenId === 'erg') {
       /**
        * TODO: fix ergo native token name
        * local:ergo/rosen-bridge/ui#100
@@ -62,12 +61,12 @@ export const generateUnsignedTx =
       lockAssets.nativeToken = unwrappedAmount;
     } else {
       // lock token
-      lockAssets.tokens.push({ id: tokenId, value: unwrappedAmount });
+      lockAssets.tokens.push({ id: token.tokenId, value: unwrappedAmount });
     }
     const lockBox = createLockBox(
       lockAddress,
       height,
-      tokenId,
+      token.tokenId,
       unwrappedAmount,
       toChain,
       toAddress,

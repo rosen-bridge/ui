@@ -15,12 +15,12 @@ export const getRosenTokens = async () => {
   );
 
   if (fs.existsSync(tokensMapFilePath)) {
-    const tokensMap = JSON.parse(
+    const { tokens } = JSON.parse(
       fs.readFileSync(tokensMapFilePath, {
         encoding: 'utf-8',
       }),
     );
-    return tokensMap;
+    return tokens;
   }
 
   throw new Error(`Tokens map file not found in the path ${tokensMapFilePath}`);

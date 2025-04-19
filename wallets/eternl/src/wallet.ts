@@ -15,7 +15,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class EtrnlWallet implements Wallet {
+export class EtrnlWallet extends Wallet {
   icon = EternlIcon;
 
   name = 'Eternl';
@@ -30,9 +30,12 @@ export class EtrnlWallet implements Wallet {
     return window.cardano.eternl;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
@@ -43,6 +46,7 @@ export class EtrnlWallet implements Wallet {
   async disconnect(): Promise<void> {}
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     try {
       const wallet = await this.api.enable();
       return await wallet.getChangeAddress();
@@ -52,6 +56,8 @@ export class EtrnlWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
@@ -60,8 +66,9 @@ export class EtrnlWallet implements Wallet {
 
     const amount = balances.find(
       (asset) =>
-        asset.policyId === token.policyId &&
-        (asset.nameHex === hexToCbor(token.assetName) || !token.policyId),
+        asset.policyId === token.extra.policyId &&
+        (asset.nameHex === hexToCbor(token.extra.assetName as string) ||
+          !token.extra.policyId),
     );
 
     if (!amount) return 0n;
@@ -69,7 +76,7 @@ export class EtrnlWallet implements Wallet {
     const tokenMap = await this.config.getTokenMap();
 
     const wrappedAmount = tokenMap.wrapAmount(
-      token[tokenMap.getIdKey(NETWORKS.cardano.key)],
+      token.tokenId,
       amount.quantity,
       NETWORKS.cardano.key,
     ).amount;
@@ -82,6 +89,8 @@ export class EtrnlWallet implements Wallet {
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
+
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();
@@ -102,8 +111,8 @@ export class EtrnlWallet implements Wallet {
       walletUtxos,
       params.lockAddress,
       changeAddressHex,
-      params.token.policyId,
-      params.token.assetName,
+      params.token.extra.policyId as string,
+      params.token.extra.assetName as string,
       params.amount,
       auxiliaryDataHex,
     );

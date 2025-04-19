@@ -75,9 +75,9 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const tokenId = useMemo(() => {
     if (!sourceValue || !tokenValue) return;
 
-    const idKey = tokenMap.getIdKey(sourceValue);
-
-    const tokens = tokenMap.search(sourceValue, { [idKey]: tokenValue[idKey] });
+    const tokens = tokenMap.search(sourceValue, {
+      tokenId: tokenValue.tokenId,
+    });
 
     return tokens[0].ergo.tokenId as string;
   }, [sourceValue, tokenValue, tokenMap]);

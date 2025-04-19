@@ -12,11 +12,12 @@ import {
   UtxoFetchError,
   Wallet,
   WalletTransferParams,
+  ConnectionTimeoutError,
 } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
 
-export class NautilusWallet implements Wallet {
+export class NautilusWallet extends Wallet {
   icon = NautilusIcon;
 
   name = 'Nautilus';
@@ -31,10 +32,19 @@ export class NautilusWallet implements Wallet {
     return window.ergoConnector.nautilus;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   async connect(): Promise<void> {
-    const isConnected = await this.api.connect({ createErgoObject: false });
+    this.requireAvailable();
+    let isConnected: boolean;
+
+    try {
+      isConnected = await this.api.connect({ createErgoObject: false });
+    } catch (error) {
+      throw new ConnectionTimeoutError(this.name, error);
+    }
 
     if (isConnected) return;
 
@@ -42,6 +52,7 @@ export class NautilusWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
+    this.requireAvailable();
     const result = await this.api.disconnect();
 
     if (!result) {
@@ -50,6 +61,7 @@ export class NautilusWallet implements Wallet {
   }
 
   async getAddress(): Promise<string> {
+    this.requireAvailable();
     try {
       const wallet = await this.api.getContext();
       return await wallet.get_change_address();
@@ -59,18 +71,17 @@ export class NautilusWallet implements Wallet {
   }
 
   async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+    this.requireAvailable();
     const wallet = await this.api.getContext();
 
     const tokenMap = await this.config.getTokenMap();
-
-    const tokenId = token[tokenMap.getIdKey(NETWORKS.ergo.key)];
 
     /**
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
     const balance = await wallet.get_balance(
-      tokenId === 'erg' ? 'ERG' : tokenId,
+      token.tokenId === 'erg' ? 'ERG' : token.tokenId,
     );
 
     const amount = BigInt(balance);
@@ -78,7 +89,7 @@ export class NautilusWallet implements Wallet {
     if (!amount) return 0n;
 
     const wrappedAmount = tokenMap.wrapAmount(
-      tokenId,
+      token.tokenId,
       amount,
       NETWORKS.ergo.key,
     ).amount;
@@ -94,10 +105,12 @@ export class NautilusWallet implements Wallet {
   }
 
   async isConnected(): Promise<boolean> {
+    this.requireAvailable();
     return await this.api.isAuthorized();
   }
 
   async transfer(params: WalletTransferParams): Promise<string> {
+    this.requireAvailable();
     const wallet = await this.api.getContext();
 
     const changeAddress = await this.getAddress();

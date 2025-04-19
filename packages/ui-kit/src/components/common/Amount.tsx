@@ -1,7 +1,7 @@
 import { Box, Typography } from '../base';
 
 export interface AmountProps {
-  value: string;
+  value?: bigint | number | string;
   loading?: boolean;
   size?: 'normal' | 'large';
   title?: string;
@@ -18,63 +18,98 @@ export const Amount = ({
   title,
   unit,
 }: AmountProps) => {
-  const [number, decimals] = value.split('.');
+  let number: string | undefined;
+
+  let decimals: string | undefined;
+
+  switch (typeof value) {
+    case 'bigint': {
+      number = value.toLocaleString();
+      decimals = '0';
+
+      break;
+    }
+
+    case 'number': {
+      const sections = value
+        .toLocaleString('fullwide', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 20,
+        })
+        .split('.');
+
+      number = sections.at(0);
+      decimals = sections.at(1) || '0';
+
+      break;
+    }
+
+    case 'string': {
+      const sections = value.split('.');
+
+      number = sections.at(0)!.toLocaleString();
+      decimals = sections.at(1) || '0';
+
+      break;
+    }
+  }
+
   return (
     <Box
       sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        display: title ? 'flex' : 'inline-flex',
+        alignItems: 'baseline',
       }}
     >
       {!!title && (
         <Typography
           color="text.secondary"
-          variant={size == 'normal' ? 'body2' : 'body1'}
+          sx={{
+            flexGrow: 1,
+            fontSize: size == 'normal' ? '0.75rem' : '1rem',
+          }}
         >
           {title}
         </Typography>
       )}
-      <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-        {loading && (
-          <Typography
-            color="text.primary"
-            variant={size == 'normal' ? 'body1' : 'h2'}
-          >
-            Pending...
-          </Typography>
-        )}
-        {!loading && (
-          <>
-            <Typography
-              color="text.primary"
-              variant={size == 'normal' ? 'body1' : 'h2'}
-            >
-              {+value ? number.replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}
-            </Typography>
-            {!!+value && (
-              <>
-                {!!decimals && (
-                  <Typography
-                    color="text.primary"
-                    variant={size == 'normal' ? 'caption' : 'body2'}
-                  >
-                    .{decimals}
-                  </Typography>
-                )}
-                {!!unit && (
-                  <Typography
-                    color="text.secondary"
-                    variant={size == 'normal' ? 'caption' : 'body2'}
-                  >
-                    &nbsp;{unit}
-                  </Typography>
-                )}
-              </>
-            )}
-          </>
-        )}
-      </Box>
+      {loading && (
+        <Typography
+          color="text.primary"
+          sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.375rem' }}
+        >
+          Pending...
+        </Typography>
+      )}
+      {!loading && (
+        <Typography
+          color="text.primary"
+          sx={{ fontSize: size == 'normal' ? '0.75rem' : '1.375rem' }}
+        >
+          {number || '-'}
+        </Typography>
+      )}
+      {!loading && !!decimals && (
+        <Typography
+          color="text.secondary"
+          sx={{
+            fontSize:
+              size == 'normal' ? 'calc(0.75rem * 0.75)' : 'calc(1.5rem * 0.75)',
+          }}
+        >
+          .{decimals}
+        </Typography>
+      )}
+      {!loading && !!unit && !!number && (
+        <Typography
+          color="text.secondary"
+          sx={{
+            fontSize:
+              size == 'normal' ? 'calc(0.75rem * 0.75)' : 'calc(1.5rem * 0.75)',
+          }}
+        >
+          &nbsp;{unit}
+        </Typography>
+      )}
     </Box>
   );
 };
