@@ -3,7 +3,7 @@ import dataSource from 'src/data-source';
 
 /**
  * returns the last saved block height based on the scanner name
- * @param scanner: considering scanned blocks by this scanner
+ * @param scanner considering scanned blocks by this scanner
  */
 export const getLastSavedBlock = async (scanner: string) => {
   const lastBlock = await dataSource.getRepository(BlockEntity).find({
