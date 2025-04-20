@@ -12,6 +12,10 @@ const getOptionalString = (path: string): string | undefined => {
   return nodeConfig.has(path) ? nodeConfig.get<string>(path) : undefined;
 };
 
+const getOptionalNumber = (path: string): number | undefined => {
+  return nodeConfig.has(path) ? nodeConfig.get<number>(path) : undefined;
+};
+
 const getConfig = () => {
   try {
     return {
@@ -146,13 +150,13 @@ const getConfig = () => {
         discordWebHookUrl: nodeConfig.get<string>(
           'notification.discordWebhookUrl',
         ),
-        historyCleanupTimeout: nodeConfig.get<number>(
+        historyCleanupTimeout: getOptionalNumber(
           'notification.historyCleanupTimeout',
         ),
-        hasBeenUnstableForAWhileWindowDuration: nodeConfig.get<number>(
+        hasBeenUnstableForAWhileWindowDuration: getOptionalNumber(
           'notification.windowDurations.hasBeenUnstableForAWhile',
         ),
-        hasBeenUnknownForAWhileWindowDuration: nodeConfig.get<number>(
+        hasBeenUnknownForAWhileWindowDuration: getOptionalNumber(
           'notification.windowDurations.hasBeenUnknownForAWhile',
         ),
       },
