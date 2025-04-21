@@ -82,7 +82,7 @@ healthCheck:
   interval: 60  #health check update interval (in seconds)
 notification:
   discordWebhookUrl:  # discord notification webhook
-  historyCleanupTimeout: # notification history cleanup threshold (in seconds, uses default if not set)
-  windowDurations:
-    hasBeenUnstableForAWhile: # window duration to notify when service has been unstable for a while (in seconds, uses default if not set)
-    hasBeenUnknownForAWhile:  # window duration to notify when service has been in unknown status for a while (in seconds, uses default if not set)
+#  historyCleanupTimeout: # notification history cleanup threshold (in seconds, uses default if not set)
+#  windowDurations:
+#    hasBeenUnstableForAWhile: # window duration to notify when service has been unstable for a while (in seconds, uses default if not set)
+#    hasBeenUnknownForAWhile:  # window duration to notify when service has been in unknown status for a while (in seconds, uses default if not set)
