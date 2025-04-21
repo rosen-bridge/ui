@@ -1,3 +1,4 @@
+import { TokenMap } from '@rosen-bridge/tokens';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 import fs from 'fs';
 import path from 'path';
@@ -8,9 +9,9 @@ import AppError from './errors/AppError';
 const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
 
 /**
- * get rosen tokens object from tokensMap file or throw error if file is missing
+ * get token map instance
  */
-export const getRosenTokens = () => {
+export const getTokenMap = async (): Promise<TokenMap> => {
   const tokensMapFilePath = path.resolve(
     path.dirname(fileURLToPath(import.meta.url)),
     '../config/tokensMap.json',
@@ -22,7 +23,12 @@ export const getRosenTokens = () => {
         encoding: 'utf-8',
       }),
     );
-    return tokens;
+
+    const tokenMap = new TokenMap();
+
+    await tokenMap.updateConfigByJson(tokens);
+
+    return tokenMap;
   }
 
   throw new Error(`Tokens map file not found in the path ${tokensMapFilePath}`);

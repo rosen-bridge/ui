@@ -4,6 +4,7 @@ import './bootstrap';
 import calculatorService from './calculator/calculator-service';
 import dataSource from './data-source';
 import AppError from './errors/AppError';
+import healthCheckService from './health-check/health-check-service';
 import scannerService from './scanner/scanner-service';
 import { handleError } from './utils';
 
@@ -41,6 +42,9 @@ const main = async () => {
       }),
       scannerService.start().then(() => {
         logger.info('scanner service started successfully');
+      }),
+      healthCheckService.start().then(() => {
+        logger.info('health check service started successfully');
       }),
     ]);
   } catch (error) {

@@ -1,5 +1,21 @@
 # @rosen-ui/wallet-api
 
+## 1.3.1
+
+### Patch Changes
+
+- Implement proper error to ensure graceful failure when the wallet API is unavailable.
+
+## 1.3.0
+
+### Minor Changes
+
+- Define an error named `ConnectionTimeoutError` to handle connection timeouts for wallet extensions
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+
 ## 1.2.1
 
 ### Patch Changes

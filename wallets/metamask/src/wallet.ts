@@ -22,7 +22,7 @@ import { BrowserProvider, Contract } from 'ethers';
 
 import { WalletConfig } from './types';
 
-export class MetaMaskWallet implements Wallet {
+export class MetaMaskWallet extends Wallet {
   icon = MetaMaskIcon;
 
   name = 'MetaMask';
@@ -51,6 +51,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   private get provider() {
+    this.requireAvailable();
     const provider = this.api.getProvider();
 
     if (!provider) throw new InteractionError(this.name);
@@ -58,7 +59,9 @@ export class MetaMaskWallet implements Wallet {
     return provider;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   private async permissions() {
     return (await this.provider.request({
@@ -68,6 +71,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async connect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
@@ -76,6 +80,7 @@ export class MetaMaskWallet implements Wallet {
   }
 
   async disconnect(): Promise<void> {
+    this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
@@ -188,6 +193,7 @@ export class MetaMaskWallet implements Wallet {
       params.amount,
       rosenData,
       params.token,
+      params.fromChain,
     );
 
     try {

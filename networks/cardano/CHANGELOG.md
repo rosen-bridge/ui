@@ -1,5 +1,17 @@
 # @rosen-network/cardano
 
+## 2.1.3
+
+### Patch Changes
+
+- Temporary fix for transaction fee calculation
+
+## 2.1.2
+
+### Patch Changes
+
+- Enhance the logic associated with TokenMap to ensure compatibility with the latest version of the `@rosen-bridge/tokens` package
+
 ## 2.1.1
 
 ### Patch Changes

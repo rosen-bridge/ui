@@ -9,6 +9,7 @@ import {
 } from 'react';
 
 import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import { wallets } from '@/_wallets';
@@ -109,6 +110,33 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       }
     })();
   }, [selectedSource, setSelected]);
+
+  /**
+   * TODO: update or move this logic
+   * local:ergo/rosen-bridge/ui#577
+   */
+  useEffect(() => {
+    if (!selected) return;
+
+    if (!selectedSource) return;
+
+    if (selectedSource.name !== NETWORKS.bitcoin.key) return;
+
+    const start = async () => {
+      const address = await selected.getAddress();
+
+      const isValid = address.toLowerCase().startsWith('bc1q');
+
+      if (isValid) return;
+
+      openSnackbar(
+        'The source address of the selected wallet is not native SegWit (P2WPKH or P2WSH).',
+        'error',
+      );
+    };
+
+    start();
+  }, [selected, selectedSource]);
 
   const state = {
     select,

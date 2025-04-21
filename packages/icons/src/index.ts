@@ -154,6 +154,9 @@ export { default as BitcoinRaw } from './networks/bitcoin.svg?raw';
 export { ReactComponent as Cardano } from './networks/cardano.svg';
 export { default as CardanoRaw } from './networks/cardano.svg?raw';
 
+export { ReactComponent as Doge } from './networks/doge.svg';
+export { default as DogeRaw } from './networks/doge.svg?raw';
+
 export { ReactComponent as Ergo } from './networks/ergo.svg';
 export { default as ErgoRaw } from './networks/ergo.svg?raw';
 
@@ -168,6 +171,9 @@ export { default as LaceRaw } from './wallets/lace.svg?raw';
 
 export { ReactComponent as MetaMask } from './wallets/meta-mask.svg';
 export { default as MetaMaskRaw } from './wallets/meta-mask.svg?raw';
+
+export { ReactComponent as Mydoge } from './wallets/mydoge.svg';
+export { default as MydogeRaw } from './wallets/mydoge.svg?raw';
 
 export { ReactComponent as Nautilus } from './wallets/nautilus.svg';
 export { default as NautilusRaw } from './wallets/nautilus.svg?raw';

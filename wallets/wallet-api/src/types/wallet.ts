@@ -3,29 +3,12 @@ import { FC } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
-/**
- * main wallet type for the bridge, all wallets implement
- * this interface to unify access and interaction with wallets
- */
-export interface Wallet {
-  icon: FC;
-  name: string;
-  label: string;
-  link: string;
-  supportedChains: Network[];
-  connect(): Promise<void>;
-  getAddress(): Promise<string>;
-  getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
-  isAvailable(): boolean;
-  isConnected?(): Promise<boolean>;
-  switchChain?(chain: Network, silent?: boolean): Promise<void>;
-  transfer(params: WalletTransferParams): Promise<string>;
-  disconnect(): Promise<void>;
-}
+import { UnavailableApiError } from './errors';
 
 export interface WalletTransferParams {
   token: RosenChainToken;
   amount: RosenAmountValue;
+  fromChain: Network;
   toChain: Network;
   address: string;
   bridgeFee: RosenAmountValue;
@@ -33,4 +16,30 @@ export interface WalletTransferParams {
   lockAddress: string;
 }
 
-export * from './common';
+/**
+ * main wallet type for the bridge, all wallets implement
+ * this interface to unify access and interaction with wallets
+ */
+export abstract class Wallet {
+  abstract icon: FC;
+  abstract name: string;
+  abstract label: string;
+  abstract link: string;
+  abstract supportedChains: Network[];
+
+  abstract connect(): Promise<void>;
+  abstract disconnect(): Promise<void>;
+  abstract getAddress(): Promise<string>;
+  abstract getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
+  abstract isAvailable(): boolean;
+  abstract transfer(params: WalletTransferParams): Promise<string>;
+
+  isConnected?(): Promise<boolean>;
+  switchChain?(chain: Network, silent?: boolean): Promise<void>;
+
+  protected requireAvailable(): void {
+    if (!this.isAvailable()) {
+      throw new UnavailableApiError(this.name);
+    }
+  }
+}

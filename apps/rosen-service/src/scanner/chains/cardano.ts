@@ -34,7 +34,7 @@ export const startCardanoScanner = async () => {
       config.cardano.koiosAuthToken,
     );
 
-    observationService.registerCardanoExtractor(scanner);
+    await observationService.registerCardanoExtractor(scanner);
 
     await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
 

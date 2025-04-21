@@ -10,7 +10,6 @@ import {
   Tooltip,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
 
 import {
   useNetwork,
@@ -106,35 +105,33 @@ export const BridgeTransaction = ({
             padding: (theme) => theme.spacing(3),
           }}
         >
-          {sourceValue == NETWORKS.bitcoin.key && (
-            <Alert severity="warning" icon={false}>
-              We only support native SegWit addresses (P2WPKH or P2WSH) for the
-              source address.
-            </Alert>
-          )}
           <div style={{ flexGrow: '1' }} />
           <Amount
             title="Transaction Fee"
-            value={networkFeeRaw}
+            value={!tokenValue ? undefined : networkFeeRaw}
             unit={tokenInfo?.tokenName}
             loading={isPending}
           />
           <Amount
             title="Bridge Fee"
-            value={bridgeFeeRaw}
+            value={!tokenValue ? undefined : bridgeFeeRaw}
             unit={tokenInfo?.tokenName}
             loading={isPending}
           />
           <Amount
             title="Min Transfer"
-            value={minTransferRaw}
+            value={!tokenValue ? undefined : minTransferRaw}
             unit={tokenInfo?.tokenName}
             loading={isPending}
           />
           <Divider sx={{ borderStyle: 'dashed' }} />
           <Amount
             title="You Will Receive"
-            value={receivingAmountRaw}
+            value={
+              !tokenValue || receivingAmountRaw === '0'
+                ? undefined
+                : receivingAmountRaw
+            }
             unit={targetTokenInfo?.name}
             loading={isPending}
           />

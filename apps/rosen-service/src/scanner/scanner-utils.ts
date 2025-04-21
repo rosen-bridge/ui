@@ -10,7 +10,7 @@ import { handleError, runAndSetInterval } from '../utils';
  * @param loggerFileName
  * @param updateInterval
  */
-export const startScanner = (
+export const startScanner = async (
   scanner: GeneralScanner<any>,
   loggerFileName: string,
   updateInterval: number,
@@ -37,7 +37,7 @@ export const startScanner = (
     }
   };
 
-  runAndSetInterval(tryUpdating, updateInterval);
+  await runAndSetInterval(tryUpdating, updateInterval);
 
   logger.debug('scanner update job run successfully', {
     scannerName: scanner.name(),

@@ -7,6 +7,7 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/token',
   [NETWORKS.bitcoin.key]: '',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/token',
+  [NETWORKS.doge.key]: '',
 };
 
 export const getTokenUrl = (network: Network, tokenId?: string) => {

@@ -16,6 +16,7 @@ npm run build --workspace networks/base
 npm run build --workspace networks/evm
 npm run build --workspace networks/binance
 npm run build --workspace networks/bitcoin
+npm run build --workspace networks/doge
 npm run build --workspace networks/cardano
 npm run build --workspace networks/ergo
 npm run build --workspace networks/ethereum
@@ -24,3 +25,4 @@ npm run build --workspace wallets/lace
 npm run build --workspace wallets/metamask
 npm run build --workspace wallets/nautilus
 npm run build --workspace wallets/okx
+npm run build --workspace wallets/my-doge

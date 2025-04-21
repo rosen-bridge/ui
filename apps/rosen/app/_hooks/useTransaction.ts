@@ -3,6 +3,13 @@ import { useState } from 'react';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { getNonDecimalString } from '@rosen-ui/utils';
+import {
+  UserDeniedTransactionSignatureError,
+  WalletTransferParams,
+} from '@rosen-ui/wallet-api';
+import { serializeError } from 'serialize-error';
+
+import { logger } from '@/_actions';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -22,8 +29,13 @@ export const useTransaction = () => {
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const { targetValue, tokenValue, amountValue, walletAddressValue } =
-    useTransactionFormData();
+  const {
+    sourceValue,
+    targetValue,
+    tokenValue,
+    amountValue,
+    walletAddressValue,
+  } = useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -34,6 +46,7 @@ export const useTransaction = () => {
       !amountValue ||
       !bridgeFee ||
       !networkFee ||
+      !sourceValue ||
       !targetValue ||
       !tokenMap ||
       !tokenValue ||
@@ -46,8 +59,10 @@ export const useTransaction = () => {
 
     setIsSubmitting(true);
 
+    let parameters: WalletTransferParams | undefined = undefined;
+
     try {
-      const parameters = {
+      parameters = {
         token: tokenValue as RosenChainToken,
         amount: BigInt(
           getNonDecimalString(
@@ -55,6 +70,7 @@ export const useTransaction = () => {
             tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
           ),
         ),
+        fromChain: sourceValue,
         toChain: targetValue,
         address: selectedTarget.toSafeAddress(walletAddressValue),
         bridgeFee,
@@ -69,7 +85,17 @@ export const useTransaction = () => {
       openSnackbar(
         error?.info ?? error?.message ?? JSON.stringify(error),
         'error',
+        undefined,
+        () => JSON.stringify(serializeError(error), null, 2),
       );
+
+      if (error instanceof UserDeniedTransactionSignatureError) return;
+
+      logger('transfer', parameters, serializeError(error))
+        .then(() => {})
+        .catch((error) => {
+          console.log('Failed to send log to Discord', error);
+        });
     } finally {
       setIsSubmitting(false);
     }
