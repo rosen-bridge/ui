@@ -89,7 +89,7 @@ export const useTransaction = () => {
         () => JSON.stringify(serializeError(error), null, 2),
       );
 
-      if (error instanceof UserDeniedTransactionSignatureError) return;
+      // if (error instanceof UserDeniedTransactionSignatureError) return;
 
       logger('transfer', parameters, serializeError(error))
         .then(() => {})
