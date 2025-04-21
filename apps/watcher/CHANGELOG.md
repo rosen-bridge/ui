@@ -1,5 +1,14 @@
 # @rosen-bridge/watcher-app
 
+## 3.3.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/utils@0.5.0
+  - @rosen-bridge/ui-kit@1.10.1
+
 ## 3.3.0
 
 ### Minor Changes

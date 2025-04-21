@@ -1,5 +1,11 @@
 # @rosen-network/evm
 
+## 0.3.0
+
+### Minor Changes
+
+- Add the fromChain field to the wallet-api and fix the generateTxParameters function on EVM networks.
+
 ## 0.2.2
 
 ### Patch Changes
