@@ -193,6 +193,7 @@ export class MetaMaskWallet extends Wallet {
       params.amount,
       rosenData,
       params.token,
+      params.fromChain,
     );
 
     try {
