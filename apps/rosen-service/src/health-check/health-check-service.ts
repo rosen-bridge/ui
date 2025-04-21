@@ -7,17 +7,16 @@ import {
   EvmRPCScannerHealthCheck,
 } from '@rosen-bridge/scanner-sync-check';
 import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
-import config from 'src/configs';
+import { NETWORKS } from "@rosen-ui/constants";
+import config from '../configs';
 import {
   BINANCE_BLOCK_TIME,
-  BINANCE_CHAIN_NAME,
   ETHEREUM_BLOCK_TIME,
-  ETHEREUM_CHAIN_NAME,
-} from 'src/constants';
-import { startBinanceScanner } from 'src/scanner/chains/binance';
-import { startCardanoScanner } from 'src/scanner/chains/cardano';
-import { startErgoScanner } from 'src/scanner/chains/ergo';
-import { startEthereumScanner } from 'src/scanner/chains/ethereum';
+} from '../constants';
+import { startBinanceScanner } from '../scanner/chains/binance';
+import { startCardanoScanner } from '../scanner/chains/cardano';
+import { startErgoScanner } from '../scanner/chains/ergo';
+import { startEthereumScanner } from '../scanner/chains/ethereum';
 
 import { getLastSavedBlock } from './health-check-utils';
 
@@ -89,7 +88,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     },
     {
       instance: new EvmRPCScannerHealthCheck(
-        ETHEREUM_CHAIN_NAME,
+        NETWORKS.ethereum.key,
         () => getLastSavedBlock(startEthereumScanner.name),
         config.healthCheck.ethereumScannerWarnDiff,
         config.healthCheck.ethereumScannerCriticalDiff,
@@ -101,7 +100,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     },
     {
       instance: new EvmRPCScannerHealthCheck(
-        BINANCE_CHAIN_NAME,
+        NETWORKS.binance.key,
         () => getLastSavedBlock(startBinanceScanner.name),
         config.healthCheck.binanceScannerWarnDiff,
         config.healthCheck.binanceScannerCriticalDiff,
