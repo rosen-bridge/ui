@@ -36,6 +36,20 @@ bitcoin:
     url:
     username:
     password:
+doge:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  blockcypherUrl: https://api.blockcypher.com
+  rpc:
+    url:
+    username:
+    password:
 ethereum:
   addresses:
     lock:
