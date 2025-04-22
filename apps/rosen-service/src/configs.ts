@@ -63,7 +63,6 @@ const getConfig = () => {
         rpcUsername: getOptionalString('bitcoin.rpc.username'),
         rpcPassword: getOptionalString('bitcoin.rpc.password'),
       },
-
       ethereum: {
         addresses: {
           lock: nodeConfig.get<string>('ethereum.addresses.lock'),
