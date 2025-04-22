@@ -9,8 +9,8 @@
 ### Patch Changes
 
 - Fix import problems
-  Fix optional configs
-  Use constant package for ethereum and binance chain key
+- Fix optional configs
+- Use constant package for ethereum and binance chain key
 - Updated dependencies
   - @rosen-ui/constants@0.3.0
   - @rosen-ui/asset-calculator@2.1.4
