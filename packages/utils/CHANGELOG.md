@@ -1,5 +1,17 @@
 # @rosen-ui/utils
 
+## 0.5.0
+
+### Minor Changes
+
+- Add Doge URLs to the utils package
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/types@0.3.5
+
 ## 0.4.5
 
 ### Patch Changes
