@@ -1,5 +1,20 @@
 # @rosen-bridge/rosen-service
 
+## 3.1.0
+
+### Minor Changes
+
+- Add scanner health parameters to evaluate its health periodically and add notification manager to notify us of any possible issues
+
+### Patch Changes
+
+- Fix import problems
+- Fix optional configs
+- Use constant package for ethereum and binance chain key
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/asset-calculator@2.1.4
+
 ## 3.0.1
 
 ### Patch Changes

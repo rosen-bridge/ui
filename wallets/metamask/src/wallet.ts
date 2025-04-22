@@ -8,7 +8,6 @@ import {
   DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
-  UnavailableApiError,
   UnsupportedChainError,
   Wallet,
   InteractionError,
@@ -23,7 +22,7 @@ import { BrowserProvider, Contract } from 'ethers';
 
 import { WalletConfig } from './types';
 
-export class MetaMaskWallet implements Wallet {
+export class MetaMaskWallet extends Wallet {
   icon = MetaMaskIcon;
 
   name = 'MetaMask';
@@ -60,7 +59,9 @@ export class MetaMaskWallet implements Wallet {
     return provider;
   }
 
-  constructor(private config: WalletConfig) {}
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   private async permissions() {
     return (await this.provider.request({
@@ -138,10 +139,6 @@ export class MetaMaskWallet implements Wallet {
     return this.api.isExtensionActive();
   }
 
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
-  }
-
   async isConnected(): Promise<boolean> {
     return !!(await this.permissions()).length;
   }
@@ -196,6 +193,7 @@ export class MetaMaskWallet implements Wallet {
       params.amount,
       rosenData,
       params.token,
+      params.fromChain,
     );
 
     try {

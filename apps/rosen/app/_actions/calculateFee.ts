@@ -32,6 +32,13 @@ const GetHeight = {
     );
     return response.json();
   },
+  [NETWORKS.doge.key]: async (): Promise<number> => {
+    const response = await fetch(
+      `${process.env.DOGE_BLOCKCYPHER_API}/v1/doge/main`,
+    );
+    const data = await response.json();
+    return data.height;
+  },
 } as const;
 
 /**

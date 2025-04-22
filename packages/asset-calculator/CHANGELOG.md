@@ -1,5 +1,13 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/types@0.3.5
+
 ## 2.1.3
 
 ### Patch Changes
