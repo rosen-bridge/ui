@@ -1,4 +1,3 @@
-import { useIsDarkMode } from '../../../hooks';
 import { Avatar } from '../../base';
 
 export interface TokenListItemAvatarProps {
@@ -13,13 +12,11 @@ export interface TokenListItemAvatarProps {
  * @param index index used to change background color of avatar
  */
 export const TokenListItemAvatar = ({ name }: TokenListItemAvatarProps) => {
-  const isDarkMode = useIsDarkMode();
-
   return (
     <Avatar
       sx={{
-        color: isDarkMode ? 'info.light' : 'info.main',
-        bgcolor: isDarkMode ? 'background.shadow' : 'info.light',
+        color: 'primary.main',
+        bgcolor: 'primary.light',
       }}
     >
       {name[0]}
