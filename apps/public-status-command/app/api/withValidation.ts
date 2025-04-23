@@ -1,4 +1,3 @@
-// import { NextApiRequest, NextApiResponse } from 'next';
 import { NextRequest } from 'next/server';
 
 import { ValidationResult } from 'joi';
@@ -30,7 +29,7 @@ export const withValidation =
     const { error, value } = await validator(request);
 
     if (error) {
-      return Response.json(error.message, { status: 400 });
+      return Response.json({ error: error.message }, { status: 400 });
     }
 
     try {
@@ -38,19 +37,16 @@ export const withValidation =
       return Response.json(response);
     } catch (error) {
       if (error instanceof ReferenceError) {
-        return Response.json(error.message, { status: 404 });
+        return Response.json({ error: error.message }, { status: 404 });
       }
       if (error instanceof AccessDeniedError) {
-        return Response.json(error.message, { status: 403 });
+        return Response.json({ error: error.message }, { status: 403 });
       }
       if (error instanceof Error) {
-        console.error(error.message.toString());
-        if (!!error.stack) console.error(error.stack);
-        return Response.json(error.message, { status: 500 });
+        console.error(error.message);
+        return Response.json({ error: error.message }, { status: 500 });
       }
       console.error(JSON.stringify(error));
       return Response.json(JSON.stringify(error), { status: 500 });
     }
   };
-
-export type ResponseData = any;

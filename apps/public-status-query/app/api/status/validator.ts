@@ -7,7 +7,11 @@ export interface GetAggregatedStatusesRequestBody {
 }
 
 const ParamsSchema = Joi.object<GetAggregatedStatusesRequestBody>().keys({
-  eventIds: Joi.array().items(Joi.string().length(64)).required().min(1),
+  eventIds: Joi.array()
+    .items(Joi.string().length(64))
+    .required()
+    .min(1)
+    .max(100),
 });
 
 export const validator = async (request: NextRequest) => {

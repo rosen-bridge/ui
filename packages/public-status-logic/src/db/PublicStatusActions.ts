@@ -1,4 +1,11 @@
-import { EventStatus, TxStatus, TxType } from '../constants';
+import {
+  AggregateEventStatus,
+  AggregateTxStatus,
+  EventStatus,
+  TxStatus,
+  TxType,
+} from '../constants';
+import { Threshold } from '../types';
 import { Utils } from '../utils';
 import { DataSourceHandler } from './DataSourceHandler';
 import { AggregatedStatusChangedEntity } from './entities/AggregatedStatusChangedEntity';
@@ -26,6 +33,8 @@ export class PublicStatusActions {
     pk: string,
     timestampSeconds: number,
     status: EventStatus,
+    eventStatusThresholds: Threshold<AggregateEventStatus>,
+    txStatusThresholds: Threshold<AggregateTxStatus>,
     tx?: {
       txId: string;
       chain: string;
@@ -100,7 +109,11 @@ export class PublicStatusActions {
         );
 
         // calculate aggregated status with the new status
-        const aggregatedStatusNew = Utils.calcAggregatedStatus(newStatuses);
+        const aggregatedStatusNew = Utils.calcAggregatedStatus(
+          newStatuses,
+          eventStatusThresholds,
+          txStatusThresholds,
+        );
 
         const guardStatusTx = tx
           ? {
@@ -131,7 +144,11 @@ export class PublicStatusActions {
         if (
           guardsStatus.length === 0 ||
           Utils.aggregatedStatusesMatch(
-            Utils.calcAggregatedStatus(guardsStatus),
+            Utils.calcAggregatedStatus(
+              guardsStatus,
+              eventStatusThresholds,
+              txStatusThresholds,
+            ),
             aggregatedStatusNew,
           ) === false
         ) {

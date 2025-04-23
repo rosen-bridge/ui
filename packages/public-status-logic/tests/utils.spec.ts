@@ -7,7 +7,15 @@ import {
 } from '../src/constants';
 import { TxEntity } from '../src/db/entities/TxEntity';
 import { Utils } from '../src/utils';
-import { guardPk0, guardPk1, guardPk2, guardPk3, id0 } from './testData';
+import {
+  guardPk0,
+  guardPk1,
+  guardPk2,
+  guardPk3,
+  id0,
+  mockEventStatusThresholds,
+  mockTxStatusThresholds,
+} from './testData';
 
 describe('Utils', () => {
   describe('calcAggregatedStatus', () => {
@@ -48,9 +56,21 @@ describe('Utils', () => {
       ];
 
       // act
-      const result0 = Utils.calcAggregatedStatus(statuses0);
-      const result1 = Utils.calcAggregatedStatus(statuses1);
-      const result2 = Utils.calcAggregatedStatus(statuses2);
+      const result0 = Utils.calcAggregatedStatus(
+        statuses0,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
+      );
+      const result1 = Utils.calcAggregatedStatus(
+        statuses1,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
+      );
+      const result2 = Utils.calcAggregatedStatus(
+        statuses2,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
+      );
 
       // assert
       const waitingForConfirmationObj = {
@@ -110,7 +130,11 @@ describe('Utils', () => {
       ];
 
       // act
-      const result = Utils.calcAggregatedStatus(statuses);
+      const result = Utils.calcAggregatedStatus(
+        statuses,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
+      );
 
       // assert
       expect(result).toEqual({

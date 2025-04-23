@@ -10,6 +10,8 @@ import {
   mockTxDTO,
   mockNewGuardStatus,
   mockNewGuardStatusWithTx,
+  mockEventStatusThresholds,
+  mockTxStatusThresholds,
 } from '../testData';
 
 describe('PublicStatusActions', () => {
@@ -53,6 +55,8 @@ describe('PublicStatusActions', () => {
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
         undefined,
       );
 
@@ -74,9 +78,11 @@ describe('PublicStatusActions', () => {
       );
 
       expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledTimes(1);
-      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledWith([
-        mockNewGuardStatus,
-      ]);
+      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledWith(
+        [mockNewGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
+      );
 
       expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
       expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
@@ -160,6 +166,8 @@ describe('PublicStatusActions', () => {
         mockNewGuardStatusWithTx.guardPk,
         mockNewGuardStatusWithTx.updatedAt,
         mockNewGuardStatusWithTx.status,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
         mockTxDTO,
       );
 
@@ -188,9 +196,11 @@ describe('PublicStatusActions', () => {
       );
 
       expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledTimes(1);
-      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledWith([
-        mockNewGuardStatusWithTx,
-      ]);
+      expect(mocks.Utils.calcAggregatedStatus).toHaveBeenCalledWith(
+        [mockNewGuardStatusWithTx],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
+      );
 
       expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledTimes(1);
       expect(mocks.GuardStatusRepository.upsertOne).toHaveBeenCalledWith(
@@ -283,6 +293,8 @@ describe('PublicStatusActions', () => {
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
         undefined,
       );
 
@@ -306,9 +318,13 @@ describe('PublicStatusActions', () => {
       expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
         [mockExistingGuardStatus, mockNewGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
         [mockExistingGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
 
       expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
@@ -389,6 +405,8 @@ describe('PublicStatusActions', () => {
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
         mockNewGuardStatus.status,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
         undefined,
       );
 
@@ -412,9 +430,13 @@ describe('PublicStatusActions', () => {
       expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
         [mockExistingGuardStatus, mockNewGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
         [mockExistingGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
 
       expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
@@ -515,6 +537,8 @@ describe('PublicStatusActions', () => {
         mockNewGuardStatusWithTx.guardPk,
         mockNewGuardStatusWithTx.updatedAt,
         mockNewGuardStatusWithTx.status,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
         mockTxDTO,
       );
 
@@ -545,9 +569,13 @@ describe('PublicStatusActions', () => {
       expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
         [mockExistingGuardStatus, mockNewGuardStatusWithTx],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
         [mockExistingGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
 
       expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);
@@ -628,6 +656,8 @@ describe('PublicStatusActions', () => {
         mockNewGuardStatusWithTx.guardPk,
         mockNewGuardStatusWithTx.updatedAt,
         mockNewGuardStatusWithTx.status,
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
         mockTxDTO,
       );
 
@@ -658,9 +688,13 @@ describe('PublicStatusActions', () => {
       expect(mocks.Utils.calcAggregatedStatus.mock.calls.length).toBe(2);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[0]).toEqual([
         [mockExistingGuardStatus, mockNewGuardStatusWithTx],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
       expect(mocks.Utils.calcAggregatedStatus.mock.calls[1]).toEqual([
         [mockExistingGuardStatus],
+        mockEventStatusThresholds,
+        mockTxStatusThresholds,
       ]);
 
       expect(mocks.Utils.aggregatedStatusesMatch).toHaveBeenCalledTimes(1);

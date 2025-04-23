@@ -5,8 +5,7 @@ import {
   TxStatus,
 } from './constants';
 import { GuardStatusEntity } from './db/entities/GuardStatusEntity';
-import { eventStatusThresholds, txStatusThresholds } from './thresholds';
-import { AggregatedStatus } from './types';
+import { AggregatedStatus, Threshold } from './types';
 
 export class Utils {
   /**
@@ -34,6 +33,8 @@ export class Utils {
    */
   static calcAggregatedStatus = (
     statuses: GuardStatusEntity[],
+    eventStatusThresholds: Threshold<AggregateEventStatus>,
+    txStatusThresholds: Threshold<AggregateTxStatus>,
   ): AggregatedStatus => {
     const aggregatedStatus: AggregatedStatus = {
       status: AggregateEventStatus.waitingForConfirmation,

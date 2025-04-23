@@ -10,7 +10,7 @@ import { AggregatedStatusEntity } from '../src/db/entities/AggregatedStatusEntit
 import { GuardStatusChangedEntity } from '../src/db/entities/GuardStatusChangedEntity';
 import { GuardStatusEntity } from '../src/db/entities/GuardStatusEntity';
 import { TxEntity } from '../src/db/entities/TxEntity';
-import { AggregatedStatus } from '../src/types';
+import { AggregatedStatus, Threshold } from '../src/types';
 
 export const id0 =
   '0000000000000000000000000000000000000000000000000000000000000000';
@@ -255,3 +255,23 @@ export const mockAggregatedStatusOld: AggregatedStatus = {
   txStatus: 'aggTxStatusOld' as AggregateTxStatus,
   tx: undefined,
 };
+
+export const mockEventStatusThresholds: Threshold<AggregateEventStatus> = [
+  { status: AggregateEventStatus.finished, count: 6 },
+  { status: AggregateEventStatus.inReward, count: 3 },
+  { status: AggregateEventStatus.pendingReward, count: 3 },
+  { status: AggregateEventStatus.inPayment, count: 6 },
+  { status: AggregateEventStatus.rejected, count: 5 },
+  { status: AggregateEventStatus.timeout, count: 5 },
+  { status: AggregateEventStatus.reachedLimit, count: 5 },
+  { status: AggregateEventStatus.paymentWaiting, count: 5 },
+  { status: AggregateEventStatus.pendingPayment, count: 3 },
+];
+
+export const mockTxStatusThresholds: Threshold<AggregateTxStatus> = [
+  { status: AggregateTxStatus.completed, count: 6 },
+  { status: AggregateTxStatus.invalid, count: 6 },
+  { status: AggregateTxStatus.sent, count: 6 },
+  { status: AggregateTxStatus.signed, count: 3 },
+  { status: AggregateTxStatus.inSign, count: 6 },
+];

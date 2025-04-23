@@ -147,7 +147,7 @@ const testInvalidTimestampPast = async () => {
   } catch (error) {
     assert(error.response.status === 403);
 
-    if (error.response.data !== 'bad_timestamp') {
+    if (error.response.data.error !== 'invalid timestamp') {
       throw new Error('testInvalidTimestampPast: Failed');
     }
   }
@@ -169,7 +169,7 @@ const testInvalidTimestampFuture = async () => {
   } catch (error) {
     assert(error.response.status === 403);
 
-    if (error.response.data !== 'bad_timestamp') {
+    if (error.response.data.error !== 'invalid timestamp') {
       throw new Error('testInvalidTimestampFuture: Failed');
     }
   }
@@ -191,7 +191,7 @@ const testNotAllowedPk = async () => {
   } catch (error) {
     assert(error.response.status === 403);
 
-    if (error.response.data !== 'access_denied') {
+    if (error.response.data.error !== 'public key not allowed') {
       throw new Error('testNotAllowedPk: Failed');
     }
   }
@@ -216,7 +216,7 @@ const testSignatureInvalid = async () => {
   } catch (error) {
     assert(error.response.status === 403);
 
-    if (error.response.data !== 'verify_failed') {
+    if (error.response.data.error !== 'signature verification failed') {
       throw new Error('testSignatureInvalid: Failed');
     }
   }

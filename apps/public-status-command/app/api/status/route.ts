@@ -21,7 +21,7 @@ const paramsToSignMessage = (
 const handler = async (params: Params) => {
   // check if pk is allowed
   if (!configs.allowedPks.includes(params.pk)) {
-    throw new AccessDeniedError('access_denied');
+    throw new AccessDeniedError('public key not allowed');
   }
 
   // check timestamp
@@ -31,7 +31,7 @@ const handler = async (params: Params) => {
     nowSeconds < timestampSeconds ||
     nowSeconds - timestampSeconds >= configs.timeoutThresholdSeconds
   ) {
-    throw new AccessDeniedError('bad_timestamp');
+    throw new AccessDeniedError('invalid timestamp');
   }
 
   // verify signature
@@ -41,7 +41,7 @@ const handler = async (params: Params) => {
     params.pk,
   );
   if (!verified) {
-    throw new AccessDeniedError('verify_failed');
+    throw new AccessDeniedError('signature verification failed');
   }
 
   await PublicStatusActions.insertStatus(
@@ -49,10 +49,12 @@ const handler = async (params: Params) => {
     params.pk,
     nowSeconds,
     params.status,
+    configs.eventStatusThresholds,
+    configs.txStatusThresholds,
     params.tx,
   );
 
-  return {};
+  return { ok: true };
 };
 
 export const POST = withValidation(validator, handler);
