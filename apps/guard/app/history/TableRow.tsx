@@ -7,6 +7,7 @@ import {
   TableRow,
   Id,
   Connector,
+  Amount,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
@@ -37,18 +38,21 @@ export const tabletHeader = [
     title: 'Event Id',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Lock TX Id',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Reward TX Id',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
@@ -69,30 +73,35 @@ export const tabletHeader = [
     title: 'Token',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Amount',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Bridge Fee',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Network Fee',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
   {
     title: 'Status',
     cellProps: {
       width: 120,
+      align: 'center' as const,
     },
   },
 ];
@@ -163,22 +172,34 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(
-                row.sourceChainToken.amount.toString(),
-                row.sourceChainToken.decimals,
-              )}
+              <Amount
+                value={getDecimalString(
+                  row.sourceChainToken.amount.toString(),
+                  row.sourceChainToken.decimals,
+                )}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+              <Amount
+                value={getDecimalString(
+                  row.bridgeFee,
+                  row.sourceChainToken.decimals,
+                )}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
+              <Amount
+                value={getDecimalString(
+                  row.networkFee,
+                  row.sourceChainToken.decimals,
+                )}
+              />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -209,16 +230,16 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.eventId} />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id
           id={row.sourceTxId}
           href={getTxURL(row.fromChain, row.sourceTxId)!}
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id
           id={row.rewardTxId}
           href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
@@ -236,20 +257,31 @@ export const TabletRow: FC<RowProps> = (props) => {
           end={<Id id={row.toAddress} />}
         />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.sourceChainToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>
-        {getDecimalString(
-          row.sourceChainToken.amount.toString(),
-          row.sourceChainToken.decimals,
-        )}
+      <EnhancedTableCell align="center">
+        {row.sourceChainToken.name}
       </EnhancedTableCell>
-      <EnhancedTableCell>
-        {getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+      <EnhancedTableCell align="center">
+        <Amount
+          value={getDecimalString(
+            row.sourceChainToken.amount.toString(),
+            row.sourceChainToken.decimals,
+          )}
+        />
       </EnhancedTableCell>
-      <EnhancedTableCell>
-        {getDecimalString(row.networkFee, row.sourceChainToken.decimals)}
+      <EnhancedTableCell align="center">
+        <Amount
+          value={getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
+        />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.status}</EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        <Amount
+          value={getDecimalString(
+            row.networkFee,
+            row.sourceChainToken.decimals,
+          )}
+        />
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.status}</EnhancedTableCell>
     </TableRow>
   );
 };
