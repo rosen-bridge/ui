@@ -8,7 +8,7 @@ const Image = styled('img')(({ theme }) => ({
   height: 'unset',
   [theme.breakpoints.down('tablet')]: {
     width: 'unset',
-    height: 32,
+    height: 40,
   },
 }));
 

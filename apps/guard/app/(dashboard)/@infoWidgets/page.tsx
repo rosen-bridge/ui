@@ -27,7 +27,7 @@ const InfoWidgets = () => {
         />
         <WalletWidget
           title="Cold Wallet"
-          color="info"
+          color="tertiary"
           tokenInfoWithAddresses={info?.balances.cold ?? []}
           isLoading={isLoading}
         />

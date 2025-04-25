@@ -106,9 +106,9 @@ export const lightThemeOptions: ThemeOptions = {
       dark: '#116044',
     },
     info: {
-      main: '#42559E',
-      light: '#D9DDEC',
-      dark: '#28335F',
+      main: '#2C70B5',
+      light: '#C0D6ED',
+      dark: '#071D33',
     },
   },
   shape: {
@@ -383,6 +383,11 @@ export const darkThemeOptions: ThemeOptions = {
       light: '#251718',
       dark: '#C48D7C',
       contrastText: '#000000',
+    },
+    text: {
+      primary: '#FFFFFFDE',
+      secondary: '#FFFFFF99',
+      disabled: '#FFFFFF61',
     },
     background: {
       paper: '#0D1120',

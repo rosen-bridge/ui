@@ -12,6 +12,10 @@ const getOptionalString = (path: string): string | undefined => {
   return nodeConfig.has(path) ? nodeConfig.get<string>(path) : undefined;
 };
 
+const getOptionalNumber = (path: string): number | undefined => {
+  return nodeConfig.has(path) ? nodeConfig.get<number>(path) : undefined;
+};
+
 const getConfig = () => {
   try {
     return {
@@ -125,6 +129,53 @@ const getConfig = () => {
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
         },
+      },
+      healthCheck: {
+        ergoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.ergoScannerWarnDiff',
+        ),
+        ergoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.ergoScannerCriticalDiff',
+        ),
+        cardanoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.cardanoScannerWarnDiff',
+        ),
+        cardanoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.cardanoScannerCriticalDiff',
+        ),
+        bitcoinScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.bitcoinScannerWarnDiff',
+        ),
+        bitcoinScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.bitcoinScannerCriticalDiff',
+        ),
+        ethereumScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.ethereumScannerWarnDiff',
+        ),
+        ethereumScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.ethereumScannerCriticalDiff',
+        ),
+        binanceScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.binanceScannerWarnDiff',
+        ),
+        binanceScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.binanceScannerCriticalDiff',
+        ),
+        updateInterval: nodeConfig.get<number>('healthCheck.interval'),
+      },
+      notification: {
+        discordWebHookUrl: nodeConfig.get<string>(
+          'notification.discordWebhookUrl',
+        ),
+        historyCleanupTimeout: getOptionalNumber(
+          'notification.historyCleanupTimeout',
+        ),
+        hasBeenUnstableForAWhileWindowDuration: getOptionalNumber(
+          'notification.windowDurations.hasBeenUnstableForAWhile',
+        ),
+        hasBeenUnknownForAWhileWindowDuration: getOptionalNumber(
+          'notification.windowDurations.hasBeenUnknownForAWhile',
+        ),
       },
     };
   } catch (error) {

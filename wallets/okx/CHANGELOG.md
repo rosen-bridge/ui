@@ -1,5 +1,16 @@
 # @rosen-ui/okx-wallet
 
+## 1.3.3
+
+### Patch Changes
+
+- Updated all wallets to inherit from the abstract Wallet class, combining shared core logic with their unique custom behaviors.
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/wallet-api@1.4.0
+  - @rosen-network/bitcoin@2.1.3
+  - @rosen-ui/types@0.3.5
+
 ## 1.3.2
 
 ### Patch Changes

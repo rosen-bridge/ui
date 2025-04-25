@@ -1,5 +1,11 @@
 # @rosen-network/ethereum
 
+## 0.2.3
+
+### Patch Changes
+
+- Updated dependency @rosen-network/evm@0.3.0
+
 ## 0.2.2
 
 ### Patch Changes
