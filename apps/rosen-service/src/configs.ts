@@ -149,6 +149,12 @@ const getConfig = () => {
         bitcoinScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.bitcoinScannerCriticalDiff',
         ),
+        dogeScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerWarnDiff',
+        ),
+        dogeScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerCriticalDiff',
+        ),
         ethereumScannerWarnDiff: nodeConfig.get<number>(
           'healthCheck.ethereumScannerWarnDiff',
         ),
