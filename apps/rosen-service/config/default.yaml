@@ -48,8 +48,8 @@ doge:
   blockcypherUrl: https://api.blockcypher.com
   rpc:
     url:
-    username:
-    password:
+    # username:
+    # password:
 ethereum:
   addresses:
     lock:
@@ -80,5 +80,6 @@ calculator:
     ergo: []
     cardano: []
     bitcoin: []
+    doge: []
     ethereum: []
     binance: []
