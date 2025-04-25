@@ -90,6 +90,8 @@ healthCheck:
   cardanoScannerCriticalDiff: 5
   bitcoinScannerWarnDiff: 3
   bitcoinScannerCriticalDiff: 5
+  dogeScannerWarnDiff: 3
+  dogeScannerCriticalDiff: 5
   ethereumScannerWarnDiff: 3
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3
