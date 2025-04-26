@@ -76,7 +76,7 @@ export const BridgeTransaction = ({
 
   return (
     <>
-      <div>
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
         <Card
           sx={{
             marginBottom: '18px',
@@ -99,10 +99,10 @@ export const BridgeTransaction = ({
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            height: '75%',
             gap: (theme) => theme.spacing(1),
             backgroundColor: 'primary.light',
             padding: (theme) => theme.spacing(3),
+            flexGrow: 1,
           }}
         >
           <div style={{ flexGrow: '1' }} />
