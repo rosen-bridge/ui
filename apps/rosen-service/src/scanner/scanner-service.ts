@@ -1,4 +1,4 @@
-import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
@@ -7,7 +7,7 @@ import { startCardanoScanner } from './chains/cardano';
 import { startErgoScanner } from './chains/ergo';
 import { startEthereumScanner } from './chains/ethereum';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 /**
  * start all scanners and register their extractors

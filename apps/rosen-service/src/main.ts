@@ -1,4 +1,4 @@
-import WinstonLogger from '@rosen-bridge/winston-logger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import './bootstrap';
 import calculatorService from './calculator/calculator-service';
@@ -8,7 +8,7 @@ import healthCheckService from './health-check/health-check-service';
 import scannerService from './scanner/scanner-service';
 import { handleError } from './utils';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 const main = async () => {
   try {
