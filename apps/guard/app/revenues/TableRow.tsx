@@ -218,7 +218,8 @@ export const MobileRow: FC<RowProps> = (props) => {
                     .find(
                       (revenue) =>
                         revenue.revenueType === 'emission' &&
-                        revenue.data.tokenId === info?.rsnTokenId,
+                        (revenue.data.tokenId === info?.rsnTokenId ||
+                          revenue.data.tokenId === info?.emissionTokenId),
                     )
                     ?.data.amount.toString() ?? '',
                   row.lockToken.decimals,

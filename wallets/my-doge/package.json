@@ -20,7 +20,6 @@
     "@rosen-bridge/tokens": "^3.0.0",
     "@rosen-network/doge": "^0.1.1",
     "@rosen-ui/constants": "^0.3.0",
-    "@rosen-ui/types": "^0.3.5",
     "@rosen-ui/wallet-api": "^1.4.0"
   }
 }
