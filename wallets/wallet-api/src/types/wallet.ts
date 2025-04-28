@@ -27,7 +27,7 @@ export abstract class Wallet {
   abstract link: string;
   abstract supportedChains: Network[];
 
-  abstract connect(): Promise<void>;
+  abstract connect(silent?: boolean): Promise<void>;
   abstract disconnect(): Promise<void>;
   abstract getAddress(): Promise<string>;
   abstract getBalance(token: RosenChainToken): Promise<RosenAmountValue>;

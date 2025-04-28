@@ -22,6 +22,7 @@ npm run build --workspace networks/ethereum
 npm run build --workspace wallets/eternl
 npm run build --workspace wallets/lace
 npm run build --workspace wallets/metamask
+npm run build --workspace wallets/my-doge
 npm run build --workspace wallets/nautilus
 npm run build --workspace wallets/okx
-npm run build --workspace wallets/my-doge
+npm run build --workspace wallets/wallet-connect

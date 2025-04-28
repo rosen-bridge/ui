@@ -89,9 +89,9 @@ export const ChooseWalletModal = ({
           {wallets.map((wallet) => {
             const Icon = wallet.icon;
             return (
-              <Card key={wallet.label}>
+              <Card key={wallet.name}>
                 <CardContent>
-                  <Tooltip title={wallet.name}>
+                  <Tooltip title={wallet.label}>
                     <Box
                       sx={{
                         display: 'flex',

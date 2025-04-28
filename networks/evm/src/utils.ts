@@ -1,8 +1,10 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
-import { FeeData, isAddress, JsonRpcProvider } from 'ethers';
+import { Contract, FeeData, isAddress, JsonRpcProvider } from 'ethers';
 
+import { tokenABI } from './constants';
 import { EvmChains } from './types';
 
 /**
@@ -48,6 +50,26 @@ export const generateLockData = async (
  */
 export const getHeight = async (chain: EvmChains): Promise<number> => {
   return await new JsonRpcProvider(getChainRpcUrl(chain)).getBlockNumber();
+};
+
+/**
+ * gets address balance for a specific token on EVM chain
+ * @returns
+ */
+export const getBalance = async (
+  chain: EvmChains,
+  address: string,
+  token: RosenChainToken,
+): Promise<bigint> => {
+  const provider = new JsonRpcProvider(getChainRpcUrl(chain));
+
+  if (token.type === 'native') {
+    return await provider.getBalance(address);
+  } else {
+    const contract = new Contract(token.tokenId, tokenABI, provider);
+
+    return await contract.balanceOf(address);
+  }
 };
 
 /**

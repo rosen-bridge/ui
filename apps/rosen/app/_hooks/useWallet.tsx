@@ -99,7 +99,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       if ((await wallet.isConnected?.()) === false) return;
 
       try {
-        await wallet.connect();
+        await wallet.connect(true);
 
         await wallet.switchChain?.(selectedSource.name, true);
 
