@@ -36,6 +36,20 @@ bitcoin:
     url:
     username:
     password:
+doge:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  blockcypherUrl: https://api.blockcypher.com
+  rpc:
+    url:
+    # username:
+    # password:
 ethereum:
   addresses:
     lock:
@@ -66,6 +80,7 @@ calculator:
     ergo: []
     cardano: []
     bitcoin: []
+    doge: []
     ethereum: []
     binance: []
 healthCheck:
@@ -75,6 +90,8 @@ healthCheck:
   cardanoScannerCriticalDiff: 5
   bitcoinScannerWarnDiff: 3
   bitcoinScannerCriticalDiff: 5
+  dogeScannerWarnDiff: 3
+  dogeScannerCriticalDiff: 5
   ethereumScannerWarnDiff: 3
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3

@@ -84,6 +84,17 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       label: 'bitcoin',
     },
     {
+      instance: new BitcoinRPCScannerHealthCheck(
+        () => getLastSavedBlock(startBinanceScanner.name),
+        config.healthCheck.dogeScannerWarnDiff,
+        config.healthCheck.dogeScannerCriticalDiff,
+        config.doge.rpcUrl,
+        config.doge.rpcUsername,
+        config.doge.rpcPassword,
+      ),
+      label: 'doge',
+    },
+    {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.ethereum.key,
         () => getLastSavedBlock(startEthereumScanner.name),
