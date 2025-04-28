@@ -1,5 +1,5 @@
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
-import WinstonLogger from '@rosen-bridge/winston-logger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import config from '../../configs';
 import {
@@ -12,8 +12,8 @@ import AppError from '../../errors/AppError';
 import observationService from '../../observation/observation-service';
 import { startScanner } from '../scanner-utils';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
-const scannerLogger = WinstonLogger.getInstance().getLogger(
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
   BITCOIN_SCANNER_LOGGER_NAME,
 );
 
