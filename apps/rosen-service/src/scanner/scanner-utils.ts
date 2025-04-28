@@ -1,5 +1,5 @@
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { GeneralScanner } from '@rosen-bridge/scanner';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import AppError from '../errors/AppError';
 import { handleError, runAndSetInterval } from '../utils';
@@ -15,7 +15,7 @@ export const startScanner = async (
   loggerFileName: string,
   updateInterval: number,
 ) => {
-  const logger = WinstonLogger.getInstance().getLogger(loggerFileName);
+  const logger = CallbackLoggerFactory.getInstance().getLogger(loggerFileName);
 
   const tryUpdating = async () => {
     try {
