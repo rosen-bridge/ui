@@ -1,4 +1,4 @@
-import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
 import config from '../configs';
@@ -16,7 +16,7 @@ const startUpdateJob = async (
   calculator: AssetCalculator,
   updateInterval: number,
 ) => {
-  const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+  const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
   const tryUpdating = async () => {
     try {
@@ -44,7 +44,7 @@ const startUpdateJob = async (
  * start asset calculator service
  */
 const start = async () => {
-  const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+  const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
   const assetCalculator = new AssetCalculator(
     await getTokenMap(),
     {

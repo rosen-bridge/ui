@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/evm",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
@@ -15,6 +15,8 @@
   "dependencies": {
     "@rosen-bridge/address-codec": "^0.5.1",
     "@rosen-bridge/tokens": "^3.0.0",
+    "@rosen-ui/constants": "^0.3.0",
+    "@rosen-ui/types": "^0.3.5",
     "ethers": "^6.13.2"
   },
   "devDependencies": {

@@ -1,17 +1,17 @@
 diff --git a/node_modules/@rosen-bridge/bitcoin-rpc-scanner/dist/DogeRpcNetwork.js b/node_modules/@rosen-bridge/bitcoin-rpc-scanner/dist/DogeRpcNetwork.js
-index b869485..2e26d0e 100644
+index 5d2e613..74f6457 100644
 --- a/node_modules/@rosen-bridge/bitcoin-rpc-scanner/dist/DogeRpcNetwork.js
 +++ b/node_modules/@rosen-bridge/bitcoin-rpc-scanner/dist/DogeRpcNetwork.js
 @@ -1,6 +1,8 @@
  import axios from 'axios';
- import { AbstractNetworkConnector } from '@rosen-bridge/scanner';
+ import { AbstractNetworkConnector, } from '@rosen-bridge/scanner-interfaces';
  import { randomBytes } from 'crypto';
 +import rateLimit from 'axios-rate-limit';
 +
  export class DogeRpcNetwork extends AbstractNetworkConnector {
      url;
      timeout;
-@@ -9,12 +11,17 @@ export class DogeRpcNetwork extends AbstractNetworkConnector {
+@@ -9,12 +11,16 @@ export class DogeRpcNetwork extends AbstractNetworkConnector {
          super();
          this.url = url;
          this.timeout = timeout;
@@ -21,7 +21,6 @@ index b869485..2e26d0e 100644
 -            headers: { 'Content-Type': 'application/json' },
 -            auth: auth,
 -        });
-+
 +        // Use axios-rate-limit to limit to 3 requests per second
 +        this.client = rateLimit(
 +            axios.create({

@@ -16,5 +16,10 @@
     "strict": true,
     "target": "esnext"
   },
-  "include": ["src"]
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../../packages/constants"
+    }
+  ]
 }

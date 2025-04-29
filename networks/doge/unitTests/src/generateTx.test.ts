@@ -57,17 +57,21 @@ describe('generateUnsignedTx', () => {
     const data =
       '00000000007554fc820000000000962f582103f999da8e6e42660e4464d17d29e63bc006734a6710a24eb489b466323d3a9339';
 
+    const rosenChainToken: RosenChainToken = {
+      tokenId: '',
+      name: '',
+      decimals: 8,
+      type: 'native',
+      residency: '',
+      extra: {},
+    };
+
     const result = await generateUnsignedTx(getTokenMap)(
       lockAddress,
       fromAddress,
       amount,
       data,
-      /**
-       * TODO: remove the inline ESLint comment
-       * local:ergo/rosen-bridge/ui#441
-       */
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      {} as any,
+      rosenChainToken,
     );
 
     const psbt = Psbt.fromBase64(result.psbt.base64, { network: DOGE_NETWORK });

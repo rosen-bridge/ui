@@ -1,5 +1,14 @@
 # @rosen-bridge/ui-kit
 
+## 1.10.1
+
+### Patch Changes
+
+- Reducing font size for 'Pending...' in the Amount component ensures smoother rendering and a cleaner UI.
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/utils@0.5.0
+
 ## 1.10.0
 
 ### Minor Changes

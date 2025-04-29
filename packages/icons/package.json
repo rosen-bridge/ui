@@ -26,12 +26,10 @@
     "release": "echo 'this package should not be published due to the license constraints'"
   },
   "peerDependencies": {
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "18.2.0"
   },
   "devDependencies": {
     "@types/react": "18.2.12",
-    "@types/react-dom": "18.2.4",
     "glob": "^11.0.1",
     "vite": "^4.3.9",
     "vite-plugin-dts": "^2.3.0",

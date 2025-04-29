@@ -1,27 +1,33 @@
-import { ErgoNetworkType } from '@rosen-bridge/abstract-extractor';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoScanner } from '@rosen-bridge/scanner';
+import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import configs from '../configs';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
-const ergoEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
-  'ergo-event-trigger-extractor',
-);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const ergoEventTriggerExtractorLogger =
+  CallbackLoggerFactory.getInstance().getLogger('ergo-event-trigger-extractor');
 const cardanoEventTriggerExtractorLogger =
-  WinstonLogger.getInstance().getLogger('cardano-event-trigger-extractor');
+  CallbackLoggerFactory.getInstance().getLogger(
+    'cardano-event-trigger-extractor',
+  );
 const bitcoinEventTriggerExtractorLogger =
-  WinstonLogger.getInstance().getLogger('bitcoin-event-trigger-extractor');
-const dogeEventTriggerExtractorLogger = WinstonLogger.getInstance().getLogger(
-  'doge-event-trigger-extractor',
-);
+  CallbackLoggerFactory.getInstance().getLogger(
+    'bitcoin-event-trigger-extractor',
+  );
 const ethereumEventTriggerExtractorLogger =
-  WinstonLogger.getInstance().getLogger('ethereum-event-trigger-extractor');
+  CallbackLoggerFactory.getInstance().getLogger(
+    'ethereum-event-trigger-extractor',
+  );
 const binanceEventTriggerExtractorLogger =
-  WinstonLogger.getInstance().getLogger('binance-event-trigger-extractor');
+  CallbackLoggerFactory.getInstance().getLogger(
+    'binance-event-trigger-extractor',
+  );
+const dogeEventTriggerExtractorLogger =
+  CallbackLoggerFactory.getInstance().getLogger('doge-event-trigger-extractor');
 
 /**
  * register event trigger extractors for all chains
