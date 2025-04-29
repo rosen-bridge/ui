@@ -17,7 +17,6 @@
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-extractor": "^2.0.0",
     "@rosen-bridge/bitcoin-observation-extractor": "^6.1.0",
     "@rosen-bridge/bitcoin-rpc-scanner": "^1.2.0",
     "@rosen-bridge/callback-logger": "^0.1.0",
@@ -35,6 +34,7 @@
     "@rosen-bridge/winston-logger": "^1.0.3",
     "@rosen-ui/asset-calculator": "^2.1.4",
     "@rosen-ui/constants": "^0.3.0",
+    "axios-rate-limit": "^1.4.0",
     "config": "^3.3.7"
   },
   "devDependencies": {
