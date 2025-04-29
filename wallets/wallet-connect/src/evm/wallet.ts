@@ -11,23 +11,40 @@ import {
 import { WalletConnect } from '../abstract';
 import { WalletConnectEVMConfig } from './types';
 
-export class WalletConnectEVM extends WalletConnect {
-  name = 'WalletConnectEVM';
-
-  currentChain: Network = NETWORKS.ethereum.key;
-
-  supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
+export abstract class WalletConnectEVM extends WalletConnect {
+  abstract currentChain: Network;
 
   constructor(private config: WalletConnectEVMConfig) {
     super(config.projectId);
   }
 
-  get currentChainId() {
+  get chainId() {
     return `eip155:${Number(NETWORKS[this.currentChain].id)}`;
   }
 
+  get name() {
+    return 'WalletConnect' + this.currentChain;
+  }
+
   get namespaces() {
-    return this.getNamespaces(this.currentChain);
+    return {
+      eip155: {
+        accounts: [],
+        chains: [this.chainId],
+        events: ['chainChanged', 'accountsChanged'],
+        methods: [
+          'eth_sendTransaction',
+          'eth_signTransaction',
+          'eth_sign',
+          'personal_sign',
+          'eth_signTypedData',
+        ],
+      },
+    };
+  }
+
+  get supportedChains() {
+    return [this.currentChain];
   }
 
   getAddress = async (): Promise<string> => {
@@ -66,42 +83,6 @@ export class WalletConnectEVM extends WalletConnect {
     return wrappedAmount;
   };
 
-  getChainId = (chain: Network) => {
-    return `eip155:${Number(NETWORKS[chain].id)}`;
-  };
-
-  getNamespaces = (chain: Network) => {
-    return {
-      eip155: {
-        accounts: [],
-        chains: [this.getChainId(chain)],
-        events: ['chainChanged', 'accountsChanged'],
-        methods: [
-          'eth_sendTransaction',
-          'eth_signTransaction',
-          'eth_sign',
-          'personal_sign',
-          'eth_signTypedData',
-        ],
-      },
-    };
-  };
-
-  // switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
-  //   if (!this.supportedChains.includes(chain)) {
-  //     throw new UnsupportedChainError(this.name, chain);
-  //   }
-
-  //   debugger;
-
-  //   await this.signClient.update({
-  //     topic: this.session!.topic,
-  //     namespaces: this.getNamespaces(chain),
-  //   });
-
-  //   this.currentChain = chain;
-  // };
-
   transfer = async (params: WalletTransferParams): Promise<string> => {
     const address = await this.getAddress();
 
@@ -125,7 +106,7 @@ export class WalletConnectEVM extends WalletConnect {
     try {
       return (await this.signClient.request<string>({
         topic: this.session!.topic,
-        chainId: this.currentChainId,
+        chainId: this.chainId,
         request: {
           method: 'eth_sendTransaction',
           params: [transactionParameters],
