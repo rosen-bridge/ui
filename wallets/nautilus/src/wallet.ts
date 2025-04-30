@@ -28,15 +28,15 @@ export class NautilusWallet extends Wallet {
 
   supportedChains = [NETWORKS.ergo.key];
 
-  private get api() {
-    return window.ergoConnector.nautilus;
-  }
-
   constructor(private config: WalletConfig) {
     super();
   }
 
-  async connect(): Promise<void> {
+  private get api() {
+    return window.ergoConnector.nautilus;
+  }
+
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     let isConnected: boolean;
 
@@ -49,18 +49,18 @@ export class NautilusWallet extends Wallet {
     if (isConnected) return;
 
     throw new ConnectionRejectedError(this.name);
-  }
+  };
 
-  async disconnect(): Promise<void> {
+  disconnect = async (): Promise<void> => {
     this.requireAvailable();
     const result = await this.api.disconnect();
 
     if (!result) {
       throw new DisconnectionFailedError(this.name);
     }
-  }
+  };
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
     try {
       const wallet = await this.api.getContext();
@@ -68,9 +68,9 @@ export class NautilusWallet extends Wallet {
     } catch (error) {
       throw new AddressRetrievalError(this.name, error);
     }
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
     const wallet = await this.api.getContext();
 
@@ -95,21 +95,21 @@ export class NautilusWallet extends Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return (
       typeof window.ergoConnector !== 'undefined' &&
       !!window.ergoConnector.nautilus
     );
-  }
+  };
 
-  async isConnected(): Promise<boolean> {
+  isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
     return await this.api.isAuthorized();
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
     const wallet = await this.api.getContext();
 
@@ -143,5 +143,5 @@ export class NautilusWallet extends Wallet {
     } catch (error) {
       throw new SubmitTransactionError(this.name, error);
     }
-  }
+  };
 }
