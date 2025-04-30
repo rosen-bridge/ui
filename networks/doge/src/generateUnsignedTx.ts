@@ -41,6 +41,7 @@ export const generateUnsignedTx =
     // generate OP_RETURN box
     const opReturnPayment = payments.embed({
       data: [Buffer.from(opReturnData, 'hex')],
+      network: DOGE_NETWORK,
     });
     psbt.addOutput({
       script: opReturnPayment.output!,
