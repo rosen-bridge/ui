@@ -26,26 +26,26 @@ export class EtrnlWallet extends Wallet {
 
   supportedChains = [NETWORKS.cardano.key];
 
-  private get api() {
-    return window.cardano.eternl;
-  }
-
   constructor(private config: WalletConfig) {
     super();
   }
 
-  async connect(): Promise<void> {
+  private get api() {
+    return window.cardano.eternl;
+  }
+
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
-  }
+  };
 
-  async disconnect(): Promise<void> {}
+  disconnect = async (): Promise<void> => {};
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
     try {
       const wallet = await this.api.enable();
@@ -53,9 +53,9 @@ export class EtrnlWallet extends Wallet {
     } catch (error) {
       throw new AddressRetrievalError(this.name, error);
     }
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
 
     const wallet = await this.api.enable();
@@ -82,13 +82,13 @@ export class EtrnlWallet extends Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return typeof window.cardano !== 'undefined' && !!window.cardano.eternl;
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
 
     const wallet = await this.api.enable();
@@ -135,5 +135,5 @@ export class EtrnlWallet extends Wallet {
     } catch (error) {
       throw new SubmitTransactionError(this.name, error);
     }
-  }
+  };
 }

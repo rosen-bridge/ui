@@ -27,19 +27,19 @@ export abstract class Wallet {
   abstract link: string;
   abstract supportedChains: Network[];
 
-  abstract connect(): Promise<void>;
-  abstract disconnect(): Promise<void>;
-  abstract getAddress(): Promise<string>;
-  abstract getBalance(token: RosenChainToken): Promise<RosenAmountValue>;
-  abstract isAvailable(): boolean;
-  abstract transfer(params: WalletTransferParams): Promise<string>;
+  abstract connect: () => Promise<void>;
+  abstract disconnect: () => Promise<void>;
+  abstract getAddress: () => Promise<string>;
+  abstract getBalance: (token: RosenChainToken) => Promise<RosenAmountValue>;
+  abstract isAvailable: () => boolean;
+  abstract transfer: (params: WalletTransferParams) => Promise<string>;
 
-  isConnected?(): Promise<boolean>;
-  switchChain?(chain: Network, silent?: boolean): Promise<void>;
+  isConnected?: () => Promise<boolean>;
+  switchChain?: (chain: Network, silent?: boolean) => Promise<void>;
 
-  protected requireAvailable(): void {
+  protected requireAvailable: () => void = () => {
     if (!this.isAvailable()) {
       throw new UnavailableApiError(this.name);
     }
-  }
+  };
 }
