@@ -14,5 +14,8 @@
   },
   "devDependencies": {
     "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@rosen-ui/types": "^0.3.5"
   }
 }

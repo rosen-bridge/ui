@@ -8,7 +8,7 @@ import type {
 import { CipWalletApi } from '@rosen-ui/wallet-api';
 
 export type WalletConfig = {
-  getTokenMap(): Promise<TokenMap>;
+  getTokenMap: () => Promise<TokenMap>;
   decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
@@ -22,8 +22,8 @@ declare global {
   interface Window {
     cardano: {
       eternl: {
-        enable(): Promise<CipWalletApi>;
-        isEnabled(): Promise<boolean>;
+        enable: () => Promise<CipWalletApi>;
+        isEnabled: () => Promise<boolean>;
         experimental?: unknown;
       };
     };

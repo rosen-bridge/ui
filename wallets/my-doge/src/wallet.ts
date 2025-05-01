@@ -7,6 +7,7 @@ import {
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
+  AddressRetrievalError,
 } from '@rosen-ui/wallet-api';
 
 import { WalletConfig } from './types';
@@ -30,37 +31,39 @@ export class MyDogeWallet extends Wallet {
     super();
   }
 
-  async connect(): Promise<void> {
+  connect = async (): Promise<void> => {
     this.requireAvailable();
-    try {
-      const isConnected = await this.isConnected();
-      if (isConnected) {
-        return;
-      }
 
+    if (await this.isConnected()) return;
+
+    try {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
-  }
+  };
 
-  async disconnect(): Promise<void> {
+  disconnect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
       throw new DisconnectionFailedError(this.name, error);
     }
-  }
+  };
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
-    const account = await this.api.getConnectionStatus();
-    return account.selectedWalletAddress;
-  }
+    try {
+      return (await this.api.getConnectionStatus()).selectedWalletAddress;
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<bigint> {
+  getBalance = async (token: RosenChainToken): Promise<bigint> => {
     this.requireAvailable();
+
     const amount = await this.api.getBalance();
 
     const tokenMap = await this.config.getTokenMap();
@@ -72,22 +75,23 @@ export class MyDogeWallet extends Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return typeof window.doge !== 'undefined' && !!window.doge;
-  }
+  };
 
-  async isConnected(): Promise<boolean> {
+  isConnected = async (): Promise<boolean> => {
     try {
       return (await this.api.getConnectionStatus()).connected;
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
+    } catch {
+      return false;
     }
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
+
     const userAddress = await this.getAddress();
 
     const opReturnData = await this.config.generateOpReturnData(
@@ -117,5 +121,5 @@ export class MyDogeWallet extends Wallet {
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
-  }
+  };
 }

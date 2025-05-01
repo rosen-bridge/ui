@@ -1,7 +1,7 @@
 import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { Id } from '..';
+import { Amount, Id } from '..';
 import { useTheme } from '../../../hooks';
 import {
   Box,
@@ -50,20 +50,13 @@ export const TokenListItem = ({
         primary={
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography sx={{ flexGrow: 1 }}>{nameOrPlaceholder}</Typography>
-            <Typography variant="caption">
-              {getDecimalString(value, decimals)}
-            </Typography>
-            <Typography variant="caption">
-              {coldValue !== undefined && '🔥'}
-            </Typography>
-            {coldValue && (
-              <>
-                <Typography variant="caption">
-                  {' '}
-                  / {getDecimalString(coldValue, decimals)}
-                </Typography>
-                <Typography variant="caption"> ❄️</Typography>
-              </>
+            <Amount value={getDecimalString(value, decimals)} />
+            {coldValue !== undefined && (
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Typography variant="caption">🔥</Typography>
+                <Amount value={getDecimalString(coldValue, decimals)} />
+                <Typography variant="caption">❄️</Typography>
+              </Box>
             )}
           </Box>
         }

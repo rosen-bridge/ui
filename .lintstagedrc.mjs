@@ -30,5 +30,8 @@ export default {
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),
+  '**/*.{js,jsx,ts,tsx}': perPackage((directory) => {
+    return `npx depcheck --ignores="@mui/material, @types/react, @types/node, @types/react-dom, @vitest/runner, eslint-config-prettier, tsx, vitest, axios-rate-limit, pg,joi" --ignore-patterns="vite.config.ts.timestamp-*" ${path.relative(process.cwd(), directory)}`;
+  }),
   '*.{js,jsx,ts,tsx}': 'npm run test:related',
 };

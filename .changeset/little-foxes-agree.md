@@ -6,4 +6,4 @@
 '@rosen-ui/okx-wallet': patch
 ---
 
-Updated all wallets to inherit from the abstract Wallet class, combining shared core logic with their unique custom behaviors.
+Refactor methods to arrow functions for improved code consistency.

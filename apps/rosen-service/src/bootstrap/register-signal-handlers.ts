@@ -1,10 +1,10 @@
-import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 import { handleError } from '../utils';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 process.on('SIGTERM', async () => {
   logger.debug(

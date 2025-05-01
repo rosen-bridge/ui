@@ -34,7 +34,6 @@ const Root = styled(Box)(({ theme }) => ({
   paddingRight: theme.shape.borderRadius * 2,
   [theme.breakpoints.down('tablet')]: {
     display: 'block',
-    backgroundColor: theme.palette.background.default,
     marginLeft: `-${theme.spacing(2)}`,
     marginRight: theme.spacing(-2),
     paddingLeft: theme.spacing(2),
@@ -57,13 +56,13 @@ const TabsContainer = styled(Box)(({ theme }) => ({
     'paddingBottom': theme.spacing(5),
     [theme.breakpoints.down('tablet')]: {
       padding: theme.spacing(1, 2, 0, 2),
-      backgroundColor: theme.palette.info.dark,
+      backgroundColor: theme.palette.primary.main,
     },
     '& .MuiTab-root': {
       minHeight: 48,
       justifyContent: 'start',
       textAlign: 'left',
-      color: theme.palette.info.contrastText,
+      color: theme.palette.primary.contrastText,
       fontSize: theme.typography.body2.fontSize,
       [theme.breakpoints.down('tablet')]: {
         width: '10em',
@@ -71,12 +70,9 @@ const TabsContainer = styled(Box)(({ theme }) => ({
       },
     },
     '& .Mui-selected': {
-      color:
-        theme.palette.mode === 'light'
-          ? theme.palette.info.dark
-          : theme.palette.info.light,
+      color: theme.palette.primary.dark,
       [theme.breakpoints.down('tablet')]: {
-        backgroundColor: theme.palette.background.default,
+        backgroundColor: theme.palette.background.paper,
         borderTopRightRadius: theme.shape.borderRadius,
         borderTopLeftRadius: theme.shape.borderRadius,
       },
@@ -96,7 +92,7 @@ const TabsContainer = styled(Box)(({ theme }) => ({
       display: 'none',
     },
     '& .top': {
-      backgroundColor: theme.palette.info.dark,
+      backgroundColor: theme.palette.primary.main,
       borderTopRightRadius: theme.shape.borderRadius,
       borderTopLeftRadius: theme.shape.borderRadius,
       borderBottomRightRadius: theme.shape.borderRadius / 2,
@@ -104,7 +100,7 @@ const TabsContainer = styled(Box)(({ theme }) => ({
       transition: 'height 300ms',
     },
     '& .bottom': {
-      backgroundColor: theme.palette.info.dark,
+      backgroundColor: theme.palette.primary.main,
       borderTopRightRadius: theme.shape.borderRadius / 2,
       borderTopLeftRadius: theme.shape.borderRadius / 2,
       borderBottomRightRadius: theme.shape.borderRadius,

@@ -99,6 +99,22 @@ const getConfig = () => {
         rpcUrl: nodeConfig.get<string>('binance.rpcUrl'),
         rpcAuthToken: getOptionalString('binance.rpcAuthToken'),
       },
+      doge: {
+        addresses: {
+          lock: nodeConfig.get<string>('doge.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>('doge.addresses.eventTrigger'),
+          permit: nodeConfig.get<string>('doge.addresses.permit'),
+          fraud: nodeConfig.get<string>('doge.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('doge.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('doge.tokens.rwt'),
+        },
+        blockcypherUrl: nodeConfig.get<string>('doge.blockcypherUrl'),
+        rpcUrl: nodeConfig.get<string>('doge.rpc.url'),
+        rpcUsername: getOptionalString('doge.rpc.username'),
+        rpcPassword: getOptionalString('doge.rpc.password'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -111,6 +127,7 @@ const getConfig = () => {
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
+          doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
         },
       },
       healthCheck: {
@@ -131,6 +148,12 @@ const getConfig = () => {
         ),
         bitcoinScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.bitcoinScannerCriticalDiff',
+        ),
+        dogeScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerWarnDiff',
+        ),
+        dogeScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerCriticalDiff',
         ),
         ethereumScannerWarnDiff: nodeConfig.get<number>(
           'healthCheck.ethereumScannerWarnDiff',

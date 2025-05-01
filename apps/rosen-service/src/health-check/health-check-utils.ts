@@ -1,5 +1,6 @@
 import { BlockEntity, PROCEED } from '@rosen-bridge/scanner';
-import dataSource from 'src/data-source';
+
+import dataSource from '../data-source';
 
 /**
  * returns the last saved block height based on the scanner name
