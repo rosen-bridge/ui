@@ -1,0 +1,110 @@
+import React from 'react';
+
+import { useTheme } from '@rosen-bridge/ui-kit';
+
+export default function CubeNetSvg({
+  className,
+  color,
+}: {
+  className?: string;
+  color: 'primary' | 'secondary';
+}) {
+  const theme = useTheme();
+  const _color = theme.palette.mode === 'light' ? color : 'primary';
+  return (
+    <svg
+      id="Layer_2"
+      viewBox="0 0 1074 278.5"
+      xmlns="http://www.w3.org/2000/svg"
+      data-name="Layer 2"
+      className={className}
+    >
+      <defs>
+        <linearGradient
+          id="primaryFadeGradient"
+          gradientUnits="userSpaceOnUse"
+          x1="0"
+          x2="0"
+          y1="0"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            stop-color={theme.palette.primary.main}
+            stop-opacity="0.4"
+          />
+          <stop
+            offset="100%"
+            stop-color={theme.palette.background.default}
+            stop-opacity="0"
+          />
+        </linearGradient>
+        <linearGradient
+          id="secondaryFadeGradient"
+          gradientUnits="userSpaceOnUse"
+          x1="0"
+          x2="0"
+          y1="0"
+          y2="100%"
+        >
+          <stop
+            offset="0%"
+            stop-color={theme.palette.secondary.main}
+            stop-opacity="0.4"
+          />
+          <stop
+            offset="100%"
+            stop-color={theme.palette.background.default}
+            stop-opacity="0"
+          />
+        </linearGradient>
+      </defs>
+      <g
+        id="Layer_3"
+        data-name="Layer 3"
+        fill={`url(#${_color}FadeGradient)`}
+        stroke={`url(#${_color}FadeGradient)`}
+      >
+        <g id="SubLines" opacity=".3">
+          <path
+            className="cls-1"
+            d="M899.5 122l174-100M968.5 82l35 20M1038.5 3l-35 20M1072.5 62l-69-39M1003.5 102l69-40M1038.5 120V3M968.5 161V82M934.5 143v-40M795.5 22l173 100M865.5 142l-1-120M830.5 122V3M1003.5 102V23M865.5 102l-35 20M865.5 102l34 20M795.5 142V22M795.5 62l35 20M796.5 103l34-21M796.5 103l-105-60M760.5 123V3M691.5 161l69-38M760.5 123l35 19M899.5 122V82M830.5 3l-381 220M415.5 201l69 41M484.5 242l69-41M483.5 277l1-155M553.5 278V81M588.5 262V101M726.5 181v-80M553.5 2l173 99M657.5 63l103-60M691.5 161V42M726.5 142l-35-20M587.5 181l104-59M657.5 181v-80M622.5 199v-38M554.5 162l33 19M588.5 222l-35 19M518.5 222l35 19M518.5 23v199M415.5 201l138-79M483.5 83l70 39M483.5 202l-208-120M345.5 202V3M345.5 83l34 19M242.5 182l172-100M379.5 222v-80M414.5 243v-81M379.5 182l35-20M345.5 162l34 20M449.5 222l-1-160M310.5 222l1-80M310.5 63l68-40M206.5 42l69-39M206.5 3v39M33.5 3l2 58M.5 82l102-60M34.5 22l68 40M67.5 2l-33 20M67.5 122V2M172.5 182l-105-60M67.5 82l69-40M67.5 122l70-40M101.5 142l1-80M137.5 122l-36 20M137.5 161v-39M242.5 182l-140-80M172.5 222V21M172.5 182l138-80M311.5 182l-174-100M172.5 141l103-59M311.5 142l-209-120M275.5 122V3M242.5 182v-40M206.5 122v40M483.5 83l70-42M587.5 61l1-58M691.5 161l-69-40M518.5 21l-34-18"
+          />
+          <g>
+            <path
+              className="cls-3"
+              d="M899.5 122l174-100M968.5 82l35 20M1038.5 3l-35 20M1072.5 62l-69-39M1003.5 102l69-40M1038.5 120V3M968.5 161V82M934.5 143v-40M795.5 22l173 100M865.5 142l-1-120M830.5 122V3M1003.5 102V23M865.5 102l-35 20M865.5 102l34 20M795.5 142V22M795.5 62l35 20M796.5 103l34-21M796.5 103l-105-60M760.5 123V3M691.5 161l69-38M760.5 123l35 19M899.5 122V82M830.5 3l-381 220M415.5 201l69 41M484.5 242l69-41M483.5 277l1-155M553.5 278V81M588.5 262V101M726.5 181v-80M553.5 2l173 99M657.5 63l103-60M691.5 161V42M726.5 142l-35-20M587.5 181l104-59M657.5 181v-80M622.5 199v-38M554.5 162l33 19M588.5 222l-35 19M518.5 222l35 19M518.5 23v199M415.5 201l138-79M483.5 83l70 39M483.5 202l-208-120M345.5 202V3M345.5 83l34 19M242.5 182l172-100M379.5 222v-80M414.5 243v-81M379.5 182l35-20M345.5 162l34 20M449.5 222l-1-160M310.5 222l1-80M310.5 63l68-40M206.5 42l69-39M206.5 3v39M33.5 3l2 58M.5 82l102-60M34.5 22l68 40M67.5 2l-33 20M67.5 122V2M172.5 182l-105-60M67.5 82l69-40M67.5 122l70-40M101.5 142l1-80M137.5 122l-36 20M137.5 161v-39M242.5 182l-140-80M172.5 222V21M172.5 182l138-80M311.5 182l-174-100M172.5 141l103-59M311.5 142l-209-120M275.5 122V3M242.5 182v-40M206.5 122v40M483.5 83l70-42M587.5 61l1-58M691.5 161l-69-40M518.5 21l-34-18"
+            />
+          </g>
+        </g>
+        <g id="MainLines">
+          <path
+            className="cls-2"
+            d="M172 21.5v80M243 21.5l-1 120M207 161.5l35-20M138 1.5l34 20M207 2.5l-35 19M207 2.5l36 19M276 2.5l-33 19M276 81.5v-79M242 101.5l-139-80M103 2.5v19M68 42.5l35-21M103 61.5l35-20M138 41.5v-40M103 101.5v-40M138 121.5l-35-20M138 81.5l-35 20M207 121.5l-69-40M207 121.5l35-20M207 121.5v-40M311 21.5l-104 60M207 41.5l-35 20M276 161.5l-34-20M346 121.5l-70-40M276 121.5l35-20M311 62.5v39M276 41.5l35 20M346 42.5l-35-21M311 2.5v18M346 2.5v40M380 2.5v59M346 82.5l34-21M519 141.5l-139-80M380 101.5l35-20M449 61.5l-103-59M346 42.5l34-21M415 2.5l104 59M449 61.5l35-20M415 41.5l34-20M415 81.5v-40M450 2.5v20M450 141.5l-1-80M484 161.5l-69-40M380 141.5l35-20M380 101.5v40M415 161.5l-35-20M519 141.5l-35 20M484 161.5v-40M484 82.5l-34 19M484 201.5l35-20M554 201.5l-35-20M519 61.5v120M519 2.5v19M554 2.5v39M554 41.5l-35 20M588 61.5l-33-19M658 101.5l-35-20M623 121.5v-40M658 141.5l-35-20M623 161.5l35-20M554 121.5l69 40M554 161.5l34-20M589 101.5l-1 40M589 101.5l34-20M554 81.5l35 20M554 81.5v40M692 2.5l-208 119M589 2.5v19M658 62.5l-69-41M624 2.5v39M658 101.5v-99M762 42.5l-70-41M692 42.5l36-20M727 3.5v59M692 81.5l35-19M727 101.5l34-20M761 81.5l-34-19M796 21.5l-34 21M796 2.5v19M831 2.5l69 39M900 81.5v-40M866 101.5l104-59M900 1.5l139 80M969 81.5l35-20M1004 22.5v39M970 1.5l34 21M935 21.5l35-20M970 1.5v41M935 2.5v100M865 61.5l35 20M865 21.5v40M900 1.5l-35 20"
+          />
+        </g>
+        <g id="Markers">
+          <circle className="cls-4" cx="68" cy="42.5" r="3" />
+          <circle className="cls-4" cx="138" cy="121.5" r="3" />
+          <circle className="cls-4" cx="276" cy="121.5" r="3" />
+          <circle className="cls-4" cx="276" cy="161.5" r="3" />
+          <circle className="cls-4" cx="415" cy="161.5" r="3" />
+          <circle className="cls-4" cx="484" cy="201.5" r="3" />
+          <circle className="cls-4" cx="484" cy="82.5" r="3" />
+          <circle className="cls-4" cx="554" cy="161.5" r="3" />
+          <circle className="cls-4" cx="519" cy="22.5" r="3" />
+          <circle className="cls-4" cx="692" cy="42.5" r="3" />
+          <circle className="cls-4" cx="866" cy="101.5" r="3" />
+          <circle className="cls-4" cx="935" cy="102.5" r="3" />
+          <circle className="cls-4" cx="969" cy="81.5" r="3" />
+          <circle className="cls-4" cx="1039" cy="81.5" r="3" />
+          <circle className="cls-4" cx="554" cy="201.5" r="3" />
+          <circle className="cls-4" cx="346" cy="121.5" r="3" />
+          <circle className="cls-4" cx="346" cy="82.5" r="3" />
+          <circle className="cls-4" cx="207" cy="161.5" r="3" />
+          <circle className="cls-4" cx="207" cy="41.5" r="3" />
+        </g>
+      </g>
+    </svg>
+  );
+}
