@@ -10,6 +10,7 @@
     "build": "next build"
   },
   "dependencies": {
+    "@rosen-bridge/encryption": "^0.1.1",
     "@rosen-bridge/public-status-logic": "^0.0.1",
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/kv": "^2.0.0",
