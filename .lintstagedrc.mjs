@@ -30,8 +30,29 @@ export default {
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),
-  '**/*.{js,jsx,ts,tsx}': perPackage((directory) => {
-    return `npx depcheck --ignores="@mui/material, @types/react, @types/node, @types/react-dom, @vitest/runner, eslint-config-prettier, tsx, vitest, axios-rate-limit, pg,joi" --ignore-patterns="vite.config.ts.timestamp-*" ${path.relative(process.cwd(), directory)}`;
+  '**/*.{js,jsx,ts,tsx,mjs}': perPackage((directory) => {
+    const packages = [
+      '@eslint/js',
+      '@mui/material',
+      '@rosen-bridge/changeset-formatter',
+      '@trivago/prettier-plugin-sort-imports',
+      '@types/node',
+      '@types/react',
+      '@types/react-dom',
+      '@vitest/runner',
+      '@vitest/coverage-istanbul',
+      'axios-rate-limit',
+      'eslint-config-prettier',
+      'lint-staged',
+      'pg',
+      'prettier',
+      'tsx',
+      'vitest',
+    ];
+
+    const paths = ['vite.config.ts.timestamp-*'];
+
+    return `npx depcheck --ignores="${packages.join(', ')}" --ignore-patterns="${paths.join(', ')}" ${path.relative(process.cwd(), directory)}`;
   }),
   '*.{js,jsx,ts,tsx}': 'npm run test:related',
 };
