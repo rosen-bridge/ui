@@ -2,36 +2,10 @@ import { AggregatedStatusChangedEntity } from '../../../src/db/entities/Aggregat
 import { AggregatedStatusEntity } from '../../../src/db/entities/AggregatedStatusEntity';
 import { GuardStatusChangedEntity } from '../../../src/db/entities/GuardStatusChangedEntity';
 import { GuardStatusEntity } from '../../../src/db/entities/GuardStatusEntity';
-import {
-  AggregatedStatusChangedRepository,
-  createAggregatedStatusChangedRepository,
-} from '../../../src/db/repositories/AggregatedStatusChangedRepository';
-import {
-  AggregatedStatusRepository,
-  createAggregatedStatusRepository,
-} from '../../../src/db/repositories/AggregatedStatusRepository';
-import {
-  GuardStatusChangedRepository,
-  createGuardStatusChangedRepository,
-} from '../../../src/db/repositories/GuardStatusChangedRepository';
-import {
-  GuardStatusRepository,
-  createGuardStatusRepository,
-} from '../../../src/db/repositories/GuardStatusRepository';
-import {
-  TxRepository,
-  createTxRepository,
-} from '../../../src/db/repositories/TxRepository';
 import { testDataSource } from './testDataSource';
 
 export class DataSourceMock {
   static testDataSource = testDataSource;
-
-  static aggregatedStatusChangedRepository: AggregatedStatusChangedRepository;
-  static aggregatedStatusRepository: AggregatedStatusRepository;
-  static guardStatusChangedRepository: GuardStatusChangedRepository;
-  static guardStatusRepository: GuardStatusRepository;
-  static txRepository: TxRepository;
 
   /**
    * initializes test data source
@@ -39,19 +13,6 @@ export class DataSourceMock {
   static init = async () => {
     await this.testDataSource.initialize();
     await this.testDataSource.runMigrations();
-
-    this.aggregatedStatusChangedRepository =
-      createAggregatedStatusChangedRepository(this.testDataSource);
-    this.aggregatedStatusRepository = createAggregatedStatusRepository(
-      this.testDataSource,
-    );
-    this.guardStatusChangedRepository = createGuardStatusChangedRepository(
-      this.testDataSource,
-    );
-    this.guardStatusRepository = createGuardStatusRepository(
-      this.testDataSource,
-    );
-    this.txRepository = createTxRepository(this.testDataSource);
   };
 
   /**

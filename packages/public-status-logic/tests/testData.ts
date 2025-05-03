@@ -245,8 +245,8 @@ export const mockNewGuardStatusWithTx = {
 
 // mocks for aggregated status objects returned from Utils.calcAggregatedStatus
 export const mockAggregatedStatus: AggregatedStatus = {
-  status: 'aggStatusNew' as AggregateEventStatus,
-  txStatus: 'aggTxStatusNew' as AggregateTxStatus,
+  status: AggregateEventStatus.finished,
+  txStatus: AggregateTxStatus.waitingForConfirmation,
   tx: { txId: mockTxDTO.txId, chain: mockTxDTO.chain },
 };
 

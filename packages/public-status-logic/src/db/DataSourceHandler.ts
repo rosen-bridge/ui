@@ -6,46 +6,13 @@ import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
 import { GuardStatusEntity } from './entities/GuardStatusEntity';
 import { TxEntity } from './entities/TxEntity';
 import migrations from './migrations';
-import {
-  AggregatedStatusChangedRepository,
-  createAggregatedStatusChangedRepository,
-} from './repositories/AggregatedStatusChangedRepository';
-import {
-  AggregatedStatusRepository,
-  createAggregatedStatusRepository,
-} from './repositories/AggregatedStatusRepository';
-import {
-  GuardStatusChangedRepository,
-  createGuardStatusChangedRepository,
-} from './repositories/GuardStatusChangedRepository';
-import {
-  GuardStatusRepository,
-  createGuardStatusRepository,
-} from './repositories/GuardStatusRepository';
-import { TxRepository, createTxRepository } from './repositories/TxRepository';
 
 export class DataSourceHandler {
   private static instance?: DataSourceHandler;
   readonly dataSource: DataSource;
 
-  aggregatedStatusChangedRepository: AggregatedStatusChangedRepository;
-  aggregatedStatusRepository: AggregatedStatusRepository;
-  guardStatusChangedRepository: GuardStatusChangedRepository;
-  guardStatusRepository: GuardStatusRepository;
-  txRepository: TxRepository;
-
   protected constructor(dataSource: DataSource) {
     this.dataSource = dataSource;
-    this.aggregatedStatusChangedRepository =
-      createAggregatedStatusChangedRepository(this.dataSource);
-    this.aggregatedStatusRepository = createAggregatedStatusRepository(
-      this.dataSource,
-    );
-    this.guardStatusChangedRepository = createGuardStatusChangedRepository(
-      this.dataSource,
-    );
-    this.guardStatusRepository = createGuardStatusRepository(this.dataSource);
-    this.txRepository = createTxRepository(this.dataSource);
   }
 
   /**

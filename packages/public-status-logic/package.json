@@ -24,15 +24,14 @@
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
-    "@rosen-bridge/encryption": "^0.1.0",
     "@rosen-bridge/extended-typeorm": "^0.0.3",
     "pg": "^8.11.3",
     "reflect-metadata": "^0.2.2",
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/node": "^20.17.10",
-    "@vitest/coverage-istanbul": "^2.1.8",
     "tsx": "^4.19.2",
     "typescript": "^5.0.0",
     "vitest": "^2.1.8"

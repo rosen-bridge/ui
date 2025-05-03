@@ -13,6 +13,11 @@ import { AggregatedStatusEntity } from './entities/AggregatedStatusEntity';
 import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
 import { GuardStatusEntity } from './entities/GuardStatusEntity';
 import { TxEntity } from './entities/TxEntity';
+import AggregatedStatusChangedHandler from './handlers/AggregatedStatusChangedHandler';
+import AggregatedStatusHandler from './handlers/AggregatedStatusHandler';
+import GuardStatusChangedHandler from './handlers/GuardStatusChangedHandler';
+import GuardStatusHandler from './handlers/GuardStatusHandler';
+import TxHandler from './handlers/TxHandler';
 
 /**
  * entry point of data layer (aggregate root)
@@ -42,33 +47,29 @@ export class PublicStatusActions {
       txStatus: TxStatus;
     },
   ): Promise<void> => {
-    const dataSourceHandler = DataSourceHandler.getInstance();
-
     // perform operations in a db transaction
-    await dataSourceHandler.dataSource.manager.transaction(
+    await DataSourceHandler.getInstance().dataSource.manager.transaction(
       async (entityManager) => {
         // get repositories from transactional entity manager
-        const guardStatusRepository = entityManager.withRepository(
-          dataSourceHandler.guardStatusRepository,
+        const guardStatusRepository =
+          entityManager.getRepository(GuardStatusEntity);
+        const guardStatusChangedRepository = entityManager.getRepository(
+          GuardStatusChangedEntity,
         );
-        const guardStatusChangedRepository = entityManager.withRepository(
-          dataSourceHandler.guardStatusChangedRepository,
+        const aggregatedStatusRepository = entityManager.getRepository(
+          AggregatedStatusEntity,
         );
-        const aggregatedStatusRepository = entityManager.withRepository(
-          dataSourceHandler.aggregatedStatusRepository,
+        const aggregatedStatusChangedRepository = entityManager.getRepository(
+          AggregatedStatusChangedEntity,
         );
-        const aggregatedStatusChangedRepository = entityManager.withRepository(
-          dataSourceHandler.aggregatedStatusChangedRepository,
-        );
-        const txRepository = entityManager.withRepository(
-          dataSourceHandler.txRepository,
-        );
+        const txRepository = entityManager.getRepository(TxEntity);
 
         // if request has tx info specified
         if (tx) {
           // try to insert tx
           try {
-            await txRepository.insertOne(
+            await TxHandler.getInstance().insertOne(
+              txRepository,
               tx.txId,
               tx.chain,
               eventId,
@@ -83,7 +84,11 @@ export class PublicStatusActions {
         }
 
         // get array of last status of all guards
-        const guardsStatus = await guardStatusRepository.getMany(eventId, []);
+        const guardsStatus = await GuardStatusHandler.getInstance().getMany(
+          guardStatusRepository,
+          eventId,
+          [],
+        );
 
         const newGuardStatus: GuardStatusEntity = {
           eventId,
@@ -124,14 +129,16 @@ export class PublicStatusActions {
           : undefined;
 
         let promises = [
-          guardStatusRepository.upsertOne(
+          GuardStatusHandler.getInstance().upsertOne(
+            guardStatusRepository,
             eventId,
             pk,
             timestampSeconds,
             status,
             guardStatusTx,
           ),
-          guardStatusChangedRepository.insertOne(
+          GuardStatusChangedHandler.getInstance().insertOne(
+            guardStatusChangedRepository,
             eventId,
             pk,
             timestampSeconds,
@@ -160,14 +167,16 @@ export class PublicStatusActions {
             : undefined;
 
           promises.push(
-            aggregatedStatusRepository.upsertOne(
+            AggregatedStatusHandler.getInstance().upsertOne(
+              aggregatedStatusRepository,
               eventId,
               timestampSeconds,
               aggregatedStatusNew.status,
               aggregatedStatusNew.txStatus,
               aggregatedStatusTx,
             ),
-            aggregatedStatusChangedRepository.insertOne(
+            AggregatedStatusChangedHandler.getInstance().insertOne(
+              aggregatedStatusChangedRepository,
               eventId,
               timestampSeconds,
               aggregatedStatusNew.status,
@@ -204,7 +213,13 @@ export class PublicStatusActions {
   static getAggregatedStatuses = (
     eventIds: string[],
   ): Promise<AggregatedStatusEntity[]> => {
-    return DataSourceHandler.getInstance().aggregatedStatusRepository.getMany(
+    const aggregatedStatusRepository =
+      DataSourceHandler.getInstance().dataSource.getRepository(
+        AggregatedStatusEntity,
+      );
+
+    return AggregatedStatusHandler.getInstance().getMany(
+      aggregatedStatusRepository,
       eventIds,
     );
   };
@@ -217,7 +232,13 @@ export class PublicStatusActions {
   static getAggregatedStatusTimeline = (
     eventId: string,
   ): Promise<AggregatedStatusChangedEntity[]> => {
-    return DataSourceHandler.getInstance().aggregatedStatusChangedRepository.getMany(
+    const aggregatedStatusChangedRepository =
+      DataSourceHandler.getInstance().dataSource.getRepository(
+        AggregatedStatusChangedEntity,
+      );
+
+    return AggregatedStatusChangedHandler.getInstance().getMany(
+      aggregatedStatusChangedRepository,
       eventId,
     );
   };
@@ -232,7 +253,13 @@ export class PublicStatusActions {
     eventId: string,
     guardPks: string[],
   ): Promise<GuardStatusChangedEntity[]> => {
-    return DataSourceHandler.getInstance().guardStatusChangedRepository.getMany(
+    const guardStatusChangedRepository =
+      DataSourceHandler.getInstance().dataSource.getRepository(
+        GuardStatusChangedEntity,
+      );
+
+    return GuardStatusChangedHandler.getInstance().getMany(
+      guardStatusChangedRepository,
       eventId,
       guardPks,
     );

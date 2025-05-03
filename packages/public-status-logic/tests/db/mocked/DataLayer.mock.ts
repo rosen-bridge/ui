@@ -1,115 +1,107 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { mockAggregatedStatus } from '../../testData';
+import {
+  GuardStatusEntity,
+  GuardStatusChangedEntity,
+  AggregatedStatusEntity,
+  AggregatedStatusChangedEntity,
+  TxEntity,
+} from '../../../src';
+import AggregatedStatusChangedHandlerMod from '../../../src/db/handlers/AggregatedStatusChangedHandler';
+import AggregatedStatusHandlerMod from '../../../src/db/handlers/AggregatedStatusHandler';
+import GuardStatusChangedHandlerMod from '../../../src/db/handlers/GuardStatusChangedHandler';
+import GuardStatusHandlerMod from '../../../src/db/handlers/GuardStatusHandler';
+import TxHandlerMod from '../../../src/db/handlers/TxHandler';
+import { Utils } from '../../../src/utils';
 
-// stub holders for repositories and utils
-let TxRepository = {
-  insertOne: vi.fn(() => Promise.resolve()),
-};
-let GuardStatusRepository = {
-  getMany: vi.fn(() => Promise.resolve<any[]>([])),
-  upsertOne: vi.fn(() => Promise.resolve()),
-};
-let GuardStatusChangedRepository = {
-  insertOne: vi.fn(() => Promise.resolve()),
-};
-let AggregatedStatusRepository = {
-  upsertOne: vi.fn(() => Promise.resolve()),
-};
-let AggregatedStatusChangedRepository = {
-  insertOne: vi.fn(() => Promise.resolve()),
-};
-let Utils = {
-  cloneFilterPush: vi.fn(
-    (orig: any[], key: string, pk: string, newObj: any) => {
-      return [...orig.filter(() => true), newObj];
-    },
-  ),
-  calcAggregatedStatus: vi.fn(() => mockAggregatedStatus),
-  aggregatedStatusesMatch: vi.fn(() => false),
-};
-
-// mock entity manager that returns a stub repository by repository constructor
-const createMockEntityManager = () => {
-  return {
-    withRepository: (repo: any) => {
-      if (repo === TxRepository) return TxRepository;
-      if (repo === GuardStatusRepository) return GuardStatusRepository;
-      if (repo === GuardStatusChangedRepository)
-        return GuardStatusChangedRepository;
-      if (repo === AggregatedStatusRepository)
-        return AggregatedStatusRepository;
-      if (repo === AggregatedStatusChangedRepository)
-        return AggregatedStatusChangedRepository;
-      throw new Error('wrong repository');
-    },
-  };
-};
-
-// stub dataSource and its manager.transaction method
-const dataSource = {
-  manager: {
-    transaction: async (cb: (em: any) => Promise<void>) => {
-      const mockEntityManager = createMockEntityManager();
-      await cb(mockEntityManager);
-    },
-  },
-};
-const DataSourceHandler = {
+vi.mock('../../../src/db/DataSourceHandler', () => ({
   DataSourceHandler: {
     getInstance: () => ({
-      dataSource,
-      aggregatedStatusChangedRepository: AggregatedStatusChangedRepository,
-      aggregatedStatusRepository: AggregatedStatusRepository,
-      guardStatusChangedRepository: GuardStatusChangedRepository,
-      guardStatusRepository: GuardStatusRepository,
-      txRepository: TxRepository,
+      dataSource: {
+        manager: {
+          transaction: async (cb: (em: any) => Promise<void>) => {
+            const mockEntityManager = {
+              getRepository: (entity: any) => {
+                if (entity === TxEntity) return {};
+                if (entity === GuardStatusEntity) return {};
+                if (entity === GuardStatusChangedEntity) return {};
+                if (entity === AggregatedStatusEntity) return {};
+                if (entity === AggregatedStatusChangedEntity) return {};
+                throw new Error('wrong repository');
+              },
+            };
+            await cb(mockEntityManager);
+          },
+        },
+      },
     }),
   },
-};
+}));
 
-vi.mock('../../../src/utils', () => {
-  return {
-    Utils,
-  };
-});
-vi.mock('../../../src/db/DataSourceHandler', () => {
-  return DataSourceHandler;
-});
-vi.mock('../../../src/db/repositories/TxRepository', () => {
-  return {
-    TxRepository,
-  };
-});
-vi.mock('../../../src/db/repositories/GuardStatusRepository', () => {
-  return {
-    GuardStatusRepository,
-  };
-});
-vi.mock('../../../src/db/repositories/GuardStatusChangedRepository', () => {
-  return {
-    GuardStatusChangedRepository,
-  };
-});
-vi.mock('../../../src/db/repositories/AggregatedStatusRepository', () => {
-  return {
-    AggregatedStatusRepository,
-  };
-});
-vi.mock(
-  '../../../src/db/repositories/AggregatedStatusChangedRepository',
-  () => {
-    return {
-      AggregatedStatusChangedRepository,
-    };
-  },
+const cloneFilterPushSpy = vi
+  .spyOn(Utils, 'cloneFilterPush')
+  .mockImplementation((orig: any[], key: string, pk: string, newObj: any) => {
+    return [...orig.filter(() => true), newObj];
+  });
+const calcAggregatedStatusSpy = vi
+  .spyOn(Utils, 'calcAggregatedStatus')
+  .mockRejectedValue('not mocked');
+const aggregatedStatusesMatchSpy = vi
+  .spyOn(Utils, 'aggregatedStatusesMatch')
+  .mockReturnValue(false);
+
+//
+const TxHandler = {
+  insertOne: vi.fn().mockResolvedValue(undefined),
+};
+vi.spyOn(TxHandlerMod, 'getInstance').mockReturnValue(TxHandler);
+
+//
+const GuardStatusHandler = {
+  getOne: vi.fn().mockResolvedValue(undefined),
+  getMany: vi.fn().mockResolvedValue([]),
+  upsertOne: vi.fn().mockResolvedValue(undefined),
+};
+vi.spyOn(GuardStatusHandlerMod, 'getInstance').mockReturnValue(
+  GuardStatusHandler,
+);
+
+//
+const GuardStatusChangedHandler = {
+  getLast: vi.fn().mockResolvedValue(undefined),
+  getMany: vi.fn().mockResolvedValue([]),
+  insertOne: vi.fn().mockResolvedValue(undefined),
+};
+vi.spyOn(GuardStatusChangedHandlerMod, 'getInstance').mockReturnValue(
+  GuardStatusChangedHandler,
+);
+
+//
+const AggregatedStatusHandler = {
+  getOne: vi.fn().mockResolvedValue(undefined),
+  getMany: vi.fn().mockResolvedValue([]),
+  upsertOne: vi.fn().mockResolvedValue(undefined),
+};
+vi.spyOn(AggregatedStatusHandlerMod, 'getInstance').mockReturnValue(
+  AggregatedStatusHandler,
+);
+
+//
+const AggregatedStatusChangedHandler = {
+  getLast: vi.fn().mockResolvedValue(undefined),
+  getMany: vi.fn().mockResolvedValue([]),
+  insertOne: vi.fn().mockResolvedValue(undefined),
+};
+vi.spyOn(AggregatedStatusChangedHandlerMod, 'getInstance').mockReturnValue(
+  AggregatedStatusChangedHandler,
 );
 
 export {
-  Utils,
-  DataSourceHandler,
-  TxRepository,
-  GuardStatusRepository,
-  GuardStatusChangedRepository,
-  AggregatedStatusRepository,
-  AggregatedStatusChangedRepository,
+  TxHandler,
+  GuardStatusHandler,
+  GuardStatusChangedHandler,
+  AggregatedStatusHandler,
+  AggregatedStatusChangedHandler,
+  cloneFilterPushSpy,
+  calcAggregatedStatusSpy,
+  aggregatedStatusesMatchSpy,
 };
