@@ -10,10 +10,7 @@ const HomeActionButtonBase = styled(Button)(({ theme }) => ({
   'display': 'flex',
   'flexDirection': 'column',
   'gap': theme.spacing(0.5),
-  'color':
-    theme.palette.mode === 'light'
-      ? theme.palette.primary.dark
-      : theme.palette.text.primary,
+  'color': theme.palette.primary.dark,
   'opacity': 0.8,
   'fontSize': theme.typography.subtitle2.fontSize,
   'flexBasis': '20%',
@@ -22,10 +19,7 @@ const HomeActionButtonBase = styled(Button)(({ theme }) => ({
     backgroundColor: 'transparent',
   },
   '& .MuiButton-startIcon': {
-    backgroundColor:
-      theme.palette.mode === 'light'
-        ? theme.palette.primary.light
-        : theme.palette.primary.dark,
+    backgroundColor: theme.palette.primary.light,
     padding: theme.spacing(2),
     margin: 0,
     borderRadius: theme.shape.borderRadius,
