@@ -15,10 +15,10 @@ import {
   WalletProvider,
 } from '@/_hooks';
 
-import CubeNetSvg from '../../assets/patterns/cube-net';
 import { BridgeForm } from './BridgeForm';
 import { BridgeTransaction } from './BridgeTransaction';
 import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
+import { CubeNetSvg } from './cube-net';
 
 const Background = styled('div')(({ theme }) => ({
   'position': 'absolute',
