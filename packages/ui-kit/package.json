@@ -22,7 +22,7 @@
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
-    "watch": "tsc --watch",
+    "build:watch": "tsc --watch",
     "type-check": "tsc",
     "release": "npm run build && npm publish --access public"
   },
