@@ -1,7 +1,15 @@
 import { useState, FC, useMemo } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
-import { Button, EnhancedTableCell, Id, TableRow } from '@rosen-bridge/ui-kit';
+import {
+  Amount,
+  Box,
+  Button,
+  EnhancedTableCell,
+  Id,
+  styled,
+  TableRow,
+} from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useERsnToken } from '@/_hooks/useERsnToken';
@@ -11,6 +19,15 @@ import { Revenue } from '@/_types/api';
 interface RowProps extends Revenue {
   isLoading?: boolean;
 }
+
+const StyledBox = styled(Box)({
+  'display': 'inline-flex',
+  'alignItems': 'center',
+  '& > div:not(:last-child)::after': {
+    content: '"+"',
+    margin: '0 4px',
+  },
+});
 
 export const mobileHeader = [
   {
@@ -32,24 +49,28 @@ export const tabletHeader = [
     title: 'Event Id',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Income (RSN/eRSN)',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
   {
     title: 'Token Income',
     cellProps: {
       width: 150,
+      align: 'center' as const,
     },
   },
 ];
@@ -84,13 +105,10 @@ export const MobileRow: FC<RowProps> = (props) => {
   const getTokenIncome = () =>
     row.revenues
       .filter((token) => token.tokenId !== rsnToken?.tokenId)
-      .map(
-        (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)}${
-            token.name
-          }`,
-      )
-      .join('+');
+      .map((token) => ({
+        value: getDecimalString(token.amount.toString(), token.decimals),
+        unit: token.name,
+      }));
 
   return (
     <>
@@ -108,11 +126,23 @@ export const MobileRow: FC<RowProps> = (props) => {
         <>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>RSN Income</EnhancedTableCell>
-            <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <Amount value={getRSNIncome()} />
+            </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell>Token Income</EnhancedTableCell>
-            <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+            <EnhancedTableCell>
+              <StyledBox>
+                {getTokenIncome().map((tokenIncome, index) => (
+                  <Amount
+                    key={index}
+                    value={tokenIncome.value}
+                    unit={tokenIncome.unit}
+                  />
+                ))}
+              </StyledBox>
+            </EnhancedTableCell>
           </TableRow>
         </>
       )}
@@ -169,22 +199,31 @@ export const TabletRow: FC<RowProps> = (props) => {
           token.tokenId !== rsnToken?.tokenId &&
           token.tokenId !== eRsnToken?.tokenId,
       )
-      .map(
-        (token) =>
-          `${getDecimalString(token.amount.toString(), token.decimals)} ${
-            token.name
-          }`,
-      )
-      .join(' + ');
+      .map((token) => ({
+        value: getDecimalString(token.amount.toString(), token.decimals),
+        unit: token.name,
+      }));
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
-      <EnhancedTableCell>
+      <EnhancedTableCell align="center">
         <Id id={row.eventId} />
       </EnhancedTableCell>
-      <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
-      <EnhancedTableCell>{getRSNIncome()}</EnhancedTableCell>
-      <EnhancedTableCell>{getTokenIncome()}</EnhancedTableCell>
+      <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        <Amount value={getRSNIncome()} />
+      </EnhancedTableCell>
+      <EnhancedTableCell align="center">
+        <StyledBox>
+          {getTokenIncome().map((tokenIncome, index) => (
+            <Amount
+              key={index}
+              value={tokenIncome.value}
+              unit={tokenIncome.unit}
+            />
+          ))}
+        </StyledBox>
+      </EnhancedTableCell>
     </TableRow>
   );
 };
