@@ -1,5 +1,16 @@
 # @rosen-bridge/guard-app
 
+## 1.12.3
+
+### Patch Changes
+
+- Utilize the Amount component to ensure clear presentation of financial data.
+- Fix the display of the Emission value on mobile devices.
+- Fix ui-kit theme options and connects guard theme to it
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.11.0
+  - @rosen-bridge/icons@1.4.0
+
 ## 1.12.2
 
 ### Patch Changes

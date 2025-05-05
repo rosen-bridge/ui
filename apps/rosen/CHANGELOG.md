@@ -1,5 +1,25 @@
 # @rosen-bridge/rosen-app
 
+## 4.1.1
+
+### Patch Changes
+
+- Replace the 'Connect' button to display 'Disconnect' once a wallet is connected in ChooseWallet part.
+- Update rosen dependencies
+- Fix the Rosen bridge background pattern
+- Set the height of the transaction section to match the height of the bridge form.
+- Updated dependencies
+  - @rosen-ui/my-doge-wallet@0.2.1
+  - @rosen-bridge/ui-kit@1.11.0
+  - @rosen-network/doge@0.1.2
+  - @rosen-bridge/icons@1.4.0
+  - @rosen-ui/metamask-wallet@1.4.1
+  - @rosen-ui/nautilus-wallet@2.3.4
+  - @rosen-ui/eternl-wallet@2.3.4
+  - @rosen-ui/lace-wallet@2.3.4
+  - @rosen-ui/okx-wallet@1.3.4
+  - @rosen-ui/asset-calculator@2.1.5
+
 ## 4.1.0
 
 ### Minor Changes

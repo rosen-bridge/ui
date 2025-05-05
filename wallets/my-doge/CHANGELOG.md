@@ -1,5 +1,14 @@
 # @rosen-ui/my-doge-wallet
 
+## 0.2.1
+
+### Patch Changes
+
+- Fix the connection logic issue that causes a rejection error when connecting to the extension
+- Updated dependencies
+  - @rosen-network/doge@0.1.2
+  - @rosen-bridge/icons@1.4.0
+
 ## 0.2.0
 
 ### Minor Changes

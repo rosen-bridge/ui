@@ -1,5 +1,12 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.3.4
+
+### Patch Changes
+
+- Refactor methods to arrow functions for improved code consistency.
+- Updated dependency @rosen-bridge/icons@1.4.0
+
 ## 2.3.3
 
 ### Patch Changes
