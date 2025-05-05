@@ -12,6 +12,10 @@ const getOptionalString = (path: string): string | undefined => {
   return nodeConfig.has(path) ? nodeConfig.get<string>(path) : undefined;
 };
 
+const getOptionalNumber = (path: string): number | undefined => {
+  return nodeConfig.has(path) ? nodeConfig.get<number>(path) : undefined;
+};
+
 const getConfig = () => {
   try {
     return {
@@ -95,6 +99,22 @@ const getConfig = () => {
         rpcUrl: nodeConfig.get<string>('binance.rpcUrl'),
         rpcAuthToken: getOptionalString('binance.rpcAuthToken'),
       },
+      doge: {
+        addresses: {
+          lock: nodeConfig.get<string>('doge.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>('doge.addresses.eventTrigger'),
+          permit: nodeConfig.get<string>('doge.addresses.permit'),
+          fraud: nodeConfig.get<string>('doge.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('doge.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('doge.tokens.rwt'),
+        },
+        blockcypherUrl: nodeConfig.get<string>('doge.blockcypherUrl'),
+        rpcUrl: nodeConfig.get<string>('doge.rpc.url'),
+        rpcUsername: getOptionalString('doge.rpc.username'),
+        rpcPassword: getOptionalString('doge.rpc.password'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -107,7 +127,61 @@ const getConfig = () => {
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
+          doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
         },
+      },
+      healthCheck: {
+        ergoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.ergoScannerWarnDiff',
+        ),
+        ergoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.ergoScannerCriticalDiff',
+        ),
+        cardanoScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.cardanoScannerWarnDiff',
+        ),
+        cardanoScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.cardanoScannerCriticalDiff',
+        ),
+        bitcoinScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.bitcoinScannerWarnDiff',
+        ),
+        bitcoinScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.bitcoinScannerCriticalDiff',
+        ),
+        dogeScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerWarnDiff',
+        ),
+        dogeScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.dogeScannerCriticalDiff',
+        ),
+        ethereumScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.ethereumScannerWarnDiff',
+        ),
+        ethereumScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.ethereumScannerCriticalDiff',
+        ),
+        binanceScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.binanceScannerWarnDiff',
+        ),
+        binanceScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.binanceScannerCriticalDiff',
+        ),
+        updateInterval: nodeConfig.get<number>('healthCheck.interval'),
+      },
+      notification: {
+        discordWebHookUrl: nodeConfig.get<string>(
+          'notification.discordWebhookUrl',
+        ),
+        historyCleanupTimeout: getOptionalNumber(
+          'notification.historyCleanupTimeout',
+        ),
+        hasBeenUnstableForAWhileWindowDuration: getOptionalNumber(
+          'notification.windowDurations.hasBeenUnstableForAWhile',
+        ),
+        hasBeenUnknownForAWhileWindowDuration: getOptionalNumber(
+          'notification.windowDurations.hasBeenUnknownForAWhile',
+        ),
       },
     };
   } catch (error) {

@@ -25,6 +25,9 @@ export { default as BitcoinSignRaw } from './icons/bitcoin-sign.svg?raw';
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';
 export { default as CheckCircleRaw } from './icons/check-circle.svg?raw';
 
+export { ReactComponent as Check } from './icons/check.svg';
+export { default as CheckRaw } from './icons/check.svg?raw';
+
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { default as ClipboardNotesRaw } from './icons/clipboard-notes.svg?raw';
 
@@ -57,6 +60,12 @@ export { default as EyeSlashRaw } from './icons/eye-slash.svg?raw';
 
 export { ReactComponent as Eye } from './icons/eye.svg';
 export { default as EyeRaw } from './icons/eye.svg?raw';
+
+export { ReactComponent as Favorite } from './icons/favorite.svg';
+export { default as FavoriteRaw } from './icons/favorite.svg?raw';
+
+export { ReactComponent as FileCopyAlt } from './icons/file-copy-alt.svg';
+export { default as FileCopyAltRaw } from './icons/file-copy-alt.svg?raw';
 
 export { ReactComponent as FileEditAlt } from './icons/file-edit-alt.svg';
 export { default as FileEditAltRaw } from './icons/file-edit-alt.svg?raw';
@@ -109,6 +118,9 @@ export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';
 export { ReactComponent as Redo } from './icons/redo.svg';
 export { default as RedoRaw } from './icons/redo.svg?raw';
 
+export { ReactComponent as Search } from './icons/search.svg';
+export { default as SearchRaw } from './icons/search.svg?raw';
+
 export { ReactComponent as Setting } from './icons/setting.svg';
 export { default as SettingRaw } from './icons/setting.svg?raw';
 
@@ -123,6 +135,12 @@ export { default as ShieldExclamationRaw } from './icons/shield-exclamation.svg?
 
 export { ReactComponent as ShieldQuestion } from './icons/shield-question.svg';
 export { default as ShieldQuestionRaw } from './icons/shield-question.svg?raw';
+
+export { ReactComponent as SortAmountDown } from './icons/sort-amount-down.svg';
+export { default as SortAmountDownRaw } from './icons/sort-amount-down.svg?raw';
+
+export { ReactComponent as SortAmountUp } from './icons/sort-amount-up.svg';
+export { default as SortAmountUpRaw } from './icons/sort-amount-up.svg?raw';
 
 export { ReactComponent as SquareShape } from './icons/square-shape.svg';
 export { default as SquareShapeRaw } from './icons/square-shape.svg?raw';
@@ -171,6 +189,9 @@ export { default as LaceRaw } from './wallets/lace.svg?raw';
 
 export { ReactComponent as MetaMask } from './wallets/meta-mask.svg';
 export { default as MetaMaskRaw } from './wallets/meta-mask.svg?raw';
+
+export { ReactComponent as Mydoge } from './wallets/mydoge.svg';
+export { default as MydogeRaw } from './wallets/mydoge.svg?raw';
 
 export { ReactComponent as Nautilus } from './wallets/nautilus.svg';
 export { default as NautilusRaw } from './wallets/nautilus.svg?raw';

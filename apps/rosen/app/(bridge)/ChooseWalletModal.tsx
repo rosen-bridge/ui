@@ -21,6 +21,8 @@ import { Wallet } from '@rosen-ui/wallet-api';
 import { useTransactionFormData } from '@/_hooks';
 
 interface ChooseWalletModalProps {
+  selectedWallet: Wallet | undefined;
+  disconnect: () => void;
   open: boolean;
   handleClose: () => void;
   setSelectedWallet: ((wallet: Wallet) => Promise<void>) | undefined;
@@ -39,6 +41,8 @@ interface ChooseWalletModalProps {
  *
  */
 export const ChooseWalletModal = ({
+  selectedWallet,
+  disconnect,
   open,
   handleClose,
   setSelectedWallet,
@@ -48,11 +52,6 @@ export const ChooseWalletModal = ({
   const [, forceUpdate] = useState('');
 
   const { sourceValue } = useTransactionFormData();
-
-  const handleConnect = async (wallet: Wallet) => {
-    setSelectedWallet && (await setSelectedWallet(wallet));
-    handleClose();
-  };
 
   useEffect(() => {
     if (!open) return;
@@ -88,6 +87,18 @@ export const ChooseWalletModal = ({
         <Grid container justifyContent="center" gap={2}>
           {wallets.map((wallet) => {
             const Icon = wallet.icon;
+            const isConnected = selectedWallet?.name === wallet.name;
+
+            const handleClick = async (event: React.MouseEvent) => {
+              event.preventDefault();
+              if (isConnected) {
+                disconnect();
+              } else if (wallet.isAvailable() && setSelectedWallet) {
+                await setSelectedWallet(wallet);
+              }
+              handleClose();
+            };
+
             return (
               <Card key={wallet.label}>
                 <CardContent>
@@ -109,13 +120,10 @@ export const ChooseWalletModal = ({
                         variant="contained"
                         size="small"
                         sx={{ width: '100%' }}
-                        disabled={!wallet.isAvailable()}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          handleConnect(wallet);
-                        }}
+                        color={isConnected ? 'inherit' : 'primary'}
+                        onClick={handleClick}
                       >
-                        Connect
+                        {isConnected ? 'Disconnect' : 'Connect'}
                       </Button>
                     </Box>
                   </Tooltip>

@@ -1,5 +1,47 @@
 # @rosen-bridge/rosen-app
 
+## 4.1.0
+
+### Minor Changes
+
+- Implement a notifier to send critical errors to the Rosen team's Discord channel
+- Add the fromChain field to the wallet-api and fix the generateTxParameters function on EVM networks.
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/wallet-api@1.4.0
+  - @rosen-ui/metamask-wallet@1.4.0
+  - @rosen-network/evm@0.3.0
+  - @rosen-ui/nautilus-wallet@2.3.3
+  - @rosen-ui/eternl-wallet@2.3.3
+  - @rosen-ui/lace-wallet@2.3.3
+  - @rosen-ui/okx-wallet@1.3.3
+  - @rosen-ui/utils@0.5.0
+  - @rosen-bridge/ui-kit@1.10.1
+  - @rosen-network/bitcoin@2.1.3
+  - @rosen-network/doge@0.1.1
+  - @rosen-ui/asset-calculator@2.1.4
+  - @rosen-ui/types@0.3.5
+
+## 4.0.6
+
+### Patch Changes
+
+- Utilize the Amount component to ensure clear presentation of financial data.
+- Display error details in the Snackbar when transaction submission fails
+- Updated dependencies
+  - @rosen-bridge/ui-kit@1.10.0
+  - @rosen-ui/wallet-api@1.3.1
+  - @rosen-network/cardano@2.1.3
+  - @rosen-ui/metamask-wallet@1.3.2
+  - @rosen-ui/nautilus-wallet@2.3.2
+  - @rosen-ui/eternl-wallet@2.3.2
+  - @rosen-ui/lace-wallet@2.3.2
+  - @rosen-ui/okx-wallet@1.3.2
+  - @rosen-bridge/icons@1.3.0
+
 ## 4.0.5
 
 ### Patch Changes

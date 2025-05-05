@@ -1,13 +1,13 @@
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { CardanoKoiosObservationExtractor } from '@rosen-bridge/observation-extractor';
 import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner

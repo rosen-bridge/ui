@@ -8,7 +8,6 @@ import {
   ConnectionRejectedError,
   ErgoTxProxy,
   SubmitTransactionError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -18,7 +17,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class NautilusWallet implements Wallet {
+export class NautilusWallet extends Wallet {
   icon = NautilusIcon;
 
   name = 'Nautilus';
@@ -29,13 +28,15 @@ export class NautilusWallet implements Wallet {
 
   supportedChains = [NETWORKS.ergo.key];
 
+  constructor(private config: WalletConfig) {
+    super();
+  }
+
   private get api() {
     return window.ergoConnector.nautilus;
   }
 
-  constructor(private config: WalletConfig) {}
-
-  async connect(): Promise<void> {
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     let isConnected: boolean;
 
@@ -48,18 +49,18 @@ export class NautilusWallet implements Wallet {
     if (isConnected) return;
 
     throw new ConnectionRejectedError(this.name);
-  }
+  };
 
-  async disconnect(): Promise<void> {
+  disconnect = async (): Promise<void> => {
     this.requireAvailable();
     const result = await this.api.disconnect();
 
     if (!result) {
       throw new DisconnectionFailedError(this.name);
     }
-  }
+  };
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
     try {
       const wallet = await this.api.getContext();
@@ -67,9 +68,9 @@ export class NautilusWallet implements Wallet {
     } catch (error) {
       throw new AddressRetrievalError(this.name, error);
     }
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
     const wallet = await this.api.getContext();
 
@@ -94,25 +95,21 @@ export class NautilusWallet implements Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return (
       typeof window.ergoConnector !== 'undefined' &&
       !!window.ergoConnector.nautilus
     );
-  }
+  };
 
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
-  }
-
-  async isConnected(): Promise<boolean> {
+  isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
     return await this.api.isAuthorized();
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
     const wallet = await this.api.getContext();
 
@@ -146,5 +143,5 @@ export class NautilusWallet implements Wallet {
     } catch (error) {
       throw new SubmitTransactionError(this.name, error);
     }
-  }
+  };
 }

@@ -8,7 +8,6 @@ import {
   DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
-  UnavailableApiError,
   UnsupportedChainError,
   Wallet,
   InteractionError,
@@ -23,7 +22,7 @@ import { BrowserProvider, Contract } from 'ethers';
 
 import { WalletConfig } from './types';
 
-export class MetaMaskWallet implements Wallet {
+export class MetaMaskWallet extends Wallet {
   icon = MetaMaskIcon;
 
   name = 'MetaMask';
@@ -33,6 +32,10 @@ export class MetaMaskWallet implements Wallet {
   link = 'https://metamask.io/';
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
+
+  constructor(private config: WalletConfig) {
+    super();
+  }
 
   private api = new MetaMaskSDK({
     dappMetadata: {
@@ -60,34 +63,32 @@ export class MetaMaskWallet implements Wallet {
     return provider;
   }
 
-  constructor(private config: WalletConfig) {}
-
-  private async permissions() {
+  private permissions = async () => {
     return (await this.provider.request({
       method: 'wallet_getPermissions',
       params: [],
     })) as { caveats: { type: string; value: string[] }[] }[];
-  }
+  };
 
-  async connect(): Promise<void> {
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.connect();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
-  }
+  };
 
-  async disconnect(): Promise<void> {
+  disconnect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.disconnect();
     } catch (error) {
       throw new DisconnectionFailedError(this.name, error);
     }
-  }
+  };
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
     });
@@ -97,9 +98,9 @@ export class MetaMaskWallet implements Wallet {
     if (!account) throw new AddressRetrievalError(this.name);
 
     return account;
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     const address = await this.getAddress();
 
     const tokenMap = await this.config.getTokenMap();
@@ -132,21 +133,17 @@ export class MetaMaskWallet implements Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return this.api.isExtensionActive();
-  }
+  };
 
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
-  }
-
-  async isConnected(): Promise<boolean> {
+  isConnected = async (): Promise<boolean> => {
     return !!(await this.permissions()).length;
-  }
+  };
 
-  async switchChain(chain: Network, silent?: boolean): Promise<void> {
+  switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
     if (!this.supportedChains.includes(chain)) {
       throw new UnsupportedChainError(this.name, chain);
     }
@@ -177,9 +174,9 @@ export class MetaMaskWallet implements Wallet {
         4902: () => new ChainNotAddedError(this.name, chain, error),
       });
     }
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     const address = await this.getAddress();
 
     const rosenData = await this.config.generateLockData(
@@ -196,6 +193,7 @@ export class MetaMaskWallet implements Wallet {
       params.amount,
       rosenData,
       params.token,
+      params.fromChain,
     );
 
     try {
@@ -206,5 +204,5 @@ export class MetaMaskWallet implements Wallet {
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
-  }
+  };
 }

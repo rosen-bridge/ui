@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "private": true,
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/index.js",
@@ -17,6 +17,9 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-ui/constants": "^0.2.0"
+    "@rosen-ui/constants": "^0.3.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
   }
 }

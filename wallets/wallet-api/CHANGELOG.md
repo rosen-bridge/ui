@@ -1,5 +1,24 @@
 # @rosen-ui/wallet-api
 
+## 1.4.0
+
+### Minor Changes
+
+- Add the fromChain field to the wallet-api and fix the generateTxParameters function on EVM networks.
+- Convert the Wallet from an interface to an abstract class to provide shared functionality while supporting different wallet implementations.
+
+### Patch Changes
+
+- Updated dependencies
+  - @rosen-ui/utils@0.5.0
+  - @rosen-ui/types@0.3.5
+
+## 1.3.1
+
+### Patch Changes
+
+- Implement proper error to ensure graceful failure when the wallet API is unavailable.
+
 ## 1.3.0
 
 ### Minor Changes

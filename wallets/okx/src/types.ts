@@ -7,7 +7,7 @@ import type {
 } from '@rosen-network/bitcoin';
 
 export type WalletConfig = {
-  getTokenMap(): Promise<TokenMap>;
+  getTokenMap: () => Promise<TokenMap>;
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   submitTransaction: typeof submitTransaction;
@@ -22,25 +22,25 @@ declare global {
     okxwallet: {
       selectedAddress?: string;
       bitcoin: {
-        connect(): Promise<{
+        connect: () => Promise<{
           address: string;
           compressedPublicKey: string;
           publicKey: string;
         }>;
-        disconnect(): Promise<void>;
-        getAccounts(): Promise<string[]>;
-        getBalance(): Promise<{
+        disconnect: () => Promise<void>;
+        getAccounts: () => Promise<string[]>;
+        getBalance: () => Promise<{
           confirmed: number;
           total: number;
           unconfirmed: number;
         }>;
-        signPsbt(
+        signPsbt: (
           psbtHex: string,
           options: {
             autoFinalized: boolean;
             toSignInputs: { address: string; index: number }[];
           },
-        ): Promise<string>;
+        ) => Promise<string>;
       };
     };
   }

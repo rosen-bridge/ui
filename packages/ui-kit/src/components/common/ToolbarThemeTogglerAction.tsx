@@ -7,7 +7,7 @@ export const ToolbarThemeTogglerAction = () => {
   const isDarkMode = useIsDarkMode();
   const themeToggler = useThemeToggler();
   return (
-    <IconButton onClick={themeToggler.toggle} size="large">
+    <IconButton onClick={themeToggler.toggle}>
       {isDarkMode ? (
         <SvgIcon sx={{ width: 24 }}>
           <Sun />

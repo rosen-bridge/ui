@@ -7,7 +7,6 @@ import {
   AddressRetrievalError,
   ConnectionRejectedError,
   SubmitTransactionError,
-  UnavailableApiError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
@@ -16,7 +15,7 @@ import {
 
 import { WalletConfig } from './types';
 
-export class LaceWallet implements Wallet {
+export class LaceWallet extends Wallet {
   icon = LaceIcon;
 
   name = 'Lace';
@@ -27,24 +26,26 @@ export class LaceWallet implements Wallet {
 
   supportedChains = [NETWORKS.cardano.key];
 
+  constructor(private config: WalletConfig) {
+    super();
+  }
+
   private get api() {
     return window.cardano.lace;
   }
 
-  constructor(private config: WalletConfig) {}
-
-  async connect(): Promise<void> {
+  connect = async (): Promise<void> => {
     this.requireAvailable();
     try {
       await this.api.enable();
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
-  }
+  };
 
-  async disconnect(): Promise<void> {}
+  disconnect = async (): Promise<void> => {};
 
-  async getAddress(): Promise<string> {
+  getAddress = async (): Promise<string> => {
     this.requireAvailable();
     try {
       const wallet = await this.api.enable();
@@ -52,9 +53,9 @@ export class LaceWallet implements Wallet {
     } catch (error) {
       throw new AddressRetrievalError(this.name, error);
     }
-  }
+  };
 
-  async getBalance(token: RosenChainToken): Promise<RosenAmountValue> {
+  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
 
     const wallet = await this.api.enable();
@@ -81,22 +82,18 @@ export class LaceWallet implements Wallet {
     ).amount;
 
     return wrappedAmount;
-  }
+  };
 
-  isAvailable(): boolean {
+  isAvailable = (): boolean => {
     return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
-  }
+  };
 
-  requireAvailable() {
-    if (!this.isAvailable()) throw new UnavailableApiError(this.name);
-  }
-
-  async isConnected(): Promise<boolean> {
+  isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
     return await this.api.isEnabled();
-  }
+  };
 
-  async transfer(params: WalletTransferParams): Promise<string> {
+  transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
     const wallet = await this.api.enable();
 
@@ -142,5 +139,5 @@ export class LaceWallet implements Wallet {
     } catch (error) {
       throw new SubmitTransactionError(this.name, error);
     }
-  }
+  };
 }

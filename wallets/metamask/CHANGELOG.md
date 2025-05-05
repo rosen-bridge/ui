@@ -1,5 +1,29 @@
 # @rosen-ui/metamask-wallet
 
+## 1.4.0
+
+### Minor Changes
+
+- Add the fromChain field to the wallet-api and fix the generateTxParameters function on EVM networks.
+
+### Patch Changes
+
+- Updated all wallets to inherit from the abstract Wallet class, combining shared core logic with their unique custom behaviors.
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/wallet-api@1.4.0
+  - @rosen-network/evm@0.3.0
+  - @rosen-ui/types@0.3.5
+
+## 1.3.2
+
+### Patch Changes
+
+- Improve wallet integrations by adding robust availability checks and gracefully handling unsupported or inaccessible wallets.
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.3.1
+  - @rosen-bridge/icons@1.3.0
+
 ## 1.3.1
 
 ### Patch Changes

@@ -6,4 +6,4 @@
 '@rosen-ui/okx-wallet': patch
 ---
 
-Improve wallet integrations by adding robust availability checks and gracefully handling unsupported or inaccessible wallets.
+Refactor methods to arrow functions for improved code consistency.

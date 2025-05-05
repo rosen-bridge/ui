@@ -1,5 +1,25 @@
 # @rosen-ui/nautilus-wallet
 
+## 2.3.3
+
+### Patch Changes
+
+- Updated all wallets to inherit from the abstract Wallet class, combining shared core logic with their unique custom behaviors.
+- Updated dependencies
+  - @rosen-ui/constants@0.3.0
+  - @rosen-ui/wallet-api@1.4.0
+  - @rosen-ui/utils@0.5.0
+  - @rosen-ui/types@0.3.5
+
+## 2.3.2
+
+### Patch Changes
+
+- Improve wallet integrations by adding robust availability checks and gracefully handling unsupported or inaccessible wallets.
+- Updated dependencies
+  - @rosen-ui/wallet-api@1.3.1
+  - @rosen-bridge/icons@1.3.0
+
 ## 2.3.1
 
 ### Patch Changes

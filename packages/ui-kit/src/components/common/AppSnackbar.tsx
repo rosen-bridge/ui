@@ -1,10 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { FileCopyAlt } from '@rosen-bridge/icons';
 
 import { useSnackbar } from '../../hooks/useSnackbar';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
-import { Snackbar, Alert, Button } from '../base';
+import { Snackbar, Alert, IconButton, SvgIcon } from '../base';
 
 /**
  * global snackbar component that connects to snackbar context and shows and
@@ -14,8 +14,17 @@ import { Snackbar, Alert, Button } from '../base';
 export const AppSnackbar = () => {
   const { state, closeSnackbar } = useSnackbar();
   const theme = useTheme();
-  const [showMore, setShowMore] = useState(false);
-  useEffect(() => setShowMore(false), [state.isOpen]);
+
+  const handleCopyMore = async () => {
+    if (state.more) {
+      try {
+        await navigator.clipboard.writeText(state.more());
+      } catch (err) {
+        console.error('Failed to copy:', err);
+      }
+    }
+  };
+
   return state.isOpen ? (
     <Snackbar
       open={state.isOpen}
@@ -31,21 +40,20 @@ export const AppSnackbar = () => {
         severity={state.severity!}
         action={
           state.more && (
-            <Button
+            <IconButton
               color="inherit"
               size="small"
               style={{ paddingTop: '5px', paddingBottom: '5px' }}
-              onClick={() => setShowMore(!showMore)}
+              onClick={handleCopyMore}
             >
-              {showMore ? 'LESS' : 'MORE'}
-            </Button>
+              <SvgIcon>
+                <FileCopyAlt />
+              </SvgIcon>
+            </IconButton>
           )
         }
       >
         {state.message}
-        {showMore && (
-          <div style={{ whiteSpace: 'break-spaces' }}>{state.more!()}</div>
-        )}
       </Alert>
     </Snackbar>
   ) : null;
