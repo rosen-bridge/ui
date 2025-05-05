@@ -404,21 +404,25 @@ export const darkThemeOptions: ThemeOptions = {
       main: '#C04343',
       light: '#331313',
       dark: '#DEADAD',
+      contrastText: '#000',
     },
     warning: {
       main: '#BF783E',
       light: '#331E0D',
       dark: '#CEB199',
+      contrastText: '#000',
     },
     success: {
       main: '#2B7D60',
       light: '#09261C',
       dark: '#A1D7C4',
+      contrastText: '#000',
     },
     info: {
       main: '#3E70A3',
       light: '#16385A',
       dark: '#A3BFDC',
+      contrastText: '#000',
     },
   },
 };

@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
-import { useMediaQuery } from '@rosen-bridge/ui-kit';
+import { useMediaQuery, useTheme } from '@rosen-bridge/ui-kit';
 import { upperFirst } from 'lodash-es';
 
 import { useInfo } from '../_hooks/useInfo';
 
-export const useIcon = (mode: 'light' | 'dark' | 'auto' | 'auto-reverse') => {
+export const useIcon = (
+  mode: 'light' | 'dark' | 'auto' | 'auto-reverse' | 'theme',
+) => {
   const { data } = useInfo();
+  const theme = useTheme();
 
   const [icon, setIcon] = useState<string>();
 
@@ -25,7 +28,8 @@ export const useIcon = (mode: 'light' | 'dark' | 'auto' | 'auto-reverse') => {
     const isDarkMode =
       mode == 'dark' ||
       (mode == 'auto' && prefersDarkMode) ||
-      (mode == 'auto-reverse' && !prefersDarkMode);
+      (mode == 'auto-reverse' && !prefersDarkMode) ||
+      (mode == 'theme' && theme.palette.mode === 'dark');
 
     const icon = Icons[key].replace(
       '<svg ',
@@ -42,7 +46,7 @@ export const useIcon = (mode: 'light' | 'dark' | 'auto' | 'auto-reverse') => {
       setIcon('');
       URL.revokeObjectURL(url);
     };
-  }, [data, mode, prefersDarkMode]);
+  }, [data, mode, prefersDarkMode, theme.palette.mode]);
 
   return icon;
 };

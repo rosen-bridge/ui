@@ -22,6 +22,7 @@
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "eslint --fix . && npm run prettify",
     "build": "tsc --build",
+    "build:watch": "tsc --watch",
     "type-check": "tsc",
     "release": "npm run build && npm publish --access public"
   },
@@ -47,6 +48,7 @@
     "react-hook-form": "^7.45.1",
     "embla-carousel-react": "^8.5.2",
     "moment": "^2.29.4",
-    "qrcode.react": "^3.1.0"
+    "qrcode.react": "^3.1.0",
+    "joi": "^17.11.0"
   }
 }
