@@ -6,11 +6,11 @@ import {
   AggregatedStatusChangedEntity,
   TxEntity,
 } from '../../../src';
-import AggregatedStatusChangedHandlerMod from '../../../src/db/handlers/AggregatedStatusChangedHandler';
-import AggregatedStatusHandlerMod from '../../../src/db/handlers/AggregatedStatusHandler';
-import GuardStatusChangedHandlerMod from '../../../src/db/handlers/GuardStatusChangedHandler';
-import GuardStatusHandlerMod from '../../../src/db/handlers/GuardStatusHandler';
-import TxHandlerMod from '../../../src/db/handlers/TxHandler';
+import AggregatedStatusActionMod from '../../../src/db/actions/AggregatedStatusAction';
+import AggregatedStatusChangedActionMod from '../../../src/db/actions/AggregatedStatusChangedAction';
+import GuardStatusActionMod from '../../../src/db/actions/GuardStatusAction';
+import GuardStatusChangedActionMod from '../../../src/db/actions/GuardStatusChangedAction';
+import TxActionMod from '../../../src/db/actions/TxAction';
 import { Utils } from '../../../src/utils';
 
 vi.mock('../../../src/db/DataSourceHandler', () => ({
@@ -50,57 +50,57 @@ const aggregatedStatusesMatchSpy = vi
   .mockReturnValue(false);
 
 //
-const TxHandler = {
+const TxAction = {
   insertOne: vi.fn().mockResolvedValue(undefined),
 };
-vi.spyOn(TxHandlerMod, 'getInstance').mockReturnValue(TxHandler);
+vi.spyOn(TxActionMod, 'getInstance').mockReturnValue(TxAction);
 
 //
-const GuardStatusHandler = {
+const GuardStatusAction = {
   getOne: vi.fn().mockResolvedValue(undefined),
   getMany: vi.fn().mockResolvedValue([]),
   upsertOne: vi.fn().mockResolvedValue(undefined),
 };
-vi.spyOn(GuardStatusHandlerMod, 'getInstance').mockReturnValue(
-  GuardStatusHandler,
+vi.spyOn(GuardStatusActionMod, 'getInstance').mockReturnValue(
+  GuardStatusAction,
 );
 
 //
-const GuardStatusChangedHandler = {
+const GuardStatusChangedAction = {
   getLast: vi.fn().mockResolvedValue(undefined),
   getMany: vi.fn().mockResolvedValue([]),
   insertOne: vi.fn().mockResolvedValue(undefined),
 };
-vi.spyOn(GuardStatusChangedHandlerMod, 'getInstance').mockReturnValue(
-  GuardStatusChangedHandler,
+vi.spyOn(GuardStatusChangedActionMod, 'getInstance').mockReturnValue(
+  GuardStatusChangedAction,
 );
 
 //
-const AggregatedStatusHandler = {
+const AggregatedStatusAction = {
   getOne: vi.fn().mockResolvedValue(undefined),
   getMany: vi.fn().mockResolvedValue([]),
   upsertOne: vi.fn().mockResolvedValue(undefined),
 };
-vi.spyOn(AggregatedStatusHandlerMod, 'getInstance').mockReturnValue(
-  AggregatedStatusHandler,
+vi.spyOn(AggregatedStatusActionMod, 'getInstance').mockReturnValue(
+  AggregatedStatusAction,
 );
 
 //
-const AggregatedStatusChangedHandler = {
+const AggregatedStatusChangedAction = {
   getLast: vi.fn().mockResolvedValue(undefined),
   getMany: vi.fn().mockResolvedValue([]),
   insertOne: vi.fn().mockResolvedValue(undefined),
 };
-vi.spyOn(AggregatedStatusChangedHandlerMod, 'getInstance').mockReturnValue(
-  AggregatedStatusChangedHandler,
+vi.spyOn(AggregatedStatusChangedActionMod, 'getInstance').mockReturnValue(
+  AggregatedStatusChangedAction,
 );
 
 export {
-  TxHandler,
-  GuardStatusHandler,
-  GuardStatusChangedHandler,
-  AggregatedStatusHandler,
-  AggregatedStatusChangedHandler,
+  TxAction,
+  GuardStatusAction,
+  GuardStatusChangedAction,
+  AggregatedStatusAction,
+  AggregatedStatusChangedAction,
   cloneFilterPushSpy,
   calcAggregatedStatusSpy,
   aggregatedStatusesMatchSpy,

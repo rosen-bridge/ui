@@ -1,13 +1,17 @@
 import { Repository } from 'typeorm';
 
+import TxAction from '../../../src/db/actions/TxAction';
 import { TxEntity } from '../../../src/db/entities/TxEntity';
-import TxHandler from '../../../src/db/handlers/TxHandler';
 import { mockTxs } from '../../testData';
 
-describe('TxHandler', () => {
+describe('TxAction', () => {
+  beforeAll(() => {
+    TxAction.init();
+  });
+
   describe('insertOne', () => {
     /**
-     * @target TxHandler.insertOne should call insert when tx is new
+     * @target TxAction.insertOne should call insert when tx is new
      * @dependencies
      * @scenario
      * - stub repository.findOneBy and insert to resolve to null
@@ -25,7 +29,7 @@ describe('TxHandler', () => {
       const record = mockTxs[0];
 
       // act
-      await TxHandler.getInstance().insertOne(
+      await TxAction.getInstance().insertOne(
         repository as unknown as Repository<TxEntity>,
         record.txId,
         record.chain,
@@ -40,7 +44,7 @@ describe('TxHandler', () => {
     });
 
     /**
-     * @target TxHandler.insertOne should throw when tx exists in database
+     * @target TxAction.insertOne should throw when tx exists in database
      * @dependencies
      * @scenario
      * - define a mock TxEntity
@@ -62,7 +66,7 @@ describe('TxHandler', () => {
 
       // act and assert
       await expect(async () => {
-        await TxHandler.getInstance().insertOne(
+        await TxAction.getInstance().insertOne(
           repository as unknown as Repository<TxEntity>,
           record.txId,
           record.chain,

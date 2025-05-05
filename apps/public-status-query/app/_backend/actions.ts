@@ -1,8 +1,6 @@
 // sort-imports-ignore
 import './initialize-if-needed';
 
-export { PublicStatusActions } from '@rosen-bridge/public-status-logic';
-
 import {
   AggregatedStatusChangedEntity,
   GuardStatusChangedEntity,
@@ -63,3 +61,5 @@ export const guardStatusChangedToDTO = (
 ): GuardStatusChangedDTO => {
   return Utils.cloneOmitting(record, ['id', 'eventId']);
 };
+
+export { PublicStatusActions } from '@rosen-bridge/public-status-logic';

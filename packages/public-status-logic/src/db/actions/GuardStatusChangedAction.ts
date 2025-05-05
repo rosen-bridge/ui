@@ -3,20 +3,28 @@ import { In, Repository } from 'typeorm';
 import { EventStatus, TxStatus } from '../../constants';
 import { GuardStatusChangedEntity } from '../entities/GuardStatusChangedEntity';
 
-class GuardStatusChangedHandler {
-  private static instance?: GuardStatusChangedHandler;
+class GuardStatusChangedAction {
+  private static instance?: GuardStatusChangedAction;
 
   protected constructor() {}
 
   /**
-   * generates a GuardStatusChangedHandler object if it doesn't exist
-   * @returns GuardStatusChangedHandler instance
+   * initialize GuardStatusChangedAction
    */
-  public static getInstance = () => {
-    if (!GuardStatusChangedHandler.instance) {
-      GuardStatusChangedHandler.instance = new GuardStatusChangedHandler();
-    }
-    return GuardStatusChangedHandler.instance;
+  static init = async () => {
+    GuardStatusChangedAction.instance = new GuardStatusChangedAction();
+  };
+
+  /**
+   * get GuardStatusChangedAction instance or throw
+   * @returns GuardStatusChangedAction instance
+   */
+  static getInstance = () => {
+    if (!GuardStatusChangedAction.instance)
+      throw Error(
+        `GuardStatusChangedAction should have been initialized before getInstance`,
+      );
+    return GuardStatusChangedAction.instance;
   };
 
   /**
@@ -106,4 +114,4 @@ class GuardStatusChangedHandler {
   };
 }
 
-export default GuardStatusChangedHandler;
+export default GuardStatusChangedAction;

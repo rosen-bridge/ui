@@ -4,20 +4,20 @@ import {
   EventStatus,
   TxStatus,
   TxType,
-} from '../constants';
-import { Threshold } from '../types';
-import { Utils } from '../utils';
-import { DataSourceHandler } from './DataSourceHandler';
-import { AggregatedStatusChangedEntity } from './entities/AggregatedStatusChangedEntity';
-import { AggregatedStatusEntity } from './entities/AggregatedStatusEntity';
-import { GuardStatusChangedEntity } from './entities/GuardStatusChangedEntity';
-import { GuardStatusEntity } from './entities/GuardStatusEntity';
-import { TxEntity } from './entities/TxEntity';
-import AggregatedStatusChangedHandler from './handlers/AggregatedStatusChangedHandler';
-import AggregatedStatusHandler from './handlers/AggregatedStatusHandler';
-import GuardStatusChangedHandler from './handlers/GuardStatusChangedHandler';
-import GuardStatusHandler from './handlers/GuardStatusHandler';
-import TxHandler from './handlers/TxHandler';
+} from '../../constants';
+import { Threshold } from '../../types';
+import { Utils } from '../../utils';
+import { DataSourceHandler } from '../DataSourceHandler';
+import { AggregatedStatusChangedEntity } from '../entities/AggregatedStatusChangedEntity';
+import { AggregatedStatusEntity } from '../entities/AggregatedStatusEntity';
+import { GuardStatusChangedEntity } from '../entities/GuardStatusChangedEntity';
+import { GuardStatusEntity } from '../entities/GuardStatusEntity';
+import { TxEntity } from '../entities/TxEntity';
+import AggregatedStatusAction from './AggregatedStatusAction';
+import AggregatedStatusChangedAction from './AggregatedStatusChangedAction';
+import GuardStatusAction from './GuardStatusAction';
+import GuardStatusChangedAction from './GuardStatusChangedAction';
+import TxAction from './TxAction';
 
 /**
  * entry point of data layer (aggregate root)
@@ -68,7 +68,7 @@ export class PublicStatusActions {
         if (tx) {
           // try to insert tx
           try {
-            await TxHandler.getInstance().insertOne(
+            await TxAction.getInstance().insertOne(
               txRepository,
               tx.txId,
               tx.chain,
@@ -84,7 +84,7 @@ export class PublicStatusActions {
         }
 
         // get array of last status of all guards
-        const guardsStatus = await GuardStatusHandler.getInstance().getMany(
+        const guardsStatus = await GuardStatusAction.getInstance().getMany(
           guardStatusRepository,
           eventId,
           [],
@@ -129,7 +129,7 @@ export class PublicStatusActions {
           : undefined;
 
         let promises = [
-          GuardStatusHandler.getInstance().upsertOne(
+          GuardStatusAction.getInstance().upsertOne(
             guardStatusRepository,
             eventId,
             pk,
@@ -137,7 +137,7 @@ export class PublicStatusActions {
             status,
             guardStatusTx,
           ),
-          GuardStatusChangedHandler.getInstance().insertOne(
+          GuardStatusChangedAction.getInstance().insertOne(
             guardStatusChangedRepository,
             eventId,
             pk,
@@ -167,7 +167,7 @@ export class PublicStatusActions {
             : undefined;
 
           promises.push(
-            AggregatedStatusHandler.getInstance().upsertOne(
+            AggregatedStatusAction.getInstance().upsertOne(
               aggregatedStatusRepository,
               eventId,
               timestampSeconds,
@@ -175,7 +175,7 @@ export class PublicStatusActions {
               aggregatedStatusNew.txStatus,
               aggregatedStatusTx,
             ),
-            AggregatedStatusChangedHandler.getInstance().insertOne(
+            AggregatedStatusChangedAction.getInstance().insertOne(
               aggregatedStatusChangedRepository,
               eventId,
               timestampSeconds,
@@ -218,7 +218,7 @@ export class PublicStatusActions {
         AggregatedStatusEntity,
       );
 
-    return AggregatedStatusHandler.getInstance().getMany(
+    return AggregatedStatusAction.getInstance().getMany(
       aggregatedStatusRepository,
       eventIds,
     );
@@ -237,7 +237,7 @@ export class PublicStatusActions {
         AggregatedStatusChangedEntity,
       );
 
-    return AggregatedStatusChangedHandler.getInstance().getMany(
+    return AggregatedStatusChangedAction.getInstance().getMany(
       aggregatedStatusChangedRepository,
       eventId,
     );
@@ -258,7 +258,7 @@ export class PublicStatusActions {
         GuardStatusChangedEntity,
       );
 
-    return GuardStatusChangedHandler.getInstance().getMany(
+    return GuardStatusChangedAction.getInstance().getMany(
       guardStatusChangedRepository,
       eventId,
       guardPks,

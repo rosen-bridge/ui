@@ -1,14 +1,18 @@
 import { Repository, In } from 'typeorm';
 
 import { EventStatus } from '../../../src/constants';
+import GuardStatusAction from '../../../src/db/actions/GuardStatusAction';
 import { GuardStatusEntity } from '../../../src/db/entities/GuardStatusEntity';
-import GuardStatusHandler from '../../../src/db/handlers/GuardStatusHandler';
 import { mockGuardStatusRecords, id0 } from '../../testData';
 
-describe('GuardStatusHandler', () => {
+describe('GuardStatusAction', () => {
+  beforeAll(() => {
+    GuardStatusAction.init();
+  });
+
   describe('getOne', () => {
     /**
-     * @target GuardStatusHandler.getOne should call repository.findOne using the eventId and guardPk as query
+     * @target GuardStatusAction.getOne should call repository.findOne using the eventId and guardPk as query
      * @dependencies
      * @scenario
      * - stub repository.findOne to resolve to null
@@ -24,7 +28,7 @@ describe('GuardStatusHandler', () => {
       };
 
       // act
-      const currentStatus = await GuardStatusHandler.getInstance().getOne(
+      const currentStatus = await GuardStatusAction.getInstance().getOne(
         repository as unknown as Repository<GuardStatusEntity>,
         id0,
         'pk0',
@@ -42,7 +46,7 @@ describe('GuardStatusHandler', () => {
 
   describe('getMany', () => {
     /**
-     * @target GuardStatusHandler.getMany should call repository.find using the eventId and guardPks as query
+     * @target GuardStatusAction.getMany should call repository.find using the eventId and guardPks as query
      * @dependencies
      * @scenario
      * - stub repository.find to resolve to empty array
@@ -58,7 +62,7 @@ describe('GuardStatusHandler', () => {
       };
 
       // act
-      const records = await GuardStatusHandler.getInstance().getMany(
+      const records = await GuardStatusAction.getInstance().getMany(
         repository as unknown as Repository<GuardStatusEntity>,
         id0,
         ['pk0', 'pk1'],
@@ -77,7 +81,7 @@ describe('GuardStatusHandler', () => {
 
   describe('upsertOne', () => {
     /**
-     * @target GuardStatusHandler.upsertOne should call upsert when eventId is new
+     * @target GuardStatusAction.upsertOne should call upsert when eventId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and upsert to resolve to null
@@ -96,7 +100,7 @@ describe('GuardStatusHandler', () => {
       const record2 = mockGuardStatusRecords[2];
 
       // act
-      await GuardStatusHandler.getInstance().upsertOne(
+      await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record.eventId,
         record.guardPk,
@@ -109,7 +113,7 @@ describe('GuardStatusHandler', () => {
             }
           : undefined,
       );
-      await GuardStatusHandler.getInstance().upsertOne(
+      await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record2.eventId,
         record2.guardPk,
@@ -130,7 +134,7 @@ describe('GuardStatusHandler', () => {
     });
 
     /**
-     * @target GuardStatusHandler.upsertOne should call upsert when a record with matching eventId exists and its status is changed
+     * @target GuardStatusAction.upsertOne should call upsert when a record with matching eventId exists and its status is changed
      * @dependencies
      * @scenario
      * - define a mock GuardStatusEntity
@@ -149,7 +153,7 @@ describe('GuardStatusHandler', () => {
       };
 
       // act
-      await GuardStatusHandler.getInstance().upsertOne(
+      await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record.eventId,
         record.guardPk,
@@ -176,7 +180,7 @@ describe('GuardStatusHandler', () => {
     });
 
     /**
-     * @target GuardStatusHandler.upsertOne should not call upsert when record exists in database and its status is not changed
+     * @target GuardStatusAction.upsertOne should not call upsert when record exists in database and its status is not changed
      * @dependencies
      * @scenario
      * - define a mock GuardStatusEntity
@@ -195,7 +199,7 @@ describe('GuardStatusHandler', () => {
       };
 
       // act
-      await GuardStatusHandler.getInstance().upsertOne(
+      await GuardStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<GuardStatusEntity>,
         record.eventId,
         record.guardPk,

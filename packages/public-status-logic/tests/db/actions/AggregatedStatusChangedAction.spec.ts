@@ -1,14 +1,18 @@
 import { Repository } from 'typeorm';
 
 import { AggregateEventStatus } from '../../../src/constants';
+import AggregatedStatusChangedAction from '../../../src/db/actions/AggregatedStatusChangedAction';
 import { AggregatedStatusChangedEntity } from '../../../src/db/entities/AggregatedStatusChangedEntity';
-import AggregatedStatusChangedHandler from '../../../src/db/handlers/AggregatedStatusChangedHandler';
 import { mockAggregatedStatusChangedRecords, id0 } from '../../testData';
 
-describe('AggregatedStatusChangedHandler', () => {
+describe('AggregatedStatusChangedAction', () => {
+  beforeAll(() => {
+    AggregatedStatusChangedAction.init();
+  });
+
   describe('getLast', () => {
     /**
-     * @target AggregatedStatusChangedHandler.getLast should call repository.findOne with DESC ordering on insertedAt field
+     * @target AggregatedStatusChangedAction.getLast should call repository.findOne with DESC ordering on insertedAt field
      * @dependencies
      * @scenario
      * - stub repository.findOne to resolve to null
@@ -25,7 +29,7 @@ describe('AggregatedStatusChangedHandler', () => {
 
       // act
       const lastStatus =
-        await AggregatedStatusChangedHandler.getInstance().getLast(
+        await AggregatedStatusChangedAction.getInstance().getLast(
           repository as unknown as Repository<AggregatedStatusChangedEntity>,
           id0,
         );
@@ -43,7 +47,7 @@ describe('AggregatedStatusChangedHandler', () => {
 
   describe('getMany', () => {
     /**
-     * @target AggregatedStatusChangedHandler.getMany should call repository.find with DESC ordering on insertedAt field
+     * @target AggregatedStatusChangedAction.getMany should call repository.find with DESC ordering on insertedAt field
      * @dependencies
      * @scenario
      * - stub repository.find to resolve to empty array
@@ -59,11 +63,10 @@ describe('AggregatedStatusChangedHandler', () => {
       };
 
       // act
-      const records =
-        await AggregatedStatusChangedHandler.getInstance().getMany(
-          repository as unknown as Repository<AggregatedStatusChangedEntity>,
-          id0,
-        );
+      const records = await AggregatedStatusChangedAction.getInstance().getMany(
+        repository as unknown as Repository<AggregatedStatusChangedEntity>,
+        id0,
+      );
 
       // assert
       expect(records).toHaveLength(0);
@@ -78,7 +81,7 @@ describe('AggregatedStatusChangedHandler', () => {
 
   describe('insertOne', () => {
     /**
-     * @target AggregatedStatusChangedHandler.insertOne should call insert when eventId is new
+     * @target AggregatedStatusChangedAction.insertOne should call insert when eventId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and insert to resolve to null
@@ -96,7 +99,7 @@ describe('AggregatedStatusChangedHandler', () => {
       const record = mockAggregatedStatusChangedRecords[0];
 
       // act
-      await AggregatedStatusChangedHandler.getInstance().insertOne(
+      await AggregatedStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         record.eventId,
         record.insertedAt,
@@ -111,7 +114,7 @@ describe('AggregatedStatusChangedHandler', () => {
     });
 
     /**
-     * @target AggregatedStatusChangedHandler.insertOne should call insert when record exists in database and its status is changed
+     * @target AggregatedStatusChangedAction.insertOne should call insert when record exists in database and its status is changed
      * @dependencies
      * @scenario
      * - define a mock AggregatedStatusChangedEntity
@@ -130,7 +133,7 @@ describe('AggregatedStatusChangedHandler', () => {
       };
 
       // act
-      await AggregatedStatusChangedHandler.getInstance().insertOne(
+      await AggregatedStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         record.eventId,
         record.insertedAt,
@@ -148,7 +151,7 @@ describe('AggregatedStatusChangedHandler', () => {
     });
 
     /**
-     * @target AggregatedStatusChangedHandler.insertOne should throw when record exists in database and its status is not changed
+     * @target AggregatedStatusChangedAction.insertOne should throw when record exists in database and its status is not changed
      * @dependencies
      * @scenario
      * - define a mock AggregatedStatusChangedEntity
@@ -169,7 +172,7 @@ describe('AggregatedStatusChangedHandler', () => {
 
       // act and assert
       await expect(async () => {
-        await AggregatedStatusChangedHandler.getInstance().insertOne(
+        await AggregatedStatusChangedAction.getInstance().insertOne(
           repository as unknown as Repository<AggregatedStatusChangedEntity>,
           record.eventId,
           record.insertedAt + 5,

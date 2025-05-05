@@ -1,14 +1,18 @@
 import { Repository, In } from 'typeorm';
 
 import { AggregateEventStatus } from '../../../src/constants';
+import AggregatedStatusAction from '../../../src/db/actions/AggregatedStatusAction';
 import { AggregatedStatusEntity } from '../../../src/db/entities/AggregatedStatusEntity';
-import AggregatedStatusHandler from '../../../src/db/handlers/AggregatedStatusHandler';
 import { mockAggregatedStatusRecords, id0, id1 } from '../../testData';
 
-describe('AggregatedStatusHandler', () => {
+describe('AggregatedStatusAction', () => {
+  beforeAll(() => {
+    AggregatedStatusAction.init();
+  });
+
   describe('getOne', () => {
     /**
-     * @target AggregatedStatusHandler.getOne should call repository.findOne using the eventId as query
+     * @target AggregatedStatusAction.getOne should call repository.findOne using the eventId as query
      * @dependencies
      * @scenario
      * - stub repository.findOne to resolve to null
@@ -24,7 +28,7 @@ describe('AggregatedStatusHandler', () => {
       };
 
       // act
-      const currentStatus = await AggregatedStatusHandler.getInstance().getOne(
+      const currentStatus = await AggregatedStatusAction.getInstance().getOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         id0,
       );
@@ -41,7 +45,7 @@ describe('AggregatedStatusHandler', () => {
 
   describe('getMany', () => {
     /**
-     * @target AggregatedStatusHandler.getMany should call repository.find using the eventIds as query
+     * @target AggregatedStatusAction.getMany should call repository.find using the eventIds as query
      * @dependencies
      * @scenario
      * - stub repository.find to resolve to empty array
@@ -57,7 +61,7 @@ describe('AggregatedStatusHandler', () => {
       };
 
       // act
-      const records = await AggregatedStatusHandler.getInstance().getMany(
+      const records = await AggregatedStatusAction.getInstance().getMany(
         repository as unknown as Repository<AggregatedStatusEntity>,
         [id0, id1],
       );
@@ -75,7 +79,7 @@ describe('AggregatedStatusHandler', () => {
 
   describe('upsertOne', () => {
     /**
-     * @target AggregatedStatusHandler.upsertOne should call upsert when eventId is new
+     * @target AggregatedStatusAction.upsertOne should call upsert when eventId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and upsert to resolve to null
@@ -94,7 +98,7 @@ describe('AggregatedStatusHandler', () => {
       const record2 = mockAggregatedStatusRecords[2];
 
       // act
-      await AggregatedStatusHandler.getInstance().upsertOne(
+      await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record.eventId,
         record.updatedAt,
@@ -102,7 +106,7 @@ describe('AggregatedStatusHandler', () => {
         record.txStatus,
         record.tx ?? undefined,
       );
-      await AggregatedStatusHandler.getInstance().upsertOne(
+      await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record2.eventId,
         record2.updatedAt,
@@ -118,7 +122,7 @@ describe('AggregatedStatusHandler', () => {
     });
 
     /**
-     * @target AggregatedStatusHandler.upsertOne should call upsert when a record with matching eventId exists and its status is changed
+     * @target AggregatedStatusAction.upsertOne should call upsert when a record with matching eventId exists and its status is changed
      * @dependencies
      * @scenario
      * - define a mock AggregatedStatusEntity
@@ -137,7 +141,7 @@ describe('AggregatedStatusHandler', () => {
       };
 
       // act
-      await AggregatedStatusHandler.getInstance().upsertOne(
+      await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record.eventId,
         record.updatedAt + 5,
@@ -163,7 +167,7 @@ describe('AggregatedStatusHandler', () => {
     });
 
     /**
-     * @target AggregatedStatusHandler.upsertOne should not call upsert when record exists in database and its status is not changed
+     * @target AggregatedStatusAction.upsertOne should not call upsert when record exists in database and its status is not changed
      * @dependencies
      * @scenario
      * - define a mock AggregatedStatusEntity
@@ -182,7 +186,7 @@ describe('AggregatedStatusHandler', () => {
       };
 
       // act
-      await AggregatedStatusHandler.getInstance().upsertOne(
+      await AggregatedStatusAction.getInstance().upsertOne(
         repository as unknown as Repository<AggregatedStatusEntity>,
         record.eventId,
         record.updatedAt + 5,

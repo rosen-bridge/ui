@@ -1,11 +1,15 @@
 import { Repository, In } from 'typeorm';
 
 import { EventStatus } from '../../../src/constants';
+import GuardStatusChangedAction from '../../../src/db/actions/GuardStatusChangedAction';
 import { GuardStatusChangedEntity } from '../../../src/db/entities/GuardStatusChangedEntity';
-import GuardStatusChangedHandler from '../../../src/db/handlers/GuardStatusChangedHandler';
 import { mockGuardStatusChangedRecords, id0 } from '../../testData';
 
-describe('GuardStatusChangedHandler', () => {
+describe('GuardStatusChangedAction', () => {
+  beforeAll(() => {
+    GuardStatusChangedAction.init();
+  });
+
   describe('getLast', () => {
     /**
      * @target GuardStatusChangedRepository.getLast should call repository.findOne with DESC ordering on insertedAt field
@@ -24,7 +28,7 @@ describe('GuardStatusChangedHandler', () => {
       };
 
       // act
-      const lastStatus = await GuardStatusChangedHandler.getInstance().getLast(
+      const lastStatus = await GuardStatusChangedAction.getInstance().getLast(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         id0,
         'pk',
@@ -59,7 +63,7 @@ describe('GuardStatusChangedHandler', () => {
       };
 
       // act
-      const records = await GuardStatusChangedHandler.getInstance().getMany(
+      const records = await GuardStatusChangedAction.getInstance().getMany(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         id0,
         ['pk'],
@@ -78,7 +82,7 @@ describe('GuardStatusChangedHandler', () => {
 
   describe('insertOne', () => {
     /**
-     * @target GuardStatusChangedHandler.insertOne should call insert when eventId is new
+     * @target GuardStatusChangedAction.insertOne should call insert when eventId is new
      * @dependencies
      * @scenario
      * - stub repository.findOne and insert to resolve to null
@@ -96,7 +100,7 @@ describe('GuardStatusChangedHandler', () => {
       const record = mockGuardStatusChangedRecords[0];
 
       // act
-      await GuardStatusChangedHandler.getInstance().insertOne(
+      await GuardStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         record.eventId,
         record.guardPk,
@@ -116,7 +120,7 @@ describe('GuardStatusChangedHandler', () => {
     });
 
     /**
-     * @target GuardStatusChangedHandler.insertOne should call insert when record exists in database and its status is changed
+     * @target GuardStatusChangedAction.insertOne should call insert when record exists in database and its status is changed
      * @dependencies
      * @scenario
      * - define a mock GuardStatusChangedEntity
@@ -135,7 +139,7 @@ describe('GuardStatusChangedHandler', () => {
       };
 
       // act
-      await GuardStatusChangedHandler.getInstance().insertOne(
+      await GuardStatusChangedAction.getInstance().insertOne(
         repository as unknown as Repository<GuardStatusChangedEntity>,
         record.eventId,
         record.guardPk,
@@ -158,7 +162,7 @@ describe('GuardStatusChangedHandler', () => {
     });
 
     /**
-     * @target GuardStatusChangedHandler.insertOne should throw when record exists in database and its status is not changed
+     * @target GuardStatusChangedAction.insertOne should throw when record exists in database and its status is not changed
      * @dependencies
      * @scenario
      * - define a mock GuardStatusChangedEntity
@@ -179,7 +183,7 @@ describe('GuardStatusChangedHandler', () => {
 
       // act and assert
       await expect(async () => {
-        await GuardStatusChangedHandler.getInstance().insertOne(
+        await GuardStatusChangedAction.getInstance().insertOne(
           repository as unknown as Repository<GuardStatusChangedEntity>,
           record.eventId,
           record.guardPk,

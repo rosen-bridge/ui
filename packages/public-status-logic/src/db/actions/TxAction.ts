@@ -3,20 +3,26 @@ import { Repository } from 'typeorm';
 import { TxType } from '../../constants';
 import { TxEntity } from '../entities/TxEntity';
 
-class TxHandler {
-  private static instance?: TxHandler;
+class TxAction {
+  private static instance?: TxAction;
 
   protected constructor() {}
 
   /**
-   * generates a TxHandler object if it doesn't exist
-   * @returns TxHandler instance
+   * initialize TxAction
    */
-  public static getInstance = () => {
-    if (!TxHandler.instance) {
-      TxHandler.instance = new TxHandler();
-    }
-    return TxHandler.instance;
+  static init = async () => {
+    TxAction.instance = new TxAction();
+  };
+
+  /**
+   * get TxAction instance or throw
+   * @returns TxAction instance
+   */
+  static getInstance = () => {
+    if (!TxAction.instance)
+      throw Error(`TxAction should have been initialized before getInstance`);
+    return TxAction.instance;
   };
 
   /**
@@ -53,4 +59,4 @@ class TxHandler {
   };
 }
 
-export default TxHandler;
+export default TxAction;

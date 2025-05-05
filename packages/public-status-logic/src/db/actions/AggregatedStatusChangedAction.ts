@@ -3,21 +3,29 @@ import { Repository } from 'typeorm';
 import { AggregateEventStatus, AggregateTxStatus } from '../../constants';
 import { AggregatedStatusChangedEntity } from '../entities/AggregatedStatusChangedEntity';
 
-class AggregatedStatusChangedHandler {
-  private static instance?: AggregatedStatusChangedHandler;
+class AggregatedStatusChangedAction {
+  private static instance?: AggregatedStatusChangedAction;
 
   protected constructor() {}
 
   /**
-   * generates a AggregatedStatusChangedHandler object if it doesn't exist
-   * @returns AggregatedStatusChangedHandler instance
+   * initialize AggregatedStatusChangedAction
    */
-  public static getInstance = () => {
-    if (!AggregatedStatusChangedHandler.instance) {
-      AggregatedStatusChangedHandler.instance =
-        new AggregatedStatusChangedHandler();
-    }
-    return AggregatedStatusChangedHandler.instance;
+  static init = async () => {
+    AggregatedStatusChangedAction.instance =
+      new AggregatedStatusChangedAction();
+  };
+
+  /**
+   * get AggregatedStatusChangedAction instance or throw
+   * @returns AggregatedStatusChangedAction instance
+   */
+  static getInstance = () => {
+    if (!AggregatedStatusChangedAction.instance)
+      throw Error(
+        `AggregatedStatusChangedAction should have been initialized before getInstance`,
+      );
+    return AggregatedStatusChangedAction.instance;
   };
 
   /**
@@ -98,4 +106,4 @@ class AggregatedStatusChangedHandler {
   };
 }
 
-export default AggregatedStatusChangedHandler;
+export default AggregatedStatusChangedAction;
