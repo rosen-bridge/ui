@@ -1,5 +1,5 @@
 import {
-  PublicStatusActions,
+  PublicStatusAction,
   AggregatedStatusDTO,
   aggregatedStatusToDTO,
 } from '@/_backend/actions';
@@ -10,7 +10,7 @@ import { validator, GetAggregatedStatusesRequestBody } from './validator';
 type GetManyStatusResponse = Record<string, AggregatedStatusDTO>;
 
 const handler = async (params: GetAggregatedStatusesRequestBody) => {
-  const records = await PublicStatusActions.getAggregatedStatuses(
+  const records = await PublicStatusAction.getInstance().getAggregatedStatuses(
     params.eventIds,
   );
   return records.reduce((dict, record) => {

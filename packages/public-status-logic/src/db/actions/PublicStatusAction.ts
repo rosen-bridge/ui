@@ -23,7 +23,35 @@ import TxAction from './TxAction';
  * entry point of data layer (aggregate root)
  * also methods that span multiple entities belong here
  */
-export class PublicStatusActions {
+export class PublicStatusAction {
+  private static instance?: PublicStatusAction;
+
+  protected constructor() {}
+
+  /**
+   * initialize PublicStatusAction
+   */
+  static init = async () => {
+    PublicStatusAction.instance = new PublicStatusAction();
+    await AggregatedStatusChangedAction.init();
+    await AggregatedStatusAction.init();
+    await GuardStatusChangedAction.init();
+    await GuardStatusAction.init();
+    await TxAction.init();
+  };
+
+  /**
+   * get PublicStatusAction instance or throw
+   * @returns PublicStatusAction instance
+   */
+  static getInstance = () => {
+    if (!PublicStatusAction.instance)
+      throw Error(
+        `PublicStatusAction should have been initialized before getInstance`,
+      );
+    return PublicStatusAction.instance;
+  };
+
   /**
    * updates guard's status and if the new status changes the aggregated status it also updates aggregated status of the event
    * @param eventId
@@ -33,7 +61,7 @@ export class PublicStatusActions {
    * @param tx
    * @returns a promise that resolves to void
    */
-  static insertStatus = async (
+  insertStatus = async (
     eventId: string,
     pk: string,
     timestampSeconds: number,
@@ -210,7 +238,7 @@ export class PublicStatusActions {
    * @param eventIds
    * @returns promise of AggregatedStatusEntity array
    */
-  static getAggregatedStatuses = (
+  getAggregatedStatuses = (
     eventIds: string[],
   ): Promise<AggregatedStatusEntity[]> => {
     const aggregatedStatusRepository =
@@ -229,7 +257,7 @@ export class PublicStatusActions {
    * @param eventId
    * @returns promise of AggregatedStatusChangedEntity array
    */
-  static getAggregatedStatusTimeline = (
+  getAggregatedStatusTimeline = (
     eventId: string,
   ): Promise<AggregatedStatusChangedEntity[]> => {
     const aggregatedStatusChangedRepository =
@@ -249,7 +277,7 @@ export class PublicStatusActions {
    * @param guardPks
    * @returns promise of GuardStatusChangedEntity array
    */
-  static getGuardStatusTimeline = (
+  getGuardStatusTimeline = (
     eventId: string,
     guardPks: string[],
   ): Promise<GuardStatusChangedEntity[]> => {

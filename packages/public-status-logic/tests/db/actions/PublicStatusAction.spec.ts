@@ -1,7 +1,7 @@
-// should be imported before PublicStatusActions
+// should be imported before PublicStatusAction
 import * as mocks from '@/tests/db/mocked/DataLayer.mock';
 
-import { PublicStatusActions } from '../../../src/db/actions/PublicStatusActions';
+import { PublicStatusAction } from '../../../src/db/actions/PublicStatusAction';
 import {
   mockExistingGuardStatus,
   mockGuardStatusTx,
@@ -14,7 +14,11 @@ import {
   mockTxStatusThresholds,
 } from '../../testData';
 
-describe('PublicStatusActions', () => {
+describe('PublicStatusAction', () => {
+  beforeAll(() => {
+    PublicStatusAction.init();
+  });
+
   describe('insertStatus', () => {
     beforeEach(() => {
       // reset all mocks for each test
@@ -22,7 +26,7 @@ describe('PublicStatusActions', () => {
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should update aggregated status and
+     * @target PublicStatusAction.insertStatus should update aggregated status and
      * guard status when no guard statuses exist for this eventId, tx info not provided
      * @scenario
      * - spy on TxAction.insertOne
@@ -53,7 +57,7 @@ describe('PublicStatusActions', () => {
       mocks.calcAggregatedStatusSpy.mockReturnValue(mockAggregatedStatus);
 
       // act
-      await PublicStatusActions.insertStatus(
+      await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
@@ -130,7 +134,7 @@ describe('PublicStatusActions', () => {
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should update aggregated status and
+     * @target PublicStatusAction.insertStatus should update aggregated status and
      * guard status when no guard statuses exist for this eventId, tx info provided
      * @scenario
      * - stub TxAction.insertOne to return
@@ -160,7 +164,7 @@ describe('PublicStatusActions', () => {
       mocks.GuardStatusAction.getMany.mockResolvedValueOnce([]);
 
       // act
-      await PublicStatusActions.insertStatus(
+      await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusWithTx.eventId,
         mockNewGuardStatusWithTx.guardPk,
         mockNewGuardStatusWithTx.updatedAt,
@@ -249,7 +253,7 @@ describe('PublicStatusActions', () => {
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should only update guard status and not
+     * @target PublicStatusAction.insertStatus should only update guard status and not
      * aggregated status when guard statuses exist and aggregated status is not
      * changed, tx info not provided
      * @scenario
@@ -289,7 +293,7 @@ describe('PublicStatusActions', () => {
       mocks.aggregatedStatusesMatchSpy.mockReturnValueOnce(true);
 
       // act
-      await PublicStatusActions.insertStatus(
+      await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
@@ -362,7 +366,7 @@ describe('PublicStatusActions', () => {
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should update guard status and
+     * @target PublicStatusAction.insertStatus should update guard status and
      * aggregated status when guard statuses exist and aggregated status is
      * changed, tx info not provided
      * @scenario
@@ -402,7 +406,7 @@ describe('PublicStatusActions', () => {
       mocks.aggregatedStatusesMatchSpy.mockReturnValueOnce(false);
 
       // act
-      await PublicStatusActions.insertStatus(
+      await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatus.eventId,
         mockNewGuardStatus.guardPk,
         mockNewGuardStatus.updatedAt,
@@ -494,7 +498,7 @@ describe('PublicStatusActions', () => {
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should only update guard status and not
+     * @target PublicStatusAction.insertStatus should only update guard status and not
      * aggregated status when guard statuses exist and aggregated status is not
      * changed, tx info provided
      * @scenario
@@ -535,7 +539,7 @@ describe('PublicStatusActions', () => {
       mocks.aggregatedStatusesMatchSpy.mockReturnValueOnce(true);
 
       // act
-      await PublicStatusActions.insertStatus(
+      await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusWithTx.eventId,
         mockNewGuardStatusWithTx.guardPk,
         mockNewGuardStatusWithTx.updatedAt,
@@ -616,7 +620,7 @@ describe('PublicStatusActions', () => {
     });
 
     /**
-     * @target PublicStatusActions.insertStatus should update guard status and aggregated
+     * @target PublicStatusAction.insertStatus should update guard status and aggregated
      * status when guard statuses exist and aggregated status is changed, tx info provided
      * @scenario
      * - stub TxAction.insertOne to return
@@ -656,7 +660,7 @@ describe('PublicStatusActions', () => {
       mocks.aggregatedStatusesMatchSpy.mockReturnValueOnce(false);
 
       // act
-      await PublicStatusActions.insertStatus(
+      await PublicStatusAction.getInstance().insertStatus(
         mockNewGuardStatusWithTx.eventId,
         mockNewGuardStatusWithTx.guardPk,
         mockNewGuardStatusWithTx.updatedAt,

@@ -62,4 +62,4 @@ export const guardStatusChangedToDTO = (
   return Utils.cloneOmitting(record, ['id', 'eventId']);
 };
 
-export { PublicStatusActions } from '@rosen-bridge/public-status-logic';
+export { PublicStatusAction } from '@rosen-bridge/public-status-logic';

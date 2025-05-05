@@ -1,6 +1,6 @@
 import { ECDSA } from '@rosen-bridge/encryption';
 
-import { PublicStatusActions } from '@/_backend/actions';
+import { PublicStatusAction } from '@/_backend/actions';
 import { configs } from '@/_backend/configs';
 import { AccessDeniedError, withValidation } from '@/api/withValidation';
 
@@ -44,7 +44,7 @@ const handler = async (params: Params) => {
     throw new AccessDeniedError('signature verification failed');
   }
 
-  await PublicStatusActions.insertStatus(
+  await PublicStatusAction.getInstance().insertStatus(
     params.eventId,
     params.pk,
     nowSeconds,

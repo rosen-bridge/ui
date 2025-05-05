@@ -1,5 +1,5 @@
 import {
-  PublicStatusActions,
+  PublicStatusAction,
   guardStatusChangedToDTO,
 } from '@/_backend/actions';
 import { withValidation } from '@/api/withValidation';
@@ -8,7 +8,10 @@ import { GetGuardStatusTimelineParams, validator } from './validator';
 
 const handler = async (params: GetGuardStatusTimelineParams) => {
   return (
-    await PublicStatusActions.getGuardStatusTimeline(params.id, params.guardPks)
+    await PublicStatusAction.getInstance().getGuardStatusTimeline(
+      params.id,
+      params.guardPks,
+    )
   ).map(guardStatusChangedToDTO);
 };
 
