@@ -1,7 +1,7 @@
 import { Eternl as EternlIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
   AddressRetrievalError,
@@ -13,9 +13,9 @@ import {
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { EtrnlWalletConfig } from './types';
 
-export class EtrnlWallet extends Wallet {
+export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
   icon = EternlIcon;
 
   name = 'Eternl';
@@ -24,11 +24,9 @@ export class EtrnlWallet extends Wallet {
 
   link = 'https://eternl.io';
 
-  supportedChains = [NETWORKS.cardano.key];
+  currentChain: Network = NETWORKS.cardano.key;
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
+  supportedChains: Network[] = [NETWORKS.cardano.key];
 
   private get api() {
     return window.cardano.eternl;
@@ -55,7 +53,9 @@ export class EtrnlWallet extends Wallet {
     }
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
+  getBalanceRaw = async (
+    token: RosenChainToken,
+  ): Promise<bigint | undefined> => {
     this.requireAvailable();
 
     const wallet = await this.api.enable();
@@ -71,17 +71,7 @@ export class EtrnlWallet extends Wallet {
           !token.extra.policyId),
     );
 
-    if (!amount) return 0n;
-
-    const tokenMap = await this.config.getTokenMap();
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      amount.quantity,
-      NETWORKS.cardano.key,
-    ).amount;
-
-    return wrappedAmount;
+    return amount?.quantity;
   };
 
   isAvailable = (): boolean => {
