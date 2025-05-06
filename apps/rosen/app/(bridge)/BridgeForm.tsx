@@ -241,7 +241,7 @@ export const BridgeForm = () => {
                     try {
                       const clipboardText =
                         await navigator.clipboard.readText();
-                      setValue('walletAddress', clipboardText, {
+                      setValue('walletAddress', clipboardText.trim(), {
                         shouldDirty: true,
                         shouldTouch: true,
                         shouldValidate: true,
@@ -272,6 +272,14 @@ export const BridgeForm = () => {
         autoComplete="off"
         {...addressField}
         value={addressField.value ?? ''}
+        onBlur={(e) => {
+          const trimmed = e.target.value.trim();
+          setValue('walletAddress', trimmed, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+          });
+        }}
       />
       {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
