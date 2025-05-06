@@ -1,12 +1,12 @@
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import AppError from './errors/AppError';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 /**
  * get token map instance

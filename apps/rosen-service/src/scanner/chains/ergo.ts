@@ -1,5 +1,6 @@
-import { ErgoNetworkType, ErgoScanner } from '@rosen-bridge/scanner';
-import WinstonLogger from '@rosen-bridge/winston-logger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { ErgoScanner } from '@rosen-bridge/scanner';
+import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 
 import config from '../../configs';
 import {
@@ -13,8 +14,8 @@ import eventTriggerService from '../../event-trigger/event-trigger-service';
 import observationService from '../../observation/observation-service';
 import { startScanner } from '../../scanner/scanner-utils';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
-const scannerLogger = WinstonLogger.getInstance().getLogger(
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
   ERGO_SCANNER_LOGGER_NAME,
 );
 

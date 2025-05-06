@@ -5,7 +5,7 @@ import type {
 } from '@rosen-network/evm';
 
 export type WalletConfig = {
-  getTokenMap(): Promise<TokenMap>;
+  getTokenMap: () => Promise<TokenMap>;
   generateLockData: typeof generateLockData;
   generateTxParameters: ReturnType<typeof generateTxParameters>;
 };

@@ -106,9 +106,9 @@ export const lightThemeOptions: ThemeOptions = {
       dark: '#116044',
     },
     info: {
-      main: '#42559E',
-      light: '#D9DDEC',
-      dark: '#28335F',
+      main: '#2C70B5',
+      light: '#C0D6ED',
+      dark: '#071D33',
     },
   },
   shape: {
@@ -384,6 +384,11 @@ export const darkThemeOptions: ThemeOptions = {
       dark: '#C48D7C',
       contrastText: '#000000',
     },
+    text: {
+      primary: '#FFFFFFDE',
+      secondary: '#FFFFFF99',
+      disabled: '#FFFFFF61',
+    },
     background: {
       paper: '#0D1120',
       default: '#070810',
@@ -399,21 +404,25 @@ export const darkThemeOptions: ThemeOptions = {
       main: '#C04343',
       light: '#331313',
       dark: '#DEADAD',
+      contrastText: '#000',
     },
     warning: {
       main: '#BF783E',
       light: '#331E0D',
       dark: '#CEB199',
+      contrastText: '#000',
     },
     success: {
       main: '#2B7D60',
       light: '#09261C',
       dark: '#A1D7C4',
+      contrastText: '#000',
     },
     info: {
       main: '#3E70A3',
       light: '#16385A',
       dark: '#A3BFDC',
+      contrastText: '#000',
     },
   },
 };

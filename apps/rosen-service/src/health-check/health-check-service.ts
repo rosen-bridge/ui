@@ -1,3 +1,4 @@
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import { HealthCheck } from '@rosen-bridge/health-check';
 import {
@@ -6,21 +7,17 @@ import {
   BitcoinRPCScannerHealthCheck,
   EvmRPCScannerHealthCheck,
 } from '@rosen-bridge/scanner-sync-check';
-import WinstonLogger from '@rosen-bridge/winston-logger/dist/WinstonLogger';
-import { NETWORKS } from "@rosen-ui/constants";
+import { NETWORKS } from '@rosen-ui/constants';
+
 import config from '../configs';
-import {
-  BINANCE_BLOCK_TIME,
-  ETHEREUM_BLOCK_TIME,
-} from '../constants';
+import { BINANCE_BLOCK_TIME, ETHEREUM_BLOCK_TIME } from '../constants';
 import { startBinanceScanner } from '../scanner/chains/binance';
 import { startCardanoScanner } from '../scanner/chains/cardano';
 import { startErgoScanner } from '../scanner/chains/ergo';
 import { startEthereumScanner } from '../scanner/chains/ethereum';
-
 import { getLastSavedBlock } from './health-check-utils';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 /**
  * Get notify and notificationConfig if discord is configured
@@ -85,6 +82,17 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
         config.bitcoin.rpcPassword,
       ),
       label: 'bitcoin',
+    },
+    {
+      instance: new BitcoinRPCScannerHealthCheck(
+        () => getLastSavedBlock(startBinanceScanner.name),
+        config.healthCheck.dogeScannerWarnDiff,
+        config.healthCheck.dogeScannerCriticalDiff,
+        config.doge.rpcUrl,
+        config.doge.rpcUsername,
+        config.doge.rpcPassword,
+      ),
+      label: 'doge',
     },
     {
       instance: new EvmRPCScannerHealthCheck(

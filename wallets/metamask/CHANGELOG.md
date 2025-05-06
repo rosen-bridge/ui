@@ -1,5 +1,12 @@
 # @rosen-ui/metamask-wallet
 
+## 1.4.1
+
+### Patch Changes
+
+- Refactor methods to arrow functions for improved code consistency.
+- Updated dependency @rosen-bridge/icons@1.4.0
+
 ## 1.4.0
 
 ### Minor Changes

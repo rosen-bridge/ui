@@ -1,10 +1,11 @@
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import config from '../configs';
 import AppError from '../errors/AppError';
 
 try {
-  WinstonLogger.init(config.logs);
+  CallbackLoggerFactory.init(new WinstonLogger(config.logs));
 } catch (error) {
   throw new AppError(
     `Cannot initialize logger due to error: ${error}`,

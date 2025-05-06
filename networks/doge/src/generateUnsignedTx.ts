@@ -94,7 +94,6 @@ export const generateUnsignedTx =
         hash: box.txId,
         index: box.index,
         nonWitnessUtxo: Buffer.from(txToHex[box.txId], 'hex'),
-        redeemScript: fromAddressScript,
       });
     }
 
