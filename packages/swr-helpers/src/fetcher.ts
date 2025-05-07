@@ -4,7 +4,7 @@ import axios from 'axios';
  * FIXME: Remove this in favor of a dynamic baseURL
  * local:ergo/rosen-bridge/ui#43
  */
-axios.defaults.baseURL = '/api';
+axios.defaults.baseURL = process.env.API_BASE_URL || '/api';
 
 /**
  * wrap `axios.get`, returning data field of response
