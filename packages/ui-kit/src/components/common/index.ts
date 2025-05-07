@@ -19,6 +19,7 @@ export * from './NavigationBar';
 export * from './NavigationButton';
 export * from './Version';
 export * from './QrCodeModal';
+export * from './SelectedAsset';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
 export * from './TokensCard';

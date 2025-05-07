@@ -17,6 +17,7 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  SelectedAsset,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -25,23 +26,12 @@ import {
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenMap,
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * bridge form container comp
