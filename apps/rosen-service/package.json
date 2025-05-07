@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-service",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "private": true,
   "license": "GPL-3.0",
   "author": "Rosen Team",
@@ -32,7 +32,7 @@
     "@rosen-bridge/tokens": "^3.1.0",
     "@rosen-bridge/watcher-data-extractor": "^12.1.0",
     "@rosen-bridge/winston-logger": "^1.0.3",
-    "@rosen-ui/asset-calculator": "^2.1.4",
+    "@rosen-ui/asset-calculator": "^2.1.5",
     "@rosen-ui/constants": "^0.3.0",
     "axios-rate-limit": "^1.4.0",
     "config": "^3.3.7"

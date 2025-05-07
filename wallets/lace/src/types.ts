@@ -1,14 +1,12 @@
-import { TokenMap } from '@rosen-bridge/tokens';
 import type {
   generateUnsignedTx,
   decodeWasmValue,
   generateLockAuxiliaryData,
   setTxWitnessSet,
 } from '@rosen-network/cardano';
-import { CipWalletApi } from '@rosen-ui/wallet-api';
+import { CipWalletApi, WalletConfig } from '@rosen-ui/wallet-api';
 
-export type WalletConfig = {
-  getTokenMap: () => Promise<TokenMap>;
+export type LaceWalletConfig = WalletConfig & {
   decodeWasmValue: typeof decodeWasmValue;
   generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;

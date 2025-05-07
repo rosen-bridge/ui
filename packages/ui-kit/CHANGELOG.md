@@ -1,5 +1,20 @@
 # @rosen-bridge/ui-kit
 
+## 1.11.0
+
+### Minor Changes
+
+- Develop the SmartSearch component with a history feature and implement the Sort component
+
+### Patch Changes
+
+- A new copy button has been integrated into toast alerts for errors. When an issue occurs, users can now easily copy additional error details for troubleshooting and sharing.
+- Fix main component border radius
+- Fixes ui-kit theme options and connects guard theme to it
+- Improve readability by adding visual contrast between numbers and decimals.
+- Fixes scrolled appbar in mobile view
+- Updated dependency @rosen-bridge/icons@1.4.0
+
 ## 1.10.1
 
 ### Patch Changes

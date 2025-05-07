@@ -58,18 +58,15 @@ export const HealthParamCard = ({
   const colors = useMemo(() => {
     if (lastCheck) {
       return {
-        cardBackground: `${color}.${theme.palette.mode}`,
-        cardColor: `${color}.${
-          theme.palette.mode === 'light' ? 'dark' : 'light'
-        }`,
+        cardBackground: `${color}.light`,
+        cardColor: `${color}.dark`,
         button: color,
         alertBackground: `${color}.main`,
         alert: `${color}.light`,
       };
     } else {
       return {
-        cardBackground:
-          theme.palette.grey[theme.palette.mode == 'light' ? 200 : 800],
+        cardBackground: theme.palette.neutral.light,
         cardColor: 'inherit',
         button: 'inherit',
         alertBackground: 'inherit',

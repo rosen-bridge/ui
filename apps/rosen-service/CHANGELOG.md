@@ -1,5 +1,18 @@
 # @rosen-bridge/rosen-service
 
+## 3.2.0
+
+### Minor Changes
+
+- Add Doge related implementations
+- Update service to use CallbackLogger instead of WinstonLogger
+
+### Patch Changes
+
+- Add patch-package and add related patch into the DogeRpcNetwork
+- Update rosen dependencies
+- Updated dependency @rosen-ui/asset-calculator@2.1.5
+
 ## 3.1.0
 
 ### Minor Changes

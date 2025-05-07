@@ -25,7 +25,7 @@ import { ApiInfoResponse } from '@/_types/api';
 import { InfoWidgetCard } from './InfoWidgetCard';
 
 const InfoWidgets = () => {
-  const icon = useIcon('light');
+  const icon = useIcon('theme');
 
   const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
     '/info',
