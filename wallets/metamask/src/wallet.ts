@@ -3,7 +3,7 @@ import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
   ChainNotAddedError,
@@ -20,9 +20,9 @@ import {
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
-import { WalletConfig } from './types';
+import { MetaMaskWalletConfig } from './types';
 
-export class MetaMaskWallet extends Wallet {
+export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   icon = MetaMaskIcon;
 
   name = 'MetaMask';
@@ -33,10 +33,6 @@ export class MetaMaskWallet extends Wallet {
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
-
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',
@@ -44,7 +40,7 @@ export class MetaMaskWallet extends Wallet {
     enableAnalytics: false,
   });
 
-  private get currentChain() {
+  get currentChain(): Network {
     const chain = Object.values(NETWORKS).find(
       (network) => network.id == this.provider.chainId,
     )?.key;
@@ -100,10 +96,10 @@ export class MetaMaskWallet extends Wallet {
     return account;
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
+  getBalanceRaw = async (
+    token: RosenChainToken,
+  ): Promise<string | undefined> => {
     const address = await this.getAddress();
-
-    const tokenMap = await this.config.getTokenMap();
 
     let amount;
 
@@ -124,15 +120,7 @@ export class MetaMaskWallet extends Wallet {
       amount = await contract.balanceOf(address);
     }
 
-    if (!amount) return 0n;
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      BigInt(amount),
-      this.currentChain,
-    ).amount;
-
-    return wrappedAmount;
+    return amount;
   };
 
   isAvailable = (): boolean => {

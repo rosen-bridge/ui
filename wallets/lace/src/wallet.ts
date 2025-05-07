@@ -1,7 +1,7 @@
 import { Lace as LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
   AddressRetrievalError,
@@ -13,9 +13,9 @@ import {
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { LaceWalletConfig } from './types';
 
-export class LaceWallet extends Wallet {
+export class LaceWallet extends Wallet<LaceWalletConfig> {
   icon = LaceIcon;
 
   name = 'Lace';
@@ -24,11 +24,9 @@ export class LaceWallet extends Wallet {
 
   link = 'https://www.lace.io/';
 
-  supportedChains = [NETWORKS.cardano.key];
+  currentChain: Network = NETWORKS.cardano.key;
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
+  supportedChains: Network[] = [NETWORKS.cardano.key];
 
   private get api() {
     return window.cardano.lace;
@@ -55,9 +53,9 @@ export class LaceWallet extends Wallet {
     }
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
-    this.requireAvailable();
-
+  getBalanceRaw = async (
+    token: RosenChainToken,
+  ): Promise<bigint | undefined> => {
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
@@ -71,17 +69,7 @@ export class LaceWallet extends Wallet {
           !token.extra.policyId),
     );
 
-    if (!amount) return 0n;
-
-    const tokenMap = await this.config.getTokenMap();
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      amount.quantity,
-      NETWORKS.cardano.key,
-    ).amount;
-
-    return wrappedAmount;
+    return amount?.quantity;
   };
 
   isAvailable = (): boolean => {

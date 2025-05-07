@@ -1,13 +1,12 @@
-import { TokenMap } from '@rosen-bridge/tokens';
 import type {
   generateUnsignedTx,
   generateOpReturnData,
   getAddressBalance,
   submitTransaction,
 } from '@rosen-network/bitcoin';
+import { WalletConfig } from '@rosen-ui/wallet-api';
 
-export type WalletConfig = {
-  getTokenMap: () => Promise<TokenMap>;
+export type OKXWalletConfig = WalletConfig & {
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   submitTransaction: typeof submitTransaction;
