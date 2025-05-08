@@ -256,6 +256,32 @@ export const mockAggregatedStatusOld: AggregatedStatus = {
   tx: undefined,
 };
 
+export const eventStatusFromAggregateDict: Record<
+  AggregateEventStatus,
+  EventStatus
+> = {
+  [AggregateEventStatus.finished]: EventStatus.completed,
+  [AggregateEventStatus.inReward]: EventStatus.inReward,
+  [AggregateEventStatus.pendingReward]: EventStatus.pendingReward,
+  [AggregateEventStatus.inPayment]: EventStatus.inPayment,
+  [AggregateEventStatus.rejected]: EventStatus.rejected,
+  [AggregateEventStatus.timeout]: EventStatus.timeout,
+  [AggregateEventStatus.reachedLimit]: EventStatus.reachedLimit,
+  [AggregateEventStatus.paymentWaiting]: EventStatus.paymentWaiting,
+  [AggregateEventStatus.pendingPayment]: EventStatus.pendingPayment,
+  [AggregateEventStatus.rewardWaiting]: EventStatus.rewardWaiting,
+  [AggregateEventStatus.waitingForConfirmation]: EventStatus.rewardWaiting,
+};
+
+export const txStatusFromAggregateDict: Record<AggregateTxStatus, TxStatus> = {
+  [AggregateTxStatus.completed]: TxStatus.completed,
+  [AggregateTxStatus.invalid]: TxStatus.invalid,
+  [AggregateTxStatus.sent]: TxStatus.sent,
+  [AggregateTxStatus.signed]: TxStatus.signed,
+  [AggregateTxStatus.inSign]: TxStatus.approved,
+  [AggregateTxStatus.waitingForConfirmation]: TxStatus.approved,
+};
+
 export const mockEventStatusThresholds: Threshold<AggregateEventStatus> = [
   { status: AggregateEventStatus.finished, count: 6 },
   { status: AggregateEventStatus.inReward, count: 3 },

@@ -8,14 +8,14 @@ import {
 import { TxEntity } from '../src/db/entities/TxEntity';
 import { Utils } from '../src/utils';
 import {
+  eventStatusFromAggregateDict,
   guardPk0,
-  guardPk1,
-  guardPk2,
-  guardPk3,
   id0,
   mockEventStatusThresholds,
   mockTxStatusThresholds,
+  txStatusFromAggregateDict,
 } from './testData';
+import TestUtils from './testUtils';
 
 describe('Utils', () => {
   describe('calcAggregatedStatus', () => {
@@ -84,64 +84,102 @@ describe('Utils', () => {
     });
 
     /**
-     * @target calcAggregatedStatus should return the correct aggregated status
+     * @target calcAggregatedStatus should return the correct aggregated status for each of the thresholds
      * @dependencies
      * @scenario
-     * - call calcAggregatedStatus with array of statuses that won't result in waitingForConfirmation
+     * - define a mock empty statuses array
+     * - for each of the event statuses thresholds
+     * - to trigger the current status, add it `threshold.count` times to the statuses array
+     * - call calcAggregatedStatus using statuses array
      * @expected
-     * - should have returned the correct value
+     * - on each call, calcAggregatedStatus should have returned the matching aggregated status with threshold.status
      */
-    it('should return the correct aggregated status', async () => {
+    it('should return the correct aggregated status for each of the thresholds', async () => {
       // arrange
-      const tx0 = { txId: id0, chain: 'c1' } as unknown as TxEntity;
-      const statuses: GuardStatusEntity[] = [
-        {
-          eventId: '',
-          guardPk: guardPk3,
-          updatedAt: 0,
-          status: EventStatus.pendingPayment,
-          tx: null,
-          txStatus: null,
-        },
-        {
-          eventId: '',
-          guardPk: guardPk0,
-          updatedAt: 0,
-          status: EventStatus.inReward,
-          tx: tx0,
-          txStatus: TxStatus.signed,
-        },
-        {
-          eventId: '',
-          guardPk: guardPk1,
-          updatedAt: 0,
-          status: EventStatus.inReward,
-          tx: tx0,
-          txStatus: TxStatus.signed,
-        },
-        {
-          eventId: '',
-          guardPk: guardPk2,
-          updatedAt: 0,
-          status: EventStatus.inReward,
-          tx: tx0,
-          txStatus: TxStatus.signed,
-        },
-      ];
+      const statuses: GuardStatusEntity[] = [];
 
-      // act
-      const result = Utils.calcAggregatedStatus(
-        statuses,
-        mockEventStatusThresholds,
-        mockTxStatusThresholds,
-      );
+      for (let i = 0; i < mockEventStatusThresholds.length; i += 1) {
+        // get the next aggregated status from the thresholds array
+        // and push multiple status records to statuses array
+        // in order to trigger the selected aggregated status
+        for (let j = 0; j < mockEventStatusThresholds[i].count; j += 1) {
+          const aggregatedEventStatus = mockEventStatusThresholds[i].status;
+          const eventStatus =
+            eventStatusFromAggregateDict[aggregatedEventStatus];
 
-      // assert
-      expect(result).toEqual({
-        status: AggregateEventStatus.inReward,
-        txStatus: AggregateTxStatus.signed,
-        tx: tx0,
-      });
+          statuses.push(TestUtils.makeStatus(statuses.length, eventStatus));
+        }
+
+        // act
+        const result = Utils.calcAggregatedStatus(
+          statuses,
+          mockEventStatusThresholds,
+          mockTxStatusThresholds,
+        );
+
+        // assert
+        expect(result).toEqual({
+          status: mockEventStatusThresholds[i].status,
+          txStatus: AggregateTxStatus.waitingForConfirmation,
+          tx: undefined,
+        });
+
+        // pop 1 status so that count of last status be below threshold
+        // in order to trigger and check the next threshold
+        statuses.pop();
+      }
+    });
+
+    /**
+     * @target calcAggregatedStatus should return the correct aggregated tx status for each of the tx thresholds
+     * @dependencies
+     * @scenario
+     * - define a mock empty statuses array
+     * - for each of the tx statuses thresholds
+     * - to trigger the current status, add it `threshold.count` times to the statuses array
+     * - call calcAggregatedStatus using statuses array
+     * @expected
+     * - on each call, calcAggregatedStatus should have returned the matching aggregated tx status with threshold.status
+     */
+    it('should return the correct aggregated tx status for each of the tx thresholds', async () => {
+      // arrange
+      const statuses: GuardStatusEntity[] = [];
+
+      for (let i = 0; i < mockTxStatusThresholds.length; i += 1) {
+        // get the next aggregated status from the thresholds array
+        // and push multiple status records to statuses array
+        // in order to trigger the selected aggregated status
+        for (let j = 0; j < mockTxStatusThresholds[i].count; j += 1) {
+          const aggregatedTxStatus = mockTxStatusThresholds[i].status;
+          const txStatus = txStatusFromAggregateDict[aggregatedTxStatus];
+
+          statuses.push(
+            TestUtils.makeStatus(
+              statuses.length,
+              EventStatus.inPayment,
+              txStatus,
+            ),
+          );
+        }
+
+        // act
+        const result = Utils.calcAggregatedStatus(
+          statuses,
+          mockEventStatusThresholds,
+          mockTxStatusThresholds,
+        );
+
+        // assert
+        expect(result).toEqual({
+          status: EventStatus.inPayment,
+          txStatus: mockTxStatusThresholds[i].status,
+          tx: TestUtils.tx0,
+        });
+
+        // pop 1 status so that count of last status be below threshold
+        // in order to trigger and check the next threshold
+        statuses.pop();
+      }
     });
   });
 

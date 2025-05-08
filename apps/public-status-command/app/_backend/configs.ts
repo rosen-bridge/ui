@@ -81,6 +81,7 @@ export const configs = {
     { status: AggregateEventStatus.timeout, count: 5 },
     { status: AggregateEventStatus.reachedLimit, count: 5 },
     { status: AggregateEventStatus.paymentWaiting, count: 5 },
+    { status: AggregateEventStatus.rewardWaiting, count: 5 },
     { status: AggregateEventStatus.pendingPayment, count: 3 },
   ],
   txStatusThresholds: getThresholdFromEnv<AggregateTxStatus>(
