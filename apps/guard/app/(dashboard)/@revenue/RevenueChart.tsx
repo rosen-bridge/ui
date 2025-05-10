@@ -65,16 +65,14 @@ interface RevenueChartProps {
 export const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const theme = useTheme();
 
-  const reversedData = useMemo(
-    () =>
-      data
-        .map((innerData) => ({
-          ...innerData,
-          data: innerData.data.toReversed(),
-        }))
-        .toReversed(),
-    [data],
-  );
+  const slots = useMemo(() => {
+    return data
+      .map((token) => token.data)
+      .flat()
+      .map((item) => +item.label)
+      .filter((item, index, items) => items.indexOf(item) == index)
+      .sort((a, b) => a - b);
+  }, [data]);
 
   const apexChartOptions = useMemo(
     () => ({
@@ -82,15 +80,8 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       xaxis: {
         ...baseChartOptions.xaxis,
         categories:
-          reversedData[0]?.data.map((datum) =>
-            moment(+datum.label).format(getDateFormat(period)),
-          ) ?? [],
-      },
-      yaxis: {
-        labels: {
-          formatter: (label: number) =>
-            `${roundToPrecision(label, reversedData[0]?.title?.decimals || 0)}`,
-        },
+          slots.map((slot) => moment(+slot).format(getDateFormat(period))) ??
+          [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -114,18 +105,23 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
               theme.palette.error.light,
             ],
     }),
-    [reversedData, period, theme],
+    [period, slots, theme],
   );
 
   const apexChartSeries = useMemo(
     () =>
-      reversedData.map((tokenData) => ({
-        name: tokenData.title.name,
-        data: tokenData.data.map(
-          (datum) => +getDecimalString(datum.amount, tokenData.title.decimals),
+      data.map((token) => ({
+        name: token.title.name,
+        data: slots.map(
+          (slot) =>
+            +getDecimalString(
+              token.data.find((item) => item.label == slot.toString())
+                ?.amount || '0',
+              token.title.decimals,
+            ),
         ),
       })),
-    [reversedData],
+    [data, slots],
   );
 
   return (
