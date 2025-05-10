@@ -119,14 +119,20 @@ export const App = ({ children, sideBar, theme, toolbar }: AppProps) => {
               sideBar
             )}
             <Main>
-              {!isMobile && (
-                <div
-                  style={{ position: 'relative', zIndex: '1', float: 'right' }}
-                >
-                  {toolbar}
-                </div>
-              )}
-              {children}
+              <Paper>
+                {!isMobile && (
+                  <div
+                    style={{
+                      position: 'relative',
+                      zIndex: '1',
+                      float: 'right',
+                    }}
+                  >
+                    {toolbar}
+                  </div>
+                )}
+                {children}
+              </Paper>
             </Main>
             <AppSnackbar />
           </Root>
