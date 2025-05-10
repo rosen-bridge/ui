@@ -38,7 +38,7 @@ export class Utils {
   ): AggregatedStatus => {
     const aggregatedStatus: AggregatedStatus = {
       status: AggregateEventStatus.waitingForConfirmation,
-      txStatus: AggregateTxStatus.waitingForConfirmation,
+      txStatus: undefined,
       tx: undefined,
     };
 

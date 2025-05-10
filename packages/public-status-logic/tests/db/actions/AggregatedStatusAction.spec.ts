@@ -103,7 +103,7 @@ describe('AggregatedStatusAction', () => {
         record.eventId,
         record.updatedAt,
         record.status,
-        record.txStatus,
+        record.txStatus ?? undefined,
         record.tx ?? undefined,
       );
       await AggregatedStatusAction.getInstance().upsertOne(
@@ -111,7 +111,7 @@ describe('AggregatedStatusAction', () => {
         record2.eventId,
         record2.updatedAt,
         record2.status,
-        record2.txStatus,
+        record2.txStatus ?? undefined,
         record2.tx ?? undefined,
       );
 
@@ -146,7 +146,7 @@ describe('AggregatedStatusAction', () => {
         record.eventId,
         record.updatedAt + 5,
         AggregateEventStatus.pendingPayment,
-        record.txStatus,
+        undefined,
         undefined,
       );
 
@@ -158,7 +158,7 @@ describe('AggregatedStatusAction', () => {
             eventId: record.eventId,
             updatedAt: record.updatedAt + 5,
             status: AggregateEventStatus.pendingPayment,
-            txStatus: record.txStatus,
+            txStatus: null,
             tx: null,
           },
         ],
@@ -191,7 +191,7 @@ describe('AggregatedStatusAction', () => {
         record.eventId,
         record.updatedAt + 5,
         record.status,
-        record.txStatus,
+        record.txStatus ?? undefined,
         record.tx ?? undefined,
       );
 

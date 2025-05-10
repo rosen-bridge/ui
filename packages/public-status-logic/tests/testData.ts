@@ -30,6 +30,8 @@ export const guardPk2 =
 export const guardPk3 =
   '03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c8';
 
+export const tx0 = { txId: id0, chain: 'c1' } as unknown as TxEntity;
+
 export const mockAggregatedStatusChangedRecords: Omit<
   AggregatedStatusChangedEntity,
   'id'
@@ -38,7 +40,7 @@ export const mockAggregatedStatusChangedRecords: Omit<
     eventId: id0,
     insertedAt: 1000,
     status: AggregateEventStatus.pendingPayment,
-    txStatus: AggregateTxStatus.waitingForConfirmation,
+    txStatus: null,
     tx: null,
   },
   {
@@ -52,14 +54,14 @@ export const mockAggregatedStatusChangedRecords: Omit<
     eventId: id1,
     insertedAt: 1010,
     status: AggregateEventStatus.pendingPayment,
-    txStatus: AggregateTxStatus.waitingForConfirmation,
+    txStatus: null,
     tx: null,
   },
   {
     eventId: id2,
     insertedAt: 1001,
     status: AggregateEventStatus.timeout,
-    txStatus: AggregateTxStatus.waitingForConfirmation,
+    txStatus: null,
     tx: null,
   },
 ];
@@ -77,14 +79,14 @@ export const mockAggregatedStatusRecords: Omit<AggregatedStatusEntity, 'id'>[] =
       eventId: id1,
       updatedAt: 1010,
       status: AggregateEventStatus.pendingPayment,
-      txStatus: AggregateTxStatus.waitingForConfirmation,
+      txStatus: null,
       tx: null,
     },
     {
       eventId: id2,
       updatedAt: 1001,
       status: AggregateEventStatus.timeout,
-      txStatus: AggregateTxStatus.waitingForConfirmation,
+      txStatus: null,
       tx: null,
     },
   ];
@@ -246,7 +248,7 @@ export const mockNewGuardStatusWithTx = {
 // mocks for aggregated status objects returned from Utils.calcAggregatedStatus
 export const mockAggregatedStatus: AggregatedStatus = {
   status: AggregateEventStatus.finished,
-  txStatus: AggregateTxStatus.waitingForConfirmation,
+  txStatus: undefined,
   tx: { txId: mockTxDTO.txId, chain: mockTxDTO.chain },
 };
 
@@ -270,8 +272,7 @@ export const eventStatusFromAggregateDict: Record<
   [AggregateEventStatus.paymentWaiting]: EventStatus.paymentWaiting,
   [AggregateEventStatus.pendingPayment]: EventStatus.pendingPayment,
   [AggregateEventStatus.rewardWaiting]: EventStatus.rewardWaiting,
-  [AggregateEventStatus.waitingForConfirmation]: EventStatus.rewardWaiting,
-};
+} as Record<AggregateEventStatus, EventStatus>;
 
 export const txStatusFromAggregateDict: Record<AggregateTxStatus, TxStatus> = {
   [AggregateTxStatus.completed]: TxStatus.completed,
@@ -279,8 +280,7 @@ export const txStatusFromAggregateDict: Record<AggregateTxStatus, TxStatus> = {
   [AggregateTxStatus.sent]: TxStatus.sent,
   [AggregateTxStatus.signed]: TxStatus.signed,
   [AggregateTxStatus.inSign]: TxStatus.approved,
-  [AggregateTxStatus.waitingForConfirmation]: TxStatus.approved,
-};
+} as Record<AggregateTxStatus, TxStatus>;
 
 export const mockEventStatusThresholds: Threshold<AggregateEventStatus> = [
   { status: AggregateEventStatus.finished, count: 6 },

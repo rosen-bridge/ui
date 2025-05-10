@@ -1,10 +1,5 @@
 import { GuardStatusEntity } from '../src';
-import {
-  AggregateEventStatus,
-  AggregateTxStatus,
-  EventStatus,
-  TxStatus,
-} from '../src/constants';
+import { AggregateEventStatus, EventStatus, TxStatus } from '../src/constants';
 import { TxEntity } from '../src/db/entities/TxEntity';
 import { Utils } from '../src/utils';
 import {
@@ -13,6 +8,7 @@ import {
   id0,
   mockEventStatusThresholds,
   mockTxStatusThresholds,
+  tx0,
   txStatusFromAggregateDict,
 } from './testData';
 import TestUtils from './testUtils';
@@ -75,7 +71,7 @@ describe('Utils', () => {
       // assert
       const waitingForConfirmationObj = {
         status: AggregateEventStatus.waitingForConfirmation,
-        txStatus: AggregateTxStatus.waitingForConfirmation,
+        txStatus: undefined,
         tx: undefined,
       };
       expect(result0).toEqual(waitingForConfirmationObj);
@@ -120,7 +116,7 @@ describe('Utils', () => {
         // assert
         expect(result).toEqual({
           status: mockEventStatusThresholds[i].status,
-          txStatus: AggregateTxStatus.waitingForConfirmation,
+          txStatus: undefined,
           tx: undefined,
         });
 
@@ -173,7 +169,7 @@ describe('Utils', () => {
         expect(result).toEqual({
           status: EventStatus.inPayment,
           txStatus: mockTxStatusThresholds[i].status,
-          tx: TestUtils.tx0,
+          tx: tx0,
         });
 
         // pop 1 status so that count of last status be below threshold

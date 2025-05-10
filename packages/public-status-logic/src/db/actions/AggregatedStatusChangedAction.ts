@@ -78,7 +78,7 @@ class AggregatedStatusChangedAction {
     eventId: string,
     insertedAt: number,
     status: AggregateEventStatus,
-    txStatus: AggregateTxStatus,
+    txStatus?: AggregateTxStatus,
     tx?: {
       txId: string;
       chain: string;
@@ -100,7 +100,7 @@ class AggregatedStatusChangedAction {
       eventId,
       insertedAt,
       status,
-      txStatus,
+      txStatus: txStatus ?? null,
       tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
     });
   };

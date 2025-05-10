@@ -13,7 +13,7 @@ export type Threshold<T> = {
  */
 export type AggregatedStatus = {
   status: AggregateEventStatus;
-  txStatus: AggregateTxStatus;
+  txStatus?: AggregateTxStatus;
   tx?: {
     txId: string;
     chain: string;

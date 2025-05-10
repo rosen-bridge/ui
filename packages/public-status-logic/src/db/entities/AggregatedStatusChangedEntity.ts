@@ -26,8 +26,8 @@ export class AggregatedStatusChangedEntity {
   @Column('varchar')
   status: AggregateEventStatus;
 
-  @Column('varchar')
-  txStatus: AggregateTxStatus;
+  @Column('varchar', { nullable: true })
+  txStatus: AggregateTxStatus | null;
 
   @ManyToOne(() => TxEntity, (tx) => tx.aggregatedStatusChangedRecords, {
     cascade: false,

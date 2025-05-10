@@ -104,7 +104,7 @@ describe('AggregatedStatusChangedAction', () => {
         record.eventId,
         record.insertedAt,
         record.status,
-        record.txStatus,
+        record.txStatus ?? undefined,
         record.tx ?? undefined,
       );
 
@@ -138,7 +138,7 @@ describe('AggregatedStatusChangedAction', () => {
         record.eventId,
         record.insertedAt,
         AggregateEventStatus.paymentWaiting,
-        record.txStatus,
+        record.txStatus ?? undefined,
         record.tx ?? undefined,
       );
 
@@ -177,7 +177,7 @@ describe('AggregatedStatusChangedAction', () => {
           record.eventId,
           record.insertedAt + 5,
           record.status,
-          record.txStatus,
+          record.txStatus ?? undefined,
           record.tx ?? undefined,
         );
       }).rejects.toThrowError('aggregated_status_not_changed');

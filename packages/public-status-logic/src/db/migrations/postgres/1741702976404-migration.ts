@@ -9,7 +9,7 @@ export class Migration1741702976404 implements MigrationInterface {
                 "eventId" character varying NOT NULL,
                 "updatedAt" integer NOT NULL,
                 "status" character varying NOT NULL,
-                "txStatus" character varying NOT NULL,
+                "txStatus" character varying,
                 "txId" character varying,
                 "txChain" character varying,
                 CONSTRAINT "PK_9517f829114915e69d8abaa4f57" PRIMARY KEY ("eventId")
@@ -65,7 +65,7 @@ export class Migration1741702976404 implements MigrationInterface {
                 "eventId" character varying NOT NULL,
                 "insertedAt" integer NOT NULL,
                 "status" character varying NOT NULL,
-                "txStatus" character varying NOT NULL,
+                "txStatus" character varying,
                 "txId" character varying,
                 "txChain" character varying,
                 CONSTRAINT "PK_e259cd03aaeea13f57bff471ab6" PRIMARY KEY ("id")

@@ -20,7 +20,7 @@ export class Migration1745413346225 implements MigrationInterface {
                 "eventId" varchar PRIMARY KEY NOT NULL,
                 "updatedAt" integer NOT NULL,
                 "status" varchar NOT NULL,
-                "txStatus" varchar NOT NULL,
+                "txStatus" varchar,
                 "txId" varchar,
                 "txChain" varchar,
                 CONSTRAINT "FK_b52da2f98009c4747f449a402b3" FOREIGN KEY ("txId", "txChain") REFERENCES "tx_entity" ("txId", "chain") ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -33,7 +33,7 @@ export class Migration1745413346225 implements MigrationInterface {
                 "eventId" varchar NOT NULL,
                 "insertedAt" integer NOT NULL,
                 "status" varchar NOT NULL,
-                "txStatus" varchar NOT NULL,
+                "txStatus" varchar,
                 "txId" varchar,
                 "txChain" varchar,
                 CONSTRAINT "FK_2dc2218d76c16a68ef9de380fb1" FOREIGN KEY ("txId", "txChain") REFERENCES "tx_entity" ("txId", "chain") ON DELETE NO ACTION ON UPDATE NO ACTION

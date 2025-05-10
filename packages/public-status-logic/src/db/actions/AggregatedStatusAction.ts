@@ -75,7 +75,7 @@ class AggregatedStatusAction {
     eventId: string,
     updatedAt: number,
     status: AggregateEventStatus,
-    txStatus: AggregateTxStatus,
+    txStatus?: AggregateTxStatus,
     tx?: {
       txId: string;
       chain: string;
@@ -99,7 +99,7 @@ class AggregatedStatusAction {
           eventId,
           updatedAt,
           status,
-          txStatus,
+          txStatus: txStatus ?? null,
           tx: tx ? { txId: tx.txId, chain: tx.chain } : null,
         },
       ],

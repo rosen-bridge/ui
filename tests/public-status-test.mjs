@@ -248,7 +248,7 @@ const testValidRequest = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt >= timestamp);
@@ -261,7 +261,7 @@ const testValidRequest = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -305,7 +305,7 @@ const testValidRequest2 = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt >= timestamp);
@@ -319,7 +319,7 @@ const testValidRequest2 = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -391,7 +391,7 @@ const testDuplicateRequest = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt < timestamp); // <
@@ -404,7 +404,7 @@ const testDuplicateRequest = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -451,7 +451,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt >= timestamp);
@@ -464,7 +464,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -506,7 +506,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt < timestamp);
@@ -519,7 +519,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -569,7 +569,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'pending-payment',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt >= timestamp);
@@ -583,13 +583,13 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'pending-payment',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[1], {
     insertedAt: response.data[1].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -649,7 +649,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt >= timestamp);
@@ -664,19 +664,19 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[1], {
     insertedAt: response.data[1].insertedAt,
     status: 'pending-payment',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[2], {
     insertedAt: response.data[2].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -743,7 +743,7 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[eventId], {
     updatedAt: response.data[eventId].updatedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assert(response.data[eventId].updatedAt < timestamp);
@@ -758,19 +758,19 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: response.data[0].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[1], {
     insertedAt: response.data[1].insertedAt,
     status: 'pending-payment',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[2], {
     insertedAt: response.data[2].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -866,19 +866,19 @@ const testAggregateStatusChange = async () => {
   assertObjectsMatch(response.data[1], {
     insertedAt: response.data[1].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[2], {
     insertedAt: response.data[2].insertedAt,
     status: 'pending-payment',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
   assertObjectsMatch(response.data[3], {
     insertedAt: response.data[3].insertedAt,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 
@@ -967,7 +967,7 @@ const testGetValidEventTimeline = async () => {
   assertObjectsMatch(response.data[0], {
     insertedAt: validRequest2Timestamp,
     status: 'waiting-for-confirmation',
-    txStatus: 'waiting-for-confirmation',
+    txStatus: null,
     tx: null,
   });
 

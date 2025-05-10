@@ -47,7 +47,6 @@ export enum AggregateTxStatus {
   completed = 'completed',
   sent = 'sent',
   invalid = 'invalid',
-  waitingForConfirmation = 'waiting-for-confirmation',
 }
 
 export const eventStatuses = Object.values(EventStatus);
