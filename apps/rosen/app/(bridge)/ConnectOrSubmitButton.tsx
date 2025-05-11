@@ -28,10 +28,14 @@ import { getTokenNameAndId } from '@/_utils';
 
 interface ConnectOrSubmitButtonProps {
   setChooseWalletsModalOpen: (open: boolean) => void;
+  isTargetAddressEditing: boolean;
+  isAmountEditing?: boolean;
 }
 
 export const ConnectOrSubmitButton = ({
   setChooseWalletsModalOpen,
+  isTargetAddressEditing,
+  isAmountEditing,
 }: ConnectOrSubmitButtonProps) => {
   const [open, setOpen] = useState(false);
 
@@ -100,7 +104,9 @@ export const ConnectOrSubmitButton = ({
       !networkFee ||
       !!errors.amount ||
       !!errors.walletAddress ||
-      isValidating
+      isValidating ||
+      isTargetAddressEditing ||
+      isAmountEditing
     : !sourceValue;
 
   return (
@@ -110,7 +116,7 @@ export const ConnectOrSubmitButton = ({
         color={selectedWallet ? 'success' : 'primary'}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
-        type="submit"
+        type="button"
         disabled={disabled}
         onClick={() => {
           if (selectedWallet) {

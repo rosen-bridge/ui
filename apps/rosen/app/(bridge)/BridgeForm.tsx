@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, ChangeEvent } from 'react';
+import { useCallback, ChangeEvent, useState, useEffect, useRef } from 'react';
 
 import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
@@ -54,7 +54,13 @@ const FormContainer = styled('div')(({ theme }) => ({
 /**
  * renders the bridge main form
  */
-export const BridgeForm = () => {
+export const BridgeForm = ({
+  onAddressEditingChange,
+  onAmountEditingChange,
+}: {
+  onAddressEditingChange?: (isEditing: boolean) => void;
+  onAmountEditingChange?: (isEditing: boolean) => void;
+}) => {
   const {
     reset,
     setValue,
@@ -87,6 +93,8 @@ export const BridgeForm = () => {
   } = useMaxTransfer();
 
   const { selected: selectedWallet } = useWallet();
+
+  const addressInputRef = useRef<HTMLInputElement | null>(null);
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
@@ -149,13 +157,6 @@ export const BridgeForm = () => {
     [reset, sourceField, targetField],
   );
 
-  const handleAmountChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      amountField.onChange(event);
-    },
-    [amountField],
-  );
-
   const handleSelectMax = useCallback(() => {
     setValue('amount', raw, {
       shouldDirty: true,
@@ -163,6 +164,32 @@ export const BridgeForm = () => {
       shouldValidate: true,
     });
   }, [raw, setValue]);
+
+  const handleAddressChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onAddressEditingChange?.(true);
+      addressField.onChange(event);
+    },
+    [addressField, onAddressEditingChange],
+  );
+
+  const handleAddressBlur = useCallback(() => {
+    onAddressEditingChange?.(false);
+    addressField.onBlur();
+  }, [addressField, onAddressEditingChange]);
+
+  const handleAmountChange = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      onAmountEditingChange?.(true);
+      amountField.onChange(event);
+    },
+    [amountField, onAmountEditingChange],
+  );
+
+  const handleAmountBlur = useCallback(() => {
+    onAmountEditingChange?.(false);
+    amountField.onBlur();
+  }, [amountField, onAmountEditingChange]);
 
   return (
     <FormContainer>
@@ -203,7 +230,6 @@ export const BridgeForm = () => {
             InputProps={{ disableUnderline: true }}
             variant="filled"
             {...targetField}
-            // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
             value={targetField.value ?? ''}
             SelectProps={{
               renderValue: renderSelectedNetwork,
@@ -227,6 +253,7 @@ export const BridgeForm = () => {
       </Grid>
       <TextField
         label="Target Address"
+        inputRef={addressInputRef}
         InputProps={
           {
             disableUnderline: true,
@@ -246,6 +273,9 @@ export const BridgeForm = () => {
                         shouldTouch: true,
                         shouldValidate: true,
                       });
+                      setTimeout(() => {
+                        addressInputRef.current?.focus();
+                      }, 0);
                     } catch (err) {
                       console.error('Failed to read clipboard: ', err);
                     }
@@ -272,6 +302,8 @@ export const BridgeForm = () => {
         autoComplete="off"
         {...addressField}
         value={addressField.value ?? ''}
+        onChange={handleAddressChange}
+        onBlur={handleAddressBlur}
       />
       {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
@@ -331,9 +363,10 @@ export const BridgeForm = () => {
         variant="filled"
         {...amountField}
         value={amountField.value ?? ''}
-        onChange={handleAmountChange}
         disabled={!tokenField.value}
         autoComplete="off"
+        onChange={handleAmountChange}
+        onBlur={handleAmountBlur}
       />
     </FormContainer>
   );

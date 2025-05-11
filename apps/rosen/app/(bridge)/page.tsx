@@ -72,6 +72,8 @@ export interface BridgeForm {
  */
 const RosenBridge = () => {
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
+  const [isTargetAddressEditing, setIsTargetAddressEditing] = useState(false);
+  const [isAmountEditing, setIsAmountEditing] = useState(false);
 
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',
@@ -94,7 +96,10 @@ const RosenBridge = () => {
               <MaxTransferProvider>
                 <TransactionFeesProvider>
                   <BridgeContainer>
-                    <BridgeForm />
+                    <BridgeForm
+                      onAddressEditingChange={setIsTargetAddressEditing}
+                      onAmountEditingChange={setIsAmountEditing}
+                    />
                     <BridgeTransaction
                       chooseWalletsModalOpen={chooseWalletsModalOpen}
                       setChooseWalletsModalOpen={setChooseWalletsModalOpen}
@@ -148,6 +153,8 @@ const RosenBridge = () => {
                       >
                         <ConnectOrSubmitButton
                           setChooseWalletsModalOpen={setChooseWalletsModalOpen}
+                          isTargetAddressEditing={isTargetAddressEditing}
+                          isAmountEditing={isAmountEditing}
                         />
                       </Box>
                     </Box>
