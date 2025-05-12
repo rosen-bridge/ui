@@ -4,7 +4,7 @@
 # character limitation for build command
 # This file should be removed when #24 is implemented
 
-echo "building monorepo packages..."
+echo "building monorepo packages....."
 
 npm run build --workspace packages/constants
 npm run build --workspace packages/types
