@@ -11,7 +11,7 @@
     "start": "next start",
     "test": "vitest",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
-    "build:vercel": "cd ../../ && ./build.sh && cd apps/rosen && node ./configs/generate.mjs && npm run build"
+    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build"
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-nodejs": "^13.2.1",
@@ -48,7 +48,6 @@
     "@rosen-ui/wallet-api": "^1.4.0",
     "@upstash/ratelimit": "^1.2.1",
     "@vercel/kv": "^2.0.0",
-    "discord.js": "^14.17.3",
     "joi": "^17.11.0",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
