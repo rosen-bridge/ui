@@ -9,7 +9,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

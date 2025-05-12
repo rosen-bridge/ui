@@ -1,5 +1,4 @@
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
-import { EmbedBuilder, WebhookClient } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
 import * as url from 'url';
@@ -43,38 +42,3 @@ const content = [
 fs.writeFileSync(path.join(__dirname, './index.ts'), content.join('\n'));
 
 contracts.forEach((contract) => fs.rmSync(path.join(__dirname, contract.file)));
-
-if (!!process.env.DISCORD_NOTIFICATION_WEBHOOK_URL) {
-  const webhookClient = new WebhookClient({
-    url: process.env.DISCORD_NOTIFICATION_WEBHOOK_URL,
-  });
-
-  const embed = new EmbedBuilder()
-    .setTitle('🚀 New Deployment Notification')
-    .setColor(0x3498db)
-    .setDescription('A new deployment has been triggered on **Vercel**.')
-    .addFields(
-      {
-        name: '🌍 Branch URL',
-        value: process.env.VERCEL_BRANCH_URL
-          ? `[${process.env.VERCEL_BRANCH_URL}](https://${process.env.VERCEL_BRANCH_URL})`
-          : 'N/A',
-        inline: false,
-      },
-      {
-        name: '📜 Commit Message',
-        value: process.env.VERCEL_GIT_COMMIT_MESSAGE || 'N/A',
-        inline: false,
-      },
-      {
-        name: '🔖 Commit Ref',
-        value: process.env.VERCEL_GIT_COMMIT_REF || 'N/A',
-        inline: false,
-      },
-    )
-    .setTimestamp();
-
-  webhookClient.send({
-    embeds: [embed],
-  });
-}
