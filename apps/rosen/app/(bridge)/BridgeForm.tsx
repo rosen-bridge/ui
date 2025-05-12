@@ -17,6 +17,7 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  SelectedNetwork,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -25,23 +26,12 @@ import {
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenMap,
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * bridge form container comp
@@ -90,15 +80,7 @@ export const BridgeForm = () => {
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
-    const Logo = network.logo;
-    return (
-      <SelectedAsset>
-        <SvgIcon>
-          <Logo />
-        </SvgIcon>
-        <Typography color="text.secondary">{network.label}</Typography>
-      </SelectedAsset>
-    );
+    return <SelectedNetwork label={network.label} Logo={network.logo} />;
   };
 
   const handleTokenChange = useCallback(

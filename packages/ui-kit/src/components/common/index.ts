@@ -20,6 +20,7 @@ export * from './NavigationBar';
 export * from './NavigationButton';
 export * from './Version';
 export * from './QrCodeModal';
+export * from './SelectedNetwork';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
 export * from './TokensCard';
