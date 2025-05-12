@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "1.12.2",
+  "version": "1.12.3",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -9,13 +9,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^1.2.0",
-    "@rosen-bridge/ui-kit": "^1.10.1",
+    "@rosen-bridge/icons": "^1.4.0",
+    "@rosen-bridge/ui-kit": "^1.11.0",
     "@rosen-ui/constants": "^0.3.0",
     "@rosen-ui/swr-helpers": "^0.2.1",
     "@rosen-ui/utils": "^0.5.0",

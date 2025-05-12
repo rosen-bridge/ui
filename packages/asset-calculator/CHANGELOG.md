@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.5
+
+### Patch Changes
+
+- Update rosen dependencies
+
 ## 2.1.4
 
 ### Patch Changes

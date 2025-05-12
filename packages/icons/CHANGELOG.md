@@ -1,5 +1,15 @@
 # @rosen-bridge/icons
 
+## 1.4.0
+
+### Minor Changes
+
+- Add Check, Favoite, Search, SortAmountDown and SortAmountUp icons
+
+### Patch Changes
+
+- Add the new icon as FileCopyAlt.
+
 ## 1.3.0
 
 ### Minor Changes

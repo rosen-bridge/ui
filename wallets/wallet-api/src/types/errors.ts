@@ -124,6 +124,17 @@ export class UserDeniedTransactionSignatureError extends Error {
   }
 }
 
+export class BalanceFetchError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`Failed to fetch wallet balance from the [${wallet}] wallet`, {
+      cause,
+    });
+  }
+}
+
 export class UtxoFetchError extends Error {
   constructor(
     public wallet: string,

@@ -55,7 +55,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
   const checks = [
     {
       instance: new ErgoExplorerScannerHealthCheck(
-        () => getLastSavedBlock(startErgoScanner.name),
+        async () => getLastSavedBlock((await startErgoScanner()).name()),
         config.healthCheck.ergoScannerWarnDiff,
         config.healthCheck.ergoScannerCriticalDiff,
         config.ergo.explorerUrl,
@@ -64,7 +64,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     },
     {
       instance: new CardanoKoiosScannerHealthCheck(
-        () => getLastSavedBlock(startCardanoScanner.name),
+        async () => getLastSavedBlock((await startCardanoScanner()).name()),
         config.healthCheck.cardanoScannerWarnDiff,
         config.healthCheck.cardanoScannerCriticalDiff,
         config.cardano.koiosUrl,
@@ -74,7 +74,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     },
     {
       instance: new BitcoinRPCScannerHealthCheck(
-        () => getLastSavedBlock(startBinanceScanner.name),
+        async () => getLastSavedBlock((await startBinanceScanner()).name()),
         config.healthCheck.bitcoinScannerWarnDiff,
         config.healthCheck.bitcoinScannerCriticalDiff,
         config.bitcoin.rpcUrl,
@@ -85,7 +85,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     },
     {
       instance: new BitcoinRPCScannerHealthCheck(
-        () => getLastSavedBlock(startBinanceScanner.name),
+        async () => getLastSavedBlock((await startBinanceScanner()).name()),
         config.healthCheck.dogeScannerWarnDiff,
         config.healthCheck.dogeScannerCriticalDiff,
         config.doge.rpcUrl,
@@ -97,7 +97,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.ethereum.key,
-        () => getLastSavedBlock(startEthereumScanner.name),
+        async () => getLastSavedBlock((await startEthereumScanner()).name()),
         config.healthCheck.ethereumScannerWarnDiff,
         config.healthCheck.ethereumScannerCriticalDiff,
         config.ethereum.rpcUrl,
@@ -109,7 +109,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.binance.key,
-        () => getLastSavedBlock(startBinanceScanner.name),
+        async () => getLastSavedBlock((await startBinanceScanner()).name()),
         config.healthCheck.binanceScannerWarnDiff,
         config.healthCheck.binanceScannerCriticalDiff,
         config.binance.rpcUrl,

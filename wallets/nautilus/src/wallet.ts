@@ -1,7 +1,7 @@
 import { Nautilus as NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
   AddressRetrievalError,
@@ -15,9 +15,9 @@ import {
   ConnectionTimeoutError,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { NautilusWalletConfig } from './types';
 
-export class NautilusWallet extends Wallet {
+export class NautilusWallet extends Wallet<NautilusWalletConfig> {
   icon = NautilusIcon;
 
   name = 'Nautilus';
@@ -26,11 +26,9 @@ export class NautilusWallet extends Wallet {
 
   link = 'https://github.com/nautls/nautilus-wallet';
 
-  supportedChains = [NETWORKS.ergo.key];
+  currentChain: Network = NETWORKS.ergo.key;
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
+  supportedChains: Network[] = [NETWORKS.ergo.key];
 
   private get api() {
     return window.ergoConnector.nautilus;
@@ -70,31 +68,20 @@ export class NautilusWallet extends Wallet {
     }
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
+  getBalanceRaw = async (token: RosenChainToken): Promise<string> => {
     this.requireAvailable();
-    const wallet = await this.api.getContext();
 
-    const tokenMap = await this.config.getTokenMap();
+    const wallet = await this.api.getContext();
 
     /**
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
-    const balance = await wallet.get_balance(
+    const amount = await wallet.get_balance(
       token.tokenId === 'erg' ? 'ERG' : token.tokenId,
     );
 
-    const amount = BigInt(balance);
-
-    if (!amount) return 0n;
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      amount,
-      NETWORKS.ergo.key,
-    ).amount;
-
-    return wrappedAmount;
+    return amount;
   };
 
   isAvailable = (): boolean => {

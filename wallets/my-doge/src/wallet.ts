@@ -1,6 +1,6 @@
 import { Mydoge as MyDogeIcon } from '@rosen-bridge/icons';
-import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
   ConnectionRejectedError,
@@ -10,9 +10,9 @@ import {
   AddressRetrievalError,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { MyDogeWalletConfig } from './types';
 
-export class MyDogeWallet extends Wallet {
+export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
   icon = MyDogeIcon;
 
   name = 'MyDoge';
@@ -21,14 +21,12 @@ export class MyDogeWallet extends Wallet {
 
   link = 'https://www.mydoge.com/';
 
-  supportedChains = [NETWORKS.doge.key];
+  currentChain: Network = NETWORKS.doge.key;
+
+  supportedChains: Network[] = [NETWORKS.doge.key];
 
   private get api() {
     return window.doge;
-  }
-
-  constructor(private config: WalletConfig) {
-    super();
   }
 
   connect = async (): Promise<void> => {
@@ -61,20 +59,8 @@ export class MyDogeWallet extends Wallet {
     }
   };
 
-  getBalance = async (token: RosenChainToken): Promise<bigint> => {
-    this.requireAvailable();
-
-    const amount = await this.api.getBalance();
-
-    const tokenMap = await this.config.getTokenMap();
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      BigInt(amount.balance),
-      NETWORKS.doge.key,
-    ).amount;
-
-    return wrappedAmount;
+  getBalanceRaw = async (): Promise<string> => {
+    return (await this.api.getBalance()).balance;
   };
 
   isAvailable = (): boolean => {

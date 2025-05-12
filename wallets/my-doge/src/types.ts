@@ -1,13 +1,12 @@
-import { TokenMap } from '@rosen-bridge/tokens';
 import type {
   generateUnsignedTx,
   generateOpReturnData,
   getAddressBalance,
   submitTransaction,
 } from '@rosen-network/doge';
+import { WalletConfig } from '@rosen-ui/wallet-api';
 
-export type WalletConfig = {
-  getTokenMap(): Promise<TokenMap>;
+export type MyDogeWalletConfig = WalletConfig & {
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
   submitTransaction: typeof submitTransaction;

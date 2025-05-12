@@ -79,6 +79,15 @@ export default [
     },
   },
 
+  {
+    files: ['packages/swr-helpers/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+      },
+    },
+  },
+
   // Additional Global Rules
   {
     rules: {
