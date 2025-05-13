@@ -10,13 +10,14 @@ APP=${1:-rosen}
 
 echo "building monorepo packages for app '$APP' ..."
 
-npm run build --workspace packages/constants
 
 if [ "$APP" == "rosen-service" ]; then
+  npm run build --workspace packages/constants
   npm run build --workspace packages/asset-calculator
 fi
 
-if [ "$APP" != "rosen-service" ]; then
+if [ "$APP" == "guard" ] || [ "$APP" == "watcher" ] ||  [ "$APP" == "rosen" ]; then
+  npm run build --workspace packages/constants
   npm run build --workspace packages/types
   npm run build --workspace packages/utils
   npm run build --workspace packages/icons
