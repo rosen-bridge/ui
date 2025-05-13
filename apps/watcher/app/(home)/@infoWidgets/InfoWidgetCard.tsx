@@ -16,8 +16,7 @@ interface InfoWidgetCardProps {
   icon: ReactNode;
   isLoading?: boolean;
   title: string;
-  unit?: string;
-  value: string;
+  value: ReactNode;
   warning?: string;
 }
 /**
@@ -27,7 +26,6 @@ interface InfoWidgetCardProps {
  * @param icon
  * @param isLoading
  * @param title
- * @param unit
  * @param value
  */
 export const InfoWidgetCard = ({
@@ -35,7 +33,6 @@ export const InfoWidgetCard = ({
   icon,
   isLoading,
   title,
-  unit,
   value,
   warning,
 }: InfoWidgetCardProps) => {
@@ -49,11 +46,7 @@ export const InfoWidgetCard = ({
           </div>
         ) : (
           <Typography className="value">
-            <div>
-              {value}
-              &nbsp;
-              <span>{unit}</span>
-            </div>
+            <div>{value}</div>
             {warning && (
               <Tooltip
                 title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
