@@ -16,6 +16,7 @@ export * from './FullCard';
 export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
 export * from './Id';
+export * from './InfoWidgetCardBase';
 export * from './NavigationBar';
 export * from './NavigationButton';
 export * from './Version';
