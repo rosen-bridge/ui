@@ -4,19 +4,11 @@ import { PublicStatusAction } from '@/_backend/actions';
 import { configs } from '@/_backend/configs';
 import { AccessDeniedError, withValidation } from '@/api/withValidation';
 
+import { paramsToSignMessage } from './utils';
 import { validator, Params } from './validator';
 
 // generating an ECDSA encryption object with no secret only for verification
 const ecdsa = new ECDSA('');
-
-const paramsToSignMessage = (
-  params: Params,
-  timestampSeconds: number,
-): string => {
-  return params.tx
-    ? `${params.eventId}${params.status}${params.tx.txId}${params.tx.chain}${params.tx.txType}${params.tx.txStatus}${timestampSeconds}`
-    : `${params.eventId}${params.status}${timestampSeconds}`;
-};
 
 const handler = async (params: Params) => {
   // check if pk is allowed

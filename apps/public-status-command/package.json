@@ -7,7 +7,8 @@
     "lint": "next lint --fix && npm run prettify",
     "type-check": "tsc --noEmit",
     "dev": "next dev",
-    "build": "next build"
+    "build": "next build",
+    "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
     "@rosen-bridge/encryption": "^0.1.1",
@@ -20,6 +21,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "18.2.12"
+    "@types/react": "18.2.12",
+    "vitest": "^2.1.8"
   }
 }
