@@ -19,14 +19,8 @@ export const VersionConfig = () => {
         value: info?.versions.contract,
       },
     ];
-    if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
-      result.push({
-        label: 'Tokens',
-        value: info?.versions.tokensMap,
-      });
-    }
     return result;
-  }, [info, isLoading]);
+  }, [info]);
 
   return <Version label="Guard" value={info?.versions.app} sub={sub} />;
 };
