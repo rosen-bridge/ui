@@ -22,7 +22,7 @@ const getString = (key: string): string => {
  */
 export const getThresholdFromEnv = <T>(
   envKey: string,
-): Threshold<T> | undefined => {
+): Threshold<T>[] | undefined => {
   const envValue = process.env[envKey];
 
   if (!envValue) {
@@ -45,24 +45,24 @@ export const getThresholdFromEnv = <T>(
     );
   }
 
-  // Validate each element has a string 'status' and a number 'count'
+  // Validate each element has a string 'key' and a number 'count'
   for (const [index, item] of parsed.entries()) {
     if (
       typeof item !== 'object' ||
       item === null ||
-      !('status' in item) ||
+      !('key' in item) ||
       !('count' in item) ||
-      typeof item.status !== 'string' ||
+      typeof item.key !== 'string' ||
       typeof item.count !== 'number'
     ) {
       throw new Error(
-        `Invalid format in environment variable ${envKey} at index ${index}: each item must be an object with string 'status' and number 'count'.`,
+        `Invalid format in environment variable ${envKey} at index ${index}: each item must be an object with string 'key' and number 'count'.`,
       );
     }
   }
 
   // Use type assertion because we've validated the structure.
-  return parsed as Threshold<T>;
+  return parsed as Threshold<T>[];
 };
 
 export const configs = {
@@ -73,24 +73,24 @@ export const configs = {
   eventStatusThresholds: getThresholdFromEnv<AggregateEventStatus>(
     'EVENT_STATUS_THRESHOLDS',
   ) ?? [
-    { status: AggregateEventStatus.finished, count: 6 },
-    { status: AggregateEventStatus.inReward, count: 3 },
-    { status: AggregateEventStatus.pendingReward, count: 3 },
-    { status: AggregateEventStatus.inPayment, count: 6 },
-    { status: AggregateEventStatus.rejected, count: 5 },
-    { status: AggregateEventStatus.timeout, count: 5 },
-    { status: AggregateEventStatus.reachedLimit, count: 5 },
-    { status: AggregateEventStatus.paymentWaiting, count: 5 },
-    { status: AggregateEventStatus.rewardWaiting, count: 5 },
-    { status: AggregateEventStatus.pendingPayment, count: 3 },
+    { key: AggregateEventStatus.finished, count: 6 },
+    { key: AggregateEventStatus.inReward, count: 3 },
+    { key: AggregateEventStatus.pendingReward, count: 3 },
+    { key: AggregateEventStatus.inPayment, count: 6 },
+    { key: AggregateEventStatus.rejected, count: 5 },
+    { key: AggregateEventStatus.timeout, count: 5 },
+    { key: AggregateEventStatus.reachedLimit, count: 5 },
+    { key: AggregateEventStatus.paymentWaiting, count: 5 },
+    { key: AggregateEventStatus.rewardWaiting, count: 5 },
+    { key: AggregateEventStatus.pendingPayment, count: 3 },
   ],
   txStatusThresholds: getThresholdFromEnv<AggregateTxStatus>(
     'TX_STATUS_THRESHOLDS',
   ) ?? [
-    { status: AggregateTxStatus.completed, count: 6 },
-    { status: AggregateTxStatus.invalid, count: 6 },
-    { status: AggregateTxStatus.sent, count: 6 },
-    { status: AggregateTxStatus.signed, count: 3 },
-    { status: AggregateTxStatus.inSign, count: 6 },
+    { key: AggregateTxStatus.completed, count: 6 },
+    { key: AggregateTxStatus.invalid, count: 6 },
+    { key: AggregateTxStatus.sent, count: 6 },
+    { key: AggregateTxStatus.signed, count: 3 },
+    { key: AggregateTxStatus.inSign, count: 6 },
   ],
 };

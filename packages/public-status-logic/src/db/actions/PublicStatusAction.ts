@@ -66,8 +66,8 @@ export class PublicStatusAction {
     pk: string,
     timestampSeconds: number,
     status: EventStatus,
-    eventStatusThresholds: Threshold<AggregateEventStatus>,
-    txStatusThresholds: Threshold<AggregateTxStatus>,
+    eventStatusThresholds: Threshold<AggregateEventStatus>[],
+    txStatusThresholds: Threshold<AggregateTxStatus>[],
     tx?: {
       txId: string;
       chain: string;

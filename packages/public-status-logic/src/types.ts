@@ -4,9 +4,9 @@ import { AggregateEventStatus, AggregateTxStatus } from './constants';
  * used for defining aggregated status thresholds of both event and tx
  */
 export type Threshold<T> = {
-  status: T;
+  key: T;
   count: number;
-}[];
+};
 
 /**
  * result of aggregate calculation

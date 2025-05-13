@@ -27,86 +27,153 @@ export class Utils {
   };
 
   /**
+   * encodes a guard status to a string AggregateEventStatus
+   * @param guardStatus
+   * @returns event status as string
+   */
+  static encodeEventStatus = (guardStatus: GuardStatusEntity): string => {
+    return `${this.eventStatusToAggregate(guardStatus.status)}`;
+  };
+
+  /**
+   * encodes a guard status to a string AggregateTxStatus if available
+   * @param guardStatus
+   * @returns tx status as string or undefined if tx is not available
+   */
+  static encodeTxStatus = (
+    guardStatus: GuardStatusEntity,
+  ): string | undefined => {
+    if (!guardStatus.tx) return undefined;
+    const txKey = JSON.stringify({
+      txId: guardStatus.tx!.txId,
+      chain: guardStatus.tx!.chain,
+    });
+    return `${txKey}::${this.txStatusToAggregate(guardStatus.txStatus!)}`;
+  };
+
+  /**
+   * counts matching strings in an array
+   * @param items
+   * @returns counts object with the string as key and count number as value
+   */
+  static countSimilar = (items: string[]): Record<string, number> => {
+    const counts: Record<string, number> = {};
+    items.forEach((item) => {
+      if (!counts[item]) {
+        counts[item] = 1;
+        return;
+      }
+      counts[item] += 1;
+    });
+    return counts;
+  };
+
+  /**
+   * compares thresholds with counts in order
+   * @param counts
+   * @param thresholds
+   * @returns triggered threshold or undefined if counts are lower than thresholds
+   */
+  static checkThresholds = <T>(
+    counts: Record<string, number>,
+    thresholds: Threshold<T>[],
+  ): T | undefined => {
+    for (const threshold of thresholds) {
+      const count = counts[`${threshold.key}`] ?? 0;
+      if (count >= threshold.count) return threshold.key;
+    }
+    return undefined;
+  };
+
+  /**
+   * calculates the aggregated event status
+   * @param guardStatuses
+   * @param eventStatusThresholds
+   * @returns AggregateEventStatus or undefined if counts are lower than thresholds
+   */
+  static getAggregatedEventStatus = (
+    guardStatuses: GuardStatusEntity[],
+    eventStatusThresholds: Threshold<AggregateEventStatus>[],
+  ): AggregateEventStatus | undefined => {
+    const statuses = guardStatuses.map(this.encodeEventStatus);
+    const counts = this.countSimilar(statuses);
+    return this.checkThresholds(counts, eventStatusThresholds);
+  };
+
+  /**
+   * calculates the aggregated tx status
+   * @param guardStatuses
+   * @param txStatusThresholds
+   * @returns AggregateTxStatus or undefined if counts are lower than thresholds
+   */
+  static getAggregatedTxStatus = (
+    guardStatuses: GuardStatusEntity[],
+    txStatusThresholds: Threshold<AggregateTxStatus>[],
+  ): string | undefined => {
+    const statuses = guardStatuses
+      .map(this.encodeTxStatus)
+      .filter((v) => !!v) as string[];
+    const counts = this.countSimilar(statuses);
+
+    for (const encodedStatus of Object.keys(counts)) {
+      const parts = encodedStatus.split('::');
+      const txStatus = parts[1];
+      const trigger = this.checkThresholds(
+        { [txStatus]: counts[encodedStatus] },
+        txStatusThresholds,
+      );
+      if (trigger) return encodedStatus;
+    }
+    return undefined;
+  };
+
+  /**
    * calculates the aggregated status
    * @param statuses
    * @returns AggregatedStatus
    */
   static calcAggregatedStatus = (
     statuses: GuardStatusEntity[],
-    eventStatusThresholds: Threshold<AggregateEventStatus>,
-    txStatusThresholds: Threshold<AggregateTxStatus>,
+    eventStatusThresholds: Threshold<AggregateEventStatus>[],
+    txStatusThresholds: Threshold<AggregateTxStatus>[],
   ): AggregatedStatus => {
     const aggregatedStatus: AggregatedStatus = {
       status: AggregateEventStatus.waitingForConfirmation,
       txStatus: undefined,
       tx: undefined,
     };
-
     if (statuses.length === 0) {
       return aggregatedStatus;
     }
 
-    // for each case of AggregateEventStatus init its count to 0
-    const statusesCount = Object.values(AggregateEventStatus).reduce(
-      (obj, status) => {
-        obj[status] = 0;
-        return obj;
-      },
-      {} as Record<AggregateEventStatus, number>,
+    const aggregatedEventStatus = this.getAggregatedEventStatus(
+      statuses,
+      eventStatusThresholds,
     );
-
-    const txKeyCount: Record<string, number> = {};
-    const txStatusesCount: Record<
-      string,
-      Record<AggregateTxStatus, number>
-    > = {};
-
-    for (const status of statuses) {
-      statusesCount[this.eventStatusToAggregate(status.status)] += 1;
-
-      if (!status.tx) continue;
-
-      const txKey = JSON.stringify({
-        txId: status.tx!.txId,
-        chain: status.tx!.chain,
-      });
-
-      if (!txStatusesCount[txKey]) {
-        txKeyCount[txKey] = 0;
-        // for each case of AggregateTxStatus init its count to 0
-        txStatusesCount[txKey] = Object.values(AggregateTxStatus).reduce(
-          (obj, status) => {
-            obj[status] = 0;
-            return obj;
-          },
-          {} as Record<AggregateTxStatus, number>,
-        );
-      }
-
-      txKeyCount[txKey] += 1;
-      txStatusesCount[txKey][this.txStatusToAggregate(status.txStatus!)] += 1;
+    if (!aggregatedEventStatus) {
+      return aggregatedStatus;
     }
 
-    for (const threshold of eventStatusThresholds) {
-      if (statusesCount[threshold.status] >= threshold.count) {
-        aggregatedStatus.status = threshold.status;
-        break;
-      }
+    aggregatedStatus.status = aggregatedEventStatus;
+    if (
+      ![AggregateEventStatus.inPayment, AggregateEventStatus.inReward].includes(
+        aggregatedEventStatus,
+      )
+    ) {
+      return aggregatedStatus;
     }
 
-    if (Object.keys(txKeyCount).length > 0) {
-      for (const txKey in txKeyCount) {
-        if (txKeyCount[txKey] === 0) continue;
-        for (const threshold of txStatusThresholds) {
-          if (txStatusesCount[txKey][threshold.status] >= threshold.count) {
-            aggregatedStatus.tx = JSON.parse(txKey);
-            aggregatedStatus.txStatus = threshold.status;
-            break;
-          }
-        }
-      }
+    const aggregatedTxStatus = this.getAggregatedTxStatus(
+      statuses,
+      txStatusThresholds,
+    );
+    if (!aggregatedTxStatus) {
+      return aggregatedStatus;
     }
 
+    const parts = aggregatedTxStatus.split('::');
+    aggregatedStatus.tx = JSON.parse(parts[0]);
+    aggregatedStatus.txStatus = parts[1] as AggregateTxStatus;
     return aggregatedStatus;
   };
 

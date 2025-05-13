@@ -1,181 +1,601 @@
-import { GuardStatusEntity } from '../src';
-import { AggregateEventStatus, EventStatus, TxStatus } from '../src/constants';
-import { TxEntity } from '../src/db/entities/TxEntity';
+import { GuardStatusEntity, Threshold } from '../src';
+import {
+  AggregateEventStatus,
+  AggregateTxStatus,
+  EventStatus,
+  TxStatus,
+} from '../src/constants';
 import { Utils } from '../src/utils';
 import {
-  eventStatusFromAggregateDict,
   guardPk0,
+  guardPk1,
+  guardPk2,
+  guardPk3,
+  guardPk4,
   id0,
-  mockEventStatusThresholds,
-  mockTxStatusThresholds,
-  tx0,
-  txStatusFromAggregateDict,
+  mockGuardStatusRecords,
+  mockTx0,
 } from './testData';
-import TestUtils from './testUtils';
 
 describe('Utils', () => {
-  describe('calcAggregatedStatus', () => {
+  describe('encodeTxStatus', () => {
     /**
-     * @target Utils.calcAggregatedStatus should return waitingForConfirmation status if
-     * no threshold is triggered
-     * @dependencies
+     * @target Utils.encodeTxStatus should it should return undefined when tx is missing from guard status
      * @scenario
-     * - call calcAggregatedStatus with 3 different values
+     * - define a mock GuardStatusEntity object with tx set to undefined
+     * - call Utils.encodeTxStatus with the mock object
      * @expected
-     * - each call of calcAggregatedStatus should have returned its correct value
+     * - Utils.encodeTxStatus should have returned undefined
      */
-    it('should return waitingForConfirmation status if no threshold is triggered', async () => {
+    it('should it should return undefined when tx is missing from guard status', () => {
       // arrange
-      const statuses0: GuardStatusEntity[] = [];
-      const statuses1: GuardStatusEntity[] = [
-        {
-          eventId: '',
-          guardPk: guardPk0,
-          updatedAt: 0,
-          status: EventStatus.pendingPayment,
-          tx: null,
-          txStatus: null,
-        },
-      ];
-      const statuses2: GuardStatusEntity[] = [
-        {
-          eventId: '',
-          guardPk: guardPk0,
-          updatedAt: 0,
-          status: EventStatus.inPayment,
-          tx: {
-            txId: id0,
-            chain: 'c1',
-          } as unknown as TxEntity,
-          txStatus: TxStatus.approved,
-        },
+      const mockGuardStatus: GuardStatusEntity = {
+        eventId: id0,
+        guardPk: guardPk0,
+        updatedAt: 0,
+        status: EventStatus.inPayment,
+        tx: null,
+        txStatus: null,
+      };
+
+      // act
+      const result = Utils.encodeTxStatus(mockGuardStatus);
+
+      // assert
+      expect(result).toBeUndefined();
+    });
+
+    /**
+     * @target Utils.encodeTxStatus should it should return a formatted string when tx is present
+     * @scenario
+     * - define a mock GuardStatusEntity object with tx and txStatus values
+     * - call Utils.encodeTxStatus with the mock object
+     * @expected
+     * - Utils.encodeTxStatus should have returned a string in the format '{"txId":"<txId>","chain":"<chain>"}::<aggregatedStatus>'
+     */
+    it('should it should return a formatted string when tx is present', () => {
+      // arrange
+      const mockGuardStatus: GuardStatusEntity = {
+        eventId: id0,
+        guardPk: guardPk0,
+        updatedAt: 0,
+        status: EventStatus.inPayment,
+        tx: mockTx0,
+        txStatus: TxStatus.inSign,
+      };
+
+      // act
+      const result = Utils.encodeTxStatus(mockGuardStatus);
+
+      // assert
+      const expectedTxKey = JSON.stringify({
+        txId: mockTx0.txId,
+        chain: mockTx0.chain,
+      });
+      expect(result).toBe(`${expectedTxKey}::${TxStatus.inSign}`);
+    });
+  });
+
+  describe('countSimilar', () => {
+    /**
+     * @target Utils.countSimilar should return an empty object when provided an empty array
+     * @scenario
+     * - define a mock array with no items
+     * - call Utils.countSimilar with the empty array
+     * @expected
+     * - Utils.countSimilar should have returned an empty object
+     */
+    it('should return an empty object when provided an empty array', () => {
+      // arrange
+      const items: string[] = [];
+
+      // act
+      const result = Utils.countSimilar(items);
+
+      // assert
+      expect(result).toEqual({});
+    });
+
+    /**
+     * @target Utils.countSimilar should return a count of one for each distinct element when no duplicates are present
+     * @scenario
+     * - define a mock array with items 'a', 'b', 'c'
+     * - call Utils.countSimilar with the array
+     * @expected
+     * - Utils.countSimilar should have returned object with keys 'a', 'b', 'c' each equal to 1
+     */
+    it('should return a count of one for each distinct element when no duplicates are present', () => {
+      // arrange
+      const items = ['a', 'b', 'c'];
+
+      // act
+      const result = Utils.countSimilar(items);
+
+      // assert
+      expect(result).toEqual({ a: 1, b: 1, c: 1 });
+    });
+
+    /**
+     * @target Utils.countSimilar should correctly count each element in a mixed array with duplicates
+     * @scenario
+     * - define a mock array with items 'aa', 'b', 'aa', 'c', 'b', 'aa'
+     * - call Utils.countSimilar with the array
+     * @expected
+     * - Utils.countSimilar should have returned object with key 'aa' equal to 3, 'b' equal to 2, 'c' equal to 1
+     */
+    it('should correctly count each element in a mixed array with duplicates', () => {
+      // arrange
+      const items = ['aa', 'b', 'aa', 'c', 'b', 'aa'];
+
+      // act
+      const result = Utils.countSimilar(items);
+
+      // assert
+      expect(result).toEqual({ aa: 3, b: 2, c: 1 });
+    });
+  });
+
+  describe('checkThresholds', () => {
+    /**
+     * @target Utils.checkThresholds should return the threshold key when the count is greater than the threshold count
+     * @scenario
+     * - define a mock counts record with key 'a' set to 10
+     * - define a mock thresholds array with one threshold having key 'a' and count 5
+     * - call Utils.checkThresholds with the mock counts and thresholds
+     * @expected
+     * - Utils.checkThresholds should have returned 'a'
+     */
+    it('should return the threshold key when the count is greater than the threshold count', () => {
+      // arrange
+      const counts = { a: 10 };
+      const thresholds = [{ key: 'a', count: 5 }];
+
+      // act
+      const result = Utils.checkThresholds(counts, thresholds);
+
+      // assert
+      expect(result).toEqual('a');
+    });
+
+    /**
+     * @target Utils.checkThresholds should return the threshold key when the count is equal to the threshold count
+     * @scenario
+     * - define a mock counts record with key 'b' set to 7
+     * - define a mock thresholds array with one threshold having key 'b' and count 7
+     * - call Utils.checkThresholds with the mock counts and thresholds
+     * @expected
+     * - Utils.checkThresholds should have returned 'b'
+     */
+    it('should return the threshold key when the count is equal to the threshold count', () => {
+      // arrange
+      const counts = { b: 7 };
+      const thresholds = [{ key: 'b', count: 7 }];
+
+      // act
+      const result = Utils.checkThresholds(counts, thresholds);
+
+      // assert
+      expect(result).toEqual('b');
+    });
+
+    /**
+     * @target Utils.checkThresholds should return undefined when the count is lower than the threshold count
+     * @scenario
+     * - define a mock counts record with key 'c' set to 3
+     * - define a mock thresholds array with one threshold having key 'c' and count 5
+     * - call Utils.checkThresholds with the mock counts and thresholds
+     * @expected
+     * - Utils.checkThresholds should have returned undefined
+     */
+    it('should return undefined when the count is lower than the threshold count', () => {
+      // arrange
+      const counts = { c: 3 };
+      const thresholds = [{ key: 'c', count: 5 }];
+
+      // act
+      const result = Utils.checkThresholds(counts, thresholds);
+
+      // assert
+      expect(result).toBeUndefined();
+    });
+
+    /**
+     * @target Utils.checkThresholds should return the first triggered threshold key when multiple thresholds are satisfied
+     * @scenario
+     * - define a mock counts record with keys 'x' set to 7 and 'y' set to 15
+     * - define a mock thresholds array with two thresholds: first with key 'x' and count 8, second with key 'y' and count 12
+     * - call Utils.checkThresholds with the mock counts and thresholds
+     * @expected
+     * - Utils.checkThresholds should have returned 'y'
+     */
+    it('should return the first triggered threshold key when multiple thresholds are satisfied', () => {
+      // arrange
+      const counts = { x: 7, y: 15, z: 8 };
+      const thresholds = [
+        { key: 'x', count: 8 },
+        { key: 'y', count: 12 },
+        { key: 'z', count: 5 },
       ];
 
       // act
-      const result0 = Utils.calcAggregatedStatus(
-        statuses0,
-        mockEventStatusThresholds,
-        mockTxStatusThresholds,
-      );
-      const result1 = Utils.calcAggregatedStatus(
-        statuses1,
-        mockEventStatusThresholds,
-        mockTxStatusThresholds,
-      );
-      const result2 = Utils.calcAggregatedStatus(
-        statuses2,
-        mockEventStatusThresholds,
-        mockTxStatusThresholds,
+      const result = Utils.checkThresholds(counts, thresholds);
+
+      // assert
+      expect(result).toEqual('y');
+    });
+
+    /**
+     * @target Utils.checkThresholds should return undefined when counts record does not include the threshold key
+     * @scenario
+     * - define a mock counts record with key 'd' set to 0 (or missing key 'e')
+     * - define a mock thresholds array with one threshold having key 'e' and count 1
+     * - call Utils.checkThresholds with the mock counts and thresholds
+     * @expected
+     * - Utils.checkThresholds should have returned undefined
+     */
+    it('should return undefined when counts record does not include the threshold key', () => {
+      // arrange
+      const counts = { d: 0 };
+      const thresholds = [{ key: 'e', count: 1 }];
+
+      // act
+      const result = Utils.checkThresholds(counts, thresholds);
+
+      // assert
+      expect(result).toBeUndefined();
+    });
+
+    /**
+     * @target Utils.checkThresholds should handle multiple thresholds and return undefined if no counts satisfy any thresholds
+     * @scenario
+     * - define a mock counts record with keys 'm' set to 2 and 'n' set to 3
+     * - define a mock thresholds array with two thresholds: one with key 'm' and count 5 and one with key 'n' and count 4
+     * - call Utils.checkThresholds with the mock counts and thresholds
+     * @expected
+     * - Utils.checkThresholds should have returned undefined
+     */
+    it('should handle multiple thresholds and return undefined if no counts satisfy any thresholds', () => {
+      // arrange
+      const counts = { m: 2, n: 3 };
+      const thresholds = [
+        { key: 'm', count: 5 },
+        { key: 'n', count: 4 },
+      ];
+
+      // act
+      const result = Utils.checkThresholds(counts, thresholds);
+
+      // assert
+      expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getAggregatedTxStatus', () => {
+    /**
+     * @target getAggregatedTxStatus should return undefined when guardStatuses is an empty array
+     * @scenario
+     * - define a mock guardStatuses as empty array
+     * - define a mock thresholds array
+     * - call getAggregatedTxStatus
+     * @expected
+     * - getAggregatedTxStatus should have returned undefined
+     */
+    it('should return undefined when guardStatuses is an empty array', () => {
+      // arrange
+      const emptyGuardStatuses: GuardStatusEntity[] = [];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.completed, count: 3 },
+      ];
+
+      // act
+      const result = Utils.getAggregatedTxStatus(
+        emptyGuardStatuses,
+        txStatusThresholds,
       );
 
       // assert
-      const waitingForConfirmationObj = {
+      expect(result).toBeUndefined();
+    });
+
+    /**
+     * @target getAggregatedTxStatus should return undefined when none of the statuses trigger the thresholds
+     * @scenario
+     * - define a mock guardStatuses array with multiple elements
+     * - define a mock thresholds array
+     * - call getAggregatedTxStatus
+     * @expected
+     * - getAggregatedTxStatus should have returned undefined
+     */
+    it('should return undefined when none of the statuses trigger the thresholds', () => {
+      // arrange
+      const guardStatuses: GuardStatusEntity[] = [...mockGuardStatusRecords];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.completed, count: 3 },
+      ];
+
+      // act
+      const result = Utils.getAggregatedTxStatus(
+        guardStatuses,
+        txStatusThresholds,
+      );
+
+      // assert
+      expect(result).toBeUndefined();
+    });
+
+    /**
+     * @target getAggregatedTxStatus should return the first triggered tx status when multiple statuses trigger thresholds
+     * @scenario
+     * - define a mock guardStatuses array with multiple elements mapping to different tx statuses, e.g. some 'id::statusA' and some 'id::statusB'
+     * - define a mock thresholds array
+     * - call getAggregatedTxStatus
+     * @expected
+     * - getAggregatedTxStatus should have returned the tx status corresponding to the first threshold triggered in the iteration order
+     */
+    it('should return the first triggered tx status when multiple statuses trigger thresholds', () => {
+      // arrange
+      const guardStatuses: GuardStatusEntity[] = [
+        ...mockGuardStatusRecords,
+        { ...mockGuardStatusRecords[1], guardPk: guardPk1 },
+        { ...mockGuardStatusRecords[1], guardPk: guardPk2 },
+      ];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.inSign, count: 6 },
+        { key: AggregateTxStatus.signed, count: 3 },
+        { key: AggregateTxStatus.completed, count: 3 },
+      ];
+
+      // act
+      const result = Utils.getAggregatedTxStatus(
+        guardStatuses,
+        txStatusThresholds,
+      );
+
+      // assert
+      expect(result).toBe(
+        '{"txId":"0000000000000000000000000000000000000000000000000000000000000001","chain":"c1"}::signed',
+      );
+    });
+  });
+
+  describe('calcAggregatedStatus', () => {
+    /**
+     * @target Utils.calcAggregatedStatus should return default aggregated status when statuses array is empty
+     * @scenario
+     * - define a mock guardStatuses array with zero elements
+     * - define a mock eventStatusThresholds with any valid thresholds
+     * - define a mock txStatusThresholds with any valid thresholds
+     * - call Utils.calcAggregatedStatus
+     * @expected
+     * - Utils.calcAggregatedStatus should have returned an object with status = waitingForConfirmation, tx & txStatus = undefined
+     */
+    it('should return default aggregated status when statuses array is empty', () => {
+      // arrange
+      const guardStatuses: GuardStatusEntity[] = [];
+      const eventStatusThresholds: Threshold<AggregateEventStatus>[] = [
+        { key: AggregateEventStatus.inPayment, count: 5 },
+      ];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.inSign, count: 5 },
+      ];
+
+      // act
+      const result = Utils.calcAggregatedStatus(
+        guardStatuses,
+        eventStatusThresholds,
+        txStatusThresholds,
+      );
+
+      // assert
+      expect(result).toEqual({
         status: AggregateEventStatus.waitingForConfirmation,
-        txStatus: undefined,
         tx: undefined,
-      };
-      expect(result0).toEqual(waitingForConfirmationObj);
-      expect(result1).toEqual(waitingForConfirmationObj);
-      expect(result2).toEqual(waitingForConfirmationObj);
+        txStatus: undefined,
+      });
     });
 
     /**
-     * @target calcAggregatedStatus should return the correct aggregated status for each of the thresholds
-     * @dependencies
+     * @target Utils.calcAggregatedStatus should return default aggregated status when event status counts are lower than thresholds
      * @scenario
-     * - define a mock empty statuses array
-     * - for each of the event statuses thresholds
-     * - to trigger the current status, add it `threshold.count` times to the statuses array
-     * - call calcAggregatedStatus using statuses array
+     * - define a mock guardStatuses array with at least one record
+     * - define a mock eventStatusThresholds with valid thresholds
+     * - define a mock txStatusThresholds with valid thresholds
+     * - call Utils.calcAggregatedStatus
      * @expected
-     * - on each call, calcAggregatedStatus should have returned the matching aggregated status with threshold.status
+     * - Utils.calcAggregatedStatus should have returned an object with status = waitingForConfirmation, tx & txStatus = undefined
      */
-    it('should return the correct aggregated status for each of the thresholds', async () => {
+    it('should return default aggregated status when event status counts are lower than thresholds', () => {
       // arrange
-      const statuses: GuardStatusEntity[] = [];
+      const guardStatuses: GuardStatusEntity[] = mockGuardStatusRecords;
+      const eventStatusThresholds: Threshold<AggregateEventStatus>[] = [
+        { key: AggregateEventStatus.inPayment, count: 5 },
+      ];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.inSign, count: 5 },
+      ];
 
-      for (let i = 0; i < mockEventStatusThresholds.length; i += 1) {
-        // get the next aggregated status from the thresholds array
-        // and push multiple status records to statuses array
-        // in order to trigger the selected aggregated status
-        for (let j = 0; j < mockEventStatusThresholds[i].count; j += 1) {
-          const aggregatedEventStatus = mockEventStatusThresholds[i].status;
-          const eventStatus =
-            eventStatusFromAggregateDict[aggregatedEventStatus];
+      // act
+      const result = Utils.calcAggregatedStatus(
+        guardStatuses,
+        eventStatusThresholds,
+        txStatusThresholds,
+      );
 
-          statuses.push(TestUtils.makeStatus(statuses.length, eventStatus));
-        }
-
-        // act
-        const result = Utils.calcAggregatedStatus(
-          statuses,
-          mockEventStatusThresholds,
-          mockTxStatusThresholds,
-        );
-
-        // assert
-        expect(result).toEqual({
-          status: mockEventStatusThresholds[i].status,
-          txStatus: undefined,
-          tx: undefined,
-        });
-
-        // pop 1 status so that count of last status be below threshold
-        // in order to trigger and check the next threshold
-        statuses.pop();
-      }
+      // assert
+      expect(result).toEqual({
+        status: AggregateEventStatus.waitingForConfirmation,
+        tx: undefined,
+        txStatus: undefined,
+      });
     });
 
     /**
-     * @target calcAggregatedStatus should return the correct aggregated tx status for each of the tx thresholds
-     * @dependencies
+     * @target Utils.calcAggregatedStatus should return aggregated status with updated event status and no tx details when aggregated event status is not inPayment or inReward
      * @scenario
-     * - define a mock empty statuses array
-     * - for each of the tx statuses thresholds
-     * - to trigger the current status, add it `threshold.count` times to the statuses array
-     * - call calcAggregatedStatus using statuses array
+     * - define a mock guardStatuses array with enough records to trigger 'finished' aggregated event status
+     * - define a mock eventStatusThresholds with valid thresholds
+     * - define a mock txStatusThresholds with valid thresholds
+     * - call Utils.calcAggregatedStatus
      * @expected
-     * - on each call, calcAggregatedStatus should have returned the matching aggregated tx status with threshold.status
+     * - Utils.calcAggregatedStatus should have returned an object with status = mock event status, tx & txStatus = undefined
      */
-    it('should return the correct aggregated tx status for each of the tx thresholds', async () => {
+    it('should return aggregated status with updated event status and no tx details when aggregated event status is not inPayment or inReward', () => {
       // arrange
-      const statuses: GuardStatusEntity[] = [];
+      const guardStatuses: GuardStatusEntity[] = [
+        ...mockGuardStatusRecords,
+        {
+          ...mockGuardStatusRecords[0],
+          guardPk: guardPk1,
+          status: EventStatus.completed,
+        },
+        {
+          ...mockGuardStatusRecords[0],
+          guardPk: guardPk2,
+          status: EventStatus.completed,
+        },
+        {
+          ...mockGuardStatusRecords[0],
+          guardPk: guardPk3,
+          status: EventStatus.completed,
+        },
+      ];
+      const eventStatusThresholds: Threshold<AggregateEventStatus>[] = [
+        { key: AggregateEventStatus.inPayment, count: 5 },
+        { key: AggregateEventStatus.inReward, count: 5 },
+        { key: AggregateEventStatus.finished, count: 3 },
+        { key: AggregateEventStatus.timeout, count: 3 },
+      ];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.inSign, count: 5 },
+      ];
 
-      for (let i = 0; i < mockTxStatusThresholds.length; i += 1) {
-        // get the next aggregated status from the thresholds array
-        // and push multiple status records to statuses array
-        // in order to trigger the selected aggregated status
-        for (let j = 0; j < mockTxStatusThresholds[i].count; j += 1) {
-          const aggregatedTxStatus = mockTxStatusThresholds[i].status;
-          const txStatus = txStatusFromAggregateDict[aggregatedTxStatus];
+      // act
+      const result = Utils.calcAggregatedStatus(
+        guardStatuses,
+        eventStatusThresholds,
+        txStatusThresholds,
+      );
 
-          statuses.push(
-            TestUtils.makeStatus(
-              statuses.length,
-              EventStatus.inPayment,
-              txStatus,
-            ),
-          );
-        }
+      // assert
+      expect(result).toEqual({
+        status: AggregateEventStatus.finished,
+        tx: undefined,
+        txStatus: undefined,
+      });
+    });
 
-        // act
-        const result = Utils.calcAggregatedStatus(
-          statuses,
-          mockEventStatusThresholds,
-          mockTxStatusThresholds,
-        );
-
-        // assert
-        expect(result).toEqual({
+    /**
+     * @target Utils.calcAggregatedStatus should return aggregated status with updated event status and no tx details when aggregated tx status returns undefined
+     * @scenario
+     * - define a mock guardStatuses array with enough records to trigger 'inPayment' event status
+     * - define a mock eventStatusThresholds with valid thresholds
+     * - define a mock txStatusThresholds with valid thresholds
+     * - call Utils.calcAggregatedStatus
+     * @expected
+     * - Utils.calcAggregatedStatus should have returned an object with status = inPayment, tx & txStatus = undefined
+     */
+    it('should return aggregated status with updated event status and no tx details when aggregated tx status returns undefined', () => {
+      // arrange
+      const guardStatuses: GuardStatusEntity[] = [
+        ...mockGuardStatusRecords,
+        {
+          ...mockGuardStatusRecords[1],
+          guardPk: guardPk1,
           status: EventStatus.inPayment,
-          txStatus: mockTxStatusThresholds[i].status,
-          tx: tx0,
-        });
+        },
+        {
+          ...mockGuardStatusRecords[1],
+          guardPk: guardPk2,
+          status: EventStatus.inPayment,
+        },
+        {
+          ...mockGuardStatusRecords[1],
+          guardPk: guardPk3,
+          status: EventStatus.inPayment,
+        },
+      ];
+      const eventStatusThresholds: Threshold<AggregateEventStatus>[] = [
+        { key: AggregateEventStatus.inPayment, count: 3 },
+        { key: AggregateEventStatus.inReward, count: 5 },
+        { key: AggregateEventStatus.finished, count: 3 },
+        { key: AggregateEventStatus.timeout, count: 3 },
+      ];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.inSign, count: 5 },
+        { key: AggregateTxStatus.signed, count: 5 },
+      ];
 
-        // pop 1 status so that count of last status be below threshold
-        // in order to trigger and check the next threshold
-        statuses.pop();
-      }
+      // act
+      const result = Utils.calcAggregatedStatus(
+        guardStatuses,
+        eventStatusThresholds,
+        txStatusThresholds,
+      );
+
+      // assert
+      expect(result).toEqual({
+        status: AggregateEventStatus.inPayment,
+        tx: undefined,
+        txStatus: undefined,
+      });
+    });
+
+    /**
+     * @target Utils.calcAggregatedStatus should return aggregated status with updated event status and parsed tx details when aggregated tx status returns valid data
+     * @scenario
+     * - define a mock guardStatuses array with enough records to trigger 'inPayment' event status
+     * - define a mock eventStatusThresholds with valid thresholds
+     * - define a mock txStatusThresholds with valid thresholds
+     * - define a valid tx status string by combining tx key and mock tx status separated by ::
+     * - call Utils.calcAggregatedStatus
+     * @expected
+     * - Utils.calcAggregatedStatus should have returned an object with status = inPayment, tx = mock tx key, & txStatus = mock tx status
+     */
+    it('should return aggregated status with updated event status and parsed tx details when aggregated tx status returns valid data', () => {
+      // arrange
+      const guardStatuses: GuardStatusEntity[] = [
+        ...mockGuardStatusRecords,
+        {
+          ...mockGuardStatusRecords[1],
+          guardPk: guardPk4,
+          status: EventStatus.inPayment,
+        },
+        {
+          ...mockGuardStatusRecords[1],
+          guardPk: guardPk2,
+          status: EventStatus.inPayment,
+        },
+        {
+          ...mockGuardStatusRecords[1],
+          guardPk: guardPk3,
+          status: EventStatus.inPayment,
+        },
+      ];
+      const eventStatusThresholds: Threshold<AggregateEventStatus>[] = [
+        { key: AggregateEventStatus.inPayment, count: 3 },
+        { key: AggregateEventStatus.inReward, count: 5 },
+        { key: AggregateEventStatus.finished, count: 3 },
+        { key: AggregateEventStatus.timeout, count: 3 },
+      ];
+      const txStatusThresholds: Threshold<AggregateTxStatus>[] = [
+        { key: AggregateTxStatus.inSign, count: 5 },
+        { key: AggregateTxStatus.signed, count: 3 },
+        { key: AggregateTxStatus.completed, count: 3 },
+      ];
+
+      // act
+      const result = Utils.calcAggregatedStatus(
+        guardStatuses,
+        eventStatusThresholds,
+        txStatusThresholds,
+      );
+
+      // assert
+      expect(result).toEqual({
+        status: AggregateEventStatus.inPayment,
+        tx: { txId: mockTx0.txId, chain: mockTx0.chain },
+        txStatus: AggregateTxStatus.signed,
+      });
     });
   });
 

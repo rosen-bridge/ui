@@ -29,8 +29,16 @@ export const guardPk2 =
   '03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c7';
 export const guardPk3 =
   '03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c8';
+export const guardPk4 =
+  '03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c9';
 
-export const tx0 = { txId: id0, chain: 'c1' } as unknown as TxEntity;
+export const mockTx0: TxEntity = {
+  txId: id1,
+  chain: 'c1',
+  eventId: id0,
+  insertedAt: 0,
+  txType: TxType.payment,
+};
 
 export const mockAggregatedStatusChangedRecords: Omit<
   AggregatedStatusChangedEntity,
@@ -142,8 +150,8 @@ export const mockGuardStatusRecords: Omit<GuardStatusEntity, 'id'>[] = [
     eventId: id0,
     guardPk: guardPk0,
     updatedAt: 1005,
-    status: EventStatus.completed,
-    tx: { txId: id1, chain: 'c1' } as unknown as TxEntity,
+    status: EventStatus.inPayment,
+    tx: mockTx0,
     txStatus: TxStatus.signed,
   },
   {
@@ -282,22 +290,22 @@ export const txStatusFromAggregateDict: Record<AggregateTxStatus, TxStatus> = {
   [AggregateTxStatus.inSign]: TxStatus.approved,
 } as Record<AggregateTxStatus, TxStatus>;
 
-export const mockEventStatusThresholds: Threshold<AggregateEventStatus> = [
-  { status: AggregateEventStatus.finished, count: 6 },
-  { status: AggregateEventStatus.inReward, count: 3 },
-  { status: AggregateEventStatus.pendingReward, count: 3 },
-  { status: AggregateEventStatus.inPayment, count: 6 },
-  { status: AggregateEventStatus.rejected, count: 5 },
-  { status: AggregateEventStatus.timeout, count: 5 },
-  { status: AggregateEventStatus.reachedLimit, count: 5 },
-  { status: AggregateEventStatus.paymentWaiting, count: 5 },
-  { status: AggregateEventStatus.pendingPayment, count: 3 },
+export const mockEventStatusThresholds: Threshold<AggregateEventStatus>[] = [
+  { key: AggregateEventStatus.finished, count: 6 },
+  { key: AggregateEventStatus.inReward, count: 3 },
+  { key: AggregateEventStatus.pendingReward, count: 3 },
+  { key: AggregateEventStatus.inPayment, count: 6 },
+  { key: AggregateEventStatus.rejected, count: 5 },
+  { key: AggregateEventStatus.timeout, count: 5 },
+  { key: AggregateEventStatus.reachedLimit, count: 5 },
+  { key: AggregateEventStatus.paymentWaiting, count: 5 },
+  { key: AggregateEventStatus.pendingPayment, count: 3 },
 ];
 
-export const mockTxStatusThresholds: Threshold<AggregateTxStatus> = [
-  { status: AggregateTxStatus.completed, count: 6 },
-  { status: AggregateTxStatus.invalid, count: 6 },
-  { status: AggregateTxStatus.sent, count: 6 },
-  { status: AggregateTxStatus.signed, count: 3 },
-  { status: AggregateTxStatus.inSign, count: 6 },
+export const mockTxStatusThresholds: Threshold<AggregateTxStatus>[] = [
+  { key: AggregateTxStatus.completed, count: 6 },
+  { key: AggregateTxStatus.invalid, count: 6 },
+  { key: AggregateTxStatus.sent, count: 6 },
+  { key: AggregateTxStatus.signed, count: 3 },
+  { key: AggregateTxStatus.inSign, count: 6 },
 ];
