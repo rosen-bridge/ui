@@ -28,15 +28,10 @@ export const Toolbar = () => {
   const isMobile = useIsMobile();
 
   return (
-    <UiKitToolbar
-      title={page ? (pageTitleMap[page] ?? '') : ''}
-      toolbarActions={
-        <>
-          {isMobile && <VersionConfig />}
-          <ApiKeyModal />
-          <ToolbarThemeTogglerAction />
-        </>
-      }
-    />
+    <UiKitToolbar>
+      {isMobile && <VersionConfig />}
+      <ApiKeyModal />
+      <ToolbarThemeTogglerAction />
+    </UiKitToolbar>
   );
 };
