@@ -4,6 +4,7 @@ import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
 import { startBitcoinScanner } from './chains/bitcoin';
 import { startCardanoScanner } from './chains/cardano';
+import { startDogeScanner } from './chains/doge';
 import { startErgoScanner } from './chains/ergo';
 import { startEthereumScanner } from './chains/ethereum';
 
@@ -20,12 +21,14 @@ const start = async () => {
       bitcoinScanner,
       ethereumScanner,
       binanceScanner,
+      dogeScanner,
     ] = await Promise.all([
       startErgoScanner(),
       startCardanoScanner(),
       startBitcoinScanner(),
       startEthereumScanner(),
       startBinanceScanner(),
+      startDogeScanner(),
     ]);
 
     logger.debug('all scanners started and their extractors registered', {
@@ -35,6 +38,7 @@ const start = async () => {
         bitcoinScanner.name(),
         ethereumScanner.name(),
         binanceScanner.name(),
+        dogeScanner.name(),
       ],
     });
   } catch (error) {
