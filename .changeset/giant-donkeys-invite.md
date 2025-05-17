@@ -2,4 +2,4 @@
 '@rosen-bridge/watcher-app': patch
 ---
 
-Fix the pages heading in Watcher
+Fix the heading of pages
