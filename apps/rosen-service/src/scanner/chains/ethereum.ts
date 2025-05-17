@@ -1,5 +1,10 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/scanner';
+import { TransactionResponse } from 'ethers';
 
 import config from '../../configs';
 import {
@@ -18,22 +23,38 @@ const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
 );
 
 /**
+ * Creates and configures a NetworkConnectorManager instance for ethereum scanner
+ */
+export const createEthereumNetworkConnectorManager = () => {
+  const networkConnectorManager =
+    new NetworkConnectorManager<TransactionResponse>(
+      new FailoverStrategy(),
+      scannerLogger,
+    );
+
+  networkConnectorManager.addConnector(
+    new EvmRpcNetwork(
+      config.ethereum.rpcUrl,
+      SCANNER_API_TIMEOUT * 1000,
+      config.ethereum.rpcAuthToken,
+    ),
+  );
+
+  return networkConnectorManager;
+};
+
+/**
  * create a ethereum scanner, initializing it and calling its update method
  * periodically
  */
 export const startEthereumScanner = async () => {
   try {
-    const scanner = new EvmRpcScanner(
-      'ethereum',
-      {
-        RpcUrl: config.ethereum.rpcUrl,
-        dataSource,
-        initialHeight: config.ethereum.initialHeight,
-        timeout: SCANNER_API_TIMEOUT,
-      },
-      scannerLogger,
-      config.ethereum.rpcAuthToken,
-    );
+    const scanner = new EvmRpcScanner('ethereum', {
+      dataSource,
+      initialHeight: config.ethereum.initialHeight,
+      logger: scannerLogger,
+      network: createEthereumNetworkConnectorManager(),
+    });
 
     await observationService.registerEthereumExtractor(scanner);
 

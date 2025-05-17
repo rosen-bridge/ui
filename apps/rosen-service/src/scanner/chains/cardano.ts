@@ -1,5 +1,13 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
+import {
+  CardanoKoiosScanner,
+  KoiosNetwork,
+  KoiosTransaction,
+} from '@rosen-bridge/scanner';
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/scanner';
 
 import config from '../../configs';
 import {
@@ -18,21 +26,37 @@ const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
 );
 
 /**
+ * Creates and configures a NetworkConnectorManager instance for cardano scanner
+ */
+export const createCardanoNetworkConnectorManager = () => {
+  const networkConnectorManager = new NetworkConnectorManager<KoiosTransaction>(
+    new FailoverStrategy(),
+    scannerLogger,
+  );
+
+  networkConnectorManager.addConnector(
+    new KoiosNetwork(
+      config.cardano.koiosUrl,
+      SCANNER_API_TIMEOUT * 1000,
+      config.cardano.koiosAuthToken,
+    ),
+  );
+
+  return networkConnectorManager;
+};
+
+/**
  * create a cardano scanner, initializing it and calling its update method
  * periodically
  */
 export const startCardanoScanner = async () => {
   try {
-    const scanner = new CardanoKoiosScanner(
-      {
-        dataSource,
-        initialHeight: config.cardano.initialHeight,
-        koiosUrl: config.cardano.koiosUrl,
-        timeout: SCANNER_API_TIMEOUT,
-      },
-      scannerLogger,
-      config.cardano.koiosAuthToken,
-    );
+    const scanner = new CardanoKoiosScanner({
+      dataSource,
+      initialHeight: config.cardano.initialHeight,
+      logger: scannerLogger,
+      network: createCardanoNetworkConnectorManager(),
+    });
 
     await observationService.registerCardanoExtractor(scanner);
 

@@ -1,5 +1,10 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/scanner';
+import { TransactionResponse } from 'ethers';
 
 import config from '../../configs';
 import {
@@ -18,22 +23,38 @@ const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
 );
 
 /**
+ * Creates and configures a NetworkConnectorManager instance for binance scanner
+ */
+export const createBinanceNetworkConnectorManager = () => {
+  const networkConnectorManager =
+    new NetworkConnectorManager<TransactionResponse>(
+      new FailoverStrategy(),
+      scannerLogger,
+    );
+
+  networkConnectorManager.addConnector(
+    new EvmRpcNetwork(
+      config.binance.rpcUrl,
+      SCANNER_API_TIMEOUT * 1000,
+      config.binance.rpcAuthToken,
+    ),
+  );
+
+  return networkConnectorManager;
+};
+
+/**
  * create a binance scanner, initializing it and calling its update method
  * periodically
  */
 export const startBinanceScanner = async () => {
   try {
-    const scanner = new EvmRpcScanner(
-      'binance',
-      {
-        RpcUrl: config.binance.rpcUrl,
-        dataSource,
-        initialHeight: config.binance.initialHeight,
-        timeout: SCANNER_API_TIMEOUT,
-      },
-      scannerLogger,
-      config.binance.rpcAuthToken,
-    );
+    const scanner = new EvmRpcScanner('binance', {
+      dataSource,
+      initialHeight: config.binance.initialHeight,
+      logger: scannerLogger,
+      network: createBinanceNetworkConnectorManager(),
+    });
 
     await observationService.registerBinanceExtractor(scanner);
 
