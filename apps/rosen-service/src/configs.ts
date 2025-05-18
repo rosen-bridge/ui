@@ -107,6 +107,7 @@ const getConfig = () => {
           fraud: nodeConfig.get<string>('doge.addresses.fraud'),
         },
         initialHeight: nodeConfig.get<number>('doge.initialHeight'),
+        blockRetrieveGap: nodeConfig.get<number>('doge.blockRetrieveGap'),
         tokens: {
           rwt: nodeConfig.get<string>('doge.tokens.rwt'),
         },

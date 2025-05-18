@@ -63,6 +63,7 @@ export const startDogeScanner = async () => {
       initialHeight: config.doge.initialHeight,
       logger: scannerLogger,
       network: createDogeRpcNetworkConnectorManager(),
+      blockRetrieveGap: config.doge.blockRetrieveGap,
     });
 
     observationService.registerDogeExtractor(scanner);

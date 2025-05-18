@@ -45,6 +45,7 @@ doge:
   tokens:
     rwt:
   initialHeight:
+  blockRetrieveGap: 1200 # in milliseconds
   blockcypherUrl: https://api.blockcypher.com
   rpcConnections:
     - url:
