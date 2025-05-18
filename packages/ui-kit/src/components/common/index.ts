@@ -19,6 +19,7 @@ export * from './Id';
 export * from './InfoWidgetCardBase';
 export * from './NavigationBar';
 export * from './NavigationButton';
+export * from './IconSelectField';
 export * from './Version';
 export * from './PageHeading';
 export * from './QrCodeModal';

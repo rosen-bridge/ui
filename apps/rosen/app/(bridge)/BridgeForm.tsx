@@ -7,16 +7,15 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
   TextField,
-  Typography,
-  ListItemIcon,
   styled,
-  MenuItem,
   CircularProgress,
   SvgIcon,
   Alert,
   Autocomplete,
   InputAdornment,
   IconButton,
+  IconSelectField,
+  SelectedNetwork,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -25,23 +24,12 @@ import {
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenMap,
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * bridge form container comp
@@ -90,15 +78,7 @@ export const BridgeForm = () => {
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
-    const Logo = network.logo;
-    return (
-      <SelectedAsset>
-        <SvgIcon>
-          <Logo />
-        </SvgIcon>
-        <Typography color="text.secondary">{network.label}</Typography>
-      </SelectedAsset>
-    );
+    return <SelectedNetwork label={network.label} Logo={network.logo} />;
   };
 
   const handleTokenChange = useCallback(
@@ -168,61 +148,36 @@ export const BridgeForm = () => {
     <FormContainer>
       <Grid container spacing={2}>
         <Grid item mobile={6} tablet={6} laptop={6}>
-          <TextField
+          <IconSelectField
             id="source"
-            select
             label="Source"
-            inputProps={{ 'aria-label': 'source input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...sourceField}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
+            value={sourceField.value}
             onChange={handleSourceChange}
-          >
-            {availableSources.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <SvgIcon>
-                    <Logo />
-                  </SvgIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
+            options={availableSources.map(({ name, label, logo }) => ({
+              name,
+              label,
+              Logo: logo,
+            }))}
+            disabled={sourceField.disabled}
+            error={!!errors?.source}
+            helperText={errors.source?.message?.toString()}
+          />
         </Grid>
         <Grid item mobile={6} tablet={6} laptop={6}>
-          <TextField
+          <IconSelectField
             id="target"
-            select
             label="Target"
-            disabled={!sourceField.value}
-            inputProps={{ 'aria-label': 'target input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...targetField}
-            // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
-            value={targetField.value ?? ''}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
+            value={targetField.value}
             onChange={handleTargetChange}
-          >
-            {availableTargets.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <ListItemIcon>
-                    <SvgIcon>
-                      <Logo />
-                    </SvgIcon>
-                  </ListItemIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
+            options={availableTargets.map(({ name, label, logo }) => ({
+              name,
+              label,
+              Logo: logo,
+            }))}
+            disabled={!sourceField.value}
+            error={!!errors?.target}
+            helperText={errors.target?.message?.toString()}
+          />
         </Grid>
       </Grid>
       <TextField
