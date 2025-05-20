@@ -6,6 +6,7 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/en/token',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/token',
   [NETWORKS.bitcoin.key]: '',
+  [NETWORKS.runes.key]: 'TODO:',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/token',
   [NETWORKS.doge.key]: '',
 };

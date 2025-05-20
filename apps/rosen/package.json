@@ -34,6 +34,7 @@
     "@rosen-network/ergo": "^2.1.2",
     "@rosen-network/ethereum": "^0.2.3",
     "@rosen-network/evm": "^0.3.0",
+    "@rosen-network/runes": "^0.1.0",
     "@rosen-ui/asset-calculator": "^2.1.5",
     "@rosen-ui/constants": "^0.3.0",
     "@rosen-ui/eternl-wallet": "^2.3.4",

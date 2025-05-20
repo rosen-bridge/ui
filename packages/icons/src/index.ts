@@ -181,6 +181,9 @@ export { default as ErgoRaw } from './networks/ergo.svg?raw';
 export { ReactComponent as Ethereum } from './networks/ethereum.svg';
 export { default as EthereumRaw } from './networks/ethereum.svg?raw';
 
+export { ReactComponent as Runes } from './networks/runes.svg';
+export { default as RunesRaw } from './networks/runes.svg?raw';
+
 export { ReactComponent as Eternl } from './wallets/eternl.svg';
 export { default as EternlRaw } from './wallets/eternl.svg?raw';
 
