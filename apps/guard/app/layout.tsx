@@ -15,7 +15,7 @@ const RootLayout = ({ children }: PropsWithChildren) => {
      */
     <html lang="en">
       <body>
-        <App>{children}</App>
+        <App>...{children}</App>
       </body>
     </html>
   );
