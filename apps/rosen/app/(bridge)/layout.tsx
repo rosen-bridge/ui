@@ -32,11 +32,26 @@ const Background = styled('div')(({ theme }) => ({
   },
 }));
 
+const Main = styled('main')(({ theme }) => ({
+  position: 'relative',
+  zIndex: 1,
+  [theme.breakpoints.up('tablet')]: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    gap: theme.spacing(3),
+    minHeight: 'calc(100vh - 224px)',
+    maxWidth: theme.breakpoints.values.desktop,
+    margin: '0 auto',
+  },
+}));
+
 const PageLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
       <PageHeading title="Rosen Bridge" />
-      {children}
+      <Main>{children}</Main>
+
       <Background>
         <CubeNetSvg color="primary" className="top" />
         <CubeNetSvg color="secondary" className="bottom" />
