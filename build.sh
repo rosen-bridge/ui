@@ -42,6 +42,7 @@ if [ "$APP" == "rosen" ]; then
   npm run build --workspace wallets/metamask
   npm run build --workspace wallets/nautilus
   npm run build --workspace wallets/okx
+  npm run build --workspace wallets/wallet-connect
   npm run build --workspace wallets/my-doge
 fi
 
