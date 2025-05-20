@@ -75,6 +75,16 @@ JSON_PAYLOAD=$(cat <<EOF
           "inline": false
         },
         {
+          "name": "🌍 Branch URL",
+          "value": "$([ -n "$VERCEL_URL" ] && echo "[$VERCEL_URL](https://$VERCEL_URL)" || echo "N/A")",
+          "inline": false
+        },
+        {
+          "name": "🌍 Branch URL",
+          "value": "$([ -n "$NEXT_PUBLIC_SITE_URL" ] && echo "[$NEXT_PUBLIC_SITE_URL](https://$NEXT_PUBLIC_SITE_URL)" || echo "N/A")",
+          "inline": false
+        },
+        {
           "name": "📜 Commit Message",
           "value": "${VERCEL_GIT_COMMIT_MESSAGE:-N/A}",
           "inline": false
