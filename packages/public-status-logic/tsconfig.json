@@ -1,9 +1,6 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "noFallthroughCasesInSwitch": true,
-    "useUnknownInCatchVariables": false,
-    "outDir": "dist",
     "rootDir": ".",
     "types": ["../../node_modules/vitest/globals"],
     "paths": {
