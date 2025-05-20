@@ -1,4 +1,5 @@
 export * from './carousel';
+export * from './input';
 export * from './smartSearch';
 export * from './AlertCard';
 export * from './Amount';
