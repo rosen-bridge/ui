@@ -43,9 +43,6 @@ if [ "$APP" == "rosen" ]; then
   npm run build --workspace wallets/nautilus
   npm run build --workspace wallets/okx
   npm run build --workspace wallets/my-doge
-fi
-
-if [ "$APP" == "public-status" ]; then
   npm run build --workspace packages/public-status-logic
 fi
 
