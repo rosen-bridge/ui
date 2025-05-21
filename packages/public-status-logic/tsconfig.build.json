@@ -1,7 +1,10 @@
 {
-  "extends": "./tsconfig.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "strictPropertyInitialization": false
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    "outDir": "dist",
+    "rootDir": "./src"
   },
-  "exclude": ["tests", "vitest.config.ts"]
+  "include": ["src"]
 }
