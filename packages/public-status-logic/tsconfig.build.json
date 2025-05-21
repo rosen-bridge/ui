@@ -1,7 +1,7 @@
 {
-  "extends": "../../tsconfig.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "dist",
+    "strictPropertyInitialization": false,
     "rootDir": "./src"
   },
   "exclude": ["tests", "vitest.config.ts"]

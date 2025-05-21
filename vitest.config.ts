@@ -7,7 +7,6 @@ export default defineConfig({
       provider: 'istanbul',
       reporter: ['cobertura', 'json-summary'],
       reportOnFailure: true,
-      exclude: ['apps/public-status-command', 'apps/public-status-query'],
     },
   },
 });
