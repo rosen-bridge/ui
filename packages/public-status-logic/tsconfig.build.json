@@ -1,8 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "strictPropertyInitialization": false,
-    "rootDir": "./src"
+    "strictPropertyInitialization": false
   },
   "exclude": ["tests", "vitest.config.ts"]
 }
