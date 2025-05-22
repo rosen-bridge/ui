@@ -18,6 +18,10 @@ const bitcoinEventTriggerExtractorLogger =
   CallbackLoggerFactory.getInstance().getLogger(
     'bitcoin-event-trigger-extractor',
   );
+const runesEventTriggerExtractorLogger =
+  CallbackLoggerFactory.getInstance().getLogger(
+    'runes-event-trigger-extractor',
+  );
 const ethereumEventTriggerExtractorLogger =
   CallbackLoggerFactory.getInstance().getLogger(
     'ethereum-event-trigger-extractor',
@@ -68,6 +72,17 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.bitcoin.addresses.fraud,
       bitcoinEventTriggerExtractorLogger,
     );
+    const runesEventTriggerExtractor = new EventTriggerExtractor(
+      'runes-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.runes.addresses.eventTrigger,
+      configs.runes.tokens.rwt,
+      configs.runes.addresses.permit,
+      configs.runes.addresses.fraud,
+      runesEventTriggerExtractorLogger,
+    );
     const dogeEventTriggerExtractor = new EventTriggerExtractor(
       'doge-extractor',
       dataSource,
@@ -104,6 +119,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);
     await scanner.registerExtractor(bitcoinEventTriggerExtractor);
+    await scanner.registerExtractor(runesEventTriggerExtractor);
     await scanner.registerExtractor(dogeEventTriggerExtractor);
     await scanner.registerExtractor(ethereumEventTriggerExtractor);
     await scanner.registerExtractor(binanceEventTriggerExtractor);
@@ -114,6 +130,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         ergoEventTriggerExtractor.getId(),
         cardanoEventTriggerExtractor.getId(),
         bitcoinEventTriggerExtractor.getId(),
+        runesEventTriggerExtractor.getId(),
         dogeEventTriggerExtractor.getId(),
         ethereumEventTriggerExtractor.getId(),
         binanceEventTriggerExtractor.getId(),

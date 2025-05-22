@@ -67,6 +67,19 @@ const getConfig = () => {
         rpcUsername: getOptionalString('bitcoin.rpc.username'),
         rpcPassword: getOptionalString('bitcoin.rpc.password'),
       },
+      runes: {
+        addresses: {
+          lock: nodeConfig.get<string>('runes.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>('runes.addresses.eventTrigger'),
+          permit: nodeConfig.get<string>('runes.addresses.permit'),
+          fraud: nodeConfig.get<string>('runes.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('runes.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('runes.tokens.rwt'),
+        },
+        unisatUrl: nodeConfig.get<string>('runes.unisatUrl'),
+      },
       ethereum: {
         addresses: {
           lock: nodeConfig.get<string>('ethereum.addresses.lock'),
@@ -125,6 +138,7 @@ const getConfig = () => {
           ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
+          runes: nodeConfig.get<string[]>('calculator.addresses.runes'),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
@@ -148,6 +162,12 @@ const getConfig = () => {
         ),
         bitcoinScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.bitcoinScannerCriticalDiff',
+        ),
+        runesScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.runesScannerWarnDiff',
+        ),
+        runesScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.runesScannerCriticalDiff',
         ),
         dogeScannerWarnDiff: nodeConfig.get<number>(
           'healthCheck.dogeScannerWarnDiff',

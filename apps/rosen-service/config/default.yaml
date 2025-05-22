@@ -36,6 +36,16 @@ bitcoin:
     url:
     username:
     password:
+runes:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  unisatUrl: https://open-api.unisat.io
 doge:
   addresses:
     lock:
@@ -80,6 +90,7 @@ calculator:
     ergo: []
     cardano: []
     bitcoin: []
+    runes: []
     doge: []
     ethereum: []
     binance: []
@@ -90,15 +101,17 @@ healthCheck:
   cardanoScannerCriticalDiff: 5
   bitcoinScannerWarnDiff: 3
   bitcoinScannerCriticalDiff: 5
+  runesScannerWarnDiff: 3
+  runesScannerCriticalDiff: 5
   dogeScannerWarnDiff: 3
   dogeScannerCriticalDiff: 5
   ethereumScannerWarnDiff: 3
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3
   binanceScannerCriticalDiff: 5
-  interval: 60  #health check update interval (in seconds)
+  interval: 60 #health check update interval (in seconds)
 notification:
-  discordWebhookUrl:  # discord notification webhook
+  discordWebhookUrl: # discord notification webhook
 #  historyCleanupTimeout: # notification history cleanup threshold (in seconds, uses default if not set)
 #  windowDurations:
 #    hasBeenUnstableForAWhile: # window duration to notify when service has been unstable for a while (in seconds, uses default if not set)
