@@ -11,12 +11,14 @@ import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { EvmCalculator } from './calculator/chains/evm-calculator';
+import { RunesCalculator } from './calculator/chains/runes-calculator';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import {
   BitcoinCalculatorInterface,
+  RunesCalculatorInterface,
   CardanoCalculatorInterface,
   ErgoCalculatorInterface,
   EvmCalculatorInterface,
@@ -34,6 +36,7 @@ class AssetCalculator {
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
     bitcoinCalculator: BitcoinCalculatorInterface,
+    runesCalculator: RunesCalculatorInterface,
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
     dataSource: DataSource,
@@ -59,6 +62,12 @@ class AssetCalculator {
       bitcoinCalculator.esploraUrl,
       logger,
     );
+    const runesAssetCalculator = new RunesCalculator(
+      this.tokens,
+      runesCalculator.addresses,
+      runesCalculator.unisatUrl,
+      logger,
+    );
     const ethereumAssetCalculator = new EvmCalculator(
       NETWORKS.ethereum.key,
       this.tokens,
@@ -78,6 +87,7 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
+    this.calculatorMap.set(NETWORKS.bitcoin.key, runesAssetCalculator); // TODO: change to runes after constants update
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);

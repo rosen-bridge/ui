@@ -9,6 +9,9 @@ interface CardanoCalculatorInterface extends CalculatorInterface {
 interface BitcoinCalculatorInterface extends CalculatorInterface {
   esploraUrl?: string;
 }
+interface RunesCalculatorInterface extends CalculatorInterface {
+  unisatUrl?: string;
+}
 
 interface EvmCalculatorInterface extends CalculatorInterface {
   rpcUrl: string;
@@ -23,5 +26,6 @@ export {
   ErgoCalculatorInterface,
   CardanoCalculatorInterface,
   BitcoinCalculatorInterface,
+  RunesCalculatorInterface,
   EvmCalculatorInterface,
 };

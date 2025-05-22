@@ -1,0 +1,145 @@
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
+import axios, { AxiosInstance } from 'axios';
+import { zipWith } from 'lodash-es';
+
+import AbstractCalculator from '../abstract-calculator';
+
+export class RunesCalculator extends AbstractCalculator {
+  readonly chain: Network = NETWORKS.bitcoin.key; // TODO: change to runes after constants update
+
+  protected client: AxiosInstance;
+
+  constructor(
+    tokenMap: TokenMap,
+    addresses: string[],
+    url: string = 'https://open-api.unisat.io',
+    logger?: AbstractLogger,
+  ) {
+    super(addresses, logger, tokenMap);
+    this.client = axios.create({
+      baseURL: url,
+    });
+  }
+
+  /**
+   * @param token Runes chain token info
+   * @returns total supply of the token
+   */
+  totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
+    const response = await this.client.get<UnisatResponse<RuneInfo>>(
+      `/v1/indexer/runes/${token.tokenId}/info`,
+    );
+    const tokenDetail = response.data.data;
+
+    if (tokenDetail) {
+      this.logger.debug(
+        `Total supply of token [${token.tokenId}] is [${tokenDetail.supply}]`,
+      );
+      return BigInt(tokenDetail.supply);
+    }
+
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
+  };
+
+  /**
+   * @param token Runes chain token info
+   * @returns total balance in hot and cold wallets
+   */
+  totalRawBalance = async (token: RosenChainToken): Promise<bigint> => {
+    let tokenBalance = 0n;
+
+    for (const address of this.addresses) {
+      const response = await this.client.get<
+        UnisatResponse<AddressRunesBalance>
+      >(`/v1/indexer/address/${address}/runes/${token.tokenId}/balance`);
+
+      const addressTokenBalance = response.data.data
+        ? BigInt(response.data.data.amount)
+        : 0n;
+
+      this.logger.debug(
+        `Balance of token [${token.name}] in address [${address}] is [${addressTokenBalance}]`,
+      );
+
+      tokenBalance += addressTokenBalance;
+    }
+
+    this.logger.debug(
+      `Total balance of token [${token.name}] is [${tokenBalance}]`,
+    );
+
+    return tokenBalance;
+  };
+
+  /**
+   * returns locked amounts of a specific token for different addresses
+   * @param token
+   */
+  getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
+    const tokenBalances = await Promise.all(
+      this.addresses.map(async (address) => {
+        const response = await this.client.get<
+          UnisatResponse<AddressRunesBalance>
+        >(`/v1/indexer/address/${address}/runes/${token.tokenId}/balance`);
+
+        return response.data.data ? BigInt(response.data.data.amount) : 0n;
+      }),
+    );
+
+    return zipWith(this.addresses, tokenBalances, (address, amount) => ({
+      address,
+      amount,
+    })).filter((amountPerAddress) => amountPerAddress.amount);
+  };
+}
+
+export type UnisatResponse<T> = {
+  code: number;
+  msg: string;
+  data: T | null;
+};
+
+export type AddressRunesBalance = {
+  amount: string;
+  runeid: string;
+  rune: string;
+  spacedRune: string;
+  symbol: string;
+  divisibility: number;
+};
+
+export type RuneInfo = {
+  runeid: string;
+  rune: string;
+  spacedRune: string;
+  number: number;
+  height: number;
+  txidx: number;
+  timestamp: number;
+  divisibility: number;
+  symbol: string;
+  etching: string;
+  premine: string;
+  terms: RuneInfoTerms;
+  mints: string;
+  burned: string;
+  holders: number;
+  transactions: number;
+  supply: string;
+  start: number;
+  end: number;
+  mintable: boolean;
+  remaining: string;
+};
+
+export type RuneInfoTerms = {
+  amount: string;
+  cap: string;
+  heightStart: number;
+  heightEnd: number;
+  offsetStart: number | null;
+  offsetEnd: number | null;
+};
