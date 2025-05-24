@@ -45,7 +45,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace wallets/my-doge
 fi
 
-if [ "$APP" == "default" ]; then
+if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/public-status-logic
 fi
 
