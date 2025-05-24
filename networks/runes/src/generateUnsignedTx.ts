@@ -3,6 +3,6 @@
  * @returns
  */
 export const generateUnsignedTx = () => {
-  // TODO:
+  // TODO: implement logic in the runes-ui-network task
   throw new Error('not implemented yet');
 };
