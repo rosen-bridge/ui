@@ -1,6 +1,7 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
-import { HealthCheck } from '@rosen-bridge/health-check';
+import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
+import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import {
   CardanoKoiosScannerHealthCheck,
   ErgoExplorerScannerHealthCheck,
@@ -133,6 +134,24 @@ const start = async () => {
   try {
     const { notify, notificationConfig } = getNotifySetup();
     const healthCheck = new HealthCheck(notify, notificationConfig);
+
+    const warnLogCheck = new LogLevelHealthCheck(
+      CallbackLoggerFactory.getInstance(),
+      HealthStatusLevel.UNSTABLE,
+      config.healthCheck.warnLogAllowedCount,
+      config.healthCheck.logDuration,
+      'warn',
+    );
+    healthCheck.register(warnLogCheck);
+
+    const errorLogCheck = new LogLevelHealthCheck(
+      CallbackLoggerFactory.getInstance(),
+      HealthStatusLevel.UNSTABLE,
+      config.healthCheck.errorLogAllowedCount,
+      config.healthCheck.logDuration,
+      'error',
+    );
+    healthCheck.register(errorLogCheck);
 
     registerAllHealthChecks(healthCheck);
 

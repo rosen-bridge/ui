@@ -168,6 +168,13 @@ const getConfig = () => {
           'healthCheck.binanceScannerCriticalDiff',
         ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
+        logDuration: nodeConfig.get<number>('healthCheck.duration') * 1000,
+        errorLogAllowedCount: nodeConfig.get<number>(
+          'healthCheck.maxAllowedErrorCount',
+        ),
+        warnLogAllowedCount: nodeConfig.get<number>(
+          'healthCheck.maxAllowedWarnCount',
+        ),
       },
       notification: {
         discordWebHookUrl: nodeConfig.get<string>(
