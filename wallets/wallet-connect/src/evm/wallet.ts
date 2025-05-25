@@ -1,3 +1,4 @@
+import { Provider } from '@reown/appkit-adapter-ethers';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Network } from '@rosen-ui/types';
 import {
@@ -17,8 +18,7 @@ export abstract class WalletConnectEVM extends WalletConnect<WalletConnectEVMCon
   }
 
   get provider() {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return this.modal.getWalletProvider() as any;
+    return this.modal.getWalletProvider() as Provider;
   }
 
   get supportedChains() {

@@ -6,7 +6,7 @@ import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 import { generateLockData, generateTxParameters } from './server';
 
 export const walletConnectBinance = new WalletConnectBinance({
-  projectId: 'a95ba285168bef3d2e4fc7e6be193998',
+  projectId: process.env.NEXT_PUBLIC_REOWN_PROJECT_ID!,
   getTokenMap,
   generateLockData: unwrap(generateLockData),
   generateTxParameters: unwrap(generateTxParameters),
