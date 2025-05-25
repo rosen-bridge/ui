@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "test": "vitest",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-pandora --out configs --include-prereleases && node ./configs/generate.mjs",
     "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build"
   },
   "dependencies": {

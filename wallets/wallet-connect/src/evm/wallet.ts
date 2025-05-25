@@ -13,7 +13,7 @@ export abstract class WalletConnectEVM extends WalletConnect<WalletConnectEVMCon
   abstract currentChain: Network;
 
   get name() {
-    return 'WalletConnect1' + this.currentChain;
+    return 'WalletConnect' + this.currentChain;
   }
 
   get provider() {

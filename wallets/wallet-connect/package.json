@@ -9,7 +9,7 @@
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "eslint --fix . && npm run prettify",
-    "build": "tsc --build",
+    "build": "tsc --watch",
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@reown/appkit": "^1.7.5",
+    "@reown/appkit-adapter-bitcoin": "^1.7.6",
     "@reown/appkit-adapter-ethers": "^1.7.5",
     "@rosen-bridge/icons": "^1.3.0",
     "@rosen-bridge/tokens": "^3.0.0",
