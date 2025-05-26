@@ -155,7 +155,7 @@ const start = async () => {
 
     registerAllHealthChecks(healthCheck);
 
-    const interval = config.healthCheck.updateInterval * 1000;
+    const interval = config.healthCheck.updateInterval;
     setInterval(async () => {
       try {
         await healthCheck.update();
