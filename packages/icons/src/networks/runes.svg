@@ -1,11 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300">
-  <defs>
-    <style>
-      .cls-1 {
-        stroke-width: 0px;
-      }
-    </style>
-  </defs>
   <g image-rendering="optimizeQuality" shape-rendering="geometricPrecision" text-rendering="geometricPrecision">
     <g>
       <path class="cls-1" d="M118,119.25c-1.2-1.72-2.41-3.45-3.66-5.24-.17.25-.27.35-.33.48-5.95,11.66-11.89,23.32-17.85,34.98-.39.77-.32,1.43.08,2.17,2.67,4.99,5.32,10.01,7.99,15.01,2.67,5.04,5.36,10.06,8.11,15.26.24-.32.41-.51.55-.72,7.79-11.33,15.57-22.67,23.38-33.99.47-.67.39-1.1-.05-1.72-6.09-8.73-12.15-17.48-18.22-26.22Z"/>
