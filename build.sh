@@ -5,8 +5,8 @@
 # This file should be removed when #24 is implemented
 
 
-# Default app is rosen if not specified
-APP=${1:-rosen}
+# Default app is default if not specified
+APP=${1:-default}
 
 echo "building monorepo packages for app '$APP' ..."
 
@@ -16,7 +16,7 @@ if [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/asset-calculator
 fi
 
-if [ "$APP" == "guard" ] || [ "$APP" == "watcher" ] ||  [ "$APP" == "rosen" ]; then
+if [ "$APP" == "guard" ] || [ "$APP" == "watcher" ] ||  [ "$APP" == "rosen" ] ||  [ "$APP" == "default" ]; then
   npm run build --workspace packages/constants
   npm run build --workspace packages/types
   npm run build --workspace packages/utils
@@ -26,7 +26,7 @@ if [ "$APP" == "guard" ] || [ "$APP" == "watcher" ] ||  [ "$APP" == "rosen" ]; t
   npm run build --workspace packages/ui-kit
 fi
 
-if [ "$APP" == "rosen" ]; then
+if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/asset-calculator
   npm run build --workspace wallets/wallet-api
   npm run build --workspace networks/base
@@ -45,7 +45,7 @@ if [ "$APP" == "rosen" ]; then
   npm run build --workspace wallets/my-doge
 fi
 
-if [ "$APP" == "public-status" ]; then
+if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/public-status-logic
 fi
 
