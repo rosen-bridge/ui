@@ -4,6 +4,7 @@ import { metamask } from './metamask';
 import { myDoge } from './my-doge';
 import { nautilus } from './nautilus';
 import { okx } from './okx';
+import { xverse } from './xverse';
 
 export const wallets = {
   [eternl.name]: eternl,
@@ -12,4 +13,5 @@ export const wallets = {
   [nautilus.name]: nautilus,
   [okx.name]: okx,
   [myDoge.name]: myDoge,
+  [xverse.name]: xverse,
 } as const;
