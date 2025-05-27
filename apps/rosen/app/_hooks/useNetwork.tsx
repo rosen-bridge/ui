@@ -1,6 +1,7 @@
 import {
   ReactNode,
   createContext,
+  useCallback,
   useContext,
   useEffect,
   useMemo,
@@ -12,7 +13,7 @@ import { Network } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network as NetworkKey } from '@rosen-ui/types';
 
-import { networks } from '@/_networks';
+import * as networks from '@/_networks';
 
 import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
@@ -76,6 +77,10 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     [],
   );
 
+  const getNetwork = useCallback((name: NetworkKey) => {
+    return Object.values(networks).find((wallet) => wallet.name == name);
+  }, []);
+
   /**
    * returns the list of available network objects if a and filters out
    * unsupported networks
@@ -83,8 +88,8 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const sources = useMemo(() => {
     return (tokenMap.getAllChains() as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => networks[chain]);
-  }, [tokenMap]);
+      .map((chain) => getNetwork(chain));
+  }, [tokenMap, getNetwork]);
 
   /**
    * returns the list of available target network objects if a and filters out
@@ -93,8 +98,8 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const targets = useMemo(() => {
     return (tokenMap.getSupportedChains(sourceField.value) as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => networks[chain]);
-  }, [sourceField.value, tokenMap]);
+      .map((chain) => getNetwork(chain));
+  }, [sourceField.value, tokenMap, getNetwork]);
 
   /**
    * a list of available tokens in the selected network
@@ -105,9 +110,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     return tokenMap.getTokens(sourceField.value, targetField.value);
   }, [targetField.value, sourceField.value, tokenMap]);
 
-  const selectedSource = networks[sourceField.value as NetworkKey];
+  const selectedSource = getNetwork(sourceField.value);
 
-  const selectedTarget = networks[targetField.value as NetworkKey];
+  const selectedTarget = getNetwork(targetField.value);
 
   useEffect(() => {
     if (!blacklist) return;
@@ -134,11 +139,11 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
           if (isBlocked) continue;
 
-          sources.add(networks[fromChain as NetworkKey]);
+          sources.add(getNetwork(fromChain as NetworkKey)!);
 
           if (sourceField.value != fromChain) continue;
 
-          targets.add(networks[toChain as NetworkKey]);
+          targets.add(getNetwork(toChain as NetworkKey)!);
 
           if (targetField.value != toChain) continue;
 
@@ -150,7 +155,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     setAvailableSources(Array.from(sources));
     setAvailableTargets(Array.from(targets));
     setAvailableTokens(Array.from(tokens));
-  }, [blacklist, tokenMap, sourceField.value, targetField.value]);
+  }, [blacklist, tokenMap, sourceField.value, targetField.value, getNetwork]);
 
   const state = {
     sources,

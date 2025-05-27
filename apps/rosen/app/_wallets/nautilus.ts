@@ -1,11 +1,9 @@
 import { NautilusWallet } from '@rosen-ui/nautilus-wallet';
 
-import { unwrap } from '@/_safeServerAction';
+import { ergo } from '@/_networks';
 import { getTokenMap } from '@/_tokenMap/getClientTokenMap';
 
-import { generateUnsignedTx } from './server';
-
 export const nautilus = new NautilusWallet({
+  networks: [ergo],
   getTokenMap,
-  generateUnsignedTx: unwrap(generateUnsignedTx),
 });
