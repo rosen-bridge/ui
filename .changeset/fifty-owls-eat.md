@@ -2,4 +2,4 @@
 '@rosen-bridge/icons': minor
 ---
 
-Add the WalletConnect icon.
+Add the WalletConnect icon
