@@ -46,6 +46,8 @@ runes:
     rwt:
   initialHeight:
   unisatUrl: https://open-api.unisat.io
+  ordiscanUrl: https://api.ordiscan.com
+  ordiscanApiKey:
 doge:
   addresses:
     lock:

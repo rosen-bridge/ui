@@ -1,7 +1,7 @@
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { RunesRpcObservationExtractor } from '@rosen-bridge/runes-observation-extractor';
 
-// import { RunesRpcObservationExtractor } from '@rosen-bridge/runes-observation-extractor';
 import config from '../../configs';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
@@ -15,15 +15,16 @@ const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
  */
 export const registerRunesExtractor = async (scanner: BitcoinRpcScanner) => {
   try {
-    // TODO: requires @rosen-bridge/runes-observation-extractor
-    //     const observationExtractor = new RunesRpcObservationExtractor(
-    //       config.runes.addresses.lock,
-    //       dataSource,
-    //       await getTokenMap(),
-    //       logger,
-    //     );
-    //
-    //     await scanner.registerExtractor(observationExtractor);
+    const observationExtractor = new RunesRpcObservationExtractor(
+      config.runes.addresses.lock,
+      config.runes.ordiscanUrl,
+      config.runes.ordiscanApiKey,
+      dataSource,
+      await getTokenMap(),
+      logger,
+    );
+
+    await scanner.registerExtractor(observationExtractor);
 
     logger.debug('runes observation extractor registered', {
       scannerName: scanner.name(),

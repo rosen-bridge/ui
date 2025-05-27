@@ -79,6 +79,8 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('runes.tokens.rwt'),
         },
         unisatUrl: nodeConfig.get<string>('runes.unisatUrl'),
+        ordiscanUrl: nodeConfig.get<string>('runes.ordiscanUrl'),
+        ordiscanApiKey: nodeConfig.get<string>('runes.ordiscanApiKey'),
       },
       ethereum: {
         addresses: {
