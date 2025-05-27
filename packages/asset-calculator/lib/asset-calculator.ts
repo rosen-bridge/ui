@@ -87,7 +87,7 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
-    this.calculatorMap.set(NETWORKS.bitcoin.key, runesAssetCalculator); // TODO: change to runes after constants update
+    this.calculatorMap.set(NETWORKS.runes.key, runesAssetCalculator);
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);

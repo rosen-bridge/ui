@@ -8,7 +8,7 @@ import { zipWith } from 'lodash-es';
 import AbstractCalculator from '../abstract-calculator';
 
 export class RunesCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.bitcoin.key; // TODO: change to runes after constants update
+  readonly chain: Network = NETWORKS.runes.key;
 
   protected client: AxiosInstance;
 
