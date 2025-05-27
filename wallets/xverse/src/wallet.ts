@@ -1,27 +1,28 @@
-import { Okx as OKXIcon } from '@rosen-bridge/icons';
+import { Xverse } from '@rosen-bridge/icons';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  DisconnectionFailedError,
   AddressRetrievalError,
   ConnectionRejectedError,
+  DisconnectionFailedError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
-  UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
+import { AddressPurpose, request } from 'sats-connect';
 
-import { OKXWalletConfig } from './types';
+import { XverseWalletConfig } from './types';
 
-export class OKXWallet extends Wallet<OKXWalletConfig> {
-  icon = OKXIcon;
+export class XverseWallet extends Wallet<XverseWalletConfig> {
+  icon = Xverse;
 
-  name = 'OKX';
+  name = 'Xverse';
 
-  label = 'OKX';
+  label = 'Xverse';
 
-  link = 'https://www.okx.com/';
+  link = 'https://www.xverse.app/';
 
   currentChain: Network = NETWORKS.bitcoin.key;
 
@@ -33,14 +34,15 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
     );
   }
 
-  private get api() {
-    return window.okxwallet.bitcoin;
-  }
-
   connect = async (): Promise<void> => {
     this.requireAvailable();
+
     try {
-      await this.api.connect();
+      const response = await request('wallet_connect', null);
+
+      if (response.status === 'success') return;
+
+      throw response.error;
     } catch (error) {
       throw new ConnectionRejectedError(this.name, error);
     }
@@ -48,8 +50,13 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
 
   disconnect = async (): Promise<void> => {
     this.requireAvailable();
+
     try {
-      await this.api.disconnect();
+      const response = await request('wallet_disconnect', null);
+
+      if (response.status === 'success') return;
+
+      throw response.error;
     } catch (error) {
       throw new DisconnectionFailedError(this.name, error);
     }
@@ -57,27 +64,44 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
 
   getAddress = async (): Promise<string> => {
     this.requireAvailable();
-    const accounts = await this.api.getAccounts();
 
-    const account = accounts?.at(0);
+    try {
+      const response = await request('getAddresses', {
+        purposes: [AddressPurpose.Payment],
+      });
 
-    if (!account) throw new AddressRetrievalError(this.name);
+      if (response.status == 'error') throw response.error;
 
-    return account;
+      const address = response.result.addresses.find(
+        (address) => address.purpose === AddressPurpose.Payment,
+      );
+
+      return address!.address;
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
   };
 
-  getBalanceRaw = async (): Promise<number> => {
-    return (await this.api.getBalance()).confirmed;
+  getBalanceRaw = async (): Promise<string> => {
+    const response = await request('getBalance', undefined);
+
+    if (response.status === 'success') return response.result.confirmed;
+
+    throw response.error;
   };
 
   isAvailable = (): boolean => {
     return (
-      typeof window.okxwallet !== 'undefined' && !!window.okxwallet.bitcoin
+      typeof window !== 'undefined' && !!window.XverseProviders?.BitcoinProvider
     );
   };
 
   isConnected = async (): Promise<boolean> => {
-    return !!window.okxwallet.selectedAddress;
+    try {
+      return !!(await this.getAddress());
+    } catch {
+      return false;
+    }
   };
 
   transfer = async (params: WalletTransferParams): Promise<string> => {
@@ -104,25 +128,28 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
       params.token,
     );
 
-    let signedPsbtHex;
+    let signedPsbtBase64;
 
     try {
-      signedPsbtHex = await this.api.signPsbt(psbtData.psbt.hex, {
-        autoFinalized: false,
-        toSignInputs: Array.from(Array(psbtData.inputSize).keys()).map(
-          (index) => ({
-            address: userAddress,
-            index: index,
-          }),
-        ),
+      const response = await request('signPsbt', {
+        psbt: psbtData.psbt.base64,
+        signInputs: {
+          [userAddress]: Array.from(Array(psbtData.inputSize).keys()),
+        },
       });
+
+      if (response.status === 'error') {
+        throw response.error;
+      }
+
+      signedPsbtBase64 = response.result.psbt;
     } catch (error) {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
     const txId = await this.currentNetwork.submitTransaction(
-      signedPsbtHex,
-      'hex',
+      signedPsbtBase64,
+      'base64',
     );
 
     return txId;

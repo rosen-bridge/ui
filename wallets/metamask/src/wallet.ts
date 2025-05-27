@@ -1,6 +1,8 @@
 import { MetaMaskSDK } from '@metamask/sdk';
 import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { BinanceNetwork } from '@rosen-network/binance/dist/client';
+import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -32,6 +34,12 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   link = 'https://metamask.io/';
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
 
   private api = new MetaMaskSDK({
     dappMetadata: {
@@ -165,24 +173,34 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   };
 
   transfer = async (params: WalletTransferParams): Promise<string> => {
+    this.requireAvailable();
+
+    if (
+      !(this.currentNetwork instanceof BinanceNetwork) &&
+      !(this.currentNetwork instanceof EthereumNetwork)
+    ) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const address = await this.getAddress();
 
-    const rosenData = await this.config.generateLockData(
+    const rosenData = await this.currentNetwork.generateLockData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const transactionParameters = await this.config.generateTxParameters(
-      params.token.tokenId,
-      params.lockAddress,
-      address,
-      params.amount,
-      rosenData,
-      params.token,
-      params.fromChain,
-    );
+    const transactionParameters =
+      await this.currentNetwork.generateTxParameters(
+        params.token.tokenId,
+        params.lockAddress,
+        address,
+        params.amount,
+        rosenData,
+        params.token,
+        params.fromChain,
+      );
 
     try {
       return (await this.provider.request<string>({
