@@ -32,11 +32,49 @@ const Background = styled('div')(({ theme }) => ({
   },
 }));
 
+const Main = styled('main')(({ theme }) => ({
+  'position': 'relative',
+  'display': 'grid',
+  'gridTemplateRows': 'auto',
+  'gridTemplateColumns': '1fr',
+  'gap': theme.spacing(2),
+  'alignContent': 'center',
+  'marginInline': 'auto',
+  'minHeight': 'calc(100vh - 224px)',
+  'maxWidth': theme.breakpoints.values.laptop,
+  [theme.breakpoints.up('laptop')]: {
+    'gridTemplateColumns': '2fr 1fr',
+    'gap': theme.spacing(3),
+    '& .alert': {
+      gridColumn: '1/-1',
+    },
+  },
+  '& :is(.form,.info)': {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
+  },
+  '& .action': {
+    [theme.breakpoints.up('tablet')]: {
+      justifySelf: 'center',
+      width: '50%',
+    },
+    [theme.breakpoints.up('laptop')]: {
+      gridColumn: '1/-1',
+      width: '33%',
+      paddingRight: theme.spacing(2),
+    },
+  },
+  [theme.breakpoints.up('tablet')]: {
+    zIndex: 1,
+  },
+}));
+
 const PageLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
       <PageHeading title="Rosen Bridge" />
-      {children}
+      <Main>{children}</Main>
       <Background>
         <CubeNetSvg color="primary" className="top" />
         <CubeNetSvg color="secondary" className="bottom" />
