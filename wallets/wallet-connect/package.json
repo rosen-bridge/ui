@@ -20,7 +20,8 @@
     "@reown/appkit-adapter-ethers": "^1.7.5",
     "@rosen-bridge/icons": "^1.3.0",
     "@rosen-bridge/tokens": "^3.0.0",
-    "@rosen-network/evm": "^0.3.0",
+    "@rosen-network/binance": "^0.2.3",
+    "@rosen-network/ethereum": "^0.2.3",
     "@rosen-ui/constants": "^0.3.0",
     "@rosen-ui/types": "^0.3.5",
     "@rosen-ui/wallet-api": "^1.4.0"

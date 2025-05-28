@@ -1,2 +1,1 @@
-export * from './binance';
-export * from './ethereum';
+export * from './wallet';

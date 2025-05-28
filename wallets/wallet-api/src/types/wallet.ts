@@ -1,6 +1,7 @@
 import { FC } from 'react';
 
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { Network as NetworkBase } from '@rosen-network/base';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { BalanceFetchError, UnavailableApiError } from './errors';
@@ -17,6 +18,7 @@ export interface WalletTransferParams {
 }
 
 export type WalletConfig = {
+  networks: NetworkBase[];
   getTokenMap: () => Promise<TokenMap>;
 };
 
