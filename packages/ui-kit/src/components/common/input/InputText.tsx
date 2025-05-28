@@ -8,7 +8,7 @@ import {
 import { IconButton, InputAdornment, SvgIcon, TextField } from '@mui/material';
 import { ClipboardNotes } from '@rosen-bridge/icons';
 
-interface InputTextProps {
+export interface InputTextProps {
   name: string;
   label?: string;
   disabled?: boolean;
@@ -51,7 +51,7 @@ export const InputText = ({
       multiline={!!rows}
       rows={rows}
       error={invalid}
-      helperText={invalid && error?.message}
+      helperText={error?.message}
       InputProps={{
         startAdornment: startAdornment ? (
           <InputAdornment position="start">{startAdornment}</InputAdornment>

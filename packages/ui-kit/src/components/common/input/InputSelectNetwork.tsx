@@ -5,7 +5,7 @@ import { SvgIcon } from '@mui/material';
 
 import { InputSelect } from './InputSelect';
 
-interface InputSelectNetworkProps<OptionType> {
+export interface InputSelectNetworkProps<OptionType> {
   name: string;
   label?: string;
   options: OptionType[];

@@ -1,10 +1,12 @@
 import { useEffect, useMemo } from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
 
 import {
   Card,
   Grid,
+  InputSelect,
   InputSelectNetwork,
+  InputSelectNetworkProps,
+  InputSelectProps,
   InputText,
   LoadingButton,
   Stack,
@@ -18,6 +20,8 @@ import { useTokenMap } from '@/_hooks';
 import { networks } from '@/_networks';
 import { unwrap } from '@/_safeServerAction';
 
+import { useBridgeForm } from './useBridgeForm';
+
 export type FormData = {
   source: string | null;
   target: string | null;
@@ -27,88 +31,53 @@ export type FormData = {
 };
 
 const BridgeForm = () => {
-  const methods = useForm<FormData>({
-    defaultValues: {
-      source: null,
-      target: null,
-      token: null,
-      walletAddress: null,
-      amount: null,
-    },
-  });
-  const { reset, handleSubmit, watch } = methods;
-
-  const tokenMap = useTokenMap();
-  const sources = useMemo(() => {
-    return (tokenMap.getAllChains() as NetworkKey[])
-      .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => networks[chain]);
-  }, [tokenMap]);
-
-  const onSubmit = handleSubmit((data) =>
-    console.log('zzz handleSubmit', data),
-  );
-
-  useEffect(() => {
-    const { unsubscribe } = watch((value, { name, type }) => {
-      console.log('zzz useEffect', value, name, type);
-      if (name === 'source') {
-        reset({
-          source: value.source,
-          walletAddress: value.walletAddress,
-        });
-      } else if (name === 'target') {
-        reset({
-          source: value.source,
-          target: value.target,
-          walletAddress: value.walletAddress,
-        });
-      } else if (name === 'token') {
-        reset({
-          source: value.source,
-          target: value.target,
-          token: value.token,
-          walletAddress: value.walletAddress,
-        });
-      }
-    });
-    return () => unsubscribe();
-  }, [watch]);
+  const [fields, methods, FormProvider, Form] = useBridgeForm();
+  const { reset, handleSubmit, watch, setValue } = methods;
 
   return (
-    <FormProvider {...methods}>
-      <form onSubmit={onSubmit}>
+    <FormProvider>
+      <Form>
         <Grid container spacing={2}>
           <Grid item mobile={12} desktop={8}>
             <Grid container spacing={2}>
               <Grid item mobile={12} tablet={6}>
                 <InputSelectNetwork
-                  name="source"
-                  label="Source"
-                  options={sources}
-                  rules={{ required: true }}
+                  {...(fields.source as InputSelectNetworkProps<any>)}
                 />
               </Grid>
               <Grid item mobile={12} tablet={6}>
-                <InputSelectNetwork
-                  name="target"
-                  label="Target"
-                  options={sources}
-                  rules={{ required: true }}
-                  disabled={!watch('source')}
+                <InputSelect
+                  // name="target"
+                  // label="Target"
+                  // options={sources}
+                  // rules={{ required: 'This is required.' }}
+                  // disabled={!watch('source')}
+                  {...(fields.target as InputSelectProps<any>)}
+                  //  {...fields.target}
                 />
               </Grid>
               <Grid item mobile={12}>
                 <InputText
-                  name="token"
-                  label="Token"
-                  disabled={!watch('target')}
+                  // name="token"
+                  // label="Token"
+                  // disabled={!watch('target')}
+                  {...fields.token}
                 />
               </Grid>
               <Grid item mobile={12}>
                 <InputText
                   name="amount"
                   label="Amount"
+                  rules={{
+                    required: 'This is required.',
+                    onChange: (e) => {
+                      console.log('zzz onChange amount', e.target.value);
+                    },
+                    pattern: {
+                      value: /^\d+(\.\d+)?$/,
+                      message: 'Invalid amount format',
+                    },
+                  }}
                   disabled={!watch('token')}
                 />
               </Grid>
@@ -118,6 +87,10 @@ const BridgeForm = () => {
                   label="Target Address"
                   enablePasteButton
                   rules={{
+                    onChange: (e) => {
+                      setValue('walletAddress', e.target.value.trim());
+                      console.log('zzz onChange walletAddress', e.target.value);
+                    },
                     validate: async (value) => {
                       const targetNetwork = watch('target');
                       console.log(
@@ -126,14 +99,17 @@ const BridgeForm = () => {
                         targetNetwork,
                       );
                       if (!value) {
-                        return 'Address cannot be empty';
+                        return 'Address is required!';
+                      }
+                      if (!targetNetwork) {
+                        return 'Target network is not selected!';
                       }
                       const isValid = await unwrap(validateAddress)(
                         targetNetwork as Network,
                         networks[targetNetwork as Network].toSafeAddress(value),
                       );
                       if (isValid) return;
-                      return 'Invalid Address';
+                      return 'Address is invalid!';
                     },
                   }}
                 />
@@ -154,7 +130,7 @@ const BridgeForm = () => {
           </Grid>
           <Grid item mobile></Grid>
         </Grid>
-      </form>
+      </Form>
     </FormProvider>
   );
 };

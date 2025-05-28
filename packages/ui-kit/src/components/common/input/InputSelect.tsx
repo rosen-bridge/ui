@@ -7,7 +7,7 @@ import {
 
 import { Autocomplete, InputAdornment, TextField } from '@mui/material';
 
-interface InputSelectProps<OptionType> {
+export interface InputSelectProps<OptionType> {
   name: string;
   label?: string;
   options: OptionType[];
@@ -38,7 +38,10 @@ export const InputSelect = <OptionType,>({
   rules,
 }: InputSelectProps<OptionType>) => {
   const { control, setValue } = useFormContext();
-  const { field } = useController({
+  const {
+    field,
+    fieldState: { invalid, error },
+  } = useController({
     name,
     control,
     rules,
@@ -78,6 +81,8 @@ export const InputSelect = <OptionType,>({
             ) : undefined,
           }}
           {...params}
+          error={invalid}
+          helperText={error?.message}
         />
       )}
     />
