@@ -27,13 +27,13 @@ export const CubeNetSvg = ({ className, color }: CubeNetSvgProps) => {
         >
           <stop
             offset="0%"
-            stop-color={theme.palette.primary.main}
-            stop-opacity="0.4"
+            stopColor={theme.palette.primary.main}
+            stopOpacity="0.4"
           />
           <stop
             offset="100%"
-            stop-color={theme.palette.background.default}
-            stop-opacity="0"
+            stopColor={theme.palette.background.default}
+            stopOpacity="0"
           />
         </linearGradient>
         <linearGradient
@@ -46,13 +46,13 @@ export const CubeNetSvg = ({ className, color }: CubeNetSvgProps) => {
         >
           <stop
             offset="0%"
-            stop-color={theme.palette.secondary.main}
-            stop-opacity="0.4"
+            stopColor={theme.palette.secondary.main}
+            stopOpacity="0.4"
           />
           <stop
             offset="100%"
-            stop-color={theme.palette.background.default}
-            stop-opacity="0"
+            stopColor={theme.palette.background.default}
+            stopOpacity="0"
           />
         </linearGradient>
       </defs>
