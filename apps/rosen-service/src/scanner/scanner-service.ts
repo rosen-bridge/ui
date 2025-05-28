@@ -1,4 +1,10 @@
+import {
+  BitcoinRpcScanner,
+  DogeRpcScanner,
+} from '@rosen-bridge/bitcoin-rpc-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import { CardanoKoiosScanner, ErgoScanner } from '@rosen-bridge/scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
@@ -10,12 +16,20 @@ import { startEthereumScanner } from './chains/ethereum';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
+// Scanner instances that will be initialized in start()
+let ergoScanner: ErgoScanner;
+let cardanoScanner: CardanoKoiosScanner;
+let bitcoinScanner: BitcoinRpcScanner;
+let ethereumScanner: EvmRpcScanner;
+let binanceScanner: EvmRpcScanner;
+let dogeScanner: DogeRpcScanner;
+
 /**
  * start all scanners and register their extractors
  */
 const start = async () => {
   try {
-    const [
+    [
       ergoScanner,
       cardanoScanner,
       bitcoinScanner,
@@ -48,6 +62,13 @@ const start = async () => {
 
 const scannerService = {
   start,
+  // Export scanner instances
+  getErgoScanner: () => ergoScanner,
+  getCardanoScanner: () => cardanoScanner,
+  getBitcoinScanner: () => bitcoinScanner,
+  getEthereumScanner: () => ethereumScanner,
+  getBinanceScanner: () => binanceScanner,
+  getDogeScanner: () => dogeScanner,
 };
 
 export default scannerService;
