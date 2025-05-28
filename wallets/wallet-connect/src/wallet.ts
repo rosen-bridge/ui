@@ -187,7 +187,7 @@ export class WalletConnect<
     return await this.provider.request(request);
   };
 
-  switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
+  switchChain = async (chain: Network): Promise<void> => {
     if (!this.supportedChains.includes(chain)) {
       throw new UnsupportedChainError(this.name, chain);
     }
