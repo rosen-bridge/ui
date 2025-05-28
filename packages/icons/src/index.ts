@@ -199,5 +199,8 @@ export { default as NautilusRaw } from './wallets/nautilus.svg?raw';
 export { ReactComponent as Okx } from './wallets/okx.svg';
 export { default as OkxRaw } from './wallets/okx.svg?raw';
 
+export { ReactComponent as WalletConnect } from './wallets/wallet-connect.svg';
+export { default as WalletConnectRaw } from './wallets/wallet-connect.svg?raw';
+
 export { ReactComponent as Xverse } from './wallets/xverse.svg';
 export { default as XverseRaw } from './wallets/xverse.svg?raw';
