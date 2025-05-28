@@ -168,7 +168,7 @@ const getConfig = () => {
           'healthCheck.binanceScannerCriticalDiff',
         ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
-        logDuration: nodeConfig.get<number>('healthCheck.duration') * 1000,
+        logDuration: nodeConfig.get<number>('healthCheck.duration'),
         errorLogAllowedCount: nodeConfig.get<number>(
           'healthCheck.maxAllowedErrorCount',
         ),
