@@ -6,6 +6,7 @@ import { nautilus } from './nautilus';
 import { okx } from './okx';
 import { walletConnectBinance } from './wallet-connect-binance';
 import { walletConnectEthereum } from './wallet-connect-ethereum';
+import { xverse } from './xverse';
 
 export const wallets = {
   [eternl.name]: eternl,
@@ -14,6 +15,7 @@ export const wallets = {
   [nautilus.name]: nautilus,
   [okx.name]: okx,
   [myDoge.name]: myDoge,
+  [xverse.name]: xverse,
   [walletConnectBinance.name]: walletConnectBinance,
   [walletConnectEthereum.name]: walletConnectEthereum,
 } as const;

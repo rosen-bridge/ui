@@ -43,6 +43,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace wallets/nautilus
   npm run build --workspace wallets/okx
   npm run build --workspace wallets/my-doge
+  npm run build --workspace wallets/xverse
   npm run build --workspace wallets/wallet-connect
 fi
 
