@@ -3,11 +3,14 @@ import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 import { mainnet, bsc } from '@reown/appkit/networks';
 import { WalletConnect as WalletConnectIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { BinanceNetwork } from '@rosen-network/binance/dist/client';
+import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
   AddressRetrievalError,
   ConnectionRejectedError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
@@ -187,6 +190,15 @@ export class WalletConnect<
   };
 
   transfer = async (params: WalletTransferParams): Promise<string> => {
+    this.requireAvailable();
+
+    if (
+      !(this.currentNetwork instanceof BinanceNetwork) &&
+      !(this.currentNetwork instanceof EthereumNetwork)
+    ) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const address = await this.getAddress();
 
     const rosenData = await this.currentNetwork.generateLockData(
