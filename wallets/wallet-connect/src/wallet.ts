@@ -10,6 +10,7 @@ import { Network } from '@rosen-ui/types';
 import {
   AddressRetrievalError,
   ConnectionRejectedError,
+  CurrentChainError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
@@ -84,9 +85,18 @@ export class WalletConnect<
 
   link = 'https://walletconnect.network/';
 
-  currentChain: Network = NETWORKS.ethereum.key;
-
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
+
+  get currentChain(): Network {
+    switch (this.modal.getChainId()) {
+      case 1:
+        return NETWORKS.ethereum.key;
+      case 56:
+        return NETWORKS.binance.key;
+      default:
+        throw new CurrentChainError(this.name);
+    }
+  }
 
   get currentNetwork() {
     return this.config.networks.find(
@@ -106,18 +116,6 @@ export class WalletConnect<
     createModal(this.config.projectId);
 
     await initialized.promise;
-
-    if (this.modal.getChainId() == Number(NETWORKS[this.currentChain].id))
-      return;
-
-    switch (this.currentChain) {
-      case 'binance':
-        await this.modal.switchNetwork(bsc);
-        break;
-      case 'ethereum':
-        await this.modal.switchNetwork(mainnet);
-        break;
-    }
   };
 
   connect = async (): Promise<void> => {
@@ -187,6 +185,25 @@ export class WalletConnect<
     }
 
     return await this.provider.request(request);
+  };
+
+  switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
+    if (!this.supportedChains.includes(chain)) {
+      throw new UnsupportedChainError(this.name, chain);
+    }
+
+    if (this.modal.getChainId() == Number(NETWORKS[chain].id)) {
+      return;
+    }
+
+    switch (chain) {
+      case 'binance':
+        await this.modal.switchNetwork(bsc);
+        break;
+      case 'ethereum':
+        await this.modal.switchNetwork(mainnet);
+        break;
+    }
   };
 
   transfer = async (params: WalletTransferParams): Promise<string> => {
