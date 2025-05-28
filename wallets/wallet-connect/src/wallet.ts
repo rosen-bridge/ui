@@ -1,9 +1,17 @@
-import { AppKit, createAppKit } from '@reown/appkit';
+import { AppKit, Provider, createAppKit } from '@reown/appkit';
 import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 import { mainnet, bsc } from '@reown/appkit/networks';
 import { WalletConnect as WalletConnectIcon } from '@rosen-bridge/icons';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { ConnectionRejectedError, Wallet } from '@rosen-ui/wallet-api';
+import { Network } from '@rosen-ui/types';
+import {
+  AddressRetrievalError,
+  ConnectionRejectedError,
+  UserDeniedTransactionSignatureError,
+  Wallet,
+  WalletTransferParams,
+} from '@rosen-ui/wallet-api';
 
 import { WalletConnectConfig } from './types';
 
@@ -62,17 +70,33 @@ const createModal = (projectId: string) => {
   });
 };
 
-export abstract class WalletConnect<
+export class WalletConnect<
   Config extends WalletConnectConfig,
 > extends Wallet<Config> {
   icon = WalletConnectIcon;
+
+  name = 'WalletConnect';
 
   label = 'Wallet Connect';
 
   link = 'https://walletconnect.network/';
 
+  currentChain: Network = NETWORKS.ethereum.key;
+
+  supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
+
   get modal(): AppKit {
     return modal!;
+  }
+
+  get provider() {
+    return this.modal.getWalletProvider() as Provider;
   }
 
   initialize = async (): Promise<void> => {
@@ -122,5 +146,74 @@ export abstract class WalletConnect<
   isConnected = async (): Promise<boolean> => {
     await this.initialize();
     return this.modal.getIsConnectedState();
+  };
+
+  getAddress = async (): Promise<string> => {
+    await this.initialize();
+
+    const address = this.modal.getAddress();
+
+    if (!address) throw new AddressRetrievalError(this.name);
+
+    return address;
+  };
+
+  getBalanceRaw = async (
+    token: RosenChainToken,
+  ): Promise<string | undefined> => {
+    const address = await this.getAddress();
+
+    let request;
+
+    if (token.type === 'native') {
+      request = {
+        method: 'eth_getBalance',
+        params: [address, 'latest'],
+      };
+    } else {
+      request = {
+        method: 'eth_call',
+        params: [
+          {
+            to: token.tokenId,
+            data: '0x70a08231' + address.replace('0x', '').padStart(64, '0'),
+          },
+          'latest',
+        ],
+      };
+    }
+
+    return await this.provider.request(request);
+  };
+
+  transfer = async (params: WalletTransferParams): Promise<string> => {
+    const address = await this.getAddress();
+
+    const rosenData = await this.currentNetwork.generateLockData(
+      params.toChain,
+      params.address,
+      params.networkFee.toString(),
+      params.bridgeFee.toString(),
+    );
+
+    const transactionParameters =
+      await this.currentNetwork.generateTxParameters(
+        params.token.tokenId,
+        params.lockAddress,
+        address,
+        params.amount,
+        rosenData,
+        params.token,
+        params.fromChain,
+      );
+
+    try {
+      return (await this.provider.request({
+        method: 'eth_sendTransaction',
+        params: [transactionParameters],
+      }))!;
+    } catch (error) {
+      throw new UserDeniedTransactionSignatureError(this.name, error);
+    }
   };
 }
