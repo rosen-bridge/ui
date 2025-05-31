@@ -6,7 +6,7 @@ import packageJson from '../package.json';
 import { useInfo } from './_hooks/useInfo';
 
 export const VersionConfig = () => {
-  const { data: info, isLoading } = useInfo();
+  const { data: info } = useInfo();
 
   const sub = useMemo(() => {
     const result = [
@@ -19,14 +19,8 @@ export const VersionConfig = () => {
         value: info?.versions.contract,
       },
     ];
-    if (!isLoading && info?.versions.contract !== info?.versions.tokensMap) {
-      result.push({
-        label: 'Tokens',
-        value: info?.versions.tokensMap,
-      });
-    }
     return result;
-  }, [info, isLoading]);
+  }, [info]);
 
   return <Version label="Guard" value={info?.versions.app} sub={sub} />;
 };

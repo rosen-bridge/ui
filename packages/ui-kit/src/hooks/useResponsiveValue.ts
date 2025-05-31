@@ -1,14 +1,9 @@
-import { Breakpoint } from '@mui/material';
-
 import type { ResponsiveValueOptionsBase } from '../@types';
 import { useMediaQuery } from './useMediaQuery';
 import { useTheme } from './useTheme';
 
-type UseResponsiveValueOptions<
-  T,
-  MandatoryBreakpoint extends Breakpoint = 'mobile',
-> = {
-  [Key in MandatoryBreakpoint]: NonNullable<T>;
+type UseResponsiveValueOptions<T> = {
+  mobile: NonNullable<T>;
 } & ResponsiveValueOptionsBase<T>;
 
 /**

@@ -1,9 +1,9 @@
 import { binance } from './binance';
 import { bitcoin } from './bitcoin';
 import { cardano } from './cardano';
+import { doge } from './doge';
 import { ergo } from './ergo';
 import { ethereum } from './ethereum';
-import { doge } from './doge';
 
 export const networks = {
   [binance.name]: binance,

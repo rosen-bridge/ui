@@ -120,6 +120,7 @@ export const ChooseWalletModal = ({
                         variant="contained"
                         size="small"
                         sx={{ width: '100%' }}
+                        disabled={!wallet.isAvailable()}
                         color={isConnected ? 'inherit' : 'primary'}
                         onClick={handleClick}
                       >
