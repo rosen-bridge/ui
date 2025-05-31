@@ -25,17 +25,53 @@ export class RunesCalculator extends AbstractCalculator {
   }
 
   /**
-   * @param token Bitcoin chain token supply, always 0
+   * @param token Runes chain token info
+   * @returns total supply of the token
    */
-  totalRawSupply = async (): Promise<bigint> => {
-    return 0n;
+  totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
+    const response = await this.client.get<UnisatResponse<RuneInfo>>(
+      `/v1/indexer/runes/${token.tokenId}/info`,
+    );
+    const tokenDetail = response.data.data;
+
+    if (tokenDetail) {
+      this.logger.debug(
+        `Total supply of token [${token.tokenId}] is [${tokenDetail.supply}]`,
+      );
+      return BigInt(tokenDetail.supply);
+    }
+
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
   };
 
   /**
-   * @param token Bitcoin chain token balance, always 0
+   * @param token Runes chain token info
+   * @returns total balance in hot and cold wallets
    */
-  totalRawBalance = async (): Promise<bigint> => {
-    return 0n;
+  totalRawBalance = async (token: RosenChainToken): Promise<bigint> => {
+    let tokenBalance = 0n;
+
+    for (const address of this.addresses) {
+      const response = await this.client.get<
+        UnisatResponse<AddressRunesBalance>
+      >(`/v1/indexer/address/${address}/runes/${token.tokenId}/balance`);
+
+      const addressTokenBalance = response.data.data
+        ? BigInt(response.data.data.amount)
+        : 0n;
+
+      this.logger.debug(
+        `Balance of token [${token.name}] in address [${address}] is [${addressTokenBalance}]`,
+      );
+
+      tokenBalance += addressTokenBalance;
+    }
+
+    this.logger.debug(
+      `Total balance of token [${token.name}] is [${tokenBalance}]`,
+    );
+
+    return tokenBalance;
   };
 
   /**
