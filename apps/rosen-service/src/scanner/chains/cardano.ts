@@ -60,7 +60,7 @@ export const startCardanoScanner = async () => {
 
     await observationService.registerCardanoExtractor(scanner);
 
-    await startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, CARDANO_SCANNER_INTERVAL);
 
     logger.debug('cardano scanner started');
 

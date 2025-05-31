@@ -58,7 +58,7 @@ export const startBinanceScanner = async () => {
 
     await observationService.registerBinanceExtractor(scanner);
 
-    await startScanner(scanner, import.meta.url, BINANCE_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, BINANCE_SCANNER_INTERVAL);
 
     logger.debug('binance scanner started');
 

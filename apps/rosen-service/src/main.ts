@@ -38,10 +38,15 @@ const main = async () => {
 
     await scannerService.start();
     logger.info('scanner service started successfully');
-    await healthCheckService.start();
-    logger.info('health check service started successfully');
-    await calculatorService.start();
-    logger.info('calculator service started successfully');
+
+    await Promise.all([
+      calculatorService.start().then(() => {
+        logger.info('calculator service started successfully');
+      }),
+      healthCheckService.start().then(() => {
+        logger.info('health check service started successfully');
+      }),
+    ]);
   } catch (error) {
     handleError(error);
   }

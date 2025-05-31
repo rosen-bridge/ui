@@ -54,7 +54,7 @@ export const startErgoScanner = async () => {
     await observationService.registerErgoExtractor(scanner);
     await eventTriggerService.registerExtractors(scanner);
 
-    await startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
 
     logger.debug('ergo scanner started');
 

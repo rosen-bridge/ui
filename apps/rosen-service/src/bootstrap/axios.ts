@@ -7,7 +7,7 @@ const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 const dogeLimitRules = config.doge.rpcConnections.map((rpcConfig) => {
   return {
-    pattern: rpcConfig.url,
+    pattern: `^${rpcConfig.url}$`,
     rateLimit: 3,
   };
 });

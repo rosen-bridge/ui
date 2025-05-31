@@ -58,7 +58,7 @@ export const startEthereumScanner = async () => {
 
     await observationService.registerEthereumExtractor(scanner);
 
-    await startScanner(scanner, import.meta.url, ETHEREUM_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, ETHEREUM_SCANNER_INTERVAL);
 
     logger.debug('ethereum scanner started');
 

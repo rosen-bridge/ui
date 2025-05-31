@@ -68,7 +68,7 @@ export const startDogeScanner = async () => {
 
     observationService.registerDogeExtractor(scanner);
 
-    await startScanner(scanner, import.meta.url, DOGE_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, DOGE_SCANNER_INTERVAL);
 
     logger.debug('doge scanner started');
 
