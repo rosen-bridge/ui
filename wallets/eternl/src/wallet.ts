@@ -1,4 +1,3 @@
-import { Eternl as EternlIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoNetwork } from '@rosen-network/cardano/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -15,10 +14,11 @@ import {
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { EtrnlWalletConfig } from './types';
 
 export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
-  icon = EternlIcon;
+  icon = ICON;
 
   name = 'Eternl';
 

@@ -1,4 +1,3 @@
-import { Xverse } from '@rosen-bridge/icons';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -13,10 +12,11 @@ import {
 } from '@rosen-ui/wallet-api';
 import { AddressPurpose, request } from 'sats-connect';
 
+import { ICON } from './icon';
 import { XverseWalletConfig } from './types';
 
 export class XverseWallet extends Wallet<XverseWalletConfig> {
-  icon = Xverse;
+  icon = ICON;
 
   name = 'Xverse';
 

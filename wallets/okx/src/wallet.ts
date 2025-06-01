@@ -1,4 +1,3 @@
-import { Okx as OKXIcon } from '@rosen-bridge/icons';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -12,10 +11,11 @@ import {
   UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { OKXWalletConfig } from './types';
 
 export class OKXWallet extends Wallet<OKXWalletConfig> {
-  icon = OKXIcon;
+  icon = ICON;
 
   name = 'OKX';
 

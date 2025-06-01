@@ -1,4 +1,3 @@
-import { Nautilus as NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -17,10 +16,11 @@ import {
   UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { NautilusWalletConfig } from './types';
 
 export class NautilusWallet extends Wallet<NautilusWalletConfig> {
-  icon = NautilusIcon;
+  icon = ICON;
 
   name = 'Nautilus';
 

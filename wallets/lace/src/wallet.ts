@@ -1,4 +1,3 @@
-import { Lace as LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { CardanoNetwork } from '@rosen-network/cardano/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -15,10 +14,11 @@ import {
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { LaceWalletConfig } from './types';
 
 export class LaceWallet extends Wallet<LaceWalletConfig> {
-  icon = LaceIcon;
+  icon = ICON;
 
   name = 'Lace';
 

@@ -1,4 +1,3 @@
-import { Mydoge as MyDogeIcon } from '@rosen-bridge/icons';
 import { DogeNetwork } from '@rosen-network/doge/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -12,10 +11,11 @@ import {
   UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { MyDogeWalletConfig } from './types';
 
 export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
-  icon = MyDogeIcon;
+  icon = ICON;
 
   name = 'MyDoge';
 

@@ -1,7 +1,6 @@
 import { AppKit, Provider, createAppKit } from '@reown/appkit';
 import { EthersAdapter } from '@reown/appkit-adapter-ethers';
 import { mainnet, bsc } from '@reown/appkit/networks';
-import { WalletConnect as WalletConnectIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
@@ -17,6 +16,7 @@ import {
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { WalletConnectConfig } from './types';
 
 let connected: ReturnType<typeof createDeferred>;
@@ -77,7 +77,7 @@ const createModal = (projectId: string) => {
 export class WalletConnect<
   Config extends WalletConnectConfig,
 > extends Wallet<Config> {
-  icon = WalletConnectIcon;
+  icon = ICON;
 
   name = 'WalletConnect';
 
