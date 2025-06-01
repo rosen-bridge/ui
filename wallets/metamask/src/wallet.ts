@@ -1,5 +1,4 @@
 import { MetaMaskSDK } from '@metamask/sdk';
-import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
@@ -22,10 +21,11 @@ import {
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
+import { ICON } from './icon';
 import { MetaMaskWalletConfig } from './types';
 
 export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
-  icon = MetaMaskIcon;
+  icon = ICON;
 
   name = 'MetaMask';
 

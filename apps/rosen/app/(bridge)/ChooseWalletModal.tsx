@@ -86,7 +86,7 @@ export const ChooseWalletModal = ({
         )}
         <Grid container justifyContent="center" gap={2}>
           {wallets.map((wallet) => {
-            const Icon = wallet.icon;
+            const Icon = wallet.iconReact;
             const isConnected = selectedWallet?.name === wallet.name;
 
             const handleClick = async (event: React.MouseEvent) => {

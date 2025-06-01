@@ -1,3 +1,5 @@
+import './base';
+
 export * from './eternl';
 export * from './lace';
 export * from './metaMask';
