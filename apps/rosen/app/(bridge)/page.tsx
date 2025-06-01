@@ -163,9 +163,7 @@ const RosenBridge = () => {
                           },
                         })}
                       >
-                        <ConnectOrSubmitButton
-                          setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-                        />
+                        <ConnectOrSubmitButton />
                       </Box>
                     </Box>
                   </BridgeContainer>

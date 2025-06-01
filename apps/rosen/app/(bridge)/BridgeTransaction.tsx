@@ -80,12 +80,6 @@ export const BridgeTransaction = ({
         <Card
           sx={{
             marginBottom: '18px',
-            display: 'flex',
-            padding: '12px 25px',
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.secondary.light
-                : theme.palette.background.paper,
           }}
         >
           <WalletInfo
