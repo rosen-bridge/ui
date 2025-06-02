@@ -5,7 +5,8 @@ import { Network } from '@rosen-ui/types';
 import axios, { AxiosInstance } from 'axios';
 import { zipWith } from 'lodash-es';
 
-import AbstractCalculator from '../abstract-calculator';
+import AbstractCalculator from '../../abstract-calculator';
+import { AddressRunesBalance, RuneInfo, UnisatResponse } from './types';
 
 export class RunesCalculator extends AbstractCalculator {
   readonly chain: Network = NETWORKS.runes.key;
@@ -89,57 +90,21 @@ export class RunesCalculator extends AbstractCalculator {
       }),
     );
 
-    return zipWith(this.addresses, tokenBalances, (address, amount) => ({
-      address,
-      amount,
-    })).filter((amountPerAddress) => amountPerAddress.amount);
+    const balances = zipWith(
+      this.addresses,
+      tokenBalances,
+      (address, amount) => ({
+        address,
+        amount,
+      }),
+    ).filter((amountPerAddress) => amountPerAddress.amount);
+
+    for (const { address, amount } of balances) {
+      this.logger.debug(
+        `balance of token [${token.name}] for address [${address}] is [${amount}]`,
+      );
+    }
+
+    return balances;
   };
 }
-
-export type UnisatResponse<T> = {
-  code: number;
-  msg: string;
-  data: T | null;
-};
-
-export type AddressRunesBalance = {
-  amount: string;
-  runeid: string;
-  rune: string;
-  spacedRune: string;
-  symbol: string;
-  divisibility: number;
-};
-
-export type RuneInfo = {
-  runeid: string;
-  rune: string;
-  spacedRune: string;
-  number: number;
-  height: number;
-  txidx: number;
-  timestamp: number;
-  divisibility: number;
-  symbol: string;
-  etching: string;
-  premine: string;
-  terms: RuneInfoTerms;
-  mints: string;
-  burned: string;
-  holders: number;
-  transactions: number;
-  supply: string;
-  start: number;
-  end: number;
-  mintable: boolean;
-  remaining: string;
-};
-
-export type RuneInfoTerms = {
-  amount: string;
-  cap: string;
-  heightStart: number;
-  heightEnd: number;
-  offsetStart: number | null;
-  offsetEnd: number | null;
-};
