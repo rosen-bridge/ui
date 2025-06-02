@@ -9,6 +9,7 @@ import { DataSource } from 'typeorm';
 import AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
+import { DogeCalculator } from './calculator/chains/doge-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { EvmCalculator } from './calculator/chains/evm-calculator';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
@@ -18,6 +19,7 @@ import { TokenModel } from './database/token/TokenModel';
 import {
   BitcoinCalculatorInterface,
   CardanoCalculatorInterface,
+  DogeCalculatorInterface,
   ErgoCalculatorInterface,
   EvmCalculatorInterface,
 } from './interfaces';
@@ -36,6 +38,7 @@ class AssetCalculator {
     bitcoinCalculator: BitcoinCalculatorInterface,
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
+    dogeCalculator: DogeCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
   ) {
@@ -75,11 +78,18 @@ class AssetCalculator {
       binanceCalculator.authToken,
       logger,
     );
+    const dogeAssetCalculator = new DogeCalculator(
+      this.tokens,
+      dogeCalculator.addresses,
+      dogeCalculator.blockcypherUrl,
+      logger,
+    );
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
+    this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
     this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
     this.tokenModel = new TokenModel(dataSource, logger);
