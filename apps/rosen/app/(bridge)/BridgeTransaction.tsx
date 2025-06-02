@@ -89,7 +89,7 @@ export const BridgeTransaction = ({
           }}
         >
           <WalletInfo
-            icon={selectedWallet?.icon}
+            icon={selectedWallet?.iconReact}
             label={selectedWallet?.label}
             disconnect={disconnect}
             onClick={() => setChooseWalletsModalOpen(true)}

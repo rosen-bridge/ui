@@ -1,20 +1,22 @@
-import { Xverse } from '@rosen-bridge/icons';
+import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
   AddressRetrievalError,
   ConnectionRejectedError,
   DisconnectionFailedError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 import { AddressPurpose, request } from 'sats-connect';
 
+import { ICON } from './icon';
 import { XverseWalletConfig } from './types';
 
 export class XverseWallet extends Wallet<XverseWalletConfig> {
-  icon = Xverse;
+  icon = ICON;
 
   name = 'Xverse';
 
@@ -25,6 +27,12 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   currentChain: Network = NETWORKS.bitcoin.key;
 
   supportedChains: Network[] = [NETWORKS.bitcoin.key];
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
 
   connect = async (): Promise<void> => {
     this.requireAvailable();
@@ -99,16 +107,20 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
 
+    if (!(this.currentNetwork instanceof BitcoinNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const userAddress = await this.getAddress();
 
-    const opReturnData = await this.config.generateOpReturnData(
+    const opReturnData = await this.currentNetwork.generateOpReturnData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await this.config.generateUnsignedTx(
+    const psbtData = await this.currentNetwork.generateUnsignedTx(
       params.lockAddress,
       userAddress,
       params.amount,
@@ -135,7 +147,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const txId = await this.config.submitTransaction(
+    const txId = await this.currentNetwork.submitTransaction(
       signedPsbtBase64,
       'base64',
     );

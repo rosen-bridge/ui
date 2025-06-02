@@ -1,6 +1,5 @@
-import { FC } from 'react';
-
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { Network as NetworkBase } from '@rosen-network/base';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import { BalanceFetchError, UnavailableApiError } from './errors';
@@ -17,6 +16,7 @@ export interface WalletTransferParams {
 }
 
 export type WalletConfig = {
+  networks: NetworkBase[];
   getTokenMap: () => Promise<TokenMap>;
 };
 
@@ -25,7 +25,7 @@ export type WalletConfig = {
  * this interface to unify access and interaction with wallets
  */
 export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
-  abstract icon: FC;
+  abstract icon: string;
   abstract name: string;
   abstract label: string;
   abstract link: string;
