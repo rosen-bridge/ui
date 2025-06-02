@@ -1,7 +1,6 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { Balance } from '@rosen-clients/ergo-explorer/dist/src/v1/types';
+import ergoExplorerClientFactory, { V1 } from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
@@ -70,7 +69,7 @@ export class ErgoCalculator extends AbstractCalculator {
    */
   private getTokenBalanceFromAddressBalance = (
     token: RosenChainToken,
-    addressBalance: Balance,
+    addressBalance: V1.Balance,
   ) => {
     if (token.type === NATIVE_TOKEN) {
       return addressBalance.nanoErgs;
