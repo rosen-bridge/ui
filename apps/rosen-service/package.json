@@ -26,6 +26,7 @@
     "@rosen-bridge/evm-rpc-scanner": "^3.0.1",
     "@rosen-bridge/extended-typeorm": "^0.0.3",
     "@rosen-bridge/health-check": "6.0.4",
+    "@rosen-bridge/log-level-check": "^1.1.0",
     "@rosen-bridge/observation-extractor": "^7.1.1",
     "@rosen-bridge/rate-limited-axios": "^0.2.0",
     "@rosen-bridge/scanner": "^7.1.0",
