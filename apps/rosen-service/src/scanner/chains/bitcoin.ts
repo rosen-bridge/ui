@@ -1,5 +1,13 @@
-import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
+import {
+  BitcoinRpcNetwork,
+  BitcoinRpcScanner,
+  BitcoinRpcTransaction,
+} from '@rosen-bridge/bitcoin-rpc-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/scanner';
 
 import config from '../../configs';
 import {
@@ -18,26 +26,47 @@ const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
 );
 
 /**
+ * Creates and configures a NetworkConnectorManager instance for bitcoin scanner
+ */
+export const createBitcoinNetworkConnectorManager = () => {
+  const networkConnectorManager =
+    new NetworkConnectorManager<BitcoinRpcTransaction>(
+      new FailoverStrategy(),
+      scannerLogger,
+    );
+
+  networkConnectorManager.addConnector(
+    new BitcoinRpcNetwork(
+      config.bitcoin.rpcUrl,
+      SCANNER_API_TIMEOUT * 1000,
+      config.bitcoin.rpcUsername && config.bitcoin.rpcPassword
+        ? {
+            username: config.bitcoin.rpcUsername,
+            password: config.bitcoin.rpcPassword,
+          }
+        : undefined,
+    ),
+  );
+
+  return networkConnectorManager;
+};
+
+/**
  * create a bitcoin scanner, initializing it and calling its update method
  * periodically
  */
 export const startBitcoinScanner = async () => {
   try {
-    const scanner = new BitcoinRpcScanner(
-      {
-        rpcUrl: config.bitcoin.rpcUrl,
-        dataSource,
-        initialHeight: config.bitcoin.initialHeight,
-        timeout: SCANNER_API_TIMEOUT,
-        username: config.bitcoin.rpcUsername,
-        password: config.bitcoin.rpcPassword,
-      },
-      scannerLogger,
-    );
+    const scanner = new BitcoinRpcScanner({
+      dataSource,
+      initialHeight: config.bitcoin.initialHeight,
+      logger: scannerLogger,
+      network: createBitcoinNetworkConnectorManager(),
+    });
 
     await observationService.registerBitcoinExtractor(scanner);
 
-    await startScanner(scanner, import.meta.url, BITCOIN_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, BITCOIN_SCANNER_INTERVAL);
 
     logger.debug('bitcoin scanner started');
 

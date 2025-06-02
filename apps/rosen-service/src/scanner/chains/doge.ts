@@ -1,5 +1,13 @@
-import { DogeRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
+import {
+  DogeRpcNetwork,
+  DogeRpcScanner,
+  DogeRpcTransaction,
+} from '@rosen-bridge/bitcoin-rpc-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import {
+  RoundRobinStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/scanner';
 
 import config from '../../configs';
 import {
@@ -18,26 +26,48 @@ const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
 );
 
 /**
+ * Creates and configures a NetworkConnectorManager instance for Doge RPC scanner
+ */
+export const createDogeRpcNetworkConnectorManager = () => {
+  const networkConnectorManager =
+    new NetworkConnectorManager<DogeRpcTransaction>(
+      new RoundRobinStrategy(),
+      scannerLogger,
+    );
+  config.doge.rpcConnections.forEach((rpcConfig) => {
+    networkConnectorManager.addConnector(
+      new DogeRpcNetwork(
+        rpcConfig.url,
+        SCANNER_API_TIMEOUT * 1000,
+        rpcConfig.username && rpcConfig.password
+          ? {
+              username: rpcConfig.username,
+              password: rpcConfig.password,
+            }
+          : undefined,
+      ),
+    );
+  });
+
+  return networkConnectorManager;
+};
+
+/**
  * create a dogecoin scanner, initializing it and calling its update method
  * periodically
  */
 export const startDogeScanner = async () => {
   try {
-    const scanner = new DogeRpcScanner(
-      {
-        rpcUrl: config.doge.rpcUrl,
-        username: config.doge.rpcUsername,
-        password: config.doge.rpcPassword,
-        dataSource,
-        initialHeight: config.doge.initialHeight,
-        timeout: SCANNER_API_TIMEOUT,
-      },
-      scannerLogger,
-    );
+    const scanner = new DogeRpcScanner({
+      dataSource,
+      initialHeight: config.doge.initialHeight,
+      logger: scannerLogger,
+      network: createDogeRpcNetworkConnectorManager(),
+    });
 
     observationService.registerDogeExtractor(scanner);
 
-    await startScanner(scanner, import.meta.url, DOGE_SCANNER_INTERVAL);
+    startScanner(scanner, import.meta.url, DOGE_SCANNER_INTERVAL);
 
     logger.debug('doge scanner started');
 

@@ -111,9 +111,13 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('doge.tokens.rwt'),
         },
         blockcypherUrl: nodeConfig.get<string>('doge.blockcypherUrl'),
-        rpcUrl: nodeConfig.get<string>('doge.rpc.url'),
-        rpcUsername: getOptionalString('doge.rpc.username'),
-        rpcPassword: getOptionalString('doge.rpc.password'),
+        rpcConnections: nodeConfig.get<
+          Array<{
+            url: string;
+            username?: string;
+            password?: string;
+          }>
+        >('doge.rpcConnections'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),

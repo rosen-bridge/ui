@@ -10,11 +10,12 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 
 import config from '../configs';
-import { BINANCE_BLOCK_TIME, ETHEREUM_BLOCK_TIME } from '../constants';
-import { startBinanceScanner } from '../scanner/chains/binance';
-import { startCardanoScanner } from '../scanner/chains/cardano';
-import { startErgoScanner } from '../scanner/chains/ergo';
-import { startEthereumScanner } from '../scanner/chains/ethereum';
+import {
+  BINANCE_BLOCK_TIME,
+  DOGE_BLOCK_TIME,
+  ETHEREUM_BLOCK_TIME,
+} from '../constants';
+import scannerService from '../scanner/scanner-service';
 import { getLastSavedBlock } from './health-check-utils';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
@@ -55,66 +56,68 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
   const checks = [
     {
       instance: new ErgoExplorerScannerHealthCheck(
-        async () => getLastSavedBlock((await startErgoScanner()).name()),
+        scannerService.getErgoScanner().getBlockChainLastHeight,
+        async () => getLastSavedBlock(scannerService.getErgoScanner().name()),
         config.healthCheck.ergoScannerWarnDiff,
         config.healthCheck.ergoScannerCriticalDiff,
-        config.ergo.explorerUrl,
       ),
       label: 'ergo',
     },
     {
       instance: new CardanoKoiosScannerHealthCheck(
-        async () => getLastSavedBlock((await startCardanoScanner()).name()),
+        scannerService.getCardanoScanner().getBlockChainLastHeight,
+        async () =>
+          getLastSavedBlock(scannerService.getCardanoScanner().name()),
         config.healthCheck.cardanoScannerWarnDiff,
         config.healthCheck.cardanoScannerCriticalDiff,
-        config.cardano.koiosUrl,
-        config.cardano.koiosAuthToken,
       ),
       label: 'cardano',
     },
     {
       instance: new BitcoinRPCScannerHealthCheck(
-        async () => getLastSavedBlock((await startBinanceScanner()).name()),
+        NETWORKS.bitcoin.key,
+        scannerService.getBitcoinScanner().getBlockChainLastHeight,
+        async () =>
+          getLastSavedBlock(scannerService.getBitcoinScanner().name()),
         config.healthCheck.bitcoinScannerWarnDiff,
         config.healthCheck.bitcoinScannerCriticalDiff,
-        config.bitcoin.rpcUrl,
-        config.bitcoin.rpcUsername,
-        config.bitcoin.rpcPassword,
       ),
       label: 'bitcoin',
     },
     {
       instance: new BitcoinRPCScannerHealthCheck(
-        async () => getLastSavedBlock((await startBinanceScanner()).name()),
+        NETWORKS.doge.key,
+        scannerService.getDogeScanner().getBlockChainLastHeight,
+        async () => getLastSavedBlock(scannerService.getDogeScanner().name()),
         config.healthCheck.dogeScannerWarnDiff,
         config.healthCheck.dogeScannerCriticalDiff,
-        config.doge.rpcUrl,
-        config.doge.rpcUsername,
-        config.doge.rpcPassword,
+        undefined, // to use the default warn block gap
+        undefined, // to use the default critical block gap
+        DOGE_BLOCK_TIME,
       ),
       label: 'doge',
     },
     {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.ethereum.key,
-        async () => getLastSavedBlock((await startEthereumScanner()).name()),
+        scannerService.getEthereumScanner().getBlockChainLastHeight,
+        async () =>
+          getLastSavedBlock(scannerService.getEthereumScanner().name()),
         config.healthCheck.ethereumScannerWarnDiff,
         config.healthCheck.ethereumScannerCriticalDiff,
-        config.ethereum.rpcUrl,
         ETHEREUM_BLOCK_TIME,
-        config.ethereum.rpcAuthToken,
       ),
       label: 'ethereum',
     },
     {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.binance.key,
-        async () => getLastSavedBlock((await startBinanceScanner()).name()),
+        scannerService.getBinanceScanner().getBlockChainLastHeight,
+        async () =>
+          getLastSavedBlock(scannerService.getBinanceScanner().name()),
         config.healthCheck.binanceScannerWarnDiff,
         config.healthCheck.binanceScannerCriticalDiff,
-        config.binance.rpcUrl,
         BINANCE_BLOCK_TIME,
-        config.binance.rpcAuthToken,
       ),
       label: 'binance',
     },
