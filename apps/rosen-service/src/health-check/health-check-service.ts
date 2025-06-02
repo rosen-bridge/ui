@@ -10,11 +10,11 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 
 import config from '../configs';
-import { BINANCE_BLOCK_TIME, ETHEREUM_BLOCK_TIME } from '../constants';
-import { startBinanceScanner } from '../scanner/chains/binance';
-import { startCardanoScanner } from '../scanner/chains/cardano';
-import { startErgoScanner } from '../scanner/chains/ergo';
-import { startEthereumScanner } from '../scanner/chains/ethereum';
+import {
+  BINANCE_BLOCK_TIME,
+  DOGE_BLOCK_TIME,
+  ETHEREUM_BLOCK_TIME,
+} from '../constants';
 import scannerService from '../scanner/scanner-service';
 import { getLastSavedBlock } from './health-check-utils';
 
@@ -57,7 +57,7 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new ErgoExplorerScannerHealthCheck(
         scannerService.getErgoScanner().getBlockChainLastHeight,
-        async () => getLastSavedBlock((await startErgoScanner()).name()),
+        async () => getLastSavedBlock(scannerService.getErgoScanner().name()),
         config.healthCheck.ergoScannerWarnDiff,
         config.healthCheck.ergoScannerCriticalDiff,
       ),
@@ -66,7 +66,8 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
     {
       instance: new CardanoKoiosScannerHealthCheck(
         scannerService.getCardanoScanner().getBlockChainLastHeight,
-        async () => getLastSavedBlock((await startCardanoScanner()).name()),
+        async () =>
+          getLastSavedBlock(scannerService.getCardanoScanner().name()),
         config.healthCheck.cardanoScannerWarnDiff,
         config.healthCheck.cardanoScannerCriticalDiff,
       ),
@@ -76,7 +77,8 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       instance: new BitcoinRPCScannerHealthCheck(
         NETWORKS.bitcoin.key,
         scannerService.getBitcoinScanner().getBlockChainLastHeight,
-        async () => getLastSavedBlock((await startBinanceScanner()).name()),
+        async () =>
+          getLastSavedBlock(scannerService.getBitcoinScanner().name()),
         config.healthCheck.bitcoinScannerWarnDiff,
         config.healthCheck.bitcoinScannerCriticalDiff,
       ),
@@ -86,9 +88,12 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       instance: new BitcoinRPCScannerHealthCheck(
         NETWORKS.doge.key,
         scannerService.getDogeScanner().getBlockChainLastHeight,
-        async () => getLastSavedBlock((await startBinanceScanner()).name()),
+        async () => getLastSavedBlock(scannerService.getDogeScanner().name()),
         config.healthCheck.dogeScannerWarnDiff,
         config.healthCheck.dogeScannerCriticalDiff,
+        undefined, // to use the default warn block gap
+        undefined, // to use the default critical block gap
+        DOGE_BLOCK_TIME,
       ),
       label: 'doge',
     },
@@ -96,7 +101,8 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.ethereum.key,
         scannerService.getEthereumScanner().getBlockChainLastHeight,
-        async () => getLastSavedBlock((await startEthereumScanner()).name()),
+        async () =>
+          getLastSavedBlock(scannerService.getEthereumScanner().name()),
         config.healthCheck.ethereumScannerWarnDiff,
         config.healthCheck.ethereumScannerCriticalDiff,
         ETHEREUM_BLOCK_TIME,
@@ -107,7 +113,8 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       instance: new EvmRPCScannerHealthCheck(
         NETWORKS.binance.key,
         scannerService.getBinanceScanner().getBlockChainLastHeight,
-        async () => getLastSavedBlock((await startBinanceScanner()).name()),
+        async () =>
+          getLastSavedBlock(scannerService.getBinanceScanner().name()),
         config.healthCheck.binanceScannerWarnDiff,
         config.healthCheck.binanceScannerCriticalDiff,
         BINANCE_BLOCK_TIME,
