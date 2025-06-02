@@ -1,8 +1,26 @@
 diff --git a/node_modules/@rosen-bridge/rate-limited-axios/dist/index.js b/node_modules/@rosen-bridge/rate-limited-axios/dist/index.js
-index ec6b888..ebf9383 100644
+index ec6b888..ffa037d 100644
 --- a/node_modules/@rosen-bridge/rate-limited-axios/dist/index.js
 +++ b/node_modules/@rosen-bridge/rate-limited-axios/dist/index.js
-@@ -46,7 +46,7 @@ class RateLimitedAxios extends originalAxios.Axios {
+@@ -1,4 +1,4 @@
+-import originalAxios from 'axios';
++import originalAxios, { mergeConfig, } from 'axios';
+ import { Semaphore } from 'await-semaphore';
+ import { DummyLogger } from '@rosen-bridge/abstract-logger';
+ import { RateLimiterMemory } from 'rate-limiter-flexible';
+@@ -12,10 +12,7 @@ class RateLimitedAxios extends originalAxios.Axios {
+         if (!RateLimitedAxios.refreshPeriodInterval || !RateLimitedAxios.rules) {
+             throw new Error('Instantiation of this class is not allowed until the initConfigs method has been successfully invoked.');
+         }
+-        super({
+-            ...originalAxios.defaults,
+-            ...config,
+-        });
++        super(mergeConfig(originalAxios.defaults, config || {}));
+         this.interceptors.request.use(RateLimitedAxios.interceptor);
+     }
+     /**
+@@ -46,7 +43,7 @@ class RateLimitedAxios extends originalAxios.Axios {
       * @returns
       */
      static interceptor = async (config) => {
