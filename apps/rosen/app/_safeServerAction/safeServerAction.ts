@@ -44,6 +44,12 @@ type UnwrapResult<Action extends ReturnType<Wrap>> = Promise<
   NonNullable<Awaited<ReturnType<Action>>['result']>
 >;
 
+type UnwrapFromObject = <T extends Record<string, ReturnType<Wrap>>>(
+  obj: T,
+) => {
+  [K in keyof T]: (...args: Parameters<T[K]>) => UnwrapResult<T[K]>;
+};
+
 const DEFAULT_CONFIG: Partial<CreateSafeActionConfig> = {
   errors: {},
   deserializeError(error) {
@@ -148,5 +154,15 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
     };
   };
 
-  return { wrap, unwrap };
+  const unwrapFromObject: UnwrapFromObject = (obj) => {
+    const result = {} as any;
+
+    for (const key in obj) {
+      result[key] = unwrap(obj[key]);
+    }
+
+    return result;
+  };
+
+  return { wrap, unwrap, unwrapFromObject };
 };

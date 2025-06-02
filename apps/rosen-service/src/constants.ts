@@ -17,3 +17,4 @@ export const BINANCE_SCANNER_LOGGER_NAME = 'binance-scanner';
 
 export const ETHEREUM_BLOCK_TIME = 12;
 export const BINANCE_BLOCK_TIME = 3;
+export const DOGE_BLOCK_TIME = 60;

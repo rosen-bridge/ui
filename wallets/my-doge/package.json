@@ -16,7 +16,6 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^1.4.0",
     "@rosen-network/doge": "^0.1.2",
     "@rosen-ui/constants": "^0.3.0",
     "@rosen-ui/types": "^0.3.5",
