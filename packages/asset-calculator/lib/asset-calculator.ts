@@ -11,7 +11,7 @@ import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { EvmCalculator } from './calculator/chains/evm-calculator';
-import { RunesCalculator } from './calculator/chains/runes-calculator';
+import { RunesCalculator } from './calculator/chains/runes';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
