@@ -1,0 +1,13 @@
+diff --git a/node_modules/@rosen-bridge/rosen-extractor/node_modules/@rosen-bridge/address-codec/dist/index.js b/node_modules/@rosen-bridge/rosen-extractor/node_modules/@rosen-bridge/address-codec/dist/index.js
+index be93bb8..e3dc11a 100644
+--- a/node_modules/@rosen-bridge/rosen-extractor/node_modules/@rosen-bridge/address-codec/dist/index.js
++++ b/node_modules/@rosen-bridge/rosen-extractor/node_modules/@rosen-bridge/address-codec/dist/index.js
+@@ -1,6 +1,6 @@
+-import * as tinySecp from 'tiny-secp256k1';
++import ecc from '@bitcoinerlab/secp256k1';
+ import * as bitcoinLib from 'bitcoinjs-lib';
+-bitcoinLib.initEccLib(tinySecp);
++bitcoinLib.initEccLib(ecc);
+ export * from './encoder';
+ export * from './decoder';
+ export * from './types';

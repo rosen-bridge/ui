@@ -20,6 +20,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
+    "@bitcoinerlab/secp256k1": "^1.2.0",
     "@changesets/cli": "^2.27.1",
     "patch-package": "^8.0.0"
   },

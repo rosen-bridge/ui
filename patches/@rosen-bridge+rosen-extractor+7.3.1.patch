@@ -1,0 +1,13 @@
+diff --git a/node_modules/@rosen-bridge/rosen-extractor/dist/lib/index.js b/node_modules/@rosen-bridge/rosen-extractor/dist/lib/index.js
+index 082239b..0c3acea 100644
+--- a/node_modules/@rosen-bridge/rosen-extractor/dist/lib/index.js
++++ b/node_modules/@rosen-bridge/rosen-extractor/dist/lib/index.js
+@@ -1,6 +1,6 @@
+ import { initEccLib } from 'bitcoinjs-lib';
+-import * as tinySecp from 'tiny-secp256k1';
+-initEccLib(tinySecp);
++import ecc from '@bitcoinerlab/secp256k1';
++initEccLib(ecc);
+ export { default as AbstractRosenDataExtractor } from './getRosenData/abstract/AbstractRosenDataExtractor';
+ export { BitcoinEsploraRosenExtractor } from './getRosenData/bitcoin/BitcoinEsploraRosenExtractor';
+ export { BitcoinRosenExtractor } from './getRosenData/bitcoin/BitcoinRosenExtractor';
