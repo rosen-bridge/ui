@@ -1,4 +1,4 @@
-import { Mydoge as MyDogeIcon } from '@rosen-bridge/icons';
+import { DogeNetwork } from '@rosen-network/doge/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
@@ -8,12 +8,14 @@ import {
   Wallet,
   WalletTransferParams,
   AddressRetrievalError,
+  UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { MyDogeWalletConfig } from './types';
 
 export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
-  icon = MyDogeIcon;
+  icon = ICON;
 
   name = 'MyDoge';
 
@@ -24,6 +26,12 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
   currentChain: Network = NETWORKS.doge.key;
 
   supportedChains: Network[] = [NETWORKS.doge.key];
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
 
   private get api() {
     return window.doge;
@@ -78,16 +86,20 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
   transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
 
+    if (!(this.currentNetwork instanceof DogeNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const userAddress = await this.getAddress();
 
-    const opReturnData = await this.config.generateOpReturnData(
+    const opReturnData = await this.currentNetwork.generateOpReturnData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await this.config.generateUnsignedTx(
+    const psbtData = await this.currentNetwork.generateUnsignedTx(
       params.lockAddress,
       userAddress,
       params.amount,

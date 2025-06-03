@@ -1,11 +1,12 @@
 import { Ethereum as EthereumIcon } from '@rosen-bridge/icons';
-import {
-  Network,
-  NetworkConfig,
-  NetworkMaxTransferParams,
-} from '@rosen-network/base';
+import { Network, NetworkConfig } from '@rosen-network/base';
+import { generateLockData, generateTxParameters } from '@rosen-network/evm';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+
+type EthereumNetworkConfig = NetworkConfig & {
+  generateLockData: typeof generateLockData;
+  generateTxParameters: ReturnType<typeof generateTxParameters>;
+};
 
 export class EthereumNetwork implements Network {
   public label = NETWORKS.ethereum.label;
@@ -18,18 +19,30 @@ export class EthereumNetwork implements Network {
 
   public nextHeightInterval: number;
 
-  constructor(protected config: NetworkConfig) {
+  constructor(protected config: EthereumNetworkConfig) {
     this.nextHeightInterval = config.nextHeightInterval;
     this.lockAddress = config.lockAddress;
   }
 
-  public getMaxTransfer(
-    params: NetworkMaxTransferParams,
-  ): Promise<RosenAmountValue> {
-    return this.config.getMaxTransfer(params);
-  }
+  public generateLockData: EthereumNetworkConfig['generateLockData'] = (
+    ...args
+  ) => {
+    return this.config.generateLockData(...args);
+  };
 
-  public toSafeAddress(address: string): string {
+  public generateTxParameters: EthereumNetworkConfig['generateTxParameters'] = (
+    ...args
+  ) => {
+    return this.config.generateTxParameters(...args);
+  };
+
+  public getMaxTransfer: EthereumNetworkConfig['getMaxTransfer'] = (
+    ...args
+  ) => {
+    return this.config.getMaxTransfer(...args);
+  };
+
+  public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
-  }
+  };
 }

@@ -1,0 +1,28 @@
+{
+  "name": "@rosen-ui/wallet-connect",
+  "version": "0.1.0",
+  "private": true,
+  "description": "This is a private package utilized within Rosen Bridge UI app",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "lint": "eslint --fix . && npm run prettify",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@reown/appkit": "^1.7.5",
+    "@reown/appkit-adapter-ethers": "^1.7.5",
+    "@rosen-bridge/tokens": "^3.0.0",
+    "@rosen-network/binance": "^0.2.3",
+    "@rosen-network/ethereum": "^0.2.3",
+    "@rosen-ui/constants": "^0.3.0",
+    "@rosen-ui/types": "^0.3.5",
+    "@rosen-ui/wallet-api": "^1.4.0"
+  }
+}

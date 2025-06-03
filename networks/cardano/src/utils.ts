@@ -20,7 +20,7 @@ export const getCardanoProtocolParams =
     const cardanoKoiosClient = cardanoKoiosClientFactory(
       process.env.CARDANO_KOIOS_API!, // TODO
     );
-    return await cardanoKoiosClient.getEpochParams().then((epochParams) => {
+    return await cardanoKoiosClient.epochParams().then((epochParams) => {
       const params = epochParams[0];
       if (
         !params.min_fee_a ||

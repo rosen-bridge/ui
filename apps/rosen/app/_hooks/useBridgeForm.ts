@@ -5,7 +5,7 @@ import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import { validateAddress } from '@/_actions';
-import { networks } from '@/_networks';
+import * as networks from '@/_networks';
 import { unwrap } from '@/_safeServerAction';
 import { getMinTransfer } from '@/_utils';
 
@@ -70,7 +70,9 @@ export const useBridgeForm = () => {
         if (walletGlobalContext?.selected) {
           // prevent user from entering more than token amount
 
-          const selectedNetwork = networks[sourceField.value as Network];
+          const selectedNetwork = Object.values(networks).find(
+            (wallet) => wallet.name == sourceField.value,
+          )!;
 
           const maxTransfer = await selectedNetwork.getMaxTransfer({
             balance: await walletGlobalContext!.selected.getBalance(
@@ -112,7 +114,9 @@ export const useBridgeForm = () => {
 
         const isValid = await unwrap(validateAddress)(
           targetField.value as Network,
-          networks[targetField.value as Network].toSafeAddress(value),
+          Object.values(networks)
+            .find((wallet) => wallet.name == targetField.value)!
+            .toSafeAddress(value),
         );
 
         if (isValid) return;

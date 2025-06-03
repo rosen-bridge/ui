@@ -1,9 +1,6 @@
-import type { generateUnsignedTx } from '@rosen-network/ergo';
 import { EipWalletApi, WalletConfig } from '@rosen-ui/wallet-api';
 
-export type NautilusWalletConfig = WalletConfig & {
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-};
+export type NautilusWalletConfig = WalletConfig & {};
 
 /**
  * global type augmentation for nautilus wallet

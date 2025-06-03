@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
-import React, { SyntheticEvent } from 'react';
+import React, { Fragment, SyntheticEvent } from 'react';
 
 import {
   LockAlt,
@@ -16,6 +16,7 @@ import {
   ToggleButtonGroup,
   styled,
   Grid,
+  PageHeading,
 } from '@rosen-bridge/ui-kit';
 import { LayoutProps } from '@rosen-ui/types';
 
@@ -68,7 +69,8 @@ const Actions = ({ form, text }: LayoutProps) => {
   };
 
   return (
-    <>
+    <Fragment>
+      <PageHeading title="Actions" />
       <ScrollableContainer>
         <CustomToggleButtonGroup
           value={segments.at(-1)}
@@ -139,7 +141,7 @@ const Actions = ({ form, text }: LayoutProps) => {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Fragment>
   );
 };
 

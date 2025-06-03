@@ -41,7 +41,6 @@ export default {
       '@types/react-dom',
       '@vitest/runner',
       '@vitest/coverage-istanbul',
-      'axios-rate-limit',
       'eslint-config-prettier',
       'lint-staged',
       'pg',

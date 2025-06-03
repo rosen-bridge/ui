@@ -23,7 +23,7 @@ const GetHeight = {
   [NETWORKS.binance.key]: () => getHeight(EvmChains.BINANCE),
   [NETWORKS.ethereum.key]: () => getHeight(EvmChains.ETHEREUM),
   [NETWORKS.cardano.key]: async () =>
-    (await cardanoKoiosClient.getTip())[0].block_no,
+    (await cardanoKoiosClient.tip())[0].block_no,
   [NETWORKS.ergo.key]: async () =>
     Number((await ergoExplorerClient.v1.getApiV1Networkstate()).height),
   [NETWORKS.bitcoin.key]: async (): Promise<number> => {

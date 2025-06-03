@@ -58,10 +58,14 @@ doge:
     rwt:
   initialHeight:
   blockcypherUrl: https://api.blockcypher.com
-  rpc:
-    url:
-    # username:
-    # password:
+  rpcConnections:
+    - url:
+      username:
+      password:
+    # Add more RPC connections as needed
+    # - url:
+    #   username:
+    #   password:
 ethereum:
   addresses:
     lock:
@@ -112,6 +116,9 @@ healthCheck:
   binanceScannerWarnDiff: 3
   binanceScannerCriticalDiff: 5
   interval: 60 #health check update interval (in seconds)
+  duration: 600 # log duration time check (in seconds)
+  maxAllowedErrorCount: 1 # maximum allowed error log lines
+  maxAllowedWarnCount: 10 # maximum allowed warn log lines
 notification:
   discordWebhookUrl: # discord notification webhook
 #  historyCleanupTimeout: # notification history cleanup threshold (in seconds, uses default if not set)
