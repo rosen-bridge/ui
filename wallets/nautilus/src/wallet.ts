@@ -1,5 +1,5 @@
-import { Nautilus as NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
@@ -13,12 +13,14 @@ import {
   Wallet,
   WalletTransferParams,
   ConnectionTimeoutError,
+  UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { NautilusWalletConfig } from './types';
 
 export class NautilusWallet extends Wallet<NautilusWalletConfig> {
-  icon = NautilusIcon;
+  icon = ICON;
 
   name = 'Nautilus';
 
@@ -29,6 +31,12 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
   currentChain: Network = NETWORKS.ergo.key;
 
   supportedChains: Network[] = [NETWORKS.ergo.key];
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
 
   private get api() {
     return window.ergoConnector.nautilus;
@@ -98,6 +106,11 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
 
   transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
+
+    if (!(this.currentNetwork instanceof ErgoNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const wallet = await this.api.getContext();
 
     const changeAddress = await this.getAddress();
@@ -106,7 +119,7 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
 
     if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTx = await this.config.generateUnsignedTx(
+    const unsignedTx = await this.currentNetwork.generateUnsignedTx(
       changeAddress,
       walletUtxos,
       params.lockAddress,

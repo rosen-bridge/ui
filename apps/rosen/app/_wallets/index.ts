@@ -1,15 +1,10 @@
-import { eternl } from './eternl';
-import { lace } from './lace';
-import { metamask } from './metamask';
-import { myDoge } from './my-doge';
-import { nautilus } from './nautilus';
-import { okx } from './okx';
+import './base';
 
-export const wallets = {
-  [eternl.name]: eternl,
-  [lace.name]: lace,
-  [metamask.name]: metamask,
-  [nautilus.name]: nautilus,
-  [okx.name]: okx,
-  [myDoge.name]: myDoge,
-} as const;
+export * from './eternl';
+export * from './lace';
+export * from './metaMask';
+export * from './myDoge';
+export * from './nautilus';
+export * from './okx';
+export * from './walletConnect';
+export * from './xverse';

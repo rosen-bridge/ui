@@ -180,24 +180,3 @@ export { default as ErgoRaw } from './networks/ergo.svg?raw';
 
 export { ReactComponent as Ethereum } from './networks/ethereum.svg';
 export { default as EthereumRaw } from './networks/ethereum.svg?raw';
-
-export { ReactComponent as Runes } from './networks/runes.svg';
-export { default as RunesRaw } from './networks/runes.svg?raw';
-
-export { ReactComponent as Eternl } from './wallets/eternl.svg';
-export { default as EternlRaw } from './wallets/eternl.svg?raw';
-
-export { ReactComponent as Lace } from './wallets/lace.svg';
-export { default as LaceRaw } from './wallets/lace.svg?raw';
-
-export { ReactComponent as MetaMask } from './wallets/meta-mask.svg';
-export { default as MetaMaskRaw } from './wallets/meta-mask.svg?raw';
-
-export { ReactComponent as Mydoge } from './wallets/mydoge.svg';
-export { default as MydogeRaw } from './wallets/mydoge.svg?raw';
-
-export { ReactComponent as Nautilus } from './wallets/nautilus.svg';
-export { default as NautilusRaw } from './wallets/nautilus.svg?raw';
-
-export { ReactComponent as Okx } from './wallets/okx.svg';
-export { default as OkxRaw } from './wallets/okx.svg?raw';

@@ -1,6 +1,7 @@
+import axios from '@rosen-bridge/rate-limited-axios';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { AssetCalculator } from '../lib';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
@@ -9,6 +10,13 @@ import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';
 
 describe('AssetCalculator', () => {
+  beforeAll(() => {
+    axios.initConfigs({
+      apiLimitRateRangeAsSeconds: 10,
+      apiLimitRules: [],
+    });
+  });
+
   describe('calculateEmissionForChain', () => {
     /**
      * Mock database and create the AssetCalculator instance before each test
@@ -28,6 +36,10 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          blockcypherUrl: 'blockcypherUrl',
+        },
         dataSource,
       );
     });
@@ -104,6 +116,10 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          blockcypherUrl: 'blockcypherUrl',
+        },
         dataSource,
       );
     });
@@ -174,6 +190,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         dataSource,
       );
       assetCalculator['calculateEmissionForChain'] = () =>
@@ -287,6 +304,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         dataSource,
       );
       await assetCalculator['tokenModel']['tokenRepository'].insert(tokens);

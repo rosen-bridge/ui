@@ -59,7 +59,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
             padding: '12px',
           }}
         >
-          <CircularProgress size={15} />
+          <CircularProgress size={15} color="inherit" />
         </Box>
       ) : (
         <>
@@ -120,7 +120,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
             }
           >
             <IconButton
-              sx={{ padding: '12px' }}
+              sx={{ padding: '12px', color: 'inherit' }}
               onClick={() => setTooltipOpen(!tooltipOpen)}
               onMouseEnter={() => !isMobile && setTooltipOpen(true)}
               onMouseLeave={() => !isMobile && setTooltipOpen(false)}

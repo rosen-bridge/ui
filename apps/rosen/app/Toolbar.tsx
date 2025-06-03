@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Stack,
+  Toolbar as UiKitToolbar,
   ToolbarThemeTogglerAction,
   useIsMobile,
   Version,
@@ -15,9 +15,9 @@ import packageJson from '../package.json';
 export const Toolbar = () => {
   const isMobile = useIsMobile();
   return (
-    <Stack direction="row">
+    <UiKitToolbar>
       {isMobile && <Version label="UI" value={packageJson.version} />}
       <ToolbarThemeTogglerAction />
-    </Stack>
+    </UiKitToolbar>
   );
 };
