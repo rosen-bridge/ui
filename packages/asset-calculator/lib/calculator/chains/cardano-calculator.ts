@@ -27,7 +27,7 @@ export class CardanoCalculator extends AbstractCalculator {
    * @returns total supply of the token in Cardano
    */
   totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
-    const assetSummary = await this.koiosApi.postAssetInfo({
+    const assetSummary = await this.koiosApi.assetInfo({
       _asset_list: [
         [token.extra.policyId as string, token.extra.assetName as string],
       ],
@@ -48,7 +48,7 @@ export class CardanoCalculator extends AbstractCalculator {
    * @returns total balance in hot and cold wallets
    */
   totalRawBalance = async (token: RosenChainToken): Promise<bigint> => {
-    const assets = await this.koiosApi.postAddressAssets({
+    const assets = await this.koiosApi.addressAssets({
       _addresses: this.addresses,
     });
     const tokenBalance = assets
@@ -71,7 +71,7 @@ export class CardanoCalculator extends AbstractCalculator {
    */
   getRawLockedAmountsPerAddress = async (token: RosenChainToken) => {
     if (token.type === NATIVE_TOKEN) {
-      const addressesInfo = await this.koiosApi.postAddressInfo({
+      const addressesInfo = await this.koiosApi.addressInfo({
         _addresses: this.addresses,
       });
       return addressesInfo
@@ -82,7 +82,7 @@ export class CardanoCalculator extends AbstractCalculator {
         }));
     }
 
-    const assets = await this.koiosApi.postAddressAssets({
+    const assets = await this.koiosApi.addressAssets({
       _addresses: this.addresses,
     });
 

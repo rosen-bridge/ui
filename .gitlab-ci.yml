@@ -38,7 +38,6 @@ build:
         - wallets/*/dist
   script:
     - npm run build:mono-packages
-    - npm run build:mono-packages -- public-status
 
 type_check:
   stage: type_check

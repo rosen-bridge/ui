@@ -13,6 +13,10 @@ interface RunesCalculatorInterface extends CalculatorInterface {
   unisatUrl?: string;
 }
 
+interface DogeCalculatorInterface extends CalculatorInterface {
+  blockcypherUrl: string;
+}
+
 interface EvmCalculatorInterface extends CalculatorInterface {
   rpcUrl: string;
   authToken?: string;
@@ -28,4 +32,5 @@ export {
   BitcoinCalculatorInterface,
   RunesCalculatorInterface,
   EvmCalculatorInterface,
+  DogeCalculatorInterface,
 };

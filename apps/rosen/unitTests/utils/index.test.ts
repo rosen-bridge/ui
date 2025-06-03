@@ -1,7 +1,7 @@
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { describe, expect, it } from 'vitest';
 
-import { getTokenNameAndId } from '@/_utils';
+import { getTokenNameAndId } from '@/_utils/getTokenNameAndId';
 
 describe('getTokenNameAndId', () => {
   /**

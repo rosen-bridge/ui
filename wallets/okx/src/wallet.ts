@@ -1,4 +1,4 @@
-import { Okx as OKXIcon } from '@rosen-bridge/icons';
+import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
@@ -8,12 +8,14 @@ import {
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
+  UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
+import { ICON } from './icon';
 import { OKXWalletConfig } from './types';
 
 export class OKXWallet extends Wallet<OKXWalletConfig> {
-  icon = OKXIcon;
+  icon = ICON;
 
   name = 'OKX';
 
@@ -24,6 +26,12 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
   currentChain: Network = NETWORKS.bitcoin.key;
 
   supportedChains: Network[] = [NETWORKS.bitcoin.key];
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
 
   private get api() {
     return window.okxwallet.bitcoin;
@@ -74,16 +82,21 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
 
   transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
+
+    if (!(this.currentNetwork instanceof BitcoinNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const userAddress = await this.getAddress();
 
-    const opReturnData = await this.config.generateOpReturnData(
+    const opReturnData = await this.currentNetwork.generateOpReturnData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await this.config.generateUnsignedTx(
+    const psbtData = await this.currentNetwork.generateUnsignedTx(
       params.lockAddress,
       userAddress,
       params.amount,
@@ -107,7 +120,10 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
+    const txId = await this.currentNetwork.submitTransaction(
+      signedPsbtHex,
+      'hex',
+    );
 
     return txId;
   };

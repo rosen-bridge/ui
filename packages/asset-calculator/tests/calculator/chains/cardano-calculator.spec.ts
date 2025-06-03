@@ -15,7 +15,7 @@ describe('CardanoCalculator', () => {
      */
     beforeEach(() => {
       vitest.mocked(cardanoKoiosClientFactory).mockReturnValue({
-        postAddressAssets: async () => [
+        addressAssets: async () => [
           {
             address: 'hotAddress',
             policy_id: 'policyId',
@@ -78,7 +78,7 @@ describe('CardanoCalculator', () => {
      */
     beforeEach(() => {
       vitest.mocked(cardanoKoiosClientFactory).mockReturnValue({
-        postAssetInfo: async () => [
+        assetInfo: async () => [
           {
             policy_id: 'policyId',
             asset_name: 'assetName',

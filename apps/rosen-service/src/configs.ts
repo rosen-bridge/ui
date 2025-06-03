@@ -111,9 +111,13 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('doge.tokens.rwt'),
         },
         blockcypherUrl: nodeConfig.get<string>('doge.blockcypherUrl'),
-        rpcUrl: nodeConfig.get<string>('doge.rpc.url'),
-        rpcUsername: getOptionalString('doge.rpc.username'),
-        rpcPassword: getOptionalString('doge.rpc.password'),
+        rpcConnections: nodeConfig.get<
+          Array<{
+            url: string;
+            username?: string;
+            password?: string;
+          }>
+        >('doge.rpcConnections'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
@@ -168,6 +172,13 @@ const getConfig = () => {
           'healthCheck.binanceScannerCriticalDiff',
         ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
+        logDuration: nodeConfig.get<number>('healthCheck.duration'),
+        errorLogAllowedCount: nodeConfig.get<number>(
+          'healthCheck.maxAllowedErrorCount',
+        ),
+        warnLogAllowedCount: nodeConfig.get<number>(
+          'healthCheck.maxAllowedWarnCount',
+        ),
       },
       notification: {
         discordWebHookUrl: nodeConfig.get<string>(

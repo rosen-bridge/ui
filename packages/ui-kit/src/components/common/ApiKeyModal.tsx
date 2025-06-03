@@ -63,7 +63,6 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
       {children?.(handleOpenModal) || (
         <IconButton
           onClick={handleOpenModal}
-          size="large"
           color={apiKey ? 'primary' : 'default'}
         >
           <SvgIcon sx={{ width: 24 }}>

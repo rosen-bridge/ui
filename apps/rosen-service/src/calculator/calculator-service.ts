@@ -74,6 +74,10 @@ const start = async () => {
       rpcUrl: config.binance.rpcUrl,
       authToken: config.binance.rpcAuthToken,
     },
+    {
+      addresses: config.calculator.addresses.doge,
+      blockcypherUrl: config.doge.blockcypherUrl,
+    },
     dataSource,
     logger,
   );

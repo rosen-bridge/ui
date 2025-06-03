@@ -1,17 +1,6 @@
-import type {
-  generateUnsignedTx,
-  decodeWasmValue,
-  generateLockAuxiliaryData,
-  setTxWitnessSet,
-} from '@rosen-network/cardano';
 import { CipWalletApi, WalletConfig } from '@rosen-ui/wallet-api';
 
-export type LaceWalletConfig = WalletConfig & {
-  decodeWasmValue: typeof decodeWasmValue;
-  generateLockAuxiliaryData: typeof generateLockAuxiliaryData;
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-  setTxWitnessSet: typeof setTxWitnessSet;
-};
+export type LaceWalletConfig = WalletConfig & {};
 
 /**
  * global type augmentation for the wallet

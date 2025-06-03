@@ -3,7 +3,7 @@ import Chart from 'react-apexcharts';
 
 import { useTheme } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
-import { getDecimalString, roundToPrecision } from '@rosen-ui/utils';
+import { getDecimalString } from '@rosen-ui/utils';
 import moment from 'moment';
 
 import { ApiRevenueChartResponse } from '@/_types/api';
@@ -65,16 +65,45 @@ interface RevenueChartProps {
 export const RevenueChart = ({ period, data }: RevenueChartProps) => {
   const theme = useTheme();
 
-  const reversedData = useMemo(
-    () =>
-      data
-        .map((innerData) => ({
-          ...innerData,
-          data: innerData.data.toReversed(),
-        }))
-        .toReversed(),
-    [data],
-  );
+  const slots = useMemo(() => {
+    const raw = data
+      .map((token) => token.data)
+      .flat()
+      .map((item) => +item.label)
+      .filter((item, index, items) => items.indexOf(item) == index)
+      .sort((a, b) => a - b);
+
+    const min = raw[0];
+    const max = raw[raw.length - 1];
+
+    const result = [] as number[];
+
+    let current = min;
+
+    result.push(current);
+
+    while (current < max) {
+      const date = new Date(current);
+
+      switch (period) {
+        case 'week':
+          date.setUTCDate(date.getUTCDate() + 7);
+          break;
+        case 'month':
+          date.setUTCMonth(date.getUTCMonth() + 1);
+          break;
+        case 'year':
+          date.setUTCFullYear(date.getUTCFullYear() + 1);
+          break;
+      }
+
+      current = date.getTime();
+
+      result.push(current);
+    }
+
+    return result;
+  }, [data, period]);
 
   const apexChartOptions = useMemo(
     () => ({
@@ -82,15 +111,8 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       xaxis: {
         ...baseChartOptions.xaxis,
         categories:
-          reversedData[0]?.data.map((datum) =>
-            moment(+datum.label).format(getDateFormat(period)),
-          ) ?? [],
-      },
-      yaxis: {
-        labels: {
-          formatter: (label: number) =>
-            `${roundToPrecision(label, reversedData[0]?.title?.decimals || 0)}`,
-        },
+          slots.map((slot) => moment(+slot).format(getDateFormat(period))) ??
+          [],
       },
       theme: {
         mode: theme.palette.mode,
@@ -114,18 +136,21 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
               theme.palette.error.light,
             ],
     }),
-    [reversedData, period, theme],
+    [period, slots, theme],
   );
 
   const apexChartSeries = useMemo(
     () =>
-      reversedData.map((tokenData) => ({
-        name: tokenData.title.name,
-        data: tokenData.data.map(
-          (datum) => +getDecimalString(datum.amount, tokenData.title.decimals),
-        ),
+      data.map((token) => ({
+        name: token.title.name,
+        data: slots.map((slot) => {
+          const amount =
+            token.data.find((item) => item.label == slot.toString())?.amount ||
+            '0';
+          return +getDecimalString(amount, token.title.decimals);
+        }),
       })),
-    [reversedData],
+    [data, slots],
   );
 
   return (

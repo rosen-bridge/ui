@@ -1,6 +1,8 @@
 'use client';
 
-import { Box, Grid } from '@rosen-bridge/ui-kit';
+import { Fragment } from 'react';
+
+import { Box, Grid, PageHeading } from '@rosen-bridge/ui-kit';
 import { LayoutProps } from '@rosen-ui/types';
 
 const DashboardLayout = ({
@@ -9,18 +11,21 @@ const DashboardLayout = ({
   revenue,
   tokens,
 }: LayoutProps) => (
-  <Grid container spacing={3}>
-    <Grid item mobile={12} laptop={4}>
-      {infoWidgets}
+  <Fragment>
+    <PageHeading title="Dashboard" />
+    <Grid container spacing={3}>
+      <Grid item mobile={12} laptop={4}>
+        {infoWidgets}
+      </Grid>
+      <Grid item mobile={12} laptop={8}>
+        {revenue}
+      </Grid>
+      <Box mt={3} width="1">
+        {actions}
+      </Box>
+      {tokens}
     </Grid>
-    <Grid item mobile={12} laptop={8}>
-      {revenue}
-    </Grid>
-    <Box mt={3} width="1">
-      {actions}
-    </Box>
-    {tokens}
-  </Grid>
+  </Fragment>
 );
 
 export default DashboardLayout;
