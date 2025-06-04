@@ -25,6 +25,14 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  runes: {
+    index: 6,
+    key: 'runes',
+    label: 'Runes',
+    nativeToken: 'btc',
+    id: '',
+    hasTokenSupport: true,
+  },
   cardano: {
     index: 1,
     key: 'cardano',

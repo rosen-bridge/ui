@@ -33,6 +33,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace networks/evm
   npm run build --workspace networks/binance
   npm run build --workspace networks/bitcoin
+  npm run build --workspace networks/runes
   npm run build --workspace networks/doge
   npm run build --workspace networks/cardano
   npm run build --workspace networks/ergo

@@ -32,6 +32,12 @@ const GetHeight = {
     );
     return response.json();
   },
+  [NETWORKS.runes.key]: async (): Promise<number> => {
+    const response = await fetch(
+      `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
+    );
+    return response.json();
+  },
   [NETWORKS.doge.key]: async (): Promise<number> => {
     const response = await fetch(
       `${process.env.DOGE_BLOCKCYPHER_API}/v1/doge/main`,
