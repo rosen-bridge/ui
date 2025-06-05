@@ -3,11 +3,9 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
-  ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
-  AddressRetrievalError,
   UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
@@ -27,26 +25,13 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.doge.key];
 
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
-
   private get api() {
     return window.doge;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-
+  performConnect = async (): Promise<void> => {
     if (await this.isConnected()) return;
-
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+    await this.api.connect();
   };
 
   disconnect = async (): Promise<void> => {
@@ -58,16 +43,11 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
     }
   };
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    try {
-      return (await this.api.getConnectionStatus()).selectedWalletAddress;
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
-    }
+  fetchAddress = async (): Promise<string | undefined> => {
+    return (await this.api.getConnectionStatus()).selectedWalletAddress;
   };
 
-  getBalanceRaw = async (): Promise<string> => {
+  fetchBalance = async (): Promise<string> => {
     return (await this.api.getBalance()).balance;
   };
 
@@ -83,9 +63,7 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
     }
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (!(this.currentNetwork instanceof DogeNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }

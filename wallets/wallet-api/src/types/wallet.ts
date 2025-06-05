@@ -2,7 +2,13 @@ import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { Network as NetworkBase } from '@rosen-network/base';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
-import { BalanceFetchError, UnavailableApiError } from './errors';
+import {
+  AddressRetrievalError,
+  BalanceFetchError,
+  ConnectionRejectedError,
+  UnavailableApiError,
+  UnsupportedChainError,
+} from './errors';
 
 export interface WalletTransferParams {
   token: RosenChainToken;
@@ -34,17 +40,56 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
   constructor(protected config: Config) {}
 
-  abstract connect: () => Promise<void>;
+  abstract performConnect: () => Promise<void>;
   abstract disconnect: () => Promise<void>;
-  abstract getAddress: () => Promise<string>;
-  abstract getBalanceRaw: (
+  abstract fetchAddress: () => Promise<string | undefined>;
+  abstract fetchBalance: (
     token: RosenChainToken,
   ) => Promise<bigint | number | string | undefined>;
   abstract isAvailable: () => boolean;
-  abstract transfer: (params: WalletTransferParams) => Promise<string>;
+  abstract performTransfer: (params: WalletTransferParams) => Promise<string>;
+  transfer = async (params: WalletTransferParams): Promise<string> => {
+    this.requireAvailable();
 
-  isConnected?: () => Promise<boolean>;
+    if (this.currentNetwork?.name != this.currentChain) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
+    return await this.performTransfer(params);
+  };
+
+  isConnected: () => Promise<boolean>;
   switchChain?: (chain: Network, silent?: boolean) => Promise<void>;
+
+  get currentNetwork() {
+    return this.config.networks.find(
+      (network) => network.name == this.currentChain,
+    );
+  }
+
+  connect = async (): Promise<void> => {
+    this.requireAvailable();
+
+    try {
+      await this.performConnect();
+    } catch (error) {
+      throw new ConnectionRejectedError(this.name, error);
+    }
+  };
+
+  getAddress = async (): Promise<string> => {
+    this.requireAvailable();
+
+    try {
+      const address = await this.fetchAddress();
+
+      if (!address) throw address;
+
+      return address;
+    } catch (error) {
+      throw new AddressRetrievalError(this.name, error);
+    }
+  };
 
   getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
@@ -52,7 +97,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
     let raw;
 
     try {
-      raw = await this.getBalanceRaw(token);
+      raw = await this.fetchBalance(token);
     } catch (error) {
       throw new BalanceFetchError(this.name, error);
     }

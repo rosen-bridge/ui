@@ -2,9 +2,8 @@ import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  AddressRetrievalError,
-  ConnectionRejectedError,
   DisconnectionFailedError,
+  SubmitTransactionError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   Wallet,
@@ -28,24 +27,12 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.bitcoin.key];
 
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
+  performConnect = async (): Promise<void> => {
+    const response = await request('wallet_connect', null);
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
+    if (response.status === 'success') return;
 
-    try {
-      const response = await request('wallet_connect', null);
-
-      if (response.status === 'success') return;
-
-      throw response.error;
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+    throw response.error;
   };
 
   disconnect = async (): Promise<void> => {
@@ -62,27 +49,21 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     }
   };
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
+  fetchAddress = async (): Promise<string | undefined> => {
+    const response = await request('getAddresses', {
+      purposes: [AddressPurpose.Payment],
+    });
 
-    try {
-      const response = await request('getAddresses', {
-        purposes: [AddressPurpose.Payment],
-      });
+    if (response.status == 'error') throw response.error;
 
-      if (response.status == 'error') throw response.error;
+    const address = response.result.addresses.find(
+      (address) => address.purpose === AddressPurpose.Payment,
+    );
 
-      const address = response.result.addresses.find(
-        (address) => address.purpose === AddressPurpose.Payment,
-      );
-
-      return address!.address;
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
-    }
+    return address!.address;
   };
 
-  getBalanceRaw = async (): Promise<string> => {
+  fetchBalance = async (): Promise<string> => {
     const response = await request('getBalance', undefined);
 
     if (response.status === 'success') return response.result.confirmed;
@@ -104,9 +85,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     }
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (!(this.currentNetwork instanceof BitcoinNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
@@ -147,11 +126,13 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const txId = await this.currentNetwork.submitTransaction(
-      signedPsbtBase64,
-      'base64',
-    );
-
-    return txId;
+    try {
+      return await this.currentNetwork.submitTransaction(
+        signedPsbtBase64,
+        'base64',
+      );
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   };
 }

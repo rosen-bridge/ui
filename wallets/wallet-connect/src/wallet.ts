@@ -7,8 +7,6 @@ import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  AddressRetrievalError,
-  ConnectionRejectedError,
   CurrentChainError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
@@ -98,12 +96,6 @@ export class WalletConnect<
     }
   }
 
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
-
   get modal(): AppKit {
     return modal!;
   }
@@ -118,22 +110,16 @@ export class WalletConnect<
     await initialized.promise;
   };
 
-  connect = async (): Promise<void> => {
-    await this.initialize();
+  performConnect = async (): Promise<void> => {
+    if (await this.isConnected()) return;
 
-    if (this.modal.getIsConnectedState()) return;
+    connected = createDeferred();
 
-    try {
-      connected = createDeferred();
+    await this.modal.open({
+      view: 'ConnectingWalletConnectBasic',
+    });
 
-      await this.modal.open({
-        view: 'ConnectingWalletConnectBasic',
-      });
-
-      await connected.promise;
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+    await connected.promise;
   };
 
   disconnect = async (): Promise<void> => {
@@ -149,17 +135,12 @@ export class WalletConnect<
     return this.modal.getIsConnectedState();
   };
 
-  getAddress = async (): Promise<string> => {
+  fetchAddress = async (): Promise<string | undefined> => {
     await this.initialize();
-
-    const address = this.modal.getAddress();
-
-    if (!address) throw new AddressRetrievalError(this.name);
-
-    return address;
+    return this.modal.getAddress();
   };
 
-  getBalanceRaw = async (
+  fetchBalance = async (
     token: RosenChainToken,
   ): Promise<string | undefined> => {
     const address = await this.getAddress();
@@ -206,9 +187,7 @@ export class WalletConnect<
     }
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (
       !(this.currentNetwork instanceof BinanceNetwork) &&
       !(this.currentNetwork instanceof EthereumNetwork)

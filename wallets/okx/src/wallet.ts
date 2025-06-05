@@ -3,12 +3,11 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
-  AddressRetrievalError,
-  ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
   UnsupportedChainError,
+  SubmitTransactionError,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
@@ -27,23 +26,12 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.bitcoin.key];
 
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
-
   private get api() {
     return window.okxwallet.bitcoin;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+  performConnect = async (): Promise<void> => {
+    await this.api.connect();
   };
 
   disconnect = async (): Promise<void> => {
@@ -55,18 +43,11 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
     }
   };
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    const accounts = await this.api.getAccounts();
-
-    const account = accounts?.at(0);
-
-    if (!account) throw new AddressRetrievalError(this.name);
-
-    return account;
+  fetchAddress = async (): Promise<string | undefined> => {
+    return (await this.api.getAccounts())?.at(0);
   };
 
-  getBalanceRaw = async (): Promise<number> => {
+  fetchBalance = async (): Promise<number> => {
     return (await this.api.getBalance()).confirmed;
   };
 
@@ -80,9 +61,7 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
     return !!window.okxwallet.selectedAddress;
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (!(this.currentNetwork instanceof BitcoinNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
@@ -120,11 +99,10 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const txId = await this.currentNetwork.submitTransaction(
-      signedPsbtHex,
-      'hex',
-    );
-
-    return txId;
+    try {
+      return await this.currentNetwork.submitTransaction(signedPsbtHex, 'hex');
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   };
 }

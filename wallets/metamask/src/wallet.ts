@@ -13,8 +13,6 @@ import {
   Wallet,
   InteractionError,
   WalletTransferParams,
-  AddressRetrievalError,
-  ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   dispatchError,
   CurrentChainError,
@@ -34,12 +32,6 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   link = 'https://metamask.io/';
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
-
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
 
   private api = new MetaMaskSDK({
     dappMetadata: {
@@ -74,13 +66,8 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     })) as { caveats: { type: string; value: string[] }[] }[];
   };
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+  performConnect = async (): Promise<void> => {
+    await this.api.connect();
   };
 
   disconnect = async (): Promise<void> => {
@@ -92,19 +79,14 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     }
   };
 
-  getAddress = async (): Promise<string> => {
+  fetchAddress = async (): Promise<string | undefined> => {
     const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
     });
-
-    const account = accounts?.at(0);
-
-    if (!account) throw new AddressRetrievalError(this.name);
-
-    return account;
+    return accounts?.at(0);
   };
 
-  getBalanceRaw = async (
+  fetchBalance = async (
     token: RosenChainToken,
   ): Promise<string | undefined> => {
     const address = await this.getAddress();
@@ -172,9 +154,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     }
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (
       !(this.currentNetwork instanceof BinanceNetwork) &&
       !(this.currentNetwork instanceof EthereumNetwork)
