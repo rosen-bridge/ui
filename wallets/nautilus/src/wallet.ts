@@ -4,8 +4,6 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
-  AddressRetrievalError,
-  ConnectionRejectedError,
   ErgoTxProxy,
   SubmitTransactionError,
   UserDeniedTransactionSignatureError,
@@ -32,18 +30,11 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.ergo.key];
 
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
-
   private get api() {
     return window.ergoConnector.nautilus;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
+  performConnect = async (): Promise<void> => {
     let isConnected: boolean;
 
     try {
@@ -54,7 +45,7 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
 
     if (isConnected) return;
 
-    throw new ConnectionRejectedError(this.name);
+    throw undefined;
   };
 
   disconnect = async (): Promise<void> => {
@@ -66,19 +57,12 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
     }
   };
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    try {
-      const wallet = await this.api.getContext();
-      return await wallet.get_change_address();
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
-    }
+  fetchAddress = async (): Promise<string | undefined> => {
+    const wallet = await this.api.getContext();
+    return await wallet.get_change_address();
   };
 
-  getBalanceRaw = async (token: RosenChainToken): Promise<string> => {
-    this.requireAvailable();
-
+  fetchBalance = async (token: RosenChainToken): Promise<string> => {
     const wallet = await this.api.getContext();
 
     /**
@@ -104,9 +88,7 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
     return await this.api.isAuthorized();
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (!(this.currentNetwork instanceof ErgoNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }

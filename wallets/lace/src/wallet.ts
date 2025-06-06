@@ -4,8 +4,6 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
-  AddressRetrievalError,
-  ConnectionRejectedError,
   SubmitTransactionError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
@@ -30,42 +28,24 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.cardano.key];
 
-  get currentNetwork() {
-    return this.config.networks.find(
-      (network) => network.name == this.currentChain,
-    );
-  }
-
   private get api() {
     return window.cardano.lace;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.enable();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+  performConnect = async (): Promise<void> => {
+    await this.api.enable();
   };
 
   disconnect = async (): Promise<void> => {};
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    try {
-      const wallet = await this.api.enable();
-      return await wallet.getChangeAddress();
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
-    }
+  fetchAddress = async (): Promise<string | undefined> => {
+    const wallet = await this.api.enable();
+    return await wallet.getChangeAddress();
   };
 
-  getBalanceRaw = async (
+  fetchBalance = async (
     token: RosenChainToken,
   ): Promise<bigint | undefined> => {
-    this.requireAvailable();
-
     if (!(this.currentNetwork instanceof CardanoNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
@@ -95,9 +75,7 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
     return await this.api.isEnabled();
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
-
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (!(this.currentNetwork instanceof CardanoNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
