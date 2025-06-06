@@ -83,9 +83,7 @@ const RosenBridge = () => {
                     </div>
                   )}
                   <div className="action">
-                    <ConnectOrSubmitButton
-                      setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-                    />
+                    <ConnectOrSubmitButton />
                   </div>
                 </TransactionFeesProvider>
               </MaxTransferProvider>
