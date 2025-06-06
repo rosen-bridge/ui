@@ -1,3 +1,6 @@
+export { ReactComponent as AlignCenter } from './icons/align-center.svg';
+export { default as AlignCenterRaw } from './icons/align-center.svg?raw';
+
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { default as AngleDownRaw } from './icons/angle-down.svg?raw';
 
@@ -12,6 +15,9 @@ export { default as AngleUpRaw } from './icons/angle-up.svg?raw';
 
 export { ReactComponent as Archway } from './icons/archway.svg';
 export { default as ArchwayRaw } from './icons/archway.svg?raw';
+
+export { ReactComponent as CaretDown } from './icons/caret-down.svg';
+export { default as CaretDownRaw } from './icons/caret-down.svg?raw';
 
 export { ReactComponent as ArrowRight } from './icons/arrow-right.svg';
 export { default as ArrowRightRaw } from './icons/arrow-right.svg?raw';
