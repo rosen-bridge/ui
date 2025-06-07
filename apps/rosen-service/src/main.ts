@@ -48,7 +48,7 @@ const main = async () => {
       }),
     ]);
   } catch (error) {
-    handleError(error);
+    handleError(error, logger);
   }
 };
 
