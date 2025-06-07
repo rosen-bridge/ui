@@ -1,8 +1,8 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import axios, { Axios } from '@rosen-bridge/rate-limited-axios';
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
-import axios, { AxiosInstance } from 'axios';
 import { zipWith } from 'lodash-es';
 
 import AbstractCalculator from '../../abstract-calculator';
@@ -11,7 +11,7 @@ import { AddressRunesBalance, RuneInfo, UnisatResponse } from './types';
 export class RunesCalculator extends AbstractCalculator {
   readonly chain: Network = NETWORKS.runes.key;
 
-  protected client: AxiosInstance;
+  protected client: Axios;
 
   constructor(
     tokenMap: TokenMap,
