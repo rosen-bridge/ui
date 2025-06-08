@@ -26,13 +26,7 @@ import {
 } from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
-interface ConnectOrSubmitButtonProps {
-  setChooseWalletsModalOpen: (open: boolean) => void;
-}
-
-export const ConnectOrSubmitButton = ({
-  setChooseWalletsModalOpen,
-}: ConnectOrSubmitButtonProps) => {
+export const SubmitButton = () => {
   const [open, setOpen] = useState(false);
 
   const tokenMap = useTokenMap();
@@ -107,20 +101,15 @@ export const ConnectOrSubmitButton = ({
     <>
       <LoadingButton
         sx={{ width: '100%' }}
-        color={selectedWallet ? 'success' : 'primary'}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
         disabled={disabled}
         onClick={() => {
-          if (selectedWallet) {
-            setOpen(true);
-          } else {
-            setChooseWalletsModalOpen(true);
-          }
+          setOpen(true);
         }}
       >
-        {!selectedWallet ? 'CONNECT WALLET' : 'SUBMIT'}
+        SUBMIT
       </LoadingButton>
       <EnhancedDialog
         open={open}
