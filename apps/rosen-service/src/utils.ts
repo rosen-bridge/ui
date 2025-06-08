@@ -48,7 +48,7 @@ export const handleError = (
     );
     error instanceof Error && error.stack && logger.error(error.stack);
     logger.error('shutting down service');
-    process.exit(0);
+    process.exit(1);
   }
 
   logger[error.severity](error.message, error.context);
