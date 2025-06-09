@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@metamask/sdk": "^0.28.2",
-    "@rosen-bridge/tokens": "^3.1.0",
+    "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-network/binance": "^0.2.3",
     "@rosen-network/ethereum": "^0.2.3",
     "@rosen-network/evm": "^0.3.0",
