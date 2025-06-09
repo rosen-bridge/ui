@@ -1,21 +1,12 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import axios from '@rosen-bridge/rate-limited-axios';
+import { RateLimitedAxiosConfig } from '@rosen-bridge/rate-limited-axios';
 
 import config from '../configs';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
-const dogeLimitRules = config.doge.rpcConnections.map((rpcConfig) => {
-  return {
-    pattern: `^${rpcConfig.url}$`,
-    rateLimit: 3,
-  };
+config.doge.rpcConnections.forEach((rpcConfig) => {
+  RateLimitedAxiosConfig.addRule(`^${rpcConfig.url}$`, 3, 1);
 });
 
-axios.initConfigs(
-  {
-    apiLimitRateRangeAsSeconds: 1,
-    apiLimitRules: dogeLimitRules,
-  },
-  logger,
-);
+RateLimitedAxiosConfig.setLogger(logger);
