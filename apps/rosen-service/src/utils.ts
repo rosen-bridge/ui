@@ -41,7 +41,7 @@ export const handleError = (
   customHandler?: (error: AppError) => void,
 ) => {
   if (!(error instanceof AppError) || !error.canBeHandled) {
-    logger?.error('an error occurred that cannot be handled');
+    logger.error('an error occurred that cannot be handled');
     logger.error(
       `${error}`,
       error instanceof AppError ? error.context : undefined,
