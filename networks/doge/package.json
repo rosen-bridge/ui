@@ -14,7 +14,7 @@
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.6.1",
+    "@rosen-bridge/address-codec": "^0.6.2",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.3.0",
     "@rosen-bridge/icons": "^1.4.0",
     "@rosen-bridge/tokens": "^3.0.0",
