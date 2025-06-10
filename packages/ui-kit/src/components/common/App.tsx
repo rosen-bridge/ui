@@ -60,6 +60,7 @@ const Paper = styled('div', {
   borderTopLeftRadius: theme.shape.borderRadius * 2,
   borderBottomLeftRadius: theme.shape.borderRadius * 2,
   padding: theme.spacing(4),
+  color: theme.palette.text.primary,
   transition: 'ease-in-out 100ms',
   [theme.breakpoints.down('tablet')]: {
     borderTopRightRadius: theme.shape.borderRadius * 2,
