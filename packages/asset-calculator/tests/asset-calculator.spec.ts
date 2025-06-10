@@ -1,7 +1,6 @@
-import axios from '@rosen-bridge/rate-limited-axios';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
-import { beforeAll, beforeEach, describe, expect, it, vitest } from 'vitest';
+import { beforeEach, describe, expect, it, vitest } from 'vitest';
 
 import { AssetCalculator } from '../lib';
 import AbstractCalculator from '../lib/calculator/abstract-calculator';
@@ -10,13 +9,6 @@ import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';
 
 describe('AssetCalculator', () => {
-  beforeAll(() => {
-    axios.initConfigs({
-      apiLimitRateRangeAsSeconds: 10,
-      apiLimitRules: [],
-    });
-  });
-
   describe('calculateEmissionForChain', () => {
     /**
      * Mock database and create the AssetCalculator instance before each test

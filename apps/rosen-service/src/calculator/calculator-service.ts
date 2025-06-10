@@ -29,7 +29,7 @@ const startUpdateJob = async (
         'warn',
         error instanceof Error ? error.stack : undefined,
       );
-      handleError(appError);
+      handleError(appError, logger);
     }
   };
 

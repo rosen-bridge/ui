@@ -33,7 +33,7 @@ export const startScanner = async (
           scannerName: scanner.name(),
         },
       );
-      handleError(appError);
+      handleError(appError, logger);
     }
   };
 

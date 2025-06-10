@@ -13,11 +13,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.5.1",
-    "@rosen-bridge/tokens": "^3.0.0",
+    "@rosen-bridge/address-codec": "^0.6.2",
+    "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-ui/constants": "^0.3.0",
     "@rosen-ui/types": "^0.3.5",
-    "ethers": "^6.13.2"
+    "ethers": "^6.14.3"
   },
   "devDependencies": {
     "typescript": "^5.0.0"
