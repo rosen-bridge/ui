@@ -8,7 +8,7 @@ interface LabelProps {
   inset?: boolean;
   dense?: boolean;
   orientation?: 'horizontal' | 'vertical';
-  color?: 'text.secondary' | 'text.primary';
+  color?: 'textSecondary' | 'textPrimary';
 }
 
 export const Label = ({
@@ -17,7 +17,7 @@ export const Label = ({
   dense,
   inset,
   orientation,
-  color = 'text.secondary',
+  color = 'textSecondary',
 }: LabelProps) => {
   const content = (
     <Box
