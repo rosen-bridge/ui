@@ -20,6 +20,7 @@ export * from './Id';
 export * from './InfoWidgetCardBase';
 export * from './NavigationBar';
 export * from './NavigationButton';
+export * from './NewPagination';
 export * from './Version';
 export * from './PageHeading';
 export * from './QrCodeModal';
