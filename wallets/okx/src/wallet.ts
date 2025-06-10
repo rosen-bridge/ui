@@ -58,7 +58,7 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
   };
 
   isConnected = async (): Promise<boolean> => {
-    return !!window.okxwallet.selectedAddress;
+    return !!(await this.fetchAddress());
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {

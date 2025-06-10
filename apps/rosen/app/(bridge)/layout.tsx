@@ -36,14 +36,14 @@ const Main = styled('main')(({ theme }) => ({
   'position': 'relative',
   'display': 'grid',
   'gridTemplateRows': 'auto',
-  'gridTemplateColumns': '1fr',
+  'gridTemplateColumns': 'minmax(0, 1fr)',
   'gap': theme.spacing(2),
   'alignContent': 'center',
   'marginInline': 'auto',
   'minHeight': 'calc(100vh - 224px)',
-  'maxWidth': theme.breakpoints.values.laptop,
+  'maxWidth': '1048px',
   [theme.breakpoints.up('laptop')]: {
-    'gridTemplateColumns': '2fr 1fr',
+    'gridTemplateColumns': '2fr minmax(320px, 1fr)',
     'gap': theme.spacing(3),
     '& .alert': {
       gridColumn: '1/-1',

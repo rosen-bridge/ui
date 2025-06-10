@@ -27,7 +27,7 @@ process.on('uncaughtException', async (error) => {
           error instanceof Error ? error.stack : undefined,
         );
 
-  handleError(appError);
+  handleError(appError, logger);
 });
 
 process.on('unhandledRejection', async (reason) => {

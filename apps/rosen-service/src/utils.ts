@@ -1,3 +1,4 @@
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import fs from 'fs';
@@ -36,6 +37,7 @@ export const getTokenMap = async (): Promise<TokenMap> => {
 
 export const handleError = (
   error: unknown,
+  logger: AbstractLogger,
   customHandler?: (error: AppError) => void,
 ) => {
   if (!(error instanceof AppError) || !error.canBeHandled) {
@@ -44,6 +46,7 @@ export const handleError = (
       `${error}`,
       error instanceof AppError ? error.context : undefined,
     );
+    error instanceof Error && error.stack && logger.error(error.stack);
     logger.error('shutting down service');
     process.exit(1);
   }
