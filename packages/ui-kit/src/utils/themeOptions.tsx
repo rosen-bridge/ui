@@ -140,7 +140,8 @@ export const lightThemeOptions: ThemeOptions = {
       fontSize: '1rem',
     },
     body2: {
-      fontSize: '0.75rem',
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
     },
     subtitle2: {
       fontSize: '0.625rem',

@@ -44,7 +44,6 @@ export const SideBar = () => {
       path: '/assets',
       disabled: false,
       icon: <BitcoinCircle />,
-      badge: 'Beta',
     },
     {
       label: 'Support',
@@ -78,7 +77,6 @@ export const SideBar = () => {
           {routes.map((route) => (
             <NavigationButton
               key={route.label}
-              badge={route.badge}
               disabled={route.disabled}
               icon={route.icon}
               isActive={pathname === route.path}
