@@ -339,6 +339,15 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.primary.contrastText,
+          backgroundColor: theme.palette.primary.dark,
+          borderRadius: theme.shape.borderRadius / 2,
+        }),
+      },
+    },
     RosenNavigationBar: {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
