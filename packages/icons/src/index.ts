@@ -16,9 +16,6 @@ export { default as AngleUpRaw } from './icons/angle-up.svg?raw';
 export { ReactComponent as Archway } from './icons/archway.svg';
 export { default as ArchwayRaw } from './icons/archway.svg?raw';
 
-export { ReactComponent as CaretDown } from './icons/caret-down.svg';
-export { default as CaretDownRaw } from './icons/caret-down.svg?raw';
-
 export { ReactComponent as ArrowRight } from './icons/arrow-right.svg';
 export { default as ArrowRightRaw } from './icons/arrow-right.svg?raw';
 
@@ -27,6 +24,9 @@ export { default as BitcoinCircleRaw } from './icons/bitcoin-circle.svg?raw';
 
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { default as BitcoinSignRaw } from './icons/bitcoin-sign.svg?raw';
+
+export { ReactComponent as CaretDown } from './icons/caret-down.svg';
+export { default as CaretDownRaw } from './icons/caret-down.svg?raw';
 
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';
 export { default as CheckCircleRaw } from './icons/check-circle.svg?raw';
@@ -117,6 +117,9 @@ export { default as PauseRaw } from './icons/pause.svg?raw';
 
 export { ReactComponent as QrcodeScan } from './icons/qrcode-scan.svg';
 export { default as QrcodeScanRaw } from './icons/qrcode-scan.svg?raw';
+
+export { ReactComponent as Qrcode } from './icons/qrcode.svg';
+export { default as QrcodeRaw } from './icons/qrcode.svg?raw';
 
 export { ReactComponent as ReceiptAlt } from './icons/receipt-alt.svg';
 export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';
