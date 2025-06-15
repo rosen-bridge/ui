@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ArrowRight, CommentAltExclamation } from '@rosen-bridge/icons';
 import {
   Amount,
+  Amount2,
   Box,
   Card,
   DialogActions,
@@ -11,6 +12,8 @@ import {
   EnhancedDialog,
   EnhancedDialogTitle,
   Grid,
+  Identifier,
+  Label,
   LoadingButton,
   SvgIcon,
   Typography,
@@ -182,31 +185,27 @@ export const ConnectOrSubmitButton = ({
                 <Typography color="text.primary">{target?.label}</Typography>
               </Grid>
             </Box>
-            <Divider sx={{ my: 2 }} />
-            <Amount
-              title="Transaction Fee"
-              value={networkFeeRaw}
-              unit={tokenInfo?.tokenName}
-            />
-            <Box sx={{ my: 2 }} />
-            <Amount
-              title="Bridge Fee"
-              value={bridgeFeeRaw}
-              unit={tokenInfo?.tokenName}
-            />
-            <Box sx={{ my: 2 }} />
-            <Amount
-              title="Received amount"
-              value={receivingAmountRaw}
-              unit={targetTokenInfo?.name}
-            />
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="body2" color="text.secondary">
-              Destination address
-            </Typography>
-            <Typography sx={{ wordBreak: 'break-all' }}>
-              {walletAddressValue}
-            </Typography>
+            <Divider sx={{ my: 1 }} />
+            <Label label="Transaction Fee">
+              <Amount2 value={networkFeeRaw} unit={tokenInfo?.tokenName} />
+            </Label>
+            <Label label="Bridge Fee">
+              <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.tokenName} />
+            </Label>
+            <Label label="Received Amount">
+              <Amount2
+                value={receivingAmountRaw}
+                unit={targetTokenInfo?.name}
+              />
+            </Label>
+            <Divider sx={{ my: 1 }} />
+            <Label label="Destination Address" orientation="vertical">
+              <Identifier
+                value={walletAddressValue}
+                copyable
+                title="Destination address"
+              />
+            </Label>
           </Card>
         </DialogContent>
         <DialogActions>
