@@ -22,14 +22,20 @@ const Root = styled('div')(() => ({
   fontFamily: 'monospace',
 }));
 
-const ValueContainer = styled('span')(() => ({
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  textOverflow: 'ellipsis',
-  flex: '1 1 auto',
+const Value = styled('div')(() => ({
+  'display': 'flex',
+  'alignItems': 'baseline',
+  'overflow': 'hidden',
+  'flex': '1 1 auto',
+  '& > span:first-of-type': {
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
+    flex: '1 1 auto',
+  },
 }));
 
-const ActionContainer = styled('div')(() => ({
+const Action = styled('div')(() => ({
   display: 'flex',
   alignItems: 'center',
   transform: 'translateY(4px)',
@@ -52,28 +58,31 @@ export const Identifier = ({
       </Root>
     );
   return (
-    <Tooltip placement="top" title={value} arrow>
-      <Root>
-        <ValueContainer>{value.slice(0, -trailingLength)}</ValueContainer>
-        <span>{value.slice(-trailingLength)}</span>
-        <ActionContainer>
-          {href && (
-            <IconButton size="small" href={href}>
-              <SvgIcon fontSize="small">
-                <ExternalLinkAlt />
-              </SvgIcon>
-            </IconButton>
-          )}
-          {copyable && <CopyButton value={value} title={title} size="small" />}
-          {qrcode && (
-            <IconButton size="small">
-              <SvgIcon fontSize="small">
-                <Qrcode />
-              </SvgIcon>
-            </IconButton>
-          )}
-        </ActionContainer>
-      </Root>
-    </Tooltip>
+    <Root>
+      <Tooltip title={value}>
+        <Value>
+          <span>{value.slice(0, -trailingLength)}</span>
+          <span>{value.slice(-trailingLength)}</span>
+        </Value>
+      </Tooltip>
+
+      <Action>
+        {href && (
+          <IconButton size="small" href={href}>
+            <SvgIcon fontSize="small">
+              <ExternalLinkAlt />
+            </SvgIcon>
+          </IconButton>
+        )}
+        {copyable && <CopyButton value={value} title={title} size="small" />}
+        {qrcode && (
+          <IconButton size="small">
+            <SvgIcon fontSize="small">
+              <Qrcode />
+            </SvgIcon>
+          </IconButton>
+        )}
+      </Action>
+    </Root>
   );
 };

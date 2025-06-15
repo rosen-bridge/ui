@@ -1,7 +1,7 @@
 import { Copy } from '@rosen-bridge/icons';
 
 import { useSnackbar } from '../../../hooks';
-import { IconButton, SvgIcon } from '../../base';
+import { IconButton, SvgIcon, Tooltip } from '../../base';
 
 interface CopyButtonProps {
   value: string;
@@ -27,10 +27,12 @@ export const CopyButton = ({
     );
   };
   return (
-    <IconButton size={size} onClick={handleCopy}>
-      <SvgIcon fontSize={size}>
-        <Copy />
-      </SvgIcon>
-    </IconButton>
+    <Tooltip title="Copy">
+      <IconButton size={size} onClick={handleCopy}>
+        <SvgIcon fontSize={size}>
+          <Copy />
+        </SvgIcon>
+      </IconButton>
+    </Tooltip>
   );
 };
