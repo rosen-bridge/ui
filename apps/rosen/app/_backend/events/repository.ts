@@ -1,5 +1,9 @@
 import { ObservationEntity } from '@rosen-bridge/observation-extractor';
 import { BlockEntity } from '@rosen-bridge/scanner';
+import {
+  Filters,
+  filtersToTypeorm,
+} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
@@ -31,7 +35,20 @@ const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
  * @param offset
  * @param limit
  */
-export const getEvents = async (offset: number, limit: number) => {
+export const getEvents = async (filters: Filters) => {
+  const { sort, where } = filtersToTypeorm(
+    filters,
+    ['fromChain', 'toChain', 'fromAddress', 'toAddress'],
+    (key) => {
+      switch (key) {
+        case 'timestamp':
+          return 'be.' + key;
+        default:
+          return 'oe.' + key;
+      }
+    },
+  );
+
   /**
    * TODO: convert the query to a view
    * local:ergo/rosen-bridge/ui#194
@@ -73,10 +90,11 @@ export const getEvents = async (offset: number, limit: number) => {
        */
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
     ])
+    .where(where)
     .distinct(true)
-    .orderBy('be.timestamp', 'DESC')
-    .offset(offset)
-    .limit(limit)
+    .orderBy(sort?.key || 'be.timestamp', sort?.order || 'DESC')
+    .offset(filters.pagination.offset)
+    .limit(filters.pagination.limit)
     .getRawMany();
 
   const items = getItemsWithoutTotal(rawItems);
