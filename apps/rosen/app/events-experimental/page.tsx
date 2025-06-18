@@ -41,7 +41,10 @@ const Events = () => {
     isLastPage,
   } = useTableDataPagination<ApiEventResponse>(getKey(query));
 
-  const stickyRef = useStickyBox({ offsetTop: 20, offsetBottom: 20 });
+  const stickyRef = useStickyBox({
+    offsetTop: 16,
+    offsetBottom: 16,
+  });
 
   if (!data) return null;
 
@@ -82,17 +85,22 @@ const Events = () => {
         />
       </div>
       <div
-        ref={stickyRef}
         style={{
           flexBasis: '330px',
-          height: '120vh',
-          background: 'white',
-          width: '330px',
-          padding: '16px',
-          borderRadius: '16px',
         }}
       >
-        sidebar
+        <div
+          ref={stickyRef}
+          style={{
+            height: '120vh',
+            background: 'white',
+            width: '330px',
+            padding: '16px',
+            borderRadius: '16px',
+          }}
+        >
+          sidebar
+        </div>
       </div>
     </Layout>
   );
