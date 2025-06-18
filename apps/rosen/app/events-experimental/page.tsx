@@ -72,7 +72,9 @@ const Events = () => {
             borderRadius: '16px',
           }}
         >
-          body
+          {data.items.map((item) => (
+            <h1 key={item.id}>{item.id}</h1>
+          ))}
         </div>
         <br />
         <NewPagination
