@@ -27,6 +27,7 @@ export * from './QrCodeModal';
 export * from './SortField';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
+export * from './TableLayout';
 export * from './TokensCard';
 export * from './Toolbar';
 export * from './AppSnackbar';

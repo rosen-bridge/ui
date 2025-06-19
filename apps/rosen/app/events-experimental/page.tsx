@@ -27,9 +27,14 @@ const TableLayout = ({ children, pagination, search, sidebar, sort }: any) => {
       <Grid item mobile={12}>
         <Grid container gap={(theme) => theme.spacing(2)}>
           <Grid item flexGrow={1}>
-            {children}
-            <br />
-            {pagination}
+            <Grid container gap={(theme) => theme.spacing(2)}>
+              <Grid item mobile={12}>
+                {children}
+              </Grid>
+              <Grid item mobile={12}>
+                {pagination}
+              </Grid>
+            </Grid>
           </Grid>
           <Grid item>{sidebar}</Grid>
         </Grid>
