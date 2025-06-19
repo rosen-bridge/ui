@@ -24,6 +24,7 @@ export * from './NewPagination';
 export * from './Version';
 export * from './PageHeading';
 export * from './QrCodeModal';
+export * from './SortField';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
 export * from './TokensCard';

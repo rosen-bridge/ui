@@ -1,110 +1,129 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback } from 'react';
 import { useStickyBox } from 'react-sticky-box';
 
-import { styled } from '@mui/material';
 import {
+  Grid,
   NewPagination,
   SmartSearch,
-  useTableDataPagination,
+  SortField,
+  useDataTable,
 } from '@rosen-bridge/ui-kit';
 
 import { ApiEventResponse } from '@/_types';
 
-import { defaultSort, filters, sorts } from './smartSearchConfig';
+import { defaultSort, filters, sorts } from './config';
 
-const getKey = (filters: string) => (offset: number, limit: number) => {
-  return [
-    `/v1/events?offset=${offset}&limit=${limit}${filters ? '&' : ''}${filters}`,
-  ];
+const TableLayout = ({ children, pagination, search, sidebar, sort }: any) => {
+  return (
+    <Grid container gap={(theme) => theme.spacing(2)}>
+      <Grid item mobile={12}>
+        <Grid container gap={(theme) => theme.spacing(2)}>
+          <Grid flexGrow={1}>{search}</Grid>
+          <Grid flexBasis="auto">{sort}</Grid>
+        </Grid>
+      </Grid>
+      <Grid item mobile={12}>
+        <Grid container gap={(theme) => theme.spacing(2)}>
+          <Grid item flexGrow={1}>
+            {children}
+            <br />
+            {pagination}
+          </Grid>
+          <Grid item>{sidebar}</Grid>
+        </Grid>
+      </Grid>
+    </Grid>
+  );
 };
 
-const Layout = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: theme.spacing(2),
-}));
-
 const Events = () => {
-  const [query, setQuery] = useState('');
-
-  const {
-    data,
-    isLoading,
-    pageIndex,
-    pageSize,
-    setPageIndex,
-    setPageSize,
-    isFirstLoad,
-    isFirstPage,
-    isLastPage,
-  } = useTableDataPagination<ApiEventResponse>(getKey(query));
+  const dataTable = useDataTable<ApiEventResponse>({
+    baseUrl: process.env.API_BASE_URL,
+    api: '/v1/events',
+  });
 
   const stickyRef = useStickyBox({
     offsetTop: 16,
     offsetBottom: 16,
   });
 
-  if (!data) return null;
+  const renderPagination = useCallback(
+    () => (
+      <NewPagination
+        total={dataTable.total}
+        pageSize={dataTable.pageSize}
+        pageIndex={dataTable.pageIndex}
+        onPageIndexChange={dataTable.setPageIndex}
+        onPageSizeChange={dataTable.setPageSize}
+      />
+    ),
+    [dataTable],
+  );
 
-  return (
-    <Layout>
-      <div style={{ flexBasis: '100%' }}>
-        <SmartSearch
-          namespace="events"
-          filters={filters}
-          sorts={sorts}
-          defaultSort={defaultSort}
-          onChange={(selected) => {
-            console.log('selected', selected);
-            setQuery(selected.query);
-          }}
-        />
-      </div>
-      <div style={{ flexGrow: '1' }}>
-        <div
-          style={{
-            flexGrow: '1',
-            height: '200vh',
-            background: 'white',
-            padding: '16px',
-            borderRadius: '16px',
-          }}
-        >
-          {data.items.map((item) => (
-            <h1 key={item.id}>{item.id}</h1>
-          ))}
-        </div>
-        <br />
-        <NewPagination
-          page={1}
-          total={data.total}
-          pageSize={10}
-          pageSizeOptions={[10, 50, 100]}
-          onPageChange={() => undefined}
-          onSizeChange={() => undefined}
-        />
-      </div>
+  const renderSearch = useCallback(
+    () => (
+      <SmartSearch
+        namespace="events"
+        filters={filters}
+        onChange={(selected) => dataTable.setQuery(selected.query)}
+      />
+    ),
+    [dataTable],
+  );
+
+  const renderSidebar = useCallback(
+    () => (
       <div
+        ref={stickyRef}
         style={{
-          flexBasis: '330px',
+          height: '120vh',
+          background: 'white',
+          width: '330px',
+          padding: '16px',
+          borderRadius: '16px',
         }}
       >
-        <div
-          ref={stickyRef}
-          style={{
-            height: '120vh',
-            background: 'white',
-            width: '330px',
-            padding: '16px',
-            borderRadius: '16px',
-          }}
-        >
-          sidebar
-        </div>
+        sidebar
       </div>
-    </Layout>
+    ),
+    [stickyRef],
+  );
+
+  const renderSort = useCallback(
+    () => (
+      <SortField
+        value={dataTable.sort}
+        defaultValue={defaultSort}
+        options={sorts}
+        onChange={dataTable.setSort}
+      />
+    ),
+    [dataTable],
+  );
+
+  return (
+    <TableLayout
+      search={renderSearch()}
+      sort={renderSort()}
+      sidebar={renderSidebar()}
+      pagination={renderPagination()}
+    >
+      <div
+        style={{
+          flexGrow: '1',
+          height: '200vh',
+          background: 'white',
+          padding: '16px',
+          borderRadius: '16px',
+        }}
+      >
+        {dataTable.items.map((item) => (
+          <h1 key={item.id}>{item.id}</h1>
+        ))}
+      </div>
+    </TableLayout>
   );
 };
 

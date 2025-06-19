@@ -13,22 +13,22 @@ import {
   Divider,
 } from '../base';
 
-interface PaginationBarProps {
-  page: number;
+interface NewPaginationProps {
   total: number;
+  pageIndex: number;
   pageSize: number;
-  pageSizeOptions: number[];
-  onPageChange: (newPage: number) => void;
-  onSizeChange: (newRows: number) => void;
+  pageSizeOptions?: number[];
+  onPageIndexChange: (index: number) => void;
+  onPageSizeChange: (size: number) => void;
 }
 
-export const NewPagination: FC<PaginationBarProps> = ({
-  page,
+export const NewPagination: FC<NewPaginationProps> = ({
+  pageIndex,
   total,
   pageSize,
-  pageSizeOptions,
-  onPageChange,
-  onSizeChange,
+  pageSizeOptions = [10, 25, 100],
+  onPageIndexChange,
+  onPageSizeChange,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [responsiveSiblingCount, setResponsiveSiblingCount] = useState(1);
@@ -46,8 +46,8 @@ export const NewPagination: FC<PaginationBarProps> = ({
   }, []);
 
   const totalPages = Math.ceil(total / pageSize);
-  const from = (page - 1) * pageSize + 1;
-  const to = Math.min(page * pageSize, total);
+  const from = pageIndex * pageSize + 1;
+  const to = Math.min((pageIndex + 1) * pageSize, total);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
@@ -61,7 +61,7 @@ export const NewPagination: FC<PaginationBarProps> = ({
   };
 
   const handleSelect = (value: number) => {
-    onSizeChange(value);
+    onPageSizeChange(value);
     handleMenuClose();
   };
 
@@ -115,8 +115,8 @@ export const NewPagination: FC<PaginationBarProps> = ({
         <Pagination
           color="primary"
           count={totalPages}
-          page={page}
-          onChange={(_, val) => onPageChange(val)}
+          page={pageIndex + 1}
+          onChange={(_, val) => onPageIndexChange(val - 1)}
           size="small"
           siblingCount={responsiveSiblingCount}
           boundaryCount={1}
