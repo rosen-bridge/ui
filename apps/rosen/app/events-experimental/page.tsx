@@ -57,6 +57,7 @@ const Events = () => {
   const renderPagination = useCallback(
     () => (
       <NewPagination
+        disabled={dataTable.isLoading}
         total={dataTable.total}
         pageSize={dataTable.pageSize}
         pageIndex={dataTable.pageIndex}
@@ -70,6 +71,7 @@ const Events = () => {
   const renderSearch = useCallback(
     () => (
       <SmartSearch
+        disabled={dataTable.isLoading}
         namespace="events"
         filters={filters}
         onChange={(selected) => dataTable.setQuery(selected.query)}
@@ -99,6 +101,7 @@ const Events = () => {
   const renderSort = useCallback(
     () => (
       <SortField
+        disabled={dataTable.isLoading}
         value={dataTable.sort}
         defaultValue={defaultSort}
         options={sorts}

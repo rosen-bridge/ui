@@ -13,7 +13,8 @@ import {
   Divider,
 } from '../base';
 
-interface NewPaginationProps {
+export interface NewPaginationProps {
+  disabled?: boolean;
   total: number;
   pageIndex: number;
   pageSize: number;
@@ -23,8 +24,9 @@ interface NewPaginationProps {
 }
 
 export const NewPagination: FC<NewPaginationProps> = ({
-  pageIndex,
+  disabled,
   total,
+  pageIndex,
   pageSize,
   pageSizeOptions = [10, 25, 100],
   onPageIndexChange,
@@ -113,6 +115,7 @@ export const NewPagination: FC<NewPaginationProps> = ({
         }}
       >
         <Pagination
+          disabled={disabled}
           color="primary"
           count={totalPages}
           page={pageIndex + 1}
@@ -183,6 +186,7 @@ export const NewPagination: FC<NewPaginationProps> = ({
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
+              disabled={disabled}
               onClick={handleMenuOpen}
               size="small"
               sx={{ padding: 1 }}

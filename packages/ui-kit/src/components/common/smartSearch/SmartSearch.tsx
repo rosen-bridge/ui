@@ -47,6 +47,7 @@ const Container = styled('div')(({ theme }) => ({
 type SmartSearchState = 'idle' | 'flow' | 'operator' | 'value' | 'complete';
 
 export type SmartSearchProps = {
+  disabled?: boolean;
   filters: Filter[];
   namespace: string;
   onChange: (result: {
@@ -60,6 +61,7 @@ export type SmartSearchProps = {
 };
 
 export const SmartSearch = ({
+  disabled,
   filters: filtersInput,
   namespace,
   onChange,
@@ -338,6 +340,7 @@ export const SmartSearch = ({
   return (
     <Root>
       <History
+        disabled={disabled}
         filter={filtersInput}
         namespace={namespace}
         ref={$history}
@@ -352,6 +355,7 @@ export const SmartSearch = ({
           <Container>
             <Chips value={chips} />
             <input
+              disabled={disabled}
               ref={$anchor}
               value={query}
               autoComplete="off"
@@ -375,7 +379,11 @@ export const SmartSearch = ({
           </Container>
         </ClickAwayListener>
       </VirtualScroll>
-      <IconButton ref={$search} onClick={() => setFilters(selected)}>
+      <IconButton
+        disabled={disabled}
+        ref={$search}
+        onClick={() => setFilters(selected)}
+      >
         <SvgIcon>
           <Search />
         </SvgIcon>

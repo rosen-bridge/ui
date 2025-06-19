@@ -32,6 +32,7 @@ export type Sort = {
 export type SortFieldProps = {
   value?: Sort;
   defaultValue?: Sort;
+  disabled?: boolean;
   options: Array<{ label: string; value: string }>;
   onChange: (sort?: Sort) => void;
 };
@@ -39,6 +40,7 @@ export type SortFieldProps = {
 export const SortField = ({
   value,
   defaultValue,
+  disabled,
   options,
   onChange,
 }: SortFieldProps) => {
@@ -65,6 +67,7 @@ export const SortField = ({
 
   return (
     <Field
+      disabled={disabled}
       select
       fullWidth
       SelectProps={{
@@ -92,7 +95,7 @@ export const SortField = ({
               <Divider orientation="vertical" />
             </Grid>
             <Grid item>
-              <IconButton onClick={handleSortOrderChange}>
+              <IconButton disabled={disabled} onClick={handleSortOrderChange}>
                 <SvgIcon>
                   {value?.order == 'ASC' ? (
                     <SortAmountDown />
