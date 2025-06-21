@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import {
   NewPagination,
@@ -9,13 +9,17 @@ import {
   DataLayout,
   useDataFetcher,
   useStickyBox,
+  useSnackbar,
 } from '@rosen-bridge/ui-kit';
+import { serializeError } from 'serialize-error';
 
 import { ApiEventResponse } from '@/_types';
 
 import { defaultSort, filters, sorts } from './config';
 
 const Events = () => {
+  const { openSnackbar } = useSnackbar();
+
   const dataTable = useDataFetcher<ApiEventResponse>({
     baseUrl: process.env.API_BASE_URL,
     api: '/v1/events',
@@ -82,6 +86,14 @@ const Events = () => {
     ),
     [dataTable],
   );
+
+  useEffect(() => {
+    if (dataTable.error) {
+      openSnackbar(dataTable.error.message, 'error', undefined, () =>
+        JSON.stringify(serializeError(dataTable.error), null, 2),
+      );
+    }
+  }, [dataTable.error]);
 
   return (
     <DataLayout

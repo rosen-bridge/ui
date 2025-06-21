@@ -54,7 +54,7 @@ export const useDataFetcher = <T extends Paginated<unknown>>({
     return params.join('&');
   }, [pageIndex, pageSize, query, sort]);
 
-  const { data, isLoading } = useSWR<T>(`${api}?${params}`, fetcher, {
+  const { data, error, isLoading } = useSWR<T>(`${api}?${params}`, fetcher, {
     keepPreviousData: true,
   });
 
@@ -64,6 +64,7 @@ export const useDataFetcher = <T extends Paginated<unknown>>({
   }, []);
 
   return {
+    error,
     isLoading,
     items: (data?.items || []) as T['items'],
     total: data?.total || 0,
