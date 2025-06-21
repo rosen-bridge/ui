@@ -36,17 +36,25 @@ export const useDataFetcher = <T extends Paginated<unknown>>({
 
   const [sort, setSort] = useState<Sort | undefined>();
 
-  const params = useMemo(
-    () => ({
-      offset: pageIndex * pageSize,
-      limit: pageSize,
-      sort: sort && `${sort.key}${sort.order ? '-' + sort.order : ''}`,
-      query: query || undefined,
-    }),
-    [pageIndex, pageSize, query, sort],
-  );
+  const params = useMemo(() => {
+    const params: string[] = [];
 
-  const { data, isLoading } = useSWR<T>([api, params], fetcher, {
+    params.push(`offset=${pageIndex * pageSize}`);
+
+    params.push(`limit=${pageSize}`);
+
+    if (query) {
+      params.push(query);
+    }
+
+    if (sort?.key) {
+      params.push(`sort=${sort.key}${sort.order ? '-' + sort.order : ''}`);
+    }
+
+    return params.join('&');
+  }, [pageIndex, pageSize, query, sort]);
+
+  const { data, isLoading } = useSWR<T>(`${api}?${params}`, fetcher, {
     keepPreviousData: true,
   });
 
