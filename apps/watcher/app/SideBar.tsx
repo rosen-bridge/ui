@@ -24,33 +24,6 @@ export const SideBar = () => {
   const pathname = usePathname();
 
   const router = useRouter();
-  const routes = [
-    {
-      label: 'Home',
-      path: '/',
-      icon: <Estate />,
-    },
-    {
-      label: 'Health',
-      path: '/health',
-      icon: <Heartbeat />,
-    },
-    {
-      label: 'Observations',
-      path: '/observations',
-      icon: <Newspaper />,
-    },
-    {
-      label: 'Events',
-      path: '/events',
-      icon: <ClipboardNotes />,
-    },
-    {
-      label: 'Revenues',
-      path: '/revenues',
-      icon: <Moneybag />,
-    },
-  ];
 
   return (
     <AppBar
@@ -66,16 +39,31 @@ export const SideBar = () => {
       }
       versions={<VersionConfig />}
       navigationBar={
-        <NavigationBar>
-          {routes.map((route) => (
-            <NavigationButton
-              key={route.label}
-              icon={route.icon}
-              isActive={pathname === route.path}
-              label={route.label}
-              onClick={() => router.push(route.path)}
-            />
-          ))}
+        <NavigationBar
+          isActive={(path) => pathname === path}
+          onClick={(path) => router.push(path)}
+        >
+          <NavigationButton icon={<Estate />} label="Home" path="/" />
+          <NavigationButton
+            icon={<Heartbeat />}
+            label="Health"
+            path="/health"
+          />
+          <NavigationButton
+            icon={<Newspaper />}
+            label="Observations"
+            path="/observations"
+          />
+          <NavigationButton
+            icon={<ClipboardNotes />}
+            label="Events"
+            path="/events"
+          />
+          <NavigationButton
+            icon={<Moneybag />}
+            label="Revenues"
+            path="/revenues"
+          />
         </NavigationBar>
       }
     />
