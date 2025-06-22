@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   NewPagination,
@@ -8,7 +8,6 @@ import {
   SortField,
   DataLayout,
   useCollection,
-  useStickyBox,
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -18,9 +17,12 @@ import useSWR from 'swr';
 import { ApiEventResponse } from '@/_types';
 
 import { filters, sorts } from './config';
+import { Details } from './details';
 
 const Events = () => {
   const { openSnackbar } = useSnackbar();
+
+  const [current, setCurrent] = useState<ApiEventResponse['items'][0]>();
 
   const collection = useCollection();
 
@@ -31,11 +33,6 @@ const Events = () => {
       keepPreviousData: true,
     },
   );
-
-  const stickyRef = useStickyBox({
-    offsetTop: 16,
-    offsetBottom: 16,
-  });
 
   const renderPagination = useCallback(
     () => (
@@ -65,20 +62,13 @@ const Events = () => {
 
   const renderSidebar = useCallback(
     () => (
-      <div
-        ref={stickyRef}
-        style={{
-          height: '120vh',
-          background: 'white',
-          width: '330px',
-          padding: '16px',
-          borderRadius: '16px',
-        }}
-      >
-        sidebar
-      </div>
+      <Details
+        mode="sidebar"
+        value={current}
+        onClose={() => setCurrent(undefined)}
+      />
     ),
-    [stickyRef],
+    [current],
   );
 
   const renderSort = useCallback(
@@ -119,8 +109,17 @@ const Events = () => {
           borderRadius: '16px',
         }}
       >
-        {data?.items.map((item) => <h1 key={item.id}>{item.id}</h1>)}
+        {data?.items.map((item) => (
+          <h1 key={item.id} onClick={() => setCurrent(item)}>
+            {item.id}
+          </h1>
+        ))}
       </div>
+      <Details
+        mode="drawer"
+        value={current}
+        onClose={() => setCurrent(undefined)}
+      />
     </DataLayout>
   );
 };
