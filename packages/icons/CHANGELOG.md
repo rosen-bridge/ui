@@ -6,12 +6,6 @@
 
 - Remove wallet icons
 
-### Minor Changes
-
-- Add the WalletConnect icon
-- Integrate Bitcoin Runes
-- Add the Xverse icon
-
 ### Patch Changes
 
 - To improve UI clarity, add an `AlignCenter` icon for the dropdown menu on small screens and an `CaretDown` icon on larger screens in the Pagination part

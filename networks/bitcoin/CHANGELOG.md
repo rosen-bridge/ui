@@ -5,8 +5,8 @@
 ### Patch Changes
 
 - Optimize the structure to enhance compatibility with wallet packages and streamline usage within the Rosen App
-- @rosen-bridge/address-codec@0.6.2
 - Update dependencies
+  - @rosen-bridge/address-codec@0.6.2
   - @rosen-bridge/icons@2.0.0
   - @rosen-bridge/tokens@3.1.1
   - @rosen-ui/constants@0.4.0
