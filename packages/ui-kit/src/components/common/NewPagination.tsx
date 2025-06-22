@@ -15,19 +15,19 @@ import {
 
 export interface NewPaginationProps {
   disabled?: boolean;
-  total: number;
-  pageIndex: number;
-  pageSize: number;
+  total?: number;
+  pageIndex?: number;
+  pageSize?: number;
   pageSizeOptions?: number[];
-  onPageIndexChange: (index: number) => void;
-  onPageSizeChange: (size: number) => void;
+  onPageIndexChange?: (index: number) => void;
+  onPageSizeChange?: (size: number) => void;
 }
 
 export const NewPagination: FC<NewPaginationProps> = ({
   disabled,
-  total,
-  pageIndex,
-  pageSize,
+  total = 0,
+  pageIndex = 0,
+  pageSize = 10,
   pageSizeOptions = [10, 25, 100],
   onPageIndexChange,
   onPageSizeChange,
@@ -63,7 +63,7 @@ export const NewPagination: FC<NewPaginationProps> = ({
   };
 
   const handleSelect = (value: number) => {
-    onPageSizeChange(value);
+    onPageSizeChange?.(value);
     handleMenuClose();
   };
 
@@ -119,7 +119,7 @@ export const NewPagination: FC<NewPaginationProps> = ({
           color="primary"
           count={totalPages}
           page={pageIndex + 1}
-          onChange={(_, val) => onPageIndexChange(val - 1)}
+          onChange={(_, val) => onPageIndexChange?.(val - 1)}
           size="small"
           siblingCount={responsiveSiblingCount}
           boundaryCount={1}

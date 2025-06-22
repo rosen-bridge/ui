@@ -50,14 +50,7 @@ export type SmartSearchProps = {
   disabled?: boolean;
   filters: Filter[];
   namespace: string;
-  onChange: (result: {
-    filters: Selected[];
-    query: string;
-    search?: {
-      query?: string;
-      in?: string;
-    };
-  }) => void;
+  onChange: (params: Record<string, unknown>) => void;
 };
 
 export const SmartSearch = ({
@@ -320,21 +313,21 @@ export const SmartSearch = ({
 
     $history.current?.add(filters);
 
-    const query = filters
-      .map((item) => {
-        const parsed = parseFilter(filtersInput, item)!;
+    const params: Record<string, unknown> = {};
 
-        const operator = parsed.operator!.symbol;
+    for (const item of filters) {
+      const parsed = parseFilter(filtersInput, item)!;
 
-        const array = Array.isArray(item.value) ? '[]' : '';
+      const operator = parsed.operator!.symbol;
 
-        const value = [item.value].flat().join(',');
+      const array = Array.isArray(item.value) ? '[]' : '';
 
-        return `${item.flow}${array}${operator}${value}`;
-      })
-      .join('&');
+      const value = [item.value].flat().join(',');
 
-    onChange({ filters, query, search: undefined });
+      params[`${item.flow}${array}${operator.replace('=', '')}`] = value;
+    }
+
+    onChange(params);
   }, [filters, filtersInput, onChange]);
 
   return (

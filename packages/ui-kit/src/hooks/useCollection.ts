@@ -1,0 +1,64 @@
+import { useCallback, useEffect, useState } from 'react';
+
+import { SortValue } from '../components';
+
+type Params = Record<string, unknown>;
+
+export const useCollection = () => {
+  const [filters, setFilters] = useState<Params>();
+
+  const [pageIndex, setPageIndex] = useState<number>();
+
+  const [pageSize, setPageSize] = useState<number>();
+
+  const [params, setParams] = useState<Params>();
+
+  const [sort, setSort] = useState<SortValue>();
+
+  const handlePageSizeChange = useCallback((size: number) => {
+    setPageSize(size);
+    setPageIndex(0);
+  }, []);
+
+  useEffect(() => {
+    setParams(undefined);
+
+    const result: Params = {};
+
+    if (typeof pageSize === 'number') {
+      result.limit = pageSize;
+    }
+
+    if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
+      result.offset = pageSize * pageIndex;
+    }
+
+    if (sort?.key) {
+      result.sort = `${sort.key}${sort.order ? '-' + sort.order : ''}`;
+    }
+
+    if (filters) {
+      Object.assign(result, filters);
+    }
+
+    if (!Object.keys(result).length) return;
+
+    setParams(result);
+  }, [filters, pageIndex, pageSize, sort]);
+
+  return {
+    params,
+
+    filters,
+    setFilters,
+
+    pageIndex,
+    setPageIndex,
+
+    pageSize,
+    setPageSize: handlePageSizeChange,
+
+    sort,
+    setSort,
+  };
+};

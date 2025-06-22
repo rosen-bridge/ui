@@ -20,13 +20,15 @@ export const DataLayout = ({
   return (
     <Grid container gap={(theme) => theme.spacing(2)}>
       <Grid item mobile={12}>
-        <Grid container gap={(theme) => theme.spacing(2)}>
-          <Grid flexGrow={1}>{search}</Grid>
+        <Grid container wrap="nowrap" gap={(theme) => theme.spacing(2)}>
+          <Grid flexGrow={1} minWidth={0}>
+            {search}
+          </Grid>
           <Grid flexBasis="auto">{sort}</Grid>
         </Grid>
       </Grid>
       <Grid item mobile={12}>
-        <Grid container gap={(theme) => theme.spacing(2)}>
+        <Grid container wrap="nowrap" gap={(theme) => theme.spacing(2)}>
           <Grid item flexGrow={1}>
             <Grid container gap={(theme) => theme.spacing(2)}>
               <Grid item mobile={12}>

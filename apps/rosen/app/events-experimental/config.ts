@@ -4,7 +4,6 @@ import {
   OPERATOR_IS,
   OPERATORS_STRING,
   Filter,
-  Sort,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
@@ -152,5 +151,3 @@ export const sorts = [
   { label: 'From Chain', value: 'fromChain' },
   { label: 'To Chain', value: 'toChain' },
 ];
-
-export const defaultSort: Sort = { key: 'timestamp', order: 'DESC' };

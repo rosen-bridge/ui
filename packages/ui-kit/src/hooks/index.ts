@@ -1,5 +1,5 @@
 export * from './useApiKey';
-export * from './useDataFetcher';
+export * from './useCollection';
 export * from './useMediaQuery';
 export * from './useTheme';
 export * from './useIsMobile';

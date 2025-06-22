@@ -7,23 +7,30 @@ import {
   SmartSearch,
   SortField,
   DataLayout,
-  useDataFetcher,
+  useCollection,
   useStickyBox,
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
+import useSWR from 'swr';
 
 import { ApiEventResponse } from '@/_types';
 
-import { defaultSort, filters, sorts } from './config';
+import { filters, sorts } from './config';
 
 const Events = () => {
   const { openSnackbar } = useSnackbar();
 
-  const dataTable = useDataFetcher<ApiEventResponse>({
-    baseUrl: process.env.API_BASE_URL,
-    api: '/v1/events',
-  });
+  const collection = useCollection();
+
+  const { data, error, isLoading } = useSWR<ApiEventResponse>(
+    collection.params && ['/v1/events', collection.params],
+    fetcher,
+    {
+      keepPreviousData: true,
+    },
+  );
 
   const stickyRef = useStickyBox({
     offsetTop: 16,
@@ -33,27 +40,27 @@ const Events = () => {
   const renderPagination = useCallback(
     () => (
       <NewPagination
-        disabled={dataTable.isLoading}
-        total={dataTable.total}
-        pageSize={dataTable.pageSize}
-        pageIndex={dataTable.pageIndex}
-        onPageIndexChange={dataTable.setPageIndex}
-        onPageSizeChange={dataTable.setPageSize}
+        disabled={isLoading}
+        total={data?.total}
+        pageSize={collection.pageSize}
+        pageIndex={collection.pageIndex}
+        onPageIndexChange={collection.setPageIndex}
+        onPageSizeChange={collection.setPageSize}
       />
     ),
-    [dataTable],
+    [data, isLoading, collection],
   );
 
   const renderSearch = useCallback(
     () => (
       <SmartSearch
-        disabled={dataTable.isLoading}
+        disabled={isLoading}
         namespace="events"
         filters={filters}
-        onChange={(selected) => dataTable.setQuery(selected.query)}
+        onChange={collection.setFilters}
       />
     ),
-    [dataTable],
+    [isLoading, collection],
   );
 
   const renderSidebar = useCallback(
@@ -77,23 +84,24 @@ const Events = () => {
   const renderSort = useCallback(
     () => (
       <SortField
-        disabled={dataTable.isLoading}
-        value={dataTable.sort}
-        defaultValue={defaultSort}
+        defaultKey="timestamp"
+        defaultOrder="DESC"
+        disabled={isLoading}
+        value={collection.sort}
         options={sorts}
-        onChange={dataTable.setSort}
+        onChange={collection.setSort}
       />
     ),
-    [dataTable],
+    [isLoading, collection],
   );
 
   useEffect(() => {
-    if (dataTable.error) {
-      openSnackbar(dataTable.error.message, 'error', undefined, () =>
-        JSON.stringify(serializeError(dataTable.error), null, 2),
+    if (error) {
+      openSnackbar(error.message, 'error', undefined, () =>
+        JSON.stringify(serializeError(error), null, 2),
       );
     }
-  }, [dataTable.error]);
+  }, [error]);
 
   return (
     <DataLayout
@@ -111,9 +119,7 @@ const Events = () => {
           borderRadius: '16px',
         }}
       >
-        {dataTable.items.map((item) => (
-          <h1 key={item.id}>{item.id}</h1>
-        ))}
+        {data?.items.map((item) => <h1 key={item.id}>{item.id}</h1>)}
       </div>
     </DataLayout>
   );
