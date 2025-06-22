@@ -61,13 +61,7 @@ const Events = () => {
   );
 
   const renderSidebar = useCallback(
-    () => (
-      <Details
-        mode="sidebar"
-        value={current}
-        onClose={() => setCurrent(undefined)}
-      />
-    ),
+    () => <Details value={current} onClose={() => setCurrent(undefined)} />,
     [current],
   );
 
@@ -115,11 +109,6 @@ const Events = () => {
           </h1>
         ))}
       </div>
-      <Details
-        mode="drawer"
-        value={current}
-        onClose={() => setCurrent(undefined)}
-      />
     </DataLayout>
   );
 };

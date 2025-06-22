@@ -3,7 +3,6 @@ import { useStickyBox, useIsMobile, Drawer } from '@rosen-bridge/ui-kit';
 import { ApiEventResponse } from '@/_types';
 
 export type DetailsProps = {
-  mode: 'sidebar' | 'drawer';
   value?: ApiEventResponse['items'][0];
   onClose: () => void;
 };
@@ -12,7 +11,7 @@ const Content = ({ value }: Pick<DetailsProps, 'value'>) => {
   return <div>Details {value?.id}</div>;
 };
 
-export const Details = ({ mode, value, onClose }: DetailsProps) => {
+export const Details = ({ value, onClose }: DetailsProps) => {
   const isMobile = useIsMobile();
 
   const stickyRef = useStickyBox({
@@ -20,7 +19,7 @@ export const Details = ({ mode, value, onClose }: DetailsProps) => {
     offsetBottom: 16,
   });
 
-  if (mode == 'drawer' && isMobile) {
+  if (isMobile) {
     return (
       <Drawer anchor="bottom" open={!!value} onClose={onClose}>
         <Content value={value} />
@@ -28,7 +27,7 @@ export const Details = ({ mode, value, onClose }: DetailsProps) => {
     );
   }
 
-  if (mode == 'sidebar' && !isMobile) {
+  if (!isMobile) {
     return (
       <div
         ref={stickyRef}
@@ -38,6 +37,7 @@ export const Details = ({ mode, value, onClose }: DetailsProps) => {
           width: '330px',
           padding: '16px',
           borderRadius: '16px',
+          marginLeft: '16px',
         }}
       >
         <Content value={value} />

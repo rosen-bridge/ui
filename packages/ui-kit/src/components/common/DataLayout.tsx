@@ -6,7 +6,7 @@ export type DataLayoutProps = {
   children: ReactNode;
   pagination: ReactNode;
   search: ReactNode;
-  sidebar?: ReactNode;
+  sidebar: ReactNode;
   sort: ReactNode;
 };
 
@@ -28,7 +28,7 @@ export const DataLayout = ({
         </Grid>
       </Grid>
       <Grid item mobile={12}>
-        <Grid container wrap="nowrap" gap={(theme) => theme.spacing(2)}>
+        <Grid container wrap="nowrap">
           <Grid item flexGrow={1}>
             <Grid container gap={(theme) => theme.spacing(2)}>
               <Grid item mobile={12}>
@@ -39,7 +39,7 @@ export const DataLayout = ({
               </Grid>
             </Grid>
           </Grid>
-          {sidebar && <Grid item>{sidebar}</Grid>}
+          <Grid item>{sidebar}</Grid>
         </Grid>
       </Grid>
     </Grid>
