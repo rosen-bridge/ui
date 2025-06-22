@@ -1,5 +1,51 @@
 # @rosen-bridge/rosen-app
 
+## 4.2.0
+
+### Minor Changes
+
+- Integrate the WalletConnect protocol to support Ethereum and Binance networks
+- Integrate the Xverse wallet extension to enable Bitcoin transactions through both the extension itself and Ledger devices
+- Integrate Bitcoin Runes
+
+### Patch Changes
+
+- Ensure automatically trim whitespace on TargetAddress field.
+- Fix spacing of the toolbar
+- Replace transaction info card of bridge with new Label and Amount components
+- Fix min and max size of transaction info of bridge
+- @rosen-bridge/address-codec@0.6.2
+- Update wallet icon usage to align with the latest changes in wallet packages
+- Fix the bridge page layout
+- Fixes page heading
+- Enhance wallets and networks usage by incorporating the latest updates to the new structure
+- @rosen-clients/ergo-explorer@1.1.5
+- Remove assets beta badge
+- Update dependencies
+  - @rosen-ui/metamask-wallet@2.0.0
+  - @rosen-ui/nautilus-wallet@3.0.0
+  - @rosen-ui/my-doge-wallet@1.0.0
+  - @rosen-ui/eternl-wallet@3.0.0
+  - @rosen-ui/lace-wallet@3.0.0
+  - @rosen-ui/okx-wallet@2.0.0
+  - @rosen-ui/wallet-connect@1.0.0
+  - @rosen-ui/xverse-wallet@1.0.0
+  - @rosen-bridge/ui-kit@1.12.0
+  - @rosen-network/ethereum@0.2.4
+  - @rosen-network/binance@0.2.4
+  - @rosen-network/bitcoin@2.1.4
+  - @rosen-network/cardano@2.1.4
+  - @rosen-network/runes@0.1.1
+  - @rosen-network/doge@0.1.3
+  - @rosen-network/ergo@2.1.3
+  - @rosen-network/evm@0.3.1
+  - @rosen-bridge/icons@2.0.0
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/utils@0.6.0
+  - @rosen-ui/wallet-api@2.0.0
+  - @rosen-ui/asset-calculator@2.1.6
+  - @rosen-ui/types@0.3.6
+
 ## 4.1.1
 
 ### Patch Changes

@@ -1,5 +1,22 @@
 # @rosen-bridge/rosen-service
 
+## 4.0.0
+
+### Major Changes
+
+- Implement LogLevelHealthCheck in the rosen-service
+- Updated scanner instances to use multiple connectors for each chain
+
+### Patch Changes
+
+- Fix issue where the last block was not found in the database based on the chain name
+- Fix `handleError` to log more information on an unhandled error
+- @rosen-bridge/rate-limited-axios@0.2.1
+- Update dependencies
+  - @rosen-bridge/scanner@8.0.0
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/asset-calculator@2.1.6
+
 ## 3.2.0
 
 ### Minor Changes

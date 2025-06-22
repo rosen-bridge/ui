@@ -1,5 +1,15 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/rate-limited-axios@0.2.1
+  - @rosen-clients/ergo-explorer@1.1.5
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/types@0.3.6
+
 ## 2.1.5
 
 ### Patch Changes

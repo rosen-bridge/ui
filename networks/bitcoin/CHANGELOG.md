@@ -1,5 +1,17 @@
 # @rosen-network/bitcoin
 
+## 2.1.4
+
+### Patch Changes
+
+- Optimize the structure to enhance compatibility with wallet packages and streamline usage within the Rosen App
+- @rosen-bridge/address-codec@0.6.2
+- Update dependencies
+  - @rosen-bridge/icons@2.0.0
+  - @rosen-bridge/tokens@3.1.1
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/types@0.3.6
+
 ## 2.1.3
 
 ### Patch Changes
