@@ -1,5 +1,20 @@
 # @rosen-ui/wallet-api
 
+## 2.0.0
+
+### Major Changes
+
+- Enhance the abstract class named `Wallet` by simplifying and optimizing the `transfer`, `currentNetwork`, `connect`, `getAddress`, and `getBalance` methods to reduce code duplication and improve maintainability
+
+### Patch Changes
+
+- Optimize the structure to enhance compatibility with network packages and streamline usage within the Rosen App
+- Add a new error named `BalanceFetchError` for use during wallet balance retrieval, and update the method signature to prevent duplicate implementations of the `getBalance` method.
+- Eliminate icon dependencies by embedding raw SVG icons as strings
+- Update dependencies
+  - @rosen-ui/utils@0.6.0
+  - @rosen-ui/types@0.3.6
+
 ## 1.4.0
 
 ### Minor Changes
