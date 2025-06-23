@@ -1,27 +1,34 @@
-import { ChangeEvent, useCallback, useEffect } from 'react';
+import {
+  HTMLAttributes,
+  MouseEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
-import { SortAmountDown, SortAmountUp } from '@rosen-bridge/icons';
+import {
+  AngleDown,
+  AngleUp,
+  ListUiAlt,
+  SortAmountDown,
+  SortAmountUp,
+} from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
 import {
+  Button,
+  Card,
   Divider,
   Grid,
   IconButton,
+  Menu,
   MenuItem,
   SvgIcon,
-  TextField,
 } from '../base';
 
-const Field = styled(TextField)(({ theme }) => ({
-  '.MuiSelect-icon': {
-    right: theme.spacing(10),
-  },
-  '.MuiInputBase-root': {
-    backgroundColor: theme.palette.background.paper,
-  },
-  'fieldset': {
-    border: 'none',
-  },
+const Root = styled(Card)(({ theme }) => ({
+  padding: theme.spacing(1, 0.5),
 }));
 
 export type SortValue = {
@@ -37,26 +44,30 @@ export type SortOption = {
 export type SortFieldProps = {
   defaultKey?: SortValue['key'];
   defaultOrder?: SortValue['order'];
+  dense?: boolean;
   disabled?: boolean;
   options: SortOption[];
   value?: SortValue;
   onChange?: (value?: SortValue) => void;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 export const SortField = ({
   defaultKey,
   defaultOrder,
+  dense,
   disabled,
   options,
   value,
   onChange,
+  ...rest
 }: SortFieldProps) => {
-  const handleSortChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      onChange?.({ key: event.target.value });
-    },
-    [onChange],
-  );
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const open = Boolean(anchorEl);
+
+  const current = useMemo(() => {
+    return options.find((option) => option.value === value?.key);
+  }, [options, value]);
 
   const handleSortOrderChange = useCallback(() => {
     const next = value || {};
@@ -65,6 +76,22 @@ export const SortField = ({
 
     onChange?.({ ...next });
   }, [value, onChange]);
+
+  const handleMenuOpen = useCallback((event: MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  }, []);
+
+  const handleMenuClose = useCallback(() => {
+    setAnchorEl(null);
+  }, []);
+
+  const handleSortChange = useCallback(
+    (option: SortOption) => {
+      handleMenuClose();
+      onChange?.({ key: option.value });
+    },
+    [handleMenuClose, onChange],
+  );
 
   useEffect(() => {
     if (!onChange) return;
@@ -78,55 +105,64 @@ export const SortField = ({
   }, [defaultKey, defaultOrder, onChange]);
 
   return (
-    <Field
-      disabled={disabled}
-      select
-      fullWidth
-      SelectProps={{
-        MenuProps: {
-          PaperProps: {
-            style: {
-              marginTop: '4px',
-            },
-          },
-        },
-      }}
-      value={value?.key || ''}
-      style={{ minWidth: 250 }}
-      InputProps={{
-        endAdornment: (
-          <Grid
-            container
-            alignItems="center"
-            justifyContent="space-between"
-            wrap="nowrap"
-            width="auto"
-            gap={1}
+    <Root {...rest}>
+      <Grid container alignItems="center" wrap="nowrap" width="auto" gap={1}>
+        <Grid item flexGrow={1}>
+          {dense ? (
+            <IconButton disabled={disabled} onClick={handleMenuOpen}>
+              <SvgIcon>
+                <ListUiAlt />
+              </SvgIcon>
+            </IconButton>
+          ) : (
+            <Button
+              disabled={disabled}
+              style={{
+                whiteSpace: 'nowrap',
+                textTransform: 'none',
+                color: 'inherit',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}
+              endIcon={<SvgIcon>{open ? <AngleUp /> : <AngleDown />}</SvgIcon>}
+              onClick={handleMenuOpen}
+            >
+              {current?.label}
+            </Button>
+          )}
+          <Menu
+            anchorEl={anchorEl}
+            open={open}
+            PaperProps={{
+              style: {
+                marginTop: 12,
+                marginLeft: -4,
+              },
+            }}
+            onClose={handleMenuClose}
           >
-            <Grid item alignSelf="stretch">
-              <Divider orientation="vertical" />
-            </Grid>
-            <Grid item>
-              <IconButton disabled={disabled} onClick={handleSortOrderChange}>
-                <SvgIcon>
-                  {value?.order == 'ASC' ? (
-                    <SortAmountDown />
-                  ) : (
-                    <SortAmountUp />
-                  )}
-                </SvgIcon>
-              </IconButton>
-            </Grid>
-          </Grid>
-        ),
-      }}
-      onChange={handleSortChange}
-    >
-      {options.map((item) => (
-        <MenuItem key={item.value} value={item.value}>
-          {item.label}
-        </MenuItem>
-      ))}
-    </Field>
+            {options.map((item) => (
+              <MenuItem
+                key={item.value}
+                value={item.value}
+                onClick={() => handleSortChange(item)}
+              >
+                {item.label}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Grid>
+        <Grid item alignSelf="stretch">
+          <Divider orientation="vertical" />
+        </Grid>
+        <Grid item>
+          <IconButton disabled={disabled} onClick={handleSortOrderChange}>
+            <SvgIcon>
+              {value?.order == 'ASC' ? <SortAmountDown /> : <SortAmountUp />}
+            </SvgIcon>
+          </IconButton>
+        </Grid>
+      </Grid>
+    </Root>
   );
 };

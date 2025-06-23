@@ -1,4 +1,4 @@
-import { useStickyBox, useIsMobile, Drawer } from '@rosen-bridge/ui-kit';
+import { Drawer, useBreakpoint, useStickyBox } from '@rosen-bridge/ui-kit';
 
 import { ApiEventResponse } from '@/_types';
 
@@ -12,14 +12,14 @@ const Content = ({ value }: Pick<DetailsProps, 'value'>) => {
 };
 
 export const Details = ({ value, onClose }: DetailsProps) => {
-  const isMobile = useIsMobile();
+  const drawer = useBreakpoint('laptop-down');
 
   const stickyRef = useStickyBox({
     offsetTop: 16,
     offsetBottom: 16,
   });
 
-  if (isMobile) {
+  if (drawer) {
     return (
       <Drawer anchor="bottom" open={!!value} onClose={onClose}>
         <Content value={value} />
@@ -27,23 +27,19 @@ export const Details = ({ value, onClose }: DetailsProps) => {
     );
   }
 
-  if (!isMobile) {
-    return (
-      <div
-        ref={stickyRef}
-        style={{
-          height: '120vh',
-          background: 'white',
-          width: '330px',
-          padding: '16px',
-          borderRadius: '16px',
-          marginLeft: '16px',
-        }}
-      >
-        <Content value={value} />
-      </div>
-    );
-  }
-
-  return null;
+  return (
+    <div
+      ref={stickyRef}
+      style={{
+        height: '120vh',
+        background: 'white',
+        width: '330px',
+        padding: '16px',
+        borderRadius: '16px',
+        marginLeft: '16px',
+      }}
+    >
+      <Content value={value} />
+    </div>
+  );
 };

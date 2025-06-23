@@ -9,6 +9,7 @@ import {
   DataLayout,
   useCollection,
   useSnackbar,
+  useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
@@ -20,6 +21,8 @@ import { filters, sorts } from './config';
 import { Details } from './details';
 
 const Events = () => {
+  const dense = useBreakpoint('laptop-down');
+
   const { openSnackbar } = useSnackbar();
 
   const [current, setCurrent] = useState<ApiEventResponse['items'][0]>();
@@ -70,13 +73,14 @@ const Events = () => {
       <SortField
         defaultKey="timestamp"
         defaultOrder="DESC"
+        dense={dense}
         disabled={isLoading}
         value={collection.sort}
         options={sorts}
         onChange={collection.setSort}
       />
     ),
-    [isLoading, collection],
+    [dense, isLoading, collection],
   );
 
   useEffect(() => {
