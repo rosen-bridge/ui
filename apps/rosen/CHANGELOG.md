@@ -6,7 +6,6 @@
 
 - Integrate the WalletConnect protocol to support Ethereum and Binance networks
 - Integrate the Xverse wallet extension to enable Bitcoin transactions through both the extension itself and Ledger devices
-- Integrate Bitcoin Runes
 
 ### Patch Changes
 
