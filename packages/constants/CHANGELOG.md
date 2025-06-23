@@ -1,5 +1,11 @@
 # @rosen-ui/constants
 
+## 0.4.0
+
+### Minor Changes
+
+- Integrate Bitcoin Runes
+
 ## 0.3.0
 
 ### Minor Changes

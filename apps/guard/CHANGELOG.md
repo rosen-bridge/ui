@@ -1,5 +1,18 @@
 # @rosen-bridge/guard-app
 
+## 1.12.4
+
+### Patch Changes
+
+- Fix the heading of pages
+- Correct the logic causing incorrect dates to be displayed on the revenue chart in the dashboard
+- Removed the tokensMap version from VersionConfig
+- Update dependencies
+  - @rosen-bridge/ui-kit@1.12.0
+  - @rosen-bridge/icons@2.0.0
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/utils@0.6.0
+
 ## 1.12.3
 
 ### Patch Changes

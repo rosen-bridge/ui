@@ -1,5 +1,15 @@
 # @rosen-network/evm
 
+## 0.3.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/address-codec@0.6.2
+  - @rosen-bridge/tokens@3.1.1
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/types@0.3.6
+
 ## 0.3.0
 
 ### Minor Changes
