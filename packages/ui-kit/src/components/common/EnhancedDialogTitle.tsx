@@ -1,10 +1,10 @@
-import React from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
-import { useIsMobile } from '../../hooks';
-import { DialogTitle, DialogTitleProps, IconButton, SvgIcon } from '../base';
+import { useBreakpoint } from '../../hooks';
+import { DialogTitle, IconButton, SvgIcon } from '../base';
 
 const IconContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -14,22 +14,22 @@ const IconContainer = styled('div')(({ theme }) => ({
 }));
 
 export type EnhancedDialogTitleProps = {
-  icon?: React.ReactNode;
-  onClose?: React.MouseEventHandler<HTMLButtonElement>;
-} & DialogTitleProps;
+  children?: ReactNode;
+  icon?: ReactNode;
+  onClose?: MouseEventHandler<HTMLButtonElement>;
+};
 
 /**
  * renders an enhanced version of material ui DialogTitle
  */
 export const EnhancedDialogTitle = ({
+  children,
   icon,
   onClose,
-  ...props
 }: EnhancedDialogTitleProps) => {
-  const isMobile = useIsMobile();
+  const isMobile = useBreakpoint('mobile');
   return (
     <DialogTitle
-      {...props}
       display="flex"
       alignItems="center"
       flexDirection={isMobile ? 'column' : 'row'}
@@ -40,7 +40,7 @@ export const EnhancedDialogTitle = ({
           <SvgIcon sx={{ height: 20, width: 20 }}>{icon}</SvgIcon>
         </IconContainer>
       )}
-      <span style={{ flexGrow: 1 }}>{props.children}</span>
+      <span style={{ flexGrow: 1 }}>{children}</span>
       {!isMobile && onClose && (
         <IconButton onClick={onClose}>
           <SvgIcon>

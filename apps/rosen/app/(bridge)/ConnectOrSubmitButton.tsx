@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ArrowRight, CommentAltExclamation } from '@rosen-bridge/icons';
 import {
   Amount,
+  Amount2,
   Box,
   Card,
   DialogActions,
@@ -11,6 +12,7 @@ import {
   EnhancedDialog,
   EnhancedDialogTitle,
   Grid,
+  Label,
   LoadingButton,
   SvgIcon,
   Typography,
@@ -183,23 +185,20 @@ export const ConnectOrSubmitButton = ({
               </Grid>
             </Box>
             <Divider sx={{ my: 2 }} />
-            <Amount
-              title="Transaction Fee"
-              value={networkFeeRaw}
-              unit={tokenInfo?.tokenName}
-            />
-            <Box sx={{ my: 2 }} />
-            <Amount
-              title="Bridge Fee"
-              value={bridgeFeeRaw}
-              unit={tokenInfo?.tokenName}
-            />
-            <Box sx={{ my: 2 }} />
-            <Amount
-              title="Received amount"
-              value={receivingAmountRaw}
-              unit={targetTokenInfo?.name}
-            />
+            <Label label="Transaction Fee">
+              <Amount2 value={networkFeeRaw} unit={tokenInfo?.tokenName} />
+            </Label>
+
+            <Label label="Bridge Fee">
+              <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.tokenName} />
+            </Label>
+
+            <Label label="Received amount">
+              <Amount2
+                value={receivingAmountRaw}
+                unit={targetTokenInfo?.name}
+              />
+            </Label>
             <Divider sx={{ my: 2 }} />
             <Typography variant="body2" color="text.secondary">
               Destination address
