@@ -1,7 +1,14 @@
-import { PropsWithChildren } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
 import { DialogContent } from '../base';
 
-export const EnhancedDialogContent = ({ children }: PropsWithChildren) => {
-  return <DialogContent>{children}</DialogContent>;
+export type EnhancedDialogContentProps = {
+  children?: ReactNode;
+} & HTMLAttributes<HTMLDivElement>;
+
+export const EnhancedDialogContent = ({
+  children,
+  ...rest
+}: EnhancedDialogContentProps) => {
+  return <DialogContent {...rest}>{children}</DialogContent>;
 };

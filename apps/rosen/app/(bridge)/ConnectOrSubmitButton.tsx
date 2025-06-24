@@ -1,20 +1,20 @@
 import { useState } from 'react';
 
-import { ArrowRight, CommentAltExclamation } from '@rosen-bridge/icons';
+import { CommentAltExclamation } from '@rosen-bridge/icons';
 import {
   Amount,
   Amount2,
-  Box,
   Card,
+  Connector,
   DialogActions,
-  DialogContent,
   Divider,
   EnhancedDialog,
+  EnhancedDialogContent,
   EnhancedDialogTitle,
-  Grid,
   Label,
   LoadingButton,
-  SvgIcon,
+  Network,
+  Stack,
   Typography,
 } from '@rosen-bridge/ui-kit';
 
@@ -72,12 +72,10 @@ export const ConnectOrSubmitButton = ({
   const source = availableSources.find(
     (availableNetwork) => availableNetwork.name == sourceValue,
   );
-  const SourceLogo = source?.logo;
 
   const target = availableSources.find(
     (availableNetwork) => availableNetwork.name == targetValue,
   );
-  const TargetLogo = target?.logo;
 
   const tokenInfo =
     tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
@@ -136,7 +134,7 @@ export const ConnectOrSubmitButton = ({
         >
           Confirm Transaction
         </EnhancedDialogTitle>
-        <DialogContent sx={{ py: 0 }}>
+        <EnhancedDialogContent style={{ paddingBottom: 0 }}>
           <Card
             sx={{
               backgroundColor: (theme) =>
@@ -147,67 +145,44 @@ export const ConnectOrSubmitButton = ({
               py: 3,
             }}
           >
-            <Grid container justifyContent="center">
-              <Amount
-                value={amountValue || 0}
-                size="large"
-                unit={tokenInfo?.tokenName}
-              />
-            </Grid>
-            <Box
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'auto auto auto',
-                justifyContent: 'center',
-                columnGap: 2,
-                rowGap: 0.5,
-                my: 3,
-              }}
-            >
-              <Grid container alignItems="center" gap={1}>
-                {SourceLogo && (
-                  <SvgIcon>
-                    <SourceLogo />
-                  </SvgIcon>
+            <Stack spacing={2}>
+              <Stack alignItems="center" spacing={2}>
+                <Amount
+                  value={amountValue || 0}
+                  size="large"
+                  unit={tokenInfo?.tokenName}
+                />
+                {source && target && (
+                  <Connector
+                    start={<Network name={source.name} />}
+                    end={<Network name={target.name} />}
+                  />
                 )}
-                <Typography color="text.primary">{source?.label}</Typography>
-              </Grid>
-              <SvgIcon>
-                <ArrowRight />
-              </SvgIcon>
-              <Grid container alignItems="center" gap={1}>
-                {TargetLogo && (
-                  <SvgIcon>
-                    <TargetLogo />
-                  </SvgIcon>
-                )}
-                <Typography color="text.primary">{target?.label}</Typography>
-              </Grid>
-            </Box>
-            <Divider sx={{ my: 2 }} />
-            <Label label="Transaction Fee">
-              <Amount2 value={networkFeeRaw} unit={tokenInfo?.tokenName} />
-            </Label>
-
-            <Label label="Bridge Fee">
-              <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.tokenName} />
-            </Label>
-
-            <Label label="Received amount">
-              <Amount2
-                value={receivingAmountRaw}
-                unit={targetTokenInfo?.name}
-              />
-            </Label>
-            <Divider sx={{ my: 2 }} />
-            <Typography variant="body2" color="text.secondary">
-              Destination address
-            </Typography>
-            <Typography sx={{ wordBreak: 'break-all' }}>
-              {walletAddressValue}
-            </Typography>
+              </Stack>
+              <Divider />
+              <div>
+                <Label label="Transaction Fee">
+                  <Amount2 value={networkFeeRaw} unit={tokenInfo?.tokenName} />
+                </Label>
+                <Label label="Bridge Fee">
+                  <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.tokenName} />
+                </Label>
+                <Label label="Received amount">
+                  <Amount2
+                    value={receivingAmountRaw}
+                    unit={targetTokenInfo?.name}
+                  />
+                </Label>
+              </div>
+              <Divider />
+              <Label label="Destination address" orientation="vertical">
+                <Typography sx={{ wordBreak: 'break-all' }}>
+                  {walletAddressValue}
+                </Typography>
+              </Label>
+            </Stack>
           </Card>
-        </DialogContent>
+        </EnhancedDialogContent>
         <DialogActions>
           <LoadingButton
             color="secondary"

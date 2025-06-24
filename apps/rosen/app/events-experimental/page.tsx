@@ -98,21 +98,11 @@ const Events = () => {
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
-      <div
-        style={{
-          flexGrow: '1',
-          height: '200vh',
-          background: 'white',
-          padding: '16px',
-          borderRadius: '16px',
-        }}
-      >
-        {data?.items.map((item) => (
-          <h1 key={item.id} onClick={() => setCurrent(item)}>
-            {item.id}
-          </h1>
-        ))}
-      </div>
+      {data?.items.map((item) => (
+        <h1 key={item.id} onClick={() => setCurrent(item)}>
+          {item.id}
+        </h1>
+      ))}
     </DataLayout>
   );
 };
