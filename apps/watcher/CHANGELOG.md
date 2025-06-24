@@ -1,5 +1,23 @@
 # @rosen-bridge/watcher-app
 
+## 3.4.0
+
+### Minor Changes
+
+- Fix some colors in ui-kit and apply it to watcher
+
+### Patch Changes
+
+- Fix the heading of pages
+- Utilize the Amount component to improve readability and consistency for financial data
+- Used `InfoWidgetCardBase` from `@rosen-bridge/ui-kit` as a shared styled component to reusability across the app
+- Removed the tokensMap version from VersionConfig
+- Update dependencies
+  - @rosen-bridge/ui-kit@1.12.0
+  - @rosen-bridge/icons@2.0.0
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/utils@0.6.0
+
 ## 3.3.1
 
 ### Patch Changes

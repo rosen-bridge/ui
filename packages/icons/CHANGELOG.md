@@ -1,5 +1,15 @@
 # @rosen-bridge/icons
 
+## 2.0.0
+
+### Major Changes
+
+- Remove wallet icons
+
+### Patch Changes
+
+- To improve UI clarity, add an `AlignCenter` icon for the dropdown menu on small screens and an `CaretDown` icon on larger screens in the Pagination part
+
 ## 1.4.0
 
 ### Minor Changes
