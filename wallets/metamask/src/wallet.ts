@@ -1,9 +1,10 @@
 import { MetaMaskSDK } from '@metamask/sdk';
-import { MetaMask as MetaMaskIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { BinanceNetwork } from '@rosen-network/binance/dist/client';
+import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
 import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
   ChainNotAddedError,
@@ -12,18 +13,17 @@ import {
   Wallet,
   InteractionError,
   WalletTransferParams,
-  AddressRetrievalError,
-  ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   dispatchError,
   CurrentChainError,
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
 
-import { WalletConfig } from './types';
+import { ICON } from './icon';
+import { MetaMaskWalletConfig } from './types';
 
-export class MetaMaskWallet extends Wallet {
-  icon = MetaMaskIcon;
+export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
+  icon = ICON;
 
   name = 'MetaMask';
 
@@ -33,10 +33,6 @@ export class MetaMaskWallet extends Wallet {
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
-
   private api = new MetaMaskSDK({
     dappMetadata: {
       name: 'Rosen Bridge',
@@ -44,7 +40,7 @@ export class MetaMaskWallet extends Wallet {
     enableAnalytics: false,
   });
 
-  private get currentChain() {
+  get currentChain(): Network {
     const chain = Object.values(NETWORKS).find(
       (network) => network.id == this.provider.chainId,
     )?.key;
@@ -70,13 +66,8 @@ export class MetaMaskWallet extends Wallet {
     })) as { caveats: { type: string; value: string[] }[] }[];
   };
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+  performConnect = async (): Promise<void> => {
+    await this.api.connect();
   };
 
   disconnect = async (): Promise<void> => {
@@ -88,22 +79,17 @@ export class MetaMaskWallet extends Wallet {
     }
   };
 
-  getAddress = async (): Promise<string> => {
+  fetchAddress = async (): Promise<string | undefined> => {
     const accounts = await this.provider.request<string[]>({
       method: 'eth_accounts',
     });
-
-    const account = accounts?.at(0);
-
-    if (!account) throw new AddressRetrievalError(this.name);
-
-    return account;
+    return accounts?.at(0);
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
+  fetchBalance = async (
+    token: RosenChainToken,
+  ): Promise<string | undefined> => {
     const address = await this.getAddress();
-
-    const tokenMap = await this.config.getTokenMap();
 
     let amount;
 
@@ -124,15 +110,7 @@ export class MetaMaskWallet extends Wallet {
       amount = await contract.balanceOf(address);
     }
 
-    if (!amount) return 0n;
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      BigInt(amount),
-      this.currentChain,
-    ).amount;
-
-    return wrappedAmount;
+    return amount;
   };
 
   isAvailable = (): boolean => {
@@ -176,25 +154,33 @@ export class MetaMaskWallet extends Wallet {
     }
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
+    if (
+      !(this.currentNetwork instanceof BinanceNetwork) &&
+      !(this.currentNetwork instanceof EthereumNetwork)
+    ) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const address = await this.getAddress();
 
-    const rosenData = await this.config.generateLockData(
+    const rosenData = await this.currentNetwork.generateLockData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const transactionParameters = await this.config.generateTxParameters(
-      params.token.tokenId,
-      params.lockAddress,
-      address,
-      params.amount,
-      rosenData,
-      params.token,
-      params.fromChain,
-    );
+    const transactionParameters =
+      await this.currentNetwork.generateTxParameters(
+        params.token.tokenId,
+        params.lockAddress,
+        address,
+        params.amount,
+        rosenData,
+        params.token,
+        params.fromChain,
+      );
 
     try {
       return (await this.provider.request<string>({

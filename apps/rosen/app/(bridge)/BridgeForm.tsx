@@ -25,7 +25,6 @@ import {
   useBridgeForm,
   useMaxTransfer,
   useNetwork,
-  useTokenMap,
   useTransactionFormData,
   useWallet,
 } from '@/_hooks';
@@ -41,14 +40,6 @@ const SelectedAsset = styled('div')(({ theme }) => ({
   gap: theme.spacing(1),
   alignItems: 'center',
   marginBottom: '-1px',
-}));
-
-/**
- * bridge form container comp
- */
-const FormContainer = styled('div')(({ theme }) => ({
-  display: 'grid',
-  gap: theme.spacing(2),
 }));
 
 /**
@@ -165,9 +156,9 @@ export const BridgeForm = () => {
   }, [raw, setValue]);
 
   return (
-    <FormContainer>
+    <>
       <Grid container spacing={2}>
-        <Grid item mobile={6} tablet={6} laptop={6}>
+        <Grid item mobile={12} tablet={6}>
           <TextField
             id="source"
             select
@@ -193,7 +184,7 @@ export const BridgeForm = () => {
             ))}
           </TextField>
         </Grid>
-        <Grid item mobile={6} tablet={6} laptop={6}>
+        <Grid item mobile={12} tablet={6}>
           <TextField
             id="target"
             select
@@ -241,7 +232,7 @@ export const BridgeForm = () => {
                     try {
                       const clipboardText =
                         await navigator.clipboard.readText();
-                      setValue('walletAddress', clipboardText, {
+                      setValue('walletAddress', clipboardText.trim(), {
                         shouldDirty: true,
                         shouldTouch: true,
                         shouldValidate: true,
@@ -272,6 +263,14 @@ export const BridgeForm = () => {
         autoComplete="off"
         {...addressField}
         value={addressField.value ?? ''}
+        onBlur={(e) => {
+          const trimmed = e.target.value.trim();
+          setValue('walletAddress', trimmed, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+          });
+        }}
       />
       {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
@@ -335,6 +334,6 @@ export const BridgeForm = () => {
         disabled={!tokenField.value}
         autoComplete="off"
       />
-    </FormContainer>
+    </>
   );
 };

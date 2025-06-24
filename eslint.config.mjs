@@ -32,7 +32,10 @@ export default [
   // Browser-Specific Globals
   {
     files: ['{packages,wallets}/**/*.{js,jsx,ts,tsx}'],
-    ignores: ['packages/asset-calculator/**/*.{js,jsx,ts,tsx}'],
+    ignores: [
+      'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
+      'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
+    ],
     languageOptions: {
       globals: globals.browser,
     },
@@ -43,9 +46,23 @@ export default [
     files: [
       'networks/**/*.{js,jsx,ts,tsx}',
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
+      'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
-      globals: globals.node,
+      globals: {
+        ...globals.node,
+        vi: 'readonly',
+        afterAll: 'readonly',
+        afterEach: 'readonly',
+        beforeAll: 'readonly',
+        beforeEach: 'readonly',
+        describe: 'readonly',
+        expect: 'readonly',
+        fit: 'readonly',
+        it: 'readonly',
+        jest: 'readonly',
+        test: 'readonly',
+      },
     },
   },
 
@@ -59,6 +76,15 @@ export default [
     rules: {
       'react-refresh/only-export-components': 'warn',
       ...reactHooks.configs.recommended.rules,
+    },
+  },
+
+  {
+    files: ['packages/swr-helpers/**/*.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+      },
     },
   },
 

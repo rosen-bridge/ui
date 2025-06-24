@@ -1,11 +1,9 @@
-import { Nautilus as NautilusIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
-  AddressRetrievalError,
-  ConnectionRejectedError,
   ErgoTxProxy,
   SubmitTransactionError,
   UserDeniedTransactionSignatureError,
@@ -13,12 +11,14 @@ import {
   Wallet,
   WalletTransferParams,
   ConnectionTimeoutError,
+  UnsupportedChainError,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { ICON } from './icon';
+import { NautilusWalletConfig } from './types';
 
-export class NautilusWallet extends Wallet {
-  icon = NautilusIcon;
+export class NautilusWallet extends Wallet<NautilusWalletConfig> {
+  icon = ICON;
 
   name = 'Nautilus';
 
@@ -26,18 +26,15 @@ export class NautilusWallet extends Wallet {
 
   link = 'https://github.com/nautls/nautilus-wallet';
 
-  supportedChains = [NETWORKS.ergo.key];
+  currentChain: Network = NETWORKS.ergo.key;
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
+  supportedChains: Network[] = [NETWORKS.ergo.key];
 
   private get api() {
     return window.ergoConnector.nautilus;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
+  performConnect = async (): Promise<void> => {
     let isConnected: boolean;
 
     try {
@@ -48,7 +45,7 @@ export class NautilusWallet extends Wallet {
 
     if (isConnected) return;
 
-    throw new ConnectionRejectedError(this.name);
+    throw undefined;
   };
 
   disconnect = async (): Promise<void> => {
@@ -60,41 +57,23 @@ export class NautilusWallet extends Wallet {
     }
   };
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    try {
-      const wallet = await this.api.getContext();
-      return await wallet.get_change_address();
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
-    }
+  fetchAddress = async (): Promise<string | undefined> => {
+    const wallet = await this.api.getContext();
+    return await wallet.get_change_address();
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
-    this.requireAvailable();
+  fetchBalance = async (token: RosenChainToken): Promise<string> => {
     const wallet = await this.api.getContext();
-
-    const tokenMap = await this.config.getTokenMap();
 
     /**
      * The following condition is required because nautilus only accepts
      * uppercase ERG as tokenId for the erg native token
      */
-    const balance = await wallet.get_balance(
+    const amount = await wallet.get_balance(
       token.tokenId === 'erg' ? 'ERG' : token.tokenId,
     );
 
-    const amount = BigInt(balance);
-
-    if (!amount) return 0n;
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      amount,
-      NETWORKS.ergo.key,
-    ).amount;
-
-    return wrappedAmount;
+    return amount;
   };
 
   isAvailable = (): boolean => {
@@ -109,8 +88,11 @@ export class NautilusWallet extends Wallet {
     return await this.api.isAuthorized();
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
+    if (!(this.currentNetwork instanceof ErgoNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const wallet = await this.api.getContext();
 
     const changeAddress = await this.getAddress();
@@ -119,7 +101,7 @@ export class NautilusWallet extends Wallet {
 
     if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTx = await this.config.generateUnsignedTx(
+    const unsignedTx = await this.currentNetwork.generateUnsignedTx(
       changeAddress,
       walletUtxos,
       params.lockAddress,

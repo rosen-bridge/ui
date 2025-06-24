@@ -36,19 +36,19 @@ const main = async () => {
       );
     }
 
+    await scannerService.start();
+    logger.info('scanner service started successfully');
+
     await Promise.all([
       calculatorService.start().then(() => {
         logger.info('calculator service started successfully');
-      }),
-      scannerService.start().then(() => {
-        logger.info('scanner service started successfully');
       }),
       healthCheckService.start().then(() => {
         logger.info('health check service started successfully');
       }),
     ]);
   } catch (error) {
-    handleError(error);
+    handleError(error, logger);
   }
 };
 

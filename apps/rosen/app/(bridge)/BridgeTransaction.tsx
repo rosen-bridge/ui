@@ -4,9 +4,10 @@ import { Dispatch, SetStateAction } from 'react';
 
 import {
   Alert,
-  Amount,
+  Amount2,
   Card,
   Divider,
+  Label,
   Tooltip,
   Typography,
 } from '@rosen-bridge/ui-kit';
@@ -89,7 +90,7 @@ export const BridgeTransaction = ({
           }}
         >
           <WalletInfo
-            icon={selectedWallet?.icon}
+            icon={selectedWallet?.iconReact}
             label={selectedWallet?.label}
             disconnect={disconnect}
             onClick={() => setChooseWalletsModalOpen(true)}
@@ -99,42 +100,45 @@ export const BridgeTransaction = ({
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            gap: (theme) => theme.spacing(1),
             backgroundColor: 'primary.light',
             padding: (theme) => theme.spacing(3),
             flexGrow: 1,
           }}
         >
           <div style={{ flexGrow: '1' }} />
-          <Amount
-            title="Transaction Fee"
-            value={!tokenValue ? undefined : networkFeeRaw}
-            unit={tokenInfo?.tokenName}
-            loading={isPending}
-          />
-          <Amount
-            title="Bridge Fee"
-            value={!tokenValue ? undefined : bridgeFeeRaw}
-            unit={tokenInfo?.tokenName}
-            loading={isPending}
-          />
-          <Amount
-            title="Min Transfer"
-            value={!tokenValue ? undefined : minTransferRaw}
-            unit={tokenInfo?.tokenName}
-            loading={isPending}
-          />
-          <Divider sx={{ borderStyle: 'dashed' }} />
-          <Amount
-            title="You Will Receive"
-            value={
-              !tokenValue || receivingAmountRaw === '0'
-                ? undefined
-                : receivingAmountRaw
-            }
-            unit={targetTokenInfo?.name}
-            loading={isPending}
-          />
+          <Label label="You Will Receive" color="textPrimary" dense>
+            <Amount2
+              value={
+                !tokenValue || receivingAmountRaw === '0'
+                  ? undefined
+                  : receivingAmountRaw
+              }
+              unit={targetTokenInfo?.name}
+              loading={isPending}
+            />
+          </Label>
+          <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
+          <Label label="Transaction Fee" dense>
+            <Amount2
+              value={!tokenValue ? undefined : networkFeeRaw}
+              unit={tokenInfo?.tokenName}
+              loading={isPending}
+            />
+          </Label>
+          <Label label="Bridge Fee" dense>
+            <Amount2
+              value={!tokenValue ? undefined : bridgeFeeRaw}
+              unit={tokenInfo?.tokenName}
+              loading={isPending}
+            />
+          </Label>
+          <Label label="Min Transfer" dense>
+            <Amount2
+              value={!tokenValue ? undefined : minTransferRaw}
+              unit={tokenInfo?.tokenName}
+              loading={isPending}
+            />
+          </Label>
           {!!error && (
             <Alert
               severity="error"

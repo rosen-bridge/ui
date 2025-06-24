@@ -3,76 +3,20 @@ import { ReactNode } from 'react';
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   Box,
-  Card,
   CircularProgress,
   SvgIcon,
+  InfoWidgetCardBase,
   Tooltip,
   Typography,
-  styled,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
-
-interface InfoWidgetCardBaseProps {
-  widgetColor: keyof AugmentedPalette;
-}
-/**
- * render an info widget card without any data
- *
- * @param color
- * @param icon
- * @param isLoading
- * @param title
- * @param unit
- * @param value
- */
-const InfoWidgetCardBase = styled(Card)<InfoWidgetCardBaseProps>(
-  ({ theme, ...props }) => ({
-    'padding': theme.spacing(2),
-    'backgroundColor': theme.palette[props.widgetColor].main,
-    'color': theme.palette[props.widgetColor].contrastText,
-    'display': 'flex',
-    'gap': theme.spacing(2),
-    '& .column': {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      gap: theme.spacing(0.5),
-    },
-    '& .title': {
-      fontSize: theme.typography.body2.fontSize,
-      lineHeight: 1,
-      opacity: 0.75,
-    },
-    '& .value': {
-      'fontSize': theme.typography.h6.fontSize,
-      'fontWeight': 'bold',
-      'lineHeight': 1,
-      'display': 'flex',
-      'justifyContent': 'space-between',
-      'alignItems': 'center',
-      '& span': {
-        fontSize: '60%',
-        fontWeight: 'normal',
-        opacity: 0.75,
-      },
-    },
-    [theme.breakpoints.down('tablet')]: {
-      'flexDirection': 'column',
-      'alignItems': 'center',
-      '& p': {
-        textAlign: 'center',
-      },
-    },
-  }),
-);
 
 interface InfoWidgetCardProps {
   color?: keyof AugmentedPalette;
   icon: ReactNode;
   isLoading?: boolean;
   title: string;
-  unit?: string;
-  value: string;
+  value: ReactNode;
   warning?: string;
 }
 /**
@@ -82,7 +26,6 @@ interface InfoWidgetCardProps {
  * @param icon
  * @param isLoading
  * @param title
- * @param unit
  * @param value
  */
 export const InfoWidgetCard = ({
@@ -90,7 +33,6 @@ export const InfoWidgetCard = ({
   icon,
   isLoading,
   title,
-  unit,
   value,
   warning,
 }: InfoWidgetCardProps) => {
@@ -104,11 +46,7 @@ export const InfoWidgetCard = ({
           </div>
         ) : (
           <Typography className="value">
-            <div>
-              {value}
-              &nbsp;
-              <span>{unit}</span>
-            </div>
+            <div>{value}</div>
             {warning && (
               <Tooltip
                 title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}

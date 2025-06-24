@@ -1,19 +1,20 @@
-import { Okx as OKXIcon } from '@rosen-bridge/icons';
-import { RosenChainToken } from '@rosen-bridge/tokens';
+import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 import {
   DisconnectionFailedError,
-  AddressRetrievalError,
-  ConnectionRejectedError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
+  UnsupportedChainError,
+  SubmitTransactionError,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { ICON } from './icon';
+import { OKXWalletConfig } from './types';
 
-export class OKXWallet extends Wallet {
-  icon = OKXIcon;
+export class OKXWallet extends Wallet<OKXWalletConfig> {
+  icon = ICON;
 
   name = 'OKX';
 
@@ -21,23 +22,16 @@ export class OKXWallet extends Wallet {
 
   link = 'https://www.okx.com/';
 
-  supportedChains = [NETWORKS.bitcoin.key];
+  currentChain: Network = NETWORKS.bitcoin.key;
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
+  supportedChains: Network[] = [NETWORKS.bitcoin.key];
 
   private get api() {
     return window.okxwallet.bitcoin;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.connect();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+  performConnect = async (): Promise<void> => {
+    await this.api.connect();
   };
 
   disconnect = async (): Promise<void> => {
@@ -49,32 +43,12 @@ export class OKXWallet extends Wallet {
     }
   };
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    const accounts = await this.api.getAccounts();
-
-    const account = accounts?.at(0);
-
-    if (!account) throw new AddressRetrievalError(this.name);
-
-    return account;
+  fetchAddress = async (): Promise<string | undefined> => {
+    return (await this.api.getAccounts())?.at(0);
   };
 
-  getBalance = async (token: RosenChainToken): Promise<bigint> => {
-    this.requireAvailable();
-    const amount = await this.api.getBalance();
-
-    if (!amount.confirmed) return 0n;
-
-    const tokenMap = await this.config.getTokenMap();
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      BigInt(amount.confirmed),
-      NETWORKS.bitcoin.key,
-    ).amount;
-
-    return wrappedAmount;
+  fetchBalance = async (): Promise<number> => {
+    return (await this.api.getBalance()).confirmed;
   };
 
   isAvailable = (): boolean => {
@@ -84,21 +58,24 @@ export class OKXWallet extends Wallet {
   };
 
   isConnected = async (): Promise<boolean> => {
-    return !!window.okxwallet.selectedAddress;
+    return !!(await this.fetchAddress());
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
+    if (!(this.currentNetwork instanceof BitcoinNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const userAddress = await this.getAddress();
 
-    const opReturnData = await this.config.generateOpReturnData(
+    const opReturnData = await this.currentNetwork.generateOpReturnData(
       params.toChain,
       params.address,
       params.networkFee.toString(),
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await this.config.generateUnsignedTx(
+    const psbtData = await this.currentNetwork.generateUnsignedTx(
       params.lockAddress,
       userAddress,
       params.amount,
@@ -122,8 +99,10 @@ export class OKXWallet extends Wallet {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const txId = await this.config.submitTransaction(signedPsbtHex, 'hex');
-
-    return txId;
+    try {
+      return await this.currentNetwork.submitTransaction(signedPsbtHex, 'hex');
+    } catch (error) {
+      throw new SubmitTransactionError(this.name, error);
+    }
   };
 }

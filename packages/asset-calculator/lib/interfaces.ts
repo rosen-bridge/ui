@@ -10,6 +10,10 @@ interface BitcoinCalculatorInterface extends CalculatorInterface {
   esploraUrl?: string;
 }
 
+interface DogeCalculatorInterface extends CalculatorInterface {
+  blockcypherUrl: string;
+}
+
 interface EvmCalculatorInterface extends CalculatorInterface {
   rpcUrl: string;
   authToken?: string;
@@ -24,4 +28,5 @@ export {
   CardanoCalculatorInterface,
   BitcoinCalculatorInterface,
   EvmCalculatorInterface,
+  DogeCalculatorInterface,
 };

@@ -1,0 +1,10 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "noFallthroughCasesInSwitch": true,
+    "useUnknownInCatchVariables": false,
+    "outDir": "dist",
+    "rootDir": "./src"
+  },
+  "include": ["src"]
+}

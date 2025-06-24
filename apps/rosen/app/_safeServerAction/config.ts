@@ -2,7 +2,7 @@ import { serializeError } from 'serialize-error';
 
 import { createSafeAction } from './safeServerAction';
 
-export const { wrap, unwrap } = createSafeAction({
+export const { wrap, unwrap, unwrapFromObject } = createSafeAction({
   async onError(error, traceKey, args) {
     if (typeof window === 'undefined') {
       import('@/_actions')

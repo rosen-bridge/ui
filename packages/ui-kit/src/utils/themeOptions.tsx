@@ -140,7 +140,8 @@ export const lightThemeOptions: ThemeOptions = {
       fontSize: '1rem',
     },
     body2: {
-      fontSize: '0.75rem',
+      fontSize: '0.875rem',
+      lineHeight: '1.25rem',
     },
     subtitle2: {
       fontSize: '0.625rem',
@@ -356,6 +357,10 @@ export const lightThemeOptions: ThemeOptions = {
             theme.palette.mode === 'light'
               ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
               : theme.palette.primary.light,
+          color:
+            theme.palette.mode === 'light'
+              ? theme.palette.common.white
+              : theme.palette.text.primary,
           [theme.breakpoints.down('tablet')]: {
             background:
               theme.palette.mode === 'light'

@@ -28,6 +28,10 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          blockcypherUrl: 'blockcypherUrl',
+        },
         dataSource,
       );
     });
@@ -104,6 +108,10 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        {
+          addresses: ['hotAddr', 'coldAddr'],
+          blockcypherUrl: 'blockcypherUrl',
+        },
         dataSource,
       );
     });
@@ -174,6 +182,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         dataSource,
       );
       assetCalculator['calculateEmissionForChain'] = () =>
@@ -287,6 +296,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         dataSource,
       );
       await assetCalculator['tokenModel']['tokenRepository'].insert(tokens);

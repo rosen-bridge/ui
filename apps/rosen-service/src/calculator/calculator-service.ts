@@ -29,7 +29,7 @@ const startUpdateJob = async (
         'warn',
         error instanceof Error ? error.stack : undefined,
       );
-      handleError(appError);
+      handleError(appError, logger);
     }
   };
 
@@ -69,6 +69,10 @@ const start = async () => {
       addresses: config.calculator.addresses.binance,
       rpcUrl: config.binance.rpcUrl,
       authToken: config.binance.rpcAuthToken,
+    },
+    {
+      addresses: config.calculator.addresses.doge,
+      blockcypherUrl: config.doge.blockcypherUrl,
     },
     dataSource,
     logger,

@@ -1,3 +1,6 @@
+export { ReactComponent as AlignCenter } from './icons/align-center.svg';
+export { default as AlignCenterRaw } from './icons/align-center.svg?raw';
+
 export { ReactComponent as AngleDown } from './icons/angle-down.svg';
 export { default as AngleDownRaw } from './icons/angle-down.svg?raw';
 
@@ -21,6 +24,9 @@ export { default as BitcoinCircleRaw } from './icons/bitcoin-circle.svg?raw';
 
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { default as BitcoinSignRaw } from './icons/bitcoin-sign.svg?raw';
+
+export { ReactComponent as CaretDown } from './icons/caret-down.svg';
+export { default as CaretDownRaw } from './icons/caret-down.svg?raw';
 
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';
 export { default as CheckCircleRaw } from './icons/check-circle.svg?raw';
@@ -181,20 +187,5 @@ export { default as ErgoRaw } from './networks/ergo.svg?raw';
 export { ReactComponent as Ethereum } from './networks/ethereum.svg';
 export { default as EthereumRaw } from './networks/ethereum.svg?raw';
 
-export { ReactComponent as Eternl } from './wallets/eternl.svg';
-export { default as EternlRaw } from './wallets/eternl.svg?raw';
-
-export { ReactComponent as Lace } from './wallets/lace.svg';
-export { default as LaceRaw } from './wallets/lace.svg?raw';
-
-export { ReactComponent as MetaMask } from './wallets/meta-mask.svg';
-export { default as MetaMaskRaw } from './wallets/meta-mask.svg?raw';
-
-export { ReactComponent as Mydoge } from './wallets/mydoge.svg';
-export { default as MydogeRaw } from './wallets/mydoge.svg?raw';
-
-export { ReactComponent as Nautilus } from './wallets/nautilus.svg';
-export { default as NautilusRaw } from './wallets/nautilus.svg?raw';
-
-export { ReactComponent as Okx } from './wallets/okx.svg';
-export { default as OkxRaw } from './wallets/okx.svg?raw';
+export { ReactComponent as Runes } from './networks/runes.svg';
+export { default as RunesRaw } from './networks/runes.svg?raw';

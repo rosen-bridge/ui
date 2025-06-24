@@ -1,5 +1,16 @@
 # @rosen-network/binance
 
+## 0.2.4
+
+### Patch Changes
+
+- Optimize the structure to enhance compatibility with wallet packages and streamline usage within the Rosen App
+- Update dependencies
+  - @rosen-network/evm@0.3.1
+  - @rosen-bridge/icons@2.0.0
+  - @rosen-bridge/tokens@3.1.1
+  - @rosen-ui/constants@0.4.0
+
 ## 0.2.3
 
 ### Patch Changes

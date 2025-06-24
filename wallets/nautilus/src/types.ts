@@ -1,11 +1,6 @@
-import { TokenMap } from '@rosen-bridge/tokens';
-import type { generateUnsignedTx } from '@rosen-network/ergo';
-import { EipWalletApi } from '@rosen-ui/wallet-api';
+import { EipWalletApi, WalletConfig } from '@rosen-ui/wallet-api';
 
-export type WalletConfig = {
-  getTokenMap: () => Promise<TokenMap>;
-  generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-};
+export type NautilusWalletConfig = WalletConfig & {};
 
 /**
  * global type augmentation for nautilus wallet

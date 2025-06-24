@@ -12,7 +12,7 @@ import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Wallet } from '@rosen-ui/wallet-api';
 
-import { wallets } from '@/_wallets';
+import * as wallets from '@/_wallets';
 
 import { useNetwork } from './useNetwork';
 
@@ -92,11 +92,13 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
       if (!name) return;
 
-      const wallet = wallets[name as keyof typeof wallets] as Wallet;
+      const wallet = Object.values(wallets).find(
+        (wallet) => wallet.name == name,
+      );
 
       if (!wallet || !wallet.isAvailable()) return;
 
-      if ((await wallet.isConnected?.()) === false) return;
+      if (!(await wallet.isConnected())) return;
 
       try {
         await wallet.connect();

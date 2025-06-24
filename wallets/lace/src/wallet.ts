@@ -1,22 +1,22 @@
-import { Lace as LaceIcon } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import { CardanoNetwork } from '@rosen-network/cardano/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 import { hexToCbor } from '@rosen-ui/utils';
 import {
-  AddressRetrievalError,
-  ConnectionRejectedError,
   SubmitTransactionError,
+  UnsupportedChainError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 
-import { WalletConfig } from './types';
+import { ICON } from './icon';
+import { LaceWalletConfig } from './types';
 
-export class LaceWallet extends Wallet {
-  icon = LaceIcon;
+export class LaceWallet extends Wallet<LaceWalletConfig> {
+  icon = ICON;
 
   name = 'Lace';
 
@@ -24,45 +24,37 @@ export class LaceWallet extends Wallet {
 
   link = 'https://www.lace.io/';
 
-  supportedChains = [NETWORKS.cardano.key];
+  currentChain: Network = NETWORKS.cardano.key;
 
-  constructor(private config: WalletConfig) {
-    super();
-  }
+  supportedChains: Network[] = [NETWORKS.cardano.key];
 
   private get api() {
     return window.cardano.lace;
   }
 
-  connect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.enable();
-    } catch (error) {
-      throw new ConnectionRejectedError(this.name, error);
-    }
+  performConnect = async (): Promise<void> => {
+    await this.api.enable();
   };
 
   disconnect = async (): Promise<void> => {};
 
-  getAddress = async (): Promise<string> => {
-    this.requireAvailable();
-    try {
-      const wallet = await this.api.enable();
-      return await wallet.getChangeAddress();
-    } catch (error) {
-      throw new AddressRetrievalError(this.name, error);
-    }
+  fetchAddress = async (): Promise<string | undefined> => {
+    const wallet = await this.api.enable();
+    return await wallet.getChangeAddress();
   };
 
-  getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
-    this.requireAvailable();
+  fetchBalance = async (
+    token: RosenChainToken,
+  ): Promise<bigint | undefined> => {
+    if (!(this.currentNetwork instanceof CardanoNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
 
     const wallet = await this.api.enable();
 
     const rawValue = await wallet.getBalance();
 
-    const balances = await this.config.decodeWasmValue(rawValue);
+    const balances = await this.currentNetwork.decodeWasmValue(rawValue);
 
     const amount = balances.find(
       (asset) =>
@@ -71,17 +63,7 @@ export class LaceWallet extends Wallet {
           !token.extra.policyId),
     );
 
-    if (!amount) return 0n;
-
-    const tokenMap = await this.config.getTokenMap();
-
-    const wrappedAmount = tokenMap.wrapAmount(
-      token.tokenId,
-      amount.quantity,
-      NETWORKS.cardano.key,
-    ).amount;
-
-    return wrappedAmount;
+    return amount?.quantity;
   };
 
   isAvailable = (): boolean => {
@@ -93,25 +75,29 @@ export class LaceWallet extends Wallet {
     return await this.api.isEnabled();
   };
 
-  transfer = async (params: WalletTransferParams): Promise<string> => {
-    this.requireAvailable();
+  performTransfer = async (params: WalletTransferParams): Promise<string> => {
+    if (!(this.currentNetwork instanceof CardanoNetwork)) {
+      throw new UnsupportedChainError(this.name, this.currentChain);
+    }
+
     const wallet = await this.api.enable();
 
     const changeAddressHex = await this.getAddress();
 
-    const auxiliaryDataHex = await this.config.generateLockAuxiliaryData(
-      params.toChain,
-      params.address,
-      changeAddressHex,
-      params.networkFee.toString(),
-      params.bridgeFee.toString(),
-    );
+    const auxiliaryDataHex =
+      await this.currentNetwork.generateLockAuxiliaryData(
+        params.toChain,
+        params.address,
+        changeAddressHex,
+        params.networkFee.toString(),
+        params.bridgeFee.toString(),
+      );
 
     const walletUtxos = await wallet.getUtxos();
 
     if (!walletUtxos) throw new UtxoFetchError(this.name);
 
-    const unsignedTxHex = await this.config.generateUnsignedTx(
+    const unsignedTxHex = await this.currentNetwork.generateUnsignedTx(
       walletUtxos,
       params.lockAddress,
       changeAddressHex,
@@ -129,7 +115,7 @@ export class LaceWallet extends Wallet {
       throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
-    const signedTxHex = await this.config.setTxWitnessSet(
+    const signedTxHex = await this.currentNetwork.setTxWitnessSet(
       unsignedTxHex,
       witnessSetHex,
     );
