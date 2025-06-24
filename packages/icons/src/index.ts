@@ -16,9 +16,6 @@ export { default as AngleUpRaw } from './icons/angle-up.svg?raw';
 export { ReactComponent as Archway } from './icons/archway.svg';
 export { default as ArchwayRaw } from './icons/archway.svg?raw';
 
-export { ReactComponent as CaretDown } from './icons/caret-down.svg';
-export { default as CaretDownRaw } from './icons/caret-down.svg?raw';
-
 export { ReactComponent as ArrowRight } from './icons/arrow-right.svg';
 export { default as ArrowRightRaw } from './icons/arrow-right.svg?raw';
 
@@ -27,6 +24,9 @@ export { default as BitcoinCircleRaw } from './icons/bitcoin-circle.svg?raw';
 
 export { ReactComponent as BitcoinSign } from './icons/bitcoin-sign.svg';
 export { default as BitcoinSignRaw } from './icons/bitcoin-sign.svg?raw';
+
+export { ReactComponent as CaretDown } from './icons/caret-down.svg';
+export { default as CaretDownRaw } from './icons/caret-down.svg?raw';
 
 export { ReactComponent as CheckCircle } from './icons/check-circle.svg';
 export { default as CheckCircleRaw } from './icons/check-circle.svg?raw';
@@ -93,6 +93,9 @@ export { default as KeySkeletonRaw } from './icons/key-skeleton.svg?raw';
 
 export { ReactComponent as LinkBroken } from './icons/link-broken.svg';
 export { default as LinkBrokenRaw } from './icons/link-broken.svg?raw';
+
+export { ReactComponent as ListUiAlt } from './icons/list-ui-alt.svg';
+export { default as ListUiAltRaw } from './icons/list-ui-alt.svg?raw';
 
 export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
 export { default as LockAltRaw } from './icons/lock-alt.svg?raw';

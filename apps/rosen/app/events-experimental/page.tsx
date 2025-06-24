@@ -15,7 +15,7 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
-import { ApiEventResponse } from '@/_types';
+import { ApiEventResponse, EventItem } from '@/_types';
 
 import { filters, sorts } from './config';
 import { Details } from './details';
@@ -25,7 +25,7 @@ const Events = () => {
 
   const { openSnackbar } = useSnackbar();
 
-  const [current, setCurrent] = useState<ApiEventResponse['items'][0]>();
+  const [current, setCurrent] = useState<EventItem>();
 
   const collection = useCollection();
 
