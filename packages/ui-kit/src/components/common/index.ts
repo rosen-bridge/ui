@@ -1,6 +1,7 @@
 export * from './carousel';
 export * from './smartSearch';
 export * from './display';
+export * from './navigationBar';
 export * from './AlertCard';
 export * from './Amount';
 export * from './ApiKeyModal';
@@ -18,8 +19,6 @@ export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
 export * from './Id';
 export * from './InfoWidgetCardBase';
-export * from './NavigationBar';
-export * from './NavigationButton';
 export * from './NewPagination';
 export * from './Version';
 export * from './PageHeading';

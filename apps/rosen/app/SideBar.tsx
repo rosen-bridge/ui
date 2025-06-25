@@ -26,39 +26,6 @@ export const SideBar = () => {
 
   const router = useRouter();
 
-  const routes = [
-    {
-      label: 'Bridge',
-      path: '/',
-      disabled: false,
-      icon: <Archway />,
-    },
-    {
-      label: 'Events',
-      path: '/events',
-      disabled: false,
-      icon: <Exchange />,
-    },
-    {
-      label: 'Assets',
-      path: '/assets',
-      disabled: false,
-      icon: <BitcoinCircle />,
-    },
-    {
-      label: 'Support',
-      path: '/support',
-      disabled: true,
-      icon: <Headphones />,
-    },
-    {
-      label: 'Dashboard',
-      path: '/dashboard',
-      disabled: true,
-      icon: <Dashboard />,
-    },
-  ];
-
   return (
     <AppBar
       logo={
@@ -73,17 +40,29 @@ export const SideBar = () => {
       }
       versions={<Version label="UI" value={packageJson.version} />}
       navigationBar={
-        <NavigationBar>
-          {routes.map((route) => (
-            <NavigationButton
-              key={route.label}
-              disabled={route.disabled}
-              icon={route.icon}
-              isActive={pathname === route.path}
-              label={route.label}
-              onClick={() => router.push(route.path)}
-            />
-          ))}
+        <NavigationBar
+          isActive={(path) => pathname === path}
+          onClick={(path) => router.push(path)}
+        >
+          <NavigationButton icon={<Archway />} label="Bridge" path="/" />
+          <NavigationButton icon={<Exchange />} label="Events" path="/events" />
+          <NavigationButton
+            icon={<BitcoinCircle />}
+            label="Assets"
+            path="/assets"
+          />
+          <NavigationButton
+            disabled={true}
+            icon={<Headphones />}
+            label="Support"
+            path="/support"
+          />
+          <NavigationButton
+            disabled={true}
+            icon={<Dashboard />}
+            label="Dashboard"
+            path="/dashboard"
+          />
         </NavigationBar>
       }
     />

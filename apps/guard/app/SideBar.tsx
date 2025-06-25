@@ -26,39 +26,6 @@ export const SideBar = () => {
 
   const router = useRouter();
 
-  const routes = [
-    {
-      label: 'Dashboard',
-      path: '/',
-      icon: <Dashboard />,
-    },
-    {
-      label: 'Health',
-      path: '/health',
-      icon: <Heartbeat />,
-    },
-    {
-      label: 'Events',
-      path: '/events',
-      icon: <ClipboardNotes />,
-    },
-    {
-      label: 'History',
-      path: '/history',
-      icon: <History />,
-    },
-    {
-      label: 'Assets',
-      path: '/assets',
-      icon: <BitcoinCircle />,
-    },
-    {
-      label: 'Revenues',
-      path: '/revenues',
-      icon: <Moneybag />,
-    },
-  ];
-
   return (
     <AppBar
       logo={
@@ -73,16 +40,36 @@ export const SideBar = () => {
       }
       versions={<VersionConfig />}
       navigationBar={
-        <NavigationBar>
-          {routes.map((route) => (
-            <NavigationButton
-              key={route.label}
-              icon={route.icon}
-              isActive={pathname === route.path}
-              label={route.label}
-              onClick={() => router.push(route.path)}
-            />
-          ))}
+        <NavigationBar
+          isActive={(path) => pathname === path}
+          onClick={(path) => router.push(path)}
+        >
+          <NavigationButton icon={<Dashboard />} label="Dashboard" path="/" />
+          <NavigationButton
+            icon={<Heartbeat />}
+            label="Health"
+            path="/health"
+          />
+          <NavigationButton
+            icon={<ClipboardNotes />}
+            label="Events"
+            path="/events"
+          />
+          <NavigationButton
+            icon={<History />}
+            label="History"
+            path="/history"
+          />
+          <NavigationButton
+            icon={<BitcoinCircle />}
+            label="Assets"
+            path="/assets"
+          />
+          <NavigationButton
+            icon={<Moneybag />}
+            label="Revenues"
+            path="/revenues"
+          />
         </NavigationBar>
       }
     />
