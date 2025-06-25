@@ -11,6 +11,8 @@ export * from './AppBar';
 export * from './AppLogo';
 export * from './Connector';
 export * from './EnhancedDialog';
+export * from './EnhancedDialogActions';
+export * from './EnhancedDialogContent';
 export * from './EnhancedDialogTitle';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
