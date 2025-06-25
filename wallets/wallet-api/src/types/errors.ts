@@ -168,26 +168,13 @@ export class SubmitTransactionError extends Error {
   }
 }
 
-export function dispatchError(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error: any,
-  cases: { [key: number]: () => Error },
-): never {
-  if (error?.code in cases) {
-    throw cases[error.code]();
+export class NotConnectedError extends Error {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(`Wallet connection required for the [${wallet}] wallet`, {
+      cause,
+    });
   }
-
-  if (error.info) {
-    throw new Error(error.info, { cause: error });
-  }
-
-  if (error.message) {
-    throw new Error(error.message, { cause: error });
-  }
-
-  if (typeof error !== 'object') {
-    throw new Error(`${error}`, { cause: error });
-  }
-
-  throw error;
 }

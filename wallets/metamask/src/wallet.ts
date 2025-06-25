@@ -6,7 +6,6 @@ import { tokenABI } from '@rosen-network/evm/dist/constants';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  DisconnectionFailedError,
   ChainNotAddedError,
   ChainSwitchingRejectedError,
   UnsupportedChainError,
@@ -14,7 +13,6 @@ import {
   InteractionError,
   WalletTransferParams,
   UserDeniedTransactionSignatureError,
-  dispatchError,
   CurrentChainError,
 } from '@rosen-ui/wallet-api';
 import { BrowserProvider, Contract } from 'ethers';
@@ -52,6 +50,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
   private get provider() {
     this.requireAvailable();
+
     const provider = this.api.getProvider();
 
     if (!provider) throw new InteractionError(this.name);
@@ -70,13 +69,8 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     await this.api.connect();
   };
 
-  disconnect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.disconnect();
-    } catch (error) {
-      throw new DisconnectionFailedError(this.name, error);
-    }
+  performDisconnect = async (): Promise<void> => {
+    await this.api.disconnect();
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
@@ -117,15 +111,14 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     return this.api.isExtensionActive();
   };
 
-  isConnected = async (): Promise<boolean> => {
+  hasConnection = async (): Promise<boolean> => {
     return !!(await this.permissions()).length;
   };
 
-  switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
-    if (!this.supportedChains.includes(chain)) {
-      throw new UnsupportedChainError(this.name, chain);
-    }
-
+  performSwitchChain = async (
+    chain: Network,
+    silent?: boolean,
+  ): Promise<void> => {
     const chainId = NETWORKS[chain].id;
 
     if (silent) {
@@ -147,10 +140,15 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
         params: [{ chainId }],
       });
     } catch (error) {
-      dispatchError(error, {
-        4001: () => new ChainSwitchingRejectedError(this.name, chain, error),
-        4902: () => new ChainNotAddedError(this.name, chain, error),
-      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      switch ((error as any)?.code) {
+        case 4001:
+          throw new ChainSwitchingRejectedError(this.name, chain, error);
+        case 4902:
+          throw new ChainNotAddedError(this.name, chain, error);
+        default:
+          throw error;
+      }
     }
   };
 

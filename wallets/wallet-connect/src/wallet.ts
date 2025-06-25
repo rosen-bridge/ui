@@ -122,7 +122,7 @@ export class WalletConnect<
     await connected.promise;
   };
 
-  disconnect = async (): Promise<void> => {
+  performDisconnect = async (): Promise<void> => {
     await this.modal.disconnect();
   };
 
@@ -130,7 +130,7 @@ export class WalletConnect<
     return true;
   };
 
-  isConnected = async (): Promise<boolean> => {
+  hasConnection = async (): Promise<boolean> => {
     await this.initialize();
     return this.modal.getIsConnectedState();
   };
@@ -168,11 +168,7 @@ export class WalletConnect<
     return await this.provider.request(request);
   };
 
-  switchChain = async (chain: Network): Promise<void> => {
-    if (!this.supportedChains.includes(chain)) {
-      throw new UnsupportedChainError(this.name, chain);
-    }
-
+  performSwitchChain = async (chain: Network): Promise<void> => {
     if (this.modal.getChainId() == Number(NETWORKS[chain].id)) {
       return;
     }
