@@ -111,7 +111,7 @@ export const Network = ({
             sx={{ borderRadius: 0.3 }}
           />
         ) : (
-          <Typography variant="body1">{network.key}</Typography>
+          <Typography variant="body1">{network.label}</Typography>
         ))}
     </ContainerNetwork>
   );
