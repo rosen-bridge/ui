@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { Pagination } from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
@@ -13,23 +13,25 @@ import {
   Divider,
 } from '../base';
 
-interface PaginationBarProps {
-  page: number;
-  total: number;
-  pageSize: number;
-  pageSizeOptions: number[];
-  onPageChange: (newPage: number) => void;
-  onSizeChange: (newRows: number) => void;
+export interface NewPaginationProps {
+  disabled?: boolean;
+  total?: number;
+  pageIndex?: number;
+  pageSize?: number;
+  pageSizeOptions?: number[];
+  onPageIndexChange?: (index: number) => void;
+  onPageSizeChange?: (size: number) => void;
 }
 
-export const NewPagination: FC<PaginationBarProps> = ({
-  page,
-  total,
-  pageSize,
-  pageSizeOptions,
-  onPageChange,
-  onSizeChange,
-}) => {
+export const NewPagination = ({
+  disabled,
+  total = 0,
+  pageIndex = 0,
+  pageSize = 10,
+  pageSizeOptions = [10, 25, 100],
+  onPageIndexChange,
+  onPageSizeChange,
+}: NewPaginationProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [responsiveSiblingCount, setResponsiveSiblingCount] = useState(1);
 
@@ -46,13 +48,13 @@ export const NewPagination: FC<PaginationBarProps> = ({
   }, []);
 
   const totalPages = Math.ceil(total / pageSize);
-  const from = (page - 1) * pageSize + 1;
-  const to = Math.min(page * pageSize, total);
+  const from = pageIndex * pageSize + 1;
+  const to = Math.min((pageIndex + 1) * pageSize, total);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -61,7 +63,7 @@ export const NewPagination: FC<PaginationBarProps> = ({
   };
 
   const handleSelect = (value: number) => {
-    onSizeChange(value);
+    onPageSizeChange?.(value);
     handleMenuClose();
   };
 
@@ -113,10 +115,11 @@ export const NewPagination: FC<PaginationBarProps> = ({
         }}
       >
         <Pagination
+          disabled={disabled}
           color="primary"
           count={totalPages}
-          page={page}
-          onChange={(_, val) => onPageChange(val)}
+          page={pageIndex + 1}
+          onChange={(_, val) => onPageIndexChange?.(val - 1)}
           size="small"
           siblingCount={responsiveSiblingCount}
           boundaryCount={1}
@@ -183,6 +186,7 @@ export const NewPagination: FC<PaginationBarProps> = ({
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <IconButton
+              disabled={disabled}
               onClick={handleMenuOpen}
               size="small"
               sx={{ padding: 1 }}
