@@ -10,6 +10,7 @@ export * from './App';
 export * from './AppBar';
 export * from './AppLogo';
 export * from './Connector';
+export * from './DataLayout';
 export * from './EnhancedDialog';
 export * from './EnhancedDialogTitle';
 export * from './EnhancedTable';
