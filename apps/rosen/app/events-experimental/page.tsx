@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import {
   NewPagination,
@@ -10,16 +10,40 @@ import {
   useCollection,
   useSnackbar,
   useBreakpoint,
+  styled,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import { ApiEventResponse, EventItem } from '@/_types';
+import EventCard from '@/events-experimental/EventCard';
 
 import { filters, sorts } from './config';
 import { Details } from './details';
 
+interface DataContainerProps {
+  variant?: 'grid' | 'row';
+  bordered?: boolean;
+}
+
+const EventsContainer = styled('div')<DataContainerProps>(
+  ({ theme, variant = 'grid' }) => ({
+    display: variant === 'grid' ? 'grid' : 'flex',
+    flexDirection: variant === 'row' ? 'column' : undefined,
+    gap: theme.spacing(1.2),
+    width: '100%',
+    ...(variant === 'grid' && {
+      gridTemplateColumns: 'repeat(1, 1fr)',
+      [theme.breakpoints.up('tablet')]: {
+        gridTemplateColumns: 'repeat(2, 1fr)',
+      },
+      [theme.breakpoints.up('laptop')]: {
+        gridTemplateColumns: 'repeat(3, 1fr)',
+      },
+    }),
+  }),
+);
 const Events = () => {
   const dense = useBreakpoint('laptop-down');
 
@@ -98,11 +122,15 @@ const Events = () => {
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
-      {data?.items.map((item) => (
-        <h1 key={item.id} onClick={() => setCurrent(item)}>
-          {item.id}
-        </h1>
-      ))}
+      <EventsContainer variant={'grid'}>
+        {data?.items.map((item) => (
+          <EventCard
+            onClick={() => setCurrent(item)}
+            item={item}
+            active={current?.id === item.id}
+          />
+        ))}
+      </EventsContainer>
     </DataLayout>
   );
 };
