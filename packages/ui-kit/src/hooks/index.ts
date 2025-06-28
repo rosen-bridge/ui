@@ -1,4 +1,5 @@
 export * from './useApiKey';
+export * from './useBreakpoint';
 export * from './useMediaQuery';
 export * from './useTheme';
 export * from './useIsMobile';
