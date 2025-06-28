@@ -36,7 +36,7 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
     await this.api.enable();
   };
 
-  disconnect = async (): Promise<void> => {};
+  performDisconnect = async (): Promise<void> => {};
 
   fetchAddress = async (): Promise<string | undefined> => {
     const wallet = await this.api.enable();
@@ -70,8 +70,7 @@ export class EtrnlWallet extends Wallet<EtrnlWalletConfig> {
     return typeof window.cardano !== 'undefined' && !!window.cardano.eternl;
   };
 
-  isConnected = async (): Promise<boolean> => {
-    this.requireAvailable();
+  hasConnection = async (): Promise<boolean> => {
     return this.api.isEnabled();
   };
 

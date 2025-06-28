@@ -1,5 +1,17 @@
 # @rosen-ui/utils
 
+## 0.6.0
+
+### Minor Changes
+
+- Integrate Bitcoin Runes
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/types@0.3.6
+
 ## 0.5.0
 
 ### Minor Changes

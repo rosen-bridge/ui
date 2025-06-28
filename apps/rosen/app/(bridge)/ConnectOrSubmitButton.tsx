@@ -128,7 +128,7 @@ export const ConnectOrSubmitButton = ({
       <EnhancedDialog
         open={open}
         maxWidth="tablet"
-        scroll="paper"
+        stickOn="mobile"
         onClose={() => setOpen(false)}
       >
         <EnhancedDialogTitle
