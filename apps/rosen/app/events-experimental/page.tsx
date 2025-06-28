@@ -52,7 +52,9 @@ const Events = () => {
   const [current, setCurrent] = useState<EventItem>();
 
   const collection = useCollection();
-
+  useEffect(() => {
+    console.log(current);
+  }, [setCurrent]);
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
     collection.params && ['/v1/events', collection.params],
     fetcher,
@@ -114,7 +116,7 @@ const Events = () => {
       );
     }
   }, [error]);
-
+  console.log(data?.items[0]);
   return (
     <DataLayout
       search={renderSearch()}

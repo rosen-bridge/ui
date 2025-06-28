@@ -12,14 +12,37 @@ import {
   Label,
   Amount2,
   Network,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import moment from 'moment';
 
 import { EventItem } from '@/_types';
 
+const renderEmptyState = () => (
+  <Box
+    sx={{
+      width: '100%',
+      height: '95vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+    }}
+  >
+    <Typography
+      variant="body1"
+      sx={{ color: (theme) => theme.palette.text.secondary }}
+    >
+      Select an event to see
+      <br /> its details.
+    </Typography>
+  </Box>
+);
+
 const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
-  if (!value) return null;
+  if (!value) return renderEmptyState();
+
   return (
     <Box
       sx={{
@@ -154,6 +177,7 @@ export type DetailsProps = {
 };
 
 export const Details = (props: DetailsProps) => {
+  console.log('Details', props);
   const drawer = useBreakpoint('laptop-down');
   if (drawer) {
     return <DetailsDrawer {...props} />;

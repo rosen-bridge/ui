@@ -9,7 +9,7 @@ import {
   styled,
 } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types';
-
+import {capitalize} from 'lodash-es'
 import { Connector2 } from '@/events-experimental/Connector2';
 
 interface DataContainerProps {
@@ -51,9 +51,15 @@ const renderToken = (item: any, name: string) => (
         color: theme.palette.secondary.main,
       })}
     >
-      {name.slice(0, 1)}
+      {capitalize(name.slice(0, 1))}
     </Avatar>
-    <Amount2 value={item} orientation={'horizontal'} />
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+    }}>
+      <Amount2 unit={name} value={item} orientation={'vertical'} />
+    </div>
   </Box>
 );
 //TODO:replace this func with Identifier and use in renderIdentifier
