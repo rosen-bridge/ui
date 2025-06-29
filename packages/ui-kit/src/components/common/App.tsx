@@ -55,7 +55,6 @@ const Paper = styled('div', {
 })(({ theme }) => ({
   position: 'relative',
   minHeight: '100vh',
-  overflow: 'hidden',
   backgroundColor: theme.palette.background.default,
   borderTopLeftRadius: theme.shape.borderRadius * 2,
   borderBottomLeftRadius: theme.shape.borderRadius * 2,
@@ -119,7 +118,7 @@ export const App = ({ children, sideBar, theme, toolbar }: AppProps) => {
             ) : (
               sideBar
             )}
-            <Main>
+            <Main ref={main}>
               <Paper>
                 {!isMobile && (
                   <div
