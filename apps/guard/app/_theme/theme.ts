@@ -37,12 +37,6 @@ const customLightThemeOptions = {
       dark: '#28335F',
       contrastText: '#FFFFFF',
     },
-    info: {
-      main: '#DD704F',
-      light: '#F5D4CA',
-      dark: '#B15A3F',
-      contrastText: '#FFFFFF',
-    },
     background: {
       paper: '#ffffff',
       default: '#E7F2F1',

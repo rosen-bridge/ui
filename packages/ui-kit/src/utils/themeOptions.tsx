@@ -108,7 +108,7 @@ export const lightThemeOptions: ThemeOptions = {
     info: {
       main: '#2C70B5',
       light: '#C0D6ED',
-      dark: '#071D33',
+      dark: '#12477D',
     },
   },
   shape: {
