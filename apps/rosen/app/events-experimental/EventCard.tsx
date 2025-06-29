@@ -1,11 +1,20 @@
 import React from 'react';
 
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
-import { Amount2, Avatar, Box, Network, styled } from '@rosen-bridge/ui-kit';
+import {
+  Amount2,
+  Avatar,
+  Box,
+  Label,
+  Network,
+  styled,
+} from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types';
 import { capitalize } from 'lodash-es';
 
-import { Connector2 } from '@/events-experimental/Connector2';
+import Chip2 from '@/events-experimental/components/Chip2';
+import { Connector2 } from '@/events-experimental/components/Connector2';
+import { Identifier } from '@/events-experimental/components/Identifier';
 
 interface DataContainerProps {
   variant?: 'grid' | 'row';
@@ -62,25 +71,22 @@ const renderToken = (item: any, name: string) => (
     </div>
   </Box>
 );
-//TODO:replace this func with Identifier and use in renderIdentifier
-const shortId = (id: string) => `${id.slice(0, 26)}...${id.slice(-5)}`;
 
 const renderIdentifier = (string: string) => (
   <Box
     sx={(theme) => ({
-      display: 'flex',
-      alignItems: 'center',
-      fontSize: '18px',
-      gap: theme.spacing(1),
-      width: '100%',
+      width: '242px',
     })}
   >
-    {shortId(string)}
-    <ExternalLinkAlt width={24} height={24} />
+    <Identifier value={string} href={string} />
   </Box>
 );
 
-const renderTransaction = (from: NetworkType, to: NetworkType) => (
+const renderTransaction = (
+  from: NetworkType,
+  to: NetworkType,
+  status: string,
+) => (
   <Box
     sx={(theme) => ({
       display: 'flex',
@@ -97,18 +103,17 @@ const renderTransaction = (from: NetworkType, to: NetworkType) => (
       end={<Network name={to} variant="logo" />}
     />
     {/*TODO: create chip component*/}
-    <div style={{ width: 'fit-content' }}>Chip</div>
+    <Chip2 label={status} color="success" icon={'CheckCircle'} />
   </Box>
 );
 
 const EventCard = ({ onClick, active, item, variant }: EventCardProps) => {
   const { fromChain: from, toChain: to } = item;
-  console.log(variant);
   return (
     <DataCard bordered={active} onClick={onClick} variant={variant}>
       {renderToken(item.amount, item.lockToken.name)}
       {renderIdentifier(item.fromAddress)}
-      {renderTransaction(from, to)}
+      {renderTransaction(from, to, item.status)}
     </DataCard>
   );
 };

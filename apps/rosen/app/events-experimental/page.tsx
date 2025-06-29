@@ -33,17 +33,25 @@ const EventsContainer = styled('div')<DataContainerProps>(
     flexDirection: variant === 'row' ? 'column' : undefined,
     gap: theme.spacing(1.2),
     width: '100%',
+
     ...(variant === 'grid' && {
       gridTemplateColumns: 'repeat(1, 1fr)',
+
       [theme.breakpoints.up('tablet')]: {
         gridTemplateColumns: 'repeat(2, 1fr)',
       },
-      [theme.breakpoints.up('laptop')]: {
+
+      [theme.breakpoints.between('laptop', 'desktop')]: {
+        gridTemplateColumns: 'repeat(2, 1fr)',
+      },
+
+      [theme.breakpoints.up('desktop')]: {
         gridTemplateColumns: 'repeat(3, 1fr)',
       },
     }),
   }),
 );
+
 const Events = () => {
   const dense = useBreakpoint('laptop-down');
 
@@ -129,9 +137,8 @@ const Events = () => {
       sort={renderSort()}
       sidebar={renderSidebar()}
       pagination={renderPagination()}
-      viewToggle={renderViewToggle()}
     >
-      <EventsContainer variant={activeView}>
+      <EventsContainer variant={'grid'}>
         {data?.items.map((item) => (
           <EventCard
             onClick={() => setCurrent(item)}

@@ -15,14 +15,16 @@ import {
   Typography,
   CardHeader,
   SvgIcon,
-  styled, Chip
+  styled,
+  Chip,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import { upperCase } from 'lodash-es';
 import moment from 'moment';
 
 import { EventItem } from '@/_types';
-import Chip2 from '@/events-experimental/Chip2';
+import Chip2 from '@/events-experimental/components/Chip2';
+import { Identifier } from '@/events-experimental/components/Identifier';
 
 const renderEmptyState = () => (
   <Box
@@ -73,10 +75,15 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
       }}
     >
       <div>
-        <Label label="Event Id">TODO {value.eventId}</Label>
+        <Label label="Event Id">
+          <Identifier value={value.eventId} />
+        </Label>
         <Label label="Status">
-          <Chip2 label={value.status&&"completed"} color={'success'} icon={'CheckCircle'} />
-
+          <Chip2
+            label={value.status && 'completed'}
+            color={'success'}
+            icon={'CheckCircle'}
+          />
         </Label>
         <Label label="Token">TODO {value.lockToken.name}</Label>
         <Label label="Amount">
@@ -96,26 +103,30 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
         </Label>
         <Label label="Tx IDs"></Label>
         <Label label="Source Tx" inset>
-          TODO {value.sourceTxId}
+          <Identifier value={value.sourceTxId} />
         </Label>
         <Label label="Payment Tx" inset>
-          TODO
+          {/*TODO: Value for Payment Tx is not available yet. */}
+          <Identifier value={value.sourceTxId} />
         </Label>
         <Label label="Reward Tx" inset>
-          TODO
+          {/*TODO: Value for Reward Tx is not available yet. */}
+          <Identifier value={value.sourceTxId} />
         </Label>
       </div>
       <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
       <div>
         <Label label="Address"></Label>
         <Label label="From" inset>
-          TODO {value.fromAddress}
+          <Identifier value={value.fromAddress} />
         </Label>
         <Label label="To" inset>
-          TODO {value.toAddress}
+          <Identifier value={value.toAddress} />
         </Label>
         <Label label="Duration">
-          TODO {moment(value.timestamp * 1000).fromNow()}
+          {/*TODO: check this for using in moment */}
+          {  moment(value.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          {/*<Amount2 value={} />*/}
         </Label>
         <Label label="Bridge fee">
           <Amount2
@@ -133,8 +144,8 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
             )}
           />
         </Label>
-        <Label label="Reports">TODO</Label>
-        <Label label="Height">TODO {value.height}</Label>
+        <Label label="Reports">Not Found</Label>
+        <Label label="Height">{value.height}</Label>
       </div>
     </Box>
   );

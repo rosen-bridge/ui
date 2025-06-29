@@ -8,7 +8,6 @@ export type DataLayoutProps = {
   search: ReactNode;
   sidebar: ReactNode;
   sort: ReactNode;
-  viewToggle: ReactNode;
 };
 
 export const DataLayout = ({
@@ -17,7 +16,6 @@ export const DataLayout = ({
   search,
   sidebar,
   sort,
-  viewToggle,
 }: DataLayoutProps) => {
   return (
     <Grid container gap={(theme) => theme.spacing(2)}>
@@ -27,7 +25,6 @@ export const DataLayout = ({
             {search}
           </Grid>
           <Grid flexBasis="auto">{sort}</Grid>
-          <Grid flexBasis="auto">{viewToggle}</Grid>
         </Grid>
       </Grid>
       <Grid item mobile={12}>
