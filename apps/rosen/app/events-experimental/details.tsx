@@ -25,6 +25,7 @@ import moment from 'moment';
 import { EventItem } from '@/_types';
 import Chip2 from '@/events-experimental/components/Chip2';
 import { Identifier } from '@/events-experimental/components/Identifier';
+import { Token } from '@/events-experimental/components/Token';
 
 const renderEmptyState = () => (
   <Box
@@ -85,7 +86,9 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
             icon={'CheckCircle'}
           />
         </Label>
-        <Label label="Token">TODO {value.lockToken.name}</Label>
+        <Label label="Token">
+          <Token reverse name={value.lockToken.name} />
+        </Label>
         <Label label="Amount">
           <Amount2
             value={getDecimalString(
@@ -125,7 +128,7 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
         </Label>
         <Label label="Duration">
           {/*TODO: check this for using in moment */}
-          {  moment(value.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          {moment(value.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
           {/*<Amount2 value={} />*/}
         </Label>
         <Label label="Bridge fee">
@@ -174,7 +177,7 @@ const DetailsHeader = () => {
   }));
   const BorderBottom = styled('div')(({ theme }) => ({
     width: '100%',
-    borderBottom: '1px dashed #000',
+    borderBottom: `1px dashed ${theme.palette.divider}`,
   }));
 
   return (
