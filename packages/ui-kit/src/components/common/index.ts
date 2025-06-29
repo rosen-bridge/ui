@@ -33,3 +33,4 @@ export * from './Toolbar';
 export * from './AppSnackbar';
 export * from './ToolbarThemeTogglerAction';
 export * from './WithExternalLink';
+export * from './Token';
