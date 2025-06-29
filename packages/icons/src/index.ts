@@ -94,6 +94,9 @@ export { default as KeySkeletonRaw } from './icons/key-skeleton.svg?raw';
 export { ReactComponent as LinkBroken } from './icons/link-broken.svg';
 export { default as LinkBrokenRaw } from './icons/link-broken.svg?raw';
 
+export { ReactComponent as ListUiAlt } from './icons/list-ui-alt.svg';
+export { default as ListUiAltRaw } from './icons/list-ui-alt.svg?raw';
+
 export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
 export { default as LockAltRaw } from './icons/lock-alt.svg?raw';
 

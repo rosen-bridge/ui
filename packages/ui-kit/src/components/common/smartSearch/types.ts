@@ -56,11 +56,6 @@ export type Selected = {
     | Array<boolean | null | number | string>;
 };
 
-export type Sort = {
-  key?: string;
-  order?: 'ASC' | 'DESC';
-};
-
 export type Search = {
   query?: string;
   in?: string;
