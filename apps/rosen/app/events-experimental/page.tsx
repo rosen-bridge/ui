@@ -51,6 +51,8 @@ const Events = () => {
 
   const [current, setCurrent] = useState<EventItem>();
 
+  const [activeView, setActiveView] = useState<'grid' | 'row'>('grid');
+
   const collection = useCollection();
   useEffect(() => {
     console.log(current);
@@ -108,6 +110,10 @@ const Events = () => {
     ),
     [dense, isLoading, collection],
   );
+  const renderViewToggle = useCallback(
+    () => <div></div>,
+    [dense, isLoading, collection],
+  );
 
   useEffect(() => {
     if (error) {
@@ -123,8 +129,9 @@ const Events = () => {
       sort={renderSort()}
       sidebar={renderSidebar()}
       pagination={renderPagination()}
+      viewToggle={renderViewToggle()}
     >
-      <EventsContainer variant={'grid'}>
+      <EventsContainer variant={activeView}>
         {data?.items.map((item) => (
           <EventCard
             onClick={() => setCurrent(item)}

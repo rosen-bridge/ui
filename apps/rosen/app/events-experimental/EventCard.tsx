@@ -1,15 +1,10 @@
 import React from 'react';
 
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
-import {
-  Amount2,
-  Avatar,
-  Box,
-  Network,
-  styled,
-} from '@rosen-bridge/ui-kit';
+import { Amount2, Avatar, Box, Network, styled } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types';
-import {capitalize} from 'lodash-es'
+import { capitalize } from 'lodash-es';
+
 import { Connector2 } from '@/events-experimental/Connector2';
 
 interface DataContainerProps {
@@ -21,19 +16,22 @@ interface EventCardProps {
   onClick?: () => void;
   item?: any;
   active?: boolean;
+  variant?: 'grid' | 'row';
 }
 
-const DataCard = styled('div')<DataContainerProps>(({ theme, bordered }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  padding: theme.spacing(1.5),
-  border: `3px solid ${bordered ? theme.palette.primary.main : 'transparent'}`,
-  backgroundColor: theme.palette.background.paper,
-  borderRadius: theme.shape.borderRadius,
-  gap: theme.spacing(1),
-  width: '100%',
-  fontSize: '16px',
-}));
+const DataCard = styled('div')<DataContainerProps>(
+  ({ theme, bordered, variant }) => ({
+    display: 'flex',
+    flexDirection: variant === 'row' ? 'row' : 'column',
+    padding: theme.spacing(1.5),
+    border: `3px solid ${bordered ? theme.palette.primary.main : 'transparent'}`,
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
+    gap: theme.spacing(1),
+    width: '100%',
+    fontSize: '16px',
+  }),
+);
 
 const renderToken = (item: any, name: string) => (
   <Box
@@ -53,11 +51,13 @@ const renderToken = (item: any, name: string) => (
     >
       {capitalize(name.slice(0, 1))}
     </Avatar>
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'flex-start',
-    }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+      }}
+    >
       <Amount2 unit={name} value={item} orientation={'vertical'} />
     </div>
   </Box>
@@ -101,10 +101,11 @@ const renderTransaction = (from: NetworkType, to: NetworkType) => (
   </Box>
 );
 
-const EventCard = ({ onClick, active, item }: EventCardProps) => {
+const EventCard = ({ onClick, active, item, variant }: EventCardProps) => {
   const { fromChain: from, toChain: to } = item;
+  console.log(variant);
   return (
-    <DataCard bordered={active} onClick={onClick}>
+    <DataCard bordered={active} onClick={onClick} variant={variant}>
       {renderToken(item.amount, item.lockToken.name)}
       {renderIdentifier(item.fromAddress)}
       {renderTransaction(from, to)}
@@ -113,6 +114,3 @@ const EventCard = ({ onClick, active, item }: EventCardProps) => {
 };
 
 export default EventCard;
-
-
-

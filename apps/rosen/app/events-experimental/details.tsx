@@ -1,4 +1,4 @@
-import { Exchange } from '@rosen-bridge/icons';
+import { AngleRight, ArrowRight, Exchange } from '@rosen-bridge/icons';
 import {
   Card,
   EnhancedDialogContent,
@@ -13,11 +13,16 @@ import {
   Amount2,
   Network,
   Typography,
+  CardHeader,
+  SvgIcon,
+  styled, Chip
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
+import { upperCase } from 'lodash-es';
 import moment from 'moment';
 
 import { EventItem } from '@/_types';
+import Chip2 from '@/events-experimental/Chip2';
 
 const renderEmptyState = () => (
   <Box
@@ -41,6 +46,7 @@ const renderEmptyState = () => (
 );
 
 const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
+  console.log(value);
   if (!value) return renderEmptyState();
 
   return (
@@ -69,12 +75,8 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
       <div>
         <Label label="Event Id">TODO {value.eventId}</Label>
         <Label label="Status">
-          TODO{' '}
-          {{
-            fraud: 'fraud',
-            processing: 'processing',
-            successful: 'done',
-          }[value.status] ?? 'unknown'}
+          <Chip2 label={value.status&&"completed"} color={'success'} icon={'CheckCircle'} />
+
         </Label>
         <Label label="Token">TODO {value.lockToken.name}</Label>
         <Label label="Amount">
@@ -151,6 +153,41 @@ const DetailsDrawer = ({ value, onClose }: DetailsProps) => {
   );
 };
 
+const DetailsHeader = () => {
+  const ActionWrapper = styled('div')(({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    color: theme.palette.primary.main,
+    cursor: 'pointer',
+  }));
+  const BorderBottom = styled('div')(({ theme }) => ({
+    width: '100%',
+    borderBottom: '1px dashed #000',
+  }));
+
+  return (
+    <div>
+      <CardHeader
+        title={<Typography variant="h5">Event</Typography>}
+        action={
+          <ActionWrapper>
+            <Typography variant="caption">
+              {upperCase('see details')}
+            </Typography>
+            <SvgIcon>
+              <AngleRight />
+            </SvgIcon>
+          </ActionWrapper>
+        }
+      />
+      <Box sx={{ padding: (theme) => theme.spacing(0, 2) }}>
+        <BorderBottom />
+      </Box>
+    </div>
+  );
+};
+
 const DetailsSidebar = ({ value }: DetailsProps) => {
   const stickyRef = useStickyBox({
     offsetTop: 16,
@@ -164,6 +201,7 @@ const DetailsSidebar = ({ value }: DetailsProps) => {
         marginLeft: (theme) => theme.spacing(2),
       }}
     >
+      <DetailsHeader />
       <CardContent>
         <DetailsContent value={value} />
       </CardContent>
@@ -177,7 +215,6 @@ export type DetailsProps = {
 };
 
 export const Details = (props: DetailsProps) => {
-  console.log('Details', props);
   const drawer = useBreakpoint('laptop-down');
   if (drawer) {
     return <DetailsDrawer {...props} />;
