@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { Sort } from '../components';
+import { SortValue } from '../components';
 
 type Params = Record<string, unknown>;
 
@@ -13,7 +13,7 @@ export const useCollection = () => {
 
   const [params, setParams] = useState<Params>();
 
-  const [sort, setSort] = useState<Sort>();
+  const [sort, setSort] = useState<SortValue>();
 
   const handlePageSizeChange = useCallback((size: number) => {
     setPageSize(size);
