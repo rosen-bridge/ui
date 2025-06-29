@@ -11,11 +11,11 @@ import {
   EnhancedDialogActions,
   EnhancedDialogContent,
   EnhancedDialogTitle,
+  Identifier,
   Label,
   LoadingButton,
   Network,
   Stack,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -180,10 +180,12 @@ export const ConnectOrSubmitButton = ({
                 </Label>
               </div>
               <Divider />
-              <Label label="Destination address" orientation="vertical">
-                <Typography sx={{ wordBreak: 'break-all' }}>
-                  {walletAddressValue}
-                </Typography>
+              <Label label="Destination Address" orientation="vertical">
+                <Identifier
+                  value={walletAddressValue}
+                  copyable
+                  title="Destination address"
+                />
               </Label>
             </Stack>
           </Card>

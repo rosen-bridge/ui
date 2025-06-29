@@ -34,13 +34,14 @@ export type HistoryRef = {
 };
 
 export type HistoryProps = {
+  disabled?: boolean;
   filter: Filter[];
   namespace: string;
   onSelect: (selected: Selected[]) => void;
 };
 
 export const History = forwardRef<HistoryRef, HistoryProps>(
-  ({ filter, namespace, onSelect }, ref) => {
+  ({ disabled, filter, namespace, onSelect }, ref) => {
     const $anchor = useRef<HTMLButtonElement | null>(null);
 
     const [open, setOpen] = useState(false);
@@ -175,7 +176,11 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     return (
       <ClickAwayListener onClickAway={() => setOpen(false)}>
         <div>
-          <IconButton ref={$anchor} onClick={() => setOpen(!open)}>
+          <IconButton
+            disabled={disabled}
+            ref={$anchor}
+            onClick={() => setOpen(!open)}
+          >
             <SvgIcon>
               <HistoryIcon />
             </SvgIcon>
