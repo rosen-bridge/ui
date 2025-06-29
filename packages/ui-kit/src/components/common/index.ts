@@ -1,5 +1,6 @@
 export * from './carousel';
 export * from './smartSearch';
+export * from './button';
 export * from './display';
 export * from './navigationBar';
 export * from './AlertCard';
