@@ -1,21 +1,20 @@
-import { ErgoBoxProxy } from '@rosen-bridge/ergo-box-selection';
+import { ErgoBoxSelection } from '@rosen-bridge/ergo-box-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
 import { fee, minBoxValue } from './constants';
-import { AssetBalance, UnsignedErgoTxProxy } from './types';
+import { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
 import {
   createChangeBox,
   createLockBox,
-  getBoxAssets,
-  getCoveringBoxes,
   getHeight,
-  subtractAssetBalance,
   sumAssetBalance,
 } from './utils';
+
+const selector = new ErgoBoxSelection();
 
 /**
  * generates an unsigned lock transaction on Ergo
@@ -75,42 +74,42 @@ export const generateUnsignedTx =
     );
     // calculate required assets to get input boxes
     const requiredAssets = sumAssetBalance(lockAssets, {
-      nativeToken: minBoxValue + fee,
+      nativeToken: minBoxValue,
       tokens: [],
     });
 
+    const ergoBoxes = walletUtxos.map((walletUtxo) =>
+      wasm.ErgoBox.from_json(JSON.stringify(walletUtxo)),
+    );
+
     // get input boxes
-    const inputs = await getCoveringBoxes(
+    const inputs = await selector.getCoveringBoxes(
       requiredAssets,
       [],
       new Map(),
-      walletUtxos.values(),
+      ergoBoxes.values(),
+      undefined,
+      undefined,
+      () => fee,
     );
     if (!inputs.covered) throw Error(`Not enough assets`);
-    let inputAssets: AssetBalance = {
-      nativeToken: 0n,
-      tokens: [],
-    };
     // add input boxes to transaction
     const unsignedInputs = new wasm.UnsignedInputs();
     inputs.boxes.forEach((box) => {
-      unsignedInputs.add(
-        wasm.UnsignedInput.from_box_id(wasm.BoxId.from_str(box.boxId)),
-      );
-      inputAssets = sumAssetBalance(inputAssets, getBoxAssets(box));
+      unsignedInputs.add(wasm.UnsignedInput.from_box_id(box.box_id()));
     });
 
-    // calculate change box assets and transaction fee
-    const changeAssets = subtractAssetBalance(inputAssets, lockAssets);
-    changeAssets.nativeToken -= fee;
-    const changeBox = createChangeBox(changeAddress, height, changeAssets);
     const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
       wasm.BoxValue.from_i64(wasm.I64.from_str(fee.toString())),
       height,
     );
 
     const txOutputs = new wasm.ErgoBoxCandidates(lockBox);
-    txOutputs.add(changeBox);
+
+    inputs.additionalAssets.list.forEach((item) => {
+      txOutputs.add(createChangeBox(changeAddress, height, item));
+    });
+
     txOutputs.add(feeBox);
 
     const unsignedTx = new wasm.UnsignedTransaction(
@@ -118,5 +117,9 @@ export const generateUnsignedTx =
       new wasm.DataInputs(),
       txOutputs,
     );
-    return unsignedTransactionToProxy(unsignedTx, inputs.boxes);
+
+    return unsignedTransactionToProxy(
+      unsignedTx,
+      inputs.boxes.map((box) => box.to_js_eip12()),
+    );
   };
