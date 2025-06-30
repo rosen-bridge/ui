@@ -35,7 +35,7 @@
     "@rosen-clients/ergo-explorer": "^1.1.5",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-ui/types": "^0.3.6",
-    "ethers": "^6.14.3",
+    "ethers": "6.13.2",
     "lodash-es": "^4.17.21",
     "typeorm": "^0.3.20"
   }
