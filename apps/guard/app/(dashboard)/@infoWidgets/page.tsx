@@ -1,16 +1,14 @@
 'use client';
 
 import { Stack } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { ApiInfoResponse } from '@/_types/api';
+import { useInfo } from '@/_hooks/useInfo';
 
 import { HealthWidget } from './HealthWidget';
 import { WalletWidget } from './WalletWidget';
 
 const InfoWidgets = () => {
-  const { data: info, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
+  const { data: info, isLoading } = useInfo();
 
   return (
     <Stack spacing={2}>

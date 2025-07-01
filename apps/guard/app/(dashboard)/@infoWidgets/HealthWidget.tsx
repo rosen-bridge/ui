@@ -9,11 +9,9 @@ import {
   styled,
 } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
-import useSWR from 'swr';
 
-import { ApiInfoResponse } from '@/_types/api';
+import { useInfo } from '@/_hooks/useInfo';
 
 interface HealthWidgetBaseProps {
   widgetColor: keyof AugmentedPalette;
@@ -50,7 +48,7 @@ const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
  * render a widget showing health status or a pending indicator
  */
 export const HealthWidget = () => {
-  const { data: info, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
+  const { data: info, isLoading } = useInfo();
 
   return (
     <HealthWidgetBase
