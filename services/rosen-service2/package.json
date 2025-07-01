@@ -1,0 +1,44 @@
+{
+  "name": "@rosen-bridge/rosen-service2",
+  "version": "0.0.0",
+  "description": "",
+  "repository": "",
+  "license": "GPL-3.0",
+  "author": "Rosen Team",
+  "type": "module",
+  "main": "src/index.ts",
+  "scripts": {
+    "coverage": "npm run test -- --coverage",
+    "lint": "eslint --fix . && npm run prettify",
+    "prettify": "prettier --write . --ignore-path ./.gitignore",
+    "start": "tsx ./src/index.ts",
+    "start:dev": "tsx watch ./src/index.ts",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "type-check": "tsc --noEmit",
+    "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
+    "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
+    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts"
+  },
+  "dependencies": {
+    "@rosen-bridge/extended-typeorm": "^0.1.0",
+    "@rosen-bridge/winston-logger": "^0.2.1",
+    "config": "^3.3.7",
+    "express": "^4.18.1",
+    "reflect-metadata": "^0.1.13",
+    "sqlite3": "^5.0.8",
+    "tsx": "^4.19.4"
+  },
+  "devDependencies": {
+    "@types/config": "^0.0.41",
+    "@types/express": "^4.17.13",
+    "@types/node": "^20.11.9",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "@vitest/coverage-istanbul": "^3.1.4",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "prettier": "^3.2.4",
+    "typescript": "^5.3.3",
+    "vitest": "^3.1.4"
+  }
+}
