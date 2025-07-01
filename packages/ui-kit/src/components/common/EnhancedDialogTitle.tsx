@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode } from 'react';
+import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
@@ -17,7 +17,7 @@ export type EnhancedDialogTitleProps = {
   children?: ReactNode;
   icon?: ReactNode;
   onClose?: MouseEventHandler<HTMLButtonElement>;
-};
+} & HTMLAttributes<HTMLHeadingElement>;
 
 /**
  * renders an enhanced version of material ui DialogTitle

@@ -2,7 +2,6 @@ import { DogeNetwork } from '@rosen-network/doge/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  DisconnectionFailedError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
@@ -34,13 +33,8 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
     await this.api.connect();
   };
 
-  disconnect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.disconnect();
-    } catch (error) {
-      throw new DisconnectionFailedError(this.name, error);
-    }
+  performDisconnect = async (): Promise<void> => {
+    await this.api.disconnect();
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
@@ -55,7 +49,7 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
     return typeof window.doge !== 'undefined' && !!window.doge;
   };
 
-  isConnected = async (): Promise<boolean> => {
+  hasConnection = async (): Promise<boolean> => {
     try {
       return (await this.api.getConnectionStatus()).connected;
     } catch {

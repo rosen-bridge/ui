@@ -6,16 +6,16 @@ import {
   Amount2,
   Card,
   Connector,
-  DialogActions,
   Divider,
   EnhancedDialog,
+  EnhancedDialogActions,
   EnhancedDialogContent,
   EnhancedDialogTitle,
+  Identifier,
   Label,
   LoadingButton,
   Network,
   Stack,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -134,7 +134,12 @@ export const ConnectOrSubmitButton = ({
         >
           Confirm Transaction
         </EnhancedDialogTitle>
-        <EnhancedDialogContent style={{ paddingBottom: 0 }}>
+        <EnhancedDialogContent
+          style={{
+            paddingTop: 0,
+            paddingBottom: 0,
+          }}
+        >
           <Card
             sx={{
               backgroundColor: (theme) =>
@@ -175,15 +180,17 @@ export const ConnectOrSubmitButton = ({
                 </Label>
               </div>
               <Divider />
-              <Label label="Destination address" orientation="vertical">
-                <Typography sx={{ wordBreak: 'break-all' }}>
-                  {walletAddressValue}
-                </Typography>
+              <Label label="Destination Address" orientation="vertical">
+                <Identifier
+                  value={walletAddressValue}
+                  copyable
+                  title="Destination address"
+                />
               </Label>
             </Stack>
           </Card>
         </EnhancedDialogContent>
-        <DialogActions>
+        <EnhancedDialogActions>
           <LoadingButton
             color="secondary"
             variant="contained"
@@ -202,7 +209,7 @@ export const ConnectOrSubmitButton = ({
           >
             Confirm
           </LoadingButton>
-        </DialogActions>
+        </EnhancedDialogActions>
       </EnhancedDialog>
     </>
   );

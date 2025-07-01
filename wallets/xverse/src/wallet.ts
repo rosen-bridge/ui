@@ -2,7 +2,6 @@ import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  DisconnectionFailedError,
   SubmitTransactionError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
@@ -35,18 +34,12 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     throw response.error;
   };
 
-  disconnect = async (): Promise<void> => {
-    this.requireAvailable();
+  performDisconnect = async (): Promise<void> => {
+    const response = await request('wallet_disconnect', null);
 
-    try {
-      const response = await request('wallet_disconnect', null);
+    if (response.status === 'success') return;
 
-      if (response.status === 'success') return;
-
-      throw response.error;
-    } catch (error) {
-      throw new DisconnectionFailedError(this.name, error);
-    }
+    throw response.error;
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
@@ -77,7 +70,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     );
   };
 
-  isConnected = async (): Promise<boolean> => {
+  hasConnection = async (): Promise<boolean> => {
     try {
       return !!(await this.getAddress());
     } catch {

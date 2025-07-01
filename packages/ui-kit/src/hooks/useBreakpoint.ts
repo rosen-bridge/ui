@@ -21,7 +21,11 @@ export const useBreakpoint = (
     args.push(keys[2]);
   }
 
-  const action = keys[1] == 'to' ? 'between' : keys[1] || 'only';
+  let action = keys[1] == 'to' ? 'between' : keys[1] || 'only';
+
+  if (breakpoint == 'mobile-down' || breakpoint == 'desktop-up') {
+    action = 'only';
+  }
 
   const func = theme.breakpoints[action as keyof typeof theme.breakpoints] as (
     ...args: string[]

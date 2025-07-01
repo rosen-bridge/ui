@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { Pagination } from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
@@ -23,7 +23,7 @@ export interface NewPaginationProps {
   onPageSizeChange?: (size: number) => void;
 }
 
-export const NewPagination: FC<NewPaginationProps> = ({
+export const NewPagination = ({
   disabled,
   total = 0,
   pageIndex = 0,
@@ -31,7 +31,7 @@ export const NewPagination: FC<NewPaginationProps> = ({
   pageSizeOptions = [10, 25, 100],
   onPageIndexChange,
   onPageSizeChange,
-}) => {
+}: NewPaginationProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [responsiveSiblingCount, setResponsiveSiblingCount] = useState(1);
 
@@ -54,7 +54,7 @@ export const NewPagination: FC<NewPaginationProps> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenuOpen = (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 

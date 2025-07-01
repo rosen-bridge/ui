@@ -21,8 +21,6 @@ export const useCollection = () => {
   }, []);
 
   useEffect(() => {
-    setParams(undefined);
-
     const result: Params = {};
 
     if (typeof pageSize === 'number') {
@@ -41,9 +39,11 @@ export const useCollection = () => {
       Object.assign(result, filters);
     }
 
-    if (!Object.keys(result).length) return;
-
-    setParams(result);
+    if (Object.keys(result).length) {
+      setParams(result);
+    } else {
+      setParams(undefined);
+    }
   }, [filters, pageIndex, pageSize, sort]);
 
   return {

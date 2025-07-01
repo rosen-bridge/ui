@@ -118,7 +118,7 @@ export const App = ({ children, sideBar, theme, toolbar }: AppProps) => {
             ) : (
               sideBar
             )}
-            <Main>
+            <Main ref={main}>
               <Paper>
                 {!isMobile && (
                   <div

@@ -6,6 +6,8 @@ import {
   AddressRetrievalError,
   BalanceFetchError,
   ConnectionRejectedError,
+  DisconnectionFailedError,
+  NotConnectedError,
   UnavailableApiError,
   UnsupportedChainError,
 } from './errors';
@@ -41,7 +43,7 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
   constructor(protected config: Config) {}
 
   abstract performConnect: () => Promise<void>;
-  abstract disconnect: () => Promise<void>;
+  abstract performDisconnect: () => Promise<void>;
   abstract fetchAddress: () => Promise<string | undefined>;
   abstract fetchBalance: (
     token: RosenChainToken,
@@ -51,6 +53,8 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
   transfer = async (params: WalletTransferParams): Promise<string> => {
     this.requireAvailable();
 
+    await this.requireConnection();
+
     if (this.currentNetwork?.name != this.currentChain) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
@@ -58,8 +62,28 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
     return await this.performTransfer(params);
   };
 
-  isConnected: () => Promise<boolean>;
-  switchChain?: (chain: Network, silent?: boolean) => Promise<void>;
+  abstract hasConnection: () => Promise<boolean>;
+
+  isConnected = async (): Promise<boolean> => {
+    this.requireAvailable();
+    return await this.hasConnection();
+  };
+
+  switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
+    this.requireAvailable();
+
+    await this.requireConnection();
+
+    if (!this.supportedChains.includes(chain)) {
+      throw new UnsupportedChainError(this.name, chain);
+    }
+
+    if (this.performSwitchChain) {
+      await this.performSwitchChain(chain, silent);
+    }
+  };
+
+  performSwitchChain?: (chain: Network, silent?: boolean) => Promise<void>;
 
   get currentNetwork() {
     return this.config.networks.find(
@@ -77,8 +101,20 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
     }
   };
 
+  disconnect = async (): Promise<void> => {
+    this.requireAvailable();
+
+    try {
+      await this.performDisconnect();
+    } catch (error) {
+      throw new DisconnectionFailedError(this.name, error);
+    }
+  };
+
   getAddress = async (): Promise<string> => {
     this.requireAvailable();
+
+    await this.requireConnection();
 
     try {
       const address = await this.fetchAddress();
@@ -93,6 +129,8 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
   getBalance = async (token: RosenChainToken): Promise<RosenAmountValue> => {
     this.requireAvailable();
+
+    await this.requireConnection();
 
     let raw;
 
@@ -119,10 +157,14 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
     return wrappedAmount;
   };
 
-  protected requireAvailable: () => void = () => {
-    if (!this.isAvailable()) {
-      throw new UnavailableApiError(this.name);
-    }
+  protected requireAvailable = () => {
+    if (this.isAvailable()) return;
+    throw new UnavailableApiError(this.name);
+  };
+
+  protected requireConnection = async () => {
+    if (await this.isConnected()) return;
+    throw new NotConnectedError(this.name);
   };
 }
 

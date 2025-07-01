@@ -36,7 +36,7 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
     await this.api.enable();
   };
 
-  disconnect = async (): Promise<void> => {};
+  performDisconnect = async (): Promise<void> => {};
 
   fetchAddress = async (): Promise<string | undefined> => {
     const wallet = await this.api.enable();
@@ -70,8 +70,7 @@ export class LaceWallet extends Wallet<LaceWalletConfig> {
     return typeof window.cardano !== 'undefined' && !!window.cardano.lace;
   };
 
-  isConnected = async (): Promise<boolean> => {
-    this.requireAvailable();
+  hasConnection = async (): Promise<boolean> => {
     return await this.api.isEnabled();
   };
 

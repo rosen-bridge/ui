@@ -1,6 +1,8 @@
-import { ReactNode, useCallback } from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
-import { Breakpoint, Dialog, Theme } from '@mui/material';
+import { Breakpoint, Dialog } from '@mui/material';
+
+import { useBreakpoint } from '../../hooks';
 
 export type EnhancedDialogProps = {
   children?: ReactNode;
@@ -8,7 +10,7 @@ export type EnhancedDialogProps = {
   maxWidth?: Breakpoint;
   stickOn: Breakpoint;
   onClose?: () => void;
-};
+} & HTMLAttributes<HTMLDivElement>;
 
 /**
  * renders an enhanced version of material ui Dialog
@@ -20,30 +22,28 @@ export const EnhancedDialog = ({
   stickOn,
   onClose,
 }: EnhancedDialogProps) => {
-  const sx = useCallback(
-    (theme: Theme) => {
-      const query =
-        stickOn == 'mobile'
-          ? theme.breakpoints.only(stickOn)
-          : theme.breakpoints.down(stickOn);
-      return {
-        [query]: {
-          '& > .MuiDialog-container': {
-            'alignItems': 'end',
-            '& > .MuiPaper-root': {
-              margin: 0,
-              borderBottomRightRadius: 0,
-              borderBottomLeftRadius: 0,
-              width: '100%',
-            },
-          },
-        },
-      };
-    },
-    [stickOn],
-  );
+  const stick = useBreakpoint(`${stickOn}-down`);
   return (
-    <Dialog open={open} sx={sx} maxWidth={maxWidth} onClose={onClose}>
+    <Dialog
+      open={open}
+      sx={
+        stick
+          ? {
+              '& > .MuiDialog-container': {
+                'alignItems': 'end',
+                '& > .MuiPaper-root': {
+                  margin: 0,
+                  borderBottomRightRadius: 0,
+                  borderBottomLeftRadius: 0,
+                  width: '100%',
+                },
+              },
+            }
+          : {}
+      }
+      maxWidth={maxWidth}
+      onClose={onClose}
+    >
       {children}
     </Dialog>
   );

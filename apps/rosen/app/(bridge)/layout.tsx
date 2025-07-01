@@ -14,6 +14,8 @@ const Background = styled('div')(({ theme }) => ({
       ? `linear-gradient(180deg,${theme.palette.primary.light},${theme.palette.background.default},${theme.palette.background.default},${theme.palette.secondary.light})`
       : 'none',
   'zIndex': '0',
+  'borderTopLeftRadius': theme.shape.borderRadius * 2,
+  'borderBottomLeftRadius': theme.shape.borderRadius * 2,
   '& > svg': {
     'position': 'absolute',
     'width': '100%',

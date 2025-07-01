@@ -121,6 +121,9 @@ export { default as PauseRaw } from './icons/pause.svg?raw';
 export { ReactComponent as QrcodeScan } from './icons/qrcode-scan.svg';
 export { default as QrcodeScanRaw } from './icons/qrcode-scan.svg?raw';
 
+export { ReactComponent as Qrcode } from './icons/qrcode.svg';
+export { default as QrcodeRaw } from './icons/qrcode.svg?raw';
+
 export { ReactComponent as ReceiptAlt } from './icons/receipt-alt.svg';
 export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';
 
