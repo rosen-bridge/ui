@@ -1,9 +1,33 @@
+import { ConfigValidator } from '@rosen-bridge/config';
 import config from 'config';
+import * as fs from 'fs';
+import JsonBigIntFactory from 'json-bigint';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-export const apiPort = config.get<number>('api.port');
-export const apiHost = config.get<string>('api.host');
+/**
+ * validates configs using the config schema
+ *
+ * @return {[key: string]: string | object}
+ */
+const validateConfigs = (): { [key: string]: string | object } => {
+  const JsonBigInt = JsonBigIntFactory({
+    alwaysParseAsBig: false,
+    useNativeBigInt: true,
+  });
 
-export const maxLogSize = config.get<string>('logs.maxSize');
-export const maxLogFilesCount = config.get<string>('logs.maxFilesCount');
-export const logsPath = config.get<string>('logs.path');
-export const logLevel = config.get<string>('logs.level');
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
+  const rawSchemaData = fs.readFileSync(
+    path.join(__dirname, '../../config/schema.json'),
+    'utf-8',
+  );
+  const schema = JsonBigInt.parse(rawSchemaData);
+  const confValidator = new ConfigValidator(schema);
+
+  const configs = config.util.toObject();
+  confValidator.validateConfig(configs);
+  return configs;
+};
+
+export const configs = validateConfigs();
