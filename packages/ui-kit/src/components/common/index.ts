@@ -36,3 +36,4 @@ export * from './AppSnackbar';
 export * from './ToolbarThemeTogglerAction';
 export * from './WithExternalLink';
 export * from './Token';
+export * from './Chip';
