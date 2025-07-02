@@ -35,19 +35,7 @@ const EventsContainer = styled('div')<DataContainerProps>(
     width: '100%',
 
     ...(variant === 'grid' && {
-      gridTemplateColumns: 'repeat(1, 1fr)',
-
-      [theme.breakpoints.up('tablet')]: {
-        gridTemplateColumns: 'repeat(2, 1fr)',
-      },
-
-      [theme.breakpoints.between('laptop', 'desktop')]: {
-        gridTemplateColumns: 'repeat(2, 1fr)',
-      },
-
-      [theme.breakpoints.up('desktop')]: {
-        gridTemplateColumns: 'repeat(3, 1fr)',
-      },
+      gridTemplateColumns: 'repeat(auto-fill, minmax(242px, 1fr))',
     }),
   }),
 );
@@ -58,8 +46,6 @@ const Events = () => {
   const { openSnackbar } = useSnackbar();
 
   const [current, setCurrent] = useState<EventItem>();
-
-  const [activeView, setActiveView] = useState<'grid' | 'row'>('grid');
 
   const collection = useCollection();
   useEffect(() => {
@@ -118,10 +104,6 @@ const Events = () => {
     ),
     [dense, isLoading, collection],
   );
-  const renderViewToggle = useCallback(
-    () => <div></div>,
-    [dense, isLoading, collection],
-  );
 
   useEffect(() => {
     if (error) {
@@ -131,6 +113,7 @@ const Events = () => {
     }
   }, [error]);
   console.log(data?.items[0]);
+
   return (
     <DataLayout
       search={renderSearch()}
@@ -138,15 +121,23 @@ const Events = () => {
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
-      <EventsContainer variant={'grid'}>
-        {data?.items.map((item) => (
-          <EventCard
-            onClick={() => setCurrent(item)}
-            item={item}
-            active={current?.id === item.id}
-          />
-        ))}
-      </EventsContainer>
+      {!isLoading ? (
+        <EventsContainer variant={'grid'}>
+          {data?.items.map((item) => (
+            <EventCard
+              onClick={() => setCurrent(item)}
+              item={item}
+              active={current?.id === item.id}
+            />
+          ))}
+        </EventsContainer>
+      ) : (
+        <EventsContainer variant={'grid'}>
+          {Array.from({ length: 5 }).map((_, i) => (
+            <EventCard key={i} isLoading variant={'grid'} />
+          ))}
+        </EventsContainer>
+      )}
     </DataLayout>
   );
 };

@@ -17,15 +17,14 @@ import {
   SvgIcon,
   styled,
   Chip,
+  Identifier,
+  Token,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import { upperCase } from 'lodash-es';
 import moment from 'moment';
 
 import { EventItem } from '@/_types';
-import Chip2 from '@/events-experimental/components/Chip2';
-import { Identifier } from '@/events-experimental/components/Identifier';
-import { Token } from '@/events-experimental/components/Token';
 
 const renderEmptyState = () => (
   <Box
@@ -48,10 +47,29 @@ const renderEmptyState = () => (
   </Box>
 );
 
+function getTimeAgoParts(timestamp: number): { amount: number; unit: string } {
+  const targetTime = moment.unix(timestamp);
+  const diffString = moment().to(targetTime, true);
+
+  const parts = diffString.split(' ');
+  let amount: number;
+  let unit: string;
+
+  if (parseInt(parts[0], 10)) {
+    amount = parseInt(parts[0], 10);
+    unit = parts[1];
+  } else {
+    amount = 0;
+    unit = 'seconds';
+  }
+
+  return { amount, unit };
+}
+
 const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
   console.log(value);
   if (!value) return renderEmptyState();
-
+  const { amount, unit } = getTimeAgoParts(value.timestamp);
   return (
     <Box
       sx={{
@@ -80,7 +98,7 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
           <Identifier value={value.eventId} />
         </Label>
         <Label label="Status">
-          <Chip2
+          <Chip
             label={value.status && 'completed'}
             color={'success'}
             icon={'CheckCircle'}
@@ -127,9 +145,11 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
           <Identifier value={value.toAddress} />
         </Label>
         <Label label="Duration">
-          {/*TODO: check this for using in moment */}
-          {moment(value.timestamp * 1000).format('YYYY-MM-DD HH:mm:ss')}
-          {/*<Amount2 value={} />*/}
+          {amount !== 0 ? (
+            <Amount2 value={amount} unit={unit} />
+          ) : (
+            <Amount2 unit={"a just now"} />
+          )}
         </Label>
         <Label label="Bridge fee">
           <Amount2
@@ -183,6 +203,9 @@ const DetailsHeader = () => {
   return (
     <div>
       <CardHeader
+        sx={{
+          paddingBottom: (theme) => theme.spacing(1),
+        }}
         title={<Typography variant="h5">Event</Typography>}
         action={
           <ActionWrapper>
@@ -216,7 +239,11 @@ const DetailsSidebar = ({ value }: DetailsProps) => {
       }}
     >
       <DetailsHeader />
-      <CardContent>
+      <CardContent
+        sx={{
+          paddingTop: (theme) => theme.spacing(1),
+        }}
+      >
         <DetailsContent value={value} />
       </CardContent>
     </Card>

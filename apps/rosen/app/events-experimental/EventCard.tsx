@@ -1,20 +1,18 @@
 import React from 'react';
 
-import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import {
   Amount2,
   Avatar,
   Box,
-  Label,
+  Chip,
+  Connector,
+  Identifier,
   Network,
+  Skeleton,
   styled,
 } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types';
 import { capitalize } from 'lodash-es';
-
-import Chip2 from '@/events-experimental/components/Chip2';
-import { Connector2 } from '@/events-experimental/components/Connector2';
-import { Identifier } from '@/events-experimental/components/Identifier';
 
 interface DataContainerProps {
   variant?: 'grid' | 'row';
@@ -26,6 +24,7 @@ interface EventCardProps {
   item?: any;
   active?: boolean;
   variant?: 'grid' | 'row';
+  isLoading?: boolean;
 }
 
 const DataCard = styled('div')<DataContainerProps>(
@@ -75,7 +74,7 @@ const renderToken = (item: any, name: string) => (
 const renderIdentifier = (string: string) => (
   <Box
     sx={(theme) => ({
-      width: '242px',
+      width: '220px',
     })}
   >
     <Identifier value={string} href={string} />
@@ -97,17 +96,58 @@ const renderTransaction = (
       width: '100%',
     })}
   >
-    <Connector2
+    <Connector
       variant="filled"
       start={<Network name={from} variant="logo" />}
       end={<Network name={to} variant="logo" />}
     />
-    {/*TODO: create chip component*/}
-    <Chip2 label={status} color="success" icon={'CheckCircle'} />
+    <Chip label={status} color="success" icon={'CheckCircle'} />
   </Box>
 );
 
-const EventCard = ({ onClick, active, item, variant }: EventCardProps) => {
+const EventSkeleton = () => {
+  return (
+    <DataCard sx={{ height: '160px' }} variant="grid">
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: (theme) => theme.spacing(1),
+          padding: (theme) => theme.spacing(0, 0, 2, 0),
+        }}
+      >
+        <Skeleton variant="circular" width={48} height={48} />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: (theme) => theme.spacing(1),
+          }}
+        >
+          <Skeleton variant="rounded" width={80} height={14}></Skeleton>
+          <Skeleton variant="rounded" width={60} height={14}></Skeleton>
+        </Box>
+      </Box>
+      <Skeleton variant="rounded" width="100%" height={20}></Skeleton>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: (theme) => theme.spacing(1),
+          padding: (theme) => theme.spacing(1, 0, 0, 0),
+        }}
+      >
+        <Skeleton variant="rounded" width={80} height={32}></Skeleton>
+        <Skeleton variant="rounded" width={80} height={32}></Skeleton>
+      </Box>
+    </DataCard>
+  );
+};
+
+const Event = ({ onClick, active, item, variant }: EventCardProps) => {
   const { fromChain: from, toChain: to } = item;
   return (
     <DataCard bordered={active} onClick={onClick} variant={variant}>
@@ -116,6 +156,10 @@ const EventCard = ({ onClick, active, item, variant }: EventCardProps) => {
       {renderTransaction(from, to, item.status)}
     </DataCard>
   );
+};
+
+const EventCard = ({ isLoading, ...props }: EventCardProps) => {
+  return !isLoading ? <Event {...props} /> : <EventSkeleton />;
 };
 
 export default EventCard;
