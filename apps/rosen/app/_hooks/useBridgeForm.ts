@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { useController } from 'react-hook-form';
 
+import { InputTextProps } from '@rosen-bridge/ui-kit';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
@@ -19,7 +20,7 @@ import { WalletContext } from './useWallet';
  */
 
 export const useBridgeForm = () => {
-  const { control, resetField, reset, setValue, formState, setFocus } =
+  const { control, resetField, reset, setValue, formState, setFocus, watch } =
     useTransactionFormData();
 
   const tokenMap = useTokenMap();
@@ -46,6 +47,7 @@ export const useBridgeForm = () => {
     control,
     rules: {
       validate: async (value) => {
+        const address = watch('walletAddress');
         // match any complete or incomplete decimal number
         const match = value.match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
 
@@ -81,7 +83,7 @@ export const useBridgeForm = () => {
             isNative: tokenField.value.type === 'native',
             eventData: {
               fromAddress: await walletGlobalContext!.selected!.getAddress(),
-              toAddress: addressField.value,
+              toAddress: address,
               toChain: targetField.value as Network,
             },
           });
@@ -103,30 +105,33 @@ export const useBridgeForm = () => {
     },
   });
 
-  const { field: addressField } = useController({
-    name: 'walletAddress',
-    control,
-    rules: {
+  const fields = {
+    address: {
+      name: 'walletAddress',
+      label: 'Target Address',
+      defaultValue: '',
+      enablePasteButton: true,
+      required: true,
       validate: async (value) => {
-        if (!value) {
-          return 'Address cannot be empty';
+        const targetNetwork = watch('target');
+        if (!targetNetwork) {
+          return 'Target network is not selected!';
         }
-
         const isValid = await unwrap(validateAddress)(
-          targetField.value as Network,
+          targetNetwork,
           Object.values(networks)
-            .find((wallet) => wallet.name == targetField.value)!
+            .find((wallet) => wallet.name == targetNetwork)!
             .toSafeAddress(value),
         );
-
         if (isValid) return;
-
-        return 'Invalid Address';
+        return 'Target address is invalid!';
       },
-    },
-  });
+      onValueChange: (value) => value.trim(),
+    } as InputTextProps,
+  };
 
   return {
+    fields,
     reset,
     setValue,
     resetField,
@@ -135,7 +140,6 @@ export const useBridgeForm = () => {
     targetField,
     tokenField,
     amountField,
-    addressField,
     formState,
   };
 };

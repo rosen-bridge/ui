@@ -255,16 +255,14 @@ export const lightThemeOptions: ThemeOptions = {
       },
     },
     MuiFilledInput: {
+      defaultProps: {
+        disableUnderline: true,
+      },
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
-          'overflow': 'hidden',
           'borderRadius': theme.shape.borderRadius,
+          'overflow': 'hidden',
           'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-          'minHeight': theme.spacing(7),
-          'transition': theme.transitions.create([
-            'background-color',
-            'box-shadow',
-          ]),
           '&:hover': {
             backgroundColor: alpha(theme.palette.background.paper, 1.0),
           },
@@ -278,11 +276,6 @@ export const lightThemeOptions: ThemeOptions = {
             WebkitAppearance: 'none',
           },
         }),
-        input: {
-          '&:focus': {
-            backgroundColor: 'inherit',
-          },
-        },
       },
     },
     MuiSnackbar: {

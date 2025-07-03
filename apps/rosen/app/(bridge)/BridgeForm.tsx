@@ -2,7 +2,6 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
@@ -11,12 +10,10 @@ import {
   ListItemIcon,
   styled,
   MenuItem,
-  CircularProgress,
   SvgIcon,
   Alert,
   Autocomplete,
-  InputAdornment,
-  IconButton,
+  InputText,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -47,6 +44,7 @@ const SelectedAsset = styled('div')(({ theme }) => ({
  */
 export const BridgeForm = () => {
   const {
+    fields,
     reset,
     setValue,
     resetField,
@@ -54,15 +52,10 @@ export const BridgeForm = () => {
     targetField,
     tokenField,
     amountField,
-    addressField,
     formState: { errors },
   } = useBridgeForm();
 
-  const {
-    sourceValue,
-    tokenValue,
-    formState: { isValidating },
-  } = useTransactionFormData();
+  const { sourceValue, tokenValue } = useTransactionFormData();
 
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
@@ -216,62 +209,7 @@ export const BridgeForm = () => {
           </TextField>
         </Grid>
       </Grid>
-      <TextField
-        label="Target Address"
-        InputProps={
-          {
-            disableUnderline: true,
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'secondary',
-                  }}
-                  onClick={async () => {
-                    try {
-                      const clipboardText =
-                        await navigator.clipboard.readText();
-                      setValue('walletAddress', clipboardText.trim(), {
-                        shouldDirty: true,
-                        shouldTouch: true,
-                        shouldValidate: true,
-                      });
-                    } catch (err) {
-                      console.error('Failed to read clipboard: ', err);
-                    }
-                  }}
-                >
-                  <SvgIcon sx={{ opacity: '0.6' }}>
-                    <ClipboardNotes />
-                  </SvgIcon>
-                </IconButton>
-              </InputAdornment>
-            ),
-          } as any
-        }
-        variant="filled"
-        error={!!errors?.walletAddress}
-        helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
-        }
-        disabled={!targetField.value}
-        autoComplete="off"
-        {...addressField}
-        value={addressField.value ?? ''}
-        onBlur={(e) => {
-          const trimmed = e.target.value.trim();
-          setValue('walletAddress', trimmed, {
-            shouldDirty: true,
-            shouldTouch: true,
-            shouldValidate: true,
-          });
-        }}
-      />
+      <InputText {...fields.address} />
       {targetField.value == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
