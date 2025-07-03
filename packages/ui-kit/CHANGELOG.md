@@ -1,5 +1,26 @@
 # @rosen-bridge/ui-kit
 
+## 1.12.0
+
+### Minor Changes
+
+- Add the reusable `NewPagination` component to ensure consistent pagination behavior across packages
+- Added `InfoWidgetCardBase` as a new styled component to be reused across packages
+- Implement Network component
+
+### Patch Changes
+
+- Fix the text color of app component
+- Fix the toolbar component
+- Add Label and Amount components
+- Fix some colors in ui-kit and apply it to watcher
+- Fix the color of the version button
+- Fixes page heading
+- Update dependencies
+  - @rosen-bridge/icons@2.0.0
+  - @rosen-ui/constants@0.4.0
+  - @rosen-ui/utils@0.6.0
+
 ## 1.11.0
 
 ### Minor Changes

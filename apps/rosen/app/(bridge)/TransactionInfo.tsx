@@ -62,7 +62,7 @@ export const TransactionInfo = () => {
       }}
     >
       <div style={{ flexGrow: '1' }} />
-      <Label label="You Will Receive" color="text.primary" dense>
+      <Label label="You Will Receive" color="textPrimary" dense>
         <Amount2
           value={
             !tokenValue || receivingAmountRaw === '0'

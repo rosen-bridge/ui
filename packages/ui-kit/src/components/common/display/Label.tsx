@@ -8,7 +8,7 @@ interface LabelProps {
   inset?: boolean;
   dense?: boolean;
   orientation?: 'horizontal' | 'vertical';
-  color?: 'text.secondary' | 'text.primary';
+  color?: 'textSecondary' | 'textPrimary';
 }
 
 export const Label = ({
@@ -17,7 +17,7 @@ export const Label = ({
   dense,
   inset,
   orientation,
-  color = 'text.secondary',
+  color = 'textSecondary',
 }: LabelProps) => {
   const content = (
     <Box
@@ -29,6 +29,7 @@ export const Label = ({
         justifyContent: 'space-between',
         gap: orientation === 'vertical' ? 0 : 1,
         py: dense ? 0 : 0.5,
+        overflow: 'hidden',
       }}
     >
       <Box flexShrink={0} flexBasis="40%">
@@ -44,7 +45,9 @@ export const Label = ({
           {label}
         </Typography>
       </Box>
-      <Box overflow="hidden">{children}</Box>
+      <Box overflow="hidden" whiteSpace="nowrap">
+        {children}
+      </Box>
     </Box>
   );
 
@@ -63,6 +66,7 @@ export const Label = ({
           transform: 'translateY(-50%)',
           ml: 1,
           mr: 0.5,
+          flexShrink: 0,
         }}
       />
       {content}

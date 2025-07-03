@@ -3,7 +3,6 @@ import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  DisconnectionFailedError,
   ErgoTxProxy,
   SubmitTransactionError,
   UserDeniedTransactionSignatureError,
@@ -48,13 +47,12 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
     throw undefined;
   };
 
-  disconnect = async (): Promise<void> => {
-    this.requireAvailable();
+  performDisconnect = async (): Promise<void> => {
     const result = await this.api.disconnect();
 
-    if (!result) {
-      throw new DisconnectionFailedError(this.name);
-    }
+    if (result) return;
+
+    throw undefined;
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
@@ -83,8 +81,7 @@ export class NautilusWallet extends Wallet<NautilusWalletConfig> {
     );
   };
 
-  isConnected = async (): Promise<boolean> => {
-    this.requireAvailable();
+  hasConnection = async (): Promise<boolean> => {
     return await this.api.isAuthorized();
   };
 

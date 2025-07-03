@@ -108,7 +108,7 @@ export const lightThemeOptions: ThemeOptions = {
     info: {
       main: '#2C70B5',
       light: '#C0D6ED',
-      dark: '#071D33',
+      dark: '#12477D',
     },
   },
   shape: {
@@ -336,6 +336,15 @@ export const lightThemeOptions: ThemeOptions = {
         standardWarning: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.warning.main,
           backgroundColor: theme.palette.warning.light,
+        }),
+      },
+    },
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.primary.contrastText,
+          backgroundColor: theme.palette.primary.dark,
+          borderRadius: theme.shape.borderRadius / 2,
         }),
       },
     },

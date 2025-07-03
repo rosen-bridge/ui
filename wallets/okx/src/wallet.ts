@@ -2,7 +2,6 @@ import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  DisconnectionFailedError,
   UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
@@ -34,13 +33,8 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
     await this.api.connect();
   };
 
-  disconnect = async (): Promise<void> => {
-    this.requireAvailable();
-    try {
-      await this.api.disconnect();
-    } catch (error) {
-      throw new DisconnectionFailedError(this.name, error);
-    }
+  performDisconnect = async (): Promise<void> => {
+    await this.api.disconnect();
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
@@ -57,8 +51,8 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
     );
   };
 
-  isConnected = async (): Promise<boolean> => {
-    return !!window.okxwallet.selectedAddress;
+  hasConnection = async (): Promise<boolean> => {
+    return !!(await this.fetchAddress());
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
