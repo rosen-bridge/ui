@@ -2,7 +2,6 @@
 
 import { useCallback, ChangeEvent } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
   TextField,
@@ -12,7 +11,7 @@ import {
   MenuItem,
   SvgIcon,
   Alert,
-  Autocomplete,
+  InputSelect,
   InputText,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -84,24 +83,6 @@ export const BridgeForm = () => {
       </SelectedAsset>
     );
   };
-
-  const handleTokenChange = useCallback(
-    (
-      e: React.SyntheticEvent,
-      value: RosenChainToken | null,
-      reason: string,
-    ) => {
-      if (reason == 'clear') return;
-      const currentToken = value || undefined;
-      setValue('token', currentToken, {
-        shouldDirty: true,
-        shouldTouch: true,
-      });
-      setValue('amount', '');
-      resetField('amount');
-    },
-    [setValue, resetField],
-  );
 
   const handleSourceChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -215,26 +196,7 @@ export const BridgeForm = () => {
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
       )}
-      <Autocomplete
-        aria-label="token input"
-        disabled={!availableTokens.length}
-        id="token"
-        clearIcon={false}
-        disablePortal
-        options={availableTokens}
-        value={tokenField.value}
-        getOptionLabel={(option) => option.name || ''}
-        isOptionEqualToValue={(option, value) => {
-          return (
-            getTokenNameAndId(option, sourceField.value)?.tokenId ===
-            getTokenNameAndId(value, sourceField.value)?.tokenId
-          );
-        }}
-        renderInput={(params) => (
-          <TextField {...params} label="Token" name={tokenField.name} />
-        )}
-        onChange={handleTokenChange}
-      />
+      <InputSelect {...fields.token} />
       <TextField
         id="amount"
         size="medium"

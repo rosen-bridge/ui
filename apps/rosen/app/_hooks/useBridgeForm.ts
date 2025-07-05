@@ -1,11 +1,13 @@
 import { useContext } from 'react';
 import { useController } from 'react-hook-form';
 
-import { InputTextProps } from '@rosen-bridge/ui-kit';
+import { RosenChainToken } from '@rosen-bridge/tokens';
+import { InputSelectProps, InputTextProps } from '@rosen-bridge/ui-kit';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import { validateAddress } from '@/_actions';
+import { useNetwork } from '@/_hooks';
 import * as networks from '@/_networks';
 import { unwrap } from '@/_safeServerAction';
 import { getMinTransfer } from '@/_utils';
@@ -22,7 +24,7 @@ import { WalletContext } from './useWallet';
 export const useBridgeForm = () => {
   const { control, resetField, reset, setValue, formState, setFocus, watch } =
     useTransactionFormData();
-
+  const { availableTokens } = useNetwork();
   const tokenMap = useTokenMap();
 
   const walletGlobalContext = useContext(WalletContext);
@@ -105,7 +107,22 @@ export const useBridgeForm = () => {
     },
   });
 
-  const fields = {
+  const fields: {
+    token: InputSelectProps<RosenChainToken>;
+    address: InputTextProps;
+  } = {
+    token: {
+      name: 'token',
+      label: 'Token',
+      defaultValue: null,
+      options: availableTokens,
+      optionKey: 'tokenId',
+      optionLabel: 'name',
+      disableClearable: true,
+      required: true,
+      disabled: !watch('target'),
+      onValueChange: () => resetField('amount'),
+    },
     address: {
       name: 'walletAddress',
       label: 'Target Address',
@@ -127,7 +144,7 @@ export const useBridgeForm = () => {
         return 'Target address is invalid!';
       },
       onValueChange: (value) => value.trim(),
-    } as InputTextProps,
+    },
   };
 
   return {
