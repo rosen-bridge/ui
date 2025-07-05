@@ -1,0 +1,20 @@
+{
+  "initialHeight" : 21600,
+  "addresses" : {
+    "lock" : "DBVxmQC82dCLh2WoGd4EBCPWS2VMLV13yd",
+    "WatcherPermit" : "2Eit2LFRqu2Mo33z3pYTJRHNCPYS33MrU9QgeNcRsF9359pYMahqnLvKsHwwH72C6WDSZRj7G7WC5heVyUEawcSLSx821iJXT4xWf2F5fjVWDUkje1kCt7DSEufp9kN95BRzhkMTmgY2jmZ3gPH7hjfNkbPBkjLNifx5iH8wZ1EmiMFiWKozc1ZeT3QdnRhCtLZwHo5sBTek83753eK8YZNVgtykvcdLDbsgGyfCXZtJ2zxbNK7522JRormkeNkhLFBxC9u2tQ11EHyvcg8qHUhPA1GCXALUdtB1FkV2chfgewbDmtrpn7tqC7o3eaxQs3Ted3mo3TKmckYVWca7TqHnBCYGE1GRH2X3ZuWuSJXyi1AxKCyRi9JucVAGwpBhQPNR4viEZe5fo6kBiChWriCKmr7pti8685xoAz1ycFnLPKhbgdkwXmZtoLbYYrirEifkMJ1QXtaJStb86NQLQU2ThhqTzEkP22D8sRZ3Ud2b83KcxVvzzCvGeDRK7SkfjbmfhTCazJwwXiFTHBgT2tzfJvQTazwP6czcVC4taS55Ts2uKB4Z9Eu5MeWEvbBLBis8KxnkZkdMecxcBjRdAojCwyMBJUz8EPYo6x659TzbSJhjJiFaQ9f4kanVBV7nC9gK1rq5oY7bFH9MUcwGeu38HQk62kUbv7Q2dYx56CBVw6cHzdRJu6AXHY8dAy3BLqvHCV",
+    "WatcherTriggerEvent" : "ZsPNMsGz8D8y11MAneZTVjJndCjgTUn38JxZpW4EiZgEoHt1Juw2od5nVwwx23kjav2ZzWjZAYrjAQnGwskZjCxmVagr3o3d8AfdQZySQigfqzTFjekNSHeQBuQPQ1y3ry6fN4w5ECxn9jrmho9pZFkBddZ2QLbAhvZVt8WrpduXniFkG27KsYo6ikCtgRsJyvzjE7kubBpsYfRf7tV8ZT2RyZaSGJp8Lo6SbrAMdDA1mke93sDDkP6B1cXi1UdSSg8nAi68b2HLJEdnw52KES4Xnh3Dg3s3n9Ur1mGf6WJ44oVVxwsBHoXWLhoAXJ6v6XSnX1rxBcqT344WHLrezqdGwzYAbKYqGtUiEZq6fcHVhL3Wu3pxkv2WbupVFpVAeFPxYzcwwf7vtibL7KG5RDuZ3rziqCgLC5jL9ckTS4KkZXH6YEJktNnUmULpcBdpGUHWzeea2SLMeiNYw1aoZ1k9QfmVK7TjxKJ5g8gSrSTwmfZHMPD5v6EBYyu4gBe31WXWVz",
+    "Fraud" : "2U1Bm1VfBKJQzNr6Zu6yAh2ZUwHjC1jbECv7LLtYhJrPxPmNiGp5UvodrFtM8HEx38Z9oCSZyi9FzKrhKWsNPo2gi6h3GaJw6HUuifVcRj3X93gaoub7XpYM13wum6ecVVtShHjzm86Fdp7jvMQfpKbnzQRCXF2o41ZWnWCMf2NMA5fcctUPBJDVHJfp4Cfrqsr2cYoUiPRxPARJXTuboe6ZhFSYdugiFJXf4F1XZ6D9cGFBZMpicJr"
+  },
+  "tokens" : {
+    "RWTId" : "5d727b722fb72aa02257d987970c68aeda41614518bab9f0d8a21bbc75b7a3b0"
+  },
+  "blockcypherUrl": "https://api.blockcypher.com",
+  "rpcConnections": [
+    {
+      "url": "",
+      "username": "",
+      "password": ""
+    }
+  ]
+}

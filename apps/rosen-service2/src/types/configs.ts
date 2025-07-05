@@ -6,11 +6,52 @@ export type JsonType =
   | JsonType[]
   | { [key: string]: JsonType };
 
-export interface ContractsConfig {
-  lock: string;
-  eventTrigger: string;
-  permit: string;
-  fraud: string;
+interface ChainConfig {
+  initialHeight: number;
+  addresses: {
+    lock: string;
+    WatcherTriggerEvent: string;
+    WatcherPermit: string;
+    Fraud: string;
+  };
+  tokens: {
+    RWTId: string;
+  };
+}
+
+export interface ErgoChainConfig extends ChainConfig {
+  explorerUrl: string;
+}
+
+export interface BitcoinChainConfig extends ChainConfig {
+  esploraUrl: string;
+  rpc: {
+    url: string;
+    username: string;
+    password: string;
+  };
+}
+
+export interface EthereumChainConfig extends ChainConfig {
+  rpcUrl: string;
+}
+
+export interface BinanceChainConfig extends ChainConfig {
+  rpcUrl: string;
+}
+
+export interface CardanoChainConfig extends ChainConfig {
+  koiosUrl: string;
+  koiosAuthToken: string;
+}
+
+export interface DogeChainConfig extends ChainConfig {
+  blockcypherUrl: string;
+  rpcConnections: {
+    url: string;
+    username: string;
+    password: string;
+  }[];
 }
 
 export interface Configs {
@@ -29,121 +70,36 @@ export interface Configs {
   )[];
   chains: {
     ergo: {
-      network: 'Mainnet' | 'Testnet';
-      type: 'node' | 'explorer';
-      fee: number;
-      minBoxValue: number;
-      mnemonic: string;
-      initialHeight: number;
-      explorer: {
-        url: string;
-        timeout: number;
-      };
-      node: {
-        url: string;
-        timeout: number;
-      };
-      transaction: {
-        timeout: number;
-        confirmation: number;
-        commitmentTimeoutConfirmation: number;
-      };
-      interval: {
-        scanner: number;
-        revenue: number;
-        transaction: number;
-        tokenName: number;
-        commitment: {
-          creation: number;
-          reveal: number;
-          redeem: number;
-        };
-        wid: {
-          status: number;
-        };
-        minimumFee: number;
-      };
-      contracts: ContractsConfig | undefined;
+      chainConfigs: ErgoChainConfig | undefined;
     };
     cardano: {
       active: boolean;
-      type: 'koios' | 'ogmios' | 'blockfrost';
-      initial: {
-        slot: number;
-        hash: string;
-        height: number;
-      };
-      koios: {
-        interval: number;
-        timeout: number;
-        url: string;
-      };
-      ogmios: {
-        host: string;
-        port: number;
-        connectionRetrialInterval: number;
-        useTls: false;
-      };
-      blockfrost: {
-        url: string;
-        projectId: string;
-        timeout: number;
-        interval: number;
-      };
-      contracts: ContractsConfig | undefined;
+      chainConfigs: CardanoChainConfig | undefined;
     };
     bitcoin: {
       active: boolean;
-      type: 'esplora' | 'rpc';
-      initialHeight: number;
-      interval: number;
-      esplora: {
-        timeout: number;
-        url: string;
-      };
-      rpc: {
-        timeout: number;
-        url: string;
-      };
-      contracts: ContractsConfig | undefined;
+      chainConfigs: BitcoinChainConfig | undefined;
     };
     doge: {
       active: boolean;
-      type: 'esplora' | 'rpc';
-      initialHeight: number;
-      interval: number;
-      esplora: {
-        url: string;
-        timeout: number;
-      }[];
-      rpc: {
-        url: string;
-        timeout: number;
-      }[];
-      contracts: ContractsConfig | undefined;
+      chainConfigs: DogeChainConfig | undefined;
     };
     ethereum: {
       active: boolean;
-      type: string;
-      initialHeight: number;
-      interval: number;
-      rpc: {
-        url: string;
-        interval: number;
-        timeout: number;
-      };
-      contracts: ContractsConfig | undefined;
+      chainConfigs: EthereumChainConfig | undefined;
     };
     binance: {
       active: boolean;
-      type: string;
-      initialHeight: number;
-      interval: number;
-      rpc: {
-        url: string;
-        timeout: number;
-      };
-      contracts: ContractsConfig | undefined;
+      chainConfigs: BinanceChainConfig | undefined;
     };
   };
 }
+
+export type CHAIN_TYPES = {
+  ergo: ErgoChainConfig;
+  bitcoin: BitcoinChainConfig;
+  ethereum: EthereumChainConfig;
+  binance: BinanceChainConfig;
+  cardano: CardanoChainConfig;
+  doge: DogeChainConfig;
+};

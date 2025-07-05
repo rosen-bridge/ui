@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "author": "Rosen Team",
   "type": "module",
-  "main": "src/index.ts",
+  "main": "./src/index.ts",
   "scripts": {
     "coverage": "npm run test -- --coverage",
     "lint": "eslint --fix . && npm run prettify",

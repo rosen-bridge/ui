@@ -1,6 +1,0 @@
-{
-  lock: string
-  eventTrigger: string
-  permit: string
-  fraud: string
-}

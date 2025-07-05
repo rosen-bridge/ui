@@ -4,11 +4,11 @@ import config from 'config';
 import * as fs from 'fs';
 import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
+import { exit } from 'process';
 import { fileURLToPath } from 'url';
 
-import { Configs, ContractsConfig } from '../types';
-
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+import { SUPPORTED_CHAINS } from '../constants';
+import { Configs } from '../types';
 
 /**
  * validates configs using the config schema
@@ -29,31 +29,35 @@ const validateConfigs = (): Configs => {
   );
   const schema = JsonBigInt.parse(rawSchemaData);
   const confValidator = new ConfigValidator(schema);
-
   const configs = config.util.toObject();
   confValidator.validateConfig(configs);
-  for (const chain in Object.keys(configs.chains)) {
+
+  const rawContractSchemaData = fs.readFileSync(
+    path.join(__dirname, '../../config/schema-contract.json'),
+    'utf-8',
+  );
+  const contractSchema = JsonBigInt.parse(rawContractSchemaData);
+  const contractConfValidator = new ConfigValidator(contractSchema);
+
+  configs.chains['ergo'] = {};
+  for (const chain of SUPPORTED_CHAINS) {
     if (chain == 'ergo' || configs.chains[chain].active) {
-      let contractsData;
+      let contractsData: string;
       try {
         contractsData = fs.readFileSync(
           path.join(__dirname, `../../config/rosen/contracts-${chain}.json`),
           'utf-8',
         );
+        const contractsConfig = JsonBigInt.parse(contractsData);
+        contractsConfig['chain'] = chain;
+        contractConfValidator.validateConfig(contractsConfig);
+        configs.chains[chain].contracts = contractsConfig;
       } catch (err) {
-        logger.error(
-          `Error occurred on reading ${chain} blockchain contracts: ${err}`,
+        console.error(
+          `Error occurred on reading ${chain} blockchain contracts: ${(err as Error).message}`,
         );
+        exit(-1);
       }
-      const confValidator = new ConfigValidator({
-        lock: { type: 'string', validations: [{ required: true }] },
-        eventTrigger: { type: 'string', validations: [{ required: true }] },
-        permit: { type: 'string', validations: [{ required: true }] },
-        fraud: { type: 'string', validations: [{ required: true }] },
-      });
-      const contractsConfig = JSON.parse(rawSchemaData);
-      confValidator.validateConfig(contractsConfig);
-      configs.chains[chain].contracts = contractsConfig;
     }
   }
 
