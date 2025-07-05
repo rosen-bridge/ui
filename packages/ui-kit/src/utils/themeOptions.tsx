@@ -217,43 +217,6 @@ export const lightThemeOptions: ThemeOptions = {
         fullWidth: true,
       },
     },
-    MuiAutocomplete: {
-      styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
-          '.MuiInputLabel-root': {
-            'transform': 'translate(12px, 16px) scale(1)',
-            '&.MuiInputLabel-shrink': {
-              transform: 'translate(12px, 7px) scale(0.75)',
-            },
-          },
-          '.MuiAutocomplete-input': {
-            transform: 'translateY(8px)',
-          },
-          '.MuiOutlinedInput-root': {
-            'overflow': 'hidden',
-            'borderRadius': theme.spacing(2),
-            'backgroundColor': alpha(theme.palette.background.paper, 0.75),
-            'minHeight': theme.spacing(7),
-            'transition': theme.transitions.create([
-              'background-color',
-              'box-shadow',
-            ]),
-            '&:hover': {
-              backgroundColor: alpha(theme.palette.background.paper, 1.0),
-            },
-            '&.Mui-disabled': {
-              backgroundColor: alpha(theme.palette.background.paper, 0.5),
-            },
-            '&.Mui-focused': {
-              backgroundColor: alpha(theme.palette.background.paper, 1.0),
-            },
-          },
-          'fieldset': {
-            border: 'none',
-          },
-        }),
-      },
-    },
     MuiFilledInput: {
       defaultProps: {
         disableUnderline: true,
@@ -276,6 +239,16 @@ export const lightThemeOptions: ThemeOptions = {
             WebkitAppearance: 'none',
           },
         }),
+      },
+    },
+    MuiInputAdornment: {
+      styleOverrides: {
+        filled: {
+          '&.MuiInputAdornment-root.MuiInputAdornment-positionStart:not(.MuiInputAdornment-hiddenLabel)':
+            {
+              marginTop: 0,
+            },
+        },
       },
     },
     MuiSnackbar: {
