@@ -7,7 +7,7 @@
       }
     ]
   },
-  "initialHeight" : {
+  "initialHeight": {
     "type": "number",
     "validations": [
       {
@@ -15,10 +15,10 @@
       }
     ]
   },
-  "addresses" : {
+  "addresses": {
     "type": "object",
     "children": {
-      "lock" : {
+      "lock": {
         "type": "string",
         "validations": [
           {
@@ -26,7 +26,7 @@
           }
         ]
       },
-      "WatcherPermit" : {
+      "WatcherPermit": {
         "type": "string",
         "validations": [
           {
@@ -34,7 +34,7 @@
           }
         ]
       },
-      "WatcherTriggerEvent" : {
+      "WatcherTriggerEvent": {
         "type": "string",
         "validations": [
           {
@@ -42,7 +42,7 @@
           }
         ]
       },
-      "Fraud" : {
+      "Fraud": {
         "type": "string",
         "validations": [
           {
@@ -52,10 +52,10 @@
       }
     }
   },
-  "tokens" : {
+  "tokens": {
     "type": "object",
     "children": {
-      "RWTId" : {
+      "RWTId": {
         "type": "string",
         "validations": [
           {
@@ -70,7 +70,7 @@
     "validations": [
       {
         "required": true,
-        "when": {"path": "chain", "value": "ergo"}
+        "when": { "path": "chain", "value": "ergo" }
       }
     ]
   },
@@ -79,7 +79,7 @@
     "validations": [
       {
         "required": true,
-        "when": {"path": "chain", "value": "cardano"}
+        "when": { "path": "chain", "value": "cardano" }
       }
     ]
   },
@@ -96,7 +96,7 @@
     "validations": [
       {
         "required": true,
-        "when": {"path": "chain", "value": "bitcoin"}
+        "when": { "path": "chain", "value": "bitcoin" }
       }
     ]
   },
@@ -134,11 +134,11 @@
     "validations": [
       {
         "required": true,
-        "when": {"path": "chain", "value": "ethereum"}
+        "when": { "path": "chain", "value": "ethereum" }
       },
       {
         "required": true,
-        "when": {"path": "chain", "value": "binance"}
+        "when": { "path": "chain", "value": "binance" }
       }
     ]
   },
@@ -147,7 +147,7 @@
     "validations": [
       {
         "required": true,
-        "when": {"path": "chain", "value": "doge"}
+        "when": { "path": "chain", "value": "doge" }
       }
     ]
   },
@@ -161,7 +161,7 @@
           "validations": [
             {
               "required": true,
-              "when": {"path": "chain", "value": "doge" }
+              "when": { "path": "chain", "value": "doge" }
             }
           ]
         },

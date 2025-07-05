@@ -9,7 +9,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "coverage": "npm run test -- --coverage",
-    "lint": "eslint --fix . && npm run prettify",
+    "lint": "eslint --fix && npm run prettify",
     "prettify": "prettier --write . --ignore-path ./.gitignore",
     "start": "tsx ./src/index.ts",
     "start:dev": "tsx watch ./src/index.ts",
