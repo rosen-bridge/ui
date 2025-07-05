@@ -8,11 +8,13 @@ import {
   useState,
   useTransition,
 } from 'react';
+import { useFormContext } from 'react-hook-form';
 
 import { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { useBridgeForm } from './useBridgeForm';
+import { BridgeForm } from '@/(bridge)/page';
+
 import { useTokenMap } from './useTokenMap';
 import { useWallet } from './useWallet';
 
@@ -39,9 +41,8 @@ export type BalanceContextType = {
 export const BalanceContext = createContext<BalanceContextType | null>(null);
 
 export const BalanceProvider = ({ children }: PropsWithChildren) => {
-  const {
-    tokenField: { value: token },
-  } = useBridgeForm();
+  const { watch } = useFormContext<BridgeForm>();
+  const token = watch('token');
 
   const tokenMap = useTokenMap();
 
