@@ -38,7 +38,7 @@ export const getEvents = async (filters: Filters) => {
   );
 
   if (filters.search) {
-    filters.search.in ||= ['fromChain', 'toChain', 'fromAddress', 'toAddress'];
+    filters.search.in ||= [];
   }
 
   const { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
