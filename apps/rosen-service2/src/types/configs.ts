@@ -1,11 +1,3 @@
-export type JsonType =
-  | string
-  | number
-  | boolean
-  | null
-  | JsonType[]
-  | { [key: string]: JsonType };
-
 interface ChainConfig {
   initialHeight: number;
   addresses: {
@@ -94,12 +86,3 @@ export interface Configs {
     };
   };
 }
-
-export type CHAIN_TYPES = {
-  ergo: ErgoChainConfig;
-  bitcoin: BitcoinChainConfig;
-  ethereum: EthereumChainConfig;
-  binance: BinanceChainConfig;
-  cardano: CardanoChainConfig;
-  doge: DogeChainConfig;
-};
