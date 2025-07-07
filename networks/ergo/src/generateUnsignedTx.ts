@@ -11,7 +11,6 @@ import {
   createChangeBox,
   createLockBox,
   getHeight,
-  sumAssetBalance,
 } from './utils';
 
 const selector = new ErgoBoxSelection();
@@ -72,11 +71,6 @@ export const generateUnsignedTx =
       bridgeFee,
       networkFee,
     );
-    // calculate required assets to get input boxes
-    const requiredAssets = sumAssetBalance(lockAssets, {
-      nativeToken: minBoxValue,
-      tokens: [],
-    });
 
     const ergoBoxes = walletUtxos.map((walletUtxo) =>
       wasm.ErgoBox.from_json(JSON.stringify(walletUtxo)),
@@ -84,7 +78,7 @@ export const generateUnsignedTx =
 
     // get input boxes
     const inputs = await selector.getCoveringBoxes(
-      requiredAssets,
+      lockAssets,
       [],
       new Map(),
       ergoBoxes.values(),
@@ -100,7 +94,7 @@ export const generateUnsignedTx =
     });
 
     const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
-      wasm.BoxValue.from_i64(wasm.I64.from_str(fee.toString())),
+      wasm.BoxValue.from_i64(wasm.I64.from_str(inputs.additionalAssets.fee.toString())),
       height,
     );
 
