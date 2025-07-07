@@ -1,10 +1,15 @@
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { Network } from '@rosen-ui/types';
-import { ErgoBoxProxy } from '@rosen-ui/wallet-api';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
 import { minBoxValue } from './constants';
-import { AssetBalance, BoxInfo, CoveringBoxes, TokenInfo } from './types';
+import {
+  AssetBalance,
+  BoxInfo,
+  CoveringBoxes,
+  ErgoBoxProxy,
+  TokenInfo,
+} from './types';
 
 /**
  * gets Ergo current block height

@@ -7,9 +7,16 @@ import {
 } from '@rosen-bridge/cardano-utxo-selection';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { Network } from '@rosen-ui/types';
-import { decodeWasmValue as decodeWasmValueCore } from '@rosen-ui/wallet-api';
+import { encodeHex, decodeHex } from '@rosen-ui/utils';
 
-import { CardanoProtocolParams } from './types';
+import { AdaAssetName, AdaAssetNameHex, AdaPolicyId } from './constants';
+import {
+  CardanoProtocolParams,
+  PolicyId,
+  Value,
+  AssetEntry,
+  Lovelace,
+} from './types';
 
 /**
  * gets Cardano protocol params
@@ -340,5 +347,46 @@ export const setTxWitnessSet = async (
 };
 
 export const decodeWasmValue = async (raw: string) => {
-  return decodeWasmValueCore(raw, wasm);
+  return fromWasmValue(wasm.Value.from_bytes(decodeHex(raw)));
 };
+
+export function AdaEntry(quantity: Lovelace): AssetEntry {
+  return {
+    name: AdaAssetName,
+    policyId: AdaPolicyId,
+    quantity,
+    nameHex: AdaAssetNameHex,
+  };
+}
+
+export function fromWasmValue(value: wasm.Value): Value {
+  const adaEntry = AdaEntry(BigInt(value.coin().to_str()));
+  const ma = value.multiasset();
+  if (ma) {
+    const policies = ma.keys();
+    const numPolicies = policies.len();
+    const assetsGrouped: [PolicyId, wasm.Assets][] = [];
+    const totalEntries: AssetEntry[] = [];
+    for (let i = 0; i < numPolicies; i++) {
+      const p = policies.get(i);
+      const policyId = encodeHex(p.to_bytes());
+      assetsGrouped.push([policyId, ma.get(p)!]);
+    }
+    for (const [policyId, as] of assetsGrouped) {
+      const assets = as.keys();
+      const numAssets = assets.len();
+      const entries: AssetEntry[] = [];
+      for (let i = 0; i < numAssets; i++) {
+        const assetName = assets.get(i);
+        const nameStr = new TextDecoder().decode(assetName.name());
+        const nameHex = assetName.to_hex();
+        const quantity = BigInt(as.get(assetName)!.to_str());
+        entries.push({ name: nameStr, policyId, quantity, nameHex });
+      }
+      totalEntries.push(...entries);
+    }
+    totalEntries.push(adaEntry);
+    return totalEntries;
+  }
+  return [adaEntry];
+}
