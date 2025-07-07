@@ -29,7 +29,6 @@ fi
 if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/asset-calculator
   npm run build --workspace networks/base
-  npm run build --workspace wallets/wallet-api
   npm run build --workspace networks/evm
   npm run build --workspace networks/binance
   npm run build --workspace networks/bitcoin
@@ -38,6 +37,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace networks/cardano
   npm run build --workspace networks/ergo
   npm run build --workspace networks/ethereum
+  npm run build --workspace wallets/wallet-api
   npm run build --workspace wallets/eternl
   npm run build --workspace wallets/lace
   npm run build --workspace wallets/metamask
