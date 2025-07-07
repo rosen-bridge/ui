@@ -32,13 +32,6 @@ const validateConfigs = (): Configs => {
   const configs = config.util.toObject();
   confValidator.validateConfig(configs);
 
-  const rawContractSchemaData = fs.readFileSync(
-    path.join(__dirname, '../../config/schema-contract.json'),
-    'utf-8',
-  );
-  const contractSchema = JsonBigInt.parse(rawContractSchemaData);
-  const contractConfValidator = new ConfigValidator(contractSchema);
-
   configs.chains['ergo'] = {};
   for (const chain of SUPPORTED_CHAINS) {
     if (chain == 'ergo' || configs.chains[chain].active) {
@@ -49,8 +42,6 @@ const validateConfigs = (): Configs => {
           'utf-8',
         );
         const contractsConfig = JsonBigInt.parse(contractsData);
-        contractsConfig['chain'] = chain;
-        contractConfValidator.validateConfig(contractsConfig);
         configs.chains[chain].contracts = contractsConfig;
       } catch (err) {
         console.error(
