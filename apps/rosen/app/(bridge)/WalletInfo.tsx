@@ -1,18 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { LinkBroken } from '@rosen-bridge/icons';
+import { Wallet } from '@rosen-bridge/icons';
 import {
   Avatar,
   Button,
   Card,
   Grid,
   IconButton,
+  styled,
+  SvgIcon,
   Typography,
 } from '@rosen-bridge/ui-kit';
 
 import { useNetwork, useWallet } from '@/_hooks';
 
 import { ChooseWalletModal } from './ChooseWalletModal';
+
+const StyledCard = styled(Card)(({ theme }) => ({
+  'display': 'flex',
+  'alignItems': 'center',
+  'justifyContent': 'space-between',
+  'height': 56,
+  'padding': theme.spacing(1, 2),
+  'backgroundColor': theme.palette.primary.light,
+  '&.connected': {
+    backgroundColor: theme.palette.secondary.light,
+  },
+}));
 
 export const WalletInfo = () => {
   const {
@@ -23,53 +38,76 @@ export const WalletInfo = () => {
   } = useWallet();
   const { selectedSource } = useNetwork();
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
+  const [state, setState] = useState<
+    'PENDING' | 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED'
+  >('PENDING');
   const Icon = selectedWallet?.iconReact;
   const label = selectedWallet?.label;
-  const selected = Icon && label;
+
+  useEffect(() => {
+    if (selectedWallet) {
+      setState('CONNECTED');
+    } else if (selectedSource) {
+      setState('DISCONNECTED');
+    } else {
+      setState('PENDING');
+    }
+  }, [selectedWallet, selectedSource]);
 
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        padding: '12px 25px',
-        backgroundColor: (theme) =>
-          theme.palette.mode === 'light'
-            ? theme.palette.secondary.light
-            : theme.palette.background.paper,
-      }}
-    >
-      <Grid container alignItems="center" justifyContent="space-between">
-        {selected ? (
+    <StyledCard className={state === 'CONNECTED' ? 'connected' : ''}>
+      {state === 'PENDING' && (
+        <Typography variant="body2" color="text.secondary">
+          Select source to see available wallets.
+        </Typography>
+      )}
+      {state === 'DISCONNECTED' && (
+        <Button
+          variant="text"
+          startIcon={
+            <SvgIcon>
+              <Wallet />
+            </SvgIcon>
+          }
+          sx={{ borderRadius: 0.5, ml: -1 }}
+          onClick={() => setChooseWalletsModalOpen(true)}
+        >
+          Choose Wallet
+        </Button>
+      )}
+      {state === 'CONNECTING' && (
+        <Typography color="text.secondary">Connecting to wallet...</Typography>
+      )}
+      {state === 'CONNECTED' && (
+        <>
           <IconButton
             sx={{
-              borderRadius: 1,
-              margin: 0,
+              borderRadius: 0.5,
+              ml: -1,
             }}
             onClick={() => setChooseWalletsModalOpen(true)}
           >
             <Grid container alignItems="center" justifyContent="center" gap={1}>
-              <Avatar
-                sx={{
-                  width: 18,
-                  height: 18,
-                  background: 'transparent',
-                }}
-              >
-                <Icon />
-              </Avatar>
+              {Icon && (
+                <Avatar
+                  sx={{
+                    width: 24,
+                    height: 24,
+                    background: 'transparent',
+                  }}
+                >
+                  <Icon />
+                </Avatar>
+              )}
               <Typography>{label}</Typography>
             </Grid>
           </IconButton>
-        ) : (
-          <Typography lineHeight={2.5}>Wallet</Typography>
-        )}
-        {selected ? (
           <Button
             sx={{
               color: (theme) => theme.palette.secondary.dark,
               fill: (theme) => theme.palette.secondary.dark,
-              borderRadius: 1,
-              margin: 0,
+              borderRadius: 0.5,
+              mr: -1,
             }}
             startIcon={<LinkBroken width="24px" />}
             onClick={() => {
@@ -78,10 +116,9 @@ export const WalletInfo = () => {
           >
             Disconnect
           </Button>
-        ) : (
-          <Typography>-</Typography>
-        )}
-      </Grid>
+        </>
+      )}
+
       <ChooseWalletModal
         selectedWallet={selectedWallet}
         disconnect={disconnect}
@@ -91,6 +128,6 @@ export const WalletInfo = () => {
         handleClose={() => setChooseWalletsModalOpen(false)}
         wallets={wallets || []}
       />
-    </Card>
+    </StyledCard>
   );
 };
