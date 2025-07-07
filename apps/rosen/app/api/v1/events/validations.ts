@@ -1,8 +1,8 @@
 import { NextRequest } from 'next/server';
 
 import {
-  extractFiltersFromSearchParams,
-  filtersSchema,
+  FiltersSchema,
+  searchParamsToFilters,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 
 /**
@@ -10,5 +10,5 @@ import {
  * @param request
  */
 export const validateGet = ({ nextUrl: { searchParams } }: NextRequest) => {
-  return filtersSchema.validate(extractFiltersFromSearchParams(searchParams));
+  return FiltersSchema.validate(searchParamsToFilters(searchParams));
 };
