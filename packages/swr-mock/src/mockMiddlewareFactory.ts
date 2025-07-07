@@ -6,7 +6,7 @@
 /* eslint-disable */
 import { Key, Middleware, SWRHook } from 'swr';
 
-interface FakeData {
+export interface FakeData {
   withStringKeys: Record<string, any>;
   withObjectKeys: Record<string, (params: any) => any>;
 }

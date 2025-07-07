@@ -4,17 +4,15 @@ import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Amount,
   Button,
-  CircularProgress,
   EnhancedTableCell,
   Id,
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
-import useSWR from 'swr';
 
-import { Revenue, ApiInfoResponse } from '@/_types/api';
+import { useInfo } from '@/_hooks/useInfo';
+import { Revenue } from '@/_types/api';
 
 interface RowProps extends Revenue {
   isLoading?: boolean;
@@ -109,10 +107,7 @@ export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
   const [expand, setExpand] = useState(false);
 
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data: info, isLoading: isInfoLoading } = useInfo();
 
   const rowStyles = useMemo(
     () => (isLoading ? { opacity: 0.3 } : {}),
@@ -250,10 +245,7 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
-  const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
-    '/info',
-    fetcher,
-  );
+  const { data: info, isLoading: isInfoLoading } = useInfo();
 
   return (
     <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
