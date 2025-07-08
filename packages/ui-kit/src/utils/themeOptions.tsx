@@ -143,6 +143,9 @@ export const lightThemeOptions: ThemeOptions = {
       fontSize: '0.875rem',
       lineHeight: '1.25rem',
     },
+    subtitle1: {
+      fontSize: '1.5rem',
+    },
     subtitle2: {
       fontSize: '0.625rem',
     },
