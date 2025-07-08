@@ -4,15 +4,17 @@ import {
   lightThemeOptions,
 } from '@rosen-bridge/ui-kit';
 
-export const theme = {
-  light: createTheme(lightThemeOptions, {
-    components: {
-      MuiTextField: {
-        defaultProps: {
-          variant: 'filled',
-        },
+const rosenThemeOptions = {
+  components: {
+    MuiTextField: {
+      defaultProps: {
+        variant: 'filled',
       },
     },
-  }),
-  dark: createTheme(darkThemeOptions),
+  },
+};
+
+export const theme = {
+  light: createTheme(lightThemeOptions, rosenThemeOptions),
+  dark: createTheme(darkThemeOptions, rosenThemeOptions),
 };
