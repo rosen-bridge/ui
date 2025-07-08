@@ -1,21 +1,8 @@
-interface ChainConfig {
-  initialHeight: number;
-  addresses: {
-    lock: string;
-    WatcherTriggerEvent: string;
-    WatcherPermit: string;
-    Fraud: string;
-  };
-  tokens: {
-    RWTId: string;
-  };
-}
-
-export interface ErgoChainConfig extends ChainConfig {
+export interface ErgoChainConfig {
   explorerUrl: string;
 }
 
-export interface BitcoinChainConfig extends ChainConfig {
+export interface BitcoinChainConfig {
   esploraUrl: string;
   rpc: {
     url: string;
@@ -24,20 +11,20 @@ export interface BitcoinChainConfig extends ChainConfig {
   };
 }
 
-export interface EthereumChainConfig extends ChainConfig {
+export interface EthereumChainConfig {
   rpcUrl: string;
 }
 
-export interface BinanceChainConfig extends ChainConfig {
+export interface BinanceChainConfig {
   rpcUrl: string;
 }
 
-export interface CardanoChainConfig extends ChainConfig {
+export interface CardanoChainConfig {
   koiosUrl: string;
   koiosAuthToken: string;
 }
 
-export interface DogeChainConfig extends ChainConfig {
+export interface DogeChainConfig {
   blockcypherUrl: string;
   rpcConnections: {
     url: string;
@@ -85,4 +72,34 @@ export interface Configs {
       chainConfigs: BinanceChainConfig | undefined;
     };
   };
+}
+
+export interface ChainConfigs {
+  version: string;
+  addresses: {
+    RWTRepo: string;
+    WatcherPermit: string;
+    Fraud: string;
+    lock: string;
+    cold: string;
+    guardSign: string;
+    Commitment: string;
+    WatcherTriggerEvent: string;
+    WatcherCollateral: string;
+    RepoConfig: string;
+    Emission: string;
+  };
+  tokens: {
+    RepoNFT: string;
+    GuardNFT: string;
+    RSN: string;
+    RSNRatioNFT: string;
+    EmissionNFT: string;
+    ERSN: string;
+    CleanupNFT: string;
+    RWTId: string;
+    AwcNFT: string;
+    RepoConfigNFT: string;
+  };
+  cleanupConfirm: number;
 }

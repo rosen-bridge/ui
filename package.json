@@ -5,7 +5,6 @@
     "apps/*",
     "networks/*",
     "packages/*",
-    "services/*",
     "wallets/*"
   ],
   "scripts": {

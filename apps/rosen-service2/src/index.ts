@@ -1,5 +1,5 @@
-import startApp from './app';
 import './bootstrap';
+import startApp from './app';
 
 const main = async () => {
   startApp();
