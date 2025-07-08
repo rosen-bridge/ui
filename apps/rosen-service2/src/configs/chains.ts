@@ -1,14 +1,11 @@
-import { ConfigValidator } from '@rosen-bridge/config';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
-import config from 'config';
 import * as fs from 'fs';
 import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
 import { exit } from 'process';
 import { fileURLToPath } from 'url';
 
-import { ChainConfigs, Configs } from '../types';
+import { ChainConfigs } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
