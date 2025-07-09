@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { getNonDecimalString } from '@rosen-ui/utils';
 import {
@@ -11,6 +10,7 @@ import { serializeError } from 'serialize-error';
 
 import { logger } from '@/_actions';
 
+import { useBridgeForm } from './useBridgeForm';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFees } from './useTransactionFees';
@@ -21,6 +21,9 @@ import { useWallet } from './useWallet';
  * a react hook to create and sign and submit transactions
  */
 export const useTransaction = () => {
+  const {
+    formValues: { source, target, token, walletAddress },
+  } = useBridgeForm();
   const { selectedSource, selectedTarget } = useNetwork();
 
   const { openSnackbar } = useSnackbar();
@@ -29,13 +32,7 @@ export const useTransaction = () => {
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    walletAddressValue,
-  } = useTransactionFormData();
+  const { amountValue } = useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -46,14 +43,14 @@ export const useTransaction = () => {
       !amountValue ||
       !bridgeFee ||
       !networkFee ||
-      !sourceValue ||
-      !targetValue ||
+      !source ||
+      !target ||
       !tokenMap ||
-      !tokenValue ||
+      !token ||
       !selectedSource ||
       !selectedTarget ||
       !selectedWallet ||
-      !walletAddressValue
+      !walletAddress
     )
       return;
 
@@ -63,16 +60,16 @@ export const useTransaction = () => {
 
     try {
       parameters = {
-        token: tokenValue as RosenChainToken,
+        token: token,
         amount: BigInt(
           getNonDecimalString(
             amountValue as string,
-            tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+            tokenMap.getSignificantDecimals(token.tokenId) || 0,
           ),
         ),
-        fromChain: sourceValue,
-        toChain: targetValue,
-        address: selectedTarget.toSafeAddress(walletAddressValue),
+        fromChain: source.name,
+        toChain: target.name,
+        address: selectedTarget.toSafeAddress(walletAddress),
         bridgeFee,
         networkFee,
         lockAddress: selectedSource.lockAddress,

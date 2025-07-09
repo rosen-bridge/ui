@@ -5,38 +5,17 @@ import { useCallback, ChangeEvent } from 'react';
 import {
   Grid,
   TextField,
-  Typography,
-  ListItemIcon,
-  styled,
-  MenuItem,
-  SvgIcon,
   Alert,
   InputSelect,
   InputText,
+  InputSelectNetwork,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
-import {
-  useBalance,
-  useBridgeForm,
-  useMaxTransfer,
-  useNetwork,
-  useTransactionFormData,
-  useWallet,
-} from '@/_hooks';
+import { useBalance, useBridgeForm, useMaxTransfer, useWallet } from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * renders the bridge main form
@@ -44,75 +23,17 @@ const SelectedAsset = styled('div')(({ theme }) => ({
 export const BridgeForm = () => {
   const {
     fields,
-    reset,
     setValue,
-    resetField,
-    sourceField,
-    targetField,
-    tokenField,
     amountField,
     formState: { errors },
+    formValues: { source, target, token },
   } = useBridgeForm();
-
-  const { sourceValue, tokenValue } = useTransactionFormData();
-
-  const { sources, availableSources, availableTargets, availableTokens } =
-    useNetwork();
 
   const { isLoading, raw: balanceRaw } = useBalance();
 
-  const {
-    error,
-    amount: max,
-    isLoading: isMaxLoading,
-    raw,
-    load,
-  } = useMaxTransfer();
+  const { error, isLoading: isMaxLoading, raw, load } = useMaxTransfer();
 
   const { selected: selectedWallet } = useWallet();
-
-  const renderSelectedNetwork = (value: unknown) => {
-    const network = sources.find((network) => network.name === value)!;
-    const Logo = network.logo;
-    return (
-      <SelectedAsset>
-        <SvgIcon>
-          <Logo />
-        </SvgIcon>
-        <Typography color="text.secondary">{network.label}</Typography>
-      </SelectedAsset>
-    );
-  };
-
-  const handleSourceChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value !== sourceField.value) {
-        reset({
-          target: null,
-          token: null,
-          amount: '',
-          walletAddress: '',
-          source: e.target.value,
-        });
-      }
-    },
-    [reset, sourceField],
-  );
-
-  const handleTargetChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value !== targetField.value) {
-        reset({
-          source: sourceField.value,
-          target: e.target.value,
-          token: null,
-          amount: '',
-          walletAddress: '',
-        });
-      }
-    },
-    [reset, sourceField, targetField],
-  );
 
   const handleAmountChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
@@ -133,65 +54,14 @@ export const BridgeForm = () => {
     <>
       <Grid container spacing={2}>
         <Grid item mobile={12} tablet={6}>
-          <TextField
-            id="source"
-            select
-            label="Source"
-            inputProps={{ 'aria-label': 'source input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...sourceField}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
-            onChange={handleSourceChange}
-          >
-            {availableSources.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <SvgIcon>
-                    <Logo />
-                  </SvgIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
+          <InputSelectNetwork {...fields.source} />
         </Grid>
         <Grid item mobile={12} tablet={6}>
-          <TextField
-            id="target"
-            select
-            label="Target"
-            disabled={!sourceField.value}
-            inputProps={{ 'aria-label': 'target input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...targetField}
-            // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
-            value={targetField.value ?? ''}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
-            onChange={handleTargetChange}
-          >
-            {availableTargets.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <ListItemIcon>
-                    <SvgIcon>
-                      <Logo />
-                    </SvgIcon>
-                  </ListItemIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
+          <InputSelectNetwork {...fields.target} />
         </Grid>
       </Grid>
       <InputText {...fields.address} />
-      {targetField.value == NETWORKS.bitcoin.key && (
+      {target?.name == NETWORKS.bitcoin.key && (
         <Alert severity="warning">
           Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
         </Alert>
@@ -206,17 +76,14 @@ export const BridgeForm = () => {
         helperText={errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
-          endAdornment: tokenField.value && selectedWallet && (
+          endAdornment: token?.tokenId && selectedWallet && (
             <UseAllAmount
               error={!!error}
               loading={isLoading || isMaxLoading}
               value={balanceRaw}
               unit={
-                (
-                  tokenValue &&
-                  sourceValue &&
-                  getTokenNameAndId(tokenValue, sourceValue)
-                )?.tokenName
+                (token && source && getTokenNameAndId(token, source.name))
+                  ?.tokenName || ''
               }
               onClick={handleSelectMax}
               onRetry={load}
@@ -231,7 +98,7 @@ export const BridgeForm = () => {
         {...amountField}
         value={amountField.value ?? ''}
         onChange={handleAmountChange}
-        disabled={!tokenField.value}
+        disabled={!token}
         autoComplete="off"
       />
     </>

@@ -19,7 +19,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import {
-  useNetwork,
+  useBridgeForm,
   useTokenMap,
   useTransaction,
   useTransactionFees,
@@ -34,14 +34,10 @@ export const SubmitButton = () => {
   const tokenMap = useTokenMap();
 
   const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
+    formValues: { source, target, token, walletAddress },
     formState: { isSubmitting: isFormSubmitting, errors, isValidating },
-    walletAddressValue,
-    handleSubmit,
-  } = useTransactionFormData();
+  } = useBridgeForm();
+  const { amountValue, handleSubmit } = useTransactionFormData();
 
   const {
     networkFee,
@@ -61,42 +57,33 @@ export const SubmitButton = () => {
     startTransaction().then(() => setOpen(false));
   });
 
-  const { availableSources } = useNetwork();
-
-  const source = availableSources.find(
-    (availableNetwork) => availableNetwork.name == sourceValue,
-  );
-
-  const target = availableSources.find(
-    (availableNetwork) => availableNetwork.name == targetValue,
-  );
-
-  const tokenInfo =
-    tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
+  const tokenInfo = token && source && getTokenNameAndId(token, source.name);
 
   const targetTokenSearchResults =
-    sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
-    tokenMap.search(sourceValue, {
-      tokenId: tokenValue.tokenId,
+    source &&
+    token &&
+    token.tokenId &&
+    tokenMap.search(source.name, {
+      tokenId: token.tokenId,
     });
   const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+    (target &&
+      targetTokenSearchResults &&
+      targetTokenSearchResults[0][target.name]) ||
+    undefined;
 
-  const disabled = selectedWallet
-    ? !sourceValue ||
-      !targetValue ||
-      !tokenValue ||
-      !amountValue ||
-      !walletAddressValue ||
-      !bridgeFee ||
-      !networkFee ||
-      !!errors.amount ||
-      !!errors.walletAddress ||
-      isValidating
-    : !sourceValue;
-
+  const disabled =
+    !selectedWallet ||
+    !source ||
+    !target ||
+    !token ||
+    !amountValue ||
+    !walletAddress ||
+    !bridgeFee ||
+    !networkFee ||
+    !!errors.amount ||
+    !!errors.walletAddress ||
+    isValidating;
   return (
     <>
       <LoadingButton
@@ -171,7 +158,7 @@ export const SubmitButton = () => {
               <Divider />
               <Label label="Destination Address" orientation="vertical">
                 <Identifier
-                  value={walletAddressValue}
+                  value={walletAddress || ''}
                   copyable
                   title="Destination address"
                 />

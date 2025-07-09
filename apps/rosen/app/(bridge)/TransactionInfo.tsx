@@ -10,11 +10,7 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 
-import {
-  useTokenMap,
-  useTransactionFees,
-  useTransactionFormData,
-} from '@/_hooks';
+import { useBridgeForm, useTokenMap, useTransactionFees } from '@/_hooks';
 import { getTokenNameAndId } from '@/_utils';
 
 /**
@@ -22,8 +18,9 @@ import { getTokenNameAndId } from '@/_utils';
  * and wallet connection
  */
 export const TransactionInfo = () => {
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const {
+    formValues: { source, target, token },
+  } = useBridgeForm();
 
   const tokenMap = useTokenMap();
 
@@ -36,20 +33,22 @@ export const TransactionInfo = () => {
     minTransferRaw,
   } = useTransactionFees();
 
-  const tokenInfo =
-    tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
+  const tokenInfo = token && source && getTokenNameAndId(token, source.name);
 
   const targetTokenSearchResults =
-    sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
-    tokenMap.search(sourceValue, {
-      tokenId: tokenValue.tokenId,
+    source &&
+    token &&
+    token.tokenId &&
+    tokenMap.search(source.name, {
+      tokenId: token.tokenId,
     });
   const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+    (target &&
+      targetTokenSearchResults &&
+      targetTokenSearchResults[0][target.name]) ||
+    undefined;
 
-  const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
+  const isPending = isLoadingFees && !!source && !!target && !!token;
 
   return (
     <Card
@@ -65,7 +64,7 @@ export const TransactionInfo = () => {
       <Label label="You Will Receive" color="textPrimary" dense>
         <Amount2
           value={
-            !tokenValue || receivingAmountRaw === '0'
+            !token || receivingAmountRaw === '0'
               ? undefined
               : receivingAmountRaw
           }
@@ -76,21 +75,21 @@ export const TransactionInfo = () => {
       <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
       <Label label="Transaction Fee" dense>
         <Amount2
-          value={!tokenValue ? undefined : networkFeeRaw}
+          value={!token ? undefined : networkFeeRaw}
           unit={tokenInfo?.tokenName}
           loading={isPending}
         />
       </Label>
       <Label label="Bridge Fee" dense>
         <Amount2
-          value={!tokenValue ? undefined : bridgeFeeRaw}
+          value={!token ? undefined : bridgeFeeRaw}
           unit={tokenInfo?.tokenName}
           loading={isPending}
         />
       </Label>
       <Label label="Min Transfer" dense>
         <Amount2
-          value={!tokenValue ? undefined : minTransferRaw}
+          value={!token ? undefined : minTransferRaw}
           unit={tokenInfo?.tokenName}
           loading={isPending}
         />

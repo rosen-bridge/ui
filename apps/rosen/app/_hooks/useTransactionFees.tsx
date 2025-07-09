@@ -16,7 +16,7 @@ import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 import { calculateFee } from '@/_actions';
 import { unwrap } from '@/_safeServerAction';
 
-import { useNetwork } from './useNetwork';
+import { useBridgeForm } from './useBridgeForm';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
 
@@ -53,14 +53,15 @@ export const TransactionFeesContext =
   createContext<TransactionFeesContextType | null>(null);
 
 export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
-  const { selectedSource } = useNetwork();
+  const {
+    formValues: { source, target, token },
+  } = useBridgeForm();
 
   const { openSnackbar } = useSnackbar();
 
   const tokenMap = useTokenMap();
 
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const { amountValue } = useTransactionFormData();
 
   const [error, setError] = useState<unknown>();
 
@@ -73,14 +74,14 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, startTransition] = useTransition();
 
   const tokenId = useMemo(() => {
-    if (!sourceValue || !tokenValue) return;
+    if (!source || !token) return;
 
-    const tokens = tokenMap.search(sourceValue, {
-      tokenId: tokenValue.tokenId,
+    const tokens = tokenMap.search(source.name, {
+      tokenId: token.tokenId,
     });
 
     return tokens[0].ergo.tokenId as string;
-  }, [sourceValue, tokenValue, tokenMap]);
+  }, [source, token, tokenMap]);
 
   const decimals = useMemo(() => {
     if (!tokenId) return 0;
@@ -157,15 +158,15 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
     setFeesInfo(undefined);
 
-    if (!selectedSource || !sourceValue || !targetValue || !tokenId) return;
+    if (!source || !target || !tokenId) return;
 
     startTransition(async () => {
       try {
         const parsedData = await unwrap(calculateFee)(
-          sourceValue,
-          targetValue,
+          source.name,
+          target.name,
           tokenId,
-          selectedSource.nextHeightInterval,
+          source.nextHeightInterval,
         );
 
         if (
@@ -187,14 +188,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
         setError(error);
       }
     });
-  }, [
-    isLoading,
-    selectedSource,
-    sourceValue,
-    targetValue,
-    tokenId,
-    openSnackbar,
-  ]);
+  }, [isLoading, source, target, tokenId, openSnackbar]);
 
   useEffect(() => {
     if (tokenId && tokenId !== feesInfo?.tokenId) {
@@ -204,7 +198,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     setFeesInfo(undefined);
-  }, [sourceValue, targetValue, tokenValue]);
+  }, [source, target, token]);
 
   return (
     <TransactionFeesContext.Provider value={state}>

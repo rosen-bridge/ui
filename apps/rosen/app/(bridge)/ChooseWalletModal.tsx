@@ -18,7 +18,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 
-import { useTransactionFormData } from '@/_hooks';
+import { useBridgeForm } from '@/_hooks';
 
 interface ChooseWalletModalProps {
   selectedWallet: Wallet | undefined;
@@ -51,7 +51,9 @@ export const ChooseWalletModal = ({
 }: ChooseWalletModalProps) => {
   const [, forceUpdate] = useState('');
 
-  const { sourceValue } = useTransactionFormData();
+  const {
+    formValues: { source },
+  } = useBridgeForm();
 
   useEffect(() => {
     if (!open) return;
@@ -78,7 +80,7 @@ export const ChooseWalletModal = ({
           It may be necessary to reload this page after the following extensions
           have been installed in order to connect to them.
         </Alert>
-        {sourceValue == NETWORKS.bitcoin.key && (
+        {source?.name == NETWORKS.bitcoin.key && (
           <Alert severity="warning" sx={{ my: '1rem' }}>
             We only support native SegWit addresses (P2WPKH or P2WSH) for the
             source address.

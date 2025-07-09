@@ -13,9 +13,9 @@ import { RosenAmountValue } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { useBalance } from './useBalance';
+import { useBridgeForm } from './useBridgeForm';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
-import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
 
 /**
@@ -44,14 +44,15 @@ export const MaxTransferContext = createContext<MaxTransferContextType | null>(
 );
 
 export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
+  const {
+    formValues: { target, token, walletAddress },
+  } = useBridgeForm();
+
   const { isLoading: isBalanceLoading, amount: balanceAmount } = useBalance();
 
   const { selectedSource } = useNetwork();
 
   const tokenMap = useTokenMap();
-
-  const { targetValue, tokenValue, walletAddressValue } =
-    useTransactionFormData();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -64,12 +65,12 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
   const isLoading = isBalanceLoading || isTransitionLoading;
 
   const raw = useMemo(() => {
-    if (!amount || !tokenMap || !tokenValue) return '0';
+    if (!amount || !tokenMap || !token) return '0';
     return getDecimalString(
       amount.toString(),
-      tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+      tokenMap.getSignificantDecimals(token.tokenId) || 0,
     );
-  }, [amount, tokenMap, tokenValue]);
+  }, [amount, tokenMap, token]);
 
   const load = useCallback(() => {
     setAmount(0n);
@@ -80,8 +81,8 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
       !balanceAmount ||
       isBalanceLoading ||
       !selectedSource ||
-      !targetValue ||
-      !tokenValue ||
+      !target ||
+      !token ||
       !selectedWallet
     )
       return;
@@ -90,11 +91,11 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
       try {
         const amount = await selectedSource.getMaxTransfer({
           balance: balanceAmount,
-          isNative: tokenValue.type === 'native',
+          isNative: token.type === 'native',
           eventData: {
             fromAddress: await selectedWallet.getAddress(),
-            toAddress: walletAddressValue,
-            toChain: targetValue,
+            toAddress: walletAddress || '',
+            toChain: target.name,
           },
         });
 
@@ -108,9 +109,9 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
     isBalanceLoading,
     selectedSource,
     selectedWallet,
-    targetValue,
-    tokenValue,
-    walletAddressValue,
+    target,
+    token,
+    walletAddress,
   ]);
 
   useEffect(load, [load]);

@@ -4,8 +4,8 @@ import { useForm, FormProvider } from 'react-hook-form';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Alert } from '@rosen-bridge/ui-kit';
+import { Network } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
 
 import {
   BalanceProvider,
@@ -21,19 +21,17 @@ import { TransactionInfo } from './TransactionInfo';
 import { WalletInfo } from './WalletInfo';
 
 export interface BridgeForm {
-  source: string | null;
-  target: string | null;
+  source: Network | null;
+  target: Network | null;
   token: RosenChainToken | null;
   walletAddress: string | null;
-  amount: RosenAmountValue | null;
+  amount: string | null;
 }
 
 const RosenBridge = () => {
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',
     defaultValues: {
-      source: '',
-      target: '',
       amount: null,
     },
   });
@@ -58,8 +56,9 @@ const RosenBridge = () => {
                     local:ergo/rosen-bridge/ui#486
                     */}
 
-                  {(methods.getValues().source == NETWORKS.binance.key ||
-                    methods.getValues().source == NETWORKS.ethereum.key) && (
+                  {(methods.getValues().source?.name == NETWORKS.binance.key ||
+                    methods.getValues().source?.name ==
+                      NETWORKS.ethereum.key) && (
                     <div className="alert">
                       <Alert
                         severity="warning"

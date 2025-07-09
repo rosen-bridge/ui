@@ -103,7 +103,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const targets = useMemo(() => {
     if (!source) return [];
 
-    return (tokenMap.getSupportedChains(source) as NetworkKey[])
+    return (tokenMap.getSupportedChains(source.name) as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
       .map((chain) => getNetwork(chain));
   }, [source, tokenMap, getNetwork]);
@@ -114,12 +114,12 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const tokens = useMemo(() => {
     if (!target || !source) return [];
 
-    return tokenMap.getTokens(source, target);
+    return tokenMap.getTokens(source.name, target.name);
   }, [target, source, tokenMap]);
 
-  const selectedSource = source ? getNetwork(source as NetworkKey) : undefined;
+  const selectedSource = source ? getNetwork(source.name) : undefined;
 
-  const selectedTarget = target ? getNetwork(target as NetworkKey) : undefined;
+  const selectedTarget = target ? getNetwork(target.name) : undefined;
 
   useEffect(() => {
     if (!blacklist) return;
@@ -148,11 +148,11 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
 
           sources.add(getNetwork(fromChain as NetworkKey));
 
-          if (source != fromChain) continue;
+          if (source?.name != fromChain) continue;
 
           targets.add(getNetwork(toChain as NetworkKey));
 
-          if (target != toChain) continue;
+          if (target?.name != toChain) continue;
 
           tokens.add(token);
         }

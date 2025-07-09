@@ -1,11 +1,17 @@
 import { useContext } from 'react';
-import { useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { InputSelectProps, InputTextProps } from '@rosen-bridge/ui-kit';
-import { Network, RosenAmountValue } from '@rosen-ui/types';
+import {
+  InputSelectNetworkProps,
+  InputSelectProps,
+  InputTextProps,
+} from '@rosen-bridge/ui-kit';
+import { Network } from '@rosen-network/base';
+import { RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import { BridgeForm } from '@/(bridge)/page';
 import { validateAddress } from '@/_actions';
 import { useNetwork } from '@/_hooks';
 import * as networks from '@/_networks';
@@ -13,7 +19,6 @@ import { unwrap } from '@/_safeServerAction';
 import { getMinTransfer } from '@/_utils';
 
 import { useTokenMap } from './useTokenMap';
-import { useTransactionFormData } from './useTransactionFormData';
 import { WalletContext } from './useWallet';
 
 /**
@@ -22,34 +27,28 @@ import { WalletContext } from './useWallet';
  */
 
 export const useBridgeForm = () => {
-  const { control, resetField, reset, setValue, formState, setFocus, watch } =
-    useTransactionFormData();
-  const { availableTokens } = useNetwork();
+  const { control, formState, watch, setValue, resetField } =
+    useFormContext<BridgeForm>();
+
+  const { availableTokens, availableSources, availableTargets } = useNetwork();
   const tokenMap = useTokenMap();
 
   const walletGlobalContext = useContext(WalletContext);
-
-  const { field: sourceField } = useController({
-    name: 'source',
-    control,
-  });
-
-  const { field: targetField } = useController({
-    name: 'target',
-    control,
-  });
-
-  const { field: tokenField } = useController({
-    name: 'token',
-    control,
-  });
 
   const { field: amountField } = useController({
     name: 'amount',
     control,
     rules: {
       validate: async (value) => {
-        const address = watch('walletAddress');
+        const { source, target, token, walletAddress } = watch();
+
+        // check prerequisites
+        if (value == null) return 'Please enter amount';
+        if (!source) return 'Please select the source network';
+        if (!target) return 'Please select the target network';
+        if (!token) return 'Please select a token';
+        if (!walletAddress) return 'Please enter the target address';
+
         // match any complete or incomplete decimal number
         const match = value.match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
 
@@ -58,8 +57,7 @@ export const useBridgeForm = () => {
         if (isValueInvalid) return 'The amount is not valid';
 
         if (!tokenMap) return 'Token map config is unavailable';
-        const decimals =
-          tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
+        const decimals = tokenMap.getSignificantDecimals(token?.tokenId) || 0;
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
@@ -75,18 +73,16 @@ export const useBridgeForm = () => {
           // prevent user from entering more than token amount
 
           const selectedNetwork = Object.values(networks).find(
-            (wallet) => wallet.name == sourceField.value,
+            (wallet) => wallet.name == source?.name,
           )!;
 
           const maxTransfer = await selectedNetwork.getMaxTransfer({
-            balance: await walletGlobalContext!.selected.getBalance(
-              tokenField.value,
-            ),
-            isNative: tokenField.value.type === 'native',
+            balance: await walletGlobalContext!.selected.getBalance(token),
+            isNative: token?.type === 'native',
             eventData: {
               fromAddress: await walletGlobalContext!.selected!.getAddress(),
-              toAddress: address,
-              toChain: targetField.value as Network,
+              toAddress: walletAddress,
+              toChain: target.name,
             },
           });
 
@@ -95,9 +91,9 @@ export const useBridgeForm = () => {
         }
 
         const minTransfer = await getMinTransfer(
-          tokenField.value,
-          sourceField.value,
-          targetField.value,
+          token,
+          source.name,
+          target.name,
         );
         const isAmountSmall = wrappedAmount < minTransfer;
         if (isAmountSmall) return 'Minimum transfer amount not respected';
@@ -108,9 +104,35 @@ export const useBridgeForm = () => {
   });
 
   const fields: {
+    source: InputSelectNetworkProps<Network>;
+    target: InputSelectNetworkProps<Network>;
     token: InputSelectProps<RosenChainToken>;
     address: InputTextProps;
   } = {
+    source: {
+      name: 'source',
+      label: 'Source',
+      defaultValue: null,
+      options: availableSources,
+      required: true,
+      onValueChange: () => {
+        resetField('target');
+        resetField('token');
+        resetField('amount');
+      },
+    },
+    target: {
+      name: 'target',
+      label: 'Target',
+      defaultValue: null,
+      options: availableTargets,
+      required: true,
+      disabled: !watch('source'),
+      onValueChange: () => {
+        resetField('token');
+        resetField('amount');
+      },
+    },
     token: {
       name: 'token',
       label: 'Token',
@@ -135,9 +157,9 @@ export const useBridgeForm = () => {
           return 'Target network is not selected!';
         }
         const isValid = await unwrap(validateAddress)(
-          targetNetwork,
+          targetNetwork.name,
           Object.values(networks)
-            .find((wallet) => wallet.name == targetNetwork)!
+            .find((wallet) => wallet.name == targetNetwork.name)!
             .toSafeAddress(value),
         );
         if (isValid) return;
@@ -149,14 +171,9 @@ export const useBridgeForm = () => {
 
   return {
     fields,
-    reset,
     setValue,
-    resetField,
-    setFocus,
-    sourceField,
-    targetField,
-    tokenField,
     amountField,
     formState,
+    formValues: watch(),
   };
 };
