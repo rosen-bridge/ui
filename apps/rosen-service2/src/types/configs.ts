@@ -47,6 +47,13 @@ export interface Configs {
         level: 'info' | 'debug' | 'warn' | 'error';
       }
   )[];
+  db: {
+    host: string;
+    port: number;
+    name: string;
+    user: string;
+    password: string;
+  };
   chains: {
     ergo: {
       chainConfigs: ErgoChainConfig | undefined;

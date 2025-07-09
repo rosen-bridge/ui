@@ -71,6 +71,28 @@
       }
     }
   },
+  "db": {
+    "type": "object",
+    "children": {
+      "host": {
+        "type": "string",
+        "default": "localhost"
+      },
+      "port": {
+        "type": "number",
+        "default": 5432
+      },
+      "user": {
+        "type": "string"
+      },
+      "password": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      }
+    }
+  },
   "chains": {
     "type": "object",
     "children": {

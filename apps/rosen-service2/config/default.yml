@@ -5,7 +5,13 @@ logs:
     path: ./logs/
     level: info
   - type: console
-    level: info
+    level: debug
+db:
+  host: localhost
+  port: 5432
+  name: rs2
+  user: postgres
+  password:
 chains:
   cardano:
     active: true
