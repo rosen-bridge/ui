@@ -1,4 +1,5 @@
-import { CipWalletApi, WalletConfig } from '@rosen-ui/wallet-api';
+import type { CipWalletApi } from '@rosen-network/cardano';
+import { WalletConfig } from '@rosen-ui/wallet-api';
 
 export type LaceWalletConfig = WalletConfig & {};
 

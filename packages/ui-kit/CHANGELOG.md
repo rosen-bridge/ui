@@ -1,5 +1,34 @@
 # @rosen-bridge/ui-kit
 
+## 2.0.0
+
+### Major Changes
+
+- Refine the `NewPagination` component’s interface to adhere to standard design conventions
+- Extracted the `Sort` component from `SmartSearch` to improve maintainability by making it a standalone, reusable component
+- Update `NavigationBar` logic to streamline and simplify its usage
+- Refine the `EnhancedDialog` component to ensure it aligns with the design specifications
+- Add the variant prop with `standard` and `filled` values to the Connector component
+- Add `subtitle1` fontSize to the theme options.
+- Implement Token Component
+- Develop a layout component named `DataLayout` to standardize the presentation of data items across applications. include slots such as filtering, sorting, a sidebar, pagination, and content display
+- Create a reusable component and hook to enable sticky positioning for a sidebar box
+- Implement a custom hook called `useBreakpoint` to detect and respond to size changes in JavaScript logic
+- Create a custom hook called `useCollection` to seamlessly integrate `useSWR` with list components
+- Implement `EmptyState` component
+
+### Patch Changes
+
+- Fix the color of toolbar buttons
+- Fix the info color
+- Add identifier and copy button components
+- Prevent line compression and breaking in the Label component
+- Change tooltip color
+- Fix label display issue in Network component
+- Correct typing and rendering issues in Chip component
+- Fix the overflow style and scroll effect of app component
+- Update dependency @rosen-bridge/icons@2.1.0
+
 ## 1.12.0
 
 ### Minor Changes

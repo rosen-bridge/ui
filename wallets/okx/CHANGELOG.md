@@ -1,5 +1,15 @@
 # @rosen-ui/okx-wallet
 
+## 2.1.0
+
+### Minor Changes
+
+- Update the `disconnect`, `switchChain`, and `isConnected` methods to align with the latest changes in the wallet abstract class
+
+### Patch Changes
+
+- Update dependency @rosen-ui/wallet-api@3.0.0
+
 ## 2.0.0
 
 ### Major Changes

@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/watcher-app",
-  "version": "3.4.0",
+  "version": "3.4.1",
   "private": true,
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -15,15 +15,15 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^2.0.0",
-    "@rosen-bridge/ui-kit": "^1.12.0",
+    "@rosen-bridge/icons": "^2.1.0",
+    "@rosen-bridge/ui-kit": "^2.0.0",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-ui/swr-helpers": "^0.2.1",
-    "@rosen-ui/swr-mock": "^0.0.4",
+    "@rosen-ui/swr-mock": "^0.1.0",
     "@rosen-ui/utils": "^0.6.0",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
-    "next": "14.1.0",
+    "next": "14.2.30",
     "react": "^18.2.0",
     "react-apexcharts": "^1.4.0",
     "react-copy-to-clipboard": "^5.1.0",

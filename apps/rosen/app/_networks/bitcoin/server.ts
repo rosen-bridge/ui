@@ -12,22 +12,22 @@ import { wrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 export const generateOpReturnData = wrap(generateOpReturnDataCore, {
-  traceKey: 'generateOpReturnData',
+  traceKey: 'bitcoin:generateOpReturnData',
 });
 
 export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'generateUnsignedTx',
+  traceKey: 'bitcoin:generateUnsignedTx',
 });
 
 export const getAddressBalance = wrap(getAddressBalanceCore, {
   cache: 3000,
-  traceKey: 'getAddressBalance',
+  traceKey: 'bitcoin:getAddressBalance',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
-  traceKey: 'getMaxTransfer',
+  traceKey: 'bitcoin:getMaxTransfer',
 });
 
 export const submitTransaction = wrap(submitTransactionCore, {
-  traceKey: 'submitTransaction',
+  traceKey: 'bitcoin:submitTransaction',
 });

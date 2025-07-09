@@ -1,22 +1,11 @@
-import { EventHandler, FC, ReactNode, SyntheticEvent } from 'react';
+import { ReactNode } from 'react';
 
-import { useIsMobile } from '../../hooks';
-import { isLegacyTheme } from '../../hooks/useTheme';
-import { alpha, styled } from '../../styling';
-import { Badge, Button, SvgIcon } from '../base';
+import { useIsMobile, isLegacyTheme } from '../../../hooks';
+import { alpha, styled } from '../../../styling';
+import { Badge, Button, SvgIcon } from '../../base';
+import { useNavigationBar } from './useNavigationBar';
 
-const NavigationButtonIndicator = styled('div', {
-  name: 'RosenNavigationButton',
-  slot: 'indicator',
-  overridesResolver: (props, styles) => styles.root,
-})(({ theme }) => ({
-  height: theme.spacing(1),
-  width: theme.spacing(3),
-  borderRadius: theme.spacing(1),
-  backgroundColor: theme.palette.primary.main,
-}));
-
-const NavButtonBase = styled(Button)(({ theme }) => ({
+const NavigationButtonBase = styled(Button)(({ theme }) => ({
   'flexDirection': 'column',
   'fontSize': theme.typography.subtitle2.fontSize,
   'gap': theme.spacing(0.5),
@@ -90,14 +79,24 @@ const NavButtonBase = styled(Button)(({ theme }) => ({
   },
 }));
 
-interface NavButtonProps {
+const NavigationButtonIndicator = styled('div', {
+  name: 'RosenNavigationButton',
+  slot: 'indicator',
+  overridesResolver: (props, styles) => styles.root,
+})(({ theme }) => ({
+  height: theme.spacing(1),
+  width: theme.spacing(3),
+  borderRadius: theme.spacing(1),
+  backgroundColor: theme.palette.primary.main,
+}));
+
+export type NavigationButtonProps = {
   label: string;
   icon: ReactNode;
-  onClick: EventHandler<SyntheticEvent>;
-  isActive?: boolean;
+  path: string;
   disabled?: boolean;
   badge?: string;
-}
+};
 
 /**
  * renders a navigation button with styles and adopts based on screen size
@@ -108,9 +107,14 @@ interface NavButtonProps {
  * @property {boolean} isActive - if true the component will be rendered in active state
  * @property {boolean} disabled - if true the component will be rendered in disabled state
  */
-
-export const NavigationButton: FC<NavButtonProps> = (props) => {
-  const { badge, label, icon, isActive, onClick, disabled } = props;
+export const NavigationButton = ({
+  badge,
+  label,
+  icon,
+  path,
+  disabled,
+}: NavigationButtonProps) => {
+  const { click, isActive } = useNavigationBar();
 
   const isMobile = useIsMobile();
 
@@ -124,15 +128,15 @@ export const NavigationButton: FC<NavButtonProps> = (props) => {
     );
 
   return (
-    <NavButtonBase
-      onClick={onClick}
-      className={isActive ? 'active' : undefined}
+    <NavigationButtonBase
+      onClick={() => click(path)}
+      className={isActive(path) ? 'active' : undefined}
       startIcon={startIcon}
       variant="text"
       disabled={disabled}
       disableRipple
     >
-      {isMobile && isActive ? <NavigationButtonIndicator /> : label}
-    </NavButtonBase>
+      {isMobile && isActive(path) ? <NavigationButtonIndicator /> : label}
+    </NavigationButtonBase>
   );
 };

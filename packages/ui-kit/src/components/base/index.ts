@@ -12,7 +12,6 @@ export * from './CardActions';
 export * from './CardHeader';
 export * from './CardContent';
 export * from './Checkbox';
-export * from './Chip';
 export * from './CircularProgress';
 export * from './Collapse';
 export * from './CssBaseLine';

@@ -94,6 +94,9 @@ export { default as KeySkeletonRaw } from './icons/key-skeleton.svg?raw';
 export { ReactComponent as LinkBroken } from './icons/link-broken.svg';
 export { default as LinkBrokenRaw } from './icons/link-broken.svg?raw';
 
+export { ReactComponent as ListUiAlt } from './icons/list-ui-alt.svg';
+export { default as ListUiAltRaw } from './icons/list-ui-alt.svg?raw';
+
 export { ReactComponent as LockAlt } from './icons/lock-alt.svg';
 export { default as LockAltRaw } from './icons/lock-alt.svg?raw';
 
@@ -117,6 +120,9 @@ export { default as PauseRaw } from './icons/pause.svg?raw';
 
 export { ReactComponent as QrcodeScan } from './icons/qrcode-scan.svg';
 export { default as QrcodeScanRaw } from './icons/qrcode-scan.svg?raw';
+
+export { ReactComponent as Qrcode } from './icons/qrcode.svg';
+export { default as QrcodeRaw } from './icons/qrcode.svg?raw';
 
 export { ReactComponent as ReceiptAlt } from './icons/receipt-alt.svg';
 export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';

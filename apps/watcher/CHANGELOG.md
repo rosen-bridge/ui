@@ -1,5 +1,15 @@
 # @rosen-bridge/watcher-app
 
+## 3.4.1
+
+### Patch Changes
+
+- Update the usage of the `NavigationBar` component to align with the latest changes in the `ui-kit` package
+- Update dependencies
+  - @rosen-bridge/icons@2.1.0
+  - @rosen-bridge/ui-kit@2.0.0
+  - @rosen-ui/swr-mock@0.1.0
+
 ## 3.4.0
 
 ### Minor Changes

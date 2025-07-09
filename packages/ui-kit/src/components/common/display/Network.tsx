@@ -1,7 +1,7 @@
 import * as Icons from '@rosen-bridge/icons';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { capitalize } from 'lodash';
+import { capitalize } from 'lodash-es';
 
 import { styled } from '../../../styling';
 import { Skeleton, SvgIcon, Typography } from '../../base';
@@ -111,7 +111,7 @@ export const Network = ({
             sx={{ borderRadius: 0.3 }}
           />
         ) : (
-          <Typography variant="body1">{network.key}</Typography>
+          <Typography variant="body1">{network.label}</Typography>
         ))}
     </ContainerNetwork>
   );
