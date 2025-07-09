@@ -1,0 +1,159 @@
+{
+  "logs": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "children": {
+        "type": {
+          "type": "string",
+          "description": "options: file, console, loki",
+          "default": "file",
+          "validations": [
+            {
+              "required": true,
+              "error": "log type must be specified"
+            },
+            { "choices": ["file", "console", "loki"] }
+          ]
+        },
+        "maxSize": {
+          "type": "string",
+          "default": "20m",
+          "validations": [
+            {
+              "required": true,
+              "error": "maxSize for file log type must be specified",
+              "when": { "path": "logs.type", "value": "file" }
+            }
+          ]
+        },
+        "maxFiles": {
+          "type": "string",
+          "default": "14d",
+          "validations": [
+            {
+              "required": true,
+              "error": "maxFiles for file log type must be specified",
+              "when": { "path": "logs.type", "value": "file" }
+            }
+          ]
+        },
+        "path": {
+          "type": "string",
+          "validations": [
+            {
+              "required": true,
+              "error": "path for file log type must be specified",
+              "when": { "path": "logs.type", "value": "file" }
+            }
+          ]
+        },
+        "level": {
+          "type": "string",
+          "default": "info",
+          "validations": [
+            {
+              "required": true,
+              "error": "log level must be specified"
+            }
+          ]
+        },
+        "host": {
+          "type": "string",
+          "validations": [
+            {
+              "required": true,
+              "error": "host for the \"loki\" log type must be specified",
+              "when": { "path": "logs.type", "value": "loki" }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "chains": {
+    "type": "object",
+    "children": {
+      "cardano": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "cardano activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "cardano activation state must be set"
+              }
+            ]
+          }
+        }
+      },
+      "bitcoin": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "bitcoin activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "bitcoin activation state must be set"
+              }
+            ]
+          }
+        }
+      },
+      "doge": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "doge activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "doge activation state must be set"
+              }
+            ]
+          }
+        }
+      },
+      "ethereum": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "ethereum activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "ethereum activation state must be set"
+              }
+            ]
+          }
+        }
+      },
+      "binance": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "binance activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "binance activation state must be set"
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}
