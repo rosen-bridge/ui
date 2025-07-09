@@ -1,5 +1,11 @@
 # @rosen-ui/swr-mock
 
+## 0.1.0
+
+### Minor Changes
+
+- Expose the `FakeData` type which serves as the parameter for the `mockMiddlewareFactory` function
+
 ## 0.0.4
 
 ### Patch Changes

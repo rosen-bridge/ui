@@ -2,7 +2,7 @@
   "name": "@rosen-bridge/ui-kit",
   "description": "ui kit for Rosen projects",
   "private": true,
-  "version": "1.12.0",
+  "version": "2.0.0",
   "type": "module",
   "files": [
     "dist"
@@ -41,7 +41,7 @@
   "dependencies": {
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.4",
-    "@rosen-bridge/icons": "^2.0.0",
+    "@rosen-bridge/icons": "^2.1.0",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-ui/swr-helpers": "^0.2.1",
     "@rosen-ui/utils": "^0.6.0",
