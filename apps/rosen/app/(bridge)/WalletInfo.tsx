@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { LinkBroken } from '@rosen-bridge/icons';
 import { Wallet } from '@rosen-bridge/icons';
@@ -32,36 +32,25 @@ const StyledCard = styled(Card)(({ theme }) => ({
 export const WalletInfo = () => {
   const {
     select: setSelectedWallet,
+    state: walletState,
     wallets,
     selected: selectedWallet,
     disconnect,
   } = useWallet();
   const { selectedSource } = useNetwork();
   const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
-  const [state, setState] = useState<
-    'PENDING' | 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED'
-  >('PENDING');
+
   const Icon = selectedWallet?.iconReact;
   const label = selectedWallet?.label;
 
-  useEffect(() => {
-    if (selectedWallet) {
-      setState('CONNECTED');
-    } else if (selectedSource) {
-      setState('DISCONNECTED');
-    } else {
-      setState('PENDING');
-    }
-  }, [selectedWallet, selectedSource]);
-
   return (
-    <StyledCard className={state === 'CONNECTED' ? 'connected' : ''}>
-      {state === 'PENDING' && (
+    <StyledCard className={walletState === 'CONNECTED' ? 'connected' : ''}>
+      {walletState === 'PENDING' && (
         <Typography variant="body2" color="text.secondary">
           Select source to see available wallets.
         </Typography>
       )}
-      {state === 'DISCONNECTED' && (
+      {walletState === 'DISCONNECTED' && (
         <Button
           variant="text"
           startIcon={
@@ -75,10 +64,10 @@ export const WalletInfo = () => {
           Choose Wallet
         </Button>
       )}
-      {state === 'CONNECTING' && (
+      {walletState === 'CONNECTING' && (
         <Typography color="text.secondary">Connecting to wallet...</Typography>
       )}
-      {state === 'CONNECTED' && (
+      {walletState === 'CONNECTED' && (
         <>
           <IconButton
             sx={{
