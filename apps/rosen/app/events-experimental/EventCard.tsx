@@ -14,18 +14,18 @@ import {
 import { Network as NetworkType } from '@rosen-ui/types';
 import { capitalize } from 'lodash-es';
 
-interface DataContainerProps {
+export type DataContainerProps = {
   variant?: 'grid' | 'row';
   bordered?: boolean;
-}
+};
 
-interface EventCardProps {
+type EventCardProps = {
   onClick?: () => void;
   item?: any;
   active?: boolean;
   variant?: 'grid' | 'row';
   isLoading?: boolean;
-}
+};
 
 const DataCard = styled('div')<DataContainerProps>(
   ({ theme, bordered, variant }) => ({
@@ -72,11 +72,7 @@ const renderToken = (item: any, name: string) => (
 );
 
 const renderIdentifier = (string: string) => (
-  <Box
-    sx={(theme) => ({
-      width: '220px',
-    })}
-  >
+  <Box sx={{ width: '220px' }}>
     <Identifier value={string} href={string} />
   </Box>
 );

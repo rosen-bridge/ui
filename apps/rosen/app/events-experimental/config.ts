@@ -69,47 +69,6 @@ export const filters: Filter[] = [
       type: 'number',
     },
   },
-  // {
-  //   name: 'token',
-  //   label: 'Token',
-  //   unique: true,
-  //   operators: OPERATORS_EQUALITY,
-  //   input: (context) => ({
-  //     type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
-  //     options: [],
-  //   }),
-  // },
-  // {
-  //   name: 'amount',
-  //   label: 'Amount',
-  //   operators: OPERATORS_COMPARATIVE,
-  //   input: {
-  //     type: 'text',
-  //   },
-  // },
-  // {
-  //   name: 'status',
-  //   label: 'Status',
-  //   unique: true,
-  //   operators: OPERATORS_EQUALITY,
-  //   input: (context) => ({
-  //     type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
-  //     options: [
-  //       {
-  //         label: 'Fraud',
-  //         value: 'fraud',
-  //       },
-  //       {
-  //         label: 'Processing',
-  //         value: null,
-  //       },
-  //       {
-  //         label: 'Done',
-  //         value: 'successful',
-  //       },
-  //     ],
-  //   }),
-  // },
   {
     name: 'in',
     label: 'Search whithin',

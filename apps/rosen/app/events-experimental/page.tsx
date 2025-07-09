@@ -11,21 +11,17 @@ import {
   useSnackbar,
   useBreakpoint,
   styled,
+  EmptyState,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import { ApiEventResponse, EventItem } from '@/_types';
-import EventCard from '@/events-experimental/EventCard';
+import EventCard, { DataContainerProps } from '@/events-experimental/EventCard';
 
 import { filters, sorts } from './config';
 import { Details } from './details';
-
-interface DataContainerProps {
-  variant?: 'grid' | 'row';
-  bordered?: boolean;
-}
 
 const EventsContainer = styled('div')<DataContainerProps>(
   ({ theme, variant = 'grid' }) => ({
@@ -48,9 +44,7 @@ const Events = () => {
   const [current, setCurrent] = useState<EventItem>();
 
   const collection = useCollection();
-  useEffect(() => {
-    console.log(current);
-  }, [setCurrent]);
+
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
     collection.params && ['/v1/events', collection.params],
     fetcher,
@@ -112,7 +106,6 @@ const Events = () => {
       );
     }
   }, [error]);
-  console.log(data?.items[0]);
 
   return (
     <DataLayout
@@ -121,10 +114,17 @@ const Events = () => {
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
-      {!isLoading ? (
-        <EventsContainer variant={'grid'}>
-          {data?.items.map((item) => (
+      {isLoading ? (
+        <EventsContainer variant="grid">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <EventCard key={i} isLoading variant="grid" />
+          ))}
+        </EventsContainer>
+      ) : data?.items?.length ? (
+        <EventsContainer variant="grid">
+          {data.items.map((item) => (
             <EventCard
+              key={item.id}
               onClick={() => setCurrent(item)}
               item={item}
               active={current?.id === item.id}
@@ -132,11 +132,7 @@ const Events = () => {
           ))}
         </EventsContainer>
       ) : (
-        <EventsContainer variant={'grid'}>
-          {Array.from({ length: 5 }).map((_, i) => (
-            <EventCard key={i} isLoading variant={'grid'} />
-          ))}
-        </EventsContainer>
+        <EmptyState />
       )}
     </DataLayout>
   );

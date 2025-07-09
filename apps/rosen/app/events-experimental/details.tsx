@@ -19,6 +19,7 @@ import {
   Chip,
   Identifier,
   Token,
+  RelativeTime,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import { upperCase } from 'lodash-es';
@@ -47,29 +48,9 @@ const renderEmptyState = () => (
   </Box>
 );
 
-function getTimeAgoParts(timestamp: number): { amount: number; unit: string } {
-  const targetTime = moment.unix(timestamp);
-  const diffString = moment().to(targetTime, true);
-
-  const parts = diffString.split(' ');
-  let amount: number;
-  let unit: string;
-
-  if (parseInt(parts[0], 10)) {
-    amount = parseInt(parts[0], 10);
-    unit = parts[1];
-  } else {
-    amount = 0;
-    unit = 'seconds';
-  }
-
-  return { amount, unit };
-}
-
 const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
-  console.log(value);
   if (!value) return renderEmptyState();
-  const { amount, unit } = getTimeAgoParts(value.timestamp);
+
   return (
     <Box
       sx={{
@@ -128,11 +109,11 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
         </Label>
         <Label label="Payment Tx" inset>
           {/*TODO: Value for Payment Tx is not available yet. */}
-          <Identifier value={value.sourceTxId} />
+          TODO
         </Label>
         <Label label="Reward Tx" inset>
           {/*TODO: Value for Reward Tx is not available yet. */}
-          <Identifier value={value.sourceTxId} />
+          TODO
         </Label>
       </div>
       <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
@@ -145,11 +126,7 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
           <Identifier value={value.toAddress} />
         </Label>
         <Label label="Duration">
-          {amount !== 0 ? (
-            <Amount2 value={amount} unit={unit} />
-          ) : (
-            <Amount2 unit={"a just now"} />
-          )}
+          <RelativeTime timestamp={value.timestamp} />
         </Label>
         <Label label="Bridge fee">
           <Amount2
@@ -167,7 +144,7 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
             )}
           />
         </Label>
-        <Label label="Reports">Not Found</Label>
+        <Label label="Reports">TODO</Label>
         <Label label="Height">{value.height}</Label>
       </div>
     </Box>
