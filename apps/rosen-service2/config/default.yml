@@ -1,0 +1,25 @@
+logs:
+  - type: file
+    maxSize: 20m
+    maxFiles: 14d
+    path: ./logs/
+    level: info
+  - type: console
+    level: debug
+db:
+  host: localhost
+  port: 5432
+  name: rs2
+  user: postgres
+  password:
+chains:
+  cardano:
+    active: true
+  bitcoin:
+    active: true
+  doge:
+    active: true
+  ethereum:
+    active: true
+  binance:
+    active: true
