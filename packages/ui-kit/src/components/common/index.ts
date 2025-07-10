@@ -38,4 +38,5 @@ export * from './WithExternalLink';
 export * from './Token';
 export * from './Chip';
 export * from './RelativeTime';
+export * from './ViewToggle';
 export * from './EmptyState';

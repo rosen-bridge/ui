@@ -1,5 +1,17 @@
 # @rosen-network/ergo
 
+## 2.2.0
+
+### Minor Changes
+
+- Add relevant `types` related to the context, as defined in the `@rosen-ui/wallet-api` package
+
+### Patch Changes
+
+- Resolve the issue concerning the maximum number of tokens allowed in an Ergo Box
+- Fix invalid transaction generation bug due to wrong ERG value in change box
+- Update dependency @rosen-bridge/icons@2.1.0
+
 ## 2.1.3
 
 ### Patch Changes

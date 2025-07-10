@@ -76,6 +76,9 @@ export { default as FileCopyAltRaw } from './icons/file-copy-alt.svg?raw';
 export { ReactComponent as FileEditAlt } from './icons/file-edit-alt.svg';
 export { default as FileEditAltRaw } from './icons/file-edit-alt.svg?raw';
 
+export { ReactComponent as Grid } from './icons/grid.svg';
+export { default as GridRaw } from './icons/grid.svg?raw';
+
 export { ReactComponent as Headphones } from './icons/headphones.svg';
 export { default as HeadphonesRaw } from './icons/headphones.svg?raw';
 
@@ -129,6 +132,9 @@ export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';
 
 export { ReactComponent as Redo } from './icons/redo.svg';
 export { default as RedoRaw } from './icons/redo.svg?raw';
+
+export { ReactComponent as Row } from './icons/row.svg';
+export { default as RowRaw } from './icons/row.svg?raw';
 
 export { ReactComponent as Search } from './icons/search.svg';
 export { default as SearchRaw } from './icons/search.svg?raw';
