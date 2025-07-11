@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-app
 
+## 4.2.2
+
+### Patch Changes
+
+- Apply patch for @rosen-bridge/abstract-box-selection (Fix calculation of change box count)
+
 ## 4.2.1
 
 ### Patch Changes
