@@ -92,13 +92,7 @@
         ]
       },
       "password": {
-        "type": "string",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres password is required"
-          }
-        ]
+        "type": "string"
       },
       "name": {
         "type": "string",
