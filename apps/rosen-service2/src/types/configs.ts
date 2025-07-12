@@ -1,6 +1,6 @@
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
+import { SUPPORTED_CHAINS } from '../constants';
 
-export type ChainChoices = (typeof NETWORKS_KEYS)[number];
+export type ChainChoices = (typeof SUPPORTED_CHAINS)[number];
 
 export interface ErgoChainConfig {
   explorerUrl: string;
