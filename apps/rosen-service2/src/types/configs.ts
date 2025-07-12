@@ -1,3 +1,7 @@
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
+
+export type ChainChoices = (typeof NETWORKS_KEYS)[number];
+
 export interface ErgoChainConfig {
   explorerUrl: string;
 }
@@ -77,29 +81,13 @@ export interface Configs {
 export interface ChainConfigs {
   version: string;
   addresses: {
-    RWTRepo: string;
+    lock: string;
+    WatcherTriggerEvent: string;
     WatcherPermit: string;
     Fraud: string;
-    lock: string;
-    cold: string;
-    guardSign: string;
-    Commitment: string;
-    WatcherTriggerEvent: string;
-    WatcherCollateral: string;
-    RepoConfig: string;
-    Emission: string;
   };
   tokens: {
-    RepoNFT: string;
-    GuardNFT: string;
-    RSN: string;
-    RSNRatioNFT: string;
-    EmissionNFT: string;
-    ERSN: string;
-    CleanupNFT: string;
     RWTId: string;
-    AwcNFT: string;
-    RepoConfigNFT: string;
   };
   cleanupConfirm: number;
 }

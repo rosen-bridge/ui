@@ -5,10 +5,11 @@ import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { SUPPORTED_CHAINS, ERGO_CHAIN } from '../constants';
+import { SUPPORTED_CHAINS } from '../constants';
 import { Configs } from '../types';
 import { ChainConfigsReader } from './chains';
 
+const ERGO_CHAIN = 'ergo';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const JsonBigInt = JsonBigIntFactory({
   alwaysParseAsBig: false,
