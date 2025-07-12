@@ -2,4 +2,4 @@
 '@rosen-bridge/icons': minor
 ---
 
-Add the `ListUiAlt` icon
+Add two icons named `Grid` and `Row`

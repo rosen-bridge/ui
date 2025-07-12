@@ -1,5 +1,12 @@
 # @rosen-ui/wallet-api
 
+## 3.0.0
+
+### Major Changes
+
+- Remove support for `Ergo` and `Cardano` network types and utilities, and relocate them to their respective packages
+- Enhance the wallet abstract class to ensure its methods are securely callable
+
 ## 2.0.0
 
 ### Major Changes

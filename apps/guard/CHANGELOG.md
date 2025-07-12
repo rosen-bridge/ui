@@ -1,5 +1,24 @@
 # @rosen-bridge/guard-app
 
+## 2.0.0
+
+### Major Changes
+
+- Delete the Tokens section from the dashboard
+
+### Minor Changes
+
+- Add new `HealthStatus` component for Networks section in dashboard page
+
+### Patch Changes
+
+- Update the usage of the `NavigationBar` component to align with the latest changes in the `ui-kit` package
+- Fix the info color
+- Disable data refresh on window focus in `SWR` and limit error retry attempts to 3
+- Update dependencies
+  - @rosen-bridge/icons@2.1.0
+  - @rosen-bridge/ui-kit@2.0.0
+
 ## 1.12.4
 
 ### Patch Changes
