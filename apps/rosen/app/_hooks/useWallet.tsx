@@ -6,6 +6,7 @@ import {
   useEffect,
   useMemo,
   useState,
+  useTransition,
 } from 'react';
 
 import { useSnackbar } from '@rosen-bridge/ui-kit';
@@ -30,9 +31,12 @@ export const useWallet = () => {
   return context;
 };
 
+type WalletState = 'PENDING' | 'DISCONNECTED' | 'CONNECTING' | 'CONNECTED';
+
 export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
   selected?: Wallet;
+  state: WalletState;
   wallets: Wallet[];
   disconnect: () => void;
 };
@@ -44,7 +48,9 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
   const { openSnackbar } = useSnackbar();
 
+  const [isConnecting, startConnectTransition] = useTransition();
   const [selected, setSelected] = useState<Wallet>();
+  const [state, setState] = useState<WalletState>('PENDING');
 
   const filtered = useMemo(() => {
     if (!selectedSource) return [];
@@ -56,21 +62,24 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
   const select = useCallback(
     async (wallet: Wallet) => {
       try {
-        await wallet.connect();
-        if (wallet.switchChain && selectedSource) {
-          await wallet.switchChain(selectedSource.name);
-        }
+        startConnectTransition(async () => {
+          await wallet.connect();
+          if (wallet.switchChain && selectedSource) {
+            await wallet.switchChain(selectedSource.name);
+          }
+          startConnectTransition(() => {
+            setSelected(wallet);
+          });
+        });
       } catch (error: any) {
         return openSnackbar(error.message, 'error');
       }
-
-      setSelected(wallet);
 
       if (!selectedSource) return;
 
       localStorage.setItem('rosen:wallet:' + selectedSource.name, wallet.name);
     },
-    [selectedSource, openSnackbar, setSelected],
+    [selectedSource, openSnackbar, setSelected, startConnectTransition],
   );
 
   const disconnect = useCallback(() => {
@@ -101,17 +110,19 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       if (!(await wallet.isConnected())) return;
 
       try {
-        await wallet.connect();
-
-        await wallet.switchChain?.(selectedSource.name, true);
-
-        setSelected(wallet);
+        startConnectTransition(async () => {
+          await wallet.connect();
+          await wallet.switchChain?.(selectedSource.name, true);
+          startConnectTransition(() => {
+            setSelected(wallet);
+          });
+        });
       } catch (error) {
         setSelected(undefined);
         throw error;
       }
     })();
-  }, [selectedSource, setSelected]);
+  }, [selectedSource, setSelected, startConnectTransition]);
 
   /**
    * TODO: update or move this logic
@@ -140,14 +151,29 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     start();
   }, [selected, selectedSource]);
 
-  const state = {
+  useEffect(() => {
+    if (isConnecting) {
+      setState('CONNECTING');
+    } else if (selected) {
+      setState('CONNECTED');
+    } else if (selectedSource) {
+      setState('DISCONNECTED');
+    } else {
+      setState('PENDING');
+    }
+  }, [selected, selectedSource, isConnecting]);
+
+  const contextValue = {
     select,
     selected,
+    state,
     wallets: filtered,
     disconnect,
   };
 
   return (
-    <WalletContext.Provider value={state}>{children}</WalletContext.Provider>
+    <WalletContext.Provider value={contextValue}>
+      {children}
+    </WalletContext.Provider>
   );
 };
