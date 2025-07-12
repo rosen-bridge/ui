@@ -83,13 +83,31 @@
         "default": 5432
       },
       "user": {
-        "type": "string"
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres username is required"
+          }
+        ]
       },
       "password": {
-        "type": "string"
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres password is required"
+          }
+        ]
       },
       "name": {
-        "type": "string"
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres database name is required"
+          }
+        ]
       }
     }
   },

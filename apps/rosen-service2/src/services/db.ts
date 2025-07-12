@@ -7,7 +7,7 @@ import {
 } from '@rosen-bridge/service-manager';
 
 export class DBService extends AbstractService {
-  name = 'RosenService2-DBService';
+  name = 'DBService';
   private static instance: DBService;
   readonly dataSource: DataSource;
 
@@ -49,7 +49,6 @@ export class DBService extends AbstractService {
 
   protected start = async (): Promise<boolean> => {
     try {
-      this.setStatus(ServiceStatus.started);
       this.logger.debug('Initializing data source');
       await this.dataSource.initialize();
       this.logger.debug('data source initialized');
