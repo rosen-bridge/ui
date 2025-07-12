@@ -1,11 +1,10 @@
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
 import * as fs from 'fs';
 import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
 import { exit } from 'process';
 import { fileURLToPath } from 'url';
 
-import { ChainConfigs } from '../types';
+import { ChainConfigs, ChainChoices } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -17,7 +16,7 @@ const JsonBigInt = JsonBigIntFactory({
 export class ChainConfigsReader {
   public data: ChainConfigs | undefined;
 
-  constructor(protected chain: (typeof NETWORKS_KEYS)[number]) {
+  constructor(protected chain: ChainChoices) {
     this.readConfigs();
   }
 

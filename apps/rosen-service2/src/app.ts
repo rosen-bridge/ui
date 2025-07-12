@@ -10,10 +10,12 @@ const startApp = async () => {
   const serviceManager = ServiceManager.setup();
 
   logger.debug('Initializing database service');
-  await dataSource.initialize();
   DBService.init(dataSource, logger);
   serviceManager.register(DBService.getInstance());
   logger.debug('Database service registered to the service manager');
+
+  logger.debug('Starting service manager...');
+  await serviceManager.start(DBService.getInstance().getName());
 };
 
 export default startApp;
