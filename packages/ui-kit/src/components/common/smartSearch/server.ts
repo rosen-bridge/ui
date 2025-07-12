@@ -2,71 +2,56 @@ import Joi from 'joi';
 
 const OPERATORS = ['==', '!=', '<=', '>=', '*=', '^=', '$='] as const;
 
-const SEARCH_QUERY_KEY = 'search';
-
-const SEARCH_IN_QUERY_KEY = 'in';
-
-const SORT_QUERY_KEY = 'sort';
-
-type Fields = {
+type Field = {
   key: string;
   operator: (typeof OPERATORS)[number];
   value: boolean | number | string | (number | string)[];
 };
 
 type Sort = {
-  key?: string;
+  key: string;
   order?: 'ASC' | 'DESC';
 };
 
 type Search = {
-  query?: string;
-  in?: string;
+  query: string;
+  in?: string[];
 };
 
 type Pagination = {
-  offset: number;
-  limit: number;
+  offset?: number;
+  limit?: number;
 };
 
 export type Filters = {
-  fields: Fields[];
-  pagination: Pagination;
+  fields?: Field[];
+  pagination?: Pagination;
   search?: Search;
   sort?: Sort;
 };
 
-export type FiltersRaw = {
-  fields?: Fields[];
-  pagination?: Partial<Pagination>;
-  search?: Partial<Search>;
-  sort?: Partial<Sort>;
-};
-
-export const filtersSchema = Joi.object<Filters>({
-  fields: Joi.array()
-    .items(
-      Joi.object({
-        key: Joi.string().required(),
-        operator: Joi.string()
-          .valid(...OPERATORS)
-          .required(),
-        value: Joi.alternatives(
-          Joi.boolean(),
-          Joi.number(),
-          Joi.string(),
-          Joi.array().items(Joi.alternatives(Joi.number(), Joi.string())),
-        ).required(),
-      }),
-    )
-    .default([]),
+export const FiltersSchema = Joi.object<Filters>({
+  fields: Joi.array().items(
+    Joi.object({
+      key: Joi.string().required(),
+      operator: Joi.string()
+        .valid(...OPERATORS)
+        .required(),
+      value: Joi.alternatives(
+        Joi.boolean(),
+        Joi.number(),
+        Joi.string(),
+        Joi.array().items(Joi.alternatives(Joi.number(), Joi.string())),
+      ).required(),
+    }),
+  ),
   pagination: Joi.object({
     offset: Joi.number().min(0).default(0),
     limit: Joi.number().min(1).max(100).default(20),
-  }).default({}),
+  }),
   search: Joi.object({
-    query: Joi.string(),
-    in: Joi.string(),
+    query: Joi.string().required(),
+    in: Joi.array().items(Joi.string()),
   }),
   sort: Joi.object({
     key: Joi.string().required(),
@@ -74,16 +59,10 @@ export const filtersSchema = Joi.object<Filters>({
   }),
 });
 
-export const extractFiltersFromSearchParams = (
+export const searchParamsToFilters = (
   searchParams: URLSearchParams,
-): FiltersRaw => {
-  const filters: FiltersRaw = {};
-
-  if (searchParams.has(SEARCH_IN_QUERY_KEY)) {
-    filters.search ||= {};
-    filters.search.in = searchParams.get(SEARCH_IN_QUERY_KEY)!;
-    searchParams.delete(SEARCH_IN_QUERY_KEY);
-  }
+): Filters => {
+  const filters: Filters = {};
 
   if (searchParams.has('limit')) {
     filters.pagination ||= {};
@@ -97,28 +76,29 @@ export const extractFiltersFromSearchParams = (
     searchParams.delete('offset');
   }
 
-  if (searchParams.has(SEARCH_QUERY_KEY)) {
-    filters.search ||= {};
-    filters.search.query = searchParams.get(SEARCH_QUERY_KEY)!;
-    searchParams.delete(SEARCH_QUERY_KEY);
+  if (searchParams.has('search')) {
+    filters.search = {
+      query: searchParams.get('search')!,
+    };
+    searchParams.delete('search');
   }
 
-  if (searchParams.has(SORT_QUERY_KEY)) {
-    const raw = searchParams.get(SORT_QUERY_KEY)!;
-
-    filters.sort ||= { key: raw };
-
-    if (raw.endsWith('-ASC')) {
-      filters.sort.key = raw.replace('-ASC', '');
-      filters.sort.order = 'ASC';
+  if (searchParams.has('in')) {
+    if (filters.search) {
+      filters.search.in = searchParams.get('in')!.split(',');
     }
+    searchParams.delete('in');
+  }
 
-    if (raw.endsWith('-DESC')) {
-      filters.sort.key = raw.replace('-DESC', '');
-      filters.sort.order = 'DESC';
-    }
+  if (searchParams.has('sort')) {
+    const [key, order] = searchParams.get('sort')!.split('-');
 
-    searchParams.delete(SORT_QUERY_KEY);
+    filters.sort = {
+      key,
+      order: order as Sort['order'],
+    };
+
+    searchParams.delete('sort');
   }
 
   searchParams.forEach((value, key) => {
@@ -145,12 +125,11 @@ export const extractFiltersFromSearchParams = (
 
 export const filtersToTypeorm = (
   filters: Filters,
-  searchFields: string[],
   mapper: (key: string) => string,
 ) => {
   const sections: string[] = [];
 
-  for (const field of filters.fields) {
+  for (const field of filters.fields || []) {
     const key = mapper(field.key);
 
     const values = [field.value]
@@ -190,21 +169,21 @@ export const filtersToTypeorm = (
     }
   }
 
-  if (filters.search?.query) {
-    const fields = filters.search.in ? [filters.search.in] : searchFields;
+  if (filters.search) {
+    const query = filters.search.in
+      ?.map((field) => `(${mapper(field)} ILIKE '%${filters.search!.query}%')`)
+      ?.join(' OR ');
 
-    const query = fields
-      .map((field) => `(${mapper(field)} ILIKE '%${filters.search?.query}%')`)
-      .join(' OR ');
-
-    sections.push(`(${query})`);
+    query && sections.push(`(${query})`);
   }
 
-  const where = sections.join(' AND ');
+  const query = sections.join(' AND ');
+
+  const pagination = filters.pagination;
 
   const sort = filters.sort?.key
     ? Object.assign({}, filters.sort, { key: mapper(filters.sort.key) })
     : filters.sort;
 
-  return { sort, where };
+  return { query, pagination, sort };
 };
