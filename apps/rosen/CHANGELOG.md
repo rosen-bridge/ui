@@ -1,5 +1,30 @@
 # @rosen-bridge/rosen-app
 
+## 4.2.1
+
+### Patch Changes
+
+- Use new identifier component in bridge confirm modal
+- Updated the `Transaction Confirmation` dialog to use design system components instead of custom solutions
+- Update the usage of the `NavigationBar` component to align with the latest changes in the `ui-kit` package
+- Fix the overflow style and scroll effect of app component
+- Update dependencies
+  - @rosen-network/ergo@2.2.0
+  - @rosen-bridge/icons@2.1.0
+  - @rosen-bridge/ui-kit@2.0.0
+  - @rosen-ui/wallet-connect@0.2.0
+  - @rosen-ui/metamask-wallet@2.1.0
+  - @rosen-ui/nautilus-wallet@3.1.0
+  - @rosen-ui/my-doge-wallet@1.1.0
+  - @rosen-ui/eternl-wallet@3.1.0
+  - @rosen-ui/xverse-wallet@0.2.0
+  - @rosen-ui/lace-wallet@3.1.0
+  - @rosen-ui/okx-wallet@2.1.0
+  - @rosen-ui/wallet-api@3.0.0
+  - @rosen-network/cardano@2.2.0
+  - @rosen-ui/asset-calculator@2.1.7
+  - @rosen-network/evm@0.3.2
+
 ## 4.2.0
 
 ### Minor Changes

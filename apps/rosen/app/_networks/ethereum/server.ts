@@ -10,16 +10,16 @@ import { wrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 export const generateLockData = wrap(generateLockDataCore, {
-  traceKey: 'generateLockData',
+  traceKey: 'ethereum:generateLockData',
 });
 
 export const generateTxParameters = wrap(
   generateTxParametersCore(getTokenMap),
   {
-    traceKey: 'generateTxParameters',
+    traceKey: 'ethereum:generateTxParameters',
   },
 );
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
-  traceKey: 'getMaxTransfer',
+  traceKey: 'ethereum:getMaxTransfer',
 });
