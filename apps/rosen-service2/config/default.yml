@@ -11,7 +11,7 @@ db:
   port: 5432
   name: rs2
   user: postgres
-  password:
+  # password:
 chains:
   cardano:
     active: true
