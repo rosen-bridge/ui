@@ -8,7 +8,7 @@ import { fileURLToPath } from 'url';
 
 import { SUPPORTED_CHAINS } from '../constants';
 import { Configs } from '../types';
-import { ChainConfigsReader } from './chains';
+import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const JsonBigInt = JsonBigIntFactory({
@@ -32,7 +32,7 @@ export const validateConfigs = (): Configs => {
   confValidator.validateConfig(configs);
 
   // TODO: Must remove after adding the Ergo config segment
-  configs.chains['ergo'] = {};
+  configs.chains[NETWORKS.ergo.key] = {};
   for (const chain of SUPPORTED_CHAINS) {
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
       const chainConfigReader = new ChainConfigsReader(chain);
