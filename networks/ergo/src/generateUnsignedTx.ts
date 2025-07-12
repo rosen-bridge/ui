@@ -7,11 +7,7 @@ import * as wasm from 'ergo-lib-wasm-nodejs';
 import { fee, minBoxValue } from './constants';
 import { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
-import {
-  createChangeBox,
-  createLockBox,
-  getHeight,
-} from './utils';
+import { createChangeBox, createLockBox, getHeight } from './utils';
 
 const selector = new ErgoBoxSelection();
 
@@ -82,7 +78,7 @@ export const generateUnsignedTx =
       [],
       new Map(),
       ergoBoxes.values(),
-      undefined,
+      minBoxValue,
       undefined,
       () => fee,
     );
@@ -94,7 +90,9 @@ export const generateUnsignedTx =
     });
 
     const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
-      wasm.BoxValue.from_i64(wasm.I64.from_str(inputs.additionalAssets.fee.toString())),
+      wasm.BoxValue.from_i64(
+        wasm.I64.from_str(inputs.additionalAssets.fee.toString()),
+      ),
       height,
     );
 
