@@ -1,5 +1,9 @@
 import { ObservationEntity } from '@rosen-bridge/observation-extractor';
 import { BlockEntity } from '@rosen-bridge/scanner';
+import {
+  Filters,
+  filtersToTypeorm,
+} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
@@ -20,23 +24,33 @@ interface EventWithTotal extends Omit<ObservationEntity, 'requestId'> {
 }
 
 /**
- * remove total field from rawItems returned by query in getEvents
- * @param rawItems
- */
-const getItemsWithoutTotal = (rawItems: EventWithTotal[]) =>
-  rawItems.map(({ total, ...item }) => item);
-
-/**
  * get paginated list of events
  * @param offset
  * @param limit
  */
-export const getEvents = async (offset: number, limit: number) => {
-  /**
-   * TODO: convert the query to a view
-   * local:ergo/rosen-bridge/ui#194
-   */
-  const rawItems: EventWithTotal[] = await observationRepository
+export const getEvents = async (filters: Filters) => {
+  filters.sort = Object.assign(
+    {
+      key: 'timestamp',
+      order: 'DESC',
+    },
+    filters.sort,
+  );
+
+  if (filters.search) {
+    filters.search.in ||= [];
+  }
+
+  const { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+    switch (key) {
+      case 'timestamp':
+        return 'be.' + key;
+      default:
+        return 'oe.' + key;
+    }
+  });
+
+  let queryBuilder = observationRepository
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
     .leftJoin(
@@ -72,14 +86,33 @@ export const getEvents = async (offset: number, limit: number) => {
        *  event is a fraud
        */
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
-    ])
-    .distinct(true)
-    .orderBy('be.timestamp', 'DESC')
-    .offset(offset)
-    .limit(limit)
-    .getRawMany();
+    ]);
 
-  const items = getItemsWithoutTotal(rawItems);
+  if (query) {
+    queryBuilder.where(query);
+  }
+
+  queryBuilder = queryBuilder.distinct(true);
+
+  if (sort) {
+    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
+  }
+
+  if (pagination?.offset) {
+    queryBuilder = queryBuilder.offset(pagination.offset);
+  }
+
+  if (pagination?.limit) {
+    queryBuilder = queryBuilder.limit(pagination.limit);
+  }
+
+  /**
+   * TODO: convert the query to a view
+   * local:ergo/rosen-bridge/ui#194
+   */
+  const rawItems = await queryBuilder.getRawMany<EventWithTotal>();
+
+  const items = rawItems.map(({ total, ...item }) => item);
 
   return {
     items,
