@@ -9,9 +9,9 @@ import { wrap } from '@/_safeServerAction';
 import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'generateUnsignedTx',
+  traceKey: 'ergo:generateUnsignedTx',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
-  traceKey: 'getMaxTransfer',
+  traceKey: 'ergo:getMaxTransfer',
 });

@@ -1,5 +1,15 @@
 # @rosen-network/cardano
 
+## 2.2.0
+
+### Minor Changes
+
+- Add relevant `constants`, `types`, and `utility` functions related to the context, as defined in the `@rosen-ui/wallet-api` package
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/icons@2.1.0
+
 ## 2.1.4
 
 ### Patch Changes

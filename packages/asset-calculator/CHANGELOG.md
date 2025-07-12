@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.7
+
+### Patch Changes
+
+- Downgrade ethers version
+
 ## 2.1.6
 
 ### Patch Changes

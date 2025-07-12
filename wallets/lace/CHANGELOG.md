@@ -1,5 +1,18 @@
 # @rosen-ui/lace-wallet
 
+## 3.1.0
+
+### Minor Changes
+
+- Update the `disconnect`, `switchChain`, and `isConnected` methods to align with the latest changes in the wallet abstract class
+
+### Patch Changes
+
+- Import network types directly from the network package instead of importing them from `@rosen-ui/wallet-api`
+- Update dependencies
+  - @rosen-ui/wallet-api@3.0.0
+  - @rosen-network/cardano@2.2.0
+
 ## 3.0.0
 
 ### Major Changes

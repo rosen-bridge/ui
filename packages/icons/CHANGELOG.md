@@ -1,5 +1,16 @@
 # @rosen-bridge/icons
 
+## 2.1.0
+
+### Minor Changes
+
+- Add the `ListUiAlt` icon
+- Add tree icons `CloseCircle`,`ExclamationTriangleFill`,`ExclamationOctagon` for using in HealthStatus Component
+
+### Patch Changes
+
+- Add new icon for qr code
+
 ## 2.0.0
 
 ### Major Changes
