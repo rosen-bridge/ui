@@ -4,7 +4,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
-import { fee, minBoxValue } from './constants';
+import { fee, maxTokenCount, minBoxValue } from './constants';
 import { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
 import { createChangeBox, createLockBox, getHeight } from './utils';
@@ -79,7 +79,11 @@ export const generateUnsignedTx =
       new Map(),
       ergoBoxes.values(),
       minBoxValue,
-      undefined,
+      /**
+       * TODO: use the default value
+       * local:ergo/rosen-bridge/selection#22
+       */
+      maxTokenCount,
       () => fee,
     );
     if (!inputs.covered) throw Error(`Not enough assets`);
