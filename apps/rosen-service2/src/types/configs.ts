@@ -3,10 +3,15 @@ import { SUPPORTED_CHAINS } from '../constants';
 export type ChainChoices = (typeof SUPPORTED_CHAINS)[number];
 
 export interface ErgoChainConfig {
-  explorerUrl: string;
+  initialHeight: number;
+  node: {
+    url: string;
+    timeout: number;
+  };
 }
 
 export interface BitcoinChainConfig {
+  active: boolean;
   esploraUrl: string;
   rpc: {
     url: string;
@@ -16,19 +21,23 @@ export interface BitcoinChainConfig {
 }
 
 export interface EthereumChainConfig {
+  active: boolean;
   rpcUrl: string;
 }
 
 export interface BinanceChainConfig {
+  active: boolean;
   rpcUrl: string;
 }
 
 export interface CardanoChainConfig {
+  active: boolean;
   koiosUrl: string;
   koiosAuthToken: string;
 }
 
 export interface DogeChainConfig {
+  active: boolean;
   blockcypherUrl: string;
   rpcConnections: {
     url: string;
@@ -52,29 +61,12 @@ export interface Configs {
       }
   )[];
   chains: {
-    ergo: {
-      chainConfigs: ErgoChainConfig | undefined;
-    };
-    cardano: {
-      active: boolean;
-      chainConfigs: CardanoChainConfig | undefined;
-    };
-    bitcoin: {
-      active: boolean;
-      chainConfigs: BitcoinChainConfig | undefined;
-    };
-    doge: {
-      active: boolean;
-      chainConfigs: DogeChainConfig | undefined;
-    };
-    ethereum: {
-      active: boolean;
-      chainConfigs: EthereumChainConfig | undefined;
-    };
-    binance: {
-      active: boolean;
-      chainConfigs: BinanceChainConfig | undefined;
-    };
+    ergo: ErgoChainConfig | undefined;
+    cardano: CardanoChainConfig;
+    bitcoin: BitcoinChainConfig;
+    doge: DogeChainConfig;
+    ethereum: EthereumChainConfig;
+    binance: BinanceChainConfig;
   };
 }
 
