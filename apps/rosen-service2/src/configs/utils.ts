@@ -1,11 +1,12 @@
 import { ConfigValidator } from '@rosen-bridge/config';
+import { NETWORKS } from '@rosen-ui/constants';
 import config from 'config';
 import * as fs from 'fs';
 import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { SUPPORTED_CHAINS, ERGO_CHAIN } from '../constants';
+import { SUPPORTED_CHAINS } from '../constants';
 import { Configs } from '../types';
 import { ChainConfigsReader } from './chains';
 
@@ -33,7 +34,7 @@ export const validateConfigs = (): Configs => {
   // TODO: Must remove after adding the Ergo config segment
   configs.chains['ergo'] = {};
   for (const chain of SUPPORTED_CHAINS) {
-    if (chain == ERGO_CHAIN || configs.chains[chain].active) {
+    if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
       const chainConfigReader = new ChainConfigsReader(chain);
       configs.chains[chain].contracts = chainConfigReader.data;
     }
