@@ -1,5 +1,5 @@
 import {
-  ReactNode,
+  PropsWithChildren,
   createContext,
   useCallback,
   useContext,
@@ -17,6 +17,8 @@ import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
+
+const MaxTransferContext = createContext<MaxTransferContextType | null>(null);
 
 /**
  * a hook version of `getMaxTransfer` util
@@ -39,21 +41,16 @@ export type MaxTransferContextType = {
   load: () => void;
 };
 
-export const MaxTransferContext = createContext<MaxTransferContextType | null>(
-  null,
-);
+export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
+  const balance = useBalance();
 
-export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
-  const { isLoading: isBalanceLoading, amount: balanceAmount } = useBalance();
-
-  const { selectedSource } = useNetwork();
+  const network = useNetwork();
 
   const tokenMap = useTokenMap();
 
-  const { targetValue, tokenValue, walletAddressValue } =
-    useTransactionFormData();
+  const transactionFormData = useTransactionFormData();
 
-  const { selected: selectedWallet } = useWallet();
+  const wallet = useWallet();
 
   const [amount, setAmount] = useState<RosenAmountValue>(0n);
 
@@ -61,15 +58,16 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
 
   const [isTransitionLoading, startTransition] = useTransition();
 
-  const isLoading = isBalanceLoading || isTransitionLoading;
+  const isLoading = balance.isLoading || isTransitionLoading;
 
   const raw = useMemo(() => {
-    if (!amount || !tokenMap || !tokenValue) return '0';
+    if (!amount || !tokenMap || !transactionFormData.tokenValue) return '0';
     return getDecimalString(
       amount.toString(),
-      tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+      tokenMap.getSignificantDecimals(transactionFormData.tokenValue.tokenId) ||
+        0,
     );
-  }, [amount, tokenMap, tokenValue]);
+  }, [amount, tokenMap, transactionFormData.tokenValue]);
 
   const load = useCallback(() => {
     setAmount(0n);
@@ -77,24 +75,25 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
     setError(null);
 
     if (
-      !balanceAmount ||
-      isBalanceLoading ||
-      !selectedSource ||
-      !targetValue ||
-      !tokenValue ||
-      !selectedWallet
+      !balance.amount ||
+      balance.isLoading ||
+      !network.selectedSource ||
+      !transactionFormData.targetValue ||
+      !transactionFormData.tokenValue ||
+      !wallet.selected ||
+      transactionFormData.formState.errors?.walletAddress
     )
       return;
 
     startTransition(async () => {
       try {
-        const amount = await selectedSource.getMaxTransfer({
-          balance: balanceAmount,
-          isNative: tokenValue.type === 'native',
+        const amount = await network.selectedSource!.getMaxTransfer({
+          balance: balance.amount,
+          isNative: transactionFormData.tokenValue.type === 'native',
           eventData: {
-            fromAddress: await selectedWallet.getAddress(),
-            toAddress: walletAddressValue,
-            toChain: targetValue,
+            fromAddress: await wallet.selected!.getAddress(),
+            toAddress: transactionFormData.walletAddressValue,
+            toChain: transactionFormData.targetValue!,
           },
         });
 
@@ -104,24 +103,28 @@ export const MaxTransferProvider = ({ children }: { children: ReactNode }) => {
       }
     });
   }, [
-    balanceAmount,
-    isBalanceLoading,
-    selectedSource,
-    selectedWallet,
-    targetValue,
-    tokenValue,
-    walletAddressValue,
+    balance.amount,
+    balance.isLoading,
+    network.selectedSource,
+    wallet.selected,
+    transactionFormData.formState.errors,
+    transactionFormData.targetValue,
+    transactionFormData.tokenValue,
+    transactionFormData.walletAddressValue,
   ]);
 
   useEffect(load, [load]);
 
-  const state = {
-    amount,
-    error,
-    isLoading,
-    raw,
-    load,
-  };
+  const state = useMemo<MaxTransferContextType>(
+    () => ({
+      amount,
+      error,
+      isLoading,
+      raw,
+      load,
+    }),
+    [amount, error, isLoading, raw, load],
+  );
 
   return (
     <MaxTransferContext.Provider value={state}>
