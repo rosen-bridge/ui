@@ -20,10 +20,10 @@ import {
   Identifier,
   Token,
   RelativeTime,
+  Link,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import { upperCase } from 'lodash-es';
-import moment from 'moment';
 
 import { EventItem } from '@/_types';
 
@@ -31,7 +31,7 @@ const renderEmptyState = () => (
   <Box
     sx={{
       width: '100%',
-      height: '95vh',
+      height: 'clamp(320px, 100vh, calc(100vh - 280px))',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -48,7 +48,7 @@ const renderEmptyState = () => (
   </Box>
 );
 
-const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
+const SideBarContent = ({ value }: Pick<SideBarProps, 'value'>) => {
   if (!value) return renderEmptyState();
 
   return (
@@ -151,20 +151,20 @@ const DetailsContent = ({ value }: Pick<DetailsProps, 'value'>) => {
   );
 };
 
-const DetailsDrawer = ({ value, onClose }: DetailsProps) => {
+const DetailsDrawer = ({ value, onClose }: SideBarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
       <EnhancedDialogTitle icon={<Exchange />} onClose={onClose}>
         Event Details
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
-        <DetailsContent value={value} />
+        <SideBarContent value={value} />
       </EnhancedDialogContent>
     </EnhancedDialog>
   );
 };
 
-const DetailsHeader = () => {
+const SideBarHeader = ({ value }: Pick<SideBarProps, 'value'>) => {
   const ActionWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row',
@@ -185,14 +185,21 @@ const DetailsHeader = () => {
         }}
         title={<Typography variant="h5">Event</Typography>}
         action={
-          <ActionWrapper>
-            <Typography variant="caption">
-              {upperCase('see details')}
-            </Typography>
-            <SvgIcon>
-              <AngleRight />
-            </SvgIcon>
-          </ActionWrapper>
+          value && (
+            <ActionWrapper>
+              <Link underline="none" href={`/events-experimental/${value.toAddress}`}>
+                <Typography
+                  sx={{ color: (theme) => theme.palette.primary.main }}
+                  variant="caption"
+                >
+                  {upperCase('see details')}
+                </Typography>
+              </Link>
+              <SvgIcon>
+                <AngleRight />
+              </SvgIcon>
+            </ActionWrapper>
+          )
         }
       />
       <Box sx={{ padding: (theme) => theme.spacing(0, 2) }}>
@@ -202,7 +209,7 @@ const DetailsHeader = () => {
   );
 };
 
-const DetailsSidebar = ({ value }: DetailsProps) => {
+const DetailsSidebar = ({ value }: SideBarProps) => {
   const stickyRef = useStickyBox({
     offsetTop: 16,
     offsetBottom: 16,
@@ -215,24 +222,25 @@ const DetailsSidebar = ({ value }: DetailsProps) => {
         marginLeft: (theme) => theme.spacing(2),
       }}
     >
-      <DetailsHeader />
+      <SideBarHeader value={value} />
       <CardContent
         sx={{
           paddingTop: (theme) => theme.spacing(1),
+          height: 'auto',
         }}
       >
-        <DetailsContent value={value} />
+        <SideBarContent value={value} />
       </CardContent>
     </Card>
   );
 };
 
-export type DetailsProps = {
+export type SideBarProps = {
   value?: EventItem;
   onClose: () => void;
 };
 
-export const Details = (props: DetailsProps) => {
+export const SideBar = (props: SideBarProps) => {
   const drawer = useBreakpoint('laptop-down');
   if (drawer) {
     return <DetailsDrawer {...props} />;

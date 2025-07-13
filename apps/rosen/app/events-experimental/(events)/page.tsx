@@ -18,23 +18,17 @@ import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import { ApiEventResponse, EventItem } from '@/_types';
-import EventCard, { DataContainerProps } from '@/events-experimental/EventCard';
 
-import { filters, sorts } from './config';
-import { Details } from './details';
+import { filters, sorts } from '../config';
+import { EventCard } from './EventCard';
+import { SideBar } from './SideBar';
 
-const EventsContainer = styled('div')<DataContainerProps>(
-  ({ theme, variant = 'grid' }) => ({
-    display: variant === 'grid' ? 'grid' : 'flex',
-    flexDirection: variant === 'row' ? 'column' : undefined,
-    gap: theme.spacing(1.2),
-    width: '100%',
-
-    ...(variant === 'grid' && {
-      gridTemplateColumns: 'repeat(auto-fill, minmax(242px, 1fr))',
-    }),
-  }),
-);
+const EventsContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(1.2),
+  width: '100%',
+  gridTemplateColumns: 'repeat(auto-fill, minmax(242px, 1fr))',
+}));
 
 const Events = () => {
   const dense = useBreakpoint('laptop-down');
@@ -44,6 +38,10 @@ const Events = () => {
   const [current, setCurrent] = useState<EventItem>();
 
   const collection = useCollection();
+
+  useEffect(() => {
+    setCurrent(undefined);
+  }, [collection.sort, collection.filters, collection.pageIndex]);
 
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
     collection.params && ['/v1/events', collection.params],
@@ -80,7 +78,7 @@ const Events = () => {
   );
 
   const renderSidebar = useCallback(
-    () => <Details value={current} onClose={() => setCurrent(undefined)} />,
+    () => <SideBar value={current} onClose={() => setCurrent(undefined)} />,
     [current],
   );
 
@@ -115,19 +113,19 @@ const Events = () => {
       pagination={renderPagination()}
     >
       {isLoading ? (
-        <EventsContainer variant="grid">
+        <EventsContainer>
           {Array.from({ length: 5 }).map((_, i) => (
-            <EventCard key={i} isLoading variant="grid" />
+            <EventCard key={i} isLoading />
           ))}
         </EventsContainer>
-      ) : data?.items?.length ? (
-        <EventsContainer variant="grid">
+      ) : data?.items && data.items.length >= 1 ? (
+        <EventsContainer>
           {data.items.map((item) => (
             <EventCard
+              active={current?.id === item.id}
+              item={item}
               key={item.id}
               onClick={() => setCurrent(item)}
-              item={item}
-              active={current?.id === item.id}
             />
           ))}
         </EventsContainer>
