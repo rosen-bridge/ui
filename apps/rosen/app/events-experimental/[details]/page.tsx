@@ -1,3 +1,6 @@
 export default function Details({ params }: { params: any }) {
-  return <div>{params.id}</div>;
+  return <div>
+    this page in not completed.
+
+    {params.id}</div>;
 }

@@ -68,41 +68,7 @@ export const filters: Filter[] = [
     input: {
       type: 'number',
     },
-  },
-  {
-    name: 'in',
-    label: 'Search whithin',
-    operators: [OPERATOR_IS],
-    input: {
-      type: 'select',
-      options: [
-        {
-          label: 'Event Id',
-          value: 'requestId',
-        },
-        {
-          label: 'Lock TX Id',
-          value: 'sourceTxId',
-        },
-        {
-          label: 'From Address',
-          value: 'fromAddress',
-        },
-        {
-          label: 'To Address',
-          value: 'toAddress',
-        },
-      ],
-    },
-  },
-  {
-    name: 'search',
-    label: 'Search for this text',
-    operators: [OPERATOR_IS],
-    input: {
-      type: 'text',
-    },
-  },
+  }
 ];
 
 export const sorts = [

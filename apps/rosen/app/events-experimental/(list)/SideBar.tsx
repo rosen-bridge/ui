@@ -31,7 +31,7 @@ const renderEmptyState = () => (
   <Box
     sx={{
       width: '100%',
-      height: 'clamp(320px, 100vh, calc(100vh - 280px))',
+      height: 'clamp(320px, 100vh, calc(100vh - 295px))',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',

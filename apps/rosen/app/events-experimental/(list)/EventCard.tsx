@@ -34,11 +34,6 @@ const Root = styled('div')<{ active?: boolean; isSkeleton?: boolean }>(
     'gap': theme.spacing(1),
     'width': '100%',
     'fontSize': '16px',
-    '&:hover': {
-      border: isSkeleton
-        ? `3px solid transparent`
-        : `3px solid ${theme.palette.primary.main}`,
-    },
   }),
 );
 
@@ -128,7 +123,7 @@ const Event = ({ onClick, active, item }: EventCardProps) => {
         </div>
       </Wrapper>
 
-      <Identifier value={item.fromAddress} href={`/events-experimental/${item.fromAddress}`} />
+      <Identifier value={item.eventId} href={`/events-experimental/${item.eventId}`} />
 
       <Wrapper
         sx={(theme) => ({
