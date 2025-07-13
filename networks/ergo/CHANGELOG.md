@@ -1,5 +1,13 @@
 # @rosen-network/ergo
 
+## 2.2.1
+
+### Patch Changes
+
+- Update the @rosen-bridge/ergo-box-selection@1.1.1 dependency
+- Fix min box value for the ErgoBoxSelection
+- Update dependency @rosen-bridge/icons@2.2.0
+
 ## 2.2.0
 
 ### Minor Changes

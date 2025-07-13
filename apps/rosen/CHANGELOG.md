@@ -1,5 +1,19 @@
 # @rosen-bridge/rosen-app
 
+## 4.3.0
+
+### Minor Changes
+
+- Improve the Events API context by adding support for filters
+
+### Patch Changes
+
+- Handle exceptions arising from fetching the maximum transfer amount due to an invalid target address
+- Update dependencies
+  - @rosen-network/ergo@2.2.1
+  - @rosen-bridge/icons@2.2.0
+  - @rosen-bridge/ui-kit@2.1.0
+
 ## 4.2.2
 
 ### Patch Changes
