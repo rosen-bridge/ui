@@ -37,6 +37,9 @@ export { default as CheckRaw } from './icons/check.svg?raw';
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { default as ClipboardNotesRaw } from './icons/clipboard-notes.svg?raw';
 
+export { ReactComponent as CloseCircle } from './icons/close-circle.svg';
+export { default as CloseCircleRaw } from './icons/close-circle.svg?raw';
+
 export { ReactComponent as CommentAltExclamation } from './icons/comment-alt-exclamation.svg';
 export { default as CommentAltExclamationRaw } from './icons/comment-alt-exclamation.svg?raw';
 
@@ -54,6 +57,12 @@ export { default as ExchangeRaw } from './icons/exchange.svg?raw';
 
 export { ReactComponent as ExclamationCircle } from './icons/exclamation-circle.svg';
 export { default as ExclamationCircleRaw } from './icons/exclamation-circle.svg?raw';
+
+export { ReactComponent as ExclamationOctagon } from './icons/exclamation-octagon.svg';
+export { default as ExclamationOctagonRaw } from './icons/exclamation-octagon.svg?raw';
+
+export { ReactComponent as ExclamationTriangleFill } from './icons/exclamation-triangle-fill.svg';
+export { default as ExclamationTriangleFillRaw } from './icons/exclamation-triangle-fill.svg?raw';
 
 export { ReactComponent as ExclamationTriangle } from './icons/exclamation-triangle.svg';
 export { default as ExclamationTriangleRaw } from './icons/exclamation-triangle.svg?raw';
@@ -75,6 +84,9 @@ export { default as FileCopyAltRaw } from './icons/file-copy-alt.svg?raw';
 
 export { ReactComponent as FileEditAlt } from './icons/file-edit-alt.svg';
 export { default as FileEditAltRaw } from './icons/file-edit-alt.svg?raw';
+
+export { ReactComponent as Fire } from './icons/fire.svg';
+export { default as FireRaw } from './icons/fire.svg?raw';
 
 export { ReactComponent as Grid } from './icons/grid.svg';
 export { default as GridRaw } from './icons/grid.svg?raw';
@@ -153,6 +165,9 @@ export { default as ShieldExclamationRaw } from './icons/shield-exclamation.svg?
 
 export { ReactComponent as ShieldQuestion } from './icons/shield-question.svg';
 export { default as ShieldQuestionRaw } from './icons/shield-question.svg?raw';
+
+export { ReactComponent as SnowFlake } from './icons/snow-flake.svg';
+export { default as SnowFlakeRaw } from './icons/snow-flake.svg?raw';
 
 export { ReactComponent as SortAmountDown } from './icons/sort-amount-down.svg';
 export { default as SortAmountDownRaw } from './icons/sort-amount-down.svg?raw';
