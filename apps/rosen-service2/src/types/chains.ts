@@ -1,6 +1,6 @@
-import { SUPPORTED_CHAINS } from '../constants';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
-export type ChainChoices = (typeof SUPPORTED_CHAINS)[number];
+export type ChainChoices = (typeof NETWORKS_KEYS)[number];
 
 export interface ChainConfigs {
   version: string;

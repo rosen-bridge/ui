@@ -23,3 +23,5 @@ chains:
     active: true
   binance:
     active: true
+  runes:
+    active: false
