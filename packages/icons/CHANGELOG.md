@@ -1,5 +1,27 @@
 # @rosen-bridge/icons
 
+## 2.2.0
+
+### Minor Changes
+
+- Add `Fire` and `SnowFlake` icons
+- Add two icons named `Grid` and `Row`
+
+### Patch Changes
+
+- Add missing exports to `index.ts` and fix export structure
+
+## 2.1.0
+
+### Minor Changes
+
+- Add the `ListUiAlt` icon
+- Add tree icons `CloseCircle`,`ExclamationTriangleFill`,`ExclamationOctagon` for using in HealthStatus Component
+
+### Patch Changes
+
+- Add new icon for qr code
+
 ## 2.0.0
 
 ### Major Changes

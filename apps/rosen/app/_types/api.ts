@@ -4,6 +4,7 @@ import { getEventsWithFullTokenData } from '@/_backend/events';
 export type ApiEventResponse = Awaited<
   ReturnType<typeof getEventsWithFullTokenData>
 >;
+export type EventItem = ApiEventResponse['items'][0];
 type ArrayElement<T> = T extends (infer Element)[] ? Element : never;
 export type Event = ArrayElement<ApiEventResponse['items']>;
 

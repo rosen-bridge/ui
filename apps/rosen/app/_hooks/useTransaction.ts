@@ -91,7 +91,11 @@ export const useTransaction = () => {
 
       if (error instanceof UserDeniedTransactionSignatureError) return;
 
-      logger('transfer', parameters, serializeError(error))
+      logger(
+        `${selectedWallet.name}:transfer`,
+        parameters,
+        serializeError(error),
+      )
         .then(() => {})
         .catch((error) => {
           console.log('Failed to send log to Discord', error);
