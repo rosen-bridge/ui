@@ -7,8 +7,10 @@ import { Typography } from '../base';
  * Properties for the {@link RelativeTime} component.
  *
  * @remarks
- * Pass a timestamp as a {@link Date} or a `number` (seconds since Unix epoch).
- * The component calculates the difference with `Date.now()` and displays it in a human-readable relative format.
+ * Pass a timestamp as a {@link Date} or a `number` representing
+ * seconds since the Unix epoch (not milliseconds).
+ * The component calculates the difference with `Date.now()` and displays
+ * a human-readable relative time string.
  */
 export type RelativeTimeProps = {
   /**
@@ -16,11 +18,10 @@ export type RelativeTimeProps = {
    *
    * @remarks
    * If a number is passed, it is interpreted as a UNIX timestamp in **seconds**.
-   * If a {@link Date} is passed, it will be converted automatically.
+   * If a {@link Date} is passed, it will be automatically converted to milliseconds.
    */
   timestamp: Date | number;
 };
-
 /**
  * Configuration for each time unit used by {@link RelativeTime}.
  *
@@ -77,38 +78,14 @@ const getTimeValue = (input: Date | number): number => {
   if (input instanceof Date) {
     return input.getTime();
   }
-  return input * 1000; // Assumes seconds, convert to ms
+  return input * 1000;
 };
 
 /**
- * Splits a formatted relative time string into prefix/core/suffix.
+ * Convert input timestamp to milliseconds.
  *
- * @param formatted - String from {@link Intl.RelativeTimeFormat}.
- * @returns An object containing parts.
- *
- * @internal
- */
-function splitRelativeTime(formatted: string) {
-  let prefix = '';
-  let core = formatted;
-  let suffix = '';
-
-  if (formatted.startsWith('in ')) {
-    prefix = 'in';
-    core = formatted.slice(3);
-  } else if (formatted.endsWith(' ago')) {
-    suffix = 'ago';
-    core = formatted.slice(0, -4);
-  }
-
-  return { prefix, core, suffix };
-}
-
-/**
- * Helper to render consistent typography.
- *
- * @param text - Text content.
- * @returns {@link Typography} component.
+ * @param input - A {@link Date} object or a `number` representing seconds.
+ * @returns Milliseconds since Unix epoch.
  *
  * @internal
  */
@@ -134,10 +111,11 @@ const renderTypography = (text: string) => (
  * ```
  *
  * @remarks
- * Uses {@link Intl.RelativeTimeFormat} for accurate localization (hardcoded to `"en"`).
+ * Uses {@link Intl.RelativeTimeFormat} localized to English ("en").
+ * For other languages, localization support should be added.
  *
  * @param props - {@link RelativeTimeProps}
- * @returns React element with relative time.
+ * @returns React element showing relative time.
  */
 export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
   const { prefix, number, unit, suffix } = useMemo(() => {
@@ -146,6 +124,11 @@ export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
     const diff = target - now;
     const abs = Math.abs(diff);
 
+    /**
+     * If the time difference is less than 10 seconds,
+     * treat it as "now" to avoid confusing rapidly changing text like
+     * "in 1 second" or "1 second ago".
+     */
     if (abs < 10 * 1000) {
       return { prefix: '', number: 'now', unit: '', suffix: '' };
     }
@@ -154,31 +137,43 @@ export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
       RELATIVE_TIME_UNITS.find((u) => abs >= u.value) ??
       RELATIVE_TIME_UNITS.at(-1)!;
     const value = Math.round(abs / unitObj.value) || 1;
-    const signedValue = diff > 0 ? value : -value;
 
-    const rtf = new Intl.RelativeTimeFormat('en', { numeric: 'always' });
-    const formatted = rtf.format(signedValue, unitObj.name);
-
-    const { prefix, core, suffix } = splitRelativeTime(formatted);
-    const [number, unit] = core.split(' ');
-
-    return { prefix, number, unit, suffix };
+    if (diff > 0) {
+      return {
+        prefix: 'in',
+        number: value.toString(),
+        unit: unitObj.name,
+        suffix: '',
+      };
+    } else {
+      return {
+        prefix: '',
+        number: value.toString(),
+        unit: unitObj.name + ' ago',
+        suffix: '',
+      };
+    }
   }, [timestamp]);
-
-  if (number === 'now') {
-    return renderTypography('now');
-  }
 
   return (
     <Root>
-      {prefix && renderTypography(prefix)}
-      <Typography
-        sx={{ fontSize: '18px', color: (theme) => theme.palette.text.primary }}
-      >
-        {number}
-      </Typography>
-      {renderTypography(unit)}
-      {suffix && renderTypography(suffix)}
+      {!unit && number === 'now' ? (
+        renderTypography('now')
+      ) : (
+        <>
+          {prefix && renderTypography(prefix)}
+          <Typography
+            sx={{
+              fontSize: '18px',
+              color: (theme) => theme.palette.text.primary,
+            }}
+          >
+            {number}
+          </Typography>
+          {unit && renderTypography(unit)}
+          {suffix && renderTypography(suffix)}
+        </>
+      )}
     </Root>
   );
 };
