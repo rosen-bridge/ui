@@ -80,7 +80,12 @@
       },
       "port": {
         "type": "number",
-        "default": 5432
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres port is required"
+          }
+        ]
       },
       "user": {
         "type": "string",

@@ -1,27 +1,23 @@
 import { ConfigValidator } from '@rosen-bridge/config';
+import JsonBigInt from '@rosen-bridge/json-bigint';
 import { NETWORKS } from '@rosen-ui/constants';
 import config from 'config';
 import * as fs from 'fs';
-import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { SUPPORTED_CHAINS } from '../constants';
-import { Configs } from '../types';
+import { RoseService2Config } from '../types';
 import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const JsonBigInt = JsonBigIntFactory({
-  alwaysParseAsBig: false,
-  useNativeBigInt: true,
-});
 
 /**
  * validates configs using the config schema
  *
- * @return Configs
+ * @return RoseService2Config
  */
-export const validateConfigs = (): Configs => {
+export const validateConfigs = (): RoseService2Config => {
   const rawSchemaData = fs.readFileSync(
     path.join(__dirname, '../../config/schema.json'),
     'utf-8',
