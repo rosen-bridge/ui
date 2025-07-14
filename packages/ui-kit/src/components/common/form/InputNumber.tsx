@@ -82,8 +82,8 @@ export const InputNumber = ({
   };
 
   useEffect(() => {
-    setInputValue(defaultValue?.toString() || '');
-  }, [defaultValue]);
+    setInputValue(field.value?.toString() || '');
+  }, [field.value]);
 
   return (
     <TextField
