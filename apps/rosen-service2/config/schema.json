@@ -113,6 +113,56 @@
   "chains": {
     "type": "object",
     "children": {
+      "ergo": {
+        "type": "object",
+        "children": {
+          "initialHeight": {
+            "type": "number",
+            "description": "ergo initial height",
+            "validations": [
+              {
+                "required": true,
+                "error": "ergo initial height is required"
+              }
+            ]
+          },
+          "node": {
+            "type": "object",
+            "children": {
+              "blockRetrieveGap": {
+                "type": "number",
+                "description": "ergo node blockRetrieveGap threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo node blockRetrieveGap is required (in seconds)"
+                  }
+                ]
+              },
+              "rescanDelaySeconds": {
+                "type": "number",
+                "description": "ergo node rescanDelaySeconds threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo node rescanDelaySeconds is required (in seconds)"
+                  }
+                ]
+              },
+              "url": {
+                "type": "string",
+                "description": "ergo node url",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo node url is required"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "cardano": {
         "type": "object",
         "children": {

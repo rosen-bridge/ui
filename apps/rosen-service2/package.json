@@ -33,6 +33,8 @@
     "@rosen-ui/asset-calculator": "^2.1.6",
     "@rosen-bridge/service-manager": "^0.1.2",
     "@rosen-bridge/json-bigint": "^0.1.0",
+    "@rosen-bridge/tokens": "3.1.1",
+    "@rosen-bridge/scanner-interfaces": "0.1.0",
     "config": "^3.3.7",
     "reflect-metadata": "^0.1.13",
     "tsx": "^4.19.4"

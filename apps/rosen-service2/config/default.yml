@@ -13,6 +13,12 @@ db:
   user: postgres
   # password:
 chains:
+  ergo:
+    initialHeight: 1
+    node:
+      url: ''
+      rescanDelaySeconds: 20
+      blockRetrieveGap: 60
   cardano:
     active: true
   bitcoin:

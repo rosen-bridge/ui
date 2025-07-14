@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { RoseService2Config } from '../types';
+import { RoseService2Configs } from '../types';
 import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -14,9 +14,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /**
  * validates configs using the config schema
  *
- * @return RoseService2Config
+ * @return RoseService2Configs
  */
-export const validateConfigs = (): RoseService2Config => {
+export const validateConfigs = (): RoseService2Configs => {
   const rawSchemaData = fs.readFileSync(
     path.join(__dirname, '../../config/schema.json'),
     'utf-8',
@@ -26,12 +26,11 @@ export const validateConfigs = (): RoseService2Config => {
   const configs = config.util.toObject();
   confValidator.validateConfig(configs);
 
-  // TODO: Must remove after adding the Ergo config segment
-  configs.chains[NETWORKS.ergo.key] = {};
+  configs.contracts = {};
   for (const chain of NETWORKS_KEYS) {
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
       const chainConfigReader = new ChainConfigsReader(chain);
-      configs.chains[chain].contracts = chainConfigReader.data;
+      configs.contracts[chain] = chainConfigReader.data;
     }
   }
 
