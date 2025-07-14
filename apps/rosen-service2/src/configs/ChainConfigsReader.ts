@@ -1,5 +1,5 @@
+import JsonBigInt from '@rosen-bridge/json-bigint';
 import * as fs from 'fs';
-import JsonBigIntFactory from 'json-bigint';
 import path from 'path';
 import { exit } from 'process';
 import { fileURLToPath } from 'url';
@@ -7,11 +7,6 @@ import { fileURLToPath } from 'url';
 import { ChainConfigs, ChainChoices } from '../types';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const JsonBigInt = JsonBigIntFactory({
-  alwaysParseAsBig: false,
-  useNativeBigInt: true,
-});
 
 export class ChainConfigsReader {
   public data: ChainConfigs | undefined;
