@@ -1,8 +1,9 @@
 import { useContext } from 'react';
-import { useController, useFormContext } from 'react-hook-form';
+import { useFormContext } from 'react-hook-form';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
+  InputNumberProps,
   InputSelectNetworkProps,
   InputSelectProps,
   InputTextProps,
@@ -27,7 +28,7 @@ import { WalletContext } from './useWallet';
  */
 
 export const useBridgeForm = () => {
-  const { control, formState, watch, setValue, resetField } =
+  const { watch, setValue, resetField, formState } =
     useFormContext<BridgeForm>();
 
   const { availableTokens, availableSources, availableTargets } = useNetwork();
@@ -35,79 +36,12 @@ export const useBridgeForm = () => {
 
   const walletGlobalContext = useContext(WalletContext);
 
-  const { field: amountField } = useController({
-    name: 'amount',
-    control,
-    rules: {
-      validate: async (value) => {
-        const { source, target, token, walletAddress } = watch();
-
-        // check prerequisites
-        if (value == null) return 'Please enter amount';
-        if (!source) return 'Please select the source network';
-        if (!target) return 'Please select the target network';
-        if (!token) return 'Please select a token';
-        if (!walletAddress) return 'Please enter the target address';
-
-        // match any complete or incomplete decimal number
-        const match = value.match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
-
-        // prevent user from entering invalid numbers
-        const isValueInvalid = !match;
-        if (isValueInvalid) return 'The amount is not valid';
-
-        if (!tokenMap) return 'Token map config is unavailable';
-        const decimals = tokenMap.getSignificantDecimals(token?.tokenId) || 0;
-
-        // prevent user from entering more decimals than token decimals
-        const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length || 0) > decimals;
-        if (isDecimalsLarge)
-          return `The current token only supports ${decimals} decimals`;
-
-        const wrappedAmount = BigInt(
-          getNonDecimalString(value, decimals),
-        ) as RosenAmountValue;
-
-        if (walletGlobalContext?.selected) {
-          // prevent user from entering more than token amount
-
-          const selectedNetwork = Object.values(networks).find(
-            (wallet) => wallet.name == source?.name,
-          )!;
-
-          const maxTransfer = await selectedNetwork.getMaxTransfer({
-            balance: await walletGlobalContext!.selected.getBalance(token),
-            isNative: token?.type === 'native',
-            eventData: {
-              fromAddress: await walletGlobalContext!.selected!.getAddress(),
-              toAddress: walletAddress,
-              toChain: target.name,
-            },
-          });
-
-          const isAmountLarge = wrappedAmount > maxTransfer;
-          if (isAmountLarge) return 'Balance insufficient';
-        }
-
-        const minTransfer = await getMinTransfer(
-          token,
-          source.name,
-          target.name,
-        );
-        const isAmountSmall = wrappedAmount < minTransfer;
-        if (isAmountSmall) return 'Minimum transfer amount not respected';
-
-        return undefined;
-      },
-    },
-  });
-
   const fields: {
     source: InputSelectNetworkProps<Network>;
     target: InputSelectNetworkProps<Network>;
     token: InputSelectProps<RosenChainToken>;
     address: InputTextProps;
+    amount: InputNumberProps;
   } = {
     source: {
       name: 'source',
@@ -167,13 +101,84 @@ export const useBridgeForm = () => {
       },
       onValueChange: (value) => value.trim(),
     },
+    amount: {
+      name: 'amount',
+      label: 'Amount',
+      defaultValue: null,
+      placeholder: '0.0',
+      size: 'large',
+      required: true,
+      disabled: !watch('token'),
+      validate: async (value) => {
+        const { source, target, token, walletAddress } = watch();
+
+        // check prerequisites
+        if (value == null) return 'Please enter amount';
+        if (!source) return 'Please select the source network';
+        if (!target) return 'Please select the target network';
+        if (!token) return 'Please select a token';
+        if (!walletAddress) return 'Please enter the target address';
+
+        // match any complete or incomplete decimal number
+        const match = value
+          .toString()
+          .match(/^(\d+(\.(?<floatingDigits>\d+))?)?$/);
+
+        // prevent user from entering invalid numbers
+        const isValueInvalid = !match;
+        if (isValueInvalid) return 'The amount is not valid';
+
+        if (!tokenMap) return 'Token map config is unavailable';
+        const decimals = tokenMap.getSignificantDecimals(token?.tokenId) || 0;
+
+        // prevent user from entering more decimals than token decimals
+        const isDecimalsLarge =
+          (match?.groups?.floatingDigits?.length || 0) > decimals;
+        if (isDecimalsLarge)
+          return `The current token only supports ${decimals} decimals`;
+
+        const wrappedAmount = BigInt(
+          getNonDecimalString(value.toString(), decimals),
+        ) as RosenAmountValue;
+
+        if (walletGlobalContext?.selected) {
+          // prevent user from entering more than token amount
+
+          const selectedNetwork = Object.values(networks).find(
+            (wallet) => wallet.name == source?.name,
+          )!;
+
+          const maxTransfer = await selectedNetwork.getMaxTransfer({
+            balance: await walletGlobalContext!.selected.getBalance(token),
+            isNative: token?.type === 'native',
+            eventData: {
+              fromAddress: await walletGlobalContext!.selected!.getAddress(),
+              toAddress: walletAddress,
+              toChain: target.name,
+            },
+          });
+
+          const isAmountLarge = wrappedAmount > maxTransfer;
+          if (isAmountLarge) return 'Balance insufficient';
+        }
+
+        const minTransfer = await getMinTransfer(
+          token,
+          source.name,
+          target.name,
+        );
+        const isAmountSmall = wrappedAmount < minTransfer;
+        if (isAmountSmall) return 'Minimum transfer amount not respected';
+
+        return undefined;
+      },
+    },
   };
 
   return {
     fields,
     setValue,
-    amountField,
-    formState,
     formValues: watch(),
+    formState,
   };
 };

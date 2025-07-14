@@ -25,15 +25,12 @@ export interface BridgeForm {
   target: Network | null;
   token: RosenChainToken | null;
   walletAddress: string | null;
-  amount: string | null;
+  amount: number | null;
 }
 
 const RosenBridge = () => {
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',
-    defaultValues: {
-      amount: null,
-    },
   });
 
   return (

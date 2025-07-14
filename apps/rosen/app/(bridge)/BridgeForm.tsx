@@ -1,14 +1,14 @@
 'use client';
 
-import { useCallback, ChangeEvent } from 'react';
+import { useCallback } from 'react';
 
 import {
   Grid,
-  TextField,
   Alert,
   InputSelect,
   InputText,
   InputSelectNetwork,
+  InputNumber,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -24,8 +24,6 @@ export const BridgeForm = () => {
   const {
     fields,
     setValue,
-    amountField,
-    formState: { errors },
     formValues: { source, target, token },
   } = useBridgeForm();
 
@@ -35,15 +33,8 @@ export const BridgeForm = () => {
 
   const { selected: selectedWallet } = useWallet();
 
-  const handleAmountChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      amountField.onChange(event);
-    },
-    [amountField],
-  );
-
   const handleSelectMax = useCallback(() => {
-    setValue('amount', raw, {
+    setValue('amount', Number(raw), {
       shouldDirty: true,
       shouldTouch: true,
       shouldValidate: true,
@@ -67,16 +58,11 @@ export const BridgeForm = () => {
         </Alert>
       )}
       <InputSelect {...fields.token} />
-      <TextField
-        id="amount"
-        size="medium"
-        label="Amount"
-        placeholder="0.0"
-        error={!!errors?.amount}
-        helperText={errors.amount?.message?.toString()}
-        InputProps={{
-          disableUnderline: true,
-          endAdornment: token?.tokenId && selectedWallet && (
+      <InputNumber
+        {...fields.amount}
+        endAdornment={
+          token?.tokenId &&
+          selectedWallet && (
             <UseAllAmount
               error={!!error}
               loading={isLoading || isMaxLoading}
@@ -88,18 +74,8 @@ export const BridgeForm = () => {
               onClick={handleSelectMax}
               onRetry={load}
             />
-          ),
-        }}
-        inputProps={{
-          'style': { fontSize: '2rem' },
-          'aria-label': 'amount input',
-        }}
-        variant="filled"
-        {...amountField}
-        value={amountField.value ?? ''}
-        onChange={handleAmountChange}
-        disabled={!token}
-        autoComplete="off"
+          )
+        }
       />
     </>
   );
