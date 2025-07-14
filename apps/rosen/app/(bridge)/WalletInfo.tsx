@@ -44,8 +44,14 @@ export const WalletInfo = () => {
   const label = selectedWallet?.label;
 
   return (
-    <StyledCard className={walletState === 'CONNECTED' ? 'connected' : ''}>
-      {walletState === 'PENDING' && (
+    <StyledCard
+      className={
+        walletState === 'CONNECTED' || walletState === 'DISCONNECTING'
+          ? 'connected'
+          : ''
+      }
+    >
+      {walletState === 'IDLE' && (
         <Typography variant="body2" color="text.secondary">
           Select source to see available wallets.
         </Typography>
@@ -66,6 +72,9 @@ export const WalletInfo = () => {
       )}
       {walletState === 'CONNECTING' && (
         <Typography color="text.secondary">Connecting to wallet...</Typography>
+      )}
+      {walletState === 'DISCONNECTING' && (
+        <Typography color="text.secondary">Disconnecting...</Typography>
       )}
       {walletState === 'CONNECTED' && (
         <>
