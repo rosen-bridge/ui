@@ -1,85 +1,41 @@
-import { SUPPORTED_CHAINS } from '../constants';
-
-export type ChainChoices = (typeof SUPPORTED_CHAINS)[number];
-
-export interface ErgoChainConfig {
-  initialHeight: number;
-  node: {
-    url: string;
-    timeout: number;
-  };
+export interface RoseService2Config {
+  chains: Chains;
+  logs: Logs[];
 }
 
-export interface BitcoinChainConfig {
+export interface Logs {
+  type: 'file' | 'console' | 'loki';
+  maxSize?: string;
+  maxFiles?: string;
+  path?: string;
+  level: string;
+  host?: string;
+}
+
+export interface Chains {
+  cardano: Cardano;
+  bitcoin: Bitcoin;
+  doge: Doge;
+  ethereum: Ethereum;
+  binance: Binance;
+}
+
+export interface Binance {
   active: boolean;
-  esploraUrl: string;
-  rpc: {
-    url: string;
-    username: string;
-    password: string;
-  };
 }
 
-export interface EthereumChainConfig {
+export interface Ethereum {
   active: boolean;
-  rpcUrl: string;
 }
 
-export interface BinanceChainConfig {
+export interface Doge {
   active: boolean;
-  rpcUrl: string;
 }
 
-export interface CardanoChainConfig {
+export interface Bitcoin {
   active: boolean;
-  koiosUrl: string;
-  koiosAuthToken: string;
 }
 
-export interface DogeChainConfig {
+export interface Cardano {
   active: boolean;
-  blockcypherUrl: string;
-  rpcConnections: {
-    url: string;
-    username: string;
-    password: string;
-  }[];
-}
-
-export interface Configs {
-  logs: (
-    | {
-        type: 'file';
-        maxSize: string;
-        maxFiles: string;
-        path: string;
-        level: 'info' | 'debug' | 'warn' | 'error';
-      }
-    | {
-        type: 'console';
-        level: 'info' | 'debug' | 'warn' | 'error';
-      }
-  )[];
-  chains: {
-    ergo: ErgoChainConfig | undefined;
-    cardano: CardanoChainConfig;
-    bitcoin: BitcoinChainConfig;
-    doge: DogeChainConfig;
-    ethereum: EthereumChainConfig;
-    binance: BinanceChainConfig;
-  };
-}
-
-export interface ChainConfigs {
-  version: string;
-  addresses: {
-    lock: string;
-    WatcherTriggerEvent: string;
-    WatcherPermit: string;
-    Fraud: string;
-  };
-  tokens: {
-    RWTId: string;
-  };
-  cleanupConfirm: number;
 }
