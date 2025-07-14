@@ -18,6 +18,11 @@ export interface Chains {
   doge: Doge;
   ethereum: Ethereum;
   binance: Binance;
+  runes: Runes;
+}
+
+export interface Runes {
+  active: boolean;
 }
 
 export interface Binance {
