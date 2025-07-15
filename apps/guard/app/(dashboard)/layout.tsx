@@ -10,10 +10,20 @@ const DashboardLayout = ({
   infoWidgets,
   revenue,
   tokens,
+  health,
+  networks,
 }: LayoutProps) => (
   <Fragment>
     <PageHeading title="Dashboard" />
     <Grid container spacing={3}>
+      <Grid item container spacing={2}>
+        <Grid item laptop={2} tablet={12} mobile={12}>
+          {health}
+        </Grid>
+        <Grid item laptop={10} tablet={12} mobile={12}>
+          {networks}
+        </Grid>
+      </Grid>
       <Grid item mobile={12} laptop={4}>
         {infoWidgets}
       </Grid>
