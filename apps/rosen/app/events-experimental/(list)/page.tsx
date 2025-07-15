@@ -19,7 +19,7 @@ import useSWR from 'swr';
 
 import { ApiEventResponse, EventItem } from '@/_types';
 
-import { filters, sorts } from '../config';
+import { filters, sorts } from './config';
 import { EventCard } from './EventCard';
 import { SideBar } from './SideBar';
 

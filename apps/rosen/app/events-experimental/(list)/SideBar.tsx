@@ -1,4 +1,4 @@
-import { AngleRight, ArrowRight, Exchange } from '@rosen-bridge/icons';
+import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
   Card,
   EnhancedDialogContent,
@@ -187,14 +187,15 @@ const SideBarHeader = ({ value }: Pick<SideBarProps, 'value'>) => {
         action={
           value && (
             <ActionWrapper>
-              <Link underline="none" href={`/events-experimental/${value.toAddress}`}>
-                <Typography
-                  sx={{ color: (theme) => theme.palette.primary.main }}
-                  variant="caption"
-                >
-                  {upperCase('see details')}
-                </Typography>
-              </Link>
+              <Typography
+                component="a"
+                target="_blank"
+                href={`/events-experimental/${value.toAddress}`}
+                sx={{ color: (theme) => theme.palette.primary.main }}
+                variant="caption"
+              >
+                {upperCase('see details')}
+              </Typography>
               <SvgIcon>
                 <AngleRight />
               </SvgIcon>

@@ -11,7 +11,6 @@ import {
   Skeleton,
   styled,
 } from '@rosen-bridge/ui-kit';
-import { Network as NetworkType } from '@rosen-ui/types';
 import { capitalize } from 'lodash-es';
 
 type EventCardProps = {
