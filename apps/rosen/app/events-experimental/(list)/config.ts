@@ -8,7 +8,7 @@ import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const filters: Filter[] = [
   {
-    name: 'requestId',
+    name: 'eventId',
     label: 'Event Id',
     unique: true,
     operators: [OPERATOR_CONTAINS],
@@ -136,15 +136,15 @@ export const filters: Filter[] = [
       type: 'number',
     },
   },
-  // {
-  //   name: 'reports',
-  //   label: 'Reports',
-  //   unique: true,
-  //   operators: OPERATORS_COMPARATIVE,
-  //   input: {
-  //     type: 'number',
-  //   },
-  // },
+  {
+    name: 'reports',
+    label: 'Reports',
+    unique: true,
+    operators: OPERATORS_COMPARATIVE,
+    input: {
+      type: 'number',
+    },
+  },
 ];
 
 export const sorts = [

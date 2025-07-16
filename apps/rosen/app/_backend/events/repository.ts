@@ -46,11 +46,11 @@ export const getEvents = async (filters: Filters) => {
       case 'amount':
       case 'bridgeFee':
       case 'networkFee':
-        return `CAST(sub.${key} AS BIGINT)`;
+        return `CAST(sub."${key}" AS BIGINT)`;
       case 'source':
-        return 'sub.sourceTxId';
+        return 'sub."sourceTxId"';
       default:
-        return `sub.${key}`;
+        return `sub."${key}"`;
     }
   });
 
@@ -76,6 +76,7 @@ export const getEvents = async (filters: Filters) => {
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
+      'ete.WIDsCount AS "reports"',
       'COUNT(*) OVER() AS "total"',
       /**
        * There may be multiple event triggers for the same events, but we should
