@@ -15,8 +15,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^2.1.0",
-    "@rosen-bridge/ui-kit": "^2.0.0",
+    "@rosen-bridge/icons": "^2.2.0",
+    "@rosen-bridge/ui-kit": "^2.1.0",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-ui/swr-helpers": "^0.2.1",
     "@rosen-ui/utils": "^0.6.0",

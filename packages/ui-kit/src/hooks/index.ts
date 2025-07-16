@@ -9,3 +9,4 @@ export * from './useResponsiveValue';
 export * from './useTablePagination';
 export * from './useSnackbar';
 export * from './useThemeToggler';
+export * from './useCurrentBreakpoint';
