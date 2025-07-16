@@ -2,7 +2,7 @@
 
 import { FileCopyAlt } from '@rosen-bridge/icons';
 
-import { useSnackbar } from '../../hooks/useSnackbar';
+import { useSnackbar } from '../../hooks';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { Snackbar, Alert, IconButton, SvgIcon } from '../base';
 
@@ -10,7 +10,6 @@ import { Snackbar, Alert, IconButton, SvgIcon } from '../base';
  * global snackbar component that connects to snackbar context and shows and
  * hides the snackbar depending on the context
  */
-
 export const AppSnackbar = () => {
   const { state, closeSnackbar } = useSnackbar();
   const theme = useTheme();
