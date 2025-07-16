@@ -75,8 +75,8 @@ const SideBarContent = ({ value }: Pick<SideBarProps, 'value'>) => {
       }}
     >
       <div>
-        <Label label="Event Id">
-          <Identifier value={value.eventId} />
+        <Label orientation={'horizontal'} label="Event Id">
+          <Identifier copyable value={value.eventId} />
         </Label>
         <Label label="Status">
           <Chip
@@ -105,23 +105,23 @@ const SideBarContent = ({ value }: Pick<SideBarProps, 'value'>) => {
         </Label>
         <Label label="Tx IDs"></Label>
         <Label label="Source Tx" inset>
-          <Identifier value={value.sourceTxId} />
+          <Identifier copyable value={value.sourceTxId} />
         </Label>
         <Label label="Payment Tx" inset>
-          {value.paymentTxId}
+          <Identifier copyable value={value.paymentTxId || ''} />
         </Label>
         <Label label="Reward Tx" inset>
-          {value.spendTxId}
+          <Identifier copyable value={value.spendTxId || ''} />
         </Label>
       </div>
       <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
       <div>
         <Label label="Address"></Label>
         <Label label="From" inset>
-          <Identifier value={value.fromAddress} />
+          <Identifier copyable value={value.fromAddress} />
         </Label>
         <Label label="To" inset>
-          <Identifier value={value.toAddress} />
+          <Identifier copyable value={value.toAddress} />
         </Label>
         <Label label="Duration">
           <RelativeTime timestamp={value.timestamp} />
@@ -166,8 +166,9 @@ const SideBarHeader = ({ value }: Pick<SideBarProps, 'value'>) => {
   const ActionWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'end',
     color: theme.palette.primary.main,
+    textAlign: 'center',
     cursor: 'pointer',
   }));
   const BorderBottom = styled('div')(({ theme }) => ({
@@ -188,8 +189,11 @@ const SideBarHeader = ({ value }: Pick<SideBarProps, 'value'>) => {
               <Typography
                 component="a"
                 target="_blank"
-                href={`/events-experimental/${value.toAddress}`}
-                sx={{ color: (theme) => theme.palette.primary.main }}
+                href={`/events-experimental/${value.eventId}`}
+                sx={{
+                  color: (theme) => theme.palette.primary.main,
+                  textDecoration: 'none',
+                }}
                 variant="caption"
               >
                 {upperCase('see details')}
