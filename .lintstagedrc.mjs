@@ -21,7 +21,8 @@ const perPackage = (resolver) => (files) => {
 
 export default {
   '*': 'prettier --ignore-unknown --write',
-  '**/{networks,packages,wallets}/**/*.{js,jsx,ts,tsx}': 'eslint --fix',
+  '**/{networks,packages,wallets,apps/rosen-service2}/**/*.{js,jsx,ts,tsx}':
+    'eslint --fix',
   '**/apps/{guard,rosen,watcher}/**/*.{js,jsx,ts,tsx}': perPackage(
     (directory, file) => {
       return `next lint ${directory} --fix --file ${path.relative(directory, file)}`;
