@@ -33,12 +33,7 @@
   "devDependencies": {
     "@types/config": "^0.0.41",
     "@types/node": "^20.11.9",
-    "@typescript-eslint/eslint-plugin": "^6.19.1",
-    "@typescript-eslint/parser": "^6.19.1",
     "@vitest/coverage-istanbul": "^3.1.4",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
-    "prettier": "^3.2.4",
     "typescript": "^5.3.3",
     "vitest": "^3.1.4"
   }
