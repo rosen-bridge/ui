@@ -14,7 +14,7 @@ db:
   # password:
 chains:
   ergo:
-    initialHeight: 1
+    initialHeight: 0
     node:
       url: ''
       rescanDelaySeconds: 20

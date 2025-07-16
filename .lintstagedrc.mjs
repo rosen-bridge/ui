@@ -41,8 +41,6 @@ export default {
       '@types/react-dom',
       '@vitest/runner',
       '@vitest/coverage-istanbul',
-      '@typescript-eslint/eslint-plugin',
-      '@typescript-eslint/parser',
       'eslint-config-prettier',
       'lint-staged',
       'pg',
