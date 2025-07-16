@@ -1,9 +1,9 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
+import type { ErgoTxProxy } from '@rosen-network/ergo';
 import { ErgoNetwork } from '@rosen-network/ergo/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
-  ErgoTxProxy,
   SubmitTransactionError,
   UserDeniedTransactionSignatureError,
   UtxoFetchError,

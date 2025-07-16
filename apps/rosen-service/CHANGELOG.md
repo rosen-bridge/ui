@@ -1,5 +1,12 @@
 # @rosen-bridge/rosen-service
 
+## 4.0.1
+
+### Patch Changes
+
+- Downgrade ethers version
+- Update dependency @rosen-ui/asset-calculator@2.1.7
+
 ## 4.0.0
 
 ### Major Changes

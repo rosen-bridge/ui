@@ -29,6 +29,12 @@ const nextConfig = {
     ];
   },
   webpack: function (config, options) {
+    /**
+     * This configuration should be applied as recommended in:
+     * https://docs.reown.com/appkit/next/core/installation#extra-configuration
+     */
+    config.externals.push('pino-pretty', 'lokijs', 'encoding');
+
     config.experiments = {
       asyncWebAssembly: true,
       syncWebAssembly: true,

@@ -84,19 +84,18 @@ export const SubmitButton = () => {
   const targetTokenInfo =
     targetValue && targetTokenSearchResults?.[0]?.[targetValue];
 
-  const disabled = selectedWallet
-    ? !sourceValue ||
-      !targetValue ||
-      !tokenValue ||
-      !amountValue ||
-      !walletAddressValue ||
-      !bridgeFee ||
-      !networkFee ||
-      !!errors.amount ||
-      !!errors.walletAddress ||
-      isValidating
-    : !sourceValue;
-
+  const disabled =
+    !selectedWallet ||
+    !sourceValue ||
+    !targetValue ||
+    !tokenValue ||
+    !amountValue ||
+    !walletAddressValue ||
+    !bridgeFee ||
+    !networkFee ||
+    !!errors.amount ||
+    !!errors.walletAddress ||
+    isValidating;
   return (
     <>
       <LoadingButton

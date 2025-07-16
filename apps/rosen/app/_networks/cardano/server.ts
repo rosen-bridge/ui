@@ -13,21 +13,21 @@ import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
 
 export const decodeWasmValue = wrap(decodeWasmValueCore, {
   cache: Infinity,
-  traceKey: 'decodeWasmValue',
+  traceKey: 'cardano:decodeWasmValue',
 });
 
 export const generateLockAuxiliaryData = wrap(generateLockAuxiliaryDataCore, {
-  traceKey: 'generateLockAuxiliaryData',
+  traceKey: 'cardano:generateLockAuxiliaryData',
 });
 
 export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
-  traceKey: 'generateUnsignedTx',
+  traceKey: 'cardano:generateUnsignedTx',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
-  traceKey: 'getMaxTransfer',
+  traceKey: 'cardano:getMaxTransfer',
 });
 
 export const setTxWitnessSet = wrap(setTxWitnessSetCore, {
-  traceKey: 'setTxWitnessSet',
+  traceKey: 'cardano:setTxWitnessSet',
 });

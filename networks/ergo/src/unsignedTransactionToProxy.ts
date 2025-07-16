@@ -1,5 +1,6 @@
-import { ErgoBoxProxy, UnsignedErgoTxProxy } from '@rosen-ui/wallet-api';
 import * as wasm from 'ergo-lib-wasm-nodejs';
+
+import { ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 
 /**
  * converts wasm UnsignedTransaction to UnsignedErgoTxProxy format
