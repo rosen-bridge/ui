@@ -109,24 +109,24 @@ export const filters: Filter[] = [
       type: 'text',
     },
   },
-  // {
-  //   name: 'payment',
-  //   label: 'Payment Tx ID',
-  //   unique: true,
-  //   operators: [OPERATOR_CONTAINS],
-  //   input: {
-  //     type: 'text',
-  //   },
-  // },
-  // {
-  //   name: 'reward',
-  //   label: 'Reward Tx ID',
-  //   unique: true,
-  //   operators: [OPERATOR_CONTAINS],
-  //   input: {
-  //     type: 'text',
-  //   },
-  // },
+  {
+    name: 'paymentTxId',
+    label: 'Payment Tx ID',
+    unique: true,
+    operators: [OPERATOR_CONTAINS],
+    input: {
+      type: 'text',
+    },
+  },
+  {
+    name: 'spendTxId',
+    label: 'Reward Tx ID',
+    unique: true,
+    operators: [OPERATOR_CONTAINS],
+    input: {
+      type: 'text',
+    },
+  },
   {
     name: 'height',
     label: 'Height',
@@ -137,7 +137,7 @@ export const filters: Filter[] = [
     },
   },
   {
-    name: 'reports',
+    name: 'WIDsCount',
     label: 'Reports',
     unique: true,
     operators: OPERATORS_COMPARATIVE,

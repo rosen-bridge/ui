@@ -14,7 +14,9 @@ const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
 
-interface EventWithTotal extends Omit<ObservationEntity, 'requestId'> {
+interface EventWithTotal
+  extends Omit<ObservationEntity, 'requestId'>,
+    Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> {
   eventId: string;
   timestamp: number;
   total: number;
@@ -47,8 +49,6 @@ export const getEvents = async (filters: Filters) => {
       case 'bridgeFee':
       case 'networkFee':
         return `CAST(sub."${key}" AS BIGINT)`;
-      case 'source':
-        return 'sub."sourceTxId"';
       default:
         return `sub."${key}"`;
     }
@@ -76,7 +76,9 @@ export const getEvents = async (filters: Filters) => {
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'ete.WIDsCount AS "reports"',
+      'ete.WIDsCount AS "WIDsCount"',
+      'ete.paymentTxId AS "paymentTxId"',
+      'ete.spendTxId AS "spendTxId"',
       'COUNT(*) OVER() AS "total"',
       /**
        * There may be multiple event triggers for the same events, but we should

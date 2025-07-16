@@ -108,12 +108,10 @@ const SideBarContent = ({ value }: Pick<SideBarProps, 'value'>) => {
           <Identifier value={value.sourceTxId} />
         </Label>
         <Label label="Payment Tx" inset>
-          {/*TODO: Value for Payment Tx is not available yet. */}
-          TODO
+          {value.paymentTxId}
         </Label>
         <Label label="Reward Tx" inset>
-          {/*TODO: Value for Reward Tx is not available yet. */}
-          TODO
+          {value.spendTxId}
         </Label>
       </div>
       <Divider orientation="vertical" flexItem sx={{ borderStyle: 'dashed' }} />
@@ -144,7 +142,7 @@ const SideBarContent = ({ value }: Pick<SideBarProps, 'value'>) => {
             )}
           />
         </Label>
-        <Label label="Reports">TODO</Label>
+        <Label label="Reports">{value.WIDsCount}</Label>
         <Label label="Height">{value.height}</Label>
       </div>
     </Box>
