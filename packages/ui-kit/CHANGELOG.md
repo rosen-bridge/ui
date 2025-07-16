@@ -1,5 +1,16 @@
 # @rosen-bridge/ui-kit
 
+## 2.1.0
+
+### Minor Changes
+
+- Implement useCurrentBreakpoint hook
+- Implement ViewToggle component
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/icons@2.2.0
+
 ## 2.0.0
 
 ### Major Changes
