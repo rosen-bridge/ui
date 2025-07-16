@@ -41,16 +41,20 @@ export const getEvents = async (filters: Filters) => {
     filters.search.in ||= [];
   }
 
-  const { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
     switch (key) {
-      case 'timestamp':
-        return 'be.' + key;
+      case 'amount':
+      case 'bridgeFee':
+      case 'networkFee':
+        return `CAST(sub.${key} AS BIGINT)`;
+      case 'source':
+        return 'sub.sourceTxId';
       default:
-        return 'oe.' + key;
+        return `sub.${key}`;
     }
   });
 
-  let queryBuilder = observationRepository
+  const subquery = observationRepository
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
     .leftJoin(
@@ -88,8 +92,13 @@ export const getEvents = async (filters: Filters) => {
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
     ]);
 
+  let queryBuilder = dataSource
+    .createQueryBuilder()
+    .select('*')
+    .from(`(${subquery.getQuery()})`, 'sub');
+
   if (query) {
-    queryBuilder.where(query);
+    queryBuilder = queryBuilder.where(query);
   }
 
   queryBuilder = queryBuilder.distinct(true);

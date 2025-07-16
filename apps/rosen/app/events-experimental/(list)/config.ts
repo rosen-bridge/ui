@@ -1,29 +1,52 @@
 import {
   OPERATORS_COMPARATIVE,
   OPERATORS_EQUALITY,
-  OPERATOR_IS,
-  OPERATORS_STRING,
   Filter,
-  OPERATOR_GREATER_THAN_OR_EQUAL,
-  OPERATOR_LESS_THAN_OR_EQUAL,
+  OPERATOR_CONTAINS,
 } from '@rosen-bridge/ui-kit';
-
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const filters: Filter[] = [
   {
     name: 'requestId',
     label: 'Event Id',
     unique: true,
-    operators: OPERATORS_STRING,
+    operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
   },
   {
+    name: 'fromChain',
+    label: 'From Chain',
+    unique: true,
+    operators: OPERATORS_EQUALITY,
+    input: (context) => ({
+      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+      options: NETWORKS_KEYS.map((key) => ({
+        label: NETWORKS[key].label,
+        value: key,
+      })),
+    }),
+  },
+  {
+    name: 'toChain',
+    label: 'To Chain',
+    unique: true,
+    operators: OPERATORS_EQUALITY,
+    input: (context) => ({
+      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+      options: NETWORKS_KEYS.map((key) => ({
+        label: NETWORKS[key].label,
+        value: key,
+      })),
+    }),
+  },
+  {
     name: 'fromAddress',
     label: 'From Address',
     unique: true,
-    operators: OPERATORS_STRING,
+    operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
@@ -32,14 +55,33 @@ export const filters: Filter[] = [
     name: 'toAddress',
     label: 'To Address',
     unique: true,
-    operators: OPERATORS_STRING,
+    operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
   },
   {
-    name: 'height',
-    label: 'Height',
+    name: 'amount',
+    label: 'Amount',
+    unique: true,
+    operators: OPERATORS_COMPARATIVE,
+    input: {
+      type: 'number',
+    },
+  },
+  {
+    name: 'bridgeFee',
+    label: 'Bridge Fee',
+    unique: true,
+    operators: OPERATORS_COMPARATIVE,
+    input: {
+      type: 'number',
+    },
+  },
+  {
+    name: 'networkFee',
+    label: 'Network Fee',
+    unique: true,
     operators: OPERATORS_COMPARATIVE,
     input: {
       type: 'number',
@@ -48,6 +90,7 @@ export const filters: Filter[] = [
   {
     name: 'status',
     label: 'Status',
+    unique: true,
     operators: OPERATORS_EQUALITY,
     input: {
       type: 'select',
@@ -58,48 +101,50 @@ export const filters: Filter[] = [
     },
   },
   {
-    name: 'amount',
-    label: 'Amount',
-    operators: OPERATORS_COMPARATIVE,
-    input: {
-      type: 'number',
-    },
-  },
-  {
-    name: 'reports',
-    label: 'Reports',
-    operators: OPERATORS_COMPARATIVE,
-    input: {
-      type: 'number',
-    },
-  },
-  {
     name: 'source',
-    label: 'Source',
+    label: 'Source Tx ID',
     unique: true,
-    operators: OPERATORS_STRING,
+    operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
   },
+  // {
+  //   name: 'payment',
+  //   label: 'Payment Tx ID',
+  //   unique: true,
+  //   operators: [OPERATOR_CONTAINS],
+  //   input: {
+  //     type: 'text',
+  //   },
+  // },
+  // {
+  //   name: 'reward',
+  //   label: 'Reward Tx ID',
+  //   unique: true,
+  //   operators: [OPERATOR_CONTAINS],
+  //   input: {
+  //     type: 'text',
+  //   },
+  // },
   {
-    name: 'payment',
-    label: 'Payment',
+    name: 'height',
+    label: 'Height',
     unique: true,
-    operators: OPERATORS_STRING,
+    operators: OPERATORS_COMPARATIVE,
     input: {
-      type: 'text',
+      type: 'number',
     },
   },
-  {
-    name: 'reward',
-    label: 'Reward',
-    unique: true,
-    operators: OPERATORS_STRING,
-    input: {
-      type: 'text',
-    },
-  },
+  // {
+  //   name: 'reports',
+  //   label: 'Reports',
+  //   unique: true,
+  //   operators: OPERATORS_COMPARATIVE,
+  //   input: {
+  //     type: 'number',
+  //   },
+  // },
 ];
 
 export const sorts = [
