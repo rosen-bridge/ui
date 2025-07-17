@@ -4,14 +4,25 @@ import { styled } from '../../../styling';
 import { IconButton, Skeleton, SvgIcon, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
 
-interface IdentifierProps {
+type IdentifierProps = {
+  /** The main string value to display (e.g., an identifier or long string) */
   value: string;
+
+  /** Tooltip text shown when hovering over the value */
   title?: string;
+
+  /** If true, shows a loading skeleton instead of the value */
   loading?: boolean;
+
+  /** If provided, renders an external link that opens in a new tab */
   href?: string;
+
+  /** If true, enables a button to copy the value to the clipboard */
   copyable?: boolean;
+
+  /** If true, displays a QR code icon */
   qrcode?: boolean;
-}
+};
 
 const trailingLength = 5; // Number of characters to show at the end
 
@@ -43,6 +54,22 @@ const Action = styled('div')(() => ({
   marginLeft: '0.25rem',
 }));
 
+/**
+ * Identifier component displays a formatted string with optional helper actions.
+ *
+ * It truncates the value, preserving the last few characters,
+ * and can show an external link (opens in new tab), a copy button, and a QR code icon.
+ *
+ * @example
+ * ```tsx
+ * <Identifier
+ *   value="0x123456789abcdef"
+ *   href="https://example.com/details/0x123456789abcdef"
+ *   copyable
+ *   qrcode
+ * />
+ * ```
+ */
 export const Identifier = ({
   value,
   title,
@@ -68,7 +95,7 @@ export const Identifier = ({
 
       <Action>
         {href && (
-          <IconButton size="small" href={href}>
+          <IconButton target="_blank" size="small" href={href}>
             <SvgIcon fontSize="small">
               <ExternalLinkAlt />
             </SvgIcon>
