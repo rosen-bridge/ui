@@ -30,9 +30,17 @@ export const useWallet = () => {
   return context;
 };
 
+type WalletState =
+  | 'IDLE'
+  | 'DISCONNECTING'
+  | 'DISCONNECTED'
+  | 'CONNECTING'
+  | 'CONNECTED';
+
 export type WalletContextType = {
   select: (wallet: Wallet) => Promise<void>;
   selected?: Wallet;
+  state: WalletState;
   wallets: Wallet[];
   disconnect: () => void;
 };
@@ -46,6 +54,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
   const [selected, setSelected] = useState<Wallet>();
 
+  const [state, setState] = useState<WalletState>('DISCONNECTED');
+
   const filtered = useMemo(() => {
     if (!selectedSource) return [];
     return Object.values<Wallet>(wallets).filter((wallet) => {
@@ -55,38 +65,52 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
   const select = useCallback(
     async (wallet: Wallet) => {
+      if (!selectedSource) return;
+
       try {
+        setState('CONNECTING');
+
         await wallet.connect();
-        if (wallet.switchChain && selectedSource) {
-          await wallet.switchChain(selectedSource.name);
-        }
+
+        await wallet.switchChain(selectedSource.name);
       } catch (error: any) {
+        setState('DISCONNECTED');
         return openSnackbar(error.message, 'error');
       }
 
       setSelected(wallet);
-
-      if (!selectedSource) return;
+      setState('CONNECTED');
 
       localStorage.setItem('rosen:wallet:' + selectedSource.name, wallet.name);
     },
-    [selectedSource, openSnackbar, setSelected],
+    [selectedSource, openSnackbar, setSelected, setState],
   );
 
-  const disconnect = useCallback(() => {
+  const disconnect = useCallback(async () => {
     if (!selected) return;
 
-    selected.disconnect();
+    if (!selectedSource) return;
 
-    localStorage.removeItem('rosen:wallet:' + selected.name);
+    setState('DISCONNECTING');
+
+    try {
+      await selected.disconnect();
+    } catch {}
+
+    localStorage.removeItem('rosen:wallet:' + selectedSource.name);
+
     setSelected(undefined);
-  }, [selected]);
+    setState('DISCONNECTED');
+  }, [selected, selectedSource]);
 
   useEffect(() => {
     (async () => {
       setSelected(undefined);
+      setState('IDLE');
 
       if (!selectedSource) return;
+
+      setState('DISCONNECTED');
 
       const name = localStorage.getItem('rosen:wallet:' + selectedSource.name);
 
@@ -101,17 +125,21 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       if (!(await wallet.isConnected())) return;
 
       try {
+        setState('CONNECTING');
+
         await wallet.connect();
 
         await wallet.switchChain?.(selectedSource.name, true);
 
         setSelected(wallet);
+        setState('CONNECTED');
       } catch (error) {
         setSelected(undefined);
+        setState('DISCONNECTED');
         throw error;
       }
     })();
-  }, [selectedSource, setSelected]);
+  }, [selectedSource, setSelected, setState]);
 
   /**
    * TODO: update or move this logic
@@ -140,14 +168,18 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     start();
   }, [selected, selectedSource]);
 
-  const state = {
-    select,
-    selected,
-    wallets: filtered,
-    disconnect,
-  };
+  const value = useMemo(
+    () => ({
+      select,
+      selected,
+      state,
+      wallets: filtered,
+      disconnect,
+    }),
+    [select, selected, state, filtered, disconnect],
+  );
 
   return (
-    <WalletContext.Provider value={state}>{children}</WalletContext.Provider>
+    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
   );
 };
