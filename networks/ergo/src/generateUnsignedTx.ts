@@ -4,14 +4,10 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
 
-import { fee, minBoxValue } from './constants';
+import { fee, maxTokenCount, minBoxValue } from './constants';
 import { AssetBalance, ErgoBoxProxy, UnsignedErgoTxProxy } from './types';
 import { unsignedTransactionToProxy } from './unsignedTransactionToProxy';
-import {
-  createChangeBox,
-  createLockBox,
-  getHeight,
-} from './utils';
+import { createChangeBox, createLockBox, getHeight } from './utils';
 
 const selector = new ErgoBoxSelection();
 
@@ -82,8 +78,12 @@ export const generateUnsignedTx =
       [],
       new Map(),
       ergoBoxes.values(),
-      undefined,
-      undefined,
+      minBoxValue,
+      /**
+       * TODO: use the default value
+       * local:ergo/rosen-bridge/selection#22
+       */
+      maxTokenCount,
       () => fee,
     );
     if (!inputs.covered) throw Error(`Not enough assets`);
@@ -94,7 +94,9 @@ export const generateUnsignedTx =
     });
 
     const feeBox = wasm.ErgoBoxCandidate.new_miner_fee_box(
-      wasm.BoxValue.from_i64(wasm.I64.from_str(inputs.additionalAssets.fee.toString())),
+      wasm.BoxValue.from_i64(
+        wasm.I64.from_str(inputs.additionalAssets.fee.toString()),
+      ),
       height,
     );
 

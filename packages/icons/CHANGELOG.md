@@ -1,5 +1,16 @@
 # @rosen-bridge/icons
 
+## 2.2.0
+
+### Minor Changes
+
+- Add `Fire` and `SnowFlake` icons
+- Add two icons named `Grid` and `Row`
+
+### Patch Changes
+
+- Add missing exports to `index.ts` and fix export structure
+
 ## 2.1.0
 
 ### Minor Changes

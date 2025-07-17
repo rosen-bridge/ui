@@ -8,6 +8,7 @@ import {
   Divider,
   Identifier,
   Network,
+  Skeleton,
   styled,
   SvgIcon,
   Typography,
@@ -33,18 +34,29 @@ type RenderNetworkProps = NetworkProps & {
   state: 'hot' | 'cold';
 };
 
+/**
+ * Props for the `NetworkCard` component.
+ *
+ * @property hot - Data for the 'hot' network, including amount, unit, link, and address.
+ * @property cold - Data for the 'cold' network, including amount, unit, link, and address.
+ * @property network - The network name or identifier to display. Required.
+ * @property isLoading - If `true`, shows a skeleton placeholder instead of actual content.
+ */
 export type NetworkCardProps = {
-  /** Data props for the 'hot' network */
-  hot: NetworkProps;
+  /** Data for the 'hot' network (e.g., current wallet info). */
+  hot?: NetworkProps;
 
-  /** Data props for the 'cold' network */
-  cold: NetworkProps;
+  /** Data for the 'cold' network (e.g., cold wallet info). */
+  cold?: NetworkProps;
 
-  /** Network name or identifier to display */
-  network: NetworkType;
+  /** The network name or identifier to display (e.g., 'Binance'). */
+  network?: NetworkType;
+
+  /** Shows a loading skeleton while data is being fetched. */
+  isLoading?: boolean;
 };
 
-const NetworkContainer = styled('div')(({ theme }) => ({
+const Root = styled('div')(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'start',
@@ -67,6 +79,14 @@ const WrapperIcon = styled('div')(({ theme }) => ({
   gap: '0.5rem',
   fontSize: '1.5rem',
   width: '100%',
+}));
+
+const WrapperFallBack = styled('div')(({ theme }) => ({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
 }));
 
 const RenderNetwork = ({
@@ -106,16 +126,85 @@ const RenderNetwork = ({
     </WrapperItem>
   );
 };
-/**
- * NetworkCard component that displays network name,
- * and renders two RenderNetwork components for 'hot' and 'cold' data.
- * @param hot Data props for the 'hot' network.
- * @param cold Data props for the 'cold' network.
- * @param network Network name or identifier to display.
- */
-const NetworkCard = ({ hot, cold, network }: NetworkCardProps) => {
+
+const NetworkCardSkeleton = () => {
   return (
-    <NetworkContainer>
+    <Root>
+      <WrapperItem>
+        <WrapperIcon>
+          <Skeleton variant="circular" width={24} height={24} />
+          <Skeleton variant="text" width={80} height={32} />
+        </WrapperIcon>
+      </WrapperItem>
+
+      <WrapperItem>
+        <WrapperIcon>
+          <Skeleton variant="circular" width={24} height={24} />
+          <Skeleton variant="text" width={120} height={32} />
+        </WrapperIcon>
+        <Skeleton variant="text" width="100%" height={32} />
+      </WrapperItem>
+
+      <Divider variant="middle" sx={{ width: '100%' }} />
+
+      <WrapperItem>
+        <WrapperIcon>
+          <Skeleton variant="circular" width={24} height={24} />
+          <Skeleton variant="text" width={120} height={32} />
+        </WrapperIcon>
+        <Skeleton variant="text" width="100%" height={32} />
+      </WrapperItem>
+    </Root>
+  );
+};
+
+const NetworkFallback = () => {
+  return (
+    <Root sx={{ height: '100%' }}>
+      <WrapperFallBack>
+        <Typography variant="body1" color="error">
+          Some required data is missing.
+        </Typography>
+      </WrapperFallBack>
+    </Root>
+  );
+};
+
+/**
+ * `NetworkCard` displays network information for two states (`hot` and `cold`)
+ * with icons, amounts, addresses, and QR code. If `isLoading` is `true`, it shows
+ * a skeleton placeholder. If required `network` data is missing, it falls back
+ * to an error message.
+ *
+ * @example
+ * ```tsx
+ * <NetworkCard
+ *   network="Binance"
+ *   hot={{ amount: 3022, unit: 'ERG', link: '', address: 'xyz' }}
+ *   cold={{ amount: 1234, unit: 'ERG', link: '', address: 'abc' }}
+ *   isLoading={false}
+ * />
+ * ```
+ *
+ * @param props - {@link NetworkCardProps}
+ * @returns Rendered JSX for the network card.
+ */
+export const NetworkCard = ({
+  hot,
+  cold,
+  network,
+  isLoading,
+}: NetworkCardProps) => {
+  if (isLoading) {
+    return <NetworkCardSkeleton />;
+  }
+
+  if (!network || !cold || !hot) {
+    return <NetworkFallback />;
+  }
+
+  return (
+    <Root>
       <WrapperItem>
         <Network name={network} />
       </WrapperItem>
@@ -125,7 +214,6 @@ const NetworkCard = ({ hot, cold, network }: NetworkCardProps) => {
       <Divider variant="middle" sx={{ width: '100%' }} />
 
       <RenderNetwork {...cold} state={'cold'} />
-    </NetworkContainer>
+    </Root>
   );
 };
-export default NetworkCard;
