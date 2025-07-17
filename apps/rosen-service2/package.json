@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@rosen-bridge/config": "^0.2.1",
-    "@rosen-bridge/winston-logger": "^0.2.1",
+    "@rosen-bridge/winston-logger": "^1.0.3",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-bridge/json-bigint": "^0.1.0",
     "config": "^3.3.7",
