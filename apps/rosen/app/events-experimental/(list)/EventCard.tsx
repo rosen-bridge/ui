@@ -13,39 +13,32 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { capitalize } from 'lodash-es';
 
-type EventCardProps = {
-  onClick?: () => void;
-  item?: any;
-  active?: boolean;
-  isLoading?: boolean;
-};
-
-const Root = styled('div')<{ active?: boolean; isSkeleton?: boolean }>(
-  ({ theme, active, isSkeleton }) => ({
-    'display': 'flex',
-    'flexDirection': 'column',
-    'cursor': isSkeleton ? 'default' : 'pointer',
-    'pointerEvents': isSkeleton ? 'none' : 'auto',
-    'padding': theme.spacing(1.5),
-    'border': `3px solid ${active ? theme.palette.primary.main : 'transparent'}`,
-    'backgroundColor': theme.palette.background.paper,
-    'borderRadius': theme.shape.borderRadius,
-    'gap': theme.spacing(1),
-    'width': '100%',
-    'fontSize': '16px',
+const Root = styled('div')<EventCardProps & { isSkeleton?: boolean }>(
+  ({ active, isSkeleton, theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    cursor: isSkeleton ? 'default' : 'pointer',
+    pointerEvents: isSkeleton ? 'none' : 'auto',
+    padding: theme.spacing(1.5),
+    border: `3px solid ${active ? theme.palette.primary.main : 'transparent'}`,
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
+    gap: theme.spacing(1),
+    width: '100%',
+    fontSize: '16px',
   }),
 );
 
-const Wrapper = styled('div')(({ theme }) => ({
+const Wrapper = styled('div')(() => ({
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
 }));
 
-const EventSkeleton = () => {
+const EventCardSkeleton = () => {
   return (
     <Root
-      sx={{
+      style={{
         height: '160px',
       }}
       isSkeleton
@@ -89,8 +82,20 @@ const EventSkeleton = () => {
   );
 };
 
-const Event = ({ onClick, active, item }: EventCardProps) => {
-  const { fromChain: from, toChain: to } = item;
+export type EventCardProps = {
+  active?: boolean;
+  isLoading?: boolean;
+  item?: any;
+  onClick?: () => void;
+};
+
+export const EventCard = ({
+  active,
+  isLoading,
+  item,
+  onClick,
+}: EventCardProps) => {
+  if (isLoading) return <EventCardSkeleton />;
   return (
     <Root active={active} onClick={onClick}>
       <Wrapper
@@ -122,7 +127,10 @@ const Event = ({ onClick, active, item }: EventCardProps) => {
         </div>
       </Wrapper>
 
-      <Identifier value={item.eventId} href={`/events-experimental/${item.eventId}`} />
+      <Identifier
+        value={item.eventId}
+        href={`/events-experimental/${item.eventId}`}
+      />
 
       <Wrapper
         sx={(theme) => ({
@@ -133,17 +141,11 @@ const Event = ({ onClick, active, item }: EventCardProps) => {
       >
         <Connector
           variant="filled"
-          start={<Network name={from} variant="logo" />}
-          end={<Network name={to} variant="logo" />}
+          start={<Network name={item.fromChain} variant="logo" />}
+          end={<Network name={item.toChain} variant="logo" />}
         />
         <Chip label={item.status} color="success" icon={'CheckCircle'} />
       </Wrapper>
     </Root>
   );
 };
-
-export const EventCard = ({ isLoading, ...props }: EventCardProps) => {
-  return !isLoading ? <Event {...props} /> : <EventSkeleton />;
-};
-
-

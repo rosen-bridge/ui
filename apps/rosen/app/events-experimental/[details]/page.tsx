@@ -1,14 +1,5 @@
-export default function Details({ params }: { params: any }) {
-  return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        textAlign: 'center',
-        fontSize: '24px',
-      }}
-    >
-      coming soon....
-    </div>
-  );
+import { EventDetails } from '@/events-experimental/[details]/EventDetails';
+
+export default function DetailsPage({ params }: { params: any }) {
+  return <EventDetails id={params.id} />;
 }
