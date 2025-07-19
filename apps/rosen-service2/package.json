@@ -22,10 +22,11 @@
     "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default_values.yaml --format yaml"
   },
   "dependencies": {
+    "@rosen-bridge/callback-logger": "^0.1.0",
     "@rosen-bridge/config": "^0.2.1",
+    "@rosen-bridge/json-bigint": "^0.1.0",
     "@rosen-bridge/winston-logger": "^1.0.3",
     "@rosen-ui/constants": "^0.4.0",
-    "@rosen-bridge/json-bigint": "^0.1.0",
     "config": "^3.3.7",
     "reflect-metadata": "^0.1.13",
     "tsx": "^4.19.4"

@@ -1,7 +1,9 @@
-import WinstonLogger from '@rosen-bridge/winston-logger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
-const startApp = () => {};
+const startApp = () => {
+  logger.info('The Rosen-Service2 Started');
+};
 
 export default startApp;
