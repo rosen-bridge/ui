@@ -1,3 +1,4 @@
+import { TokenMap } from '@rosen-bridge/tokens';
 import {
   OPERATORS_COMPARATIVE,
   OPERATORS_EQUALITY,
@@ -6,7 +7,25 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
-export const filters: Filter[] = [
+export const getFilters = (tokenMap: TokenMap): Filter[] => [
+  {
+    name: 'sourceChainTokenId',
+    label: 'Token',
+    unique: true,
+    operators: OPERATORS_EQUALITY,
+    input: (context) => ({
+      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+      options: tokenMap
+        .getConfig()
+        .map((item) => Object.values(item))
+        .flat()
+        .filter((item) => item.residency == 'native')
+        .map((item) => ({
+          label: item.name,
+          value: item.tokenId,
+        })),
+    }),
+  },
   {
     name: 'eventId',
     label: 'Event Id',

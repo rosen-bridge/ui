@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   NewPagination,
@@ -17,9 +17,10 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
+import { useTokenMap } from '@/_hooks';
 import { ApiEventResponse, EventItem } from '@/_types';
 
-import { filters, sorts } from './config';
+import { getFilters, sorts } from './config';
 import { EventCard } from './EventCard';
 import { SideBar } from './SideBar';
 
@@ -38,6 +39,10 @@ const Events = () => {
   const [current, setCurrent] = useState<EventItem>();
 
   const collection = useCollection();
+
+  const tokenMap = useTokenMap();
+
+  const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
 
   useEffect(() => {
     setCurrent(undefined);

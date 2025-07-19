@@ -7,6 +7,8 @@ import {
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
+import { getTokenMap } from '@/_tokenMap/getServerTokenMap';
+
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
@@ -31,6 +33,8 @@ interface EventWithTotal
  * @param limit
  */
 export const getEvents = async (filters: Filters) => {
+  const tokenMap = await getTokenMap();
+
   filters.sort = Object.assign(
     {
       key: 'timestamp',
@@ -42,6 +46,32 @@ export const getEvents = async (filters: Filters) => {
   if (filters.search) {
     filters.search.in ||= [];
   }
+
+  (() => {
+    const field = filters.fields?.find(
+      (field) => field.key == 'sourceChainTokenId',
+    );
+
+    if (!field) return;
+
+    const tokenIds = [];
+
+    const values = [field.value].flat();
+
+    const collections = tokenMap.getConfig();
+
+    for (const collection of collections) {
+      for (const value of values) {
+        for (const aa of Object.values(collection)) {
+          if (aa.tokenId == value) {
+            tokenIds.push(aa.tokenId);
+          }
+        }
+      }
+    }
+
+    field.value = tokenIds;
+  })();
 
   let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
     switch (key) {
