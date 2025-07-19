@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import { Alert } from '@rosen-bridge/ui-kit';
@@ -16,8 +15,9 @@ import {
 } from '@/_hooks';
 
 import { BridgeForm } from './BridgeForm';
-import { BridgeTransaction } from './BridgeTransaction';
-import { ConnectOrSubmitButton } from './ConnectOrSubmitButton';
+import { SubmitButton } from './SubmitButton';
+import { TransactionInfo } from './TransactionInfo';
+import { WalletInfo } from './WalletInfo';
 
 export interface BridgeForm {
   source: string | null;
@@ -28,8 +28,6 @@ export interface BridgeForm {
 }
 
 const RosenBridge = () => {
-  const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
-
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',
     defaultValues: {
@@ -53,10 +51,8 @@ const RosenBridge = () => {
                     <BridgeForm />
                   </div>
                   <div className="info">
-                    <BridgeTransaction
-                      chooseWalletsModalOpen={chooseWalletsModalOpen}
-                      setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-                    />
+                    <WalletInfo />
+                    <TransactionInfo />
                   </div>
                   {/* 
                     TODO: Add a condition that activates this alert specifically when MetaMask is selected
@@ -83,9 +79,7 @@ const RosenBridge = () => {
                     </div>
                   )}
                   <div className="action">
-                    <ConnectOrSubmitButton
-                      setChooseWalletsModalOpen={setChooseWalletsModalOpen}
-                    />
+                    <SubmitButton />
                   </div>
                 </TransactionFeesProvider>
               </MaxTransferProvider>
