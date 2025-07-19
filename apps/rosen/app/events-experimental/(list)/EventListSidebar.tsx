@@ -40,15 +40,18 @@ const Columns = ({
   width: string;
 }) => {
   return (
-    <div
-      style={{
-        columnWidth: width,
-        columnGap: gap,
-        columnRule: rule ? '1px solid red' : '',
+    <Box
+      sx={{
+        'columnWidth': width,
+        'columnGap': gap,
+        'columnRule': rule ? '1px solid red' : '',
+        '& > *': {
+          breakInside: 'avoid',
+        },
       }}
     >
       {children}
-    </div>
+    </Box>
   );
 };
 
@@ -78,30 +81,36 @@ const Content = ({ value }: EventListSidebarProps) => {
           )}
         />
       </Label>
-      <Label label="Chain"></Label>
-      <Label label="From" inset>
-        <Network name={value.fromChain} reverse />
-      </Label>
-      <Label label="To" inset>
-        <Network name={value.toChain} reverse />
-      </Label>
-      <Label label="Tx IDs"></Label>
-      <Label label="Source Tx" inset>
-        <Identifier copyable value={value.sourceTxId} />
-      </Label>
-      <Label label="Payment Tx" inset>
-        <Identifier copyable value={value.paymentTxId || ''} />
-      </Label>
-      <Label label="Reward Tx" inset>
-        <Identifier copyable value={value.spendTxId || ''} />
-      </Label>
-      <Label label="Address"></Label>
-      <Label label="From" inset>
-        <Identifier copyable value={value.fromAddress} />
-      </Label>
-      <Label label="To" inset>
-        <Identifier copyable value={value.toAddress} />
-      </Label>
+      <div>
+        <Label label="Chain"></Label>
+        <Label label="From" inset>
+          <Network name={value.fromChain} reverse />
+        </Label>
+        <Label label="To" inset>
+          <Network name={value.toChain} reverse />
+        </Label>
+      </div>
+      <div>
+        <Label label="Tx IDs"></Label>
+        <Label label="Source Tx" inset>
+          <Identifier copyable value={value.sourceTxId} />
+        </Label>
+        <Label label="Payment Tx" inset>
+          <Identifier copyable value={value.paymentTxId || ''} />
+        </Label>
+        <Label label="Reward Tx" inset>
+          <Identifier copyable value={value.spendTxId || ''} />
+        </Label>
+      </div>
+      <div>
+        <Label label="Address"></Label>
+        <Label label="From" inset>
+          <Identifier copyable value={value.fromAddress} />
+        </Label>
+        <Label label="To" inset>
+          <Identifier copyable value={value.toAddress} />
+        </Label>
+      </div>
       <Label label="Duration">
         <RelativeTime timestamp={value.timestamp} />
       </Label>
