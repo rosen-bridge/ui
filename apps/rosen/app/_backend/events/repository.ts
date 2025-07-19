@@ -54,18 +54,20 @@ export const getEvents = async (filters: Filters) => {
 
     if (!field) return;
 
-    const tokenIds = [];
+    const tokenIds: string[] = [];
 
     const values = [field.value].flat();
 
     const collections = tokenMap.getConfig();
 
     for (const collection of collections) {
+      const tokens = Object.values(collection);
       for (const value of values) {
-        for (const aa of Object.values(collection)) {
-          if (aa.tokenId == value) {
-            tokenIds.push(aa.tokenId);
-          }
+        for (const token of tokens) {
+          if (token.tokenId !== value) continue;
+          const ids = tokens.map((token) => token.tokenId);
+          tokenIds.push(...ids);
+          break;
         }
       }
     }
