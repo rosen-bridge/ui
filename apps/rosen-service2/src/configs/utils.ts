@@ -12,6 +12,12 @@ import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+/**
+ * Converts log configurations to an array of TransportOptions based on their type.
+ *
+ * @param configs - Configuration object with log settings.
+ * @returns List of TransportOptions for logger setup.
+ */
 export const getLogOptions = (
   configs: RosenService2Config,
 ): TransportOptions[] => {
