@@ -1,9 +1,7 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import WinstonLogger, { TransportOptions } from '@rosen-bridge/winston-logger';
+import WinstonLogger from '@rosen-bridge/winston-logger';
 import 'reflect-metadata';
 
-import { configs } from './configs';
+import { configs, getLogOptions } from './configs';
 
-CallbackLoggerFactory.init(
-  new WinstonLogger(configs.logs as TransportOptions[]),
-);
+CallbackLoggerFactory.init(new WinstonLogger(getLogOptions(configs)));
