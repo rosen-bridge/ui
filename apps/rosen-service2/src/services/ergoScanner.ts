@@ -1,4 +1,5 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import * as scanner from '@rosen-bridge/scanner';
 import { Transaction } from '@rosen-bridge/scanner-interfaces';
@@ -7,7 +8,6 @@ import {
   Dependency,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import { configs } from '../configs';
 import { getTokenMap } from '../utils';
@@ -80,7 +80,9 @@ export class ErgoScannerService extends AbstractService {
     if (this.instance != undefined) {
       return;
     }
-    const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+    const logger = CallbackLoggerFactory.getInstance().getLogger(
+      import.meta.url,
+    );
     this.instance = new ErgoScannerService(dbService, logger);
 
     await this.instance.registerExtractors();
