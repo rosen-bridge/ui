@@ -50,7 +50,6 @@ export default [
       'networks/**/*.{js,jsx,ts,tsx}',
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
       'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
-      'apps/rosen-service2/**/*.ts',
     ],
     languageOptions: {
       globals: {

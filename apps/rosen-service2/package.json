@@ -18,7 +18,7 @@
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
     "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-    "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RoseService2Config",
+    "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RosenService2Config",
     "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default_values.yaml --format yaml"
   },
   "dependencies": {
