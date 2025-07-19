@@ -5,6 +5,7 @@
     "apps/*",
     "networks/*",
     "packages/*",
+    "services/*",
     "wallets/*"
   ],
   "scripts": {
@@ -18,6 +19,9 @@
     "version:guard": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/rosen-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty",
     "version:rosen": "npx changeset version --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/guard-app && npm i && npx changeset --empty",
     "version:watcher": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/rosen-app --ignore @rosen-bridge/guard-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty"
+  },
+  "overrides": {
+    "ethers": "6.13.2"
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1",
@@ -39,8 +43,5 @@
     "prettier": "^3.3.3",
     "tsx": "^4.19.2",
     "vitest": "^2.1.8"
-  },
-  "overrides": {
-    "ethers": "6.13.2"
   }
 }

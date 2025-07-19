@@ -1,10 +1,10 @@
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
-import WinstonLogger from '@rosen-bridge/winston-logger';
 
 import dataSource from './data-source';
 import { DBService } from './services/db';
 
-const logger = WinstonLogger.getInstance().getLogger(import.meta.url);
+const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
 const startApp = async () => {
   const serviceManager = ServiceManager.setup();
