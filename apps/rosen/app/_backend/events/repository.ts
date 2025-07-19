@@ -111,7 +111,6 @@ export const getEvents = async (filters: Filters) => {
       'ete.WIDsCount AS "WIDsCount"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
-      'COUNT(*) OVER() AS "total"',
       /**
        * There may be multiple event triggers for the same events, but we should
        * only select one based on the results. The order is:
@@ -129,7 +128,7 @@ export const getEvents = async (filters: Filters) => {
 
   let queryBuilder = dataSource
     .createQueryBuilder()
-    .select('*')
+    .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
     .from(`(${subquery.getQuery()})`, 'sub');
 
   if (query) {
