@@ -21,15 +21,13 @@ export interface ConnectorProps {
 
 const ConnectorWrapper = styled('div')<Pick<ConnectorProps, 'variant'>>(
   ({ theme, variant }) => ({
-    display: 'flex',
+    display: 'inline-flex',
     backgroundColor:
       variant === 'filled' ? theme.palette.neutral.light : 'transparent',
     padding: theme.spacing(0.5),
     borderRadius: theme.spacing(4),
     flexDirection: 'row',
     alignItems: 'center',
-    width: 'fit-content',
-    gap: theme.spacing(0.8),
   }),
 );
 
