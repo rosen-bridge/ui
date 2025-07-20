@@ -14,6 +14,8 @@ import {
 } from '../base';
 
 export interface NewPaginationProps {
+  defaultPageIndex?: number;
+  defaultPageSize?: number;
   disabled?: boolean;
   total?: number;
   pageIndex?: number;
@@ -24,14 +26,19 @@ export interface NewPaginationProps {
 }
 
 export const NewPagination = ({
+  defaultPageIndex = 0,
+  defaultPageSize = 10,
   disabled,
   total = 0,
-  pageIndex = 0,
-  pageSize = 10,
+  pageIndex,
+  pageSize,
   pageSizeOptions = [10, 25, 100],
   onPageIndexChange,
   onPageSizeChange,
 }: NewPaginationProps) => {
+  const pageIndexCurrent = pageIndex ?? defaultPageIndex;
+  const pageSizeCurrent = pageSize ?? defaultPageSize;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [responsiveSiblingCount, setResponsiveSiblingCount] = useState(1);
 
@@ -47,9 +54,9 @@ export const NewPagination = ({
     return () => observer.disconnect();
   }, []);
 
-  const totalPages = Math.ceil(total / pageSize);
-  const from = pageIndex * pageSize + 1;
-  const to = Math.min((pageIndex + 1) * pageSize, total);
+  const totalPages = Math.ceil(total / pageSizeCurrent);
+  const from = pageIndexCurrent * pageSizeCurrent + 1;
+  const to = Math.min((pageIndexCurrent + 1) * pageSizeCurrent, total);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
@@ -66,6 +73,18 @@ export const NewPagination = ({
     onPageSizeChange?.(value);
     handleMenuClose();
   };
+
+  useEffect(() => {
+    if (typeof defaultPageIndex != 'number') return;
+    if (typeof pageIndex == 'number') return;
+    onPageIndexChange?.(defaultPageIndex);
+  }, [defaultPageIndex, pageIndex, onPageIndexChange]);
+
+  useEffect(() => {
+    if (typeof defaultPageSize != 'number') return;
+    if (typeof pageSize == 'number') return;
+    onPageSizeChange?.(defaultPageSize);
+  }, [defaultPageSize, pageSize, onPageSizeChange]);
 
   return (
     <Box
@@ -118,7 +137,7 @@ export const NewPagination = ({
           disabled={disabled}
           color="primary"
           count={totalPages}
-          page={pageIndex + 1}
+          page={pageIndexCurrent + 1}
           onChange={(_, val) => onPageIndexChange?.(val - 1)}
           size="small"
           siblingCount={responsiveSiblingCount}
@@ -181,7 +200,7 @@ export const NewPagination = ({
               },
             }}
           >
-            Items per page {pageSize}
+            Items per page {pageSizeCurrent}
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -233,14 +252,14 @@ export const NewPagination = ({
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Items per page {pageSize}
+                  Items per page {pageSizeCurrent}
                 </Typography>
               </MenuItem>
 
               {pageSizeOptions.map((option) => (
                 <MenuItem
                   key={option}
-                  selected={option === pageSize}
+                  selected={option === pageSizeCurrent}
                   onClick={() => handleSelect(option)}
                 >
                   {option}
