@@ -43,3 +43,4 @@ export * from './EmptyState';
 export * from './Center';
 export * from './Columns';
 export * from './GridContainer';
+export * from './CardHeader';
