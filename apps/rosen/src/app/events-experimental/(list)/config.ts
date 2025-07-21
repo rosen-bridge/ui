@@ -168,6 +168,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
 
 export const sorts = [
   { label: 'Timestamp', value: 'timestamp' },
-  { label: 'From Chain', value: 'fromChain' },
-  { label: 'To Chain', value: 'toChain' },
+  { label: 'Reports', value: 'WIDsCount' },
+  { label: 'Height', value: 'height' },
+  { label: 'Amount', value: 'amount' },
 ];

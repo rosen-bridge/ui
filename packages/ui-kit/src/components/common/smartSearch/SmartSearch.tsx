@@ -129,15 +129,20 @@ export const SmartSearch = ({
 
         parsed.flow && labels.push(parsed.flow.label);
 
-        parsed.operator && labels.push(parsed.operator.label);
+        parsed.operator &&
+          labels.push(parsed.operator.preview || parsed.operator.label);
 
         if (!Object.hasOwn(parsed, 'value')) return labels;
 
+        const values: string[] = [];
+
+        labels.push(values);
+
         [parsed.value].flat().forEach((value) => {
           if (typeof value == 'object' && 'label' in value) {
-            labels.push(value.label);
+            values.push(value.label);
           } else {
-            labels.push(`${value}`);
+            values.push(`${value}`);
           }
         });
 

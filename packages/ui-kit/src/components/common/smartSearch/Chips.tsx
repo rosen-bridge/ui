@@ -6,19 +6,25 @@ const Root = styled('div')(({ theme }) => ({
   'gap': theme.spacing(1),
   'whiteSpace': 'nowrap',
   'userSelect': 'none',
+  '.items': {
+    'display': 'flex',
+    'alignItems': 'center',
+    'gap': '2px',
+    '& > :nth-child(1)': {
+      borderTopLeftRadius: theme.shape.borderRadius / 4,
+      borderBottomLeftRadius: theme.shape.borderRadius / 4,
+    },
+    '& > :nth-child(3)': {
+      borderTopRightRadius: theme.shape.borderRadius / 4,
+      borderBottomRightRadius: theme.shape.borderRadius / 4,
+    },
+  },
   '.item': {
     display: 'flex',
-    gap: '2px',
     alignItems: 'center',
-    padding: theme.spacing(0.5, 0),
-  },
-  '.items': {
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(0.75),
-    padding: theme.spacing(0.5, 1),
-    borderRadius: theme.shape.borderRadius / 2,
+    padding: theme.spacing(0.5, 0.75),
     background: theme.palette.divider,
+    whiteSpace: 'pre',
   },
   '.multiple': {},
 }));
@@ -45,7 +51,9 @@ export const Chips = ({ value }: ChipsProps) => {
                 {value.map((value, index, values) => (
                   <div key={value} className="value">
                     {value}
-                    {values.length > 1 && values.length > index + 1 ? ', ' : ''}
+                    {values.length > 2 && values.length != index + 1 && ','}
+                    {values.length > 2 && values.length != index + 2 && ' '}
+                    {values.length > 1 && values.length == index + 2 && ' and '}
                   </div>
                 ))}
               </div>
