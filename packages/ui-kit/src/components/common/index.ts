@@ -42,3 +42,4 @@ export * from './ViewToggle';
 export * from './EmptyState';
 export * from './Center';
 export * from './Columns';
+export * from './GridContainer';
