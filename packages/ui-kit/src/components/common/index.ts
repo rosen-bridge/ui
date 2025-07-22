@@ -41,6 +41,6 @@ export * from './RelativeTime';
 export * from './ViewToggle';
 export * from './EmptyState';
 export * from './Center';
-export * from './Columns';
-export * from './GridContainer';
 export * from './CardHeader';
+export * from './GridContainer';
+export * from './Columns';
