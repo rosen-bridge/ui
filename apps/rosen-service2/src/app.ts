@@ -6,6 +6,11 @@ import { DBService } from './services/db';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
+/**
+ * Main function for running the Rosen-Service2
+ *
+ * @return
+ */
 const startApp = async () => {
   const serviceManager = ServiceManager.setup();
 

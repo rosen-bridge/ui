@@ -15,6 +15,11 @@ export class ChainConfigsReader {
     this.readConfigs();
   }
 
+  /**
+   * Read and return the Rosen-Service2 configs
+   *
+   * @return { ChainConfigs } RosenService2Config
+   */
   protected readConfigs = (): ChainConfigs => {
     try {
       const contractsData = fs.readFileSync(
