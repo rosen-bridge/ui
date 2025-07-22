@@ -183,6 +183,8 @@ const DetailsSidebar = ({ value }: EventListSidebarProps) => {
             <Button
               variant="text"
               size="small"
+              target="_blank"
+              href={`/events-experimental/${value.eventId}`}
               endIcon={
                 <SvgIcon>
                   <AngleRight />

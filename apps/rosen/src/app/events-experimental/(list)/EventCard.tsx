@@ -3,13 +3,12 @@ import React from 'react';
 import {
   Amount2,
   Avatar,
-  Box,
-  Chip,
+  Card,
   Connector,
   Identifier,
   Network,
   Skeleton,
-  styled,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import { capitalize } from 'lodash-es';
@@ -18,72 +17,42 @@ import { EventItem } from '@/types';
 
 import { EventStatus } from './EventStatus';
 
-const Root = styled('div')<EventCardProps & { isSkeleton?: boolean }>(
-  ({ active, isSkeleton, theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    cursor: isSkeleton ? 'default' : 'pointer',
-    pointerEvents: isSkeleton ? 'none' : 'auto',
-    padding: theme.spacing(1.5),
-    border: `3px solid ${active ? theme.palette.primary.main : 'transparent'}`,
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    gap: theme.spacing(1),
-    width: '100%',
-    fontSize: '16px',
-  }),
-);
-
-const Wrapper = styled('div')(() => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-}));
-
 const EventCardSkeleton = () => {
   return (
-    <Root
-      style={{
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        padding: (theme) => theme.spacing(1.5),
+        gap: (theme) => theme.spacing(1),
         height: '160px',
       }}
-      isSkeleton
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: (theme) => theme.spacing(1),
-          padding: (theme) => theme.spacing(0, 0, 2, 0),
-        }}
+      <Stack
+        alignItems="center"
+        flexDirection="row"
+        gap={1}
+        padding={[0, 0, 2, 0]}
       >
         <Skeleton variant="circular" width={48} height={48} />
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: (theme) => theme.spacing(1),
-          }}
-        >
+        <Stack flexDirection="column" gap={1}>
           <Skeleton variant="rounded" width={80} height={14}></Skeleton>
           <Skeleton variant="rounded" width={60} height={14}></Skeleton>
-        </Box>
-      </Box>
+        </Stack>
+      </Stack>
       <Skeleton variant="rounded" width="100%" height={20}></Skeleton>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: (theme) => theme.spacing(1),
-          padding: (theme) => theme.spacing(1, 0, 0, 0),
-        }}
+      <Stack
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="space-between"
+        gap={1}
+        padding={[1, 0, 0, 0]}
       >
         <Skeleton variant="rounded" width={80} height={32}></Skeleton>
         <Skeleton variant="rounded" width={80} height={32}></Skeleton>
-      </Box>
-    </Root>
+      </Stack>
+    </Card>
   );
 };
 
@@ -105,13 +74,19 @@ export const EventCard = ({
   if (!item) return null;
 
   return (
-    <Root active={active} onClick={onClick}>
-      <Wrapper
-        sx={(theme) => ({
-          fontSize: theme.typography.body1,
-          gap: theme.spacing(1),
-        })}
-      >
+    <Card
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        padding: (theme) => theme.spacing(1.5),
+        gap: (theme) => theme.spacing(1),
+        cursor: 'pointer',
+        border: (theme) =>
+          `3px solid ${active ? theme.palette.primary.main : 'transparent'}`,
+      }}
+      onClick={onClick}
+    >
+      <Stack gap={1} flexDirection="row">
         <Avatar
           sx={(theme) => ({
             backgroundColor: theme.palette.secondary.light,
@@ -120,13 +95,7 @@ export const EventCard = ({
         >
           {capitalize(item.lockToken.name.slice(0, 1))}
         </Avatar>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-          }}
-        >
+        <Stack flexDirection="column" alignItems="flex-start">
           <Amount2
             unit={item.lockToken.name}
             value={getDecimalString(
@@ -135,28 +104,21 @@ export const EventCard = ({
             )}
             orientation={'vertical'}
           />
-        </div>
-      </Wrapper>
+        </Stack>
+      </Stack>
 
       <Identifier
         value={item.eventId}
         href={`/events-experimental/${item.eventId}`}
       />
-
-      <Wrapper
-        sx={(theme) => ({
-          justifyContent: 'space-between',
-          fontSize: theme.typography.body1,
-          width: '100%',
-        })}
-      >
+      <Stack justifyContent="space-between" flexDirection="row">
         <Connector
           variant="filled"
           start={<Network name={item.fromChain} variant="logo" />}
           end={<Network name={item.toChain} variant="logo" />}
         />
         <EventStatus value={item.status} />
-      </Wrapper>
-    </Root>
+      </Stack>
+    </Card>
   );
 };
