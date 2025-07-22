@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { Logs, RosenService2Config } from '../types';
+import { Logs, RosenService2BaseConfig } from '../types';
 import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -54,7 +54,7 @@ export const getLogOptions = (logConfigs: Logs[]): TransportOptions[] => {
  *
  * @return RosenService2Config
  */
-export const validateConfigs = (): RosenService2Config => {
+export const validateConfigs = (): RosenService2BaseConfig => {
   const rawSchemaData = fs.readFileSync(
     path.join(__dirname, '../../config/schema.json'),
     'utf-8',
