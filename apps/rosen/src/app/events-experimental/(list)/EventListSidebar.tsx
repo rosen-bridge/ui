@@ -143,7 +143,7 @@ const Content = ({ value }: EventListSidebarProps) => {
           )}
         />
       </Label>
-      <Label label="Reports">{value.WIDsCount}</Label>
+      <Label label="Reports">{value.WIDsCount ?? 'N/C'}</Label>
       <Label label="Height">{value.height}</Label>
     </Columns>
   );
@@ -177,10 +177,12 @@ const DetailsSidebar = ({ value }: EventListSidebarProps) => {
     >
       <CardHeader
         title="Event"
+        separator
         action={
           value && (
             <Button
               variant="text"
+              size="small"
               endIcon={
                 <SvgIcon>
                   <AngleRight />
@@ -192,7 +194,7 @@ const DetailsSidebar = ({ value }: EventListSidebarProps) => {
           )
         }
       />
-      <CardContent>
+      <CardContent style={{ paddingTop: 0 }}>
         <Content value={value} />
       </CardContent>
     </Card>
