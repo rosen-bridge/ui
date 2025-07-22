@@ -7,7 +7,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { RosenService2Config } from '../types';
+import { Logs, RosenService2Config } from '../types';
 import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,11 +18,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * @param configs - Configuration object with log settings.
  * @returns List of TransportOptions for logger setup.
  */
-export const getLogOptions = (
-  configs: RosenService2Config,
-): TransportOptions[] => {
+export const getLogOptions = (logConfigs: Logs[]): TransportOptions[] => {
   const logOptions: TransportOptions[] = [];
-  for (const log of configs.logs) {
+  for (const log of logConfigs) {
     switch (log.type) {
       case 'console':
         logOptions.push({
