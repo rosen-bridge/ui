@@ -11,7 +11,12 @@ import {
   Skeleton,
   styled,
 } from '@rosen-bridge/ui-kit';
+import { getDecimalString } from '@rosen-ui/utils';
 import { capitalize } from 'lodash-es';
+
+import { EventItem } from '@/types';
+
+import { EventStatus } from './EventStatus';
 
 const Root = styled('div')<EventCardProps & { isSkeleton?: boolean }>(
   ({ active, isSkeleton, theme }) => ({
@@ -85,7 +90,7 @@ const EventCardSkeleton = () => {
 export type EventCardProps = {
   active?: boolean;
   isLoading?: boolean;
-  item?: any;
+  item?: EventItem;
   onClick?: () => void;
 };
 
@@ -96,6 +101,9 @@ export const EventCard = ({
   onClick,
 }: EventCardProps) => {
   if (isLoading) return <EventCardSkeleton />;
+
+  if (!item) return null;
+
   return (
     <Root active={active} onClick={onClick}>
       <Wrapper
@@ -121,7 +129,10 @@ export const EventCard = ({
         >
           <Amount2
             unit={item.lockToken.name}
-            value={item.amount}
+            value={getDecimalString(
+              item.amount,
+              item.lockToken.significantDecimals,
+            )}
             orientation={'vertical'}
           />
         </div>
@@ -144,7 +155,7 @@ export const EventCard = ({
           start={<Network name={item.fromChain} variant="logo" />}
           end={<Network name={item.toChain} variant="logo" />}
         />
-        <Chip label={item.status} color="success" icon={'CheckCircle'} />
+        <EventStatus value={item.status} />
       </Wrapper>
     </Root>
   );

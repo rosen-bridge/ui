@@ -82,7 +82,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
   {
     name: 'amount',
     label: 'Amount',
-    unique: true,
+    unique: false,
     operators: OPERATORS_COMPARATIVE,
     input: {
       type: 'number',
@@ -91,7 +91,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
   {
     name: 'bridgeFee',
     label: 'Bridge Fee',
-    unique: true,
+    unique: false,
     operators: OPERATORS_COMPARATIVE,
     input: {
       type: 'number',
@@ -100,7 +100,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
   {
     name: 'networkFee',
     label: 'Network Fee',
-    unique: true,
+    unique: false,
     operators: OPERATORS_COMPARATIVE,
     input: {
       type: 'number',
@@ -149,7 +149,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
   {
     name: 'height',
     label: 'Height',
-    unique: true,
+    unique: false,
     operators: OPERATORS_COMPARATIVE,
     input: {
       type: 'number',
@@ -158,7 +158,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
   {
     name: 'WIDsCount',
     label: 'Reports',
-    unique: true,
+    unique: false,
     operators: OPERATORS_COMPARATIVE,
     input: {
       type: 'number',

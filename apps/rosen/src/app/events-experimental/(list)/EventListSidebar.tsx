@@ -6,7 +6,6 @@ import {
   CardContent,
   CardHeader,
   Center,
-  Chip,
   Columns,
   EnhancedDialog,
   EnhancedDialogContent,
@@ -26,6 +25,8 @@ import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
 
 import { EventItem } from '@/types';
 
+import { EventStatus } from './EventStatus';
+
 const Content = ({ value }: EventListSidebarProps) => {
   if (!value)
     return (
@@ -34,10 +35,7 @@ const Content = ({ value }: EventListSidebarProps) => {
           height: 'clamp(320px, 100vh, calc(100vh - 310px))',
         }}
       >
-        <Typography
-          variant="body1"
-          sx={{ color: (theme) => theme.palette.text.secondary }}
-        >
+        <Typography variant="body1" color="text.secondary">
           Select an event to see its details.
         </Typography>
       </Center>
@@ -49,11 +47,7 @@ const Content = ({ value }: EventListSidebarProps) => {
         <Identifier copyable value={value.eventId} />
       </Label>
       <Label label="Status">
-        <Chip
-          label={value.status && 'completed'}
-          color="success"
-          icon="CheckCircle"
-        />
+        <EventStatus value={value.status} />
       </Label>
       <Label label="Token">
         <Token reverse name={value.lockToken.name} />
@@ -79,30 +73,34 @@ const Content = ({ value }: EventListSidebarProps) => {
         <Label label="Tx IDs"></Label>
         <Label label="Lock Tx" inset>
           <Identifier
-            copyable
+            copyable={!!value.sourceTxId}
             value={value.sourceTxId}
             href={
-              getAddressUrl(value.fromChain, value.sourceTxId || '') ||
-              undefined
+              value.sourceTxId
+                ? getAddressUrl(value.fromChain, value.sourceTxId)!
+                : undefined
             }
           />
         </Label>
         <Label label="Payment Tx" inset>
           <Identifier
-            copyable
+            copyable={!!value.paymentTxId}
             value={value.paymentTxId || ''}
             href={
-              getAddressUrl(value.toChain, value.paymentTxId || '') || undefined
+              value.paymentTxId
+                ? getAddressUrl(value.toChain, value.paymentTxId)!
+                : undefined
             }
           />
         </Label>
         <Label label="Reward Tx" inset>
           <Identifier
-            copyable
+            copyable={!!value.spendTxId}
             value={value.spendTxId || ''}
             href={
-              getAddressUrl(NETWORKS.ergo.key, value.spendTxId || '') ||
-              undefined
+              value.spendTxId
+                ? getAddressUrl(NETWORKS.ergo.key, value.spendTxId)!
+                : undefined
             }
           />
         </Label>
@@ -126,7 +124,7 @@ const Content = ({ value }: EventListSidebarProps) => {
           />
         </Label>
       </div>
-      <Label label="Duration">
+      <Label label="Time">
         <RelativeTime timestamp={value.timestamp} />
       </Label>
       <Label label="Bridge fee">

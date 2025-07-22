@@ -48,6 +48,8 @@ export const EventList = () => {
   const renderPagination = useCallback(
     () => (
       <NewPagination
+        defaultPageSize={25}
+        pageSizeOptions={[25, 50, 100]}
         disabled={isLoading}
         total={data?.total}
         pageSize={collection.pageSize}

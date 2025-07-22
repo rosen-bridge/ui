@@ -51,8 +51,8 @@ export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
 export const OPERATOR_CONTAINS: Operator = {
   value: 'contains',
   label: 'Contains',
-  preview: '*',
-  post: '*',
+  preview: '∈',
+  post: '∈',
   symbol: '*=',
 };
 
