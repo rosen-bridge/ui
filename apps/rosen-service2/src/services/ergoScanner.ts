@@ -2,12 +2,13 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import * as scanner from '@rosen-bridge/scanner';
-import { Transaction } from '@rosen-bridge/scanner-interfaces';
+import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
 import {
   AbstractService,
   Dependency,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
+import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from '../configs';
 import { getTokenMap } from '../utils';
@@ -59,13 +60,33 @@ export class ErgoScannerService extends AbstractService {
    * @returns
    */
   protected readonly registerExtractors = async () => {
-    const rosenServiceExtractor = new ErgoObservationExtractor(
-      this.dbService.dataSource,
-      await getTokenMap(),
-      configs.contracts.ergo.addresses.lock,
-      this.logger,
-    );
-    await this.scanner.registerExtractor(rosenServiceExtractor);
+    try {
+      const rosenServiceExtractor = new ErgoObservationExtractor(
+        this.dbService.dataSource,
+        await getTokenMap(),
+        configs.contracts.ergo.addresses.lock,
+        this.logger,
+      );
+      const ergoEventTriggerExtractor = new EventTriggerExtractor(
+        'ergo-extractor',
+        this.dbService.dataSource,
+        ErgoNetworkType.Node,
+        configs.chains.ergo.node.url,
+        configs.contracts.ergo.addresses.WatcherTriggerEvent,
+        configs.contracts.ergo.tokens.RWTId,
+        configs.contracts.ergo.addresses.WatcherPermit,
+        configs.contracts.ergo.addresses.Fraud,
+        CallbackLoggerFactory.getInstance().getLogger(
+          'ergo-event-trigger-extractor',
+        ),
+      );
+      await this.scanner.registerExtractor(rosenServiceExtractor);
+      await this.scanner.registerExtractor(ergoEventTriggerExtractor);
+    } catch (error) {
+      throw new Error(
+        `cannot create or register event trigger extractors due to error: ${error}`,
+      );
+    }
   };
 
   /**
