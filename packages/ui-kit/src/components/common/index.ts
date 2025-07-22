@@ -44,3 +44,4 @@ export * from './Center';
 export * from './CardHeader';
 export * from './GridContainer';
 export * from './Columns';
+export * from './Illustrations';
