@@ -1,8 +1,9 @@
 import { useState } from 'react';
+import React from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
   UserDeniedTransactionSignatureError,
   WalletTransferParams,
@@ -80,7 +81,25 @@ export const useTransaction = () => {
 
       const txId = await selectedWallet.transfer(parameters);
 
-      openSnackbar(`Transaction submitted with id [${txId}]`, 'success');
+      openSnackbar(
+        React.createElement('div', undefined, [
+          'Transaction submitted successfully, click ',
+          React.createElement(
+            'a',
+            {
+              href: getTxURL(sourceValue, txId),
+              target: '_blank',
+              style: {
+                color: 'inherit',
+                fontWeight: 'bold',
+              },
+            },
+            ['here'],
+          ),
+          ' to see more details.',
+        ]),
+        'success',
+      );
     } catch (error: any) {
       openSnackbar(
         error?.info ?? error?.message ?? JSON.stringify(error),
