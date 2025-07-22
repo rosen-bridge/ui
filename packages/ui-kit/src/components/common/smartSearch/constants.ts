@@ -19,8 +19,8 @@ export const OPERATOR_NOT: Operator = {
 export const OPERATOR_IS_NOT_ONE_OF: Operator = {
   value: 'is-not-one-of',
   label: 'Is not one of',
-  preview: '!=',
-  post: '!=',
+  preview: '!|',
+  post: '!|',
   symbol: '!=',
 };
 
