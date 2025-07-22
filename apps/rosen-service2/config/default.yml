@@ -1,0 +1,21 @@
+logs:
+  - type: file
+    maxSize: 20m
+    maxFiles: 14d
+    path: ./logs/
+    level: info
+  - type: console
+    level: info
+chains:
+  cardano:
+    active: true
+  bitcoin:
+    active: true
+  doge:
+    active: true
+  ethereum:
+    active: true
+  binance:
+    active: true
+  runes:
+    active: false

@@ -14,7 +14,9 @@ export default [
 
   // Base Configuration for JS/TS Files
   {
-    files: ['{networks,packages,wallets}/**/*.{js,jsx,ts,tsx}'],
+    files: [
+      '{networks,packages,wallets,apps/rosen-service2}/**/*.{js,jsx,ts,tsx}',
+    ],
     languageOptions: {
       parser: typescriptParser,
       ecmaVersion: 'latest',
@@ -44,6 +46,7 @@ export default [
   // Node-Specific Globals
   {
     files: [
+      'apps/rosen-service2/**/*.{js,jsx,ts,tsx}',
       'networks/**/*.{js,jsx,ts,tsx}',
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
       'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
