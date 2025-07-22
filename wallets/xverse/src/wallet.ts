@@ -72,7 +72,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
   hasConnection = async (): Promise<boolean> => {
     try {
-      return !!(await this.getAddress());
+      return !!(await this.fetchAddress());
     } catch {
       return false;
     }

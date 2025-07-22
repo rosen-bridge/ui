@@ -41,7 +41,9 @@ export const getLogOptions = (logConfigs: Logs[]): TransportOptions[] => {
         logOptions.push({
           type: log.type,
           level: log.level,
+          serviceName: log.serviceName,
           host: log.host!,
+          basicAuth: log.basicAuth,
         });
         break;
     }

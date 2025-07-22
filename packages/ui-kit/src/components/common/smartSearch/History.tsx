@@ -167,7 +167,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
       setOpen(false);
     };
 
-    useEffect(() => load, [load]);
+    useEffect(() => {
+      open && load();
+    }, [open, load]);
 
     useImperativeHandle(ref, () => {
       return { add };
