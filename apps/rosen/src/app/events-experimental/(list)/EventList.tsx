@@ -112,22 +112,20 @@ export const EventList = () => {
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
-      {!isLoading && !data?.items.length && <EmptyState />}
-      {isLoading && (
+      {!isLoading && !data?.items.length ? (
+        <EmptyState />
+      ) : (
         <GridContainer gap="8px" minWidth="242px">
-          {isLoading &&
-            Array.from({ length: 5 }).map((_, i) => (
-              <EventCard key={i} isLoading />
-            ))}
-          {!isLoading &&
-            data?.items.map((item) => (
-              <EventCard
-                active={current?.id === item.id}
-                item={item}
-                key={item.id}
-                onClick={() => setCurrent(item)}
-              />
-            ))}
+          {isLoading
+            ? [...Array(5)].map((_, i) => <EventCard key={i} isLoading />)
+            : data?.items.map((item) => (
+                <EventCard
+                  active={current?.id === item.id}
+                  item={item}
+                  key={item.id}
+                  onClick={() => setCurrent(item)}
+                />
+              ))}
         </GridContainer>
       )}
     </DataLayout>

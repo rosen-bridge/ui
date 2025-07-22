@@ -21,7 +21,8 @@ import {
   useBreakpoint,
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
-import { getDecimalString } from '@rosen-ui/utils';
+import { NETWORKS } from '@rosen-ui/constants';
+import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
 
 import { EventItem } from '@/types';
 
@@ -30,22 +31,20 @@ const Content = ({ value }: EventListSidebarProps) => {
     return (
       <Center
         style={{
-          height: 'clamp(320px, 100vh, calc(100vh - 295px))',
+          height: 'clamp(320px, 100vh, calc(100vh - 310px))',
         }}
       >
         <Typography
           variant="body1"
           sx={{ color: (theme) => theme.palette.text.secondary }}
         >
-          Select an event to see
-          <br />
-          its details.
+          Select an event to see its details.
         </Typography>
       </Center>
     );
 
   return (
-    <Columns width="20rem" rule>
+    <Columns gap="32px" width="20rem" rule>
       <Label orientation="horizontal" label="Event Id">
         <Identifier copyable value={value.eventId} />
       </Label>
@@ -78,23 +77,53 @@ const Content = ({ value }: EventListSidebarProps) => {
       </div>
       <div>
         <Label label="Tx IDs"></Label>
-        <Label label="Source Tx" inset>
-          <Identifier copyable value={value.sourceTxId} />
+        <Label label="Lock Tx" inset>
+          <Identifier
+            copyable
+            value={value.sourceTxId}
+            href={
+              getAddressUrl(value.fromChain, value.sourceTxId || '') ||
+              undefined
+            }
+          />
         </Label>
         <Label label="Payment Tx" inset>
-          <Identifier copyable value={value.paymentTxId || ''} />
+          <Identifier
+            copyable
+            value={value.paymentTxId || ''}
+            href={
+              getAddressUrl(value.toChain, value.paymentTxId || '') || undefined
+            }
+          />
         </Label>
         <Label label="Reward Tx" inset>
-          <Identifier copyable value={value.spendTxId || ''} />
+          <Identifier
+            copyable
+            value={value.spendTxId || ''}
+            href={
+              getAddressUrl(NETWORKS.ergo.key, value.spendTxId || '') ||
+              undefined
+            }
+          />
         </Label>
       </div>
       <div>
         <Label label="Address"></Label>
         <Label label="From" inset>
-          <Identifier copyable value={value.fromAddress} />
+          <Identifier
+            copyable
+            value={value.fromAddress}
+            href={
+              getAddressUrl(value.fromChain, value.fromAddress) || undefined
+            }
+          />
         </Label>
         <Label label="To" inset>
-          <Identifier copyable value={value.toAddress} />
+          <Identifier
+            copyable
+            value={value.toAddress}
+            href={getAddressUrl(value.toChain, value.toAddress) || undefined}
+          />
         </Label>
       </div>
       <Label label="Duration">

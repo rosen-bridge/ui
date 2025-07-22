@@ -1,7 +1,9 @@
 'use client';
 
+import { EventList } from './EventList';
+
 const Page = () => {
-  return <div>TODO</div>;
+  return <EventList />;
 };
 
 export default Page;
