@@ -1,4 +1,4 @@
-export interface RosenService2Config {
+export interface RosenService2BaseConfig {
   chains: Chains;
   db: Db;
   logs: Logs[];

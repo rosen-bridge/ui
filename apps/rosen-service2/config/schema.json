@@ -58,6 +58,16 @@
             }
           ]
         },
+        "serviceName": {
+          "type": "string",
+          "validations": [
+            {
+              "required": true,
+              "error": "Service-Name for the \"loki\" log type must be specified",
+              "when": { "path": "logs.type", "value": "loki" }
+            }
+          ]
+        },
         "host": {
           "type": "string",
           "validations": [
@@ -67,6 +77,10 @@
               "when": { "path": "logs.type", "value": "loki" }
             }
           ]
+        },
+        "basicAuth": {
+          "type": "string",
+          "default": ""
         }
       }
     }
