@@ -10,7 +10,9 @@ export interface Logs {
   maxFiles?: string;
   path?: string;
   level: string;
+  serviceName?: string;
   host?: string;
+  basicAuth?: string;
 }
 
 export interface Db {
