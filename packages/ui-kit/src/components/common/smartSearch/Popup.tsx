@@ -8,9 +8,24 @@ const Root = styled('div')(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
   background: theme.palette.background.paper,
   boxShadow: theme.shadows[8],
-  overflow: 'hidden',
-  overflowY: 'auto',
-  maxHeight: '25rem',
+  padding: theme.spacing(1, 0),
+}));
+
+const Scrollable = styled('div')(({ theme }) => ({
+  'overflow': 'hidden',
+  'overflowY': 'auto',
+  'maxHeight': '25rem',
+  '::-webkit-scrollbar': {
+    background: 'transparent',
+    width: theme.spacing(1),
+  },
+  '::-webkit-scrollbar-thumb': {
+    background: theme.palette.neutral.main,
+    borderRadius: theme.shape.borderRadius,
+  },
+  '::-webkit-scrollbar-track': {
+    background: 'transparent',
+  },
 }));
 
 export type PopupProps = {
@@ -62,7 +77,9 @@ export const Popup = ({ anchorEl, children, open, onFocusOut }: PopupProps) => {
         },
       ]}
     >
-      <Root>{children}</Root>
+      <Root>
+        <Scrollable>{children}</Scrollable>
+      </Root>
     </Popper>
   );
 };
