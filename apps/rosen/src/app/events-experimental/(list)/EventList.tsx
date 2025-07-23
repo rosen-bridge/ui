@@ -119,7 +119,7 @@ export const EventList = () => {
       ) : (
         <GridContainer gap="8px" minWidth="242px">
           {isLoading
-            ? [...Array(5)].map((_, i) => <EventCard key={i} isLoading />)
+            ? [...Array(collection.pageSize)].map((_, i) => <EventCard key={i} isLoading />)
             : data?.items.map((item) => (
                 <EventCard
                   active={current?.id === item.id}

@@ -11,24 +11,24 @@ export const OPERATOR_IS: Operator = {
 export const OPERATOR_NOT: Operator = {
   value: 'not',
   label: 'Not',
-  preview: '!=',
-  post: '!=',
+  preview: '≠',
+  post: '≠',
   symbol: '!=',
 };
 
 export const OPERATOR_IS_NOT_ONE_OF: Operator = {
   value: 'is-not-one-of',
   label: 'Is not one of',
-  preview: '!|',
-  post: '!|',
+  preview: '∉',
+  post: '∉',
   symbol: '!=',
 };
 
 export const OPERATOR_IS_ONE_OF: Operator = {
   value: 'is-one-of',
   label: 'Is one of',
-  preview: '||',
-  post: '||',
+  preview: '∈',
+  post: '∈',
   symbol: '=',
 };
 
@@ -51,8 +51,8 @@ export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
 export const OPERATOR_CONTAINS: Operator = {
   value: 'contains',
   label: 'Contains',
-  preview: '∈',
-  post: '∈',
+  preview: '⊃',
+  post: '⊃',
   symbol: '*=',
 };
 
@@ -80,8 +80,8 @@ export const OPERATORS_COMPARATIVE: Operator[] = [
 export const OPERATORS_EQUALITY: Operator[] = [
   OPERATOR_IS,
   OPERATOR_NOT,
-  OPERATOR_IS_NOT_ONE_OF,
   OPERATOR_IS_ONE_OF,
+  OPERATOR_IS_NOT_ONE_OF,
 ];
 
 export const OPERATORS_STRING: Operator[] = [

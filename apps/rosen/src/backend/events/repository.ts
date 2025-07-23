@@ -75,16 +75,10 @@ export const getEvents = async (filters: Filters) => {
     field.value = tokenIds;
   })();
 
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
-    switch (key) {
-      case 'amount':
-      case 'bridgeFee':
-      case 'networkFee':
-        return `CAST(sub."${key}" AS BIGINT)`;
-      default:
-        return `sub."${key}"`;
-    }
-  });
+  let { pagination, query, sort } = filtersToTypeorm(
+    filters,
+    (key) => `sub."${key}"`,
+  );
 
   const subquery = observationRepository
     .createQueryBuilder('oe')
@@ -132,6 +126,12 @@ export const getEvents = async (filters: Filters) => {
     .from(`(${subquery.getQuery()})`, 'sub');
 
   if (query) {
+    const keys = ['amount', 'bridgeFee', 'networkFee'];
+
+    for (const key of keys) {
+      query = query.replaceAll(`sub."${key}"`, `CAST(sub."${key}" AS BIGINT)`);
+    }
+
     queryBuilder = queryBuilder.where(query);
   }
 
