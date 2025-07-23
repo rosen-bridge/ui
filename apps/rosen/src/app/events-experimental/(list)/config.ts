@@ -120,7 +120,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     },
   },
   {
-    name: 'source',
+    name: 'sourceTxId',
     label: 'Source Tx ID',
     unique: true,
     operators: [OPERATOR_CONTAINS],
