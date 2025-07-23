@@ -101,7 +101,7 @@ export const Identifier = ({
             </SvgIcon>
           </IconButton>
         )}
-        {copyable && <CopyButton value={value} title={title} size="small" />}
+        {copyable && <CopyButton value={value} size="small" />}
         {qrcode && (
           <IconButton size="small">
             <SvgIcon fontSize="small">
