@@ -88,39 +88,23 @@
   "db": {
     "type": "object",
     "children": {
-      "host": {
+      "url": {
         "type": "string",
-        "default": "localhost"
-      },
-      "port": {
-        "type": "number",
+        "default": "localhost",
         "validations": [
           {
             "required": true,
-            "error": "postgres port is required"
+            "error": "url for the \"postgres\" database address must be specified"
           }
         ]
       },
-      "user": {
-        "type": "string",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres username is required"
-          }
-        ]
+      "useSSL": {
+        "type": "boolean",
+        "default": false
       },
-      "password": {
-        "type": "string"
-      },
-      "name": {
-        "type": "string",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres database name is required"
-          }
-        ]
+      "logging": {
+        "type": "boolean",
+        "default": false
       }
     }
   },

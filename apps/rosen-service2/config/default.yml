@@ -7,11 +7,9 @@ logs:
   - type: console
     level: debug
 db:
-  host: localhost
-  port: 5432
-  name: rs2
-  user: postgres
-  # password:
+  url: localhost
+  useSSL: false
+  logging: false
 chains:
   cardano:
     active: true

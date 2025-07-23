@@ -16,11 +16,9 @@ export interface Logs {
 }
 
 export interface Db {
-  host?: string;
-  port: number;
-  user: string;
-  password?: string;
-  name: string;
+  url: string;
+  useSSL?: boolean;
+  logging?: boolean;
 }
 
 export interface Chains {
@@ -29,6 +27,11 @@ export interface Chains {
   doge: Doge;
   ethereum: Ethereum;
   binance: Binance;
+  runes: Runes;
+}
+
+export interface Runes {
+  active: boolean;
 }
 
 export interface Binance {
