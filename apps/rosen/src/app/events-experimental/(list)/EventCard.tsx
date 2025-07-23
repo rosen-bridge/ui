@@ -106,7 +106,6 @@ export const EventCard = ({
           />
         </Stack>
       </Stack>
-
       <Identifier
         value={item.eventId}
         href={`/events-experimental/${item.eventId}`}

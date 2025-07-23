@@ -32,7 +32,7 @@ const Content = ({ value }: EventListSidebarProps) => {
     return (
       <Center
         style={{
-          height: 'clamp(320px, 100vh, calc(100vh - 310px))',
+          minHeight: 'calc(100vh - 295px)',
         }}
       >
         <Typography variant="body1" color="text.secondary">
