@@ -42,3 +42,6 @@ export * from './ViewToggle';
 export * from './EmptyState';
 export * from './Center';
 export * from './CardHeader';
+export * from './GridContainer';
+export * from './Columns';
+export * from './Illustrations';
