@@ -309,11 +309,7 @@ export const SmartSearch = ({
             ref={$anchor}
             value={query}
             autoComplete="off"
-            placeholder={
-              selectedValidatedWithCurrent.length
-                ? ''
-                : 'Search or filter results…'
-            }
+            placeholder={state === 'idle' ? 'Filter results that ... ' : ''}
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
