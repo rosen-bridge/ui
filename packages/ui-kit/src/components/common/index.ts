@@ -43,3 +43,4 @@ export * from './EmptyState';
 export * from './Center';
 export * from './GridContainer';
 export * from './Columns';
+export * from './Illustrations';
