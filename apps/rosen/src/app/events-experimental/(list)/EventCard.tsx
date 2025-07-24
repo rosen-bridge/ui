@@ -26,7 +26,7 @@ const EventCardSkeleton = () => {
         justifyContent: 'space-between',
         padding: (theme) => theme.spacing(1.5),
         gap: (theme) => theme.spacing(1),
-        height: '160px',
+        height: '152px',
       }}
     >
       <Stack
