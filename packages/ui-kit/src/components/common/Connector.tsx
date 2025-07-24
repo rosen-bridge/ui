@@ -49,8 +49,8 @@ export const Connector = ({ start, end, variant }: ConnectorProps) => {
   return (
     <ConnectorWrapper variant={variant}>
       {start}
-      <SvgIcon>
-        <ArrowRight style={{ color: 'secondary.light' }} />
+      <SvgIcon sx={{ color: 'text.secondary' }}>
+        <ArrowRight />
       </SvgIcon>
       {end}
     </ConnectorWrapper>
