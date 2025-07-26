@@ -178,6 +178,7 @@ const DetailsSidebar = ({ value }: EventListSidebarProps) => {
       <CardHeader
         title="Event"
         separator
+        regular
         action={
           value && (
             <Button

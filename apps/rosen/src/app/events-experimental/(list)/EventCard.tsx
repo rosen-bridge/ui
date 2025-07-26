@@ -29,12 +29,7 @@ const EventCardSkeleton = () => {
         height: '152px',
       }}
     >
-      <Stack
-        alignItems="center"
-        flexDirection="row"
-        gap={1}
-        padding={[0, 0, 2, 0]}
-      >
+      <Stack alignItems="center" flexDirection="row" gap={1}>
         <Skeleton variant="circular" width={48} height={48} />
         <Stack flexDirection="column" gap={1}>
           <Skeleton variant="rounded" width={80} height={14}></Skeleton>
@@ -47,7 +42,6 @@ const EventCardSkeleton = () => {
         alignItems="center"
         justifyContent="space-between"
         gap={1}
-        padding={[1, 0, 0, 0]}
       >
         <Skeleton variant="rounded" width={80} height={32}></Skeleton>
         <Skeleton variant="rounded" width={80} height={32}></Skeleton>
