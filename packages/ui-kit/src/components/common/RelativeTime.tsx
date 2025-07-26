@@ -138,18 +138,20 @@ export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
       RELATIVE_TIME_UNITS.at(-1)!;
     const value = Math.round(abs / unitObj.value) || 1;
 
+    const pluralizedUnit = value > 1 ? unitObj.name + 's' : unitObj.name;
+
     if (diff > 0) {
       return {
         prefix: 'in',
         number: value.toString(),
-        unit: unitObj.name,
+        unit: pluralizedUnit,
         suffix: '',
       };
     } else {
       return {
         prefix: '',
         number: value.toString(),
-        unit: unitObj.name + ' ago',
+        unit: pluralizedUnit + ' ago',
         suffix: '',
       };
     }
