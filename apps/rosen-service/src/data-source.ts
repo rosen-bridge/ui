@@ -1,51 +1,15 @@
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  ObservationEntity,
-  migrations as observationExtractorMigrations,
-} from '@rosen-bridge/observation-extractor';
-import {
-  BlockEntity,
-  ExtractorStatusEntity,
-  migrations as scannerMigrations,
-} from '@rosen-bridge/scanner';
-import {
-  EventTriggerEntity,
-  migrations as eventTriggerExtractorMigrations,
-} from '@rosen-bridge/watcher-data-extractor';
-import {
-  BridgedAssetEntity,
-  LockedAssetEntity,
-  TokenEntity,
-  migrations as assetCalculatorMigrations,
-} from '@rosen-ui/asset-calculator';
+import { getDataSource } from '@rosen-ui/data-source';
 
 import config from './configs';
 import AppError from './errors/AppError';
 
-const getDataSource = () => {
+const dataSource = (() => {
   try {
-    return new DataSource({
-      type: 'postgres',
-      url: config.postgres.url,
-      synchronize: false,
-      logging: config.postgres.logging,
-      ssl: config.postgres.useSSL,
-      entities: [
-        BlockEntity,
-        EventTriggerEntity,
-        ObservationEntity,
-        BridgedAssetEntity,
-        TokenEntity,
-        LockedAssetEntity,
-        ExtractorStatusEntity,
-      ],
-      migrations: [
-        ...eventTriggerExtractorMigrations.postgres,
-        ...observationExtractorMigrations.postgres,
-        ...scannerMigrations.postgres,
-        ...assetCalculatorMigrations.postgres,
-      ],
-    });
+    return getDataSource(
+      config.postgres.url,
+      config.postgres.useSSL,
+      config.postgres.logging,
+    );
   } catch (error) {
     throw new AppError(
       `cannot create data source due to error: ${error}`,
@@ -61,8 +25,6 @@ const getDataSource = () => {
       },
     );
   }
-};
-
-const dataSource = getDataSource();
+})();
 
 export default dataSource;

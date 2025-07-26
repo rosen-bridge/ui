@@ -15,7 +15,6 @@
   },
   "dependencies": {
     "@rosen-bridge/address-codec": "^0.6.2",
-    "@rosen-bridge/extended-typeorm": "^0.0.3",
     "@rosen-bridge/icons": "^2.2.0",
     "@rosen-bridge/minimum-fee": "^2.2.3",
     "@rosen-bridge/observation-extractor": "^7.1.2",
@@ -36,6 +35,7 @@
     "@rosen-network/runes": "^0.1.1",
     "@rosen-ui/asset-calculator": "^2.1.7",
     "@rosen-ui/constants": "^0.4.0",
+    "@rosen-ui/data-source": "^0.0.1",
     "@rosen-ui/eternl-wallet": "^3.1.0",
     "@rosen-ui/lace-wallet": "^3.1.0",
     "@rosen-ui/metamask-wallet": "^2.1.0",

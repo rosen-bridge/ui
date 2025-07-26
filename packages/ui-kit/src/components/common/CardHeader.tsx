@@ -16,6 +16,10 @@ export interface CardHeaderProps extends MuiCardHeaderProps {
    * Shows a dashed divider below the header if `true`.
    */
   separator?: boolean;
+  /**
+   * For change font size in title
+   */
+  regular?: boolean;
 }
 
 /**
@@ -29,13 +33,25 @@ export interface CardHeaderProps extends MuiCardHeaderProps {
  *   title="My Card"
  *   subheader="Optional subheader"
  *   separator
+ *   regular
  * />
  * ```
  */
-export const CardHeader = ({ separator, ...props }: CardHeaderProps) => {
+export const CardHeader = ({
+  regular,
+  separator,
+  ...props
+}: CardHeaderProps) => {
   return (
     <>
       <MuiCardHeader
+        titleTypographyProps={
+          regular && {
+            variant: 'body1',
+            color: 'text.primary',
+            sx: { fontWeight: 400 },
+          }
+        }
         sx={{
           ...(props.sx || {}),
           ...(separator && { paddingBottom: (theme) => theme.spacing(1) }),
