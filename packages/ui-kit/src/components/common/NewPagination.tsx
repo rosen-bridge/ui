@@ -7,10 +7,12 @@ import {
   Box,
   Typography,
   MenuItem,
-  IconButton,
   Menu,
   SvgIcon,
   Divider,
+  Stack,
+  Button,
+  ListSubheader,
 } from '../base';
 
 export interface NewPaginationProps {
@@ -139,7 +141,7 @@ export const NewPagination = ({
           count={totalPages}
           page={pageIndexCurrent + 1}
           onChange={(_, val) => onPageIndexChange?.(val - 1)}
-          size="small"
+          size="medium"
           siblingCount={responsiveSiblingCount}
           boundaryCount={1}
           sx={(theme) => ({
@@ -163,13 +165,11 @@ export const NewPagination = ({
         />
       </Box>
 
-      <Box
-        sx={(theme) => ({
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: theme.spacing(1),
-        })}
+      <Stack
+        flexDirection="row"
+        justifyContent="space-between"
+        alignItems="center"
+        gap={1}
       >
         <Divider
           orientation="vertical"
@@ -182,57 +182,63 @@ export const NewPagination = ({
             },
           }}
         />
-
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-evenly',
-          }}
+        <Stack
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-evenly"
         >
-          <Typography
-            color="text.secondary"
-            variant="body2"
-            sx={{
-              '@container (max-width: 864px)': {
-                display: 'none',
-              },
-            }}
-          >
-            Items per page {pageSizeCurrent}
-          </Typography>
-
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <IconButton
+          <Stack alignItems="center">
+            <Button
               disabled={disabled}
-              onClick={handleMenuOpen}
               size="small"
-              sx={{ padding: 1 }}
+              sx={{ padding: 1, textTransform: 'none' }}
+              onClick={handleMenuOpen}
+              endIcon={
+                <>
+                  <SvgIcon
+                    sx={{
+                      'color': (theme) => theme.palette.text.secondary,
+                      'width': 24,
+                      'height': 24,
+                      'display': 'none',
+                      '@container (min-width: 865px)': {
+                        display: 'inline',
+                      },
+                    }}
+                  >
+                    <CaretDown />
+                  </SvgIcon>
+                  <SvgIcon
+                    sx={{
+                      'color': (theme) => theme.palette.text.secondary,
+                      'width': 24,
+                      'height': 24,
+                      'display': 'inline',
+                      '@container (min-width: 865px)': {
+                        display: 'none',
+                      },
+                    }}
+                  >
+                    <AlignCenter />
+                  </SvgIcon>
+                </>
+              }
             >
-              <SvgIcon
+              <Typography
+                color="text.secondary"
+                variant="body2"
                 sx={{
-                  'width': 24,
-                  'display': 'none',
-                  '@container (min-width: 865px)': {
-                    display: 'inline',
-                  },
-                }}
-              >
-                <CaretDown />
-              </SvgIcon>
-              <SvgIcon
-                sx={{
-                  'width': 24,
-                  'display': 'inline',
-                  '@container (min-width: 865px)': {
+                  '@container (max-width: 864px)': {
                     display: 'none',
                   },
                 }}
               >
-                <AlignCenter />
-              </SvgIcon>
-            </IconButton>
+                Items per page{' '}
+                <span style={{ color: '#000', fontSize: '1rem' }}>
+                  {pageSizeCurrent}
+                </span>
+              </Typography>
+            </Button>
 
             <Menu
               anchorEl={anchorEl}
@@ -243,7 +249,7 @@ export const NewPagination = ({
               PaperProps={{ sx: { width: 204 } }}
               disablePortal
             >
-              <MenuItem
+              <ListSubheader
                 sx={{
                   'display': 'none',
                   '@container (max-width: 864px)': {
@@ -252,10 +258,10 @@ export const NewPagination = ({
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Items per page {pageSizeCurrent}
+                  Items per page{' '}
+                  <span style={{ color: '#000' }}>{pageSizeCurrent}</span>
                 </Typography>
-              </MenuItem>
-
+              </ListSubheader>
               {pageSizeOptions.map((option) => (
                 <MenuItem
                   key={option}
@@ -266,9 +272,9 @@ export const NewPagination = ({
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
-        </Box>
-      </Box>
+          </Stack>
+        </Stack>
+      </Stack>
     </Box>
   );
 };
