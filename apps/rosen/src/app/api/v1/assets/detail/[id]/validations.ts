@@ -14,7 +14,7 @@ const getQueryParamsSchema = Joi.object<GETPositionalParams>().keys({
  * validate get requests
  * @param request
  */
-export const validateGet = (
+export const validateGet = async (
   _: NextRequest,
   context?: { params: GETPositionalParams },
 ) => {

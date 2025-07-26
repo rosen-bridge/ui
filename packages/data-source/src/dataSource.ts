@@ -18,6 +18,14 @@ import {
   TokenEntity,
   migrations as assetCalculatorMigrations,
 } from '@rosen-ui/asset-calculator';
+import {
+  AggregatedStatusChangedEntity,
+  AggregatedStatusEntity,
+  GuardStatusChangedEntity,
+  GuardStatusEntity,
+  TxEntity,
+  migrations as publicStatusMigrations,
+} from '@rosen-ui/public-status';
 
 export const getDataSource = (
   postgresUrl: string,
@@ -38,12 +46,18 @@ export const getDataSource = (
       TokenEntity,
       LockedAssetEntity,
       ExtractorStatusEntity,
+      AggregatedStatusEntity,
+      AggregatedStatusChangedEntity,
+      GuardStatusEntity,
+      GuardStatusChangedEntity,
+      TxEntity,
     ],
     migrations: [
       ...eventTriggerExtractorMigrations.postgres,
       ...observationExtractorMigrations.postgres,
       ...scannerMigrations.postgres,
       ...assetCalculatorMigrations.postgres,
+      ...publicStatusMigrations.postgres,
     ],
   });
 };

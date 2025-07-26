@@ -9,6 +9,8 @@ import {
  * validate get requests
  * @param request
  */
-export const validateGet = ({ nextUrl: { searchParams } }: NextRequest) => {
+export const validateGet = async ({
+  nextUrl: { searchParams },
+}: NextRequest) => {
   return FiltersSchema.validate(searchParamsToFilters(searchParams));
 };

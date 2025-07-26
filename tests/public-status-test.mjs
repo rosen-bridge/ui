@@ -39,8 +39,8 @@ const guardSecret3 =
 const guardPk3 =
   '03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099';
 
-const commandApiBaseUrl = 'http://localhost:3000';
-const queryApiBaseUrl = 'http://localhost:3001';
+const apiBaseUrl = 'http://localhost:3000';
+
 const mockTx0 = {
   txId: id0,
   chain: 'c1',
@@ -123,7 +123,7 @@ const submitStatus = async (params) => {
 
   const signature = sign(secret, paramsToSignMessage(params));
 
-  return axios.post(`${commandApiBaseUrl}/api/status`, {
+  return axios.post(`${apiBaseUrl}/api/v1/status/submit`, {
     date: timestamp,
     eventId,
     status,
@@ -241,7 +241,7 @@ const testValidRequest = async () => {
   await sleep(1000);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -254,7 +254,7 @@ const testValidRequest = async () => {
   assert(response.data[eventId].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -266,10 +266,9 @@ const testValidRequest = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [guardPk0] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [guardPk0],
+  });
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -298,7 +297,7 @@ const testValidRequest2 = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -312,7 +311,7 @@ const testValidRequest2 = async () => {
   validRequest2Timestamp = response.data[eventId].updatedAt;
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -324,10 +323,9 @@ const testValidRequest2 = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [guardPk1] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [guardPk1],
+  });
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -340,18 +338,16 @@ const testValidRequest2 = async () => {
   });
 
   // get guard status timeline of this eventId with another guard
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [guardPk3] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [guardPk3],
+  });
   assert(response.status === 200);
   assert(response.data.length === 0);
 
   // get guard status timeline of this eventId with all guards
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -384,7 +380,7 @@ const testDuplicateRequest = async () => {
   }
 
   // get aggregated status of this eventId
-  let response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  let response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -397,7 +393,7 @@ const testDuplicateRequest = async () => {
   assert(response.data[eventId].updatedAt < timestamp); // <
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt < timestamp); // <
@@ -409,10 +405,9 @@ const testDuplicateRequest = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [guardPk1] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [guardPk1],
+  });
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt < timestamp); // <
@@ -444,7 +439,7 @@ const testAggregateStatusChange = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -457,7 +452,7 @@ const testAggregateStatusChange = async () => {
   assert(response.data[eventId].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -469,10 +464,9 @@ const testAggregateStatusChange = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt >= timestamp);
@@ -499,7 +493,7 @@ const testAggregateStatusChange = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -512,7 +506,7 @@ const testAggregateStatusChange = async () => {
   assert(response.data[eventId].updatedAt < timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
   assert(response.data[0].insertedAt < timestamp);
@@ -524,10 +518,9 @@ const testAggregateStatusChange = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 2);
   assert(response.data[0].insertedAt >= timestamp);
@@ -562,7 +555,7 @@ const testAggregateStatusChange = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -575,7 +568,7 @@ const testAggregateStatusChange = async () => {
   assert(response.data[eventId].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 2);
   assert(response.data[0].insertedAt >= timestamp);
@@ -594,10 +587,9 @@ const testAggregateStatusChange = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 3);
   assert(response.data[0].insertedAt >= timestamp);
@@ -642,7 +634,7 @@ const testAggregateStatusChange = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -655,7 +647,7 @@ const testAggregateStatusChange = async () => {
   assert(response.data[eventId].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 3);
   assert(response.data[0].insertedAt >= timestamp);
@@ -681,10 +673,9 @@ const testAggregateStatusChange = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 4);
   assert(response.data[0].insertedAt >= timestamp);
@@ -736,7 +727,7 @@ const testAggregateStatusChange = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -749,7 +740,7 @@ const testAggregateStatusChange = async () => {
   assert(response.data[eventId].updatedAt < timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 3);
   assert(response.data[0].insertedAt < timestamp);
@@ -775,10 +766,9 @@ const testAggregateStatusChange = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 5);
   assert(response.data[0].insertedAt >= timestamp);
@@ -837,7 +827,7 @@ const testAggregateStatusChange = async () => {
   assert(response.status === 200);
 
   // get aggregated status of this eventId
-  response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [eventId],
   });
   assert(response.status === 200);
@@ -850,7 +840,7 @@ const testAggregateStatusChange = async () => {
   assert(response.data[eventId].updatedAt >= timestamp);
 
   // get aggregated status timeline of this eventId
-  response = await axios.get(`${queryApiBaseUrl}/api/status/${eventId}`);
+  response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
   assert(response.data.length === 4);
   assert(response.data[0].insertedAt >= timestamp);
@@ -883,10 +873,9 @@ const testAggregateStatusChange = async () => {
   });
 
   // get guard status timeline of this eventId
-  response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${eventId}/guards`,
-    { guardPks: [] },
-  );
+  response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
+    guardPks: [],
+  });
   assert(response.status === 200);
   assert(response.data.length === 6);
   assert(response.data[0].insertedAt >= timestamp);
@@ -943,7 +932,7 @@ const testAggregateStatusChange = async () => {
 
 const testGetInvalidEventIds = async () => {
   // get aggregated status
-  const response = await axios.post(`${queryApiBaseUrl}/api/status`, {
+  const response = await axios.post(`${apiBaseUrl}/api/v1/status`, {
     eventIds: [id3],
   });
   assert(response.status === 200);
@@ -953,7 +942,7 @@ const testGetInvalidEventIds = async () => {
 };
 
 const testGetInvalidEventTimeline = async () => {
-  const response = await axios.get(`${queryApiBaseUrl}/api/status/${id3}`);
+  const response = await axios.get(`${apiBaseUrl}/api/v1/status/${id3}`);
   assert(response.status === 200);
   assert(response.data.length === 0);
 
@@ -961,7 +950,7 @@ const testGetInvalidEventTimeline = async () => {
 };
 
 const testGetValidEventTimeline = async () => {
-  const response = await axios.get(`${queryApiBaseUrl}/api/status/${id1}`);
+  const response = await axios.get(`${apiBaseUrl}/api/v1/status/${id1}`);
   assert(response.status === 200);
   assert(response.data.length === 1);
   assertObjectsMatch(response.data[0], {
@@ -976,7 +965,7 @@ const testGetValidEventTimeline = async () => {
 
 const testGetInvalidGuardEventTimeline = async () => {
   const response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${id3}/guards`,
+    `${apiBaseUrl}/api/v1/status/${id3}/guards`,
     {
       guardPks: [guardPk0],
     },
@@ -989,7 +978,7 @@ const testGetInvalidGuardEventTimeline = async () => {
 
 const testGetValidGuardEventTimeline = async () => {
   const response = await axios.post(
-    `${queryApiBaseUrl}/api/status/${id1}/guards`,
+    `${apiBaseUrl}/api/v1/status/${id1}/guards`,
     {
       guardPks: [guardPk1],
     },
@@ -1046,54 +1035,32 @@ const setupDB = async () => {
   EOF`;
 };
 
-let commandApi;
-const startCommandApi = async () => {
+let api;
+const startApi = async () => {
   await within(async () => {
-    console.log('starting command api');
+    console.log('starting api');
 
     await $`export NVM_DIR=$HOME/.nvm; source $NVM_DIR/nvm.sh; nvm use;`;
 
-    cd(`apps/public-status-command`);
+    cd(`apps/rosen`);
 
     await $`export ALLOWED_PKS="0308b553ecd6c7fa3098c9d129150de25eff1bb52e25223980c9e304c566f5a8e1,03a9d7dacdd1da2514188921cea39750035468dc1c7d4c23401231706c6027f5c6,03a0fd33438b413ddd0781260901817615aab9e3933a102320f1f606a35b8ed099"`;
     await $`export POSTGRES_URL="postgresql://public_status_test_user@localhost:5432/public_status_test"`;
     await $`export POSTGRES_USE_SSL="false"`;
 
-    commandApi = $`npm run dev`;
+    api = $`npm run dev`;
 
-    for await (const chunk of commandApi.stdout) {
+    for await (const chunk of api.stdout) {
       if (chunk.includes('Ready in ')) break;
     }
 
-    console.log('command api ready');
-  });
-};
-
-let queryApi;
-const startQueryApi = async () => {
-  await within(async () => {
-    console.log('starting query api');
-
-    await $`export NVM_DIR=$HOME/.nvm; source $NVM_DIR/nvm.sh; nvm use;`;
-
-    cd(`../public-status-query`);
-
-    await $`export POSTGRES_URL="postgresql://public_status_test_user@localhost:5432/public_status_test"`;
-    await $`export POSTGRES_USE_SSL="false"`;
-
-    queryApi = $`npm run dev`;
-
-    for await (const chunk of queryApi.stdout) {
-      if (chunk.includes('Ready in ')) break;
-    }
-
-    console.log('query api ready');
+    console.log('api ready');
   });
 };
 
 const getShouldStartApis = () => {
   if (process.argv.length < 4) {
-    console.log('expecting the apis are up and running');
+    console.log('expecting the api to be up and running');
     return false;
   }
 
@@ -1119,8 +1086,7 @@ const run = async () => {
       resetDB();
 
       if (shouldStartApis) {
-        await startCommandApi();
-        await startQueryApi();
+        await startApi();
       }
 
       await testInvalidTimestampPast();
@@ -1140,13 +1106,13 @@ const run = async () => {
       console.log(chalk.bgGreen.black('All tests passed'));
 
       if (shouldStartApis) {
-        commandApi.kill('SIGINT');
+        api.kill('SIGINT');
         queryApi.kill('SIGINT');
       }
     } catch (e) {
       console.error(e);
       if (shouldStartApis) {
-        commandApi.kill('SIGINT');
+        api.kill('SIGINT');
         queryApi.kill('SIGINT');
       }
       process.exitCode = 1;

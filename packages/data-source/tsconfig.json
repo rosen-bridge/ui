@@ -4,5 +4,8 @@
     "rootDir": ".",
     "types": ["node"]
   },
-  "references": [{ "path": "../asset-calculator" }]
+  "references": [
+    { "path": "../asset-calculator" },
+    { "path": "../public-status" }
+  ]
 }
