@@ -177,7 +177,6 @@ export const lightThemeOptions: ThemeOptions = {
       styleOverrides: {
         title: {
           fontSize: '1rem',
-          fontWeight: 'bold',
         },
       },
     },

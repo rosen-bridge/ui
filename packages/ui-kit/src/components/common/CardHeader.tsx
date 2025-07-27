@@ -45,13 +45,12 @@ export const CardHeader = ({
   return (
     <>
       <MuiCardHeader
-        titleTypographyProps={
-          regular && {
-            variant: 'body1',
-            color: 'text.primary',
-            sx: { fontWeight: 400 },
-          }
-        }
+        titleTypographyProps={{
+          sx: {
+            fontWeight: regular ? 'normal' : 'bold',
+            color: regular ? 'text.primary' : undefined,
+          },
+        }}
         sx={{
           ...(props.sx || {}),
           ...(separator && { paddingBottom: (theme) => theme.spacing(1) }),
