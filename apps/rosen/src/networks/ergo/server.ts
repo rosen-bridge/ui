@@ -1,5 +1,6 @@
 'use server';
 
+import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   getMaxTransferCreator as getMaxTransferCore,
   generateUnsignedTx as generateUnsignedTxCore,
@@ -14,4 +15,9 @@ export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'ergo:getMaxTransfer',
+});
+
+export const validateAddress = wrap(validateAddressCore, {
+  cache: Infinity,
+  traceKey: 'ergo:validateAddress',
 });

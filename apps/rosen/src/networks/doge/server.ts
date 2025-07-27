@@ -1,5 +1,6 @@
 'use server';
 
+import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   generateOpReturnData as generateOpReturnDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
@@ -30,4 +31,9 @@ export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
 
 export const submitTransaction = wrap(submitTransactionCore, {
   traceKey: 'doge:submitTransaction',
+});
+
+export const validateAddress = wrap(validateAddressCore, {
+  cache: Infinity,
+  traceKey: 'doge:validateAddress',
 });
