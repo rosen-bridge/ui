@@ -103,6 +103,9 @@ export { default as HistoryRaw } from './icons/history.svg?raw';
 export { ReactComponent as HourGlass } from './icons/hour-glass.svg';
 export { default as HourGlassRaw } from './icons/hour-glass.svg?raw';
 
+export { ReactComponent as Hourglass } from './icons/hourglass.svg';
+export { default as HourglassRaw } from './icons/hourglass.svg?raw';
+
 export { ReactComponent as InfoCircle } from './icons/info-circle.svg';
 export { default as InfoCircleRaw } from './icons/info-circle.svg?raw';
 

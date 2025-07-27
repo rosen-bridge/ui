@@ -27,6 +27,11 @@ import { EventItem } from '@/types';
 
 import { EventStatus } from './EventStatus';
 
+/**
+ *
+ * @param value
+ * @constructor
+ */
 const Content = ({ value }: EventListSidebarProps) => {
   if (!value)
     return (
