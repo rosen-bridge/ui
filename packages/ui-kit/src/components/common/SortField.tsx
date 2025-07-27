@@ -128,7 +128,7 @@ export const SortField = ({
                 color: 'inherit',
                 width: '100%',
                 justifyContent: 'space-between',
-                padding: '0 16px',
+                padding: '2px 8px',
               }}
               endIcon={<SvgIcon>{open ? <AngleUp /> : <AngleDown />}</SvgIcon>}
               onClick={handleMenuOpen}
@@ -136,11 +136,11 @@ export const SortField = ({
               <Stack alignItems="start">
                 <Typography
                   hidden={dense}
-                  variant="subtitle2"
+                  variant="caption"
                   color="text.secondary"
                   lineHeight="12px"
                 >
-                  sort by
+                  Sort by
                 </Typography>
                 <Typography variant="body1" lineHeight="24px">
                   {current?.label}
@@ -160,8 +160,8 @@ export const SortField = ({
             onClose={handleMenuClose}
           >
             <ListSubheader style={{ display: dense ? 'flex' : 'none' }}>
-              <Typography variant="body2" color="text.secondary">
-                sort by
+              <Typography variant="caption" color="text.secondary">
+                Sort by
               </Typography>
             </ListSubheader>
             {options.map((item) => (
