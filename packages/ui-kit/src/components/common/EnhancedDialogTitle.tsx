@@ -29,18 +29,13 @@ export const EnhancedDialogTitle = ({
 }: EnhancedDialogTitleProps) => {
   const isMobile = useBreakpoint('mobile');
   return (
-    <DialogTitle
-      display="flex"
-      alignItems="center"
-      flexDirection={isMobile ? 'column' : 'row'}
-      gap={2}
-    >
-      {!isMobile && icon && (
+    <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={2}>
+      {icon && (
         <IconContainer>
           <SvgIcon sx={{ height: 20, width: 20 }}>{icon}</SvgIcon>
         </IconContainer>
       )}
-      <span style={{ flexGrow: 1 }}>{children}</span>
+      <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>
       {!isMobile && onClose && (
         <IconButton onClick={onClose}>
           <SvgIcon>
