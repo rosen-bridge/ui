@@ -16,7 +16,14 @@ import { SvgIcon, Typography } from '../base';
 interface ChipProps {
   label: string;
   icon?: keyof typeof Icons | ReactNode;
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'neutral';
+  color?:
+    | 'primary'
+    | 'secondary'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'neutral'
+    | 'info';
 }
 
 /** Type guard for safer icon check */

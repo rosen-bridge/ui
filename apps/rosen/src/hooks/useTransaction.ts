@@ -81,25 +81,25 @@ export const useTransaction = () => {
 
       const txId = await selectedWallet.transfer(parameters);
 
-      openSnackbar(
-        React.createElement('div', undefined, [
-          'Transaction submitted successfully, click ',
-          React.createElement(
-            'a',
-            {
-              href: getTxURL(sourceValue, txId),
-              target: '_blank',
-              style: {
-                color: 'inherit',
-                fontWeight: 'bold',
-              },
-            },
-            ['here'],
-          ),
-          ' to see more details.',
-        ]),
-        'success',
-      );
+      // openSnackbar(
+      //   React.createElement('div', undefined, [
+      //     'Transaction submitted successfully, click ',
+      //     React.createElement(
+      //       'a',
+      //       {
+      //         href: getTxURL(sourceValue, txId),
+      //         target: '_blank',
+      //         style: {
+      //           color: 'inherit',
+      //           fontWeight: 'bold',
+      //         },
+      //       },
+      //       ['here'],
+      //     ),
+      //     ' to see more details.',
+      //   ]),
+      //   'success',
+      // );
     } catch (error: any) {
       openSnackbar(
         error?.info ?? error?.message ?? JSON.stringify(error),

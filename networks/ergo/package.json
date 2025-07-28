@@ -13,7 +13,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/ergo-box-selection": "^1.1.1",
+    "@rosen-bridge/ergo-box-selection": "^1.1.2",
     "@rosen-bridge/icons": "^2.2.0",
     "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-clients/ergo-explorer": "^1.1.5",

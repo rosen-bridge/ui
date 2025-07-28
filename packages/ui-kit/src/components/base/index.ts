@@ -9,7 +9,6 @@ export * from './Box';
 export * from './Button';
 export * from './Card';
 export * from './CardActions';
-export * from './CardHeader';
 export * from './CardContent';
 export * from './Checkbox';
 export * from './CircularProgress';
