@@ -1,4 +1,4 @@
-import startApp from './app';
 import './bootstrap';
+import startApp from './app';
 
 startApp();

@@ -85,6 +85,42 @@
       }
     }
   },
+  "db": {
+    "type": "object",
+    "children": {
+      "host": {
+        "type": "string",
+        "default": "localhost",
+        "validations": [
+          {
+            "required": true,
+            "error": "host for the \"postgres\" database address must be specified"
+          }
+        ]
+      },
+      "port": {
+        "type": "number"
+      },
+      "username": {
+        "type": "string",
+        "default": "postgres"
+      },
+      "password": {
+        "type": "string",
+        "default": ""
+      },
+      "name": {
+        "type": "string",
+        "default": "rosen_service",
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres database name is required"
+          }
+        ]
+      }
+    }
+  },
   "chains": {
     "type": "object",
     "children": {

@@ -1,5 +1,6 @@
 export interface RosenService2BaseConfig {
   chains: Chains;
+  db: Db;
   logs: Logs[];
 }
 
@@ -12,6 +13,14 @@ export interface Logs {
   serviceName?: string;
   host?: string;
   basicAuth?: string;
+}
+
+export interface Db {
+  host: string;
+  port?: number;
+  username?: string;
+  password?: string;
+  name: string;
 }
 
 export interface Chains {
