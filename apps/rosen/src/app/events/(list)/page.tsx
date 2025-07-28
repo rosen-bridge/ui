@@ -22,9 +22,9 @@ import { ApiEventResponse, EventItem } from '@/types';
 
 import { getFilters, sorts } from './config';
 import { EventCard } from './EventCard';
-import { EventListSidebar } from './EventListSidebar';
+import { EventSidebar } from './EventSidebar';
 
-export const EventList = () => {
+const Page = () => {
   const dense = useBreakpoint('laptop-down');
 
   const { openSnackbar } = useSnackbar();
@@ -75,7 +75,7 @@ export const EventList = () => {
 
   const renderSidebar = useCallback(
     () => (
-      <EventListSidebar value={current} onClose={() => setCurrent(undefined)} />
+      <EventSidebar value={current} onClose={() => setCurrent(undefined)} />
     ),
     [current],
   );
@@ -119,7 +119,9 @@ export const EventList = () => {
       ) : (
         <GridContainer gap="8px" minWidth="242px">
           {isLoading
-            ? [...Array(collection.pageSize)].map((_, i) => <EventCard key={i} isLoading />)
+            ? [...Array(collection.pageSize)].map((_, i) => (
+                <EventCard key={i} isLoading />
+              ))
             : data?.items.map((item) => (
                 <EventCard
                   active={current?.id === item.id}
@@ -133,3 +135,5 @@ export const EventList = () => {
     </DataLayout>
   );
 };
+
+export default Page;

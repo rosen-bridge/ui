@@ -100,10 +100,7 @@ export const EventCard = ({
           />
         </Stack>
       </Stack>
-      <Identifier
-        value={item.eventId}
-        href={`/events-experimental/${item.eventId}`}
-      />
+      <Identifier value={item.eventId} href={`/events/${item.eventId}`} />
       <Stack justifyContent="space-between" flexDirection="row">
         <Connector
           variant="filled"

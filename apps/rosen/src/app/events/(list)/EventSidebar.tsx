@@ -32,7 +32,7 @@ import { EventStatus } from './EventStatus';
  * @param value
  * @constructor
  */
-const Content = ({ value }: EventListSidebarProps) => {
+const Content = ({ value }: EventSidebarProps) => {
   if (!value)
     return (
       <Center
@@ -154,7 +154,7 @@ const Content = ({ value }: EventListSidebarProps) => {
   );
 };
 
-const Drawer = ({ value, onClose }: EventListSidebarProps) => {
+const Drawer = ({ value, onClose }: EventSidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
       <EnhancedDialogTitle icon={<Exchange />} onClose={onClose}>
@@ -167,7 +167,7 @@ const Drawer = ({ value, onClose }: EventListSidebarProps) => {
   );
 };
 
-const DetailsSidebar = ({ value }: EventListSidebarProps) => {
+const DetailsSidebar = ({ value }: EventSidebarProps) => {
   const stickyRef = useStickyBox({
     offsetTop: 16,
     offsetBottom: 16,
@@ -190,7 +190,7 @@ const DetailsSidebar = ({ value }: EventListSidebarProps) => {
               variant="text"
               size="small"
               target="_blank"
-              href={`/events-experimental/${value.eventId}`}
+              href={`/events/${value.eventId}`}
               endIcon={
                 <SvgIcon>
                   <AngleRight />
@@ -209,12 +209,12 @@ const DetailsSidebar = ({ value }: EventListSidebarProps) => {
   );
 };
 
-export type EventListSidebarProps = {
+export type EventSidebarProps = {
   value?: EventItem;
   onClose?: () => void;
 };
 
-export const EventListSidebar = (props: EventListSidebarProps) => {
+export const EventSidebar = (props: EventSidebarProps) => {
   const drawer = useBreakpoint('laptop-down');
   if (drawer) {
     return <Drawer {...props} />;
