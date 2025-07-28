@@ -10,6 +10,7 @@ export type Operator = {
   symbol: string;
   pre?: ReactNode;
   post?: ReactNode;
+  preview?: string;
 };
 
 export type Input =
