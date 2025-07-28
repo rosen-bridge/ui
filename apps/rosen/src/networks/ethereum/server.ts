@@ -1,5 +1,6 @@
 'use server';
 
+import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import { getMaxTransferCreator as getMaxTransferCore } from '@rosen-network/ethereum';
 import {
   generateLockData as generateLockDataCore,
@@ -22,4 +23,9 @@ export const generateTxParameters = wrap(
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'ethereum:getMaxTransfer',
+});
+
+export const validateAddress = wrap(validateAddressCore, {
+  cache: Infinity,
+  traceKey: 'ethereum:validateAddress',
 });

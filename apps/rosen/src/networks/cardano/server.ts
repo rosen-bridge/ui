@@ -1,5 +1,6 @@
 'use server';
 
+import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   decodeWasmValue as decodeWasmValueCore,
   generateLockAuxiliaryData as generateLockAuxiliaryDataCore,
@@ -30,4 +31,9 @@ export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
 
 export const setTxWitnessSet = wrap(setTxWitnessSetCore, {
   traceKey: 'cardano:setTxWitnessSet',
+});
+
+export const validateAddress = wrap(validateAddressCore, {
+  cache: Infinity,
+  traceKey: 'cardano:validateAddress',
 });

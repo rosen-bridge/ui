@@ -14,7 +14,6 @@
     "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.6.2",
     "@rosen-bridge/icons": "^2.2.0",
     "@rosen-bridge/minimum-fee": "^2.2.3",
     "@rosen-bridge/observation-extractor": "^7.1.2",
