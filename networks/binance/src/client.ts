@@ -43,4 +43,8 @@ export class BinanceNetwork implements Network {
   public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
   };
+
+  public validateAddress = (walletAddress: string): Promise<boolean> => {
+    return this.config.validateAddress(this.name, walletAddress);
+  };
 }

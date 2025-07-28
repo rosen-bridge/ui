@@ -1,12 +1,12 @@
 import { RunesNetwork } from '@rosen-network/runes/dist/client';
 
-import { unwrap } from '@/safeServerAction';
+import { unwrapFromObject } from '@/safeServerAction';
 
 import { LOCK_ADDRESSES } from '../../../configs';
-import { getMaxTransfer } from './server';
+import * as actions from './server';
 
 export const runes = new RunesNetwork({
   lockAddress: LOCK_ADDRESSES.runes,
   nextHeightInterval: 1,
-  getMaxTransfer: unwrap(getMaxTransfer),
+  ...unwrapFromObject(actions),
 });

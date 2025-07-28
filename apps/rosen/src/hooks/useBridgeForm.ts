@@ -4,7 +4,6 @@ import { useController } from 'react-hook-form';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
-import { validateAddress } from '@/actions';
 import * as networks from '@/networks';
 import { unwrap } from '@/safeServerAction';
 import { getMinTransfer } from '@/utils';
@@ -112,11 +111,12 @@ export const useBridgeForm = () => {
           return 'Address cannot be empty';
         }
 
-        const isValid = await unwrap(validateAddress)(
-          targetField.value as Network,
-          Object.values(networks)
-            .find((wallet) => wallet.name == targetField.value)!
-            .toSafeAddress(value),
+        const network = Object.values(networks).find(
+          (wallet) => wallet.name == targetField.value,
+        )!;
+
+        const isValid = await network.validateAddress(
+          network.toSafeAddress(value),
         );
 
         if (isValid) return;
