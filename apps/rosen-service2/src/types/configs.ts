@@ -16,9 +16,11 @@ export interface Logs {
 }
 
 export interface Db {
-  url: string;
-  useSSL?: boolean;
-  logging?: boolean;
+  host: string;
+  port?: number;
+  username?: string;
+  password?: string;
+  name: string;
 }
 
 export interface Chains {

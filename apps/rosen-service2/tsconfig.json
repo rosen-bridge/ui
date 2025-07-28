@@ -7,5 +7,5 @@
     "experimentalDecorators": true
   },
   "include": ["src"],
-  "references": [{ "path": "../../packages/data-source/tsconfig.json" }]
+  "references": [{ "path": "../../packages/asset-calculator/" }]
 }

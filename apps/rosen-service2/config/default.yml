@@ -1,25 +1,18 @@
-logs:
-  - type: file
-    maxSize: 20m
-    maxFiles: 14d
-    path: ./logs/
-    level: info
-  - type: console
-    level: debug
 db:
-  url: localhost
-  useSSL: false
-  logging: false
+  host: localhost
+  username: postgres
+  password: ''
+  name: rosen_service
 chains:
   cardano:
-    active: true
+    active: false
   bitcoin:
-    active: true
+    active: false
   doge:
-    active: true
+    active: false
   ethereum:
-    active: true
+    active: false
   binance:
-    active: true
+    active: false
   runes:
     active: false

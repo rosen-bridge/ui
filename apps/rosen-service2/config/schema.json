@@ -88,23 +88,36 @@
   "db": {
     "type": "object",
     "children": {
-      "url": {
+      "host": {
         "type": "string",
         "default": "localhost",
         "validations": [
           {
             "required": true,
-            "error": "url for the \"postgres\" database address must be specified"
+            "error": "host for the \"postgres\" database address must be specified"
           }
         ]
       },
-      "useSSL": {
-        "type": "boolean",
-        "default": false
+      "port": {
+        "type": "number"
       },
-      "logging": {
-        "type": "boolean",
-        "default": false
+      "username": {
+        "type": "string",
+        "default": "postgres"
+      },
+      "password": {
+        "type": "string",
+        "default": ""
+      },
+      "name": {
+        "type": "string",
+        "default": "rosen_service",
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres database name is required"
+          }
+        ]
       }
     }
   },
