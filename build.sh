@@ -52,7 +52,7 @@ if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/public-status-logic
 fi
 
-if [ "$APP" == "public-status" ] || [ "$APP" == "default" ] || [ "$APP" == "rosen-service" ]; then
+if [ "$APP" == "public-status" ] || [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/data-source
 fi
 
