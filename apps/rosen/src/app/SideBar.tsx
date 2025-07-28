@@ -45,7 +45,11 @@ export const SideBar = () => {
           onClick={(path) => router.push(path)}
         >
           <NavigationButton icon={<Archway />} label="Bridge" path="/" />
-          <NavigationButton icon={<Exchange />} label="Events" path="/events" />
+          <NavigationButton
+            icon={<Exchange />}
+            label="Events"
+            path="/events"
+          />
           <NavigationButton
             icon={<BitcoinCircle />}
             label="Assets"

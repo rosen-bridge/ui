@@ -7,6 +7,8 @@ import {
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
+import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
@@ -14,7 +16,9 @@ const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
 
-interface EventWithTotal extends Omit<ObservationEntity, 'requestId'> {
+interface EventWithTotal
+  extends Omit<ObservationEntity, 'requestId'>,
+    Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> {
   eventId: string;
   timestamp: number;
   total: number;
@@ -29,6 +33,8 @@ interface EventWithTotal extends Omit<ObservationEntity, 'requestId'> {
  * @param limit
  */
 export const getEvents = async (filters: Filters) => {
+  const tokenMap = await getTokenMap();
+
   filters.sort = Object.assign(
     {
       key: 'timestamp',
@@ -41,16 +47,40 @@ export const getEvents = async (filters: Filters) => {
     filters.search.in ||= [];
   }
 
-  const { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
-    switch (key) {
-      case 'timestamp':
-        return 'be.' + key;
-      default:
-        return 'oe.' + key;
-    }
-  });
+  (() => {
+    const field = filters.fields?.find(
+      (field) => field.key == 'sourceChainTokenId',
+    );
 
-  let queryBuilder = observationRepository
+    if (!field) return;
+
+    const tokenIds: string[] = [];
+
+    const values = [field.value].flat();
+
+    const collections = tokenMap.getConfig();
+
+    for (const collection of collections) {
+      const tokens = Object.values(collection);
+      for (const value of values) {
+        for (const token of tokens) {
+          if (token.tokenId !== value) continue;
+          const ids = tokens.map((token) => token.tokenId);
+          tokenIds.push(...ids);
+          break;
+        }
+      }
+    }
+
+    field.value = tokenIds;
+  })();
+
+  let { pagination, query, sort } = filtersToTypeorm(
+    filters,
+    (key) => `sub."${key}"`,
+  );
+
+  const subquery = observationRepository
     .createQueryBuilder('oe')
     .leftJoin(blockRepository.metadata.tableName, 'be', 'be.hash = oe.block')
     .leftJoin(
@@ -72,7 +102,9 @@ export const getEvents = async (filters: Filters) => {
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'COUNT(*) OVER() AS "total"',
+      'ete.WIDsCount AS "WIDsCount"',
+      'ete.paymentTxId AS "paymentTxId"',
+      'ete.spendTxId AS "spendTxId"',
       /**
        * There may be multiple event triggers for the same events, but we should
        * only select one based on the results. The order is:
@@ -88,8 +120,19 @@ export const getEvents = async (filters: Filters) => {
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
     ]);
 
+  let queryBuilder = dataSource
+    .createQueryBuilder()
+    .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
+    .from(`(${subquery.getQuery()})`, 'sub');
+
   if (query) {
-    queryBuilder.where(query);
+    const keys = ['amount', 'bridgeFee', 'networkFee'];
+
+    for (const key of keys) {
+      query = query.replaceAll(`sub."${key}"`, `CAST(sub."${key}" AS BIGINT)`);
+    }
+
+    queryBuilder = queryBuilder.where(query);
   }
 
   queryBuilder = queryBuilder.distinct(true);
