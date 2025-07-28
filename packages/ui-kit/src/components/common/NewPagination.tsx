@@ -144,11 +144,10 @@ export const NewPagination = ({
           size="medium"
           siblingCount={responsiveSiblingCount}
           boundaryCount={1}
-          sx={(theme) => ({
+          sx={{
             '& .MuiPagination-ul': {
               display: 'flex',
               flexDirection: 'row',
-              gap: theme.spacing(2),
             },
             '& .MuiPaginationItem-root': {
               fontSize: 14,
@@ -161,7 +160,7 @@ export const NewPagination = ({
                 justifyContent: 'space-between',
               },
             },
-          })}
+          }}
         />
       </Box>
 
