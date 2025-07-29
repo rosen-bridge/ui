@@ -1,0 +1,18 @@
+db:
+  host: localhost
+  username: postgres
+  password: ''
+  name: rosen_service
+chains:
+  cardano:
+    active: false
+  bitcoin:
+    active: false
+  doge:
+    active: false
+  ethereum:
+    active: false
+  binance:
+    active: false
+  runes:
+    active: false

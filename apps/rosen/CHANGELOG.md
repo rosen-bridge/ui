@@ -1,5 +1,40 @@
 # @rosen-bridge/rosen-app
 
+## 4.4.0
+
+### Minor Changes
+
+- Redesigned the event page for a cleaner and more organized experience
+- Added search and sort functionality to help users find events more easily
+- Made the layout fully responsive across all screen sizes, including mobile
+- Improved navigation and browsing for a smoother user experience
+- Introduced a new card-based layout for better readability of events
+- Added a side panel to display additional details for each event
+- Add clickable transaction link in snackbar after submission
+- Replace @rosen-bridge/extended-typeorm with @rosen-ui/data-source package
+
+### Patch Changes
+
+- Replace the general Next.js server action with the network address validator function
+- Fix missing prop in SubmitButton component
+- Separate components of wallet and transaction info cards in bridge
+- Update dependencies
+  - @rosen-bridge/ui-kit@2.2.0
+  - @rosen-network/ethereum@0.3.0
+  - @rosen-network/binance@0.3.0
+  - @rosen-network/bitcoin@2.2.0
+  - @rosen-network/cardano@2.3.0
+  - @rosen-network/runes@0.2.0
+  - @rosen-network/doge@0.2.0
+  - @rosen-network/ergo@2.3.0
+  - @rosen-ui/xverse-wallet@0.2.1
+  - @rosen-network/base@0.3.0
+  - @rosen-bridge/icons@2.3.0
+  - @rosen-ui/metamask-wallet@2.1.1
+  - @rosen-ui/wallet-connect@0.2.1
+  - @rosen-ui/my-doge-wallet@1.1.1
+  - @rosen-ui/wallet-api@3.0.1
+
 ## 4.3.0
 
 ### Minor Changes

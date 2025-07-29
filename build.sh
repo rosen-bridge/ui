@@ -52,6 +52,10 @@ if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/public-status-logic
 fi
 
+if [ "$APP" == "public-status" ] || [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+  npm run build --workspace packages/data-source
+fi
+
 # Check if Discord webhook URL is set
 if [ -z "$DISCORD_NOTIFICATION_WEBHOOK_URL" ]; then
   echo "Discord webhook URL not set. Skipping notification."

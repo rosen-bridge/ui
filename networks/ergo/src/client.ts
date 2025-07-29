@@ -37,4 +37,8 @@ export class ErgoNetwork implements Network {
   public toSafeAddress = (address: string): string => {
     return address;
   };
+
+  public validateAddress = (walletAddress: string): Promise<boolean> => {
+    return this.config.validateAddress(this.name, walletAddress);
+  };
 }

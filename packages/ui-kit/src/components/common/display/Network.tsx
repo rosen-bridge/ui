@@ -9,35 +9,24 @@ import { Skeleton, SvgIcon, Typography } from '../../base';
 /**
  * Props for the Network component.
  *
- * @property name - The name of the network (like 'binance' or 'bitcoin' and others...).
- *
+ * @property name - The name of the network (like 'binance', 'bitcoin', etc.).
  * @property variant - What to show:
- * - 'both': show logo and label (default)
- * - 'logo': show only the logo
- * - 'title': show only the label
- *
- * @property orientation - Layout direction:
- * - 'horizontal': items are in a row (default)
- * - 'vertical': items are in a column
- *
- * @property loading - If true, show loading placeholders instead of content.
- *
- * @property reverse - If true, show items in reverse order.
+ *   - 'both': logo + label (default)
+ *   - 'logo': logo only
+ *   - 'title': label only
+ * @property orientation - 'horizontal' or 'vertical'.
+ * @property loading - If true, show loading placeholders.
+ * @property reverse - If true, reverse order.
  */
-export interface NetworkProps {
+export type NetworkProps = {
   name: NetworkType;
   variant?: 'both' | 'logo' | 'title';
   orientation?: 'horizontal' | 'vertical';
   loading?: boolean;
   reverse?: boolean;
-}
+};
 
-interface ContainerNetworkProps {
-  reverse?: boolean;
-  orientation?: 'horizontal' | 'vertical';
-}
-
-const ContainerNetwork = styled('div')<ContainerNetworkProps>(({
+const Root = styled('div')<Omit<NetworkProps, 'name'>>(({
   theme,
   reverse,
   orientation,
@@ -61,14 +50,51 @@ const ContainerNetwork = styled('div')<ContainerNetworkProps>(({
 });
 
 /**
- * Network component.
- *
- * Shows a network logo and an optional label.
- * You can choose to show only the logo, only the label, or both.
- * The layout can be horizontal or vertical, and you can reverse the order.
- * If `loading` is true, it shows skeleton placeholders.
- *
- * @param props - The props to control how the network is shown.
+ * Skeleton placeholder for the Network component.
+ */
+const NetworkSkeleton = ({
+  orientation,
+  reverse,
+  showText,
+  showIcon,
+}: Omit<NetworkProps, 'name'> & { showIcon?: boolean; showText?: boolean }) => (
+  <Root reverse={reverse} orientation={orientation}>
+    {showIcon && (
+      <Skeleton animation="wave" height={24} width={24} variant="circular" />
+    )}
+    {showText && (
+      <Skeleton
+        animation="wave"
+        height={14}
+        width={60}
+        variant="rectangular"
+        sx={{ borderRadius: 0.3 }}
+      />
+    )}
+  </Root>
+);
+
+/**
+ * Fallback for unsupported networks.
+ */
+const NetworkFallback = ({
+  orientation,
+  reverse,
+  showText,
+  showIcon,
+}: Omit<NetworkProps, 'name'> & { showIcon?: boolean; showText?: boolean }) => (
+  <Root reverse={reverse} orientation={orientation}>
+    {showIcon && (
+      <SvgIcon>
+        <Icons.ExclamationTriangleFill />
+      </SvgIcon>
+    )}
+    {showText && <Typography variant="body1">Unsupported</Typography>}
+  </Root>
+);
+
+/**
+ * Main Network component.
  */
 export const Network = ({
   name,
@@ -77,42 +103,46 @@ export const Network = ({
   loading,
   reverse,
 }: NetworkProps) => {
-  const network = NETWORKS[name];
-
-  const LogoNetwork = Icons[capitalize(name) as keyof typeof Icons];
-
   const showText = variant !== 'logo';
-
   const showIcon = variant !== 'title';
 
-  return (
-    <ContainerNetwork reverse={reverse} orientation={orientation}>
-      {showIcon &&
-        (loading ? (
-          <Skeleton
-            animation="wave"
-            height={24}
-            width={24}
-            variant="circular"
-          />
-        ) : (
-          <SvgIcon>
-            <LogoNetwork />
-          </SvgIcon>
-        ))}
+  if (loading) {
+    return (
+      <NetworkSkeleton
+        showText={showText}
+        showIcon={showIcon}
+        orientation={orientation}
+        reverse={reverse}
+      />
+    );
+  }
 
-      {showText &&
-        (loading ? (
-          <Skeleton
-            animation="wave"
-            height={14}
-            width={60}
-            variant="rectangular"
-            sx={{ borderRadius: 0.3 }}
-          />
-        ) : (
-          <Typography variant="body1">{network.label}</Typography>
-        ))}
-    </ContainerNetwork>
+  const network = name in NETWORKS ? NETWORKS[name as NetworkType] : undefined;
+
+  const iconKey = capitalize(name);
+
+  const LogoNetwork =
+    iconKey in Icons ? Icons[iconKey as keyof typeof Icons] : undefined;
+
+  if (!network || !LogoNetwork) {
+    return (
+      <NetworkFallback
+        showText={showText}
+        showIcon={showIcon}
+        orientation={orientation}
+        reverse={reverse}
+      />
+    );
+  }
+
+  return (
+    <Root reverse={reverse} orientation={orientation}>
+      {showIcon && (
+        <SvgIcon>
+          <LogoNetwork />
+        </SvgIcon>
+      )}
+      {showText && <Typography variant="body1">{network.label}</Typography>}
+    </Root>
   );
 };

@@ -30,5 +30,8 @@ config
 **/configs/*.yaml
 next-env.d.ts
 !config/default.yaml
+!config/schema.json
 
 .devcontainer
+
+**/vite.config.*.mjs

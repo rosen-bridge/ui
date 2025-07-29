@@ -8,12 +8,11 @@ import {
   useState,
 } from 'react';
 
-import { ClickAwayListener } from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { Card, Divider, IconButton, SvgIcon } from '../../base';
-import { Chips, ChipsProps } from './Chips';
+import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Filter, Input, Selected } from './types';
@@ -64,8 +63,6 @@ export const SmartSearch = ({
   const $history = useRef<HistoryRef>(null);
 
   const $search = useRef<HTMLButtonElement>(null);
-
-  const timeout = useRef<number>();
 
   const [current, setCurrent] = useState<Partial<Selected>>();
 
@@ -118,34 +115,6 @@ export const SmartSearch = ({
     return current ? [...selectedValidated, current] : selectedValidated;
   }, [current, selectedValidated]);
 
-  const chips = useMemo<ChipsProps['value']>(() => {
-    return selectedValidatedWithCurrent
-      .map((current) => {
-        const labels = [] as (string | string[])[];
-
-        const parsed = parseFilter(filtersInput, current);
-
-        if (!parsed) return labels;
-
-        parsed.flow && labels.push(parsed.flow.label);
-
-        parsed.operator && labels.push(parsed.operator.label);
-
-        if (!Object.hasOwn(parsed, 'value')) return labels;
-
-        [parsed.value].flat().forEach((value) => {
-          if (typeof value == 'object' && 'label' in value) {
-            labels.push(value.label);
-          } else {
-            labels.push(`${value}`);
-          }
-        });
-
-        return labels;
-      })
-      .filter((item) => !!item.length);
-  }, [filtersInput, selectedValidatedWithCurrent]);
-
   const picker = useMemo<Input | undefined>(() => {
     switch (state) {
       case 'idle': {
@@ -191,32 +160,12 @@ export const SmartSearch = ({
     }
   }, [current, filtersInput, selectedValidated, state]);
 
-  const change = useCallback(() => {
-    setCurrent({});
-
-    const next = [...selectedValidated, current as Selected];
-
-    setSelected(next);
-  }, [current, selectedValidated]);
-
-  const handleClickAway = useCallback(() => {
-    if (Array.isArray(current?.value) && current?.value.length) {
-      change();
-    }
-    setCurrent(undefined);
-  }, [current, change]);
-
   const handleInputChange = useCallback(
     (event: ChangeEvent<HTMLInputElement>) => {
       setQuery(event.target.value);
     },
     [],
   );
-
-  const handleInputBlur = useCallback(() => {
-    clearTimeout(timeout.current);
-    timeout.current = window.setTimeout(handleClickAway, 250);
-  }, [handleClickAway]);
 
   const handleInputFocus = useCallback(() => {
     setCurrent({});
@@ -283,28 +232,30 @@ export const SmartSearch = ({
 
   const handlePickerSelect = useCallback(
     (value: Selected['value']) => {
-      clearTimeout(timeout.current);
-
       if (state == 'idle') return;
 
-      $anchor.current?.focus({ preventScroll: true });
+      if (!(state == 'value' && picker?.type == 'multiple')) {
+        $anchor.current?.focus({ preventScroll: true });
+      }
 
-      setCurrent(Object.assign({}, current, { [state]: value }));
+      const nextCurrent = Object.assign({}, current, { [state]: value });
+
+      setCurrent(nextCurrent);
+
+      if (state !== 'value') return;
+
+      setCurrent({});
+
+      const nextSelected = [...selectedValidated, nextCurrent as Selected];
+
+      setSelected(nextSelected);
     },
-    [current, state],
+    [current, picker, selectedValidated, state],
   );
 
   useEffect(() => {
     setQuery('');
   }, [current]);
-
-  useEffect(() => {
-    if (state != 'complete') return;
-
-    if (picker?.type == 'multiple') return;
-
-    change();
-  }, [picker, state, change]);
 
   useEffect(() => {
     $search.current?.focus({ preventScroll: true });
@@ -344,33 +295,36 @@ export const SmartSearch = ({
       />
       <Divider orientation="vertical" flexItem />
       <VirtualScroll>
-        <ClickAwayListener onClickAway={handleClickAway}>
-          <Container>
-            <Chips value={chips} />
-            <input
-              disabled={disabled}
-              ref={$anchor}
-              value={query}
-              autoComplete="off"
-              placeholder={
-                selectedValidatedWithCurrent.length
-                  ? ''
-                  : 'Search or filter results…'
-              }
-              onBlur={handleInputBlur}
-              onChange={handleInputChange}
-              onFocus={handleInputFocus}
-              onKeyDown={handleInputKeyDown}
-            />
-            <Picker
-              anchorEl={$anchor.current}
-              query={query}
-              open={!!picker}
-              value={picker}
-              onSelect={handlePickerSelect}
-            />
-          </Container>
-        </ClickAwayListener>
+        <Container>
+          <Chips
+            filters={filtersInput}
+            value={selectedValidatedWithCurrent}
+            onRemove={(item) => {
+              setCurrent(undefined);
+              setSelected(selected.filter((_) => _ !== item));
+            }}
+          />
+          <input
+            disabled={disabled}
+            ref={$anchor}
+            value={query}
+            autoComplete="off"
+            placeholder={state === 'idle' ? 'Filter results that ... ' : ''}
+            onChange={handleInputChange}
+            onFocus={handleInputFocus}
+            onKeyDown={handleInputKeyDown}
+          />
+          <Picker
+            anchorEl={$anchor.current}
+            query={query}
+            open={!!picker}
+            value={picker}
+            onClose={() => {
+              setCurrent(undefined);
+            }}
+            onSelect={handlePickerSelect}
+          />
+        </Container>
       </VirtualScroll>
       <IconButton
         disabled={disabled}
