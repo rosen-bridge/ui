@@ -1,5 +1,46 @@
 # @rosen-bridge/ui-kit
 
+## 2.2.0
+
+### Minor Changes
+
+- Implement `NotFound`, `ServerError`, and `UnderDevelop` pages
+- Refine the `size` prop in `CarouselItem` for improved responsive layout behavior
+- Changed arrow icon color in `Connector` component to `text.secondary`
+- Implement `Center` component
+- Update `useSnackbar` hook to support ReactNode messages for customizable snackbar content
+- Add a new color variant in `Chip` component
+- Implement `RelativeTime` component
+- Remove `title` prop from `Identifier` component
+- Implement `GridContainer` component
+- Add copy status icon to `CopyButton` and remove `Snackbar` message
+- Add support for opening external links in a new tab in the `Identifier` component
+- Add separator prop to `CardHeader` component
+- Add a `preview` configuration to the operators settings that displays a concise symbol instead of a lengthy sentence or word within the `SmartSearch` component
+- Enhance the overflow handling of the chips container in the `SmartSearch` component by implementing a virtual scroll feature, allowing users to drag and scroll with the mouse for a smoother user experience on both desktop and mobile devices
+- Enhance the default operators by displaying a symbol in front of each item using the `post` setting in the `SmartSearch` component
+- Enhance the styling of picker menu items for multiple-choice inputs within the `SmartSearch` component
+- Enhance the user experience and interaction design of the `SmartSearch` component
+- Add the ability to remove selected filters using the close button on the badges in the `SmartSearch` component
+- Implement `Columns` component
+
+### Patch Changes
+
+- Resolved token component style bugs and improved code structure
+- Fix `NewPagination` page size menu to open on label click too
+- Fix display issue in `connector` component
+- Fix default page setting issue in `NewPagination` component
+- Fix static label in `SortField` component
+- Fix styling handling in `Center` component
+- Fix label font size issue in `SortField` component
+- Fix font weight override issue in CardHeader title component
+- Fix history component to correctly load and manage search history items
+- Fix pluralization of time units in `RelativeTime` component logic
+- Fix title alignment in `EnhancedDialogTitle` component
+- Fix unsupported tokens fallback in Network component
+- Fix gap between items in Pagination component
+- Update dependency @rosen-bridge/icons@2.3.0
+
 ## 2.1.0
 
 ### Minor Changes
