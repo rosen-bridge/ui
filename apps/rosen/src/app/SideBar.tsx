@@ -46,6 +46,7 @@ export const SideBar = () => {
         >
           <NavigationButton icon={<Archway />} label="Bridge" path="/" />
           <NavigationButton
+            badge="Beta"
             icon={<Exchange />}
             label="Events"
             path="/events"
