@@ -1,5 +1,17 @@
 # @rosen-network/bitcoin
 
+## 2.2.0
+
+### Minor Changes
+
+- Add a public method named `validateAddress` to the Network class to validate network addresses
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-network/base@0.3.0
+  - @rosen-bridge/icons@2.3.0
+
 ## 2.1.4
 
 ### Patch Changes

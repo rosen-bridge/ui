@@ -1,5 +1,11 @@
 # @rosen-network/base
 
+## 0.3.0
+
+### Minor Changes
+
+- Add a utility to validate addresses based on different networks
+
 ## 0.2.2
 
 ### Patch Changes

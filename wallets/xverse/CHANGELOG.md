@@ -1,5 +1,14 @@
 # @rosen-ui/xverse-wallet
 
+## 0.2.1
+
+### Patch Changes
+
+- Resolve the connection error with the Xverse wallet
+- Update dependencies
+  - @rosen-network/bitcoin@2.2.0
+  - @rosen-ui/wallet-api@3.0.1
+
 ## 0.2.0
 
 ### Minor Changes

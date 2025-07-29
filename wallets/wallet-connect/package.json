@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-connect",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
@@ -19,10 +19,10 @@
     "@reown/appkit": "^1.7.5",
     "@reown/appkit-adapter-ethers": "^1.7.11",
     "@rosen-bridge/tokens": "^3.1.1",
-    "@rosen-network/binance": "^0.2.4",
-    "@rosen-network/ethereum": "^0.2.4",
+    "@rosen-network/binance": "^0.3.0",
+    "@rosen-network/ethereum": "^0.3.0",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-ui/types": "^0.3.6",
-    "@rosen-ui/wallet-api": "^3.0.0"
+    "@rosen-ui/wallet-api": "^3.0.1"
   }
 }
