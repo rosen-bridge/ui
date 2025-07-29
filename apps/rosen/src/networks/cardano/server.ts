@@ -2,6 +2,7 @@
 
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
+  calculateFee as calculateFeeCore,
   decodeWasmValue as decodeWasmValueCore,
   generateLockAuxiliaryData as generateLockAuxiliaryDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
@@ -11,6 +12,11 @@ import {
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
+export const calculateFee = wrap(calculateFeeCore, {
+  cache: 10 * 60 * 1000,
+  traceKey: 'cardano:calculateFee',
+});
 
 export const decodeWasmValue = wrap(decodeWasmValueCore, {
   cache: Infinity,

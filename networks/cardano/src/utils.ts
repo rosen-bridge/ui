@@ -6,6 +6,8 @@ import {
   TokenInfo,
 } from '@rosen-bridge/cardano-utxo-selection';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
+import { calculateFeeCreator } from '@rosen-network/base';
+import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { encodeHex, decodeHex } from '@rosen-ui/utils';
 
@@ -390,3 +392,18 @@ export function fromWasmValue(value: wasm.Value): Value {
   }
   return [adaEntry];
 }
+
+export const getHeight = async (): Promise<number> => {
+  const cardanoKoiosClient = cardanoKoiosClientFactory(
+    process.env.CARDANO_KOIOS_API!,
+  );
+
+  const height = (await cardanoKoiosClient.tip())[0].block_no!;
+
+  return height;
+};
+
+export const calculateFee = calculateFeeCreator(
+  NETWORKS.cardano.key,
+  getHeight,
+);

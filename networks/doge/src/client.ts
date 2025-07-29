@@ -32,6 +32,10 @@ export class DogeNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: DogeNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateOpReturnData: DogeNetworkConfig['generateOpReturnData'] = (
     ...args
   ) => {

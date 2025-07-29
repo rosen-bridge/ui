@@ -2,6 +2,7 @@
 
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
+  calculateFee as calculateFeeCore,
   generateOpReturnData as generateOpReturnDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
   getAddressBalance as getAddressBalanceCore,
@@ -11,6 +12,11 @@ import {
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
+export const calculateFee = wrap(calculateFeeCore, {
+  cache: 10 * 60 * 1000,
+  traceKey: 'bitcoin:calculateFee',
+});
 
 export const generateOpReturnData = wrap(generateOpReturnDataCore, {
   traceKey: 'bitcoin:generateOpReturnData',

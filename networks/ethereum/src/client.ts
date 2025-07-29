@@ -24,6 +24,10 @@ export class EthereumNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: EthereumNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateLockData: EthereumNetworkConfig['generateLockData'] = (
     ...args
   ) => {

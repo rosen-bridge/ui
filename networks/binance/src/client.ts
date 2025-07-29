@@ -24,6 +24,10 @@ export class BinanceNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: BinanceNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateLockData: BinanceNetworkConfig['generateLockData'] = (
     ...args
   ) => {
