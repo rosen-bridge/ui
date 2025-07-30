@@ -36,7 +36,7 @@ export default [
     files: ['{packages,wallets}/**/*.{js,jsx,ts,tsx}'],
     ignores: [
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
-      'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
+      'packages/public-status/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       globals: globals.browser,
@@ -49,7 +49,7 @@ export default [
       'apps/rosen-service2/**/*.{js,jsx,ts,tsx}',
       'networks/**/*.{js,jsx,ts,tsx}',
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
-      'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
+      'packages/public-status/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       globals: {
