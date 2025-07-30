@@ -14,11 +14,11 @@ db:
   # password:
 chains:
   ergo:
-    initialHeight: 0
+    initialHeight: 1578000
     node:
-      url: ''
-      rescanDelaySeconds: 20
-      blockRetrieveGap: 60
+      url: https://node.ergopool.io/
+      rescanDelaySeconds: 0
+      blockRetrieveGap: 1
   cardano:
     active: true
   bitcoin:
