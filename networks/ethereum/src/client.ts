@@ -46,6 +46,12 @@ export class EthereumNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: EthereumNetworkConfig['getMinTransfer'] = (
+    ...args
+  ) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
   };

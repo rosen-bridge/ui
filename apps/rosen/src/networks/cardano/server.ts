@@ -7,6 +7,7 @@ import {
   generateLockAuxiliaryData as generateLockAuxiliaryDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
   getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
   setTxWitnessSet as setTxWitnessSetCore,
 } from '@rosen-network/cardano';
 
@@ -33,6 +34,10 @@ export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'cardano:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'cardano:getMinTransfer',
 });
 
 export const setTxWitnessSet = wrap(setTxWitnessSetCore, {

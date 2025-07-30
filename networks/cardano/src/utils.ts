@@ -6,7 +6,10 @@ import {
   TokenInfo,
 } from '@rosen-bridge/cardano-utxo-selection';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
-import { calculateFeeCreator } from '@rosen-network/base';
+import {
+  calculateFeeCreator,
+  getMinTransferCreator as getMinTransferCreatorBase,
+} from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { encodeHex, decodeHex } from '@rosen-ui/utils';
@@ -406,4 +409,9 @@ export const getHeight = async (): Promise<number> => {
 export const calculateFee = calculateFeeCreator(
   NETWORKS.cardano.key,
   getHeight,
+);
+
+export const getMinTransferCreator = getMinTransferCreatorBase(
+  NETWORKS.cardano.key,
+  calculateFee,
 );

@@ -58,6 +58,10 @@ export class BitcoinNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: BitcoinNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public submitTransaction: BitcoinNetworkConfig['submitTransaction'] = (
     ...args
   ) => {

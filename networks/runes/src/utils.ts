@@ -1,4 +1,7 @@
-import { calculateFeeCreator } from '@rosen-network/base';
+import {
+  calculateFeeCreator,
+  getMinTransferCreator as getMinTransferCreatorBase,
+} from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 export const getHeight = async (): Promise<number> => {
@@ -12,3 +15,8 @@ export const getHeight = async (): Promise<number> => {
 };
 
 export const calculateFee = calculateFeeCreator(NETWORKS.runes.key, getHeight);
+
+export const getMinTransferCreator = getMinTransferCreatorBase(
+  NETWORKS.runes.key,
+  calculateFee,
+);

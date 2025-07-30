@@ -58,6 +58,10 @@ export class DogeNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: DogeNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public submitTransaction: DogeNetworkConfig['submitTransaction'] = (
     ...args
   ) => {

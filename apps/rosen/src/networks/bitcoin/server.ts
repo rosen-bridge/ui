@@ -7,6 +7,7 @@ import {
   generateUnsignedTx as generateUnsignedTxCore,
   getAddressBalance as getAddressBalanceCore,
   getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
   submitTransaction as submitTransactionCore,
 } from '@rosen-network/bitcoin';
 
@@ -33,6 +34,10 @@ export const getAddressBalance = wrap(getAddressBalanceCore, {
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'bitcoin:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'bitcoin:getMinTransfer',
 });
 
 export const submitTransaction = wrap(submitTransactionCore, {
