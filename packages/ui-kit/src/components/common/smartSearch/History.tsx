@@ -219,7 +219,10 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                 <Divider />
               </>
             )}
-            <List subheader={<ListSubheader>Recent searches</ListSubheader>}>
+            <List
+              style={{ maxWidth: '560px' }}
+              subheader={<ListSubheader>Recent searches</ListSubheader>}
+            >
               {!recent.length && (
                 <ListItem>
                   <ListItemText primary="You don't have any recent searches" />
