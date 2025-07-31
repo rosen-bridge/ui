@@ -27,7 +27,7 @@ export const EnhancedDialogTitle = ({
   icon,
   onClose,
 }: EnhancedDialogTitleProps) => {
-  const isMobile = useBreakpoint('mobile');
+  const isMobile = useBreakpoint('laptop-down');
   return (
     <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={2}>
       {icon && (
@@ -36,7 +36,7 @@ export const EnhancedDialogTitle = ({
         </IconContainer>
       )}
       <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>
-      {!isMobile && onClose && (
+      {isMobile && onClose && (
         <IconButton onClick={onClose}>
           <SvgIcon>
             <Times />
