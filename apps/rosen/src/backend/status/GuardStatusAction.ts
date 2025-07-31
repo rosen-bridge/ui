@@ -51,12 +51,16 @@ class GuardStatusAction {
    * empty guardPks will be ignored from filter
    * @param eventId
    * @param guardPks
+   * @param skip
+   * @param take
    * @returns a promise that resolves to an array of GuardStatusEntity objects
    */
   getMany = async (
     repository: Repository<GuardStatusEntity>,
     eventId: string,
     guardPks: string[],
+    skip: number,
+    take: number,
   ): Promise<GuardStatusEntity[]> => {
     const whereClause =
       guardPks.length > 0 ? { eventId, guardPk: In(guardPks) } : { eventId };
@@ -65,6 +69,8 @@ class GuardStatusAction {
       where: whereClause,
       relations: ['tx'],
       order: { updatedAt: 'DESC' },
+      skip,
+      take,
     });
   };
 

@@ -1,4 +1,5 @@
 import { Repository } from '@rosen-bridge/extended-typeorm';
+import { testDataSource } from '@rosen-ui/data-source';
 import {
   AggregatedStatusChangedEntity,
   AggregateEventStatus,
@@ -6,7 +7,12 @@ import {
 
 import AggregatedStatusChangedAction from '@/backend/status/AggregatedStatusChangedAction';
 
-import { mockAggregatedStatusChangedRecords, id0 } from './testData';
+import { DataSourceMock } from '../../mocked/DataSource.mock';
+import {
+  mockAggregatedStatusChangedRecords,
+  id0,
+  mockPaginationTestData,
+} from './testData';
 
 describe('AggregatedStatusChangedAction', () => {
   beforeAll(() => {
@@ -69,6 +75,8 @@ describe('AggregatedStatusChangedAction', () => {
       const records = await AggregatedStatusChangedAction.getInstance().getMany(
         repository as unknown as Repository<AggregatedStatusChangedEntity>,
         id0,
+        0,
+        100,
       );
 
       // assert
@@ -78,7 +86,60 @@ describe('AggregatedStatusChangedAction', () => {
         where: { eventId: id0 },
         relations: ['tx'],
         order: { insertedAt: 'DESC' },
+        skip: 0,
+        take: 100,
       });
+    });
+
+    /**
+     * @target AggregatedStatusChangedAction.getMany should respond with respect to pagination params
+     * @dependencies
+     * - DataSourceMock
+     * - testDataSource
+     * @scenario
+     * - populate AggregatedStatusChanged table with 10 records
+     * - call getMany with skip = 0 and take = 6
+     * - check the returned value
+     * - call getMany with skip = 5 and take = 10
+     * - check the returned value
+     * @expected
+     * - first getMany call should return the first 6 mock records
+     * - second getMany call should return the last 5 mock records
+     */
+    it('should respond with respect to pagination params', async () => {
+      // arrange
+      await DataSourceMock.populateAggregatedStatusChanged(
+        mockPaginationTestData.aggregatedStatusChanged,
+      );
+
+      // act
+      const records = await AggregatedStatusChangedAction.getInstance().getMany(
+        testDataSource.getRepository(AggregatedStatusChangedEntity),
+        id0,
+        0,
+        6,
+      );
+
+      // assert
+      expect(records).toHaveLength(6);
+      expect(records).toEqual(
+        mockPaginationTestData.aggregatedStatusChanged.slice(0, 6),
+      );
+
+      // act
+      const records2 =
+        await AggregatedStatusChangedAction.getInstance().getMany(
+          testDataSource.getRepository(AggregatedStatusChangedEntity),
+          id0,
+          5,
+          10,
+        );
+
+      // assert
+      expect(records2).toHaveLength(5);
+      expect(records2).toEqual(
+        mockPaginationTestData.aggregatedStatusChanged.slice(5),
+      );
     });
   });
 

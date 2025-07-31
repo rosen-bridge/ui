@@ -12,6 +12,8 @@ const handler = async (params: GetAggregatedStatusTimelineRouteParam) => {
   return (
     await PublicStatusAction.getInstance().getAggregatedStatusTimeline(
       params.id,
+      params.skip,
+      params.take,
     )
   ).map(aggregatedStatusChangedToDTO);
 };

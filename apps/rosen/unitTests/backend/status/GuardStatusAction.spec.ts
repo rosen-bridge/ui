@@ -1,9 +1,15 @@
 import { In, Repository } from '@rosen-bridge/extended-typeorm';
+import { testDataSource } from '@rosen-ui/data-source';
 import { GuardStatusEntity, EventStatus } from '@rosen-ui/public-status';
 
 import GuardStatusAction from '@/backend/status/GuardStatusAction';
 
-import { mockGuardStatusRecords, id0 } from './testData';
+import { DataSourceMock } from '../../mocked/DataSource.mock';
+import {
+  mockGuardStatusRecords,
+  id0,
+  mockPaginationTestData,
+} from './testData';
 
 describe('GuardStatusAction', () => {
   beforeAll(() => {
@@ -66,6 +72,8 @@ describe('GuardStatusAction', () => {
         repository as unknown as Repository<GuardStatusEntity>,
         id0,
         ['pk0', 'pk1'],
+        0,
+        100,
       );
 
       // assert
@@ -75,7 +83,57 @@ describe('GuardStatusAction', () => {
         where: { eventId: id0, guardPk: In(['pk0', 'pk1']) },
         relations: ['tx'],
         order: { updatedAt: 'DESC' },
+        skip: 0,
+        take: 100,
       });
+    });
+
+    /**
+     * @target GuardStatusAction.getMany should respond with respect to pagination params
+     * @dependencies
+     * - DataSourceMock
+     * - testDataSource
+     * @scenario
+     * - populate GuardStatus table with 10 records
+     * - call getMany with skip = 0 and take = 6
+     * - check the returned value
+     * - call getMany with skip = 5 and take = 10
+     * - check the returned value
+     * @expected
+     * - first getMany call should return the first 6 mock records
+     * - second getMany call should return the last 5 mock records
+     */
+    it('should respond with respect to pagination params', async () => {
+      // arrange
+      await DataSourceMock.populateGuardStatus(
+        mockPaginationTestData.guardStatus,
+      );
+
+      // act
+      const records = await GuardStatusAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusEntity),
+        id0,
+        [],
+        0,
+        6,
+      );
+
+      // assert
+      expect(records).toHaveLength(6);
+      expect(records).toEqual(mockPaginationTestData.guardStatus.slice(0, 6));
+
+      // act
+      const records2 = await GuardStatusAction.getInstance().getMany(
+        testDataSource.getRepository(GuardStatusEntity),
+        id0,
+        [],
+        5,
+        10,
+      );
+
+      // assert
+      expect(records2).toHaveLength(5);
+      expect(records2).toEqual(mockPaginationTestData.guardStatus.slice(5));
     });
   });
 

@@ -996,7 +996,132 @@ const testGetValidGuardEventTimeline = async () => {
   console.log(`testGetValidGuardEventTimeline: Passed`);
 };
 
-const resetDB = () => {
+const testGetEventTimelinePagination = async () => {
+  // page 1
+  await (async () => {
+    const response = await axios.get(
+      `${apiBaseUrl}/api/v1/status/${id1}?skip=0&take=10`,
+    );
+    assert(response.status === 200);
+    assert(response.data.length === 10);
+    for (let i = 0; i < 10; i += 1) {
+      assertObjectsMatch(response.data[i], {
+        insertedAt: 21 - i,
+        status: 'finished',
+        txStatus: null,
+        tx: null,
+      });
+    }
+  })();
+
+  // page 2
+  const response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${id1}?skip=7&take=20`,
+  );
+
+  assert(response.status === 200);
+  assert(response.data.length === 5);
+  for (let i = 0; i < 5; i += 1) {
+    assertObjectsMatch(response.data[i], {
+      insertedAt: 21 - 7 - i,
+      status: 'finished',
+      txStatus: null,
+      tx: null,
+    });
+  }
+
+  console.log(`testGetEventTimelinePagination: Passed`);
+};
+
+const testGetGuardEventTimelinePagination = async () => {
+  // page 1
+  await (async () => {
+    const response = await axios.post(
+      `${apiBaseUrl}/api/v1/status/${id1}/guards?skip=0&take=10`,
+      {
+        guardPks: [guardPk1],
+      },
+    );
+    assert(response.status === 200);
+    assert(response.data.length === 10);
+    for (let i = 0; i < 10; i += 1) {
+      assertObjectsMatch(response.data[i], {
+        guardPk: guardPk1,
+        insertedAt: 21 - i,
+        status: 'in-payment',
+        txStatus: null,
+        tx: null,
+      });
+    }
+  })();
+
+  // page 2
+  const response = await axios.post(
+    `${apiBaseUrl}/api/v1/status/${id1}/guards?skip=7&take=20`,
+    {
+      guardPks: [guardPk1],
+    },
+  );
+  assert(response.status === 200);
+  assert(response.data.length === 5);
+  for (let i = 0; i < 5; i += 1) {
+    assertObjectsMatch(response.data[i], {
+      guardPk: guardPk1,
+      insertedAt: 21 - 7 - i,
+      status: 'in-payment',
+      txStatus: null,
+      tx: null,
+    });
+  }
+
+  console.log(`testGetGuardEventTimelinePagination: Passed`);
+};
+
+const insertMockDataForPaginationTest = async () => {
+  console.log('inserting mock data for pagination test');
+  const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
+
+  p.stdin.write('BEGIN;\n');
+  p.stdin
+    .write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "insertedAt", "status", "txStatus", "txId", "txChain")
+      VALUES
+          (10, '${id1}', 10, 'finished', NULL, NULL, NULL),
+          (11, '${id1}', 11, 'finished', NULL, NULL, NULL),
+          (12, '${id1}', 12, 'finished', NULL, NULL, NULL),
+          (13, '${id1}', 13, 'finished', NULL, NULL, NULL),
+          (14, '${id1}', 14, 'finished', NULL, NULL, NULL),
+          (15, '${id1}', 15, 'finished', NULL, NULL, NULL),
+          (16, '${id1}', 16, 'finished', NULL, NULL, NULL),
+          (17, '${id1}', 17, 'finished', NULL, NULL, NULL),
+          (18, '${id1}', 18, 'finished', NULL, NULL, NULL),
+          (19, '${id1}', 19, 'finished', NULL, NULL, NULL),
+          (20, '${id1}', 20, 'finished', NULL, NULL, NULL),
+          (21, '${id1}', 21, 'finished', NULL, NULL, NULL);
+
+      INSERT INTO guard_status_changed_entity ("id", "eventId", "guardPk", "insertedAt", "status", "txStatus", "txId", "txChain")
+      VALUES
+          (10, '${id1}', '${guardPk1}', 10, 'in-payment', NULL, NULL, NULL),
+          (11, '${id1}', '${guardPk1}', 11, 'in-payment', NULL, NULL, NULL),
+          (12, '${id1}', '${guardPk1}', 12, 'in-payment', NULL, NULL, NULL),
+          (13, '${id1}', '${guardPk1}', 13, 'in-payment', NULL, NULL, NULL),
+          (14, '${id1}', '${guardPk1}', 14, 'in-payment', NULL, NULL, NULL),
+          (15, '${id1}', '${guardPk1}', 15, 'in-payment', NULL, NULL, NULL),
+          (16, '${id1}', '${guardPk1}', 16, 'in-payment', NULL, NULL, NULL),
+          (17, '${id1}', '${guardPk1}', 17, 'in-payment', NULL, NULL, NULL),
+          (18, '${id1}', '${guardPk1}', 18, 'in-payment', NULL, NULL, NULL),
+          (19, '${id1}', '${guardPk1}', 19, 'in-payment', NULL, NULL, NULL),
+          (20, '${id1}', '${guardPk1}', 20, 'in-payment', NULL, NULL, NULL),
+          (21, '${id1}', '${guardPk1}', 21, 'in-payment', NULL, NULL, NULL);\n`);
+  p.stdin.write('COMMIT;\n');
+
+  p.stdin.end();
+
+  await new Promise((r) => setTimeout(r, 500));
+
+  console.log('done inserting mock data for pagination test');
+};
+
+const resetDB = async () => {
   console.log('resetting db');
   const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
 
@@ -1009,6 +1134,8 @@ const resetDB = () => {
   p.stdin.write('COMMIT;\n');
 
   p.stdin.end();
+
+  await new Promise((r) => setTimeout(r, 500));
 
   console.log('done resetting db');
 };
@@ -1083,7 +1210,7 @@ const run = async () => {
     const shouldStartApis = getShouldStartApis();
 
     try {
-      resetDB();
+      await resetDB();
 
       if (shouldStartApis) {
         await startApi();
@@ -1102,6 +1229,11 @@ const run = async () => {
       await testGetValidEventTimeline();
       await testGetInvalidGuardEventTimeline();
       await testGetValidGuardEventTimeline();
+
+      await resetDB();
+      await insertMockDataForPaginationTest();
+      await testGetEventTimelinePagination();
+      await testGetGuardEventTimelinePagination();
 
       console.log(chalk.bgGreen.black('All tests passed'));
 

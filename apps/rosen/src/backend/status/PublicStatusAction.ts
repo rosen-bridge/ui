@@ -119,6 +119,8 @@ export class PublicStatusAction {
         guardStatusRepository,
         eventId,
         [],
+        0,
+        100,
       );
 
       const newGuardStatus: GuardStatusEntity = {
@@ -256,10 +258,14 @@ export class PublicStatusAction {
   /**
    * gets array of AggregatedStatusChangedEntity (timeline)
    * @param eventId
+   * @param skip
+   * @param take
    * @returns promise of AggregatedStatusChangedEntity array
    */
   getAggregatedStatusTimeline = (
     eventId: string,
+    skip: number,
+    take: number,
   ): Promise<AggregatedStatusChangedEntity[]> => {
     const aggregatedStatusChangedRepository = this.dataSource!.getRepository(
       AggregatedStatusChangedEntity,
@@ -268,6 +274,8 @@ export class PublicStatusAction {
     return AggregatedStatusChangedAction.getInstance().getMany(
       aggregatedStatusChangedRepository,
       eventId,
+      skip,
+      take,
     );
   };
 
@@ -275,11 +283,15 @@ export class PublicStatusAction {
    * gets array of GuardStatusChangedEntity (timeline)
    * @param eventId
    * @param guardPks
+   * @param skip
+   * @param take
    * @returns promise of GuardStatusChangedEntity array
    */
   getGuardStatusTimeline = (
     eventId: string,
     guardPks: string[],
+    skip: number,
+    take: number,
   ): Promise<GuardStatusChangedEntity[]> => {
     const guardStatusChangedRepository = this.dataSource!.getRepository(
       GuardStatusChangedEntity,
@@ -289,6 +301,8 @@ export class PublicStatusAction {
       guardStatusChangedRepository,
       eventId,
       guardPks,
+      skip,
+      take,
     );
   };
 }

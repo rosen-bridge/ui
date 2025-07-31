@@ -54,12 +54,16 @@ class GuardStatusChangedAction {
    * @param repository
    * @param eventId
    * @param guardPks
+   * @param skip
+   * @param take
    * @returns a promise that resolves to an array of GuardStatusChangedEntity objects
    */
   getMany = async (
     repository: Repository<GuardStatusChangedEntity>,
     eventId: string,
     guardPks: string[],
+    skip: number,
+    take: number,
   ): Promise<GuardStatusChangedEntity[]> => {
     const whereClause =
       guardPks.length > 0 ? { eventId, guardPk: In(guardPks) } : { eventId };
@@ -68,6 +72,8 @@ class GuardStatusChangedAction {
       where: whereClause,
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
+      skip,
+      take,
     });
   };
 

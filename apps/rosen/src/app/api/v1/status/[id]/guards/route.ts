@@ -13,6 +13,8 @@ const handler = async (params: GetGuardStatusTimelineParams) => {
     await PublicStatusAction.getInstance().getGuardStatusTimeline(
       params.id,
       params.guardPks,
+      params.skip,
+      params.take,
     )
   ).map(guardStatusChangedToDTO);
 };

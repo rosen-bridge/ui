@@ -51,16 +51,22 @@ class AggregatedStatusChangedAction {
    * retrieves multiple AggregatedStatusChangedEntity objects for a given eventId (timeline)
    * @param repository
    * @param eventId
+   * @param skip
+   * @param take
    * @returns a promise that resolves to an array of AggregatedStatusChangedEntity objects
    */
   getMany = async (
     repository: Repository<AggregatedStatusChangedEntity>,
     eventId: string,
+    skip: number,
+    take: number,
   ): Promise<AggregatedStatusChangedEntity[]> => {
     return repository.find({
       where: { eventId },
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
+      skip,
+      take,
     });
   };
 
