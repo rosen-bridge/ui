@@ -1,4 +1,4 @@
-import React from 'react';
+import { HTMLAttributes } from 'react';
 
 import { Search } from '@rosen-bridge/icons';
 
@@ -11,7 +11,6 @@ const Root = styled('div')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   gap: theme.spacing(1),
-  height: '50vh',
 }));
 const IconWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -50,6 +49,9 @@ const CountBadge = styled('div')(({ theme }) => ({
   cursor: 'default',
   border: `2px solid ${theme.palette.info.light}`,
 }));
+
+export type EmptyStateProps = {} & HTMLAttributes<HTMLDivElement>;
+
 /**
  * `EmptyState` is a reusable UI component that displays
  * a friendly message and an icon when there are no results to show.
@@ -64,9 +66,9 @@ const CountBadge = styled('div')(({ theme }) => ({
  *
  * This component does not accept props and is fully static.
  */
-export const EmptyState = () => {
+export const EmptyState = (props: EmptyStateProps) => {
   return (
-    <Root>
+    <Root {...props}>
       <IconWrapper>
         <SearchCircle>
           <SvgIcon>

@@ -23,7 +23,7 @@ import { EventSidebar } from '@/app/events/(list)/EventSidebar';
 import { useTokenMap } from '@/hooks';
 import { ApiEventResponse, EventItem } from '@/types';
 
- const Page = () => {
+const Page = () => {
   const dense = useBreakpoint('laptop-down');
 
   const { openSnackbar } = useSnackbar();
@@ -114,7 +114,7 @@ import { ApiEventResponse, EventItem } from '@/types';
       pagination={renderPagination()}
     >
       {!isLoading && !data?.items.length ? (
-        <EmptyState />
+        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       ) : (
         <GridContainer gap="8px" minWidth="242px">
           {isLoading
