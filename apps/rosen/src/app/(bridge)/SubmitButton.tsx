@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { CommentAltExclamation } from '@rosen-bridge/icons';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
   Amount2,
@@ -26,7 +27,6 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/hooks';
-import { getTokenNameAndId } from '@/utils';
 
 export const SubmitButton = () => {
   const [open, setOpen] = useState(false);
@@ -71,8 +71,7 @@ export const SubmitButton = () => {
     (availableNetwork) => availableNetwork.name == targetValue,
   );
 
-  const tokenInfo =
-    tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
+  const tokenInfo = tokenValue as RosenChainToken;
 
   const targetTokenSearchResults =
     sourceValue &&
@@ -143,7 +142,7 @@ export const SubmitButton = () => {
                 <Amount
                   value={amountValue || 0}
                   size="large"
-                  unit={tokenInfo?.tokenName}
+                  unit={tokenInfo?.name}
                 />
                 {source && target && (
                   <Connector
@@ -155,10 +154,10 @@ export const SubmitButton = () => {
               <Divider />
               <div>
                 <Label label="Transaction Fee">
-                  <Amount2 value={networkFeeRaw} unit={tokenInfo?.tokenName} />
+                  <Amount2 value={networkFeeRaw} unit={tokenInfo?.name} />
                 </Label>
                 <Label label="Bridge Fee">
-                  <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.tokenName} />
+                  <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.name} />
                 </Label>
                 <Label label="Received amount">
                   <Amount2
