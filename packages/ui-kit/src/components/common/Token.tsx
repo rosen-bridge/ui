@@ -28,7 +28,15 @@ export const Token = ({ name, reverse }: TokenProps) => {
       fontSize="inherit"
       gap="0.5em"
     >
-      <Avatar sx={{ width: '2em ', height: '2em', fontSize: '1em' }}>
+      <Avatar
+        sx={(theme) => ({
+          width: '2em ',
+          height: '2em',
+          fontSize: '1em',
+          backgroundColor: theme.palette.secondary.light,
+          color: theme.palette.secondary.main,
+        })}
+      >
         {capitalize(name).slice(0, 1)}
       </Avatar>
 
