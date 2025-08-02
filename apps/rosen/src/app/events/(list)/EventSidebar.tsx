@@ -21,7 +21,7 @@ import {
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
@@ -76,7 +76,7 @@ const Content = ({ value }: EventSidebarProps) => {
             value={value.sourceTxId}
             href={
               value.sourceTxId
-                ? getAddressUrl(value.fromChain, value.sourceTxId)!
+                ? getTxURL(value.fromChain, value.sourceTxId)!
                 : undefined
             }
           />
@@ -87,7 +87,7 @@ const Content = ({ value }: EventSidebarProps) => {
             value={value.paymentTxId || ''}
             href={
               value.paymentTxId
-                ? getAddressUrl(value.toChain, value.paymentTxId)!
+                ? getTxURL(value.toChain, value.paymentTxId)!
                 : undefined
             }
           />
@@ -98,7 +98,7 @@ const Content = ({ value }: EventSidebarProps) => {
             value={value.spendTxId || ''}
             href={
               value.spendTxId
-                ? getAddressUrl(NETWORKS.ergo.key, value.spendTxId)!
+                ? getTxURL(NETWORKS.ergo.key, value.spendTxId)!
                 : undefined
             }
           />
