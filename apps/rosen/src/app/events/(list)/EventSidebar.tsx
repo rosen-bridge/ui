@@ -14,6 +14,7 @@ import {
   Label,
   Network,
   RelativeTime,
+  Stack,
   SvgIcon,
   Token,
   Typography,
@@ -27,6 +28,7 @@ import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
+  const isTablet = useBreakpoint('laptop-down');
   if (!value)
     return (
       <Center
@@ -144,6 +146,23 @@ const Content = ({ value }: EventSidebarProps) => {
       </Label>
       <Label label="Reports">{value.WIDsCount ?? 'N/C'}</Label>
       <Label label="Height">{value.height}</Label>
+      {isTablet && (
+        <Stack alignItems="end">
+          <Button
+            variant="text"
+            size="medium"
+            target="_blank"
+            href={`/events/${value.eventId}`}
+            endIcon={
+              <SvgIcon>
+                <AngleRight />
+              </SvgIcon>
+            }
+          >
+            SEE DETAILS
+          </Button>
+        </Stack>
+      )}
     </Columns>
   );
 };
