@@ -33,6 +33,10 @@ export class RunesNetwork implements Network {
     return this.config.getMaxTransfer(params);
   };
 
+  public getMinTransfer: NetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address;
   };

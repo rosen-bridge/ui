@@ -44,6 +44,10 @@ export class BinanceNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: BinanceNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
   };

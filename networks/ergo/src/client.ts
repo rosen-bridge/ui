@@ -38,6 +38,10 @@ export class ErgoNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: ErgoNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address;
   };

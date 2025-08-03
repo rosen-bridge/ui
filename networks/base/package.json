@@ -18,6 +18,7 @@
   "dependencies": {
     "@rosen-bridge/address-codec": "^0.6.3",
     "@rosen-bridge/minimum-fee": "^2.2.3",
+    "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-ui/types": "^0.3.6"
   }
 }

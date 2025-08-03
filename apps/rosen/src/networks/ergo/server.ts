@@ -4,6 +4,7 @@ import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
   getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
   generateUnsignedTx as generateUnsignedTxCore,
 } from '@rosen-network/ergo';
 
@@ -21,6 +22,10 @@ export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'ergo:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'ergo:getMinTransfer',
 });
 
 export const validateAddress = wrap(validateAddressCore, {

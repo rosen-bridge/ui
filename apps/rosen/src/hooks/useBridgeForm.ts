@@ -5,9 +5,8 @@ import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
 import * as networks from '@/networks';
-import { unwrap } from '@/safeServerAction';
-import { getMinTransfer } from '@/utils';
 
+import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
 import { WalletContext } from './useWallet';
@@ -89,10 +88,14 @@ export const useBridgeForm = () => {
           if (isAmountLarge) return 'Balance insufficient';
         }
 
-        const minTransfer = await getMinTransfer(
+        const network = Object.values(networks).find(
+          (network) => network.name == sourceField.value,
+        )!;
+
+        const minTransfer = await network.getMinTransfer(
           tokenField.value,
-          sourceField.value,
           targetField.value,
+          FEE_CONFIG_TOKEN_ID,
         );
         const isAmountSmall = wrappedAmount < minTransfer;
         if (isAmountSmall) return 'Minimum transfer amount not respected';

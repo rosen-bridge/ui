@@ -4,6 +4,7 @@ import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
   getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
 } from '@rosen-network/ethereum';
 import {
   generateLockData as generateLockDataCore,
@@ -31,6 +32,10 @@ export const generateTxParameters = wrap(
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'ethereum:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'ethereum:getMinTransfer',
 });
 
 export const validateAddress = wrap(validateAddressCore, {

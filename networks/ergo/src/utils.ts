@@ -1,5 +1,8 @@
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { calculateFeeCreator } from '@rosen-network/base';
+import {
+  calculateFeeCreator,
+  getMinTransferCreator as getMinTransferCreatorBase,
+} from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
@@ -316,3 +319,8 @@ export const getBoxAssets = (box: ErgoBoxProxy): AssetBalance => {
 };
 
 export const calculateFee = calculateFeeCreator(NETWORKS.ergo.key, getHeight);
+
+export const getMinTransferCreator = getMinTransferCreatorBase(
+  NETWORKS.ergo.key,
+  calculateFee,
+);

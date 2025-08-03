@@ -1,5 +1,8 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
-import { calculateFeeCreator } from '@rosen-network/base';
+import {
+  calculateFeeCreator,
+  getMinTransferCreator as getMinTransferCreatorBase,
+} from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Axios from 'axios';
@@ -191,4 +194,9 @@ export const getHeight = async (): Promise<number> => {
 export const calculateFee = calculateFeeCreator(
   NETWORKS.bitcoin.key,
   getHeight,
+);
+
+export const getMinTransferCreator = getMinTransferCreatorBase(
+  NETWORKS.bitcoin.key,
+  calculateFee,
 );

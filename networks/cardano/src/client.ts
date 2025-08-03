@@ -57,6 +57,10 @@ export class CardanoNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: CardanoNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public setTxWitnessSet: CardanoNetworkConfig['setTxWitnessSet'] = (
     ...args
   ) => {
