@@ -1,5 +1,6 @@
 'use client';
 
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
   Amount2,
@@ -15,7 +16,6 @@ import {
   useTransactionFees,
   useTransactionFormData,
 } from '@/hooks';
-import { getTokenNameAndId } from '@/utils';
 
 /**
  * shows fees to the user and handles wallet transaction
@@ -36,8 +36,7 @@ export const TransactionInfo = () => {
     minTransferRaw,
   } = useTransactionFees();
 
-  const tokenInfo =
-    tokenValue && sourceValue && getTokenNameAndId(tokenValue, sourceValue);
+  const tokenInfo = tokenValue as RosenChainToken;
 
   const targetTokenSearchResults =
     sourceValue &&
@@ -77,21 +76,21 @@ export const TransactionInfo = () => {
       <Label label="Transaction Fee" dense>
         <Amount2
           value={!tokenValue ? undefined : networkFeeRaw}
-          unit={tokenInfo?.tokenName}
+          unit={tokenInfo?.name}
           loading={isPending}
         />
       </Label>
       <Label label="Bridge Fee" dense>
         <Amount2
           value={!tokenValue ? undefined : bridgeFeeRaw}
-          unit={tokenInfo?.tokenName}
+          unit={tokenInfo?.name}
           loading={isPending}
         />
       </Label>
       <Label label="Min Transfer" dense>
         <Amount2
           value={!tokenValue ? undefined : minTransferRaw}
-          unit={tokenInfo?.tokenName}
+          unit={tokenInfo?.name}
           loading={isPending}
         />
       </Label>

@@ -28,7 +28,6 @@ import {
   useTransactionFormData,
   useWallet,
 } from '@/hooks';
-import { getTokenNameAndId } from '@/utils';
 
 import { UseAllAmount } from './UseAllAmount';
 
@@ -288,8 +287,8 @@ export const BridgeForm = () => {
         getOptionLabel={(option) => option.name || ''}
         isOptionEqualToValue={(option, value) => {
           return (
-            getTokenNameAndId(option, sourceField.value)?.tokenId ===
-            getTokenNameAndId(value, sourceField.value)?.tokenId
+            (option as RosenChainToken)?.tokenId ===
+            (value as RosenChainToken)?.tokenId
           );
         }}
         renderInput={(params) => (
@@ -311,13 +310,7 @@ export const BridgeForm = () => {
               error={!!error}
               loading={isLoading || isMaxLoading}
               value={balanceRaw}
-              unit={
-                (
-                  tokenValue &&
-                  sourceValue &&
-                  getTokenNameAndId(tokenValue, sourceValue)
-                )?.tokenName
-              }
+              unit={(tokenValue as RosenChainToken)?.name}
               onClick={handleSelectMax}
               onRetry={load}
             />
