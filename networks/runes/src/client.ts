@@ -23,6 +23,10 @@ export class RunesNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: NetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public getMaxTransfer = (
     params: NetworkMaxTransferParams,
   ): Promise<RosenAmountValue> => {

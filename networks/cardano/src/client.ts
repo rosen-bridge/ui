@@ -32,6 +32,10 @@ export class CardanoNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: CardanoNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public decodeWasmValue: CardanoNetworkConfig['decodeWasmValue'] = (
     ...args
   ) => {

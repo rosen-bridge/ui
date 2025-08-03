@@ -1,9 +1,10 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
-import { calculateFee } from '@/actions';
-import { unwrap } from '@/safeServerAction';
+import * as networks from '@/networks';
 import { getTokenMap } from '@/tokenMap/getClientTokenMap';
+
+import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 
 /**
  * get min transfer amount of a token
@@ -24,11 +25,15 @@ export const getMinTransfer = async (
   const ergoTokenId = tokens[0].ergo.tokenId;
 
   try {
-    const { fees } = await unwrap(calculateFee)(
-      sourceChain,
+    const network = Object.values(networks).find(
+      (network) => network.name == sourceChain,
+    )!;
+
+    const { fees } = await network.calculateFee(
       targetChain,
       ergoTokenId,
       0,
+      FEE_CONFIG_TOKEN_ID,
     );
 
     const networkFee = fees?.networkFee ?? 0n;

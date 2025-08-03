@@ -24,6 +24,10 @@ export class ErgoNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: ErgoNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateUnsignedTx: ErgoNetworkConfig['generateUnsignedTx'] = (
     ...args
   ) => {
