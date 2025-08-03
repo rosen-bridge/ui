@@ -13,6 +13,7 @@ import {
 import { getDecimalString } from '@rosen-ui/utils';
 import { capitalize } from 'lodash-es';
 
+import { Card2, Card2Body } from '@/app/card2';
 import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
 
@@ -67,47 +68,40 @@ export const EventCard = ({
   if (!item) return null;
 
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        padding: (theme) => theme.spacing(1.5),
-        gap: (theme) => theme.spacing(1),
-        cursor: 'pointer',
-        border: (theme) =>
-          `3px solid ${active ? theme.palette.primary.main : 'transparent'}`,
-      }}
-      onClick={onClick}
-    >
-      <Stack gap={1} flexDirection="row">
-        <Avatar
-          sx={(theme) => ({
-            backgroundColor: theme.palette.secondary.light,
-            color: theme.palette.secondary.main,
-          })}
-        >
-          {capitalize(item.lockToken.name.slice(0, 1))}
-        </Avatar>
-        <Stack flexDirection="column" alignItems="flex-start">
-          <Amount2
-            unit={item.lockToken.name}
-            value={getDecimalString(
-              item.amount,
-              item.lockToken.significantDecimals,
-            )}
-            orientation={'vertical'}
-          />
+    <Card2 active={active} clickable onClick={onClick}>
+      <Card2Body>
+        <Stack gap={1}>
+          <Stack gap={1} flexDirection="row">
+            <Avatar
+              sx={(theme) => ({
+                backgroundColor: theme.palette.secondary.light,
+                color: theme.palette.secondary.main,
+              })}
+            >
+              {capitalize(item.lockToken.name.slice(0, 1))}
+            </Avatar>
+            <Stack flexDirection="column" alignItems="flex-start">
+              <Amount2
+                unit={item.lockToken.name}
+                value={getDecimalString(
+                  item.amount,
+                  item.lockToken.significantDecimals,
+                )}
+                orientation={'vertical'}
+              />
+            </Stack>
+          </Stack>
+          <Identifier value={item.eventId} href={`/events/${item.eventId}`} />
+          <Stack justifyContent="space-between" flexDirection="row">
+            <Connector
+              variant="filled"
+              start={<Network name={item.fromChain} variant="logo" />}
+              end={<Network name={item.toChain} variant="logo" />}
+            />
+            <EventStatus value={item.status} />
+          </Stack>
         </Stack>
-      </Stack>
-      <Identifier value={item.eventId} href={`/events/${item.eventId}`} />
-      <Stack justifyContent="space-between" flexDirection="row">
-        <Connector
-          variant="filled"
-          start={<Network name={item.fromChain} variant="logo" />}
-          end={<Network name={item.toChain} variant="logo" />}
-        />
-        <EventStatus value={item.status} />
-      </Stack>
-    </Card>
+      </Card2Body>
+    </Card2>
   );
 };

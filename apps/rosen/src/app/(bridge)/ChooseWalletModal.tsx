@@ -5,13 +5,12 @@ import {
   Alert,
   Box,
   Button,
-  Card,
-  CardContent,
   Dialog,
   DialogContent,
   DialogContentText,
   EnhancedDialogTitle,
   Grid,
+  Stack,
   Tooltip,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -19,6 +18,8 @@ import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import { useTransactionFormData } from '@/hooks';
+
+import { Card2, Card2Body } from '../card2';
 
 interface ChooseWalletModalProps {
   selectedWallet: Wallet | undefined;
@@ -100,15 +101,12 @@ export const ChooseWalletModal = ({
             };
 
             return (
-              <Card key={wallet.label}>
-                <CardContent>
+              <Card2 key={wallet.label}>
+                <Card2Body>
                   <Tooltip title={wallet.name}>
-                    <Box
+                    <Stack
+                      gap={3}
                       sx={{
-                        display: 'flex',
-                        gap: 3,
-                        alignItems: 'center',
-                        flexDirection: 'column',
                         svg: {
                           height: (theme) => theme.spacing(13),
                           width: (theme) => theme.spacing(13),
@@ -126,10 +124,10 @@ export const ChooseWalletModal = ({
                       >
                         {isConnected ? 'Disconnect' : 'Connect'}
                       </Button>
-                    </Box>
+                    </Stack>
                   </Tooltip>
-                </CardContent>
-              </Card>
+                </Card2Body>
+              </Card2>
             );
           })}
         </Grid>

@@ -24,6 +24,7 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
 
+import { Card2, Card2Body, Card2Header, Card2Title } from '@/app/card2';
 import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
 
@@ -33,7 +34,7 @@ const Content = ({ value }: EventSidebarProps) => {
     return (
       <Center
         style={{
-          minHeight: 'calc(100vh - 295px)',
+          minHeight: 'calc(100vh - 304px)',
         }}
       >
         <Typography variant="body1" color="text.secondary">
@@ -186,39 +187,47 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
     offsetBottom: 16,
   });
   return (
-    <Card
+    <Card2
       ref={stickyRef}
+      variant="separated"
       style={{
         width: '330px',
         marginLeft: '16px',
       }}
     >
-      <CardHeader
-        title="Event"
-        separator
-        regular
+      <Card2Header
         action={
           value && (
-            <Button
-              variant="text"
-              size="small"
-              target="_blank"
-              href={`/events/${value.eventId}`}
-              endIcon={
-                <SvgIcon>
-                  <AngleRight />
-                </SvgIcon>
-              }
+            <div
+              style={{
+                height: 0,
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
-              SEE DETAILS
-            </Button>
+              <Button
+                variant="text"
+                size="small"
+                target="_blank"
+                href={`/events/${value.eventId}`}
+                endIcon={
+                  <SvgIcon>
+                    <AngleRight />
+                  </SvgIcon>
+                }
+              >
+                SEE DETAILS
+              </Button>
+            </div>
           )
         }
-      />
-      <CardContent style={{ paddingTop: 0 }}>
+      >
+        <Card2Title>Event</Card2Title>
+      </Card2Header>
+      <Card2Body>
         <Content value={value} />
-      </CardContent>
-    </Card>
+      </Card2Body>
+    </Card2>
   );
 };
 
