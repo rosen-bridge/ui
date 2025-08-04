@@ -80,7 +80,7 @@ export class PublicStatusAction {
     },
   ): Promise<void> => {
     // perform operations in a db transaction
-    await this.dataSource!.manager.transaction(async (entityManager) => {
+    await this.dataSource.manager.transaction(async (entityManager) => {
       // get repositories from transactional entity manager
       const guardStatusRepository =
         entityManager.getRepository(GuardStatusEntity);
@@ -243,7 +243,7 @@ export class PublicStatusAction {
   getAggregatedStatuses = (
     eventIds: string[],
   ): Promise<AggregatedStatusEntity[]> => {
-    const aggregatedStatusRepository = this.dataSource!.getRepository(
+    const aggregatedStatusRepository = this.dataSource.getRepository(
       AggregatedStatusEntity,
     );
 
@@ -261,7 +261,7 @@ export class PublicStatusAction {
   getAggregatedStatusTimeline = (
     eventId: string,
   ): Promise<AggregatedStatusChangedEntity[]> => {
-    const aggregatedStatusChangedRepository = this.dataSource!.getRepository(
+    const aggregatedStatusChangedRepository = this.dataSource.getRepository(
       AggregatedStatusChangedEntity,
     );
 
@@ -281,7 +281,7 @@ export class PublicStatusAction {
     eventId: string,
     guardPks: string[],
   ): Promise<GuardStatusChangedEntity[]> => {
-    const guardStatusChangedRepository = this.dataSource!.getRepository(
+    const guardStatusChangedRepository = this.dataSource.getRepository(
       GuardStatusChangedEntity,
     );
 
