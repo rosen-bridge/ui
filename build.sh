@@ -13,6 +13,7 @@ echo "building monorepo packages for app '$APP' ..."
 
 if [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/constants
+  npm run build --workspace packages/public-status
   npm run build --workspace packages/asset-calculator
 fi
 
@@ -27,6 +28,7 @@ if [ "$APP" == "guard" ] || [ "$APP" == "watcher" ] ||  [ "$APP" == "rosen" ] ||
 fi
 
 if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
+  npm run build --workspace packages/public-status
   npm run build --workspace packages/asset-calculator
   npm run build --workspace networks/base
   npm run build --workspace networks/evm
@@ -48,11 +50,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace wallets/wallet-connect
 fi
 
-if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
-  npm run build --workspace packages/public-status-logic
-fi
-
-if [ "$APP" == "public-status" ] || [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+if [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/data-source
 fi
 

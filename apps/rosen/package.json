@@ -9,11 +9,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "vitest",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
     "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build"
   },
   "dependencies": {
+    "@rosen-bridge/encryption": "^0.1.1",
+    "@rosen-bridge/extended-typeorm": "^0.1.0",
     "@rosen-bridge/icons": "^2.3.0",
     "@rosen-bridge/observation-extractor": "^7.1.2",
     "@rosen-bridge/scanner": "^8.0.0",
@@ -38,6 +40,7 @@
     "@rosen-ui/my-doge-wallet": "^1.1.1",
     "@rosen-ui/nautilus-wallet": "^3.1.0",
     "@rosen-ui/okx-wallet": "^2.1.0",
+    "@rosen-ui/public-status": "^0.0.1",
     "@rosen-ui/swr-helpers": "^0.2.1",
     "@rosen-ui/types": "^0.3.6",
     "@rosen-ui/utils": "^0.6.0",
