@@ -3,15 +3,15 @@ import { useEffect, useState } from 'react';
 import { Wallet as WalletIcon } from '@rosen-bridge/icons';
 import {
   Alert,
-  Box,
+  Card2,
+  Card2Body,
   Button,
-  Card,
-  CardContent,
   Dialog,
   DialogContent,
   DialogContentText,
   EnhancedDialogTitle,
   Grid,
+  Stack,
   Tooltip,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -100,15 +100,12 @@ export const ChooseWalletModal = ({
             };
 
             return (
-              <Card key={wallet.label}>
-                <CardContent>
+              <Card2 key={wallet.label} backgroundColor="background.paper">
+                <Card2Body>
                   <Tooltip title={wallet.name}>
-                    <Box
+                    <Stack
+                      gap={3}
                       sx={{
-                        display: 'flex',
-                        gap: 3,
-                        alignItems: 'center',
-                        flexDirection: 'column',
                         svg: {
                           height: (theme) => theme.spacing(13),
                           width: (theme) => theme.spacing(13),
@@ -126,10 +123,10 @@ export const ChooseWalletModal = ({
                       >
                         {isConnected ? 'Disconnect' : 'Connect'}
                       </Button>
-                    </Box>
+                    </Stack>
                   </Tooltip>
-                </CardContent>
-              </Card>
+                </Card2Body>
+              </Card2>
             );
           })}
         </Grid>

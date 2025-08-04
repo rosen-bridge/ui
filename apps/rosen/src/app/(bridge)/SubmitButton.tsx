@@ -5,7 +5,8 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
   Amount2,
-  Card,
+  Card2,
+  Card2Body,
   Connector,
   Divider,
   EnhancedDialog,
@@ -127,51 +128,44 @@ export const SubmitButton = () => {
             paddingBottom: 0,
           }}
         >
-          <Card
-            sx={{
-              backgroundColor: (theme) =>
-                theme.palette.mode === 'light'
-                  ? theme.palette.primary.light
-                  : theme.palette.primary.dark,
-              px: 2,
-              py: 3,
-            }}
-          >
-            <Stack spacing={2}>
-              <Stack alignItems="center" spacing={2}>
-                <Amount
-                  value={amountValue || 0}
-                  size="large"
-                  unit={tokenInfo?.name}
-                />
-                {source && target && (
-                  <Connector
-                    start={<Network name={source.name} />}
-                    end={<Network name={target.name} />}
+          <Card2 backgroundColor="primary.light">
+            <Card2Body>
+              <Stack spacing={2}>
+                <Stack alignItems="center" spacing={2}>
+                  <Amount
+                    value={amountValue || 0}
+                    size="large"
+                    unit={tokenInfo?.name}
                   />
-                )}
+                  {source && target && (
+                    <Connector
+                      start={<Network name={source.name} />}
+                      end={<Network name={target.name} />}
+                    />
+                  )}
+                </Stack>
+                <Divider />
+                <div>
+                  <Label label="Transaction Fee">
+                    <Amount2 value={networkFeeRaw} unit={tokenInfo?.name} />
+                  </Label>
+                  <Label label="Bridge Fee">
+                    <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.name} />
+                  </Label>
+                  <Label label="Received amount">
+                    <Amount2
+                      value={receivingAmountRaw}
+                      unit={targetTokenInfo?.name}
+                    />
+                  </Label>
+                </div>
+                <Divider />
+                <Label label="Destination Address" orientation="vertical">
+                  <Identifier value={walletAddressValue} copyable />
+                </Label>
               </Stack>
-              <Divider />
-              <div>
-                <Label label="Transaction Fee">
-                  <Amount2 value={networkFeeRaw} unit={tokenInfo?.name} />
-                </Label>
-                <Label label="Bridge Fee">
-                  <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.name} />
-                </Label>
-                <Label label="Received amount">
-                  <Amount2
-                    value={receivingAmountRaw}
-                    unit={targetTokenInfo?.name}
-                  />
-                </Label>
-              </div>
-              <Divider />
-              <Label label="Destination Address" orientation="vertical">
-                <Identifier value={walletAddressValue} copyable />
-              </Label>
-            </Stack>
-          </Card>
+            </Card2Body>
+          </Card2>
         </EnhancedDialogContent>
         <EnhancedDialogActions>
           <LoadingButton
