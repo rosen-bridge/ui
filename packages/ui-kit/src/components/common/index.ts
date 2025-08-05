@@ -46,3 +46,4 @@ export * from './GridContainer';
 export * from './Columns';
 export * from './Illustrations';
 export * from './Truncate';
+export * from './card2';
