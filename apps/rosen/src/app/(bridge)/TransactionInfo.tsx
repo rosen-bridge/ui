@@ -4,7 +4,8 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
   Amount2,
-  Card,
+  Card2,
+  Card2Body,
   Divider,
   Label,
   Tooltip,
@@ -51,72 +52,71 @@ export const TransactionInfo = () => {
   const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
 
   return (
-    <Card
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        backgroundColor: 'primary.light',
-        padding: (theme) => theme.spacing(3),
+    <Card2
+      backgroundColor="primary.light"
+      style={{
+        alignContent: 'end',
         flexGrow: 1,
       }}
     >
-      <div style={{ flexGrow: '1' }} />
-      <Label label="You Will Receive" color="textPrimary" dense>
-        <Amount2
-          value={
-            !tokenValue || receivingAmountRaw === '0'
-              ? undefined
-              : receivingAmountRaw
-          }
-          unit={targetTokenInfo?.name}
-          loading={isPending}
-        />
-      </Label>
-      <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
-      <Label label="Transaction Fee" dense>
-        <Amount2
-          value={!tokenValue ? undefined : networkFeeRaw}
-          unit={tokenInfo?.name}
-          loading={isPending}
-        />
-      </Label>
-      <Label label="Bridge Fee" dense>
-        <Amount2
-          value={!tokenValue ? undefined : bridgeFeeRaw}
-          unit={tokenInfo?.name}
-          loading={isPending}
-        />
-      </Label>
-      <Label label="Min Transfer" dense>
-        <Amount2
-          value={!tokenValue ? undefined : minTransferRaw}
-          unit={tokenInfo?.name}
-          loading={isPending}
-        />
-      </Label>
-      {!!error && (
-        <Alert
-          severity="error"
-          sx={{
-            maxWidth: '100%',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          <Tooltip title={(error as any)?.message}>
-            <Typography
-              sx={{
-                maxWidth: '100%',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              {(error as any)?.message}
-            </Typography>
-          </Tooltip>
-        </Alert>
-      )}
-    </Card>
+      <Card2Body>
+        <Label label="You Will Receive" color="textPrimary" dense>
+          <Amount2
+            value={
+              !tokenValue || receivingAmountRaw === '0'
+                ? undefined
+                : receivingAmountRaw
+            }
+            unit={targetTokenInfo?.name}
+            loading={isPending}
+          />
+        </Label>
+        <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
+        <Label label="Transaction Fee" dense>
+          <Amount2
+            value={!tokenValue ? undefined : networkFeeRaw}
+            unit={tokenInfo?.name}
+            loading={isPending}
+          />
+        </Label>
+        <Label label="Bridge Fee" dense>
+          <Amount2
+            value={!tokenValue ? undefined : bridgeFeeRaw}
+            unit={tokenInfo?.name}
+            loading={isPending}
+          />
+        </Label>
+        <Label label="Min Transfer" dense>
+          <Amount2
+            value={!tokenValue ? undefined : minTransferRaw}
+            unit={tokenInfo?.name}
+            loading={isPending}
+          />
+        </Label>
+        {!!error && (
+          <Alert
+            severity="error"
+            sx={{
+              maxWidth: '100%',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+            }}
+          >
+            <Tooltip title={(error as any)?.message}>
+              <Typography
+                sx={{
+                  maxWidth: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                {(error as any)?.message}
+              </Typography>
+            </Tooltip>
+          </Alert>
+        )}
+      </Card2Body>
+    </Card2>
   );
 };
