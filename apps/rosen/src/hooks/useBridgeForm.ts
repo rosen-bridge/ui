@@ -116,7 +116,9 @@ export const useBridgeForm = () => {
 
         const network = Object.values(networks).find(
           (wallet) => wallet.name == targetField.value,
-        )!;
+        );
+
+        if (!network) return;
 
         const isValid = await network.validateAddress(
           network.toSafeAddress(value),
