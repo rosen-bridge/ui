@@ -3,7 +3,6 @@ import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { styled } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
-import { useBreakpoint } from '../../hooks';
 import { DialogTitle, IconButton, SvgIcon } from '../base';
 
 const IconContainer = styled('div')(({ theme }) => ({
@@ -27,7 +26,6 @@ export const EnhancedDialogTitle = ({
   icon,
   onClose,
 }: EnhancedDialogTitleProps) => {
-  const isMobile = useBreakpoint('mobile');
   return (
     <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={2}>
       {icon && (
@@ -36,7 +34,7 @@ export const EnhancedDialogTitle = ({
         </IconContainer>
       )}
       <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>
-      {!isMobile && onClose && (
+      {onClose && (
         <IconButton onClick={onClose}>
           <SvgIcon>
             <Times />
