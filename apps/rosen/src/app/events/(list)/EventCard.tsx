@@ -8,6 +8,7 @@ import {
   Connector,
   Identifier,
   Network,
+  RelativeTime,
   Skeleton,
   Stack,
 } from '@rosen-bridge/ui-kit';
@@ -23,10 +24,26 @@ const EventCardSkeleton = () => {
       <Card2Body style={{ height: '152px' }}>
         <Stack gap={1} justifyContent="space-between">
           <Stack alignItems="center" flexDirection="row" gap={1}>
-            <Skeleton variant="circular" width={48} height={48} />
-            <Stack flexDirection="column" gap={1}>
-              <Skeleton variant="rounded" width={80} height={14}></Skeleton>
-              <Skeleton variant="rounded" width={60} height={14}></Skeleton>
+            <Skeleton
+              variant="circular"
+              width={48}
+              height={48}
+              style={{ minWidth: '48px' }}
+            />
+            <Stack
+              style={{ width: '100%' }}
+              flexDirection="row"
+              justifyContent="space-between"
+            >
+              <Stack flexDirection="column" gap={1}>
+                <Skeleton variant="rounded" width={80} height={14}></Skeleton>
+                <Skeleton variant="rounded" width={60} height={14}></Skeleton>
+              </Stack>
+              <Stack justifyContent="flex-end">
+                <div style={{ marginBottom: '-2px' }}>
+                  <Skeleton variant="rounded" width={80} height={16}></Skeleton>
+                </div>
+              </Stack>
             </Stack>
           </Stack>
           <Skeleton variant="rounded" width="100%" height={22}></Skeleton>
@@ -80,7 +97,11 @@ export const EventCard = ({
             >
               {capitalize(item.lockToken.name.slice(0, 1))}
             </Avatar>
-            <Stack flexDirection="column" alignItems="flex-start">
+            <Stack
+              style={{ width: '100%' }}
+              flexDirection="row"
+              justifyContent="space-between"
+            >
               <Amount2
                 unit={item.lockToken.name}
                 value={getDecimalString(
@@ -89,6 +110,11 @@ export const EventCard = ({
                 )}
                 orientation={'vertical'}
               />
+              <Stack justifyContent="flex-end">
+                <div style={{ marginBottom: '-4px' }}>
+                  <RelativeTime timestamp={item.timestamp} />
+                </div>
+              </Stack>
             </Stack>
           </Stack>
           <Identifier value={item.eventId} href={`/events/${item.eventId}`} />
