@@ -51,7 +51,6 @@ export default [
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
       'packages/public-status/**/*.{js,jsx,ts,tsx}',
       'packages/public-status-logic/**/*.{js,jsx,ts,tsx}',
-      'apps/rosen-service2/**/*.ts',
     ],
     languageOptions: {
       globals: {
