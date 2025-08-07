@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 2.3.0
+
+### Minor Changes
+
+- Add `HourGlass` icon
+
 ## 2.2.0
 
 ### Minor Changes

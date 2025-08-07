@@ -8,9 +8,6 @@ type IdentifierProps = {
   /** The main string value to display (e.g., an identifier or long string) */
   value: string;
 
-  /** Tooltip text shown when hovering over the value */
-  title?: string;
-
   /** If true, shows a loading skeleton instead of the value */
   loading?: boolean;
 
@@ -72,7 +69,6 @@ const Action = styled('div')(() => ({
  */
 export const Identifier = ({
   value,
-  title,
   loading,
   href,
   copyable,
@@ -101,7 +97,7 @@ export const Identifier = ({
             </SvgIcon>
           </IconButton>
         )}
-        {copyable && <CopyButton value={value} title={title} size="small" />}
+        {copyable && <CopyButton value={value} size="small" />}
         {qrcode && (
           <IconButton size="small">
             <SvgIcon fontSize="small">

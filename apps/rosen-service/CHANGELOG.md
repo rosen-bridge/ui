@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-service
 
+## 4.1.0
+
+### Minor Changes
+
+- Replace @rosen-bridge/extended-typeorm with @rosen-ui/data-source package
+
 ## 4.0.1
 
 ### Patch Changes

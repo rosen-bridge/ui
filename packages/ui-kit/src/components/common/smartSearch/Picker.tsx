@@ -18,7 +18,8 @@ export type PickerProps = {
   open?: boolean;
   query?: string;
   value?: Input;
-  onSelect: (value: Selected['value']) => void;
+  onClose?: () => void;
+  onSelect?: (value: Selected['value']) => void;
 };
 
 export const Picker = ({
@@ -26,6 +27,7 @@ export const Picker = ({
   open,
   query,
   value,
+  onClose,
   onSelect,
 }: PickerProps) => {
   const [indexSelected, setIndexSelected] = useState(-1);
@@ -51,31 +53,48 @@ export const Picker = ({
 
   const handleClick = useCallback(
     (option: SelectOption) => {
-      if (!value) return;
+      switch (value?.type) {
+        case 'multiple': {
+          setIndexSelected(options.indexOf(option));
 
-      if (value.type == 'multiple') {
-        setIndexSelected(options.indexOf(option));
+          if (items.has(option.value)) {
+            items.delete(option.value);
+          } else {
+            items.add(option.value);
+          }
 
-        if (items.has(option.value)) {
-          items.delete(option.value);
-        } else {
-          items.add(option.value);
+          const next = new Set(items);
+
+          setItems(next);
+
+          break;
         }
+        case 'select': {
+          setIndexSelected(-1);
 
-        const next = new Set(items);
+          onSelect?.(option.value);
 
-        setItems(next);
-
-        onSelect(Array.from(next.values()));
-      }
-
-      if (value.type == 'select') {
-        setIndexSelected(-1);
-        onSelect(option.value);
+          break;
+        }
       }
     },
     [items, options, value, onSelect],
   );
+
+  const handleFocusOut = useCallback(() => {
+    switch (value?.type) {
+      case 'multiple': {
+        setItems(new Set());
+
+        const next = Array.from(items.values());
+
+        onSelect?.(next);
+
+        break;
+      }
+    }
+    onClose?.();
+  }, [items, value, onClose, onSelect]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -106,11 +125,11 @@ export const Picker = ({
           break;
         }
         case 'Enter:number': {
-          query && !isNaN(Number(query)) && onSelect(Number(query));
+          query && !isNaN(Number(query)) && onSelect?.(Number(query));
           break;
         }
         case 'Enter:text': {
-          query && onSelect(query);
+          query && onSelect?.(query);
           break;
         }
       }
@@ -141,31 +160,39 @@ export const Picker = ({
   if (!value) return null;
 
   return (
-    <Popup anchorEl={anchorEl} open={open}>
+    <Popup anchorEl={anchorEl} open={open} onFocusOut={handleFocusOut}>
       {(value.type == 'multiple' || value.type == 'select') && (
         <List>
-          {options.map((option, index) => (
-            <ListItem
-              key={`${option.value}`}
-              disablePadding
-              secondaryAction={option.post}
-            >
-              <ListItemButton
-                selected={indexSelected == index}
-                onClick={() => handleClick(option)}
-              >
-                {value.type == 'multiple' && (
-                  <ListItemIcon>
+          {options.map((option, index) => {
+            const post = (() => {
+              switch (value.type) {
+                case 'multiple':
+                  return (
                     <SvgIcon>{items.has(option.value) && <Check />}</SvgIcon>
-                  </ListItemIcon>
-                )}
-                {value.type == 'select' && option.pre && (
-                  <ListItemIcon>{option.pre}</ListItemIcon>
-                )}
-                <ListItemText primary={option.label} />
-              </ListItemButton>
-            </ListItem>
-          ))}
+                  );
+                case 'select':
+                  return option.post;
+              }
+            })();
+
+            return (
+              <ListItem
+                key={`${option.value}`}
+                disablePadding
+                secondaryAction={post}
+              >
+                <ListItemButton
+                  selected={indexSelected == index}
+                  onClick={() => handleClick(option)}
+                >
+                  {value.type == 'select' && option.pre && (
+                    <ListItemIcon>{option.pre}</ListItemIcon>
+                  )}
+                  <ListItemText primary={option.label} />
+                </ListItemButton>
+              </ListItem>
+            );
+          })}
         </List>
       )}
     </Popup>

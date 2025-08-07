@@ -23,13 +23,25 @@ export class RunesNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: NetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public getMaxTransfer = (
     params: NetworkMaxTransferParams,
   ): Promise<RosenAmountValue> => {
     return this.config.getMaxTransfer(params);
   };
 
+  public getMinTransfer: NetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address;
+  };
+
+  public validateAddress = (walletAddress: string): Promise<boolean> => {
+    return this.config.validateAddress(this.name, walletAddress);
   };
 }

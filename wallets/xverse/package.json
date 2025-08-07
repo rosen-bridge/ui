@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/xverse-wallet",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
@@ -16,10 +16,10 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-network/bitcoin": "^2.1.4",
+    "@rosen-network/bitcoin": "^2.2.0",
     "@rosen-ui/constants": "^0.4.0",
     "@rosen-ui/types": "^0.3.6",
-    "@rosen-ui/wallet-api": "^3.0.0",
+    "@rosen-ui/wallet-api": "^3.0.1",
     "sats-connect": "^3.5.0"
   }
 }

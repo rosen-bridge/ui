@@ -8,8 +8,8 @@ import {
 } from 'react';
 
 import {
-  AngleDown,
-  AngleUp,
+  CaretDown,
+  Check,
   ListUiAlt,
   SortAmountDown,
   SortAmountUp,
@@ -22,9 +22,13 @@ import {
   Divider,
   Grid,
   IconButton,
+  ListItemText,
+  ListSubheader,
   Menu,
   MenuItem,
+  Stack,
   SvgIcon,
+  Typography,
 } from '../base';
 
 const Root = styled(Card)(({ theme }) => ({
@@ -123,11 +127,32 @@ export const SortField = ({
                 color: 'inherit',
                 width: '100%',
                 justifyContent: 'space-between',
+                padding: '2px 8px',
               }}
-              endIcon={<SvgIcon>{open ? <AngleUp /> : <AngleDown />}</SvgIcon>}
+              endIcon={
+                <SvgIcon
+                  style={{
+                    rotate: open ? '180deg' : '0deg',
+                  }}
+                >
+                  <CaretDown />
+                </SvgIcon>
+              }
               onClick={handleMenuOpen}
             >
-              {current?.label}
+              <Stack alignItems="start">
+                <Typography
+                  hidden={dense}
+                  variant="caption"
+                  color="text.secondary"
+                  lineHeight="12px"
+                >
+                  Sort by
+                </Typography>
+                <Typography variant="body1" lineHeight="24px">
+                  {current?.label}
+                </Typography>
+              </Stack>
             </Button>
           )}
           <Menu
@@ -141,13 +166,33 @@ export const SortField = ({
             }}
             onClose={handleMenuClose}
           >
+            <ListSubheader
+              style={{
+                display: dense ? 'flex' : 'none',
+                backgroundColor: 'transparent',
+              }}
+            >
+              <Typography variant="caption" color="text.secondary">
+                Sort by
+              </Typography>
+            </ListSubheader>
             {options.map((item) => (
               <MenuItem
                 key={item.value}
                 value={item.value}
                 onClick={() => handleSortChange(item)}
               >
-                {item.label}
+                <ListItemText> {item.label}</ListItemText>
+                <SvgIcon
+                  style={{
+                    display:
+                      dense && current && item.value === current.value
+                        ? 'flex'
+                        : 'none',
+                  }}
+                >
+                  <Check />
+                </SvgIcon>
               </MenuItem>
             ))}
           </Menu>

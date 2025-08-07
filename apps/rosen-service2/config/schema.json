@@ -90,31 +90,28 @@
     "children": {
       "host": {
         "type": "string",
-        "default": "localhost"
+        "default": "localhost",
+        "validations": [
+          {
+            "required": true,
+            "error": "host for the \"postgres\" database address must be specified"
+          }
+        ]
       },
       "port": {
-        "type": "number",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres port is required"
-          }
-        ]
+        "type": "number"
       },
-      "user": {
+      "username": {
         "type": "string",
-        "validations": [
-          {
-            "required": true,
-            "error": "postgres username is required"
-          }
-        ]
+        "default": "postgres"
       },
       "password": {
-        "type": "string"
+        "type": "string",
+        "default": ""
       },
       "name": {
         "type": "string",
+        "default": "rosen_service",
         "validations": [
           {
             "required": true,

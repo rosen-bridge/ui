@@ -48,8 +48,9 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace wallets/wallet-connect
 fi
 
-if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
-  npm run build --workspace packages/public-status-logic
+if [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+  npm run build --workspace packages/public-status
+  npm run build --workspace packages/data-source
 fi
 
 # Check if Discord webhook URL is set

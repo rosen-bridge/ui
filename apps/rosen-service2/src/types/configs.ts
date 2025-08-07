@@ -16,9 +16,9 @@ export interface Logs {
 }
 
 export interface Db {
-  host?: string;
-  port: number;
-  user: string;
+  host: string;
+  port?: number;
+  username?: string;
   password?: string;
   name: string;
 }

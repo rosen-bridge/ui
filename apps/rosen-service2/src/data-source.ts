@@ -40,7 +40,7 @@ export default new DataSource({
   ],
   host: configs.db.host,
   port: configs.db.port,
-  username: configs.db.user,
+  username: configs.db.username,
   password: configs.db.password,
   database: configs.db.name,
   synchronize: false,

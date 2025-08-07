@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist"
+  },
+  "include": ["src"],
+  "references": [
+    {
+      "path": "../asset-calculator/tsconfig.build.json"
+    },
+    {
+      "path": "../public-status/tsconfig.build.json"
+    }
+  ]
+}

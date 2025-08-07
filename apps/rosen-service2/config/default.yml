@@ -1,17 +1,8 @@
-logs:
-  - type: file
-    maxSize: 20m
-    maxFiles: 14d
-    path: ./logs/
-    level: info
-  - type: console
-    level: debug
 db:
   host: localhost
-  port: 5432
-  name: rs2
-  user: postgres
-  # password:
+  username: postgres
+  password: ''
+  name: rosen_service
 chains:
   ergo:
     initialHeight: 1578000
@@ -20,14 +11,14 @@ chains:
       rescanDelaySeconds: 0
       blockRetrieveGap: 1
   cardano:
-    active: true
+    active: false
   bitcoin:
-    active: true
+    active: false
   doge:
-    active: true
+    active: false
   ethereum:
-    active: true
+    active: false
   binance:
-    active: true
+    active: false
   runes:
     active: false

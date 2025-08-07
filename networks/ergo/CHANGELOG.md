@@ -1,5 +1,18 @@
 # @rosen-network/ergo
 
+## 2.3.0
+
+### Minor Changes
+
+- Add a public method named `validateAddress` to the Network class to validate network addresses
+
+### Patch Changes
+
+- Resolve the `Not enough assets` error on the Ergo network
+- Update dependencies
+  - @rosen-network/base@0.3.0
+  - @rosen-bridge/icons@2.3.0
+
 ## 2.2.1
 
 ### Patch Changes

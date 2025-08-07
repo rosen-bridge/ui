@@ -24,6 +24,10 @@ export class ErgoNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: ErgoNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateUnsignedTx: ErgoNetworkConfig['generateUnsignedTx'] = (
     ...args
   ) => {
@@ -34,7 +38,15 @@ export class ErgoNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: ErgoNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address;
+  };
+
+  public validateAddress = (walletAddress: string): Promise<boolean> => {
+    return this.config.validateAddress(this.name, walletAddress);
   };
 }

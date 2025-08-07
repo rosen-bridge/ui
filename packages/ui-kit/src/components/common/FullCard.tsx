@@ -6,9 +6,8 @@ import {
   CardActionsProps,
   CardContent,
   CardContentProps,
-  CardHeader,
-  CardHeaderProps,
 } from '../base';
+import { CardHeader, CardHeaderProps } from './CardHeader';
 
 export interface FullCardProps {
   headerProps?: CardHeaderProps;

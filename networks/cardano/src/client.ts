@@ -32,6 +32,10 @@ export class CardanoNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: CardanoNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public decodeWasmValue: CardanoNetworkConfig['decodeWasmValue'] = (
     ...args
   ) => {
@@ -53,6 +57,10 @@ export class CardanoNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: CardanoNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public setTxWitnessSet: CardanoNetworkConfig['setTxWitnessSet'] = (
     ...args
   ) => {
@@ -61,5 +69,9 @@ export class CardanoNetwork implements Network {
 
   public toSafeAddress = (address: string): string => {
     return address;
+  };
+
+  public validateAddress = (walletAddress: string): Promise<boolean> => {
+    return this.config.validateAddress(this.name, walletAddress);
   };
 }

@@ -4,16 +4,13 @@ import { defineConfig } from 'vitest/config';
 export default defineConfig({
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./app', import.meta.url)),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
   test: {
     name: 'rosen-app',
-    include: ['**/*.test.?(c|m)[jt]s?(x)'],
-    server: {
-      deps: {
-        inline: true,
-      },
-    },
+    globals: true,
+    include: ['**/*.(test|spec).?(c|m)[jt]s?(x)'],
+    setupFiles: ['./unitTests/setup/setupTests.ts'],
   },
 });

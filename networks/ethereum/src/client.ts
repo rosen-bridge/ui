@@ -24,6 +24,10 @@ export class EthereumNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: EthereumNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateLockData: EthereumNetworkConfig['generateLockData'] = (
     ...args
   ) => {
@@ -42,7 +46,17 @@ export class EthereumNetwork implements Network {
     return this.config.getMaxTransfer(...args);
   };
 
+  public getMinTransfer: EthereumNetworkConfig['getMinTransfer'] = (
+    ...args
+  ) => {
+    return this.config.getMinTransfer(...args);
+  };
+
   public toSafeAddress = (address: string): string => {
     return address.toLowerCase();
+  };
+
+  public validateAddress = (walletAddress: string): Promise<boolean> => {
+    return this.config.validateAddress(this.name, walletAddress);
   };
 }

@@ -100,6 +100,9 @@ export { default as HeartbeatRaw } from './icons/heartbeat.svg?raw';
 export { ReactComponent as History } from './icons/history.svg';
 export { default as HistoryRaw } from './icons/history.svg?raw';
 
+export { ReactComponent as HourGlass } from './icons/hour-glass.svg';
+export { default as HourGlassRaw } from './icons/hour-glass.svg?raw';
+
 export { ReactComponent as InfoCircle } from './icons/info-circle.svg';
 export { default as InfoCircleRaw } from './icons/info-circle.svg?raw';
 

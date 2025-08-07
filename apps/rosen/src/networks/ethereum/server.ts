@@ -1,0 +1,44 @@
+'use server';
+
+import { validateAddress as validateAddressCore } from '@rosen-network/base';
+import {
+  calculateFee as calculateFeeCore,
+  getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
+} from '@rosen-network/ethereum';
+import {
+  generateLockData as generateLockDataCore,
+  generateTxParameters as generateTxParametersCore,
+} from '@rosen-network/evm';
+
+import { wrap } from '@/safeServerAction';
+import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
+export const calculateFee = wrap(calculateFeeCore, {
+  cache: 10 * 60 * 1000,
+  traceKey: 'ethereum:calculateFee',
+});
+
+export const generateLockData = wrap(generateLockDataCore, {
+  traceKey: 'ethereum:generateLockData',
+});
+
+export const generateTxParameters = wrap(
+  generateTxParametersCore(getTokenMap),
+  {
+    traceKey: 'ethereum:generateTxParameters',
+  },
+);
+
+export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
+  traceKey: 'ethereum:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'ethereum:getMinTransfer',
+});
+
+export const validateAddress = wrap(validateAddressCore, {
+  cache: Infinity,
+  traceKey: 'ethereum:validateAddress',
+});
