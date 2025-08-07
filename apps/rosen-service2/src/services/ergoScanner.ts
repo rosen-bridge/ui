@@ -61,13 +61,13 @@ export class ErgoScannerService extends AbstractService {
    */
   protected readonly registerExtractors = async () => {
     try {
-      const rosenServiceExtractor = new ErgoObservationExtractor(
+      const ergoObservationExtractor = new ErgoObservationExtractor(
         this.dbService.dataSource,
         await getTokenMap(),
         configs.contracts.ergo.addresses.lock,
         this.logger,
       );
-      await this.scanner.registerExtractor(rosenServiceExtractor);
+      await this.scanner.registerExtractor(ergoObservationExtractor);
       const ergoEventTriggerExtractor = new EventTriggerExtractor(
         'ergo-extractor',
         this.dbService.dataSource,
@@ -236,7 +236,7 @@ export class ErgoScannerService extends AbstractService {
 
     const scheduled = setTimeout(
       () => this.fetchData(),
-      configs.chains.ergo.node.rescanDelaySeconds * 1000,
+      configs.chains.ergo.node.scanInterval * 1000,
     );
 
     if (this.shouldStop) {
@@ -260,12 +260,14 @@ export class ErgoScannerService extends AbstractService {
    * @memberof ErgoScannerService
    */
   protected stop = async (): Promise<boolean> => {
+    if (this.latestTimeOut) {
+      await new Promise<void>((resolve) => {
+        this.continueStop = resolve;
+        this.shouldStop = true;
+      });
+    }
     clearTimeout(this.latestTimeOut);
-    await new Promise<void>((resolve) => {
-      this.continueStop = resolve;
-      this.shouldStop = true;
-    });
-
+    this.shouldStop = false;
     this.setStatus(ServiceStatus.dormant);
     return true;
   };

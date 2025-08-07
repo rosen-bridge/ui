@@ -8,7 +8,7 @@ chains:
     initialHeight: 1578000
     node:
       url: https://node.ergopool.io/
-      rescanDelaySeconds: 0
+      scanInterval: 0
       blockRetrieveGap: 1
   cardano:
     active: false

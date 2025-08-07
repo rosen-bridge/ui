@@ -64,6 +64,6 @@ export interface Ergo {
 
 export interface Node {
   blockRetrieveGap: number;
-  rescanDelaySeconds: number;
+  scanInterval: number;
   url: string;
 }
