@@ -9,6 +9,7 @@ import {
   Divider,
   Label,
   Tooltip,
+  Truncate,
   Typography,
 } from '@rosen-bridge/ui-kit';
 
@@ -93,27 +94,12 @@ export const TransactionInfo = () => {
             loading={isPending}
           />
         </Label>
+
         {!!error && (
-          <Alert
-            severity="error"
-            sx={{
-              maxWidth: '100%',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-            }}
-          >
-            <Tooltip title={(error as any)?.message}>
-              <Typography
-                sx={{
-                  maxWidth: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {(error as any)?.message}
-              </Typography>
-            </Tooltip>
+          <Alert severity="error">
+            <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
+              {(error as any)?.message}
+            </Truncate>
           </Alert>
         )}
       </Card2Body>
