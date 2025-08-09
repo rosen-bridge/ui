@@ -1,15 +1,24 @@
 'use client';
 
-import { Center, Stack } from '@rosen-bridge/ui-kit';
-import { UnderDevelop } from '@rosen-bridge/ui-kit';
+import { Fragment } from 'react';
+
+import { Columns, Stack } from '@rosen-bridge/ui-kit';
+
+import { Details } from '@/app/events/[details]/Details';
+import { Overview } from '@/app/events/[details]/Overview';
+import { SourceTx } from '@/app/events/[details]/SourceTx';
+import { StepperEvent } from '@/app/events/[details]/Stepper';
+import { Wids } from '@/app/events/[details]/Wids';
 
 const Page = () => {
   return (
-    <Center style={{ minHeight: 'calc(100vh - 224px)' }}>
-      <Stack spacing={4} alignItems="center">
-        <UnderDevelop />
-      </Stack>
-    </Center>
+    <Stack display="flex" gap={2} flexDirection="column">
+      <Overview />
+      <Details />
+      <StepperEvent />
+      <Wids />
+      <SourceTx />
+    </Stack>
   );
 };
 
