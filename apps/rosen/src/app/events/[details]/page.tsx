@@ -7,7 +7,7 @@ import { Columns, Stack } from '@rosen-bridge/ui-kit';
 import { Details } from '@/app/events/[details]/Details';
 import { Overview } from '@/app/events/[details]/Overview';
 import { SourceTx } from '@/app/events/[details]/SourceTx';
-import { StepperEvent } from '@/app/events/[details]/Stepper';
+import { StepperEvent } from '@/app/events/[details]/stepper/Stepper';
 import { Wids } from '@/app/events/[details]/Wids';
 
 const Page = () => {
