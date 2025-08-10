@@ -123,7 +123,7 @@ const mainSteps: stepItem[] = [
 ];
 
 const Stepper1 = () => {
-  const isMobile = useBreakpoint('tablet');
+  const isMobile = useBreakpoint('laptop-down');
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
@@ -284,7 +284,7 @@ const RenderDots = () => {
         x2="95.3525"
         y2="12"
         stroke="#737373"
-        stroke-dasharray="2 2"
+        strokeDasharray="2 2"
       />
       <line
         x1="0.764893"
@@ -292,7 +292,7 @@ const RenderDots = () => {
         x2="192"
         y2="12.5"
         stroke="#737373"
-        stroke-dasharray="2 2"
+        strokeDasharray="2 2"
       />
       <line x1="0.5" y1="9" x2="0.5" y2="17" stroke="#737373" />
       <line x1="192.5" y1="9" x2="192.5" y2="17" stroke="#737373" />
