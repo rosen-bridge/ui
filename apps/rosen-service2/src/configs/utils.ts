@@ -1,5 +1,4 @@
 import { ConfigValidator } from '@rosen-bridge/config';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TransportOptions } from '@rosen-bridge/winston-logger';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import config from 'config';
@@ -18,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * @param configs - Configuration object with log settings.
  * @returns List of TransportOptions for logger setup.
  */
-export const getLogOptions = (logConfigs: Logs[]): TransportOptions[] => {
+export const getLogOptions = (logConfigs: Logs[] = []): TransportOptions[] => {
   const logOptions: TransportOptions[] = [];
   for (const log of logConfigs) {
     switch (log.type) {
@@ -61,7 +60,7 @@ export const validateConfigs = (): RosenService2Configs => {
     path.join(__dirname, '../../config/schema.json'),
     'utf-8',
   );
-  const schema = JsonBigInt.parse(rawSchemaData);
+  const schema = JSON.parse(rawSchemaData);
   const confValidator = new ConfigValidator(schema);
   const configs = config.util.toObject();
   confValidator.validateConfig(configs);

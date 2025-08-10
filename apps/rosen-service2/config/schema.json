@@ -99,7 +99,8 @@
         ]
       },
       "port": {
-        "type": "number"
+        "type": "number",
+        "default": 5432
       },
       "username": {
         "type": "string",
@@ -129,6 +130,7 @@
         "children": {
           "initialHeight": {
             "type": "number",
+            "default": 1,
             "description": "ergo initial height",
             "validations": [
               {
@@ -142,7 +144,7 @@
             "children": {
               "blockRetrieveGap": {
                 "type": "number",
-                "default": 1,
+                "default": 0,
                 "description": "ergo node blockRetrieveGap threshold in seconds",
                 "validations": [
                   {
@@ -153,6 +155,7 @@
               },
               "scanInterval": {
                 "type": "number",
+                "default": 60,
                 "description": "ergo node scanInterval threshold in seconds",
                 "validations": [
                   {
@@ -163,6 +166,7 @@
               },
               "url": {
                 "type": "string",
+                "default": "https://node.ergopool.io/",
                 "description": "ergo node url",
                 "validations": [
                   {

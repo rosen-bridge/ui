@@ -229,8 +229,8 @@ export class ErgoScannerService extends AbstractService {
     try {
       await this.scanner.update();
     } catch (err) {
-      this.logger.error(`ErgoScannerService fetchData failed: ${err}`);
-      if (err instanceof Error && err.stack) this.logger.error(err.stack);
+      this.logger.error(`ErgoScannerService scanner update failed: ${err}`);
+      if (err instanceof Error && err.stack) this.logger.debug(err.stack);
       return false;
     }
 
