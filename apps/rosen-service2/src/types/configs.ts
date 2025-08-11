@@ -24,6 +24,7 @@ export interface Db {
 }
 
 export interface Chains {
+  ergo: Ergo;
   cardano: Cardano;
   bitcoin: Bitcoin;
   doge: Doge;
@@ -54,4 +55,15 @@ export interface Bitcoin {
 
 export interface Cardano {
   active: boolean;
+}
+
+export interface Ergo {
+  initialHeight: number;
+  node: Node;
+}
+
+export interface Node {
+  blockRetrieveGap: number;
+  scanInterval: number;
+  url: string;
 }

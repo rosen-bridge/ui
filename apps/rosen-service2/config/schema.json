@@ -99,7 +99,8 @@
         ]
       },
       "port": {
-        "type": "number"
+        "type": "number",
+        "default": 5432
       },
       "username": {
         "type": "string",
@@ -124,6 +125,60 @@
   "chains": {
     "type": "object",
     "children": {
+      "ergo": {
+        "type": "object",
+        "children": {
+          "initialHeight": {
+            "type": "number",
+            "default": 1,
+            "description": "ergo initial height",
+            "validations": [
+              {
+                "required": true,
+                "error": "ergo initial height is required"
+              }
+            ]
+          },
+          "node": {
+            "type": "object",
+            "children": {
+              "blockRetrieveGap": {
+                "type": "number",
+                "default": 0,
+                "description": "ergo node blockRetrieveGap threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo node blockRetrieveGap is required (in seconds)"
+                  }
+                ]
+              },
+              "scanInterval": {
+                "type": "number",
+                "default": 60,
+                "description": "ergo node scanInterval threshold in seconds",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo node scanInterval is required (in seconds)"
+                  }
+                ]
+              },
+              "url": {
+                "type": "string",
+                "default": "https://node.ergopool.io/",
+                "description": "ergo node url",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "ergo node url is required"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
       "cardano": {
         "type": "object",
         "children": {
