@@ -1,5 +1,4 @@
 import { ConfigValidator } from '@rosen-bridge/config';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TransportOptions } from '@rosen-bridge/winston-logger';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import config from 'config';
@@ -7,7 +6,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { Logs, RosenService2BaseConfig } from '../types';
+import { Logs, RosenService2Configs } from '../types';
 import { ChainConfigsReader } from './ChainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -18,7 +17,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * @param configs - Configuration object with log settings.
  * @returns List of TransportOptions for logger setup.
  */
-export const getLogOptions = (logConfigs: Logs[]): TransportOptions[] => {
+export const getLogOptions = (logConfigs: Logs[] = []): TransportOptions[] => {
   const logOptions: TransportOptions[] = [];
   for (const log of logConfigs) {
     switch (log.type) {
@@ -54,24 +53,23 @@ export const getLogOptions = (logConfigs: Logs[]): TransportOptions[] => {
 /**
  * validates configs using the config schema
  *
- * @return RosenService2Config
+ * @return RosenService2Configs
  */
-export const validateConfigs = (): RosenService2BaseConfig => {
+export const validateConfigs = (): RosenService2Configs => {
   const rawSchemaData = fs.readFileSync(
     path.join(__dirname, '../../config/schema.json'),
     'utf-8',
   );
-  const schema = JsonBigInt.parse(rawSchemaData);
+  const schema = JSON.parse(rawSchemaData);
   const confValidator = new ConfigValidator(schema);
   const configs = config.util.toObject();
   confValidator.validateConfig(configs);
 
-  // TODO: Must remove after adding the Ergo config segment
-  configs.chains[NETWORKS.ergo.key] = {};
+  configs.contracts = {};
   for (const chain of NETWORKS_KEYS) {
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
       const chainConfigReader = new ChainConfigsReader(chain);
-      configs.chains[chain].contracts = chainConfigReader.data;
+      configs.contracts[chain] = chainConfigReader.data;
     }
   }
 
