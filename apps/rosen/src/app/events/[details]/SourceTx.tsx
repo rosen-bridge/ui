@@ -15,11 +15,12 @@ export const SourceTx = () => {
   };
   return (
     <DetailsCard title="Source tx metadata">
-      {/*TODO: fix background & remove sx */}
+      {/*TODO: fix background & remove sx Card2  */}
       <Box
         sx={{
           width: '100%',
           height: '100%',
+          overflow: 'hidden',
           backgroundColor: (theme) => theme.palette.primary.light,
           borderRadius: (theme) => theme.spacing(3),
           padding: (theme) => theme.spacing(1),

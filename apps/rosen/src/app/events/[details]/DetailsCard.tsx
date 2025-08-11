@@ -23,7 +23,8 @@ export const DetailsCard = ({ children, title }: DetailsProps) => {
           <Typography
             letterSpacing={0.15}
             lineHeight="24px"
-            variant="h2"
+            variant="h3"
+            fontSize="20px"
             color="text.secondary"
           >
             {title}

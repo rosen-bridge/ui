@@ -12,21 +12,26 @@ import {
   RelativeTime,
   Stack,
   Token,
+  useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
 export const Overview = () => {
+  const isMobile = useBreakpoint('tablet-down');
   return (
     <DetailsCard title="Overview">
-      <Label orientation="vertical" label="Event Id">
+      <Label
+        orientation={isMobile ? 'horizontal' : 'vertical'}
+        label="Event Id"
+      >
         {/*TODO: Fix Identifier responsive */}
         <div
-          style={{
-            flexGrow: 1,
-            width: '100%',
-            maxWidth: 'calc(100% - 100px)',
-          }}
+        // style={{
+        //   flexGrow: 1,
+        //   width: '100%',
+        //   maxWidth: 'calc(100% - 100px)',
+        // }}
         >
           <Identifier
             value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
@@ -36,26 +41,37 @@ export const Overview = () => {
       </Label>
       {/*Identifier*/}
       <GridContainer minWidth="250px" gap={1}>
-        <Label orientation="vertical" label="Chin">
-          <Connector
-            start={<Network name={'bitcoin'} />}
-            end={<Network name={'ethereum'} />}
-          />
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Chin">
+          <Stack alignItems="center">
+            <Connector
+              start={<Network name={'bitcoin'} />}
+              end={<Network name={'ethereum'} />}
+            />
+          </Stack>
         </Label>
-        <Label orientation="vertical" label="Date">
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Date">
           <RelativeTime timestamp={1754489360} />
         </Label>
         {/*Chip*/}
-        <Label orientation="vertical" label="Event Id">
+        <Label
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          label="Event Id"
+        >
           <Chip label="In Payment / Approved" color="info" />
         </Label>
-        <Label orientation="vertical" label="Token">
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Token">
           <Token name="PALM" />
         </Label>
-        <Label orientation="vertical" label="Amount">
+        <Label
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          label="Amount"
+        >
           <Amount2 value={2000000} orientation={'horizontal'} unit={'PALM'} />
         </Label>
-        <Label orientation="vertical" label="Fee Sum">
+        <Label
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          label="Fee Sum"
+        >
           <Amount2
             value={10052.268809}
             orientation={'horizontal'}
