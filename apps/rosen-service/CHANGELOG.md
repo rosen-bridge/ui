@@ -1,5 +1,11 @@
 # @rosen-bridge/rosen-service
 
+## 4.1.1
+
+### Patch Changes
+
+- Update dependency @rosen-ui/data-source@0.1.0
+
 ## 4.1.0
 
 ### Minor Changes

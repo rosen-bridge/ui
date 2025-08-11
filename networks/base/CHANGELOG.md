@@ -1,5 +1,12 @@
 # @rosen-network/base
 
+## 0.4.0
+
+### Minor Changes
+
+- Create a base function called `getMinTransferCreator`, and utilize it within each network's package to get min transfer amount
+- Create a base function called `calculateFeeCreator`, and utilize it within each network's package to calculate transaction fees
+
 ## 0.3.0
 
 ### Minor Changes
