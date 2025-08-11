@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/data-source",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "DataSource implementation to be used across ui apps",
   "repository": {
     "type": "git",
