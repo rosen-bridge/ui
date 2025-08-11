@@ -2,7 +2,7 @@
 
 import { FileCopyAlt } from '@rosen-bridge/icons';
 
-import { useSnackbar } from '../../hooks';
+import { useBreakpoint, useSnackbar } from '../../hooks';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { Snackbar, Alert, IconButton, SvgIcon } from '../base';
 
@@ -11,6 +11,7 @@ import { Snackbar, Alert, IconButton, SvgIcon } from '../base';
  * hides the snackbar depending on the context
  */
 export const AppSnackbar = () => {
+  const isMobile = useBreakpoint('tablet-down');
   const { state, closeSnackbar } = useSnackbar();
   const theme = useTheme();
 
@@ -33,8 +34,17 @@ export const AppSnackbar = () => {
         vertical: state.position.vertical,
         horizontal: state.position.horizontal,
       }}
+      sx={{
+        '@media (max-width: 768px)': {
+          position: 'fixed',
+          top: '6%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+        },
+      }}
     >
       <Alert
+        style={{ minWidth: isMobile ? '260px' : undefined }}
         variant={isLegacyTheme(theme) ? 'filled' : 'standard'}
         severity={state.severity!}
         action={
