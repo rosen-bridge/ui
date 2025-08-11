@@ -1,5 +1,11 @@
 # @rosen-ui/wallet-api
 
+## 3.0.2
+
+### Patch Changes
+
+- Update dependency @rosen-network/base@0.4.0
+
 ## 3.0.1
 
 ### Patch Changes

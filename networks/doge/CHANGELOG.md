@@ -1,5 +1,16 @@
 # @rosen-network/doge
 
+## 0.3.0
+
+### Minor Changes
+
+- Implement the `calculateFee` utility function to compute transaction fees
+- Implement the `getMinTransferCreator` utility function to get min transfer amount
+
+### Patch Changes
+
+- Update dependency @rosen-network/base@0.4.0
+
 ## 0.2.0
 
 ### Minor Changes
