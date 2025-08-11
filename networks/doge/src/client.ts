@@ -32,6 +32,10 @@ export class DogeNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: DogeNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateOpReturnData: DogeNetworkConfig['generateOpReturnData'] = (
     ...args
   ) => {
@@ -52,6 +56,10 @@ export class DogeNetwork implements Network {
 
   public getMaxTransfer: DogeNetworkConfig['getMaxTransfer'] = (...args) => {
     return this.config.getMaxTransfer(...args);
+  };
+
+  public getMinTransfer: DogeNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
   };
 
   public submitTransaction: DogeNetworkConfig['submitTransaction'] = (

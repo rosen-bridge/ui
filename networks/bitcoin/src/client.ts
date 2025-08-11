@@ -32,6 +32,10 @@ export class BitcoinNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: BitcoinNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateOpReturnData: BitcoinNetworkConfig['generateOpReturnData'] = (
     ...args
   ) => {
@@ -52,6 +56,10 @@ export class BitcoinNetwork implements Network {
 
   public getMaxTransfer: BitcoinNetworkConfig['getMaxTransfer'] = (...args) => {
     return this.config.getMaxTransfer(...args);
+  };
+
+  public getMinTransfer: BitcoinNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
   };
 
   public submitTransaction: BitcoinNetworkConfig['submitTransaction'] = (

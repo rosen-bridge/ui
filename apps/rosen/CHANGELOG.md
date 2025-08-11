@@ -1,5 +1,39 @@
 # @rosen-bridge/rosen-app
 
+## 4.5.0
+
+### Minor Changes
+
+- Add timestamp for `EventCard` in `Events` page
+- Update `TransactionInfo` error message with `Truncate` component
+- Add public-status api routes and database actions to rosen-app
+- Add See Details button for tablet and smaller screen sizes in Events page
+- Replaced all `Card` components with custom `Card2`
+
+### Patch Changes
+
+- Fixed the search functionality for status filtering on the `Events` page
+- Fix incorrect transaction URL generation in the `Tx IDs` section of the Sidebar component on the `Events` page
+- Remove Go home button in `Events Details` page
+- Fix stuck loading on bridge form when Target Address is provided but Target Network is missing
+- Fix height issue on `Events` page for `EmptyState` component
+- Remove the use of the getTokenNameAndId utility
+- Update dependencies
+  - @rosen-ui/data-source@0.1.0
+  - @rosen-bridge/ui-kit@2.3.0
+  - @rosen-network/base@0.4.0
+  - @rosen-network/ethereum@0.4.0
+  - @rosen-network/binance@0.4.0
+  - @rosen-network/bitcoin@2.3.0
+  - @rosen-network/cardano@2.4.0
+  - @rosen-network/runes@0.3.0
+  - @rosen-network/doge@0.3.0
+  - @rosen-network/ergo@2.4.0
+  - @rosen-ui/wallet-api@3.0.2
+  - @rosen-ui/metamask-wallet@2.1.2
+  - @rosen-ui/wallet-connect@0.2.2
+  - @rosen-ui/my-doge-wallet@1.1.2
+
 ## 4.4.0
 
 ### Minor Changes

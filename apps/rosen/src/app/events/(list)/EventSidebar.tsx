@@ -2,9 +2,10 @@ import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
   Amount2,
   Button,
-  Card,
-  CardContent,
-  CardHeader,
+  Card2,
+  Card2Body,
+  Card2Header,
+  Card2Title,
   Center,
   Columns,
   EnhancedDialog,
@@ -14,6 +15,7 @@ import {
   Label,
   Network,
   RelativeTime,
+  Stack,
   SvgIcon,
   Token,
   Typography,
@@ -21,17 +23,18 @@ import {
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
+  const isTablet = useBreakpoint('laptop-down');
   if (!value)
     return (
       <Center
         style={{
-          minHeight: 'calc(100vh - 295px)',
+          minHeight: 'calc(100vh - 304px)',
         }}
       >
         <Typography variant="body1" color="text.secondary">
@@ -76,7 +79,7 @@ const Content = ({ value }: EventSidebarProps) => {
             value={value.sourceTxId}
             href={
               value.sourceTxId
-                ? getAddressUrl(value.fromChain, value.sourceTxId)!
+                ? getTxURL(value.fromChain, value.sourceTxId)!
                 : undefined
             }
           />
@@ -87,7 +90,7 @@ const Content = ({ value }: EventSidebarProps) => {
             value={value.paymentTxId || ''}
             href={
               value.paymentTxId
-                ? getAddressUrl(value.toChain, value.paymentTxId)!
+                ? getTxURL(value.toChain, value.paymentTxId)!
                 : undefined
             }
           />
@@ -98,7 +101,7 @@ const Content = ({ value }: EventSidebarProps) => {
             value={value.spendTxId || ''}
             href={
               value.spendTxId
-                ? getAddressUrl(NETWORKS.ergo.key, value.spendTxId)!
+                ? getTxURL(NETWORKS.ergo.key, value.spendTxId)!
                 : undefined
             }
           />
@@ -144,6 +147,23 @@ const Content = ({ value }: EventSidebarProps) => {
       </Label>
       <Label label="Reports">{value.WIDsCount ?? 'N/C'}</Label>
       <Label label="Height">{value.height}</Label>
+      {isTablet && (
+        <Stack alignItems="end">
+          <Button
+            variant="text"
+            size="medium"
+            target="_blank"
+            href={`/events/${value.eventId}`}
+            endIcon={
+              <SvgIcon>
+                <AngleRight />
+              </SvgIcon>
+            }
+          >
+            SEE DETAILS
+          </Button>
+        </Stack>
+      )}
     </Columns>
   );
 };
@@ -167,39 +187,48 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
     offsetBottom: 16,
   });
   return (
-    <Card
+    <Card2
       ref={stickyRef}
+      variant="separated"
+      backgroundColor="background.paper"
       style={{
         width: '330px',
         marginLeft: '16px',
       }}
     >
-      <CardHeader
-        title="Event"
-        separator
-        regular
+      <Card2Header
         action={
           value && (
-            <Button
-              variant="text"
-              size="small"
-              target="_blank"
-              href={`/events/${value.eventId}`}
-              endIcon={
-                <SvgIcon>
-                  <AngleRight />
-                </SvgIcon>
-              }
+            <div
+              style={{
+                height: 0,
+                display: 'flex',
+                alignItems: 'center',
+              }}
             >
-              SEE DETAILS
-            </Button>
+              <Button
+                variant="text"
+                size="small"
+                target="_blank"
+                href={`/events/${value.eventId}`}
+                endIcon={
+                  <SvgIcon>
+                    <AngleRight />
+                  </SvgIcon>
+                }
+              >
+                SEE DETAILS
+              </Button>
+            </div>
           )
         }
-      />
-      <CardContent style={{ paddingTop: 0 }}>
+      >
+        <Card2Title>Event</Card2Title>
+      </Card2Header>
+      <Card2Body>
         <Content value={value} />
-      </CardContent>
-    </Card>
+      </Card2Body>
+    </Card2>
   );
 };
 

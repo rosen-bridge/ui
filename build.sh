@@ -48,11 +48,8 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace wallets/wallet-connect
 fi
 
-if [ "$APP" == "public-status" ] || [ "$APP" == "default" ]; then
-  npm run build --workspace packages/public-status-logic
-fi
-
-if [ "$APP" == "public-status" ] || [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+if [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+  npm run build --workspace packages/public-status
   npm run build --workspace packages/data-source
 fi
 

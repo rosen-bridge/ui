@@ -6,7 +6,6 @@ import {
   Grid,
   IconButton,
   SvgIcon,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {

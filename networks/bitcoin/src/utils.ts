@@ -1,4 +1,8 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
+import {
+  calculateFeeCreator,
+  getMinTransferCreator as getMinTransferCreatorBase,
+} from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Axios from 'axios';
@@ -176,3 +180,23 @@ export const isValidAddress = (addr: string) => {
     return false;
   }
 };
+
+export const getHeight = async (): Promise<number> => {
+  const response = await fetch(
+    `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
+  );
+
+  const height = await response.json();
+
+  return height;
+};
+
+export const calculateFee = calculateFeeCreator(
+  NETWORKS.bitcoin.key,
+  getHeight,
+);
+
+export const getMinTransferCreator = getMinTransferCreatorBase(
+  NETWORKS.bitcoin.key,
+  calculateFee,
+);

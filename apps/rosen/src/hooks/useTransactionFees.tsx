@@ -13,9 +13,7 @@ import { useSnackbar } from '@rosen-bridge/ui-kit';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
-import { calculateFee } from '@/actions';
-import { unwrap } from '@/safeServerAction';
-
+import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFormData } from './useTransactionFormData';
@@ -161,11 +159,11 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
     startTransition(async () => {
       try {
-        const parsedData = await unwrap(calculateFee)(
-          sourceValue,
+        const parsedData = await selectedSource.calculateFee(
           targetValue,
           tokenId,
           selectedSource.nextHeightInterval,
+          FEE_CONFIG_TOKEN_ID,
         );
 
         if (

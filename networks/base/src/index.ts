@@ -1,5 +1,8 @@
 import { Network as NetworkName, RosenAmountValue } from '@rosen-ui/types';
 
+import { calculateFeeCreator } from './calculateFeeCreator';
+import { getMinTransferCreator } from './getMinTransferCreator';
+
 export interface NetworkMaxTransferParams {
   balance: RosenAmountValue;
   isNative: boolean;
@@ -13,7 +16,9 @@ export interface NetworkMaxTransferParams {
 export interface NetworkConfig {
   nextHeightInterval: number;
   lockAddress: string;
+  calculateFee: ReturnType<typeof calculateFeeCreator>;
   getMaxTransfer(params: NetworkMaxTransferParams): Promise<RosenAmountValue>;
+  getMinTransfer: ReturnType<ReturnType<typeof getMinTransferCreator>>;
   validateAddress(chain: NetworkName, walletAddress: string): Promise<boolean>;
 }
 
@@ -28,11 +33,17 @@ export interface Network {
 
   nextHeightInterval: number;
 
+  calculateFee: ReturnType<typeof calculateFeeCreator>;
+
   getMaxTransfer(params: NetworkMaxTransferParams): Promise<RosenAmountValue>;
+
+  getMinTransfer: ReturnType<ReturnType<typeof getMinTransferCreator>>;
 
   toSafeAddress(address: string): string;
 
   validateAddress(walletAddress: string): Promise<boolean>;
 }
 
+export * from './calculateFeeCreator';
+export * from './getMinTransferCreator';
 export * from './validateAddress';

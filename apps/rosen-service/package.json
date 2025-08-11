@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-service",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "private": true,
   "license": "GPL-3.0",
   "author": "Rosen Team",
@@ -37,7 +37,7 @@
     "@rosen-bridge/winston-logger": "^1.0.3",
     "@rosen-ui/asset-calculator": "^2.1.7",
     "@rosen-ui/constants": "^0.4.0",
-    "@rosen-ui/data-source": "^0.0.1",
+    "@rosen-ui/data-source": "^0.1.0",
     "config": "^3.3.7",
     "ethers": "6.13.2"
   },

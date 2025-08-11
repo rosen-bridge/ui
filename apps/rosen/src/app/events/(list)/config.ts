@@ -114,7 +114,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     input: {
       type: 'select',
       options: [
-        { label: 'Completed', value: 'completed' },
+        { label: 'Successful', value: 'successful' },
         { label: 'Processing', value: 'processing' },
       ],
     },

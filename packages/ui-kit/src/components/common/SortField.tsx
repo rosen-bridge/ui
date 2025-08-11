@@ -8,8 +8,7 @@ import {
 } from 'react';
 
 import {
-  AngleDown,
-  AngleUp,
+  CaretDown,
   Check,
   ListUiAlt,
   SortAmountDown,
@@ -130,7 +129,15 @@ export const SortField = ({
                 justifyContent: 'space-between',
                 padding: '2px 8px',
               }}
-              endIcon={<SvgIcon>{open ? <AngleUp /> : <AngleDown />}</SvgIcon>}
+              endIcon={
+                <SvgIcon
+                  style={{
+                    rotate: open ? '180deg' : '0deg',
+                  }}
+                >
+                  <CaretDown />
+                </SvgIcon>
+              }
               onClick={handleMenuOpen}
             >
               <Stack alignItems="start">
@@ -159,7 +166,12 @@ export const SortField = ({
             }}
             onClose={handleMenuClose}
           >
-            <ListSubheader style={{ display: dense ? 'flex' : 'none' }}>
+            <ListSubheader
+              style={{
+                display: dense ? 'flex' : 'none',
+                backgroundColor: 'transparent',
+              }}
+            >
               <Typography variant="caption" color="text.secondary">
                 Sort by
               </Typography>

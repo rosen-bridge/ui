@@ -1,7 +1,11 @@
 'use server';
 
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
-import { getMaxTransferCreator as getMaxTransferCore } from '@rosen-network/binance';
+import {
+  calculateFee as calculateFeeCore,
+  getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
+} from '@rosen-network/binance';
 import {
   generateLockData as generateLockDataCore,
   generateTxParameters as generateTxParametersCore,
@@ -9,6 +13,11 @@ import {
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
+export const calculateFee = wrap(calculateFeeCore, {
+  cache: 10 * 60 * 1000,
+  traceKey: 'binance:calculateFee',
+});
 
 export const generateLockData = wrap(generateLockDataCore, {
   traceKey: 'binance:generateLockData',
@@ -23,6 +32,10 @@ export const generateTxParameters = wrap(
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'binance:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'binance:getMinTransfer',
 });
 
 export const validateAddress = wrap(validateAddressCore, {

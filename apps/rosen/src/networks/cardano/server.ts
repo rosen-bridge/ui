@@ -2,15 +2,22 @@
 
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
+  calculateFee as calculateFeeCore,
   decodeWasmValue as decodeWasmValueCore,
   generateLockAuxiliaryData as generateLockAuxiliaryDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
   getMaxTransferCreator as getMaxTransferCore,
+  getMinTransferCreator,
   setTxWitnessSet as setTxWitnessSetCore,
 } from '@rosen-network/cardano';
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
+
+export const calculateFee = wrap(calculateFeeCore, {
+  cache: 10 * 60 * 1000,
+  traceKey: 'cardano:calculateFee',
+});
 
 export const decodeWasmValue = wrap(decodeWasmValueCore, {
   cache: Infinity,
@@ -27,6 +34,10 @@ export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
 
 export const getMaxTransfer = wrap(getMaxTransferCore(getTokenMap), {
   traceKey: 'cardano:getMaxTransfer',
+});
+
+export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
+  traceKey: 'cardano:getMinTransfer',
 });
 
 export const setTxWitnessSet = wrap(setTxWitnessSetCore, {

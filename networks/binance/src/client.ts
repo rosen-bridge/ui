@@ -24,6 +24,10 @@ export class BinanceNetwork implements Network {
     this.lockAddress = config.lockAddress;
   }
 
+  public calculateFee: BinanceNetworkConfig['calculateFee'] = (...args) => {
+    return this.config.calculateFee(...args);
+  };
+
   public generateLockData: BinanceNetworkConfig['generateLockData'] = (
     ...args
   ) => {
@@ -38,6 +42,10 @@ export class BinanceNetwork implements Network {
 
   public getMaxTransfer: BinanceNetworkConfig['getMaxTransfer'] = (...args) => {
     return this.config.getMaxTransfer(...args);
+  };
+
+  public getMinTransfer: BinanceNetworkConfig['getMinTransfer'] = (...args) => {
+    return this.config.getMinTransfer(...args);
   };
 
   public toSafeAddress = (address: string): string => {

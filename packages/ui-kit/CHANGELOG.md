@@ -1,5 +1,21 @@
 # @rosen-bridge/ui-kit
 
+## 2.3.0
+
+### Minor Changes
+
+- Refactor `EmptyState` component to allow custom props and remove fixed height for better flexibility
+- Implement `Truncate` component
+- Implement `Card2`, `Card2Header`, `Card2Body`, and `Card2Title` components
+
+### Patch Changes
+
+- Fix missing close button in EnhancedDialogTitle component for tablet and mobile screen sizes
+- Fixed `SortField` label background color and dropdown icon on mobile dark mode to match Figma design
+- Fix background color of avatar in `Token` component
+- Fix icon alignment in page size button of `NewPagination` component on tablet and smaller screens
+- Fix background color of SortField label in dark mode
+
 ## 2.2.0
 
 ### Minor Changes
