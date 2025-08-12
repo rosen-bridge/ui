@@ -80,7 +80,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const getNetwork = useCallback((name: NetworkKey) => {
     return Object.values<Network>(networks).find(
       (wallet) => wallet.name == name,
-    )!;
+    );
   }, []);
 
   /**
@@ -90,7 +90,8 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const sources = useMemo(() => {
     return (tokenMap.getAllChains() as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => getNetwork(chain));
+      .map((chain) => getNetwork(chain))
+      .filter((chain) => !!chain);
   }, [tokenMap, getNetwork]);
 
   /**
@@ -100,7 +101,8 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
   const targets = useMemo(() => {
     return (tokenMap.getSupportedChains(sourceField.value) as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
-      .map((chain) => getNetwork(chain));
+      .map((chain) => getNetwork(chain))
+      .filter((chain) => !!chain);
   }, [sourceField.value, tokenMap, getNetwork]);
 
   /**
@@ -140,12 +142,15 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
           );
 
           if (isBlocked) continue;
+          const sourceNetwork = getNetwork(fromChain as NetworkKey);
 
-          sources.add(getNetwork(fromChain as NetworkKey));
+          sourceNetwork && sources.add(sourceNetwork);
 
           if (sourceField.value != fromChain) continue;
 
-          targets.add(getNetwork(toChain as NetworkKey));
+          const targetNetwork = getNetwork(toChain as NetworkKey);
+
+          targetNetwork && targets.add(targetNetwork);
 
           if (targetField.value != toChain) continue;
 
