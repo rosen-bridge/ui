@@ -1,3 +1,5 @@
+'use client';
+
 import { Chip } from '@rosen-bridge/ui-kit';
 
 const progressStatusMap = {
@@ -105,8 +107,8 @@ const progressStatusMap = {
 
 type ProgressStatusKey = keyof typeof progressStatusMap;
 
-export const ProgressStatus = (value: ProgressStatusKey) => {
-  const status = progressStatusMap[value];
+export const ProgressStatus = ({ state }: { state: ProgressStatusKey }) => {
+  const status = progressStatusMap[state];
   if (!status) return null;
 
   return <Chip label={status.label} color={status.color} icon={status.icon} />;

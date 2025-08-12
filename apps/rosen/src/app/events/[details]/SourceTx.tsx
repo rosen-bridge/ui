@@ -1,4 +1,6 @@
-import { Box } from '@rosen-bridge/ui-kit';
+'use client'
+
+import { Box, Card2, Card2Body } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
@@ -15,19 +17,9 @@ export const SourceTx = () => {
   };
   return (
     <DetailsCard title="Source tx metadata">
-      {/*TODO: fix background & remove sx Card2  */}
-      <Box
-        sx={{
-          width: '100%',
-          height: '100%',
-          overflow: 'hidden',
-          backgroundColor: (theme) => theme.palette.primary.light,
-          borderRadius: (theme) => theme.spacing(3),
-          padding: (theme) => theme.spacing(1),
-        }}
-      >
-        {JSON.stringify(data, null, 2)}
-      </Box>
+      <Card2 backgroundColor="primary.light">
+        <Card2Body>{JSON.stringify(data, null, 2)}</Card2Body>
+      </Card2>
     </DetailsCard>
   );
 };

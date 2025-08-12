@@ -1,4 +1,7 @@
-import { Check, HourGlass } from '@rosen-bridge/icons';
+'use client'
+
+import { Check, Hourglass } from '@rosen-bridge/icons';
+
 import { Stack, SvgIcon, Typography } from '@rosen-bridge/ui-kit';
 
 import { Item } from '@/app/events/[details]/stepper/types';
@@ -25,7 +28,7 @@ export const StepIcon = ({ state }: Item) => {
         </SvgIcon>
       ) : state === 'pending' ? (
         <SvgIcon>
-          <HourGlass fontSize="small" color="#fff" />
+          <Hourglass fontSize="small" color="#fff" />
         </SvgIcon>
       ) : state === 'idle' ? (
         <Typography fontWeight="bold" color="#fff">

@@ -1,3 +1,5 @@
+'use client'
+
 import { useMemo, useState } from 'react';
 
 // TODO : move to ui-kit

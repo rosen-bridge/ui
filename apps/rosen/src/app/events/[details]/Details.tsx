@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import {
@@ -17,20 +19,18 @@ export const Details = () => {
   return (
     <DetailsCard title="Details">
       <Stack flexDirection="column" gap={1}>
-        <Grid container columns={3}>
+        <Columns width="230px" columnCount={3} >
           {/*Date*/}
-          <Grid item mobile={3} tablet={1}>
-            <Label orientation="vertical" label="Date">
-              <RelativeTime timestamp={1754489360} />
-            </Label>
-          </Grid>
+          <Label orientation="vertical" label="Date">
+            <RelativeTime timestamp={1754489360} />
+          </Label>
+
           {/*Triggered by Z watchers*/}
-          <Grid item mobile={3} tablet={1}>
-            <Label orientation="vertical" label="Triggered by Z watchers">
-              <Typography>66</Typography>
-            </Label>
-          </Grid>
-        </Grid>
+          <Label orientation="vertical" label="Triggered by Z watchers">
+            <Typography>66</Typography>
+          </Label>
+        </Columns>
+        {/*TODO: convert to Columns*/}
         <Grid container columns={3} spacing={3}>
           <Grid item mobile={3} tablet={3} laptop={1} desktop={1}>
             <Label label="Fees"></Label>

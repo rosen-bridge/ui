@@ -1,8 +1,9 @@
+'use client'
 import React from 'react';
 
 import {
   Amount2,
-  Chip,
+  Chip, Columns,
   Connector,
   Grid,
   GridContainer,
@@ -12,10 +13,11 @@ import {
   RelativeTime,
   Stack,
   Token,
-  useBreakpoint,
+  useBreakpoint
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
+import { ProgressStatus } from '@/app/events/[details]/ProgressStatus';
 
 export const Overview = () => {
   const isMobile = useBreakpoint('tablet-down');
@@ -27,11 +29,10 @@ export const Overview = () => {
       >
         {/*TODO: Fix Identifier responsive */}
         <div
-        // style={{
-        //   flexGrow: 1,
-        //   width: '100%',
-        //   maxWidth: 'calc(100% - 100px)',
-        // }}
+        style={{
+          width: '100%',
+          maxWidth: '300px',
+        }}
         >
           <Identifier
             value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
@@ -40,7 +41,7 @@ export const Overview = () => {
         </div>
       </Label>
       {/*Identifier*/}
-      <GridContainer minWidth="250px" gap={1}>
+      <Columns columnCount={3} width='300px'>
         <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Chin">
           <Stack alignItems="center">
             <Connector
@@ -55,9 +56,9 @@ export const Overview = () => {
         {/*Chip*/}
         <Label
           orientation={isMobile ? 'horizontal' : 'vertical'}
-          label="Event Id"
+          label="Status"
         >
-          <Chip label="In Payment / Approved" color="info" />
+          <ProgressStatus state="inPaymentApproved" />
         </Label>
         <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Token">
           <Token name="PALM" />
@@ -78,7 +79,7 @@ export const Overview = () => {
             unit={'PALM'}
           />
         </Label>
-      </GridContainer>
+      </Columns>
 
       <div>
         <Label label="Address"></Label>
