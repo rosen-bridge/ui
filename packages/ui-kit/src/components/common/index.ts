@@ -12,6 +12,7 @@ export * from './AppBar';
 export * from './AppLogo';
 export * from './Connector';
 export * from './DataLayout';
+export * from './DisclosureButton';
 export * from './EnhancedDialog';
 export * from './EnhancedDialogActions';
 export * from './EnhancedDialogContent';
