@@ -19,7 +19,7 @@ export const Details = () => {
   return (
     <DetailsCard title="Details">
       <Stack flexDirection="column" gap={1}>
-        <Columns width="230px" columnCount={3} >
+        <Columns width="230px" count={3}>
           {/*Date*/}
           <Label orientation="vertical" label="Date">
             <RelativeTime timestamp={1754489360} />

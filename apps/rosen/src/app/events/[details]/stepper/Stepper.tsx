@@ -1,6 +1,6 @@
-'use client'
+'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 // TODO : move to ui-kit
 import {
@@ -10,11 +10,20 @@ import {
   Popper,
   StepContent,
 } from '@mui/material';
-import { Paper, Stack, Typography, useBreakpoint } from '@rosen-bridge/ui-kit';
+import {
+  Card2,
+  Card2Body,
+  Card2Header,
+  Paper,
+  Stack,
+  Typography,
+  useBreakpoint,
+} from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 import { Label } from '@/app/events/[details]/stepper/Label';
 import { StepIcon } from '@/app/events/[details]/stepper/StateIcon';
+import { SubStep } from '@/app/events/[details]/stepper/SubStep';
 import { Item, stepItem } from '@/app/events/[details]/stepper/types';
 
 const mainSteps: stepItem[] = [
@@ -32,13 +41,13 @@ const mainSteps: stepItem[] = [
       },
       {
         id: 'Tx Approscedveved',
-        state: 'pending',
+        state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
         id: 'Tx Approveqs2d3d',
-        state: 'idle',
+        state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
@@ -128,146 +137,90 @@ const Stepper1 = () => {
   const isMobile = useBreakpoint('laptop-down');
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
-  const handleStepClick = (
-    event: React.MouseEvent<HTMLElement>,
-    index: number,
-  ) => {
-    if (!isMobile) {
-      if (activeIndex === index) {
-        setOpen(false);
-        setActiveIndex(null);
-      } else {
-        setOpen(true);
-        setAnchorEl(event.currentTarget);
-        setActiveIndex(index);
-      }
-    } else {
-      setActiveStep(index);
-    }
-  };
+  useEffect(() => {
+    if (!mainSteps || mainSteps.length === 0) return;
 
-  const id = open ? 'popper-id' : undefined;
+    const firstNotDoneIndex = mainSteps.findIndex(
+      (step) =>
+        step.state !== 'done' ||
+        step.sub?.some((subItem) => subItem.state !== 'done'),
+    );
+
+    if (firstNotDoneIndex !== -1) {
+      if (isMobile) {
+        setActiveStep(firstNotDoneIndex);
+      } else {
+        setActiveIndex(firstNotDoneIndex);
+        setOpen(true);
+      }
+    }
+  }, [isMobile, mainSteps]);
 
   return (
-    <div>
-      <Typography variant="h5" sx={{ mb: 3 }}>
-        Event Progress
-      </Typography>
-      <Stepper
-        activeStep={!isMobile ? -1 : activeStep}
-        alternativeLabel={!isMobile}
-        orientation={isMobile ? 'vertical' : 'horizontal'}
-      >
-        {mainSteps.map((step, index) => (
-          <Step key={step.id}>
-            <Label
-              step={step}
-              icon={(props) => <StepIcon {...props} state={step.state} />}
-              onClick={(e) => handleStepClick(e, index)}
-            />
-            {!isMobile ? (
-              <Popper
-                id={id}
-                open={
-                  index === 0 || mainSteps.length - 1 === index
-                    ? false
-                    : open && activeIndex === index
-                }
-                anchorEl={anchorEl}
-                placement="bottom"
-              >
-                <Paper
-                  style={{
-                    background: 'none',
-                    boxShadow: 'none',
-                  }}
-                  elevation={3}
-                >
+    <Card2>
+      <Card2Body>
+        <Stepper
+          activeStep={!isMobile ? -1 : activeStep}
+          alternativeLabel={!isMobile}
+          orientation={isMobile ? 'vertical' : 'horizontal'}
+        >
+          {mainSteps.map((step, index) => (
+            <Step key={step.id}>
+              <Label
+                step={step}
+                icon={(props) => <StepIcon {...props} state={step.state} />}
+              />
+              {!isMobile ? (
+                index !== 0 &&
+                index !== mainSteps.length - 1 &&
+                activeIndex === index && (
                   <Stack
-                    flexDirection="column"
+                    direction="column"
                     alignItems="center"
                     justifyContent="center"
                     gap={1}
+                    style={{
+                      position: 'relative',
+                      top: '8px',
+                    }}
                   >
                     <RenderDots />
                     {step.sub && step.sub.length > 0 && (
                       <Stack
                         direction="column"
                         spacing={2}
-                        justifyContent="center"
                         alignItems="center"
-                        justifyItems="center"
+                        style={{
+                          position: 'absolute',
+                          top: '100%',
+                          left: 0,
+                          width: '100%',
+                        }}
                       >
-                        <Stepper
-                          orientation={'horizontal'}
-                          alternativeLabel
-                          activeStep={activeStep}
-                          connector={<StepConnector />}
-                        >
-                          {step.sub.map((sub) => (
-                            <Step
-                              style={{ width: '95px' }}
-                              key={sub.id}
-                              completed={sub.state === 'done'}
-                            >
-                              <Label
-                                step={step}
-                                icon={(props) => (
-                                  <StepIcon {...props} state={sub.state} />
-                                )}
-                              />
-                            </Step>
-                          ))}
-                        </Stepper>
+                        <SubStep step={step} activeStep={activeStep} />
                       </Stack>
                     )}
                   </Stack>
-                </Paper>
-              </Popper>
-            ) : (
-              <StepContent>
-                <div
-                  style={{
-                    borderStyle: 'solid',
-                    borderTopWidth: '0px',
-                    borderBottomWidth: '0px',
-                    borderRightWidth: '0px',
-                    borderLeftWidth: '1px',
-                    borderColor: '#bdbdbd',
-                    minHeight: '24px',
-                    marginLeft: '12px',
-                  }}
-                />
-                <Stepper
-                  orientation={'vertical'}
-                  activeStep={activeStep}
-                  connector={<StepConnector />}
-                >
-                  {step.sub &&
-                    step.sub.map((sub) => (
-                      <Step
-                        style={{ width: '95px' }}
-                        key={sub.id}
-                        completed={sub.state === 'done'}
-                      >
-                        <Label
-                          step={step}
-                          icon={(props) => (
-                            <StepIcon {...props} state={sub.state} />
-                          )}
-                        />
-                      </Step>
-                    ))}
-                </Stepper>
-              </StepContent>
-            )}
-          </Step>
-        ))}
-      </Stepper>
-    </div>
+                )
+              ) : (
+                <StepContent>
+                  <div
+                    style={{
+                      borderLeft: '1px solid #bdbdbd',
+                      minHeight: 24,
+                      marginLeft: 12,
+                    }}
+                  />
+                  <SubStep activeStep={activeStep} dance step={step} />
+                </StepContent>
+              )}
+            </Step>
+          ))}
+        </Stepper>
+      </Card2Body>
+    </Card2>
   );
 };
 

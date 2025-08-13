@@ -1,9 +1,11 @@
-'use client'
+'use client';
+
 import React from 'react';
 
 import {
   Amount2,
-  Chip, Columns,
+  Chip,
+  Columns,
   Connector,
   Grid,
   GridContainer,
@@ -13,7 +15,7 @@ import {
   RelativeTime,
   Stack,
   Token,
-  useBreakpoint
+  useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
@@ -29,10 +31,10 @@ export const Overview = () => {
       >
         {/*TODO: Fix Identifier responsive */}
         <div
-        style={{
-          width: '100%',
-          maxWidth: '300px',
-        }}
+          style={{
+            width: '100%',
+            maxWidth: '300px',
+          }}
         >
           <Identifier
             value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
@@ -41,7 +43,7 @@ export const Overview = () => {
         </div>
       </Label>
       {/*Identifier*/}
-      <Columns columnCount={3} width='300px'>
+      <Columns count={3} width="300px">
         <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Chin">
           <Stack alignItems="center">
             <Connector
