@@ -25,6 +25,12 @@ type ColumnsProps = {
    * Accepts any valid CSS length, e.g. `'240px'`.
    */
   width: string;
+
+  /**
+   * The count.
+   * To specify the desired column
+   */
+  count?: number;
 };
 
 /**
@@ -32,12 +38,19 @@ type ColumnsProps = {
  * It uses CSS columns to automatically split children into multiple columns,
  * with configurable column width, gap, and an optional dividing rule.
  */
-export const Columns = ({ children, gap, rule, width }: ColumnsProps) => {
+export const Columns = ({
+  children,
+  gap,
+  rule,
+  width,
+  count,
+}: ColumnsProps) => {
   return (
     <Box
       sx={{
         'columnWidth': width,
         'columnGap': gap,
+        'columnCount': count || 'auto',
         'columnRule': (theme) =>
           rule ? `1px dashed ${theme.palette.divider}` : '',
         '& > *': {
