@@ -17,9 +17,9 @@ import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
 export const Details = () => {
   return (
-    <DetailsCard title="Details">
+    <DetailsCard sync title="Details">
       <Stack flexDirection="column" gap={1}>
-        <Columns width="230px" count={3}>
+        <Columns width="230px" count={3} gap="8px">
           {/*Date*/}
           <Label orientation="vertical" label="Date">
             <RelativeTime timestamp={1754489360} />

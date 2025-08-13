@@ -22,11 +22,11 @@ import {
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 import { Label } from '@/app/events/[details]/stepper/Label';
-import { StepIcon } from '@/app/events/[details]/stepper/StateIcon';
+import { StepIcon } from '@/app/events/[details]/stepper/StepIcon';
 import { SubStep } from '@/app/events/[details]/stepper/SubStep';
-import { Item, stepItem } from '@/app/events/[details]/stepper/types';
+import { stepItem } from '@/app/events/[details]/stepper/types';
 
-const mainSteps: stepItem[] = [
+const amainSteps: stepItem[] = [
   {
     id: 'Tx Created1ascaca',
     state: 'done',
@@ -133,97 +133,6 @@ const mainSteps: stepItem[] = [
   },
 ];
 
-const Stepper1 = () => {
-  const isMobile = useBreakpoint('laptop-down');
-  const [activeStep, setActiveStep] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
-  useEffect(() => {
-    if (!mainSteps || mainSteps.length === 0) return;
-
-    const firstNotDoneIndex = mainSteps.findIndex(
-      (step) =>
-        step.state !== 'done' ||
-        step.sub?.some((subItem) => subItem.state !== 'done'),
-    );
-
-    if (firstNotDoneIndex !== -1) {
-      if (isMobile) {
-        setActiveStep(firstNotDoneIndex);
-      } else {
-        setActiveIndex(firstNotDoneIndex);
-        setOpen(true);
-      }
-    }
-  }, [isMobile, mainSteps]);
-
-  return (
-    <Card2>
-      <Card2Body>
-        <Stepper
-          activeStep={!isMobile ? -1 : activeStep}
-          alternativeLabel={!isMobile}
-          orientation={isMobile ? 'vertical' : 'horizontal'}
-        >
-          {mainSteps.map((step, index) => (
-            <Step key={step.id}>
-              <Label
-                step={step}
-                icon={(props) => <StepIcon {...props} state={step.state} />}
-              />
-              {!isMobile ? (
-                index !== 0 &&
-                index !== mainSteps.length - 1 &&
-                activeIndex === index && (
-                  <Stack
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    gap={1}
-                    style={{
-                      position: 'relative',
-                      top: '8px',
-                    }}
-                  >
-                    <RenderDots />
-                    {step.sub && step.sub.length > 0 && (
-                      <Stack
-                        direction="column"
-                        spacing={2}
-                        alignItems="center"
-                        style={{
-                          position: 'absolute',
-                          top: '100%',
-                          left: 0,
-                          width: '100%',
-                        }}
-                      >
-                        <SubStep step={step} activeStep={activeStep} />
-                      </Stack>
-                    )}
-                  </Stack>
-                )
-              ) : (
-                <StepContent>
-                  <div
-                    style={{
-                      borderLeft: '1px solid #bdbdbd',
-                      minHeight: 24,
-                      marginLeft: 12,
-                    }}
-                  />
-                  <SubStep activeStep={activeStep} dance step={step} />
-                </StepContent>
-              )}
-            </Step>
-          ))}
-        </Stepper>
-      </Card2Body>
-    </Card2>
-  );
-};
-
 const RenderDots = () => {
   return (
     <svg
@@ -254,11 +163,94 @@ const RenderDots = () => {
     </svg>
   );
 };
+
+const Stepper1 = ({ data }: { data: stepItem[] }) => {
+  const isMobile = useBreakpoint('laptop-down');
+  const [activeStep, setActiveStep] = useState(0);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const findFirstNotDoneIndex = (steps: stepItem[]) =>
+    steps.findIndex(
+      (step) =>
+        step.state !== 'done' || step.sub?.some((sub) => sub.state !== 'done'),
+    );
+
+  const shouldShowSubStep = (index: number) =>
+    index !== 0 && index !== data.length - 1 && activeIndex === index;
+
+  useEffect(() => {
+    if (!data || data.length === 0) return;
+
+    const firstIndex = findFirstNotDoneIndex(data);
+    if (firstIndex !== -1) {
+      if (isMobile) setActiveStep(firstIndex);
+      else setActiveIndex(firstIndex);
+    }
+  }, [isMobile, data]);
+
+  return (
+    <Stepper
+      activeStep={!isMobile ? -1 : activeStep}
+      alternativeLabel={!isMobile}
+      orientation={isMobile ? 'vertical' : 'horizontal'}
+    >
+      {data.map((step, index) => (
+        <Step key={step.id}>
+          <Label
+            step={step}
+            icon={(props) => <StepIcon {...props} state={step.state} />}
+          />
+
+          {isMobile ? (
+            <StepContent>
+              <div
+                style={{
+                  borderLeft: '1px solid #bdbdbd',
+                  minHeight: 24,
+                  marginLeft: 12,
+                }}
+              />
+              <SubStep activeStep={activeStep} dance step={step} />
+            </StepContent>
+          ) : (
+            shouldShowSubStep(index) && (
+              <Stack
+                direction="column"
+                alignItems="center"
+                justifyContent="center"
+                gap={1}
+                style={{ position: 'relative', top: '8px' }}
+              >
+                <RenderDots />
+                {step.sub && step.sub?.length > 0 && (
+                  <Stack
+                    direction="column"
+                    spacing={2}
+                    alignItems="center"
+                    style={{
+                      position: 'absolute',
+                      top: '100%',
+                      left: 0,
+                      width: '100%',
+                    }}
+                  >
+                    <SubStep step={step} activeStep={activeStep} />
+                  </Stack>
+                )}
+              </Stack>
+            )
+          )}
+        </Step>
+      ))}
+    </Stepper>
+  );
+};
+
 export const StepperEvent = () => {
   return (
-    <DetailsCard title="Event Progres">
+    <DetailsCard sync title="Event Progres">
       <div style={{ minHeight: '250px' }}>
-        <Stepper1 />
+        <Stepper1 data={amainSteps} />
       </div>
     </DetailsCard>
   );

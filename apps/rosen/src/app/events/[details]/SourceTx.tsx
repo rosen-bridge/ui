@@ -1,6 +1,12 @@
-'use client'
+'use client';
 
-import { Box, Card2, Card2Body } from '@rosen-bridge/ui-kit';
+import {
+  Box,
+  Card2,
+  Card2Body,
+  Card2Header,
+  Stack,
+} from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
@@ -16,9 +22,14 @@ export const SourceTx = () => {
     ],
   };
   return (
-    <DetailsCard title="Source tx metadata">
+    <DetailsCard sync title="Source tx metadata">
       <Card2 backgroundColor="primary.light">
-        <Card2Body>{JSON.stringify(data, null, 2)}</Card2Body>
+        <Card2Body>
+          {/*TODO: Check pt of card2*/}
+          <div style={{ paddingTop: '16px', overflow: 'hidden' }}>
+            {JSON.stringify(data, null, 3)}
+          </div>
+        </Card2Body>
       </Card2>
     </DetailsCard>
   );

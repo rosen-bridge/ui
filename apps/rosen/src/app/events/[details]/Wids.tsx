@@ -1,8 +1,15 @@
 'use client';
 
-import { Eye } from '@rosen-bridge/icons';
+import { useCallback, useState } from 'react';
+
+import { CheckCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
+  EnhancedDialog,
+  EnhancedDialogContent,
+  EnhancedDialogTitle,
+  IconButton,
   Identifier,
+  Label,
   Stack,
   SvgIcon,
   Table,
@@ -11,94 +18,178 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
   useBreakpoint,
-  useMediaQuery,
+  useCurrentBreakpoint,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
+type rowTypes = {
+  id: number;
+  wid: string;
+  commitment: string;
+  rewarded?: 'Yes' | 'No';
+};
+//TODO: data types
+const rows: rowTypes[] = [
+  {
+    id: 1,
+    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment:
+      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    rewarded: 'Yes',
+  },
+  {
+    id: 2,
+    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd39.3030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment:
+      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    rewarded: 'Yes',
+  },
+  {
+    id: 3,
+    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment:
+      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    rewarded: 'Yes',
+  },
+  {
+    id: 4,
+    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment:
+      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    rewarded: 'No',
+  },
+  {
+    id: 5,
+    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment:
+      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    rewarded: 'Yes',
+  },
+];
+
 export const Wids = () => {
-  const isMobile = useBreakpoint('tablet-to-mobile');
-  const rows = [
-    {
-      id: '1',
-      address:
-        '20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab3b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab',
+  const [open, setOpen] = useState(false);
+  const [data, setData] = useState<rowTypes>();
+  const currentSize = useCurrentBreakpoint();
+
+  const isMobile = useBreakpoint('tablet-down');
+
+  const size = useCallback(
+    (custom?: string) => {
+      switch (currentSize) {
+        case 'mobile':
+          return '150px';
+        case 'tablet':
+          return '150px';
+        case 'laptop':
+          return '250px';
+        case 'desktop':
+          return custom ?? '350px';
+        default:
+          return '150px';
+      }
     },
-    {
-      id: '2',
-      address:
-        '20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab3b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab',
-    },
-    {
-      id: '3',
-      address:
-        '20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab3b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab',
-    },
-  ];
+    [currentSize],
+  );
+
+  const handelOpen = (value: rowTypes) => {
+    setOpen(true);
+    setData(value);
+  };
 
   return (
     <DetailsCard title="Wids">
       <TableContainer>
-        <Table aria-label="simple table">
+        <Table>
           <TableHead
-            //TODO :remove sx
             sx={(theme) => ({
               '& .MuiTableCell-root': {
                 backgroundColor: theme.palette.secondary.light,
                 padding: theme.spacing(0.5, 2),
               },
-              '& .MuiTableCell-root:first-of-type': {
-                borderTopLeftRadius: theme.spacing(3),
-                borderBottomLeftRadius: theme.spacing(3),
-              },
-              '& .MuiTableCell-root:last-of-type': {
-                borderTopRightRadius: theme.spacing(3),
-                borderBottomRightRadius: theme.spacing(3),
-              },
             })}
           >
-            <TableRow>
+            <TableRow style={{ display: !isMobile ? 'table-row' : 'none' }}>
               <TableCell>#</TableCell>
               <TableCell>WID</TableCell>
-              <TableCell>{isMobile ? '' : 'Commitment'}</TableCell>
+              <TableCell>COMMITMENT</TableCell>
+              <TableCell>REWARDED</TableCell>
             </TableRow>
           </TableHead>
 
-          <TableBody
-            sx={(theme) => ({
-              // TODO
-              '& .MuiTableCell-root': {
-                padding: theme.spacing(1, 2),
-              },
-            })}
-          >
-            {rows.map((row, index) => (
+          <TableBody>
+            {rows.map((row) => (
               <TableRow key={row.id}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>
-                  <Stack flexDirection="row" gap={2} alignItems="center">
-                    {/*TODO*/}
-                    <div
-                      style={{ maxWidth: '320px', width: 'calc(90% - 16px)' }}
-                    >
-                      <Identifier value={row.address} />
+                {!isMobile && (
+                  <TableCell align="center" style={{ maxWidth: '10px' }}>
+                    {row.id}
+                  </TableCell>
+                )}
+                <TableCell align="center" style={{ maxWidth: size('400px') }}>
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    gap={1}
+                  >
+                    {isMobile && <Typography>{row.id}</Typography>}
+                    {isMobile && (
+                      <SvgIcon
+                        sx={{
+                          color:
+                            row.rewarded === 'Yes'
+                              ? 'warning.main'
+                              : 'text.secondary',
+                        }}
+                      >
+                        <CheckCircle />
+                      </SvgIcon>
+                    )}
+                    <div style={{ maxWidth: size('450px'), width: '100%' }}>
+                      <Identifier value={row.wid} />
                     </div>
                   </Stack>
                 </TableCell>
 
-                {!isMobile ? (
-                  <TableCell>
-                    {/*TODO*/}
-                    <div style={{ maxWidth: 'calc(80% - 20px)' }}>
-                      <Identifier href={row.address} value={row.address} />
+                {isMobile && (
+                  <TableCell align="right" style={{ maxWidth: '40px' }}>
+                    <IconButton onClick={() => handelOpen(row)}>
+                      <SvgIcon>
+                        <Eye />
+                      </SvgIcon>
+                    </IconButton>
+                  </TableCell>
+                )}
+
+                {!isMobile && (
+                  <TableCell style={{ maxWidth: size() }}>
+                    <div style={{ maxWidth: size() }}>
+                      <Identifier
+                        value={row.commitment}
+                        href={row.commitment}
+                      />
                     </div>
                   </TableCell>
-                ) : (
-                  <TableCell>
-                    <SvgIcon>
-                      <Eye />
-                    </SvgIcon>
+                )}
+                {/*Reward Icon*/}
+                {!isMobile && (
+                  <TableCell align="center" style={{ maxWidth: '80px' }}>
+                    <Stack alignItems="center" flexDirection="row" gap={1}>
+                      <SvgIcon
+                        sx={{
+                          color:
+                            row.rewarded === 'Yes'
+                              ? 'warning.main'
+                              : 'text.secondary',
+                        }}
+                      >
+                        <CheckCircle />
+                      </SvgIcon>
+                      {row.rewarded}
+                    </Stack>
                   </TableCell>
                 )}
               </TableRow>
@@ -106,6 +197,59 @@ export const Wids = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {isMobile && (
+        <Drawer open={open} onClose={() => setOpen(false)} value={data} />
+      )}
     </DetailsCard>
+  );
+};
+
+type DrawerProps = {
+  value?: rowTypes;
+  onClose: () => void;
+  open: boolean;
+};
+
+const Drawer = ({ value, onClose, open = false }: DrawerProps) => {
+  return (
+    <EnhancedDialog open={open} stickOn="tablet" onClose={onClose}>
+      <EnhancedDialogTitle icon={<Exchange />} onClose={onClose}>
+        Event Details
+      </EnhancedDialogTitle>
+      <EnhancedDialogContent>
+        <Stack>
+          <Label label="Wid" orientation="horizontal">
+            {value && <Identifier value={value?.wid} copyable />}
+          </Label>
+          <Label label="Commitment" orientation="horizontal">
+            {value && (
+              <Identifier
+                value={value?.commitment}
+                href={value?.commitment}
+                copyable
+              />
+            )}
+          </Label>
+          <Label label="Rewarded" orientation="horizontal">
+            {value && (
+              <Stack flexDirection="row" gap={1}>
+                <Typography>{value.rewarded}</Typography>
+                <SvgIcon
+                  sx={{
+                    color:
+                      value.rewarded === 'Yes'
+                        ? 'warning.main'
+                        : 'text.secondary',
+                  }}
+                >
+                  <CheckCircle />
+                </SvgIcon>
+              </Stack>
+            )}
+          </Label>
+        </Stack>
+      </EnhancedDialogContent>
+    </EnhancedDialog>
   );
 };

@@ -24,7 +24,7 @@ import { ProgressStatus } from '@/app/events/[details]/ProgressStatus';
 export const Overview = () => {
   const isMobile = useBreakpoint('tablet-down');
   return (
-    <DetailsCard title="Overview">
+    <DetailsCard sync title="Overview">
       <Label
         orientation={isMobile ? 'horizontal' : 'vertical'}
         label="Event Id"
@@ -33,7 +33,7 @@ export const Overview = () => {
         <div
           style={{
             width: '100%',
-            maxWidth: '300px',
+            maxWidth: isMobile ? '300px' : '400px',
           }}
         >
           <Identifier
@@ -43,44 +43,61 @@ export const Overview = () => {
         </div>
       </Label>
       {/*Identifier*/}
-      <Columns count={3} width="300px">
-        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Chin">
-          <Stack alignItems="center">
-            <Connector
-              start={<Network name={'bitcoin'} />}
-              end={<Network name={'ethereum'} />}
-            />
-          </Stack>
-        </Label>
-        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Date">
-          <RelativeTime timestamp={1754489360} />
-        </Label>
+      <Columns count={3} width="320px" gap="8px">
+        <div>
+          <Label
+            orientation={isMobile ? 'horizontal' : 'vertical'}
+            label="Chin"
+          >
+            <Stack alignItems="center">
+              <Connector
+                start={<Network name={'bitcoin'} />}
+                end={<Network name={'ethereum'} />}
+              />
+            </Stack>
+          </Label>
+          <Label
+            orientation={isMobile ? 'horizontal' : 'vertical'}
+            label="Date"
+          >
+            <RelativeTime timestamp={1754489360} />
+          </Label>
+        </div>
+
         {/*Chip*/}
-        <Label
-          orientation={isMobile ? 'horizontal' : 'vertical'}
-          label="Status"
-        >
-          <ProgressStatus state="inPaymentApproved" />
-        </Label>
-        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Token">
-          <Token name="PALM" />
-        </Label>
-        <Label
-          orientation={isMobile ? 'horizontal' : 'vertical'}
-          label="Amount"
-        >
-          <Amount2 value={2000000} orientation={'horizontal'} unit={'PALM'} />
-        </Label>
-        <Label
-          orientation={isMobile ? 'horizontal' : 'vertical'}
-          label="Fee Sum"
-        >
-          <Amount2
-            value={10052.268809}
-            orientation={'horizontal'}
-            unit={'PALM'}
-          />
-        </Label>
+        <div>
+          <Label
+            orientation={isMobile ? 'horizontal' : 'vertical'}
+            label="Status"
+          >
+            <ProgressStatus state="inPaymentApproved" />
+          </Label>
+          <Label
+            orientation={isMobile ? 'horizontal' : 'vertical'}
+            label="Token"
+          >
+            <Token name="PALM" />
+          </Label>
+        </div>
+
+        <div>
+          <Label
+            orientation={isMobile ? 'horizontal' : 'vertical'}
+            label="Amount"
+          >
+            <Amount2 value={2000000} orientation={'horizontal'} unit={'PALM'} />
+          </Label>
+          <Label
+            orientation={isMobile ? 'horizontal' : 'vertical'}
+            label="Fee Sum"
+          >
+            <Amount2
+              value={10052.268809}
+              orientation={'horizontal'}
+              unit={'PALM'}
+            />
+          </Label>
+        </div>
       </Columns>
 
       <div>
