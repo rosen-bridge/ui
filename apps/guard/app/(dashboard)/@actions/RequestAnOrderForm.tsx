@@ -7,11 +7,15 @@ import {
   ApiKeyModalWarning,
   FullCard,
   Grid,
+  Card2,
   MenuItem,
   SubmitButton,
   TextField,
   Typography,
   useApiKey,
+  Card2Header,
+  Card2Title,
+  Card2Body,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -101,48 +105,57 @@ export const RequestAnOrderForm = () => {
   );
 
   return (
-    <FullCard title="Request An Order" backgroundColor="transparent">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {renderAlert()}
+    <Card2 backgroundColor="transparent">
+      <Card2Header>
+        <Card2Title>
+          <Typography variant="h5" fontWeight="bold">
+            Request An Order
+          </Typography>
+        </Card2Title>
+      </Card2Header>
+      <Card2Body>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {renderAlert()}
 
-        <TextField label="Id" {...register('id')} sx={{ mb: 2 }} />
-        <TextField
-          select
-          label="Chain"
-          {...register('chain')}
-          sx={{ mb: 2 }}
-          fullWidth
-        >
-          {NETWORKS_KEYS.map((key) => (
-            <MenuItem key={key} value={key}>
-              {NETWORKS[key].label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          label="Order"
-          multiline
-          rows={5}
-          {...register('orderJson')}
-          sx={{ mb: 2 }}
-        />
-
-        {error?.response?.status === 403 && (
-          <Grid
-            container
-            alignItems="center"
-            sx={(theme) => ({ color: theme.palette.warning.main })}
+          <TextField label="Id" {...register('id')} sx={{ mb: 2 }} />
+          <TextField
+            select
+            label="Chain"
+            {...register('chain')}
+            sx={{ mb: 2 }}
+            fullWidth
           >
-            <Typography>The Api key is not correct</Typography>
-          </Grid>
-        )}
+            {NETWORKS_KEYS.map((key) => (
+              <MenuItem key={key} value={key}>
+                {NETWORKS[key].label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label="Order"
+            multiline
+            rows={5}
+            {...register('orderJson')}
+            sx={{ mb: 2 }}
+          />
 
-        <ApiKeyModalWarning />
+          {error?.response?.status === 403 && (
+            <Grid
+              container
+              alignItems="center"
+              sx={(theme) => ({ color: theme.palette.warning.main })}
+            >
+              <Typography>The Api key is not correct</Typography>
+            </Grid>
+          )}
 
-        <SubmitButton loading={isOrderPending} disabled={!apiKey}>
-          Send
-        </SubmitButton>
-      </form>
-    </FullCard>
+          <ApiKeyModalWarning />
+
+          <SubmitButton loading={isOrderPending} disabled={!apiKey}>
+            Send
+          </SubmitButton>
+        </form>
+      </Card2Body>
+    </Card2>
   );
 };

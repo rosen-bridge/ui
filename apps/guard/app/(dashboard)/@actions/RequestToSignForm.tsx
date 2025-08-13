@@ -5,8 +5,11 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
+  Card2,
+  Card2Body,
+  Card2Header,
+  Card2Title,
   Checkbox,
-  FullCard,
   Grid,
   MenuItem,
   SubmitButton,
@@ -27,6 +30,7 @@ interface Form {
   requiredSign: number;
   overwrite?: boolean;
 }
+
 /**
  * render a form for signing a tx
  */
@@ -112,59 +116,68 @@ export const RequestToSignForm = () => {
   );
 
   return (
-    <FullCard title="Request To Sign" backgroundColor="transparent">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {renderAlert()}
+    <Card2 backgroundColor="background.paper">
+      <Card2Header>
+        <Card2Title>
+          <Typography variant="h5" fontWeight="bold">
+            Request To Sign
+          </Typography>
+        </Card2Title>
+      </Card2Header>
+      <Card2Body>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {renderAlert()}
 
-        <TextField
-          select
-          label="Chain"
-          {...register('chain')}
-          sx={{ mb: 2 }}
-          fullWidth
-        >
-          {NETWORKS_KEYS.map((key) => (
-            <MenuItem key={key} value={key}>
-              {NETWORKS[key].label}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          label="Transaction"
-          multiline
-          rows={5}
-          {...register('txJson')}
-          sx={{ mb: 2 }}
-        />
-        <TextField
-          label="Required Signs"
-          {...register('requiredSign')}
-          sx={{ mb: 2 }}
-        />
-
-        {error?.response?.status === 409 && (
-          <Grid container alignItems="center">
-            <Checkbox {...register('overwrite')} />
-            <Typography>Overwrite the already sent transaction</Typography>
-          </Grid>
-        )}
-
-        {error?.response?.status === 403 && (
-          <Grid
-            container
-            alignItems="center"
-            sx={(theme) => ({ color: theme.palette.warning.main })}
+          <TextField
+            select
+            label="Chain"
+            {...register('chain')}
+            sx={{ mb: 2 }}
+            fullWidth
           >
-            <Typography>The Api key is not correct</Typography>
-          </Grid>
-        )}
+            {NETWORKS_KEYS.map((key) => (
+              <MenuItem key={key} value={key}>
+                {NETWORKS[key].label}
+              </MenuItem>
+            ))}
+          </TextField>
+          <TextField
+            label="Transaction"
+            multiline
+            rows={5}
+            {...register('txJson')}
+            sx={{ mb: 2 }}
+          />
+          <TextField
+            label="Required Signs"
+            {...register('requiredSign')}
+            sx={{ mb: 2 }}
+          />
 
-        <ApiKeyModalWarning />
+          {error?.response?.status === 409 && (
+            <Grid container alignItems="center">
+              <Checkbox {...register('overwrite')} />
+              <Typography>Overwrite the already sent transaction</Typography>
+            </Grid>
+          )}
 
-        <SubmitButton loading={isSignPending} disabled={!apiKey}>
-          Send
-        </SubmitButton>
-      </form>
-    </FullCard>
+          {error?.response?.status === 403 && (
+            <Grid
+              container
+              alignItems="center"
+              sx={(theme) => ({ color: theme.palette.warning.main })}
+            >
+              <Typography>The Api key is not correct</Typography>
+            </Grid>
+          )}
+
+          <ApiKeyModalWarning />
+
+          <SubmitButton loading={isSignPending} disabled={!apiKey}>
+            Send
+          </SubmitButton>
+        </form>
+      </Card2Body>
+    </Card2>
   );
 };

@@ -4,7 +4,6 @@ import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Copy, QrcodeScan } from '@rosen-bridge/icons';
 import {
   Box,
-  Card,
   CircularProgress,
   Grid,
   IconButton,
@@ -15,6 +14,7 @@ import {
   SuccessfulCopySnackbar,
   QrCodeModal,
   Amount,
+  Card2,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -29,7 +29,7 @@ interface WidgetCardProps {
  *
  * @param widgetColor
  */
-const WalletWidgetBase = styled(Card)<WidgetCardProps>(
+const WalletWidgetBase = styled(Card2)<WidgetCardProps>(
   ({ theme, ...props }) => ({
     'padding': theme.spacing(2),
     'backgroundColor': theme.palette[props.widgetColor].main,
