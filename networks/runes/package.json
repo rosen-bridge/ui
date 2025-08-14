@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/runes",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -15,11 +15,11 @@
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^2.3.0",
+    "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/tokens": "^3.1.1",
-    "@rosen-network/base": "^0.4.0",
-    "@rosen-ui/constants": "^0.4.0",
-    "@rosen-ui/types": "^0.3.6"
+    "@rosen-network/base": "^0.4.1",
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-ui/types": "^0.3.7"
   },
   "devDependencies": {
     "tsx": "^4.19.2",

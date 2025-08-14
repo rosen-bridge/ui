@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/base",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -20,6 +20,6 @@
     "@rosen-bridge/address-codec": "^0.6.3",
     "@rosen-bridge/minimum-fee": "^2.2.3",
     "@rosen-bridge/tokens": "^3.1.1",
-    "@rosen-ui/types": "^0.3.6"
+    "@rosen-ui/types": "^0.3.7"
   }
 }

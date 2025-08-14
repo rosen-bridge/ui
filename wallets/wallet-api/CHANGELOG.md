@@ -1,5 +1,14 @@
 # @rosen-ui/wallet-api
 
+## 3.0.3
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/types@0.3.7
+  - @rosen-network/base@0.4.1
+
 ## 3.0.2
 
 ### Patch Changes

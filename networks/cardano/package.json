@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/cardano",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -16,13 +16,13 @@
   "dependencies": {
     "@emurgo/cardano-serialization-lib-nodejs": "^13.2.1",
     "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
-    "@rosen-bridge/icons": "^2.3.0",
+    "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-clients/cardano-koios": "^2.1.1",
-    "@rosen-network/base": "^0.4.0",
-    "@rosen-ui/constants": "^0.4.0",
-    "@rosen-ui/types": "^0.3.6",
-    "@rosen-ui/utils": "^0.6.0"
+    "@rosen-network/base": "^0.4.1",
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-ui/types": "^0.3.7",
+    "@rosen-ui/utils": "^0.6.1"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

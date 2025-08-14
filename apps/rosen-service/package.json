@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-service",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "private": true,
   "license": "MIT",
   "author": "Rosen Team",
@@ -35,9 +35,9 @@
     "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-bridge/watcher-data-extractor": "^12.1.3",
     "@rosen-bridge/winston-logger": "^1.0.3",
-    "@rosen-ui/asset-calculator": "^2.1.7",
-    "@rosen-ui/constants": "^0.4.0",
-    "@rosen-ui/data-source": "^0.1.0",
+    "@rosen-ui/asset-calculator": "^2.1.8",
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-ui/data-source": "^0.1.1",
     "config": "^3.3.7",
     "ethers": "6.13.2"
   },

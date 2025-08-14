@@ -1,5 +1,15 @@
 # @rosen-bridge/rosen-service
 
+## 4.1.2
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/asset-calculator@2.1.8
+  - @rosen-ui/data-source@0.1.1
+  - @rosen-ui/constants@0.4.1
+
 ## 4.1.1
 
 ### Patch Changes

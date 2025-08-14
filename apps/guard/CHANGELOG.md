@@ -1,5 +1,24 @@
 # @rosen-bridge/guard-app
 
+## 2.1.0
+
+### Minor Changes
+
+- Add loading skeleton for the Status component
+- Add new `NetworkCard` component for Networks section in dashboard page
+- Add loading skeleton for the `NetworkCard` component
+
+### Patch Changes
+
+- Replaced all `Card` components with custom `Card2`
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-bridge/ui-kit@2.4.0
+  - @rosen-bridge/icons@2.3.1
+  - @rosen-ui/swr-helpers@0.2.2
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/utils@0.6.1
+
 ## 2.0.0
 
 ### Major Changes

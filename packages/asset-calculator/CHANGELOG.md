@@ -1,5 +1,14 @@
 # @rosen-ui/asset-calculator
 
+## 2.1.8
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/types@0.3.7
+
 ## 2.1.7
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/public-status",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Core logic package of public status",
   "repository": {
     "type": "git",

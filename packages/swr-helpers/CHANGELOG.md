@@ -1,5 +1,11 @@
 # @rosen-ui/swr-helpers
 
+## 0.2.2
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+
 ## 0.2.1
 
 ### Patch Changes
