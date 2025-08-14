@@ -92,9 +92,14 @@ export const SortField = ({
   const handleSortChange = useCallback(
     (option: SortOption) => {
       handleMenuClose();
-      onChange?.({ key: option.value });
+
+      const next = value || { order: defaultOrder };
+
+      next.key = option.value;
+
+      onChange?.({ ...next });
     },
-    [handleMenuClose, onChange],
+    [defaultOrder, value, handleMenuClose, onChange],
   );
 
   useEffect(() => {

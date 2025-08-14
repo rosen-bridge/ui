@@ -1,5 +1,14 @@
 # @rosen-ui/utils
 
+## 0.6.1
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/types@0.3.7
+
 ## 0.6.0
 
 ### Minor Changes

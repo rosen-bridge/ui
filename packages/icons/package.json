@@ -2,7 +2,7 @@
   "name": "@rosen-bridge/icons",
   "description": "A react icon set wrapping Unicons, used in Rosen apps",
   "private": "true",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "type": "module",
   "types": "./dist/index.d.ts",
   "files": [
@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/rosen-bridge/ui.git"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "author": "Rosen Team",
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",

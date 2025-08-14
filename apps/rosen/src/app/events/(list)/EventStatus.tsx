@@ -11,7 +11,7 @@ export const EventStatus = ({ value }: EventStatusProps) => {
     case 'fraud':
       return null;
     case 'processing':
-      return <Chip label={value} color="info" icon="HourGlass" />;
+      return <Chip label={value} color="info" icon="Hourglass" />;
     case 'successful':
       return <Chip label={value} color="success" icon="CheckCircle" />;
   }

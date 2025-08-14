@@ -1,7 +1,8 @@
 {
   "name": "@rosen-network/ethereum",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "private": true,
+  "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,11 +14,11 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/icons": "^2.3.0",
+    "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/tokens": "^3.1.1",
-    "@rosen-network/base": "^0.4.0",
-    "@rosen-network/evm": "^0.3.1",
-    "@rosen-ui/constants": "^0.4.0"
+    "@rosen-network/base": "^0.4.1",
+    "@rosen-network/evm": "^0.3.3",
+    "@rosen-ui/constants": "^0.4.1"
   },
   "devDependencies": {
     "typescript": "^5.0.0"

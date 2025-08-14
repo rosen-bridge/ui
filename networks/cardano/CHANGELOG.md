@@ -1,5 +1,17 @@
 # @rosen-network/cardano
 
+## 2.4.1
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-bridge/icons@2.3.1
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/types@0.3.7
+  - @rosen-ui/utils@0.6.1
+  - @rosen-network/base@0.4.1
+
 ## 2.4.0
 
 ### Minor Changes

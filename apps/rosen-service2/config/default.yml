@@ -1,9 +1,16 @@
 db:
   host: localhost
+  port: 5432
   username: postgres
   password: ''
   name: rosen_service
 chains:
+  ergo:
+    initialHeight: 1
+    node:
+      blockRetrieveGap: 0
+      scanInterval: 60
+      url: https://node.ergopool.io/
   cardano:
     active: false
   bitcoin:
