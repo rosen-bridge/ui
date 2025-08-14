@@ -2,6 +2,7 @@
   "name": "@rosen-bridge/guard-app",
   "version": "2.0.0",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "next lint --fix && npm run prettify",

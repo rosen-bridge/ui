@@ -2,7 +2,7 @@
   "name": "@rosen-bridge/rosen-service",
   "version": "4.1.1",
   "private": true,
-  "license": "GPL-3.0",
+  "license": "MIT",
   "author": "Rosen Team",
   "type": "module",
   "main": "dist/main.js",

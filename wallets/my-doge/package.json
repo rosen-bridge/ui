@@ -2,6 +2,7 @@
   "name": "@rosen-ui/my-doge-wallet",
   "version": "1.1.2",
   "private": true,
+  "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

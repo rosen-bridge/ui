@@ -2,6 +2,7 @@
   "name": "@rosen-ui/utils",
   "version": "0.6.0",
   "private": true,
+  "license": "MIT",
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

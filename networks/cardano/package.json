@@ -2,6 +2,7 @@
   "name": "@rosen-network/cardano",
   "version": "2.4.0",
   "private": true,
+  "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

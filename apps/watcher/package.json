@@ -2,6 +2,7 @@
   "name": "@rosen-bridge/watcher-app",
   "version": "3.4.1",
   "private": true,
+  "license": "MIT",
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "lint": "next lint --fix && npm run prettify",

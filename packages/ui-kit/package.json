@@ -16,7 +16,7 @@
     "type": "git",
     "url": "git+https://github.com/rosen-bridge/ui.git"
   },
-  "license": "GPL-3.0",
+  "license": "MIT",
   "author": "Rosen Team",
   "scripts": {
     "prettify": "prettier --write . --ignore-path ../../.gitignore",

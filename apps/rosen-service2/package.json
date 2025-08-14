@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "repository": "",
-  "license": "GPL-3.0",
+  "license": "MIT",
   "author": "Rosen Team",
   "type": "module",
   "main": "./src/index.ts",
