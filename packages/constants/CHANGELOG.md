@@ -1,5 +1,11 @@
 # @rosen-ui/constants
 
+## 0.4.1
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+
 ## 0.4.0
 
 ### Minor Changes

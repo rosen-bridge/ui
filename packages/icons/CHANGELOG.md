@@ -1,5 +1,12 @@
 # @rosen-bridge/icons
 
+## 2.3.1
+
+### Patch Changes
+
+- Rename Hourglass icon to match original source name
+- Set the `license` field in package.json to `MIT`
+
 ## 2.3.0
 
 ### Minor Changes

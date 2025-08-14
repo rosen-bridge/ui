@@ -1,5 +1,16 @@
 # @rosen-ui/okx-wallet
 
+## 2.1.1
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/wallet-api@3.0.3
+  - @rosen-network/bitcoin@2.3.1
+  - @rosen-ui/types@0.3.7
+
 ## 2.1.0
 
 ### Minor Changes

@@ -1,5 +1,12 @@
 # @rosen-ui/types
 
+## 0.3.7
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependency @rosen-ui/constants@0.4.1
+
 ## 0.3.6
 
 ### Patch Changes

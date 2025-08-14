@@ -1,5 +1,12 @@
 # @rosen-network/base
 
+## 0.4.1
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependency @rosen-ui/types@0.3.7
+
 ## 0.4.0
 
 ### Minor Changes

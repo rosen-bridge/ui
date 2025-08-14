@@ -1,7 +1,8 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.3.6",
+  "version": "0.3.7",
   "private": true,
+  "license": "MIT",
   "description": "This is a private package utilized within Rosen UI apps",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,7 +18,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-ui/constants": "^0.4.0"
+    "@rosen-ui/constants": "^0.4.1"
   },
   "peerDependencies": {
     "react": "^18.2.0"

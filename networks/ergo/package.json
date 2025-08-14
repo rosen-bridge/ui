@@ -1,7 +1,8 @@
 {
   "name": "@rosen-network/ergo",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "private": true,
+  "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,12 +15,12 @@
   },
   "dependencies": {
     "@rosen-bridge/ergo-box-selection": "^1.1.2",
-    "@rosen-bridge/icons": "^2.3.0",
+    "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-clients/ergo-explorer": "^1.1.5",
-    "@rosen-network/base": "^0.4.0",
-    "@rosen-ui/constants": "^0.4.0",
-    "@rosen-ui/types": "^0.3.6",
+    "@rosen-network/base": "^0.4.1",
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-ui/types": "^0.3.7",
     "ergo-lib-wasm-nodejs": "^0.24.1"
   },
   "devDependencies": {

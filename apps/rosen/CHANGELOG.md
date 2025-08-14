@@ -1,5 +1,45 @@
 # @rosen-bridge/rosen-app
 
+## 4.6.0
+
+### Minor Changes
+
+- Improved network handling by checking `getNetwork` results before adding to **sources** and **targets**, preventing
+  potential errors
+- Integrate Bitcoin Runes
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-bridge/ui-kit@2.4.0
+  - @rosen-bridge/icons@2.3.1
+  - @rosen-ui/asset-calculator@2.1.8
+  - @rosen-ui/public-status@0.0.2
+  - @rosen-ui/wallet-connect@0.2.3
+  - @rosen-ui/data-source@0.1.1
+  - @rosen-ui/swr-helpers@0.2.2
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/wallet-api@3.0.3
+  - @rosen-network/ethereum@0.4.1
+  - @rosen-network/binance@0.4.1
+  - @rosen-network/bitcoin@2.3.1
+  - @rosen-network/cardano@2.4.1
+  - @rosen-ui/metamask-wallet@2.1.3
+  - @rosen-ui/nautilus-wallet@3.1.1
+  - @rosen-ui/my-doge-wallet@1.1.3
+  - @rosen-network/runes@0.3.1
+  - @rosen-ui/types@0.3.7
+  - @rosen-ui/utils@0.6.1
+  - @rosen-ui/eternl-wallet@3.1.1
+  - @rosen-ui/xverse-wallet@0.2.2
+  - @rosen-network/base@0.4.1
+  - @rosen-network/doge@0.3.1
+  - @rosen-network/ergo@2.4.1
+  - @rosen-network/evm@0.3.3
+  - @rosen-ui/lace-wallet@3.1.1
+  - @rosen-ui/okx-wallet@2.1.1
+
 ## 4.5.0
 
 ### Minor Changes

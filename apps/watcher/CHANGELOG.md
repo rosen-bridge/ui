@@ -1,5 +1,18 @@
 # @rosen-bridge/watcher-app
 
+## 3.4.2
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-bridge/ui-kit@2.4.0
+  - @rosen-bridge/icons@2.3.1
+  - @rosen-ui/swr-helpers@0.2.2
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/swr-mock@0.1.1
+  - @rosen-ui/utils@0.6.1
+
 ## 3.4.1
 
 ### Patch Changes

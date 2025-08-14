@@ -1,5 +1,18 @@
 # @rosen-ui/metamask-wallet
 
+## 2.1.3
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/wallet-api@3.0.3
+  - @rosen-network/ethereum@0.4.1
+  - @rosen-network/binance@0.4.1
+  - @rosen-ui/types@0.3.7
+  - @rosen-network/evm@0.3.3
+
 ## 2.1.2
 
 ### Patch Changes

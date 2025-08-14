@@ -1,5 +1,23 @@
 # @rosen-bridge/ui-kit
 
+## 2.4.0
+
+### Minor Changes
+
+- Add `count` prop to `Columns` component to allow direct control over the number of displayed columns
+- Added `useDisclosure` hook and `DisclosureButton` component
+
+### Patch Changes
+
+- Fix minor style adjustment in `Card2Body` component
+- Set the `license` field in package.json to `MIT`
+- Fixed an issue in the `SortFilter` component where changing the sort key would reset the current sort state
+- Update dependencies
+  - @rosen-bridge/icons@2.3.1
+  - @rosen-ui/swr-helpers@0.2.2
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/utils@0.6.1
+
 ## 2.3.0
 
 ### Minor Changes

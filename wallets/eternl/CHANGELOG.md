@@ -1,5 +1,17 @@
 # @rosen-ui/eternl-wallet
 
+## 3.1.1
+
+### Patch Changes
+
+- Set the `license` field in package.json to `MIT`
+- Update dependencies
+  - @rosen-ui/constants@0.4.1
+  - @rosen-ui/wallet-api@3.0.3
+  - @rosen-network/cardano@2.4.1
+  - @rosen-ui/types@0.3.7
+  - @rosen-ui/utils@0.6.1
+
 ## 3.1.0
 
 ### Minor Changes
