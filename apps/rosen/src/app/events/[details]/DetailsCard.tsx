@@ -9,6 +9,7 @@ import {
   Card2Title,
   Collapse,
   DisclosureButton,
+  DisclosureState,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -16,32 +17,19 @@ import {
 type DetailsProps = {
   title?: string;
   children?: ReactNode;
-  sync?: boolean;
+  action?: ReactNode;
+  state?: DisclosureState;
 };
 
-export const DetailsCard = ({ children, title, sync }: DetailsProps) => {
-  const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
-    },
-  });
+export const DetailsCard = ({
+  children,
+  title,
+  action,
+  state,
+}: DetailsProps) => {
   return (
     <Card2 backgroundColor="background.paper">
-      <Card2Header
-        action={
-          sync ? (
-            <DisclosureButton disabled={false} disclosure={disclosure} />
-          ) : undefined
-        }
-      >
+      <Card2Header action={action}>
         <Card2Title>
           <Typography
             letterSpacing={0.15}
@@ -54,17 +42,13 @@ export const DetailsCard = ({ children, title, sync }: DetailsProps) => {
           </Typography>
         </Card2Title>
       </Card2Header>
-      {sync ? (
+      {action ? (
         <Card2Body
           style={{
-            paddingBottom: disclosure.state !== 'open' ? '0' : undefined,
+            paddingBottom: state !== 'open' ? '0' : undefined,
           }}
         >
-          <Collapse
-            in={disclosure.state == 'open'}
-            unmountOnExit
-            defaultValue="open"
-          >
+          <Collapse in={state == 'open'} unmountOnExit defaultValue="open">
             {children}
           </Collapse>
         </Card2Body>

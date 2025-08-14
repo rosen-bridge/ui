@@ -7,6 +7,7 @@ import {
   Chip,
   Columns,
   Connector,
+  DisclosureButton,
   Grid,
   GridContainer,
   Identifier,
@@ -16,6 +17,7 @@ import {
   Stack,
   Token,
   useBreakpoint,
+  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
@@ -23,8 +25,25 @@ import { ProgressStatus } from '@/app/events/[details]/ProgressStatus';
 
 export const Overview = () => {
   const isMobile = useBreakpoint('tablet-down');
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            resolve();
+          } else {
+            reject();
+          }
+        }, 500);
+      });
+    },
+  });
   return (
-    <DetailsCard sync title="Overview">
+    <DetailsCard
+      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
+      state={disclosure.state}
+      title="Overview"
+    >
       <Label
         orientation={isMobile ? 'horizontal' : 'vertical'}
         label="Event Id"
@@ -44,60 +63,46 @@ export const Overview = () => {
       </Label>
       {/*Identifier*/}
       <Columns count={3} width="320px" gap="8px">
-        <div>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Chin"
-          >
-            <Stack alignItems="center">
-              <Connector
-                start={<Network name={'bitcoin'} />}
-                end={<Network name={'ethereum'} />}
-              />
-            </Stack>
-          </Label>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Date"
-          >
-            <RelativeTime timestamp={1754489360} />
-          </Label>
-        </div>
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Chin">
+          <Stack alignItems="center">
+            <Connector
+              start={<Network name={'bitcoin'} />}
+              end={<Network name={'ethereum'} />}
+            />
+          </Stack>
+        </Label>
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Date">
+          <RelativeTime timestamp={1754489360} />
+        </Label>
 
         {/*Chip*/}
-        <div>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Status"
-          >
-            <ProgressStatus state="inPaymentApproved" />
-          </Label>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Token"
-          >
-            <Token name="PALM" />
-          </Label>
-        </div>
 
-        <div>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Amount"
-          >
-            <Amount2 value={2000000} orientation={'horizontal'} unit={'PALM'} />
-          </Label>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Fee Sum"
-          >
-            <Amount2
-              value={10052.268809}
-              orientation={'horizontal'}
-              unit={'PALM'}
-            />
-          </Label>
-        </div>
+        <Label
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          label="Status"
+        >
+          <ProgressStatus state="inPaymentApproved" />
+        </Label>
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Token">
+          <Token name="PALM" reverse={isMobile} />
+        </Label>
+
+        <Label
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          label="Amount"
+        >
+          <Amount2 value={2000000} orientation={'horizontal'} unit={'PALM'} />
+        </Label>
+        <Label
+          orientation={isMobile ? 'horizontal' : 'vertical'}
+          label="Fee Sum"
+        >
+          <Amount2
+            value={10052.268809}
+            orientation={'horizontal'}
+            unit={'PALM'}
+          />
+        </Label>
       </Columns>
 
       <div>

@@ -5,19 +5,38 @@ import React from 'react';
 import {
   Amount2,
   Columns,
+  DisclosureButton,
   Grid,
   Identifier,
   Label,
   RelativeTime,
   Stack,
   Typography,
+  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
 export const Details = () => {
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            resolve();
+          } else {
+            reject();
+          }
+        }, 500);
+      });
+    },
+  });
   return (
-    <DetailsCard sync title="Details">
+    <DetailsCard
+      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
+      state={disclosure.state}
+      title="Details"
+    >
       <Stack flexDirection="column" gap={1}>
         <Columns width="230px" count={3} gap="8px">
           {/*Date*/}

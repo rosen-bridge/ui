@@ -1,9 +1,10 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { CheckCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
+  DisclosureButton,
   EnhancedDialog,
   EnhancedDialogContent,
   EnhancedDialogTitle,
@@ -21,6 +22,7 @@ import {
   Typography,
   useBreakpoint,
   useCurrentBreakpoint,
+  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
@@ -100,8 +102,26 @@ export const Wids = () => {
     setData(value);
   };
 
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            resolve();
+          } else {
+            reject();
+          }
+        }, 500);
+      });
+    },
+  });
+
   return (
-    <DetailsCard title="Wids">
+    <DetailsCard
+      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
+      state={disclosure.state}
+      title="Wids"
+    >
       <TableContainer>
         <Table>
           <TableHead

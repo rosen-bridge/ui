@@ -1,16 +1,33 @@
 'use client';
 
+import React from 'react';
+
 import {
   Box,
   Card2,
   Card2Body,
   Card2Header,
+  DisclosureButton,
   Stack,
+  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
 export const SourceTx = () => {
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            resolve();
+          } else {
+            reject();
+          }
+        }, 500);
+      });
+    },
+  });
   const data = {
     to: 'binance',
     bridgeFee: '10000000000',
@@ -22,7 +39,11 @@ export const SourceTx = () => {
     ],
   };
   return (
-    <DetailsCard sync title="Source tx metadata">
+    <DetailsCard
+      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
+      state={disclosure.state}
+      title="Source tx metadata"
+    >
       <Card2 backgroundColor="primary.light">
         <Card2Body>
           {/*TODO: Check pt of card2*/}
