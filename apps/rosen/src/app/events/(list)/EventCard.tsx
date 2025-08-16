@@ -89,12 +89,7 @@ export const EventCard = ({
       <Card2Body>
         <Stack gap={1}>
           <Stack gap={1} flexDirection="row">
-            <Avatar
-              sx={(theme) => ({
-                backgroundColor: theme.palette.secondary.light,
-                color: theme.palette.secondary.main,
-              })}
-            >
+            <Avatar background="secondary.light" color="secondary.main">
               {capitalize(item.lockToken.name.slice(0, 1))}
             </Avatar>
             <Stack

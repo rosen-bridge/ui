@@ -1,4 +1,4 @@
-import { Avatar } from '../../base';
+import { Avatar } from '../Avatar';
 
 export interface TokenListItemAvatarProps {
   name: string;

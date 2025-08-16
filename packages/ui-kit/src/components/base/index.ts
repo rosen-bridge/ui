@@ -2,7 +2,6 @@ export * from './Accordion';
 export * from './AccordionDetails';
 export * from './AccordionSummary';
 export * from './Alert';
-export * from './Avatar';
 export * from './Autocomplete';
 export * from './Badge';
 export * from './Box';
