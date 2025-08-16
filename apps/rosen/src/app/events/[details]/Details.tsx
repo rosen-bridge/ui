@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Amount2,
@@ -14,34 +14,21 @@ import {
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
-export const Details = () => {
-  const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
-    },
-  });
+export const Details = ({ id }: { id: string }) => {
+  const { data, isLoading, error } = useSWR(`/v1/events/${id}`, fetcher);
+
   return (
-    <DetailsCard
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
-      title="Details"
-    >
+    <DetailsCard state="open" title="Details">
       <Stack flexDirection="column" gap={1}>
         <Columns width="230px" count={3} gap="8px">
           {/*Date*/}
           <Label orientation="vertical" label="Date">
-            <RelativeTime timestamp={1754489360} />
+            {data && <RelativeTime timestamp={data?.timestamp || 1754489360} />}
           </Label>
 
           {/*Triggered by Z watchers*/}
@@ -54,10 +41,10 @@ export const Details = () => {
           <Grid item mobile={3} tablet={3} laptop={1} desktop={1}>
             <Label label="Fees"></Label>
             <Label label="Bridge Fee" inset>
-              <Amount2 value={10000} />
+              <Amount2 value={data?.bridgeFee || 1754} />
             </Label>
             <Label label="Network Fee" inset>
-              <Amount2 value={52.268809} />
+              <Amount2 value={data?.networkFee || 17544} />
             </Label>
             <Label label="Lock Tx" inset>
               <Amount2 value={10000} />
@@ -69,16 +56,10 @@ export const Details = () => {
           <Grid item mobile={3} tablet={3} laptop={2} desktop={2}>
             <Label label="Tx IDs"></Label>
             <Label label="Source Tx" inset>
-              <Identifier
-                value="addr1qyn20ad4h9hqdax8ftgcvzdwht93v6dz6004fv9zjlfn0ddt803hh8au69dq6qlzgkg8xceters0yurxhkzdax3ugueqdffypc"
-                copyable
-              />
+              <Identifier value={data?.sourceTxId || 'TODO'} copyable />
             </Label>
             <Label label="Payment Tx" inset>
-              <Identifier
-                value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
-                copyable
-              />
+              <Identifier value={data?.paymentTxId || 'TODO'} copyable />
             </Label>
             <Label label="Reward Tx" inset>
               <Identifier

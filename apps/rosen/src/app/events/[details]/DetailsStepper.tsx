@@ -11,25 +11,25 @@ import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
 const Steps: stepItem[] = [
   {
-    id: 'Tx Created1ascaca',
+    id: 'Tx Created1ascacaApprovedsxsSDVSDVEQ',
     state: 'done',
     title: 'Tx Created',
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx Approdvfj32ved3',
+        id: 'Tx ApproApprovedsxsSDVSDVEQdvfj32ved3',
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approscedveved',
+        id: 'Tx AApprovedsxsSDVSDVEQpproscedveved',
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approveqs2d3d',
+        id: 'Tx AppApprovedsxsSDVSDVEQroveqs2d3d',
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -37,25 +37,25 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx Created332acs',
+    id: 'Tx CreatedApprovedsxsSDVSDVEQ332acs',
     state: 'done',
     title: 'Tx Created',
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx Approv86ed23asc',
+        id: 'Tx Approv86ApprovedsxsSDVSDVEQed23aApprovedsxsSDVSDVEQsc',
         state: 'done',
         title: 'Tx Apstepproved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approvedzasca',
+        id: 'Tx AApprovedsxsSDVSDVEQpprovedzasca',
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approvascwedascasca',
+        id: 'Tx ApprovascwedascascApprovedsxsSDVSDVEQa',
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -69,19 +69,19 @@ const Steps: stepItem[] = [
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApprovxsedASCSACA',
+        id: 'Tx AppApprovedsxsSDVSDVEQrovxsedASCSACA',
         state: 'done',
         title: 'Tx ApprovedVVE',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovsxedCADC',
+        id: 'Tx ApprovsApprovedsxsSDVSDVEQxedCADC',
         state: 'pending',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovedsxsSDVSDVEQ',
+        id: 'Tx ApprovedsxsSDVSDVEQApprovedsxsSDVSDVEQ',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -89,25 +89,25 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx CreatedSDVD',
+    id: 'Tx Creaddbdn58tedSDVD',
     state: 'idle',
     title: 'Tx Created',
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApprovedCDsEQW4',
+        id: 'Tx ApqxcsprovedCDsEQW4',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovedDCWE4Jss8',
+        id: 'Tx Approvednkih1DCWE4Jss8',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approved5DsCCV5',
+        id: 'Tx Approerbddved5DsCCV5',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -115,25 +115,25 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx CreatedSDVD',
+    id: 'Tx Crea43tedSDVD',
     state: 'idle',
     title: 'Tx Created',
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApprovedCDsEQW4',
+        id: 'Tx Approefce34vedCDsEQW4',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovedDCWE4Jss8',
+        id: 'Tx ApprovdvedDCWE4Jss8',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approved5DsCCV5',
+        id: 'Tx Approved5ytDsCCV5',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -141,25 +141,25 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx CreatedSDVD',
+    id: 'Tx CreathyhyedSDVD',
     state: 'idle',
     title: 'Tx Created',
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApprovedCDsEQW4',
+        id: 'Tx ApproveyydCDsEQW4',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovedDCWE4Jss8',
+        id: 'Tx AppwdwvrgtrovedDCWE4Jss8',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approved5DsCCV5',
+        id: 'Tx Addwpproved5DsCCV5',
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -169,25 +169,8 @@ const Steps: stepItem[] = [
 ];
 
 export const DetailsStepper = () => {
-  const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
-    },
-  });
   return (
-    <DetailsCard
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
-      title="Progress"
-    >
+    <DetailsCard state="open" title="Progress">
       <div style={{ minHeight: '210px' }}>
         <Stepper data={Steps} />
       </div>

@@ -162,3 +162,31 @@ export const getEvents = async (filters: Filters) => {
     total: rawItems[0]?.total ?? 0,
   };
 };
+
+export const getEventById = async (eventId: string) => {
+  const observationRepo = dataSource.getRepository(ObservationEntity);
+  const eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
+  const blockRepo = dataSource.getRepository(BlockEntity);
+
+  const observation = await observationRepo.findOne({
+    where: { requestId: eventId },
+  });
+  if (!observation) return null;
+
+  const block = observation.block
+    ? await blockRepo.findOne({ where: { hash: observation.block } })
+    : null;
+
+  const eventTriggers = await eventTriggerRepo.find({ where: { eventId } });
+
+  const paymentTxId = eventTriggers[0]?.paymentTxId;
+  const spendTxId = eventTriggers[0]?.spendTxId;
+
+  return {
+    ...observation,
+    eventTriggers: { ...eventTriggers[0] },
+    timestamp: block?.timestamp,
+    paymentTxId,
+    spendTxId,
+  };
+};

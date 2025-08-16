@@ -1,15 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Amount2,
-  Chip,
   Columns,
   Connector,
-  DisclosureButton,
-  Grid,
-  GridContainer,
   Identifier,
   Label,
   Network,
@@ -17,33 +13,26 @@ import {
   Stack,
   Token,
   useBreakpoint,
-  useDisclosure,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 import { ProgressStatus } from '@/app/events/[details]/ProgressStatus';
+import { EventItem } from '@/types';
 
-export const Overview = () => {
+export const Overview = ({ id }: { id: string }) => {
   const isMobile = useBreakpoint('tablet-down');
-  const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
-    },
-  });
+
+  const { data, isLoading, error } = useSWR<EventItem>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
+  useEffect(() => {
+    console.log(data);
+  }, [data, isLoading, error]);
   return (
-    <DetailsCard
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
-      title="Overview"
-    >
+    <DetailsCard state="open" title="Overview">
       <Label
         orientation={isMobile ? 'horizontal' : 'vertical'}
         label="Event Id"
@@ -55,24 +44,23 @@ export const Overview = () => {
             maxWidth: isMobile ? '300px' : '400px',
           }}
         >
-          <Identifier
-            value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
-            copyable
-          />
+          {data && <Identifier value={data?.eventId || 'TODO'} copyable />}
         </div>
       </Label>
       {/*Identifier*/}
       <Columns count={3} width="320px" gap="8px">
         <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Chin">
           <Stack alignItems="center">
-            <Connector
-              start={<Network name={'bitcoin'} />}
-              end={<Network name={'ethereum'} />}
-            />
+            {data && (
+              <Connector
+                start={<Network name={data?.fromChain} />}
+                end={<Network name={data?.toChain} />}
+              />
+            )}
           </Stack>
         </Label>
-        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Date">
-          <RelativeTime timestamp={1754489360} />
+        <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Time">
+          {data && <RelativeTime timestamp={data?.timestamp || 1755841} />}
         </Label>
 
         {/*Chip*/}
@@ -81,26 +69,33 @@ export const Overview = () => {
           orientation={isMobile ? 'horizontal' : 'vertical'}
           label="Status"
         >
-          <ProgressStatus state="inPaymentApproved" />
+          <ProgressStatus state="completed" />
         </Label>
         <Label orientation={isMobile ? 'horizontal' : 'vertical'} label="Token">
-          <Token name="PALM" reverse={isMobile} />
+          {/*TODO: diff type sourceChainTokenId*/}
+          <Token name={'as'} reverse={isMobile} />
         </Label>
 
         <Label
           orientation={isMobile ? 'horizontal' : 'vertical'}
           label="Amount"
         >
-          <Amount2 value={2000000} orientation={'horizontal'} unit={'PALM'} />
+          {/*TODO: diff type sourceChainTokenId*/}
+          <Amount2
+            value={data?.amount}
+            orientation={'horizontal'}
+            unit={'as'}
+          />
         </Label>
         <Label
           orientation={isMobile ? 'horizontal' : 'vertical'}
           label="Fee Sum"
         >
+          {/*TODO: diff type sourceChainTokenId*/}
           <Amount2
-            value={10052.268809}
+            value={data?.networkFee}
             orientation={'horizontal'}
-            unit={'PALM'}
+            unit={'as'}
           />
         </Label>
       </Columns>
@@ -108,16 +103,10 @@ export const Overview = () => {
       <div>
         <Label label="Address"></Label>
         <Label label="from" inset>
-          <Identifier
-            value="addr1qyn20ad4h9hqdax8ftgcvzdwht93v6dz6004fv9zjlfn0ddt803hh8au69dq6qlzgkg8xceters0yurxhkzdax3ugueqdffypc"
-            copyable
-          />
+          <Identifier value={data?.fromAddress || 'TODO'} copyable />
         </Label>
         <Label label="to" inset>
-          <Identifier
-            value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
-            copyable
-          />
+          <Identifier value={data?.toAddress || 'TODO'} copyable />
         </Label>
       </div>
     </DetailsCard>
