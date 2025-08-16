@@ -153,7 +153,7 @@ export const NewPagination = ({
               fontSize: 14,
             },
             '@container (max-width: 644px)': {
-              '& li:not(:first-child):not(:last-child)': {
+              '& li:not(:first-of-type):not(:last-child)': {
                 display: 'none',
               },
               '& .MuiPagination-ul': {
