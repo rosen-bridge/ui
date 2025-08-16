@@ -51,17 +51,29 @@ class AggregatedStatusChangedAction {
    * retrieves multiple AggregatedStatusChangedEntity objects for a given eventId (timeline)
    * @param repository
    * @param eventId
+   * @param offset
+   * @param limit
    * @returns a promise that resolves to an array of AggregatedStatusChangedEntity objects
    */
   getMany = async (
     repository: Repository<AggregatedStatusChangedEntity>,
     eventId: string,
-  ): Promise<AggregatedStatusChangedEntity[]> => {
-    return repository.find({
+    offset?: number,
+    limit?: number,
+  ): Promise<{ total: number; items: AggregatedStatusChangedEntity[] }> => {
+    const [items, total] = await repository.findAndCount({
       where: { eventId },
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
+      ...(Number.isFinite(offset) && Number.isFinite(limit)
+        ? { skip: offset, take: limit }
+        : {}),
     });
+
+    return {
+      items,
+      total,
+    };
   };
 
   /**

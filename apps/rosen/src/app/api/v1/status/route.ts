@@ -4,7 +4,7 @@ import '@/backend/initialize-datasource-if-needed';
 import { AggregatedStatusDTO, aggregatedStatusToDTO } from '@/backend/status';
 import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 
-import { validator, GetAggregatedStatusesRequestBody } from './validator';
+import { validator, GetAggregatedStatusesRequestBody } from './validations';
 
 PublicStatusAction.init(dataSource);
 

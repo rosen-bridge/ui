@@ -54,21 +54,33 @@ class GuardStatusChangedAction {
    * @param repository
    * @param eventId
    * @param guardPks
+   * @param offset
+   * @param limit
    * @returns a promise that resolves to an array of GuardStatusChangedEntity objects
    */
   getMany = async (
     repository: Repository<GuardStatusChangedEntity>,
     eventId: string,
     guardPks: string[],
-  ): Promise<GuardStatusChangedEntity[]> => {
+    offset?: number,
+    limit?: number,
+  ): Promise<{ total: number; items: GuardStatusChangedEntity[] }> => {
     const whereClause =
       guardPks.length > 0 ? { eventId, guardPk: In(guardPks) } : { eventId };
 
-    return repository.find({
+    const [items, total] = await repository.findAndCount({
       where: whereClause,
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
+      ...(Number.isFinite(offset) && Number.isFinite(limit)
+        ? { skip: offset, take: limit }
+        : {}),
     });
+
+    return {
+      items,
+      total,
+    };
   };
 
   /**
