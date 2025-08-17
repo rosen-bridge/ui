@@ -18,64 +18,83 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
+import { BridgeEvent } from '@/app/events/[details]/type';
+
+const SkeletonDetails = () => {
+  return <div style={{ width: '100%', minHeight: '339px' }}>loading....</div>;
+};
 
 export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading, error } = useSWR(`/v1/events/${id}`, fetcher);
+  const { data, isLoading, error } = useSWR<BridgeEvent>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
 
   return (
     <DetailsCard state="open" title="Details">
-      <Stack flexDirection="column" gap={1}>
-        <Columns width="230px" count={3} gap="8px">
-          {/*Date*/}
-          <Label orientation="vertical" label="Date">
-            {data && <RelativeTime timestamp={data?.timestamp || 1754489360} />}
-          </Label>
+      {isLoading ? (
+        <SkeletonDetails />
+      ) : (
+        <Stack flexDirection="column" gap={1}>
+          <Columns width="230px" count={3} gap="8px">
+            {/*Date*/}
+            <Label orientation="vertical" label="Date">
+              {data && <RelativeTime timestamp={data?.timestamp} />}
+            </Label>
 
-          {/*Triggered by Z watchers*/}
-          <Label orientation="vertical" label="Triggered by Z watchers">
-            <Typography>66</Typography>
-          </Label>
-        </Columns>
-        {/*TODO: convert to Columns*/}
-        <Grid container columns={3} spacing={3}>
-          <Grid item mobile={3} tablet={3} laptop={1} desktop={1}>
-            <Label label="Fees"></Label>
-            <Label label="Bridge Fee" inset>
-              <Amount2 value={data?.bridgeFee || 1754} />
+            {/*Triggered by Z watchers*/}
+            <Label orientation="vertical" label="Triggered by Z watchers">
+              <Typography>N/A</Typography>
             </Label>
-            <Label label="Network Fee" inset>
-              <Amount2 value={data?.networkFee || 17544} />
-            </Label>
-            <Label label="Lock Tx" inset>
-              <Amount2 value={10000} />
-            </Label>
-            <Label label="Payment Tx" inset>
-              <Amount2 value={10000} />
-            </Label>
+          </Columns>
+          {/*TODO: convert to Columns*/}
+          <Grid container columns={3} spacing={3}>
+            <Grid item mobile={3} tablet={3} laptop={1} desktop={1}>
+              <Label label="Fees"></Label>
+              <Label label="Bridge Fee" inset>
+                <Amount2 value={data?.bridgeFee || 1754} />
+              </Label>
+              <Label label="Network Fee" inset>
+                <Amount2 value={data?.networkFee || 17544} />
+              </Label>
+              <Label label="Lock Tx" inset>
+                N/A
+                {/*<Amount2 value={10000} />*/}
+              </Label>
+              <Label label="Payment Tx" inset>
+                N/A
+              </Label>
+            </Grid>
+            <Grid item mobile={3} tablet={3} laptop={2} desktop={2}>
+              <Label label="Tx IDs"></Label>
+              <Label label="Source Tx" inset>
+                <Identifier value={data?.sourceTxId || 'N/A       '} copyable />
+              </Label>
+              <Label label="Payment Tx" inset>
+                {data?.paymentTxId === null ? (
+                  <>N/A</>
+                ) : (
+                  <Identifier value={data?.paymentTxId || 'TODO'} copyable />
+                )}
+              </Label>
+              <Label label="Reward Tx" inset>
+                N/A
+                {/*<Identifier*/}
+                {/*  value="addr1qyn20ad4h9hqdax8ftgcvzdwht93v6dz6004fv9zjlfn0ddt803hh8au69dq6qlzgkg8xceters0yurxhkzdax3ugueqdffypc"*/}
+                {/*  copyable*/}
+                {/*/>*/}
+              </Label>
+              <Label label="Trigger Tx" inset>
+                N/A
+                {/*<Identifier*/}
+                {/*  value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"*/}
+                {/*  copyable*/}
+                {/*/>*/}
+              </Label>
+            </Grid>
           </Grid>
-          <Grid item mobile={3} tablet={3} laptop={2} desktop={2}>
-            <Label label="Tx IDs"></Label>
-            <Label label="Source Tx" inset>
-              <Identifier value={data?.sourceTxId || 'TODO'} copyable />
-            </Label>
-            <Label label="Payment Tx" inset>
-              <Identifier value={data?.paymentTxId || 'TODO'} copyable />
-            </Label>
-            <Label label="Reward Tx" inset>
-              <Identifier
-                value="addr1qyn20ad4h9hqdax8ftgcvzdwht93v6dz6004fv9zjlfn0ddt803hh8au69dq6qlzgkg8xceters0yurxhkzdax3ugueqdffypc"
-                copyable
-              />
-            </Label>
-            <Label label="Trigger Tx" inset>
-              <Identifier
-                value="20dae02b01ab75f435be6813b1d2908e39ea8e6ac3113d1b125b211fb85eb0ab"
-                copyable
-              />
-            </Label>
-          </Grid>
-        </Grid>
-      </Stack>
+        </Stack>
+      )}
     </DetailsCard>
   );
 };
