@@ -2,7 +2,8 @@ import React from 'react';
 
 import { capitalize } from 'lodash-es';
 
-import { Typography, Avatar, Stack } from '../base';
+import { Typography, Stack } from '../base';
+import { Avatar } from './Avatar';
 
 /**
  * Props for the Token component.

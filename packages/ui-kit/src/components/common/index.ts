@@ -1,3 +1,4 @@
+export * from './Avatar';
 export * from './carousel';
 export * from './smartSearch';
 export * from './button';
