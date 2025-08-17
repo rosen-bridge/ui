@@ -212,6 +212,9 @@ export class WalletConnect<
       );
 
     try {
+      if (transactionParameters.value) {
+        transactionParameters.value = '0x' + transactionParameters.value;
+      }
       return (await this.provider.request({
         method: 'eth_sendTransaction',
         params: [transactionParameters],
