@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { Network } from '@rosen-ui/types';
 
-import { useInfo } from './useInfo';
+import { useBalance } from './useBalance';
 
 type Addresses = {
   [key in 'cold' | 'hot']: {
@@ -14,18 +14,18 @@ type Addresses = {
  * returns hot and cold addresses
  */
 export const useAddresses = () => {
-  const { data } = useInfo();
+  const { data } = useBalance();
   return useMemo(() => {
     const addresses: Addresses = {
       cold: {},
       hot: {},
     };
 
-    data?.balances.cold.forEach((item) => {
+    data?.cold.forEach((item) => {
       addresses.cold[item.chain] = item.address;
     });
 
-    data?.balances.hot.forEach((item) => {
+    data?.hot.forEach((item) => {
       addresses.hot[item.chain] = item.address;
     });
 

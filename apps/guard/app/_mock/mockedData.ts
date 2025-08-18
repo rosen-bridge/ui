@@ -14,64 +14,13 @@ import {
   ApiHistoryResponse as ApiHistoryEventResponse,
   HistoryEvent,
   OngoingEvent,
+  ApiBalanceResponse,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
   health: {
     status: 'Unstable',
     trialErrors: [],
-  },
-  balances: {
-    hot: [
-      {
-        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-        chain: NETWORKS.ergo.key,
-        balance: {
-          amount: 100 * 1e9,
-          decimals: 9,
-          tokenId: 'erg',
-          name: 'erg',
-          isNativeToken: true,
-        },
-      },
-      {
-        address:
-          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
-        chain: NETWORKS.cardano.key,
-        balance: {
-          amount: 500 * 1e6,
-          decimals: 6,
-          tokenId: 'ada',
-          name: 'ada',
-          isNativeToken: true,
-        },
-      },
-    ],
-    cold: [
-      {
-        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-        chain: NETWORKS.ergo.key,
-        balance: {
-          amount: 300 * 1e9,
-          decimals: 9,
-          tokenId: 'erg',
-          name: 'erg',
-          isNativeToken: true,
-        },
-      },
-      {
-        address:
-          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
-        chain: NETWORKS.cardano.key,
-        balance: {
-          amount: 1500 * 1e6,
-          decimals: 6,
-          tokenId: 'ada',
-          name: 'ada',
-          isNativeToken: true,
-        },
-      },
-    ],
   },
   rsnTokenId:
     '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
@@ -81,6 +30,59 @@ const info: ApiInfoResponse = {
     contract: '',
     tokensMap: '',
   },
+};
+
+const balance: ApiBalanceResponse = {
+  hot: [
+    {
+      address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+      chain: NETWORKS.ergo.key,
+      balance: {
+        amount: 100 * 1e9,
+        decimals: 9,
+        tokenId: 'erg',
+        name: 'erg',
+        isNativeToken: true,
+      },
+    },
+    {
+      address:
+        'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+      chain: NETWORKS.cardano.key,
+      balance: {
+        amount: 500 * 1e6,
+        decimals: 6,
+        tokenId: 'ada',
+        name: 'ada',
+        isNativeToken: true,
+      },
+    },
+  ],
+  cold: [
+    {
+      address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+      chain: NETWORKS.ergo.key,
+      balance: {
+        amount: 300 * 1e9,
+        decimals: 9,
+        tokenId: 'erg',
+        name: 'erg',
+        isNativeToken: true,
+      },
+    },
+    {
+      address:
+        'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+      chain: NETWORKS.cardano.key,
+      balance: {
+        amount: 1500 * 1e6,
+        decimals: 6,
+        tokenId: 'ada',
+        name: 'ada',
+        isNativeToken: true,
+      },
+    },
+  ],
 };
 
 const revenueChartWeekly: ApiRevenueChartResponse = [
@@ -393,6 +395,7 @@ const history: ApiHistoryEventResponse = {
 export const mockedData: FakeData = {
   withStringKeys: {
     '/info': info,
+    '/balance': balance,
     '/revenue/chart': revenueChart,
     '/sign': sign,
     '/health/status': healthStatus,
