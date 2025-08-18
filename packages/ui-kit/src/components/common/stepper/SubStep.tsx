@@ -42,12 +42,12 @@ export const SubStep = ({ activeStep, step, dance }: SubStepProps) => {
       {step.sub &&
         step.sub.map((sub) => (
           <Step
-            style={{ width: '95px' }}
+            style={{ width: '97px', marginTop: !dance ? '-10px' : undefined }}
             key={sub.id}
             completed={sub.state === 'done'}
           >
             <LabelStep
-              step={step}
+              step={sub}
               icon={(props) => <StepIcon {...props} state={sub.state} />}
             />
           </Step>

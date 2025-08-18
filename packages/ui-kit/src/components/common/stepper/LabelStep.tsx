@@ -31,17 +31,31 @@ type LabelProps = {
  * @returns A styled step label with icon, title, and subtitle.
  */
 export const LabelStep = ({ step, icon }: LabelProps) => {
+  const getColor = () => {
+    switch (step.state) {
+      case 'pending':
+        return 'info.dark';
+      case 'idle':
+        return 'neutral.dark';
+      default:
+        return 'success.main';
+    }
+  };
+
   return (
     <StepLabel
       StepIconComponent={icon}
-      sx={{ cursor: 'pointer', userSelect: 'none' }}
+      sx={{ cursor: 'text', userSelect: 'none' }}
     >
-      <Typography noWrap variant="body2" color="primary.main">
+      <Typography noWrap variant="body2" color={getColor()}>
         {step.title}
       </Typography>
-      <Typography noWrap variant="caption" color="text.secondary">
-        {step.subtitle}
-      </Typography>
+
+      {step.state === 'done' && step.subtitle && (
+        <Typography noWrap variant="caption" color="text.secondary">
+          {step.subtitle}
+        </Typography>
+      )}
     </StepLabel>
   );
 };

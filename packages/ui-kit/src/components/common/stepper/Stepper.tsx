@@ -12,7 +12,7 @@ import { stepItem } from './types';
 const RenderDots = () => {
   return (
     <svg
-      width="193"
+      width="200"
       height="17"
       viewBox="0 0 193 17"
       fill="none"
@@ -97,7 +97,6 @@ export const Stepper = ({ data }: { data: stepItem[] }) => {
                 gap={1}
                 style={{ position: 'relative', top: '8px' }}
               >
-                <RenderDots />
                 {step.sub && step.sub?.length > 0 && (
                   <Stack
                     direction="column"
@@ -110,6 +109,7 @@ export const Stepper = ({ data }: { data: stepItem[] }) => {
                       width: '100%',
                     }}
                   >
+                    <RenderDots />
                     <SubStep step={step} activeStep={activeStep} />
                   </Stack>
                 )}
