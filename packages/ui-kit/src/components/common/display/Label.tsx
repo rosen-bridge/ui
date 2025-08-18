@@ -45,7 +45,7 @@ export const Label = ({
           {label}
         </Typography>
       </Box>
-      <Box overflow="hidden" whiteSpace="nowrap">
+      <Box overflow="hidden" whiteSpace="nowrap" maxWidth="100%">
         {children}
       </Box>
     </Box>
