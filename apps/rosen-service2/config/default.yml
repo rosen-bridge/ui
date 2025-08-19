@@ -1,9 +1,21 @@
+logs:
+  - type: console
+    level: debug
 db:
   host: localhost
   port: 5432
   username: postgres
   password: ''
   name: rosen_service
+healthCheck:
+  logging:
+    maxErrors: 10
+    maxWarns: 10
+    duration: 100
+  scanner:
+    warnDiff: 2
+    criticalDiff: 10
+  updateInterval: 60
 chains:
   ergo:
     initialHeight: 1

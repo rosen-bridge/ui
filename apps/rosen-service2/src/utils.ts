@@ -3,25 +3,52 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-export const getTokenMap = async (): Promise<TokenMap> => {
-  const tokensMapFilePath = path.resolve(
-    path.dirname(fileURLToPath(import.meta.url)),
-    '../config/tokensMap.json',
-  );
+class TokensConfig {
+  private static instance: TokensConfig;
+  protected tokenMap: TokenMap;
 
-  if (fs.existsSync(tokensMapFilePath)) {
-    const { tokens } = JSON.parse(
-      fs.readFileSync(tokensMapFilePath, {
-        encoding: 'utf-8',
-      }),
-    );
-
-    const tokenMap = new TokenMap();
-
-    await tokenMap.updateConfigByJson(tokens);
-
-    return tokenMap;
+  private constructor() {
+    // do nothing
   }
 
-  throw new Error(`Tokens map file not found in the path ${tokensMapFilePath}`);
-};
+  /**
+   * initializes TokensConfig with tokens from the specified path
+   * @param tokensPath path to tokens json file
+   */
+  static async init(): Promise<void> {
+    const tokensPath = path.resolve(
+      path.dirname(fileURLToPath(import.meta.url)),
+      '../config/tokensMap.json',
+    );
+    if (!TokensConfig.instance) {
+      if (!fs.existsSync(tokensPath)) {
+        throw new Error(`tokensMap file with path ${tokensPath} doesn't exist`);
+      }
+      TokensConfig.instance = new TokensConfig();
+      const tokensJson: string = fs.readFileSync(tokensPath, 'utf8');
+      const tokens = JSON.parse(tokensJson);
+      TokensConfig.instance.tokenMap = new TokenMap();
+      await TokensConfig.instance.tokenMap.updateConfigByJson(tokens.tokens);
+    }
+  }
+
+  /**
+   * returns the TokensConfig instance if initialized
+   * @returns TokensConfig instance
+   */
+  static getInstance(): TokensConfig {
+    if (!TokensConfig.instance) {
+      throw new Error('TokensConfig is not initialized');
+    }
+    return TokensConfig.instance;
+  }
+
+  /**
+   * @returns the token map
+   */
+  getTokenMap(): TokenMap {
+    return this.tokenMap;
+  }
+}
+
+export { TokensConfig };
