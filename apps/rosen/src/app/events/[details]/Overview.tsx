@@ -15,6 +15,7 @@ import {
   useBreakpoint,
   Skeleton,
   Chip,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
@@ -59,6 +60,22 @@ const EventStatus = ({ value }: EventStatusProps) => {
 export const Overview = ({ id }: { id: string }) => {
   const isMobile = useBreakpoint('tablet-down');
   const { data, isLoading } = useSWR<BridgeEvent>(`/v1/events/${id}`, fetcher);
+
+  function time(timestamp: number) {
+    const date = new Date(timestamp);
+
+    const formatted = new Intl.DateTimeFormat('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    }).format(date);
+
+    return formatted.replace(',', '');
+  }
 
   const renderLabel = (
     label: string,
@@ -119,7 +136,9 @@ export const Overview = ({ id }: { id: string }) => {
 
         {renderLabel(
           'Time',
-          <RelativeTime timestamp={data.timestamp || 1755841} />,
+          <Typography color="text.primary" variant="body1">
+            {time(data.timestamp || 175522841)}
+          </Typography>,
         )}
 
         {renderLabel(
@@ -147,20 +166,21 @@ export const Overview = ({ id }: { id: string }) => {
       </Columns>
 
       <div>
-        {renderLabel('Address', null)}
-        {renderLabel(
-          'from',
+        <Label label="Address"></Label>
+        <Label label="from" inset>
           <Identifier
             value={data.fromAddress || 'error loading !!!'}
+            href={data.fromAddress}
             copyable
-          />,
-          true,
-        )}
-        {renderLabel(
-          'to',
-          <Identifier value={data.toAddress || 'error loading !!!'} copyable />,
-          true,
-        )}
+          />
+        </Label>
+        <Label label="to" inset>
+          <Identifier
+            value={data.toAddress || 'error loading !!!'}
+            href={data.fromAddress}
+            copyable
+          />
+        </Label>
       </div>
     </DetailsCard>
   );

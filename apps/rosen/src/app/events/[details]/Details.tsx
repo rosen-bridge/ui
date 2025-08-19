@@ -41,7 +41,11 @@ export const Details = ({ id }: { id: string }) => {
   const { data, isLoading } = useSWR<BridgeEvent>(`/v1/events/${id}`, fetcher);
 
   if (isLoading || !data) {
-    return <SkeletonDetails />;
+    return (
+      <DetailsCard state="open" title="Details">
+        <SkeletonDetails />
+      </DetailsCard>
+    );
   }
 
   return (
@@ -51,57 +55,61 @@ export const Details = ({ id }: { id: string }) => {
       ) : (
         <Stack flexDirection="column" gap={2}>
           <Columns width="230px" count={3} gap="8px">
-            <Label orientation="vertical" label="Date">
+            <Label orientation="vertical" label="Duration">
               {data?.timestamp ? (
                 <RelativeTime timestamp={data.timestamp} />
               ) : (
                 <Typography>N/A</Typography>
               )}
             </Label>
-            <Label orientation="vertical" label="Triggered by Z watchers">
+            <Label orientation="vertical" label="Token Price">
+              <Typography>N/A</Typography>
+            </Label>
+            <Label orientation="vertical" label="RSN Ratio">
               <Typography>N/A</Typography>
             </Label>
           </Columns>
 
-          <Grid container columns={3} spacing={3}>
-            {/* Fees */}
-            <Grid item mobile={3} tablet={3} laptop={1} desktop={1}>
-              <Label label="Fees" />
+          <Columns width="500px" count={2} gap="24px">
+            <div>
+              <Label label="Total Emission" />
+              <Label label="Guards" inset>
+                <Typography>N/A</Typography>
+              </Label>
+              <Label label="Watchers" inset>
+                <Typography>N/A</Typography>
+              </Label>
+            </div>
+            <div>
+              <Label label="Fee Sum" />
               <Label label="Bridge Fee" inset>
-                <Amount2 value={data?.bridgeFee ?? 1754} />
+                <Typography>N/A</Typography>
               </Label>
               <Label label="Network Fee" inset>
-                <Amount2 value={data?.networkFee ?? 17544} />
+                <Typography>N/A</Typography>
               </Label>
-              <Label label="Lock Tx" inset>
-                N/A
-              </Label>
-              <Label label="Payment Tx" inset>
-                N/A
-              </Label>
-            </Grid>
+            </div>
+          </Columns>
 
-            {/* Transactions */}
-            <Grid item mobile={3} tablet={3} laptop={2} desktop={2}>
-              <Label label="Tx IDs" />
-              <Label label="Source Tx" inset>
-                <Identifier value={data?.sourceTxId ?? 'N/A'} copyable />
-              </Label>
-              <Label label="Payment Tx" inset>
-                {data?.paymentTxId ? (
-                  <Identifier value={data.paymentTxId} copyable />
-                ) : (
-                  <>N/A</>
-                )}
-              </Label>
-              <Label label="Reward Tx" inset>
-                N/A
-              </Label>
-              <Label label="Trigger Tx" inset>
-                N/A
-              </Label>
-            </Grid>
-          </Grid>
+          <div>
+            <Label label="Tx IDs" />
+            <Label label="Source Tx" inset>
+              <Identifier value={data?.sourceTxId ?? 'N/A'} copyable />
+            </Label>
+            <Label label="Payment Tx" inset>
+              {data?.paymentTxId ? (
+                <Identifier value={data.paymentTxId} copyable />
+              ) : (
+                <>N/A</>
+              )}
+            </Label>
+            <Label label="Reward Tx" inset>
+              N/A
+            </Label>
+            <Label label="Trigger Tx" inset>
+              N/A
+            </Label>
+          </div>
         </Stack>
       )}
     </DetailsCard>

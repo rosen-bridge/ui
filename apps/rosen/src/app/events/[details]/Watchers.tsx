@@ -4,6 +4,7 @@ import React, { useCallback, useState } from 'react';
 
 import { CheckCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
+  Columns,
   DisclosureButton,
   EnhancedDialog,
   EnhancedDialogContent,
@@ -72,7 +73,7 @@ const rows: rowTypes[] = [
   },
 ];
 
-export const Wids = () => {
+export const Watchers = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<rowTypes>();
   const currentSize = useCurrentBreakpoint();
@@ -122,6 +123,22 @@ export const Wids = () => {
       state={disclosure.state}
       title="Wids"
     >
+      <div
+        style={{ marginBottom: '8px', display: isMobile ? 'none' : 'block' }}
+      >
+        <Columns width="100px" count={3} gap="24px">
+          <Label label="Commitments" orientation="vertical">
+            44
+          </Label>
+          <Label label="Triggered by" orientation="vertical">
+            15
+          </Label>
+          <Label label="Rewarded to" orientation="vertical">
+            N/A
+          </Label>
+        </Columns>
+      </div>
+
       <TableContainer>
         <Table>
           <TableHead
@@ -161,7 +178,7 @@ export const Wids = () => {
                         sx={{
                           color:
                             row.rewarded === 'Yes'
-                              ? 'warning.main'
+                              ? 'secondary.main'
                               : 'text.secondary',
                         }}
                       >
@@ -202,7 +219,7 @@ export const Wids = () => {
                         sx={{
                           color:
                             row.rewarded === 'Yes'
-                              ? 'warning.main'
+                              ? 'secondary.main'
                               : 'text.secondary',
                         }}
                       >
@@ -259,7 +276,7 @@ const Drawer = ({ value, onClose, open = false }: DrawerProps) => {
                   sx={{
                     color:
                       value.rewarded === 'Yes'
-                        ? 'warning.main'
+                        ? 'secondary.main'
                         : 'text.secondary',
                   }}
                 >

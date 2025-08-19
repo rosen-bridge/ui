@@ -9,7 +9,7 @@ import {
   DetailsStepper,
   Overview,
   SourceTx,
-  Wids,
+  Watchers,
 } from '@/app/events/[details]';
 
 const Page = () => {
@@ -20,7 +20,7 @@ const Page = () => {
       <Overview id={eventId as string} />
       <Details id={eventId as string} />
       <DetailsStepper />
-      <Wids />
+      <Watchers />
       <SourceTx />
     </Stack>
   );
