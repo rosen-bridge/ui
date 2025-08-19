@@ -16,7 +16,7 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 
-export type Status = 'ok' | 'unstable' | 'broken';
+export type StatusType = 'ok' | 'unstable' | 'broken';
 
 export type VariantColor = 'success' | 'warning' | 'error';
 
@@ -25,10 +25,10 @@ export type VariantColor = 'success' | 'warning' | 'error';
  */
 export interface StatusProps {
   /**
-   * The status variant to display.
+   * The StatusType variant to display.
    * Possible values: 'ok', 'unstable', 'broken'.
    */
-  variant?: Status;
+  variant?: StatusType;
 
   /**
    * Additional details shown as a tooltip on hover.
@@ -42,7 +42,7 @@ export interface StatusProps {
 }
 
 const Variants: Record<
-  Status,
+  StatusType,
   { status: string; Icon: React.ElementType; color: VariantColor }
 > = {
   ok: { status: 'OK', Icon: ShieldCheck, color: 'success' },
@@ -144,7 +144,7 @@ export const Status = ({ variant, details, isLoading }: StatusProps) => {
    * Ensures a valid variant is used by falling back to 'broken'
    * if the provided variant is not recognized.
    */
-  const safeVariant = Variants[variant as Status] || Variants['broken'];
+  const safeVariant = Variants[variant as StatusType] || Variants['broken'];
   const { status, Icon, color } = safeVariant;
 
   return (
@@ -230,4 +230,3 @@ export const Status = ({ variant, details, isLoading }: StatusProps) => {
   );
 };
 
-export default Status;

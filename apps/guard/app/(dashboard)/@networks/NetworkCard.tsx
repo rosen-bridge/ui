@@ -9,7 +9,7 @@ import {
   Identifier,
   Network,
   Skeleton,
-  styled,
+  Stack,
   SvgIcon,
   Typography,
 } from '@rosen-bridge/ui-kit';
@@ -56,39 +56,6 @@ export type NetworkCardProps = {
   isLoading?: boolean;
 };
 
-const Root = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'start',
-  backgroundColor: theme.palette.background.paper,
-  alignItems: 'center',
-  gap: theme.spacing(1),
-  padding: theme.spacing(2, 2, 1, 2),
-  borderRadius: theme.shape.borderRadius,
-}));
-
-const WrapperItem = styled('div')(({ theme }) => ({
-  width: '100%',
-}));
-
-const WrapperIcon = styled('div')(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'start',
-  gap: '0.5rem',
-  fontSize: '1.5rem',
-  width: '100%',
-}));
-
-const WrapperFallBack = styled('div')(({ theme }) => ({
-  width: '100%',
-  height: '100%',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
 const RenderNetwork = ({
   amount,
   unit,
@@ -97,8 +64,15 @@ const RenderNetwork = ({
   link,
 }: RenderNetworkProps) => {
   return (
-    <WrapperItem>
-      <WrapperIcon>
+    <div style={{ width: '100%' }}>
+      <Stack
+        gap={1}
+        fontSize="1.5rem"
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="start"
+        width="100%"
+      >
         <SvgIcon
           sx={{
             color: (theme) =>
@@ -110,6 +84,7 @@ const RenderNetwork = ({
           {state === 'hot' ? <Fire /> : <SnowFlake />}
         </SvgIcon>
         <Typography
+          component="div"
           sx={{
             fontWeight: 700,
             fontSize: '1.5rem',
@@ -121,52 +96,87 @@ const RenderNetwork = ({
         >
           <Amount value={amount} unit={unit} />
         </Typography>
-      </WrapperIcon>
+      </Stack>
       <Identifier value={address} qrcode href={link} />
-    </WrapperItem>
+    </div>
   );
 };
 
 const NetworkCardSkeleton = () => {
   return (
-    <Root>
-      <WrapperItem>
-        <WrapperIcon>
-          <Skeleton variant="circular" width={24} height={24} />
-          <Skeleton variant="text" width={80} height={32} />
-        </WrapperIcon>
-      </WrapperItem>
+    <Stack
+      alignItems="center"
+      bgcolor="background.paper"
+      sx={{ borderRadius: (theme) => theme.spacing(2) }}
+      flexDirection="column"
+      gap={1}
+      justifyContent="start"
+      padding={[2, 2, 1, 2]}
+      width="100%"
+    >
+      <Stack
+        gap={1}
+        flexDirection="row"
+        alignItems="center"
+        justifyContent="start"
+        width="100%"
+      >
+        <Skeleton variant="circular" width={24} height={24} />
+        <Skeleton variant="text" width={80} height={32} />
+      </Stack>
 
-      <WrapperItem>
-        <WrapperIcon>
+      <Stack width="100%" justifyContent="start">
+        <Stack
+          gap={1}
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="start"
+          width="100%"
+        >
           <Skeleton variant="circular" width={24} height={24} />
           <Skeleton variant="text" width={120} height={32} />
-        </WrapperIcon>
+        </Stack>
         <Skeleton variant="text" width="100%" height={32} />
-      </WrapperItem>
+      </Stack>
 
-      <Divider variant="middle" sx={{ width: '100%' }} />
+      <Divider variant="middle" style={{ width: '100%' }} />
 
-      <WrapperItem>
-        <WrapperIcon>
+      <Stack width="100%">
+        <Stack
+          gap={1}
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="start"
+          width="100%"
+        >
           <Skeleton variant="circular" width={24} height={24} />
           <Skeleton variant="text" width={120} height={32} />
-        </WrapperIcon>
+        </Stack>
         <Skeleton variant="text" width="100%" height={32} />
-      </WrapperItem>
-    </Root>
+      </Stack>
+    </Stack>
   );
 };
 
 const NetworkFallback = () => {
   return (
-    <Root sx={{ height: '100%' }}>
-      <WrapperFallBack>
+    <Stack
+      alignItems="center"
+      bgcolor="background.paper"
+      sx={{ borderRadius: (theme) => theme.spacing(2) }}
+      flexDirection="column"
+      gap={1}
+      justifyContent="start"
+      padding={[2, 2, 1, 2]}
+      width="100%"
+      height='100%'
+    >
+      <Stack alignItems="center" justifyContent="center">
         <Typography variant="body1" color="error">
           Some required data is missing.
         </Typography>
-      </WrapperFallBack>
-    </Root>
+      </Stack>
+    </Stack>
   );
 };
 
@@ -204,16 +214,25 @@ export const NetworkCard = ({
   }
 
   return (
-    <Root>
-      <WrapperItem>
+    <Stack
+      alignItems="center"
+      bgcolor="background.paper"
+      sx={{ borderRadius: (theme) => theme.spacing(2) }}
+      flexDirection="column"
+      gap={1}
+      justifyContent="start"
+      padding={[2, 2, 1, 2]}
+      width="100%"
+    >
+      <div style={{ width: '100%' }}>
         <Network name={network} />
-      </WrapperItem>
+      </div>
 
       <RenderNetwork {...hot} state={'hot'} />
 
-      <Divider variant="middle" sx={{ width: '100%' }} />
+      <Divider variant="middle" style={{ width: '100%' }} />
 
       <RenderNetwork {...cold} state={'cold'} />
-    </Root>
+    </Stack>
   );
 };
