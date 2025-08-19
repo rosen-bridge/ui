@@ -4,20 +4,21 @@ import { useParams } from 'next/navigation';
 
 import { Stack } from '@rosen-bridge/ui-kit';
 
-import { Details } from '@/app/events/[details]/Details';
-import { DetailsStepper } from '@/app/events/[details]/DetailsStepper';
-import { Overview } from '@/app/events/[details]/Overview';
-import { SourceTx } from '@/app/events/[details]/SourceTx';
-import { Wids } from '@/app/events/[details]/Wids';
+import {
+  Details,
+  DetailsStepper,
+  Overview,
+  SourceTx,
+  Wids,
+} from '@/app/events/[details]';
 
 const Page = () => {
-  const params = useParams();
-  const eventId = params.details;
+  const { details: eventId } = useParams();
 
   return (
     <Stack display="flex" gap={2} flexDirection="column">
-      <Overview id={`${eventId}`} />
-      <Details id={`${eventId}`} />
+      <Overview id={eventId as string} />
+      <Details id={eventId as string} />
       <DetailsStepper />
       <Wids />
       <SourceTx />

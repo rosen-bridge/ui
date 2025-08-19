@@ -12,7 +12,7 @@ import {
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
-import { DetailsCard } from '@/app/events/[details]/DetailsCard';
+import { DetailsCard } from '@/app/events/[details]/';
 
 export const SourceTx = () => {
   const disclosure = useDisclosure({

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 
 import {
   Amount2,
@@ -19,7 +19,7 @@ import {
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { DetailsCard } from '@/app/events/[details]/DetailsCard';
+import { DetailsCard } from '@/app/events/[details]';
 import { BridgeEvent } from '@/app/events/[details]/type';
 
 type EventStatusProps = {
@@ -27,7 +27,20 @@ type EventStatusProps = {
 };
 
 const SkeletonOverview = () => {
-  return <div style={{ width: '100%', minHeight: '339px' }}>loading....</div>;
+  return (
+    <div>
+      <Stack flexDirection="column" gap={2}>
+        <Skeleton width="100%" height="30px" />
+        <Columns width={'320px'} gap={'16px'} count={3}>
+          {Array.from(Array(6).keys()).map((_, i) => (
+            <div key={i} style={{ margin: '8px' }}>
+              <Skeleton variant="rectangular" height={100} width={100} />
+            </div>
+          ))}
+        </Columns>
+      </Stack>
+    </div>
+  );
 };
 
 const EventStatus = ({ value }: EventStatusProps) => {
@@ -45,129 +58,110 @@ const EventStatus = ({ value }: EventStatusProps) => {
 
 export const Overview = ({ id }: { id: string }) => {
   const isMobile = useBreakpoint('tablet-down');
-  const { data, isLoading, error } = useSWR<BridgeEvent>(
-    `/v1/events/${id}`,
-    fetcher,
+  const { data, isLoading } = useSWR<BridgeEvent>(`/v1/events/${id}`, fetcher);
+
+  const renderLabel = (
+    label: string,
+    children: React.ReactNode,
+    inset = false,
+  ) => (
+    <Label
+      orientation={isMobile ? 'horizontal' : 'vertical'}
+      label={label}
+      inset={inset}
+    >
+      {children}
+    </Label>
   );
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [data, isLoading, error]);
+
+  if (isLoading || !data) {
+    return (
+      <DetailsCard state="open" title="Overview">
+        <SkeletonOverview />
+      </DetailsCard>
+    );
+  }
 
   return (
     <DetailsCard state="open" title="Overview">
-      {isLoading ? (
-        <SkeletonOverview />
-      ) : (
-        <>
-          <Label
-            orientation={isMobile ? 'horizontal' : 'vertical'}
-            label="Event Id"
-          >
-            {data && (
-              <Identifier
-                value={data?.eventTriggers?.eventId || 'error loading !!!'}
-                copyable
-              />
-            )}
-          </Label>
-          {/*Identifier*/}
-          <Columns count={3} width="320px" gap="8px">
-            <Label
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              label="Chin"
-            >
-              <Stack alignItems="center">
-                {data && (
-                  <Connector
-                    start={
-                      <Network
-                        variant={isMobile ? 'logo' : 'both'}
-                        loading={isLoading}
-                        name={data?.fromChain}
-                      />
-                    }
-                    end={
-                      <Network
-                        variant={isMobile ? 'logo' : 'both'}
-                        loading={isLoading}
-                        name={data?.toChain}
-                      />
-                    }
-                  />
-                )}
-              </Stack>
-            </Label>
-
-            <Label
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              label="Token"
-            >
-              {/*TODO: diff type sourceChainTokenId*/}
-              <Token name={data?.sourceChainTokenId} reverse={isMobile} />
-            </Label>
-
-            <Label
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              label="Time"
-            >
-              {data && <RelativeTime timestamp={data?.timestamp || 1755841} />}
-            </Label>
-
-            {/*Chip*/}
-            <Label
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              label="Amount"
-            >
-              {/*TODO: amount to usd */}
-              <Amount2
-                value={data?.amount}
-                orientation={'horizontal'}
-                unit={'N/A'}
-              />
-            </Label>
-
-            <Label
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              label="Status"
-            >
-              {data?.status === null ? (
-                <>fraud</>
-              ) : (
-                <EventStatus value={data?.status} />
-              )}
-            </Label>
-            <Label
-              orientation={isMobile ? 'horizontal' : 'vertical'}
-              label="Fee Sum"
-            >
-              {/*TODO: diff type sourceChainTokenId*/}
-              <Amount2
-                value={data?.networkFee}
-                orientation={'horizontal'}
-                unit={data?.sourceChainTokenId}
-              />
-            </Label>
-          </Columns>
-
-          <div>
-            <Label label="Address"></Label>
-            <Label label="from" inset>
-              <Identifier
-                loading={isLoading}
-                value={data?.fromAddress || 'error loading !!!'}
-                copyable
-              />
-            </Label>
-            <Label label="to" inset>
-              <Identifier
-                loading={isLoading}
-                value={data?.toAddress || 'error loading !!!'}
-                copyable
-              />
-            </Label>
-          </div>
-        </>
+      {renderLabel(
+        'Event Id',
+        <Identifier
+          value={data.eventTriggers?.eventId || 'error loading !!!'}
+          copyable
+        />,
       )}
+      <Columns count={3} width="320px" gap="8px">
+        {renderLabel(
+          'Chin',
+          <Stack alignItems="center">
+            <Connector
+              start={
+                <Network
+                  variant={isMobile ? 'logo' : 'both'}
+                  name={data.fromChain}
+                />
+              }
+              end={
+                <Network
+                  variant={isMobile ? 'logo' : 'both'}
+                  name={data.toChain}
+                />
+              }
+            />
+          </Stack>,
+        )}
+
+        {renderLabel(
+          'Token',
+          <Token name={data.sourceChainTokenId} reverse={isMobile} />,
+        )}
+
+        {renderLabel(
+          'Time',
+          <RelativeTime timestamp={data.timestamp || 1755841} />,
+        )}
+
+        {renderLabel(
+          'Amount',
+          <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />,
+        )}
+
+        {renderLabel(
+          'Status',
+          data.status === null ? (
+            <>fraud</>
+          ) : (
+            <EventStatus value={data.status} />
+          ),
+        )}
+
+        {renderLabel(
+          'Fee Sum',
+          <Amount2
+            value={data.networkFee}
+            orientation="horizontal"
+            unit={data.sourceChainTokenId}
+          />,
+        )}
+      </Columns>
+
+      <div>
+        {renderLabel('Address', null)}
+        {renderLabel(
+          'from',
+          <Identifier
+            value={data.fromAddress || 'error loading !!!'}
+            copyable
+          />,
+          true,
+        )}
+        {renderLabel(
+          'to',
+          <Identifier value={data.toAddress || 'error loading !!!'} copyable />,
+          true,
+        )}
+      </div>
     </DetailsCard>
   );
 };
