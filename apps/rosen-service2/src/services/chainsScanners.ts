@@ -62,6 +62,13 @@ export class ChainsScannerService extends PeriodicTaskService {
   }
 
   /**
+   * return scanners
+   *
+   * @returns { { [k1 in ChainsKeys]?: ExtraChainScannersType } } scanners
+   */
+  public getScanners = () => this.scanners;
+
+  /**
    * Generates and registers blockchain scanners along with their corresponding event extractors
    * based on the active chains and configured methods.
    *
