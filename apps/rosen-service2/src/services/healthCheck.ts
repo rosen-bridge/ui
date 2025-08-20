@@ -1,4 +1,4 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import {
@@ -46,7 +46,7 @@ export class HealthService extends AbstractService {
   private constructor(
     dbService: DBService,
     ergoScannerService: ErgoScannerService,
-    logger: AbstractLogger = new DummyLogger(),
+    logger?: AbstractLogger,
   ) {
     super(logger);
     this.dbService = dbService;
@@ -82,7 +82,7 @@ export class HealthService extends AbstractService {
     this.params = [
       new ScannerSyncHealthCheckParam(
         NETWORKS.ergo.key,
-        async () => this.dbService.getLastSavedBlock('ergo'),
+        async () => this.dbService.getLastSavedBlock(NETWORKS.ergo.key),
         configs.healthCheck.scanner.warnDiff,
         configs.healthCheck.scanner.criticalDiff,
         ERGO_BLOCK_TIME * 1000,
