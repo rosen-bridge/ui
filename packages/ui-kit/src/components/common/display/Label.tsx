@@ -1,21 +1,69 @@
 import { ReactNode } from 'react';
 
 import { Box, Typography } from '@mui/material';
+import { ExclamationCircle } from '@rosen-bridge/icons';
 
-interface LabelProps {
+import { Stack, SvgIcon, Tooltip } from '../../base';
+
+/**
+ * Props for the `Label` component.
+ */
+type LabelProps = {
+  /**
+   * The text to be displayed as the main label.
+   */
   label: string;
-  children?: ReactNode;
-  inset?: boolean;
-  dense?: boolean;
-  orientation?: 'horizontal' | 'vertical';
-  color?: 'textSecondary' | 'textPrimary';
-}
 
+  /**
+   * Optional child content displayed next to or below the label,
+   * depending on the orientation.
+   */
+  children?: ReactNode;
+
+  /**
+   * When true, renders the label with an "inset" style,
+   * showing a dashed border indicator on the left.
+   */
+  inset?: boolean;
+
+  /**
+   * An optional info text to display in a tooltip.
+   * If provided, an info icon will appear next to the label.
+   */
+  info?: string;
+
+  /**
+   * Reduces vertical padding for a denser layout.
+   */
+  dense?: boolean;
+
+  /**
+   * Layout orientation of the label and content.
+   * - `horizontal`: label and content are side by side.
+   * - `vertical`: label is placed above the content.
+   */
+  orientation?: 'horizontal' | 'vertical';
+
+  /**
+   * The color of the label text.
+   * - `textSecondary` (default)
+   * - `textPrimary`
+   */
+  color?: 'textSecondary' | 'textPrimary';
+};
+
+/**
+ * A reusable label component that supports optional tooltip info,
+ * orientation (horizontal or vertical), inset styling, and dense layout.
+ *
+ * Useful for form-like UIs where labels and values need consistent styling.
+ */
 export const Label = ({
   label,
   children,
   dense,
   inset,
+  info,
   orientation,
   color = 'textSecondary',
 }: LabelProps) => {
@@ -33,17 +81,36 @@ export const Label = ({
       }}
     >
       <Box flexShrink={0} flexBasis="40%">
-        <Typography
-          noWrap
-          variant="body2"
-          color={color}
-          lineHeight="1.5rem"
-          sx={{
-            my: orientation === 'vertical' ? 0 : 0.5,
-          }}
-        >
-          {label}
-        </Typography>
+        <Stack gap={1} flexDirection="row" alignItems="center">
+          <Typography
+            noWrap
+            variant="body2"
+            color={color}
+            lineHeight="1.5rem"
+            sx={{
+              my: orientation === 'vertical' ? 0 : 0.5,
+            }}
+          >
+            {label}
+          </Typography>
+          {info && (
+            <Tooltip arrow title={info}>
+              <SvgIcon
+                sx={{
+                  width: '16px',
+                  height: '16px',
+                  cursor: 'pointer',
+                  color: (theme) =>
+                    color === 'textSecondary'
+                      ? theme.palette.text.secondary
+                      : theme.palette.text.primary,
+                }}
+              >
+                <ExclamationCircle />
+              </SvgIcon>
+            </Tooltip>
+          )}
+        </Stack>
       </Box>
       <Box overflow="hidden" whiteSpace="nowrap" maxWidth="100%">
         {children}
