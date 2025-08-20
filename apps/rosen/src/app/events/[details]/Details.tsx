@@ -5,6 +5,7 @@ import React from 'react';
 import {
   Amount2,
   Columns,
+  DisclosureButton,
   Grid,
   Identifier,
   Label,
@@ -20,76 +21,62 @@ import useSWR from 'swr';
 import { DetailsCard } from '@/app/events/[details]/';
 import { BridgeEvent } from '@/app/events/[details]/type';
 
-const SkeletonDetails = () => {
-  return (
-    <div>
-      <Stack flexDirection="column" gap={2}>
-        <Skeleton width="100%" height="30px" />
-        <Columns width={'320px'} gap={'16px'} count={3}>
-          {Array.from(Array(6).keys()).map((_, i) => (
-            <div key={i} style={{ margin: '8px' }}>
-              <Skeleton variant="rectangular" height={100} width={100} />
-            </div>
-          ))}
-        </Columns>
-      </Stack>
-    </div>
-  );
-};
-
 export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading } = useSWR<BridgeEvent>(`/v1/events/${id}`, fetcher);
+  const { data, isLoading, mutate } = useSWR<BridgeEvent>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
 
-  if (isLoading || !data) {
-    return (
-      <DetailsCard state="open" title="Details">
-        <SkeletonDetails />
-      </DetailsCard>
-    );
-  }
+  const disclosure = useDisclosure({
+    onOpen: async () => {
+      await mutate();
+    },
+  });
 
   return (
-    <DetailsCard state="open" title="Details">
-      {isLoading ? (
-        <SkeletonDetails />
-      ) : (
-        <Stack flexDirection="column" gap={2}>
-          <Columns width="230px" count={3} gap="8px">
-            <Label orientation="vertical" label="Duration">
-              {data?.timestamp ? (
-                <RelativeTime timestamp={data.timestamp} />
-              ) : (
-                <Typography>N/A</Typography>
-              )}
-            </Label>
-            <Label orientation="vertical" label="Token Price">
+    <DetailsCard
+      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
+      state={disclosure.state}
+      title="Details"
+    >
+      <Columns width="350px" count={2} rule gap="24px">
+        <div>
+          <Label orientation="horizontal" label="Duration">
+            {data?.timestamp ? (
+              <RelativeTime timestamp={data.timestamp} />
+            ) : (
               <Typography>N/A</Typography>
-            </Label>
-            <Label orientation="vertical" label="RSN Ratio">
-              <Typography>N/A</Typography>
-            </Label>
-          </Columns>
+            )}
+          </Label>
 
-          <Columns width="500px" count={2} gap="24px">
-            <div>
-              <Label label="Total Emission" />
-              <Label label="Guards" inset>
-                <Typography>N/A</Typography>
-              </Label>
-              <Label label="Watchers" inset>
-                <Typography>N/A</Typography>
-              </Label>
-            </div>
-            <div>
-              <Label label="Fee Sum" />
-              <Label label="Bridge Fee" inset>
-                <Typography>N/A</Typography>
-              </Label>
-              <Label label="Network Fee" inset>
-                <Typography>N/A</Typography>
-              </Label>
-            </div>
-          </Columns>
+          <div>
+            <Label label="Fee Sum" />
+            <Label label="Bridge Fee" inset>
+              <Typography>N/A</Typography>
+            </Label>
+            <Label label="Network Fee" inset>
+              <Typography>N/A</Typography>
+            </Label>
+          </div>
+
+          <div>
+            <Label label="Total Emission" />
+            <Label label="Guards" inset>
+              <Typography>N/A</Typography>
+            </Label>
+            <Label label="Watchers" inset>
+              <Typography>N/A</Typography>
+            </Label>
+          </div>
+        </div>
+
+        <div>
+          <Label orientation="horizontal" label="Token Price">
+            <Typography>N/A</Typography>
+          </Label>
+          <Label orientation="horizontal" label="RSN Ratio">
+            <Typography>N/A</Typography>
+          </Label>
 
           <div>
             <Label label="Tx IDs" />
@@ -110,8 +97,8 @@ export const Details = ({ id }: { id: string }) => {
               N/A
             </Label>
           </div>
-        </Stack>
-      )}
+        </div>
+      </Columns>
     </DetailsCard>
   );
 };

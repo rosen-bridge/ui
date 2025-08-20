@@ -34,8 +34,8 @@ const SkeletonOverview = () => {
         <Skeleton width="100%" height="30px" />
         <Columns width={'320px'} gap={'16px'} count={3}>
           {Array.from(Array(6).keys()).map((_, i) => (
-            <div key={i} style={{ margin: '8px' }}>
-              <Skeleton variant="rectangular" height={100} width={100} />
+            <div key={i} style={{ marginBottom: '8px' }}>
+              <Skeleton variant="rounded" height={100} width={'100%'} />
             </div>
           ))}
         </Columns>
@@ -59,7 +59,10 @@ const EventStatus = ({ value }: EventStatusProps) => {
 
 export const Overview = ({ id }: { id: string }) => {
   const isMobile = useBreakpoint('tablet-down');
+
   const { data, isLoading } = useSWR<BridgeEvent>(`/v1/events/${id}`, fetcher);
+
+  const orientation = isMobile ? 'horizontal' : 'vertical';
 
   function time(timestamp: number) {
     const date = new Date(timestamp);
@@ -77,20 +80,6 @@ export const Overview = ({ id }: { id: string }) => {
     return formatted.replace(',', '');
   }
 
-  const renderLabel = (
-    label: string,
-    children: React.ReactNode,
-    inset = false,
-  ) => (
-    <Label
-      orientation={isMobile ? 'horizontal' : 'vertical'}
-      label={label}
-      inset={inset}
-    >
-      {children}
-    </Label>
-  );
-
   if (isLoading || !data) {
     return (
       <DetailsCard state="open" title="Overview">
@@ -101,16 +90,16 @@ export const Overview = ({ id }: { id: string }) => {
 
   return (
     <DetailsCard state="open" title="Overview">
-      {renderLabel(
-        'Event Id',
-        <Identifier
-          value={data.eventTriggers?.eventId || 'error loading !!!'}
-          copyable
-        />,
-      )}
-      <Columns count={3} width="320px" gap="8px">
-        {renderLabel(
-          'Chin',
+      <div style={{ width: '70%' }}>
+        <Label label="Event Id">
+          <Identifier
+            value={data.eventTriggers?.eventId || 'error loading !!!'}
+            copyable
+          />
+        </Label>
+      </div>
+      <Columns count={3} width="320px" gap="24px">
+        <Label orientation={orientation} label="Chin">
           <Stack alignItems="center">
             <Connector
               start={
@@ -126,62 +115,83 @@ export const Overview = ({ id }: { id: string }) => {
                 />
               }
             />
-          </Stack>,
-        )}
+          </Stack>
+        </Label>
 
-        {renderLabel(
-          'Token',
-          <Token name={data.sourceChainTokenId} reverse={isMobile} />,
-        )}
+        <Label label="Token" orientation={orientation}>
+          <Token name={data.sourceChainTokenId} reverse={isMobile} />
+        </Label>
 
-        {renderLabel(
-          'Time',
+        <Label label="Time" orientation={orientation}>
           <Typography color="text.primary" variant="body1">
             {time(data.timestamp || 175522841)}
-          </Typography>,
-        )}
+          </Typography>
+        </Label>
 
-        {renderLabel(
-          'Amount',
-          <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />,
-        )}
+        <Label label="Amount" orientation={orientation}>
+          <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />
+        </Label>
 
-        {renderLabel(
-          'Status',
-          data.status === null ? (
-            <>fraud</>
+        <Label label="Status" orientation={orientation}>
+          {data.status === undefined ? (
+            <Typography>fraud</Typography>
           ) : (
             <EventStatus value={data.status} />
-          ),
-        )}
+          )}
+        </Label>
 
-        {renderLabel(
-          'Fee Sum',
+        <Label label="Fee Sum" orientation={orientation}>
           <Amount2
             value={data.networkFee}
             orientation="horizontal"
             unit={data.sourceChainTokenId}
-          />,
-        )}
+          />
+        </Label>
       </Columns>
 
-      <div>
+      <Stack>
         <Label label="Address"></Label>
-        <Label label="from" inset>
-          <Identifier
-            value={data.fromAddress || 'error loading !!!'}
-            href={data.fromAddress}
-            copyable
-          />
-        </Label>
-        <Label label="to" inset>
-          <Identifier
-            value={data.toAddress || 'error loading !!!'}
-            href={data.fromAddress}
-            copyable
-          />
-        </Label>
-      </div>
+        <Stack
+          flexDirection={'row'}
+          justifyContent="space-between"
+          style={{ width: isMobile ? '100%' : '70%' }}
+        >
+          <Label label="from" inset></Label>
+          <div
+            style={{
+              maxWidth: '568px',
+              overflow: 'hidden',
+              marginLeft: isMobile ? '10px' : '60px',
+            }}
+          >
+            <Identifier
+              value={data.fromAddress || 'error loading !!!'}
+              href={data.fromAddress}
+              copyable
+            />
+          </div>
+        </Stack>
+        <Stack
+          flexDirection={'row'}
+          justifyContent="space-between"
+          style={{ width: isMobile ? '100%' : '70%' }}
+        >
+          <Label label="to" inset></Label>
+          <div
+            style={{
+              maxWidth: '568px',
+              overflow: 'hidden',
+              marginLeft: isMobile ? '10px' : '60px',
+            }}
+          >
+            <Identifier
+              value={data.toAddress || 'error loading !!!'}
+              href={data.fromAddress}
+              copyable
+            />
+          </div>
+        </Stack>
+      </Stack>
     </DetailsCard>
   );
 };

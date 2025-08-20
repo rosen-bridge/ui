@@ -73,6 +73,28 @@ const rows: rowTypes[] = [
   },
 ];
 
+const TableHeader = () => {
+  const isMobile = useBreakpoint('tablet-down');
+
+  return (
+    <TableHead
+      sx={(theme) => ({
+        '& .MuiTableCell-root': {
+          backgroundColor: theme.palette.secondary.light,
+          padding: theme.spacing(0.5, 2),
+        },
+      })}
+    >
+      <TableRow style={{ display: !isMobile ? 'table-row' : 'none' }}>
+        <TableCell>#</TableCell>
+        <TableCell>WID</TableCell>
+        <TableCell>COMMITMENT</TableCell>
+        <TableCell>REWARDED</TableCell>
+      </TableRow>
+    </TableHead>
+  );
+};
+
 export const Watchers = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<rowTypes>();
@@ -84,11 +106,11 @@ export const Watchers = () => {
     (custom?: string) => {
       switch (currentSize) {
         case 'mobile':
-          return '150px';
+          return '140px';
         case 'tablet':
-          return '150px';
+          return '160px';
         case 'laptop':
-          return '250px';
+          return '260px';
         case 'desktop':
           return custom ?? '350px';
         default:
@@ -120,7 +142,7 @@ export const Watchers = () => {
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
+      state={'open'}
       title="Wids"
     >
       <div
@@ -141,23 +163,17 @@ export const Watchers = () => {
 
       <TableContainer>
         <Table>
-          <TableHead
-            sx={(theme) => ({
-              '& .MuiTableCell-root': {
-                backgroundColor: theme.palette.secondary.light,
-                padding: theme.spacing(0.5, 2),
+          <TableHeader />
+          <TableBody
+            sx={{
+              '& > tr': {
+                '& > td': {
+                  padding: '0px 0',
+                  height: '40px',
+                },
               },
-            })}
+            }}
           >
-            <TableRow style={{ display: !isMobile ? 'table-row' : 'none' }}>
-              <TableCell>#</TableCell>
-              <TableCell>WID</TableCell>
-              <TableCell>COMMITMENT</TableCell>
-              <TableCell>REWARDED</TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
             {rows.map((row) => (
               <TableRow key={row.id}>
                 {!isMobile && (
@@ -213,8 +229,13 @@ export const Watchers = () => {
                 )}
                 {/*Reward Icon*/}
                 {!isMobile && (
-                  <TableCell align="center" style={{ maxWidth: '80px' }}>
-                    <Stack alignItems="center" flexDirection="row" gap={1}>
+                  <TableCell align="right" style={{ maxWidth: '50px' }}>
+                    <Stack
+                      alignItems="center"
+                      justifyContent="center"
+                      flexDirection="row"
+                      gap={1}
+                    >
                       <SvgIcon
                         sx={{
                           color:
