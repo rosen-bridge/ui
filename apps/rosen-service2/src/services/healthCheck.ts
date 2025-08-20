@@ -150,7 +150,6 @@ export class HealthService extends AbstractService {
         `Registering healthCheck ${param.getId()} parameter failed: ${err}`,
       );
       if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-      throw err;
     }
   };
 
@@ -167,7 +166,6 @@ export class HealthService extends AbstractService {
         `Unregistering healthCheck ${paramId} parameter failed: ${err}`,
       );
       if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-      throw err;
     }
   };
 

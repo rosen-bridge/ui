@@ -1,3 +1,4 @@
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import fs from 'fs';
 import path from 'path';
@@ -7,7 +8,7 @@ class TokensConfig {
   private static instance: TokensConfig;
   protected tokenMap: TokenMap;
 
-  private constructor() {
+  private constructor(protected logger: AbstractLogger) {
     // do nothing
   }
 
@@ -15,7 +16,7 @@ class TokensConfig {
    * initializes TokensConfig with tokens from the specified path
    * @param tokensPath path to tokens json file
    */
-  static async init(): Promise<void> {
+  static async init(logger: AbstractLogger = new DummyLogger()): Promise<void> {
     const tokensPath = path.resolve(
       path.dirname(fileURLToPath(import.meta.url)),
       '../config/tokensMap.json',
@@ -24,11 +25,14 @@ class TokensConfig {
       if (!fs.existsSync(tokensPath)) {
         throw new Error(`tokensMap file with path ${tokensPath} doesn't exist`);
       }
-      TokensConfig.instance = new TokensConfig();
+      TokensConfig.instance = new TokensConfig(logger);
       const tokensJson: string = fs.readFileSync(tokensPath, 'utf8');
       const tokens = JSON.parse(tokensJson);
       TokensConfig.instance.tokenMap = new TokenMap();
       await TokensConfig.instance.tokenMap.updateConfigByJson(tokens.tokens);
+      logger.debug(
+        `Token map loaded with ${JSON.stringify(TokensConfig.instance.tokenMap)} tokens`,
+      );
     }
   }
 

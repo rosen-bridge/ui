@@ -35,3 +35,4 @@ next-env.d.ts
 .devcontainer
 
 **/vite.config.*.mjs
+**vitest.config.ts.timestamp-*.mjs

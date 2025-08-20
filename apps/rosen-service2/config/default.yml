@@ -1,6 +1,3 @@
-logs:
-  - type: console
-    level: debug
 db:
   host: localhost
   port: 5432
@@ -19,19 +16,46 @@ healthCheck:
 chains:
   ergo:
     initialHeight: 1
+    scanInterval: 60
+    method: explorer
     node:
-      blockRetrieveGap: 0
-      scanInterval: 60
       url: https://node.ergopool.io/
+    explorer:
+      url: https://explorer.ergoplatform.com/
   cardano:
     active: false
+    initialHeight: 1
+    scanInterval: 60
+    method: koios
+    koios:
+      timeout: 100
   bitcoin:
     active: false
+    initialHeight: 1
+    scanInterval: 60
+    method: rpc
+    rpc:
+      timeout: 100
+    esplora:
+      timeout: 100
   doge:
     active: false
+    initialHeight: 1
+    scanInterval: 60
+    method: rpc
+    esplora:
+      timeout: 100
   ethereum:
     active: false
+    initialHeight: 1
+    scanInterval: 60
+    rpc:
+      timeout: 100
   binance:
     active: false
+    initialHeight: 1
+    scanInterval: 60
+    rpc:
+      timeout: 100
   runes:
     active: false
