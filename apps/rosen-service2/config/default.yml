@@ -1,9 +1,26 @@
+logs:
+  - type: 'file' # [file, console]
+    path: './logs/' # path to log files (only for rotateFile type)
+    maxSize: '20m' # maximum size of each log file (20 MB) (only for rotateFile type)
+    maxFiles: '10d' # maximum number of log files (14 days) (only for rotateFile type)
+    level: 'info' # [debug, info, warn, error]
+  - type: 'console'
+    level: 'info'
 db:
   host: localhost
   port: 5432
   username: postgres
   password: ''
   name: rosen_service
+healthCheck:
+  logging:
+    maxErrors: 10
+    maxWarns: 10
+    duration: 100
+  scanner:
+    warnDiff: 2
+    criticalDiff: 10
+  updateInterval: 60
 chains:
   ergo:
     initialHeight: 1
