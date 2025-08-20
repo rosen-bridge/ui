@@ -1,4 +1,4 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import * as scanner from '@rosen-bridge/scanner';
@@ -13,7 +13,7 @@ import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { configs } from '../configs';
 import { ERGO_METHOD_EXPLORER } from '../constants';
 import { initializeErgoScanner } from '../scanners';
-import { TokensConfig } from '../utils';
+import { TokensConfig } from '../tokensConfig';
 import { DBService } from './db';
 
 export class ErgoScannerService extends AbstractService {
@@ -33,10 +33,7 @@ export class ErgoScannerService extends AbstractService {
   ];
   readonly scanner: scanner.ErgoScanner;
 
-  private constructor(
-    dbService: DBService,
-    logger: AbstractLogger = new DummyLogger(),
-  ) {
+  private constructor(dbService: DBService, logger?: AbstractLogger) {
     super(logger);
     this.dbService = dbService;
     this.scanner = initializeErgoScanner(dbService.dataSource);
@@ -171,8 +168,8 @@ export class ErgoScannerService extends AbstractService {
    * initializes the singleton instance of ErgoScannerService
    *
    * @static
-   * @param {Ergo} ErgoScannerConfig
    * @param {DBService} [dbService]
+   * @param {AbstractLogger} [logger]
    * @memberof ErgoScannerService
    */
   static readonly init = async (

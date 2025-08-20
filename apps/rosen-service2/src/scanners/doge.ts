@@ -19,7 +19,7 @@ import {
 } from '@rosen-bridge/scanner';
 
 import { configs } from '../configs';
-import { TokensConfig } from '../utils';
+import { TokensConfig } from '../tokensConfig';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 

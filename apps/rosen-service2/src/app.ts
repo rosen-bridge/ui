@@ -7,7 +7,7 @@ import { ChainsScannerService } from './services/chainsScanners';
 import { DBService } from './services/db';
 import { ErgoScannerService } from './services/ergoScanner';
 import { HealthService } from './services/healthCheck';
-import { TokensConfig } from './utils';
+import { TokensConfig } from './tokensConfig';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
@@ -27,7 +27,10 @@ const startApp = async () => {
   );
 
   logger.debug('Initializing database service');
-  DBService.init(dataSource, logger);
+  DBService.init(
+    dataSource,
+    CallbackLoggerFactory.getInstance().getLogger('db-service'),
+  );
   serviceManager.register(DBService.getInstance());
   logger.debug('Database service registered to the service manager');
 
@@ -69,7 +72,7 @@ const startApp = async () => {
   serviceManager.register(ChainsHealthCheckService.getInstance());
   logger.debug('chains health-check Service registered to the service manager');
 
-  logger.debug('Starting service manager...');
+  logger.info('Starting service manager...');
   serviceManager.start(ChainsHealthCheckService.getInstance().getName());
 
   await Promise.resolve(() => {});

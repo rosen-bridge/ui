@@ -35,7 +35,7 @@
     "@rosen-bridge/health-check": "^7.0.1",
     "@rosen-bridge/json-bigint": "^0.1.0",
     "@rosen-bridge/log-level-check": "^2.0.1",
-    "@rosen-bridge/observation-extractor": "^7.1.1",
+    "@rosen-bridge/observation-extractor": "^7.1.4",
     "@rosen-bridge/scanner": "8.0.1",
     "@rosen-bridge/scanner-interfaces": "0.1.0",
     "@rosen-bridge/scanner-sync-check": "^7.0.0",
