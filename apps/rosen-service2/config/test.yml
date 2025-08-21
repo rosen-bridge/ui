@@ -35,3 +35,6 @@ chains:
     active: false
   runes:
     active: false
+paths:
+  tokens: tests/config/rosen/tokensMap.json
+  contracts: tests/config/rosen

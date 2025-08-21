@@ -374,5 +374,30 @@
         }
       }
     }
+  },
+  "paths": {
+    "type": "object",
+    "children": {
+      "tokens": {
+        "type": "string",
+        "default": "config/rosen/tokensMap.json",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the tokens file must be set"
+          }
+        ]
+      },
+      "contracts": {
+        "type": "string",
+        "default": "config/rosen",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the contracts file must be set"
+          }
+        ]
+      }
+    }
   }
 }

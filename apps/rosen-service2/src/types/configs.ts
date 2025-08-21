@@ -1,4 +1,5 @@
 export interface RosenService2BaseConfig {
+  paths: Paths;
   chains: Chains;
   healthCheck: HealthCheck;
   db: Db;
@@ -92,4 +93,9 @@ export interface Node {
   blockRetrieveGap: number;
   scanInterval: number;
   url: string;
+}
+
+export interface Paths {
+  tokens: string;
+  contracts: string;
 }
