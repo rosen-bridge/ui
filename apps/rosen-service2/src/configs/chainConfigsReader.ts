@@ -11,7 +11,10 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export class ChainConfigsReader {
   public data: ChainConfigs | undefined;
 
-  constructor(protected chain: ChainChoices) {
+  constructor(
+    protected chain: ChainChoices,
+    protected contractsPath: string,
+  ) {
     this.readConfigs();
   }
 
@@ -23,7 +26,10 @@ export class ChainConfigsReader {
   protected readConfigs = (): ChainConfigs => {
     try {
       const contractsData = fs.readFileSync(
-        path.join(__dirname, `../../config/rosen/contracts-${this.chain}.json`),
+        path.join(
+          __dirname,
+          `../../${this.contractsPath}/contracts-${this.chain}.json`,
+        ),
         'utf-8',
       );
       const contractsConfig = JsonBigInt.parse(contractsData) as ChainConfigs;
