@@ -100,7 +100,13 @@
       },
       "port": {
         "type": "number",
-        "default": 5432
+        "default": 5432,
+        "validations": [
+          {
+            "required": true,
+            "error": "postgres port must be set"
+          }
+        ]
       },
       "username": {
         "type": "string",
@@ -116,7 +122,99 @@
         "validations": [
           {
             "required": true,
-            "error": "postgres database name is required"
+            "error": "postgres database name must be set"
+          }
+        ]
+      }
+    }
+  },
+  "healthCheck": {
+    "type": "object",
+    "children": {
+      "logging": {
+        "type": "object",
+        "children": {
+          "maxErrors": {
+            "type": "number",
+            "default": 10,
+            "validations": [
+              {
+                "required": true,
+                "error": "maxErrorLogs must be specified"
+              }
+            ]
+          },
+          "maxWarns": {
+            "type": "number",
+            "default": 10,
+            "validations": [
+              {
+                "required": true,
+                "error": "maxWarns must be specified"
+              }
+            ]
+          },
+          "duration": {
+            "type": "number",
+            "default": 100,
+            "validations": [
+              {
+                "required": true,
+                "error": "duration must be specified (in seconds)"
+              }
+            ]
+          }
+        }
+      },
+      "scanner": {
+        "type": "object",
+        "children": {
+          "warnDiff": {
+            "type": "number",
+            "default": 2,
+            "validations": [
+              {
+                "required": true,
+                "error": "warnDiff must be specified"
+              }
+            ]
+          },
+          "criticalDiff": {
+            "type": "number",
+            "default": 10,
+            "validations": [
+              {
+                "required": true,
+                "error": "criticalDiff must be specified"
+              }
+            ]
+          }
+        }
+      },
+      "notification": {
+        "type": "object",
+        "children": {
+          "discordWebHookUrl": {
+            "type": "string"
+          },
+          "historyCleanupTimeout": {
+            "type": "number"
+          },
+          "hasBeenUnstableForAWhileWindowDuration": {
+            "type": "number"
+          },
+          "hasBeenUnknownForAWhileWindowDuration": {
+            "type": "number"
+          }
+        }
+      },
+      "updateInterval": {
+        "type": "number",
+        "default": 60,
+        "validations": [
+          {
+            "required": true,
+            "error": "notification updateInterval must be set"
           }
         ]
       }
@@ -135,7 +233,7 @@
             "validations": [
               {
                 "required": true,
-                "error": "ergo initial height is required"
+                "error": "ergo initial height must be set"
               }
             ]
           },
@@ -149,7 +247,7 @@
                 "validations": [
                   {
                     "required": true,
-                    "error": "ergo node blockRetrieveGap is required (in seconds)"
+                    "error": "ergo node blockRetrieveGap must be set (in seconds)"
                   }
                 ]
               },
@@ -160,7 +258,7 @@
                 "validations": [
                   {
                     "required": true,
-                    "error": "ergo node scanInterval is required (in seconds)"
+                    "error": "ergo node scanInterval must be set (in seconds)"
                   }
                 ]
               },
@@ -171,7 +269,7 @@
                 "validations": [
                   {
                     "required": true,
-                    "error": "ergo node url is required"
+                    "error": "ergo node url must be set"
                   }
                 ]
               }
@@ -274,6 +372,31 @@
             ]
           }
         }
+      }
+    }
+  },
+  "paths": {
+    "type": "object",
+    "children": {
+      "tokens": {
+        "type": "string",
+        "default": "config/rosen/tokensMap.json",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the tokens file must be set"
+          }
+        ]
+      },
+      "contracts": {
+        "type": "string",
+        "default": "config/rosen",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the contracts file must be set"
+          }
+        ]
       }
     }
   }

@@ -1,5 +1,6 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { BlockEntity, PROCEED } from '@rosen-bridge/scanner';
 import {
   AbstractService,
   Dependency,
@@ -15,6 +16,22 @@ export class DBService extends AbstractService {
     super(logger);
     this.dataSource = dataSource;
   }
+
+  /**
+   * returns the last saved block height based on the scanner name
+   * @param scanner considering scanned blocks by this scanner
+   */
+  public getLastSavedBlock = async (scanner: string) => {
+    const lastBlock = await this.dataSource.getRepository(BlockEntity).find({
+      where: { status: PROCEED, scanner: scanner },
+      order: { height: 'DESC' },
+      take: 1,
+    });
+    if (lastBlock.length !== 0) {
+      return lastBlock[0];
+    }
+    throw new Error('No block found or error in database connection');
+  };
 
   /**
    * initializes the singleton instance of DBService
