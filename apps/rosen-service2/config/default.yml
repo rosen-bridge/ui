@@ -1,11 +1,3 @@
-logs:
-  - type: 'file' # [file, console]
-    path: './logs/' # path to log files (only for rotateFile type)
-    maxSize: '20m' # maximum size of each log file (20 MB) (only for rotateFile type)
-    maxFiles: '10d' # maximum number of log files (14 days) (only for rotateFile type)
-    level: 'info' # [debug, info, warn, error]
-  - type: 'console'
-    level: 'info'
 db:
   host: localhost
   port: 5432
@@ -27,7 +19,6 @@ chains:
     node:
       blockRetrieveGap: 0
       scanInterval: 60
-      url: https://node.ergopool.io/
   cardano:
     active: false
   bitcoin:

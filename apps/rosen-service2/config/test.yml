@@ -1,28 +1,24 @@
-logs:
-  - type: console
-    level: warn
 db:
   host: localhost
   port: 5432
-  username: postgres
-  password: ''
-  name: rosen_service
+  username: test
+  password: test
+  name: test_db
 healthCheck:
   logging:
-    maxErrors: 10
-    maxWarns: 10
-    duration: 100
+    maxErrors: 5
+    maxWarns: 5
+    duration: 20
   scanner:
-    warnDiff: 2
-    criticalDiff: 10
-  updateInterval: 60
+    warnDiff: 5
+    criticalDiff: 20
+  updateInterval: 10
 chains:
   ergo:
     initialHeight: 1
     node:
       blockRetrieveGap: 0
       scanInterval: 60
-      url: https://node.ergopool.io/
   cardano:
     active: false
   bitcoin:
