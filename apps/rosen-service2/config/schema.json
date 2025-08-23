@@ -283,6 +283,7 @@
             "children": {
               "url": {
                 "type": "string",
+                "default": "https://api.ergoplatform.com/",
                 "description": "ergo explorer url",
                 "validations": [
                   {
@@ -323,7 +324,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 20,
+            "default": 30,
             "description": "cardano scanInterval threshold in seconds",
             "validations": [
               {
@@ -764,7 +765,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 12,
+            "default": 60,
             "description": "ethereum scanInterval threshold in seconds",
             "validations": [
               {
@@ -840,7 +841,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 3,
+            "default": 10,
             "description": "binance scanInterval threshold in seconds",
             "validations": [
               {

@@ -3,15 +3,19 @@ chains:
     explorer:
       url: ''
   cardano:
+    active: false
     koios:
       url: ''
   bitcoin:
+    active: false
     rpc:
       url: ''
   ethereum:
+    active: false
     rpc:
       url: ''
   binance:
+    active: false
     rpc:
       url: ''
 paths:
