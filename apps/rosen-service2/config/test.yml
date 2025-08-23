@@ -1,0 +1,7 @@
+chains:
+  ergo:
+    node:
+      url: ''
+paths:
+  tokens: tests/config/rosen/tokensMap.json
+  contracts: tests/config/rosen

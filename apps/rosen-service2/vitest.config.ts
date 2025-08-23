@@ -1,4 +1,8 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { defineConfig } from 'vitest/config';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   test: {
@@ -14,6 +18,10 @@ export default defineConfig({
       forks: {
         singleFork: true,
       },
+    },
+    env: {
+      NODE_ENV: 'test',
+      NODE_CONFIG_DIR: path.resolve(__dirname, 'config'),
     },
   },
 });
