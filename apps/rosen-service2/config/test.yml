@@ -1,36 +1,7 @@
-db:
-  host: localhost
-  port: 5432
-  username: test
-  password: test
-  name: test_db
-healthCheck:
-  logging:
-    maxErrors: 5
-    maxWarns: 5
-    duration: 20
-  scanner:
-    warnDiff: 5
-    criticalDiff: 20
-  updateInterval: 10
 chains:
   ergo:
-    initialHeight: 1
     node:
-      blockRetrieveGap: 0
-      scanInterval: 60
-  cardano:
-    active: false
-  bitcoin:
-    active: false
-  doge:
-    active: false
-  ethereum:
-    active: false
-  binance:
-    active: false
-  runes:
-    active: false
+      url: ''
 paths:
   tokens: tests/config/rosen/tokensMap.json
   contracts: tests/config/rosen
