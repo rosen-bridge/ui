@@ -267,7 +267,6 @@
             "children": {
               "url": {
                 "type": "string",
-                "default": "https://node.ergopool.io/",
                 "description": "ergo node url",
                 "validations": [
                   {
