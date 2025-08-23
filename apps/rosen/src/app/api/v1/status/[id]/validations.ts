@@ -11,7 +11,7 @@ export interface GetAggregatedStatusTimelineRouteParam {
 const ParamsSchema = Joi.object<GetAggregatedStatusTimelineRouteParam>().keys({
   id: Joi.string().length(64).required(),
   offset: Joi.number().integer().min(0).default(0),
-  limit: Joi.number().integer().min(10).max(100).default(10),
+  limit: Joi.number().integer().min(1).max(100).default(10),
 });
 
 export const validator = async (

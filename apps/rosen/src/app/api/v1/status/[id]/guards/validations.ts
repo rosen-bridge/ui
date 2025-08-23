@@ -22,7 +22,7 @@ const ParamsSchema = Joi.object<GetGuardStatusTimelineParams>().keys({
   id: Joi.string().required().length(64),
   guardPks: Joi.array().items(Joi.string().length(66)).default([]), // compressed ECDSA public key is used which is 66 bytes
   offset: Joi.number().integer().min(0).default(0),
-  limit: Joi.number().integer().min(10).max(100).default(10),
+  limit: Joi.number().integer().min(1).max(100).default(10),
 });
 
 export const validator = async (

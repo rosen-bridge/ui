@@ -72,9 +72,8 @@ class GuardStatusChangedAction {
       where: whereClause,
       relations: ['tx'],
       order: { insertedAt: 'DESC' },
-      ...(Number.isFinite(offset) && Number.isFinite(limit)
-        ? { skip: offset, take: limit }
-        : {}),
+      ...(Number.isFinite(offset) ? { skip: offset } : {}),
+      ...(Number.isFinite(limit) ? { take: limit } : {}),
     });
 
     return {
