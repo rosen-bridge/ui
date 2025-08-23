@@ -1,6 +1,6 @@
 chains:
   ergo:
-    node:
+    explorer:
       url: ''
   cardano:
     koios:

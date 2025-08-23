@@ -239,7 +239,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 120,
             "description": "ergo scanInterval threshold in seconds",
             "validations": [
               {
@@ -283,7 +283,6 @@
             "children": {
               "url": {
                 "type": "string",
-                "default": "https://explorer.ergoplatform.com/",
                 "description": "ergo explorer url",
                 "validations": [
                   {
@@ -324,7 +323,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 20,
             "description": "cardano scanInterval threshold in seconds",
             "validations": [
               {
@@ -502,7 +501,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 600,
             "description": "bitcoin scanInterval threshold in seconds",
             "validations": [
               {
@@ -765,7 +764,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 12,
             "description": "ethereum scanInterval threshold in seconds",
             "validations": [
               {
@@ -841,7 +840,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 3,
             "description": "binance scanInterval threshold in seconds",
             "validations": [
               {

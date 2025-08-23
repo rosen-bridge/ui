@@ -10,7 +10,7 @@ class TokensConfig {
   protected tokenMap: TokenMap;
 
   private constructor(protected logger?: AbstractLogger) {
-    // do nothing
+    this.logger?.info(`New instance of TokensConfig created`);
   }
 
   /**
@@ -28,6 +28,9 @@ class TokensConfig {
       const tokens = JSON.parse(tokensJson);
       TokensConfig.instance.tokenMap = new TokenMap();
       await TokensConfig.instance.tokenMap.updateConfigByJson(tokens.tokens);
+      logger?.info(
+        `TokenMap config successfully updated by ${tokens.tokens} tokens info.`,
+      );
     }
   }
 
