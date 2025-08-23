@@ -1,7 +1,7 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { AssetBalance, AddressBalance, ChainAssetBalance } from '../interfaces';
+import { AssetBalance, ChainAssetBalance } from '../interfaces';
 
 export abstract class AbstractDataAdapter {
   abstract chain: string;
@@ -12,8 +12,13 @@ export abstract class AbstractDataAdapter {
     protected readonly logger: AbstractLogger = new DummyLogger(),
   ) {}
 
-  public fetch = (): AssetBalance[] => {
-    const chainAssets: { [assetId: string]: AddressBalance[] } = {};
+  /**
+   * Aggregates balances of all tracked addresses into a list of assets.
+   *
+   * @returns {AssetBalance[]} list of assets with address-specific balances
+   */
+  public fetch = (): AssetBalance => {
+    const chainAssets: AssetBalance = {};
     for (const address of this.addresses) {
       const assets = this.getAddressAssets(address);
       for (const asset of assets) {
@@ -30,11 +35,14 @@ export abstract class AbstractDataAdapter {
         }
       }
     }
-    return Object.entries(chainAssets).map(([assetId, addressBalance]) => ({
-      assetId: assetId,
-      addressBalance: addressBalance,
-    }));
+    return chainAssets;
   };
 
+  /**
+   * Fetches raw chain assets for a given address.
+   *
+   * @param {string} address - target blockchain address
+   * @returns {ChainAssetBalance[]} list of asset balances for the address
+   */
   abstract getAddressAssets: (address: string) => ChainAssetBalance[];
 }

@@ -1,7 +1,4 @@
-export interface AssetBalance {
-  assetId: string;
-  addressBalance: AddressBalance[];
-}
+export type AssetBalance = { [assetId: string]: AddressBalance[] };
 
 export interface AddressBalance {
   address: string;

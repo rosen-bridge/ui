@@ -1,4 +1,4 @@
-# asset-calculator2
+# @rosen-ui/asset-data-adapter
 
 ## Table of contents
 
@@ -12,11 +12,11 @@
 npm:
 
 ```sh
-npm i asset-calculator2
+npm i @rosen-ui/asset-data-adapter
 ```
 
 yarn:
 
 ```sh
-yarn add asset-calculator2
+yarn add @rosen-ui/asset-data-adapter
 ```
