@@ -1,4 +1,5 @@
 export interface RosenService2BaseConfig {
+  paths: Paths;
   chains: Chains;
   healthCheck: HealthCheck;
   db: Db;
@@ -192,4 +193,9 @@ export interface Explorer {
 
 export interface Node {
   url?: string;
+}
+
+export interface Paths {
+  tokens: string;
+  contracts: string;
 }

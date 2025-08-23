@@ -2,7 +2,8 @@ import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+
+import { configs } from './configs';
 
 class TokensConfig {
   private static instance: TokensConfig;
@@ -18,10 +19,7 @@ class TokensConfig {
    */
   static async init(logger?: AbstractLogger): Promise<void> {
     if (!TokensConfig.instance) {
-      const tokensPath = path.resolve(
-        path.dirname(fileURLToPath(import.meta.url)),
-        '../config/tokensMap.json',
-      );
+      const tokensPath = path.resolve(configs.paths.tokens);
       if (!fs.existsSync(tokensPath)) {
         throw new Error(`tokensMap file with path ${tokensPath} doesn't exist`);
       }

@@ -1,11 +1,6 @@
 logs:
-  - type: file
-    path: './logs/'
-    maxSize: 20m
-    maxFiles: 1d
-    level: info
   - type: console
-    level: debug
+    level: warn
 db:
   host: localhost
   port: 5432
@@ -16,37 +11,29 @@ healthCheck:
   logging:
     maxErrors: 10
     maxWarns: 10
-    duration: 1000
-  updateInterval: 10
+    duration: 100
   scanner:
-    warnDiff: 10
-    criticalDiff: 100
+    warnDiff: 2
+    criticalDiff: 10
+  updateInterval: 60
 chains:
   ergo:
-    initialHeight: 1593707
-    scanInterval: 20
+    initialHeight: 1
     blockRetrieveGap: 0
-    method: explorer
-    explorer:
-      url: https://api.ergoplatform.com/
+    scanInterval: 60
+    method: node
+    node:
+      url: https://node.ergopool.io/
   cardano:
     active: false
     initialHeight: 12277062
     scanInterval: 20
     blockRetrieveGap: 0
     method: koios
-    blockfrost:
-      projectId: mainnetj8Uy7k8s7eT24eXA2YwHRI0wkchEvNDC
     koios:
       url: https://api.koios.rest/api/v1/
-      authToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZGRyIjoic3Rha2UxdTh0c3NhMnNwa2o2NzNlcTg3bWhybm16MHp2eHo0cDcwbThlYXZ2YXRhYzJsbmduNzd6bGsiLCJleHAiOjE3ODY0NjYxNjcsInRpZXIiOjEsInByb2pJRCI6Inh5eiJ9.EruAKF_Qd2PBmmeCTrE7P7SyvJ8Ftdw4gy1Sifts6u0
+      authToken: test-auth-token
       timeout: 100
-    ogmios:
-      address: 65.109.18.187
-      port: 1337
-      initialSlot: 163430692
-      initialHash: 44268730b046ec52cc69e562c35828e6a0b344331fe388804fc78f098a8fd88c
-      suffix: 'ogmioooooooooos'
   bitcoin:
     active: false
     initialHeight: 910341
@@ -56,10 +43,7 @@ chains:
     rpc:
       url: https://bitcoin-mainnet.core.chainstack.com/7c80d95c05ecc746482c6177cdd877ff
       username: hopeful-cori
-      password: atop-sugar-wobble-bulge-ending-trance
-      timeout: 100
-    esplora:
-      url: https://blockstream.info/
+      password: test-password
       timeout: 100
   doge:
     active: false
@@ -68,7 +52,7 @@ chains:
     blockRetrieveGap: 0
     method: rpc
     rpc:
-      - url: https://go.getblock.io/a723335982e74f06bccbf692fa9090c4
+      - url: https://go.getblock.io/test
         timeout: 100
   ethereum:
     active: false
@@ -89,5 +73,5 @@ chains:
   runes:
     active: false
 paths:
-  tokens: config/rosen/tokensMap.json
-  contracts: config/rosen
+  tokens: tests/config/rosen/tokensMap.json
+  contracts: tests/config/rosen
