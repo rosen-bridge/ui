@@ -21,7 +21,7 @@ export default defineConfig({
     },
     env: {
       NODE_ENV: 'test',
-      NODE_CONFIG_DIR: path.resolve(__dirname, 'tests/config'),
+      NODE_CONFIG_DIR: path.resolve(__dirname, 'config'),
     },
   },
 });
