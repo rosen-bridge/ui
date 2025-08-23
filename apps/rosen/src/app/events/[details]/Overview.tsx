@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Amount2,
@@ -99,6 +99,35 @@ export const Overview = ({ id }: { id: string }) => {
         </Label>
       </div>
       <Columns count={3} width="320px" gap="24px">
+        <Label label="Amount" orientation={orientation}>
+          <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />
+        </Label>
+
+        <Label label="Token" orientation={orientation}>
+          <Token name={data.sourceChainTokenId} reverse={isMobile} />
+        </Label>
+
+        <Label label="Time" orientation={orientation}>
+          <Typography color="text.primary" variant="body1">
+            {time(data.timestamp || 175522841)}
+          </Typography>
+        </Label>
+        <Label label="Fee Sum" orientation={orientation}>
+          <Amount2
+            value={data.networkFee}
+            orientation="horizontal"
+            unit={data.sourceChainTokenId}
+          />
+        </Label>
+
+        <Label label="Status" orientation={orientation}>
+          {data.status === undefined ? (
+            <EventStatus value={'successful'} />
+          ) : (
+            <EventStatus value={data.status} />
+          )}
+        </Label>
+
         <Label orientation={orientation} label="Chin">
           <Stack alignItems="center">
             <Connector
@@ -116,36 +145,6 @@ export const Overview = ({ id }: { id: string }) => {
               }
             />
           </Stack>
-        </Label>
-
-        <Label label="Token" orientation={orientation}>
-          <Token name={data.sourceChainTokenId} reverse={isMobile} />
-        </Label>
-
-        <Label label="Time" orientation={orientation}>
-          <Typography color="text.primary" variant="body1">
-            {time(data.timestamp || 175522841)}
-          </Typography>
-        </Label>
-
-        <Label label="Amount" orientation={orientation}>
-          <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />
-        </Label>
-
-        <Label label="Status" orientation={orientation}>
-          {data.status === undefined ? (
-            <Typography>fraud</Typography>
-          ) : (
-            <EventStatus value={data.status} />
-          )}
-        </Label>
-
-        <Label label="Fee Sum" orientation={orientation}>
-          <Amount2
-            value={data.networkFee}
-            orientation="horizontal"
-            unit={data.sourceChainTokenId}
-          />
         </Label>
       </Columns>
 

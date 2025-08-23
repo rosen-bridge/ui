@@ -36,10 +36,10 @@ export const Details = ({ id }: { id: string }) => {
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
+      state={'open'}
       title="Details"
     >
-      <Columns width="350px" count={2} rule gap="24px">
+      <Columns width="350px" count={3} rule gap="24px">
         <div>
           <Label orientation="horizontal" label="Duration">
             {data?.timestamp ? (
@@ -48,55 +48,51 @@ export const Details = ({ id }: { id: string }) => {
               <Typography>N/A</Typography>
             )}
           </Label>
-
-          <div>
-            <Label label="Fee Sum" />
-            <Label label="Bridge Fee" inset>
-              <Typography>N/A</Typography>
-            </Label>
-            <Label label="Network Fee" inset>
-              <Typography>N/A</Typography>
-            </Label>
-          </div>
-
-          <div>
-            <Label label="Total Emission" />
-            <Label label="Guards" inset>
-              <Typography>N/A</Typography>
-            </Label>
-            <Label label="Watchers" inset>
-              <Typography>N/A</Typography>
-            </Label>
-          </div>
+          <Label label="Fee Sum">
+            <Amount2 value={10052} unit="PALM" />
+          </Label>
+          <Label label="Bridge Fee" inset>
+            <Amount2 value={10052} unit="PALM" />
+          </Label>
+          <Label label="Network Fee" inset>
+            <Amount2 value={10052} unit="PALM" />
+          </Label>
+          <Label label="Token Price">
+            <Amount2 value={0.22} unit="$" />
+          </Label>
         </div>
 
         <div>
-          <Label orientation="horizontal" label="Token Price">
+          <Label label="RSN Ratio">
+            <Amount2 value={2.054} />
+          </Label>
+          <Label label="Total Emission" />
+          <Label label="Guards" inset>
             <Typography>N/A</Typography>
           </Label>
-          <Label orientation="horizontal" label="RSN Ratio">
+          <Label label="Watchers" inset>
             <Typography>N/A</Typography>
           </Label>
+        </div>
 
-          <div>
-            <Label label="Tx IDs" />
-            <Label label="Source Tx" inset>
-              <Identifier value={data?.sourceTxId ?? 'N/A'} copyable />
-            </Label>
-            <Label label="Payment Tx" inset>
-              {data?.paymentTxId ? (
-                <Identifier value={data.paymentTxId} copyable />
-              ) : (
-                <>N/A</>
-              )}
-            </Label>
-            <Label label="Reward Tx" inset>
-              N/A
-            </Label>
-            <Label label="Trigger Tx" inset>
-              N/A
-            </Label>
-          </div>
+        <div>
+          <Label label="Tx IDs" />
+          <Label label="Source Tx" inset>
+            <Identifier value={data?.sourceTxId ?? 'N/A'} copyable />
+          </Label>
+          <Label label="Payment Tx" inset>
+            {data?.paymentTxId ? (
+              <Identifier value={data.paymentTxId} copyable />
+            ) : (
+              <>N/A</>
+            )}
+          </Label>
+          <Label label="Reward Tx" inset>
+            N/A
+          </Label>
+          <Label label="Trigger Tx" inset>
+            N/A
+          </Label>
         </div>
       </Columns>
     </DetailsCard>

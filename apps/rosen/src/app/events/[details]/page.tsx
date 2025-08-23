@@ -6,7 +6,7 @@ import { Stack } from '@rosen-bridge/ui-kit';
 
 import {
   Details,
-  DetailsStepper,
+  DetailsProcess,
   Overview,
   SourceTx,
   Watchers,
@@ -19,7 +19,7 @@ const Page = () => {
     <Stack display="flex" gap={2} flexDirection="column">
       <Overview id={eventId as string} />
       <Details id={eventId as string} />
-      <DetailsStepper />
+      <DetailsProcess />
       <Watchers />
       <SourceTx />
     </Stack>

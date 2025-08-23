@@ -3,7 +3,7 @@ import React from 'react';
 import {
   DisclosureButton,
   stepItem,
-  Stepper,
+  ProcessTracker,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
@@ -11,25 +11,29 @@ import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 
 const Steps: stepItem[] = [
   {
-    id: 'Tx Created1ascacaApprovedsxsSDVSDVEQ',
+    id: `${crypto.randomUUID()}`,
     state: 'done',
     title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApproApprovedsxsSDVSDVEQdvfj32ved3',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx AApprovedsxsSDVSDVEQpproscedveved',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx AppApprovedsxsSDVSDVEQroveqs2d3d',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -37,25 +41,29 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx CreatedApprovedsxsSDVSDVEQ332acs',
+    id: `${crypto.randomUUID()}`,
     state: 'done',
     title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx Approv86ApprovedsxsSDVSDVEQed23aApprovedsxsSDVSDVEQsc',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
         title: 'Tx Apstepproved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx AApprovedsxsSDVSDVEQpprovedzasca',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovascwedascascApprovedsxsSDVSDVEQa',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -63,25 +71,59 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx CreatedaXAXW',
+    id: `${crypto.randomUUID()}`,
     state: 'pending',
     title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx AppApprovedsxsSDVSDVEQrovxsedASCSACA',
+        id: `${crypto.randomUUID()}`,
         state: 'done',
-        title: 'Tx ApprovedVVE',
-        subtitle: 'Tx Approved',
+        title: 'Approved',
+        subtitle: '',
       },
       {
-        id: 'Tx ApprovsApprovedsxsSDVSDVEQxedCADC',
+        id: `${crypto.randomUUID()}`,
         state: 'pending',
+        title: 'Sign',
+        subtitle: '',
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Send',
+        subtitle: '',
+      },
+    ],
+  },
+  {
+    id: `${crypto.randomUUID()}`,
+    state: 'idle',
+    title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
+    subtitle: 'Tx Created',
+    sub: [
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovedsxsSDVSDVEQApprovedsxsSDVSDVEQ',
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Tx Approved',
+        subtitle: 'Tx Approved',
+      },
+      {
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -89,25 +131,29 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx Creaddbdn58tedSDVD',
+    id: `${crypto.randomUUID()}`,
     state: 'idle',
     title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApqxcsprovedCDsEQW4',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approvednkih1DCWE4Jss8',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approerbddved5DsCCV5',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -115,25 +161,29 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx Crea43tedSDVD',
+    id: `${crypto.randomUUID()}`,
     state: 'idle',
     title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx Approefce34vedCDsEQW4',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx ApprovdvedDCWE4Jss8',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Approved5ytDsCCV5',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -141,25 +191,29 @@ const Steps: stepItem[] = [
     ],
   },
   {
-    id: 'Tx CreathyhyedSDVD',
+    id: `${crypto.randomUUID()}`,
     state: 'idle',
     title: 'Tx Created',
+    doneStep: {
+      date: '18 Aug 2025 11:14:30',
+      description: 'More description about this status goes here.',
+    },
     subtitle: 'Tx Created',
     sub: [
       {
-        id: 'Tx ApproveyydCDsEQW4',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx AppwdwvrgtrovedDCWE4Jss8',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
       },
       {
-        id: 'Tx Addwpproved5DsCCV5',
+        id: `${crypto.randomUUID()}`,
         state: 'idle',
         title: 'Tx Approved',
         subtitle: 'Tx Approved',
@@ -168,11 +222,11 @@ const Steps: stepItem[] = [
   },
 ];
 
-export const DetailsStepper = () => {
+export const DetailsProcess = () => {
   return (
     <DetailsCard state="open" title="Progress">
       <div style={{ minHeight: '210px' }}>
-        <Stepper data={Steps} />
+        <ProcessTracker data={Steps} />
       </div>
     </DetailsCard>
   );

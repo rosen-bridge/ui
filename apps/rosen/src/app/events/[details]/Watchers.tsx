@@ -143,7 +143,7 @@ export const Watchers = () => {
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
       state={'open'}
-      title="Wids"
+      title="Watchers"
     >
       <div
         style={{ marginBottom: '8px', display: isMobile ? 'none' : 'block' }}
@@ -152,10 +152,18 @@ export const Watchers = () => {
           <Label label="Commitments" orientation="vertical">
             44
           </Label>
-          <Label label="Triggered by" orientation="vertical">
+          <Label
+            label="Triggered by"
+            orientation="vertical"
+            info={'this is lorem text for show tooltip'}
+          >
             15
           </Label>
-          <Label label="Rewarded to" orientation="vertical">
+          <Label
+            label="Rewarded to"
+            orientation="vertical"
+            info="In tedad mitune bishtar az triggered by bashe chun baezi commitment haye valid momkene tu trigger merge nashode bashan."
+          >
             N/A
           </Label>
         </Columns>
