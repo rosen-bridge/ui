@@ -25,8 +25,8 @@ export const buildEthereumEvmScannerWithExtractors = async (
     dataSource: dataSource,
     initialHeight: configs.chains.ethereum.initialHeight,
     network: new EvmRpcNetwork(
-      configs.chains.ethereum.rpc.url,
-      configs.chains.ethereum.rpc.timeout * 1000,
+      configs.chains.ethereum.rpc.url!,
+      configs.chains.ethereum.rpc.timeout! * 1000,
       configs.chains.ethereum.rpc.authToken,
     ),
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,

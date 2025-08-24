@@ -340,7 +340,6 @@
           "method": {
             "type": "string",
             "description": "cardano network connection method",
-            "default": "koios",
             "validations": [
               {
                 "required": true,
@@ -518,7 +517,6 @@
           "method": {
             "type": "string",
             "description": "bitcoin network connection method",
-            "default": "rpc",
             "validations": [
               {
                 "required": true,
@@ -648,7 +646,6 @@
           "method": {
             "type": "string",
             "description": "doge network connection method",
-            "default": "rpc",
             "validations": [
               {
                 "required": true,
@@ -787,6 +784,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.ethereum.active", "value": true},
                     "error": "ethereum rpc url must be specified"
                   }
                 ]
@@ -798,6 +796,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.ethereum.active", "value": true},
                     "error": "ethereum rpc timeout must be specified (in seconds)"
                   }
                 ]
@@ -863,6 +862,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.binance.active", "value": true},
                     "error": "binance rpc url must be specified"
                   }
                 ]
@@ -874,6 +874,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.binance.active", "value": true},
                     "error": "binance rpc timeout must be specified (in seconds)"
                   }
                 ]

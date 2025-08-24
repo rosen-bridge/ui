@@ -73,8 +73,8 @@ export interface Binance {
 }
 
 export interface Rpc1 {
-  url: string;
-  timeout: number;
+  url?: string;
+  timeout?: number;
   authToken?: string;
   suffix?: string;
 }
@@ -88,8 +88,8 @@ export interface Ethereum {
 }
 
 export interface Rpc2 {
-  url: string;
-  timeout: number;
+  url?: string;
+  timeout?: number;
   authToken?: string;
   suffix?: string;
 }

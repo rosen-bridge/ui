@@ -18,18 +18,18 @@ chains:
     initialHeight: 1
     scanInterval: 120
     method: explorer
+    explorer:
+      url: https://api.ergoplatform.com/
   cardano:
     active: false
     initialHeight: 1
-    scanInterval: 20
-    method: koios
+    scanInterval: 30
     koios:
       timeout: 100
   bitcoin:
     active: false
     initialHeight: 1
     scanInterval: 600
-    method: rpc
     rpc:
       timeout: 100
     esplora:
@@ -38,19 +38,18 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 60
-    method: rpc
     esplora:
       timeout: 100
   ethereum:
     active: false
     initialHeight: 1
-    scanInterval: 12
+    scanInterval: 60
     rpc:
       timeout: 100
   binance:
     active: false
     initialHeight: 1
-    scanInterval: 3
+    scanInterval: 10
     rpc:
       timeout: 100
   runes:
