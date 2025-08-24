@@ -6,12 +6,10 @@ import {
   Amount2,
   Columns,
   DisclosureButton,
-  Grid,
   Identifier,
   Label,
   RelativeTime,
   Skeleton,
-  Stack,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -49,7 +47,11 @@ export const Details = ({ id }: { id: string }) => {
             )}
           </Label>
           <Label label="Fee Sum">
-            <Amount2 value={10052} unit="PALM" />
+            {!isLoading && data ? (
+              <Amount2 value={10052} unit="PALM" />
+            ) : (
+              <Skeleton width={80} height={14} variant="rounded" />
+            )}
           </Label>
           <Label label="Bridge Fee" inset>
             <Amount2 value={10052} unit="PALM" />
