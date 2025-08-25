@@ -35,7 +35,7 @@ describe('AbstractDataAdapter', () => {
           { address: 'addr1', balance: 100n },
           { address: 'addr2', balance: 50n },
         ],
-        token2: [{ address: 'addr1', balance: 200n }],
+        ergo_token2: [{ address: 'addr1', balance: 200n }],
       });
     });
   });
