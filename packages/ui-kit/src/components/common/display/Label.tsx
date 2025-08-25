@@ -112,7 +112,7 @@ export const Label = ({
           )}
         </Stack>
       </Box>
-      <Box overflow="hidden" whiteSpace="nowrap" maxWidth="100%">
+      <Box overflow="hidden" whiteSpace="nowrap" maxWidth="100%" height="2em">
         {children}
       </Box>
     </Box>
