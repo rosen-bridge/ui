@@ -7,36 +7,34 @@ import {
   Card2,
   Card2Body,
   Card2Header,
+  CopyButton,
   DisclosureButton,
   Stack,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/';
+import { EventDetails } from '@/app/events/[details]/type';
 
-export const SourceTx = () => {
+export const SourceTx = ({ id }: { id: string }) => {
+  const { data, isLoading, mutate } = useSWR<EventDetails>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
+
   const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
+    onOpen: async () => {
+      await mutate();
     },
   });
-  const data = {
-    to: 'binance',
-    bridgeFee: '10000000000',
-    networkFee: '52268809',
-    toAddress: '0xba085e2bc3023c7b191605189fab20bb4cd5387b',
-    fromAddress: [
-      'addr1qyn20ad4h9hqdax8ftgcvzdwht93v6dz6004fv9zjlfn0ddt803hh8au69d',
-      'q6qlzgkg8xceters0yurxhkzdax3ugueqdffypc',
-    ],
+  const metaData = {
+    to: data?.toChain,
+    bridgeFee: data?.bridgeFee,
+    networkFee: data?.networkFee,
+    toAddress: data?.toAddress,
+    fromAddress: data?.toAddress,
   };
   return (
     <DetailsCard
@@ -46,9 +44,14 @@ export const SourceTx = () => {
     >
       <Card2 backgroundColor="primary.light">
         <Card2Body>
-          {/*TODO: Check pt of card2*/}
-          <div style={{ paddingTop: '16px', overflow: 'hidden' }}>
-            {JSON.stringify(data, null, 3)}
+          <div style={{ position: 'relative' }}>
+            <div style={{ position: 'absolute', right: 0, top: 10 }}>
+              <CopyButton value={JSON.stringify(metaData)} />
+            </div>
+            {/*TODO: Check pt of card2*/}
+            <pre style={{ paddingTop: '16px', overflow: 'hidden' }}>
+              {JSON.stringify(metaData, null, 3)}
+            </pre>
           </div>
         </Card2Body>
       </Card2>

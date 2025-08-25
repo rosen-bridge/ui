@@ -164,27 +164,85 @@ export const getEvents = async (filters: Filters) => {
 };
 
 export const getEventById = async (eventId: string) => {
-  const observation = await observationRepository.findOne({
-    where: { requestId: eventId },
-  });
-  if (!observation) return null;
+  const qb = observationRepository
+    .createQueryBuilder('obs')
+    .leftJoin(BlockEntity, 'block', 'block.hash = obs.block')
+    .leftJoin(EventTriggerEntity, 'et', 'et.eventId = obs.requestId')
+    .select([
+      'obs.id AS "id"',
+      'obs.fromChain AS "fromChain"',
+      'obs.toChain AS "toChain"',
+      'obs.fromAddress AS "fromAddress"',
+      'obs.toAddress AS "toAddress"',
+      'obs.height AS "height"',
+      'obs.amount AS "amount"',
+      'obs.networkFee AS "networkFee"',
+      'obs.bridgeFee AS "bridgeFee"',
+      'obs.sourceChainTokenId AS "sourceChainTokenId"',
+      'obs.targetChainTokenId AS "targetChainTokenId"',
+      'obs.sourceTxId AS "sourceTxId"',
+      'obs.sourceBlockId AS "sourceBlockId"',
+      'obs.requestId AS "eventId"',
 
-  const block = observation.block
-    ? await blockRepository.findOne({ where: { hash: observation.block } })
-    : null;
+      'block.timestamp AS "timestamp"',
+      'block.hash AS "blockHash"',
+      'block.height AS "blockHeight"',
 
-  const eventTriggers = await eventTriggerRepository.find({
-    where: { eventId },
-  });
+      'et.WIDsCount AS "WIDsCount"',
+      'et.paymentTxId AS "paymentTxId"',
+      'et.spendTxId AS "spendTxId"',
+      'et.result AS "triggerResult"',
+      'et.txId AS "triggerTxId"',
+      'et.fromChain AS "triggerFromChain"',
+      'et.toChain AS "triggerToChain"',
+      'et.fromAddress AS "triggerFromAddress"',
+      'et.toAddress AS "triggerToAddress"',
+    ])
 
-  const paymentTxId = eventTriggers[0]?.paymentTxId;
-  const spendTxId = eventTriggers[0]?.spendTxId;
+    .addSelect(
+      `COALESCE(
+        FIRST_VALUE(et.result) OVER(PARTITION BY et.eventId ORDER BY COALESCE(et.result, 'PROCESSING') DESC),
+        'PROCESSING'
+      )`,
+      'status',
+    )
+    .where('obs.requestId = :eventId', { eventId });
+
+  // console.log(qb.getSql());
+  const result = await qb.getRawOne();
+
+  if (!result) return null;
 
   return {
-    ...observation,
-    eventTriggers: { ...eventTriggers[0] },
-    timestamp: block?.timestamp,
-    paymentTxId,
-    spendTxId,
+    id: result.id,
+    eventId: result.eventId,
+    fromChain: result.fromChain,
+    toChain: result.toChain,
+    fromAddress: result.fromAddress,
+    toAddress: result.toAddress,
+    height: result.height,
+    amount: result.amount,
+    networkFee: result.networkFee,
+    bridgeFee: result.bridgeFee,
+    sourceChainTokenId: result.sourceChainTokenId,
+    targetChainTokenId: result.targetChainTokenId,
+    sourceTxId: result.sourceTxId,
+    sourceBlockId: result.sourceBlockId,
+
+    block: {
+      hash: result.blockHash,
+      height: result.blockHeight,
+      timestamp: result.timestamp,
+    },
+
+    eventTrigger: {
+      txId: result.triggerTxId,
+      paymentTxId: result.paymentTxId,
+      spendTxId: result.spendTxId,
+      WIDsCount: result.WIDsCount,
+      result: result.triggerResult,
+    },
+
+    status: result.status,
   };
 };

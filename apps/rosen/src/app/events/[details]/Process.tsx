@@ -222,9 +222,26 @@ const Steps: stepItem[] = [
   },
 ];
 
-export const DetailsProcess = () => {
+export const Process = () => {
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          if (Math.random() > 0.5) {
+            resolve();
+          } else {
+            reject();
+          }
+        }, 500);
+      });
+    },
+  });
   return (
-    <DetailsCard state="open" title="Progress">
+    <DetailsCard
+      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
+      state={disclosure.state}
+      title="Progress"
+    >
       <div style={{ minHeight: '210px' }}>
         <ProcessTracker data={Steps} />
       </div>

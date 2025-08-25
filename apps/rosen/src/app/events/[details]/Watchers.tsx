@@ -2,7 +2,7 @@
 
 import React, { useCallback, useState } from 'react';
 
-import { CheckCircle, Exchange, Eye } from '@rosen-bridge/icons';
+import { CheckCircle, CloseCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
   Columns,
   DisclosureButton,
@@ -142,7 +142,7 @@ export const Watchers = () => {
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={'open'}
+      state={disclosure.state}
       title="Watchers"
     >
       <div
@@ -150,21 +150,21 @@ export const Watchers = () => {
       >
         <Columns width="100px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">
-            44
+            TODO
           </Label>
           <Label
             label="Triggered by"
             orientation="vertical"
             info={'this is lorem text for show tooltip'}
           >
-            15
+            TODO
           </Label>
           <Label
             label="Rewarded to"
             orientation="vertical"
             info="In tedad mitune bishtar az triggered by bashe chun baezi commitment haye valid momkene tu trigger merge nashode bashan."
           >
-            N/A
+            TODO
           </Label>
         </Columns>
       </div>
@@ -202,14 +202,18 @@ export const Watchers = () => {
                         sx={{
                           color:
                             row.rewarded === 'Yes'
-                              ? 'secondary.main'
+                              ? 'success.main'
                               : 'text.secondary',
                         }}
                       >
-                        <CheckCircle />
+                        {row.rewarded === 'Yes' ? (
+                          <CheckCircle />
+                        ) : (
+                          <CloseCircle />
+                        )}
                       </SvgIcon>
                     )}
-                    <div style={{ maxWidth: size('450px'), width: '100%' }}>
+                    <div style={{ maxWidth: size('500px'), width: '100%' }}>
                       <Identifier value={row.wid} />
                     </div>
                   </Stack>
@@ -248,11 +252,15 @@ export const Watchers = () => {
                         sx={{
                           color:
                             row.rewarded === 'Yes'
-                              ? 'secondary.main'
+                              ? 'success.main'
                               : 'text.secondary',
                         }}
                       >
-                        <CheckCircle />
+                        {row.rewarded === 'Yes' ? (
+                          <CheckCircle />
+                        ) : (
+                          <CloseCircle />
+                        )}
                       </SvgIcon>
                       {row.rewarded}
                     </Stack>
@@ -305,11 +313,11 @@ const Drawer = ({ value, onClose, open = false }: DrawerProps) => {
                   sx={{
                     color:
                       value.rewarded === 'Yes'
-                        ? 'secondary.main'
+                        ? 'success.main'
                         : 'text.secondary',
                   }}
                 >
-                  <CheckCircle />
+                  {value.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
                 </SvgIcon>
               </Stack>
             )}

@@ -1,4 +1,4 @@
-export * from './DetailsProcess';
+export * from './Process';
 export * from './Details';
 export * from './DetailsCard';
 export * from './Overview';

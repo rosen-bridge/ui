@@ -35,3 +35,40 @@ type eventsTypes = {
   result: string | null;
   paymentTxId: string | null;
 };
+
+// V2
+export type EventDetails = {
+  id: number;
+  eventId: string;
+  fromChain: string;
+  toChain: string;
+  fromAddress: string;
+  toAddress: string;
+  height: number;
+  amount: string;
+  networkFee: string;
+  bridgeFee: string;
+  sourceChainTokenId: string;
+  targetChainTokenId: string;
+  sourceTxId: string;
+  sourceBlockId: string;
+
+  block: {
+    hash: string;
+    height: number;
+    timestamp: number;
+  };
+
+  eventTrigger: {
+    txId: string;
+    paymentTxId?: string | null;
+    spendTxId?: string | null;
+    WIDsCount: number;
+    result?: string | null;
+  } | null;
+
+  status: string;
+};
+export type EventStatusProps = {
+  value: 'FRAUD' | 'PROCESSING' | 'SUCCESSFUL' | undefined;
+};

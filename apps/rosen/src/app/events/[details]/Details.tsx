@@ -17,10 +17,10 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/';
-import { BridgeEvent } from '@/app/events/[details]/type';
+import { BridgeEvent, EventDetails } from '@/app/events/[details]/type';
 
 export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR<BridgeEvent>(
+  const { data, isLoading, mutate } = useSWR<EventDetails>(
     `/v1/events/${id}`,
     fetcher,
   );
@@ -34,46 +34,46 @@ export const Details = ({ id }: { id: string }) => {
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={'open'}
+      state={disclosure.state}
       title="Details"
     >
       <Columns width="350px" count={3} rule gap="24px">
         <div>
           <Label orientation="horizontal" label="Duration">
-            {data?.timestamp ? (
-              <RelativeTime timestamp={data.timestamp} />
+            {data?.block.timestamp ? (
+              <RelativeTime timestamp={data.block.timestamp} />
             ) : (
-              <Typography>N/A</Typography>
+              <Skeleton
+                variant="rectangular"
+                style={{ width: '100%', borderRadius: '4px' }}
+                height={'14px'}
+              />
             )}
           </Label>
-          <Label label="Fee Sum">
-            {!isLoading && data ? (
-              <Amount2 value={10052} unit="PALM" />
-            ) : (
-              <Skeleton width={80} height={14} variant="rounded" />
-            )}
-          </Label>
+          <Label label="Fee Sum">TODO</Label>
           <Label label="Bridge Fee" inset>
-            <Amount2 value={10052} unit="PALM" />
+            <Amount2 value={data?.bridgeFee} unit="TODO" />
           </Label>
           <Label label="Network Fee" inset>
-            <Amount2 value={10052} unit="PALM" />
+            <Amount2 value={data?.networkFee} unit="TODO" />
           </Label>
           <Label label="Token Price">
-            <Amount2 value={0.22} unit="$" />
+            TODO
+            {/*<Amount2 value={0.22} unit="$" />*/}
           </Label>
         </div>
 
         <div>
           <Label label="RSN Ratio">
-            <Amount2 value={2.054} />
+            TODO
+            {/*<Amount2 value={2.054} />*/}
           </Label>
           <Label label="Total Emission" />
           <Label label="Guards" inset>
-            <Typography>N/A</Typography>
+            <Typography>TODO</Typography>
           </Label>
           <Label label="Watchers" inset>
-            <Typography>N/A</Typography>
+            <Typography>TODO</Typography>
           </Label>
         </div>
 
@@ -83,17 +83,25 @@ export const Details = ({ id }: { id: string }) => {
             <Identifier value={data?.sourceTxId ?? 'N/A'} copyable />
           </Label>
           <Label label="Payment Tx" inset>
-            {data?.paymentTxId ? (
-              <Identifier value={data.paymentTxId} copyable />
+            {data?.eventTrigger?.paymentTxId ? (
+              <Identifier value={data?.eventTrigger?.paymentTxId} copyable />
             ) : (
-              <>N/A</>
+              <>TODO</>
             )}
           </Label>
           <Label label="Reward Tx" inset>
-            N/A
+            {data?.eventTrigger?.spendTxId ? (
+              <Identifier value={data?.eventTrigger?.spendTxId} copyable />
+            ) : (
+              <>TODO</>
+            )}
           </Label>
           <Label label="Trigger Tx" inset>
-            N/A
+            {data?.eventTrigger?.txId ? (
+              <Identifier value={data?.eventTrigger?.txId} copyable />
+            ) : (
+              <>TODO</>
+            )}
           </Label>
         </div>
       </Columns>
