@@ -1,10 +1,9 @@
 {
   "name": "@rosen-ui/asset-data-adapter",
-  "version": "0.0.1",
-  "description": "",
-  "repository": "",
+  "version": "0.1.0",
+  "description": "A data adapter for fetching and normalizing asset information across multiple blockchains.",
   "license": "GPL-3.0",
-  "author": "",
+  "author": "Rosen Team",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

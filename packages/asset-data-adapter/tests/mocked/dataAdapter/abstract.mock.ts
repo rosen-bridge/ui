@@ -33,7 +33,7 @@ export const sampleTokenMapConfig = [
       extra: false,
     },
     binance: {
-      tokenId: '_token1',
+      tokenId: 'token1',
       name: 'rpnTest1',
       decimals: 3,
       type: 'ERC-20',
@@ -51,7 +51,7 @@ export const sampleTokenMapConfig = [
       extra: false,
     },
     cardano: {
-      tokenId: '_token2',
+      tokenId: 'token2',
       name: 'rpnTest2',
       decimals: 3,
       type: 'CIP26',
@@ -63,7 +63,7 @@ export const sampleTokenMapConfig = [
       },
     },
     ergo: {
-      tokenId: '_token2',
+      tokenId: 'token2',
       name: 'rpnTest2',
       decimals: 6,
       type: 'EIP-004',
@@ -71,7 +71,7 @@ export const sampleTokenMapConfig = [
       extra: false,
     },
     binance: {
-      tokenId: '_token2',
+      tokenId: 'token2',
       name: 'rpnTest2',
       decimals: 6,
       type: 'ERC-20',
