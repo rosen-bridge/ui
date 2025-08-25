@@ -141,7 +141,8 @@ export const HealthParamCard = ({
             bgcolor: colors.alertBackground,
             color: colors.alert,
             mt: 2,
-            wordBreak: 'break-word',
+            wordBreak: 'normal',
+            overflowWrap: 'break-word',
           }}
         >
           {details}
