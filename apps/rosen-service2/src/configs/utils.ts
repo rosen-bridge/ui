@@ -7,7 +7,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 import { Logs, RosenService2Configs } from '../types';
-import { ChainConfigsReader } from './ChainConfigsReader';
+import { ChainConfigsReader } from './chainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -68,7 +68,10 @@ export const validateConfigs = (): RosenService2Configs => {
   configs.contracts = {};
   for (const chain of NETWORKS_KEYS) {
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
-      const chainConfigReader = new ChainConfigsReader(chain);
+      const chainConfigReader = new ChainConfigsReader(
+        chain,
+        configs.paths.contracts,
+      );
       configs.contracts[chain] = chainConfigReader.data;
     }
   }

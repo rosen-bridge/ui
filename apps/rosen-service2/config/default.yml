@@ -4,13 +4,21 @@ db:
   username: postgres
   password: ''
   name: rosen_service
+healthCheck:
+  logging:
+    maxErrors: 10
+    maxWarns: 10
+    duration: 100
+  scanner:
+    warnDiff: 2
+    criticalDiff: 10
+  updateInterval: 60
 chains:
   ergo:
     initialHeight: 1
     node:
       blockRetrieveGap: 0
       scanInterval: 60
-      url: https://node.ergopool.io/
   cardano:
     active: false
   bitcoin:
@@ -23,3 +31,6 @@ chains:
     active: false
   runes:
     active: false
+paths:
+  tokens: config/rosen/tokensMap.json
+  contracts: config/rosen

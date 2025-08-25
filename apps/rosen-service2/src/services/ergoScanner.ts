@@ -1,4 +1,4 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import * as scanner from '@rosen-bridge/scanner';
@@ -11,7 +11,7 @@ import {
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from '../configs';
-import { getTokenMap } from '../utils';
+import { TokensConfig } from '../tokensConfig';
 import { DBService } from './db';
 
 export class ErgoScannerService extends AbstractService {
@@ -31,10 +31,7 @@ export class ErgoScannerService extends AbstractService {
   ];
   readonly scanner: scanner.ErgoScanner;
 
-  private constructor(
-    dbService: DBService,
-    logger: AbstractLogger = new DummyLogger(),
-  ) {
+  private constructor(dbService: DBService, logger?: AbstractLogger) {
     super(logger);
     this.dbService = dbService;
     const networkConnectorManager =
@@ -63,7 +60,7 @@ export class ErgoScannerService extends AbstractService {
     try {
       const ergoObservationExtractor = new ErgoObservationExtractor(
         this.dbService.dataSource,
-        await getTokenMap(),
+        TokensConfig.getInstance().getTokenMap(),
         configs.contracts.ergo.addresses.lock,
         this.logger,
       );
@@ -173,17 +170,17 @@ export class ErgoScannerService extends AbstractService {
    * initializes the singleton instance of ErgoScannerService
    *
    * @static
-   * @param {Ergo} ErgoScannerConfig
    * @param {DBService} [dbService]
+   * @param {AbstractLogger} [logger]
    * @memberof ErgoScannerService
    */
-  static readonly init = async (dbService: DBService) => {
+  static readonly init = async (
+    dbService: DBService,
+    logger?: AbstractLogger,
+  ) => {
     if (this.instance != undefined) {
       return;
     }
-    const logger = CallbackLoggerFactory.getInstance().getLogger(
-      import.meta.url,
-    );
     this.instance = new ErgoScannerService(dbService, logger);
 
     await this.instance.registerExtractors();
@@ -213,10 +210,11 @@ export class ErgoScannerService extends AbstractService {
    * false
    * @memberof ErgoScannerService
    */
-  protected start = async (): Promise<boolean> => {
+  protected start = async () => {
     this.shouldStop = false;
     this.setStatus(ServiceStatus.started);
-    return await this.fetchData();
+    this.fetchData();
+    return true;
   };
 
   /**

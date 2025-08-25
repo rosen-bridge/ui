@@ -1,5 +1,7 @@
 export interface RosenService2BaseConfig {
+  paths: Paths;
   chains: Chains;
+  healthCheck: HealthCheck;
   db: Db;
   logs: Logs[];
 }
@@ -17,10 +19,35 @@ export interface Logs {
 
 export interface Db {
   host: string;
-  port?: number;
+  port: number;
   username?: string;
   password?: string;
   name: string;
+}
+
+export interface HealthCheck {
+  logging: Logging;
+  scanner: Scanner;
+  notification: Notification;
+  updateInterval: number;
+}
+
+export interface Notification {
+  discordWebHookUrl?: string;
+  historyCleanupTimeout?: number;
+  hasBeenUnstableForAWhileWindowDuration?: number;
+  hasBeenUnknownForAWhileWindowDuration?: number;
+}
+
+export interface Scanner {
+  warnDiff: number;
+  criticalDiff: number;
+}
+
+export interface Logging {
+  maxErrors: number;
+  maxWarns: number;
+  duration: number;
 }
 
 export interface Chains {
@@ -66,4 +93,9 @@ export interface Node {
   blockRetrieveGap: number;
   scanInterval: number;
   url: string;
+}
+
+export interface Paths {
+  tokens: string;
+  contracts: string;
 }
