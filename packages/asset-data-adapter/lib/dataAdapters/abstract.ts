@@ -22,7 +22,11 @@ export abstract class AbstractDataAdapter {
     for (const address of this.addresses) {
       const assets = this.getAddressAssets(address);
       for (const asset of assets) {
-        if (this.tokenMap.getTokenSet(asset.assetId) != undefined) {
+        const tokenSet = this.tokenMap.getTokenSet(asset.assetId);
+        if (
+          tokenSet != undefined &&
+          tokenSet[this.chain].tokenId == asset.assetId
+        ) {
           chainAssets[asset.assetId] = chainAssets[asset.assetId] ?? [];
           chainAssets[asset.assetId].push({
             address: address,

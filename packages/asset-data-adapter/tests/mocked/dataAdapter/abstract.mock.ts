@@ -10,6 +10,7 @@ export class TestAdapter extends AbstractDataAdapter {
         { assetId: 'token0', balance: 100n },
         { assetId: 'token1', balance: 100n },
         { assetId: 'ergo_token2', balance: 200_000n },
+        { assetId: 'cardano_token3', balance: 200_000n },
       ];
     }
     if (address === 'addr2') {
@@ -74,6 +75,27 @@ export const sampleTokenMapConfig = [
       tokenId: 'binance_token2',
       name: 'rpnTest2',
       decimals: 6,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: false,
+    },
+  },
+];
+
+export const sampleTokenMapConfigWithDuplicateTokenId = [
+  {
+    ergo: {
+      tokenId: 'token3',
+      name: 'Test3',
+      decimals: 5,
+      type: 'EIP-004',
+      residency: 'native',
+      extra: false,
+    },
+    cardano: {
+      tokenId: 'cardano_token3',
+      name: 'rpnTest3',
+      decimals: 3,
       type: 'ERC-20',
       residency: 'wrapped',
       extra: false,
