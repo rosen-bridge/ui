@@ -49,3 +49,4 @@ export * from './Columns';
 export * from './Illustrations';
 export * from './Truncate';
 export * from './card2';
+export * from './OverridableComponent';
