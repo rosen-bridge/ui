@@ -11,6 +11,7 @@ import {
 import { ClickAwayListener } from '@mui/material';
 import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
+import { useBreakpoint } from '../../../hooks';
 import {
   Divider,
   List,
@@ -20,6 +21,7 @@ import {
   ListSubheader,
 } from '../../base';
 import { IconButton, SvgIcon } from '../../base';
+import { Truncate } from '../Truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
@@ -42,6 +44,8 @@ export type HistoryProps = {
 
 export const History = forwardRef<HistoryRef, HistoryProps>(
   ({ disabled, filter, namespace, onSelect }, ref) => {
+    const isMobile = useBreakpoint('tablet-down');
+
     const $anchor = useRef<HTMLButtonElement | null>(null);
 
     const [open, setOpen] = useState(false);
@@ -174,7 +178,6 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     useImperativeHandle(ref, () => {
       return { add };
     }, [add]);
-
     return (
       <ClickAwayListener onClickAway={() => setOpen(false)}>
         <div>
@@ -188,68 +191,83 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
             </SvgIcon>
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
-            {!!bookmarks.length && (
-              <>
-                <List subheader={<ListSubheader>Bookmark</ListSubheader>}>
-                  {bookmarks.map((item) => (
-                    <ListItem
-                      disablePadding
-                      key={getKey(item.selected)}
-                      secondaryAction={
-                        <IconButton
-                          edge="end"
-                          onClick={(event) => {
-                            event.stopPropagation();
-                            remove(item);
-                          }}
-                        >
-                          <SvgIcon>
-                            <Times />
-                          </SvgIcon>
-                        </IconButton>
-                      }
-                      onClick={() => handleClick(item)}
-                    >
-                      <ListItemButton>
-                        <ListItemText primary={getTitle(item)} />
-                      </ListItemButton>
-                    </ListItem>
-                  ))}
-                </List>
-                <Divider />
-              </>
-            )}
-            <List subheader={<ListSubheader>Recent searches</ListSubheader>}>
-              {!recent.length && (
-                <ListItem>
-                  <ListItemText primary="You don't have any recent searches" />
-                </ListItem>
+            <div
+              style={{
+                maxWidth: isMobile ? '100%' : '32rem',
+                width: isMobile ? '90vw' : 'auto',
+              }}
+            >
+              {!!bookmarks.length && (
+                <>
+                  <List subheader={<ListSubheader>Bookmark</ListSubheader>}>
+                    {bookmarks.map((item) => (
+                      <ListItem
+                        disablePadding
+                        key={getKey(item.selected)}
+                        secondaryAction={
+                          <IconButton
+                            edge="end"
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              remove(item);
+                            }}
+                          >
+                            <SvgIcon>
+                              <Times />
+                            </SvgIcon>
+                          </IconButton>
+                        }
+                        onClick={() => handleClick(item)}
+                      >
+                        <ListItemButton>
+                          <ListItemText
+                            primary={
+                              <Truncate lines={1}>{getTitle(item)}</Truncate>
+                            }
+                          />
+                        </ListItemButton>
+                      </ListItem>
+                    ))}
+                  </List>
+                  <Divider />
+                </>
               )}
-              {recent.map((item) => (
-                <ListItem
-                  disablePadding
-                  key={getKey(item.selected)}
-                  secondaryAction={
-                    <IconButton
-                      edge="end"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        book(item);
-                      }}
-                    >
-                      <SvgIcon>
-                        <Favorite />
-                      </SvgIcon>
-                    </IconButton>
-                  }
-                  onClick={() => handleClick(item)}
-                >
-                  <ListItemButton>
-                    <ListItemText primary={getTitle(item)} />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </List>
+              <List subheader={<ListSubheader>Recent searches</ListSubheader>}>
+                {!recent.length && (
+                  <ListItem>
+                    <ListItemText primary="You don't have any recent searches" />
+                  </ListItem>
+                )}
+                {recent.map((item) => (
+                  <ListItem
+                    disablePadding
+                    key={getKey(item.selected)}
+                    secondaryAction={
+                      <IconButton
+                        edge="end"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          book(item);
+                        }}
+                      >
+                        <SvgIcon>
+                          <Favorite />
+                        </SvgIcon>
+                      </IconButton>
+                    }
+                    onClick={() => handleClick(item)}
+                  >
+                    <ListItemButton>
+                      <ListItemText
+                        primary={
+                          <Truncate lines={1}>{getTitle(item)}</Truncate>
+                        }
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
           </Popup>
         </div>
       </ClickAwayListener>
