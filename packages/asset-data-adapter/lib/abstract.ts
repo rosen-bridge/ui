@@ -1,7 +1,7 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { AssetBalance, ChainAssetBalance } from '../interfaces';
+import { AssetBalance, ChainAssetBalance } from './interfaces';
 
 export abstract class AbstractDataAdapter {
   abstract chain: string;

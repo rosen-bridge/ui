@@ -1,4 +1,4 @@
-import { AbstractDataAdapter } from '../../../lib/dataAdapters';
+import { AbstractDataAdapter } from '../../../lib/abstract';
 import { ChainAssetBalance } from '../../../lib/interfaces';
 
 export class TestAdapter extends AbstractDataAdapter {
