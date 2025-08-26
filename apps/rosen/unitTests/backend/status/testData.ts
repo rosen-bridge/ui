@@ -189,27 +189,27 @@ export const mockTxs: Omit<
 ];
 
 export const mockPaginationTestData = {
-  aggregatedStatusChanged: Array.from(Array(10).keys()).map((id) => ({
-    id,
+  aggregatedStatusChanged: Array.from(Array(10).keys()).map((i) => ({
+    id: i,
     eventId: id0,
-    insertedAt: 0,
+    insertedAt: i,
     status: AggregateEventStatus.finished,
     txStatus: null,
     tx: null,
   })),
-  guardStatusChanged: Array.from(Array(10).keys()).map((id) => ({
-    id,
+  guardStatusChanged: Array.from(Array(10).keys()).map((i) => ({
+    id: i,
     eventId: id0,
-    guardPk: `${id}`,
-    insertedAt: 0,
+    guardPk: `${i}`,
+    insertedAt: i,
     status: EventStatus.completed,
     txStatus: null,
     tx: null,
   })),
-  guardStatus: Array.from(Array(10).keys()).map((id) => ({
+  guardStatus: Array.from(Array(10).keys()).map((i) => ({
     eventId: id0,
-    guardPk: `${id}`,
-    updatedAt: 0,
+    guardPk: `${i}`,
+    updatedAt: i,
     status: EventStatus.completed,
     txStatus: null,
     tx: null,
