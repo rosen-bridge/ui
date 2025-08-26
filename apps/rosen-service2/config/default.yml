@@ -16,24 +16,20 @@ healthCheck:
 chains:
   ergo:
     initialHeight: 1
-    scanInterval: 60
+    scanInterval: 120
     method: explorer
-    node:
-      url: https://node.ergopool.io/
     explorer:
-      url: https://explorer.ergoplatform.com/
+      url: https://api.ergoplatform.com/
   cardano:
     active: false
     initialHeight: 1
-    scanInterval: 60
-    method: koios
+    scanInterval: 30
     koios:
       timeout: 100
   bitcoin:
     active: false
     initialHeight: 1
-    scanInterval: 60
-    method: rpc
+    scanInterval: 600
     rpc:
       timeout: 100
     esplora:
@@ -42,7 +38,6 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 60
-    method: rpc
     esplora:
       timeout: 100
   ethereum:
@@ -54,7 +49,7 @@ chains:
   binance:
     active: false
     initialHeight: 1
-    scanInterval: 60
+    scanInterval: 10
     rpc:
       timeout: 100
   runes:

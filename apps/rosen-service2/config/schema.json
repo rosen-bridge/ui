@@ -239,7 +239,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 120,
             "description": "ergo scanInterval threshold in seconds",
             "validations": [
               {
@@ -283,7 +283,7 @@
             "children": {
               "url": {
                 "type": "string",
-                "default": "https://explorer.ergoplatform.com/",
+                "default": "https://api.ergoplatform.com/",
                 "description": "ergo explorer url",
                 "validations": [
                   {
@@ -324,7 +324,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 30,
             "description": "cardano scanInterval threshold in seconds",
             "validations": [
               {
@@ -340,7 +340,6 @@
           "method": {
             "type": "string",
             "description": "cardano network connection method",
-            "default": "koios",
             "validations": [
               {
                 "required": true,
@@ -502,7 +501,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 600,
             "description": "bitcoin scanInterval threshold in seconds",
             "validations": [
               {
@@ -518,7 +517,6 @@
           "method": {
             "type": "string",
             "description": "bitcoin network connection method",
-            "default": "rpc",
             "validations": [
               {
                 "required": true,
@@ -648,7 +646,6 @@
           "method": {
             "type": "string",
             "description": "doge network connection method",
-            "default": "rpc",
             "validations": [
               {
                 "required": true,
@@ -787,6 +784,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.ethereum.active", "value": true},
                     "error": "ethereum rpc url must be specified"
                   }
                 ]
@@ -798,6 +796,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.ethereum.active", "value": true},
                     "error": "ethereum rpc timeout must be specified (in seconds)"
                   }
                 ]
@@ -841,7 +840,7 @@
           },
           "scanInterval": {
             "type": "number",
-            "default": 60,
+            "default": 10,
             "description": "binance scanInterval threshold in seconds",
             "validations": [
               {
@@ -863,6 +862,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.binance.active", "value": true},
                     "error": "binance rpc url must be specified"
                   }
                 ]
@@ -874,6 +874,7 @@
                 "validations": [
                   {
                     "required": true,
+                    "when": {"path": "chains.binance.active", "value": true},
                     "error": "binance rpc timeout must be specified (in seconds)"
                   }
                 ]

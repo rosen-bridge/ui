@@ -172,14 +172,11 @@ export class ErgoScannerService extends AbstractService {
    * @param {AbstractLogger} [logger]
    * @memberof ErgoScannerService
    */
-  static readonly init = async (
-    dbService: DBService,
-    logger?: AbstractLogger,
-  ) => {
+  static readonly init = async (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new ErgoScannerService(dbService, logger);
+    this.instance = new ErgoScannerService(DBService.getInstance(), logger);
 
     await this.instance.registerExtractors();
   };

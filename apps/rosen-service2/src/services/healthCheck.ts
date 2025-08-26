@@ -112,15 +112,15 @@ export class HealthService extends AbstractService {
    * @param {ErgoScannerService} [ergoScannerService]
    * @memberof HealthService
    */
-  static readonly init = (
-    dbService: DBService,
-    ergoScannerService: ErgoScannerService,
-    logger?: AbstractLogger,
-  ) => {
+  static readonly init = (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new HealthService(dbService, ergoScannerService, logger);
+    this.instance = new HealthService(
+      DBService.getInstance(),
+      ErgoScannerService.getInstance(),
+      logger,
+    );
   };
 
   /**

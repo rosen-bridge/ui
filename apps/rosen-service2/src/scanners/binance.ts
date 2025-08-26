@@ -25,8 +25,8 @@ export const buildBinanceRpcScannerWithExtractors = async (
     dataSource: dataSource,
     initialHeight: configs.chains.binance.initialHeight,
     network: new EvmRpcNetwork(
-      configs.chains.binance.rpc.url,
-      configs.chains.binance.rpc.timeout * 1000,
+      configs.chains.binance.rpc.url!,
+      configs.chains.binance.rpc.timeout! * 1000,
       configs.chains.binance.rpc.authToken,
     ),
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,

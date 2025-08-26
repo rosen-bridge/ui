@@ -10,8 +10,11 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { configs } from '../configs';
 import {
   BITCOIN_METHOD_ESPLORA,
+  BITCOIN_METHOD_RPC,
   CARDANO_METHOD_BLOCKFROST,
+  CARDANO_METHOD_KOIOS,
   DOGE_METHOD_ESPLORA,
+  DOGE_METHOD_RPC,
 } from '../constants';
 import { CARDANO_METHOD_OGMIOS } from '../constants';
 import {
@@ -101,7 +104,7 @@ export class ChainsScannerService extends PeriodicTaskService {
                 this.dbService.dataSource,
               );
             break;
-          default:
+          case CARDANO_METHOD_KOIOS:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoKoiosScannerWithExtractors(
                 this.dbService.dataSource,
@@ -117,7 +120,7 @@ export class ChainsScannerService extends PeriodicTaskService {
                 this.dbService.dataSource,
               );
             break;
-          default:
+          case BITCOIN_METHOD_RPC:
             this.scanners[NETWORKS.bitcoin.key] =
               await buildBitcoinRpcScannerWithExtractors(
                 this.dbService.dataSource,
@@ -133,7 +136,7 @@ export class ChainsScannerService extends PeriodicTaskService {
                 this.dbService.dataSource,
               );
             break;
-          default:
+          case DOGE_METHOD_RPC:
             this.scanners[NETWORKS.doge.key] =
               await buildDogeRpcScannerWithExtractors(
                 this.dbService.dataSource,
@@ -167,17 +170,13 @@ export class ChainsScannerService extends PeriodicTaskService {
    * @param {HealthCheckService} [healthCheckService],
    * @memberof ChainsScannerService
    */
-  static readonly init = async (
-    dbService: DBService,
-    healthCheckService: HealthService,
-    logger?: AbstractLogger,
-  ) => {
+  static readonly init = async (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
     this.instance = new ChainsScannerService(
-      dbService,
-      healthCheckService,
+      DBService.getInstance(),
+      HealthService.getInstance(),
       logger,
     );
 
@@ -204,7 +203,6 @@ export class ChainsScannerService extends PeriodicTaskService {
    * @returns void
    */
   protected preStart = async () => {
-    this.setStatus(ServiceStatus.running);
     for (const [, scanner] of Object.entries(this.scanners)) {
       if (scanner instanceof WebSocketScanner) {
         if (!scanner.getConnectionStatus()) {
@@ -239,7 +237,7 @@ export class ChainsScannerService extends PeriodicTaskService {
             }
           } catch (err) {
             this.logger.error(
-              `ChainsScannerService scanners update failed: ${err}`,
+              `ChainsScannerService ${chain} scanner update failed: ${err}`,
             );
             if (err instanceof Error && err.stack) {
               this.logger.debug(err.stack);
@@ -259,11 +257,11 @@ export class ChainsScannerService extends PeriodicTaskService {
    * @returns void
    */
   protected postStop = async () => {
-    Object.values(this.scanners).map((scanner) => {
+    Object.values(this.scanners).map(async (scanner) => {
       if (scanner instanceof CardanoOgmiosScanner) {
         if (scanner.getConnectionStatus()) {
           try {
-            scanner.stop();
+            await scanner.stop();
           } catch (err) {
             this.logger.error(
               `ChainsScannerService websocket scanners stop failed: ${err}`,
@@ -275,8 +273,6 @@ export class ChainsScannerService extends PeriodicTaskService {
         }
       }
     });
-
-    this.setStatus(ServiceStatus.dormant);
 
     this.logger.info('The ChainsScannerService stopped');
   };
