@@ -65,7 +65,26 @@ const getTime = () => {
   return Math.floor(Date.now() / 1000);
 };
 
-const assertObjectsMatch = (o1, o2) => {
+const sortKeys = (obj) => {
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => sortKeys(item));
+  }
+
+  return Object.keys(obj)
+    .sort()
+    .reduce((sortedObj, key) => {
+      sortedObj[key] = sortKeys(obj[key]);
+      return sortedObj;
+    }, {});
+};
+
+const assertObjectsMatch = (_o1, _o2) => {
+  const o1 = sortKeys(_o1);
+  const o2 = sortKeys(_o2);
   const o1String = JSON.stringify(o1);
   const o2String = JSON.stringify(o2);
   if (o1String !== o2String) {
@@ -256,10 +275,10 @@ const testValidRequest = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -270,14 +289,18 @@ const testValidRequest = async () => {
     guardPks: [guardPk0],
   });
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk0,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'completed',
     txStatus: mockTx0.txStatus,
-    tx: getMockTxExpectation(mockTx0, eventId, response.data[0].insertedAt),
+    tx: getMockTxExpectation(
+      mockTx0,
+      eventId,
+      response.data.items[0].insertedAt,
+    ),
   });
 
   console.log(`testValidRequest: Passed`);
@@ -313,10 +336,10 @@ const testValidRequest2 = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -327,14 +350,18 @@ const testValidRequest2 = async () => {
     guardPks: [guardPk1],
   });
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: mockTx1.txStatus,
-    tx: getMockTxExpectation(mockTx1, eventId, response.data[0].insertedAt),
+    tx: getMockTxExpectation(
+      mockTx1,
+      eventId,
+      response.data.items[0].insertedAt,
+    ),
   });
 
   // get guard status timeline of this eventId with another guard
@@ -342,21 +369,25 @@ const testValidRequest2 = async () => {
     guardPks: [guardPk3],
   });
   assert(response.status === 200);
-  assert(response.data.length === 0);
+  assert(response.data.items.length === 0);
 
   // get guard status timeline of this eventId with all guards
   response = await axios.post(`${apiBaseUrl}/api/v1/status/${eventId}/guards`, {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: mockTx1.txStatus,
-    tx: getMockTxExpectation(mockTx1, eventId, response.data[0].insertedAt),
+    tx: getMockTxExpectation(
+      mockTx1,
+      eventId,
+      response.data.items[0].insertedAt,
+    ),
   });
 
   console.log(`testValidRequest2: Passed`);
@@ -395,10 +426,10 @@ const testDuplicateRequest = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt < timestamp); // <
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt < timestamp); // <
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -409,14 +440,18 @@ const testDuplicateRequest = async () => {
     guardPks: [guardPk1],
   });
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt < timestamp); // <
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt < timestamp); // <
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: mockTx1.txStatus,
-    tx: getMockTxExpectation(mockTx1, eventId, response.data[0].insertedAt),
+    tx: getMockTxExpectation(
+      mockTx1,
+      eventId,
+      response.data.items[0].insertedAt,
+    ),
   });
 
   console.log(`testDuplicateRequest: Passed`);
@@ -454,10 +489,10 @@ const testAggregateStatusChange = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -468,11 +503,11 @@ const testAggregateStatusChange = async () => {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt >= timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk0,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
@@ -508,10 +543,10 @@ const testAggregateStatusChange = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assert(response.data[0].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 1);
+  assert(response.data.items[0].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -522,19 +557,19 @@ const testAggregateStatusChange = async () => {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 2);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 2);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[1], {
+  assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk0,
-    insertedAt: response.data[1].insertedAt,
+    insertedAt: response.data.items[1].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
@@ -570,17 +605,17 @@ const testAggregateStatusChange = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 2);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 2);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[1], {
-    insertedAt: response.data[1].insertedAt,
+  assertObjectsMatch(response.data.items[1], {
+    insertedAt: response.data.items[1].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -591,27 +626,27 @@ const testAggregateStatusChange = async () => {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 3);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 3);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk3,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[1], {
+  assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk1,
-    insertedAt: response.data[1].insertedAt,
+    insertedAt: response.data.items[1].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[2], {
+  assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk0,
-    insertedAt: response.data[2].insertedAt,
+    insertedAt: response.data.items[2].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
@@ -649,24 +684,24 @@ const testAggregateStatusChange = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 3);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 3);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[1], {
-    insertedAt: response.data[1].insertedAt,
+  assertObjectsMatch(response.data.items[1], {
+    insertedAt: response.data.items[1].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[2], {
-    insertedAt: response.data[2].insertedAt,
+  assertObjectsMatch(response.data.items[2], {
+    insertedAt: response.data.items[2].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -677,36 +712,36 @@ const testAggregateStatusChange = async () => {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 4);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assert(response.data[3].insertedAt < timestamp);
-  const txTimestamp = response.data[0].insertedAt;
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 4);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assert(response.data.items[3].insertedAt < timestamp);
+  const txTimestamp = response.data.items[0].insertedAt;
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk0,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[1], {
+  assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk3,
-    insertedAt: response.data[1].insertedAt,
+    insertedAt: response.data.items[1].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[2], {
+  assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk1,
-    insertedAt: response.data[2].insertedAt,
+    insertedAt: response.data.items[2].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[3], {
+  assertObjectsMatch(response.data.items[3], {
     guardPk: guardPk0,
-    insertedAt: response.data[3].insertedAt,
+    insertedAt: response.data.items[3].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
@@ -742,24 +777,24 @@ const testAggregateStatusChange = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 3);
-  assert(response.data[0].insertedAt < timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 3);
+  assert(response.data.items[0].insertedAt < timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[1], {
-    insertedAt: response.data[1].insertedAt,
+  assertObjectsMatch(response.data.items[1], {
+    insertedAt: response.data.items[1].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[2], {
-    insertedAt: response.data[2].insertedAt,
+  assertObjectsMatch(response.data.items[2], {
+    insertedAt: response.data.items[2].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -770,43 +805,43 @@ const testAggregateStatusChange = async () => {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 5);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assert(response.data[3].insertedAt < timestamp);
-  assert(response.data[4].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 5);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assert(response.data.items[3].insertedAt < timestamp);
+  assert(response.data.items[4].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[1], {
+  assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk0,
-    insertedAt: response.data[1].insertedAt,
+    insertedAt: response.data.items[1].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[2], {
+  assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk3,
-    insertedAt: response.data[2].insertedAt,
+    insertedAt: response.data.items[2].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[3], {
+  assertObjectsMatch(response.data.items[3], {
     guardPk: guardPk1,
-    insertedAt: response.data[3].insertedAt,
+    insertedAt: response.data.items[3].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[4], {
+  assertObjectsMatch(response.data.items[4], {
     guardPk: guardPk0,
-    insertedAt: response.data[4].insertedAt,
+    insertedAt: response.data.items[4].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
@@ -842,31 +877,31 @@ const testAggregateStatusChange = async () => {
   // get aggregated status timeline of this eventId
   response = await axios.get(`${apiBaseUrl}/api/v1/status/${eventId}`);
   assert(response.status === 200);
-  assert(response.data.length === 4);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assert(response.data[3].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
-    insertedAt: response.data[0].insertedAt,
+  assert(response.data.items.length === 4);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assert(response.data.items[3].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
+    insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[1], {
-    insertedAt: response.data[1].insertedAt,
+  assertObjectsMatch(response.data.items[1], {
+    insertedAt: response.data.items[1].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[2], {
-    insertedAt: response.data[2].insertedAt,
+  assertObjectsMatch(response.data.items[2], {
+    insertedAt: response.data.items[2].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[3], {
-    insertedAt: response.data[3].insertedAt,
+  assertObjectsMatch(response.data.items[3], {
+    insertedAt: response.data.items[3].insertedAt,
     status: 'waiting-for-confirmation',
     txStatus: null,
     tx: null,
@@ -877,51 +912,51 @@ const testAggregateStatusChange = async () => {
     guardPks: [],
   });
   assert(response.status === 200);
-  assert(response.data.length === 6);
-  assert(response.data[0].insertedAt >= timestamp);
-  assert(response.data[1].insertedAt < timestamp);
-  assert(response.data[2].insertedAt < timestamp);
-  assert(response.data[3].insertedAt < timestamp);
-  assert(response.data[4].insertedAt < timestamp);
-  assert(response.data[5].insertedAt < timestamp);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 6);
+  assert(response.data.items[0].insertedAt >= timestamp);
+  assert(response.data.items[1].insertedAt < timestamp);
+  assert(response.data.items[2].insertedAt < timestamp);
+  assert(response.data.items[3].insertedAt < timestamp);
+  assert(response.data.items[4].insertedAt < timestamp);
+  assert(response.data.items[5].insertedAt < timestamp);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk3,
-    insertedAt: response.data[0].insertedAt,
+    insertedAt: response.data.items[0].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[1], {
+  assertObjectsMatch(response.data.items[1], {
     guardPk: guardPk1,
-    insertedAt: response.data[1].insertedAt,
+    insertedAt: response.data.items[1].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[2], {
+  assertObjectsMatch(response.data.items[2], {
     guardPk: guardPk0,
-    insertedAt: response.data[2].insertedAt,
+    insertedAt: response.data.items[2].insertedAt,
     status: 'in-reward',
     txStatus: mockTx2.txStatus,
     tx: getMockTxExpectation(mockTx2, eventId, txTimestamp),
   });
-  assertObjectsMatch(response.data[3], {
+  assertObjectsMatch(response.data.items[3], {
     guardPk: guardPk3,
-    insertedAt: response.data[3].insertedAt,
+    insertedAt: response.data.items[3].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[4], {
+  assertObjectsMatch(response.data.items[4], {
     guardPk: guardPk1,
-    insertedAt: response.data[4].insertedAt,
+    insertedAt: response.data.items[4].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
   });
-  assertObjectsMatch(response.data[5], {
+  assertObjectsMatch(response.data.items[5], {
     guardPk: guardPk0,
-    insertedAt: response.data[5].insertedAt,
+    insertedAt: response.data.items[5].insertedAt,
     status: 'pending-payment',
     txStatus: null,
     tx: null,
@@ -944,7 +979,7 @@ const testGetInvalidEventIds = async () => {
 const testGetInvalidEventTimeline = async () => {
   const response = await axios.get(`${apiBaseUrl}/api/v1/status/${id3}`);
   assert(response.status === 200);
-  assert(response.data.length === 0);
+  assert(response.data.items.length === 0);
 
   console.log(`testGetInvalidEventTimeline: Passed`);
 };
@@ -952,8 +987,8 @@ const testGetInvalidEventTimeline = async () => {
 const testGetValidEventTimeline = async () => {
   const response = await axios.get(`${apiBaseUrl}/api/v1/status/${id1}`);
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assertObjectsMatch(response.data.items[0], {
     insertedAt: validRequest2Timestamp,
     status: 'waiting-for-confirmation',
     txStatus: null,
@@ -971,7 +1006,7 @@ const testGetInvalidGuardEventTimeline = async () => {
     },
   );
   assert(response.status === 200);
-  assert(response.data.length === 0);
+  assert(response.data.items.length === 0);
 
   console.log(`testGetInvalidGuardEventTimeline: Passed`);
 };
@@ -984,8 +1019,8 @@ const testGetValidGuardEventTimeline = async () => {
     },
   );
   assert(response.status === 200);
-  assert(response.data.length === 1);
-  assertObjectsMatch(response.data[0], {
+  assert(response.data.items.length === 1);
+  assertObjectsMatch(response.data.items[0], {
     guardPk: guardPk1,
     insertedAt: validRequest2Timestamp,
     status: 'pending-payment',
@@ -996,7 +1031,132 @@ const testGetValidGuardEventTimeline = async () => {
   console.log(`testGetValidGuardEventTimeline: Passed`);
 };
 
-const resetDB = () => {
+const testGetEventTimelinePagination = async () => {
+  // page 1
+  await (async () => {
+    const response = await axios.get(
+      `${apiBaseUrl}/api/v1/status/${id1}?offset=0&limit=10`,
+    );
+    assert(response.status === 200);
+    assert(response.data.items.length === 10);
+    for (let i = 0; i < 10; i += 1) {
+      assertObjectsMatch(response.data.items[i], {
+        insertedAt: 21 - i,
+        status: 'finished',
+        txStatus: null,
+        tx: null,
+      });
+    }
+  })();
+
+  // page 2
+  const response = await axios.get(
+    `${apiBaseUrl}/api/v1/status/${id1}?offset=7&limit=20`,
+  );
+
+  assert(response.status === 200);
+  assert(response.data.items.length === 5);
+  for (let i = 0; i < 5; i += 1) {
+    assertObjectsMatch(response.data.items[i], {
+      insertedAt: 21 - 7 - i,
+      status: 'finished',
+      txStatus: null,
+      tx: null,
+    });
+  }
+
+  console.log(`testGetEventTimelinePagination: Passed`);
+};
+
+const testGetGuardEventTimelinePagination = async () => {
+  // page 1
+  await (async () => {
+    const response = await axios.post(
+      `${apiBaseUrl}/api/v1/status/${id1}/guards?offset=0&limit=10`,
+      {
+        guardPks: [guardPk1],
+      },
+    );
+    assert(response.status === 200);
+    assert(response.data.items.length === 10);
+    for (let i = 0; i < 10; i += 1) {
+      assertObjectsMatch(response.data.items[i], {
+        guardPk: guardPk1,
+        insertedAt: 21 - i,
+        status: 'in-payment',
+        txStatus: null,
+        tx: null,
+      });
+    }
+  })();
+
+  // page 2
+  const response = await axios.post(
+    `${apiBaseUrl}/api/v1/status/${id1}/guards?offset=7&limit=20`,
+    {
+      guardPks: [guardPk1],
+    },
+  );
+  assert(response.status === 200);
+  assert(response.data.items.length === 5);
+  for (let i = 0; i < 5; i += 1) {
+    assertObjectsMatch(response.data.items[i], {
+      guardPk: guardPk1,
+      insertedAt: 21 - 7 - i,
+      status: 'in-payment',
+      txStatus: null,
+      tx: null,
+    });
+  }
+
+  console.log(`testGetGuardEventTimelinePagination: Passed`);
+};
+
+const insertMockDataForPaginationTest = async () => {
+  console.log('inserting mock data for pagination test');
+  const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
+
+  p.stdin.write('BEGIN;\n');
+  p.stdin
+    .write(`INSERT INTO aggregated_status_changed_entity ("id", "eventId", "insertedAt", "status", "txStatus", "txId", "txChain")
+      VALUES
+          (10, '${id1}', 10, 'finished', NULL, NULL, NULL),
+          (11, '${id1}', 11, 'finished', NULL, NULL, NULL),
+          (12, '${id1}', 12, 'finished', NULL, NULL, NULL),
+          (13, '${id1}', 13, 'finished', NULL, NULL, NULL),
+          (14, '${id1}', 14, 'finished', NULL, NULL, NULL),
+          (15, '${id1}', 15, 'finished', NULL, NULL, NULL),
+          (16, '${id1}', 16, 'finished', NULL, NULL, NULL),
+          (17, '${id1}', 17, 'finished', NULL, NULL, NULL),
+          (18, '${id1}', 18, 'finished', NULL, NULL, NULL),
+          (19, '${id1}', 19, 'finished', NULL, NULL, NULL),
+          (20, '${id1}', 20, 'finished', NULL, NULL, NULL),
+          (21, '${id1}', 21, 'finished', NULL, NULL, NULL);
+
+      INSERT INTO guard_status_changed_entity ("id", "eventId", "guardPk", "insertedAt", "status", "txStatus", "txId", "txChain")
+      VALUES
+          (10, '${id1}', '${guardPk1}', 10, 'in-payment', NULL, NULL, NULL),
+          (11, '${id1}', '${guardPk1}', 11, 'in-payment', NULL, NULL, NULL),
+          (12, '${id1}', '${guardPk1}', 12, 'in-payment', NULL, NULL, NULL),
+          (13, '${id1}', '${guardPk1}', 13, 'in-payment', NULL, NULL, NULL),
+          (14, '${id1}', '${guardPk1}', 14, 'in-payment', NULL, NULL, NULL),
+          (15, '${id1}', '${guardPk1}', 15, 'in-payment', NULL, NULL, NULL),
+          (16, '${id1}', '${guardPk1}', 16, 'in-payment', NULL, NULL, NULL),
+          (17, '${id1}', '${guardPk1}', 17, 'in-payment', NULL, NULL, NULL),
+          (18, '${id1}', '${guardPk1}', 18, 'in-payment', NULL, NULL, NULL),
+          (19, '${id1}', '${guardPk1}', 19, 'in-payment', NULL, NULL, NULL),
+          (20, '${id1}', '${guardPk1}', 20, 'in-payment', NULL, NULL, NULL),
+          (21, '${id1}', '${guardPk1}', 21, 'in-payment', NULL, NULL, NULL);\n`);
+  p.stdin.write('COMMIT;\n');
+
+  p.stdin.end();
+
+  await new Promise((r) => setTimeout(r, 500));
+
+  console.log('done inserting mock data for pagination test');
+};
+
+const resetDB = async () => {
   console.log('resetting db');
   const p = $`psql -p 5432 -U postgres -d public_status_test`.stdio('pipe');
 
@@ -1009,6 +1169,8 @@ const resetDB = () => {
   p.stdin.write('COMMIT;\n');
 
   p.stdin.end();
+
+  await new Promise((r) => setTimeout(r, 500));
 
   console.log('done resetting db');
 };
@@ -1083,7 +1245,7 @@ const run = async () => {
     const shouldStartApis = getShouldStartApis();
 
     try {
-      resetDB();
+      await resetDB();
 
       if (shouldStartApis) {
         await startApi();
@@ -1102,6 +1264,11 @@ const run = async () => {
       await testGetValidEventTimeline();
       await testGetInvalidGuardEventTimeline();
       await testGetValidGuardEventTimeline();
+
+      await resetDB();
+      await insertMockDataForPaginationTest();
+      await testGetEventTimelinePagination();
+      await testGetGuardEventTimelinePagination();
 
       console.log(chalk.bgGreen.black('All tests passed'));
 

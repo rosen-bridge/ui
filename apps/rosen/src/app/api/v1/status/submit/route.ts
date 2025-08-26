@@ -6,7 +6,7 @@ import '@/backend/initialize-datasource-if-needed';
 import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 import { publicStatusConfigs } from '@/backend/status/services';
 
-import { paramsToSignMessage, validator, Params } from './validator';
+import { paramsToSignMessage, validator, Params } from './validations';
 
 PublicStatusAction.init(dataSource);
 

@@ -348,6 +348,9 @@ export const lightThemeOptions: ThemeOptions = {
           backgroundColor: theme.palette.primary.dark,
           borderRadius: theme.shape.borderRadius / 2,
         }),
+        arrow: ({ theme }: { theme: Theme }) => ({
+          color: theme.palette.primary.dark,
+        }),
       },
     },
     RosenNavigationBar: {

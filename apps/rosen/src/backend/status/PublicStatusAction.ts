@@ -138,7 +138,7 @@ export class PublicStatusAction {
       // inserts or replaces a status with matching pk (if exists) with the new status
       // without mutating the original array
       const newStatuses = Utils.cloneFilterPush(
-        guardsStatus,
+        guardsStatus.items,
         'guardPk',
         pk,
         newGuardStatus,
@@ -180,10 +180,10 @@ export class PublicStatusAction {
 
       // if eventId is new or aggregated status has changed, update the aggregated status
       if (
-        guardsStatus.length === 0 ||
+        guardsStatus.items.length === 0 ||
         Utils.aggregatedStatusesMatch(
           Utils.calcAggregatedStatus(
-            guardsStatus,
+            guardsStatus.items,
             eventStatusThresholds,
             txStatusThresholds,
           ),
@@ -256,11 +256,15 @@ export class PublicStatusAction {
   /**
    * gets array of AggregatedStatusChangedEntity (timeline)
    * @param eventId
+   * @param offset
+   * @param limit
    * @returns promise of AggregatedStatusChangedEntity array
    */
   getAggregatedStatusTimeline = (
     eventId: string,
-  ): Promise<AggregatedStatusChangedEntity[]> => {
+    offset?: number,
+    limit?: number,
+  ) => {
     const aggregatedStatusChangedRepository = this.dataSource.getRepository(
       AggregatedStatusChangedEntity,
     );
@@ -268,6 +272,8 @@ export class PublicStatusAction {
     return AggregatedStatusChangedAction.getInstance().getMany(
       aggregatedStatusChangedRepository,
       eventId,
+      offset,
+      limit,
     );
   };
 
@@ -275,12 +281,16 @@ export class PublicStatusAction {
    * gets array of GuardStatusChangedEntity (timeline)
    * @param eventId
    * @param guardPks
+   * @param offset
+   * @param limit
    * @returns promise of GuardStatusChangedEntity array
    */
   getGuardStatusTimeline = (
     eventId: string,
     guardPks: string[],
-  ): Promise<GuardStatusChangedEntity[]> => {
+    offset?: number,
+    limit?: number,
+  ) => {
     const guardStatusChangedRepository = this.dataSource.getRepository(
       GuardStatusChangedEntity,
     );
@@ -289,6 +299,8 @@ export class PublicStatusAction {
       guardStatusChangedRepository,
       eventId,
       guardPks,
+      offset,
+      limit,
     );
   };
 }

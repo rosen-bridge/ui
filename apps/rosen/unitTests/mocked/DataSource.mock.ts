@@ -31,7 +31,7 @@ export class DataSourceMock {
    * @param records
    */
   static populateAggregatedStatusChanged = async (
-    records: Omit<AggregatedStatusChangedEntity, 'id'>[],
+    records: AggregatedStatusChangedEntity[],
   ) => {
     for (const record of records) {
       await testDataSource
@@ -75,7 +75,7 @@ export class DataSourceMock {
    * @param records
    */
   static populateGuardStatusChanged = async (
-    records: Omit<GuardStatusChangedEntity, 'id'>[],
+    records: GuardStatusChangedEntity[],
   ) => {
     for (const record of records) {
       await testDataSource

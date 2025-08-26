@@ -75,10 +75,20 @@ export const generateUnsignedTx =
       1,
     );
     if (!coveredBoxes.covered) {
+      const totalInputDoge = utxoIterator.reduce(
+        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
+        0n,
+      );
       throw new Error(
         `Available boxes didn't cover required assets. DOGE: ${
           unwrappedAmount + minDoge
         }`,
+        {
+          cause: {
+            totalInputDoge,
+            fromAddress: fromAddress,
+          },
+        },
       );
     }
 
