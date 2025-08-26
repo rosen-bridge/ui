@@ -151,19 +151,14 @@ export class ChainsHealthCheckService extends AbstractService {
    * @param {AbstractLogger} [logger]
    * @memberof ChainsHealthCheckService
    */
-  static init = (
-    dbService: DBService,
-    healthCheckService: HealthService,
-    chainsScannerService: ChainsScannerService,
-    logger?: AbstractLogger,
-  ) => {
+  static init = (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
     this.instance = new ChainsHealthCheckService(
-      dbService,
-      healthCheckService,
-      chainsScannerService,
+      DBService.getInstance(),
+      HealthService.getInstance(),
+      ChainsScannerService.getInstance(),
       logger,
     );
   };
