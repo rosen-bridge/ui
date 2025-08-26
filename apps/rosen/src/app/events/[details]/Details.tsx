@@ -4,12 +4,13 @@ import React from 'react';
 
 import {
   Amount2,
+  Box as BoxMui,
   Columns,
   DisclosureButton,
   Identifier,
+  InjectOverrides,
   Label,
   RelativeTime,
-  Skeleton,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -20,11 +21,10 @@ import { DetailsCard } from '@/app/events/[details]/';
 import { BridgeEvent, EventDetails } from '@/app/events/[details]/type';
 
 export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR<EventDetails>(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+  const { data, mutate } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
+  const Box = InjectOverrides(BoxMui);
 
+  const isLoading = true;
   const disclosure = useDisclosure({
     onOpen: async () => {
       await mutate();
@@ -34,21 +34,16 @@ export const Details = ({ id }: { id: string }) => {
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
+      state={'open'}
       title="Details"
     >
       <Columns width="350px" count={3} rule gap="24px">
         <div>
           <Label orientation="horizontal" label="Duration">
-            {data?.block.timestamp ? (
-              <RelativeTime timestamp={data.block.timestamp} />
-            ) : (
-              <Skeleton
-                variant="rectangular"
-                style={{ width: '100%', borderRadius: '4px' }}
-                height={'14px'}
-              />
-            )}
+            <RelativeTime
+              isLoading={isLoading}
+              timestamp={data?.block.timestamp}
+            />
           </Label>
           <Label label="Fee Sum">TODO</Label>
           <Label label="Bridge Fee" inset>
@@ -77,33 +72,58 @@ export const Details = ({ id }: { id: string }) => {
           </Label>
         </div>
 
-        <div>
+        <Box
+          overrides={{
+            laptop: {
+              style: {
+                columnSpan: 'all',
+              },
+            },
+            desktop: {
+              style: {
+                columnSpan: 'none',
+              },
+            },
+          }}
+        >
           <Label label="Tx IDs" />
           <Label label="Source Tx" inset>
-            <Identifier value={data?.sourceTxId ?? 'N/A'} copyable />
+            <div style={{ width: '40%' }}>
+              <Identifier
+                loading={isLoading}
+                value={data?.sourceTxId ?? 'N/A'}
+                copyable
+              />
+            </div>
           </Label>
           <Label label="Payment Tx" inset>
-            {data?.eventTrigger?.paymentTxId ? (
-              <Identifier value={data?.eventTrigger?.paymentTxId} copyable />
-            ) : (
-              <>TODO</>
-            )}
+            <div style={{ width: '40%' }}>
+              <Identifier
+                loading={isLoading}
+                value={data?.eventTrigger?.paymentTxId ?? undefined}
+                copyable
+              />
+            </div>
           </Label>
           <Label label="Reward Tx" inset>
-            {data?.eventTrigger?.spendTxId ? (
-              <Identifier value={data?.eventTrigger?.spendTxId} copyable />
-            ) : (
-              <>TODO</>
-            )}
+            <div style={{ width: '40%' }}>
+              <Identifier
+                loading={isLoading}
+                value={data?.eventTrigger?.spendTxId ?? undefined}
+                copyable
+              />
+            </div>
           </Label>
           <Label label="Trigger Tx" inset>
-            {data?.eventTrigger?.txId ? (
-              <Identifier value={data?.eventTrigger?.txId} copyable />
-            ) : (
-              <>TODO</>
-            )}
+            <div style={{ width: '40%' }}>
+              <Identifier
+                loading={isLoading}
+                value={data?.eventTrigger?.txId}
+                copyable
+              />
+            </div>
           </Label>
-        </div>
+        </Box>
       </Columns>
     </DetailsCard>
   );

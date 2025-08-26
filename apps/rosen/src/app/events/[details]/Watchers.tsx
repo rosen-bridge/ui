@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
+import React, { HTMLAttributes, ReactNode, useCallback, useState } from 'react';
 
 import { CheckCircle, CloseCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
@@ -12,14 +12,15 @@ import {
   IconButton,
   Identifier,
   Label,
+  InjectOverrides,
   Stack,
   SvgIcon,
   Table,
   TableBody,
-  TableCell,
+  TableCell as TableCellBase,
   TableContainer,
   TableHead,
-  TableRow,
+  TableRow as TableRowBase,
   Typography,
   useBreakpoint,
   useCurrentBreakpoint,
@@ -72,10 +73,14 @@ const rows: rowTypes[] = [
     rewarded: 'Yes',
   },
 ];
+const TableRow = InjectOverrides(TableRowBase);
+const TableCell = InjectOverrides(TableCellBase);
+
+type WrapperProps = {
+  children: ReactNode;
+} & HTMLAttributes<HTMLDivElement>;
 
 const TableHeader = () => {
-  const isMobile = useBreakpoint('tablet-down');
-
   return (
     <TableHead
       sx={(theme) => ({
@@ -85,7 +90,16 @@ const TableHeader = () => {
         },
       })}
     >
-      <TableRow style={{ display: !isMobile ? 'table-row' : 'none' }}>
+      <TableRow
+        overrides={{
+          mobile: {
+            style: { display: 'none' },
+          },
+          tablet: {
+            style: { display: 'table-row' },
+          },
+        }}
+      >
         <TableCell>#</TableCell>
         <TableCell>WID</TableCell>
         <TableCell>COMMITMENT</TableCell>
@@ -120,6 +134,21 @@ export const Watchers = () => {
     [currentSize],
   );
 
+  const overrideStyle = {
+    mobile: {
+      style: { maxWidth: '140px' },
+    },
+    tablet: {
+      style: { maxWidth: '160px' },
+    },
+    laptop: {
+      style: { maxWidth: '280px' },
+    },
+    desktop: {
+      style: { maxWidth: '360px' },
+    },
+  };
+
   const handelOpen = (value: rowTypes) => {
     setOpen(true);
     setData(value);
@@ -142,7 +171,7 @@ export const Watchers = () => {
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
+      state="open"
       title="Watchers"
     >
       <div
@@ -189,7 +218,7 @@ export const Watchers = () => {
                     {row.id}
                   </TableCell>
                 )}
-                <TableCell align="center" style={{ maxWidth: size('400px') }}>
+                <TableCell align="center" overrides={overrideStyle}>
                   <Stack
                     direction="row"
                     justifyContent="space-between"
@@ -230,7 +259,7 @@ export const Watchers = () => {
                 )}
 
                 {!isMobile && (
-                  <TableCell style={{ maxWidth: size() }}>
+                  <TableCell overrides={overrideStyle}>
                     <div style={{ maxWidth: size() }}>
                       <Identifier
                         value={row.commitment}

@@ -9,11 +9,12 @@ import {
   Identifier,
   Label,
   Network,
-  Stack,
+  Stack as StackBase,
   Token,
-  useBreakpoint,
   Skeleton,
   Chip,
+  InjectOverrides,
+  Box as BoxBase,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types/dist/common';
@@ -21,7 +22,7 @@ import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]';
 import { DateTime } from '@/app/events/[details]/DateTime';
-import { EventDetails, EventStatusProps } from '@/app/events/[details]/type';
+import { EventDetails } from '@/app/events/[details]/type';
 
 const EventStatus = ({ value }: { value: string }) => {
   switch (value?.toLowerCase()) {
@@ -37,59 +38,98 @@ const EventStatus = ({ value }: { value: string }) => {
 };
 
 export const Overview = ({ id }: { id: string }) => {
-  const isMobile = useBreakpoint('tablet-down');
+  const Stack = InjectOverrides(StackBase);
+  const Box = InjectOverrides(BoxBase);
 
-  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
-
-  const orientation = isMobile ? 'horizontal' : 'vertical';
-
+  const { data } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
+  const isLoading = true;
   useEffect(() => {
     console.log(data);
   }, [data, isLoading]);
 
   return (
     <DetailsCard state="open" title="Overview">
-      <div style={{ width: isMobile ? '100%' : '70%' }}>
-        {!isLoading && data ? (
-          <Label label="Event Id" orientation={orientation}>
-            <Identifier value={data.eventId || 'error loading !!!'} copyable />
-          </Label>
-        ) : (
-          <Stack>
-            <Label orientation="horizontal" label="Event Id">
-              {/*TODO: fix */}
-              {isMobile && (
-                <Skeleton
-                  variant="rectangular"
-                  style={{ width: '100%', borderRadius: '4px' }}
-                  height={'14px'}
-                />
-              )}
-            </Label>
-            {/*TODO: fix */}
-            {!isMobile && (
-              <Skeleton
-                variant="rectangular"
-                style={{ width: '100%', borderRadius: '4px' }}
-                height={'14px'}
-              />
-            )}
-          </Stack>
-        )}
-      </div>
+      <Box
+        overrides={{
+          mobile: { style: { width: '100%' } },
+          tablet: { style: { width: '70%' } },
+        }}
+      >
+        <Label
+          label="Event Id"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <div style={{ width: '100%' }}>
+            <Identifier
+              loading={isLoading}
+              value={data?.eventId || 'error loading !!!'}
+              copyable
+            />
+          </div>
+        </Label>
+      </Box>
+
       <Columns count={3} width="320px" gap="24px">
-        <Label label="Token" orientation={orientation}>
+        <Label
+          label="Token"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           {!isLoading && data ? (
-            <Token name={data.targetChainTokenId} reverse={isMobile} />
+            <Token
+              name={data.sourceChainTokenId}
+              overrides={{
+                mobile: {
+                  reverse: true,
+                },
+                tablet: {
+                  reverse: false,
+                },
+              }}
+            />
           ) : (
-            <Stack alignItems="center" flexDirection="row" gap={1}>
+            <Stack
+              overrides={{
+                mobile: { flexDirection: 'row-reverse' },
+                tablet: { flexDirection: 'row' },
+              }}
+              alignItems="center"
+              flexDirection="row"
+              gap={1}
+            >
               <Skeleton width={32} height={32} variant="circular" />
               <Skeleton width={80} height={14} variant="rounded" />
             </Stack>
           )}
         </Label>
 
-        <Label label="Amount" orientation={orientation}>
+        <Label
+          label="Amount"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           {!isLoading && data ? (
             <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />
           ) : (
@@ -97,45 +137,68 @@ export const Overview = ({ id }: { id: string }) => {
           )}
         </Label>
 
-        <Label label="Chin" orientation={orientation}>
-          <Stack alignItems="center">
-            {!isLoading && data ? (
-              <Connector
-                start={
-                  <Network
-                    variant={isMobile ? 'logo' : 'both'}
-                    name={data.fromChain as NetworkType}
-                  />
-                }
-                end={
-                  <Network
-                    variant={isMobile ? 'logo' : 'both'}
-                    name={data.toChain as NetworkType}
-                  />
-                }
+        <Label
+          label="Chin"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <Connector
+            start={
+              <Network
+                loading={isLoading}
+                overrides={{
+                  mobile: {
+                    variant: 'logo',
+                    name: data?.fromChain as NetworkType,
+                  },
+                  tablet: {
+                    variant: 'both',
+                    name: data?.fromChain as NetworkType,
+                  },
+                }}
+                variant={'both'}
+                name={data?.fromChain as NetworkType}
               />
-            ) : (
-              <Connector
-                start={
-                  <Network
-                    loading
-                    variant={isMobile ? 'logo' : 'both'}
-                    name={'ergo'}
-                  />
-                }
-                end={
-                  <Network
-                    loading
-                    variant={isMobile ? 'logo' : 'both'}
-                    name={'ergo'}
-                  />
-                }
+            }
+            end={
+              <Network
+                loading={isLoading}
+                overrides={{
+                  mobile: {
+                    variant: 'logo',
+                    name: data?.toChain as NetworkType,
+                  },
+                  tablet: {
+                    variant: 'both',
+                    name: data?.toChain as NetworkType,
+                  },
+                }}
+                variant={'both'}
+                name={data?.toChain as NetworkType}
               />
-            )}
-          </Stack>
+            }
+          />
         </Label>
 
-        <Label label="Time" orientation={orientation}>
+        <Label
+          label="Time"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           {!isLoading && data ? (
             <DateTime timestamp={data.block?.timestamp * 1000 || 175522841} />
           ) : (
@@ -143,7 +206,18 @@ export const Overview = ({ id }: { id: string }) => {
           )}
         </Label>
 
-        <Label label="Status" orientation={orientation}>
+        <Label
+          label="Status"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           {!isLoading && data ? (
             <>
               {data.status ? (
@@ -157,7 +231,18 @@ export const Overview = ({ id }: { id: string }) => {
           )}
         </Label>
 
-        <Label label="Fee Sum" orientation={orientation}>
+        <Label
+          label="Fee Sum"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           {!isLoading && data ? (
             <>TODO</>
           ) : (
@@ -171,15 +256,34 @@ export const Overview = ({ id }: { id: string }) => {
         <Stack
           flexDirection={'row'}
           justifyContent="space-between"
-          style={{ width: isMobile ? '100%' : '70%' }}
+          overrides={{
+            mobile: {
+              style: { width: '100%' },
+            },
+            tablet: {
+              style: { width: '70%' },
+            },
+          }}
         >
           <Label label="from" inset></Label>
-          <div
-            style={{
-              maxWidth: '568px',
-              width: '100%',
-              overflow: 'hidden',
-              marginLeft: isMobile ? '10px' : '60px',
+          <Box
+            overrides={{
+              mobile: {
+                style: {
+                  maxWidth: '568px',
+                  width: '100%',
+                  overflow: 'hidden',
+                  marginLeft: '10px',
+                },
+              },
+              tablet: {
+                style: {
+                  maxWidth: '568px',
+                  width: '100%',
+                  overflow: 'hidden',
+                  marginLeft: '60px',
+                },
+              },
             }}
           >
             {!isLoading && data ? (
@@ -191,32 +295,52 @@ export const Overview = ({ id }: { id: string }) => {
             ) : (
               <Identifier value={''} loading />
             )}
-          </div>
+          </Box>
         </Stack>
         <Stack
           flexDirection={'row'}
+          alignItems="center"
           justifyContent="space-between"
-          style={{ width: isMobile ? '100%' : '70%' }}
+          overrides={{
+            mobile: {
+              style: { width: '100%' },
+            },
+            tablet: {
+              style: { width: '70%' },
+              alignItems: 'center',
+            },
+          }}
         >
           <Label label="to" inset></Label>
-          <div
-            style={{
-              maxWidth: '568px',
-              width: '100%',
-              overflow: 'hidden',
-              marginLeft: isMobile ? '10px' : '60px',
+          <Box
+            overrides={{
+              mobile: {
+                style: {
+                  alignItems: 'center',
+                  maxWidth: '568px',
+                  width: '100%',
+                  overflow: 'hidden',
+                  marginLeft: '10px',
+                },
+              },
+              tablet: {
+                style: {
+                  alignItems: 'center',
+                  maxWidth: '568px',
+                  width: '100%',
+                  overflow: 'hidden',
+                  marginLeft: '60px',
+                },
+              },
             }}
           >
-            {!isLoading && data ? (
-              <Identifier
-                value={data.toAddress || 'error loading !!!'}
-                href={data.fromAddress}
-                copyable
-              />
-            ) : (
-              <Identifier value={''} loading />
-            )}
-          </div>
+            <Identifier
+              loading={isLoading}
+              value={data?.toAddress}
+              href={data?.fromAddress}
+              copyable
+            />
+          </Box>
         </Stack>
       </Stack>
     </DetailsCard>
