@@ -15,12 +15,12 @@ export abstract class AbstractDataAdapter {
   /**
    * Aggregates balances of all tracked addresses into a list of assets.
    *
-   * @returns {AssetBalance[]} list of assets with address-specific balances
+   * @returns {Promise<AssetBalance>} list of assets with address-specific balances
    */
-  public fetch = (): AssetBalance => {
+  public fetch = async (): Promise<AssetBalance> => {
     const chainAssets: AssetBalance = {};
     for (const address of this.addresses) {
-      const assets = this.getAddressAssets(address);
+      const assets = await this.getAddressAssets(address);
       for (const asset of assets) {
         const tokenSet = this.tokenMap.getTokenSet(asset.assetId);
         if (
@@ -46,7 +46,7 @@ export abstract class AbstractDataAdapter {
    * Fetches raw chain assets for a given address.
    *
    * @param {string} address - target blockchain address
-   * @returns {ChainAssetBalance[]} list of asset balances for the address
+   * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
-  abstract getAddressAssets: (address: string) => ChainAssetBalance[];
+  abstract getAddressAssets: (address: string) => Promise<ChainAssetBalance[]>;
 }

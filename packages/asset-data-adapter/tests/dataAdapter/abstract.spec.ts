@@ -29,7 +29,7 @@ describe('AbstractDataAdapter', () => {
       const adapter = new TestAdapter(['addr1', 'addr2'], tokenMap);
 
       // fetch tokens that exists on the tokenMap
-      const result: AssetBalance = adapter.fetch();
+      const result: AssetBalance = await adapter.fetch();
 
       expect(result).toEqual({
         token1: [
@@ -65,7 +65,7 @@ describe('AbstractDataAdapter', () => {
       const adapter = new TestAdapter(['addr1', 'addr2'], tokenMap);
 
       // fetch tokens that exists on the tokenMap but on the another chain
-      const result: AssetBalance = adapter.fetch();
+      const result: AssetBalance = await adapter.fetch();
 
       expect(result).toEqual({});
     });

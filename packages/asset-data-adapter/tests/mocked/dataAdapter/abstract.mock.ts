@@ -4,7 +4,7 @@ import { ChainAssetBalance } from '../../../lib/interfaces';
 export class TestAdapter extends AbstractDataAdapter {
   chain = 'ergo';
 
-  getAddressAssets = (address: string): ChainAssetBalance[] => {
+  getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
     if (address === 'addr1') {
       return [
         { assetId: 'token0', balance: 100n },
