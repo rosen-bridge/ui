@@ -35,7 +35,6 @@ const startApp = async () => {
 
   logger.debug('Initializing scanner service');
   await ErgoScannerService.init(
-    DBService.getInstance(),
     CallbackLoggerFactory.getInstance().getLogger('ergo-scanner-service'),
   );
   serviceManager.register(ErgoScannerService.getInstance());
@@ -43,8 +42,6 @@ const startApp = async () => {
 
   logger.debug('Initializing health service');
   HealthService.init(
-    DBService.getInstance(),
-    ErgoScannerService.getInstance(),
     CallbackLoggerFactory.getInstance().getLogger('health-check-service'),
   );
   serviceManager.register(HealthService.getInstance());
@@ -52,8 +49,6 @@ const startApp = async () => {
 
   logger.debug('Initializing chains scanners service');
   await ChainsScannerService.init(
-    DBService.getInstance(),
-    HealthService.getInstance(),
     CallbackLoggerFactory.getInstance().getLogger('chains-scanner-service'),
   );
   serviceManager.register(ChainsScannerService.getInstance());

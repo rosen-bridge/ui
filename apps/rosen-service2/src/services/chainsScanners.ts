@@ -163,17 +163,13 @@ export class ChainsScannerService extends PeriodicTaskService {
    * @param {HealthCheckService} [healthCheckService],
    * @memberof ChainsScannerService
    */
-  static readonly init = async (
-    dbService: DBService,
-    healthCheckService: HealthService,
-    logger?: AbstractLogger,
-  ) => {
+  static readonly init = async (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
     this.instance = new ChainsScannerService(
-      dbService,
-      healthCheckService,
+      DBService.getInstance(),
+      HealthService.getInstance(),
       logger,
     );
 
