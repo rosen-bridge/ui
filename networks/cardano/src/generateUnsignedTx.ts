@@ -85,7 +85,18 @@ export const generateUnsignedTx =
       new Map(),
       utxos.values(),
     );
-    if (!inputs.covered) throw Error(`Not enough assets`);
+    if (!inputs.covered) {
+      const totalInputAda = utxos.reduce(
+        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
+        0n,
+      );
+      throw Error(`Not enough assets`, {
+        cause: {
+          totalInputAda,
+          fromAddress: changeAddress,
+        },
+      });
+    }
 
     return generateTx(
       lockAssets,
