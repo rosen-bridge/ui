@@ -4,17 +4,23 @@ import '@/backend/initialize-datasource-if-needed';
 import { guardStatusChangedToDTO } from '@/backend/status';
 import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 
-import { GetGuardStatusTimelineParams, validator } from './validator';
+import { GetGuardStatusTimelineParams, validator } from './validations';
 
 PublicStatusAction.init(dataSource);
 
 const handler = async (params: GetGuardStatusTimelineParams) => {
-  return (
+  const { total, items } =
     await PublicStatusAction.getInstance().getGuardStatusTimeline(
       params.id,
       params.guardPks,
-    )
-  ).map(guardStatusChangedToDTO);
+      params.offset,
+      params.limit,
+    );
+
+  return {
+    items: items.map(guardStatusChangedToDTO),
+    total,
+  };
 };
 
 export const POST = withValidation(validator, handler);

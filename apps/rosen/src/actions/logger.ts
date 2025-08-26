@@ -39,7 +39,10 @@ export const logger = async (
   args: unknown,
   error: unknown,
 ) => {
+  console.error({ traceKey, args, error });
+
   if (!process.env.DISCORD_LOGGER_WEBHOOK_URL) return;
+
   try {
     const log = [
       '🚨 New error captured!',

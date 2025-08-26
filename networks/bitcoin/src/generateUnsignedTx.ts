@@ -74,10 +74,20 @@ export const generateUnsignedTx =
       feeRatio,
     );
     if (!coveredBoxes.covered) {
+      const totalInputBtc = utxoIterator.reduce(
+        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
+        0n,
+      );
       throw new Error(
         `Available boxes didn't cover required assets. BTC: ${
           unwrappedAmount + minSatoshi
         }`,
+        {
+          cause: {
+            totalInputBtc,
+            fromAddress: fromAddress,
+          },
+        },
       );
     }
 

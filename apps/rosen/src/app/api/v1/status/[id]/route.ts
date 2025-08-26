@@ -4,16 +4,25 @@ import '@/backend/initialize-datasource-if-needed';
 import { aggregatedStatusChangedToDTO } from '@/backend/status';
 import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 
-import { GetAggregatedStatusTimelineRouteParam, validator } from './validator';
+import {
+  GetAggregatedStatusTimelineRouteParam,
+  validator,
+} from './validations';
 
 PublicStatusAction.init(dataSource);
 
 const handler = async (params: GetAggregatedStatusTimelineRouteParam) => {
-  return (
+  const { total, items } =
     await PublicStatusAction.getInstance().getAggregatedStatusTimeline(
       params.id,
-    )
-  ).map(aggregatedStatusChangedToDTO);
+      params.offset,
+      params.limit,
+    );
+
+  return {
+    items: items.map(aggregatedStatusChangedToDTO),
+    total,
+  };
 };
 
 export const GET = withValidation(validator, handler);

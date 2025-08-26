@@ -90,6 +90,7 @@ export const generateUnsignedTx =
       throw Error(`Not enough assets`, {
         cause: {
           totalInputErg,
+          fromAddress: changeAddress,
           additionalAssets: inputs.additionalAssets,
         },
       });
