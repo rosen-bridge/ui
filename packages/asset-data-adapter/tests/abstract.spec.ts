@@ -2,12 +2,12 @@
 import { TokenMap } from '@rosen-bridge/tokens';
 import { describe, it, expect } from 'vitest';
 
-import { AssetBalance } from '../../lib/interfaces';
+import { AssetBalance } from '../lib/interfaces';
 import {
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
   TestAdapter,
-} from '../mocked/dataAdapter/abstract.mock';
+} from './mocked/abstract.mock';
 
 describe('AbstractDataAdapter', () => {
   describe('fetch', () => {

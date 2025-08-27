@@ -1,5 +1,5 @@
-import { AbstractDataAdapter } from '../../../lib/abstract';
-import { ChainAssetBalance } from '../../../lib/interfaces';
+import { AbstractDataAdapter } from '../../lib/abstract';
+import { ChainAssetBalance } from '../../lib/interfaces';
 
 export class TestAdapter extends AbstractDataAdapter {
   chain = 'ergo';
