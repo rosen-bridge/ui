@@ -14,7 +14,7 @@ import {
   SuccessfulCopySnackbar,
   QrCodeModal,
   Amount,
-  Card2,
+  Card,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -29,7 +29,7 @@ interface WidgetCardProps {
  *
  * @param widgetColor
  */
-const WalletWidgetBase = styled(Card2)<WidgetCardProps>(
+const WalletWidgetBase = styled(Card)<WidgetCardProps>(
   ({ theme, ...props }) => ({
     'padding': theme.spacing(2),
     'backgroundColor': theme.palette[props.widgetColor].main,

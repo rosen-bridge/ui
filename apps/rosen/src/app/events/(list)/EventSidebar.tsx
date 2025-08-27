@@ -2,10 +2,10 @@ import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
   Amount2,
   Button,
-  Card2,
-  Card2Body,
-  Card2Header,
-  Card2Title,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   Center,
   Columns,
   EnhancedDialog,
@@ -187,7 +187,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
     offsetBottom: 16,
   });
   return (
-    <Card2
+    <Card
       ref={stickyRef}
       variant="separated"
       backgroundColor="background.paper"
@@ -196,7 +196,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
         marginLeft: '16px',
       }}
     >
-      <Card2Header
+      <CardHeader
         action={
           value && (
             <div
@@ -223,12 +223,12 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
           )
         }
       >
-        <Card2Title>Event</Card2Title>
-      </Card2Header>
-      <Card2Body>
+        <CardTitle>Event</CardTitle>
+      </CardHeader>
+      <CardBody>
         <Content value={value} />
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };
 

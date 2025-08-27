@@ -4,8 +4,8 @@ import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
   Amount2,
-  Card2,
-  Card2Body,
+  Card,
+  CardBody,
   Divider,
   Label,
   Tooltip,
@@ -53,14 +53,14 @@ export const TransactionInfo = () => {
   const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
 
   return (
-    <Card2
+    <Card
       backgroundColor="primary.light"
       style={{
         alignContent: 'end',
         flexGrow: 1,
       }}
     >
-      <Card2Body>
+      <CardBody>
         <Label label="You Will Receive" color="textPrimary" dense>
           <Amount2
             value={
@@ -102,7 +102,7 @@ export const TransactionInfo = () => {
             </Truncate>
           </Alert>
         )}
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };

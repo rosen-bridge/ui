@@ -3,26 +3,26 @@ import React, { HTMLAttributes } from 'react';
 import { Box } from '../../base';
 
 /**
- * Props for the `Card2Title` component.
+ * Props for the `CardTitle` component.
  *
  * Extends standard HTML `<div>` attributes.
  */
-type Card2TitleProps = {} & HTMLAttributes<HTMLDivElement>;
+type CardTitleProps = {} & HTMLAttributes<HTMLDivElement>;
 
 /**
- * `Card2Title` is a simple wrapper component for rendering a title
- * or heading inside a `Card2` component.
+ * `CardTitle` is a simple wrapper component for rendering a title
+ * or heading inside a `Card` component.
  *
  * It accepts any valid React children and applies default layout styles
  * through the `Box` component.
  *
  * @example
  * ```tsx
- * <Card2Title>
+ * <CardTitle>
  *   <Typography variant="h6">Dashboard</Typography>
- * </Card2Title>
+ * </CardTitle>
  * ```
  */
-export const Card2Title = ({ children }: Card2TitleProps) => {
+export const CardTitle = ({ children }: CardTitleProps) => {
   return <Box>{children}</Box>;
 };

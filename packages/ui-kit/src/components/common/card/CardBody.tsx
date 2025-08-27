@@ -3,16 +3,16 @@ import React, { HTMLAttributes } from 'react';
 import { Box } from '../../base';
 
 /**
- * Props for the Card2Body component.
+ * Props for the CardBody component.
  *
  * Extends standard HTML <div> attributes.
  */
-type Card2BodyProps = {} & HTMLAttributes<HTMLDivElement>;
+type CardBodyProps = {} & HTMLAttributes<HTMLDivElement>;
 
 /**
- * Card2Body is a content container used within a Card2 component.
+ * CardBody is a content container used within a Card component.
  * It provides consistent padding and spacing rules depending on
- * the card variant and its neighboring elements (e.g., `Card2Header`).
+ * the card variant and its neighboring elements (e.g., `CardHeader`).
  *
  * This component applies conditional padding styles:
  * - Removes top padding if it follows a card2-header inside a non-separated card.
@@ -20,15 +20,15 @@ type Card2BodyProps = {} & HTMLAttributes<HTMLDivElement>;
  *
  * @example
  *
- * <Card2>
- *   <Card2Header>Header</Card2Header>
- *   <Card2Body>
+ * <Card>
+ *   <CardHeader>Header</CardHeader>
+ *   <CardBody>
  *     <Typography>Content goes here</Typography>
- *   </Card2Body>
- * </Card2>
+ *   </CardBody>
+ * </Card>
  *
  */
-export const Card2Body = ({ children, style, ...rest }: Card2BodyProps) => {
+export const CardBody = ({ children, style, ...rest }: CardBodyProps) => {
   return (
     <Box
       className="card2-body"

@@ -7,15 +7,15 @@ import {
   ApiKeyModalWarning,
   FullCard,
   Grid,
-  Card2,
+  Card,
   MenuItem,
   SubmitButton,
   TextField,
   Typography,
   useApiKey,
-  Card2Header,
-  Card2Title,
-  Card2Body,
+  CardHeader,
+  CardTitle,
+  CardBody,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -105,15 +105,15 @@ export const RequestAnOrderForm = () => {
   );
 
   return (
-    <Card2 backgroundColor="transparent">
-      <Card2Header>
-        <Card2Title>
+    <Card backgroundColor="transparent">
+      <CardHeader>
+        <CardTitle>
           <Typography variant="h5" fontWeight="bold">
             Request An Order
           </Typography>
-        </Card2Title>
-      </Card2Header>
-      <Card2Body>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           {renderAlert()}
 
@@ -155,7 +155,7 @@ export const RequestAnOrderForm = () => {
             Send
           </SubmitButton>
         </form>
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };

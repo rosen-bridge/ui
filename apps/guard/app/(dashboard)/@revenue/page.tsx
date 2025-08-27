@@ -4,10 +4,10 @@ import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 
 import {
-  Card2,
-  Card2Header,
-  Card2Title,
-  Card2Body,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardBody,
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -36,24 +36,24 @@ const Revenue = () => {
   );
 
   return (
-    <Card2 backgroundColor="background.paper">
-      <Card2Header
+    <Card backgroundColor="background.paper">
+      <CardHeader
         action={<PeriodSelect period={period} setPeriod={setPeriod} />}
       >
-        <Card2Title>
+        <CardTitle>
           <Typography variant="h5" fontWeight="bold">
             Revenue
           </Typography>
-        </Card2Title>
-      </Card2Header>
-      <Card2Body>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
         {isLoading ? (
           <RevenueChartSkeleton />
         ) : (
           data && <RevenueChart period={period} data={data} />
         )}
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };
 
