@@ -127,15 +127,16 @@ export const WalletWidget = ({
             {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
               <>
                 {!!index && ' / '}
-                <Amount
-                  unit={tokenInfoWithAddress.balance.name}
-                  value={getDecimalString(
-                    tokenInfoWithAddress.balance.amount.toString(),
-                    tokenInfoWithAddress.balance.decimals,
-                    3,
-                  )}
-                  size="large"
-                />
+                <Typography variant="subtitle1" display="inline-block">
+                  <Amount
+                    unit={tokenInfoWithAddress.balance.name}
+                    value={getDecimalString(
+                      tokenInfoWithAddress.balance.amount.toString(),
+                      tokenInfoWithAddress.balance.decimals,
+                      3,
+                    )}
+                  />
+                </Typography>
               </>
             ))}
           </Typography>

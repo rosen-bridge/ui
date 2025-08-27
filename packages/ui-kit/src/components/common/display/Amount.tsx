@@ -1,13 +1,15 @@
+import { HTMLAttributes } from 'react';
+
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 
 import { Box, Skeleton, SvgIcon, Typography } from '../../base';
 
-export interface AmountProps {
+export type AmountProps = {
   value?: bigint | number | string;
   loading?: boolean;
   orientation?: 'horizontal' | 'vertical';
   unit?: string;
-}
+} & HTMLAttributes<HTMLDivElement>;
 
 /**
  * Displays an amount value along with its unit, if available
@@ -22,6 +24,7 @@ export const Amount = ({
 
   let number: string | undefined;
   let decimals: string | undefined;
+
   switch (typeof value) {
     case 'bigint': {
       number = value.toLocaleString();
