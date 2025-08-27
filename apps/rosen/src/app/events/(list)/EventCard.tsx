@@ -1,7 +1,7 @@
 import React from 'react';
 
 import {
-  Amount2,
+  Amount,
   Avatar,
   Card2,
   Card2Body,
@@ -97,7 +97,7 @@ export const EventCard = ({
               flexDirection="row"
               justifyContent="space-between"
             >
-              <Amount2
+              <Amount
                 unit={item.lockToken.name}
                 value={getDecimalString(
                   item.amount,

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Fire, SnowFlake } from '@rosen-bridge/icons';
 import {
-  Amount2,
+  Amount,
   Divider,
   Identifier,
   Network,
@@ -119,7 +119,7 @@ const RenderNetwork = ({
                 : theme.palette.tertiary.dark,
           }}
         >
-          <Amount2 value={amount} unit={unit} />
+          <Amount value={amount} unit={unit} />
         </Typography>
       </WrapperIcon>
       <Identifier value={address} qrcode href={link} />
