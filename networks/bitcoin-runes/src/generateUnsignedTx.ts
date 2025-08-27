@@ -1,5 +1,5 @@
 /**
- * generates runes lock tx
+ * generates bitcoin-runes lock tx
  * @returns
  */
 export const generateUnsignedTx = () => {

@@ -5,25 +5,25 @@ import {
   calculateFee as calculateFeeCore,
   getMaxTransferCreator,
   getMinTransferCreator,
-} from '@rosen-network/runes';
+} from '@rosen-network/bitcoin-runes';
 
 import { wrap } from '@/safeServerAction';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 export const calculateFee = wrap(calculateFeeCore, {
   cache: 10 * 60 * 1000,
-  traceKey: 'runes:calculateFee',
+  traceKey: 'bitcoinRunes:calculateFee',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCreator(getTokenMap), {
-  traceKey: 'runes:getMaxTransfer',
+  traceKey: 'bitcoinRunes:getMaxTransfer',
 });
 
 export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
-  traceKey: 'runes:getMinTransfer',
+  traceKey: 'bitcoinRunes:getMinTransfer',
 });
 
 export const validateAddress = wrap(validateAddressCore, {
   cache: Infinity,
-  traceKey: 'runes:validateAddress',
+  traceKey: 'bitcoinRunes:validateAddress',
 });

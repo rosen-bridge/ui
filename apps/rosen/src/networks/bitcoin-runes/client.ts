@@ -1,12 +1,12 @@
-import { RunesNetwork } from '@rosen-network/runes/dist/client';
+import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
 
 import { unwrapFromObject } from '@/safeServerAction';
 
 import { LOCK_ADDRESSES } from '../../../configs';
 import * as actions from './server';
 
-export const runes = new RunesNetwork({
-  lockAddress: LOCK_ADDRESSES.runes,
+export const bitcoinRunes = new BitcoinRunesNetwork({
+  lockAddress: LOCK_ADDRESSES.bitcoinRunes,
   nextHeightInterval: 1,
   ...unwrapFromObject(actions),
 });

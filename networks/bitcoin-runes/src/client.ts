@@ -1,4 +1,4 @@
-import { Runes as RunesIcon } from '@rosen-bridge/icons';
+import { BitcoinRunes as BitcoinRunesIcon } from '@rosen-bridge/icons';
 import {
   Network,
   NetworkConfig,
@@ -7,14 +7,14 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
-export class RunesNetwork implements Network {
-  public label = NETWORKS.runes.label;
+export class BitcoinRunesNetwork implements Network {
+  public label = NETWORKS.bitcoinRunes.label;
 
   public lockAddress: string;
 
-  public logo = RunesIcon;
+  public logo = BitcoinRunesIcon;
 
-  public name = NETWORKS.runes.key;
+  public name = NETWORKS.bitcoinRunes.key;
 
   public nextHeightInterval: number;
 

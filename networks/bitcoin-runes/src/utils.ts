@@ -14,9 +14,12 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee = calculateFeeCreator(NETWORKS.runes.key, getHeight);
+export const calculateFee = calculateFeeCreator(
+  NETWORKS.bitcoinRunes.key,
+  getHeight,
+);
 
 export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.runes.key,
+  NETWORKS.bitcoinRunes.key,
   calculateFee,
 );
