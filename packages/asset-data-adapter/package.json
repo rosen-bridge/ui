@@ -1,0 +1,37 @@
+{
+  "name": "@rosen-ui/asset-data-adapter",
+  "version": "0.1.0",
+  "description": "A data adapter for fetching and normalizing asset information across multiple blockchains.",
+  "license": "GPL-3.0",
+  "author": "Rosen Team",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "coverage": "npm run test -- --coverage",
+    "lint": "eslint --fix . && npm run prettify",
+    "prettify": "prettier --write . --ignore-path ./.gitignore",
+    "release": "npm run test -- --run && npm run build && npm publish --access public",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@rosen-bridge/abstract-logger": "2.1.0",
+    "@rosen-bridge/tokens": "3.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.9",
+    "@vitest/coverage-istanbul": "^3.1.4",
+    "tsx": "^4.20.4",
+    "typescript": "^5.9.2",
+    "vitest": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=20.11.0"
+  }
+}

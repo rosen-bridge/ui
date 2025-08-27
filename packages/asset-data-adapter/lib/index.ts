@@ -1,0 +1,1 @@
+export { AbstractDataAdapter } from './abstract';
