@@ -2,13 +2,13 @@
 
 import { Stack } from '@rosen-bridge/ui-kit';
 
-import { useInfo } from '@/_hooks/useInfo';
+import { useBalance } from '@/_hooks/useBalance';
 
 import { HealthWidget } from './HealthWidget';
 import { WalletWidget } from './WalletWidget';
 
 const InfoWidgets = () => {
-  const { data: info, isLoading } = useInfo();
+  const { data: info, isLoading } = useBalance();
 
   return (
     <Stack spacing={2}>
@@ -20,13 +20,13 @@ const InfoWidgets = () => {
         <WalletWidget
           title="Hot Wallet"
           color="secondary"
-          tokenInfoWithAddresses={info?.balances.hot ?? []}
+          tokenInfoWithAddresses={info?.hot ?? []}
           isLoading={isLoading}
         />
         <WalletWidget
           title="Cold Wallet"
           color="tertiary"
-          tokenInfoWithAddresses={info?.balances.cold ?? []}
+          tokenInfoWithAddresses={info?.cold ?? []}
           isLoading={isLoading}
         />
       </Stack>
