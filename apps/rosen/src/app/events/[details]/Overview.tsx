@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 
 import {
-  Amount2,
+  Amount,
   Columns,
   Connector,
   Identifier,
@@ -124,7 +124,7 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          <Amount2
+          <Amount
             loading={isLoading}
             value={data?.amount}
             orientation="horizontal"

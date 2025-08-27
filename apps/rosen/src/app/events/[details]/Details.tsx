@@ -3,7 +3,7 @@
 import React from 'react';
 
 import {
-  Amount2,
+  Amount,
   Box as BoxMui,
   Columns,
   DisclosureButton,
@@ -49,21 +49,21 @@ export const Details = ({ id }: { id: string }) => {
           </Label>
           <Label label="Fee Sum">TODO</Label>
           <Label label="Bridge Fee" inset>
-            <Amount2 loading={isLoading} value={data?.bridgeFee} unit="TODO" />
+            <Amount loading={isLoading} value={data?.bridgeFee} unit="TODO" />
           </Label>
           <Label label="Network Fee" inset>
-            <Amount2 loading={isLoading} value={data?.networkFee} unit="TODO" />
+            <Amount loading={isLoading} value={data?.networkFee} unit="TODO" />
           </Label>
           <Label label="Token Price">
             TODO
-            {/*<Amount2 value={0.22} unit="$" />*/}
+            {/*<Amount value={0.22} unit="$" />*/}
           </Label>
         </div>
 
         <div>
           <Label label="RSN Ratio">
             TODO
-            {/*<Amount2 value={2.054} />*/}
+            {/*<Amount value={2.054} />*/}
           </Label>
           <Label label="Total Emission" />
           <Label label="Guards" inset>
