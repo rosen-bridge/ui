@@ -1,12 +1,49 @@
 import React from 'react';
 
-import { Typography } from '@rosen-bridge/ui-kit';
+import { Skeleton, Typography } from '@rosen-bridge/ui-kit';
 
+/**
+ * Props for the DateTime component.
+ */
 export type DateTimeProps = {
-  timestamp: number;
+  /**
+   * Unix timestamp in milliseconds.
+   * If not provided, the component will display `"invalid"`.
+   */
+  timestamp?: number;
+
+  /**
+   * Whether the component is in loading state.
+   * When `true`, a skeleton placeholder will be shown.
+   */
+  loading?: boolean;
 };
-// TODO: move to ui-kit
-export const DateTime = ({ timestamp }: DateTimeProps) => {
+
+const Loading = () => {
+  return <Skeleton width={80} height={14} variant="rounded" />;
+};
+
+/**
+ * A component to display a formatted date and time string.
+ *
+ * - If `loading` is `true`, it renders a skeleton placeholder.
+ * - If `timestamp` is not provided, it renders `"invalid"`.
+ * - Otherwise, it formats the given timestamp into a readable date-time string
+ *   using the `Intl.DateTimeFormat` API with the `en-US` locale.
+ *
+ * Example output: `"Aug 27 2025 01:33:12"`.
+ */
+export const DateTime = ({ timestamp, loading }: DateTimeProps) => {
+  if (loading) return <Loading />;
+
+  if (!timestamp) {
+    return (
+      <Typography variant="body1" color="textPrimary">
+        invalid
+      </Typography>
+    );
+  }
+
   const date = new Date(timestamp);
 
   const parts = new Intl.DateTimeFormat('en-US', {
@@ -17,17 +54,13 @@ export const DateTime = ({ timestamp }: DateTimeProps) => {
     minute: '2-digit',
     second: '2-digit',
     hour12: false,
-  }).formatToParts(date);
+  })
+    .format(date)
+    .replace(/,\s*/g, ' ');
 
   return (
     <Typography variant="body1" color="textPrimary">
-      {/*TODO : fix this */}
-      <span>{parts[2].value}</span> <span>{parts[0].value}</span>{' '}
-      <span>{parts[4].value}</span> <span>{parts[6].value}</span>
-      {':'}
-      <span>{parts[8].value}</span>
-      {':'}
-      <span>{parts[10].value}</span>
+      {parts}
     </Typography>
   );
 };

@@ -24,16 +24,32 @@ import { DetailsCard } from '@/app/events/[details]';
 import { DateTime } from '@/app/events/[details]/DateTime';
 import { EventDetails } from '@/app/events/[details]/type';
 
-const EventStatus = ({ value }: { value: string }) => {
-  switch (value?.toLowerCase()) {
+export interface EventStatusProps {
+  value?: string;
+  loading?: boolean;
+}
+
+export const EventStatus = ({ value, loading }: EventStatusProps) => {
+  if (loading) {
+    return <Chip loading />;
+  }
+
+  if (!value) {
+    return <span>invalid</span>;
+  }
+
+  switch (value.toLowerCase()) {
     case 'fraud':
       return null;
+
     case 'processing':
       return <Chip label={value} color="info" icon="Hourglass" />;
+
     case 'successful':
       return <Chip label={value} color="success" icon="CheckCircle" />;
+
     default:
-      return null;
+      return <span>{value}</span>;
   }
 };
 
@@ -41,11 +57,7 @@ export const Overview = ({ id }: { id: string }) => {
   const Stack = InjectOverrides(StackBase);
   const Box = InjectOverrides(BoxBase);
 
-  const { data } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
-  const isLoading = true;
-  useEffect(() => {
-    console.log(data);
-  }, [data, isLoading]);
+  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
 
   return (
     <DetailsCard state="open" title="Overview">
@@ -68,11 +80,7 @@ export const Overview = ({ id }: { id: string }) => {
           }}
         >
           <div style={{ width: '100%' }}>
-            <Identifier
-              loading={isLoading}
-              value={data?.eventId || 'error loading !!!'}
-              copyable
-            />
+            <Identifier loading={isLoading} value={data?.eventId} copyable />
           </div>
         </Label>
       </Box>
@@ -90,32 +98,18 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          {!isLoading && data ? (
-            <Token
-              name={data.sourceChainTokenId}
-              overrides={{
-                mobile: {
-                  reverse: true,
-                },
-                tablet: {
-                  reverse: false,
-                },
-              }}
-            />
-          ) : (
-            <Stack
-              overrides={{
-                mobile: { flexDirection: 'row-reverse' },
-                tablet: { flexDirection: 'row' },
-              }}
-              alignItems="center"
-              flexDirection="row"
-              gap={1}
-            >
-              <Skeleton width={32} height={32} variant="circular" />
-              <Skeleton width={80} height={14} variant="rounded" />
-            </Stack>
-          )}
+          <Token
+            loading={isLoading}
+            name={data?.sourceChainTokenId}
+            overrides={{
+              mobile: {
+                reverse: true,
+              },
+              tablet: {
+                reverse: false,
+              },
+            }}
+          />
         </Label>
 
         <Label
@@ -130,11 +124,12 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          {!isLoading && data ? (
-            <Amount2 value={data.amount} orientation="horizontal" unit="N/A" />
-          ) : (
-            <Amount2 loading />
-          )}
+          <Amount2
+            loading={isLoading}
+            value={data?.amount}
+            orientation="horizontal"
+            unit="TODO"
+          />
         </Label>
 
         <Label
@@ -199,11 +194,10 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          {!isLoading && data ? (
-            <DateTime timestamp={data.block?.timestamp * 1000 || 175522841} />
-          ) : (
-            <Skeleton width={80} height={14} variant="rounded" />
-          )}
+          <DateTime
+            loading={isLoading}
+            timestamp={data?.block?.timestamp && data.block.timestamp * 1000}
+          />
         </Label>
 
         <Label
@@ -218,17 +212,7 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          {!isLoading && data ? (
-            <>
-              {data.status ? (
-                <EventStatus value={data.status} />
-              ) : (
-                <EventStatus value={'successful'} />
-              )}
-            </>
-          ) : (
-            <Skeleton width={180} height={32} variant="rounded" />
-          )}
+          <EventStatus value={data?.status} loading={isLoading} />
         </Label>
 
         <Label
@@ -286,15 +270,12 @@ export const Overview = ({ id }: { id: string }) => {
               },
             }}
           >
-            {!isLoading && data ? (
-              <Identifier
-                value={data.fromAddress || 'error loading !!!'}
-                href={data.fromAddress}
-                copyable
-              />
-            ) : (
-              <Identifier value={''} loading />
-            )}
+            <Identifier
+              loading={isLoading}
+              value={data?.fromAddress}
+              href={data?.fromAddress}
+              copyable
+            />
           </Box>
         </Stack>
         <Stack

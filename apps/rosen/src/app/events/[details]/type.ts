@@ -69,6 +69,6 @@ export type EventDetails = {
 
   status: string;
 };
-export type EventStatusProps = {
-  value: 'FRAUD' | 'PROCESSING' | 'SUCCESSFUL' | undefined;
+export type StatusProps = {
+  value: 'FRAUD' | 'PROCESSING' | 'SUCCESSFUL';
 };

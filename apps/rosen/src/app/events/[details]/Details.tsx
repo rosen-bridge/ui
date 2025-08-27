@@ -18,13 +18,15 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/';
-import { BridgeEvent, EventDetails } from '@/app/events/[details]/type';
+import { EventDetails } from '@/app/events/[details]/type';
 
 export const Details = ({ id }: { id: string }) => {
-  const { data, mutate } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
+  const { data, isLoading, mutate } = useSWR<EventDetails>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
   const Box = InjectOverrides(BoxMui);
 
-  const isLoading = true;
   const disclosure = useDisclosure({
     onOpen: async () => {
       await mutate();
@@ -47,10 +49,10 @@ export const Details = ({ id }: { id: string }) => {
           </Label>
           <Label label="Fee Sum">TODO</Label>
           <Label label="Bridge Fee" inset>
-            <Amount2 value={data?.bridgeFee} unit="TODO" />
+            <Amount2 loading={isLoading} value={data?.bridgeFee} unit="TODO" />
           </Label>
           <Label label="Network Fee" inset>
-            <Amount2 value={data?.networkFee} unit="TODO" />
+            <Amount2 loading={isLoading} value={data?.networkFee} unit="TODO" />
           </Label>
           <Label label="Token Price">
             TODO
@@ -71,7 +73,6 @@ export const Details = ({ id }: { id: string }) => {
             <Typography>TODO</Typography>
           </Label>
         </div>
-
         <Box
           overrides={{
             laptop: {
@@ -88,7 +89,7 @@ export const Details = ({ id }: { id: string }) => {
         >
           <Label label="Tx IDs" />
           <Label label="Source Tx" inset>
-            <div style={{ width: '40%' }}>
+            <div style={{ width: isLoading ? '40%' : '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.sourceTxId ?? 'N/A'}
@@ -97,7 +98,7 @@ export const Details = ({ id }: { id: string }) => {
             </div>
           </Label>
           <Label label="Payment Tx" inset>
-            <div style={{ width: '40%' }}>
+            <div style={{ width: isLoading ? '40%' : '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.eventTrigger?.paymentTxId ?? undefined}
@@ -106,7 +107,7 @@ export const Details = ({ id }: { id: string }) => {
             </div>
           </Label>
           <Label label="Reward Tx" inset>
-            <div style={{ width: '40%' }}>
+            <div style={{ width: isLoading ? '40%' : '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.eventTrigger?.spendTxId ?? undefined}
@@ -115,7 +116,7 @@ export const Details = ({ id }: { id: string }) => {
             </div>
           </Label>
           <Label label="Trigger Tx" inset>
-            <div style={{ width: '40%' }}>
+            <div style={{ width: isLoading ? '40%' : '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.eventTrigger?.txId}

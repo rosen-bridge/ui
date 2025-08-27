@@ -115,7 +115,7 @@ export const Chip = ({
     <ChipWrapper color={color}>
       {RenderedIcon}
       <Typography variant="body2">
-        {label ? capitalize(label) : 'Invalid'}
+        {label ? capitalize(label) : 'invalid'}
       </Typography>
     </ChipWrapper>
   );

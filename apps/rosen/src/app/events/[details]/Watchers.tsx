@@ -1,6 +1,6 @@
 'use client';
 
-import React, { HTMLAttributes, ReactNode, useCallback, useState } from 'react';
+import React, { useState } from 'react';
 
 import { CheckCircle, CloseCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
@@ -23,8 +23,8 @@ import {
   TableRow as TableRowBase,
   Typography,
   useBreakpoint,
-  useCurrentBreakpoint,
   useDisclosure,
+  Box as BoxMui,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/';
@@ -75,10 +75,7 @@ const rows: rowTypes[] = [
 ];
 const TableRow = InjectOverrides(TableRowBase);
 const TableCell = InjectOverrides(TableCellBase);
-
-type WrapperProps = {
-  children: ReactNode;
-} & HTMLAttributes<HTMLDivElement>;
+const Box = InjectOverrides(BoxMui);
 
 const TableHeader = () => {
   return (
@@ -95,7 +92,7 @@ const TableHeader = () => {
           mobile: {
             style: { display: 'none' },
           },
-          tablet: {
+          laptop: {
             style: { display: 'table-row' },
           },
         }}
@@ -105,6 +102,22 @@ const TableHeader = () => {
         <TableCell>COMMITMENT</TableCell>
         <TableCell>REWARDED</TableCell>
       </TableRow>
+
+      <TableRow
+        overrides={{
+          mobile: {
+            style: { display: 'table-row' },
+          },
+          laptop: {
+            style: { display: 'none' },
+          },
+        }}
+      >
+        <TableCell></TableCell>
+        <TableCell></TableCell>
+        <TableCell></TableCell>
+        <TableCell></TableCell>
+      </TableRow>
     </TableHead>
   );
 };
@@ -112,42 +125,7 @@ const TableHeader = () => {
 export const Watchers = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<rowTypes>();
-  const currentSize = useCurrentBreakpoint();
-
   const isMobile = useBreakpoint('tablet-down');
-
-  const size = useCallback(
-    (custom?: string) => {
-      switch (currentSize) {
-        case 'mobile':
-          return '140px';
-        case 'tablet':
-          return '160px';
-        case 'laptop':
-          return '260px';
-        case 'desktop':
-          return custom ?? '350px';
-        default:
-          return '150px';
-      }
-    },
-    [currentSize],
-  );
-
-  const overrideStyle = {
-    mobile: {
-      style: { maxWidth: '140px' },
-    },
-    tablet: {
-      style: { maxWidth: '160px' },
-    },
-    laptop: {
-      style: { maxWidth: '280px' },
-    },
-    desktop: {
-      style: { maxWidth: '360px' },
-    },
-  };
 
   const handelOpen = (value: rowTypes) => {
     setOpen(true);
@@ -198,8 +176,8 @@ export const Watchers = () => {
         </Columns>
       </div>
 
-      <TableContainer>
-        <Table>
+      <TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
+        <Table sx={{ tableLayout: 'auto', width: '100%' }}>
           <TableHeader />
           <TableBody
             sx={{
@@ -211,99 +189,20 @@ export const Watchers = () => {
               },
             }}
           >
-            {rows.map((row) => (
-              <TableRow key={row.id}>
-                {!isMobile && (
-                  <TableCell align="center" style={{ maxWidth: '10px' }}>
-                    {row.id}
-                  </TableCell>
-                )}
-                <TableCell align="center" overrides={overrideStyle}>
-                  <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    gap={1}
-                  >
-                    {isMobile && <Typography>{row.id}</Typography>}
-                    {isMobile && (
-                      <SvgIcon
-                        sx={{
-                          color:
-                            row.rewarded === 'Yes'
-                              ? 'success.main'
-                              : 'text.secondary',
-                        }}
-                      >
-                        {row.rewarded === 'Yes' ? (
-                          <CheckCircle />
-                        ) : (
-                          <CloseCircle />
-                        )}
-                      </SvgIcon>
-                    )}
-                    <div style={{ maxWidth: size('500px'), width: '100%' }}>
-                      <Identifier value={row.wid} />
-                    </div>
-                  </Stack>
-                </TableCell>
-
-                {isMobile && (
-                  <TableCell align="right" style={{ maxWidth: '40px' }}>
-                    <IconButton onClick={() => handelOpen(row)}>
-                      <SvgIcon>
-                        <Eye />
-                      </SvgIcon>
-                    </IconButton>
-                  </TableCell>
-                )}
-
-                {!isMobile && (
-                  <TableCell overrides={overrideStyle}>
-                    <div style={{ maxWidth: size() }}>
-                      <Identifier
-                        value={row.commitment}
-                        href={row.commitment}
-                      />
-                    </div>
-                  </TableCell>
-                )}
-                {/*Reward Icon*/}
-                {!isMobile && (
-                  <TableCell align="right" style={{ maxWidth: '50px' }}>
-                    <Stack
-                      alignItems="center"
-                      justifyContent="center"
-                      flexDirection="row"
-                      gap={1}
-                    >
-                      <SvgIcon
-                        sx={{
-                          color:
-                            row.rewarded === 'Yes'
-                              ? 'success.main'
-                              : 'text.secondary',
-                        }}
-                      >
-                        {row.rewarded === 'Yes' ? (
-                          <CheckCircle />
-                        ) : (
-                          <CloseCircle />
-                        )}
-                      </SvgIcon>
-                      {row.rewarded}
-                    </Stack>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
+            {rows.map((row) =>
+              isMobile ? (
+                <TableRowMobile key={row.wid} row={row} onClick={handelOpen} />
+              ) : (
+                <TableRowLaptop key={row.wid} row={row} />
+              ),
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {isMobile && (
+      <Box>
         <Drawer open={open} onClose={() => setOpen(false)} value={data} />
-      )}
+      </Box>
     </DetailsCard>
   );
 };
@@ -354,5 +253,143 @@ const Drawer = ({ value, onClose, open = false }: DrawerProps) => {
         </Stack>
       </EnhancedDialogContent>
     </EnhancedDialog>
+  );
+};
+
+const TableRowMobile = ({
+  row,
+  onClick,
+}: {
+  row: rowTypes;
+  onClick: (row: rowTypes) => void;
+}) => {
+  return (
+    <TableRow>
+      <TableCell
+        overrides={{
+          tablet: {
+            style: { display: 'table-cell' },
+          },
+          laptop: {
+            style: { display: 'none' },
+          },
+        }}
+      >
+        <Typography variant="body1" color="text.secondary">
+          {row.id}
+        </Typography>
+      </TableCell>
+
+      <TableCell
+        overrides={{
+          tablet: {
+            style: { display: 'table-cell' },
+          },
+          laptop: {
+            style: { display: 'none' },
+          },
+        }}
+      >
+        <SvgIcon
+          sx={{
+            color: row.rewarded === 'Yes' ? 'success.main' : 'text.secondary',
+          }}
+        >
+          {row.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
+        </SvgIcon>
+      </TableCell>
+
+      <TableCell
+        overrides={{
+          tablet: {
+            style: { display: 'table-cell' },
+          },
+          laptop: {
+            style: { display: 'none' },
+          },
+        }}
+        sx={{
+          maxWidth: 150,
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textAlign: 'center',
+        }}
+      >
+        <Identifier value={row.wid} />
+      </TableCell>
+
+      <TableCell
+        overrides={{
+          tablet: {
+            style: { display: 'table-cell' },
+          },
+          laptop: {
+            style: { display: 'none' },
+          },
+        }}
+      >
+        <IconButton onClick={() => onClick(row)}>
+          <SvgIcon>
+            <Eye />
+          </SvgIcon>
+        </IconButton>
+      </TableCell>
+    </TableRow>
+  );
+};
+
+const TableRowLaptop = ({ row }: { row: rowTypes }) => {
+  return (
+    <TableRow>
+      {/* 1 */}
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+        <Typography variant="body1" color="text.secondary">
+          {row.id}
+        </Typography>
+      </TableCell>
+
+      {/* 2 */}
+      <TableCell
+        sx={{
+          maxWidth: 200, // حداکثر عرض ستون
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        <Identifier value={row.commitment} href={row.commitment} />
+      </TableCell>
+
+      {/* 3 */}
+      <TableCell
+        sx={{
+          maxWidth: 200,
+          overflow: 'hidden',
+          whiteSpace: 'nowrap',
+          textOverflow: 'ellipsis',
+        }}
+      >
+        <Identifier value={row.commitment} href={row.commitment} />
+      </TableCell>
+
+      {/* 4 */}
+      <TableCell sx={{ whiteSpace: 'nowrap', textAlign: 'center' }}>
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          flexDirection="row"
+          gap={1}
+        >
+          <SvgIcon
+            sx={{
+              color: row.rewarded === 'Yes' ? 'success.main' : 'text.secondary',
+            }}
+          >
+            {row.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
+          </SvgIcon>
+          {row.rewarded}
+        </Stack>
+      </TableCell>
+    </TableRow>
   );
 };
