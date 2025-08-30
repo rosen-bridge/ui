@@ -112,15 +112,15 @@ export class HealthService extends AbstractService {
    * @param {ErgoScannerService} [ergoScannerService]
    * @memberof HealthService
    */
-  static readonly init = (
-    dbService: DBService,
-    ergoScannerService: ErgoScannerService,
-    logger?: AbstractLogger,
-  ) => {
+  static readonly init = (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new HealthService(dbService, ergoScannerService, logger);
+    this.instance = new HealthService(
+      DBService.getInstance(),
+      ErgoScannerService.getInstance(),
+      logger,
+    );
   };
 
   /**
@@ -150,7 +150,6 @@ export class HealthService extends AbstractService {
         `Registering healthCheck ${param.getId()} parameter failed: ${err}`,
       );
       if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-      throw err;
     }
   };
 
@@ -167,7 +166,6 @@ export class HealthService extends AbstractService {
         `Unregistering healthCheck ${paramId} parameter failed: ${err}`,
       );
       if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-      throw err;
     }
   };
 

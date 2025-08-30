@@ -2,7 +2,7 @@ import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
 import * as scanner from '@rosen-bridge/scanner';
-import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
+import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import {
   AbstractService,
   Dependency,
@@ -11,6 +11,8 @@ import {
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 
 import { configs } from '../configs';
+import { ERGO_METHOD_EXPLORER } from '../constants';
+import { initializeErgoScanner } from '../scanners';
 import { TokensConfig } from '../tokensConfig';
 import { DBService } from './db';
 
@@ -34,21 +36,7 @@ export class ErgoScannerService extends AbstractService {
   private constructor(dbService: DBService, logger?: AbstractLogger) {
     super(logger);
     this.dbService = dbService;
-    const networkConnectorManager =
-      new scanner.NetworkConnectorManager<Transaction>(
-        new scanner.FailoverStrategy(),
-        this.logger,
-      );
-    networkConnectorManager.addConnector(
-      new scanner.ErgoNodeNetwork(configs.chains.ergo.node.url),
-    );
-    this.scanner = new scanner.ErgoScanner({
-      dataSource: this.dbService.dataSource,
-      initialHeight: configs.chains.ergo.initialHeight,
-      network: networkConnectorManager,
-      blockRetrieveGap: configs.chains.ergo.node.blockRetrieveGap,
-      logger: this.logger,
-    });
+    this.scanner = initializeErgoScanner(dbService.dataSource);
   }
 
   /**
@@ -58,6 +46,16 @@ export class ErgoScannerService extends AbstractService {
    */
   protected readonly registerExtractors = async () => {
     try {
+      let networkType: ErgoNetworkType;
+      let url: string;
+      if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
+        networkType = ErgoNetworkType.Explorer;
+        url = configs.chains.ergo.explorer.url!;
+      } else {
+        networkType = ErgoNetworkType.Node;
+        url = configs.chains.ergo.node.url!;
+      }
+
       const ergoObservationExtractor = new ErgoObservationExtractor(
         this.dbService.dataSource,
         TokensConfig.getInstance().getTokenMap(),
@@ -68,8 +66,8 @@ export class ErgoScannerService extends AbstractService {
       const ergoEventTriggerExtractor = new EventTriggerExtractor(
         'ergo-extractor',
         this.dbService.dataSource,
-        ErgoNetworkType.Node,
-        configs.chains.ergo.node.url,
+        networkType,
+        url,
         configs.contracts.ergo.addresses.WatcherTriggerEvent,
         configs.contracts.ergo.tokens.RWTId,
         configs.contracts.ergo.addresses.WatcherPermit,
@@ -83,8 +81,8 @@ export class ErgoScannerService extends AbstractService {
         const cardanoEventTriggerExtractor = new EventTriggerExtractor(
           'cardano-extractor',
           this.dbService.dataSource,
-          ErgoNetworkType.Node,
-          configs.chains.ergo.node.url,
+          networkType,
+          url,
           configs.contracts.cardano.addresses.WatcherTriggerEvent,
           configs.contracts.cardano.tokens.RWTId,
           configs.contracts.cardano.addresses.WatcherPermit,
@@ -99,8 +97,8 @@ export class ErgoScannerService extends AbstractService {
         const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
           'bitcoin-extractor',
           this.dbService.dataSource,
-          ErgoNetworkType.Node,
-          configs.chains.ergo.node.url,
+          networkType,
+          url,
           configs.contracts.bitcoin.addresses.WatcherTriggerEvent,
           configs.contracts.bitcoin.tokens.RWTId,
           configs.contracts.bitcoin.addresses.WatcherPermit,
@@ -115,8 +113,8 @@ export class ErgoScannerService extends AbstractService {
         const dogeEventTriggerExtractor = new EventTriggerExtractor(
           'doge-extractor',
           this.dbService.dataSource,
-          ErgoNetworkType.Node,
-          configs.chains.ergo.node.url,
+          networkType,
+          url,
           configs.contracts.doge.addresses.WatcherTriggerEvent,
           configs.contracts.doge.tokens.RWTId,
           configs.contracts.doge.addresses.WatcherPermit,
@@ -131,8 +129,8 @@ export class ErgoScannerService extends AbstractService {
         const ethereumEventTriggerExtractor = new EventTriggerExtractor(
           'ethereum-extractor',
           this.dbService.dataSource,
-          ErgoNetworkType.Node,
-          configs.chains.ergo.node.url,
+          networkType,
+          url,
           configs.contracts.ethereum.addresses.WatcherTriggerEvent,
           configs.contracts.ethereum.tokens.RWTId,
           configs.contracts.ethereum.addresses.WatcherPermit,
@@ -147,8 +145,8 @@ export class ErgoScannerService extends AbstractService {
         const binanceEventTriggerExtractor = new EventTriggerExtractor(
           'binance-extractor',
           this.dbService.dataSource,
-          ErgoNetworkType.Node,
-          configs.chains.ergo.node.url,
+          networkType,
+          url,
           configs.contracts.binance.addresses.WatcherTriggerEvent,
           configs.contracts.binance.tokens.RWTId,
           configs.contracts.binance.addresses.WatcherPermit,
@@ -174,14 +172,11 @@ export class ErgoScannerService extends AbstractService {
    * @param {AbstractLogger} [logger]
    * @memberof ErgoScannerService
    */
-  static readonly init = async (
-    dbService: DBService,
-    logger?: AbstractLogger,
-  ) => {
+  static readonly init = async (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new ErgoScannerService(dbService, logger);
+    this.instance = new ErgoScannerService(DBService.getInstance(), logger);
 
     await this.instance.registerExtractors();
   };
@@ -234,7 +229,7 @@ export class ErgoScannerService extends AbstractService {
 
     const scheduled = setTimeout(
       () => this.fetchData(),
-      configs.chains.ergo.node.scanInterval * 1000,
+      configs.chains.ergo.scanInterval * 1000,
     );
 
     if (this.shouldStop) {
