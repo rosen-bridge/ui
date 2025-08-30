@@ -1,12 +1,17 @@
+import { useCallback, useState } from 'react';
+
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
-import { styled } from '../../../styling';
-import { IconButton, Skeleton, SvgIcon, Tooltip } from '../../base';
+import { IconButton, Skeleton, Stack, SvgIcon, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
+import { QrCodeModal } from '../QrCodeModal';
 
-type IdentifierProps = {
+// Number of characters to show at the end
+const trailingLength = 5;
+
+export type IdentifierProps = {
   /** The main string value to display (e.g., an identifier or long string) */
-  value: string;
+  value?: string;
 
   /** If true, shows a loading skeleton instead of the value */
   loading?: boolean;
@@ -21,36 +26,6 @@ type IdentifierProps = {
   qrcode?: boolean;
 };
 
-const trailingLength = 5; // Number of characters to show at the end
-
-const Root = styled('div')(() => ({
-  display: 'flex',
-  alignItems: 'baseline',
-  flexWrap: 'nowrap',
-  fontFamily: 'monospace',
-}));
-
-const Value = styled('div')(() => ({
-  'display': 'flex',
-  'alignItems': 'baseline',
-  'overflow': 'hidden',
-  'flex': '1 1 auto',
-  '& > span:first-of-type': {
-    overflow: 'hidden',
-    whiteSpace: 'nowrap',
-    textOverflow: 'ellipsis',
-    flex: '1 1 auto',
-  },
-}));
-
-const Action = styled('div')(() => ({
-  display: 'flex',
-  alignItems: 'center',
-  transform: 'translateY(4px)',
-  flex: '0 0 auto',
-  marginLeft: '0.25rem',
-}));
-
 /**
  * Identifier component displays a formatted string with optional helper actions.
  *
@@ -58,54 +33,90 @@ const Action = styled('div')(() => ({
  * and can show an external link (opens in new tab), a copy button, and a QR code icon.
  *
  * @example
- * ```tsx
+ *
  * <Identifier
  *   value="0x123456789abcdef"
  *   href="https://example.com/details/0x123456789abcdef"
  *   copyable
  *   qrcode
  * />
- * ```
+ *
  */
 export const Identifier = ({
-  value,
+  value = '',
   loading,
   href,
   copyable,
   qrcode,
 }: IdentifierProps) => {
-  if (loading)
-    return (
-      <Root>
-        <Skeleton sx={{ flexGrow: 1 }} />
-      </Root>
-    );
-  return (
-    <Root>
-      <Tooltip title={value}>
-        <Value>
-          <span>{value.slice(0, -trailingLength)}</span>
-          <span>{value.slice(-trailingLength)}</span>
-        </Value>
-      </Tooltip>
+  const [open, setOpen] = useState(false);
 
-      <Action>
-        {href && (
-          <IconButton target="_blank" size="small" href={href}>
-            <SvgIcon fontSize="small">
-              <ExternalLinkAlt />
-            </SvgIcon>
-          </IconButton>
-        )}
-        {copyable && <CopyButton value={value} size="small" />}
-        {qrcode && (
-          <IconButton size="small">
-            <SvgIcon fontSize="small">
-              <Qrcode />
-            </SvgIcon>
-          </IconButton>
-        )}
-      </Action>
-    </Root>
+  const handleOpen = useCallback(() => setOpen(true), []);
+  const handleClose = useCallback(() => setOpen(false), []);
+
+  return (
+    <Stack
+      direction="row"
+      alignItems="center"
+      display="flex"
+      justifyContent="space-between"
+    >
+      {loading && <Skeleton style={{ flexGrow: 1 }} />}
+      {!loading && (
+        <>
+          <Tooltip title={value}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              style={{
+                minWidth: 0,
+                fontFamily: 'monospace',
+              }}
+            >
+              <div
+                style={{
+                  display: '-webkit-box',
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  flexShrink: 1,
+                  minWidth: 0,
+                }}
+              >
+                {value.slice(0, -trailingLength)}
+              </div>
+              <span style={{ flexShrink: 0 }}>
+                {value.slice(-trailingLength)}
+              </span>
+            </Stack>
+          </Tooltip>
+          <Stack direction="row" alignItems="center">
+            {!!href && (
+              <IconButton target="_blank" size="small" href={href}>
+                <SvgIcon fontSize="small">
+                  <ExternalLinkAlt />
+                </SvgIcon>
+              </IconButton>
+            )}
+            {copyable && <CopyButton value={value} size="small" />}
+            {qrcode && (
+              <>
+                <IconButton size="small" onClick={handleOpen}>
+                  <SvgIcon fontSize="small">
+                    <Qrcode />
+                  </SvgIcon>
+                </IconButton>
+                <QrCodeModal
+                  open={open}
+                  handleClose={handleClose}
+                  text={value}
+                />
+              </>
+            )}
+          </Stack>
+        </>
+      )}
+    </Stack>
   );
 };
