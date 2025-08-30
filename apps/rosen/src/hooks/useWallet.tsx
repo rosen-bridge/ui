@@ -152,6 +152,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
     if (selectedSource.name !== NETWORKS.bitcoin.key) return;
 
+    if (selected.currentChain !== NETWORKS.bitcoin.key) return;
+
     const start = async () => {
       const address = await selected.getAddress();
 
