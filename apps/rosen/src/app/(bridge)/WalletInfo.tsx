@@ -4,8 +4,8 @@ import { LinkBroken } from '@rosen-bridge/icons';
 import { Wallet } from '@rosen-bridge/icons';
 import {
   Avatar,
-  Card2,
-  Card2Body,
+  Card,
+  CardBody,
   Button,
   Grid,
   IconButton,
@@ -32,14 +32,14 @@ export const WalletInfo = () => {
   const label = selectedWallet?.label;
 
   return (
-    <Card2
+    <Card
       backgroundColor={
         walletState === 'CONNECTED' || walletState === 'DISCONNECTING'
           ? 'secondary.light'
           : 'primary.light'
       }
     >
-      <Card2Body
+      <CardBody
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -119,7 +119,7 @@ export const WalletInfo = () => {
             </Button>
           </>
         )}
-      </Card2Body>
+      </CardBody>
       <ChooseWalletModal
         selectedWallet={selectedWallet}
         disconnect={disconnect}
@@ -129,6 +129,6 @@ export const WalletInfo = () => {
         handleClose={() => setChooseWalletsModalOpen(false)}
         wallets={wallets || []}
       />
-    </Card2>
+    </Card>
   );
 };

@@ -2,12 +2,12 @@ import React from 'react';
 
 import { ExclamationTriangle, ShieldCheck } from '@rosen-bridge/icons';
 import {
-  Card2,
+  Card,
   CircularProgress,
   SvgIcon,
   Tooltip,
   styled,
-  Card2Body,
+  CardBody,
   Stack,
 } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
@@ -24,7 +24,7 @@ interface HealthWidgetBaseProps {
  *
  * @param widgetColor
  */
-const HealthWidgetBase = styled(Card2)<HealthWidgetBaseProps>(
+const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
   ({ theme, ...props }) => ({
     'backgroundColor': theme.palette[props.widgetColor].main,
     'color': theme.palette[props.widgetColor].contrastText,
@@ -60,7 +60,7 @@ export const HealthWidget = () => {
           : 'secondary'
       }
     >
-      <Card2Body>
+      <CardBody>
         <Stack justifyContent="center" flexDirection="row">
           {isLoading ? (
             <CircularProgress size={16} color="inherit" />
@@ -89,7 +89,7 @@ export const HealthWidget = () => {
             )
           )}
         </Stack>
-      </Card2Body>
+      </CardBody>
     </HealthWidgetBase>
   );
 };

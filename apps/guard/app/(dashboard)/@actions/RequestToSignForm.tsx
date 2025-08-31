@@ -5,10 +5,10 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  Card2,
-  Card2Body,
-  Card2Header,
-  Card2Title,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   Checkbox,
   Grid,
   MenuItem,
@@ -116,15 +116,15 @@ export const RequestToSignForm = () => {
   );
 
   return (
-    <Card2 backgroundColor="background.paper">
-      <Card2Header>
-        <Card2Title>
+    <Card backgroundColor="background.paper">
+      <CardHeader>
+        <CardTitle>
           <Typography variant="h5" fontWeight="bold">
             Request To Sign
           </Typography>
-        </Card2Title>
-      </Card2Header>
-      <Card2Body>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           {renderAlert()}
 
@@ -177,7 +177,7 @@ export const RequestToSignForm = () => {
             Send
           </SubmitButton>
         </form>
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };

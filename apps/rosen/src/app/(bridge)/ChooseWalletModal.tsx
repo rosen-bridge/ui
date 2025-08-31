@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { Wallet as WalletIcon } from '@rosen-bridge/icons';
 import {
   Alert,
-  Card2,
-  Card2Body,
+  Card,
+  CardBody,
   Button,
   Dialog,
   DialogContent,
@@ -100,8 +100,8 @@ export const ChooseWalletModal = ({
             };
 
             return (
-              <Card2 key={wallet.label} backgroundColor="background.paper">
-                <Card2Body>
+              <Card key={wallet.label} backgroundColor="background.paper">
+                <CardBody>
                   <Tooltip title={wallet.name}>
                     <Stack
                       gap={3}
@@ -125,8 +125,8 @@ export const ChooseWalletModal = ({
                       </Button>
                     </Stack>
                   </Tooltip>
-                </Card2Body>
-              </Card2>
+                </CardBody>
+              </Card>
             );
           })}
         </Grid>

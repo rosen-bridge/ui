@@ -3,9 +3,9 @@ import React, { forwardRef, HTMLAttributes } from 'react';
 import { Box } from '../../base';
 
 /**
- * Props for the `Card2` component.
+ * Props for the `Card` component.
  */
-type Card2Props = {
+type CardProps = {
   /**
    * If `true`, the card will show a pointer cursor on hover,
    * indicating it is clickable.
@@ -37,18 +37,18 @@ type Card2Props = {
 } & HTMLAttributes<HTMLDivElement>;
 
 /**
- * `Card2` is a reusable UI component based on MUI's `Box`.
+ * `Card` is a reusable UI component based on MUI's `Box`.
  * It supports optional clickable behavior, active state styling,
  * customizable background color, and variants.
  *
  * @example
  * ```tsx
- * <Card2 clickable active backgroundColor="#f0f0f0" variant="separated">
+ * <Card clickable active backgroundColor="#f0f0f0" variant="separated">
  *   Content here
- * </Card2>
+ * </Card>
  * ```
  */
-export const Card2 = forwardRef<HTMLDivElement, Card2Props>(function Card2(
+export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   { clickable, active, backgroundColor = 'white', children, variant, ...rest },
   ref,
 ) {

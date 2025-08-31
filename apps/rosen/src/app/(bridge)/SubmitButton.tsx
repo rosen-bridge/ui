@@ -4,8 +4,8 @@ import { CommentAltExclamation } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
-  Card2,
-  Card2Body,
+  Card,
+  CardBody,
   Connector,
   Divider,
   EnhancedDialog,
@@ -128,8 +128,8 @@ export const SubmitButton = () => {
             paddingBottom: 0,
           }}
         >
-          <Card2 backgroundColor="primary.light">
-            <Card2Body>
+          <Card backgroundColor="primary.light">
+            <CardBody>
               <Stack spacing={2}>
                 <Stack alignItems="center" spacing={2}>
                   <Typography variant="subtitle1">
@@ -162,8 +162,8 @@ export const SubmitButton = () => {
                   <Identifier value={walletAddressValue} copyable />
                 </Label>
               </Stack>
-            </Card2Body>
-          </Card2>
+            </CardBody>
+          </Card>
         </EnhancedDialogContent>
         <EnhancedDialogActions>
           <LoadingButton

@@ -3,8 +3,8 @@ import React from 'react';
 import {
   Amount,
   Avatar,
-  Card2,
-  Card2Body,
+  Card,
+  CardBody,
   Connector,
   Identifier,
   Network,
@@ -20,8 +20,8 @@ import { EventItem } from '@/types';
 
 const EventCardSkeleton = () => {
   return (
-    <Card2 backgroundColor="background.paper">
-      <Card2Body style={{ height: '152px' }}>
+    <Card backgroundColor="background.paper">
+      <CardBody style={{ height: '152px' }}>
         <Stack gap={1} justifyContent="space-between">
           <Stack alignItems="center" flexDirection="row" gap={1}>
             <Skeleton
@@ -57,8 +57,8 @@ const EventCardSkeleton = () => {
             <Skeleton variant="rounded" width={80} height={32}></Skeleton>
           </Stack>
         </Stack>
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };
 
@@ -80,13 +80,13 @@ export const EventCard = ({
   if (!item) return null;
 
   return (
-    <Card2
+    <Card
       active={active}
       clickable
       onClick={onClick}
       backgroundColor="background.paper"
     >
-      <Card2Body>
+      <CardBody>
         <Stack gap={1}>
           <Stack gap={1} flexDirection="row">
             <Avatar background="secondary.light" color="secondary.main">
@@ -122,7 +122,7 @@ export const EventCard = ({
             <EventStatus value={item.status} />
           </Stack>
         </Stack>
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };
