@@ -25,10 +25,10 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
-  runes: {
+  bitcoinRunes: {
     index: 6,
-    key: 'runes',
-    label: 'Runes',
+    key: 'bitcoinRunes',
+    label: 'Bitcoin Runes',
     nativeToken: 'btc',
     id: '',
     hasTokenSupport: true,

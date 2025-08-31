@@ -57,10 +57,10 @@ export interface Chains {
   doge: Doge;
   ethereum: Ethereum;
   binance: Binance;
-  runes: Runes;
+  bitcoinRunes: BitcoinRunes;
 }
 
-export interface Runes {
+export interface BitcoinRunes {
   active: boolean;
 }
 
