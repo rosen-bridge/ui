@@ -52,7 +52,7 @@ chains:
     scanInterval: 10
     rpc:
       timeout: 100
-  runes:
+  bitcoinRunes:
     active: false
 paths:
   tokens: config/rosen/tokensMap.json

@@ -34,7 +34,7 @@ import { ExtraChainScannersType } from '../types';
 import { DBService } from './db';
 import { HealthService } from './healthCheck';
 
-type ChainsKeys = Exclude<keyof (typeof configs)['chains'], 'runes'>;
+type ChainsKeys = Exclude<keyof (typeof configs)['chains'], 'bitcoinRunes'>;
 
 export class ChainsScannerService extends PeriodicTaskService {
   taskName = 'ChainsScannerService';

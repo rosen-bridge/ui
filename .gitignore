@@ -28,8 +28,10 @@ build
 config
 **/configs/*.json
 **/configs/*.yaml
+**/configs/*.yml
 next-env.d.ts
 !config/default.yaml
+!config/default.yml
 !config/schema.json
 
 .devcontainer
