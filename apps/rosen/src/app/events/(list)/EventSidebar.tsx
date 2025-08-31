@@ -1,6 +1,6 @@
 import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
-  Amount2,
+  Amount,
   Button,
   Card,
   CardBody,
@@ -55,7 +55,7 @@ const Content = ({ value }: EventSidebarProps) => {
         <Token reverse name={value.lockToken.name} />
       </Label>
       <Label label="Amount">
-        <Amount2
+        <Amount
           value={getDecimalString(
             value.amount,
             value.lockToken.significantDecimals,
@@ -130,7 +130,7 @@ const Content = ({ value }: EventSidebarProps) => {
         <RelativeTime timestamp={value.timestamp} />
       </Label>
       <Label label="Bridge fee">
-        <Amount2
+        <Amount
           value={getDecimalString(
             value.bridgeFee,
             value.lockToken.significantDecimals,
@@ -138,7 +138,7 @@ const Content = ({ value }: EventSidebarProps) => {
         />
       </Label>
       <Label label="Network Fee">
-        <Amount2
+        <Amount
           value={getDecimalString(
             value.networkFee,
             value.lockToken.significantDecimals,

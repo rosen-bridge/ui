@@ -29,7 +29,7 @@ chains:
     active: false
   binance:
     active: false
-  runes:
+  bitcoinRunes:
     active: false
 paths:
   tokens: config/rosen/tokensMap.json

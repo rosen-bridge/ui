@@ -3,14 +3,12 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
-  Amount2,
+  Amount,
   Card,
   CardBody,
   Divider,
   Label,
-  Tooltip,
   Truncate,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -62,7 +60,7 @@ export const TransactionInfo = () => {
     >
       <CardBody>
         <Label label="You Will Receive" color="textPrimary" dense>
-          <Amount2
+          <Amount
             value={
               !tokenValue || receivingAmountRaw === '0'
                 ? undefined
@@ -74,21 +72,21 @@ export const TransactionInfo = () => {
         </Label>
         <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
         <Label label="Transaction Fee" dense>
-          <Amount2
+          <Amount
             value={!tokenValue ? undefined : networkFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />
         </Label>
         <Label label="Bridge Fee" dense>
-          <Amount2
+          <Amount
             value={!tokenValue ? undefined : bridgeFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />
         </Label>
         <Label label="Min Transfer" dense>
-          <Amount2
+          <Amount
             value={!tokenValue ? undefined : minTransferRaw}
             unit={tokenInfo?.name}
             loading={isPending}

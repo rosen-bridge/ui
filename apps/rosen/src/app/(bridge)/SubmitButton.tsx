@@ -4,7 +4,6 @@ import { CommentAltExclamation } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
-  Amount2,
   Card,
   CardBody,
   Connector,
@@ -18,6 +17,7 @@ import {
   LoadingButton,
   Network,
   Stack,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -132,11 +132,9 @@ export const SubmitButton = () => {
             <CardBody>
               <Stack spacing={2}>
                 <Stack alignItems="center" spacing={2}>
-                  <Amount
-                    value={amountValue || 0}
-                    size="large"
-                    unit={tokenInfo?.name}
-                  />
+                  <Typography variant="subtitle1">
+                    <Amount value={amountValue || 0} unit={tokenInfo?.name} />
+                  </Typography>
                   {source && target && (
                     <Connector
                       start={<Network name={source.name} />}
@@ -147,13 +145,13 @@ export const SubmitButton = () => {
                 <Divider />
                 <div>
                   <Label label="Transaction Fee">
-                    <Amount2 value={networkFeeRaw} unit={tokenInfo?.name} />
+                    <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
                   </Label>
                   <Label label="Bridge Fee">
-                    <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.name} />
+                    <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
                   </Label>
                   <Label label="Received amount">
-                    <Amount2
+                    <Amount
                       value={receivingAmountRaw}
                       unit={targetTokenInfo?.name}
                     />

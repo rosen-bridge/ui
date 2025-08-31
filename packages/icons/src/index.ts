@@ -202,6 +202,9 @@ export { default as WalletRaw } from './icons/wallet.svg?raw';
 export { ReactComponent as Binance } from './networks/binance.svg';
 export { default as BinanceRaw } from './networks/binance.svg?raw';
 
+export { ReactComponent as BitcoinRunes } from './networks/bitcoin-runes.svg';
+export { default as BitcoinRunesRaw } from './networks/bitcoin-runes.svg?raw';
+
 export { ReactComponent as Bitcoin } from './networks/bitcoin.svg';
 export { default as BitcoinRaw } from './networks/bitcoin.svg?raw';
 
@@ -216,6 +219,3 @@ export { default as ErgoRaw } from './networks/ergo.svg?raw';
 
 export { ReactComponent as Ethereum } from './networks/ethereum.svg';
 export { default as EthereumRaw } from './networks/ethereum.svg?raw';
-
-export { ReactComponent as Runes } from './networks/runes.svg';
-export { default as RunesRaw } from './networks/runes.svg?raw';

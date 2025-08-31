@@ -5,7 +5,6 @@ export * from './button';
 export * from './display';
 export * from './navigationBar';
 export * from './AlertCard';
-export * from './Amount';
 export * from './ApiKeyModal';
 export * from './ApiKeyModalWarning';
 export * from './App';

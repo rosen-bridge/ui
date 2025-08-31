@@ -356,17 +356,17 @@
           }
         }
       },
-      "runes": {
+      "bitcoinRunes": {
         "type": "object",
         "children": {
           "active": {
             "type": "boolean",
-            "description": "runes activation state",
+            "description": "bitcoin-runes activation state",
             "default": false,
             "validations": [
               {
                 "required": true,
-                "error": "runes activation state must be set"
+                "error": "bitcoin-runes activation state must be set"
               }
             ]
           }
