@@ -19,6 +19,7 @@ export class DBService extends AbstractService {
 
   /**
    * returns the last saved block height based on the scanner name
+   *
    * @param scanner considering scanned blocks by this scanner
    */
   public getLastSavedBlock = async (scanner: string) => {

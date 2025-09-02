@@ -2,6 +2,7 @@ import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
 
 import dataSource from './data-source';
+import { ChainsHealthCheckService } from './services/chainsHealthCheck';
 import { ChainsScannerService } from './services/chainsScanners';
 import { DBService } from './services/db';
 import { ErgoScannerService } from './services/ergoScanner';
@@ -40,7 +41,7 @@ const startApp = async () => {
   serviceManager.register(ErgoScannerService.getInstance());
   logger.debug('Scanner service registered to the service manager');
 
-  logger.debug('Initializing health service');
+  logger.debug('Initializing health-check service');
   HealthService.init(
     CallbackLoggerFactory.getInstance().getLogger('health-check-service'),
   );
@@ -54,8 +55,17 @@ const startApp = async () => {
   serviceManager.register(ChainsScannerService.getInstance());
   logger.debug('chains scanners Service registered to the service manager');
 
+  logger.debug('Initializing chains health-check service');
+  ChainsHealthCheckService.init(
+    CallbackLoggerFactory.getInstance().getLogger(
+      'chains-health-check-service',
+    ),
+  );
+  serviceManager.register(ChainsHealthCheckService.getInstance());
+  logger.debug('chains health-check Service registered to the service manager');
+
   logger.info('Starting service manager...');
-  serviceManager.start(ChainsScannerService.getInstance().getName());
+  serviceManager.start(ChainsHealthCheckService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };
