@@ -15,11 +15,11 @@ export const getHeight = async (): Promise<number> => {
 };
 
 export const calculateFee = calculateFeeCreator(
-  NETWORKS.bitcoinRunes.key,
+  NETWORKS['bitcoin-runes'].key,
   getHeight,
 );
 
 export const getMinTransferCreator = getMinTransferCreatorBase(
-  NETWORKS.bitcoinRunes.key,
+  NETWORKS['bitcoin-runes'].key,
   calculateFee,
 );

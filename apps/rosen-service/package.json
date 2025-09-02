@@ -20,6 +20,7 @@
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^2.0.1",
     "@rosen-bridge/bitcoin-observation-extractor": "^6.1.5",
+    "@rosen-bridge/runes-observation-extractor": "^0.1.4",
     "@rosen-bridge/bitcoin-rpc-scanner": "^3.0.0",
     "@rosen-bridge/callback-logger": "^0.1.0",
     "@rosen-bridge/discord-notification": "^0.1.3",
