@@ -24,27 +24,27 @@ interface HealthWidgetBaseProps {
  *
  * @param widgetColor
  */
-const HealthWidgetBase = styled(Card)<HealthWidgetBaseProps>(
-  ({ theme, ...props }) => ({
-    'backgroundColor': theme.palette[props.widgetColor].main,
-    'color': theme.palette[props.widgetColor].contrastText,
-    'backgroundImage':
-      theme.palette.mode === 'light'
-        ? `linear-gradient(180deg, ${
-            theme.palette[props.widgetColor].main
-          } 0%, ${theme.palette[props.widgetColor].dark} 100%)`
-        : 'none',
-    'display': 'flex',
-    'alignItems': 'center',
-    '& span': {
-      marginLeft: theme.spacing(2),
-      marginRight: theme.spacing(1),
-    },
-    '& strong': {
-      flexGrow: 1,
-    },
-  }),
-);
+const HealthWidgetBase = styled(Card, {
+  shouldForwardProp: (prop) => prop !== 'widgetColor',
+})<HealthWidgetBaseProps>(({ theme, ...props }) => ({
+  'backgroundColor': theme.palette[props.widgetColor].main,
+  'color': theme.palette[props.widgetColor].contrastText,
+  'backgroundImage':
+    theme.palette.mode === 'light'
+      ? `linear-gradient(180deg, ${
+          theme.palette[props.widgetColor].main
+        } 0%, ${theme.palette[props.widgetColor].dark} 100%)`
+      : 'none',
+  'display': 'flex',
+  'alignItems': 'center',
+  '& span': {
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(1),
+  },
+  '& strong': {
+    flexGrow: 1,
+  },
+}));
 
 /**
  * render a widget showing health status or a pending indicator
