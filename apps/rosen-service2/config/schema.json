@@ -311,17 +311,6 @@
               }
             ]
           },
-          "initialHeight": {
-            "type": "number",
-            "default": 1,
-            "description": "cardano initial height",
-            "validations": [
-              {
-                "required": true,
-                "error": "cardano initial height must be specified"
-              }
-            ]
-          },
           "scanInterval": {
             "type": "number",
             "default": 30,
@@ -354,6 +343,18 @@
           "koios": {
             "type": "object",
             "children": {
+              "initialHeight": {
+                "type": "number",
+                "default": 1,
+                "description": "cardano koios initial height",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "cardano koios initial height must be specified",
+                    "when": {"path": "chains.cardano.method", "value": "koios"}
+                  }
+                ]
+              },
               "url": {
                 "type": "string",
                 "description": "cardano koios url",
@@ -390,6 +391,18 @@
           "blockfrost": {
             "type": "object",
             "children": {
+              "initialHeight": {
+                "type": "number",
+                "default": 1,
+                "description": "cardano blockfrost initial height",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "cardano blockfrost initial height must be specified",
+                    "when": {"path": "chains.cardano.method", "value": "blockfrost"}
+                  }
+                ]
+              },
               "url": {
                 "type": "string",
                 "description": "cardano blockfrost url"

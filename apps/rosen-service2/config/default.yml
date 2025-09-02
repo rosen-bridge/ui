@@ -22,10 +22,12 @@ chains:
       url: https://api.ergoplatform.com/
   cardano:
     active: false
-    initialHeight: 1
     scanInterval: 30
     koios:
+      initialHeight: 1
       timeout: 100
+    blockfrost:
+      initialHeight: 1
   bitcoin:
     active: false
     initialHeight: 1

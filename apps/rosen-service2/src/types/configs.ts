@@ -146,7 +146,6 @@ export interface ChainsBitcoinRpc {
 
 export interface ChainsCardano {
   active: boolean;
-  initialHeight: number;
   scanInterval: number;
   blockRetrieveGap?: number;
   method?: 'koios' | 'ogmios' | 'blockfrost';
@@ -166,12 +165,14 @@ export interface ChainsCardanoOgmios {
 }
 
 export interface ChainsCardanoBlockfrost {
+  initialHeight?: number;
   url?: string;
   projectId?: string;
   suffix?: string;
 }
 
 export interface ChainsCardanoKoios {
+  initialHeight?: number;
   url?: string;
   timeout?: number;
   authToken?: string;

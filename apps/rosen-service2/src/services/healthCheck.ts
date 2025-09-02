@@ -9,48 +9,52 @@ import {
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
 import {
-  AbstractService,
   Dependency,
+  PeriodicTaskService,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
-import { ERGO_BLOCK_TIME } from '../constants';
+import {
+  BINANCE_BLOCK_TIME,
+  BITCOIN_BLOCK_TIME,
+  CARDANO_BLOCK_TIME,
+  DOGE_BLOCK_TIME,
+  ERGO_BLOCK_TIME,
+  ETHEREUM_BLOCK_TIME,
+} from '../constants';
 import { DBService } from './db';
-import { ErgoScannerService } from './ergoScanner';
+import { ScannerService } from './scanner';
 
-export class HealthService extends AbstractService {
+export class HealthService extends PeriodicTaskService {
   name = 'HealthService';
+  taskName = 'HealthService';
+
   private static instance: HealthService;
   readonly dbService: DBService;
-  readonly ergoScannerService: ErgoScannerService;
-  private shouldStop = false;
-  private latestTimeOut: undefined | ReturnType<typeof setTimeout>;
+  readonly scannerService: ScannerService;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
-  private continueStop = () => {
-    return;
-  };
   protected dependencies: Dependency[] = [
     {
       serviceName: DBService.name,
       allowedStatuses: [ServiceStatus.running],
     },
     {
-      serviceName: ErgoScannerService.name,
+      serviceName: ScannerService.name,
       allowedStatuses: [ServiceStatus.started],
     },
   ];
 
   private constructor(
     dbService: DBService,
-    ergoScannerService: ErgoScannerService,
+    scannerService: ScannerService,
     logger?: AbstractLogger,
   ) {
     super(logger);
     this.dbService = dbService;
-    this.ergoScannerService = ergoScannerService;
+    this.scannerService = scannerService;
 
     let notify;
     let notificationConfig;
@@ -102,6 +106,76 @@ export class HealthService extends AbstractService {
         'error',
       ),
     ];
+    if (configs.chains.cardano.active) {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          NETWORKS.cardano.key,
+          async () =>
+            this.dbService.getLastSavedBlock(
+              this.scannerService.getScanners()[NETWORKS.cardano.key]!.name(),
+            ),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          CARDANO_BLOCK_TIME * 1000,
+        ),
+      );
+    }
+    if (configs.chains.bitcoin.active) {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          NETWORKS.bitcoin.key,
+          async () =>
+            this.dbService.getLastSavedBlock(
+              this.scannerService.getScanners()[NETWORKS.bitcoin.key]!.name(),
+            ),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          BITCOIN_BLOCK_TIME * 1000,
+        ),
+      );
+    }
+    if (configs.chains.doge.active) {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          NETWORKS.doge.key,
+          async () =>
+            this.dbService.getLastSavedBlock(
+              this.scannerService.getScanners()[NETWORKS.doge.key]!.name(),
+            ),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          DOGE_BLOCK_TIME * 1000,
+        ),
+      );
+    }
+    if (configs.chains.ethereum.active) {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          NETWORKS.ethereum.key,
+          async () =>
+            this.dbService.getLastSavedBlock(
+              this.scannerService.getScanners()[NETWORKS.ethereum.key]!.name(),
+            ),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          ETHEREUM_BLOCK_TIME * 1000,
+        ),
+      );
+    }
+    if (configs.chains.binance.active) {
+      this.params.push(
+        new ScannerSyncHealthCheckParam(
+          NETWORKS.binance.key,
+          async () =>
+            this.dbService.getLastSavedBlock(
+              this.scannerService.getScanners()[NETWORKS.binance.key]!.name(),
+            ),
+          configs.healthCheck.scanner.warnDiff,
+          configs.healthCheck.scanner.criticalDiff,
+          BINANCE_BLOCK_TIME * 1000,
+        ),
+      );
+    }
   }
 
   /**
@@ -109,7 +183,7 @@ export class HealthService extends AbstractService {
    *
    * @static
    * @param {DBService} [dbService]
-   * @param {ErgoScannerService} [ergoScannerService]
+   * @param {ScannerService} [ergoScannerService]
    * @memberof HealthService
    */
   static readonly init = (logger?: AbstractLogger) => {
@@ -118,7 +192,7 @@ export class HealthService extends AbstractService {
     }
     this.instance = new HealthService(
       DBService.getInstance(),
-      ErgoScannerService.getInstance(),
+      ScannerService.getInstance(),
       logger,
     );
   };
@@ -138,118 +212,77 @@ export class HealthService extends AbstractService {
   };
 
   /**
-   * Register a new health check parameter
-   * @param param - Health check parameter instance to register
-   */
-  public registerHealthParam = (param: AbstractHealthCheckParam) => {
-    try {
-      this.healthCheck.register(param);
-      this.logger.debug(`${param.getId()} health param registered`);
-    } catch (err) {
-      this.logger.error(
-        `Registering healthCheck ${param.getId()} parameter failed: ${err}`,
-      );
-      if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-    }
-  };
-
-  /**
-   * Unregister a health check parameter by its ID
-   * @param paramId - ID of the health check parameter to unregister
-   */
-  public unregisterHealthParam = (paramId: string) => {
-    try {
-      this.healthCheck.unregister(paramId);
-      this.logger.debug(`${paramId} health param unregistered`);
-    } catch (err) {
-      this.logger.error(
-        `Unregistering healthCheck ${paramId} parameter failed: ${err}`,
-      );
-      if (err instanceof Error && err.stack) this.logger.debug(err.stack);
-    }
-  };
-
-  /**
-   * starts the service.
+   * start health-check scanner task
    *
-   * @protected
-   * @return {Promise<boolean>} true if service started successfully, otherwise
-   * false
-   * @memberof HealthService
+   * @returns void
    */
-  protected start = async (): Promise<boolean> => {
-    this.shouldStop = false;
-
-    for (const instance of this.params) this.registerHealthParam(instance);
-
-    this.setStatus(ServiceStatus.started);
-    this.updateHealthStatus();
-    return true;
-  };
-
-  /**
-   * Scan and fetch ErgoObservationExtractor boxes data
-   * @returns {boolean}
-   */
-  protected updateHealthStatus = async () => {
-    this.latestTimeOut = undefined;
-    this.logger.info('Starting the update healthCheck status');
-    try {
-      await this.healthCheck.update();
-      const isHealthy =
-        (
-          await this.healthCheck.getHealthStatusWithParamId(
-            this.params[0].getId(),
-          )
-        )?.status == HealthStatusLevel.HEALTHY;
-      if (isHealthy) {
-        this.setStatus(ServiceStatus.running);
-      } else {
-        this.setStatus(ServiceStatus.started);
+  protected preStart = async () => {
+    for (const param of this.params)
+      try {
+        this.healthCheck.register(param);
+        this.logger.debug(`${param.getId()} health param registered`);
+      } catch (err) {
+        this.logger.error(
+          `Registering healthCheck ${param.getId()} parameter failed: ${err}`,
+        );
+        if (err instanceof Error && err.stack) this.logger.debug(err.stack);
       }
-      this.logger.debug('periodic health check update done');
-      this.logger.info(
-        `Health-check status is ${this.healthCheck.getHealthStatus().map((p) => `${p.id}=${p.status}`)}`,
-      );
-    } catch (error) {
-      this.logger.error('failed to start health-check', error);
-    }
-
-    const scheduled = setTimeout(
-      () => this.updateHealthStatus(),
-      configs.healthCheck.updateInterval * 1000,
-    );
-
-    if (this.shouldStop) {
-      this.shouldStop = false;
-      clearTimeout(scheduled);
-      this.continueStop();
-    } else {
-      this.latestTimeOut = scheduled;
-    }
-
-    return true;
+    this.setStatus(ServiceStatus.started);
   };
 
   /**
-   * stops the service.
+   * Builds a list of asynchronous tasks for health-check scanner.
+   *
+   * @returns {Task[]}
+   */
+  protected getTasks = () => {
+    return [
+      {
+        fn: async () => {
+          this.logger.info('Starting the update healthCheck status');
+          try {
+            await this.healthCheck.update();
+            const isHealthy =
+              (
+                await this.healthCheck.getHealthStatusWithParamId(
+                  this.params[0].getId(),
+                )
+              )?.status == HealthStatusLevel.HEALTHY;
+            if (isHealthy) {
+              this.setStatus(ServiceStatus.running);
+            } else {
+              this.setStatus(ServiceStatus.started);
+            }
+            this.logger.debug('periodic health check update done');
+            this.logger.info(
+              `Health-check status is ${this.healthCheck.getHealthStatus().map((p) => `${p.id}=${p.status}`)}`,
+            );
+          } catch (error) {
+            this.logger.error('failed to start health-check', error);
+          }
+        },
+        interval: configs.healthCheck.updateInterval * 1000,
+      },
+    ];
+  };
+
+  /**
+   * post-stop action of service.
    *
    * @protected
    * @return {Promise<boolean>} true if service stopped successfully
    * @memberof HealthService
    */
-  protected stop = async (): Promise<boolean> => {
-    if (this.latestTimeOut) {
-      await new Promise<void>((resolve) => {
-        this.continueStop = resolve;
-        this.shouldStop = true;
-      });
-    }
-    clearTimeout(this.latestTimeOut);
-    for (const instance of this.params)
-      this.unregisterHealthParam(instance.getId());
-    this.shouldStop = false;
-    this.setStatus(ServiceStatus.dormant);
-    return true;
+  protected postStop = async () => {
+    for (const param of this.params)
+      try {
+        this.healthCheck.unregister(param.getId());
+        this.logger.debug(`${param.getId()} health param unregistered`);
+      } catch (err) {
+        this.logger.error(
+          `Unregistering healthCheck ${param.getId()} parameter failed: ${err}`,
+        );
+        if (err instanceof Error && err.stack) this.logger.debug(err.stack);
+      }
   };
 }
