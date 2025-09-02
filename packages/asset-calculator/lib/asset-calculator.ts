@@ -8,6 +8,7 @@ import { DataSource } from 'typeorm';
 
 import AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
+import { BitcoinRunesCalculator } from './calculator/chains/bitcoin-runes';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { DogeCalculator } from './calculator/chains/doge-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
@@ -18,6 +19,7 @@ import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import {
   BitcoinCalculatorInterface,
+  BitcoinRunesCalculatorInterface,
   CardanoCalculatorInterface,
   DogeCalculatorInterface,
   ErgoCalculatorInterface,
@@ -36,6 +38,7 @@ class AssetCalculator {
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
     bitcoinCalculator: BitcoinCalculatorInterface,
+    bitcoinRunesCalculator: BitcoinRunesCalculatorInterface,
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
     dogeCalculator: DogeCalculatorInterface,
@@ -60,6 +63,12 @@ class AssetCalculator {
       this.tokens,
       bitcoinCalculator.addresses,
       bitcoinCalculator.esploraUrl,
+      logger,
+    );
+    const bitcoinRunesAssetCalculator = new BitcoinRunesCalculator(
+      this.tokens,
+      bitcoinRunesCalculator.addresses,
+      bitcoinRunesCalculator.unisatUrl,
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
@@ -87,6 +96,10 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
+    this.calculatorMap.set(
+      NETWORKS.bitcoinRunes.key,
+      bitcoinRunesAssetCalculator,
+    );
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);

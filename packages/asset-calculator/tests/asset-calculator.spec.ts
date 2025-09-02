@@ -26,6 +26,7 @@ describe('AssetCalculator', () => {
         },
         { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], unisatUrl: 'unisatUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
         {
@@ -106,6 +107,7 @@ describe('AssetCalculator', () => {
         },
         { addresses: ['hotAddr', 'coldAddr'], koiosUrl: 'koiosUrl' },
         { addresses: ['hotAddr', 'coldAddr'], esploraUrl: 'esploraUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], unisatUrl: 'unisatUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
         {
@@ -180,6 +182,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
         { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
+        { addresses: ['Addr'], unisatUrl: 'unisatUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
@@ -294,6 +297,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
         { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
         { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
+        { addresses: ['Addr'], unisatUrl: 'unisatUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
