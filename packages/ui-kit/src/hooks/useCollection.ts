@@ -15,6 +15,11 @@ export const useCollection = () => {
 
   const [sort, setSort] = useState<SortValue>();
 
+  const handleFiltersChange = useCallback((filters: Params) => {
+    setFilters(filters);
+    setPageIndex(0);
+  }, []);
+
   const handlePageSizeChange = useCallback((size: number) => {
     setPageSize(size);
     setPageIndex(0);
@@ -50,7 +55,7 @@ export const useCollection = () => {
     params,
 
     filters,
-    setFilters,
+    setFilters: handleFiltersChange,
 
     pageIndex,
     setPageIndex,
