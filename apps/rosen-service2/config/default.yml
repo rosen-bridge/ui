@@ -23,11 +23,9 @@ chains:
   cardano:
     active: false
     scanInterval: 30
+    initialHeight: 1
     koios:
-      initialHeight: 1
       timeout: 100
-    blockfrost:
-      initialHeight: 1
   bitcoin:
     active: false
     initialHeight: 1

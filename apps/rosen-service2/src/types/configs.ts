@@ -149,6 +149,7 @@ export interface ChainsCardano {
   scanInterval: number;
   blockRetrieveGap?: number;
   method?: 'koios' | 'ogmios' | 'blockfrost';
+  initialHeight?: number;
   koios: ChainsCardanoKoios;
   blockfrost: ChainsCardanoBlockfrost;
   ogmios: ChainsCardanoOgmios;
@@ -165,14 +166,12 @@ export interface ChainsCardanoOgmios {
 }
 
 export interface ChainsCardanoBlockfrost {
-  initialHeight?: number;
   url?: string;
   projectId?: string;
   suffix?: string;
 }
 
 export interface ChainsCardanoKoios {
-  initialHeight?: number;
   url?: string;
   timeout?: number;
   authToken?: string;
