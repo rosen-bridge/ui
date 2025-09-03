@@ -2,6 +2,11 @@ import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { BinanceRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/scanner';
+import { TransactionResponse } from 'ethers';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
@@ -21,14 +26,20 @@ export const buildBinanceRpcScannerWithExtractors = async (
   logger.info('Starting Binance scanner initialization...');
 
   // Create Binance scanner with RPC network settings
+  const networkConnectorManager =
+    new NetworkConnectorManager<TransactionResponse>(
+      new FailoverStrategy(),
+      logger,
+    );
+  configs.chains.binance.rpc.connections.forEach((rpc) => {
+    networkConnectorManager.addConnector(
+      new EvmRpcNetwork(rpc.url!, rpc.timeout! * 1000, rpc.authToken),
+    );
+  });
   const binanceScanner = new EvmRpcScanner('binance', {
     dataSource: dataSource,
     initialHeight: configs.chains.binance.initialHeight,
-    network: new EvmRpcNetwork(
-      configs.chains.binance.rpc.url!,
-      configs.chains.binance.rpc.timeout! * 1000,
-      configs.chains.binance.rpc.authToken,
-    ),
+    network: networkConnectorManager,
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,
     suffix: configs.chains.binance.rpc.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(

@@ -30,13 +30,15 @@ export const initializeErgoScanner = (dataSource: DataSource) => {
     logger,
   );
   if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
-    networkConnectorManager.addConnector(
-      new ErgoExplorerNetwork(configs.chains.ergo.explorer.url!),
-    );
+    configs.chains.ergo.explorer.connections.forEach((explorer) => {
+      networkConnectorManager.addConnector(
+        new ErgoExplorerNetwork(explorer.url!),
+      );
+    });
   } else {
-    networkConnectorManager.addConnector(
-      new ErgoNodeNetwork(configs.chains.ergo.node.url!),
-    );
+    configs.chains.ergo.node.connections.forEach((node) => {
+      networkConnectorManager.addConnector(new ErgoNodeNetwork(node.url!));
+    });
   }
   const ergoScanner = new ErgoScanner({
     dataSource: dataSource,

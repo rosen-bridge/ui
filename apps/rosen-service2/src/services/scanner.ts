@@ -177,10 +177,10 @@ export class ScannerService extends PeriodicTaskService {
       let url: string;
       if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
         networkType = ErgoNetworkType.Explorer;
-        url = configs.chains.ergo.explorer.url!;
+        url = configs.chains.ergo.explorer.connections[0].url!;
       } else {
         networkType = ErgoNetworkType.Node;
-        url = configs.chains.ergo.node.url!;
+        url = configs.chains.ergo.node.connections[0].url!;
       }
 
       const ergoObservationExtractor = new ErgoObservationExtractor(

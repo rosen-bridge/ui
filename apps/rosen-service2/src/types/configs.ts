@@ -73,10 +73,14 @@ export interface ChainsBinance {
 }
 
 export interface ChainsBinanceRpc {
+  suffix?: string;
+  connections: ChainsBinanceRpcConnections[];
+}
+
+export interface ChainsBinanceRpcConnections {
   url?: string;
   timeout?: number;
   authToken?: string;
-  suffix?: string;
 }
 
 export interface ChainsEthereum {
@@ -88,10 +92,14 @@ export interface ChainsEthereum {
 }
 
 export interface ChainsEthereumRpc {
+  suffix?: string;
+  connections: ChainsEthereumRpcConnections[];
+}
+
+export interface ChainsEthereumRpcConnections {
   url?: string;
   timeout?: number;
   authToken?: string;
-  suffix?: string;
 }
 
 export interface ChainsDoge {
@@ -100,19 +108,27 @@ export interface ChainsDoge {
   scanInterval: number;
   blockRetrieveGap?: number;
   method?: 'rpc' | 'esplora';
-  rpcSuffix?: string;
-  rpc: ChainsDogeRpc[];
+  rpc: ChainsDogeRpc;
   esplora: ChainsDogeEsplora;
 }
 
 export interface ChainsDogeEsplora {
+  suffix?: string;
+  connections: ChainsDogeEsploraConnections[];
+}
+
+export interface ChainsDogeEsploraConnections {
   url?: string;
   timeout?: number;
   apiPrefix?: string;
-  suffix?: string;
 }
 
 export interface ChainsDogeRpc {
+  suffix?: string;
+  connections: ChainsDogeRpcConnections[];
+}
+
+export interface ChainsDogeRpcConnections {
   url?: string;
   timeout?: number;
   username?: string;
@@ -130,18 +146,26 @@ export interface ChainsBitcoin {
 }
 
 export interface ChainsBitcoinEsplora {
+  suffix?: string;
+  connections: ChainsBitcoinEsploraConnections[];
+}
+
+export interface ChainsBitcoinEsploraConnections {
   url?: string;
   timeout?: number;
   apiPrefix?: string;
-  suffix?: string;
 }
 
 export interface ChainsBitcoinRpc {
+  suffix?: string;
+  connections: ChainsBitcoinRpcConnections[];
+}
+
+export interface ChainsBitcoinRpcConnections {
   url?: string;
   timeout?: number;
   username?: string;
   password?: string;
-  suffix?: string;
 }
 
 export interface ChainsCardano {
@@ -156,26 +180,38 @@ export interface ChainsCardano {
 }
 
 export interface ChainsCardanoOgmios {
+  suffix?: string;
+  connection: ChainsCardanoOgmiosConnection;
+}
+
+export interface ChainsCardanoOgmiosConnection {
   address?: string;
   port?: number;
   initialSlot?: number;
   initialHash?: string;
   maxTryBlock?: number;
   useTls?: boolean;
-  suffix?: string;
 }
 
 export interface ChainsCardanoBlockfrost {
+  suffix?: string;
+  connections: ChainsCardanoBlockfrostConnections[];
+}
+
+export interface ChainsCardanoBlockfrostConnections {
   url?: string;
   projectId?: string;
-  suffix?: string;
 }
 
 export interface ChainsCardanoKoios {
+  suffix?: string;
+  connections: ChainsCardanoKoiosConnections[];
+}
+
+export interface ChainsCardanoKoiosConnections {
   url?: string;
   timeout?: number;
   authToken?: string;
-  suffix?: string;
 }
 
 export interface ChainsErgo {
@@ -188,10 +224,18 @@ export interface ChainsErgo {
 }
 
 export interface ChainsErgoExplorer {
+  connections: ChainsErgoExplorerConnections[];
+}
+
+export interface ChainsErgoExplorerConnections {
   url?: string;
 }
 
 export interface ChainsErgoNode {
+  connections: ChainsErgoNodeConnections[];
+}
+
+export interface ChainsErgoNodeConnections {
   url?: string;
 }
 

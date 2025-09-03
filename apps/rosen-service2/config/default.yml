@@ -18,40 +18,26 @@ chains:
     initialHeight: 1
     scanInterval: 120
     method: explorer
-    explorer:
-      url: https://api.ergoplatform.com/
   cardano:
     active: false
     scanInterval: 30
     initialHeight: 1
-    koios:
-      timeout: 100
   bitcoin:
     active: false
     initialHeight: 1
     scanInterval: 600
-    rpc:
-      timeout: 100
-    esplora:
-      timeout: 100
   doge:
     active: false
     initialHeight: 1
     scanInterval: 60
-    esplora:
-      timeout: 100
   ethereum:
     active: false
     initialHeight: 1
     scanInterval: 60
-    rpc:
-      timeout: 100
   binance:
     active: false
     initialHeight: 1
     scanInterval: 10
-    rpc:
-      timeout: 100
   bitcoinRunes:
     active: false
 paths:
