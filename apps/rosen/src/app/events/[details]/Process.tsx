@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   DisclosureButton,
   stepItem,
   ProcessTracker,
   useDisclosure,
+  Skeleton,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
+import { EventDetails } from '@/app/events/[details]/type';
 
 const Steps: stepItem[] = [
   {
@@ -222,18 +226,15 @@ const Steps: stepItem[] = [
   },
 ];
 
-export const Process = () => {
+export const Process = ({ id }: { id: string }) => {
+  const { data, mutate, isLoading } = useSWR<EventDetails>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
+
   const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
+    onOpen: async () => {
+      await mutate();
     },
   });
   return (
@@ -242,8 +243,17 @@ export const Process = () => {
       state={disclosure.state}
       title="Progress"
     >
-      <div style={{ minHeight: '210px' }}>
-        <ProcessTracker data={Steps} />
+      <div style={{ minHeight: '210px', height: '210px', maxHeight: '210px' }}>
+        {!isLoading ? (
+          <ProcessTracker data={Steps} />
+        ) : (
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height="100%"
+            sx={{ display: 'block' }}
+          />
+        )}
       </div>
     </DetailsCard>
   );

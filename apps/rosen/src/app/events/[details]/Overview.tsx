@@ -65,6 +65,7 @@ export const Overview = ({ id }: { id: string }) => {
         overrides={{
           mobile: { style: { width: '100%' } },
           tablet: { style: { width: '70%' } },
+          laptop: { style: { width: '60%' } },
         }}
       >
         <Label
@@ -79,9 +80,26 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          <div style={{ width: '100%' }}>
+          <Box
+            style={{
+              display: 'flex',
+              justifyContent: 'start',
+              alignItems: 'center',
+            }}
+            overrides={{
+              mobile: {
+                style: { width: '100%' },
+              },
+              tablet: {
+                style: { width: '100%' },
+              },
+              laptop: {
+                style: { width: '100%' },
+              },
+            }}
+          >
             <Identifier loading={isLoading} value={data?.eventId} copyable />
-          </div>
+          </Box>
         </Label>
       </Box>
 
@@ -172,7 +190,7 @@ export const Overview = ({ id }: { id: string }) => {
                   },
                   tablet: {
                     variant: 'both',
-                    name: data?.toChain as NetworkType,
+                    name: data?.fromChain as NetworkType,
                   },
                 }}
                 variant={'both'}
@@ -180,6 +198,21 @@ export const Overview = ({ id }: { id: string }) => {
               />
             }
           />
+        </Label>
+
+        <Label
+          label="Status"
+          orientation="vertical"
+          overrides={{
+            mobile: {
+              orientation: 'horizontal',
+            },
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <EventStatus value={data?.status} loading={isLoading} />
         </Label>
 
         <Label
@@ -201,21 +234,6 @@ export const Overview = ({ id }: { id: string }) => {
         </Label>
 
         <Label
-          label="Status"
-          orientation="vertical"
-          overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
-          <EventStatus value={data?.status} loading={isLoading} />
-        </Label>
-
-        <Label
           label="Fee Sum"
           orientation="vertical"
           overrides={{
@@ -230,7 +248,11 @@ export const Overview = ({ id }: { id: string }) => {
           {!isLoading && data ? (
             <>TODO</>
           ) : (
-            <Skeleton width={80} height={14} variant="rounded" />
+            <Skeleton
+              width={80}
+              style={{ fontSize: 'inherit' }}
+              variant="text"
+            />
           )}
         </Label>
       </Columns>

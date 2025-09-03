@@ -11,6 +11,7 @@ import {
   InjectOverrides,
   Label,
   RelativeTime,
+  Skeleton,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -21,22 +22,16 @@ import { DetailsCard } from '@/app/events/[details]/';
 import { EventDetails } from '@/app/events/[details]/type';
 
 export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR<EventDetails>(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
+
   const Box = InjectOverrides(BoxMui);
 
-  const disclosure = useDisclosure({
-    onOpen: async () => {
-      await mutate();
-    },
-  });
+  const disclosure = useDisclosure();
 
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={'open'}
+      state={disclosure.state}
       title="Details"
     >
       <Columns width="350px" count={3} rule gap="24px">
@@ -47,30 +42,90 @@ export const Details = ({ id }: { id: string }) => {
               timestamp={data?.block.timestamp}
             />
           </Label>
-          <Label label="Fee Sum">TODO</Label>
-          <Label label="Bridge Fee" inset>
-            <Amount loading={isLoading} value={data?.bridgeFee} unit="TODO" />
+
+          <Label label="Total Emission">
+            {!isLoading ? (
+              <Typography>TODO</Typography>
+            ) : (
+              <Skeleton
+                width={80}
+                style={{ fontSize: 'inherit' }}
+                variant="text"
+              />
+            )}
           </Label>
-          <Label label="Network Fee" inset>
-            <Amount loading={isLoading} value={data?.networkFee} unit="TODO" />
+          <Label label="Guards" inset>
+            {!isLoading ? (
+              <Typography>TODO</Typography>
+            ) : (
+              <Skeleton
+                width={80}
+                style={{ fontSize: 'inherit' }}
+                variant="text"
+              />
+            )}
           </Label>
-          <Label label="Token Price">
-            TODO
-            {/*<Amount value={0.22} unit="$" />*/}
+          <Label label="Watchers" inset>
+            {!isLoading ? (
+              <Typography>TODO</Typography>
+            ) : (
+              <Skeleton
+                width={80}
+                style={{ fontSize: 'inherit' }}
+                variant="text"
+              />
+            )}
+          </Label>
+          <Label label="RSN Ratio">
+            {!isLoading ? (
+              <Typography>TODO</Typography>
+            ) : (
+              <Skeleton
+                width={80}
+                style={{ fontSize: 'inherit' }}
+                variant="text"
+              />
+            )}
           </Label>
         </div>
 
         <div>
-          <Label label="RSN Ratio">
-            TODO
-            {/*<Amount value={2.054} />*/}
+          <Label label="Token Price">
+            {!isLoading ? (
+              <Typography>TODO</Typography>
+            ) : (
+              <Skeleton
+                width={80}
+                style={{ fontSize: 'inherit' }}
+                variant="text"
+              />
+            )}
           </Label>
-          <Label label="Total Emission" />
-          <Label label="Guards" inset>
-            <Typography>TODO</Typography>
+          <Label label="Fee Sum">
+            {' '}
+            {!isLoading ? (
+              <Typography>TODO</Typography>
+            ) : (
+              <Skeleton
+                width={80}
+                style={{ fontSize: 'inherit' }}
+                variant="text"
+              />
+            )}
           </Label>
-          <Label label="Watchers" inset>
-            <Typography>TODO</Typography>
+          <Label label="Bridge Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={data?.bridgeFee}
+              unit={isLoading ? '' : 'TODO'}
+            />
+          </Label>
+          <Label label="Network Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={data?.networkFee}
+              unit={isLoading ? '' : 'TODO'}
+            />
           </Label>
         </div>
         <Box
@@ -89,38 +144,42 @@ export const Details = ({ id }: { id: string }) => {
         >
           <Label label="Tx IDs" />
           <Label label="Source Tx" inset>
-            <div style={{ width: isLoading ? '40%' : '80%' }}>
+            <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.sourceTxId ?? 'N/A'}
                 copyable
+                qrcode
               />
             </div>
           </Label>
           <Label label="Payment Tx" inset>
-            <div style={{ width: isLoading ? '40%' : '80%' }}>
+            <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.eventTrigger?.paymentTxId ?? undefined}
                 copyable
+                qrcode
               />
             </div>
           </Label>
           <Label label="Reward Tx" inset>
-            <div style={{ width: isLoading ? '40%' : '80%' }}>
+            <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.eventTrigger?.spendTxId ?? undefined}
                 copyable
+                qrcode
               />
             </div>
           </Label>
           <Label label="Trigger Tx" inset>
-            <div style={{ width: isLoading ? '40%' : '80%' }}>
+            <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
                 value={data?.eventTrigger?.txId}
                 copyable
+                qrcode
               />
             </div>
           </Label>

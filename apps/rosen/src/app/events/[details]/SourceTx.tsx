@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Box,
@@ -9,6 +9,7 @@ import {
   Card2Header,
   CopyButton,
   DisclosureButton,
+  Skeleton,
   Stack,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -19,16 +20,10 @@ import { DetailsCard } from '@/app/events/[details]/';
 import { EventDetails } from '@/app/events/[details]/type';
 
 export const SourceTx = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR<EventDetails>(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
 
-  const disclosure = useDisclosure({
-    onOpen: async () => {
-      await mutate();
-    },
-  });
+  const disclosure = useDisclosure();
+
   const metaData = {
     to: data?.toChain,
     bridgeFee: data?.bridgeFee,
@@ -36,25 +31,34 @@ export const SourceTx = ({ id }: { id: string }) => {
     toAddress: data?.toAddress,
     fromAddress: data?.toAddress,
   };
+
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
       state={disclosure.state}
       title="Source tx metadata"
     >
-      <Card2 backgroundColor="primary.light">
-        <Card2Body>
-          <div style={{ position: 'relative' }}>
-            <div style={{ position: 'absolute', right: 0, top: 10 }}>
-              <CopyButton value={JSON.stringify(metaData)} />
+      {!isLoading && data ? (
+        <Card2 backgroundColor="primary.light">
+          <Card2Body>
+            <div style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', right: 0, top: 10 }}>
+                <CopyButton value={JSON.stringify(metaData)} />
+              </div>
+              <pre style={{ paddingTop: '16px', overflow: 'hidden' }}>
+                {JSON.stringify(metaData, null, 3)}
+              </pre>
             </div>
-            {/*TODO: Check pt of card2*/}
-            <pre style={{ paddingTop: '16px', overflow: 'hidden' }}>
-              {JSON.stringify(metaData, null, 3)}
-            </pre>
-          </div>
-        </Card2Body>
-      </Card2>
+          </Card2Body>
+        </Card2>
+      ) : (
+        <Skeleton
+          variant="rounded"
+          width="100%"
+          height="210px"
+          sx={{ display: 'block' }}
+        />
+      )}
     </DetailsCard>
   );
 };

@@ -20,7 +20,7 @@ const Page = () => {
       {/*TODO: fix ids*/}
       <Overview id={eventId as string} />
       <Details id={eventId as string} />
-      <Process />
+      <Process id={eventId as string} />
       <Watchers />
       <SourceTx id={eventId as string} />
     </Stack>
