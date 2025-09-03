@@ -4,9 +4,8 @@ import React, { useState } from 'react';
 
 import {
   Box,
-  Card2,
-  Card2Body,
-  Card2Header,
+  Card,
+  CardBody,
   CopyButton,
   DisclosureButton,
   Skeleton,
@@ -39,8 +38,8 @@ export const SourceTx = ({ id }: { id: string }) => {
       title="Source tx metadata"
     >
       {!isLoading && data ? (
-        <Card2 backgroundColor="primary.light">
-          <Card2Body>
+        <Card backgroundColor="primary.light">
+          <CardBody>
             <div style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', right: 0, top: 10 }}>
                 <CopyButton value={JSON.stringify(metaData)} />
@@ -49,8 +48,8 @@ export const SourceTx = ({ id }: { id: string }) => {
                 {JSON.stringify(metaData, null, 3)}
               </pre>
             </div>
-          </Card2Body>
-        </Card2>
+          </CardBody>
+        </Card>
       ) : (
         <Skeleton
           variant="rounded"

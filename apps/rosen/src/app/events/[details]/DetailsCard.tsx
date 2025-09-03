@@ -3,10 +3,10 @@
 import React, { ReactNode } from 'react';
 
 import {
-  Card2,
-  Card2Body,
-  Card2Header,
-  Card2Title,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   Collapse,
   DisclosureButton,
   DisclosureState,
@@ -28,9 +28,9 @@ export const DetailsCard = ({
   state,
 }: DetailsProps) => {
   return (
-    <Card2 backgroundColor="background.paper">
-      <Card2Header action={action}>
-        <Card2Title>
+    <Card backgroundColor="background.paper">
+      <CardHeader action={action}>
+        <CardTitle>
           <Typography
             letterSpacing={0.15}
             lineHeight="24px"
@@ -40,10 +40,10 @@ export const DetailsCard = ({
           >
             {title}
           </Typography>
-        </Card2Title>
-      </Card2Header>
+        </CardTitle>
+      </CardHeader>
       {action ? (
-        <Card2Body
+        <CardBody
           style={{
             paddingBottom: state !== 'open' ? '0' : undefined,
           }}
@@ -51,10 +51,10 @@ export const DetailsCard = ({
           <Collapse in={state == 'open'} unmountOnExit defaultValue="open">
             {children}
           </Collapse>
-        </Card2Body>
+        </CardBody>
       ) : (
-        <Card2Body>{children}</Card2Body>
+        <CardBody>{children}</CardBody>
       )}
-    </Card2>
+    </Card>
   );
 };
