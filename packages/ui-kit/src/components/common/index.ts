@@ -48,3 +48,4 @@ export * from './Illustrations';
 export * from './Truncate';
 export * from './card';
 export * from './OverridableComponent';
+export * from './DateTime';
