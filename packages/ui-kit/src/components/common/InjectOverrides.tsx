@@ -6,7 +6,7 @@ import { useCurrentBreakpoint } from '../../hooks';
 
 const breakpointOrder: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
-type OverrideProps<P> = {
+type InjectOverridesProps<P> = {
   /**
    * Optional overrides for props based on the current breakpoint.
    *
@@ -63,10 +63,10 @@ type OverrideProps<P> = {
  * In this example, the button will be small on mobile devices and large on laptops,
  * while using the base props (`variant="contained"`) everywhere.
  */
-export const OverridableComponent = <P extends object>(
+export const InjectOverrides = <P extends object>(
   BaseComponent: React.ComponentType<P>,
-): React.FC<OverrideProps<P>> => {
-  const WrappedComponent: React.FC<OverrideProps<P>> = ({
+): React.FC<InjectOverridesProps<P>> => {
+  const WrappedComponent: React.FC<InjectOverridesProps<P>> = ({
     overrides,
     ...rest
   }) => {

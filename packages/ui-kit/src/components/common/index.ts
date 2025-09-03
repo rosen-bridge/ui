@@ -47,4 +47,4 @@ export * from './Columns';
 export * from './Illustrations';
 export * from './Truncate';
 export * from './card';
-export * from './OverridableComponent';
+export * from './InjectOverrides';
