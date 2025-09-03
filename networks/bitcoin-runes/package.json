@@ -15,14 +15,20 @@
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
+    "@rosen-bridge/address-codec": "^0.6.3",
+    "@rosen-bridge/json-bigint": "^0.1.0",
+    "@magiceden-oss/runestone-lib": "^1.0.2",
+    "@rosen-bridge/bitcoin-runes-utxo-selection": "^1.0.2",
     "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-network/base": "^0.4.1",
     "@rosen-ui/constants": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7"
+    "@rosen-ui/types": "^0.3.7",
+    "axios": "^1.7.2",
+    "bitcoinjs-lib": "^6.1.6",
+    "@rosen-bridge/abstract-box-selection": "^0.2.2"
   },
   "devDependencies": {
-    "tsx": "^4.19.2",
     "typescript": "^5.0.0"
   }
 }

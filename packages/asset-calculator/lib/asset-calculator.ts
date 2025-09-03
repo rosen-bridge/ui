@@ -97,7 +97,7 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
     this.calculatorMap.set(
-      NETWORKS.bitcoinRunes.key,
+      NETWORKS['bitcoin-runes'].key,
       bitcoinRunesAssetCalculator,
     );
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);

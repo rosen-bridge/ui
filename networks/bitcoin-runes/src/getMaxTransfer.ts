@@ -1,13 +1,18 @@
-import { TokenMap } from '@rosen-bridge/tokens';
+import { Network, RosenAmountValue } from '@rosen-ui/types';
 
-type MaxTransferCreator = (
-  getTokenMap: () => Promise<TokenMap>,
-) => () => Promise<bigint>;
-
-export const getMaxTransferCreator: MaxTransferCreator = (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getTokenMap: () => Promise<TokenMap>,
-) => {
-  // TODO: implement logic in the runes-ui-network task: ergo/rosen-bridge/ui#642
-  throw new Error('not implemented yet');
-};
+export const getMaxTransferCreator =
+  () =>
+  async ({
+    balance,
+    eventData,
+  }: {
+    balance: RosenAmountValue;
+    eventData: {
+      toChain: Network;
+      fromAddress: string;
+      toAddress: string;
+    };
+  }) => {
+    if (!eventData.toAddress) return 0n;
+    return balance;
+  };

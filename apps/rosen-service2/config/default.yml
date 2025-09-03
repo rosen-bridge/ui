@@ -52,8 +52,9 @@ chains:
     scanInterval: 10
     rpc:
       timeout: 100
-  bitcoinRunes:
+  bitcoin-runes:
     active: false
+    scanInterval: 10
 paths:
   tokens: config/rosen/tokensMap.json
   contracts: config/rosen
