@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 
 import { styled } from '../../styling';
-import { Typography } from '../base';
+import { Skeleton, Typography } from '../base';
 
 /**
  * Properties for the {@link RelativeTime} component.
@@ -20,7 +20,12 @@ export type RelativeTimeProps = {
    * If a number is passed, it is interpreted as a UNIX timestamp in **seconds**.
    * If a {@link Date} is passed, it will be automatically converted to milliseconds.
    */
-  timestamp: Date | number;
+  timestamp?: Date | number;
+  /**
+   * Optional flag to show loading state.
+   * When true, the component will display 'Loading...' instead of the timestamp.
+   */
+  isLoading?: boolean;
 };
 /**
  * Configuration for each time unit used by {@link RelativeTime}.
@@ -117,8 +122,12 @@ const renderTypography = (text: string) => (
  * @param props - {@link RelativeTimeProps}
  * @returns React element showing relative time.
  */
-export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
-  const { prefix, number, unit, suffix } = useMemo(() => {
+export const RelativeTime = ({ timestamp, isLoading }: RelativeTimeProps) => {
+  const { prefix, number, unit, suffix, displayText } = useMemo(() => {
+    if (!timestamp) {
+      return { displayText: 'invalid' };
+    }
+
     const now = Date.now();
     const target = getTimeValue(timestamp);
     const diff = target - now;
@@ -130,14 +139,19 @@ export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
      * "in 1 second" or "1 second ago".
      */
     if (abs < 10 * 1000) {
-      return { prefix: '', number: 'now', unit: '', suffix: '' };
+      return {
+        prefix: '',
+        number: 'now',
+        unit: '',
+        suffix: '',
+        displayText: undefined,
+      };
     }
 
     const unitObj =
       RELATIVE_TIME_UNITS.find((u) => abs >= u.value) ??
       RELATIVE_TIME_UNITS.at(-1)!;
     const value = Math.round(abs / unitObj.value) || 1;
-
     const pluralizedUnit = value > 1 ? unitObj.name + 's' : unitObj.name;
 
     if (diff > 0) {
@@ -146,6 +160,7 @@ export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
         number: value.toString(),
         unit: pluralizedUnit,
         suffix: '',
+        displayText: undefined,
       };
     } else {
       return {
@@ -153,29 +168,36 @@ export const RelativeTime = ({ timestamp }: RelativeTimeProps) => {
         number: value.toString(),
         unit: pluralizedUnit + ' ago',
         suffix: '',
+        displayText: undefined,
       };
     }
   }, [timestamp]);
 
+  if (isLoading) {
+    return (
+      <Root>
+        <Skeleton variant="rounded" width={80} height={14} />
+      </Root>
+    );
+  }
+
+  if (displayText) {
+    return <Root>{renderTypography(displayText)}</Root>;
+  }
+
   return (
     <Root>
-      {!unit && number === 'now' ? (
-        renderTypography('now')
-      ) : (
-        <>
-          {prefix && renderTypography(prefix)}
-          <Typography
-            sx={{
-              fontSize: '18px',
-              color: (theme) => theme.palette.text.primary,
-            }}
-          >
-            {number}
-          </Typography>
-          {unit && renderTypography(unit)}
-          {suffix && renderTypography(suffix)}
-        </>
-      )}
+      {prefix && renderTypography(prefix)}
+      <Typography
+        sx={{
+          fontSize: '18px',
+          color: (theme) => theme.palette.text.primary,
+        }}
+      >
+        {number}
+      </Typography>
+      {unit && renderTypography(unit)}
+      {suffix && renderTypography(suffix)}
     </Root>
   );
 };
