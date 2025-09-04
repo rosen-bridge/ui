@@ -1,28 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
   DisclosureButton,
-  stepItem,
   ProcessTracker,
   useDisclosure,
-  Skeleton,
+  useBreakpoint,
 } from '@rosen-bridge/ui-kit';
+import { ProcessTrackerItem } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
 import { EventDetails } from '@/app/events/[details]/type';
 
-const Steps: stepItem[] = [
+const Steps: ProcessTrackerItem[] = [
   {
     id: `${crypto.randomUUID()}`,
     state: 'done',
-    title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    title: 'Created',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -47,12 +44,9 @@ const Steps: stepItem[] = [
   {
     id: `${crypto.randomUUID()}`,
     state: 'done',
-    title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    title: 'Committed',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -77,12 +71,10 @@ const Steps: stepItem[] = [
   {
     id: `${crypto.randomUUID()}`,
     state: 'pending',
-    title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    title: 'Triggered',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
+
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -108,11 +100,8 @@ const Steps: stepItem[] = [
     id: `${crypto.randomUUID()}`,
     state: 'idle',
     title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -137,12 +126,10 @@ const Steps: stepItem[] = [
   {
     id: `${crypto.randomUUID()}`,
     state: 'idle',
-    title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    title: 'In Payment',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
+
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -167,12 +154,9 @@ const Steps: stepItem[] = [
   {
     id: `${crypto.randomUUID()}`,
     state: 'idle',
-    title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    title: 'Reward',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -197,12 +181,10 @@ const Steps: stepItem[] = [
   {
     id: `${crypto.randomUUID()}`,
     state: 'idle',
-    title: 'Tx Created',
-    doneStep: {
-      date: '18 Aug 2025 11:14:30',
-      description: 'More description about this status goes here.',
-    },
-    subtitle: 'Tx Created',
+    title: 'Completion',
+    subtitle: '18 Aug 2025 11:14:30',
+    description: 'More description about this status goes here.',
+
     sub: [
       {
         id: `${crypto.randomUUID()}`,
@@ -228,7 +210,7 @@ const Steps: stepItem[] = [
 
 export const Process = ({ id }: { id: string }) => {
   const { isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
-
+  const isMobile = useBreakpoint('laptop-down');
   const disclosure = useDisclosure();
   return (
     <DetailsCard
@@ -236,17 +218,14 @@ export const Process = ({ id }: { id: string }) => {
       state={disclosure.state}
       title="Progress"
     >
-      <div style={{ minHeight: '210px', height: '210px', maxHeight: '210px' }}>
-        {!isLoading ? (
-          <ProcessTracker data={Steps} />
-        ) : (
-          <Skeleton
-            variant="rounded"
-            width="100%"
-            height="100%"
-            sx={{ display: 'block' }}
-          />
-        )}
+      <div
+        style={{ minHeight: '210px', height: isLoading ? '210px' : 'unset' }}
+      >
+        <ProcessTracker
+          loading={isLoading}
+          orientation={isMobile ? 'vertical' : 'horizontal'}
+          steps={Steps}
+        />
       </div>
     </DetailsCard>
   );

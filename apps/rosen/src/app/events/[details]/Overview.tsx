@@ -66,7 +66,7 @@ export const Overview = ({ id }: { id: string }) => {
         overrides={{
           mobile: { style: { width: '100%' } },
           tablet: { style: { width: '90%' } },
-          laptop: { style: { width: 'fit-content' } },
+          laptop: { style: { width: isLoading ? '100%' : 'fit-content' } },
         }}
       >
         <Label
@@ -249,93 +249,65 @@ export const Overview = ({ id }: { id: string }) => {
         </Label>
       </Columns>
 
-      <Stack>
-        <Label label="Address"></Label>
-        <Stack
-          flexDirection={'row'}
-          justifyContent="space-between"
+      <Label label="Address"></Label>
+      <Label
+        overrides={{
+          mobile: {
+            style: { width: '100%', overflow: 'hidden' },
+          },
+          tablet: {
+            style: { width: '70%' },
+          },
+        }}
+        label="from"
+        inset
+      >
+        <Identifier
           overrides={{
             mobile: {
-              style: { width: '100%' },
+              style: { width: '90%' },
             },
             tablet: {
-              style: { width: '70%' },
+              style: { width: '80%' },
             },
           }}
-        >
-          <Label label="from" inset></Label>
-          <Box
-            overrides={{
-              mobile: {
-                style: {
-                  maxWidth: '568px',
-                  width: '100%',
-                  overflow: 'hidden',
-                  marginLeft: '10px',
-                },
-              },
-              tablet: {
-                style: {
-                  maxWidth: '568px',
-                  width: '100%',
-                  overflow: 'hidden',
-                  marginLeft: '60px',
-                },
-              },
-            }}
-          >
-            <Identifier
-              loading={isLoading}
-              value={data?.fromAddress}
-              href={data?.fromAddress}
-              copyable
-            />
-          </Box>
-        </Stack>
-        <Stack
-          flexDirection={'row'}
-          alignItems="center"
-          justifyContent="space-between"
+          loading={isLoading}
+          value={data?.fromAddress}
+          href={data?.fromAddress}
+          copyable
+        />
+      </Label>
+
+      <Label
+        overrides={{
+          mobile: {
+            style: { width: '100%', overflow: 'hidden' },
+          },
+          tablet: {
+            style: { width: '70%', overflow: 'hidden' },
+          },
+          laptop: {
+            style: { width: '70%', overflow: 'hidden' },
+          },
+        }}
+        label="to"
+        inset
+      >
+        <Identifier
           overrides={{
             mobile: {
-              style: { width: '100%' },
+              style: { width: '90%' },
             },
             tablet: {
-              style: { width: '70%' },
-              alignItems: 'center',
+              style: { width: '80%' },
             },
           }}
-        >
-          <Label label="to" inset></Label>
-          <Box
-            overrides={{
-              mobile: {
-                style: {
-                  alignItems: 'center',
-                  maxWidth: '568px',
-                  overflow: 'hidden',
-                  marginLeft: '10px',
-                },
-              },
-              tablet: {
-                style: {
-                  alignItems: 'center',
-                  maxWidth: '568px',
-                  overflow: 'hidden',
-                  marginLeft: '60px',
-                },
-              },
-            }}
-          >
-            <Identifier
-              loading={isLoading}
-              value={data?.toAddress}
-              href={data?.fromAddress}
-              copyable
-            />
-          </Box>
-        </Stack>
-      </Stack>
+          loading={isLoading}
+          value={data?.toAddress}
+          href={data?.fromAddress}
+          copyable
+        />
+      </Label>
     </DetailsCard>
   );
 };
