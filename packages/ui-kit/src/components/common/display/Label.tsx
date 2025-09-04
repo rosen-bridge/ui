@@ -1,30 +1,26 @@
-import { ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
 import { Stack, SvgIcon, Tooltip } from '../../base';
+import { InjectOverrides } from '../InjectOverrides';
 
 /**
  * Props for the `Label` component.
  */
-type LabelProps = {
+export type LabelProps = HTMLAttributes<HTMLDivElement> & {
   /**
-   * The text to be displayed as the main label.
+   * The color of the label text.
+   * - `textSecondary` (default)
+   * - `textPrimary`
    */
-  label: string;
+  color?: 'textSecondary' | 'textPrimary';
 
   /**
-   * Optional child content displayed next to or below the label,
-   * depending on the orientation.
+   * Reduces vertical padding for a denser layout.
    */
-  children?: ReactNode;
-
-  /**
-   * When true, renders the label with an "inset" style,
-   * showing a dashed border indicator on the left.
-   */
-  inset?: boolean;
+  dense?: boolean;
 
   /**
    * An optional info text to display in a tooltip.
@@ -33,9 +29,15 @@ type LabelProps = {
   info?: string;
 
   /**
-   * Reduces vertical padding for a denser layout.
+   * When true, renders the label with an "inset" style,
+   * showing a dashed border indicator on the left.
    */
-  dense?: boolean;
+  inset?: boolean;
+
+  /**
+   * The text to be displayed as the main label.
+   */
+  label: string;
 
   /**
    * Layout orientation of the label and content.
@@ -43,13 +45,6 @@ type LabelProps = {
    * - `vertical`: label is placed above the content.
    */
   orientation?: 'horizontal' | 'vertical';
-
-  /**
-   * The color of the label text.
-   * - `textSecondary` (default)
-   * - `textPrimary`
-   */
-  color?: 'textSecondary' | 'textPrimary';
 };
 
 /**
@@ -58,29 +53,42 @@ type LabelProps = {
  *
  * Useful for form-like UIs where labels and values need consistent styling.
  */
-export const Label = ({
-  label,
+const LabelBase = ({
   children,
-  dense,
-  inset,
-  info,
-  orientation,
   color = 'textSecondary',
+  dense,
+  info,
+  inset,
+  label,
+  orientation,
+  ...props
 }: LabelProps) => {
-  const content = (
-    <Box
-      sx={{
-        flexGrow: inset ? 1 : 0,
-        display: 'flex',
-        flexDirection: orientation === 'vertical' ? 'column' : 'row',
-        alignItems: 'baseline',
-        justifyContent: 'space-between',
-        gap: orientation === 'vertical' ? 0 : 1,
-        py: dense ? 0 : 0.5,
-        overflow: 'hidden',
-      }}
-    >
-      <Box flexShrink={0} flexBasis="40%">
+  return (
+    <Stack flexDirection="row" justifyContent="start" {...props}>
+      {inset && (
+        <Box
+          sx={{
+            height: 'auto',
+            width: 12,
+            border: 'dashed',
+            borderWidth: '0 0 1px 1px',
+            borderBottomLeftRadius: 6,
+            borderColor: 'divider',
+            transform: 'translateY(-50%)',
+            ml: 1,
+            mr: 0.5,
+            flexShrink: 0,
+          }}
+        />
+      )}
+      <Stack
+        alignItems={orientation === 'vertical' ? 'start' : 'center'}
+        flexDirection={orientation === 'vertical' ? 'column' : 'row'}
+        gap={orientation === 'vertical' ? 0 : 1}
+        py={dense ? 0 : 0.5}
+        overflow="hidden"
+        flexGrow={1}
+      >
         <Stack gap={1} flexDirection="row" alignItems="center">
           <Typography
             noWrap
@@ -111,32 +119,23 @@ export const Label = ({
             </Tooltip>
           )}
         </Stack>
-      </Box>
-      <Box overflow="hidden" whiteSpace="nowrap" maxWidth="100%" height="2em">
-        {children}
-      </Box>
-    </Box>
-  );
-
-  if (!inset) return content;
-
-  return (
-    <Box display="flex" flexDirection="row">
-      <Box
-        sx={{
-          height: 'auto',
-          width: 12,
-          border: 'dashed',
-          borderWidth: '0 0 1px 1px',
-          borderBottomLeftRadius: 6,
-          borderColor: 'divider',
-          transform: 'translateY(-50%)',
-          ml: 1,
-          mr: 0.5,
-          flexShrink: 0,
-        }}
-      />
-      {content}
-    </Box>
+        <Stack
+          flexDirection="row"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          maxWidth="100%"
+          height={orientation === 'vertical' ? '2em' : 'unset'}
+          display="flex"
+          alignItems="center"
+          flexGrow={orientation === 'vertical' ? 0 : 1}
+          alignSelf={orientation === 'vertical' ? 'stretch' : 'center'}
+          justifyContent={orientation === 'vertical' ? 'start' : 'end'}
+        >
+          {children}
+        </Stack>
+      </Stack>
+    </Stack>
   );
 };
+
+export const Label = InjectOverrides(LabelBase);
