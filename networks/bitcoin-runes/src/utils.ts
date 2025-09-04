@@ -1,6 +1,7 @@
 import { FeeEstimator } from '@rosen-bridge/abstract-box-selection';
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import { BitcoinRunesUtxo } from '@rosen-bridge/bitcoin-runes-utxo-selection';
+import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
@@ -8,19 +9,18 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Axios from 'axios';
-import { Psbt, address } from 'bitcoinjs-lib';
+import { Psbt } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
-  SEGWIT_INPUT_WEIGHT_UNIT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
+  TAPROOT_INPUT_WEIGHT_UNIT,
   TAPROOT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
 import type {
-  EsploraAddress,
-  OrdiscanAddressUTXO,
-  OrdiscanResponse,
-  OrdiscanRuneInfo,
+  UnisatAddressBtcUtxos,
+  UnisatAddressRunesUtxos,
+  UnisatResponse,
 } from './types';
 
 /**
@@ -60,90 +60,92 @@ export const generateOpReturnData = async (
 };
 
 /**
- * gets utxos by address from ordiscan
- * @param address
- * @returns
+ * gets confirmed and unspent boxes of an address that contains given rune
+ * @param address the address
+ * @param runeId the rune ID
+ * @param offset
+ * @param limit
+ * @returns list of boxes
  */
-export const getAddressUtxos = async (
+export const getAddressRunesBoxes = async (
+  address: string,
+  runeId: string,
+  offset: number,
+  limit: number,
+): Promise<Array<BitcoinRunesUtxo>> => {
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (process.env.BITCOIN_RUNES_SECRET) {
+      Object.assign(headers, {
+        'x-api-key': process.env.BITCOIN_RUNES_SECRET,
+      });
+    }
+
+    const response = await Axios.get<
+      UnisatResponse<UnisatAddressRunesUtxos | undefined>
+    >(
+      `${process.env.BITCOIN_RUNES_API}/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`,
+      { headers },
+    );
+
+    if (!response.data?.data) return [];
+    const utxos = response.data.data.utxo;
+    return utxos.map((utxo) => ({
+      txId: utxo.txid,
+      index: utxo.vout,
+      value: BigInt(utxo.satoshi),
+      runes: utxo.runes.map((rune) => ({
+        runeId: rune.runeid,
+        quantity: BigInt(rune.amount),
+      })),
+    }));
+  } catch (e: any) {
+    const baseError = `Failed to get UTxOs conataining rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+    if (e.response) {
+      throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+    }
+    throw new Error(baseError + e.message);
+  }
+};
+
+/**
+ * gets confirmed and unspent boxes of an address that contains no rune
+ * @param address the address
+ * @returns list of boxes
+ */
+export const getAddressBtcBoxes = async (
   address: string,
 ): Promise<Array<BitcoinRunesUtxo>> => {
-  // TODO: pagination ?
-  const ordiscanUrl = process.env.BITCOIN_RUNES_API;
-  const ordiscanToken = process.env.BITCOIN_RUNES_SECRET;
-  const GET_ADDRESS_UTXOS = `${ordiscanUrl}/v1/address/${address}/utxos`;
-
-  const res = await Axios.get<OrdiscanResponse<Array<OrdiscanAddressUTXO>>>(
-    GET_ADDRESS_UTXOS,
-    {
-      headers: { Authorization: `Bearer ${ordiscanToken}` },
-    },
-  );
-
-  const runeNames: Set<string> = new Set();
-  for (const utxo of res.data.data) {
-    for (const rune of utxo.runes) {
-      runeNames.add(rune.name);
+  try {
+    const headers = { 'Content-Type': 'application/json' };
+    if (process.env.BITCOIN_RUNES_SECRET) {
+      Object.assign(headers, {
+        'x-api-key': process.env.BITCOIN_RUNES_SECRET,
+      });
     }
+
+    const response = await Axios.get<
+      UnisatResponse<UnisatAddressBtcUtxos | undefined>
+    >(
+      `${process.env.BITCOIN_RUNES_API}/v1/indexer/address/${address}/available-utxo-data?cursor=0&size=100`,
+      { headers },
+    );
+
+    if (!response.data.data) return [];
+    const utxos = response.data.data.utxo;
+    return utxos.map((utxo) => ({
+      txId: utxo.txid,
+      index: utxo.vout,
+      value: BigInt(utxo.satoshi),
+      runes: [],
+    }));
+  } catch (e: any) {
+    const baseError = `Failed to get UTxOs conataining BTC only for address [${address}] from Unisat: `;
+    if (e.response) {
+      throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+    }
+    throw new Error(baseError + e.message);
   }
-
-  const runeNameToIdMap: Map<string, string> = new Map();
-  for (const runeName of runeNames) {
-    const runeInfo = await getRuneInfo(runeName);
-    runeNameToIdMap.set(runeName, runeInfo.id);
-  }
-
-  return res.data.data.map((utxo) => {
-    const [txId, vout] = utxo.outpoint.split(':');
-
-    return {
-      txId: txId,
-      index: Number(vout),
-      value: BigInt(utxo.value),
-      runes: utxo.runes.map((rune) => {
-        const runeId = runeNameToIdMap.get(rune.name)!;
-        return {
-          runeId,
-          quantity: BigInt(rune.balance),
-        };
-      }),
-    };
-  });
-};
-
-/**
- * gets info of a rune
- * @param runeName
- * @returns
- */
-export const getRuneInfo = async (
-  runeName: string,
-): Promise<OrdiscanRuneInfo> => {
-  const ordiscanUrl = process.env.BITCOIN_RUNES_API;
-  const ordiscanToken = process.env.BITCOIN_RUNES_SECRET;
-  const GET_RUNE_INFO = `${ordiscanUrl}/v1/rune/${runeName}`;
-
-  const res = await Axios.get<OrdiscanResponse<OrdiscanRuneInfo>>(
-    GET_RUNE_INFO,
-    {
-      headers: { Authorization: `Bearer ${ordiscanToken}` },
-    },
-  );
-
-  return res.data.data;
-};
-
-/**
- * gets address BTC balance from Esplora
- * @param address
- * @returns this is a UNWRAPPED-VALUE amount
- */
-export const getAddressBalance = async (address: string): Promise<bigint> => {
-  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
-  const GET_ADDRESS = `${esploraUrl}/api/address/${address}`;
-  const res = await Axios.get<EsploraAddress>(GET_ADDRESS);
-
-  const chainStat = res.data.chain_stats;
-  return BigInt(chainStat.funded_txo_sum - chainStat.spent_txo_sum);
 };
 
 /**
@@ -184,28 +186,6 @@ export const submitTransaction = async (
   return res.data;
 };
 
-export const isValidAddress = (addr: string) => {
-  try {
-    // Decode the address using fromBech32
-    const decoded = address.fromBech32(addr);
-
-    // Check if the decoded prefix matches the expected prefix for Bitcoin
-    if (decoded.prefix !== 'bc') {
-      return false;
-    }
-
-    // Ensure the address does start with 'bc1p' (Taproot)
-    if (addr.startsWith('bc1q')) {
-      return true;
-    }
-
-    return false;
-  } catch {
-    // If an error is thrown, the address is invalid
-    return false;
-  }
-};
-
 export const getHeight = async (): Promise<number> => {
   const response = await fetch(
     `${process.env.BITCOIN_ESPLORA_API}/api/blocks/tip/height`,
@@ -243,7 +223,7 @@ const estimateTxVsize = (
   const opReturnWeightUnit =
     36 + // OP_RETURN base output weight
     opReturnScriptLength * 4; // OP_RETURN output data counts as vSize, so weight = script length * 4
-  const inputsWeight = inputSize * SEGWIT_INPUT_WEIGHT_UNIT;
+  const inputsWeight = inputSize * TAPROOT_INPUT_WEIGHT_UNIT;
   const outputWeight =
     nativeSegwitOutputSize * SEGWIT_OUTPUT_WEIGHT_UNIT +
     taprootOutputSize * TAPROOT_OUTPUT_WEIGHT_UNIT;
@@ -255,12 +235,14 @@ const estimateTxVsize = (
  * generates fee estimator for tx based on the OP_RETURN data length and type of the outputs
  * @param opReturnScriptLength
  * @param feeRatio
+ * @param preSelectedInputCount
  * @param nativeSegwitOutputSize
  * @param taprootOutputSize
  */
 export const generateFeeEstimatorWithAssumptions = (
   opReturnScriptLength: number,
   feeRatio: number,
+  preSelectedInputCount: number,
   nativeSegwitOutputSize: number,
   taprootOutputSize: number,
 ): FeeEstimator<BitcoinRunesUtxo> => {
@@ -269,7 +251,7 @@ export const generateFeeEstimatorWithAssumptions = (
     changeBoxesCount: number,
   ): bigint => {
     const estimatedVsize = estimateTxVsize(
-      selectedBoxes.length,
+      selectedBoxes.length + preSelectedInputCount,
       opReturnScriptLength,
       nativeSegwitOutputSize + changeBoxesCount, // There is always a native-segwit change output
       taprootOutputSize,

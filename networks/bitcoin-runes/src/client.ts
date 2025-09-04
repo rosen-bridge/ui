@@ -3,16 +3,11 @@ import { Network, NetworkConfig } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import type { generateUnsignedTx } from './generateUnsignedTx';
-import type {
-  generateOpReturnData,
-  getAddressBalance,
-  submitTransaction,
-} from './utils';
+import type { generateOpReturnData, submitTransaction } from './utils';
 
 type BitcoinRunesNetworkConfig = NetworkConfig & {
   generateOpReturnData: typeof generateOpReturnData;
   generateUnsignedTx: ReturnType<typeof generateUnsignedTx>;
-  getAddressBalance: typeof getAddressBalance;
   submitTransaction: typeof submitTransaction;
 };
 
@@ -47,12 +42,6 @@ export class BitcoinRunesNetwork implements Network {
     ...args
   ) => {
     return this.config.generateUnsignedTx(...args);
-  };
-
-  public getAddressBalance: BitcoinRunesNetworkConfig['getAddressBalance'] = (
-    ...args
-  ) => {
-    return this.config.getAddressBalance(...args);
   };
 
   public getMaxTransfer: BitcoinRunesNetworkConfig['getMaxTransfer'] = (

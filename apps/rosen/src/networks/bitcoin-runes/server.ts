@@ -5,7 +5,6 @@ import {
   calculateFee as calculateFeeCore,
   generateOpReturnData as generateOpReturnDataCore,
   generateUnsignedTx as generateUnsignedTxCore,
-  getAddressBalance as getAddressBalanceCore,
   getMaxTransferCreator as getMaxTransferCore,
   getMinTransferCreator,
   submitTransaction as submitTransactionCore,
@@ -25,11 +24,6 @@ export const generateOpReturnData = wrap(generateOpReturnDataCore, {
 
 export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
   traceKey: 'bitcoin-runes:generateUnsignedTx',
-});
-
-export const getAddressBalance = wrap(getAddressBalanceCore, {
-  cache: 3000,
-  traceKey: 'bitcoin-runes:getAddressBalance',
 });
 
 export const getMaxTransfer = wrap(getMaxTransferCore(), {
