@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import { Copy, QrcodeScan } from '@rosen-bridge/icons';
@@ -29,54 +29,54 @@ interface WidgetCardProps {
  *
  * @param widgetColor
  */
-const WalletWidgetBase = styled(Card)<WidgetCardProps>(
-  ({ theme, ...props }) => ({
-    'padding': theme.spacing(2),
-    'backgroundColor': theme.palette[props.widgetColor].main,
-    'backgroundImage':
-      theme.palette.mode === 'light'
-        ? `linear-gradient(180deg, ${
-            theme.palette[props.widgetColor].main
-          } 0%, ${theme.palette[props.widgetColor].dark} 100%)`
-        : 'none',
-    'color': theme.palette.success.contrastText,
-    'flexGrow': 1,
-    '& .title': {
-      fontSize: theme.typography.h5.fontSize,
-      fontWeight: 'bold',
+const WalletWidgetBase = styled(Card, {
+  shouldForwardProp: (prop) => prop !== 'widgetColor',
+})<WidgetCardProps>(({ theme, ...props }) => ({
+  'padding': theme.spacing(2),
+  'backgroundColor': theme.palette[props.widgetColor].main,
+  'backgroundImage':
+    theme.palette.mode === 'light'
+      ? `linear-gradient(180deg, ${
+          theme.palette[props.widgetColor].main
+        } 0%, ${theme.palette[props.widgetColor].dark} 100%)`
+      : 'none',
+  'color': theme.palette.success.contrastText,
+  'flexGrow': 1,
+  '& .title': {
+    fontSize: theme.typography.h5.fontSize,
+    fontWeight: 'bold',
+  },
+  '& .value': {
+    'fontSize': theme.typography.h2.fontSize,
+    'fontWeight': 'bold',
+    'textAlign': 'right',
+    '& span': {
+      fontSize: '50%',
+      fontWeight: 'normal',
     },
-    '& .value': {
-      'fontSize': theme.typography.h2.fontSize,
-      'fontWeight': 'bold',
-      'textAlign': 'right',
-      '& span': {
-        fontSize: '50%',
-        fontWeight: 'normal',
-      },
+  },
+  '& .address-container': {
+    '& .heading': {
+      fontSize: theme.typography.body2.fontSize,
+      opacity: 0.8,
+      display: 'inline',
     },
-    '& .address-container': {
-      '& .heading': {
-        fontSize: theme.typography.body2.fontSize,
-        opacity: 0.8,
-        display: 'inline',
-      },
-      '& .address': {
-        fontSize: theme.typography.body2.fontSize,
-        opacity: 0.8,
-      },
-      '& .actions': {
-        visibility: 'hidden',
-        float: 'right',
-        margin: theme.spacing(0.5),
-      },
+    '& .address': {
+      fontSize: theme.typography.body2.fontSize,
+      opacity: 0.8,
     },
-    '&:hover .address-container': {
-      '& .actions': {
-        visibility: 'visible',
-      },
+    '& .actions': {
+      visibility: 'hidden',
+      float: 'right',
+      margin: theme.spacing(0.5),
     },
-  }),
-);
+  },
+  '&:hover .address-container': {
+    '& .actions': {
+      visibility: 'visible',
+    },
+  },
+}));
 
 interface WalletWidgetProps {
   title: string;
@@ -123,9 +123,11 @@ export const WalletWidget = ({
         <CircularProgress color="inherit" size={16} sx={{ mt: 1 }} />
       ) : (
         <>
-          <Typography className="value">
+          <div className="value">
             {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
-              <>
+              <Fragment
+                key={`${tokenInfoWithAddress.chain}:${tokenInfoWithAddress.address}:${tokenInfoWithAddress.balance.tokenId}`}
+              >
                 {!!index && ' / '}
                 <Typography variant="subtitle1" display="inline-block">
                   <Amount
@@ -137,13 +139,13 @@ export const WalletWidget = ({
                     )}
                   />
                 </Typography>
-              </>
+              </Fragment>
             ))}
-          </Typography>
-          {tokenInfoWithAddresses.map((tokenInfoWithAddress, index) => (
+          </div>
+          {tokenInfoWithAddresses.map((tokenInfoWithAddress) => (
             <Box
               className="address-container"
-              key={tokenInfoWithAddress.address}
+              key={`${tokenInfoWithAddress.chain}:${tokenInfoWithAddress.address}:${tokenInfoWithAddress.balance.tokenId}`}
             >
               <Grid container alignItems="center">
                 <Grid item mobile>
