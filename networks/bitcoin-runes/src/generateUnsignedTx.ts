@@ -219,7 +219,7 @@ export const generateUnsignedTx =
     // add change UTxO
     psbt.addOutput({
       script: taprootPayment.output,
-      value: Number(additionalAssets.nativeToken - estimatedFee),
+      value: Number(additionalAssets.nativeToken - requiredAssets.nativeToken),
     });
     // OP_RETURN
     psbt.addOutput({

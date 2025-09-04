@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FeeEstimator } from '@rosen-bridge/abstract-box-selection';
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import { BitcoinRunesUtxo } from '@rosen-bridge/bitcoin-runes-utxo-selection';
@@ -253,8 +254,8 @@ export const generateFeeEstimatorWithAssumptions = (
     const estimatedVsize = estimateTxVsize(
       selectedBoxes.length + preSelectedInputCount,
       opReturnScriptLength,
-      nativeSegwitOutputSize + changeBoxesCount, // There is always a native-segwit change output
-      taprootOutputSize,
+      nativeSegwitOutputSize,
+      taprootOutputSize + changeBoxesCount, // There is always a taproot change output
     );
     return BigInt(Math.ceil(estimatedVsize * feeRatio));
   };
