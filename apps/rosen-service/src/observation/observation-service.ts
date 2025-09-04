@@ -1,6 +1,6 @@
 import { registerBinanceExtractor } from './chains/binance';
 import { registerBitcoinExtractor } from './chains/bitcoin';
-import { registerBitcoinRunesExtractor } from './chains/bitcoinRunes';
+import { registerBitcoinRunesExtractor } from './chains/bitcoin-runes';
 import { registerCardanoExtractor } from './chains/cardano';
 import { registerDogeExtractor } from './chains/doge';
 import { registerErgoExtractor } from './chains/ergo';

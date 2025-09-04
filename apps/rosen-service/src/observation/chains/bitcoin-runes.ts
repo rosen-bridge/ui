@@ -1,6 +1,6 @@
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
+import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { RunesRpcObservationExtractor } from '@rosen-bridge/runes-observation-extractor';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -17,7 +17,7 @@ export const registerBitcoinRunesExtractor = async (
   scanner: BitcoinRpcScanner,
 ) => {
   try {
-    const observationExtractor = new RunesRpcObservationExtractor(
+    const observationExtractor = new BitcoinRunesRpcObservationExtractor(
       config.bitcoinRunes.addresses.lock,
       config.bitcoinRunes.unisatUrl,
       config.bitcoinRunes.unisatApiKey,
