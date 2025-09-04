@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import {
   Amount,
@@ -15,13 +15,14 @@ import {
   Chip,
   InjectOverrides,
   Box as BoxBase,
+  DateTime,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types/dist/common';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]';
-import { DateTime } from '@/app/events/[details]/DateTime';
 import { EventDetails } from '@/app/events/[details]/type';
 
 export interface EventStatusProps {
@@ -64,8 +65,8 @@ export const Overview = ({ id }: { id: string }) => {
       <Box
         overrides={{
           mobile: { style: { width: '100%' } },
-          tablet: { style: { width: '70%' } },
-          laptop: { style: { width: '60%' } },
+          tablet: { style: { width: '90%' } },
+          laptop: { style: { width: 'fit-content' } },
         }}
       >
         <Label
@@ -80,26 +81,15 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          <Box
-            style={{
-              display: 'flex',
-              justifyContent: 'start',
-              alignItems: 'center',
-            }}
+          <Identifier
             overrides={{
-              mobile: {
-                style: { width: '100%' },
-              },
-              tablet: {
-                style: { width: '100%' },
-              },
-              laptop: {
-                style: { width: '100%' },
-              },
+              mobile: { style: { width: '90%' } },
+              tablet: { style: { width: '100%' } },
             }}
-          >
-            <Identifier loading={isLoading} value={data?.eventId} copyable />
-          </Box>
+            loading={isLoading}
+            value={data?.eventId}
+            copyable
+          />
         </Label>
       </Box>
 
@@ -248,11 +238,13 @@ export const Overview = ({ id }: { id: string }) => {
           {!isLoading && data ? (
             <>TODO</>
           ) : (
-            <Skeleton
-              width={80}
-              style={{ fontSize: 'inherit' }}
-              variant="text"
-            />
+            <Typography variant="body1" gutterBottom>
+              <Skeleton
+                width={80}
+                sx={{ borderRadius: (theme) => theme.spacing(0.5) }}
+                variant="text"
+              />
+            </Typography>
           )}
         </Label>
       </Columns>
@@ -321,7 +313,6 @@ export const Overview = ({ id }: { id: string }) => {
                 style: {
                   alignItems: 'center',
                   maxWidth: '568px',
-                  width: '100%',
                   overflow: 'hidden',
                   marginLeft: '10px',
                 },
@@ -330,7 +321,6 @@ export const Overview = ({ id }: { id: string }) => {
                 style: {
                   alignItems: 'center',
                   maxWidth: '568px',
-                  width: '100%',
                   overflow: 'hidden',
                   marginLeft: '60px',
                 },

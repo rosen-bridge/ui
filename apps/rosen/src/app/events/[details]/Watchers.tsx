@@ -25,6 +25,7 @@ import {
   useBreakpoint,
   useDisclosure,
   Box as BoxMui,
+  useMediaQuery,
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/';
@@ -132,24 +133,12 @@ export const Watchers = () => {
     setData(value);
   };
 
-  const disclosure = useDisclosure({
-    onOpen: () => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          if (Math.random() > 0.5) {
-            resolve();
-          } else {
-            reject();
-          }
-        }, 500);
-      });
-    },
-  });
+  const disclosure = useDisclosure();
 
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state="open"
+      state={disclosure.state}
       title="Watchers"
     >
       <div

@@ -22,7 +22,10 @@ import { DetailsCard } from '@/app/events/[details]/';
 import { EventDetails } from '@/app/events/[details]/type';
 
 export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
+  const { data, isLoading, mutate } = useSWR<EventDetails>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
 
   const Box = InjectOverrides(BoxMui);
 

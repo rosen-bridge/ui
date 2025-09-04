@@ -227,16 +227,9 @@ const Steps: stepItem[] = [
 ];
 
 export const Process = ({ id }: { id: string }) => {
-  const { data, mutate, isLoading } = useSWR<EventDetails>(
-    `/v1/events/${id}`,
-    fetcher,
-  );
+  const { isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
 
-  const disclosure = useDisclosure({
-    onOpen: async () => {
-      await mutate();
-    },
-  });
+  const disclosure = useDisclosure();
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
