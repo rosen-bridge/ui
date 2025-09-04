@@ -102,7 +102,7 @@ export const getEvents = async (filters: Filters) => {
       'oe.sourceTxId AS "sourceTxId"',
       'oe.requestId AS "eventId"',
       'be.timestamp AS "timestamp"',
-      'ete.WIDsCount AS "WIDsCount"',
+      'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       /**
