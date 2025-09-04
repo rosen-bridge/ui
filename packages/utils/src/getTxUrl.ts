@@ -13,7 +13,7 @@ const baseTxURLs: { [key in Network]: string } = {
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/transactions',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/transaction',
   [NETWORKS.bitcoin.key]: 'https://mempool.space/tx',
-  [NETWORKS.bitcoinRunes.key]: 'https://uniscan.cc/tx',
+  [NETWORKS['bitcoin-runes'].key]: 'https://uniscan.cc/tx',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/tx',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/tx',
 };

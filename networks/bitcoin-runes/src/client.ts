@@ -8,13 +8,13 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
 export class BitcoinRunesNetwork implements Network {
-  public label = NETWORKS.bitcoinRunes.label;
+  public label = NETWORKS['bitcoin-runes'].label;
 
   public lockAddress: string;
 
   public logo = BitcoinRunesIcon;
 
-  public name = NETWORKS.bitcoinRunes.key;
+  public name = NETWORKS['bitcoin-runes'].key;
 
   public nextHeightInterval: number;
 

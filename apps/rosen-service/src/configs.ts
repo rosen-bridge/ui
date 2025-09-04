@@ -67,6 +67,22 @@ const getConfig = () => {
         rpcUsername: getOptionalString('bitcoin.rpc.username'),
         rpcPassword: getOptionalString('bitcoin.rpc.password'),
       },
+      bitcoinRunes: {
+        addresses: {
+          lock: nodeConfig.get<string>('bitcoin-runes.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'bitcoin-runes.addresses.eventTrigger',
+          ),
+          permit: nodeConfig.get<string>('bitcoin-runes.addresses.permit'),
+          fraud: nodeConfig.get<string>('bitcoin-runes.addresses.fraud'),
+        },
+        initialHeight: nodeConfig.get<number>('bitcoin-runes.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('bitcoin-runes.tokens.rwt'),
+        },
+        unisatUrl: nodeConfig.get<string>('bitcoin-runes.unisatUrl'),
+        unisatApiKey: nodeConfig.get<string>('bitcoin-runes.unisatApiKey'),
+      },
       ethereum: {
         addresses: {
           lock: nodeConfig.get<string>('ethereum.addresses.lock'),
@@ -129,6 +145,9 @@ const getConfig = () => {
           ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
+          bitcoinRunes: nodeConfig.get<string[]>(
+            'calculator.addresses.bitcoin-runes',
+          ),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
