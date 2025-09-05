@@ -51,7 +51,7 @@ export const RequestToSignForm = () => {
     message: string;
   } | null>(null);
 
-  const { handleSubmit, register, reset, formState } = useForm({
+  const { handleSubmit, register, reset, watch } = useForm({
     defaultValues: {
       txJson: '',
       chain: '' as Network,
@@ -132,6 +132,7 @@ export const RequestToSignForm = () => {
             select
             label="Chain"
             {...register('chain')}
+            value={watch('chain') || ''}
             sx={{ mb: 2 }}
             fullWidth
           >
