@@ -145,7 +145,8 @@ export const generateUnsignedTx =
       0n,
     );
 
-    const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated - requiredAssets.nativeToken;
+    const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
+    additionalAssets.nativeToken -= requiredAssets.nativeToken;
     let estimatedFee = coveredRunesBoxes.additionalAssets.fee;
 
     if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {

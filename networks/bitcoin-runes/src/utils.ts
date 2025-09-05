@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FeeEstimator } from '@rosen-bridge/abstract-box-selection';
 import { encodeAddress } from '@rosen-bridge/address-codec';
-import { BitcoinRunesUtxo } from '@rosen-bridge/bitcoin-runes-utxo-selection';
+import {
+  BitcoinRunesUtxo,
+  FeeEstimator,
+} from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   calculateFeeCreator,
