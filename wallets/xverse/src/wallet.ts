@@ -1,3 +1,6 @@
+import { RosenChainToken } from '@rosen-bridge/tokens';
+import { UnsignedPsbtData } from '@rosen-network/bitcoin';
+import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -24,7 +27,10 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
   currentChain: Network = NETWORKS.bitcoin.key;
 
-  supportedChains: Network[] = [NETWORKS.bitcoin.key];
+  supportedChains: Network[] = [
+    NETWORKS.bitcoin.key,
+    NETWORKS['bitcoin-runes'].key,
+  ];
 
   performConnect = async (): Promise<void> => {
     const response = await request('wallet_connect', null);
@@ -43,20 +49,57 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
+    const purpose =
+      this.currentChain === NETWORKS['bitcoin-runes'].key
+        ? AddressPurpose.Ordinals
+        : AddressPurpose.Payment;
+
     const response = await request('getAddresses', {
-      purposes: [AddressPurpose.Payment],
+      purposes: [purpose],
     });
 
     if (response.status == 'error') throw response.error;
 
     const address = response.result.addresses.find(
-      (address) => address.purpose === AddressPurpose.Payment,
+      (address) => address.purpose === purpose,
     );
 
     return address!.address;
   };
 
-  fetchBalance = async (): Promise<string> => {
+  fetchPublicKey = async (): Promise<string | undefined> => {
+    const purpose =
+      this.currentChain === NETWORKS['bitcoin-runes'].key
+        ? AddressPurpose.Ordinals
+        : AddressPurpose.Payment;
+
+    const response = await request('getAddresses', {
+      purposes: [purpose],
+    });
+
+    if (response.status == 'error') throw response.error;
+
+    const address = response.result.addresses.find(
+      (address) => address.purpose === purpose,
+    );
+
+    return address?.publicKey;
+  };
+
+  fetchBalance = async (token?: RosenChainToken): Promise<string> => {
+    if (this.currentChain === NETWORKS['bitcoin-runes'].key) {
+      const response = await request('runes_getBalance', undefined);
+
+      if (response.status === 'success') {
+        const runeBalance = response.result.balances.find(
+          (rune) => rune.runeName === token?.name,
+        );
+        return runeBalance?.spendableBalance ?? '0';
+      }
+
+      throw response.error;
+    }
+
     const response = await request('getBalance', undefined);
 
     if (response.status === 'success') return response.result.confirmed;
@@ -78,8 +121,15 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     }
   };
 
+  performSwitchChain = async (chain: Network): Promise<void> => {
+    this.currentChain = chain;
+  };
+
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
-    if (!(this.currentNetwork instanceof BitcoinNetwork)) {
+    if (
+      !(this.currentNetwork instanceof BitcoinNetwork) &&
+      !(this.currentNetwork instanceof BitcoinRunesNetwork)
+    ) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
 
@@ -92,13 +142,28 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await this.currentNetwork.generateUnsignedTx(
-      params.lockAddress,
-      userAddress,
-      params.amount,
-      opReturnData,
-      params.token,
-    );
+    let psbtData: UnsignedPsbtData;
+
+    if (this.currentNetwork instanceof BitcoinRunesNetwork) {
+      const userPublicKey = await this.fetchPublicKey();
+
+      psbtData = await this.currentNetwork.generateUnsignedTx(
+        params.lockAddress,
+        userAddress,
+        params.amount,
+        opReturnData,
+        params.token,
+        userPublicKey!,
+      );
+    } else {
+      psbtData = await this.currentNetwork.generateUnsignedTx(
+        params.lockAddress,
+        userAddress,
+        params.amount,
+        opReturnData,
+        params.token,
+      );
+    }
 
     let signedPsbtBase64;
 
