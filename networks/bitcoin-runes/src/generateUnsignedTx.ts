@@ -134,8 +134,8 @@ export const generateUnsignedTx =
     );
     if (!coveredRunesBoxes.covered) {
       throw new Error(
-        `Available boxes didn't cover required assets. Required assets: ${JsonBigInt.stringify(
-          requiredAssets,
+        `Available boxes didn't cover required Runes. Required Runes: ${JsonBigInt.stringify(
+          requiredAssets.tokens,
         )}`,
       );
     }
@@ -145,7 +145,7 @@ export const generateUnsignedTx =
       0n,
     );
 
-    const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
+    const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated - requiredAssets.nativeToken;
     let estimatedFee = coveredRunesBoxes.additionalAssets.fee;
 
     if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {
@@ -175,9 +175,7 @@ export const generateUnsignedTx =
       );
       if (!coveredBtcBoxes.covered) {
         throw new Error(
-          `Available boxes didn't cover required assets. Required assets: ${JsonBigInt.stringify(
-            requiredAssets,
-          )}`,
+          `Available boxes didn't cover required BTC. Required BTC: ${requiredBtc}`,
         );
       }
       // add selected boxes
@@ -219,7 +217,7 @@ export const generateUnsignedTx =
     // add change UTxO
     psbt.addOutput({
       script: taprootPayment.output,
-      value: Number(additionalAssets.nativeToken - requiredAssets.nativeToken),
+      value: Number(additionalAssets.nativeToken),
     });
     // OP_RETURN
     psbt.addOutput({
