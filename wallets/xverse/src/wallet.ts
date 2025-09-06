@@ -32,6 +32,12 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     NETWORKS['bitcoin-runes'].key,
   ];
 
+  get purpose() {
+    return this.currentChain === NETWORKS['bitcoin-runes'].key
+      ? AddressPurpose.Ordinals
+      : AddressPurpose.Payment;
+  }
+
   performConnect = async (): Promise<void> => {
     const response = await request('wallet_connect', null);
 
@@ -49,38 +55,28 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
-    const purpose =
-      this.currentChain === NETWORKS['bitcoin-runes'].key
-        ? AddressPurpose.Ordinals
-        : AddressPurpose.Payment;
-
     const response = await request('getAddresses', {
-      purposes: [purpose],
+      purposes: [this.purpose],
     });
 
     if (response.status == 'error') throw response.error;
 
     const address = response.result.addresses.find(
-      (address) => address.purpose === purpose,
+      (address) => address.purpose === this.purpose,
     );
 
     return address!.address;
   };
 
   fetchPublicKey = async (): Promise<string | undefined> => {
-    const purpose =
-      this.currentChain === NETWORKS['bitcoin-runes'].key
-        ? AddressPurpose.Ordinals
-        : AddressPurpose.Payment;
-
     const response = await request('getAddresses', {
-      purposes: [purpose],
+      purposes: [this.purpose],
     });
 
     if (response.status == 'error') throw response.error;
 
     const address = response.result.addresses.find(
-      (address) => address.purpose === purpose,
+      (address) => address.purpose === this.purpose,
     );
 
     return address?.publicKey;
