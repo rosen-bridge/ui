@@ -167,7 +167,7 @@ export const generateUnsignedTx =
       // fetch input boxes to cover required BTC
       const coveredBtcBoxes = await boxSelection.getCoveringBoxes(
         { nativeToken: requiredBtc, tokens: [] },
-        [],
+        selectedBoxes.map((box) => `${box.txId}.${box.index}`),
         new Map(),
         btcUtxoIterator,
         MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
