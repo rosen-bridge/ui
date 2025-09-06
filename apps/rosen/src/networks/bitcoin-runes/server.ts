@@ -3,8 +3,11 @@
 import { validateAddress as validateAddressCore } from '@rosen-network/base';
 import {
   calculateFee as calculateFeeCore,
-  getMaxTransferCreator,
+  generateOpReturnData as generateOpReturnDataCore,
+  generateUnsignedTx as generateUnsignedTxCore,
+  getMaxTransferCreator as getMaxTransferCore,
   getMinTransferCreator,
+  submitTransaction as submitTransactionCore,
 } from '@rosen-network/bitcoin-runes';
 
 import { wrap } from '@/safeServerAction';
@@ -12,18 +15,30 @@ import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 export const calculateFee = wrap(calculateFeeCore, {
   cache: 10 * 60 * 1000,
-  traceKey: 'bitcoinRunes:calculateFee',
+  traceKey: 'bitcoin-runes:calculateFee',
 });
 
-export const getMaxTransfer = wrap(getMaxTransferCreator(getTokenMap), {
-  traceKey: 'bitcoinRunes:getMaxTransfer',
+export const generateOpReturnData = wrap(generateOpReturnDataCore, {
+  traceKey: 'bitcoin-runes:generateOpReturnData',
+});
+
+export const generateUnsignedTx = wrap(generateUnsignedTxCore(getTokenMap), {
+  traceKey: 'bitcoin-runes:generateUnsignedTx',
+});
+
+export const getMaxTransfer = wrap(getMaxTransferCore(), {
+  traceKey: 'bitcoin-runes:getMaxTransfer',
 });
 
 export const getMinTransfer = wrap(getMinTransferCreator(getTokenMap), {
-  traceKey: 'bitcoinRunes:getMinTransfer',
+  traceKey: 'bitcoin-runes:getMinTransfer',
+});
+
+export const submitTransaction = wrap(submitTransactionCore, {
+  traceKey: 'bitcoin-runes:submitTransaction',
 });
 
 export const validateAddress = wrap(validateAddressCore, {
   cache: Infinity,
-  traceKey: 'bitcoinRunes:validateAddress',
+  traceKey: 'bitcoin-runes:validateAddress',
 });

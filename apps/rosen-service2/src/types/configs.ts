@@ -62,6 +62,7 @@ export interface Chains {
 
 export interface ChainsBitcoinRunes {
   active: boolean;
+  scanInterval: number;
 }
 
 export interface ChainsBinance {
