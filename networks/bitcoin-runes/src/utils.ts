@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   BitcoinRunesUtxo,
@@ -102,6 +101,7 @@ export const getAddressRunesBoxes = async (
         quantity: BigInt(rune.amount),
       })),
     }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     const baseError = `Failed to get UTxOs conataining rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
     if (e.response) {
@@ -142,6 +142,7 @@ export const getAddressBtcBoxes = async (
       value: BigInt(utxo.satoshi),
       runes: [],
     }));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     const baseError = `Failed to get UTxOs conataining BTC only for address [${address}] from Unisat: `;
     if (e.response) {
