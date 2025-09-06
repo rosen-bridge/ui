@@ -23,7 +23,7 @@ import { Network as NetworkType } from '@rosen-ui/types/dist/common';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]';
-import { EventDetails } from '@/app/events/[details]/type';
+import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
 
 export interface EventStatusProps {
   value?: string;
@@ -54,11 +54,8 @@ export const EventStatus = ({ value, loading }: EventStatusProps) => {
   }
 };
 
-export const Overview = ({ id }: { id: string }) => {
-  const Stack = InjectOverrides(StackBase);
+export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
   const Box = InjectOverrides(BoxBase);
-
-  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
 
   return (
     <DetailsCard state="open" title="Overview">
@@ -87,7 +84,7 @@ export const Overview = ({ id }: { id: string }) => {
               tablet: { style: { width: '100%' } },
             }}
             loading={isLoading}
-            value={data?.eventId}
+            value={details?.eventId}
             copyable
           />
         </Label>
@@ -108,7 +105,7 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <Token
             loading={isLoading}
-            name={data?.sourceChainTokenId}
+            name={details?.sourceChainTokenId}
             overrides={{
               mobile: {
                 reverse: true,
@@ -134,7 +131,7 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <Amount
             loading={isLoading}
-            value={data?.amount}
+            value={details?.amount}
             orientation="horizontal"
             unit="TODO"
           />
@@ -159,15 +156,15 @@ export const Overview = ({ id }: { id: string }) => {
                 overrides={{
                   mobile: {
                     variant: 'logo',
-                    name: data?.fromChain as NetworkType,
+                    name: details?.fromChain as NetworkType,
                   },
                   tablet: {
                     variant: 'both',
-                    name: data?.fromChain as NetworkType,
+                    name: details?.fromChain as NetworkType,
                   },
                 }}
                 variant={'both'}
-                name={data?.fromChain as NetworkType}
+                name={details?.fromChain as NetworkType}
               />
             }
             end={
@@ -176,15 +173,15 @@ export const Overview = ({ id }: { id: string }) => {
                 overrides={{
                   mobile: {
                     variant: 'logo',
-                    name: data?.toChain as NetworkType,
+                    name: details?.toChain as NetworkType,
                   },
                   tablet: {
                     variant: 'both',
-                    name: data?.fromChain as NetworkType,
+                    name: details?.fromChain as NetworkType,
                   },
                 }}
                 variant={'both'}
-                name={data?.toChain as NetworkType}
+                name={details?.toChain as NetworkType}
               />
             }
           />
@@ -202,7 +199,7 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          <EventStatus value={data?.status} loading={isLoading} />
+          <EventStatus value={details?.status} loading={isLoading} />
         </Label>
 
         <Label
@@ -219,7 +216,9 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <DateTime
             loading={isLoading}
-            timestamp={data?.block?.timestamp && data.block.timestamp * 1000}
+            timestamp={
+              details?.block?.timestamp && details.block.timestamp * 1000
+            }
           />
         </Label>
 
@@ -235,7 +234,7 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
         >
-          {!isLoading && data ? (
+          {!isLoading && details ? (
             <>TODO</>
           ) : (
             <Typography variant="body1" gutterBottom>
@@ -272,8 +271,8 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
           loading={isLoading}
-          value={data?.fromAddress}
-          href={data?.fromAddress}
+          value={details?.fromAddress}
+          href={details?.fromAddress}
           copyable
         />
       </Label>
@@ -303,8 +302,8 @@ export const Overview = ({ id }: { id: string }) => {
             },
           }}
           loading={isLoading}
-          value={data?.toAddress}
-          href={data?.fromAddress}
+          value={details?.toAddress}
+          href={details?.fromAddress}
           copyable
         />
       </Label>

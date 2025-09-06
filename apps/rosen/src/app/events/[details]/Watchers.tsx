@@ -29,6 +29,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import { DetailsCard } from '@/app/events/[details]/';
+import { DetailsProps } from '@/app/events/[details]/type';
 
 type rowTypes = {
   id: number;
@@ -123,7 +124,7 @@ const TableHeader = () => {
   );
 };
 
-export const Watchers = () => {
+export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<rowTypes>();
   const isMobile = useBreakpoint('tablet-down');

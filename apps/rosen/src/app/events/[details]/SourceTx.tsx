@@ -16,28 +16,26 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/';
-import { EventDetails } from '@/app/events/[details]/type';
+import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
 
-export const SourceTx = ({ id }: { id: string }) => {
-  const { data, isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
-
+export const SourceTx = ({ details, loading: isLoading }: DetailsProps) => {
   const disclosure = useDisclosure();
 
   const metaData = {
-    to: data?.toChain,
-    bridgeFee: data?.bridgeFee,
-    networkFee: data?.networkFee,
-    toAddress: data?.toAddress,
-    fromAddress: data?.toAddress,
+    to: details?.toChain,
+    bridgeFee: details?.bridgeFee,
+    networkFee: details?.networkFee,
+    toAddress: details?.toAddress,
+    fromAddress: details?.toAddress,
   };
 
   return (
     <DetailsCard
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
       state={disclosure.state}
-      title="Source tx metadata"
+      title="Source tx metadetails"
     >
-      {!isLoading && data ? (
+      {!isLoading && details ? (
         <Card backgroundColor="primary.light">
           <CardBody>
             <div style={{ position: 'relative' }}>

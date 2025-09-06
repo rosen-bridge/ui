@@ -72,3 +72,8 @@ export type EventDetails = {
 export type StatusProps = {
   value: 'FRAUD' | 'PROCESSING' | 'SUCCESSFUL';
 };
+
+export type DetailsProps = {
+  details?: EventDetails;
+  loading?: boolean;
+};

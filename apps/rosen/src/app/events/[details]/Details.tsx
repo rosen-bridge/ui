@@ -19,14 +19,9 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/';
-import { EventDetails } from '@/app/events/[details]/type';
+import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
 
-export const Details = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR<EventDetails>(
-    `/v1/events/${id}`,
-    fetcher,
-  );
-
+export const Details = ({ details, loading: isLoading }: DetailsProps) => {
   const Box = InjectOverrides(BoxMui);
 
   const disclosure = useDisclosure();
@@ -42,7 +37,7 @@ export const Details = ({ id }: { id: string }) => {
           <Label orientation="horizontal" label="Duration">
             <RelativeTime
               isLoading={isLoading}
-              timestamp={data?.block.timestamp}
+              timestamp={details?.block.timestamp}
             />
           </Label>
 
@@ -119,14 +114,14 @@ export const Details = ({ id }: { id: string }) => {
           <Label label="Bridge Fee" inset>
             <Amount
               loading={isLoading}
-              value={data?.bridgeFee}
+              value={details?.bridgeFee}
               unit={isLoading ? '' : 'TODO'}
             />
           </Label>
           <Label label="Network Fee" inset>
             <Amount
               loading={isLoading}
-              value={data?.networkFee}
+              value={details?.networkFee}
               unit={isLoading ? '' : 'TODO'}
             />
           </Label>
@@ -150,7 +145,7 @@ export const Details = ({ id }: { id: string }) => {
             <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
-                value={data?.sourceTxId ?? 'N/A'}
+                value={details?.sourceTxId ?? 'N/A'}
                 copyable
                 qrcode
               />
@@ -160,7 +155,7 @@ export const Details = ({ id }: { id: string }) => {
             <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
-                value={data?.eventTrigger?.paymentTxId ?? undefined}
+                value={details?.eventTrigger?.paymentTxId ?? undefined}
                 copyable
                 qrcode
               />
@@ -170,7 +165,7 @@ export const Details = ({ id }: { id: string }) => {
             <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
-                value={data?.eventTrigger?.spendTxId ?? undefined}
+                value={details?.eventTrigger?.spendTxId ?? undefined}
                 copyable
                 qrcode
               />
@@ -180,7 +175,7 @@ export const Details = ({ id }: { id: string }) => {
             <div style={{ width: '80%' }}>
               <Identifier
                 loading={isLoading}
-                value={data?.eventTrigger?.txId}
+                value={details?.eventTrigger?.txId}
                 copyable
                 qrcode
               />

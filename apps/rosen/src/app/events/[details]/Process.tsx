@@ -11,7 +11,7 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { DetailsCard } from '@/app/events/[details]/DetailsCard';
-import { EventDetails } from '@/app/events/[details]/type';
+import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
 
 const Steps: ProcessTrackerItem[] = [
   {
@@ -208,8 +208,7 @@ const Steps: ProcessTrackerItem[] = [
   },
 ];
 
-export const Process = ({ id }: { id: string }) => {
-  const { isLoading } = useSWR<EventDetails>(`/v1/events/${id}`, fetcher);
+export const Process = ({ details, loading: isLoading }: DetailsProps) => {
   const isMobile = useBreakpoint('laptop-down');
   const disclosure = useDisclosure();
   return (
