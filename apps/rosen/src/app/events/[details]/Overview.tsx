@@ -14,6 +14,7 @@ import {
   InjectOverrides,
   Box as BoxBase,
   DateTime,
+  LabelGroup,
 } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types/dist/common';
 
@@ -229,7 +230,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
       </Columns>
 
       <Label label="Address"></Label>
-      <Label
+      <LabelGroup
         overrides={{
           mobile: {
             style: { width: '100%', overflow: 'hidden' },
@@ -238,55 +239,40 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             style: { width: '70%' },
           },
         }}
-        label="From"
-        inset
       >
-        <Identifier
-          overrides={{
-            mobile: {
-              style: { width: '90%' },
-            },
-            tablet: {
-              style: { width: '80%' },
-            },
-          }}
-          loading={isLoading}
-          value={details?.fromAddress}
-          href={details?.fromAddress}
-          copyable
-        />
-      </Label>
-
-      <Label
-        overrides={{
-          mobile: {
-            style: { width: '100%', overflow: 'hidden' },
-          },
-          tablet: {
-            style: { width: '70%', overflow: 'hidden' },
-          },
-          laptop: {
-            style: { width: '70%', overflow: 'hidden' },
-          },
-        }}
-        label="To"
-        inset
-      >
-        <Identifier
-          overrides={{
-            mobile: {
-              style: { width: '90%' },
-            },
-            tablet: {
-              style: { width: '80%' },
-            },
-          }}
-          loading={isLoading}
-          value={details?.toAddress}
-          href={details?.fromAddress}
-          copyable
-        />
-      </Label>
+        <Label label="From" inset>
+          <Identifier
+            overrides={{
+              mobile: {
+                style: { width: '90%' },
+              },
+              tablet: {
+                style: { width: '80%' },
+              },
+            }}
+            loading={isLoading}
+            value={details?.fromAddress}
+            href={details?.fromAddress}
+            copyable
+          />
+        </Label>
+        <Label label="To" inset>
+          <Identifier
+            overrides={{
+              mobile: {
+                style: { width: '90%' },
+              },
+              tablet: {
+                style: { width: '80%' },
+              },
+            }}
+            loading={isLoading}
+            value={details?.toAddress}
+            href={details?.fromAddress}
+            copyable
+          />
+        </Label>
+      </LabelGroup>
     </Section>
   );
 };
