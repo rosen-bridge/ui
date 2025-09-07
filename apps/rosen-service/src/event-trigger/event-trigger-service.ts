@@ -18,6 +18,10 @@ const bitcoinEventTriggerExtractorLogger =
   CallbackLoggerFactory.getInstance().getLogger(
     'bitcoin-event-trigger-extractor',
   );
+const bitcoinRunesEventTriggerExtractorLogger =
+  CallbackLoggerFactory.getInstance().getLogger(
+    'bitcoin-runes-event-trigger-extractor',
+  );
 const ethereumEventTriggerExtractorLogger =
   CallbackLoggerFactory.getInstance().getLogger(
     'ethereum-event-trigger-extractor',
@@ -68,6 +72,17 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.bitcoin.addresses.fraud,
       bitcoinEventTriggerExtractorLogger,
     );
+    const bitcoinRunesEventTriggerExtractor = new EventTriggerExtractor(
+      'bitcoin-runes-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.bitcoinRunes.addresses.eventTrigger,
+      configs.bitcoinRunes.tokens.rwt,
+      configs.bitcoinRunes.addresses.permit,
+      configs.bitcoinRunes.addresses.fraud,
+      bitcoinRunesEventTriggerExtractorLogger,
+    );
     const dogeEventTriggerExtractor = new EventTriggerExtractor(
       'doge-extractor',
       dataSource,
@@ -104,6 +119,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);
     await scanner.registerExtractor(bitcoinEventTriggerExtractor);
+    await scanner.registerExtractor(bitcoinRunesEventTriggerExtractor);
     await scanner.registerExtractor(dogeEventTriggerExtractor);
     await scanner.registerExtractor(ethereumEventTriggerExtractor);
     await scanner.registerExtractor(binanceEventTriggerExtractor);
@@ -114,6 +130,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         ergoEventTriggerExtractor.getId(),
         cardanoEventTriggerExtractor.getId(),
         bitcoinEventTriggerExtractor.getId(),
+        bitcoinRunesEventTriggerExtractor.getId(),
         dogeEventTriggerExtractor.getId(),
         ethereumEventTriggerExtractor.getId(),
         binanceEventTriggerExtractor.getId(),

@@ -61,8 +61,8 @@ const start = async () => {
       esploraUrl: config.bitcoin.esploraUrl,
     },
     {
-      addresses: config.calculator.addresses.bitcoin, // TODO: update in runes-rosen-service task
-      unisatUrl: config.bitcoin.esploraUrl, // TODO: update in runes-rosen-service task
+      addresses: config.calculator.addresses.bitcoinRunes,
+      unisatUrl: config.bitcoinRunes.unisatUrl,
     },
     {
       addresses: config.calculator.addresses.ethereum,

@@ -1,29 +1,30 @@
-import { useCallback, useState } from 'react';
+import { HTMLAttributes, useCallback, useState } from 'react';
 
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Stack, SvgIcon, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
+import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
 
-// Number of characters to show at the end
-const trailingLength = 5;
-
-export type IdentifierProps = {
-  /** The main string value to display (e.g., an identifier or long string) */
-  value?: string;
-
-  /** If true, shows a loading skeleton instead of the value */
-  loading?: boolean;
+export type IdentifierProps = HTMLAttributes<HTMLDivElement> & {
+  /** If true, enables a button to copy the value to the clipboard */
+  copyable?: boolean;
 
   /** If provided, renders an external link that opens in a new tab */
   href?: string;
 
-  /** If true, enables a button to copy the value to the clipboard */
-  copyable?: boolean;
+  /** If true, shows a loading skeleton instead of the value */
+  loading?: boolean;
 
   /** If true, displays a QR code icon */
   qrcode?: boolean;
+
+  /** Number of characters to show at the end*/
+  trailingLength?: number;
+
+  /** The main string value to display (e.g., an identifier or long string) */
+  value?: string;
 };
 
 /**
@@ -42,12 +43,14 @@ export type IdentifierProps = {
  * />
  *
  */
-export const Identifier = ({
-  value = '',
-  loading,
-  href,
+const IdentifierBase = ({
   copyable,
+  href,
+  loading,
   qrcode,
+  trailingLength = 5,
+  value = '',
+  ...props
 }: IdentifierProps) => {
   const [open, setOpen] = useState(false);
 
@@ -60,6 +63,7 @@ export const Identifier = ({
       alignItems="center"
       display="flex"
       justifyContent="space-between"
+      {...props}
     >
       {loading && <Skeleton style={{ flexGrow: 1 }} />}
       {!loading && (
@@ -120,3 +124,5 @@ export const Identifier = ({
     </Stack>
   );
 };
+
+export const Identifier = InjectOverrides(IdentifierBase);

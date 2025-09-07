@@ -896,7 +896,7 @@
           }
         }
       },
-      "bitcoinRunes": {
+      "bitcoin-runes": {
         "type": "object",
         "children": {
           "active": {
@@ -907,6 +907,17 @@
               {
                 "required": true,
                 "error": "bitcoin-runes activation state must be set"
+              }
+            ]
+          },
+          "scanInterval": {
+            "type": "number",
+            "default": 10,
+            "description": "binance scanInterval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "binance scanInterval must be specified (in seconds)"
               }
             ]
           }

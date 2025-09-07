@@ -33,7 +33,7 @@ const content = [
 
     const value = contract ? contract.json.addresses.lock : '';
 
-    return `  ${network}: '${value}',`;
+    return `  '${network}': '${value}',`;
   }),
   `} as any;`,
   '',

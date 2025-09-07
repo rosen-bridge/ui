@@ -51,17 +51,18 @@ export interface HealthCheckLogging {
 }
 
 export interface Chains {
-  ergo: ChainsErgo;
-  cardano: ChainsCardano;
-  bitcoin: ChainsBitcoin;
-  doge: ChainsDoge;
-  ethereum: ChainsEthereum;
-  binance: ChainsBinance;
-  bitcoinRunes: ChainsBitcoinRunes;
+  'ergo': ChainsErgo;
+  'cardano': ChainsCardano;
+  'bitcoin': ChainsBitcoin;
+  'doge': ChainsDoge;
+  'ethereum': ChainsEthereum;
+  'binance': ChainsBinance;
+  'bitcoin-runes': ChainsBitcoinRunes;
 }
 
 export interface ChainsBitcoinRunes {
   active: boolean;
+  scanInterval: number;
 }
 
 export interface ChainsBinance {
