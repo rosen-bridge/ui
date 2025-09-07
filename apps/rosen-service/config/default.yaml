@@ -36,6 +36,17 @@ bitcoin:
     url:
     username:
     password:
+bitcoin-runes:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+  tokens:
+    rwt:
+  initialHeight:
+  unisatUrl: https://open-api.unisat.io
+  unisatApiKey:
 doge:
   addresses:
     lock:
@@ -84,6 +95,7 @@ calculator:
     ergo: []
     cardano: []
     bitcoin: []
+    bitcoin-runes: []
     doge: []
     ethereum: []
     binance: []
@@ -100,7 +112,7 @@ healthCheck:
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3
   binanceScannerCriticalDiff: 5
-  interval: 60  #health check update interval (in seconds)
+  interval: 60 # health check update interval (in seconds)
   duration: 600 # log duration time check (in seconds)
   maxAllowedErrorCount: 1 # maximum allowed error log lines
   maxAllowedWarnCount: 10 # maximum allowed warn log lines

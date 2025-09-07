@@ -9,7 +9,7 @@ import AbstractCalculator from '../../abstract-calculator';
 import { AddressRunesBalance, RuneInfo, UnisatResponse } from './types';
 
 export class BitcoinRunesCalculator extends AbstractCalculator {
-  readonly chain: Network = NETWORKS.bitcoinRunes.key;
+  readonly chain: Network = NETWORKS['bitcoin-runes'].key;
 
   protected client: Axios;
 

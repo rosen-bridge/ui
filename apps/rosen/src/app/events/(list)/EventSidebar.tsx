@@ -46,7 +46,7 @@ const Content = ({ value }: EventSidebarProps) => {
   return (
     <Columns gap="32px" width="20rem" rule>
       <Label orientation="horizontal" label="Event Id">
-        <Identifier copyable value={value.eventId} />
+        <Identifier style={{ width: '80%' }} copyable value={value.eventId} />
       </Label>
       <Label label="Status">
         <EventStatus value={value.status} />
@@ -75,6 +75,7 @@ const Content = ({ value }: EventSidebarProps) => {
         <Label label="Tx IDs"></Label>
         <Label label="Lock Tx" inset>
           <Identifier
+            style={{ width: '90%' }}
             copyable={!!value.sourceTxId}
             value={value.sourceTxId}
             href={
@@ -86,6 +87,7 @@ const Content = ({ value }: EventSidebarProps) => {
         </Label>
         <Label label="Payment Tx" inset>
           <Identifier
+            style={{ width: '90%' }}
             copyable={!!value.paymentTxId}
             value={value.paymentTxId || ''}
             href={
@@ -97,6 +99,7 @@ const Content = ({ value }: EventSidebarProps) => {
         </Label>
         <Label label="Reward Tx" inset>
           <Identifier
+            style={{ width: '90%' }}
             copyable={!!value.spendTxId}
             value={value.spendTxId || ''}
             href={
@@ -111,6 +114,7 @@ const Content = ({ value }: EventSidebarProps) => {
         <Label label="Address"></Label>
         <Label label="From" inset>
           <Identifier
+            style={{ width: '90%' }}
             copyable
             value={value.fromAddress}
             href={
@@ -120,6 +124,7 @@ const Content = ({ value }: EventSidebarProps) => {
         </Label>
         <Label label="To" inset>
           <Identifier
+            style={{ width: '90%' }}
             copyable
             value={value.toAddress}
             href={getAddressUrl(value.toChain, value.toAddress) || undefined}
