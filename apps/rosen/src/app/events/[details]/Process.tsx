@@ -4,14 +4,11 @@ import {
   DisclosureButton,
   ProcessTracker,
   useDisclosure,
-  useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 import { ProcessTrackerItem } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { DetailsCard } from '@/app/events/[details]/DetailsCard';
-import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
+import { Section } from './Section';
+import { DetailsProps } from './type';
 
 const Steps: ProcessTrackerItem[] = [
   {
@@ -209,10 +206,9 @@ const Steps: ProcessTrackerItem[] = [
 ];
 
 export const Process = ({ details, loading: isLoading }: DetailsProps) => {
-  const isMobile = useBreakpoint('laptop-down');
   const disclosure = useDisclosure();
   return (
-    <DetailsCard
+    <Section
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
       state={disclosure.state}
       title="Progress"
@@ -221,11 +217,18 @@ export const Process = ({ details, loading: isLoading }: DetailsProps) => {
         style={{ minHeight: '210px', height: isLoading ? '210px' : 'unset' }}
       >
         <ProcessTracker
+          overrides={{
+            mobile: {
+              orientation: 'vertical',
+            },
+            laptop: {
+              orientation: 'horizontal',
+            },
+          }}
           loading={isLoading}
-          orientation={isMobile ? 'vertical' : 'horizontal'}
           steps={Steps}
         />
       </div>
-    </DetailsCard>
+    </Section>
   );
 };

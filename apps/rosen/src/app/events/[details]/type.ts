@@ -52,6 +52,7 @@ export type EventDetails = {
   targetChainTokenId: string;
   sourceTxId: string;
   sourceBlockId: string;
+  metadata: string;
 
   block: {
     hash: string;

@@ -11,23 +11,19 @@ import {
   InjectOverrides,
   Label,
   RelativeTime,
-  Skeleton,
-  Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { DetailsCard } from '@/app/events/[details]/';
-import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
+import { Section } from './Section';
+import { DetailsProps } from './type';
+
+const Box = InjectOverrides(BoxMui);
 
 export const Details = ({ details, loading: isLoading }: DetailsProps) => {
-  const Box = InjectOverrides(BoxMui);
-
   const disclosure = useDisclosure();
 
   return (
-    <DetailsCard
+    <Section
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
       state={disclosure.state}
       title="Details"
@@ -40,89 +36,38 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
               timestamp={details?.block.timestamp}
             />
           </Label>
-
           <Label label="Total Emission">
-            {!isLoading ? (
-              <Typography>TODO</Typography>
-            ) : (
-              <Skeleton
-                width={80}
-                style={{ fontSize: 'inherit' }}
-                variant="text"
-              />
-            )}
+            <Amount loading={isLoading} value="TODO" unit={'TODO'} />
           </Label>
           <Label label="Guards" inset>
-            {!isLoading ? (
-              <Typography>TODO</Typography>
-            ) : (
-              <Skeleton
-                width={80}
-                style={{ fontSize: 'inherit' }}
-                variant="text"
-              />
-            )}
+            <Amount loading={isLoading} value="TODO" unit={'TODO'} />
           </Label>
           <Label label="Watchers" inset>
-            {!isLoading ? (
-              <Typography>TODO</Typography>
-            ) : (
-              <Skeleton
-                width={80}
-                style={{ fontSize: 'inherit' }}
-                variant="text"
-              />
-            )}
+            <Amount loading={isLoading} value="TODO" unit={'TODO'} />
           </Label>
           <Label label="RSN Ratio">
-            {!isLoading ? (
-              <Typography>TODO</Typography>
-            ) : (
-              <Skeleton
-                width={80}
-                style={{ fontSize: 'inherit' }}
-                variant="text"
-              />
-            )}
+            <Amount loading={isLoading} value="TODO" unit={'TODO'} />
           </Label>
         </div>
-
         <div>
           <Label label="Token Price">
-            {!isLoading ? (
-              <Typography>TODO</Typography>
-            ) : (
-              <Skeleton
-                width={80}
-                style={{ fontSize: 'inherit' }}
-                variant="text"
-              />
-            )}
+            <Amount loading={isLoading} value="TODO" unit={'TODO'} />
           </Label>
           <Label label="Fee Sum">
-            {' '}
-            {!isLoading ? (
-              <Typography>TODO</Typography>
-            ) : (
-              <Skeleton
-                width={80}
-                style={{ fontSize: 'inherit' }}
-                variant="text"
-              />
-            )}
+            <Amount loading={isLoading} value="TODO" unit={'TODO'} />
           </Label>
           <Label label="Bridge Fee" inset>
             <Amount
               loading={isLoading}
               value={details?.bridgeFee}
-              unit={isLoading ? '' : 'TODO'}
+              unit={'TODO'}
             />
           </Label>
           <Label label="Network Fee" inset>
             <Amount
               loading={isLoading}
               value={details?.networkFee}
-              unit={isLoading ? '' : 'TODO'}
+              unit={'TODO'}
             />
           </Label>
         </div>
@@ -142,47 +87,43 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
         >
           <Label label="Tx IDs" />
           <Label label="Source Tx" inset>
-            <div style={{ width: '80%' }}>
-              <Identifier
-                loading={isLoading}
-                value={details?.sourceTxId ?? 'N/A'}
-                copyable
-                qrcode
-              />
-            </div>
+            <Identifier
+              style={{ width: '80%' }}
+              loading={isLoading}
+              value={details?.sourceTxId ?? 'N/A'}
+              copyable
+              qrcode
+            />
           </Label>
           <Label label="Payment Tx" inset>
-            <div style={{ width: '80%' }}>
-              <Identifier
-                loading={isLoading}
-                value={details?.eventTrigger?.paymentTxId ?? undefined}
-                copyable
-                qrcode
-              />
-            </div>
+            <Identifier
+              style={{ width: '80%' }}
+              loading={isLoading}
+              value={details?.eventTrigger?.paymentTxId ?? undefined}
+              copyable
+              qrcode
+            />
           </Label>
           <Label label="Reward Tx" inset>
-            <div style={{ width: '80%' }}>
-              <Identifier
-                loading={isLoading}
-                value={details?.eventTrigger?.spendTxId ?? undefined}
-                copyable
-                qrcode
-              />
-            </div>
+            <Identifier
+              style={{ width: '80%' }}
+              loading={isLoading}
+              value={details?.eventTrigger?.spendTxId ?? undefined}
+              copyable
+              qrcode
+            />
           </Label>
           <Label label="Trigger Tx" inset>
-            <div style={{ width: '80%' }}>
-              <Identifier
-                loading={isLoading}
-                value={details?.eventTrigger?.txId}
-                copyable
-                qrcode
-              />
-            </div>
+            <Identifier
+              style={{ width: '80%' }}
+              loading={isLoading}
+              value={details?.eventTrigger?.txId}
+              copyable
+              qrcode
+            />
           </Label>
         </Box>
       </Columns>
-    </DetailsCard>
+    </Section>
   );
 };

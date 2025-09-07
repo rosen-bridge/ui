@@ -16,20 +16,19 @@ import {
   Stack,
   SvgIcon,
   Table,
-  TableBody,
+  TableBody as TableBodyMui,
   TableCell as TableCellBase,
   TableContainer,
-  TableHead,
+  TableHead as TableHeadMui,
   TableRow as TableRowBase,
   Typography,
   useBreakpoint,
   useDisclosure,
   Box as BoxMui,
-  useMediaQuery,
 } from '@rosen-bridge/ui-kit';
 
-import { DetailsCard } from '@/app/events/[details]/';
-import { DetailsProps } from '@/app/events/[details]/type';
+import { Section } from './Section';
+import { DetailsProps } from './type';
 
 type rowTypes = {
   id: number;
@@ -41,30 +40,27 @@ type rowTypes = {
 const rows: rowTypes[] = [
   {
     id: 1,
-    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
-    commitment:
-      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    wid: '3030527c8fc3b9271c27e1e929fdcd39e71e9',
+    commitment: 'f366b7a2f50f6854b408d82f1c27e1e929fdcd39851fb',
     rewarded: 'Yes',
   },
   {
     id: 2,
-    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd39.3030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
-    commitment:
-      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    wid: '3030520527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment: 'f366b7a2f502734b408d82f1c27e1e929fdcd39851fb',
     rewarded: 'Yes',
   },
   {
     id: 3,
-    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    wid: '3030527c408d82f1c27e1e929fdcd39e71e9',
     commitment:
-      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+      'f366b7a2f50f685dfbf872903ec3b92734b408d82f1c27e1e929fdcd39851fb',
     rewarded: 'Yes',
   },
   {
     id: 4,
-    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
-    commitment:
-      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+    wid: '3030527c8fc3bfc3b92734b408d82f1c27e1e929fdcd39e71e9',
+    commitment: 'f366b7a2f50f692734b408d82f1c27e1e929fdcd39851fb',
     rewarded: 'No',
   },
   {
@@ -78,31 +74,44 @@ const rows: rowTypes[] = [
 const TableRow = InjectOverrides(TableRowBase);
 const TableCell = InjectOverrides(TableCellBase);
 const Box = InjectOverrides(BoxMui);
-
+const TableHead = InjectOverrides(TableHeadMui);
+const TableBody = InjectOverrides(TableBodyMui);
 const TableHeader = () => {
   return (
     <TableHead
-      sx={(theme) => ({
-        '& .MuiTableCell-root': {
-          backgroundColor: theme.palette.secondary.light,
-          padding: theme.spacing(0.5, 2),
+      overrides={{
+        mobile: {
+          sx: (theme) => ({
+            '& .MuiTableCell-root': {
+              backgroundColor: 'transparent',
+              padding: theme.spacing(1, 1),
+            },
+          }),
         },
-      })}
+        tablet: {
+          sx: (theme) => ({
+            '& .MuiTableCell-root': {
+              backgroundColor: theme.palette.secondary.light,
+              padding: theme.spacing(1, 1),
+            },
+          }),
+        },
+      }}
     >
       <TableRow
         overrides={{
           mobile: {
             style: { display: 'none' },
           },
-          laptop: {
+          tablet: {
             style: { display: 'table-row' },
           },
         }}
       >
-        <TableCell>#</TableCell>
+        <TableCell style={{ width: '2rem' }}>#</TableCell>
         <TableCell>WID</TableCell>
         <TableCell>COMMITMENT</TableCell>
-        <TableCell>REWARDED</TableCell>
+        <TableCell sx={{ width: '7rem' }}>REWARDED</TableCell>
       </TableRow>
 
       <TableRow
@@ -110,7 +119,7 @@ const TableHeader = () => {
           mobile: {
             style: { display: 'table-row' },
           },
-          laptop: {
+          tablet: {
             style: { display: 'none' },
           },
         }}
@@ -137,9 +146,9 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
   const disclosure = useDisclosure();
 
   return (
-    <DetailsCard
+    <Section
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
+      state="open"
       title="Watchers"
     >
       <div
@@ -170,11 +179,25 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
         <Table sx={{ tableLayout: 'auto', width: '100%' }}>
           <TableHeader />
           <TableBody
-            sx={{
-              '& > tr': {
-                '& > td': {
-                  padding: '0px 0',
-                  height: '40px',
+            overrides={{
+              mobile: {
+                sx: {
+                  '& > tr': {
+                    '& > td': {
+                      padding: (theme) => theme.spacing(0.5, 1),
+                      height: '40px',
+                    },
+                  },
+                },
+              },
+              tablet: {
+                sx: {
+                  '& > tr': {
+                    '& > td': {
+                      padding: (theme) => theme.spacing(0.5, 2),
+                      height: '40px',
+                    },
+                  },
                 },
               },
             }}
@@ -193,17 +216,17 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
       <Box>
         <Drawer open={open} onClose={() => setOpen(false)} value={data} />
       </Box>
-    </DetailsCard>
+    </Section>
   );
 };
 
 type DrawerProps = {
   value?: rowTypes;
-  onClose: () => void;
   open: boolean;
+  onClose: () => void;
 };
 
-const Drawer = ({ value, onClose, open = false }: DrawerProps) => {
+const Drawer = ({ value, onClose, open }: DrawerProps) => {
   return (
     <EnhancedDialog open={open} stickOn="tablet" onClose={onClose}>
       <EnhancedDialogTitle icon={<Exchange />} onClose={onClose}>
@@ -339,26 +362,12 @@ const TableRowLaptop = ({ row }: { row: rowTypes }) => {
       </TableCell>
 
       {/* 2 */}
-      <TableCell
-        sx={{
-          maxWidth: 200, // حداکثر عرض ستون
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-        }}
-      >
+      <TableCell style={{ maxWidth: 200 }}>
         <Identifier value={row.commitment} href={row.commitment} />
       </TableCell>
 
       {/* 3 */}
-      <TableCell
-        sx={{
-          maxWidth: 200,
-          overflow: 'hidden',
-          whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
-        }}
-      >
+      <TableCell style={{ maxWidth: 200 }}>
         <Identifier value={row.commitment} href={row.commitment} />
       </TableCell>
 
@@ -366,7 +375,7 @@ const TableRowLaptop = ({ row }: { row: rowTypes }) => {
       <TableCell sx={{ whiteSpace: 'nowrap', textAlign: 'center' }}>
         <Stack
           alignItems="center"
-          justifyContent="center"
+          justifyContent="start"
           flexDirection="row"
           gap={1}
         >

@@ -2,18 +2,21 @@ import { NextRequest } from 'next/server';
 
 import Joi from 'joi';
 
-interface GETEventParams {
+interface GETPositionalParams {
   id: string;
 }
 
-const getEventSchema = Joi.object<GETEventParams>({
+const getQueryParamsSchema = Joi.object<GETPositionalParams>().keys({
   id: Joi.string().required(),
 });
 
-export const validateGetEvent = async (
-  _req: NextRequest,
-  context?: { params?: GETEventParams },
+/**
+ * validate get requests
+ * @param request
+ */
+export const validateGet = async (
+  _: NextRequest,
+  context?: { params: GETPositionalParams },
 ) => {
-  const result = getEventSchema.validate(context?.params);
-  return result;
+  return getQueryParamsSchema.validate(context?.params);
 };

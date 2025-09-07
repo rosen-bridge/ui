@@ -7,14 +7,12 @@ import { Stack } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import {
-  Details,
-  Process,
-  Overview,
-  SourceTx,
-  Watchers,
-} from '@/app/events/[details]';
-import { EventDetails } from '@/app/events/[details]/type';
+import { Details } from './Details';
+import { Overview } from './Overview';
+import { Process } from './Process';
+import { SourceTx } from './SourceTx';
+import { EventDetails } from './type';
+import { Watchers } from './Watchers';
 
 const Sections: React.ComponentType[] = [
   Overview,

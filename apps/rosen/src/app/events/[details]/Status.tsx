@@ -2,7 +2,7 @@
 
 import { Chip } from '@rosen-bridge/ui-kit';
 
-const progressStatusMap = {
+const STATES = {
   pendingCommittment: {
     label: 'Pending Committment',
     color: 'info',
@@ -105,10 +105,13 @@ const progressStatusMap = {
   },
 } as const;
 
-type ProgressStatusKey = keyof typeof progressStatusMap;
+type StatusProps = {
+  state: keyof typeof STATES;
+};
 
-export const ProgressStatus = ({ state }: { state: ProgressStatusKey }) => {
-  const status = progressStatusMap[state];
+export const Status = ({ state }: StatusProps) => {
+  const status = STATES[state];
+
   if (!status) return null;
 
   return <Chip label={status.label} color={status.color} icon={status.icon} />;

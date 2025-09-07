@@ -9,21 +9,16 @@ import {
   Identifier,
   Label,
   Network,
-  Stack as StackBase,
   Token,
-  Skeleton,
   Chip,
   InjectOverrides,
   Box as BoxBase,
   DateTime,
-  Typography,
 } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types/dist/common';
-import useSWR from 'swr';
 
-import { DetailsCard } from '@/app/events/[details]';
-import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
+import { Section } from './Section';
+import { DetailsProps } from './type';
 
 export interface EventStatusProps {
   value?: string;
@@ -58,8 +53,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
   const Box = InjectOverrides(BoxBase);
 
   return (
-    <DetailsCard state="open" title="Overview">
-      {/*Event Id*/}
+    <Section state="open" title="Overview">
       <Box
         overrides={{
           mobile: { style: { width: '100%' } },
@@ -117,7 +111,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             }}
           />
         </Label>
-
         <Label
           label="Amount"
           orientation="vertical"
@@ -137,9 +130,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             unit="TODO"
           />
         </Label>
-
         <Label
-          label="Chin"
+          label="Chain"
           orientation="vertical"
           overrides={{
             mobile: {
@@ -187,7 +179,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             }
           />
         </Label>
-
         <Label
           label="Status"
           orientation="vertical"
@@ -202,7 +193,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         >
           <EventStatus value={details?.status} loading={isLoading} />
         </Label>
-
         <Label
           label="Time"
           orientation="vertical"
@@ -222,7 +212,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             }
           />
         </Label>
-
         <Label
           label="Fee Sum"
           orientation="vertical"
@@ -235,17 +224,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             },
           }}
         >
-          {!isLoading && details ? (
-            <>TODO</>
-          ) : (
-            <Typography variant="body1" gutterBottom>
-              <Skeleton
-                width={80}
-                sx={{ borderRadius: (theme) => theme.spacing(0.5) }}
-                variant="text"
-              />
-            </Typography>
-          )}
+          <Amount loading={isLoading} value="TODO" unit={'TODO'} />
         </Label>
       </Columns>
 
@@ -259,7 +238,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             style: { width: '70%' },
           },
         }}
-        label="from"
+        label="From"
         inset
       >
         <Identifier
@@ -290,7 +269,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             style: { width: '70%', overflow: 'hidden' },
           },
         }}
-        label="to"
+        label="To"
         inset
       >
         <Identifier
@@ -308,6 +287,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
           copyable
         />
       </Label>
-    </DetailsCard>
+    </Section>
   );
 };

@@ -8,10 +8,8 @@ import {
   CardHeader,
   CardTitle,
   Collapse,
-  DisclosureButton,
   DisclosureState,
   Typography,
-  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 type DetailsProps = {
@@ -21,23 +19,12 @@ type DetailsProps = {
   state?: DisclosureState;
 };
 
-export const DetailsCard = ({
-  children,
-  title,
-  action,
-  state,
-}: DetailsProps) => {
+export const Section = ({ children, title, action, state }: DetailsProps) => {
   return (
     <Card backgroundColor="background.paper">
       <CardHeader action={action}>
         <CardTitle>
-          <Typography
-            letterSpacing={0.15}
-            lineHeight="24px"
-            variant="h3"
-            fontSize="20px"
-            color="text.secondary"
-          >
+          <Typography variant="h2" color="text.secondary">
             {title}
           </Typography>
         </CardTitle>

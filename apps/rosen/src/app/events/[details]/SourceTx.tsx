@@ -1,49 +1,37 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
-  Box,
   Card,
   CardBody,
   CopyButton,
   DisclosureButton,
   Skeleton,
-  Stack,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { DetailsCard } from '@/app/events/[details]/';
-import { DetailsProps, EventDetails } from '@/app/events/[details]/type';
+import { Section } from './Section';
+import { DetailsProps } from './type';
 
 export const SourceTx = ({ details, loading: isLoading }: DetailsProps) => {
   const disclosure = useDisclosure();
 
-  const metaData = {
-    to: details?.toChain,
-    bridgeFee: details?.bridgeFee,
-    networkFee: details?.networkFee,
-    toAddress: details?.toAddress,
-    fromAddress: details?.toAddress,
-  };
-
   return (
-    <DetailsCard
+    <Section
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
       state={disclosure.state}
-      title="Source tx metadetails"
+      title="Source Tx Metadata"
     >
       {!isLoading && details ? (
         <Card backgroundColor="primary.light">
           <CardBody>
             <div style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', right: 0, top: 10 }}>
-                <CopyButton value={JSON.stringify(metaData)} />
+                <CopyButton value={details.metadata} />
               </div>
               <pre style={{ paddingTop: '16px', overflow: 'hidden' }}>
-                {JSON.stringify(metaData, null, 3)}
+                {details.metadata}
               </pre>
             </div>
           </CardBody>
@@ -56,6 +44,6 @@ export const SourceTx = ({ details, loading: isLoading }: DetailsProps) => {
           sx={{ display: 'block' }}
         />
       )}
-    </DetailsCard>
+    </Section>
   );
 };
