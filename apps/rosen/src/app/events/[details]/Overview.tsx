@@ -50,9 +50,9 @@ export const EventStatus = ({ value, loading }: EventStatusProps) => {
   }
 };
 
-export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
-  const Box = InjectOverrides(BoxBase);
+const Box = InjectOverrides(BoxBase);
 
+export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
   return (
     <Section state="open" title="Overview">
       <Box
@@ -64,11 +64,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
       >
         <Label
           label="Event Id"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -76,7 +73,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         >
           <Identifier
             overrides={{
-              mobile: { style: { width: '90%' } },
+              mobile: { style: { width: '100%' } },
               tablet: { style: { width: '100%' } },
             }}
             loading={isLoading}
@@ -85,15 +82,11 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
           />
         </Label>
       </Box>
-
       <Columns count={3} width="320px" gap="24px">
         <Label
           label="Token"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -114,11 +107,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         </Label>
         <Label
           label="Amount"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -133,11 +123,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         </Label>
         <Label
           label="Chain"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -147,46 +134,35 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
             start={
               <Network
                 loading={isLoading}
+                variant={'logo'}
+                name={details?.fromChain as NetworkType}
                 overrides={{
-                  mobile: {
-                    variant: 'logo',
-                    name: details?.fromChain as NetworkType,
-                  },
                   tablet: {
                     variant: 'both',
                     name: details?.fromChain as NetworkType,
                   },
                 }}
-                variant={'both'}
-                name={details?.fromChain as NetworkType}
               />
             }
             end={
               <Network
                 loading={isLoading}
+                variant={'logo'}
+                name={details?.toChain as NetworkType}
                 overrides={{
-                  mobile: {
-                    variant: 'logo',
-                    name: details?.toChain as NetworkType,
-                  },
                   tablet: {
                     variant: 'both',
                     name: details?.fromChain as NetworkType,
                   },
                 }}
-                variant={'both'}
-                name={details?.toChain as NetworkType}
               />
             }
           />
         </Label>
         <Label
           label="Status"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -196,11 +172,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         </Label>
         <Label
           label="Time"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -215,11 +188,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         </Label>
         <Label
           label="Fee Sum"
-          orientation="vertical"
+          orientation="horizontal"
           overrides={{
-            mobile: {
-              orientation: 'horizontal',
-            },
             tablet: {
               orientation: 'vertical',
             },
@@ -232,9 +202,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
       <Label label="Address"></Label>
       <LabelGroup
         overrides={{
-          mobile: {
-            style: { width: '100%', overflow: 'hidden' },
-          },
           tablet: {
             style: { width: '70%' },
           },

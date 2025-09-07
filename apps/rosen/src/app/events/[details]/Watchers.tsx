@@ -108,10 +108,10 @@ const TableHeader = () => {
           },
         }}
       >
-        <TableCell style={{ width: '2rem' }}>#</TableCell>
+        <TableCell style={{ width: '2rem', textAlign: 'center' }}>#</TableCell>
         <TableCell>WID</TableCell>
         <TableCell>COMMITMENT</TableCell>
-        <TableCell sx={{ width: '7rem' }}>REWARDED</TableCell>
+        <TableCell style={{ width: '7rem' }}>REWARDED</TableCell>
       </TableRow>
 
       <TableRow
@@ -124,10 +124,10 @@ const TableHeader = () => {
           },
         }}
       >
+        <TableCell style={{ width: '0.5rem' }}></TableCell>
         <TableCell></TableCell>
         <TableCell></TableCell>
-        <TableCell></TableCell>
-        <TableCell></TableCell>
+        <TableCell style={{ width: '0.5rem' }}></TableCell>
       </TableRow>
     </TableHead>
   );
@@ -151,9 +151,7 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
       state="open"
       title="Watchers"
     >
-      <div
-        style={{ marginBottom: '8px', display: isMobile ? 'none' : 'block' }}
-      >
+      <div style={{ marginBottom: '8px' }}>
         <Columns width="100px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">
             TODO
@@ -185,7 +183,6 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
                   '& > tr': {
                     '& > td': {
                       padding: (theme) => theme.spacing(0.5, 1),
-                      height: '40px',
                     },
                   },
                 },
@@ -235,33 +232,29 @@ const Drawer = ({ value, onClose, open }: DrawerProps) => {
       <EnhancedDialogContent>
         <Stack>
           <Label label="Wid" orientation="horizontal">
-            {value && <Identifier value={value?.wid} copyable />}
+            <Identifier value={value?.wid} copyable />
           </Label>
           <Label label="Commitment" orientation="horizontal">
-            {value && (
-              <Identifier
-                value={value?.commitment}
-                href={value?.commitment}
-                copyable
-              />
-            )}
+            <Identifier
+              value={value?.commitment}
+              href={value?.commitment}
+              copyable
+            />
           </Label>
           <Label label="Rewarded" orientation="horizontal">
-            {value && (
-              <Stack flexDirection="row" gap={1}>
-                <Typography>{value.rewarded}</Typography>
-                <SvgIcon
-                  sx={{
-                    color:
-                      value.rewarded === 'Yes'
-                        ? 'success.main'
-                        : 'text.secondary',
-                  }}
-                >
-                  {value.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
-                </SvgIcon>
-              </Stack>
-            )}
+            <Stack flexDirection="row" gap={1}>
+              <Typography>{value?.rewarded}</Typography>
+              <SvgIcon
+                sx={{
+                  color:
+                    value?.rewarded === 'Yes'
+                      ? 'success.main'
+                      : 'text.secondary',
+                }}
+              >
+                {value?.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
+              </SvgIcon>
+            </Stack>
           </Label>
         </Stack>
       </EnhancedDialogContent>
@@ -322,7 +315,7 @@ const TableRowMobile = ({
           },
         }}
         sx={{
-          maxWidth: 150,
+          maxWidth: 130,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textAlign: 'center',

@@ -10,6 +10,7 @@ import {
   Identifier,
   InjectOverrides,
   Label,
+  LabelGroup,
   RelativeTime,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -86,42 +87,44 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
           }}
         >
           <Label label="Tx IDs" />
-          <Label label="Source Tx" inset>
-            <Identifier
-              style={{ width: '80%' }}
-              loading={isLoading}
-              value={details?.sourceTxId ?? 'N/A'}
-              copyable
-              qrcode
-            />
-          </Label>
-          <Label label="Payment Tx" inset>
-            <Identifier
-              style={{ width: '80%' }}
-              loading={isLoading}
-              value={details?.eventTrigger?.paymentTxId ?? undefined}
-              copyable
-              qrcode
-            />
-          </Label>
-          <Label label="Reward Tx" inset>
-            <Identifier
-              style={{ width: '80%' }}
-              loading={isLoading}
-              value={details?.eventTrigger?.spendTxId ?? undefined}
-              copyable
-              qrcode
-            />
-          </Label>
-          <Label label="Trigger Tx" inset>
-            <Identifier
-              style={{ width: '80%' }}
-              loading={isLoading}
-              value={details?.eventTrigger?.txId}
-              copyable
-              qrcode
-            />
-          </Label>
+          <LabelGroup>
+            <Label label="Source Tx" inset>
+              <Identifier
+                style={{ width: '90%' }}
+                loading={isLoading}
+                value={details?.sourceTxId ?? 'N/A'}
+                copyable
+                qrcode
+              />
+            </Label>
+            <Label label="Payment Tx" inset>
+              <Identifier
+                style={{ width: '90%' }}
+                loading={isLoading}
+                value={details?.eventTrigger?.paymentTxId ?? undefined}
+                copyable
+                qrcode
+              />
+            </Label>
+            <Label label="Reward Tx" inset>
+              <Identifier
+                style={{ width: '90%' }}
+                loading={isLoading}
+                value={details?.eventTrigger?.spendTxId ?? undefined}
+                copyable
+                qrcode
+              />
+            </Label>
+            <Label label="Trigger Tx" inset>
+              <Identifier
+                style={{ width: '90%' }}
+                loading={isLoading}
+                value={details?.eventTrigger?.txId}
+                copyable
+                qrcode
+              />
+            </Label>
+          </LabelGroup>
         </Box>
       </Columns>
     </Section>
