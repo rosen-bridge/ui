@@ -224,6 +224,7 @@ export interface ChainsErgo {
 }
 
 export interface ChainsErgoExplorer {
+  suffix?: string;
   connections: ChainsErgoExplorerConnections[];
 }
 
@@ -232,6 +233,7 @@ export interface ChainsErgoExplorerConnections {
 }
 
 export interface ChainsErgoNode {
+  suffix?: string;
   connections: ChainsErgoNodeConnections[];
 }
 

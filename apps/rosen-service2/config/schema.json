@@ -265,6 +265,10 @@
           "node": {
             "type": "object",
             "children": {
+              "suffix": {
+                "type": "string",
+                "description": "ergo node suffix"
+              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -289,8 +293,13 @@
           "explorer": {
             "type": "object",
             "children": {
+              "suffix": {
+                "type": "string",
+                "description": "ergo explorer suffix"
+              },
               "connections": {
                 "type": "array",
+                "default": [{}],
                 "items": {
                   "type": "object",
                   "children": {
@@ -382,16 +391,18 @@
               },
               "connections": {
                 "type": "array",
+                "default": [{}],
                 "items": {
                   "type": "object",
                   "children": {
                     "url": {
                       "type": "string",
+                      "default": "https://api.koios.rest/api/v1/",
                       "description": "cardano koios url",
                       "validations": [
                         {
                           "required": true,
-                          "error": "cardano koios url must be specified (in seconds)",
+                          "error": "cardano koios url must be specified",
                           "when": {"path": "chains.cardano.method", "value": "koios"}
                         }
                       ]

@@ -18,10 +18,17 @@ chains:
     initialHeight: 1
     scanInterval: 120
     method: explorer
+    explorer:
+      connections:
+        - url: https://api.ergoplatform.com/
   cardano:
     active: false
     scanInterval: 30
     initialHeight: 1
+    koios:
+      connections:
+        - url: https://api.koios.rest/api/v1/
+          timeout: 100
   bitcoin:
     active: false
     initialHeight: 1
