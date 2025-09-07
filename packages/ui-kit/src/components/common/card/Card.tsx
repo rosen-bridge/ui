@@ -47,6 +47,8 @@ type CardProps = {
  *   Content here
  * </Card>
  * ```
+ *
+ * default || section
  */
 export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
   { clickable, active, backgroundColor = 'white', children, variant, ...rest },

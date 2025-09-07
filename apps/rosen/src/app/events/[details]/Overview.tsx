@@ -59,6 +59,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
 
   return (
     <DetailsCard state="open" title="Overview">
+      {/*Event Id*/}
       <Box
         overrides={{
           mobile: { style: { width: '100%' } },
