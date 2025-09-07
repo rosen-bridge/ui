@@ -24,6 +24,7 @@ import {
   ERGO_BLOCK_TIME,
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
+import { ChainsKeys } from '../types';
 import { DBService } from './db';
 import { ScannerService } from './scanner';
 
@@ -106,77 +107,43 @@ export class HealthService extends PeriodicTaskService {
         'error',
       ),
     ];
-    if (configs.chains.cardano.active) {
-      this.params.push(
-        new ScannerSyncHealthCheckParam(
-          NETWORKS.cardano.key,
-          async () =>
-            this.dbService.getLastSavedBlock(
-              this.scannerService.getScanners()[NETWORKS.cardano.key]!.name(),
-            ),
-          configs.healthCheck.scanner.warnDiff,
-          configs.healthCheck.scanner.criticalDiff,
-          CARDANO_BLOCK_TIME * 1000,
-        ),
-      );
-    }
-    if (configs.chains.bitcoin.active) {
-      this.params.push(
-        new ScannerSyncHealthCheckParam(
-          NETWORKS.bitcoin.key,
-          async () =>
-            this.dbService.getLastSavedBlock(
-              this.scannerService.getScanners()[NETWORKS.bitcoin.key]!.name(),
-            ),
-          configs.healthCheck.scanner.warnDiff,
-          configs.healthCheck.scanner.criticalDiff,
-          BITCOIN_BLOCK_TIME * 1000,
-        ),
-      );
-    }
-    if (configs.chains.doge.active) {
-      this.params.push(
-        new ScannerSyncHealthCheckParam(
-          NETWORKS.doge.key,
-          async () =>
-            this.dbService.getLastSavedBlock(
-              this.scannerService.getScanners()[NETWORKS.doge.key]!.name(),
-            ),
-          configs.healthCheck.scanner.warnDiff,
-          configs.healthCheck.scanner.criticalDiff,
-          DOGE_BLOCK_TIME * 1000,
-        ),
-      );
-    }
-    if (configs.chains.ethereum.active) {
-      this.params.push(
-        new ScannerSyncHealthCheckParam(
-          NETWORKS.ethereum.key,
-          async () =>
-            this.dbService.getLastSavedBlock(
-              this.scannerService.getScanners()[NETWORKS.ethereum.key]!.name(),
-            ),
-          configs.healthCheck.scanner.warnDiff,
-          configs.healthCheck.scanner.criticalDiff,
-          ETHEREUM_BLOCK_TIME * 1000,
-        ),
-      );
-    }
-    if (configs.chains.binance.active) {
-      this.params.push(
-        new ScannerSyncHealthCheckParam(
-          NETWORKS.binance.key,
-          async () =>
-            this.dbService.getLastSavedBlock(
-              this.scannerService.getScanners()[NETWORKS.binance.key]!.name(),
-            ),
-          configs.healthCheck.scanner.warnDiff,
-          configs.healthCheck.scanner.criticalDiff,
-          BINANCE_BLOCK_TIME * 1000,
-        ),
-      );
-    }
+
+    // Add chains Scanner params
+    if (configs.chains.cardano.active)
+      this.addScannerSyncParam(NETWORKS.cardano.key, CARDANO_BLOCK_TIME);
+    if (configs.chains.bitcoin.active)
+      this.addScannerSyncParam(NETWORKS.bitcoin.key, BITCOIN_BLOCK_TIME);
+    if (configs.chains.doge.active)
+      this.addScannerSyncParam(NETWORKS.doge.key, DOGE_BLOCK_TIME);
+    if (configs.chains.ethereum.active)
+      this.addScannerSyncParam(NETWORKS.ethereum.key, ETHEREUM_BLOCK_TIME);
+    if (configs.chains.binance.active)
+      this.addScannerSyncParam(NETWORKS.binance.key, BINANCE_BLOCK_TIME);
   }
+
+  /**
+   * Adds a new ScannerSyncHealthCheckParam to the internal params array.
+   *
+   * @param chain - The key of the blockchain
+   * @param blockTimeAsMilliSecond - Expected average block time in milliseconds
+   */
+  protected addScannerSyncParam = (
+    chain: ChainsKeys,
+    blockTimeAsMilliSecond: number,
+  ) => {
+    this.params.push(
+      new ScannerSyncHealthCheckParam(
+        chain,
+        async () =>
+          this.dbService.getLastSavedBlock(
+            this.scannerService.getScanners()[chain]!.name(),
+          ),
+        configs.healthCheck.scanner.warnDiff,
+        configs.healthCheck.scanner.criticalDiff,
+        blockTimeAsMilliSecond * 1000,
+      ),
+    );
+  };
 
   /**
    * initializes the singleton instance of HealthService
@@ -227,7 +194,6 @@ export class HealthService extends PeriodicTaskService {
         );
         if (err instanceof Error && err.stack) this.logger.debug(err.stack);
       }
-    this.setStatus(ServiceStatus.started);
   };
 
   /**
@@ -242,23 +208,12 @@ export class HealthService extends PeriodicTaskService {
           this.logger.info('Starting the update healthCheck status');
           try {
             await this.healthCheck.update();
-            const isHealthy =
-              (
-                await this.healthCheck.getHealthStatusWithParamId(
-                  this.params[0].getId(),
-                )
-              )?.status == HealthStatusLevel.HEALTHY;
-            if (isHealthy) {
-              this.setStatus(ServiceStatus.running);
-            } else {
-              this.setStatus(ServiceStatus.started);
-            }
             this.logger.debug('periodic health check update done');
-            this.logger.info(
+            this.logger.debug(
               `Health-check status is ${this.healthCheck.getHealthStatus().map((p) => `${p.id}=${p.status}`)}`,
             );
           } catch (error) {
-            this.logger.error('failed to start health-check', error);
+            this.logger.error(`failed to update health-check: ${error}`);
           }
         },
         interval: configs.healthCheck.updateInterval * 1000,

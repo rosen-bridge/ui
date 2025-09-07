@@ -39,10 +39,8 @@ import {
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
 import { TokensConfig } from '../tokensConfig';
-import { ChainScannersType } from '../types';
+import { ChainScannersType, ChainsKeys } from '../types';
 import { DBService } from './db';
-
-type ChainsKeys = Exclude<keyof (typeof configs)['chains'], 'bitcoinRunes'>;
 
 export class ScannerService extends PeriodicTaskService {
   name = 'ScannerService';
