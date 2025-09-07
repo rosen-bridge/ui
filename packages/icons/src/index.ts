@@ -19,6 +19,9 @@ export { default as ArchwayRaw } from './icons/archway.svg?raw';
 export { ReactComponent as ArrowRight } from './icons/arrow-right.svg';
 export { default as ArrowRightRaw } from './icons/arrow-right.svg?raw';
 
+export { ReactComponent as Ban } from './icons/ban.svg';
+export { default as BanRaw } from './icons/ban.svg?raw';
+
 export { ReactComponent as BitcoinCircle } from './icons/bitcoin-circle.svg';
 export { default as BitcoinCircleRaw } from './icons/bitcoin-circle.svg?raw';
 
@@ -37,8 +40,14 @@ export { default as CheckRaw } from './icons/check.svg?raw';
 export { ReactComponent as ClipboardNotes } from './icons/clipboard-notes.svg';
 export { default as ClipboardNotesRaw } from './icons/clipboard-notes.svg?raw';
 
+export { ReactComponent as ClockThree } from './icons/clock-three.svg';
+export { default as ClockThreeRaw } from './icons/clock-three.svg?raw';
+
 export { ReactComponent as CloseCircle } from './icons/close-circle.svg';
 export { default as CloseCircleRaw } from './icons/close-circle.svg?raw';
+
+export { ReactComponent as Coins } from './icons/coins.svg';
+export { default as CoinsRaw } from './icons/coins.svg?raw';
 
 export { ReactComponent as CommentAltExclamation } from './icons/comment-alt-exclamation.svg';
 export { default as CommentAltExclamationRaw } from './icons/comment-alt-exclamation.svg?raw';
@@ -87,6 +96,9 @@ export { default as FileEditAltRaw } from './icons/file-edit-alt.svg?raw';
 
 export { ReactComponent as Fire } from './icons/fire.svg';
 export { default as FireRaw } from './icons/fire.svg?raw';
+
+export { ReactComponent as Gift } from './icons/gift.svg';
+export { default as GiftRaw } from './icons/gift.svg?raw';
 
 export { ReactComponent as Grid } from './icons/grid.svg';
 export { default as GridRaw } from './icons/grid.svg?raw';
@@ -169,6 +181,9 @@ export { default as ShieldExclamationRaw } from './icons/shield-exclamation.svg?
 export { ReactComponent as ShieldQuestion } from './icons/shield-question.svg';
 export { default as ShieldQuestionRaw } from './icons/shield-question.svg?raw';
 
+export { ReactComponent as SignOutAlt } from './icons/sign-out-alt.svg';
+export { default as SignOutAltRaw } from './icons/sign-out-alt.svg?raw';
+
 export { ReactComponent as SnowFlake } from './icons/snow-flake.svg';
 export { default as SnowFlakeRaw } from './icons/snow-flake.svg?raw';
 
@@ -189,6 +204,9 @@ export { default as SunRaw } from './icons/sun.svg?raw';
 
 export { ReactComponent as SyncExclamation } from './icons/sync-exclamation.svg';
 export { default as SyncExclamationRaw } from './icons/sync-exclamation.svg?raw';
+
+export { ReactComponent as ThumbsUp } from './icons/thumbs-up.svg';
+export { default as ThumbsUpRaw } from './icons/thumbs-up.svg?raw';
 
 export { ReactComponent as Times } from './icons/times.svg';
 export { default as TimesRaw } from './icons/times.svg?raw';
