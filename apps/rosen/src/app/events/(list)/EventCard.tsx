@@ -11,6 +11,7 @@ import {
   RelativeTime,
   Skeleton,
   Stack,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 import { getDecimalString } from '@rosen-ui/utils';
 import { capitalize } from 'lodash-es';
@@ -114,11 +115,13 @@ export const EventCard = ({
           </Stack>
           <Identifier value={item.eventId} href={`/events/${item.eventId}`} />
           <Stack justifyContent="space-between" flexDirection="row">
-            <Connector
-              variant="filled"
-              start={<Network name={item.fromChain} variant="logo" />}
-              end={<Network name={item.toChain} variant="logo" />}
-            />
+            <Typography fontSize="12px">
+              <Connector
+                variant="filled"
+                start={<Network name={item.fromChain} variant="logo" />}
+                end={<Network name={item.toChain} variant="logo" />}
+              />
+            </Typography>
             <EventStatus value={item.status} />
           </Stack>
         </Stack>
