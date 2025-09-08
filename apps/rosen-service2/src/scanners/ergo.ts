@@ -19,6 +19,15 @@ import { ChainConfigs } from '../types';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 
+/**
+ * create an event trigger extractor
+ * @param chain
+ * @param networkType
+ * @param url
+ * @param dataSource
+ * @param chianConfigs
+ * @returns EventTriggerExtractor
+ */
 const createEventTrigger = (
   chain: string,
   networkType: ErgoNetworkType,
