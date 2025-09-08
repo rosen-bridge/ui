@@ -11,8 +11,6 @@ import {
   Network,
   Token,
   Chip,
-  InjectOverrides,
-  Box as BoxBase,
   DateTime,
   LabelGroup,
 } from '@rosen-bridge/ui-kit';
@@ -50,38 +48,25 @@ export const EventStatus = ({ value, loading }: EventStatusProps) => {
   }
 };
 
-const Box = InjectOverrides(BoxBase);
-
 export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
   return (
     <Section state="open" title="Overview">
-      <Box
+      <Label
+        label="Event Id"
+        orientation="horizontal"
         overrides={{
-          mobile: { style: { width: '100%' } },
-          tablet: { style: { width: '90%' } },
-          laptop: { style: { width: isLoading ? '100%' : 'fit-content' } },
+          tablet: {
+            orientation: 'vertical',
+          },
         }}
       >
-        <Label
-          label="Event Id"
-          orientation="horizontal"
-          overrides={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
-          <Identifier
-            overrides={{
-              mobile: { style: { width: '100%' } },
-              tablet: { style: { width: '100%' } },
-            }}
-            loading={isLoading}
-            value={details?.eventId}
-            copyable
-          />
-        </Label>
-      </Box>
+        <Identifier
+          style={{ width: isLoading ? '100%' : 'auto' }}
+          loading={isLoading}
+          value={details?.eventId}
+          copyable
+        />
+      </Label>
       <Columns count={3} width="320px" gap="24px">
         <Label
           label="Token"
@@ -95,10 +80,8 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
           <Token
             loading={isLoading}
             name={details?.sourceChainTokenId}
+            reverse
             overrides={{
-              mobile: {
-                reverse: true,
-              },
               tablet: {
                 reverse: false,
               },
@@ -139,7 +122,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
                 overrides={{
                   tablet: {
                     variant: 'both',
-                    name: details?.fromChain as NetworkType,
                   },
                 }}
               />
@@ -152,7 +134,6 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
                 overrides={{
                   tablet: {
                     variant: 'both',
-                    name: details?.fromChain as NetworkType,
                   },
                 }}
               />

@@ -92,7 +92,7 @@ const TableHeader = () => {
           sx: (theme) => ({
             '& .MuiTableCell-root': {
               backgroundColor: theme.palette.secondary.light,
-              padding: theme.spacing(1, 1),
+              padding: theme.spacing(1, 2),
             },
           }),
         },
@@ -361,7 +361,11 @@ const TableRowLaptop = ({ row }: { row: rowTypes }) => {
 
       {/* 3 */}
       <TableCell style={{ maxWidth: 200 }}>
-        <Identifier value={row.commitment} href={row.commitment} />
+        <Identifier
+          style={{ width: 'auto' }}
+          value={row.commitment}
+          href={row.commitment}
+        />
       </TableCell>
 
       {/* 4 */}

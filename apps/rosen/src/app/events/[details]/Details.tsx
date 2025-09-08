@@ -26,10 +26,10 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
   return (
     <Section
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
+      state={'open'}
       title="Details"
     >
-      <Columns width="350px" count={3} rule gap="24px">
+      <Columns width="300px" count={3} rule gap="24px">
         <div>
           <Label orientation="horizontal" label="Duration">
             <RelativeTime
@@ -73,12 +73,10 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
           </Label>
         </div>
         <Box
+          style={{
+            columnSpan: 'all',
+          }}
           overrides={{
-            laptop: {
-              style: {
-                columnSpan: 'all',
-              },
-            },
             desktop: {
               style: {
                 columnSpan: 'none',
@@ -111,7 +109,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
                 style={{ width: '90%' }}
                 loading={isLoading}
                 value={details?.eventTrigger?.spendTxId ?? undefined}
-                copyable
+                href={'todo'}
                 qrcode
               />
             </Label>
@@ -120,7 +118,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
                 style={{ width: '90%' }}
                 loading={isLoading}
                 value={details?.eventTrigger?.txId}
-                copyable
+                href={'todo'}
                 qrcode
               />
             </Label>
