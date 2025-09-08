@@ -91,8 +91,8 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
                 style={{ width: '90%' }}
                 loading={isLoading}
                 value={details?.sourceTxId ?? 'N/A'}
+                href={'todo'}
                 copyable
-                qrcode
               />
             </Label>
             <Label label="Payment Tx" inset>
@@ -100,8 +100,8 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
                 style={{ width: '90%' }}
                 loading={isLoading}
                 value={details?.eventTrigger?.paymentTxId ?? undefined}
+                href={'todo'}
                 copyable
-                qrcode
               />
             </Label>
             <Label label="Reward Tx" inset>
@@ -110,7 +110,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
                 loading={isLoading}
                 value={details?.eventTrigger?.spendTxId ?? undefined}
                 href={'todo'}
-                qrcode
+                copyable
               />
             </Label>
             <Label label="Trigger Tx" inset>
@@ -119,7 +119,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
                 loading={isLoading}
                 value={details?.eventTrigger?.txId}
                 href={'todo'}
-                qrcode
+                copyable
               />
             </Label>
           </LabelGroup>
