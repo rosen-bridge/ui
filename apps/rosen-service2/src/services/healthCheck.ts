@@ -14,6 +14,8 @@ import {
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import { configs } from '../configs';
 import {
@@ -209,8 +211,20 @@ export class HealthService extends PeriodicTaskService {
           try {
             await this.healthCheck.update();
             this.logger.debug('periodic health check update done');
+            const healthStatus: { [k: string]: string } = {};
+            this.healthCheck
+              .getHealthStatus()
+              .forEach((p) => (healthStatus[p.id] = p.status));
             this.logger.debug(
-              `Health-check status is ${this.healthCheck.getHealthStatus().map((p) => `${p.id}=${p.status}`)}`,
+              `Health-check status is ${JSON.stringify(healthStatus)}`,
+            );
+            let healthReportPath = configs.paths.healthReport;
+            if (!path.isAbsolute(healthReportPath)) {
+              healthReportPath = path.resolve(process.cwd(), healthReportPath);
+            }
+            fs.writeFileSync(
+              healthReportPath,
+              JSON.stringify(healthStatus, undefined, 4),
             );
           } catch (error) {
             this.logger.error(`failed to update health-check: ${error}`);

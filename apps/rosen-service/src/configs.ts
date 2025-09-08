@@ -198,6 +198,7 @@ const getConfig = () => {
         warnLogAllowedCount: nodeConfig.get<number>(
           'healthCheck.maxAllowedWarnCount',
         ),
+        reportPath: nodeConfig.get<string>('healthCheck.reportPath'),
       },
       notification: {
         discordWebHookUrl: nodeConfig.get<string>(

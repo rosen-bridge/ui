@@ -51,13 +51,13 @@ export interface HealthCheckLogging {
 }
 
 export interface Chains {
-  'ergo': ChainsErgo;
-  'cardano': ChainsCardano;
-  'bitcoin': ChainsBitcoin;
-  'doge': ChainsDoge;
-  'ethereum': ChainsEthereum;
-  'binance': ChainsBinance;
-  'bitcoin-runes': ChainsBitcoinRunes;
+  ergo: ChainsErgo;
+  cardano: ChainsCardano;
+  bitcoin: ChainsBitcoin;
+  doge: ChainsDoge;
+  ethereum: ChainsEthereum;
+  binance: ChainsBinance;
+  bitcoinRunes: ChainsBitcoinRunes;
 }
 
 export interface ChainsBitcoinRunes {
@@ -245,4 +245,5 @@ export interface ChainsErgoNodeConnections {
 export interface Paths {
   tokens: string;
   contracts: string;
+  healthReport: string;
 }
