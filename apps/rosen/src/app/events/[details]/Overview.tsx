@@ -209,14 +209,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
       >
         <Label label="From" inset>
           <Identifier
-            overrides={{
-              mobile: {
-                style: { width: '90%' },
-              },
-              tablet: {
-                style: { width: '80%' },
-              },
-            }}
+            style={{ width: isLoading ? '75%' : 'auto' }}
             loading={isLoading}
             value={details?.fromAddress}
             href={details?.fromAddress}
@@ -225,14 +218,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         </Label>
         <Label label="To" inset>
           <Identifier
-            overrides={{
-              mobile: {
-                style: { width: '90%' },
-              },
-              tablet: {
-                style: { width: '80%' },
-              },
-            }}
+            style={{ width: isLoading ? '75%' : 'auto' }}
             loading={isLoading}
             value={details?.toAddress}
             href={details?.fromAddress}
