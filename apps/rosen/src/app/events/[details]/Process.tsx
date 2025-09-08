@@ -214,21 +214,19 @@ export const Process = ({ details, loading: isLoading }: DetailsProps) => {
       title="Progress"
     >
       <ProcessTracker
+        orientation="vertical"
+        loading={isLoading}
+        steps={Steps}
         style={{
           minHeight: '210px',
           height: isLoading ? '210px' : 'unset',
           width: '100%',
         }}
         overrides={{
-          mobile: {
-            orientation: 'vertical',
-          },
           laptop: {
             orientation: 'horizontal',
           },
         }}
-        loading={isLoading}
-        steps={Steps}
       />
     </Section>
   );
