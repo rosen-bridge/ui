@@ -45,8 +45,6 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 10
-    rpc:
-      timeout: 100
   bitcoinRunes:
     active: false
     scanInterval: 10
