@@ -2,7 +2,9 @@ import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
 
-export type ChainChoices = (typeof NETWORKS_KEYS)[number];
+export type ChainChoices =
+  | Exclude<(typeof NETWORKS_KEYS)[number], 'bitcoin-runes'>
+  | 'bitcoinRunes';
 
 export type ChainsKeys = Exclude<
   keyof (typeof configs)['chains'],

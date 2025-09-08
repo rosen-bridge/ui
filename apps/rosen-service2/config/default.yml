@@ -52,7 +52,7 @@ chains:
     scanInterval: 10
     rpc:
       timeout: 100
-  bitcoin-runes:
+  bitcoinRunes:
     active: false
     scanInterval: 10
 paths:
