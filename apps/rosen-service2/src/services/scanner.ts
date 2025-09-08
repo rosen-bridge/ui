@@ -1,22 +1,13 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
-import {
-  ErgoScanner,
-  WebSocketScanner,
-  CardanoOgmiosScanner,
-} from '@rosen-bridge/scanner';
-import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
+import { WebSocketScanner, CardanoOgmiosScanner } from '@rosen-bridge/scanner';
 import {
   PeriodicTaskService,
   Dependency,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
-import { ERGO_METHOD_EXPLORER } from '../constants';
 import {
   BITCOIN_METHOD_ESPLORA,
   BITCOIN_METHOD_RPC,
@@ -38,7 +29,6 @@ import {
   buildCardanoBlockFrostScannerWithExtractors,
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
-import { TokensConfig } from '../tokensConfig';
 import { ChainScannersType, ChainsKeys } from '../types';
 import { DBService } from './db';
 
@@ -87,10 +77,9 @@ export class ScannerService extends PeriodicTaskService {
    * @throws {Error} If scanner or extractor creation fails
    */ protected generateAndRegisterScannersWithExtractors = async () => {
     try {
-      this.scanners[NETWORKS.ergo.key] = initializeErgoScanner(
+      this.scanners[NETWORKS.ergo.key] = await initializeErgoScanner(
         this.dbService.dataSource,
       );
-      await this.registerErgoExtractors();
 
       if (configs.chains.cardano.active) {
         switch (configs.chains.cardano.method) {
@@ -155,132 +144,6 @@ export class ScannerService extends PeriodicTaskService {
       if (configs.chains.binance.active) {
         this.scanners[NETWORKS.binance.key] =
           await buildBinanceRpcScannerWithExtractors(this.dbService.dataSource);
-      }
-    } catch (error) {
-      throw new Error(
-        `cannot create or register event trigger extractors due to error: ${error}`,
-      );
-    }
-  };
-
-  /**
-   * register all required extractors.
-   *
-   * @returns
-   */
-  protected readonly registerErgoExtractors = async () => {
-    try {
-      const scanner = this.scanners[NETWORKS.ergo.key]! as ErgoScanner;
-      let networkType: ErgoNetworkType;
-      let url: string;
-      if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
-        networkType = ErgoNetworkType.Explorer;
-        url = configs.chains.ergo.explorer.connections[0].url!;
-      } else {
-        networkType = ErgoNetworkType.Node;
-        url = configs.chains.ergo.node.connections[0].url!;
-      }
-
-      const ergoObservationExtractor = new ErgoObservationExtractor(
-        this.dbService.dataSource,
-        TokensConfig.getInstance().getTokenMap(),
-        configs.contracts.ergo.addresses.lock,
-        this.logger,
-      );
-      await scanner.registerExtractor(ergoObservationExtractor);
-      const ergoEventTriggerExtractor = new EventTriggerExtractor(
-        'ergo-extractor',
-        this.dbService.dataSource,
-        networkType,
-        url,
-        configs.contracts.ergo.addresses.WatcherTriggerEvent,
-        configs.contracts.ergo.tokens.RWTId,
-        configs.contracts.ergo.addresses.WatcherPermit,
-        configs.contracts.ergo.addresses.Fraud,
-        CallbackLoggerFactory.getInstance().getLogger(
-          'ergo-event-trigger-extractor',
-        ),
-      );
-      await scanner.registerExtractor(ergoEventTriggerExtractor);
-      if (configs.chains.cardano.active) {
-        const cardanoEventTriggerExtractor = new EventTriggerExtractor(
-          'cardano-extractor',
-          this.dbService.dataSource,
-          networkType,
-          url,
-          configs.contracts.cardano.addresses.WatcherTriggerEvent,
-          configs.contracts.cardano.tokens.RWTId,
-          configs.contracts.cardano.addresses.WatcherPermit,
-          configs.contracts.cardano.addresses.Fraud,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'cardano-event-trigger-extractor',
-          ),
-        );
-        await scanner.registerExtractor(cardanoEventTriggerExtractor);
-      }
-      if (configs.chains.bitcoin.active) {
-        const bitcoinEventTriggerExtractor = new EventTriggerExtractor(
-          'bitcoin-extractor',
-          this.dbService.dataSource,
-          networkType,
-          url,
-          configs.contracts.bitcoin.addresses.WatcherTriggerEvent,
-          configs.contracts.bitcoin.tokens.RWTId,
-          configs.contracts.bitcoin.addresses.WatcherPermit,
-          configs.contracts.bitcoin.addresses.Fraud,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'bitcoin-event-trigger-extractor',
-          ),
-        );
-        await scanner.registerExtractor(bitcoinEventTriggerExtractor);
-      }
-      if (configs.chains.doge.active) {
-        const dogeEventTriggerExtractor = new EventTriggerExtractor(
-          'doge-extractor',
-          this.dbService.dataSource,
-          networkType,
-          url,
-          configs.contracts.doge.addresses.WatcherTriggerEvent,
-          configs.contracts.doge.tokens.RWTId,
-          configs.contracts.doge.addresses.WatcherPermit,
-          configs.contracts.doge.addresses.Fraud,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'doge-event-trigger-extractor',
-          ),
-        );
-        await scanner.registerExtractor(dogeEventTriggerExtractor);
-      }
-      if (configs.chains.ethereum.active) {
-        const ethereumEventTriggerExtractor = new EventTriggerExtractor(
-          'ethereum-extractor',
-          this.dbService.dataSource,
-          networkType,
-          url,
-          configs.contracts.ethereum.addresses.WatcherTriggerEvent,
-          configs.contracts.ethereum.tokens.RWTId,
-          configs.contracts.ethereum.addresses.WatcherPermit,
-          configs.contracts.ethereum.addresses.Fraud,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'ethereum-event-trigger-extractor',
-          ),
-        );
-        await scanner.registerExtractor(ethereumEventTriggerExtractor);
-      }
-      if (configs.chains.binance.active) {
-        const binanceEventTriggerExtractor = new EventTriggerExtractor(
-          'binance-extractor',
-          this.dbService.dataSource,
-          networkType,
-          url,
-          configs.contracts.binance.addresses.WatcherTriggerEvent,
-          configs.contracts.binance.tokens.RWTId,
-          configs.contracts.binance.addresses.WatcherPermit,
-          configs.contracts.binance.addresses.Fraud,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'binance-event-trigger-extractor',
-          ),
-        );
-        await scanner.registerExtractor(binanceEventTriggerExtractor);
       }
     } catch (error) {
       throw new Error(
