@@ -50,14 +50,10 @@ export class HealthService extends PeriodicTaskService {
     },
   ];
 
-  private constructor(
-    dbService: DBService,
-    scannerService: ScannerService,
-    logger?: AbstractLogger,
-  ) {
+  private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = dbService;
-    this.scannerService = scannerService;
+    this.dbService = DBService.getInstance();
+    this.scannerService = ScannerService.getInstance();
 
     let notify;
     let notificationConfig;
@@ -159,11 +155,7 @@ export class HealthService extends PeriodicTaskService {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new HealthService(
-      DBService.getInstance(),
-      ScannerService.getInstance(),
-      logger,
-    );
+    this.instance = new HealthService(logger);
   };
 
   /**
@@ -228,6 +220,8 @@ export class HealthService extends PeriodicTaskService {
             );
           } catch (error) {
             this.logger.error(`failed to update health-check: ${error}`);
+            if (error instanceof Error && error.stack)
+              this.logger.debug(error.stack);
           }
         },
         interval: configs.healthCheck.updateInterval * 1000,

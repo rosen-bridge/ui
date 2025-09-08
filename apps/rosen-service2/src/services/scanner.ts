@@ -45,9 +45,9 @@ export class ScannerService extends PeriodicTaskService {
     },
   ];
 
-  private constructor(dbService: DBService, logger?: AbstractLogger) {
+  private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = dbService;
+    this.dbService = DBService.getInstance();
   }
 
   /**
@@ -164,7 +164,7 @@ export class ScannerService extends PeriodicTaskService {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new ScannerService(DBService.getInstance(), logger);
+    this.instance = new ScannerService(logger);
 
     await this.instance.generateAndRegisterScannersWithExtractors();
   };
