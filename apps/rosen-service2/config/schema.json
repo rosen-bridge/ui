@@ -989,7 +989,7 @@
           }
         }
       },
-      "bitcoin-runes": {
+      "bitcoinRunes": {
         "type": "object",
         "children": {
           "active": {
@@ -1006,11 +1006,11 @@
           "scanInterval": {
             "type": "number",
             "default": 10,
-            "description": "binance scanInterval threshold in seconds",
+            "description": "bitcoin-runes scanInterval threshold in seconds",
             "validations": [
               {
                 "required": true,
-                "error": "binance scanInterval must be specified (in seconds)"
+                "error": "bitcoin-runes scanInterval must be specified (in seconds)"
               }
             ]
           }

@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { Logs, RosenService2Configs } from '../types';
+import { ChainChoices, Logs, RosenService2Configs } from '../types';
 import { ChainConfigsReader } from './chainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -66,7 +66,8 @@ export const validateConfigs = (): RosenService2Configs => {
   confValidator.validateConfig(configs);
 
   configs.contracts = {};
-  for (const chain of NETWORKS_KEYS) {
+  for (const key of NETWORKS_KEYS) {
+    const chain: ChainChoices = key != 'bitcoin-runes' ? key : 'bitcoinRunes';
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
       const chainConfigReader = new ChainConfigsReader(
         chain,
