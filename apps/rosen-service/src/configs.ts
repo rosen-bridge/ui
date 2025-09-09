@@ -26,6 +26,7 @@ const getConfig = () => {
           eventTrigger: nodeConfig.get<string>('ergo.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('ergo.addresses.permit'),
           fraud: nodeConfig.get<string>('ergo.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('ergo.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('ergo.initialHeight'),
         tokens: {
@@ -41,6 +42,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('cardano.addresses.permit'),
           fraud: nodeConfig.get<string>('cardano.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('cardano.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('cardano.initialHeight'),
         tokens: {
@@ -57,6 +59,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('bitcoin.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('bitcoin.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('bitcoin.initialHeight'),
         tokens: {
@@ -75,6 +78,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('bitcoin-runes.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin-runes.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('bitcoinRunes.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('bitcoin-runes.initialHeight'),
         tokens: {
@@ -91,6 +95,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('ethereum.addresses.permit'),
           fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('ethereum.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('ethereum.initialHeight'),
         tokens: {
@@ -107,6 +112,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('binance.addresses.permit'),
           fraud: nodeConfig.get<string>('binance.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('binance.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('binance.initialHeight'),
         tokens: {
@@ -121,6 +127,7 @@ const getConfig = () => {
           eventTrigger: nodeConfig.get<string>('doge.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('doge.addresses.permit'),
           fraud: nodeConfig.get<string>('doge.addresses.fraud'),
+          commitments: nodeConfig.get<string[]>('doge.addresses.commitments'),
         },
         initialHeight: nodeConfig.get<number>('doge.initialHeight'),
         tokens: {
