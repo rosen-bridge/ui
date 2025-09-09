@@ -132,9 +132,9 @@ export const getEvents = async (filters: Filters) => {
        */
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
 
-      '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.decimal, 0))) AS "amountNormalized"',
-      '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.decimal, 0))) AS "networkFeeNormalized"',
-      '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.decimal, 0))) AS "bridgeFeeNormalized"',
+      '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimals, 0))) AS "amountNormalized"',
+      '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimals, 0))) AS "networkFeeNormalized"',
+      '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimals, 0))) AS "bridgeFeeNormalized"',
     ]);
 
   let queryBuilder = dataSource
