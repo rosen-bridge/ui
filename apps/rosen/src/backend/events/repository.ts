@@ -99,7 +99,7 @@ export const getEvents = async (filters: Filters) => {
     .leftJoin(
       tokenRepository.metadata.tableName,
       'te',
-      'te.id = oe."sourceChainTokenId"',
+      'te.id = oe.sourceChainTokenId',
     )
     .select([
       'oe.id AS "id"',
@@ -140,15 +140,10 @@ export const getEvents = async (filters: Filters) => {
   let queryBuilder = dataSource
     .createQueryBuilder()
     .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
-    .from(`(${subquery.getQuery()})`, 'sub');
+    .from(`(${subquery.getQuery()})`, 'sub')
+    .setParameters(subquery.getParameters());
 
   if (query) {
-    const keys = ['amount', 'bridgeFee', 'networkFee'];
-
-    for (const key of keys) {
-      query = query.replaceAll(`sub."${key}"`, `CAST(sub."${key}" AS BIGINT)`);
-    }
-
     queryBuilder = queryBuilder.where(query);
   }
 
