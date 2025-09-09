@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { CheckCircle, CloseCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
@@ -26,155 +26,129 @@ import {
   Box as BoxMui,
   LabelGroup,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
+
+import { Text } from '@/app/events/[details]/Text';
+import { rowTypes, WatchersApiResponse } from '@/app/events/[details]/type';
 
 import { Section } from './Section';
-import { DetailsProps } from './type';
 
-type rowTypes = {
-  id: number;
-  wid: string;
-  commitment: string;
-  rewarded?: 'Yes' | 'No';
-};
-//TODO: data types
-const rows: rowTypes[] = [
-  {
-    id: 1,
-    wid: '3030527c8fc3b9271c27e1e929fdcd39e71e9',
-    commitment: 'f366b7a2f50f6854b408d82f1c27e1e929fdcd39851fb',
-    rewarded: 'Yes',
-  },
-  {
-    id: 2,
-    wid: '3030520527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
-    commitment: 'f366b7a2f502734b408d82f1c27e1e929fdcd39851fb',
-    rewarded: 'Yes',
-  },
-  {
-    id: 3,
-    wid: '3030527c408d82f1c27e1e929fdcd39e71e9',
-    commitment:
-      'f366b7a2f50f685dfbf872903ec3b92734b408d82f1c27e1e929fdcd39851fb',
-    rewarded: 'Yes',
-  },
-  {
-    id: 4,
-    wid: '3030527c8fc3bfc3b92734b408d82f1c27e1e929fdcd39e71e9',
-    commitment: 'f366b7a2f50f692734b408d82f1c27e1e929fdcd39851fb',
-    rewarded: 'No',
-  },
-  {
-    id: 5,
-    wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
-    commitment:
-      'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
-    rewarded: 'Yes',
-  },
-];
 const TableRow = InjectOverrides(TableRowBase);
 const TableCell = InjectOverrides(TableCellBase);
 const Box = InjectOverrides(BoxMui);
 const TableHead = InjectOverrides(TableHeadMui);
 const TableBody = InjectOverrides(TableBodyMui);
-const TableHeader = () => {
-  return (
-    <TableHead
-      overrides={{
-        mobile: {
-          sx: (theme) => ({
-            '& .MuiTableCell-root': {
-              backgroundColor: 'transparent',
-              padding: theme.spacing(1, 1),
-            },
-          }),
-        },
-        tablet: {
-          sx: (theme) => ({
-            '& .MuiTableCell-root': {
-              backgroundColor: theme.palette.secondary.light,
-              padding: theme.spacing(1, 2),
-            },
-          }),
-        },
-      }}
-    >
-      <TableRow
-        overrides={{
-          mobile: {
-            style: { display: 'none' },
-          },
-          tablet: {
-            style: { display: 'table-row' },
-          },
-        }}
-      >
-        <TableCell style={{ width: '2rem', textAlign: 'center' }}>#</TableCell>
-        <TableCell>WID</TableCell>
-        <TableCell>COMMITMENT</TableCell>
-        <TableCell style={{ width: '7rem' }}>REWARDED</TableCell>
-      </TableRow>
 
-      <TableRow
-        overrides={{
-          mobile: {
-            style: { display: 'table-row' },
-          },
-          tablet: {
-            style: { display: 'none' },
-          },
-        }}
-      >
-        <TableCell style={{ width: '0.5rem' }}></TableCell>
-        <TableCell></TableCell>
-        <TableCell></TableCell>
-        <TableCell style={{ width: '0.5rem' }}></TableCell>
-      </TableRow>
-    </TableHead>
-  );
-};
-
-export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
+export const Watchers = ({ id }: { id: string }) => {
+  const {
+    data: details,
+    isLoading,
+    mutate,
+  } = useSWR<WatchersApiResponse>(`/v1/events/${id}/watchers`, fetcher);
   const [open, setOpen] = useState(false);
   const [data, setData] = useState<rowTypes>();
+
+  useEffect(() => {
+    console.log(details);
+  }, [isLoading, details]);
 
   const handelOpen = (value: rowTypes) => {
     setOpen(true);
     setData(value);
   };
 
-  const disclosure = useDisclosure();
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      void mutate();
+      return Promise.resolve();
+    },
+  });
 
   return (
     <Section
       action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state="open"
+      state={disclosure.state}
       title="Watchers"
     >
       <div style={{ marginBottom: '8px' }}>
-        <Columns width="100px" count={3} gap="24px">
+        <Columns width="150px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">
-            TODO
+            <Text value={details?.commitments} loading={isLoading} />
           </Label>
           <Label
             label="Triggered by"
             orientation="vertical"
             info={'this is lorem text for show tooltip'}
           >
-            TODO
+            <Text value={details?.triggeredBy} loading={isLoading} />
           </Label>
           <Label
             label="Rewarded to"
             orientation="vertical"
             info="In tedad mitune bishtar az triggered by bashe chun baezi commitment haye valid momkene tu trigger merge nashode bashan."
           >
-            TODO
+            <Text value={details?.rewardedTo} loading={isLoading} />
           </Label>
         </Columns>
       </div>
 
       <TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
         <Table sx={{ tableLayout: 'auto', width: '100%' }}>
-          <TableHeader />
+          <TableHead
+            overrides={{
+              mobile: {
+                sx: (theme) => ({
+                  '& .MuiTableCell-root': {
+                    backgroundColor: 'transparent',
+                    padding: theme.spacing(1, 1),
+                  },
+                }),
+              },
+              tablet: {
+                sx: (theme) => ({
+                  '& .MuiTableCell-root': {
+                    backgroundColor: theme.palette.secondary.light,
+                    padding: theme.spacing(1, 2),
+                  },
+                }),
+              },
+            }}
+          >
+            <TableRow
+              overrides={{
+                mobile: {
+                  style: { display: 'none' },
+                },
+                tablet: {
+                  style: { display: 'table-row' },
+                },
+              }}
+            >
+              <TableCell style={{ width: '2rem', textAlign: 'center' }}>
+                #
+              </TableCell>
+              <TableCell>WID</TableCell>
+              <TableCell>COMMITMENT</TableCell>
+              <TableCell style={{ width: '7rem' }}>REWARDED</TableCell>
+            </TableRow>
+
+            <TableRow
+              overrides={{
+                mobile: {
+                  style: { display: 'table-row' },
+                },
+                tablet: {
+                  style: { display: 'none' },
+                },
+              }}
+            >
+              <TableCell style={{ width: '0.5rem' }}></TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
+              <TableCell style={{ width: '0.5rem' }}></TableCell>
+            </TableRow>
+          </TableHead>
           <TableBody
             overrides={{
               mobile: {
@@ -198,12 +172,12 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
               },
             }}
           >
-            {rows.map((row, index) => (
+            {details?.watchers.map((row, index) => (
               <TableRow key={index}>
                 {/*In all sizes*/}
                 <TableCell sx={{ whiteSpace: 'nowrap' }}>
                   <Typography variant="body1" color="text.secondary">
-                    {row.id}
+                    <Text loading={isLoading}>{row.id}</Text>
                   </Typography>
                 </TableCell>
 
@@ -234,7 +208,7 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
                     maxWidth: 130,
                   }}
                 >
-                  <Identifier value={row.wid} />
+                  <Identifier loading={isLoading} value={row.wid} />
                 </TableCell>
 
                 {/*show in tablet down  ::: Drawer*/}
@@ -266,6 +240,7 @@ export const Watchers = ({ details, loading: isLoading }: DetailsProps) => {
                   }}
                 >
                   <Identifier
+                    loading={isLoading}
                     style={{ width: 'auto' }}
                     value={row.commitment}
                     href={row.commitment}

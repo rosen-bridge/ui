@@ -4,7 +4,10 @@ import {
   Filters,
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
-import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import {
+  CommitmentEntity,
+  EventTriggerEntity,
+} from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
@@ -15,6 +18,7 @@ import '../initialize-datasource-if-needed';
 const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
+const commitmentRepository = dataSource.getRepository(CommitmentEntity);
 
 interface EventWithTotal
   extends Omit<ObservationEntity, 'requestId'>,
@@ -208,6 +212,8 @@ export const getEventById = async (eventId: string) => {
     )
     .where('obs.requestId = :eventId', { eventId });
 
+  const commitmentsByEventId = await getCommitmentsByEventId(eventId);
+
   // console.log(qb.getSql());
   const result = await qb.getRawOne();
 
@@ -228,6 +234,7 @@ export const getEventById = async (eventId: string) => {
     targetChainTokenId: result.targetChainTokenId,
     sourceTxId: result.sourceTxId,
     sourceBlockId: result.sourceBlockId,
+    reports: result.reports,
 
     block: {
       hash: result.blockHash,
@@ -242,7 +249,282 @@ export const getEventById = async (eventId: string) => {
       WIDsCount: result.WIDsCount,
       result: result.triggerResult,
     },
+    commitments: commitmentsByEventId,
 
     status: result.status,
+  };
+};
+
+export const getCommitmentsByEventId = async (eventId: string) => {
+  return await commitmentRepository.find({
+    where: { eventId },
+  });
+};
+
+//todo: this func for test
+const simulateDelay = (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+const maybeThrowError = () => {
+  if (Math.random() < 0.1) {
+    throw new Error('Something went wrong');
+  }
+};
+
+export const getEventWatchers = async (eventId: string) => {
+  await simulateDelay(5000);
+  maybeThrowError();
+
+  return {
+    eventId,
+    triggeredBy: Math.floor(Math.random() * 31),
+    commitments: Math.floor(Math.random() * 101),
+    rewardedTo: Math.floor(Math.random() * 30),
+    watchers: [
+      {
+        id: 1,
+        wid: '3030527c8fc3b9271c27e1e929fdcd39e71e9',
+        commitment: 'f366b7a2f50f6854b408d82f1c27e1e929fdcd39851fb',
+        rewarded: 'Yes',
+      },
+      {
+        id: 2,
+        wid: '3030520527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+        commitment: 'f366b7a2f502734b408d82f1c27e1e929fdcd39851fb',
+        rewarded: 'Yes',
+      },
+      {
+        id: 3,
+        wid: '3030527c408d82f1c27e1e929fdcd39e71e9',
+        commitment:
+          'f366b7a2f50f685dfbf872903ec3b92734b408d82f1c27e1e929fdcd39851fb',
+        rewarded: 'Yes',
+      },
+      {
+        id: 4,
+        wid: '3030527c8fc3bfc3b92734b408d82f1c27e1e929fdcd39e71e9',
+        commitment: 'f366b7a2f50f692734b408d82f1c27e1e929fdcd39851fb',
+        rewarded: 'No',
+      },
+      {
+        id: 5,
+        wid: '3030527c8fc3b92734b408d82f1c27e1e929fdcd393030527c8fc3b92734b408d82f1c27e1e929fdcd39e71e9',
+        commitment:
+          'f366b7a2f50f685dfbf872903e115851fb798253030527c8fc3b92734b408d82f1c27e1e929fdcd39851fb',
+        rewarded: 'Yes',
+      },
+    ],
+  };
+};
+
+export const getEventProcess = async (eventId: string) => {
+  await simulateDelay(5000);
+  maybeThrowError();
+
+  return {
+    eventId,
+    steps: [
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'done',
+        title: 'Created',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'done',
+        title: 'Committed',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Apstepproved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'pending',
+        title: 'Triggered',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Approved',
+            subtitle: '',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'pending',
+            title: 'Sign',
+            subtitle: '',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Send',
+            subtitle: '',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Tx Created',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'In Payment',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Reward',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Completion',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+    ],
+  };
+};
+
+export const getEventMetadata = async (eventId: string) => {
+  await simulateDelay(5000);
+  maybeThrowError();
+
+  return {
+    eventId,
+    metadata: 'testing response metadata🧪',
   };
 };

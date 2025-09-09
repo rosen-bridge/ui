@@ -53,6 +53,7 @@ export type EventDetails = {
   sourceTxId: string;
   sourceBlockId: string;
   metadata: string;
+  reports: number | string;
 
   block: {
     hash: string;
@@ -77,4 +78,17 @@ export type StatusProps = {
 export type DetailsProps = {
   details?: EventDetails;
   loading?: boolean;
+};
+
+export type rowTypes = {
+  id: number;
+  wid: string;
+  commitment: string;
+  rewarded?: 'Yes' | 'No';
+};
+export type WatchersApiResponse = {
+  commitments: number;
+  triggeredBy: number;
+  rewardedTo: number;
+  watchers: rowTypes[];
 };

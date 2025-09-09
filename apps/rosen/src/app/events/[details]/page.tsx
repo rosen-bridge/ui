@@ -14,13 +14,14 @@ import { SourceTx } from './SourceTx';
 import { EventDetails } from './type';
 import { Watchers } from './Watchers';
 
-const Sections: React.ComponentType[] = [
-  Overview,
-  Details,
-  Process,
-  Watchers,
-  SourceTx,
-];
+const Sections: { component: React.ComponentType<any>; needsData?: boolean }[] =
+  [
+    { component: Overview, needsData: true },
+    { component: Details, needsData: true },
+    { component: Process, needsData: false },
+    { component: Watchers, needsData: false },
+    { component: SourceTx, needsData: false },
+  ];
 
 const Page = () => {
   const { details: eventId } = useParams();
@@ -28,12 +29,13 @@ const Page = () => {
     `/v1/events/${eventId}`,
     fetcher,
   );
+
   const ComponentProps = { loading: isLoading, details: data };
 
   return (
     <Stack display="flex" gap={2} flexDirection="column">
-      {Sections.map((S, i) => (
-        <S key={i} {...ComponentProps} />
+      {Sections.map(({ component: S, needsData }, i) => (
+        <S key={i} {...(needsData ? ComponentProps : { id: eventId })} />
       ))}
     </Stack>
   );

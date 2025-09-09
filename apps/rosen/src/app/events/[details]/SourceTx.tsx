@@ -10,12 +10,25 @@ import {
   Skeleton,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import useSWR from 'swr';
 
 import { Section } from './Section';
-import { DetailsProps } from './type';
+import { EventDetails } from './type';
 
-export const SourceTx = ({ details, loading: isLoading }: DetailsProps) => {
-  const disclosure = useDisclosure();
+export const SourceTx = ({ id }: { id: string }) => {
+  const {
+    data: details,
+    isLoading,
+    mutate,
+  } = useSWR<EventDetails>(`/v1/events/${id}/metadata`, fetcher);
+
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      void mutate();
+      return Promise.resolve();
+    },
+  });
 
   return (
     <Section
