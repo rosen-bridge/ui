@@ -242,6 +242,9 @@ class AssetCalculator {
         const newToken = {
           id: nativeResidentToken.tokenId,
           decimal: nativeResidentToken.decimals,
+          significantDecimal: this.tokens.getSignificantDecimals(
+            nativeResidentToken.tokenId,
+          ),
           name: nativeResidentToken.name,
           chain: residencyChain,
           isNative: nativeResidentToken.type === NATIVE_TOKEN,

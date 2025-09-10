@@ -12,6 +12,9 @@ export class TokenEntity {
   @Column('int')
   decimal: number;
 
+  @Column('int', { nullable: true })
+  significantDecimal: number | undefined;
+
   @Column('boolean')
   isNative: boolean;
 
