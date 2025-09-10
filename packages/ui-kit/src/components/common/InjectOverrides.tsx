@@ -6,7 +6,7 @@ import { useCurrentBreakpoint } from '../../hooks';
 
 const breakpointOrder: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
-type InjectOverridesProps<P> = {
+export type InjectOverridesProps<P> = {
   /**
    * Optional overrides for props based on the current breakpoint.
    *

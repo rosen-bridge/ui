@@ -4,11 +4,10 @@ import React from 'react';
 
 import {
   Amount,
-  Box as BoxMui,
+  Box,
   Columns,
   DisclosureButton,
   Identifier,
-  InjectOverrides,
   Label,
   LabelGroup,
   RelativeTime,
@@ -17,8 +16,6 @@ import {
 
 import { Section } from './Section';
 import { DetailsProps } from './type';
-
-const Box = InjectOverrides(BoxMui);
 
 export const Details = ({ details, loading: isLoading }: DetailsProps) => {
   const disclosure = useDisclosure();
