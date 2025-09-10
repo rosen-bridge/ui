@@ -113,7 +113,7 @@ export const Watchers = ({ id }: { id: string }) => {
           >
             {data?.watchers.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
+                <TableCell align="center">{index + 1}</TableCell>
                 {compressed && (
                   <TableCell align="center">
                     <Rewarded value={row.rewarded === 'Yes'} variant="icon" />
