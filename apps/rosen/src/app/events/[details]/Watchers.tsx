@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { CheckCircle, CloseCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
@@ -18,13 +18,13 @@ import {
   Table,
   TableBody as TableBodyMui,
   TableCell as TableCellBase,
-  TableContainer,
   TableHead as TableHeadMui,
   TableRow as TableRowBase,
   Typography,
   useDisclosure,
-  Box as BoxMui,
   LabelGroup,
+  useBreakpoint,
+  TableContainer,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
@@ -36,33 +36,21 @@ import { Section } from './Section';
 
 const TableRow = InjectOverrides(TableRowBase);
 const TableCell = InjectOverrides(TableCellBase);
-const Box = InjectOverrides(BoxMui);
 const TableHead = InjectOverrides(TableHeadMui);
 const TableBody = InjectOverrides(TableBodyMui);
 
 export const Watchers = ({ id }: { id: string }) => {
-  const {
-    data: details,
-    isLoading,
-    mutate,
-  } = useSWR<WatchersApiResponse>(`/v1/events/${id}/watchers`, fetcher);
-  const [open, setOpen] = useState(false);
-  const [data, setData] = useState<rowTypes>();
+  const { data, isLoading, mutate } = useSWR<WatchersApiResponse>(
+    `/v1/events/${id}/watchers`,
+    fetcher,
+  );
 
-  useEffect(() => {
-    console.log(details);
-  }, [isLoading, details]);
+  const compressed = useBreakpoint('laptop-down');
 
-  const handelOpen = (value: rowTypes) => {
-    setOpen(true);
-    setData(value);
-  };
+  const [details, setDetails] = useState<rowTypes>();
 
   const disclosure = useDisclosure({
-    onOpen: () => {
-      void mutate();
-      return Promise.resolve();
-    },
+    onOpen: async () => void (await mutate()),
   });
 
   return (
@@ -71,230 +59,102 @@ export const Watchers = ({ id }: { id: string }) => {
       state={disclosure.state}
       title="Watchers"
     >
-      <div style={{ marginBottom: '8px' }}>
+      <Stack flexDirection="column" gap={1}>
         <Columns width="150px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">
-            <Text value={details?.commitments} loading={isLoading} />
+            <Text value={data?.commitments} loading={isLoading} />
           </Label>
-          <Label
-            label="Triggered by"
-            orientation="vertical"
-            info={'this is lorem text for show tooltip'}
-          >
-            <Text value={details?.triggeredBy} loading={isLoading} />
+          <Label label="Triggered by" orientation="vertical" info="TODO">
+            <Text value={data?.triggeredBy} loading={isLoading} />
           </Label>
           <Label
             label="Rewarded to"
             orientation="vertical"
-            info="In tedad mitune bishtar az triggered by bashe chun baezi commitment haye valid momkene tu trigger merge nashode bashan."
+            info="TODO: In tedad mitune bishtar az triggered by bashe chun baezi commitment haye valid momkene tu trigger merge nashode bashan."
           >
-            <Text value={details?.rewardedTo} loading={isLoading} />
+            <Text value={data?.rewardedTo} loading={isLoading} />
           </Label>
         </Columns>
-      </div>
-
-      <TableContainer sx={{ width: '100%', overflowX: 'auto' }}>
-        <Table sx={{ tableLayout: 'auto', width: '100%' }}>
+        <Table style={{ tableLayout: 'fixed' }}>
           <TableHead
-            overrides={{
-              mobile: {
-                sx: (theme) => ({
-                  '& .MuiTableCell-root': {
-                    backgroundColor: 'transparent',
-                    padding: theme.spacing(1, 1),
-                  },
-                }),
+            sx={(theme) => ({
+              '& .MuiTableCell-root': {
+                'backgroundColor': theme.palette.secondary.light,
+                'padding': compressed ? '0' : theme.spacing(1, 1),
+                'font-size': compressed ? '0' : undefined,
+                'line-height': compressed ? '0' : undefined,
               },
-              tablet: {
-                sx: (theme) => ({
-                  '& .MuiTableCell-root': {
-                    backgroundColor: theme.palette.secondary.light,
-                    padding: theme.spacing(1, 2),
-                  },
-                }),
-              },
-            }}
+            })}
           >
-            <TableRow
-              overrides={{
-                mobile: {
-                  style: { display: 'none' },
-                },
-                tablet: {
-                  style: { display: 'table-row' },
-                },
-              }}
-            >
-              <TableCell style={{ width: '2rem', textAlign: 'center' }}>
+            <TableRow>
+              <TableCell style={{ width: '2.5rem' }} align="center">
                 #
               </TableCell>
+              {compressed && (
+                <TableCell style={{ width: '2.5rem' }}></TableCell>
+              )}
               <TableCell>WID</TableCell>
-              <TableCell>COMMITMENT</TableCell>
-              <TableCell style={{ width: '7rem' }}>REWARDED</TableCell>
-            </TableRow>
-
-            <TableRow
-              overrides={{
-                mobile: {
-                  style: { display: 'table-row' },
-                },
-                tablet: {
-                  style: { display: 'none' },
-                },
-              }}
-            >
-              <TableCell style={{ width: '0.5rem' }}></TableCell>
-              <TableCell></TableCell>
-              <TableCell></TableCell>
-              <TableCell style={{ width: '0.5rem' }}></TableCell>
+              {!compressed && <TableCell>COMMITMENT</TableCell>}
+              {!compressed && (
+                <TableCell style={{ width: '7.5rem' }}>REWARDED</TableCell>
+              )}
+              {compressed && <TableCell style={{ width: '5rem' }}></TableCell>}
             </TableRow>
           </TableHead>
           <TableBody
-            overrides={{
-              mobile: {
-                sx: {
-                  '& > tr': {
-                    '& > td': {
-                      padding: (theme) => theme.spacing(0.5, 1),
-                    },
-                  },
-                },
+            sx={{
+              '& tr': {
+                height: '50px',
               },
-              tablet: {
-                sx: {
-                  '& > tr': {
-                    '& > td': {
-                      padding: (theme) => theme.spacing(0.5, 2),
-                      height: '40px',
-                    },
-                  },
-                },
+              '& td': {
+                padding: (theme) => theme.spacing(0, 1),
               },
             }}
           >
-            {details?.watchers.map((row, index) => (
+            {data?.watchers.map((row, index) => (
               <TableRow key={index}>
-                {/*In all sizes*/}
-                <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                  <Typography variant="body1" color="text.secondary">
-                    <Text loading={isLoading}>{row.id}</Text>
-                  </Typography>
+                <TableCell>{index + 1}</TableCell>
+                {compressed && (
+                  <TableCell align="center">
+                    <Rewarded value={row.rewarded === 'Yes'} variant="icon" />
+                  </TableCell>
+                )}
+                <TableCell>
+                  <Identifier value={row.wid} />
                 </TableCell>
-
-                {/*show in tablet down ::: Rewarded*/}
-                <TableCell
-                  style={{ width: '30px' }}
-                  overrides={{
-                    tablet: {
-                      style: { display: 'none' },
-                    },
-                  }}
-                >
-                  <SvgIcon
-                    sx={{
-                      color:
-                        row.rewarded === 'Yes'
-                          ? 'success.main'
-                          : 'text.secondary',
-                    }}
-                  >
-                    {row.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
-                  </SvgIcon>
-                </TableCell>
-
-                {/* show in tablet down  ::: WID*/}
-                <TableCell
-                  sx={{
-                    maxWidth: 130,
-                  }}
-                >
-                  <Identifier loading={isLoading} value={row.wid} />
-                </TableCell>
-
-                {/*show in tablet down  ::: Drawer*/}
-                <TableCell
-                  style={{ width: '30px' }}
-                  overrides={{
-                    tablet: {
-                      style: { display: 'none' },
-                    },
-                  }}
-                >
-                  <IconButton onClick={() => handelOpen(row)}>
-                    <SvgIcon>
-                      <Eye />
-                    </SvgIcon>
-                  </IconButton>
-                </TableCell>
-
-                {/*show in tablet up ::: Commitment*/}
-                <TableCell
-                  style={{ display: 'none' }}
-                  sx={{
-                    maxWidth: 0,
-                  }}
-                  overrides={{
-                    tablet: {
-                      style: { display: 'table-cell' },
-                    },
-                  }}
-                >
-                  <Identifier
-                    loading={isLoading}
-                    style={{ width: 'auto' }}
-                    value={row.commitment}
-                    href={row.commitment}
-                  />
-                </TableCell>
-
-                {/*show in tablet up ::: Reward icons*/}
-                <TableCell
-                  style={{ display: 'none' }}
-                  overrides={{
-                    tablet: {
-                      style: { display: 'table-cell' },
-                    },
-                  }}
-                  sx={{ whiteSpace: 'nowrap', textAlign: 'center' }}
-                >
-                  <Stack
-                    alignItems="center"
-                    justifyContent="start"
-                    flexDirection="row"
-                    gap={1}
-                  >
-                    <SvgIcon
-                      sx={{
-                        color:
-                          row.rewarded === 'Yes'
-                            ? 'success.main'
-                            : 'text.secondary',
-                      }}
-                    >
-                      {row.rewarded === 'Yes' ? (
-                        <CheckCircle />
-                      ) : (
-                        <CloseCircle />
-                      )}
-                    </SvgIcon>
-                    {row.rewarded}
-                  </Stack>
-                </TableCell>
+                {!compressed && (
+                  <TableCell>
+                    <Identifier value={row.commitment} href={row.commitment} />
+                  </TableCell>
+                )}
+                {!compressed && (
+                  <TableCell>
+                    <Rewarded value={row.rewarded === 'Yes'} variant="label" />
+                  </TableCell>
+                )}
+                {compressed && (
+                  <TableCell align="center">
+                    <IconButton onClick={() => setDetails(row)}>
+                      <SvgIcon>
+                        <Eye />
+                      </SvgIcon>
+                    </IconButton>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
         </Table>
-      </TableContainer>
-
-      <Box>
-        <Drawer open={open} onClose={() => setOpen(false)} value={data} />
-      </Box>
+      </Stack>
+      {!!details && (
+        <Drawer open value={details} onClose={() => setDetails(undefined)} />
+      )}
     </Section>
   );
 };
 
 type DrawerProps = {
-  value?: rowTypes;
+  value: rowTypes;
   open: boolean;
   onClose: () => void;
 };
@@ -308,33 +168,49 @@ const Drawer = ({ value, open, onClose }: DrawerProps) => {
       <EnhancedDialogContent>
         <LabelGroup>
           <Label label="Wid" orientation="horizontal">
-            <Identifier style={{ width: '90%' }} value={value?.wid} copyable />
+            <Identifier value={value.wid} copyable />
           </Label>
           <Label label="Commitment" orientation="horizontal">
             <Identifier
-              style={{ width: '90%' }}
-              value={value?.commitment}
-              href={value?.commitment}
+              value={value.commitment}
+              href={value.commitment}
               copyable
             />
           </Label>
           <Label label="Rewarded" orientation="horizontal">
-            <Stack flexDirection="row" gap={1}>
-              <Typography>{value?.rewarded}</Typography>
-              <SvgIcon
-                sx={{
-                  color:
-                    value?.rewarded === 'Yes'
-                      ? 'success.main'
-                      : 'text.secondary',
-                }}
-              >
-                {value?.rewarded === 'Yes' ? <CheckCircle /> : <CloseCircle />}
-              </SvgIcon>
-            </Stack>
+            <Rewarded
+              value={value.rewarded === 'Yes'}
+              variant="label-reverse"
+            />
           </Label>
         </LabelGroup>
       </EnhancedDialogContent>
     </EnhancedDialog>
+  );
+};
+
+type RewardedProps = {
+  value: boolean;
+  variant: 'icon' | 'label' | 'label-reverse';
+};
+
+const Rewarded = ({ value, variant }: RewardedProps) => {
+  return (
+    <Stack
+      display="inline-flex"
+      alignItems="center"
+      flexDirection={variant === 'label-reverse' ? 'row-reverse' : 'row'}
+      gap={1}
+      flexWrap="nowrap"
+    >
+      <SvgIcon
+        sx={{
+          color: value ? 'success.main' : 'text.secondary',
+        }}
+      >
+        {value ? <CheckCircle /> : <CloseCircle />}
+      </SvgIcon>
+      {variant !== 'icon' && <Typography>{value ? 'Yes' : 'No'}</Typography>}
+    </Stack>
   );
 };
