@@ -42,7 +42,9 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('cardano.addresses.permit'),
           fraud: nodeConfig.get<string>('cardano.addresses.fraud'),
-          commitments: nodeConfig.get<string[]>('cardano.addresses.commitments'),
+          commitments: nodeConfig.get<string[]>(
+            'cardano.addresses.commitments',
+          ),
         },
         initialHeight: nodeConfig.get<number>('cardano.initialHeight'),
         tokens: {
@@ -59,7 +61,9 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('bitcoin.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin.addresses.fraud'),
-          commitments: nodeConfig.get<string[]>('bitcoin.addresses.commitments'),
+          commitments: nodeConfig.get<string[]>(
+            'bitcoin.addresses.commitments',
+          ),
         },
         initialHeight: nodeConfig.get<number>('bitcoin.initialHeight'),
         tokens: {
@@ -78,7 +82,9 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('bitcoin-runes.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin-runes.addresses.fraud'),
-          commitments: nodeConfig.get<string[]>('bitcoinRunes.addresses.commitments'),
+          commitments: nodeConfig.get<string[]>(
+            'bitcoin-runes.addresses.commitments',
+          ),
         },
         initialHeight: nodeConfig.get<number>('bitcoin-runes.initialHeight'),
         tokens: {
@@ -95,7 +101,9 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('ethereum.addresses.permit'),
           fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
-          commitments: nodeConfig.get<string[]>('ethereum.addresses.commitments'),
+          commitments: nodeConfig.get<string[]>(
+            'ethereum.addresses.commitments',
+          ),
         },
         initialHeight: nodeConfig.get<number>('ethereum.initialHeight'),
         tokens: {
@@ -112,7 +120,9 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('binance.addresses.permit'),
           fraud: nodeConfig.get<string>('binance.addresses.fraud'),
-          commitments: nodeConfig.get<string[]>('binance.addresses.commitments'),
+          commitments: nodeConfig.get<string[]>(
+            'binance.addresses.commitments',
+          ),
         },
         initialHeight: nodeConfig.get<number>('binance.initialHeight'),
         tokens: {
