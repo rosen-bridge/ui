@@ -18,8 +18,9 @@ import {
   useBreakpoint,
   useCollection,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { ApiAssetsResponse, Assets as AssetType } from '@/types/api';
@@ -105,7 +106,17 @@ const Assets = () => {
             {
               key: 'name',
               title: 'Name',
-              render: (item) => <Token name={item.name} />,
+              render: (item) => {
+                const tokenUrl =
+                  !item.isNative &&
+                  getTokenUrl(
+                    item.chain,
+                    item.chain == NETWORKS.cardano.key
+                      ? item.id.replace('.', '')
+                      : item.id,
+                  );
+                return <Token name={item.name} href={tokenUrl || undefined} />;
+              },
             },
             {
               key: 'network',
@@ -144,13 +155,15 @@ const Assets = () => {
                 const hot = item.lockedPerAddress?.find((item) =>
                   Object.values(LOCK_ADDRESSES).includes(item.address),
                 );
-                // const hotUrl = getAddressUrl(row.chain, hot?.address);
+                const hotUrl =
+                  getAddressUrl(item.chain, hot?.address) ?? undefined;
                 return (
                   <Amount
                     value={getDecimalString(
                       (hot?.amount || 0).toString(),
                       item.significantDecimals,
                     )}
+                    href={hotUrl}
                   />
                 );
               },
@@ -167,7 +180,8 @@ const Assets = () => {
                   (item) =>
                     !Object.values(LOCK_ADDRESSES).includes(item.address),
                 );
-                // const coldUrl = getAddressUrl(item.chain, cold?.address);
+                const coldUrl =
+                  getAddressUrl(item.chain, cold?.address) ?? undefined;
 
                 return (
                   <Amount
@@ -175,6 +189,7 @@ const Assets = () => {
                       (cold?.amount || 0).toString(),
                       item.significantDecimals,
                     )}
+                    href={coldUrl}
                   />
                 );
               },
