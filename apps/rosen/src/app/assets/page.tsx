@@ -4,191 +4,207 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import { ChangeEvent, MouseEvent, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import {
-  Box,
-  EnhancedTable,
-  Grid,
-  MenuItem,
-  Paper,
-  TablePaginationProps,
-  TextField,
-  Typography,
-  useTableDataPagination,
+  Amount,
+  DataLayout,
+  Network,
+  NewPagination,
+  SmartSearch,
+  TableGrid,
+  SortField,
+  Token,
+  useBreakpoint,
+  useCollection,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
-import { Network } from '@rosen-ui/types';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
-import { ApiAssetsResponse, Assets as AssetsModel } from '@/types/api';
+import { ApiAssetsResponse, Assets as AssetType } from '@/types/api';
 
-import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
-import { TableSkeleton } from './TableSkeleton';
-
-const getKey = (chain: Network | 'all') => (offset: number, limit: number) => {
-  return [
-    '/v1/assets',
-    { offset, limit, chain: chain == 'all' ? undefined : chain },
-  ];
-};
+import { LOCK_ADDRESSES } from '../../../configs';
+import AssetRowDetails from './AssetRowDetails';
+import { getFilters, sorts } from './config';
 
 const Assets = () => {
-  const [network, setNetwork] = useState<Network | 'all'>('all');
+  const dense = useBreakpoint('laptop-down');
+  const collection = useCollection();
+  const filters = useMemo(() => getFilters(), []);
 
-  const {
-    data,
-    isLoading,
-    pageIndex,
-    pageSize,
-    setPageIndex,
-    setPageSize,
-    isFirstLoad,
-    isFirstPage,
-    isLastPage,
-  } = useTableDataPagination<ApiAssetsResponse>(getKey(network));
-
-  const handleChangeNetwork = (
-    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    setNetwork(event.target.value as Network);
-  };
-
-  const handleChangePage = useCallback(
-    (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-      setPageIndex(newPage);
+  const { data, isLoading } = useSWR<ApiAssetsResponse>(
+    collection.params && ['/v1/assets', collection.params],
+    fetcher,
+    {
+      keepPreviousData: true,
     },
-    [setPageIndex],
   );
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setPageSize(parseInt(event.target.value, 10));
-    },
-    [setPageSize],
-  );
-
-  const renderMobileRow = useCallback(
-    (rowData: AssetsModel) => (
-      <MobileRow key={rowData.id} {...rowData} isLoading={isLoading} />
+  const renderPagination = useCallback(
+    () => (
+      <NewPagination
+        defaultPageSize={10}
+        pageSizeOptions={[10, 25, 50, 100]}
+        disabled={isLoading}
+        total={data?.total}
+        pageSize={collection.pageSize}
+        pageIndex={collection.pageIndex}
+        onPageIndexChange={collection.setPageIndex}
+        onPageSizeChange={collection.setPageSize}
+      />
     ),
-    [isLoading],
+    [collection, data, isLoading],
   );
 
-  const renderTabletRow = useCallback(
-    (rowData: AssetsModel) => (
-      <TabletRow key={rowData.id} {...rowData} isLoading={isLoading} />
+  const renderSearch = useCallback(
+    () => (
+      <SmartSearch
+        disabled={isLoading}
+        namespace="assets"
+        filters={filters}
+        onChange={collection.setFilters}
+      />
     ),
-    [isLoading],
+    [collection, filters, isLoading],
   );
 
-  const tableHeaderProps = useMemo(
-    () => ({
-      mobile: mobileHeader,
-      tablet: tabletHeader,
-    }),
-    [],
-  );
-
-  const tableRenderRowProps = useMemo(
-    () => ({
-      mobile: renderMobileRow,
-      tablet: renderTabletRow,
-    }),
-    [renderMobileRow, renderTabletRow],
-  );
-
-  const paginationProps = useMemo<TablePaginationProps>(
-    () => ({
-      component: 'div',
-      count: Number(data?.total ?? 0),
-      rowsPerPage: pageSize,
-      page: pageIndex,
-      onPageChange: handleChangePage,
-      onRowsPerPageChange: handleChangeRowsPerPage,
-      nextIconButtonProps: {
-        disabled: isLoading || isLastPage,
-      },
-      backIconButtonProps: {
-        disabled: isLoading || isFirstPage,
-      },
-      SelectProps: {
-        disabled: isLoading,
-      },
-    }),
-    [
-      data?.total,
-      pageIndex,
-      pageSize,
-      handleChangePage,
-      handleChangeRowsPerPage,
-      isLoading,
-      isFirstPage,
-      isLastPage,
-    ],
+  const renderSort = useCallback(
+    () => (
+      <SortField
+        defaultKey="timestamp"
+        defaultOrder="DESC"
+        dense={dense}
+        disabled={isLoading}
+        value={collection.sort}
+        options={sorts}
+        // onChange={collection.setSort}
+      />
+    ),
+    [collection, dense, isLoading],
   );
 
   return (
     <>
-      <Grid
-        alignItems={{ mobile: 'stretch', tablet: 'center' }}
-        container
-        direction={{ mobile: 'column-reverse', tablet: 'row' }}
-        justifyContent="space-between"
-        spacing={2}
-        sx={{ marginBottom: 2 }}
+      <DataLayout
+        search={renderSearch()}
+        sort={renderSort()}
+        sidebar={null}
+        pagination={renderPagination()}
       >
-        <Grid item>
-          <Box
-            bgcolor={(theme) => ({
-              mobile: theme.palette.secondary.light,
-              tablet: 'transparent',
-            })}
-            borderRadius={(theme) =>
-              `${theme.shape.borderRadius}px ${theme.shape.borderRadius}px 0 0`
-            }
-            padding={{ mobile: 2, tablet: 0 }}
-          >
-            <Typography variant="h2">List of Locked Assets</Typography>
-            <Typography variant="body2">
-              Showing {paginationProps.page * paginationProps.rowsPerPage + 1}{' '}
-              to{' '}
-              {isLastPage
-                ? paginationProps.count
-                : paginationProps.page * paginationProps.rowsPerPage +
-                  paginationProps.rowsPerPage}{' '}
-              of {paginationProps.count} Entries{' '}
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid item width={{ mobile: '100%', tablet: '200px', laptop: '240px' }}>
-          <TextField
-            select
-            label="Network"
-            fullWidth
-            onChange={handleChangeNetwork}
-            value={network}
-          >
-            <MenuItem value="all">All</MenuItem>
-            {NETWORKS_KEYS.map((key) => (
-              <MenuItem key={key} value={key}>
-                {NETWORKS[key].label}
-              </MenuItem>
-            ))}
-          </TextField>
-        </Grid>
-      </Grid>
-      <Paper sx={{ overflow: 'hidden' }}>
-        {isFirstLoad && <TableSkeleton numberOfItems={pageSize} />}
-        {!isFirstLoad && data && (
-          <EnhancedTable
-            data={data.items}
-            responsiveHead={tableHeaderProps}
-            responsiveRenderRow={tableRenderRowProps}
-            paginated={true}
-            tablePaginationProps={paginationProps}
-          />
-        )}
-      </Paper>
+        <TableGrid<AssetType>
+          data={data?.items || []}
+          isLoading={isLoading}
+          gridTemplateColumns="repeat(2,1fr)"
+          overrides={{
+            tablet: { gridTemplateColumns: 'repeat(3,1fr)' },
+            laptop: { gridTemplateColumns: 'repeat(4,1fr)' },
+            desktop: { gridTemplateColumns: 'repeat(6,1fr)' },
+          }}
+          dataMap={[
+            {
+              key: 'name',
+              title: 'Name',
+              render: (item) => <Token name={item.name} />,
+            },
+            {
+              key: 'network',
+              title: 'Network',
+              render: (item) => <Network name={item.chain} />,
+            },
+            {
+              key: 'locked',
+              title: 'Locked',
+              render: (item) => {
+                const hot = item.lockedPerAddress?.find((item) =>
+                  Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                const cold = item.lockedPerAddress?.find(
+                  (item) =>
+                    !Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                return (
+                  <Amount
+                    value={getDecimalString(
+                      ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+                      item.significantDecimals,
+                    )}
+                  />
+                );
+              },
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                tablet: { style: { display: 'block' } },
+              },
+            },
+            {
+              key: 'hot',
+              title: 'Hot',
+              render: (item) => {
+                const hot = item.lockedPerAddress?.find((item) =>
+                  Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                // const hotUrl = getAddressUrl(row.chain, hot?.address);
+                return (
+                  <Amount
+                    value={getDecimalString(
+                      (hot?.amount || 0).toString(),
+                      item.significantDecimals,
+                    )}
+                  />
+                );
+              },
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                desktop: { style: { display: 'block' } },
+              },
+            },
+            {
+              key: 'cold',
+              title: 'Cold',
+              render: (item) => {
+                const cold = item.lockedPerAddress?.find(
+                  (item) =>
+                    !Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                // const coldUrl = getAddressUrl(item.chain, cold?.address);
+
+                return (
+                  <Amount
+                    value={getDecimalString(
+                      (cold?.amount || 0).toString(),
+                      item.significantDecimals,
+                    )}
+                  />
+                );
+              },
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                desktop: { style: { display: 'block' } },
+              },
+            },
+            {
+              key: 'bridged',
+              title: 'Bridged',
+              render: (item) => (
+                <Amount
+                  value={getDecimalString(
+                    item.bridged || '0',
+                    item.significantDecimals,
+                  )}
+                />
+              ),
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                laptop: { style: { display: 'block' } },
+              },
+            },
+          ]}
+          renderDetails={(item, expanded) => (
+            <AssetRowDetails row={item} expanded={expanded} />
+          )}
+        />
+      </DataLayout>
     </>
   );
 };
