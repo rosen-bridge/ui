@@ -7,23 +7,25 @@
 import { useCallback, useMemo } from 'react';
 
 import {
+  Amount,
   DataLayout,
+  Network,
   NewPagination,
   SmartSearch,
   TableGrid,
   SortField,
+  Token,
   useBreakpoint,
   useCollection,
-  TableGridHead,
-  TableGridHeadCol,
-  Skeleton,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
-import { ApiAssetsResponse } from '@/types/api';
+import { ApiAssetsResponse, Assets as AssetType } from '@/types/api';
 
-import AssetRow from './AssetRow';
+import { LOCK_ADDRESSES } from '../../../configs';
+import AssetRowDetails from './AssetRowDetails';
 import { getFilters, sorts } from './config';
 
 const Assets = () => {
@@ -83,70 +85,127 @@ const Assets = () => {
   );
 
   return (
-    <DataLayout
-      search={renderSearch()}
-      sort={renderSort()}
-      sidebar={null}
-      pagination={renderPagination()}
-    >
-      <TableGrid
-        gridTemplateColumns="repeat(2,1fr) auto"
-        overrides={{
-          tablet: { gridTemplateColumns: 'repeat(3,1fr) auto' },
-          laptop: { gridTemplateColumns: 'repeat(4,1fr) auto' },
-          desktop: { gridTemplateColumns: 'repeat(6,1fr) auto' },
-        }}
+    <>
+      <DataLayout
+        search={renderSearch()}
+        sort={renderSort()}
+        sidebar={null}
+        pagination={renderPagination()}
       >
-        <TableGridHead>
-          <TableGridHeadCol>Name</TableGridHeadCol>
-          <TableGridHeadCol>Network</TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              tablet: { style: { display: 'block' } },
-            }}
-          >
-            Locked
-          </TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              desktop: { style: { display: 'block' } },
-            }}
-          >
-            Hot
-          </TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              desktop: { style: { display: 'block' } },
-            }}
-          >
-            Cold
-          </TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              laptop: { style: { display: 'block' } },
-            }}
-          >
-            Bridged
-          </TableGridHeadCol>
-        </TableGridHead>
-        {!isLoading
-          ? data?.items.map((item) => <AssetRow key={item.id} item={item} />)
-          : Array(collection.pageSize)
-              .fill(0)
-              .map((_, index) => (
-                <Skeleton
-                  variant="rounded"
-                  height={50}
-                  sx={{ gridColumn: '1/-1' }}
-                  key={index}
+        <TableGrid<AssetType>
+          data={data?.items || []}
+          isLoading={isLoading}
+          gridTemplateColumns="repeat(2,1fr)"
+          overrides={{
+            tablet: { gridTemplateColumns: 'repeat(3,1fr)' },
+            laptop: { gridTemplateColumns: 'repeat(4,1fr)' },
+            desktop: { gridTemplateColumns: 'repeat(6,1fr)' },
+          }}
+          dataMap={[
+            {
+              key: 'name',
+              title: 'Name',
+              render: (item) => <Token name={item.name} />,
+            },
+            {
+              key: 'network',
+              title: 'Network',
+              render: (item) => <Network name={item.chain} />,
+            },
+            {
+              key: 'locked',
+              title: 'Locked',
+              render: (item) => {
+                const hot = item.lockedPerAddress?.find((item) =>
+                  Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                const cold = item.lockedPerAddress?.find(
+                  (item) =>
+                    !Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                return (
+                  <Amount
+                    value={getDecimalString(
+                      ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+                      item.significantDecimals,
+                    )}
+                  />
+                );
+              },
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                tablet: { style: { display: 'block' } },
+              },
+            },
+            {
+              key: 'hot',
+              title: 'Hot',
+              render: (item) => {
+                const hot = item.lockedPerAddress?.find((item) =>
+                  Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                // const hotUrl = getAddressUrl(row.chain, hot?.address);
+                return (
+                  <Amount
+                    value={getDecimalString(
+                      (hot?.amount || 0).toString(),
+                      item.significantDecimals,
+                    )}
+                  />
+                );
+              },
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                desktop: { style: { display: 'block' } },
+              },
+            },
+            {
+              key: 'cold',
+              title: 'Cold',
+              render: (item) => {
+                const cold = item.lockedPerAddress?.find(
+                  (item) =>
+                    !Object.values(LOCK_ADDRESSES).includes(item.address),
+                );
+                // const coldUrl = getAddressUrl(item.chain, cold?.address);
+
+                return (
+                  <Amount
+                    value={getDecimalString(
+                      (cold?.amount || 0).toString(),
+                      item.significantDecimals,
+                    )}
+                  />
+                );
+              },
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                desktop: { style: { display: 'block' } },
+              },
+            },
+            {
+              key: 'bridged',
+              title: 'Bridged',
+              render: (item) => (
+                <Amount
+                  value={getDecimalString(
+                    item.bridged || '0',
+                    item.significantDecimals,
+                  )}
                 />
-              ))}
-      </TableGrid>
-    </DataLayout>
+              ),
+              overrides: {
+                mobile: { style: { display: 'none' } },
+                laptop: { style: { display: 'block' } },
+              },
+            },
+          ]}
+          renderDetails={(item, expanded) => (
+            <AssetRowDetails row={item} expanded={expanded} />
+          )}
+        />
+      </DataLayout>
+    </>
   );
 };
 
