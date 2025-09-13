@@ -19,36 +19,8 @@ import { Network as NetworkType } from '@rosen-ui/types/dist/common';
 import { getDecimalString, getNumberOfDecimals } from '@rosen-ui/utils';
 
 import { Section } from './Section';
+import { Status } from './Status';
 import { DetailsProps } from './type';
-
-export interface EventStatusProps {
-  value?: string;
-  loading?: boolean;
-}
-
-export const EventStatus = ({ value, loading }: EventStatusProps) => {
-  if (loading) {
-    return <Chip loading />;
-  }
-
-  if (!value) {
-    return <span>invalid</span>;
-  }
-
-  switch (value.toLowerCase()) {
-    case 'fraud':
-      return null;
-
-    case 'processing':
-      return <Chip label={value} color="info" icon="Hourglass" />;
-
-    case 'successful':
-      return <Chip label={value} color="success" icon="CheckCircle" />;
-
-    default:
-      return <span>{value}</span>;
-  }
-};
 
 export const Overview = ({
   details,
@@ -163,7 +135,7 @@ export const Overview = ({
                 },
               }}
             >
-              <EventStatus value={details?.status} loading={isLoading} />
+              <Status value={details?.status as any} loading={isLoading} />
             </Label>
             <Label
               label="Time"
