@@ -25,11 +25,6 @@ export const Process = ({ id }: { id: string }) => {
         orientation="vertical"
         loading={isLoading}
         steps={data?.steps}
-        style={{
-          minHeight: '210px',
-          height: isLoading ? '210px' : 'unset',
-          width: '100%',
-        }}
         overrides={{
           laptop: {
             orientation: 'horizontal',

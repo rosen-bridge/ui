@@ -13,13 +13,13 @@ import {
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
-type DetailsProps = {
+export type SectionProps = {
   children?: ReactNode;
   disclosure?: ReturnType<typeof useDisclosure>;
   title?: string;
 };
 
-export const Section = ({ children, disclosure, title }: DetailsProps) => {
+export const Section = ({ children, disclosure, title }: SectionProps) => {
   return (
     <Card backgroundColor="background.paper">
       <CardHeader
