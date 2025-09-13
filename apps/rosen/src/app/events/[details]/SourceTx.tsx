@@ -6,7 +6,6 @@ import {
   Card,
   CardBody,
   CopyButton,
-  DisclosureButton,
   Skeleton,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -31,11 +30,7 @@ export const SourceTx = ({ id }: { id: string }) => {
   });
 
   return (
-    <Section
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
-      title="Source Tx Metadata"
-    >
+    <Section disclosure={disclosure} title="Source Tx Metadata">
       {!isLoading && details ? (
         <Card backgroundColor="primary.light">
           <CardBody>
