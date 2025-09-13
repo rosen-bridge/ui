@@ -11,83 +11,42 @@ import {
   Stack,
   Typography,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
-import { NetworkCard } from '@/(dashboard)/@networks/NetworkCard';
 import { ApiBalanceResponse } from '@/_types/api';
 
-export default function Networks() {
+import { NetworkCard } from './NetworkCard';
+
+const Networks = () => {
   const { data, isLoading } = useSWR<ApiBalanceResponse>('/balance', fetcher);
 
   const carouselSize = useMemo(
-    () => ({ desktop: '20%', laptop: '31.5%', tablet: '42%', mobile: '100%' }),
+    () => ({
+      desktop: 'calc(25% - 3rem / 4)',
+      laptop: 'calc(33.33333% - 3rem / 4)',
+      tablet: 'calc(50% - 2rem / 3)',
+      mobile: '100%',
+    }),
     [],
   );
 
-  const carouselItems = useMemo(() => {
-    if (!data) {
-      return Array.from({ length: 6 }).map((_, i) => (
-        <CarouselItem key={i} size={carouselSize}>
-          <NetworkCard isLoading />
-        </CarouselItem>
-      ));
-    }
-
-    const filteredHot = data.hot.filter(
-      (item) => item.chain === 'ergo' && item.balance.isNativeToken,
-    );
-    const filteredCold = data.cold.filter(
-      (item) => item.chain === 'ergo' && item.balance.isNativeToken,
-    );
-
-    return filteredHot.map((hotItem, i) => {
-      const coldItem = filteredCold[i];
-
-      const hotAmount = Number(
-        getDecimalString(
-          hotItem.balance.amount.toString(),
-          hotItem.balance.decimals,
-          3,
-        ),
+  const items = useMemo(() => {
+    return NETWORKS_KEYS.filter((key) => key != 'bitcoin-runes').map((key) => {
+      const cold = data?.cold.find(
+        (item) => item.chain === key && item.balance.isNativeToken,
       );
-      const coldAmount = coldItem
-        ? Number(
-            getDecimalString(
-              coldItem.balance.amount.toString(),
-              coldItem.balance.decimals,
-              3,
-            ),
-          )
-        : undefined;
 
-      return (
-        <CarouselItem key={i} size={carouselSize}>
-          <NetworkCard
-            isLoading={isLoading}
-            network={hotItem.chain}
-            hot={{
-              amount: hotAmount,
-              address: hotItem.address,
-              link: hotItem.address,
-              unit: hotItem.balance.name ?? 'N/A',
-            }}
-            cold={
-              coldItem
-                ? {
-                    amount: coldAmount!,
-                    address: coldItem.address,
-                    link: coldItem.address,
-                    unit: coldItem.balance.name ?? 'N/A',
-                  }
-                : undefined
-            }
-          />
-        </CarouselItem>
+      const hot = data?.hot.find(
+        (item) => item.chain === key && item.balance.isNativeToken,
       );
+
+      const network = key;
+
+      return { cold, hot, network };
     });
-  }, [data, isLoading, carouselSize]);
+  }, [data]);
 
   return (
     <CarouselProvider>
@@ -101,8 +60,15 @@ export default function Networks() {
           <CarouselButton type="next" />
         </Stack>
       </Stack>
-
-      <Carousel>{carouselItems}</Carousel>
+      <Carousel>
+        {items.map((item) => (
+          <CarouselItem key={item.network} size={carouselSize}>
+            <NetworkCard loading={isLoading} {...item} />
+          </CarouselItem>
+        ))}
+      </Carousel>
     </CarouselProvider>
   );
-}
+};
+
+export default Networks;
