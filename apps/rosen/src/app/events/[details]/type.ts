@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import { EventItem } from '@/types';
 
 export type BridgeEvent = EventItem & {
@@ -78,6 +80,7 @@ export type StatusProps = {
 export type DetailsProps = {
   details?: EventDetailsV2;
   loading?: boolean;
+  error?: ReactNode;
 };
 
 export type rowTypes = {
