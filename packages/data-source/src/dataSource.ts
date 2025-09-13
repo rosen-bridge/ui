@@ -9,6 +9,7 @@ import {
   migrations as scannerMigrations,
 } from '@rosen-bridge/scanner';
 import {
+  CommitmentEntity,
   EventTriggerEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
@@ -46,6 +47,7 @@ export const getDataSource = (
       TokenEntity,
       LockedAssetEntity,
       ExtractorStatusEntity,
+      CommitmentEntity,
       AggregatedStatusEntity,
       AggregatedStatusChangedEntity,
       GuardStatusEntity,
