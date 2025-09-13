@@ -518,10 +518,8 @@ export const getEventProcess = async (eventId: string) => {
 
 export const getEventMetadata = async (eventId: string) => {
   await simulateDelay(5000);
+
   maybeThrowError();
 
-  return {
-    eventId,
-    metadata: 'testing response metadata🧪',
-  };
+  return 'testing response metadata🧪';
 };
