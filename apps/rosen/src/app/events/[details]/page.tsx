@@ -24,7 +24,8 @@ const Sections: {
   { component: Watchers, needsData: false },
   { component: SourceTx, needsData: false },
 ];
-
+/**
+ * */
 const Page = () => {
   const { details: eventId } = useParams();
   const { data, isLoading, mutate, error } = useSWR(
