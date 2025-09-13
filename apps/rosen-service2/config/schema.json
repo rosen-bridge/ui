@@ -988,33 +988,6 @@
             }
           }
         }
-      },
-      "bitcoinRunes": {
-        "type": "object",
-        "children": {
-          "active": {
-            "type": "boolean",
-            "description": "bitcoin-runes activation state",
-            "default": false,
-            "validations": [
-              {
-                "required": true,
-                "error": "bitcoin-runes activation state must be set"
-              }
-            ]
-          },
-          "scanInterval": {
-            "type": "number",
-            "default": 10,
-            "description": "bitcoin-runes scanInterval threshold in seconds",
-            "validations": [
-              {
-                "required": true,
-                "error": "bitcoin-runes scanInterval must be specified (in seconds)"
-              }
-            ]
-          }
-        }
       }
     }
   },

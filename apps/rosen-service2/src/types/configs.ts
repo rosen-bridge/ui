@@ -57,12 +57,6 @@ export interface Chains {
   doge: ChainsDoge;
   ethereum: ChainsEthereum;
   binance: ChainsBinance;
-  bitcoinRunes: ChainsBitcoinRunes;
-}
-
-export interface ChainsBitcoinRunes {
-  active: boolean;
-  scanInterval: number;
 }
 
 export interface ChainsBinance {
