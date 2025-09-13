@@ -353,6 +353,13 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
+    MuiSkeleton: {
+      styleOverrides: {
+        text: ({ theme }: { theme: Theme }) => ({
+          borderRadius: theme.spacing(0.5),
+        }),
+      },
+    },
     RosenNavigationBar: {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({

@@ -307,6 +307,7 @@ export const BridgeForm = () => {
           disableUnderline: true,
           endAdornment: tokenField.value && selectedWallet && (
             <UseAllAmount
+              disabled={!addressField.value || !!errors?.walletAddress}
               error={!!error}
               loading={isLoading || isMaxLoading}
               value={balanceRaw}
