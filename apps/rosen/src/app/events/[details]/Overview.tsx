@@ -10,13 +10,12 @@ import {
   Label,
   Network,
   Token,
-  Chip,
   DateTime,
   LabelGroup,
   Center,
 } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types/dist/common';
-import { getDecimalString, getNumberOfDecimals } from '@rosen-ui/utils';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import { Section } from './Section';
 import { Status } from './Status';
@@ -28,7 +27,7 @@ export const Overview = ({
   error,
 }: DetailsProps) => {
   return (
-    <Section state="open" title="Overview">
+    <Section title="Overview">
       {error ? (
         <Center style={{ height: '380px' }}>{error}</Center>
       ) : (

@@ -7,12 +7,10 @@ import {
   Box,
   Center,
   Columns,
-  DisclosureButton,
   Identifier,
   Label,
   LabelGroup,
   RelativeTime,
-  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 import { Section } from './Section';
@@ -23,14 +21,8 @@ export const Details = ({
   loading: isLoading,
   error,
 }: DetailsProps) => {
-  const disclosure = useDisclosure();
-
   return (
-    <Section
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={'open'}
-      title="Details"
-    >
+    <Section title="Details">
       {error ? (
         <Center style={{ height: '380px' }}>{error}</Center>
       ) : (

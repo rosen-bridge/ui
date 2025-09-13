@@ -1,10 +1,6 @@
 import React from 'react';
 
-import {
-  DisclosureButton,
-  ProcessTracker,
-  useDisclosure,
-} from '@rosen-bridge/ui-kit';
+import { ProcessTracker, useDisclosure } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
@@ -24,11 +20,7 @@ export const Process = ({ id }: { id: string }) => {
   });
 
   return (
-    <Section
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
-      title="Progress"
-    >
+    <Section disclosure={disclosure} title="Progress">
       <ProcessTracker
         orientation="vertical"
         loading={isLoading}

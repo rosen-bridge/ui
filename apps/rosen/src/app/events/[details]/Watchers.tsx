@@ -54,11 +54,7 @@ export const Watchers = ({ id }: { id: string }) => {
   });
 
   return (
-    <Section
-      action={<DisclosureButton disabled={false} disclosure={disclosure} />}
-      state={disclosure.state}
-      title="Watchers"
-    >
+    <Section disclosure={disclosure} title="Watchers">
       <Stack flexDirection="column" gap={1}>
         <Columns width="150px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">

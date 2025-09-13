@@ -8,34 +8,40 @@ import {
   CardHeader,
   CardTitle,
   Collapse,
-  DisclosureState,
+  DisclosureButton,
   Typography,
+  useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 type DetailsProps = {
-  title?: string;
   children?: ReactNode;
-  action?: ReactNode;
-  state?: DisclosureState;
+  disclosure?: ReturnType<typeof useDisclosure>;
+  title?: string;
 };
 
-export const Section = ({ children, title, action, state }: DetailsProps) => {
+export const Section = ({ children, disclosure, title }: DetailsProps) => {
   return (
     <Card backgroundColor="background.paper">
-      <CardHeader action={action}>
+      <CardHeader
+        action={disclosure && <DisclosureButton disclosure={disclosure} />}
+      >
         <CardTitle>
           <Typography variant="h2" color="text.secondary">
             {title}
           </Typography>
         </CardTitle>
       </CardHeader>
-      {action ? (
+      {disclosure ? (
         <CardBody
           style={{
-            paddingBottom: state !== 'open' ? '0' : undefined,
+            paddingBottom: disclosure.state !== 'open' ? '0' : undefined,
           }}
         >
-          <Collapse in={state == 'open'} unmountOnExit defaultValue="open">
+          <Collapse
+            in={disclosure.state == 'open'}
+            unmountOnExit
+            defaultValue="open"
+          >
             {children}
           </Collapse>
         </CardBody>
