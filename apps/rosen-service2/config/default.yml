@@ -45,9 +45,6 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 10
-  bitcoinRunes:
-    active: false
-    scanInterval: 10
 paths:
   tokens: config/rosen/tokensMap.json
   contracts: config/rosen
