@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migration1757533956751 implements MigrationInterface {
-  name = 'Migration1757533956751';
+export class Migration1757426872943 implements MigrationInterface {
+  name = 'Migration1757426872943';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
@@ -11,7 +11,7 @@ export class Migration1757533956751 implements MigrationInterface {
                 "decimal" integer NOT NULL,
                 "isNative" boolean NOT NULL,
                 "chain" varchar NOT NULL,
-                "significantDecimal" integer
+                "significantDecimal" integer NOT NULL
             )
         `);
     await queryRunner.query(`

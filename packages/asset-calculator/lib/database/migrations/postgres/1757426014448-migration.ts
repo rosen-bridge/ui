@@ -1,12 +1,12 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Migration1757534102339 implements MigrationInterface {
-  name = 'Migration1757534102339';
+export class Migration1757426014448 implements MigrationInterface {
+  name = 'Migration1757426014448';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             ALTER TABLE "token_entity"
-            ADD "significantDecimal" integer
+            ADD "significantDecimal" integer NOT NULL
         `);
     await queryRunner.query(`
             ALTER TABLE "bridged_asset_entity"
