@@ -105,14 +105,17 @@ const STATES = {
   },
 } as const;
 
-type StatusProps = {
-  state: keyof typeof STATES;
+export type StatusProps = {
+  loading?: boolean;
+  value: keyof typeof STATES;
 };
 
-export const Status = ({ state }: StatusProps) => {
-  const status = STATES[state];
+export const Status = ({ loading, value }: StatusProps) => {
+  if (loading) return <Chip loading />;
 
-  if (!status) return null;
+  const status = STATES[value];
+
+  if (!status) return <Chip label="Invalid" color="error" icon="CloseCircle" />;
 
   return <Chip label={status.label} color={status.color} icon={status.icon} />;
 };
