@@ -164,18 +164,19 @@ const start = async () => {
     setInterval(async () => {
       try {
         await healthCheck.update();
-        // write health status to the healthPatch config address
-        const healthStatus: { [k: string]: string } = {};
-        healthCheck
-          .getHealthStatus()
-          .forEach((p) => (healthStatus[p.id] = p.status));
-        let healthReportPath = config.healthCheck.reportPath;
-        if (!path.isAbsolute(healthReportPath)) {
-          healthReportPath = path.resolve(process.cwd(), healthReportPath);
-        }
+        // write health status to the health report file
+        const healthStatus = Object.fromEntries(
+          healthCheck.getHealthStatus().map((p) => [p.id, p.status]),
+        );
+
+        const healthReportPath = path.isAbsolute(config.healthCheck.reportPath)
+          ? config.healthCheck.reportPath
+          : path.resolve(process.cwd(), config.healthCheck.reportPath);
+
         fs.writeFileSync(
           healthReportPath,
-          JSON.stringify(healthStatus, undefined, 4),
+          JSON.stringify(healthStatus, null, 2),
+          'utf8',
         );
         logger.debug('periodic health check update done');
       } catch (e) {
