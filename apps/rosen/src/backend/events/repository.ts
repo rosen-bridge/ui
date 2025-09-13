@@ -10,6 +10,12 @@ import {
 } from '@rosen-bridge/watcher-data-extractor';
 import { Network } from '@rosen-ui/types';
 
+import {
+  EventDetailsV2,
+  RosenChainTokenV2,
+  TokenCollectionV2,
+  TokenInfoV2,
+} from '@/app/events/[details]/type';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 import { dataSource } from '../dataSource';
@@ -167,7 +173,9 @@ export const getEvents = async (filters: Filters) => {
   };
 };
 
-export const getEventById = async (eventId: string) => {
+export const getEventById = async (
+  eventId: string,
+): Promise<EventDetailsV2 | null> => {
   const qb = observationRepository
     .createQueryBuilder('obs')
     .leftJoin(BlockEntity, 'block', 'block.hash = obs.block')
@@ -195,63 +203,52 @@ export const getEventById = async (eventId: string) => {
       'et.WIDsCount AS "WIDsCount"',
       'et.paymentTxId AS "paymentTxId"',
       'et.spendTxId AS "spendTxId"',
-      'et.result AS "triggerResult"',
       'et.txId AS "triggerTxId"',
-      'et.fromChain AS "triggerFromChain"',
-      'et.toChain AS "triggerToChain"',
-      'et.fromAddress AS "triggerFromAddress"',
-      'et.toAddress AS "triggerToAddress"',
     ])
-
     .addSelect(
-      `COALESCE(
-        FIRST_VALUE(et.result) OVER(PARTITION BY et.eventId ORDER BY COALESCE(et.result, 'PROCESSING') DESC),
-        'PROCESSING'
+      `FIRST_VALUE(et.result) OVER(
+        PARTITION BY et.eventId 
+        ORDER BY COALESCE(et.result, 'PROCESSING') DESC
       )`,
       'status',
     )
     .where('obs.requestId = :eventId', { eventId });
 
   const commitmentsByEventId = await getCommitmentsByEventId(eventId);
-
-  // console.log(qb.getSql());
-  const result = await qb.getRawOne();
-
+  const result = await qb.getRawOne<EventDetailsV2>();
   if (!result) return null;
 
+  const tokenMap = await getTokenMap();
+  const collections = tokenMap.getConfig();
+
+  const findTokenInfo = (tokenId?: string): TokenInfoV2 | null => {
+    if (!tokenId) return null;
+
+    for (const collection of collections as TokenCollectionV2[]) {
+      for (const token of Object.values(collection)) {
+        const t = token as RosenChainTokenV2;
+        if (t.tokenId === tokenId) {
+          return {
+            tokenId: t.tokenId,
+            name: t.name ?? '',
+            symbol: t.symbol ?? '',
+            decimals: t.decimals ?? 0,
+          };
+        }
+      }
+    }
+
+    return null;
+  };
+
   return {
-    id: result.id,
-    eventId: result.eventId,
-    fromChain: result.fromChain,
-    toChain: result.toChain,
-    fromAddress: result.fromAddress,
-    toAddress: result.toAddress,
-    height: result.height,
-    amount: result.amount,
-    networkFee: result.networkFee,
-    bridgeFee: result.bridgeFee,
-    sourceChainTokenId: result.sourceChainTokenId,
-    targetChainTokenId: result.targetChainTokenId,
-    sourceTxId: result.sourceTxId,
-    sourceBlockId: result.sourceBlockId,
-    reports: result.reports,
-
-    block: {
-      hash: result.blockHash,
-      height: result.blockHeight,
-      timestamp: result.timestamp,
-    },
-
-    eventTrigger: {
-      txId: result.triggerTxId,
-      paymentTxId: result.paymentTxId,
-      spendTxId: result.spendTxId,
-      WIDsCount: result.WIDsCount,
-      result: result.triggerResult,
-    },
+    ...result,
+    height: Number(result.height),
+    blockHeight: Number(result.blockHeight),
+    WIDsCount: Number(result.WIDsCount),
     commitments: commitmentsByEventId,
-
-    status: result.status,
+    sourceToken: findTokenInfo(result.sourceChainTokenId),
+    targetToken: findTokenInfo(result.targetChainTokenId),
   };
 };
 

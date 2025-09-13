@@ -15,6 +15,7 @@ import {
   LabelGroup,
 } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types/dist/common';
+import { getDecimalString, getNumberOfDecimals } from '@rosen-ui/utils';
 
 import { Section } from './Section';
 import { DetailsProps } from './type';
@@ -79,7 +80,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         >
           <Token
             loading={isLoading}
-            name={details?.sourceChainTokenId}
+            name={details?.sourceToken?.name}
             reverse
             overrides={{
               tablet: {
@@ -99,9 +100,13 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         >
           <Amount
             loading={isLoading}
-            value={details?.amount}
+            value={getDecimalString(
+              // todo: empty string
+              details?.amount ? details.amount : '',
+              Number(details?.sourceToken?.decimals),
+            )}
             orientation="horizontal"
-            unit="TODO"
+            unit={details?.sourceToken?.symbol}
           />
         </Label>
         <Label
@@ -162,9 +167,7 @@ export const Overview = ({ details, loading: isLoading }: DetailsProps) => {
         >
           <DateTime
             loading={isLoading}
-            timestamp={
-              details?.block?.timestamp && details.block.timestamp * 1000
-            }
+            timestamp={details?.timestamp && details.timestamp * 1000}
           />
         </Label>
         <Label

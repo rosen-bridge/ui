@@ -76,7 +76,7 @@ export type StatusProps = {
 };
 
 export type DetailsProps = {
-  details?: EventDetails;
+  details?: EventDetailsV2;
   loading?: boolean;
 };
 
@@ -91,4 +91,72 @@ export type WatchersApiResponse = {
   triggeredBy: number;
   rewardedTo: number;
   watchers: rowTypes[];
+};
+
+/**
+ * ###############################[ New Type API ]#############################################
+ */
+
+export type TokenInfoV2 = {
+  tokenId: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  [key: string]: any;
+};
+
+export type RosenChainTokenV2 = {
+  tokenId: string;
+  name?: string;
+  symbol?: string;
+  decimals?: number;
+  [key: string]: any;
+};
+
+export type TokenCollectionV2 = Record<string, RosenChainTokenV2>;
+
+export type EventTriggerInfoV2 = {
+  WIDsCount: number;
+  paymentTxId: string | null;
+  spendTxId: string | null;
+  triggerTxId: string | null;
+  status: string;
+};
+
+export type BlockInfoV2 = {
+  hash: string;
+  height: number;
+  timestamp: Date;
+};
+
+export type EventDetailsV2 = {
+  id: string;
+  eventId: string;
+  fromChain: string;
+  toChain: string;
+  fromAddress: string;
+  toAddress: string;
+  height: number;
+  amount: string;
+  networkFee: string;
+  bridgeFee: string;
+  sourceChainTokenId: string;
+  targetChainTokenId: string;
+  sourceTxId: string;
+  sourceBlockId: string;
+
+  blockHash: string;
+  blockHeight: number;
+  timestamp: number;
+
+  WIDsCount: number;
+  paymentTxId: string | null;
+  spendTxId: string | null;
+  triggerTxId: string;
+
+  status: string;
+
+  commitments: unknown[];
+  sourceToken?: TokenInfoV2 | null;
+  targetToken: TokenInfoV2 | null;
 };

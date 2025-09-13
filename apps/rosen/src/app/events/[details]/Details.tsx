@@ -31,7 +31,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
           <Label orientation="horizontal" label="Duration">
             <RelativeTime
               isLoading={isLoading}
-              timestamp={details?.block.timestamp}
+              timestamp={details?.timestamp}
             />
           </Label>
           <Label label="Total Emission">
@@ -96,7 +96,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
               <Identifier
                 style={{ width: '90%' }}
                 loading={isLoading}
-                value={details?.eventTrigger?.paymentTxId ?? undefined}
+                value={details?.paymentTxId ?? undefined}
                 href={'todo'}
                 copyable
               />
@@ -105,7 +105,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
               <Identifier
                 style={{ width: '90%' }}
                 loading={isLoading}
-                value={details?.eventTrigger?.spendTxId ?? undefined}
+                value={details?.spendTxId ?? undefined}
                 href={'todo'}
                 copyable
               />
@@ -114,7 +114,7 @@ export const Details = ({ details, loading: isLoading }: DetailsProps) => {
               <Identifier
                 style={{ width: '90%' }}
                 loading={isLoading}
-                value={details?.eventTrigger?.txId}
+                value={details?.triggerTxId}
                 href={'todo'}
                 copyable
               />

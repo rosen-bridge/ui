@@ -1,7 +1,7 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Stack } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -25,10 +25,7 @@ const Sections: { component: React.ComponentType<any>; needsData?: boolean }[] =
 
 const Page = () => {
   const { details: eventId } = useParams();
-  const { data, isLoading } = useSWR<EventDetails>(
-    `/v1/events/${eventId}`,
-    fetcher,
-  );
+  const { data, isLoading } = useSWR(`/v1/events/${eventId}`, fetcher);
 
   const ComponentProps = { loading: isLoading, details: data };
 
