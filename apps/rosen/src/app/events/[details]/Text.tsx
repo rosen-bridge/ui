@@ -7,13 +7,12 @@ export type TextProps = HTMLAttributes<HTMLSpanElement> & {
   value?: string | number;
 };
 
-const Loading = () => {
-  return <Skeleton width="80px" variant="text" />;
-};
-
 const TextBase = ({ value, loading, ...props }: TextProps) => {
-  if (loading) return <Loading />;
-  return <Typography {...props}>{!loading ? value : <Loading />}</Typography>;
+  return (
+    <Typography {...props}>
+      {!loading ? value : <Skeleton width="80px" variant="text" />}
+    </Typography>
+  );
 };
 
 export const Text = InjectOverrides(TextBase);
