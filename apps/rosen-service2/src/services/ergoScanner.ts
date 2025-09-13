@@ -1,7 +1,7 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
-import * as scanner from '@rosen-bridge/scanner';
+import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
+import * as scanner from '@rosen-bridge/ergo-scanner';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import {
   AbstractService,

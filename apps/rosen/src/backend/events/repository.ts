@@ -1,5 +1,5 @@
-import { ObservationEntity } from '@rosen-bridge/observation-extractor';
-import { BlockEntity } from '@rosen-bridge/scanner';
+import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import {
   Filters,
   filtersToTypeorm,

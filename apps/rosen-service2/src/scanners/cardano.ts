@@ -1,11 +1,11 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   CardanoKoiosObservationExtractor,
   CardanoBlockFrostObservationExtractor,
   CardanoOgmiosObservationExtractor,
-} from '@rosen-bridge/observation-extractor';
-import * as scanner from '@rosen-bridge/scanner';
+} from '@rosen-bridge/cardano-observation-extractor';
+import * as scanner from '@rosen-bridge/cardano-scanner';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';

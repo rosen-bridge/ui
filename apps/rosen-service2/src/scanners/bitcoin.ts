@@ -1,15 +1,13 @@
 import {
-  BitcoinEsploraScanner,
-  EsploraNetwork,
-} from '@rosen-bridge/bitcoin-esplora-scanner';
-import {
   BitcoinRpcObservationExtractor,
   BitcoinEsploraObservationExtractor,
 } from '@rosen-bridge/bitcoin-observation-extractor';
 import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+  BitcoinEsploraScanner,
+  EsploraNetwork,
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 

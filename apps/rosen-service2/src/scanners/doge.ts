@@ -1,22 +1,20 @@
 import {
-  DogeEsploraScanner,
-  EsploraNetwork,
-} from '@rosen-bridge/bitcoin-esplora-scanner';
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
 import {
   DogeRpcObservationExtractor,
   DogeEsploraObservationExtractor,
 } from '@rosen-bridge/bitcoin-observation-extractor';
 import {
+  DogeEsploraScanner,
+  EsploraNetwork,
   DogeRpcNetwork,
   DogeRpcScanner,
   DogeRpcTransaction,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
