@@ -5,11 +5,7 @@ import React from 'react';
 import { Fire, SnowFlake } from '@rosen-bridge/icons';
 import {
   Amount,
-  Card,
-  CardBody,
-  Divider,
   Identifier,
-  Network,
   Stack,
   SvgIcon,
   Typography,
@@ -19,13 +15,15 @@ import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
 
 import { TokenInfoWithAddress } from '@/_types/api';
 
-type AddressProps = {
+import { format } from './format';
+
+export type ItemAddressProps = {
   loading?: boolean;
   state: 'hot' | 'cold';
   value?: TokenInfoWithAddress;
 };
 
-const Address = ({ loading, state, value }: AddressProps) => {
+export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
   return (
     <div style={{ width: '100%' }}>
       <Stack
@@ -61,9 +59,11 @@ const Address = ({ loading, state, value }: AddressProps) => {
             loading={loading}
             value={
               value &&
-              getDecimalString(
-                value.balance.amount.toString(),
-                value.balance.decimals,
+              format(
+                getDecimalString(
+                  value.balance.amount.toString(),
+                  value.balance.decimals,
+                ),
                 3,
               )
             }
@@ -79,47 +79,5 @@ const Address = ({ loading, state, value }: AddressProps) => {
         qrcode
       />
     </div>
-  );
-};
-
-export type NetworkCardProps = {
-  cold?: TokenInfoWithAddress;
-  hot?: TokenInfoWithAddress;
-  loading?: boolean;
-  network?: NetworkType;
-};
-
-export const NetworkCard = ({
-  cold,
-  hot,
-  loading,
-  network,
-}: NetworkCardProps) => {
-  const error = !loading && (!network || !cold || !hot);
-  return (
-    <Card backgroundColor="background.paper">
-      <CardBody>
-        <Stack
-          flexDirection="column"
-          alignItems="stretch"
-          justifyContent="start"
-          gap={1}
-        >
-          {error && (
-            <Typography color="error">
-              Some required data is missing.
-            </Typography>
-          )}
-          {!error && (
-            <>
-              <Network loading={loading} name={network} />
-              <Address loading={loading} state="hot" value={hot} />
-              <Divider variant="fullWidth" />
-              <Address loading={loading} state="cold" value={cold} />
-            </>
-          )}
-        </Stack>
-      </CardBody>
-    </Card>
   );
 };

@@ -17,7 +17,7 @@ import useSWR from 'swr';
 
 import { ApiBalanceResponse } from '@/_types/api';
 
-import { NetworkCard } from './NetworkCard';
+import { Item } from './Item';
 
 const Networks = () => {
   const { data, isLoading } = useSWR<ApiBalanceResponse>('/balance', fetcher);
@@ -63,7 +63,7 @@ const Networks = () => {
       <Carousel>
         {items.map((item) => (
           <CarouselItem key={item.network} size={carouselSize}>
-            <NetworkCard loading={isLoading} {...item} />
+            <Item loading={isLoading} {...item} />
           </CarouselItem>
         ))}
       </Carousel>

@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import {
   CloseCircle,
   ExclamationOctagon,
@@ -33,11 +35,6 @@ const VARIANTS = {
     status: 'OK',
     Icon: ShieldCheck,
   },
-  // unknown: {
-  //   color: 'main',
-  //   status: 'UNKNOWN',
-  //   Icon: ExclamationOctagon,
-  // },
   unstable: {
     color: 'warning',
     status: 'UNSTABLE',
@@ -52,11 +49,17 @@ const Health = () => {
 
   const isSmall = useBreakpoint('laptop-down');
 
-  const trialErrors = data?.health.trialErrors.join('\n');
+  const status = useMemo(
+    () => (data?.health.status.toLowerCase() || 'broken') as StatusType,
+    [data],
+  );
 
-  const status = (data?.health.status.toLowerCase() || 'broken') as StatusType;
+  const trialErrors = useMemo(
+    () => data?.health.trialErrors.join('\n'),
+    [data],
+  );
 
-  const variant = VARIANTS[status];
+  const variant = useMemo(() => VARIANTS[status], [status]);
 
   return (
     <Card
