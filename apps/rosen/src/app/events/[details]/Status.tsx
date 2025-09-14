@@ -115,7 +115,8 @@ export const Status = ({ loading, value }: StatusProps) => {
 
   const status = STATES[value];
 
-  if (!status) return <Chip label="Invalid" color="error" icon="CloseCircle" />;
+  if (!status)
+    return <Chip label="Unknown" color="neutral" icon="ExclamationCircle" />;
 
   return <Chip label={status.label} color={status.color} icon={status.icon} />;
 };

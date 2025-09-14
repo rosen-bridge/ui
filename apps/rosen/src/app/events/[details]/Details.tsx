@@ -1,130 +1,109 @@
 'use client';
 
-import React from 'react';
+import { useMemo } from 'react';
 
 import {
   Amount,
   Box,
-  Center,
   Columns,
   Identifier,
   Label,
   LabelGroup,
   RelativeTime,
 } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
 import { Section } from './Section';
-import { DetailsProps } from './type';
+import { EventDetailsV2 } from './type';
 
-export const Details = ({
-  details,
-  loading: isLoading,
-  error,
-}: DetailsProps) => {
+export const Details = ({ id }: { id: string }) => {
+  const { error, data, isLoading, mutate } = useSWR<EventDetailsV2>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
+
+  const amounts = useMemo(() => {
+    return [
+      ['Token Price', data?.amount, false],
+      ['Fee Sum', data?.totalFee, false],
+      ['Bridge Fee', data?.bridgeFee, true],
+      ['Network Fee', data?.networkFee, true],
+    ] as const;
+  }, [data]);
+
+  const txIds = useMemo(() => {
+    return [
+      ['Source Tx', data?.sourceTxId],
+      ['Payment Tx', data?.paymentTxId],
+      ['Reward Tx', data?.spendTxId],
+      ['Trigger Tx', data?.triggerTxId],
+    ] as const;
+  }, [data]);
+
   return (
-    <Section title="Details">
-      {error ? (
-        <Center style={{ height: '380px' }}>{error}</Center>
-      ) : (
-        <>
-          <Columns width="300px" count={3} rule gap="24px">
-            <div>
-              <Label orientation="horizontal" label="Duration">
-                <RelativeTime
-                  isLoading={isLoading}
-                  timestamp={details?.timestamp}
-                />
-              </Label>
-              <Label label="Total Emission">
-                <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-              </Label>
-              <Label label="Guards" inset>
-                <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-              </Label>
-              <Label label="Watchers" inset>
-                <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-              </Label>
-              <Label label="RSN Ratio">
-                <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-              </Label>
-            </div>
-            <div>
-              <Label label="Token Price">
-                <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-              </Label>
-              <Label label="Fee Sum">
-                <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-              </Label>
-              <Label label="Bridge Fee" inset>
-                <Amount
+    <Section error={error} load={mutate} title="Details">
+      <Columns width="300px" count={3} rule gap="24px">
+        <div>
+          <Label orientation="horizontal" label="Duration">
+            <RelativeTime isLoading={isLoading} timestamp={data?.timestamp} />
+          </Label>
+          <Label label="Total Emission">
+            <Amount loading={isLoading} value="TODO" unit="TODO" />
+          </Label>
+          <Label label="Guards" inset>
+            <Amount loading={isLoading} value="TODO" unit="TODO" />
+          </Label>
+          <Label label="Watchers" inset>
+            <Amount loading={isLoading} value="TODO" unit="TODO" />
+          </Label>
+          <Label label="RSN Ratio">
+            <Amount loading={isLoading} value="TODO" unit="TODO" />
+          </Label>
+        </div>
+        <div>
+          {amounts.map(([label, value, inset]) => (
+            <Label key={label} label={label} inset={inset}>
+              <Amount
+                loading={isLoading}
+                value={getDecimalString(
+                  value || '0',
+                  data?.sourceToken?.significantDecimals || 0,
+                )}
+                unit={data?.sourceToken?.name}
+              />
+            </Label>
+          ))}
+        </div>
+        <Box
+          style={{
+            columnSpan: 'all',
+          }}
+          overrides={{
+            desktop: {
+              style: {
+                columnSpan: 'none',
+              },
+            },
+          }}
+        >
+          <Label label="Tx IDs" />
+          <LabelGroup>
+            {txIds.map(([label, txId]) => (
+              <Label key={label} label={label || 'N/A'} inset>
+                <Identifier
+                  copyable={!!txId}
+                  href={getTxURL(data?.fromChain as any, txId || '') || ''}
                   loading={isLoading}
-                  value={details?.bridgeFee}
-                  unit={'TODO'}
+                  value={txId || 'N/A'}
+                  style={{ width: '90%' }}
                 />
               </Label>
-              <Label label="Network Fee" inset>
-                <Amount
-                  loading={isLoading}
-                  value={details?.networkFee}
-                  unit={'TODO'}
-                />
-              </Label>
-            </div>
-            <Box
-              style={{
-                columnSpan: 'all',
-              }}
-              overrides={{
-                desktop: {
-                  style: {
-                    columnSpan: 'none',
-                  },
-                },
-              }}
-            >
-              <Label label="Tx IDs" />
-              <LabelGroup>
-                <Label label="Source Tx" inset>
-                  <Identifier
-                    style={{ width: '90%' }}
-                    loading={isLoading}
-                    value={details?.sourceTxId ?? 'N/A'}
-                    href={'todo'}
-                    copyable
-                  />
-                </Label>
-                <Label label="Payment Tx" inset>
-                  <Identifier
-                    style={{ width: '90%' }}
-                    loading={isLoading}
-                    value={details?.paymentTxId ?? undefined}
-                    href={'todo'}
-                    copyable
-                  />
-                </Label>
-                <Label label="Reward Tx" inset>
-                  <Identifier
-                    style={{ width: '90%' }}
-                    loading={isLoading}
-                    value={details?.spendTxId ?? undefined}
-                    href={'todo'}
-                    copyable
-                  />
-                </Label>
-                <Label label="Trigger Tx" inset>
-                  <Identifier
-                    style={{ width: '90%' }}
-                    loading={isLoading}
-                    value={details?.triggerTxId}
-                    href={'todo'}
-                    copyable
-                  />
-                </Label>
-              </LabelGroup>
-            </Box>
-          </Columns>
-        </>
-      )}
+            ))}
+          </LabelGroup>
+        </Box>
+      </Columns>
     </Section>
   );
 };

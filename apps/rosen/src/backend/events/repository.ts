@@ -216,7 +216,7 @@ export const getEventById = async (
 
   const commitmentsByEventId = await getCommitmentsByEventId(eventId);
   const result = await qb.getRawOne<EventDetailsV2>();
-  if (!result) return null;
+  if (!result) throw new Error('TODO');
 
   const tokenMap = await getTokenMap();
   const collections = tokenMap.getConfig();
@@ -243,6 +243,7 @@ export const getEventById = async (
 
   return {
     ...result,
+    totalFee: (Number(result.bridgeFee) + Number(result.networkFee)).toString(),
     height: Number(result.height),
     blockHeight: Number(result.blockHeight),
     WIDsCount: Number(result.WIDsCount),

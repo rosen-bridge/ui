@@ -1,29 +1,46 @@
 'use client';
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import {
   Card,
   CardBody,
   CardHeader,
   CardTitle,
+  Center,
   Collapse,
   DisclosureButton,
+  TryAgain,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
 
 export type SectionProps = {
   children?: ReactNode;
-  disclosure?: ReturnType<typeof useDisclosure>;
+  collapsible?: boolean;
+  error?: unknown;
+  load?: () => void;
   title?: string;
 };
 
-export const Section = ({ children, disclosure, title }: SectionProps) => {
+export const Section = ({
+  children,
+  collapsible,
+  error,
+  load,
+  title,
+}: SectionProps) => {
+  const disclosure = useDisclosure({
+    onOpen: () => {
+      load?.();
+      return Promise.resolve();
+    },
+  });
+
   return (
     <Card backgroundColor="background.paper">
       <CardHeader
-        action={disclosure && <DisclosureButton disclosure={disclosure} />}
+        action={collapsible && <DisclosureButton disclosure={disclosure} />}
       >
         <CardTitle>
           <Typography variant="h2" color="text.secondary">
@@ -31,23 +48,16 @@ export const Section = ({ children, disclosure, title }: SectionProps) => {
           </Typography>
         </CardTitle>
       </CardHeader>
-      {disclosure ? (
-        <CardBody
-          style={{
-            paddingBottom: disclosure.state !== 'open' ? '0' : undefined,
-          }}
-        >
-          <Collapse
-            in={disclosure.state == 'open'}
-            unmountOnExit
-            defaultValue="open"
-          >
-            {children}
-          </Collapse>
+      <Collapse in={!collapsible || disclosure.state == 'open' || !!error}>
+        <CardBody>
+          {!error && children}
+          {!!error && (
+            <Center style={{ height: '20rem' }}>
+              <TryAgain onClick={() => load?.()} />
+            </Center>
+          )}
         </CardBody>
-      ) : (
-        <CardBody>{children}</CardBody>
-      )}
+      </Collapse>
     </Card>
   );
 };

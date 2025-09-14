@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import {
   Amount,
   Columns,
@@ -12,186 +10,187 @@ import {
   Token,
   DateTime,
   LabelGroup,
-  Center,
 } from '@rosen-bridge/ui-kit';
-import { Network as NetworkType } from '@rosen-ui/types/dist/common';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { Network as NetworkType } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
 import { Section } from './Section';
 import { Status } from './Status';
-import { DetailsProps } from './type';
+import { EventDetailsV2 } from './type';
 
-export const Overview = ({
-  details,
-  loading: isLoading,
-  error,
-}: DetailsProps) => {
+export const Overview = ({ id }: { id: string }) => {
+  const { error, data, isLoading, mutate } = useSWR<EventDetailsV2>(
+    `/v1/events/${id}`,
+    fetcher,
+  );
+
   return (
-    <Section title="Overview">
-      {error ? (
-        <Center style={{ height: '380px' }}>{error}</Center>
-      ) : (
-        <>
-          <Label
-            label="Event Id"
-            orientation="horizontal"
+    <Section error={error} load={mutate} title="Overview">
+      <Label
+        label="Event Id"
+        orientation="horizontal"
+        overrides={{
+          tablet: {
+            orientation: 'vertical',
+          },
+        }}
+      >
+        <Identifier
+          style={{ width: isLoading ? '100%' : 'auto' }}
+          loading={isLoading}
+          value={data?.eventId}
+          copyable
+        />
+      </Label>
+      <Columns count={3} width="320px" gap="24px">
+        <Label
+          label="Token"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <Token
+            loading={isLoading}
+            name={data?.sourceToken?.name}
+            reverse
             overrides={{
               tablet: {
-                orientation: 'vertical',
+                reverse: false,
               },
             }}
-          >
-            <Identifier
-              style={{ width: isLoading ? '100%' : 'auto' }}
-              loading={isLoading}
-              value={details?.eventId}
-              copyable
-            />
-          </Label>
-          <Columns count={3} width="320px" gap="24px">
-            <Label
-              label="Token"
-              orientation="horizontal"
-              overrides={{
-                tablet: {
-                  orientation: 'vertical',
-                },
-              }}
-            >
-              <Token
+          />
+        </Label>
+        <Label
+          label="Amount"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <Amount
+            loading={isLoading}
+            value={getDecimalString(
+              data?.amount || '0',
+              data?.sourceToken?.significantDecimals || 0,
+            )}
+            orientation="horizontal"
+            unit={data?.sourceToken?.symbol}
+          />
+        </Label>
+        <Label
+          label="Chain"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <Connector
+            start={
+              <Network
                 loading={isLoading}
-                name={details?.sourceToken?.name}
-                reverse
+                variant="logo"
+                name={data?.fromChain as NetworkType}
                 overrides={{
                   tablet: {
-                    reverse: false,
+                    variant: 'both',
                   },
                 }}
               />
-            </Label>
-            <Label
-              label="Amount"
-              orientation="horizontal"
-              overrides={{
-                tablet: {
-                  orientation: 'vertical',
-                },
-              }}
-            >
-              <Amount
+            }
+            end={
+              <Network
                 loading={isLoading}
-                value={getDecimalString(
-                  // todo: empty string
-                  details?.amount ? details.amount : '',
-                  Number(details?.sourceToken?.decimals),
-                )}
-                orientation="horizontal"
-                unit={details?.sourceToken?.symbol}
+                variant="logo"
+                name={data?.toChain as NetworkType}
+                overrides={{
+                  tablet: {
+                    variant: 'both',
+                  },
+                }}
               />
-            </Label>
-            <Label
-              label="Chain"
-              orientation="horizontal"
-              overrides={{
-                tablet: {
-                  orientation: 'vertical',
-                },
-              }}
-            >
-              <Connector
-                start={
-                  <Network
-                    loading={isLoading}
-                    variant={'logo'}
-                    name={details?.fromChain as NetworkType}
-                    overrides={{
-                      tablet: {
-                        variant: 'both',
-                      },
-                    }}
-                  />
-                }
-                end={
-                  <Network
-                    loading={isLoading}
-                    variant={'logo'}
-                    name={details?.toChain as NetworkType}
-                    overrides={{
-                      tablet: {
-                        variant: 'both',
-                      },
-                    }}
-                  />
-                }
-              />
-            </Label>
-            <Label
-              label="Status"
-              orientation="horizontal"
-              overrides={{
-                tablet: {
-                  orientation: 'vertical',
-                },
-              }}
-            >
-              <Status value={details?.status as any} loading={isLoading} />
-            </Label>
-            <Label
-              label="Time"
-              orientation="horizontal"
-              overrides={{
-                tablet: {
-                  orientation: 'vertical',
-                },
-              }}
-            >
-              <DateTime
-                loading={isLoading}
-                timestamp={details?.timestamp && details.timestamp * 1000}
-              />
-            </Label>
-            <Label
-              label="Fee Sum"
-              orientation="horizontal"
-              overrides={{
-                tablet: {
-                  orientation: 'vertical',
-                },
-              }}
-            >
-              <Amount loading={isLoading} value="TODO" unit={'TODO'} />
-            </Label>
-          </Columns>
-
-          <Label label="Address"></Label>
-          <LabelGroup
-            overrides={{
-              tablet: {
-                style: { width: '70%' },
-              },
-            }}
-          >
-            <Label label="From" inset>
-              <Identifier
-                style={{ width: isLoading ? '75%' : 'auto' }}
-                loading={isLoading}
-                value={details?.fromAddress}
-                href={details?.fromAddress}
-                copyable
-              />
-            </Label>
-            <Label label="To" inset>
-              <Identifier
-                style={{ width: isLoading ? '75%' : 'auto' }}
-                loading={isLoading}
-                value={details?.toAddress}
-                href={details?.fromAddress}
-                copyable
-              />
-            </Label>
-          </LabelGroup>
-        </>
-      )}
+            }
+          />
+        </Label>
+        <Label
+          label="Status"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <Status value={data?.status as any} loading={isLoading} />
+        </Label>
+        <Label
+          label="Time"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <DateTime
+            loading={isLoading}
+            timestamp={(data?.timestamp || 0) * 1000}
+          />
+        </Label>
+        <Label
+          label="Fee Sum"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
+          <Amount
+            loading={isLoading}
+            value={getDecimalString(
+              data?.totalFee || '0',
+              data?.sourceToken?.significantDecimals || 0,
+            )}
+            unit={data?.sourceToken?.name}
+          />
+        </Label>
+      </Columns>
+      <Label label="Address" />
+      <LabelGroup
+        overrides={{
+          tablet: {
+            style: { width: '70%' },
+          },
+        }}
+      >
+        <Label label="From" inset>
+          <Identifier
+            style={{ width: isLoading ? '75%' : 'auto' }}
+            loading={isLoading}
+            value={data?.fromAddress}
+            href={data?.fromAddress}
+            copyable
+          />
+        </Label>
+        <Label label="To" inset>
+          <Identifier
+            style={{ width: isLoading ? '75%' : 'auto' }}
+            loading={isLoading}
+            value={data?.toAddress}
+            href={data?.fromAddress}
+            copyable
+          />
+        </Label>
+      </LabelGroup>
     </Section>
   );
 };
