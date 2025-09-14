@@ -1,12 +1,12 @@
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
-import { BITCOIN_RUNES_KEY } from '../constants';
+import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
 
 // TODO: implement Bitcoin-Runes support later
 export type ChainChoices = Exclude<
   (typeof NETWORKS_KEYS)[number],
-  typeof BITCOIN_RUNES_KEY
+  typeof BITCOIN_RUNES_NETWORKS_KEY
 >;
 
 export type ChainsKeys = keyof (typeof configs)['chains'];
