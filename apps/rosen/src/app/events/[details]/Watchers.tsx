@@ -25,11 +25,11 @@ import {
   LabelGroup,
   useBreakpoint,
   TableContainer,
+  Text,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
-import { Text } from '@/app/events/[details]/Text';
 import { rowTypes, WatchersApiResponse } from '@/app/events/[details]/type';
 
 import { Section } from './Section';
@@ -58,17 +58,17 @@ export const Watchers = ({ id }: { id: string }) => {
       <Stack flexDirection="column" gap={1}>
         <Columns width="150px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">
-            <Text value={data?.commitments} loading={isLoading} />
+            <Text loading={isLoading}>{data?.commitments}</Text>
           </Label>
           <Label label="Triggered by" orientation="vertical" info="TODO">
-            <Text value={data?.triggeredBy} loading={isLoading} />
+            <Text loading={isLoading}>{data?.triggeredBy}</Text>
           </Label>
           <Label
             label="Rewarded to"
             orientation="vertical"
             info="TODO: In tedad mitune bishtar az triggered by bashe chun baezi commitment haye valid momkene tu trigger merge nashode bashan."
           >
-            <Text value={data?.rewardedTo} loading={isLoading} />
+            <Text loading={isLoading}>{data?.rewardedTo}</Text>
           </Label>
         </Columns>
         <Table style={{ tableLayout: 'fixed' }}>
