@@ -1,26 +1,17 @@
-import React from 'react';
-
-import { ProcessTracker, useDisclosure } from '@rosen-bridge/ui-kit';
+import { ProcessTracker } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
 import { Section } from './Section';
 
 export const Process = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR(
+  const { error, data, isLoading, mutate } = useSWR(
     `/v1/events/${id}/process`,
     fetcher,
   );
 
-  const disclosure = useDisclosure({
-    onOpen: () => {
-      void mutate();
-      return Promise.resolve();
-    },
-  });
-
   return (
-    <Section disclosure={disclosure} title="Progress">
+    <Section collapsible error={error} load={mutate} title="Progress">
       <ProcessTracker
         orientation="vertical"
         loading={isLoading}

@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { CheckCircle, CloseCircle, Exchange, Eye } from '@rosen-bridge/icons';
 import {
   Columns,
-  DisclosureButton,
   EnhancedDialog,
   EnhancedDialogContent,
   EnhancedDialogTitle,
@@ -21,13 +20,14 @@ import {
   TableHead as TableHeadMui,
   TableRow as TableRowBase,
   Typography,
-  useDisclosure,
   LabelGroup,
   useBreakpoint,
-  TableContainer,
   Text,
+  Skeleton,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { rowTypes, WatchersApiResponse } from '@/app/events/[details]/type';
@@ -40,7 +40,7 @@ const TableHead = InjectOverrides(TableHeadMui);
 const TableBody = InjectOverrides(TableBodyMui);
 
 export const Watchers = ({ id }: { id: string }) => {
-  const { data, isLoading, mutate } = useSWR<WatchersApiResponse>(
+  const { data, error, isLoading, mutate } = useSWR<WatchersApiResponse>(
     `/v1/events/${id}/watchers`,
     fetcher,
   );
@@ -49,12 +49,13 @@ export const Watchers = ({ id }: { id: string }) => {
 
   const [details, setDetails] = useState<rowTypes>();
 
-  const disclosure = useDisclosure({
-    onOpen: async () => void (await mutate()),
-  });
+  const items = useMemo(() => {
+    if (!isLoading) return data?.watchers || [];
+    return Array(5).fill({});
+  }, [data, isLoading]);
 
   return (
-    <Section disclosure={disclosure} title="Watchers">
+    <Section collapsible error={error} load={mutate} title="Watchers">
       <Stack flexDirection="column" gap={1}>
         <Columns width="150px" count={3} gap="24px">
           <Label label="Commitments" orientation="vertical">
@@ -107,30 +108,45 @@ export const Watchers = ({ id }: { id: string }) => {
               },
             }}
           >
-            {data?.watchers.map((row, index) => (
+            {items.map((item, index) => (
               <TableRow key={index}>
                 <TableCell align="center">{index + 1}</TableCell>
                 {compressed && (
                   <TableCell align="center">
-                    <Rewarded value={row.rewarded === 'Yes'} variant="icon" />
+                    <Rewarded
+                      loading={isLoading}
+                      value={item?.rewarded === 'Yes'}
+                      variant="icon"
+                    />
                   </TableCell>
                 )}
                 <TableCell>
-                  <Identifier value={row.wid} />
+                  <Identifier loading={isLoading} value={item?.wid} />
                 </TableCell>
                 {!compressed && (
                   <TableCell>
-                    <Identifier value={row.commitment} href={row.commitment} />
+                    <Identifier
+                      href={getTxURL(NETWORKS.ergo.key, item?.commitment) || ''}
+                      loading={isLoading}
+                      value={item?.commitment}
+                    />
                   </TableCell>
                 )}
                 {!compressed && (
                   <TableCell>
-                    <Rewarded value={row.rewarded === 'Yes'} variant="label" />
+                    <Rewarded
+                      loading={isLoading}
+                      value={item?.rewarded === 'Yes'}
+                      variant="label"
+                    />
                   </TableCell>
                 )}
                 {compressed && (
                   <TableCell align="center">
-                    <IconButton onClick={() => setDetails(row)}>
+                    <IconButton
+                      disabled={isLoading}
+                      onClick={() => setDetails(item)}
+                    >
                       <SvgIcon>
                         <Eye />
                       </SvgIcon>
@@ -186,11 +202,12 @@ const Drawer = ({ value, open, onClose }: DrawerProps) => {
 };
 
 type RewardedProps = {
+  loading?: boolean;
   value: boolean;
   variant: 'icon' | 'label' | 'label-reverse';
 };
 
-const Rewarded = ({ value, variant }: RewardedProps) => {
+const Rewarded = ({ loading, value, variant }: RewardedProps) => {
   return (
     <Stack
       display="inline-flex"
@@ -199,14 +216,21 @@ const Rewarded = ({ value, variant }: RewardedProps) => {
       gap={1}
       flexWrap="nowrap"
     >
-      <SvgIcon
-        sx={{
-          color: value ? 'success.main' : 'text.secondary',
-        }}
-      >
-        {value ? <CheckCircle /> : <CloseCircle />}
-      </SvgIcon>
-      {variant !== 'icon' && <Typography>{value ? 'Yes' : 'No'}</Typography>}
+      {loading && <Skeleton variant="text" width="60px" height="24px" />}
+      {!loading && (
+        <>
+          <SvgIcon
+            sx={{
+              color: value ? 'success.main' : 'text.secondary',
+            }}
+          >
+            {value ? <CheckCircle /> : <CloseCircle />}
+          </SvgIcon>
+          {variant !== 'icon' && (
+            <Typography>{value ? 'Yes' : 'No'}</Typography>
+          )}
+        </>
+      )}
     </Stack>
   );
 };
