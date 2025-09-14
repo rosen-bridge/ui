@@ -19,7 +19,6 @@ import {
   TableCell as TableCellBase,
   TableHead as TableHeadMui,
   TableRow as TableRowBase,
-  Typography,
   LabelGroup,
   useBreakpoint,
   Text,
@@ -184,9 +183,9 @@ const Drawer = ({ value, open, onClose }: DrawerProps) => {
           </Label>
           <Label label="Commitment" orientation="horizontal">
             <Identifier
-              value={value.commitment}
-              href={value.commitment}
               copyable
+              href={getTxURL(NETWORKS.ergo.key, value.commitment) || ''}
+              value={value.commitment}
             />
           </Label>
           <Label label="Rewarded" orientation="horizontal">
