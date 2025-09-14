@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react';
 
-import { Box, Grid, PageHeading } from '@rosen-bridge/ui-kit';
+import { Box, Grid, PageHeading, Stack } from '@rosen-bridge/ui-kit';
 import { LayoutProps } from '@rosen-ui/types';
 
 const DashboardLayout = ({
@@ -15,13 +15,28 @@ const DashboardLayout = ({
   <Fragment>
     <PageHeading title="Dashboard" />
     <Grid container spacing={3}>
-      <Grid item container spacing={2}>
-        <Grid item laptop={2} tablet={12} mobile={12}>
-          {health}
-        </Grid>
-        <Grid item laptop={10} tablet={12} mobile={12}>
-          {networks}
-        </Grid>
+      <Grid item mobile={12}>
+        <Stack
+          gap={2}
+          flexShrink={0}
+          sx={(theme) => ({
+            flexDirection: 'column',
+            [theme.breakpoints.up('laptop')]: {
+              flexDirection: 'row',
+            },
+          })}
+        >
+          <Box
+            sx={(theme) => ({
+              [theme.breakpoints.up('laptop')]: {
+                minWidth: '200px',
+              },
+            })}
+          >
+            {health}
+          </Box>
+          <Box minWidth={0}>{networks}</Box>
+        </Stack>
       </Grid>
       <Grid item mobile={12} laptop={12}>
         {revenue}
