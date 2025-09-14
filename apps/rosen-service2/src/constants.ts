@@ -18,4 +18,4 @@ export const BITCOIN_METHOD_ESPLORA = 'esplora';
 export const DOGE_METHOD_RPC = 'rpc';
 export const DOGE_METHOD_ESPLORA = 'esplora';
 
-export const BITCOIN_RUNES_KEY = 'bitcoin-runes';
+export const BITCOIN_RUNES_NETWORKS_KEY = 'bitcoin-runes';
