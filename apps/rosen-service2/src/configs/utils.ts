@@ -6,7 +6,7 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { BITCOIN_RUNES_KEY } from '../constants';
+import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
 import { ChainChoices, Logs, RosenService2Configs } from '../types';
 import { ChainConfigsReader } from './chainConfigsReader';
 
@@ -69,7 +69,7 @@ export const validateConfigs = (): RosenService2Configs => {
   configs.contracts = {};
   // TODO: implement Bitcoin-Runes support later
   const chainChoices = NETWORKS_KEYS.filter(
-    (net) => net != BITCOIN_RUNES_KEY,
+    (net) => net != BITCOIN_RUNES_NETWORKS_KEY,
   ) as ChainChoices[];
   for (const chain of chainChoices) {
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
