@@ -216,20 +216,21 @@ const Rewarded = ({ loading, value, variant }: RewardedProps) => {
       gap={1}
       flexWrap="nowrap"
     >
-      {loading && <Skeleton variant="text" width="60px" height="24px" />}
-      {!loading && (
-        <>
-          <SvgIcon
-            sx={{
-              color: value ? 'success.main' : 'text.secondary',
-            }}
-          >
-            {value ? <CheckCircle /> : <CloseCircle />}
-          </SvgIcon>
-          {variant !== 'icon' && (
-            <Typography>{value ? 'Yes' : 'No'}</Typography>
-          )}
-        </>
+      <SvgIcon
+        sx={{
+          color: value ? 'success.main' : 'text.secondary',
+        }}
+      >
+        {loading ? (
+          <Skeleton variant="circular" width="24px" height="24px" />
+        ) : value ? (
+          <CheckCircle />
+        ) : (
+          <CloseCircle />
+        )}
+      </SvgIcon>
+      {variant !== 'icon' && (
+        <Text loading={loading}>{value ? 'Yes' : 'No'}</Text>
       )}
     </Stack>
   );
