@@ -133,7 +133,7 @@ export const WalletWidget = ({
                   <Amount
                     unit={tokenInfoWithAddress.balance.name}
                     value={getDecimalString(
-                      tokenInfoWithAddress.balance.amount.toString(),
+                      tokenInfoWithAddress.balance.amount,
                       tokenInfoWithAddress.balance.decimals,
                       3,
                     )}
