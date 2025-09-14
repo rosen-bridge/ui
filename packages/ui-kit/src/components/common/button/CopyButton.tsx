@@ -23,7 +23,11 @@ export type CopyButtonProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * A button that copies text to the clipboard and shows the status with an icon.
  */
-const CopyButtonBase = ({ size = 'medium', value }: CopyButtonProps) => {
+const CopyButtonBase = ({
+  size = 'medium',
+  value,
+  ...props
+}: CopyButtonProps) => {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const getIcon = useCallback(() => {
@@ -51,7 +55,7 @@ const CopyButtonBase = ({ size = 'medium', value }: CopyButtonProps) => {
   }, [value]);
 
   return (
-    <Tooltip title="Copy">
+    <Tooltip title="Copy" {...props}>
       <IconButton size={size} onClick={handleCopy}>
         <SvgIcon fontSize={size}>{getIcon()}</SvgIcon>
       </IconButton>
