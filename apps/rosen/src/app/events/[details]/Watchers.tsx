@@ -125,7 +125,7 @@ export const Watchers = ({ id }: { id: string }) => {
                 {!compressed && (
                   <TableCell>
                     <Identifier
-                      href={getTxURL(NETWORKS.ergo.key, item?.commitment) || ''}
+                      href={getTxURL(NETWORKS.ergo.key, item?.commitment)}
                       loading={isLoading}
                       value={item?.commitment}
                     />
