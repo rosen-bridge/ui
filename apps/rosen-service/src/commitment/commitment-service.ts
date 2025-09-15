@@ -4,6 +4,7 @@ import { CommitmentExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import configs from '../configs';
+import { BITCOIN_RUNES_CONFIG_KEY } from '../constants';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 import { getTokenMap } from '../utils';
@@ -16,11 +17,12 @@ const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 export const registerExtractors = async (scanner: ErgoScanner) => {
   try {
     for (let key of NETWORKS_KEYS) {
-      const chain = key == NETWORKS['bitcoin-runes'].key ? 'bitcoinRunes' : key;
+      const chain =
+        key == NETWORKS['bitcoin-runes'].key ? BITCOIN_RUNES_CONFIG_KEY : key;
       const commitmentExtractor = new CommitmentExtractor(
         `${chain}-commitment-extractor`,
-        configs[chain].addresses.commitments,
-        configs.ergo.tokens.rwt,
+        [configs[chain].addresses.commitment],
+        configs[chain].tokens.rwt,
         dataSource,
         await getTokenMap(),
         CallbackLoggerFactory.getInstance().getLogger(
