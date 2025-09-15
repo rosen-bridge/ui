@@ -68,8 +68,8 @@ export type EventDetailsV2 = {
   timestamp: number;
 
   WIDsCount: number;
-  paymentTxId: string | null;
-  spendTxId: string | null;
+  paymentTxId: string;
+  spendTxId: string;
   triggerTxId: string;
 
   status: string;

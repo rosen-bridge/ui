@@ -19,7 +19,6 @@ import {
   TableCell as TableCellBase,
   TableHead as TableHeadMui,
   TableRow as TableRowBase,
-  Typography,
   LabelGroup,
   useBreakpoint,
   Text,
@@ -126,7 +125,7 @@ export const Watchers = ({ id }: { id: string }) => {
                 {!compressed && (
                   <TableCell>
                     <Identifier
-                      href={getTxURL(NETWORKS.ergo.key, item?.commitment) || ''}
+                      href={getTxURL(NETWORKS.ergo.key, item?.commitment)}
                       loading={isLoading}
                       value={item?.commitment}
                     />
@@ -184,9 +183,9 @@ const Drawer = ({ value, open, onClose }: DrawerProps) => {
           </Label>
           <Label label="Commitment" orientation="horizontal">
             <Identifier
-              value={value.commitment}
-              href={value.commitment}
               copyable
+              href={getTxURL(NETWORKS.ergo.key, value.commitment) || ''}
+              value={value.commitment}
             />
           </Label>
           <Label label="Rewarded" orientation="horizontal">
@@ -216,20 +215,21 @@ const Rewarded = ({ loading, value, variant }: RewardedProps) => {
       gap={1}
       flexWrap="nowrap"
     >
-      {loading && <Skeleton variant="text" width="60px" height="24px" />}
-      {!loading && (
-        <>
-          <SvgIcon
-            sx={{
-              color: value ? 'success.main' : 'text.secondary',
-            }}
-          >
-            {value ? <CheckCircle /> : <CloseCircle />}
-          </SvgIcon>
-          {variant !== 'icon' && (
-            <Typography>{value ? 'Yes' : 'No'}</Typography>
-          )}
-        </>
+      <SvgIcon
+        sx={{
+          color: value ? 'success.main' : 'text.secondary',
+        }}
+      >
+        {loading ? (
+          <Skeleton variant="circular" width="24px" height="24px" />
+        ) : value ? (
+          <CheckCircle />
+        ) : (
+          <CloseCircle />
+        )}
+      </SvgIcon>
+      {variant !== 'icon' && (
+        <Text loading={loading}>{value ? 'Yes' : 'No'}</Text>
       )}
     </Stack>
   );

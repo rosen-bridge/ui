@@ -68,8 +68,8 @@ export const Details = ({ id }: { id: string }) => {
               <Amount
                 loading={isLoading}
                 value={getDecimalString(
-                  value || '0',
-                  data?.sourceToken?.significantDecimals || 0,
+                  value,
+                  data?.sourceToken?.significantDecimals,
                 )}
                 unit={data?.sourceToken?.name}
               />
@@ -94,7 +94,7 @@ export const Details = ({ id }: { id: string }) => {
               <Label key={label} label={label || 'N/A'} inset>
                 <Identifier
                   copyable={!!txId}
-                  href={getTxURL(data?.fromChain as any, txId || '') || ''}
+                  href={getTxURL(data?.fromChain as any, txId)}
                   loading={isLoading}
                   value={txId || 'N/A'}
                   style={{ width: '90%' }}

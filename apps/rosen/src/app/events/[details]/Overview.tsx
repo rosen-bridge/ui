@@ -77,8 +77,8 @@ export const Overview = ({ id }: { id: string }) => {
           <Amount
             loading={isLoading}
             value={getDecimalString(
-              data?.amount || '0',
-              data?.sourceToken?.significantDecimals || 0,
+              data?.amount,
+              data?.sourceToken?.significantDecimals,
             )}
             orientation="horizontal"
             unit={data?.sourceToken?.symbol}
@@ -157,8 +157,8 @@ export const Overview = ({ id }: { id: string }) => {
           <Amount
             loading={isLoading}
             value={getDecimalString(
-              data?.totalFee || '0',
-              data?.sourceToken?.significantDecimals || 0,
+              data?.totalFee,
+              data?.sourceToken?.significantDecimals,
             )}
             unit={data?.sourceToken?.name}
           />

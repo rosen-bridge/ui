@@ -148,7 +148,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>
           <Amount
             value={getDecimalString(
-              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              (hot?.amount || 0) + (cold?.amount || 0),
               row.decimal,
             )}
           />
@@ -159,23 +159,13 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>Hot</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(
-                  hot?.amount.toString() || '0',
-                  row.decimal,
-                )}
-              />
+              <Amount value={getDecimalString(hot?.amount, row.decimal)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>Cold</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(
-                  cold?.amount.toString() || '0',
-                  row.decimal,
-                )}
-              />
+              <Amount value={getDecimalString(cold?.amount, row.decimal)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -184,7 +174,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             </EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
-                value={getDecimalString(row.bridged || '0', row.decimal)}
+                value={getDecimalString(row.bridged || undefined, row.decimal)}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -269,7 +259,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="left">
           <Amount
             value={getDecimalString(
-              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              (hot?.amount || 0) + (cold?.amount || 0),
               row.significantDecimals,
             )}
           />
@@ -277,27 +267,21 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="left">
           <WithExternalLink url={hotUrl}>
             <Amount
-              value={getDecimalString(
-                hot?.amount.toString() || '0',
-                row.significantDecimals,
-              )}
+              value={getDecimalString(hot?.amount, row.significantDecimals)}
             />
           </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <WithExternalLink url={coldUrl}>
             <Amount
-              value={getDecimalString(
-                cold?.amount.toString() || '0',
-                row.significantDecimals,
-              )}
+              value={getDecimalString(cold?.amount, row.significantDecimals)}
             />
           </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <Amount
             value={getDecimalString(
-              row.bridged || '0',
+              row.bridged || undefined,
               row.significantDecimals,
             )}
           />
