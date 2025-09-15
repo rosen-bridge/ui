@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 
 import { Box } from '../base';
+import { InjectOverrides } from './InjectOverrides';
 
-type ColumnsProps = {
+export type ColumnsProps = {
   /**
    * The content elements to display inside the columns.
    */
@@ -24,7 +25,7 @@ type ColumnsProps = {
    * Determines how wide each column can be.
    * Accepts any valid CSS length, e.g. `'240px'`.
    */
-  width: string;
+  width?: string;
 
   /**
    * The count.
@@ -38,13 +39,7 @@ type ColumnsProps = {
  * It uses CSS columns to automatically split children into multiple columns,
  * with configurable column width, gap, and an optional dividing rule.
  */
-export const Columns = ({
-  children,
-  gap,
-  rule,
-  width,
-  count,
-}: ColumnsProps) => {
+const ColumnsBase = ({ children, gap, rule, width, count }: ColumnsProps) => {
   return (
     <Box
       sx={{
@@ -62,3 +57,5 @@ export const Columns = ({
     </Box>
   );
 };
+
+export const Columns = InjectOverrides(ColumnsBase);

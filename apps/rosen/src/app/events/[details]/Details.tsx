@@ -44,7 +44,16 @@ export const Details = ({ id }: { id: string }) => {
 
   return (
     <Section error={error} load={mutate} title="Details">
-      <Columns width="300px" count={3} rule gap="24px">
+      <Columns
+        gap="24px"
+        overrides={{
+          mobile: { count: 1 },
+          tablet: { count: 1 },
+          laptop: { count: 2 },
+          desktop: { count: 3 },
+        }}
+        rule
+      >
         <div>
           <Label orientation="horizontal" label="Duration">
             <RelativeTime isLoading={isLoading} timestamp={data?.timestamp} />
@@ -77,16 +86,11 @@ export const Details = ({ id }: { id: string }) => {
           ))}
         </div>
         <Box
-          style={{
-            columnSpan: 'all',
-          }}
-          overrides={{
-            desktop: {
-              style: {
-                columnSpan: 'none',
-              },
+          sx={(theme) => ({
+            [theme.breakpoints.down('desktop')]: {
+              columnSpan: 'all',
             },
-          }}
+          })}
         >
           <Label label="Tx IDs" />
           <LabelGroup>
