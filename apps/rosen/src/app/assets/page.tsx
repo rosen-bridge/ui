@@ -134,9 +134,7 @@ const Assets = () => {
           </TableGridHeadCol>
         </TableGridHead>
         {!isLoading
-          ? data?.items.map((item, index) => (
-              <AssetRow key={index} item={item} />
-            ))
+          ? data?.items.map((item) => <AssetRow key={item.id} item={item} />)
           : Array(collection.pageSize)
               .fill(0)
               .map((_, index) => (
