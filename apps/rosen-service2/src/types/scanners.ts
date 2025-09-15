@@ -8,9 +8,11 @@ import {
   CardanoKoiosScanner,
   CardanoOgmiosScanner,
 } from '@rosen-bridge/cardano-scanner';
+import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
-export type ExtraChainScannersType =
+export type ChainScannersType =
+  | ErgoScanner
   | CardanoKoiosScanner
   | BitcoinRpcScanner
   | DogeRpcScanner

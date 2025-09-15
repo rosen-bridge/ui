@@ -1,4 +1,4 @@
-import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
 import { CardanoOgmiosScanner } from '@rosen-bridge/cardano-scanner';
 import {
@@ -18,6 +18,7 @@ import {
   DOGE_METHOD_RPC,
 } from '../constants';
 import { CARDANO_METHOD_OGMIOS } from '../constants';
+import { initializeErgoScanner } from '../scanners';
 import {
   buildCardanoKoiosScannerWithExtractors,
   buildBitcoinRpcScannerWithExtractors,
@@ -26,43 +27,28 @@ import {
   buildBinanceRpcScannerWithExtractors,
   buildBitcoinEsploraScannerWithExtractors,
   buildDogeEsploraScannerWithExtractors,
-} from '../scanners';
-import {
   buildCardanoBlockFrostScannerWithExtractors,
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
-import { ExtraChainScannersType } from '../types';
+import { ChainScannersType, ChainsKeys } from '../types';
 import { DBService } from './db';
-import { HealthService } from './healthCheck';
 
-type ChainsKeys = Exclude<keyof (typeof configs)['chains'], 'bitcoin-runes'>;
-
-export class ChainsScannerService extends PeriodicTaskService {
-  taskName = 'ChainsScannerService';
-  name = 'ChainsScannerService';
-  private static instance: ChainsScannerService;
+export class ScannerService extends PeriodicTaskService {
+  name = 'ScannerService';
+  taskName = 'ScannerService';
+  private static instance: ScannerService;
+  protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
   readonly dbService: DBService;
-  readonly healthCheckService: HealthService;
-  protected scanners: { [k1 in ChainsKeys]?: ExtraChainScannersType } = {};
   protected dependencies: Dependency[] = [
     {
       serviceName: DBService.name,
       allowedStatuses: [ServiceStatus.running],
     },
-    {
-      serviceName: HealthService.name,
-      allowedStatuses: [ServiceStatus.started, ServiceStatus.running],
-    },
   ];
 
-  private constructor(
-    dbService: DBService,
-    healthCheckService: HealthService,
-    logger: AbstractLogger = new DummyLogger(),
-  ) {
+  private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = dbService;
-    this.healthCheckService = healthCheckService;
+    this.dbService = DBService.getInstance();
   }
 
   /**
@@ -77,6 +63,7 @@ export class ChainsScannerService extends PeriodicTaskService {
    * based on the active chains and configured methods.
    *
    * Supported chains:
+   * - Ergo     (Explorer, Node)
    * - Cardano  (Blockfrost, Ogmios, Koios)
    * - Bitcoin  (Esplora, RPC)
    * - Doge     (Esplora, RPC)
@@ -91,6 +78,10 @@ export class ChainsScannerService extends PeriodicTaskService {
    * @throws {Error} If scanner or extractor creation fails
    */ protected generateAndRegisterScannersWithExtractors = async () => {
     try {
+      this.scanners[NETWORKS.ergo.key] = await initializeErgoScanner(
+        this.dbService.dataSource,
+      );
+
       if (configs.chains.cardano.active) {
         switch (configs.chains.cardano.method) {
           case CARDANO_METHOD_BLOCKFROST:
@@ -163,37 +154,32 @@ export class ChainsScannerService extends PeriodicTaskService {
   };
 
   /**
-   * initializes the singleton instance of ChainsScannerService
+   * initializes the singleton instance of ScannerService
    *
    * @static
-   * @param {Ergo} ErgoScannerConfig
    * @param {DBService} [dbService]
-   * @param {HealthCheckService} [healthCheckService],
-   * @memberof ChainsScannerService
+   * @param {AbstractLogger} [logger]
+   * @memberof ScannerService
    */
   static readonly init = async (logger?: AbstractLogger) => {
     if (this.instance != undefined) {
       return;
     }
-    this.instance = new ChainsScannerService(
-      DBService.getInstance(),
-      HealthService.getInstance(),
-      logger,
-    );
+    this.instance = new ScannerService(logger);
 
     await this.instance.generateAndRegisterScannersWithExtractors();
   };
 
   /**
-   * return the singleton instance of ChainsScannerService
+   * return the singleton instance of ScannerService
    *
    * @static
-   * @return {ChainsScannerService}
-   * @memberof ChainsScannerService
+   * @return {ScannerService}
+   * @memberof ScannerService
    */
-  static readonly getInstance = (): ChainsScannerService => {
+  static readonly getInstance = (): ScannerService => {
     if (!this.instance) {
-      throw new Error('ChainsScannerService instances is not initialized yet');
+      throw new Error('ScannerService instances is not initialized yet');
     }
     return this.instance;
   };
@@ -211,7 +197,7 @@ export class ChainsScannerService extends PeriodicTaskService {
             scanner.start();
           } catch (err) {
             this.logger.error(
-              `ChainsScannerService websocket scanners start failed: ${err}`,
+              `ScannerService websocket scanners start failed: ${err}`,
             );
             if (err instanceof Error && err.stack) {
               this.logger.debug(err.stack);
@@ -220,6 +206,7 @@ export class ChainsScannerService extends PeriodicTaskService {
         }
       }
     }
+    this.setStatus(ServiceStatus.started);
   };
 
   /**
@@ -238,7 +225,7 @@ export class ChainsScannerService extends PeriodicTaskService {
             }
           } catch (err) {
             this.logger.error(
-              `ChainsScannerService ${chain} scanner update failed: ${err}`,
+              `ScannerService ${chain} scanner update failed: ${err}`,
             );
             if (err instanceof Error && err.stack) {
               this.logger.debug(err.stack);
@@ -265,7 +252,7 @@ export class ChainsScannerService extends PeriodicTaskService {
             await scanner.stop();
           } catch (err) {
             this.logger.error(
-              `ChainsScannerService websocket scanners stop failed: ${err}`,
+              `ScannerService websocket scanners stop failed: ${err}`,
             );
             if (err instanceof Error && err.stack) {
               this.logger.debug(err.stack);
@@ -275,6 +262,6 @@ export class ChainsScannerService extends PeriodicTaskService {
       }
     });
 
-    this.logger.info('The ChainsScannerService stopped');
+    this.logger.info('The ScannerService stopped');
   };
 }

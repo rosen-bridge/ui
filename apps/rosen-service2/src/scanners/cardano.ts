@@ -27,7 +27,7 @@ export const buildCardanoKoiosScannerWithExtractors = async (
   // Create Cardano scanner with Koios network settings
   const cardanoScanner = new scanner.CardanoKoiosScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight,
+    initialHeight: configs.chains.cardano.initialHeight!,
     network: new scanner.KoiosNetwork(
       configs.chains.cardano.koios.url!,
       configs.chains.cardano.koios.timeout! * 1000,
@@ -84,7 +84,7 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
   // Create Cardano scanner with BlockFrost network settings
   const cardanoScanner = new scanner.CardanoBlockFrostScanner({
     dataSource: dataSource,
-    initialHeight: configs.chains.cardano.initialHeight,
+    initialHeight: configs.chains.cardano.initialHeight!,
     network: new scanner.BlockFrostNetwork(
       configs.chains.cardano.blockfrost.projectId!,
       configs.chains.cardano.blockfrost.url,
