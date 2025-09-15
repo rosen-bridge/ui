@@ -1,8 +1,8 @@
 ---
-'@rosen-ui/data-source': minor
-'@rosen-bridge/rosen-service2': minor
-'@rosen-bridge/rosen-service': minor
-'@rosen-bridge/rosen-app': minor
+'@rosen-ui/data-source': patch
+'@rosen-bridge/rosen-service2': patch
+'@rosen-bridge/rosen-service': patch
+'@rosen-bridge/rosen-app': patch
 ---
 
 Upgrade scanner base dependencies
