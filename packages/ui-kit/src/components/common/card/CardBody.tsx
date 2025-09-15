@@ -1,38 +1,32 @@
 import React, { HTMLAttributes } from 'react';
 
 import { Box } from '../../base';
+import { InjectOverrides } from '../InjectOverrides';
 
 /**
  * Props for the CardBody component.
  *
  * Extends standard HTML <div> attributes.
  */
-type CardBodyProps = {} & HTMLAttributes<HTMLDivElement>;
+export type CardBodyProps = {} & HTMLAttributes<HTMLDivElement>;
 
 /**
- * CardBody is a content container used within a Card component.
- * It provides consistent padding and spacing rules depending on
- * the card variant and its neighboring elements (e.g., `CardHeader`).
+ * CardBody is a container inside Card that handles padding rules.
  *
- * This component applies conditional padding styles:
- * - Removes top padding if it follows a card2-header inside a non-separated card.
- * - Removes bottom padding if it's immediately followed by another card2-header.
- *
- * @example
- *
- * <Card>
- *   <CardHeader>Header</CardHeader>
- *   <CardBody>
- *     <Typography>Content goes here</Typography>
- *   </CardBody>
- * </Card>
- *
+ * - Removes top padding after a header in non-separated cards.
+ * - Removes bottom padding if followed by a header.
  */
-export const CardBody = ({ children, style, ...rest }: CardBodyProps) => {
+const CardBodyBase = ({ children, style, ...rest }: CardBodyProps) => {
   return (
     <Box
       className="card2-body"
       sx={{
+        '.card2-section &': {
+          padding: (theme) => theme.spacing(3),
+        },
+        '.card2-section:not(.card2-separated) &': {
+          paddingTop: 0,
+        },
         'padding': (theme) => theme.spacing(2),
         ...(style || {}),
         '.card2:not(.card2-separated) > .card2-header + &, .card2:not(.card2-separated) > .card2-header + * &':
@@ -49,3 +43,5 @@ export const CardBody = ({ children, style, ...rest }: CardBodyProps) => {
     </Box>
   );
 };
+
+export const CardBody = InjectOverrides(CardBodyBase);
