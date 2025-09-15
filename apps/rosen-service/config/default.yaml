@@ -7,7 +7,7 @@ ergo:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
@@ -18,7 +18,7 @@ cardano:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
@@ -30,7 +30,7 @@ bitcoin:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
@@ -45,7 +45,7 @@ bitcoin-runes:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
@@ -57,7 +57,7 @@ doge:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
@@ -76,7 +76,7 @@ ethereum:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
@@ -87,7 +87,7 @@ binance:
     eventTrigger:
     permit:
     fraud:
-    commitments:
+    commitment:
   tokens:
     rwt:
   initialHeight:
