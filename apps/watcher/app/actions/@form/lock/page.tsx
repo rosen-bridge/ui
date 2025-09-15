@@ -113,7 +113,7 @@ const LockForm = () => {
               Lock operation is in progress. Wait for tx [
               <Link
                 target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId)!}
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
               >
                 {response.txId}
               </Link>
