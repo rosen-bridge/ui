@@ -30,7 +30,7 @@ const VARIANTS = {
     status: 'BROKEN',
     Icon: CloseCircle,
   },
-  ok: {
+  healthy: {
     color: 'success',
     status: 'OK',
     Icon: ShieldCheck,
