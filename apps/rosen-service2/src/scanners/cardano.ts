@@ -4,7 +4,13 @@ import {
   CardanoBlockFrostObservationExtractor,
   CardanoOgmiosObservationExtractor,
 } from '@rosen-bridge/cardano-observation-extractor';
-import * as scanner from '@rosen-bridge/cardano-scanner';
+import {
+  BlockFrostNetwork,
+  CardanoBlockFrostScanner,
+  CardanoKoiosScanner,
+  CardanoOgmiosScanner,
+  KoiosNetwork,
+} from '@rosen-bridge/cardano-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
@@ -25,10 +31,10 @@ export const buildCardanoKoiosScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with Koios network settings
-  const cardanoScanner = new scanner.CardanoKoiosScanner({
+  const cardanoScanner = new CardanoKoiosScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.cardano.initialHeight!,
-    network: new scanner.KoiosNetwork(
+    network: new KoiosNetwork(
       configs.chains.cardano.koios.url!,
       configs.chains.cardano.koios.timeout! * 1000,
       configs.chains.cardano.koios.authToken,
@@ -82,10 +88,10 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with BlockFrost network settings
-  const cardanoScanner = new scanner.CardanoBlockFrostScanner({
+  const cardanoScanner = new CardanoBlockFrostScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.cardano.initialHeight!,
-    network: new scanner.BlockFrostNetwork(
+    network: new BlockFrostNetwork(
       configs.chains.cardano.blockfrost.projectId!,
       configs.chains.cardano.blockfrost.url,
     ),
@@ -138,7 +144,7 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with ogmios network settings
-  const cardanoScanner = new scanner.CardanoOgmiosScanner(
+  const cardanoScanner = new CardanoOgmiosScanner(
     {
       dataSource: dataSource,
       nodeHostOrIp: configs.chains.cardano.ogmios.address!,
