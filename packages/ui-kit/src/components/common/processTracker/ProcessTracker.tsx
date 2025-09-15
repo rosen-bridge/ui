@@ -55,7 +55,7 @@ const Loading = () => {
   return (
     <Skeleton
       variant="rounded"
-      sx={{ width: '100%', height: '100%', display: 'block' }}
+      sx={{ width: '100%', height: '167px', display: 'block' }}
     />
   );
 };
@@ -205,7 +205,7 @@ const ProcessTrackerBase = ({
               alignItems="center"
               justifyContent="center"
               gap={1}
-              style={{ position: 'relative', top: '8px' }}
+              style={{ marginTop: '8px' }}
             >
               {step.sub && step.sub?.length > 0 && (
                 <Stack
@@ -213,10 +213,7 @@ const ProcessTrackerBase = ({
                   spacing={2}
                   alignItems="center"
                   style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    width: '100%',
+                    width: '0',
                   }}
                 >
                   <RenderDots />
