@@ -215,7 +215,8 @@ export class HealthService extends PeriodicTaskService {
             );
             fs.writeFileSync(
               healthReportPath,
-              JSON.stringify(healthStatus, undefined, 4),
+              JSON.stringify(healthStatus, null, 2),
+              'utf8',
             );
           } catch (error) {
             this.logger.error(`failed to update health-check: ${error}`);
