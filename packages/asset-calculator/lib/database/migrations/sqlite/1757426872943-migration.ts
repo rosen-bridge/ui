@@ -15,12 +15,13 @@ export class Migration1757426872943 implements MigrationInterface {
             )
         `);
     await queryRunner.query(`
-            INSERT INTO "temporary_token_entity"("id", "name", "decimal", "isNative", "chain")
+            INSERT INTO "temporary_token_entity"("id", "name", "decimal", "isNative", "chain", "significantDecimal")
             SELECT "id",
                 "name",
                 "decimal",
                 "isNative",
-                "chain"
+                "chain",
+                0 as "significantDecimal"
             FROM "token_entity"
         `);
     await queryRunner.query(`
