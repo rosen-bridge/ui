@@ -29,7 +29,7 @@ class TokensConfig {
       TokensConfig.instance.tokenMap = new TokenMap();
       await TokensConfig.instance.tokenMap.updateConfigByJson(tokens.tokens);
       TokensConfig.instance.logger.info(
-        `TokenMap config successfully updated by ${tokens.tokens} tokens info.`,
+        `TokenMap config successfully updated by ${JSON.stringify(tokens.tokens)} tokens info.`,
       );
     }
   }
