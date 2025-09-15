@@ -1,13 +1,14 @@
 import React, { HTMLAttributes } from 'react';
 
 import { Box } from '../../base';
+import { InjectOverrides } from '../InjectOverrides';
 
 /**
  * Props for the `CardTitle` component.
  *
  * Extends standard HTML `<div>` attributes.
  */
-type CardTitleProps = {} & HTMLAttributes<HTMLDivElement>;
+export type CardTitleProps = {} & HTMLAttributes<HTMLDivElement>;
 
 /**
  * `CardTitle` is a simple wrapper component for rendering a title
@@ -23,6 +24,8 @@ type CardTitleProps = {} & HTMLAttributes<HTMLDivElement>;
  * </CardTitle>
  * ```
  */
-export const CardTitle = ({ children }: CardTitleProps) => {
+const CardTitleBase = ({ children }: CardTitleProps) => {
   return <Box>{children}</Box>;
 };
+
+export const CardTitle = InjectOverrides(CardTitleBase);

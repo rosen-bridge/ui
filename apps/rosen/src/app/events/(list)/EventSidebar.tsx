@@ -194,7 +194,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
   return (
     <Card
       ref={stickyRef}
-      variant="separated"
+      separated
       backgroundColor="background.paper"
       style={{
         width: '330px',
