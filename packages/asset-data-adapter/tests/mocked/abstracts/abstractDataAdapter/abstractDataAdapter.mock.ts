@@ -1,0 +1,170 @@
+import { RosenTokens } from '@rosen-bridge/tokens';
+
+export const sampleTokenMapConfig: RosenTokens = [
+  {
+    ergo: {
+      tokenId: 'token1',
+      name: 'test1',
+      decimals: 3,
+      type: 'EIP-004',
+      residency: 'native',
+      extra: {},
+    },
+    binance: {
+      tokenId: 'binance_token1',
+      name: 'rpnTest1',
+      decimals: 3,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+    cardano: {
+      tokenId: 'policy1.token1',
+      name: 'rpnTest1',
+      decimals: 3,
+      type: 'CIP26',
+      residency: 'wrapped',
+      extra: {
+        policyId: 'policy1',
+        assetName: 'token1',
+      },
+    },
+  },
+  {
+    ethereum: {
+      tokenId: 'token2',
+      name: 'test2',
+      decimals: 9,
+      type: 'ERC-20',
+      residency: 'native',
+      extra: {},
+    },
+    cardano: {
+      tokenId: 'policy2.token2',
+      name: 'rpnTest2',
+      decimals: 3,
+      type: 'CIP26',
+      residency: 'wrapped',
+      extra: {
+        policyId: 'policy2',
+        assetName: 'token2',
+      },
+    },
+    ergo: {
+      tokenId: 'ergo_token2',
+      name: 'rpnTest2',
+      decimals: 6,
+      type: 'EIP-004',
+      residency: 'wrapped',
+      extra: {},
+    },
+    binance: {
+      tokenId: 'binance_token2',
+      name: 'rpnTest2',
+      decimals: 6,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+  },
+  {
+    bitcoin: {
+      tokenId: 'token3',
+      name: 'test3',
+      decimals: 8,
+      type: 'native',
+      residency: 'native',
+      extra: {},
+    },
+    ethereum: {
+      tokenId: 'ethereum_token3',
+      name: 'rpnTest3',
+      decimals: 8,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+    ergo: {
+      tokenId: 'ergo_token3',
+      name: 'rpnTest3',
+      decimals: 8,
+      type: 'EIP-004',
+      residency: 'wrapped',
+      extra: {},
+    },
+    binance: {
+      tokenId: 'binance_token3',
+      name: 'rpnTest3',
+      decimals: 8,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+    cardano: {
+      tokenId: 'policy3.cardano_token3',
+      name: 'rpnTest3',
+      decimals: 8,
+      type: 'CIP26',
+      residency: 'wrapped',
+      extra: {
+        policyId: 'policy3',
+        assetName: 'cardano_token3',
+      },
+    },
+  },
+  {
+    doge: {
+      tokenId: 'token4',
+      name: 'test4',
+      decimals: 8,
+      type: 'native',
+      residency: 'native',
+      extra: {},
+    },
+    ergo: {
+      tokenId: 'ergo_token4',
+      name: 'rpnTest4',
+      decimals: 6,
+      type: 'EIP-004',
+      residency: 'wrapped',
+      extra: {},
+    },
+    ethereum: {
+      tokenId: 'ethereum_token4',
+      name: 'rpnTest4',
+      decimals: 6,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+    binance: {
+      tokenId: 'binance_token4',
+      name: 'rpnTest4',
+      decimals: 6,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+  },
+];
+
+export const sampleTokenMapConfigWithDuplicateTokenId = [
+  {
+    ergo: {
+      tokenId: 'token3',
+      name: 'Test3',
+      decimals: 5,
+      type: 'EIP-004',
+      residency: 'native',
+      extra: {},
+    },
+    cardano: {
+      tokenId: 'cardano_token3',
+      name: 'rpnTest3',
+      decimals: 3,
+      type: 'ERC-20',
+      residency: 'wrapped',
+      extra: {},
+    },
+  },
+];

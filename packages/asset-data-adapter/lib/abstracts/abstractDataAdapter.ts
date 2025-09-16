@@ -1,7 +1,7 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 
-import { AssetBalance, ChainAssetBalance } from './interfaces';
+import { AssetBalance, ChainAssetBalance } from '../types';
 
 export abstract class AbstractDataAdapter {
   abstract chain: string;
@@ -25,7 +25,9 @@ export abstract class AbstractDataAdapter {
         const tokenSet = this.tokenMap.getTokenSet(asset.assetId);
         if (
           tokenSet != undefined &&
-          tokenSet[this.chain].tokenId == asset.assetId
+          tokenSet[this.chain] &&
+          tokenSet[this.chain].tokenId == asset.assetId &&
+          asset.balance > 0n
         ) {
           chainAssets[asset.assetId] = chainAssets[asset.assetId] ?? [];
           chainAssets[asset.assetId].push({

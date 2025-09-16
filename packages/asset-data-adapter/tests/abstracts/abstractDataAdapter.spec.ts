@@ -1,13 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { TokenMap } from '@rosen-bridge/tokens';
 import { describe, it, expect } from 'vitest';
 
-import { AssetBalance } from '../lib/interfaces';
+import { AssetBalance } from '../../lib/types';
 import {
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
-  TestAdapter,
-} from './mocked/abstract.mock';
+} from '../mocked';
+import { TestAdapter } from '../mocked';
 
 describe('AbstractDataAdapter', () => {
   describe('fetch', () => {
@@ -20,11 +19,11 @@ describe('AbstractDataAdapter', () => {
      * - tokenMap contains both token1 and token2
      * - call fetch()
      * @expected
-     * - result groups balances by assetId and ignore token0
+     * - result groups balances by assetId and ignore token0 and also ignore tokens by zero amount
      */
     it('should aggregate balances after unwrapping decimals and group by assetId', async () => {
       const tokenMap = new TokenMap();
-      await tokenMap.updateConfigByJson(sampleTokenMapConfig as any);
+      await tokenMap.updateConfigByJson(sampleTokenMapConfig);
 
       const adapter = new TestAdapter(['addr1', 'addr2'], tokenMap);
 
@@ -59,7 +58,7 @@ describe('AbstractDataAdapter', () => {
     it('should return empty balance for a token-id accidentally duplicated on another chain', async () => {
       const tokenMap = new TokenMap();
       await tokenMap.updateConfigByJson(
-        sampleTokenMapConfigWithDuplicateTokenId as any,
+        sampleTokenMapConfigWithDuplicateTokenId,
       );
 
       const adapter = new TestAdapter(['addr1', 'addr2'], tokenMap);
