@@ -4,10 +4,12 @@ import { Card, CardBody, CopyButton, Skeleton } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
+import { ApiEventMetadata } from '@/types';
+
 import { Section } from './Section';
 
 export const SourceTx = ({ id }: { id: string }) => {
-  const { data, error, isLoading, mutate } = useSWR<string>(
+  const { data, error, isLoading, mutate } = useSWR<ApiEventMetadata>(
     `/v1/events/${id}/metadata`,
     fetcher,
   );

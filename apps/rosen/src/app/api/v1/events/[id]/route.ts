@@ -1,5 +1,5 @@
 import { withValidation } from '@/app/api/v1/withValidation';
-import { getEventById } from '@/backend/events/repository';
+import { getEventById } from '@/backend/events';
 
 import { validateGet } from './validations';
 

@@ -29,7 +29,8 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
-import { rowTypes, WatchersApiResponse } from '@/app/events/[details]/type';
+import { rowTypes } from '@/app/events/[details]/type';
+import { ApiEventWatchers } from '@/types';
 
 import { Section } from './Section';
 
@@ -39,7 +40,7 @@ const TableHead = InjectOverrides(TableHeadMui);
 const TableBody = InjectOverrides(TableBodyMui);
 
 export const Watchers = ({ id }: { id: string }) => {
-  const { data, error, isLoading, mutate } = useSWR<WatchersApiResponse>(
+  const { data, error, isLoading, mutate } = useSWR<ApiEventWatchers>(
     `/v1/events/${id}/watchers`,
     fetcher,
   );

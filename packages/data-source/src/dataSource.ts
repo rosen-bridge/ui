@@ -11,7 +11,6 @@ import {
 import {
   CommitmentEntity,
   EventTriggerEntity,
-  CommitmentEntity,
   migrations as watcherDataMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {

@@ -16,12 +16,13 @@ import { Network as NetworkType } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
+import { Event } from '@/types';
+
 import { Section } from './Section';
 import { Status } from './Status';
-import { EventDetailsV2 } from './type';
 
 export const Overview = ({ id }: { id: string }) => {
-  const { error, data, isLoading, mutate } = useSWR<EventDetailsV2>(
+  const { error, data, isLoading, mutate } = useSWR<Event>(
     `/v1/events/${id}`,
     fetcher,
   );
@@ -56,7 +57,7 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <Token
             loading={isLoading}
-            name={data?.sourceToken?.name}
+            name={data?.lockToken?.name}
             reverse
             overrides={{
               tablet: {
@@ -78,10 +79,10 @@ export const Overview = ({ id }: { id: string }) => {
             loading={isLoading}
             value={getDecimalString(
               data?.amount,
-              data?.sourceToken?.significantDecimals,
+              data?.lockToken?.significantDecimals,
             )}
             orientation="horizontal"
-            unit={data?.sourceToken?.symbol}
+            unit={data?.lockToken?.name}
           />
         </Label>
         <Label
@@ -158,9 +159,9 @@ export const Overview = ({ id }: { id: string }) => {
             loading={isLoading}
             value={getDecimalString(
               data?.totalFee,
-              data?.sourceToken?.significantDecimals,
+              data?.lockToken?.significantDecimals,
             )}
-            unit={data?.sourceToken?.name}
+            unit={data?.lockToken?.name}
           />
         </Label>
       </Columns>

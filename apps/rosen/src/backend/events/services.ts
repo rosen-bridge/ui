@@ -2,22 +2,10 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { Network } from '@rosen-ui/types';
 
-import {
-  EventDetailsV2,
-  RosenChainTokenV2,
-  TokenCollectionV2,
-  TokenInfoV2,
-} from '@/app/events/[details]/type';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
-import {
-  getEventByIdRepo,
-  getEvents,
-  getMetadataRepo,
-  getProcessRepo,
-  getWatchersRepo,
-} from './repository';
+import { getEvent, getEvents, getWatchers } from './repository';
 
 /**
  * get full token data associated with a tokenId and a chain
@@ -56,86 +44,278 @@ const getFullTokenData = (
 export const getEventsWithFullTokenData = async (filters: Filters) => {
   const tokenMap = await getTokenMap();
 
+  filters.sort = Object.assign(
+    {
+      key: 'timestamp',
+      order: 'DESC',
+    },
+    filters.sort,
+  );
+
+  if (filters.search) {
+    filters.search.in ||= [];
+  }
+
+  const field = filters.fields?.find(
+    (field) => field.key == 'sourceChainTokenId',
+  );
+
+  if (field) {
+    const tokenIds: string[] = [];
+
+    const values = [field.value].flat();
+
+    const collections = tokenMap.getConfig();
+
+    for (const collection of collections) {
+      const tokens = Object.values(collection);
+      for (const value of values) {
+        for (const token of tokens) {
+          if (token.tokenId !== value) continue;
+          const ids = tokens.map((token) => token.tokenId);
+          tokenIds.push(...ids);
+          break;
+        }
+      }
+    }
+
+    field.value = tokenIds;
+  }
+
   const events = await getEvents(filters);
 
   return {
     total: events.total,
     items: events.items.map(({ sourceChainTokenId, ...item }) => ({
       ...item,
+      totalFee: (+item.bridgeFee + +item.networkFee).toString(),
       lockToken: getFullTokenData(tokenMap, sourceChainTokenId, item.fromChain),
     })),
   };
 };
 
-/**
- * Get single event buy id
- * @param eventId
- */
-export const getEventByIdService = async (eventId: string) => {
-  const result = await getEventByIdRepo(eventId);
-  if (!result) throw new Error(`Event with id ${eventId} not found`);
+export const getEventById = async (id: string) => {
+  const item = await getEvent(id);
+
+  if (!item) throw new Error(`Not found`);
 
   const tokenMap = await getTokenMap();
-  const collections = tokenMap.getConfig();
-
-  const findTokenInfo = (tokenId: string) => {
-    for (const collection of collections) {
-      for (const token of Object.values(collection)) {
-        const t = token as RosenChainTokenV2;
-        if (t.tokenId === tokenId) {
-          return {
-            tokenId: t.tokenId,
-            name: t.name ?? '',
-            symbol: t.symbol ?? '',
-            decimals: t.decimals ?? 0,
-          };
-        }
-      }
-    }
-
-    return null;
-  };
 
   return {
-    ...result,
-    totalFee: (Number(result.bridgeFee) + Number(result.networkFee)).toString(),
-    height: Number(result.height),
-    WIDsCount: Number(result.WIDsCount),
-    sourceToken: findTokenInfo(result.sourceChainTokenId),
-    targetToken: findTokenInfo(result.targetChainTokenId),
+    ...item,
+    totalFee: (+item.bridgeFee + +item.networkFee).toString(),
+    lockToken: getFullTokenData(
+      tokenMap,
+      item.sourceChainTokenId,
+      item.fromChain,
+    ),
   };
 };
 
-/**
- * Get getEventWatchersService
- * @param eventId
- */
-export const getEventWatchersService = async (eventId: string) => {
-  const result = await getWatchersRepo(eventId);
-
+export const getEventProcess = async (id: string) => {
   return {
-    ...result,
+    steps: [
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'done',
+        title: 'Created',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'done',
+        title: 'Committed',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Apstepproved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'pending',
+        title: 'Triggered',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'done',
+            title: 'Approved',
+            subtitle: '',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'pending',
+            title: 'Sign',
+            subtitle: '',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Send',
+            subtitle: '',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Tx Created',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'In Payment',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Reward',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+      {
+        id: `${crypto.randomUUID()}`,
+        state: 'idle',
+        title: 'Completion',
+        subtitle: '18 Aug 2025 11:14:30',
+        description: 'More description about this status goes here.',
+        sub: [
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+          {
+            id: `${crypto.randomUUID()}`,
+            state: 'idle',
+            title: 'Tx Approved',
+            subtitle: 'Tx Approved',
+          },
+        ],
+      },
+    ],
   };
 };
 
-/**
- * Get getEventWatchers
- * @param eventId
- */
-export const getEventProcessService = async (eventId: string) => {
-  const result = await getProcessRepo(eventId);
+export const getEventWatchers = async (id: string) => {
+  const item = await getWatchers(id);
 
-  return {
-    ...result,
-  };
+  if (!item) throw new Error(`Not found`);
+
+  return item;
 };
 
-/**
- * Get getEventWatchers
- * @param eventId
- */
-export const getEventMetadataService = async (eventId: string) => {
-  const result = await getMetadataRepo(eventId);
-
-  return result;
+export const getEventMetadata = async (id: string) => {
+  return 'TODO';
 };
