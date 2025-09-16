@@ -18,10 +18,15 @@ const baseTxURLs: { [key in Network]: string } = {
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/tx',
 };
 
-export const getTxURL = (network: Network, tx: string) => {
+export const getTxURL = (
+  network?: Network,
+  tx?: string,
+): string | undefined => {
+  if (!network || !tx) return;
+
   const baseURL = baseTxURLs[network as keyof typeof baseTxURLs];
 
-  if (!baseURL) return null;
+  if (!baseURL) return;
 
   return `${baseURL}/${tx}`;
 };
