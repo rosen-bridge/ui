@@ -18,8 +18,8 @@ import useSWR from 'swr';
 
 import { Event } from '@/types';
 
+import { Status } from '../Status';
 import { Section } from './Section';
-import { Status } from './Status';
 
 export const Overview = ({ id }: { id: string }) => {
   const { error, data, isLoading, mutate } = useSWR<Event>(
