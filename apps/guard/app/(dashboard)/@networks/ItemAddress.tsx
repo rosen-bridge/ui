@@ -64,7 +64,6 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
                   value.balance.amount.toString(),
                   value.balance.decimals,
                 ),
-                3,
               )
             }
             unit={value?.balance.name ?? 'N/A'}

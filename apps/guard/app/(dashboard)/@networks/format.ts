@@ -1,94 +1,61 @@
-export const format = (input: string, decimals: number): string => {
-  const stringValue = input.trim();
+const UNITS = [
+  { value: 1e9, symbol: 'B' },
+  { value: 1e6, symbol: 'M' },
+  { value: 1e3, symbol: 'K' },
+];
 
-  if (!stringValue) return '0';
+const formatDigits = (num: number): string => {
+  const intDigits = Math.floor(num).toString().length;
+  const decimals = Math.max(0, 4 - intDigits);
+  return num.toFixed(decimals);
+};
 
-  const powerOfTen = (num: number) => 10n ** BigInt(num);
-
-  const normalizeNumber = (str: string) => {
-    const match = str.match(/^(\d*)(?:\.(\d*))?(?:[eE]([+-]?\d+))?$/);
-
-    if (!match)
-      return {
-        integer: '0',
-        fraction: '',
-      };
-
-    let [, integer = '0', fraction = '', exponent] = match;
-
-    const digits = (integer + fraction).replace(/^0+/, '') || '0';
-
-    const position = integer.length + (exponent ? parseInt(exponent, 10) : 0);
-
-    if (!match[3])
-      return {
-        integer: integer.replace(/^0+/, '') || '0',
-        fraction,
-      };
-
-    if (position <= 0)
-      return {
-        integer: '0',
-        fraction: '0'.repeat(-position) + digits,
-      };
-
-    if (position >= digits.length)
-      return {
-        integer: digits + '0'.repeat(position - digits.length),
-        fraction: '',
-      };
-
-    return {
-      integer: digits.slice(0, position) || '0',
-      fraction: digits.slice(position),
-    };
-  };
-
-  const roundNumber = (
-    integer: string,
-    fraction: string,
-    decimalPlaces: number,
-  ) => {
-    const paddedFraction = (fraction || '').padEnd(decimalPlaces + 1, '0');
-
-    let mainDigits = BigInt(
-      integer + paddedFraction.slice(0, decimalPlaces) || '0',
-    );
-
-    if (paddedFraction[decimalPlaces] >= '5') mainDigits++;
-
-    const integerValue = mainDigits / powerOfTen(decimalPlaces);
-
-    const fractionValue = mainDigits % powerOfTen(decimalPlaces);
-
-    const fractionString = decimalPlaces
-      ? fractionValue.toString().padStart(decimalPlaces, '0').replace(/0+$/, '')
-      : '';
-
-    return (
-      integerValue.toString() + (fractionString ? '.' + fractionString : '')
-    );
-  };
-
-  const { integer, fraction } = normalizeNumber(stringValue);
-
-  if (integer === '0' && (!fraction || /^0*$/.test(fraction))) return '0';
-
-  if (integer !== '0') {
-    const fractionDigits = fraction || '';
-
-    const leftSide = (fractionDigits ? BigInt(fractionDigits) : 0n) * 1000n;
-
-    const rightSide = BigInt(integer) * powerOfTen(fractionDigits.length);
-
-    return leftSide < rightSide
-      ? integer
-      : roundNumber(integer, fraction, decimals);
+const formatMoreThanOne = (num: number): string => {
+  for (let i = 0; i < UNITS.length; i++) {
+    if (num >= UNITS[i].value) {
+      return formatDigits(num / UNITS[i].value) + ' ' + UNITS[i].symbol;
+    }
   }
+  return formatDigits(num);
+};
 
-  const firstNonZeroIndex = (fraction || '').search(/[1-9]/);
+const formatLessThanOne = (num: number): string => {
+  if (num >= 0.001) return num.toFixed(3);
 
-  const decimalPlaces = Math.max(decimals, firstNonZeroIndex + 1);
+  if (num >= 0.0005) return '0.001';
 
-  return roundNumber('0', fraction, decimalPlaces);
+  const [, exponentialString] = num.toExponential(20).split('e');
+
+  const exponential = parseInt(exponentialString, 10);
+
+  const exponentialABS = Math.abs(exponential);
+
+  const zerosBeforeFirst = exponentialABS - 1;
+
+  const parentheseZeros = Math.max(0, zerosBeforeFirst - 1);
+
+  const M = num * Math.pow(10, exponentialABS);
+
+  const scale = Math.pow(10, 4 - 1);
+
+  const integer = Math.floor(M * scale + 1e-12);
+
+  let digits = String(integer).replace(/0+$/, '');
+
+  if (digits === '') digits = '0';
+
+  const parenthese =
+    '0'.repeat(parentheseZeros) || `(${'0'.repeat(parentheseZeros)})`;
+
+  return `0.0${parenthese}${digits}`;
+};
+
+export const format = (input: string): string => {
+  const num = parseFloat(input);
+
+  if (num === 0) return '0.000';
+
+  if (num < 1) return formatLessThanOne(num);
+
+  return formatMoreThanOne(num);
 };
