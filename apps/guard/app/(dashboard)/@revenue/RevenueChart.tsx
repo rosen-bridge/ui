@@ -144,9 +144,9 @@ export const RevenueChart = ({ period, data }: RevenueChartProps) => {
       data.map((token) => ({
         name: token.title.name,
         data: slots.map((slot) => {
-          const amount =
-            token.data.find((item) => item.label == slot.toString())?.amount ||
-            '0';
+          const amount = token.data.find(
+            (item) => item.label == slot.toString(),
+          )?.amount;
           return +getDecimalString(amount, token.title.decimals);
         }),
       })),

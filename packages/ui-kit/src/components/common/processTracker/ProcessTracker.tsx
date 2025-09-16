@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { HTMLAttributes, useEffect, useState } from 'react';
 
 import {
   Step,
@@ -48,16 +48,14 @@ const RenderDots = () => {
 export type ProcessTrackerProps = {
   loading?: boolean;
   orientation?: 'vertical' | 'horizontal';
-  steps: ProcessTrackerItem[];
-};
+  steps?: ProcessTrackerItem[];
+} & HTMLAttributes<HTMLDivElement>;
 
 const Loading = () => {
   return (
     <Skeleton
       variant="rounded"
-      width="100%"
-      height="100%"
-      sx={{ display: 'block' }}
+      sx={{ width: '100%', height: '167px', display: 'block' }}
     />
   );
 };
@@ -91,7 +89,8 @@ const Loading = () => {
 const ProcessTrackerBase = ({
   loading,
   orientation,
-  steps,
+  steps = [],
+  ...props
 }: ProcessTrackerProps) => {
   const [activeSteps, setActiveSteps] = useState<number[]>([]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -133,9 +132,7 @@ const ProcessTrackerBase = ({
     }
   }, [steps, orientation]);
 
-  if (loading) return <Loading />;
-
-  return (
+  const content = (
     <StepperMui
       activeStep={-1}
       alternativeLabel={orientation === 'horizontal'}
@@ -208,7 +205,7 @@ const ProcessTrackerBase = ({
               alignItems="center"
               justifyContent="center"
               gap={1}
-              style={{ position: 'relative', top: '8px' }}
+              style={{ marginTop: '8px' }}
             >
               {step.sub && step.sub?.length > 0 && (
                 <Stack
@@ -216,10 +213,7 @@ const ProcessTrackerBase = ({
                   spacing={2}
                   alignItems="center"
                   style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: 0,
-                    width: '100%',
+                    width: '0',
                   }}
                 >
                   <RenderDots />
@@ -232,6 +226,8 @@ const ProcessTrackerBase = ({
       ))}
     </StepperMui>
   );
+
+  return <div {...props}>{loading ? <Loading /> : content}</div>;
 };
 
 export const ProcessTracker = InjectOverrides(ProcessTrackerBase);
