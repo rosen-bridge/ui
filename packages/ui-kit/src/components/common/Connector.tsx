@@ -28,7 +28,6 @@ const ConnectorWrapper = styled('div')<Pick<ConnectorProps, 'variant'>>(
     borderRadius: theme.spacing(4),
     flexDirection: 'row',
     alignItems: 'center',
-    fontSize: 'inherit',
   }),
 );
 
