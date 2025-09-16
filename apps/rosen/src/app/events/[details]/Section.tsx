@@ -2,7 +2,9 @@
 
 import { ReactNode } from 'react';
 
+import { SyncExclamation } from '@rosen-bridge/icons';
 import {
+  Button,
   Card,
   CardBody,
   CardHeader,
@@ -10,7 +12,8 @@ import {
   Center,
   Collapse,
   DisclosureButton,
-  TryAgain,
+  Stack,
+  SvgIcon,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -38,7 +41,7 @@ export const Section = ({
   });
 
   return (
-    <Card backgroundColor="background.paper">
+    <Card variant="section" backgroundColor="background.paper">
       <CardHeader
         action={collapsible && <DisclosureButton disclosure={disclosure} />}
       >
@@ -53,7 +56,14 @@ export const Section = ({
           {!error && children}
           {!!error && (
             <Center style={{ height: '20rem' }}>
-              <TryAgain onClick={() => load?.()} />
+              <Button variant="text" onClick={() => load?.()}>
+                <Stack direction="column" alignItems="center">
+                  <SvgIcon sx={{ color: 'error.main' }}>
+                    <SyncExclamation />
+                  </SvgIcon>
+                  <Typography color="error.main">TRY AGAIN!</Typography>
+                </Stack>
+              </Button>
             </Center>
           )}
         </CardBody>

@@ -214,7 +214,7 @@ export const getEventById = async (
     )
     .where('obs.requestId = :eventId', { eventId });
 
-  const commitmentsByEventId = await getCommitmentsByEventId(eventId);
+  const commitmentsByEventId = await getCommitmentRepo(eventId);
   const result = await qb.getRawOne<EventDetailsV2>();
   if (!result) throw new Error('TODO');
 
@@ -253,12 +253,6 @@ export const getEventById = async (
   };
 };
 
-export const getCommitmentsByEventId = async (eventId: string) => {
-  return await commitmentRepository.find({
-    where: { eventId },
-  });
-};
-
 //todo: this func for test
 const simulateDelay = (ms: number) =>
   new Promise((resolve) => setTimeout(resolve, ms));
@@ -268,12 +262,71 @@ const maybeThrowError = () => {
   }
 };
 
-export const getEventWatchers = async (eventId: string) => {
+interface EventById
+  extends EventTriggerEntity,
+    Omit<ObservationEntity, 'requestId'> {}
+
+export const getEventByIdRepo = async (
+  eventId: string,
+): Promise<EventById | null> => {
+  const qb = observationRepository
+    .createQueryBuilder('obs')
+    .leftJoin(BlockEntity, 'block', 'block.hash = obs.block')
+    .leftJoin(EventTriggerEntity, 'et', 'et.eventId = obs.requestId')
+    .select([
+      'obs.id AS id',
+      'obs.fromChain AS fromChain',
+      'obs.toChain AS toChain',
+      'obs.fromAddress AS fromAddress',
+      'obs.toAddress AS toAddress',
+      'obs.height AS obsHeight',
+      'obs.amount AS amount',
+      'obs.networkFee AS networkFee',
+      'obs.bridgeFee AS bridgeFee',
+      'obs.sourceChainTokenId AS "sourceChainTokenId"',
+      'obs.targetChainTokenId AS "targetChainTokenId"',
+      'obs.sourceTxId AS sourceTxId',
+      'obs.sourceBlockId AS sourceBlockId',
+      'obs.requestId AS eventId',
+      'obs.extractor AS extractor',
+
+      'block.hash AS blockHash',
+      'block.height AS blockHeight',
+      'block.timestamp AS timestamp',
+
+      'et.txId AS triggerTxId',
+      'et.WIDsCount AS WIDsCount',
+      'et.WIDsHash AS WIDsHash',
+      'et.paymentTxId AS paymentTxId',
+      'et.spendTxId AS spendTxId',
+      'et.result AS status',
+    ])
+    .where('obs.requestId = :eventId', { eventId });
+
+  const raw = await qb.getRawOne();
+  console.log('raw result --->', raw);
+
+  if (!raw) return null;
+
+  return raw;
+};
+
+export const getCommitmentRepo = async (eventId: string) => {
+  const qb = commitmentRepository
+    .createQueryBuilder('ce')
+    .where('ce.eventId = :eventId', { eventId })
+    .distinctOn(['ce."WID"'])
+    .orderBy('ce."WID"')
+    .addOrderBy('ce.id');
+
+  return qb.getMany();
+};
+
+export const getWatchersRepo = async (eventId: string) => {
   await simulateDelay(5000);
   maybeThrowError();
 
   return {
-    eventId,
     triggeredBy: Math.floor(Math.random() * 31),
     commitments: Math.floor(Math.random() * 101),
     rewardedTo: Math.floor(Math.random() * 30),
@@ -314,12 +367,11 @@ export const getEventWatchers = async (eventId: string) => {
   };
 };
 
-export const getEventProcess = async (eventId: string) => {
+export const getProcessRepo = async (eventId: string) => {
   await simulateDelay(5000);
   maybeThrowError();
 
   return {
-    eventId,
     steps: [
       {
         id: `${crypto.randomUUID()}`,
@@ -517,7 +569,7 @@ export const getEventProcess = async (eventId: string) => {
   };
 };
 
-export const getEventMetadata = async (eventId: string) => {
+export const getMetadataRepo = async (eventId: string) => {
   await simulateDelay(5000);
 
   maybeThrowError();
