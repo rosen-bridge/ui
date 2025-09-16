@@ -15,8 +15,6 @@ import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
 
 import { TokenInfoWithAddress } from '@/_types/api';
 
-import { format } from './format';
-
 export type ItemAddressProps = {
   loading?: boolean;
   state: 'hot' | 'cold';
@@ -59,11 +57,9 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
             loading={loading}
             value={
               value &&
-              format(
-                getDecimalString(
-                  value.balance.amount.toString(),
-                  value.balance.decimals,
-                ),
+              getDecimalString(
+                value.balance.amount.toString(),
+                value.balance.decimals,
               )
             }
             unit={value?.balance.name ?? 'N/A'}
