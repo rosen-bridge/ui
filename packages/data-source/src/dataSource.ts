@@ -11,7 +11,8 @@ import {
 import {
   CommitmentEntity,
   EventTriggerEntity,
-  migrations as eventTriggerExtractorMigrations,
+  CommitmentEntity,
+  migrations as watcherDataMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
   BridgedAssetEntity,
@@ -52,10 +53,11 @@ export const getDataSource = (
       AggregatedStatusChangedEntity,
       GuardStatusEntity,
       GuardStatusChangedEntity,
+      CommitmentEntity,
       TxEntity,
     ],
     migrations: [
-      ...eventTriggerExtractorMigrations.postgres,
+      ...watcherDataMigrations.postgres,
       ...observationExtractorMigrations.postgres,
       ...scannerMigrations.postgres,
       ...assetCalculatorMigrations.postgres,
