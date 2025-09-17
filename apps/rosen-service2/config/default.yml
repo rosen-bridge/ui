@@ -48,3 +48,4 @@ chains:
 paths:
   tokens: config/rosen/tokensMap.json
   contracts: config/rosen
+  healthReport: healthReport.json

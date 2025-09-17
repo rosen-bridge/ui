@@ -228,4 +228,5 @@ export interface ChainsErgoNodeConnections {
 export interface Paths {
   tokens: string;
   contracts: string;
+  healthReport: string;
 }

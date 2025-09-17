@@ -969,6 +969,16 @@
             "error": "path for the contracts file must be set"
           }
         ]
+      },
+      "healthReport": {
+        "type": "string",
+        "default": "healthReport.json",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the health-check report file must be set"
+          }
+        ]
       }
     }
   }
