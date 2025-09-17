@@ -123,6 +123,7 @@ healthCheck:
   duration: 600 # log duration time check (in seconds)
   maxAllowedErrorCount: 1 # maximum allowed error log lines
   maxAllowedWarnCount: 10 # maximum allowed warn log lines
+  reportPath: healthReport.json
 notification:
   discordWebhookUrl: # discord notification webhook
 #  historyCleanupTimeout: # notification history cleanup threshold (in seconds, uses default if not set)

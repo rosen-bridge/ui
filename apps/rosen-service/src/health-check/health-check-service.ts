@@ -9,6 +9,8 @@ import {
   EvmRPCScannerHealthCheck,
 } from '@rosen-bridge/scanner-sync-check';
 import { NETWORKS } from '@rosen-ui/constants';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import config from '../configs';
 import {
@@ -162,6 +164,20 @@ const start = async () => {
     setInterval(async () => {
       try {
         await healthCheck.update();
+        // write health status to the health report file
+        const healthStatus = Object.fromEntries(
+          healthCheck.getHealthStatus().map((p) => [p.id, p.status]),
+        );
+
+        const healthReportPath = path.isAbsolute(config.healthCheck.reportPath)
+          ? config.healthCheck.reportPath
+          : path.resolve(process.cwd(), config.healthCheck.reportPath);
+
+        fs.writeFileSync(
+          healthReportPath,
+          JSON.stringify(healthStatus, null, 2),
+          'utf8',
+        );
         logger.debug('periodic health check update done');
       } catch (e) {
         if (e instanceof AggregateError) {
