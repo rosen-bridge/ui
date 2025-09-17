@@ -311,17 +311,6 @@
               }
             ]
           },
-          "initialHeight": {
-            "type": "number",
-            "default": 1,
-            "description": "cardano initial height",
-            "validations": [
-              {
-                "required": true,
-                "error": "cardano initial height must be specified"
-              }
-            ]
-          },
           "scanInterval": {
             "type": "number",
             "default": 30,
@@ -348,6 +337,23 @@
               },
               {
                 "choices": ["koios", "ogmios", "blockfrost"]
+              }
+            ]
+          },
+          "initialHeight": {
+            "type": "number",
+            "default": 1,
+            "description": "cardano koios initial height",
+            "validations": [
+              {
+                "required": true,
+                "error": "cardano initial height must be specified",
+                "when": {"path": "chains.cardano.method", "value": "koios"}
+              },
+              {
+                "required": true,
+                "error": "cardano initial height must be specified",
+                "when": {"path": "chains.cardano.method", "value": "blockfrost"}
               }
             ]
           },
@@ -887,33 +893,6 @@
                 "description": "binance rpc suffix"
               }
             }
-          }
-        }
-      },
-      "bitcoin-runes": {
-        "type": "object",
-        "children": {
-          "active": {
-            "type": "boolean",
-            "description": "bitcoin-runes activation state",
-            "default": false,
-            "validations": [
-              {
-                "required": true,
-                "error": "bitcoin-runes activation state must be set"
-              }
-            ]
-          },
-          "scanInterval": {
-            "type": "number",
-            "default": 10,
-            "description": "binance scanInterval threshold in seconds",
-            "validations": [
-              {
-                "required": true,
-                "error": "binance scanInterval must be specified (in seconds)"
-              }
-            ]
           }
         }
       }

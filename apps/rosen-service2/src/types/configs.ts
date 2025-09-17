@@ -51,18 +51,12 @@ export interface HealthCheckLogging {
 }
 
 export interface Chains {
-  'ergo': ChainsErgo;
-  'cardano': ChainsCardano;
-  'bitcoin': ChainsBitcoin;
-  'doge': ChainsDoge;
-  'ethereum': ChainsEthereum;
-  'binance': ChainsBinance;
-  'bitcoin-runes': ChainsBitcoinRunes;
-}
-
-export interface ChainsBitcoinRunes {
-  active: boolean;
-  scanInterval: number;
+  ergo: ChainsErgo;
+  cardano: ChainsCardano;
+  bitcoin: ChainsBitcoin;
+  doge: ChainsDoge;
+  ethereum: ChainsEthereum;
+  binance: ChainsBinance;
 }
 
 export interface ChainsBinance {
@@ -147,10 +141,10 @@ export interface ChainsBitcoinRpc {
 
 export interface ChainsCardano {
   active: boolean;
-  initialHeight: number;
   scanInterval: number;
   blockRetrieveGap?: number;
   method?: 'koios' | 'ogmios' | 'blockfrost';
+  initialHeight?: number;
   koios: ChainsCardanoKoios;
   blockfrost: ChainsCardanoBlockfrost;
   ogmios: ChainsCardanoOgmios;

@@ -63,6 +63,7 @@ const IdentifierBase = ({
       alignItems="center"
       display="flex"
       justifyContent="space-between"
+      minWidth={0}
       {...props}
     >
       {loading && <Skeleton style={{ flexGrow: 1 }} />}

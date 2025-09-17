@@ -1,12 +1,14 @@
-import { ReactNode } from 'react';
+import { HTMLAttributes } from 'react';
 
 import { Box } from '../base';
+import { InjectOverrides } from './InjectOverrides';
 
-type ColumnsProps = {
+export type ColumnsProps = HTMLAttributes<HTMLDivElement> & {
   /**
-   * The content elements to display inside the columns.
+   * The count.
+   * To specify the desired column
    */
-  children?: ReactNode;
+  count?: number;
 
   /**
    * The gap between columns.
@@ -24,13 +26,7 @@ type ColumnsProps = {
    * Determines how wide each column can be.
    * Accepts any valid CSS length, e.g. `'240px'`.
    */
-  width: string;
-
-  /**
-   * The count.
-   * To specify the desired column
-   */
-  count?: number;
+  width?: string;
 };
 
 /**
@@ -38,12 +34,13 @@ type ColumnsProps = {
  * It uses CSS columns to automatically split children into multiple columns,
  * with configurable column width, gap, and an optional dividing rule.
  */
-export const Columns = ({
+const ColumnsBase = ({
+  count,
   children,
   gap,
   rule,
   width,
-  count,
+  ...props
 }: ColumnsProps) => {
   return (
     <Box
@@ -57,8 +54,11 @@ export const Columns = ({
           breakInside: 'avoid',
         },
       }}
+      {...props}
     >
       {children}
     </Box>
   );
 };
+
+export const Columns = InjectOverrides(ColumnsBase);
