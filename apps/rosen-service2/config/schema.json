@@ -265,10 +265,6 @@
           "node": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "ergo node suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -293,10 +289,6 @@
           "explorer": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "ergo explorer suffix"
-              },
               "connections": {
                 "type": "array",
                 "default": [{}],
@@ -385,10 +377,6 @@
           "koios": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "cardano koios suffix"
-              },
               "connections": {
                 "type": "array",
                 "default": [{}],
@@ -431,10 +419,6 @@
           "blockfrost": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "cardano blockfrost suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -463,10 +447,6 @@
           "ogmios": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "cardano ogmios suffix"
-              },
               "connection": {
                 "type": "object",
                 "children": {
@@ -585,10 +565,6 @@
           "rpc": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -631,10 +607,6 @@
           "esplora": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -730,10 +702,6 @@
           "rpc": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -776,10 +744,6 @@
           "esplora": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -861,10 +825,6 @@
           "rpc": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {
@@ -947,10 +907,6 @@
           "rpc": {
             "type": "object",
             "children": {
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
-              },
               "connections": {
                 "type": "array",
                 "items": {

@@ -68,7 +68,6 @@ export interface ChainsBinance {
 }
 
 export interface ChainsBinanceRpc {
-  suffix?: string;
   connections: ChainsBinanceRpcConnections[];
 }
 
@@ -87,7 +86,6 @@ export interface ChainsEthereum {
 }
 
 export interface ChainsEthereumRpc {
-  suffix?: string;
   connections: ChainsEthereumRpcConnections[];
 }
 
@@ -108,7 +106,6 @@ export interface ChainsDoge {
 }
 
 export interface ChainsDogeEsplora {
-  suffix?: string;
   connections: ChainsDogeEsploraConnections[];
 }
 
@@ -119,7 +116,6 @@ export interface ChainsDogeEsploraConnections {
 }
 
 export interface ChainsDogeRpc {
-  suffix?: string;
   connections: ChainsDogeRpcConnections[];
 }
 
@@ -141,7 +137,6 @@ export interface ChainsBitcoin {
 }
 
 export interface ChainsBitcoinEsplora {
-  suffix?: string;
   connections: ChainsBitcoinEsploraConnections[];
 }
 
@@ -152,7 +147,6 @@ export interface ChainsBitcoinEsploraConnections {
 }
 
 export interface ChainsBitcoinRpc {
-  suffix?: string;
   connections: ChainsBitcoinRpcConnections[];
 }
 
@@ -175,7 +169,6 @@ export interface ChainsCardano {
 }
 
 export interface ChainsCardanoOgmios {
-  suffix?: string;
   connection: ChainsCardanoOgmiosConnection;
 }
 
@@ -189,7 +182,6 @@ export interface ChainsCardanoOgmiosConnection {
 }
 
 export interface ChainsCardanoBlockfrost {
-  suffix?: string;
   connections: ChainsCardanoBlockfrostConnections[];
 }
 
@@ -199,7 +191,6 @@ export interface ChainsCardanoBlockfrostConnections {
 }
 
 export interface ChainsCardanoKoios {
-  suffix?: string;
   connections: ChainsCardanoKoiosConnections[];
 }
 
@@ -219,7 +210,6 @@ export interface ChainsErgo {
 }
 
 export interface ChainsErgoExplorer {
-  suffix?: string;
   connections: ChainsErgoExplorerConnections[];
 }
 
@@ -228,7 +218,6 @@ export interface ChainsErgoExplorerConnections {
 }
 
 export interface ChainsErgoNode {
-  suffix?: string;
   connections: ChainsErgoNodeConnections[];
 }
 

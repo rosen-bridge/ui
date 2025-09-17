@@ -41,7 +41,6 @@ export const buildBinanceRpcScannerWithExtractors = async (
     initialHeight: configs.chains.binance.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,
-    suffix: configs.chains.binance.rpc.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'binance-scanner-logger',
     ),

@@ -44,7 +44,6 @@ export const buildCardanoKoiosScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight!,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
-    suffix: configs.chains.cardano.koios.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'cardano-koios-scanner-logger',
     ),
@@ -107,7 +106,6 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
     initialHeight: configs.chains.cardano.initialHeight!,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.cardano.blockRetrieveGap,
-    suffix: configs.chains.cardano.blockfrost.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'cardano-BlockFrost-scanner-logger',
     ),

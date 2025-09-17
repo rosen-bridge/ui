@@ -41,7 +41,6 @@ export const buildEthereumEvmScannerWithExtractors = async (
     initialHeight: configs.chains.ethereum.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,
-    suffix: configs.chains.ethereum.rpc.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'ethereum-scanner-logger',
     ),

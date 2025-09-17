@@ -61,7 +61,6 @@ export const buildBitcoinRpcScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    suffix: configs.chains.bitcoin.rpc.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'bitcoin-scanner-logger',
     ),
@@ -128,7 +127,6 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    suffix: configs.chains.bitcoin.esplora.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'bitcoin-scanner-logger',
     ),
