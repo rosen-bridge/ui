@@ -15,11 +15,12 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
+import { Event } from '@/types';
+
 import { Section } from './Section';
-import { EventDetailsV2 } from './type';
 
 export const Details = ({ id }: { id: string }) => {
-  const { error, data, isLoading, mutate } = useSWR<EventDetailsV2>(
+  const { error, data, isLoading, mutate } = useSWR<Event>(
     `/v1/events/${id}`,
     fetcher,
   );
@@ -38,7 +39,7 @@ export const Details = ({ id }: { id: string }) => {
       ['Source Tx', data?.sourceTxId],
       ['Payment Tx', data?.paymentTxId],
       ['Reward Tx', data?.spendTxId],
-      ['Trigger Tx', data?.triggerTxId],
+      ['Trigger Tx', data?.txId],
     ] as const;
   }, [data]);
 
@@ -78,9 +79,9 @@ export const Details = ({ id }: { id: string }) => {
                 loading={isLoading}
                 value={getDecimalString(
                   value,
-                  data?.sourceToken?.significantDecimals,
+                  data?.lockToken?.significantDecimals,
                 )}
-                unit={data?.sourceToken?.name}
+                unit={data?.lockToken?.name}
               />
             </Label>
           ))}
@@ -98,7 +99,7 @@ export const Details = ({ id }: { id: string }) => {
               <Label key={label} label={label || 'N/A'} inset>
                 <Identifier
                   copyable={!!txId}
-                  href={getTxURL(data?.fromChain as any, txId)}
+                  href={getTxURL(data?.fromChain as any, txId || undefined)}
                   loading={isLoading}
                   value={txId || 'N/A'}
                   style={{ width: '90%' }}

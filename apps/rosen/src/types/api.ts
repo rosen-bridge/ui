@@ -1,7 +1,8 @@
 import { getAsset, getAllAssets } from '@/backend/assets';
 import {
-  getEventByIdService,
   getEventsWithFullTokenData,
+  getEventMetadata,
+  getEventWatchers,
 } from '@/backend/events';
 
 export type ApiEventResponse = Awaited<
@@ -16,7 +17,6 @@ export type Assets = ArrayElement<ApiAssetsResponse['items']>;
 
 export type ApiAssetResponse = Awaited<ReturnType<typeof getAsset>>;
 
-export type ApiEventByIdResponse = Awaited<
-  ReturnType<typeof getEventByIdService>
->;
-export type EventById = ApiEventByIdResponse;
+export type ApiEventMetadata = Awaited<ReturnType<typeof getEventMetadata>>;
+
+export type ApiEventWatchers = Awaited<ReturnType<typeof getEventWatchers>>;

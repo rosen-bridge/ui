@@ -3,10 +3,15 @@
 import { Chip } from '@rosen-bridge/ui-kit';
 
 const STATES = {
+  processing: {
+    label: 'Processing',
+    color: 'info',
+    icon: 'Hourglass',
+  },
   pendingCommittment: {
     label: 'Pending Committment',
     color: 'info',
-    icon: 'HourGlass',
+    icon: 'Hourglass',
   },
   committed: {
     label: 'Committed',
@@ -26,7 +31,7 @@ const STATES = {
   pendingPayment: {
     label: 'Pending Payment',
     color: 'info',
-    icon: 'HourGlass',
+    icon: 'Hourglass',
   },
   inPaymentApproved: {
     label: 'In Payment / Approved',
@@ -56,7 +61,7 @@ const STATES = {
   pendingReward: {
     label: 'Pending Reward',
     color: 'info',
-    icon: 'HourGlass',
+    icon: 'Hourglass',
   },
   inRewardApproved: {
     label: 'In Reward / Approved',
@@ -88,6 +93,11 @@ const STATES = {
     color: 'success',
     icon: 'CheckCircle',
   },
+  successful: {
+    label: 'Successful',
+    color: 'success',
+    icon: 'CheckCircle',
+  },
   timeout: {
     label: 'Timeout',
     color: 'neutral',
@@ -107,13 +117,13 @@ const STATES = {
 
 export type StatusProps = {
   loading?: boolean;
-  value: keyof typeof STATES;
+  value?: keyof typeof STATES;
 };
 
 export const Status = ({ loading, value }: StatusProps) => {
   if (loading) return <Chip loading />;
 
-  const status = STATES[value];
+  const status = value && STATES[value];
 
   if (!status)
     return <Chip label="Unknown" color="neutral" icon="ExclamationCircle" />;

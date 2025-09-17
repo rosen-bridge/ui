@@ -7,6 +7,7 @@ import {
 } from '@rosen-bridge/scanner';
 import { Transaction } from '@rosen-bridge/scanner-interfaces';
 
+import commitmentService from '../../commitment/commitment-service';
 import config from '../../configs';
 import {
   ERGO_SCANNER_INTERVAL,
@@ -53,6 +54,7 @@ export const startErgoScanner = async () => {
 
     await observationService.registerErgoExtractor(scanner);
     await eventTriggerService.registerExtractors(scanner);
+    await commitmentService.registerExtractors(scanner);
 
     startScanner(scanner, import.meta.url, ERGO_SCANNER_INTERVAL);
 

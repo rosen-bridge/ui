@@ -19,9 +19,9 @@ export const getDecimalString = (
   decimals?: number,
   truncateLength?: number,
 ): string => {
-  const valueString = value ? value.toString() : '0';
+  const valueString = (value ?? 0).toString();
 
-  const safeDecimals = decimals || 0;
+  const safeDecimals = decimals ?? 0;
 
   if (!safeDecimals) return valueString;
 

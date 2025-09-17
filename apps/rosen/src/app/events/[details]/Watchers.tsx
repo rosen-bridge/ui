@@ -29,7 +29,7 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
-import { rowTypes, WatchersApiResponse } from '@/app/events/[details]/type';
+import { ApiEventWatchers } from '@/types';
 
 import { Section } from './Section';
 
@@ -39,14 +39,14 @@ const TableHead = InjectOverrides(TableHeadMui);
 const TableBody = InjectOverrides(TableBodyMui);
 
 export const Watchers = ({ id }: { id: string }) => {
-  const { data, error, isLoading, mutate } = useSWR<WatchersApiResponse>(
+  const { data, error, isLoading, mutate } = useSWR<ApiEventWatchers>(
     `/v1/events/${id}/watchers`,
     fetcher,
   );
 
   const compressed = useBreakpoint('laptop-down');
 
-  const [details, setDetails] = useState<rowTypes>();
+  const [details, setDetails] = useState<ApiEventWatchers['watchers'][0]>();
 
   const items = useMemo(() => {
     if (!isLoading) return data?.watchers || [];
@@ -165,7 +165,7 @@ export const Watchers = ({ id }: { id: string }) => {
 };
 
 type DrawerProps = {
-  value: rowTypes;
+  value: ApiEventWatchers['watchers'][0];
   open: boolean;
   onClose: () => void;
 };
@@ -179,7 +179,7 @@ const Drawer = ({ value, open, onClose }: DrawerProps) => {
       <EnhancedDialogContent>
         <LabelGroup>
           <Label label="Wid" orientation="horizontal">
-            <Identifier value={value.wid} copyable />
+            <Identifier value={value.WID} copyable />
           </Label>
           <Label label="Commitment" orientation="horizontal">
             <Identifier
@@ -189,10 +189,7 @@ const Drawer = ({ value, open, onClose }: DrawerProps) => {
             />
           </Label>
           <Label label="Rewarded" orientation="horizontal">
-            <Rewarded
-              value={value.rewarded === 'Yes'}
-              variant="label-reverse"
-            />
+            <Rewarded value={!!value} variant="label-reverse" />
           </Label>
         </LabelGroup>
       </EnhancedDialogContent>

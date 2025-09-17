@@ -1,7 +1,8 @@
-import { validateGet } from '@/app/api/v1/events/[id]/validations';
-import { withValidation } from '@/app/api/v1/withValidation';
-import { getEventWatchersService } from '@/backend/events';
+import { getEventWatchers } from '@/backend/events';
+
+import { withValidation } from '../../../withValidation';
+import { validateGet } from '../validations';
 
 export const GET = withValidation(validateGet, (value) =>
-  getEventWatchersService(value.id),
+  getEventWatchers(value.id),
 );
