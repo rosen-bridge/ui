@@ -1,4 +1,4 @@
-import React from 'react';
+import { ComponentType, forwardRef, RefAttributes, useMemo } from 'react';
 
 import { Breakpoint } from '@mui/material';
 
@@ -20,12 +20,12 @@ export type InjectOverridesProps<P> = {
 
 /**
  * HOC to enable responsive prop overrides for a component.
- * Props can be customized per breakpoint using `overrides`.
+ * Props can be customized per breakpoint using overrides.
  *
  * @typeParam P - Props type of the wrapped component.
  *
  * @param BaseComponent - Component to wrap with responsive overrides.
- * @returns Component with all original props + `overrides` for breakpoints.
+ * @returns Component with all original props + overrides for breakpoints.
  *
  * @example
  * const ResponsiveButton = InjectOverrides(Button);
@@ -34,37 +34,38 @@ export type InjectOverridesProps<P> = {
  *   overrides={{ mobile: { size: "small" }, laptop: { size: "large" } }}
  * />
  */
-export const InjectOverrides = <P extends object>(
-  BaseComponent: React.ComponentType<P>,
-): React.FC<InjectOverridesProps<P>> => {
-  const WrappedComponent: React.FC<InjectOverridesProps<P>> = ({
-    overrides,
-    ...rest
-  }) => {
-    const current = useCurrentBreakpoint();
+export const InjectOverrides = <P extends object, R = unknown>(
+  BaseComponent: ComponentType<P & RefAttributes<R>>,
+) => {
+  const WrappedComponent = forwardRef<R, InjectOverridesProps<P>>(
+    ({ overrides, ...rest }, ref) => {
+      const current = useCurrentBreakpoint();
 
-    const final = React.useMemo(() => {
-      if (!overrides || !current) return { ...rest } as P;
+      const final = useMemo(() => {
+        if (!overrides || !current) return { ...rest } as P;
 
-      const currentIndex = breakpointOrder.indexOf(current);
+        const currentIndex = breakpointOrder.indexOf(current);
 
-      const applied: Partial<P> = Object.assign(
-        {},
-        ...breakpointOrder
-          .slice(0, currentIndex + 1)
-          .map((bp) => overrides[bp] ?? {}),
-      );
+        const applied: Partial<P> = Object.assign(
+          {},
+          ...breakpointOrder
+            .slice(0, currentIndex + 1)
+            .map((bp) => overrides[bp] ?? {}),
+        );
 
-      return { ...rest, ...applied } as P;
-    }, [overrides, current, rest]);
+        return { ...rest, ...applied } as P;
+      }, [overrides, current, rest]);
 
-    return <BaseComponent {...final} />;
-  };
+      return <BaseComponent {...final} ref={ref} />;
+    },
+  );
 
   /**
    * Custom display name for React DevTools
    */
-  WrappedComponent.displayName = `Overridable(${BaseComponent.displayName || BaseComponent.name || 'Component'})`;
+  WrappedComponent.displayName = `Overridable(
+    ${BaseComponent.displayName || BaseComponent.name || 'Component'}
+  )`;
 
   return WrappedComponent;
 };
