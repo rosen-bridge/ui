@@ -61,7 +61,6 @@ export const buildDogeRpcScannerWithExtractors = async (
     initialHeight: configs.chains.doge.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
-    suffix: configs.chains.doge.rpc.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'doge-scanner-logger',
     ),
@@ -127,7 +126,6 @@ export const buildDogeEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.doge.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
-    suffix: configs.chains.doge.esplora.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'doge-scanner-logger',
     ),

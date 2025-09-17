@@ -11,10 +11,15 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS.doge.key]: '',
 };
 
-export const getTokenUrl = (network: Network, tokenId?: string) => {
+export const getTokenUrl = (
+  network?: Network,
+  tokenId?: string,
+): string | undefined => {
+  if (!network || !tokenId) return;
+
   const baseURL = baseTokenURLs[network as keyof typeof baseTokenURLs];
 
-  if (!baseURL || !tokenId) return null;
+  if (!baseURL) return;
 
   return `${baseURL}/${tokenId}`;
 };

@@ -65,26 +65,22 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
     new FailoverStrategy(),
     logger,
   );
-  let suffix: string | undefined = undefined;
   if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
     configs.chains.ergo.explorer.connections.forEach((explorer) => {
       networkConnectorManager.addConnector(
         new ErgoExplorerNetwork(explorer.url!),
       );
     });
-    suffix = configs.chains.ergo.explorer.suffix;
   } else {
     configs.chains.ergo.node.connections.forEach((node) => {
       networkConnectorManager.addConnector(new ErgoNodeNetwork(node.url!));
     });
-    suffix = configs.chains.ergo.node.suffix;
   }
   const ergoScanner = new ErgoScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.ergo.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ergo.blockRetrieveGap,
-    suffix: suffix,
     logger: logger,
   });
 

@@ -15,16 +15,20 @@ import { trimEnd } from 'lodash-es';
  * getDecimalString('123456', 2, 3) === '12.345' // true
  */
 export const getDecimalString = (
-  value: string,
-  decimals: number,
+  value?: bigint | number | string,
+  decimals?: number,
   truncateLength?: number,
-) => {
-  if (!decimals) return value;
+): string => {
+  const valueString = (value ?? 0).toString();
+
+  const safeDecimals = decimals ?? 0;
+
+  if (!safeDecimals) return valueString;
 
   const untrimmedResult =
-    value.length > decimals
-      ? `${value.slice(0, -decimals)}.${value.slice(-decimals)}`
-      : `0.${value.padStart(decimals, '0')}`;
+    valueString.length > safeDecimals
+      ? `${valueString.slice(0, -safeDecimals)}.${valueString.slice(-safeDecimals)}`
+      : `0.${valueString.padStart(safeDecimals, '0')}`;
 
   const preciseResult = trimEnd(trimEnd(untrimmedResult, '0'), '.') || '0';
 

@@ -50,3 +50,4 @@ export * from './card';
 export * from './InjectOverrides';
 export * from './DateTime';
 export * from './processTracker';
+export * from './Text';
