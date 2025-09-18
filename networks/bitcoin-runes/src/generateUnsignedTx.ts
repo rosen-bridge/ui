@@ -12,7 +12,6 @@ import bitcoinJs from 'bitcoinjs-lib';
 import {
   GET_BOX_API_LIMIT,
   MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
-  MINIMUM_BTC_FOR_TAPROOT_OUTPUT,
 } from './constants';
 import { AssetBalance, UnsignedPsbtData } from './types';
 import {
@@ -128,9 +127,9 @@ export const generateUnsignedTx =
       [],
       new Map(),
       runesUtxoIterator(),
-      MINIMUM_BTC_FOR_TAPROOT_OUTPUT,
+      0n,
       undefined,
-      estimateFee,
+      () => 0n,
     );
     if (!coveredRunesBoxes.covered) {
       throw new Error(
@@ -146,8 +145,9 @@ export const generateUnsignedTx =
     );
 
     const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
-    additionalAssets.nativeToken -= requiredAssets.nativeToken;
-    let estimatedFee = coveredRunesBoxes.additionalAssets.fee;
+    const myFee = estimateFee(coveredRunesBoxes.boxes, 1)
+    additionalAssets.nativeToken -= requiredAssets.nativeToken + myFee;
+    let estimatedFee = myFee;
 
     if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {
       const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
@@ -162,7 +162,7 @@ export const generateUnsignedTx =
       );
 
       // generate iterator for address boxes to cover required btc
-      const btcUtxoIterator = (await getAddressBtcBoxes(lockAddress)).values();
+      const btcUtxoIterator = (await getAddressBtcBoxes(fromAddress)).values();
 
       // fetch input boxes to cover required BTC
       const coveredBtcBoxes = await boxSelection.getCoveringBoxes(
