@@ -61,12 +61,9 @@ const UnlockForm = () => {
     message: string;
   } | null>(null);
 
-  const {
-    trigger,
-    isMutating: isUnlockPending,
-    error,
-  } = useSWRMutation<
+  const { trigger, isMutating: isUnlockPending } = useSWRMutation<
     ApiPermitReturnResponse,
+    // eslint-disable-next-line
     any,
     '/permit/return',
     ApiPermitReturnRequestBody
@@ -137,6 +134,7 @@ const UnlockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({

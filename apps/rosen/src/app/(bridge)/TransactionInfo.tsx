@@ -22,8 +22,7 @@ import {
  * and wallet connection
  */
 export const TransactionInfo = () => {
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue } = useTransactionFormData();
 
   const tokenMap = useTokenMap();
 
@@ -96,6 +95,7 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
+              {/* eslint-disable-next-line */}
               {(error as any)?.message}
             </Truncate>
           </Alert>

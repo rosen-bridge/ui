@@ -100,6 +100,7 @@ export const useTransaction = () => {
         ]),
         'success',
       );
+      // eslint-disable-next-line
     } catch (error: any) {
       openSnackbar(
         error?.info ?? error?.message ?? JSON.stringify(error),

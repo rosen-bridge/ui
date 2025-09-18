@@ -41,6 +41,7 @@ export const RequestToSignForm = () => {
     trigger,
     isMutating: isSignPending,
     error,
+    // eslint-disable-next-line
   } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
     mutatorWithHeaders,
@@ -88,6 +89,7 @@ export const RequestToSignForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
