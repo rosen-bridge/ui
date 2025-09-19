@@ -1,0 +1,13 @@
+diff --git a/node_modules/@rosen-bridge/bitcoin-runes-observation-extractor/dist/BitcoinRunesAbstractObservationExtractor.js b/node_modules/@rosen-bridge/bitcoin-runes-observation-extractor/dist/BitcoinRunesAbstractObservationExtractor.js
+index d7c155e..30f08e1 100644
+--- a/node_modules/@rosen-bridge/bitcoin-runes-observation-extractor/dist/BitcoinRunesAbstractObservationExtractor.js
++++ b/node_modules/@rosen-bridge/bitcoin-runes-observation-extractor/dist/BitcoinRunesAbstractObservationExtractor.js
+@@ -17,7 +17,7 @@ export class BitcoinRunesAbstractObservationExtractor extends AbstractObservatio
+         const unisatHeaders = { 'Content-Type': 'application/json' };
+         // Add API key to headers if provided
+         if (unisatApiKey) {
+-            Object.assign(unisatHeaders, { 'x-api-key': unisatApiKey });
++            Object.assign(unisatHeaders, { Authorization: `Bearer ${unisatApiKey}` });
+         }
+         this.unisatClient = RateLimitedAxios.create({
+             baseURL: unisatUrl,

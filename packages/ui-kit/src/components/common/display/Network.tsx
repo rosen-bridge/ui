@@ -130,7 +130,11 @@ const NetworkBase = ({
   }
 
   const network = name in NETWORKS ? NETWORKS[name as NetworkType] : undefined;
-  const iconKey = capitalize(name);
+
+  const iconKey = name.includes('-')
+    ? name.split('-').map(capitalize).join('')
+    : capitalize(name);
+
   const LogoNetwork =
     iconKey in Icons ? Icons[iconKey as keyof typeof Icons] : undefined;
 
