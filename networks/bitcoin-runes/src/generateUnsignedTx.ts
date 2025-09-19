@@ -162,7 +162,7 @@ export const generateUnsignedTx =
       );
 
       // generate iterator for address boxes to cover required btc
-      const btcUtxoIterator = (await getAddressBtcBoxes(lockAddress)).values();
+      const btcUtxoIterator = (await getAddressBtcBoxes(fromAddress)).values();
 
       // fetch input boxes to cover required BTC
       const coveredBtcBoxes = await boxSelection.getCoveringBoxes(
