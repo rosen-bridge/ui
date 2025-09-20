@@ -12,8 +12,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prettify": "prettier --write . --ignore-path ./.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build tsconfig.build.json",
     "type-check": "tsc --noEmit"
   },

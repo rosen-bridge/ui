@@ -4,8 +4,10 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "type-check": "tsc --noEmit",
     "dev": "next dev",
     "build": "next build",

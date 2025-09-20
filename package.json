@@ -9,6 +9,10 @@
     "wallets/*"
   ],
   "scripts": {
+    "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
+    "prettify": "npm run prettify --workspaces",
+    "prettify:check": "npm run prettify:check --workspaces",
     "build:mono-packages": "./build.sh",
     "coverage": "npm run test -- --coverage",
     "postinstall": "patch-package",
