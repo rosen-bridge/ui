@@ -68,13 +68,15 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
     logger,
   );
   if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
-    networkConnectorManager.addConnector(
-      new ErgoExplorerNetwork(configs.chains.ergo.explorer.url!),
-    );
+    configs.chains.ergo.explorer.connections.forEach((explorer) => {
+      networkConnectorManager.addConnector(
+        new ErgoExplorerNetwork(explorer.url!),
+      );
+    });
   } else {
-    networkConnectorManager.addConnector(
-      new ErgoNodeNetwork(configs.chains.ergo.node.url!),
-    );
+    configs.chains.ergo.node.connections.forEach((node) => {
+      networkConnectorManager.addConnector(new ErgoNodeNetwork(node.url!));
+    });
   }
   const ergoScanner = new ErgoScanner({
     dataSource: dataSource,
@@ -96,10 +98,10 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
   let url: string;
   if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
     networkType = ErgoNetworkType.Explorer;
-    url = configs.chains.ergo.explorer.url!;
+    url = configs.chains.ergo.explorer.connections[0].url!;
   } else {
     networkType = ErgoNetworkType.Node;
-    url = configs.chains.ergo.node.url!;
+    url = configs.chains.ergo.node.connections[0].url!;
   }
 
   try {

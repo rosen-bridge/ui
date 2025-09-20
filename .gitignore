@@ -38,3 +38,6 @@ next-env.d.ts
 
 **/vite.config.*.mjs
 **/vitest.config.*.mjs
+
+# default health-check report file
+**/healthReport.json

@@ -78,11 +78,7 @@ const Content = ({ value }: EventSidebarProps) => {
             style={{ width: '90%' }}
             copyable={!!value.sourceTxId}
             value={value.sourceTxId}
-            href={
-              value.sourceTxId
-                ? getTxURL(value.fromChain, value.sourceTxId)!
-                : undefined
-            }
+            href={getTxURL(value.fromChain, value.sourceTxId)}
           />
         </Label>
         <Label label="Payment Tx" inset>
@@ -90,11 +86,7 @@ const Content = ({ value }: EventSidebarProps) => {
             style={{ width: '90%' }}
             copyable={!!value.paymentTxId}
             value={value.paymentTxId || ''}
-            href={
-              value.paymentTxId
-                ? getTxURL(value.toChain, value.paymentTxId)!
-                : undefined
-            }
+            href={getTxURL(value.toChain, value.paymentTxId || undefined)}
           />
         </Label>
         <Label label="Reward Tx" inset>
@@ -102,11 +94,7 @@ const Content = ({ value }: EventSidebarProps) => {
             style={{ width: '90%' }}
             copyable={!!value.spendTxId}
             value={value.spendTxId || ''}
-            href={
-              value.spendTxId
-                ? getTxURL(NETWORKS.ergo.key, value.spendTxId)!
-                : undefined
-            }
+            href={getTxURL(NETWORKS.ergo.key, value.spendTxId || undefined)}
           />
         </Label>
       </div>
@@ -117,9 +105,7 @@ const Content = ({ value }: EventSidebarProps) => {
             style={{ width: '90%' }}
             copyable
             value={value.fromAddress}
-            href={
-              getAddressUrl(value.fromChain, value.fromAddress) || undefined
-            }
+            href={getAddressUrl(value.fromChain, value.fromAddress)}
           />
         </Label>
         <Label label="To" inset>
@@ -127,7 +113,7 @@ const Content = ({ value }: EventSidebarProps) => {
             style={{ width: '90%' }}
             copyable
             value={value.toAddress}
-            href={getAddressUrl(value.toChain, value.toAddress) || undefined}
+            href={getAddressUrl(value.toChain, value.toAddress)}
           />
         </Label>
       </div>

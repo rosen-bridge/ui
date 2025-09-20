@@ -70,3 +70,8 @@ export const NETWORKS = {
 export const NETWORKS_KEYS = Object.values(NETWORKS).map(
   (network) => network.key,
 );
+
+export const ERGO_NATIVE_ASSET_KEY = 'erg';
+export const BITCOIN_NATIVE_ASSET_KEY = 'btc';
+export const CARDANO_NATIVE_ASSET_KEY = 'ada';
+export const DOGE_NATIVE_ASSET_KEY = 'doge';

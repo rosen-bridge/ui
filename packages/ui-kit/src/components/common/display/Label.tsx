@@ -56,17 +56,24 @@ export type LabelProps = HTMLAttributes<HTMLDivElement> & {
 const LabelBase = ({
   children,
   color = 'textSecondary',
+  className,
   dense,
   info,
   inset,
   label,
-  orientation,
+  orientation = 'horizontal',
   ...props
 }: LabelProps) => {
   return (
-    <Stack flexDirection="row" justifyContent="start" {...props}>
+    <Stack
+      className={`rosen-label rosen-label-${orientation} ${className || ''}`}
+      flexDirection="row"
+      justifyContent="start"
+      {...props}
+    >
       {inset && (
         <Box
+          className="rosen-label-inset"
           sx={{
             height: 'auto',
             width: 12,
@@ -82,6 +89,7 @@ const LabelBase = ({
         />
       )}
       <Stack
+        className="rosen-label-container"
         alignItems={orientation === 'vertical' ? 'start' : 'center'}
         flexDirection={orientation === 'vertical' ? 'column' : 'row'}
         gap={orientation === 'vertical' ? 0 : 1}
@@ -89,7 +97,12 @@ const LabelBase = ({
         overflow="hidden"
         flexGrow={1}
       >
-        <Stack gap={1} flexDirection="row" alignItems="center">
+        <Stack
+          className="rosen-label-label"
+          gap={1}
+          flexDirection="row"
+          alignItems="center"
+        >
           <Typography
             noWrap
             variant="body2"

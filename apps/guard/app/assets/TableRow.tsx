@@ -101,20 +101,13 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount (Hot)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(row.amount.toString(), row.decimals)}
-              />
+              <Amount value={getDecimalString(row.amount, row.decimals)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Amount (Cold)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(
-                  row.coldAmount?.toString() ?? '0',
-                  row.decimals,
-                )}
-              />
+              <Amount value={getDecimalString(row.coldAmount, row.decimals)} />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -163,19 +156,12 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       <EnhancedTableCell>
         <WithExternalLink url={hotUrl}>
-          <Amount
-            value={getDecimalString(row.amount.toString(), row.decimals)}
-          />
+          <Amount value={getDecimalString(row.amount, row.decimals)} />
         </WithExternalLink>
       </EnhancedTableCell>
       <EnhancedTableCell>
         <WithExternalLink url={coldUrl}>
-          <Amount
-            value={getDecimalString(
-              row.coldAmount?.toString() ?? '0',
-              row.decimals,
-            )}
-          />
+          <Amount value={getDecimalString(row.coldAmount, row.decimals)} />
         </WithExternalLink>
       </EnhancedTableCell>
     </TableRow>
