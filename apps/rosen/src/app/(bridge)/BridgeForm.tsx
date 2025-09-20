@@ -9,7 +9,6 @@ import {
   TextField,
   Typography,
   ListItemIcon,
-  styled,
   MenuItem,
   CircularProgress,
   SvgIcon,
@@ -17,6 +16,8 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  Stack,
+  Columns,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -30,16 +31,6 @@ import {
 } from '@/hooks';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * renders the bridge main form
@@ -82,12 +73,12 @@ export const BridgeForm = () => {
     const network = sources.find((network) => network.name === value)!;
     const Logo = network.logo;
     return (
-      <SelectedAsset>
+      <Stack flexDirection="row" alignItems="center" marginTop="-1px" gap={1}>
         <SvgIcon>
           <Logo />
         </SvgIcon>
         <Typography color="text.secondary">{network.label}</Typography>
-      </SelectedAsset>
+      </Stack>
     );
   };
 
@@ -156,8 +147,15 @@ export const BridgeForm = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item mobile={12} tablet={6}>
+      <Columns
+        count={1}
+        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+        gap="16px"
+        overrides={{
+          tablet: { count: 2, gap: '16px', style: { display: 'unset' } },
+        }}
+      >
+        <div>
           <TextField
             id="source"
             select
@@ -182,8 +180,8 @@ export const BridgeForm = () => {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
-        <Grid item mobile={12} tablet={6}>
+        </div>
+        <div>
           <TextField
             id="target"
             select
@@ -213,8 +211,8 @@ export const BridgeForm = () => {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
-      </Grid>
+        </div>
+      </Columns>
       <TextField
         label="Target Address"
         InputProps={
