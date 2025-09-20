@@ -128,6 +128,29 @@
       }
     }
   },
+  "redis": {
+    "type": "object",
+    "children": {
+      "address": {
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "vercel redis address must be specified"
+          }
+        ]
+      },
+      "token": {
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "vercel redis token must be specified"
+          }
+        ]
+      }
+    }
+  },
   "healthCheck": {
     "type": "object",
     "children": {
@@ -248,6 +271,17 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "ergo blockRetrieveGap threshold in seconds"
@@ -277,7 +311,10 @@
                         {
                           "required": true,
                           "error": "ergo node url must be specified",
-                          "when": {"path": "chains.ergo.method", "value": "node"}
+                          "when": {
+                            "path": "chains.ergo.method",
+                            "value": "node"
+                          }
                         }
                       ]
                     }
@@ -302,8 +339,7 @@
                       "validations": [
                         {
                           "required": true,
-                          "error": "ergo explorer url must be specified",
-                          "when": {"path": "chains.ergo.method", "value": "explorer"}
+                          "error": "ergo explorer url must be specified"
                         }
                       ]
                     }
@@ -339,6 +375,15 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "cardano blockRetrieveGap threshold in seconds"
@@ -350,7 +395,7 @@
               {
                 "required": true,
                 "error": "cardano network connection method must be set",
-                "when": {"path": "chains.cardano.active", "value": true}
+                "when": { "path": "chains.cardano.active", "value": true }
               },
               {
                 "choices": ["koios", "ogmios", "blockfrost"]
@@ -365,12 +410,15 @@
               {
                 "required": true,
                 "error": "cardano initial height must be specified",
-                "when": {"path": "chains.cardano.method", "value": "koios"}
+                "when": { "path": "chains.cardano.method", "value": "koios" }
               },
               {
                 "required": true,
                 "error": "cardano initial height must be specified",
-                "when": {"path": "chains.cardano.method", "value": "blockfrost"}
+                "when": {
+                  "path": "chains.cardano.method",
+                  "value": "blockfrost"
+                }
               }
             ]
           },
@@ -390,8 +438,7 @@
                       "validations": [
                         {
                           "required": true,
-                          "error": "cardano koios url must be specified",
-                          "when": {"path": "chains.cardano.method", "value": "koios"}
+                          "error": "cardano koios url must be specified"
                         }
                       ]
                     },
@@ -403,7 +450,10 @@
                         {
                           "required": true,
                           "error": "cardano koios timeout must be specified (in seconds)",
-                          "when": {"path": "chains.cardano.method", "value": "koios"}
+                          "when": {
+                            "path": "chains.cardano.method",
+                            "value": "koios"
+                          }
                         }
                       ]
                     },
@@ -435,7 +485,10 @@
                         {
                           "required": true,
                           "error": "cardano blockfrost projectId must be specified",
-                          "when": {"path": "chains.cardano.method", "value": "blockfrost"}
+                          "when": {
+                            "path": "chains.cardano.method",
+                            "value": "blockfrost"
+                          }
                         }
                       ]
                     }
@@ -457,7 +510,10 @@
                       {
                         "required": true,
                         "error": "cardano ogmios nodeHostOrIp must be specified",
-                        "when": {"path": "chains.cardano.method", "value": "ogmios"}
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
                       }
                     ]
                   },
@@ -468,7 +524,10 @@
                       {
                         "required": true,
                         "error": "cardano ogmios nodePort must be specified",
-                        "when": {"path": "chains.cardano.method", "value": "ogmios"}
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
                       }
                     ]
                   },
@@ -479,7 +538,10 @@
                       {
                         "required": true,
                         "error": "cardano ogmios initialSlot must be specified",
-                        "when": {"path": "chains.cardano.method", "value": "ogmios"}
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
                       }
                     ]
                   },
@@ -490,7 +552,10 @@
                       {
                         "required": true,
                         "error": "cardano ogmios initialHash must be specified",
-                        "when": {"path": "chains.cardano.method", "value": "ogmios"}
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
                       }
                     ]
                   },
@@ -544,6 +609,15 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "bitcoin blockRetrieveGap threshold in seconds"
@@ -555,7 +629,7 @@
               {
                 "required": true,
                 "error": "bitcoin network connection method must be set",
-                "when": {"path": "chains.bitcoin.active", "value": true}
+                "when": { "path": "chains.bitcoin.active", "value": true }
               },
               {
                 "choices": ["rpc", "esplora"]
@@ -577,7 +651,10 @@
                         {
                           "required": true,
                           "error": "bitcoin rpc url must be specified",
-                          "when": {"path": "chains.bitcoin.method", "value": "rpc"}
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "rpc"
+                          }
                         }
                       ]
                     },
@@ -589,7 +666,10 @@
                         {
                           "required": true,
                           "error": "bitcoin rpc timeout must be specified (in seconds)",
-                          "when": {"path": "chains.bitcoin.method", "value": "rpc"}
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "rpc"
+                          }
                         }
                       ]
                     },
@@ -618,8 +698,7 @@
                       "validations": [
                         {
                           "required": true,
-                          "error": "bitcoin esplora url must be specified",
-                          "when": {"path": "chains.bitcoin.method", "value": "esplora"}
+                          "error": "bitcoin esplora url must be specified"
                         }
                       ]
                     },
@@ -631,7 +710,10 @@
                         {
                           "required": true,
                           "error": "bitcoin esplora timeout must be specified (in seconds)",
-                          "when": {"path": "chains.bitcoin.method", "value": "esplora"}
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "esplora"
+                          }
                         }
                       ]
                     },
@@ -681,6 +763,30 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "blockCypher": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "default": "https://api.blockcypher.com",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "doge data-adapter blockcypher url must be specified"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "doge blockRetrieveGap threshold in seconds"
@@ -692,7 +798,7 @@
               {
                 "required": true,
                 "error": "doge network connection method must be set",
-                "when": {"path": "chains.doge.active", "value": true}
+                "when": { "path": "chains.doge.active", "value": true }
               },
               {
                 "choices": ["rpc", "esplora"]
@@ -714,7 +820,10 @@
                         {
                           "required": true,
                           "error": "doge rpc url must be specified",
-                          "when": {"path": "chains.doge.method", "value": "rpc"}
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "rpc"
+                          }
                         }
                       ]
                     },
@@ -726,7 +835,10 @@
                         {
                           "required": true,
                           "error": "doge rpc timeout must be specified (in seconds)",
-                          "when": {"path": "chains.doge.method", "value": "rpc"}
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "rpc"
+                          }
                         }
                       ]
                     },
@@ -756,7 +868,10 @@
                         {
                           "required": true,
                           "error": "doge esplora url must be specified",
-                          "when": {"path": "chains.doge.method", "value": "esplora"}
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "esplora"
+                          }
                         }
                       ]
                     },
@@ -768,7 +883,10 @@
                         {
                           "required": true,
                           "error": "doge esplora timeout must be specified (in seconds)",
-                          "when": {"path": "chains.doge.method", "value": "esplora"}
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "esplora"
+                          }
                         }
                       ]
                     },
@@ -818,6 +936,15 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "ethereum blockRetrieveGap threshold in seconds"
@@ -836,7 +963,10 @@
                       "validations": [
                         {
                           "required": true,
-                          "when": {"path": "chains.ethereum.active", "value": true},
+                          "when": {
+                            "path": "chains.ethereum.active",
+                            "value": true
+                          },
                           "error": "ethereum rpc url must be specified"
                         }
                       ]
@@ -848,7 +978,10 @@
                       "validations": [
                         {
                           "required": true,
-                          "when": {"path": "chains.ethereum.active", "value": true},
+                          "when": {
+                            "path": "chains.ethereum.active",
+                            "value": true
+                          },
                           "error": "ethereum rpc timeout must be specified (in seconds)"
                         }
                       ]
@@ -900,6 +1033,15 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "binance blockRetrieveGap threshold in seconds"
@@ -918,7 +1060,10 @@
                       "validations": [
                         {
                           "required": true,
-                          "when": {"path": "chains.binance.active", "value": true},
+                          "when": {
+                            "path": "chains.binance.active",
+                            "value": true
+                          },
                           "error": "binance rpc url must be specified"
                         }
                       ]
@@ -930,7 +1075,10 @@
                       "validations": [
                         {
                           "required": true,
-                          "when": {"path": "chains.binance.active", "value": true},
+                          "when": {
+                            "path": "chains.binance.active",
+                            "value": true
+                          },
                           "error": "binance rpc timeout must be specified (in seconds)"
                         }
                       ]

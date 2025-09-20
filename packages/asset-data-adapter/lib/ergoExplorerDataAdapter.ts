@@ -13,11 +13,16 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected explorerUrl: string,
+    protected authParams: { [key: string]: string },
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
-    this.explorerApi = ergoExplorerClientFactory(explorerUrl);
+
+    if (Object.keys(authParams).indexOf('explorerUrl') < 0)
+      throw new Error(
+        'The ErgoExplorerDataAdapter required explorerUrl param not provided.',
+      );
+    this.explorerApi = ergoExplorerClientFactory(authParams.explorerUrl);
   }
 
   /**

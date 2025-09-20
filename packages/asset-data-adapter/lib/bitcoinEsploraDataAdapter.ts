@@ -13,12 +13,12 @@ export class BitcoinEsploraDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    url: string = 'https://blockstream.info',
+    protected authParams: { [key: string]: string },
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
     this.client = new Axios({
-      baseURL: url,
+      baseURL: authParams.url ?? 'https://blockstream.info',
     });
   }
 

@@ -19,3 +19,5 @@ export const DOGE_METHOD_RPC = 'rpc';
 export const DOGE_METHOD_ESPLORA = 'esplora';
 
 export const BITCOIN_RUNES_NETWORKS_KEY = 'bitcoin-runes';
+
+export const ERG_TOTAL_SUPPLY = 97_739_924n;

@@ -13,12 +13,17 @@ export class DogeBlockCypherDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    blockCypherUrl: string,
+    protected authParams: { [key: string]: string },
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
+
+    if (Object.keys(authParams).indexOf('blockCypherUrl') < 0)
+      throw new Error(
+        'The DogeBlockCypherDataAdapter required blockCypherUrl param not provided.',
+      );
     this.client = new Axios({
-      baseURL: blockCypherUrl,
+      baseURL: authParams.blockCypherUrl,
       headers: { 'Content-Type': 'application/json' },
     });
   }

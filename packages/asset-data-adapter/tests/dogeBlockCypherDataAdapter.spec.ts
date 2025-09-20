@@ -25,11 +25,9 @@ describe('DogeBlockCypherDataAdapter', () => {
 
     ctx.mockTokenMap = new TokenMap();
     await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-    ctx.adapter = new DogeBlockCypherDataAdapter(
-      ['addr1'],
-      ctx.mockTokenMap,
-      'http://blockcypher',
-    );
+    ctx.adapter = new DogeBlockCypherDataAdapter(['addr1'], ctx.mockTokenMap, {
+      blockCypherUrl: 'http://blockcypher',
+    });
   });
 
   describe('getAddressAssets', () => {

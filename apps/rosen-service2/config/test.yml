@@ -1,3 +1,6 @@
+redis:
+  address: http://kv
+  token: 'kv-token'
 paths:
   tokens: tests/config/rosen/tokensMap.json
   contracts: tests/config/rosen

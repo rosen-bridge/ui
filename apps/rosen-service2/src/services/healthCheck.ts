@@ -27,6 +27,7 @@ import {
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 import { ChainsKeys } from '../types';
+import { AssetDataAdapterService } from './assetDataAdapters';
 import { DBService } from './db';
 import { ScannerService } from './scanner';
 
@@ -46,6 +47,10 @@ export class HealthService extends PeriodicTaskService {
     },
     {
       serviceName: ScannerService.name,
+      allowedStatuses: [ServiceStatus.started],
+    },
+    {
+      serviceName: AssetDataAdapterService.name,
       allowedStatuses: [ServiceStatus.started],
     },
   ];

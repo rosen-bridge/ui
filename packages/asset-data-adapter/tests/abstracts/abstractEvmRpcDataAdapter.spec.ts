@@ -32,11 +32,9 @@ describe('AbstractEvmRpcDataAdapter', () => {
       ctx.mockTokenMap = new TokenMap();
       await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
 
-      ctx.adapter = new TestEvmRpcAdapter(
-        ['0xAddress'],
-        ctx.mockTokenMap,
-        'http://rpc',
-      );
+      ctx.adapter = new TestEvmRpcAdapter(['0xAddress'], ctx.mockTokenMap, {
+        url: 'http://rpc',
+      });
     });
 
     /**

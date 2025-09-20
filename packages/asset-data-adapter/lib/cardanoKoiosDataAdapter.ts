@@ -13,12 +13,19 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected koiosUrl: string = 'https://api.koios.rest/api/v1',
-    protected authToken?: string,
+    protected authParams: { [key: string]: string },
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
-    this.koiosApi = cardanoKoiosClientFactory(koiosUrl, authToken);
+
+    if (Object.keys(authParams).indexOf('koiosUrl') < 0)
+      throw new Error(
+        'The CardanoKoiosDataAdapter required koiosUrl param not provided.',
+      );
+    this.koiosApi = cardanoKoiosClientFactory(
+      authParams.koiosUrl ?? 'https://api.koios.rest/api/v1',
+      authParams.authToken,
+    );
   }
 
   /**
