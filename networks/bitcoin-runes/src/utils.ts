@@ -79,7 +79,7 @@ export const getAddressRunesBoxes = async (
     const headers = { 'Content-Type': 'application/json' };
     if (process.env.BITCOIN_RUNES_SECRET) {
       Object.assign(headers, {
-        'x-api-key': process.env.BITCOIN_RUNES_SECRET,
+        Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
       });
     }
 
@@ -123,7 +123,7 @@ export const getAddressBtcBoxes = async (
     const headers = { 'Content-Type': 'application/json' };
     if (process.env.BITCOIN_RUNES_SECRET) {
       Object.assign(headers, {
-        'x-api-key': process.env.BITCOIN_RUNES_SECRET,
+        Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
       });
     }
 
