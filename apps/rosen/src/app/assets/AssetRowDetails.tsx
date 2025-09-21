@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { Amount, Columns, Label } from '@rosen-bridge/ui-kit';
+import { Amount, Columns, GridContainer, Label } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
@@ -101,7 +101,7 @@ const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
         </Label>
       </Columns>
       <Label label="Bridged to" />
-      <Columns width="220px" count={5} gap="0.5rem">
+      <GridContainer minWidth="220px" gap="0.5rem">
         {items.map((item) => (
           <BridgedAssetCard
             asset={item}
@@ -110,7 +110,7 @@ const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
             key={item.chain}
           />
         ))}
-      </Columns>
+      </GridContainer>
     </>
   );
 };
