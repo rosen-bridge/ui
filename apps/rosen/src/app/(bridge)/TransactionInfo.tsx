@@ -6,7 +6,7 @@ import {
   Amount,
   Card,
   CardBody,
-  Divider,
+  DividerNew,
   Label,
   Truncate,
 } from '@rosen-bridge/ui-kit';
@@ -70,24 +70,30 @@ export const TransactionInfo = () => {
             loading={isPending}
           />
         </Label>
-        <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
+        <DividerNew
+          style={{
+            borderStyle: 'dashed',
+            marginBottom: '8px',
+            marginTop: '8px',
+          }}
+        />
         <Label label="Transaction Fee" dense>
           <Amount
-            value={!tokenValue ? undefined : networkFeeRaw}
+            value={networkFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />
         </Label>
         <Label label="Bridge Fee" dense>
           <Amount
-            value={!tokenValue ? undefined : bridgeFeeRaw}
+            value={bridgeFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />
         </Label>
         <Label label="Min Transfer" dense>
           <Amount
-            value={!tokenValue ? undefined : minTransferRaw}
+            value={minTransferRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />

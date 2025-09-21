@@ -12,7 +12,8 @@ import { Card } from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
-import { Divider, IconButton, SvgIcon } from '../../base';
+import { IconButton, SvgIcon } from '../../base';
+import { DividerNew } from '../DividerNew';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
@@ -294,7 +295,10 @@ export const SmartSearch = ({
           setFilters(selected);
         }}
       />
-      <Divider orientation="vertical" flexItem />
+      <DividerNew
+        style={{ alignSelf: 'stretch', height: 'auto' }}
+        orientation="vertical"
+      />
       <VirtualScroll>
         <Container>
           <Chips

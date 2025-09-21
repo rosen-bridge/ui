@@ -5,7 +5,7 @@ import React from 'react';
 import {
   Card,
   CardBody,
-  Divider,
+  DividerNew,
   Network,
   Stack,
   Typography,
@@ -43,7 +43,7 @@ export const Item = ({ cold, hot, loading, network }: ItemProps) => {
             <>
               <Network loading={loading} name={network} />
               <ItemAddress loading={loading} state="hot" value={hot} />
-              <Divider variant="fullWidth" />
+              <DividerNew />
               <ItemAddress loading={loading} state="cold" value={cold} />
             </>
           )}

@@ -5,7 +5,7 @@ import {
   CardHeaderProps as MuiCardHeaderProps,
 } from '@mui/material';
 
-import { Divider } from '../base';
+import { DividerMui } from '../base';
 
 /**
  * Props for `CardHeader` component.
@@ -58,7 +58,7 @@ export const CardHeader = ({
         {...props}
       />
       {separator && (
-        <Divider
+        <DividerMui
           sx={{
             borderStyle: 'dashed',
             marginBottom: (theme) => theme.spacing(1),

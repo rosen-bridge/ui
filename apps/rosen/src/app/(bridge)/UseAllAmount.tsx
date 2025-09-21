@@ -2,7 +2,7 @@ import { SyncExclamation } from '@rosen-bridge/icons';
 import {
   Button,
   CircularProgress,
-  Divider,
+  DividerNew,
   Grid,
   IconButton,
   SvgIcon,
@@ -37,7 +37,7 @@ export const UseAllAmount = ({
       gap={1.5}
     >
       <Grid item alignSelf="stretch">
-        <Divider orientation="vertical" />
+        <DividerNew orientation="vertical" />
       </Grid>
       <Grid item>
         {loading && (

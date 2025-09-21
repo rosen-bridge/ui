@@ -6,12 +6,12 @@ import { useIsMobile } from '../../hooks';
 import {
   Box,
   CircularProgress,
-  Divider,
   IconButton,
   SvgIcon,
   Tooltip,
   Typography,
 } from '../base';
+import { DividerNew } from './DividerNew';
 
 interface VersionProps {
   label: string;
@@ -93,7 +93,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
                 <Typography variant="subtitle2" color="text.secondary">
                   VERSIONS
                 </Typography>
-                <Divider sx={{ marginBottom: '4px' }} />
+                <DividerNew style={{ marginBottom: '4px' }} />
                 <div>
                   <Typography
                     variant="subtitle2"

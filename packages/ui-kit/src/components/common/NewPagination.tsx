@@ -9,7 +9,7 @@ import {
   MenuItem,
   Menu,
   SvgIcon,
-  Divider,
+  DividerMui,
   Stack,
   Button,
   ListSubheader,
@@ -170,7 +170,7 @@ export const NewPagination = ({
         alignItems="center"
         gap={1}
       >
-        <Divider
+        <DividerMui
           orientation="vertical"
           variant="middle"
           flexItem

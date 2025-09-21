@@ -7,7 +7,7 @@ import {
   Card,
   CardBody,
   Connector,
-  Divider,
+  DividerNew,
   EnhancedDialog,
   EnhancedDialogActions,
   EnhancedDialogContent,
@@ -142,7 +142,7 @@ export const SubmitButton = () => {
                     />
                   )}
                 </Stack>
-                <Divider />
+                <DividerNew />
                 <div>
                   <Label label="Transaction Fee">
                     <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
@@ -157,7 +157,7 @@ export const SubmitButton = () => {
                     />
                   </Label>
                 </div>
-                <Divider />
+                <DividerNew />
                 <Label label="Destination Address" orientation="vertical">
                   <Identifier value={walletAddressValue} copyable />
                 </Label>

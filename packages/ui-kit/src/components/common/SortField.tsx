@@ -19,7 +19,6 @@ import {
 import { styled } from '../../styling';
 import {
   Button,
-  Divider,
   Grid,
   IconButton,
   ListItemText,
@@ -30,6 +29,7 @@ import {
   SvgIcon,
   Typography,
 } from '../base';
+import { DividerNew } from './DividerNew';
 
 const Root = styled(Card)(({ theme }) => ({
   padding: theme.spacing(1, 0.5),
@@ -203,7 +203,7 @@ export const SortField = ({
           </Menu>
         </Grid>
         <Grid item alignSelf="stretch">
-          <Divider orientation="vertical" />
+          <DividerNew orientation="vertical" />
         </Grid>
         <Grid item>
           <IconButton disabled={disabled} onClick={handleSortOrderChange}>

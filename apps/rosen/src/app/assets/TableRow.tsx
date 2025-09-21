@@ -7,7 +7,7 @@ import {
   Button,
   CircularProgress,
   Collapse,
-  Divider,
+  DividerNew,
   EnhancedTableCell,
   IconButton,
   Id,
@@ -319,7 +319,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       >
         <EnhancedTableCell colSpan={10} padding="none">
           <Collapse in={open} unmountOnExit>
-            <Divider variant="middle" sx={{ borderBottomStyle: 'dashed' }} />
+            <DividerNew variant="middle" style={{ borderStyle: 'dashed' }} />
             {data && (
               <Box sx={{ m: 2 }}>
                 {data.bridged && (

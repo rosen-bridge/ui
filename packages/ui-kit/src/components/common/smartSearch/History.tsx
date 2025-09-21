@@ -13,7 +13,6 @@ import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
 import { useBreakpoint } from '../../../hooks';
 import {
-  Divider,
   List,
   ListItem,
   ListItemButton,
@@ -21,6 +20,7 @@ import {
   ListSubheader,
 } from '../../base';
 import { IconButton, SvgIcon } from '../../base';
+import { DividerNew } from '../DividerNew';
 import { Truncate } from '../Truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
@@ -229,7 +229,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                       </ListItem>
                     ))}
                   </List>
-                  <Divider />
+                  <DividerNew />
                 </>
               )}
               <List subheader={<ListSubheader>Recent searches</ListSubheader>}>
