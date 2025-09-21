@@ -67,14 +67,9 @@ describe('AbstractEvmRpcDataAdapter', () => {
      *   1. first call → expect the first asset
      *   2. second call → expect the second asset
      *   3. third call → expect the third asset
-     * - call resetOffset() and fetch again:
-     *   - expect it to restart and return the first asset
-     * - call setOffset(3) and fetch again:
-     *   - expect it to directly return the third asset
+     *   4. third call → expect the first asset
      * @expected
      * - offset increases on each fetch
-     * - resetOffset sets offset back to one
-     * - setOffset jumps to the given offset correctly
      */
     it<TestContext>('should paginate address assets using offset', async ({
       adapter,
@@ -85,7 +80,6 @@ describe('AbstractEvmRpcDataAdapter', () => {
         mockTokenMap,
         'http://rpc',
         undefined,
-        1,
         1,
       );
 
@@ -100,13 +94,8 @@ describe('AbstractEvmRpcDataAdapter', () => {
       assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
       expect(assets).toEqual([totalAssets[2]]);
 
-      adapterByFetchParameters.resetOffset();
       assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
       expect(assets).toEqual([totalAssets[0]]);
-
-      adapterByFetchParameters.setOffset(3);
-      assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[2]]);
     });
 
     /**
@@ -132,7 +121,6 @@ describe('AbstractEvmRpcDataAdapter', () => {
         'http://rpc',
         undefined,
         2,
-        1,
       );
 
       const totalAssets = await adapter.getAddressAssets('0xAddress');
@@ -142,44 +130,6 @@ describe('AbstractEvmRpcDataAdapter', () => {
 
       assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
       expect(assets).toEqual([totalAssets[2]]);
-    });
-
-    /**
-     * @target should respect fetchOffset and reset after reaching the last asset
-     * @scenario
-     * - mock adapter.getAddressAssets to return a list of 3 assets
-     * - adapterByFetchParameters is initialized with an offset equal to totalAssets.length
-     * - first call to getAddressAssets:
-     *   - expect it to return [totalAssets[2]]
-     * - second call to getAddressAssets:
-     *   - expect it to reset the offset and return [totalAssets[0]]
-     * @expected
-     * - fetch starts at the configured offset
-     * - after reaching the last item, offset resets to the beginning
-     */
-    it<TestContext>('should respect fetchOffset and reset after last asset', async ({
-      adapter,
-      mockTokenMap,
-    }) => {
-      const adapterByFetchParameters = new TestEvmRpcAdapter(
-        ['0xAddress'],
-        mockTokenMap,
-        'http://rpc',
-        undefined,
-        1,
-        1,
-      );
-
-      const totalAssets = await adapter.getAddressAssets('0xAddress');
-      adapterByFetchParameters.setOffset(totalAssets.length);
-
-      // fetch assets starting from the configured offset
-      let assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[2]]);
-
-      // after reaching the last item, the offset should reset to the beginning
-      assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[0]]);
     });
   });
 });
