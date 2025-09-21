@@ -3,13 +3,12 @@ import { useMemo, useState } from 'react';
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Amount,
-  Collapse,
-  Divider,
   IconButton,
   Network,
   Skeleton,
   SvgIcon,
   TableGridBodyCol,
+  TableGridBodyDetails,
   TableGridBodyRow,
   Token,
 } from '@rosen-bridge/ui-kit';
@@ -104,19 +103,16 @@ const AssetRow = ({ item, isLoading }: AssetRowProps) => {
           )}
         />
       </TableGridBodyCol>
-
+      {/* Action column, whose includes an icon button to show/hide row details. */}
       <TableGridBodyCol padding="actions">
         <IconButton size="small" onClick={handleToggleExpansion}>
           <SvgIcon>{expanded ? <AngleUp /> : <AngleDown />}</SvgIcon>
         </IconButton>
       </TableGridBodyCol>
-
-      <Collapse in={expanded} sx={{ gridColumn: '1 / -1' }}>
-        <Divider sx={{ mt: 1 }} />
-        <TableGridBodyCol>
-          <AssetRowDetails row={item} expanded={expanded} />
-        </TableGridBodyCol>
-      </Collapse>
+      {/* Row details, which is collapsed by default. */}
+      <TableGridBodyDetails expanded={expanded}>
+        <AssetRowDetails row={item} expanded={expanded} />
+      </TableGridBodyDetails>
     </TableGridBodyRow>
   );
 };

@@ -3,7 +3,7 @@ export * from './carousel';
 export * from './smartSearch';
 export * from './button';
 export * from './display';
-export * from './data';
+export * from './tableGrid';
 export * from './navigationBar';
 export * from './AlertCard';
 export * from './ApiKeyModal';
