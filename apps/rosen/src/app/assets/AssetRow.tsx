@@ -7,6 +7,7 @@ import {
   Divider,
   IconButton,
   Network,
+  Skeleton,
   SvgIcon,
   TableGridBodyCol,
   TableGridBodyRow,
@@ -22,9 +23,10 @@ import AssetRowDetails from './AssetRowDetails';
 
 interface AssetRowProps {
   item: AssetType;
+  isLoading?: boolean;
 }
 
-const AssetRow = ({ item }: AssetRowProps) => {
+const AssetRow = ({ item, isLoading }: AssetRowProps) => {
   const [expanded, setExpanded] = useState(false);
   const handleToggleExpansion = () => setExpanded((prev) => !prev);
 
@@ -61,6 +63,11 @@ const AssetRow = ({ item }: AssetRowProps) => {
     ];
   }, [item]);
 
+  if (isLoading)
+    return (
+      <Skeleton variant="rounded" height={50} sx={{ gridColumn: '1/-1' }} />
+    );
+
   return (
     <TableGridBodyRow>
       <TableGridBodyCol>
@@ -69,53 +76,27 @@ const AssetRow = ({ item }: AssetRowProps) => {
       <TableGridBodyCol>
         <Network name={item.chain} />
       </TableGridBodyCol>
-      <TableGridBodyCol
-        overrides={{
-          mobile: { style: { display: 'none' } },
-          tablet: { style: { display: 'block' } },
-        }}
-      >
+      <TableGridBodyCol>
         <Amount
           value={getDecimalString(
-            (hotAmount + coldAmount).toString(),
+            hotAmount + coldAmount,
             item.significantDecimals,
           )}
         />
       </TableGridBodyCol>
-      <TableGridBodyCol
-        overrides={{
-          mobile: { style: { display: 'none' } },
-          desktop: { style: { display: 'block' } },
-        }}
-      >
+      <TableGridBodyCol>
         <Amount
-          value={getDecimalString(
-            hotAmount.toString(),
-            item.significantDecimals,
-          )}
+          value={getDecimalString(hotAmount, item.significantDecimals)}
           href={hotUrl}
         />
       </TableGridBodyCol>
-      <TableGridBodyCol
-        overrides={{
-          mobile: { style: { display: 'none' } },
-          desktop: { style: { display: 'block' } },
-        }}
-      >
+      <TableGridBodyCol>
         <Amount
-          value={getDecimalString(
-            coldAmount.toString(),
-            item.significantDecimals,
-          )}
+          value={getDecimalString(coldAmount, item.significantDecimals)}
           href={coldUrl}
         />
       </TableGridBodyCol>
-      <TableGridBodyCol
-        overrides={{
-          mobile: { style: { display: 'none' } },
-          laptop: { style: { display: 'block' } },
-        }}
-      >
+      <TableGridBodyCol>
         <Amount
           value={getDecimalString(
             item.bridged || '0',

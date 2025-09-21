@@ -1,4 +1,6 @@
-import { Amount, Columns, Grid, Label } from '@rosen-bridge/ui-kit';
+import { useMemo } from 'react';
+
+import { Amount, Columns, Label } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
@@ -6,17 +8,22 @@ import useSWR from 'swr';
 import { ApiAssetResponse, Assets as AssetType } from '@/types';
 
 import { LOCK_ADDRESSES } from '../../../configs';
-import BridgedAssetCard, { BridgedAssetCardSkeleton } from './BridgedAssetCard';
+import BridgedAssetCard from './BridgedAssetCard';
 
 interface AssetRowDetailsProps {
   row: AssetType;
   expanded: boolean;
 }
 const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
-  const { data, isLoading: loading } = useSWR<ApiAssetResponse>(
+  const { data, isLoading } = useSWR<ApiAssetResponse>(
     expanded ? `/v1/assets/detail/${row.id.toLowerCase()}` : null,
     fetcher,
   );
+
+  const items = useMemo(() => {
+    if (!isLoading) return data?.bridged || [];
+    return Array(4).fill({});
+  }, [data, isLoading]);
 
   const hot = row.lockedPerAddress?.find((item) =>
     Object.values(LOCK_ADDRESSES).includes(item.address),
@@ -94,38 +101,16 @@ const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
         </Label>
       </Columns>
       <Label label="Bridged to" />
-      <Grid container spacing={1} mb={1}>
-        {!loading &&
-          data &&
-          data.bridged.map((item) => (
-            <Grid
-              item
-              mobile={12}
-              tablet={6}
-              laptop={4}
-              desktop={3}
-              key={item.chain}
-            >
-              <BridgedAssetCard
-                asset={item}
-                decimals={row.significantDecimals}
-              />
-            </Grid>
-          ))}
-        {loading &&
-          Array.from({ length: 4 }).map((_, index) => (
-            <Grid
-              item
-              mobile={12}
-              tablet={6}
-              laptop={4}
-              desktop={3}
-              key={index}
-            >
-              <BridgedAssetCardSkeleton />
-            </Grid>
-          ))}
-      </Grid>
+      <Columns width="220px" count={5} gap="0.5rem">
+        {items.map((item) => (
+          <BridgedAssetCard
+            asset={item}
+            decimals={row.significantDecimals}
+            isLoading={isLoading}
+            key={item.chain}
+          />
+        ))}
+      </Columns>
     </>
   );
 };

@@ -4,7 +4,7 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import {
   DataLayout,
@@ -16,7 +16,7 @@ import {
   useCollection,
   TableGridHead,
   TableGridHeadCol,
-  Skeleton,
+  TableGridBody,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
@@ -38,6 +38,11 @@ const Assets = () => {
       keepPreviousData: true,
     },
   );
+
+  const items = useMemo(() => {
+    if (!isLoading) return data?.items || [];
+    return Array(collection.pageSize).fill({});
+  }, [collection.pageSize, data, isLoading]);
 
   const renderPagination = useCallback(
     () => (
@@ -89,62 +94,20 @@ const Assets = () => {
       sidebar={null}
       pagination={renderPagination()}
     >
-      <TableGrid
-        gridTemplateColumns="repeat(2,1fr) auto"
-        overrides={{
-          tablet: { gridTemplateColumns: 'repeat(3,1fr) auto' },
-          laptop: { gridTemplateColumns: 'repeat(4,1fr) auto' },
-          desktop: { gridTemplateColumns: 'repeat(6,1fr) auto' },
-        }}
-      >
+      <TableGrid hasActionColumn>
         <TableGridHead>
           <TableGridHeadCol>Name</TableGridHeadCol>
           <TableGridHeadCol>Network</TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              tablet: { style: { display: 'block' } },
-            }}
-          >
-            Locked
-          </TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              desktop: { style: { display: 'block' } },
-            }}
-          >
-            Hot
-          </TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              desktop: { style: { display: 'block' } },
-            }}
-          >
-            Cold
-          </TableGridHeadCol>
-          <TableGridHeadCol
-            overrides={{
-              mobile: { style: { display: 'none' } },
-              laptop: { style: { display: 'block' } },
-            }}
-          >
-            Bridged
-          </TableGridHeadCol>
+          <TableGridHeadCol hideOn="tablet-down">Locked</TableGridHeadCol>
+          <TableGridHeadCol hideOn="desktop-down">Hot</TableGridHeadCol>
+          <TableGridHeadCol hideOn="desktop-down">Cold</TableGridHeadCol>
+          <TableGridHeadCol hideOn="laptop-down">Bridged</TableGridHeadCol>
         </TableGridHead>
-        {!isLoading
-          ? data?.items.map((item) => <AssetRow key={item.id} item={item} />)
-          : Array(collection.pageSize)
-              .fill(0)
-              .map((_, index) => (
-                <Skeleton
-                  variant="rounded"
-                  height={50}
-                  sx={{ gridColumn: '1/-1' }}
-                  key={index}
-                />
-              ))}
+        <TableGridBody>
+          {items.map((item) => (
+            <AssetRow key={item.id} item={item} isLoading={isLoading} />
+          ))}
+        </TableGridBody>
       </TableGrid>
     </DataLayout>
   );

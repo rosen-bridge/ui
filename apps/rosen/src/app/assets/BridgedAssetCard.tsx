@@ -15,13 +15,14 @@ import { ApiAssetResponse } from '@/types';
 interface BridgedAssetCardProps {
   asset: ApiAssetResponse['bridged'][0];
   decimals: number;
+  isLoading?: boolean;
 }
 
-export const BridgedAssetCardSkeleton = () => (
-  <Skeleton variant="rounded" height={90} />
-);
-
-const BridgedAssetCard = ({ asset, decimals }: BridgedAssetCardProps) => {
+const BridgedAssetCard = ({
+  asset,
+  decimals,
+  isLoading,
+}: BridgedAssetCardProps) => {
   const { amount, birdgedTokenId, chain } = asset;
   const tokenUrl = getTokenUrl(
     chain,
@@ -29,6 +30,9 @@ const BridgedAssetCard = ({ asset, decimals }: BridgedAssetCardProps) => {
       ? birdgedTokenId.replace('.', '')
       : birdgedTokenId,
   );
+
+  if (isLoading) return <Skeleton variant="rounded" height={90} />;
+
   return (
     <Card backgroundColor="neutral.light">
       <CardBody>
