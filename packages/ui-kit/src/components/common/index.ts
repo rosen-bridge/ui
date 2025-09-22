@@ -52,3 +52,4 @@ export * from './DateTime';
 export * from './processTracker';
 export * from './Text';
 export * from './DividerNew';
+export * from './IconWarp';

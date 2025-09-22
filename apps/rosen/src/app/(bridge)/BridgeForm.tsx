@@ -5,7 +5,6 @@ import { useCallback, ChangeEvent } from 'react';
 import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
-  Grid,
   TextField,
   Typography,
   ListItemIcon,

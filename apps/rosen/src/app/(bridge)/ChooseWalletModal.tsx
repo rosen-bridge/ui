@@ -6,13 +6,15 @@ import {
   Card,
   CardBody,
   Button,
-  Dialog,
   DialogContent,
   DialogContentText,
   EnhancedDialogTitle,
-  Grid,
-  Stack,
+  Stack as StackMUI,
   Tooltip,
+  Box,
+  Typography,
+  EnhancedDialog,
+  InjectOverrides,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -30,6 +32,7 @@ interface ChooseWalletModalProps {
   wallets: Wallet[];
 }
 
+const Stack = InjectOverrides(StackMUI);
 /**
  * modal to allow user to choose a wallet
  *
@@ -66,7 +69,12 @@ export const ChooseWalletModal = ({
   }, [open, wallets]);
 
   return (
-    <Dialog open={open} maxWidth="laptop" onClose={handleClose}>
+    <EnhancedDialog
+      maxWidth="desktop"
+      open={open}
+      stickOn="tablet"
+      onClose={handleClose}
+    >
       <EnhancedDialogTitle icon={<WalletIcon />} onClose={handleClose}>
         Choose Wallet
       </EnhancedDialogTitle>
@@ -84,7 +92,15 @@ export const ChooseWalletModal = ({
             source address.
           </Alert>
         )}
-        <Grid container justifyContent="center" gap={2}>
+        <Stack
+          display="flex"
+          flexDirection="row"
+          justifyContent="center"
+          flexWrap="wrap"
+          alignItems="flex-start"
+          gap={2}
+          width="100%"
+        >
           {wallets.map((wallet) => {
             const Icon = wallet.iconReact;
             const isConnected = selectedWallet?.name === wallet.name;
@@ -100,23 +116,59 @@ export const ChooseWalletModal = ({
             };
 
             return (
-              <Card key={wallet.label} backgroundColor="background.paper">
-                <CardBody>
-                  <Tooltip title={wallet.name}>
+              <Card
+                style={{ width: '100%' }}
+                overrides={{
+                  tablet: { style: { width: 'fit-content' } },
+                }}
+                key={wallet.label}
+                backgroundColor="background.paper"
+              >
+                <CardBody
+                  style={{ padding: '0' }}
+                  overrides={{ tablet: { style: { padding: '16px' } } }}
+                >
+                  <Tooltip title={'wallet.name'}>
                     <Stack
-                      gap={3}
-                      sx={{
-                        svg: {
-                          height: (theme) => theme.spacing(13),
-                          width: (theme) => theme.spacing(13),
+                      overrides={{
+                        mobile: {
+                          flexDirection: 'row',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          marginBottom: '8px',
+                        },
+                        tablet: {
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
                         },
                       }}
+                      gap={2}
                     >
-                      <Icon />
+                      <WalletIconWrapper
+                        size="56px"
+                        overrides={{ tablet: { size: '120px' } }}
+                      >
+                        <Icon />
+                      </WalletIconWrapper>
+                      <Box
+                        style={{ display: 'flex', alignItems: 'center' }}
+                        overrides={{
+                          tablet: {
+                            style: {
+                              display: 'none',
+                            },
+                          },
+                        }}
+                      >
+                        <Typography variant="body1" noWrap>
+                          {wallet.name}
+                        </Typography>
+                      </Box>
                       <Button
                         variant="contained"
                         size="small"
-                        sx={{ width: '100%' }}
+                        style={{ width: 'fit-content', height: 'auto' }}
                         disabled={!wallet.isAvailable()}
                         color={isConnected ? 'inherit' : 'primary'}
                         onClick={handleClick}
@@ -129,8 +181,26 @@ export const ChooseWalletModal = ({
               </Card>
             );
           })}
-        </Grid>
+        </Stack>
       </DialogContent>
-    </Dialog>
+    </EnhancedDialog>
   );
 };
+//todo: fix
+const WalletIconWrapper = InjectOverrides(
+  ({ children, size }: { children: JSX.Element; size: string | number }) => {
+    return (
+      <div
+        style={{
+          width: size,
+          height: size,
+          display: 'inline-flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        {children}
+      </div>
+    );
+  },
+);

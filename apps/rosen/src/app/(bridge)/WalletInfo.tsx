@@ -91,7 +91,7 @@ export const WalletInfo = () => {
               >
                 {Icon && (
                   <Avatar
-                    sx={{
+                    style={{
                       width: 24,
                       height: 24,
                       background: 'transparent',
