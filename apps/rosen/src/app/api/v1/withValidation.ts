@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { NextRequest } from 'next/server';
 
 import { ValidationResult } from 'joi';

@@ -1,4 +1,4 @@
-import { PROCEED } from '@rosen-bridge/scanner';
+import { PROCEED } from '@rosen-bridge/abstract-scanner';
 
 const now = Date.now();
 

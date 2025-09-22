@@ -1,5 +1,5 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { ErgoScanner } from '@rosen-bridge/scanner';
+import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 

@@ -8,7 +8,6 @@ import { LayoutProps } from '@rosen-ui/types';
 const DashboardLayout = ({
   actions,
   revenue,
-  tokens,
   health,
   networks,
 }: LayoutProps) => (
