@@ -67,11 +67,10 @@ export const Wrap = <P extends object, R = unknown>(
       }, [overrides, current, rest]);
 
       const className = useMemo(() => {
-        if (!options?.reflects) return (rest as any).className;
 
-        const componentName = kebabCase(BaseComponent.displayName);
+        const componentName = 'rosen-' + kebabCase(BaseComponent.displayName);
 
-        const reflectClasses = options.reflects
+        const reflectClasses = (options?.reflects || [])
           .map((key) => {
             const value = mergedProps[key];
             if (value === undefined || value === null || value === false) return null;
