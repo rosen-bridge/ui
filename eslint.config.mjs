@@ -1,3 +1,4 @@
+import { FlatCompat } from '@eslint/eslintrc';
 import pluginJs from '@eslint/js';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
 import typescriptParser from '@typescript-eslint/parser';
@@ -6,16 +7,21 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import globals from 'globals';
 
-export default [
+const compat = new FlatCompat({
+  baseDirectory: import.meta.dirname,
+});
+
+const eslintConfig = [
   // General Ignore Patterns
   {
-    ignores: ['**/dist/*'],
+    ignores: ['**/.next/*', '**/dist/*', '**/out/*'],
   },
 
   // Base Configuration for JS/TS Files
   {
     files: [
       '{networks,packages,wallets,apps/rosen-service2}/**/*.{js,jsx,ts,tsx}',
+      'apps/{guard,rosen,watcher}/{app,src}/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       parser: typescriptParser,
@@ -71,7 +77,10 @@ export default [
 
   // React-Specific Rules and Plugins
   {
-    files: ['packages/ui-kit/**/*.{js,jsx,ts,tsx}'],
+    files: [
+      'apps/{guard,rosen,watcher}/{app,src}/**/*.{js,jsx,ts,tsx}',
+      'packages/ui-kit/**/*.{js,jsx,ts,tsx}',
+    ],
     plugins: {
       'react-refresh': reactRefresh,
       'react-hooks': reactHooks,
@@ -93,6 +102,12 @@ export default [
 
   // Additional Global Rules
   {
+    languageOptions: {
+      parser: typescriptParser,
+    },
+    plugins: {
+      '@typescript-eslint': typescriptEslint,
+    },
     rules: {
       '@typescript-eslint/no-unused-expressions': [
         'error',
@@ -101,6 +116,17 @@ export default [
     },
   },
 
+  ...compat.config({
+    extends: ['next/core-web-vitals'],
+    settings: {
+      next: {
+        rootDir: ['apps/guard', 'apps/rosen', 'apps/watcher'],
+      },
+    },
+  }),
+
   // Integrate Prettier for Formatting
   prettier,
 ];
+
+export default eslintConfig;

@@ -297,7 +297,7 @@ const healthStatus: ApiHealthStatusResponse = [
 const generateHistoryEventRecords = (
   numberOfRecords: number,
 ): HistoryEvent[] => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map(() => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
     fromChain: NETWORKS.ergo.key,
@@ -323,7 +323,7 @@ const generateHistoryEventRecords = (
 const generateOngoingEventRecords = (
   numberOfRecords: number,
 ): OngoingEvent[] => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map(() => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
     fromChain: NETWORKS.ergo.key,
@@ -405,15 +405,12 @@ export const mockedData: FakeData = {
       return revenueChart[period];
     },
 
-    '/assets': ({ offset, limit, chain }): ApiAddressAssetsResponse => {
+    '/assets': ({ chain }): ApiAddressAssetsResponse => {
       const filteredData = chain
         ? assets.filter((asset) => asset.chain === chain)
         : assets;
 
       const pageData = filteredData;
-      offset && limit
-        ? filteredData.slice(offset, limit + offset)
-        : filteredData;
 
       return {
         total: filteredData.length,

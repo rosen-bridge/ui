@@ -9,8 +9,10 @@
   "main": "./src/index.ts",
   "scripts": {
     "coverage": "npm run test -- --coverage",
-    "lint": "eslint --fix && npm run prettify",
-    "prettify": "prettier --write . --ignore-path ./.gitignore",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "start": "tsx ./src/index.ts",
     "start:dev": "tsx watch ./src/index.ts",
     "test": "NODE_OPTIONS='--import tsx' vitest",
@@ -48,8 +50,8 @@
     "@rosen-bridge/winston-logger": "^1.0.3",
     "@rosen-ui/asset-calculator": "^2.1.8",
     "@rosen-ui/constants": "^0.4.1",
-    "ethers": "6.13.2",
     "config": "^3.3.7",
+    "ethers": "6.13.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

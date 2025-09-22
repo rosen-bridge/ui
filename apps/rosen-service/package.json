@@ -15,7 +15,10 @@
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
     "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
     "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore"
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore"
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^2.0.1",
