@@ -6,7 +6,7 @@ export class Migration1757426014448 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             ALTER TABLE "token_entity"
-            ADD "significantDecimal" integer NOT NULL
+            ADD "significantDecimal" integer NOT NULL DEFAULT 0
         `);
   }
 
