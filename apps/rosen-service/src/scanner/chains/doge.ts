@@ -1,13 +1,13 @@
 import {
+  RoundRobinStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
+import {
   DogeRpcNetwork,
   DogeRpcScanner,
   DogeRpcTransaction,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import {
-  RoundRobinStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
 
 import config from '../../configs';
 import {

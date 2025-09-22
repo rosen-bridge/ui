@@ -1,6 +1,6 @@
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { BlockEntity } from '@rosen-bridge/scanner';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { DBService } from '../../src/services/db';

@@ -1,6 +1,6 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { BlockEntity, PROCEED } from '@rosen-bridge/scanner';
 import {
   AbstractService,
   Dependency,

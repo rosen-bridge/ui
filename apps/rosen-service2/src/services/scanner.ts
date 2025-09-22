@@ -1,5 +1,6 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { WebSocketScanner, CardanoOgmiosScanner } from '@rosen-bridge/scanner';
+import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
+import { CardanoOgmiosScanner } from '@rosen-bridge/cardano-scanner';
 import {
   PeriodicTaskService,
   Dependency,
