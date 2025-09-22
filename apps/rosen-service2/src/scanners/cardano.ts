@@ -1,11 +1,23 @@
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   CardanoKoiosObservationExtractor,
   CardanoBlockFrostObservationExtractor,
   CardanoOgmiosObservationExtractor,
-} from '@rosen-bridge/observation-extractor';
-import * as scanner from '@rosen-bridge/scanner';
+} from '@rosen-bridge/cardano-observation-extractor';
+import {
+  BlockFrostNetwork,
+  BlockFrostTransaction,
+  CardanoBlockFrostScanner,
+  CardanoKoiosScanner,
+  CardanoOgmiosScanner,
+  KoiosNetwork,
+  KoiosTransaction,
+} from '@rosen-bridge/cardano-scanner';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
@@ -25,21 +37,16 @@ export const buildCardanoKoiosScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with Koios network settings
-  const networkConnectorManager =
-    new scanner.NetworkConnectorManager<scanner.KoiosTransaction>(
-      new scanner.FailoverStrategy(),
-      logger,
-    );
+  const networkConnectorManager = new NetworkConnectorManager<KoiosTransaction>(
+    new FailoverStrategy(),
+    logger,
+  );
   configs.chains.cardano.koios.connections.forEach((koios) => {
     networkConnectorManager.addConnector(
-      new scanner.KoiosNetwork(
-        koios.url!,
-        koios.timeout! * 1000,
-        koios.authToken,
-      ),
+      new KoiosNetwork(koios.url!, koios.timeout! * 1000, koios.authToken),
     );
   });
-  const cardanoScanner = new scanner.CardanoKoiosScanner({
+  const cardanoScanner = new CardanoKoiosScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.cardano.initialHeight!,
     network: networkConnectorManager,
@@ -92,16 +99,16 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
 
   // Create Cardano scanner with BlockFrost network settings
   const networkConnectorManager =
-    new scanner.NetworkConnectorManager<scanner.BlockFrostTransaction>(
-      new scanner.FailoverStrategy(),
+    new NetworkConnectorManager<BlockFrostTransaction>(
+      new FailoverStrategy(),
       logger,
     );
   configs.chains.cardano.blockfrost.connections.forEach((blockfrost) => {
     networkConnectorManager.addConnector(
-      new scanner.BlockFrostNetwork(blockfrost.projectId!, blockfrost.url),
+      new BlockFrostNetwork(blockfrost.projectId!, blockfrost.url),
     );
   });
-  const cardanoScanner = new scanner.CardanoBlockFrostScanner({
+  const cardanoScanner = new CardanoBlockFrostScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.cardano.initialHeight!,
     network: networkConnectorManager,
@@ -153,7 +160,7 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
   logger.info('Starting Cardano scanner initialization...');
 
   // Create Cardano scanner with ogmios network settings
-  const cardanoScanner = new scanner.CardanoOgmiosScanner(
+  const cardanoScanner = new CardanoOgmiosScanner(
     {
       dataSource: dataSource,
       nodeHostOrIp: configs.chains.cardano.ogmios.connection.address!,

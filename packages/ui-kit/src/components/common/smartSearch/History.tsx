@@ -274,3 +274,5 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
     );
   },
 );
+
+History.displayName = 'History';

@@ -4,7 +4,7 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import { MouseEvent, useCallback, useMemo, useState } from 'react';
+import { ChangeEvent, MouseEvent, useCallback, useMemo, useState } from 'react';
 
 import {
   Box,
@@ -47,8 +47,10 @@ const Assets = () => {
     isLastPage,
   } = useTableDataPagination<ApiAssetsResponse>(getKey(network));
 
-  const handleChangeNetwork = (event: any) => {
-    setNetwork(event.target.value);
+  const handleChangeNetwork = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setNetwork(event.target.value as Network);
   };
 
   const handleChangePage = useCallback(
@@ -59,7 +61,7 @@ const Assets = () => {
   );
 
   const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setPageSize(parseInt(event.target.value, 10));
     },
     [setPageSize],

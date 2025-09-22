@@ -92,7 +92,7 @@ const LabelBase = ({
         className="rosen-label-container"
         alignItems={orientation === 'vertical' ? 'start' : 'center'}
         flexDirection={orientation === 'vertical' ? 'column' : 'row'}
-        gap={orientation === 'vertical' ? 0 : 1}
+        gap={orientation === 'vertical' ? 0 : 2}
         py={dense ? 0 : 0.5}
         overflow="hidden"
         flexGrow={1}

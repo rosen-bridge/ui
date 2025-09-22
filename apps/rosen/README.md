@@ -7,7 +7,6 @@ Follow these steps to set up and run your local version of Rosen App:
 ### Prerequisites
 
 1. **Postgres & Rosen Service** (Optional for bridge page access)
-
    - Required for full functionality
    - Setup instructions: [Rosen Service README](../rosen-service/README.md)
 

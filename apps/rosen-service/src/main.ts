@@ -1,6 +1,7 @@
+import './bootstrap';
+
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
-import './bootstrap';
 import calculatorService from './calculator/calculator-service';
 import dataSource from './data-source';
 import AppError from './errors/AppError';
