@@ -13,6 +13,7 @@ import {
   EnhancedDialogTitle,
   Identifier,
   Label,
+  LabelGroup,
   Network,
   RelativeTime,
   Stack,
@@ -25,8 +26,9 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
 
-import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
+
+import { Status } from '../Status';
 
 const Content = ({ value }: EventSidebarProps) => {
   const isTablet = useBreakpoint('laptop-down');
@@ -46,10 +48,10 @@ const Content = ({ value }: EventSidebarProps) => {
   return (
     <Columns gap="32px" width="20rem" rule>
       <Label orientation="horizontal" label="Event Id">
-        <Identifier style={{ width: '80%' }} copyable value={value.eventId} />
+        <Identifier copyable value={value.eventId} />
       </Label>
       <Label label="Status">
-        <EventStatus value={value.status} />
+        <Status value={value.status} />
       </Label>
       <Label label="Token">
         <Token reverse name={value.lockToken.name} />
@@ -63,59 +65,60 @@ const Content = ({ value }: EventSidebarProps) => {
         />
       </Label>
       <div>
-        <Label label="Chain"></Label>
-        <Label label="From" inset>
-          <Network name={value.fromChain} reverse />
-        </Label>
-        <Label label="To" inset>
-          <Network name={value.toChain} reverse />
-        </Label>
+        <Label label="Chain" />
+        <LabelGroup>
+          <Label label="From" inset>
+            <Network name={value.fromChain} reverse />
+          </Label>
+          <Label label="To" inset>
+            <Network name={value.toChain} reverse />
+          </Label>
+        </LabelGroup>
       </div>
       <div>
-        <Label label="Tx IDs"></Label>
-        <Label label="Lock Tx" inset>
-          <Identifier
-            style={{ width: '90%' }}
-            copyable={!!value.sourceTxId}
-            value={value.sourceTxId}
-            href={getTxURL(value.fromChain, value.sourceTxId)}
-          />
-        </Label>
-        <Label label="Payment Tx" inset>
-          <Identifier
-            style={{ width: '90%' }}
-            copyable={!!value.paymentTxId}
-            value={value.paymentTxId || ''}
-            href={getTxURL(value.toChain, value.paymentTxId || undefined)}
-          />
-        </Label>
-        <Label label="Reward Tx" inset>
-          <Identifier
-            style={{ width: '90%' }}
-            copyable={!!value.spendTxId}
-            value={value.spendTxId || ''}
-            href={getTxURL(NETWORKS.ergo.key, value.spendTxId || undefined)}
-          />
-        </Label>
+        <Label label="Tx IDs" />
+        <LabelGroup>
+          <Label label="Lock Tx" inset>
+            <Identifier
+              copyable={!!value.sourceTxId}
+              value={value.sourceTxId}
+              href={getTxURL(value.fromChain, value.sourceTxId)}
+            />
+          </Label>
+          <Label label="Payment Tx" inset>
+            <Identifier
+              copyable={!!value.paymentTxId}
+              value={value.paymentTxId || ''}
+              href={getTxURL(value.toChain, value.paymentTxId || undefined)}
+            />
+          </Label>
+          <Label label="Reward Tx" inset>
+            <Identifier
+              copyable={!!value.spendTxId}
+              value={value.spendTxId || ''}
+              href={getTxURL(NETWORKS.ergo.key, value.spendTxId || undefined)}
+            />
+          </Label>
+        </LabelGroup>
       </div>
       <div>
-        <Label label="Address"></Label>
-        <Label label="From" inset>
-          <Identifier
-            style={{ width: '90%' }}
-            copyable
-            value={value.fromAddress}
-            href={getAddressUrl(value.fromChain, value.fromAddress)}
-          />
-        </Label>
-        <Label label="To" inset>
-          <Identifier
-            style={{ width: '90%' }}
-            copyable
-            value={value.toAddress}
-            href={getAddressUrl(value.toChain, value.toAddress)}
-          />
-        </Label>
+        <Label label="Address" />
+        <LabelGroup>
+          <Label label="From" inset>
+            <Identifier
+              copyable
+              value={value.fromAddress}
+              href={getAddressUrl(value.fromChain, value.fromAddress)}
+            />
+          </Label>
+          <Label label="To" inset>
+            <Identifier
+              copyable
+              value={value.toAddress}
+              href={getAddressUrl(value.toChain, value.toAddress)}
+            />
+          </Label>
+        </LabelGroup>
       </div>
       <Label label="Time">
         <RelativeTime timestamp={value.timestamp} />
@@ -195,6 +198,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
                 height: 0,
                 display: 'flex',
                 alignItems: 'center',
+                marginRight: '-1rem',
               }}
             >
               <Button
