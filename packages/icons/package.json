@@ -19,8 +19,10 @@
   "license": "MIT",
   "author": "Rosen Team",
   "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "node ./generate.js && tsc && vite build",
     "type-check": "tsc",
     "release": "echo 'this package should not be published due to the license constraints'"

@@ -113,6 +113,7 @@ export const getAllAssets = async (
     .limit(limit)
     .getRawMany();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   const total = rawItems[0]?.total ?? 0;

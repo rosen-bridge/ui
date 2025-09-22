@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const BIGINT_KEY = 'BIGINT:';
 
 type AsyncFunction = (...args: any[]) => Promise<any>;

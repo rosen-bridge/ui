@@ -155,6 +155,7 @@ export const getEvents = async (filters: Filters) => {
    */
   const rawItems = await queryBuilder.getRawMany<EventWithTotal>();
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {
