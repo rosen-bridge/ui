@@ -1,8 +1,13 @@
-import { ComponentType, forwardRef, RefAttributes, useMemo } from 'react';
-
+import {
+  ComponentType,
+  forwardRef,
+  HTMLAttributes,
+  RefAttributes,
+  useMemo,
+} from 'react';
 import { Breakpoint } from '@mui/material';
-
 import { useCurrentBreakpoint } from '../hooks';
+import { kebabCase } from 'lodash-es';
 
 const breakpointOrder: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
@@ -36,12 +41,17 @@ export type WrapProps<P> = {
  */
 export const Wrap = <P extends object, R = unknown>(
   BaseComponent: ComponentType<P & RefAttributes<R>>,
+  options?: {
+    reflects?: Array<
+      Exclude<keyof P, keyof HTMLAttributes<HTMLElement> | 'key' | 'ref'>
+    >;
+  }
 ) => {
   const WrappedComponent = forwardRef<R, WrapProps<P>>(
     ({ overrides, ...rest }, ref) => {
       const current = useCurrentBreakpoint();
 
-      const final = useMemo(() => {
+      const mergedProps = useMemo(() => {
         if (!overrides || !current) return { ...rest } as P;
 
         const currentIndex = breakpointOrder.indexOf(current);
@@ -56,11 +66,35 @@ export const Wrap = <P extends object, R = unknown>(
         return { ...rest, ...applied } as P;
       }, [overrides, current, rest]);
 
-      return <BaseComponent {...final} ref={ref} />;
+      const className = useMemo(() => {
+        if (!options?.reflects) return (rest as any).className;
+
+        const componentName = kebabCase(BaseComponent.displayName);
+
+        const reflectClasses = options.reflects
+          .map((key) => {
+            const value = mergedProps[key];
+            if (value === undefined || value === null || value === false) return null;
+            return `${componentName}-${String(key)}-${String(value)}`;
+          })
+          .filter(Boolean)
+          .join(' ');
+
+        return [
+          componentName,
+          (rest as any).className || '',
+          reflectClasses,
+        ]
+          .filter(Boolean)
+          .join(' ')
+          .trim();
+      }, [mergedProps, rest]);
+
+      return <BaseComponent {...mergedProps} className={className} ref={ref} />;
     },
   );
 
-  WrappedComponent.displayName = BaseComponent.displayName || BaseComponent.name;
+  WrappedComponent.displayName = BaseComponent.displayName;
 
   return WrappedComponent;
 };
