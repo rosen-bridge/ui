@@ -3,3 +3,4 @@ export * from './common';
 
 export * from './Center';
 export * from './ComponentName';
+export * from './Icon';
