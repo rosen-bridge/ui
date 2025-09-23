@@ -31,6 +31,8 @@ class AssetCalculator {
   protected readonly bridgedAssetModel: BridgedAssetModel;
   protected readonly lockedAssetModel: LockedAssetModel;
   protected readonly tokenModel: TokenModel;
+  // this flag used to update tokens details in first call of update
+  protected isForceInsertRequired = true;
   protected calculatorMap: Map<string, AbstractCalculator> = new Map();
 
   constructor(
@@ -255,7 +257,7 @@ class AssetCalculator {
           chain: residencyChain,
           isNative: nativeResidentToken.type === NATIVE_TOKEN,
         };
-        await this.tokenModel.insertToken(newToken);
+        await this.tokenModel.insertToken(newToken, this.isForceInsertRequired);
         allCurrentTokens.push(newToken.id);
 
         const locked = await this.calculateLocked(
@@ -356,6 +358,13 @@ class AssetCalculator {
     await this.bridgedAssetModel.removeAssets(oldBridgedAssets);
     await this.lockedAssetModel.removeAssets(oldLockedAssets);
     await this.tokenModel.removeTokens(oldTokens);
+
+    /*
+    force-insert is required to be true in first call of update
+    to refresh all tokens details and in later calls preventing
+    update when tokens already exists
+    */
+    this.isForceInsertRequired = false;
   };
 }
 

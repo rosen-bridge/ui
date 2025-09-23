@@ -16,12 +16,13 @@ class TokenModel {
   /**
    * Insert a token with specified information
    * @param token
+   * @param isForce
    */
-  insertToken = async (token: TokenEntity) => {
+  insertToken = async (token: TokenEntity, isForce: boolean = false) => {
     const savedToken = await this.tokenRepository.findOne({
       where: { id: token.id },
     });
-    if (savedToken) {
+    if (!isForce && savedToken) {
       this.logger.debug(
         `Token [${JsonBigInt.stringify(token)}] already exists in the database`,
       );
