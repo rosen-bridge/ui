@@ -17,6 +17,7 @@ import {
   IconButton,
   Stack,
   Columns,
+  DividerNew,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -201,64 +202,6 @@ export const BridgeForm = () => {
           </TextField>
         </div>
       </Columns>
-      <TextField
-        label="Target Address"
-        InputProps={{
-          disableUnderline: true,
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                sx={{
-                  cursor: 'pointer',
-                  color: 'secondary',
-                }}
-                onClick={async () => {
-                  try {
-                    const clipboardText = await navigator.clipboard.readText();
-                    setValue('walletAddress', clipboardText.trim(), {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                      shouldValidate: true,
-                    });
-                  } catch (err) {
-                    console.error('Failed to read clipboard: ', err);
-                  }
-                }}
-              >
-                <SvgIcon sx={{ opacity: '0.6' }}>
-                  <ClipboardNotes />
-                </SvgIcon>
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-        variant="filled"
-        error={!!errors?.walletAddress}
-        helperText={
-          isValidating ? (
-            <CircularProgress size={10} />
-          ) : (
-            errors.walletAddress?.message?.toString()
-          )
-        }
-        disabled={!targetField.value}
-        autoComplete="off"
-        {...addressField}
-        value={addressField.value ?? ''}
-        onBlur={(e) => {
-          const trimmed = e.target.value.trim();
-          setValue('walletAddress', trimmed, {
-            shouldDirty: true,
-            shouldTouch: true,
-            shouldValidate: true,
-          });
-        }}
-      />
-      {targetField.value == NETWORKS.bitcoin.key && (
-        <Alert severity="warning">
-          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
-        </Alert>
-      )}
       <Autocomplete
         aria-label="token input"
         disabled={!availableTokens.length}
@@ -311,6 +254,79 @@ export const BridgeForm = () => {
         disabled={!tokenField.value}
         autoComplete="off"
       />
+
+      <TextField
+        label="Target Address"
+        InputProps={{
+          disableUnderline: true,
+          endAdornment: (
+            <InputAdornment position="end">
+              {isValidating ? (
+                <Stack flexDirection="row">
+                  <div style={{ height: '40px' }}>
+                    <DividerNew
+                      variant="fullWidth"
+                      style={{ display: 'flex' }}
+                      orientation="vertical"
+                    />
+                  </div>
+                  <CircularProgress
+                    size={24}
+                    style={{
+                      margin: '8px',
+                      verticalAlign: 'middle',
+                    }}
+                  />
+                </Stack>
+              ) : (
+                <IconButton
+                  sx={{
+                    cursor: 'pointer',
+                    color: 'secondary',
+                  }}
+                  onClick={async () => {
+                    try {
+                      const clipboardText =
+                        await navigator.clipboard.readText();
+                      setValue('walletAddress', clipboardText.trim(), {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                        shouldValidate: true,
+                      });
+                    } catch (err) {
+                      console.error('Failed to read clipboard: ', err);
+                    }
+                  }}
+                >
+                  <SvgIcon sx={{ opacity: '0.6' }}>
+                    <ClipboardNotes />
+                  </SvgIcon>
+                </IconButton>
+              )}
+            </InputAdornment>
+          ),
+        }}
+        variant="filled"
+        error={!!errors?.walletAddress}
+        helperText={!isValidating && errors.walletAddress?.message?.toString()}
+        disabled={!targetField.value}
+        autoComplete="off"
+        {...addressField}
+        value={addressField.value ?? ''}
+        onBlur={(e) => {
+          const trimmed = e.target.value.trim();
+          setValue('walletAddress', trimmed, {
+            shouldDirty: true,
+            shouldTouch: true,
+            shouldValidate: true,
+          });
+        }}
+      />
+      {targetField.value == NETWORKS.bitcoin.key && (
+        <Alert severity="warning">
+          Only Native SegWit (P2WPKH or P2WSH) addresses are supported.
+        </Alert>
+      )}
     </>
   );
 };

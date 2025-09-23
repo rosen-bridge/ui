@@ -1,4 +1,4 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { JSX, MouseEvent, useEffect, useState } from 'react';
 
 import { Wallet as WalletIcon } from '@rosen-bridge/icons';
 import {
@@ -82,12 +82,12 @@ export const ChooseWalletModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
-        <Alert severity="warning" sx={{ my: '1rem' }}>
+        <Alert severity="warning" style={{ margin: '1rem 0' }}>
           It may be necessary to reload this page after the following extensions
           have been installed in order to connect to them.
         </Alert>
         {sourceValue == NETWORKS.bitcoin.key && (
-          <Alert severity="warning" sx={{ my: '1rem' }}>
+          <Alert severity="warning" style={{ margin: '1rem 0' }}>
             We only support native SegWit addresses (P2WPKH or P2WSH) for the
             source address.
           </Alert>

@@ -43,8 +43,8 @@ export const UseAllAmount = ({
         {loading && (
           <CircularProgress
             size={24}
-            sx={{
-              margin: (theme) => theme.spacing(1),
+            style={{
+              margin: '8px',
               verticalAlign: 'middle',
             }}
           />
