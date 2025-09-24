@@ -36,6 +36,7 @@ describe('AbstractEvmRpcDataAdapter', () => {
         ['0xAddress'],
         ctx.mockTokenMap,
         'http://rpc',
+        100,
       );
     });
 
@@ -79,8 +80,8 @@ describe('AbstractEvmRpcDataAdapter', () => {
         ['0xAddress'],
         mockTokenMap,
         'http://rpc',
-        undefined,
         1,
+        undefined,
       );
 
       const totalAssets = await adapter.getAddressAssets('0xAddress');
@@ -119,8 +120,8 @@ describe('AbstractEvmRpcDataAdapter', () => {
         ['0xAddress'],
         mockTokenMap,
         'http://rpc',
-        undefined,
         2,
+        undefined,
       );
 
       const totalAssets = await adapter.getAddressAssets('0xAddress');

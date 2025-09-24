@@ -15,8 +15,8 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     protected addresses: string[],
     protected tokenMap: TokenMap,
     protected url: string,
+    protected chunkSize: number,
     protected authToken?: string,
-    protected chunkSize: number | undefined = undefined,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
@@ -37,16 +37,13 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     const assets: ChainAssetBalance[] = [];
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
     let chunk = supportedTokens;
-    if (this.chunkSize != undefined) {
-      chunk = supportedTokens.slice(
-        this.fetchOffset,
-        this.chunkSize + this.fetchOffset,
-      );
-    }
+    chunk = supportedTokens.slice(
+      this.fetchOffset,
+      this.chunkSize + this.fetchOffset,
+    );
 
     for (const chainTokenDetails of chunk) {
       try {
-        // Considering fetch size and other conditions
         if (chainTokenDetails.type == NATIVE_TOKEN) {
           const balance = await this.provider.getBalance(address);
           assets.push({
@@ -77,7 +74,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
       }
     }
 
-    if (this.chunkSize != undefined) this.fetchOffset += this.chunkSize;
+    this.fetchOffset += this.chunkSize;
 
     if (this.fetchOffset >= supportedTokens.length) this.fetchOffset = 0;
 
