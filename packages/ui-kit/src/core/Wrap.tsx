@@ -8,6 +8,7 @@ import {
 import { Breakpoint } from '@mui/material';
 import { useCurrentBreakpoint } from '../hooks';
 import { kebabCase } from 'lodash-es';
+import { useConfigs } from './ConfigProvider';
 
 const breakpointOrder: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
@@ -52,12 +53,18 @@ export const Wrap = <P extends object, R = unknown>(
 
   const WrappedComponent = forwardRef<R, WrapProps<P>>(
     ({ overrides, ...rest }, ref) => {
+      const config = useConfigs();
+
       const current = useCurrentBreakpoint();
+
+      const globalProps = useMemo(() => {
+        return config.components?.[BaseComponent.displayName as keyof typeof config.components]?.defaultProps || {}
+      }, [config]);
 
       const reflects = useMemo(() => options?.reflects || [], []);
 
       const mergedProps = useMemo(() => {
-        if (!overrides || !current) return { ...rest } as P;
+        if (!overrides || !current) return { ...globalProps, ...rest } as P;
 
         const currentIndex = breakpointOrder.indexOf(current);
 
@@ -68,8 +75,8 @@ export const Wrap = <P extends object, R = unknown>(
             .map((bp) => overrides[bp] ?? {}),
         );
 
-        return { ...rest, ...applied } as P;
-      }, [overrides, current, rest]);
+        return { ...globalProps, ...rest, ...applied } as P;
+      }, [globalProps, overrides, current, rest]);
 
       const attrs = useMemo(() => {
         const attr = {} as any;

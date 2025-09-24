@@ -32,5 +32,6 @@ export * from './Providers';
 export * from './styling';
 export * from './utils';
 
+export * from './core';
 export * from './contexts';
 export type { Theme } from '@mui/material';
