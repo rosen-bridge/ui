@@ -2,13 +2,13 @@ import { ComponentProps, forwardRef, HTMLAttributes } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 
-import { Wrap } from '../core';
+import { Colors, Wrap } from '../core';
 
 /**
  * TODO
  */
 type IconPropsBase = HTMLAttributes<HTMLDivElement> & {
-  color?: string;
+  color?: Colors;
   name?: keyof typeof Icons;
   size?: number | string;
 };

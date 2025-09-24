@@ -1,9 +1,10 @@
 import { createContext, ReactNode, useContext, } from 'react';
 
-import { IconProps } from '../components';
+import { CenterProps, IconProps } from '../components';
 
 type Components = {
-  Icon: IconProps
+  Center: CenterProps;
+  Icon: IconProps;
 };
 
 export const useConfigs = () => {

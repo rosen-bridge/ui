@@ -13,33 +13,9 @@ import { useConfigs } from './ConfigProvider';
 const breakpointOrder: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
 export type WrapProps<P> = {
-  /**
-   * Optional overrides for component props based on current breakpoint.
-   * Merged in order: mobile → tablet → laptop → desktop.
-   *
-   * Example:
-   * <MyComponent someProp="default" overrides={{ mobile: { someProp: "small" }, laptop: { someProp: "large" } }} />
-   * On laptop, someProp will be "large".
-   */
   overrides?: Partial<Record<Breakpoint, Partial<P>>>;
 } & P;
 
-/**
- * HOC to enable responsive prop overrides for a component.
- * Props can be customized per breakpoint using overrides.
- *
- * @typeParam P - Props type of the wrapped component.
- *
- * @param BaseComponent - Component to wrap with responsive overrides.
- * @returns Component with all original props + overrides for breakpoints.
- *
- * @example
- * const ResponsiveButton = Wrap(Button);
- * <ResponsiveButton
- *   variant="contained"
- *   overrides={{ mobile: { size: "small" }, laptop: { size: "large" } }}
- * />
- */
 export const Wrap = <P extends object, R = unknown>(
   BaseComponent: ComponentType<P & RefAttributes<R>>,
   options?: {
@@ -49,7 +25,9 @@ export const Wrap = <P extends object, R = unknown>(
     }>;
   }
 ) => {
-  const componentName = 'rosen-' + kebabCase(BaseComponent.displayName);
+  const prefix = 'rosen';
+
+  const componentName = prefix + '-' + kebabCase(BaseComponent.displayName);
 
   const WrappedComponent = forwardRef<R, WrapProps<P>>(
     ({ overrides, ...rest }, ref) => {
@@ -103,12 +81,16 @@ export const Wrap = <P extends object, R = unknown>(
               case 'COLOR': {
                 const value = mergedProps[reflect.property];
 
+                if (value === undefined || value === null || value === '') break;
+
                 const option = new Option();
 
                 (option as any).style.color = value;
 
                 if (option.style.color !== '') {
                   vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = value;
+                } else {
+                  vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = `var(--rosen-palette-${value})`;
                 }
 
                 break;
@@ -119,7 +101,7 @@ export const Wrap = <P extends object, R = unknown>(
                   break;
                 }
                 if (typeof value === 'number') {
-                  vars[`--${componentName}-${kebabCase(String(reflect.property))}-scale`] = value;
+                  vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = `calc(var(--rosen-spacing) * ${value} * 1px)`;
                 }
                 if (/^\d+(\.\d+)?(px|pt|cm|mm|in|em|rem|%|vw|vh)$/.test(value as string)) {
                   vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = value;
