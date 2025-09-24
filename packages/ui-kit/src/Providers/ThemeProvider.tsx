@@ -48,7 +48,7 @@ export const ThemeProvider = ({
 
   const theme1 = useMemo(() => {
     return extendTheme({
-      cssVarPrefix: 'md-demo',
+      cssVarPrefix: 'rosen',
       ...theme
     });
   }, [theme])

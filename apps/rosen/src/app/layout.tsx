@@ -1,6 +1,8 @@
 import { Metadata } from 'next';
 import { PropsWithChildren } from 'react';
 
+import '@rosen-bridge/ui-kit/index.css';
+
 import { App } from './App';
 
 export const metadata: Metadata = {

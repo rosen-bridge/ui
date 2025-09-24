@@ -1,6 +1,6 @@
 export * from './base';
 export * from './common';
 
-export * from './Center';
+export * from './center';
 export * from './ComponentName';
-export * from './Icon';
+export * from './icon';

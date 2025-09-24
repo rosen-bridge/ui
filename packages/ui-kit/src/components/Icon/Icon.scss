@@ -1,0 +1,21 @@
+.rosen-icon {
+    user-select: none;
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    fill: var(--rosen-icon-color, currentColor);
+    flex-shrink: 0;
+    font-size: var(--rosen-icon-size, medium);
+}
+
+.rosen-icon[data-size="small"] {
+    --rosen-icon-size: 1.25rem;
+}
+
+.rosen-icon[data-size="medium"] {
+    --rosen-icon-size: 1.5rem;
+}
+
+.rosen-icon[data-size="large"] {
+    --rosen-icon-size: 2.1875rem;
+}

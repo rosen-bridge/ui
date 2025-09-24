@@ -1,0 +1,13 @@
+@use "./center/center.scss" as *;
+@use "./icon/icon.scss" as *;
+
+:root {
+  --rosen-spacing: 8px;
+  --rosen-palette-background: var(--rosen-palette-background-default);
+  --rosen-palette-primary: var(--rosen-palette-primary-main);
+  --rosen-palette-secondary: var(--rosen-palette-secondary-main);
+  --rosen-palette-error: var(--rosen-palette-error-main);
+  --rosen-palette-warning: var(--rosen-palette-warning-main);
+  --rosen-palette-info: var(--rosen-palette-info-main);
+  --rosen-palette-success: var(--rosen-palette-success-main);
+}

@@ -2,7 +2,7 @@ import { ComponentProps, forwardRef, HTMLAttributes } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 
-import { Colors, Wrap } from '../core';
+import { Colors, Wrap } from '../../core';
 
 /**
  * TODO
@@ -10,7 +10,7 @@ import { Colors, Wrap } from '../core';
 type IconPropsBase = HTMLAttributes<HTMLDivElement> & {
   color?: Colors;
   name?: keyof typeof Icons;
-  size?: number | string;
+  size?: 'inherit' | 'small' | 'medium' | 'large' | (number & {}) | (string & {});
 };
 
 /**
@@ -19,9 +19,9 @@ type IconPropsBase = HTMLAttributes<HTMLDivElement> & {
 const IconBase = forwardRef<HTMLDivElement, IconPropsBase>((props, ref) => {
   const {
     children,
-    color,
+    color = 'inherit',
     name,
-    size,
+    size = 'medium',
     ...rest
   } = props;
 
