@@ -43,7 +43,7 @@ const AssetRow = ({ item, isLoading }: AssetRowProps) => {
   );
 
   const [hotAmount, hotUrl] = useMemo(() => {
-    const hot = item.lockedPerAddress?.find((item) =>
+    const hot = item.lockedPerAddress?.find((item: AssetType) =>
       Object.values(LOCK_ADDRESSES).includes(item.address),
     );
     return [
@@ -54,7 +54,8 @@ const AssetRow = ({ item, isLoading }: AssetRowProps) => {
 
   const [coldAmount, coldUrl] = useMemo(() => {
     const cold = item.lockedPerAddress?.find(
-      (item) => !Object.values(LOCK_ADDRESSES).includes(item.address),
+      (item: AssetType) =>
+        !Object.values(LOCK_ADDRESSES).includes(item.address),
     );
     return [
       cold?.amount || 0,
@@ -72,7 +73,7 @@ const AssetRow = ({ item, isLoading }: AssetRowProps) => {
       <TableGridBodyCol>
         <Token name={item.name} href={tokenUrl} />
       </TableGridBodyCol>
-      <TableGridBodyCol>
+      <TableGridBodyCol style={{}}>
         <Network name={item.chain} />
       </TableGridBodyCol>
       <TableGridBodyCol>

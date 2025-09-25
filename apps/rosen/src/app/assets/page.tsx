@@ -4,38 +4,40 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   DataLayout,
   NewPagination,
   SmartSearch,
-  TableGrid,
   SortField,
   useBreakpoint,
   useCollection,
-  TableGridHead,
-  TableGridHeadCol,
-  TableGridBody,
   ViewType,
   ViewToggle,
-  GridContainer,
+  EmptyState,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
+import { useTokenMap } from '@/hooks';
 import { ApiAssetsResponse, Assets as AssetType } from '@/types/api';
 
-import AssetGridCard from './AssetGridCard';
 import { AssetGridDetails } from './AssetGridDetails';
-import AssetRow from './AssetRow';
 import { getFilters, sorts } from './config';
+import { GridView, RowView } from './views';
 
 const Assets = () => {
   const dense = useBreakpoint('laptop-down');
+
   const collection = useCollection();
-  const filters = useMemo(() => getFilters(), []);
-  const [activeView, setActiveView] = useState<ViewType>('grid');
+
+  const tokenMap = useTokenMap();
+
+  const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
+
+  const [activeView, setActiveView] = useState<ViewType>('row');
+
   const [current, setCurrent] = useState<AssetType>();
 
   const { data, isLoading } = useSWR<ApiAssetsResponse>(
@@ -82,13 +84,13 @@ const Assets = () => {
   const renderSort = useCallback(
     () => (
       <SortField
-        defaultKey="timestamp"
+        defaultKey="name"
         defaultOrder="DESC"
         dense={dense}
         disabled={isLoading}
         value={collection.sort}
         options={sorts}
-        // onChange={collection.setSort}
+        onChange={collection.setSort}
       />
     ),
     [collection, dense, isLoading],
@@ -110,42 +112,27 @@ const Assets = () => {
     [setActiveView],
   );
 
+  useEffect(() => {
+    console.log(items);
+  }, [items, isLoading]);
   return (
     <DataLayout
       search={renderSearch()}
       sort={renderSort()}
       sidebar={renderSidebar()}
       pagination={renderPagination()}
-      view={renderView()}
     >
-      {activeView == 'row' ? (
-        <TableGrid hasActionColumn>
-          <TableGridHead>
-            <TableGridHeadCol>Name</TableGridHeadCol>
-            <TableGridHeadCol>Network</TableGridHeadCol>
-            <TableGridHeadCol hideOn="tablet-down">Locked</TableGridHeadCol>
-            <TableGridHeadCol hideOn="desktop-down">Hot</TableGridHeadCol>
-            <TableGridHeadCol hideOn="desktop-down">Cold</TableGridHeadCol>
-            <TableGridHeadCol hideOn="laptop-down">Bridged</TableGridHeadCol>
-          </TableGridHead>
-          <TableGridBody>
-            {items.map((item) => (
-              <AssetRow key={item.id} item={item} isLoading={isLoading} />
-            ))}
-          </TableGridBody>
-        </TableGrid>
+      {!isLoading && !items.length ? (
+        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+      ) : activeView === 'row' ? (
+        <RowView items={items} isLoading={isLoading} />
       ) : (
-        <GridContainer minWidth="260px" gap="8px">
-          {items.map((item) => (
-            <AssetGridCard
-              key={item.id}
-              item={item}
-              isLoading={isLoading}
-              isActive={item.id == current?.id}
-              onClick={setCurrent}
-            />
-          ))}
-        </GridContainer>
+        <GridView
+          items={items}
+          isLoading={isLoading}
+          current={current}
+          setCurrent={setCurrent}
+        />
       )}
     </DataLayout>
   );

@@ -14,6 +14,7 @@ interface AssetRowDetailsProps {
   row: AssetType;
   expanded: boolean;
 }
+
 const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
   const { data, isLoading } = useSWR<ApiAssetResponse>(
     expanded ? `/v1/assets/detail/${row.id.toLowerCase()}` : null,
@@ -25,11 +26,11 @@ const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
     return Array(4).fill({});
   }, [data, isLoading]);
 
-  const hot = row.lockedPerAddress?.find((item) =>
+  const hot = row.lockedPerAddress?.find((item: AssetType) =>
     Object.values(LOCK_ADDRESSES).includes(item.address),
   );
   const cold = row.lockedPerAddress?.find(
-    (item) => !Object.values(LOCK_ADDRESSES).includes(item.address),
+    (item: AssetType) => !Object.values(LOCK_ADDRESSES).includes(item.address),
   );
 
   return (
@@ -102,12 +103,12 @@ const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
       </Columns>
       <Label label="Bridged to" />
       <GridContainer minWidth="220px" gap="0.5rem">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <BridgedAssetCard
             asset={item}
             decimals={row.significantDecimals}
             isLoading={isLoading}
-            key={item.chain}
+            key={index}
           />
         ))}
       </GridContainer>

@@ -22,7 +22,7 @@ export const useAsset = (item: AssetType) => {
   );
 
   const [hotAmount, hotUrl] = useMemo(() => {
-    const hot = item.lockedPerAddress?.find((item) =>
+    const hot = item.lockedPerAddress?.find((item: AssetType) =>
       Object.values(LOCK_ADDRESSES).includes(item.address),
     );
     return [
@@ -33,7 +33,8 @@ export const useAsset = (item: AssetType) => {
 
   const [coldAmount, coldUrl] = useMemo(() => {
     const cold = item.lockedPerAddress?.find(
-      (item) => !Object.values(LOCK_ADDRESSES).includes(item.address),
+      (item: AssetType) =>
+        !Object.values(LOCK_ADDRESSES).includes(item.address),
     );
     return [
       cold?.amount || 0,

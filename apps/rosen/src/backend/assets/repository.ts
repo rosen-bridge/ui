@@ -1,4 +1,8 @@
 import {
+  Filters,
+  filtersToTypeorm,
+} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
@@ -27,6 +31,11 @@ export type AssetFilters = Partial<Pick<Asset, 'chain' | 'name' | 'id'>>;
 interface AssetWithTotal extends Asset {
   total: number;
 }
+
+export interface AssetRepository
+  extends BridgedAssetEntity,
+    TokenEntity,
+    LockedAssetEntity {}
 
 /**
  * get details of an asset, including its token info, plus locked and bridged
@@ -65,29 +74,30 @@ export const getAsset = async (id: string) => {
 
 /**
  * get paginated list of assets
- * @param offset
- * @param limit
  * @param filters
  */
-export const getAllAssets = async (
-  offset: number,
-  limit: number,
-  filters: AssetFilters = {},
-) => {
-  const rawItems: AssetWithTotal[] = await tokenRepository
+export const getAllAssets = async (filters: Filters) => {
+  if (filters.search) filters.search.in ||= [];
+
+  let { pagination, query, sort } = filtersToTypeorm(
+    filters,
+    (key) => `"sub".${key}`,
+  );
+  console.log(query);
+  const subquery = tokenRepository
     .createQueryBuilder('te')
     .leftJoin(
-      (queryBuilder) =>
-        queryBuilder
-          .select(['bae.tokenId AS "tokenId"', 'sum(bae.amount) AS "bridged"'])
+      (qb) =>
+        qb
+          .select(['bae.tokenId AS "tokenId"', 'SUM(bae.amount) AS "bridged"'])
           .from(bridgedAssetRepository.metadata.tableName, 'bae')
           .groupBy('bae.tokenId'),
       'baeq',
       'baeq."tokenId" = te.id',
     )
     .leftJoin(
-      (queryBuilder) =>
-        queryBuilder
+      (qb) =>
+        qb
           .select([
             'lae.tokenId AS "tokenId"',
             `jsonb_agg(to_jsonb(lae) - 'tokenId') AS "lockedPerAddress"`,
@@ -98,28 +108,41 @@ export const getAllAssets = async (
       'laeq."tokenId" = te.id',
     )
     .select([
-      'id',
-      'name',
-      'decimal',
-      '"isNative"',
-      '"bridged"',
-      '"lockedPerAddress"',
-      'chain',
-      'count(*) over() AS total',
-    ])
-    .where(filters)
-    .orderBy('name', 'ASC')
-    .offset(offset)
-    .limit(limit)
-    .getRawMany();
+      'te.id AS "id"',
+      'te.name AS "name"',
+      'CAST(te.decimal AS BIGINT) AS "decimal"',
+      'te.isNative AS "isNative"',
+      'baeq."bridged" AS "bridged"',
+      'laeq."lockedPerAddress" AS "lockedPerAddress"',
+      'te.chain AS "chain"',
+    ]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let queryBuilder = dataSource
+    .createQueryBuilder()
+    .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
+    .from(`(${subquery.getQuery()})`, 'sub')
+    .setParameters(subquery.getParameters());
+
+  if (query) {
+    const numericKeys = ['bridged', 'decimal'];
+    for (const key of numericKeys) {
+      query = query.replaceAll(`"sub".${key}`, `CAST("sub".${key} AS BIGINT)`);
+    }
+    queryBuilder = queryBuilder.where(query);
+  }
+
+  if (sort) {
+    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
+  }
+
+  if (pagination?.offset) queryBuilder.offset(pagination.offset);
+  if (pagination?.limit) queryBuilder.limit(pagination.limit);
+
+  const rawItems = await queryBuilder.getRawMany<any>();
   const items = rawItems.map(({ total, ...item }) => item);
-
-  const total = rawItems[0]?.total ?? 0;
 
   return {
     items,
-    total,
+    total: rawItems[0]?.total ?? 0,
   };
 };

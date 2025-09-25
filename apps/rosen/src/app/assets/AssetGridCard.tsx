@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   Connector,
+  Identifier,
   Label,
   Network,
   Skeleton,
@@ -50,6 +51,9 @@ const AssetGridCard = ({
             />
           </Typography>
         </Stack>
+        <Typography>
+          <Identifier value={item.id} copyable />
+        </Typography>
         <Box mt={1} mb={-1}>
           <Label label="Bridged" dense>
             <Amount value={bridged} />
