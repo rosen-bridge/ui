@@ -1,9 +1,9 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
+} from '@rosen-bridge/abstract-scanner';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 import { TransactionResponse } from 'ethers';
 
 import config from '../../configs';

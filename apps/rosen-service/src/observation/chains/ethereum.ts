@@ -1,6 +1,6 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
-import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';

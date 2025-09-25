@@ -1,11 +1,11 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { BinanceRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
-import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
+} from '@rosen-bridge/abstract-scanner';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { BinanceRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
+import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TransactionResponse } from 'ethers';
 
 import { configs } from '../configs';

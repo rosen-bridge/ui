@@ -4,6 +4,7 @@ stages:
   - installation
   - build
   - type_check
+  - prettify
   - lint
   - unit_tests
   - changeset
@@ -54,6 +55,16 @@ type_check:
   script:
     - npm run type-check --workspaces --if-present
 
+prettify:
+  stage: prettify
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run prettify:check
+
 lint:
   stage: lint
   cache:
@@ -62,7 +73,7 @@ lint:
     paths:
       - node_modules
   script:
-    - npm run lint --workspaces --if-present
+    - npm run lint:check
 
 unit_tests:
   stage: unit_tests

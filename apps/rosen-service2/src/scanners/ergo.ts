@@ -1,13 +1,15 @@
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
+import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
 import {
   ErgoExplorerNetwork,
   ErgoNodeNetwork,
   ErgoScanner,
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
+} from '@rosen-bridge/ergo-scanner';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';

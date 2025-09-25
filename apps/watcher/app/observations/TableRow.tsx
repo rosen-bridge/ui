@@ -9,7 +9,6 @@ import {
   Id,
   TableRow,
 } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Observation } from '@/_types/api';
