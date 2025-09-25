@@ -16,7 +16,6 @@ class TokenModel {
   /**
    * Insert a token with specified information
    * @param token
-   * @param isForce
    */
   insertToken = async (token: TokenEntity) => {
     await this.tokenRepository.save(token);
