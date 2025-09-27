@@ -8,12 +8,14 @@ import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   abstract chain: string;
+  protected fetchOffset: number;
   protected readonly provider: JsonRpcProvider;
 
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
     protected url: string,
+    protected chunkSize: number,
     protected authToken?: string,
     logger?: AbstractLogger,
   ) {
@@ -21,6 +23,8 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     this.provider = authToken
       ? new JsonRpcProvider(`${url}/${authToken}`)
       : new JsonRpcProvider(`${url}`);
+
+    this.fetchOffset = 0;
   }
 
   /**
@@ -30,40 +34,49 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
    * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
-    const rosenTokens = this.tokenMap.getConfig();
-    const assets = (
-      await Promise.all(
-        Object.values(rosenTokens).map(async (tokenSet) => {
-          try {
-            const chainTokenDetails = tokenSet[this.chain];
-            if (!chainTokenDetails) return undefined;
-            if (chainTokenDetails.type == NATIVE_TOKEN) {
-              const balance = await this.provider.getBalance(address);
-              return {
-                assetId: chainTokenDetails.tokenId,
-                balance: balance,
-              };
-            }
-            const contract = new ethers.Contract(
-              chainTokenDetails.tokenId,
-              PartialERC20ABI,
-              this.provider,
+    const assets: ChainAssetBalance[] = [];
+    const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
+    const chunk = supportedTokens.slice(
+      this.fetchOffset,
+      this.chunkSize + this.fetchOffset,
+    );
+
+    for (const chainTokenDetails of chunk) {
+      try {
+        if (chainTokenDetails.type == NATIVE_TOKEN) {
+          const balance = await this.provider.getBalance(address);
+          assets.push({
+            assetId: chainTokenDetails.tokenId,
+            balance: balance,
+          });
+        } else {
+          const contract = new ethers.Contract(
+            chainTokenDetails.tokenId,
+            PartialERC20ABI,
+            this.provider,
+          );
+          const assetBalance = await contract.balanceOf(address);
+          if (assetBalance == undefined)
+            throw new Error(
+              `Amount of a asset on the "${address}" address of ${this.chain} chain by "${chainTokenDetails.tokenId}" identity is invalid`,
             );
-            const assetBalance = await contract.balanceOf(address);
-            if (assetBalance == undefined)
-              throw new Error(
-                `Amount of a asset on the"${address}" address of ${this.chain} chain by "${chainTokenDetails.tokenId}" identity is invalid`,
-              );
-            return {
-              assetId: chainTokenDetails.tokenId,
-              balance: BigInt(assetBalance),
-            };
-          } catch {
-            return undefined;
-          }
-        }),
-      )
-    ).filter((assetBalance) => assetBalance != undefined);
+          assets.push({
+            assetId: chainTokenDetails.tokenId,
+            balance: BigInt(assetBalance),
+          });
+        }
+      } catch (err) {
+        this.logger.error(
+          `Error in fetch ${this.chain} chain assets occurred: ${err}`,
+        );
+        if (err instanceof Error && err.stack) this.logger.debug(err.stack);
+      }
+    }
+
+    this.fetchOffset += this.chunkSize;
+
+    if (this.fetchOffset >= supportedTokens.length) this.fetchOffset = 0;
+
     return assets;
   };
 }
