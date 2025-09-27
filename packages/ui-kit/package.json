@@ -23,8 +23,9 @@
     "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build",
+    "build": "tsc --build && npm run build:styles",
     "build:watch": "tsc --watch",
+    "build:styles": "sass src/components/index.scss dist/index.css --no-source-map",
     "type-check": "tsc",
     "release": "npm run build && npm publish --access public"
   },
@@ -53,6 +54,7 @@
     "moment": "^2.29.4",
     "qrcode.react": "^3.1.0",
     "react-hook-form": "^7.45.1",
-    "react-sticky-box": "^2.0.5"
+    "react-sticky-box": "^2.0.5",
+    "sass": "^1.93.2"
   }
 }

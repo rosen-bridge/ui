@@ -7,10 +7,13 @@ import {
 } from 'react';
 import { Breakpoint } from '@mui/material';
 import { useCurrentBreakpoint } from '../hooks';
-import { kebabCase } from 'lodash-es';
 import { useConfigs } from './ConfigProvider';
 
 const breakpointOrder: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
+
+const generateKey = (...keys: any[]): string => keys.join('-');
+
+const generateCSSVariable = (...keys: any[]): string => `--${generateKey(...keys)}`;
 
 export type WrapProps<P> = {
   overrides?: Partial<Record<Breakpoint, Partial<P>>>;
@@ -27,17 +30,15 @@ export const Wrap = <P extends object, R = unknown>(
 ) => {
   const prefix = 'rosen';
 
-  const componentName = prefix + '-' + kebabCase(BaseComponent.displayName);
-
   const WrappedComponent = forwardRef<R, WrapProps<P>>(
     ({ overrides, ...rest }, ref) => {
-      const config = useConfigs();
+      // const config = useConfigs();
 
       const current = useCurrentBreakpoint();
 
       const globalProps = useMemo(() => {
-        return config.components?.[BaseComponent.displayName as keyof typeof config.components]?.defaultProps || {}
-      }, [config]);
+        return {}//config.components?.[BaseComponent.displayName as keyof typeof config.components]?.defaultProps || {}
+      }, []);
 
       const reflects = useMemo(() => options?.reflects || [], []);
 
@@ -61,7 +62,7 @@ export const Wrap = <P extends object, R = unknown>(
 
         for (const reflect of reflects) {
           if (reflect.property in mergedProps) {
-            attr[`data-${kebabCase(String(reflect.property))}`] = mergedProps[reflect.property];
+            attr[`data-${(String(reflect.property))}`] = mergedProps[reflect.property];
           }
         }
 
@@ -69,47 +70,45 @@ export const Wrap = <P extends object, R = unknown>(
       }, [mergedProps, reflects]);
 
       const classes = useMemo(() => {
-        return [componentName, (rest as any)?.className || ''].filter(Boolean).join(' ').trim();
+        return [generateKey(prefix, BaseComponent.displayName), (rest as any)?.className || ''].filter(Boolean).join(' ').trim();
       }, [rest]);
 
       const styles = useMemo(() => {
         const vars = {} as any;
 
         for (const reflect of reflects) {
-          if (reflect.property in mergedProps) {
-            switch (reflect.parser) {
-              case 'COLOR': {
-                const value = mergedProps[reflect.property];
+          if (!(reflect.property in mergedProps)) continue;
 
-                if (value === undefined || value === null || value === '') break;
+          const value = mergedProps[reflect.property];
 
-                const option = new Option();
+          if (value === undefined || value === null || value === '') continue;
 
-                (option as any).style.color = value;
+          let result;
 
-                if (option.style.color !== '') {
-                  vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = value;
-                } else {
-                  vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = `var(--rosen-palette-${value})`;
-                }
+          switch (reflect.parser) {
+            case 'COLOR': {
+              const option = new Option();
 
-                break;
+              (option as any).style.color = value;
+
+              const isValid = option.style.color === '';
+
+              result = isValid ? generateCSSVariable(prefix, 'palette', value) : value;
+
+              break;
+            }
+            case 'SIZE': {
+              if (typeof value === 'number') {
+                result = `calc(var(${generateCSSVariable(prefix, 'spacing')}) * ${value} * 1px)`;
               }
-              case 'SIZE': {
-                const value = mergedProps[reflect.property];
-                if (value === undefined || value === null || value === '') {
-                  break;
-                }
-                if (typeof value === 'number') {
-                  vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = `calc(var(--rosen-spacing) * ${value} * 1px)`;
-                }
-                if (/^\d+(\.\d+)?(px|pt|cm|mm|in|em|rem|%|vw|vh)$/.test(value as string)) {
-                  vars[`--${componentName}-${kebabCase(String(reflect.property))}`] = value;
-                }
-                break;
+              if (/^\d+(\.\d+)?(px|pt|cm|mm|in|em|rem|%|vw|vh)$/.test(value as string)) {
+                result = value;
               }
+              break;
             }
           }
+
+          vars[generateCSSVariable(prefix, BaseComponent.displayName, reflect.property)] = result;
         }
 
         return Object.assign({}, vars, (rest as any).style)
