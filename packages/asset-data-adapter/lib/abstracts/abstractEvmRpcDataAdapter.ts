@@ -36,8 +36,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
     const assets: ChainAssetBalance[] = [];
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
-    let chunk = supportedTokens;
-    chunk = supportedTokens.slice(
+    const chunk = supportedTokens.slice(
       this.fetchOffset,
       this.chunkSize + this.fetchOffset,
     );

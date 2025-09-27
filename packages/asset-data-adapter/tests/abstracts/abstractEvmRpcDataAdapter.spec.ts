@@ -64,13 +64,12 @@ describe('AbstractEvmRpcDataAdapter', () => {
      * @target should paginate address assets using offset
      * @scenario
      * - call adapter.getAddressAssets to return a list of all assets
-     * - call adapterByFetchParameters.getAddressAssets repeatedly:
-     *   1. first call → expect the first asset
-     *   2. second call → expect the second asset
-     *   3. third call → expect the third asset
-     *   4. third call → expect the first asset
+     * - call adapterByFetchParameters.getAddressAssets repeatedly
      * @expected
-     * - offset increases on each fetch
+     * - first call → expect the first asset
+     * - second call → expect the second asset
+     * - third call → expect the third asset
+     * - third call → expect the first asset
      */
     it<TestContext>('should paginate address assets using offset', async ({
       adapter,
