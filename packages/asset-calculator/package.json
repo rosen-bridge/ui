@@ -11,8 +11,10 @@
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "coverage": "npm run test -- --coverage",
-    "lint": "eslint --fix . && npm run prettify",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "release": "npm run build && npm publish --access public",
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc --noEmit"

@@ -69,7 +69,7 @@ const LockForm = () => {
   const {
     trigger,
     isMutating: isLockPending,
-    error,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWRMutation<ApiPermitResponse, any, '/permit', ApiPermitRequestBody>(
     '/permit',
     mutatorWithHeaders,
@@ -113,7 +113,7 @@ const LockForm = () => {
               Lock operation is in progress. Wait for tx [
               <Link
                 target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId)!}
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
               >
                 {response.txId}
               </Link>
@@ -127,6 +127,7 @@ const LockForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({

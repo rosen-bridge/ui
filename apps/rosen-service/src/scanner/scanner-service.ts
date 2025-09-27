@@ -1,10 +1,11 @@
 import {
   BitcoinRpcScanner,
   DogeRpcScanner,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
-import { CardanoKoiosScanner, ErgoScanner } from '@rosen-bridge/scanner';
+import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
+import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';

@@ -634,7 +634,6 @@
 - Resolve the stale balance problem, when changing the source/target wallet the balance doesn't reset.
 - Fix xDefi wallet getAddress API usage
 - Resolve the negative amount when clicking on the balance with zero value in these states
-
   - Cardano > Ergo (ADA)
   - Bitcoin > Ergo (BTC)
   - Bitcoin > Cardano (BTC)

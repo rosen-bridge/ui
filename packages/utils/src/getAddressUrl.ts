@@ -11,10 +11,15 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/address',
 };
 
-export const getAddressUrl = (network: Network, address?: string) => {
+export const getAddressUrl = (
+  network?: Network,
+  address?: string,
+): string | undefined => {
+  if (!network || !address) return;
+
   const baseURL = baseAddressURLs[network as keyof typeof baseAddressURLs];
 
-  if (!baseURL || !address) return null;
+  if (!baseURL) return;
 
   return `${baseURL}/${address}`;
 };

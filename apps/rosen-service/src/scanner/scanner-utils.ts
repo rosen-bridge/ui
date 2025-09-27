@@ -1,5 +1,5 @@
+import { GeneralScanner } from '@rosen-bridge/abstract-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { GeneralScanner } from '@rosen-bridge/scanner';
 
 import AppError from '../errors/AppError';
 import { handleError, runAndSetInterval } from '../utils';

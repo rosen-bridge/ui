@@ -110,29 +110,24 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
     const bridgeFee =
       fees.bridgeFee > variableBridgeFee ? fees.bridgeFee : variableBridgeFee;
 
-    const bridgeFeeRaw = getDecimalString(bridgeFee.toString(), decimals);
+    const bridgeFeeRaw = getDecimalString(bridgeFee, decimals);
 
     const networkFee = fees.networkFee;
 
-    const networkFeeRaw = getDecimalString(
-      fees.networkFee.toString(),
-      decimals,
-    );
+    const networkFeeRaw = getDecimalString(fees.networkFee, decimals);
 
     const receivingAmount = feesInfo
       ? paymentAmount - (fees.networkFee + bridgeFee!)
       : 0n;
 
     const receivingAmountRaw =
-      receivingAmount > 0
-        ? getDecimalString(receivingAmount.toString(), decimals)
-        : '0';
+      receivingAmount > 0 ? getDecimalString(receivingAmount, decimals) : '0';
 
     const minTransferBase = fees.bridgeFee + fees.networkFee;
 
     const minTransfer = minTransferBase ? minTransferBase + 1n : 0n;
 
-    const minTransferRaw = getDecimalString(minTransfer.toString(), decimals);
+    const minTransferRaw = getDecimalString(minTransfer, decimals);
 
     return {
       bridgeFee,

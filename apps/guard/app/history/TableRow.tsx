@@ -131,7 +131,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id
-            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
             id={row.sourceTxId}
           />
         </EnhancedTableCell>
@@ -143,7 +143,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Id
                 id={row.rewardTxId}
-                href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
+                href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -174,7 +174,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(
-                  row.sourceChainToken.amount.toString(),
+                  row.sourceChainToken.amount,
                   row.sourceChainToken.decimals,
                 )}
               />
@@ -236,13 +236,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell align="center">
         <Id
           id={row.sourceTxId}
-          href={getTxURL(row.fromChain, row.sourceTxId)!}
+          href={getTxURL(row.fromChain, row.sourceTxId)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Id
           id={row.rewardTxId}
-          href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
+          href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -263,7 +263,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
-            row.sourceChainToken.amount.toString(),
+            row.sourceChainToken.amount,
             row.sourceChainToken.decimals,
           )}
         />

@@ -56,8 +56,8 @@ export const BalanceProvider = ({ children }: PropsWithChildren) => {
   const raw = useMemo(() => {
     if (!amount || !tokenMap || !token) return '0';
     return getDecimalString(
-      amount.toString(),
-      tokenMap.getSignificantDecimals(token.tokenId) || 0,
+      amount,
+      tokenMap.getSignificantDecimals(token.tokenId),
     );
   }, [amount, tokenMap, token]);
 

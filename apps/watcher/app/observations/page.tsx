@@ -1,6 +1,6 @@
 'use client';
 
-import { MouseEvent, useCallback, useMemo } from 'react';
+import { ChangeEvent, MouseEvent, useCallback, useMemo } from 'react';
 
 import {
   EnhancedTable,
@@ -39,7 +39,7 @@ const Observations = () => {
   );
 
   const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
+    (event: ChangeEvent<HTMLInputElement>) => {
       setPageSize(parseInt(event.target.value, 10));
     },
     [setPageSize],

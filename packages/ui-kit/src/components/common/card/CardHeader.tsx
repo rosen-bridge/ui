@@ -1,23 +1,23 @@
 import React, { HTMLAttributes, ReactNode } from 'react';
 
 import { Box } from '../../base';
+import { InjectOverrides } from '../InjectOverrides';
 
 /**
  * Props for the `CardHeader` component.
  */
-type CardHeaderProps = {
-  /**
-   * The main content of the header, typically a title or custom element.
-   * This will be placed on the left side and take up remaining horizontal space.
-   */
-  children?: ReactNode;
-
+export type CardHeaderProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * Optional action element rendered on the right side of the header.
    * Typically a button, icon, or menu.
    */
   action?: ReactNode;
-} & HTMLAttributes<HTMLDivElement>;
+  /**
+   * The main content of the header, typically a title or custom element.
+   * This will be placed on the left side and take up remaining horizontal space.
+   */
+  children?: ReactNode;
+};
 
 /**
  * `CardHeader` is a layout component intended to be used
@@ -38,7 +38,7 @@ type CardHeaderProps = {
  * </CardHeader>
  * ```
  */
-export const CardHeader = ({ children, action }: CardHeaderProps) => {
+const CardHeaderBase = ({ action, children }: CardHeaderProps) => {
   return (
     <Box
       className="card2-header"
@@ -47,6 +47,9 @@ export const CardHeader = ({ children, action }: CardHeaderProps) => {
         'alignItems': 'center',
         'borderRadius': (theme) => theme.spacing(2),
         'padding': (theme) => theme.spacing(2),
+        '.card2-section &': {
+          padding: (theme) => theme.spacing(3),
+        },
         '.card2-separated &': {
           position: 'relative',
         },
@@ -58,6 +61,11 @@ export const CardHeader = ({ children, action }: CardHeaderProps) => {
           right: (theme) => theme.spacing(2),
           borderBottom: (theme) => `1px dashed ${theme.palette.neutral.light}`,
         },
+
+        '.card2-section.card2-separated &:after': {
+          left: (theme) => theme.spacing(3),
+          right: (theme) => theme.spacing(3),
+        },
       }}
     >
       <div style={{ flexGrow: 1 }}>{children}</div>
@@ -65,3 +73,5 @@ export const CardHeader = ({ children, action }: CardHeaderProps) => {
     </Box>
   );
 };
+
+export const CardHeader = InjectOverrides(CardHeaderBase);

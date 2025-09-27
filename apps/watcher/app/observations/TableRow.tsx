@@ -9,7 +9,6 @@ import {
   Id,
   TableRow,
 } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Observation } from '@/_types/api';
@@ -119,7 +118,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>
           <Id
             id={row.sourceTxId}
-            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
           />
         </EnhancedTableCell>
       </TableRow>
@@ -203,7 +202,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Box style={{ display: 'flex', justifyContent: 'center' }}>
           <Id
             id={row.sourceTxId}
-            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
           />
         </Box>
       </EnhancedTableCell>
