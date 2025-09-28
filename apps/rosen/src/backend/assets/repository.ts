@@ -83,7 +83,7 @@ export const getAllAssets = async (filters: Filters) => {
     filters,
     (key) => `"sub".${key}`,
   );
-  console.log(query);
+
   const subquery = tokenRepository
     .createQueryBuilder('te')
     .leftJoin(

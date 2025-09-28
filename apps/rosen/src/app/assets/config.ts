@@ -33,31 +33,13 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
   },
   {
     name: 'id',
-    label: 'Id',
+    label: 'Token Id',
     unique: true,
     operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
   },
-  // {
-  //   name: 'bridgedTokenId',
-  //   label: 'Token',
-  //   unique: true,
-  //   operators: OPERATORS_EQUALITY,
-  //   input: (context) => ({
-  //     type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
-  //     options: tokenMap
-  //       .getConfig()
-  //       .map((item) => Object.values(item))
-  //       .flat()
-  //       .filter((item) => item.residency == 'native')
-  //       .map((item) => ({
-  //         label: item.name,
-  //         value: item.tokenId,
-  //       })),
-  //   }),
-  // },
 ];
 
 export const sorts = [
