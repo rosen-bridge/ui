@@ -1,4 +1,5 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   Dependency,
@@ -120,15 +121,11 @@ export class AssetDataAdapterService extends PeriodicTaskService {
     const Adapter = {
       [NETWORKS.ergo.key]: ErgoExplorerDataAdapter,
       [NETWORKS.bitcoin.key]: BitcoinEsploraDataAdapter,
-      [NETWORKS.ethereum.key]: EthereumEvmRpcDataAdapter,
-      [NETWORKS.binance.key]: BinanceEvmRpcDataAdapter,
+      [NETWORKS.ethereum.key]: undefined,
+      [NETWORKS.binance.key]: undefined,
       [NETWORKS.cardano.key]: CardanoKoiosDataAdapter,
       [NETWORKS.doge.key]: DogeBlockCypherDataAdapter,
     }[chain];
-
-    if (!Adapter) {
-      throw new Error(`No adapter class found for chain: ${chain}`);
-    }
 
     const tokenMap = TokensConfig.getInstance().getTokenMap();
 
@@ -138,7 +135,31 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       ...(configs.chains[chain].adapter?.extraAddresses ?? []),
     ].filter(Boolean);
 
-    return new Adapter(addresses, tokenMap, authParams);
+    if (chain === NETWORKS.ethereum.key)
+      return new EthereumEvmRpcDataAdapter(
+        addresses,
+        tokenMap,
+        authParams,
+        configs.chains.ethereum.adapter.chunkSize,
+        CallbackLoggerFactory.getInstance().getLogger('ethereum-data-adapter'),
+      );
+    else if (chain === NETWORKS.binance.key)
+      return new BinanceEvmRpcDataAdapter(
+        addresses,
+        tokenMap,
+        authParams,
+        configs.chains.binance.adapter.chunkSize,
+        CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
+      );
+
+    if (!Adapter) throw new Error(`No adapter class found for chain: ${chain}`);
+
+    return new Adapter(
+      addresses,
+      tokenMap,
+      authParams,
+      CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
+    );
   };
 
   /**

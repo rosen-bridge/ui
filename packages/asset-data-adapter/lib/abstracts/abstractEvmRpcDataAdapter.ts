@@ -14,16 +14,19 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected url: string,
+    protected authParams: { [key: string]: string },
     protected chunkSize: number,
-    protected authToken?: string,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
 
-    this.provider = authToken
-      ? new JsonRpcProvider(`${url}/${authToken}`)
-      : new JsonRpcProvider(`${url}`);
+    if (Object.keys(authParams).indexOf('url') < 0)
+      throw new Error(
+        'The AbstractEvmRpcDataAdapter required url param not provided.',
+      );
+    this.provider = authParams.authToken
+      ? new JsonRpcProvider(`${authParams.url}/${authParams.authToken}`)
+      : new JsonRpcProvider(`${authParams.url}`);
     this.fetchOffset = 0;
   }
 
@@ -38,7 +41,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
     const chunk = supportedTokens.slice(
       this.fetchOffset,
-      this.chunkSize + this.fetchOffset,
+      this.fetchOffset + this.chunkSize,
     );
 
     for (const chainTokenDetails of chunk) {

@@ -86,6 +86,7 @@ export interface ChainsBinanceRpcConnections {
 
 export interface ChainsBinanceAdapter {
   extraAddresses?: string[];
+  chunkSize: number;
 }
 
 export interface ChainsEthereum {
@@ -109,6 +110,7 @@ export interface ChainsEthereumRpcConnections {
 
 export interface ChainsEthereumAdapter {
   extraAddresses?: string[];
+  chunkSize: number;
 }
 
 export interface ChainsDoge {
@@ -192,7 +194,6 @@ export interface ChainsCardano {
   active: boolean;
   scanInterval: number;
   adapter: ChainsCardanoAdapter;
-  adapterAddresses?: string[];
   blockRetrieveGap?: number;
   method?: 'koios' | 'ogmios' | 'blockfrost';
   initialHeight?: number;

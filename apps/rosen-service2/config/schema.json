@@ -942,6 +942,15 @@
               "extraAddresses": {
                 "type": "array",
                 "items": { "type": "string" }
+              },
+              "chunkSize": {
+                "type": "number",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "binance adapter chunk-size must be specified"
+                  }
+                ]
               }
             }
           },
@@ -1039,6 +1048,15 @@
               "extraAddresses": {
                 "type": "array",
                 "items": { "type": "string" }
+              },
+              "chunkSize": {
+                "type": "number",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "binance adapter chunk-size must be specified"
+                  }
+                ]
               }
             }
           },
