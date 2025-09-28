@@ -1,5 +1,11 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Filter, OPERATOR_IS, OPERATORS_EQUALITY } from '@rosen-bridge/ui-kit';
+import {
+  Filter,
+  OPERATOR_CONTAINS,
+  OPERATOR_IS,
+  OPERATORS_COMPARATIVE,
+  OPERATORS_EQUALITY,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const getFilters = (tokenMap: TokenMap): Filter[] => [
@@ -17,41 +23,41 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     }),
   },
   {
-    name: 'bridgedTokenId',
+    name: 'name',
     label: 'Name',
     unique: true,
-    operators: OPERATORS_EQUALITY,
+    operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
-  },
-  {
-    name: 'name',
-    label: 'Token',
-    unique: true,
-    operators: OPERATORS_EQUALITY,
-    input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
-      options: tokenMap
-        .getConfig()
-        .map((item) => Object.values(item))
-        .flat()
-        .filter((item) => item.residency == 'native')
-        .map((item) => ({
-          label: item.name,
-          value: item.tokenId,
-        })),
-    }),
   },
   {
     name: 'id',
     label: 'Id',
     unique: true,
-    operators: OPERATORS_EQUALITY,
+    operators: [OPERATOR_CONTAINS],
     input: {
       type: 'text',
     },
   },
+  // {
+  //   name: 'bridgedTokenId',
+  //   label: 'Token',
+  //   unique: true,
+  //   operators: OPERATORS_EQUALITY,
+  //   input: (context) => ({
+  //     type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+  //     options: tokenMap
+  //       .getConfig()
+  //       .map((item) => Object.values(item))
+  //       .flat()
+  //       .filter((item) => item.residency == 'native')
+  //       .map((item) => ({
+  //         label: item.name,
+  //         value: item.tokenId,
+  //       })),
+  //   }),
+  // },
 ];
 
 export const sorts = [

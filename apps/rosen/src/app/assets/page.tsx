@@ -40,6 +40,17 @@ const Assets = () => {
 
   const [current, setCurrent] = useState<AssetType>();
 
+  useEffect(() => {
+    const arry = [];
+    const token = tokenMap.getConfig();
+    for (let item of token) {
+      arry.push(item);
+    }
+    console.group('Arry');
+    console.log(arry);
+    console.groupEnd();
+  }, [tokenMap]);
+
   const { data, isLoading } = useSWR<ApiAssetsResponse>(
     collection.params && ['/v1/assets', collection.params],
     fetcher,
