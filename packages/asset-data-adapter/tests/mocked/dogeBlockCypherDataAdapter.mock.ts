@@ -1,4 +1,4 @@
-import { DOGE_NATIVE_ASSET_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 export const blockCypherClientDogeReturnValue = {
   data: { final_balance: 100n },
@@ -6,7 +6,7 @@ export const blockCypherClientDogeReturnValue = {
 
 export const expectedDogeGetAddressAssetsResult = [
   {
-    assetId: DOGE_NATIVE_ASSET_KEY,
+    assetId: NETWORKS.doge.nativeToken,
     balance: 100n,
   },
 ];

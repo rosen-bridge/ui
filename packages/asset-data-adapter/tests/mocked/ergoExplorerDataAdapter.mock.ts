@@ -1,4 +1,4 @@
-import { ERGO_NATIVE_ASSET_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 export const expectedErgoExplorerGetAddressAssetsResult = {
   nanoErgs: 100,
@@ -9,7 +9,7 @@ export const expectedErgoExplorerGetAddressAssetsResult = {
 };
 
 export const expectedErgoGetAddressAssetsResult = [
-  { assetId: ERGO_NATIVE_ASSET_KEY, balance: 100 },
+  { assetId: NETWORKS.ergo.nativeToken, balance: 100 },
   { assetId: 't1', balance: 200 },
   { assetId: 't2', balance: 300 },
 ];

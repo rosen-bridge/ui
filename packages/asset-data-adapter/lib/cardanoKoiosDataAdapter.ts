@@ -1,7 +1,7 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
-import { CARDANO_NATIVE_ASSET_KEY, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
 import { ChainAssetBalance } from './types';
@@ -42,7 +42,7 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
     if (accountNativeBalance == undefined)
       throw new Error(`Balance of "${address}" Cardano address is undefined.`);
     return {
-      assetId: CARDANO_NATIVE_ASSET_KEY,
+      assetId: NETWORKS.cardano.nativeToken,
       balance: BigInt(accountNativeBalance),
     };
   };
