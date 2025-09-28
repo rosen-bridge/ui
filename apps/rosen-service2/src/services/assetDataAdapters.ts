@@ -158,7 +158,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       addresses,
       tokenMap,
       authParams,
-      CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
+      CallbackLoggerFactory.getInstance().getLogger(`{chain}-data-adapter`),
     );
   };
 
