@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import {
   Dialog,
@@ -12,7 +12,7 @@ import {
 interface ConfirmationModalProps {
   open: boolean;
   title: string;
-  content: React.ReactNode | string;
+  content: ReactNode | string;
   buttonText: string;
   onConfirm: () => Promise<void>;
   handleClose: () => void;

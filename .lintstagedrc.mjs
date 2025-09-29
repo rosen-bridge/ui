@@ -43,15 +43,10 @@ const getDepcheckCommand = (directory) => {
   return `npx depcheck --ignores="${packages.join(', ')}" --ignore-patterns="${paths.join(', ')}" ${path.relative(process.cwd(), directory)}`;
 };
 
-export default {
+const configs = {
   '*': 'prettier --ignore-unknown --write',
-  '**/{networks,packages,wallets,apps/rosen-service2}/**/*.{js,jsx,ts,tsx}':
+  '**/{networks,packages,wallets,apps/guard,apps/rosen,apps/rosen-service2,apps/watcher}/**/*.{js,jsx,ts,tsx}':
     'eslint --fix',
-  '**/apps/{guard,rosen,watcher}/**/*.{js,jsx,ts,tsx}': perPackage(
-    (directory, file) => {
-      return `next lint ${directory} --fix --file ${path.relative(directory, file)}`;
-    },
-  ),
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),
@@ -59,3 +54,5 @@ export default {
   '**/package.json': perPackage(getDepcheckCommand),
   '*.{js,jsx,ts,tsx}': 'npm run test:related',
 };
+
+export default configs;

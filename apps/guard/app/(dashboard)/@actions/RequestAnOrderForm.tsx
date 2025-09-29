@@ -5,7 +5,6 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  FullCard,
   Grid,
   Card,
   MenuItem,
@@ -37,6 +36,7 @@ export const RequestAnOrderForm = () => {
     trigger,
     isMutating: isOrderPending,
     error,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
     '/order',
     mutatorWithHeaders,
@@ -77,6 +77,7 @@ export const RequestAnOrderForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({

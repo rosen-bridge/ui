@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import { Wallet as WalletIcon } from '@rosen-bridge/icons';
 import {
@@ -89,7 +89,7 @@ export const ChooseWalletModal = ({
             const Icon = wallet.iconReact;
             const isConnected = selectedWallet?.name === wallet.name;
 
-            const handleClick = async (event: React.MouseEvent) => {
+            const handleClick = async (event: MouseEvent) => {
               event.preventDefault();
               if (isConnected) {
                 disconnect();

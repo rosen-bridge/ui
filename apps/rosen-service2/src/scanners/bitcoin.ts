@@ -1,8 +1,7 @@
 import {
-  BitcoinEsploraScanner,
-  BitcoinEsploraTransaction,
-  EsploraNetwork,
-} from '@rosen-bridge/bitcoin-esplora-scanner';
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
 import {
   BitcoinRpcObservationExtractor,
   BitcoinEsploraObservationExtractor,
@@ -10,14 +9,13 @@ import {
 import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
+  BitcoinEsploraScanner,
+  EsploraNetwork,
   BitcoinRpcTransaction,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+  BitcoinEsploraTransaction,
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';

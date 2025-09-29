@@ -104,8 +104,6 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const [expand, setExpand] = useState(false);
 
-  const [open, setOpen] = useState(false);
-
   const rowStyles = useMemo(
     () => ({
       'opacity': isLoading ? 0.3 : 1.0,
@@ -125,13 +123,9 @@ export const MobileRow: FC<RowProps> = (props) => {
     return Object.values(LOCK_ADDRESSES).includes(item.address) == true;
   });
 
-  const hotUrl = getAddressUrl(row.chain, hot?.address);
-
   const cold = row.lockedPerAddress?.find((item) => {
     return Object.values(LOCK_ADDRESSES).includes(item.address) != true;
   });
-
-  const coldUrl = getAddressUrl(row.chain, cold?.address);
 
   return (
     <>
