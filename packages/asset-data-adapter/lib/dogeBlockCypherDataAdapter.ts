@@ -1,7 +1,7 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { Axios } from '@rosen-clients/rate-limited-axios';
-import { DOGE_NATIVE_ASSET_KEY, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
 import { ChainAssetBalance } from './types';
@@ -35,7 +35,7 @@ export class DogeBlockCypherDataAdapter extends AbstractDataAdapter {
     );
     return [
       {
-        assetId: DOGE_NATIVE_ASSET_KEY,
+        assetId: NETWORKS.doge.nativeToken,
         balance: BigInt(response.data.final_balance),
       },
     ];

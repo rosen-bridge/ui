@@ -1,4 +1,4 @@
-import { CARDANO_NATIVE_ASSET_KEY } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 export const CardanoAddressInfoMockValue = [{ balance: 5000000 }];
 
@@ -8,7 +8,7 @@ export const koiosAPIAddressAssetsMockedData = [
 ];
 
 export const CardanoAdapterGetAddressAssetsResult = [
-  { assetId: CARDANO_NATIVE_ASSET_KEY, balance: BigInt(5000000) },
+  { assetId: NETWORKS.cardano.nativeToken, balance: BigInt(5000000) },
   { assetId: 'policy1.token1', balance: BigInt(1000) },
   { assetId: 'policy2.token2', balance: BigInt(2000) },
 ];
