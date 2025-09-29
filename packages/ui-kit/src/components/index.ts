@@ -5,3 +5,4 @@ export * from './ComponentName';
 export * from './gridContainer';
 export * from './Center';
 export * from './Icon';
+export * from './IconSvg2';

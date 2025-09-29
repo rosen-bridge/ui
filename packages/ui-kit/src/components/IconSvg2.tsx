@@ -1,25 +1,31 @@
 import { ComponentProps, forwardRef, SVGAttributes, useMemo } from 'react';
 
-import { SvgIcon } from '@mui/material';
+import { SvgIcon as MuiSvgIcon } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 import { Colors, Wrap } from '../core';
 import { useTheme } from '../hooks';
+
+const SIZE_PREDEFINED = ['inherit', 'small', 'medium', 'large'] as const;
+
+type SizePredefined = typeof SIZE_PREDEFINED[number];
 
 /**
  * TODO
  */
 type SvgIcon2PropsBase = SVGAttributes<SVGElement> & {
   color?: Colors;
-  size?: 'inherit' | 'small' | 'medium' | 'large' | (number & {}) | (string & {});
+  size?: SizePredefined | (number & {}) | (string & {});
 };
 
 /**
  * TODO
  */
-const SvgIcon2Base = forwardRef<SVGElement, SvgIcon2PropsBase>((props, ref) => {
+const SvgIcon2Base = forwardRef<SVGSVGElement, SvgIcon2PropsBase>((props, ref) => {
   const {
     children,
     color = 'inherit',
+    shapeRendering,
     size = 'medium',
     ...rest
   } = props;
@@ -27,11 +33,11 @@ const SvgIcon2Base = forwardRef<SVGElement, SvgIcon2PropsBase>((props, ref) => {
   const theme = useTheme();
 
   const isPredefined = useMemo(() => {
-    return ['inherit', 'small', 'medium', 'large'].includes(size)
+    return (SIZE_PREDEFINED as readonly string[]).includes(size as string);
   }, [size]);
 
   const fontSize = useMemo(() => {
-    return isPredefined ? size : undefined;
+    return isPredefined ? (size as SizePredefined) : undefined;
   }, [isPredefined, size]);
 
   const width = useMemo(() => {
@@ -42,19 +48,25 @@ const SvgIcon2Base = forwardRef<SVGElement, SvgIcon2PropsBase>((props, ref) => {
     return theme.spacing(size);
   }, [isPredefined, size, theme]);
 
-  const sx = useMemo(() => {
-    return { color, width: width, height: width }
+  const sx = useMemo<SxProps<Theme>>(() => {
+    return { color, width, height: width };
   }, [color, width]);
 
-  return <SvgIcon {...rest} fontSize={fontSize} sx={sx} ref={ref}>
-    {children}
-  </SvgIcon>
+  return (
+    <MuiSvgIcon
+      {...rest}
+      fontSize={fontSize}
+      ref={ref}
+      shapeRendering={shapeRendering as string}
+      sx={sx}
+    >
+      {children}
+    </MuiSvgIcon>
+  );
 });
 
-SvgIcon2Base.displayName = "SvgIcon2";
+SvgIcon2Base.displayName = 'SvgIcon2';
 
 export const SvgIcon2 = Wrap(SvgIcon2Base);
 
 export type SvgIcon2Props = ComponentProps<typeof SvgIcon2>;
-
-
