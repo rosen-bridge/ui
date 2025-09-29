@@ -3,8 +3,8 @@ import {
   Button,
   CircularProgress,
   DividerNew,
-  Grid,
   IconButton,
+  Stack,
   SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
@@ -28,18 +28,17 @@ export const UseAllAmount = ({
   onRetry,
 }: UseAllAmountProps) => {
   return (
-    <Grid
-      container
+    <Stack
+      direction="row"
       alignItems="center"
       justifyContent="space-between"
-      wrap="nowrap"
+      flexWrap="nowrap"
       width="auto"
       gap={1.5}
     >
-      <Grid item alignSelf="stretch">
-        <DividerNew orientation="vertical" />
-      </Grid>
-      <Grid item>
+      <DividerNew orientation="vertical" style={{ alignSelf: 'stretch' }} />
+
+      <Stack direction="row" alignItems="center">
         {loading && (
           <CircularProgress
             size={24}
@@ -49,19 +48,17 @@ export const UseAllAmount = ({
             }}
           />
         )}
+
         {!error && !loading && (
-          <Button
-            sx={{ whiteSpace: 'nowrap' }}
-            disabled={disabled}
-            onClick={onClick}
-          >
-            <span>
+          <Button disabled={disabled} onClick={onClick}>
+            <span style={{ whiteSpace: 'nowrap' }}>
               Use all
               <br />
               {value} <small style={{ textTransform: 'none' }}>{unit}</small>
             </span>
           </Button>
         )}
+
         {error && !loading && (
           <IconButton style={{ verticalAlign: 'middle' }} onClick={onRetry}>
             <SvgIcon color="error" style={{ width: 24 }}>
@@ -69,7 +66,7 @@ export const UseAllAmount = ({
             </SvgIcon>
           </IconButton>
         )}
-      </Grid>
-    </Grid>
+      </Stack>
+    </Stack>
   );
 };
