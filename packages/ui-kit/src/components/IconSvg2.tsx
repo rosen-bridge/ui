@@ -3,7 +3,7 @@ import { ComponentProps, forwardRef, SVGAttributes, useMemo } from 'react';
 import { SvgIcon as MuiSvgIcon } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material/styles';
 
-import { Colors, Wrap } from '../core';
+import { Colors, ensureColor, Wrap } from '../core';
 import { useTheme } from '../hooks';
 
 const SIZE_PREDEFINED = ['inherit', 'small', 'medium', 'large'] as const;
@@ -49,7 +49,7 @@ const SvgIcon2Base = forwardRef<SVGSVGElement, SvgIcon2PropsBase>((props, ref) =
   }, [isPredefined, size, theme]);
 
   const sx = useMemo<SxProps<Theme>>(() => {
-    return { color, width, height: width };
+    return { color: ensureColor(color), width, height: width };
   }, [color, width]);
 
   return (
