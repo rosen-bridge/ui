@@ -1,10 +1,16 @@
-import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
+import {
+  BitcoinBoxSelection,
+  generateFeeEstimator,
+} from '@rosen-bridge/bitcoin-utxo-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
 
-import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
+import {
+  SEGWIT_INPUT_WEIGHT_UNIT,
+  SEGWIT_OUTPUT_WEIGHT_UNIT,
+} from './constants';
 import { BitcoinUtxo, UnsignedPsbtData } from './types';
 import {
   estimateTxWeight,
@@ -12,6 +18,8 @@ import {
   getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
+
+const selector = new BitcoinBoxSelection();
 
 /**
  * generates bitcoin lock tx
@@ -60,21 +68,34 @@ export const generateUnsignedTx =
     let estimatedTxWeight = estimateTxWeight(0, 2, opReturnData.length);
 
     // fetch inputs
-    const utxoIterator = (await getAddressUtxos(fromAddress)).values();
+    const utxos = await getAddressUtxos(fromAddress);
     const feeRatio = await getFeeRatio();
     const minSatoshi = getMinimumMeaningfulSatoshi(feeRatio);
-    const coveredBoxes = await selectBitcoinUtxos(
-      unwrappedAmount + minSatoshi,
+
+    // generate fee estimator
+    const estimateFee = generateFeeEstimator(
+      1,
+      42, // all txs include 40W. P2WPKH txs need additional 2W
+      SEGWIT_INPUT_WEIGHT_UNIT,
+      SEGWIT_OUTPUT_WEIGHT_UNIT,
+      feeRatio,
+      4, // the virtual size matters for fee estimation of native-segwit transactions
+    );
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: unwrappedAmount,
+        tokens: [],
+      },
       [],
       new Map<string, BitcoinUtxo | undefined>(),
-      utxoIterator,
+      utxos.values(),
       minSatoshi,
-      SEGWIT_INPUT_WEIGHT_UNIT,
-      estimatedTxWeight,
-      feeRatio,
+      undefined,
+      estimateFee,
     );
     if (!coveredBoxes.covered) {
-      const totalInputBtc = utxoIterator.reduce(
+      const totalInputBtc = utxos.reduce(
         (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
         0n,
       );
