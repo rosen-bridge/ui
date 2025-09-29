@@ -99,7 +99,7 @@ export const Wrap = <P extends object, R = unknown>(
             }
             case 'SIZE': {
               if (typeof value === 'number') {
-                result = `calc(var(${generateCSSVariable(prefix, 'spacing')}) * ${value} * 1px)`;
+                result = `calc(var(${generateCSSVariable(prefix, 'spacing')}) * ${value})`;
               }
               if (/^\d+(\.\d+)?(px|pt|cm|mm|in|em|rem|%|vw|vh)$/.test(value as string)) {
                 result = value;
