@@ -1,10 +1,18 @@
-import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
+import {
+  BitcoinBoxSelection,
+  generateFeeEstimator,
+} from '@rosen-bridge/bitcoin-utxo-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
 
-import { DOGE_NETWORK, DOGE_INPUT_SIZE } from './constants';
+import {
+  DOGE_NETWORK,
+  DOGE_INPUT_SIZE,
+  DOGE_TX_BASE_SIZE,
+  DOGE_OUTPUT_SIZE,
+} from './constants';
 import { DogeUtxo, UnsignedPsbtData } from './types';
 import {
   estimateTxWeight,
@@ -13,6 +21,8 @@ import {
   getMinimumMeaningfulDoge,
   getTxHex,
 } from './utils';
+
+const selector = new BitcoinBoxSelection();
 
 /**
  * generates doge lock tx
@@ -59,23 +69,34 @@ export const generateUnsignedTx =
     let estimatedTxWeight = estimateTxWeight(0, 2, opReturnData.length);
 
     // fetch inputs
-    const utxoIterator = (await getAddressUtxos(fromAddress)).values();
+    const utxos = await getAddressUtxos(fromAddress);
     const feeRatio = await getFeeRatio();
     const minDoge = getMinimumMeaningfulDoge(feeRatio);
-    const coveredBoxes = await selectBitcoinUtxos(
-      unwrappedAmount + minDoge,
+
+    // generate fee estimator
+    const estimateFee = generateFeeEstimator(
+      1,
+      DOGE_TX_BASE_SIZE,
+      DOGE_INPUT_SIZE,
+      DOGE_OUTPUT_SIZE,
+      feeRatio,
+      1, // the virtual size matters for fee estimation of native-segwit transactions
+    );
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: unwrappedAmount,
+        tokens: [],
+      },
       [],
       new Map<string, DogeUtxo | undefined>(),
-      utxoIterator,
+      utxos.values(),
       minDoge,
-      DOGE_INPUT_SIZE,
-      estimatedTxWeight,
-      feeRatio,
       undefined,
-      1,
+      estimateFee,
     );
     if (!coveredBoxes.covered) {
-      const totalInputDoge = utxoIterator.reduce(
+      const totalInputDoge = utxos.reduce(
         (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
         0n,
       );
