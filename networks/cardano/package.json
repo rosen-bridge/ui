@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@emurgo/cardano-serialization-lib-nodejs": "^13.2.1",
-    "@rosen-bridge/cardano-utxo-selection": "^1.1.0",
+    "@rosen-bridge/cardano-utxo-selection": "^2.3.0",
     "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/tokens": "^3.1.1",
     "@rosen-clients/cardano-koios": "^2.1.1",
