@@ -318,7 +318,12 @@ export const getBoxAssets = (box: ErgoBoxProxy): AssetBalance => {
   };
 };
 
-export const calculateFee = calculateFeeCreator(NETWORKS.ergo.key, getHeight);
+export type CalculateFee = ReturnType<typeof calculateFeeCreator>;
+
+export const calculateFee: CalculateFee = calculateFeeCreator(
+  NETWORKS.ergo.key,
+  getHeight,
+);
 
 export const getMinTransferCreator = getMinTransferCreatorBase(
   NETWORKS.ergo.key,

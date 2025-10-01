@@ -406,7 +406,9 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee = calculateFeeCreator(
+export type CalculateFee = ReturnType<typeof calculateFeeCreator>;
+
+export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS.cardano.key,
   getHeight,
 );

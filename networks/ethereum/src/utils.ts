@@ -9,7 +9,9 @@ export const getHeight = async (): Promise<number> => {
   return await getHeightCore(EvmChains.ETHEREUM);
 };
 
-export const calculateFee = calculateFeeCreator(
+export type CalculateFee = ReturnType<typeof calculateFeeCreator>;
+
+export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS.ethereum.key,
   getHeight,
 );

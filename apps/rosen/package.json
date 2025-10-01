@@ -22,7 +22,7 @@
     "@rosen-bridge/encryption": "^0.1.1",
     "@rosen-bridge/extended-typeorm": "^1.0.0",
     "@rosen-bridge/icons": "^2.3.1",
-    "@rosen-bridge/tokens": "^3.1.1",
+    "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-bridge/ui-kit": "^2.4.0",
     "@rosen-bridge/watcher-data-extractor": "^12.2.1",
     "@rosen-network/base": "^0.4.1",

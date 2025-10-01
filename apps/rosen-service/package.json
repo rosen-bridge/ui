@@ -21,7 +21,7 @@
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-logger": "^2.0.1",
+    "@rosen-bridge/abstract-logger": "^3.0.0",
     "@rosen-bridge/abstract-scanner": "^0.2.0",
     "@rosen-bridge/bitcoin-observation-extractor": "^6.2.2",
     "@rosen-bridge/bitcoin-runes-observation-extractor": "^0.2.0",
@@ -39,9 +39,9 @@
     "@rosen-bridge/rate-limited-axios": "^0.2.1",
     "@rosen-bridge/scanner-interfaces": "^0.2.0",
     "@rosen-bridge/scanner-sync-check": "^5.0.0",
-    "@rosen-bridge/tokens": "^3.1.1",
+    "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-bridge/watcher-data-extractor": "^12.2.1",
-    "@rosen-bridge/winston-logger": "^1.0.3",
+    "@rosen-bridge/winston-logger": "^2.0.0",
     "@rosen-ui/asset-calculator": "^2.1.8",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/data-source": "^0.1.1",
