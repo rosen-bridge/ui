@@ -38,7 +38,6 @@
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",
     "ethers": "6.13.2",
-    "lodash-es": "^4.17.21",
-    "typeorm": "0.3.26"
+    "lodash-es": "^4.17.21"
   }
 }
