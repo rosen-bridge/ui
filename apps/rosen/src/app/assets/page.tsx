@@ -56,7 +56,7 @@ const Assets = () => {
   const renderPagination = useCallback(
     () => (
       <NewPagination
-        defaultPageSize={10}
+        defaultPageSize={25}
         pageSizeOptions={[10, 25, 50, 100]}
         disabled={isLoading}
         total={data?.total}
