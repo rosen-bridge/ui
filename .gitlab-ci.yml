@@ -3,6 +3,7 @@ image: node:20.18.1
 stages:
   - installation
   - build
+  - knip
   - type_check
   - prettify
   - lint
@@ -39,6 +40,21 @@ build:
         - wallets/*/dist
   script:
     - npm run build:mono-packages
+
+knip:
+  stage: knip
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - packages/*/dist
+      - wallets/*/node_modules
+      - wallets/*/dist
+  script:
+    - npx knip --dependencies
 
 type_check:
   stage: type_check
