@@ -1,7 +1,7 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
-import { ERGO_NATIVE_ASSET_KEY, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
 import { ChainAssetBalance } from './types';
@@ -31,7 +31,7 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
       await this.explorerApi.v1.getApiV1AddressesP1BalanceConfirmed(address);
     const assets: ChainAssetBalance[] = [];
     assets.push({
-      assetId: ERGO_NATIVE_ASSET_KEY,
+      assetId: NETWORKS.ergo.nativeToken,
       balance: apiResult.nanoErgs,
     });
     apiResult.tokens?.forEach((asset) =>

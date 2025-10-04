@@ -239,9 +239,18 @@ class AssetCalculator {
         this.logger.info(
           `Started calculating values for ${nativeResidentToken.name} native on chain ${residencyChain}`,
         );
+        const significantDecimal = this.tokens.getSignificantDecimals(
+          nativeResidentToken.tokenId,
+        );
+        if (significantDecimal == undefined)
+          throw new Error(
+            `Failed to retrieve significant decimals for tokenId: ${nativeResidentToken.tokenId}`,
+          );
+
         const newToken = {
           id: nativeResidentToken.tokenId,
           decimal: nativeResidentToken.decimals,
+          significantDecimal: significantDecimal,
           name: nativeResidentToken.name,
           chain: residencyChain,
           isNative: nativeResidentToken.type === NATIVE_TOKEN,

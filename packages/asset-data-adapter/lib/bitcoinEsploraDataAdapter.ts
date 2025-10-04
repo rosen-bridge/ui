@@ -1,7 +1,7 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { Axios } from '@rosen-clients/rate-limited-axios';
-import { BITCOIN_NATIVE_ASSET_KEY, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
 import { ChainAssetBalance } from './types';
@@ -33,7 +33,7 @@ export class BitcoinEsploraDataAdapter extends AbstractDataAdapter {
     const chainStats = response.data.chain_stats;
     return [
       {
-        assetId: BITCOIN_NATIVE_ASSET_KEY,
+        assetId: NETWORKS.bitcoin.nativeToken,
         balance: BigInt(chainStats.funded_txo_sum - chainStats.spent_txo_sum),
       },
     ];
