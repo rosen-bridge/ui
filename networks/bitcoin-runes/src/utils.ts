@@ -5,6 +5,7 @@ import {
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
+  CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
@@ -199,8 +200,6 @@ export const getHeight = async (): Promise<number> => {
 
   return height;
 };
-
-export type CalculateFee = ReturnType<typeof calculateFeeCreator>;
 
 export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS['bitcoin-runes'].key,
