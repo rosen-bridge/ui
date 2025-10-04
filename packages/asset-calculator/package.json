@@ -28,9 +28,9 @@
     "node": ">=20.18.1"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-logger": "^1.0.0",
+    "@rosen-bridge/abstract-logger": "^3.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.0",
-    "@rosen-bridge/json-bigint": "^0.1.0",
+    "@rosen-bridge/json-bigint": "^1.0.0",
     "@rosen-bridge/rate-limited-axios": "^0.2.1",
     "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-clients/cardano-koios": "^2.1.2",
