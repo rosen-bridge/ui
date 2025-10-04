@@ -1,5 +1,6 @@
 ---
 '@rosen-ui/asset-calculator': patch
+'@rosen-ui/asset-data-adapter': patch
 '@rosen-network/bitcoin-runes': patch
 '@rosen-ui/wallet-connect': patch
 '@rosen-ui/wallet-api': patch
