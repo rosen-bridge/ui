@@ -4,7 +4,7 @@ import { Network as NetworkType } from '@rosen-ui/types';
 import { camelCase, upperFirst } from 'lodash-es';
 
 import { styled } from '../../../styling';
-import { Skeleton, SvgIcon, Typography } from '../../base';
+import { Skeleton, SvgIconMui, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 export type NetworkProps = {
@@ -84,11 +84,11 @@ const NetworkFallback = ({
 }: Omit<NetworkProps, 'name'> & { showIcon?: boolean; showText?: boolean }) => (
   <Root reverse={reverse} orientation={orientation}>
     {showIcon && (
-      <SvgIcon sx={{ fontSize: '2em' }}>
+      <SvgIconMui sx={{ fontSize: '2em' }}>
         <Icons.ExclamationTriangleFill
           style={{ width: '100%', height: '100%' }}
         />
-      </SvgIcon>
+      </SvgIconMui>
     )}
     {showText && <Typography variant="body1">Unsupported</Typography>}
   </Root>
@@ -148,9 +148,9 @@ const NetworkBase = ({
   return (
     <Root reverse={reverse} orientation={orientation}>
       {showIcon && (
-        <SvgIcon sx={{ fontSize: '2em' }}>
+        <SvgIconMui sx={{ fontSize: '2em' }}>
           <LogoNetwork style={{ width: '100%', height: '100%' }} />
-        </SvgIcon>
+        </SvgIconMui>
       )}
       {showText && <Typography variant="inherit">{network.label}</Typography>}
     </Root>

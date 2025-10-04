@@ -13,7 +13,7 @@ import {
   Tooltip,
   IconButton,
   InputAdornment,
-  SvgIcon,
+  SvgIconMui,
   TextField,
   Typography,
 } from '../base';
@@ -62,9 +62,9 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
     <>
       {children?.(handleOpenModal) || (
         <IconButton onClick={handleOpenModal} color="inherit">
-          <SvgIcon sx={{ width: 24 }}>
+          <SvgIconMui sx={{ width: 24 }}>
             <KeySkeleton />
-          </SvgIcon>
+          </SvgIconMui>
         </IconButton>
       )}
       <Dialog
@@ -92,16 +92,16 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
                       <InputAdornment position="end">
                         <Tooltip title="Clear">
                           <IconButton onClick={() => reset()}>
-                            <SvgIcon sx={{ width: 24 }}>
+                            <SvgIconMui sx={{ width: 24 }}>
                               <Times />
-                            </SvgIcon>
+                            </SvgIconMui>
                           </IconButton>
                         </Tooltip>
                         <Tooltip title={showKey ? 'Hide key' : 'Show key'}>
                           <IconButton onClick={handleToggleShowKey}>
-                            <SvgIcon sx={{ width: 24 }}>
+                            <SvgIconMui sx={{ width: 24 }}>
                               {showKey ? <EyeSlash /> : <Eye />}
-                            </SvgIcon>
+                            </SvgIconMui>
                           </IconButton>
                         </Tooltip>
                       </InputAdornment>

@@ -3,7 +3,7 @@ import { ReactNode } from 'react';
 import { ArrowRight } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { SvgIcon } from '../base';
+import { SvgIconMui } from '../base';
 
 /**
  * Props for the Connector component.
@@ -49,9 +49,9 @@ export const Connector = ({ start, end, variant }: ConnectorProps) => {
   return (
     <ConnectorWrapper variant={variant}>
       {start}
-      <SvgIcon sx={{ color: 'text.secondary' }}>
+      <SvgIconMui sx={{ color: 'text.secondary' }}>
         <ArrowRight />
-      </SvgIcon>
+      </SvgIconMui>
       {end}
     </ConnectorWrapper>
   );

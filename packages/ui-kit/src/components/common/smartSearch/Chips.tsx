@@ -1,7 +1,7 @@
 import { Times } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
-import { IconButton, SvgIcon, Typography } from '../../base';
+import { IconButton, SvgIconMui, Typography } from '../../base';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 
@@ -95,9 +95,9 @@ export const Chips = ({ filters, value, onRemove }: ChipsProps) => {
                   );
                 })}
                 <IconButton onClick={() => onRemove?.(item)}>
-                  <SvgIcon>
+                  <SvgIconMui>
                     <Times />
-                  </SvgIcon>
+                  </SvgIconMui>
                 </IconButton>
               </div>
             )}

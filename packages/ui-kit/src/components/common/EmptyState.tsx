@@ -3,7 +3,7 @@ import { HTMLAttributes } from 'react';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { SvgIcon, Typography } from '../base';
+import { SvgIconMui, Typography } from '../base';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -71,9 +71,9 @@ export const EmptyState = (props: EmptyStateProps) => {
     <Root {...props}>
       <IconWrapper>
         <SearchCircle>
-          <SvgIcon>
+          <SvgIconMui>
             <Search />
-          </SvgIcon>
+          </SvgIconMui>
           <CountBadge>
             <Typography
               typography="span"

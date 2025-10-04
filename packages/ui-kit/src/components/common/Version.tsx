@@ -8,7 +8,7 @@ import {
   CircularProgress,
   Divider,
   IconButton,
-  SvgIcon,
+  SvgIconMui,
   Tooltip,
   Typography,
 } from '../base';
@@ -125,9 +125,9 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
               onMouseEnter={() => !isMobile && setTooltipOpen(true)}
               onMouseLeave={() => !isMobile && setTooltipOpen(false)}
             >
-              <SvgIcon sx={{ width: 24 }}>
+              <SvgIconMui sx={{ width: 24 }}>
                 <InfoCircle fill="currentColor" />
-              </SvgIcon>
+              </SvgIconMui>
             </IconButton>
           </Tooltip>
         </>

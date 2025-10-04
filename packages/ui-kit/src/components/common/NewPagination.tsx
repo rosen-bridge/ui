@@ -8,7 +8,7 @@ import {
   Typography,
   MenuItem,
   Menu,
-  SvgIcon,
+  SvgIconMui,
   Divider,
   Stack,
   Button,
@@ -211,7 +211,7 @@ export const NewPagination = ({
                   Items per page {pageSizeCurrent}
                 </Typography>
 
-                <SvgIcon
+                <SvgIconMui
                   sx={{
                     'color': (theme) => theme.palette.text.secondary,
                     'width': 24,
@@ -223,9 +223,9 @@ export const NewPagination = ({
                   }}
                 >
                   <CaretDown />
-                </SvgIcon>
+                </SvgIconMui>
 
-                <SvgIcon
+                <SvgIconMui
                   sx={{
                     'color': (theme) => theme.palette.text.secondary,
                     'width': 24,
@@ -238,7 +238,7 @@ export const NewPagination = ({
                   }}
                 >
                   <AlignCenter />
-                </SvgIcon>
+                </SvgIconMui>
               </Stack>
             </Button>
 

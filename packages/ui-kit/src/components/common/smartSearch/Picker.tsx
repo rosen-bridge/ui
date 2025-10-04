@@ -8,7 +8,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  SvgIcon,
+  SvgIconMui,
 } from '../../base';
 import { Popup } from './Popup';
 import { Input, SelectOption, Selected } from './types';
@@ -168,7 +168,9 @@ export const Picker = ({
               switch (value.type) {
                 case 'multiple':
                   return (
-                    <SvgIcon>{items.has(option.value) && <Check />}</SvgIcon>
+                    <SvgIconMui>
+                      {items.has(option.value) && <Check />}
+                    </SvgIconMui>
                   );
                 case 'select':
                   return option.post;

@@ -10,6 +10,7 @@ interface PeriodSelectProps {
   period: string;
   setPeriod: React.Dispatch<React.SetStateAction<ChartPeriod>>;
 }
+
 /**
  * render a period select to be used inside parent page
  * @param period

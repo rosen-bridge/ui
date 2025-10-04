@@ -41,7 +41,7 @@ export * from './Skeleton';
 export * from './Slide';
 export * from './Snackbar';
 export * from './Stack';
-export * from './SvgIcon';
+export * from './SvgIconMui';
 export * from './Switch';
 export * from './Tab';
 export * from './Tabs';

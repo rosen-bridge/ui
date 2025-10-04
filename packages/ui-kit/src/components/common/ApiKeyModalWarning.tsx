@@ -1,7 +1,7 @@
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 
 import { useApiKey } from '../../hooks';
-import { Button, Grid, SvgIcon, Typography } from '../base';
+import { Button, Grid, SvgIconMui, Typography } from '../base';
 import { ApiKeyModal } from './ApiKeyModal';
 
 export const ApiKeyModalWarning = () => {
@@ -17,9 +17,9 @@ export const ApiKeyModalWarning = () => {
       sx={(theme) => ({ color: theme.palette.warning.main })}
     >
       <Grid item>
-        <SvgIcon>
+        <SvgIconMui>
           <ExclamationTriangle />
-        </SvgIcon>
+        </SvgIconMui>
       </Grid>
       <Grid item>
         <Typography>You need to set an Api Key before sending</Typography>

@@ -20,7 +20,7 @@ import {
   ListItemText,
   ListSubheader,
 } from '../../base';
-import { IconButton, SvgIcon } from '../../base';
+import { IconButton, SvgIconMui } from '../../base';
 import { Truncate } from '../Truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
@@ -186,9 +186,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
             ref={$anchor}
             onClick={() => setOpen(!open)}
           >
-            <SvgIcon>
+            <SvgIconMui>
               <HistoryIcon />
-            </SvgIcon>
+            </SvgIconMui>
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
             <div
@@ -212,9 +212,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                               remove(item);
                             }}
                           >
-                            <SvgIcon>
+                            <SvgIconMui>
                               <Times />
-                            </SvgIcon>
+                            </SvgIconMui>
                           </IconButton>
                         }
                         onClick={() => handleClick(item)}
@@ -250,9 +250,9 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                           book(item);
                         }}
                       >
-                        <SvgIcon>
+                        <SvgIconMui>
                           <Favorite />
-                        </SvgIcon>
+                        </SvgIconMui>
                       </IconButton>
                     }
                     onClick={() => handleClick(item)}

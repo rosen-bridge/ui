@@ -2,7 +2,7 @@ import { HTMLAttributes } from 'react';
 
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 
-import { Box, Skeleton, SvgIcon, Typography } from '../../base';
+import { Box, Skeleton, SvgIconMui, Typography } from '../../base';
 
 export type AmountProps = {
   value?: bigint | number | string;
@@ -66,7 +66,7 @@ export const Amount = ({
       >
         {loading && <Skeleton variant="text" width={80} sx={{ mr: 0.5 }} />}
         {!loading && error && (
-          <SvgIcon
+          <SvgIconMui
             fontSize="inherit"
             sx={{
               mr: 0.5,
@@ -74,7 +74,7 @@ export const Amount = ({
             }}
           >
             <ExclamationTriangle />
-          </SvgIcon>
+          </SvgIconMui>
         )}
         {!loading && !error && (
           <Typography fontSize="inherit" component="span">

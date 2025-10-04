@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
-import { LinkBroken } from '@rosen-bridge/icons';
-import { Wallet } from '@rosen-bridge/icons';
+import { Wallet, LinkBroken } from '@rosen-bridge/icons';
 import {
   Avatar,
   Card,
@@ -9,8 +8,8 @@ import {
   Button,
   Grid,
   IconButton,
-  SvgIcon,
   Typography,
+  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
 import { useNetwork, useWallet } from '@/hooks';
