@@ -3,7 +3,7 @@ import { HTMLAttributes } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
-import { Stack, SvgIcon, Tooltip } from '../../base';
+import { StackMui, SvgIcon, Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 /**
@@ -65,7 +65,7 @@ const LabelBase = ({
   ...props
 }: LabelProps) => {
   return (
-    <Stack
+    <StackMui
       className={`rosen-label rosen-label-${orientation} ${className || ''}`}
       flexDirection="row"
       justifyContent="start"
@@ -88,7 +88,7 @@ const LabelBase = ({
           }}
         />
       )}
-      <Stack
+      <StackMui
         className="rosen-label-container"
         alignItems={orientation === 'vertical' ? 'start' : 'center'}
         flexDirection={orientation === 'vertical' ? 'column' : 'row'}
@@ -97,7 +97,7 @@ const LabelBase = ({
         overflow="hidden"
         flexGrow={1}
       >
-        <Stack
+        <StackMui
           className="rosen-label-label"
           gap={1}
           flexDirection="row"
@@ -131,8 +131,8 @@ const LabelBase = ({
               </SvgIcon>
             </Tooltip>
           )}
-        </Stack>
-        <Stack
+        </StackMui>
+        <StackMui
           flexDirection="row"
           overflow="hidden"
           whiteSpace="nowrap"
@@ -145,9 +145,9 @@ const LabelBase = ({
           justifyContent={orientation === 'vertical' ? 'start' : 'end'}
         >
           {children}
-        </Stack>
-      </Stack>
-    </Stack>
+        </StackMui>
+      </StackMui>
+    </StackMui>
   );
 };
 

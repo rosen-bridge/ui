@@ -2,7 +2,7 @@ import { HTMLAttributes, useCallback, useState } from 'react';
 
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, Stack, SvgIcon, Tooltip } from '../../base';
+import { IconButton, Skeleton, StackMui, SvgIcon, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
@@ -58,7 +58,7 @@ const IdentifierBase = ({
   const handleClose = useCallback(() => setOpen(false), []);
 
   return (
-    <Stack
+    <StackMui
       direction="row"
       alignItems="center"
       display="flex"
@@ -70,7 +70,7 @@ const IdentifierBase = ({
       {!loading && (
         <>
           <Tooltip title={value}>
-            <Stack
+            <StackMui
               direction="row"
               alignItems="center"
               style={{
@@ -94,9 +94,9 @@ const IdentifierBase = ({
               <span style={{ flexShrink: 0 }}>
                 {value.slice(-trailingLength)}
               </span>
-            </Stack>
+            </StackMui>
           </Tooltip>
-          <Stack direction="row" alignItems="center">
+          <StackMui direction="row" alignItems="center">
             {!!href && (
               <IconButton target="_blank" size="small" href={href}>
                 <SvgIcon fontSize="small">
@@ -119,10 +119,10 @@ const IdentifierBase = ({
                 />
               </>
             )}
-          </Stack>
+          </StackMui>
         </>
       )}
-    </Stack>
+    </StackMui>
   );
 };
 

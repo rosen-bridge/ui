@@ -7,7 +7,7 @@ import {
   Stepper as StepperMui,
 } from '@mui/material';
 
-import { Box, Skeleton, Stack, Typography } from '../../base';
+import { Box, Skeleton, StackMui, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 import { ProcessIcon } from './ProcessIcon';
 import { ProcessLabel } from './ProcessLabel';
@@ -200,7 +200,7 @@ const ProcessTrackerBase = ({
           )}
           {/* Desktop */}
           {orientation === 'horizontal' && shouldShowSubStep(index) && (
-            <Stack
+            <StackMui
               direction="column"
               alignItems="center"
               justifyContent="center"
@@ -208,7 +208,7 @@ const ProcessTrackerBase = ({
               style={{ marginTop: '8px' }}
             >
               {step.sub && step.sub?.length > 0 && (
-                <Stack
+                <StackMui
                   direction="column"
                   spacing={2}
                   alignItems="center"
@@ -218,9 +218,9 @@ const ProcessTrackerBase = ({
                 >
                   <RenderDots />
                   <SubItem step={step} activeStep={activeIndex ?? 0} />
-                </Stack>
+                </StackMui>
               )}
-            </Stack>
+            </StackMui>
           )}
         </Step>
       ))}

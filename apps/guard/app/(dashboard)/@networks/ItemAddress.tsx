@@ -24,14 +24,7 @@ export type ItemAddressProps = {
 export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
   return (
     <div style={{ width: '100%' }}>
-      <Stack
-        gap={1}
-        fontSize="1.5rem"
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="start"
-        width="100%"
-      >
+      <Stack spacing={1} direction="row" align="center" justify="start">
         <SvgIcon
           sx={{
             color: (theme) =>

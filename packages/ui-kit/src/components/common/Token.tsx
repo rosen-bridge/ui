@@ -2,7 +2,7 @@ import React, { HTMLAttributes } from 'react';
 
 import { capitalize } from 'lodash-es';
 
-import { Typography, Stack, Skeleton } from '../base';
+import { Typography, StackMui, Skeleton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 
@@ -28,7 +28,7 @@ export type TokenProps = HTMLAttributes<HTMLDivElement> & {
 
 const Loading = ({ reverse }: TokenProps) => {
   return (
-    <Stack
+    <StackMui
       alignItems="center"
       flexDirection={!reverse ? 'row' : 'row-reverse'}
       fontSize="inherit"
@@ -36,7 +36,7 @@ const Loading = ({ reverse }: TokenProps) => {
     >
       <Skeleton width="2em" height="2em" variant="circular" />
       <Skeleton width={80} height={14} variant="rounded" />
-    </Stack>
+    </StackMui>
   );
 };
 
@@ -53,7 +53,7 @@ const TokenBase = ({ loading, name, reverse }: TokenProps) => {
   }
 
   return (
-    <Stack
+    <StackMui
       component="div"
       alignItems="center"
       flexDirection={!reverse ? 'row' : 'row-reverse'}
@@ -72,10 +72,10 @@ const TokenBase = ({ loading, name, reverse }: TokenProps) => {
         {capitalize(name).slice(0, 1)}
       </Avatar>
 
-      <Stack flexDirection="column" alignItems="start">
+      <StackMui flexDirection="column" alignItems="start">
         <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
-      </Stack>
-    </Stack>
+      </StackMui>
+    </StackMui>
   );
 };
 

@@ -66,7 +66,12 @@ export const BridgeForm = () => {
     const network = sources.find((network) => network.name === value)!;
     const Logo = network.logo;
     return (
-      <Stack flexDirection="row" alignItems="center" marginTop="-1px" gap={1}>
+      <Stack
+        direction="row"
+        align="center"
+        style={{ marginTop: '-1px' }}
+        spacing={1}
+      >
         <SvgIcon>
           <Logo />
         </SvgIcon>
@@ -262,7 +267,7 @@ export const BridgeForm = () => {
           endAdornment: (
             <InputAdornment position="end">
               {isValidating ? (
-                <Stack flexDirection="row">
+                <Stack direction="row">
                   <div style={{ height: '40px' }}>
                     <DividerNew
                       variant="fullWidth"

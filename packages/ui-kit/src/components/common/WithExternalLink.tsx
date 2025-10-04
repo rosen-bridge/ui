@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { Link, Stack, SvgIcon } from '../base';
+import { Link, StackMui, SvgIcon } from '../base';
 
 export interface WithExternalLinkProps {
   children: ReactNode;
@@ -17,7 +17,7 @@ export interface WithExternalLinkProps {
  */
 export const WithExternalLink = ({ children, url }: WithExternalLinkProps) => {
   return (
-    <Stack alignItems="center" direction="row" gap={1}>
+    <StackMui alignItems="center" direction="row" gap={1}>
       <span>{children}</span>
       {url && (
         <Link
@@ -30,6 +30,6 @@ export const WithExternalLink = ({ children, url }: WithExternalLinkProps) => {
           </SvgIcon>
         </Link>
       )}
-    </Stack>
+    </StackMui>
   );
 };

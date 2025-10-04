@@ -25,7 +25,7 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
-  Stack,
+  StackMui,
   SvgIcon,
   Typography,
 } from '../base';
@@ -145,7 +145,7 @@ export const SortField = ({
               }
               onClick={handleMenuOpen}
             >
-              <Stack alignItems="start">
+              <StackMui alignItems="start">
                 <Typography
                   hidden={dense}
                   variant="caption"
@@ -157,7 +157,7 @@ export const SortField = ({
                 <Typography variant="body1" lineHeight="24px">
                   {current?.label}
                 </Typography>
-              </Stack>
+              </StackMui>
             </Button>
           )}
           <Menu

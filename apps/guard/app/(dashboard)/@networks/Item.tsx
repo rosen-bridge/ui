@@ -28,12 +28,7 @@ export const Item = ({ cold, hot, loading, network }: ItemProps) => {
   return (
     <Card backgroundColor="background.paper" style={{ userSelect: 'none' }}>
       <CardBody>
-        <Stack
-          flexDirection="column"
-          alignItems="stretch"
-          justifyContent="start"
-          gap={1}
-        >
+        <Stack align="stretch" justify="start" spacing={1}>
           {error && (
             <Typography color="error">
               Some required data is missing.

@@ -30,15 +30,15 @@ export const UseAllAmount = ({
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      justifyContent="space-between"
-      flexWrap="nowrap"
-      width="auto"
-      gap={1.5}
+      align="center"
+      justify="between"
+      wrap
+      style={{ width: 'auto' }}
+      spacing={1.5}
     >
       <DividerNew orientation="vertical" style={{ alignSelf: 'stretch' }} />
 
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" align="center">
         {loading && (
           <CircularProgress
             size={24}

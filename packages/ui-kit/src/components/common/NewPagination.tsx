@@ -10,7 +10,7 @@ import {
   Menu,
   SvgIcon,
   DividerMui,
-  Stack,
+  StackMui,
   Button,
   ListSubheader,
 } from '../base';
@@ -164,7 +164,7 @@ export const NewPagination = ({
         />
       </Box>
 
-      <Stack
+      <StackMui
         flexDirection="row"
         justifyContent="space-between"
         alignItems="center"
@@ -181,19 +181,19 @@ export const NewPagination = ({
             },
           }}
         />
-        <Stack
+        <StackMui
           flexDirection="row"
           alignItems="center"
           justifyContent="space-evenly"
         >
-          <Stack alignItems="center">
+          <StackMui alignItems="center">
             <Button
               disabled={disabled}
               size="small"
               sx={{ padding: 1, textTransform: 'none' }}
               onClick={handleMenuOpen}
             >
-              <Stack
+              <StackMui
                 flexDirection="row"
                 justifyContent="center"
                 alignItems="center"
@@ -239,7 +239,7 @@ export const NewPagination = ({
                 >
                   <AlignCenter />
                 </SvgIcon>
-              </Stack>
+              </StackMui>
             </Button>
 
             <Menu
@@ -274,9 +274,9 @@ export const NewPagination = ({
                 </MenuItem>
               ))}
             </Menu>
-          </Stack>
-        </Stack>
-      </Stack>
+          </StackMui>
+        </StackMui>
+      </StackMui>
     </Box>
   );
 };

@@ -70,10 +70,10 @@ const Health = () => {
     >
       <CardBody>
         <Stack
-          alignItems="center"
-          gap={1}
-          flexDirection={isSmall ? 'row' : 'column'}
-          height={isSmall ? undefined : '230px'}
+          align="center"
+          spacing={1}
+          direction={isSmall ? 'row' : 'column'}
+          style={{ height: isSmall ? undefined : '230px' }}
         >
           {!isSmall && <Box flexGrow={1} />}
 

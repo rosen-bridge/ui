@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StepLabel } from '@mui/material';
 
-import { Stack, Tooltip, Typography } from '../../base';
+import { StackMui, Tooltip, Typography } from '../../base';
 import { ProcessTrackerSubItem } from './types';
 
 type LabelProps = {
@@ -119,14 +119,14 @@ export const ProcessLabel = ({ icon, info, step, onClick }: LabelProps) => {
         },
       }}
       title={
-        <Stack sx={{ cursor: 'text' }}>
+        <StackMui sx={{ cursor: 'text' }}>
           <Typography textAlign="center" color="success.main" variant="body2">
             {info.subTittle}
           </Typography>
           <Typography color="success.dark" variant="body2">
             {info.description}
           </Typography>
-        </Stack>
+        </StackMui>
       }
     >
       {content}

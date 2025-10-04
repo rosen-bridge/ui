@@ -9,7 +9,7 @@ import {
   DialogContent,
   DialogContentText,
   EnhancedDialogTitle,
-  Stack as StackMUI,
+  Stack,
   Tooltip,
   Box,
   Typography,
@@ -32,7 +32,6 @@ interface ChooseWalletModalProps {
   wallets: Wallet[];
 }
 
-const Stack = InjectOverrides(StackMUI);
 /**
  * modal to allow user to choose a wallet
  *
@@ -93,13 +92,12 @@ export const ChooseWalletModal = ({
           </Alert>
         )}
         <Stack
-          display="flex"
-          flexDirection="row"
-          justifyContent="center"
-          flexWrap="wrap"
-          alignItems="flex-start"
-          gap={2}
-          width="100%"
+          direction="row"
+          justify="center"
+          wrap
+          align="start"
+          spacing={2}
+          style={{ width: '100%' }}
         >
           {wallets.map((wallet) => {
             const Icon = wallet.iconReact;
@@ -132,18 +130,17 @@ export const ChooseWalletModal = ({
                     <Stack
                       overrides={{
                         mobile: {
-                          flexDirection: 'row',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          marginBottom: '8px',
+                          direction: 'row',
+                          justify: 'between',
+                          align: 'center',
                         },
                         tablet: {
-                          flexDirection: 'column',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
+                          direction: 'column',
+                          justify: 'between',
+                          align: 'center',
                         },
                       }}
-                      gap={2}
+                      spacing={2}
                     >
                       <WalletIconWrapper
                         size="56px"

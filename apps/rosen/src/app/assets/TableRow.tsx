@@ -341,11 +341,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                               />
                             </TableCell>
                             <TableCell>
-                              <Stack
-                                alignItems="center"
-                                direction="row"
-                                gap={1}
-                              >
+                              <Stack align="center" direction="row" spacing={1}>
                                 <Id
                                   id={item.birdgedTokenId}
                                   href={tokenUrl || undefined}

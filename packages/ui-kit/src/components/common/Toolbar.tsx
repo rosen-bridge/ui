@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from '../base';
+import { StackMui } from '../base';
 
 export interface ToolbarProps {
   children?: React.ReactNode;
@@ -8,8 +8,8 @@ export interface ToolbarProps {
 
 export const Toolbar: React.FC<ToolbarProps> = ({ children }) => {
   return (
-    <Stack direction="row" spacing={1}>
+    <StackMui direction="row" spacing={1}>
       {children}
-    </Stack>
+    </StackMui>
   );
 };

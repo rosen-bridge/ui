@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { Check, Hourglass } from '@rosen-bridge/icons';
 
-import { Stack, SvgIcon, Typography } from '../../base';
+import { StackMui, SvgIcon, Typography } from '../../base';
 import { ProcessTrackerStateIcon } from './types';
 
 /**
@@ -70,12 +70,12 @@ export const ProcessIcon = ({
   }
 
   return (
-    <Stack
+    <StackMui
       sx={{ ...baseStyle, backgroundColor: backgroundColors[state] }}
       justifyContent="center"
       alignItems="center"
     >
       {iconContent}
-    </Stack>
+    </StackMui>
   );
 };

@@ -1,8 +1,8 @@
-import { Stack, Typography } from '../../base';
+import { StackMui, Typography } from '../../base';
 
 export const UnderDevelop = () => {
   return (
-    <Stack direction="column" textAlign="center" spacing={1}>
+    <StackMui direction="column" textAlign="center" spacing={1}>
       <svg
         width="294"
         height="286"
@@ -71,6 +71,6 @@ export const UnderDevelop = () => {
       <Typography variant="h2" color="primary.main" sx={{ opacity: 0.5 }}>
         Page Is Under Develop
       </Typography>
-    </Stack>
+    </StackMui>
   );
 };

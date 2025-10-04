@@ -1,8 +1,8 @@
-import { Stack, Typography } from '../../base';
+import { StackMui, Typography } from '../../base';
 
 export const NotFound = () => {
   return (
-    <Stack direction="column" textAlign="center" spacing={1}>
+    <StackMui direction="column" textAlign="center" spacing={1}>
       <svg
         width="241"
         height="264"
@@ -73,6 +73,6 @@ export const NotFound = () => {
       <Typography variant="h2" color="primary.main" sx={{ opacity: 0.5 }}>
         Page not Found
       </Typography>
-    </Stack>
+    </StackMui>
   );
 };
