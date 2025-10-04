@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { Link, StackMui, SvgIcon } from '../base';
+import { Link, StackMui, SvgIconMui } from '../base';
 
 export interface WithExternalLinkProps {
   children: ReactNode;
@@ -25,9 +25,9 @@ export const WithExternalLink = ({ children, url }: WithExternalLinkProps) => {
           target="_blank"
           onClick={(event) => event.stopPropagation()}
         >
-          <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
+          <SvgIconMui fontSize="inherit" sx={{ display: 'block' }}>
             <ExternalLinkAlt />
-          </SvgIcon>
+          </SvgIconMui>
         </Link>
       )}
     </StackMui>

@@ -4,10 +4,10 @@ import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   Box,
   CircularProgress,
-  SvgIcon,
   InfoWidgetCardBase,
   Tooltip,
   Typography,
+  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 
@@ -19,6 +19,7 @@ interface InfoWidgetCardProps {
   value: ReactNode;
   warning?: string;
 }
+
 /**
  * render an info widget card containing data
  *

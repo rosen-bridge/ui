@@ -11,7 +11,7 @@ import moment from 'moment';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, LoadingButton, SvgIcon, Tooltip, Typography } from '../base';
+import { Alert, LoadingButton, SvgIconMui, Tooltip, Typography } from '../base';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;
@@ -90,17 +90,17 @@ export const HealthParamCard = ({
             {lastCheck ? status : 'Unknown'}
             {lastTrialErrorTime && (
               <Tooltip title={lastTrialErrorMessage}>
-                <SvgIcon color="warning">
+                <SvgIconMui color="warning">
                   <ExclamationTriangle />
-                </SvgIcon>
+                </SvgIconMui>
               </Tooltip>
             )}
           </>
         ),
         avatar: (
-          <SvgIcon>
+          <SvgIconMui>
             <Icon />
-          </SvgIcon>
+          </SvgIconMui>
         ),
         sx: {
           'color': colors.cardColor,

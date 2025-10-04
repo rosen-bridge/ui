@@ -26,7 +26,7 @@ import {
   Menu,
   MenuItem,
   StackMui,
-  SvgIcon,
+  SvgIconMui,
   Typography,
 } from '../base';
 import { DividerNew } from './DividerNew';
@@ -119,9 +119,9 @@ export const SortField = ({
         <Grid item flexGrow={1}>
           {dense ? (
             <IconButton disabled={disabled} onClick={handleMenuOpen}>
-              <SvgIcon>
+              <SvgIconMui>
                 <ListUiAlt />
-              </SvgIcon>
+              </SvgIconMui>
             </IconButton>
           ) : (
             <Button
@@ -135,13 +135,13 @@ export const SortField = ({
                 padding: '2px 8px',
               }}
               endIcon={
-                <SvgIcon
+                <SvgIconMui
                   style={{
                     rotate: open ? '180deg' : '0deg',
                   }}
                 >
                   <CaretDown />
-                </SvgIcon>
+                </SvgIconMui>
               }
               onClick={handleMenuOpen}
             >
@@ -188,7 +188,7 @@ export const SortField = ({
                 onClick={() => handleSortChange(item)}
               >
                 <ListItemText> {item.label}</ListItemText>
-                <SvgIcon
+                <SvgIconMui
                   style={{
                     display:
                       dense && current && item.value === current.value
@@ -197,7 +197,7 @@ export const SortField = ({
                   }}
                 >
                   <Check />
-                </SvgIcon>
+                </SvgIconMui>
               </MenuItem>
             ))}
           </Menu>
@@ -207,9 +207,9 @@ export const SortField = ({
         </Grid>
         <Grid item>
           <IconButton disabled={disabled} onClick={handleSortOrderChange}>
-            <SvgIcon>
+            <SvgIconMui>
               {value?.order == 'ASC' ? <SortAmountDown /> : <SortAmountUp />}
-            </SvgIcon>
+            </SvgIconMui>
           </IconButton>
         </Grid>
       </Grid>

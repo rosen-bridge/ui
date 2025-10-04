@@ -2,7 +2,7 @@ import { HTMLAttributes, useCallback, useState } from 'react';
 
 import { Check, Copy, Times } from '@rosen-bridge/icons';
 
-import { IconButton, SvgIcon, Tooltip } from '../../base';
+import { IconButton, SvgIconMui, Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 /**
@@ -57,7 +57,7 @@ const CopyButtonBase = ({
   return (
     <Tooltip title="Copy" {...props}>
       <IconButton size={size} onClick={handleCopy}>
-        <SvgIcon fontSize={size}>{getIcon()}</SvgIcon>
+        <SvgIconMui fontSize={size}>{getIcon()}</SvgIconMui>
       </IconButton>
     </Tooltip>
   );

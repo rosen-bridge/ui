@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Grid, Row } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { SvgIcon } from '../base';
+import { SvgIconMui } from '../base';
 
 export type ViewType = 'grid' | 'row';
 
@@ -71,18 +71,18 @@ export const ViewToggle = ({ onChangeView }: ViewToggleProps) => {
         active={activeView === 'row'}
         onClick={() => handleClick('row')}
       >
-        <SvgIcon>
+        <SvgIconMui>
           <Row />
-        </SvgIcon>
+        </SvgIconMui>
       </TabWrapper>
 
       <TabWrapper
         active={activeView === 'grid'}
         onClick={() => handleClick('grid')}
       >
-        <SvgIcon>
+        <SvgIconMui>
           <Grid />
-        </SvgIcon>
+        </SvgIconMui>
       </TabWrapper>
     </ViewToggleRoot>
   );

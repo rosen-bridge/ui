@@ -2,7 +2,13 @@ import { HTMLAttributes, useCallback, useState } from 'react';
 
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, StackMui, SvgIcon, Tooltip } from '../../base';
+import {
+  IconButton,
+  Skeleton,
+  StackMui,
+  SvgIconMui,
+  Tooltip,
+} from '../../base';
 import { CopyButton } from '../button/CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
@@ -99,18 +105,18 @@ const IdentifierBase = ({
           <StackMui direction="row" alignItems="center">
             {!!href && (
               <IconButton target="_blank" size="small" href={href}>
-                <SvgIcon fontSize="small">
+                <SvgIconMui fontSize="small">
                   <ExternalLinkAlt />
-                </SvgIcon>
+                </SvgIconMui>
               </IconButton>
             )}
             {copyable && <CopyButton value={value} size="small" />}
             {qrcode && (
               <>
                 <IconButton size="small" onClick={handleOpen}>
-                  <SvgIcon fontSize="small">
+                  <SvgIconMui fontSize="small">
                     <Qrcode />
-                  </SvgIcon>
+                  </SvgIconMui>
                 </IconButton>
                 <QrCodeModal
                   open={open}

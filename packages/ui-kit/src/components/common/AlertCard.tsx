@@ -2,7 +2,7 @@ import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
 import { Times } from '@rosen-bridge/icons';
 
-import { Alert, AlertProps, Collapse, IconButton, SvgIcon } from '../base';
+import { Alert, AlertProps, Collapse, IconButton, SvgIconMui } from '../base';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;
@@ -30,9 +30,9 @@ export const AlertCard = ({ severity, onClose, children }: AlertCardProps) => {
               className="close-button"
               onClick={onClose}
             >
-              <SvgIcon>
+              <SvgIconMui>
                 <Times />
-              </SvgIcon>
+              </SvgIconMui>
             </IconButton>
           )
         }

@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { Check, Hourglass } from '@rosen-bridge/icons';
 
-import { StackMui, SvgIcon, Typography } from '../../base';
+import { StackMui, SvgIconMui, Typography } from '../../base';
 import { ProcessTrackerStateIcon } from './types';
 
 /**
@@ -48,16 +48,16 @@ export const ProcessIcon = ({
   switch (state) {
     case 'done':
       iconContent = (
-        <SvgIcon>
+        <SvgIconMui>
           <Check fontSize="small" color="#fff" />
-        </SvgIcon>
+        </SvgIconMui>
       );
       break;
     case 'pending':
       iconContent = (
-        <SvgIcon>
+        <SvgIconMui>
           <Hourglass fontSize="small" color="#fff" />
-        </SvgIcon>
+        </SvgIconMui>
       );
       break;
     case 'idle':

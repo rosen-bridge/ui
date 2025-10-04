@@ -4,7 +4,7 @@ import * as Icons from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
 import { styled } from '../../styling';
-import { SvgIcon, Typography, Skeleton } from '../base';
+import { SvgIconMui, Typography, Skeleton } from '../base';
 
 /**
  * Props for the Chip component.
@@ -94,14 +94,14 @@ export const Chip = ({
     if (isIconKey(icon)) {
       const IconComponent = Icons[icon];
       return (
-        <SvgIcon sx={{ mr: 0.5 }}>
+        <SvgIconMui sx={{ mr: 0.5 }}>
           <IconComponent />
-        </SvgIcon>
+        </SvgIconMui>
       );
     }
 
     if (React.isValidElement(icon)) {
-      return <SvgIcon sx={{ mr: 0.5 }}>{icon}</SvgIcon>;
+      return <SvgIconMui sx={{ mr: 0.5 }}>{icon}</SvgIconMui>;
     }
 
     return null;

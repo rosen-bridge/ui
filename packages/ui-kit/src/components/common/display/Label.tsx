@@ -3,7 +3,7 @@ import { HTMLAttributes } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
-import { StackMui, SvgIcon, Tooltip } from '../../base';
+import { StackMui, SvgIconMui, Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 /**
@@ -116,7 +116,7 @@ const LabelBase = ({
           </Typography>
           {info && (
             <Tooltip arrow title={info}>
-              <SvgIcon
+              <SvgIconMui
                 sx={{
                   width: '16px',
                   height: '16px',
@@ -128,7 +128,7 @@ const LabelBase = ({
                 }}
               >
                 <ExclamationCircle />
-              </SvgIcon>
+              </SvgIconMui>
             </Tooltip>
           )}
         </StackMui>

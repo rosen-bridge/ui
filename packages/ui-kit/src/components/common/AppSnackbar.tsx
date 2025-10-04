@@ -4,7 +4,7 @@ import { FileCopyAlt } from '@rosen-bridge/icons';
 
 import { useSnackbar } from '../../hooks';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
-import { Snackbar, Alert, IconButton, SvgIcon } from '../base';
+import { Snackbar, Alert, IconButton, SvgIconMui } from '../base';
 
 /**
  * global snackbar component that connects to snackbar context and shows and
@@ -45,9 +45,9 @@ export const AppSnackbar = () => {
               style={{ paddingTop: '5px', paddingBottom: '5px' }}
               onClick={handleCopyMore}
             >
-              <SvgIcon>
+              <SvgIconMui>
                 <FileCopyAlt />
-              </SvgIcon>
+              </SvgIconMui>
             </IconButton>
           )
         }

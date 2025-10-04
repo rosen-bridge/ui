@@ -1,6 +1,6 @@
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { Typography, Tooltip, SvgIcon } from '../base';
+import { Typography, Tooltip, SvgIconMui } from '../base';
 
 export interface IdProps {
   id: string;
@@ -38,7 +38,7 @@ export const Id = ({ id, indicator, href }: IdProps) => {
           <Typography noWrap variant="caption" component="span">
             {text}
           </Typography>
-          <SvgIcon
+          <SvgIconMui
             fontSize="inherit"
             sx={{
               display: 'block',
@@ -46,7 +46,7 @@ export const Id = ({ id, indicator, href }: IdProps) => {
             }}
           >
             <ExternalLinkAlt />
-          </SvgIcon>
+          </SvgIconMui>
         </a>
       ) : (
         <Typography noWrap variant="caption">

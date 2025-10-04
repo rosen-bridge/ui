@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { useIsMobile, isLegacyTheme } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
-import { Badge, Button, SvgIcon } from '../../base';
+import { Badge, Button, SvgIconMui } from '../../base';
 import { useNavigationBar } from './useNavigationBar';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
@@ -118,7 +118,7 @@ export const NavigationButton = ({
 
   const isMobile = useIsMobile();
 
-  let startIcon = <SvgIcon>{icon}</SvgIcon>;
+  let startIcon = <SvgIconMui>{icon}</SvgIconMui>;
 
   if (badge)
     startIcon = (

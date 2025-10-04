@@ -51,6 +51,7 @@ export * from './InjectOverrides';
 export * from './DateTime';
 export * from './processTracker';
 export * from './Text';
+export * from './SvgIcon';
 export * from './Stack';
 export * from './DividerNew';
 export * from './IconWarp';

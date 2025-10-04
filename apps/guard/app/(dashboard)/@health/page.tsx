@@ -40,7 +40,7 @@ const VARIANTS = {
     status: 'UNSTABLE',
     Icon: ExclamationOctagon,
   },
-};
+} as const;
 
 type StatusType = keyof typeof VARIANTS;
 
@@ -80,13 +80,7 @@ const Health = () => {
           {isLoading ? (
             <Skeleton variant="circular" width={32} height={32} />
           ) : (
-            <SvgIcon
-              sx={{
-                width: 32,
-                height: 32,
-                color: `${variant.color}.main`,
-              }}
-            >
+            <SvgIcon size="32px" color={variant.color}>
               <variant.Icon />
             </SvgIcon>
           )}
@@ -120,11 +114,7 @@ const Health = () => {
             )}
             {!isLoading && trialErrors && (
               <Tooltip title={trialErrors}>
-                <SvgIcon
-                  sx={{
-                    color: `${variant.color}.dark`,
-                  }}
-                >
+                <SvgIcon color={`${variant.color}.dark`}>
                   <ExclamationTriangleFill />
                 </SvgIcon>
               </Tooltip>
@@ -144,14 +134,7 @@ const Health = () => {
         {isLoading ? (
           <Skeleton variant="circular" width={184} height={184} />
         ) : (
-          <SvgIcon
-            opacity="0.2"
-            sx={{
-              width: 184,
-              height: 184,
-              color: `${variant.color}.main`,
-            }}
-          >
+          <SvgIcon size={'184px'} opacity="0.2" color={`${variant.color}.dark`}>
             <variant.Icon />
           </SvgIcon>
         )}

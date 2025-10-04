@@ -12,7 +12,7 @@ import { Card } from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
-import { IconButton, SvgIcon } from '../../base';
+import { IconButton, SvgIconMui } from '../../base';
 import { DividerNew } from '../DividerNew';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
@@ -336,9 +336,9 @@ export const SmartSearch = ({
         ref={$search}
         onClick={() => setFilters(selected)}
       >
-        <SvgIcon>
+        <SvgIconMui>
           <Search />
-        </SvgIcon>
+        </SvgIconMui>
       </IconButton>
     </Root>
   );
