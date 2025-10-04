@@ -1,4 +1,4 @@
-import { JSX, MouseEvent, useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 
 import { Wallet as WalletIcon } from '@rosen-bridge/icons';
 import {
@@ -11,10 +11,8 @@ import {
   EnhancedDialogTitle,
   Stack,
   Tooltip,
-  Box,
-  Typography,
   EnhancedDialog,
-  InjectOverrides,
+  StackMui,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -91,14 +89,7 @@ export const ChooseWalletModal = ({
             source address.
           </Alert>
         )}
-        <Stack
-          direction="row"
-          justify="center"
-          wrap
-          align="start"
-          spacing={2}
-          style={{ width: '100%' }}
-        >
+        <Stack justify="center" spacing={2} direction="row" wrap>
           {wallets.map((wallet) => {
             const Icon = wallet.iconReact;
             const isConnected = selectedWallet?.name === wallet.name;
@@ -114,65 +105,30 @@ export const ChooseWalletModal = ({
             };
 
             return (
-              <Card
-                style={{ width: '100%' }}
-                overrides={{
-                  tablet: { style: { width: 'fit-content' } },
-                }}
-                key={wallet.label}
-                backgroundColor="background.paper"
-              >
-                <CardBody
-                  style={{ padding: '0' }}
-                  overrides={{ tablet: { style: { padding: '16px' } } }}
-                >
-                  <Tooltip title={'wallet.name'}>
-                    <Stack
-                      overrides={{
-                        mobile: {
-                          direction: 'row',
-                          justify: 'between',
-                          align: 'center',
-                        },
-                        tablet: {
-                          direction: 'column',
-                          justify: 'between',
-                          align: 'center',
+              <Card key={wallet.label} backgroundColor="background.paper">
+                <CardBody>
+                  <Tooltip title={wallet.name}>
+                    <StackMui
+                      gap={3}
+                      sx={{
+                        svg: {
+                          height: (theme) => theme.spacing(13),
+                          width: (theme) => theme.spacing(13),
                         },
                       }}
-                      spacing={2}
                     >
-                      <WalletIconWrapper
-                        size="56px"
-                        overrides={{ tablet: { size: '120px' } }}
-                      >
-                        <Icon />
-                      </WalletIconWrapper>
-                      <Box
-                        style={{ display: 'flex', alignItems: 'center' }}
-                        overrides={{
-                          tablet: {
-                            style: {
-                              display: 'none',
-                            },
-                          },
-                        }}
-                      >
-                        <Typography variant="body1" noWrap>
-                          {wallet.name}
-                        </Typography>
-                      </Box>
+                      <Icon />
                       <Button
                         variant="contained"
                         size="small"
-                        style={{ width: 'fit-content', height: 'auto' }}
+                        sx={{ width: '100%' }}
                         disabled={!wallet.isAvailable()}
                         color={isConnected ? 'inherit' : 'primary'}
                         onClick={handleClick}
                       >
                         {isConnected ? 'Disconnect' : 'Connect'}
                       </Button>
-                    </Stack>
+                    </StackMui>
                   </Tooltip>
                 </CardBody>
               </Card>
@@ -183,21 +139,3 @@ export const ChooseWalletModal = ({
     </EnhancedDialog>
   );
 };
-//todo: fix
-const WalletIconWrapper = InjectOverrides(
-  ({ children, size }: { children: JSX.Element; size: string | number }) => {
-    return (
-      <div
-        style={{
-          width: size,
-          height: size,
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {children}
-      </div>
-    );
-  },
-);

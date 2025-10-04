@@ -303,7 +303,7 @@ export const BridgeForm = () => {
                     }
                   }}
                 >
-                  <SvgIcon sx={{ opacity: '0.6' }}>
+                  <SvgIcon opacity={0.6}>
                     <ClipboardNotes />
                   </SvgIcon>
                 </IconButton>
