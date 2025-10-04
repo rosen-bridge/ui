@@ -33,7 +33,7 @@
     "@rosen-bridge/cardano-observation-extractor": "^0.1.2",
     "@rosen-bridge/cardano-scanner": "^0.2.0",
     "@rosen-bridge/config": "^1.0.0",
-    "@rosen-bridge/discord-notification": "^0.1.3",
+    "@rosen-bridge/discord-notification": "^0.2.0",
     "@rosen-bridge/ergo-observation-extractor": "^0.1.2",
     "@rosen-bridge/ergo-scanner": "^0.1.1",
     "@rosen-bridge/evm-observation-extractor": "^5.2.2",
