@@ -8,6 +8,7 @@ import {
 } from 'react';
 
 import { Card } from '@mui/material';
+import { SvgIcon } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -27,7 +28,6 @@ import {
   Menu,
   MenuItem,
   Stack,
-  SvgIcon,
   Typography,
 } from '../base';
 

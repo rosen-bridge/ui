@@ -1,8 +1,9 @@
 import { ReactNode } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { Link, Stack, SvgIcon } from '../base';
+import { Link, Stack } from '../base';
 
 export interface WithExternalLinkProps {
   children: ReactNode;

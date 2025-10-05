@@ -1,10 +1,11 @@
 import React, { ReactNode, useMemo } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import * as Icons from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
 import { styled } from '../../styling';
-import { SvgIcon, Typography, Skeleton } from '../base';
+import { Typography, Skeleton } from '../base';
 
 /**
  * Props for the Chip component.
