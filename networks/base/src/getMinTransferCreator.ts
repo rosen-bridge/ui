@@ -1,13 +1,10 @@
 import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
-import { calculateFeeCreator } from './calculateFeeCreator';
+import { CalculateFee } from './calculateFeeCreator';
 
 export const getMinTransferCreator =
-  (
-    sourceChain: Network,
-    calculateFee: ReturnType<typeof calculateFeeCreator>,
-  ) =>
+  (sourceChain: Network, calculateFee: CalculateFee) =>
   (getTokenMap: () => Promise<TokenMap>) =>
   async (
     token: RosenChainToken,

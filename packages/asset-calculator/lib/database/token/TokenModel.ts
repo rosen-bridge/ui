@@ -1,6 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource, In, Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { DataSource, In, Repository } from 'typeorm';
 
 import { TokenEntity } from './TokenEntity';
 

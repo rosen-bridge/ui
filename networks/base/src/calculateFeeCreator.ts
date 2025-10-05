@@ -1,5 +1,19 @@
-import { ErgoNetworkType, MinimumFeeBox } from '@rosen-bridge/minimum-fee';
+import {
+  ChainMinimumFee,
+  ErgoNetworkType,
+  MinimumFeeBox,
+} from '@rosen-bridge/minimum-fee';
 import { Network } from '@rosen-ui/types';
+
+export type CalculateFee = (
+  targetNetwork: Network,
+  tokenId: string,
+  nextHeightInterval: number,
+  minimumFeeNFT: string,
+) => Promise<{
+  fees: ChainMinimumFee;
+  nextFees: ChainMinimumFee;
+}>;
 
 export const calculateFeeCreator = (
   sourceNetwork: Network,

@@ -1,7 +1,7 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { Network } from '@rosen-ui/types';
-import { DataSource, Repository } from 'typeorm';
 
 import { BridgedAssetEntity } from './BridgedAssetEntity';
 
