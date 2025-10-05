@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Card, Stack } from '@mui/material';
+import { Card, SvgIcon, Stack } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -26,7 +26,6 @@ import {
   ListSubheader,
   Menu,
   MenuItem,
-  SvgIcon,
   Typography,
 } from '../base';
 

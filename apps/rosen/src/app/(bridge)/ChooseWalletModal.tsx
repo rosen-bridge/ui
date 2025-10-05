@@ -13,6 +13,7 @@ import {
   Grid,
   Tooltip,
   Stack,
+  Box,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -104,7 +105,14 @@ export const ChooseWalletModal = ({
                 <CardBody>
                   <Tooltip title={wallet.name}>
                     <Stack spacing={3}>
-                      <Icon />
+                      <Box
+                        sx={{
+                          height: (theme) => theme.spacing(13),
+                          width: (theme) => theme.spacing(13),
+                        }}
+                      >
+                        <Icon />
+                      </Box>
                       <Button
                         variant="contained"
                         size="small"

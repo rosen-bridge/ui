@@ -1,8 +1,9 @@
 import { HTMLAttributes } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 
-import { Box, Skeleton, SvgIcon, Typography } from '../../base';
+import { Box, Skeleton, Typography } from '../../base';
 
 export type AmountProps = {
   value?: bigint | number | string;

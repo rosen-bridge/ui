@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
 
-import { Stack } from '@mui/material';
+import { Stack, SvgIcon } from '@mui/material';
 import { Check, Hourglass } from '@rosen-bridge/icons';
 
-import { SvgIcon, Typography } from '../../base';
+import { Typography } from '../../base';
 import { ProcessTrackerStateIcon } from './types';
 
 /**
