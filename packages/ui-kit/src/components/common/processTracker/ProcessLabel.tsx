@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { StepLabel } from '@mui/material';
+import { Stack, StepLabel } from '@mui/material';
 
-import { Stack, Tooltip, Typography } from '../../base';
+import { Tooltip, Typography } from '../../base';
 import { ProcessTrackerSubItem } from './types';
 
 type LabelProps = {

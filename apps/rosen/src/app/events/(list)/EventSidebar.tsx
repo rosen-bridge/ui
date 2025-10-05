@@ -142,7 +142,7 @@ const Content = ({ value }: EventSidebarProps) => {
       <Label label="Reports">{value.WIDsCount ?? 'N/C'}</Label>
       <Label label="Height">{value.height}</Label>
       {isTablet && (
-        <Stack alignItems="end">
+        <Stack align="end">
           <Button
             variant="text"
             size="medium"
