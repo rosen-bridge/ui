@@ -1,8 +1,9 @@
 import React, { HTMLAttributes } from 'react';
 
+import { Stack } from '@mui/material';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Stack, Skeleton } from '../base';
+import { Typography, Skeleton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 

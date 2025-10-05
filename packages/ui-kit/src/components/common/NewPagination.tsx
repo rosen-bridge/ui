@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import { Pagination } from '@mui/material';
+import { Pagination, Stack } from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
 import {
@@ -10,7 +10,6 @@ import {
   Menu,
   SvgIcon,
   Divider,
-  Stack,
   Button,
   ListSubheader,
 } from '../base';

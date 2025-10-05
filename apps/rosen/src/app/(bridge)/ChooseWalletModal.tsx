@@ -11,8 +11,8 @@ import {
   DialogContentText,
   EnhancedDialogTitle,
   Grid,
-  Stack,
   Tooltip,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -103,15 +103,7 @@ export const ChooseWalletModal = ({
               <Card key={wallet.label} backgroundColor="background.paper">
                 <CardBody>
                   <Tooltip title={wallet.name}>
-                    <Stack
-                      gap={3}
-                      sx={{
-                        svg: {
-                          height: (theme) => theme.spacing(13),
-                          width: (theme) => theme.spacing(13),
-                        },
-                      }}
-                    >
+                    <Stack spacing={3}>
                       <Icon />
                       <Button
                         variant="contained"

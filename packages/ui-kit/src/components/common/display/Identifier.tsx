@@ -1,8 +1,9 @@
 import { HTMLAttributes, useCallback, useState } from 'react';
 
+import { Stack } from '@mui/material';
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, Stack, SvgIcon, Tooltip } from '../../base';
+import { IconButton, Skeleton, SvgIcon, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';

@@ -1,9 +1,9 @@
 import { HTMLAttributes } from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Stack } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
-import { Stack, SvgIcon, Tooltip } from '../../base';
+import { SvgIcon, Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 /**
