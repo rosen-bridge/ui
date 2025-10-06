@@ -3,12 +3,12 @@ import { Breakpoint } from '@mui/material';
 import { useMediaQuery } from './useMediaQuery';
 import { useTheme } from './useTheme';
 
-export const useBreakpoint = (
-  breakpoint:
-    | Breakpoint
-    | `${Breakpoint}-${'up' | 'down' | 'not'}`
-    | `${Breakpoint}-to-${Breakpoint}`,
-) => {
+export type BreakpointQuery =
+  | Breakpoint
+  | `${Breakpoint}-${'up' | 'down' | 'not'}`
+  | `${Breakpoint}-to-${Breakpoint}`;
+
+export const useBreakpoint = (breakpoint: BreakpointQuery) => {
   const theme = useTheme();
 
   const keys = breakpoint.split('-');
