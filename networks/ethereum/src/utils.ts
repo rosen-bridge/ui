@@ -1,4 +1,5 @@
 import {
+  CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
@@ -9,7 +10,7 @@ export const getHeight = async (): Promise<number> => {
   return await getHeightCore(EvmChains.ETHEREUM);
 };
 
-export const calculateFee = calculateFeeCreator(
+export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS.ethereum.key,
   getHeight,
 );
