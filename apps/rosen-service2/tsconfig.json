@@ -9,6 +9,7 @@
   "include": ["src"],
   "references": [
     { "path": "../../packages/asset-calculator/" },
-    { "path": "../../packages/constants" }
+    { "path": "../../packages/constants" },
+    { "path": "../../packages/types" }
   ]
 }

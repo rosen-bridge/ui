@@ -12,13 +12,13 @@ import {
   EventTriggerEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
+
 import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
-  migrations as assetCalculatorMigrations,
-} from '@rosen-ui/asset-calculator';
-
+  migrations,
+} from '../src/database';
 import { configs } from './configs';
 
 export default new DataSource({
@@ -36,7 +36,7 @@ export default new DataSource({
     ...scannerMigrations.postgres,
     ...eventTriggerExtractorMigrations.postgres,
     ...observationExtractorMigrations.postgres,
-    ...assetCalculatorMigrations.postgres,
+    ...migrations.postgres,
   ],
   host: configs.db.host,
   port: configs.db.port,
