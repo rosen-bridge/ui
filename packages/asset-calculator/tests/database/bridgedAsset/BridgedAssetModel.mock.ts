@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { TokenEntity, LockedAssetEntity } from '../../../lib';
 import { BridgedAssetEntity } from '../../../lib/database/bridgedAsset/BridgedAssetEntity';
