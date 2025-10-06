@@ -1,5 +1,10 @@
 import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from '@rosen-bridge/extended-typeorm';
 
 import { TokenEntity } from '../token/TokenEntity';
 
