@@ -23,5 +23,8 @@
     "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-network/base": "^0.4.1",
     "@rosen-ui/types": "^0.3.7"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

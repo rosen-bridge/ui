@@ -20,12 +20,8 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.17.10",
     "tsx": "^4.19.2",
     "typescript": "^5.1.6"
-  },
-  "engines": {
-    "node": ">=20.18.1"
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^1.0.0",
@@ -39,5 +35,8 @@
     "@rosen-ui/types": "^0.3.7",
     "ethers": "6.13.2",
     "lodash-es": "^4.17.21"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

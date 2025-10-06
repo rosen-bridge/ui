@@ -28,5 +28,8 @@
     "@rosen-ui/types": "^0.3.7",
     "@rosen-ui/wallet-api": "^3.0.3",
     "ethers": "6.13.2"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }
