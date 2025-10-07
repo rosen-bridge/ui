@@ -1,5 +1,5 @@
-import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-rpc-scanner';
 import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes-observation-extractor';
+import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import config from '../../configs';

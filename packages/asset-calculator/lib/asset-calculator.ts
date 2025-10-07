@@ -1,10 +1,10 @@
 import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TokenMap, RosenChainToken, NATIVE_TOKEN } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { difference, differenceWith, isEqual } from 'lodash-es';
-import { DataSource } from 'typeorm';
 
 import AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
@@ -239,9 +239,18 @@ class AssetCalculator {
         this.logger.info(
           `Started calculating values for ${nativeResidentToken.name} native on chain ${residencyChain}`,
         );
+        const significantDecimal = this.tokens.getSignificantDecimals(
+          nativeResidentToken.tokenId,
+        );
+        if (significantDecimal == undefined)
+          throw new Error(
+            `Failed to retrieve significant decimals for tokenId: ${nativeResidentToken.tokenId}`,
+          );
+
         const newToken = {
           id: nativeResidentToken.tokenId,
           decimal: nativeResidentToken.decimals,
+          significantDecimal: significantDecimal,
           name: nativeResidentToken.name,
           chain: residencyChain,
           isNative: nativeResidentToken.type === NATIVE_TOKEN,

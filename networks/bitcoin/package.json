@@ -8,17 +8,19 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build",
     "type-check": "tsc --noEmit",
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.6.3",
+    "@rosen-bridge/address-codec": "^1.0.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^0.3.0",
     "@rosen-bridge/icons": "^2.3.1",
-    "@rosen-bridge/tokens": "^3.1.1",
+    "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-network/base": "^0.4.1",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",

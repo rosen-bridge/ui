@@ -1,8 +1,10 @@
 import React, { HTMLAttributes } from 'react';
 
+import { SvgIcon } from '@mui/material';
+import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Stack, Skeleton } from '../base';
+import { Typography, Stack, Skeleton, IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 
@@ -10,6 +12,9 @@ import { InjectOverrides } from './InjectOverrides';
  * Props for the Token component.
  */
 export type TokenProps = HTMLAttributes<HTMLDivElement> & {
+  /** If provided, renders an external link that opens in a new tab */
+  href?: string;
+
   /**
    * If true, the token is in loading state and shows a skeleton placeholder.
    */
@@ -26,55 +31,48 @@ export type TokenProps = HTMLAttributes<HTMLDivElement> & {
   reverse?: boolean;
 };
 
-const Loading = ({ reverse }: TokenProps) => {
-  return (
-    <Stack
-      alignItems="center"
-      flexDirection={!reverse ? 'row' : 'row-reverse'}
-      fontSize="inherit"
-      gap="0.5em"
-    >
-      <Skeleton width="2em" height="2em" variant="circular" />
-      <Skeleton width={80} height={14} variant="rounded" />
-    </Stack>
-  );
-};
-
 /**
  * Displays a token with an avatar and its name.
- *
- * @param loading - If true, show a loading state instead of the token content.
- * @param name - The name of the token to display.
- * @param reverse - If true, show items in reverse order.
  */
-const TokenBase = ({ loading, name, reverse }: TokenProps) => {
-  if (loading) {
-    return <Loading reverse={reverse} />;
-  }
-
+const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
   return (
     <Stack
-      component="div"
       alignItems="center"
       flexDirection={!reverse ? 'row' : 'row-reverse'}
       fontSize="inherit"
       gap="0.5em"
     >
-      <Avatar
-        sx={(theme) => ({
-          width: '2em',
-          height: '2em',
-          fontSize: '1em',
-          backgroundColor: theme.palette.secondary.light,
-          color: theme.palette.secondary.main,
-        })}
-      >
-        {capitalize(name).slice(0, 1)}
-      </Avatar>
+      {loading ? (
+        <>
+          <Skeleton width="2em" height="2em" variant="circular" />
+          <Skeleton width={80} height={14} variant="rounded" />
+        </>
+      ) : (
+        <>
+          <Avatar
+            sx={(theme) => ({
+              width: '2em',
+              height: '2em',
+              fontSize: '1em',
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.secondary.main,
+            })}
+          >
+            {capitalize(name).slice(0, 1)}
+          </Avatar>
 
-      <Stack flexDirection="column" alignItems="start">
-        <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
-      </Stack>
+          <Stack flexDirection="column" alignItems="start">
+            <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
+          </Stack>
+          {!!href && (
+            <IconButton target="_blank" size="small" href={href}>
+              <SvgIcon fontSize="small">
+                <ExternalLinkAlt />
+              </SvgIcon>
+            </IconButton>
+          )}
+        </>
+      )}
     </Stack>
   );
 };

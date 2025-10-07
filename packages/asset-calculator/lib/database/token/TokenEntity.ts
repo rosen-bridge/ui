@@ -1,5 +1,5 @@
+import { Column, Entity, PrimaryColumn } from '@rosen-bridge/extended-typeorm';
 import { Network } from '@rosen-ui/types';
-import { Column, Entity, PrimaryColumn } from 'typeorm';
 
 @Entity('token_entity')
 export class TokenEntity {
@@ -11,6 +11,9 @@ export class TokenEntity {
 
   @Column('int')
   decimal: number;
+
+  @Column('int')
+  significantDecimal: number;
 
   @Column('boolean')
   isNative: boolean;

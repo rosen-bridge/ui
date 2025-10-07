@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Schema } from 'joi';
 import {
   errorConstructors,

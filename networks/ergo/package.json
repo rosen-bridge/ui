@@ -8,15 +8,17 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@rosen-bridge/ergo-box-selection": "^1.1.2",
     "@rosen-bridge/icons": "^2.3.1",
-    "@rosen-bridge/tokens": "^3.1.1",
+    "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-clients/ergo-explorer": "^1.1.5",
     "@rosen-network/base": "^0.4.1",
     "@rosen-ui/constants": "^0.4.1",

@@ -72,5 +72,7 @@ export const logger = async (
       method: 'POST',
       body: formData,
     });
-  } catch {}
+  } catch (error) {
+    console.log(error);
+  }
 };

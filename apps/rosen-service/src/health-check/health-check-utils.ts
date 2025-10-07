@@ -1,4 +1,4 @@
-import { BlockEntity, PROCEED } from '@rosen-bridge/scanner';
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 
 import dataSource from '../data-source';
 

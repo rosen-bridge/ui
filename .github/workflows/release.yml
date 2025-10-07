@@ -20,9 +20,9 @@ jobs:
         run: npm install -g yamljs
 
       - name: Download Contract Files
-        uses: rosen-bridge/operation@V0.1
-        with:
-          type: ${{ vars.RELEASE_NAME }}
+        run: |
+          npx @rosen-bridge/cli@${{ vars.ROSEN_CLI_VERSION || 'latest' }} download-assets -c ${{ vars.RELEASE_NAME }} ${{ vars.RELEASE_TAG }} -o . -s mainnet
+          mv tokens*.json tokens.json
 
       - name: Download Watcher Files
         run: |
@@ -89,9 +89,9 @@ jobs:
       - name: Install Front Dependencies
         run: |
           npm ci
-          npm run build --workspace packages/constants    
-          npm run build --workspace packages/types    
-          npm run build --workspace packages/utils    
+          npm run build --workspace packages/constants
+          npm run build --workspace packages/types
+          npm run build --workspace packages/utils
           npm run build --workspace packages --if-present
 
       - name: Download Artifacts
@@ -110,7 +110,7 @@ jobs:
       - name: Move Service File
         shell: bash
         run: |
-          mkdir -p ./apps/watcher/src-tauri/.bin 
+          mkdir -p ./apps/watcher/src-tauri/.bin
           chmod +x ./tmp/watcher-service*
           mv ./tmp/watcher-service-*-${{ matrix.platform }}* ./apps/watcher/src-tauri/.bin/watcher-service-$(rustc -Vv | grep host | cut -f2 -d' ')${{ matrix.exec_extention }}
 

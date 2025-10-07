@@ -1,13 +1,13 @@
+import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import {
   CardanoKoiosScanner,
   KoiosNetwork,
   KoiosTransaction,
-} from '@rosen-bridge/scanner';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
+} from '@rosen-bridge/cardano-scanner';
 
 import config from '../../configs';
 import {
