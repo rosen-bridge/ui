@@ -1,8 +1,9 @@
 import { HTMLAttributes, useCallback, useState } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { Check, Copy, Times } from '@rosen-bridge/icons';
 
-import { IconButton, SvgIcon, Tooltip } from '../../base';
+import { IconButton, Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 /**

@@ -1,9 +1,10 @@
 import React, { HTMLAttributes } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Stack, Skeleton, IconButton, SvgIcon } from '../base';
+import { Typography, Stack, Skeleton, IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 
