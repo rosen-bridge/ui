@@ -33,12 +33,7 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
         width="100%"
       >
         <SvgIcon
-          sx={{
-            color: (theme) =>
-              state === 'hot'
-                ? theme.palette.secondary.dark
-                : theme.palette.tertiary.dark,
-          }}
+          color={`${state === 'hot' ? 'secondary.dark' : 'secondary.dark'}`}
         >
           {state === 'hot' ? <Fire /> : <SnowFlake />}
         </SvgIcon>

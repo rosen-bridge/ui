@@ -1,12 +1,14 @@
+import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { Typography, Tooltip, SvgIcon } from '../base';
+import { Typography, Tooltip } from '../base';
 
 export interface IdProps {
   id: string;
   indicator?: 'middle';
   href?: string;
 }
+
 /**
  * render some starting and ending characters of an id and showing ellipsis in
  * the middle

@@ -1,14 +1,16 @@
 import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
-import { Alert, AlertProps, Collapse, IconButton, SvgIcon } from '../base';
+import { Alert, AlertProps, Collapse, IconButton } from '../base';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;
   onClose?: EventHandler<SyntheticEvent>;
   children: ReactNode;
 }
+
 /**
  * render a collapse with an alert inside
  *
