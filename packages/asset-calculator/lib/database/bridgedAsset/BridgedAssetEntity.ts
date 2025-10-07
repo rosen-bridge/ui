@@ -1,6 +1,11 @@
-import { BigIntValueTransformer } from '@rosen-bridge/extended-typeorm';
+import {
+  BigIntValueTransformer,
+  Column,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from '@rosen-bridge/extended-typeorm';
 import { Network } from '@rosen-ui/types';
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 import { TokenEntity } from '../token/TokenEntity';
 

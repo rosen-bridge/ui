@@ -19,7 +19,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@rosen-bridge/tokens": "^3.1.1",
+    "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-network/bitcoin": "^2.3.1",
     "@rosen-network/bitcoin-runes": "^0.1.0",
     "@rosen-ui/constants": "^0.4.1",

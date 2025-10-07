@@ -1,6 +1,6 @@
 import { Network as NetworkName, RosenAmountValue } from '@rosen-ui/types';
 
-import { calculateFeeCreator } from './calculateFeeCreator';
+import { CalculateFee } from './calculateFeeCreator';
 import { getMinTransferCreator } from './getMinTransferCreator';
 
 export interface NetworkMaxTransferParams {
@@ -16,7 +16,7 @@ export interface NetworkMaxTransferParams {
 export interface NetworkConfig {
   nextHeightInterval: number;
   lockAddress: string;
-  calculateFee: ReturnType<typeof calculateFeeCreator>;
+  calculateFee: CalculateFee;
   getMaxTransfer(params: NetworkMaxTransferParams): Promise<RosenAmountValue>;
   getMinTransfer: ReturnType<ReturnType<typeof getMinTransferCreator>>;
   validateAddress(chain: NetworkName, walletAddress: string): Promise<boolean>;
@@ -33,7 +33,7 @@ export interface Network {
 
   nextHeightInterval: number;
 
-  calculateFee: ReturnType<typeof calculateFeeCreator>;
+  calculateFee: CalculateFee;
 
   getMaxTransfer(params: NetworkMaxTransferParams): Promise<RosenAmountValue>;
 
