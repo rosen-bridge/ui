@@ -2,4 +2,6 @@
 '@rosen-network/ergo': patch
 ---
 
-Update the version of dependency @rosen-bridge/ergo-box-selection
+Update dependencies
+
+- @rosen-bridge/ergo-box-selection@1.2.0
