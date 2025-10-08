@@ -105,7 +105,7 @@ const AssetRow = ({ item, isLoading }: AssetRowProps) => {
         />
       </TableGridBodyCol>
       {/* Action column, whose includes an icon button to show/hide row details. */}
-      <TableGridBodyCol>
+      <TableGridBodyCol style={{ padding: 0 }}>
         <IconButton size="small" onClick={handleToggleExpansion}>
           <SvgIcon>{expanded ? <AngleUp /> : <AngleDown />}</SvgIcon>
         </IconButton>

@@ -35,7 +35,7 @@ const TableGridBase = ({ children }: TableGridProps) => {
   const style = useMemo(() => ({
     gridTemplateColumns: columns
       .sort((a, b) => a.index > b.index ? +1 : -1)
-      .map((column) => column.props.width || '1fr')
+      .map((column) => column.props.width || 'auto')
       .join(' ')
   }), [columns]);
 

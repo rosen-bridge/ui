@@ -28,7 +28,7 @@ export const RowView = ({ items, isLoading }: ViewSProps) => {
         <TableGridHeadCol hideOn="desktop-down">Hot</TableGridHeadCol>
         <TableGridHeadCol hideOn="desktop-down">Cold</TableGridHeadCol>
         <TableGridHeadCol hideOn="laptop-down">Bridged</TableGridHeadCol>
-        <TableGridHeadCol style={{ padding: 0 }} width="auto" />
+        <TableGridHeadCol style={{ padding: 0 }} width="2.5rem" />
       </TableGridHead>
       <TableGridBody>
         {items?.map((item, index) => (
