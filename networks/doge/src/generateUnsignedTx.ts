@@ -15,7 +15,6 @@ import {
 } from './constants';
 import { DogeUtxo, UnsignedPsbtData } from './types';
 import {
-  estimateTxWeight,
   getAddressUtxos,
   getFeeRatio,
   getMinimumMeaningfulDoge,
@@ -63,10 +62,6 @@ export const generateUnsignedTx =
       script: lockScript,
       value: Number(unwrappedAmount),
     });
-
-    // estimate tx weight without considering inputs
-    //  0 inputs, 2 outputs, 1 for feeRatio to get weights only, multiply by 4 to convert vSize to weight unit
-    let estimatedTxWeight = estimateTxWeight(0, 2, opReturnData.length);
 
     // fetch inputs
     const utxos = await getAddressUtxos(fromAddress);
@@ -128,22 +123,10 @@ export const generateUnsignedTx =
       });
     }
 
-    // calculate input boxes assets
-    let remainingDoge =
-      coveredBoxes.boxes.reduce((a, b) => a + b.value, 0n) - unwrappedAmount;
-
-    // create change output
-    estimatedTxWeight = estimateTxWeight(
-      psbt.txInputs.length,
-      2,
-      opReturnData.length,
-    );
-
-    const estimatedFee = BigInt(Math.ceil(estimatedTxWeight * feeRatio));
-    remainingDoge -= estimatedFee;
+    // add change
     psbt.addOutput({
       script: fromAddressScript,
-      value: Number(remainingDoge),
+      value: Number(coveredBoxes.additionalAssets.aggregated.nativeToken),
     });
 
     return {

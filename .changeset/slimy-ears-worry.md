@@ -2,4 +2,6 @@
 '@rosen-network/doge': patch
 ---
 
-Update the version of dependency @rosen-bridge/bitcoin-utxo-selection
+Update dependencies
+
+- @rosen-bridge/bitcoin-utxo-selection@1.2.0
