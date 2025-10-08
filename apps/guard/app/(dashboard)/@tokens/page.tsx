@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import {
   Carousel,
   CarouselButton,
@@ -16,16 +18,42 @@ import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network } from '@rosen-ui/types';
 import useSWR from 'swr';
 
-import { ApiAddressAssetsResponse } from '@/_types/api';
+import { ApiBalanceResponse } from '@/_types/api';
 
 const Token = ({ chain }: { chain: Network }) => {
-  const { data, isLoading } = useSWR<ApiAddressAssetsResponse>(
-    ['/assets', { chain }],
+  const { data, isLoading } = useSWR<ApiBalanceResponse>(
+    ['/balance', { chain }],
     fetcher,
   );
+
+  const tokens = useMemo(() => {
+    if (!data) return [];
+
+    const tokenIds = [...data.cold, ...data.hot]
+      .filter((item) => item.chain === chain)
+      .map((item) => item.balance.tokenId)
+      .filter((item, index, items) => items.indexOf(item) === index);
+
+    return tokenIds.map((id) => {
+      const cold = data.cold.find(
+        (item) => item.chain === chain && item.balance.tokenId === id,
+      );
+
+      const hot = data.hot.find(
+        (item) => item.chain === chain && item.balance.tokenId === id,
+      );
+
+      const token = Object.assign({}, hot?.balance, cold?.balance, {
+        coldAmount: cold?.balance.amount || 0,
+      });
+
+      return token;
+    });
+  }, [chain, data]);
+
   return (
     <TokensCard
-      tokens={data?.items ?? []}
+      tokens={tokens}
       isLoading={isLoading}
       title={NETWORKS[chain].label}
     />
