@@ -2,4 +2,6 @@
 '@rosen-network/cardano': patch
 ---
 
-Update the version of dependency @rosen-bridge/cardano-utxo-selection
+Update dependencies
+
+- @rosen-bridge/cardano-utxo-selection@2.3.0
