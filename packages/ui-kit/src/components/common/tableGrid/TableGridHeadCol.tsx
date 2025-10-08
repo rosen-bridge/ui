@@ -1,13 +1,8 @@
-import { HTMLAttributes, useContext, useEffect } from 'react';
-
 import { BreakpointQuery, useBreakpoint } from '../../../hooks';
 import { styled } from '../../../styling';
-import { TableGridContext } from './TableGridContext';
-
-export interface TableGridHeadColProps extends HTMLAttributes<HTMLDivElement> {
-  hideOn?: BreakpointQuery;
-  index?: number;
-}
+import { useTableGrid } from './useTableGrid';
+import { forwardRef, HTMLAttributes, useEffect } from 'react';
+import { InjectOverrides } from '../InjectOverrides';
 
 const TableGridHeadColRoot = styled('div')(({ theme }) => ({
   'fontSize': '0.75rem',
@@ -25,24 +20,38 @@ const TableGridHeadColRoot = styled('div')(({ theme }) => ({
   },
 }));
 
-export const TableGridHeadCol = ({
-  hideOn,
-  index,
-  ...restProps
-}: TableGridHeadColProps) => {
-  const { setColumns } = useContext(TableGridContext);
+export type TableGridHeadColProps = HTMLAttributes<HTMLDivElement> & {
+  hideOn?: BreakpointQuery;
+  index?: number;
+  width?: string;
+};
+
+const TableGridHeadColBase = forwardRef<HTMLDivElement, TableGridHeadColProps>((props, ref) => {
+  const { children, hideOn, index, width, ...rest } = props;
+
   const hide = useBreakpoint(hideOn || 'mobile-down');
 
-  const display = !hideOn || (hideOn && !hide);
+  const { register, unregister } = useTableGrid();
+
+  const show = !hideOn || (hideOn && !hide);
 
   useEffect(() => {
-    setColumns((prev) => {
-      const next = [...prev];
-      next[index ?? 0] = display;
-      return next;
-    });
-  }, [display, index, setColumns]);
+    if (typeof index !== 'number' || !show) return;
 
-  if (display) return <TableGridHeadColRoot {...restProps} />;
-  return null;
-};
+    register(index, { width });
+
+    return () => {
+      unregister(index);
+    };
+  }, [index, show, width, register, unregister]);
+
+  if (!show) return null;
+
+  return (
+    <TableGridHeadColRoot {...rest} ref={ref}>
+      {children}
+    </TableGridHeadColRoot>
+  );
+});
+
+export const TableGridHeadCol = InjectOverrides(TableGridHeadColBase);

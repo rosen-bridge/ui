@@ -1,5 +1,21 @@
-import { styled } from '../../../styling';
+import { forwardRef, HTMLAttributes, useMemo } from 'react';
 
-export const TableGridBody = styled('div')(() => ({
-  display: 'contents',
-}));
+import { InjectOverrides } from '../InjectOverrides';
+
+export type TableGridBodyProps = HTMLAttributes<HTMLDivElement> & {};
+
+const TableGridBodyBase = forwardRef<HTMLDivElement, TableGridBodyProps>((props, ref) => {
+  const { children, style, ...rest } = props;
+
+  const styles = useMemo(() => {
+    return Object.assign({}, { display: 'contents' }, style)
+  }, [style]);
+
+  return (
+    <div style={styles} {...rest} ref={ref}>
+      {children}
+    </div>
+  );
+});
+
+export const TableGridBody = InjectOverrides(TableGridBodyBase);

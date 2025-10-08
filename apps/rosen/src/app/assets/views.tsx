@@ -20,7 +20,7 @@ export type ViewSProps = {
 
 export const RowView = ({ items, isLoading }: ViewSProps) => {
   return (
-    <TableGrid hasActionColumn>
+    <TableGrid>
       <TableGridHead>
         <TableGridHeadCol>Name</TableGridHeadCol>
         <TableGridHeadCol>Network</TableGridHeadCol>
@@ -28,6 +28,7 @@ export const RowView = ({ items, isLoading }: ViewSProps) => {
         <TableGridHeadCol hideOn="desktop-down">Hot</TableGridHeadCol>
         <TableGridHeadCol hideOn="desktop-down">Cold</TableGridHeadCol>
         <TableGridHeadCol hideOn="laptop-down">Bridged</TableGridHeadCol>
+        <TableGridHeadCol style={{ padding: 0 }} width="auto" />
       </TableGridHead>
       <TableGridBody>
         {items?.map((item, index) => (

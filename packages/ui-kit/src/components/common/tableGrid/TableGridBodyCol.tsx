@@ -1,16 +1,9 @@
-import { HTMLAttributes, useContext } from 'react';
-
 import { styled } from '../../../styling';
-import { TableGridContext } from './TableGridContext';
+import { forwardRef, HTMLAttributes } from 'react';
+import { InjectOverrides } from '../InjectOverrides';
+import { useTableGrid } from './useTableGrid';
 
-export interface TableGridBodyColProps extends HTMLAttributes<HTMLDivElement> {
-  padding?: 'normal' | 'actions';
-  index?: number;
-}
-
-const TableGridBodyColRoot = styled('div', {
-  shouldForwardProp: (prop) => prop !== 'padding',
-})<TableGridBodyColProps>(({ theme, padding = 'normal' }) => ({
+const TableGridBodyColRoot = styled('div')(({ theme }) => ({
   alignSelf: 'center',
   minWidth: 0,
   color: theme.palette.text.primary,
@@ -19,28 +12,32 @@ const TableGridBodyColRoot = styled('div', {
   lineHeight: '1.5rem',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  ...(padding === 'normal' && {
-    'padding': theme.spacing(0, 1.5),
-    '&:first-of-type': {
-      paddingLeft: theme.spacing(2),
-    },
-    '&:last-of-type': {
-      paddingRight: theme.spacing(2),
-    },
-  }),
-  ...(padding === 'actions' && {
-    padding: theme.spacing(0, 0.5, 0, 1.5),
-  }),
+  'padding': theme.spacing(0, 1.5),
+  '&:first-of-type': {
+    paddingLeft: theme.spacing(2),
+  },
+  '&:last-of-type': {
+    paddingRight: theme.spacing(2),
+  },
+
 }));
 
-export const TableGridBodyCol = ({
-  index = -1,
-  ...restProps
-}: TableGridBodyColProps) => {
-  const { columns } = useContext(TableGridContext);
-
-  const display = columns[index] ?? true;
-
-  if (display) return <TableGridBodyColRoot {...restProps} />;
-  return null;
+export type TableGridBodyColProps = HTMLAttributes<HTMLDivElement> & {
+  index?: number;
 };
+
+const TableGridBodyColBase = forwardRef<HTMLDivElement, TableGridBodyColProps>((props, ref) => {
+  const { children, index, ...rest } = props;
+
+  const { available } = useTableGrid();
+
+  if (!available(index ?? -1)) return null
+
+  return (
+    <TableGridBodyColRoot {...rest} ref={ref}>
+      {children}
+    </TableGridBodyColRoot>
+  );
+});
+
+export const TableGridBodyCol = InjectOverrides(TableGridBodyColBase);

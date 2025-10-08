@@ -1,11 +1,7 @@
-import { Children, cloneElement, HTMLAttributes, ReactElement } from 'react';
-
+import { Children, cloneElement, forwardRef, HTMLAttributes, ReactElement, useMemo } from 'react';
+import { InjectOverrides } from '../InjectOverrides';
 import { styled } from '../../../styling';
 import { TableGridBodyColProps } from './TableGridBodyCol';
-
-interface TableGridBodyRowProps extends HTMLAttributes<HTMLDivElement> {
-  children: ReactElement<TableGridBodyColProps>[];
-}
 
 const TableGridBodyRowRoot = styled('div')(({ theme }) => ({
   gridColumn: '1 / -1',
@@ -16,15 +12,22 @@ const TableGridBodyRowRoot = styled('div')(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
 }));
 
-export const TableGridBodyRow = ({
-  children,
-  ...restProps
-}: TableGridBodyRowProps) => {
+export type TableGridBodyRowProps = HTMLAttributes<HTMLDivElement> & {
+  children: ReactElement<TableGridBodyColProps>[];
+};
+
+const TableGridBodyRowBase = forwardRef<HTMLDivElement, TableGridBodyRowProps>((props, ref) => {
+  const { children, ...rest } = props;
+
+  const newChildren = useMemo(() => {
+    return Children.map(children, (child, index) => cloneElement(child, { index }))
+  }, [children]);
+
   return (
-    <TableGridBodyRowRoot {...restProps}>
-      {Children.map(children, (child, index) => {
-        return cloneElement(child, { key: index, index });
-      })}
+    <TableGridBodyRowRoot {...rest} ref={ref}>
+      {newChildren}
     </TableGridBodyRowRoot>
   );
-};
+});
+
+export const TableGridBodyRow = InjectOverrides(TableGridBodyRowBase);

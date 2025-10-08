@@ -1,22 +1,28 @@
-import { ReactNode } from 'react';
+import { forwardRef, HTMLAttributes } from 'react';
+import { InjectOverrides } from '../InjectOverrides';
+import { Box, Collapse, Divider } from '@mui/material';
 
-import { Box, Collapse, Divider } from '../../base';
-import { TableGridBodyCol } from './TableGridBodyCol';
+export type TableGridBodyDetailsProps = HTMLAttributes<HTMLDivElement> & {
+  expanded?: boolean;
+};
 
-interface TableGridBodyDetailsProps {
-  expanded: boolean;
-  children: ReactNode;
-}
-
-export const TableGridBodyDetails = ({
-  children,
-  expanded,
-}: TableGridBodyDetailsProps) => {
+const TableGridBodyDetailsBase = forwardRef<HTMLDivElement, TableGridBodyDetailsProps>((props, ref) => {
+  const { children, expanded, ...rest } = props;
   return (
-    <Collapse in={expanded} sx={{ gridColumn: '1 / -1' }}>
+    <Collapse
+      in={expanded}
+      sx={{
+        gridColumn: '1 / -1',
+        'padding': (theme) => theme.spacing(0, 1.5)
+      }}
+      {...rest}
+      ref={ref}
+    >
       <Divider sx={{ mt: 1 }} />
-      <TableGridBodyCol>{children}</TableGridBodyCol>
+      {children}
       <Box height={8} />
     </Collapse>
   );
-};
+});
+
+export const TableGridBodyDetails = InjectOverrides(TableGridBodyDetailsBase);
