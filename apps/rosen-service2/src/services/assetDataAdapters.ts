@@ -71,11 +71,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           if (tokenId == NETWORKS.ergo.nativeToken) {
             return {
               assetId: tokenId,
-              totalSupply: tokenMap.wrapAmount(
-                tokenId,
-                ERG_TOTAL_SUPPLY,
-                NETWORKS.ergo.key,
-              ).amount,
+              totalSupply: ERG_TOTAL_SUPPLY,
             };
           }
           const tokenDetail =
