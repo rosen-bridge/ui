@@ -39,8 +39,8 @@ export const EventCard = ({
       onClick={onClick}
     >
       <CardBody>
-        <Stack gap={1}>
-          <Stack gap={1} flexDirection="row">
+        <Stack spacing={1}>
+          <Stack spacing={1} direction="row">
             {isLoading && (
               <Skeleton
                 variant="circular"
@@ -54,11 +54,7 @@ export const EventCard = ({
                 {capitalize(item.lockToken.name.slice(0, 1))}
               </Avatar>
             )}
-            <Stack
-              flexDirection="row"
-              justifyContent="space-between"
-              style={{ width: '100%' }}
-            >
+            <Stack direction="row" justify="between" style={{ width: '100%' }}>
               <Amount
                 loading={isLoading}
                 orientation="vertical"
@@ -68,7 +64,7 @@ export const EventCard = ({
                   item?.lockToken?.significantDecimals,
                 )}
               />
-              <Stack justifyContent="flex-end">
+              <Stack justify="end">
                 <div style={{ marginBottom: '-4px' }}>
                   <RelativeTime
                     isLoading={isLoading}
@@ -83,7 +79,7 @@ export const EventCard = ({
             loading={isLoading}
             value={item?.eventId}
           />
-          <Stack flexDirection="row" justifyContent="space-between">
+          <Stack direction="row" justify="between">
             <Typography component="div" fontSize="12px">
               <Connector
                 variant="filled"
