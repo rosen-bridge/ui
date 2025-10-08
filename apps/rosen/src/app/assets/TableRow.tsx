@@ -313,7 +313,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       >
         <EnhancedTableCell colSpan={10} padding="none">
           <Collapse in={open} unmountOnExit>
-            <Divider variant="middle" sx={{ borderBottomStyle: 'dashed' }} />
+            <Divider variant="middle" borderStyle="dashed" />
             {data && (
               <Box sx={{ m: 2 }}>
                 {data.bridged && (
