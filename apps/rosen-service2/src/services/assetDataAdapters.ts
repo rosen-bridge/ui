@@ -54,9 +54,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
   }
 
   /**
-   * @param token Ergo chain token info
-   *
-   * @returns {Promise<TotalSupply[]>} total supply of the token in Ergo
+   * calculate total supply of the token in Ergo
    */
   getAssetsTotalSupply = async (): Promise<TotalSupply[]> => {
     const tokenMap = TokensConfig.getInstance().getTokenMap();
