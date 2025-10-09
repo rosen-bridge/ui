@@ -16,6 +16,7 @@ import {
   EthereumEvmRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
 import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
+import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
@@ -309,15 +310,29 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           adapter.chain == NETWORKS.binance.key
             ? async () => {
                 // preventing of overriding old chunks of data
-                this.redis.set(
-                  adapter.chain,
-                  JsonBigInt.stringify({
-                    ...JsonBigInt.parse(
-                      (await this.redis.get(adapter.chain)) || '{}',
-                    ),
-                    ...(await adapter.fetch()),
-                  }),
-                );
+                const oldData =
+                  (await this.redis.get<AssetBalance | null>(adapter.chain)) ||
+                  {};
+                const newData = await adapter.fetch();
+                const finalData = oldData;
+                for (const tokenId of Object.keys(newData)) {
+                  if (!Object.hasOwn(finalData, tokenId)) {
+                    finalData[tokenId] = newData[tokenId];
+                  } else {
+                    newData[tokenId].forEach((item, index) => {
+                      const finalItemIndex = finalData[tokenId]
+                        .map((addressBalance) => addressBalance.address)
+                        .indexOf(item.address);
+                      if (finalItemIndex >= 0) {
+                        finalData[tokenId][index] =
+                          newData[tokenId][finalItemIndex];
+                      } else {
+                        finalData[tokenId].push(item);
+                      }
+                    });
+                  }
+                }
+                this.redis.set(adapter.chain, JsonBigInt.stringify(finalData));
               }
             : async () => {
                 this.redis.set(
