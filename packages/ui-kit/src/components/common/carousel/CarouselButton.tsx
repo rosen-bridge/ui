@@ -1,6 +1,7 @@
+import { SvgIcon } from '@mui/material';
 import { AngleLeft, AngleRight } from '@rosen-bridge/icons';
 
-import { IconButton, SvgIcon } from '../../base';
+import { IconButton } from '../../base';
 import { useCarousel } from './useCarousel';
 
 export const CarouselButton = ({ type }: { type: 'next' | 'prev' }) => {

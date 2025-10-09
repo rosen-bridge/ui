@@ -20,10 +20,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-observation-extractor": "^0.1.1",
-    "@rosen-bridge/abstract-scanner": "^0.1.0",
-    "@rosen-bridge/extended-typeorm": "^0.2.1",
-    "@rosen-bridge/watcher-data-extractor": "^12.2.0",
+    "@rosen-bridge/abstract-observation-extractor": "^0.1.2",
+    "@rosen-bridge/abstract-scanner": "^0.2.0",
+    "@rosen-bridge/extended-typeorm": "^1.0.0",
+    "@rosen-bridge/watcher-data-extractor": "^12.2.1",
     "@rosen-ui/asset-calculator": "^2.1.8",
     "@rosen-ui/public-status": "^0.0.2"
   },
