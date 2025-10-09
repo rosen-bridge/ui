@@ -8,12 +8,11 @@ import {
   useState,
 } from 'react';
 
-import { ClickAwayListener, SvgIcon } from '@mui/material';
+import { ClickAwayListener, SvgIcon, Divider } from '@mui/material';
 import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
 import { useBreakpoint } from '../../../hooks';
 import {
-  Divider,
   List,
   ListItem,
   ListItemButton,

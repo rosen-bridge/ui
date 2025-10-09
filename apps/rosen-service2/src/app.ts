@@ -56,6 +56,7 @@ const startApp = async () => {
 
   logger.info('Starting service manager...');
   serviceManager.start(HealthService.getInstance().getName());
+  serviceManager.start(AssetDataAdapterService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };

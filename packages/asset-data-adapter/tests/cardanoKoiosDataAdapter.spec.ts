@@ -30,6 +30,7 @@ describe('CardanoKoiosDataAdapter', () => {
 
     ctx.adapter = new CardanoKoiosDataAdapter(['addr1'], ctx.mockTokenMap, {
       koiosUrl: 'http://koios',
+      authToken: 'mocked-token',
     });
   });
 

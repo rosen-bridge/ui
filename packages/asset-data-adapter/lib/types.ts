@@ -24,3 +24,25 @@ export type ChainsAdapters =
   | BinanceEvmRpcDataAdapter
   | CardanoKoiosDataAdapter
   | DogeBlockCypherDataAdapter;
+
+export interface ErgoExplorerDataAdapterAuthParams {
+  explorerUrl: string;
+}
+
+export interface BitcoinEsploraDataAdapterAuthParams {
+  url: string | undefined;
+}
+
+export interface CardanoKoiosDataAdapterAuthParams {
+  koiosUrl: string | undefined;
+  authToken: string;
+}
+
+export interface DogeBlockCypherDataAdapterAuthParams {
+  blockCypherUrl: string;
+}
+
+export interface EvmRpcDataAdapterAuthParams {
+  url: string;
+  authToken: string | undefined;
+}

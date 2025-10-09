@@ -61,11 +61,8 @@ export class AssetDataAdapterService extends PeriodicTaskService {
     const rosenTokens = tokenMap.getConfig();
     const assets = (
       await Promise.all(
-        Object.values(rosenTokens).map(async (token) => {
-          let tokenId = Object.entries(token)[0][1].tokenId;
-          const tokenSet = tokenMap.getTokenSet(tokenId);
-          if (!tokenSet || !tokenSet[NETWORKS.ergo.key]) return undefined;
-          tokenId = tokenSet[NETWORKS.ergo.key].tokenId;
+        rosenTokens.map(async (tokenSet) => {
+          const tokenId = tokenSet[NETWORKS.ergo.key].tokenId;
           if (tokenId == NETWORKS.ergo.nativeToken) {
             return {
               assetId: tokenId,
@@ -87,9 +84,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
               ).amount,
             };
           }
-          throw Error(
-            `Total supply of token [${token.tokenId}] is not calculable`,
-          );
+          throw Error(`Total supply of token [${tokenId}] is not calculable`);
         }),
       )
     ).filter((asset) => asset != undefined);
@@ -108,19 +103,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * @example
    * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
    */
-  protected createChainSpecificDataAdapter = (
-    chain: ChainChoices,
-    authParams: { [key: string]: string },
-  ) => {
-    const Adapter = {
-      [NETWORKS.ergo.key]: ErgoExplorerDataAdapter,
-      [NETWORKS.bitcoin.key]: BitcoinEsploraDataAdapter,
-      [NETWORKS.ethereum.key]: undefined,
-      [NETWORKS.binance.key]: undefined,
-      [NETWORKS.cardano.key]: CardanoKoiosDataAdapter,
-      [NETWORKS.doge.key]: DogeBlockCypherDataAdapter,
-    }[chain];
-
+  protected createChainSpecificDataAdapter = (chain: ChainChoices) => {
     const tokenMap = TokensConfig.getInstance().getTokenMap();
 
     const addresses: string[] = [
@@ -129,11 +112,32 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       ...(configs.chains[chain].adapter?.extraAddresses ?? []),
     ].filter(Boolean);
 
-    if (chain === NETWORKS.ethereum.key)
+    if (chain === NETWORKS.ergo.key)
+      return new ErgoExplorerDataAdapter(
+        addresses,
+        tokenMap,
+        {
+          explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
+        },
+        CallbackLoggerFactory.getInstance().getLogger(`ergo-data-adapter`),
+      );
+    else if (chain === NETWORKS.bitcoin.key)
+      return new BitcoinEsploraDataAdapter(
+        addresses,
+        tokenMap,
+        {
+          url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
+        },
+        CallbackLoggerFactory.getInstance().getLogger('bitcoin-data-adapter'),
+      );
+    else if (chain === NETWORKS.ethereum.key)
       return new EthereumEvmRpcDataAdapter(
         addresses,
         tokenMap,
-        authParams,
+        {
+          url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
+          authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
+        },
         configs.chains.ethereum.adapter.chunkSize,
         CallbackLoggerFactory.getInstance().getLogger('ethereum-data-adapter'),
       );
@@ -141,19 +145,36 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       return new BinanceEvmRpcDataAdapter(
         addresses,
         tokenMap,
-        authParams,
+        {
+          url: configs.chains.binance.rpc.connections.at(0)!.url!,
+          authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
+        },
         configs.chains.binance.adapter.chunkSize,
         CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
       );
+    else if (chain === NETWORKS.cardano.key)
+      return new CardanoKoiosDataAdapter(
+        addresses,
+        tokenMap,
+        {
+          koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
+          authToken: configs.chains.cardano.koios.connections
+            .at(0)!
+            .authToken!.toString(),
+        },
+        CallbackLoggerFactory.getInstance().getLogger('cardano-data-adapter'),
+      );
+    else if (chain === NETWORKS.doge.key)
+      return new DogeBlockCypherDataAdapter(
+        addresses,
+        tokenMap,
+        {
+          blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
+        },
+        CallbackLoggerFactory.getInstance().getLogger('doge-data-adapter'),
+      );
 
-    if (!Adapter) throw new Error(`No adapter class found for chain: ${chain}`);
-
-    return new Adapter(
-      addresses,
-      tokenMap,
-      authParams,
-      CallbackLoggerFactory.getInstance().getLogger(`{chain}-data-adapter`),
-    );
+    throw new Error(`No adapter class found for chain: ${chain}`);
   };
 
   /**
@@ -180,9 +201,6 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       // Create Ergo data-adapter
       this.adapters[NETWORKS.ergo.key] = this.createChainSpecificDataAdapter(
         NETWORKS.ergo.key,
-        {
-          explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
-        },
       );
 
       if (
@@ -190,18 +208,8 @@ export class AssetDataAdapterService extends PeriodicTaskService {
         configs.chains.cardano.koios.connections.at(0)
       ) {
         // Create Cardano data-adapter
-        const cardanoKoiosConnection: { [key: string]: string } = {
-          koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
-        };
-        if (configs.chains.cardano.koios.connections.at(0)!.authToken)
-          cardanoKoiosConnection['authToken'] =
-            configs.chains.cardano.koios.connections.at(0)!.authToken!;
-
         this.adapters[NETWORKS.cardano.key] =
-          this.createChainSpecificDataAdapter(
-            NETWORKS.cardano.key,
-            cardanoKoiosConnection,
-          );
+          this.createChainSpecificDataAdapter(NETWORKS.cardano.key);
       }
 
       if (
@@ -210,18 +218,13 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       ) {
         // Create Bitcoin data-adapter
         this.adapters[NETWORKS.bitcoin.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.bitcoin.key, {
-            url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
-          });
+          this.createChainSpecificDataAdapter(NETWORKS.bitcoin.key);
       }
 
       if (configs.chains.doge.active) {
         // Create Doge data-adapter
         this.adapters[NETWORKS.doge.key] = this.createChainSpecificDataAdapter(
           NETWORKS.doge.key,
-          {
-            blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
-          },
         );
       }
 
@@ -231,9 +234,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       ) {
         // Create Ethereum data-adapter
         this.adapters[NETWORKS.ethereum.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.ethereum.key, {
-            url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-          });
+          this.createChainSpecificDataAdapter(NETWORKS.ethereum.key);
       }
 
       if (
@@ -242,9 +243,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       ) {
         // Create Binance data-adapter
         this.adapters[NETWORKS.binance.key] =
-          this.createChainSpecificDataAdapter(NETWORKS.binance.key, {
-            url: configs.chains.binance.rpc.connections.at(0)!.url!,
-          });
+          this.createChainSpecificDataAdapter(NETWORKS.binance.key);
       }
     } catch (error) {
       this.logger.error(
@@ -305,12 +304,27 @@ export class AssetDataAdapterService extends PeriodicTaskService {
     const tasks = [];
     for (const adapter of Object.values(this.adapters)) {
       tasks.push({
-        fn: async () => {
-          this.redis.set(
-            adapter.chain,
-            JsonBigInt.stringify(await adapter.fetch()),
-          );
-        },
+        fn:
+          adapter.chain == NETWORKS.ethereum.key ||
+          adapter.chain == NETWORKS.binance.key
+            ? async () => {
+                // preventing of overriding old chunks of data
+                this.redis.set(
+                  adapter.chain,
+                  JsonBigInt.stringify({
+                    ...JsonBigInt.parse(
+                      (await this.redis.get(adapter.chain)) || '{}',
+                    ),
+                    ...(await adapter.fetch()),
+                  }),
+                );
+              }
+            : async () => {
+                this.redis.set(
+                  adapter.chain,
+                  JsonBigInt.stringify(await adapter.fetch()),
+                );
+              },
         interval:
           configs.chains[adapter.chain as keyof Chains].scanInterval * 1000,
       });

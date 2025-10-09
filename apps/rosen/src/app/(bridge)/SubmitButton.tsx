@@ -131,7 +131,7 @@ export const SubmitButton = () => {
           <Card backgroundColor="primary.light">
             <CardBody>
               <Stack spacing={2}>
-                <Stack alignItems="center" spacing={2}>
+                <Stack align="center" spacing={2}>
                   <Typography variant="subtitle1">
                     <Amount value={amountValue || 0} unit={tokenInfo?.name} />
                   </Typography>

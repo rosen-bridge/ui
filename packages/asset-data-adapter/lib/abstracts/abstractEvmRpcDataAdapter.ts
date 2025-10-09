@@ -3,7 +3,7 @@ import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
-import { ChainAssetBalance } from '../types';
+import { ChainAssetBalance, EvmRpcDataAdapterAuthParams } from '../types';
 import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
@@ -14,16 +14,12 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected authParams: { [key: string]: string },
+    protected authParams: EvmRpcDataAdapterAuthParams,
     protected chunkSize: number,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
 
-    if (Object.keys(authParams).indexOf('url') < 0)
-      throw new Error(
-        'The AbstractEvmRpcDataAdapter required url param not provided.',
-      );
     this.provider = authParams.authToken
       ? new JsonRpcProvider(`${authParams.url}/${authParams.authToken}`)
       : new JsonRpcProvider(`${authParams.url}`);

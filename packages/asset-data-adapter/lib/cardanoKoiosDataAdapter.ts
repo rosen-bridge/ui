@@ -4,7 +4,7 @@ import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { ChainAssetBalance } from './types';
+import { CardanoKoiosDataAdapterAuthParams, ChainAssetBalance } from './types';
 
 export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
   chain: string = NETWORKS.cardano.key;
@@ -13,15 +13,11 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected authParams: { [key: string]: string },
+    protected authParams: CardanoKoiosDataAdapterAuthParams,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
 
-    if (Object.keys(authParams).indexOf('koiosUrl') < 0)
-      throw new Error(
-        'The CardanoKoiosDataAdapter required koiosUrl param not provided.',
-      );
     this.koiosApi = cardanoKoiosClientFactory(
       authParams.koiosUrl ?? 'https://api.koios.rest/api/v1',
       authParams.authToken,

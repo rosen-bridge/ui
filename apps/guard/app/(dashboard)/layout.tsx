@@ -16,14 +16,16 @@ const DashboardLayout = ({
     <Grid container spacing={3}>
       <Grid item mobile={12}>
         <Stack
-          gap={2}
-          flexShrink={0}
-          sx={(theme) => ({
-            flexDirection: 'column',
-            [theme.breakpoints.up('laptop')]: {
-              flexDirection: 'row',
+          spacing={2}
+          direction="column"
+          style={{
+            flexShrink: 0,
+          }}
+          overrides={{
+            laptop: {
+              direction: 'row',
             },
-          })}
+          }}
         >
           <Box
             sx={(theme) => ({

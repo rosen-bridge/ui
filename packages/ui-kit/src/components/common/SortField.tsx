@@ -7,8 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Card } from '@mui/material';
-import { SvgIcon } from '@mui/material';
+import { Card, SvgIcon, Stack, Divider } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -20,14 +19,12 @@ import {
 import { styled } from '../../styling';
 import {
   Button,
-  Divider,
   Grid,
   IconButton,
   ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
-  Stack,
   Typography,
 } from '../base';
 
