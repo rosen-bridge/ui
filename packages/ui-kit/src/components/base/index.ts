@@ -10,7 +10,6 @@ export * from './Checkbox';
 export * from './CircularProgress';
 export * from './Collapse';
 export * from './CssBaseLine';
-export * from './Divider';
 export * from './Drawer';
 export * from './Dialog';
 export * from './DialogActions';

@@ -8,11 +8,11 @@ import {
   useState,
 } from 'react';
 
-import { Card, SvgIcon } from '@mui/material';
+import { Card, SvgIcon, Divider } from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
-import { Divider, IconButton } from '../../base';
+import { IconButton } from '../../base';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
