@@ -38,7 +38,7 @@ export const Item = ({ cold, hot, loading, network }: ItemProps) => {
             <>
               <Network loading={loading} name={network} />
               <ItemAddress loading={loading} state="hot" value={hot} />
-              <Divider variant="fullWidth" />
+              <Divider variant="full" />
               <ItemAddress loading={loading} state="cold" value={cold} />
             </>
           )}
