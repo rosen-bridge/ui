@@ -136,7 +136,7 @@
         "validations": [
           {
             "required": true,
-            "error": "vercel redis address must be specified"
+            "error": "redis address must be specified"
           }
         ]
       },
