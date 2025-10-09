@@ -145,7 +145,7 @@
         "validations": [
           {
             "required": true,
-            "error": "vercel redis token must be specified"
+            "error": "redis token must be specified"
           }
         ]
       }
