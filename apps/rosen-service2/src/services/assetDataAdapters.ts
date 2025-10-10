@@ -96,7 +96,6 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * Creates and returns a blockchain-specific data adapter instance.
    *
    * @param chain - The target blockchain identifier (e.g., 'ergo', 'bitcoin', etc.)
-   * @param authParams - An object containing authentication parameters required by the adapter
    * @returns An instance of the corresponding data adapter for the specified chain
    *
    * @throws Error if no adapter class exists for the given chain
@@ -113,67 +112,71 @@ export class AssetDataAdapterService extends PeriodicTaskService {
       ...(configs.chains[chain].adapter?.extraAddresses ?? []),
     ].filter(Boolean);
 
-    if (chain === NETWORKS.ergo.key)
-      return new ErgoExplorerDataAdapter(
-        addresses,
-        tokenMap,
-        {
-          explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
-        },
-        CallbackLoggerFactory.getInstance().getLogger(`ergo-data-adapter`),
-      );
-    else if (chain === NETWORKS.bitcoin.key)
-      return new BitcoinEsploraDataAdapter(
-        addresses,
-        tokenMap,
-        {
-          url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
-        },
-        CallbackLoggerFactory.getInstance().getLogger('bitcoin-data-adapter'),
-      );
-    else if (chain === NETWORKS.ethereum.key)
-      return new EthereumEvmRpcDataAdapter(
-        addresses,
-        tokenMap,
-        {
-          url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-          authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
-        },
-        configs.chains.ethereum.adapter.chunkSize,
-        CallbackLoggerFactory.getInstance().getLogger('ethereum-data-adapter'),
-      );
-    else if (chain === NETWORKS.binance.key)
-      return new BinanceEvmRpcDataAdapter(
-        addresses,
-        tokenMap,
-        {
-          url: configs.chains.binance.rpc.connections.at(0)!.url!,
-          authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
-        },
-        configs.chains.binance.adapter.chunkSize,
-        CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
-      );
-    else if (chain === NETWORKS.cardano.key)
-      return new CardanoKoiosDataAdapter(
-        addresses,
-        tokenMap,
-        {
-          koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
-          authToken: configs.chains.cardano.koios.connections
-            .at(0)!
-            .authToken!.toString(),
-        },
-        CallbackLoggerFactory.getInstance().getLogger('cardano-data-adapter'),
-      );
-    else if (chain === NETWORKS.doge.key)
-      return new DogeBlockCypherDataAdapter(
-        addresses,
-        tokenMap,
-        {
-          blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
-        },
-        CallbackLoggerFactory.getInstance().getLogger('doge-data-adapter'),
-      );
+    switch (chain) {
+      case NETWORKS.ergo.key:
+        return new ErgoExplorerDataAdapter(
+          addresses,
+          tokenMap,
+          {
+            explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
+          },
+          CallbackLoggerFactory.getInstance().getLogger(`ergo-data-adapter`),
+        );
+      case NETWORKS.bitcoin.key:
+        return new BitcoinEsploraDataAdapter(
+          addresses,
+          tokenMap,
+          {
+            url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
+          },
+          CallbackLoggerFactory.getInstance().getLogger('bitcoin-data-adapter'),
+        );
+      case NETWORKS.ethereum.key:
+        return new EthereumEvmRpcDataAdapter(
+          addresses,
+          tokenMap,
+          {
+            url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
+            authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
+          },
+          configs.chains.ethereum.adapter.chunkSize,
+          CallbackLoggerFactory.getInstance().getLogger(
+            'ethereum-data-adapter',
+          ),
+        );
+      case NETWORKS.binance.key:
+        return new BinanceEvmRpcDataAdapter(
+          addresses,
+          tokenMap,
+          {
+            url: configs.chains.binance.rpc.connections.at(0)!.url!,
+            authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
+          },
+          configs.chains.binance.adapter.chunkSize,
+          CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
+        );
+      case NETWORKS.cardano.key:
+        return new CardanoKoiosDataAdapter(
+          addresses,
+          tokenMap,
+          {
+            koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
+            authToken: configs.chains.cardano.koios.connections
+              .at(0)!
+              .authToken!.toString(),
+          },
+          CallbackLoggerFactory.getInstance().getLogger('cardano-data-adapter'),
+        );
+      case NETWORKS.doge.key:
+        return new DogeBlockCypherDataAdapter(
+          addresses,
+          tokenMap,
+          {
+            blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
+          },
+          CallbackLoggerFactory.getInstance().getLogger('doge-data-adapter'),
+        );
+    }
 
     throw new Error(`No adapter class found for chain: ${chain}`);
   };
