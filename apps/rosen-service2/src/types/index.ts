@@ -10,3 +10,8 @@ export interface RosenService2Configs extends RosenService2BaseConfig {
     [key: string]: ChainConfigs;
   };
 }
+
+export interface TotalSupply {
+  assetId: string;
+  totalSupply: bigint;
+}

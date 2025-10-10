@@ -34,11 +34,9 @@ describe('ErgoExplorerDataAdapter', () => {
     ctx.mockTokenMap = new TokenMap();
     await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
 
-    ctx.adapter = new ErgoExplorerDataAdapter(
-      ['addr1'],
-      ctx.mockTokenMap,
-      'http://explorer',
-    );
+    ctx.adapter = new ErgoExplorerDataAdapter(['addr1'], ctx.mockTokenMap, {
+      explorerUrl: 'http://explorer',
+    });
 
     ctx.mockExplorer = mockExplorer;
   });
