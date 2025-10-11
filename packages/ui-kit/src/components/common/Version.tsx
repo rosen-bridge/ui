@@ -1,14 +1,13 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
+import { SvgIcon, Divider } from '@mui/material';
 import { InfoCircle } from '@rosen-bridge/icons';
 
 import { useIsMobile } from '../../hooks';
 import {
   Box,
   CircularProgress,
-  Divider,
   IconButton,
-  SvgIcon,
   Tooltip,
   Typography,
 } from '../base';

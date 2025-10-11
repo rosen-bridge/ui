@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { Check } from '@rosen-bridge/icons';
 
 import {
@@ -8,7 +9,6 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  SvgIcon,
 } from '../../base';
 import { Popup } from './Popup';
 import { Input, SelectOption, Selected } from './types';

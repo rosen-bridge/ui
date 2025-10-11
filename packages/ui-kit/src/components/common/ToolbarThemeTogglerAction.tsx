@@ -1,7 +1,8 @@
+import { SvgIcon } from '@mui/material';
 import { Moon, Sun } from '@rosen-bridge/icons';
 
 import { useIsDarkMode, useThemeToggler } from '../../hooks';
-import { IconButton, SvgIcon } from '../base';
+import { IconButton } from '../base';
 
 export const ToolbarThemeTogglerAction = () => {
   const isDarkMode = useIsDarkMode();

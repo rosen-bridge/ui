@@ -1,4 +1,6 @@
-import { Stack, Typography } from '../../base';
+import { Stack } from '@mui/material';
+
+import { Typography } from '../../base';
 
 export const NotFound = () => {
   return (

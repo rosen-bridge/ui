@@ -5,6 +5,7 @@ import {
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import { TokenEntity } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';
 
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
@@ -15,6 +16,7 @@ import '../initialize-datasource-if-needed';
 const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
 const observationRepository = dataSource.getRepository(ObservationEntity);
+const tokenRepository = dataSource.getRepository(TokenEntity);
 
 interface EventWithTotal
   extends Omit<ObservationEntity, 'requestId'>,
@@ -75,10 +77,16 @@ export const getEvents = async (filters: Filters) => {
     field.value = tokenIds;
   })();
 
-  let { pagination, query, sort } = filtersToTypeorm(
-    filters,
-    (key) => `sub."${key}"`,
-  );
+  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+    switch (key) {
+      case 'amount':
+      case 'bridgeFee':
+      case 'networkFee':
+        return `sub."${key}Normalized"`;
+      default:
+        return `sub."${key}"`;
+    }
+  });
 
   const subquery = observationRepository
     .createQueryBuilder('oe')
@@ -87,6 +95,11 @@ export const getEvents = async (filters: Filters) => {
       eventTriggerRepository.metadata.tableName,
       'ete',
       'ete.eventId = oe.requestId',
+    )
+    .leftJoin(
+      tokenRepository.metadata.tableName,
+      'te',
+      'te.id = oe.sourceChainTokenId',
     )
     .select([
       'oe.id AS "id"',
@@ -118,20 +131,19 @@ export const getEvents = async (filters: Filters) => {
        *  event is a fraud
        */
       "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
+
+      '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
+      '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
+      '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "bridgeFeeNormalized"',
     ]);
 
   let queryBuilder = dataSource
     .createQueryBuilder()
     .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
-    .from(`(${subquery.getQuery()})`, 'sub');
+    .from(`(${subquery.getQuery()})`, 'sub')
+    .setParameters(subquery.getParameters());
 
   if (query) {
-    const keys = ['amount', 'bridgeFee', 'networkFee'];
-
-    for (const key of keys) {
-      query = query.replaceAll(`sub."${key}"`, `CAST(sub."${key}" AS BIGINT)`);
-    }
-
     queryBuilder = queryBuilder.where(query);
   }
 

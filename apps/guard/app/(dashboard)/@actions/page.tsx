@@ -8,11 +8,11 @@ import { FileEditAlt } from '@rosen-bridge/icons';
 import {
   Box,
   Grid,
-  SvgIcon,
   Tab,
   Tabs,
   styled,
   useResponsiveValue,
+  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
@@ -150,7 +150,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Pause Service"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <Pause />
             </SvgIcon>
           }
@@ -160,7 +160,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Stop Service"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <StopCircle />
             </SvgIcon>
           }
@@ -170,7 +170,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Pause Network"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <Pause />
             </SvgIcon>
           }
@@ -179,7 +179,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Request To Sign"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <FileEditAlt />
             </SvgIcon>
           }
@@ -188,7 +188,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Request An Order"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <ReceiptAlt />
             </SvgIcon>
           }
@@ -198,7 +198,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Generate Key"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <KeySkeleton />
             </SvgIcon>
           }
@@ -208,7 +208,7 @@ const Actions = () => {
           iconPosition={iconPosition}
           label="Key Reconstruction"
           icon={
-            <SvgIcon fontSize="small">
+            <SvgIcon size="small">
               <Redo />
             </SvgIcon>
           }

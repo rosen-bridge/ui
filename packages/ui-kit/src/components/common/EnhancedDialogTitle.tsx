@@ -1,9 +1,10 @@
 import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
+import { SvgIcon } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
-import { DialogTitle, IconButton, SvgIcon } from '../base';
+import { DialogTitle, IconButton } from '../base';
 
 const IconContainer = styled('div')(({ theme }) => ({
   display: 'flex',

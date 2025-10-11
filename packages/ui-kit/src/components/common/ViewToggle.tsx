@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import { Grid, Row } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { SvgIcon } from '../base';
 
 export type ViewType = 'grid' | 'row';
 

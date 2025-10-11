@@ -50,11 +50,11 @@ const Networks = () => {
 
   return (
     <CarouselProvider>
-      <Stack direction="row" alignItems="center" justifyContent="space-between">
+      <Stack direction="row" align="center" justify="between">
         <Typography variant="h2" fontWeight="300" color="text.secondary">
           Networks
         </Typography>
-        <Stack direction="row" alignItems="center" gap="0.5rem">
+        <Stack direction="row" align="center" spacing="0.5rem">
           <CarouselButton type="prev" />
           <CarouselIndicators />
           <CarouselButton type="next" />

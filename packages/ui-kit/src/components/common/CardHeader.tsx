@@ -3,9 +3,8 @@ import React from 'react';
 import {
   CardHeader as MuiCardHeader,
   CardHeaderProps as MuiCardHeaderProps,
+  Divider,
 } from '@mui/material';
-
-import { Divider } from '../base';
 
 /**
  * Props for `CardHeader` component.
