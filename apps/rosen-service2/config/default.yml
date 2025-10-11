@@ -37,6 +37,9 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 60
+    adapter:
+      blockCypher:
+        url: https://api.blockcypher.com
   ethereum:
     active: false
     initialHeight: 1

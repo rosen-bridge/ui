@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from '../base';
+import { Stack } from '@mui/material';
 
 export interface ToolbarProps {
   children?: React.ReactNode;

@@ -2,6 +2,7 @@ export interface RosenService2BaseConfig {
   paths: Paths;
   chains: Chains;
   healthCheck: HealthCheck;
+  redis: Redis;
   db: Db;
   logs: Logs[];
 }
@@ -23,6 +24,11 @@ export interface Db {
   username?: string;
   password?: string;
   name: string;
+}
+
+export interface Redis {
+  address: string;
+  token: string;
 }
 
 export interface HealthCheck {
@@ -63,6 +69,7 @@ export interface ChainsBinance {
   active: boolean;
   initialHeight: number;
   scanInterval: number;
+  adapter: ChainsBinanceAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsBinanceRpc;
 }
@@ -77,10 +84,16 @@ export interface ChainsBinanceRpcConnections {
   authToken?: string;
 }
 
+export interface ChainsBinanceAdapter {
+  extraAddresses?: string[];
+  chunkSize: number;
+}
+
 export interface ChainsEthereum {
   active: boolean;
   initialHeight: number;
   scanInterval: number;
+  adapter: ChainsEthereumAdapter;
   blockRetrieveGap?: number;
   rpc: ChainsEthereumRpc;
 }
@@ -95,10 +108,16 @@ export interface ChainsEthereumRpcConnections {
   authToken?: string;
 }
 
+export interface ChainsEthereumAdapter {
+  extraAddresses?: string[];
+  chunkSize: number;
+}
+
 export interface ChainsDoge {
   active: boolean;
   initialHeight: number;
   scanInterval: number;
+  adapter: ChainsDogeAdapter;
   blockRetrieveGap?: number;
   method?: 'rpc' | 'esplora';
   rpc: ChainsDogeRpc;
@@ -126,10 +145,20 @@ export interface ChainsDogeRpcConnections {
   password?: string;
 }
 
+export interface ChainsDogeAdapter {
+  extraAddresses?: string[];
+  blockCypher: ChainsDogeAdapterBlockCypher;
+}
+
+export interface ChainsDogeAdapterBlockCypher {
+  url: string;
+}
+
 export interface ChainsBitcoin {
   active: boolean;
   initialHeight: number;
   scanInterval: number;
+  adapter: ChainsBitcoinAdapter;
   blockRetrieveGap?: number;
   method?: 'rpc' | 'esplora';
   rpc: ChainsBitcoinRpc;
@@ -141,7 +170,7 @@ export interface ChainsBitcoinEsplora {
 }
 
 export interface ChainsBitcoinEsploraConnections {
-  url?: string;
+  url: string;
   timeout?: number;
   apiPrefix?: string;
 }
@@ -157,9 +186,14 @@ export interface ChainsBitcoinRpcConnections {
   password?: string;
 }
 
+export interface ChainsBitcoinAdapter {
+  extraAddresses?: string[];
+}
+
 export interface ChainsCardano {
   active: boolean;
   scanInterval: number;
+  adapter: ChainsCardanoAdapter;
   blockRetrieveGap?: number;
   method?: 'koios' | 'ogmios' | 'blockfrost';
   initialHeight?: number;
@@ -195,14 +229,19 @@ export interface ChainsCardanoKoios {
 }
 
 export interface ChainsCardanoKoiosConnections {
-  url?: string;
+  url: string;
   timeout?: number;
   authToken?: string;
+}
+
+export interface ChainsCardanoAdapter {
+  extraAddresses?: string[];
 }
 
 export interface ChainsErgo {
   initialHeight: number;
   scanInterval: number;
+  adapter: ChainsErgoAdapter;
   blockRetrieveGap?: number;
   method?: 'explorer' | 'node';
   node: ChainsErgoNode;
@@ -214,7 +253,7 @@ export interface ChainsErgoExplorer {
 }
 
 export interface ChainsErgoExplorerConnections {
-  url?: string;
+  url: string;
 }
 
 export interface ChainsErgoNode {
@@ -223,6 +262,10 @@ export interface ChainsErgoNode {
 
 export interface ChainsErgoNodeConnections {
   url?: string;
+}
+
+export interface ChainsErgoAdapter {
+  extraAddresses?: string[];
 }
 
 export interface Paths {
