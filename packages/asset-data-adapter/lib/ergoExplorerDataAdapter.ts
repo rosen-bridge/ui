@@ -4,7 +4,7 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { ChainAssetBalance } from './types';
+import { ChainAssetBalance, ErgoExplorerDataAdapterAuthParams } from './types';
 
 export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
   chain: string = NETWORKS.ergo.key;
@@ -13,11 +13,12 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected explorerUrl: string,
+    protected authParams: ErgoExplorerDataAdapterAuthParams,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
-    this.explorerApi = ergoExplorerClientFactory(explorerUrl);
+
+    this.explorerApi = ergoExplorerClientFactory(authParams.explorerUrl);
   }
 
   /**
