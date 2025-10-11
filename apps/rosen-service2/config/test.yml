@@ -1,3 +1,14 @@
+redis:
+  address: http://kv
+  token: 'kv-token'
+chains:
+  binance:
+    adapter:
+      chunkSize: 1
+  ethereum:
+    adapter:
+      chunkSize: 1
+
 paths:
   tokens: tests/config/rosen/tokensMap.json
   contracts: tests/config/rosen

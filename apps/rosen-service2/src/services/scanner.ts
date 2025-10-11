@@ -76,7 +76,8 @@ export class ScannerService extends PeriodicTaskService {
    * @async
    * @returns {Promise<void>} Resolves once all active scanners are created and registered
    * @throws {Error} If scanner or extractor creation fails
-   */ protected generateAndRegisterScannersWithExtractors = async () => {
+   */
+  protected generateAndRegisterScannersWithExtractors = async () => {
     try {
       this.scanners[NETWORKS.ergo.key] = await initializeErgoScanner(
         this.dbService.dataSource,

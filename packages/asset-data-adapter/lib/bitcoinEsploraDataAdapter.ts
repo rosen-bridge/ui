@@ -4,7 +4,10 @@ import { Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { ChainAssetBalance } from './types';
+import {
+  BitcoinEsploraDataAdapterAuthParams,
+  ChainAssetBalance,
+} from './types';
 
 export class BitcoinEsploraDataAdapter extends AbstractDataAdapter {
   chain: string = NETWORKS.bitcoin.key;
@@ -13,12 +16,12 @@ export class BitcoinEsploraDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    url: string = 'https://blockstream.info',
+    protected authParams: BitcoinEsploraDataAdapterAuthParams,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
     this.client = new Axios({
-      baseURL: url,
+      baseURL: authParams.url ?? 'https://blockstream.info',
     });
   }
 
