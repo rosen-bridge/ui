@@ -72,7 +72,7 @@ const DetailsSidebar = ({ item }: AssetGridDetailsProps) => {
   return (
     <Card
       ref={stickyRef}
-      variant="separated"
+      separated
       backgroundColor="background.paper"
       style={{
         width: '330px',

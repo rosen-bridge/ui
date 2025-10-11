@@ -41,7 +41,7 @@ const AssetGridCard = ({
   return (
     <Card active={isActive} onClick={handleClick} clickable>
       <CardBody>
-        <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" justify="between">
           <Token name={item.name} href={tokenUrl} />
           <Typography fontSize="0.75rem">
             <Connector

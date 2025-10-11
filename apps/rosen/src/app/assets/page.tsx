@@ -4,7 +4,7 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import {
   DataLayout,
@@ -118,6 +118,7 @@ const Assets = () => {
       sort={renderSort()}
       sidebar={renderSidebar()}
       pagination={renderPagination()}
+      view={renderView()}
     >
       {!isLoading && !items.length ? (
         <EmptyState style={{ height: 'calc(100vh - 288px)' }} />

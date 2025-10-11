@@ -1,5 +1,4 @@
 import {
-  EmptyState,
   GridContainer,
   TableGrid,
   TableGridBody,
@@ -11,6 +10,9 @@ import AssetGridCard from '@/app/assets/AssetGridCard';
 import AssetRow from '@/app/assets/AssetRow';
 import { Assets } from '@/types/api';
 
+/**
+ * ViewSProps
+ */
 export type ViewSProps = {
   current?: Assets;
   items?: Assets[];
