@@ -25,20 +25,14 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
   return (
     <div style={{ width: '100%' }}>
       <Stack
-        gap={1}
-        fontSize="1.5rem"
-        flexDirection="row"
-        alignItems="center"
-        justifyContent="start"
-        width="100%"
+        spacing={1}
+        direction="row"
+        align="center"
+        justify="start"
+        style={{ fontSize: '1.5rem', width: '100%' }}
       >
         <SvgIcon
-          sx={{
-            color: (theme) =>
-              state === 'hot'
-                ? theme.palette.secondary.dark
-                : theme.palette.tertiary.dark,
-          }}
+          color={`${state === 'hot' ? 'secondary.dark' : 'secondary.dark'}`}
         >
           {state === 'hot' ? <Fire /> : <SnowFlake />}
         </SvgIcon>

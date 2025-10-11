@@ -1,10 +1,11 @@
+import { SvgIcon } from '@mui/material';
 import * as Icons from '@rosen-bridge/icons';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network as NetworkType } from '@rosen-ui/types';
 import { camelCase, upperFirst } from 'lodash-es';
 
 import { styled } from '../../../styling';
-import { Skeleton, SvgIcon, Typography } from '../../base';
+import { Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 export type NetworkProps = {

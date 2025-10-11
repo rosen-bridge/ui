@@ -1,13 +1,14 @@
 import React, { HTMLAttributes, useEffect, useState } from 'react';
 
 import {
+  Stack,
   Step,
   StepConnector,
   StepContent,
   Stepper as StepperMui,
 } from '@mui/material';
 
-import { Box, Skeleton, Stack, Typography } from '../../base';
+import { Box, Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 import { ProcessIcon } from './ProcessIcon';
 import { ProcessLabel } from './ProcessLabel';

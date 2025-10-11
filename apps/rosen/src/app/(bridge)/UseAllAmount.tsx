@@ -64,7 +64,7 @@ export const UseAllAmount = ({
         )}
         {error && !loading && (
           <IconButton sx={{ verticalAlign: 'middle' }} onClick={onRetry}>
-            <SvgIcon color="error" sx={{ width: 24 }}>
+            <SvgIcon color="error">
               <SyncExclamation />
             </SvgIcon>
           </IconButton>

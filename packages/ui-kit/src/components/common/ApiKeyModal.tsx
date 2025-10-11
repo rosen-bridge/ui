@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
+import { SvgIcon } from '@mui/material';
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
 
 import { useApiKey, useSnackbar } from '../../hooks';
@@ -13,7 +14,6 @@ import {
   Tooltip,
   IconButton,
   InputAdornment,
-  SvgIcon,
   TextField,
   Typography,
 } from '../base';

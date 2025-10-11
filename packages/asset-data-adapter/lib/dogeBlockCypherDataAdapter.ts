@@ -4,7 +4,10 @@ import { Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { AbstractDataAdapter } from './abstracts';
-import { ChainAssetBalance } from './types';
+import {
+  ChainAssetBalance,
+  DogeBlockCypherDataAdapterAuthParams,
+} from './types';
 
 export class DogeBlockCypherDataAdapter extends AbstractDataAdapter {
   chain: string = NETWORKS.doge.key;
@@ -13,12 +16,13 @@ export class DogeBlockCypherDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    blockCypherUrl: string,
+    protected authParams: DogeBlockCypherDataAdapterAuthParams,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
+
     this.client = new Axios({
-      baseURL: blockCypherUrl,
+      baseURL: authParams.blockCypherUrl,
       headers: { 'Content-Type': 'application/json' },
     });
   }

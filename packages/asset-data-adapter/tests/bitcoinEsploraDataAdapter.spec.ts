@@ -25,11 +25,9 @@ describe('BitcoinEsploraDataAdapter', () => {
 
     ctx.mockTokenMap = new TokenMap();
     await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-    ctx.adapter = new BitcoinEsploraDataAdapter(
-      ['addr1'],
-      ctx.mockTokenMap,
-      'http://rpc',
-    );
+    ctx.adapter = new BitcoinEsploraDataAdapter(['addr1'], ctx.mockTokenMap, {
+      url: 'http://rpc',
+    });
   });
 
   describe('getAddressAssets', () => {

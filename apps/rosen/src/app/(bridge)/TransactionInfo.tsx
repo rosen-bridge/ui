@@ -69,7 +69,7 @@ export const TransactionInfo = () => {
             loading={isPending}
           />
         </Label>
-        <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
+        <Divider borderStyle="dashed" style={{ margin: '8px 0' }} />
         <Label label="Transaction Fee" dense>
           <Amount
             value={!tokenValue ? undefined : networkFeeRaw}
