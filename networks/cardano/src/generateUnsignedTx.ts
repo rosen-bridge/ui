@@ -175,7 +175,7 @@ const generateTx = (
       );
     }
     txBuilder.add_regular_input(
-      wasm.Address.from_bech32(utxo.address!),
+      wasm.Address.from_bech32(utxo.address),
       wasm.TransactionInput.new(
         wasm.TransactionHash.from_hex(utxo.txId),
         utxo.index,

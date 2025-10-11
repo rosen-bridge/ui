@@ -90,7 +90,7 @@ const InfoWidgets = () => {
           : ''
       }
       icon={
-        <SvgIcon fontSize="large">
+        <SvgIcon size="large">
           <LockAlt />
         </SvgIcon>
       }
@@ -110,7 +110,7 @@ const InfoWidgets = () => {
         title="Available / Total Reports"
         value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
         icon={
-          <SvgIcon fontSize="large">
+          <SvgIcon size="large">
             <LockAlt />
           </SvgIcon>
         }
@@ -152,7 +152,7 @@ const InfoWidgets = () => {
               : ''
           }
           icon={
-            <SvgIcon fontSize="large">
+            <SvgIcon size="large">
               <Wallet />
             </SvgIcon>
           }
@@ -164,7 +164,7 @@ const InfoWidgets = () => {
           value={titleRSN || titleERSN || '0 RSN'}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
-            <SvgIcon fontSize="large">
+            <SvgIcon size="large">
               <Wallet />
               {/* FIXME: Use an appropriate icon
                 local:ergo/rosen-bridge/ui#64
@@ -180,7 +180,7 @@ const InfoWidgets = () => {
           title="Health"
           value={data?.health.status ?? ''}
           icon={
-            <SvgIcon fontSize="large">
+            <SvgIcon size="large">
               {data?.health.status === 'Healthy' ? (
                 <ShieldCheck />
               ) : (

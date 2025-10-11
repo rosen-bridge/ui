@@ -1,8 +1,9 @@
 import { HTMLAttributes, useMemo } from 'react';
 
+import { SvgIcon, Stack } from '@mui/material';
 import { ExclamationTriangle, ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, Stack, SvgIcon, Typography } from '../../base';
+import { IconButton, Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {

@@ -3,7 +3,7 @@ import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
-import { ChainAssetBalance } from '../types';
+import { ChainAssetBalance, EvmRpcDataAdapterAuthParams } from '../types';
 import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
@@ -14,16 +14,15 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   constructor(
     protected addresses: string[],
     protected tokenMap: TokenMap,
-    protected url: string,
+    protected authParams: EvmRpcDataAdapterAuthParams,
     protected chunkSize: number,
-    protected authToken?: string,
     logger?: AbstractLogger,
   ) {
     super(addresses, tokenMap, logger);
-    this.provider = authToken
-      ? new JsonRpcProvider(`${url}/${authToken}`)
-      : new JsonRpcProvider(`${url}`);
 
+    this.provider = authParams.authToken
+      ? new JsonRpcProvider(`${authParams.url}/${authParams.authToken}`)
+      : new JsonRpcProvider(`${authParams.url}`);
     this.fetchOffset = 0;
   }
 
@@ -38,7 +37,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
     const chunk = supportedTokens.slice(
       this.fetchOffset,
-      this.chunkSize + this.fetchOffset,
+      this.fetchOffset + this.chunkSize,
     );
 
     for (const chainTokenDetails of chunk) {
