@@ -7,4 +7,4 @@
 '@rosen-bridge/rosen-app': minor
 ---
 
-Updated Supported NodeJS version to 22.18.0
+Update Supported NodeJS version to 22.18.0
