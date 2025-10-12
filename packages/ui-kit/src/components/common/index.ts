@@ -3,6 +3,7 @@ export * from './carousel';
 export * from './smartSearch';
 export * from './button';
 export * from './display';
+export * from './event';
 export * from './navigationBar';
 export * from './AlertCard';
 export * from './ApiKeyModal';
