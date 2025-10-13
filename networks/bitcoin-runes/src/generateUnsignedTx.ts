@@ -7,18 +7,16 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
-import bitcoinJs from 'bitcoinjs-lib';
+import * as bitcoinJs from 'bitcoinjs-lib';
 
-import {
-  GET_BOX_API_LIMIT,
-  MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
-  MINIMUM_BTC_FOR_TAPROOT_OUTPUT,
-} from './constants';
+import { MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT } from './constants';
 import { AssetBalance, UnsignedPsbtData } from './types';
 import {
-  generateFeeEstimatorWithAssumptions,
-  getAddressBtcBoxes,
-  getAddressRunesBoxes,
+  collect,
+  getAdditionalBoxes,
+  getAddressAvailableBtcUtxos,
+  getAddressRunesUtxos,
+  getAddressUtxos,
   getFeeRatio,
 } from './utils';
 
@@ -89,36 +87,12 @@ export const generateUnsignedTx =
     // generate fee estimator
     const feeRatio = await getFeeRatio();
 
-    const estimateFee = generateFeeEstimatorWithAssumptions(
-      runestone.encodedRunestone.length,
-      feeRatio,
-      0,
-      lockDataChunks.length + 1, // multiple utxos for data chunks, 1 utxo to lock address
-      0,
+    // generate iterator for address boxes
+    const runesUtxos = await collect(
+      getAddressRunesUtxos(fromAddress, token.tokenId),
     );
 
-    // fetch input boxes
     const boxSelection = new BitcoinRunesBoxSelection();
-
-    // generate iterator for address boxes
-    const runesUtxoIterator = async function* () {
-      let offset = 0;
-      const limit = GET_BOX_API_LIMIT;
-      while (true) {
-        const page = await getAddressRunesBoxes(
-          fromAddress,
-          token.tokenId,
-          offset,
-          limit,
-        );
-        if (page.length === 0) break;
-        yield* page;
-        offset += limit;
-      }
-      return undefined;
-    };
-
-    const selectedBoxes: BitcoinRunesUtxo[] = [];
 
     const coveredRunesBoxes = await boxSelection.getCoveringBoxes(
       {
@@ -127,10 +101,10 @@ export const generateUnsignedTx =
       },
       [],
       new Map(),
-      runesUtxoIterator(),
-      MINIMUM_BTC_FOR_TAPROOT_OUTPUT,
+      runesUtxos.values(),
+      0n,
       undefined,
-      estimateFee,
+      () => 0n,
     );
     if (!coveredRunesBoxes.covered) {
       throw new Error(
@@ -139,52 +113,66 @@ export const generateUnsignedTx =
         )}`,
       );
     }
-    selectedBoxes.push(...coveredRunesBoxes.boxes);
-    const preSelectedBtc = coveredRunesBoxes.boxes.reduce(
-      (a, b) => a + b.value,
-      0n,
-    );
+
+    const selectedBoxes: BitcoinRunesUtxo[] = coveredRunesBoxes.boxes;
 
     const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
     additionalAssets.nativeToken -= requiredAssets.nativeToken;
     let estimatedFee = coveredRunesBoxes.additionalAssets.fee;
 
+    let preSelectedBtc = selectedBoxes.reduce((a, b) => a + b.value, 0n);
+
     if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {
       const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
 
-      // generate fee estimator for 2nd box selection
-      const feeEstimator = generateFeeEstimatorWithAssumptions(
-        runestone.encodedRunestone.length,
+      // get available btc utxos
+      const btcUtxos = await collect(getAddressAvailableBtcUtxos(fromAddress));
+
+      const additionalBoxes = await getAdditionalBoxes(
+        requiredBtc,
+        selectedBoxes,
+        btcUtxos,
         feeRatio,
-        selectedBoxes.length,
-        lockDataChunks.length + 1, // multiple utxos for data chunks, 1 utxo to lock address
-        0,
+        runestone.encodedRunestone.length,
+        lockDataChunks.length,
       );
 
-      // generate iterator for address boxes to cover required btc
-      const btcUtxoIterator = (await getAddressBtcBoxes(lockAddress)).values();
-
-      // fetch input boxes to cover required BTC
-      const coveredBtcBoxes = await boxSelection.getCoveringBoxes(
-        { nativeToken: requiredBtc, tokens: [] },
-        selectedBoxes.map((box) => `${box.txId}.${box.index}`),
-        new Map(),
-        btcUtxoIterator,
-        MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
-        undefined,
-        feeEstimator,
-      );
-      if (!coveredBtcBoxes.covered) {
-        throw new Error(
-          `Available boxes didn't cover required BTC. Required BTC: ${requiredBtc}`,
-        );
-      }
       // add selected boxes
-      selectedBoxes.push(...coveredBtcBoxes.boxes);
+      selectedBoxes.push(...additionalBoxes.boxes);
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
-        coveredBtcBoxes.additionalAssets.aggregated.nativeToken;
-      estimatedFee = coveredBtcBoxes.additionalAssets.fee;
+        additionalBoxes.additionalAssets.aggregated.nativeToken;
+      estimatedFee = additionalBoxes.additionalAssets.fee;
+    }
+
+    preSelectedBtc = selectedBoxes.reduce((a, b) => a + b.value, 0n);
+    if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {
+      const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
+
+      // get all utxos
+      const utxos = await getAddressUtxos(fromAddress, runesUtxos);
+
+      const additionalBoxes = await getAdditionalBoxes(
+        requiredBtc,
+        selectedBoxes,
+        utxos,
+        feeRatio,
+        runestone.encodedRunestone.length,
+        lockDataChunks.length,
+      );
+
+      if (!additionalBoxes.covered) {
+        throw new Error(
+          `Boxes didn't cover required BTC. Required BTC: ${requiredBtc}`,
+        );
+      }
+
+      // add selected boxes
+      selectedBoxes.push(...additionalBoxes.boxes);
+      // the fee and additional BTC are only based on the additional assets of the 2nd selection
+      additionalAssets.nativeToken =
+        additionalBoxes.additionalAssets.aggregated.nativeToken;
+      estimatedFee = additionalBoxes.additionalAssets.fee;
     }
 
     const taprootPayment = bitcoinJs.payments.p2tr({

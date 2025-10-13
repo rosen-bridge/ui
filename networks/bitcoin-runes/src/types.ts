@@ -56,14 +56,23 @@ export interface UnisatRunesDetail {
   divisibility: number;
 }
 
-export interface UnisatAddressBtcUtxos {
+export interface UnisatPage {
   cursor: number;
   total: number;
+}
+
+export interface UnisatAddressAvailableBtcUtxos extends UnisatPage {
+  utxo: UnisatAddressAvailableBtcUtxo[];
+}
+
+export interface UnisatAddressBtcUtxos extends UnisatPage {
+  totalConfirmed: number;
+  totalUnconfirmed: number;
+  totalUnconfirmedSpend: number;
   utxo: UnisatBtcUtxo[];
 }
 
 export interface UnisatBtcUtxo {
-  confirmations: number;
   txid: string;
   vout: number;
   satoshi: number;
@@ -77,6 +86,10 @@ export interface UnisatBtcUtxo {
   isSpent: boolean;
   inscriptionsCount: number;
   inscriptions: UnisatInscriptionItem[];
+}
+
+export interface UnisatAddressAvailableBtcUtxo extends UnisatBtcUtxo {
+  confirmations: number;
 }
 
 export interface UnisatInscriptionItem {
