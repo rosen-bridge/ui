@@ -93,39 +93,36 @@ export const requestUnisat = async <T>(
 /**
  * gets confirmed and unspent boxes of an address
  * @param requiredBtc
- * @param selectedBoxes
+ * @param preSelectedBoxes
  * @param utxos
- * @param feeRatio
- * @param runestoneLength
- * @param lockDataChunksLength
+ * @param feeEstimator
  * @returns list of boxes
  */
 export const getAdditionalBoxes = async (
   requiredBtc: bigint,
-  selectedBoxes: BitcoinRunesUtxo[],
+  preSelectedBoxes: BitcoinRunesUtxo[],
   utxos: BitcoinRunesUtxo[],
-  feeRatio: number,
-  runestoneLength: number,
-  lockDataChunksLength: number,
+  feeEstimator: (
+    selectedBoxes: Array<BitcoinRunesUtxo>,
+    changeBoxesCount: number,
+  ) => bigint,
 ): Promise<CoveringBoxes<BitcoinRunesUtxo>> => {
-  const feeEstimator = generateFeeEstimatorWithAssumptions(
-    runestoneLength,
-    feeRatio,
-    selectedBoxes.length,
-    lockDataChunksLength + 1, // multiple utxos for data chunks, 1 utxo to lock address
-    0,
-  );
+  const feeEstimatorWrapper = (
+    selectedBoxes: Array<BitcoinRunesUtxo>,
+    changeBoxesCount: number,
+  ): bigint =>
+    feeEstimator(selectedBoxes, changeBoxesCount + preSelectedBoxes.length);
 
   // fetch input boxes to cover required BTC
   const boxSelection = new BitcoinRunesBoxSelection();
   const coveredBtcBoxes = await boxSelection.getCoveringBoxes(
     { nativeToken: requiredBtc, tokens: [] },
-    selectedBoxes.map((box) => `${box.txId}.${box.index}`),
+    preSelectedBoxes.map((box) => `${box.txId}.${box.index}`),
     new Map(),
     utxos.values(),
     MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
     undefined,
-    feeEstimator,
+    feeEstimatorWrapper,
   );
 
   return coveredBtcBoxes;
