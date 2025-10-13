@@ -150,7 +150,7 @@ export const generateUnsignedTx =
       const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
 
       // get all utxos
-      const utxos = await getAddressUtxos(fromAddress, runesUtxos);
+      const utxos = await getAddressUtxos(fromAddress);
 
       const additionalBoxes = await getAdditionalBoxes(
         requiredBtc,

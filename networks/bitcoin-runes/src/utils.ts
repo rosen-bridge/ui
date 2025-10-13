@@ -134,17 +134,13 @@ export const getAdditionalBoxes = async (
 /**
  * gets confirmed and unspent boxes of an address
  * @param address
- * @param runesUtxos
  * @returns list of boxes
  */
 export const getAddressUtxos = async (
   address: string,
-  runesUtxos: BitcoinRunesUtxo[],
 ): Promise<Array<BitcoinRunesUtxo>> => {
-  let utxos: BitcoinRunesUtxo[] = [];
-
   try {
-    utxos = await collect(getAddressAllBtcUtxos(address));
+    return await collect(getAddressAllBtcUtxos(address));
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (e: any) {
     const baseError = `Failed to get UTxOs containing BTC only for address [${address}] from Unisat: `;
@@ -153,23 +149,6 @@ export const getAddressUtxos = async (
     }
     throw new Error(baseError + e.message);
   }
-
-  const runesUtxosMap: Map<string, Array<BitcoinRunesUtxo>> = new Map();
-  for (const runesUtxo of runesUtxos) {
-    const boxId = `${runesUtxo.txId}.${runesUtxo.index}`;
-    if (!runesUtxosMap.has(boxId)) runesUtxosMap.set(boxId, [runesUtxo]);
-    else runesUtxosMap.set(boxId, [...runesUtxosMap.get(boxId)!, runesUtxo]);
-  }
-
-  for (const utxo of utxos) {
-    const boxId = `${utxo.txId}.${utxo.index}`;
-
-    if (runesUtxosMap.has(boxId)) {
-      utxo.runes = runesUtxosMap.get(boxId)!.flatMap((box) => box.runes);
-    }
-  }
-
-  return utxos;
 };
 
 /**
