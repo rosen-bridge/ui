@@ -82,10 +82,13 @@ export const generateUnsignedTx =
     requiredAssets.nativeToken += feeAndMinBoxValue;
     // get input boxes, THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
     const inputs = await selector.getCoveringBoxes(
-      requiredAssets,
+      lockAssets,
       [],
       new Map(),
       utxos.values(),
+      0n,
+      undefined,
+      () => 0n,
     );
     if (!inputs.covered) {
       const totalInputAda = utxos.reduce(
@@ -166,6 +169,11 @@ const generateTx = (
   // add input boxes to transaction
   inputs.forEach((utxo) => {
     inputAssets = sumAssetBalance(inputAssets, getUtxoAssets(utxo));
+    if (!utxo.address) {
+      throw new Error(
+        `ImpossibleBehavior: utxo has no value for address [${utxo.txId}] [${utxo.index}]`,
+      );
+    }
     txBuilder.add_regular_input(
       wasm.Address.from_bech32(utxo.address!),
       wasm.TransactionInput.new(
