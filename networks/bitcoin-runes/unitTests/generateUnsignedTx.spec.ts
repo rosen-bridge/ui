@@ -42,7 +42,7 @@ vi.mock('../src/utils', async (importOriginal) => {
   return {
     ...ref,
     getAdditionalBoxes,
-    getFeeRatio: async () => 1.1,
+    getFeeRatio: async () => 1,
   };
 });
 
