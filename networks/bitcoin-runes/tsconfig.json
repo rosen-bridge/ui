@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "outDir": "./dist",
-    "types": ["node", "vitest/globals"]
+    "types": ["vitest/globals"]
   },
   "include": ["src", "unitTests", "vitest.config.ts"]
 }

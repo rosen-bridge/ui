@@ -111,9 +111,6 @@ export const generateUnsignedTx =
 
     const selectedBoxes: BitcoinRunesUtxo[] = coveredRunesBoxes.boxes;
 
-    const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
-    additionalAssets.nativeToken -= requiredAssets.nativeToken;
-
     const feeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,
@@ -122,6 +119,9 @@ export const generateUnsignedTx =
       0,
     );
     let estimatedFee = feeEstimator(selectedBoxes, 1);
+
+    const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
+    additionalAssets.nativeToken -= requiredAssets.nativeToken + estimatedFee;
 
     let preSelectedBtc = selectedBoxes.reduce((a, b) => a + b.value, 0n);
 
@@ -147,11 +147,6 @@ export const generateUnsignedTx =
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
-    } else {
-      additionalAssets.nativeToken =
-        selectedBoxes.reduce((a, b) => a + b.value, 0n) -
-        requiredAssets.nativeToken -
-        estimatedFee;
     }
 
     // selection step 3
