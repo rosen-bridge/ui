@@ -95,23 +95,26 @@ export const requestUnisat = async <T>(
  * @param requiredBtc
  * @param preSelectedBoxes
  * @param utxos
- * @param feeEstimator
+ * @param runestoneLength
+ * @param lockDataChunksLength
+ * @param feeRatio
  * @returns list of boxes
  */
 export const getAdditionalBoxes = async (
   requiredBtc: bigint,
   preSelectedBoxes: BitcoinRunesUtxo[],
-  utxos: BitcoinRunesUtxo[],
-  feeEstimator: (
-    selectedBoxes: Array<BitcoinRunesUtxo>,
-    changeBoxesCount: number,
-  ) => bigint,
+  utxos: AsyncIterator<BitcoinRunesUtxo>,
+  runestoneLength: number,
+  lockDataChunksLength: number,
+  feeRatio: number,
 ): Promise<CoveringBoxes<BitcoinRunesUtxo>> => {
-  const feeEstimatorWrapper = (
-    selectedBoxes: Array<BitcoinRunesUtxo>,
-    changeBoxesCount: number,
-  ): bigint =>
-    feeEstimator(selectedBoxes, changeBoxesCount + preSelectedBoxes.length);
+  const feeEstimator = generateFeeEstimatorWithAssumptions(
+    runestoneLength,
+    feeRatio,
+    preSelectedBoxes.length,
+    lockDataChunksLength + 1, // multiple utxos for data chunks, 1 utxo to lock address
+    0,
+  );
 
   // fetch input boxes to cover required BTC
   const boxSelection = new BitcoinRunesBoxSelection();
@@ -119,48 +122,13 @@ export const getAdditionalBoxes = async (
     { nativeToken: requiredBtc, tokens: [] },
     preSelectedBoxes.map((box) => `${box.txId}.${box.index}`),
     new Map(),
-    utxos.values(),
+    utxos,
     MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
     undefined,
-    feeEstimatorWrapper,
+    feeEstimator,
   );
 
   return coveredBtcBoxes;
-};
-
-/**
- * gets confirmed and unspent boxes of an address
- * @param address
- * @returns list of boxes
- */
-export const getAddressUtxos = async (
-  address: string,
-): Promise<Array<BitcoinRunesUtxo>> => {
-  try {
-    return await collect(getAddressAllBtcUtxos(address));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    const baseError = `Failed to get UTxOs containing BTC only for address [${address}] from Unisat: `;
-    if (e.response) {
-      throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
-    }
-    throw new Error(baseError + e.message);
-  }
-};
-
-/**
- * collects all values of a generic AsyncGenerator
- * @param generator
- * @returns array of generic values
- */
-export const collect = async <T>(
-  generator: AsyncGenerator<T[], void, unknown>,
-): Promise<T[]> => {
-  const result: T[] = [];
-  for await (const page of generator) {
-    result.push(...page);
-  }
-  return result;
 };
 
 /**
@@ -178,7 +146,7 @@ export async function* getAddressAvailableBtcUtxos(
   address: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT,
-): AsyncGenerator<BitcoinRunesUtxo[], void, unknown> {
+): AsyncIterator<BitcoinRunesUtxo, undefined> {
   let offset = startOffset;
   let hasMorePages = true;
 
@@ -199,7 +167,9 @@ export async function* getAddressAvailableBtcUtxos(
         runes: [],
       }));
 
-      yield page;
+      for (const record of page) {
+        yield record;
+      }
 
       if (page.length < limit) {
         hasMorePages = false;
@@ -229,7 +199,7 @@ export async function* getAddressAllBtcUtxos(
   address: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT,
-): AsyncGenerator<BitcoinRunesUtxo[], void, unknown> {
+): AsyncIterator<BitcoinRunesUtxo, undefined> {
   let offset = startOffset;
   let hasMorePages = true;
 
@@ -250,7 +220,9 @@ export async function* getAddressAllBtcUtxos(
         runes: [],
       }));
 
-      yield page;
+      for (const record of page) {
+        yield record;
+      }
 
       if (page.length < limit) {
         hasMorePages = false;
@@ -281,7 +253,7 @@ export async function* getAddressRunesUtxos(
   runeId: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT,
-): AsyncGenerator<BitcoinRunesUtxo[], void, unknown> {
+): AsyncIterator<BitcoinRunesUtxo, undefined> {
   let offset = startOffset;
   let hasMorePages = true;
 
@@ -305,7 +277,9 @@ export async function* getAddressRunesUtxos(
         })),
       }));
 
-      yield page;
+      for (const record of page) {
+        yield record;
+      }
 
       if (page.length < limit) {
         hasMorePages = false;

@@ -12,12 +12,11 @@ import * as bitcoinJs from 'bitcoinjs-lib';
 import { MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT } from './constants';
 import { AssetBalance, UnsignedPsbtData } from './types';
 import {
-  collect,
   generateFeeEstimatorWithAssumptions,
   getAdditionalBoxes,
+  getAddressAllBtcUtxos,
   getAddressAvailableBtcUtxos,
   getAddressRunesUtxos,
-  getAddressUtxos,
   getFeeRatio,
 } from './utils';
 
@@ -82,21 +81,11 @@ export const generateUnsignedTx =
       pointer: 0,
     });
 
-    // generate fee estimator
+    // get fee ratio
     const feeRatio = await getFeeRatio();
 
-    const feeEstimator = generateFeeEstimatorWithAssumptions(
-      runestone.encodedRunestone.length,
-      feeRatio,
-      0,
-      lockDataChunks.length + 1, // multiple utxos for data chunks, 1 utxo to lock address
-      0,
-    );
-
     // generate iterator for boxes
-    const runesUtxos = await collect(
-      getAddressRunesUtxos(fromAddress, token.tokenId),
-    );
+    const runesUtxos = getAddressRunesUtxos(fromAddress, token.tokenId);
 
     const boxSelection = new BitcoinRunesBoxSelection();
 
@@ -107,7 +96,7 @@ export const generateUnsignedTx =
       },
       [],
       new Map(),
-      runesUtxos.values(),
+      runesUtxos,
       0n,
       undefined,
       () => 0n,
@@ -124,7 +113,15 @@ export const generateUnsignedTx =
 
     const additionalAssets = coveredRunesBoxes.additionalAssets.aggregated;
     additionalAssets.nativeToken -= requiredAssets.nativeToken;
-    let estimatedFee = coveredRunesBoxes.additionalAssets.fee;
+
+    const feeEstimator = generateFeeEstimatorWithAssumptions(
+      runestone.encodedRunestone.length,
+      feeRatio,
+      0,
+      lockDataChunks.length + 1, // multiple utxos for data chunks, 1 utxo to lock address
+      0,
+    );
+    let estimatedFee = feeEstimator(selectedBoxes, 1);
 
     let preSelectedBtc = selectedBoxes.reduce((a, b) => a + b.value, 0n);
 
@@ -133,13 +130,15 @@ export const generateUnsignedTx =
       const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
 
       // get available btc utxos
-      const btcUtxos = await collect(getAddressAvailableBtcUtxos(fromAddress));
+      const btcUtxos = getAddressAvailableBtcUtxos(fromAddress);
 
       const additionalBoxes = await getAdditionalBoxes(
         requiredBtc,
         selectedBoxes,
         btcUtxos,
-        feeEstimator,
+        runestone.encodedRunestone.length,
+        lockDataChunks.length,
+        feeRatio,
       );
 
       // add selected boxes
@@ -149,8 +148,6 @@ export const generateUnsignedTx =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
     } else {
-      estimatedFee = feeEstimator(selectedBoxes, 1);
-
       additionalAssets.nativeToken =
         selectedBoxes.reduce((a, b) => a + b.value, 0n) -
         requiredAssets.nativeToken -
@@ -163,13 +160,15 @@ export const generateUnsignedTx =
       const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
 
       // get all utxos
-      const utxos = await getAddressUtxos(fromAddress);
+      const utxos = getAddressAllBtcUtxos(fromAddress);
 
       const additionalBoxes = await getAdditionalBoxes(
         requiredBtc,
         selectedBoxes,
         utxos,
-        feeEstimator,
+        runestone.encodedRunestone.length,
+        lockDataChunks.length,
+        feeRatio,
       );
 
       if (!additionalBoxes.covered) {
