@@ -7,7 +7,7 @@ import {
   EmptyState,
   EventCard,
   GridContainer,
-  NewPagination,
+  Pagination,
   SmartSearch,
   SortField,
   useBreakpoint,
@@ -53,7 +53,7 @@ const Page = () => {
 
   const renderPagination = useCallback(
     () => (
-      <NewPagination
+      <Pagination
         defaultPageSize={25}
         pageSizeOptions={[25, 50, 100]}
         disabled={isLoading}
