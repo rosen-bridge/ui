@@ -8,7 +8,6 @@ import {
   Grid,
   Card,
   MenuItem,
-  SubmitButton,
   TextField,
   Typography,
   useApiKey,
@@ -16,6 +15,7 @@ import {
   CardTitle,
   CardBody,
   Stack,
+  Button2,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -144,9 +144,9 @@ export const RequestAnOrderForm = () => {
 
             <ApiKeyModalWarning />
 
-            <SubmitButton loading={isOrderPending} disabled={!apiKey}>
+            <Button2 loading={isOrderPending} disabled={!apiKey}>
               Send
-            </SubmitButton>
+            </Button2>
           </Stack>
         </form>
       </CardBody>

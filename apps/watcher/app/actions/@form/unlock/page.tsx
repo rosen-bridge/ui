@@ -8,9 +8,9 @@ import {
   AlertProps,
   Box,
   Grid,
-  SubmitButton,
   useApiKey,
   ApiKeyModalWarning,
+  Button2,
 } from '@rosen-bridge/ui-kit';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
@@ -185,9 +185,9 @@ const UnlockForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton loading={isUnlockPending} disabled={disabled}>
+        <Button2 loading={isUnlockPending} disabled={disabled}>
           Unlock
-        </SubmitButton>
+        </Button2>
 
         <ConfirmationModal
           open={confirmationModalOpen}

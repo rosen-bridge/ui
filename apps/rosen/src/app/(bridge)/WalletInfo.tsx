@@ -8,9 +8,9 @@ import {
   CardBody,
   Button,
   Grid,
-  IconButton,
   SvgIcon,
   Typography,
+  Button2,
 } from '@rosen-bridge/ui-kit';
 
 import { useNetwork, useWallet } from '@/hooks';
@@ -76,7 +76,7 @@ export const WalletInfo = () => {
         )}
         {walletState === 'CONNECTED' && (
           <>
-            <IconButton
+            <Button2
               style={{
                 borderRadius: '8px',
                 marginLeft: '-8px',
@@ -102,7 +102,7 @@ export const WalletInfo = () => {
                 )}
                 <Typography>{label}</Typography>
               </Grid>
-            </IconButton>
+            </Button2>
             <Button
               sx={{
                 color: (theme) => theme.palette.secondary.dark,

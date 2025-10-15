@@ -4,6 +4,7 @@ import { CommentAltExclamation } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
+  Button2,
   Card,
   CardBody,
   Connector,
@@ -14,7 +15,6 @@ import {
   EnhancedDialogTitle,
   Identifier,
   Label,
-  LoadingButton,
   Network,
   Stack,
   Typography,
@@ -98,7 +98,7 @@ export const SubmitButton = () => {
     isValidating;
   return (
     <>
-      <LoadingButton
+      <Button2
         style={{ width: '100%' }}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
@@ -109,7 +109,7 @@ export const SubmitButton = () => {
         }}
       >
         SUBMIT
-      </LoadingButton>
+      </Button2>
       <EnhancedDialog
         open={open}
         maxWidth="tablet"
@@ -159,22 +159,22 @@ export const SubmitButton = () => {
                 </div>
                 <Divider />
                 <Label label="Destination Address" orientation="vertical">
-                  <Identifier value={'walletAddressValue'} copyable />
+                  <Identifier value={walletAddressValue} copyable />
                 </Label>
               </Stack>
             </CardBody>
           </Card>
         </EnhancedDialogContent>
         <EnhancedDialogActions>
-          <LoadingButton
+          <Button2
             color="secondary"
             variant="contained"
             style={{ flexGrow: 2 }}
             onClick={() => setOpen(false)}
           >
             Cancel
-          </LoadingButton>
-          <LoadingButton
+          </Button2>
+          <Button2
             variant="contained"
             style={{ flexGrow: 5 }}
             loading={
@@ -183,7 +183,7 @@ export const SubmitButton = () => {
             onClick={handleFormSubmit}
           >
             Confirm
-          </LoadingButton>
+          </Button2>
         </EnhancedDialogActions>
       </EnhancedDialog>
     </>

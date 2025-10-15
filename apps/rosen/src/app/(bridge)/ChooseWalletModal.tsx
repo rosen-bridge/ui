@@ -5,7 +5,6 @@ import {
   Alert,
   Card,
   CardBody,
-  Button,
   Dialog,
   DialogContent,
   DialogContentText,
@@ -14,6 +13,7 @@ import {
   Tooltip,
   Stack,
   Box,
+  Button2,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -113,7 +113,7 @@ export const ChooseWalletModal = ({
                       >
                         <Icon />
                       </Box>
-                      <Button
+                      <Button2
                         variant="contained"
                         size="small"
                         style={{ width: '100%' }}
@@ -122,7 +122,7 @@ export const ChooseWalletModal = ({
                         onClick={handleClick}
                       >
                         {isConnected ? 'Disconnect' : 'Connect'}
-                      </Button>
+                      </Button2>
                     </Stack>
                   </Tooltip>
                 </CardBody>

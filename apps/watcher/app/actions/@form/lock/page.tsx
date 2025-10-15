@@ -8,9 +8,9 @@ import {
   AlertProps,
   ApiKeyModalWarning,
   Box,
+  Button2,
   Grid,
   Link,
-  SubmitButton,
   Typography,
   useApiKey,
 } from '@rosen-bridge/ui-kit';
@@ -266,10 +266,10 @@ const LockForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton loading={isLockPending} disabled={disabled}>
+        <Button2 loading={isLockPending} disabled={disabled}>
           {' '}
           Lock
-        </SubmitButton>
+        </Button2>
 
         <ConfirmationModal
           open={confirmationModalOpen}

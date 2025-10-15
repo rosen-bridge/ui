@@ -5,6 +5,7 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
+  Button2,
   Card,
   CardBody,
   CardHeader,
@@ -13,7 +14,6 @@ import {
   Grid,
   MenuItem,
   Stack,
-  SubmitButton,
   TextField,
   Typography,
   useApiKey,
@@ -169,9 +169,9 @@ export const RequestToSignForm = () => {
 
             <ApiKeyModalWarning />
 
-            <SubmitButton loading={isSignPending} disabled={!apiKey}>
+            <Button2 loading={isSignPending} disabled={!apiKey}>
               Send
-            </SubmitButton>
+            </Button2>
           </Stack>
         </form>
       </CardBody>

@@ -16,7 +16,7 @@ import {
   Alert,
   Autocomplete,
   InputAdornment,
-  IconButton,
+  Button2,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -210,7 +210,7 @@ export const BridgeForm = () => {
           disableUnderline: true,
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
+              <Button2
                 onClick={async () => {
                   try {
                     const clipboardText = await navigator.clipboard.readText();
@@ -227,7 +227,7 @@ export const BridgeForm = () => {
                 <SvgIcon opacity="0.6">
                   <ClipboardNotes />
                 </SvgIcon>
-              </IconButton>
+              </Button2>
             </InputAdornment>
           ),
         }}
