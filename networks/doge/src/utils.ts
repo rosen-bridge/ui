@@ -132,9 +132,8 @@ export const estimateTxWeight = (
 ): number => {
   const x =
     DOGE_TX_BASE_SIZE +
-    2 + // all txs include 40W. P2WPKH txs need additional 2W
-    44 + // OP_RETURN output base weight
-    opReturnLength * 2 + // OP_RETURN output data counts as vSize, so weight = hexString length / 2 * 4
+    11 + // OP_RETURN output base weight
+    opReturnLength / 2 + // OP_RETURN output data counts as vSize, so weight = hexString length / 2 * 4
     inputSize * DOGE_INPUT_SIZE + // inputs weights
     outputSize * DOGE_OUTPUT_SIZE; // outputs weights
   return x;
