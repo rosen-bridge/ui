@@ -103,7 +103,7 @@ export const requestUnisat = async <T>(
 export const getAdditionalBoxes = async (
   requiredBtc: bigint,
   preSelectedBoxes: BitcoinRunesUtxo[],
-  utxos: AsyncIterator<BitcoinRunesUtxo>,
+  utxos: AsyncGenerator<BitcoinRunesUtxo>,
   runestoneLength: number,
   lockDataChunksLength: number,
   feeRatio: number,
@@ -146,7 +146,7 @@ export async function* getAddressAvailableBtcUtxos(
   address: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT,
-): AsyncIterator<BitcoinRunesUtxo, undefined> {
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
   let offset = startOffset;
   let hasMorePages = true;
 
@@ -199,7 +199,7 @@ export async function* getAddressAllBtcUtxos(
   address: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT,
-): AsyncIterator<BitcoinRunesUtxo, undefined> {
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
   let offset = startOffset;
   let hasMorePages = true;
 
@@ -253,7 +253,7 @@ export async function* getAddressRunesUtxos(
   runeId: string,
   startOffset: number = 0,
   limit: number = GET_BOX_API_LIMIT,
-): AsyncIterator<BitcoinRunesUtxo, undefined> {
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
   let offset = startOffset;
   let hasMorePages = true;
 

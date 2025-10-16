@@ -1,18 +1,10 @@
+import { BitcoinRunesBoxSelection } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import { TokenMap } from '@rosen-bridge/tokens';
-import axios from 'axios';
 import { Mock } from 'vitest';
 
 import { generateUnsignedTx } from '../src';
 import { getAdditionalBoxes } from '../src/utils';
 import * as testData from './testData';
-
-vi.mock('axios', () => {
-  return {
-    default: {
-      get: vi.fn(),
-    },
-  };
-});
 
 vi.mock('../src/constants', async (importOriginal) => {
   const ref = await importOriginal<typeof import('../src/constants')>();
@@ -36,17 +28,35 @@ vi.mock('../src/utils', async (importOriginal) => {
   };
 });
 
+vi.mock('axios', () => {
+  return {
+    default: {
+      get: vi.fn().mockResolvedValue({ status: 200, data: {} }),
+    },
+  };
+});
+
+vi.mock(import('@rosen-bridge/bitcoin-runes-utxo-selection'), () => {
+  const BitcoinRunesBoxSelection = vi.fn();
+  BitcoinRunesBoxSelection.prototype.getCoveringBoxes = vi.fn();
+  return { BitcoinRunesBoxSelection };
+});
+
 describe('generateUnsignedTx', () => {
+  const getCoveringBoxesMock = BitcoinRunesBoxSelection.prototype
+    .getCoveringBoxes as Mock;
+
   beforeEach(() => {
     (getAdditionalBoxes as Mock).mockClear();
-    (axios.get as Mock).mockClear();
+    getCoveringBoxesMock.mockClear();
   });
 
   /**
    * @target generateUnsignedTx should perform 1 selection step to get the required amounts
    * @dependencies
    * @scenario
-   * - stub axios.get to return mock sequence of responses
+   * - stub axios.get to resolve
+   * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
    * - spy on getAdditionalBoxes
@@ -58,10 +68,7 @@ describe('generateUnsignedTx', () => {
    */
   it('should perform 1 selection step to get the required amounts', async () => {
     // arrange
-    (axios.get as Mock).mockResolvedValueOnce({
-      status: 200,
-      data: testData.runesBoxes2[0],
-    });
+    getCoveringBoxesMock.mockResolvedValueOnce(testData.selection1[0]);
 
     const getTokenMap = async () =>
       ({
@@ -89,7 +96,9 @@ describe('generateUnsignedTx', () => {
    * @target generateUnsignedTx should perform 2 selection step to get the required amounts
    * @dependencies
    * @scenario
-   * - stub axios.get to return mock sequence of responses
+   * - stub axios.get to resolve
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the second call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
    * - spy on getAdditionalBoxes
@@ -101,12 +110,9 @@ describe('generateUnsignedTx', () => {
    */
   it('should perform 2 selection step to get the required amounts', async () => {
     // arrange
-    (axios.get as Mock)
-      .mockResolvedValueOnce({ status: 200, data: testData.runesBoxes[0] })
-      .mockResolvedValueOnce({
-        status: 200,
-        data: testData.availableBtcBoxes2[0],
-      });
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection2[0])
+      .mockResolvedValueOnce(testData.selection2[1]);
 
     const getTokenMap = async () =>
       ({
@@ -134,7 +140,9 @@ describe('generateUnsignedTx', () => {
    * @target generateUnsignedTx should perform 3 selection steps to get the required amounts
    * @dependencies
    * @scenario
-   * - stub axios.get to return mock sequence of responses
+   * - stub axios.get to resolve
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the third call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
    * - spy on getAdditionalBoxes
@@ -146,15 +154,10 @@ describe('generateUnsignedTx', () => {
    */
   it('should perform 3 selection steps to get the required amounts', async () => {
     // arrange
-    (axios.get as Mock)
-      .mockResolvedValueOnce({ status: 200, data: testData.runesBoxes[0] })
-      .mockResolvedValueOnce({
-        status: 200,
-        data: testData.availableBtcBoxes[0],
-      })
-      .mockResolvedValueOnce({ status: 200, data: testData.allBtcBoxes[0] })
-      .mockResolvedValueOnce({ status: 200, data: testData.allBtcBoxes[1] })
-      .mockResolvedValueOnce({ status: 200, data: testData.allBtcBoxes[2] });
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection3[0])
+      .mockResolvedValueOnce(testData.selection3[1])
+      .mockResolvedValueOnce(testData.selection3[2]);
 
     const getTokenMap = async () =>
       ({
