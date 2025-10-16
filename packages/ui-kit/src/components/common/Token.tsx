@@ -1,10 +1,10 @@
 import React, { HTMLAttributes } from 'react';
 
-import { SvgIcon, Stack } from '@mui/material';
+import { SvgIcon, Stack, Tooltip } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Skeleton, IconButton } from '../base';
+import { Typography, Skeleton, IconButton, Box } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 
@@ -41,6 +41,7 @@ const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
       flexDirection={!reverse ? 'row' : 'row-reverse'}
       fontSize="inherit"
       gap="0.5em"
+      overflow="hidden"
     >
       {loading ? (
         <>
@@ -60,16 +61,19 @@ const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
           >
             {capitalize(name).slice(0, 1)}
           </Avatar>
-
-          <Stack flexDirection="column" alignItems="start">
-            <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
-          </Stack>
+          <Tooltip title={name} enterDelay={500}>
+            <Typography sx={{ fontSize: 'inherit' }} noWrap>
+              {name}
+            </Typography>
+          </Tooltip>
           {!!href && (
-            <IconButton target="_blank" size="small" href={href}>
-              <SvgIcon fontSize="small">
-                <ExternalLinkAlt />
-              </SvgIcon>
-            </IconButton>
+            <Box ml={reverse ? 0 : -1} mr={reverse ? -1 : 0}>
+              <IconButton target="_blank" size="small" href={href}>
+                <SvgIcon fontSize="small">
+                  <ExternalLinkAlt />
+                </SvgIcon>
+              </IconButton>
+            </Box>
           )}
         </>
       )}
