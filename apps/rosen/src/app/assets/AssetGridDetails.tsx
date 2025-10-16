@@ -11,6 +11,7 @@ import {
   EnhancedDialogContent,
   EnhancedDialogTitle,
   Label,
+  Stack,
   Token,
   Typography,
   useBreakpoint,
@@ -19,7 +20,9 @@ import {
 
 import { Assets as AssetType } from '@/types/api';
 
+import BridgedAssetCard from './BridgedAssetCard';
 import { useAsset } from './useAsset';
+import { useAssetDetails } from './useAssetDetails';
 
 interface AssetGridDetailsProps {
   item: AssetType | undefined;
@@ -29,10 +32,11 @@ interface AssetGridDetailsProps {
 const DetailsContent = ({ item }: { item: AssetType }) => {
   const { tokenUrl, hot, hotUrl, cold, coldUrl, locked, bridged } =
     useAsset(item);
+  const { bridgedAssets, isLoading } = useAssetDetails(item.id);
 
   return (
-    <Columns width="175px" count={2} rule gap="32px">
-      <Label label="Locked" orientation="horizontal">
+    <Columns width="250px" count={2} rule gap="32px">
+      <Label label="Token" orientation="horizontal">
         <Token name={item.name} href={tokenUrl} reverse />
       </Label>
       <Label label="Locked" orientation="horizontal">
@@ -47,6 +51,20 @@ const DetailsContent = ({ item }: { item: AssetType }) => {
       <Label label="Bridged" orientation="horizontal">
         <Amount value={bridged} />
       </Label>
+
+      <div>
+        <Label label="Bridged to" />
+        <Stack spacing={1}>
+          {bridgedAssets.map((asset, index) => (
+            <BridgedAssetCard
+              asset={asset}
+              decimals={item.significantDecimals}
+              isLoading={isLoading}
+              key={index}
+            />
+          ))}
+        </Stack>
+      </div>
     </Columns>
   );
 };

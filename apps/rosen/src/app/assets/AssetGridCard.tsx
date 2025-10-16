@@ -1,10 +1,10 @@
 import {
   Amount,
+  AvatarGroup,
   Box,
   Card,
   CardBody,
   Connector,
-  Identifier,
   Label,
   Network,
   Skeleton,
@@ -16,6 +16,7 @@ import {
 import { Assets as AssetType } from '@/types/api';
 
 import { useAsset } from './useAsset';
+import { useAssetDetails } from './useAssetDetails';
 
 interface AssetRowProps {
   item: AssetType;
@@ -30,7 +31,11 @@ const AssetGridCard = ({
   isActive,
   onClick,
 }: AssetRowProps) => {
-  const { tokenUrl, bridged, locked } = useAsset(item);
+  const { bridged, locked } = useAsset(item);
+  const { bridgedAssets, isLoading: bridgedAssetsLoading } = useAssetDetails(
+    item.id,
+    1,
+  );
 
   const handleClick = () => {
     if (onClick) onClick(item);
@@ -41,19 +46,27 @@ const AssetGridCard = ({
   return (
     <Card active={isActive} onClick={handleClick} clickable>
       <CardBody>
-        <Stack direction="row" justify="between">
-          <Token name={item.name} href={tokenUrl} />
+        <Stack direction="row" justify="between" style={{ maxWidth: 600 }}>
+          <Token name={item.name} />
           <Typography fontSize="0.75rem">
             <Connector
               start={<Network name={item.chain} variant="logo" />}
-              end={<Network name={'ethereum'} variant="logo" />}
+              end={
+                <AvatarGroup>
+                  {bridgedAssets.map((asset) => (
+                    <Network
+                      name={asset.chain}
+                      variant="logo"
+                      loading={bridgedAssetsLoading}
+                      key={asset.chain}
+                    />
+                  ))}
+                </AvatarGroup>
+              }
               variant="filled"
             />
           </Typography>
         </Stack>
-        <Typography>
-          <Identifier value={item.id} copyable />
-        </Typography>
         <Box mt={1} mb={-1}>
           <Label label="Bridged" dense>
             <Amount value={bridged} />

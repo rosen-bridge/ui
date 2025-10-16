@@ -47,7 +47,7 @@ const BridgedAssetCard = ({
           <Network name={chain} />
           <Amount value={getDecimalString(amount, decimals)} />
         </Box>
-        <Box fontSize={'0.875rem'} color="text.secondary">
+        <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>
           <Identifier value={birdgedTokenId} href={tokenUrl || undefined} />
         </Box>
       </CardBody>

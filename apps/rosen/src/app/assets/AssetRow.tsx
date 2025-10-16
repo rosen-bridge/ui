@@ -112,7 +112,7 @@ const AssetRow = ({ item, isLoading }: AssetRowProps) => {
       </TableGridBodyCol>
       {/* Row details, which is collapsed by default. */}
       <TableGridBodyDetails expanded={expanded}>
-        <AssetRowDetails row={item} expanded={expanded} />
+        <AssetRowDetails row={item} />
       </TableGridBodyDetails>
     </TableGridBodyRow>
   );
