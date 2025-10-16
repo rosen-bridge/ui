@@ -108,7 +108,12 @@ const Assets = () => {
   );
 
   const renderView = useCallback(
-    () => <ViewToggle onChangeView={(value) => setActiveView(value)} />,
+    () => (
+      <ViewToggle
+        defaultView="row"
+        onChangeView={(value) => setActiveView(value)}
+      />
+    ),
     [setActiveView],
   );
 
