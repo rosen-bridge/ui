@@ -28,14 +28,6 @@ vi.mock('../src/utils', async (importOriginal) => {
   };
 });
 
-vi.mock('axios', () => {
-  return {
-    default: {
-      get: vi.fn().mockResolvedValue({ status: 200, data: {} }),
-    },
-  };
-});
-
 vi.mock(import('@rosen-bridge/bitcoin-runes-utxo-selection'), () => {
   const BitcoinRunesBoxSelection = vi.fn();
   BitcoinRunesBoxSelection.prototype.getCoveringBoxes = vi.fn();
@@ -56,9 +48,7 @@ describe('generateUnsignedTx', () => {
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
-   * - axios
    * @scenario
-   * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
    * - stub tokenMap.unwrapAmount to return a mock value
@@ -101,9 +91,7 @@ describe('generateUnsignedTx', () => {
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
-   * - axios
    * @scenario
-   * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
    *  amount on the second call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
@@ -149,9 +137,7 @@ describe('generateUnsignedTx', () => {
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
-   * - axios
    * @scenario
-   * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
    *  amount on the third call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
@@ -198,9 +184,7 @@ describe('generateUnsignedTx', () => {
    * @dependencies
    * - TokenMap
    * - BitcoinRunesBoxSelection
-   * - axios
    * @scenario
-   * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
    *  amount on the 4th call
    * - stub constants to return a mock value for GET_BOX_API_LIMIT
