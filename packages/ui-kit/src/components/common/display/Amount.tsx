@@ -72,7 +72,7 @@ const AmountBase = ({
     <Stack
       display="inline-flex"
       flexDirection="row"
-      alignItems="baseline"
+      alignItems="center"
       {...props}
     >
       {loading ? (
@@ -120,7 +120,6 @@ const AmountBase = ({
           rel="noopener noreferrer"
           size="small"
           href={href}
-          style={{ marginLeft: '4px' }}
         >
           <SvgIcon fontSize="small">
             <ExternalLinkAlt />
