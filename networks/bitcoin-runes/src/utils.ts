@@ -25,6 +25,7 @@ import {
   TAPROOT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
 import type {
+  EsploraUtxo,
   UnisatAddressAvailableBtcUtxos,
   UnisatAddressBtcUtxos,
   UnisatAddressRunesUtxos,
@@ -402,9 +403,31 @@ export const generateFeeEstimatorWithAssumptions = (
     const estimatedVsize = estimateTxVsize(
       selectedBoxes.length + preSelectedInputCount,
       opReturnScriptLength,
-      nativeSegwitOutputSize,
-      taprootOutputSize + changeBoxesCount, // There is always a taproot change output
+      nativeSegwitOutputSize + changeBoxesCount, // There is always a native segwit change output
+      taprootOutputSize,
     );
     return BigInt(Math.ceil(estimatedVsize * feeRatio));
   };
 };
+
+/**
+ * gets utxos by address from Esplora
+ * @param address
+ * @returns array of BitcoinRunesUtxo
+ */
+export async function* getEsploraAddressUtxos(
+  address: string,
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  const esploraUrl = process.env.BITCOIN_ESPLORA_API;
+  const GET_ADDRESS_UTXOS = `${esploraUrl}/api/address/${address}/utxo`;
+  const response = await Axios.get<Array<EsploraUtxo>>(GET_ADDRESS_UTXOS);
+
+  for (const record of response.data) {
+    yield {
+      txId: record.txid,
+      index: record.vout,
+      value: BigInt(record.value),
+      runes: [],
+    };
+  }
+}

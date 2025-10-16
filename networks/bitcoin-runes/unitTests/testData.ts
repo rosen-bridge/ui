@@ -10,6 +10,9 @@ import {
 export const fromAddress =
   'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z';
 
+export const fromPaymentAddress =
+  'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk';
+
 export const lockAddress =
   'bc1pvpyum6lxgrfr675wz8v9jxk2jmqvm9nzdly9p2cmvhnawhl0tvtsz73adv';
 
@@ -463,6 +466,71 @@ export const selection3 = [
       fee: 0n,
     },
     uncoveredAssets: undefined,
+  },
+  {
+    covered: false,
+    boxes: [],
+    additionalAssets: {
+      aggregated: { nativeToken: -245n, tokens: [] },
+      list: [],
+      fee: 245n,
+    },
+    uncoveredAssets: { nativeToken: 1221n, tokens: [] },
+  },
+  {
+    covered: true,
+    boxes: [
+      {
+        txId: '22b93e565aaa62ab0fa1471fcaabaa7e665a4d3d3623186bd36a241cbe65f850',
+        index: 0,
+        value: 55133n,
+        runes: [],
+      },
+    ],
+    additionalAssets: {
+      aggregated: { nativeToken: 53811n, tokens: [] },
+      list: [{ nativeToken: 53811n, tokens: [] }],
+      fee: 346n,
+    },
+    uncoveredAssets: undefined,
+  },
+];
+
+export const selection4 = [
+  {
+    covered: true,
+    boxes: [
+      {
+        txId: 'ba9bd0e9c84b2743313d3b7f34777e9dab0688fc85fa9cce8cbb340f8d06ffcb',
+        index: 0,
+        value: 500n,
+        runes: [{ runeId: '880352:855', quantity: 4492999000n }],
+      },
+    ],
+    additionalAssets: {
+      aggregated: {
+        nativeToken: 500n,
+        tokens: [{ id: '880352:855', value: 4492998990n }],
+      },
+      list: [
+        {
+          nativeToken: 500n,
+          tokens: [{ id: '880352:855', value: 4492998990n }],
+        },
+      ],
+      fee: 0n,
+    },
+    uncoveredAssets: undefined,
+  },
+  {
+    covered: false,
+    boxes: [],
+    additionalAssets: {
+      aggregated: { nativeToken: -245n, tokens: [] },
+      list: [],
+      fee: 245n,
+    },
+    uncoveredAssets: { nativeToken: 1221n, tokens: [] },
   },
   {
     covered: false,

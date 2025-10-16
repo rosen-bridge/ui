@@ -68,6 +68,20 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     return address!.address;
   };
 
+  fetchPaymentAddress = async (): Promise<string | undefined> => {
+    const response = await request('getAddresses', {
+      purposes: [AddressPurpose.Payment],
+    });
+
+    if (response.status == 'error') throw response.error;
+
+    const address = response.result.addresses.find(
+      (address) => address.purpose === AddressPurpose.Payment,
+    );
+
+    return address!.address;
+  };
+
   fetchPublicKey = async (): Promise<string | undefined> => {
     const response = await request('getAddresses', {
       purposes: [this.purpose],
@@ -142,10 +156,12 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
 
     if (this.currentNetwork instanceof BitcoinRunesNetwork) {
       const userPublicKey = await this.fetchPublicKey();
+      const userPaymentAddress = await this.fetchPaymentAddress();
 
       psbtData = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,
         userAddress,
+        userPaymentAddress!,
         params.amount,
         opReturnData,
         params.token,

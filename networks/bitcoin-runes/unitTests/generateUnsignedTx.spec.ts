@@ -54,6 +54,9 @@ describe('generateUnsignedTx', () => {
   /**
    * @target generateUnsignedTx should perform 1 selection step to get the required amounts
    * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * - axios
    * @scenario
    * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to a mock object that covers the required amount
@@ -81,6 +84,7 @@ describe('generateUnsignedTx', () => {
     const result = await generateUnsignedTx(getTokenMap)(
       testData.lockAddress,
       testData.fromAddress,
+      testData.fromPaymentAddress,
       100n,
       testData.lockData,
       testData.transferToken,
@@ -95,6 +99,9 @@ describe('generateUnsignedTx', () => {
   /**
    * @target generateUnsignedTx should perform 2 selection step to get the required amounts
    * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * - axios
    * @scenario
    * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
@@ -125,6 +132,7 @@ describe('generateUnsignedTx', () => {
     const result = await generateUnsignedTx(getTokenMap)(
       testData.lockAddress,
       testData.fromAddress,
+      testData.fromPaymentAddress,
       100n,
       testData.lockData,
       testData.transferToken,
@@ -139,6 +147,9 @@ describe('generateUnsignedTx', () => {
   /**
    * @target generateUnsignedTx should perform 3 selection steps to get the required amounts
    * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * - axios
    * @scenario
    * - stub axios.get to resolve
    * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
@@ -170,6 +181,7 @@ describe('generateUnsignedTx', () => {
     const result = await generateUnsignedTx(getTokenMap)(
       testData.lockAddress,
       testData.fromAddress,
+      testData.fromPaymentAddress,
       100n,
       testData.lockData,
       testData.transferToken,
@@ -179,5 +191,56 @@ describe('generateUnsignedTx', () => {
     // assert
     expect(result.inputSize).toBe(2);
     expect(getAdditionalBoxes).toHaveBeenCalledTimes(2);
+  });
+
+  /**
+   * @target generateUnsignedTx should perform 4 selection steps to get the required amounts
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * - axios
+   * @scenario
+   * - stub axios.get to resolve
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the 4th call
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - spy on getAdditionalBoxes
+   * - call generateUnsignedTx
+   * - check the returned psbt
+   * @expected
+   * - returning inputSize should have been 2
+   * - getAdditionalBoxes mock should have been called 3 times
+   */
+
+  it('should perform 4 selection steps to get the required amounts', async () => {
+    // arrange
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection4[0])
+      .mockResolvedValueOnce(testData.selection4[1])
+      .mockResolvedValueOnce(testData.selection4[2])
+      .mockResolvedValueOnce(testData.selection4[3]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi
+          .fn()
+          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    const result = await generateUnsignedTx(getTokenMap)(
+      testData.lockAddress,
+      testData.fromAddress,
+      testData.fromPaymentAddress,
+      100n,
+      testData.lockData,
+      testData.transferToken,
+      testData.internalPubkey,
+    );
+
+    // assert
+    expect(result.inputSize).toBe(2);
+    expect(getAdditionalBoxes).toHaveBeenCalledTimes(3);
   });
 });
