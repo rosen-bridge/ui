@@ -3,7 +3,9 @@ image: node:20.18.1
 stages:
   - installation
   - build
+  - knip
   - type_check
+  - prettify
   - lint
   - unit_tests
   - changeset
@@ -39,6 +41,21 @@ build:
   script:
     - npm run build:mono-packages
 
+knip:
+  stage: knip
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+      - apps/*/node_modules
+      - packages/*/node_modules
+      - packages/*/dist
+      - wallets/*/node_modules
+      - wallets/*/dist
+  script:
+    - npx knip --dependencies
+
 type_check:
   stage: type_check
   cache:
@@ -54,6 +71,16 @@ type_check:
   script:
     - npm run type-check --workspaces --if-present
 
+prettify:
+  stage: prettify
+  cache:
+    key: $CI_COMMIT_REF_NAME
+    policy: pull
+    paths:
+      - node_modules
+  script:
+    - npm run prettify:check
+
 lint:
   stage: lint
   cache:
@@ -62,7 +89,7 @@ lint:
     paths:
       - node_modules
   script:
-    - npm run lint --workspaces --if-present
+    - npm run lint:check
 
 unit_tests:
   stage: unit_tests

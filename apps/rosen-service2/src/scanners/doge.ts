@@ -1,22 +1,21 @@
 import {
-  DogeEsploraScanner,
-  EsploraNetwork,
-} from '@rosen-bridge/bitcoin-esplora-scanner';
+  NetworkConnectorManager,
+  RoundRobinStrategy,
+} from '@rosen-bridge/abstract-scanner';
 import {
   DogeRpcObservationExtractor,
   DogeEsploraObservationExtractor,
 } from '@rosen-bridge/bitcoin-observation-extractor';
 import {
+  DogeEsploraScanner,
+  EsploraNetwork,
   DogeRpcNetwork,
   DogeRpcScanner,
   DogeRpcTransaction,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+  BitcoinEsploraTransaction,
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
@@ -38,10 +37,10 @@ export const buildDogeRpcScannerWithExtractors = async (
   // Create Doge scanner with RPC network settings
   const networkConnectorManager =
     new NetworkConnectorManager<DogeRpcTransaction>(
-      new FailoverStrategy(),
+      new RoundRobinStrategy(),
       logger,
     );
-  configs.chains.doge.rpc.forEach((rpc) => {
+  configs.chains.doge.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
       new DogeRpcNetwork(
         rpc.url!,
@@ -60,7 +59,6 @@ export const buildDogeRpcScannerWithExtractors = async (
     initialHeight: configs.chains.doge.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
-    suffix: configs.chains.doge.rpcSuffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'doge-scanner-logger',
     ),
@@ -107,16 +105,25 @@ export const buildDogeEsploraScannerWithExtractors = async (
   logger.info('Starting Doge scanner initialization...');
 
   // Create Doge scanner with Esplora network settings
+  const networkConnectorManager =
+    new NetworkConnectorManager<BitcoinEsploraTransaction>(
+      new RoundRobinStrategy(),
+      logger,
+    );
+  configs.chains.doge.esplora.connections.forEach((esplora) => {
+    networkConnectorManager.addConnector(
+      new EsploraNetwork(
+        esplora.url!,
+        esplora.timeout! * 1000,
+        esplora.apiPrefix,
+      ),
+    );
+  });
   const dogeScanner = new DogeEsploraScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.doge.initialHeight,
-    network: new EsploraNetwork(
-      configs.chains.doge.esplora.url!,
-      configs.chains.doge.esplora.timeout! * 1000,
-      configs.chains.doge.esplora.apiPrefix,
-    ),
+    network: networkConnectorManager,
     blockRetrieveGap: configs.chains.doge.blockRetrieveGap,
-    suffix: configs.chains.doge.esplora.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'doge-scanner-logger',
     ),

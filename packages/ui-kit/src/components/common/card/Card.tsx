@@ -1,26 +1,18 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
 
 import { Box } from '../../base';
+import { InjectOverrides } from '../InjectOverrides';
 
 /**
  * Props for the `Card` component.
  */
-type CardProps = {
-  /**
-   * If `true`, the card will show a pointer cursor on hover,
-   * indicating it is clickable.
-   *
-   * @default false
-   */
-  clickable?: boolean;
-
+export type CardProps = HTMLAttributes<HTMLDivElement> & {
   /**
    * If `true`, the card will show an outline indicating it is active.
    *
    * @default false
    */
   active?: boolean;
-
   /**
    * Background color of the card.
    *
@@ -29,12 +21,27 @@ type CardProps = {
    * @default "white"
    */
   backgroundColor?: string;
+  /**
+   * If `true`, the card will show a pointer cursor on hover,
+   * indicating it is clickable.
+   *
+   * @default false
+   */
+  clickable?: boolean;
+  /**
+   * If `true`, the card will be displayed with separated style.
+   *
+   * @default false
+   */
+  separated?: boolean;
 
   /**
-   * Visual variant of the card. Currently supports only `'separated'`.
+   * Visual variant of the card. Supports `'default' | 'section'`.
+   *
+   * @default 'default'
    */
-  variant?: 'separated';
-} & HTMLAttributes<HTMLDivElement>;
+  variant?: 'default' | 'section';
+};
 
 /**
  * `Card` is a reusable UI component based on MUI's `Box`.
@@ -43,19 +50,27 @@ type CardProps = {
  *
  * @example
  * ```tsx
- * <Card clickable active backgroundColor="#f0f0f0" variant="separated">
+ * <Card clickable active backgroundColor="#f0f0f0" separated variant="section">
  *   Content here
  * </Card>
  * ```
  */
-export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
-  { clickable, active, backgroundColor = 'white', children, variant, ...rest },
+const CardBase = forwardRef<HTMLDivElement, CardProps>(function Card(
+  {
+    active,
+    backgroundColor = 'white',
+    clickable,
+    children,
+    separated,
+    variant = 'default',
+    ...rest
+  },
   ref,
 ) {
   return (
     <Box
       ref={ref}
-      className={`card2 ${variant ? 'card2-' + variant : ''}`}
+      className={`card2 card2-${variant} ${separated ? 'card2-separated' : ''}`}
       sx={{
         backgroundColor: backgroundColor,
         borderRadius: (theme) => theme.spacing(2),
@@ -71,3 +86,5 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(function Card(
     </Box>
   );
 });
+
+export const Card = InjectOverrides(CardBase);

@@ -128,6 +128,29 @@
       }
     }
   },
+  "redis": {
+    "type": "object",
+    "children": {
+      "address": {
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "redis address must be specified"
+          }
+        ]
+      },
+      "token": {
+        "type": "string",
+        "validations": [
+          {
+            "required": true,
+            "error": "redis token must be specified"
+          }
+        ]
+      }
+    }
+  },
   "healthCheck": {
     "type": "object",
     "children": {
@@ -248,6 +271,17 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "ergo blockRetrieveGap threshold in seconds"
@@ -265,33 +299,52 @@
           "node": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "ergo node url",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "ergo node url must be specified",
-                    "when": {"path": "chains.ergo.method", "value": "node"}
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "ergo node url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "ergo node url must be specified",
+                          "when": {
+                            "path": "chains.ergo.method",
+                            "value": "node"
+                          }
+                        }
+                      ]
+                    }
                   }
-                ]
+                }
               }
             }
           },
           "explorer": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "default": "https://api.ergoplatform.com/",
-                "description": "ergo explorer url",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "ergo explorer url must be specified",
-                    "when": {"path": "chains.ergo.method", "value": "explorer"}
+              "connections": {
+                "type": "array",
+                "default": [{}],
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "default": "https://api.ergoplatform.com/",
+                      "description": "ergo explorer url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "ergo explorer url must be specified"
+                        }
+                      ]
+                    }
                   }
-                ]
+                }
               }
             }
           }
@@ -311,17 +364,6 @@
               }
             ]
           },
-          "initialHeight": {
-            "type": "number",
-            "default": 1,
-            "description": "cardano initial height",
-            "validations": [
-              {
-                "required": true,
-                "error": "cardano initial height must be specified"
-              }
-            ]
-          },
           "scanInterval": {
             "type": "number",
             "default": 30,
@@ -332,6 +374,15 @@
                 "error": "cardano scanInterval must be specified (in seconds)"
               }
             ]
+          },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
           },
           "blockRetrieveGap": {
             "type": "number",
@@ -344,131 +395,179 @@
               {
                 "required": true,
                 "error": "cardano network connection method must be set",
-                "when": {"path": "chains.cardano.active", "value": true}
+                "when": { "path": "chains.cardano.active", "value": true }
               },
               {
                 "choices": ["koios", "ogmios", "blockfrost"]
               }
             ]
           },
+          "initialHeight": {
+            "type": "number",
+            "default": 1,
+            "description": "cardano koios initial height",
+            "validations": [
+              {
+                "required": true,
+                "error": "cardano initial height must be specified",
+                "when": { "path": "chains.cardano.method", "value": "koios" }
+              },
+              {
+                "required": true,
+                "error": "cardano initial height must be specified",
+                "when": {
+                  "path": "chains.cardano.method",
+                  "value": "blockfrost"
+                }
+              }
+            ]
+          },
           "koios": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "cardano koios url",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano koios url must be specified (in seconds)",
-                    "when": {"path": "chains.cardano.method", "value": "koios"}
+              "connections": {
+                "type": "array",
+                "default": [{}],
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "default": "https://api.koios.rest/api/v1/",
+                      "description": "cardano koios url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "cardano koios url must be specified"
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "cardano koios timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "cardano koios timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.cardano.method",
+                            "value": "koios"
+                          }
+                        }
+                      ]
+                    },
+                    "authToken": {
+                      "type": "string",
+                      "description": "cardano koios authToken"
+                    }
                   }
-                ]
-              },
-              "timeout": {
-                "type": "number",
-                "default": 100,
-                "description": "cardano koios timeout threshold in seconds",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano koios timeout must be specified (in seconds)",
-                    "when": {"path": "chains.cardano.method", "value": "koios"}
-                  }
-                ]
-              },
-              "authToken": {
-                "type": "string",
-                "description": "cardano koios authToken"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "cardano koios suffix"
+                }
               }
             }
           },
           "blockfrost": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "cardano blockfrost url"
-              },
-              "projectId": {
-                "type": "string",
-                "description": "cardano blockfrost projectId",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano blockfrost projectId must be specified",
-                    "when": {"path": "chains.cardano.method", "value": "blockfrost"}
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "cardano blockfrost url"
+                    },
+                    "projectId": {
+                      "type": "string",
+                      "description": "cardano blockfrost projectId",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "cardano blockfrost projectId must be specified",
+                          "when": {
+                            "path": "chains.cardano.method",
+                            "value": "blockfrost"
+                          }
+                        }
+                      ]
+                    }
                   }
-                ]
-              },
-              "suffix": {
-                "type": "string",
-                "description": "cardano blockfrost suffix"
+                }
               }
             }
           },
           "ogmios": {
             "type": "object",
             "children": {
-              "address": {
-                "type": "string",
-                "description": "cardano ogmios nodeHostOrIp",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano ogmios nodeHostOrIp must be specified",
-                    "when": {"path": "chains.cardano.method", "value": "ogmios"}
+              "connection": {
+                "type": "object",
+                "children": {
+                  "address": {
+                    "type": "string",
+                    "description": "cardano ogmios nodeHostOrIp",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "cardano ogmios nodeHostOrIp must be specified",
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
+                      }
+                    ]
+                  },
+                  "port": {
+                    "type": "number",
+                    "description": "cardano ogmios nodePort",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "cardano ogmios nodePort must be specified",
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
+                      }
+                    ]
+                  },
+                  "initialSlot": {
+                    "type": "number",
+                    "description": "cardano ogmios initialSlot",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "cardano ogmios initialSlot must be specified",
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
+                      }
+                    ]
+                  },
+                  "initialHash": {
+                    "type": "string",
+                    "description": "cardano ogmios initialHash",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "cardano ogmios initialHash must be specified",
+                        "when": {
+                          "path": "chains.cardano.method",
+                          "value": "ogmios"
+                        }
+                      }
+                    ]
+                  },
+                  "maxTryBlock": {
+                    "type": "number",
+                    "description": "cardano ogmios maxTryBlock"
+                  },
+                  "useTls": {
+                    "type": "boolean",
+                    "description": "cardano ogmios useTls"
                   }
-                ]
-              },
-              "port": {
-                "type": "number",
-                "description": "cardano ogmios nodePort",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano ogmios nodePort must be specified",
-                    "when": {"path": "chains.cardano.method", "value": "ogmios"}
-                  }
-                ]
-              },
-              "initialSlot": {
-                "type": "number",
-                "description": "cardano ogmios initialSlot",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano ogmios initialSlot must be specified",
-                    "when": {"path": "chains.cardano.method", "value": "ogmios"}
-                  }
-                ]
-              },
-              "initialHash": {
-                "type": "string",
-                "description": "cardano ogmios initialHash",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "cardano ogmios initialHash must be specified",
-                    "when": {"path": "chains.cardano.method", "value": "ogmios"}
-                  }
-                ]
-              },
-              "maxTryBlock": {
-                "type": "number",
-                "description": "cardano ogmios maxTryBlock"
-              },
-              "useTls": {
-                "type": "boolean",
-                "description": "cardano ogmios useTls"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "cardano ogmios suffix"
+                }
               }
             }
           }
@@ -510,6 +609,15 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "bitcoin blockRetrieveGap threshold in seconds"
@@ -521,7 +629,7 @@
               {
                 "required": true,
                 "error": "bitcoin network connection method must be set",
-                "when": {"path": "chains.bitcoin.active", "value": true}
+                "when": { "path": "chains.bitcoin.active", "value": true }
               },
               {
                 "choices": ["rpc", "esplora"]
@@ -531,73 +639,89 @@
           "rpc": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "bitcoin rpc url",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "bitcoin rpc url must be specified",
-                    "when": {"path": "chains.bitcoin.method", "value": "rpc"}
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "bitcoin rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "bitcoin rpc url must be specified",
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "bitcoin rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "bitcoin rpc timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
+                    }
                   }
-                ]
-              },
-              "timeout": {
-                "type": "number",
-                "default": 100,
-                "description": "bitcoin rpc timeout threshold in seconds",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "bitcoin rpc timeout must be specified (in seconds)",
-                    "when": {"path": "chains.bitcoin.method", "value": "rpc"}
-                  }
-                ]
-              },
-              "username": {
-                "type": "string"
-              },
-              "password": {
-                "type": "string"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin rpc suffix"
+                }
               }
             }
           },
           "esplora": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "bitcoin esplora url",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "bitcoin esplora url must be specified",
-                    "when": {"path": "chains.bitcoin.method", "value": "esplora"}
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "bitcoin esplora url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "bitcoin esplora url must be specified"
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "bitcoin esplora timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "bitcoin esplora timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.bitcoin.method",
+                            "value": "esplora"
+                          }
+                        }
+                      ]
+                    },
+                    "apiPrefix": {
+                      "type": "string"
+                    }
                   }
-                ]
-              },
-              "timeout": {
-                "type": "number",
-                "default": 100,
-                "description": "bitcoin esplora timeout threshold in seconds",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "bitcoin esplora timeout must be specified (in seconds)",
-                    "when": {"path": "chains.bitcoin.method", "value": "esplora"}
-                  }
-                ]
-              },
-              "apiPrefix": {
-                "type": "string"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "bitcoin esplora suffix"
+                }
               }
             }
           }
@@ -639,6 +763,30 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "blockCypher": {
+                "type": "object",
+                "children": {
+                  "url": {
+                    "type": "string",
+                    "default": "https://api.blockcypher.com",
+                    "validations": [
+                      {
+                        "required": true,
+                        "error": "doge data-adapter blockcypher url must be specified"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "doge blockRetrieveGap threshold in seconds"
@@ -650,50 +798,57 @@
               {
                 "required": true,
                 "error": "doge network connection method must be set",
-                "when": {"path": "chains.doge.active", "value": true}
+                "when": { "path": "chains.doge.active", "value": true }
               },
               {
                 "choices": ["rpc", "esplora"]
               }
             ]
           },
-          "rpcSuffix": {
-            "type": "string",
-            "description": "doge rpc suffix"
-          },
           "rpc": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "children": {
-                "url": {
-                  "type": "string",
-                  "description": "doge rpc url",
-                  "validations": [
-                    {
-                      "required": true,
-                      "error": "doge rpc url must be specified",
-                      "when": {"path": "chains.doge.method", "value": "rpc"}
+            "type": "object",
+            "children": {
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "doge rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "doge rpc url must be specified",
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "doge rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "doge rpc timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "rpc"
+                          }
+                        }
+                      ]
+                    },
+                    "username": {
+                      "type": "string"
+                    },
+                    "password": {
+                      "type": "string"
                     }
-                  ]
-                },
-                "timeout": {
-                  "type": "number",
-                  "default": 100,
-                  "description": "doge rpc timeout threshold in seconds",
-                  "validations": [
-                    {
-                      "required": true,
-                      "error": "doge rpc timeout must be specified (in seconds)",
-                      "when": {"path": "chains.doge.method", "value": "rpc"}
-                    }
-                  ]
-                },
-                "username": {
-                  "type": "string"
-                },
-                "password": {
-                  "type": "string"
+                  }
                 }
               }
             }
@@ -701,35 +856,45 @@
           "esplora": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "doge esplora url",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "doge esplora url must be specified",
-                    "when": {"path": "chains.doge.method", "value": "esplora"}
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "doge esplora url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "doge esplora url must be specified",
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "esplora"
+                          }
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "doge esplora timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "doge esplora timeout must be specified (in seconds)",
+                          "when": {
+                            "path": "chains.doge.method",
+                            "value": "esplora"
+                          }
+                        }
+                      ]
+                    },
+                    "apiPrefix": {
+                      "type": "string"
+                    }
                   }
-                ]
-              },
-              "timeout": {
-                "type": "number",
-                "default": 100,
-                "description": "doge esplora timeout threshold in seconds",
-                "validations": [
-                  {
-                    "required": true,
-                    "error": "doge esplora timeout must be specified (in seconds)",
-                    "when": {"path": "chains.doge.method", "value": "esplora"}
-                  }
-                ]
-              },
-              "apiPrefix": {
-                "type": "string"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "doge esplora suffix"
+                }
               }
             }
           }
@@ -771,6 +936,24 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "chunkSize": {
+                "type": "number",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "binance adapter chunk-size must be specified"
+                  }
+                ]
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "ethereum blockRetrieveGap threshold in seconds"
@@ -778,36 +961,46 @@
           "rpc": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "ethereum rpc url",
-                "validations": [
-                  {
-                    "required": true,
-                    "when": {"path": "chains.ethereum.active", "value": true},
-                    "error": "ethereum rpc url must be specified"
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "ethereum rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.ethereum.active",
+                            "value": true
+                          },
+                          "error": "ethereum rpc url must be specified"
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "ethereum rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.ethereum.active",
+                            "value": true
+                          },
+                          "error": "ethereum rpc timeout must be specified (in seconds)"
+                        }
+                      ]
+                    },
+                    "authToken": {
+                      "type": "string",
+                      "description": "ethereum rpc authToken"
+                    }
                   }
-                ]
-              },
-              "timeout": {
-                "type": "number",
-                "default": 100,
-                "description": "ethereum rpc timeout threshold in seconds",
-                "validations": [
-                  {
-                    "required": true,
-                    "when": {"path": "chains.ethereum.active", "value": true},
-                    "error": "ethereum rpc timeout must be specified (in seconds)"
-                  }
-                ]
-              },
-              "authToken": {
-                "type": "string",
-                "description": "ethereum rpc authToken"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "ethereum rpc suffix"
+                }
               }
             }
           }
@@ -849,6 +1042,24 @@
               }
             ]
           },
+          "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "chunkSize": {
+                "type": "number",
+                "validations": [
+                  {
+                    "required": true,
+                    "error": "binance adapter chunk-size must be specified"
+                  }
+                ]
+              }
+            }
+          },
           "blockRetrieveGap": {
             "type": "number",
             "description": "binance blockRetrieveGap threshold in seconds"
@@ -856,64 +1067,47 @@
           "rpc": {
             "type": "object",
             "children": {
-              "url": {
-                "type": "string",
-                "description": "binance rpc url",
-                "validations": [
-                  {
-                    "required": true,
-                    "when": {"path": "chains.binance.active", "value": true},
-                    "error": "binance rpc url must be specified"
+              "connections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "children": {
+                    "url": {
+                      "type": "string",
+                      "description": "binance rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.binance.active",
+                            "value": true
+                          },
+                          "error": "binance rpc url must be specified"
+                        }
+                      ]
+                    },
+                    "timeout": {
+                      "type": "number",
+                      "default": 100,
+                      "description": "binance rpc timeout threshold in seconds",
+                      "validations": [
+                        {
+                          "required": true,
+                          "when": {
+                            "path": "chains.binance.active",
+                            "value": true
+                          },
+                          "error": "binance rpc timeout must be specified (in seconds)"
+                        }
+                      ]
+                    },
+                    "authToken": {
+                      "type": "string"
+                    }
                   }
-                ]
-              },
-              "timeout": {
-                "type": "number",
-                "default": 100,
-                "description": "binance rpc timeout threshold in seconds",
-                "validations": [
-                  {
-                    "required": true,
-                    "when": {"path": "chains.binance.active", "value": true},
-                    "error": "binance rpc timeout must be specified (in seconds)"
-                  }
-                ]
-              },
-              "authToken": {
-                "type": "string"
-              },
-              "suffix": {
-                "type": "string",
-                "description": "binance rpc suffix"
+                }
               }
             }
-          }
-        }
-      },
-      "bitcoin-runes": {
-        "type": "object",
-        "children": {
-          "active": {
-            "type": "boolean",
-            "description": "bitcoin-runes activation state",
-            "default": false,
-            "validations": [
-              {
-                "required": true,
-                "error": "bitcoin-runes activation state must be set"
-              }
-            ]
-          },
-          "scanInterval": {
-            "type": "number",
-            "default": 10,
-            "description": "binance scanInterval threshold in seconds",
-            "validations": [
-              {
-                "required": true,
-                "error": "binance scanInterval must be specified (in seconds)"
-              }
-            ]
           }
         }
       }
@@ -939,6 +1133,16 @@
           {
             "required": true,
             "error": "path for the contracts file must be set"
+          }
+        ]
+      },
+      "healthReport": {
+        "type": "string",
+        "default": "healthReport.json",
+        "validations": [
+          {
+            "required": true,
+            "error": "path for the health-check report file must be set"
           }
         ]
       }

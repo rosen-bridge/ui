@@ -1,16 +1,18 @@
-import { BitcoinEsploraScanner } from '@rosen-bridge/bitcoin-esplora-scanner';
 import {
   BitcoinRpcScanner,
   DogeRpcScanner,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
-import { EvmRpcScanner } from '@rosen-bridge/evm-rpc-scanner';
+  BitcoinEsploraScanner,
+} from '@rosen-bridge/bitcoin-scanner';
 import {
   CardanoBlockFrostScanner,
   CardanoKoiosScanner,
   CardanoOgmiosScanner,
-} from '@rosen-bridge/scanner';
+} from '@rosen-bridge/cardano-scanner';
+import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
-export type ExtraChainScannersType =
+export type ChainScannersType =
+  | ErgoScanner
   | CardanoKoiosScanner
   | BitcoinRpcScanner
   | DogeRpcScanner

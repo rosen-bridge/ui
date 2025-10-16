@@ -1,10 +1,11 @@
+import { SvgIcon } from '@mui/material';
 import * as Icons from '@rosen-bridge/icons';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { capitalize } from 'lodash-es';
+import { camelCase, upperFirst } from 'lodash-es';
 
 import { styled } from '../../../styling';
-import { Skeleton, SvgIcon, Typography } from '../../base';
+import { Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 
 export type NetworkProps = {
@@ -130,7 +131,7 @@ const NetworkBase = ({
   }
 
   const network = name in NETWORKS ? NETWORKS[name as NetworkType] : undefined;
-  const iconKey = capitalize(name);
+  const iconKey = upperFirst(camelCase(name));
   const LogoNetwork =
     iconKey in Icons ? Icons[iconKey as keyof typeof Icons] : undefined;
 

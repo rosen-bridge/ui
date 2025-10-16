@@ -131,7 +131,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id
-            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
             id={row.sourceTxId}
           />
         </EnhancedTableCell>
@@ -141,7 +141,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
             <EnhancedTableCell>Trigger TX Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)!} />
+              <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
@@ -171,7 +171,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(
-                  row.sourceChainToken.amount.toString(),
+                  row.sourceChainToken.amount,
                   row.sourceChainToken.decimals,
                 )}
               />
@@ -232,12 +232,12 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Id
-          href={getTxURL(row.fromChain, row.sourceTxId)!}
+          href={getTxURL(row.fromChain, row.sourceTxId)}
           id={row.sourceTxId}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)!} />
+        <Id id={row.txId} href={getTxURL(NETWORKS.ergo.key, row.txId)} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Connector
@@ -257,7 +257,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
-            row.sourceChainToken.amount.toString(),
+            row.sourceChainToken.amount,
             row.sourceChainToken.decimals,
           )}
         />

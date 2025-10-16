@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 
+import { SvgIcon } from '@mui/material';
 import {
   ExclamationTriangle,
   ShieldCheck,
@@ -11,7 +12,7 @@ import moment from 'moment';
 
 import { FullCard } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, LoadingButton, SvgIcon, Tooltip, Typography } from '../base';
+import { Alert, LoadingButton, Tooltip, Typography } from '../base';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;

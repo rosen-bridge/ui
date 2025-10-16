@@ -36,16 +36,12 @@ const Tokens = () => {
   return (
     <Grid item mobile={12}>
       <CarouselProvider>
-        <Stack gap="0.5rem">
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+        <Stack spacing="0.5rem">
+          <Stack direction="row" align="center" justify="between">
             <Typography variant="h5" fontWeight="bold">
               Tokens
             </Typography>
-            <Stack direction="row" alignItems="center" gap="0.5rem">
+            <Stack direction="row" align="center" spacing="0.5rem">
               <CarouselButton type="prev" />
               <CarouselIndicators />
               <CarouselButton type="next" />

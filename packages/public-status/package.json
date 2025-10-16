@@ -12,15 +12,17 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prettify": "prettier --write . --ignore-path ./.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "coverage": "npm run test -- --coverage",
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
-    "@rosen-bridge/extended-typeorm": "^0.2.1"
+    "@rosen-bridge/extended-typeorm": "^1.0.0"
   },
   "devDependencies": {
     "@types/node": "^20.17.10",

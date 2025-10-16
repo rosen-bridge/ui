@@ -1,7 +1,7 @@
 import {
-  BitcoinEsploraScanner,
-  EsploraNetwork,
-} from '@rosen-bridge/bitcoin-esplora-scanner';
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
 import {
   BitcoinRpcObservationExtractor,
   BitcoinEsploraObservationExtractor,
@@ -9,7 +9,11 @@ import {
 import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+  BitcoinEsploraScanner,
+  EsploraNetwork,
+  BitcoinRpcTransaction,
+  BitcoinEsploraTransaction,
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
@@ -31,21 +35,30 @@ export const buildBitcoinRpcScannerWithExtractors = async (
   logger.info('Starting Bitcoin scanner initialization...');
 
   // Create Bitcoin scanner with RPC network settings
+  const networkConnectorManager =
+    new NetworkConnectorManager<BitcoinRpcTransaction>(
+      new FailoverStrategy(),
+      logger,
+    );
+  configs.chains.bitcoin.rpc.connections.forEach((rpc) => {
+    networkConnectorManager.addConnector(
+      new BitcoinRpcNetwork(
+        rpc.url!,
+        rpc.timeout! * 1000,
+        rpc.username && rpc.password
+          ? {
+              username: rpc.username,
+              password: rpc.password,
+            }
+          : undefined,
+      ),
+    );
+  });
   const bitcoinScanner = new BitcoinRpcScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.bitcoin.initialHeight,
-    network: new BitcoinRpcNetwork(
-      configs.chains.bitcoin.rpc.url!,
-      configs.chains.bitcoin.rpc.timeout! * 1000,
-      configs.chains.bitcoin.rpc.username && configs.chains.bitcoin.rpc.password
-        ? {
-            username: configs.chains.bitcoin.rpc.username,
-            password: configs.chains.bitcoin.rpc.password,
-          }
-        : undefined,
-    ),
+    network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    suffix: configs.chains.bitcoin.rpc.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'bitcoin-scanner-logger',
     ),
@@ -93,16 +106,25 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
   logger.info('Starting Bitcoin scanner initialization...');
 
   // Create Bitcoin scanner with Esplora network settings
+  const networkConnectorManager =
+    new NetworkConnectorManager<BitcoinEsploraTransaction>(
+      new FailoverStrategy(),
+      logger,
+    );
+  configs.chains.bitcoin.esplora.connections.forEach((esplora) => {
+    networkConnectorManager.addConnector(
+      new EsploraNetwork(
+        esplora.url!,
+        esplora.timeout! * 1000,
+        esplora.apiPrefix,
+      ),
+    );
+  });
   const bitcoinScanner = new BitcoinEsploraScanner({
     dataSource: dataSource,
     initialHeight: configs.chains.bitcoin.initialHeight,
-    network: new EsploraNetwork(
-      configs.chains.bitcoin.esplora.url!,
-      configs.chains.bitcoin.esplora.timeout! * 1000,
-      configs.chains.bitcoin.esplora.apiPrefix,
-    ),
+    network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    suffix: configs.chains.bitcoin.esplora.suffix,
     logger: CallbackLoggerFactory.getInstance().getLogger(
       'bitcoin-scanner-logger',
     ),

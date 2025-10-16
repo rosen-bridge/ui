@@ -144,13 +144,13 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
           if (isBlocked) continue;
           const sourceNetwork = getNetwork(fromChain as NetworkKey);
 
-          sourceNetwork && sources.add(sourceNetwork);
+          if (sourceNetwork) sources.add(sourceNetwork);
 
           if (sourceField.value != fromChain) continue;
 
           const targetNetwork = getNetwork(toChain as NetworkKey);
 
-          targetNetwork && targets.add(targetNetwork);
+          if (targetNetwork) targets.add(targetNetwork);
 
           if (targetField.value != toChain) continue;
 

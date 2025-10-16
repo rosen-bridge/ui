@@ -6,7 +6,8 @@ import * as fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-import { Logs, RosenService2Configs } from '../types';
+import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
+import { ChainChoices, Logs, RosenService2Configs } from '../types';
 import { ChainConfigsReader } from './chainConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -66,7 +67,11 @@ export const validateConfigs = (): RosenService2Configs => {
   confValidator.validateConfig(configs);
 
   configs.contracts = {};
-  for (const chain of NETWORKS_KEYS) {
+  // TODO: implement Bitcoin-Runes support later
+  const chainChoices = NETWORKS_KEYS.filter(
+    (net) => net != BITCOIN_RUNES_NETWORKS_KEY,
+  ) as ChainChoices[];
+  for (const chain of chainChoices) {
     if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
       const chainConfigReader = new ChainConfigsReader(
         chain,

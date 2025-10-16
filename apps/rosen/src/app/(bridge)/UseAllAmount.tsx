@@ -9,6 +9,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {
+  disabled: boolean;
   error: boolean;
   loading: boolean;
   value: string;
@@ -18,6 +19,7 @@ export interface UseAllAmountProps {
 }
 
 export const UseAllAmount = ({
+  disabled,
   error,
   loading,
   value,
@@ -48,7 +50,11 @@ export const UseAllAmount = ({
           />
         )}
         {!error && !loading && (
-          <Button sx={{ whiteSpace: 'nowrap' }} onClick={onClick}>
+          <Button
+            sx={{ whiteSpace: 'nowrap' }}
+            disabled={disabled}
+            onClick={onClick}
+          >
             <span>
               Use all
               <br />
@@ -58,7 +64,7 @@ export const UseAllAmount = ({
         )}
         {error && !loading && (
           <IconButton sx={{ verticalAlign: 'middle' }} onClick={onRetry}>
-            <SvgIcon color="error" sx={{ width: 24 }}>
+            <SvgIcon color="error">
               <SyncExclamation />
             </SvgIcon>
           </IconButton>

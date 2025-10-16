@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   DataLayout,
   EmptyState,
+  EventCard,
   GridContainer,
   NewPagination,
   SmartSearch,
@@ -14,14 +15,15 @@ import {
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
-import { getFilters, sorts } from '@/app/events/(list)/config';
-import { EventCard } from '@/app/events/(list)/EventCard';
-import { EventSidebar } from '@/app/events/(list)/EventSidebar';
 import { useTokenMap } from '@/hooks';
 import { ApiEventResponse, EventItem } from '@/types';
+
+import { getFilters, sorts } from './config';
+import { EventSidebar } from './EventSidebar';
 
 const Page = () => {
   const dense = useBreakpoint('laptop-down');
@@ -43,6 +45,11 @@ const Page = () => {
       keepPreviousData: true,
     },
   );
+
+  const items = useMemo(() => {
+    if (!isLoading) return data?.items || [];
+    return Array(collection.pageSize).fill({});
+  }, [collection.pageSize, data, isLoading]);
 
   const renderPagination = useCallback(
     () => (
@@ -117,18 +124,31 @@ const Page = () => {
         <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       ) : (
         <GridContainer gap="8px" minWidth="242px">
-          {isLoading
-            ? [...Array(collection.pageSize)].map((_, i) => (
-                <EventCard key={i} isLoading />
-              ))
-            : data?.items.map((item) => (
-                <EventCard
-                  active={current?.id === item.id}
-                  item={item}
-                  key={item.id}
-                  onClick={() => setCurrent(item)}
-                />
-              ))}
+          {items.map((item, index) => (
+            <EventCard
+              key={item.id ?? index}
+              active={!isLoading && current?.id === item.id}
+              isLoading={isLoading}
+              value={
+                !item
+                  ? undefined
+                  : {
+                      amount: getDecimalString(
+                        item.amount,
+                        item.lockToken?.significantDecimals,
+                      ),
+                      fromChain: item.fromChain,
+                      href: `/events/${item.eventId}`,
+                      id: item.eventId,
+                      status: item.status,
+                      toChain: item.toChain,
+                      token: item.lockToken?.name,
+                      timestamp: item.timestamp,
+                    }
+              }
+              onClick={() => setCurrent(item)}
+            />
+          ))}
         </GridContainer>
       )}
     </DataLayout>

@@ -1,5 +1,6 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
+  CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
@@ -186,7 +187,10 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee = calculateFeeCreator(NETWORKS.doge.key, getHeight);
+export const calculateFee: CalculateFee = calculateFeeCreator(
+  NETWORKS.doge.key,
+  getHeight,
+);
 
 export const getMinTransferCreator = getMinTransferCreatorBase(
   NETWORKS.doge.key,

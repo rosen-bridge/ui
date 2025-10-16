@@ -1,8 +1,9 @@
 import { HTMLAttributes, useCallback, useState } from 'react';
 
+import { SvgIcon, Stack } from '@mui/material';
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, Stack, SvgIcon, Tooltip } from '../../base';
+import { IconButton, Skeleton, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
@@ -63,6 +64,7 @@ const IdentifierBase = ({
       alignItems="center"
       display="flex"
       justifyContent="space-between"
+      minWidth={0}
       {...props}
     >
       {loading && <Skeleton style={{ flexGrow: 1 }} />}

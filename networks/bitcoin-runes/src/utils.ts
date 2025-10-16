@@ -5,6 +5,7 @@ import {
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
+  CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
@@ -79,7 +80,7 @@ export const getAddressRunesBoxes = async (
     const headers = { 'Content-Type': 'application/json' };
     if (process.env.BITCOIN_RUNES_SECRET) {
       Object.assign(headers, {
-        'x-api-key': process.env.BITCOIN_RUNES_SECRET,
+        Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
       });
     }
 
@@ -123,7 +124,7 @@ export const getAddressBtcBoxes = async (
     const headers = { 'Content-Type': 'application/json' };
     if (process.env.BITCOIN_RUNES_SECRET) {
       Object.assign(headers, {
-        'x-api-key': process.env.BITCOIN_RUNES_SECRET,
+        Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
       });
     }
 
@@ -200,7 +201,7 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee = calculateFeeCreator(
+export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS['bitcoin-runes'].key,
   getHeight,
 );

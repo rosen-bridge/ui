@@ -22,8 +22,7 @@ import {
  * and wallet connection
  */
 export const TransactionInfo = () => {
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue } = useTransactionFormData();
 
   const tokenMap = useTokenMap();
 
@@ -70,7 +69,7 @@ export const TransactionInfo = () => {
             loading={isPending}
           />
         </Label>
-        <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
+        <Divider borderStyle="dashed" style={{ margin: '8px 0' }} />
         <Label label="Transaction Fee" dense>
           <Amount
             value={!tokenValue ? undefined : networkFeeRaw}
@@ -96,6 +95,7 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {(error as any)?.message}
             </Truncate>
           </Alert>

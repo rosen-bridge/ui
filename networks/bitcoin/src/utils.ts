@@ -1,5 +1,6 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
+  CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
@@ -101,11 +102,12 @@ export const getFeeRatio = async (): Promise<number> => {
  * @returns the minimum UNWRAPPED-VALUE amount
  */
 export const getMinimumMeaningfulSatoshi = (feeRatio: number): bigint => {
-  return BigInt(
+  const minSat = BigInt(
     Math.ceil(
       (feeRatio * SEGWIT_INPUT_WEIGHT_UNIT) / 4, // estimate fee per weight and convert to virtual size
     ),
   );
+  return minSat > 294n ? minSat : 294n;
 };
 
 /**
@@ -191,7 +193,7 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee = calculateFeeCreator(
+export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS.bitcoin.key,
   getHeight,
 );

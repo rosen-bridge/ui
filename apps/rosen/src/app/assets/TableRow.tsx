@@ -104,8 +104,6 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   const [expand, setExpand] = useState(false);
 
-  const [open, setOpen] = useState(false);
-
   const rowStyles = useMemo(
     () => ({
       'opacity': isLoading ? 0.3 : 1.0,
@@ -125,13 +123,9 @@ export const MobileRow: FC<RowProps> = (props) => {
     return Object.values(LOCK_ADDRESSES).includes(item.address) == true;
   });
 
-  const hotUrl = getAddressUrl(row.chain, hot?.address);
-
   const cold = row.lockedPerAddress?.find((item) => {
     return Object.values(LOCK_ADDRESSES).includes(item.address) != true;
   });
-
-  const coldUrl = getAddressUrl(row.chain, cold?.address);
 
   return (
     <>
@@ -148,7 +142,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell>
           <Amount
             value={getDecimalString(
-              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              (hot?.amount || 0) + (cold?.amount || 0),
               row.decimal,
             )}
           />
@@ -159,23 +153,13 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>Hot</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(
-                  hot?.amount.toString() || '0',
-                  row.decimal,
-                )}
-              />
+              <Amount value={getDecimalString(hot?.amount, row.decimal)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
             <EnhancedTableCell sx={{ opacity: '0.6' }}>Cold</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(
-                  cold?.amount.toString() || '0',
-                  row.decimal,
-                )}
-              />
+              <Amount value={getDecimalString(cold?.amount, row.decimal)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
@@ -184,7 +168,7 @@ export const MobileRow: FC<RowProps> = (props) => {
             </EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
-                value={getDecimalString(row.bridged || '0', row.decimal)}
+                value={getDecimalString(row.bridged || undefined, row.decimal)}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -269,7 +253,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="left">
           <Amount
             value={getDecimalString(
-              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              (hot?.amount || 0) + (cold?.amount || 0),
               row.significantDecimals,
             )}
           />
@@ -277,27 +261,21 @@ export const TabletRow: FC<RowProps> = (props) => {
         <EnhancedTableCell align="left">
           <WithExternalLink url={hotUrl}>
             <Amount
-              value={getDecimalString(
-                hot?.amount.toString() || '0',
-                row.significantDecimals,
-              )}
+              value={getDecimalString(hot?.amount, row.significantDecimals)}
             />
           </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <WithExternalLink url={coldUrl}>
             <Amount
-              value={getDecimalString(
-                cold?.amount.toString() || '0',
-                row.significantDecimals,
-              )}
+              value={getDecimalString(cold?.amount, row.significantDecimals)}
             />
           </WithExternalLink>
         </EnhancedTableCell>
         <EnhancedTableCell align="left">
           <Amount
             value={getDecimalString(
-              row.bridged || '0',
+              row.bridged || undefined,
               row.significantDecimals,
             )}
           />
@@ -335,7 +313,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       >
         <EnhancedTableCell colSpan={10} padding="none">
           <Collapse in={open} unmountOnExit>
-            <Divider variant="middle" sx={{ borderBottomStyle: 'dashed' }} />
+            <Divider variant="middle" borderStyle="dashed" />
             {data && (
               <Box sx={{ m: 2 }}>
                 {data.bridged && (
@@ -363,11 +341,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                               />
                             </TableCell>
                             <TableCell>
-                              <Stack
-                                alignItems="center"
-                                direction="row"
-                                gap={1}
-                              >
+                              <Stack align="center" direction="row" spacing={1}>
                                 <Id
                                   id={item.birdgedTokenId}
                                   href={tokenUrl || undefined}
