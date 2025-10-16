@@ -8,6 +8,7 @@ import { styled } from '../../styling';
 export type ViewType = 'grid' | 'row';
 
 export type ViewToggleProps = {
+  defaultView?: ViewType;
   onChangeView?: (value: ViewType) => void;
 };
 
@@ -57,8 +58,11 @@ const TabWrapper = styled('button')<{
  *
  * @returns {JSX.Element} A toggle UI with two buttons for switching view types.
  */
-export const ViewToggle = ({ onChangeView }: ViewToggleProps) => {
-  const [activeView, setActiveView] = useState<ViewType>('grid');
+export const ViewToggle = ({
+  onChangeView,
+  defaultView = 'grid',
+}: ViewToggleProps) => {
+  const [activeView, setActiveView] = useState<ViewType>(defaultView);
 
   const handleClick = (value: ViewType) => {
     setActiveView(value);
