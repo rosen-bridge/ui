@@ -155,12 +155,12 @@ export async function* getAddressAvailableBtcUtxos(
       const response = await requestUnisat<UnisatAddressAvailableBtcUtxos>(
         `/v1/indexer/address/${address}/available-utxo-data?cursor=${offset}&size=${limit}`,
       );
-      if (!response.data || response.data.utxo.length === 0) {
+      const utxos = response.data?.utxo ?? [];
+      if (utxos.length < limit) {
         hasMorePages = false;
-        break;
       }
 
-      const page = response.data.utxo.map((utxo) => ({
+      const page = utxos.map((utxo) => ({
         txId: utxo.txid,
         index: utxo.vout,
         value: BigInt(utxo.satoshi),
@@ -169,11 +169,6 @@ export async function* getAddressAvailableBtcUtxos(
 
       for (const record of page) {
         yield record;
-      }
-
-      if (page.length < limit) {
-        hasMorePages = false;
-        break;
       }
 
       offset += limit;
@@ -208,12 +203,12 @@ export async function* getAddressAllBtcUtxos(
       const response = await requestUnisat<UnisatAddressBtcUtxos>(
         `/v1/indexer/address/${address}/all-utxo-data?cursor=${offset}&size=${limit}`,
       );
-      if (!response.data || response.data.utxo.length === 0) {
+      const utxos = response.data?.utxo ?? [];
+      if (utxos.length < limit) {
         hasMorePages = false;
-        break;
       }
 
-      const page = response.data.utxo.map((utxo) => ({
+      const page = utxos.map((utxo) => ({
         txId: utxo.txid,
         index: utxo.vout,
         value: BigInt(utxo.satoshi),
@@ -222,10 +217,6 @@ export async function* getAddressAllBtcUtxos(
 
       for (const record of page) {
         yield record;
-      }
-
-      if (page.length < limit) {
-        hasMorePages = false;
       }
 
       offset += limit;
@@ -262,12 +253,12 @@ export async function* getAddressRunesUtxos(
       const response = await requestUnisat<UnisatAddressRunesUtxos>(
         `/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`,
       );
-      if (!response.data || response.data.utxo.length === 0) {
+      const utxos = response.data?.utxo ?? [];
+      if (utxos.length < limit) {
         hasMorePages = false;
-        break;
       }
 
-      const page = response.data.utxo.map((utxo) => ({
+      const page = utxos.map((utxo) => ({
         txId: utxo.txid,
         index: utxo.vout,
         value: BigInt(utxo.satoshi),
@@ -279,10 +270,6 @@ export async function* getAddressRunesUtxos(
 
       for (const record of page) {
         yield record;
-      }
-
-      if (page.length < limit) {
-        hasMorePages = false;
       }
 
       offset += limit;

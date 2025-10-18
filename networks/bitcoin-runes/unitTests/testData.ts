@@ -492,3 +492,79 @@ export const selection3 = [
     uncoveredAssets: undefined,
   },
 ];
+
+export const selection4 = [
+  {
+    covered: false,
+    boxes: [
+      {
+        txId: 'ba9bd0e9c84b2743313d3b7f34777e9dab0688fc85fa9cce8cbb340f8d06ffcb',
+        index: 0,
+        value: 500n,
+        runes: [{ runeId: '880352:855', quantity: 100n }],
+      },
+    ],
+    additionalAssets: {
+      aggregated: {
+        nativeToken: 500n,
+        tokens: [{ id: '880352:855', value: 100n }],
+      },
+      list: [
+        {
+          nativeToken: 500n,
+          tokens: [{ id: '880352:855', value: 100n }],
+        },
+      ],
+      fee: 0n,
+    },
+    uncoveredAssets: undefined,
+  },
+];
+
+export const selection5 = [
+  {
+    covered: true,
+    boxes: [
+      {
+        txId: 'ba9bd0e9c84b2743313d3b7f34777e9dab0688fc85fa9cce8cbb340f8d06ffcb',
+        index: 0,
+        value: 300n,
+        runes: [{ runeId: '880352:855', quantity: 4492999000n }],
+      },
+    ],
+    additionalAssets: {
+      aggregated: {
+        nativeToken: 300n,
+        tokens: [{ id: '880352:855', value: 4492998990n }],
+      },
+      list: [
+        {
+          nativeToken: 300n,
+          tokens: [{ id: '880352:855', value: 4492998990n }],
+        },
+      ],
+      fee: 0n,
+    },
+    uncoveredAssets: undefined,
+  },
+  {
+    covered: false,
+    boxes: [],
+    additionalAssets: {
+      aggregated: { nativeToken: -30n, tokens: [] },
+      list: [],
+      fee: 330n,
+    },
+    uncoveredAssets: { nativeToken: 1221n, tokens: [] },
+  },
+  {
+    covered: false,
+    boxes: [],
+    additionalAssets: {
+      aggregated: { nativeToken: -30n, tokens: [] },
+      list: [],
+      fee: 330n,
+    },
+    uncoveredAssets: { nativeToken: 1221n, tokens: [] },
+  },
+];
