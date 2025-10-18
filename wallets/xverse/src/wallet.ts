@@ -68,7 +68,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     return address!.address;
   };
 
-  fetchPaymentAddress = async (): Promise<string | undefined> => {
+  fetchPaymentAddress = async (): Promise<string> => {
     const response = await request('getAddresses', {
       purposes: [AddressPurpose.Payment],
     });
@@ -79,7 +79,9 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       (address) => address.purpose === AddressPurpose.Payment,
     );
 
-    return address!.address;
+    if (address === undefined)
+      throw Error(`Found no address with Payment purpose`);
+    return address.address;
   };
 
   fetchPublicKey = async (): Promise<string | undefined> => {
@@ -161,7 +163,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       psbtData = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,
         userAddress,
-        userPaymentAddress!,
+        userPaymentAddress,
         params.amount,
         opReturnData,
         params.token,
