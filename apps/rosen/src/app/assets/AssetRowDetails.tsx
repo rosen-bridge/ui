@@ -1,18 +1,37 @@
+import { useMemo } from 'react';
+
 import { Amount, Columns, GridContainer, Label } from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
-import { Assets as AssetType } from '@/types';
+import { ApiAssetResponse, Assets as AssetType } from '@/types';
 
+import { LOCK_ADDRESSES } from '../../../configs';
 import BridgedAssetCard from './BridgedAssetCard';
-import { useAsset } from './useAsset';
-import { useAssetDetails } from './useAssetDetails';
 
 interface AssetRowDetailsProps {
   row: AssetType;
+  expanded: boolean;
 }
 
-const AssetRowDetails = ({ row }: AssetRowDetailsProps) => {
-  const { hot, cold, locked, bridged } = useAsset(row);
-  const { bridgedAssets, isLoading } = useAssetDetails(row.id);
+const AssetRowDetails = ({ row, expanded }: AssetRowDetailsProps) => {
+  const { data, isLoading } = useSWR<ApiAssetResponse>(
+    expanded ? `/v1/assets/detail/${row.id.toLowerCase()}` : null,
+    fetcher,
+  );
+
+  const items = useMemo(() => {
+    if (!isLoading) return data?.bridged || [];
+    return Array(4).fill({});
+  }, [data, isLoading]);
+
+  const hot = row.lockedPerAddress?.find((item: AssetType) =>
+    Object.values(LOCK_ADDRESSES).includes(item.address),
+  );
+  const cold = row.lockedPerAddress?.find(
+    (item: AssetType) => !Object.values(LOCK_ADDRESSES).includes(item.address),
+  );
 
   return (
     <>
@@ -26,7 +45,12 @@ const AssetRowDetails = ({ row }: AssetRowDetailsProps) => {
             },
           }}
         >
-          <Amount value={locked} />
+          <Amount
+            value={getDecimalString(
+              ((hot?.amount || 0) + (cold?.amount || 0)).toString(),
+              row.significantDecimals,
+            )}
+          />
         </Label>
         <Label
           label="Hot"
@@ -37,7 +61,12 @@ const AssetRowDetails = ({ row }: AssetRowDetailsProps) => {
             },
           }}
         >
-          <Amount value={hot} />
+          <Amount
+            value={getDecimalString(
+              (hot?.amount || 0).toString(),
+              row.significantDecimals,
+            )}
+          />
         </Label>
         <Label
           label="Cold"
@@ -48,7 +77,12 @@ const AssetRowDetails = ({ row }: AssetRowDetailsProps) => {
             },
           }}
         >
-          <Amount value={cold} />
+          <Amount
+            value={getDecimalString(
+              (cold?.amount || 0).toString(),
+              row.significantDecimals,
+            )}
+          />
         </Label>
         <Label
           label="Bridged"
@@ -59,14 +93,19 @@ const AssetRowDetails = ({ row }: AssetRowDetailsProps) => {
             },
           }}
         >
-          <Amount value={bridged} />
+          <Amount
+            value={getDecimalString(
+              row.bridged || '0',
+              row.significantDecimals,
+            )}
+          />
         </Label>
       </Columns>
       <Label label="Bridged to" />
       <GridContainer minWidth="220px" gap="0.5rem">
-        {bridgedAssets.map((asset, index) => (
+        {items.map((item, index) => (
           <BridgedAssetCard
-            asset={asset}
+            asset={item}
             decimals={row.significantDecimals}
             isLoading={isLoading}
             key={index}
