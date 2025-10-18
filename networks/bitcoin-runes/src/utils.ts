@@ -167,9 +167,7 @@ export async function* getAddressAvailableBtcUtxos(
         runes: [],
       }));
 
-      for (const record of page) {
-        yield record;
-      }
+      yield* page;
 
       offset += limit;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -215,9 +213,7 @@ export async function* getAddressAllBtcUtxos(
         runes: [],
       }));
 
-      for (const record of page) {
-        yield record;
-      }
+      yield* page;
 
       offset += limit;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -268,9 +264,7 @@ export async function* getAddressRunesUtxos(
         })),
       }));
 
-      for (const record of page) {
-        yield record;
-      }
+      yield* page;
 
       offset += limit;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
