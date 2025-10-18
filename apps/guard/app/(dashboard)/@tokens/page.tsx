@@ -44,6 +44,7 @@ const Token = ({ chain }: { chain: Network }) => {
       );
 
       const token = Object.assign({}, hot?.balance, cold?.balance, {
+        amount: hot?.balance.amount || 0,
         coldAmount: cold?.balance.amount || 0,
       });
 
