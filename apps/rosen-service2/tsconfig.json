@@ -10,6 +10,8 @@
   "references": [
     { "path": "../../packages/asset-calculator/" },
     { "path": "../../packages/constants" },
-    { "path": "../../packages/asset-data-adapter/" }
+    { "path": "../../packages/asset-data-adapter/" },
+    { "path": "../../packages/types" },
+    { "path": "../../packages/asset-aggregator"}
   ]
 }
