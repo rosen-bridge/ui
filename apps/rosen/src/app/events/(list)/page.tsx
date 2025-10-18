@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   DataLayout,
   EmptyState,
+  EventCard,
   GridContainer,
   NewPagination,
   SmartSearch,
@@ -14,6 +15,7 @@ import {
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
@@ -21,7 +23,6 @@ import { useTokenMap } from '@/hooks';
 import { ApiEventResponse, EventItem } from '@/types';
 
 import { getFilters, sorts } from './config';
-import { EventCard } from './EventCard';
 import { EventSidebar } from './EventSidebar';
 
 const Page = () => {
@@ -128,7 +129,23 @@ const Page = () => {
               key={item.id ?? index}
               active={!isLoading && current?.id === item.id}
               isLoading={isLoading}
-              item={item}
+              value={
+                !item
+                  ? undefined
+                  : {
+                      amount: getDecimalString(
+                        item.amount,
+                        item.lockToken?.significantDecimals,
+                      ),
+                      fromChain: item.fromChain,
+                      href: `/events/${item.eventId}`,
+                      id: item.eventId,
+                      status: item.status,
+                      toChain: item.toChain,
+                      token: item.lockToken?.name,
+                      timestamp: item.timestamp,
+                    }
+              }
               onClick={() => setCurrent(item)}
             />
           ))}
