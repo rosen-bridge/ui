@@ -10,13 +10,13 @@ import { InjectOverrides } from './InjectOverrides';
  */
 type StackPropsBase = HTMLAttributes<HTMLDivElement> & {
   /** Defines how children are aligned along the cross-axis. */
-  align?: 'start' | 'center' | 'end' | 'stretch';
+  align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 
   /** Sets the main axis direction of the stack. */
-  direction?: 'row' | 'column';
+  direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
 
   /** Controls distribution of space along the main axis. */
-  justify?: 'start' | 'center' | 'end' | 'between' | 'around';
+  justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 
   /** Gap between child elements (number uses theme.spacing). */
   spacing?: number | string;
@@ -26,6 +26,7 @@ type StackPropsBase = HTMLAttributes<HTMLDivElement> & {
 };
 
 const ALIGN_MAP: Record<NonNullable<StackPropsBase['align']>, string> = {
+  baseline: 'baseline',
   center: 'center',
   end: 'flex-end',
   start: 'flex-start',
@@ -37,6 +38,7 @@ const JUSTIFY_MAP: Record<NonNullable<StackPropsBase['justify']>, string> = {
   between: 'space-between',
   center: 'center',
   end: 'flex-end',
+  evenly: 'space-evenly',
   start: 'flex-start',
 };
 
