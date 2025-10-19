@@ -97,7 +97,7 @@ describe('generateUnsignedTx', () => {
     expect(lockUtxo.value).toEqual(Number(amount));
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
-    const expectedFee = 476000n;
+    const expectedFee = 226000n;
     expect(changeUtxo.value).toEqual(
       Number(mockedInput.value - amount - expectedFee),
     );
@@ -167,7 +167,7 @@ describe('generateUnsignedTx', () => {
     expect(lockUtxo.value).toEqual(Number(unwrappedAmount));
     const changeUtxo = psbt.txOutputs[2];
     expect(changeUtxo.address).toEqual(fromAddress);
-    const expectedFee = 476000n;
+    const expectedFee = 226000n;
     expect(changeUtxo.value).toEqual(
       Number(mockedInput.value - unwrappedAmount - expectedFee),
     );
