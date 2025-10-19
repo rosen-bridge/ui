@@ -24,5 +24,8 @@
     "@rosen-ui/types": "^0.3.7",
     "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

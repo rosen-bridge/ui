@@ -28,7 +28,9 @@
     "@rosen-ui/public-status": "^0.0.2"
   },
   "devDependencies": {
-    "@types/node": "^22.18.0",
     "typescript": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }
