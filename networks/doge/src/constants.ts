@@ -1,6 +1,6 @@
 export const CONFIRMATION_TARGET = 10;
 export const DOGE_TX_BASE_SIZE = 10;
-export const DOGE_INPUT_SIZE = 147;
+export const DOGE_INPUT_SIZE = 148;
 export const DOGE_OUTPUT_SIZE = 34;
 export const MINIMUM_UTXO_VALUE = 1000000; // Minimum Dogecoin UTXO value in satoshis
 export const DOGE_NETWORK = {

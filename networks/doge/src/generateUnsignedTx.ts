@@ -75,7 +75,7 @@ export const generateUnsignedTx =
       DOGE_INPUT_SIZE,
       DOGE_OUTPUT_SIZE,
       feeRatio,
-      1, // the virtual size matters for fee estimation of native-segwit transactions
+      1, // Doge does not use segwit
     );
 
     const coveredBoxes = await selector.getCoveringBoxes(
