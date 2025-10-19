@@ -27,16 +27,17 @@ const DashboardLayout = ({
             },
           }}
         >
-          <Box
-            sx={(theme) => ({
-              [theme.breakpoints.up('laptop')]: {
-                minWidth: '200px',
+          <Stack
+            style={{ width: '100%' }}
+            overrides={{
+              laptop: {
+                style: { minWidth: '200px' },
               },
-            })}
+            }}
           >
             {health}
-          </Box>
-          <Box minWidth={0}>{networks}</Box>
+          </Stack>
+          <div style={{ minWidth: 0 }}>{networks}</div>
         </Stack>
       </Grid>
       <Grid item mobile={12} laptop={12}>

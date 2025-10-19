@@ -99,7 +99,7 @@ export const SubmitButton = () => {
   return (
     <>
       <LoadingButton
-        sx={{ width: '100%' }}
+        style={{ width: '100%' }}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
@@ -159,7 +159,7 @@ export const SubmitButton = () => {
                 </div>
                 <Divider />
                 <Label label="Destination Address" orientation="vertical">
-                  <Identifier value={walletAddressValue} copyable />
+                  <Identifier value={'walletAddressValue'} copyable />
                 </Label>
               </Stack>
             </CardBody>
@@ -169,14 +169,14 @@ export const SubmitButton = () => {
           <LoadingButton
             color="secondary"
             variant="contained"
-            sx={{ flexGrow: 2 }}
+            style={{ flexGrow: 2 }}
             onClick={() => setOpen(false)}
           >
             Cancel
           </LoadingButton>
           <LoadingButton
             variant="contained"
-            sx={{ flexGrow: 5 }}
+            style={{ flexGrow: 5 }}
             loading={
               isFormSubmitting || isTransactionSubmitting || isLoadingFees
             }
