@@ -1,6 +1,6 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import axios, { Axios } from '@rosen-bridge/rate-limited-axios';
 import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import axios, { Axios } from '@rosen-clients/rate-limited-axios';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
