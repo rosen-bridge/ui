@@ -12,7 +12,13 @@ import {
   EventTriggerEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
-import { BridgedAssetEntity, LockedAssetEntity, TokenEntity, migrations as  assetAggregatorMigrations } from '@rosen-ui/asset-aggregator';
+import {
+  BridgedAssetEntity,
+  LockedAssetEntity,
+  TokenEntity,
+  migrations as assetAggregatorMigrations,
+} from '@rosen-ui/asset-aggregator';
+
 import { configs } from './configs';
 
 export default new DataSource({
