@@ -1,6 +1,11 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import { Pagination, Stack, SvgIcon, Divider } from '@mui/material';
+import {
+  Pagination as PaginationMui,
+  Stack,
+  SvgIcon,
+  Divider,
+} from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
 import {
@@ -12,7 +17,7 @@ import {
   ListSubheader,
 } from '../base';
 
-export interface NewPaginationProps {
+export interface PaginationProps {
   defaultPageIndex?: number;
   defaultPageSize?: number;
   disabled?: boolean;
@@ -24,7 +29,7 @@ export interface NewPaginationProps {
   onPageSizeChange?: (size: number) => void;
 }
 
-export const NewPagination = ({
+export const Pagination = ({
   defaultPageIndex = 0,
   defaultPageSize = 10,
   disabled,
@@ -34,7 +39,7 @@ export const NewPagination = ({
   pageSizeOptions = [10, 25, 100],
   onPageIndexChange,
   onPageSizeChange,
-}: NewPaginationProps) => {
+}: PaginationProps) => {
   const pageIndexCurrent = pageIndex ?? defaultPageIndex;
   const pageSizeCurrent = pageSize ?? defaultPageSize;
 
@@ -117,7 +122,7 @@ export const NewPagination = ({
           {from} to {to} of {total}
           <Box component="span" className="mobile-hide">
             {' '}
-            Entries
+            {Number(total) <= 1 ? 'Entry' : ' Entries'}
           </Box>
         </Typography>
       </Box>
@@ -132,7 +137,7 @@ export const NewPagination = ({
           },
         }}
       >
-        <Pagination
+        <PaginationMui
           disabled={disabled}
           color="primary"
           count={totalPages}
