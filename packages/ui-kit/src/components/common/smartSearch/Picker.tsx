@@ -44,7 +44,10 @@ export const Picker = ({
     if (!query) return value.options;
 
     return value.options.filter((option) => {
-      return option.label.toLowerCase().includes(query.toLowerCase());
+      return option.label
+        ?.toString()
+        .toLowerCase()
+        .includes(query.toLowerCase());
     });
   }, [query, value]);
 
