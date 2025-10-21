@@ -6,23 +6,23 @@ import { Network } from '@rosen-ui/types';
 })
 export class AssetViewEntity {
   @ViewColumn()
-  id: string;
+  id!: string;
 
   @ViewColumn()
-  name: string;
+  name!: string;
 
   @ViewColumn()
-  decimal: number;
+  decimal!: number;
 
   @ViewColumn()
-  isNative: boolean;
+  isNative!: boolean;
 
   @ViewColumn()
-  chain: Network;
+  chain!: Network;
 
   @ViewColumn()
-  bridged: string;
+  bridged!: string;
 
   @ViewColumn()
-  lockedPerAddress: Array<{ address: string; amount: number }>;
+  lockedPerAddress!: Array<{ address: string; amount: number }>;
 }

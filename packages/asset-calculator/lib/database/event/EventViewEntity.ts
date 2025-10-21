@@ -6,62 +6,62 @@ import { Network } from '@rosen-ui/types';
 })
 export class EventViewEntity {
   @ViewColumn()
-  id: string;
+  id!: string;
 
   @ViewColumn()
-  fromChain: Network;
+  fromChain!: Network;
 
   @ViewColumn()
-  toChain: Network;
+  toChain!: Network;
 
   @ViewColumn()
-  fromAddress: string;
+  fromAddress!: string;
 
   @ViewColumn()
-  toAddress: string;
+  toAddress!: string;
 
   @ViewColumn()
-  height: number;
+  height!: number;
 
   @ViewColumn()
-  amount: string;
+  amount!: string;
 
   @ViewColumn()
-  networkFee: string;
+  networkFee!: string;
 
   @ViewColumn()
-  bridgeFee: string;
+  bridgeFee!: string;
 
   @ViewColumn()
-  sourceChainTokenId: string;
+  sourceChainTokenId!: string;
 
   @ViewColumn()
-  sourceTxId: string;
+  sourceTxId!: string;
 
   @ViewColumn()
-  eventId: string;
+  eventId!: string;
 
   @ViewColumn()
-  timestamp: number;
+  timestamp!: number;
 
   @ViewColumn()
-  WIDsCount: number;
+  WIDsCount!: number;
 
   @ViewColumn()
-  paymentTxId: string | null;
+  paymentTxId!: string | null;
 
   @ViewColumn()
-  spendTxId: string | null;
+  spendTxId!: string | null;
 
   @ViewColumn()
-  status: 'fraud' | 'processing' | 'successful';
+  status!: 'fraud' | 'processing' | 'successful';
 
   @ViewColumn()
-  amountNormalized: number;
+  amountNormalized!: number;
 
   @ViewColumn()
-  networkFeeNormalized: number;
+  networkFeeNormalized!: number;
 
   @ViewColumn()
-  bridgeFeeNormalized: number;
+  bridgeFeeNormalized!: number;
 }
