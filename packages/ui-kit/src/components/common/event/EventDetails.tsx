@@ -1,6 +1,6 @@
 import { forwardRef, HTMLAttributes } from 'react';
 
-import { Button, Stack, SvgIcon } from '@mui/material';
+import { Button, SvgIcon } from '@mui/material';
 import { AngleRight } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
@@ -8,6 +8,7 @@ import { Columns } from '../Columns';
 import { Amount, Identifier, Label, LabelGroup, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
+import { Stack } from '../Stack';
 import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
@@ -124,7 +125,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         <Label label="Reports">{value.reports}</Label>
         <Label label="Height">{value.height}</Label>
         {showSeeDetailsButton && !!value?.href && (
-          <Stack alignItems="end">
+          <Stack align="end">
             <Button
               variant="text"
               size="medium"
