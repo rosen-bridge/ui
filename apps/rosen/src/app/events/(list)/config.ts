@@ -80,7 +80,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     },
   },
   {
-    name: 'amount',
+    name: 'amountNormalized',
     label: 'Amount',
     unique: false,
     operators: OPERATORS_COMPARATIVE,
@@ -89,7 +89,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     },
   },
   {
-    name: 'bridgeFee',
+    name: 'bridgeFeeNormalized',
     label: 'Bridge Fee',
     unique: false,
     operators: OPERATORS_COMPARATIVE,
@@ -98,7 +98,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     },
   },
   {
-    name: 'networkFee',
+    name: 'networkFeeNormalized',
     label: 'Network Fee',
     unique: false,
     operators: OPERATORS_COMPARATIVE,
