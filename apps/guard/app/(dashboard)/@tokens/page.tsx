@@ -32,9 +32,9 @@ const Token = ({ chain }: { chain: Network }) => {
     const tokenIds = [
       ...new Set(
         [...data.cold, ...data.hot]
-          .filter(item => item.chain === chain)
-          .map(item => item.balance.tokenId)
-      )
+          .filter((item) => item.chain === chain)
+          .map((item) => item.balance.tokenId),
+      ),
     ];
 
     return tokenIds.map((id) => {
