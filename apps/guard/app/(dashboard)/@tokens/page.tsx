@@ -29,10 +29,13 @@ const Token = ({ chain }: { chain: Network }) => {
   const tokens = useMemo(() => {
     if (!data) return [];
 
-    const tokenIds = [...data.cold, ...data.hot]
-      .filter((item) => item.chain === chain)
-      .map((item) => item.balance.tokenId)
-      .filter((item, index, items) => items.indexOf(item) === index);
+    const tokenIds = [
+      ...new Set(
+        [...data.cold, ...data.hot]
+          .filter(item => item.chain === chain)
+          .map(item => item.balance.tokenId)
+      )
+    ];
 
     return tokenIds.map((id) => {
       const cold = data.cold.find(
