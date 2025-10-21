@@ -70,14 +70,7 @@ const AmountBase = ({
   }, [value]);
 
   return (
-    <Stack
-      style={{
-        display: 'inline-flex',
-      }}
-      align="baseline"
-      direction="row"
-      {...props}
-    >
+    <Stack inline align="baseline" direction="row" {...props}>
       {loading ? (
         <Skeleton variant="text" width={80} style={{ marginRight: '4px' }} />
       ) : error ? (
@@ -89,9 +82,7 @@ const AmountBase = ({
         </SvgIcon>
       ) : (
         <Stack
-          style={{
-            display: 'inline-flex',
-          }}
+          inline
           align="baseline"
           direction={orientation === 'vertical' ? 'column' : 'row'}
         >
