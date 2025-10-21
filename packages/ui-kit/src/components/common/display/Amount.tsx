@@ -1,10 +1,11 @@
 import { HTMLAttributes, useMemo } from 'react';
 
-import { SvgIcon, Stack } from '@mui/material';
+import { SvgIcon } from '@mui/material';
 import { ExclamationTriangle, ExternalLinkAlt } from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
+import { Stack } from '../Stack';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Optional external link shown as an icon button */
@@ -70,9 +71,11 @@ const AmountBase = ({
 
   return (
     <Stack
-      display="inline-flex"
-      flexDirection="row"
-      alignItems="baseline"
+      style={{
+        display: 'inline-flex',
+      }}
+      align="baseline"
+      direction="row"
       {...props}
     >
       {loading ? (
@@ -86,9 +89,11 @@ const AmountBase = ({
         </SvgIcon>
       ) : (
         <Stack
-          display="inline-flex"
-          alignItems="baseline"
-          flexDirection={orientation === 'vertical' ? 'column' : 'row'}
+          style={{
+            display: 'inline-flex',
+          }}
+          align="baseline"
+          direction={orientation === 'vertical' ? 'column' : 'row'}
         >
           <Typography fontSize="inherit" component="span">
             {number || '–'}

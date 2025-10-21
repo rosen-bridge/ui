@@ -20,7 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/node": "^20.17.10",
+    "@types/node": "^22.18.0",
     "tsx": "^4.19.2",
     "typescript": "^5.1.6"
   },
@@ -31,10 +31,10 @@
     "@rosen-bridge/abstract-logger": "^1.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.0",
     "@rosen-bridge/json-bigint": "^1.0.0",
-    "@rosen-bridge/rate-limited-axios": "^0.2.1",
     "@rosen-bridge/tokens": "^4.0.0",
-    "@rosen-clients/cardano-koios": "^2.1.2",
-    "@rosen-clients/ergo-explorer": "^1.1.5",
+    "@rosen-clients/cardano-koios": "^3.1.0",
+    "@rosen-clients/ergo-explorer": "^2.1.0",
+    "@rosen-clients/rate-limited-axios": "^1.1.0",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",
     "ethers": "6.13.2",

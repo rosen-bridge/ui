@@ -1,6 +1,6 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import { Pagination, Stack, SvgIcon, Divider } from '@mui/material';
+import { Pagination as PaginationMui, SvgIcon, Divider } from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
 import {
@@ -11,8 +11,9 @@ import {
   Button,
   ListSubheader,
 } from '../base';
+import { Stack } from './Stack';
 
-export interface NewPaginationProps {
+export interface PaginationProps {
   defaultPageIndex?: number;
   defaultPageSize?: number;
   disabled?: boolean;
@@ -24,7 +25,7 @@ export interface NewPaginationProps {
   onPageSizeChange?: (size: number) => void;
 }
 
-export const NewPagination = ({
+export const Pagination = ({
   defaultPageIndex = 0,
   defaultPageSize = 10,
   disabled,
@@ -34,7 +35,7 @@ export const NewPagination = ({
   pageSizeOptions = [10, 25, 100],
   onPageIndexChange,
   onPageSizeChange,
-}: NewPaginationProps) => {
+}: PaginationProps) => {
   const pageIndexCurrent = pageIndex ?? defaultPageIndex;
   const pageSizeCurrent = pageSize ?? defaultPageSize;
 
@@ -117,7 +118,7 @@ export const NewPagination = ({
           {from} to {to} of {total}
           <Box component="span" className="mobile-hide">
             {' '}
-            Entries
+            {Number(total) <= 1 ? 'Entry' : ' Entries'}
           </Box>
         </Typography>
       </Box>
@@ -132,7 +133,7 @@ export const NewPagination = ({
           },
         }}
       >
-        <Pagination
+        <PaginationMui
           disabled={disabled}
           color="primary"
           count={totalPages}
@@ -161,12 +162,7 @@ export const NewPagination = ({
         />
       </Box>
 
-      <Stack
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        gap={1}
-      >
+      <Stack direction="row" justify="between" align="center" spacing={1}>
         <Divider
           orientation="vertical"
           variant="middle"
@@ -178,12 +174,8 @@ export const NewPagination = ({
             },
           }}
         />
-        <Stack
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-evenly"
-        >
-          <Stack alignItems="center">
+        <Stack direction="row" align="center" justify="evenly">
+          <Stack align="center">
             <Button
               disabled={disabled}
               size="small"
@@ -191,10 +183,10 @@ export const NewPagination = ({
               onClick={handleMenuOpen}
             >
               <Stack
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                gap={1}
+                direction="row"
+                justify="center"
+                align="center"
+                spacing={1}
               >
                 <Typography
                   color="text.secondary"

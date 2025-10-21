@@ -48,7 +48,7 @@
     "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-bridge/watcher-data-extractor": "^12.2.1",
     "@rosen-bridge/winston-logger": "^1.0.3",
-    "@rosen-clients/ergo-explorer": "^2.0.0",
+    "@rosen-clients/ergo-explorer": "^2.1.0",
     "@rosen-ui/asset-calculator": "^2.1.8",
     "@rosen-ui/asset-data-adapter": "0.1.0",
     "@rosen-ui/constants": "^0.4.1",
@@ -59,7 +59,7 @@
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
-    "@types/node": "^20.11.9",
+    "@types/node": "^22.18.0",
     "@vitest/coverage-istanbul": "^2.1.9",
     "typescript": "^5.3.3",
     "vitest": "^2.1.9"
