@@ -44,7 +44,7 @@ export const Picker = ({
     if (!query) return value.options;
 
     return value.options.filter((option) => {
-      return option.value
+      return option.label
         ?.toString()
         .toLowerCase()
         .includes(query.toLowerCase());
