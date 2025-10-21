@@ -16,9 +16,6 @@
     "type-check": "tsc --noEmit",
     "release": "npm run build && npm publish --access public"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-network/base": "^0.4.1",

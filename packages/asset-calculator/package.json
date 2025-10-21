@@ -20,8 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "tsx": "^4.19.2",
-    "typescript": "^5.1.6"
+    "tsx": "^4.19.2"
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^1.0.0",

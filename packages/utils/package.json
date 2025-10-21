@@ -16,8 +16,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.12",
-    "typescript": "^5.0.0"
+    "@types/lodash-es": "^4.17.12"
   },
   "dependencies": {
     "@rosen-ui/constants": "^0.4.1",

@@ -15,9 +15,6 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "@rosen-bridge/tokens": "^4.0.0",
     "@rosen-network/cardano": "^2.4.1",

@@ -26,9 +26,6 @@
     "@rosen-ui/types": "^0.3.7",
     "@rosen-ui/utils": "^0.6.1"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "engines": {
     "node": ">=22.18.0"
   }

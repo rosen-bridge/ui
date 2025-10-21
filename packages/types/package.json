@@ -16,8 +16,7 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@mui/material": "^5.13.7",
-    "typescript": "^5.0.0"
+    "@mui/material": "^5.13.7"
   },
   "dependencies": {
     "@rosen-ui/constants": "^0.4.1"
