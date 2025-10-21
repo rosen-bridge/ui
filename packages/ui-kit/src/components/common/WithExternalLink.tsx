@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
 import { Link } from '../base';
 import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
 
 export interface WithExternalLinkProps {
   children: ReactNode;
@@ -27,7 +27,7 @@ export const WithExternalLink = ({ children, url }: WithExternalLinkProps) => {
           target="_blank"
           onClick={(event) => event.stopPropagation()}
         >
-          <SvgIcon fontSize="inherit" sx={{ display: 'block' }}>
+          <SvgIcon fontSize="inherit" style={{ display: 'block' }}>
             <ExternalLinkAlt />
           </SvgIcon>
         </Link>

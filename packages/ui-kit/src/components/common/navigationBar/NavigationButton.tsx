@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
-import { SvgIcon } from '@mui/material';
-
 import { useIsMobile, isLegacyTheme } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
 import { Badge, Button } from '../../base';
+import { SvgIcon } from '../SvgIcon';
 import { useNavigationBar } from './useNavigationBar';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({

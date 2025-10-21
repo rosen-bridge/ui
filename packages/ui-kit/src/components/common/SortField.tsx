@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Card, SvgIcon, Divider } from '@mui/material';
+import { Card, Divider } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -28,6 +28,7 @@ import {
   Typography,
 } from '../base';
 import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
 
 const Root = styled(Card)(({ theme }) => ({
   padding: theme.spacing(1, 0.5),

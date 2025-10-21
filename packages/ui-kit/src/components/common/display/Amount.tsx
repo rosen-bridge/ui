@@ -1,11 +1,11 @@
 import { HTMLAttributes, useMemo } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { ExclamationTriangle, ExternalLinkAlt } from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 import { Stack } from '../Stack';
+import { SvgIcon } from '../SvgIcon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Optional external link shown as an icon button */
@@ -82,8 +82,11 @@ const AmountBase = ({
         <Skeleton variant="text" width={80} style={{ marginRight: '4px' }} />
       ) : error ? (
         <SvgIcon
-          fontSize="inherit"
-          style={{ marginRight: '4px', transform: 'translateY(20%)' }}
+          style={{
+            marginRight: '4px',
+            transform: 'translateY(20%)',
+            fontSize: 'inherit',
+          }}
         >
           <ExclamationTriangle />
         </SvgIcon>
@@ -127,7 +130,7 @@ const AmountBase = ({
           href={href}
           style={{ marginLeft: '4px' }}
         >
-          <SvgIcon fontSize="small">
+          <SvgIcon size="small">
             <ExternalLinkAlt />
           </SvgIcon>
         </IconButton>
