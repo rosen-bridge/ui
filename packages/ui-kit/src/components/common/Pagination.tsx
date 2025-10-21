@@ -1,11 +1,6 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import {
-  Pagination as PaginationMui,
-  Stack,
-  SvgIcon,
-  Divider,
-} from '@mui/material';
+import { Pagination as PaginationMui, SvgIcon, Divider } from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
 import {
@@ -16,6 +11,7 @@ import {
   Button,
   ListSubheader,
 } from '../base';
+import { Stack } from './Stack';
 
 export interface PaginationProps {
   defaultPageIndex?: number;
@@ -166,12 +162,7 @@ export const Pagination = ({
         />
       </Box>
 
-      <Stack
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-        gap={1}
-      >
+      <Stack direction="row" justify="between" align="center" spacing={1}>
         <Divider
           orientation="vertical"
           variant="middle"
@@ -183,12 +174,8 @@ export const Pagination = ({
             },
           }}
         />
-        <Stack
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-evenly"
-        >
-          <Stack alignItems="center">
+        <Stack direction="row" align="center" justify="evenly">
+          <Stack align="center">
             <Button
               disabled={disabled}
               size="small"
@@ -196,10 +183,10 @@ export const Pagination = ({
               onClick={handleMenuOpen}
             >
               <Stack
-                flexDirection="row"
-                justifyContent="center"
-                alignItems="center"
-                gap={1}
+                direction="row"
+                justify="center"
+                align="center"
+                spacing={1}
               >
                 <Typography
                   color="text.secondary"
