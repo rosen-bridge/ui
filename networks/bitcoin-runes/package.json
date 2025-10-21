@@ -12,7 +12,7 @@
     "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build",
+    "build": "tsc --build tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
