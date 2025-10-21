@@ -14,9 +14,9 @@ import {
   migrations as watcherDataMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
-  AssetViewEntity,
+  // AssetViewEntity,
   BridgedAssetEntity,
-  EventViewEntity,
+  // EventViewEntity,
   LockedAssetEntity,
   TokenEntity,
   migrations as assetCalculatorMigrations,
@@ -55,8 +55,8 @@ export const getDataSource = (
       GuardStatusChangedEntity,
       CommitmentEntity,
       TxEntity,
-      AssetViewEntity,
-      EventViewEntity,
+      // AssetViewEntity,
+      // EventViewEntity,
     ],
     migrations: [
       ...watcherDataMigrations.postgres,
