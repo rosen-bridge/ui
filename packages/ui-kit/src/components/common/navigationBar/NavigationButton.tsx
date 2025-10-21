@@ -17,7 +17,7 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
       }
     : {
         gap: theme.spacing(1),
-        color: alpha(theme.palette.common.white, 0.8),
+        color: theme.palette.common.white,
         backgroundColor: 'transparent!important',
         padding: theme.spacing(1),
         fontWeight: 700,
@@ -41,15 +41,23 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
   },
   '&.active': {
     'opacity': 1,
+    'color':
+      theme.palette.mode === 'light'
+        ? theme.palette.common.white
+        : theme.palette.primary.main,
     '& .MuiButton-startIcon': {
       color: isLegacyTheme(theme)
         ? theme.palette.info.dark
-        : alpha(theme.palette.common.black, 0.8),
+        : theme.palette.mode === 'light'
+          ? alpha(theme.palette.common.black, 0.8)
+          : theme.palette.primary.contrastText,
       backgroundColor: isLegacyTheme(theme)
         ? theme.palette.mode === 'light'
           ? theme.palette.common.white
           : theme.palette.info.light
-        : alpha(theme.palette.common.white, 0.8),
+        : theme.palette.mode === 'light'
+          ? theme.palette.common.white
+          : theme.palette.primary.main,
     },
   },
   [theme.breakpoints.down('tablet')]: {

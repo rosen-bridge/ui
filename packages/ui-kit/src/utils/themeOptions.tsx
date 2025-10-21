@@ -194,6 +194,13 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
+    MuiDialog: {
+      styleOverrides: {
+        paper: {
+          backgroundImage: 'none',
+        },
+      },
+    },
     MuiDialogTitle: {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
@@ -377,7 +384,7 @@ export const lightThemeOptions: ThemeOptions = {
           background:
             theme.palette.mode === 'light'
               ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-              : theme.palette.primary.light,
+              : theme.palette.background.paper,
           color:
             theme.palette.mode === 'light'
               ? theme.palette.common.white
@@ -399,14 +406,14 @@ export const darkThemeOptions: ThemeOptions = {
   palette: {
     mode: 'dark',
     primary: {
-      main: '#6877B1',
-      light: '#131725',
+      main: '#6E89F7',
+      light: '#1A1E2E',
       dark: '#B3BBD8',
       contrastText: '#000000',
     },
     secondary: {
       main: '#B15A3F',
-      light: '#251718',
+      light: '#3D2D29',
       dark: '#C48D7C',
       contrastText: '#000000',
     },
@@ -416,8 +423,8 @@ export const darkThemeOptions: ThemeOptions = {
       disabled: '#FFFFFF61',
     },
     background: {
-      paper: '#0D1120',
-      default: '#070810',
+      paper: '#1F2937',
+      default: '#111827',
       shadow: 'rgba(0, 0, 0, 0.2)',
     },
     neutral: {
@@ -428,19 +435,19 @@ export const darkThemeOptions: ThemeOptions = {
     },
     error: {
       main: '#C04343',
-      light: '#331313',
+      light: '#402626',
       dark: '#DEADAD',
       contrastText: '#000',
     },
     warning: {
       main: '#BF783E',
-      light: '#331E0D',
+      light: '#2A1F16',
       dark: '#CEB199',
       contrastText: '#000',
     },
     success: {
       main: '#2B7D60',
-      light: '#09261C',
+      light: '#253731',
       dark: '#A1D7C4',
       contrastText: '#000',
     },
