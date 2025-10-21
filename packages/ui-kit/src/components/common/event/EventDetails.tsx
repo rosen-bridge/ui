@@ -121,7 +121,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         <Label label="Network Fee">
           <Amount value={value.networkFee} />
         </Label>
-        <Label label="Reports">{value.reports ?? 'N/C'}</Label>
+        <Label label="Reports">{value.reports}</Label>
         <Label label="Height">{value.height}</Label>
         {showSeeDetailsButton && !!value?.href && (
           <Stack alignItems="end">
