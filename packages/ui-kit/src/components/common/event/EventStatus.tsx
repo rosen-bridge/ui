@@ -1,15 +1,16 @@
-'use client';
+import { forwardRef, HTMLAttributes } from 'react';
 
-import { Chip } from '@rosen-bridge/ui-kit';
+import { Chip } from '../Chip';
+import { InjectOverrides } from '../InjectOverrides';
 
-const STATES = {
+const STATUS_MAP = {
   processing: {
     label: 'Processing',
     color: 'info',
     icon: 'Hourglass',
   },
-  pendingCommittment: {
-    label: 'Pending Committment',
+  pendingCommitment: {
+    label: 'Pending Commitment',
     color: 'info',
     icon: 'Hourglass',
   },
@@ -115,18 +116,28 @@ const STATES = {
   },
 } as const;
 
-export type StatusProps = {
+export type EventStatusProps = HTMLAttributes<HTMLButtonElement> & {
   loading?: boolean;
-  value?: keyof typeof STATES;
+  value?: keyof typeof STATUS_MAP;
 };
 
-export const Status = ({ loading, value }: StatusProps) => {
-  if (loading) return <Chip loading />;
+const EventStatusBase = forwardRef<HTMLButtonElement, EventStatusProps>(
+  (props) => {
+    const { loading, value } = props;
 
-  const status = value && STATES[value];
+    if (loading) return <Chip loading />;
 
-  if (!status)
-    return <Chip label="Unknown" color="neutral" icon="ExclamationCircle" />;
+    const status = value && STATUS_MAP[value];
 
-  return <Chip label={status.label} color={status.color} icon={status.icon} />;
-};
+    if (!status)
+      return <Chip label="Unknown" color="neutral" icon="ExclamationCircle" />;
+
+    return (
+      <Chip label={status.label} color={status.color} icon={status.icon} />
+    );
+  },
+);
+
+EventStatusBase.displayName = 'EventStatus';
+
+export const EventStatus = InjectOverrides(EventStatusBase);
