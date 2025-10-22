@@ -28,11 +28,10 @@ describe('CardanoKoiosDataAdapter', () => {
     ctx.mockTokenMap = new TokenMap();
     await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
 
-    ctx.adapter = new CardanoKoiosDataAdapter(
-      ['addr1'],
-      ctx.mockTokenMap,
-      'http://koios',
-    );
+    ctx.adapter = new CardanoKoiosDataAdapter(['addr1'], ctx.mockTokenMap, {
+      koiosUrl: 'http://koios',
+      authToken: 'mocked-token',
+    });
   });
 
   describe('getAddressAssets', () => {

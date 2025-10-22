@@ -1,8 +1,9 @@
-import { Stack, Typography } from '../../base';
+import { Typography } from '../../base';
+import { Stack } from '../Stack';
 
 export const NotFound = () => {
   return (
-    <Stack direction="column" textAlign="center" spacing={1}>
+    <Stack direction="column" align="center" spacing={1}>
       <svg
         width="241"
         height="264"

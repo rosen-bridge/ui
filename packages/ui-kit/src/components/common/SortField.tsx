@@ -7,8 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Card } from '@mui/material';
-import { SvgIcon } from '@mui/material';
+import { Card, Divider } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -20,16 +19,16 @@ import {
 import { styled } from '../../styling';
 import {
   Button,
-  Divider,
   Grid,
   IconButton,
   ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
-  Stack,
   Typography,
 } from '../base';
+import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
 
 const Root = styled(Card)(({ theme }) => ({
   padding: theme.spacing(1, 0.5),
@@ -145,7 +144,7 @@ export const SortField = ({
               }
               onClick={handleMenuOpen}
             >
-              <Stack alignItems="start">
+              <Stack align="start">
                 <Typography
                   hidden={dense}
                   variant="caption"

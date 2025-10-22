@@ -1,10 +1,11 @@
 import { HTMLAttributes } from 'react';
 
-import { Box, SvgIcon, Typography } from '@mui/material';
+import { Box, Typography, SvgIcon } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
-import { Stack, Tooltip } from '../../base';
+import { Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
+import { Stack } from '../Stack';
 
 /**
  * Props for the `Label` component.
@@ -67,8 +68,8 @@ const LabelBase = ({
   return (
     <Stack
       className={`rosen-label rosen-label-${orientation} ${className || ''}`}
-      flexDirection="row"
-      justifyContent="start"
+      direction="row"
+      justify="start"
       {...props}
     >
       {inset && (
@@ -90,18 +91,20 @@ const LabelBase = ({
       )}
       <Stack
         className="rosen-label-container"
-        alignItems={orientation === 'vertical' ? 'start' : 'center'}
-        flexDirection={orientation === 'vertical' ? 'column' : 'row'}
-        gap={orientation === 'vertical' ? 0 : 2}
-        py={dense ? 0 : 0.5}
-        overflow="hidden"
-        flexGrow={1}
+        align={orientation === 'vertical' ? 'start' : 'center'}
+        direction={orientation === 'vertical' ? 'column' : 'row'}
+        spacing={orientation === 'vertical' ? 0 : 2}
+        style={{
+          padding: `${dense ? 0 : 4}px 0`,
+          overflow: 'hidden',
+          flexGrow: 1,
+        }}
       >
         <Stack
           className="rosen-label-label"
-          gap={1}
-          flexDirection="row"
-          alignItems="center"
+          spacing={1}
+          direction="row"
+          align="center"
         >
           <Typography
             noWrap
@@ -133,16 +136,17 @@ const LabelBase = ({
           )}
         </Stack>
         <Stack
-          flexDirection="row"
-          overflow="hidden"
-          whiteSpace="nowrap"
-          maxWidth="100%"
-          height={orientation === 'vertical' ? '2em' : 'unset'}
-          display="flex"
-          alignItems="center"
-          flexGrow={orientation === 'vertical' ? 0 : 1}
-          alignSelf={orientation === 'vertical' ? 'stretch' : 'center'}
-          justifyContent={orientation === 'vertical' ? 'start' : 'end'}
+          direction="row"
+          style={{
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+            maxWidth: '100%',
+            height: orientation === 'vertical' ? '2em' : 'unset',
+            flexGrow: orientation === 'vertical' ? 0 : 1,
+            alignSelf: orientation === 'vertical' ? 'stretch' : 'center',
+            justifyContent: orientation === 'vertical' ? 'start' : 'end',
+          }}
+          align="center"
         >
           {children}
         </Stack>

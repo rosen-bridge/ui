@@ -1,12 +1,13 @@
 import { HTMLAttributes, useCallback, useState } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, Stack, Tooltip } from '../../base';
+import { IconButton, Skeleton, Tooltip } from '../../base';
 import { CopyButton } from '../button/CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
+import { Stack } from '../Stack';
+import { SvgIcon } from '../SvgIcon';
 
 export type IdentifierProps = HTMLAttributes<HTMLDivElement> & {
   /** If true, enables a button to copy the value to the clipboard */
@@ -61,10 +62,9 @@ const IdentifierBase = ({
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      display="flex"
-      justifyContent="space-between"
-      minWidth={0}
+      align="center"
+      justify="between"
+      style={{ minWidth: 0 }}
       {...props}
     >
       {loading && <Skeleton style={{ flexGrow: 1 }} />}
@@ -73,7 +73,7 @@ const IdentifierBase = ({
           <Tooltip title={value}>
             <Stack
               direction="row"
-              alignItems="center"
+              align="center"
               style={{
                 minWidth: 0,
                 fontFamily: 'monospace',
@@ -97,10 +97,10 @@ const IdentifierBase = ({
               </span>
             </Stack>
           </Tooltip>
-          <Stack direction="row" alignItems="center">
+          <Stack direction="row" align="center">
             {!!href && (
               <IconButton target="_blank" size="small" href={href}>
-                <SvgIcon fontSize="small">
+                <SvgIcon size="small">
                   <ExternalLinkAlt />
                 </SvgIcon>
               </IconButton>
@@ -109,7 +109,7 @@ const IdentifierBase = ({
             {qrcode && (
               <>
                 <IconButton size="small" onClick={handleOpen}>
-                  <SvgIcon fontSize="small">
+                  <SvgIcon size="small">
                     <Qrcode />
                   </SvgIcon>
                 </IconButton>

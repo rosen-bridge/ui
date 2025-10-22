@@ -1,12 +1,13 @@
 import React, { HTMLAttributes } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Stack, Skeleton, IconButton } from '../base';
+import { Typography, Skeleton, IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
+import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * Props for the Token component.
@@ -37,10 +38,12 @@ export type TokenProps = HTMLAttributes<HTMLDivElement> & {
 const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
   return (
     <Stack
-      alignItems="center"
-      flexDirection={!reverse ? 'row' : 'row-reverse'}
-      fontSize="inherit"
-      gap="0.5em"
+      align="center"
+      style={{
+        flexDirection: !reverse ? 'row' : 'row-reverse',
+        fontSize: 'inherit',
+      }}
+      spacing="0.5em"
     >
       {loading ? (
         <>
@@ -61,12 +64,12 @@ const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
             {capitalize(name).slice(0, 1)}
           </Avatar>
 
-          <Stack flexDirection="column" alignItems="start">
+          <Stack direction="column" align="start">
             <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
           </Stack>
           {!!href && (
             <IconButton target="_blank" size="small" href={href}>
-              <SvgIcon fontSize="small">
+              <SvgIcon size="small">
                 <ExternalLinkAlt />
               </SvgIcon>
             </IconButton>

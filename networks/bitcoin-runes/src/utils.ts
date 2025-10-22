@@ -1,6 +1,8 @@
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
+  BitcoinRunesBoxSelection,
   BitcoinRunesUtxo,
+  CoveringBoxes,
   FeeEstimator,
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import JsonBigInt from '@rosen-bridge/json-bigint';
@@ -16,11 +18,14 @@ import { Psbt } from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
+  GET_BOX_API_LIMIT,
+  MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
   SEGWIT_OUTPUT_WEIGHT_UNIT,
   TAPROOT_INPUT_WEIGHT_UNIT,
   TAPROOT_OUTPUT_WEIGHT_UNIT,
 } from './constants';
 import type {
+  UnisatAddressAvailableBtcUtxos,
   UnisatAddressBtcUtxos,
   UnisatAddressRunesUtxos,
   UnisatResponse,
@@ -63,95 +68,215 @@ export const generateOpReturnData = async (
 };
 
 /**
- * gets confirmed and unspent boxes of an address that contains given rune
+ * submits a get request to unisat api
+ * @param path
+ * @returns UnisatResponse
+ */
+export const requestUnisat = async <T>(
+  path: string,
+): Promise<UnisatResponse<T | undefined>> => {
+  const headers = { 'Content-Type': 'application/json' };
+  if (process.env.BITCOIN_RUNES_SECRET) {
+    Object.assign(headers, {
+      Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
+    });
+  }
+
+  const response = await Axios.get<UnisatResponse<T | undefined>>(
+    `${process.env.BITCOIN_RUNES_API}${path}`,
+    { headers },
+  );
+
+  return response.data;
+};
+
+/**
+ * gets confirmed and unspent boxes of an address
+ * @param requiredBtc
+ * @param preSelectedBoxes
+ * @param utxos
+ * @param runestoneLength
+ * @param lockDataChunksLength
+ * @param feeRatio
+ * @returns list of boxes
+ */
+export const getAdditionalBoxes = async (
+  requiredBtc: bigint,
+  preSelectedBoxes: BitcoinRunesUtxo[],
+  utxos: AsyncGenerator<BitcoinRunesUtxo>,
+  runestoneLength: number,
+  lockDataChunksLength: number,
+  feeRatio: number,
+): Promise<CoveringBoxes<BitcoinRunesUtxo>> => {
+  const feeEstimator = generateFeeEstimatorWithAssumptions(
+    runestoneLength,
+    feeRatio,
+    preSelectedBoxes.length,
+    lockDataChunksLength + 1, // multiple utxos for data chunks, 1 utxo to lock address
+    0,
+  );
+
+  // fetch input boxes to cover required BTC
+  const boxSelection = new BitcoinRunesBoxSelection();
+  const coveredBtcBoxes = await boxSelection.getCoveringBoxes(
+    { nativeToken: requiredBtc, tokens: [] },
+    preSelectedBoxes.map((box) => `${box.txId}.${box.index}`),
+    new Map(),
+    utxos,
+    MINIMUM_BTC_FOR_NATIVE_SEGWIT_OUTPUT,
+    undefined,
+    feeEstimator,
+  );
+
+  return coveredBtcBoxes;
+};
+
+/**
+ * gets the current address's available UTXO list that can be used for BTC spending
+ *
+ * Note: UTXOs of assets such as inscriptions, runes, and alkanes will not be included
+ * Note: UTXOs with less than 600 satoshis will not be returned to avoid potential
+ *  unspendable outputs from unrecognized asset protocols or burns
  * @param address the address
- * @param runeId the rune ID
  * @param offset
  * @param limit
  * @returns list of boxes
  */
-export const getAddressRunesBoxes = async (
+export async function* getAddressAvailableBtcUtxos(
   address: string,
-  runeId: string,
-  offset: number,
-  limit: number,
-): Promise<Array<BitcoinRunesUtxo>> => {
-  try {
-    const headers = { 'Content-Type': 'application/json' };
-    if (process.env.BITCOIN_RUNES_SECRET) {
-      Object.assign(headers, {
-        Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
-      });
-    }
+  startOffset: number = 0,
+  limit: number = GET_BOX_API_LIMIT,
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  let offset = startOffset;
+  let hasMorePages = true;
 
-    const response = await Axios.get<
-      UnisatResponse<UnisatAddressRunesUtxos | undefined>
-    >(
-      `${process.env.BITCOIN_RUNES_API}/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`,
-      { headers },
-    );
+  while (hasMorePages) {
+    try {
+      const response = await requestUnisat<UnisatAddressAvailableBtcUtxos>(
+        `/v1/indexer/address/${address}/available-utxo-data?cursor=${offset}&size=${limit}`,
+      );
+      const utxos = response.data?.utxo ?? [];
+      if (utxos.length < limit) {
+        hasMorePages = false;
+      }
 
-    if (!response.data?.data) return [];
-    const utxos = response.data.data.utxo;
-    return utxos.map((utxo) => ({
-      txId: utxo.txid,
-      index: utxo.vout,
-      value: BigInt(utxo.satoshi),
-      runes: utxo.runes.map((rune) => ({
-        runeId: rune.runeid,
-        quantity: BigInt(rune.amount),
-      })),
-    }));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    const baseError = `Failed to get UTxOs conataining rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
-    if (e.response) {
-      throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+      const page = utxos.map((utxo) => ({
+        txId: utxo.txid,
+        index: utxo.vout,
+        value: BigInt(utxo.satoshi),
+        runes: [],
+      }));
+
+      yield* page;
+
+      offset += limit;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      const baseError = `Failed to get available UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+      if (e.response) {
+        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+      }
+      throw new Error(baseError + e.message);
     }
-    throw new Error(baseError + e.message);
   }
-};
+}
 
 /**
- * gets confirmed and unspent boxes of an address that contains no rune
+ * gets confirmed and unspent boxes of an address
  * @param address the address
+ * @param startOffset
+ * @param limit
  * @returns list of boxes
  */
-export const getAddressBtcBoxes = async (
+export async function* getAddressAllBtcUtxos(
   address: string,
-): Promise<Array<BitcoinRunesUtxo>> => {
-  try {
-    const headers = { 'Content-Type': 'application/json' };
-    if (process.env.BITCOIN_RUNES_SECRET) {
-      Object.assign(headers, {
-        Authorization: `Bearer ${process.env.BITCOIN_RUNES_SECRET}`,
-      });
-    }
+  startOffset: number = 0,
+  limit: number = GET_BOX_API_LIMIT,
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  let offset = startOffset;
+  let hasMorePages = true;
 
-    const response = await Axios.get<
-      UnisatResponse<UnisatAddressBtcUtxos | undefined>
-    >(
-      `${process.env.BITCOIN_RUNES_API}/v1/indexer/address/${address}/available-utxo-data?cursor=0&size=100`,
-      { headers },
-    );
+  while (hasMorePages) {
+    try {
+      const response = await requestUnisat<UnisatAddressBtcUtxos>(
+        `/v1/indexer/address/${address}/all-utxo-data?cursor=${offset}&size=${limit}`,
+      );
+      const utxos = response.data?.utxo ?? [];
+      if (utxos.length < limit) {
+        hasMorePages = false;
+      }
 
-    if (!response.data.data) return [];
-    const utxos = response.data.data.utxo;
-    return utxos.map((utxo) => ({
-      txId: utxo.txid,
-      index: utxo.vout,
-      value: BigInt(utxo.satoshi),
-      runes: [],
-    }));
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (e: any) {
-    const baseError = `Failed to get UTxOs conataining BTC only for address [${address}] from Unisat: `;
-    if (e.response) {
-      throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+      const page = utxos.map((utxo) => ({
+        txId: utxo.txid,
+        index: utxo.vout,
+        value: BigInt(utxo.satoshi),
+        runes: [],
+      }));
+
+      yield* page;
+
+      offset += limit;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      const baseError = `Failed to get all UTxOs containing BTC only for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+      if (e.response) {
+        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+      }
+      throw new Error(baseError + e.message);
     }
-    throw new Error(baseError + e.message);
   }
-};
+}
+
+/**
+ * gets confirmed and unspent boxes of an address that contains given rune
+ * @param address the address
+ * @param runeId the rune ID
+ * @param startOffset
+ * @param limit
+ * @returns list of boxes
+ */
+export async function* getAddressRunesUtxos(
+  address: string,
+  runeId: string,
+  startOffset: number = 0,
+  limit: number = GET_BOX_API_LIMIT,
+): AsyncGenerator<BitcoinRunesUtxo, undefined> {
+  let offset = startOffset;
+  let hasMorePages = true;
+
+  while (hasMorePages) {
+    try {
+      const response = await requestUnisat<UnisatAddressRunesUtxos>(
+        `/v1/indexer/address/${address}/runes/${runeId}/utxo?start=${offset}&limit=${limit}`,
+      );
+      const utxos = response.data?.utxo ?? [];
+      if (utxos.length < limit) {
+        hasMorePages = false;
+      }
+
+      const page = utxos.map((utxo) => ({
+        txId: utxo.txid,
+        index: utxo.vout,
+        value: BigInt(utxo.satoshi),
+        runes: utxo.runes.map((rune) => ({
+          runeId: rune.runeid,
+          quantity: BigInt(rune.amount),
+        })),
+      }));
+
+      yield* page;
+
+      offset += limit;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (e: any) {
+      const baseError = `Failed to get UTxOs containing rune [${runeId}] for address [${address}] with offset/limit [${offset}/${limit}] from Unisat: `;
+      if (e.response) {
+        throw new Error(baseError + `${JsonBigInt.stringify(e.response.data)}`);
+      }
+      throw new Error(baseError + e.message);
+    }
+  }
+}
 
 /**
  * gets current fee ratio of the network

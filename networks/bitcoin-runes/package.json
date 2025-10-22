@@ -12,14 +12,14 @@
     "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build",
+    "build": "tsc --build tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
     "@magiceden-oss/runestone-lib": "^1.0.2",
+    "@rosen-bridge/bitcoin-runes-utxo-selection": "^1.1.0",
     "@rosen-bridge/address-codec": "^1.0.0",
-    "@rosen-bridge/bitcoin-runes-utxo-selection": "^1.0.3",
     "@rosen-bridge/icons": "^2.3.1",
     "@rosen-bridge/json-bigint": "^1.0.0",
     "@rosen-bridge/tokens": "^4.0.0",

@@ -1,11 +1,11 @@
 'use client';
 
-import { SvgIcon } from '@mui/material';
 import { FileCopyAlt } from '@rosen-bridge/icons';
 
 import { useSnackbar } from '../../hooks';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { Snackbar, Alert, IconButton } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * global snackbar component that connects to snackbar context and shows and
