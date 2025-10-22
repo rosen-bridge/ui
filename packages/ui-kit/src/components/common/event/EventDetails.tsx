@@ -79,20 +79,24 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
                 href={value.sourceTxIdUrl}
               />
             </Label>
-            <Label label="Payment Tx" inset>
-              <Identifier
-                copyable={!!value.paymentTxId}
-                value={value.paymentTxId}
-                href={value.paymentTxIdUrl}
-              />
-            </Label>
-            <Label label="Reward Tx" inset>
-              <Identifier
-                copyable={!!value.spendTxId}
-                value={value.spendTxId}
-                href={value.spendTxIdUrl}
-              />
-            </Label>
+            {'paymentTxId' in value && (
+              <Label label="Payment Tx" inset>
+                <Identifier
+                  copyable={!!value.paymentTxId}
+                  value={value.paymentTxId}
+                  href={value.paymentTxIdUrl}
+                />
+              </Label>
+            )}
+            {'spendTxId' in value && (
+              <Label label="Reward Tx" inset>
+                <Identifier
+                  copyable={!!value.spendTxId}
+                  value={value.spendTxId}
+                  href={value.spendTxIdUrl}
+                />
+              </Label>
+            )}
           </LabelGroup>
         </div>
         <div>
