@@ -99,3 +99,17 @@ export interface UnisatInscriptionItem {
   moved: boolean;
   offset: number;
 }
+
+export interface Status {
+  confirmed: boolean;
+  block_height?: number;
+  block_hash?: string;
+  block_time?: number;
+}
+
+export interface EsploraUtxo {
+  txid: string;
+  vout: number;
+  status: Status;
+  value: number;
+}

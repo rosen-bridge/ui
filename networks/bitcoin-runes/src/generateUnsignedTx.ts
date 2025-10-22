@@ -17,6 +17,7 @@ import {
   getAddressAllBtcUtxos,
   getAddressAvailableBtcUtxos,
   getAddressRunesUtxos,
+  getEsploraAddressUtxos,
   getFeeRatio,
 } from './utils';
 
@@ -30,6 +31,7 @@ export const generateUnsignedTx =
   async (
     lockAddress: string,
     fromAddress: string,
+    fromPaymentAddress: string,
     wrappedAmount: RosenAmountValue,
     lockData: string,
     token: RosenChainToken,
@@ -154,6 +156,30 @@ export const generateUnsignedTx =
     if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {
       const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
 
+      const utxos = getEsploraAddressUtxos(fromPaymentAddress);
+
+      const additionalBoxes = await getAdditionalBoxes(
+        requiredBtc,
+        selectedBoxes,
+        utxos,
+        runestone.encodedRunestone.length,
+        lockDataChunks.length,
+        feeRatio,
+      );
+
+      // add selected boxes
+      selectedBoxes.push(...additionalBoxes.boxes);
+      // the fee and additional BTC are only based on the additional assets of the 2nd selection
+      additionalAssets.nativeToken =
+        additionalBoxes.additionalAssets.aggregated.nativeToken;
+      estimatedFee = additionalBoxes.additionalAssets.fee;
+    }
+
+    // selection step 4
+    preSelectedBtc = selectedBoxes.reduce((a, b) => a + b.value, 0n);
+    if (preSelectedBtc < requiredAssets.nativeToken + estimatedFee) {
+      const requiredBtc = requiredAssets.nativeToken - preSelectedBtc;
+
       // get all utxos
       const utxos = getAddressAllBtcUtxos(fromAddress);
 
@@ -210,7 +236,7 @@ export const generateUnsignedTx =
 
     // add change UTxO
     psbt.addOutput({
-      script: taprootPayment.output,
+      address: fromPaymentAddress,
       value: Number(additionalAssets.nativeToken),
     });
     // OP_RETURN

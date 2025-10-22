@@ -27,6 +27,7 @@ describe('utils', () => {
     /**
      * @target getAddressAvailableBtcUtxos should successfully get all the pages
      * @dependencies
+     * - axios
      * @scenario
      * - stub axios.get to return mock sequence of responses
      * - call getAddressAvailableBtcUtxos
@@ -79,6 +80,7 @@ describe('utils', () => {
     /**
      * @target getAddressAllBtcUtxos should successfully get all the pages
      * @dependencies
+     * - axios
      * @scenario
      * - stub axios.get to return mock sequence of responses
      * - call getAddressAllBtcUtxos
@@ -127,6 +129,7 @@ describe('utils', () => {
     /**
      * @target getAddressRunesUtxos should successfully get all the pages
      * @dependencies
+     * - axios
      * @scenario
      * - stub axios.get to return mock sequence of responses
      * - call getAddressRunesUtxos
