@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react';
 
-import { ClickAwayListener, SvgIcon, Divider } from '@mui/material';
+import { ClickAwayListener, Divider } from '@mui/material';
 import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
 import { useBreakpoint } from '../../../hooks';
@@ -20,6 +20,7 @@ import {
   ListSubheader,
 } from '../../base';
 import { IconButton } from '../../base';
+import { SvgIcon } from '../SvgIcon';
 import { Truncate } from '../Truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';

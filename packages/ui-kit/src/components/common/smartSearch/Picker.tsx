@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { Check } from '@rosen-bridge/icons';
 
 import {
@@ -10,6 +9,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from '../../base';
+import { SvgIcon } from '../SvgIcon';
 import { Popup } from './Popup';
 import { Input, SelectOption, Selected } from './types';
 
@@ -44,7 +44,7 @@ export const Picker = ({
     if (!query) return value.options;
 
     return value.options.filter((option) => {
-      return option.value
+      return option.label
         ?.toString()
         .toLowerCase()
         .includes(query.toLowerCase());
