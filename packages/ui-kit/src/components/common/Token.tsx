@@ -1,6 +1,5 @@
 import React, { HTMLAttributes } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
@@ -8,6 +7,7 @@ import { Typography, Skeleton, IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * Props for the Token component.
@@ -69,7 +69,7 @@ const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
           </Stack>
           {!!href && (
             <IconButton target="_blank" size="small" href={href}>
-              <SvgIcon fontSize="small">
+              <SvgIcon size="small">
                 <ExternalLinkAlt />
               </SvgIcon>
             </IconButton>
