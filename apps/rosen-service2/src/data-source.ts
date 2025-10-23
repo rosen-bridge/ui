@@ -16,8 +16,8 @@ import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
-  migrations as assetAggregatorMigrations,
-} from '@rosen-ui/asset-aggregator';
+  migrations as assetCalculatorMigrations,
+} from '@rosen-ui/asset-calculator';
 
 import { configs } from './configs';
 
@@ -36,7 +36,7 @@ export default new DataSource({
     ...scannerMigrations.postgres,
     ...eventTriggerExtractorMigrations.postgres,
     ...observationExtractorMigrations.postgres,
-    ...assetAggregatorMigrations.postgres,
+    ...assetCalculatorMigrations.postgres,
   ],
   host: configs.db.host,
   port: configs.db.port,
