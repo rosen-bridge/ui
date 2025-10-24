@@ -116,6 +116,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
       options: [
         { label: 'Successful', value: 'successful' },
         { label: 'Processing', value: 'processing' },
+        { label: 'Fraud', value: 'fraud' },
       ],
     },
   },

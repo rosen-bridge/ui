@@ -1,6 +1,6 @@
 import { forwardRef, HTMLAttributes } from 'react';
 
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 import { capitalize } from 'lodash-es';
 
@@ -10,6 +10,7 @@ import { Connector } from '../Connector';
 import { Amount, Identifier, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
+import { Stack } from '../Stack';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
@@ -40,8 +41,8 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
         onClick={onClick}
       >
         <CardBody>
-          <Stack gap={1}>
-            <Stack gap={1} flexDirection="row">
+          <Stack spacing={1}>
+            <Stack spacing={1} direction="row">
               {isLoading && (
                 <Skeleton
                   variant="circular"
@@ -56,8 +57,8 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 </Avatar>
               )}
               <Stack
-                flexDirection="row"
-                justifyContent="space-between"
+                direction="row"
+                justify="between"
                 style={{ width: '100%' }}
               >
                 <Amount
@@ -67,7 +68,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                   value={value?.amount}
                 />
                 {!!value && 'timestamp' in value && (
-                  <Stack justifyContent="flex-end">
+                  <Stack justify="end">
                     <div style={{ marginBottom: '-4px' }}>
                       <RelativeTime
                         isLoading={isLoading}
@@ -83,7 +84,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
               loading={isLoading}
               value={value?.id}
             />
-            <Stack flexDirection="row" justifyContent="space-between">
+            <Stack direction="row" justify="between">
               <Typography component="div" fontSize="12px">
                 <Connector
                   variant="filled"
