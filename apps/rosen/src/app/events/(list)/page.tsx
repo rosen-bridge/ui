@@ -73,7 +73,7 @@ const Page = () => {
         disabled={isLoading}
         namespace="events"
         filters={filters}
-        onChange={collection.setFilters}
+        onChange={collection.setFields}
       />
     ),
     [collection, filters, isLoading],
@@ -103,7 +103,7 @@ const Page = () => {
 
   useEffect(() => {
     setCurrent(undefined);
-  }, [collection.sort, collection.filters, collection.pageIndex]);
+  }, [collection.sort, collection.fields, collection.pageIndex]);
 
   useEffect(() => {
     if (error) {

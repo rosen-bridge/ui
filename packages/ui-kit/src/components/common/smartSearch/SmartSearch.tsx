@@ -51,7 +51,7 @@ export type SmartSearchProps = {
   disabled?: boolean;
   filters: Filter[];
   namespace: string;
-  onChange: (params: Record<string, unknown>) => void;
+  onChange: (filters: Selected[]) => void;
 };
 
 export const SmartSearch = ({
@@ -266,22 +266,8 @@ export const SmartSearch = ({
 
     $history.current?.add(filters);
 
-    const params: Record<string, unknown> = {};
-
-    for (const item of filters) {
-      const parsed = parseFilter(filtersInput, item)!;
-
-      const operator = parsed.operator!.symbol;
-
-      const array = Array.isArray(item.value) ? '[]' : '';
-
-      const value = [item.value].flat().join(',');
-
-      params[`${item.flow}${array}${operator.replace('=', '')}`] = value;
-    }
-
-    onChange(params);
-  }, [filters, filtersInput, onChange]);
+    onChange(filters);
+  }, [filters, onChange]);
 
   return (
     <Root>

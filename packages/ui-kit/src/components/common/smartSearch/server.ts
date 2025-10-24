@@ -1,117 +1,104 @@
+import { 
+  FindManyOptions,
+  In,
+  LessThanOrEqual,
+  MoreThanOrEqual,
+  Not,
+  ILike 
+} from '@rosen-bridge/extended-typeorm';
 import Joi from 'joi';
 
-const OPERATORS = ['==', '!=', '<=', '>=', '*=', '^=', '$='] as const;
+export const FILTERS_FIELD_OPERATORS = ['==', '!=', '<=', '>=', '*=', '^=', '$='] as const;
 
-type Field = {
+export type FiltersField = {
   key: string;
-  operator: (typeof OPERATORS)[number];
-  value: boolean | number | string | (number | string)[];
+  operator: (typeof FILTERS_FIELD_OPERATORS)[number];
+  value: boolean | number | null | string | ( boolean | number | null | string)[];
 };
 
-type Sort = {
+export type FiltersSort = {
   key: string;
   order?: 'ASC' | 'DESC';
 };
 
-type Search = {
+export type FiltersSearch = {
   query: string;
   in?: string[];
 };
 
-type Pagination = {
+export type FiltersPagination = {
   offset?: number;
   limit?: number;
 };
 
 export type Filters = {
-  fields?: Field[];
-  pagination?: Pagination;
-  search?: Search;
-  sort?: Sort;
+  fields: FiltersField[];
+  pagination?: FiltersPagination;
+  search?: FiltersSearch;
+  sorts: FiltersSort[];
 };
 
-export const FiltersSchema = Joi.object<Filters>({
-  fields: Joi.array().items(
-    Joi.object({
-      key: Joi.string().required(),
-      operator: Joi.string()
-        .valid(...OPERATORS)
-        .required(),
-      value: Joi.alternatives(
-        Joi.boolean(),
-        Joi.number(),
-        Joi.string(),
-        Joi.array().items(Joi.alternatives(Joi.number(), Joi.string())),
-      ).required(),
-    }),
-  ),
-  pagination: Joi.object({
-    offset: Joi.number().min(0).default(0),
-    limit: Joi.number().min(1).max(100).default(20),
-  }),
-  search: Joi.object({
-    query: Joi.string().required(),
-    in: Joi.array().items(Joi.string()),
-  }),
-  sort: Joi.object({
-    key: Joi.string().required(),
-    order: Joi.string().valid('ASC', 'DESC'),
-  }),
-});
-
-export const searchParamsToFilters = (
-  searchParams: URLSearchParams,
+export const urlSearchParamsToFilters = (
+  urlSearchParams: URLSearchParams,
 ): Filters => {
-  const filters: Filters = {};
+  const filters: Filters = {
+    fields: [],
+    sorts: []
+  };
 
-  if (searchParams.has('limit')) {
+  if (urlSearchParams.has('limit')) {
     filters.pagination ||= {};
-    filters.pagination.limit = +searchParams.get('limit')!;
-    searchParams.delete('limit');
+    filters.pagination.limit = +urlSearchParams.get('limit')!;
+    urlSearchParams.delete('limit');
   }
 
-  if (searchParams.has('offset')) {
+  if (urlSearchParams.has('offset')) {
     filters.pagination ||= {};
-    filters.pagination.offset = +searchParams.get('offset')!;
-    searchParams.delete('offset');
+    filters.pagination.offset = +urlSearchParams.get('offset')!;
+    urlSearchParams.delete('offset');
   }
 
-  if (searchParams.has('search')) {
+  if (urlSearchParams.has('search')) {
     filters.search = {
-      query: searchParams.get('search')!,
+      query: urlSearchParams.get('search')!,
     };
-    searchParams.delete('search');
+    urlSearchParams.delete('search');
   }
 
-  if (searchParams.has('in')) {
+  if (urlSearchParams.has('in')) {
     if (filters.search) {
-      filters.search.in = searchParams.get('in')!.split(',');
+      filters.search.in = urlSearchParams.get('in')!.split(',');
     }
-    searchParams.delete('in');
+    urlSearchParams.delete('in');
   }
 
-  if (searchParams.has('sort')) {
-    const [key, order] = searchParams.get('sort')!.split('-');
+  if (urlSearchParams.has('sorts')) {
+    const raw = urlSearchParams.get('sorts') || '';
 
-    filters.sort = {
-      key,
-      order: order as Sort['order'],
-    };
+    const values = raw.split(',');
 
-    searchParams.delete('sort');
+    for (const value of values) {
+      const sections = value.split('-');
+
+      const key = sections.at(0) as string;
+
+      const order = sections.at(1) as FiltersSort['order'];
+
+      filters.sorts.push({ key, order })
+    }
+ 
+    urlSearchParams.delete('sorts');
   }
 
-  searchParams.forEach((value, key) => {
+  urlSearchParams.forEach((value, key) => {
     const isArray = key.endsWith('[]') || key.slice(0, -1).endsWith('[]');
 
     const operator =
-      OPERATORS.find((operator) => key.at(-1) === operator.at(0)) || '==';
+      FILTERS_FIELD_OPERATORS.find((operator) => key.at(-1) === operator.at(0)) || '==';
 
     const name = (key + '=')
       .split(`${isArray ? '[]' : ''}${operator.at(0)}`)
       .at(0)!;
-
-    filters.fields ||= [];
 
     filters.fields.push({
       key: name,
@@ -123,67 +110,87 @@ export const searchParamsToFilters = (
   return filters;
 };
 
-export const filtersToTypeorm = (
-  filters: Filters,
-  mapper: (key: string) => string,
-) => {
-  const sections: string[] = [];
+export const FiltersSchema = Joi.object<Filters>({
+  fields: Joi.array().items(
+    Joi.object({
+      key: Joi.string().required(),
+      operator: Joi.string()
+        .valid(...FILTERS_FIELD_OPERATORS)
+        .required(),
+      value: Joi.alternatives(
+        Joi.boolean(),
+        Joi.number(),
+        Joi.string(),
+        Joi.array().items(Joi.alternatives(Joi.number(), Joi.string())),
+      ).required(),
+    }),
+  ).required(),
+  pagination: Joi.object({
+    offset: Joi.number().min(0),
+    limit: Joi.number().min(1),
+  }),
+  search: Joi.object({
+    query: Joi.string().required(),
+    in: Joi.array().items(Joi.string()),
+  }),
+  sorts: Joi.array().items(
+    Joi.object({
+      key: Joi.string().required(),
+      order: Joi.string().valid('ASC', 'DESC'),
+    })
+  ).required(),
+});
+
+export const filtersToTypeorm = <T>(filters: Filters): FindManyOptions<T> => {
+  const result: FindManyOptions<T> = {
+    order: {},
+    where: {},
+  };
+
+  result.skip = filters.pagination?.offset;
+
+  result.take = filters.pagination?.limit;
+
+  filters.sorts.forEach((sort) => { 
+    (result.order as Record<string, unknown>)[sort.key] = sort.order;
+  });
 
   for (const field of filters.fields || []) {
-    const key = mapper(field.key);
-
-    const values = [field.value]
-      .flat()
-      .map((value) => `'${value}'`)
-      .join(', ');
+    let condition;
 
     switch (field.operator) {
       case '!=': {
-        sections.push(`(${key} NOT IN (${values}))`);
+        condition = Not(In([field.value].flat()));
         break;
       }
       case '<=': {
-        sections.push(`(${key} <= ${field.value})`);
+        condition = LessThanOrEqual(field.value);
         break;
       }
       case '==': {
-        sections.push(`(${key} IN (${values}))`);
+        condition = In([field.value].flat());
         break;
       }
       case '>=': {
-        sections.push(`(${key} >= ${field.value})`);
+        condition = MoreThanOrEqual(field.value);
         break;
       }
       case '*=': {
-        sections.push(`(${key} ILIKE '%${field.value}%')`);
+        condition = ILike(`%${field.value}%`);
         break;
       }
       case '^=': {
-        sections.push(`(${key} ILIKE '${field.value}%')`);
+        condition = ILike(`${field.value}%`);
         break;
       }
       case '$=': {
-        sections.push(`(${key} ILIKE '%${field.value}')`);
+        condition = ILike(`%${field.value}`);
         break;
       }
     }
+    
+    (result.where as Record<string, unknown>)[field.key] = condition;
   }
 
-  if (filters.search) {
-    const query = filters.search.in
-      ?.map((field) => `(${mapper(field)} ILIKE '%${filters.search!.query}%')`)
-      ?.join(' OR ');
-
-    query && sections.push(`(${query})`);
-  }
-
-  const query = sections.join(' AND ');
-
-  const pagination = filters.pagination;
-
-  const sort = filters.sort?.key
-    ? Object.assign({}, filters.sort, { key: mapper(filters.sort.key) })
-    : filters.sort;
-
-  return { query, pagination, sort };
+  return result;
 };

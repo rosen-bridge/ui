@@ -3,6 +3,7 @@ import {
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import {
+  AssetViewEntity,
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
@@ -15,6 +16,7 @@ import '../initialize-datasource-if-needed';
 const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
 const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
 const tokenRepository = dataSource.getRepository(TokenEntity);
+const assetViewRepository = dataSource.getRepository(AssetViewEntity);
 
 export interface Asset {
   id: string;
@@ -24,10 +26,6 @@ export interface Asset {
   bridged: string | null;
   lockedPerAddress?: Array<{ amount: number; address: string }>;
   chain: Network;
-}
-
-interface AssetWithTotal extends Asset {
-  total: number;
 }
 
 /**
@@ -70,85 +68,23 @@ export const getAsset = async (id: string) => {
  * @param filters
  */
 export const getAllAssets = async (filters: Filters) => {
-  if (!filters.sort) {
-    filters.sort = {
-      key: 'name',
-      order: 'ASC',
-    };
-  }
-
   if (filters.search) {
     filters.search.in ||= [];
   }
 
-  let { pagination, query, sort } = filtersToTypeorm(
-    filters,
-    (key) => `"sub".${key}`,
-  );
-
-  const subquery = tokenRepository
-    .createQueryBuilder('te')
-    .leftJoin(
-      (queryBuilder) =>
-        queryBuilder
-          .select(['bae.tokenId AS "tokenId"', 'sum(bae.amount) AS "bridged"'])
-          .from(bridgedAssetRepository.metadata.tableName, 'bae')
-          .groupBy('bae.tokenId'),
-      'baeq',
-      'baeq."tokenId" = te.id',
-    )
-    .leftJoin(
-      (queryBuilder) =>
-        queryBuilder
-          .select([
-            'lae.tokenId AS "tokenId"',
-            `jsonb_agg(to_jsonb(lae) - 'tokenId') AS "lockedPerAddress"`,
-          ])
-          .from(lockedAssetRepository.metadata.tableName, 'lae')
-          .groupBy('lae.tokenId'),
-      'laeq',
-      'laeq."tokenId" = te.id',
-    )
-    .select([
-      'id',
-      'name',
-      'decimal',
-      '"isNative"',
-      '"bridged"',
-      '"lockedPerAddress"',
-      'chain',
-      'count(*) over() AS total',
-    ]);
-
-  let queryBuilder = dataSource
-    .createQueryBuilder()
-    .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
-    .from(`(${subquery.getQuery()})`, 'sub')
-    .setParameters(subquery.getParameters());
-
-  if (query) {
-    queryBuilder = queryBuilder.where(query);
+  if (!filters.sorts.length) {
+    filters.sorts.push({
+      key: 'name',
+      order: 'ASC',
+    });
   }
+ 
+  const options = filtersToTypeorm<AssetViewEntity>(filters);
 
-  if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
-  }
-
-  if (pagination?.offset) {
-    queryBuilder = queryBuilder.offset(pagination.offset);
-  }
-
-  if (pagination?.limit) {
-    queryBuilder = queryBuilder.limit(pagination.limit);
-  }
-
-  const rawItems = await queryBuilder.getRawMany<AssetWithTotal>();
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const items = rawItems.map(({ total, ...item }) => item);
+  const [items, total] = await assetViewRepository.findAndCount(options);
 
   return {
     items,
-    total: rawItems[0]?.total ?? 0,
+    total,
   };
 };

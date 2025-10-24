@@ -7,7 +7,6 @@ export type Context = {
 export type Operator = {
   value: string;
   label: string;
-  symbol: string;
   pre?: ReactNode;
   post?: ReactNode;
   preview?: string;
