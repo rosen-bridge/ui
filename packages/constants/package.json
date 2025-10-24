@@ -15,7 +15,7 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
+  "engines": {
+    "node": ">=22.18.0"
   }
 }
