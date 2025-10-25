@@ -19,6 +19,13 @@ export class InsufficientAssetsError extends Error {
   }
 }
 
+/**
+ * Handles cases where an asset balance does not cover required values.
+ *
+ * @param tokenMap
+ * @param nativeTokenKey
+ * @param assetBalance
+ */
 export const handleUncoveredAssets = (
   tokenMap: TokenMap,
   nativeTokenKey: Network,
