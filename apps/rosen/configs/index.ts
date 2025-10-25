@@ -4,6 +4,8 @@
  **************************************************/
 import { NETWORKS } from '@rosen-ui/constants';
 
+export const CONTRACT_VERSION = '';
+
 export const FEE_CONFIG_TOKEN_ID = '';
 
 export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {
