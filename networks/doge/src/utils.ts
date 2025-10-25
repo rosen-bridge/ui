@@ -120,23 +120,23 @@ export const getMinimumMeaningfulDoge = (feeRatio: number): bigint => {
 };
 
 /**
- * estimates tx weight based on number of inputs and outputs
+ * estimates tx size based on number of inputs and outputs
  * inputs and outputs required fee are estimated by DOGE_INPUT_SIZE and DOGE_OUTPUT_SIZE
  * @param inputSize
  * @param outputSize
  * @param feeRatio
  */
-export const estimateTxWeight = (
+export const estimateTxSize = (
   inputSize: number,
   outputSize: number,
   opReturnLength: number,
 ): number => {
   const x =
     DOGE_TX_BASE_SIZE +
-    11 + // OP_RETURN output base weight
+    11 + // OP_RETURN output base size
     opReturnLength / 2 + // OP_RETURN size in bytes
-    inputSize * DOGE_INPUT_SIZE + // inputs weights
-    outputSize * DOGE_OUTPUT_SIZE; // outputs weights
+    inputSize * DOGE_INPUT_SIZE + // inputs size
+    outputSize * DOGE_OUTPUT_SIZE; // outputs size
   return x;
 };
 
