@@ -2,7 +2,7 @@ import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
   workspaces: {},
-  ignoreBinaries: ['tsc', 'typeorm'],
+  ignoreBinaries: ['typeorm'],
   ignore: ['**/node_modules/', '**/dist/', '**/.next/'],
   ignoreDependencies: [
     '@mui/material',

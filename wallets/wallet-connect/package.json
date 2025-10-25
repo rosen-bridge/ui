@@ -15,9 +15,6 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "@reown/appkit": "^1.7.5",
     "@reown/appkit-adapter-ethers": "^1.7.11",
@@ -27,5 +24,8 @@
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",
     "@rosen-ui/wallet-api": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

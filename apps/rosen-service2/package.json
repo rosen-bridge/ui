@@ -59,9 +59,10 @@
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
-    "@types/node": "^22.18.0",
     "@vitest/coverage-istanbul": "^2.1.9",
-    "typescript": "^5.3.3",
     "vitest": "^2.1.9"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }
