@@ -5,16 +5,17 @@ import {
   ManyToOne,
   PrimaryColumn,
 } from '@rosen-bridge/extended-typeorm';
+import { Network } from '@rosen-ui/types';
 
-import { TokenEntity } from '../token/TokenEntity';
+import { TokenEntity } from './tokenEntity';
 
-@Entity('locked_asset_entity')
-export class LockedAssetEntity {
+@Entity('bridged_asset_entity')
+export class BridgedAssetEntity {
   @Column({ type: 'bigint', transformer: new BigIntValueTransformer() })
   amount: bigint;
 
   @PrimaryColumn('varchar')
-  address: string;
+  chain: Network;
 
   /**
    * In order to create a foreign key primary column, we need to include the
@@ -25,4 +26,7 @@ export class LockedAssetEntity {
 
   @ManyToOne(() => TokenEntity, 'id')
   token: TokenEntity;
+
+  @Column('varchar')
+  bridgedTokenId: string;
 }

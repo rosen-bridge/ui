@@ -4,5 +4,9 @@
     "outDir": "./dist"
   },
   "include": ["tests", "lib"],
-  "references": [{ "path": "../../packages/types" }]
+  "references": [
+    { "path": "../types" },
+    { "path": "../constants" },
+    { "path": "../asset-data-adapter" }
+  ]
 }
