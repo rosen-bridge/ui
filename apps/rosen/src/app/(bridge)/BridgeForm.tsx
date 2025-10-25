@@ -211,6 +211,10 @@ export const BridgeForm = () => {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
+                sx={{
+                  cursor: 'pointer',
+                  color: 'secondary',
+                }}
                 onClick={async () => {
                   try {
                     const clipboardText = await navigator.clipboard.readText();

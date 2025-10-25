@@ -171,6 +171,11 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const isLoading = isLoadingProp || isRsnTokenLoading || isERsnTokenLoading;
 
+  const rowStyles = useMemo(
+    () => (isLoading ? { opacity: 0.3 } : {}),
+    [isLoading],
+  );
+
   const getRSNIncome = () => {
     const rsnTokenInfo = row.revenues.find(
       (token) => token.tokenId === rsnToken?.tokenId,
@@ -205,7 +210,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       }));
 
   return (
-    <TableRow className="divider" style={isLoading ? { opacity: 0.3 } : {}}>
+    <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
         <Id id={row.eventId} />
       </EnhancedTableCell>

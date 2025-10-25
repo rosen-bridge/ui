@@ -4,4 +4,4 @@
 '@rosen-bridge/rosen-app': minor
 ---
 
-Improve style-related code in Rosen, Guard, and Watcher for internal consistency
+Improve and unify style implementation

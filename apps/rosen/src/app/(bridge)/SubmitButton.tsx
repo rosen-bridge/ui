@@ -159,7 +159,7 @@ export const SubmitButton = () => {
                 </div>
                 <Divider />
                 <Label label="Destination Address" orientation="vertical">
-                  <Identifier value={'walletAddressValue'} copyable />
+                  <Identifier value={walletAddressValue} copyable />
                 </Label>
               </Stack>
             </CardBody>
