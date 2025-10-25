@@ -69,6 +69,7 @@ describe('generateUnsignedTx', () => {
     const result = await generateUnsignedTx(getTokenMap)(
       testData.lockAddress,
       testData.fromAddress,
+      testData.fromPaymentAddress,
       100n,
       testData.lockData,
       testData.transferToken,
@@ -113,6 +114,7 @@ describe('generateUnsignedTx', () => {
     const result = await generateUnsignedTx(getTokenMap)(
       testData.lockAddress,
       testData.fromAddress,
+      testData.fromPaymentAddress,
       100n,
       testData.lockData,
       testData.transferToken,
@@ -158,6 +160,7 @@ describe('generateUnsignedTx', () => {
     const result = await generateUnsignedTx(getTokenMap)(
       testData.lockAddress,
       testData.fromAddress,
+      testData.fromPaymentAddress,
       100n,
       testData.lockData,
       testData.transferToken,
@@ -167,6 +170,53 @@ describe('generateUnsignedTx', () => {
     // assert
     expect(result.inputSize).toBe(2);
     expect(getCoveringBoxesMock).toHaveBeenCalledTimes(3);
+  });
+
+  /**
+   * @target generateUnsignedTx should perform 4 selection steps to get the required amounts
+   * @dependencies
+   * - TokenMap
+   * - BitcoinRunesBoxSelection
+   * @scenario
+   * - stub getCoveringBoxes to resolve to sequence of mock objects that covers the required
+   *  amount on the 4th call
+   * - stub constants to return a mock value for GET_BOX_API_LIMIT
+   * - stub tokenMap.unwrapAmount to return a mock value
+   * - call generateUnsignedTx
+   * - check the returned psbt
+   * @expected
+   * - returning inputSize should have been 2
+   * - getCoveringBoxesMock mock should have been called 4 times
+   */
+  it('should perform 4 selection steps to get the required amounts', async () => {
+    // arrange
+    getCoveringBoxesMock
+      .mockResolvedValueOnce(testData.selection6[0])
+      .mockResolvedValueOnce(testData.selection6[1])
+      .mockResolvedValueOnce(testData.selection6[2])
+      .mockResolvedValueOnce(testData.selection6[3]);
+
+    const getTokenMap = async () =>
+      ({
+        unwrapAmount: vi
+          .fn()
+          .mockImplementation(() => ({ amount: 10n, decimals: 2 })),
+      }) as unknown as TokenMap;
+
+    // act
+    const result = await generateUnsignedTx(getTokenMap)(
+      testData.lockAddress,
+      testData.fromAddress,
+      testData.fromPaymentAddress,
+      100n,
+      testData.lockData,
+      testData.transferToken,
+      testData.internalPubkey,
+    );
+
+    // assert
+    expect(result.inputSize).toBe(2);
+    expect(getCoveringBoxesMock).toHaveBeenCalledTimes(4);
   });
 
   /**
@@ -199,6 +249,7 @@ describe('generateUnsignedTx', () => {
       await generateUnsignedTx(getTokenMap)(
         testData.lockAddress,
         testData.fromAddress,
+        testData.fromPaymentAddress,
         1000n,
         testData.lockData,
         testData.transferToken,
@@ -240,6 +291,7 @@ describe('generateUnsignedTx', () => {
       await generateUnsignedTx(getTokenMap)(
         testData.lockAddress,
         testData.fromAddress,
+        testData.fromPaymentAddress,
         10n,
         testData.lockData,
         testData.transferToken,
