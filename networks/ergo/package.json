@@ -25,7 +25,7 @@
     "@rosen-ui/types": "^0.3.7",
     "ergo-lib-wasm-nodejs": "^0.24.1"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
+  "engines": {
+    "node": ">=22.18.0"
   }
 }
