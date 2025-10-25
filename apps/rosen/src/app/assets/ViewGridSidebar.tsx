@@ -17,8 +17,8 @@ import {
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 
-import { AssetsFullData } from './getFullAssetData';
 import { BridgedList } from './BridgedList';
+import { AssetsFullData } from './getFullAssetData';
 
 const Content = ({ value }: ViewGridSidebarProps) => {
   if (!value) {

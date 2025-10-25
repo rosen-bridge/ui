@@ -1,10 +1,21 @@
-import { ApiAssetResponse } from "@/types";
-import { Amount, Box, Card, CardBody, GridContainer, Identifier, Network } from "@rosen-bridge/ui-kit"
-import { fetcher } from "@rosen-ui/swr-helpers";
-import { getDecimalString } from "@rosen-ui/utils";
-import { useMemo } from "react";
-import useSWR from "swr";
-import { AssetsFullData } from "./getFullAssetData";
+import { useMemo } from 'react';
+
+import {
+  Amount,
+  Box,
+  Card,
+  CardBody,
+  GridContainer,
+  Identifier,
+  Network,
+} from '@rosen-bridge/ui-kit';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getDecimalString } from '@rosen-ui/utils';
+import useSWR from 'swr';
+
+import { ApiAssetResponse } from '@/types';
+
+import { AssetsFullData } from './getFullAssetData';
 
 export interface BridgedListProps {
   value: AssetsFullData;
@@ -35,14 +46,21 @@ export const BridgedList = ({ value }: BridgedListProps) => {
               fontSize="0.875rem"
             >
               <Network loading={isLoading} name={item.chain} />
-              <Amount loading={isLoading} value={getDecimalString(item.amount, value.significantDecimals)} />
+              <Amount
+                loading={isLoading}
+                value={getDecimalString(item.amount, value.significantDecimals)}
+              />
             </Box>
             <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>
-              <Identifier href={'tokenUrl'} loading={isLoading} value={item.birdgedTokenId} />
+              <Identifier
+                href={'tokenUrl'}
+                loading={isLoading}
+                value={item.birdgedTokenId}
+              />
             </Box>
           </CardBody>
         </Card>
       ))}
     </GridContainer>
-  )
-}
+  );
+};

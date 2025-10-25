@@ -19,8 +19,8 @@ import {
   Token,
 } from '@rosen-bridge/ui-kit';
 
-import { AssetsFullData } from './getFullAssetData';
 import { BridgedList } from './BridgedList';
+import { AssetsFullData } from './getFullAssetData';
 
 export type ViewRowProps = {
   current?: AssetsFullData;
