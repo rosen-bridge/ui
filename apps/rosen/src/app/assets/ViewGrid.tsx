@@ -32,6 +32,7 @@ export const ViewGrid = ({
         <Card
           key={item.id || index}
           active={item.id === current?.id}
+          backgroundColor="background.paper"
           clickable
           onClick={() => {
             setCurrent(item);
