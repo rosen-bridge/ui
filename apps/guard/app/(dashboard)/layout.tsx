@@ -10,6 +10,7 @@ const DashboardLayout = ({
   revenue,
   health,
   networks,
+  tokens,
 }: LayoutProps) => (
   <Fragment>
     <PageHeading title="Dashboard" />
@@ -46,6 +47,7 @@ const DashboardLayout = ({
       <Box mt={3} width="1">
         {actions}
       </Box>
+      {tokens}
     </Grid>
   </Fragment>
 );

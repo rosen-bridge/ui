@@ -27,8 +27,7 @@
     "@rosen-ui/asset-calculator": "^2.1.8",
     "@rosen-ui/public-status": "^0.0.2"
   },
-  "devDependencies": {
-    "@types/node": "^20.17.10",
-    "typescript": "^5.0.0"
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

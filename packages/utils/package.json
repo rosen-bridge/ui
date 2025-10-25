@@ -16,13 +16,15 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@types/lodash-es": "^4.17.12",
-    "typescript": "^5.0.0"
+    "@types/lodash-es": "^4.17.12"
   },
   "dependencies": {
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",
     "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

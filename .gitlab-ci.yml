@@ -1,4 +1,4 @@
-image: node:20.18.1
+image: node:22.18.0
 
 stages:
   - installation

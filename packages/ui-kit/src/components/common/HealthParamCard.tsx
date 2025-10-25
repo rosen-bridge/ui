@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import {
   ExclamationTriangle,
   ShieldCheck,
@@ -10,7 +9,7 @@ import {
 import { HealthParamInfo } from '@rosen-ui/types';
 import moment from 'moment';
 
-import { FullCard } from '.';
+import { FullCard, SvgIcon } from '.';
 import { useTheme } from '../../hooks';
 import { Alert, LoadingButton, Tooltip, Typography } from '../base';
 

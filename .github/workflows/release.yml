@@ -14,7 +14,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: 20.18.1
+          node-version: 22.18.0
 
       - name: Install yaml2json
         run: npm install -g yamljs
@@ -49,7 +49,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
-        node-version: [20.18.1]
+        node-version: [22.18.0]
         include:
           - os: macos-latest
             platform: macOS
