@@ -1,6 +1,6 @@
 import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 
-import { SvgIcon, Divider } from '@mui/material';
+import { Divider } from '@mui/material';
 import { InfoCircle } from '@rosen-bridge/icons';
 
 import { useIsMobile } from '../../hooks';
@@ -11,6 +11,7 @@ import {
   Tooltip,
   Typography,
 } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 interface VersionProps {
   label: string;
@@ -124,7 +125,7 @@ export const Version: FC<VersionProps> = ({ label, value, sub }) => {
               onMouseEnter={() => !isMobile && setTooltipOpen(true)}
               onMouseLeave={() => !isMobile && setTooltipOpen(false)}
             >
-              <SvgIcon sx={{ width: 24 }}>
+              <SvgIcon size="medium">
                 <InfoCircle fill="currentColor" />
               </SvgIcon>
             </IconButton>

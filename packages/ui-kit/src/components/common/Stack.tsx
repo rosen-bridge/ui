@@ -18,6 +18,11 @@ type StackPropsBase = HTMLAttributes<HTMLDivElement> & {
   /** Controls distribution of space along the main axis. */
   justify?: 'start' | 'center' | 'end' | 'between' | 'around' | 'evenly';
 
+  /**
+   * If true, the Stack will use `display: inline-flex` instead of `flex`.
+   */
+  inline?: boolean;
+
   /** Gap between child elements (number uses theme.spacing). */
   spacing?: number | string;
 
@@ -60,6 +65,7 @@ const StackBase = forwardRef<HTMLDivElement, StackPropsBase>((props, ref) => {
     children,
     direction = 'column',
     justify,
+    inline,
     spacing,
     style,
     wrap,
@@ -81,7 +87,7 @@ const StackBase = forwardRef<HTMLDivElement, StackPropsBase>((props, ref) => {
       Object.assign(
         {},
         {
-          display: 'flex',
+          display: inline ? 'inline-flex' : 'flex',
           flexDirection: direction,
           flexWrap: wrap ? 'wrap' : 'nowrap',
           alignItems: align ? ALIGN_MAP[align] : undefined,

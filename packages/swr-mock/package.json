@@ -15,11 +15,11 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "peerDependencies": {
     "react": "^18.2.0",
     "swr": "^2.2.0"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

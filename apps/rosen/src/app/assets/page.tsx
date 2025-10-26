@@ -177,7 +177,7 @@ const Assets = () => {
           </TextField>
         </Grid>
       </Grid>
-      <Paper sx={{ overflow: 'hidden' }}>
+      <Paper style={{ overflow: 'hidden' }}>
         {isFirstLoad && <TableSkeleton numberOfItems={pageSize} />}
         {!isFirstLoad && data && (
           <EnhancedTable

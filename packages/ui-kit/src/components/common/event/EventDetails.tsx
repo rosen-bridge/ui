@@ -1,6 +1,6 @@
 import { forwardRef, HTMLAttributes } from 'react';
 
-import { Button, Stack, SvgIcon } from '@mui/material';
+import { Button } from '@mui/material';
 import { AngleRight } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
@@ -8,6 +8,8 @@ import { Columns } from '../Columns';
 import { Amount, Identifier, Label, LabelGroup, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
+import { Stack } from '../Stack';
+import { SvgIcon } from '../SvgIcon';
 import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
@@ -77,20 +79,24 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
                 href={value.sourceTxIdUrl}
               />
             </Label>
-            <Label label="Payment Tx" inset>
-              <Identifier
-                copyable={!!value.paymentTxId}
-                value={value.paymentTxId}
-                href={value.paymentTxIdUrl}
-              />
-            </Label>
-            <Label label="Reward Tx" inset>
-              <Identifier
-                copyable={!!value.spendTxId}
-                value={value.spendTxId}
-                href={value.spendTxIdUrl}
-              />
-            </Label>
+            {'paymentTxId' in value && (
+              <Label label="Payment Tx" inset>
+                <Identifier
+                  copyable={!!value.paymentTxId}
+                  value={value.paymentTxId}
+                  href={value.paymentTxIdUrl}
+                />
+              </Label>
+            )}
+            {'spendTxId' in value && (
+              <Label label="Reward Tx" inset>
+                <Identifier
+                  copyable={!!value.spendTxId}
+                  value={value.spendTxId}
+                  href={value.spendTxIdUrl}
+                />
+              </Label>
+            )}
           </LabelGroup>
         </div>
         <div>
@@ -121,10 +127,10 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         <Label label="Network Fee">
           <Amount value={value.networkFee} />
         </Label>
-        <Label label="Reports">{value.reports ?? 'N/C'}</Label>
+        <Label label="Reports">{value.reports}</Label>
         <Label label="Height">{value.height}</Label>
         {showSeeDetailsButton && !!value?.href && (
-          <Stack alignItems="end">
+          <Stack align="end">
             <Button
               variant="text"
               size="medium"

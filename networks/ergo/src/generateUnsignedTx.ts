@@ -1,5 +1,6 @@
 import { ErgoBoxSelection } from '@rosen-bridge/ergo-box-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import * as wasm from 'ergo-lib-wasm-nodejs';
@@ -83,17 +84,11 @@ export const generateUnsignedTx =
       () => fee,
     );
     if (!inputs.covered) {
-      const totalInputErg = walletUtxos.reduce(
-        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
-        0n,
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.ergo.key,
+        inputs.uncoveredAssets,
       );
-      throw Error(`Not enough assets`, {
-        cause: {
-          totalInputErg,
-          fromAddress: changeAddress,
-          additionalAssets: inputs.additionalAssets,
-        },
-      });
     }
     // add input boxes to transaction
     const unsignedInputs = new wasm.UnsignedInputs();

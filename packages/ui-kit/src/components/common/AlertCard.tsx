@@ -1,9 +1,9 @@
 import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
 import { Alert, AlertProps, Collapse, IconButton } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;

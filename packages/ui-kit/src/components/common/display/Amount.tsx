@@ -1,10 +1,11 @@
 import { HTMLAttributes, useMemo } from 'react';
 
-import { SvgIcon, Stack } from '@mui/material';
 import { ExclamationTriangle, ExternalLinkAlt } from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
+import { Stack } from '../Stack';
+import { SvgIcon } from '../SvgIcon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Optional external link shown as an icon button */
@@ -69,26 +70,24 @@ const AmountBase = ({
   }, [value]);
 
   return (
-    <Stack
-      display="inline-flex"
-      flexDirection="row"
-      alignItems="baseline"
-      {...props}
-    >
+    <Stack inline align="baseline" direction="row" {...props}>
       {loading ? (
         <Skeleton variant="text" width={80} style={{ marginRight: '4px' }} />
       ) : error ? (
         <SvgIcon
-          fontSize="inherit"
-          style={{ marginRight: '4px', transform: 'translateY(20%)' }}
+          style={{
+            marginRight: '4px',
+            transform: 'translateY(20%)',
+            fontSize: 'inherit',
+          }}
         >
           <ExclamationTriangle />
         </SvgIcon>
       ) : (
         <Stack
-          display="inline-flex"
-          alignItems="baseline"
-          flexDirection={orientation === 'vertical' ? 'column' : 'row'}
+          inline
+          align="baseline"
+          direction={orientation === 'vertical' ? 'column' : 'row'}
         >
           <Typography fontSize="inherit" component="span">
             {number || '–'}
@@ -122,7 +121,7 @@ const AmountBase = ({
           href={href}
           style={{ marginLeft: '4px' }}
         >
-          <SvgIcon fontSize="small">
+          <SvgIcon size="small">
             <ExternalLinkAlt />
           </SvgIcon>
         </IconButton>

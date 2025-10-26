@@ -64,7 +64,7 @@ const RosenBridge = () => {
                     <div className="alert">
                       <Alert
                         severity="warning"
-                        sx={{
+                        style={{
                           textAlign: 'justify',
                         }}
                       >

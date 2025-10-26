@@ -1,7 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
-import { SvgIcon } from '@mui/material';
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
 
 import { useApiKey, useSnackbar } from '../../hooks';
@@ -17,6 +16,7 @@ import {
   TextField,
   Typography,
 } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 interface FormValues {
   apiKey: string;
@@ -62,7 +62,7 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
     <>
       {children?.(handleOpenModal) || (
         <IconButton onClick={handleOpenModal} color="inherit">
-          <SvgIcon sx={{ width: 24 }}>
+          <SvgIcon size="medium">
             <KeySkeleton />
           </SvgIcon>
         </IconButton>
@@ -92,14 +92,14 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
                       <InputAdornment position="end">
                         <Tooltip title="Clear">
                           <IconButton onClick={() => reset()}>
-                            <SvgIcon sx={{ width: 24 }}>
+                            <SvgIcon size="medium">
                               <Times />
                             </SvgIcon>
                           </IconButton>
                         </Tooltip>
                         <Tooltip title={showKey ? 'Hide key' : 'Show key'}>
                           <IconButton onClick={handleToggleShowKey}>
-                            <SvgIcon sx={{ width: 24 }}>
+                            <SvgIcon size="medium">
                               {showKey ? <EyeSlash /> : <Eye />}
                             </SvgIcon>
                           </IconButton>

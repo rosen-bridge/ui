@@ -60,7 +60,7 @@ export const WalletInfo = () => {
                 <Wallet />
               </SvgIcon>
             }
-            sx={{ borderRadius: 0.5, ml: -1 }}
+            style={{ borderRadius: '8px', marginLeft: '-8px' }}
             onClick={() => setChooseWalletsModalOpen(true)}
           >
             Choose Wallet
@@ -77,9 +77,9 @@ export const WalletInfo = () => {
         {walletState === 'CONNECTED' && (
           <>
             <IconButton
-              sx={{
-                borderRadius: 0.5,
-                ml: -1,
+              style={{
+                borderRadius: '8px',
+                marginLeft: '-8px',
               }}
               onClick={() => setChooseWalletsModalOpen(true)}
             >
@@ -91,7 +91,7 @@ export const WalletInfo = () => {
               >
                 {Icon && (
                   <Avatar
-                    sx={{
+                    style={{
                       width: 24,
                       height: 24,
                       background: 'transparent',
@@ -106,11 +106,14 @@ export const WalletInfo = () => {
             <Button
               sx={{
                 color: (theme) => theme.palette.secondary.dark,
-                fill: (theme) => theme.palette.secondary.dark,
                 borderRadius: 0.5,
                 mr: -1,
               }}
-              startIcon={<LinkBroken width="24px" />}
+              startIcon={
+                <SvgIcon size="24px" color="secondary.dark">
+                  <LinkBroken />
+                </SvgIcon>
+              }
               onClick={() => {
                 disconnect();
               }}

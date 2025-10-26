@@ -1,10 +1,10 @@
 import { HTMLAttributes, useCallback, useState } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { Check, Copy, Times } from '@rosen-bridge/icons';
 
 import { IconButton, Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
+import { SvgIcon } from '../SvgIcon';
 
 /**
  * `CopyButton` copies the given value to the clipboard.
@@ -58,7 +58,7 @@ const CopyButtonBase = ({
   return (
     <Tooltip title="Copy" {...props}>
       <IconButton size={size} onClick={handleCopy}>
-        <SvgIcon fontSize={size}>{getIcon()}</SvgIcon>
+        <SvgIcon size={size}>{getIcon()}</SvgIcon>
       </IconButton>
     </Tooltip>
   );

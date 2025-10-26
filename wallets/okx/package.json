@@ -15,13 +15,13 @@
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
     "@rosen-network/bitcoin": "^2.3.1",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",
     "@rosen-ui/wallet-api": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

@@ -134,7 +134,7 @@ const Actions = () => {
   const renderTabs = () => (
     <TabsContainer>
       <Box className="card">
-        <Box className="top" sx={{ height: 40 + tab * 48 }} />
+        <Box className="top" style={{ height: 40 + tab * 48 }} />
         <Box className="space" />
         <Box className="bottom" />
       </Box>
@@ -239,7 +239,7 @@ const Actions = () => {
         <Grid item mobile={12} tablet={4}>
           {renderTabs()}
         </Grid>
-        <Grid item mobile={12} tablet={8} sx={{ overflow: 'hidden' }}>
+        <Grid item mobile={12} tablet={8} style={{ overflow: 'hidden' }}>
           {renderTabPanels()}
         </Grid>
       </Grid>

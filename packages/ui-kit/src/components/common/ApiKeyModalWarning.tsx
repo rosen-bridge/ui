@@ -1,9 +1,9 @@
-import { SvgIcon } from '@mui/material';
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 
 import { useApiKey } from '../../hooks';
 import { Button, Grid, Typography } from '../base';
 import { ApiKeyModal } from './ApiKeyModal';
+import { SvgIcon } from './SvgIcon';
 
 export const ApiKeyModalWarning = () => {
   const { apiKey } = useApiKey();

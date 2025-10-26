@@ -1,4 +1,4 @@
-import { useState, FC, useMemo } from 'react';
+import { useState, FC, useMemo, CSSProperties } from 'react';
 
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
@@ -99,6 +99,10 @@ export const tabletHeader = [
   },
 ];
 
+const opacity: CSSProperties = {
+  opacity: '0.6',
+};
+
 export const MobileRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
@@ -130,15 +134,15 @@ export const MobileRow: FC<RowProps> = (props) => {
   return (
     <>
       <TableRow sx={rowStyles}>
-        <EnhancedTableCell sx={{ opacity: '0.6' }}>Name</EnhancedTableCell>
+        <EnhancedTableCell style={opacity}>Name</EnhancedTableCell>
         <EnhancedTableCell>{row.name}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
-        <EnhancedTableCell sx={{ opacity: '0.6' }}>Network</EnhancedTableCell>
+        <EnhancedTableCell style={opacity}>Network</EnhancedTableCell>
         <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       </TableRow>
       <TableRow sx={rowStyles}>
-        <EnhancedTableCell sx={{ opacity: '0.6' }}>Locked</EnhancedTableCell>
+        <EnhancedTableCell style={opacity}>Locked</EnhancedTableCell>
         <EnhancedTableCell>
           <Amount
             value={getDecimalString(
@@ -151,21 +155,19 @@ export const MobileRow: FC<RowProps> = (props) => {
       {expand && (
         <>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell sx={{ opacity: '0.6' }}>Hot</EnhancedTableCell>
+            <EnhancedTableCell style={opacity}>Hot</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount value={getDecimalString(hot?.amount, row.decimal)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell sx={{ opacity: '0.6' }}>Cold</EnhancedTableCell>
+            <EnhancedTableCell style={opacity}>Cold</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount value={getDecimalString(cold?.amount, row.decimal)} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow sx={rowStyles}>
-            <EnhancedTableCell sx={{ opacity: '0.6' }}>
-              Bridged
-            </EnhancedTableCell>
+            <EnhancedTableCell style={opacity}>Bridged</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(row.bridged || undefined, row.decimal)}
@@ -185,7 +187,7 @@ export const MobileRow: FC<RowProps> = (props) => {
         <EnhancedTableCell padding="none">
           <Button
             variant="text"
-            sx={{ fontSize: 'inherit' }}
+            style={{ fontSize: 'inherit' }}
             endIcon={expand ? <AngleUp /> : <AngleDown />}
             onClick={toggleExpand}
           >

@@ -1,11 +1,11 @@
 import React, { ReactNode, useMemo } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import * as Icons from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
 import { styled } from '../../styling';
 import { Typography, Skeleton } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * Props for the Chip component.
@@ -95,14 +95,14 @@ export const Chip = ({
     if (isIconKey(icon)) {
       const IconComponent = Icons[icon];
       return (
-        <SvgIcon sx={{ mr: 0.5 }}>
+        <SvgIcon style={{ marginRight: '4px' }}>
           <IconComponent />
         </SvgIcon>
       );
     }
 
     if (React.isValidElement(icon)) {
-      return <SvgIcon sx={{ mr: 0.5 }}>{icon}</SvgIcon>;
+      return <SvgIcon style={{ marginRight: '4px' }}>{icon}</SvgIcon>;
     }
 
     return null;

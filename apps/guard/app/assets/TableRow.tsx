@@ -82,29 +82,29 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   return (
     <>
-      <TableRow className="divider" sx={rowStyles}>
+      <TableRow className="divider" style={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
         <EnhancedTableCell>
           {row.isNativeToken ? '-' : <Id id={row.tokenId} />}
         </EnhancedTableCell>
       </TableRow>
-      <TableRow sx={rowStyles}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Token name</EnhancedTableCell>
         <EnhancedTableCell>{row.name}</EnhancedTableCell>
       </TableRow>
-      <TableRow sx={rowStyles}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Chain</EnhancedTableCell>
         <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount (Hot)</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount value={getDecimalString(row.amount, row.decimals)} />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount (Cold)</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount value={getDecimalString(row.coldAmount, row.decimals)} />
@@ -112,12 +112,12 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
         </>
       )}
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell padding="none">
           <Button
             variant="text"
             onClick={toggleExpand}
-            sx={{ fontSize: 'inherit' }}
+            style={{ fontSize: 'inherit' }}
             endIcon={expand ? <AngleUp /> : <AngleDown />}
           >
             {expand ? 'Show less' : 'Show more'}
@@ -141,12 +141,17 @@ export const TabletRow: FC<RowProps> = (props) => {
       : row.tokenId,
   );
 
+  const rowStyles = useMemo(
+    () => (isLoading ? { opacity: 0.3 } : {}),
+    [isLoading],
+  );
+
   const coldUrl = getAddressUrl(row.chain, addresses.cold[row?.chain]);
 
   const hotUrl = getAddressUrl(row.chain, addresses.hot[row?.chain]);
 
   return (
-    <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
+    <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell>
         <WithExternalLink url={row.isNativeToken ? undefined : tokenUrl}>
           {row.isNativeToken ? '-' : <Id id={row.tokenId} />}

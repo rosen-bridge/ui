@@ -1,10 +1,10 @@
 import { HTMLAttributes } from 'react';
 
-import { SvgIcon } from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
 import { Typography } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',

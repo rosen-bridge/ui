@@ -1,8 +1,8 @@
-import { SvgIcon } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { IconButton, Typography } from '../../base';
+import { SvgIcon } from '../SvgIcon';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 

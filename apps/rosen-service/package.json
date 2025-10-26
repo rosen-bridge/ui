@@ -50,8 +50,9 @@
   },
   "devDependencies": {
     "@types/config": "^0.0.41",
-    "@types/node": "^22.18.0",
-    "tsx": "^4.19.2",
-    "typescript": "^5.0.0"
+    "tsx": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

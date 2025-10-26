@@ -8,7 +8,10 @@ export type Colors =
   | Name
   | 'background'
   | 'background.default'
-  | 'background.paper';
+  | 'background.paper'
+  | 'text.primary'
+  | 'text.secondary'
+  | 'text.disabled';
 
 /**
  * Normalizes a given color token to a valid theme color reference.

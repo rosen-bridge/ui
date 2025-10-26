@@ -47,3 +47,4 @@ export interface Network {
 export * from './calculateFeeCreator';
 export * from './getMinTransferCreator';
 export * from './validateAddress';
+export * from './handleUncoveredAssets';
