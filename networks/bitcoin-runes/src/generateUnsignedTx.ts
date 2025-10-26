@@ -3,8 +3,8 @@ import {
   BitcoinRunesBoxSelection,
   BitcoinRunesUtxo,
 } from '@rosen-bridge/bitcoin-runes-utxo-selection';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import * as bitcoinJs from 'bitcoinjs-lib';
@@ -104,10 +104,10 @@ export const generateUnsignedTx =
       () => 0n,
     );
     if (!coveredRunesBoxes.covered) {
-      throw new Error(
-        `Available boxes didn't cover required Runes. Required Runes: ${JsonBigInt.stringify(
-          requiredAssets.tokens,
-        )}`,
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS['bitcoin-runes'].key,
+        coveredRunesBoxes.uncoveredAssets,
       );
     }
 
