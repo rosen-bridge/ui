@@ -5,7 +5,7 @@ import {
 } from '@rosen-bridge/extended-typeorm';
 import { describe, beforeEach, it, expect } from 'vitest';
 
-import { BridgedAssetEntity } from '../../lib';
+import { BridgedAssetEntity, TokenEntity } from '../../lib';
 import { BridgedAssetAction } from '../../lib/actions';
 import { BridgedAssetMockData } from '../mocked/actions/bridgedAssetAction.mock';
 import { createDatabase } from '../testUtils';
@@ -14,6 +14,7 @@ interface BridgedAssetTestContext {
   dataSource: DataSource;
   queryRunner: QueryRunner;
   repository: Repository<BridgedAssetEntity>;
+  tokenRepository: Repository<TokenEntity>;
   action: BridgedAssetAction;
 }
 
@@ -23,6 +24,8 @@ describe('BridgedAssetAction', () => {
     context.queryRunner = context.dataSource.createQueryRunner();
     context.repository =
       context.queryRunner.manager.getRepository(BridgedAssetEntity);
+    context.tokenRepository =
+      context.queryRunner.manager.getRepository(TokenEntity);
     context.action = new BridgedAssetAction(context.dataSource);
   });
 
@@ -30,15 +33,21 @@ describe('BridgedAssetAction', () => {
     /**
      * @target should store a single bridged asset
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - call the store function
+     * - insert required token entity first
+     * - call the store function with BridgedAssetEntity
      * @expected
-     * - New record of BridgedAssetEntity should stored in database
+     * - New record of BridgedAssetEntity should be stored in database
      */
     it<BridgedAssetTestContext>('should store a single bridged asset', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required token first
+      await tokenRepository.insert(BridgedAssetMockData.SAMPLE_TOKENS[0]);
+
       const asset = BridgedAssetMockData.createSingleAsset();
 
       await action.store(asset);
@@ -50,15 +59,24 @@ describe('BridgedAssetAction', () => {
     /**
      * @target should store multiple bridged assets
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - call the store function by array of assets data
+     * - insert required token entities first
+     * - call the store function with array of BridgedAssetEntity
      * @expected
-     * - Two new records of BridgedAssetEntity should stored in database
+     * - Multiple records of BridgedAssetEntity should be stored in database
      */
     it<BridgedAssetTestContext>('should store multiple bridged assets', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required tokens first
+      await tokenRepository.insert([
+        BridgedAssetMockData.SAMPLE_TOKENS[0],
+        BridgedAssetMockData.SAMPLE_TOKENS[1],
+      ]);
+
       const assets = BridgedAssetMockData.createMultipleAssets(2);
 
       await action.store(assets);
@@ -72,16 +90,25 @@ describe('BridgedAssetAction', () => {
     /**
      * @target should return all bridged assets with tokenId and chain
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert two BridgedAssetEntity to database
+     * - insert required token entities first
+     * - insert test BridgedAssetEntity records
      * - call the getAll function
      * @expected
-     * - Two records of BridgedAssetEntity should stored in database
+     * - All BridgedAssetEntity records should be returned
      */
     it<BridgedAssetTestContext>('should return all bridged assets with tokenId and chain', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required tokens first
+      await tokenRepository.insert([
+        BridgedAssetMockData.SAMPLE_TOKENS[0],
+        BridgedAssetMockData.SAMPLE_TOKENS[1],
+      ]);
+
       // Insert test data using mock data
       const assets = BridgedAssetMockData.createMultipleAssets(2);
       await repository.save(assets);
@@ -96,16 +123,22 @@ describe('BridgedAssetAction', () => {
     /**
      * @target should remove a single bridged asset
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert a BridgedAssetEntity to database
+     * - insert required token entity first
+     * - insert test BridgedAssetEntity record
      * - call the remove function
      * @expected
-     * - Record of BridgedAssetEntity should removed from database
+     * - BridgedAssetEntity record should be removed from database
      */
     it<BridgedAssetTestContext>('should remove a single bridged asset', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required token first
+      await tokenRepository.insert(BridgedAssetMockData.SAMPLE_TOKENS[0]);
+
       // Insert test data using mock data
       const asset = BridgedAssetMockData.createSingleAsset();
       await repository.save(asset);
@@ -119,16 +152,25 @@ describe('BridgedAssetAction', () => {
     /**
      * @target should remove multiple bridged assets
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert two BridgedAssetEntities to database
-     * - call the remove function by multiple BridgedAssetEntities data
+     * - insert required token entities first
+     * - insert test BridgedAssetEntity records
+     * - call the remove function with multiple records
      * @expected
-     * - Record of BridgedAssetEntities should removed from database
+     * - Multiple BridgedAssetEntity records should be removed from database
      */
     it<BridgedAssetTestContext>('should remove multiple bridged assets', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required tokens first
+      await tokenRepository.insert([
+        BridgedAssetMockData.SAMPLE_TOKENS[0],
+        BridgedAssetMockData.SAMPLE_TOKENS[1],
+      ]);
+
       // Insert test data using mock data
       const assets = BridgedAssetMockData.createMultipleAssets(2);
       await repository.save(assets);

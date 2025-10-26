@@ -5,7 +5,7 @@ import {
 } from '@rosen-bridge/extended-typeorm';
 import { describe, beforeEach, it, expect } from 'vitest';
 
-import { LockedAssetEntity } from '../../lib';
+import { LockedAssetEntity, TokenEntity } from '../../lib';
 import { LockedAssetAction } from '../../lib/actions';
 import { LockedAssetMockData } from '../mocked/actions/lockedAssetAction.mock';
 import { createDatabase } from '../testUtils';
@@ -14,6 +14,7 @@ interface LockedAssetTestContext {
   dataSource: DataSource;
   queryRunner: QueryRunner;
   repository: Repository<LockedAssetEntity>;
+  tokenRepository: Repository<TokenEntity>;
   action: LockedAssetAction;
 }
 
@@ -23,6 +24,8 @@ describe('LockedAssetAction', () => {
     context.queryRunner = context.dataSource.createQueryRunner();
     context.repository =
       context.queryRunner.manager.getRepository(LockedAssetEntity);
+    context.tokenRepository =
+      context.queryRunner.manager.getRepository(TokenEntity);
     context.action = new LockedAssetAction(context.dataSource);
   });
 
@@ -30,15 +33,21 @@ describe('LockedAssetAction', () => {
     /**
      * @target should store a single locked asset
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - call the store function
+     * - insert required token entity first
+     * - call the store function with LockedAssetEntity
      * @expected
-     * - New record of LockedAssetEntity should stored in database
+     * - New record of LockedAssetEntity should be stored in database
      */
     it<LockedAssetTestContext>('should store a single locked asset', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required token first
+      await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS[0]);
+
       const asset = LockedAssetMockData.createSingleAsset();
       await action.store(asset);
       const stored = await repository.find();
@@ -48,15 +57,24 @@ describe('LockedAssetAction', () => {
     /**
      * @target should store multiple locked assets
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - call the store function by array of assets data
+     * - insert required token entities first
+     * - call the store function with array of LockedAssetEntity
      * @expected
-     * - Two new records of LockedAssetEntity should stored in database
+     * - Multiple records of LockedAssetEntity should be stored in database
      */
     it<LockedAssetTestContext>('should store multiple locked assets', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required tokens first
+      await tokenRepository.insert([
+        LockedAssetMockData.SAMPLE_TOKENS[0],
+        LockedAssetMockData.SAMPLE_TOKENS[1],
+      ]);
+
       const assets = LockedAssetMockData.createMultipleAssets(2);
       await action.store(assets);
       const stored = await repository.find();
@@ -68,16 +86,25 @@ describe('LockedAssetAction', () => {
     /**
      * @target should return all locked assets with address and tokenId
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert two LockedAssetEntity to database
+     * - insert required token entities first
+     * - insert test LockedAssetEntity records
      * - call the getAll function
      * @expected
-     * - Two records of LockedAssetEntity should returned
+     * - All LockedAssetEntity records should be returned
      */
     it<LockedAssetTestContext>('should return all locked assets with address and tokenId', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required tokens first
+      await tokenRepository.insert([
+        LockedAssetMockData.SAMPLE_TOKENS[0],
+        LockedAssetMockData.SAMPLE_TOKENS[1],
+      ]);
+
       const assets = LockedAssetMockData.createMultipleAssets(2);
       await repository.save(assets);
       const result = await action.getAll();
@@ -89,16 +116,22 @@ describe('LockedAssetAction', () => {
     /**
      * @target should remove a single locked asset
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert a LockedAssetEntity to database
+     * - insert required token entity first
+     * - insert test LockedAssetEntity record
      * - call the remove function
      * @expected
-     * - Record of LockedAssetEntity should removed from database
+     * - LockedAssetEntity record should be removed from database
      */
     it<LockedAssetTestContext>('should remove a single locked asset', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required token first
+      await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS[0]);
+
       const asset = LockedAssetMockData.createSingleAsset();
       await repository.save(asset);
       await action.remove(LockedAssetMockData.SAMPLE_REMOVE_DATA[0]);
@@ -109,16 +142,25 @@ describe('LockedAssetAction', () => {
     /**
      * @target should remove multiple locked assets
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert two LockedAssetEntities to database
-     * - call the remove function by multiple LockedAssetEntities data
+     * - insert required token entities first
+     * - insert test LockedAssetEntity records
+     * - call the remove function with multiple records
      * @expected
-     * - Record of LockedAssetEntities should removed from database
+     * - Multiple LockedAssetEntity records should be removed from database
      */
     it<LockedAssetTestContext>('should remove multiple locked assets', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required tokens first
+      await tokenRepository.insert([
+        LockedAssetMockData.SAMPLE_TOKENS[0],
+        LockedAssetMockData.SAMPLE_TOKENS[1],
+      ]);
+
       const assets = LockedAssetMockData.createMultipleAssets(2);
       await repository.save(assets);
       await action.remove(LockedAssetMockData.SAMPLE_REMOVE_DATA);
@@ -129,16 +171,22 @@ describe('LockedAssetAction', () => {
     /**
      * @target should handle removal of non-existent locked assets gracefully
      * @dependencies
+     * - TokenEntity (for foreign key constraint)
      * @scenario
-     * - insert a LockedAssetEntity to database
-     * - call the remove function by non-existing LockedAssetEntities data
+     * - insert required token entity first
+     * - insert test LockedAssetEntity record
+     * - call the remove function with non-existing data
      * @expected
-     * - Record of LockedAssetEntities should remain intact
+     * - Existing LockedAssetEntity record should remain intact
      */
     it<LockedAssetTestContext>('should handle removal of non-existent locked assets gracefully', async ({
       action,
       repository,
+      tokenRepository,
     }) => {
+      // Insert required token first
+      await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS[0]);
+
       const asset = LockedAssetMockData.createSingleAsset();
       await repository.save(asset);
       await action.remove(LockedAssetMockData.SAMPLE_REMOVE_DATA[1]);

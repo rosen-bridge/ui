@@ -1,9 +1,39 @@
-import { LockedAssetEntity } from '../../../lib/entities';
+import { LockedAssetEntity, TokenEntity } from '../../../lib/entities';
 
 export class LockedAssetMockData {
+  /**
+   * Sample data for testing remove operations
+   */
   static SAMPLE_REMOVE_DATA = [
     { tokenId: 'test-token-1', address: 'addr1' },
     { tokenId: 'test-token-2', address: 'addr2' },
+  ];
+
+  /**
+   * Sample token entities required for foreign key constraints
+   */
+  static SAMPLE_TOKENS: Partial<TokenEntity>[] = [
+    {
+      id: 'test-token-1',
+      name: 'Test Token 1',
+      decimal: 18,
+      isNative: false,
+      chain: 'ergo',
+    },
+    {
+      id: 'test-token-2',
+      name: 'Test Token 2',
+      decimal: 18,
+      isNative: false,
+      chain: 'ergo',
+    },
+    {
+      id: 'test-token-3',
+      name: 'Test Token 3',
+      decimal: 18,
+      isNative: false,
+      chain: 'ergo',
+    },
   ];
 
   /**
