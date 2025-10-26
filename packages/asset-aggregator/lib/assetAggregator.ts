@@ -40,8 +40,9 @@ export class AssetAggregator {
 
       for (const token of tokens) {
         if (
+          !ChainAssetBalanceInfo[chain as NetworkItem] ||
           ChainAssetBalanceInfo[chain as NetworkItem][token.tokenId] ==
-          undefined
+            undefined
         ) {
           this.logger.debug(
             `Token ${token.tokenId} not found in chain balance info for ${chain}, skipping`,
@@ -107,8 +108,9 @@ export class AssetAggregator {
 
           const lockedAmount = chainAssets[token.tokenId]
             .map((addressBalance) => addressBalance.balance)
-            .reduce((acc, cur) => acc + cur, 0n);
-          const bridgedAmount = assetTotalSupply[0].totalSupply - lockedAmount;
+            .reduce((acc, cur) => BigInt(acc) + BigInt(cur), 0n);
+          const bridgedAmount =
+            BigInt(assetTotalSupply[0].totalSupply) - BigInt(lockedAmount);
 
           this.logger.debug(
             `Token ${token.tokenId}: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,

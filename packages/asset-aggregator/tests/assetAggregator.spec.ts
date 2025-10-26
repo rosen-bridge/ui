@@ -4,7 +4,7 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { describe, beforeEach, it, expect } from 'vitest';
 
-import { AssetAggregator } from '../lib/assetAggregator';
+import { AssetAggregator } from '../lib';
 import {
   BridgedAssetEntity,
   LockedAssetEntity,
@@ -18,7 +18,7 @@ import {
   WRAPPED_TOKEN_TOTAL_SUPPLY,
   MIXED_TOKENS_CHAIN_BALANCE_INFO,
   MIXED_TOKENS_TOTAL_SUPPLY,
-  MULTICHAIN_BALANCE_INFO,
+  MULTI_CHAIN_BALANCE_INFO,
   BRIDGED_AMOUNT_CHAIN_BALANCE_INFO,
   BRIDGED_AMOUNT_TOTAL_SUPPLY,
 } from './mocked/assetAggregator.mock';
@@ -211,7 +211,7 @@ describe('AssetAggregator', () => {
       assetAggregator,
       dataSource,
     }) => {
-      await assetAggregator.update(MULTICHAIN_BALANCE_INFO, []);
+      await assetAggregator.update(MULTI_CHAIN_BALANCE_INFO, []);
 
       const tokenRepository = dataSource.getRepository(TokenEntity);
       const storedTokens = await tokenRepository.find();

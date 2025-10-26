@@ -187,7 +187,7 @@ export const MIXED_TOKENS_TOTAL_SUPPLY: TotalSupply[] = [
 /**
  * Sample chain asset balance info for multiple chains test
  */
-export const MULTICHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
+export const MULTI_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
   ergo: {
     erg: [{ address: 'test-address-1', balance: 1000n }],
   },
