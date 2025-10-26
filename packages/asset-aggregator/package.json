@@ -21,9 +21,7 @@
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate:postgres": "npm run typeorm migration:generate ./lib/migrations/postgres/migration -- -p -d ./dataSource.ts",
-    "typeorm:generate:sqlite": "npm run typeorm migration:generate ./lib/migrations/sqlite/migration -- -p -d ./dataSource.ts",
-    "typeorm:migrate:postgres": "npm run typeorm migration:run -- -d ./dataSource.ts",
-    "typeorm:migrate:sqlite": "npm run typeorm migration:run -- -d ./dataSource.ts"
+    "typeorm:migrate:postgres": "npm run typeorm migration:run -- -d ./dataSource.ts"
   },
   "dependencies": {
     "@rosen-bridge/extended-typeorm": "1.0.1",
