@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 
 import {
   Archway,
@@ -16,6 +17,7 @@ import {
   Version,
 } from '@rosen-bridge/ui-kit';
 
+import { CONTRACT_VERSION } from '../../configs';
 import packageJson from '../../package.json';
 
 /**
@@ -25,6 +27,16 @@ export const SideBar = () => {
   const pathname = usePathname();
 
   const router = useRouter();
+
+  const sub = useMemo(() => {
+    const result = [
+      {
+        label: 'Contract',
+        value: CONTRACT_VERSION,
+      },
+    ];
+    return result;
+  }, []);
 
   return (
     <AppBar
@@ -38,7 +50,7 @@ export const SideBar = () => {
           />
         </Link>
       }
-      versions={<Version label="UI" value={packageJson.version} />}
+      versions={<Version label="UI" value={packageJson.version} sub={sub} />}
       navigationBar={
         <NavigationBar
           isActive={(path) => pathname === path}
