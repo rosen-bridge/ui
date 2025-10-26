@@ -35,7 +35,7 @@
     "@rosen-bridge/evm-observation-extractor": "^5.2.2",
     "@rosen-bridge/evm-scanner": "^0.1.1",
     "@rosen-bridge/health-check": "7.0.0",
-    "@rosen-bridge/log-level-check": "^2.0.0",
+    "@rosen-bridge/log-level-check": "2.0.0",
     "@rosen-bridge/scanner-interfaces": "^0.2.0",
     "@rosen-bridge/scanner-sync-check": "^5.0.0",
     "@rosen-bridge/tokens": "^4.0.0",
