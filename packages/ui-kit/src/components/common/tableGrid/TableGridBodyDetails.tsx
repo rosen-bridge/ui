@@ -1,7 +1,8 @@
 import { forwardRef, HTMLAttributes } from 'react';
 
-import { Box, Collapse, Divider } from '@mui/material';
+import { Box, Collapse } from '@mui/material';
 
+import { Divider } from '../Divider';
 import { InjectOverrides } from '../InjectOverrides';
 
 export type TableGridBodyDetailsProps = HTMLAttributes<HTMLDivElement> & {
@@ -23,7 +24,7 @@ const TableGridBodyDetailsBase = forwardRef<
       {...rest}
       ref={ref}
     >
-      <Divider sx={{ mt: 1 }} />
+      <Divider style={{ marginTop: '8px' }} />
       {children}
       <Box height={8} />
     </Collapse>
