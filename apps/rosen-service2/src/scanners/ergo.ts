@@ -1,3 +1,4 @@
+import { CallbackType } from '@rosen-bridge/abstract-extractor';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
@@ -12,9 +13,12 @@ import {
 } from '@rosen-bridge/ergo-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
+import { TokenMap } from '@rosen-bridge/tokens';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';
+import { createClient } from '@vercel/kv';
 import * as ergoLib from 'ergo-lib-wasm-nodejs';
+import crypto from 'node:crypto';
 
 import { configs } from '../configs';
 import { ERGO_METHOD_EXPLORER } from '../constants';
@@ -183,6 +187,25 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
       CallbackLoggerFactory.getInstance().getLogger(`token-map-box-extractor`),
     );
     await ergoScanner.registerExtractor(tokenMapBoxExtractor);
+
+    const tokenMap = new TokenMap();
+
+    const redis = createClient({
+      url: configs.redis.address,
+      token: configs.redis.token,
+    });
+
+    tokenMapBoxExtractor.hook(CallbackType.Insert, async (boxes) => {
+      await tokenMap.updateConfigByBoxes(boxes.map((box) => box.serialized));
+
+      const tokenMapJSON = JSON.stringify(tokenMap.getConfig());
+      const tokenMapHash = crypto.hash('sha256', tokenMapJSON);
+
+      await redis.set('token-map', {
+        hash: tokenMapHash,
+        tokenMap: tokenMapJSON,
+      });
+    });
   } catch (error) {
     throw new Error(
       `cannot create or register token map box extractor due to error: ${error}`,
