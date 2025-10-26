@@ -1,3 +1,5 @@
+import { useMemo } from 'react';
+
 import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
   Button,
@@ -10,6 +12,7 @@ import {
   EnhancedDialogContent,
   EnhancedDialogTitle,
   EventDetails,
+  EventDetailsProps,
   SvgIcon,
   Typography,
   useBreakpoint,
@@ -22,57 +25,67 @@ import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
   const isTablet = useBreakpoint('laptop-down');
-  if (!value)
+
+  const eventData = useMemo(() => {
+    if (!value) return null;
+
+    const data: EventDetailsProps['value'] = {
+      amount: getDecimalString(
+        value.amount,
+        value.lockToken.significantDecimals,
+      ),
+      bridgeFee: getDecimalString(
+        value.bridgeFee,
+        value.lockToken.significantDecimals,
+      ),
+      fromAddress: value.fromAddress,
+      fromAddressUrl: getAddressUrl(value.fromChain, value.fromAddress),
+      fromChain: value.fromChain,
+      height: value.height,
+      href: `/events/${value.eventId}`,
+      id: value.eventId,
+      networkFee: getDecimalString(
+        value.networkFee,
+        value.lockToken.significantDecimals,
+      ),
+      reports: value.WIDsCount,
+      sourceTxId: value.sourceTxId,
+      sourceTxIdUrl: getTxURL(value.fromChain, value.sourceTxId),
+      status: value.status,
+      toAddress: value.toAddress,
+      toAddressUrl: getAddressUrl(value.toChain, value.toAddress),
+      toChain: value.toChain,
+      token: value.lockToken.name,
+      paymentTxId: value.paymentTxId ?? undefined,
+      paymentTxIdUrl: value.paymentTxId
+        ? getTxURL(value.toChain, value.paymentTxId)
+        : undefined,
+      spendTxId: value.spendTxId ?? undefined,
+      spendTxIdUrl: value.spendTxId
+        ? getTxURL(NETWORKS.ergo.key, value.spendTxId)
+        : undefined,
+      timestamp: value.timestamp,
+    };
+
+    if (value.status === 'fraud') {
+      delete data.paymentTxId;
+      delete data.spendTxId;
+    }
+
+    return data;
+  }, [value]);
+
+  if (!eventData) {
     return (
-      <Center
-        style={{
-          minHeight: 'calc(100vh - 304px)',
-        }}
-      >
+      <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text.secondary">
           Select an event to see its details.
         </Typography>
       </Center>
     );
+  }
 
-  return (
-    <EventDetails
-      value={{
-        amount: getDecimalString(
-          value.amount,
-          value.lockToken.significantDecimals,
-        ),
-        bridgeFee: getDecimalString(
-          value.bridgeFee,
-          value.lockToken.significantDecimals,
-        ),
-        fromAddress: value.fromAddress,
-        fromAddressUrl: getAddressUrl(value.fromChain, value.fromAddress),
-        fromChain: value.fromChain,
-        height: value.height,
-        href: `/events/${value.eventId}`,
-        id: value.eventId,
-        networkFee: getDecimalString(
-          value.networkFee,
-          value.lockToken.significantDecimals,
-        ),
-        reports: value.WIDsCount,
-        sourceTxId: value.sourceTxId,
-        sourceTxIdUrl: getTxURL(value.fromChain, value.sourceTxId),
-        status: value.status,
-        toAddress: value.toAddress,
-        toAddressUrl: getAddressUrl(value.toChain, value.toAddress),
-        toChain: value.toChain,
-        token: value.lockToken.name,
-        paymentTxId: value.paymentTxId ?? undefined,
-        paymentTxIdUrl: getTxURL(value.toChain, value.paymentTxId ?? undefined),
-        spendTxId: value.spendTxId ?? undefined,
-        spendTxIdUrl: getTxURL(NETWORKS.ergo.key, value.spendTxId ?? undefined),
-        timestamp: value.timestamp,
-      }}
-      showSeeDetailsButton={isTablet}
-    />
-  );
+  return <EventDetails value={eventData} showSeeDetailsButton={isTablet} />;
 };
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {

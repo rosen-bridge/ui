@@ -1,10 +1,10 @@
 import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
-import { SvgIcon } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
 import { DialogTitle, IconButton } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 const IconContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -31,7 +31,7 @@ export const EnhancedDialogTitle = ({
     <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={2}>
       {icon && (
         <IconContainer>
-          <SvgIcon sx={{ height: 20, width: 20 }}>{icon}</SvgIcon>
+          <SvgIcon size="small">{icon}</SvgIcon>
         </IconContainer>
       )}
       <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>

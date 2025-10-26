@@ -22,7 +22,7 @@
     "@rosen-network/evm": "^0.3.3",
     "@rosen-ui/constants": "^0.4.1"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
+  "engines": {
+    "node": ">=22.18.0"
   }
 }

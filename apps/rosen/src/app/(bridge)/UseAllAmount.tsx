@@ -50,12 +50,8 @@ export const UseAllAmount = ({
           />
         )}
         {!error && !loading && (
-          <Button
-            sx={{ whiteSpace: 'nowrap' }}
-            disabled={disabled}
-            onClick={onClick}
-          >
-            <span>
+          <Button disabled={disabled} onClick={onClick}>
+            <span style={{ whiteSpace: 'nowrap' }}>
               Use all
               <br />
               {value} <small style={{ textTransform: 'none' }}>{unit}</small>
