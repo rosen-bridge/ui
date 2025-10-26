@@ -2,7 +2,6 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
-import { sum } from 'lodash-es';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
 import { NetworkItem, TotalSupply } from './types';
@@ -106,13 +105,9 @@ export class AssetAggregator {
             tokenId: storedToken.id,
           })[0];
 
-          const lockedAmount = BigInt(
-            sum(
-              chainAssets[token.tokenId].map(
-                (addressBalance) => addressBalance.balance,
-              ),
-            ),
-          );
+          const lockedAmount = chainAssets[token.tokenId]
+            .map((addressBalance) => addressBalance.balance)
+            .reduce((acc, cur) => acc + cur, 0n);
           const bridgedAmount = assetTotalSupply[0].totalSupply - lockedAmount;
 
           this.logger.debug(

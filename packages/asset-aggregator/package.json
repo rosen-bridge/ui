@@ -33,7 +33,7 @@
     "@rosen-ui/asset-data-adapter": "^0.1.0",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "0.3.7",
-    "lodash-es": "^4.17.21",
+    "@vitest/coverage-istanbul": "^3.1.4",
     "tsx": "^4.20.5",
     "vitest": "^3.1.4"
   },
