@@ -1,5 +1,6 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
+import { AssetAggregatorService } from 'services/assetAggregator';
 
 import dataSource from './data-source';
 import { AssetDataAdapterService } from './services/assetDataAdapters';
@@ -7,7 +8,6 @@ import { DBService } from './services/db';
 import { HealthService } from './services/healthCheck';
 import { ScannerService } from './services/scanner';
 import { TokensConfig } from './tokensConfig';
-import { AssetAggregatorService } from 'services/assetAggregator';
 
 const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 

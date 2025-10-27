@@ -4,16 +4,16 @@ import {
   PeriodicTaskService,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-import { AssetBalance } from '@rosen-ui/asset-data-adapter';
-import { createClient } from '@vercel/kv';
 import { AssetAggregator, NetworkItem } from '@rosen-ui/asset-aggregator';
+import { AssetBalance } from '@rosen-ui/asset-data-adapter';
+import { NETWORKS } from '@rosen-ui/constants';
+import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
-import { DBService } from './db';
-import { AssetDataAdapterService } from './assetDataAdapters';
 import { ChainChoices, TotalSupply } from '../types';
-import { NETWORKS } from '@rosen-ui/constants';
+import { AssetDataAdapterService } from './assetDataAdapters';
+import { DBService } from './db';
 
 export class AssetAggregatorService extends PeriodicTaskService {
   name = 'AssetAggregatorService';
@@ -72,8 +72,7 @@ export class AssetAggregatorService extends PeriodicTaskService {
    *
    * @returns void
    */
-  protected preStart = async () => {
-  };
+  protected preStart = async () => {};
 
   /**
    * Builds a list of asynchronous tasks for active chains.
@@ -84,23 +83,31 @@ export class AssetAggregatorService extends PeriodicTaskService {
     const assetAggregator = new AssetAggregator(
       TokensConfig.getInstance().getTokenMap(),
       this.dbService.dataSource,
-      this.logger
+      this.logger,
     );
-    return [{
-      fn: async () => {
-        const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
-        await Promise.all(Object.values(Object.keys(configs.chains)).map(async (chain) => {
-          const chainConfig = configs.chains[chain as ChainChoices];
-          if(chain == NETWORKS.ergo.key || ('active' in chainConfig && chainConfig.active)) {
-            const data = await this.redis.get<AssetBalance | null>(chain);
-            if (data) assetBalances[chain as ChainChoices] = data;
-          }
-        }));
-        const totalSupply: TotalSupply[] = await this.redis.get('total_supply') ?? [];
-        await assetAggregator.update(assetBalances, totalSupply);
+    return [
+      {
+        fn: async () => {
+          const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
+          await Promise.all(
+            Object.values(Object.keys(configs.chains)).map(async (chain) => {
+              const chainConfig = configs.chains[chain as ChainChoices];
+              if (
+                chain == NETWORKS.ergo.key ||
+                ('active' in chainConfig && chainConfig.active)
+              ) {
+                const data = await this.redis.get<AssetBalance | null>(chain);
+                if (data) assetBalances[chain as ChainChoices] = data;
+              }
+            }),
+          );
+          const totalSupply: TotalSupply[] =
+            (await this.redis.get('total_supply')) ?? [];
+          await assetAggregator.update(assetBalances, totalSupply);
+        },
+        interval: configs.dataAggregator.interval * 1000,
       },
-      interval: configs.dataAggregator.interval * 1000
-    }];
+    ];
   };
 
   /**
