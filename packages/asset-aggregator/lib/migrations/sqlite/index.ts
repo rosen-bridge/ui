@@ -1,1 +1,1 @@
-export { Migration1761477848161 } from './1761477848161-migration';
+export { Migration1761566399698 } from './1761566399698-migration';
