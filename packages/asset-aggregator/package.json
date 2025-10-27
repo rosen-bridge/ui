@@ -1,0 +1,37 @@
+{
+  "name": "@rosen-ui/asset-aggregator",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "Rosen Team",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "release": "npm run build && npm publish --access public",
+    "type-check": "tsc --noEmit",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
+    "typeorm:generate:postgres": "npm run typeorm migration:generate ./lib/migrations/postgres/migration -- -p -d ./dataSource.ts",
+    "typeorm:migrate:postgres": "npm run typeorm migration:run -- -d ./dataSource.ts",
+    "typeorm:generate:sqlite": "npm run typeorm migration:generate ./lib/migrations/sqlite/migration -- -p -d ./dataSource.ts",
+    "typeorm:migrate:sqlite": "npm run typeorm migration:run -- -d ./dataSource.ts"
+  },
+  "dependencies": {
+    "@rosen-bridge/extended-typeorm": "1.0.1",
+    "@rosen-ui/types": "0.3.7",
+    "tsx": "^4.20.5",
+    "vitest": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  }
+}
