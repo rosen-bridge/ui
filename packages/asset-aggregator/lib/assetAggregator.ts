@@ -2,6 +2,7 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
 import { NetworkItem, TotalSupply } from './types';
@@ -87,8 +88,15 @@ export class AssetAggregator {
           this.logger.debug(
             `Token ${token.tokenId} is wrapped token, storing as bridged asset`,
           );
+
+          const tokenDataOnAllChains = this.tokenMap.search(chain, {
+            tokenId: storedToken.id,
+          })[0];
+
           const assetTotalSupply = totalSupply.filter(
-            (t) => t.assetId == token.tokenId,
+            (t) =>
+              t.assetId ==
+              this.tokenMap.getID(tokenDataOnAllChains, NETWORKS.ergo.key),
           );
 
           if (assetTotalSupply.length == 0) {
@@ -97,10 +105,6 @@ export class AssetAggregator {
             );
             continue;
           }
-
-          const tokenDataOnAllChains = this.tokenMap.search(chain, {
-            tokenId: storedToken.id,
-          })[0];
 
           const lockedAmount = chainAssets[token.tokenId]
             .map((addressBalance) => addressBalance.balance)
@@ -112,12 +116,23 @@ export class AssetAggregator {
             `Token ${token.tokenId}: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
           );
 
+          const bridgedTokenId = Object.entries(tokenDataOnAllChains).filter(
+            ([, v]) => v.residency == NATIVE_TOKEN,
+          );
+
+          if (bridgedTokenId.length == 0) {
+            this.logger.error(
+              `Bridged id of token ${token.tokenId} not found in provided token-map`,
+            );
+            continue;
+          }
+
           await this.bridgedAssetAction.store({
             amount: bridgedAmount,
             chain: chain as NetworkItem,
             tokenId: token.tokenId,
             token: storedToken,
-            bridgedTokenId: this.tokenMap.getID(tokenDataOnAllChains, chain),
+            bridgedTokenId: bridgedTokenId[0][1].tokenId,
           });
 
           this.logger.debug(
