@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect } from 'react';
+import { MouseEventHandler, useEffect, useState } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -19,25 +19,31 @@ interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
   token: Pick<TokenInfo, 'amount' | 'decimals' | 'name'> | undefined;
+  minBoxValue?: bigint;
 }
+
 /**
- * render a react-hook-form compatible text field for token amount input,
+ * Render a react-hook-form compatible text field for token amount input,
  * handling decimal and maximum available validation for token, enabling user to
  * choose maximum available amount for text field, setting minimum value for
  * the text field when the `token` prop changes and optionally showing a pending
- * indicator
+ * indicator.
  *
- * @param disabled
- * @param loading
- * @param token
+ * @param disabled - Disable the input field.
+ * @param loading - Show a loading indicator when data is pending.
+ * @param token - Token information used for validation and formatting.
+ * @param minBoxValue - Minimum allowed value for the input, applied when token changes.
  */
 export const TokenAmountTextField = ({
   disabled,
   loading,
   token,
+  minBoxValue,
 }: TokenAmountTextFieldProps) => {
   const { control, setValue } =
     useFormContext<TokenAmountCompatibleFormSchema>();
+
+  const [error, setError] = useState<string | undefined>();
 
   const { field: amountField } = useController({
     control: control,
@@ -62,6 +68,7 @@ export const TokenAmountTextField = ({
     event.preventDefault();
 
     setAmountFieldValue(getMaxAvailableTokenAmount());
+    setError(undefined);
   };
 
   return (
@@ -69,6 +76,7 @@ export const TokenAmountTextField = ({
       label="Amount"
       {...amountField}
       disabled={disabled}
+      error={!!error}
       onChange={(event) => {
         if (!token) return;
 
@@ -76,32 +84,43 @@ export const TokenAmountTextField = ({
 
         // match any complete or incomplete decimal number
         const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
-
-        // prevent user from entering invalid numbers
-        const isValueInvalid = !match;
-        if (isValueInvalid) return;
+        if (!match) return;
 
         // prevent user from entering more decimals than token decimals
         const isDecimalsLarge =
           (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
         if (isDecimalsLarge) return;
 
+        const newValueBigInt = BigInt(
+          getNonDecimalString(newValue, token.decimals),
+        );
+
         // prevent user from entering more than token amount
-        const isAmountLarge =
-          BigInt(getNonDecimalString(newValue, token.decimals)) > token.amount;
-        if (isAmountLarge) return;
+        if (newValueBigInt > token.amount) return;
+
+        if (minBoxValue && newValueBigInt < minBoxValue) {
+          setError(
+            `Amount must be at least ${getDecimalString(
+              minBoxValue.toString(),
+              token.decimals,
+            )}`,
+          );
+        } else {
+          setError(undefined);
+        }
 
         amountField.onChange(event);
       }}
       helperText={
-        token && (
+        error ||
+        (token && (
           <>
             <Link component="button" onClick={setAmountToMaxAvailable}>
               {getMaxAvailableTokenAmount()}
             </Link>{' '}
             {token.name} available
           </>
-        )
+        ))
       }
       InputProps={{
         endAdornment: token && (
