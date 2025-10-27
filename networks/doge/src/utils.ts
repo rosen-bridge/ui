@@ -120,24 +120,23 @@ export const getMinimumMeaningfulDoge = (feeRatio: number): bigint => {
 };
 
 /**
- * estimates tx weight based on number of inputs and outputs
- * inputs and outputs required fee are estimated by segwit weight unit
+ * estimates tx size based on number of inputs and outputs
+ * inputs and outputs required fee are estimated by DOGE_INPUT_SIZE and DOGE_OUTPUT_SIZE
  * @param inputSize
  * @param outputSize
  * @param feeRatio
  */
-export const estimateTxWeight = (
+export const estimateTxSize = (
   inputSize: number,
   outputSize: number,
   opReturnLength: number,
 ): number => {
   const x =
     DOGE_TX_BASE_SIZE +
-    2 + // all txs include 40W. P2WPKH txs need additional 2W
-    44 + // OP_RETURN output base weight
-    opReturnLength * 2 + // OP_RETURN output data counts as vSize, so weight = hexString length / 2 * 4
-    inputSize * DOGE_INPUT_SIZE + // inputs weights
-    outputSize * DOGE_OUTPUT_SIZE; // outputs weights
+    11 + // OP_RETURN output base size
+    opReturnLength / 2 + // OP_RETURN size in bytes
+    inputSize * DOGE_INPUT_SIZE + // inputs size
+    outputSize * DOGE_OUTPUT_SIZE; // outputs size
   return x;
 };
 
