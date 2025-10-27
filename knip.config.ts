@@ -2,6 +2,9 @@ import type { KnipConfig } from 'knip';
 
 const config: KnipConfig = {
   workspaces: {
+    '.': {
+      entry: ['*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'],
+    },
     'packages/*': {
       entry: ['{lib,src,tests}/**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}'],
     },
