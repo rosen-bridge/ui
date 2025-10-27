@@ -40,9 +40,6 @@
   "peerDependencies": {
     "@rosen-bridge/tokens": "^4.0.0"
   },
-  "devDependencies": {
-    "typescript": "^5.3.3"
-  },
   "engines": {
     "node": ">=22.18.0"
   }

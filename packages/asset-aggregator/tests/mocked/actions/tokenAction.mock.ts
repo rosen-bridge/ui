@@ -16,6 +16,7 @@ export class TokenMockData {
     token.id = 'tkn-1';
     token.name = 'Token One';
     token.decimal = 9;
+    token.significantDecimal = 9;
     token.isNative = false;
     token.chain = 'ergo' as Network;
     Object.assign(token, overrides);
@@ -39,6 +40,7 @@ export class TokenMockData {
       token.id = `tkn-${i + 1}`;
       token.name = `Token ${i + 1}`;
       token.decimal = 9;
+      token.significantDecimal = 9;
       token.isNative = i % 2 === 0;
       token.chain = i % 2 === 0 ? ('ergo' as Network) : ('ethereum' as Network);
       Object.assign(token, baseOverrides);
