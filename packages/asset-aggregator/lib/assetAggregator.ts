@@ -27,7 +27,7 @@ export class AssetAggregator {
    * @param totalSupply
    */
   update = async (
-    ChainAssetBalanceInfo: Record<NetworkItem, AssetBalance>,
+    ChainAssetBalanceInfo: Partial<Record<NetworkItem, AssetBalance>>,
     totalSupply: TotalSupply[],
   ) => {
     this.logger.debug('Starting asset aggregator update process');
@@ -39,11 +39,8 @@ export class AssetAggregator {
       this.logger.debug(`Found ${tokens.length} tokens for chain ${chain}`);
 
       for (const token of tokens) {
-        if (
-          !ChainAssetBalanceInfo[chain as NetworkItem] ||
-          ChainAssetBalanceInfo[chain as NetworkItem][token.tokenId] ==
-            undefined
-        ) {
+        const chainAssets = ChainAssetBalanceInfo[chain as NetworkItem];
+        if (!chainAssets || chainAssets[token.tokenId] === undefined) {
           this.logger.debug(
             `Token ${token.tokenId} not found in chain balance info for ${chain}, skipping`,
           );
@@ -62,7 +59,6 @@ export class AssetAggregator {
           })
         )[0];
         usedTokens.push(storedToken.id);
-        const chainAssets = ChainAssetBalanceInfo[chain as NetworkItem];
 
         if (token.residency == NATIVE_TOKEN) {
           this.logger.debug(
