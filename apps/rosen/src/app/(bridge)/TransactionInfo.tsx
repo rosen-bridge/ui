@@ -60,6 +60,7 @@ export const TransactionInfo = () => {
       <CardBody>
         <Label label="You Will Receive" color="textPrimary" dense>
           <Amount
+            data-test-id="rosen-you-will-receive-amount"
             value={
               !tokenValue || receivingAmountRaw === '0'
                 ? undefined
@@ -72,6 +73,7 @@ export const TransactionInfo = () => {
         <Divider borderStyle="dashed" style={{ margin: '8px 0' }} />
         <Label label="Transaction Fee" dense>
           <Amount
+            data-test-id="rosen-transaction-fee-amount"
             value={!tokenValue ? undefined : networkFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
@@ -79,6 +81,7 @@ export const TransactionInfo = () => {
         </Label>
         <Label label="Bridge Fee" dense>
           <Amount
+            data-test-id="rosen-bridge-fee-amount"
             value={!tokenValue ? undefined : bridgeFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
@@ -86,6 +89,7 @@ export const TransactionInfo = () => {
         </Label>
         <Label label="Min Transfer" dense>
           <Amount
+            data-test-id="rosen-min-transfer-amount"
             value={!tokenValue ? undefined : minTransferRaw}
             unit={tokenInfo?.name}
             loading={isPending}

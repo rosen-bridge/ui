@@ -99,6 +99,7 @@ export const SubmitButton = () => {
   return (
     <>
       <LoadingButton
+        data-test-id="rosen-submit-button"
         sx={{ width: '100%' }}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
@@ -111,12 +112,14 @@ export const SubmitButton = () => {
         SUBMIT
       </LoadingButton>
       <EnhancedDialog
+        data-test-id="rosen-close-dialog-mobile"
         open={open}
         maxWidth="tablet"
         stickOn="mobile"
         onClose={() => setOpen(false)}
       >
         <EnhancedDialogTitle
+          data-test-id="rosen-close-dialog-tablet"
           icon={<CommentAltExclamation />}
           onClose={() => setOpen(false)}
         >
@@ -137,21 +140,40 @@ export const SubmitButton = () => {
                   </Typography>
                   {source && target && (
                     <Connector
-                      start={<Network name={source.name} />}
-                      end={<Network name={target.name} />}
+                      start={
+                        <Network
+                          data-test-id="rosen-source-network-dialog"
+                          name={source.name}
+                        />
+                      }
+                      end={
+                        <Network
+                          data-test-id="rosen-terget-network-dialog"
+                          name={target.name}
+                        />
+                      }
                     />
                   )}
                 </Stack>
                 <Divider />
                 <div>
                   <Label label="Transaction Fee">
-                    <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
+                    <Amount
+                      data-test-id="rosen-transaction-fee-dialog"
+                      value={networkFeeRaw}
+                      unit={tokenInfo?.name}
+                    />
                   </Label>
                   <Label label="Bridge Fee">
-                    <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
+                    <Amount
+                      data-test-id="rosen-bridge-fee-dialog"
+                      value={bridgeFeeRaw}
+                      unit={tokenInfo?.name}
+                    />
                   </Label>
                   <Label label="Received amount">
                     <Amount
+                      data-test-id="rosen-received-amount-dialog"
                       value={receivingAmountRaw}
                       unit={targetTokenInfo?.name}
                     />
@@ -159,7 +181,11 @@ export const SubmitButton = () => {
                 </div>
                 <Divider />
                 <Label label="Destination Address" orientation="vertical">
-                  <Identifier value={walletAddressValue} copyable />
+                  <Identifier
+                    data-test-id="rosen-destination-address-dialog"
+                    value={walletAddressValue}
+                    copyable
+                  />
                 </Label>
               </Stack>
             </CardBody>
@@ -167,6 +193,7 @@ export const SubmitButton = () => {
         </EnhancedDialogContent>
         <EnhancedDialogActions>
           <LoadingButton
+            data-test-id="rosen-cancel-button-dialog"
             color="secondary"
             variant="contained"
             sx={{ flexGrow: 2 }}
@@ -175,6 +202,7 @@ export const SubmitButton = () => {
             Cancel
           </LoadingButton>
           <LoadingButton
+            data-test-id="rosen-confirm-button-dialog"
             variant="contained"
             sx={{ flexGrow: 5 }}
             loading={

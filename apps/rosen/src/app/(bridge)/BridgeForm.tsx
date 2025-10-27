@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
+import { useCallback, ChangeEvent, SyntheticEvent, useEffect } from 'react';
 
 import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
@@ -143,11 +143,20 @@ export const BridgeForm = () => {
     });
   }, [raw, setValue]);
 
+  function test(data: string) {
+    return `[data-test-id=${data}]`;
+  }
+
+  useEffect(() => {
+    const elm = document.querySelector(test('rosen-bridge-clipboard-button'));
+    console.log(elm);
+  }, []);
   return (
     <>
       <Grid container spacing={2}>
         <Grid item mobile={12} tablet={6}>
           <TextField
+            data-test-id="rosen-source-input"
             id="source"
             select
             label="Source"
@@ -174,6 +183,7 @@ export const BridgeForm = () => {
         </Grid>
         <Grid item mobile={12} tablet={6}>
           <TextField
+            data-test-id="rosen-target-input"
             id="target"
             select
             label="Target"
@@ -205,12 +215,14 @@ export const BridgeForm = () => {
         </Grid>
       </Grid>
       <TextField
+        data-test-id="rosen-target-address-input"
         label="Target Address"
         InputProps={{
           disableUnderline: true,
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
+                data-test-id="rosen-clipboard-button"
                 sx={{
                   cursor: 'pointer',
                   color: 'secondary',
@@ -263,6 +275,7 @@ export const BridgeForm = () => {
         </Alert>
       )}
       <Autocomplete
+        data-test-id="rosen-token-input"
         aria-label="token input"
         disabled={!availableTokens.length}
         id="token"
@@ -283,6 +296,7 @@ export const BridgeForm = () => {
         onChange={handleTokenChange}
       />
       <TextField
+        data-test-id="rosen-amount-input"
         id="amount"
         size="medium"
         label="Amount"

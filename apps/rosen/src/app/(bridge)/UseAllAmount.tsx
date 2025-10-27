@@ -51,6 +51,7 @@ export const UseAllAmount = ({
         )}
         {!error && !loading && (
           <Button
+            data-test-id="rosen-use-all-amount-button"
             sx={{ whiteSpace: 'nowrap' }}
             disabled={disabled}
             onClick={onClick}

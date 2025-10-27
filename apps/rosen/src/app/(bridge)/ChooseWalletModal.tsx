@@ -114,6 +114,7 @@ export const ChooseWalletModal = ({
                         <Icon />
                       </Box>
                       <Button
+                        data-test-id={`rosen-${isConnected ? 'disconnect' : 'connect'}-button-dialog`}
                         variant="contained"
                         size="small"
                         sx={{ width: '100%' }}

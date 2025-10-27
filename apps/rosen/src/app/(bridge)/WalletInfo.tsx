@@ -54,6 +54,7 @@ export const WalletInfo = () => {
         )}
         {walletState === 'DISCONNECTED' && (
           <Button
+            data-test-id="rosen-choose-wallet-button"
             variant="text"
             startIcon={
               <SvgIcon>
@@ -77,6 +78,7 @@ export const WalletInfo = () => {
         {walletState === 'CONNECTED' && (
           <>
             <IconButton
+              data-test-id="rosen-open-wallet-modal-button"
               sx={{
                 borderRadius: 0.5,
                 ml: -1,
@@ -100,10 +102,13 @@ export const WalletInfo = () => {
                     <Icon />
                   </Avatar>
                 )}
-                <Typography>{label}</Typography>
+                <Typography data-test-id="rosen-name-wallet">
+                  {label}
+                </Typography>
               </Grid>
             </IconButton>
             <Button
+              data-test-id="rosen-disconnect-button"
               sx={{
                 color: (theme) => theme.palette.secondary.dark,
                 fill: (theme) => theme.palette.secondary.dark,
