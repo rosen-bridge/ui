@@ -173,6 +173,7 @@ describe('AssetAggregator', () => {
       await tokenRepository.insert({
         id: 'unused-token',
         decimal: 18,
+        significantDecimal: 18,
         name: 'Unused Token',
         chain: 'ergo',
         isNative: false,

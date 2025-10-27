@@ -50,10 +50,20 @@ export class AssetAggregator {
         this.logger.debug(
           `Processing token ${token.tokenId} (${token.name}) on chain ${chain}`,
         );
+        const significantDecimal = this.tokenMap.getSignificantDecimals(
+          token.tokenId,
+        );
+        if (!significantDecimal) {
+          this.logger.error(
+            `Significant-decimal of token ${token.tokenId} is undefined`,
+          );
+          continue;
+        }
         const storedToken = (
           await this.tokenAction.insert({
             id: token.tokenId,
             decimal: token.decimals,
+            significantDecimal: significantDecimal,
             name: token.name,
             chain: chain as NetworkItem,
             isNative: token.residency == NATIVE_TOKEN,
