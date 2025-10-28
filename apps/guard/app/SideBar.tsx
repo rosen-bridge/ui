@@ -51,6 +51,12 @@ export const SideBar = () => {
             path="/health"
           />
           <NavigationButton
+            badge='Next'
+            icon={<ClipboardNotes />}
+            label="Events"
+            path="/events-next"
+          />
+          <NavigationButton
             icon={<ClipboardNotes />}
             label="Events"
             path="/events"
