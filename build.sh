@@ -28,6 +28,7 @@ fi
 
 if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/asset-calculator
+  npm run build --workspace packages/asset-aggregator
   npm run build --workspace packages/asset-data-adapter
   npm run build --workspace networks/base
   npm run build --workspace networks/evm
