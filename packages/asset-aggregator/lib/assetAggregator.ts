@@ -43,19 +43,19 @@ export class AssetAggregator {
         const chainAssets = ChainAssetBalanceInfo[chain as NetworkItem];
         if (!chainAssets || chainAssets[token.tokenId] === undefined) {
           this.logger.debug(
-            `Token ${token.tokenId} not found in chain balance info for ${chain}, skipping`,
+            `Token [${token.tokenId}] not found in chain balance info for ${chain}, skipping`,
           );
           continue;
         }
         this.logger.debug(
-          `Processing token ${token.tokenId} (${token.name}) on chain ${chain}`,
+          `Processing token [${token.tokenId}] (${token.name}) on chain ${chain}`,
         );
         const significantDecimal = this.tokenMap.getSignificantDecimals(
           token.tokenId,
         );
         if (!significantDecimal) {
           this.logger.error(
-            `Significant-decimal of token ${token.tokenId} is undefined`,
+            `Significant-decimal of token [${token.tokenId}] is undefined`,
           );
           continue;
         }
@@ -73,11 +73,11 @@ export class AssetAggregator {
 
         if (token.residency == NATIVE_TOKEN) {
           this.logger.debug(
-            `Token ${token.tokenId} is native token, storing as locked asset`,
+            `Token [${token.tokenId}] is native token, storing as locked asset`,
           );
           const addressBalances = chainAssets[token.tokenId];
           this.logger.debug(
-            `Found ${addressBalances.length} address balances for native token ${token.tokenId}`,
+            `Found ${addressBalances.length} address balances for native token [${token.tokenId}]`,
           );
 
           await Promise.all(
@@ -92,11 +92,11 @@ export class AssetAggregator {
           );
 
           this.logger.debug(
-            `Stored ${addressBalances.length} locked assets for token ${token.tokenId}`,
+            `Stored ${addressBalances.length} locked assets for token [${token.tokenId}]`,
           );
         } else {
           this.logger.debug(
-            `Token ${token.tokenId} is wrapped token, storing as bridged asset`,
+            `Token [${token.tokenId}] is wrapped token, storing as bridged asset`,
           );
 
           const tokenDataOnAllChains = this.tokenMap.search(chain, {
@@ -111,7 +111,7 @@ export class AssetAggregator {
 
           if (assetTotalSupply.length == 0) {
             this.logger.error(
-              `Total-supply of token ${token.tokenId} not found in provided total supply data`,
+              `Total-supply of token [${token.tokenId}] not found in provided total supply data`,
             );
             continue;
           }
@@ -123,7 +123,7 @@ export class AssetAggregator {
             BigInt(assetTotalSupply[0].totalSupply) - BigInt(lockedAmount);
 
           this.logger.debug(
-            `Token ${token.tokenId}: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
+            `Token [${token.tokenId}]: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
           );
 
           const bridgedTokenId = Object.entries(tokenDataOnAllChains).filter(
@@ -132,7 +132,7 @@ export class AssetAggregator {
 
           if (bridgedTokenId.length == 0) {
             this.logger.error(
-              `Bridged id of token ${token.tokenId} not found in provided token-map`,
+              `Bridged id of token [${token.tokenId}] not found in provided token-map`,
             );
             continue;
           }
@@ -146,7 +146,7 @@ export class AssetAggregator {
           });
 
           this.logger.debug(
-            `Stored bridged asset for token ${token.tokenId} on chain ${chain} with amount ${bridgedAmount}`,
+            `Stored bridged asset for token [${token.tokenId}] on chain ${chain} with amount ${bridgedAmount}`,
           );
         }
       }

@@ -33,7 +33,7 @@ export class BridgedAssetAction {
    * @returns Promise that resolves to an array of BridgedAssetEntity objects
    */
   getAll = async (): Promise<BridgedAssetEntity[]> => {
-    return await this.repository.find({ select: ['chain', 'tokenId'] });
+    return await this.repository.find();
   };
 
   /**
