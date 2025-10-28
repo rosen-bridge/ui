@@ -25,6 +25,8 @@ const content = [
   ' **************************************************/',
   `import { NETWORKS } from '@rosen-ui/constants';`,
   '',
+  `export const CONTRACT_VERSION = '${contracts.at(0)?.json.version || ''}';`,
+  '',
   `export const FEE_CONFIG_TOKEN_ID = '${contracts.at(0)?.json.tokens.RSNRatioNFT || ''}';`,
   '',
   `export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {`,

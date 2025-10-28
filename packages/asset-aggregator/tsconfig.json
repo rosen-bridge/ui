@@ -1,0 +1,8 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["tests", "lib"],
+  "references": [{ "path": "../../packages/types" }]
+}
