@@ -10,21 +10,23 @@ let tokenMap: TokenMap;
  * get a TokenMap instance using the Rosen TokenMapObject in the server.
  */
 export const getTokenMap = async () => {
-  if (tokenMap) return tokenMap;
-
-  tokenMap = new TokenMap();
-
   if (process.env.USE_OCTM === 'true') {
+    const storedTokenMap = await getOnChainRosenTokens();
+
+    if (!tokenMap) {
+      tokenMap = new TokenMap();
+    }
+
     const tokenMapJSON = JSON.stringify(tokenMap.getConfig());
     const tokenMapHash = crypto.hash('sha256', tokenMapJSON);
 
-    const storedTokenMap = await getOnChainRosenTokens();
-
-    if (storedTokenMap && tokenMapHash !== storedTokenMap.hash) {
+    if (tokenMapHash !== storedTokenMap.hash) {
       tokenMap = new TokenMap();
       await tokenMap.updateConfigByJson(storedTokenMap.tokenMap);
     }
   } else {
+    if (tokenMap) return tokenMap;
+    tokenMap = new TokenMap();
     const tokens = await getRosenTokens();
     await tokenMap.updateConfigByJson(tokens);
   }
