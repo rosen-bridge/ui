@@ -1,5 +1,4 @@
 export interface RosenService2BaseConfig {
-  tokenMap: TokenMap;
   paths: Paths;
   chains: Chains;
   healthCheck: HealthCheck;
@@ -273,9 +272,4 @@ export interface Paths {
   tokens: string;
   contracts: string;
   healthReport: string;
-}
-
-export interface TokenMap {
-  address: string;
-  token: string;
 }
