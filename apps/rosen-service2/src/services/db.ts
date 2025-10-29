@@ -99,7 +99,6 @@ export class DBService extends AbstractService {
   public getTokenMapBoxes = async (): Promise<BoxEntity[]> => {
     const boxes = await this.dataSource.getRepository(BoxEntity).find({
       where: { extractor: TOKEN_MAP_EXTRACTOR_ID, spendHeight: IsNull() },
-      order: { height: 'DESC' },
     });
 
     return boxes;

@@ -21,7 +21,11 @@ import crypto from 'crypto';
 import * as ergoLib from 'ergo-lib-wasm-nodejs';
 
 import { configs } from '../configs';
-import { ERGO_METHOD_EXPLORER, TOKEN_MAP_EXTRACTOR_ID } from '../constants';
+import {
+  ERGO_METHOD_EXPLORER,
+  TOKEN_MAP_EXTRACTOR_ID,
+  TOKEN_MAP_REDIS_KEY,
+} from '../constants';
 import { DBService } from '../services/db';
 import { TokensConfig } from '../tokensConfig';
 import { ChainConfigs } from '../types';
@@ -233,7 +237,7 @@ const updateTokenMap = async (tokenMap: TokenMap, redis: VercelKV) => {
   const tokenMapJSON = JSON.stringify(tokenMap.getConfig());
   const tokenMapHash = crypto.hash('sha256', tokenMapJSON);
 
-  await redis.set('token-map', {
+  await redis.set(TOKEN_MAP_REDIS_KEY, {
     hash: tokenMapHash,
     tokenMap: tokenMap.getConfig(),
   });
