@@ -177,14 +177,21 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
   }
 
   try {
+    if (!configs.contracts.ergo.addresses.tokenMap) {
+      throw new Error(`on-chain-token-map address in not defined`);
+    }
+    if (!configs.contracts.ergo.tokens.tokenMap) {
+      throw new Error(`on-chain-token-map token in not defined`);
+    }
+
     const tokenMapBoxExtractor = new ErgoUTXOExtractor(
       dataSource,
       TOKEN_MAP_EXTRACTOR_ID,
       ergoLib.NetworkPrefix.Mainnet,
       url,
       networkType,
-      configs.contracts.ergo.addresses.tokenMap!,
-      [configs.contracts.ergo.tokens.tokenMap!],
+      configs.contracts.ergo.addresses.tokenMap,
+      [configs.contracts.ergo.tokens.tokenMap],
       CallbackLoggerFactory.getInstance().getLogger(TOKEN_MAP_EXTRACTOR_ID),
     );
     await ergoScanner.registerExtractor(tokenMapBoxExtractor);
