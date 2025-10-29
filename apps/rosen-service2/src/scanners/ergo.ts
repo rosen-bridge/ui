@@ -16,12 +16,13 @@ import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';
-import { createClient } from '@vercel/kv';
+import { createClient, VercelKV } from '@vercel/kv';
+import crypto from 'crypto';
 import * as ergoLib from 'ergo-lib-wasm-nodejs';
-import crypto from 'node:crypto';
 
 import { configs } from '../configs';
-import { ERGO_METHOD_EXPLORER } from '../constants';
+import { ERGO_METHOD_EXPLORER, TOKEN_MAP_EXTRACTOR_ID } from '../constants';
+import { DBService } from '../services/db';
 import { TokensConfig } from '../tokensConfig';
 import { ChainConfigs } from '../types';
 
@@ -176,15 +177,22 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
   }
 
   try {
+    if (!configs.contracts.ergo.addresses.tokenMap) {
+      throw new Error(`on-chain-token-map address in not defined`);
+    }
+    if (!configs.contracts.ergo.tokens.tokenMap) {
+      throw new Error(`on-chain-token-map token in not defined`);
+    }
+
     const tokenMapBoxExtractor = new ErgoUTXOExtractor(
       dataSource,
-      'token-map-box-extractor',
+      TOKEN_MAP_EXTRACTOR_ID,
       ergoLib.NetworkPrefix.Mainnet,
       url,
       networkType,
-      configs.contracts.ergo.addresses.tokenMap!,
-      [configs.contracts.ergo.tokens.tokenMap!],
-      CallbackLoggerFactory.getInstance().getLogger(`token-map-box-extractor`),
+      configs.contracts.ergo.addresses.tokenMap,
+      [configs.contracts.ergo.tokens.tokenMap],
+      CallbackLoggerFactory.getInstance().getLogger(TOKEN_MAP_EXTRACTOR_ID),
     );
     await ergoScanner.registerExtractor(tokenMapBoxExtractor);
 
@@ -195,17 +203,13 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
       token: configs.redis.token,
     });
 
-    tokenMapBoxExtractor.hook(CallbackType.Insert, async (boxes) => {
-      await tokenMap.updateConfigByBoxes(boxes.map((box) => box.serialized));
+    const updateTokenMapWrapper = async () =>
+      await updateTokenMap(tokenMap, redis);
 
-      const tokenMapJSON = JSON.stringify(tokenMap.getConfig());
-      const tokenMapHash = crypto.hash('sha256', tokenMapJSON);
-
-      await redis.set('token-map', {
-        hash: tokenMapHash,
-        tokenMap: tokenMapJSON,
-      });
-    });
+    tokenMapBoxExtractor.hook(CallbackType.Insert, updateTokenMapWrapper);
+    tokenMapBoxExtractor.hook(CallbackType.Update, updateTokenMapWrapper);
+    tokenMapBoxExtractor.hook(CallbackType.Spend, updateTokenMapWrapper);
+    tokenMapBoxExtractor.hook(CallbackType.Delete, updateTokenMapWrapper);
   } catch (error) {
     throw new Error(
       `cannot create or register token map box extractor due to error: ${error}`,
@@ -214,4 +218,23 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
 
   logger.info('Ergo scanner initialization completed successfully');
   return ergoScanner;
+};
+
+/**
+ * updates the tokenMap using
+ * @param tokenMap
+ * @param redis
+ */
+const updateTokenMap = async (tokenMap: TokenMap, redis: VercelKV) => {
+  const boxes = await DBService.getInstance().getTokenMapBoxes();
+
+  await tokenMap.updateConfigByBoxes(boxes.map((box) => box.serialized));
+
+  const tokenMapJSON = JSON.stringify(tokenMap.getConfig());
+  const tokenMapHash = crypto.hash('sha256', tokenMapJSON);
+
+  await redis.set('token-map', {
+    hash: tokenMapHash,
+    tokenMap: tokenMap.getConfig(),
+  });
 };
