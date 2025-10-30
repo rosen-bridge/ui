@@ -1,5 +1,6 @@
 import './base';
 
+export * from './bobExtension';
 export * from './eternl';
 export * from './lace';
 export * from './metaMask';
