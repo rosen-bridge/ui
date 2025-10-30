@@ -78,6 +78,10 @@ const start = async () => {
       addresses: config.calculator.addresses.doge,
       blockcypherUrl: config.doge.blockcypherUrl,
     },
+    {
+      addresses: config.calculator.addresses.handshake,
+      rpcUrl: config.handshake.rpcUrl,
+    },
     dataSource,
     logger,
   );

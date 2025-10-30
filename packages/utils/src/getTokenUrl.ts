@@ -9,6 +9,7 @@ const baseTokenURLs: { [key in Network]: string } = {
   [NETWORKS['bitcoin-runes'].key]: 'https://unisat.io/runes/detail',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/token',
   [NETWORKS.doge.key]: '',
+  [NETWORKS.handshake.key]: '',
 };
 
 export const getTokenUrl = (

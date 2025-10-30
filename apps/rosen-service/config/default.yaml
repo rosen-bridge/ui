@@ -70,6 +70,17 @@ doge:
     # - url:
     #   username:
     #   password:
+handshake:
+  addresses:
+    lock:
+    eventTrigger:
+    permit:
+    fraud:
+    commitment:
+  tokens:
+    rwt:
+  initialHeight:
+  rpcUrl:
 ethereum:
   addresses:
     lock:
@@ -104,6 +115,7 @@ calculator:
     bitcoin: []
     bitcoin-runes: []
     doge: []
+    handshake: []
     ethereum: []
     binance: []
 healthCheck:
@@ -119,6 +131,8 @@ healthCheck:
   ethereumScannerCriticalDiff: 5
   binanceScannerWarnDiff: 3
   binanceScannerCriticalDiff: 5
+  handshakeScannerWarnDiff: 3
+  handshakeScannerCriticalDiff: 5
   interval: 60 # health check update interval (in seconds)
   duration: 600 # log duration time check (in seconds)
   maxAllowedErrorCount: 1 # maximum allowed error log lines

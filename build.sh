@@ -35,10 +35,12 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace networks/bitcoin
   npm run build --workspace networks/bitcoin-runes
   npm run build --workspace networks/doge
+  npm run build --workspace networks/handshake
   npm run build --workspace networks/cardano
   npm run build --workspace networks/ergo
   npm run build --workspace networks/ethereum
   npm run build --workspace wallets/wallet-api
+  npm run build --workspace wallets/bob-extension
   npm run build --workspace wallets/eternl
   npm run build --workspace wallets/lace
   npm run build --workspace wallets/metamask

@@ -237,3 +237,6 @@ export { default as ErgoRaw } from './networks/ergo.svg?raw';
 
 export { ReactComponent as Ethereum } from './networks/ethereum.svg';
 export { default as EthereumRaw } from './networks/ethereum.svg?raw';
+
+export { ReactComponent as Handshake } from './networks/handshake.svg';
+export { default as HandshakeRaw } from './networks/handshake.svg?raw';

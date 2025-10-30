@@ -144,6 +144,22 @@ const getConfig = () => {
           }>
         >('doge.rpcConnections'),
       },
+      handshake: {
+        addresses: {
+          lock: nodeConfig.get<string>('handshake.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'handshake.addresses.eventTrigger',
+          ),
+          permit: nodeConfig.get<string>('handshake.addresses.permit'),
+          fraud: nodeConfig.get<string>('handshake.addresses.fraud'),
+          commitment: nodeConfig.get<string>('handshake.addresses.commitment'),
+        },
+        initialHeight: nodeConfig.get<number>('handshake.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('handshake.tokens.rwt'),
+        },
+        rpcUrl: nodeConfig.get<string>('handshake.rpcUrl'),
+      },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),
         logging: nodeConfig.get<boolean>('postgres.logging'),
@@ -160,6 +176,7 @@ const getConfig = () => {
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
+          handshake: nodeConfig.get<string[]>('calculator.addresses.handshake'),
         },
       },
       healthCheck: {
@@ -198,6 +215,12 @@ const getConfig = () => {
         ),
         binanceScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.binanceScannerCriticalDiff',
+        ),
+        handshakeScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.handshakeScannerWarnDiff',
+        ),
+        handshakeScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.handshakeScannerCriticalDiff',
         ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
         logDuration: nodeConfig.get<number>('healthCheck.duration'),

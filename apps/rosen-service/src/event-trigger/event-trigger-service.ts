@@ -32,6 +32,10 @@ const binanceEventTriggerExtractorLogger =
   );
 const dogeEventTriggerExtractorLogger =
   CallbackLoggerFactory.getInstance().getLogger('doge-event-trigger-extractor');
+const handshakeEventTriggerExtractorLogger =
+  CallbackLoggerFactory.getInstance().getLogger(
+    'handshake-event-trigger-extractor',
+  );
 
 /**
  * register event trigger extractors for all chains
@@ -116,6 +120,17 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
       configs.binance.addresses.fraud,
       binanceEventTriggerExtractorLogger,
     );
+    const handshakeEventTriggerExtractor = new EventTriggerExtractor(
+      'handshake-extractor',
+      dataSource,
+      ErgoNetworkType.Explorer,
+      configs.ergo.explorerUrl,
+      configs.handshake.addresses.eventTrigger,
+      configs.handshake.tokens.rwt,
+      configs.handshake.addresses.permit,
+      configs.handshake.addresses.fraud,
+      handshakeEventTriggerExtractorLogger,
+    );
     await scanner.registerExtractor(ergoEventTriggerExtractor);
     await scanner.registerExtractor(cardanoEventTriggerExtractor);
     await scanner.registerExtractor(bitcoinEventTriggerExtractor);
@@ -123,6 +138,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
     await scanner.registerExtractor(dogeEventTriggerExtractor);
     await scanner.registerExtractor(ethereumEventTriggerExtractor);
     await scanner.registerExtractor(binanceEventTriggerExtractor);
+    await scanner.registerExtractor(handshakeEventTriggerExtractor);
 
     logger.debug('event trigger extractors registered', {
       scannerName: scanner.name(),
@@ -134,6 +150,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         dogeEventTriggerExtractor.getId(),
         ethereumEventTriggerExtractor.getId(),
         binanceEventTriggerExtractor.getId(),
+        handshakeEventTriggerExtractor.getId(),
       ],
     });
   } catch (error) {
