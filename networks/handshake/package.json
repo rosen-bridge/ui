@@ -1,0 +1,34 @@
+{
+  "name": "@rosen-network/handshake",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "description": "This is a private package utilized within Rosen Bridge UI app",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit",
+    "test": "NODE_OPTIONS='--import tsx' vitest"
+  },
+  "dependencies": {
+    "@rosen-bridge/bitcoin-utxo-selection": "^1.2.0",
+    "@rosen-bridge/address-codec": "^1.0.0",
+    "@rosen-bridge/icons": "^2.3.1",
+    "@rosen-bridge/tokens": "^4.0.0",
+    "@rosen-network/base": "^0.4.1",
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-ui/types": "^0.3.7",
+    "axios": "^1.7.2",
+    "hsd": "^8.0.0"
+  },
+  "devDependencies": {
+    "tsx": "^4.19.2",
+    "typescript": "^5.0.0"
+  }
+}
