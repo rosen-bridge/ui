@@ -1,0 +1,28 @@
+{
+  "name": "@rosen-ui/bob-extension",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Aco Šmrkas",
+  "description": "Bob Extension wallet integration for Rosen Bridge",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "build": "tsc --build",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-network/handshake": "^0.1.0",
+    "@rosen-ui/types": "^0.3.7",
+    "@rosen-ui/wallet-api": "^3.0.3"
+  }
+}
