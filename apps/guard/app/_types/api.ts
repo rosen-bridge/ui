@@ -29,8 +29,14 @@ export interface ApiInfoResponse {
 }
 
 export interface ApiBalanceResponse {
-  hot: TokenInfoWithAddress[];
-  cold: TokenInfoWithAddress[];
+  hot: {
+    items: TokenInfoWithAddress[];
+    total: number;
+  };
+  cold: {
+    items: TokenInfoWithAddress[];
+    total: number;
+  };
 }
 
 export interface GuardTokenInfo extends TokenInfoWithColdAmount {

@@ -12,15 +12,13 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
-import useSWR from 'swr';
 
-import { ApiBalanceResponse } from '@/_types/api';
+import { useBalance } from '@/_hooks/useBalance';
 
 import { Item } from './Item';
 
 const Networks = () => {
-  const { data, isLoading } = useSWR<ApiBalanceResponse>('/balance', fetcher);
+  const { data, isLoading } = useBalance();
 
   const carouselSize = useMemo(
     () => ({
@@ -34,11 +32,11 @@ const Networks = () => {
 
   const items = useMemo(() => {
     return NETWORKS_KEYS.filter((key) => key != 'bitcoin-runes').map((key) => {
-      const cold = data?.cold.find(
+      const cold = data?.cold.items.find(
         (item) => item.chain === key && item.balance.isNativeToken,
       );
 
-      const hot = data?.hot.find(
+      const hot = data?.hot.items.find(
         (item) => item.chain === key && item.balance.isNativeToken,
       );
 
