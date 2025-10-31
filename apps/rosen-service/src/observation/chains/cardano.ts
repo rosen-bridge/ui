@@ -18,9 +18,9 @@ export const registerCardanoExtractor = async (
 ) => {
   try {
     const observationExtractor = new CardanoKoiosObservationExtractor(
+      config.cardano.addresses.lock,
       dataSource,
       await getTokenMap(),
-      config.cardano.addresses.lock,
       logger,
     );
 
