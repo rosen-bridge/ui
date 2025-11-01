@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import crypto from 'node:crypto';
+import crypto from 'crypto';
 
 import { unwrap } from '@/safeServerAction';
 
@@ -23,7 +23,6 @@ export const getTokenMap = async () => {
     const tokenMapHash = crypto.hash('sha256', tokenMapJSON);
 
     if (tokenMapHash !== storedTokenMap.hash) {
-      tokenMap = new TokenMap();
       await tokenMap.updateConfigByJson(storedTokenMap.tokenMap);
     }
   } else {
