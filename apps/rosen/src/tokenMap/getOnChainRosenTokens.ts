@@ -25,6 +25,6 @@ export const getOnChainRosenTokens = async () => {
 };
 
 export const getOnChainRosenTokensWithCache = wrap(getOnChainRosenTokens, {
-  cache: 60 * 1000,
+  cache: undefined,
   traceKey: 'getOnChainRosenTokens',
 });
