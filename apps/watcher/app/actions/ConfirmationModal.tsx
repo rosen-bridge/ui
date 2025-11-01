@@ -6,7 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  LoadingButton,
+  Button,
 } from '@rosen-bridge/ui-kit';
 
 interface ConfirmationModalProps {
@@ -55,13 +55,13 @@ export const ConfirmationModal = ({
         )}
       </DialogContent>
       <DialogActions>
-        <LoadingButton
+        <Button
           variant="text"
           loading={buttonLoading}
           onClick={handleConfirmClick}
         >
           {buttonText}
-        </LoadingButton>
+        </Button>
       </DialogActions>
     </Dialog>
   );

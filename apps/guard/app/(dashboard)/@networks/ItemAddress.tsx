@@ -32,20 +32,15 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
         style={{ fontSize: '1.5rem', width: '100%' }}
       >
         <SvgIcon
-          color={`${state === 'hot' ? 'secondary.dark' : 'secondary.dark'}`}
+          color={`${state === 'hot' ? 'secondary.dark' : 'tertiary.dark'}`}
         >
           {state === 'hot' ? <Fire /> : <SnowFlake />}
         </SvgIcon>
         <Typography
+          color={`${state === 'hot' ? 'secondary.dark' : 'tertiary.dark'}`}
           component="div"
-          sx={{
-            fontWeight: 700,
-            fontSize: '1.5rem',
-            color: (theme) =>
-              state === 'hot'
-                ? theme.palette.secondary.dark
-                : theme.palette.tertiary.dark,
-          }}
+          fontWeight="700"
+          fontSize="1.5rem"
         >
           <Amount
             loading={loading}
