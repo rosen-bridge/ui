@@ -20,13 +20,6 @@
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore"
   },
-  "devDependencies": {
-    "@types/config": "^0.0.41",
-    "tsx": "^4.19.2"
-  },
-  "engines": {
-    "node": ">=22.18.0"
-  },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^3.0.1",
     "@rosen-bridge/abstract-scanner": "^0.2.2",
@@ -54,5 +47,12 @@
     "@rosen-ui/data-source": "^0.1.1",
     "config": "^3.3.12",
     "ethers": "6.13.2"
+  },
+  "devDependencies": {
+    "@types/config": "^0.0.41",
+    "tsx": "^4.19.2"
+  },
+  "engines": {
+    "node": ">=22.18.0"
   }
 }
