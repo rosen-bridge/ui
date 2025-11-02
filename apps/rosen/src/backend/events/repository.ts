@@ -147,10 +147,12 @@ export const getEvents = async (filters: Filters) => {
     queryBuilder = queryBuilder.where(query);
   }
 
-  queryBuilder = queryBuilder.distinct(true);
+  queryBuilder = queryBuilder
+    .distinctOn(['sub."eventId"'])
+    .orderBy('sub."eventId"', 'ASC');
 
   if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
+    queryBuilder = queryBuilder.addOrderBy(sort.key, sort.order);
   }
 
   if (pagination?.offset) {
