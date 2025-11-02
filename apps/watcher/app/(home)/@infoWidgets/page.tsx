@@ -128,7 +128,7 @@ const InfoWidgets = () => {
           value={upperFirst(data?.network ?? '')}
           icon={
             !icon ? (
-              <Box sx={{ width: 35, height: 35 }} />
+              <Box style={{ width: 35, height: 35 }} />
             ) : (
               <Image src={icon} alt="network" width={35} height={35} />
             )

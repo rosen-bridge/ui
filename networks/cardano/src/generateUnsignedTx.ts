@@ -5,6 +5,7 @@ import {
   CardanoBoxSelection,
 } from '@rosen-bridge/cardano-utxo-selection';
 import { TokenMap } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -82,7 +83,7 @@ export const generateUnsignedTx =
     requiredAssets.nativeToken += feeAndMinBoxValue;
     // get input boxes, THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
     const inputs = await selector.getCoveringBoxes(
-      lockAssets,
+      requiredAssets,
       [],
       new Map(),
       utxos.values(),
@@ -91,16 +92,11 @@ export const generateUnsignedTx =
       () => 0n,
     );
     if (!inputs.covered) {
-      const totalInputAda = utxos.reduce(
-        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
-        0n,
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.cardano.key,
+        inputs.uncoveredAssets,
       );
-      throw Error(`Not enough assets`, {
-        cause: {
-          totalInputAda,
-          fromAddress: changeAddress,
-        },
-      });
     }
 
     return generateTx(

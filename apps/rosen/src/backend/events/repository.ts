@@ -59,6 +59,10 @@ export const getEvents = async (filters: Filters) => {
 
   const options = filtersToTypeorm<EventViewEntity>(filters);
 
+  // queryBuilder = queryBuilder
+  // .distinctOn(['sub."eventId"'])
+  // .orderBy('sub."eventId"', 'ASC');
+
   const [items, total] = await eventViewRepository.findAndCount(options);
 
   return {

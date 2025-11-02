@@ -3,6 +3,7 @@ import {
   generateFeeEstimator,
 } from '@rosen-bridge/bitcoin-utxo-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
@@ -75,7 +76,7 @@ export const generateUnsignedTx =
       DOGE_INPUT_SIZE,
       DOGE_OUTPUT_SIZE,
       feeRatio,
-      1, // the virtual size matters for fee estimation of native-segwit transactions
+      1, // Doge does not use segwit
     );
 
     const coveredBoxes = await selector.getCoveringBoxes(
@@ -91,20 +92,10 @@ export const generateUnsignedTx =
       estimateFee,
     );
     if (!coveredBoxes.covered) {
-      const totalInputDoge = utxos.reduce(
-        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
-        0n,
-      );
-      throw new Error(
-        `Available boxes didn't cover required assets. DOGE: ${
-          unwrappedAmount + minDoge
-        }`,
-        {
-          cause: {
-            totalInputDoge,
-            fromAddress: fromAddress,
-          },
-        },
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.doge.key,
+        coveredBoxes.uncoveredAssets,
       );
     }
 

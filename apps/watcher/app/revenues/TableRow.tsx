@@ -112,25 +112,25 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   return (
     <>
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id id={row.eventId} />
         </EnhancedTableCell>
       </TableRow>
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Token</EnhancedTableCell>
         <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>RSN Income</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount value={getRSNIncome()} />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Token Income</EnhancedTableCell>
             <EnhancedTableCell>
               <StyledBox>
@@ -146,12 +146,12 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
         </>
       )}
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell padding="none">
           <Button
             variant="text"
             onClick={toggleExpand}
-            sx={{ fontSize: 'inherit' }}
+            style={{ fontSize: 'inherit' }}
             endIcon={expand ? <AngleUp /> : <AngleDown />}
           >
             {expand ? 'Show less' : 'Show more'}
@@ -170,6 +170,11 @@ export const TabletRow: FC<RowProps> = (props) => {
   const { eRsnToken, isLoading: isERsnTokenLoading } = useERsnToken();
 
   const isLoading = isLoadingProp || isRsnTokenLoading || isERsnTokenLoading;
+
+  const rowStyles = useMemo(
+    () => (isLoading ? { opacity: 0.3 } : {}),
+    [isLoading],
+  );
 
   const getRSNIncome = () => {
     const rsnTokenInfo = row.revenues.find(
@@ -205,7 +210,7 @@ export const TabletRow: FC<RowProps> = (props) => {
       }));
 
   return (
-    <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
+    <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
         <Id id={row.eventId} />
       </EnhancedTableCell>

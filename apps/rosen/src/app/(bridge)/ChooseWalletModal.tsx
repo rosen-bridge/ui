@@ -75,12 +75,12 @@ export const ChooseWalletModal = ({
         <DialogContentText>
           Please choose any of the supported wallets for {chainName} chain.
         </DialogContentText>
-        <Alert severity="warning" sx={{ my: '1rem' }}>
+        <Alert severity="warning" style={{ margin: '1rem 0' }}>
           It may be necessary to reload this page after the following extensions
           have been installed in order to connect to them.
         </Alert>
         {sourceValue == NETWORKS.bitcoin.key && (
-          <Alert severity="warning" sx={{ my: '1rem' }}>
+          <Alert severity="warning" style={{ margin: '1rem 0' }}>
             We only support native SegWit addresses (P2WPKH or P2WSH) for the
             source address.
           </Alert>
@@ -116,7 +116,7 @@ export const ChooseWalletModal = ({
                       <Button
                         variant="contained"
                         size="small"
-                        sx={{ width: '100%' }}
+                        style={{ width: '100%' }}
                         disabled={!wallet.isAvailable()}
                         color={isConnected ? 'inherit' : 'primary'}
                         onClick={handleClick}

@@ -13,13 +13,17 @@
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "dependencies": {
     "@rosen-bridge/address-codec": "^1.0.0",
     "@rosen-bridge/minimum-fee": "^3.0.0",
+    "@rosen-bridge/selection-types": "^1.0.1",
     "@rosen-bridge/tokens": "^4.0.0",
-    "@rosen-ui/types": "^0.3.7"
+    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-ui/types": "^0.3.7",
+    "@rosen-ui/utils": "^0.6.1"
   },
   "engines": {
     "node": ">=22.18.0"
