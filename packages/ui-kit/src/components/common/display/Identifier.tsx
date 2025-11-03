@@ -1,4 +1,4 @@
-import { HTMLAttributes, useCallback, useState } from 'react';
+import { HTMLAttributes, useCallback, useMemo, useState } from 'react';
 
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
@@ -52,6 +52,7 @@ const IdentifierBase = ({
   qrcode,
   trailingLength = 5,
   value = '',
+  style,
   ...props
 }: IdentifierProps) => {
   const [open, setOpen] = useState(false);
@@ -59,12 +60,24 @@ const IdentifierBase = ({
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => setOpen(false), []);
 
+  const styles = useMemo(
+    () =>
+      Object.assign(
+        {},
+        {
+          minWidth: 0,
+        },
+        style,
+      ),
+    [style],
+  );
+
   return (
     <Stack
       direction="row"
       align="center"
       justify="between"
-      style={{ minWidth: 0 }}
+      style={styles}
       {...props}
     >
       {loading && <Skeleton style={{ flexGrow: 1 }} />}
