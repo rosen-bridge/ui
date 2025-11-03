@@ -1,10 +1,11 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
+import { TokenEntity } from './entities';
 import { NetworkItem, TotalSupply } from './types';
 
 export class AssetAggregator {
@@ -34,122 +35,10 @@ export class AssetAggregator {
     this.logger.debug('Starting asset aggregator update process');
     const usedTokens: string[] = [];
 
-    for (const chain of Object.keys(ChainAssetBalanceInfo)) {
-      this.logger.debug(`Processing chain: ${chain}`);
-      const tokens = this.tokenMap.getTokens(chain, chain);
-      this.logger.debug(`Found ${tokens.length} tokens for chain ${chain}`);
-
-      for (const token of tokens) {
-        const chainAssets = ChainAssetBalanceInfo[chain as NetworkItem];
-        if (!chainAssets || chainAssets[token.tokenId] === undefined) {
-          this.logger.debug(
-            `Token [${token.tokenId}] not found in chain balance info for ${chain}, skipping`,
-          );
-          continue;
-        }
-        this.logger.debug(
-          `Processing token [${token.tokenId}] (${token.name}) on chain ${chain}`,
-        );
-        const significantDecimal = this.tokenMap.getSignificantDecimals(
-          token.tokenId,
-        );
-        if (!significantDecimal) {
-          this.logger.error(
-            `Significant-decimal of token [${token.tokenId}] is undefined`,
-          );
-          continue;
-        }
-        const storedToken = (
-          await this.tokenAction.insert({
-            id: token.tokenId,
-            decimal: token.decimals,
-            significantDecimal: significantDecimal,
-            name: token.name,
-            chain: chain as NetworkItem,
-            isNative: token.residency == NATIVE_TOKEN,
-          })
-        )[0];
-        usedTokens.push(storedToken.id);
-
-        if (token.residency == NATIVE_TOKEN) {
-          this.logger.debug(
-            `Token [${token.tokenId}] is native token, storing as locked asset`,
-          );
-          const addressBalances = chainAssets[token.tokenId];
-          this.logger.debug(
-            `Found ${addressBalances.length} address balances for native token [${token.tokenId}]`,
-          );
-
-          await Promise.all(
-            addressBalances.map(async (addressBalance) => {
-              await this.lockedAssetAction.store({
-                amount: addressBalance.balance,
-                address: addressBalance.address,
-                tokenId: token.tokenId,
-                token: storedToken,
-              });
-            }),
-          );
-
-          this.logger.debug(
-            `Stored ${addressBalances.length} locked assets for token [${token.tokenId}]`,
-          );
-        } else {
-          this.logger.debug(
-            `Token [${token.tokenId}] is wrapped token, storing as bridged asset`,
-          );
-
-          const tokenDataOnAllChains = this.tokenMap.search(chain, {
-            tokenId: storedToken.id,
-          })[0];
-
-          const assetTotalSupply = totalSupply.filter(
-            (t) =>
-              t.assetId ==
-              this.tokenMap.getID(tokenDataOnAllChains, NETWORKS.ergo.key),
-          );
-
-          if (assetTotalSupply.length == 0) {
-            this.logger.error(
-              `Total-supply of token [${token.tokenId}] not found in provided total supply data`,
-            );
-            continue;
-          }
-
-          const lockedAmount = chainAssets[token.tokenId]
-            .map((addressBalance) => addressBalance.balance)
-            .reduce((acc, cur) => BigInt(acc) + BigInt(cur), 0n);
-          const bridgedAmount =
-            BigInt(assetTotalSupply[0].totalSupply) - BigInt(lockedAmount);
-
-          this.logger.debug(
-            `Token [${token.tokenId}]: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
-          );
-
-          const bridgedTokenId = Object.entries(tokenDataOnAllChains).filter(
-            ([, v]) => v.residency == NATIVE_TOKEN,
-          );
-
-          if (bridgedTokenId.length == 0) {
-            this.logger.error(
-              `Bridged id of token [${token.tokenId}] not found in provided token-map`,
-            );
-            continue;
-          }
-
-          await this.bridgedAssetAction.store({
-            amount: bridgedAmount,
-            chain: chain as NetworkItem,
-            tokenId: token.tokenId,
-            token: storedToken,
-            bridgedTokenId: bridgedTokenId[0][1].tokenId,
-          });
-
-          this.logger.debug(
-            `Stored bridged asset for token [${token.tokenId}] on chain ${chain} with amount ${bridgedAmount}`,
-          );
-        }
-      }
+    for (const [chain, chainAssets] of Object.entries(
+      ChainAssetBalanceInfo,
+    ) as [NetworkItem, AssetBalance][]) {
+      await this.handleChainUpdate(chain, chainAssets, totalSupply, usedTokens);
     }
 
     this.logger.debug(
@@ -157,5 +46,200 @@ export class AssetAggregator {
     );
     await this.tokenAction.keepOnly(usedTokens);
     this.logger.debug('Asset aggregator update process completed successfully');
+  };
+
+  /**
+   * Processes update flow for a single chain.
+   *
+   * @param chain
+   * @param chainAssets
+   * @param totalSupply
+   * @param usedTokens
+   */
+  private handleChainUpdate = async (
+    chain: NetworkItem,
+    chainAssets: AssetBalance,
+    totalSupply: TotalSupply[],
+    usedTokens: string[],
+  ) => {
+    this.logger.debug(`Processing chain: ${chain}`);
+    const tokens = this.tokenMap.getTokens(chain, chain);
+    this.logger.debug(`Found ${tokens.length} tokens for chain ${chain}`);
+
+    for (const token of tokens) {
+      await this.handleTokenUpdate(
+        token,
+        chain,
+        chainAssets,
+        totalSupply,
+        usedTokens,
+      );
+    }
+  };
+
+  /**
+   * Handles store/update logic for a single token on a chain.
+   *
+   * @param token
+   * @param chain
+   * @param chainAssets
+   * @param totalSupply
+   * @param usedTokens
+   */
+  private handleTokenUpdate = async (
+    token: RosenChainToken,
+    chain: NetworkItem,
+    chainAssets: AssetBalance,
+    totalSupply: TotalSupply[],
+    usedTokens: string[],
+  ) => {
+    if (!chainAssets || chainAssets[token.tokenId] === undefined) {
+      this.logger.warn(
+        `Token [${token.tokenId}] not found in chain balance info for ${chain}, skipping`,
+      );
+      return;
+    }
+    this.logger.debug(
+      `Processing token [${token.tokenId}] (${token.name}) on chain ${chain}`,
+    );
+    const significantDecimal = this.tokenMap.getSignificantDecimals(
+      token.tokenId,
+    );
+    if (!significantDecimal) {
+      this.logger.error(
+        `Significant-decimal of token [${token.tokenId}] is undefined`,
+      );
+      return;
+    }
+    const storedToken = (
+      await this.tokenAction.store({
+        id: token.tokenId,
+        decimal: token.decimals,
+        significantDecimal: significantDecimal,
+        name: token.name,
+        chain: chain,
+        isNative: token.residency == NATIVE_TOKEN,
+      })
+    )[0];
+    usedTokens.push(storedToken.id);
+
+    if (token.residency == NATIVE_TOKEN) {
+      await this.handleNativeToken(token, storedToken, chainAssets);
+    } else {
+      await this.handleWrappedToken(
+        token,
+        storedToken,
+        chain,
+        chainAssets,
+        totalSupply,
+      );
+    }
+  };
+
+  /**
+   * Persists all locked balances for a native token on a chain.
+   *
+   * @param token
+   * @param storedToken
+   * @param chainAssets
+   */
+  private handleNativeToken = async (
+    token: RosenChainToken,
+    storedToken: TokenEntity,
+    chainAssets: AssetBalance,
+  ) => {
+    this.logger.debug(
+      `Token [${token.tokenId}] is native token, storing as locked asset`,
+    );
+    const addressBalances = chainAssets[token.tokenId];
+    this.logger.debug(
+      `Found ${addressBalances.length} address balances for native token [${token.tokenId}]`,
+    );
+
+    await this.lockedAssetAction.store(
+      addressBalances.map((addressBalance) => {
+        return {
+          amount: addressBalance.balance,
+          address: addressBalance.address,
+          tokenId: token.tokenId,
+          token: storedToken,
+        };
+      }),
+    );
+
+    this.logger.debug(
+      `Stored ${addressBalances.length} locked assets for token [${token.tokenId}]`,
+    );
+  };
+
+  /**
+   * Computes bridged amount for wrapped token and stores bridged asset.
+   *
+   * @param token
+   * @param storedToken
+   * @param chain
+   * @param chainAssets
+   * @param totalSupply
+   */
+  private handleWrappedToken = async (
+    token: RosenChainToken,
+    storedToken: TokenEntity,
+    chain: NetworkItem,
+    chainAssets: AssetBalance,
+    totalSupply: TotalSupply[],
+  ) => {
+    this.logger.debug(
+      `Token [${token.tokenId}] is wrapped token, storing as bridged asset`,
+    );
+
+    const tokenDataOnAllChains = this.tokenMap.search(chain, {
+      tokenId: storedToken.id,
+    })[0];
+
+    const assetTotalSupply = totalSupply.filter(
+      (t) =>
+        t.assetId ==
+        this.tokenMap.getID(tokenDataOnAllChains, NETWORKS.ergo.key),
+    );
+
+    if (assetTotalSupply.length == 0) {
+      this.logger.error(
+        `Total-supply of token [${token.tokenId}] not found in provided total supply data`,
+      );
+      return;
+    }
+
+    const lockedAmount = chainAssets[token.tokenId]
+      .map((addressBalance) => addressBalance.balance)
+      .reduce((acc: bigint, cur: bigint) => BigInt(acc) + BigInt(cur), 0n);
+    const bridgedAmount =
+      BigInt(assetTotalSupply[0].totalSupply) - BigInt(lockedAmount);
+
+    this.logger.debug(
+      `Token [${token.tokenId}]: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
+    );
+
+    const bridgedTokenId = Object.entries(tokenDataOnAllChains).filter(
+      ([, v]) => v.residency == NATIVE_TOKEN,
+    );
+
+    if (bridgedTokenId.length == 0) {
+      this.logger.error(
+        `Bridged id of token [${token.tokenId}] not found in provided token-map`,
+      );
+      return;
+    }
+
+    await this.bridgedAssetAction.store({
+      amount: bridgedAmount,
+      chain: chain,
+      tokenId: token.tokenId,
+      token: storedToken,
+      bridgedTokenId: bridgedTokenId[0][1].tokenId,
+    });
+
+    this.logger.debug(
+      `Stored bridged asset for token [${token.tokenId}] on chain ${chain} with amount ${bridgedAmount}`,
+    );
   };
 }
