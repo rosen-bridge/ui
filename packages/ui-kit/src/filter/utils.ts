@@ -48,8 +48,18 @@ const createFieldsSchema = (config: FilterConfig): z.ZodType<Filter['fields']> =
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const items = (config.fields?.items?.map(createFieldSchema) || []) as any; 
 
-  if (!items.length) {
-    return z.array(z.never()).optional();
+  if (!config.fields?.items) {
+    // return z
+    //   .array(createFieldSchema())
+    //   .optional();
+  }
+
+  if (items.length === 0) {
+    return z
+      .array(z.never({
+        error: (iss) => `The filter '${(iss.input as FilterField).key}' is not valid`
+      }))
+      .optional();
   }
 
   const schema = z
@@ -119,8 +129,8 @@ const createPaginationSchema = (config: FilterConfig): z.ZodType<Filter['paginat
   return schema;
 }
 
-const createSortSchema = (sort?: FilterConfigSort): z.ZodType<FilterSort> => {
-  const key = sort ? z.literal(sort.key) : z.string();
+const createSortSchema = (sort: FilterConfigSort): z.ZodType<FilterSort> => {
+  const key = z.literal(sort.key);
 
   let order = z
     .enum(["ASC", "DESC"], {
@@ -128,7 +138,7 @@ const createSortSchema = (sort?: FilterConfigSort): z.ZodType<FilterSort> => {
     })
     .optional();
 
-  if (sort?.defaultOrder) {
+  if (sort.defaultOrder) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     order = order.default(sort.defaultOrder) as any;
   }
@@ -146,13 +156,7 @@ const createSortsSchema = (config: FilterConfig): z.ZodType<Filter['sorts']> => 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const items = (config.sorts?.items?.map(createSortSchema) || []) as any;
 
-  if (!config.sorts?.items) {
-    return z
-      .array(createSortSchema())
-      .optional();
-  }
-
-  if (items.length === 0) {
+  if (!items.length) {
     return z
       .array(z.never({
         error: (iss) => `The sort '${(iss.input as FilterSort).key}' is not valid`

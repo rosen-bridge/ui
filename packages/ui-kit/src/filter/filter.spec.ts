@@ -10,6 +10,15 @@ describe('11111111', () => {
     expect(Object.keys(filter)).toEqual([]);
   });
 
+  // describe('Fields', () => {
+  //   it('TODO', () => {
+  //     const parser = createFilterParser();
+
+  //     expect(() => parser(`http://localhost?key`))
+  //       .toThrow('Filtering is disabled');
+  //   });
+  // });
+
   describe('Pagination', () => {
     it('should throw error when pagination is disabled', () => {
       const parser = createFilterParser();
@@ -172,7 +181,7 @@ describe('11111111', () => {
         .toThrow('Sorting is disabled');
     });
 
-    it('should parse a single sort key', () => {
+    it('should throw error if sort key is not in config', () => {
       const key = 'key';
 
       const parser = createFilterParser({ 
@@ -181,9 +190,8 @@ describe('11111111', () => {
         }
       });
 
-      const filter = parser(`http://localhost?sorts=${key}`);
-
-      expect(filter.sorts).toEqual([{ key }]);
+      expect(() => parser(`http://localhost?sorts=${key}`))
+        .toThrow(`The sort '${key}' is not valid`);    
     });
 
     it('should parse multiple sort keys', () => {
@@ -193,6 +201,10 @@ describe('11111111', () => {
       const parser = createFilterParser({ 
         sorts: { 
           enable: true,
+          items: [
+            { key: key1 }, 
+            { key: key2 },
+          ]
         }
       });
 
@@ -201,13 +213,14 @@ describe('11111111', () => {
       expect(filter.sorts).toEqual([{ key: key1 }, { key: key2 }]);
     });
 
-    it('should parse a sort key with an explicit order', () => {
+    it('should parse a sort key with explicit order', () => {
       const key = 'key';
       const order = 'ASC';
 
       const parser = createFilterParser({ 
         sorts: { 
           enable: true,
+          items: [{ key }]
         }
       });
 
@@ -216,7 +229,7 @@ describe('11111111', () => {
       expect(filter.sorts).toEqual([{ key, order }]);
     });
 
-    it('should throw if sort key is not allowed', () => {
+    it('should throw error if sort list is empty', () => {
       const key = 'key';
 
       const parser = createFilterParser({ 
@@ -251,7 +264,7 @@ describe('11111111', () => {
       expect(filter.sorts).toEqual([{ key, order }]);
     });
 
-    it('should mix explicit and default sort orders correctly', () => {
+    it('should handle mixed explicit and default orders', () => {
       const key1 = 'key1';
       const order1 = 'ASC';
 
