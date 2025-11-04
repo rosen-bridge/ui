@@ -17,27 +17,46 @@ const createFieldsSchema = (config: FilterConfig): z.ZodType<Filter['fields']> =
         return z.object({ 
           key: z.literal(field.key),
           type: z.literal('collection'),
-          operator: z.enum(field.operators || FILTER_FIELD_COLLECTION_OPERATORS),
-          values: z.array(z.enum([])),
+          operator: z.enum(field.operators || FILTER_FIELD_COLLECTION_OPERATORS, {
+            error: `Invalid operator for the '${field.key}' field`
+          }),
+          values: field.values ? 
+            z.array(z.enum(field.values, {error: `Invalid value for the '${field.key}' field`})) : 
+            z.array(z.string()),
         })
       case 'number':
         return z.object({ 
           key: z.literal(field.key),
           type: z.literal('number'),
-          operator: z.enum(field.operators || FILTER_FIELD_NUMBER_OPERATORS),
-          value: z.number(),
+          operator: z.enum(field.operators || FILTER_FIELD_NUMBER_OPERATORS, {
+            error: `Invalid operator for the '${field.key}' field`
+          }),
+          value: z.number({
+            error: `Invalid value for the '${field.key}' field`
+          }),
         })
       case 'string':
         return z.object({ 
           key: z.literal(field.key),
           type: z.literal('string'),
-          operator: z.enum(field.operators || FILTER_FIELD_STRING_OPERATORS),
-          value: z.string(),
+          operator: z.enum(field.operators || FILTER_FIELD_STRING_OPERATORS, {
+            error: `Invalid operator for the '${field.key}' field`
+          }),
+          value: z.string({
+            error: `Invalid value for the '${field.key}' field`
+          }),
         })
     }
   }); 
 
-  const schema = z.array(z.discriminatedUnion("key", fields as any));
+  const schema = z.array(z.discriminatedUnion("key", fields as any, {
+    error: (iss) => {
+      if (iss.discriminator == 'key') {
+        return `The filter '${(iss.input as any).key}' is not valid`
+      }
+      return iss.message
+    }
+  }));
 
   return schema;
 }

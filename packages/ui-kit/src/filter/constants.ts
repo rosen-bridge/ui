@@ -59,15 +59,15 @@ export const FILTER_FIELD_COLLECTION_OPERATORS = [
 ] as const;
 
 export const FILTER_FIELD_NUMBER_OPERATORS = [ 
-  'equal',
-  'notEqual',
+  // 'equal',
+  // 'notEqual',
   'lessThanOrEqual',
   'greaterThanOrEqual',
 ] as const;
 
 export const FILTER_FIELD_STRING_OPERATORS = [ 
-  'equal',
-  'notEqual',
+  // 'equal',
+  // 'notEqual',
   'startsWith',
   'contains',
   'endsWith',
