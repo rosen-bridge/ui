@@ -32,6 +32,9 @@ export const FILTER_FIELD_OPERATORS = [
 ] as const; 
  
 export const FILTER_CONFIG_DEFAULT: FilterConfig = {
+  fields: {
+    enable: false,
+  },
   pagination: {
     enable: true,
     offset: {
@@ -49,3 +52,23 @@ export const FILTER_CONFIG_DEFAULT: FilterConfig = {
     enable: true
   }
 }
+
+export const FILTER_FIELD_COLLECTION_OPERATORS = [
+  'includes', 
+  'excludes',
+] as const;
+
+export const FILTER_FIELD_NUMBER_OPERATORS = [ 
+  'equal',
+  'notEqual',
+  'lessThanOrEqual',
+  'greaterThanOrEqual',
+] as const;
+
+export const FILTER_FIELD_STRING_OPERATORS = [ 
+  'equal',
+  'notEqual',
+  'startsWith',
+  'contains',
+  'endsWith',
+] as const;

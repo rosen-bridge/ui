@@ -10,7 +10,7 @@ const parser = createFilterParser({
   },
   sorts: {
     // enable: false,
-    keys: [
+    items: [
       {
         key: 'qqq',
         defaultOrder: 'DESC'
@@ -21,12 +21,46 @@ const parser = createFilterParser({
       }
     ]
   },
-  // fields: [
+  fields: {
+    enable: true,
+    items: [
+      {
+        key: 'toChain',
+        type: 'collection',
+        operators: ['excludes'],
+        // values: ['v1', 'v2']
+      },
+      {
+        key: 'amount',
+        type: 'number',
+        operators: ['greaterThanOrEqual', "equal"]
+      },
+      {
+        key: 'tokenName',
+        type: 'string',
+        operators: ['equal']
+      },
+      {
+        key: 'eventId',
+        type: 'string',
+        operators: ['contains']
+      }
+    ]
+  },
+  // fields1: [
   //   {
-  //     key: 'toChain'
+  //     key: 'k1',
+  //     operators: [],
+  //     values: []
   //   }
   // ]
 });
+
+/**
+ * string     -> equal, not equal
+ * collection -> includes, excludes
+ * amount     -> equal, not equal, greaterThanOrEqual, lessThanOrEqual
+ */
 
 export async function GET(request: Request) {
   try {

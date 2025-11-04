@@ -2,28 +2,45 @@
 import * as z from "zod";
 import deepmerge from 'deepmerge';
 import { Filter, FilterConfig, FilterSort } from './types';
-import { FILTER_CONFIG_DEFAULT, FILTER_FIELD_OPERATORS } from './constants';
+import { FILTER_CONFIG_DEFAULT, FILTER_FIELD_COLLECTION_OPERATORS, FILTER_FIELD_NUMBER_OPERATORS, FILTER_FIELD_OPERATORS, FILTER_FIELD_STRING_OPERATORS } from './constants';
 
-// const createFieldsSchema = (config: FilterConfig): z.ZodType<Filter['fields']> => {
-//   // const fields1 = z.array(z.union(config.fields!.map((field) => z.object({key: z.literal(field.key)})))).optional();
+const createFieldsSchema = (config: FilterConfig): z.ZodType<Filter['fields']> => {
+  if (!config.fields?.enable) {
+    return z.undefined({
+      error: "Filtering is disabled"
+    });
+  }
 
-//   // const fieldSchemas = (config.fields ?? []).map(
-//   //   (field) =>
-//   //     z.object({
-//   //       key: z.literal(field.key)
-//   //     })
-//   // );
+  const fields = config.fields.items!.map((field) => {
+    switch (field.type) {
+      case 'collection':
+        return z.object({ 
+          key: z.literal(field.key),
+          type: z.literal('collection'),
+          operator: z.enum(field.operators || FILTER_FIELD_COLLECTION_OPERATORS),
+          values: z.array(z.enum([])),
+        })
+      case 'number':
+        return z.object({ 
+          key: z.literal(field.key),
+          type: z.literal('number'),
+          operator: z.enum(field.operators || FILTER_FIELD_NUMBER_OPERATORS),
+          value: z.number(),
+        })
+      case 'string':
+        return z.object({ 
+          key: z.literal(field.key),
+          type: z.literal('string'),
+          operator: z.enum(field.operators || FILTER_FIELD_STRING_OPERATORS),
+          value: z.string(),
+        })
+    }
+  }); 
 
-//   // const fields =
-//   //   fieldSchemas.length > 0
-//   //     ? z.discriminatedUnion("key", fieldSchemas)
-//   //     : z.never();
+  const schema = z.array(z.discriminatedUnion("key", fields as any));
 
-
-//   const schema = z.array(z.object({}));
-
-//   return schema;
-// }
+  return schema;
+}
 
 const createPaginationSchema = (config: FilterConfig): z.ZodType<Filter['pagination']> => {
   if (!config.pagination?.enable) {
@@ -90,7 +107,7 @@ const createSortsSchema = (config: FilterConfig): z.ZodType<Filter['sorts']> => 
     });
   }
 
-  const sorts = (config.sorts?.keys || []);
+  const sorts = (config.sorts?.items || []);
 
   const objects = sorts.map((field) => {
     const key = z.literal(field.key);
@@ -121,13 +138,13 @@ const createSortsSchema = (config: FilterConfig): z.ZodType<Filter['sorts']> => 
 }
  
 const createFilterSchema = (config: FilterConfig): z.ZodType<Filter> => {
-  // const fields = createFieldsSchema(config);
+  const fields = createFieldsSchema(config);
 
   const pagination = createPaginationSchema(config);
 
   const sorts = createSortsSchema(config);
 
-  return z.object({ pagination, sorts }); 
+  return z.object({ fields, pagination, sorts }); 
 }
 
 const urlToFilter = (url: string): Filter => {

@@ -1,22 +1,31 @@
- export type FilterField = 
-| {
-    key: string;
-    type: 'collection'
-    operator: 'includes'| 'excludes';
-    values: string[];
-  }
-| {
-    key: string;
-    type: 'number'
-    operator: 'lessThanOrEqual'| 'greaterThanOrEqual';
-    value: number;
-  }
-| {
-    key: string;
-    type: 'string'
-    operator: 'startsWith'| 'contains'| 'endsWith';
-    value: string;
-  };
+import { 
+  FILTER_FIELD_COLLECTION_OPERATORS, 
+  FILTER_FIELD_NUMBER_OPERATORS, 
+  FILTER_FIELD_STRING_OPERATORS 
+} from "./constants";
+  
+export type FilterFieldCollection = {
+  key: string;
+  type: 'collection'
+  operator: typeof FILTER_FIELD_COLLECTION_OPERATORS[number];
+  values: string[];
+}
+
+export type FilterFieldNumber = {
+  key: string;
+  type: 'number'
+  operator: typeof FILTER_FIELD_NUMBER_OPERATORS[number];
+  value: number;
+}
+
+export type FilterFieldString = {
+  key: string;
+  type: 'string'
+  operator: typeof FILTER_FIELD_STRING_OPERATORS[number];
+  value: string;
+}
+
+export type FilterField = FilterFieldCollection | FilterFieldNumber | FilterFieldString;
 
 export type FilterSort = {
   key: string;
@@ -34,8 +43,32 @@ export type Filter = {
   sorts?: FilterSort[];
 };
 
+export type FilterConfigFieldCollection = {
+  key: string; 
+  type: 'collection';
+  operators?: FilterFieldCollection['operator'][];
+  values?: string[];
+}
+
+export type FilterConfigFieldNumber = {
+  key: string; 
+  type: 'number';
+  operators?: FilterFieldNumber['operator'][];
+}
+
+export type FilterConfigFieldString = {
+  key: string; 
+  type: 'string';
+  operators?: FilterFieldString['operator'][];
+}
+
+export type FilterConfigField = FilterConfigFieldCollection | FilterConfigFieldNumber | FilterConfigFieldString;
+
 export type FilterConfig = {
-  // fields?: ({ key: string; })[];
+  fields?: {
+    enable?: boolean;
+    items?: FilterConfigField[]
+  };
   pagination?: {
     enable?: boolean;
     offset?: {
@@ -51,7 +84,7 @@ export type FilterConfig = {
   };
   sorts?: {
     enable?: boolean;
-    keys?: Array<{ 
+    items?: Array<{ 
       key: string; 
       defaultOrder?: 'ASC' | 'DESC';
     }>;
