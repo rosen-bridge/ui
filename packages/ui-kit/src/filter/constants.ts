@@ -31,15 +31,15 @@ export const FILTER_FIELD_OPERATORS = [
   },
 ] as const; 
  
-export const FILTER_CONFIG_DEFAULT: FilterConfig = {
+export const FILTER_CONFIG_DEFAULT = {
   fields: {
     enable: false,
   },
   pagination: {
-    enable: true,
+    enable: false,
     offset: {
       min: 0, 
-      max: Infinity, 
+      max: 1000, 
       default: 0
     }, 
     limit: {
@@ -49,9 +49,9 @@ export const FILTER_CONFIG_DEFAULT: FilterConfig = {
     }
   },
   sorts: {
-    enable: true
+    enable: false
   }
-}
+} satisfies FilterConfig
 
 export const FILTER_FIELD_COLLECTION_OPERATORS = [
   'includes', 
