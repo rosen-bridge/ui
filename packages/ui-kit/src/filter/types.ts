@@ -64,6 +64,11 @@ export type FilterConfigFieldString = {
 
 export type FilterConfigField = FilterConfigFieldCollection | FilterConfigFieldNumber | FilterConfigFieldString;
 
+export type FilterConfigSort = {
+  key: string; 
+  defaultOrder?: 'ASC' | 'DESC';
+}
+
 export type FilterConfig = {
   fields?: {
     enable?: boolean;
@@ -84,9 +89,6 @@ export type FilterConfig = {
   };
   sorts?: {
     enable?: boolean;
-    items?: Array<{ 
-      key: string; 
-      defaultOrder?: 'ASC' | 'DESC';
-    }>;
+    items?: FilterConfigSort[];
   };
 }

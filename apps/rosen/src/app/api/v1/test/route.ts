@@ -27,18 +27,18 @@ const parser = createFilterParser({
       {
         key: 'toChain',
         type: 'collection',
-        operators: ['excludes'],
-        // values: ['v1', 'v2']
+        operators: ['includes'],
+        values: ['v1', 'v2']
       },
       {
         key: 'amount',
         type: 'number',
-        operators: ['greaterThanOrEqual', "equal"]
+        // operators: ['greaterThanOrEqual', "equal"]
       },
       {
         key: 'tokenName',
         type: 'string',
-        operators: ['equal']
+        // operators: ['equal']
       },
       {
         key: 'eventId',

@@ -1,8 +1,42 @@
 // import { FindManyOptions,In,LessThanOrEqual,MoreThanOrEqual,Not,ILike } from '@rosen-bridge/extended-typeorm';
 import * as z from "zod";
 import deepmerge from 'deepmerge';
-import { Filter, FilterConfig, FilterSort } from './types';
+import { Filter, FilterConfig, FilterConfigField, FilterConfigSort, FilterField, FilterSort } from './types';
 import { FILTER_CONFIG_DEFAULT, FILTER_FIELD_COLLECTION_OPERATORS, FILTER_FIELD_NUMBER_OPERATORS, FILTER_FIELD_OPERATORS, FILTER_FIELD_STRING_OPERATORS } from './constants';
+
+const createFieldSchema = (field: FilterConfigField): z.ZodType<FilterField> => {
+  const operatorParams = {
+    error: `Invalid operator for the '${field.key}' field`
+  };
+
+  const valueParams = {
+    error: `Invalid value for the '${field.key}' field`
+  };
+
+  switch (field.type) {
+    case 'collection':
+      return z.object({ 
+        key: z.literal(field.key),
+        type: z.literal(field.type),
+        operator: z.enum(field.operators || FILTER_FIELD_COLLECTION_OPERATORS, operatorParams),
+        values: z.array(field.values ? z.enum(field.values, valueParams) : z.string()),
+      })
+    case 'number':
+      return z.object({ 
+        key: z.literal(field.key),
+        type: z.literal(field.type),
+        operator: z.enum(field.operators || FILTER_FIELD_NUMBER_OPERATORS, operatorParams),
+        value: z.number(valueParams),
+      })
+    case 'string':
+      return z.object({ 
+        key: z.literal(field.key),
+        type: z.literal(field.type),
+        operator: z.enum(field.operators || FILTER_FIELD_STRING_OPERATORS, operatorParams),
+        value: z.string(valueParams),
+      })
+  }
+}
 
 const createFieldsSchema = (config: FilterConfig): z.ZodType<Filter['fields']> => {
   if (!config.fields?.enable) {
@@ -11,52 +45,14 @@ const createFieldsSchema = (config: FilterConfig): z.ZodType<Filter['fields']> =
     });
   }
 
-  const fields = config.fields.items!.map((field) => {
-    switch (field.type) {
-      case 'collection':
-        return z.object({ 
-          key: z.literal(field.key),
-          type: z.literal('collection'),
-          operator: z.enum(field.operators || FILTER_FIELD_COLLECTION_OPERATORS, {
-            error: `Invalid operator for the '${field.key}' field`
-          }),
-          values: field.values ? 
-            z.array(z.enum(field.values, {error: `Invalid value for the '${field.key}' field`})) : 
-            z.array(z.string()),
-        })
-      case 'number':
-        return z.object({ 
-          key: z.literal(field.key),
-          type: z.literal('number'),
-          operator: z.enum(field.operators || FILTER_FIELD_NUMBER_OPERATORS, {
-            error: `Invalid operator for the '${field.key}' field`
-          }),
-          value: z.number({
-            error: `Invalid value for the '${field.key}' field`
-          }),
-        })
-      case 'string':
-        return z.object({ 
-          key: z.literal(field.key),
-          type: z.literal('string'),
-          operator: z.enum(field.operators || FILTER_FIELD_STRING_OPERATORS, {
-            error: `Invalid operator for the '${field.key}' field`
-          }),
-          value: z.string({
-            error: `Invalid value for the '${field.key}' field`
-          }),
-        })
-    }
-  }); 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items = (config.fields?.items?.map(createFieldSchema) || []) as any; 
 
-  const schema = z.array(z.discriminatedUnion("key", fields as any, {
-    error: (iss) => {
-      if (iss.discriminator == 'key') {
-        return `The filter '${(iss.input as any).key}' is not valid`
-      }
-      return iss.message
-    }
-  }));
+  const schema = z
+    .array(z.discriminatedUnion("key", items, {
+      error: (iss) => `The filter '${(iss.input as FilterField).key}' is not valid`
+    }))
+    .optional();
 
   return schema;
 }
@@ -119,39 +115,38 @@ const createPaginationSchema = (config: FilterConfig): z.ZodType<Filter['paginat
   return schema;
 }
 
+const createSortSchema = (sort: FilterConfigSort): z.ZodType<FilterSort> => {
+  const key = z.literal(sort.key);
+
+  let order = z
+    .enum(["ASC", "DESC"], {
+      error: (iss) => `The value '${iss.input}' is not a valid sort order, Only 'ASC' or 'DESC' are allowed`
+    })
+    .optional();
+
+  if (sort.defaultOrder) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    order = order.default(sort.defaultOrder) as any;
+  }
+
+  return z.object({ key, order });
+}
+
 const createSortsSchema = (config: FilterConfig): z.ZodType<Filter['sorts']> => {
   if (!config.sorts?.enable) {
     return z.undefined({
       error: "Sorting is disabled"
     });
   }
-
-  const sorts = (config.sorts?.items || []);
-
-  const objects = sorts.map((field) => {
-    const key = z.literal(field.key);
-
-    let order = z
-      .enum(["ASC", "DESC"])
-      .optional();
-
-    if (field.defaultOrder) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      order = order.default(field.defaultOrder) as any;
-    }
-
-    return z.object({ key, order });
-  });
-
-  const keys = sorts.map((sort) => `'${sort.key}'`).join(', ');
+  
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const items = (config.sorts?.items?.map(createSortSchema) || []) as any;
 
   const schema = z
-    .array(
-      z.union(objects, {
-        error: `Sort key or order missing or invalid. Use ${keys} for key and 'ASC' or 'DESC' for order`
-      })
-    )
-    .optional();   
+    .array(z.discriminatedUnion("key", items, {
+      error: (iss) => `The sort '${(iss.input as FilterSort).key}' is not valid`
+    }))
+    .optional(); 
 
   return schema;
 }
@@ -264,10 +259,13 @@ export const createFilterParser = (partialConfig?: FilterConfig) => {
     try {
       return schema.parse(filter)
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const details = (error as any)?.issues?.at(0)?.message;
+      let message;
 
-      const message = details || 'Unexpected Error';
+      if (error instanceof z.ZodError) {
+        message = error.issues.at(0)?.message
+      }
+
+      message ||= 'Unexpected Error';
 
       throw new Error(message, { cause: error });
     }
