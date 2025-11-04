@@ -14,7 +14,9 @@ export const BITCOIN_SCANNER_LOGGER_NAME = 'bitcoin-scanner';
 export const DOGE_SCANNER_LOGGER_NAME = 'doge-scanner';
 export const ETHEREUM_SCANNER_LOGGER_NAME = 'ethereum-scanner';
 export const BINANCE_SCANNER_LOGGER_NAME = 'binance-scanner';
-
+export const ERGO_BLOCK_TIME = 120;
+export const CARDANO_BLOCK_TIME = 20;
+export const BITCOIN_BLOCK_TIME = 600;
 export const ETHEREUM_BLOCK_TIME = 12;
 export const BINANCE_BLOCK_TIME = 3;
 export const DOGE_BLOCK_TIME = 60;

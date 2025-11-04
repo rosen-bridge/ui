@@ -61,9 +61,9 @@ export const buildCardanoKoiosScannerWithExtractors = async (
 
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoKoiosObservationExtractor(
+      configs.contracts.cardano.addresses.lock,
       dataSource,
       tokenMap,
-      configs.contracts.cardano.addresses.lock,
       CallbackLoggerFactory.getInstance().getLogger(
         'cardano-koios-observation-extractor',
       ),
@@ -123,9 +123,10 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
 
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoBlockFrostObservationExtractor(
+      configs.contracts.cardano.addresses.lock,
+
       dataSource,
       tokenMap,
-      configs.contracts.cardano.addresses.lock,
       CallbackLoggerFactory.getInstance().getLogger(
         'cardano-BlockFrost-observation-extractor',
       ),
@@ -178,9 +179,10 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
 
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoOgmiosObservationExtractor(
+      configs.contracts.cardano.addresses.lock,
+
       dataSource,
       tokenMap,
-      configs.contracts.cardano.addresses.lock,
       CallbackLoggerFactory.getInstance().getLogger(
         'cardano-ogmios-observation-extractor',
       ),

@@ -16,9 +16,9 @@ const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 export const registerErgoExtractor = async (scanner: ErgoScanner) => {
   try {
     const observationExtractor = new ErgoObservationExtractor(
+      config.ergo.addresses.lock,
       dataSource,
       await getTokenMap(),
-      config.ergo.addresses.lock,
       logger,
     );
 
