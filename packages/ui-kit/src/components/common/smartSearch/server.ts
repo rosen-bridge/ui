@@ -194,3 +194,5 @@ export const filtersToTypeorm = <T>(filters: Filters): FindManyOptions<T> => {
 
   return result;
 };
+
+export * from '../../../filter'
