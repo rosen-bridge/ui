@@ -1,11 +1,11 @@
-import { 
-  FindManyOptions,
-  In,
-  LessThanOrEqual,
-  MoreThanOrEqual,
-  Not,
-  ILike 
-} from '@rosen-bridge/extended-typeorm';
+// import { 
+//   FindManyOptions,
+//   In,
+//   LessThanOrEqual,
+//   MoreThanOrEqual,
+//   Not,
+//   ILike 
+// } from '@rosen-bridge/extended-typeorm';
 import Joi from 'joi';
 
 export const FILTERS_FIELD_OPERATORS = ['==', '!=', '<=', '>=', '*=', '^=', '$='] as const;
@@ -141,58 +141,59 @@ export const FiltersSchema = Joi.object<Filters>({
   ).required(),
 });
 
-export const filtersToTypeorm = <T>(filters: Filters): FindManyOptions<T> => {
-  const result: FindManyOptions<T> = {
-    order: {},
-    where: {},
-  };
+export const filtersToTypeorm = <T>(filters: Filters): any => {
+  return {}
+  // const result: FindManyOptions<T> = {
+  //   order: {},
+  //   where: {},
+  // };
 
-  result.skip = filters.pagination?.offset;
+  // result.skip = filters.pagination?.offset;
 
-  result.take = filters.pagination?.limit;
+  // result.take = filters.pagination?.limit;
 
-  filters.sorts.forEach((sort) => { 
-    (result.order as Record<string, unknown>)[sort.key] = sort.order;
-  });
+  // filters.sorts.forEach((sort) => { 
+  //   (result.order as Record<string, unknown>)[sort.key] = sort.order;
+  // });
 
-  for (const field of filters.fields || []) {
-    let condition;
+  // for (const field of filters.fields || []) {
+  //   let condition;
 
-    switch (field.operator) {
-      case '!=': {
-        condition = Not(In([field.value].flat()));
-        break;
-      }
-      case '<=': {
-        condition = LessThanOrEqual(field.value);
-        break;
-      }
-      case '==': {
-        condition = In([field.value].flat());
-        break;
-      }
-      case '>=': {
-        condition = MoreThanOrEqual(field.value);
-        break;
-      }
-      case '*=': {
-        condition = ILike(`%${field.value}%`);
-        break;
-      }
-      case '^=': {
-        condition = ILike(`${field.value}%`);
-        break;
-      }
-      case '$=': {
-        condition = ILike(`%${field.value}`);
-        break;
-      }
-    }
+  //   switch (field.operator) {
+  //     case '!=': {
+  //       condition = Not(In([field.value].flat()));
+  //       break;
+  //     }
+  //     case '<=': {
+  //       condition = LessThanOrEqual(field.value);
+  //       break;
+  //     }
+  //     case '==': {
+  //       condition = In([field.value].flat());
+  //       break;
+  //     }
+  //     case '>=': {
+  //       condition = MoreThanOrEqual(field.value);
+  //       break;
+  //     }
+  //     case '*=': {
+  //       condition = ILike(`%${field.value}%`);
+  //       break;
+  //     }
+  //     case '^=': {
+  //       condition = ILike(`${field.value}%`);
+  //       break;
+  //     }
+  //     case '$=': {
+  //       condition = ILike(`%${field.value}`);
+  //       break;
+  //     }
+  //   }
     
-    (result.where as Record<string, unknown>)[field.key] = condition;
-  }
+  //   (result.where as Record<string, unknown>)[field.key] = condition;
+  // }
 
-  return result;
+  // return result;
 };
 
 export * from '../../../filter'

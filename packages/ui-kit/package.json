@@ -26,7 +26,8 @@
     "build": "tsc --build",
     "build:watch": "tsc --watch",
     "type-check": "tsc",
-    "release": "npm run build && npm publish --access public"
+    "release": "npm run build && npm publish --access public",
+    "test": "NODE_OPTIONS='--import tsx' vitest"
   },
   "peerDependencies": {
     "@emotion/react": "^11.11.1",
@@ -43,6 +44,7 @@
   "dependencies": {
     "@mui/lab": "^5.0.0-alpha.134",
     "@mui/material": "^5.13.4",
+    "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/icons": "^2.3.1",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/swr-helpers": "^0.2.2",
@@ -53,7 +55,9 @@
     "moment": "^2.29.4",
     "qrcode.react": "^3.1.0",
     "react-hook-form": "^7.45.1",
-    "react-sticky-box": "^2.0.5"
+    "react-sticky-box": "^2.0.5",
+    "tsx": "^4.20.6",
+    "zod": "^4.1.12"
   },
   "engines": {
     "node": ">=22.18.0"
