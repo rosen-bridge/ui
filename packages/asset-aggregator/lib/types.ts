@@ -10,6 +10,7 @@ export type NetworkItem = Exclude<
   (typeof NETWORKS_KEYS)[number],
   typeof BITCOIN_RUNES_NETWORKS_KEY
 >;
+export type TokensEqualTypes = { [key: string]: string };
 
 export interface TotalSupply {
   assetId: string;

@@ -16,6 +16,7 @@ export class TokenAction {
 
   /**
    * Stores one or more tokens into the database
+   *
    * @param tokens - Single TokenEntity or array of TokenEntity objects to insert
    * @returns Promise that resolves to the inserted tokens
    */
@@ -28,7 +29,15 @@ export class TokenAction {
     return tokens;
   };
 
-  // getAll removed
+  /**
+   * Get and return token by id
+   *
+   * @param tokenId
+   * return Promise<TokenEntity | null>
+   */
+  getById = async (tokenId: string) => {
+    return await this.repository.findOne({ where: { id: tokenId } });
+  };
 
   /**
    * Deletes tokens in chunks for efficiency.
@@ -47,6 +56,7 @@ export class TokenAction {
 
   /**
    * Removes all items from the array except the ones with the specified excludeTokenIds.
+   *
    * @param excludeTokenIds
    */
   keepOnly = async (excludeTokenIds: string[] | string) => {
