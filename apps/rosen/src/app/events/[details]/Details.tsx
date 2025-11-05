@@ -12,6 +12,7 @@ import {
   LabelGroup,
   RelativeTime,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
@@ -37,10 +38,10 @@ export const Details = ({ id }: { id: string }) => {
 
   const txIds = useMemo(() => {
     return [
-      ['Source Tx', data?.sourceTxId],
-      ['Payment Tx', data?.paymentTxId],
-      ['Reward Tx', data?.spendTxId],
-      ['Trigger Tx', data?.txId],
+      ['Source Tx', data?.fromChain, data?.sourceTxId],
+      ['Payment Tx', data?.toChain, data?.paymentTxId],
+      ['Reward Tx', NETWORKS.ergo.key, data?.spendTxId],
+      ['Trigger Tx', NETWORKS.ergo.key, data?.txId],
     ] as const;
   }, [data]);
 
@@ -115,13 +116,13 @@ export const Details = ({ id }: { id: string }) => {
         >
           <Label label="Tx IDs" />
           <LabelGroup>
-            {txIds.map(([label, txId]) => (
-              <Label key={label} label={label || 'N/A'} inset>
+            {txIds.map(([label, chain, txId]) => (
+              <Label key={label} label={label} inset>
                 <Identifier
                   copyable={!!txId}
-                  href={getTxURL(data?.fromChain, txId || undefined)}
+                  href={getTxURL(chain, txId)}
                   loading={isLoading}
-                  value={txId || 'N/A'}
+                  value={txId}
                   style={{ width: '90%' }}
                 />
               </Label>

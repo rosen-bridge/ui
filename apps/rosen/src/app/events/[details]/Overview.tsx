@@ -14,7 +14,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { Section } from './Section';
@@ -182,7 +182,7 @@ export const Overview = ({ id }: { id: string }) => {
             }}
             loading={isLoading}
             value={data?.fromAddress}
-            href={data?.fromAddress}
+            href={getAddressUrl(data?.fromChain, data?.fromAddress)}
             copyable
           />
         </Label>
@@ -196,7 +196,7 @@ export const Overview = ({ id }: { id: string }) => {
             }}
             loading={isLoading}
             value={data?.toAddress}
-            href={data?.fromAddress}
+            href={getAddressUrl(data?.toChain, data?.toAddress)}
             copyable
           />
         </Label>
