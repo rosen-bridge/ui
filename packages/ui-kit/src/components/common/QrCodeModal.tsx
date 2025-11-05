@@ -1,8 +1,8 @@
+import { Button } from '@mui/material';
 import QrCode from 'qrcode.react';
 
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,

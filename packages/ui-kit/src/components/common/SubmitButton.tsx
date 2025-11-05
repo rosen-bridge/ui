@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { LoadingButton } from '../base';
+import { LoadingButton } from '@mui/lab';
 
 export interface SubmitButtonProps {
   loading: boolean;

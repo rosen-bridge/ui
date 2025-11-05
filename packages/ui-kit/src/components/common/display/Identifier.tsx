@@ -3,7 +3,7 @@ import { HTMLAttributes, useCallback, useMemo, useState } from 'react';
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Tooltip } from '../../base';
-import { CopyButton } from '../button/CopyButton';
+import { CopyButton } from '../CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
 import { Stack } from '../Stack';

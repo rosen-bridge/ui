@@ -1,11 +1,11 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 
+import { Button } from '@mui/material';
 import { KeySkeleton, Eye, EyeSlash, Times } from '@rosen-bridge/icons';
 
 import { useApiKey, useSnackbar } from '../../hooks';
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,

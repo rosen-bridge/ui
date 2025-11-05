@@ -9,7 +9,6 @@ import {
   TextField,
   Typography,
   ListItemIcon,
-  styled,
   MenuItem,
   CircularProgress,
   SvgIcon,
@@ -17,6 +16,7 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -30,16 +30,6 @@ import {
 } from '@/hooks';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * renders the bridge main form
@@ -75,12 +65,12 @@ export const BridgeForm = () => {
     const network = sources.find((network) => network.name === value)!;
     const Logo = network.logo;
     return (
-      <SelectedAsset>
+      <Stack direction="row" align="center" spacing={1}>
         <SvgIcon>
           <Logo />
         </SvgIcon>
         <Typography color="text.secondary">{network.label}</Typography>
-      </SelectedAsset>
+      </Stack>
     );
   };
 
@@ -211,10 +201,6 @@ export const BridgeForm = () => {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
-                sx={{
-                  cursor: 'pointer',
-                  color: 'secondary',
-                }}
                 onClick={async () => {
                   try {
                     const clipboardText = await navigator.clipboard.readText();
