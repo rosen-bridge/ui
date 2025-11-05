@@ -9,7 +9,7 @@ export const SAMPLE_TOKEN_MAP: RosenTokens = [
       tokenId: 'erg',
       name: 'erg',
       decimals: 9,
-      type: 'EIP-004',
+      type: 'native',
       residency: 'native',
       extra: {},
     },

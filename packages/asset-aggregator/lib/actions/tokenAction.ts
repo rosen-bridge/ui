@@ -3,7 +3,6 @@ import { DataSource, In, Repository } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { TokenEntity } from '../entities';
-import { IdInfoType, TokenIdInfoType } from '../types';
 
 export class TokenAction {
   protected readonly repository: Repository<TokenEntity>;
@@ -16,11 +15,12 @@ export class TokenAction {
   }
 
   /**
-   * Inserts one or more tokens into the database
+   * Stores one or more tokens into the database
+   *
    * @param tokens - Single TokenEntity or array of TokenEntity objects to insert
    * @returns Promise that resolves to the inserted tokens
    */
-  insert = async (tokens: TokenEntity[] | TokenEntity) => {
+  store = async (tokens: TokenEntity[] | TokenEntity) => {
     if (!(tokens instanceof Array)) tokens = [tokens];
     await this.repository.save(tokens);
     this.logger.debug(
@@ -30,11 +30,13 @@ export class TokenAction {
   };
 
   /**
-   * Retrieves all tokens from the database
-   * @returns Promise that resolves to an array of objects containing token id information
+   * Get and return token by id
+   *
+   * @param tokenId
+   * return Promise<TokenEntity | null>
    */
-  getAll = async () => {
-    return await this.repository.find({ select: ['id'] });
+  getById = async (tokenId: string) => {
+    return await this.repository.findOne({ where: { id: tokenId } });
   };
 
   /**
@@ -53,28 +55,13 @@ export class TokenAction {
   }
 
   /**
-   * Removes one or more tokens from the database in chunks.
-   * @param tokenIds - Single TokenIdInfoType or array of TokenIdInfoType objects to delete
-   * @returns Promise that resolves when all tokens are deleted
-   */
-  remove = async (tokenIds: TokenIdInfoType[] | TokenIdInfoType) => {
-    if (!(tokenIds instanceof Array)) tokenIds = [tokenIds];
-    const ids = tokenIds.map(
-      (token) => (token as IdInfoType).id || token,
-    ) as string[];
-    await this.deleteInChunks(ids);
-  };
-
-  /**
    * Removes all items from the array except the ones with the specified excludeTokenIds.
+   *
    * @param excludeTokenIds
    */
-  keepOnly = async (excludeTokenIds: TokenIdInfoType[] | TokenIdInfoType) => {
+  keepOnly = async (excludeTokenIds: string[] | string) => {
     if (!(excludeTokenIds instanceof Array))
       excludeTokenIds = [excludeTokenIds];
-    excludeTokenIds = excludeTokenIds.map(
-      (token) => (token as IdInfoType).id || token,
-    );
 
     const allTokenObjs = await this.repository.find({ select: ['id'] });
     const allTokenIds = allTokenObjs.map((obj) => obj.id);

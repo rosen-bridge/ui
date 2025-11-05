@@ -25,120 +25,42 @@ describe('TokenAction', () => {
     context.action = new TokenAction(context.dataSource);
   });
 
-  describe('insert', () => {
+  describe('store', () => {
     /**
-     * @target should insert a single token
+     * @target should store a single token
      * @dependencies
      * @scenario
-     * - call the insert function
+     * - call the store function
      * @expected
      * - New record of TokenEntity should stored in database
      */
-    it<TokenTestContext>('should insert a single token', async ({
+    it<TokenTestContext>('should store a single token', async ({
       action,
       repository,
     }) => {
       const token = TokenMockData.createSingleToken();
-      await action.insert(token);
+      await action.store(token);
       const stored = await repository.find();
       expect(stored).toHaveLength(1);
       expect(stored[0].id).toBe('tkn-1');
     });
 
     /**
-     * @target should insert multiple tokens
+     * @target should store multiple tokens
      * @dependencies
      * @scenario
-     * - call the insert function by array of tokens
+     * - call the store function by array of tokens
      * @expected
      * - Two new records of TokenEntity should stored in database
      */
-    it<TokenTestContext>('should insert multiple tokens', async ({
+    it<TokenTestContext>('should store multiple tokens', async ({
       action,
       repository,
     }) => {
       const tokens = TokenMockData.createMultipleTokens(2);
-      await action.insert(tokens);
+      await action.store(tokens);
       const stored = await repository.find();
       expect(stored).toHaveLength(2);
-    });
-  });
-
-  describe('getAll', () => {
-    /**
-     * @target should return all tokens with id
-     * @dependencies
-     * @scenario
-     * - insert two TokenEntity to database
-     * - call the getAll function
-     * @expected
-     * - Two records of TokenEntity should returned
-     */
-    it<TokenTestContext>('should return all tokens with id', async ({
-      action,
-      repository,
-    }) => {
-      const tokens = TokenMockData.createMultipleTokens(2);
-      await repository.save(tokens);
-      const result = await action.getAll();
-      expect(result).toHaveLength(2);
-    });
-
-    /**
-     * @target should return empty array when no tokens exist
-     * @dependencies
-     * @scenario
-     * - call the getAll function without inserting any data
-     * @expected
-     * - Empty array should be returned
-     */
-    it<TokenTestContext>('should return empty array when no tokens exist', async ({
-      action,
-    }) => {
-      const result = await action.getAll();
-      expect(result).toEqual([]);
-    });
-  });
-
-  describe('remove', () => {
-    /**
-     * @target should remove a single token
-     * @dependencies
-     * @scenario
-     * - insert a TokenEntity to database
-     * - call the remove function
-     * @expected
-     * - Record of TokenEntity should removed from database
-     */
-    it<TokenTestContext>('should remove a single token', async ({
-      action,
-      repository,
-    }) => {
-      const token = TokenMockData.createSingleToken();
-      await repository.save(token);
-      await action.remove('tkn-1');
-      const remaining = await repository.find();
-      expect(remaining).toHaveLength(0);
-    });
-
-    /**
-     * @target should remove multiple tokens
-     * @dependencies
-     * @scenario
-     * - insert two TokenEntities to database
-     * - call the remove function by list of token ids
-     * @expected
-     * - Records of TokenEntities should removed from database
-     */
-    it<TokenTestContext>('should remove multiple tokens', async ({
-      action,
-      repository,
-    }) => {
-      const tokens = TokenMockData.createMultipleTokens(2);
-      await repository.save(tokens);
-      await action.remove(TokenMockData.SAMPLE_REMOVE_IDS);
-      const remaining = await repository.find();
-      expect(remaining).toHaveLength(0);
     });
   });
 
@@ -147,7 +69,7 @@ describe('TokenAction', () => {
      * @target should persist a single token and remove other tokens
      * @dependencies
      * @scenario
-     * - insert 5 TokenEntity to database
+     * - store 5 TokenEntity to database
      * - call the keepOnly function
      * @expected
      * - All other records of TokenEntity should removed from database
