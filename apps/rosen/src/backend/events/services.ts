@@ -5,7 +5,7 @@ import { Network } from '@rosen-ui/types';
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
 import { UNSUPPORTED_TOKEN_NAME } from '../constants';
-import { getEvents } from './repository';
+import { getEvent, getEvents } from './repository';
 
 /**
  * get full token data associated with a tokenId and a chain
@@ -52,5 +52,23 @@ export const getEventsWithFullTokenData = async (filters: Filters) => {
       ...item,
       lockToken: getFullTokenData(tokenMap, sourceChainTokenId, item.fromChain),
     })),
+  };
+};
+
+export const getEventById = async (id: string) => {
+  const item = await getEvent(id);
+
+  if (!item) throw new Error(`Not found`);
+
+  const tokenMap = await getTokenMap();
+
+  return {
+    ...item,
+    totalFee: (+item.bridgeFee + +item.networkFee).toString(),
+    lockToken: getFullTokenData(
+      tokenMap,
+      item.sourceChainTokenId,
+      item.fromChain,
+    ),
   };
 };
