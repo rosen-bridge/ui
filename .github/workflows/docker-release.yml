@@ -30,6 +30,11 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+
       - name: Build dependencies
         run: |
           npm ci 
@@ -143,7 +148,6 @@ jobs:
       - name: Create manifest list and push
         working-directory: ${{ runner.temp }}/digests
         env:
-          IMAGE_NAME: ${{ env.IMAGE_NAME }}
           TAGS: ${{ steps.meta.outputs.tags }}
         run: |
           docker buildx imagetools create \
