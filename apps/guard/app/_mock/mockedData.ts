@@ -33,56 +33,62 @@ const info: ApiInfoResponse = {
 };
 
 const balance: ApiBalanceResponse = {
-  hot: [
-    {
-      address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-      chain: NETWORKS.ergo.key,
-      balance: {
-        amount: 100 * 1e9,
-        decimals: 9,
-        tokenId: 'erg',
-        name: 'erg',
-        isNativeToken: true,
+  hot: {
+    items: [
+      {
+        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        chain: NETWORKS.ergo.key,
+        balance: {
+          amount: 100 * 1e9,
+          decimals: 9,
+          tokenId: 'erg',
+          name: 'erg',
+          isNativeToken: true,
+        },
       },
-    },
-    {
-      address:
-        'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
-      chain: NETWORKS.cardano.key,
-      balance: {
-        amount: 500 * 1e6,
-        decimals: 6,
-        tokenId: 'ada',
-        name: 'ada',
-        isNativeToken: true,
+      {
+        address:
+          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        chain: NETWORKS.cardano.key,
+        balance: {
+          amount: 500 * 1e6,
+          decimals: 6,
+          tokenId: 'ada',
+          name: 'ada',
+          isNativeToken: true,
+        },
       },
-    },
-  ],
-  cold: [
-    {
-      address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
-      chain: NETWORKS.ergo.key,
-      balance: {
-        amount: 300 * 1e9,
-        decimals: 9,
-        tokenId: 'erg',
-        name: 'erg',
-        isNativeToken: true,
+    ],
+    total: 2,
+  },
+  cold: {
+    items: [
+      {
+        address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
+        chain: NETWORKS.ergo.key,
+        balance: {
+          amount: 300 * 1e9,
+          decimals: 9,
+          tokenId: 'erg',
+          name: 'erg',
+          isNativeToken: true,
+        },
       },
-    },
-    {
-      address:
-        'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
-      chain: NETWORKS.cardano.key,
-      balance: {
-        amount: 1500 * 1e6,
-        decimals: 6,
-        tokenId: 'ada',
-        name: 'ada',
-        isNativeToken: true,
+      {
+        address:
+          'addr1qyrgyu3x5vqul78qa2g9q8l62xxnnfyz64qawwelltuzagdhs2e6xhe9mn0j9xzhf3f63vd0ulm58820qp7s3q0ql92swdh27a',
+        chain: NETWORKS.cardano.key,
+        balance: {
+          amount: 1500 * 1e6,
+          decimals: 6,
+          tokenId: 'ada',
+          name: 'ada',
+          isNativeToken: true,
+        },
       },
-    },
-  ],
+    ],
+    total: 2,
+  },
 };
 
 const revenueChartWeekly: ApiRevenueChartResponse = [

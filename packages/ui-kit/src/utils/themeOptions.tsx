@@ -13,7 +13,7 @@ import {
   InfoCircle,
 } from '@rosen-bridge/icons';
 
-import { AppProps, LoadingButtonProps } from '../components';
+import { AppProps } from '../components';
 
 declare module '@mui/material/styles' {
   interface TypeNeutral {
@@ -37,22 +37,15 @@ declare module '@mui/material/styles' {
   }
 
   interface ComponentNameToClassKey {
-    MuiLoadingButton: 'text' | 'outlined' | 'contained';
     RosenApp: 'root' | 'main';
     RosenNavigationBar: 'root';
   }
 
   interface ComponentsPropsList {
-    MuiLoadingButton: Partial<LoadingButtonProps>;
     RosenApp: Partial<AppProps>;
   }
 
   interface Components {
-    MuiLoadingButton?: {
-      defaultProps?: ComponentsPropsList['MuiLoadingButton'];
-      styleOverrides?: ComponentsOverrides<Theme>['MuiLoadingButton'];
-      variants?: ComponentsVariants['MuiLoadingButton'];
-    };
     RosenApp?: {
       defaultProps?: ComponentsPropsList['RosenApp'];
       styleOverrides?: ComponentsOverrides<Theme>['RosenApp'];
@@ -214,11 +207,6 @@ export const lightThemeOptions: ThemeOptions = {
         root: ({ theme }: { theme: Theme }) => ({
           padding: theme.spacing(3),
         }),
-      },
-    },
-    MuiLoadingButton: {
-      defaultProps: {
-        variant: 'contained',
       },
     },
     MuiTextField: {

@@ -22,6 +22,7 @@ const info: ApiInfoResponse = {
     erg: 10000000000,
     rsn: 0,
   },
+  minBoxValue: 40000n,
   currentBalance: 150,
   health: {
     status: 'Unstable',

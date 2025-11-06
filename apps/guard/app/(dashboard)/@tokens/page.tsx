@@ -14,35 +14,30 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network } from '@rosen-ui/types';
-import useSWR from 'swr';
 
-import { ApiBalanceResponse } from '@/_types/api';
+import { useBalance } from '@/_hooks/useBalance';
 
 const Token = ({ chain }: { chain: Network }) => {
-  const { data, isLoading } = useSWR<ApiBalanceResponse>(
-    ['/balance', { chain }],
-    fetcher,
-  );
+  const { data, isLoading } = useBalance(chain);
 
   const tokens = useMemo(() => {
     if (!data) return [];
 
     const tokenIds = [
       ...new Set(
-        [...data.cold, ...data.hot]
+        [...data.cold.items, ...data.hot.items]
           .filter((item) => item.chain === chain)
           .map((item) => item.balance.tokenId),
       ),
     ];
 
     return tokenIds.map((id) => {
-      const cold = data.cold.find(
+      const cold = data.cold.items.find(
         (item) => item.chain === chain && item.balance.tokenId === id,
       );
 
-      const hot = data.hot.find(
+      const hot = data.hot.items.find(
         (item) => item.chain === chain && item.balance.tokenId === id,
       );
 

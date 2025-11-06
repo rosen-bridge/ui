@@ -21,11 +21,11 @@ export const useAddresses = () => {
       hot: {},
     };
 
-    data?.cold.forEach((item) => {
+    data?.cold.items.forEach((item) => {
       addresses.cold[item.chain] = item.address;
     });
 
-    data?.hot.forEach((item) => {
+    data?.hot.items.forEach((item) => {
       addresses.hot[item.chain] = item.address;
     });
 

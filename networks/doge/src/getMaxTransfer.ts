@@ -3,7 +3,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 
 import {
-  estimateTxWeight,
+  estimateTxSize,
   generateOpReturnData,
   getFeeRatio,
   getAddressUtxos,
@@ -39,7 +39,7 @@ export const getMaxTransferCreator =
       )
     ).length;
     const utxos = await getAddressUtxos(eventData.fromAddress);
-    const estimatedTxWeight = await estimateTxWeight(
+    const estimatedTxSize = await estimateTxSize(
       /**
        * When getting max transfer, probably all of the utxos are going to be
        * spent
@@ -48,7 +48,7 @@ export const getMaxTransferCreator =
       2,
       opRetrunDataLength,
     );
-    const estimatedFee = Math.ceil(estimatedTxWeight * feeRatio);
+    const estimatedFee = Math.ceil(estimatedTxSize * feeRatio);
     const minDoge = getMinimumMeaningfulDoge(feeRatio);
 
     const offset = tokenMap.wrapAmount(

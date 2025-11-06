@@ -28,6 +28,7 @@ import { getNonDecimalString } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { useInfo } from '@/_hooks/useInfo';
 import { useToken } from '@/_hooks/useToken';
 import {
   ApiAddressAssetsResponse,
@@ -57,6 +58,8 @@ const WithdrawForm = () => {
     () => data?.items.filter((token) => !!token.amount),
     [data],
   );
+
+  const info = useInfo();
 
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
@@ -171,10 +174,27 @@ const WithdrawForm = () => {
 
   const renderAddressTextField = () => (
     <TextField
-      autoFocus
       label="Address"
       disabled={disabled}
-      {...register('address', { required: true })}
+      {...register('address', {
+        required: 'Address is required',
+      })}
+      error={!!formMethods.formState.errors.address}
+      helperText={
+        formMethods.formState.isValidating ? (
+          <CircularProgress size={10} />
+        ) : (
+          formMethods.formState.errors.address?.message
+        )
+      }
+      onBlur={(e) => {
+        const trimmed = e.target.value.trim();
+        formMethods.setValue('address', trimmed, {
+          shouldDirty: true,
+          shouldTouch: true,
+          shouldValidate: true,
+        });
+      }}
     />
   );
 
@@ -207,7 +227,11 @@ const WithdrawForm = () => {
   );
 
   const renderTokenAmountTextField = () => (
-    <TokenAmountTextField disabled={disabled} token={selectedToken} />
+    <TokenAmountTextField
+      disabled={disabled}
+      token={selectedToken}
+      minBoxValue={info.data?.minBoxValue}
+    />
   );
 
   return (
