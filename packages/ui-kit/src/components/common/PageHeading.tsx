@@ -12,7 +12,7 @@ const Root = styled('div', {
   display: 'flex',
   flexDirection: 'row',
   alignItems: 'center',
-  minHeight: theme.spacing(6),
+  minHeight: theme.spacing(5),
   justifyContent: 'space-between',
   marginBottom: theme.spacing(4),
   [theme.breakpoints.down('tablet')]: {

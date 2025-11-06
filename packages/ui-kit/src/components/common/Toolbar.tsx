@@ -8,7 +8,7 @@ export interface ToolbarProps {
 
 export const Toolbar: React.FC<ToolbarProps> = ({ children }) => {
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} style={{ paddingLeft: 8 }}>
       {children}
     </Stack>
   );

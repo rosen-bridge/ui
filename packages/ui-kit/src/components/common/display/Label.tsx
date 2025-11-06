@@ -110,7 +110,7 @@ const LabelBase = ({
             noWrap
             variant="body2"
             color={color}
-            lineHeight="1.5rem"
+            lineHeight={dense ? '0.75rem' : '1.5rem'}
             sx={{
               my: orientation === 'vertical' ? 0 : 0.5,
             }}
@@ -141,7 +141,12 @@ const LabelBase = ({
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             maxWidth: '100%',
-            height: orientation === 'vertical' ? '2em' : 'unset',
+            height:
+              orientation === 'vertical'
+                ? dense
+                  ? '1.25rem'
+                  : '2em'
+                : 'unset',
             flexGrow: orientation === 'vertical' ? 0 : 1,
             alignSelf: orientation === 'vertical' ? 'stretch' : 'center',
             justifyContent: orientation === 'vertical' ? 'start' : 'end',
