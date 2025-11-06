@@ -11,7 +11,8 @@ import moment from 'moment';
 
 import { FullCard, SvgIcon } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, LoadingButton, Tooltip, Typography } from '../base';
+import { Alert, Tooltip, Typography } from '../base';
+import { Button } from './Button';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;
@@ -118,15 +119,17 @@ export const HealthParamCard = ({
         <Typography variant="body2">
           {/* Note that "Check now" feature only works with a real watcher
           instance and its functionality cannot be mocked now */}
-          <LoadingButton
+          <Button
             loading={checking}
             size="small"
             variant="text"
-            sx={{ color: colors.button, fontSize: 'inherit' }}
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            color={colors.button as any}
+            style={{ fontSize: 'inherit' }}
             onClick={handleCheckNow}
           >
             {checking ? 'Checking' : 'Check now'}
-          </LoadingButton>
+          </Button>
           {lastCheck &&
             `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
         </Typography>
