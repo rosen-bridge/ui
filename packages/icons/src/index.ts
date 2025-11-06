@@ -58,6 +58,9 @@ export { default as CopyRaw } from './icons/copy.svg?raw';
 export { ReactComponent as Dashboard } from './icons/dashboard.svg';
 export { default as DashboardRaw } from './icons/dashboard.svg?raw';
 
+export { ReactComponent as Download } from './icons/download.svg';
+export { default as DownloadRaw } from './icons/download.svg?raw';
+
 export { ReactComponent as Estate } from './icons/estate.svg';
 export { default as EstateRaw } from './icons/estate.svg?raw';
 
@@ -154,11 +157,17 @@ export { default as QrcodeScanRaw } from './icons/qrcode-scan.svg?raw';
 export { ReactComponent as Qrcode } from './icons/qrcode.svg';
 export { default as QrcodeRaw } from './icons/qrcode.svg?raw';
 
+export { ReactComponent as QuestionMark } from './icons/question-mark.svg';
+export { default as QuestionMarkRaw } from './icons/question-mark.svg?raw';
+
 export { ReactComponent as ReceiptAlt } from './icons/receipt-alt.svg';
 export { default as ReceiptAltRaw } from './icons/receipt-alt.svg?raw';
 
 export { ReactComponent as Redo } from './icons/redo.svg';
 export { default as RedoRaw } from './icons/redo.svg?raw';
+
+export { ReactComponent as Refresh } from './icons/refresh.svg';
+export { default as RefreshRaw } from './icons/refresh.svg?raw';
 
 export { ReactComponent as Row } from './icons/row.svg';
 export { default as RowRaw } from './icons/row.svg?raw';
@@ -213,6 +222,9 @@ export { default as TimesRaw } from './icons/times.svg?raw';
 
 export { ReactComponent as Unlock } from './icons/unlock.svg';
 export { default as UnlockRaw } from './icons/unlock.svg?raw';
+
+export { ReactComponent as Upload } from './icons/upload.svg';
+export { default as UploadRaw } from './icons/upload.svg?raw';
 
 export { ReactComponent as Wallet } from './icons/wallet.svg';
 export { default as WalletRaw } from './icons/wallet.svg?raw';
