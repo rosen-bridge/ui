@@ -1,31 +1,44 @@
 name: Build and Push Docker Image
 on:
+  push:
+    branches:
+      - dev
   release:
     types:
       - 'published'
 
 jobs:
   build:
-    name: Build and Push Docker Image
+    name: Build ${{ matrix.platform }}-${{ matrix.apps }}
     permissions: write-all
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest]
+        platform: ${{ fromJSON(vars.PLATFORM_LIST || '["linux/amd64"]') }}
+        apps: >-
+          ${{ fromJSON(
+            (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'watcher') && '["watcher"]')
+            || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'guard') && '["guard"]')
+            || '["watcher","guard"]'
+          ) }}
 
     steps:
       - name: Checkout the Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
 
       - name: Build dependencies
         run: |
           npm ci 
-          npm run build --workspace packages/constants 
-          npm run build --workspace packages/types 
-          npm run build --workspace packages/utils 
-          npm run build --workspace packages --if-present
+          ./build.sh ${{ matrix.apps }}
 
       - name: Move Config Files
         run: |
@@ -33,49 +46,110 @@ jobs:
           mv docker/entrypoint.sh ./
 
       - name: Build App
-        id: build-app
         run: |
-          if [[ ${{ github.ref }} =~ ^refs/tags/watcher-app-* ]]; then
-              cd ./apps/watcher
-              npm run build
-              echo "appName=watcher" >> $GITHUB_OUTPUT
-          elif [[ ${{ github.ref }} =~ ^refs/tags/guard-app-* ]]; then
-              cd ./apps/guard
-              npm run build
-              echo "appName=guard" >> $GITHUB_OUTPUT
-          fi
+          cd ./apps/${{ matrix.apps }}
+          npm run build
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        if: contains(matrix.platform, 'arm')
+        uses: docker/setup-qemu-action@v3
         with:
-          # set PLATFORM_LIST as list of platform names separate with comma eg. linux/amd64,linux/arm64,linux/arm/v7
-          platforms: ${{ vars.PLATFORM_LIST || 'linux/amd64' }}
+          platforms: arm64,arm
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Registry
-        uses: docker/login-action@v2
+      - name: Login to GHCR Docker Registry
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: rosen-bridge
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker Metadata action
+      - name: Prepare for artifact
+        shell: bash
+        run: |
+          platform='${{ matrix.platform }}'
+          echo "PLATFORM_PAIR=${platform//\//-}" >> "$GITHUB_ENV"
+
+      - name: Generate Docker Metadata
         uses: docker/metadata-action@v5
-        if: steps.build-app.outputs.appName != null
         id: meta
         with:
-          images: ghcr.io/rosen-bridge/ui-${{ steps.build-app.outputs.appName }}
-          tags: |
-            type=match,pattern=\d+\.\d+\.\d+
+          images: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}
 
-      - name: Build and push
-        uses: docker/build-push-action@v4
-        if: steps.build-app.outputs.appName != null
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: ${{ vars.PLATFORM_LIST || 'linux/amd64' }}
-          push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          target: ${{ steps.build-app.outputs.appName }}
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          outputs: type=image,name=ghcr.io/rosen-bridge/ui-${{ matrix.apps }},push-by-digest=true,name-canonical=true,push=true
+          target: ${{ matrix.apps }}
+
+      - name: Export digest file
+        shell: bash
+        run: |
+          mkdir -p "${{ runner.temp }}/digests"
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${{ runner.temp }}/digests/${digest#sha256:}"
+
+      - name: Upload digest artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ env.PLATFORM_PAIR }}-${{ matrix.apps }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  publish:
+    name: Publish Multi-arch Manifest
+    runs-on: ubuntu-latest
+    needs: [build]
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        apps: >-
+          ${{ fromJSON(
+            (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'watcher') && '["watcher"]')
+            || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'guard') && '["guard"]')
+            || '["watcher","guard"]'
+          ) }}
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-*-${{ matrix.apps }}
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Generate Docker Metadata
+        uses: docker/metadata-action@v5
+        id: meta
+        with:
+          images: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}
+          tags: |
+            type=match,pattern=\d+\.\d+\.\d+,enable=${{ github.event_name == 'release' }}
+            type=raw,value=dev,enable=${{ github.event_name == 'push' }}
+
+      - name: Login to GHCR Docker Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
+        run: |
+          docker buildx imagetools create \
+            $(printf ' -t %s' $TAGS) \
+            $(printf 'ghcr.io/rosen-bridge/ui-${{ matrix.apps }}@sha256:%s ' *)
