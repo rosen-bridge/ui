@@ -1,5 +1,5 @@
 import {
-  Filters,
+  Filter,
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import {
@@ -67,22 +67,20 @@ export const getAsset = async (id: string) => {
 
 /**
  * get paginated list of assets
- * @param filters
+ * @param filter
  */
-export const getAllAssets = async (filters: Filters) => {
-  if (!filters.sort) {
-    filters.sort = {
-      key: 'name',
-      order: 'ASC',
-    };
+export const getAllAssets = async (filter: Filter) => {
+  if (!filter.sorts) {
+    filter.sorts = [
+      {
+        key: 'name',
+        order: 'ASC',
+      },
+    ];
   }
 
-  if (filters.search) {
-    filters.search.in ||= [];
-  }
-
-  let { pagination, query, sort } = filtersToTypeorm(
-    filters,
+  let { pagination, query, sorts } = filtersToTypeorm(
+    filter,
     (key) => `"sub".${key}`,
   );
 
@@ -130,8 +128,15 @@ export const getAllAssets = async (filters: Filters) => {
     queryBuilder = queryBuilder.where(query);
   }
 
-  if (sort) {
-    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
+  if (sorts) {
+    for (let index = 0; index < sorts.length; index++) {
+      const sort = sorts[index];
+      if (index === 0) {
+        queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
+      } else {
+        queryBuilder = queryBuilder.addOrderBy(sort.key, sort.order);
+      }
+    }
   }
 
   if (pagination?.offset) {

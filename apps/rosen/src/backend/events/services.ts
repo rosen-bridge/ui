@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+import { Filter } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { Network } from '@rosen-ui/types';
 
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
@@ -39,12 +39,12 @@ const getFullTokenData = (
 
 /**
  * return events with full token data
- * @param filters
+ * @param filter
  */
-export const getEventsWithFullTokenData = async (filters: Filters) => {
+export const getEventsWithFullTokenData = async (filter: Filter) => {
   const tokenMap = await getTokenMap();
 
-  const events = await getEvents(filters);
+  const events = await getEvents(filter);
 
   return {
     total: events.total,

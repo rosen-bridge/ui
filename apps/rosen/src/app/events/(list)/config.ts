@@ -14,7 +14,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     unique: true,
     operators: OPERATORS_EQUALITY,
     input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+      type: context.operator.endsWith('OneOf') ? 'multiple' : 'select',
       options: tokenMap
         .getConfig()
         .map((item) => Object.values(item))
@@ -41,7 +41,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     unique: true,
     operators: OPERATORS_EQUALITY,
     input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+      type: context.operator.endsWith('OneOf') ? 'multiple' : 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,
@@ -54,7 +54,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     unique: true,
     operators: OPERATORS_EQUALITY,
     input: (context) => ({
-      type: context.operator.endsWith('one-of') ? 'multiple' : 'select',
+      type: context.operator.endsWith('OneOf') ? 'multiple' : 'select',
       options: NETWORKS_KEYS.map((key) => ({
         label: NETWORKS[key].label,
         value: key,

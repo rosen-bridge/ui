@@ -1,7 +1,7 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import {
-  Filters,
+  Filter,
   filtersToTypeorm,
 } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
@@ -33,34 +33,32 @@ type EventDetailsType = Omit<EventWithTotal, 'total'>;
 
 /**
  * get paginated list of events
- * @param offset
- * @param limit
+ * @param filter
  */
-export const getEvents = async (filters: Filters) => {
+export const getEvents = async (filter: Filter) => {
   const tokenMap = await getTokenMap();
 
-  filters.sort = Object.assign(
-    {
-      key: 'timestamp',
-      order: 'DESC',
-    },
-    filters.sort,
-  );
-
-  if (filters.search) {
-    filters.search.in ||= [];
+  if (!filter.sorts) {
+    filter.sorts = [
+      {
+        key: 'timestamp',
+        order: 'DESC',
+      },
+    ];
   }
 
   (() => {
-    const field = filters.fields?.find(
+    const field = filter.fields?.find(
       (field) => field.key == 'sourceChainTokenId',
     );
 
     if (!field) return;
 
+    if (field.type !== 'stringArray') return;
+
     const tokenIds: string[] = [];
 
-    const values = [field.value].flat();
+    const values = field.values;
 
     const collections = tokenMap.getConfig();
 
@@ -76,10 +74,10 @@ export const getEvents = async (filters: Filters) => {
       }
     }
 
-    field.value = tokenIds;
+    field.values = tokenIds;
   })();
 
-  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+  let { pagination, query, sorts } = filtersToTypeorm(filter, (key) => {
     switch (key) {
       case 'amount':
       case 'bridgeFee':
@@ -153,8 +151,10 @@ export const getEvents = async (filters: Filters) => {
     .distinctOn(['sub."eventId"'])
     .orderBy('sub."eventId"', 'ASC');
 
-  if (sort) {
-    queryBuilder = queryBuilder.addOrderBy(sort.key, sort.order);
+  if (sorts) {
+    for (const sort of sorts) {
+      queryBuilder = queryBuilder.addOrderBy(sort.key, sort.order);
+    }
   }
 
   if (pagination?.offset) {
