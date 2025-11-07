@@ -1,18 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 
-import { Selected, SortValue } from '../components';
-
-const OPERATOR_MAP = {
-  'is': '',
-  'not': '!',
-  'isNotOneOf': '!',
-  'isOneOf': '',
-  'greaterThanOrEqual': '>',
-  'lessThanOrEqual': '<',
-  'contains': '*',
-  'startsWith': '^',
-  'endsWith': '$',
-}
+import { OPERATORS, Selected, SortValue } from '../components';
 
 export const useCollection = () => {
   const [fields, setFields] = useState<Selected[]>([]);
@@ -27,13 +15,11 @@ export const useCollection = () => {
     const params: Record<string, string> = {};
 
     for (const field of fields) {
-      const isArray = Array.isArray(field.value);
+      const operator = OPERATORS.find((OPERATOR) => OPERATOR.value === field.operator)!.symbol;
 
-      const operator = OPERATOR_MAP[field.operator as keyof typeof OPERATOR_MAP];
+      const key = `${field.flow}${operator}`;
 
-      const key = `${field.flow}${ isArray ? '[]' : ''}${operator}`;
-
-      const value = isArray ? [field.value].flat().join(',') : String(field.value);
+      const value = Array.isArray(field.value) ? [field.value].flat().join(',') : String(field.value);
 
       params[key] = value;
     }

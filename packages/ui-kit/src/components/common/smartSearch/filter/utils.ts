@@ -233,11 +233,9 @@ const urlToFilter = (config: FilterConfig, url: string): Filter => {
   }
 
   searchParams.forEach((value, key) => {
-    let operator = FILTER_FIELD_OPERATORS.find((operator) => operator.symbol && key.endsWith(operator.symbol));
-
-    if (!operator) {
-      operator = FILTER_FIELD_OPERATORS.find((operator) => !operator.symbol);
-    }
+    const operator = [...FILTER_FIELD_OPERATORS]
+      .sort((a, b) => b.symbol.length - a.symbol.length)
+      .find((operator) => !operator.symbol || key.endsWith(operator.symbol));
 
     if (!operator) return;
 
