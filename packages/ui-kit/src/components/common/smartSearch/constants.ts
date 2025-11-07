@@ -17,7 +17,7 @@ export const OPERATOR_NOT: Operator = {
 };
 
 export const OPERATOR_IS_NOT_ONE_OF: Operator = {
-  value: 'is-not-one-of',
+  value: 'isNotOneOf',
   label: 'Is not one of',
   preview: '∉',
   post: '∉',
@@ -25,7 +25,7 @@ export const OPERATOR_IS_NOT_ONE_OF: Operator = {
 };
 
 export const OPERATOR_IS_ONE_OF: Operator = {
-  value: 'is-one-of',
+  value: 'isOneOf',
   label: 'Is one of',
   preview: '∈',
   post: '∈',
@@ -33,7 +33,7 @@ export const OPERATOR_IS_ONE_OF: Operator = {
 };
 
 export const OPERATOR_GREATER_THAN_OR_EQUAL: Operator = {
-  value: 'greater-than-or-equal',
+  value: 'greaterThanOrEqual',
   label: 'Greater Than Or Equal',
   preview: '≥',
   post: '≥',
@@ -41,7 +41,7 @@ export const OPERATOR_GREATER_THAN_OR_EQUAL: Operator = {
 };
 
 export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
-  value: 'less-than-or-equal',
+  value: 'lessThanOrEqual',
   label: 'Less Than Or Equal',
   preview: '≤',
   post: '≤',

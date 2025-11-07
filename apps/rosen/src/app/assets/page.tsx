@@ -38,7 +38,7 @@ const Assets = () => {
   const [current, setCurrent] = useState<AssetsFullData>();
 
   const { data, isLoading } = useSWR<ApiAssetsResponse>(
-    collection.params && ['/v1/assets', collection.params],
+    collection.params && `/v1/assets?${collection.params}`,
     fetcher,
     {
       keepPreviousData: true,

@@ -39,7 +39,7 @@ const Page = () => {
   const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
 
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
-    collection.params && ['/v1/events', collection.params],
+    collection.params && `/v1/events?${collection.params}`,
     fetcher,
     {
       keepPreviousData: true,
@@ -73,7 +73,7 @@ const Page = () => {
         disabled={isLoading}
         namespace="events"
         filters={filters}
-        onChange={collection.setFilters}
+        onChange={collection.setFields}
       />
     ),
     [collection, filters, isLoading],
@@ -103,7 +103,7 @@ const Page = () => {
 
   useEffect(() => {
     setCurrent(undefined);
-  }, [collection.sort, collection.filters, collection.pageIndex]);
+  }, [collection.sort, collection.fields, collection.pageIndex]);
 
   useEffect(() => {
     if (error) {
@@ -133,18 +133,18 @@ const Page = () => {
                 !item
                   ? undefined
                   : {
-                      amount: getDecimalString(
-                        item.amount,
-                        item.lockToken?.significantDecimals,
-                      ),
-                      fromChain: item.fromChain,
-                      href: `/events/${item.eventId}`,
-                      id: item.eventId,
-                      status: item.status,
-                      toChain: item.toChain,
-                      token: item.lockToken?.name,
-                      timestamp: item.timestamp,
-                    }
+                    amount: getDecimalString(
+                      item.amount,
+                      item.lockToken?.significantDecimals,
+                    ),
+                    fromChain: item.fromChain,
+                    href: `/events/${item.eventId}`,
+                    id: item.eventId,
+                    status: item.status,
+                    toChain: item.toChain,
+                    token: item.lockToken?.name,
+                    timestamp: item.timestamp,
+                  }
               }
               onClick={() => setCurrent(item)}
             />

@@ -1,4 +1,4 @@
-import { Filters } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+import { Filter } from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
 
 import { getTokenMap } from '@/tokenMap/getServerTokenMap';
 
@@ -30,12 +30,12 @@ export const getAsset = async (id: string) => {
 
 /**
  * return assets
- * @param filters
+ * @param filter
  */
-export const getAllAssets = async (filters: Filters) => {
+export const getAllAssets = async (filter: Filter) => {
   const tokenMap = await getTokenMap();
 
-  const assets = await repositoryGetAllAssets(filters);
+  const assets = await repositoryGetAllAssets(filter);
 
   return {
     total: assets.total,

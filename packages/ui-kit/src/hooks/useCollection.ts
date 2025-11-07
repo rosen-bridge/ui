@@ -1,22 +1,65 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { SortValue } from '../components';
+import { Selected, SortValue } from '../components';
 
-type Params = Record<string, unknown>;
+const OPERATOR_MAP = {
+  'is': '',
+  'not': '!',
+  'isNotOneOf': '!',
+  'isOneOf': '',
+  'greaterThanOrEqual': '>',
+  'lessThanOrEqual': '<',
+  'contains': '*',
+  'startsWith': '^',
+  'endsWith': '$',
+}
 
 export const useCollection = () => {
-  const [filters, setFilters] = useState<Params>();
+  const [fields, setFields] = useState<Selected[]>([]);
 
   const [pageIndex, setPageIndex] = useState<number>();
 
   const [pageSize, setPageSize] = useState<number>();
 
-  const [params, setParams] = useState<Params>();
-
   const [sort, setSort] = useState<SortValue>();
 
-  const handleFiltersChange = useCallback((filters: Params) => {
-    setFilters(filters);
+  const params = useMemo<string | undefined>(() => {
+    const params: Record<string, string> = {};
+
+    for (const field of fields) {
+      const isArray = Array.isArray(field.value);
+
+      const operator = OPERATOR_MAP[field.operator as keyof typeof OPERATOR_MAP];
+
+      const key = `${field.flow}${ isArray ? '[]' : ''}${operator}`;
+
+      const value = isArray ? [field.value].flat().join(',') : String(field.value);
+
+      params[key] = value;
+    }
+
+    if (typeof pageSize === 'number') {
+      params['limit'] = String(pageSize);
+    }
+
+    if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
+      params['offset'] = String(pageSize * pageIndex);
+    }
+
+    if (sort?.key) {
+      params['sorts'] = sort.order ? `${sort.key}-${sort.order}` : sort.key;
+    }
+
+    if (!Object.keys(params).length) return;
+
+    return Object
+      .keys(params)
+      .map((key) => `${key}=${params[key]}`)
+      .join('&');
+  }, [fields, pageIndex, pageSize, sort]);
+
+  const handleFieldsChange = useCallback((fields: Selected[]) => {
+    setFields(fields);
     setPageIndex(0);
   }, []);
 
@@ -25,37 +68,11 @@ export const useCollection = () => {
     setPageIndex(0);
   }, []);
 
-  useEffect(() => {
-    const result: Params = {};
-
-    if (typeof pageSize === 'number') {
-      result.limit = pageSize;
-    }
-
-    if (typeof pageSize === 'number' && typeof pageIndex === 'number') {
-      result.offset = pageSize * pageIndex;
-    }
-
-    if (sort?.key) {
-      result.sort = `${sort.key}${sort.order ? '-' + sort.order : ''}`;
-    }
-
-    if (filters) {
-      Object.assign(result, filters);
-    }
-
-    if (Object.keys(result).length) {
-      setParams(result);
-    } else {
-      setParams(undefined);
-    }
-  }, [filters, pageIndex, pageSize, sort]);
-
   return {
     params,
 
-    filters,
-    setFilters: handleFiltersChange,
+    fields,
+    setFields: handleFieldsChange,
 
     pageIndex,
     setPageIndex,
