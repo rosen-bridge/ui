@@ -1,17 +1,6 @@
+'use client';
+
 import { ReactNode, useCallback, useEffect, useRef } from 'react';
-
-import { styled } from '../../../styling';
-
-const Viewport = styled('div')(() => ({
-  overflow: 'hidden',
-  flexGrow: 1,
-  cursor: 'grab',
-  scrollSnapType: 'none',
-  overscrollBehavior: 'none',
-  WebkitOverflowScrolling: 'auto',
-}));
-
-const Content = styled('div')(() => ({}));
 
 export type VirtualScrollProps = {
   children?: ReactNode;
@@ -81,51 +70,53 @@ export const VirtualScroll = ({ children }: VirtualScrollProps) => {
     [cancelMomentum],
   );
 
-  const handleMouseMove = useCallback(
-    (event: MouseEvent) => {
-      drag(event.pageX);
-    },
-    [drag],
-  );
-
-  const handleMouseUp = useCallback(() => {
-    endDrag();
-  }, [endDrag]);
-
-  const handleTouchMove = useCallback(
-    (event: TouchEvent) => {
-      if (!isDragging.current) return;
-      drag(event.touches[0].pageX);
-      event.preventDefault();
-    },
-    [drag],
-  );
-
-  const handleTouchEnd = useCallback(() => {
-    endDrag();
-  }, [endDrag]);
-
+  // === pointer events unified handling ===
   useEffect(() => {
-    window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('touchmove', handleTouchMove, { passive: false });
-    window.addEventListener('touchend', handleTouchEnd);
+    const container = containerRef.current;
+    if (!container) return;
+
+    const handlePointerDown = (e: PointerEvent) => {
+      if (e.pointerType === 'mouse' && e.button !== 0) return;
+      container.setPointerCapture(e.pointerId);
+      startDrag(e.clientX);
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging.current) return;
+      drag(e.clientX);
+    };
+
+    const handlePointerUp = (e: PointerEvent) => {
+      if (!isDragging.current) return;
+      container.releasePointerCapture(e.pointerId);
+      endDrag();
+    };
+
+    container.addEventListener('pointerdown', handlePointerDown);
+    container.addEventListener('pointermove', handlePointerMove);
+    container.addEventListener('pointerup', handlePointerUp);
 
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleTouchEnd);
+      container.removeEventListener('pointerdown', handlePointerDown);
+      container.removeEventListener('pointermove', handlePointerMove);
+      container.removeEventListener('pointerup', handlePointerUp);
     };
-  }, [handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
+  }, [drag, endDrag, startDrag]);
 
   return (
-    <Viewport
+    <div
+      style={{
+        overflow: 'hidden',
+        flexGrow: 1,
+        cursor: 'grab',
+        scrollSnapType: 'none',
+        overscrollBehavior: 'none',
+        WebkitOverflowScrolling: 'auto',
+        touchAction: 'none',
+      }}
       ref={containerRef}
-      onMouseDown={(event) => startDrag(event.pageX)}
-      onTouchStart={(event) => startDrag(event.touches[0].pageX)}
     >
-      <Content>{children}</Content>
-    </Viewport>
+      <div>{children}</div>
+    </div>
   );
 };
