@@ -30,16 +30,6 @@ export class TokenAction {
   };
 
   /**
-   * Get and return token by id
-   *
-   * @param tokenId
-   * return Promise<TokenEntity | null>
-   */
-  getById = async (tokenId: string) => {
-    return await this.repository.findOne({ where: { id: tokenId } });
-  };
-
-  /**
    * Deletes tokens in chunks for efficiency.
    * @param tokenIds array of ids to delete
    */
