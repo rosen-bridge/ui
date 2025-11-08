@@ -14,7 +14,7 @@ import {
   EnhancedDialogTitle,
   Identifier,
   Label,
-  LoadingButton,
+  Button,
   Network,
   Stack,
   Typography,
@@ -98,7 +98,7 @@ export const SubmitButton = () => {
     isValidating;
   return (
     <>
-      <LoadingButton
+      <Button
         style={{ width: '100%' }}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
@@ -109,7 +109,7 @@ export const SubmitButton = () => {
         }}
       >
         SUBMIT
-      </LoadingButton>
+      </Button>
       <EnhancedDialog
         open={open}
         maxWidth="tablet"
@@ -166,15 +166,15 @@ export const SubmitButton = () => {
           </Card>
         </EnhancedDialogContent>
         <EnhancedDialogActions>
-          <LoadingButton
+          <Button
             color="secondary"
             variant="contained"
             style={{ flexGrow: 2 }}
             onClick={() => setOpen(false)}
           >
             Cancel
-          </LoadingButton>
-          <LoadingButton
+          </Button>
+          <Button
             variant="contained"
             style={{ flexGrow: 5 }}
             loading={
@@ -183,7 +183,7 @@ export const SubmitButton = () => {
             onClick={handleFormSubmit}
           >
             Confirm
-          </LoadingButton>
+          </Button>
         </EnhancedDialogActions>
       </EnhancedDialog>
     </>

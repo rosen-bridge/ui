@@ -1,7 +1,8 @@
 export * from './Avatar';
 export * from './carousel';
 export * from './smartSearch';
-export * from './button';
+export * from './Button';
+export * from './CopyButton';
 export * from './display';
 export * from './event';
 export * from './navigationBar';
@@ -37,7 +38,6 @@ export * from './tableGrid';
 export * from './Toolbar';
 export * from './AppSnackbar';
 export * from './ToolbarThemeTogglerAction';
-export * from './WithExternalLink';
 export * from './Token';
 export * from './Chip';
 export * from './RelativeTime';

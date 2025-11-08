@@ -83,7 +83,7 @@ export const generateUnsignedTx =
     requiredAssets.nativeToken += feeAndMinBoxValue;
     // get input boxes, THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
     const inputs = await selector.getCoveringBoxes(
-      lockAssets,
+      requiredAssets,
       [],
       new Map(),
       utxos.values(),

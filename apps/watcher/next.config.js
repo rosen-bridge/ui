@@ -4,10 +4,6 @@
 const nextConfig = {
   experimental: {
     typedRoutes: true,
-    serverComponentsExternalPackages: [
-      'ergo-lib-wasm-nodejs',
-      '@emurgo/cardano-serialization-lib-nodejs',
-    ],
   },
   images: {
     unoptimized: true,

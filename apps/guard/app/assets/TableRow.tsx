@@ -5,9 +5,8 @@ import {
   Amount,
   Button,
   EnhancedTableCell,
-  Id,
+  Identifier,
   TableRow,
-  WithExternalLink,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
@@ -85,7 +84,7 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow className="divider" style={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
         <EnhancedTableCell>
-          {row.isNativeToken ? '-' : <Id id={row.tokenId} />}
+          <Identifier value={row.isNativeToken ? '-' : row.tokenId} />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
@@ -153,21 +152,27 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell>
-        <WithExternalLink url={row.isNativeToken ? undefined : tokenUrl}>
-          {row.isNativeToken ? '-' : <Id id={row.tokenId} />}
-        </WithExternalLink>
+        <Identifier
+          href={row.isNativeToken ? undefined : tokenUrl}
+          value={row.isNativeToken ? '-' : row.tokenId}
+          style={{ maxWidth: '100px' }}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>{row.name}</EnhancedTableCell>
       <EnhancedTableCell>{row.chain}</EnhancedTableCell>
       <EnhancedTableCell>
-        <WithExternalLink url={hotUrl}>
-          <Amount value={getDecimalString(row.amount, row.decimals)} />
-        </WithExternalLink>
+        <Amount
+          href={hotUrl}
+          value={getDecimalString(row.amount, row.decimals)}
+          style={{ alignItems: 'center' }}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <WithExternalLink url={coldUrl}>
-          <Amount value={getDecimalString(row.coldAmount, row.decimals)} />
-        </WithExternalLink>
+        <Amount
+          href={coldUrl}
+          value={getDecimalString(row.coldAmount, row.decimals)}
+          style={{ alignItems: 'center' }}
+        />
       </EnhancedTableCell>
     </TableRow>
   );

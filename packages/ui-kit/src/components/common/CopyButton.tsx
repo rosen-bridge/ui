@@ -2,9 +2,9 @@ import { HTMLAttributes, useCallback, useState } from 'react';
 
 import { Check, Copy, Times } from '@rosen-bridge/icons';
 
-import { IconButton, Tooltip } from '../../base';
-import { InjectOverrides } from '../InjectOverrides';
-import { SvgIcon } from '../SvgIcon';
+import { IconButton, Tooltip } from '../base';
+import { InjectOverrides } from './InjectOverrides';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * `CopyButton` copies the given value to the clipboard.

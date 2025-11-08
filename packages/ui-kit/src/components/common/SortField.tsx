@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Card } from '@mui/material';
+import { Button, Card } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -18,7 +18,6 @@ import {
 
 import { styled } from '../../styling';
 import {
-  Button,
   Grid,
   IconButton,
   ListItemText,

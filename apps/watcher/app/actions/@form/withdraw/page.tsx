@@ -35,7 +35,6 @@ import {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/_types/api';
-import { validateAddressErgo } from '@/actions/validation';
 
 import { ConfirmationModal } from '../../ConfirmationModal';
 import {
@@ -179,11 +178,6 @@ const WithdrawForm = () => {
       disabled={disabled}
       {...register('address', {
         required: 'Address is required',
-        validate: async (value) => {
-          if (!value) return 'Address is required';
-          const isValid = await validateAddressErgo(value);
-          return isValid || 'Invalid Ergo address';
-        },
       })}
       error={!!formMethods.formState.errors.address}
       helperText={

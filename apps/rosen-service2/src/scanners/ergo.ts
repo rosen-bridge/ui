@@ -89,9 +89,9 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
   });
 
   const ergoObservationExtractor = new ErgoObservationExtractor(
+    configs.contracts.ergo.addresses.lock,
     dataSource,
     TokensConfig.getInstance().getTokenMap(),
-    configs.contracts.ergo.addresses.lock,
     logger,
   );
   await ergoScanner.registerExtractor(ergoObservationExtractor);
