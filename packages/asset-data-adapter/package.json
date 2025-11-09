@@ -13,7 +13,7 @@
   ],
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
-    "coverage": "npm run test -- --coverage",
+    "coverage": "npm run test -- --run --coverage",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -23,18 +23,13 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-logger": "2.1.0",
-    "@rosen-bridge/tokens": "^4.0.0",
+    "@rosen-bridge/abstract-logger": "^3.0.1",
+    "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-clients/cardano-koios": "^3.1.0",
     "@rosen-clients/ergo-explorer": "^2.1.0",
     "@rosen-clients/rate-limited-axios": "^1.1.0",
     "@rosen-ui/constants": "^0.4.1",
     "ethers": "6.13.2"
-  },
-  "devDependencies": {
-    "@vitest/coverage-istanbul": "^3.1.4",
-    "tsx": "^4.20.4",
-    "vitest": "^3.1.4"
   },
   "engines": {
     "node": ">=22.18.0"

@@ -19,6 +19,7 @@
     "release": "npm run build && npm publish --access public",
     "type-check": "tsc --noEmit",
     "test": "NODE_OPTIONS='--import tsx' vitest",
+    "coverage": "npm run test -- --run --coverage",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate:postgres": "npm run typeorm migration:generate ./lib/migrations/postgres/migration -- -p -d ./dataSource.ts",
     "typeorm:migrate:postgres": "npm run typeorm migration:run -- -d ./dataSource.ts",
@@ -27,9 +28,7 @@
   },
   "dependencies": {
     "@rosen-bridge/extended-typeorm": "1.0.1",
-    "@rosen-ui/types": "0.3.7",
-    "tsx": "^4.20.5",
-    "vitest": "^3.1.4"
+    "@rosen-ui/types": "0.3.7"
   },
   "engines": {
     "node": ">=22.18.0"
