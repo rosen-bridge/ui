@@ -40,7 +40,8 @@ describe('AssetAggregator', () => {
       context.tokenMap,
       context.dataSource,
     );
-    await context.assetAggregator.initializeNativeTokens();
+    await context.dataSource.getRepository(TokenEntity).deleteAll();
+    await context.assetAggregator.updateTokens();
   });
 
   describe('update', () => {
@@ -186,7 +187,7 @@ describe('AssetAggregator', () => {
       };
 
       const totalSupply: Array<{ assetId: string; totalSupply: bigint }> = [];
-      await assetAggregator.initializeNativeTokens();
+      await assetAggregator.updateTokens();
       await assetAggregator.update(ChainAssetBalanceInfo, totalSupply);
 
       const storedTokens = await tokenRepository.find();

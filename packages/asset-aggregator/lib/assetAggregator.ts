@@ -27,12 +27,10 @@ export class AssetAggregator {
    *
    * @returns
    */
-  initializeNativeTokens = async () => {
+  updateTokens = async () => {
     const analyzer = new TokensAnalyzer({}, [], this.tokenMap, this.logger);
     await analyzer.analyze();
-    const nativeTokens = analyzer.getNativeTokens();
-    for (const nativeToken of nativeTokens)
-      await this.tokenAction.store(nativeToken);
+    await this.tokenAction.store(analyzer.getNativeTokens());
   };
 
   /**
@@ -56,11 +54,11 @@ export class AssetAggregator {
     const nativeTokens = await this.tokenAction.getAll();
     const lockedTokens = analyzer.getLockedTokens();
     const bridgedTokens = analyzer.getBridgedTokens();
-    const usedTokens = [];
+    const usedTokens = new Set<string>();
     for (const nativeToken of nativeTokens) {
       if (!lockedTokens[nativeToken.id] && !bridgedTokens[nativeToken.id])
         continue;
-      usedTokens.push(nativeToken.id);
+      usedTokens.add(nativeToken.id);
       if (bridgedTokens[nativeToken.id])
         await this.bridgedAssetAction.store(
           bridgedTokens[nativeToken.id].map((t) => ({
@@ -76,6 +74,6 @@ export class AssetAggregator {
           })),
         );
     }
-    await this.tokenAction.keepOnly(usedTokens);
+    await this.tokenAction.keepOnly(Array.from(usedTokens));
   };
 }
