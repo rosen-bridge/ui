@@ -137,7 +137,11 @@ const LockForm = () => {
       } else {
         setAlertData({
           severity: 'error',
-          message: error.message,
+          message:
+            error.message +
+            (error.response?.data?.message
+              ? `(${error.response?.data?.message})`
+              : ''),
         });
       }
     }
