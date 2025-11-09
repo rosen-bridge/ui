@@ -17,7 +17,7 @@ export class TokenAction {
   /**
    * Retrieve all tokens
    *
-   * @return
+   * @return Promise that resolves total tokens
    */
   getAll = async () => {
     return await this.repository.find();

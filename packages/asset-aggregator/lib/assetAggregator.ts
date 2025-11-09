@@ -22,6 +22,11 @@ export class AssetAggregator {
     this.tokenAction = new TokenAction(datasource, logger);
   }
 
+  /**
+   * Initialize tokens in database
+   *
+   * @returns
+   */
   initializeNativeTokens = async () => {
     const analyzer = new TokensAnalyzer({}, [], this.tokenMap, this.logger);
     await analyzer.analyze();
