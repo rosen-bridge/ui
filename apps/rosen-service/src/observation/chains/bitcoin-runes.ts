@@ -1,4 +1,5 @@
 import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes-observation-extractor';
+import { UnisatRunesProtocolNetwork } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
@@ -17,10 +18,17 @@ export const registerBitcoinRunesExtractor = async (
   scanner: BitcoinRpcScanner,
 ) => {
   try {
-    const observationExtractor = new BitcoinRunesRpcObservationExtractor(
-      config.bitcoinRunes.addresses.lock,
+    // TODO: Ordiscan should also be added as an observation network in rosen-service2
+    const observationNetwork = new UnisatRunesProtocolNetwork(
       config.bitcoinRunes.unisatUrl,
       config.bitcoinRunes.unisatApiKey,
+      CallbackLoggerFactory.getInstance().getLogger(
+        'UnisatRunesProtocolNetwork',
+      ),
+    );
+    const observationExtractor = new BitcoinRunesRpcObservationExtractor(
+      config.bitcoinRunes.addresses.lock,
+      observationNetwork,
       dataSource,
       await getTokenMap(),
       logger,

@@ -16,7 +16,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/tokens": "^4.0.0",
+    "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-network/cardano": "^2.4.1",
     "@rosen-ui/constants": "^0.4.1",
     "@rosen-ui/types": "^0.3.7",

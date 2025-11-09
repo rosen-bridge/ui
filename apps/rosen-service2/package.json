@@ -8,7 +8,7 @@
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
-    "coverage": "npm run test -- --coverage",
+    "coverage": "npm run test -- --run --coverage",
     "lint": "eslint --fix .",
     "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -24,12 +24,12 @@
     "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-logger": "^2.0.1",
+    "@rosen-bridge/abstract-logger": "^3.0.1",
     "@rosen-bridge/abstract-observation-extractor": "^0.2.1",
     "@rosen-bridge/abstract-scanner": "^0.2.2",
     "@rosen-bridge/bitcoin-observation-extractor": "^6.3.1",
     "@rosen-bridge/bitcoin-scanner": "^0.2.2",
-    "@rosen-bridge/callback-logger": "^0.1.0",
+    "@rosen-bridge/callback-logger": "^1.0.1",
     "@rosen-bridge/cardano-observation-extractor": "^1.0.0",
     "@rosen-bridge/cardano-scanner": "^1.0.0",
     "@rosen-bridge/config": "^1.1.0",
@@ -39,15 +39,15 @@
     "@rosen-bridge/evm-observation-extractor": "^5.3.1",
     "@rosen-bridge/evm-scanner": "^0.1.3",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
-    "@rosen-bridge/health-check": "^7.0.1",
-    "@rosen-bridge/json-bigint": "^1.0.0",
-    "@rosen-bridge/log-level-check": "^2.0.1",
-    "@rosen-bridge/scanner-interfaces": "^0.2.0",
-    "@rosen-bridge/scanner-sync-check": "^7.0.1",
+    "@rosen-bridge/health-check": "^8.0.0",
+    "@rosen-bridge/json-bigint": "^1.1.0",
+    "@rosen-bridge/log-level-check": "^3.0.0",
+    "@rosen-bridge/scanner-interfaces": "^0.2.1",
+    "@rosen-bridge/scanner-sync-check": "^8.0.0",
     "@rosen-bridge/service-manager": "^1.0.1",
     "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
-    "@rosen-bridge/winston-logger": "^1.0.3",
+    "@rosen-bridge/winston-logger": "^2.0.1",
     "@rosen-clients/ergo-explorer": "^2.1.0",
     "@rosen-ui/asset-calculator": "^2.1.8",
     "@rosen-ui/asset-data-adapter": "0.1.0",
@@ -58,9 +58,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@types/config": "^0.0.41",
-    "@vitest/coverage-istanbul": "^2.1.9",
-    "vitest": "^2.1.9"
+    "@types/config": "^0.0.41"
   },
   "engines": {
     "node": ">=22.18.0"
