@@ -40,7 +40,7 @@ describe('AssetAggregator', () => {
       context.tokenMap,
       context.dataSource,
     );
-    await context.dataSource.getRepository(TokenEntity).deleteAll();
+    await context.assetAggregator.initializeNativeTokens();
   });
 
   describe('update', () => {
@@ -167,6 +167,7 @@ describe('AssetAggregator', () => {
       dataSource,
     }) => {
       const tokenRepository = dataSource.getRepository(TokenEntity);
+      await tokenRepository.deleteAll();
       await tokenRepository.insert({
         id: 'unused-token',
         decimal: 18,
@@ -185,11 +186,11 @@ describe('AssetAggregator', () => {
       };
 
       const totalSupply: Array<{ assetId: string; totalSupply: bigint }> = [];
-
+      await assetAggregator.initializeNativeTokens();
       await assetAggregator.update(ChainAssetBalanceInfo, totalSupply);
 
       const storedTokens = await tokenRepository.find();
-      // expect(storedTokens).toHaveLength(1);
+      expect(storedTokens).toHaveLength(1);
       expect(
         storedTokens.some((t) => t.id == NETWORKS.ergo.nativeToken),
       ).toBeTruthy();

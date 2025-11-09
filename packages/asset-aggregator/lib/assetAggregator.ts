@@ -22,6 +22,14 @@ export class AssetAggregator {
     this.tokenAction = new TokenAction(datasource, logger);
   }
 
+  initializeNativeTokens = async () => {
+    const analyzer = new TokensAnalyzer({}, [], this.tokenMap, this.logger);
+    await analyzer.analyze();
+    const nativeTokens = analyzer.getNativeTokens();
+    for (const nativeToken of nativeTokens)
+      await this.tokenAction.store(nativeToken);
+  };
+
   /**
    * Update database by considering chainAssetBalanceInfo and totalSupply
    *
@@ -40,7 +48,7 @@ export class AssetAggregator {
       this.logger,
     );
     await analyzer.analyze();
-    const nativeTokens = analyzer.getNativeTokens();
+    const nativeTokens = await this.tokenAction.getAll();
     const lockedTokens = analyzer.getLockedTokens();
     const bridgedTokens = analyzer.getBridgedTokens();
     const usedTokens = [];
@@ -48,14 +56,19 @@ export class AssetAggregator {
       if (!lockedTokens[nativeToken.id] && !bridgedTokens[nativeToken.id])
         continue;
       usedTokens.push(nativeToken.id);
-      const token = (await this.tokenAction.store(nativeToken))[0];
       if (bridgedTokens[nativeToken.id])
         await this.bridgedAssetAction.store(
-          bridgedTokens[nativeToken.id].map((t) => ({ ...t, token: token })),
+          bridgedTokens[nativeToken.id].map((t) => ({
+            ...t,
+            token: nativeToken,
+          })),
         );
       if (lockedTokens[nativeToken.id])
         await this.lockedAssetAction.store(
-          lockedTokens[nativeToken.id].map((t) => ({ ...t, token: token })),
+          lockedTokens[nativeToken.id].map((t) => ({
+            ...t,
+            token: nativeToken,
+          })),
         );
     }
     await this.tokenAction.keepOnly(usedTokens);

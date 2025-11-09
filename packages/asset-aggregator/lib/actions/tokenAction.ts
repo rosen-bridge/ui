@@ -15,6 +15,15 @@ export class TokenAction {
   }
 
   /**
+   * Retrieve all tokens
+   *
+   * @return
+   */
+  getAll = async () => {
+    return await this.repository.find();
+  };
+
+  /**
    * Stores one or more tokens into the database
    *
    * @param tokens - Single TokenEntity or array of TokenEntity objects to insert
