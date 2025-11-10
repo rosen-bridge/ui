@@ -22,6 +22,7 @@ interface EventWithTotal
   extends Omit<ObservationEntity, 'requestId'>,
     Pick<EventTriggerEntity, 'WIDsCount' | 'paymentTxId' | 'spendTxId'> {
   eventId: string;
+  eventTriggerId: string;
   timestamp: number;
   total: number;
   status: 'fraud' | 'processing' | 'successful';
@@ -120,6 +121,7 @@ export const getEvents = async (filters: Filters) => {
       'COALESCE(ete."WIDsCount", 0) AS "WIDsCount"',
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
+      'ete.id AS "eventTriggerId"',
       /**
        * There may be multiple event triggers for the same events, but we should
        * only select one based on the results. The order is:
@@ -149,12 +151,10 @@ export const getEvents = async (filters: Filters) => {
     queryBuilder = queryBuilder.where(query);
   }
 
-  queryBuilder = queryBuilder
-    .distinctOn(['sub."eventId"'])
-    .orderBy('sub."eventId"', 'ASC');
+  queryBuilder = queryBuilder.distinct(true);
 
   if (sort) {
-    queryBuilder = queryBuilder.addOrderBy(sort.key, sort.order);
+    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
   }
 
   if (pagination?.offset) {

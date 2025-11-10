@@ -126,8 +126,8 @@ const Page = () => {
         <GridContainer gap="8px" minWidth="242px">
           {items.map((item, index) => (
             <EventCard
-              key={item.id ?? index}
-              active={!isLoading && current?.id === item.id}
+              key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
+              active={!isLoading && current === item}
               isLoading={isLoading}
               value={
                 !item
