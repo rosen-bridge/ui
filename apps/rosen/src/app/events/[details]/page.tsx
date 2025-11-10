@@ -1,15 +1,28 @@
 'use client';
 
-import { Center, Stack } from '@rosen-bridge/ui-kit';
-import { UnderDevelop } from '@rosen-bridge/ui-kit';
+import { useParams } from 'next/navigation';
+
+import { Stack } from '@rosen-bridge/ui-kit';
+
+import { Details } from './Details';
+import { Overview } from './Overview';
+import { Process } from './Process';
+import { SourceTx } from './SourceTx';
+import { Watchers } from './Watchers';
 
 const Page = () => {
+  const { details } = useParams();
+
+  const id = details as string;
+
   return (
-    <Center style={{ minHeight: 'calc(100vh - 224px)' }}>
-      <Stack spacing={4} align="center">
-        <UnderDevelop />
-      </Stack>
-    </Center>
+    <Stack spacing={2} direction="column">
+      <Overview id={id} />
+      <Details id={id} />
+      <Process />
+      <Watchers />
+      <SourceTx />
+    </Stack>
   );
 };
 

@@ -9,6 +9,11 @@ export default defineConfig({
   },
   test: {
     name: 'rosen-app',
+    coverage: {
+      all: true,
+      provider: 'istanbul',
+      reporter: 'cobertura',
+    },
     globals: true,
     include: ['**/*.(test|spec).?(c|m)[jt]s?(x)'],
     setupFiles: ['./unitTests/setup/setupTests.ts'],

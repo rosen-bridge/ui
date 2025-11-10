@@ -22,6 +22,7 @@ installation:
       - networks/*/node_modules
       - wallets/*/node_modules
   script:
+    - npm i -g npm@11.6.2
     - npm ci
 
 build:

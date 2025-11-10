@@ -1,16 +1,14 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import { Pagination as PaginationMui, SvgIcon, Divider } from '@mui/material';
+import {
+  Pagination as PaginationMui,
+  SvgIcon,
+  Divider,
+  Button,
+} from '@mui/material';
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
-import {
-  Box,
-  Typography,
-  MenuItem,
-  Menu,
-  Button,
-  ListSubheader,
-} from '../base';
+import { Box, Typography, MenuItem, Menu, ListSubheader } from '../base';
 import { Stack } from './Stack';
 
 export interface PaginationProps {

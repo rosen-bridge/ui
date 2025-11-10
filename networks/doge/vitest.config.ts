@@ -2,11 +2,16 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
+    globals: true,
     coverage: {
-      enabled: true,
+      all: true,
       provider: 'istanbul',
-      reporter: ['cobertura', 'json-summary'],
-      reportOnFailure: true,
+      reporter: 'cobertura',
+    },
+    poolOptions: {
+      forks: {
+        singleFork: true,
+      },
     },
   },
 });

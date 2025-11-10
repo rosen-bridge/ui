@@ -17,7 +17,7 @@
     "release": "npm run build && npm publish --access public"
   },
   "dependencies": {
-    "@rosen-bridge/tokens": "^4.0.0",
+    "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-network/base": "^0.4.1",
     "@rosen-ui/types": "^0.3.7"
   },

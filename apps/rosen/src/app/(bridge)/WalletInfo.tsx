@@ -3,38 +3,28 @@ import { useState } from 'react';
 import { LinkBroken } from '@rosen-bridge/icons';
 import { Wallet } from '@rosen-bridge/icons';
 import {
-  Avatar,
   Card,
   CardBody,
   Button,
-  Grid,
-  IconButton,
   SvgIcon,
   Typography,
 } from '@rosen-bridge/ui-kit';
 
-import { useNetwork, useWallet } from '@/hooks';
+import { useWallet } from '@/hooks';
 
-import { ChooseWalletModal } from './ChooseWalletModal';
+import { WalletModal } from './WalletModal';
 
 export const WalletInfo = () => {
-  const {
-    select: setSelectedWallet,
-    state: walletState,
-    wallets,
-    selected: selectedWallet,
-    disconnect,
-  } = useWallet();
-  const { selectedSource } = useNetwork();
-  const [chooseWalletsModalOpen, setChooseWalletsModalOpen] = useState(false);
+  const wallet = useWallet();
 
-  const Icon = selectedWallet?.iconReact;
-  const label = selectedWallet?.label;
+  const [open, setOpen] = useState(false);
+
+  const Icon = wallet.selected?.iconReact;
 
   return (
     <Card
       backgroundColor={
-        walletState === 'CONNECTED' || walletState === 'DISCONNECTING'
+        wallet.state === 'CONNECTED' || wallet.state === 'DISCONNECTING'
           ? 'secondary.light'
           : 'primary.light'
       }
@@ -47,12 +37,20 @@ export const WalletInfo = () => {
           height: 56,
         }}
       >
-        {walletState === 'IDLE' && (
-          <Typography variant="body2" color="text.secondary">
+        {wallet.state === 'IDLE' && (
+          <Typography color="text.secondary" variant="body2">
             Select source to see available wallets.
           </Typography>
         )}
-        {walletState === 'DISCONNECTED' && (
+        {wallet.state === 'CONNECTING' && (
+          <Typography color="text.secondary">
+            Connecting to wallet...
+          </Typography>
+        )}
+        {wallet.state === 'DISCONNECTING' && (
+          <Typography color="text.secondary">Disconnecting...</Typography>
+        )}
+        {wallet.state === 'DISCONNECTED' && (
           <Button
             variant="text"
             startIcon={
@@ -60,78 +58,38 @@ export const WalletInfo = () => {
                 <Wallet />
               </SvgIcon>
             }
-            style={{ borderRadius: '8px', marginLeft: '-8px' }}
-            onClick={() => setChooseWalletsModalOpen(true)}
+            style={{ marginLeft: '-8px' }}
+            onClick={() => setOpen(true)}
           >
             Choose Wallet
           </Button>
         )}
-        {walletState === 'CONNECTING' && (
-          <Typography color="text.secondary">
-            Connecting to wallet...
-          </Typography>
-        )}
-        {walletState === 'DISCONNECTING' && (
-          <Typography color="text.secondary">Disconnecting...</Typography>
-        )}
-        {walletState === 'CONNECTED' && (
+        {wallet.state === 'CONNECTED' && (
           <>
-            <IconButton
-              style={{
-                borderRadius: '8px',
-                marginLeft: '-8px',
-              }}
-              onClick={() => setChooseWalletsModalOpen(true)}
-            >
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                gap={1}
-              >
-                {Icon && (
-                  <Avatar
-                    style={{
-                      width: 24,
-                      height: 24,
-                      background: 'transparent',
-                    }}
-                  >
-                    <Icon />
-                  </Avatar>
-                )}
-                <Typography>{label}</Typography>
-              </Grid>
-            </IconButton>
             <Button
-              sx={{
-                color: (theme) => theme.palette.secondary.dark,
-                borderRadius: 0.5,
-                mr: -1,
-              }}
+              color="inherit"
+              startIcon={<SvgIcon size="24px">{Icon && <Icon />}</SvgIcon>}
+              style={{ marginLeft: '-8px', textTransform: 'none' }}
+              onClick={() => setOpen(true)}
+            >
+              {wallet.selected?.label}
+            </Button>
+            <Button
+              color="secondary"
               startIcon={
-                <SvgIcon size="24px" color="secondary.dark">
+                <SvgIcon size="24px">
                   <LinkBroken />
                 </SvgIcon>
               }
-              onClick={() => {
-                disconnect();
-              }}
+              style={{ marginRight: '-8px' }}
+              onClick={() => wallet.disconnect()}
             >
               Disconnect
             </Button>
           </>
         )}
       </CardBody>
-      <ChooseWalletModal
-        selectedWallet={selectedWallet}
-        disconnect={disconnect}
-        open={chooseWalletsModalOpen}
-        chainName={selectedSource?.name}
-        setSelectedWallet={setSelectedWallet}
-        handleClose={() => setChooseWalletsModalOpen(false)}
-        wallets={wallets || []}
-      />
+      <WalletModal open={open} onClose={() => setOpen(false)} />
     </Card>
   );
 };

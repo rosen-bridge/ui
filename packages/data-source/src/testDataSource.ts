@@ -10,6 +10,7 @@ import {
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   EventTriggerEntity,
+  CommitmentEntity,
   migrations as eventTriggerExtractorMigrations,
 } from '@rosen-bridge/watcher-data-extractor';
 import {
@@ -42,6 +43,7 @@ export const testDataSource = new DataSource({
     AggregatedStatusChangedEntity,
     GuardStatusEntity,
     GuardStatusChangedEntity,
+    CommitmentEntity,
     TxEntity,
   ],
   migrations: [

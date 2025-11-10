@@ -53,7 +53,7 @@ export const ViewRow = ({
               <Skeleton
                 variant="rounded"
                 height={50}
-                sx={{ gridColumn: '1/-1' }}
+                style={{ gridColumn: '1/-1' }}
               />
             )}
             {!isLoading && (

@@ -1,4 +1,11 @@
-type Name = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+type Name =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'success';
 
 type Shade = 'light' | 'main' | 'dark' | 'contrastText';
 
