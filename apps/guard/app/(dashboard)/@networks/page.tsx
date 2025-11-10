@@ -31,18 +31,35 @@ const Networks = () => {
   );
 
   const items = useMemo(() => {
-    return NETWORKS_KEYS.filter((key) => key != 'bitcoin-runes').map((key) => {
-      const cold = data?.cold.items.find(
-        (item) => item.chain === key && item.balance.isNativeToken,
-      );
+    if (!data) return [];
 
-      const hot = data?.hot.items.find(
-        (item) => item.chain === key && item.balance.isNativeToken,
-      );
+    const { cold: coldData, hot: hotData } = data;
 
-      const network = key;
+    const coldRunes = coldData.items.find(
+      (item) =>
+        item.chain === 'bitcoin-runes' && item.balance.tokenId === 'btc',
+    );
+    const hotRunes = hotData.items.find(
+      (item) =>
+        item.chain === 'bitcoin-runes' && item.balance.tokenId === 'btc',
+    );
 
-      return { cold, hot, network };
+    return NETWORKS_KEYS.map((key) => {
+      const cold =
+        key === 'bitcoin-runes'
+          ? coldRunes
+          : coldData.items.find(
+              (item) => item.chain === key && item.balance.isNativeToken,
+            );
+
+      const hot =
+        key === 'bitcoin-runes'
+          ? hotRunes
+          : hotData.items.find(
+              (item) => item.chain === key && item.balance.isNativeToken,
+            );
+
+      return { cold, hot, network: key };
     });
   }, [data]);
 
