@@ -126,6 +126,18 @@ export const generateUnsignedTx =
 
     let psbt = new bitcoinJs.Psbt();
 
+    coveredRunesBoxes.boxes.forEach((box) => {
+      psbt.addInput({
+        hash: box.txId,
+        index: box.index,
+        witnessUtxo: {
+          script: taprootPayment.output!,
+          value: Number(box.value),
+        },
+        tapInternalKey: taprootPayment.internalPubkey,
+      });
+    });
+
     const feeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
       feeRatio,
