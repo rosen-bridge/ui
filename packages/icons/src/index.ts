@@ -88,6 +88,9 @@ export { default as EyeRaw } from './icons/eye.svg?raw';
 export { ReactComponent as Favorite } from './icons/favorite.svg';
 export { default as FavoriteRaw } from './icons/favorite.svg?raw';
 
+export { ReactComponent as FileAlt } from './icons/file-alt.svg';
+export { default as FileAltRaw } from './icons/file-alt.svg?raw';
+
 export { ReactComponent as FileCopyAlt } from './icons/file-copy-alt.svg';
 export { default as FileCopyAltRaw } from './icons/file-copy-alt.svg?raw';
 
@@ -201,6 +204,9 @@ export { default as StopCircleRaw } from './icons/stop-circle.svg?raw';
 
 export { ReactComponent as Sun } from './icons/sun.svg';
 export { default as SunRaw } from './icons/sun.svg?raw';
+
+export { ReactComponent as Swatchbook } from './icons/swatchbook.svg';
+export { default as SwatchbookRaw } from './icons/swatchbook.svg?raw';
 
 export { ReactComponent as SyncExclamation } from './icons/sync-exclamation.svg';
 export { default as SyncExclamationRaw } from './icons/sync-exclamation.svg?raw';
