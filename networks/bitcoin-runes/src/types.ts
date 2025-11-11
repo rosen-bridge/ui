@@ -1,9 +1,6 @@
 export interface UnsignedPsbtData {
-  psbt: {
-    base64: string;
-    hex: string;
-  };
-  inputSize: number;
+  psbt: string;
+  signInputs: Record<string, number[]>;
 }
 
 export interface TokenInfo {
