@@ -19,6 +19,7 @@ import {
   getAddressRunesUtxos,
   getEsploraAddressUtxos,
   getFeeRatio,
+  getNumberRange,
   makeP2wpkhPayment,
   makeTaprootPayment,
 } from './utils';
@@ -114,10 +115,16 @@ export const generateUnsignedTx =
     }
 
     const selectedBoxes: BitcoinRunesUtxo[] = coveredRunesBoxes.boxes;
-    const selectedBoxesByAddress: Record<string, BitcoinRunesUtxo[]> = {
-      [fromAddress]: coveredRunesBoxes.boxes.slice(),
+    const signInputs: Record<string, number[]> = {
+      [fromAddress]: getNumberRange(coveredRunesBoxes.boxes.length),
       [fromPaymentAddress]: [],
     };
+    let selectedBoxesCount = coveredRunesBoxes.boxes.length;
+
+    const taprootPayment = makeTaprootPayment(internalPubkey, fromAddress);
+    const p2wpkhPayment = makeP2wpkhPayment(fromPaymentAddress);
+
+    let psbt = new bitcoinJs.Psbt();
 
     const feeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
@@ -151,7 +158,26 @@ export const generateUnsignedTx =
 
       // add selected boxes
       selectedBoxes.push(...additionalBoxes.boxes);
-      selectedBoxesByAddress[fromAddress].push(...additionalBoxes.boxes);
+      additionalBoxes.boxes.forEach((box) => {
+        psbt.addInput({
+          hash: box.txId,
+          index: box.index,
+          witnessUtxo: {
+            script: taprootPayment.output!,
+            value: Number(box.value),
+          },
+          tapInternalKey: taprootPayment.internalPubkey,
+        });
+      });
+
+      signInputs[fromAddress].push(
+        ...getNumberRange(
+          selectedBoxesCount + additionalBoxes.boxes.length,
+          selectedBoxesCount,
+        ),
+      );
+      selectedBoxesCount += additionalBoxes.boxes.length;
+
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
@@ -176,7 +202,25 @@ export const generateUnsignedTx =
 
       // add selected boxes
       selectedBoxes.push(...additionalBoxes.boxes);
-      selectedBoxesByAddress[fromPaymentAddress].push(...additionalBoxes.boxes);
+      additionalBoxes.boxes.forEach((box) => {
+        psbt.addInput({
+          hash: box.txId,
+          index: box.index,
+          witnessUtxo: {
+            script: p2wpkhPayment.output!,
+            value: Number(box.value),
+          },
+        });
+      });
+
+      signInputs[fromPaymentAddress].push(
+        ...getNumberRange(
+          selectedBoxesCount + additionalBoxes.boxes.length,
+          selectedBoxesCount,
+        ),
+      );
+      selectedBoxesCount += additionalBoxes.boxes.length;
+
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
@@ -208,48 +252,29 @@ export const generateUnsignedTx =
 
       // add selected boxes
       selectedBoxes.push(...additionalBoxes.boxes);
-      selectedBoxesByAddress[fromAddress].push(...additionalBoxes.boxes);
+      additionalBoxes.boxes.forEach((box) => {
+        psbt.addInput({
+          hash: box.txId,
+          index: box.index,
+          witnessUtxo: {
+            script: taprootPayment.output!,
+            value: Number(box.value),
+          },
+          tapInternalKey: taprootPayment.internalPubkey,
+        });
+      });
+
+      signInputs[fromAddress].push(
+        ...getNumberRange(
+          selectedBoxesCount + additionalBoxes.boxes.length,
+          selectedBoxesCount,
+        ),
+      );
+
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
-    }
-
-    const taprootPayment = makeTaprootPayment(internalPubkey, fromAddress);
-    const p2wpkhPayment = makeP2wpkhPayment(fromPaymentAddress);
-
-    let psbt = new bitcoinJs.Psbt();
-
-    const signInputs: Record<string, number[]> = {
-      [fromAddress]: [],
-      [fromPaymentAddress]: [],
-    };
-
-    // add inputs
-    for (const box of selectedBoxesByAddress[fromAddress]) {
-      signInputs[fromAddress].push(signInputs[fromAddress].length);
-      psbt.addInput({
-        hash: box.txId,
-        index: box.index,
-        witnessUtxo: {
-          script: taprootPayment.output!,
-          value: Number(box.value),
-        },
-        tapInternalKey: taprootPayment.internalPubkey,
-      });
-    }
-    for (const box of selectedBoxesByAddress[fromPaymentAddress]) {
-      signInputs[fromPaymentAddress].push(
-        signInputs[fromAddress].length + signInputs[fromPaymentAddress].length,
-      );
-      psbt.addInput({
-        hash: box.txId,
-        index: box.index,
-        witnessUtxo: {
-          script: p2wpkhPayment.output!,
-          value: Number(box.value),
-        },
-      });
     }
 
     // add change UTxO
@@ -277,6 +302,7 @@ export const generateUnsignedTx =
 
     return {
       psbt: psbt.toBase64(),
+      psbtHex: psbt.toHex(),
       signInputs,
     };
   };

@@ -459,3 +459,13 @@ export const makeP2wpkhPayment = (
 
   return payment;
 };
+
+/**
+ * makes an array of sequential numbers in the specified range
+ * @param to
+ * @param from
+ * @returns array of sequential numbers
+ */
+export const getNumberRange = (to: number, from?: number): number[] => {
+  return [...Array(to).keys()].slice(from);
+};

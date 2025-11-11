@@ -161,7 +161,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       const userPublicKey = await this.fetchPublicKey();
       const userPaymentAddress = await this.fetchPaymentAddress();
 
-      const psbtData = await this.currentNetwork.generateUnsignedTx(
+      const { psbt, signInputs } = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,
         userAddress,
         userPaymentAddress,
@@ -172,7 +172,10 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       );
 
       try {
-        const response = await request('signPsbt', psbtData);
+        const response = await request('signPsbt', {
+          psbt,
+          signInputs,
+        });
 
         if (response.status === 'error') {
           throw response.error;

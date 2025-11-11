@@ -1,5 +1,6 @@
 export interface UnsignedPsbtData {
   psbt: string;
+  psbtHex: string;
   signInputs: Record<string, number[]>;
 }
 
