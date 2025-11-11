@@ -56,3 +56,4 @@ export * from './Text';
 export * from './SvgIcon';
 export * from './Stack';
 export * from './Divider';
+export * from './VirtualScroll';

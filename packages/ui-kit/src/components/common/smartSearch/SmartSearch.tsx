@@ -15,12 +15,12 @@ import { styled } from '../../../styling';
 import { IconButton } from '../../base';
 import { Divider } from '../Divider';
 import { SvgIcon } from '../SvgIcon';
+import { VirtualScroll } from '../VirtualScroll';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
-import { VirtualScroll } from './VirtualScroll';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
