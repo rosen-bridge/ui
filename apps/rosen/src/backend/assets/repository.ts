@@ -81,10 +81,14 @@ export const getAllAssets = async (filters: Filters) => {
     filters.search.in ||= [];
   }
 
-  let { pagination, query, sort } = filtersToTypeorm(
-    filters,
-    (key) => `"sub".${key}`,
-  );
+  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+    switch (key) {
+      case 'bridged':
+        return `sub."${key}Normalized"`;
+      default:
+        return `sub."${key}"`;
+    }
+  });
 
   const subquery = tokenRepository
     .createQueryBuilder('te')
@@ -117,6 +121,7 @@ export const getAllAssets = async (filters: Filters) => {
       '"bridged"',
       '"lockedPerAddress"',
       'chain',
+      '(CAST(bridged AS NUMERIC) / POWER(10, COALESCE("significantDecimal", 0))) AS "bridgedNormalized"',
       'count(*) over() AS total',
     ]);
 
