@@ -53,7 +53,7 @@ export const BridgedList = ({ value }: BridgedListProps) => {
             </Box>
             <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>
               <Identifier
-                href={'tokenUrl'}
+                href={value.tokenUrl}
                 loading={isLoading}
                 value={item.birdgedTokenId}
               />
