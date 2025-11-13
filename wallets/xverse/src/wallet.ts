@@ -1,5 +1,4 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
-import { UnsignedPsbtData } from '@rosen-network/bitcoin';
 import { BitcoinRunesNetwork } from '@rosen-network/bitcoin-runes/dist/client';
 import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -84,7 +83,7 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     return address.address;
   };
 
-  fetchPublicKey = async (): Promise<string | undefined> => {
+  fetchPublicKey = async (): Promise<string> => {
     const response = await request('getAddresses', {
       purposes: [this.purpose],
     });
@@ -95,7 +94,9 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       (address) => address.purpose === this.purpose,
     );
 
-    return address?.publicKey;
+    if (address === undefined)
+      throw Error(`Found no address with ${this.purpose} purpose`);
+    return address.publicKey;
   };
 
   fetchBalance = async (token?: RosenChainToken): Promise<string> => {
@@ -154,48 +155,61 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    let psbtData: UnsignedPsbtData;
+    let signedPsbtBase64;
 
     if (this.currentNetwork instanceof BitcoinRunesNetwork) {
       const userPublicKey = await this.fetchPublicKey();
       const userPaymentAddress = await this.fetchPaymentAddress();
 
-      psbtData = await this.currentNetwork.generateUnsignedTx(
+      const { psbt, signInputs } = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,
         userAddress,
         userPaymentAddress,
         params.amount,
         opReturnData,
         params.token,
-        userPublicKey!,
+        userPublicKey,
       );
+
+      try {
+        const response = await request('signPsbt', {
+          psbt,
+          signInputs,
+        });
+
+        if (response.status === 'error') {
+          throw response.error;
+        }
+
+        signedPsbtBase64 = response.result.psbt;
+      } catch (error) {
+        throw new UserDeniedTransactionSignatureError(this.name, error);
+      }
     } else {
-      psbtData = await this.currentNetwork.generateUnsignedTx(
+      const psbtData = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,
         userAddress,
         params.amount,
         opReturnData,
         params.token,
       );
-    }
 
-    let signedPsbtBase64;
+      try {
+        const response = await request('signPsbt', {
+          psbt: psbtData.psbt.base64,
+          signInputs: {
+            [userAddress]: Array.from(Array(psbtData.inputSize).keys()),
+          },
+        });
 
-    try {
-      const response = await request('signPsbt', {
-        psbt: psbtData.psbt.base64,
-        signInputs: {
-          [userAddress]: Array.from(Array(psbtData.inputSize).keys()),
-        },
-      });
+        if (response.status === 'error') {
+          throw response.error;
+        }
 
-      if (response.status === 'error') {
-        throw response.error;
+        signedPsbtBase64 = response.result.psbt;
+      } catch (error) {
+        throw new UserDeniedTransactionSignatureError(this.name, error);
       }
-
-      signedPsbtBase64 = response.result.psbt;
-    } catch (error) {
-      throw new UserDeniedTransactionSignatureError(this.name, error);
     }
 
     try {
