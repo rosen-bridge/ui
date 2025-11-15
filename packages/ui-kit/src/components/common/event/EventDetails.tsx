@@ -70,7 +70,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
           </LabelGroup>
         </div>
         <div>
-          <Label label="Tx IDs" />
+          <Label label="Tx ID" />
           <LabelGroup>
             <Label label="Lock Tx" inset>
               <Identifier
@@ -121,7 +121,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         <Label label="Time">
           <RelativeTime timestamp={value.timestamp} />
         </Label>
-        <Label label="Bridge fee">
+        <Label label="Bridge Fee">
           <Amount value={value.bridgeFee} />
         </Label>
         <Label label="Network Fee">
