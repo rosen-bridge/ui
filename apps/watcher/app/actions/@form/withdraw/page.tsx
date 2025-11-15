@@ -108,6 +108,12 @@ const WithdrawForm = () => {
   );
 
   useEffect(() => {
+    resetField('amount', {
+      defaultValue: '',
+      keepError: false,
+      keepDirty: false,
+      keepTouched: false,
+    });
     if (tokens && !tokenIdField.value) {
       resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
     }
