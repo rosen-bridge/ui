@@ -52,6 +52,7 @@ const Token = ({ chain }: { chain: Network }) => {
 
   return (
     <TokensCard
+      chain={chain}
       tokens={tokens}
       isLoading={isLoading}
       title={NETWORKS[chain].label}
