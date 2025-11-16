@@ -33,12 +33,7 @@ export const registerBitcoinRunesExtractor = async (
       1,
       8000, // timeout
     );
-    RateLimitedAxiosConfig.addRule(
-      config.bitcoinRunes.unisatUrl,
-      5, // 2000 calls/day
-      86400,
-      8000, // timeout
-    );
+    // TODO: add 2000 calls/second rule when multiple rules are supported
 
     const observationExtractor = new BitcoinRunesRpcObservationExtractor(
       config.bitcoinRunes.addresses.lock,
