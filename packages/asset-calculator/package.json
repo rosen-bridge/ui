@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/asset-calculator",
-  "version": "2.1.8",
+  "version": "2.2.0",
   "description": "Rosen bridge locked asset calculator",
   "license": "MIT",
   "author": "Rosen Team",
@@ -30,8 +30,8 @@
     "@rosen-clients/cardano-koios": "^3.1.0",
     "@rosen-clients/ergo-explorer": "^2.1.0",
     "@rosen-clients/rate-limited-axios": "^1.1.0",
-    "@rosen-ui/constants": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.3.8",
     "ethers": "6.13.2",
     "lodash-es": "^4.17.21"
   },

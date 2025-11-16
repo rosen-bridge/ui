@@ -1,5 +1,73 @@
 # @rosen-bridge/ui-kit
 
+## 3.0.0
+
+### Major Changes
+
+- Add a new `Stack` wrapper with restricted props for consistent usage
+- The old card design has been replaced with a new, improved version throughout the package. `Card` and its subcomponents have been removed, and `Card2` has been renamed to `Card`
+- Refactor the `Button` component to remove unnecessary props and simplify its API for a cleaner codebase
+- Refine and standardize Divider component with extended props support
+- Add `SvgIcon` component as replacement for MUI svgIcon
+- Remove the `WithExternalLink` component as it is no longer needed
+- Removed the `Amount` component and renamed `Amount2` to `Amount`
+
+### Minor Changes
+
+- Update `TokensList` and `TokensCard` components to align with the latest design and support external links for each token
+- Add `BreakpointQuery` type to `useBreakpoint` hook for improved type safety
+- Replace all MUI Divider components with the custom `Divider`
+- Add new `section` variant support to `Card` component
+- Add toggle view slot to `DataLayout` for consistent layout integration
+- Replaced MUI `SvgIcon` with a custom SVG component.
+- Rename `NewPagination` component to `Pagination`
+- Add the `defaultView` prop to the `ViewToggle` component
+- Extend `Identifier` component props to include HTMLAttributes and add support for style prop
+- Make some props optional in `Chip` and add loading skeleton
+- Add `Text` component for rendering text with loading state and skeleton
+- Allow `CopyButton` to accept standard HTML attributes
+- Added borderRadius to MuiSkeleton text variant in `themeOptions`
+- Enhanced the `RelativeTime` component to support loading state and handle invalid or missing timestamps
+- Fix icon size and improve the loading state, make props optional in `Network` component
+- Add loading state and improve code structure in `Token` component
+- Remove unused MUI components
+- Added support for overriding `Box` component props using `InjectOverrides`
+- Updated the `Identifier` component to simplify its structure and text truncation, and added QR code modal support
+- Refactored the `Label` component for cleaner structure and improved inset handling
+- Implement `LabelGroup` component
+- Improve style handling in `Identifier` component
+- Add support for external link in the `Token` component
+- Implement `DateTime` component
+- Add fontSize support and HTMLAttributes typing to `Connector` component
+- Fix singular entry count display in Pagination component
+- Added `background` and `color` props to the `Avatar` component
+- Fix dark theme
+- Add support for optional external link `href` prop in the `Amount` component
+- Added `InjectOverrides` HOC for responsive prop overrides
+- Added `ProcessTracker` component for tracking and displaying process flow
+- Add ability to optionally hide fields `spendTxId` and `paymentTxId` in `EventDetails`
+- Add a responsive `TableGrid` component to enable adaptive table layouts across breakpoints
+- Add reusable Event components (Status, Card, Details) for cross-app usage
+- Allow `Columns` component to work without requiring the width prop
+- Add text color variants to `Colors` type
+
+### Patch Changes
+
+- Fix word breaking issue in `HealthParamCard` component
+- Add `Knip` and update lint-staged configuration to integrate it for dependency checks
+- Fix Events page sidebar to display `0` when no reports are available instead of `N/C`
+- Fix Network component to correctly display the `Bitcoin Runes` icon instead of falling back to Unsupported
+- Fixed pagination not resetting after applying filters or search on the event list page
+- Fix color of the carousel indicator
+- To ensure a better appearance, prevent the history menu in the `smartSearch` component from expanding too much when it
+  has a large amount of content
+- Fixed CSS selector issues causing styling problems in the `SmartSearch` component
+- Improve filtering logic to display matching results in events page search
+- Update dependencies
+  - @rosen-bridge/icons@3.0.0
+  - @rosen-ui/utils@1.0.0
+  - @rosen-ui/constants@1.0.0
+
 ## 2.4.0
 
 ### Minor Changes
