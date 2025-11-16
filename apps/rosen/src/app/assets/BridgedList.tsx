@@ -48,7 +48,10 @@ export const BridgedList = ({ value }: BridgedListProps) => {
               <Network loading={isLoading} name={item.chain} />
               <Amount
                 loading={isLoading}
-                value={getDecimalString(item.amount, value.significantDecimals)}
+                value={getDecimalString(
+                  BigInt(item.amount || '0') < 0n ? '0' : item.amount,
+                  value.significantDecimals,
+                )}
               />
             </Box>
             <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>
