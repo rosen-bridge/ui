@@ -139,17 +139,34 @@ class AssetCalculator {
     residencyChain: Network,
   ): Promise<bigint> => {
     const calculator = this.calculatorMap.get(chain);
+    const ergoCalculator = this.calculatorMap.get(NETWORKS.ergo.key);
 
     if (!calculator)
       throw Error(`Chain [${chain}] is not supported in asset calculator`);
 
+    if (!ergoCalculator)
+      throw Error(
+        `Ergo calculator is required but not found. Cannot calculate total supply for chain [${chain}]`,
+      );
+
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);
+    const ergoToken = this.getTokenDataForChain(
+      token,
+      residencyChain,
+      NETWORKS.ergo.key,
+    );
     if (!chainToken) {
       this.logger.debug(`Token ${token.name} is not supported in ${chain}`);
       return 0n;
     }
+    if (!ergoToken) {
+      this.logger.debug(
+        `Token ${token.name} is not supported in ${NETWORKS.ergo.key}`,
+      );
+      return 0n;
+    }
     const emission =
-      (await calculator.totalSupply(chainToken)) -
+      (await ergoCalculator.totalSupply(ergoToken)) -
       (await calculator.totalBalance(chainToken));
 
     this.logger.debug(

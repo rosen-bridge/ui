@@ -50,17 +50,22 @@ describe('AssetCalculator', () => {
      */
     it('should calculate cardano emission of a native asset on another chain', async () => {
       const calculator = {
-        totalSupply: () => Promise.resolve(1000n),
         totalBalance: () => Promise.resolve(900n),
       } as unknown as AbstractCalculator;
-      const map = new Map([[NETWORKS.cardano.key, calculator]]);
+      const ergoCalculator = {
+        totalSupply: () => Promise.resolve(2000n),
+      } as unknown as AbstractCalculator;
+      const map = new Map([
+        [NETWORKS.cardano.key, calculator],
+        [NETWORKS.ergo.key, ergoCalculator],
+      ]);
       assetCalculator['calculatorMap'] = map;
       const totalLocked = await assetCalculator['calculateEmissionForChain'](
         tokenMapData[0].ergo,
         NETWORKS.cardano.key,
         NETWORKS.ergo.key,
       );
-      expect(totalLocked).to.equal(100n);
+      expect(totalLocked).to.equal(1100n);
     });
 
     /**
