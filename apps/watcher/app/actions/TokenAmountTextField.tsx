@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { MouseEventHandler, useEffect } from 'react';
 import { useController, useFormContext } from 'react-hook-form';
 
 import {
@@ -8,6 +8,7 @@ import {
   Link,
   TextField,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { TokenInfo } from '@rosen-ui/types';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
@@ -19,7 +20,7 @@ interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
   token: Pick<TokenInfo, 'amount' | 'decimals' | 'name'> | undefined;
-  minBoxValue?: bigint;
+  minBoxValue?: number;
 }
 
 /**
@@ -43,11 +44,45 @@ export const TokenAmountTextField = ({
   const { control, setValue } =
     useFormContext<TokenAmountCompatibleFormSchema>();
 
-  const [error, setError] = useState<string | undefined>();
-
-  const { field: amountField } = useController({
+  const { field: amountField, fieldState } = useController({
     control: control,
     name: 'amount',
+    rules: {
+      validate: (value) => {
+        if (!token) return 'Token must be selected first';
+
+        const newValue = value?.trim() || '';
+
+        if (!newValue) return 'Amount is required';
+
+        // match any complete or incomplete decimal number
+        const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+        if (!match) return 'Invalid amount';
+
+        // prevent user from entering more decimals than token decimals
+        const isDecimalsLarge =
+          (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
+        if (isDecimalsLarge)
+          return `The current token only supports ${token.decimals} decimals`;
+
+        const newValueBigInt = BigInt(
+          getNonDecimalString(newValue, token.decimals),
+        );
+
+        // prevent user from entering more than token amount
+        if (newValueBigInt > token.amount) return `Insufficient balance`;
+
+        if (
+          token.name === NETWORKS.ergo.nativeToken &&
+          minBoxValue &&
+          newValueBigInt < BigInt(minBoxValue)
+        ) {
+          return `Amount must be at least ${getDecimalString(minBoxValue.toString(), token.decimals)}`;
+        }
+
+        return true;
+      },
+    },
   });
 
   useEffect(() => {
@@ -68,7 +103,6 @@ export const TokenAmountTextField = ({
     event.preventDefault();
 
     setAmountFieldValue(getMaxAvailableTokenAmount());
-    setError(undefined);
   };
 
   return (
@@ -76,43 +110,9 @@ export const TokenAmountTextField = ({
       label="Amount"
       {...amountField}
       disabled={disabled}
-      error={!!error}
-      onChange={(event) => {
-        if (!token) return;
-
-        const newValue = event.target.value;
-
-        // match any complete or incomplete decimal number
-        const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
-        if (!match) return;
-
-        // prevent user from entering more decimals than token decimals
-        const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
-        if (isDecimalsLarge) return;
-
-        const newValueBigInt = BigInt(
-          getNonDecimalString(newValue, token.decimals),
-        );
-
-        // prevent user from entering more than token amount
-        if (newValueBigInt > token.amount) return;
-
-        if (minBoxValue && newValueBigInt < minBoxValue) {
-          setError(
-            `Amount must be at least ${getDecimalString(
-              minBoxValue.toString(),
-              token.decimals,
-            )}`,
-          );
-        } else {
-          setError(undefined);
-        }
-
-        amountField.onChange(event);
-      }}
+      error={!!fieldState.error}
       helperText={
-        error ||
+        fieldState.error?.message ||
         (token && (
           <>
             <Link component="button" onClick={setAmountToMaxAvailable}>
