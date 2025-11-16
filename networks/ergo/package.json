@@ -26,6 +26,7 @@
     "ergo-lib-wasm-nodejs": "^0.24.1"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }
