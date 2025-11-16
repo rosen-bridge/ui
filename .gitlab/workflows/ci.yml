@@ -24,11 +24,6 @@ knip:
     policy: pull
     paths:
       - node_modules
-      - apps/*/node_modules
-      - packages/*/node_modules
-      - packages/*/dist
-      - wallets/*/node_modules
-      - wallets/*/dist
       - .npm
   script:
     - npx knip --dependencies
@@ -45,6 +40,8 @@ type_check:
       - packages/*/dist
       - wallets/*/node_modules
       - wallets/*/dist
+      - networks/*/node_modules
+      - networks/*/dist
       - .npm
   script:
     - npm run type-check --workspaces --if-present
@@ -79,9 +76,13 @@ unit_tests:
     paths:
       - node_modules
       - apps/*/node_modules
+      - apps/*/dist
       - networks/*/node_modules
+      - networks/*/dist
       - packages/*/node_modules
+      - packages/*/dist
       - wallets/*/node_modules
+      - wallets/*/dist
       - .npm
   script:
     - npm run coverage
@@ -99,8 +100,6 @@ changeset:
     policy: pull
     paths:
       - node_modules
-      - apps/*/node_modules
-      - packages/*/node_modules
       - .npm
   before_script:
     - git fetch origin dev
