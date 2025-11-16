@@ -42,6 +42,7 @@ const Assets = () => {
     fetcher,
     {
       keepPreviousData: true,
+      refreshInterval: 0,
     },
   );
 
