@@ -146,7 +146,7 @@ class AssetCalculator {
 
     if (!ergoCalculator)
       throw Error(
-        `Chain [${NETWORKS.ergo.key}] is not supported in asset calculator ${chain}. Its required to calculate total balance of each wrapped token`,
+        `Ergo calculator is required but not found. Cannot calculate total supply for chain [${chain}]`,
       );
 
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);

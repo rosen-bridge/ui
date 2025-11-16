@@ -50,12 +50,10 @@ describe('AssetCalculator', () => {
      */
     it('should calculate cardano emission of a native asset on another chain', async () => {
       const calculator = {
-        totalSupply: () => Promise.resolve(1000n),
         totalBalance: () => Promise.resolve(900n),
       } as unknown as AbstractCalculator;
       const ergoCalculator = {
         totalSupply: () => Promise.resolve(2000n),
-        totalBalance: () => Promise.resolve(1200n),
       } as unknown as AbstractCalculator;
       const map = new Map([
         [NETWORKS.cardano.key, calculator],
