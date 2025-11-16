@@ -173,7 +173,7 @@ class AssetCalculator {
       `Emitted amount of asset [${token.tokenId}] in chain [${chain}] is [${emission}]`,
     );
 
-    return emission;
+    return emission > 0n ? emission : 0n;
   };
 
   /**
