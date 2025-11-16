@@ -18,8 +18,8 @@
     "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-observation-extractor": "^0.2.1",
-    "@rosen-bridge/abstract-scanner": "^0.2.2",
+    "@rosen-bridge/abstract-observation-extractor": "^0.2.3",
+    "@rosen-bridge/abstract-scanner": "^0.2.3",
     "@rosen-bridge/encryption": "^1.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/icons": "^2.3.1",
