@@ -2,6 +2,7 @@ import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes
 import { UnisatRunesProtocolNetwork } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { RateLimitedAxiosConfig } from '@rosen-clients/rate-limited-axios';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -26,6 +27,14 @@ export const registerBitcoinRunesExtractor = async (
         'UnisatRunesProtocolNetwork',
       ),
     );
+    RateLimitedAxiosConfig.addRule(
+      config.bitcoinRunes.unisatUrl,
+      5, // 5 calls/second
+      1,
+      8000, // timeout
+    );
+    // TODO: add 2000 calls/second rule when multiple rules are supported
+
     const observationExtractor = new BitcoinRunesRpcObservationExtractor(
       config.bitcoinRunes.addresses.lock,
       observationNetwork,
