@@ -32,7 +32,7 @@
 - Return distinct events by `eventId` to prevent duplicates in the `Event List` page
 - Add root-level ESLint configuration and resolved existing linting issues
 - Rename runes network to bitcoin-runes
-- update Dependencies:
+- Update dependencies
   - @vercel/kv@3.0.0
   - @rosen-bridge/encryption@1.0.0
   - @rosen-bridge/abstract-observation-extractor@0.2.3

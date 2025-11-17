@@ -6,7 +6,7 @@
 
 - Add TokenPriceEntity to data-source.
 - Update Supported NodeJS version to 22.18.0
-- Added CommitmentExtractor in rosen-service
+- Added `CommitmentExtractor` in rosen-service
 
 ### Patch Changes
 

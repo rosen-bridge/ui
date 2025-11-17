@@ -7,7 +7,7 @@
 - Update supported node version to the 22.18.0 and update rosen-clients versions
 - Health status report file is now supported
 - Add support for Bitcoin Runes to rosen-service
-- Added CommitmentExtractor in rosen-service
+- Added `CommitmentExtractor` in rosen-service
 
 ### Patch Changes
 
