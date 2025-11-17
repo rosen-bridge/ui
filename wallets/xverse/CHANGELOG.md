@@ -1,5 +1,23 @@
 # @rosen-ui/xverse-wallet
 
+## 0.3.0
+
+### Minor Changes
+
+- Add fetchPaymentAddress method required for performTransfer of bitcoin-runes
+- Implement Bitcoin Runes functionalities and switch chain functionality
+
+### Patch Changes
+
+- Handle signing of the p2wpkh utxos
+- Update dependencies
+  - @rosen-bridge/tokens@4.0.1
+  - @rosen-network/bitcoin-runes@1.0.0
+  - @rosen-network/bitcoin@2.4.0
+  - @rosen-ui/wallet-api@3.0.4
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/types@0.3.8
+
 ## 0.2.2
 
 ### Patch Changes
