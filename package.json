@@ -9,14 +9,14 @@
     "wallets/*"
   ],
   "scripts": {
-    "lint": "npm run lint --workspaces",
-    "lint:check": "npm run lint:check --workspaces",
-    "prettify": "npm run prettify --workspaces",
-    "prettify:check": "npm run prettify:check --workspaces",
     "build:mono-packages": "./build.sh",
     "coverage": "npm run coverage --workspaces",
     "postinstall": "patch-package",
+    "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
     "prepare": "husky install",
+    "prettify": "npm run prettify --workspaces",
+    "prettify:check": "npm run prettify:check --workspaces",
     "test": "npm run test --workspaces",
     "test:related": "NODE_OPTIONS='--import tsx' vitest related --run",
     "version": "npx changeset version && npm i && npx changeset --empty",
