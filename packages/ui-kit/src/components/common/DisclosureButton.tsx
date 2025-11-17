@@ -1,7 +1,8 @@
 import { AngleDown, SyncExclamation } from '@rosen-bridge/icons';
 
 import { useDisclosure } from '../../hooks/useDisclosure';
-import { CircularProgress, IconButton, SvgIcon } from '../base';
+import { CircularProgress, IconButton } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * Return type of the useDisclosure hook for type safety

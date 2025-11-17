@@ -1,48 +1,88 @@
-import React from 'react';
+import { HTMLAttributes, useMemo } from 'react';
 
+import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Avatar, Stack } from '../base';
+import { Typography, Skeleton, IconButton } from '../base';
+import { Avatar } from './Avatar';
+import { InjectOverrides } from './InjectOverrides';
+import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
+import { Truncate } from './Truncate';
 
 /**
  * Props for the Token component.
- * @property name - The token's name.
- * @property reverse - If true, show items in reverse order.
  */
-type TokenProps = {
+export type TokenProps = HTMLAttributes<HTMLDivElement> & {
+  /** If provided, renders an external link that opens in a new tab */
+  href?: string;
+
+  /**
+   * If true, the token is in loading state and shows a skeleton placeholder.
+   */
+  loading?: boolean;
+
+  /**
+   * The name of the token to display.
+   */
   name?: string;
+
+  /**
+   * If true, show the avatar and text in reverse order.
+   */
   reverse?: boolean;
 };
 
 /**
  * Displays a token with an avatar and its name.
- *
- * @param name - The name of the token.
- * @param reverse - If true, show items in reverse order.
  */
-export const Token = ({ name, reverse }: TokenProps) => {
+const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
+  const styles = useMemo(() => {
+    return Object.assign(
+      {},
+      {
+        flexDirection: !reverse ? 'row' : 'row-reverse',
+        fontSize: 'inherit',
+        minWidth: 0,
+      },
+      style,
+    );
+  }, [reverse, style]);
   return (
-    <Stack
-      alignItems="center"
-      flexDirection={!reverse ? 'row' : 'row-reverse'}
-      fontSize="inherit"
-      gap="0.5em"
-    >
-      <Avatar
-        sx={(theme) => ({
-          width: '2em ',
-          height: '2em',
-          fontSize: '1em',
-          backgroundColor: theme.palette.secondary.light,
-          color: theme.palette.secondary.main,
-        })}
-      >
-        {capitalize(name).slice(0, 1)}
-      </Avatar>
+    <Stack align="center" style={styles} spacing="0.5em">
+      {loading ? (
+        <>
+          <Skeleton width="2em" height="2em" variant="circular" />
+          <Skeleton width={80} height={14} variant="rounded" />
+        </>
+      ) : (
+        <>
+          <Avatar
+            sx={(theme) => ({
+              width: '2em',
+              height: '2em',
+              fontSize: '1em',
+              backgroundColor: theme.palette.secondary.light,
+              color: theme.palette.secondary.main,
+            })}
+          >
+            {capitalize(name).slice(0, 1)}
+          </Avatar>
 
-      <Stack flexDirection="column" alignItems="start">
-        <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
-      </Stack>
+          <Typography sx={{ fontSize: 'inherit', minWidth: 0 }}>
+            <Truncate lines={1}>{name}</Truncate>
+          </Typography>
+          {!!href && (
+            <IconButton target="_blank" size="small" href={href}>
+              <SvgIcon size="small">
+                <ExternalLinkAlt />
+              </SvgIcon>
+            </IconButton>
+          )}
+        </>
+      )}
     </Stack>
   );
 };
+
+export const Token = InjectOverrides(TokenBase);

@@ -1,0 +1,37 @@
+{
+  "name": "@rosen-network/bitcoin-runes",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "description": "This is a private package utilized within Rosen Bridge UI app",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "build": "tsc --build tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "coverage": "npm run test -- --run --coverage"
+  },
+  "dependencies": {
+    "@magiceden-oss/runestone-lib": "^1.0.2",
+    "@rosen-bridge/address-codec": "^1.0.1",
+    "@rosen-bridge/bitcoin-runes-utxo-selection": "^2.0.1",
+    "@rosen-bridge/icons": "^3.0.0",
+    "@rosen-bridge/json-bigint": "^1.1.0",
+    "@rosen-bridge/tokens": "^4.0.1",
+    "@rosen-network/base": "^0.5.0",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.3.8",
+    "axios": "^1.7.2",
+    "bitcoinjs-lib": "^6.1.6"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  }
+}

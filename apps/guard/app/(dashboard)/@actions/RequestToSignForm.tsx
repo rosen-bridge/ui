@@ -5,13 +5,14 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  Card2,
-  Card2Body,
-  Card2Header,
-  Card2Title,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   Checkbox,
   Grid,
   MenuItem,
+  Stack,
   SubmitButton,
   TextField,
   Typography,
@@ -41,6 +42,7 @@ export const RequestToSignForm = () => {
     trigger,
     isMutating: isSignPending,
     error,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWRMutation<ApiSignResponse, any, '/sign', ApiSignRequestBody>(
     '/sign',
     mutatorWithHeaders,
@@ -51,7 +53,7 @@ export const RequestToSignForm = () => {
     message: string;
   } | null>(null);
 
-  const { handleSubmit, register, reset, formState } = useForm({
+  const { handleSubmit, register, reset, watch } = useForm({
     defaultValues: {
       txJson: '',
       chain: '' as Network,
@@ -88,6 +90,7 @@ export const RequestToSignForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
@@ -116,68 +119,62 @@ export const RequestToSignForm = () => {
   );
 
   return (
-    <Card2 backgroundColor="background.paper">
-      <Card2Header>
-        <Card2Title>
+    <Card backgroundColor="background.paper">
+      <CardHeader>
+        <CardTitle>
           <Typography variant="h5" fontWeight="bold">
             Request To Sign
           </Typography>
-        </Card2Title>
-      </Card2Header>
-      <Card2Body>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           {renderAlert()}
-
-          <TextField
-            select
-            label="Chain"
-            {...register('chain')}
-            sx={{ mb: 2 }}
-            fullWidth
-          >
-            {NETWORKS_KEYS.map((key) => (
-              <MenuItem key={key} value={key}>
-                {NETWORKS[key].label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Transaction"
-            multiline
-            rows={5}
-            {...register('txJson')}
-            sx={{ mb: 2 }}
-          />
-          <TextField
-            label="Required Signs"
-            {...register('requiredSign')}
-            sx={{ mb: 2 }}
-          />
-
-          {error?.response?.status === 409 && (
-            <Grid container alignItems="center">
-              <Checkbox {...register('overwrite')} />
-              <Typography>Overwrite the already sent transaction</Typography>
-            </Grid>
-          )}
-
-          {error?.response?.status === 403 && (
-            <Grid
-              container
-              alignItems="center"
-              sx={(theme) => ({ color: theme.palette.warning.main })}
+          <Stack spacing={2}>
+            <TextField
+              select
+              label="Chain"
+              {...register('chain')}
+              value={watch('chain') || ''}
+              fullWidth
             >
-              <Typography>The Api key is not correct</Typography>
-            </Grid>
-          )}
+              {NETWORKS_KEYS.map((key) => (
+                <MenuItem key={key} value={key}>
+                  {NETWORKS[key].label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              label="Transaction"
+              multiline
+              rows={5}
+              {...register('txJson')}
+            />
+            <TextField label="Required Signs" {...register('requiredSign')} />
 
-          <ApiKeyModalWarning />
+            {error?.response?.status === 409 && (
+              <Grid container alignItems="center">
+                <Checkbox {...register('overwrite')} />
+                <Typography>Overwrite the already sent transaction</Typography>
+              </Grid>
+            )}
 
-          <SubmitButton loading={isSignPending} disabled={!apiKey}>
-            Send
-          </SubmitButton>
+            {error?.response?.status === 403 && (
+              <Grid container alignItems="center">
+                <Typography color="warning.main">
+                  The Api key is not correct
+                </Typography>
+              </Grid>
+            )}
+
+            <ApiKeyModalWarning />
+
+            <SubmitButton loading={isSignPending} disabled={!apiKey}>
+              Send
+            </SubmitButton>
+          </Stack>
         </form>
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };

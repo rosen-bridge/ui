@@ -9,7 +9,6 @@ import {
   Id,
   TableRow,
 } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
 import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { Observation } from '@/_types/api';
@@ -114,38 +113,38 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   return (
     <>
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id
             id={row.sourceTxId}
-            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
           />
         </EnhancedTableCell>
       </TableRow>
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Token</EnhancedTableCell>
         <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
               <Id id={row.fromAddress} />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
             <EnhancedTableCell>
               <Id id={row.toAddress} />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Height</EnhancedTableCell>
             <EnhancedTableCell>{row.height}</EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
@@ -153,7 +152,7 @@ export const MobileRow: FC<RowProps> = (props) => {
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
@@ -161,7 +160,7 @@ export const MobileRow: FC<RowProps> = (props) => {
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
@@ -169,7 +168,7 @@ export const MobileRow: FC<RowProps> = (props) => {
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Event Id</EnhancedTableCell>
             <EnhancedTableCell>
               <Id id={row.requestId} />
@@ -177,12 +176,12 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
         </>
       )}
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell padding="none">
           <Button
             variant="text"
             onClick={toggleExpand}
-            sx={{ fontSize: 'inherit' }}
+            style={{ fontSize: 'inherit' }}
             endIcon={expand ? <AngleUp /> : <AngleDown />}
           >
             {expand ? 'Show less' : 'Show more'}
@@ -197,13 +196,18 @@ export const MobileRow: FC<RowProps> = (props) => {
 export const TabletRow: FC<RowProps> = (props) => {
   const { isLoading, ...row } = props;
 
+  const rowStyles = useMemo(
+    () => (isLoading ? { opacity: 0.3 } : {}),
+    [isLoading],
+  );
+
   return (
-    <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
+    <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
         <Box style={{ display: 'flex', justifyContent: 'center' }}>
           <Id
             id={row.sourceTxId}
-            href={getTxURL(row.fromChain, row.sourceTxId)!}
+            href={getTxURL(row.fromChain, row.sourceTxId)}
           />
         </Box>
       </EnhancedTableCell>

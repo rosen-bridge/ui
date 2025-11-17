@@ -12,6 +12,7 @@ export interface ApiInfoResponse {
     erg: number;
     rsn: number;
   };
+  minBoxValue: number;
   currentBalance: number;
   network: string;
   permitsPerEvent: number;
@@ -49,6 +50,7 @@ export interface ApiWithdrawRequestBodyData {
 
 export type ApiWithdrawRequestBody =
   MutationRequestBodyWithHeaders<ApiWithdrawRequestBodyData>;
+
 export interface ApiWithdrawResponse {
   txId: string;
   status: 'OK';
@@ -64,6 +66,7 @@ export type ApiPermitRequestBody =
 export interface ApiPermitResponse {
   txId: string;
 }
+
 export interface ApiPermitReturnRequestBodyData {
   count: string;
 }

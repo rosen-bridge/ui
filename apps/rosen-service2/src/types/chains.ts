@@ -1,11 +1,21 @@
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
-export type ChainChoices = (typeof NETWORKS_KEYS)[number];
+import { configs } from '../configs';
+import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
+
+// TODO: implement Bitcoin-Runes support later
+export type ChainChoices = Exclude<
+  (typeof NETWORKS_KEYS)[number],
+  typeof BITCOIN_RUNES_NETWORKS_KEY
+>;
+
+export type ChainsKeys = keyof (typeof configs)['chains'];
 
 export interface ChainConfigs {
   version: string;
   addresses: {
     lock: string;
+    cold: string;
     WatcherTriggerEvent: string;
     WatcherPermit: string;
     Fraud: string;

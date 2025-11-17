@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { NextRequest } from 'next/server';
 
 import { ValidationResult } from 'joi';
@@ -22,14 +23,30 @@ export const withValidation =
     validator: (
       request: NextRequest,
       context?: { params: any },
-    ) => Promise<ValidationResult<TSchema>>,
+    ) => Promise<ValidationResult<TSchema> | TSchema>,
     handler: (value: TSchema) => Promise<any>,
   ) =>
   async (request: NextRequest, context?: { params: any }) => {
-    const { error, value } = await validator(request, context);
+    let value: TSchema;
 
-    if (error) {
-      return Response.json(error.message, { status: 400 });
+    try {
+      const result = await validator(request, context);
+
+      if (
+        result &&
+        typeof result === 'object' &&
+        ('error' in result || 'value' in result)
+      ) {
+        const { error, value: data } = result as ValidationResult<TSchema>;
+
+        if (error) throw error;
+
+        value = data;
+      } else {
+        value = result;
+      }
+    } catch (error) {
+      return Response.json((error as any).message, { status: 400 });
     }
 
     try {

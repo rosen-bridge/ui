@@ -4,9 +4,8 @@ import { CommentAltExclamation } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
-  Amount2,
-  Card2,
-  Card2Body,
+  Card,
+  CardBody,
   Connector,
   Divider,
   EnhancedDialog,
@@ -15,9 +14,10 @@ import {
   EnhancedDialogTitle,
   Identifier,
   Label,
-  LoadingButton,
+  Button,
   Network,
   Stack,
+  Typography,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -98,8 +98,8 @@ export const SubmitButton = () => {
     isValidating;
   return (
     <>
-      <LoadingButton
-        sx={{ width: '100%' }}
+      <Button
+        style={{ width: '100%' }}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
@@ -109,7 +109,7 @@ export const SubmitButton = () => {
         }}
       >
         SUBMIT
-      </LoadingButton>
+      </Button>
       <EnhancedDialog
         open={open}
         maxWidth="tablet"
@@ -128,15 +128,13 @@ export const SubmitButton = () => {
             paddingBottom: 0,
           }}
         >
-          <Card2 backgroundColor="primary.light">
-            <Card2Body>
+          <Card backgroundColor="primary.light">
+            <CardBody>
               <Stack spacing={2}>
-                <Stack alignItems="center" spacing={2}>
-                  <Amount
-                    value={amountValue || 0}
-                    size="large"
-                    unit={tokenInfo?.name}
-                  />
+                <Stack align="center" spacing={2}>
+                  <Typography variant="subtitle1">
+                    <Amount value={amountValue || 0} unit={tokenInfo?.name} />
+                  </Typography>
                   {source && target && (
                     <Connector
                       start={<Network name={source.name} />}
@@ -147,13 +145,13 @@ export const SubmitButton = () => {
                 <Divider />
                 <div>
                   <Label label="Transaction Fee">
-                    <Amount2 value={networkFeeRaw} unit={tokenInfo?.name} />
+                    <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
                   </Label>
                   <Label label="Bridge Fee">
-                    <Amount2 value={bridgeFeeRaw} unit={tokenInfo?.name} />
+                    <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
                   </Label>
                   <Label label="Received amount">
-                    <Amount2
+                    <Amount
                       value={receivingAmountRaw}
                       unit={targetTokenInfo?.name}
                     />
@@ -164,28 +162,28 @@ export const SubmitButton = () => {
                   <Identifier value={walletAddressValue} copyable />
                 </Label>
               </Stack>
-            </Card2Body>
-          </Card2>
+            </CardBody>
+          </Card>
         </EnhancedDialogContent>
         <EnhancedDialogActions>
-          <LoadingButton
+          <Button
             color="secondary"
             variant="contained"
-            sx={{ flexGrow: 2 }}
+            style={{ flexGrow: 2 }}
             onClick={() => setOpen(false)}
           >
             Cancel
-          </LoadingButton>
-          <LoadingButton
+          </Button>
+          <Button
             variant="contained"
-            sx={{ flexGrow: 5 }}
+            style={{ flexGrow: 5 }}
             loading={
               isFormSubmitting || isTransactionSubmitting || isLoadingFees
             }
             onClick={handleFormSubmit}
           >
             Confirm
-          </LoadingButton>
+          </Button>
         </EnhancedDialogActions>
       </EnhancedDialog>
     </>

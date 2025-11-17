@@ -63,9 +63,8 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
   const raw = useMemo(() => {
     if (!amount || !tokenMap || !transactionFormData.tokenValue) return '0';
     return getDecimalString(
-      amount.toString(),
-      tokenMap.getSignificantDecimals(transactionFormData.tokenValue.tokenId) ||
-        0,
+      amount,
+      tokenMap.getSignificantDecimals(transactionFormData.tokenValue.tokenId),
     );
   }, [amount, tokenMap, transactionFormData.tokenValue]);
 

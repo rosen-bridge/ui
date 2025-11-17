@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/base",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -8,18 +8,26 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build",
-    "type-check": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "typescript": "^5.0.0"
+    "type-check": "tsc --noEmit",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "coverage": "npm run test -- --run --coverage"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^0.6.3",
-    "@rosen-bridge/minimum-fee": "^2.2.3",
-    "@rosen-bridge/tokens": "^3.1.1",
-    "@rosen-ui/types": "^0.3.7"
+    "@rosen-bridge/address-codec": "^1.0.1",
+    "@rosen-bridge/minimum-fee": "^3.1.0",
+    "@rosen-bridge/selection-types": "^1.0.1",
+    "@rosen-bridge/tokens": "^4.0.1",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.3.8",
+    "@rosen-ui/utils": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

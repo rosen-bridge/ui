@@ -1,36 +1,31 @@
 import * as Icons from '@rosen-bridge/icons';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { capitalize } from 'lodash-es';
+import { camelCase, upperFirst } from 'lodash-es';
 
 import { styled } from '../../../styling';
-import { Skeleton, SvgIcon, Typography } from '../../base';
+import { Skeleton, Typography } from '../../base';
+import { InjectOverrides } from '../InjectOverrides';
+import { SvgIcon } from '../SvgIcon';
 
-/**
- * Props for the Network component.
- *
- * @property name - The name of the network (like 'binance', 'bitcoin', etc.).
- * @property variant - What to show:
- *   - 'both': logo + label (default)
- *   - 'logo': logo only
- *   - 'title': label only
- * @property orientation - 'horizontal' or 'vertical'.
- * @property loading - If true, show loading placeholders.
- * @property reverse - If true, reverse order.
- */
 export type NetworkProps = {
-  name: NetworkType;
-  variant?: 'both' | 'logo' | 'title';
+  /** Layout orientation: 'horizontal' | 'vertical' */
   orientation?: 'horizontal' | 'vertical';
+
+  /** If true, show loading placeholders */
   loading?: boolean;
+
+  /** The name of the network (like 'binance', 'bitcoin', etc.). Optional, fallback will be used if missing */
+  name?: NetworkType;
+
+  /** If true, reverse the order */
   reverse?: boolean;
+
+  /** What to show: 'both' | 'logo' | 'title' */
+  variant?: 'both' | 'logo' | 'title';
 };
 
-const Root = styled('div')<Omit<NetworkProps, 'name'>>(({
-  theme,
-  reverse,
-  orientation,
-}) => {
+const Root = styled('div')<NetworkProps>(({ reverse, orientation }) => {
   let flexDirection: 'row' | 'row-reverse' | 'column' | 'column-reverse' =
     'row';
 
@@ -44,8 +39,9 @@ const Root = styled('div')<Omit<NetworkProps, 'name'>>(({
     display: 'flex',
     width: 'fit-content',
     alignItems: 'center',
+    fontSize: 'inherit',
     flexDirection,
-    gap: theme.spacing(1),
+    gap: '0.5em',
   };
 });
 
@@ -60,7 +56,11 @@ const NetworkSkeleton = ({
 }: Omit<NetworkProps, 'name'> & { showIcon?: boolean; showText?: boolean }) => (
   <Root reverse={reverse} orientation={orientation}>
     {showIcon && (
-      <Skeleton animation="wave" height={24} width={24} variant="circular" />
+      <Skeleton
+        animation="wave"
+        sx={{ width: '2em', height: '2em' }}
+        variant="circular"
+      />
     )}
     {showText && (
       <Skeleton
@@ -85,8 +85,10 @@ const NetworkFallback = ({
 }: Omit<NetworkProps, 'name'> & { showIcon?: boolean; showText?: boolean }) => (
   <Root reverse={reverse} orientation={orientation}>
     {showIcon && (
-      <SvgIcon>
-        <Icons.ExclamationTriangleFill />
+      <SvgIcon style={{ fontSize: '2em' }}>
+        <Icons.ExclamationTriangleFill
+          style={{ width: '100%', height: '100%' }}
+        />
       </SvgIcon>
     )}
     {showText && <Typography variant="body1">Unsupported</Typography>}
@@ -96,7 +98,7 @@ const NetworkFallback = ({
 /**
  * Main Network component.
  */
-export const Network = ({
+const NetworkBase = ({
   name,
   variant = 'both',
   orientation = 'horizontal',
@@ -117,10 +119,19 @@ export const Network = ({
     );
   }
 
+  if (!name) {
+    return (
+      <NetworkFallback
+        showText={showText}
+        showIcon={showIcon}
+        orientation={orientation}
+        reverse={reverse}
+      />
+    );
+  }
+
   const network = name in NETWORKS ? NETWORKS[name as NetworkType] : undefined;
-
-  const iconKey = capitalize(name);
-
+  const iconKey = upperFirst(camelCase(name));
   const LogoNetwork =
     iconKey in Icons ? Icons[iconKey as keyof typeof Icons] : undefined;
 
@@ -138,11 +149,13 @@ export const Network = ({
   return (
     <Root reverse={reverse} orientation={orientation}>
       {showIcon && (
-        <SvgIcon>
-          <LogoNetwork />
+        <SvgIcon style={{ fontSize: '2em' }}>
+          <LogoNetwork style={{ width: '100%', height: '100%' }} />
         </SvgIcon>
       )}
-      {showText && <Typography variant="body1">{network.label}</Typography>}
+      {showText && <Typography variant="inherit">{network.label}</Typography>}
     </Root>
   );
 };
+
+export const Network = InjectOverrides(NetworkBase);

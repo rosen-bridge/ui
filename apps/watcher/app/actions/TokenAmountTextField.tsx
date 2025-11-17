@@ -8,6 +8,7 @@ import {
   Link,
   TextField,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { TokenInfo } from '@rosen-ui/types';
 import { getDecimalString, getNonDecimalString } from '@rosen-ui/utils';
 
@@ -19,29 +20,69 @@ interface TokenAmountTextFieldProps {
   disabled: boolean;
   loading?: boolean;
   token: Pick<TokenInfo, 'amount' | 'decimals' | 'name'> | undefined;
+  minBoxValue?: number;
 }
+
 /**
- * render a react-hook-form compatible text field for token amount input,
+ * Render a react-hook-form compatible text field for token amount input,
  * handling decimal and maximum available validation for token, enabling user to
  * choose maximum available amount for text field, setting minimum value for
  * the text field when the `token` prop changes and optionally showing a pending
- * indicator
+ * indicator.
  *
- * @param disabled
- * @param loading
- * @param token
+ * @param disabled - Disable the input field.
+ * @param loading - Show a loading indicator when data is pending.
+ * @param token - Token information used for validation and formatting.
+ * @param minBoxValue - Minimum allowed value for the input, applied when token changes.
  */
 export const TokenAmountTextField = ({
   disabled,
   loading,
   token,
+  minBoxValue,
 }: TokenAmountTextFieldProps) => {
   const { control, setValue } =
     useFormContext<TokenAmountCompatibleFormSchema>();
 
-  const { field: amountField } = useController({
+  const { field: amountField, fieldState } = useController({
     control: control,
     name: 'amount',
+    rules: {
+      validate: (value) => {
+        if (!token) return 'Token must be selected first';
+
+        const newValue = value?.trim() || '';
+
+        if (!newValue) return 'Amount is required';
+
+        // match any complete or incomplete decimal number
+        const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
+        if (!match) return 'Invalid amount';
+
+        // prevent user from entering more decimals than token decimals
+        const isDecimalsLarge =
+          (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
+        if (isDecimalsLarge)
+          return `The current token only supports ${token.decimals} decimals`;
+
+        const newValueBigInt = BigInt(
+          getNonDecimalString(newValue, token.decimals),
+        );
+
+        // prevent user from entering more than token amount
+        if (newValueBigInt > token.amount) return `Insufficient balance`;
+
+        if (
+          token.name === NETWORKS.ergo.nativeToken &&
+          minBoxValue &&
+          newValueBigInt < BigInt(minBoxValue)
+        ) {
+          return `Amount must be at least ${getDecimalString(minBoxValue.toString(), token.decimals)}`;
+        }
+
+        return true;
+      },
+    },
   });
 
   useEffect(() => {
@@ -69,39 +110,17 @@ export const TokenAmountTextField = ({
       label="Amount"
       {...amountField}
       disabled={disabled}
-      onChange={(event) => {
-        if (!token) return;
-
-        const newValue = event.target.value;
-
-        // match any complete or incomplete decimal number
-        const match = newValue.match(/^(\d+(\.(?<floatingDigits>\d+)?)?)?$/);
-
-        // prevent user from entering invalid numbers
-        const isValueInvalid = !match;
-        if (isValueInvalid) return;
-
-        // prevent user from entering more decimals than token decimals
-        const isDecimalsLarge =
-          (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
-        if (isDecimalsLarge) return;
-
-        // prevent user from entering more than token amount
-        const isAmountLarge =
-          BigInt(getNonDecimalString(newValue, token.decimals)) > token.amount;
-        if (isAmountLarge) return;
-
-        amountField.onChange(event);
-      }}
+      error={!!fieldState.error}
       helperText={
-        token && (
+        fieldState.error?.message ||
+        (token && (
           <>
             <Link component="button" onClick={setAmountToMaxAvailable}>
               {getMaxAvailableTokenAmount()}
             </Link>{' '}
             {token.name} available
           </>
-        )
+        ))
       }
       InputProps={{
         endAdornment: token && (

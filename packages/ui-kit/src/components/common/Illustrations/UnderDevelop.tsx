@@ -1,8 +1,9 @@
-import { Stack, Typography } from '../../base';
+import { Typography } from '../../base';
+import { Stack } from '../Stack';
 
 export const UnderDevelop = () => {
   return (
-    <Stack direction="column" textAlign="center" spacing={1}>
+    <Stack direction="column" align="center" spacing={1}>
       <svg
         width="294"
         height="286"

@@ -5,17 +5,17 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  FullCard,
   Grid,
-  Card2,
+  Card,
   MenuItem,
   SubmitButton,
   TextField,
   Typography,
   useApiKey,
-  Card2Header,
-  Card2Title,
-  Card2Body,
+  CardHeader,
+  CardTitle,
+  CardBody,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -37,6 +37,7 @@ export const RequestAnOrderForm = () => {
     trigger,
     isMutating: isOrderPending,
     error,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
     '/order',
     mutatorWithHeaders,
@@ -77,6 +78,7 @@ export const RequestAnOrderForm = () => {
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
@@ -105,57 +107,49 @@ export const RequestAnOrderForm = () => {
   );
 
   return (
-    <Card2 backgroundColor="transparent">
-      <Card2Header>
-        <Card2Title>
+    <Card backgroundColor="transparent">
+      <CardHeader>
+        <CardTitle>
           <Typography variant="h5" fontWeight="bold">
             Request An Order
           </Typography>
-        </Card2Title>
-      </Card2Header>
-      <Card2Body>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
           {renderAlert()}
+          <Stack spacing={2}>
+            <TextField label="Id" {...register('id')} />
+            <TextField select label="Chain" {...register('chain')} fullWidth>
+              {NETWORKS_KEYS.map((key) => (
+                <MenuItem key={key} value={key}>
+                  {NETWORKS[key].label}
+                </MenuItem>
+              ))}
+            </TextField>
+            <TextField
+              label="Order"
+              multiline
+              rows={5}
+              {...register('orderJson')}
+            />
 
-          <TextField label="Id" {...register('id')} sx={{ mb: 2 }} />
-          <TextField
-            select
-            label="Chain"
-            {...register('chain')}
-            sx={{ mb: 2 }}
-            fullWidth
-          >
-            {NETWORKS_KEYS.map((key) => (
-              <MenuItem key={key} value={key}>
-                {NETWORKS[key].label}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Order"
-            multiline
-            rows={5}
-            {...register('orderJson')}
-            sx={{ mb: 2 }}
-          />
+            {error?.response?.status === 403 && (
+              <Grid container alignItems="center">
+                <Typography color="warning.main">
+                  The Api key is not correct
+                </Typography>
+              </Grid>
+            )}
 
-          {error?.response?.status === 403 && (
-            <Grid
-              container
-              alignItems="center"
-              sx={(theme) => ({ color: theme.palette.warning.main })}
-            >
-              <Typography>The Api key is not correct</Typography>
-            </Grid>
-          )}
+            <ApiKeyModalWarning />
 
-          <ApiKeyModalWarning />
-
-          <SubmitButton loading={isOrderPending} disabled={!apiKey}>
-            Send
-          </SubmitButton>
+            <SubmitButton loading={isOrderPending} disabled={!apiKey}>
+              Send
+            </SubmitButton>
+          </Stack>
         </form>
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };

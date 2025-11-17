@@ -12,9 +12,8 @@ export default defineConfig({
     setupFiles: [],
     coverage: {
       all: true,
-      reporter: ['cobertura', 'lcov', 'text', 'text-summary'],
       provider: 'istanbul',
-      include: ['src'],
+      reporter: 'cobertura',
     },
     poolOptions: {
       forks: {

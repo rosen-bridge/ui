@@ -9,7 +9,7 @@ export const TOKEN_NAME_PLACEHOLDER = 'unnamed token';
 export const HEALTH_DATA_REFRESH_INTERVAL = 60000;
 
 export const NETWORKS = {
-  binance: {
+  'binance': {
     index: 4,
     key: 'binance',
     label: 'Binance',
@@ -17,7 +17,7 @@ export const NETWORKS = {
     id: '0x38',
     hasTokenSupport: true,
   },
-  bitcoin: {
+  'bitcoin': {
     index: 2,
     key: 'bitcoin',
     label: 'Bitcoin',
@@ -25,15 +25,15 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
-  runes: {
+  'bitcoin-runes': {
     index: 6,
-    key: 'runes',
-    label: 'Runes',
+    key: 'bitcoin-runes',
+    label: 'Bitcoin Runes',
     nativeToken: 'btc',
     id: '',
     hasTokenSupport: true,
   },
-  cardano: {
+  'cardano': {
     index: 1,
     key: 'cardano',
     label: 'Cardano',
@@ -41,7 +41,7 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: true,
   },
-  ergo: {
+  'ergo': {
     index: 0,
     key: 'ergo',
     label: 'Ergo',
@@ -49,7 +49,7 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: true,
   },
-  ethereum: {
+  'ethereum': {
     index: 3,
     key: 'ethereum',
     label: 'Ethereum',
@@ -57,7 +57,7 @@ export const NETWORKS = {
     id: '0x1',
     hasTokenSupport: true,
   },
-  doge: {
+  'doge': {
     index: 5,
     key: 'doge',
     label: 'Doge',

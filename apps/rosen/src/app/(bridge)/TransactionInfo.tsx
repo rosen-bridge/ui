@@ -3,14 +3,12 @@
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
-  Amount2,
-  Card2,
-  Card2Body,
+  Amount,
+  Card,
+  CardBody,
   Divider,
   Label,
-  Tooltip,
   Truncate,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 
 import {
@@ -24,8 +22,7 @@ import {
  * and wallet connection
  */
 export const TransactionInfo = () => {
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const { sourceValue, targetValue, tokenValue } = useTransactionFormData();
 
   const tokenMap = useTokenMap();
 
@@ -53,16 +50,16 @@ export const TransactionInfo = () => {
   const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
 
   return (
-    <Card2
+    <Card
       backgroundColor="primary.light"
       style={{
         alignContent: 'end',
         flexGrow: 1,
       }}
     >
-      <Card2Body>
+      <CardBody>
         <Label label="You Will Receive" color="textPrimary" dense>
-          <Amount2
+          <Amount
             value={
               !tokenValue || receivingAmountRaw === '0'
                 ? undefined
@@ -72,23 +69,23 @@ export const TransactionInfo = () => {
             loading={isPending}
           />
         </Label>
-        <Divider sx={{ borderStyle: 'dashed', my: 1 }} />
+        <Divider borderStyle="dashed" style={{ margin: '8px 0' }} />
         <Label label="Transaction Fee" dense>
-          <Amount2
+          <Amount
             value={!tokenValue ? undefined : networkFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />
         </Label>
         <Label label="Bridge Fee" dense>
-          <Amount2
+          <Amount
             value={!tokenValue ? undefined : bridgeFeeRaw}
             unit={tokenInfo?.name}
             loading={isPending}
           />
         </Label>
         <Label label="Min Transfer" dense>
-          <Amount2
+          <Amount
             value={!tokenValue ? undefined : minTransferRaw}
             unit={tokenInfo?.name}
             loading={isPending}
@@ -98,11 +95,12 @@ export const TransactionInfo = () => {
         {!!error && (
           <Alert severity="error">
             <Truncate lines={1} style={{ whiteSpace: 'nowrap' }}>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {(error as any)?.message}
             </Truncate>
           </Alert>
         )}
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };

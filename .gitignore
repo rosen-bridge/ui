@@ -28,10 +28,16 @@ build
 config
 **/configs/*.json
 **/configs/*.yaml
+**/configs/*.yml
 next-env.d.ts
 !config/default.yaml
+!config/default.yml
 !config/schema.json
 
 .devcontainer
 
 **/vite.config.*.mjs
+**/vitest.config.*.mjs
+
+# default health-check report file
+**/healthReport.json

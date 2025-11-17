@@ -1,6 +1,6 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { ErgoObservationExtractor } from '@rosen-bridge/observation-extractor';
-import { ErgoScanner } from '@rosen-bridge/scanner';
+import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
+import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -16,9 +16,9 @@ const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
 export const registerErgoExtractor = async (scanner: ErgoScanner) => {
   try {
     const observationExtractor = new ErgoObservationExtractor(
+      config.ergo.addresses.lock,
       dataSource,
       await getTokenMap(),
-      config.ergo.addresses.lock,
       logger,
     );
 

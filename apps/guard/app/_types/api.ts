@@ -21,14 +21,21 @@ export interface ApiInfoResponse {
   };
   rsnTokenId: string;
   emissionTokenId: string;
-  balances: {
-    hot: TokenInfoWithAddress[];
-    cold: TokenInfoWithAddress[];
-  };
   versions: {
     app: string;
     contract: string;
     tokensMap: string;
+  };
+}
+
+export interface ApiBalanceResponse {
+  hot: {
+    items: TokenInfoWithAddress[];
+    total: number;
+  };
+  cold: {
+    items: TokenInfoWithAddress[];
+    total: number;
   };
 }
 

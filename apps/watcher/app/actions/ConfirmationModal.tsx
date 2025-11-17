@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 
 import {
   Dialog,
@@ -6,13 +6,13 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  LoadingButton,
+  Button,
 } from '@rosen-bridge/ui-kit';
 
 interface ConfirmationModalProps {
   open: boolean;
   title: string;
-  content: React.ReactNode | string;
+  content: ReactNode | string;
   buttonText: string;
   onConfirm: () => Promise<void>;
   handleClose: () => void;
@@ -55,13 +55,13 @@ export const ConfirmationModal = ({
         )}
       </DialogContent>
       <DialogActions>
-        <LoadingButton
+        <Button
           variant="text"
           loading={buttonLoading}
           onClick={handleConfirmClick}
         >
           {buttonText}
-        </LoadingButton>
+        </Button>
       </DialogActions>
     </Dialog>
   );

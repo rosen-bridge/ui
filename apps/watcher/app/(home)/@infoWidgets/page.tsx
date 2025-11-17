@@ -8,7 +8,7 @@ import {
   ShieldExclamation,
   Wallet,
 } from '@rosen-bridge/icons';
-import { Amount, Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
+import { Box, Grid, SvgIcon } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
@@ -77,25 +77,20 @@ const InfoWidgets = () => {
     <InfoWidgetCard
       title="Available / Total Locked RSN"
       value={
-        <Amount
-          value={
-            data
-              ? `${getDecimalString(
-                  data.permitCount.active.toString() ?? '0',
-                  rsnToken?.decimals ?? 0,
-                  1,
-                )} / ${getDecimalString(
-                  data.permitCount.total.toString() ?? '0',
-                  rsnToken?.decimals ?? 0,
-                  1,
-                )}`
-              : undefined
-          }
-          size="large"
-        />
+        data
+          ? `${getDecimalString(
+              data.permitCount.active.toString() ?? '0',
+              rsnToken?.decimals ?? 0,
+              1,
+            )} / ${getDecimalString(
+              data.permitCount.total.toString() ?? '0',
+              rsnToken?.decimals ?? 0,
+              1,
+            )}`
+          : ''
       }
       icon={
-        <SvgIcon fontSize="large">
+        <SvgIcon size="large">
           <LockAlt />
         </SvgIcon>
       }
@@ -113,14 +108,9 @@ const InfoWidgets = () => {
     return (
       <InfoWidgetCard
         title="Available / Total Reports"
-        value={
-          <Amount
-            value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
-            size="large"
-          />
-        }
+        value={`${allowedAndTotalPermits.allowed} / ${allowedAndTotalPermits.total}`}
         icon={
-          <SvgIcon fontSize="large">
+          <SvgIcon size="large">
             <LockAlt />
           </SvgIcon>
         }
@@ -138,7 +128,7 @@ const InfoWidgets = () => {
           value={upperFirst(data?.network ?? '')}
           icon={
             !icon ? (
-              <Box sx={{ width: 35, height: 35 }} />
+              <Box style={{ width: 35, height: 35 }} />
             ) : (
               <Image src={icon} alt="network" width={35} height={35} />
             )
@@ -157,20 +147,12 @@ const InfoWidgets = () => {
         <InfoWidgetCard
           title="ERG"
           value={
-            <Amount
-              size="large"
-              value={
-                ergToken?.amount !== undefined
-                  ? getDecimalString(
-                      ergToken.amount.toString(),
-                      ergToken.decimals,
-                    )
-                  : undefined
-              }
-            />
+            ergToken?.amount !== undefined
+              ? getDecimalString(ergToken.amount.toString(), ergToken.decimals)
+              : ''
           }
           icon={
-            <SvgIcon fontSize="large">
+            <SvgIcon size="large">
               <Wallet />
             </SvgIcon>
           }
@@ -179,19 +161,10 @@ const InfoWidgets = () => {
       </Grid>
       <Grid item mobile={6} tablet={6} laptop>
         <InfoWidgetCard
-          value={(() => {
-            const amountValue = (titleRSN || titleERSN || '0 RSN').split(' ');
-            return (
-              <Amount
-                value={amountValue[0]}
-                unit={amountValue[1]}
-                size="large"
-              />
-            );
-          })()}
+          value={titleRSN || titleERSN || '0 RSN'}
           title={rsnToken?.amount === 0 ? '' : titleERSN}
           icon={
-            <SvgIcon fontSize="large">
+            <SvgIcon size="large">
               <Wallet />
               {/* FIXME: Use an appropriate icon
                 local:ergo/rosen-bridge/ui#64
@@ -207,7 +180,7 @@ const InfoWidgets = () => {
           title="Health"
           value={data?.health.status ?? ''}
           icon={
-            <SvgIcon fontSize="large">
+            <SvgIcon size="large">
               {data?.health.status === 'Healthy' ? (
                 <ShieldCheck />
               ) : (

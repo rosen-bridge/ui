@@ -1,49 +1,48 @@
 'use client';
 
-import { MouseEvent, useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import {
-  EnhancedTable,
-  Grid,
-  TablePaginationProps,
-  useTableDataPagination,
-} from '@rosen-bridge/ui-kit';
+import { EnhancedTable, Grid } from '@rosen-bridge/ui-kit';
+import { Network } from '@rosen-ui/types';
 
-import { ApiAddressAssetsResponse, GuardTokenInfo } from '@/_types/api';
+import { useBalance } from '@/_hooks/useBalance';
+import { GuardTokenInfo } from '@/_types/api';
 
 import { MobileRow, TabletRow, mobileHeader, tabletHeader } from './TableRow';
 import { TableSkeleton } from './TableSkeleton';
 
-const getKey = (offset: number, limit: number) => {
-  return ['/assets', { offset, limit }];
-};
-
 const Assets = () => {
-  const {
-    data,
-    isLoading,
-    pageIndex,
-    pageSize,
-    setPageIndex,
-    setPageSize,
-    isFirstLoad,
-    isFirstPage,
-    isLastPage,
-  } = useTableDataPagination<ApiAddressAssetsResponse>(getKey);
+  const { data, isLoading } = useBalance();
 
-  const handleChangePage = useCallback(
-    (event: MouseEvent<HTMLButtonElement> | null, newPage: number) => {
-      setPageIndex(newPage);
-    },
-    [setPageIndex],
-  );
+  const items = useMemo(() => {
+    if (!data) return [];
 
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPageSize(parseInt(event.target.value, 10));
-    },
-    [setPageSize],
-  );
+    const items = [
+      ...data.cold.items.map((item) => ({ ...item, type: 'cold' })),
+      ...data.hot.items.map((item) => ({ ...item, type: 'hot' })),
+    ];
+
+    const all = Object.groupBy(
+      items,
+      (item) => item.chain + ':' + item.balance.tokenId,
+    );
+
+    return Object.values(all)
+      .filter((items) => !!items)
+      .map((items) => {
+        const cold = items.find((item) => item.type === 'cold');
+
+        const hot = items.find((item) => item.type === 'hot');
+
+        const token = Object.assign({}, hot?.balance, cold?.balance, {
+          chain: (cold?.chain || hot?.chain) as Network,
+          amount: hot?.balance.amount || 0,
+          coldAmount: cold?.balance.amount || 0,
+        });
+
+        return token;
+      });
+  }, [data]);
 
   const renderMobileRow = useCallback(
     (rowData: GuardTokenInfo) => (
@@ -75,49 +74,18 @@ const Assets = () => {
     [renderMobileRow, renderTabletRow],
   );
 
-  const paginationProps = useMemo<TablePaginationProps>(
-    () => ({
-      component: 'div',
-      count: data?.total ?? 0,
-      rowsPerPage: pageSize,
-      page: pageIndex,
-      onPageChange: handleChangePage,
-      onRowsPerPageChange: handleChangeRowsPerPage,
-      nextIconButtonProps: {
-        disabled: isLoading || isLastPage,
-      },
-      backIconButtonProps: {
-        disabled: isLoading || isFirstPage,
-      },
-      SelectProps: {
-        disabled: isLoading,
-      },
-    }),
-    [
-      data?.total,
-      pageIndex,
-      pageSize,
-      handleChangePage,
-      handleChangeRowsPerPage,
-      isLoading,
-      isFirstPage,
-      isLastPage,
-    ],
-  );
-
-  return isFirstLoad ? (
+  return isLoading ? (
     <Grid>
-      <TableSkeleton numberOfItems={pageSize} />
+      <TableSkeleton numberOfItems={25} />
     </Grid>
   ) : (
     data && (
       <Grid container>
         <EnhancedTable
-          data={data.items}
+          data={items}
           responsiveHead={tableHeaderProps}
           responsiveRenderRow={tableRenderRowProps}
-          paginated={true}
-          tablePaginationProps={paginationProps}
+          paginated={false}
         />
       </Grid>
     )

@@ -1,7 +1,8 @@
 import { Moon, Sun } from '@rosen-bridge/icons';
 
 import { useIsDarkMode, useThemeToggler } from '../../hooks';
-import { IconButton, SvgIcon } from '../base';
+import { IconButton } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 export const ToolbarThemeTogglerAction = () => {
   const isDarkMode = useIsDarkMode();
@@ -9,11 +10,11 @@ export const ToolbarThemeTogglerAction = () => {
   return (
     <IconButton onClick={themeToggler.toggle} color="inherit">
       {isDarkMode ? (
-        <SvgIcon sx={{ width: 24 }}>
+        <SvgIcon size="medium">
           <Sun />
         </SvgIcon>
       ) : (
-        <SvgIcon sx={{ width: 24 }}>
+        <SvgIcon size="medium">
           <Moon />
         </SvgIcon>
       )}

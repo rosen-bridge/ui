@@ -2,9 +2,10 @@ import * as wasm from '@emurgo/cardano-serialization-lib-nodejs';
 import {
   AssetBalance,
   CardanoUtxo,
-  selectCardanoUtxos,
+  CardanoBoxSelection,
 } from '@rosen-bridge/cardano-utxo-selection';
 import { TokenMap } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -19,6 +20,8 @@ import {
   sumAssetBalance,
   walletUtxoToCardanoUtxo,
 } from './utils';
+
+const selector = new CardanoBoxSelection();
 
 /**
  * generates a lock transaction on Cardano
@@ -79,13 +82,22 @@ export const generateUnsignedTx =
     // add required ADA estimation for tx fee and change box
     requiredAssets.nativeToken += feeAndMinBoxValue;
     // get input boxes, THIS FUNCTION WORKS WITH UNWRAPPED-VALUE
-    const inputs = await selectCardanoUtxos(
+    const inputs = await selector.getCoveringBoxes(
       requiredAssets,
       [],
       new Map(),
       utxos.values(),
+      0n,
+      undefined,
+      () => 0n,
     );
-    if (!inputs.covered) throw Error(`Not enough assets`);
+    if (!inputs.covered) {
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.cardano.key,
+        inputs.uncoveredAssets,
+      );
+    }
 
     return generateTx(
       lockAssets,
@@ -153,6 +165,11 @@ const generateTx = (
   // add input boxes to transaction
   inputs.forEach((utxo) => {
     inputAssets = sumAssetBalance(inputAssets, getUtxoAssets(utxo));
+    if (!utxo.address) {
+      throw new Error(
+        `ImpossibleBehavior: utxo has no value for address [${utxo.txId}] [${utxo.index}]`,
+      );
+    }
     txBuilder.add_regular_input(
       wasm.Address.from_bech32(utxo.address),
       wasm.TransactionInput.new(

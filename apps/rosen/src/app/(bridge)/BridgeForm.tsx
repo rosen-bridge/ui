@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, ChangeEvent } from 'react';
+import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
 
 import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
@@ -9,7 +9,6 @@ import {
   TextField,
   Typography,
   ListItemIcon,
-  styled,
   MenuItem,
   CircularProgress,
   SvgIcon,
@@ -17,6 +16,7 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -30,16 +30,6 @@ import {
 } from '@/hooks';
 
 import { UseAllAmount } from './UseAllAmount';
-
-/**
- * bridge form container comp
- */
-const SelectedAsset = styled('div')(({ theme }) => ({
-  display: 'flex',
-  gap: theme.spacing(1),
-  alignItems: 'center',
-  marginBottom: '-1px',
-}));
 
 /**
  * renders the bridge main form
@@ -58,7 +48,6 @@ export const BridgeForm = () => {
   } = useBridgeForm();
 
   const {
-    sourceValue,
     tokenValue,
     formState: { isValidating },
   } = useTransactionFormData();
@@ -68,13 +57,7 @@ export const BridgeForm = () => {
 
   const { isLoading, raw: balanceRaw } = useBalance();
 
-  const {
-    error,
-    amount: max,
-    isLoading: isMaxLoading,
-    raw,
-    load,
-  } = useMaxTransfer();
+  const { error, isLoading: isMaxLoading, raw, load } = useMaxTransfer();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -82,21 +65,17 @@ export const BridgeForm = () => {
     const network = sources.find((network) => network.name === value)!;
     const Logo = network.logo;
     return (
-      <SelectedAsset>
+      <Stack direction="row" align="center" spacing={1}>
         <SvgIcon>
           <Logo />
         </SvgIcon>
         <Typography color="text.secondary">{network.label}</Typography>
-      </SelectedAsset>
+      </Stack>
     );
   };
 
   const handleTokenChange = useCallback(
-    (
-      e: React.SyntheticEvent,
-      value: RosenChainToken | null,
-      reason: string,
-    ) => {
+    (e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
       if (reason == 'clear') return;
       const currentToken = value || undefined;
       setValue('token', currentToken, {
@@ -217,38 +196,31 @@ export const BridgeForm = () => {
       </Grid>
       <TextField
         label="Target Address"
-        InputProps={
-          {
-            disableUnderline: true,
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton
-                  sx={{
-                    cursor: 'pointer',
-                    color: 'secondary',
-                  }}
-                  onClick={async () => {
-                    try {
-                      const clipboardText =
-                        await navigator.clipboard.readText();
-                      setValue('walletAddress', clipboardText.trim(), {
-                        shouldDirty: true,
-                        shouldTouch: true,
-                        shouldValidate: true,
-                      });
-                    } catch (err) {
-                      console.error('Failed to read clipboard: ', err);
-                    }
-                  }}
-                >
-                  <SvgIcon sx={{ opacity: '0.6' }}>
-                    <ClipboardNotes />
-                  </SvgIcon>
-                </IconButton>
-              </InputAdornment>
-            ),
-          } as any
-        }
+        InputProps={{
+          disableUnderline: true,
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                onClick={async () => {
+                  try {
+                    const clipboardText = await navigator.clipboard.readText();
+                    setValue('walletAddress', clipboardText.trim(), {
+                      shouldDirty: true,
+                      shouldTouch: true,
+                      shouldValidate: true,
+                    });
+                  } catch (err) {
+                    console.error('Failed to read clipboard: ', err);
+                  }
+                }}
+              >
+                <SvgIcon opacity="0.6">
+                  <ClipboardNotes />
+                </SvgIcon>
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
         variant="filled"
         error={!!errors?.walletAddress}
         helperText={
@@ -307,6 +279,7 @@ export const BridgeForm = () => {
           disableUnderline: true,
           endAdornment: tokenField.value && selectedWallet && (
             <UseAllAmount
+              disabled={!addressField.value || !!errors?.walletAddress}
               error={!!error}
               loading={isLoading || isMaxLoading}
               value={balanceRaw}

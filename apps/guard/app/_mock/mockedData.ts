@@ -14,6 +14,7 @@ import {
   ApiHistoryResponse as ApiHistoryEventResponse,
   HistoryEvent,
   OngoingEvent,
+  ApiBalanceResponse,
 } from '@/_types/api';
 
 const info: ApiInfoResponse = {
@@ -21,8 +22,19 @@ const info: ApiInfoResponse = {
     status: 'Unstable',
     trialErrors: [],
   },
-  balances: {
-    hot: [
+  rsnTokenId:
+    '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
+  emissionTokenId: '',
+  versions: {
+    app: '',
+    contract: '',
+    tokensMap: '',
+  },
+};
+
+const balance: ApiBalanceResponse = {
+  hot: {
+    items: [
       {
         address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
         chain: NETWORKS.ergo.key,
@@ -47,7 +59,10 @@ const info: ApiInfoResponse = {
         },
       },
     ],
-    cold: [
+    total: 2,
+  },
+  cold: {
+    items: [
       {
         address: '3WvuxxkcM5gRhfktbKTn3Wvux1xkcM5gRhTn1WfktbGoSqpW',
         chain: NETWORKS.ergo.key,
@@ -72,14 +87,7 @@ const info: ApiInfoResponse = {
         },
       },
     ],
-  },
-  rsnTokenId:
-    '85baefff2eb9e45b04f8b4e6265e866773db6db5f9e8e30ce2cae1aa263b90gg',
-  emissionTokenId: '',
-  versions: {
-    app: '',
-    contract: '',
-    tokensMap: '',
+    total: 2,
   },
 };
 
@@ -295,7 +303,7 @@ const healthStatus: ApiHealthStatusResponse = [
 const generateHistoryEventRecords = (
   numberOfRecords: number,
 ): HistoryEvent[] => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map(() => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
     fromChain: NETWORKS.ergo.key,
@@ -321,7 +329,7 @@ const generateHistoryEventRecords = (
 const generateOngoingEventRecords = (
   numberOfRecords: number,
 ): OngoingEvent[] => {
-  return new Array(numberOfRecords).fill(null).map((data, index) => ({
+  return new Array(numberOfRecords).fill(null).map(() => ({
     eventId: `${Math.floor(Date.now() * Math.random())}`,
     txId: `${Math.floor(Date.now() * Math.random())}`,
     fromChain: NETWORKS.ergo.key,
@@ -393,6 +401,7 @@ const history: ApiHistoryEventResponse = {
 export const mockedData: FakeData = {
   withStringKeys: {
     '/info': info,
+    '/balance': balance,
     '/revenue/chart': revenueChart,
     '/sign': sign,
     '/health/status': healthStatus,
@@ -402,15 +411,12 @@ export const mockedData: FakeData = {
       return revenueChart[period];
     },
 
-    '/assets': ({ offset, limit, chain }): ApiAddressAssetsResponse => {
+    '/assets': ({ chain }): ApiAddressAssetsResponse => {
       const filteredData = chain
         ? assets.filter((asset) => asset.chain === chain)
         : assets;
 
       const pageData = filteredData;
-      offset && limit
-        ? filteredData.slice(offset, limit + offset)
-        : filteredData;
 
       return {
         total: filteredData.length,

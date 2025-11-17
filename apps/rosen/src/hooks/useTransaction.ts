@@ -3,6 +3,7 @@ import React from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
   UserDeniedTransactionSignatureError,
@@ -100,6 +101,8 @@ export const useTransaction = () => {
         ]),
         'success',
       );
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       openSnackbar(
         error?.info ?? error?.message ?? JSON.stringify(error),
@@ -107,6 +110,8 @@ export const useTransaction = () => {
         undefined,
         () => JSON.stringify(serializeError(error), null, 2),
       );
+
+      if (error instanceof InsufficientAssetsError) return;
 
       if (error instanceof UserDeniedTransactionSignatureError) return;
 

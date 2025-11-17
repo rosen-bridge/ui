@@ -1,18 +1,28 @@
-import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
+import {
+  BitcoinBoxSelection,
+  generateFeeEstimator,
+} from '@rosen-bridge/bitcoin-utxo-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
 
-import { DOGE_NETWORK, DOGE_INPUT_SIZE } from './constants';
+import {
+  DOGE_NETWORK,
+  DOGE_INPUT_SIZE,
+  DOGE_TX_BASE_SIZE,
+  DOGE_OUTPUT_SIZE,
+} from './constants';
 import { DogeUtxo, UnsignedPsbtData } from './types';
 import {
-  estimateTxWeight,
   getAddressUtxos,
   getFeeRatio,
   getMinimumMeaningfulDoge,
   getTxHex,
 } from './utils';
+
+const selector = new BitcoinBoxSelection();
 
 /**
  * generates doge lock tx
@@ -54,31 +64,38 @@ export const generateUnsignedTx =
       value: Number(unwrappedAmount),
     });
 
-    // estimate tx weight without considering inputs
-    //  0 inputs, 2 outputs, 1 for feeRatio to get weights only, multiply by 4 to convert vSize to weight unit
-    let estimatedTxWeight = estimateTxWeight(0, 2, opReturnData.length);
-
     // fetch inputs
-    const utxoIterator = (await getAddressUtxos(fromAddress)).values();
+    const utxos = await getAddressUtxos(fromAddress);
     const feeRatio = await getFeeRatio();
     const minDoge = getMinimumMeaningfulDoge(feeRatio);
-    const coveredBoxes = await selectBitcoinUtxos(
-      unwrappedAmount + minDoge,
+
+    // generate fee estimator
+    const estimateFee = generateFeeEstimator(
+      1,
+      DOGE_TX_BASE_SIZE,
+      DOGE_INPUT_SIZE,
+      DOGE_OUTPUT_SIZE,
+      feeRatio,
+      1, // Doge does not use segwit
+    );
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: unwrappedAmount,
+        tokens: [],
+      },
       [],
       new Map<string, DogeUtxo | undefined>(),
-      utxoIterator,
+      utxos.values(),
       minDoge,
-      DOGE_INPUT_SIZE,
-      estimatedTxWeight,
-      feeRatio,
       undefined,
-      1,
+      estimateFee,
     );
     if (!coveredBoxes.covered) {
-      throw new Error(
-        `Available boxes didn't cover required assets. DOGE: ${
-          unwrappedAmount + minDoge
-        }`,
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.doge.key,
+        coveredBoxes.uncoveredAssets,
       );
     }
 
@@ -97,22 +114,10 @@ export const generateUnsignedTx =
       });
     }
 
-    // calculate input boxes assets
-    let remainingDoge =
-      coveredBoxes.boxes.reduce((a, b) => a + b.value, 0n) - unwrappedAmount;
-
-    // create change output
-    estimatedTxWeight = estimateTxWeight(
-      psbt.txInputs.length,
-      2,
-      opReturnData.length,
-    );
-
-    const estimatedFee = BigInt(Math.ceil(estimatedTxWeight * feeRatio));
-    remainingDoge -= estimatedFee;
+    // add change
     psbt.addOutput({
       script: fromAddressScript,
-      value: Number(remainingDoge),
+      value: Number(coveredBoxes.additionalAssets.aggregated.nativeToken),
     });
 
     return {

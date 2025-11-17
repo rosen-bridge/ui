@@ -3,12 +3,12 @@ import { ReactNode, useCallback, useEffect, useRef } from 'react';
 import { styled } from '../../../styling';
 
 const Viewport = styled('div')(() => ({
-  'overflow': 'hidden',
-  'flexGrow': 1,
-  'cursor': 'grab',
-  'scroll-snap-type': 'none',
-  'overscroll-behavior': 'none',
-  '-webkit-overflow-scrolling': 'auto',
+  overflow: 'hidden',
+  flexGrow: 1,
+  cursor: 'grab',
+  scrollSnapType: 'none',
+  overscrollBehavior: 'none',
+  WebkitOverflowScrolling: 'auto',
 }));
 
 const Content = styled('div')(() => ({}));

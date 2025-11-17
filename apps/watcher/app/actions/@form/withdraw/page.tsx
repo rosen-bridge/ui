@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   FormProvider,
   SubmitHandler,
@@ -21,13 +21,15 @@ import {
   TextField,
   useApiKey,
   ApiKeyModalWarning,
+  Link,
 } from '@rosen-bridge/ui-kit';
-import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
+import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { useInfo } from '@/_hooks/useInfo';
 import { useToken } from '@/_hooks/useToken';
 import {
   ApiAddressAssetsResponse,
@@ -58,19 +60,18 @@ const WithdrawForm = () => {
     [data],
   );
 
+  const info = useInfo();
+
   const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string;
+    message: string | ReactNode;
   } | null>(null);
 
-  const {
-    trigger,
-    isMutating: isWithdrawPending,
-    error,
-  } = useSWRMutation<
+  const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
     ApiWithdrawResponse,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     any,
     '/withdraw',
     ApiWithdrawRequestBody
@@ -107,6 +108,12 @@ const WithdrawForm = () => {
   );
 
   useEffect(() => {
+    resetField('amount', {
+      defaultValue: '',
+      keepError: false,
+      keepDirty: false,
+      keepTouched: false,
+    });
     if (tokens && !tokenIdField.value) {
       resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
     }
@@ -133,13 +140,25 @@ const WithdrawForm = () => {
       if (response.status === 'OK') {
         setAlertData({
           severity: 'success',
-          message: `Withdrawal is successful. Wait for tx [${response.txId}] to be confirmed.`,
+          message: (
+            <>
+              Withdrawal is successful. Wait for tx [
+              <Link
+                target="_blank"
+                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
+              >
+                {response.txId}
+              </Link>
+              ] to be confirmed.
+            </>
+          ),
         });
       } else {
         throw new Error(
           'Server responded but the response message was unexpected',
         );
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error?.response?.status === 403) {
         setAlertData({
@@ -173,10 +192,27 @@ const WithdrawForm = () => {
 
   const renderAddressTextField = () => (
     <TextField
-      autoFocus
       label="Address"
       disabled={disabled}
-      {...register('address', { required: true })}
+      {...register('address', {
+        required: 'Address is required',
+      })}
+      error={!!formMethods.formState.errors.address}
+      helperText={
+        formMethods.formState.isValidating ? (
+          <CircularProgress size={10} />
+        ) : (
+          formMethods.formState.errors.address?.message
+        )
+      }
+      onBlur={(e) => {
+        const trimmed = e.target.value.trim();
+        formMethods.setValue('address', trimmed, {
+          shouldDirty: true,
+          shouldTouch: true,
+          shouldValidate: true,
+        });
+      }}
     />
   );
 
@@ -209,7 +245,11 @@ const WithdrawForm = () => {
   );
 
   const renderTokenAmountTextField = () => (
-    <TokenAmountTextField disabled={disabled} token={selectedToken} />
+    <TokenAmountTextField
+      disabled={disabled}
+      token={selectedToken}
+      minBoxValue={info.data?.minBoxValue}
+    />
   );
 
   return (

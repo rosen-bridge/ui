@@ -26,6 +26,7 @@ const getConfig = () => {
           eventTrigger: nodeConfig.get<string>('ergo.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('ergo.addresses.permit'),
           fraud: nodeConfig.get<string>('ergo.addresses.fraud'),
+          commitment: nodeConfig.get<string>('ergo.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('ergo.initialHeight'),
         tokens: {
@@ -41,6 +42,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('cardano.addresses.permit'),
           fraud: nodeConfig.get<string>('cardano.addresses.fraud'),
+          commitment: nodeConfig.get<string>('cardano.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('cardano.initialHeight'),
         tokens: {
@@ -57,6 +59,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('bitcoin.addresses.permit'),
           fraud: nodeConfig.get<string>('bitcoin.addresses.fraud'),
+          commitment: nodeConfig.get<string>('bitcoin.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('bitcoin.initialHeight'),
         tokens: {
@@ -67,6 +70,25 @@ const getConfig = () => {
         rpcUsername: getOptionalString('bitcoin.rpc.username'),
         rpcPassword: getOptionalString('bitcoin.rpc.password'),
       },
+      bitcoinRunes: {
+        addresses: {
+          lock: nodeConfig.get<string>('bitcoin-runes.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>(
+            'bitcoin-runes.addresses.eventTrigger',
+          ),
+          permit: nodeConfig.get<string>('bitcoin-runes.addresses.permit'),
+          fraud: nodeConfig.get<string>('bitcoin-runes.addresses.fraud'),
+          commitment: nodeConfig.get<string>(
+            'bitcoin-runes.addresses.commitment',
+          ),
+        },
+        initialHeight: nodeConfig.get<number>('bitcoin-runes.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('bitcoin-runes.tokens.rwt'),
+        },
+        unisatUrl: nodeConfig.get<string>('bitcoin-runes.unisatUrl'),
+        unisatApiKey: nodeConfig.get<string>('bitcoin-runes.unisatApiKey'),
+      },
       ethereum: {
         addresses: {
           lock: nodeConfig.get<string>('ethereum.addresses.lock'),
@@ -75,6 +97,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('ethereum.addresses.permit'),
           fraud: nodeConfig.get<string>('ethereum.addresses.fraud'),
+          commitment: nodeConfig.get<string>('ethereum.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('ethereum.initialHeight'),
         tokens: {
@@ -91,6 +114,7 @@ const getConfig = () => {
           ),
           permit: nodeConfig.get<string>('binance.addresses.permit'),
           fraud: nodeConfig.get<string>('binance.addresses.fraud'),
+          commitment: nodeConfig.get<string>('binance.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('binance.initialHeight'),
         tokens: {
@@ -105,6 +129,7 @@ const getConfig = () => {
           eventTrigger: nodeConfig.get<string>('doge.addresses.eventTrigger'),
           permit: nodeConfig.get<string>('doge.addresses.permit'),
           fraud: nodeConfig.get<string>('doge.addresses.fraud'),
+          commitment: nodeConfig.get<string>('doge.addresses.commitment'),
         },
         initialHeight: nodeConfig.get<number>('doge.initialHeight'),
         tokens: {
@@ -129,6 +154,9 @@ const getConfig = () => {
           ergo: nodeConfig.get<string[]>('calculator.addresses.ergo'),
           cardano: nodeConfig.get<string[]>('calculator.addresses.cardano'),
           bitcoin: nodeConfig.get<string[]>('calculator.addresses.bitcoin'),
+          bitcoinRunes: nodeConfig.get<string[]>(
+            'calculator.addresses.bitcoin-runes',
+          ),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
@@ -179,6 +207,7 @@ const getConfig = () => {
         warnLogAllowedCount: nodeConfig.get<number>(
           'healthCheck.maxAllowedWarnCount',
         ),
+        reportPath: nodeConfig.get<string>('healthCheck.reportPath'),
       },
       notification: {
         discordWebHookUrl: nodeConfig.get<string>(

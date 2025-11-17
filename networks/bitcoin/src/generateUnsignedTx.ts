@@ -1,17 +1,25 @@
-import { selectBitcoinUtxos } from '@rosen-bridge/bitcoin-utxo-selection';
+import {
+  BitcoinBoxSelection,
+  generateFeeEstimator,
+} from '@rosen-bridge/bitcoin-utxo-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
 
-import { SEGWIT_INPUT_WEIGHT_UNIT } from './constants';
+import {
+  SEGWIT_INPUT_WEIGHT_UNIT,
+  SEGWIT_OUTPUT_WEIGHT_UNIT,
+} from './constants';
 import { BitcoinUtxo, UnsignedPsbtData } from './types';
 import {
-  estimateTxWeight,
   getAddressUtxos,
   getFeeRatio,
   getMinimumMeaningfulSatoshi,
 } from './utils';
+
+const selector = new BitcoinBoxSelection();
 
 /**
  * generates bitcoin lock tx
@@ -55,29 +63,40 @@ export const generateUnsignedTx =
       value: Number(unwrappedAmount),
     });
 
-    // estimate tx weight without considering inputs
-    //  0 inputs, 2 outputs, 1 for feeRatio to get weights only, multiply by 4 to convert vSize to weight unit
-    let estimatedTxWeight = estimateTxWeight(0, 2, opReturnData.length);
-
     // fetch inputs
-    const utxoIterator = (await getAddressUtxos(fromAddress)).values();
+    const utxos = await getAddressUtxos(fromAddress);
     const feeRatio = await getFeeRatio();
     const minSatoshi = getMinimumMeaningfulSatoshi(feeRatio);
-    const coveredBoxes = await selectBitcoinUtxos(
-      unwrappedAmount + minSatoshi,
+
+    // generate fee estimator
+    const estimateFee = generateFeeEstimator(
+      1,
+      42 + // all txs include 40W. P2WPKH txs need additional 2W
+        44 + // OP_RETURN output base weight
+        opReturnData.length * 2, // op_return data weight
+      SEGWIT_INPUT_WEIGHT_UNIT,
+      SEGWIT_OUTPUT_WEIGHT_UNIT,
+      feeRatio,
+      4, // the virtual size matters for fee estimation of native-segwit transactions
+    );
+
+    const coveredBoxes = await selector.getCoveringBoxes(
+      {
+        nativeToken: unwrappedAmount,
+        tokens: [],
+      },
       [],
       new Map<string, BitcoinUtxo | undefined>(),
-      utxoIterator,
+      utxos.values(),
       minSatoshi,
-      SEGWIT_INPUT_WEIGHT_UNIT,
-      estimatedTxWeight,
-      feeRatio,
+      undefined,
+      estimateFee,
     );
     if (!coveredBoxes.covered) {
-      throw new Error(
-        `Available boxes didn't cover required assets. BTC: ${
-          unwrappedAmount + minSatoshi
-        }`,
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.bitcoin.key,
+        coveredBoxes.uncoveredAssets,
       );
     }
 
@@ -94,26 +113,10 @@ export const generateUnsignedTx =
       });
     });
 
-    // calculate input boxes assets
-    let remainingBtc =
-      coveredBoxes.boxes.reduce((a, b) => a + b.value, 0n) - unwrappedAmount;
-
-    // create change output
-    estimatedTxWeight = estimateTxWeight(
-      psbt.txInputs.length,
-      2,
-      opReturnData.length,
-    );
-    const estimatedFee = BigInt(
-      Math.ceil(
-        (estimatedTxWeight / 4) * // estimate tx weight and convert to virtual size
-          feeRatio,
-      ),
-    );
-    remainingBtc -= estimatedFee;
+    // add change
     psbt.addOutput({
       script: fromAddressScript,
-      value: Number(remainingBtc),
+      value: Number(coveredBoxes.additionalAssets.aggregated.nativeToken),
     });
 
     return {

@@ -1,17 +1,24 @@
-image: node:20.18.1
+image: node:22.18.0
+
+default:
+  interruptible: true
 
 stages:
   - installation
   - build
-  - type_check
-  - lint
-  - unit_tests
-  - changeset
+  - triggers
+
+variables:
+  npm_config_cache: '${CI_PROJECT_DIR}/.npm'
+  NPM_VERSION: '11.6.2'
+
+before_script:
+  - npm i -g npm@${NPM_VERSION}
 
 installation:
   stage: installation
   cache:
-    key: $CI_COMMIT_REF_NAME
+    key: ${CI_COMMIT_REF_NAME}
     policy: push
     paths:
       - node_modules
@@ -19,13 +26,14 @@ installation:
       - packages/*/node_modules
       - networks/*/node_modules
       - wallets/*/node_modules
+      - .npm
   script:
     - npm ci
 
 build:
   stage: build
   cache:
-    - key: $CI_COMMIT_REF_NAME
+    - key: ${CI_COMMIT_REF_NAME}
       policy: pull-push
       paths:
         - node_modules
@@ -36,64 +44,13 @@ build:
         - packages/*/dist
         - wallets/*/node_modules
         - wallets/*/dist
+        - .npm
   script:
     - npm run build:mono-packages
 
-type_check:
-  stage: type_check
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    policy: pull
-    paths:
-      - node_modules
-      - apps/*/node_modules
-      - packages/*/node_modules
-      - packages/*/dist
-      - wallets/*/node_modules
-      - wallets/*/dist
-  script:
-    - npm run type-check --workspaces --if-present
-
-lint:
-  stage: lint
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    policy: pull
-    paths:
-      - node_modules
-  script:
-    - npm run lint --workspaces --if-present
-
-unit_tests:
-  stage: unit_tests
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    policy: pull
-    paths:
-      - node_modules
-      - apps/*/node_modules
-      - networks/*/node_modules
-      - packages/*/node_modules
-      - wallets/*/node_modules
-  script:
-    - npm run coverage
-  coverage: '/All files[^|]*\|[^|]*\s+([\d\.]+)/'
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: 'coverage/cobertura-coverage.xml'
-
-changeset:
-  stage: changeset
-  cache:
-    key: $CI_COMMIT_REF_NAME
-    policy: pull
-    paths:
-      - node_modules
-      - apps/*/node_modules
-      - packages/*/node_modules
-  before_script:
-    - git fetch origin dev
-  script:
-    - npx changeset status --since=origin/dev
+run_ci:
+  stage: triggers
+  trigger:
+    include:
+      - local: .gitlab/workflows/ci.yml
+    strategy: mirror

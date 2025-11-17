@@ -73,6 +73,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         await wallet.connect();
 
         await wallet.switchChain(selectedSource.name);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         setState('DISCONNECTED');
         return openSnackbar(error.message, 'error');
@@ -95,7 +96,9 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
     try {
       await selected.disconnect();
-    } catch {}
+    } catch {
+      //
+    }
 
     localStorage.removeItem('rosen:wallet:' + selectedSource.name);
 
@@ -151,6 +154,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
     if (!selectedSource) return;
 
     if (selectedSource.name !== NETWORKS.bitcoin.key) return;
+
+    if (selected.currentChain !== NETWORKS.bitcoin.key) return;
 
     const start = async () => {
       const address = await selected.getAddress();

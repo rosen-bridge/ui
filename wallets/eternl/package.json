@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/eternl-wallet",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -8,20 +8,23 @@
   "types": "dist/index.d.ts",
   "type": "module",
   "scripts": {
+    "lint": "eslint --fix .",
+    "lint:check": "eslint .",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "lint": "eslint --fix . && npm run prettify",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
-  },
   "dependencies": {
-    "@rosen-bridge/tokens": "^3.1.1",
-    "@rosen-network/cardano": "^2.4.1",
-    "@rosen-ui/constants": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7",
-    "@rosen-ui/utils": "^0.6.1",
-    "@rosen-ui/wallet-api": "^3.0.3"
+    "@rosen-bridge/tokens": "^4.0.1",
+    "@rosen-network/cardano": "^2.5.0",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.3.8",
+    "@rosen-ui/utils": "^1.0.0",
+    "@rosen-ui/wallet-api": "^3.0.4"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

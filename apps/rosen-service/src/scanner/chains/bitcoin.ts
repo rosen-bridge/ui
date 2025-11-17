@@ -1,13 +1,13 @@
 import {
+  FailoverStrategy,
+  NetworkConnectorManager,
+} from '@rosen-bridge/abstract-scanner';
+import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
   BitcoinRpcTransaction,
-} from '@rosen-bridge/bitcoin-rpc-scanner';
+} from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import {
-  FailoverStrategy,
-  NetworkConnectorManager,
-} from '@rosen-bridge/scanner';
 
 import config from '../../configs';
 import {
@@ -65,6 +65,7 @@ export const startBitcoinScanner = async () => {
     });
 
     await observationService.registerBitcoinExtractor(scanner);
+    await observationService.registerBitcoinRunesExtractor(scanner);
 
     startScanner(scanner, import.meta.url, BITCOIN_SCANNER_INTERVAL);
 

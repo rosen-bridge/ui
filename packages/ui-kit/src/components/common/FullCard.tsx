@@ -6,7 +6,8 @@ import {
   CardActionsProps,
   CardContent,
   CardContentProps,
-} from '../base';
+} from '@mui/material';
+
 import { CardHeader, CardHeaderProps } from './CardHeader';
 
 export interface FullCardProps {

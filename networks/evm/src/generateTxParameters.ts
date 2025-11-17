@@ -35,7 +35,7 @@ export const generateTxParameters =
         to: lockAddress,
         from: fromAddress,
         data: '0x' + rosenData,
-        value: unwrappedAmount.toString(16),
+        value: '0x' + unwrappedAmount.toString(16),
       };
     } else {
       const contract = new Contract(tokenId, transferABI, undefined);

@@ -1,6 +1,6 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { CardanoKoiosObservationExtractor } from '@rosen-bridge/observation-extractor';
-import { CardanoKoiosScanner } from '@rosen-bridge/scanner';
+import { CardanoKoiosObservationExtractor } from '@rosen-bridge/cardano-observation-extractor';
+import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -18,9 +18,9 @@ export const registerCardanoExtractor = async (
 ) => {
   try {
     const observationExtractor = new CardanoKoiosObservationExtractor(
+      config.cardano.addresses.lock,
       dataSource,
       await getTokenMap(),
-      config.cardano.addresses.lock,
       logger,
     );
 

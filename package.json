@@ -9,16 +9,20 @@
     "wallets/*"
   ],
   "scripts": {
+    "lint": "npm run lint --workspaces",
+    "lint:check": "npm run lint:check --workspaces",
+    "prettify": "npm run prettify --workspaces",
+    "prettify:check": "npm run prettify:check --workspaces",
     "build:mono-packages": "./build.sh",
-    "coverage": "npm run test -- --coverage",
+    "coverage": "npm run coverage --workspaces",
     "postinstall": "patch-package",
     "prepare": "husky install",
-    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "test": "npm run test --workspaces",
     "test:related": "NODE_OPTIONS='--import tsx' vitest related --run",
     "version": "npx changeset version && npm i && npx changeset --empty",
-    "version:guard": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/rosen-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty",
+    "version:guard": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/rosen-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/bitcoin-runes --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty",
     "version:rosen": "npx changeset version --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/guard-app --ignore @rosen-bridge/rosen-service2 && npm i && npx changeset --empty",
-    "version:watcher": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/rosen-app --ignore @rosen-bridge/guard-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty"
+    "version:watcher": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/rosen-app --ignore @rosen-bridge/guard-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/bitcoin-runes --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty"
   },
   "overrides": {
     "ethers": "6.13.2"
@@ -28,20 +32,31 @@
     "patch-package": "^8.0.0"
   },
   "devDependencies": {
-    "@rosen-bridge/changeset-formatter": "^1.0.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.15.0",
-    "@typescript-eslint/parser": "^8.15.0",
-    "@vitest/coverage-istanbul": "^2.1.8",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react-hooks": "^5.0.0",
-    "eslint-plugin-react-refresh": "^0.4.14",
-    "globals": "^15.12.0",
+    "@eslint/eslintrc": "^3.3.1",
+    "@eslint/js": "^9.36.0",
+    "@next/eslint-plugin-next": "^15.5.3",
+    "@rosen-bridge/changeset-formatter": "^2.0.1",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/node": "^22.18.0",
+    "@typescript-eslint/eslint-plugin": "^8.44.0",
+    "@typescript-eslint/parser": "^8.44.0",
+    "@vitest/coverage-istanbul": "^3.1.4",
+    "eslint": "^9.36.0",
+    "eslint-config-next": "^15.5.3",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.4.0",
     "husky": "^8.0.0",
+    "knip": "^5.64.1",
     "lint-staged": "^13.2.2",
-    "prettier": "^3.3.3",
+    "prettier": "^3.6.2",
     "tsx": "^4.19.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.8.3",
+    "vitest": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

@@ -3,12 +3,13 @@ import {
   Button,
   CircularProgress,
   Divider,
-  Grid,
   IconButton,
+  Stack,
   SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {
+  disabled: boolean;
   error: boolean;
   loading: boolean;
   value: string;
@@ -18,6 +19,7 @@ export interface UseAllAmountProps {
 }
 
 export const UseAllAmount = ({
+  disabled,
   error,
   loading,
   value,
@@ -26,44 +28,32 @@ export const UseAllAmount = ({
   onRetry,
 }: UseAllAmountProps) => {
   return (
-    <Grid
-      container
-      alignItems="center"
-      justifyContent="space-between"
-      wrap="nowrap"
-      width="auto"
-      gap={1.5}
-    >
-      <Grid item alignSelf="stretch">
-        <Divider orientation="vertical" />
-      </Grid>
-      <Grid item>
-        {loading && (
-          <CircularProgress
-            size={24}
-            sx={{
-              margin: (theme) => theme.spacing(1),
-              verticalAlign: 'middle',
-            }}
-          />
-        )}
-        {!error && !loading && (
-          <Button sx={{ whiteSpace: 'nowrap' }} onClick={onClick}>
-            <span>
-              Use all
-              <br />
-              {value} <small style={{ textTransform: 'none' }}>{unit}</small>
-            </span>
-          </Button>
-        )}
-        {error && !loading && (
-          <IconButton sx={{ verticalAlign: 'middle' }} onClick={onRetry}>
-            <SvgIcon color="error" sx={{ width: 24 }}>
-              <SyncExclamation />
-            </SvgIcon>
-          </IconButton>
-        )}
-      </Grid>
-    </Grid>
+    <Stack direction="row" align="center" justify="between" spacing={1.5}>
+      <Divider
+        orientation="vertical"
+        style={{ alignSelf: 'stretch', height: 'auto' }}
+      />
+      {loading && (
+        <IconButton disabled>
+          <CircularProgress size={24} />
+        </IconButton>
+      )}
+      {!error && !loading && (
+        <Button disabled={disabled} onClick={onClick}>
+          <span style={{ whiteSpace: 'nowrap' }}>
+            Use all
+            <br />
+            {value} <small style={{ textTransform: 'none' }}>{unit}</small>
+          </span>
+        </Button>
+      )}
+      {error && !loading && (
+        <IconButton onClick={onRetry}>
+          <SvgIcon color="error">
+            <SyncExclamation />
+          </SvgIcon>
+        </IconButton>
+      )}
+    </Stack>
   );
 };

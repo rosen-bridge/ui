@@ -1,5 +1,23 @@
 # @rosen-ui/asset-calculator
 
+## 2.2.0
+
+### Minor Changes
+
+- Update supported node version to the 22.18.0 and update rosen-clients versions
+- Added the significantDecimal field to TokenEntity
+- Add support for Bitcoin Runes to asset-calculator
+- Fetch token total supply only from ergo
+
+### Patch Changes
+
+- Fix postgres migrations
+- Update dependencies
+  - @rosen-bridge/extended-typeorm@1.0.0
+  - @rosen-bridge/tokens@4.0.1
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/types@0.3.8
+
 ## 2.1.8
 
 ### Patch Changes

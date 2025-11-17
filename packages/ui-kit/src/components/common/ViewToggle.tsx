@@ -3,11 +3,12 @@ import React, { useState } from 'react';
 import { Grid, Row } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { SvgIcon } from '../base';
+import { SvgIcon } from './SvgIcon';
 
 export type ViewType = 'grid' | 'row';
 
 export type ViewToggleProps = {
+  defaultView?: ViewType;
   onChangeView?: (value: ViewType) => void;
 };
 
@@ -57,8 +58,11 @@ const TabWrapper = styled('button')<{
  *
  * @returns {JSX.Element} A toggle UI with two buttons for switching view types.
  */
-export const ViewToggle = ({ onChangeView }: ViewToggleProps) => {
-  const [activeView, setActiveView] = useState<ViewType>('grid');
+export const ViewToggle = ({
+  defaultView = 'grid',
+  onChangeView,
+}: ViewToggleProps) => {
+  const [activeView, setActiveView] = useState<ViewType>(defaultView);
 
   const handleClick = (value: ViewType) => {
     setActiveView(value);

@@ -1,5 +1,7 @@
 'use client';
 
+import { useMemo } from 'react';
+
 import {
   Carousel,
   CarouselButton,
@@ -12,20 +14,46 @@ import {
   Typography,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network } from '@rosen-ui/types';
-import useSWR from 'swr';
 
-import { ApiAddressAssetsResponse } from '@/_types/api';
+import { useBalance } from '@/_hooks/useBalance';
 
 const Token = ({ chain }: { chain: Network }) => {
-  const { data, isLoading } = useSWR<ApiAddressAssetsResponse>(
-    ['/assets', { chain }],
-    fetcher,
-  );
+  const { data, isLoading } = useBalance(chain);
+
+  const tokens = useMemo(() => {
+    if (!data) return [];
+
+    const tokenIds = [
+      ...new Set(
+        [...data.cold.items, ...data.hot.items]
+          .filter((item) => item.chain === chain)
+          .map((item) => item.balance.tokenId),
+      ),
+    ];
+
+    return tokenIds.map((id) => {
+      const cold = data.cold.items.find(
+        (item) => item.chain === chain && item.balance.tokenId === id,
+      );
+
+      const hot = data.hot.items.find(
+        (item) => item.chain === chain && item.balance.tokenId === id,
+      );
+
+      const token = Object.assign({}, hot?.balance, cold?.balance, {
+        amount: hot?.balance.amount || 0,
+        coldAmount: cold?.balance.amount || 0,
+      });
+
+      return token;
+    });
+  }, [chain, data]);
+
   return (
     <TokensCard
-      tokens={data?.items ?? []}
+      chain={chain}
+      tokens={tokens}
       isLoading={isLoading}
       title={NETWORKS[chain].label}
     />
@@ -36,16 +64,12 @@ const Tokens = () => {
   return (
     <Grid item mobile={12}>
       <CarouselProvider>
-        <Stack gap="0.5rem">
-          <Stack
-            direction="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
+        <Stack spacing="0.5rem">
+          <Stack direction="row" align="center" justify="between">
             <Typography variant="h5" fontWeight="bold">
               Tokens
             </Typography>
-            <Stack direction="row" alignItems="center" gap="0.5rem">
+            <Stack direction="row" align="center" spacing="0.5rem">
               <CarouselButton type="prev" />
               <CarouselIndicators />
               <CarouselButton type="next" />

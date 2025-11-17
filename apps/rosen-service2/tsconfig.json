@@ -7,5 +7,9 @@
     "experimentalDecorators": true
   },
   "include": ["src"],
-  "references": [{ "path": "../../packages/asset-calculator/" }]
+  "references": [
+    { "path": "../../packages/asset-calculator/" },
+    { "path": "../../packages/constants" },
+    { "path": "../../packages/asset-data-adapter/" }
+  ]
 }

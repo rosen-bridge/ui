@@ -7,6 +7,7 @@ import {
 } from '@rosen-bridge/cardano-utxo-selection';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import {
+  CalculateFee,
   calculateFeeCreator,
   getMinTransferCreator as getMinTransferCreatorBase,
 } from '@rosen-network/base';
@@ -406,7 +407,7 @@ export const getHeight = async (): Promise<number> => {
   return height;
 };
 
-export const calculateFee = calculateFeeCreator(
+export const calculateFee: CalculateFee = calculateFeeCreator(
   NETWORKS.cardano.key,
   getHeight,
 );

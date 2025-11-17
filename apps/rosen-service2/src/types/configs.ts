@@ -1,5 +1,8 @@
 export interface RosenService2BaseConfig {
+  paths: Paths;
   chains: Chains;
+  healthCheck: HealthCheck;
+  redis: Redis;
   db: Db;
   logs: Logs[];
 }
@@ -17,53 +20,256 @@ export interface Logs {
 
 export interface Db {
   host: string;
-  port?: number;
+  port: number;
   username?: string;
   password?: string;
   name: string;
 }
 
+export interface Redis {
+  address: string;
+  token: string;
+}
+
+export interface HealthCheck {
+  logging: HealthCheckLogging;
+  scanner: HealthCheckScanner;
+  notification: HealthCheckNotification;
+  updateInterval: number;
+}
+
+export interface HealthCheckNotification {
+  discordWebHookUrl?: string;
+  historyCleanupTimeout?: number;
+  hasBeenUnstableForAWhileWindowDuration?: number;
+  hasBeenUnknownForAWhileWindowDuration?: number;
+}
+
+export interface HealthCheckScanner {
+  warnDiff: number;
+  criticalDiff: number;
+}
+
+export interface HealthCheckLogging {
+  maxErrors: number;
+  maxWarns: number;
+  duration: number;
+}
+
 export interface Chains {
-  ergo: Ergo;
-  cardano: Cardano;
-  bitcoin: Bitcoin;
-  doge: Doge;
-  ethereum: Ethereum;
-  binance: Binance;
-  runes: Runes;
+  ergo: ChainsErgo;
+  cardano: ChainsCardano;
+  bitcoin: ChainsBitcoin;
+  doge: ChainsDoge;
+  ethereum: ChainsEthereum;
+  binance: ChainsBinance;
 }
 
-export interface Runes {
+export interface ChainsBinance {
   active: boolean;
-}
-
-export interface Binance {
-  active: boolean;
-}
-
-export interface Ethereum {
-  active: boolean;
-}
-
-export interface Doge {
-  active: boolean;
-}
-
-export interface Bitcoin {
-  active: boolean;
-}
-
-export interface Cardano {
-  active: boolean;
-}
-
-export interface Ergo {
   initialHeight: number;
-  node: Node;
+  scanInterval: number;
+  adapter: ChainsBinanceAdapter;
+  blockRetrieveGap?: number;
+  rpc: ChainsBinanceRpc;
 }
 
-export interface Node {
-  blockRetrieveGap: number;
+export interface ChainsBinanceRpc {
+  connections: ChainsBinanceRpcConnections[];
+}
+
+export interface ChainsBinanceRpcConnections {
+  url?: string;
+  timeout?: number;
+  authToken?: string;
+}
+
+export interface ChainsBinanceAdapter {
+  extraAddresses?: string[];
+  chunkSize: number;
+}
+
+export interface ChainsEthereum {
+  active: boolean;
+  initialHeight: number;
   scanInterval: number;
+  adapter: ChainsEthereumAdapter;
+  blockRetrieveGap?: number;
+  rpc: ChainsEthereumRpc;
+}
+
+export interface ChainsEthereumRpc {
+  connections: ChainsEthereumRpcConnections[];
+}
+
+export interface ChainsEthereumRpcConnections {
+  url?: string;
+  timeout?: number;
+  authToken?: string;
+}
+
+export interface ChainsEthereumAdapter {
+  extraAddresses?: string[];
+  chunkSize: number;
+}
+
+export interface ChainsDoge {
+  active: boolean;
+  initialHeight: number;
+  scanInterval: number;
+  adapter: ChainsDogeAdapter;
+  blockRetrieveGap?: number;
+  method?: 'rpc' | 'esplora';
+  rpc: ChainsDogeRpc;
+  esplora: ChainsDogeEsplora;
+}
+
+export interface ChainsDogeEsplora {
+  connections: ChainsDogeEsploraConnections[];
+}
+
+export interface ChainsDogeEsploraConnections {
+  url?: string;
+  timeout?: number;
+  apiPrefix?: string;
+}
+
+export interface ChainsDogeRpc {
+  connections: ChainsDogeRpcConnections[];
+}
+
+export interface ChainsDogeRpcConnections {
+  url?: string;
+  timeout?: number;
+  username?: string;
+  password?: string;
+}
+
+export interface ChainsDogeAdapter {
+  extraAddresses?: string[];
+  blockCypher: ChainsDogeAdapterBlockCypher;
+}
+
+export interface ChainsDogeAdapterBlockCypher {
   url: string;
+}
+
+export interface ChainsBitcoin {
+  active: boolean;
+  initialHeight: number;
+  scanInterval: number;
+  adapter: ChainsBitcoinAdapter;
+  blockRetrieveGap?: number;
+  method?: 'rpc' | 'esplora';
+  rpc: ChainsBitcoinRpc;
+  esplora: ChainsBitcoinEsplora;
+}
+
+export interface ChainsBitcoinEsplora {
+  connections: ChainsBitcoinEsploraConnections[];
+}
+
+export interface ChainsBitcoinEsploraConnections {
+  url: string;
+  timeout?: number;
+  apiPrefix?: string;
+}
+
+export interface ChainsBitcoinRpc {
+  connections: ChainsBitcoinRpcConnections[];
+}
+
+export interface ChainsBitcoinRpcConnections {
+  url?: string;
+  timeout?: number;
+  username?: string;
+  password?: string;
+}
+
+export interface ChainsBitcoinAdapter {
+  extraAddresses?: string[];
+}
+
+export interface ChainsCardano {
+  active: boolean;
+  scanInterval: number;
+  adapter: ChainsCardanoAdapter;
+  blockRetrieveGap?: number;
+  method?: 'koios' | 'ogmios' | 'blockfrost';
+  initialHeight?: number;
+  koios: ChainsCardanoKoios;
+  blockfrost: ChainsCardanoBlockfrost;
+  ogmios: ChainsCardanoOgmios;
+}
+
+export interface ChainsCardanoOgmios {
+  connection: ChainsCardanoOgmiosConnection;
+}
+
+export interface ChainsCardanoOgmiosConnection {
+  address?: string;
+  port?: number;
+  initialSlot?: number;
+  initialHash?: string;
+  maxTryBlock?: number;
+  useTls?: boolean;
+}
+
+export interface ChainsCardanoBlockfrost {
+  connections: ChainsCardanoBlockfrostConnections[];
+}
+
+export interface ChainsCardanoBlockfrostConnections {
+  url?: string;
+  projectId?: string;
+}
+
+export interface ChainsCardanoKoios {
+  connections: ChainsCardanoKoiosConnections[];
+}
+
+export interface ChainsCardanoKoiosConnections {
+  url: string;
+  timeout?: number;
+  authToken?: string;
+}
+
+export interface ChainsCardanoAdapter {
+  extraAddresses?: string[];
+}
+
+export interface ChainsErgo {
+  initialHeight: number;
+  scanInterval: number;
+  adapter: ChainsErgoAdapter;
+  blockRetrieveGap?: number;
+  method?: 'explorer' | 'node';
+  node: ChainsErgoNode;
+  explorer: ChainsErgoExplorer;
+}
+
+export interface ChainsErgoExplorer {
+  connections: ChainsErgoExplorerConnections[];
+}
+
+export interface ChainsErgoExplorerConnections {
+  url: string;
+}
+
+export interface ChainsErgoNode {
+  connections: ChainsErgoNodeConnections[];
+}
+
+export interface ChainsErgoNodeConnections {
+  url?: string;
+}
+
+export interface ChainsErgoAdapter {
+  extraAddresses?: string[];
+}
+
+export interface Paths {
+  tokens: string;
+  contracts: string;
+  healthReport: string;
 }

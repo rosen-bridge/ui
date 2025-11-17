@@ -1,13 +1,14 @@
 import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TokenMap, RosenChainToken, NATIVE_TOKEN } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { difference, differenceWith, isEqual } from 'lodash-es';
-import { DataSource } from 'typeorm';
 
 import AbstractCalculator from './calculator/abstract-calculator';
 import { BitcoinCalculator } from './calculator/chains/bitcoin-calculator';
+import { BitcoinRunesCalculator } from './calculator/chains/bitcoin-runes';
 import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { DogeCalculator } from './calculator/chains/doge-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
@@ -18,6 +19,7 @@ import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
 import { TokenModel } from './database/token/TokenModel';
 import {
   BitcoinCalculatorInterface,
+  BitcoinRunesCalculatorInterface,
   CardanoCalculatorInterface,
   DogeCalculatorInterface,
   ErgoCalculatorInterface,
@@ -36,6 +38,7 @@ class AssetCalculator {
     ergoCalculator: ErgoCalculatorInterface,
     cardanoCalculator: CardanoCalculatorInterface,
     bitcoinCalculator: BitcoinCalculatorInterface,
+    bitcoinRunesCalculator: BitcoinRunesCalculatorInterface,
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
     dogeCalculator: DogeCalculatorInterface,
@@ -60,6 +63,12 @@ class AssetCalculator {
       this.tokens,
       bitcoinCalculator.addresses,
       bitcoinCalculator.esploraUrl,
+      logger,
+    );
+    const bitcoinRunesAssetCalculator = new BitcoinRunesCalculator(
+      this.tokens,
+      bitcoinRunesCalculator.addresses,
+      bitcoinRunesCalculator.unisatUrl,
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
@@ -87,6 +96,10 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
+    this.calculatorMap.set(
+      NETWORKS['bitcoin-runes'].key,
+      bitcoinRunesAssetCalculator,
+    );
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
@@ -126,24 +139,41 @@ class AssetCalculator {
     residencyChain: Network,
   ): Promise<bigint> => {
     const calculator = this.calculatorMap.get(chain);
+    const ergoCalculator = this.calculatorMap.get(NETWORKS.ergo.key);
 
     if (!calculator)
       throw Error(`Chain [${chain}] is not supported in asset calculator`);
 
+    if (!ergoCalculator)
+      throw Error(
+        `Ergo calculator is required but not found. Cannot calculate total supply for chain [${chain}]`,
+      );
+
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);
+    const ergoToken = this.getTokenDataForChain(
+      token,
+      residencyChain,
+      NETWORKS.ergo.key,
+    );
     if (!chainToken) {
       this.logger.debug(`Token ${token.name} is not supported in ${chain}`);
       return 0n;
     }
+    if (!ergoToken) {
+      this.logger.debug(
+        `Token ${token.name} is not supported in ${NETWORKS.ergo.key}`,
+      );
+      return 0n;
+    }
     const emission =
-      (await calculator.totalSupply(chainToken)) -
+      (await ergoCalculator.totalSupply(ergoToken)) -
       (await calculator.totalBalance(chainToken));
 
     this.logger.debug(
       `Emitted amount of asset [${token.tokenId}] in chain [${chain}] is [${emission}]`,
     );
 
-    return emission;
+    return emission > 0n ? emission : 0n;
   };
 
   /**
@@ -226,9 +256,18 @@ class AssetCalculator {
         this.logger.info(
           `Started calculating values for ${nativeResidentToken.name} native on chain ${residencyChain}`,
         );
+        const significantDecimal = this.tokens.getSignificantDecimals(
+          nativeResidentToken.tokenId,
+        );
+        if (significantDecimal == undefined)
+          throw new Error(
+            `Failed to retrieve significant decimals for tokenId: ${nativeResidentToken.tokenId}`,
+          );
+
         const newToken = {
           id: nativeResidentToken.tokenId,
           decimal: nativeResidentToken.decimals,
+          significantDecimal: significantDecimal,
           name: nativeResidentToken.name,
           chain: residencyChain,
           isNative: nativeResidentToken.type === NATIVE_TOKEN,

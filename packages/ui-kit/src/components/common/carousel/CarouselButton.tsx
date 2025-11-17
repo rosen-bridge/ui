@@ -1,6 +1,7 @@
 import { AngleLeft, AngleRight } from '@rosen-bridge/icons';
 
-import { IconButton, SvgIcon } from '../../base';
+import { IconButton } from '../../base';
+import { SvgIcon } from '../SvgIcon';
 import { useCarousel } from './useCarousel';
 
 export const CarouselButton = ({ type }: { type: 'next' | 'prev' }) => {
@@ -14,7 +15,7 @@ export const CarouselButton = ({ type }: { type: 'next' | 'prev' }) => {
 
   return (
     <IconButton disabled={!canScroll} onClick={scroll}>
-      <SvgIcon sx={{ width: 24 }}>{Icon}</SvgIcon>
+      <SvgIcon size="medium">{Icon}</SvgIcon>
     </IconButton>
   );
 };

@@ -1,23 +1,19 @@
+import { useMemo } from 'react';
+
 import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
-  Amount2,
   Button,
-  Card2,
-  Card2Body,
-  Card2Header,
-  Card2Title,
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
   Center,
-  Columns,
   EnhancedDialog,
   EnhancedDialogContent,
   EnhancedDialogTitle,
-  Identifier,
-  Label,
-  Network,
-  RelativeTime,
-  Stack,
+  EventDetails,
+  EventDetailsProps,
   SvgIcon,
-  Token,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -25,147 +21,71 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
 
-import { EventStatus } from '@/app/events/(list)/EventStatus';
 import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
   const isTablet = useBreakpoint('laptop-down');
-  if (!value)
+
+  const eventData = useMemo(() => {
+    if (!value) return null;
+
+    const data: EventDetailsProps['value'] = {
+      amount: getDecimalString(
+        value.amount,
+        value.lockToken.significantDecimals,
+      ),
+      bridgeFee: getDecimalString(
+        value.bridgeFee,
+        value.lockToken.significantDecimals,
+      ),
+      fromAddress: value.fromAddress,
+      fromAddressUrl: getAddressUrl(value.fromChain, value.fromAddress),
+      fromChain: value.fromChain,
+      height: value.height,
+      href: `/events/${value.eventId}`,
+      id: value.eventId,
+      networkFee: getDecimalString(
+        value.networkFee,
+        value.lockToken.significantDecimals,
+      ),
+      reports: value.WIDsCount,
+      sourceTxId: value.sourceTxId,
+      sourceTxIdUrl: getTxURL(value.fromChain, value.sourceTxId),
+      status: value.status,
+      toAddress: value.toAddress,
+      toAddressUrl: getAddressUrl(value.toChain, value.toAddress),
+      toChain: value.toChain,
+      token: value.lockToken.name,
+      paymentTxId: value.paymentTxId ?? undefined,
+      paymentTxIdUrl: value.paymentTxId
+        ? getTxURL(value.toChain, value.paymentTxId)
+        : undefined,
+      spendTxId: value.spendTxId ?? undefined,
+      spendTxIdUrl: value.spendTxId
+        ? getTxURL(NETWORKS.ergo.key, value.spendTxId)
+        : undefined,
+      timestamp: value.timestamp,
+    };
+
+    if (value.status === 'fraud') {
+      delete data.paymentTxId;
+      delete data.spendTxId;
+    }
+
+    return data;
+  }, [value]);
+
+  if (!eventData) {
     return (
-      <Center
-        style={{
-          minHeight: 'calc(100vh - 304px)',
-        }}
-      >
+      <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text.secondary">
           Select an event to see its details.
         </Typography>
       </Center>
     );
+  }
 
-  return (
-    <Columns gap="32px" width="20rem" rule>
-      <Label orientation="horizontal" label="Event Id">
-        <Identifier copyable value={value.eventId} />
-      </Label>
-      <Label label="Status">
-        <EventStatus value={value.status} />
-      </Label>
-      <Label label="Token">
-        <Token reverse name={value.lockToken.name} />
-      </Label>
-      <Label label="Amount">
-        <Amount2
-          value={getDecimalString(
-            value.amount,
-            value.lockToken.significantDecimals,
-          )}
-        />
-      </Label>
-      <div>
-        <Label label="Chain"></Label>
-        <Label label="From" inset>
-          <Network name={value.fromChain} reverse />
-        </Label>
-        <Label label="To" inset>
-          <Network name={value.toChain} reverse />
-        </Label>
-      </div>
-      <div>
-        <Label label="Tx IDs"></Label>
-        <Label label="Lock Tx" inset>
-          <Identifier
-            copyable={!!value.sourceTxId}
-            value={value.sourceTxId}
-            href={
-              value.sourceTxId
-                ? getTxURL(value.fromChain, value.sourceTxId)!
-                : undefined
-            }
-          />
-        </Label>
-        <Label label="Payment Tx" inset>
-          <Identifier
-            copyable={!!value.paymentTxId}
-            value={value.paymentTxId || ''}
-            href={
-              value.paymentTxId
-                ? getTxURL(value.toChain, value.paymentTxId)!
-                : undefined
-            }
-          />
-        </Label>
-        <Label label="Reward Tx" inset>
-          <Identifier
-            copyable={!!value.spendTxId}
-            value={value.spendTxId || ''}
-            href={
-              value.spendTxId
-                ? getTxURL(NETWORKS.ergo.key, value.spendTxId)!
-                : undefined
-            }
-          />
-        </Label>
-      </div>
-      <div>
-        <Label label="Address"></Label>
-        <Label label="From" inset>
-          <Identifier
-            copyable
-            value={value.fromAddress}
-            href={
-              getAddressUrl(value.fromChain, value.fromAddress) || undefined
-            }
-          />
-        </Label>
-        <Label label="To" inset>
-          <Identifier
-            copyable
-            value={value.toAddress}
-            href={getAddressUrl(value.toChain, value.toAddress) || undefined}
-          />
-        </Label>
-      </div>
-      <Label label="Time">
-        <RelativeTime timestamp={value.timestamp} />
-      </Label>
-      <Label label="Bridge fee">
-        <Amount2
-          value={getDecimalString(
-            value.bridgeFee,
-            value.lockToken.significantDecimals,
-          )}
-        />
-      </Label>
-      <Label label="Network Fee">
-        <Amount2
-          value={getDecimalString(
-            value.networkFee,
-            value.lockToken.significantDecimals,
-          )}
-        />
-      </Label>
-      <Label label="Reports">{value.WIDsCount ?? 'N/C'}</Label>
-      <Label label="Height">{value.height}</Label>
-      {isTablet && (
-        <Stack alignItems="end">
-          <Button
-            variant="text"
-            size="medium"
-            target="_blank"
-            href={`/events/${value.eventId}`}
-            endIcon={
-              <SvgIcon>
-                <AngleRight />
-              </SvgIcon>
-            }
-          >
-            SEE DETAILS
-          </Button>
-        </Stack>
-      )}
-    </Columns>
-  );
+  return <EventDetails value={eventData} showSeeDetailsButton={isTablet} />;
 };
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
@@ -187,16 +107,16 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
     offsetBottom: 16,
   });
   return (
-    <Card2
+    <Card
       ref={stickyRef}
-      variant="separated"
+      separated
       backgroundColor="background.paper"
       style={{
         width: '330px',
         marginLeft: '16px',
       }}
     >
-      <Card2Header
+      <CardHeader
         action={
           value && (
             <div
@@ -204,6 +124,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
                 height: 0,
                 display: 'flex',
                 alignItems: 'center',
+                marginRight: '-1rem',
               }}
             >
               <Button
@@ -223,12 +144,12 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
           )
         }
       >
-        <Card2Title>Event</Card2Title>
-      </Card2Header>
-      <Card2Body>
+        <CardTitle>Event</CardTitle>
+      </CardHeader>
+      <CardBody>
         <Content value={value} />
-      </Card2Body>
-    </Card2>
+      </CardBody>
+    </Card>
   );
 };
 

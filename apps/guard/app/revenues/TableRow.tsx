@@ -120,103 +120,97 @@ export const MobileRow: FC<RowProps> = (props) => {
 
   return (
     <>
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Event Id</EnhancedTableCell>
         <EnhancedTableCell>
           <Id id={row.eventId} />
         </EnhancedTableCell>
       </TableRow>
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell>Lock TX Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)!} />
+          <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
         </EnhancedTableCell>
       </TableRow>
       {expand && (
         <>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Reward TX Id</EnhancedTableCell>
             <EnhancedTableCell>
               <Id
                 id={row.rewardTxId}
-                href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
+                href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
               <Id id={row.fromAddress} />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
             <EnhancedTableCell>
               <Id id={row.toAddress} />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Token</EnhancedTableCell>
             <EnhancedTableCell>{row.lockToken.name}</EnhancedTableCell>
           </TableRow>
-          <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(
-                  row.lockToken.amount.toString(),
+                  row.lockToken.amount,
                   row.lockToken.decimals,
                 )}
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(
-                  row.revenues
-                    .find(
-                      (revenue) =>
-                        revenue.revenueType === 'bridge-fee' &&
-                        revenue.data.tokenId === row.ergoSideTokenId,
-                    )
-                    ?.data.amount.toString() ?? '',
+                  row.revenues.find(
+                    (revenue) =>
+                      revenue.revenueType === 'bridge-fee' &&
+                      revenue.data.tokenId === row.ergoSideTokenId,
+                  )?.data.amount,
                   row.lockToken.decimals,
                 )}
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(
-                  row.revenues
-                    .find(
-                      (revenue) =>
-                        revenue.revenueType === 'network-fee' &&
-                        revenue.data.tokenId === row.ergoSideTokenId,
-                    )
-                    ?.data.amount.toString() ?? '',
+                  row.revenues.find(
+                    (revenue) =>
+                      revenue.revenueType === 'network-fee' &&
+                      revenue.data.tokenId === row.ergoSideTokenId,
+                  )?.data.amount,
                   row.lockToken.decimals,
                 )}
               />
             </EnhancedTableCell>
           </TableRow>
-          <TableRow sx={rowStyles}>
+          <TableRow style={rowStyles}>
             <EnhancedTableCell>Emission (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
                 value={getDecimalString(
-                  row.revenues
-                    .find(
-                      (revenue) =>
-                        revenue.revenueType === 'emission' &&
-                        (revenue.data.tokenId === info?.rsnTokenId ||
-                          revenue.data.tokenId === info?.emissionTokenId),
-                    )
-                    ?.data.amount.toString() ?? '',
+                  row.revenues.find(
+                    (revenue) =>
+                      revenue.revenueType === 'emission' &&
+                      (revenue.data.tokenId === info?.rsnTokenId ||
+                        revenue.data.tokenId === info?.emissionTokenId),
+                  )?.data.amount,
                   row.lockToken.decimals,
                 )}
                 loading={isInfoLoading}
@@ -225,12 +219,12 @@ export const MobileRow: FC<RowProps> = (props) => {
           </TableRow>
         </>
       )}
-      <TableRow sx={isLoading ? { opacity: 0.3 } : {}}>
+      <TableRow style={rowStyles}>
         <EnhancedTableCell padding="none">
           <Button
             variant="text"
             onClick={toggleExpand}
-            sx={{ fontSize: 'inherit' }}
+            style={{ fontSize: 'inherit' }}
             endIcon={expand ? <AngleUp /> : <AngleDown />}
           >
             {expand ? 'Show less' : 'Show more'}
@@ -247,18 +241,23 @@ export const TabletRow: FC<RowProps> = (props) => {
 
   const { data: info, isLoading: isInfoLoading } = useInfo();
 
+  const rowStyles = useMemo(
+    () => (isLoading ? { opacity: 0.3 } : {}),
+    [isLoading],
+  );
+
   return (
-    <TableRow className="divider" sx={isLoading ? { opacity: 0.3 } : {}}>
+    <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell>
         <Id id={row.eventId} />
       </EnhancedTableCell>
       <EnhancedTableCell>
-        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)!} />
+        <Id id={row.lockTxId} href={getTxURL(row.fromChain, row.lockTxId)} />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Id
           id={row.rewardTxId}
-          href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)!}
+          href={getTxURL(NETWORKS.ergo.key, row.rewardTxId)}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -279,13 +278,11 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
-            row.revenues
-              .find(
-                (revenue) =>
-                  revenue.revenueType === 'bridge-fee' &&
-                  revenue.data.tokenId === row.ergoSideTokenId,
-              )
-              ?.data.amount.toString() ?? '',
+            row.revenues.find(
+              (revenue) =>
+                revenue.revenueType === 'bridge-fee' &&
+                revenue.data.tokenId === row.ergoSideTokenId,
+            )?.data.amount,
             row.lockToken.decimals,
           )}
         />
@@ -293,21 +290,16 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell align="center">
         <Amount
           value={getDecimalString(
-            row.revenues
-              .find(
-                (revenue) =>
-                  revenue.revenueType === 'network-fee' &&
-                  revenue.data.tokenId === row.ergoSideTokenId,
-              )
-              ?.data.amount.toString() ?? '',
+            row.revenues.find(
+              (revenue) =>
+                revenue.revenueType === 'network-fee' &&
+                revenue.data.tokenId === row.ergoSideTokenId,
+            )?.data.amount,
             row.lockToken.decimals,
           )}
         />
       </EnhancedTableCell>
-      <EnhancedTableCell
-        sx={{ opacity: isInfoLoading ? 0.3 : 1 }}
-        align="center"
-      >
+      <EnhancedTableCell style={rowStyles} align="center">
         <Amount
           value={getDecimalString(
             row.revenues
@@ -317,8 +309,7 @@ export const TabletRow: FC<RowProps> = (props) => {
                   (revenue.data.tokenId === info?.rsnTokenId ||
                     revenue.data.tokenId === info?.emissionTokenId),
               )
-              .reduce((sum, revenue) => sum + revenue.data.amount, 0)
-              .toString() ?? '',
+              .reduce((sum, revenue) => sum + revenue.data.amount, 0),
             row.lockToken.decimals,
           )}
           loading={isInfoLoading}

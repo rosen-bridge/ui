@@ -2,18 +2,17 @@ import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
-import {
-  CardanoKoiosScannerHealthCheck,
-  ErgoExplorerScannerHealthCheck,
-  BitcoinRPCScannerHealthCheck,
-  EvmRPCScannerHealthCheck,
-} from '@rosen-bridge/scanner-sync-check';
-import { NETWORKS } from '@rosen-ui/constants';
+import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
+import fs from 'node:fs';
+import path from 'node:path';
 
 import config from '../configs';
 import {
   BINANCE_BLOCK_TIME,
+  BITCOIN_BLOCK_TIME,
+  CARDANO_BLOCK_TIME,
   DOGE_BLOCK_TIME,
+  ERGO_BLOCK_TIME,
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 import scannerService from '../scanner/scanner-service';
@@ -56,52 +55,50 @@ const getNotifySetup = () => {
 const registerAllHealthChecks = (healthCheck: HealthCheck) => {
   const checks = [
     {
-      instance: new ErgoExplorerScannerHealthCheck(
-        scannerService.getErgoScanner().getBlockChainLastHeight,
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getErgoScanner().name(),
         async () => getLastSavedBlock(scannerService.getErgoScanner().name()),
         config.healthCheck.ergoScannerWarnDiff,
         config.healthCheck.ergoScannerCriticalDiff,
+        ERGO_BLOCK_TIME,
       ),
       label: 'ergo',
     },
     {
-      instance: new CardanoKoiosScannerHealthCheck(
-        scannerService.getCardanoScanner().getBlockChainLastHeight,
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getCardanoScanner().name(),
         async () =>
           getLastSavedBlock(scannerService.getCardanoScanner().name()),
         config.healthCheck.cardanoScannerWarnDiff,
         config.healthCheck.cardanoScannerCriticalDiff,
+        CARDANO_BLOCK_TIME,
       ),
       label: 'cardano',
     },
     {
-      instance: new BitcoinRPCScannerHealthCheck(
-        NETWORKS.bitcoin.key,
-        scannerService.getBitcoinScanner().getBlockChainLastHeight,
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getBitcoinScanner().name(),
         async () =>
           getLastSavedBlock(scannerService.getBitcoinScanner().name()),
         config.healthCheck.bitcoinScannerWarnDiff,
         config.healthCheck.bitcoinScannerCriticalDiff,
+        BITCOIN_BLOCK_TIME,
       ),
       label: 'bitcoin',
     },
     {
-      instance: new BitcoinRPCScannerHealthCheck(
-        NETWORKS.doge.key,
-        scannerService.getDogeScanner().getBlockChainLastHeight,
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getDogeScanner().name(),
         async () => getLastSavedBlock(scannerService.getDogeScanner().name()),
         config.healthCheck.dogeScannerWarnDiff,
         config.healthCheck.dogeScannerCriticalDiff,
-        undefined, // to use the default warn block gap
-        undefined, // to use the default critical block gap
         DOGE_BLOCK_TIME,
       ),
       label: 'doge',
     },
     {
-      instance: new EvmRPCScannerHealthCheck(
-        NETWORKS.ethereum.key,
-        scannerService.getEthereumScanner().getBlockChainLastHeight,
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getEthereumScanner().name(),
         async () =>
           getLastSavedBlock(scannerService.getEthereumScanner().name()),
         config.healthCheck.ethereumScannerWarnDiff,
@@ -111,9 +108,8 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
       label: 'ethereum',
     },
     {
-      instance: new EvmRPCScannerHealthCheck(
-        NETWORKS.binance.key,
-        scannerService.getBinanceScanner().getBlockChainLastHeight,
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getBinanceScanner().name(),
         async () =>
           getLastSavedBlock(scannerService.getBinanceScanner().name()),
         config.healthCheck.binanceScannerWarnDiff,
@@ -162,6 +158,20 @@ const start = async () => {
     setInterval(async () => {
       try {
         await healthCheck.update();
+        // write health status to the health report file
+        const healthStatus = Object.fromEntries(
+          healthCheck.getHealthStatus().map((p) => [p.id, p.status]),
+        );
+
+        const healthReportPath = path.isAbsolute(config.healthCheck.reportPath)
+          ? config.healthCheck.reportPath
+          : path.resolve(process.cwd(), config.healthCheck.reportPath);
+
+        fs.writeFileSync(
+          healthReportPath,
+          JSON.stringify(healthStatus, null, 2),
+          'utf8',
+        );
         logger.debug('periodic health check update done');
       } catch (e) {
         if (e instanceof AggregateError) {

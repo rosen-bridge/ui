@@ -61,6 +61,10 @@ const start = async () => {
       esploraUrl: config.bitcoin.esploraUrl,
     },
     {
+      addresses: config.calculator.addresses.bitcoinRunes,
+      unisatUrl: config.bitcoinRunes.unisatUrl,
+    },
+    {
       addresses: config.calculator.addresses.ethereum,
       rpcUrl: config.ethereum.rpcUrl,
       authToken: config.ethereum.rpcAuthToken,

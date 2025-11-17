@@ -4,22 +4,51 @@ db:
   username: postgres
   password: ''
   name: rosen_service
+healthCheck:
+  logging:
+    maxErrors: 10
+    maxWarns: 10
+    duration: 100
+  scanner:
+    warnDiff: 2
+    criticalDiff: 10
+  updateInterval: 60
 chains:
   ergo:
     initialHeight: 1
-    node:
-      blockRetrieveGap: 0
-      scanInterval: 60
-      url: https://node.ergopool.io/
+    scanInterval: 120
+    method: explorer
+    explorer:
+      connections:
+        - url: https://api.ergoplatform.com/
   cardano:
     active: false
+    scanInterval: 30
+    initialHeight: 1
+    koios:
+      connections:
+        - url: https://api.koios.rest/api/v1/
+          timeout: 100
   bitcoin:
     active: false
+    initialHeight: 1
+    scanInterval: 600
   doge:
     active: false
+    initialHeight: 1
+    scanInterval: 60
+    adapter:
+      blockCypher:
+        url: https://api.blockcypher.com
   ethereum:
     active: false
+    initialHeight: 1
+    scanInterval: 60
   binance:
     active: false
-  runes:
-    active: false
+    initialHeight: 1
+    scanInterval: 10
+paths:
+  tokens: config/rosen/tokensMap.json
+  contracts: config/rosen
+  healthReport: healthReport.json

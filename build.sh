@@ -13,6 +13,7 @@ echo "building monorepo packages for app '$APP' ..."
 
 if [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/constants
+  npm run build --workspace packages/types
   npm run build --workspace packages/asset-calculator
 fi
 
@@ -28,11 +29,13 @@ fi
 
 if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/asset-calculator
+  npm run build --workspace packages/asset-aggregator
+  npm run build --workspace packages/asset-data-adapter
   npm run build --workspace networks/base
   npm run build --workspace networks/evm
   npm run build --workspace networks/binance
   npm run build --workspace networks/bitcoin
-  npm run build --workspace networks/runes
+  npm run build --workspace networks/bitcoin-runes
   npm run build --workspace networks/doge
   npm run build --workspace networks/cardano
   npm run build --workspace networks/ergo

@@ -1,9 +1,10 @@
-import { ReactNode } from 'react';
+import { ComponentProps, forwardRef, HTMLAttributes, ReactNode } from 'react';
 
 import { ArrowRight } from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
-import { SvgIcon } from '../base';
+import { InjectOverrides } from './InjectOverrides';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * Props for the Connector component.
@@ -13,13 +14,13 @@ import { SvgIcon } from '../base';
  * @property variant - Visual style of the connector. Can be 'standard' (transparent)
  * or 'filled' (with background). Default is 'standard'.
  */
-export interface ConnectorProps {
+type ConnectorBaseProps = HTMLAttributes<HTMLDivElement> & {
   start: ReactNode;
   end: ReactNode;
   variant?: 'standard' | 'filled';
-}
+};
 
-const ConnectorWrapper = styled('div')<Pick<ConnectorProps, 'variant'>>(
+const Root = styled('div')<Pick<ConnectorBaseProps, 'variant'>>(
   ({ theme, variant }) => ({
     display: 'inline-flex',
     backgroundColor:
@@ -28,31 +29,35 @@ const ConnectorWrapper = styled('div')<Pick<ConnectorProps, 'variant'>>(
     borderRadius: theme.spacing(4),
     flexDirection: 'row',
     alignItems: 'center',
+    fontSize: 'inherit',
   }),
 );
 
 /**
- * A UI component that visually connects two elements with an arrow.
- * It renders a horizontal container with a start element, an arrow icon,
- * and an end element. Useful for showing transitions, mappings, or flows.
+ * Connector component: visually connects two elements with an arrow.
  *
- * Example:
- * ```
- * <Connector
- *   start={<Network name={'bitcoin'} /> OR <span>Source</span>}
- *   end={<Network name={'ethereum'} /> OR <span>Destination</span>}
- *   variant="filled"
- * />
- * ```
+ * Props:
+ * - start: left element (label or icon)
+ * - end: right element (label or icon)
+ * - variant: 'standard' (transparent) or 'filled' (with background)
  */
-export const Connector = ({ start, end, variant }: ConnectorProps) => {
-  return (
-    <ConnectorWrapper variant={variant}>
-      {start}
-      <SvgIcon sx={{ color: 'text.secondary' }}>
-        <ArrowRight />
-      </SvgIcon>
-      {end}
-    </ConnectorWrapper>
-  );
-};
+const ConnectorBase = forwardRef<HTMLDivElement, ConnectorBaseProps>(
+  (props) => {
+    const { start, end, variant, ...rest } = props;
+    return (
+      <Root variant={variant} {...rest}>
+        {start}
+        <SvgIcon color="text.secondary">
+          <ArrowRight />
+        </SvgIcon>
+        {end}
+      </Root>
+    );
+  },
+);
+
+ConnectorBase.displayName = 'Connector';
+
+export const Connector = InjectOverrides(ConnectorBase);
+
+export type ConnectorProps = ComponentProps<typeof Connector>;
