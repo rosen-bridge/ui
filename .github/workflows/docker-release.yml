@@ -12,6 +12,7 @@ jobs:
     name: Build ${{ matrix.platform }}-${{ matrix.apps }}
     permissions: write-all
     runs-on: ubuntu-latest
+    environment: ${{ github.event_name == 'release' && 'release' || 'dev' }}
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +22,8 @@ jobs:
           ${{ fromJSON(
             (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'watcher') && '["watcher"]')
             || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'guard') && '["guard"]')
-            || '["watcher","guard"]'
+            || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'rosen-service') && '["rosen-service"]')
+            || '["watcher","guard","rosen-service"]'
           ) }}
 
     steps:
@@ -38,20 +40,26 @@ jobs:
       - name: Setup npm 11.6.2
         run: npm i -g npm@11.6.2
 
-      - name: Build dependencies
+      - name: Prepare and Build Frontend
+        if: ${{ matrix.apps == 'watcher' || matrix.apps == 'guard' }}
         run: |
+          # Build Dependencies
           npm ci 
           ./build.sh ${{ matrix.apps }}
 
-      - name: Move Config Files
-        run: |
+          # Move Config Files
           mv docker/nginx.conf ./
           mv docker/entrypoint.sh ./
 
-      - name: Build App
-        run: |
+          # Build App
           cd ./apps/${{ matrix.apps }}
           npm run build
+
+      - name: Setup rosen-service Configs
+        if: ${{ matrix.apps == 'rosen-service' }}
+        run: |
+          npx @rosen-bridge/cli@${{ vars.ROSEN_CLI_VERSION || 'latest' }} download-assets -c ${{ vars.RELEASE_NAME }} ${{ vars.RELEASE_TAG }} -o ./apps/rosen-service/config/
+          rm ./apps/rosen-service/config/contracts-*
 
       - name: Set up QEMU
         if: contains(matrix.platform, 'arm')
@@ -119,7 +127,8 @@ jobs:
           ${{ fromJSON(
             (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'watcher') && '["watcher"]')
             || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'guard') && '["guard"]')
-            || '["watcher","guard"]'
+            || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'rosen-service') && '["rosen-service"]')
+            || '["watcher","guard","rosen-service"]'
           ) }}
     steps:
       - name: Download digests
