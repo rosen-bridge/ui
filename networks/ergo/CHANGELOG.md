@@ -1,5 +1,11 @@
 # @rosen-network/ergo
 
+## 2.5.1
+
+### Patch Changes
+
+- Increase Min Box Value to ensure transactions meet minimum requirements and reduce failures
+
 ## 2.5.0
 
 ### Minor Changes

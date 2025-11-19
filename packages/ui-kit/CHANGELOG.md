@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 3.0.1
+
+### Patch Changes
+
+- Fix label issues in `EventDetails` and resolve truncation behavior in the Identifier component
+
 ## 3.0.0
 
 ### Major Changes

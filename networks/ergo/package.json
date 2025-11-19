@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/ergo",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
