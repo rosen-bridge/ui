@@ -1,10 +1,17 @@
-import React, { ReactNode, useMemo } from 'react';
+import React, {
+  ComponentProps,
+  forwardRef,
+  HtmlHTMLAttributes,
+  ReactNode,
+  useMemo,
+} from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
 import { styled } from '../../styling';
 import { Typography, Skeleton } from '../base';
+import { InjectOverrides } from './InjectOverrides';
 import { SvgIcon } from './SvgIcon';
 
 /**
@@ -25,7 +32,7 @@ import { SvgIcon } from './SvgIcon';
  * @property loading - When true, displays a skeleton placeholder
  * instead of the actual chip content.
  */
-export interface ChipProps {
+type ChipBaseProps = HtmlHTMLAttributes<HTMLDivElement> & {
   label?: string;
   icon?: keyof typeof Icons | ReactNode;
   color?:
@@ -37,13 +44,13 @@ export interface ChipProps {
     | 'neutral'
     | 'info';
   loading?: boolean;
-}
+};
 
 /** Type guard for safer icon check */
 const isIconKey = (icon: unknown): icon is keyof typeof Icons =>
   typeof icon === 'string' && icon in Icons;
 
-const ChipWrapper = styled('button')<{ color?: ChipProps['color'] }>(({
+const ChipWrapper = styled('div')<ChipBaseProps>(({
   theme,
   color = 'primary',
 }) => {
@@ -83,12 +90,9 @@ const ChipWrapper = styled('button')<{ color?: ChipProps['color'] }>(({
  * <Chip label="Pending" color="warning" loading />
  * ```
  */
-export const Chip = ({
-  label,
-  icon,
-  color = 'primary',
-  loading,
-}: ChipProps) => {
+const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
+  const { label, icon, color = 'primary', loading } = props;
+
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
 
@@ -113,11 +117,17 @@ export const Chip = ({
   }
 
   return (
-    <ChipWrapper color={color}>
+    <ChipWrapper color={color} ref={ref}>
       {RenderedIcon}
       <Typography variant="body2">
         {label ? capitalize(label) : 'Invalid'}
       </Typography>
     </ChipWrapper>
   );
-};
+});
+
+ChipBase.displayName = 'Chip';
+
+export const Chip = InjectOverrides(ChipBase);
+
+export type ChipProps = ComponentProps<typeof Chip>;
