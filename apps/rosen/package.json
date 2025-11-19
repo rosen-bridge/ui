@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-app",
-  "version": "4.7.0",
+  "version": "4.7.1",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -24,7 +24,7 @@
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/icons": "^3.0.0",
     "@rosen-bridge/tokens": "^4.0.1",
-    "@rosen-bridge/ui-kit": "^3.0.0",
+    "@rosen-bridge/ui-kit": "^3.0.1",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
     "@rosen-network/base": "^0.5.0",
     "@rosen-network/binance": "^0.4.2",
@@ -32,7 +32,7 @@
     "@rosen-network/bitcoin-runes": "^1.0.0",
     "@rosen-network/cardano": "^2.5.0",
     "@rosen-network/doge": "^0.4.0",
-    "@rosen-network/ergo": "^2.5.0",
+    "@rosen-network/ergo": "^2.5.1",
     "@rosen-network/ethereum": "^0.4.2",
     "@rosen-network/evm": "^0.3.4",
     "@rosen-ui/asset-calculator": "^2.2.0",

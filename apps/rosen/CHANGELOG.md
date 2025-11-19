@@ -1,5 +1,14 @@
 # @rosen-bridge/rosen-app
 
+## 4.7.1
+
+### Patch Changes
+
+- Disable interval-based SWR fetching on Assets page to reduce unnecessary API load
+- Update dependencies
+  - @rosen-bridge/ui-kit@3.0.1
+  - @rosen-network/ergo@2.5.1
+
 ## 4.7.0
 
 ### Minor Changes

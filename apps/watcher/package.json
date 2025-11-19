@@ -19,7 +19,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@rosen-bridge/icons": "^3.0.0",
-    "@rosen-bridge/ui-kit": "^3.0.0",
+    "@rosen-bridge/ui-kit": "^3.0.1",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/swr-mock": "^0.1.1",

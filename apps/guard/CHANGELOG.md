@@ -1,5 +1,12 @@
 # @rosen-bridge/guard-app
 
+## 3.0.1
+
+### Patch Changes
+
+- Fix network data fetching in the dashboard by fetching per network, aggregating results, and showing proper error states
+- Update dependency @rosen-bridge/ui-kit@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
