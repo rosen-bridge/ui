@@ -94,9 +94,7 @@ const IdentifierBase = ({
             >
               <div
                 style={{
-                  display: '-webkit-box',
-                  WebkitLineClamp: 1,
-                  WebkitBoxOrient: 'vertical',
+                  whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   flexShrink: 1,
