@@ -35,6 +35,9 @@ jobs:
         with:
           node-version-file: .nvmrc
 
+      - name: Setup npm 11.6.2
+        run: npm i -g npm@11.6.2
+
       - name: Build dependencies
         run: |
           npm ci 

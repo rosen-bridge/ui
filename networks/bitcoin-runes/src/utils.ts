@@ -15,6 +15,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import Axios from 'axios';
 import { Psbt } from 'bitcoinjs-lib';
+import * as bitcoinJs from 'bitcoinjs-lib';
 
 import {
   CONFIRMATION_TARGET,
@@ -412,3 +413,59 @@ export async function* getEsploraAddressUtxos(
     };
   }
 }
+
+/**
+ * makes a taproot payment object
+ * @param internalPubkey
+ * @param address
+ * @returns taproot payment
+ */
+export const makeTaprootPayment = (
+  internalPubkey: string,
+  address: string,
+): bitcoinJs.payments.Payment => {
+  const payment = bitcoinJs.payments.p2tr({
+    internalPubkey: Buffer.from(internalPubkey, 'hex'),
+  });
+
+  if (!payment.output) throw Error(`failed to extract taproot output script!`);
+  if (!payment.address) throw Error(`failed to extract taproot address!`);
+  if (payment.address !== address)
+    throw Error(
+      `the calculated taproot address by public key is not equal to address!`,
+    );
+
+  return payment;
+};
+
+/**
+ * makes a p2wpkh payment object
+ * @param address
+ * @returns p2wpkh payment
+ */
+export const makeP2wpkhPayment = (
+  address: string,
+): bitcoinJs.payments.Payment => {
+  const payment = bitcoinJs.payments.p2wpkh({
+    address,
+  });
+
+  if (!payment.output) throw Error(`failed to extract p2wpkh output script!`);
+  if (!payment.address) throw Error(`failed to extract p2wpkh address!`);
+  if (payment.address !== address)
+    throw Error(
+      `the calculated p2wpkh address by public key is not equal to address!`,
+    );
+
+  return payment;
+};
+
+/**
+ * makes an array of sequential numbers in the specified range
+ * @param to
+ * @param from
+ * @returns array of sequential numbers
+ */
+export const getNumberRange = (to: number, from?: number): number[] => {
+  return [...Array(to).keys()].slice(from);
+};

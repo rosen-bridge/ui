@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/metamask-wallet",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -18,15 +18,16 @@
   "dependencies": {
     "@metamask/sdk": "^0.28.2",
     "@rosen-bridge/tokens": "^4.0.1",
-    "@rosen-network/binance": "^0.4.1",
-    "@rosen-network/ethereum": "^0.4.1",
-    "@rosen-network/evm": "^0.3.3",
-    "@rosen-ui/constants": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7",
-    "@rosen-ui/wallet-api": "^3.0.3",
+    "@rosen-network/binance": "^0.4.2",
+    "@rosen-network/ethereum": "^0.4.2",
+    "@rosen-network/evm": "^0.3.4",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.3.8",
+    "@rosen-ui/wallet-api": "^3.0.4",
     "ethers": "6.13.2"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

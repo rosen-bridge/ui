@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/public-status",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Core logic package of public status",
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "@rosen-bridge/extended-typeorm": "^1.0.1"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

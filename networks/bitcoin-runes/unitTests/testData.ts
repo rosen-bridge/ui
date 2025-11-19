@@ -8,10 +8,9 @@ import {
 } from '../src/types';
 
 export const fromAddress =
-  'bc1pjxzw9tm6qatyapu3c409dg8k23p4hjlk4ehwwlsum3emjqsaetrqppyu2z';
-
-export const fromPaymentAddress =
   'bc1px0ad45qrfwc20yfd9wljeytrvfa6tmrcxv6pgxze2svvx00tp7mstj5rpk';
+
+export const fromPaymentAddress = 'bc1qwu6zk52mz9wyy62ktdahuxqzmqd8xzxa92gk73';
 
 export const lockAddress =
   'bc1pvpyum6lxgrfr675wz8v9jxk2jmqvm9nzdly9p2cmvhnawhl0tvtsz73adv';
@@ -19,7 +18,10 @@ export const lockAddress =
 export const lockData = crypto.randomBytes(80).toString('hex');
 
 export const internalPubkey =
-  '187791b6f712a8ea41c8ecdd0ee77fab3e85263b37e1ec18a3651926b3a6cf27';
+  '49273bdf5b4d4594ef73377e249166579adf6f4bf18f9b23db309416ad1ee4f5';
+
+export const paymentInternalPubkey =
+  '0335014025b2d9428be3a717619b9830b6ba953f49cd8994b34c2a53c85944898f';
 
 export const transferToken = {
   tokenId: '880352:855',

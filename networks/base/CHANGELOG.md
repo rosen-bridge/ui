@@ -1,5 +1,21 @@
 # @rosen-network/base
 
+## 0.5.0
+
+### Minor Changes
+
+- Add `InsufficientAssetsError` custom error and `handleUncoveredAssets` function to be used across network packages for managing uncovered asset situations
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/utils@1.0.0
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/types@0.3.8
+  - @rosen-bridge/tokens@4.0.1
+  - @rosen-bridge/address-codec@1.0.1
+  - @rosen-bridge/minimum-fee@3.1.0
+
 ## 0.4.1
 
 ### Patch Changes

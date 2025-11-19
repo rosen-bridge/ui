@@ -13,6 +13,7 @@ echo "building monorepo packages for app '$APP' ..."
 
 if [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/constants
+  npm run build --workspace packages/types
   npm run build --workspace packages/asset-calculator
 fi
 

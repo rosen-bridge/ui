@@ -1,6 +1,6 @@
 import { BitcoinRunesBoxSelection } from '@rosen-bridge/bitcoin-runes-utxo-selection';
 import { TokenMap } from '@rosen-bridge/tokens';
-import { Mock } from 'vitest';
+import { describe, expect, it, vi, Mock, beforeEach } from 'vitest';
 
 import { generateUnsignedTx } from '../src';
 import * as testData from './testData';
@@ -77,7 +77,8 @@ describe('generateUnsignedTx', () => {
     );
 
     // assert
-    expect(result.inputSize).toBe(1);
+    expect(result.signInputs[testData.fromAddress]).toEqual([0]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([]);
     expect(getCoveringBoxesMock).toHaveBeenCalledTimes(1);
   });
 
@@ -122,7 +123,8 @@ describe('generateUnsignedTx', () => {
     );
 
     // assert
-    expect(result.inputSize).toBe(2);
+    expect(result.signInputs[testData.fromAddress]).toEqual([0, 1]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([]);
     expect(getCoveringBoxesMock).toHaveBeenCalledTimes(2);
   });
 
@@ -168,7 +170,8 @@ describe('generateUnsignedTx', () => {
     );
 
     // assert
-    expect(result.inputSize).toBe(2);
+    expect(result.signInputs[testData.fromAddress]).toEqual([0]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([1]);
     expect(getCoveringBoxesMock).toHaveBeenCalledTimes(3);
   });
 
@@ -215,7 +218,8 @@ describe('generateUnsignedTx', () => {
     );
 
     // assert
-    expect(result.inputSize).toBe(2);
+    expect(result.signInputs[testData.fromAddress]).toEqual([0, 1]);
+    expect(result.signInputs[testData.fromPaymentAddress]).toEqual([]);
     expect(getCoveringBoxesMock).toHaveBeenCalledTimes(4);
   });
 

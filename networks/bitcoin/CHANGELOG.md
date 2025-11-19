@@ -1,5 +1,24 @@
 # @rosen-network/bitcoin
 
+## 2.4.0
+
+### Minor Changes
+
+- Handle uncovered assets errors by throwing a suitable error to inform the user clearly
+- Enhance network error messages for `generateUnsignedTx` function to include details on uncovered native tokens
+
+### Patch Changes
+
+- Add a lower limit to min satoshi calculation to avoid dust error
+- Update dependencies
+  - @rosen-bridge/address-codec@1.0.1
+  - @rosen-bridge/bitcoin-utxo-selection@2.0.1
+  - @rosen-bridge/tokens@4.0.1
+  - @rosen-bridge/icons@3.0.0
+  - @rosen-network/base@0.5.0
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/types@0.3.8
+
 ## 2.3.1
 
 ### Patch Changes

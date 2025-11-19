@@ -1,5 +1,16 @@
 # @rosen-network/evm
 
+## 0.3.4
+
+### Patch Changes
+
+- Resolved issue where Ethereum/Binance balances showed as `0` in Trust Wallet confirmation dialogs on Android when using WalletConnect through the `reown` package
+- Update dependencies
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/types@0.3.8
+  - @rosen-bridge/address-codec@1.0.1
+  - @rosen-bridge/tokens@4.0.1
+
 ## 0.3.3
 
 ### Patch Changes

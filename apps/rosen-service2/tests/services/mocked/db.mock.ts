@@ -1,6 +1,6 @@
 import { PROCEED } from '@rosen-bridge/abstract-scanner';
 
-const now = Date.now();
+const now = 1763288720000;
 
 export const MockedBlockEntityData = [
   {

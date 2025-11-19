@@ -3,10 +3,9 @@ import {
   Box,
   Card,
   CardBody,
-  Connector,
+  Chip,
   GridContainer,
   Label,
-  Network,
   Stack,
   Token,
 } from '@rosen-bridge/ui-kit';
@@ -39,21 +38,21 @@ export const ViewGrid = ({
           }}
         >
           <CardBody>
-            <Stack direction="row" justify="between" style={{ maxWidth: 600 }}>
-              <Token loading={isLoading} name={item.name} />
-              <div style={{ fontSize: '0.75rem' }}>
-                <Connector
-                  start={
-                    <Network
-                      loading={isLoading}
-                      name={item.chain}
-                      variant="logo"
-                    />
-                  }
-                  end={<div />}
-                  variant="filled"
-                />
-              </div>
+            <Stack
+              direction="row"
+              justify="between"
+              spacing={1}
+              style={{ maxWidth: 600 }}
+            >
+              <Token loading={isLoading} name={item.name} style={{ flex: 1 }} />
+              <Chip
+                color="neutral"
+                icon={item.chain.replace(/(^\w|-\w)/g, (matched) =>
+                  matched.replace('-', '').toUpperCase(),
+                )}
+                label={item.chain}
+                loading={isLoading}
+              />
             </Stack>
             <Box mt={1} mb={-1}>
               <Label label="Bridged" dense>

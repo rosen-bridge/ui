@@ -1,5 +1,30 @@
 # @rosen-bridge/watcher-app
 
+## 3.5.0
+
+### Minor Changes
+
+- Fix build break caused by server-side address validation
+- Show linkable transaction after successful unlock
+- Add address validation and minimum amount check to ensure valid transactions in the `withdraw` page
+- Fix dark theme
+- Update Supported NodeJS version to 22.18.0
+- Improve and unify style implementation
+- Show linkable transaction after successful withdraw
+- Display backend error messages instead of generic 400 errors when attempting to lock RSN before the previous transaction is confirmed
+
+### Patch Changes
+
+- Redesigned the Address section using the new Identifier component from the UI kit, replacing the old buttons and card for a cleaner, more consistent, and responsive experience across all devices
+- Update helper usage to handle null values and leverage the improved compatibility of `utils` functions
+- Fix amount field validation so erg-specific rules apply only when erg is selected
+- Add root-level ESLint configuration and resolved existing linting issues
+- Update dependencies
+  - @rosen-bridge/ui-kit@3.0.0
+  - @rosen-bridge/icons@3.0.0
+  - @rosen-ui/utils@1.0.0
+  - @rosen-ui/constants@1.0.0
+
 ## 3.4.2
 
 ### Patch Changes

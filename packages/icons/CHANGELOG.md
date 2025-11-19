@@ -1,5 +1,16 @@
 # @rosen-bridge/icons
 
+## 3.0.0
+
+### Major Changes
+
+- Rename Runes icon to BitcoinRunes
+
+### Minor Changes
+
+- Add new icons `Ban`, `Coins`, `Gift`, `SignOutAlt`, `ThumbsUp`, `ClockThree`
+- Add `SwatchBook` and `FleAlt` icons
+
 ## 2.3.1
 
 ### Patch Changes

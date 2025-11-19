@@ -12,7 +12,7 @@ export interface ApiInfoResponse {
     erg: number;
     rsn: number;
   };
-  minBoxValue: bigint;
+  minBoxValue: number;
   currentBalance: number;
   network: string;
   permitsPerEvent: number;

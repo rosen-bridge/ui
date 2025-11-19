@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/constants",
-  "version": "0.4.1",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen UI apps",
@@ -16,6 +16,7 @@
     "type-check": "tsc --noEmit"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }
