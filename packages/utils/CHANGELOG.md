@@ -1,5 +1,18 @@
 # @rosen-ui/utils
 
+## 1.0.0
+
+### Major Changes
+
+- Improve `getDecimalString`, `getAddressUrl`, `getTokenUrl`, and `getTxURL` with null checks and standardized outputs for safer usage
+
+### Patch Changes
+
+- Update NETWORKS runes key to bitcoinRunes
+- Update dependencies
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/types@0.3.8
+
 ## 0.6.1
 
 ### Patch Changes

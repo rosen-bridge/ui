@@ -11,6 +11,7 @@ import {
   EnhancedDialogContent,
   EnhancedDialogTitle,
   Label,
+  Network,
   Token,
   Typography,
   useBreakpoint,
@@ -35,6 +36,9 @@ const Content = ({ value }: ViewGridSidebarProps) => {
     <Columns width="250px" count={2} rule gap="32px">
       <Label label="Token" orientation="horizontal">
         <Token name={value.name} href={value.tokenUrl} reverse />
+      </Label>
+      <Label label="Network">
+        <Network name={value.chain} reverse />
       </Label>
       <Label label="Locked" orientation="horizontal">
         <Amount value={value.lockedAmount} />

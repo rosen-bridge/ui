@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/asset-data-adapter': minor
 '@rosen-bridge/rosen-service2': minor
 ---
 

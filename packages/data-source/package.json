@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/data-source",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "DataSource implementation to be used across ui apps",
   "repository": {
     "type": "git",
@@ -20,14 +20,16 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-observation-extractor": "^0.2.1",
-    "@rosen-bridge/abstract-scanner": "^0.2.2",
+    "@rosen-bridge/abstract-observation-extractor": "^0.2.3",
+    "@rosen-bridge/abstract-scanner": "^0.2.3",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/token-price-entity": "^0.1.0",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
-    "@rosen-ui/asset-calculator": "^2.1.8",
-    "@rosen-ui/public-status": "^0.0.2"
+    "@rosen-ui/asset-calculator": "^2.2.0",
+    "@rosen-ui/public-status": "^0.1.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

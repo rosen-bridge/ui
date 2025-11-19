@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/types",
-  "version": "0.3.7",
+  "version": "0.3.8",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen UI apps",
@@ -19,12 +19,13 @@
     "@mui/material": "^5.13.7"
   },
   "dependencies": {
-    "@rosen-ui/constants": "^0.4.1"
+    "@rosen-ui/constants": "^1.0.0"
   },
   "peerDependencies": {
     "react": "^18.2.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

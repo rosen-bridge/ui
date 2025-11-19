@@ -10,7 +10,7 @@ import {
   Network,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
+import { getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { ApiAssetResponse } from '@/types';
@@ -25,6 +25,10 @@ export const BridgedList = ({ value }: BridgedListProps) => {
   const { data, isLoading } = useSWR<ApiAssetResponse>(
     `/v1/assets/detail/${value?.id.toLowerCase()}`,
     fetcher,
+    {
+      keepPreviousData: true,
+      refreshInterval: 0,
+    },
   );
 
   const items = useMemo(() => {
@@ -53,7 +57,7 @@ export const BridgedList = ({ value }: BridgedListProps) => {
             </Box>
             <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>
               <Identifier
-                href={value.tokenUrl}
+                href={getTokenUrl(item.chain, item.birdgedTokenId)}
                 loading={isLoading}
                 value={item.birdgedTokenId}
               />

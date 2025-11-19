@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/xverse-wallet",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -17,14 +17,15 @@
   },
   "dependencies": {
     "@rosen-bridge/tokens": "^4.0.1",
-    "@rosen-network/bitcoin": "^2.3.1",
-    "@rosen-network/bitcoin-runes": "^0.1.0",
-    "@rosen-ui/constants": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7",
-    "@rosen-ui/wallet-api": "^3.0.3",
+    "@rosen-network/bitcoin": "^2.4.0",
+    "@rosen-network/bitcoin-runes": "^1.0.0",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.3.8",
+    "@rosen-ui/wallet-api": "^3.0.4",
     "sats-connect": "^3.5.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

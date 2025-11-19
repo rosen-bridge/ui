@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "private": true,
   "license": "MIT",
   "scripts": {
@@ -18,11 +18,11 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^2.3.1",
-    "@rosen-bridge/ui-kit": "^2.4.0",
-    "@rosen-ui/constants": "^0.4.1",
+    "@rosen-bridge/icons": "^3.0.0",
+    "@rosen-bridge/ui-kit": "^3.0.0",
+    "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
-    "@rosen-ui/utils": "^0.6.1",
+    "@rosen-ui/utils": "^1.0.0",
     "moment": "^2.29.4",
     "next": "14.2.30",
     "react": "^18.2.0",
@@ -33,13 +33,14 @@
   },
   "devDependencies": {
     "@rosen-ui/swr-mock": "^0.1.1",
-    "@rosen-ui/types": "^0.3.7",
+    "@rosen-ui/types": "^0.3.8",
     "@tauri-apps/cli": "^1.4.0",
     "@types/moment": "^2.13.0",
     "@types/react": "18.2.12",
     "@types/react-dom": "18.2.4"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

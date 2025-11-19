@@ -1,5 +1,33 @@
 # @rosen-bridge/guard-app
 
+## 3.0.0
+
+### Major Changes
+
+- Update to reflect latest API changes by removing reliance on the `balances` property from `/info` and fetching balances from the new dedicated `/balance` route instead
+
+### Minor Changes
+
+- Update tokens section to match the latest design and add external links for each token
+- Fix network display for `bitcoin-runes`
+- Implement a new `Token Carousel` section in the dashboard to display token-related information dynamically
+- Implement the layout for `networks` and `health` section in dashboard
+- Fix dark theme
+- Update Supported NodeJS version to 22.18.0
+- Improve and unify style implementation
+
+### Patch Changes
+
+- Update helper usage to handle null values and leverage the improved compatibility of `utils` functions
+- Update Assets page to use new `/balance` API endpoint instead of `/assets`
+- Fixed console errors and warnings, improving stability and developer experience
+- Add root-level ESLint configuration and resolved existing linting issues
+- Update dependencies
+  - @rosen-bridge/ui-kit@3.0.0
+  - @rosen-bridge/icons@3.0.0
+  - @rosen-ui/utils@1.0.0
+  - @rosen-ui/constants@1.0.0
+
 ## 2.1.0
 
 ### Minor Changes

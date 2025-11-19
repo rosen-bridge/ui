@@ -1,5 +1,72 @@
 # @rosen-bridge/rosen-app
 
+## 4.7.0
+
+### Minor Changes
+
+- Display `InsufficientAssetsError` as a toast to the user and prevent it from being logged to Discord
+- Implement Event Details page
+- Implement pagination for status apis and database actions
+- Add filters, pagination, and sorting to the Assets API
+- Better code structure for `Events` page to improve quality and maintainability
+- Add contract version to app sidebar information
+- Remove `paymentTxId` and `spendTxId` from `EventSidebar` for fraud status
+- Update Supported NodeJS version to 22.18.0
+- Improve and unify style implementation
+- Integrate Vercel logging for server actions
+- Implement the new `Assets` page
+- Refactor `withValidation` to support both `Joi` and `Zod` validators with unified error handling
+- Add a filter for `fraud` status in `events` page
+
+### Patch Changes
+
+- Upgrade scanner base dependencies
+- Update helper usage to handle null values and leverage the improved compatibility of `utils` functions
+- Fixed the issue where changing the source network to `Bitcoin` while a wallet is connected to a non-Bitcoin network causes an error related to native SegWit support, regardless of the wallet's connection status
+- Fix incorrect filtering on `Event List` page by applying decimals normalization in DB query
+- Added fraud status indicator on `Event List` page
+- Fixed event list sorting by Reports count to ensure correct order
+- Correct timestamp sorting on the Event List page to display events in proper chronological order
+- Add Bitcoin Runes to xverse wallet networks
+- Fix issue where clicking `Use All` button without an address dropped zero into the amount field by disabling the button until a valid address is entered
+- Return distinct events by `eventId` to prevent duplicates in the `Event List` page
+- Add root-level ESLint configuration and resolved existing linting issues
+- Rename runes network to bitcoin-runes
+- Update dependencies
+  - @vercel/kv@3.0.0
+  - @rosen-bridge/encryption@1.0.0
+  - @rosen-bridge/abstract-observation-extractor@0.2.3
+  - @rosen-bridge/abstract-scanner@0.2.3
+  - @rosen-bridge/extended-typeorm@1.0.1
+  - @rosen-bridge/tokens@4.0.1
+  - @rosen-bridge/watcher-data-extractor@12.3.0
+  - @rosen-bridge/ui-kit@3.0.0
+  - @rosen-network/bitcoin-runes@1.0.0
+  - @rosen-ui/data-source@0.2.0
+  - @rosen-network/ergo@2.5.0
+  - @rosen-bridge/icons@3.0.0
+  - @rosen-ui/public-status@0.1.0
+  - @rosen-network/evm@0.3.4
+  - @rosen-ui/xverse-wallet@0.3.0
+  - @rosen-ui/asset-calculator@2.2.0
+  - @rosen-network/bitcoin@2.4.0
+  - @rosen-ui/wallet-connect@0.2.4
+  - @rosen-ui/wallet-api@3.0.4
+  - @rosen-network/ethereum@0.4.2
+  - @rosen-network/binance@0.4.2
+  - @rosen-network/cardano@2.5.0
+  - @rosen-ui/metamask-wallet@2.1.4
+  - @rosen-ui/nautilus-wallet@3.1.2
+  - @rosen-ui/eternl-wallet@3.1.2
+  - @rosen-network/base@0.5.0
+  - @rosen-network/doge@0.4.0
+  - @rosen-ui/lace-wallet@3.1.2
+  - @rosen-ui/utils@1.0.0
+  - @rosen-ui/constants@1.0.0
+  - @rosen-ui/my-doge-wallet@1.1.4
+  - @rosen-ui/types@0.3.8
+  - @rosen-ui/okx-wallet@2.1.2
+
 ## 4.6.0
 
 ### Minor Changes

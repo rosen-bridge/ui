@@ -9,57 +9,46 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  type-lint:
-    name: type-check and lint
+  ci:
+    name: CI
     runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22.18.0
-          cache: 'npm'
-
-      - run: npm ci
-      - run: npm run build:mono-packages
-      - run: npm run type-check --workspaces --if-present
-      - run: npm run lint --workspaces --if-present
-
-  test:
-    name: 'build and test'
-    runs-on: ubuntu-latest
     timeout-minutes: 20
-    strategy:
-      fail-fast: false
-      matrix:
-        node-version: [22.18.0]
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Build and test using Node.js v${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-
-      - run: npm ci
-      - run: npm run build:mono-packages
-      - run: npm run coverage
-
-  changeset:
-    name: 'changeset'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          # check out full history
           fetch-depth: 0
 
-      - name: Run changeset to check versions
-        uses: actions/setup-node@v3
+      - name: Setup node
+        uses: actions/setup-node@v5
         with:
-          node-version: 22.18.0
+          node-version-file: .nvmrc
           cache: 'npm'
-      - run: npx @changesets/cli@2.27.7 status --since=origin/dev
+
+      - name: Setup npm 11.6.2
+        run: npm i -g npm@11.6.2
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build:mono-packages
+
+      - name: Knip
+        run: npx knip --dependencies
+
+      - name: Type Check
+        run: npm run type-check --workspaces --if-present
+
+      - name: Prettify
+        run: npm run prettify:check
+
+      - name: Lint
+        run: npm run lint --workspaces --if-present
+
+      - name: Test
+        run: npm run coverage
+
+      - name: changeset
+        run: npx @changesets/cli@2.27.7 status --since=origin/dev

@@ -9,6 +9,10 @@ import {
 } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
+  TokenPriceEntity,
+  migrations as TokenPriceMigrations,
+} from '@rosen-bridge/token-price-entity';
+import {
   EventTriggerEntity,
   CommitmentEntity,
   migrations as watcherDataMigrations,
@@ -53,6 +57,7 @@ export const getDataSource = (
       GuardStatusChangedEntity,
       CommitmentEntity,
       TxEntity,
+      TokenPriceEntity,
     ],
     migrations: [
       ...watcherDataMigrations.postgres,
@@ -60,6 +65,7 @@ export const getDataSource = (
       ...scannerMigrations.postgres,
       ...assetCalculatorMigrations.postgres,
       ...publicStatusMigrations.postgres,
+      ...TokenPriceMigrations.postgres,
     ],
   });
 };

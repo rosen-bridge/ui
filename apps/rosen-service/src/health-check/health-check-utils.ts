@@ -1,13 +1,8 @@
 import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
+import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
 
 import dataSource from '../data-source';
 
-// TODO: After the export is fixed, include LastSavedBlock from health-check package
-// local:ergo/rosen-bridge/health-check/67
-type LastSavedBlock = {
-  height: number;
-  timestamp: number;
-};
 /**
  * returns the last saved block height based on the scanner name
  * @param scanner considering scanned blocks by this scanner
