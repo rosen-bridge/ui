@@ -121,8 +121,8 @@ export type EventStatusProps = HTMLAttributes<HTMLButtonElement> & {
   value?: keyof typeof STATUS_MAP;
 };
 
-const EventStatusBase = forwardRef<HTMLButtonElement, EventStatusProps>(
-  (props) => {
+const EventStatusBase = forwardRef<HTMLDivElement, EventStatusProps>(
+  (props, ref) => {
     const { loading, value } = props;
 
     if (loading) return <Chip loading />;
@@ -133,7 +133,12 @@ const EventStatusBase = forwardRef<HTMLButtonElement, EventStatusProps>(
       return <Chip label="Unknown" color="neutral" icon="ExclamationCircle" />;
 
     return (
-      <Chip label={status.label} color={status.color} icon={status.icon} />
+      <Chip
+        ref={ref}
+        label={status.label}
+        color={status.color}
+        icon={status.icon}
+      />
     );
   },
 );
