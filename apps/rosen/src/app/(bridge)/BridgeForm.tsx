@@ -5,7 +5,6 @@ import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
 import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
-  Grid,
   TextField,
   Typography,
   ListItemIcon,
@@ -17,6 +16,7 @@ import {
   InputAdornment,
   IconButton,
   Stack,
+  Columns,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -135,8 +135,15 @@ export const BridgeForm = () => {
 
   return (
     <>
-      <Grid container spacing={2}>
-        <Grid item mobile={12} tablet={6}>
+      <Columns
+        count={1}
+        style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}
+        gap="16px"
+        overrides={{
+          tablet: { count: 2, gap: '16px', style: { display: 'unset' } },
+        }}
+      >
+        <div>
           <TextField
             id="source"
             select
@@ -161,8 +168,8 @@ export const BridgeForm = () => {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
-        <Grid item mobile={12} tablet={6}>
+        </div>
+        <div>
           <TextField
             id="target"
             select
@@ -192,8 +199,8 @@ export const BridgeForm = () => {
               </MenuItem>
             ))}
           </TextField>
-        </Grid>
-      </Grid>
+        </div>
+      </Columns>
       <TextField
         label="Target Address"
         InputProps={{
