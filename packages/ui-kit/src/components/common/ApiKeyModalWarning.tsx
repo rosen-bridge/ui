@@ -2,8 +2,9 @@ import { Button } from '@mui/material';
 import { ExclamationTriangle } from '@rosen-bridge/icons';
 
 import { useApiKey } from '../../hooks';
-import { Grid, Typography } from '../base';
+import { Typography } from '../base';
 import { ApiKeyModal } from './ApiKeyModal';
+import { Stack } from './Stack';
 import { SvgIcon } from './SvgIcon';
 
 export const ApiKeyModalWarning = () => {
@@ -12,25 +13,18 @@ export const ApiKeyModalWarning = () => {
   if (apiKey) return null;
 
   return (
-    <Grid
-      container
-      alignItems="center"
-      gap={1}
-      sx={(theme) => ({ color: theme.palette.warning.main })}
-    >
-      <Grid item>
-        <SvgIcon>
-          <ExclamationTriangle />
-        </SvgIcon>
-      </Grid>
-      <Grid item>
-        <Typography>You need to set an Api Key before sending</Typography>
-      </Grid>
-      <Grid item>
-        <ApiKeyModal>
-          {(open) => <Button onClick={open}>Click To Set</Button>}
-        </ApiKeyModal>
-      </Grid>
-    </Grid>
+    <Stack spacing={1} direction="row" align="center" wrap>
+      <SvgIcon color="warning.main">
+        <ExclamationTriangle />
+      </SvgIcon>
+
+      <Typography color="warning.main">
+        You need to set an Api Key before sending
+      </Typography>
+
+      <ApiKeyModal>
+        {(open) => <Button onClick={open}>Click To Set</Button>}
+      </ApiKeyModal>
+    </Stack>
   );
 };
