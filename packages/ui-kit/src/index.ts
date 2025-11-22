@@ -1,4 +1,4 @@
-declare module '@mui/system' {
+declare module '@mui/material/styles' {
   interface BreakpointOverrides {
     laptop: true;
     tablet: true;
@@ -11,14 +11,15 @@ declare module '@mui/system' {
     lg: false;
     xl: false;
   }
-}
-declare module '@mui/material/styles' {
+
   interface TypeBackground {
     shadow: string;
   }
+
   interface Palette {
     background: TypeBackground;
   }
+
   interface PaletteOptions {
     background?: Partial<TypeBackground>;
   }
