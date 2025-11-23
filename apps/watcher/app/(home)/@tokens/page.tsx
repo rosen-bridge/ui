@@ -8,7 +8,7 @@ import { ApiAddressAssetsResponse } from '@/_types/api';
 
 const Tokens = () => {
   const { data, isLoading } = useSWR<ApiAddressAssetsResponse>(
-    ['/address/assets', { offset: 0, limit: 6 }],
+    ['/address/assets', { offset: 0, limit: 5 }],
     fetcher,
   );
 
