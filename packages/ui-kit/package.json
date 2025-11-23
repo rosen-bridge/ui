@@ -31,14 +31,14 @@
   "peerDependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "swr": "^2.1.5"
   },
   "devDependencies": {
     "@rosen-ui/types": "^0.3.8",
-    "@types/react": "18.2.12",
-    "@types/react-dom": "18.2.4"
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1"
   },
   "dependencies": {
     "@mui/lab": "^5.0.0-alpha.134",
