@@ -1,5 +1,4 @@
 ---
-'@rosen-ui/swr-mock': minor
 '@rosen-bridge/ui-kit': minor
 '@rosen-bridge/icons': minor
 '@rosen-ui/types': minor
