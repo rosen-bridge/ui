@@ -146,7 +146,7 @@ const Page = () => {
                       timestamp: item.timestamp,
                     }
               }
-              onClick={() => setCurrent(item)}
+              onClick={() => !isLoading && setCurrent(item)}
             />
           ))}
         </GridContainer>
