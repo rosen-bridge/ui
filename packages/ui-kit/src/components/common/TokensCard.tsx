@@ -1,14 +1,18 @@
+import { Button } from '@mui/material';
+import { AngleRight } from '@rosen-bridge/icons';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import { Card, CardBody, CardHeader, CardTitle } from './card';
+import { SvgIcon } from './SvgIcon';
 import { TokensList } from './TokensList';
 
-export interface TokensCardProps {
+export type TokensCardProps = {
   chain?: Network;
   title: string;
   tokens: TokenInfoWithColdAmount[];
   isLoading: boolean;
-}
+  href?: string;
+};
 
 /**
  * a wrapper for `TokensList` which also renders a title and a "See All" action
@@ -18,19 +22,35 @@ export interface TokensCardProps {
  * @param title
  * @param tokens
  * @param isLoading
+ * @param href
  */
 export const TokensCard = ({
   chain,
   title,
   tokens,
   isLoading,
+  href,
 }: TokensCardProps) => (
-  /**
-   * TODO: Implement the See All Section and click handler as part of #9
-   * local:ergo/rosen-bridge/ui#9
-   */
   <Card style={{ height: '100%' }} backgroundColor="background.paper">
-    <CardHeader>
+    <CardHeader
+      action={
+        href && (
+          <Button
+            variant="text"
+            size="medium"
+            target="_blank"
+            href={href}
+            endIcon={
+              <SvgIcon>
+                <AngleRight />
+              </SvgIcon>
+            }
+          >
+            See All
+          </Button>
+        )
+      }
+    >
       <CardTitle>{title}</CardTitle>
     </CardHeader>
     <CardBody>
