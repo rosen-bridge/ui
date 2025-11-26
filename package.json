@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@changesets/cli": "^2.27.1",
+    "@rosen-bridge/json-bigint": "^1.1.0",
     "patch-package": "^8.0.0"
   },
   "devDependencies": {

@@ -24,10 +24,11 @@
     "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml"
   },
   "dependencies": {
-    "@rosen-bridge/address-extractor": "^6.2.2",
+    "@rosen-bridge/abstract-extractor": "^2.1.2",
     "@rosen-bridge/abstract-logger": "^3.0.1",
     "@rosen-bridge/abstract-observation-extractor": "^0.2.3",
     "@rosen-bridge/abstract-scanner": "^0.2.3",
+    "@rosen-bridge/address-extractor": "^6.2.2",
     "@rosen-bridge/bitcoin-observation-extractor": "^6.4.1",
     "@rosen-bridge/bitcoin-scanner": "^0.2.3",
     "@rosen-bridge/callback-logger": "^1.0.1",
