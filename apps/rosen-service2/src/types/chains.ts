@@ -19,9 +19,11 @@ export interface ChainConfigs {
     WatcherTriggerEvent: string;
     WatcherPermit: string;
     Fraud: string;
+    tokenMap?: string;
   };
   tokens: {
     RWTId: string;
+    tokenMap?: string;
   };
   cleanupConfirm: number;
 }

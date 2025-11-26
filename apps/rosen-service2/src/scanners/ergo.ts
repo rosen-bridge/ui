@@ -2,6 +2,7 @@ import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
+import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
 import {
@@ -13,6 +14,7 @@ import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';
+import * as ergoLib from 'ergo-lib-wasm-nodejs';
 
 import { configs } from '../configs';
 import { ERGO_METHOD_EXPLORER } from '../constants';
@@ -166,6 +168,31 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
   } catch (error) {
     throw new Error(
       `cannot create or register event trigger extractors due to error: ${error}`,
+    );
+  }
+
+  try {
+    if (!configs.contracts.ergo.addresses.tokenMap) {
+      throw new Error(`on-chain-token-map address in not defined`);
+    }
+    if (!configs.contracts.ergo.tokens.tokenMap) {
+      throw new Error(`on-chain-token-map token in not defined`);
+    }
+
+    const tokenMapBoxExtractor = new ErgoUTXOExtractor(
+      dataSource,
+      'token-map-box-extractor',
+      ergoLib.NetworkPrefix.Mainnet,
+      url,
+      networkType,
+      configs.contracts.ergo.addresses.tokenMap,
+      [configs.contracts.ergo.tokens.tokenMap],
+      CallbackLoggerFactory.getInstance().getLogger(`token-map-box-extractor`),
+    );
+    await ergoScanner.registerExtractor(tokenMapBoxExtractor);
+  } catch (error) {
+    throw new Error(
+      `cannot create or register token map box extractor due to error: ${error}`,
     );
   }
 
