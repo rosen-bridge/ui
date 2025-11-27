@@ -150,7 +150,7 @@ export const SubmitButton = () => {
                   <Label label="Bridge Fee">
                     <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
                   </Label>
-                  <Label label="Received amount">
+                  <Label label="Receiving Amount">
                     <Amount
                       value={receivingAmountRaw}
                       unit={targetTokenInfo?.name}
