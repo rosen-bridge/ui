@@ -31,7 +31,6 @@ const config: KnipConfig = {
     '@vitest/runner',
     'eslint-config-next',
     'pg',
-    '@rosen-bridge/json-bigint',
   ],
 };
 
