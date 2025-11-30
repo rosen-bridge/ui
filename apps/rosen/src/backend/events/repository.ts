@@ -133,12 +133,12 @@ export const getEvents = async (filters: Filters) => {
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.id AS "eventTriggerId"',
-      'ete.result AS "status"',
+      'COALESCE(ete.result, \'processing\') AS "status"',
       '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
       '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
       '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "bridgeFeeNormalized"',
       'COUNT(ete.id) OVER (PARTITION BY oe.id) AS "flows"',
-      'ARRAY_AGG(ete.result) OVER (PARTITION BY oe.id) AS "statuses"',
+      'ARRAY_AGG(COALESCE(ete.result, \'processing\')) OVER (PARTITION BY oe.id) AS "statuses"',
     ])
     .orderBy('oe.id')
     .addOrderBy(

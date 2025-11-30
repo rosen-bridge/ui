@@ -10,7 +10,6 @@ import {
   CardHeader,
   CardTitle,
   Checkbox,
-  Grid,
   MenuItem,
   Stack,
   SubmitButton,
@@ -153,18 +152,16 @@ export const RequestToSignForm = () => {
             <TextField label="Required Signs" {...register('requiredSign')} />
 
             {error?.response?.status === 409 && (
-              <Grid container alignItems="center">
+              <Stack direction="row" align="center">
                 <Checkbox {...register('overwrite')} />
                 <Typography>Overwrite the already sent transaction</Typography>
-              </Grid>
+              </Stack>
             )}
 
             {error?.response?.status === 403 && (
-              <Grid container alignItems="center">
-                <Typography color="warning.main">
-                  The Api key is not correct
-                </Typography>
-              </Grid>
+              <Typography color="warning.main">
+                The Api key is not correct
+              </Typography>
             )}
 
             <ApiKeyModalWarning />

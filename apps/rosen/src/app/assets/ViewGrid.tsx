@@ -30,7 +30,7 @@ export const ViewGrid = ({
       {items.map((item, index) => (
         <Card
           key={item.id || index}
-          active={item.id === current?.id}
+          active={!isLoading && !!item?.id && item?.id === current?.id}
           backgroundColor="background.paper"
           clickable
           onClick={() => {
@@ -47,7 +47,7 @@ export const ViewGrid = ({
               <Token loading={isLoading} name={item.name} style={{ flex: 1 }} />
               <Chip
                 color="neutral"
-                icon={item.chain.replace(/(^\w|-\w)/g, (matched) =>
+                icon={item.chain?.replace(/(^\w|-\w)/g, (matched) =>
                   matched.replace('-', '').toUpperCase(),
                 )}
                 label={item.chain}

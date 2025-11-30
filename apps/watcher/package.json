@@ -22,7 +22,6 @@
     "@rosen-bridge/ui-kit": "^3.0.1",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
-    "@rosen-ui/swr-mock": "^0.1.1",
     "@rosen-ui/utils": "^1.0.0",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
