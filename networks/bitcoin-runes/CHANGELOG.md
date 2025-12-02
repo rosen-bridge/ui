@@ -1,5 +1,14 @@
 # @rosen-network/bitcoin-runes
 
+## 1.0.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.1.0
+  - @rosen-ui/types@0.4.0
+  - @rosen-network/base@0.5.1
+
 ## 1.0.0
 
 ### Major Changes

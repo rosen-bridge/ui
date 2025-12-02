@@ -1,5 +1,11 @@
 # @rosen-network/evm
 
+## 0.3.5
+
+### Patch Changes
+
+- Update dependency @rosen-ui/types@0.4.0
+
 ## 0.3.4
 
 ### Patch Changes

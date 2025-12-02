@@ -1,5 +1,15 @@
 # @rosen-ui/lace-wallet
 
+## 3.1.3
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.4.0
+  - @rosen-network/cardano@2.5.1
+  - @rosen-ui/utils@1.0.1
+  - @rosen-ui/wallet-api@3.0.5
+
 ## 3.1.2
 
 ### Patch Changes

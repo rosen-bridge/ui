@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/my-doge-wallet",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -16,10 +16,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-network/doge": "^0.4.0",
+    "@rosen-network/doge": "^0.4.1",
     "@rosen-ui/constants": "^1.0.0",
-    "@rosen-ui/types": "^0.3.8",
-    "@rosen-ui/wallet-api": "^3.0.4"
+    "@rosen-ui/types": "^0.4.0",
+    "@rosen-ui/wallet-api": "^3.0.5"
   },
   "engines": {
     "node": ">=22.18.0",
