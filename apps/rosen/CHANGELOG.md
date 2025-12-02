@@ -1,5 +1,43 @@
 # @rosen-bridge/rosen-app
 
+## 4.8.0
+
+### Minor Changes
+
+- Add info text for `Duration` and `RSN Ratio` on the event details page
+- Prevent page crash when users click during loading state in `Events` page
+- Redesigns Information app section with new updates and improvements
+- Upgrade React and React DOM to 18.3.1
+
+### Patch Changes
+
+- Prevent Bridge form from crashing on field validation errors
+- Prevent UI crash on Assets grid view when changing `Items Per Page` value
+- Fix `Unknown` status by correctly mapping the Processing event state on the Events List page
+- Fix event list API by correcting status, adding flow count, and removing duplicates
+- Update dependencies
+  - @rosen-bridge/ui-kit@4.0.0
+  - @rosen-bridge/icons@3.1.0
+  - @rosen-ui/types@0.4.0
+  - @rosen-network/base@0.5.1
+  - @rosen-network/bitcoin@2.4.1
+  - @rosen-network/bitcoin-runes@1.0.1
+  - @rosen-network/cardano@2.5.1
+  - @rosen-network/doge@0.4.1
+  - @rosen-network/ergo@2.5.2
+  - @rosen-network/evm@0.3.5
+  - @rosen-ui/asset-calculator@2.2.1
+  - @rosen-ui/utils@1.0.1
+  - @rosen-ui/eternl-wallet@3.1.3
+  - @rosen-ui/lace-wallet@3.1.3
+  - @rosen-ui/metamask-wallet@2.1.5
+  - @rosen-ui/my-doge-wallet@1.1.5
+  - @rosen-ui/nautilus-wallet@3.1.3
+  - @rosen-ui/okx-wallet@2.1.3
+  - @rosen-ui/wallet-api@3.0.5
+  - @rosen-ui/wallet-connect@0.2.5
+  - @rosen-ui/xverse-wallet@0.3.1
+
 ## 4.7.1
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @rosen-ui/utils
 
+## 1.0.1
+
+### Patch Changes
+
+- Update dependency @rosen-ui/types@0.4.0
+
 ## 1.0.0
 
 ### Major Changes
