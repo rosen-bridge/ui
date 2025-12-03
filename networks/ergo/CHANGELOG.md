@@ -1,5 +1,14 @@
 # @rosen-network/ergo
 
+## 2.5.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.1.0
+  - @rosen-ui/types@0.4.0
+  - @rosen-network/base@0.5.1
+
 ## 2.5.1
 
 ### Patch Changes

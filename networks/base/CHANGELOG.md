@@ -1,5 +1,13 @@
 # @rosen-network/base
 
+## 0.5.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.4.0
+  - @rosen-ui/utils@1.0.1
+
 ## 0.5.0
 
 ### Minor Changes

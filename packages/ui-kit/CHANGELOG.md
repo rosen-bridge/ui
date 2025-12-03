@@ -1,5 +1,29 @@
 # @rosen-bridge/ui-kit
 
+## 4.0.0
+
+### Major Changes
+
+- Rename `Version` to `AppInfo`, update and improve component structure
+
+### Minor Changes
+
+- Add conditional hide for missing fields in `EventDetails` component
+- Standardizing and unifying MUI module declarations according to official guidelines
+- Refactor ApiKeyModalWarning from `Grid` to `Stack`
+- Update `EventCard` to include event flows and reposition the timestamp in a new layout
+- Extend `Chip` component props to support standard HTML div attributes
+- Fix cross-browser text truncation issues in `Identifier` component
+- Fix missing ref forwarding in `Connector` component
+- Fix forwardRef signature in `EventStatus` component
+- Upgrade React and React DOM to 18.3.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.1.0
+  - @rosen-ui/utils@1.0.1
+
 ## 3.0.1
 
 ### Patch Changes

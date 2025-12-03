@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-connect",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -22,8 +22,8 @@
     "@rosen-network/binance": "^0.4.2",
     "@rosen-network/ethereum": "^0.4.2",
     "@rosen-ui/constants": "^1.0.0",
-    "@rosen-ui/types": "^0.3.8",
-    "@rosen-ui/wallet-api": "^3.0.4"
+    "@rosen-ui/types": "^0.4.0",
+    "@rosen-ui/wallet-api": "^3.0.5"
   },
   "engines": {
     "node": ">=22.18.0",
