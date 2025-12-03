@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@rosen-bridge/extended-typeorm": "1.0.1",
-    "@rosen-ui/types": "0.3.8"
+    "@rosen-ui/types": "0.4.0"
   },
   "engines": {
     "node": ">=22.18.0",

@@ -101,10 +101,10 @@ const IdentifierBase = ({
                   minWidth: 0,
                 }}
               >
-                {value.slice(0, -trailingLength)}
+                {(value ?? '').slice(0, -trailingLength)}
               </div>
               <span style={{ flexShrink: 0 }}>
-                {value.slice(-trailingLength)}
+                {(value ?? '').slice(-trailingLength)}
               </span>
             </Stack>
           </Tooltip>

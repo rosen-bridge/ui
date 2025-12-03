@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/evm",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -19,7 +19,7 @@
     "@rosen-bridge/address-codec": "^1.0.1",
     "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-ui/constants": "^1.0.0",
-    "@rosen-ui/types": "^0.3.8",
+    "@rosen-ui/types": "^0.4.0",
     "ethers": "6.13.2"
   },
   "engines": {

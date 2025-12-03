@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/utils",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen UI apps",
@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@rosen-ui/constants": "^1.0.0",
-    "@rosen-ui/types": "^0.3.8",
+    "@rosen-ui/types": "^0.4.0",
     "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"
   },

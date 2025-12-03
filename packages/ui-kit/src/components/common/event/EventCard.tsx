@@ -25,6 +25,7 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
     toChain: NetworkType;
     token: string;
     timestamp?: number;
+    flows?: number;
   };
   onClick?: () => void;
 };
@@ -42,7 +43,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
       >
         <CardBody>
           <Stack spacing={1}>
-            <Stack spacing={1} direction="row">
+            <Stack spacing={1} align="center" direction="row">
               {isLoading && (
                 <Skeleton
                   variant="circular"
@@ -56,29 +57,40 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                   {capitalize(value.token.slice(0, 1))}
                 </Avatar>
               )}
+              <Amount
+                loading={isLoading}
+                orientation="vertical"
+                unit={value?.token}
+                value={value?.amount}
+              />
+            </Stack>
+            {!!value && ('timestamp' in value || 'flows' in value) && (
               <Stack
                 direction="row"
+                align="center"
                 justify="between"
-                style={{ width: '100%' }}
+                style={{ marginBottom: '-4px' }}
               >
-                <Amount
-                  loading={isLoading}
-                  orientation="vertical"
-                  unit={value?.token}
-                  value={value?.amount}
-                />
-                {!!value && 'timestamp' in value && (
-                  <Stack justify="end">
-                    <div style={{ marginBottom: '-4px' }}>
-                      <RelativeTime
-                        isLoading={isLoading}
-                        timestamp={value?.timestamp}
-                      />
-                    </div>
-                  </Stack>
+                <div>
+                  {!!value && 'timestamp' in value && (
+                    <RelativeTime
+                      isLoading={isLoading}
+                      timestamp={value?.timestamp}
+                    />
+                  )}
+                </div>
+                {!!value && 'flows' in value && (
+                  <>
+                    {!isLoading && (
+                      <Typography color="text.secondary" variant="body2">
+                        with {value.flows} flow(s)
+                      </Typography>
+                    )}
+                    {!!isLoading && <Skeleton width="80px" variant="text" />}
+                  </>
                 )}
               </Stack>
-            </Stack>
+            )}
             <Identifier
               href={value?.href}
               loading={isLoading}
