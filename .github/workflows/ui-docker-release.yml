@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image (watcher/guard)
 on:
   push:
     branches:
@@ -12,7 +12,7 @@ jobs:
     name: Build ${{ matrix.platform }}-${{ matrix.apps }}
     permissions: write-all
     runs-on: ubuntu-latest
-    environment: ${{ github.event_name == 'release' && 'release' || 'dev' }}
+    if: ${{ !(github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'rosen-service')) }}
     strategy:
       fail-fast: false
       matrix:
@@ -22,8 +22,7 @@ jobs:
           ${{ fromJSON(
             (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'watcher') && '["watcher"]')
             || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'guard') && '["guard"]')
-            || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'rosen-service') && '["rosen-service"]')
-            || '["watcher","guard","rosen-service"]'
+            || '["watcher","guard"]'
           ) }}
 
     steps:
@@ -40,26 +39,20 @@ jobs:
       - name: Setup npm 11.6.2
         run: npm i -g npm@11.6.2
 
-      - name: Prepare and Build Frontend
-        if: ${{ matrix.apps == 'watcher' || matrix.apps == 'guard' }}
+      - name: Build dependencies
         run: |
-          # Build Dependencies
           npm ci 
           ./build.sh ${{ matrix.apps }}
 
-          # Move Config Files
+      - name: Move Config Files
+        run: |
           mv docker/nginx.conf ./
           mv docker/entrypoint.sh ./
 
-          # Build App
+      - name: Build App
+        run: |
           cd ./apps/${{ matrix.apps }}
           npm run build
-
-      - name: Setup rosen-service Configs
-        if: ${{ matrix.apps == 'rosen-service' }}
-        run: |
-          npx @rosen-bridge/cli@${{ vars.ROSEN_CLI_VERSION || 'latest' }} download-assets -c ${{ vars.RELEASE_NAME }} ${{ vars.RELEASE_TAG }} -o ./apps/rosen-service/config/
-          rm ./apps/rosen-service/config/contracts-*
 
       - name: Set up QEMU
         if: contains(matrix.platform, 'arm')
@@ -127,8 +120,7 @@ jobs:
           ${{ fromJSON(
             (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'watcher') && '["watcher"]')
             || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'guard') && '["guard"]')
-            || (github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'rosen-service') && '["rosen-service"]')
-            || '["watcher","guard","rosen-service"]'
+            || '["watcher","guard"]'
           ) }}
     steps:
       - name: Download digests
