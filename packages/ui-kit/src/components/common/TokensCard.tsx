@@ -1,6 +1,7 @@
+import { Typography } from '@mui/material';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
-import { FullCard } from './FullCard';
+import { Card, CardBody, CardHeader, CardTitle } from './card';
 import { TokensList } from './TokensList';
 
 export interface TokensCardProps {
@@ -9,6 +10,7 @@ export interface TokensCardProps {
   tokens: TokenInfoWithColdAmount[];
   isLoading: boolean;
 }
+
 /**
  * a wrapper for `TokensList` which also renders a title and a "See All" action
  * button
@@ -28,7 +30,14 @@ export const TokensCard = ({
    * TODO: Implement the See All Section and click handler as part of #9
    * local:ergo/rosen-bridge/ui#9
    */
-  <FullCard title={title}>
-    <TokensList chain={chain} tokens={tokens ?? []} isLoading={isLoading} />
-  </FullCard>
+  <Card style={{ height: '100%' }} backgroundColor="background.paper">
+    <CardHeader>
+      <CardTitle>
+        <Typography fontWeight="700">{title}</Typography>
+      </CardTitle>
+    </CardHeader>
+    <CardBody>
+      <TokensList chain={chain} tokens={tokens ?? []} isLoading={isLoading} />
+    </CardBody>
+  </Card>
 );

@@ -21,7 +21,6 @@ export * from './EnhancedDialogContent';
 export * from './EnhancedDialogTitle';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
-export * from './FullCard';
 export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
 export * from './Id';

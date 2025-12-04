@@ -7,16 +7,28 @@ import {
   SquareShape,
   Unlock,
 } from '@rosen-bridge/icons';
-import { FullCard, SvgIcon } from '@rosen-bridge/ui-kit';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Stack,
+  SvgIcon,
+  Typography,
+} from '@rosen-bridge/ui-kit';
 
 import { HomeActionButton } from '@/_components/HomeActionButton';
 
 const Actions = () => {
   return (
-    <FullCard
-      title="Actions"
-      cardActions={
-        <>
+    <Card backgroundColor="background.paper">
+      <CardHeader>
+        <CardTitle>
+          <Typography fontWeight="700">Actions</Typography>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
+        <Stack direction="row">
           <HomeActionButton
             action="withdraw"
             label="Withdraw"
@@ -64,9 +76,9 @@ const Actions = () => {
               </SvgIcon>
             }
           />
-        </>
-      }
-    />
+        </Stack>
+      </CardBody>
+    </Card>
   );
 };
 

@@ -1,6 +1,12 @@
 import { ReactNode } from 'react';
 
-import { FullCard } from '@rosen-bridge/ui-kit';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Typography,
+} from '@rosen-bridge/ui-kit';
 
 interface ActionText {
   title: string;
@@ -11,11 +17,14 @@ interface ActionText {
  * @param children
  */
 export const ActionText = ({ title, children }: ActionText) => (
-  <FullCard
-    title={title}
-    backgroundColor="divider"
-    contentProps={{ sx: { color: (theme) => theme.palette.text.secondary } }}
-  >
-    {children}
-  </FullCard>
+  <Card backgroundColor="divider">
+    <CardHeader>
+      <CardTitle>
+        <Typography fontWeight="700">{title}</Typography>
+      </CardTitle>
+    </CardHeader>
+    <CardBody>
+      <Typography color="textSecondary">{children}</Typography>
+    </CardBody>
+  </Card>
 );
