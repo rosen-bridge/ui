@@ -140,7 +140,7 @@ const LockForm = () => {
           message:
             error.message +
             (error.response?.data?.message
-              ? `(${error.response?.data?.message})`
+              ? `\u00A0(${error.response?.data?.message})`
               : ''),
         });
       }

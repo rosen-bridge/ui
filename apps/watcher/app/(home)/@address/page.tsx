@@ -18,7 +18,7 @@ import { ApiInfoResponse } from '@/_types/api';
 const Address = () => {
   const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
   return (
-    <Card backgroundColor="background.paper">
+    <Card style={{ minWidth: 0 }} backgroundColor="background.paper">
       <CardHeader>
         <CardTitle>
           <Typography fontWeight="700">Address</Typography>

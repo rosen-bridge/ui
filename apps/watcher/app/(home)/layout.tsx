@@ -2,7 +2,7 @@
 
 import { Fragment } from 'react';
 
-import { Grid, PageHeading } from '@rosen-bridge/ui-kit';
+import { Box, PageHeading, Stack } from '@rosen-bridge/ui-kit';
 import { LayoutProps } from '@rosen-ui/types';
 
 const HomeLayout = ({
@@ -14,21 +14,28 @@ const HomeLayout = ({
 }: LayoutProps) => (
   <Fragment>
     <PageHeading title="Home" />
-    <Grid container spacing={{ mobile: 1, tablet: 3 }}>
-      <Grid item mobile={12}>
-        {infoWidgets}
-      </Grid>
-      <Grid item container direction="column" mobile={12} tablet={6}>
-        <Grid item>{actions}</Grid>
-        <Grid item>{revenue}</Grid>
-      </Grid>
-      <Grid item mobile={12} tablet={6}>
+    <Stack spacing={2}>
+      {infoWidgets}
+      <Box
+        style={{
+          display: 'grid',
+          gap: '16px',
+        }}
+        overrides={{
+          mobile: {
+            gridTemplateColumns: '1fr',
+          },
+          laptop: {
+            gridTemplateColumns: '1fr 1fr',
+          },
+        }}
+      >
+        {revenue}
         {tokens}
-      </Grid>
-      <Grid item mobile={12}>
+        {actions}
         {address}
-      </Grid>
-    </Grid>
+      </Box>
+    </Stack>
   </Fragment>
 );
 

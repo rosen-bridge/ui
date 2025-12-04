@@ -36,7 +36,7 @@ const Revenue = () => {
   );
 
   return (
-    <Card backgroundColor="background.paper">
+    <Card style={{ minWidth: 0 }} backgroundColor="background.paper">
       <CardHeader
         action={<PeriodSelect period={period} setPeriod={setPeriod} />}
       >
