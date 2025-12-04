@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
 import { App as AppBase, ApiKeyProvider } from '@rosen-bridge/ui-kit';
-import { mockMiddlewareFactory } from '@rosen-ui/swr-mock';
+import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 import { SWRConfig } from 'swr';
 
 import { theme } from '@/_theme/theme';

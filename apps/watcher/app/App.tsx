@@ -8,7 +8,8 @@ import { PropsWithChildren } from 'react';
  */
 import { NoSsr } from '@mui/material';
 import { App as AppBase, ApiKeyProvider } from '@rosen-bridge/ui-kit';
-import { SWRConfig } from '@rosen-ui/swr-mock';
+import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
+import { SWRConfig } from 'swr';
 
 import { Favicon } from './_components/Favicon';
 import { mockedData } from './_mock/mockedData';
@@ -23,8 +24,12 @@ export const App = ({ children }: PropsWithChildren) => {
         <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
           <Favicon />
           <SWRConfig
-            useMockedApis={process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'}
-            fakeData={mockedData}
+            value={{
+              use:
+                process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                  ? [mockMiddlewareFactory(mockedData)]
+                  : [],
+            }}
           >
             {children}
           </SWRConfig>

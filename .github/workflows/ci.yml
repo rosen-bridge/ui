@@ -45,7 +45,7 @@ jobs:
         run: npm run prettify:check
 
       - name: Lint
-        run: npm run lint --workspaces --if-present
+        run: npm run lint
 
       - name: Test
         run: npm run coverage

@@ -24,9 +24,11 @@
     "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml"
   },
   "dependencies": {
+    "@rosen-bridge/abstract-extractor": "^2.1.2",
     "@rosen-bridge/abstract-logger": "^3.0.1",
     "@rosen-bridge/abstract-observation-extractor": "^0.2.3",
     "@rosen-bridge/abstract-scanner": "^0.2.3",
+    "@rosen-bridge/address-extractor": "^6.2.2",
     "@rosen-bridge/bitcoin-observation-extractor": "^6.4.1",
     "@rosen-bridge/bitcoin-scanner": "^0.2.3",
     "@rosen-bridge/callback-logger": "^1.0.1",
@@ -49,11 +51,12 @@
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
     "@rosen-bridge/winston-logger": "^2.0.1",
     "@rosen-clients/ergo-explorer": "^2.1.0",
-    "@rosen-ui/asset-calculator": "^2.2.0",
+    "@rosen-ui/asset-calculator": "^2.2.1",
     "@rosen-ui/asset-data-adapter": "0.2.0",
     "@rosen-ui/constants": "^1.0.0",
     "@vercel/kv": "^3.0.0",
     "config": "^3.3.7",
+    "ergo-lib-wasm-nodejs": "^0.24.1",
     "ethers": "6.13.2",
     "reflect-metadata": "^0.1.13"
   },

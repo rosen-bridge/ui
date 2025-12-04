@@ -1,5 +1,11 @@
 # @rosen-ui/types
 
+## 0.4.0
+
+### Minor Changes
+
+- Upgrade React and React DOM to 18.3.1
+
 ## 0.3.8
 
 ### Patch Changes

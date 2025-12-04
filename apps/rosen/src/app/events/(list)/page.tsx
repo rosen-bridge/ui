@@ -144,9 +144,10 @@ const Page = () => {
                       toChain: item.toChain,
                       token: item.lockToken?.name,
                       timestamp: item.timestamp,
+                      flows: Number(item.flows || '1'),
                     }
               }
-              onClick={() => setCurrent(item)}
+              onClick={() => !isLoading && setCurrent(item)}
             />
           ))}
         </GridContainer>

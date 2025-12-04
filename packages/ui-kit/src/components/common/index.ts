@@ -27,7 +27,7 @@ export * from './HealthParamCardSkeleton';
 export * from './Id';
 export * from './InfoWidgetCardBase';
 export * from './Pagination';
-export * from './Version';
+export * from './AppInfo';
 export * from './PageHeading';
 export * from './QrCodeModal';
 export * from './SortField';

@@ -25,6 +25,7 @@ interface EventWithTotal
   eventTriggerId: string;
   timestamp: number;
   total: number;
+  flows: number;
   status: 'fraud' | 'processing' | 'successful';
   fromChain: Network;
   toChain: Network;
@@ -80,6 +81,12 @@ export const getEvents = async (filters: Filters) => {
     field.value = tokenIds;
   })();
 
+  const statusIndex =
+    filters.fields?.findIndex((field) => field.key == 'status') ?? -1;
+
+  const status =
+    statusIndex > -1 ? filters.fields?.splice(statusIndex, 1)[0] : undefined;
+
   let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
     switch (key) {
       case 'amount':
@@ -90,6 +97,10 @@ export const getEvents = async (filters: Filters) => {
         return `sub."${key}"`;
     }
   });
+
+  if (status) {
+    query = `${query ? `${query} AND ` : ''}(${status.operator == '!=' ? 'NOT ' : ''}('${status.value}' = ANY(sub."statuses")))`;
+  }
 
   const subquery = observationRepository
     .createQueryBuilder('oe')
@@ -122,24 +133,20 @@ export const getEvents = async (filters: Filters) => {
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.id AS "eventTriggerId"',
-      /**
-       * There may be multiple event triggers for the same events, but we should
-       * only select one based on the results. The order is:
-       *
-       * 1. "successful": If there is at least one successful one, no matter the
-       *  other event trigger results, the event can be counted as successful
-       * 2. NULL (coalesced to "processing" for sql sorting purposes): If no
-       *  successful event triggers exists and at least one processing one, the
-       *  event may still become successful
-       * 3. "fraud": If only fraud event triggers exists, it's clear that the
-       *  event is a fraud
-       */
-      "COALESCE(FIRST_VALUE(ete.result) OVER(PARTITION BY ete.eventId ORDER BY COALESCE(ete.result, 'processing') DESC), 'processing') AS status",
-
+      'COALESCE(ete.result, \'processing\') AS "status"',
       '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
       '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
       '(CAST(oe.bridgeFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "bridgeFeeNormalized"',
-    ]);
+      'COUNT(ete.id) OVER (PARTITION BY oe.id) AS "flows"',
+      'ARRAY_AGG(COALESCE(ete.result, \'processing\')) OVER (PARTITION BY oe.id) AS "statuses"',
+    ])
+    .orderBy('oe.id')
+    .addOrderBy(
+      `COALESCE(array_position(ARRAY['successful', 'processing', '', 'fraud'], ete.result), 3)`,
+      'ASC',
+    )
+    .addOrderBy(`be.timestamp`, 'ASC')
+    .distinctOn(['oe.id']);
 
   let queryBuilder = dataSource
     .createQueryBuilder()

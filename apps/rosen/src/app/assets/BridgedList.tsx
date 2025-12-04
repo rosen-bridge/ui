@@ -25,6 +25,10 @@ export const BridgedList = ({ value }: BridgedListProps) => {
   const { data, isLoading } = useSWR<ApiAssetResponse>(
     `/v1/assets/detail/${value?.id.toLowerCase()}`,
     fetcher,
+    {
+      keepPreviousData: true,
+      refreshInterval: 0,
+    },
   );
 
   const items = useMemo(() => {

@@ -1,5 +1,28 @@
 # @rosen-bridge/guard-app
 
+## 3.1.0
+
+### Minor Changes
+
+- Redesigns Information app section with new updates and improvements
+- Upgrade React and React DOM to 18.3.1
+- Replace Grid with Stack in `RequestToSignForm` component
+
+### Patch Changes
+
+- Remove unnecessary `@rosen-ui/swr-mock` package from the app
+- Update dependencies
+  - @rosen-bridge/ui-kit@4.0.0
+  - @rosen-bridge/icons@3.1.0
+  - @rosen-ui/utils@1.0.1
+
+## 3.0.1
+
+### Patch Changes
+
+- Fix network data fetching in the dashboard by fetching per network, aggregating results, and showing proper error states
+- Update dependency @rosen-bridge/ui-kit@3.0.1
+
 ## 3.0.0
 
 ### Major Changes
