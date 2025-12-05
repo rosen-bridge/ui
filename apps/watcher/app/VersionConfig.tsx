@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { FileAlt, Swatchbook } from '@rosen-bridge/icons';
+import { FileAlt, Swatchbook, ShieldCheck } from '@rosen-bridge/icons';
 import { AppInfo } from '@rosen-bridge/ui-kit';
 
 import packageJson from '../package.json';
@@ -11,6 +11,11 @@ export const VersionConfig = () => {
 
   const versions = useMemo(() => {
     const result = [
+      {
+        label: 'Watcher',
+        value: info?.versions.app,
+        icon: <ShieldCheck />,
+      },
       {
         label: 'UI',
         value: packageJson.version,
