@@ -28,15 +28,6 @@ export const Details = ({ id }: { id: string }) => {
     fetcher,
   );
 
-  const amounts = useMemo(() => {
-    return [
-      ['Token Price', data?.amount, false],
-      ['Fee Sum', data?.totalFee, false],
-      ['Bridge Fee', data?.bridgeFee, true],
-      ['Network Fee', data?.networkFee, true],
-    ] as const;
-  }, [data]);
-
   const txIds = useMemo(() => {
     return [
       ['Source Tx', data?.fromChain, data?.sourceTxId],
@@ -74,54 +65,55 @@ export const Details = ({ id }: { id: string }) => {
             </SvgIcon>
           </Label>
           <Label label="Total Emission">
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
           <Label label="Guards" inset>
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
           <Label label="Watchers" inset>
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
           <Label
             label="RSN Ratio"
             info="The number of RSN tokens that correspond to one unit of this token."
           >
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
         </div>
         <div>
-          {amounts.map(([label, value, inset]) => (
-            <Label key={label} label={label} inset={inset}>
-              <Amount
-                loading={isLoading}
-                value={getDecimalString(
-                  value,
-                  data?.lockToken?.significantDecimals,
-                )}
-                unit={data?.lockToken?.name}
-              />
-            </Label>
-          ))}
+          <Label label="Token Price">
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+          </Label>
+          <Label label="Fee Sum">
+            <Amount
+              loading={isLoading}
+              value={getDecimalString(
+                data?.totalFee,
+                data?.lockToken?.significantDecimals,
+              )}
+              unit={data?.lockToken?.name}
+            />
+          </Label>
+          <Label label="Bridge Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={getDecimalString(
+                data?.bridgeFee,
+                data?.lockToken?.significantDecimals,
+              )}
+              unit={data?.lockToken?.name}
+            />
+          </Label>
+          <Label label="Network Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={getDecimalString(
+                data?.networkFee,
+                data?.lockToken?.significantDecimals,
+              )}
+              unit={data?.lockToken?.name}
+            />
+          </Label>
         </div>
         <Box
           style={{ columnSpan: 'all' }}

@@ -9,7 +9,6 @@ import {
   Network,
   Token,
   DateTime,
-  LabelGroup,
   EventStatus,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -163,44 +162,42 @@ export const Overview = ({ id }: { id: string }) => {
           />
         </Label>
       </Columns>
-
-      <Label label="Address" />
-      <LabelGroup
-        overrides={{
-          tablet: {
-            style: { width: '70%' },
-          },
-        }}
-      >
-        <Label label="From" inset>
+      <Columns count={3} width="320px" gap="24px">
+        <Label
+          label="From Address"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           <Identifier
             style={{ width: isLoading ? '100%' : 'auto' }}
-            overrides={{
-              tablet: {
-                style: { width: isLoading ? '75%' : 'auto' },
-              },
-            }}
             loading={isLoading}
             value={data?.fromAddress}
             href={getAddressUrl(data?.fromChain, data?.fromAddress)}
             copyable
           />
         </Label>
-        <Label label="To" inset>
+        <Label
+          label="To Address"
+          orientation="horizontal"
+          overrides={{
+            tablet: {
+              orientation: 'vertical',
+            },
+          }}
+        >
           <Identifier
             style={{ width: isLoading ? '100%' : 'auto' }}
-            overrides={{
-              tablet: {
-                style: { width: isLoading ? '75%' : 'auto' },
-              },
-            }}
             loading={isLoading}
             value={data?.toAddress}
             href={getAddressUrl(data?.toChain, data?.toAddress)}
             copyable
           />
         </Label>
-      </LabelGroup>
+      </Columns>
     </Section>
   );
 };
