@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 4.1.0
+
+### Minor Changes
+
+- Improve the `TokensList` component to align with the new design
+
 ## 4.0.0
 
 ### Major Changes
