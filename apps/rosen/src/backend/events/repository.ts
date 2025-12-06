@@ -26,7 +26,7 @@ interface EventWithTotal
   timestamp: number;
   total: number;
   flows: number;
-  status: 'fraud' | 'processing' | 'successful';
+  status: 'fraud' | 'processing' | 'successful' | 'multipleFlows';
   fromChain: Network;
   toChain: Network;
 }
@@ -182,7 +182,10 @@ export const getEvents = async (filters: Filters) => {
   const items = rawItems.map(({ total, ...item }) => item);
 
   return {
-    items,
+    items: items.map((item) => ({
+      ...item,
+      status: item.flows > 1 ? 'multipleFlows' : item.status,
+    })),
     total: rawItems[0]?.total ?? 0,
   };
 };

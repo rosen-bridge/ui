@@ -7,7 +7,6 @@ import React, {
 } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
-import { capitalize } from 'lodash-es';
 
 import { styled } from '../../styling';
 import { Typography, Skeleton } from '../base';
@@ -119,9 +118,7 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
   return (
     <ChipWrapper color={color} ref={ref}>
       {RenderedIcon}
-      <Typography variant="body2">
-        {label ? capitalize(label) : 'Invalid'}
-      </Typography>
+      <Typography variant="body2">{label ? label : 'Invalid'}</Typography>
     </ChipWrapper>
   );
 });
