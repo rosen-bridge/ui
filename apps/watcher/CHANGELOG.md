@@ -1,5 +1,15 @@
 # @rosen-bridge/watcher-app
 
+## 3.7.0
+
+### Minor Changes
+
+- Fix showing the correct UI version
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/ui-kit@4.1.0
+
 ## 3.6.0
 
 ### Minor Changes

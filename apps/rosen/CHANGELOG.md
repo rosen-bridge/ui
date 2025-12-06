@@ -1,5 +1,16 @@
 # @rosen-bridge/rosen-app
 
+## 4.9.0
+
+### Minor Changes
+
+- Adjusted field positions and section structure on `Event Details` page
+- Add on chain token map feature
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/ui-kit@4.1.0
+
 ## 4.8.0
 
 ### Minor Changes
