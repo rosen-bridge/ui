@@ -12,7 +12,7 @@ jobs:
     name: Build ${{ matrix.platform }}-${{ matrix.apps }}
     permissions: write-all
     runs-on: ubuntu-latest
-    if: ${{ !(github.event_name == 'release' && github.event.action == 'published' && contains(github.ref_name, 'rosen-service')) }}
+    if: ${{ (github.event_name == 'push') || contains(github.ref_name, 'guard') || contains(github.ref_name, 'watcher') }}
     strategy:
       fail-fast: false
       matrix:

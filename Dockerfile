@@ -49,11 +49,10 @@ COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/node_modules 
 COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/packages/asset-calculator /app/packages/asset-calculator
 COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/packages/constants /app/packages/constants
 COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/packages/data-source /app/packages/data-source
-COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/packages/icons /app/packages/icons
 COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/packages/public-status /app/packages/public-status
 COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/packages/types /app/packages/types
-COPY --chmod=700 --chown=ergo:ergo ./apps/rosen-service /app/apps/rosen-service
-COPY --chmod=700 --chown=ergo:ergo ./package-lock.json /app/
+COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/apps/rosen-service /app/apps/rosen-service
+COPY --chmod=700 --chown=ergo:ergo --from=rosen-service-build /app/package-lock.json /app/
 
 WORKDIR  /app/apps/rosen-service/
 ENTRYPOINT ["npm", "run", "start"]
