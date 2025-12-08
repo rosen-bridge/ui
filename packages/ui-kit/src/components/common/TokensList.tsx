@@ -1,4 +1,3 @@
-import { Fire, SnowFlake } from '@rosen-bridge/icons';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getDecimalString, getTokenUrl } from '@rosen-ui/utils';
 
@@ -6,7 +5,6 @@ import { Typography } from '../base';
 import { Avatar } from './Avatar';
 import { Amount, Identifier } from './display';
 import { Stack } from './Stack';
-import { SvgIcon } from './SvgIcon';
 import { Text } from './Text';
 
 export interface TokensListProps {
@@ -62,15 +60,12 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
           </Text>
           <Stack direction="row" align="center" justify="end" spacing={0.5}>
             {hasCold && (
-              <>
-                <Amount
-                  loading={isLoading}
-                  value={getDecimalString(token.coldAmount, token.decimals)}
-                />
-                <SvgIcon color="tertiary.dark" size="16px">
-                  <SnowFlake />
-                </SvgIcon>
-              </>
+              <Amount
+                variant="cold"
+                reverse
+                loading={isLoading}
+                value={getDecimalString(token.coldAmount, token.decimals)}
+              />
             )}
             {!hasCold && (
               <Amount
@@ -95,15 +90,12 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
           </Typography>
           <Stack direction="row" align="center" justify="end" spacing={0.5}>
             {hasCold && (
-              <>
-                <Amount
-                  loading={isLoading}
-                  value={getDecimalString(token.amount, token.decimals)}
-                />
-                <SvgIcon color="secondary.dark" size="16px">
-                  <Fire />
-                </SvgIcon>
-              </>
+              <Amount
+                variant="hot"
+                reverse
+                loading={isLoading}
+                value={getDecimalString(token.amount, token.decimals)}
+              />
             )}
           </Stack>
         </div>
