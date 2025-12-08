@@ -58,13 +58,10 @@ const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
       ) : (
         <>
           <Avatar
-            sx={(theme) => ({
-              width: '2em',
-              height: '2em',
-              fontSize: '1em',
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.secondary.main,
-            })}
+            background="secondary.light"
+            color="secondary"
+            size="2em"
+            style={{ fontSize: '1em' }}
           >
             {capitalize(name).slice(0, 1)}
           </Avatar>

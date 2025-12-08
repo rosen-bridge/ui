@@ -45,14 +45,12 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
           }}
         >
           <Avatar
+            loading={isLoading}
+            color="primary"
+            background="primary.light"
+            size={44}
             style={{
               gridRow: 'span 2',
-            }}
-            sx={{
-              color: 'primary.main',
-              bgcolor: 'primary.light',
-              width: 44,
-              height: 44,
             }}
           >
             {token.name?.at(0)}
