@@ -25,7 +25,6 @@ export * from './FullCard';
 export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
 export * from './Id';
-export * from './InfoWidgetCardBase';
 export * from './Pagination';
 export * from './AppInfo';
 export * from './PageHeading';
