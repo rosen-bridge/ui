@@ -46,7 +46,8 @@
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/data-source": "^0.2.0",
     "config": "^3.3.12",
-    "ethers": "6.13.2"
+    "ethers": "6.13.2",
+    "pg": "^8.11.3"
   },
   "devDependencies": {
     "@types/config": "^0.0.41",

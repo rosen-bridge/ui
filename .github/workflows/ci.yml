@@ -45,10 +45,12 @@ jobs:
         run: npm run prettify:check
 
       - name: Lint
-        run: npm run lint
+        run: npm run lint:check
 
       - name: Test
         run: npm run coverage
 
       - name: changeset
-        run: npx @changesets/cli@2.27.7 status --since=origin/dev
+        run: |
+          git fetch origin dev
+          npx changeset status --since=origin/dev
