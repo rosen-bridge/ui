@@ -1,8 +1,8 @@
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import * as fs from 'fs';
-import path from 'path';
-import { exit } from 'process';
-import { fileURLToPath } from 'url';
+import * as fs from 'node:fs';
+import path from 'node:path';
+import { exit } from 'node:process';
+import { fileURLToPath } from 'node:url';
 
 import { ChainConfigs, ChainChoices } from '../types';
 
