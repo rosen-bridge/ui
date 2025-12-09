@@ -19,6 +19,9 @@ export type CopyButtonProps = HTMLAttributes<HTMLDivElement> & {
    * The text value to copy.
    */
   value: string;
+
+  /** Disables the CopyButton, preventing user interaction and visually indicating the disabled state */
+  disabled?: boolean;
 };
 
 /**
@@ -27,6 +30,7 @@ export type CopyButtonProps = HTMLAttributes<HTMLDivElement> & {
 const CopyButtonBase = ({
   size = 'medium',
   value,
+  disabled,
   ...props
 }: CopyButtonProps) => {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -57,7 +61,7 @@ const CopyButtonBase = ({
 
   return (
     <Tooltip title="Copy" {...props}>
-      <IconButton size={size} onClick={handleCopy}>
+      <IconButton disabled={disabled} size={size} onClick={handleCopy}>
         <SvgIcon size={size}>{getIcon()}</SvgIcon>
       </IconButton>
     </Tooltip>
