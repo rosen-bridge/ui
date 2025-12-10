@@ -2,6 +2,7 @@
 
 import { useMemo } from 'react';
 
+import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   Amount,
   Box as BoxMui,
@@ -10,7 +11,7 @@ import {
   InjectOverrides,
   Label,
   LabelGroup,
-  RelativeTime,
+  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -26,15 +27,6 @@ export const Details = ({ id }: { id: string }) => {
     `/v1/events/${id}`,
     fetcher,
   );
-
-  const amounts = useMemo(() => {
-    return [
-      ['Token Price', data?.amount, false],
-      ['Fee Sum', data?.totalFee, false],
-      ['Bridge Fee', data?.bridgeFee, true],
-      ['Network Fee', data?.networkFee, true],
-    ] as const;
-  }, [data]);
 
   const txIds = useMemo(() => {
     return [
@@ -58,55 +50,70 @@ export const Details = ({ id }: { id: string }) => {
         rule
       >
         <div>
-          <Label orientation="horizontal" label="Duration">
-            <RelativeTime isLoading={isLoading} timestamp={data?.timestamp} />
+          <Label
+            orientation="horizontal"
+            label="Duration"
+            info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
+          >
+            <SvgIcon
+              style={{
+                marginRight: '4px',
+                fontSize: 'inherit',
+              }}
+            >
+              <ExclamationTriangle />
+            </SvgIcon>
           </Label>
           <Label label="Total Emission">
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
           <Label label="Guards" inset>
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
           <Label label="Watchers" inset>
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
-          <Label label="RSN Ratio">
-            <Amount
-              style={{ height: '20px' }}
-              loading={isLoading}
-              value="TODO"
-              unit="TODO"
-            />
+          <Label
+            label="RSN Ratio"
+            info="The number of RSN tokens that correspond to one unit of this token."
+          >
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
           </Label>
         </div>
         <div>
-          {amounts.map(([label, value, inset]) => (
-            <Label key={label} label={label} inset={inset}>
-              <Amount
-                loading={isLoading}
-                value={getDecimalString(
-                  value,
-                  data?.lockToken?.significantDecimals,
-                )}
-                unit={data?.lockToken?.name}
-              />
-            </Label>
-          ))}
+          <Label label="Token Price">
+            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+          </Label>
+          <Label label="Fee Sum">
+            <Amount
+              loading={isLoading}
+              value={getDecimalString(
+                data?.totalFee,
+                data?.lockToken?.significantDecimals,
+              )}
+              unit={data?.lockToken?.name}
+            />
+          </Label>
+          <Label label="Bridge Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={getDecimalString(
+                data?.bridgeFee,
+                data?.lockToken?.significantDecimals,
+              )}
+              unit={data?.lockToken?.name}
+            />
+          </Label>
+          <Label label="Network Fee" inset>
+            <Amount
+              loading={isLoading}
+              value={getDecimalString(
+                data?.networkFee,
+                data?.lockToken?.significantDecimals,
+              )}
+              unit={data?.lockToken?.name}
+            />
+          </Label>
         </div>
         <Box
           style={{ columnSpan: 'all' }}

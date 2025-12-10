@@ -42,10 +42,10 @@ const Root = styled('div')<Pick<ConnectorBaseProps, 'variant'>>(
  * - variant: 'standard' (transparent) or 'filled' (with background)
  */
 const ConnectorBase = forwardRef<HTMLDivElement, ConnectorBaseProps>(
-  (props) => {
+  (props, ref) => {
     const { start, end, variant, ...rest } = props;
     return (
-      <Root variant={variant} {...rest}>
+      <Root ref={ref} variant={variant} {...rest}>
         {start}
         <SvgIcon color="text.secondary">
           <ArrowRight />

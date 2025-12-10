@@ -1,13 +1,15 @@
-import React, { HTMLAttributes } from 'react';
+import { HTMLAttributes, useMemo } from 'react';
 
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
-import { Typography, Skeleton, IconButton } from '../base';
+import { IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 import { Stack } from './Stack';
 import { SvgIcon } from './SvgIcon';
+import { Text } from './Text';
+import { Truncate } from './Truncate';
 
 /**
  * Props for the Token component.
@@ -35,46 +37,39 @@ export type TokenProps = HTMLAttributes<HTMLDivElement> & {
 /**
  * Displays a token with an avatar and its name.
  */
-const TokenBase = ({ href, loading, name, reverse }: TokenProps) => {
-  return (
-    <Stack
-      align="center"
-      style={{
+const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
+  const styles = useMemo(() => {
+    return Object.assign(
+      {},
+      {
         flexDirection: !reverse ? 'row' : 'row-reverse',
         fontSize: 'inherit',
-      }}
-      spacing="0.5em"
-    >
-      {loading ? (
-        <>
-          <Skeleton width="2em" height="2em" variant="circular" />
-          <Skeleton width={80} height={14} variant="rounded" />
-        </>
-      ) : (
-        <>
-          <Avatar
-            sx={(theme) => ({
-              width: '2em',
-              height: '2em',
-              fontSize: '1em',
-              backgroundColor: theme.palette.secondary.light,
-              color: theme.palette.secondary.main,
-            })}
-          >
-            {capitalize(name).slice(0, 1)}
-          </Avatar>
+        minWidth: 0,
+      },
+      style,
+    );
+  }, [reverse, style]);
+  return (
+    <Stack align="center" style={styles} spacing="0.5em">
+      <Avatar
+        background="secondary.light"
+        color="secondary"
+        loading={loading}
+        size="2em"
+        style={{ fontSize: '1em' }}
+      >
+        {capitalize(name).slice(0, 1)}
+      </Avatar>
 
-          <Stack direction="column" align="start">
-            <Typography sx={{ fontSize: 'inherit' }}>{name}</Typography>
-          </Stack>
-          {!!href && (
-            <IconButton target="_blank" size="small" href={href}>
-              <SvgIcon size="small">
-                <ExternalLinkAlt />
-              </SvgIcon>
-            </IconButton>
-          )}
-        </>
+      <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
+        <Truncate lines={1}>{name}</Truncate>
+      </Text>
+      {!!href && (
+        <IconButton target="_blank" size="small" href={href}>
+          <SvgIcon size="small">
+            <ExternalLinkAlt />
+          </SvgIcon>
+        </IconButton>
       )}
     </Stack>
   );

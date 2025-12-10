@@ -51,16 +51,17 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
                 value.balance.decimals,
               )
             }
-            unit={value?.balance.name ?? 'N/A'}
+            unit={value?.balance.name}
           />
         </Typography>
       </Stack>
       <Identifier
-        href={getAddressUrl(value?.chain as NetworkType, value?.address) || ''}
+        href={getAddressUrl(value?.chain as NetworkType, value?.address)}
         loading={loading}
-        value={value?.address}
-        copyable
-        qrcode
+        value={value?.address || 'N/A'}
+        copyable={!!value?.address}
+        qrcode={!!value?.address}
+        style={{ minHeight: '30px' }}
       />
     </div>
   );

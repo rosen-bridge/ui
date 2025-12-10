@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
-  "version": "3.0.3",
+  "version": "3.0.5",
   "private": true,
   "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
@@ -17,11 +17,12 @@
     "release": "npm run build && npm publish --access public"
   },
   "dependencies": {
-    "@rosen-bridge/tokens": "^4.0.0",
-    "@rosen-network/base": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7"
+    "@rosen-bridge/tokens": "^4.0.1",
+    "@rosen-network/base": "^0.5.1",
+    "@rosen-ui/types": "^0.4.0"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

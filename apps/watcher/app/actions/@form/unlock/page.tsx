@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useMemo, useState, useEffect } from 'react';
+import Link from 'next/link';
+import React, { useMemo, useState, useEffect, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
@@ -12,9 +13,10 @@ import {
   useApiKey,
   ApiKeyModalWarning,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
 import { TokenInfo } from '@rosen-ui/types';
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -58,7 +60,8 @@ const UnlockForm = () => {
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string;
+    message: ReactNode;
+    more?: () => string;
   } | null>(null);
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
@@ -70,11 +73,12 @@ const UnlockForm = () => {
   >('/permit/return', mutatorWithHeaders);
 
   const formMethods = useForm({
+    mode: 'onChange',
     defaultValues: {
       amount: '',
     },
   });
-  const { handleSubmit, watch } = formMethods;
+  const { handleSubmit, watch, formState } = formMethods;
 
   const formData = watch();
 
@@ -127,7 +131,18 @@ const UnlockForm = () => {
       if (response?.txId) {
         setAlertData({
           severity: 'success',
-          message: `Unlock operation is in progress. Wait for tx ${response.txId} to be confirmed by some blocks.`,
+          message: (
+            <>
+              Unlock operation is in progress. Wait for tx [
+              <Link
+                target="_blank"
+                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
+              >
+                {response.txId}
+              </Link>
+              ] to be confirmed by some blocks.
+            </>
+          ),
         });
       } else {
         throw new Error(
@@ -145,6 +160,7 @@ const UnlockForm = () => {
         setAlertData({
           severity: 'error',
           message: error.message,
+          more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
     }
@@ -156,6 +172,7 @@ const UnlockForm = () => {
 
   const renderAlert = () => (
     <AlertCard
+      more={alertData?.more}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
@@ -164,13 +181,14 @@ const UnlockForm = () => {
   );
 
   const disabled =
-    !apiKey || isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
       disabled={disabled}
       loading={isInfoLoading || isRsnTokenLoading}
       token={rwtPartialToken}
+      setMinValue
     />
   );
 
@@ -185,7 +203,10 @@ const UnlockForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton loading={isUnlockPending} disabled={disabled}>
+        <SubmitButton
+          loading={isUnlockPending}
+          disabled={!formState.isValid || !apiKey || disabled}
+        >
           Unlock
         </SubmitButton>
 

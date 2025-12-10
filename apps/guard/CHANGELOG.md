@@ -1,5 +1,66 @@
 # @rosen-bridge/guard-app
 
+## 3.2.0
+
+### Minor Changes
+
+- Fix showing the correct UI version
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/ui-kit@4.1.0
+
+## 3.1.0
+
+### Minor Changes
+
+- Redesigns Information app section with new updates and improvements
+- Upgrade React and React DOM to 18.3.1
+- Replace Grid with Stack in `RequestToSignForm` component
+
+### Patch Changes
+
+- Remove unnecessary `@rosen-ui/swr-mock` package from the app
+- Update dependencies
+  - @rosen-bridge/ui-kit@4.0.0
+  - @rosen-bridge/icons@3.1.0
+  - @rosen-ui/utils@1.0.1
+
+## 3.0.1
+
+### Patch Changes
+
+- Fix network data fetching in the dashboard by fetching per network, aggregating results, and showing proper error states
+- Update dependency @rosen-bridge/ui-kit@3.0.1
+
+## 3.0.0
+
+### Major Changes
+
+- Update to reflect latest API changes by removing reliance on the `balances` property from `/info` and fetching balances from the new dedicated `/balance` route instead
+
+### Minor Changes
+
+- Update tokens section to match the latest design and add external links for each token
+- Fix network display for `bitcoin-runes`
+- Implement a new `Token Carousel` section in the dashboard to display token-related information dynamically
+- Implement the layout for `networks` and `health` section in dashboard
+- Fix dark theme
+- Update Supported NodeJS version to 22.18.0
+- Improve and unify style implementation
+
+### Patch Changes
+
+- Update helper usage to handle null values and leverage the improved compatibility of `utils` functions
+- Update Assets page to use new `/balance` API endpoint instead of `/assets`
+- Fixed console errors and warnings, improving stability and developer experience
+- Add root-level ESLint configuration and resolved existing linting issues
+- Update dependencies
+  - @rosen-bridge/ui-kit@3.0.0
+  - @rosen-bridge/icons@3.0.0
+  - @rosen-ui/utils@1.0.0
+  - @rosen-ui/constants@1.0.0
+
 ## 2.1.0
 
 ### Minor Changes

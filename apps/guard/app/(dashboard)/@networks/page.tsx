@@ -11,15 +11,11 @@ import {
   Stack,
   Typography,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS_KEYS } from '@rosen-ui/constants';
-
-import { useBalance } from '@/_hooks/useBalance';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { Item } from './Item';
 
 const Networks = () => {
-  const { data, isLoading } = useBalance();
-
   const carouselSize = useMemo(
     () => ({
       desktop: 'calc(25% - 3rem / 4)',
@@ -29,22 +25,6 @@ const Networks = () => {
     }),
     [],
   );
-
-  const items = useMemo(() => {
-    return NETWORKS_KEYS.filter((key) => key != 'bitcoin-runes').map((key) => {
-      const cold = data?.cold.items.find(
-        (item) => item.chain === key && item.balance.isNativeToken,
-      );
-
-      const hot = data?.hot.items.find(
-        (item) => item.chain === key && item.balance.isNativeToken,
-      );
-
-      const network = key;
-
-      return { cold, hot, network };
-    });
-  }, [data]);
 
   return (
     <CarouselProvider>
@@ -59,11 +39,13 @@ const Networks = () => {
         </Stack>
       </Stack>
       <Carousel>
-        {items.map((item) => (
-          <CarouselItem key={item.network} size={carouselSize}>
-            <Item loading={isLoading} {...item} />
-          </CarouselItem>
-        ))}
+        {Object.values(NETWORKS)
+          .sort((a, b) => a.index - b.index)
+          .map((network) => (
+            <CarouselItem key={network.key} size={carouselSize}>
+              <Item network={network.key} />
+            </CarouselItem>
+          ))}
       </Carousel>
     </CarouselProvider>
   );

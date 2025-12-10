@@ -4,6 +4,8 @@ import {
   OPERATORS_EQUALITY,
   Filter,
   OPERATOR_CONTAINS,
+  OPERATOR_IS,
+  OPERATOR_NOT,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
@@ -110,7 +112,7 @@ export const getFilters = (tokenMap: TokenMap): Filter[] => [
     name: 'status',
     label: 'Status',
     unique: true,
-    operators: OPERATORS_EQUALITY,
+    operators: [OPERATOR_IS, OPERATOR_NOT],
     input: {
       type: 'select',
       options: [

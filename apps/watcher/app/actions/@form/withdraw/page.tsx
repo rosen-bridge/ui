@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   FormProvider,
   SubmitHandler,
@@ -21,10 +21,11 @@ import {
   TextField,
   useApiKey,
   ApiKeyModalWarning,
+  Link,
 } from '@rosen-bridge/ui-kit';
-import { TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
+import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
-import { getNonDecimalString } from '@rosen-ui/utils';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
@@ -65,7 +66,8 @@ const WithdrawForm = () => {
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string;
+    message: ReactNode;
+    more?: () => string;
   } | null>(null);
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
@@ -86,13 +88,15 @@ const WithdrawForm = () => {
   }, [isErgTokenLoading, ergToken]);
 
   const formMethods = useForm({
+    mode: 'onChange',
     defaultValues: {
       address: '',
       tokenId: tokens?.[0]?.tokenId ?? '',
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch } = formMethods;
+  const { handleSubmit, control, resetField, register, watch, formState } =
+    formMethods;
 
   const formData = watch();
 
@@ -107,6 +111,12 @@ const WithdrawForm = () => {
   );
 
   useEffect(() => {
+    resetField('amount', {
+      defaultValue: '',
+      keepError: false,
+      keepDirty: false,
+      keepTouched: false,
+    });
     if (tokens && !tokenIdField.value) {
       resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
     }
@@ -133,7 +143,18 @@ const WithdrawForm = () => {
       if (response.status === 'OK') {
         setAlertData({
           severity: 'success',
-          message: `Withdrawal is successful. Wait for tx [${response.txId}] to be confirmed.`,
+          message: (
+            <>
+              Withdrawal is successful. Wait for tx [
+              <Link
+                target="_blank"
+                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
+              >
+                {response.txId}
+              </Link>
+              ] to be confirmed.
+            </>
+          ),
         });
       } else {
         throw new Error(
@@ -151,6 +172,7 @@ const WithdrawForm = () => {
         setAlertData({
           severity: 'error',
           message: error.message,
+          more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
     }
@@ -162,6 +184,7 @@ const WithdrawForm = () => {
 
   const renderAlert = () => (
     <AlertCard
+      more={alertData?.more}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
@@ -170,7 +193,7 @@ const WithdrawForm = () => {
   );
 
   const disabled =
-    !apiKey || isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
@@ -255,7 +278,10 @@ const WithdrawForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton disabled={disabled} loading={isWithdrawPending}>
+        <SubmitButton
+          disabled={!formState.isValid || !apiKey || disabled}
+          loading={isWithdrawPending}
+        >
           Withdraw
         </SubmitButton>
 

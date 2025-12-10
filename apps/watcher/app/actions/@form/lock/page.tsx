@@ -63,7 +63,8 @@ const LockForm = () => {
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string | ReactNode;
+    message: ReactNode;
+    more?: () => string;
   } | null>(null);
 
   const {
@@ -85,11 +86,12 @@ const LockForm = () => {
   }, [isRsnTokenLoading, rsnToken]);
 
   const formMethods = useForm({
+    mode: 'onChange',
     defaultValues: {
       amount: '',
     },
   });
-  const { handleSubmit, watch } = formMethods;
+  const { handleSubmit, watch, formState } = formMethods;
 
   const formData = watch();
   const submit = async () => {
@@ -138,6 +140,7 @@ const LockForm = () => {
         setAlertData({
           severity: 'error',
           message: error.message,
+          more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
     }
@@ -149,6 +152,7 @@ const LockForm = () => {
 
   const renderAlert = () => (
     <AlertCard
+      more={alertData?.more}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
@@ -157,7 +161,6 @@ const LockForm = () => {
   );
 
   const disabled =
-    !apiKey ||
     isRsnTokenLoading ||
     isInfoLoading ||
     isErgTokenLoading ||
@@ -168,6 +171,7 @@ const LockForm = () => {
       disabled={disabled}
       loading={isRsnTokenLoading}
       token={modifiedRsnTokenConsideringCollateral}
+      setMinValue
     />
   );
 
@@ -266,8 +270,10 @@ const LockForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton loading={isLockPending} disabled={disabled}>
-          {' '}
+        <SubmitButton
+          loading={isLockPending}
+          disabled={!formState.isValid || !apiKey || disabled}
+        >
           Lock
         </SubmitButton>
 

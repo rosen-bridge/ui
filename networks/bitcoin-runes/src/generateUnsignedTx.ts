@@ -19,6 +19,9 @@ import {
   getAddressRunesUtxos,
   getEsploraAddressUtxos,
   getFeeRatio,
+  getNumberRange,
+  makeP2wpkhPayment,
+  makeTaprootPayment,
 } from './utils';
 
 /**
@@ -112,6 +115,28 @@ export const generateUnsignedTx =
     }
 
     const selectedBoxes: BitcoinRunesUtxo[] = coveredRunesBoxes.boxes;
+    const signInputs: Record<string, number[]> = {
+      [fromAddress]: getNumberRange(coveredRunesBoxes.boxes.length),
+      [fromPaymentAddress]: [],
+    };
+    let selectedBoxesCount = coveredRunesBoxes.boxes.length;
+
+    const taprootPayment = makeTaprootPayment(internalPubkey, fromAddress);
+    const p2wpkhPayment = makeP2wpkhPayment(fromPaymentAddress);
+
+    let psbt = new bitcoinJs.Psbt();
+
+    coveredRunesBoxes.boxes.forEach((box) => {
+      psbt.addInput({
+        hash: box.txId,
+        index: box.index,
+        witnessUtxo: {
+          script: taprootPayment.output!,
+          value: Number(box.value),
+        },
+        tapInternalKey: taprootPayment.internalPubkey,
+      });
+    });
 
     const feeEstimator = generateFeeEstimatorWithAssumptions(
       runestone.encodedRunestone.length,
@@ -145,6 +170,26 @@ export const generateUnsignedTx =
 
       // add selected boxes
       selectedBoxes.push(...additionalBoxes.boxes);
+      additionalBoxes.boxes.forEach((box) => {
+        psbt.addInput({
+          hash: box.txId,
+          index: box.index,
+          witnessUtxo: {
+            script: taprootPayment.output!,
+            value: Number(box.value),
+          },
+          tapInternalKey: taprootPayment.internalPubkey,
+        });
+      });
+
+      signInputs[fromAddress].push(
+        ...getNumberRange(
+          selectedBoxesCount + additionalBoxes.boxes.length,
+          selectedBoxesCount,
+        ),
+      );
+      selectedBoxesCount += additionalBoxes.boxes.length;
+
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
@@ -169,6 +214,25 @@ export const generateUnsignedTx =
 
       // add selected boxes
       selectedBoxes.push(...additionalBoxes.boxes);
+      additionalBoxes.boxes.forEach((box) => {
+        psbt.addInput({
+          hash: box.txId,
+          index: box.index,
+          witnessUtxo: {
+            script: p2wpkhPayment.output!,
+            value: Number(box.value),
+          },
+        });
+      });
+
+      signInputs[fromPaymentAddress].push(
+        ...getNumberRange(
+          selectedBoxesCount + additionalBoxes.boxes.length,
+          selectedBoxesCount,
+        ),
+      );
+      selectedBoxesCount += additionalBoxes.boxes.length;
+
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
@@ -200,43 +264,34 @@ export const generateUnsignedTx =
 
       // add selected boxes
       selectedBoxes.push(...additionalBoxes.boxes);
+      additionalBoxes.boxes.forEach((box) => {
+        psbt.addInput({
+          hash: box.txId,
+          index: box.index,
+          witnessUtxo: {
+            script: taprootPayment.output!,
+            value: Number(box.value),
+          },
+          tapInternalKey: taprootPayment.internalPubkey,
+        });
+      });
+
+      signInputs[fromAddress].push(
+        ...getNumberRange(
+          selectedBoxesCount + additionalBoxes.boxes.length,
+          selectedBoxesCount,
+        ),
+      );
+
       // the fee and additional BTC are only based on the additional assets of the 2nd selection
       additionalAssets.nativeToken =
         additionalBoxes.additionalAssets.aggregated.nativeToken;
       estimatedFee = additionalBoxes.additionalAssets.fee;
     }
 
-    const taprootPayment = bitcoinJs.payments.p2tr({
-      internalPubkey: Buffer.from(internalPubkey, 'hex'),
-    });
-
-    if (!taprootPayment.output)
-      throw Error(`failed to extract taproot output script!`);
-    if (!taprootPayment.address)
-      throw Error(`failed to extract taproot address!`);
-    if (taprootPayment.address !== fromAddress)
-      throw Error(
-        `the calculated address by public key is not equal to from address!`,
-      );
-
-    let psbt = new bitcoinJs.Psbt();
-
-    // add inputs
-    for (const box of selectedBoxes) {
-      psbt.addInput({
-        hash: box.txId,
-        index: box.index,
-        witnessUtxo: {
-          script: taprootPayment.output,
-          value: Number(box.value),
-        },
-        tapInternalKey: taprootPayment.internalPubkey,
-      });
-    }
-
     // add change UTxO
     psbt.addOutput({
-      address: fromPaymentAddress,
+      script: p2wpkhPayment.output!,
       value: Number(additionalAssets.nativeToken),
     });
     // OP_RETURN
@@ -258,10 +313,8 @@ export const generateUnsignedTx =
     });
 
     return {
-      psbt: {
-        base64: psbt.toBase64(),
-        hex: psbt.toHex(),
-      },
-      inputSize: psbt.inputCount,
+      psbt: psbt.toBase64(),
+      psbtHex: psbt.toHex(),
+      signInputs,
     };
   };

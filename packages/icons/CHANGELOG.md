@@ -1,5 +1,22 @@
 # @rosen-bridge/icons
 
+## 3.1.0
+
+### Minor Changes
+
+- Upgrade React and React DOM to 18.3.1
+
+## 3.0.0
+
+### Major Changes
+
+- Rename Runes icon to BitcoinRunes
+
+### Minor Changes
+
+- Add new icons `Ban`, `Coins`, `Gift`, `SignOutAlt`, `ThumbsUp`, `ClockThree`
+- Add `SwatchBook` and `FleAlt` icons
+
 ## 2.3.1
 
 ### Patch Changes

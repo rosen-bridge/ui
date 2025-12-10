@@ -1,5 +1,5 @@
 import { NETWORKS } from '@rosen-ui/constants';
-import { FakeData } from '@rosen-ui/swr-mock';
+import { FakeData } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
 import moment from 'moment';
 

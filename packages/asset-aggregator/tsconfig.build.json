@@ -4,5 +4,10 @@
     "rootDir": "."
   },
   "include": ["tests", "lib", "vitest.config.ts"],
-  "exclude": ["tests"]
+  "exclude": ["tests"],
+  "references": [
+    { "path": "../types" },
+    { "path": "../constants" },
+    { "path": "../asset-data-adapter/tsconfig.build.json" }
+  ]
 }

@@ -5,7 +5,8 @@ type Name =
   | 'error'
   | 'warning'
   | 'info'
-  | 'success';
+  | 'success'
+  | 'neutral';
 
 type Shade = 'light' | 'main' | 'dark' | 'contrastText';
 
@@ -34,6 +35,7 @@ export const ensureColor = (color: Colors) => {
     case 'error':
     case 'warning':
     case 'info':
+    case 'neutral':
     case 'success':
       return `${color}.main`;
     default:

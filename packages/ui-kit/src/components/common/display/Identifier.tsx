@@ -94,19 +94,17 @@ const IdentifierBase = ({
             >
               <div
                 style={{
-                  display: '-webkit-box',
-                  WebkitLineClamp: 1,
-                  WebkitBoxOrient: 'vertical',
+                  whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   flexShrink: 1,
                   minWidth: 0,
                 }}
               >
-                {value.slice(0, -trailingLength)}
+                {(value ?? '').slice(0, -trailingLength)}
               </div>
               <span style={{ flexShrink: 0 }}>
-                {value.slice(-trailingLength)}
+                {(value ?? '').slice(-trailingLength)}
               </span>
             </Stack>
           </Tooltip>
