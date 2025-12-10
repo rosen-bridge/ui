@@ -1,6 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
@@ -28,9 +28,33 @@ export class AssetAggregator {
    * @returns
    */
   updateTokens = async () => {
-    const analyzer = new TokensAnalyzer({}, [], this.tokenMap, this.logger);
-    await analyzer.analyze();
-    await this.tokenAction.store(analyzer.getNativeTokens());
+    const tokens = [];
+    for (const chain of this.tokenMap.getAllChains() as NetworkItem[]) {
+      // get all supported tokens by passing same chain as source and destination parameters
+      const chainTokens = this.tokenMap.getTokens(chain, chain);
+      for (const token of chainTokens) {
+        const significantDecimal = this.tokenMap.getSignificantDecimals(
+          token.tokenId,
+        );
+        if (!significantDecimal) {
+          this.logger.error(
+            `Significant-decimal of token [${token.tokenId}] is undefined`,
+          );
+          continue;
+        }
+        tokens.push({
+          id: token.tokenId,
+          decimal: token.decimals,
+          significantDecimal: significantDecimal,
+          name: token.name,
+          chain: chain,
+          isNative: token.type == NATIVE_TOKEN,
+        });
+      }
+    }
+    await this.tokenAction.store(tokens);
+
+    return tokens;
   };
 
   /**

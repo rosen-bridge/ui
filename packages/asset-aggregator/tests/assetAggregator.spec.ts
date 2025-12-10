@@ -266,4 +266,32 @@ describe('AssetAggregator', () => {
       await assetAggregator.update({ ergo: { erg: [] } } as any, []);
     });
   });
+
+  describe('updateTokens', () => {
+    /**
+     * @target should collect native tokens correctly
+     * @scenario
+     * - create analyzer with a valid token map
+     * - call collectNativeTokensMap
+     * @expected
+     * - nativeTokens should not be empty
+     * - each token should be native in owned chain
+     */
+    it<BridgedAssetTestContext>('should collect native tokens correctly', async ({
+      assetAggregator,
+      tokenMap,
+    }) => {
+      const tokens = await assetAggregator['updateTokens']();
+
+      expect(tokens.length).toBeGreaterThan(0);
+      expect(
+        tokens.every(
+          (t) =>
+            tokenMap
+              .getTokens(t.chain, t.chain)
+              .filter((t2) => t2.tokenId == t.id).length == 1,
+        ),
+      ).toBeTruthy();
+    });
+  });
 });

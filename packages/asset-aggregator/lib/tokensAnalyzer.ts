@@ -3,11 +3,10 @@ import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
 
-import { BridgedAssetEntity, LockedAssetEntity, TokenEntity } from './entities';
+import { BridgedAssetEntity, LockedAssetEntity } from './entities';
 import { NetworkItem, TotalSupply } from './types';
 
 export class TokensAnalyzer {
-  protected nativeTokens: TokenEntity[];
   protected lockedTokens: Record<string, Omit<LockedAssetEntity, 'token'>[]>;
   protected bridgedTokens: Record<string, Omit<BridgedAssetEntity, 'token'>[]>;
 
@@ -17,13 +16,6 @@ export class TokensAnalyzer {
     protected tokenMap: TokenMap,
     protected logger: AbstractLogger = new DummyLogger(),
   ) {}
-
-  /**
-   * Returns list of all native token entities collected.
-   *
-   * @returns {TokenEntity[]} native tokens
-   */
-  getNativeTokens = () => this.nativeTokens;
 
   /**
    * Returns all locked token records grouped by native token ID.
@@ -64,10 +56,8 @@ export class TokensAnalyzer {
    * @returns {Promise<void>}
    */
   analyze = async () => {
-    this.nativeTokens = [];
     this.lockedTokens = {};
     this.bridgedTokens = {};
-    this.collectNativeTokensMap();
     for (const [chain, chainAssets] of Object.entries(
       this.chainAssetBalanceInfo,
     ) as [NetworkItem, AssetBalance][]) {
@@ -89,36 +79,6 @@ export class TokensAnalyzer {
     return Object.entries(tokenSet).filter(
       ([, token]) => token.residency == NATIVE_TOKEN,
     )[0][1].tokenId;
-  };
-
-  /**
-   * collect native-token info for all chains
-   *
-   * @returns
-   */
-  protected collectNativeTokensMap = () => {
-    this.nativeTokens = [];
-    for (const chain of this.tokenMap.getAllChains() as NetworkItem[]) {
-      for (const nativeToken of this.tokenMap.getAllNativeTokens(chain)) {
-        const significantDecimal = this.tokenMap.getSignificantDecimals(
-          nativeToken.tokenId,
-        );
-        if (!significantDecimal) {
-          this.logger.error(
-            `Significant-decimal of token [${nativeToken.tokenId}] is undefined`,
-          );
-          continue;
-        }
-        this.nativeTokens.push({
-          id: nativeToken.tokenId,
-          decimal: nativeToken.decimals,
-          significantDecimal: significantDecimal,
-          name: nativeToken.name,
-          chain: chain,
-          isNative: nativeToken.type == NATIVE_TOKEN,
-        });
-      }
-    }
   };
 
   /**

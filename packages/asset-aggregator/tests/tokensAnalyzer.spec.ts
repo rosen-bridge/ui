@@ -50,14 +50,10 @@ describe('TokensAnalyzer', () => {
       await analyzer.analyze();
 
       const locked = analyzer.getLockedTokens();
-      const native = analyzer.getNativeTokens();
 
       expect(Object.keys(locked)).toContain(NETWORKS.ergo.nativeToken);
       const assets = locked[NETWORKS.ergo.nativeToken];
       expect(assets.length).toBeGreaterThan(0);
-      expect(
-        native.find((t) => t.id === NETWORKS.ergo.nativeToken),
-      ).toBeTruthy();
     });
 
     /**
@@ -85,35 +81,6 @@ describe('TokensAnalyzer', () => {
       const first = bridged[bridgedKeys[0]][0];
       expect(first.amount).toBeTypeOf('bigint');
       expect(first).toHaveProperty('bridgedTokenId');
-    });
-  });
-
-  describe('collectNativeTokensMap', () => {
-    /**
-     * @target should collect native tokens correctly
-     * @scenario
-     * - create analyzer with a valid token map
-     * - call collectNativeTokensMap
-     * @expected
-     * - nativeTokens should not be empty
-     * - each token should be native in owned chain
-     */
-    it<AnalyzerTestContext>('should collect native tokens correctly', async ({
-      analyzer,
-      tokenMap,
-    }) => {
-      analyzer['collectNativeTokensMap']();
-      const nativeTokens = analyzer.getNativeTokens();
-
-      expect(nativeTokens.length).toBeGreaterThan(0);
-      expect(
-        nativeTokens.every(
-          (t) =>
-            tokenMap
-              .getAllNativeTokens(t.chain)
-              .filter((t2) => t2.tokenId == t.id).length == 1,
-        ),
-      ).toBeTruthy();
     });
   });
 
