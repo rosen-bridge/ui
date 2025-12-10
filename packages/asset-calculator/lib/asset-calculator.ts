@@ -1,7 +1,12 @@
 import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { TokenMap, RosenChainToken, NATIVE_TOKEN } from '@rosen-bridge/tokens';
+import {
+  TokenMap,
+  RosenChainToken,
+  NATIVE_TOKEN,
+  NATIVE_RESIDENCY,
+} from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { difference, differenceWith, isEqual } from 'lodash-es';
@@ -32,6 +37,8 @@ class AssetCalculator {
   protected readonly lockedAssetModel: LockedAssetModel;
   protected readonly tokenModel: TokenModel;
   protected calculatorMap: Map<string, AbstractCalculator> = new Map();
+  protected totalSupplyMap: Map<string, bigint> = new Map();
+  protected totalSupplyInit = false;
 
   constructor(
     tokens: TokenMap,
@@ -109,6 +116,50 @@ class AssetCalculator {
   }
 
   /**
+   * Store all token supplies at startup and store them in a map
+   * This method should be called once during service initialization
+   */
+  storeAllTokenSupplies = async (): Promise<void> => {
+    this.logger.info('Starting extraction of all token supplies...');
+    const residencyChains = this.tokens.getAllChains();
+
+    for (const chain of residencyChains) {
+      const calculator = this.calculatorMap.get(chain);
+      if (!calculator) {
+        throw new Error(
+          `Calculator for chain [${chain}] is not available, skipping token supply extraction`,
+        );
+      }
+      // `getTokens` method with from and to same chains results in all tokens on the chain
+      // it includes both wrapped and native tokens
+      const chainTokens = this.tokens.getTokens(chain, chain);
+      this.logger.debug(
+        `Extracting token supplies for ${chainTokens.length} tokens on chain ${chain}`,
+      );
+
+      for (const token of chainTokens) {
+        if (token.residency == NATIVE_RESIDENCY) {
+          this.logger.debug(
+            `Token ${token.name} is native on chain ${chain}, skipping total supply extraction`,
+          );
+          continue;
+        }
+        const totalSupply = await calculator.totalSupply(token);
+        const mapKey = `${chain}-${token.tokenId}`;
+        this.totalSupplyMap.set(mapKey, totalSupply);
+
+        this.logger.debug(
+          `Stored total supply for token [${token.tokenId}] on chain [${chain}]: [${totalSupply}]`,
+        );
+      }
+    }
+
+    this.logger.info(
+      `Completed extraction of token supplies. Total entries stored: ${this.totalSupplyMap.size}`,
+    );
+  };
+
+  /**
    * get a token data on a specific chain
    * @param residentToken
    * @param residencyChain
@@ -139,35 +190,29 @@ class AssetCalculator {
     residencyChain: Network,
   ): Promise<bigint> => {
     const calculator = this.calculatorMap.get(chain);
-    const ergoCalculator = this.calculatorMap.get(NETWORKS.ergo.key);
 
     if (!calculator)
       throw Error(`Chain [${chain}] is not supported in asset calculator`);
 
-    if (!ergoCalculator)
-      throw Error(
-        `Ergo calculator is required but not found. Cannot calculate total supply for chain [${chain}]`,
-      );
-
     const chainToken = this.getTokenDataForChain(token, residencyChain, chain);
-    const ergoToken = this.getTokenDataForChain(
-      token,
-      residencyChain,
-      NETWORKS.ergo.key,
-    );
     if (!chainToken) {
       this.logger.debug(`Token ${token.name} is not supported in ${chain}`);
       return 0n;
     }
-    if (!ergoToken) {
-      this.logger.debug(
-        `Token ${token.name} is not supported in ${NETWORKS.ergo.key}`,
+
+    // Get total supply from stored map, fallback to calculator if not found
+    const tokenMapKey = `${chain}-${chainToken.tokenId}`;
+    let totalSupply = this.totalSupplyMap.get(tokenMapKey);
+    if (!totalSupply) {
+      throw new Error(
+        `ImpossibleBehavior: Total supply for token [${chainToken.tokenId}] on chain [${chain}] not found in map`,
       );
-      return 0n;
     }
-    const emission =
-      (await ergoCalculator.totalSupply(ergoToken)) -
-      (await calculator.totalBalance(chainToken));
+    this.logger.debug(
+      `Total supply for token [${chainToken.tokenId}] on chain [${chain}] is [${totalSupply}]`,
+    );
+
+    const emission = totalSupply - (await calculator.totalBalance(chainToken));
 
     this.logger.debug(
       `Emitted amount of asset [${token.tokenId}] in chain [${chain}] is [${emission}]`,
@@ -212,6 +257,10 @@ class AssetCalculator {
    * old tokens from the database
    */
   update = async () => {
+    if (!this.totalSupplyInit) {
+      await this.storeAllTokenSupplies();
+      this.totalSupplyInit = true;
+    }
     const allStoredBridgedAssets =
       await this.bridgedAssetModel.getAllStoredAssets();
     this.logger.debug(
