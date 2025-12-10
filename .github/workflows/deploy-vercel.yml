@@ -12,6 +12,7 @@ on:
 
 jobs:
   deploy-with-vercel-api:
+    name: Deploy Vercel with API - ${{ matrix.app }}
     runs-on: ubuntu-latest
 
     env:
@@ -23,7 +24,6 @@ jobs:
 
     strategy:
       matrix:
-        app: [rosen, guard, watcher]
         include:
           - app: rosen
             project_env: ROSEN_PROJECT_ID
