@@ -12,14 +12,14 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "tsc --build tsconfig.build.json",
+    "coverage": "npm run test -- --run --coverage",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build tsconfig.build.json",
-    "type-check": "tsc --noEmit",
-    "coverage": "npm run test -- --run --coverage",
-    "test": "NODE_OPTIONS='--import tsx' vitest"
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@rosen-bridge/extended-typeorm": "^1.0.1"

@@ -39,10 +39,7 @@ jobs:
         run: npx knip --dependencies
 
       - name: Type Check
-        run: npm run type-check --workspaces --if-present
-
-      - name: Prettify
-        run: npm run prettify:check
+        run: npm run type-check
 
       - name: Lint
         run: npm run lint:check

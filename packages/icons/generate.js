@@ -1,6 +1,6 @@
-import fs from 'fs';
 import * as glob from 'glob';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const content = glob
   .sync('**/*.svg', {

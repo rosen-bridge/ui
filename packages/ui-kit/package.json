@@ -1,44 +1,32 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "description": "ui kit for Rosen projects",
-  "private": true,
   "version": "4.1.0",
-  "type": "module",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "exports": {
-    ".": "./dist/index.js",
-    "./dist/components/common/smartSearch/server": "./dist/components/common/smartSearch/server.js"
-  },
+  "private": true,
+  "description": "ui kit for Rosen projects",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rosen-bridge/ui.git"
   },
   "license": "MIT",
   "author": "Rosen Team",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./dist/components/common/smartSearch/server": "./dist/components/common/smartSearch/server.js"
+  },
+  "main": "./dist/index.js",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "build": "tsc --build",
     "build:watch": "tsc --watch",
-    "type-check": "tsc",
-    "release": "npm run build && npm publish --access public"
-  },
-  "peerDependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "swr": "^2.1.5"
-  },
-  "devDependencies": {
-    "@rosen-ui/types": "^0.4.0",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1"
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "release": "npm run build && npm publish --access public",
+    "type-check": "tsc"
   },
   "dependencies": {
     "@mui/lab": "^5.0.0-alpha.134",
@@ -54,6 +42,18 @@
     "qrcode.react": "^3.1.0",
     "react-hook-form": "^7.45.1",
     "react-sticky-box": "^2.0.5"
+  },
+  "devDependencies": {
+    "@rosen-ui/types": "^0.4.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1"
+  },
+  "peerDependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "swr": "^2.1.5"
   },
   "engines": {
     "node": ">=22.18.0",
