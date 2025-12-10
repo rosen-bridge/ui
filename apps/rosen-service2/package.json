@@ -2,15 +2,20 @@
   "name": "@rosen-bridge/rosen-service2",
   "version": "0.0.2",
   "description": "",
-  "repository": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
   "license": "MIT",
   "author": "Rosen Team",
   "type": "module",
   "main": "./src/index.ts",
   "scripts": {
     "coverage": "npm run test -- --run --coverage",
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml",
+    "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RosenService2BaseConfig",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "start": "tsx ./src/index.ts",
@@ -19,9 +24,7 @@
     "type-check": "tsc --noEmit",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
-    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-    "gen-config-types": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-ts-types --schema ./config/schema.json --output ./src/types/configs.ts --root-type RosenService2BaseConfig",
-    "gen-config-defaults": "NODE_OPTIONS='--import tsx' npx @rosen-bridge/config generate-default --schema ./config/schema.json --output ./config/default.yml --format yaml"
+    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts"
   },
   "dependencies": {
     "@rosen-bridge/abstract-extractor": "^2.1.2",

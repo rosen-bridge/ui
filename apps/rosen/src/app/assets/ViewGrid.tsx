@@ -9,6 +9,7 @@ import {
   Stack,
   Token,
 } from '@rosen-bridge/ui-kit';
+import { NETWORKS } from '@rosen-ui/constants';
 
 import { AssetsFullData } from './getFullAssetData';
 
@@ -50,7 +51,7 @@ export const ViewGrid = ({
                 icon={item.chain?.replace(/(^\w|-\w)/g, (matched) =>
                   matched.replace('-', '').toUpperCase(),
                 )}
-                label={item.chain}
+                label={NETWORKS[item.chain].label}
                 loading={isLoading}
               />
             </Stack>

@@ -85,6 +85,17 @@ const Content = ({ value }: EventSidebarProps) => {
     );
   }
 
+  if (eventData.status === 'multipleFlows') {
+    return (
+      <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
+        <Typography variant="body1" color="secondary" textAlign="center">
+          This event has multiple flows. Click <b>See Details</b> for more
+          information.
+        </Typography>
+      </Center>
+    );
+  }
+
   return <EventDetails value={eventData} showSeeDetailsButton={isTablet} />;
 };
 

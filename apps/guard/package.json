@@ -2,18 +2,22 @@
   "name": "@rosen-bridge/guard-app",
   "version": "3.2.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "next build",
+    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build",
+    "dev": "next dev",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "type-check": "tsc --noEmit",
-    "dev": "next dev",
-    "build": "next build",
     "start": "next start",
     "tauri": "tauri",
-    "build:vercel": "cd ../../ && ./build.sh guard && cd apps/guard && npm run build"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",

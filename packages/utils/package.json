@@ -2,27 +2,31 @@
   "name": "@rosen-ui/utils",
   "version": "1.0.1",
   "private": true,
-  "license": "MIT",
   "description": "This is a private package utilized within Rosen UI apps",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
+  "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "tsc --build",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build",
     "type-check": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@types/lodash-es": "^4.17.12"
   },
   "dependencies": {
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/types": "^0.4.0",
     "cbor-x": "^1.5.9",
     "lodash-es": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "^4.17.12"
   },
   "engines": {
     "node": ">=22.18.0",

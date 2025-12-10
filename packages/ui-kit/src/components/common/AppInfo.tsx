@@ -65,10 +65,7 @@ export const AppInfo = ({
                 {versions.map(({ label, icon: Icon, value }) => (
                   <Stack key={label} direction="row" justify="between">
                     <Stack direction="row" spacing={1} align="center">
-                      <Avatar
-                        style={{ width: '32px', height: '32px' }}
-                        background="neutral.contrastText"
-                      >
+                      <Avatar size="32px" background="neutral.contrastText">
                         <SvgIcon size="medium">{Icon}</SvgIcon>
                       </Avatar>
                       <Typography noWrap variant="body1">

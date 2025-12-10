@@ -44,18 +44,7 @@ type_check:
       - networks/*/dist
       - .npm
   script:
-    - npm run type-check --workspaces --if-present
-
-prettify:
-  stage: ci
-  cache:
-    key: ${CI_COMMIT_REF_NAME}
-    policy: pull
-    paths:
-      - node_modules
-      - .npm
-  script:
-    - npm run prettify:check
+    - npm run type-check
 
 lint:
   stage: ci

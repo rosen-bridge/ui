@@ -53,7 +53,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 />
               )}
               {!isLoading && value && (
-                <Avatar background="secondary.light" color="secondary.main">
+                <Avatar background="secondary.light" color="secondary">
                   {capitalize(value.token.slice(0, 1))}
                 </Avatar>
               )}

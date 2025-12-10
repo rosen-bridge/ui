@@ -21,6 +21,7 @@ interface TokenAmountTextFieldProps {
   loading?: boolean;
   token: Pick<TokenInfo, 'amount' | 'decimals' | 'name'> | undefined;
   minBoxValue?: number;
+  setMinValue?: boolean;
 }
 
 /**
@@ -34,12 +35,14 @@ interface TokenAmountTextFieldProps {
  * @param loading - Show a loading indicator when data is pending.
  * @param token - Token information used for validation and formatting.
  * @param minBoxValue - Minimum allowed value for the input, applied when token changes.
+ * @param setMinValue - Set smallest non-zero amount on token change.
  */
 export const TokenAmountTextField = ({
   disabled,
   loading,
   token,
   minBoxValue,
+  setMinValue,
 }: TokenAmountTextFieldProps) => {
   const { control, setValue } =
     useFormContext<TokenAmountCompatibleFormSchema>();
@@ -80,21 +83,25 @@ export const TokenAmountTextField = ({
           return `Amount must be at least ${getDecimalString(minBoxValue.toString(), token.decimals)}`;
         }
 
+        if (newValueBigInt === 0n) return 'Amount must be greater than 0';
+
         return true;
       },
     },
   });
 
   useEffect(() => {
+    if (!setMinValue) return;
     const getMinAmount = () =>
       token!.decimals ? `0.${'0'.repeat(token!.decimals - 1)}1` : '1';
 
     if (token) {
-      setValue('amount', getMinAmount());
+      setValue('amount', getMinAmount(), { shouldValidate: true });
     }
-  }, [token, setValue]);
+  }, [token, setValue, setMinValue]);
 
-  const setAmountFieldValue = (value: string) => setValue('amount', value);
+  const setAmountFieldValue = (value: string) =>
+    setValue('amount', value, { shouldValidate: true });
 
   const getMaxAvailableTokenAmount = () =>
     getDecimalString(token!.amount.toString(), token!.decimals);

@@ -2,12 +2,18 @@ import { HTMLAttributes, useMemo } from 'react';
 
 import { ExclamationTriangle, ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { IconButton, Skeleton, Typography } from '../../base';
+import { IconButton, Skeleton, Tooltip, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
 import { Stack } from '../Stack';
 import { SvgIcon } from '../SvgIcon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
+  /** Maximum fractional digits to render in the decimal part */
+  decimalMaxFractionDigits?: number;
+
+  /** How many leading zeros trigger compressed zero notation */
+  decimalLeadingZeroThreshold?: number;
+
   /** Optional external link shown as an icon button */
   href?: string;
 
@@ -28,6 +34,8 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
  * Displays an amount value along with its unit, if available
  */
 const AmountBase = ({
+  decimalMaxFractionDigits = 3,
+  decimalLeadingZeroThreshold = 3,
   href,
   loading,
   value,
@@ -37,37 +45,83 @@ const AmountBase = ({
 }: AmountProps) => {
   const error = value !== undefined && isNaN(Number(value));
 
-  const { number, decimals } = useMemo(() => {
-    let number: string | undefined;
-    let decimals: string | undefined;
-
+  const valueString = useMemo(() => {
     switch (typeof value) {
-      case 'bigint': {
-        number = value.toLocaleString();
-        decimals = '0';
-        break;
-      }
-      case 'number': {
-        const sections = value
-          .toLocaleString('fullwide', {
-            minimumFractionDigits: 1,
-            maximumFractionDigits: 20,
-          })
-          .split('.');
-        number = sections.at(0);
-        decimals = sections.at(1) || '0';
-        break;
-      }
-      case 'string': {
-        const sections = value.split('.');
-        number = sections.at(0)?.toLocaleString();
-        decimals = sections.at(1) || '0';
-        break;
-      }
+      case 'bigint':
+        return value.toLocaleString();
+      case 'number':
+        return value.toLocaleString('fullwide', {
+          minimumFractionDigits: 1,
+          maximumFractionDigits: 20,
+        });
+      case 'string':
+        return value || '0';
+      default:
+        return '0';
+    }
+  }, [value]);
+
+  const tooltip = useMemo(() => {
+    return valueString?.replace(/^\d+/, (m) =>
+      m.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
+    );
+  }, [valueString]);
+
+  const parts = useMemo(() => {
+    const decimal = valueString.split('.').at(1)?.length || 0;
+
+    const [numberStr = '0', decimalStr = '0'] = valueString.split('.');
+
+    const numberParsed = BigInt(numberStr);
+
+    if (numberParsed > 0n) {
+      const units = ['', 'K', 'M', 'B', 'T'];
+
+      const num = valueString.replace('.', '');
+
+      const str = BigInt(num).toString().replace(/^0+/, '') || '0';
+
+      const index = Math.min(
+        Math.floor((str.length - 1 - decimal) / 3),
+        units.length - 1,
+      );
+
+      const value = Number(num) / 10 ** decimal / 1000 ** index;
+
+      const val = value.toFixed(decimalMaxFractionDigits).replace(/0+$/, '');
+
+      const unit = units[index];
+
+      return {
+        unit,
+        number: val.toString().split('.').at(0),
+        fraction: val.toString().split('.').at(1),
+      };
     }
 
-    return { number, decimals };
-  }, [value]);
+    const leadingZeros = decimalStr.match(/^(0*)/)?.at(1)?.length || 0;
+
+    const threshold =
+      leadingZeros >= decimalLeadingZeroThreshold ? leadingZeros : 0;
+
+    const precision =
+      leadingZeros + decimalMaxFractionDigits - (threshold ? 1 : 0);
+
+    let fraction = Number(`0.${decimalStr}`)
+      .toFixed(precision)
+      .replace(/^0\./, '')
+      .replace(/0+$/, '');
+
+    if (threshold) {
+      fraction = fraction?.replace('0'.repeat(threshold), '');
+    }
+
+    return {
+      number: '0',
+      fraction,
+      zeros: threshold,
+    };
+  }, [decimalLeadingZeroThreshold, decimalMaxFractionDigits, valueString]);
 
   return (
     <Stack inline align="baseline" direction="row" {...props}>
@@ -89,18 +143,33 @@ const AmountBase = ({
           align="baseline"
           direction={orientation === 'vertical' ? 'column' : 'row'}
         >
-          <Typography fontSize="inherit" component="span">
-            {number || '–'}
-            {!loading && !error && !!decimals && (
-              <Typography
-                component="span"
-                fontSize="75%"
-                style={{ opacity: 0.7 }}
-              >
-                .{decimals}
-              </Typography>
-            )}
-          </Typography>
+          <Tooltip title={tooltip}>
+            <Typography fontSize="inherit" component="span">
+              {parts.number}
+              {parts.fraction && (
+                <Typography
+                  component="span"
+                  fontSize="75%"
+                  style={{ opacity: 0.7 }}
+                >
+                  .{!!parts.zeros && '0'}
+                  {!!parts.zeros && (
+                    <sub
+                      style={{
+                        fontFamily: 'monospace',
+                        fontSize: '0.65em',
+                        letterSpacing: '-1px',
+                      }}
+                    >
+                      ({parts.zeros})
+                    </sub>
+                  )}
+                  {parts.fraction}
+                </Typography>
+              )}
+              {!!parts.unit && ` ${parts.unit}`}
+            </Typography>
+          </Tooltip>
           {unit && (
             <Typography
               fontSize="75%"
