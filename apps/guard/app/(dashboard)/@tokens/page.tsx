@@ -30,7 +30,7 @@ const Token = ({ chain }: { chain: Network }) => {
           .filter((item) => item.chain === chain)
           .map((item) => item.balance.tokenId),
       ),
-    ];
+    ].slice(0, 5);
 
     return tokenIds.map((id) => {
       const cold = data.cold.items.find(
