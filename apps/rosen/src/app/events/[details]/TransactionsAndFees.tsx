@@ -22,7 +22,7 @@ import { Section } from './Section';
 
 const Box = InjectOverrides(BoxMui);
 
-export const Details = ({ id }: { id: string }) => {
+export const TransactionsAndFees = ({ id }: { id: string }) => {
   const { error, data, isLoading, mutate } = useSWR(
     `/v1/events/${id}`,
     fetcher,
@@ -38,7 +38,7 @@ export const Details = ({ id }: { id: string }) => {
   }, [data]);
 
   return (
-    <Section error={error} load={mutate} title="Details">
+    <Section error={error} load={mutate} title="Transactions and Fees">
       <Columns
         gap="24px"
         overrides={{
