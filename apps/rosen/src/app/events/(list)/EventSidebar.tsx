@@ -84,11 +84,10 @@ const Content = ({ value }: EventSidebarProps) => {
       </Center>
     );
   }
-
   if (eventData.status === 'multipleFlows') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="secondary" textAlign="center">
+        <Typography variant="body1" color="text.secondary" textAlign="center">
           This event has multiple flows. Click <b>See Details</b> for more
           information.
         </Typography>

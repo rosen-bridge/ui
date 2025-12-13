@@ -87,6 +87,8 @@ const AmountBase = ({
   }, [valueString]);
 
   const parts = useMemo(() => {
+    if (error) return;
+
     const decimal = valueString.split('.').at(1)?.length || 0;
 
     const [numberStr = '0', decimalStr = '0'] = valueString.split('.');
@@ -114,7 +116,7 @@ const AmountBase = ({
       return {
         unit,
         number: val.toString().split('.').at(0),
-        fraction: val.toString().split('.').at(1),
+        fraction: val.toString().split('.').at(1) || '0',
       };
     }
 
@@ -140,13 +142,19 @@ const AmountBase = ({
       fraction,
       zeros: threshold,
     };
-  }, [decimalLeadingZeroThreshold, decimalMaxFractionDigits, valueString]);
+  }, [
+    decimalLeadingZeroThreshold,
+    decimalMaxFractionDigits,
+    error,
+    valueString,
+  ]);
 
   const content = (
     <>
-      {loading ? (
+      {loading && (
         <Skeleton variant="text" width={80} style={{ marginRight: '4px' }} />
-      ) : error ? (
+      )}
+      {!loading && !!error && (
         <SvgIcon
           style={{
             marginRight: '4px',
@@ -156,7 +164,8 @@ const AmountBase = ({
         >
           <ExclamationTriangle />
         </SvgIcon>
-      ) : (
+      )}
+      {!loading && !error && !!parts && (
         <Stack
           inline
           align="baseline"
@@ -173,15 +182,7 @@ const AmountBase = ({
                 >
                   .{!!parts.zeros && '0'}
                   {!!parts.zeros && (
-                    <sub
-                      style={{
-                        fontFamily: 'monospace',
-                        fontSize: '0.65em',
-                        letterSpacing: '-1px',
-                      }}
-                    >
-                      ({parts.zeros})
-                    </sub>
+                    <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
                   )}
                   {parts.fraction}
                 </Typography>
