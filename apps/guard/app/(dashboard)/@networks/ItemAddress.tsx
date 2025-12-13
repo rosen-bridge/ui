@@ -58,9 +58,10 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
       <Identifier
         href={getAddressUrl(value?.chain as NetworkType, value?.address)}
         loading={loading}
-        value={value?.address || 'N/A'}
-        copyable={!!value?.address}
-        qrcode={!!value?.address}
+        value={value?.address}
+        fallback="N/A"
+        copyable
+        qrcode
         style={{ minHeight: '30px' }}
       />
     </div>
