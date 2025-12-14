@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Check } from '@rosen-bridge/icons';
 
@@ -30,25 +30,26 @@ export const Picker = ({
   onClose,
   onSelect,
 }: PickerProps) => {
+  const lastMoveRef = useRef(0);
+
   const [indexSelected, setIndexSelected] = useState(-1);
 
   const [items, setItems] = useState(
     new Set<string | number | boolean | null>(),
   );
 
+  const itemRefs = useRef<Array<HTMLDivElement | null>>([]);
+
   const options = useMemo<SelectOption[]>(() => {
     if (!value) return [];
 
-    if (value.type != 'multiple' && value.type != 'select') return [];
+    if (value.type !== 'multiple' && value.type !== 'select') return [];
 
     if (!query) return value.options;
 
-    return value.options.filter((option) => {
-      return option.label
-        ?.toString()
-        .toLowerCase()
-        .includes(query.toLowerCase());
-    });
+    return value.options.filter((option) =>
+      option.label?.toString().toLowerCase().includes(query.toLowerCase()),
+    );
   }, [query, value]);
 
   const handleClick = useCallback(
@@ -99,6 +100,14 @@ export const Picker = ({
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
       if (!value) return;
+
+      const now = Date.now();
+
+      if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+        if (now - lastMoveRef.current < 150) return;
+        lastMoveRef.current = now;
+        event.preventDefault();
+      }
 
       const key = event.key + ':' + value.type;
 
@@ -157,6 +166,14 @@ export const Picker = ({
     }
   }, [value, handleClick]);
 
+  useEffect(() => {
+    if (indexSelected < 0) return;
+    const el = itemRefs.current[indexSelected];
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [indexSelected]);
+
   if (!value) return null;
 
   return (
@@ -182,7 +199,8 @@ export const Picker = ({
                 secondaryAction={post}
               >
                 <ListItemButton
-                  selected={indexSelected == index}
+                  ref={(el) => (itemRefs.current[index] = el)}
+                  selected={indexSelected === index}
                   onClick={() => handleClick(option)}
                 >
                   {value.type == 'select' && option.pre && (
