@@ -126,7 +126,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             {txIds.map(([label, chain, txId]) => (
               <Label key={label} label={label} inset>
                 <Identifier
-                  copyable={!!txId}
+                  copyable
                   href={getTxURL(chain, txId)}
                   loading={isLoading}
                   value={txId}

@@ -27,6 +27,9 @@ export type IdentifierProps = HTMLAttributes<HTMLDivElement> & {
 
   /** The main string value to display (e.g., an identifier or long string) */
   value?: string;
+
+  /** If provided, disables actions and displays this fallback text */
+  fallback?: string;
 };
 
 /**
@@ -52,6 +55,7 @@ const IdentifierBase = ({
   qrcode,
   trailingLength = 5,
   value = '',
+  fallback,
   style,
   ...props
 }: IdentifierProps) => {
@@ -70,6 +74,14 @@ const IdentifierBase = ({
         style,
       ),
     [style],
+  );
+
+  const { showFallback, hideActions } = useMemo(
+    () => ({
+      showFallback: !value && !!fallback,
+      hideActions: !value && !fallback,
+    }),
+    [value, fallback],
   );
 
   return (
@@ -101,7 +113,9 @@ const IdentifierBase = ({
                   minWidth: 0,
                 }}
               >
-                {(value ?? '').slice(0, -trailingLength)}
+                {showFallback
+                  ? fallback
+                  : (value ?? '').slice(0, -trailingLength)}
               </div>
               <span style={{ flexShrink: 0 }}>
                 {(value ?? '').slice(-trailingLength)}
@@ -109,17 +123,30 @@ const IdentifierBase = ({
             </Stack>
           </Tooltip>
           <Stack direction="row" align="center">
-            {!!href && (
-              <IconButton target="_blank" size="small" href={href}>
+            {!hideActions && !!href && (
+              <IconButton
+                disabled={showFallback}
+                target="_blank"
+                size="small"
+                href={href}
+              >
                 <SvgIcon size="small">
                   <ExternalLinkAlt />
                 </SvgIcon>
               </IconButton>
             )}
-            {copyable && <CopyButton value={value} size="small" />}
-            {qrcode && (
+
+            {!hideActions && copyable && (
+              <CopyButton disabled={showFallback} value={value} size="small" />
+            )}
+
+            {!hideActions && qrcode && (
               <>
-                <IconButton size="small" onClick={handleOpen}>
+                <IconButton
+                  disabled={showFallback}
+                  size="small"
+                  onClick={handleOpen}
+                >
                   <SvgIcon size="small">
                     <Qrcode />
                   </SvgIcon>
