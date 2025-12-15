@@ -12,12 +12,7 @@ const Address = () => {
   const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
   return (
     <FullCard title="Address">
-      <Identifier
-        copyable
-        qrcode
-        value={data?.address || ''}
-        loading={isLoading}
-      />
+      <Identifier copyable qrcode value={data?.address} loading={isLoading} />
     </FullCard>
   );
 };
