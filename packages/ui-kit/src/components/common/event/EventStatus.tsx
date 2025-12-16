@@ -117,7 +117,7 @@ const STATUS_MAP = {
   multipleFlows: {
     label: 'Multiple Flows',
     color: 'warning',
-    icon: 'ExclamationCircle',
+    icon: 'CodeBranch',
   },
 } as const;
 

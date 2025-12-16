@@ -46,6 +46,9 @@ export { default as ClockThreeRaw } from './icons/clock-three.svg?raw';
 export { ReactComponent as CloseCircle } from './icons/close-circle.svg';
 export { default as CloseCircleRaw } from './icons/close-circle.svg?raw';
 
+export { ReactComponent as CodeBranch } from './icons/code-branch.svg';
+export { default as CodeBranchRaw } from './icons/code-branch.svg?raw';
+
 export { ReactComponent as Coins } from './icons/coins.svg';
 export { default as CoinsRaw } from './icons/coins.svg?raw';
 
