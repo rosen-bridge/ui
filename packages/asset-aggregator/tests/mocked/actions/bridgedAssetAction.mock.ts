@@ -107,24 +107,27 @@ export class BridgedAssetMockData {
 
   /**
    * Generate BridgedAssetEntity data
-   * 
-   * @param token 
-   * @param amount 
-   * @param tokenId 
-   * @param address 
-   * 
+   *
+   * @param token
+   * @param amount
+   * @param tokenId
+   * @param address
+   *
    * @returns Not saved LockedTokenEntities
    */
-  static generateMockedBridgedEntity = (tokens: TokenEntity[], amount: bigint = 1000n) => {
+  static generateMockedBridgedEntity = (
+    tokens: TokenEntity[],
+    amount: bigint = 1000n,
+  ) => {
     const lockedTokens = [];
-    for(const token of tokens) 
+    for (const token of tokens)
       lockedTokens.push({
         token: token,
         amount: amount,
         chain: 'ergo' as const,
         address: crypto.randomUUID(),
-        bridgedTokenId: 'erg'
+        bridgedTokenId: 'erg',
       });
     return lockedTokens;
-  }
+  };
 }

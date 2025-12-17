@@ -41,24 +41,27 @@ export class LockedAssetMockData {
 
   /**
    * Generate LockedAssetEntity data
-   * 
-   * @param token 
-   * @param amount 
-   * @param tokenId 
-   * @param address 
-   * 
+   *
+   * @param token
+   * @param amount
+   * @param tokenId
+   * @param address
+   *
    * @returns Not saved LockedTokenEntities
    */
-  static generateMockedLockedEntity = (tokens: TokenEntity[], amount: bigint = 1000n) => {
+  static generateMockedLockedEntity = (
+    tokens: TokenEntity[],
+    amount: bigint = 1000n,
+  ) => {
     const lockedTokens = [];
-    for(const token of tokens) 
+    for (const token of tokens)
       lockedTokens.push({
         token: token,
         amount: amount,
-        address: crypto.randomUUID()
+        address: crypto.randomUUID(),
       });
     return lockedTokens;
-  }
+  };
 
   /**
    * Creates a single LockedAssetEntity with sane defaults.

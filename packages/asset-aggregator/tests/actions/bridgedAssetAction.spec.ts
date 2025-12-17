@@ -103,7 +103,8 @@ describe('BridgedAssetAction', () => {
     }) => {
       await tokenRepository.insert(BridgedAssetMockData.SAMPLE_TOKENS);
       const tokens = await tokenRepository.find();
-      const bridgedEntities = BridgedAssetMockData.generateMockedBridgedEntity(tokens);
+      const bridgedEntities =
+        BridgedAssetMockData.generateMockedBridgedEntity(tokens);
       await repository.insert(bridgedEntities);
       let remaining = await repository.find();
       await action.keepOnly(remaining[0].tokenId);

@@ -99,7 +99,8 @@ describe('LockedAssetAction', () => {
     }) => {
       await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS);
       const tokens = await tokenRepository.find();
-      const lockedEntities = LockedAssetMockData.generateMockedLockedEntity(tokens);
+      const lockedEntities =
+        LockedAssetMockData.generateMockedLockedEntity(tokens);
       await repository.insert(lockedEntities);
       let remaining = await repository.find();
       await action.keepOnly(remaining[0].tokenId);

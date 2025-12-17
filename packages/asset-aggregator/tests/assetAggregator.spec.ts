@@ -99,7 +99,9 @@ describe('AssetAggregator', () => {
       );
 
       const tokenRepository = dataSource.getRepository(TokenEntity);
-      const token = (await tokenRepository.find()).filter((t) => t.id == 'bnb').at(0);
+      const token = (await tokenRepository.find())
+        .filter((t) => t.id == 'bnb')
+        .at(0);
       expect(token).not.toBeUndefined();
       expect(token!.isNative).toBe(true);
 
@@ -173,7 +175,8 @@ describe('AssetAggregator', () => {
         isNative: false,
       });
 
-      const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
+      const bridgedAssetRepository =
+        dataSource.getRepository(BridgedAssetEntity);
       const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
       await bridgedAssetRepository.deleteAll();
       await lockedAssetRepository.deleteAll();
@@ -181,7 +184,7 @@ describe('AssetAggregator', () => {
         amount: 1000n,
         chain: 'ergo',
         tokenId: 'unused-token',
-        bridgedTokenId: 'unused-token-id'
+        bridgedTokenId: 'unused-token-id',
       });
       await lockedAssetRepository.insert({
         amount: 1000n,
@@ -207,14 +210,18 @@ describe('AssetAggregator', () => {
       expect(
         storedLockedTokens.some((t) => t.tokenId == NETWORKS.ergo.nativeToken),
       ).toBeTruthy();
-      expect(storedLockedTokens.some((t) => t.tokenId == 'unused-token')).not.toBeTruthy();
+      expect(
+        storedLockedTokens.some((t) => t.tokenId == 'unused-token'),
+      ).not.toBeTruthy();
 
       const storedBridgedTokens = await lockedAssetRepository.find();
       expect(storedBridgedTokens).toHaveLength(1);
       expect(
         storedBridgedTokens.some((t) => t.tokenId == NETWORKS.ergo.nativeToken),
       ).toBeTruthy();
-      expect(storedBridgedTokens.some((t) => t.tokenId == 'unused-token')).not.toBeTruthy();
+      expect(
+        storedBridgedTokens.some((t) => t.tokenId == 'unused-token'),
+      ).not.toBeTruthy();
     });
 
     /**
