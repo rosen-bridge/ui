@@ -172,7 +172,7 @@ describe('AssetCalculator', () => {
      * check the function calls
      * - run test (call `update`)
      * @expected
-     * - should call bridgedAssetModel.upsertAsset 3 times(for each token in
+     * - should call bridgedAssetModel.upsertAsset 6 times(for each token in
      * tokenMap)
      * - should call bridgedAssetModel.removeAssets with empty array
      * - should call lockedAssetModel.upsertAsset 3 times(for each token in
@@ -228,11 +228,11 @@ describe('AssetCalculator', () => {
         await assetCalculator['lockedAssetModel'].getAllStoredAssets();
       const allStoredTokens =
         await assetCalculator['tokenModel'].getAllStoredTokens();
-      expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(6);
       expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
       expect(removeLockedAssetSpy).to.have.toBeCalledWith([]);
-      expect(insertTokenSpy).toBeCalledTimes(tokenMapData.length);
+      expect(insertTokenSpy).toBeCalledTimes(6);
       expect(
         allStoredBridgedAssets.sort((a, b) =>
           a.tokenId.localeCompare(b.tokenId),
@@ -248,8 +248,16 @@ describe('AssetCalculator', () => {
             chain: NETWORKS.cardano.key,
           },
           {
+            tokenId: tokenMapData[1].cardano.tokenId,
+            chain: NETWORKS.ergo.key,
+          },
+          {
             tokenId: tokenMapData[2].cardano.tokenId,
             chain: NETWORKS.ergo.key,
+          },
+          {
+            tokenId: tokenMapData[2].ergo.tokenId,
+            chain: NETWORKS.cardano.key,
           },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );
@@ -268,7 +276,9 @@ describe('AssetCalculator', () => {
         [
           tokenMapData[0].ergo.tokenId,
           tokenMapData[1].ergo.tokenId,
+          tokenMapData[1].cardano.tokenId,
           tokenMapData[2].cardano.tokenId,
+          tokenMapData[2].ergo.tokenId,
         ].sort(),
       );
     });
@@ -289,7 +299,7 @@ describe('AssetCalculator', () => {
      * check the function calls
      * - run test (call `update`)
      * @expected
-     * - should call bridgedAssetModel.upsertAsset 3 times (for each token in
+     * - should call bridgedAssetModel.upsertAsset 6 times (for each token in
      * tokenMap)
      * - should call bridgedAssetModel.removeAssets with all old asset ids
      * - should call lockedAssetModel.upsertAsset 3 times (for each token in
@@ -346,7 +356,7 @@ describe('AssetCalculator', () => {
         await assetCalculator['bridgedAssetModel'].getAllStoredAssets();
       const allStoredLockedAssets =
         await assetCalculator['lockedAssetModel'].getAllStoredAssets();
-      expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(6);
       expect(updateLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetsSpy).to.have.toBeCalledWith(
         bridgedAssets.map((asset) => ({
@@ -361,6 +371,11 @@ describe('AssetCalculator', () => {
             address: asset.address,
           }))
           .sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
+      );
+      console.log(
+        allStoredBridgedAssets.sort((a, b) =>
+          a.tokenId.localeCompare(b.tokenId),
+        ),
       );
       expect(
         allStoredBridgedAssets.sort((a, b) =>
@@ -377,8 +392,16 @@ describe('AssetCalculator', () => {
             chain: NETWORKS.cardano.key,
           },
           {
+            tokenId: tokenMapData[1].cardano.tokenId,
+            chain: NETWORKS.ergo.key,
+          },
+          {
             tokenId: tokenMapData[2].cardano.tokenId,
             chain: NETWORKS.ergo.key,
+          },
+          {
+            tokenId: tokenMapData[2].ergo.tokenId,
+            chain: NETWORKS.cardano.key,
           },
         ].sort((a, b) => a.tokenId.localeCompare(b.tokenId)),
       );

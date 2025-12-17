@@ -263,6 +263,7 @@ class AssetCalculator {
     }
     const allStoredBridgedAssets =
       await this.bridgedAssetModel.getAllStoredAssets();
+
     this.logger.debug(
       `All current stored bridge assets are ${JsonBigInt.stringify(
         allStoredBridgedAssets,
@@ -287,92 +288,74 @@ class AssetCalculator {
     const allCurrentTokens = [];
 
     const residencyChains = this.tokens.getAllChains() as Network[];
-
     for (const residencyChain of residencyChains) {
-      const nativeResidentTokens =
-        this.tokens.getAllNativeTokens(residencyChain);
+      const allTokensOnChain = this.tokens.getTokens(
+        residencyChain,
+        residencyChain,
+      );
       this.logger.debug(
-        `All native resident tokens of ${residencyChain} chain are ${JsonBigInt.stringify(
-          nativeResidentTokens,
+        `All tokens of ${residencyChain} chain are ${JsonBigInt.stringify(
+          allTokensOnChain,
         )}`,
       );
 
-      const chains = this.tokens.getSupportedChains(
-        residencyChain,
-      ) as Network[];
-
-      for (const nativeResidentToken of nativeResidentTokens) {
+      for (const token of allTokensOnChain) {
         this.logger.info(
-          `Started calculating values for ${nativeResidentToken.name} native on chain ${residencyChain}`,
+          `Started calculating values for ${token.name} native on chain ${residencyChain}`,
         );
         const significantDecimal = this.tokens.getSignificantDecimals(
-          nativeResidentToken.tokenId,
+          token.tokenId,
         );
         if (significantDecimal == undefined)
           throw new Error(
-            `Failed to retrieve significant decimals for tokenId: ${nativeResidentToken.tokenId}`,
+            `Failed to retrieve significant decimals for tokenId: ${token.tokenId}`,
           );
 
         const newToken = {
-          id: nativeResidentToken.tokenId,
-          decimal: nativeResidentToken.decimals,
+          id: token.tokenId,
+          decimal: token.decimals,
           significantDecimal: significantDecimal,
-          name: nativeResidentToken.name,
+          name: token.name,
           chain: residencyChain,
-          isNative: nativeResidentToken.type === NATIVE_TOKEN,
+          isNative: token.residency === NATIVE_TOKEN,
         };
+
         await this.tokenModel.insertToken(newToken);
         allCurrentTokens.push(newToken.id);
 
-        const locked = await this.calculateLocked(
-          nativeResidentToken,
+        if (token.residency === NATIVE_TOKEN) {
+          const locked = await this.calculateLocked(token, residencyChain);
+          await Promise.all(
+            locked.map(async (lockedItem) => {
+              const newLockedAsset = {
+                amount: lockedItem.amount,
+                address: lockedItem.address,
+                token: newToken,
+                tokenId: newToken.id,
+              };
+              await this.lockedAssetModel.upsertAsset(newLockedAsset);
+              allCurrentLockedAssets.push({
+                tokenId: newLockedAsset.tokenId,
+                address: newLockedAsset.address,
+              });
+            }),
+          );
+        }
+        const supportedChains = this.tokens.getSupportedChains(
           residencyChain,
-        );
-        await Promise.all(
-          locked.map(async (lockedItem) => {
-            const newLockedAsset = {
-              amount: lockedItem.amount,
-              address: lockedItem.address,
-              token: newToken,
-              tokenId: newToken.id,
-            };
-            await this.lockedAssetModel.upsertAsset(newLockedAsset);
-            allCurrentLockedAssets.push({
-              tokenId: newLockedAsset.tokenId,
-              address: newLockedAsset.address,
-            });
-            this.logger.info(
-              `Updated asset [${nativeResidentToken.tokenId}] locked amount to [${lockedItem.amount}] for address [${lockedItem.address}]`,
-            );
-            this.logger.debug(
-              `Updated asset details for [${JsonBigInt.stringify(
-                newLockedAsset,
-              )}]`,
-            );
-          }),
-        );
-
-        try {
-          for (const chain of chains) {
+        ) as Network[];
+        for (const chain of supportedChains) {
+          try {
             const emission = await this.calculateEmissionForChain(
-              nativeResidentToken,
+              token,
               chain,
               residencyChain,
             );
-            this.logger.debug(
-              `Asset [${nativeResidentToken.tokenId}] emitted amount on chain ${chain} is [${emission}]`,
-            );
-            if (!emission) {
-              this.logger.debug(
-                `Emitted amount of asset ${nativeResidentToken.name} on ${chain} is zero. skipping bridged asset update.`,
-              );
-              continue;
-            }
+            if (!emission) continue;
 
             const tokenDataOnAllChains = this.tokens.search(residencyChain, {
-              tokenId: newToken.id,
+              tokenId: token.tokenId,
             })[0];
-
             const bridgedTokenId = this.tokens.getID(
               tokenDataOnAllChains,
               chain,
@@ -390,21 +373,11 @@ class AssetCalculator {
               tokenId: newBridgedAsset.tokenId,
               chain: newBridgedAsset.chain,
             });
-            this.logger.info(
-              `Updated asset [${nativeResidentToken.tokenId}] bridged amount on chain ${chain} to [${emission}]`,
-            );
-            this.logger.debug(
-              `Updated bridged asset details for [${JsonBigInt.stringify(
-                newBridgedAsset,
-              )}]`,
+          } catch (e) {
+            this.logger.warn(
+              `Skipping asset [${token.tokenId}] bridged amount update, error: [${e}]`,
             );
           }
-        } catch (e) {
-          this.logger.warn(
-            `Skipping asset [${nativeResidentToken.tokenId}] bridged amount update, error: [${e}]`,
-          );
-          if (e instanceof Error && e.stack)
-            this.logger.debug(`Error stack trace: [${e.stack}]`);
         }
       }
     }
