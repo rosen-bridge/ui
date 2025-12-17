@@ -2,9 +2,9 @@ import { ConfigValidator } from '@rosen-bridge/config';
 import { TransportOptions } from '@rosen-bridge/winston-logger';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import config from 'config';
-import * as fs from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import * as fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
 import { ChainChoices, Logs, RosenService2Configs } from '../types';

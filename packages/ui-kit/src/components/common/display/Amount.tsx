@@ -1,6 +1,11 @@
 import { HTMLAttributes, useMemo } from 'react';
 
-import { ExclamationTriangle, ExternalLinkAlt } from '@rosen-bridge/icons';
+import {
+  ExclamationTriangle,
+  ExternalLinkAlt,
+  Fire,
+  SnowFlake,
+} from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Tooltip, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
@@ -28,6 +33,18 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
 
   /** Unit label displayed next to the value (e.g. "USD") */
   unit?: string;
+
+  /**
+   * Variant of the Amount component.
+   * - 'hot': displays a default icon on the left representing a positive/active state.
+   * - 'cold': displays a default icon on the left representing a negative/inactive state.
+   */
+  variant?: 'hot' | 'cold';
+
+  /**
+   * If true, reverses the layout of the Amount component, moving the icon from left to right.
+   */
+  reverse?: boolean;
 };
 
 /**
@@ -39,6 +56,8 @@ const AmountBase = ({
   href,
   loading,
   value,
+  variant,
+  reverse,
   orientation = 'horizontal',
   unit,
   ...props
@@ -68,6 +87,8 @@ const AmountBase = ({
   }, [valueString]);
 
   const parts = useMemo(() => {
+    if (error) return;
+
     const decimal = valueString.split('.').at(1)?.length || 0;
 
     const [numberStr = '0', decimalStr = '0'] = valueString.split('.');
@@ -95,7 +116,7 @@ const AmountBase = ({
       return {
         unit,
         number: val.toString().split('.').at(0),
-        fraction: val.toString().split('.').at(1),
+        fraction: val.toString().split('.').at(1) || '0',
       };
     }
 
@@ -121,13 +142,19 @@ const AmountBase = ({
       fraction,
       zeros: threshold,
     };
-  }, [decimalLeadingZeroThreshold, decimalMaxFractionDigits, valueString]);
+  }, [
+    decimalLeadingZeroThreshold,
+    decimalMaxFractionDigits,
+    error,
+    valueString,
+  ]);
 
-  return (
-    <Stack inline align="baseline" direction="row" {...props}>
-      {loading ? (
+  const content = (
+    <>
+      {loading && (
         <Skeleton variant="text" width={80} style={{ marginRight: '4px' }} />
-      ) : error ? (
+      )}
+      {!loading && !!error && (
         <SvgIcon
           style={{
             marginRight: '4px',
@@ -137,7 +164,8 @@ const AmountBase = ({
         >
           <ExclamationTriangle />
         </SvgIcon>
-      ) : (
+      )}
+      {!loading && !error && !!parts && (
         <Stack
           inline
           align="baseline"
@@ -154,15 +182,7 @@ const AmountBase = ({
                 >
                   .{!!parts.zeros && '0'}
                   {!!parts.zeros && (
-                    <sub
-                      style={{
-                        fontFamily: 'monospace',
-                        fontSize: '0.65em',
-                        letterSpacing: '-1px',
-                      }}
-                    >
-                      ({parts.zeros})
-                    </sub>
+                    <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
                   )}
                   {parts.fraction}
                 </Typography>
@@ -195,6 +215,27 @@ const AmountBase = ({
           </SvgIcon>
         </IconButton>
       )}
+    </>
+  );
+
+  return (
+    <Stack
+      inline
+      align="center"
+      spacing="0.3em"
+      direction={variant && reverse ? 'row-reverse' : 'row'}
+      {...props}
+    >
+      {variant === 'hot' ? (
+        <SvgIcon style={{ fontSize: 'inherit' }} color="secondary.dark">
+          <Fire />
+        </SvgIcon>
+      ) : variant === 'cold' ? (
+        <SvgIcon style={{ fontSize: 'inherit' }} color="tertiary.dark">
+          <SnowFlake />
+        </SvgIcon>
+      ) : null}
+      {content}
     </Stack>
   );
 };

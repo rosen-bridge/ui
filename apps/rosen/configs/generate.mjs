@@ -1,7 +1,7 @@
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
-import fs from 'fs';
-import path from 'path';
-import * as url from 'url';
+import fs from 'node:fs';
+import path from 'node:path';
+import * as url from 'node:url';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 

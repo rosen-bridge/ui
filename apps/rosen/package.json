@@ -2,20 +2,24 @@
   "name": "@rosen-bridge/rosen-app",
   "version": "4.9.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
   "license": "MIT",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "next build",
+    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build",
+    "coverage": "npm run test -- --run --coverage",
+    "dev": "next dev",
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "type-check": "tsc --noEmit",
-    "dev": "next dev",
-    "build": "next build",
     "start": "next start",
     "test": "NODE_OPTIONS='--import tsx' vitest",
-    "coverage": "npm run test -- --run --coverage",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out configs --include-prereleases && node ./configs/generate.mjs",
-    "build:vercel": "cd ../../ && ./build.sh rosen && cd apps/rosen && node ./configs/generate.mjs && npm run build"
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@rosen-bridge/abstract-observation-extractor": "^0.2.3",

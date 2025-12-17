@@ -2,6 +2,10 @@
   "name": "@rosen-ui/asset-data-adapter",
   "version": "0.2.0",
   "description": "A data adapter for fetching and normalizing asset information across multiple blockchains.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
   "license": "GPL-3.0",
   "author": "Rosen Team",
   "type": "module",
@@ -14,8 +18,8 @@
   "scripts": {
     "build": "tsc --build tsconfig.build.json",
     "coverage": "npm run test -- --run --coverage",
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "release": "npm run test -- --run && npm run build && npm publish --access public",

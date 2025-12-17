@@ -1,0 +1,69 @@
+name: Trigger Vercel Deploys via REST API
+
+on:
+  push:
+    branches:
+      - "all/*"
+      - "dev"
+      - "master"
+      - "rosen/*"
+      - "guard/*"
+      - "watcher/*"
+
+jobs:
+  deploy-with-vercel-api:
+    name: Deploy Vercel with API - ${{ matrix.app }}
+    runs-on: ubuntu-latest
+
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      ROSEN_PROJECT_ID: ${{ secrets.ROSEN_PROJECT_ID }}
+      GUARD_PROJECT_ID: ${{ secrets.GUARD_PROJECT_ID }}
+      WATCHER_PROJECT_ID: ${{ secrets.WATCHER_PROJECT_ID }}
+
+    strategy:
+      matrix:
+        include:
+          - app: rosen
+            project_env: ROSEN_PROJECT_ID
+            prefix: 'rosen/'
+          - app: guard
+            project_env: GUARD_PROJECT_ID
+            prefix: 'guard/'
+          - app: watcher
+            project_env: WATCHER_PROJECT_ID
+            prefix: 'watcher/'
+
+    steps:
+      - name: Trigger ${{ matrix.app }} deploy
+        if: ${{ github.ref_name == 'dev'
+                || github.ref_name == 'master'
+                || startsWith(github.ref_name, 'all/')
+                || startsWith(github.ref_name, matrix.prefix) }}
+        env:
+          PROJECT_ID: ${{ env[matrix.project_env] }}
+          REPO_ID: ${{ github.event.repository.id }}
+          REF: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+        run: |
+          TARGET_FIELD=""
+          if [ "$REF" = "master" ]; then
+            TARGET_FIELD='"target": "production",'
+          fi
+
+          curl -fsS -X POST "https://api.vercel.com/v13/deployments?teamId=$VERCEL_ORG_ID" \
+            -H "Authorization: Bearer $VERCEL_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"name\": \"${{ matrix.app }}\",
+              \"project\": \"$PROJECT_ID\",
+              $TARGET_FIELD
+              \"gitSource\": {
+                \"type\": \"github\",
+                \"repoId\": $REPO_ID,
+                \"ref\": \"$REF\",
+                \"sha\": \"$SHA\"
+              }
+            }"
+

@@ -12,11 +12,11 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "tsc --build tsconfig.build.json",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build tsconfig.build.json",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

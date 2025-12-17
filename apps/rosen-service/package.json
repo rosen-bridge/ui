@@ -2,23 +2,27 @@
   "name": "@rosen-bridge/rosen-service",
   "version": "4.2.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
   "license": "MIT",
   "author": "Rosen Team",
   "type": "module",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
   "scripts": {
+    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "start": "tsx watch ./src/main.ts",
     "start:prod": "tsx ./src/main.ts",
     "type-check": "tsc --noEmit",
     "typeorm": "NODE_OPTIONS='--import tsx' typeorm",
     "typeorm:generate": "npm run typeorm migration:generate ./src/db/migrations/migration -- -p -d ./src/data-source.ts",
-    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts",
-    "get-config": "npx @rosen-bridge/cli download-assets --chain-type public-launch --out config",
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
-    "prettify": "prettier --write . --ignore-path ../../.gitignore",
-    "prettify:check": "prettier --check . --ignore-path ../../.gitignore"
+    "typeorm:migrate": "npm run typeorm migration:run -- -d ./src/data-source.ts"
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^3.0.1",
