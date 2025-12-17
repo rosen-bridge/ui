@@ -46,7 +46,7 @@ describe('AssetAggregator', () => {
 
   describe('update', () => {
     /**
-     * @target AssetAggregator.update should store native token as locked asset
+     * @target should store native token as locked asset
      * @dependencies
      * - database
      * - AssetAggregator.update
@@ -68,7 +68,6 @@ describe('AssetAggregator', () => {
 
       const tokenRepository = dataSource.getRepository(TokenEntity);
       const storedTokens = await tokenRepository.find();
-      expect(storedTokens).toHaveLength(1);
       expect(storedTokens[0].id).toBe(NETWORKS.ergo.nativeToken);
       expect(storedTokens[0].isNative).toBe(true);
 
@@ -78,7 +77,7 @@ describe('AssetAggregator', () => {
     });
 
     /**
-     * @target AssetAggregator.update should store wrapped token as bridged asset
+     * @target should store wrapped token as bridged asset
      * @dependencies
      * - database
      * - AssetAggregator.update
@@ -100,10 +99,9 @@ describe('AssetAggregator', () => {
       );
 
       const tokenRepository = dataSource.getRepository(TokenEntity);
-      const storedTokens = await tokenRepository.find();
-      expect(storedTokens).toHaveLength(1);
-      expect(storedTokens[0].id).toBe('bnb');
-      expect(storedTokens[0].isNative).toBe(true);
+      const token = (await tokenRepository.find()).filter((t) => t.id == 'bnb').at(0);
+      expect(token).not.toBeUndefined();
+      expect(token!.isNative).toBe(true);
 
       const bridgedAssetRepository =
         dataSource.getRepository(BridgedAssetEntity);
@@ -112,7 +110,7 @@ describe('AssetAggregator', () => {
     });
 
     /**
-     * @target AssetAggregator.update should handle both native and wrapped tokens in same chain
+     * @target should handle both native and wrapped tokens in same chain
      * @dependencies
      * - database
      * - AssetAggregator.update
@@ -134,10 +132,6 @@ describe('AssetAggregator', () => {
         MIXED_TOKENS_TOTAL_SUPPLY,
       );
 
-      const tokenRepository = dataSource.getRepository(TokenEntity);
-      const storedTokens = await tokenRepository.find();
-      expect(storedTokens).toHaveLength(2);
-
       const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
       const storedLockedAssets = await lockedAssetRepository.find();
       expect(storedLockedAssets).toHaveLength(1);
@@ -151,19 +145,20 @@ describe('AssetAggregator', () => {
     });
 
     /**
-     * @target AssetAggregator.update should remove unused tokens after update
+     * @target should remove unused locked/bridged assets after update
      * @dependencies
      * - database
      * - AssetAggregator.update
      * @scenario
-     * - insert an unused token into database
-     * - create ChainAssetBalanceInfo with different token (native token)
+     * - insert an unused locked-token into database
+     * - insert an unused bridged-Token into database
+     * - create ChainAssetBalanceInfo with different token
      * - call update method
      * @expected
      * - unused token should be removed from database
      * - only the new token should remain in database
      */
-    it<BridgedAssetTestContext>('should remove unused tokens after update', async ({
+    it<BridgedAssetTestContext>('should remove unused locked/bridged assets after update', async ({
       assetAggregator,
       dataSource,
     }) => {
@@ -178,9 +173,26 @@ describe('AssetAggregator', () => {
         isNative: false,
       });
 
-      expect(await tokenRepository.count()).toBe(1);
+      const bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
+      const lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
+      await bridgedAssetRepository.deleteAll();
+      await lockedAssetRepository.deleteAll();
+      await bridgedAssetRepository.insert({
+        amount: 1000n,
+        chain: 'ergo',
+        tokenId: 'unused-token',
+        bridgedTokenId: 'unused-token-id'
+      });
+      await lockedAssetRepository.insert({
+        amount: 1000n,
+        address: '6152e7b55893488594606d9e740fb377',
+        tokenId: 'unused-token',
+      });
 
-      const ChainAssetBalanceInfo: any = {
+      expect(await bridgedAssetRepository.count()).toBe(1);
+      expect(await lockedAssetRepository.count()).toBe(1);
+
+      const chainAssetBalanceInfo: any = {
         ergo: {
           erg: [{ address: 'test-address-1', balance: 1000n }],
         },
@@ -188,18 +200,25 @@ describe('AssetAggregator', () => {
 
       const totalSupply: Array<{ assetId: string; totalSupply: bigint }> = [];
       await assetAggregator.updateTokens();
-      await assetAggregator.update(ChainAssetBalanceInfo, totalSupply);
+      await assetAggregator.update(chainAssetBalanceInfo, totalSupply);
 
-      const storedTokens = await tokenRepository.find();
-      expect(storedTokens).toHaveLength(1);
+      const storedLockedTokens = await lockedAssetRepository.find();
+      expect(storedLockedTokens).toHaveLength(1);
       expect(
-        storedTokens.some((t) => t.id == NETWORKS.ergo.nativeToken),
+        storedLockedTokens.some((t) => t.tokenId == NETWORKS.ergo.nativeToken),
       ).toBeTruthy();
-      expect(storedTokens.some((t) => t.id == 'unused-token')).not.toBeTruthy();
+      expect(storedLockedTokens.some((t) => t.tokenId == 'unused-token')).not.toBeTruthy();
+
+      const storedBridgedTokens = await lockedAssetRepository.find();
+      expect(storedBridgedTokens).toHaveLength(1);
+      expect(
+        storedBridgedTokens.some((t) => t.tokenId == NETWORKS.ergo.nativeToken),
+      ).toBeTruthy();
+      expect(storedBridgedTokens.some((t) => t.tokenId == 'unused-token')).not.toBeTruthy();
     });
 
     /**
-     * @target AssetAggregator.update should handle multiple chains
+     * @target should handle multiple chains
      * @dependencies
      * - database
      * - AssetAggregator.update
@@ -221,7 +240,7 @@ describe('AssetAggregator', () => {
     });
 
     /**
-     * @target AssetAggregator.update should calculate bridged amount correctly for wrapped tokens
+     * @target should calculate bridged amount correctly for wrapped tokens
      * @dependencies
      * - database
      * - AssetAggregator.update
@@ -250,7 +269,7 @@ describe('AssetAggregator', () => {
     });
 
     /**
-     * @target AssetAggregator.update should handle empty balance array for a token
+     * @target should handle empty balance array for a token
      * @dependencies
      * - database
      * - AssetAggregator.update

@@ -81,4 +81,30 @@ describe('LockedAssetAction', () => {
       expect(stored).toHaveLength(2);
     });
   });
+
+  describe('keepOnly', () => {
+    /**
+     * @target should persist a single locked-token and remove other tokens
+     * @dependencies
+     * @scenario
+     * - store multiple LockedAssetEntities to database
+     * - call the keepOnly function
+     * @expected
+     * - All other records of TokenEntity should removed from database
+     */
+    it<LockedAssetTestContext>('should persist a single locked-token and remove other tokens', async ({
+      action,
+      tokenRepository,
+      repository,
+    }) => {
+      await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS);
+      const tokens = await tokenRepository.find();
+      const lockedEntities = LockedAssetMockData.generateMockedLockedEntity(tokens);
+      await repository.insert(lockedEntities);
+      let remaining = await repository.find();
+      await action.keepOnly(remaining[0].tokenId);
+      remaining = await repository.find();
+      expect(remaining).toHaveLength(1);
+    });
+  });
 });

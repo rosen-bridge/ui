@@ -75,29 +75,34 @@ export class AssetAggregator {
       this.logger,
     );
     await analyzer.analyze();
-    const nativeTokens = await this.tokenAction.getAll();
+    const tokens = await this.tokenAction.getAll();
     const lockedTokens = analyzer.getLockedTokens();
     const bridgedTokens = analyzer.getBridgedTokens();
-    const usedTokens = new Set<string>();
-    for (const nativeToken of nativeTokens) {
-      if (!lockedTokens[nativeToken.id] && !bridgedTokens[nativeToken.id])
+    const usedBridgedTokens = new Set<string>();
+    const usedLockedTokens = new Set<string>();
+    for (const token of tokens) {
+      if (!lockedTokens[token.id] && !bridgedTokens[token.id])
         continue;
-      usedTokens.add(nativeToken.id);
-      if (bridgedTokens[nativeToken.id])
+      if (bridgedTokens[token.id]) {
         await this.bridgedAssetAction.store(
-          bridgedTokens[nativeToken.id].map((t) => ({
+          bridgedTokens[token.id].map((t) => ({
             ...t,
-            token: nativeToken,
+            token: token,
           })),
         );
-      if (lockedTokens[nativeToken.id])
+        usedBridgedTokens.add(token.id);
+      }
+      if (lockedTokens[token.id]) {
         await this.lockedAssetAction.store(
-          lockedTokens[nativeToken.id].map((t) => ({
+          lockedTokens[token.id].map((t) => ({
             ...t,
-            token: nativeToken,
+            token: token,
           })),
         );
+        usedLockedTokens.add(token.id);
+      }
     }
-    await this.tokenAction.keepOnly(Array.from(usedTokens));
+    await this.bridgedAssetAction.keepOnly(Array.from(usedBridgedTokens));
+    await this.lockedAssetAction.keepOnly(Array.from(usedLockedTokens));
   };
 }

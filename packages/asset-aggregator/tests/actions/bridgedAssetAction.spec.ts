@@ -85,4 +85,30 @@ describe('BridgedAssetAction', () => {
       expect(storedAssets).toHaveLength(2);
     });
   });
+
+  describe('keepOnly', () => {
+    /**
+     * @target should persist a single bridged-token and remove other tokens
+     * @dependencies
+     * @scenario
+     * - store multiple BridgedAssetEntities to database
+     * - call the keepOnly function
+     * @expected
+     * - All other records of TokenEntity should removed from database
+     */
+    it<BridgedAssetTestContext>('should persist a single bridged-token and remove other tokens', async ({
+      action,
+      tokenRepository,
+      repository,
+    }) => {
+      await tokenRepository.insert(BridgedAssetMockData.SAMPLE_TOKENS);
+      const tokens = await tokenRepository.find();
+      const bridgedEntities = BridgedAssetMockData.generateMockedBridgedEntity(tokens);
+      await repository.insert(bridgedEntities);
+      let remaining = await repository.find();
+      await action.keepOnly(remaining[0].tokenId);
+      remaining = await repository.find();
+      expect(remaining).toHaveLength(1);
+    });
+  });
 });

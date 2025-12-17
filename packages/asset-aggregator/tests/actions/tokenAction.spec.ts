@@ -63,27 +63,4 @@ describe('TokenAction', () => {
       expect(stored).toHaveLength(2);
     });
   });
-
-  describe('keepOnly', () => {
-    /**
-     * @target should persist a single token and remove other tokens
-     * @dependencies
-     * @scenario
-     * - store 5 TokenEntity to database
-     * - call the keepOnly function
-     * @expected
-     * - All other records of TokenEntity should removed from database
-     */
-    it<TokenTestContext>('should persist a single token and remove other tokens', async ({
-      action,
-      repository,
-    }) => {
-      const tokens = TokenMockData.createMultipleTokens(5);
-      await repository.save(tokens);
-      let remaining = await repository.find();
-      await action.keepOnly(['tkn-1']);
-      remaining = await repository.find();
-      expect(remaining).toHaveLength(1);
-    });
-  });
 });
