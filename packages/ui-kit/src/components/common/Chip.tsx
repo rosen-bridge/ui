@@ -90,7 +90,7 @@ const ChipWrapper = styled('div')<ChipBaseProps>(({
  * ```
  */
 const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
-  const { label, icon, color = 'primary', loading } = props;
+  const { label, icon, children, color = 'primary', loading } = props;
 
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
@@ -115,10 +115,16 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
     return <Skeleton width={80} height={32} variant="rounded" />;
   }
 
+  const hasContent = !!children || !!label;
+
+  const content = hasContent
+    ? (children ?? <Typography variant="body2">{label}</Typography>)
+    : 'Invalid';
+
   return (
-    <ChipWrapper color={color} ref={ref}>
+    <ChipWrapper color={color} ref={ref} {...props}>
       {RenderedIcon}
-      <Typography variant="body2">{label ? label : 'Invalid'}</Typography>
+      {content}
     </ChipWrapper>
   );
 });

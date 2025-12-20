@@ -6,10 +6,10 @@ import {
   Chip,
   GridContainer,
   Label,
+  Network,
   Stack,
   Token,
 } from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
 
 import { AssetsFullData } from './getFullAssetData';
 
@@ -48,12 +48,11 @@ export const ViewGrid = ({
               <Token loading={isLoading} name={item.name} style={{ flex: 1 }} />
               <Chip
                 color="neutral"
-                icon={item.chain?.replace(/(^\w|-\w)/g, (matched) =>
-                  matched.replace('-', '').toUpperCase(),
-                )}
-                label={NETWORKS[item.chain].label}
                 loading={isLoading}
-              />
+                style={{ fontSize: '13px' }}
+              >
+                <Network name={item.chain} />
+              </Chip>
             </Stack>
             <Box mt={1} mb={-1}>
               <Label label="Bridged" dense>
