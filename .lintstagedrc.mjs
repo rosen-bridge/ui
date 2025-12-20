@@ -79,12 +79,7 @@ const configs = {
         command += ` -- --config ${path.join(folderPath, foundConfig)}`;
       }
 
-      console.log(`Running tests for ${folderName}:`, command);
-
-      execSync(command, {
-        stdio: 'inherit',
-        cwd: folderPath,
-      });
+      commands.push(command);
     }
 
     return commands;
