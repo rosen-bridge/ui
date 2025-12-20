@@ -13,6 +13,8 @@ healthCheck:
     warnDiff: 2
     criticalDiff: 10
   updateInterval: 60
+dataAggregator:
+  interval: 60
 chains:
   ergo:
     initialHeight: 1

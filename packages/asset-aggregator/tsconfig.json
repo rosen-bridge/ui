@@ -5,7 +5,7 @@
     "strictPropertyInitialization": false,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["tests", "lib", "vitest.config.ts"],
+  "include": ["tests", "lib"],
   "references": [
     { "path": "../types" },
     { "path": "../constants" },

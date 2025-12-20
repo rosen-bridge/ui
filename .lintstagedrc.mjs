@@ -44,7 +44,51 @@ const configs = {
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),
-  '*.{js,jsx,ts,tsx}': 'npm run test:related',
+  '*.{js,jsx,ts,tsx}': (files) => {
+    const foldersMap = {};
+
+    files.forEach((file) => {
+      const match = file.match(/^(packages|networks|wallets|apps)\/([^\/]+)\//);
+      if (match) {
+        const folder = match[1];
+        const name = match[2];
+        const key = `${folder}/${name}`;
+        if (!foldersMap[key]) foldersMap[key] = [];
+        foldersMap[key].push(file);
+      }
+    });
+
+    const commands = [];
+    const configFiles = [
+      'vitest.config.ts',
+      'vitest.config.js',
+      'vitest.config.mjs',
+      'vitest.config.cjs',
+      'vitest.config.tsx',
+    ];
+
+    for (const [folderName, folderFiles] of Object.entries(foldersMap)) {
+      const folderPath = path.join(process.cwd(), folderName);
+      const foundConfig = configFiles.find((cfg) =>
+        fs.existsSync(path.join(folderPath, cfg)),
+      );
+
+      let command = `npm run test:related -- ${folderFiles.join(' ')}`;
+
+      if (foundConfig) {
+        command += ` -- --config ${path.join(folderPath, foundConfig)}`;
+      }
+
+      console.log(`Running tests for ${folderName}:`, command);
+
+      execSync(command, {
+        stdio: 'inherit',
+        cwd: folderPath,
+      });
+    }
+
+    return commands;
+  },
 };
 
 export default configs;

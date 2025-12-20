@@ -243,6 +243,22 @@
       }
     }
   },
+  "dataAggregator": {
+    "type": "object",
+    "children": {
+      "interval": {
+        "type": "number",
+        "default": 60,
+        "description": "data-aggregator interval threshold in seconds",
+        "validations": [
+          {
+            "required": true,
+            "error": "data-aggregator interval must be specified (in seconds)"
+          }
+        ]
+      }
+    }
+  },
   "chains": {
     "type": "object",
     "children": {

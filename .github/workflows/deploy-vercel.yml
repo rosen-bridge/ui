@@ -3,12 +3,12 @@ name: Trigger Vercel Deploys via REST API
 on:
   push:
     branches:
-      - "all/*"
-      - "dev"
-      - "master"
-      - "rosen/*"
-      - "guard/*"
-      - "watcher/*"
+      - 'all/*'
+      - 'dev'
+      - 'master'
+      - 'rosen/*'
+      - 'guard/*'
+      - 'watcher/*'
 
 jobs:
   deploy-with-vercel-api:
@@ -38,9 +38,9 @@ jobs:
     steps:
       - name: Trigger ${{ matrix.app }} deploy
         if: ${{ github.ref_name == 'dev'
-                || github.ref_name == 'master'
-                || startsWith(github.ref_name, 'all/')
-                || startsWith(github.ref_name, matrix.prefix) }}
+          || github.ref_name == 'master'
+          || startsWith(github.ref_name, 'all/')
+          || startsWith(github.ref_name, matrix.prefix) }}
         env:
           PROJECT_ID: ${{ env[matrix.project_env] }}
           REPO_ID: ${{ github.event.repository.id }}
@@ -66,4 +66,3 @@ jobs:
                 \"sha\": \"$SHA\"
               }
             }"
-
