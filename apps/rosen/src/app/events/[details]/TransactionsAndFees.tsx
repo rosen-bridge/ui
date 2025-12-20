@@ -15,7 +15,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { Section } from './Section';
@@ -65,52 +65,66 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             </SvgIcon>
           </Label>
           <Label label="Total Emission">
-            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+            <Amount
+              style={{ height: '20px' }}
+              loading={isLoading}
+              fallback="-"
+            />
           </Label>
           <Label label="Guards" inset>
-            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+            <Amount
+              style={{ height: '20px' }}
+              loading={isLoading}
+              fallback="-"
+            />
           </Label>
           <Label label="Watchers" inset>
-            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+            <Amount
+              style={{ height: '20px' }}
+              loading={isLoading}
+              fallback="-"
+            />
           </Label>
           <Label
             label="RSN Ratio"
             info="The number of RSN tokens that correspond to one unit of this token."
           >
-            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+            <Amount
+              style={{ height: '20px' }}
+              loading={isLoading}
+              fallback="-"
+            />
           </Label>
         </div>
         <div>
           <Label label="Token Price">
-            <Amount style={{ height: '20px' }} loading={isLoading} value="-" />
+            <Amount
+              style={{ height: '20px' }}
+              loading={isLoading}
+              fallback="-"
+            />
           </Label>
           <Label label="Fee Sum">
             <Amount
               loading={isLoading}
-              value={getDecimalString(
-                data?.totalFee,
-                data?.lockToken?.significantDecimals,
-              )}
+              value={data?.totalFee}
+              decimal={data?.lockToken?.significantDecimals}
               unit={data?.lockToken?.name}
             />
           </Label>
           <Label label="Bridge Fee" inset>
             <Amount
               loading={isLoading}
-              value={getDecimalString(
-                data?.bridgeFee,
-                data?.lockToken?.significantDecimals,
-              )}
+              value={data?.bridgeFee}
+              decimal={data?.lockToken?.significantDecimals}
               unit={data?.lockToken?.name}
             />
           </Label>
           <Label label="Network Fee" inset>
             <Amount
               loading={isLoading}
-              value={getDecimalString(
-                data?.networkFee,
-                data?.lockToken?.significantDecimals,
-              )}
+              value={data?.networkFee}
+              decimal={data?.lockToken?.significantDecimals}
               unit={data?.lockToken?.name}
             />
           </Label>
