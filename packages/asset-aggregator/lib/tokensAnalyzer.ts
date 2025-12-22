@@ -42,9 +42,8 @@ export class TokensAnalyzer {
     map: Record<string, T[]>,
     token: T,
   ) => {
-    const nativeTokenId = this.getNativeTokenId(token.tokenId);
-    if (map[nativeTokenId] == undefined) map[nativeTokenId] = [];
-    map[nativeTokenId].push(token);
+    if (map[token.tokenId] == undefined) map[token.tokenId] = [];
+    map[token.tokenId].push(token);
     return map;
   };
 

@@ -81,7 +81,6 @@ export class AssetAggregator {
     const usedBridgedTokens = new Set<string>();
     const usedLockedTokens = new Set<string>();
     for (const token of tokens) {
-      if (!lockedTokens[token.id] && !bridgedTokens[token.id]) continue;
       if (bridgedTokens[token.id]) {
         await this.bridgedAssetAction.store(
           bridgedTokens[token.id].map((t) => ({
