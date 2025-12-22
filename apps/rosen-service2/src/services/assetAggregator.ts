@@ -18,9 +18,11 @@ import { DBService } from './db';
 export class AssetAggregatorService extends PeriodicTaskService {
   name = 'AssetAggregatorService';
   taskName = 'AssetAggregatorService';
+  readonly assetAggregator;
   private static instance: AssetAggregatorService;
   readonly dbService: DBService;
   readonly redis;
+
   protected dependencies: Dependency[] = [
     {
       serviceName: AssetDataAdapterService.name,
@@ -35,6 +37,11 @@ export class AssetAggregatorService extends PeriodicTaskService {
       url: configs.redis.address,
       token: configs.redis.token,
     });
+    this.assetAggregator = new AssetAggregator(
+      TokensConfig.getInstance().getTokenMap(),
+      this.dbService.dataSource,
+      this.logger,
+    );
   }
 
   /**
@@ -72,7 +79,9 @@ export class AssetAggregatorService extends PeriodicTaskService {
    *
    * @returns void
    */
-  protected preStart = async () => {};
+  protected preStart = async () => {
+    await this.assetAggregator.updateTokens();
+  };
 
   /**
    * Builds a list of asynchronous tasks for active chains.
@@ -80,11 +89,6 @@ export class AssetAggregatorService extends PeriodicTaskService {
    * @returns {Task[]}
    */
   protected getTasks = () => {
-    const assetAggregator = new AssetAggregator(
-      TokensConfig.getInstance().getTokenMap(),
-      this.dbService.dataSource,
-      this.logger,
-    );
     return [
       {
         fn: async () => {
@@ -103,7 +107,7 @@ export class AssetAggregatorService extends PeriodicTaskService {
           );
           const totalSupply: TotalSupply[] =
             (await this.redis.get('total_supply')) ?? [];
-          await assetAggregator.update(assetBalances, totalSupply);
+          await this.assetAggregator.update(assetBalances, totalSupply);
         },
         interval: configs.dataAggregator.interval * 1000,
       },
