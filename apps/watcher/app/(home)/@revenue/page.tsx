@@ -3,7 +3,13 @@
 import dynamic from 'next/dynamic';
 import React, { useState } from 'react';
 
-import { FullCard } from '@rosen-bridge/ui-kit';
+import {
+  Card,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Typography,
+} from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
 import useSWR from 'swr';
@@ -30,16 +36,22 @@ const Revenue = () => {
   );
 
   return (
-    <FullCard
-      headerActions={<PeriodSelect period={period} setPeriod={setPeriod} />}
-      title="Revenue"
-    >
-      {isLoading ? (
-        <RevenueChartSkeleton />
-      ) : (
-        data && <RevenueChart period={period} data={data} />
-      )}
-    </FullCard>
+    <Card style={{ minWidth: 0 }} backgroundColor="background.paper">
+      <CardHeader
+        action={<PeriodSelect period={period} setPeriod={setPeriod} />}
+      >
+        <CardTitle>
+          <Typography fontWeight="700">Revenue</Typography>
+        </CardTitle>
+      </CardHeader>
+      <CardBody>
+        {isLoading ? (
+          <RevenueChartSkeleton />
+        ) : (
+          data && <RevenueChart period={period} data={data} />
+        )}
+      </CardBody>
+    </Card>
   );
 };
 
