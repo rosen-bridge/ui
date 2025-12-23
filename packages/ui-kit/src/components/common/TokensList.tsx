@@ -1,5 +1,5 @@
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
-import { getDecimalString, getTokenUrl } from '@rosen-ui/utils';
+import { getTokenUrl } from '@rosen-ui/utils';
 
 import { Typography } from '../base';
 import { Avatar } from './Avatar';
@@ -62,13 +62,15 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
                 variant="cold"
                 reverse
                 loading={isLoading}
-                value={getDecimalString(token.coldAmount, token.decimals)}
+                value={token.coldAmount}
+                decimal={token.decimals}
               />
             )}
             {!hasCold && (
               <Amount
                 loading={isLoading}
-                value={getDecimalString(token.amount, token.decimals)}
+                value={token.amount}
+                decimal={token.decimals}
               />
             )}
           </Stack>
@@ -92,7 +94,8 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
                 variant="hot"
                 reverse
                 loading={isLoading}
-                value={getDecimalString(token.amount, token.decimals)}
+                value={token.amount}
+                decimal={token.decimals}
               />
             )}
           </Stack>
