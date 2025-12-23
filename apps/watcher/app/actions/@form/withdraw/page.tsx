@@ -259,19 +259,19 @@ const WithdrawForm = () => {
 
   return (
     <FormProvider {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
         <Box mt={2} />
         {renderAlert()}
 
-        <Grid container item mobile={12}>
+        <Grid container size={{ mobile: 12 }}>
           {renderAddressTextField()}
         </Grid>
         <Box mt={2} />
         <Grid container spacing={2}>
-          <Grid item mobile={12} laptop={6}>
+          <Grid size={{ mobile: 12, tablet: 6 }}>
             {renderTokensListSelect()}
           </Grid>
-          <Grid item mobile={12} laptop={6}>
+          <Grid size={{ mobile: 12, tablet: 6 }}>
             {renderTokenAmountTextField()}
           </Grid>
         </Grid>

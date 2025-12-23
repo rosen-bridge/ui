@@ -16,9 +16,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ESNext",
-    "useDefineForClassFields": true
+    "useDefineForClassFields": true,
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
-  "include": ["src"],
+  "include": ["src", "types"],
   "references": [
     { "path": "../constants" },
     { "path": "../types" },

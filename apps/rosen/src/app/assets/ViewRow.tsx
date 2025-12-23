@@ -36,7 +36,7 @@ export const ViewRow = ({
   setCurrent,
 }: ViewRowProps) => {
   return (
-    <TableGrid>
+    <TableGrid style={{ width: 'inherit' }}>
       <TableGridHead>
         <TableGridHeadCol>Name</TableGridHeadCol>
         <TableGridHeadCol>Network</TableGridHeadCol>

@@ -256,10 +256,10 @@ const LockForm = () => {
 
   return (
     <FormProvider {...formMethods}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form style={{ width: '100%' }} onSubmit={handleSubmit(onSubmit)}>
         <Box mt={2} />
         {renderAlert()}
-        <Grid item mobile={12} laptop={12}>
+        <Grid size={{ mobile: 12, tablet: 12 }}>
           {renderTokenAmountTextField()}
         </Grid>
 

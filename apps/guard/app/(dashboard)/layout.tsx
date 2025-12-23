@@ -15,21 +15,24 @@ const DashboardLayout = ({
   <Fragment>
     <PageHeading title="Dashboard" />
     <Grid container spacing={3}>
-      <Grid item mobile={12}>
+      <Grid size={{ mobile: 12 }} style={{ overflow: 'hidden', minWidth: 0 }}>
         <Stack
           spacing={2}
           direction="column"
           style={{
             flexShrink: 0,
+            width: 'inherit',
           }}
           overrides={{
             laptop: {
               direction: 'row',
+              align: 'center',
+              style: { overflow: 'hidden' },
             },
           }}
         >
           <Stack
-            style={{ width: '100%' }}
+            style={{ width: '100%', minWidth: 0 }}
             overrides={{
               laptop: {
                 style: { minWidth: '200px' },
@@ -41,9 +44,7 @@ const DashboardLayout = ({
           <div style={{ minWidth: 0 }}>{networks}</div>
         </Stack>
       </Grid>
-      <Grid item mobile={12} laptop={12}>
-        {revenue}
-      </Grid>
+      <Grid size={12}>{revenue}</Grid>
       <Box mt={3} width="1">
         {actions}
       </Box>

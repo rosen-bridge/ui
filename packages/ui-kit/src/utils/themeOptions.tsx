@@ -144,6 +144,11 @@ export const lightThemeOptions: ThemeOptions = {
     },
   },
   components: {
+    MuiGrid: {
+      defaultProps: {
+        container: true,
+      },
+    },
     MuiTypography: {
       styleOverrides: {
         h1: ({ theme }: { theme: Theme }) =>

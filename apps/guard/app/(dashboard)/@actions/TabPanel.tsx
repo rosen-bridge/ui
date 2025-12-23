@@ -24,7 +24,7 @@ export const TabPanel = ({ in: isIn, children }: TabPanelProps) => {
         exit: 0,
       }}
     >
-      <Box>{children}</Box>
+      <Box style={{ width: '100%' }}>{children}</Box>
     </Slide>
   );
 };

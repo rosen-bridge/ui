@@ -46,6 +46,7 @@ const Root = styled(Box)(({ theme }) => ({
 const TabsContainer = styled(Box)(({ theme }) => ({
   'position': 'relative',
   'height': 'calc(100% + 32px)',
+  'width': '100%',
   'margin': theme.spacing(-2, 0),
   [theme.breakpoints.down('tablet')]: {
     margin: theme.spacing(-3, -2),
@@ -235,11 +236,9 @@ const Actions = () => {
 
   return (
     <Root>
-      <Grid container spacing={3}>
-        <Grid item mobile={12} tablet={4}>
-          {renderTabs()}
-        </Grid>
-        <Grid item mobile={12} tablet={8} style={{ overflow: 'hidden' }}>
+      <Grid container spacing={3} style={{ width: '100%' }}>
+        <Grid size={{ mobile: 12, tablet: 4 }}>{renderTabs()}</Grid>
+        <Grid size={{ mobile: 12, tablet: 8 }} style={{ overflow: 'hidden' }}>
           {renderTabPanels()}
         </Grid>
       </Grid>

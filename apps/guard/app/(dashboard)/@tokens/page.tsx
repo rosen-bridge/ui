@@ -62,9 +62,9 @@ const Token = ({ chain }: { chain: Network }) => {
 
 const Tokens = () => {
   return (
-    <Grid item mobile={12}>
+    <Grid size={{ mobile: 12 }} style={{ width: '100%', minWidth: 'inherit' }}>
       <CarouselProvider>
-        <Stack spacing="0.5rem">
+        <Stack spacing="0.5rem" style={{ width: '100%' }}>
           <Stack direction="row" align="center" justify="between">
             <Typography variant="h5" fontWeight="bold">
               Tokens

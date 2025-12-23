@@ -119,7 +119,9 @@ const Assets = () => {
       view={renderView()}
     >
       {!isLoading && !items.length && (
-        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+        <EmptyState
+          style={{ height: 'calc(100vh - 288px)', width: 'inherit' }}
+        />
       )}
       {view === 'grid' && !!items.length && (
         <ViewGrid

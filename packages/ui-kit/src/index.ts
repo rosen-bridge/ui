@@ -1,15 +1,15 @@
 declare module '@mui/material/styles' {
   interface BreakpointOverrides {
-    laptop: true;
-    tablet: true;
-    mobile: true;
-    desktop: true;
-
     xs: false;
     sm: false;
     md: false;
     lg: false;
     xl: false;
+
+    mobile: true;
+    tablet: true;
+    laptop: true;
+    desktop: true;
   }
 
   interface TypeBackground {
@@ -22,6 +22,10 @@ declare module '@mui/material/styles' {
 
   interface PaletteOptions {
     background?: Partial<TypeBackground>;
+  }
+
+  interface Shape {
+    borderRadius: number;
   }
 }
 
