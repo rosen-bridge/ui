@@ -6,6 +6,7 @@ import {
   Fire,
   SnowFlake,
 } from '@rosen-bridge/icons';
+import { getDecimalString } from '@rosen-ui/utils';
 
 import { IconButton, Skeleton, Tooltip, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
@@ -13,11 +14,17 @@ import { Stack } from '../Stack';
 import { SvgIcon } from '../SvgIcon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
+  /** Number of decimal places to shift the value before formatting */
+  decimal?: number;
+
   /** Maximum fractional digits to render in the decimal part */
   decimalMaxFractionDigits?: number;
 
   /** How many leading zeros trigger compressed zero notation */
   decimalLeadingZeroThreshold?: number;
+
+  /** Content shown when no value is provided and the amount cannot be rendered */
+  fallback?: string;
 
   /** Optional external link shown as an icon button */
   href?: string;
@@ -51,8 +58,10 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
  * Displays an amount value along with its unit, if available
  */
 const AmountBase = ({
+  decimal,
   decimalMaxFractionDigits = 3,
   decimalLeadingZeroThreshold = 3,
+  fallback,
   href,
   loading,
   value,
@@ -62,52 +71,105 @@ const AmountBase = ({
   unit,
   ...props
 }: AmountProps) => {
-  const error = value !== undefined && isNaN(Number(value));
-
-  const valueString = useMemo(() => {
+  /**
+   * try to convert value to a valid string number with decimal if is available
+   *
+   * examples
+   *   - undefined    -> undefined
+   *   - ''           -> undefined
+   *   - ' '          -> undefined
+   *   - 'hi'.        -> undefined
+   *   - '1234h'      -> undefined
+   *   - '1234.56k78' -> undefined
+   *   - NaN          -> undefined
+   *   - 12345        -> '12345'
+   *   - '12345'      -> '12345'
+   *   - '12345.6789' -> '12345.6789'
+   *   - 12345.6789   -> '12345.6789'
+   *   - '3e-12'.     -> '0.000000000003'
+   *   - 12345n       -> '12345'
+   */
+  const normalizedValue = useMemo(() => {
     switch (typeof value) {
       case 'bigint':
-        return value.toLocaleString();
+        return value.toString();
       case 'number':
-        return value.toLocaleString('fullwide', {
-          minimumFractionDigits: 1,
-          maximumFractionDigits: 20,
-        });
+        if (isNaN(value)) return;
+        return value
+          .toLocaleString('fullwide', {
+            useGrouping: false,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 20,
+          })
+          .replace(/\.0$/, '');
       case 'string':
-        return value || '0';
+        if (!value.trim()) return;
+        if (isNaN(Number(value))) return;
+        return Number(value)
+          .toLocaleString('fullwide', {
+            useGrouping: false,
+            minimumFractionDigits: 1,
+            maximumFractionDigits: 20,
+          })
+          .replace(/\.0$/, '');
       default:
-        return '0';
+        return;
     }
   }, [value]);
 
+  const splittedValue = useMemo(() => {
+    if (!normalizedValue) return;
+
+    let value = normalizedValue;
+
+    if (decimal !== undefined) {
+      value = getDecimalString(normalizedValue, decimal)!;
+    }
+
+    return {
+      number: value.split('.').at(0)!,
+      decimal: value.split('.').at(1),
+    };
+  }, [decimal, normalizedValue]);
+
+  const error = useMemo(() => {
+    if (value === undefined) return false;
+    return (
+      !normalizedValue ||
+      (decimal !== undefined && !!normalizedValue.split('.').at(1))
+    );
+  }, [decimal, normalizedValue, value]);
+
   const tooltip = useMemo(() => {
-    return valueString?.replace(/^\d+/, (m) =>
+    if (!splittedValue) return '';
+
+    const number = splittedValue.number.replace(/^\d+/, (m) =>
       m.replace(/\B(?=(\d{3})+(?!\d))/g, ','),
     );
-  }, [valueString]);
+
+    if (!splittedValue.decimal) return number;
+
+    return `${number}.${splittedValue.decimal}`;
+  }, [splittedValue]);
 
   const parts = useMemo(() => {
-    if (error) return;
+    if (!splittedValue) return;
 
-    const decimal = valueString.split('.').at(1)?.length || 0;
+    const decimalLength = splittedValue.decimal?.length || 0;
 
-    const [numberStr = '0', decimalStr = '0'] = valueString.split('.');
-
-    const numberParsed = BigInt(numberStr);
-
-    if (numberParsed > 0n) {
+    if (BigInt(splittedValue.number) > 0n) {
       const units = ['', 'K', 'M', 'B', 'T'];
 
-      const num = valueString.replace('.', '');
+      const num = splittedValue.number + (splittedValue.decimal || '');
 
       const str = BigInt(num).toString().replace(/^0+/, '') || '0';
 
       const index = Math.min(
-        Math.floor((str.length - 1 - decimal) / 3),
+        Math.floor((str.length - 1 - decimalLength) / 3),
         units.length - 1,
       );
 
-      const value = Number(num) / 10 ** decimal / 1000 ** index;
+      const value = Number(num) / 10 ** decimalLength / 1000 ** index;
 
       const val = value.toFixed(decimalMaxFractionDigits).replace(/0+$/, '');
 
@@ -120,7 +182,8 @@ const AmountBase = ({
       };
     }
 
-    const leadingZeros = decimalStr.match(/^(0*)/)?.at(1)?.length || 0;
+    const leadingZeros =
+      splittedValue.decimal?.match(/^(0*)/)?.at(1)?.length || 0;
 
     const threshold =
       leadingZeros >= decimalLeadingZeroThreshold ? leadingZeros : 0;
@@ -128,7 +191,7 @@ const AmountBase = ({
     const precision =
       leadingZeros + decimalMaxFractionDigits - (threshold ? 1 : 0);
 
-    let fraction = Number(`0.${decimalStr}`)
+    let fraction = Number(`0.${splittedValue.decimal || 0}`)
       .toFixed(precision)
       .replace(/^0\./, '')
       .replace(/0+$/, '');
@@ -142,81 +205,7 @@ const AmountBase = ({
       fraction,
       zeros: threshold,
     };
-  }, [
-    decimalLeadingZeroThreshold,
-    decimalMaxFractionDigits,
-    error,
-    valueString,
-  ]);
-
-  const content = (
-    <>
-      {loading && (
-        <Skeleton variant="text" width={80} style={{ marginRight: '4px' }} />
-      )}
-      {!loading && !!error && (
-        <SvgIcon
-          style={{
-            marginRight: '4px',
-            transform: 'translateY(20%)',
-            fontSize: 'inherit',
-          }}
-        >
-          <ExclamationTriangle />
-        </SvgIcon>
-      )}
-      {!loading && !error && !!parts && (
-        <Stack
-          inline
-          align="baseline"
-          direction={orientation === 'vertical' ? 'column' : 'row'}
-        >
-          <Tooltip title={tooltip}>
-            <Typography fontSize="inherit" component="span">
-              {parts.number}
-              {parts.fraction && (
-                <Typography
-                  component="span"
-                  fontSize="75%"
-                  style={{ opacity: 0.7 }}
-                >
-                  .{!!parts.zeros && '0'}
-                  {!!parts.zeros && (
-                    <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
-                  )}
-                  {parts.fraction}
-                </Typography>
-              )}
-              {!!parts.unit && ` ${parts.unit}`}
-            </Typography>
-          </Tooltip>
-          {unit && (
-            <Typography
-              fontSize="75%"
-              component="div"
-              style={{ opacity: 0.7, marginLeft: '4px' }}
-            >
-              {unit}
-            </Typography>
-          )}
-        </Stack>
-      )}
-
-      {href && (
-        <IconButton
-          target="_blank"
-          rel="noopener noreferrer"
-          size="small"
-          href={href}
-          style={{ marginLeft: '4px' }}
-        >
-          <SvgIcon size="small">
-            <ExternalLinkAlt />
-          </SvgIcon>
-        </IconButton>
-      )}
-    </>
-  );
+  }, [decimalLeadingZeroThreshold, decimalMaxFractionDigits, splittedValue]);
 
   return (
     <Stack
@@ -226,16 +215,83 @@ const AmountBase = ({
       direction={variant && reverse ? 'row-reverse' : 'row'}
       {...props}
     >
-      {variant === 'hot' ? (
-        <SvgIcon style={{ fontSize: 'inherit' }} color="secondary.dark">
-          <Fire />
-        </SvgIcon>
-      ) : variant === 'cold' ? (
+      {variant === 'cold' && (
         <SvgIcon style={{ fontSize: 'inherit' }} color="tertiary.dark">
           <SnowFlake />
         </SvgIcon>
-      ) : null}
-      {content}
+      )}
+      {variant === 'hot' && (
+        <SvgIcon style={{ fontSize: 'inherit' }} color="secondary.dark">
+          <Fire />
+        </SvgIcon>
+      )}
+      <Stack align="center" direction="row">
+        <Stack
+          align={error ? 'center' : 'baseline'}
+          direction={orientation === 'vertical' ? 'column' : 'row'}
+          spacing="4px"
+        >
+          <>
+            {loading && <Skeleton variant="text" width={80} />}
+            {!loading && !!error && (
+              <SvgIcon
+                style={{
+                  fontSize: 'inherit',
+                }}
+              >
+                <ExclamationTriangle />
+              </SvgIcon>
+            )}
+            {!loading && !error && !!parts && (
+              <Tooltip title={tooltip}>
+                <Typography
+                  fontSize="inherit"
+                  component="span"
+                  whiteSpace="nowrap"
+                >
+                  {parts.number}
+                  {parts.fraction && (
+                    <Typography
+                      component="span"
+                      fontSize="75%"
+                      style={{ opacity: 0.7 }}
+                    >
+                      .{!!parts.zeros && '0'}
+                      {!!parts.zeros && (
+                        <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
+                      )}
+                      {parts.fraction}
+                    </Typography>
+                  )}
+                  {!!parts.unit && ` ${parts.unit}`}
+                </Typography>
+              </Tooltip>
+            )}
+            {!loading &&
+              !error &&
+              !parts &&
+              !!fallback &&
+              value === undefined && <>{fallback}</>}
+          </>
+          {unit && (
+            <Typography fontSize="75%" component="div" style={{ opacity: 0.7 }}>
+              {unit}
+            </Typography>
+          )}
+        </Stack>
+        {href && (
+          <IconButton
+            target="_blank"
+            rel="noopener noreferrer"
+            size="small"
+            href={href}
+          >
+            <SvgIcon size="small">
+              <ExternalLinkAlt />
+            </SvgIcon>
+          </IconButton>
+        )}
+      </Stack>
     </Stack>
   );
 };

@@ -13,7 +13,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { Section } from './Section';
@@ -74,10 +74,8 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <Amount
             loading={isLoading}
-            value={getDecimalString(
-              data?.amount,
-              data?.lockToken?.significantDecimals,
-            )}
+            value={data?.amount}
+            decimal={data?.lockToken?.significantDecimals}
             orientation="horizontal"
             unit={data?.lockToken?.name}
           />
@@ -154,10 +152,8 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <Amount
             loading={isLoading}
-            value={getDecimalString(
-              data?.totalFee,
-              data?.lockToken?.significantDecimals,
-            )}
+            value={data?.totalFee}
+            decimal={data?.lockToken?.significantDecimals}
             unit={data?.lockToken?.name}
           />
         </Label>

@@ -66,6 +66,7 @@ export const TransactionInfo = () => {
                 : receivingAmountRaw
             }
             unit={targetTokenInfo?.name}
+            fallback="0"
             loading={isPending}
           />
         </Label>
@@ -74,6 +75,7 @@ export const TransactionInfo = () => {
           <Amount
             value={!tokenValue ? undefined : networkFeeRaw}
             unit={tokenInfo?.name}
+            fallback="0"
             loading={isPending}
           />
         </Label>
@@ -81,12 +83,14 @@ export const TransactionInfo = () => {
           <Amount
             value={!tokenValue ? undefined : bridgeFeeRaw}
             unit={tokenInfo?.name}
+            fallback="0"
             loading={isPending}
           />
         </Label>
         <Label label="Min Transfer" dense>
           <Amount
             value={!tokenValue ? undefined : minTransferRaw}
+            fallback="0"
             unit={tokenInfo?.name}
             loading={isPending}
           />

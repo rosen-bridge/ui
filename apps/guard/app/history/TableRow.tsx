@@ -10,7 +10,7 @@ import {
   Amount,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { getTxURL } from '@rosen-ui/utils';
 
 import { HistoryEvent } from '@/_types/api';
 
@@ -173,10 +173,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
-                value={getDecimalString(
-                  row.sourceChainToken.amount,
-                  row.sourceChainToken.decimals,
-                )}
+                value={row.sourceChainToken.amount}
+                decimal={row.sourceChainToken.decimals}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -184,10 +182,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
-                value={getDecimalString(
-                  row.bridgeFee,
-                  row.sourceChainToken.decimals,
-                )}
+                value={row.bridgeFee}
+                decimal={row.sourceChainToken.decimals}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -195,10 +191,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
-                value={getDecimalString(
-                  row.networkFee,
-                  row.sourceChainToken.decimals,
-                )}
+                value={row.networkFee}
+                decimal={row.sourceChainToken.decimals}
               />
             </EnhancedTableCell>
           </TableRow>
@@ -266,23 +260,17 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Amount
-          value={getDecimalString(
-            row.sourceChainToken.amount,
-            row.sourceChainToken.decimals,
-          )}
+          value={row.sourceChainToken.amount}
+          decimal={row.sourceChainToken.decimals}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount
-          value={getDecimalString(row.bridgeFee, row.sourceChainToken.decimals)}
-        />
+        <Amount value={row.bridgeFee} decimal={row.sourceChainToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Amount
-          value={getDecimalString(
-            row.networkFee,
-            row.sourceChainToken.decimals,
-          )}
+          value={row.networkFee}
+          decimal={row.sourceChainToken.decimals}
         />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.status}</EnhancedTableCell>
