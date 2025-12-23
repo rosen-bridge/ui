@@ -18,6 +18,7 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
   isLoading?: boolean;
   value?: {
     amount: string;
+    decimal: number;
     fromChain: NetworkType;
     href: string;
     id: string;
@@ -53,7 +54,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 />
               )}
               {!isLoading && value && (
-                <Avatar background="secondary.light" color="secondary.main">
+                <Avatar background="secondary.light" color="secondary">
                   {capitalize(value.token.slice(0, 1))}
                 </Avatar>
               )}
@@ -62,6 +63,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 orientation="vertical"
                 unit={value?.token}
                 value={value?.amount}
+                decimal={value?.decimal}
               />
             </Stack>
             {!!value && ('timestamp' in value || 'flows' in value) && (

@@ -1,5 +1,17 @@
 # @rosen-bridge/guard-app
 
+## 3.3.0
+
+### Minor Changes
+
+- Enforce a 5-item display limit per card in the dashboard `Tokens` section
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.0.0
+  - @rosen-bridge/icons@3.2.0
+
 ## 3.2.0
 
 ### Minor Changes

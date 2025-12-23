@@ -60,7 +60,8 @@ const UnlockForm = () => {
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string | ReactNode;
+    message: ReactNode;
+    more?: () => string;
   } | null>(null);
 
   const { trigger, isMutating: isUnlockPending } = useSWRMutation<
@@ -72,11 +73,12 @@ const UnlockForm = () => {
   >('/permit/return', mutatorWithHeaders);
 
   const formMethods = useForm({
+    mode: 'onChange',
     defaultValues: {
       amount: '',
     },
   });
-  const { handleSubmit, watch } = formMethods;
+  const { handleSubmit, watch, formState } = formMethods;
 
   const formData = watch();
 
@@ -158,6 +160,7 @@ const UnlockForm = () => {
         setAlertData({
           severity: 'error',
           message: error.message,
+          more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
     }
@@ -169,6 +172,7 @@ const UnlockForm = () => {
 
   const renderAlert = () => (
     <AlertCard
+      more={alertData?.more}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
@@ -177,13 +181,14 @@ const UnlockForm = () => {
   );
 
   const disabled =
-    !apiKey || isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
+    isInfoLoading || isRsnTokenLoading || !rwtPartialToken?.amount;
 
   const renderTokenAmountTextField = () => (
     <TokenAmountTextField
       disabled={disabled}
       loading={isInfoLoading || isRsnTokenLoading}
       token={rwtPartialToken}
+      setMinValue
     />
   );
 
@@ -198,7 +203,10 @@ const UnlockForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton loading={isUnlockPending} disabled={disabled}>
+        <SubmitButton
+          loading={isUnlockPending}
+          disabled={!formState.isValid || !apiKey || disabled}
+        >
           Unlock
         </SubmitButton>
 

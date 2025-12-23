@@ -114,6 +114,11 @@ const STATUS_MAP = {
     color: 'error',
     icon: 'Ban',
   },
+  multipleFlows: {
+    label: 'Multiple Flows',
+    color: 'warning',
+    icon: 'CodeBranch',
+  },
 } as const;
 
 export type EventStatusProps = HTMLAttributes<HTMLButtonElement> & {

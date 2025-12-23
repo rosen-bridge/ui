@@ -9,7 +9,7 @@ import {
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getAddressUrl, getDecimalString, getTokenUrl } from '@rosen-ui/utils';
+import { getAddressUrl, getTokenUrl } from '@rosen-ui/utils';
 
 import { useAddresses } from '@/_hooks/useAddresses';
 import { GuardTokenInfo } from '@/_types/api';
@@ -84,7 +84,10 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow className="divider" style={rowStyles}>
         <EnhancedTableCell>Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Identifier value={row.isNativeToken ? '-' : row.tokenId} />
+          <Identifier
+            value={row.isNativeToken ? '' : row.tokenId}
+            fallback="-"
+          />
         </EnhancedTableCell>
       </TableRow>
       <TableRow style={rowStyles}>
@@ -100,13 +103,13 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount (Hot)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={getDecimalString(row.amount, row.decimals)} />
+              <Amount value={row.amount} decimal={row.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount (Cold)</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount value={getDecimalString(row.coldAmount, row.decimals)} />
+              <Amount value={row.coldAmount} decimal={row.decimals} />
             </EnhancedTableCell>
           </TableRow>
         </>
@@ -154,7 +157,8 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Identifier
           href={row.isNativeToken ? undefined : tokenUrl}
-          value={row.isNativeToken ? '-' : row.tokenId}
+          value={row.isNativeToken ? '' : row.tokenId}
+          fallback="-"
           style={{ maxWidth: '100px' }}
         />
       </EnhancedTableCell>
@@ -163,14 +167,16 @@ export const TabletRow: FC<RowProps> = (props) => {
       <EnhancedTableCell>
         <Amount
           href={hotUrl}
-          value={getDecimalString(row.amount, row.decimals)}
+          value={row.amount}
+          decimal={row.decimals}
           style={{ alignItems: 'center' }}
         />
       </EnhancedTableCell>
       <EnhancedTableCell>
         <Amount
           href={coldUrl}
-          value={getDecimalString(row.coldAmount, row.decimals)}
+          value={row.coldAmount}
+          decimal={row.decimals}
           style={{ alignItems: 'center' }}
         />
       </EnhancedTableCell>

@@ -1,34 +1,31 @@
 {
   "name": "@rosen-bridge/icons",
-  "description": "A react icon set wrapping Unicons, used in Rosen apps",
+  "version": "3.2.0",
   "private": "true",
-  "version": "3.1.0",
-  "type": "module",
-  "types": "./dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
-  "main": "./dist/index.js",
-  "exports": {
-    ".": "./dist/index.js"
-  },
+  "description": "A react icon set wrapping Unicons, used in Rosen apps",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/rosen-bridge/ui.git"
   },
   "license": "MIT",
   "author": "Rosen Team",
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "node ./generate.js && tsc && vite build",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "node ./generate.js && tsc && vite build",
-    "type-check": "tsc",
-    "release": "echo 'this package should not be published due to the license constraints'"
-  },
-  "peerDependencies": {
-    "react": "^18.3.1"
+    "release": "echo 'this package should not be published due to the license constraints'",
+    "type-check": "tsc"
   },
   "devDependencies": {
     "@types/react": "^18.3.1",
@@ -36,6 +33,9 @@
     "vite": "^4.3.9",
     "vite-plugin-dts": "^2.3.0",
     "vite-plugin-svgr": "^3.2.0"
+  },
+  "peerDependencies": {
+    "react": "^18.3.1"
   },
   "engines": {
     "node": ">=22.18.0",

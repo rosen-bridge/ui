@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 3.2.0
+
+### Minor Changes
+
+- Add `CodeBranch` icon
+
 ## 3.1.0
 
 ### Minor Changes

@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.2.2
+
+### Patch Changes
+
+- Cache all tokens total supply on service statup
+
 ## 2.2.1
 
 ### Patch Changes

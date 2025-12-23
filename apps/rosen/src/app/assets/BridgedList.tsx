@@ -10,7 +10,7 @@ import {
   Network,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString, getTokenUrl } from '@rosen-ui/utils';
+import { getTokenUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { ApiAssetResponse } from '@/types';
@@ -52,7 +52,8 @@ export const BridgedList = ({ value }: BridgedListProps) => {
               <Network loading={isLoading} name={item.chain} />
               <Amount
                 loading={isLoading}
-                value={getDecimalString(item.amount, value.significantDecimals)}
+                value={item.amount}
+                decimal={value.significantDecimals}
               />
             </Box>
             <Box fontSize={'0.875rem'} color="text.secondary" mb={-1}>

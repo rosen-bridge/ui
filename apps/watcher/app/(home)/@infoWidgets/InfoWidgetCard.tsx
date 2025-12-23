@@ -1,13 +1,15 @@
 import { ReactNode } from 'react';
 
-import { ExclamationTriangle } from '@rosen-bridge/icons';
+import { ExclamationTriangleFill } from '@rosen-bridge/icons';
 import {
-  Box,
-  CircularProgress,
   SvgIcon,
-  InfoWidgetCardBase,
   Tooltip,
   Typography,
+  Stack,
+  Card,
+  CardBody,
+  Truncate,
+  CircularProgress,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 
@@ -37,29 +39,42 @@ export const InfoWidgetCard = ({
   warning,
 }: InfoWidgetCardProps) => {
   return (
-    <InfoWidgetCardBase widgetColor={color}>
-      <Box className="column">{icon}</Box>
-      <Box className="column" flexGrow={1}>
-        {isLoading ? (
-          <div>
-            <CircularProgress size={16} color="inherit" />
-          </div>
-        ) : (
-          <Typography className="value">
-            <div>{value}</div>
-            {warning && (
-              <Tooltip
-                title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
+    <Card backgroundColor={`${color}.main`}>
+      <CardBody>
+        <Stack direction="row" align="center" spacing={2}>
+          <SvgIcon color="primary.contrastText" size="large">
+            {icon}
+          </SvgIcon>
+          <Stack direction="column" style={{ flexGrow: 1, minWidth: 0 }}>
+            <Stack direction="row" align="center" justify="between">
+              <Typography
+                variant="h6"
+                color="primary.contrastText"
+                lineHeight="normal"
               >
-                <SvgIcon>
-                  <ExclamationTriangle />
-                </SvgIcon>
-              </Tooltip>
-            )}
-          </Typography>
-        )}
-        <Typography className="title">{title}</Typography>
-      </Box>
-    </InfoWidgetCardBase>
+                {isLoading && <CircularProgress size={16} color="inherit" />}
+                {!isLoading && <Truncate lines={1}>{value}</Truncate>}
+              </Typography>
+              {warning && (
+                <Tooltip
+                  title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
+                >
+                  <SvgIcon color="primary.contrastText" size="small">
+                    <ExclamationTriangleFill />
+                  </SvgIcon>
+                </Tooltip>
+              )}
+            </Stack>
+            <Typography
+              variant="body2"
+              color="primary.contrastText"
+              style={{ opacity: 0.6 }}
+            >
+              <Truncate lines={1}>{title}</Truncate>
+            </Typography>
+          </Stack>
+        </Stack>
+      </CardBody>
+    </Card>
   );
 };

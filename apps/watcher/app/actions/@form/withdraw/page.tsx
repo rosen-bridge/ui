@@ -66,7 +66,8 @@ const WithdrawForm = () => {
 
   const [alertData, setAlertData] = useState<{
     severity: AlertProps['severity'];
-    message: string | ReactNode;
+    message: ReactNode;
+    more?: () => string;
   } | null>(null);
 
   const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
@@ -87,13 +88,15 @@ const WithdrawForm = () => {
   }, [isErgTokenLoading, ergToken]);
 
   const formMethods = useForm({
+    mode: 'onChange',
     defaultValues: {
       address: '',
       tokenId: tokens?.[0]?.tokenId ?? '',
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch } = formMethods;
+  const { handleSubmit, control, resetField, register, watch, formState } =
+    formMethods;
 
   const formData = watch();
 
@@ -169,6 +172,7 @@ const WithdrawForm = () => {
         setAlertData({
           severity: 'error',
           message: error.message,
+          more: () => JSON.stringify(error.response?.data, null, 2),
         });
       }
     }
@@ -180,6 +184,7 @@ const WithdrawForm = () => {
 
   const renderAlert = () => (
     <AlertCard
+      more={alertData?.more}
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
@@ -188,7 +193,7 @@ const WithdrawForm = () => {
   );
 
   const disabled =
-    !apiKey || isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
 
   const renderAddressTextField = () => (
     <TextField
@@ -273,7 +278,10 @@ const WithdrawForm = () => {
 
         <ApiKeyModalWarning />
 
-        <SubmitButton disabled={disabled} loading={isWithdrawPending}>
+        <SubmitButton
+          disabled={!formState.isValid || !apiKey || disabled}
+          loading={isWithdrawPending}
+        >
           Withdraw
         </SubmitButton>
 
