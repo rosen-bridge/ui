@@ -15,7 +15,6 @@ import {
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
@@ -133,10 +132,8 @@ const Page = () => {
                 !item
                   ? undefined
                   : {
-                      amount: getDecimalString(
-                        item.amount,
-                        item.lockToken?.significantDecimals,
-                      ),
+                      amount: item.amount,
+                      decimal: item.lockToken?.significantDecimals,
                       fromChain: item.fromChain,
                       href: `/events/${item.eventId}`,
                       id: item.eventId,

@@ -4,7 +4,7 @@ import React from 'react';
 
 import { Amount, Identifier, Stack, Typography } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { getAddressUrl, getDecimalString } from '@rosen-ui/utils';
+import { getAddressUrl } from '@rosen-ui/utils';
 
 import { TokenInfoWithAddress } from '@/_types/api';
 
@@ -32,13 +32,8 @@ export const ItemAddress = ({ loading, state, value }: ItemAddressProps) => {
           <Amount
             variant={state}
             loading={loading}
-            value={
-              value &&
-              getDecimalString(
-                value.balance.amount.toString(),
-                value.balance.decimals,
-              )
-            }
+            value={value?.balance.amount}
+            decimal={value?.balance.decimals}
             unit={value?.balance.name}
           />
         </Typography>

@@ -9,7 +9,7 @@ import {
   Id,
   TableRow,
 } from '@rosen-bridge/ui-kit';
-import { getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { getTxURL } from '@rosen-ui/utils';
 
 import { Observation } from '@/_types/api';
 
@@ -147,25 +147,19 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Amount</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(row.amount, row.lockToken.decimals)}
-              />
+              <Amount value={row.amount} decimal={row.lockToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Bridge Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(row.bridgeFee, row.lockToken.decimals)}
-              />
+              <Amount value={row.bridgeFee} decimal={row.lockToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Network Fee</EnhancedTableCell>
             <EnhancedTableCell>
-              <Amount
-                value={getDecimalString(row.networkFee, row.lockToken.decimals)}
-              />
+              <Amount value={row.networkFee} decimal={row.lockToken.decimals} />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -220,17 +214,13 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount value={getDecimalString(row.amount, row.lockToken.decimals)} />
+        <Amount value={row.amount} decimal={row.lockToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount
-          value={getDecimalString(row.bridgeFee, row.lockToken.decimals)}
-        />
+        <Amount value={row.bridgeFee} decimal={row.lockToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Amount
-          value={getDecimalString(row.networkFee, row.lockToken.decimals)}
-        />
+        <Amount value={row.networkFee} decimal={row.lockToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
         <Id id={row.requestId} />
