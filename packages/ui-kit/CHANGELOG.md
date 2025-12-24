@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 5.0.1
+
+### Patch Changes
+
+- Fix incorrect localization of the `Amount` component
+
 ## 5.0.0
 
 ### Major Changes
