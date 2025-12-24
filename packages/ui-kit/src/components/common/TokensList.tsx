@@ -24,7 +24,7 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
   <div
     style={{
       display: 'grid',
-      gridTemplateColumns: 'auto 1fr auto',
+      gridTemplateColumns: 'auto auto 1fr',
       rowGap: '16px',
     }}
   >
