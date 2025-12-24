@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "3.2.0",
+  "version": "3.3.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -22,8 +22,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
-    "@rosen-bridge/icons": "^3.1.0",
-    "@rosen-bridge/ui-kit": "^4.1.0",
+    "@rosen-bridge/icons": "^3.2.0",
+    "@rosen-bridge/ui-kit": "^5.0.0",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.1",

@@ -1,5 +1,19 @@
 # @rosen-bridge/rosen-app
 
+## 4.10.0
+
+### Minor Changes
+
+- Change the `Details` section title in the `Event Details` page to `Transactions and Fees`
+- Include a `multipleFlows` status value in the event list API
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.0.0
+  - @rosen-bridge/icons@3.2.0
+  - @rosen-ui/asset-calculator@2.2.2
+
 ## 4.9.0
 
 ### Minor Changes

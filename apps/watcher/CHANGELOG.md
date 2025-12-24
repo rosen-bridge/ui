@@ -1,5 +1,18 @@
 # @rosen-bridge/watcher-app
 
+## 3.8.0
+
+### Minor Changes
+
+- Apply latest design updates and bug fixes to `home` page layout and components
+
+### Patch Changes
+
+- Enhance the Lock, Unlock and Withdraw forms in the app with real time duration validation, error copy functionality, and submit button disable behavior
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.0.0
+  - @rosen-bridge/icons@3.2.0
+
 ## 3.7.0
 
 ### Minor Changes

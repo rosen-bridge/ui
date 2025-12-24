@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-app",
-  "version": "4.9.0",
+  "version": "4.10.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -26,9 +26,9 @@
     "@rosen-bridge/abstract-scanner": "^0.2.3",
     "@rosen-bridge/encryption": "^1.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
-    "@rosen-bridge/icons": "^3.1.0",
+    "@rosen-bridge/icons": "^3.2.0",
     "@rosen-bridge/tokens": "^4.0.1",
-    "@rosen-bridge/ui-kit": "^4.1.0",
+    "@rosen-bridge/ui-kit": "^5.0.0",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
     "@rosen-network/base": "^0.5.1",
     "@rosen-network/binance": "^0.4.2",
@@ -39,7 +39,7 @@
     "@rosen-network/ergo": "^2.5.2",
     "@rosen-network/ethereum": "^0.4.2",
     "@rosen-network/evm": "^0.3.5",
-    "@rosen-ui/asset-calculator": "^2.2.1",
+    "@rosen-ui/asset-calculator": "^2.2.2",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/data-source": "^0.2.0",
     "@rosen-ui/eternl-wallet": "^3.1.3",

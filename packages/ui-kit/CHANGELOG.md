@@ -1,5 +1,32 @@
 # @rosen-bridge/ui-kit
 
+## 5.0.0
+
+### Major Changes
+
+- Improve the Amount component by adding decimal calculation support via the `decimal` prop and refining value handling logic
+
+### Minor Changes
+
+- Improve `Avatar` component by stabilizing color behavior and enforcing consistent styling
+- Refactor `Token` component to unify loading behavior
+- Add hot and cold variants to `Amount` component
+- Update Amount component to display large and small numbers in a readable format
+- Remove unused `InfoWidgetCardBase` component
+- Add `Copy Details` button to the `AlertCard` component
+- Add `disabled` prop to `CopyButton` component
+- Add `href` support to `TokensCard` component to enable the built-in `See All` action
+- Refined `Identifier` behavior to properly toggle fallback visibility and action states based on empty values
+- Support children prop in `Chip` component
+- Add support for neutral color in ensureColor function
+- Fix `Picker` component to auto-scroll on keyboard navigation
+
+### Patch Changes
+
+- Add a `Multiple Flows` status to `EventStatus` and update `Chip` to stop forcing label capitalization
+- Fix `Amount` component to handle invalid numbers, remove decimal parentheses, and enforce at least one decimal character
+- Update dependency @rosen-bridge/icons@3.2.0
+
 ## 4.1.0
 
 ### Minor Changes

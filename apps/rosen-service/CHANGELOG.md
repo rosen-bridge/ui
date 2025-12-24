@@ -1,5 +1,15 @@
 # @rosen-bridge/rosen-service
 
+## 4.3.0
+
+### Minor Changes
+
+- Consider scanner update interval in ScannerSyncHealthCheckParam health checks.
+
+### Patch Changes
+
+- Update dependency @rosen-ui/asset-calculator@2.2.2
+
 ## 4.2.0
 
 ### Minor Changes
