@@ -75,10 +75,10 @@ const AmountBase = ({
    * try to convert value to a valid string number with decimal if is available
    *
    * examples
-   *   - undefined    -> undefined
+   *   - undefined     -> undefined
    *   - ''           -> undefined
    *   - ' '          -> undefined
-   *   - 'hi'.        -> undefined
+   *   - 'hi'         -> undefined
    *   - '1234h'      -> undefined
    *   - '1234.56k78' -> undefined
    *   - NaN          -> undefined
@@ -86,7 +86,7 @@ const AmountBase = ({
    *   - '12345'      -> '12345'
    *   - '12345.6789' -> '12345.6789'
    *   - 12345.6789   -> '12345.6789'
-   *   - '3e-12'.     -> '0.000000000003'
+   *   - '3e-12'      -> '0.000000000003'
    *   - 12345n       -> '12345'
    */
   const normalizedValue = useMemo(() => {
@@ -96,7 +96,7 @@ const AmountBase = ({
       case 'number':
         if (isNaN(value)) return;
         return value
-          .toLocaleString('fullwide', {
+          .toLocaleString('en', {
             useGrouping: false,
             minimumFractionDigits: 1,
             maximumFractionDigits: 20,
@@ -106,7 +106,7 @@ const AmountBase = ({
         if (!value.trim()) return;
         if (isNaN(Number(value))) return;
         return Number(value)
-          .toLocaleString('fullwide', {
+          .toLocaleString('en', {
             useGrouping: false,
             minimumFractionDigits: 1,
             maximumFractionDigits: 20,
