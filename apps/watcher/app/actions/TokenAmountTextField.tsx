@@ -66,7 +66,7 @@ export const TokenAmountTextField = ({
         const isDecimalsLarge =
           (match?.groups?.floatingDigits?.length ?? 0) > token.decimals;
         if (isDecimalsLarge)
-          return `The current token only supports ${token.decimals} decimals`;
+          return `The current token only supports ${token.decimals} ${token.decimals <= 1 ? 'decimal' : 'decimals'}`;
 
         const newValueBigInt = BigInt(
           getNonDecimalString(newValue, token.decimals),
