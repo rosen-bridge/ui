@@ -96,7 +96,7 @@ const AmountBase = ({
       case 'number':
         if (isNaN(value)) return;
         return value
-          .toLocaleString('fullwide', {
+          .toLocaleString('en', {
             useGrouping: false,
             minimumFractionDigits: 1,
             maximumFractionDigits: 20,
@@ -106,7 +106,7 @@ const AmountBase = ({
         if (!value.trim()) return;
         if (isNaN(Number(value))) return;
         return Number(value)
-          .toLocaleString('fullwide', {
+          .toLocaleString('en', {
             useGrouping: false,
             minimumFractionDigits: 1,
             maximumFractionDigits: 20,
