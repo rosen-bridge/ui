@@ -1,0 +1,36 @@
+{
+  "name": "rosen-statistics-entity",
+  "version": "0.0.0",
+  "description": "Rosen statistics entity and migrations",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/rosen-statistics-entity.git"
+  },
+  "private": true,
+  "license": "MIT",
+  "author": "Rosen Team",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "tsc --build tsconfig.build.json",
+    "clean": "rimraf dist && rimraf tsconfig.build.tsbuildinfo",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
+    "prettify": "prettier --write . --ignore-path ../../.gitignore",
+    "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "release": "npm run clean && npm run build && npm publish --access public",
+    "type-check": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "dependencies": {
+    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "rimraf": "^3.0.2"
+  }
+}
