@@ -2,7 +2,6 @@
 
 import { useMemo } from 'react';
 
-import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   Amount,
   Box as BoxMui,
@@ -11,7 +10,6 @@ import {
   InjectOverrides,
   Label,
   LabelGroup,
-  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -55,14 +53,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             label="Duration"
             info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
           >
-            <SvgIcon
-              style={{
-                marginRight: '4px',
-                fontSize: 'inherit',
-              }}
-            >
-              <ExclamationTriangle />
-            </SvgIcon>
+            -
           </Label>
           <Label label="Total Emission">
             <Amount
