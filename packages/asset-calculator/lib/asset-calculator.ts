@@ -263,7 +263,6 @@ class AssetCalculator {
     }
     const allStoredBridgedAssets =
       await this.bridgedAssetModel.getAllStoredAssets();
-
     this.logger.debug(
       `All current stored bridge assets are ${JsonBigInt.stringify(
         allStoredBridgedAssets,
@@ -317,7 +316,7 @@ class AssetCalculator {
           significantDecimal: significantDecimal,
           name: token.name,
           chain: residencyChain,
-          isNative: token.residency === NATIVE_TOKEN,
+          isNative: token.type === NATIVE_TOKEN,
         };
 
         await this.tokenModel.insertToken(newToken);
@@ -338,45 +337,70 @@ class AssetCalculator {
                 tokenId: newLockedAsset.tokenId,
                 address: newLockedAsset.address,
               });
+              this.logger.info(
+                `Updated asset [${token.tokenId}] locked amount to [${lockedItem.amount}] for address [${lockedItem.address}]`,
+              );
+              this.logger.debug(
+                `Updated asset details for [${JsonBigInt.stringify(
+                  newLockedAsset,
+                )}]`,
+              );
             }),
           );
-        }
-        const supportedChains = this.tokens.getSupportedChains(
-          residencyChain,
-        ) as Network[];
-        for (const chain of supportedChains) {
-          try {
-            const emission = await this.calculateEmissionForChain(
-              token,
-              chain,
-              residencyChain,
-            );
-            if (!emission) continue;
+          const supportedChains = this.tokens.getSupportedChains(
+            residencyChain,
+          ) as Network[];
+          for (const chain of supportedChains) {
+            try {
+              const emission = await this.calculateEmissionForChain(
+                token,
+                chain,
+                residencyChain,
+              );
+              this.logger.debug(
+                `Asset [${token.tokenId}] emitted amount on chain ${chain} is [${emission}]`,
+              );
+              if (!emission) {
+                this.logger.debug(
+                  `Emitted amount of asset ${token.name} on ${chain} is zero. skipping bridged asset update.`,
+                );
+                continue;
+              }
+              const tokenDataOnAllChains = this.tokens.search(residencyChain, {
+                tokenId: newToken.id,
+              })[0];
+              const bridgedTokenId = this.tokens.getID(
+                tokenDataOnAllChains,
+                chain,
+              );
 
-            const tokenDataOnAllChains = this.tokens.search(residencyChain, {
-              tokenId: token.tokenId,
-            })[0];
-            const bridgedTokenId = this.tokens.getID(
-              tokenDataOnAllChains,
-              chain,
-            );
-
-            const newBridgedAsset = {
-              amount: emission,
-              chain: chain,
-              token: newToken,
-              tokenId: newToken.id,
-              bridgedTokenId,
-            };
-            await this.bridgedAssetModel.upsertAsset(newBridgedAsset);
-            allCurrentBridgedAssets.push({
-              tokenId: newBridgedAsset.tokenId,
-              chain: newBridgedAsset.chain,
-            });
-          } catch (e) {
-            this.logger.warn(
-              `Skipping asset [${token.tokenId}] bridged amount update, error: [${e}]`,
-            );
+              const newBridgedAsset = {
+                amount: emission,
+                chain: chain,
+                token: newToken,
+                tokenId: newToken.id,
+                bridgedTokenId,
+              };
+              await this.bridgedAssetModel.upsertAsset(newBridgedAsset);
+              allCurrentBridgedAssets.push({
+                tokenId: newBridgedAsset.tokenId,
+                chain: newBridgedAsset.chain,
+              });
+              this.logger.info(
+                `Updated asset [${token.tokenId}] bridged amount on chain ${chain} to [${emission}]`,
+              );
+              this.logger.debug(
+                `Updated bridged asset details for [${JsonBigInt.stringify(
+                  newBridgedAsset,
+                )}]`,
+              );
+            } catch (e) {
+              this.logger.warn(
+                `Skipping asset [${token.tokenId}] bridged amount update, error: [${e}]`,
+              );
+              if (e instanceof Error && e.stack)
+                this.logger.debug(`Error stack trace: [${e.stack}]`);
+            }
           }
         }
       }
