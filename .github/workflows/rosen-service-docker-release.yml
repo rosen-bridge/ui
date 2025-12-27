@@ -44,7 +44,7 @@ jobs:
       - name: Setup rosen-service Configs
         run: |
           npx @rosen-bridge/cli@${{ vars.ROSEN_CLI_VERSION || 'latest' }} download-assets -c ${{ vars.RELEASE_NAME }} ${{ vars.RELEASE_TAG }} -o ./apps/rosen-service/config/
-          rm ./apps/rosen-service/config/contracts-*
+          rm ./apps/rosen-service/config/contracts.json
 
       - name: Set up QEMU
         if: contains(matrix.platform, 'arm')
