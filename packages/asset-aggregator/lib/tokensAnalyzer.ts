@@ -42,8 +42,9 @@ export class TokensAnalyzer {
     map: Record<string, T[]>,
     token: T,
   ) => {
-    if (map[token.tokenId] == undefined) map[token.tokenId] = [];
-    map[token.tokenId].push(token);
+    const nativeTokenId = this.getNativeTokenId(token.tokenId);
+    if (map[nativeTokenId] == undefined) map[nativeTokenId] = [];
+    map[nativeTokenId].push(token);
     return map;
   };
 
@@ -145,13 +146,26 @@ export class TokensAnalyzer {
       tokenId: token.tokenId,
     })?.[0];
 
-    const assetTotalSupply = this.totalSupply.filter(
-      (t) =>
-        t.assetId ==
-        this.tokenMap.getID(tokenDataOnAllChains, NETWORKS.ergo.key),
-    );
+    const nativeToken = Object.entries(tokenDataOnAllChains)
+      .filter(([, v]) => v.residency == NATIVE_TOKEN)
+      .at(0);
 
-    if (assetTotalSupply.length == 0) {
+    if (!nativeToken) {
+      this.logger.error(
+        `Bridged id of token [${token.tokenId}] not found in provided token-map`,
+      );
+      return;
+    }
+
+    const assetTotalSupply = this.totalSupply
+      .filter(
+        (t) =>
+          t.assetId ==
+          this.tokenMap.getID(tokenDataOnAllChains, NETWORKS.ergo.key),
+      )
+      .at(0);
+
+    if (!assetTotalSupply) {
       this.logger.error(
         `Total-supply of token [${token.tokenId}] not found in provided total supply data`,
       );
@@ -160,30 +174,21 @@ export class TokensAnalyzer {
 
     const lockedAmount = chainAssets[token.tokenId]
       .map((addressBalance) => addressBalance.balance)
-      .reduce((acc: bigint, cur: bigint) => BigInt(acc) + BigInt(cur), 0n);
+      .reduce((acc: bigint, cur: bigint) => {
+        return BigInt(acc) + BigInt(cur);
+      }, 0n);
     const bridgedAmount =
-      BigInt(assetTotalSupply[0].totalSupply) - BigInt(lockedAmount);
+      BigInt(assetTotalSupply.totalSupply) - BigInt(lockedAmount);
 
     this.logger.debug(
-      `Token [${token.tokenId}]: total supply=${assetTotalSupply[0].totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
+      `Token [${token.tokenId}]: total supply=${assetTotalSupply.totalSupply}, locked=${lockedAmount}, bridged=${bridgedAmount}`,
     );
-
-    const bridgedTokenId = Object.entries(tokenDataOnAllChains).filter(
-      ([, v]) => v.residency == NATIVE_TOKEN,
-    );
-
-    if (bridgedTokenId.length == 0) {
-      this.logger.error(
-        `Bridged id of token [${token.tokenId}] not found in provided token-map`,
-      );
-      return;
-    }
 
     return {
       amount: bridgedAmount,
       chain: chain,
-      tokenId: token.tokenId,
-      bridgedTokenId: bridgedTokenId[0][1].tokenId,
+      tokenId: nativeToken[1].tokenId,
+      bridgedTokenId: token.tokenId,
     };
   };
 }
