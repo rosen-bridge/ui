@@ -1,14 +1,12 @@
 import { ConfigValidator } from '@rosen-bridge/config';
 import { TransportOptions } from '@rosen-bridge/winston-logger';
-import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import config from 'config';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
-import { ChainChoices, Logs, RosenService2Configs } from '../types';
-import { ChainConfigsReader } from './chainConfigsReader';
+import { Logs, RosenService2Configs } from '../types';
+import { ContractConfigsReader } from './contractConfigsReader';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -68,18 +66,8 @@ export const validateConfigs = (): RosenService2Configs => {
 
   configs.contracts = {};
   // TODO: implement Bitcoin-Runes support later
-  const chainChoices = NETWORKS_KEYS.filter(
-    (net) => net != BITCOIN_RUNES_NETWORKS_KEY,
-  ) as ChainChoices[];
-  for (const chain of chainChoices) {
-    if (chain == NETWORKS.ergo.key || configs.chains[chain].active) {
-      const chainConfigReader = new ChainConfigsReader(
-        chain,
-        configs.paths.contracts,
-      );
-      configs.contracts[chain] = chainConfigReader.data;
-    }
-  }
+  const chainConfigReader = new ContractConfigsReader(configs.paths.contracts);
+  configs.contracts = chainConfigReader.data;
 
   return configs;
 };
