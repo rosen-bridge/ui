@@ -30,8 +30,8 @@ const Root = styled(Box)(({ theme }) => ({
   marginBottom: theme.spacing(2),
   marginLeft: -theme.shape.borderRadius * 2,
   marginRight: -theme.shape.borderRadius * 2,
-  paddingLeft: theme.shape.borderRadius * 2,
-  paddingRight: theme.shape.borderRadius * 2,
+  paddingLeft: theme.shape.borderRadius,
+  paddingRight: theme.shape.borderRadius,
   [theme.breakpoints.down('tablet')]: {
     display: 'block',
     marginLeft: `-${theme.spacing(2)}`,
@@ -235,11 +235,15 @@ const Actions = () => {
 
   return (
     <Root>
-      <Grid container spacing={3}>
-        <Grid item mobile={12} tablet={4}>
+      <Grid container spacing={3} style={{ width: '100%' }}>
+        <Grid size={{ mobile: 12, tablet: 4 }} flexBasis="auto">
           {renderTabs()}
         </Grid>
-        <Grid item mobile={12} tablet={8} style={{ overflow: 'hidden' }}>
+        <Grid
+          size={{ mobile: 12, tablet: 8 }}
+          flexGrow={1}
+          style={{ overflow: 'hidden' }}
+        >
           {renderTabPanels()}
         </Grid>
       </Grid>
