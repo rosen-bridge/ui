@@ -27,12 +27,40 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
   );
 
   const txIds = useMemo(() => {
-    return [
-      ['Source Tx', data?.fromChain, data?.sourceTxId],
-      ['Payment Tx', data?.toChain, data?.paymentTxId],
-      ['Reward Tx', NETWORKS.ergo.key, data?.spendTxId],
-      ['Trigger Tx', NETWORKS.ergo.key, data?.txId],
+    const allTxs = [
+      {
+        type: 'source',
+        label: 'Source Tx',
+        chain: data?.fromChain,
+        txId: data?.sourceTxId,
+      },
+      {
+        type: 'payment',
+        label: 'Payment Tx',
+        chain: data?.toChain,
+        txId: data?.paymentTxId,
+      },
+      {
+        type: 'reward',
+        label: 'Reward Tx',
+        chain: NETWORKS.ergo.key,
+        txId: data?.spendTxId,
+      },
+      {
+        type: 'trigger',
+        label: 'Trigger Tx',
+        chain: NETWORKS.ergo.key,
+        txId: data?.txId,
+      },
     ] as const;
+
+    if (data?.status === 'fraud') {
+      return allTxs.filter(
+        (tx) => tx.type !== 'payment' && tx.type !== 'reward',
+      );
+    }
+
+    return allTxs;
   }, [data]);
 
   return (
@@ -128,8 +156,8 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
         >
           <Label label="Tx IDs" />
           <LabelGroup>
-            {txIds.map(([label, chain, txId]) => (
-              <Label key={label} label={label} inset>
+            {txIds.map(({ type, label, chain, txId }) => (
+              <Label key={type} label={label} inset>
                 <Identifier
                   copyable
                   href={getTxURL(chain, txId)}
