@@ -15,7 +15,7 @@ const DashboardLayout = ({
   <Fragment>
     <PageHeading title="Dashboard" />
     <Grid container spacing={3}>
-      <Grid item mobile={12}>
+      <Grid size={{ mobile: 12 }}>
         <Stack
           spacing={2}
           direction="column"
@@ -25,6 +25,7 @@ const DashboardLayout = ({
           overrides={{
             laptop: {
               direction: 'row',
+              align: 'center',
             },
           }}
         >
@@ -41,9 +42,7 @@ const DashboardLayout = ({
           <div style={{ minWidth: 0 }}>{networks}</div>
         </Stack>
       </Grid>
-      <Grid item mobile={12} laptop={12}>
-        {revenue}
-      </Grid>
+      <Grid size={12}>{revenue}</Grid>
       <Box mt={3} width="1">
         {actions}
       </Box>
