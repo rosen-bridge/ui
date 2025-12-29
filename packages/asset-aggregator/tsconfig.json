@@ -1,8 +1,14 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "strictPropertyInitialization": false,
+    "types": ["node", "vitest/globals"]
   },
-  "include": ["tests", "lib"],
-  "references": [{ "path": "../../packages/types" }]
+  "include": ["tests", "lib", "vitest.config.ts"],
+  "references": [
+    { "path": "../types" },
+    { "path": "../constants" },
+    { "path": "../asset-data-adapter" }
+  ]
 }

@@ -31,8 +31,18 @@
     "typeorm:migrate:sqlite": "npm run typeorm migration:run -- -d ./dataSource.ts"
   },
   "dependencies": {
-    "@rosen-bridge/extended-typeorm": "1.0.1",
-    "@rosen-ui/types": "0.4.0"
+    "@rosen-bridge/abstract-logger": "^3.0.1",
+    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/json-bigint": "^0.2.0",
+    "@rosen-ui/asset-data-adapter": "^0.2.0",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.4.0",
+    "@vitest/coverage-istanbul": "^3.1.4",
+    "tsx": "^4.20.5",
+    "vitest": "^3.1.4"
+  },
+  "peerDependencies": {
+    "@rosen-bridge/tokens": "^4.0.0"
   },
   "engines": {
     "node": ">=22.18.0",
