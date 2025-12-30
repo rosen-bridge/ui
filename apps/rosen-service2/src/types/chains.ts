@@ -12,7 +12,6 @@ export type ChainChoices = Exclude<
 export type ChainsKeys = keyof (typeof configs)['chains'];
 
 export interface ChainConfigs {
-  version: string;
   addresses: {
     lock: string;
     cold: string;
@@ -27,3 +26,9 @@ export interface ChainConfigs {
   };
   cleanupConfirm: number;
 }
+
+export type AllChainsConfigs = {
+  version: string;
+} & {
+  [K in ChainChoices]: ChainConfigs;
+};

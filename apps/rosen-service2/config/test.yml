@@ -10,5 +10,5 @@ chains:
       chunkSize: 1
 
 paths:
-  tokens: tests/config/rosen/tokensMap.json
-  contracts: tests/config/rosen
+  tokens: tests/config/tokensMap.json
+  contracts: tests/config/contracts.json
