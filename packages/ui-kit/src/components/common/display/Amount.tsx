@@ -207,6 +207,11 @@ const AmountBase = ({
     };
   }, [decimalLeadingZeroThreshold, decimalMaxFractionDigits, splittedValue]);
 
+  const isIntegerZero = useMemo(() => {
+    if (!splittedValue) return false;
+    return BigInt(splittedValue.number) === 0n;
+  }, [splittedValue]);
+
   return (
     <Stack
       inline
@@ -249,16 +254,27 @@ const AmountBase = ({
                   component="span"
                   whiteSpace="nowrap"
                 >
-                  {parts.number}
+                  <span style={{ fontSize: isIntegerZero ? '75%' : 'inherit' }}>
+                    {parts.number}
+                  </span>
                   {parts.fraction && (
                     <Typography
                       component="span"
-                      fontSize="75%"
-                      style={{ opacity: 0.7 }}
+                      fontSize={!isIntegerZero ? '75%' : 'inherit'}
                     >
                       .{!!parts.zeros && '0'}
                       {!!parts.zeros && (
-                        <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
+                        <Typography
+                          component="sub"
+                          style={{
+                            borderTop: '0.16em dotted',
+                            borderColor:
+                              'color-mix(in srgb, currentColor 60%, transparent)',
+                            fontSize: '0.75em',
+                          }}
+                        >
+                          {parts.zeros}
+                        </Typography>
                       )}
                       {parts.fraction}
                     </Typography>
