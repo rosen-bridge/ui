@@ -2,7 +2,7 @@ import { Network } from '@rosen-ui/types';
 
 import { BridgedAssetEntity, TokenEntity } from '../../../lib/entities';
 
-export class BridgedAssetMockData {
+export class BridgedAssetTestData {
   /**
    * Sample data for testing remove operations
    */
@@ -115,7 +115,7 @@ export class BridgedAssetMockData {
    *
    * @returns Not saved LockedTokenEntities
    */
-  static generateMockedBridgedEntity = (
+  static generateTestDataBridgedEntity = (
     tokens: TokenEntity[],
     amount: bigint = 1000n,
   ) => {

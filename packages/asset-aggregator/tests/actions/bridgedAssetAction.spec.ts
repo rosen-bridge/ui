@@ -7,7 +7,7 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 import { BridgedAssetEntity, TokenEntity } from '../../lib';
 import { BridgedAssetAction } from '../../lib/actions';
-import { BridgedAssetMockData } from '../mocked/actions/bridgedAssetAction.mock';
+import { BridgedAssetTestData } from '../mocked/actions/bridgedAssetAction.mock';
 import { createDatabase } from '../testUtils';
 
 interface BridgedAssetTestContext {
@@ -46,9 +46,9 @@ describe('BridgedAssetAction', () => {
       tokenRepository,
     }) => {
       // Insert required token first
-      await tokenRepository.insert(BridgedAssetMockData.SAMPLE_TOKENS[0]);
+      await tokenRepository.insert(BridgedAssetTestData.SAMPLE_TOKENS[0]);
 
-      const asset = BridgedAssetMockData.createSingleAsset();
+      const asset = BridgedAssetTestData.createSingleAsset();
 
       await action.store(asset);
 
@@ -73,11 +73,11 @@ describe('BridgedAssetAction', () => {
     }) => {
       // Insert required tokens first
       await tokenRepository.insert([
-        BridgedAssetMockData.SAMPLE_TOKENS[0],
-        BridgedAssetMockData.SAMPLE_TOKENS[1],
+        BridgedAssetTestData.SAMPLE_TOKENS[0],
+        BridgedAssetTestData.SAMPLE_TOKENS[1],
       ]);
 
-      const assets = BridgedAssetMockData.createMultipleAssets(2);
+      const assets = BridgedAssetTestData.createMultipleAssets(2);
 
       await action.store(assets);
 
@@ -101,15 +101,16 @@ describe('BridgedAssetAction', () => {
       tokenRepository,
       repository,
     }) => {
-      await tokenRepository.insert(BridgedAssetMockData.SAMPLE_TOKENS);
+      await tokenRepository.insert(BridgedAssetTestData.SAMPLE_TOKENS);
       const tokens = await tokenRepository.find();
       const bridgedEntities =
-        BridgedAssetMockData.generateMockedBridgedEntity(tokens);
+        BridgedAssetTestData.generateTestDataBridgedEntity(tokens);
       await repository.insert(bridgedEntities);
-      let remaining = await repository.find();
+      const remaining = await repository.find();
       await action.keepOnly(remaining[0].tokenId);
-      remaining = await repository.find();
-      expect(remaining).toHaveLength(1);
+      const dbRemaining = await repository.find();
+      expect(dbRemaining).toHaveLength(1);
+      expect(dbRemaining[0]).toEqual(remaining[0]);
     });
   });
 });

@@ -14,3 +14,10 @@ export interface TotalSupply {
   assetId: string;
   totalSupply: bigint;
 }
+
+export type AssetBalance = { [assetId: string]: AddressBalance[] };
+
+export interface AddressBalance {
+  address: string;
+  balance: bigint;
+}

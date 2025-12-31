@@ -7,7 +7,7 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 import { LockedAssetEntity, TokenEntity } from '../../lib';
 import { LockedAssetAction } from '../../lib/actions';
-import { LockedAssetMockData } from '../mocked/actions/lockedAssetAction.mock';
+import { LockedAssetTestData } from '../mocked/actions/lockedAssetAction.mock';
 import { createDatabase } from '../testUtils';
 
 interface LockedAssetTestContext {
@@ -46,9 +46,9 @@ describe('LockedAssetAction', () => {
       tokenRepository,
     }) => {
       // Insert required token first
-      await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS[0]);
+      await tokenRepository.insert(LockedAssetTestData.SAMPLE_TOKENS[0]);
 
-      const asset = LockedAssetMockData.createSingleAsset();
+      const asset = LockedAssetTestData.createSingleAsset();
       await action.store(asset);
       const stored = await repository.find();
       expect(stored).toHaveLength(1);
@@ -71,11 +71,11 @@ describe('LockedAssetAction', () => {
     }) => {
       // Insert required tokens first
       await tokenRepository.insert([
-        LockedAssetMockData.SAMPLE_TOKENS[0],
-        LockedAssetMockData.SAMPLE_TOKENS[1],
+        LockedAssetTestData.SAMPLE_TOKENS[0],
+        LockedAssetTestData.SAMPLE_TOKENS[1],
       ]);
 
-      const assets = LockedAssetMockData.createMultipleAssets(2);
+      const assets = LockedAssetTestData.createMultipleAssets(2);
       await action.store(assets);
       const stored = await repository.find();
       expect(stored).toHaveLength(2);
@@ -97,15 +97,16 @@ describe('LockedAssetAction', () => {
       tokenRepository,
       repository,
     }) => {
-      await tokenRepository.insert(LockedAssetMockData.SAMPLE_TOKENS);
+      await tokenRepository.insert(LockedAssetTestData.SAMPLE_TOKENS);
       const tokens = await tokenRepository.find();
       const lockedEntities =
-        LockedAssetMockData.generateMockedLockedEntity(tokens);
+        LockedAssetTestData.generateTestDataLockedEntity(tokens);
       await repository.insert(lockedEntities);
       let remaining = await repository.find();
       await action.keepOnly(remaining[0].tokenId);
-      remaining = await repository.find();
-      expect(remaining).toHaveLength(1);
+      const dbRemaining = await repository.find();
+      expect(dbRemaining).toHaveLength(1);
+      expect(dbRemaining[0]).toEqual(remaining[0]);
     });
   });
 });

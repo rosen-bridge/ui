@@ -1,10 +1,9 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { BridgedAssetEntity, LockedAssetEntity } from './entities';
-import { NetworkItem, TotalSupply } from './types';
+import { AssetBalance, NetworkItem, TotalSupply } from './types';
 
 export class TokensAnalyzer {
   protected lockedTokens: Omit<LockedAssetEntity, 'token'>[];
@@ -128,7 +127,7 @@ export class TokensAnalyzer {
       tokenId: token.tokenId,
     })?.[0];
 
-    // TODO: Update this part after totalSupply is removed from the Ergo network #1069
+    // TODO: improve updating (local:ergo/rosen-bridge/ui#1069)
     const assetTotalSupply = this.totalSupply
       .filter(
         (t) =>
