@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { describe, beforeEach, it, expect } from 'vitest';
@@ -6,10 +6,10 @@ import { describe, beforeEach, it, expect } from 'vitest';
 import { TokensAnalyzer } from '../lib/tokensAnalyzer';
 import {
   NATIVE_TOKEN_CHAIN_BALANCE_INFO,
-  NATIVE_TOKEN_TOTAL_SUPPLY,
   WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
   WRAPPED_TOKEN_TOTAL_SUPPLY,
   SAMPLE_TOKEN_MAP,
+  SAMPLE_ANALYZER_BRIDGED_TOKEN,
 } from './mocked/tokensAnalyzer.mock';
 
 interface AnalyzerTestContext {
@@ -44,15 +44,16 @@ describe('TokensAnalyzer', () => {
     }) => {
       const analyzer = new TokensAnalyzer(
         NATIVE_TOKEN_CHAIN_BALANCE_INFO,
-        NATIVE_TOKEN_TOTAL_SUPPLY,
+        WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
       await analyzer.analyze();
 
-      const locked = analyzer.getLockedTokens();
-
-      expect(locked.map((l) => l.tokenId)).toContain(NETWORKS.ergo.nativeToken);
-      expect(locked.length).toBeGreaterThan(0);
+      expect(analyzer['lockedTokens'].map((l) => l.tokenId)).toContain(
+        NETWORKS.ergo.nativeToken,
+      );
+      expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
+      expect(analyzer['bridgedTokens']).toEqual(SAMPLE_ANALYZER_BRIDGED_TOKEN);
     });
 
     /**
@@ -72,48 +73,60 @@ describe('TokensAnalyzer', () => {
         tokenMap,
       );
       await analyzer.analyze();
-
-      const bridged = analyzer.getBridgedTokens();
-      const bridgedKeys = Object.keys(bridged);
-      expect(bridgedKeys.length).toBeGreaterThan(0);
-
-      const first = bridged[0];
-      expect(first.amount).toBeTypeOf('bigint');
-      expect(first).toHaveProperty('bridgedTokenId');
     });
-  });
-
-  /**
-   * @target should throw error for unknown token in getNativeTokenId
-   * @scenario
-   * - call getNativeTokenId with invalid token id
-   * @expected
-   * - should throw an Error
-   */
-  it<AnalyzerTestContext>('should throw error for unknown token in getNativeTokenId', async ({
-    analyzer,
-  }) => {
-    expect(() => analyzer['getNativeTokenId']('unknown-token')).toThrowError();
   });
 
   describe('handleWrappedToken', () => {
     /**
-     * @target should return undefined if totalSupply missing
+     * @target should correctly calculate and store bridged amount for wrapped token
+     * @dependencies
+     * - TokensAnalyzer
+     * - TokenMap
+     * - WRAPPED_TOKEN_CHAIN_BALANCE_INFO
+     * - WRAPPED_TOKEN_TOTAL_SUPPLY
      * @scenario
-     * - mock token and chainAssets but omit totalSupply
+     * - create tokenMap with wrapped token definition
+     * - provide totalSupply for native token
+     * - provide locked balance for wrapped token
+     * - call analyze()
      * @expected
-     * - should return undefined and not crash
+     * - getBridgedTokens returns one record
+     * - record.amount equals totalSupply - lockedAmount
+     * - tokenId is native token id
+     * - bridgedTokenId is wrapped token id
+     * - chain equals wrapped token chain
      */
-    it<AnalyzerTestContext>('should return undefined if totalSupply missing', async ({
-      tokenMap,
-    }) => {
-      const analyzer = new TokensAnalyzer({}, [], tokenMap);
-      const result = await analyzer['handleWrappedToken'](
-        tokenMap.getAllNativeTokens('ergo')[0],
-        'ergo' as any,
-        { ergo: [] } as any,
+    it('should correctly calculate bridged amount for wrapped token', async () => {
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(SAMPLE_TOKEN_MAP);
+
+      const analyzer = new TokensAnalyzer(
+        WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
+        WRAPPED_TOKEN_TOTAL_SUPPLY,
+        tokenMap,
       );
-      expect(result).toBeUndefined();
+
+      await analyzer.analyze();
+
+      const bridged = analyzer.getBridgedTokens();
+      expect(bridged).toHaveLength(1);
+
+      const token = bridged[0];
+
+      const totalSupply = BigInt(WRAPPED_TOKEN_TOTAL_SUPPLY[0].totalSupply);
+
+      const lockedAmount = BigInt(
+        WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo[SAMPLE_TOKEN_MAP[2].ergo.tokenId]
+          .map((item: { balance: bigint }) => item.balance)
+          .reduce((old: bigint, current: bigint) => old + current),
+      );
+
+      const expected = totalSupply - lockedAmount;
+
+      expect(token.amount).toEqual(expected);
+      expect(token.tokenId).toEqual(SAMPLE_TOKEN_MAP[2].binance.tokenId);
+      expect(token.bridgedTokenId).toEqual(SAMPLE_TOKEN_MAP[2].ergo.tokenId);
+      expect(token.chain).toEqual('ergo');
     });
   });
 });

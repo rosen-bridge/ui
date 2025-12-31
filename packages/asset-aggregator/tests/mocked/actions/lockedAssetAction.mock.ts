@@ -1,6 +1,6 @@
 import { LockedAssetEntity, TokenEntity } from '../../../lib/entities';
 
-export class LockedAssetMockData {
+export class LockedAssetTestData {
   /**
    * Sample data for testing remove operations
    */
@@ -49,7 +49,7 @@ export class LockedAssetMockData {
    *
    * @returns Not saved LockedTokenEntities
    */
-  static generateMockedLockedEntity = (
+  static generateTestDataLockedEntity = (
     tokens: TokenEntity[],
     amount: bigint = 1000n,
   ) => {

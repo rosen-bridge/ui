@@ -34,7 +34,6 @@
     "@rosen-bridge/abstract-logger": "^3.0.1",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/json-bigint": "^0.2.0",
-    "@rosen-ui/asset-data-adapter": "^0.2.0",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/types": "^0.4.0",
     "@vitest/coverage-istanbul": "^3.1.4",

@@ -5,10 +5,6 @@
     "strictPropertyInitialization": false,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["tests", "lib", "vitest.config.ts"],
-  "references": [
-    { "path": "../types" },
-    { "path": "../constants" },
-    { "path": "../asset-data-adapter" }
-  ]
+  "include": ["tests", "lib"],
+  "references": [{ "path": "../types" }, { "path": "../constants" }]
 }
