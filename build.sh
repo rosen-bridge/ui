@@ -51,6 +51,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
 fi
 
 if [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+  npm run build --workspace packages/rosen-statistics-entity
   npm run build --workspace packages/public-status
   npm run build --workspace packages/data-source
 fi
