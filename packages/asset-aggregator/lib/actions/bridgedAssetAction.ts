@@ -25,7 +25,11 @@ export class BridgedAssetAction {
    * @param assets - Single BridgedAssetEntity or array of BridgedAssetEntity objects to store
    * @returns Promise that resolves when all assets are saved
    */
-  store = async (assets: BridgedAssetEntity[] | BridgedAssetEntity) => {
+  store = async (
+    assets:
+      | Omit<BridgedAssetEntity, 'token'>[]
+      | Omit<BridgedAssetEntity, 'token'>,
+  ) => {
     if (!(assets instanceof Array)) assets = [assets];
     await this.repository.save(assets);
     this.logger.debug(

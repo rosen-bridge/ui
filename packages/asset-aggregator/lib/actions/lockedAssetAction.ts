@@ -25,7 +25,11 @@ export class LockedAssetAction {
    * @param assets - Single LockedAssetEntity or array of LockedAssetEntity objects to store
    * @returns Promise that resolves when all assets are saved
    */
-  store = async (assets: LockedAssetEntity[] | LockedAssetEntity) => {
+  store = async (
+    assets:
+      | Omit<LockedAssetEntity, 'token'>[]
+      | Omit<LockedAssetEntity, 'token'>,
+  ) => {
     if (!(assets instanceof Array)) assets = [assets];
     await this.repository.save(assets);
     this.logger.debug(
@@ -38,15 +42,12 @@ export class LockedAssetAction {
    * @param tokenIds array of tokenIds to delete
    * @param chunkSize size of chunks
    */
-  protected async deleteInChunks(
-    tokenIds: string[],
-    chunkSize = DEFAULT_DELETE_CHUNK_SIZE,
-  ) {
+  protected async deleteInChunks(tokenIds: string[]) {
     let offset = 0;
     while (offset < tokenIds.length) {
-      const chunk = tokenIds.slice(offset, offset + chunkSize);
+      const chunk = tokenIds.slice(offset, offset + DEFAULT_DELETE_CHUNK_SIZE);
       await this.repository.delete({ tokenId: In(chunk) });
-      offset += chunkSize;
+      offset += DEFAULT_DELETE_CHUNK_SIZE;
     }
     if (tokenIds.length)
       this.logger.debug(`Deleted tokens ${tokenIds} from the database`);

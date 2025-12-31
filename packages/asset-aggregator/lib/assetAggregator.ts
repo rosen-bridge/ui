@@ -1,12 +1,10 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
-import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
-import { BridgedAssetEntity, LockedAssetEntity } from './entities';
 import { TokensAnalyzer } from './tokensAnalyzer';
-import { NetworkItem, TotalSupply } from './types';
+import { AssetBalance, NetworkItem, TotalSupply } from './types';
 
 export class AssetAggregator {
   lockedAssetAction: LockedAssetAction;
@@ -80,13 +78,11 @@ export class AssetAggregator {
     const lockedTokens = analyzer.getLockedTokens();
 
     // store used locked and bridged tokens
-    await this.bridgedAssetAction.store(bridgedTokens as BridgedAssetEntity[]);
-    await this.lockedAssetAction.store(lockedTokens as LockedAssetEntity[]);
+    await this.bridgedAssetAction.store(bridgedTokens);
+    await this.lockedAssetAction.store(lockedTokens);
     // remove unused locked and bridged tokens
     await this.bridgedAssetAction.keepOnly(
-      Object.values(bridgedTokens)
-        .flat()
-        .map((t) => t.tokenId),
+      Object.values(bridgedTokens).map((t) => t.tokenId),
     );
     await this.lockedAssetAction.keepOnly(
       Object.values(lockedTokens)
