@@ -178,7 +178,7 @@ describe('AssetCalculator', () => {
      * - should call lockedAssetModel.upsertAsset 3 times(for each token in
      * tokenMap)
      * - should call lockedAssetModel.removeAssets with empty array
-     * - should store 3 new tokenMap assets successfully
+     * - should store 6 new tokenMap assets successfully
      */
     it('should store asset and token data for all bridged tokens on all chains', async () => {
       const dataSource = await initDatabase();
@@ -232,7 +232,7 @@ describe('AssetCalculator', () => {
       expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
       expect(removeLockedAssetSpy).to.have.toBeCalledWith([]);
-      expect(insertTokenSpy).toBeCalledTimes(tokenMapData.length);
+      expect(insertTokenSpy).toBeCalledTimes(6);
       expect(
         allStoredBridgedAssets.sort((a, b) =>
           a.tokenId.localeCompare(b.tokenId),
@@ -268,7 +268,9 @@ describe('AssetCalculator', () => {
         [
           tokenMapData[0].ergo.tokenId,
           tokenMapData[1].ergo.tokenId,
+          tokenMapData[1].cardano.tokenId,
           tokenMapData[2].cardano.tokenId,
+          tokenMapData[2].ergo.tokenId,
         ].sort(),
       );
     });
