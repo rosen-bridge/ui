@@ -93,7 +93,17 @@ export const HealthParamCard = ({
       }}
       backgroundColor={colors.cardBackground}
     >
-      <CardHeader>
+      <CardHeader
+        action={
+          lastTrialErrorTime && (
+            <Tooltip title={lastTrialErrorMessage}>
+              <SvgIcon color="warning">
+                <ExclamationTriangle />
+              </SvgIcon>
+            </Tooltip>
+          )
+        }
+      >
         <Stack spacing={2} direction="row">
           <SvgIcon color={colors.cardColor as Colors}>
             <Icon />
@@ -102,13 +112,6 @@ export const HealthParamCard = ({
             <Typography color={colors.cardColor} fontWeight="700">
               {lastCheck ? status : 'Unknown'}
             </Typography>
-            {lastTrialErrorTime && (
-              <Tooltip title={lastTrialErrorMessage}>
-                <SvgIcon color="warning">
-                  <ExclamationTriangle />
-                </SvgIcon>
-              </Tooltip>
-            )}
           </CardTitle>
         </Stack>
       </CardHeader>

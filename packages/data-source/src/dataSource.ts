@@ -31,6 +31,15 @@ import {
   TxEntity,
   migrations as publicStatusMigrations,
 } from '@rosen-ui/public-status';
+import {
+  BridgedAmountEntity,
+  BridgeFeeEntity,
+  EventCountEntity,
+  MetricEntity,
+  UserEventEntity,
+  WatcherCountEntity,
+  migrations as statisticsMigrations,
+} from '@rosen-ui/rosen-statistics-entity';
 
 export const getDataSource = (
   postgresUrl: string,
@@ -58,6 +67,12 @@ export const getDataSource = (
       CommitmentEntity,
       TxEntity,
       TokenPriceEntity,
+      BridgedAmountEntity,
+      BridgeFeeEntity,
+      EventCountEntity,
+      MetricEntity,
+      UserEventEntity,
+      WatcherCountEntity,
     ],
     migrations: [
       ...watcherDataMigrations.postgres,
@@ -66,6 +81,7 @@ export const getDataSource = (
       ...assetCalculatorMigrations.postgres,
       ...publicStatusMigrations.postgres,
       ...TokenPriceMigrations.postgres,
+      ...statisticsMigrations.postgres,
     ],
   });
 };
