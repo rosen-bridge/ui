@@ -30,10 +30,8 @@ RUN adduser --disabled-password --home /app --gecos "ErgoPlatform" ergo && \
 
 RUN npm i -g npm@11.6.2
 WORKDIR /app
-COPY package* ./
-COPY apps/rosen-service/package.json ./apps/rosen-service/
+COPY . .
 RUN --mount=type=cache,target=/root/.npm npm ci
-COPY . /app
 RUN ./build.sh rosen-service
 USER ergo
 WORKDIR  /app/apps/rosen-service/
