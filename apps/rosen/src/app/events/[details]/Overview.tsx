@@ -17,8 +17,12 @@ import { getAddressUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { Section } from './Section';
+import { useTokenMap } from '@/hooks';
+import { NETWORKS } from '@rosen-ui/constants';
 
 export const Overview = ({ id }: { id: string }) => {
+  const tokenMap = useTokenMap();
+
   const { error, data, isLoading, mutate } = useSWR(
     `/v1/events/${id}`,
     fetcher,
@@ -55,6 +59,7 @@ export const Overview = ({ id }: { id: string }) => {
           <Token
             loading={isLoading}
             name={data?.lockToken?.name}
+            tokenId={tokenMap.getTokenSet(data?.lockToken?.tokenId)?.[NETWORKS.ergo.key]?.tokenId}
             reverse
             overrides={{
               tablet: {

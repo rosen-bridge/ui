@@ -20,8 +20,12 @@ import {
 
 import { BridgedList } from './BridgedList';
 import { AssetsFullData } from './getFullAssetData';
+import { useTokenMap } from '@/hooks';
+import { NETWORKS } from '@rosen-ui/constants';
 
 const Content = ({ value }: ViewGridSidebarProps) => {
+  const tokenMap = useTokenMap();
+
   if (!value) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
@@ -35,7 +39,12 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   return (
     <Columns width="250px" count={2} rule gap="32px">
       <Label label="Token" orientation="horizontal">
-        <Token name={value.name} href={value.tokenUrl} reverse />
+        <Token
+          name={value.name}
+          tokenId={tokenMap.getTokenSet(value?.id)?.[NETWORKS.ergo.key]?.tokenId}
+          href={value.tokenUrl}
+          reverse
+        />
       </Label>
       <Label label="Network">
         <Network name={value.chain} reverse />

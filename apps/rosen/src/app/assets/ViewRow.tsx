@@ -21,6 +21,8 @@ import {
 
 import { BridgedList } from './BridgedList';
 import { AssetsFullData } from './getFullAssetData';
+import { NETWORKS } from '@rosen-ui/constants';
+import { useTokenMap } from '@/hooks';
 
 export type ViewRowProps = {
   current?: AssetsFullData;
@@ -35,6 +37,8 @@ export const ViewRow = ({
   isLoading,
   setCurrent,
 }: ViewRowProps) => {
+  const tokenMap = useTokenMap();
+
   return (
     <TableGrid>
       <TableGridHead>
@@ -59,7 +63,7 @@ export const ViewRow = ({
             {!isLoading && (
               <TableGridBodyRow>
                 <TableGridBodyCol>
-                  <Token href={item.tokenUrl} name={item.name} />
+                  <Token href={item.tokenUrl} name={item.name} tokenId={tokenMap.getTokenSet(item?.id)?.[NETWORKS.ergo.key]?.tokenId} />
                 </TableGridBodyCol>
                 <TableGridBodyCol>
                   <Network name={item.chain} />

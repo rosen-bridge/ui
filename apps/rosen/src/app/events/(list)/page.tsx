@@ -23,6 +23,7 @@ import { ApiEventResponse, EventItem } from '@/types';
 
 import { getFilters, sorts } from './config';
 import { EventSidebar } from './EventSidebar';
+import { NETWORKS } from '@rosen-ui/constants';
 
 const Page = () => {
   const dense = useBreakpoint('laptop-down');
@@ -132,16 +133,17 @@ const Page = () => {
                 !item
                   ? undefined
                   : {
-                      amount: item.amount,
-                      decimal: item.lockToken?.significantDecimals,
-                      fromChain: item.fromChain,
-                      href: `/events/${item.eventId}`,
-                      id: item.eventId,
-                      status: item.status,
-                      toChain: item.toChain,
-                      token: item.lockToken?.name,
-                      timestamp: item.timestamp,
-                    }
+                    amount: item.amount,
+                    decimal: item.lockToken?.significantDecimals,
+                    fromChain: item.fromChain,
+                    href: `/events/${item.eventId}`,
+                    id: item.eventId,
+                    status: item.status,
+                    toChain: item.toChain,
+                    token: item.lockToken?.name,
+                    tokenId: tokenMap.getTokenSet(item?.lockToken?.tokenId)?.[NETWORKS.ergo.key]?.tokenId,
+                    timestamp: item.timestamp,
+                  }
               }
               onClick={() => !isLoading && setCurrent(item)}
             />

@@ -12,6 +12,8 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import { AssetsFullData } from './getFullAssetData';
+import { useTokenMap } from '@/hooks';
+import { NETWORKS } from '@rosen-ui/constants';
 
 export type ViewGridProps = {
   current?: AssetsFullData;
@@ -26,6 +28,7 @@ export const ViewGrid = ({
   isLoading,
   setCurrent,
 }: ViewGridProps) => {
+  const tokenMap = useTokenMap();
   return (
     <GridContainer minWidth="260px" gap="8px">
       {items.map((item, index) => (
@@ -45,7 +48,12 @@ export const ViewGrid = ({
               spacing={1}
               style={{ maxWidth: 600 }}
             >
-              <Token loading={isLoading} name={item.name} style={{ flex: 1 }} />
+              <Token
+                loading={isLoading}
+                name={item.name}
+                tokenId={tokenMap.getTokenSet(item?.id)?.[NETWORKS.ergo.key]?.tokenId}
+                style={{ flex: 1 }}
+              />
               <Chip
                 color="neutral"
                 loading={isLoading}
