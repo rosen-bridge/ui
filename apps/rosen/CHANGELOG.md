@@ -1,5 +1,35 @@
 # @rosen-bridge/rosen-app
 
+## 4.11.0
+
+### Minor Changes
+
+- Replace warning icon with dash for empty field in Event Details page
+- Hide `Payment Tx` and `Reward Tx` fields when status is `fraud` on `EventDetails` page
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.1.0
+  - @rosen-bridge/icons@3.3.0
+  - @rosen-ui/asset-calculator@2.3.0
+  - @rosen-network/binance@0.4.3
+  - @rosen-network/bitcoin@2.4.2
+  - @rosen-network/bitcoin-runes@1.0.2
+  - @rosen-network/cardano@2.5.2
+  - @rosen-network/doge@0.4.2
+  - @rosen-network/ergo@2.5.3
+  - @rosen-network/ethereum@0.4.3
+  - @rosen-ui/data-source@0.2.1
+  - @rosen-ui/metamask-wallet@2.1.6
+  - @rosen-ui/wallet-connect@0.2.6
+  - @rosen-ui/okx-wallet@2.1.4
+  - @rosen-ui/xverse-wallet@0.3.2
+  - @rosen-ui/eternl-wallet@3.1.4
+  - @rosen-ui/lace-wallet@3.1.4
+  - @rosen-ui/my-doge-wallet@1.1.6
+  - @rosen-ui/nautilus-wallet@3.1.4
+
 ## 4.10.1
 
 ### Patch Changes
