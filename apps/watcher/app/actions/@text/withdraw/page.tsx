@@ -18,7 +18,7 @@ const WithdrawalText = () => {
       <Typography fontWeight="bold" sx={{ mt: 2 }}>
         Caution
       </Typography>
-      <Typography sx={{ mt: 2 }}>
+      <Typography component="div" sx={{ mt: 2 }}>
         To secure your assets, send two of your three WID tokens to another
         wallet (preferably a cold wallet) as soon as possible after setting up
         this Watcher.

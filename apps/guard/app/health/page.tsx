@@ -77,13 +77,13 @@ const Health = () => {
 
   return isLoading ? (
     <Grid container spacing={3}>
-      <Grid item mobile={12} tablet={6} laptop={4} key={0}>
+      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={0}>
         <HealthParamCardSkeleton />
       </Grid>
-      <Grid item mobile={12} tablet={6} laptop={4} key={1}>
+      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={1}>
         <HealthParamCardSkeleton />
       </Grid>
-      <Grid item mobile={12} tablet={6} laptop={4} key={2}>
+      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={2}>
         <HealthParamCardSkeleton />
       </Grid>
     </Grid>
@@ -93,7 +93,7 @@ const Health = () => {
         {data
           .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
           .map((item) => (
-            <Grid item mobile={12} tablet={6} laptop={4} key={item.id}>
+            <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={item.id}>
               <HealthParamCard
                 {...item}
                 checking={checking.includes(item.id)}

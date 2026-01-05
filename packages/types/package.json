@@ -23,7 +23,7 @@
     "@rosen-ui/constants": "^1.0.0"
   },
   "devDependencies": {
-    "@mui/material": "^5.13.7"
+    "@mui/material": "^7.3.6"
   },
   "peerDependencies": {
     "react": "^18.3.1"

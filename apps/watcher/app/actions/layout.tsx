@@ -133,10 +133,8 @@ const Actions = ({ form, text }: LayoutProps) => {
       </ScrollableContainer>
       <Box mt={3}>
         <Grid container spacing={{ mobile: 0, tablet: 6 }}>
-          <Grid item mobile={12} tablet={6} laptop={4}>
-            {text}
-          </Grid>
-          <Grid item mobile={12} tablet={6} laptop={8}>
+          <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }}>{text}</Grid>
+          <Grid flexGrow={1} size={{ mobile: 12, tablet: 6, laptop: 8 }}>
             {form}
           </Grid>
         </Grid>

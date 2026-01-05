@@ -235,11 +235,15 @@ const Actions = () => {
 
   return (
     <Root>
-      <Grid container spacing={3}>
-        <Grid item mobile={12} tablet={4}>
+      <Grid container spacing={3} style={{ width: '100%' }}>
+        <Grid size={{ mobile: 12, tablet: 4 }} flexBasis="auto">
           {renderTabs()}
         </Grid>
-        <Grid item mobile={12} tablet={8} style={{ overflow: 'hidden' }}>
+        <Grid
+          size={{ mobile: 12, tablet: 8 }}
+          flexGrow={1}
+          style={{ overflow: 'hidden' }}
+        >
           {renderTabPanels()}
         </Grid>
       </Grid>

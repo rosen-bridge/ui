@@ -23,6 +23,10 @@ declare module '@mui/material/styles' {
   interface PaletteOptions {
     background?: Partial<TypeBackground>;
   }
+
+  interface Shape {
+    borderRadius: number;
+  }
 }
 
 export * from 'react-sticky-box';

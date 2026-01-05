@@ -72,7 +72,9 @@ export const ProcessLabel = ({ icon, info, step, onClick }: LabelProps) => {
 
   const content = (
     <StepLabel
-      StepIconComponent={icon}
+      slots={{
+        stepIcon: icon,
+      }}
       sx={{
         'cursor': 'text ',
         'userSelect': 'none',

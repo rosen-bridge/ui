@@ -115,7 +115,7 @@ export const SortField = ({
   return (
     <Root {...rest}>
       <Grid container alignItems="center" wrap="nowrap" width="auto" gap={1}>
-        <Grid item flexGrow={1}>
+        <Grid flexGrow={1}>
           {dense ? (
             <IconButton disabled={disabled} onClick={handleMenuOpen}>
               <SvgIcon>
@@ -201,10 +201,10 @@ export const SortField = ({
             ))}
           </Menu>
         </Grid>
-        <Grid item alignSelf="stretch">
+        <Grid alignSelf="stretch">
           <Divider orientation="vertical" />
         </Grid>
-        <Grid item>
+        <Grid>
           <IconButton disabled={disabled} onClick={handleSortOrderChange}>
             <SvgIcon>
               {value?.order == 'ASC' ? <SortAmountDown /> : <SortAmountUp />}
