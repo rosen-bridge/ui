@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 3.3.0
+
+### Minor Changes
+
+- Network logos are updated from monochrome to colored versions
+
 ## 3.2.0
 
 ### Minor Changes

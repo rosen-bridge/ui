@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/bitcoin",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "repository": {
@@ -24,7 +24,7 @@
   "dependencies": {
     "@rosen-bridge/address-codec": "^1.0.1",
     "@rosen-bridge/bitcoin-utxo-selection": "^2.0.1",
-    "@rosen-bridge/icons": "^3.1.0",
+    "@rosen-bridge/icons": "^3.3.0",
     "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-network/base": "^0.5.1",
     "@rosen-ui/constants": "^1.0.0",

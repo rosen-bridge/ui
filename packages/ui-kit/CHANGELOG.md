@@ -1,5 +1,18 @@
 # @rosen-bridge/ui-kit
 
+## 5.1.0
+
+### Minor Changes
+
+- Upgrade `Mui` version to `^7.3.5`
+- Fix issue where the warning icon tooltip breaks the `HealthParamCard`
+- Fix misaligned elements in `TokensList` by updating CSS grid configuration
+- Remove `FullCard` Component
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/icons@3.3.0
+
 ## 5.0.1
 
 ### Patch Changes
