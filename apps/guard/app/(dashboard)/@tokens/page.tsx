@@ -62,7 +62,7 @@ const Token = ({ chain }: { chain: Network }) => {
 
 const Tokens = () => {
   return (
-    <Grid item mobile={12}>
+    <Grid size={{ mobile: 12 }}>
       <CarouselProvider>
         <Stack spacing="0.5rem">
           <Stack direction="row" align="center" justify="between">
