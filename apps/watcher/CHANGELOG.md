@@ -1,5 +1,18 @@
 # @rosen-bridge/watcher-app
 
+## 3.9.0
+
+### Minor Changes
+
+- Fix decimal wording in amount input error message on `Withdraw` page
+- Replace `FullCard` component with `Card` component
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.1.0
+  - @rosen-bridge/icons@3.3.0
+
 ## 3.8.1
 
 ### Patch Changes
