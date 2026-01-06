@@ -1,3 +1,5 @@
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
+
 import { BinanceEvmRpcDataAdapter } from './binanceEvmRpcDataAdapter';
 import { BitcoinEsploraDataAdapter } from './bitcoinEsploraDataAdapter';
 import { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
@@ -6,6 +8,9 @@ import { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
 import { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
 
 export type AssetBalance = { [assetId: string]: AddressBalance[] };
+
+export type TotalChainsType = (typeof NETWORKS_KEYS)[number];
+export type EVMChainsType = 'ethereum' | 'binance';
 
 export interface AddressBalance {
   address: string;

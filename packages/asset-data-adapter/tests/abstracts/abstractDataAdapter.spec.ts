@@ -1,10 +1,13 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, expect } from 'vitest';
+import { NETWORKS } from '@rosen-ui/constants';
+import { describe, it, expect, vi } from 'vitest';
 
+import { ERG_TOTAL_SUPPLY } from '../../lib/constants';
 import { AssetBalance } from '../../lib/types';
 import {
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
+  TestEvmRpcAdapter,
 } from '../mocked';
 import { TestAdapter } from '../mocked';
 
@@ -67,6 +70,78 @@ describe('AbstractDataAdapter', () => {
       const result: AssetBalance = await adapter.fetch();
 
       expect(result).toEqual({});
+    });
+  });
+
+  describe('getAllTokensTotalSupply', () => {
+    /**
+     * @target should return totalSupply for all tokens on the chain
+     * @scenario
+     * - tokenMap initialized
+     * - create instance from simple TestAdapter
+     * - call the getAllTokensTotalSupply method of the adapter
+     * @expected
+     * - result length must be equal to the tokens of the chain
+     * - items of result must be as expected value
+     */
+    it('should return totalSupply for all tokens on the chain', async () => {
+      const mockTokenMap = new TokenMap();
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      const adapter = new TestAdapter(['0xAddress'], mockTokenMap);
+
+      const result = await adapter.getAllTokensTotalSupply();
+
+      const chainWrappedTokens = adapter['getAllWrappedTokens']();
+
+      expect(Object.keys(result)).toHaveLength(chainWrappedTokens.length + 1); // plus one native token
+
+      Object.entries(result).forEach(([k, v]) => {
+        expect(v).toStrictEqual(
+          mockTokenMap.wrapAmount(
+            k,
+            k == NETWORKS.ergo.nativeToken ? ERG_TOTAL_SUPPLY : 5000n,
+            adapter.chain,
+          ),
+        );
+      });
+    });
+
+    /**
+     * @target should throw if one of the token's totalSupply cannot be fetched
+     * @scenario
+     * - Mock the totalSupply method to return undefined at second call
+     * - create an instance of the TestEvmRpcAdapter
+     * - call the getAllTokensTotalSupply method of the adapter
+     * @expected
+     * - calling getAllTokensTotalSupply is expected to throw an error
+     */
+    it('should throw if any token totalSupply cannot be fetched', async () => {
+      const totalSupplyMock = vi
+        .fn()
+        .mockResolvedValueOnce(5000n)
+        .mockResolvedValueOnce(undefined);
+
+      vi.doMock('ethers', () => {
+        const Contract = vi.fn().mockImplementation(() => ({
+          totalSupply: totalSupplyMock,
+        }));
+        const JsonRpcProvider = vi.fn().mockImplementation(() => ({}));
+
+        return { ethers: { Contract }, Contract, JsonRpcProvider };
+      });
+
+      const mockTokenMap = new TokenMap();
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      const adapter = new TestEvmRpcAdapter(
+        ['0xAddress'],
+        mockTokenMap,
+        { url: 'http://rpc', authToken: '' },
+        100,
+      );
+
+      await expect(adapter.getAllTokensTotalSupply()).rejects.toThrow();
     });
   });
 });

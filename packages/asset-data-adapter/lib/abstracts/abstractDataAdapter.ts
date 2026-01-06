@@ -1,10 +1,17 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import {
+  NATIVE_TOKEN,
+  RosenAmount,
+  RosenChainToken,
+  TokenMap,
+} from '@rosen-bridge/tokens';
+import { NETWORKS } from '@rosen-ui/constants';
 
-import { AssetBalance, ChainAssetBalance } from '../types';
+import { NATIVE_TOKENS_TOTAL_SUPPLIES } from '../constants';
+import { AssetBalance, ChainAssetBalance, TotalChainsType } from '../types';
 
 export abstract class AbstractDataAdapter {
-  abstract chain: string;
+  abstract chain: TotalChainsType;
 
   constructor(
     protected addresses: string[],
@@ -51,4 +58,51 @@ export abstract class AbstractDataAdapter {
    * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
   abstract getAddressAssets: (address: string) => Promise<ChainAssetBalance[]>;
+
+  /**
+   * return all wrapped tokens of the chain
+   *
+   * @return {Promise<RosenChainToken[]>}
+   */
+  protected getAllWrappedTokens = (): RosenChainToken[] => {
+    return this.tokenMap
+      .getConfig()
+      .filter(
+        (ts) =>
+          Object.keys(ts).includes(this.chain) &&
+          ts[this.chain].type != NATIVE_TOKEN,
+      )
+      .map((ts) => ts[this.chain]);
+  };
+
+  /**
+   * Fetches raw totalSupply for all tokens on this chain.
+   *
+   * @returns {Promise<Record<string, RosenAmount>>} tokenId → raw totalSupply
+   */
+  getAllTokensTotalSupply = async (): Promise<Record<string, RosenAmount>> => {
+    const nativeTokenTotalSupply = NATIVE_TOKENS_TOTAL_SUPPLIES[this.chain];
+    const totalSupplies: { [key: string]: RosenAmount } = {
+      [NETWORKS[this.chain].nativeToken]: this.tokenMap.wrapAmount(
+        NETWORKS[this.chain].nativeToken,
+        nativeTokenTotalSupply,
+        this.chain,
+      ),
+    };
+    for (const wToken of this.getAllWrappedTokens())
+      totalSupplies[wToken.tokenId] = this.tokenMap.wrapAmount(
+        wToken.tokenId,
+        await this.getRawTotalSupply(wToken),
+        this.chain,
+      );
+    return totalSupplies;
+  };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param token - wrapped token info
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  abstract getRawTotalSupply: (token: RosenChainToken) => Promise<bigint>;
 }

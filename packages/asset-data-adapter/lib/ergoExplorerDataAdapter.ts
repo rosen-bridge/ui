@@ -1,5 +1,5 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -7,7 +7,7 @@ import { AbstractDataAdapter } from './abstracts';
 import { ChainAssetBalance, ErgoExplorerDataAdapterAuthParams } from './types';
 
 export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
-  chain: string = NETWORKS.ergo.key;
+  chain = NETWORKS.ergo.key;
   protected explorerApi;
 
   constructor(
@@ -42,5 +42,24 @@ export class ErgoExplorerDataAdapter extends AbstractDataAdapter {
       }),
     );
     return assets;
+  };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param wrappedTokenId - Identifier of the wrapped token.
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  getRawTotalSupply = async (token: RosenChainToken) => {
+    const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(
+      token.tokenId,
+    );
+    if (tokenDetail) {
+      this.logger.debug(
+        `Total supply of token [${token.tokenId}] is [${tokenDetail.emissionAmount}]`,
+      );
+      return tokenDetail.emissionAmount;
+    }
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
   };
 }

@@ -1,13 +1,17 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
-import { ChainAssetBalance, EvmRpcDataAdapterAuthParams } from '../types';
+import {
+  ChainAssetBalance,
+  EVMChainsType,
+  EvmRpcDataAdapterAuthParams,
+} from '../types';
 import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
-  abstract chain: string;
+  abstract chain: EVMChainsType;
   protected fetchOffset: number;
   protected readonly provider: JsonRpcProvider;
 
@@ -77,5 +81,27 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     if (this.fetchOffset >= supportedTokens.length) this.fetchOffset = 0;
 
     return assets;
+  };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param wrappedTokenId - Identifier of the wrapped token.
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  getRawTotalSupply = async (token: RosenChainToken) => {
+    const contract = new ethers.Contract(
+      token.tokenId,
+      PartialERC20ABI,
+      this.provider,
+    );
+    const totalSupply = await contract.totalSupply();
+    if (totalSupply) {
+      this.logger.debug(
+        `Total supply of token [${token.tokenId}] on the [${this.chain}] chain is [${totalSupply}]`,
+      );
+      return totalSupply;
+    }
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
   };
 }

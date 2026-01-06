@@ -50,4 +50,59 @@ describe('CardanoKoiosDataAdapter', () => {
       expect(result).toEqual(CardanoAdapterGetAddressAssetsResult);
     });
   });
+
+  describe('getRawTotalSupply', () => {
+    it<TestContext>('should return total supply for existing wrapped token' /**
+     * @target should return total supply for existing wrapped token
+     * @scenario
+     * - adapter.koiosApi.assetInfo is mocked to return a single asset with total_supply
+     * - token.extra.policyId and token.extra.assetName match the mocked asset
+     * @expected
+     * - method returns the total_supply as bigint
+     * - assetInfo is called with correct _asset_list parameter
+     */, async ({ adapter }) => {
+      const token = adapter['getAllWrappedTokens']().at(0)!;
+
+      adapter['koiosApi'].assetInfo = vi
+        .fn()
+        .mockResolvedValue([{ total_supply: '123456789' }]);
+
+      const result = await adapter.getRawTotalSupply(token);
+
+      expect(result).toBe(123456789n);
+      expect(adapter['koiosApi'].assetInfo).toHaveBeenCalledWith({
+        _asset_list: [['policy1', 'token1']],
+      });
+    });
+
+    it<TestContext>('should throw if assetInfo returns empty array' /**
+     * @target should throw if assetInfo returns empty array
+     * @scenario
+     * - adapter.koiosApi.assetInfo is mocked to return []
+     * - token.extra.policyId and token.extra.assetName are given
+     * @expected
+     * - method throws an error indicating total supply is not calculable
+     */, async ({ adapter }) => {
+      const token = adapter['getAllWrappedTokens']().at(0)!;
+
+      adapter['koiosApi'].assetInfo = vi.fn().mockResolvedValue([]);
+
+      await expect(adapter.getRawTotalSupply(token)).rejects.toThrow();
+    });
+
+    it<TestContext>('should throw if assetInfo returns object without total_supply' /**
+     * @target should throw if assetInfo returns object without total_supply
+     * @scenario
+     * - adapter.koiosApi.assetInfo is mocked to return [{}]
+     * - token.extra.policyId and token.extra.assetName are given
+     * @expected
+     * - method throws an error indicating total supply is not calculable
+     */, async ({ adapter }) => {
+      const token = adapter['getAllWrappedTokens']().at(0)!;
+
+      adapter['koiosApi'].assetInfo = vi.fn().mockResolvedValue([{}]);
+
+      await expect(adapter.getRawTotalSupply(token)).rejects.toThrow();
+    });
+  });
 });

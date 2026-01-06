@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import { AbstractDataAdapter } from '../../lib';
 import { ChainAssetBalance } from '../../lib/types';
@@ -9,37 +9,45 @@ import { expectedGetAddressAssetsResult, TestEvmRpcAdapter } from '../mocked';
 interface TestContext {
   adapter: AbstractDataAdapter;
   mockTokenMap: TokenMap;
+  mockedTotalSupply: Mock;
 }
 
+const mockedTotalSupplyMock = vi.fn();
+
 describe('AbstractEvmRpcDataAdapter', () => {
-  describe('getAddressAssets', () => {
-    beforeEach<TestContext>(async (ctx) => {
-      vi.mock('ethers', () => {
-        const balanceOf = vi.fn().mockResolvedValue(BigInt(2000));
-        const getBalance = vi.fn().mockResolvedValue(BigInt(1000));
-        const Contract = vi.fn().mockImplementation(() => ({ balanceOf }));
-        const JsonRpcProvider = vi
-          .fn()
-          .mockImplementation(() => ({ getBalance }));
+  beforeEach<TestContext>(async (ctx) => {
+    ctx.mockedTotalSupply = mockedTotalSupplyMock;
 
-        return {
-          ethers: { Contract },
-          Contract,
-          JsonRpcProvider,
-        };
-      });
+    vi.mock('ethers', () => {
+      const balanceOf = vi.fn().mockResolvedValue(BigInt(2000));
+      const getBalance = vi.fn().mockResolvedValue(BigInt(1000));
+      const Contract = vi.fn().mockImplementation(() => ({
+        balanceOf,
+        totalSupply: mockedTotalSupplyMock,
+      }));
+      const JsonRpcProvider = vi
+        .fn()
+        .mockImplementation(() => ({ getBalance }));
 
-      ctx.mockTokenMap = new TokenMap();
-      await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-
-      ctx.adapter = new TestEvmRpcAdapter(
-        ['0xAddress'],
-        ctx.mockTokenMap,
-        { url: 'http://rpc', authToken: '' },
-        100,
-      );
+      return {
+        ethers: { Contract },
+        Contract,
+        JsonRpcProvider,
+      };
     });
 
+    ctx.mockTokenMap = new TokenMap();
+    await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+    ctx.adapter = new TestEvmRpcAdapter(
+      ['0xAddress'],
+      ctx.mockTokenMap,
+      { url: 'http://rpc', authToken: '' },
+      100,
+    );
+  });
+
+  describe('getAddressAssets', () => {
     /**
      * @target should fetch balances for native and ERC20 tokens
      * @scenario
@@ -129,6 +137,41 @@ describe('AbstractEvmRpcDataAdapter', () => {
 
       assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
       expect(assets).toEqual([totalAssets[2]]);
+    });
+  });
+
+  describe('getRawTotalSupply', () => {
+    /**
+     * @target should return raw totalSupply for wrapped token
+     */
+    it<TestContext>('should return raw totalSupply for wrapped token', async ({
+      adapter,
+      mockTokenMap,
+      mockedTotalSupply,
+    }) => {
+      const wrappedToken = mockTokenMap.getTokens('ethereum', 'ethereum')[0];
+
+      // set TotalSupply mock value
+      mockedTotalSupply.mockResolvedValue(9999n);
+
+      const result = await adapter.getRawTotalSupply(wrappedToken);
+
+      expect(result).toBe(9999n);
+    });
+
+    /**
+     * @target should throw if totalSupply cannot be fetched
+     */
+    it<TestContext>('should throw if totalSupply cannot be fetched', async ({
+      adapter,
+      mockTokenMap,
+      mockedTotalSupply,
+    }) => {
+      const wrappedToken = mockTokenMap.getTokens('ethereum', 'ethereum')[0];
+
+      mockedTotalSupply.mockResolvedValue(undefined);
+
+      await expect(adapter.getRawTotalSupply(wrappedToken)).rejects.toThrow();
     });
   });
 });
