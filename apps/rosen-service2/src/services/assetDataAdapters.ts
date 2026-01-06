@@ -17,11 +17,10 @@ import {
 } from '@rosen-ui/asset-data-adapter';
 import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
-import { NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
-import { ERG_TOTAL_SUPPLY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
 import { ChainChoices, Chains, TotalSupply } from '../types';
 import { DBService } from './db';
@@ -58,37 +57,22 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * calculate total supply of the token in Ergo
    */
   getAssetsTotalSupply = async (): Promise<TotalSupply[]> => {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-    const rosenTokens = tokenMap.getConfig();
     const assets = (
       await Promise.all(
-        rosenTokens.map(async (tokenSet) => {
-          const tokenId = tokenSet[NETWORKS.ergo.key].tokenId;
-          if (tokenId == NETWORKS.ergo.nativeToken) {
-            return {
-              assetId: tokenId,
-              totalSupply: ERG_TOTAL_SUPPLY,
-            };
-          }
-          const tokenDetail =
-            await this.explorerApi.v1.getApiV1TokensP1(tokenId);
-          if (tokenDetail) {
-            this.logger.debug(
-              `Total supply of token [${tokenId}] is [${tokenDetail.emissionAmount}]`,
+        NETWORKS_KEYS.map(async (chain) => {
+          const adapter = this.adapters[chain];
+          if (adapter)
+            return Object.entries(await adapter.getAllTokensTotalSupply()).map(
+              ([k, v]) => ({
+                assetId: k,
+                totalSupply: v.amount,
+              }),
             );
-            return {
-              assetId: tokenId,
-              totalSupply: tokenMap.wrapAmount(
-                tokenId,
-                tokenDetail.emissionAmount,
-                NETWORKS.ergo.key,
-              ).amount,
-            };
-          }
-          throw Error(`Total supply of token [${tokenId}] is not calculable`);
         }),
       )
-    ).filter((asset) => asset != undefined);
+    )
+      .flat()
+      .filter((asset) => asset != undefined);
     return assets;
   };
 

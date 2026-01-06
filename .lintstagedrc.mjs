@@ -44,7 +44,6 @@ const configs = {
   '**/*.{ts,tsx}': perPackage((directory) => {
     return `npm run type-check --workspace ${path.relative(process.cwd(), directory)}`;
   }),
-  '*.{js,jsx,ts,tsx}': 'npm run test:related',
 };
 
 export default configs;
