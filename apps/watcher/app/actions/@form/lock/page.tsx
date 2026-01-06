@@ -259,7 +259,7 @@ const LockForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box mt={2} />
         {renderAlert()}
-        <Grid item mobile={12} laptop={12}>
+        <Grid size={{ mobile: 12, tablet: 12 }}>
           {renderTokenAmountTextField()}
         </Grid>
 

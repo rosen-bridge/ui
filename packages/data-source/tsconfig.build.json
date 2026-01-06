@@ -11,6 +11,9 @@
     },
     {
       "path": "../public-status/tsconfig.build.json"
+    },
+    {
+      "path": "../rosen-statistics-entity/tsconfig.build.json"
     }
   ]
 }

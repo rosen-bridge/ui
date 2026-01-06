@@ -20,29 +20,25 @@ export const DataLayout = ({
   view,
 }: DataLayoutProps) => {
   return (
-    <Grid container gap={(theme) => theme.spacing(2)}>
-      <Grid item mobile={12}>
-        <Grid container wrap="nowrap" gap={(theme) => theme.spacing(2)}>
+    <Grid container spacing={2}>
+      <Grid size={12}>
+        <Grid container wrap="nowrap" spacing={2}>
           <Grid flexGrow={1} minWidth={0}>
             {search}
           </Grid>
-          <Grid flexBasis="auto">{sort}</Grid>
-          {view && <Grid flexBasis="auto">{view}</Grid>}
+          <Grid flexShrink={0}>{sort}</Grid>
+          {view && <Grid flexShrink={0}>{view}</Grid>}
         </Grid>
       </Grid>
-      <Grid item mobile={12}>
+      <Grid size={12}>
         <Grid container wrap="nowrap">
-          <Grid item flexGrow={1}>
-            <Grid container gap={(theme) => theme.spacing(2)}>
-              <Grid item mobile={12}>
-                {children}
-              </Grid>
-              <Grid item mobile={12}>
-                {pagination}
-              </Grid>
+          <Grid flexGrow={1} minWidth={0}>
+            <Grid container spacing={2}>
+              <Grid size={12}>{children}</Grid>
+              <Grid size={12}>{pagination}</Grid>
             </Grid>
           </Grid>
-          <Grid item>{sidebar}</Grid>
+          <Grid flexShrink={0}>{sidebar}</Grid>
         </Grid>
       </Grid>
     </Grid>
