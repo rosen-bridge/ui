@@ -1,14 +1,6 @@
-import { LockedAssetEntity, TokenEntity } from '../../../lib/entities';
+import { LockedAssetEntity, TokenEntity } from '../../lib/entities';
 
 export class LockedAssetTestData {
-  /**
-   * Sample data for testing remove operations
-   */
-  static SAMPLE_REMOVE_DATA = [
-    { tokenId: 'test-token-1', address: 'addr1' },
-    { tokenId: 'test-token-2', address: 'addr2' },
-  ];
-
   /**
    * Sample token entities required for foreign key constraints
    */

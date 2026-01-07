@@ -127,7 +127,7 @@ export class TokensAnalyzer {
       tokenId: token.tokenId,
     })?.[0];
 
-    // TODO: improve updating (local:ergo/rosen-bridge/ui#1069)
+    // TODO: use asset-data-adapter to get total supply (local:ergo/rosen-bridge/ui#1069)
     const assetTotalSupply = this.totalSupply
       .filter(
         (t) =>
