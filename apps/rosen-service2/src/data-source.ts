@@ -7,10 +7,6 @@ import {
   ExtractorStatusEntity,
   migrations as scannerMigrations,
 } from '@rosen-bridge/abstract-scanner';
-import {
-  BoxEntity,
-  migrations as addressExtractorMigrations,
-} from '@rosen-bridge/address-extractor';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   EventTriggerEntity,
@@ -20,8 +16,8 @@ import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
-  migrations as assetCalculatorMigrations,
-} from '@rosen-ui/asset-calculator';
+  migrations as assetAggregatorMigrations,
+} from '@rosen-ui/asset-aggregator';
 
 import { configs } from './configs';
 
@@ -35,14 +31,12 @@ export default new DataSource({
     TokenEntity,
     LockedAssetEntity,
     ExtractorStatusEntity,
-    BoxEntity,
   ],
   migrations: [
     ...scannerMigrations.postgres,
     ...eventTriggerExtractorMigrations.postgres,
     ...observationExtractorMigrations.postgres,
-    ...assetCalculatorMigrations.postgres,
-    ...addressExtractorMigrations.postgres,
+    ...assetAggregatorMigrations.postgres,
   ],
   host: configs.db.host,
   port: configs.db.port,

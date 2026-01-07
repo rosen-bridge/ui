@@ -1,8 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "strictPropertyInitialization": false,
+    "types": ["node", "vitest/globals"]
   },
   "include": ["tests", "lib"],
-  "references": [{ "path": "../../packages/types" }]
+  "references": [{ "path": "../types" }, { "path": "../constants" }]
 }

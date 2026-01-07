@@ -2,7 +2,7 @@
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenMap } from '@rosen-bridge/tokens';
-import { TokenEntity } from '@rosen-ui/asset-calculator';
+import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import { AssetDataAdapterService } from '../../src/services/assetDataAdapters';
