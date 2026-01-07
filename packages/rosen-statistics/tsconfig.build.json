@@ -3,5 +3,16 @@
   "compilerOptions": {
     "rootDir": "./lib"
   },
-  "exclude": ["tests", "vitest.config.ts"]
+  "exclude": ["tests", "vitest.config.ts"],
+  "references": [
+    {
+      "path": "../rosen-statistics-entity/tsconfig.build.json"
+    },
+    {
+      "path": "../data-source/tsconfig.build.json"
+    },
+    {
+      "path": "../asset-calculator/tsconfig.build.json"
+    }
+  ]
 }

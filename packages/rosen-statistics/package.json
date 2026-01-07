@@ -29,10 +29,19 @@
   "devDependencies": {
     "@vitest/coverage-istanbul": "^3.1.4",
     "tsx": "^4.19.4",
-    "typescript": "^5.3.3",
     "vitest": "^3.1.4"
   },
   "engines": {
-    "node": ">=22.18.0"
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
+  },
+  "dependencies": {
+    "@rosen-bridge/abstract-logger": "^3.0.1",
+    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/token-price-entity": "^0.2.0",
+    "@rosen-bridge/tokens": "^4.0.1",
+    "@rosen-ui/asset-calculator": "^2.3.0",
+    "@rosen-ui/data-source": "^0.2.1",
+    "@rosen-ui/rosen-statistics-entity": "^0.1.0"
   }
 }

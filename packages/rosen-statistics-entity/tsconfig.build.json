@@ -3,5 +3,10 @@
   "compilerOptions": {
     "rootDir": "./lib"
   },
-  "exclude": ["tests"]
+  "exclude": ["tests", "vitest.config.ts"],
+  "references": [
+    {
+      "path": "../asset-calculator/tsconfig.build.json"
+    }
+  ]
 }
