@@ -1,7 +1,10 @@
 import { RosenTokens } from '@rosen-bridge/tokens';
 
-import { AssetBalance, TotalSupply } from '../../lib/types';
+import { AssetBalance, TotalSupply } from '../lib/types';
 
+/**
+ * sample mapping of tokens across multiple chains
+ */
 export const SAMPLE_TOKEN_MAP: RosenTokens = [
   {
     ergo: {
@@ -101,6 +104,9 @@ export const SAMPLE_TOKEN_MAP: RosenTokens = [
   },
 ];
 
+/**
+ * simplified token entity data for database storage
+ */
 export const SAMPLE_TOKEN_ENTITY_DATA = [
   {
     chain: 'ergo',
@@ -184,6 +190,9 @@ export const SAMPLE_TOKEN_ENTITY_DATA = [
   },
 ];
 
+/**
+ * sample native token balances per chain
+ */
 export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
   ergo: {
     'erg': [
@@ -207,6 +216,9 @@ export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
   },
 };
 
+/**
+ * sample analyzer output for bridged token
+ */
 export const SAMPLE_ANALYZER_BRIDGED_TOKEN = [
   {
     amount: 7000n,
@@ -217,6 +229,9 @@ export const SAMPLE_ANALYZER_BRIDGED_TOKEN = [
   },
 ];
 
+/**
+ * sample wrapped token balances per chain
+ */
 export const WRAPPED_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
   ergo: {
     '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900': [
@@ -226,6 +241,9 @@ export const WRAPPED_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
   },
 };
 
+/**
+ * sample wrapped token total supply
+ */
 export const WRAPPED_TOKEN_TOTAL_SUPPLY: TotalSupply[] = [
   {
     assetId: '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
