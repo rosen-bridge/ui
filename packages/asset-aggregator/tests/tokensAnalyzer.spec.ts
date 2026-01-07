@@ -9,7 +9,7 @@ import {
   WRAPPED_TOKEN_TOTAL_SUPPLY,
   SAMPLE_TOKEN_MAP,
   SAMPLE_ANALYZER_BRIDGED_TOKEN,
-} from './mocked/tokensAnalyzer.mock';
+} from './tokensAnalyzerTestData';
 
 interface AnalyzerTestContext {
   tokenMap: TokenMap;

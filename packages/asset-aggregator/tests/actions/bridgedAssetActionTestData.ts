@@ -1,16 +1,8 @@
 import { Network } from '@rosen-ui/types';
 
-import { BridgedAssetEntity, TokenEntity } from '../../../lib/entities';
+import { BridgedAssetEntity, TokenEntity } from '../../lib/entities';
 
 export class BridgedAssetTestData {
-  /**
-   * Sample data for testing remove operations
-   */
-  static SAMPLE_REMOVE_DATA = [
-    { tokenId: 'test-token-1', chain: 'ergo' as Network },
-    { tokenId: 'test-token-2', chain: 'ethereum' as Network },
-  ];
-
   /**
    * Sample token entities required for foreign key constraints
    */
@@ -40,6 +32,7 @@ export class BridgedAssetTestData {
       chain: 'bitcoin',
     },
   ];
+
   /**
    * Creates a single bridged asset entity for testing
    * @param overrides - Optional properties to override default values

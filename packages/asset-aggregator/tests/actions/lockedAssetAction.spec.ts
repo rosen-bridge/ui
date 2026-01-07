@@ -7,8 +7,8 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 import { LockedAssetEntity, TokenEntity } from '../../lib';
 import { LockedAssetAction } from '../../lib/actions';
-import { LockedAssetTestData } from '../mocked/actions/lockedAssetAction.mock';
 import { createDatabase } from '../testUtils';
+import { LockedAssetTestData } from './lockedAssetActionTestData';
 
 interface LockedAssetTestContext {
   dataSource: DataSource;

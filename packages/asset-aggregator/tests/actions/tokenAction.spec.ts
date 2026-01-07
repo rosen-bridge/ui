@@ -7,8 +7,8 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 import { TokenEntity } from '../../lib';
 import { TokenAction } from '../../lib/actions';
-import { TokenMockData } from '../mocked/actions/tokenAction.mock';
 import { createDatabase } from '../testUtils';
+import { TokenTestData } from './tokenActionTestData';
 
 interface TokenTestContext {
   dataSource: DataSource;
@@ -38,7 +38,7 @@ describe('TokenAction', () => {
       action,
       repository,
     }) => {
-      const token = TokenMockData.createSingleToken();
+      const token = TokenTestData.createSingleToken();
       await action.store(token);
       const stored = await repository.find();
       expect(stored).toHaveLength(1);
@@ -57,7 +57,7 @@ describe('TokenAction', () => {
       action,
       repository,
     }) => {
-      const tokens = TokenMockData.createMultipleTokens(2);
+      const tokens = TokenTestData.createMultipleTokens(2);
       await action.store(tokens);
       const stored = await repository.find();
       expect(stored).toHaveLength(2);

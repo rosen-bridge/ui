@@ -6,7 +6,7 @@ import { AssetAggregator } from '../lib';
 import {
   SAMPLE_TOKEN_MAP,
   SAMPLE_TOKEN_ENTITY_DATA,
-} from './mocked/assetAggregator.mock';
+} from './assetAggregatorTestData';
 
 interface BridgedAssetTestContext {
   assetAggregator: AssetAggregator;
