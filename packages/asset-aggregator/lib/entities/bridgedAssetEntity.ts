@@ -2,6 +2,7 @@ import {
   BigIntValueTransformer,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryColumn,
 } from '@rosen-bridge/extended-typeorm';
@@ -24,7 +25,8 @@ export class BridgedAssetEntity {
   @PrimaryColumn('varchar')
   tokenId: string;
 
-  @ManyToOne(() => TokenEntity, 'id')
+  @ManyToOne(() => TokenEntity)
+  @JoinColumn({ name: 'tokenId', referencedColumnName: 'id' })
   token: TokenEntity;
 
   @Column('varchar')
