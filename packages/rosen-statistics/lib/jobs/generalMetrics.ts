@@ -6,6 +6,7 @@ import {
   MetricAction,
   METRIC_KEYS,
   LockedAssetsMetricAction,
+  EventCountMetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 /**
@@ -27,6 +28,7 @@ export const generalMetrics = async (
     logger,
   );
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
+  const eventCountMetricAction = new EventCountMetricAction(dataSource, logger);
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -62,4 +64,6 @@ export const generalMetrics = async (
   }
 
   await lockedAssetsMetricAction.calculateAndStoreLockedAssetsUsd();
+
+  await eventCountMetricAction.calculateAndStoreEventCounts();
 };
