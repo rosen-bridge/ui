@@ -7,8 +7,8 @@ import { describe, beforeEach, it, expect } from 'vitest';
 
 import { BridgedAssetEntity, TokenEntity } from '../../lib';
 import { BridgedAssetAction } from '../../lib/actions';
-import { BridgedAssetTestData } from '../mocked/actions/bridgedAssetAction.mock';
 import { createDatabase } from '../testUtils';
+import { BridgedAssetTestData } from './bridgedAssetActionTestData';
 
 interface BridgedAssetTestContext {
   dataSource: DataSource;

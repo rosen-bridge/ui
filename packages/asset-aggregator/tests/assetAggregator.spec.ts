@@ -6,7 +6,7 @@ import { AssetAggregator } from '../lib';
 import {
   SAMPLE_TOKEN_MAP,
   SAMPLE_TOKEN_ENTITY_DATA,
-} from './mocked/assetAggregator.mock';
+} from './assetAggregatorTestData';
 
 interface BridgedAssetTestContext {
   assetAggregator: AssetAggregator;
@@ -84,12 +84,12 @@ describe('AssetAggregator', () => {
      * @dependencies
      * - assetAggregator
      * @scenario
-     * - re-mock the getLockedTokensMock method to return a list with native erg token info in ergo chain
-     * - re-mock the getBridgedTokensMock method to return a list with wrapped erg token info in binance chain
+     * - mock locked tokens to include native-asset(erg) on ergo chain
+     * - mock bridged tokens to include wrapped erg on binance chain
      * - call update method
      * @expected
-     * - assetAggregator should call the bridgedAssetAction.store method for this bridged token
-     * - assetAggregator should call the bridgedAssetAction.keepOnly method for this bridged token
+     * - assetAggregator should store wrapped token as bridged asset
+     * - assetAggregator should keepOnly bridged token ids
      */
     it<BridgedAssetTestContext>('should store wrapped token as bridged asset', async ({
       assetAggregator,
@@ -105,6 +105,20 @@ describe('AssetAggregator', () => {
       ]);
     });
 
+    /**
+     * @target should handle both native and wrapped tokens in same chain
+     * @dependencies
+     * - assetAggregator
+     * @scenario
+     * - mock locked tokens so that list contains native tokens on different chains
+     * - mock bridged tokens so that list contains wrapped versions on opposite chains
+     * - call update method
+     * @expected
+     * - bridgedAssetAction.store should be called with wrapped tokens
+     * - bridgedAssetAction.keepOnly should be called with wrapped tokenIds
+     * - lockedAssetAction.store should be called only for native tokens
+     * - lockedAssetAction.keepOnly should be called only for native tokenIds
+     */
     it<BridgedAssetTestContext>('should handle both native and wrapped tokens in same chain', async ({
       assetAggregator,
     }) => {
@@ -133,6 +147,16 @@ describe('AssetAggregator', () => {
       ]);
     });
 
+    /**
+     * @target should handle empty balance array for a token
+     * @dependencies
+     * - assetAggregator
+     * @scenario
+     * - call update with a balance object where a token balance array is empty
+     * @expected
+     * - update method should complete without error
+     * - returned value should be undefined
+     */
     it<BridgedAssetTestContext>('should handle empty balance array for a token', async ({
       assetAggregator,
     }) => {
@@ -143,6 +167,15 @@ describe('AssetAggregator', () => {
   });
 
   describe('updateTokens', () => {
+    /**
+     * @target should collect tokens correctly
+     * @dependencies
+     * - assetAggregator
+     * @scenario
+     * - call updateTokens method
+     * @expected
+     * - tokenAction.store should be called with token entity data from token map
+     */
     it<BridgedAssetTestContext>('should collect tokens correctly', async ({
       assetAggregator,
     }) => {

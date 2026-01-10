@@ -1,8 +1,8 @@
 import { Network } from '@rosen-ui/types';
 
-import { TokenEntity } from '../../../lib/entities/tokenEntity';
+import { TokenEntity } from '../../lib/entities/tokenEntity';
 
-export class TokenMockData {
+export class TokenTestData {
   static SAMPLE_REMOVE_IDS = ['tkn-1', 'tkn-2'];
 
   /**
