@@ -18,10 +18,15 @@ import {
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 
+import { useTokenMap } from '@/hooks';
+import { getErgoSideTokenId } from '@/utils';
+
 import { BridgedList } from './BridgedList';
 import { AssetsFullData } from './getFullAssetData';
 
 const Content = ({ value }: ViewGridSidebarProps) => {
+  const tokenMap = useTokenMap();
+
   if (!value) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
@@ -35,7 +40,12 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   return (
     <Columns width="250px" count={2} rule gap="32px">
       <Label label="Token" orientation="horizontal">
-        <Token name={value.name} href={value.tokenUrl} reverse />
+        <Token
+          name={value.name}
+          ergoSideTokenId={getErgoSideTokenId(tokenMap, value?.id)}
+          href={value.tokenUrl}
+          reverse
+        />
       </Label>
       <Label label="Network">
         <Network name={value.chain} reverse />

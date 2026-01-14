@@ -21,10 +21,14 @@ import {
 import { NETWORKS } from '@rosen-ui/constants';
 import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
 
+import { useTokenMap } from '@/hooks';
 import { EventItem } from '@/types';
+import { getErgoSideTokenId } from '@/utils';
 
 const Content = ({ value }: EventSidebarProps) => {
   const isTablet = useBreakpoint('laptop-down');
+
+  const tokenMap = useTokenMap();
 
   const eventData = useMemo(() => {
     if (!value) return null;
@@ -56,6 +60,7 @@ const Content = ({ value }: EventSidebarProps) => {
       toAddressUrl: getAddressUrl(value.toChain, value.toAddress),
       toChain: value.toChain,
       token: value.lockToken.name,
+      ergoSideTokenId: getErgoSideTokenId(tokenMap, value?.lockToken?.tokenId),
       paymentTxId: value.paymentTxId ?? undefined,
       paymentTxIdUrl: value.paymentTxId
         ? getTxURL(value.toChain, value.paymentTxId)

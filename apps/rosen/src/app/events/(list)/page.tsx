@@ -20,6 +20,7 @@ import useSWR from 'swr';
 
 import { useTokenMap } from '@/hooks';
 import { ApiEventResponse, EventItem } from '@/types';
+import { getErgoSideTokenId } from '@/utils';
 
 import { getFilters, sorts } from './config';
 import { EventSidebar } from './EventSidebar';
@@ -140,6 +141,10 @@ const Page = () => {
                       status: item.status,
                       toChain: item.toChain,
                       token: item.lockToken?.name,
+                      ergoSideTokenId: getErgoSideTokenId(
+                        tokenMap,
+                        item?.lockToken?.tokenId,
+                      ),
                       timestamp: item.timestamp,
                     }
               }

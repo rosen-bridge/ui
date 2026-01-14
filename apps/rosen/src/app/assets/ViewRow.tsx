@@ -19,6 +19,9 @@ import {
   Token,
 } from '@rosen-bridge/ui-kit';
 
+import { useTokenMap } from '@/hooks';
+import { getErgoSideTokenId } from '@/utils';
+
 import { BridgedList } from './BridgedList';
 import { AssetsFullData } from './getFullAssetData';
 
@@ -35,6 +38,8 @@ export const ViewRow = ({
   isLoading,
   setCurrent,
 }: ViewRowProps) => {
+  const tokenMap = useTokenMap();
+
   return (
     <TableGrid>
       <TableGridHead>
@@ -59,7 +64,11 @@ export const ViewRow = ({
             {!isLoading && (
               <TableGridBodyRow>
                 <TableGridBodyCol>
-                  <Token href={item.tokenUrl} name={item.name} />
+                  <Token
+                    href={item.tokenUrl}
+                    name={item.name}
+                    ergoSideTokenId={getErgoSideTokenId(tokenMap, item?.id)}
+                  />
                 </TableGridBodyCol>
                 <TableGridBodyCol>
                   <Network name={item.chain} />

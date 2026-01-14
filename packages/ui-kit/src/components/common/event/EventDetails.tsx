@@ -33,6 +33,7 @@ export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
     toAddressUrl?: string;
     toChain?: NetworkType;
     token?: string;
+    ergoSideTokenId?: string;
     paymentTxId?: string;
     paymentTxIdUrl?: string;
     spendTxId?: string;
@@ -58,7 +59,11 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         )}
         {'token' in value && (
           <Label label="Token">
-            <Token reverse name={value.token} />
+            <Token
+              reverse
+              name={value.token}
+              ergoSideTokenId={value.ergoSideTokenId}
+            />
           </Label>
         )}
         {'amount' in value && (

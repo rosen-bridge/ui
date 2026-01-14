@@ -16,9 +16,14 @@ import { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
+import { useTokenMap } from '@/hooks';
+import { getErgoSideTokenId } from '@/utils';
+
 import { Section } from './Section';
 
 export const Overview = ({ id }: { id: string }) => {
+  const tokenMap = useTokenMap();
+
   const { error, data, isLoading, mutate } = useSWR(
     `/v1/events/${id}`,
     fetcher,
@@ -55,6 +60,10 @@ export const Overview = ({ id }: { id: string }) => {
           <Token
             loading={isLoading}
             name={data?.lockToken?.name}
+            ergoSideTokenId={getErgoSideTokenId(
+              tokenMap,
+              data?.lockToken?.tokenId,
+            )}
             reverse
             overrides={{
               tablet: {
