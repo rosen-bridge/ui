@@ -136,11 +136,12 @@ describe('EventCountMetricAction', () => {
     expect(fraudCount).not.toBeNull();
     expect(fraudCount?.eventCount).toBe(1);
 
-    const metric = await metricRepo.findOne({
+    const metric = await metricRepo.find({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
     });
     expect(metric).not.toBeNull();
-    expect(metric?.value).toBe('2');
+    expect(metric.length).toBe(1);
+    expect(metric[0]?.value).toBe('2');
   });
 
   /**
@@ -258,9 +259,11 @@ describe('EventCountMetricAction', () => {
     expect(updated?.eventCount).toBe(3); // 2 + 1
     expect(updated?.lastProcessedHeight).toBe(105);
 
-    const metric = await metricRepo.findOne({
+    const metric = await metricRepo.find({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
     });
-    expect(metric?.value).toBe('3');
+    expect(metric).not.toBeNull();
+    expect(metric.length).toBe(1);
+    expect(metric[0]?.value).toBe('3');
   });
 });
