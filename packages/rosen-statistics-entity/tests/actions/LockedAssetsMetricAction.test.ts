@@ -64,17 +64,19 @@ describe('LockedAssetsMetricAction', () => {
 
     await tokenPriceRepo.insert([
       { tokenId: 'token-1', price: 2, timestamp: 1_000 },
+      { tokenId: 'token-1', price: 10, timestamp: 2_000 },
       { tokenId: 'token-2', price: 4, timestamp: 1_000 },
     ]);
 
     await action.calculateAndStoreLockedAssetsUsd();
 
-    const metric = await metricRepo.findOne({
+    const metric = await metricRepo.find({
       where: { key: METRIC_KEYS.LOCKED_ASSETS_USD },
     });
 
     expect(metric).not.toBeNull();
-    expect(metric?.value).toBe('40'); // (10*2) + (5*4)
+    expect(metric.length).toBe(1);
+    expect(metric[0]?.value).toBe('120'); // (10*10) + (5*4)
   });
 
   /**
@@ -154,11 +156,12 @@ describe('LockedAssetsMetricAction', () => {
 
     await action.calculateAndStoreLockedAssetsUsd();
 
-    const metric = await metricRepo.findOne({
+    const metric = await metricRepo.find({
       where: { key: METRIC_KEYS.LOCKED_ASSETS_USD },
     });
 
     expect(metric).not.toBeNull();
-    expect(metric?.value).toBe('30');
+    expect(metric.length).toBe(1);
+    expect(metric[0]?.value).toBe('30');
   });
 });

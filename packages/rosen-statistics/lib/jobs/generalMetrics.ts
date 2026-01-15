@@ -1,7 +1,7 @@
-import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { TokenMap, ERGO_CHAIN } from '@rosen-bridge/tokens';
 import {
   MetricAction,
   METRIC_KEYS,
@@ -13,7 +13,7 @@ import {
  * Calculate and persist general system metrics.
  *
  * @param dataSource DataSource instance for database operations
- * @param tokenMap   TokenMap instance containing network and token configs
+ * @param tokenMap   TokenMap instance
  * @param logger     Optional logger instance
  */
 export const generalMetrics = async (
@@ -22,6 +22,8 @@ export const generalMetrics = async (
   rsnTokenId: string,
   logger?: AbstractLogger,
 ): Promise<void> => {
+  logger = logger ?? new DummyLogger();
+
   const metricAction = new MetricAction(dataSource, logger);
   const lockedAssetsMetricAction = new LockedAssetsMetricAction(
     dataSource,
@@ -34,6 +36,7 @@ export const generalMetrics = async (
 
   const networks = tokenMap.getAllChains();
   const networkCount = networks.length;
+  logger.debug(`Number of supported networks: ${networkCount}`);
 
   await metricAction.upsertMetric(
     METRIC_KEYS.NUMBER_OF_NETWORKS,
@@ -41,8 +44,9 @@ export const generalMetrics = async (
     timestamp,
   );
 
-  const supportedTokens = tokenMap.getConfig();
+  const supportedTokens = tokenMap.getTokens(ERGO_CHAIN, ERGO_CHAIN);
   const supportedTokenCount = supportedTokens.length;
+  logger.debug(`Number of supported tokens: ${supportedTokenCount}`);
 
   await metricAction.upsertMetric(
     METRIC_KEYS.NUMBER_OF_TOKENS,
@@ -56,13 +60,13 @@ export const generalMetrics = async (
   );
 
   if (rsnPrice !== undefined) {
+    logger.debug(`RSN price is: ${rsnPrice.toString()}`);
     await metricAction.upsertMetric(
       METRIC_KEYS.RSN_PRICE_USD,
       rsnPrice.toString(),
       timestamp,
     );
   }
-
   await lockedAssetsMetricAction.calculateAndStoreLockedAssetsUsd();
 
   await eventCountMetricAction.calculateAndStoreEventCounts();
