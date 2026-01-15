@@ -9,7 +9,8 @@ import {
 import { HealthParamInfo } from '@rosen-ui/types';
 import moment from 'moment';
 
-import { FullCard, SvgIcon } from '.';
+import { Card, CardBody, CardHeader, CardTitle, Stack, SvgIcon } from '.';
+import { Colors } from '../../core';
 import { useTheme } from '../../hooks';
 import { Alert, Tooltip, Typography } from '../base';
 import { Button } from './Button';
@@ -83,74 +84,74 @@ export const HealthParamCard = ({
   }, [lastCheck, status]);
 
   return (
-    <FullCard
+    <Card
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        minWidth: 0,
+      }}
       backgroundColor={colors.cardBackground}
-      headerProps={{
-        title: (
-          <>
-            {lastCheck ? status : 'Unknown'}
-            {lastTrialErrorTime && (
-              <Tooltip title={lastTrialErrorMessage}>
-                <SvgIcon color="warning">
-                  <ExclamationTriangle />
-                </SvgIcon>
-              </Tooltip>
-            )}
-          </>
-        ),
-        avatar: (
-          <SvgIcon>
+    >
+      <CardHeader
+        action={
+          lastTrialErrorTime && (
+            <Tooltip title={lastTrialErrorMessage}>
+              <SvgIcon color="warning">
+                <ExclamationTriangle />
+              </SvgIcon>
+            </Tooltip>
+          )
+        }
+      >
+        <Stack spacing={2} direction="row">
+          <SvgIcon color={colors.cardColor as Colors}>
             <Icon />
           </SvgIcon>
-        ),
-        sx: {
-          'color': colors.cardColor,
-          '& span': {
-            color: 'inherit',
-            display: 'flex',
-            justifyContent: 'space-between',
-          },
-        },
-      }}
-      contentProps={{
-        sx: { flexGrow: 1, pt: 0, pb: 1 },
-      }}
-      cardActions={
-        <Typography variant="body2">
-          {/* Note that "Check now" feature only works with a real watcher
+          <CardTitle>
+            <Typography color={colors.cardColor} fontWeight="700">
+              {lastCheck ? status : 'Unknown'}
+            </Typography>
+          </CardTitle>
+        </Stack>
+      </CardHeader>
+      <CardBody style={{ height: '100%' }}>
+        <Stack style={{ flex: 1, height: '100%' }}>
+          <Typography gutterBottom>{title}</Typography>
+          <Typography variant="body2">{description}</Typography>
+          {details && (
+            <Alert
+              variant="filled"
+              sx={{
+                bgcolor: colors.alertBackground,
+                color: colors.alert,
+                mt: 2,
+                wordBreak: 'normal',
+                overflowWrap: 'break-word',
+              }}
+            >
+              {details}
+            </Alert>
+          )}
+          <Typography variant="body2" style={{ marginTop: 'auto' }}>
+            {/* Note that "Check now" feature only works with a real watcher
           instance and its functionality cannot be mocked now */}
-          <Button
-            loading={checking}
-            size="small"
-            variant="text"
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            color={colors.button as any}
-            style={{ fontSize: 'inherit' }}
-            onClick={handleCheckNow}
-          >
-            {checking ? 'Checking' : 'Check now'}
-          </Button>
-          {lastCheck &&
-            `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
-        </Typography>
-      }
-    >
-      <Typography gutterBottom>{title}</Typography>
-      <Typography variant="body2">{description}</Typography>
-      {details && (
-        <Alert
-          variant="filled"
-          sx={{
-            bgcolor: colors.alertBackground,
-            color: colors.alert,
-            mt: 2,
-            wordBreak: 'normal',
-            overflowWrap: 'break-word',
-          }}
-        >
-          {details}
-        </Alert>
-      )}
-    </FullCard>
+            <Button
+              loading={checking}
+              size="small"
+              variant="text"
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              color={colors.button as any}
+              style={{ fontSize: 'inherit' }}
+              onClick={handleCheckNow}
+            >
+              {checking ? 'Checking' : 'Check now'}
+            </Button>
+            {lastCheck &&
+              `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
+          </Typography>
+        </Stack>
+      </CardBody>
+    </Card>
   );
 };
