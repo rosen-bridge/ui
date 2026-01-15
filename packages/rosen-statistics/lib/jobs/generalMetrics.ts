@@ -22,6 +22,7 @@ export const generalMetrics = async (
   logger?: AbstractLogger,
 ): Promise<void> => {
   logger = logger ?? new DummyLogger();
+
   const metricAction = new MetricAction(dataSource, logger);
   const lockedAssetsMetricAction = new LockedAssetsMetricAction(
     dataSource,

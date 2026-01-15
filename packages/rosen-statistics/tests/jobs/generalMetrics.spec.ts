@@ -13,52 +13,45 @@ describe('generalMetrics', () => {
   let dataSource: DataSource;
   let metricRepository: Repository<MetricEntity>;
   let tokenPriceRepository: Repository<TokenPriceEntity>;
-  let lockedAssetRepository: Repository<LockedAssetEntity>;
-  let tokenRepository: Repository<TokenEntity>;
   let tokenMap: TokenMap;
+  let tokenRepository: Repository<TokenEntity>;
+  let lockedAssetRepository: Repository<LockedAssetEntity>;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
     await dataSource.synchronize(true);
     metricRepository = dataSource.getRepository(MetricEntity);
     tokenPriceRepository = dataSource.getRepository(TokenPriceEntity);
-    lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
     tokenRepository = dataSource.getRepository(TokenEntity);
+    lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
     tokenMap = new TokenMap();
     await tokenMap.updateConfigByJson(tokenMapData);
   });
 
   /**
-   * @target generalMetrics should not store RSN price when price does not exist
-   * @dependency database
+   * @target generalMetrics should persist network and token counts and store RSN price metric when price exists and calculate locked assets USD
+   * @dependency database, TokenMap
    * @scenario
-   * - no RSN price exists in database
+   * - insert RSN price into database
+   * - insert tokens and locked assets into database
+   * - TokenMap returns a list of networks
+   * - TokenMap returns a list of supported tokens
    * - call generalMetrics
    * @expected
-   * - RSN_PRICE_USD metric is not stored
+   * - NUMBER_OF_NETWORKS metric is stored
+   * - NUMBER_OF_SUPPORTED_TOKENS metric is stored
+   * - RSN_PRICE_USD metric is stored
+   * - LOCKED_ASSETS_USD metric is stored with correct value
    */
-  it('should not store RSN price metric when price does not exist', async () => {
-    await generalMetrics(dataSource, tokenMap, 'test-token-id');
+  it('should persist network and supported token counts and store RSN price metric when price exists and calculate locked assets USD', async () => {
+    const safeTimestamp = Math.floor(Date.now() / 1000) - 86400;
 
-    const rsnMetric = await metricRepository.findOne({
-      where: { key: METRIC_KEYS.RSN_PRICE_USD },
+    await tokenPriceRepository.insert({
+      tokenId: 'test-token-id',
+      price: 0.25,
+      timestamp: safeTimestamp,
     });
 
-    expect(rsnMetric).toBeNull();
-  });
-
-  /**
-   * @target generalMetrics should calculate locked assets USD
-   * @dependency database, LockedAssetsMetricAction
-   * @scenario
-   * - insert tokens required by locked assets (fix FK + NOT NULL)
-   * - insert locked assets
-   * - insert token prices
-   * - call generalMetrics
-   * @expected
-   * - LOCKED_ASSETS_USD metric is created with correct value
-   */
-  it('should calculate and store locked assets USD metric', async () => {
     await tokenRepository.insert([
       {
         id: 'token-1',
@@ -90,11 +83,46 @@ describe('generalMetrics', () => {
 
     await generalMetrics(dataSource, tokenMap, 'test-token-id');
 
+    const networksMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.NUMBER_OF_NETWORKS },
+    });
+
+    const tokensMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.NUMBER_OF_TOKENS },
+    });
+
+    const rsnMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.RSN_PRICE_USD },
+    });
+
     const lockedMetric = await metricRepository.findOne({
       where: { key: METRIC_KEYS.LOCKED_ASSETS_USD },
     });
 
+    expect(networksMetric?.value).toBe('2');
+    expect(tokensMetric?.value).toBe('3');
+    expect(rsnMetric).not.toBeNull();
+    expect(rsnMetric?.value).toBe('0.25');
     expect(lockedMetric).not.toBeNull();
-    expect(lockedMetric?.value).toBe('40'); // (10*2) + (5*4)
+    expect(lockedMetric?.value).toBe('40');
+  });
+
+  /**
+   * @target generalMetrics should not store RSN price when price does not exist
+   * @dependency database
+   * @scenario
+   * - no RSN price exists in database
+   * - call generalMetrics
+   * @expected
+   * - RSN_PRICE_USD metric is not stored
+   */
+  it('should not store RSN price metric when price does not exist', async () => {
+    await generalMetrics(dataSource, tokenMap, 'test-token-id');
+
+    const rsnMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.RSN_PRICE_USD },
+    });
+
+    expect(rsnMetric).toBeNull();
   });
 });
