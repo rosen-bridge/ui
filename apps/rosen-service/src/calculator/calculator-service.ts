@@ -2,7 +2,6 @@ import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
 import config from '../configs';
-import { ASSET_CALCULATOR_INTERVAL } from '../constants';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 import { getTokenMap, handleError, runAndSetInterval } from '../utils';
@@ -63,6 +62,7 @@ const start = async () => {
     {
       addresses: config.calculator.addresses.bitcoinRunes,
       unisatUrl: config.bitcoinRunes.unisatUrl,
+      unisatApiKey: config.bitcoinRunes.unisatApiKey,
     },
     {
       addresses: config.calculator.addresses.ethereum,
@@ -82,7 +82,7 @@ const start = async () => {
     logger,
   );
 
-  await startUpdateJob(assetCalculator, ASSET_CALCULATOR_INTERVAL);
+  await startUpdateJob(assetCalculator, config.calculator.interval);
 };
 
 const calculatorService = {
