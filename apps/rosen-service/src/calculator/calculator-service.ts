@@ -63,6 +63,7 @@ const start = async () => {
     {
       addresses: config.calculator.addresses.bitcoinRunes,
       unisatUrl: config.bitcoinRunes.unisatUrl,
+      unisatApiKey: config.bitcoinRunes.unisatApiKey,
     },
     {
       addresses: config.calculator.addresses.ethereum,

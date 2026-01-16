@@ -76,6 +76,7 @@ class AssetCalculator {
       this.tokens,
       bitcoinRunesCalculator.addresses,
       bitcoinRunesCalculator.unisatUrl,
+      bitcoinRunesCalculator.unisatApiKey,
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
