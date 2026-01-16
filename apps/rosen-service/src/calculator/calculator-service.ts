@@ -82,7 +82,7 @@ const start = async () => {
     logger,
   );
 
-  await startUpdateJob(assetCalculator, config.calculator.interval);
+  await startUpdateJob(assetCalculator, config.calculator.interval * 1000);
 };
 
 const calculatorService = {
