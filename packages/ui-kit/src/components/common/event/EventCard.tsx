@@ -2,9 +2,7 @@ import { forwardRef, HTMLAttributes } from 'react';
 
 import { Skeleton, Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { capitalize } from 'lodash-es';
 
-import { Avatar } from '../Avatar';
 import { Card, CardBody } from '../card';
 import { Connector } from '../Connector';
 import { Amount, Identifier, Network } from '../display';
@@ -12,6 +10,7 @@ import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { Stack } from '../Stack';
 import { EventStatus, EventStatusProps } from './EventStatus';
+import { Token } from '../Token';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean;
@@ -24,7 +23,8 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
     id: string;
     status: EventStatusProps['value'];
     toChain: NetworkType;
-    token: string;
+    token?: string;
+    ergoSideTokenId?: string;
     timestamp?: number;
     flows?: number;
   };
@@ -54,9 +54,12 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 />
               )}
               {!isLoading && value && (
-                <Avatar background="secondary.light" color="secondary">
-                  {capitalize(value.token.slice(0, 1))}
-                </Avatar>
+                <Token
+                  name={value.token}
+                  ergoSideTokenId={value.ergoSideTokenId}
+                  variant="logo"
+                  style={{ fontSize: '20px' }}
+                />
               )}
               <Amount
                 loading={isLoading}

@@ -24,6 +24,7 @@ export interface Asset {
   bridged: string | null;
   lockedPerAddress?: Array<{ amount: number; address: string }>;
   chain: Network;
+  ergoSideTokenId: string;
 }
 
 interface AssetWithTotal extends Asset {
@@ -120,6 +121,7 @@ export const getAllAssets = async (filters: Filters) => {
       '"isNative"',
       '"bridged"',
       '"lockedPerAddress"',
+      '"ergoSideTokenId"',
       'chain',
       '(CAST(bridged AS NUMERIC) / POWER(10, COALESCE("significantDecimal", 0))) AS "bridgedNormalized"',
       'count(*) over() AS total',

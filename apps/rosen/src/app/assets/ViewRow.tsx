@@ -59,7 +59,11 @@ export const ViewRow = ({
             {!isLoading && (
               <TableGridBodyRow>
                 <TableGridBodyCol>
-                  <Token href={item.tokenUrl} name={item.name} />
+                  <Token
+                    href={item.tokenUrl}
+                    name={item.name}
+                    ergoSideTokenId={item.ergoSideTokenId}
+                  />
                 </TableGridBodyCol>
                 <TableGridBodyCol>
                   <Network name={item.chain} />
