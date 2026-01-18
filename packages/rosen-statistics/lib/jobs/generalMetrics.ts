@@ -7,6 +7,7 @@ import {
   METRIC_KEYS,
   LockedAssetsMetricAction,
   EventCountMetricAction,
+  UserCountMetricAction,
 } from '@rosen-ui/rosen-statistics-entity';
 
 /**
@@ -31,6 +32,7 @@ export const generalMetrics = async (
   );
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
   const eventCountMetricAction = new EventCountMetricAction(dataSource, logger);
+  const userCountMetricAction = new UserCountMetricAction(dataSource, logger);
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -70,4 +72,6 @@ export const generalMetrics = async (
   await lockedAssetsMetricAction.calculateAndStoreLockedAssetsUsd();
 
   await eventCountMetricAction.calculateAndStoreEventCounts();
+
+  await userCountMetricAction.calculateAndStoreUserCounts();
 };

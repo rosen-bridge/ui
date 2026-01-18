@@ -16,6 +16,7 @@ import {
 import {
   MetricEntity,
   EventCountEntity,
+  UserEventEntity,
   migrations as statisticsMigrations,
 } from '../lib';
 
@@ -25,6 +26,7 @@ export const createDatabase = async () => {
     database: ':memory:',
     entities: [
       MetricEntity,
+      UserEventEntity,
       TokenPriceEntity,
       LockedAssetEntity,
       TokenEntity,

@@ -1,12 +1,13 @@
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { TokenMap } from '@rosen-bridge/tokens';
+import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 import { MetricEntity, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';
-import { tokenMapData } from '../test-data';
+import { eventTriggerData, tokenData, tokenMapData } from '../test-data';
 import { createDatabase } from '../utils';
 
 describe('generalMetrics', () => {
@@ -16,6 +17,7 @@ describe('generalMetrics', () => {
   let tokenMap: TokenMap;
   let tokenRepository: Repository<TokenEntity>;
   let lockedAssetRepository: Repository<LockedAssetEntity>;
+  let eventTriggerRepository: Repository<EventTriggerEntity>;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
@@ -24,16 +26,18 @@ describe('generalMetrics', () => {
     tokenPriceRepository = dataSource.getRepository(TokenPriceEntity);
     tokenRepository = dataSource.getRepository(TokenEntity);
     lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
+    eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
     tokenMap = new TokenMap();
     await tokenMap.updateConfigByJson(tokenMapData);
   });
 
   /**
-   * @target generalMetrics should persist network and token counts and store RSN price metric when price exists and calculate locked assets USD
+   * @target generalMetrics should persist network and supported token counts, RSN price, locked assets USD, event counts, and user counts
    * @dependency database, TokenMap
    * @scenario
    * - insert RSN price into database
    * - insert tokens and locked assets into database
+   * - insert EventTriggerEntity records
    * - TokenMap returns a list of networks
    * - TokenMap returns a list of supported tokens
    * - call generalMetrics
@@ -42,8 +46,10 @@ describe('generalMetrics', () => {
    * - NUMBER_OF_SUPPORTED_TOKENS metric is stored
    * - RSN_PRICE_USD metric is stored
    * - LOCKED_ASSETS_USD metric is stored with correct value
+   * - EVENT_COUNT_TOTAL metric is stored with correct value
+   * - USER_COUNT_TOTAL metric is stored with correct value
    */
-  it('should persist network and supported token counts and store RSN price metric when price exists and calculate locked assets USD', async () => {
+  it('should persist network and supported token counts, RSN price, locked assets USD, event counts, and user counts', async () => {
     const safeTimestamp = Math.floor(Date.now() / 1000) - 86400;
 
     await tokenPriceRepository.insert({
@@ -52,24 +58,7 @@ describe('generalMetrics', () => {
       timestamp: safeTimestamp,
     });
 
-    await tokenRepository.insert([
-      {
-        id: 'token-1',
-        name: 'Token 1',
-        decimal: 0,
-        significantDecimal: 0,
-        isNative: false,
-        chain: 'ergo',
-      },
-      {
-        id: 'token-2',
-        name: 'Token 2',
-        decimal: 0,
-        significantDecimal: 0,
-        isNative: false,
-        chain: 'ergo',
-      },
-    ]);
+    await tokenRepository.insert(tokenData);
 
     await lockedAssetRepository.insert([
       { address: 'addr1', tokenId: 'token-1', amount: BigInt(10) },
@@ -80,6 +69,8 @@ describe('generalMetrics', () => {
       { tokenId: 'token-1', price: 2, timestamp: 1_000 },
       { tokenId: 'token-2', price: 4, timestamp: 1_000 },
     ]);
+
+    await eventTriggerRepository.insert(eventTriggerData);
 
     await generalMetrics(dataSource, tokenMap, 'test-token-id');
 
@@ -99,12 +90,24 @@ describe('generalMetrics', () => {
       where: { key: METRIC_KEYS.LOCKED_ASSETS_USD },
     });
 
+    const eventCountMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+    });
+
+    const userCountMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
+    });
+
     expect(networksMetric?.value).toBe('2');
     expect(tokensMetric?.value).toBe('3');
     expect(rsnMetric).not.toBeNull();
     expect(rsnMetric?.value).toBe('0.25');
     expect(lockedMetric).not.toBeNull();
     expect(lockedMetric?.value).toBe('40');
+    expect(eventCountMetric).not.toBeNull();
+    expect(eventCountMetric?.value).toBe('3');
+    expect(userCountMetric).not.toBeNull();
+    expect(userCountMetric?.value).toBe('2');
   });
 
   /**
