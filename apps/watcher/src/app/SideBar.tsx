@@ -29,12 +29,7 @@ export const SideBar = () => {
     <AppBar
       logo={
         <Link href="/">
-          <AppLogo
-            darkLogoPath="/logo-dark-desktop.png"
-            lightLogoPath="/logo-light-desktop.png"
-            darkLogoMobilePath="/logo-dark-mobile.png"
-            lightLogoMobilePath="/logo-light-mobile.png"
-          />
+          <AppLogo />
         </Link>
       }
       versions={<VersionConfig />}
