@@ -1,6 +1,6 @@
 'use client';
 
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
 import { App as AppBase, ApiKeyProvider } from '@rosen-bridge/ui-kit';

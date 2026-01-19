@@ -47,7 +47,6 @@ export const AlertCard = ({
           )
         }
         variant="filled"
-        sx={{ mb: 2 }}
       >
         {children}
         {!!more && (

@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { Amount, Identifier, Stack, Typography } from '@rosen-bridge/ui-kit';
 import { Network as NetworkType } from '@rosen-ui/types';
 import { getAddressUrl } from '@rosen-ui/utils';

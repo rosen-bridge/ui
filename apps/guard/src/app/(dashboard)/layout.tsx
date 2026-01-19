@@ -1,11 +1,18 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 import { Box, Grid, PageHeading, Stack } from '@rosen-bridge/ui-kit';
-import { LayoutProps } from '@rosen-ui/types';
 
-const DashboardLayout = ({
+type LayoutProps = {
+  actions: ReactNode;
+  revenue: ReactNode;
+  health: ReactNode;
+  networks: ReactNode;
+  tokens: ReactNode;
+};
+
+const Layout = ({
   actions,
   revenue,
   health,
@@ -39,7 +46,7 @@ const DashboardLayout = ({
           >
             {health}
           </Stack>
-          <div style={{ minWidth: 0 }}>{networks}</div>
+          <div style={{ minWidth: 0, flexGrow: 1 }}>{networks}</div>
         </Stack>
       </Grid>
       <Grid size={12}>{revenue}</Grid>
@@ -51,4 +58,4 @@ const DashboardLayout = ({
   </Fragment>
 );
 
-export default DashboardLayout;
+export default Layout;

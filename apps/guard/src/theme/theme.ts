@@ -4,18 +4,6 @@ import {
   lightThemeOptions,
 } from '@rosen-bridge/ui-kit';
 
-declare module '@mui/material/styles' {
-  interface TypeTertiary {
-    main: string;
-    light: string;
-    dark: string;
-    contrastText: string;
-  }
-  interface Palette {
-    tertiary: TypeTertiary;
-  }
-}
-
 const customLightThemeOptions = {
   palette: {
     mode: 'light',
