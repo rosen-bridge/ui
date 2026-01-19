@@ -8,6 +8,8 @@ import {
   LockedAssetsMetricAction,
   EventCountMetricAction,
   UserCountMetricAction,
+  WatcherCountMetricAction,
+  WatcherCountConfig,
 } from '@rosen-ui/rosen-statistics-entity';
 
 /**
@@ -15,12 +17,15 @@ import {
  *
  * @param dataSource DataSource instance for database operations
  * @param tokenMap   TokenMap instance
+ * @param rsnTokenId RSN token Id
+ * @param watcherCountConfig Configuration for watcher count metrics
  * @param logger     Optional logger instance
  */
 export const generalMetrics = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
   rsnTokenId: string,
+  watcherCountConfig: WatcherCountConfig,
   logger?: AbstractLogger,
 ): Promise<void> => {
   logger = logger ?? new DummyLogger();
@@ -33,6 +38,11 @@ export const generalMetrics = async (
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
   const eventCountMetricAction = new EventCountMetricAction(dataSource, logger);
   const userCountMetricAction = new UserCountMetricAction(dataSource, logger);
+  const watcherCountMetricAction = new WatcherCountMetricAction(
+    dataSource,
+    watcherCountConfig,
+    logger,
+  );
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -74,4 +84,6 @@ export const generalMetrics = async (
   await eventCountMetricAction.calculateAndStoreEventCounts();
 
   await userCountMetricAction.calculateAndStoreUserCounts();
+
+  await watcherCountMetricAction.calculateAndStoreWatcherCounts();
 };

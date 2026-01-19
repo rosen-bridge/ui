@@ -38,7 +38,11 @@
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/token-price-entity": "^0.2.0",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
-    "@rosen-ui/asset-calculator": "^2.3.0"
+    "@rosen-clients/ergo-explorer": "^2.1.0",
+    "@rosen-clients/ergo-node": "^3.1.1",
+    "@rosen-ui/asset-calculator": "^2.3.0",
+    "ergo-lib-wasm-nodejs": "^0.24.1",
+    "@rosen-bridge/json-bigint": "^1.1.0"
   },
   "engines": {
     "node": ">=22.18.0",

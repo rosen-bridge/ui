@@ -4,7 +4,8 @@ import { TokenMap } from '@rosen-bridge/tokens';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 import { MetricEntity, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { WatcherCountMetricAction } from '@rosen-ui/rosen-statistics-entity';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';
 import { eventTriggerData, tokenData, tokenMapData } from '../test-data';
@@ -20,6 +21,10 @@ describe('generalMetrics', () => {
   let eventTriggerRepository: Repository<EventTriggerEntity>;
 
   beforeEach(async () => {
+    vi.spyOn(
+      WatcherCountMetricAction.prototype,
+      'calculateAndStoreWatcherCounts',
+    ).mockResolvedValue(undefined);
     dataSource = await createDatabase();
     await dataSource.synchronize(true);
     metricRepository = dataSource.getRepository(MetricEntity);
@@ -72,7 +77,11 @@ describe('generalMetrics', () => {
 
     await eventTriggerRepository.insert(eventTriggerData);
 
-    await generalMetrics(dataSource, tokenMap, 'test-token-id');
+    await generalMetrics(dataSource, tokenMap, 'test-token-id', {
+      type: 'node',
+      rwtTokenId: 'test-rwt-tokenId',
+      url: 'test-node-url',
+    });
 
     const networksMetric = await metricRepository.findOne({
       where: { key: METRIC_KEYS.NUMBER_OF_NETWORKS },
@@ -120,7 +129,11 @@ describe('generalMetrics', () => {
    * - RSN_PRICE_USD metric is not stored
    */
   it('should not store RSN price metric when price does not exist', async () => {
-    await generalMetrics(dataSource, tokenMap, 'test-token-id');
+    await generalMetrics(dataSource, tokenMap, 'test-token-id', {
+      type: 'node',
+      rwtTokenId: 'test-rwt-tokenId',
+      url: 'test-node-url',
+    });
 
     const rsnMetric = await metricRepository.findOne({
       where: { key: METRIC_KEYS.RSN_PRICE_USD },
