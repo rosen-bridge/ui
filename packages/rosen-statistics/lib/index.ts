@@ -1,1 +1,1 @@
-export { generalMetrics, lockedAssetsMetric } from './jobs';
+export { generalMetrics, lockedAssetsMetric, eventCountMetric } from './jobs';

@@ -1,7 +1,8 @@
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { TokenMap } from '@rosen-bridge/tokens';
-import { MetricEntity, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
+import { MetricEntity } from '@rosen-ui/rosen-statistics-entity';
+import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';
@@ -36,7 +37,7 @@ describe('generalMetrics', () => {
    * - NUMBER_OF_SUPPORTED_TOKENS metric is stored
    * - RSN_PRICE_USD metric is stored
    */
-  it('should persist network and token counts and store RSN price metric when price exists', async () => {
+  it('should persist network and supported token counts and store RSN price metric when price exists', async () => {
     const safeTimestamp = Math.floor(Date.now() / 1000) - 86400;
 
     await tokenPriceRepository.insert({
@@ -44,11 +45,6 @@ describe('generalMetrics', () => {
       price: 0.25,
       timestamp: safeTimestamp,
     });
-
-    await tokenPriceRepository.insert([
-      { tokenId: 'token-1', price: 2, timestamp: 1_000 },
-      { tokenId: 'token-2', price: 4, timestamp: 1_000 },
-    ]);
 
     await generalMetrics(dataSource, tokenMap, 'test-token-id');
 
