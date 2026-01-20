@@ -16,10 +16,8 @@ export const generalMetrics = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
   rsnTokenId: string,
-  logger?: AbstractLogger,
+  logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
-  logger = logger ?? new DummyLogger();
-
   const metricAction = new MetricAction(dataSource, logger);
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
 
