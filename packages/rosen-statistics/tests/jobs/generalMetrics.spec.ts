@@ -108,21 +108,62 @@ describe('generalMetrics', () => {
   });
 
   /**
-   * @target generalMetrics should not store RSN price when price does not exist
+   * @target generalMetrics should update existing metrics
    * @dependency database
    * @scenario
-   * - no RSN price exists in database
+   * - insert RSN price into database
+   * - insert existing metrics into database
+   * - TokenMap returns a list of networks
+   * - TokenMap returns a list of supported tokens
    * - call generalMetrics
    * @expected
-   * - RSN_PRICE_USD metric is not stored
+   * - NUMBER_OF_NETWORKS metric is updated
+   * - NUMBER_OF_SUPPORTED_TOKENS metric is updated
+   * - RSN_PRICE_USD metric is keept unchanged
    */
-  it('should not store RSN price metric when price does not exist', async () => {
+  it('should update existing metrics', async () => {
+    const timestamp = Math.floor(Date.now() / 1000);
+
+    await tokenPriceRepository.insert({
+      tokenId: 'test-token-id',
+      price: 0.25,
+      timestamp: timestamp,
+    });
+
+    await metricRepository.insert([
+      {
+        key: METRIC_KEYS.NUMBER_OF_NETWORKS,
+        value: '1',
+        updatedAt: timestamp,
+      },
+      {
+        key: METRIC_KEYS.NUMBER_OF_TOKENS,
+        value: '1',
+        updatedAt: timestamp,
+      },
+      {
+        key: METRIC_KEYS.RSN_PRICE_USD,
+        value: '0.1',
+        updatedAt: timestamp,
+      },
+    ]);
     await generalMetrics(dataSource, tokenMap, 'test-token-id');
+
+    const networksMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.NUMBER_OF_NETWORKS },
+    });
+
+    const tokensMetric = await metricRepository.findOne({
+      where: { key: METRIC_KEYS.NUMBER_OF_TOKENS },
+    });
 
     const rsnMetric = await metricRepository.findOne({
       where: { key: METRIC_KEYS.RSN_PRICE_USD },
     });
 
-    expect(rsnMetric).toBeNull();
+    expect(networksMetric?.value).toBe('2');
+    expect(tokensMetric?.value).toBe('3');
+    expect(rsnMetric).not.toBeNull();
+    expect(rsnMetric?.value).toBe('0.1');
   });
 });
