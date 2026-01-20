@@ -9,6 +9,7 @@ import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
  *
  * @param dataSource DataSource instance for database operations
  * @param tokenMap   TokenMap instance
+ * @param rsnTokenId RSN token Id
  * @param logger     Optional logger instance
  */
 export const generalMetrics = async (
