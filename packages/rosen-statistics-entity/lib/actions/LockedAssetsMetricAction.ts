@@ -19,7 +19,7 @@ export class LockedAssetsMetricAction {
   }
 
   /**
-   * Calculate total USD value of locked assets using
+   * Calculate total USD value of locked assets and store it as a metric
    */
   calculateAndStoreLockedAssetsUsd = async (): Promise<void> => {
     const timestamp = Math.floor(Date.now() / 1000);

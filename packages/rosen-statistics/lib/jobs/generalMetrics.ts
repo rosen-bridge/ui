@@ -14,16 +14,15 @@ import {
  *
  * @param dataSource DataSource instance for database operations
  * @param tokenMap   TokenMap instance
+ * @param rsnTokenId RSN token Id
  * @param logger     Optional logger instance
  */
 export const generalMetrics = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
   rsnTokenId: string,
-  logger?: AbstractLogger,
+  logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
-  logger = logger ?? new DummyLogger();
-
   const metricAction = new MetricAction(dataSource, logger);
   const lockedAssetsMetricAction = new LockedAssetsMetricAction(
     dataSource,
