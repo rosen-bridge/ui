@@ -1,5 +1,5 @@
 import { Metadata } from 'next';
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 
 import { App } from './App';
 

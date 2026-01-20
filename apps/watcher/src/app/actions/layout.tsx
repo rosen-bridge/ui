@@ -1,7 +1,8 @@
 'use client';
 
+import { Route } from 'next';
 import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
-import React, { Fragment, SyntheticEvent } from 'react';
+import { Fragment, ReactNode, SyntheticEvent } from 'react';
 
 import {
   LockAlt,
@@ -18,7 +19,6 @@ import {
   Grid,
   PageHeading,
 } from '@rosen-bridge/ui-kit';
-import { LayoutProps } from '@rosen-ui/types';
 
 import { ToggleButton } from './ToggleButton';
 
@@ -59,13 +59,18 @@ const ActionsDivider = () => (
   />
 );
 
-const Actions = ({ form, text }: LayoutProps) => {
+type ActionsProps = {
+  form: ReactNode;
+  text: ReactNode;
+};
+
+const Actions = ({ form, text }: ActionsProps) => {
   const segments = useSelectedLayoutSegments('form');
 
   const router = useRouter();
 
   const handleActionChange = (event: SyntheticEvent, action: string) => {
-    router.push(`/actions/${action}`);
+    router.push(`/actions/${action}` as Route);
   };
 
   return (

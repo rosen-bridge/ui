@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useMemo, useState } from 'react';
+import { ReactNode, useEffect, useMemo, useState } from 'react';
 import {
   FormProvider,
   SubmitHandler,
@@ -11,7 +11,6 @@ import {
 import {
   AlertCard,
   AlertProps,
-  Box,
   CircularProgress,
   Grid,
   Id,
@@ -22,6 +21,7 @@ import {
   useApiKey,
   ApiKeyModalWarning,
   Link,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -259,31 +259,25 @@ const WithdrawForm = () => {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box mt={2} />
-        {renderAlert()}
-
-        <Grid container size={{ mobile: 12 }}>
+        <Stack spacing={2}>
+          {renderAlert()}
+          <ApiKeyModalWarning />
           {renderAddressTextField()}
-        </Grid>
-        <Box mt={2} />
-        <Grid container spacing={2}>
-          <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-            {renderTokensListSelect()}
+          <Grid container spacing={2}>
+            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
+              {renderTokensListSelect()}
+            </Grid>
+            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
+              {renderTokenAmountTextField()}
+            </Grid>
           </Grid>
-          <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-            {renderTokenAmountTextField()}
-          </Grid>
-        </Grid>
-
-        <ApiKeyModalWarning />
-
-        <SubmitButton
-          disabled={!formState.isValid || !apiKey || disabled}
-          loading={isWithdrawPending}
-        >
-          Withdraw
-        </SubmitButton>
-
+          <SubmitButton
+            disabled={!formState.isValid || !apiKey || disabled}
+            loading={isWithdrawPending}
+          >
+            Withdraw
+          </SubmitButton>
+        </Stack>
         <ConfirmationModal
           open={confirmationModalOpen}
           title="Confirm Withdraw"

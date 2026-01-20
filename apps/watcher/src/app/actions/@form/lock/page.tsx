@@ -1,15 +1,14 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, ReactNode } from 'react';
+import { useState, useEffect, useMemo, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  Box,
-  Grid,
   Link,
+  Stack,
   SubmitButton,
   Typography,
   useApiKey,
@@ -256,26 +255,19 @@ const LockForm = () => {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box mt={2} />
-        {renderAlert()}
-        <Grid size={{ mobile: 12, tablet: 12 }}>
+        <Stack spacing={2}>
+          {renderAlert()}
+          <ApiKeyModalWarning />
           {renderTokenAmountTextField()}
-        </Grid>
-
-        <Grid mt={2}>
           {renderCollateralAlert()}
           {renderReportsCountAlert()}
-        </Grid>
-
-        <ApiKeyModalWarning />
-
-        <SubmitButton
-          loading={isLockPending}
-          disabled={!formState.isValid || !apiKey || disabled}
-        >
-          Lock
-        </SubmitButton>
-
+          <SubmitButton
+            loading={isLockPending}
+            disabled={!formState.isValid || !apiKey || disabled}
+          >
+            Lock
+          </SubmitButton>
+        </Stack>
         <ConfirmationModal
           open={confirmationModalOpen}
           title="Confirm Lock"
@@ -284,9 +276,7 @@ const LockForm = () => {
            * received permits
            * local:ergo/rosen-bridge/ui#104
            */
-          content={`You are going to lock ${formData.amount} ${
-            rsnToken?.name ?? 'token'
-          }. You will get some reporting permits in return.`}
+          content={`You are going to lock ${formData.amount} ${rsnToken?.name ?? 'token'}. You will get some reporting permits in return.`}
           buttonText="Lock"
           handleClose={() => setConfirmationModalOpen(false)}
           onConfirm={submit}
