@@ -3,4 +3,5 @@ export {
   lockedAssetsMetric,
   eventCountMetric,
   userEventMetric,
+  watcherCountMetric,
 } from './jobs';

@@ -1,4 +1,5 @@
 import { RosenTokens } from '@rosen-bridge/tokens';
+import { WatcherCountConfig } from '@rosen-ui/rosen-statistics-entity';
 
 export const tokenMapData: RosenTokens = [
   {
@@ -98,3 +99,13 @@ export const eventTriggerData = [
     serialized: '{}',
   },
 ];
+
+export const watcherCountConfig: WatcherCountConfig = {
+  type: 'explorer' as const,
+  url: 'explorerUrl',
+  rwtTokenId: 'repoNFT',
+  rwtNetworkMap: {
+    ergo: 'rwt-ergo-token-id',
+    cardano: 'rwt-cardano-token-id',
+  },
+};

@@ -5,7 +5,7 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import ergoNodeClientFactory from '@rosen-clients/ergo-node';
 import { ErgoBox } from 'ergo-lib-wasm-nodejs';
 
-import { METRIC_KEYS, RWT_NETWORK_MAP } from '../constants';
+import { METRIC_KEYS } from '../constants';
 import { WatcherCountEntity } from '../entities';
 import { WatcherCountConfig } from '../types';
 import { MetricAction } from './MetricAction';
@@ -162,9 +162,19 @@ export class WatcherCountMetricAction {
     const tokens = box.tokens();
     for (let i = 0; i < tokens.len(); i++) {
       const token = tokens.get(i);
-      if (token && token.id().to_str() in RWT_NETWORK_MAP)
-        return RWT_NETWORK_MAP[token.id().to_str()];
+      if (!token) continue;
+
+      const tokenId = token.id().to_str();
+
+      for (const [network, rwtTokenId] of Object.entries(
+        this.config.rwtNetworkMap,
+      )) {
+        if (rwtTokenId === tokenId) {
+          return network;
+        }
+      }
     }
+
     return undefined;
   };
 }

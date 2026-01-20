@@ -3,7 +3,7 @@ import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { describe, it, expect, beforeEach, vitest } from 'vitest';
 
 import { WatcherCountMetricAction } from '../../lib/actions/WatcherCountMetricAction';
-import { METRIC_KEYS, RWT_NETWORK_MAP } from '../../lib/constants';
+import { METRIC_KEYS } from '../../lib/constants';
 import { MetricEntity, WatcherCountEntity } from '../../lib/entities';
 import { createDatabase } from '../utils';
 
@@ -19,6 +19,10 @@ describe('WatcherCountMetricAction', () => {
       type: 'explorer',
       url: 'explorerUrl',
       rwtTokenId: 'repoNFT',
+      rwtNetworkMap: {
+        ergo: 'rwt-ergo-token-id',
+        cardano: 'rwt-cardano-token-id',
+      },
     });
     watcherRepo = dataSource.getRepository(WatcherCountEntity);
     metricRepo = dataSource.getRepository(MetricEntity);
@@ -46,8 +50,7 @@ describe('WatcherCountMetricAction', () => {
           len: () => 1,
           get: () => ({
             id: () => ({
-              to_str: () =>
-                '30e4392fc439fce9948da124efddb8779fe179eef5a5d6196e249b75ee64defc',
+              to_str: () => 'rwt-ergo-token-id',
             }),
           }),
         }),
@@ -58,8 +61,7 @@ describe('WatcherCountMetricAction', () => {
           len: () => 1,
           get: () => ({
             id: () => ({
-              to_str: () =>
-                '5d727b722fb72aa02257d987970c68aeda41614518bab9f0d8a21bbc75b7a3b0',
+              to_str: () => 'rwt-cardano-token-id',
             }),
           }),
         }),
@@ -70,10 +72,7 @@ describe('WatcherCountMetricAction', () => {
 
     const updated1 = await watcherRepo.findOne({
       where: {
-        network:
-          RWT_NETWORK_MAP[
-            '30e4392fc439fce9948da124efddb8779fe179eef5a5d6196e249b75ee64defc'
-          ],
+        network: 'ergo',
       },
     });
     expect(updated1).not.toBeNull();
@@ -81,10 +80,7 @@ describe('WatcherCountMetricAction', () => {
 
     const updated2 = await watcherRepo.findOne({
       where: {
-        network:
-          RWT_NETWORK_MAP[
-            '5d727b722fb72aa02257d987970c68aeda41614518bab9f0d8a21bbc75b7a3b0'
-          ],
+        network: 'cardano',
       },
     });
     expect(updated2).not.toBeNull();
@@ -113,10 +109,7 @@ describe('WatcherCountMetricAction', () => {
    */
   it('should update existing watcher count', async () => {
     await watcherRepo.insert({
-      network:
-        RWT_NETWORK_MAP[
-          '5d727b722fb72aa02257d987970c68aeda41614518bab9f0d8a21bbc75b7a3b0'
-        ],
+      network: 'cardano',
       count: 5,
     });
 
@@ -127,8 +120,7 @@ describe('WatcherCountMetricAction', () => {
           len: () => 1,
           get: () => ({
             id: () => ({
-              to_str: () =>
-                '30e4392fc439fce9948da124efddb8779fe179eef5a5d6196e249b75ee64defc',
+              to_str: () => 'rwt-ergo-token-id',
             }),
           }),
         }),
@@ -139,10 +131,7 @@ describe('WatcherCountMetricAction', () => {
 
     const updated = await watcherRepo.findOne({
       where: {
-        network:
-          RWT_NETWORK_MAP[
-            '30e4392fc439fce9948da124efddb8779fe179eef5a5d6196e249b75ee64defc'
-          ],
+        network: 'ergo',
       },
     });
     expect(updated).not.toBeNull();
