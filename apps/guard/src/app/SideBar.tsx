@@ -1,3 +1,4 @@
+import { Route } from 'next';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 
@@ -42,7 +43,7 @@ export const SideBar = () => {
       navigationBar={
         <NavigationBar
           isActive={(path) => pathname === path}
-          onClick={(path) => router.push(path)}
+          onClick={(path) => router.push(path as Route)}
         >
           <NavigationButton icon={<Dashboard />} label="Dashboard" path="/" />
           <NavigationButton

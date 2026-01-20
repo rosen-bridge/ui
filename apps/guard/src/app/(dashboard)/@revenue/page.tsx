@@ -1,7 +1,7 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import {
   Card,
@@ -9,6 +9,7 @@ import {
   CardTitle,
   CardBody,
   Typography,
+  Skeleton,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
@@ -17,7 +18,6 @@ import useSWR from 'swr';
 import { ApiRevenueChartResponse } from '@/types/api';
 
 import { PeriodSelect } from './PeriodSelect';
-import { RevenueChartSkeleton } from './RevenueChartSkeleton';
 
 /**
  * This is required because revenue chart cannot be pre-rendered in next and
@@ -47,11 +47,15 @@ const Revenue = () => {
         </CardTitle>
       </CardHeader>
       <CardBody>
-        {isLoading ? (
-          <RevenueChartSkeleton />
-        ) : (
-          data && <RevenueChart period={period} data={data} />
+        {isLoading && (
+          <Skeleton
+            animation="wave"
+            height={255}
+            width="100%"
+            variant="rounded"
+          />
         )}
+        {!isLoading && data && <RevenueChart period={period} data={data} />}
       </CardBody>
     </Card>
   );

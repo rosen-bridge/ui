@@ -1,17 +1,16 @@
 'use client';
 
 import Link from 'next/link';
-import React, { useMemo, useState, useEffect, ReactNode } from 'react';
+import { useMemo, useState, useEffect, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   AlertCard,
   AlertProps,
-  Box,
-  Grid,
   SubmitButton,
   useApiKey,
   ApiKeyModalWarning,
+  Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -136,7 +135,7 @@ const UnlockForm = () => {
               Unlock operation is in progress. Wait for tx [
               <Link
                 target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
+                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
               >
                 {response.txId}
               </Link>
@@ -195,21 +194,17 @@ const UnlockForm = () => {
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <Box mt={2} />
-        {renderAlert()}
-        <Grid size={{ mobile: 12, tablet: 12 }}>
+        <Stack spacing={2}>
+          {renderAlert()}
+          <ApiKeyModalWarning />
           {renderTokenAmountTextField()}
-        </Grid>
-
-        <ApiKeyModalWarning />
-
-        <SubmitButton
-          loading={isUnlockPending}
-          disabled={!formState.isValid || !apiKey || disabled}
-        >
-          Unlock
-        </SubmitButton>
-
+          <SubmitButton
+            loading={isUnlockPending}
+            disabled={!formState.isValid || !apiKey || disabled}
+          >
+            Unlock
+          </SubmitButton>
+        </Stack>
         <ConfirmationModal
           open={confirmationModalOpen}
           title="Confirm Unlock"

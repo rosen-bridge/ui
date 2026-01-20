@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 
 import { AngleDown } from '@rosen-bridge/icons';
 import { Box, Button, Menu, MenuItem, SvgIcon } from '@rosen-bridge/ui-kit';
@@ -8,7 +8,7 @@ const periodOptions = ['week', 'month', 'year'] as const;
 
 interface PeriodSelectProps {
   period: string;
-  setPeriod: React.Dispatch<React.SetStateAction<ChartPeriod>>;
+  setPeriod: Dispatch<SetStateAction<ChartPeriod>>;
 }
 /**
  * render a period select to be used inside parent page
@@ -21,7 +21,7 @@ export const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
   );
   const open = !!anchorElement;
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorElement(event.currentTarget);
   };
 

@@ -9,8 +9,8 @@ import { Amount, Identifier, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { Stack } from '../Stack';
-import { EventStatus, EventStatusProps } from './EventStatus';
 import { Token } from '../Token';
+import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean;

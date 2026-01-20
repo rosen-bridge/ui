@@ -32,11 +32,11 @@ const Content = ({ value }: EventSidebarProps) => {
     const data: EventDetailsProps['value'] = {
       amount: getDecimalString(
         value.amount,
-        value.lockToken.significantDecimals,
+        value.lockToken?.significantDecimal,
       ),
       bridgeFee: getDecimalString(
         value.bridgeFee,
-        value.lockToken.significantDecimals,
+        value.lockToken?.significantDecimal,
       ),
       fromAddress: value.fromAddress,
       fromAddressUrl: getAddressUrl(value.fromChain, value.fromAddress),
@@ -46,7 +46,7 @@ const Content = ({ value }: EventSidebarProps) => {
       id: value.eventId,
       networkFee: getDecimalString(
         value.networkFee,
-        value.lockToken.significantDecimals,
+        value.lockToken?.significantDecimal,
       ),
       reports: value.WIDsCount,
       sourceTxId: value.sourceTxId,

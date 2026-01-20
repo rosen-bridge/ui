@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  Grid,
   Card,
   MenuItem,
   SubmitButton,
@@ -36,7 +35,6 @@ export const RequestAnOrderForm = () => {
   const {
     trigger,
     isMutating: isOrderPending,
-    error,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } = useSWRMutation<ApiOrderResponse, any, '/order', ApiOrderRequestBody>(
     '/order',
@@ -117,9 +115,13 @@ export const RequestAnOrderForm = () => {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {renderAlert()}
           <Stack spacing={2}>
+            {renderAlert()}
+
+            <ApiKeyModalWarning />
+
             <TextField label="Id" {...register('id')} />
+
             <TextField select label="Chain" {...register('chain')} fullWidth>
               {NETWORKS_KEYS.map((key) => (
                 <MenuItem key={key} value={key}>
@@ -127,22 +129,13 @@ export const RequestAnOrderForm = () => {
                 </MenuItem>
               ))}
             </TextField>
+
             <TextField
               label="Order"
               multiline
               rows={5}
               {...register('orderJson')}
             />
-
-            {error?.response?.status === 403 && (
-              <Grid container alignItems="center">
-                <Typography color="warning.main">
-                  The Api key is not correct
-                </Typography>
-              </Grid>
-            )}
-
-            <ApiKeyModalWarning />
 
             <SubmitButton loading={isOrderPending} disabled={!apiKey}>
               Send

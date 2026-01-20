@@ -1,5 +1,3 @@
-import React from 'react';
-
 import {
   ToolbarThemeTogglerAction,
   Toolbar as UiKitToolbar,

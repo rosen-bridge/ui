@@ -1,11 +1,18 @@
 'use client';
 
-import { Fragment } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 import { Box, PageHeading, Stack } from '@rosen-bridge/ui-kit';
-import { LayoutProps } from '@rosen-ui/types';
 
-const HomeLayout = ({
+type LayoutProps = {
+  actions: ReactNode;
+  address: ReactNode;
+  infoWidgets: ReactNode;
+  revenue: ReactNode;
+  tokens: ReactNode;
+};
+
+const Layout = ({
   actions,
   address,
   infoWidgets,
@@ -39,4 +46,4 @@ const HomeLayout = ({
   </Fragment>
 );
 
-export default HomeLayout;
+export default Layout;

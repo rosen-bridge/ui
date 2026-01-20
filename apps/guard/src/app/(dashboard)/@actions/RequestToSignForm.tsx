@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
@@ -128,8 +128,11 @@ export const RequestToSignForm = () => {
       </CardHeader>
       <CardBody>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {renderAlert()}
           <Stack spacing={2}>
+            {renderAlert()}
+
+            <ApiKeyModalWarning />
+
             <TextField
               select
               label="Chain"
@@ -143,12 +146,14 @@ export const RequestToSignForm = () => {
                 </MenuItem>
               ))}
             </TextField>
+
             <TextField
               label="Transaction"
               multiline
               rows={5}
               {...register('txJson')}
             />
+
             <TextField label="Required Signs" {...register('requiredSign')} />
 
             {error?.response?.status === 409 && (
@@ -157,14 +162,6 @@ export const RequestToSignForm = () => {
                 <Typography>Overwrite the already sent transaction</Typography>
               </Stack>
             )}
-
-            {error?.response?.status === 403 && (
-              <Typography color="warning.main">
-                The Api key is not correct
-              </Typography>
-            )}
-
-            <ApiKeyModalWarning />
 
             <SubmitButton loading={isSignPending} disabled={!apiKey}>
               Send

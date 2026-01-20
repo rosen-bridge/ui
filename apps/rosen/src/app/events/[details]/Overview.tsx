@@ -76,7 +76,7 @@ export const Overview = ({ id }: { id: string }) => {
           <Amount
             loading={isLoading}
             value={data?.amount}
-            decimal={data?.lockToken?.significantDecimals}
+            decimal={data?.lockToken?.significantDecimal}
             orientation="horizontal"
             unit={data?.lockToken?.name}
           />
@@ -154,7 +154,7 @@ export const Overview = ({ id }: { id: string }) => {
           <Amount
             loading={isLoading}
             value={data?.totalFee}
-            decimal={data?.lockToken?.significantDecimals}
+            decimal={data?.lockToken?.significantDecimal}
             unit={data?.lockToken?.name}
           />
         </Label>

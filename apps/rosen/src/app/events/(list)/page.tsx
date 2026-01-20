@@ -133,7 +133,7 @@ const Page = () => {
                   ? undefined
                   : {
                       amount: item.amount,
-                      decimal: item.lockToken?.significantDecimals,
+                      decimal: item.lockToken?.significantDecimal,
                       fromChain: item.fromChain,
                       href: `/events/${item.eventId}`,
                       id: item.eventId,

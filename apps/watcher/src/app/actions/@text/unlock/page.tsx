@@ -1,7 +1,5 @@
 'use client';
 
-import React from 'react';
-
 import { Typography } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
