@@ -27,10 +27,10 @@ describe('LockedAssetsMetricAction', () => {
   });
 
   /**
-   * @target calculateAndStoreLockedAssetsUsd should store correct total USD value
+   * @target calculateAndStoreLockedAssetsUsd should calculate and store total locked assets USD value
    * @dependency database
    * @scenario
-   * - insert tokens first (FK + NOT NULL fix)
+   * - insert tokens first
    * - insert locked assets with different tokenIds
    * - insert latest token prices
    * - call calculateAndStoreLockedAssetsUsd
@@ -80,7 +80,7 @@ describe('LockedAssetsMetricAction', () => {
   });
 
   /**
-   * @target calculateAndStoreLockedAssetsUsd should skip assets without price
+   * @target calculateAndStoreLockedAssetsUsd should skip locked assets without price
    * @dependency database
    * @scenario
    * - insert token
@@ -116,7 +116,7 @@ describe('LockedAssetsMetricAction', () => {
   });
 
   /**
-   * @target calculateAndStoreLockedAssetsUsd should update existing metric value
+   * @target calculateAndStoreLockedAssetsUsd should update existing locked assets metric
    * @dependency database
    * @scenario
    * - insert existing LOCKED_ASSETS_USD metric

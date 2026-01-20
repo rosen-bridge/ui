@@ -1,16 +1,8 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import { TokenMap, ERGO_CHAIN } from '@rosen-bridge/tokens';
-import {
-  MetricAction,
-  METRIC_KEYS,
-  LockedAssetsMetricAction,
-  EventCountMetricAction,
-  UserCountMetricAction,
-  WatcherCountMetricAction,
-  WatcherCountConfig,
-} from '@rosen-ui/rosen-statistics-entity';
+import { ERGO_CHAIN, TokenMap } from '@rosen-bridge/tokens';
+import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 
 /**
  * Calculate and persist general system metrics.
@@ -18,31 +10,16 @@ import {
  * @param dataSource DataSource instance for database operations
  * @param tokenMap   TokenMap instance
  * @param rsnTokenId RSN token Id
- * @param watcherCountConfig Configuration for watcher count metrics
  * @param logger     Optional logger instance
  */
 export const generalMetrics = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
   rsnTokenId: string,
-  watcherCountConfig: WatcherCountConfig,
-  logger?: AbstractLogger,
+  logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
-  logger = logger ?? new DummyLogger();
-
   const metricAction = new MetricAction(dataSource, logger);
-  const lockedAssetsMetricAction = new LockedAssetsMetricAction(
-    dataSource,
-    logger,
-  );
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
-  const eventCountMetricAction = new EventCountMetricAction(dataSource, logger);
-  const userCountMetricAction = new UserCountMetricAction(dataSource, logger);
-  const watcherCountMetricAction = new WatcherCountMetricAction(
-    dataSource,
-    watcherCountConfig,
-    logger,
-  );
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -79,11 +56,4 @@ export const generalMetrics = async (
       timestamp,
     );
   }
-  await lockedAssetsMetricAction.calculateAndStoreLockedAssetsUsd();
-
-  await eventCountMetricAction.calculateAndStoreEventCounts();
-
-  await userCountMetricAction.calculateAndStoreUserCounts();
-
-  await watcherCountMetricAction.calculateAndStoreWatcherCounts();
 };

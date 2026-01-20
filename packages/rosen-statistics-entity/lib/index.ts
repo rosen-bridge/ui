@@ -11,7 +11,7 @@ export {
   MetricAction,
   LockedAssetsMetricAction,
   EventCountMetricAction,
-  UserCountMetricAction,
+  UserEventMetricAction,
   WatcherCountMetricAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey, RWT_NETWORK_MAP } from './constants';
