@@ -10,9 +10,6 @@
     },
     {
       "path": "../data-source"
-    },
-    {
-      "path": "../asset-calculator"
     }
   ]
 }

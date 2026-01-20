@@ -10,9 +10,6 @@
     },
     {
       "path": "../data-source/tsconfig.build.json"
-    },
-    {
-      "path": "../asset-calculator/tsconfig.build.json"
     }
   ]
 }
