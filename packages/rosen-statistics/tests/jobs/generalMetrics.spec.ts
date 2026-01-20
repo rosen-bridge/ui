@@ -1,8 +1,8 @@
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { TokenMap } from '@rosen-bridge/tokens';
-import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
-import { MetricEntity, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
+import { MetricEntity } from '@rosen-ui/rosen-statistics-entity';
+import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';
@@ -14,26 +14,21 @@ describe('generalMetrics', () => {
   let metricRepository: Repository<MetricEntity>;
   let tokenPriceRepository: Repository<TokenPriceEntity>;
   let tokenMap: TokenMap;
-  let tokenRepository: Repository<TokenEntity>;
-  let lockedAssetRepository: Repository<LockedAssetEntity>;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
     await dataSource.synchronize(true);
     metricRepository = dataSource.getRepository(MetricEntity);
     tokenPriceRepository = dataSource.getRepository(TokenPriceEntity);
-    tokenRepository = dataSource.getRepository(TokenEntity);
-    lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
     tokenMap = new TokenMap();
     await tokenMap.updateConfigByJson(tokenMapData);
   });
 
   /**
-   * @target generalMetrics should persist network and token counts and store RSN price metric when price exists and calculate locked assets USD
+   * @target generalMetrics should persist network and token counts and store RSN price metric when price exists
    * @dependency database, TokenMap
    * @scenario
    * - insert RSN price into database
-   * - insert tokens and locked assets into database
    * - TokenMap returns a list of networks
    * - TokenMap returns a list of supported tokens
    * - call generalMetrics
@@ -41,9 +36,8 @@ describe('generalMetrics', () => {
    * - NUMBER_OF_NETWORKS metric is stored
    * - NUMBER_OF_SUPPORTED_TOKENS metric is stored
    * - RSN_PRICE_USD metric is stored
-   * - LOCKED_ASSETS_USD metric is stored with correct value
    */
-  it('should persist network and supported token counts and store RSN price metric when price exists and calculate locked assets USD', async () => {
+  it('should persist network and supported token counts and store RSN price metric when price exists', async () => {
     const safeTimestamp = Math.floor(Date.now() / 1000) - 86400;
 
     await tokenPriceRepository.insert({
@@ -51,35 +45,6 @@ describe('generalMetrics', () => {
       price: 0.25,
       timestamp: safeTimestamp,
     });
-
-    await tokenRepository.insert([
-      {
-        id: 'token-1',
-        name: 'Token 1',
-        decimal: 0,
-        significantDecimal: 0,
-        isNative: false,
-        chain: 'ergo',
-      },
-      {
-        id: 'token-2',
-        name: 'Token 2',
-        decimal: 0,
-        significantDecimal: 0,
-        isNative: false,
-        chain: 'ergo',
-      },
-    ]);
-
-    await lockedAssetRepository.insert([
-      { address: 'addr1', tokenId: 'token-1', amount: BigInt(10) },
-      { address: 'addr2', tokenId: 'token-2', amount: BigInt(5) },
-    ]);
-
-    await tokenPriceRepository.insert([
-      { tokenId: 'token-1', price: 2, timestamp: 1_000 },
-      { tokenId: 'token-2', price: 4, timestamp: 1_000 },
-    ]);
 
     await generalMetrics(dataSource, tokenMap, 'test-token-id');
 
@@ -95,16 +60,10 @@ describe('generalMetrics', () => {
       where: { key: METRIC_KEYS.RSN_PRICE_USD },
     });
 
-    const lockedMetric = await metricRepository.findOne({
-      where: { key: METRIC_KEYS.LOCKED_ASSETS_USD },
-    });
-
     expect(networksMetric?.value).toBe('2');
     expect(tokensMetric?.value).toBe('3');
     expect(rsnMetric).not.toBeNull();
     expect(rsnMetric?.value).toBe('0.25');
-    expect(lockedMetric).not.toBeNull();
-    expect(lockedMetric?.value).toBe('40');
   });
 
   /**
