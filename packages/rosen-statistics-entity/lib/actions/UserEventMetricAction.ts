@@ -6,7 +6,7 @@ import { METRIC_KEYS } from '../constants';
 import { UserEventEntity } from '../entities';
 import { MetricAction } from './MetricAction';
 
-export class UserCountMetricAction {
+export class UserEventMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
   private readonly userEventRepo: Repository<UserEventEntity>;
   private readonly metricAction: MetricAction;
@@ -82,7 +82,7 @@ export class UserCountMetricAction {
 
     const numberOfUser = await this.userEventRepo.count();
     await this.metricAction.upsertMetric(
-      METRIC_KEYS.USER_COUNT_TOTAL,
+      METRIC_KEYS.USER_EVENT_TOTAL,
       numberOfUser.toString(),
       timestamp,
     );

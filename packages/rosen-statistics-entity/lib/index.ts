@@ -11,6 +11,6 @@ export {
   MetricAction,
   LockedAssetsMetricAction,
   EventCountMetricAction,
-  UserCountMetricAction,
+  UserEventMetricAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';

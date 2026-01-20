@@ -2,22 +2,21 @@ import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { UserCountMetricAction } from '../../lib/actions/UserCountMetricAction';
+import { UserEventMetricAction } from '../../lib/actions/UserEventMetricAction';
 import { METRIC_KEYS } from '../../lib/constants';
 import { MetricEntity, UserEventEntity } from '../../lib/entities';
 import { createDatabase } from '../utils';
 
-describe('UserCountMetricAction', () => {
+describe('UserEventMetricAction', () => {
   let dataSource: DataSource;
-  let action: UserCountMetricAction;
+  let action: UserEventMetricAction;
   let metricRepo: Repository<MetricEntity>;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let userEventRepo: Repository<UserEventEntity>;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
-    action = new UserCountMetricAction(dataSource);
-
+    action = new UserEventMetricAction(dataSource);
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     userEventRepo = dataSource.getRepository(UserEventEntity);
@@ -32,7 +31,7 @@ describe('UserCountMetricAction', () => {
      * - call calculateAndStoreUserCounts
      * @expected
      * - UserEventEntity rows are created for each (fromAddress,toAddress) group
-     * - USER_COUNT_TOTAL metric is updated with number of rows in UserEventEntity
+     * - USER_EVENT_TOTAL metric is updated with number of rows in UserEventEntity
      */
     it('should calculate and store counts per (fromAddress, toAddress) and total metric', async () => {
       await eventTriggerRepo.insert([
@@ -168,7 +167,7 @@ describe('UserCountMetricAction', () => {
       expect(group2?.lastProcessedHeight).toBe(102);
 
       const metric = await metricRepo.find({
-        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
       });
       expect(metric).not.toBeNull();
       expect(metric.length).toBe(1);
@@ -183,7 +182,7 @@ describe('UserCountMetricAction', () => {
      * - call calculateAndStoreUserCounts
      * @expected
      * - no UserEventEntity rows created
-     * - USER_COUNT_TOTAL metric is not created
+     * - USER_EVENT_TOTAL metric is not created
      */
     it('should skip events if none match Success', async () => {
       await eventTriggerRepo.insert({
@@ -219,7 +218,7 @@ describe('UserCountMetricAction', () => {
 
       const rows = await userEventRepo.find();
       const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
       });
 
       expect(rows.length).toBe(0);
@@ -236,7 +235,7 @@ describe('UserCountMetricAction', () => {
      * @expected
      * - existing UserEventEntity count increases only by events with height > lastProcessedHeight
      * - lastProcessedHeight updated to max height of newly processed events
-     * - USER_COUNT_TOTAL metric updated to current number of rows
+     * - USER_EVENT_TOTAL metric updated to current number of rows
      */
     it('should update existing counts, ignore already-processed heights, and update total metric', async () => {
       await userEventRepo.insert({
@@ -380,7 +379,7 @@ describe('UserCountMetricAction', () => {
       expect(secondPair?.lastProcessedHeight).toBe(107);
 
       const metric = await metricRepo.find({
-        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
       });
       expect(metric).not.toBeNull();
       expect(metric.length).toBe(1);

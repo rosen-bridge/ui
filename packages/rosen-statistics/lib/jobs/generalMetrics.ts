@@ -2,37 +2,25 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import { TokenMap, ERGO_CHAIN } from '@rosen-bridge/tokens';
-import {
-  MetricAction,
-  METRIC_KEYS,
-  LockedAssetsMetricAction,
-  EventCountMetricAction,
-  UserCountMetricAction,
-} from '@rosen-ui/rosen-statistics-entity';
+import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 
 /**
  * Calculate and persist general system metrics.
  *
  * @param dataSource DataSource instance for database operations
  * @param tokenMap   TokenMap instance
+ * @param rsnTokenId RSN token Id
  * @param logger     Optional logger instance
  */
 export const generalMetrics = async (
   dataSource: DataSource,
   tokenMap: TokenMap,
   rsnTokenId: string,
-  logger?: AbstractLogger,
+  logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
-  logger = logger ?? new DummyLogger();
-
   const metricAction = new MetricAction(dataSource, logger);
-  const lockedAssetsMetricAction = new LockedAssetsMetricAction(
-    dataSource,
-    logger,
-  );
+
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
-  const eventCountMetricAction = new EventCountMetricAction(dataSource, logger);
-  const userCountMetricAction = new UserCountMetricAction(dataSource, logger);
 
   const timestamp = Math.floor(Date.now() / 1000);
 
@@ -69,9 +57,4 @@ export const generalMetrics = async (
       timestamp,
     );
   }
-  await lockedAssetsMetricAction.calculateAndStoreLockedAssetsUsd();
-
-  await eventCountMetricAction.calculateAndStoreEventCounts();
-
-  await userCountMetricAction.calculateAndStoreUserCounts();
 };
