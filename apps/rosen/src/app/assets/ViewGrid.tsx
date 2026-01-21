@@ -45,7 +45,12 @@ export const ViewGrid = ({
               spacing={1}
               style={{ maxWidth: 600 }}
             >
-              <Token loading={isLoading} name={item.name} style={{ flex: 1 }} />
+              <Token
+                loading={isLoading}
+                name={item.name}
+                ergoSideTokenId={item.ergoSideTokenId}
+                style={{ flex: 1 }}
+              />
               <Chip
                 color="neutral"
                 loading={isLoading}
