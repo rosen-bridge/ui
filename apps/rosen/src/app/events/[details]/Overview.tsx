@@ -79,6 +79,7 @@ export const Overview = ({ id }: { id: string }) => {
             decimal={data?.lockToken?.significantDecimal}
             orientation="horizontal"
             unit={data?.lockToken?.name}
+            price={data?.price}
           />
         </Label>
         <Label
@@ -156,6 +157,7 @@ export const Overview = ({ id }: { id: string }) => {
             value={data?.totalFee}
             decimal={data?.lockToken?.significantDecimal}
             unit={data?.lockToken?.name}
+            price={data?.price}
           />
         </Label>
       </Columns>

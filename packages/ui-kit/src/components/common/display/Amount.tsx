@@ -52,6 +52,11 @@ export type AmountProps = HTMLAttributes<HTMLDivElement> & {
    * If true, reverses the layout of the Amount component, moving the icon from left to right.
    */
   reverse?: boolean;
+
+  /**
+   * Reference currency value per unit, used to compute and display an approximate total
+   */
+  price?: number;
 };
 
 /**
@@ -69,6 +74,7 @@ const AmountBase = ({
   reverse,
   orientation = 'horizontal',
   unit,
+  price,
   ...props
 }: AmountProps) => {
   /**
@@ -207,6 +213,23 @@ const AmountBase = ({
     };
   }, [decimalLeadingZeroThreshold, decimalMaxFractionDigits, splittedValue]);
 
+  const formattedPrice = useMemo(() => {
+    if (!splittedValue) return;
+
+    if (price === undefined) return;
+
+    const amount = +`${splittedValue.number}.${splittedValue.decimal || 0}`;
+
+    if (Number.isNaN(amount)) return;
+
+    const formated = (amount * price).toLocaleString('en', {
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    });
+
+    return formated;
+  }, [splittedValue, price]);
+
   return (
     <Stack
       inline
@@ -232,7 +255,7 @@ const AmountBase = ({
           spacing="4px"
         >
           <>
-            {loading && <Skeleton variant="text" width={80} />}
+            {loading && <Skeleton width={80} />}
             {!loading && !!error && (
               <SvgIcon
                 style={{
@@ -276,6 +299,11 @@ const AmountBase = ({
           {unit && (
             <Typography fontSize="75%" component="div" style={{ opacity: 0.7 }}>
               {unit}
+            </Typography>
+          )}
+          {formattedPrice && (
+            <Typography style={{ opacity: 0.5 }}>
+              (${formattedPrice})
             </Typography>
           )}
         </Stack>
