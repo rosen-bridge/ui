@@ -32,12 +32,24 @@ export type TokenProps = HTMLAttributes<HTMLDivElement> & {
    * If true, show the avatar and text in reverse order.
    */
   reverse?: boolean;
+
+  /**
+   * Visual variant.
+   */
+  variant?: 'both' | 'logo' | 'title';
 };
 
 /**
  * Displays a token with an avatar and its name.
  */
-const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
+const TokenBase = ({
+  href,
+  loading,
+  name = 'Unsupported token',
+  reverse,
+  style,
+  variant = 'both',
+}: TokenProps) => {
   const styles = useMemo(() => {
     return Object.assign(
       {},
@@ -60,10 +72,11 @@ const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
       >
         {capitalize(name).slice(0, 1)}
       </Avatar>
-
-      <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
-        <Truncate lines={1}>{name}</Truncate>
-      </Text>
+      {(variant === 'both' || variant == 'title') && (
+        <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
+          <Truncate lines={1}>{name}</Truncate>
+        </Text>
+      )}
       {!!href && (
         <IconButton target="_blank" size="small" href={href}>
           <SvgIcon size="small">

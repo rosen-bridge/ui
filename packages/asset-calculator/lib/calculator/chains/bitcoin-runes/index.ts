@@ -17,11 +17,20 @@ export class BitcoinRunesCalculator extends AbstractCalculator {
     tokenMap: TokenMap,
     addresses: string[],
     url: string = 'https://open-api.unisat.io',
+    apiKey?: string,
     logger?: AbstractLogger,
   ) {
     super(addresses, logger, tokenMap);
+    // init Unisat client
+    const unisatHeaders = { 'Content-Type': 'application/json' };
+    if (apiKey) {
+      Object.assign(unisatHeaders, {
+        Authorization: `Bearer ${apiKey}`,
+      });
+    }
     this.client = axios.create({
       baseURL: url,
+      headers: unisatHeaders,
     });
   }
 

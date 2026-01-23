@@ -1,0 +1,54 @@
+import {
+  createTheme,
+  darkThemeOptions,
+  lightThemeOptions,
+} from '@rosen-bridge/ui-kit';
+
+const customLightThemeOptions = {
+  palette: {
+    mode: 'light',
+    primary: {
+      main: '#0B7975',
+      light: '#CEE4E3',
+      dark: '#074946',
+      contrastText: '#FFFFFF',
+    },
+    tertiary: {
+      main: '#42559E',
+      light: '#D9DDEC',
+      dark: '#28335F',
+      contrastText: '#FFFFFF',
+    },
+    background: {
+      paper: '#ffffff',
+      default: '#E7F2F1',
+    },
+  },
+};
+
+const customDarkThemeOptions = {
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#39ACA8',
+      light: '#233433',
+      dark: '#9DC9C8',
+      contrastText: '#000000',
+    },
+    tertiary: {
+      main: '#6877B1',
+      light: '#131725',
+      dark: '#B3BBD8',
+      contrastText: '#000000',
+    },
+    background: {
+      paper: '#1C2626',
+      default: '#141A1A',
+    },
+  },
+};
+
+export const theme = {
+  light: createTheme(lightThemeOptions, customLightThemeOptions),
+  dark: createTheme(darkThemeOptions, customDarkThemeOptions),
+};
