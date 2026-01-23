@@ -6,12 +6,13 @@ import {
   TokenMap,
 } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 import { NATIVE_TOKENS_TOTAL_SUPPLIES } from '../constants';
-import { AssetBalance, ChainAssetBalance, TotalChainsType } from '../types';
+import { AssetBalance, ChainAssetBalance } from '../types';
 
 export abstract class AbstractDataAdapter {
-  abstract chain: TotalChainsType;
+  abstract chain: Network;
 
   constructor(
     protected addresses: string[],
