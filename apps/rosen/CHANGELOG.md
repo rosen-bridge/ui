@@ -6,6 +6,7 @@
 
 - Replace warning icon with dash for empty field in Event Details page
 - Hide `Payment Tx` and `Reward Tx` fields when status is `fraud` on `EventDetails` page
+- Fix token filtering by native residency to ensure only correct assets are displayed on the Assets page
 
 ### Patch Changes
 

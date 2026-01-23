@@ -123,7 +123,8 @@ export const getAllAssets = async (filters: Filters) => {
       'chain',
       '(CAST(bridged AS NUMERIC) / POWER(10, COALESCE("significantDecimal", 0))) AS "bridgedNormalized"',
       'count(*) over() AS total',
-    ]);
+    ])
+    .where('te."isResident" = true');
 
   let queryBuilder = dataSource
     .createQueryBuilder()

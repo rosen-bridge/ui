@@ -8,8 +8,6 @@ import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';
 
-import { getTokenMap } from '@/tokenMap/getServerTokenMap';
-
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
 
@@ -29,6 +27,7 @@ interface EventWithTotal
   status: 'fraud' | 'processing' | 'successful' | 'multipleFlows';
   fromChain: Network;
   toChain: Network;
+  lockToken?: TokenEntity;
 }
 
 type EventDetailsType = Omit<EventWithTotal, 'total'>;
@@ -39,8 +38,6 @@ type EventDetailsType = Omit<EventWithTotal, 'total'>;
  * @param limit
  */
 export const getEvents = async (filters: Filters) => {
-  const tokenMap = await getTokenMap();
-
   filters.sort = Object.assign(
     {
       key: 'timestamp',
@@ -53,30 +50,29 @@ export const getEvents = async (filters: Filters) => {
     filters.search.in ||= [];
   }
 
-  (() => {
+  await (async () => {
     const field = filters.fields?.find(
       (field) => field.key == 'sourceChainTokenId',
     );
 
     if (!field) return;
 
-    const tokenIds: string[] = [];
+    const token = await tokenRepository.findOne({
+      where: {
+        id: field.value as string,
+      },
+    });
 
-    const values = [field.value].flat();
+    if (!token) return;
 
-    const collections = tokenMap.getConfig();
+    const tokens = await tokenRepository.find({
+      select: ['id'],
+      where: {
+        ergoSideTokenId: token.ergoSideTokenId,
+      },
+    });
 
-    for (const collection of collections) {
-      const tokens = Object.values(collection);
-      for (const value of values) {
-        for (const token of tokens) {
-          if (token.tokenId !== value) continue;
-          const ids = tokens.map((token) => token.tokenId);
-          tokenIds.push(...ids);
-          break;
-        }
-      }
-    }
+    const tokenIds = tokens.map((token) => token.id);
 
     field.value = tokenIds;
   })();
@@ -133,6 +129,7 @@ export const getEvents = async (filters: Filters) => {
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.id AS "eventTriggerId"',
+      'to_jsonb(te) AS "lockToken"',
       'COALESCE(ete.result, \'processing\') AS "status"',
       '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
       '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
@@ -196,6 +193,7 @@ export const getEvent = async (id: string) => {
     .createQueryBuilder('oe')
     .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
     .leftJoin(EventTriggerEntity, 'ete', 'ete.eventId = oe.requestId')
+    .leftJoin(TokenEntity, 'te', 'te.id = oe.sourceChainTokenId')
     .select([
       'oe.id AS "id"',
       'oe.fromChain AS "fromChain"',
@@ -214,6 +212,7 @@ export const getEvent = async (id: string) => {
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.txId AS "txId"',
+      'to_jsonb(te) AS "lockToken"',
       /**
        * There may be multiple event triggers for the same events, but we should
        * only select one based on the results. The order is:
