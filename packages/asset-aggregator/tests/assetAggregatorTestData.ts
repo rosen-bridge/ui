@@ -200,8 +200,8 @@ export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
       { address: 'test-address-2', balance: 2000n },
     ],
     '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900': [
-      { address: 'ergo_test-address-1', balance: 1000n },
-      { address: 'ergo_test-address-2', balance: 2000n },
+      { address: '92f7_test-address-1', balance: 1000n },
+      { address: '92f7_test-address-2', balance: 2000n },
     ],
   },
   binance: {
@@ -210,8 +210,8 @@ export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
       { address: 'test-address-2', balance: 2000n },
     ],
     '0xce5307d968c5d298239ffb7a6b0abd31aba5712e': [
-      { address: 'binance_test-address-1', balance: 1000n },
-      { address: 'binance_test-address-2', balance: 2000n },
+      { address: '0xce_test-address-1', balance: 1000n },
+      { address: '0xce_test-address-2', balance: 2000n },
     ],
   },
 };
