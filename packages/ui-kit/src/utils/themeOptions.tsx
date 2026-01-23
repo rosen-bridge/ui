@@ -16,6 +16,10 @@ import {
 import { AppProps } from '../components';
 
 declare module '@mui/material/styles' {
+  interface TypeBackground {
+    shadow: string;
+  }
+
   interface TypeNeutral {
     main: string;
     light: string;
@@ -23,13 +27,17 @@ declare module '@mui/material/styles' {
     contrastText: string;
   }
 
-  interface TypeBackground {
-    shadow: string;
+  interface TypeTertiary {
+    main: string;
+    light: string;
+    dark: string;
+    contrastText: string;
   }
 
   interface Palette {
     background: TypeBackground;
     neutral: TypeNeutral;
+    tertiary: TypeTertiary;
   }
 
   interface PaletteOptions {

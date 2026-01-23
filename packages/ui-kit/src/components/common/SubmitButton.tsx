@@ -21,9 +21,8 @@ export const SubmitButton = ({
 }: SubmitButtonProps) => (
   <LoadingButton
     sx={{
-      width: { mobile: '100%', laptop: '50%' },
+      width: { mobile: '100%', laptop: 'clamp(200px, 100%, 320px)' },
       display: 'flex',
-      mt: 3,
       mx: 'auto',
     }}
     variant="contained"

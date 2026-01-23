@@ -446,8 +446,14 @@ export const makeTaprootPayment = (
 export const makeP2wpkhPayment = (
   address: string,
 ): bitcoinJs.payments.Payment => {
+  const addressScript = bitcoinJs.address.toOutputScript(address);
+
+  if (addressScript.subarray(0, 2).toString('hex') !== '0014') {
+    throw new Error(`Expected a Native SegWit address, but found [${address}]`);
+  }
+
   const payment = bitcoinJs.payments.p2wpkh({
-    address,
+    output: addressScript,
   });
 
   if (!payment.output) throw Error(`failed to extract p2wpkh output script!`);
