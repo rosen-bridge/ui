@@ -11,6 +11,7 @@ interface BitcoinCalculatorInterface extends CalculatorInterface {
 }
 interface BitcoinRunesCalculatorInterface extends CalculatorInterface {
   unisatUrl?: string;
+  unisatApiKey?: string;
 }
 
 interface DogeCalculatorInterface extends CalculatorInterface {

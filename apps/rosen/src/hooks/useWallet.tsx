@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import * as wallets from '@/wallets';
@@ -153,9 +153,11 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
     if (!selectedSource) return;
 
-    if (selectedSource.name !== NETWORKS.bitcoin.key) return;
+    const segwitNetworks: Network[] = ['bitcoin', 'bitcoin-runes'];
 
-    if (selected.currentChain !== NETWORKS.bitcoin.key) return;
+    if (!segwitNetworks.includes(selectedSource.name)) return;
+
+    if (!segwitNetworks.includes(selected.currentChain)) return;
 
     const start = async () => {
       const address = await selected.getAddress();
