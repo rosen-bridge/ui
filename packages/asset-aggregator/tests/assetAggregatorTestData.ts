@@ -227,6 +227,12 @@ export const SAMPLE_ANALYZER_BRIDGED_TOKEN = [
     bridgedTokenId:
       '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
   },
+  {
+    amount: 7000n,
+    chain: 'binance',
+    tokenId: 'erg',
+    bridgedTokenId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
+  },
 ];
 
 /**
