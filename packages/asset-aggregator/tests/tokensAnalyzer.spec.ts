@@ -72,6 +72,11 @@ describe('TokensAnalyzer', () => {
         tokenMap,
       );
       await analyzer.analyze();
+
+      expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
+      expect(analyzer['bridgedTokens']).toEqual([
+        SAMPLE_ANALYZER_BRIDGED_TOKEN[0],
+      ]);
     });
   });
 

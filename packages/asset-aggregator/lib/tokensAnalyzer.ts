@@ -119,7 +119,7 @@ export class TokensAnalyzer {
     chainAssets: AssetBalance,
   ) => {
     this.logger.debug(
-      `Token [${token.tokenId}] is wrapped token, storing as bridged asset`,
+      `Token [${token.tokenId}] is wrapped token in ${chain} chain, storing as bridged asset`,
     );
 
     const assetTotalSupply = this.totalSupply
