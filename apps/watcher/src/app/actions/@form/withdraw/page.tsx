@@ -1,0 +1,294 @@
+'use client';
+
+import { ReactNode, useEffect, useMemo, useState } from 'react';
+import {
+  FormProvider,
+  SubmitHandler,
+  useController,
+  useForm,
+} from 'react-hook-form';
+
+import {
+  AlertCard,
+  AlertProps,
+  CircularProgress,
+  Grid,
+  Id,
+  InputAdornment,
+  MenuItem,
+  SubmitButton,
+  TextField,
+  useApiKey,
+  ApiKeyModalWarning,
+  Link,
+  Stack,
+} from '@rosen-bridge/ui-kit';
+import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
+import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
+import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
+import useSWR from 'swr';
+import useSWRMutation from 'swr/mutation';
+
+import { useInfo, useToken } from '@/hooks';
+import {
+  ApiAddressAssetsResponse,
+  ApiWithdrawRequestBody,
+  ApiWithdrawResponse,
+} from '@/types/api';
+
+import { ConfirmationModal } from '../../ConfirmationModal';
+import {
+  TokenAmountTextField,
+  TokenAmountCompatibleFormSchema,
+} from '../../TokenAmountTextField';
+
+interface Form extends TokenAmountCompatibleFormSchema {
+  address: string;
+  tokenId: string;
+}
+
+const WithdrawForm = () => {
+  const { data, isLoading: isTokensListLoading } =
+    useSWR<ApiAddressAssetsResponse>('/address/assets', fetcher, {});
+
+  const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
+  const { apiKey } = useApiKey();
+
+  const tokens = useMemo(
+    () => data?.items.filter((token) => !!token.amount),
+    [data],
+  );
+
+  const info = useInfo();
+
+  const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+
+  const [alertData, setAlertData] = useState<{
+    severity: AlertProps['severity'];
+    message: ReactNode;
+    more?: () => string;
+  } | null>(null);
+
+  const { trigger, isMutating: isWithdrawPending } = useSWRMutation<
+    ApiWithdrawResponse,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    any,
+    '/withdraw',
+    ApiWithdrawRequestBody
+  >('/withdraw', mutatorWithHeaders);
+
+  useEffect(() => {
+    if (!isErgTokenLoading && !ergToken?.amount) {
+      setAlertData({
+        severity: 'error',
+        message: 'Your wallet is empty. There is nothing to withdraw.',
+      });
+    }
+  }, [isErgTokenLoading, ergToken]);
+
+  const formMethods = useForm({
+    mode: 'onChange',
+    defaultValues: {
+      address: '',
+      tokenId: tokens?.[0]?.tokenId ?? '',
+      amount: '',
+    },
+  });
+  const { handleSubmit, control, resetField, register, watch, formState } =
+    formMethods;
+
+  const formData = watch();
+
+  const { field: tokenIdField } = useController({
+    control,
+    name: 'tokenId',
+  });
+
+  const selectedToken = useMemo(
+    () => tokens?.find((token) => token.tokenId === tokenIdField.value),
+    [tokens, tokenIdField.value],
+  );
+
+  useEffect(() => {
+    resetField('amount', {
+      defaultValue: '',
+      keepError: false,
+      keepDirty: false,
+      keepTouched: false,
+    });
+    if (tokens && !tokenIdField.value) {
+      resetField('tokenId', { defaultValue: tokens?.[0]?.tokenId ?? '' });
+    }
+  }, [tokens, resetField, tokenIdField.value]);
+
+  const submit = async () => {
+    try {
+      const response = await trigger({
+        data: {
+          address: formData.address,
+          tokens: [
+            {
+              tokenId: formData.tokenId,
+              amount: BigInt(
+                getNonDecimalString(formData.amount, selectedToken!.decimals),
+              ),
+            },
+          ],
+        },
+        headers: {
+          'Api-Key': apiKey!,
+        },
+      });
+      if (response.status === 'OK') {
+        setAlertData({
+          severity: 'success',
+          message: (
+            <>
+              Withdrawal is successful. Wait for tx [
+              <Link
+                target="_blank"
+                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
+              >
+                {response.txId}
+              </Link>
+              ] to be confirmed.
+            </>
+          ),
+        });
+      } else {
+        throw new Error(
+          'Server responded but the response message was unexpected',
+        );
+      }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      if (error?.response?.status === 403) {
+        setAlertData({
+          severity: 'error',
+          message: 'The Api key is not correct',
+        });
+      } else {
+        setAlertData({
+          severity: 'error',
+          message: error.message,
+          more: () => JSON.stringify(error.response?.data, null, 2),
+        });
+      }
+    }
+  };
+
+  const onSubmit: SubmitHandler<Form> = () => {
+    setConfirmationModalOpen(true);
+  };
+
+  const renderAlert = () => (
+    <AlertCard
+      more={alertData?.more}
+      severity={alertData?.severity}
+      onClose={() => setAlertData(null)}
+    >
+      {alertData?.message}
+    </AlertCard>
+  );
+
+  const disabled =
+    isTokensListLoading || isErgTokenLoading || !ergToken?.amount;
+
+  const renderAddressTextField = () => (
+    <TextField
+      label="Address"
+      disabled={disabled}
+      {...register('address', {
+        required: 'Address is required',
+      })}
+      error={!!formMethods.formState.errors.address}
+      helperText={
+        formMethods.formState.isValidating ? (
+          <CircularProgress size={10} />
+        ) : (
+          formMethods.formState.errors.address?.message
+        )
+      }
+      onBlur={(e) => {
+        const trimmed = e.target.value.trim();
+        formMethods.setValue('address', trimmed, {
+          shouldDirty: true,
+          shouldTouch: true,
+          shouldValidate: true,
+        });
+      }}
+    />
+  );
+
+  const renderTokensListSelect = () => (
+    <TextField
+      label="Token"
+      select={!isTokensListLoading}
+      InputProps={{
+        startAdornment: isTokensListLoading && (
+          <InputAdornment position="start">
+            <CircularProgress size={18} color="inherit" />
+          </InputAdornment>
+        ),
+      }}
+      {...tokenIdField}
+      disabled={disabled}
+    >
+      {tokens?.map((token) => (
+        <MenuItem value={token.tokenId} key={token.tokenId}>
+          {token.name ?? TOKEN_NAME_PLACEHOLDER}
+          &nbsp;
+          {!token.isNativeToken && (
+            <>
+              (<Id id={token.tokenId} indicator="middle" />)
+            </>
+          )}
+        </MenuItem>
+      ))}
+    </TextField>
+  );
+
+  const renderTokenAmountTextField = () => (
+    <TokenAmountTextField
+      disabled={disabled}
+      token={selectedToken}
+      minBoxValue={info.data?.minBoxValue}
+    />
+  );
+
+  return (
+    <FormProvider {...formMethods}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Stack spacing={2}>
+          {renderAlert()}
+          <ApiKeyModalWarning />
+          {renderAddressTextField()}
+          <Grid container spacing={2}>
+            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
+              {renderTokensListSelect()}
+            </Grid>
+            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
+              {renderTokenAmountTextField()}
+            </Grid>
+          </Grid>
+          <SubmitButton
+            disabled={!formState.isValid || !apiKey || disabled}
+            loading={isWithdrawPending}
+          >
+            Withdraw
+          </SubmitButton>
+        </Stack>
+        <ConfirmationModal
+          open={confirmationModalOpen}
+          title="Confirm Withdraw"
+          content={`You are going to withdraw ${formData.amount} of token with id ${formData.tokenId} to address ${formData.address}.`}
+          buttonText="Withdraw"
+          handleClose={() => setConfirmationModalOpen(false)}
+          onConfirm={submit}
+        />
+      </form>
+    </FormProvider>
+  );
+};
+
+export default WithdrawForm;

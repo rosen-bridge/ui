@@ -6,7 +6,6 @@ export const BITCOIN_SCANNER_INTERVAL = 10 * 60 * 1000;
 export const DOGE_SCANNER_INTERVAL = 60 * 1000;
 export const ETHEREUM_SCANNER_INTERVAL = 60 * 1000;
 export const BINANCE_SCANNER_INTERVAL = 10 * 1000;
-export const ASSET_CALCULATOR_INTERVAL = 30 * 1000;
 
 export const ERGO_SCANNER_LOGGER_NAME = 'ergo-scanner';
 export const CARDANO_SCANNER_LOGGER_NAME = 'cardano-scanner';

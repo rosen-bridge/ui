@@ -127,7 +127,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             <Amount
               loading={isLoading}
               value={data?.totalFee}
-              decimal={data?.lockToken?.significantDecimals}
+              decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
             />
           </Label>
@@ -135,7 +135,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             <Amount
               loading={isLoading}
               value={data?.bridgeFee}
-              decimal={data?.lockToken?.significantDecimals}
+              decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
             />
           </Label>
@@ -143,7 +143,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             <Amount
               loading={isLoading}
               value={data?.networkFee}
-              decimal={data?.lockToken?.significantDecimals}
+              decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
             />
           </Label>
