@@ -1,6 +1,18 @@
 import { Network } from '@rosen-ui/types';
 
-export class AddressRetrievalError extends Error {
+export class WalletError extends Error {
+  constructor(message: string, options?: { cause?: unknown }) {
+    super(message, options);
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, WalletError);
+    }
+
+    this.name = new.target.name;
+  }
+}
+
+export class AddressRetrievalError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -11,7 +23,7 @@ export class AddressRetrievalError extends Error {
   }
 }
 
-export class InteractionError extends Error {
+export class InteractionError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -22,7 +34,7 @@ export class InteractionError extends Error {
   }
 }
 
-export class UnsupportedChainError extends Error {
+export class UnsupportedChainError extends WalletError {
   constructor(
     public wallet: string,
     public chain: Network,
@@ -37,7 +49,7 @@ export class UnsupportedChainError extends Error {
   }
 }
 
-export class UnavailableApiError extends Error {
+export class UnavailableApiError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -48,7 +60,7 @@ export class UnavailableApiError extends Error {
   }
 }
 
-export class ChainSwitchingRejectedError extends Error {
+export class ChainSwitchingRejectedError extends WalletError {
   constructor(
     public wallet: string,
     public chain: Network,
@@ -61,7 +73,7 @@ export class ChainSwitchingRejectedError extends Error {
   }
 }
 
-export class ChainNotAddedError extends Error {
+export class ChainNotAddedError extends WalletError {
   constructor(
     public wallet: string,
     public chain: Network,
@@ -74,7 +86,7 @@ export class ChainNotAddedError extends Error {
   }
 }
 
-export class ConnectionRejectedError extends Error {
+export class ConnectionRejectedError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -85,7 +97,7 @@ export class ConnectionRejectedError extends Error {
   }
 }
 
-export class ConnectionTimeoutError extends Error {
+export class ConnectionTimeoutError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -99,7 +111,7 @@ export class ConnectionTimeoutError extends Error {
   }
 }
 
-export class DisconnectionFailedError extends Error {
+export class DisconnectionFailedError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -110,7 +122,7 @@ export class DisconnectionFailedError extends Error {
   }
 }
 
-export class UserDeniedTransactionSignatureError extends Error {
+export class UserDeniedTransactionSignatureError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -124,7 +136,7 @@ export class UserDeniedTransactionSignatureError extends Error {
   }
 }
 
-export class BalanceFetchError extends Error {
+export class BalanceFetchError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -135,7 +147,7 @@ export class BalanceFetchError extends Error {
   }
 }
 
-export class UtxoFetchError extends Error {
+export class UtxoFetchError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -146,7 +158,7 @@ export class UtxoFetchError extends Error {
   }
 }
 
-export class CurrentChainError extends Error {
+export class CurrentChainError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -157,7 +169,7 @@ export class CurrentChainError extends Error {
   }
 }
 
-export class SubmitTransactionError extends Error {
+export class SubmitTransactionError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -168,7 +180,7 @@ export class SubmitTransactionError extends Error {
   }
 }
 
-export class NotConnectedError extends Error {
+export class NotConnectedError extends WalletError {
   constructor(
     public wallet: string,
     public cause?: unknown,
@@ -176,5 +188,19 @@ export class NotConnectedError extends Error {
     super(`Wallet connection required for the [${wallet}] wallet`, {
       cause,
     });
+  }
+}
+
+export class NonNativeSegWitAddressError extends WalletError {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(
+      `The source address of the selected [${wallet}] wallet is not native SegWit (P2WPKH or P2WSH).`,
+      {
+        cause,
+      },
+    );
   }
 }

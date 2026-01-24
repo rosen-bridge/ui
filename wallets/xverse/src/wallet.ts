@@ -4,6 +4,7 @@ import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
+  NonNativeSegWitAddressError,
   SubmitTransactionError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
@@ -27,6 +28,11 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   currentChain: Network = NETWORKS.bitcoin.key;
 
   supportedChains: Network[] = [
+    NETWORKS.bitcoin.key,
+    NETWORKS['bitcoin-runes'].key,
+  ];
+
+  segwitNetworks: Network[] = [
     NETWORKS.bitcoin.key,
     NETWORKS['bitcoin-runes'].key,
   ];
@@ -64,7 +70,16 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
       (address) => address.purpose === this.purpose,
     );
 
-    return address!.address;
+    const isNonNativeSegWit =
+      address?.address &&
+      this.segwitNetworks.includes(this.currentChain) &&
+      !address.address.toLowerCase().startsWith('bc1q');
+
+    if (isNonNativeSegWit) {
+      throw new NonNativeSegWitAddressError(this.name);
+    }
+
+    return address?.address;
   };
 
   fetchPaymentAddress = async (): Promise<string> => {
@@ -127,11 +142,10 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   };
 
   hasConnection = async (): Promise<boolean> => {
-    try {
-      return !!(await this.fetchAddress());
-    } catch {
-      return false;
-    }
+    const response = await request('getAddresses', {
+      purposes: [this.purpose],
+    });
+    return response.status == 'success';
   };
 
   performSwitchChain = async (chain: Network): Promise<void> => {

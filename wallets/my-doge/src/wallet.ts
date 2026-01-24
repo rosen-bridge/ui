@@ -50,11 +50,7 @@ export class MyDogeWallet extends Wallet<MyDogeWalletConfig> {
   };
 
   hasConnection = async (): Promise<boolean> => {
-    try {
-      return (await this.api.getConnectionStatus()).connected;
-    } catch {
-      return false;
-    }
+    return (await this.api.getConnectionStatus()).connected;
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
