@@ -81,9 +81,7 @@ export class AssetAggregator {
     await this.bridgedAssetAction.store(bridgedTokens);
     await this.lockedAssetAction.store(lockedTokens);
     // remove unused locked and bridged tokens
-    await this.bridgedAssetAction.keepOnly(
-      Object.values(bridgedTokens).map((t) => t.tokenId),
-    );
+    await this.bridgedAssetAction.keepOnly(bridgedTokens.map((t) => t.tokenId));
     await this.lockedAssetAction.keepOnly(lockedTokens.map((t) => t.tokenId));
   };
 }
