@@ -66,14 +66,9 @@ export abstract class AbstractDataAdapter {
    * @return {Promise<RosenChainToken[]>}
    */
   protected getAllWrappedTokens = (): RosenChainToken[] => {
-    return this.tokenMap
-      .getConfig()
-      .filter(
-        (ts) =>
-          Object.keys(ts).includes(this.chain) &&
-          ts[this.chain].type != NATIVE_TOKEN,
-      )
-      .map((ts) => ts[this.chain]);
+    return this.tokenMap.getTokens(this.chain, this.chain).filter(
+      (t) => t.type != NATIVE_TOKEN,
+    );
   };
 
   /**
