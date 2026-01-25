@@ -40,7 +40,6 @@ export class LockedAssetAction {
   /**
    * Deletes tokens in chunks for efficiency.
    * @param tokenIds array of tokenIds to delete
-   * @param chunkSize size of chunks
    */
   protected async deleteInChunks(tokenIds: string[]) {
     let offset = 0;
