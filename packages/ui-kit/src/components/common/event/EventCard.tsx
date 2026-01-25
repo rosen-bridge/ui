@@ -24,6 +24,7 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
     status: EventStatusProps['value'];
     toChain: NetworkType;
     token?: string;
+    ergoSideTokenId?: string;
     timestamp?: number;
     flows?: number;
   };
@@ -55,6 +56,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
               {!isLoading && value && (
                 <Token
                   name={value.token}
+                  ergoSideTokenId={value.ergoSideTokenId}
                   variant="logo"
                   style={{ fontSize: '20px' }}
                 />
