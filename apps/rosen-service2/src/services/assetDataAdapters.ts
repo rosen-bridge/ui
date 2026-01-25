@@ -54,7 +54,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
   }
 
   /**
-   * calculate total supply of the token in Ergo
+   * calculate total supply of the wrapped-tokens
    */
   getAssetsTotalSupply = async (): Promise<TotalSupply[]> => {
     const assets = (

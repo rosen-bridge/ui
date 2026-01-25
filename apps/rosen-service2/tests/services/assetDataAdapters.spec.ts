@@ -12,7 +12,7 @@ import { TokensConfig } from '../../src/tokensConfig';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
   sampleTokenMapConfig,
-} from './mocked/assetDataAdapters.mock';
+} from './assetDataAdaptersTestData';
 
 interface TestContext {
   service: AssetDataAdapterService;
@@ -63,7 +63,7 @@ describe('AssetDataAdapterService', () => {
     });
 
     /**
-     * @target should fetch total supply for native and custom tokens
+     * @target should fetch total supply for wrapped tokens
      * @scenario
      * - tokenMap.getConfig returns multiple tokens including native ERG
      * - tokenMap.getTokenSet returns mapping for each token
@@ -71,7 +71,7 @@ describe('AssetDataAdapterService', () => {
      * - result includes native ERG total supply
      * - result includes all custom tokens with correct wrapped total supply
      */
-    it<TestContext>('should fetch total supply for native and custom tokens', async ({
+    it<TestContext>('should fetch total supply for wrapped tokens', async ({
       service,
       mockExplorer,
     }) => {
