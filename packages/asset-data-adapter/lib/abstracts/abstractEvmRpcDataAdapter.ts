@@ -7,13 +7,12 @@ import {
   ChainAssetBalance,
   EVMChainsType,
   EvmRpcDataAdapterAuthParams,
-  FetchOffsetType,
 } from '../types';
 import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   abstract chain: EVMChainsType;
-  protected fetchOffsets: FetchOffsetType = {};
+  protected fetchOffset: number;
   protected readonly provider: JsonRpcProvider;
 
   constructor(
@@ -28,10 +27,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     this.provider = authParams.authToken
       ? new JsonRpcProvider(`${authParams.url}/${authParams.authToken}`)
       : new JsonRpcProvider(`${authParams.url}`);
-    this.fetchOffsets = addresses.reduce<FetchOffsetType>((acc, address) => {
-      acc[address] = 0;
-      return acc;
-    }, {});
+    this.fetchOffset = 0;
   }
 
   /**
@@ -43,8 +39,10 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
     const assets: ChainAssetBalance[] = [];
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
-    const offset = this.fetchOffsets[address] ?? 0;
-    const chunk = supportedTokens.slice(offset, offset + this.chunkSize);
+    const chunk = supportedTokens.slice(
+      this.fetchOffset,
+      this.fetchOffset + this.chunkSize,
+    );
 
     for (const chainTokenDetails of chunk) {
       try {
@@ -78,10 +76,9 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
       }
     }
 
-    this.fetchOffsets[address] = offset + this.chunkSize;
-    if (this.fetchOffsets[address] >= supportedTokens.length) {
-      this.fetchOffsets[address] = 0;
-    }
+    this.fetchOffset += this.chunkSize;
+
+    if (this.fetchOffset >= supportedTokens.length) this.fetchOffset = 0;
 
     return assets;
   };
