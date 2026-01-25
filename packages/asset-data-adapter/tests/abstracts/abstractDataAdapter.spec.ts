@@ -1,8 +1,6 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
 import { describe, it, expect, vi } from 'vitest';
 
-import { ERG_TOTAL_SUPPLY } from '../../lib/constants';
 import { AssetBalance } from '../../lib/types';
 import {
   sampleTokenMapConfig,
@@ -94,15 +92,11 @@ describe('AbstractDataAdapter', () => {
 
       const chainWrappedTokens = adapter['getAllWrappedTokens']();
 
-      expect(Object.keys(result)).toHaveLength(chainWrappedTokens.length + 1); // plus one native token
+      expect(Object.keys(result)).toHaveLength(chainWrappedTokens.length); // plus one native token
 
       Object.entries(result).forEach(([k, v]) => {
         expect(v).toStrictEqual(
-          mockTokenMap.wrapAmount(
-            k,
-            k == NETWORKS.ergo.nativeToken ? ERG_TOTAL_SUPPLY : 5000n,
-            adapter.chain,
-          ),
+          mockTokenMap.wrapAmount(k, 5000n, adapter.chain),
         );
       });
     });

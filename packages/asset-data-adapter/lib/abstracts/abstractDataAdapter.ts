@@ -5,10 +5,8 @@ import {
   RosenChainToken,
   TokenMap,
 } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
-import { NATIVE_TOKENS_TOTAL_SUPPLIES } from '../constants';
 import { AssetBalance, ChainAssetBalance } from '../types';
 
 export abstract class AbstractDataAdapter {
@@ -67,13 +65,8 @@ export abstract class AbstractDataAdapter {
    */
   protected getAllWrappedTokens = (): RosenChainToken[] => {
     return this.tokenMap
-      .getConfig()
-      .filter(
-        (ts) =>
-          Object.keys(ts).includes(this.chain) &&
-          ts[this.chain].type != NATIVE_TOKEN,
-      )
-      .map((ts) => ts[this.chain]);
+      .getTokens(this.chain, this.chain)
+      .filter((t) => t.type != NATIVE_TOKEN);
   };
 
   /**
@@ -82,14 +75,7 @@ export abstract class AbstractDataAdapter {
    * @returns {Promise<Record<string, RosenAmount>>} tokenId → raw totalSupply
    */
   getAllTokensTotalSupply = async (): Promise<Record<string, RosenAmount>> => {
-    const nativeTokenTotalSupply = NATIVE_TOKENS_TOTAL_SUPPLIES[this.chain];
-    const totalSupplies: { [key: string]: RosenAmount } = {
-      [NETWORKS[this.chain].nativeToken]: this.tokenMap.wrapAmount(
-        NETWORKS[this.chain].nativeToken,
-        nativeTokenTotalSupply,
-        this.chain,
-      ),
-    };
+    const totalSupplies: { [key: string]: RosenAmount } = {};
     for (const wToken of this.getAllWrappedTokens())
       totalSupplies[wToken.tokenId] = this.tokenMap.wrapAmount(
         wToken.tokenId,
