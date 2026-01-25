@@ -3,6 +3,7 @@ import { DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenMap } from '@rosen-bridge/tokens';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
+import { NETWORKS } from '@rosen-ui/constants';
 import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import { AssetDataAdapterService } from '../../src/services/assetDataAdapters';
@@ -11,7 +12,7 @@ import { TokensConfig } from '../../src/tokensConfig';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
   sampleTokenMapConfig,
-} from './mocked/assetDataAdapters.mock';
+} from './assetDataAdaptersTestData';
 
 interface TestContext {
   service: AssetDataAdapterService;
@@ -62,7 +63,7 @@ describe('AssetDataAdapterService', () => {
     });
 
     /**
-     * @target should fetch total supply for native and custom tokens
+     * @target should fetch total supply for wrapped tokens
      * @scenario
      * - tokenMap.getConfig returns multiple tokens including native ERG
      * - tokenMap.getTokenSet returns mapping for each token
@@ -70,13 +71,17 @@ describe('AssetDataAdapterService', () => {
      * - result includes native ERG total supply
      * - result includes all custom tokens with correct wrapped total supply
      */
-    it<TestContext>('should fetch total supply for native and custom tokens', async ({
+    it<TestContext>('should fetch total supply for wrapped tokens', async ({
       service,
       mockExplorer,
     }) => {
       mockExplorer.v1.getApiV1TokensP1.mockResolvedValue({
         emissionAmount: 5000n,
       });
+
+      service['adapters'] = {
+        [NETWORKS.ergo.key]: service['adapters'][NETWORKS.ergo.key],
+      };
 
       const result = await service.getAssetsTotalSupply();
 

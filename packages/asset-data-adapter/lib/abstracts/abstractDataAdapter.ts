@@ -1,6 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import {
-  NATIVE_TOKEN,
+  NATIVE_RESIDENCY,
   RosenAmount,
   RosenChainToken,
   TokenMap,
@@ -66,7 +66,7 @@ export abstract class AbstractDataAdapter {
   protected getAllWrappedTokens = (): RosenChainToken[] => {
     return this.tokenMap
       .getTokens(this.chain, this.chain)
-      .filter((t) => t.type != NATIVE_TOKEN);
+      .filter((t) => t.residency != NATIVE_RESIDENCY);
   };
 
   /**
