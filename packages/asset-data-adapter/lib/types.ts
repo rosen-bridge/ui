@@ -7,6 +7,8 @@ import { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
 
 export type AssetBalance = { [assetId: string]: AddressBalance[] };
 
+export type FetchOffsetType = { [key: string]: number };
+
 export interface AddressBalance {
   address: string;
   balance: bigint;
