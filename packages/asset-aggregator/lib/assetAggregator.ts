@@ -84,10 +84,6 @@ export class AssetAggregator {
     await this.bridgedAssetAction.keepOnly(
       Object.values(bridgedTokens).map((t) => t.tokenId),
     );
-    await this.lockedAssetAction.keepOnly(
-      Object.values(lockedTokens)
-        .flat()
-        .map((t) => t.tokenId),
-    );
+    await this.lockedAssetAction.keepOnly(lockedTokens.map((t) => t.tokenId));
   };
 }
