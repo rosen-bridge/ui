@@ -11,6 +11,8 @@ export type AssetBalance = { [assetId: string]: AddressBalance[] };
 
 export type EVMChainsType = Extract<Network, 'ethereum' | 'binance'>;
 
+export type FetchOffsetType = { [key: string]: number };
+
 export interface AddressBalance {
   address: string;
   balance: bigint;
@@ -28,8 +30,6 @@ export type ChainsAdapters =
   | BinanceEvmRpcDataAdapter
   | CardanoKoiosDataAdapter
   | DogeBlockCypherDataAdapter;
-
-export type FetchOffsetType = { [address: string]: number };
 
 export interface ErgoExplorerDataAdapterAuthParams {
   explorerUrl: string;
