@@ -3,7 +3,6 @@ import {
   QueryRunner,
   Repository,
 } from '@rosen-bridge/extended-typeorm';
-import { describe, beforeEach, it, expect } from 'vitest';
 
 import { TokenEntity } from '../../lib';
 import { TokenAction } from '../../lib/actions';
