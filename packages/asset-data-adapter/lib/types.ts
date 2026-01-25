@@ -27,8 +27,6 @@ export type ChainsAdapters =
   | CardanoKoiosDataAdapter
   | DogeBlockCypherDataAdapter;
 
-export type FetchOffsetType = { [address: string]: number };
-
 export interface ErgoExplorerDataAdapterAuthParams {
   explorerUrl: string;
 }
