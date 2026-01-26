@@ -1,6 +1,8 @@
+import { useMemo } from 'react';
+
 import { useIsDarkMode, useIsMobile } from '../../hooks';
 
-type LogoPalette = {
+type Palette = {
   main: string;
   subt: string;
   comp: string;
@@ -10,30 +12,35 @@ type LogoPalette = {
 
 export const AppLogo = () => {
   const isMobile = useIsMobile();
+
   const isDarkMode = useIsDarkMode();
-  const palette: LogoPalette = isDarkMode
-    ? {
-        main: '#B15A3F',
-        subt: '#C48D7C',
-        comp: '#90314F',
-        back: '#1F2937',
-        line: ['#333', '#4D4D4D', '#666', '#808080', '#999'],
-      }
-    : {
-        main: '#DD704F',
-        subt: '#F5D4CA',
-        comp: '#B52B4C',
-        back: '#CDD7FF',
-        line: ['#CCC', '#B3B3B3', '#999', '#808080', '#666'],
-      };
+
+  const palette = useMemo<Palette>(() => {
+    return isDarkMode
+      ? {
+          main: '#B15A3F',
+          subt: '#C48D7C',
+          comp: '#90314F',
+          back: '#1F2937',
+          line: ['#333', '#4D4D4D', '#666', '#808080', '#999'],
+        }
+      : {
+          main: '#DD704F',
+          subt: '#F5D4CA',
+          comp: '#B52B4C',
+          back: '#CDD7FF',
+          line: ['#CCC', '#B3B3B3', '#999', '#808080', '#666'],
+        };
+  }, [isDarkMode]);
+
   return isMobile ? (
-    <RosenHorizontal palette={palette} />
+    <AppLogoHorizontal palette={palette} />
   ) : (
-    <RosenVertical palette={palette} />
+    <AppLogoVertical palette={palette} />
   );
 };
 
-const RosenVertical = ({ palette }: { palette: LogoPalette }) => {
+const AppLogoVertical = ({ palette }: { palette: Palette }) => {
   return (
     <svg
       width="64"
@@ -197,7 +204,7 @@ const RosenVertical = ({ palette }: { palette: LogoPalette }) => {
   );
 };
 
-const RosenHorizontal = ({ palette }: { palette: LogoPalette }) => {
+const AppLogoHorizontal = ({ palette }: { palette: Palette }) => {
   return (
     <svg
       height="40"
