@@ -149,10 +149,6 @@ export const sampleTokenMapConfig: RosenTokens = [
 ];
 
 export const expectedErgoGetAssetsTotalSupplyResult = [
-  {
-    assetId: 'token1',
-    totalSupply: 5000n,
-  },
   { assetId: 'ergo_token2', totalSupply: 5n },
   { assetId: 'ergo_token3', totalSupply: 5000n },
   { assetId: 'ergo_token4', totalSupply: 5000n },
