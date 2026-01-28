@@ -50,15 +50,17 @@ type SmartSearchState = 'idle' | 'flow' | 'operator' | 'value' | 'complete';
 
 export type SmartSearchProps = {
   disabled?: boolean;
-  filters: Filter[];
+  options: Filter[];
   namespace: string;
-  onChange: (params: Record<string, unknown>) => void;
+  value?: Selected[];
+  onChange: (filters: Selected[]) => void;
 };
 
 export const SmartSearch = ({
   disabled,
-  filters: filtersInput,
+  options: filtersInput,
   namespace,
+  value: filters,
   onChange,
 }: SmartSearchProps) => {
   const $anchor = useRef<HTMLInputElement>(null);
@@ -69,11 +71,9 @@ export const SmartSearch = ({
 
   const [current, setCurrent] = useState<Partial<Selected>>();
 
-  const [filters, setFilters] = useState<Selected[]>([]);
-
   const [query, setQuery] = useState('');
 
-  const [selected, setSelected] = useState<Selected[]>([]);
+  const [selected, setSelected] = useState<Selected[]>(filters || []);
 
   const state = useMemo<SmartSearchState>(() => {
     if (!current) return 'idle';
@@ -179,7 +179,7 @@ export const SmartSearch = ({
       switch (event.key) {
         case 'Enter': {
           if (state == 'flow' && !query) {
-            setFilters(selected);
+            onChange(selected);
           }
           break;
         }
@@ -230,7 +230,15 @@ export const SmartSearch = ({
         }
       }
     },
-    [current, filtersInput, query, selected, selectedValidated, state],
+    [
+      current,
+      filtersInput,
+      query,
+      selected,
+      selectedValidated,
+      state,
+      onChange,
+    ],
   );
 
   const handlePickerSelect = useCallback(
@@ -265,24 +273,10 @@ export const SmartSearch = ({
 
     setCurrent(undefined);
 
+    if (!filters) return;
+
     $history.current?.add(filters);
-
-    const params: Record<string, unknown> = {};
-
-    for (const item of filters) {
-      const parsed = parseFilter(filtersInput, item)!;
-
-      const operator = parsed.operator!.symbol;
-
-      const array = Array.isArray(item.value) ? '[]' : '';
-
-      const value = [item.value].flat().join(',');
-
-      params[`${item.flow}${array}${operator.replace('=', '')}`] = value;
-    }
-
-    onChange(params);
-  }, [filters, filtersInput, onChange]);
+  }, [filters]);
 
   return (
     <Root>
@@ -293,7 +287,7 @@ export const SmartSearch = ({
         ref={$history}
         onSelect={(selected) => {
           setSelected(selected);
-          setFilters(selected);
+          onChange(selected);
         }}
       />
       <Divider
@@ -335,7 +329,7 @@ export const SmartSearch = ({
       <IconButton
         disabled={disabled}
         ref={$search}
-        onClick={() => setFilters(selected)}
+        onClick={() => onChange(selected)}
       >
         <SvgIcon>
           <Search />

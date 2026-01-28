@@ -5,7 +5,7 @@ export const OPERATOR_IS: Operator = {
   label: 'Is',
   preview: '=',
   post: '=',
-  symbol: '=',
+  symbol: '',
 };
 
 export const OPERATOR_NOT: Operator = {
@@ -13,7 +13,7 @@ export const OPERATOR_NOT: Operator = {
   label: 'Not',
   preview: '≠',
   post: '≠',
-  symbol: '!=',
+  symbol: '!',
 };
 
 export const OPERATOR_IS_NOT_ONE_OF: Operator = {
@@ -21,7 +21,7 @@ export const OPERATOR_IS_NOT_ONE_OF: Operator = {
   label: 'Is not one of',
   preview: '∉',
   post: '∉',
-  symbol: '!=',
+  symbol: '[]!',
 };
 
 export const OPERATOR_IS_ONE_OF: Operator = {
@@ -29,7 +29,7 @@ export const OPERATOR_IS_ONE_OF: Operator = {
   label: 'Is one of',
   preview: '∈',
   post: '∈',
-  symbol: '=',
+  symbol: '[]',
 };
 
 export const OPERATOR_GREATER_THAN_OR_EQUAL: Operator = {
@@ -37,7 +37,7 @@ export const OPERATOR_GREATER_THAN_OR_EQUAL: Operator = {
   label: 'Greater Than Or Equal',
   preview: '≥',
   post: '≥',
-  symbol: '>=',
+  symbol: '>',
 };
 
 export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
@@ -45,7 +45,7 @@ export const OPERATOR_LESS_THAN_OR_EQUAL: Operator = {
   label: 'Less Than Or Equal',
   preview: '≤',
   post: '≤',
-  symbol: '<=',
+  symbol: '<',
 };
 
 export const OPERATOR_CONTAINS: Operator = {
@@ -53,7 +53,7 @@ export const OPERATOR_CONTAINS: Operator = {
   label: 'Contains',
   preview: '⊃',
   post: '⊃',
-  symbol: '*=',
+  symbol: '*',
 };
 
 export const OPERATOR_STARTS_WITH: Operator = {
@@ -61,7 +61,7 @@ export const OPERATOR_STARTS_WITH: Operator = {
   label: 'Starts With',
   preview: '→',
   post: '→',
-  symbol: '^=',
+  symbol: '^',
 };
 
 export const OPERATOR_ENDS_WITH: Operator = {
@@ -69,7 +69,7 @@ export const OPERATOR_ENDS_WITH: Operator = {
   label: 'Ends With',
   preview: '←',
   post: '←',
-  symbol: '$=',
+  symbol: '$',
 };
 
 export const OPERATORS_COMPARATIVE: Operator[] = [
@@ -85,6 +85,18 @@ export const OPERATORS_EQUALITY: Operator[] = [
 ];
 
 export const OPERATORS_STRING: Operator[] = [
+  OPERATOR_CONTAINS,
+  OPERATOR_STARTS_WITH,
+  OPERATOR_ENDS_WITH,
+];
+
+export const OPERATORS: Operator[] = [
+  OPERATOR_LESS_THAN_OR_EQUAL,
+  OPERATOR_GREATER_THAN_OR_EQUAL,
+  OPERATOR_IS,
+  OPERATOR_NOT,
+  OPERATOR_IS_ONE_OF,
+  OPERATOR_IS_NOT_ONE_OF,
   OPERATOR_CONTAINS,
   OPERATOR_STARTS_WITH,
   OPERATOR_ENDS_WITH,
