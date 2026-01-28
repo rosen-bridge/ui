@@ -11,22 +11,22 @@ const LabelGroupBase = ({ children, ...rest }: LabelGroupBaseProps) => {
   return (
     <Box
       sx={{
-        'display': 'grid',
-        'grid-template-columns': 'auto auto 1fr',
+        display: 'grid',
+        gridTemplateColumns: 'auto auto 1fr',
         '& .rosen-label-horizontal': {
-          'grid-column': '1 / 4',
-          'display': 'grid',
-          'grid-template-columns': 'subgrid',
+          gridColumn: '1 / 4',
+          display: 'grid',
+          gridTemplateColumns: 'subgrid',
           '.rosen-label-inset': {
-            'grid-column': '1 / 2',
+            gridColumn: '1 / 2',
           },
           '.rosen-label-container': {
-            'grid-column': '2 / 4',
-            'display': 'grid',
-            'grid-template-columns': 'subgrid',
+            gridColumn: '2 / 4',
+            display: 'grid',
+            gridTemplateColumns: 'subgrid',
           },
           '.rosen-label-label': {
-            'grid-column': '1 / 2',
+            gridColumn: '1 / 2',
           },
         },
       }}

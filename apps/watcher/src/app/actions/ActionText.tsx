@@ -25,7 +25,9 @@ export const ActionText = ({ title, children }: ActionText) => (
       </CardTitle>
     </CardHeader>
     <CardBody>
-      <Typography color="textSecondary">{children}</Typography>
+      <Typography component="div" color="textSecondary">
+        {children}
+      </Typography>
     </CardBody>
   </Card>
 );

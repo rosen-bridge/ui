@@ -15,15 +15,21 @@ const Root = styled('div')(({ theme }) => ({
     'display': 'flex',
     'alignItems': 'center',
     'gap': '2px',
-    '& > :nth-child(1)': {
+
+    '.item-middle':{
+      borderRadius:0
+    },
+    '.item-start': {
       borderTopLeftRadius: theme.shape.borderRadius / 4,
       borderBottomLeftRadius: theme.shape.borderRadius / 4,
     },
-    '& > :nth-child(3)': {
+
+    '.item-end': {
       borderTopRightRadius: theme.shape.borderRadius / 4,
       borderBottomRightRadius: theme.shape.borderRadius / 4,
     },
   },
+
   '.item': {
     display: 'flex',
     alignItems: 'center',
@@ -64,15 +70,15 @@ export const Chips = ({ filters, value, onRemove }: ChipsProps) => {
         return (
           <div key={JSON.stringify(item)} className="items">
             {hasFlow && (
-              <Typography className="item">{parsed.flow.label}</Typography>
+              <Typography component="div" className="item item-start">{parsed.flow.label}</Typography>
             )}
             {hasFlow && hasOperator && (
-              <Typography className="item">
+              <Typography component="div" className="item item-middle">
                 {parsed.operator.preview || parsed.operator.label}
               </Typography>
             )}
             {hasFlow && hasOperator && hasValue && (
-              <div key={JSON.stringify(value)} className="item">
+              <div key={JSON.stringify(value)} className="item item-end">
                 {[parsed.value].flat().map((value, index, values) => {
                   const length = values.length;
 

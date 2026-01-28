@@ -15,10 +15,10 @@ export const ApiKeyModalWarning = () => {
         sx={{
           '@container (max-width: 480px)': {
             'display': 'grid',
-            'grid-template-columns': 'auto 1fr',
+            'gridTemplateColumns': 'auto 1fr',
             '.MuiAlert-action': {
-              'grid-column': '2',
-              'grid-row': '2',
+              'gridColumn': '2',
+              'gridRow': '2',
             },
           },
         }}

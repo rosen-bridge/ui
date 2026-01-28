@@ -50,9 +50,9 @@ const isIconKey = (icon: unknown): icon is keyof typeof Icons =>
   typeof icon === 'string' && icon in Icons;
 
 const ChipWrapper = styled('div')<ChipBaseProps>(({
-  theme,
-  color = 'primary',
-}) => {
+                                                    theme,
+                                                    color = 'primary',
+                                                  }) => {
   const palette = theme.palette || theme;
   const colors = palette[color] || palette.primary;
 
@@ -90,7 +90,7 @@ const ChipWrapper = styled('div')<ChipBaseProps>(({
  * ```
  */
 const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
-  const { label, icon, children, color = 'primary', loading } = props;
+  const { label, icon, children, color = 'primary', loading,...rest } = props;
 
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
@@ -122,7 +122,7 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
     : 'Invalid';
 
   return (
-    <ChipWrapper color={color} ref={ref} {...props}>
+    <ChipWrapper color={color} ref={ref} {...rest}>
       {RenderedIcon}
       {content}
     </ChipWrapper>

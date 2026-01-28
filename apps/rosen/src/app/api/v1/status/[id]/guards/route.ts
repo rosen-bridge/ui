@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 import { withValidation } from '@/app/api/v1/withValidation';
 import { dataSource } from '@/backend/dataSource';
 import '@/backend/initialize-datasource-if-needed';
@@ -6,9 +8,9 @@ import { PublicStatusAction } from '@/backend/status/PublicStatusAction';
 
 import { GetGuardStatusTimelineParams, validator } from './validations';
 
-PublicStatusAction.init(dataSource);
-
 const handler = async (params: GetGuardStatusTimelineParams) => {
+  PublicStatusAction.init(dataSource);
+
   const { total, items } =
     await PublicStatusAction.getInstance().getGuardStatusTimeline(
       params.id,
@@ -23,4 +25,21 @@ const handler = async (params: GetGuardStatusTimelineParams) => {
   };
 };
 
-export const POST = withValidation(validator, handler);
+type RouteContext = {
+  params: Promise<{ id: string }>;
+};
+
+export async function POST(request: NextRequest, context: RouteContext) {
+  const body = await request.json();
+
+  const { id } = await context.params;
+
+  const params = {
+    id,
+    guardPks: body.guardPks,
+    offset: body.offset,
+    limit: body.limit,
+  };
+
+  return withValidation(validator, handler)(request, { params });
+}

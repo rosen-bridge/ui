@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 import { ValidationResult } from 'joi';
 
@@ -46,22 +46,22 @@ export const withValidation =
         value = result;
       }
     } catch (error) {
-      return Response.json((error as any).message, { status: 400 });
+      return NextResponse.json((error as any).message, { status: 400 });
     }
 
     try {
       const response = await handler(value);
-      return Response.json(response);
+      return NextResponse.json(response);
     } catch (error) {
       if (error instanceof ReferenceError) {
-        return Response.json(error.message, { status: 404 });
+        return NextResponse.json(error.message, { status: 404 });
       }
       if (error instanceof AccessDeniedError) {
-        return Response.json({ error: error.message }, { status: 403 });
+        return NextResponse.json({ error: error.message }, { status: 403 });
       }
       if (error instanceof Error) {
-        return Response.json(error.message, { status: 500 });
+        return NextResponse.json(error.message, { status: 500 });
       }
-      return Response.json(JSON.stringify(error), { status: 500 });
+      return NextResponse.json(JSON.stringify(error), { status: 500 });
     }
   };

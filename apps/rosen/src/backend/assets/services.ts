@@ -11,7 +11,8 @@ import {
  * return asset details
  * @param id
  */
-export const getAsset = async (id: string) => {
+export const getAsset = async (id?: string) => {
+  if (!id) return null;
   const assetDetails = await repositoryGetAsset(id);
 
   return {

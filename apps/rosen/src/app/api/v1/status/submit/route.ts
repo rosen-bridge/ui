@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 import { ECDSA } from '@rosen-bridge/encryption';
 
 import { AccessDeniedError, withValidation } from '@/app/api/v1/withValidation';
@@ -8,12 +10,12 @@ import { publicStatusConfigs } from '@/backend/status/services';
 
 import { paramsToSignMessage, validator, Params } from './validations';
 
-PublicStatusAction.init(dataSource);
-
-// generating an ECDSA encryption object with no secret only for verification
-const ecdsa = new ECDSA('');
-
 const handler = async (params: Params) => {
+  PublicStatusAction.init(dataSource);
+
+  // generating an ECDSA encryption object with no secret only for verification
+  const ecdsa = new ECDSA('');
+
   // check if pk is allowed
   if (!publicStatusConfigs.allowedPks.includes(params.pk)) {
     throw new AccessDeniedError('public key not allowed');
@@ -52,4 +54,6 @@ const handler = async (params: Params) => {
   return { ok: true };
 };
 
-export const POST = withValidation(validator, handler);
+export async function POST(request: NextRequest) {
+  return withValidation(validator, handler)(request);
+}

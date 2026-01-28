@@ -66,6 +66,7 @@ export const InfoWidgetCard = ({
               )}
             </Stack>
             <Typography
+              component="div"
               variant="body2"
               color="primary.contrastText"
               style={{ opacity: 0.6 }}

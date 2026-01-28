@@ -104,7 +104,7 @@ const IdentifierBase = ({
                 fontFamily: 'monospace',
               }}
             >
-              <div
+              <span
                 style={{
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
@@ -116,7 +116,7 @@ const IdentifierBase = ({
                 {showFallback
                   ? fallback
                   : (value ?? '').slice(0, -trailingLength)}
-              </div>
+              </span>
               <span style={{ flexShrink: 0 }}>
                 {(value ?? '').slice(-trailingLength)}
               </span>

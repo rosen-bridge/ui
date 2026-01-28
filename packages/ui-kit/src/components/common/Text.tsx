@@ -14,7 +14,7 @@ export type TextProps = {
  */
 const TextBase = ({ children, loading, ...props }: TextProps) => {
   return (
-    <Typography {...props}>
+    <Typography component="div" {...props}>
       {!loading ? children : <Skeleton width="80px" variant="text" />}
     </Typography>
   );

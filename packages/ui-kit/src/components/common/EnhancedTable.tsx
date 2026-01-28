@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { Fragment, ReactNode } from 'react';
 
 import { Breakpoint } from '@mui/material';
 
@@ -93,9 +93,9 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const renderHead = () => (
     <TableHead>
       <TableRow>
-        {tableHead.map((headItem) => (
+        {tableHead.map((headItem,index) => (
           <TableCell
-            key={headItem.title}
+            key={`${headItem.title ?? 'col'}-${index}`}
             variant="head"
             {...(headItem.cellProps ? headItem.cellProps : {})}
           >
@@ -109,7 +109,11 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
   const renderBody = () => (
     <TableBody>
       {data.length ? (
-        data.map(renderRow)
+        data.map((row, index) => (
+          <Fragment key={(row as any)?.id ?? index}>
+            {renderRow(row)}
+          </Fragment>
+        ))
       ) : (
         <TableRow>
           <TableCell
