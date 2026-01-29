@@ -27,7 +27,6 @@ export class EventCountMetricAction {
    */
   calculateAndStoreEventCounts = async (): Promise<void> => {
     const timestamp = Math.floor(Date.now() / 1000);
-    this.logger.debug(`Calculating event counts at timestamp: [${timestamp}]`);
 
     const lastProcessed = await this.eventCountRepo
       .createQueryBuilder('ec')
