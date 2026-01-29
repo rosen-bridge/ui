@@ -96,9 +96,11 @@ export class EventCountMetricAction {
     const totalExistingEvent = await this.metricAction.getMetricByKey(
       METRIC_KEYS.EVENT_COUNT_TOTAL,
     );
+
     const existingValue = totalExistingEvent
       ? Number(totalExistingEvent.value)
       : 0;
+
     await this.metricAction.upsertMetric(
       METRIC_KEYS.EVENT_COUNT_TOTAL,
       (existingValue + totalCount).toString(),
