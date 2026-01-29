@@ -27,7 +27,6 @@ export class EventCountMetricAction {
    */
   calculateAndStoreEventCounts = async (): Promise<void> => {
     const timestamp = Math.floor(Date.now() / 1000);
-    this.logger.debug(`Calculating event counts at timestamp: [${timestamp}]`);
 
     const lastProcessed = await this.eventCountRepo
       .createQueryBuilder('ec')
@@ -96,9 +95,11 @@ export class EventCountMetricAction {
     const totalExistingEvent = await this.metricAction.getMetricByKey(
       METRIC_KEYS.EVENT_COUNT_TOTAL,
     );
+
     const existingValue = totalExistingEvent
       ? Number(totalExistingEvent.value)
       : 0;
+
     await this.metricAction.upsertMetric(
       METRIC_KEYS.EVENT_COUNT_TOTAL,
       (existingValue + totalCount).toString(),

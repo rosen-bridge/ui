@@ -27,7 +27,6 @@ export class UserEventMetricAction {
    */
   calculateAndStoreUserCounts = async (): Promise<void> => {
     const timestamp = Math.floor(Date.now() / 1000);
-    this.logger.debug(`Calculating user counts at timestamp: [${timestamp}]`);
 
     const lastProcessed = await this.userEventRepo
       .createQueryBuilder('ue')
