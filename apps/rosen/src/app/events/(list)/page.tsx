@@ -140,6 +140,7 @@ const Page = () => {
                       status: item.status,
                       toChain: item.toChain,
                       token: item.lockToken?.name,
+                      ergoSideTokenId: item.lockToken?.ergoSideTokenId,
                       timestamp: item.timestamp,
                     }
               }

@@ -56,6 +56,7 @@ const Content = ({ value }: EventSidebarProps) => {
       toAddressUrl: getAddressUrl(value.toChain, value.toAddress),
       toChain: value.toChain,
       token: value.lockToken?.name,
+      ergoSideTokenId: value.lockToken?.ergoSideTokenId,
       paymentTxId: value.paymentTxId ?? undefined,
       paymentTxIdUrl: value.paymentTxId
         ? getTxURL(value.toChain, value.paymentTxId)
