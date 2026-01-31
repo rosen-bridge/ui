@@ -19,7 +19,6 @@ export const generalMetrics = async (
   logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
   const metricAction = new MetricAction(dataSource, logger);
-
   const tokenPriceAction = new TokenPriceAction(dataSource, logger);
 
   const timestamp = Math.floor(Date.now() / 1000);

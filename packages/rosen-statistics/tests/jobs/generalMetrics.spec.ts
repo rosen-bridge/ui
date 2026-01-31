@@ -25,7 +25,6 @@ describe('generalMetrics', () => {
   });
 
   /**
-
    * @target generalMetrics should persist network and token counts and store RSN price metric when price exists
    * @dependency database, TokenMap
    * @scenario
