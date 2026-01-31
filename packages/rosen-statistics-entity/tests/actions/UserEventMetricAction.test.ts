@@ -57,7 +57,7 @@ describe('UserEventMetricAction', () => {
           spendBlock: 'sblk1',
           spendHeight: 110,
           spendTxId: 'spendtx1',
-          result: 'Success',
+          result: 'successful',
           paymentTxId: 'ptx1',
           WIDsCount: 1,
           WIDsHash: 'hash1',
@@ -85,7 +85,7 @@ describe('UserEventMetricAction', () => {
           spendBlock: 'sblk2',
           spendHeight: 111,
           spendTxId: 'spendtx2',
-          result: 'Success',
+          result: 'successful',
           paymentTxId: 'ptx2',
           WIDsCount: 1,
           WIDsHash: 'hash2',
@@ -113,7 +113,7 @@ describe('UserEventMetricAction', () => {
           spendBlock: 'sblk3',
           spendHeight: 112,
           spendTxId: 'spendtx3',
-          result: 'Success',
+          result: 'successful',
           paymentTxId: 'ptx3',
           WIDsCount: 1,
           WIDsHash: 'hash3',
@@ -141,7 +141,7 @@ describe('UserEventMetricAction', () => {
           spendBlock: 'sblk4',
           spendHeight: 113,
           spendTxId: 'spendtx4',
-          result: 'Processing',
+          result: 'fraud',
           paymentTxId: 'ptx4',
           WIDsCount: 1,
           WIDsHash: 'hash4',
@@ -160,11 +160,11 @@ describe('UserEventMetricAction', () => {
 
       expect(group1).not.toBeNull();
       expect(group1?.count).toBe(2);
-      expect(group1?.lastProcessedHeight).toBe(101);
+      expect(group1?.lastProcessedHeight).toBe(111);
 
       expect(group2).not.toBeNull();
       expect(group2?.count).toBe(1);
-      expect(group2?.lastProcessedHeight).toBe(102);
+      expect(group2?.lastProcessedHeight).toBe(112);
 
       const metric = await metricRepo.find({
         where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
@@ -207,7 +207,7 @@ describe('UserEventMetricAction', () => {
         spendBlock: 'sblk5',
         spendHeight: 130,
         spendTxId: 'spendtx5',
-        result: 'Processing',
+        result: 'fraud',
         paymentTxId: 'ptx5',
         WIDsCount: 1,
         WIDsHash: 'hash5',
@@ -242,7 +242,7 @@ describe('UserEventMetricAction', () => {
         fromAddress: 'addr1',
         toAddress: 'addr2',
         count: 2,
-        lastProcessedHeight: 100,
+        lastProcessedHeight: 110,
       });
 
       await eventTriggerRepo.insert({
@@ -267,7 +267,7 @@ describe('UserEventMetricAction', () => {
         spendBlock: 'sblk6',
         spendHeight: 110,
         spendTxId: 'spendtx6',
-        result: 'Success',
+        result: 'successful',
         paymentTxId: 'ptx6',
         WIDsCount: 1,
         WIDsHash: 'hash6',
@@ -297,7 +297,7 @@ describe('UserEventMetricAction', () => {
           spendBlock: 'sblk7',
           spendHeight: 115,
           spendTxId: 'spendtx7',
-          result: 'Success',
+          result: 'successful',
           paymentTxId: 'ptx7',
           WIDsCount: 1,
           WIDsHash: 'hash7',
@@ -325,7 +325,7 @@ describe('UserEventMetricAction', () => {
           spendBlock: 'sblk8',
           spendHeight: 116,
           spendTxId: 'spendtx8',
-          result: 'Success',
+          result: 'successful',
           paymentTxId: 'ptx8',
           WIDsCount: 1,
           WIDsHash: 'hash8',
@@ -355,7 +355,7 @@ describe('UserEventMetricAction', () => {
         spendBlock: 'sblk9',
         spendHeight: 117,
         spendTxId: 'spendtx9',
-        result: 'Success',
+        result: 'successful',
         paymentTxId: 'ptx9',
         WIDsCount: 1,
         WIDsHash: 'hash9',
@@ -369,14 +369,14 @@ describe('UserEventMetricAction', () => {
       });
       expect(updated).not.toBeNull();
       expect(updated?.count).toBe(4);
-      expect(updated?.lastProcessedHeight).toBe(106);
+      expect(updated?.lastProcessedHeight).toBe(116);
 
       const secondPair = await userEventRepo.findOne({
         where: { fromAddress: 'addr3', toAddress: 'addr4' },
       });
       expect(secondPair).not.toBeNull();
       expect(secondPair?.count).toBe(1);
-      expect(secondPair?.lastProcessedHeight).toBe(107);
+      expect(secondPair?.lastProcessedHeight).toBe(117);
 
       const metric = await metricRepo.find({
         where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
