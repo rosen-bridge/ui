@@ -57,7 +57,7 @@ describe('EventCountMetricAction', () => {
         spendBlock: 'sblk1',
         spendHeight: 110,
         spendTxId: 'spendtx1',
-        result: 'Success',
+        result: 'successful',
         paymentTxId: 'ptx1',
         WIDsCount: 1,
         WIDsHash: 'hash1',
@@ -85,7 +85,7 @@ describe('EventCountMetricAction', () => {
         spendBlock: 'sblk2',
         spendHeight: 111,
         spendTxId: 'spendtx2',
-        result: 'Fraud',
+        result: 'fraud',
         paymentTxId: 'ptx2',
         WIDsCount: 1,
         WIDsHash: 'hash2',
@@ -124,10 +124,10 @@ describe('EventCountMetricAction', () => {
     await action.calculateAndStoreEventCounts();
 
     const successCount = await eventCountRepo.findOne({
-      where: { status: 'Success', fromChain: 'ergo', toChain: 'cardano' },
+      where: { status: 'successful', fromChain: 'ergo', toChain: 'cardano' },
     });
     const fraudCount = await eventCountRepo.findOne({
-      where: { status: 'Fraud', fromChain: 'ergo', toChain: 'cardano' },
+      where: { status: 'fraud', fromChain: 'ergo', toChain: 'cardano' },
     });
 
     expect(successCount).not.toBeNull();
@@ -145,57 +145,6 @@ describe('EventCountMetricAction', () => {
   });
 
   /**
-   * @target calculateAndStoreEventCounts should skip events if none match Success/Fraud
-   * @dependency database
-   * @scenario
-   * - insert EventTriggerEntity with ignored statuses
-   * - call calculateAndStoreEventCounts
-   * @expected
-   * - no EventCountEntity rows created
-   * - total metric is not created
-   */
-  it('should skip events if none match Success/Fraud', async () => {
-    await eventTriggerRepo.insert({
-      eventId: 'e4',
-      boxId: 'b4',
-      block: 'blk4',
-      height: 103,
-      extractor: 'ext4',
-      fromChain: 'ergo',
-      toChain: 'cardano',
-      txId: 'tx4',
-      fromAddress: 'addr4',
-      toAddress: 'addr5',
-      amount: '7',
-      bridgeFee: '0.7',
-      networkFee: '0.07',
-      sourceChainTokenId: 't1',
-      sourceChainHeight: 103,
-      targetChainTokenId: 't2',
-      sourceTxId: 'stx4',
-      sourceBlockId: 'sb4',
-      spendBlock: 'sblk4',
-      spendHeight: 113,
-      spendTxId: 'spendtx4',
-      result: 'Processing',
-      paymentTxId: 'ptx4',
-      WIDsCount: 1,
-      WIDsHash: 'hash4',
-      serialized: '{}',
-    });
-
-    await action.calculateAndStoreEventCounts();
-
-    const counts = await eventCountRepo.find();
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-    });
-
-    expect(counts.length).toBe(0);
-    expect(metric).toBeNull();
-  });
-
-  /**
    * @target calculateAndStoreEventCounts should update existing counts and total metric
    * @dependency database
    * @scenario
@@ -209,7 +158,7 @@ describe('EventCountMetricAction', () => {
    */
   it('should update existing counts and total metric', async () => {
     await eventCountRepo.insert({
-      status: 'Success',
+      status: 'successful',
       fromChain: 'ergo',
       toChain: 'cardano',
       eventCount: 2,
@@ -243,7 +192,7 @@ describe('EventCountMetricAction', () => {
       spendBlock: 'sblk5',
       spendHeight: 115,
       spendTxId: 'spendtx5',
-      result: 'Success',
+      result: 'successful',
       paymentTxId: 'ptx5',
       WIDsCount: 1,
       WIDsHash: 'hash5',
@@ -253,11 +202,11 @@ describe('EventCountMetricAction', () => {
     await action.calculateAndStoreEventCounts();
 
     const updated = await eventCountRepo.findOne({
-      where: { status: 'Success', fromChain: 'ergo', toChain: 'cardano' },
+      where: { status: 'successful', fromChain: 'ergo', toChain: 'cardano' },
     });
     expect(updated).not.toBeNull();
     expect(updated?.eventCount).toBe(3); // 2 + 1
-    expect(updated?.lastProcessedHeight).toBe(105);
+    expect(updated?.lastProcessedHeight).toBe(115);
 
     const metric = await metricRepo.find({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },

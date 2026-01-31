@@ -41,9 +41,9 @@ export class UserEventMetricAction {
       .addSelect('et.fromAddress', 'fromAddress')
       .addSelect('et.toAddress', 'toAddress')
       .addSelect('COUNT(*)', 'eventCount')
-      .addSelect('MAX(et.height)', 'maxHeight')
-      .where('et.height > :lastHeight', { lastHeight })
-      .andWhere('et.result = :status', { status: 'Success' })
+      .addSelect('MAX(et.spendHeight)', 'maxHeight')
+      .where('et.spendHeight > :lastHeight', { lastHeight })
+      .andWhere('et.result = :status', { status: 'successful' })
       .addGroupBy('et.fromAddress')
       .addGroupBy('et.toAddress')
       .getRawMany<{

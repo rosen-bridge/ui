@@ -42,10 +42,10 @@ export class EventCountMetricAction {
       .addSelect('et.fromChain', 'fromChain')
       .addSelect('et.toChain', 'toChain')
       .addSelect('COUNT(et.fromAddress)', 'eventCount')
-      .addSelect('MAX(et.height)', 'maxHeight')
-      .where('et.height > :lastHeight', { lastHeight })
+      .addSelect('MAX(et.spendHeight)', 'maxHeight')
+      .where('et.spendHeight > :lastHeight', { lastHeight })
       .andWhere('et.result IN (:...statuses)', {
-        statuses: ['Success', 'Fraud'],
+        statuses: ['successful', 'fraud'],
       })
       .groupBy('et.result')
       .addGroupBy('et.fromChain')
