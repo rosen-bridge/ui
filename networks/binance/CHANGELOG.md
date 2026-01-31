@@ -1,5 +1,11 @@
 # @rosen-network/binance
 
+## 0.4.3
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/icons@3.3.0
+
 ## 0.4.2
 
 ### Patch Changes

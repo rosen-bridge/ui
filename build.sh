@@ -54,6 +54,7 @@ if [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-servic
   npm run build --workspace packages/rosen-statistics-entity
   npm run build --workspace packages/public-status
   npm run build --workspace packages/data-source
+  npm run build --workspace packages/rosen-statistics
 fi
 
 # Check if Discord webhook URL is set

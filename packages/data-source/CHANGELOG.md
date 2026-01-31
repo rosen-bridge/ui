@@ -1,5 +1,11 @@
 # @rosen-ui/data-source
 
+## 0.2.1
+
+### Patch Changes
+
+- Update dependency @rosen-ui/asset-calculator@2.3.0
+
 ## 0.2.0
 
 ### Minor Changes

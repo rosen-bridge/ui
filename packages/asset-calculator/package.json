@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/asset-calculator",
-  "version": "2.2.2",
+  "version": "2.3.0",
   "private": true,
   "description": "Rosen bridge locked asset calculator",
   "repository": {

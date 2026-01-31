@@ -1,5 +1,11 @@
 # @rosen-network/doge
 
+## 0.4.2
+
+### Patch Changes
+
+- Update dependency @rosen-bridge/icons@3.3.0
+
 ## 0.4.1
 
 ### Patch Changes

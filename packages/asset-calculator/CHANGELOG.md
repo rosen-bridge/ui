@@ -1,5 +1,11 @@
 # @rosen-ui/asset-calculator
 
+## 2.3.0
+
+### Minor Changes
+
+- Store all tokens in the TokenEntity table.
+
 ## 2.2.2
 
 ### Patch Changes
