@@ -22,11 +22,11 @@ export const withValidation =
   <TSchema>(
     validator: (
       request: NextRequest,
-      context?: { params: any },
+      context?: { params: Promise<any> },
     ) => Promise<ValidationResult<TSchema> | TSchema>,
     handler: (value: TSchema) => Promise<any>,
   ) =>
-  async (request: NextRequest, context?: { params: any }) => {
+  async (request: NextRequest, context?: { params: Promise<any> }) => {
     let value: TSchema;
 
     try {
