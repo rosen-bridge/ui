@@ -4,7 +4,8 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import React, { useCallback, useMemo, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
   DataLayout,
@@ -16,8 +17,10 @@ import {
   ViewType,
   ViewToggle,
   EmptyState,
+  useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
+import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
 import { ApiAssetsResponse } from '@/types/api';
@@ -29,16 +32,30 @@ import { ViewGridSidebar } from './ViewGridSidebar';
 import { ViewRow } from './ViewRow';
 
 const Assets = () => {
+  const searchParams = useSearchParams();
+
+  const router = useRouter();
+
+  const pathname = usePathname();
+
   const dense = useBreakpoint('laptop-down');
 
-  const collection = useCollection();
+  const { openSnackbar } = useSnackbar();
+
+  const collection = useCollection({
+    searchParams: searchParams.toString(),
+    defaultPageIndex: 0,
+    defaultPageSize: 25,
+    defaultSortField: 'name',
+    defaultSortOrder: 'DESC',
+  });
 
   const [view, setView] = useState<ViewType>('row');
 
   const [current, setCurrent] = useState<AssetsFullData>();
 
-  const { data, isLoading } = useSWR<ApiAssetsResponse>(
-    collection.params && ['/v1/assets', collection.params],
+  const { data, error, isLoading } = useSWR<ApiAssetsResponse>(
+    collection.query && `/v1/assets?${collection.query}`,
     fetcher,
     {
       keepPreviousData: true,
@@ -56,7 +73,6 @@ const Assets = () => {
   const renderPagination = useCallback(
     () => (
       <Pagination
-        defaultPageSize={25}
         pageSizeOptions={[10, 25, 50, 100]}
         disabled={isLoading}
         total={data?.total}
@@ -74,8 +90,9 @@ const Assets = () => {
       <SmartSearch
         disabled={isLoading}
         namespace="assets"
-        filters={filters}
-        onChange={collection.setFilters}
+        options={filters}
+        value={collection.fields}
+        onChange={collection.setFields}
       />
     ),
     [collection, isLoading],
@@ -84,8 +101,6 @@ const Assets = () => {
   const renderSort = useCallback(
     () => (
       <SortField
-        defaultKey="name"
-        defaultOrder="DESC"
         dense={dense}
         disabled={isLoading}
         value={collection.sort}
@@ -109,6 +124,26 @@ const Assets = () => {
     ),
     [setView],
   );
+
+  useEffect(() => {
+    if (collection.query === searchParams.toString()) return;
+
+    const url = collection.query ? `${pathname}?${collection.query}` : pathname;
+
+    router.replace(url, { scroll: false });
+  }, [collection.query, pathname, router, searchParams]);
+
+  useEffect(() => {
+    setCurrent(undefined);
+  }, [collection.sort, collection.fields, collection.pageIndex]);
+
+  useEffect(() => {
+    if (error) {
+      openSnackbar(error.message, 'error', undefined, () =>
+        JSON.stringify(serializeError(error), null, 2),
+      );
+    }
+  }, [error]);
 
   return (
     <DataLayout

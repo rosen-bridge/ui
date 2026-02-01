@@ -52,10 +52,12 @@ export const getEvents = async (filters: Filters) => {
 
   await (async () => {
     const field = filters.fields?.find(
-      (field) => field.key == 'sourceChainTokenId',
+      (field) => field.key == 'originalTokenId',
     );
 
     if (!field) return;
+
+    field.key = 'sourceChainTokenId';
 
     const token = await tokenRepository.findOne({
       where: {
