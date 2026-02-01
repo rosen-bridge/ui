@@ -178,9 +178,7 @@ export const SmartSearch = ({
     (event: KeyboardEvent<HTMLInputElement>) => {
       switch (event.key) {
         case 'Enter': {
-          if (state == 'flow' && !query) {
-            setFilters(selected);
-          }
+          setFilters(selected);
           break;
         }
         case 'Backspace':
