@@ -20,13 +20,13 @@ interface RowProps extends OngoingEvent {
 
 export const mobileHeader = [
   {
-    title: '',
+    title: '12wq2',
     cellProps: {
       width: '40%',
     },
   },
   {
-    title: '',
+    title: 'w3ew23w',
     cellProps: {
       width: '60%',
     },

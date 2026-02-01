@@ -50,9 +50,9 @@ const isIconKey = (icon: unknown): icon is keyof typeof Icons =>
   typeof icon === 'string' && icon in Icons;
 
 const ChipWrapper = styled('div')<ChipBaseProps>(({
-  theme,
-  color = 'primary',
-}) => {
+                                                    theme,
+                                                    color = 'primary',
+                                                  }) => {
   const palette = theme.palette || theme;
   const colors = palette[color] || palette.primary;
 

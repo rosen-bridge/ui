@@ -1,20 +1,14 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  experimental: {
-    outputFileTracingIncludes: {
-      /**
-       * Transfer the 'configs' directory to the production build to ensure
-       * the 'tokensMap.json' file is accessible in the production environment.
-       */
-      '/': ['./configs/*'],
-    },
-    serverComponentsExternalPackages: [
-      'ergo-lib-wasm-nodejs',
-      '@emurgo/cardano-serialization-lib-nodejs',
-      'typeorm',
-    ],
+  outputFileTracingIncludes: {
+    '/': ['./configs/*'],
   },
+  serverExternalPackages: [
+    'ergo-lib-wasm-nodejs',
+    '@emurgo/cardano-serialization-lib-nodejs',
+    'typeorm',
+  ],
   async headers() {
     return [
       {
@@ -28,7 +22,8 @@ const nextConfig = {
       },
     ];
   },
-  webpack: function (config, options) {
+
+  webpack: (config, { isServer }) => {
     /**
      * This configuration should be applied as recommended in:
      * https://docs.reown.com/appkit/next/core/installation#extra-configuration
@@ -40,9 +35,13 @@ const nextConfig = {
       syncWebAssembly: true,
       layers: true,
     };
-    if (!options.isServer) {
-      config.resolve.fallback.fs = false;
-    }
+
+    // Fix fallback overrides
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+    };
+
     return config;
   },
 };

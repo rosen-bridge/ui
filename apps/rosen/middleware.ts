@@ -7,12 +7,12 @@ type Duration = Parameters<typeof Ratelimit.slidingWindow>[1];
 const rateLimit =
   process.env.APPLY_RATE_LIMIT === 'true'
     ? new Ratelimit({
-        redis: kv,
-        limiter: Ratelimit.slidingWindow(
-          +process.env.RATE_LIMIT_TOKENS!,
-          process.env.RATE_LIMIT_WINDOW! as Duration,
-        ),
-      })
+      redis: kv,
+      limiter: Ratelimit.slidingWindow(
+        +process.env.RATE_LIMIT_TOKENS!,
+        process.env.RATE_LIMIT_WINDOW! as Duration,
+      ),
+    })
     : undefined;
 
 /**
@@ -37,7 +37,12 @@ const getCORSHeaders = (origin: string) => {
 };
 
 export async function middleware(request: NextRequest) {
-  const ip = request.ip ?? '127.0.0.1';
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  const realIp = forwardedFor?.split(',')[0]?.trim()
+    || request.headers.get('x-real-ip')
+    || '127.0.0.1';
+
+  const ip = realIp;
 
   const success = (await rateLimit?.limit(ip))?.success ?? true;
 
