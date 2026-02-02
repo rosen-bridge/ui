@@ -16,11 +16,11 @@ const ParamsSchema = Joi.object<GetAggregatedStatusTimelineRouteParam>().keys({
 
 export const validator = async (
   request: NextRequest,
-  context?: { params: Promise<GetAggregatedStatusTimelineRouteParam> },
+  context: { params: Promise<GetAggregatedStatusTimelineRouteParam> },
 ) => {
   return ParamsSchema.validate(
     Object.assign(Object.fromEntries(request.nextUrl.searchParams), {
-      id: (await context?.params)?.id,
+      id: (await context.params)?.id,
     }),
   );
 };
