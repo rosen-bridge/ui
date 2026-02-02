@@ -1,18 +1,15 @@
 /**
- * Bob Extension wallet types
+ * Shake Wallet types
  */
 import { WalletConfig } from '@rosen-ui/wallet-api';
 
-export type BobExtensionConfig = WalletConfig & {
-  // No specific config needed - Bob Extension auto-detects
+export type ShakeWalletConfig = WalletConfig & {
+  lockScriptHex: string;
+  lockedNames: string[];
+  publicNodeUrl: string;
 };
 
-export interface Bob3API {
-  connect(): Promise<Bob3Wallet>;
-  isLocked(): Promise<boolean>;
-}
-
-export interface Bob3Wallet {
+export interface ShakeWallet {
   getAddress(): Promise<string>;
   getBalance(): Promise<{
     confirmed: number;
@@ -20,10 +17,6 @@ export interface Bob3Wallet {
     total: number;
   }>;
   send(address: string, amount: number): Promise<{ hash: string }>;
-
-  // Advanced transaction building
-  createTx(options: CreateTxOptions): Promise<{ hex: string }>;
-  sendTx(hex: string): Promise<{ hash: string }>;
 
   sign(address: string, message: string): Promise<string>;
   signWithName(name: string, message: string): Promise<string>;
@@ -47,10 +40,15 @@ export interface Bob3Wallet {
     name: string,
     records: UpdateRecordType[],
   ): Promise<{ hash: string }>;
-  sendCustomTx(
-    outputs: unknown[],
-    rate?: number,
-    subtractFee?: boolean,
+  sendRosenBridgeLock(
+    opts: {
+    name: string;
+    lockScriptHex: string;
+    resourceHex: string;
+    recipientAddress?: string;
+    recipientAmount?: number;
+    rate?: number;
+  },
   ): Promise<{ hash: string }>;
 
   // Info functions
@@ -60,21 +58,9 @@ export interface Bob3Wallet {
   hashName(name: string): Promise<string>;
 }
 
-export interface CreateTxOptions {
-  outputs: TxOutput[];
-  rate?: number;
-  subtractFee?: boolean;
-}
-
-export interface TxOutput {
-  address?: string;
-  value: number;
-  data?: string; // For OP_RETURN data
-}
-
-// Bob3 API that's accessible via window.bob3
-export interface Bob3API {
-  connect(): Promise<Bob3Wallet>;
+// Shake API that's accessible via window.shake
+export interface ShakeAPI {
+  connect(): Promise<ShakeWallet>;
   isLocked(): Promise<boolean>;
 }
 
@@ -83,9 +69,9 @@ export interface UpdateRecordType {
   [key: string]: unknown;
 }
 
-// Global declarations for Bob3 extension
+// Global declarations for Shake extension
 declare global {
   interface Window {
-    bob3?: Bob3API;
+    shake?: ShakeAPI;
   }
 }

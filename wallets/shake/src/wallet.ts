@@ -10,50 +10,107 @@ import {
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
-import { BobExtensionConfig, Bob3Wallet } from './types';
+import { ShakeWalletConfig, ShakeWallet as ShakeWalletAPI } from './types';
 
 /**
- * Bob Extension wallet integration for Handshake
+ * Shake Wallet integration for Handshake
  *
- * This wallet integrates with the Bob Extension to enable seamless
- * Handshake transactions for Rosen Bridge. Bob Extension must be
+ * This wallet integrates with the Shake Wallet to enable seamless
+ * Handshake transactions for Rosen Bridge. Shake Wallet must be
  * installed and unlocked for this wallet to function.
  */
-export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
+export class ShakeWallet extends Wallet<ShakeWalletConfig> {
   icon = ICON;
 
-  name = 'Bob Extension';
+  name = 'Shake Wallet';
 
-  label = 'Bob Extension';
+  label = 'Shake Wallet';
 
-  link = 'https://bobwallet.io/';
+  link = 'https://ipfs.hnsproxy.au/shakewallet/';
 
   currentChain: Network = NETWORKS.handshake.key;
 
   supportedChains: Network[] = [NETWORKS.handshake.key];
 
-  private wallet: Bob3Wallet | null = null;
+  private wallet: ShakeWalletAPI | null = null;
 
   /**
-   * Connect to Bob Extension
+   * Query the public HSD node to find a locked name whose owner output
+   * is not currently being spent by any mempool transaction.
+   */
+  private findFreeName = async (): Promise<string> => {
+    const url = this.config.publicNodeUrl;
+
+    // 1. Get raw mempool TX hashes
+    const mempoolRes = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ method: 'getrawmempool', params: [] }),
+    });
+    const mempoolJson = await mempoolRes.json();
+    const txHashes: string[] = mempoolJson.result ?? [];
+
+    // 2. Collect all spent outpoints from mempool transactions
+    const spentOutpoints = new Set<string>();
+    await Promise.all(
+      txHashes.map(async (hash) => {
+        try {
+          const txRes = await fetch(`${url}/tx/${hash}`);
+          const tx = await txRes.json();
+          if (tx.inputs) {
+            for (const input of tx.inputs) {
+              if (input.prevout) {
+                spentOutpoints.add(
+                  `${input.prevout.hash}:${input.prevout.index}`,
+                );
+              }
+            }
+          }
+        } catch {
+          // Skip unreachable transactions
+        }
+      }),
+    );
+
+    // 3. For each name, check if its owner output is in the spent set
+    for (const name of this.config.lockedNames) {
+      const infoRes = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ method: 'getnameinfo', params: [name] }),
+      });
+      const infoJson = await infoRes.json();
+      const owner = infoJson.result?.info?.owner;
+      if (owner && !spentOutpoints.has(`${owner.hash}:${owner.index}`)) {
+        return name;
+      }
+    }
+
+    throw new Error(
+      'All locked names are currently being spent in the mempool. Please try again later.',
+    );
+  };
+
+  /**
+   * Connect to Shake Wallet
    */
   performConnect = async (): Promise<void> => {
-    if (!window.bob3) {
+    if (!window.shake) {
       throw new Error(
-        'Bob Extension not found. Please install Bob Extension from the Chrome Web Store.',
+        'Shake Wallet not found. Please install Shake Wallet from the Chrome Web Store.',
       );
     }
 
     try {
-      this.wallet = await window.bob3.connect();
+      this.wallet = await window.shake.connect();
 
       // Verify we can get an address (confirms wallet is properly connected)
       const address = await this.wallet.getAddress();
       if (!address) {
-        throw new Error('Unable to get wallet address from Bob Extension');
+        throw new Error('Unable to get wallet address from Shake Wallet');
       }
 
-      console.log('Connected to Bob Extension, address:', address);
+      console.log('Connected to Shake Wallet, address:', address);
     } catch (error) {
       this.wallet = null;
       if (error instanceof Error) {
@@ -63,18 +120,18 @@ export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
         ) {
           throw new UserDeniedTransactionSignatureError(this.name);
         }
-        throw new Error(`Failed to connect to Bob Extension: ${error.message}`);
+        throw new Error(`Failed to connect to Shake Wallet: ${error.message}`);
       }
-      throw new Error('Failed to connect to Bob Extension: Unknown error');
+      throw new Error('Failed to connect to Shake Wallet: Unknown error');
     }
   };
 
   /**
-   * Disconnect from Bob Extension
+   * Disconnect from Shake Wallet
    */
   performDisconnect = async (): Promise<void> => {
     this.wallet = null;
-    // Bob Extension doesn't require explicit disconnect
+    // Shake Wallet doesn't require explicit disconnect
   };
 
   /**
@@ -88,7 +145,7 @@ export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
     try {
       return await this.wallet.getAddress();
     } catch (error) {
-      console.error('Failed to fetch address from Bob Extension:', error);
+      console.error('Failed to fetch address from Shake Wallet:', error);
       return undefined;
     }
   };
@@ -106,16 +163,16 @@ export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
 
       return balance.confirmed.toString();
     } catch (error) {
-      console.error('Failed to fetch balance from Bob Extension:', error);
+      console.error('Failed to fetch balance from Shake Wallet:', error);
       return '0';
     }
   };
 
   /**
-   * Check if Bob Extension is available
+   * Check if Shake Wallet is available
    */
   isAvailable = (): boolean => {
-    return !!window.bob3;
+    return !!window.shake;
   };
 
   /**
@@ -130,7 +187,11 @@ export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
   };
 
   /**
-   * Create and submit bridge transaction using Bob Extension with Rosen metadata
+   * Create and submit a locked UPDATE transaction via Shake Wallet.
+   *
+   * Builds a locked UPDATE on the bridge-controlled name, embedding
+   * Rosen Bridge metadata as the resource hex, and sending HNS to the
+   * lock address.
    */
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (
@@ -142,35 +203,42 @@ export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
 
     if (!this.wallet) {
       throw new Error(
-        'Wallet not connected. Please connect to Bob Extension first.',
+        'Wallet not connected. Please connect to Shake Wallet first.',
       );
     }
 
     try {
-      // Generate Rosen Bridge metadata for OP_RETURN
-      const rosenMetadata = await this.currentNetwork.generateOpReturnData(
+      // Pick a locked name whose owner output is not in the mempool
+      const lockedName = await this.findFreeName();
+
+      // Generate Rosen Bridge metadata encoded as hex for the UPDATE resource
+      const resourceHex = await this.currentNetwork.generateOpReturnData(
         params.toChain,
         params.address,
         params.networkFee.toString(),
         params.bridgeFee.toString(),
       );
 
-      console.log('Sending Rosen Bridge transaction:', {
-        lockAddress: params.lockAddress,
-        amount: params.amount,
-        toChain: params.toChain,
-        toAddress: params.address,
-        bridgeFee: params.bridgeFee,
-        networkFee: params.networkFee,
-        metadata: rosenMetadata,
-      });
+      const opts: {
+        name: string;
+        lockScriptHex: string;
+        resourceHex: string;
+        recipientAddress?: string;
+        recipientAmount?: number;
+      } = {
+        name: lockedName,
+        lockScriptHex: this.config.lockScriptHex,
+        resourceHex,
+      };
 
-      // Create transaction with OP_RETURN data containing Rosen metadata
-      const result = await this.createBridgeTransaction(
-        params.lockAddress,
-        Number(params.amount),
-        rosenMetadata,
-      );
+      if (params.lockAddress && Number(params.amount) > 0) {
+        opts.recipientAddress = params.lockAddress;
+        opts.recipientAmount = Number(params.amount);
+      }
+
+      console.log('Sending Rosen Bridge locked update:', opts);
+
+      const result = await this.wallet.sendRosenBridgeLock(opts);
 
       if (!result.hash) {
         throw new Error('Transaction failed - no hash returned');
@@ -196,83 +264,6 @@ export class BobExtensionWallet extends Wallet<BobExtensionConfig> {
         throw new SubmitTransactionError(this.name, error.message);
       }
       throw new SubmitTransactionError(this.name, 'Unknown error occurred');
-    }
-  };
-
-  /**
-   * Create bridge transaction with OP_RETURN metadata
-   */
-  private createBridgeTransaction = async (
-    lockAddress: string,
-    amount: number,
-    metadata: string,
-  ): Promise<{ hash: string }> => {
-    if (!this.wallet) {
-      throw new Error('Wallet not connected');
-    }
-
-    try {
-      /*
-        const hexData = Array.from(new TextEncoder().encode(customData))
-          .map(b => b.toString(16).padStart(2, '0'))
-          .join('');
-        outputs.push({
-          address: recipient,
-          value: 0,
-          data: hexData,
-        });
-      */
-
-      // Create transaction with two outputs:
-      // 1. Send amount to lock address
-      // 2. OP_RETURN with Rosen Bridge metadata
-      const outputs = [
-        {
-          address: lockAddress,
-          value: amount,
-        },
-        {
-          value: 0,
-          data: metadata, // OP_RETURN data containing Rosen Bridge metadata
-        },
-      ];
-
-      console.log('Creating Rosen Bridge transaction with outputs:', outputs);
-
-      // Create the transaction using Bob Extension's createTx
-      const broadcastResult = await this.wallet.sendCustomTx(
-        outputs,
-        20, // 20 dollarydoos per byte fee rate
-        false, // Don't subtract fee from the lock amount
-      );
-
-      console.log(
-        'Bridge transaction broadcast successfully:',
-        broadcastResult.hash,
-      );
-
-      return broadcastResult;
-    } catch (error) {
-      console.error('Failed to create bridge transaction:', error);
-
-      // If custom transaction building fails, fall back to basic send and log metadata
-      if (error instanceof Error) {
-        console.warn(
-          'Advanced transaction building failed, falling back to basic send',
-        );
-
-        // Log the metadata for external processing by the Rosen Bridge network layer
-        console.log('Rosen Bridge metadata (for network layer processing):', {
-          metadata,
-          lockAddress,
-          amount,
-          note: 'Custom transaction failed, metadata should be handled by Rosen Bridge network layer',
-        });
-
-        return await this.wallet.send(lockAddress, amount);
-      }
-
-      throw error;
     }
   };
 

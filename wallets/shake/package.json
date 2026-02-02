@@ -1,10 +1,10 @@
 {
-  "name": "@rosen-ui/bob-extension",
+  "name": "@rosen-ui/shake-wallet",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "author": "Aco Šmrkas",
-  "description": "Bob Extension wallet integration for Rosen Bridge",
+  "description": "Shake Wallet integration for Rosen Bridge",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
