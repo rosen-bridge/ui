@@ -11,7 +11,7 @@ import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 
 export const getFilters = (tokenMap: TokenMap): Filter[] => [
   {
-    name: 'sourceChainTokenId',
+    name: 'originalTokenId',
     label: 'Token',
     unique: true,
     operators: OPERATORS_EQUALITY,
