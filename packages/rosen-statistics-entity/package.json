@@ -23,11 +23,21 @@
     "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "release": "npm run clean && npm run build && npm publish --access public",
+    "release": "npm run test -- --run && npm run clean && npm run build && npm publish --access public",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "coverage": "npm run test -- --coverage",
     "type-check": "tsc --noEmit"
   },
+  "devDependencies": {
+    "@vitest/coverage-istanbul": "^3.1.4",
+    "tsx": "^4.19.4",
+    "vitest": "^3.1.4"
+  },
   "dependencies": {
-    "@rosen-bridge/extended-typeorm": "^1.0.1"
+    "@rosen-bridge/abstract-logger": "^3.0.1",
+    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-bridge/token-price-entity": "^0.2.0",
+    "@rosen-ui/asset-calculator": "^2.3.0"
   },
   "engines": {
     "node": ">=22.18.0",

@@ -161,6 +161,7 @@ const getConfig = () => {
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
         },
+        interval: nodeConfig.get<number>('calculator.interval'),
       },
       healthCheck: {
         ergoScannerWarnDiff: nodeConfig.get<number>(

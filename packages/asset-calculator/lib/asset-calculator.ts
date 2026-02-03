@@ -76,6 +76,7 @@ class AssetCalculator {
       this.tokens,
       bitcoinRunesCalculator.addresses,
       bitcoinRunesCalculator.unisatUrl,
+      bitcoinRunesCalculator.unisatApiKey,
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
@@ -309,6 +310,13 @@ class AssetCalculator {
           throw new Error(
             `Failed to retrieve significant decimals for tokenId: ${token.tokenId}`,
           );
+        const tokenSet = this.tokens.getTokenSet(token.tokenId);
+        if (!tokenSet) {
+          throw new Error(
+            `ImpossibleBehavior: Token set not found for token ${token.tokenId}`,
+          );
+        }
+        const ergoSideTokenId = this.tokens.getID(tokenSet, NETWORKS.ergo.key);
 
         const newToken = {
           id: token.tokenId,
@@ -317,6 +325,8 @@ class AssetCalculator {
           name: token.name,
           chain: residencyChain,
           isNative: token.type === NATIVE_TOKEN,
+          isResident: token.residency === NATIVE_RESIDENCY,
+          ergoSideTokenId: ergoSideTokenId,
         };
 
         await this.tokenModel.insertToken(newToken);

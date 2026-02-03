@@ -1,11 +1,7 @@
-import { Button } from '@mui/material';
-import { ExclamationTriangle } from '@rosen-bridge/icons';
+import { Alert, Button } from '@mui/material';
 
 import { useApiKey } from '../../hooks';
-import { Typography } from '../base';
 import { ApiKeyModal } from './ApiKeyModal';
-import { Stack } from './Stack';
-import { SvgIcon } from './SvgIcon';
 
 export const ApiKeyModalWarning = () => {
   const { apiKey } = useApiKey();
@@ -13,18 +9,31 @@ export const ApiKeyModalWarning = () => {
   if (apiKey) return null;
 
   return (
-    <Stack spacing={1} direction="row" align="center" wrap>
-      <SvgIcon color="warning.main">
-        <ExclamationTriangle />
-      </SvgIcon>
-
-      <Typography color="warning.main">
-        You need to set an Api Key before sending
-      </Typography>
-
-      <ApiKeyModal>
-        {(open) => <Button onClick={open}>Click To Set</Button>}
-      </ApiKeyModal>
-    </Stack>
+    <div style={{ containerType: 'inline-size' }}>
+      <Alert
+        severity="warning"
+        sx={{
+          '@container (max-width: 480px)': {
+            'display': 'grid',
+            'grid-template-columns': 'auto 1fr',
+            '.MuiAlert-action': {
+              'grid-column': '2',
+              'grid-row': '2',
+            },
+          },
+        }}
+        action={
+          <ApiKeyModal>
+            {(open) => (
+              <Button size="small" sx={{ py: '5px' }} onClick={open}>
+                SET API KEY
+              </Button>
+            )}
+          </ApiKeyModal>
+        }
+      >
+        You need to set an Api Key before sending.
+      </Alert>
+    </div>
   );
 };
