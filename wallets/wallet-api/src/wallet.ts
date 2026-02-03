@@ -10,6 +10,7 @@ import {
   NotConnectedError,
   UnavailableApiError,
   UnsupportedChainError,
+  WalletError,
 } from './errors';
 
 export interface WalletTransferParams {
@@ -66,7 +67,11 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
   isConnected = async (): Promise<boolean> => {
     this.requireAvailable();
-    return await this.hasConnection();
+    try {
+      return await this.hasConnection();
+    } catch {
+      return false;
+    }
   };
 
   switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
@@ -123,6 +128,9 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
 
       return address;
     } catch (error) {
+      if (error instanceof WalletError) {
+        throw error;
+      }
       throw new AddressRetrievalError(this.name, error);
     }
   };

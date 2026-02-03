@@ -9,7 +9,6 @@ import {
 } from 'react';
 
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import { Network } from '@rosen-ui/types';
 import { Wallet } from '@rosen-ui/wallet-api';
 
 import * as wallets from '@/wallets';
@@ -73,6 +72,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         await wallet.connect();
 
         await wallet.switchChain(selectedSource.name);
+
+        await wallet.getAddress();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         setState('DISCONNECTED');
@@ -134,46 +135,17 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
 
         await wallet.switchChain?.(selectedSource.name, true);
 
+        await wallet.getAddress();
+
         setSelected(wallet);
         setState('CONNECTED');
       } catch (error) {
         setSelected(undefined);
         setState('DISCONNECTED');
-        throw error;
+        console.log(error);
       }
     })();
   }, [selectedSource, setSelected, setState]);
-
-  /**
-   * TODO: update or move this logic
-   * local:ergo/rosen-bridge/ui#577
-   */
-  useEffect(() => {
-    if (!selected) return;
-
-    if (!selectedSource) return;
-
-    const segwitNetworks: Network[] = ['bitcoin', 'bitcoin-runes'];
-
-    if (!segwitNetworks.includes(selectedSource.name)) return;
-
-    if (!segwitNetworks.includes(selected.currentChain)) return;
-
-    const start = async () => {
-      const address = await selected.getAddress();
-
-      const isValid = address.toLowerCase().startsWith('bc1q');
-
-      if (isValid) return;
-
-      openSnackbar(
-        'The source address of the selected wallet is not native SegWit (P2WPKH or P2WSH).',
-        'error',
-      );
-    };
-
-    start();
-  }, [selected, selectedSource]);
 
   const value = useMemo(
     () => ({

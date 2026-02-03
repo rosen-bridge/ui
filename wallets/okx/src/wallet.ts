@@ -7,6 +7,7 @@ import {
   WalletTransferParams,
   UnsupportedChainError,
   SubmitTransactionError,
+  NonNativeSegWitAddressError,
 } from '@rosen-ui/wallet-api';
 
 import { ICON } from './icon';
@@ -25,6 +26,8 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.bitcoin.key];
 
+  segwitNetworks: Network[] = [NETWORKS.bitcoin.key];
+
   private get api() {
     return window.okxwallet.bitcoin;
   }
@@ -38,7 +41,18 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
-    return (await this.api.getAccounts())?.at(0);
+    const address = (await this.api.getAccounts())?.at(0);
+
+    const isNonNativeSegWit =
+      address &&
+      this.segwitNetworks.includes(this.currentChain) &&
+      !address.toLowerCase().startsWith('bc1q');
+
+    if (isNonNativeSegWit) {
+      throw new NonNativeSegWitAddressError(this.name);
+    }
+
+    return address;
   };
 
   fetchBalance = async (): Promise<number> => {
@@ -52,7 +66,7 @@ export class OKXWallet extends Wallet<OKXWalletConfig> {
   };
 
   hasConnection = async (): Promise<boolean> => {
-    return !!(await this.fetchAddress());
+    return !!(await this.api.getAccounts())?.at(0);
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {

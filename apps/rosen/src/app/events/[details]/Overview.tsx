@@ -55,6 +55,7 @@ export const Overview = ({ id }: { id: string }) => {
           <Token
             loading={isLoading}
             name={data?.lockToken?.name}
+            ergoSideTokenId={data?.lockToken?.ergoSideTokenId}
             reverse
             overrides={{
               tablet: {

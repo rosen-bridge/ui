@@ -3,16 +3,12 @@ import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
-import {
-  ChainAssetBalance,
-  EvmRpcDataAdapterAuthParams,
-  FetchOffsetType,
-} from '../types';
+import { ChainAssetBalance, EvmRpcDataAdapterAuthParams } from '../types';
 import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   abstract chain: string;
-  protected fetchOffsets: FetchOffsetType = {};
+  protected fetchOffsets: Map<string, number> = new Map();
   protected readonly provider: JsonRpcProvider;
 
   constructor(
@@ -27,10 +23,9 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     this.provider = authParams.authToken
       ? new JsonRpcProvider(`${authParams.url}/${authParams.authToken}`)
       : new JsonRpcProvider(`${authParams.url}`);
-    this.fetchOffsets = addresses.reduce<FetchOffsetType>((acc, address) => {
-      acc[address] = 0;
-      return acc;
-    }, {});
+    addresses.forEach((address) => {
+      this.fetchOffsets.set(address, 0);
+    });
   }
 
   /**
@@ -42,7 +37,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
     const assets: ChainAssetBalance[] = [];
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
-    const offset = this.fetchOffsets[address] ?? 0;
+    const offset = this.fetchOffsets.get(address) ?? 0;
     const chunk = supportedTokens.slice(offset, offset + this.chunkSize);
 
     for (const chainTokenDetails of chunk) {
@@ -77,9 +72,9 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
       }
     }
 
-    this.fetchOffsets[address] = offset + this.chunkSize;
-    if (this.fetchOffsets[address] >= supportedTokens.length) {
-      this.fetchOffsets[address] = 0;
+    this.fetchOffsets.set(address, offset + this.chunkSize);
+    if (this.fetchOffsets.get(address)! >= supportedTokens.length) {
+      this.fetchOffsets.set(address, 0);
     }
 
     return assets;
