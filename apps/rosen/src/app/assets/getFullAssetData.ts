@@ -59,5 +59,6 @@ export const getFullAssetData = (item: Assets) => {
     lockedAmount,
     bridgedAmount,
     bridged: [],
+    ergoSideTokenId: item.ergoSideTokenId,
   };
 };
