@@ -26,6 +26,7 @@
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "release": "npm run build && npm publish --access public",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc"
   },
   "dependencies": {
