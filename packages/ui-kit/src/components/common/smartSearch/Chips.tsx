@@ -42,12 +42,13 @@ const Root = styled('div')(({ theme }) => ({
 }));
 
 export type ChipsProps = {
+  disabled?: boolean;
   filters: Filter[];
   value: Partial<Selected>[];
   onRemove?: (item: Partial<Selected>) => void;
 };
 
-export const Chips = ({ filters, value, onRemove }: ChipsProps) => {
+export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
   return (
     <Root>
       {value.map((item) => {
@@ -95,7 +96,10 @@ export const Chips = ({ filters, value, onRemove }: ChipsProps) => {
                     </div>
                   );
                 })}
-                <IconButton onClick={() => onRemove?.(item)}>
+                <IconButton
+                  disabled={disabled}
+                  onClick={() => onRemove?.(item)}
+                >
                   <SvgIcon>
                     <Times />
                   </SvgIcon>
