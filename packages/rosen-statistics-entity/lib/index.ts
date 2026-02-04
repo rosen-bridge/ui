@@ -13,6 +13,7 @@ export {
   EventCountMetricAction,
   UserEventMetricAction,
   WatcherCountMetricAction,
+  BridgeFeeMetricAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
 export { WatcherCountConfig } from './types';

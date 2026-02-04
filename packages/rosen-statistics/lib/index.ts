@@ -4,4 +4,5 @@ export {
   eventCountMetric,
   userEventMetric,
   watcherCountMetric,
+  bridgeFeeMetric,
 } from './jobs';
