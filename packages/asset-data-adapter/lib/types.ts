@@ -13,6 +13,11 @@ export type EVMChainsType = Extract<Network, 'ethereum' | 'binance'>;
 
 export type FetchOffsetType = { [key: string]: number };
 
+export interface TotalSupply {
+  assetId: string;
+  totalSupply: bigint;
+}
+
 export interface AddressBalance {
   address: string;
   balance: bigint;

@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
+import { Mock } from 'vitest';
 
 import { AbstractDataAdapter } from '../../lib';
 import { ChainAssetBalance } from '../../lib/types';
@@ -159,6 +159,12 @@ describe('AbstractEvmRpcDataAdapter', () => {
   describe('getRawTotalSupply', () => {
     /**
      * @target should return raw totalSupply for wrapped token
+     * @scenario
+     * - get a wrapped token from the token map
+     * - mock the totalSupply method to return a bigint value
+     * - call the getRawTotalSupply method of the adapter
+     * @expected
+     * - getRawTotalSupply returns the mocked raw totalSupply value
      */
     it<TestContext>('should return raw totalSupply for wrapped token', async ({
       adapter,
@@ -177,6 +183,12 @@ describe('AbstractEvmRpcDataAdapter', () => {
 
     /**
      * @target should throw if totalSupply cannot be fetched
+     * @scenario
+     * - get a wrapped token from the token map
+     * - mock the totalSupply method to return undefined
+     * - call the getRawTotalSupply method of the adapter
+     * @expected
+     * - calling getRawTotalSupply throws an error
      */
     it<TestContext>('should throw if totalSupply cannot be fetched', async ({
       adapter,
@@ -188,6 +200,31 @@ describe('AbstractEvmRpcDataAdapter', () => {
       mockedTotalSupply.mockResolvedValue(undefined);
 
       await expect(adapter.getRawTotalSupply(wrappedToken)).rejects.toThrow();
+    });
+  });
+
+  describe('getAllTokensTotalSupply', () => {
+    /**
+     * @target should throw if one of the token's totalSupply cannot be fetched
+     * @scenario
+     * - Mock the totalSupply method to return undefined at second call
+     * - create an instance of the TestEvmRpcAdapter
+     * - call the getAllTokensTotalSupply method of the adapter
+     * @expected
+     * - calling getAllTokensTotalSupply is expected to throw an error
+     */
+    it('should throw if any token totalSupply cannot be fetched', async () => {
+      const mockTokenMap = new TokenMap();
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      const adapter = new TestEvmRpcAdapter(
+        ['0xAddress'],
+        mockTokenMap,
+        { url: 'http://rpc', authToken: '' },
+        100,
+      );
+
+      await expect(adapter.getAllTokensTotalSupply()).rejects.toThrow();
     });
   });
 });

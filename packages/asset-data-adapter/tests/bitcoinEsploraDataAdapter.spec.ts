@@ -1,5 +1,4 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { BitcoinEsploraDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';

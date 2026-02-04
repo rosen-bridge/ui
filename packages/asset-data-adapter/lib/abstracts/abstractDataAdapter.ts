@@ -1,13 +1,12 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import {
   NATIVE_RESIDENCY,
-  RosenAmount,
   RosenChainToken,
   TokenMap,
 } from '@rosen-bridge/tokens';
 import { Network } from '@rosen-ui/types';
 
-import { AssetBalance, ChainAssetBalance } from '../types';
+import { AssetBalance, ChainAssetBalance, TotalSupply } from '../types';
 
 export abstract class AbstractDataAdapter {
   abstract chain: Network;
@@ -74,14 +73,17 @@ export abstract class AbstractDataAdapter {
    *
    * @returns {Promise<Record<string, RosenAmount>>} tokenId → raw totalSupply
    */
-  getAllTokensTotalSupply = async (): Promise<Record<string, RosenAmount>> => {
-    const totalSupplies: { [key: string]: RosenAmount } = {};
+  getAllTokensTotalSupply = async (): Promise<TotalSupply[]> => {
+    const totalSupplies: TotalSupply[] = [];
     for (const wToken of this.getAllWrappedTokens())
-      totalSupplies[wToken.tokenId] = this.tokenMap.wrapAmount(
-        wToken.tokenId,
-        await this.getRawTotalSupply(wToken),
-        this.chain,
-      );
+      totalSupplies.push({
+        assetId: wToken.tokenId,
+        totalSupply: this.tokenMap.wrapAmount(
+          wToken.tokenId,
+          await this.getRawTotalSupply(wToken),
+          this.chain,
+        ).amount,
+      });
     return totalSupplies;
   };
 
