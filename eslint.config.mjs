@@ -61,6 +61,7 @@ const eslintConfig = [
     languageOptions: {
       globals: {
         ...globals.node,
+        ...globals.vitest,
         vi: 'readonly',
         afterAll: 'readonly',
         afterEach: 'readonly',
@@ -105,6 +106,10 @@ const eslintConfig = [
   {
     languageOptions: {
       parser: typescriptParser,
+      globals: {
+        ...globals.node,
+        ...globals.vitest,
+      },
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,

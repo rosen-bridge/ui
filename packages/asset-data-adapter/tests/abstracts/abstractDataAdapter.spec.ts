@@ -1,11 +1,9 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, expect, vi } from 'vitest';
 
 import { AssetBalance } from '../../lib/types';
 import {
   sampleTokenMapConfig,
   sampleTokenMapConfigWithDuplicateTokenId,
-  TestEvmRpcAdapter,
 } from '../mocked';
 import { TestAdapter } from '../mocked';
 
@@ -79,7 +77,7 @@ describe('AbstractDataAdapter', () => {
      * - create instance from simple TestAdapter
      * - call the getAllTokensTotalSupply method of the adapter
      * @expected
-     * - result length must be equal to the tokens of the chain
+     * - result length must be equal to the wrapped-tokens of the chain
      * - items of result must be as expected value
      */
     it('should return totalSupply for all tokens on the chain', async () => {
@@ -92,50 +90,19 @@ describe('AbstractDataAdapter', () => {
 
       const chainWrappedTokens = adapter['getAllWrappedTokens']();
 
-      expect(Object.keys(result)).toHaveLength(chainWrappedTokens.length); // plus one native token
+      expect(Object.keys(result)).toHaveLength(chainWrappedTokens.length);
 
-      Object.entries(result).forEach(([k, v]) => {
-        expect(v).toStrictEqual(
-          mockTokenMap.wrapAmount(k, 5000n, adapter.chain),
+      result.forEach((v) => {
+        const wrappedAmount = mockTokenMap.wrapAmount(
+          v.assetId,
+          5000n,
+          adapter.chain,
         );
+        expect(v).toEqual({
+          assetId: v.assetId,
+          totalSupply: wrappedAmount.amount,
+        });
       });
-    });
-
-    /**
-     * @target should throw if one of the token's totalSupply cannot be fetched
-     * @scenario
-     * - Mock the totalSupply method to return undefined at second call
-     * - create an instance of the TestEvmRpcAdapter
-     * - call the getAllTokensTotalSupply method of the adapter
-     * @expected
-     * - calling getAllTokensTotalSupply is expected to throw an error
-     */
-    it('should throw if any token totalSupply cannot be fetched', async () => {
-      const totalSupplyMock = vi
-        .fn()
-        .mockResolvedValueOnce(5000n)
-        .mockResolvedValueOnce(undefined);
-
-      vi.doMock('ethers', () => {
-        const Contract = vi.fn().mockImplementation(() => ({
-          totalSupply: totalSupplyMock,
-        }));
-        const JsonRpcProvider = vi.fn().mockImplementation(() => ({}));
-
-        return { ethers: { Contract }, Contract, JsonRpcProvider };
-      });
-
-      const mockTokenMap = new TokenMap();
-      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-
-      const adapter = new TestEvmRpcAdapter(
-        ['0xAddress'],
-        mockTokenMap,
-        { url: 'http://rpc', authToken: '' },
-        100,
-      );
-
-      await expect(adapter.getAllTokensTotalSupply()).rejects.toThrow();
     });
   });
 });

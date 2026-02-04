@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
+import { Mock } from 'vitest';
 
 import { ErgoExplorerDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';

@@ -1,5 +1,4 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { CardanoKoiosDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';
@@ -52,7 +51,7 @@ describe('CardanoKoiosDataAdapter', () => {
   });
 
   describe('getRawTotalSupply', () => {
-    it<TestContext>('should return total supply for existing wrapped token' /**
+    /**
      * @target should return total supply for existing wrapped token
      * @scenario
      * - adapter.koiosApi.assetInfo is mocked to return a single asset with total_supply
@@ -60,7 +59,10 @@ describe('CardanoKoiosDataAdapter', () => {
      * @expected
      * - method returns the total_supply as bigint
      * - assetInfo is called with correct _asset_list parameter
-     */, async ({ adapter }) => {
+     */
+    it<TestContext>('should return total supply for existing wrapped token', async ({
+      adapter,
+    }) => {
       const token = adapter['getAllWrappedTokens']().at(0)!;
 
       adapter['koiosApi'].assetInfo = vi
@@ -75,14 +77,17 @@ describe('CardanoKoiosDataAdapter', () => {
       });
     });
 
-    it<TestContext>('should throw if assetInfo returns empty array' /**
+    /**
      * @target should throw if assetInfo returns empty array
      * @scenario
      * - adapter.koiosApi.assetInfo is mocked to return []
      * - token.extra.policyId and token.extra.assetName are given
      * @expected
      * - method throws an error indicating total supply is not calculable
-     */, async ({ adapter }) => {
+     */
+    it<TestContext>('should throw if assetInfo returns empty array', async ({
+      adapter,
+    }) => {
       const token = adapter['getAllWrappedTokens']().at(0)!;
 
       adapter['koiosApi'].assetInfo = vi.fn().mockResolvedValue([]);
@@ -90,14 +95,17 @@ describe('CardanoKoiosDataAdapter', () => {
       await expect(adapter.getRawTotalSupply(token)).rejects.toThrow();
     });
 
-    it<TestContext>('should throw if assetInfo returns object without total_supply' /**
+    /**
      * @target should throw if assetInfo returns object without total_supply
      * @scenario
      * - adapter.koiosApi.assetInfo is mocked to return [{}]
      * - token.extra.policyId and token.extra.assetName are given
      * @expected
      * - method throws an error indicating total supply is not calculable
-     */, async ({ adapter }) => {
+     */
+    it<TestContext>('should throw if assetInfo returns object without total_supply', async ({
+      adapter,
+    }) => {
       const token = adapter['getAllWrappedTokens']().at(0)!;
 
       adapter['koiosApi'].assetInfo = vi.fn().mockResolvedValue([{}]);
