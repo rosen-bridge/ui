@@ -35,63 +35,6 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
   private wallet: ShakeWalletAPI | null = null;
 
   /**
-   * Query the public HSD node to find a locked name whose owner output
-   * is not currently being spent by any mempool transaction.
-   */
-  private findFreeName = async (): Promise<string> => {
-    const url = this.config.publicNodeUrl;
-
-    // 1. Get raw mempool TX hashes
-    const mempoolRes = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ method: 'getrawmempool', params: [] }),
-    });
-    const mempoolJson = await mempoolRes.json();
-    const txHashes: string[] = mempoolJson.result ?? [];
-
-    // 2. Collect all spent outpoints from mempool transactions
-    const spentOutpoints = new Set<string>();
-    await Promise.all(
-      txHashes.map(async (hash) => {
-        try {
-          const txRes = await fetch(`${url}/tx/${hash}`);
-          const tx = await txRes.json();
-          if (tx.inputs) {
-            for (const input of tx.inputs) {
-              if (input.prevout) {
-                spentOutpoints.add(
-                  `${input.prevout.hash}:${input.prevout.index}`,
-                );
-              }
-            }
-          }
-        } catch {
-          // Skip unreachable transactions
-        }
-      }),
-    );
-
-    // 3. For each name, check if its owner output is in the spent set
-    for (const name of this.config.lockedNames) {
-      const infoRes = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ method: 'getnameinfo', params: [name] }),
-      });
-      const infoJson = await infoRes.json();
-      const owner = infoJson.result?.info?.owner;
-      if (owner && !spentOutpoints.has(`${owner.hash}:${owner.index}`)) {
-        return name;
-      }
-    }
-
-    throw new Error(
-      'All locked names are currently being spent in the mempool. Please try again later.',
-    );
-  };
-
-  /**
    * Connect to Shake Wallet
    */
   performConnect = async (): Promise<void> => {
@@ -187,11 +130,13 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
   };
 
   /**
-   * Create and submit a locked UPDATE transaction via Shake Wallet.
+   * Create and submit a Rosen Bridge lock transaction via Shake Wallet.
    *
-   * Builds a locked UPDATE on the bridge-controlled name, embedding
-   * Rosen Bridge metadata as the resource hex, and sending HNS to the
-   * lock address.
+   * Uses the data-encoding approach (Bitcoin Runes method):
+   * 1. Encodes Rosen metadata as hex
+   * 2. Sends to wallet (wallet splits into 20-byte chunks)
+   * 3. Each chunk becomes a P2WPKH address (data in address hash)
+   * 4. Outputs ordered by value for extraction
    */
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (
@@ -208,37 +153,23 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
     }
 
     try {
-      // Pick a locked name whose owner output is not in the mempool
-      const lockedName = await this.findFreeName();
-
-      // Generate Rosen Bridge metadata encoded as hex for the UPDATE resource
-      const resourceHex = await this.currentNetwork.generateOpReturnData(
+      // Generate Rosen Bridge metadata encoded as hex
+      const rosenDataHex = await this.currentNetwork.generateOpReturnData(
         params.toChain,
         params.address,
         params.networkFee.toString(),
         params.bridgeFee.toString(),
       );
 
-      const opts: {
-        name: string;
-        lockScriptHex: string;
-        resourceHex: string;
-        recipientAddress?: string;
-        recipientAmount?: number;
-      } = {
-        name: lockedName,
-        lockScriptHex: this.config.lockScriptHex,
-        resourceHex,
-      };
+      console.log('Generated Rosen data:', rosenDataHex);
+      console.log('Data length:', rosenDataHex.length / 2, 'bytes');
 
-      if (params.lockAddress && Number(params.amount) > 0) {
-        opts.recipientAddress = params.lockAddress;
-        opts.recipientAmount = Number(params.amount);
-      }
-
-      console.log('Sending Rosen Bridge locked update:', opts);
-
-      const result = await this.wallet.sendRosenBridgeLock(opts);
+      // Send transaction with data-encoded outputs (wallet will chunk the data)
+      const result = await this.wallet.sendRosenBridgeData({
+        receiver: params.lockAddress,
+        amount: Number(params.amount),
+        data: rosenDataHex,
+      });
 
       if (!result.hash) {
         throw new Error('Transaction failed - no hash returned');

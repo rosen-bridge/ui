@@ -4,9 +4,10 @@
 import { WalletConfig } from '@rosen-ui/wallet-api';
 
 export type ShakeWalletConfig = WalletConfig & {
-  lockScriptHex: string;
-  lockedNames: string[];
-  publicNodeUrl: string;
+  // Deprecated: legacy locked name approach
+  lockScriptHex?: string;
+  lockedNames?: string[];
+  publicNodeUrl?: string;
 };
 
 export interface ShakeWallet {
@@ -50,6 +51,11 @@ export interface ShakeWallet {
     rate?: number;
   },
   ): Promise<{ hash: string }>;
+  sendRosenBridgeData(opts: {
+    receiver: string;
+    amount: number;
+    data: string;
+  }): Promise<{ hash: string }>;
 
   // Info functions
   getNames(): Promise<unknown[]>;
