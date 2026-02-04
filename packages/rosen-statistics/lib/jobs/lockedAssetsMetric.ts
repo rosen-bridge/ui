@@ -1,5 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   LockedAssetsMetricAction,
   METRIC_KEYS,
@@ -22,6 +23,8 @@ export const lockedAssetsMetric = async (
     logger,
   );
   const metricAction = new MetricAction(dataSource, logger);
+  const tokenPriceAction = new TokenPriceAction(dataSource, logger);
+  const timestamp = Math.floor(Date.now() / 1000);
 
   const lockedAssets = await lockedAssetsMetricAction.getLockedAssets();
   if (!lockedAssets.length) {
@@ -29,23 +32,23 @@ export const lockedAssetsMetric = async (
     return;
   }
 
-  const tokenIds = [...new Set(lockedAssets.map((a) => a.tokenId))];
-  const tokenPrices =
-    await lockedAssetsMetricAction.getLatestTokenPrices(tokenIds);
-
+  const tokenIds = new Set(lockedAssets.map((a) => a.tokenId));
   const latestPriceMap = new Map<string, number>();
-  tokenPrices.forEach((tp) => {
-    if (!latestPriceMap.has(tp.tokenId)) {
-      latestPriceMap.set(tp.tokenId, Number(tp.price));
-    }
-  });
 
+  for (const tokenId of tokenIds) {
+    const price = await tokenPriceAction.getLatestTokenPrice(
+      tokenId,
+      timestamp,
+    );
+    if (!price) continue;
+    latestPriceMap.set(tokenId, price);
+  }
   const totalUsdValue = lockedAssets.reduce((sum, asset) => {
     const price = latestPriceMap.get(asset.tokenId);
-    return sum + (price ? Number(asset.amount) * price : 0);
-  }, 0);
+    return sum + (price ? asset.amount * BigInt(price) : 0n);
+  }, 0n);
 
-  if (totalUsdValue === 0) {
+  if (totalUsdValue === 0n) {
     logger.debug('No locked assets with valid prices found');
     return;
   }
@@ -55,6 +58,6 @@ export const lockedAssetsMetric = async (
   await metricAction.upsertMetric(
     METRIC_KEYS.TOTAL_LOCKED_ASSETS_USD,
     totalUsdValue.toString(),
-    Math.floor(Date.now() / 1000),
+    timestamp,
   );
 };

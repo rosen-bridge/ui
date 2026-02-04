@@ -5,7 +5,8 @@ import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
 import { METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { lockedAssetsMetric } from '../../lib/jobs';
+import { lockedAssetsMetric } from '../../lib';
+import { lockedAssetsTestData } from '../test-data';
 import { createDatabase } from '../utils';
 
 describe('lockedAssetsMetric', () => {
@@ -41,39 +42,11 @@ describe('lockedAssetsMetric', () => {
    * - metric TOTAL_LOCKED_ASSETS_USD is stored with correct summed value
    */
   it('should calculate and store locked assets USD metric', async () => {
-    await tokenRepo.insert([
-      {
-        id: 'token-1',
-        name: 'Token 1',
-        decimal: 0,
-        significantDecimal: 0,
-        isNative: false,
-        chain: 'ergo',
-        ergoSideTokenId: 'ergo-token-1',
-        isResident: false,
-      },
-      {
-        id: 'token-2',
-        name: 'Token 2',
-        decimal: 0,
-        significantDecimal: 0,
-        isNative: false,
-        chain: 'ergo',
-        ergoSideTokenId: 'ergo-token-2',
-        isResident: false,
-      },
-    ]);
+    await tokenRepo.insert(lockedAssetsTestData.test1.tokenRepo);
 
-    await lockedAssetRepo.insert([
-      { address: 'addr1', tokenId: 'token-1', amount: BigInt(10) },
-      { address: 'addr2', tokenId: 'token-2', amount: BigInt(5) },
-    ]);
+    await lockedAssetRepo.insert(lockedAssetsTestData.test1.lockedAssetRepo);
 
-    await tokenPriceRepo.insert([
-      { tokenId: 'token-1', price: 10, timestamp: 2_000 },
-      { tokenId: 'token-2', price: 4, timestamp: 2_000 },
-      { tokenId: 'token-2', price: 3, timestamp: 3_000 },
-    ]);
+    await tokenPriceRepo.insert(lockedAssetsTestData.test1.tokenPriceRepo);
 
     await lockedAssetsMetric(dataSource, logger);
 
@@ -81,7 +54,7 @@ describe('lockedAssetsMetric', () => {
       where: { key: METRIC_KEYS.TOTAL_LOCKED_ASSETS_USD },
     });
     expect(metric).not.toBeNull();
-    expect(metric?.value).toBe('115');
+    expect(metric?.value).toBe('221');
   });
 
   /**
@@ -95,21 +68,8 @@ describe('lockedAssetsMetric', () => {
    * - no metric is created
    */
   it('should not store metric if locked assets have no prices', async () => {
-    await tokenRepo.insert({
-      id: 'token-1',
-      name: 'Token 1',
-      decimal: 0,
-      significantDecimal: 0,
-      isNative: false,
-      chain: 'ergo',
-      ergoSideTokenId: 'ergo-token-1',
-      isResident: false,
-    });
-    await lockedAssetRepo.insert({
-      address: 'addr1',
-      tokenId: 'token-1',
-      amount: BigInt(10),
-    });
+    await tokenRepo.insert(lockedAssetsTestData.test2.tokenRepo);
+    await lockedAssetRepo.insert(lockedAssetsTestData.test2.lockedAssetRepo);
 
     await lockedAssetsMetric(dataSource, logger);
 
