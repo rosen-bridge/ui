@@ -19,7 +19,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "node ./generate.js && tsc && vite build",
+    "build": "node ./generate.js && tsc && vite build && npm run lint",
     "lint": "eslint --fix . && npm run prettify",
     "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
