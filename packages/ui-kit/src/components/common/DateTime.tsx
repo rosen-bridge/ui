@@ -25,7 +25,6 @@ const Loading = () => {
       <Skeleton
         width={80}
         sx={{ borderRadius: (theme) => theme.spacing(0.5) }}
-        variant="text"
       />
     </Typography>
   );

@@ -56,21 +56,9 @@ const NetworkSkeleton = ({
 }: Omit<NetworkProps, 'name'> & { showIcon?: boolean; showText?: boolean }) => (
   <Root reverse={reverse} orientation={orientation}>
     {showIcon && (
-      <Skeleton
-        animation="wave"
-        sx={{ width: '2em', height: '2em' }}
-        variant="circular"
-      />
+      <Skeleton sx={{ width: '2em', height: '2em' }} variant="circular" />
     )}
-    {showText && (
-      <Skeleton
-        animation="wave"
-        height={14}
-        width={60}
-        variant="rectangular"
-        sx={{ borderRadius: 0.3 }}
-      />
-    )}
+    {showText && <Skeleton width={60} sx={{ borderRadius: 0.3 }} />}
   </Root>
 );
 
