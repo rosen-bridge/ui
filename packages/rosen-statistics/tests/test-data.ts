@@ -79,7 +79,7 @@ export const lockedAssetsTestData = {
         isNative: false,
         chain: 'ergo' as const,
         ergoSideTokenId: 'ergo-token-1',
-        isResident: false,
+        isResident: true,
       },
       {
         id: 'token-2',
@@ -89,7 +89,7 @@ export const lockedAssetsTestData = {
         isNative: false,
         chain: 'ergo' as const,
         ergoSideTokenId: 'ergo-token-2',
-        isResident: false,
+        isResident: true,
       },
     ],
     lockedAssetRepo: [
@@ -129,7 +129,7 @@ export const lockedAssetsTestData = {
         isNative: false,
         chain: 'ergo' as const,
         ergoSideTokenId: 'ergo-token-1',
-        isResident: false,
+        isResident: true,
       },
     ],
     lockedAssetRepo: [
