@@ -92,7 +92,7 @@ const IdentifierBase = ({
       style={styles}
       {...props}
     >
-      {loading && <Skeleton style={{ flexGrow: 1 }} />}
+      {loading && <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />}
       {!loading && (
         <>
           <Tooltip title={value}>

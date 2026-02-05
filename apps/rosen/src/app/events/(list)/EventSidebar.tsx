@@ -19,64 +19,59 @@ import {
   useStickyBox,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getAddressUrl, getDecimalString, getTxURL } from '@rosen-ui/utils';
+import { fetcher } from '@rosen-ui/swr-helpers';
+import { getAddressUrl, getTxURL } from '@rosen-ui/utils';
+import useSWR from 'swr';
 
 import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
   const isTablet = useBreakpoint('laptop-down');
 
-  const eventData = useMemo(() => {
-    if (!value) return null;
-
-    const data: EventDetailsProps['value'] = {
-      amount: getDecimalString(
-        value.amount,
-        value.lockToken?.significantDecimal,
-      ),
-      bridgeFee: getDecimalString(
-        value.bridgeFee,
-        value.lockToken?.significantDecimal,
-      ),
-      fromAddress: value.fromAddress,
-      fromAddressUrl: getAddressUrl(value.fromChain, value.fromAddress),
-      fromChain: value.fromChain,
-      height: value.height,
-      href: `/events/${value.eventId}`,
-      id: value.eventId,
-      networkFee: getDecimalString(
-        value.networkFee,
-        value.lockToken?.significantDecimal,
-      ),
-      reports: value.WIDsCount,
-      sourceTxId: value.sourceTxId,
-      sourceTxIdUrl: getTxURL(value.fromChain, value.sourceTxId),
-      status: value.status,
-      toAddress: value.toAddress,
-      toAddressUrl: getAddressUrl(value.toChain, value.toAddress),
-      toChain: value.toChain,
-      token: value.lockToken?.name,
-      ergoSideTokenId: value.lockToken?.ergoSideTokenId,
-      paymentTxId: value.paymentTxId ?? undefined,
-      paymentTxIdUrl: value.paymentTxId
-        ? getTxURL(value.toChain, value.paymentTxId)
-        : undefined,
-      spendTxId: value.spendTxId ?? undefined,
-      spendTxIdUrl: value.spendTxId
-        ? getTxURL(NETWORKS.ergo.key, value.spendTxId)
-        : undefined,
-      timestamp: value.timestamp,
-    };
-
-    if (value.status === 'fraud') {
-      delete data.paymentTxId;
-      delete data.spendTxId;
-    }
-
-    return data;
+  const shouldLoad = useMemo(() => {
+    return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
 
-  if (!eventData) {
+  const { data, isLoading } = useSWR<EventItem>(
+    shouldLoad && `/v1/events/${value?.eventId}`,
+    fetcher,
+  );
+
+  const eventData = useMemo(() => {
+    const result: EventDetailsProps['value'] = {
+      amount: data?.amount,
+      decimal: data?.lockToken?.significantDecimal,
+      price: data?.price,
+      bridgeFee: data?.bridgeFee,
+      fromAddress: data?.fromAddress,
+      fromAddressUrl: getAddressUrl(data?.fromChain, data?.fromAddress),
+      fromChain: data?.fromChain,
+      height: data?.height,
+      href: `/events/${data?.eventId}`,
+      id: data?.eventId,
+      networkFee: data?.networkFee,
+      reports: data?.WIDsCount,
+      sourceTxId: data?.sourceTxId,
+      sourceTxIdUrl: getTxURL(data?.fromChain, data?.sourceTxId),
+      status: data?.status,
+      toAddress: data?.toAddress,
+      toAddressUrl: getAddressUrl(data?.toChain, data?.toAddress),
+      toChain: data?.toChain,
+      token: data?.lockToken?.name,
+      timestamp: data?.timestamp,
+    };
+
+    if (result.status !== 'fraud') {
+      result.paymentTxId = data?.paymentTxId ?? undefined;
+      result.paymentTxIdUrl = getTxURL(data?.toChain, result?.paymentTxId);
+      result.spendTxId = data?.spendTxId ?? undefined;
+      result.spendTxIdUrl = getTxURL(NETWORKS.ergo.key, result?.spendTxId);
+    }
+
+    return result;
+  }, [data]);
+
+  if (!value) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text.secondary">
@@ -85,7 +80,8 @@ const Content = ({ value }: EventSidebarProps) => {
       </Center>
     );
   }
-  if (eventData.status === 'multipleFlows') {
+
+  if (value.status === 'multipleFlows') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text.secondary" textAlign="center">
@@ -96,7 +92,13 @@ const Content = ({ value }: EventSidebarProps) => {
     );
   }
 
-  return <EventDetails value={eventData} showSeeDetailsButton={isTablet} />;
+  return (
+    <EventDetails
+      loading={isLoading}
+      value={eventData}
+      showSeeDetailsButton={isTablet}
+    />
+  );
 };
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
