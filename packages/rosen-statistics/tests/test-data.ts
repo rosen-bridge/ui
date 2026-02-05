@@ -67,3 +67,77 @@ export const tokenMapData: RosenTokens = [
     },
   },
 ];
+
+export const lockedAssetsTestData = {
+  test1: {
+    tokenRepo: [
+      {
+        id: 'token-1',
+        name: 'Token 1',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-2',
+        name: 'Token 2',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-2',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      { address: 'addr1', tokenId: 'token-1', amount: BigInt(10) },
+      { address: 'addr2', tokenId: 'token-1', amount: BigInt(7) },
+      { address: 'addr3', tokenId: 'token-1', amount: BigInt(3) },
+
+      { address: 'addr4', tokenId: 'token-2', amount: BigInt(5) },
+      { address: 'addr5', tokenId: 'token-2', amount: BigInt(2) },
+    ],
+    tokenPriceRepo: [
+      {
+        tokenId: 'token-1',
+        price: 10,
+        timestamp: 2_000,
+      },
+      {
+        tokenId: 'token-2',
+        price: 4,
+        timestamp: 2_000,
+      },
+      {
+        tokenId: 'token-2',
+        price: 3,
+        timestamp: 3_000,
+      },
+    ],
+  },
+
+  test2: {
+    tokenRepo: [
+      {
+        id: 'token-1',
+        name: 'Token 1',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-1',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      {
+        address: 'addr1',
+        tokenId: 'token-1',
+        amount: BigInt(10),
+      },
+    ],
+  },
+};
