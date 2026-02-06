@@ -10,6 +10,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
+import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
 import { ChainChoices, TotalSupply } from '../types';
 import { AssetDataAdapterService } from './assetDataAdapters';
@@ -17,7 +18,6 @@ import { DBService } from './db';
 
 export class AssetAggregatorService extends PeriodicTaskService {
   name = 'AssetAggregatorService';
-  taskName = 'AssetAggregatorService';
   readonly assetAggregator;
   private static instance: AssetAggregatorService;
   readonly dbService: DBService;
@@ -94,7 +94,7 @@ export class AssetAggregatorService extends PeriodicTaskService {
         fn: async () => {
           const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
           await Promise.all(
-            Object.values(Object.keys(configs.chains)).map(async (chain) => {
+            Object.keys(configs.chains).map(async (chain) => {
               const chainConfig = configs.chains[chain as ChainChoices];
               if (
                 chain == NETWORKS.ergo.key ||
@@ -106,7 +106,7 @@ export class AssetAggregatorService extends PeriodicTaskService {
             }),
           );
           const totalSupply: TotalSupply[] =
-            (await this.redis.get('total_supply')) ?? [];
+            (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? [];
           await this.assetAggregator.update(assetBalances, totalSupply);
         },
         interval: configs.dataAggregator.interval * 1000,
