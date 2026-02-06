@@ -1,5 +1,6 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
+import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   Filters,
   filtersToTypeorm,
@@ -10,6 +11,8 @@ import { Network } from '@rosen-ui/types';
 
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
+
+const tokenPriceAction = new TokenPriceAction(dataSource);
 
 const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
@@ -190,7 +193,7 @@ export const getEvents = async (filters: Filters) => {
 };
 
 export const getEvent = async (id: string) => {
-  return dataSource
+  const event = await dataSource
     .getRepository(ObservationEntity)
     .createQueryBuilder('oe')
     .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
@@ -231,4 +234,25 @@ export const getEvent = async (id: string) => {
     ])
     .where('oe.requestId = :id', { id })
     .getRawOne<EventDetailsType>();
+
+  if (!event || !event.lockToken) throw new Error(`Not found`);
+
+  const token = await tokenRepository.findOne({
+    where: {
+      isResident: true,
+      ergoSideTokenId: event.lockToken.ergoSideTokenId,
+    },
+  });
+
+  if (!token) throw new Error(`Not found`);
+
+  const price = await tokenPriceAction.getLatestTokenPrice(
+    token.id,
+    event.timestamp,
+  );
+
+  return {
+    ...event,
+    price,
+  };
 };

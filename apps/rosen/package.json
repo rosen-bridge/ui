@@ -27,6 +27,7 @@
     "@rosen-bridge/encryption": "^1.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/icons": "^3.3.0",
+    "@rosen-bridge/token-price-entity": "^0.2.0",
     "@rosen-bridge/tokens": "^4.0.1",
     "@rosen-bridge/ui-kit": "^5.1.0",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
