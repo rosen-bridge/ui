@@ -35,7 +35,8 @@
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^3.0.1",
-    "@rosen-bridge/extended-typeorm": "^1.0.1"
+    "@rosen-bridge/extended-typeorm": "^1.0.1",
+    "@rosen-ui/asset-calculator": "^2.3.0"
   },
   "engines": {
     "node": ">=22.18.0",

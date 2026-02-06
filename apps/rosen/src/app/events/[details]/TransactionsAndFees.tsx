@@ -120,7 +120,8 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             <Amount
               style={{ height: '20px' }}
               loading={isLoading}
-              fallback="-"
+              value={data?.price}
+              unit="$"
             />
           </Label>
           <Label label="Fee Sum">
@@ -129,6 +130,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
               value={data?.totalFee}
               decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
+              price={data?.price}
             />
           </Label>
           <Label label="Bridge Fee" inset>
@@ -137,6 +139,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
               value={data?.bridgeFee}
               decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
+              price={data?.price}
             />
           </Label>
           <Label label="Network Fee" inset>
@@ -145,6 +148,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
               value={data?.networkFee}
               decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
+              price={data?.price}
             />
           </Label>
         </div>
