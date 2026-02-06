@@ -26,7 +26,6 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
     token?: string;
     ergoSideTokenId?: string;
     timestamp?: number;
-    flows?: number;
   };
   onClick?: () => void;
 };
@@ -69,33 +68,12 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 decimal={value?.decimal}
               />
             </Stack>
-            {!!value && ('timestamp' in value || 'flows' in value) && (
-              <Stack
-                direction="row"
-                align="center"
-                justify="between"
-                style={{ marginBottom: '-4px' }}
-              >
-                <div>
-                  {!!value && 'timestamp' in value && (
-                    <RelativeTime
-                      isLoading={isLoading}
-                      timestamp={value?.timestamp}
-                    />
-                  )}
-                </div>
-                {!!value && 'flows' in value && (
-                  <>
-                    {!isLoading && (
-                      <Typography color="text.secondary" variant="body2">
-                        with {value.flows} flow(s)
-                      </Typography>
-                    )}
-                    {!!isLoading && <Skeleton width="80px" variant="text" />}
-                  </>
-                )}
-              </Stack>
-            )}
+            <div style={{ marginBottom: '-4px' }}>
+              <RelativeTime
+                isLoading={isLoading}
+                timestamp={value?.timestamp}
+              />
+            </div>
             <Identifier
               href={value?.href}
               loading={isLoading}
