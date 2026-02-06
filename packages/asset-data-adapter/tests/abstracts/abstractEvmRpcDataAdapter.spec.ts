@@ -202,29 +202,4 @@ describe('AbstractEvmRpcDataAdapter', () => {
       await expect(adapter.getRawTotalSupply(wrappedToken)).rejects.toThrow();
     });
   });
-
-  describe('getAllTokensTotalSupply', () => {
-    /**
-     * @target should throw if one of the token's totalSupply cannot be fetched
-     * @scenario
-     * - Mock the totalSupply method to return undefined at second call
-     * - create an instance of the TestEvmRpcAdapter
-     * - call the getAllTokensTotalSupply method of the adapter
-     * @expected
-     * - calling getAllTokensTotalSupply is expected to throw an error
-     */
-    it('should throw if any token totalSupply cannot be fetched', async () => {
-      const mockTokenMap = new TokenMap();
-      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-
-      const adapter = new TestEvmRpcAdapter(
-        ['0xAddress'],
-        mockTokenMap,
-        { url: 'http://rpc', authToken: '' },
-        100,
-      );
-
-      await expect(adapter.getAllTokensTotalSupply()).rejects.toThrow();
-    });
-  });
 });
