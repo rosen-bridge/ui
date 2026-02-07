@@ -46,12 +46,16 @@ const Observations = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Observation) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: Observation) => (
+      <MobileRow key={rowData.id} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Observation) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: Observation) => (
+      <TabletRow key={rowData.id} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 

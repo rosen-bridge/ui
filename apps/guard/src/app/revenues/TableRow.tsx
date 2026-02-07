@@ -20,13 +20,13 @@ interface RowProps extends Revenue {
 
 export const mobileHeader = [
   {
-    title: '',
+    title: ' ',
     cellProps: {
       width: '40%',
     },
   },
   {
-    title: '',
+    title: '  ',
     cellProps: {
       width: '60%',
     },

@@ -46,12 +46,16 @@ const History = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: HistoryEvent) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: HistoryEvent) => (
+      <MobileRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: HistoryEvent) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: HistoryEvent) => (
+      <TabletRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 

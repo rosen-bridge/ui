@@ -19,13 +19,13 @@ interface RowProps extends Observation {
 
 export const mobileHeader = [
   {
-    title: '',
+    title: ' ',
     cellProps: {
       width: '40%',
     },
   },
   {
-    title: '',
+    title: '  ',
     cellProps: {
       width: '60%',
     },

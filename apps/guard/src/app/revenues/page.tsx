@@ -46,12 +46,16 @@ const Revenues = () => {
   );
 
   const renderMobileRow = useCallback(
-    (rowData: Revenue) => <MobileRow {...rowData} isLoading={isLoading} />,
+    (rowData: Revenue) => (
+      <MobileRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
-    (rowData: Revenue) => <TabletRow {...rowData} isLoading={isLoading} />,
+    (rowData: Revenue) => (
+      <TabletRow key={rowData.eventId} {...rowData} isLoading={isLoading} />
+    ),
     [isLoading],
   );
 
