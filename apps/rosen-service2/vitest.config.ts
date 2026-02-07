@@ -1,7 +1,8 @@
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
-const configDir = new URL('.', import.meta.url).pathname;
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   test: {
@@ -20,7 +21,7 @@ export default defineConfig({
     },
     env: {
       NODE_ENV: 'test',
-      NODE_CONFIG_DIR: path.resolve(configDir, 'config'),
+      NODE_CONFIG_DIR: path.resolve(__dirname, 'config'),
     },
   },
 });

@@ -9,7 +9,7 @@ export class TokensAnalyzer {
   protected bridgedTokens: Omit<BridgedAssetEntity, 'token'>[];
 
   constructor(
-    protected chainAssetBalanceInfo: Partial<Record<NetworkItem, AssetBalance>>,
+    protected chainAssetBalanceInfo: AssetBalance,
     protected totalSupply: TotalSupply[],
     protected tokenMap: TokenMap,
     protected logger: AbstractLogger = new DummyLogger(),
@@ -36,14 +36,10 @@ export class TokensAnalyzer {
    * @async
    * @returns {Promise<void>}
    */
-  analyze = async () => {
+  analyze = async (chain: NetworkItem) => {
     this.lockedTokens = [];
     this.bridgedTokens = [];
-    for (const [chain, chainAssets] of Object.entries(
-      this.chainAssetBalanceInfo,
-    ) as [NetworkItem, AssetBalance][]) {
-      await this.inspectChainTokens(chain, chainAssets);
-    }
+    await this.inspectChainTokens(chain, this.chainAssetBalanceInfo);
   };
 
   /**

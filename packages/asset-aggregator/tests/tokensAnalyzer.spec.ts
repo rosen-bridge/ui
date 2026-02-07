@@ -41,11 +41,11 @@ describe('TokensAnalyzer', () => {
       tokenMap,
     }) => {
       const analyzer = new TokensAnalyzer(
-        NATIVE_TOKEN_CHAIN_BALANCE_INFO,
+        NATIVE_TOKEN_CHAIN_BALANCE_INFO.ergo,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
-      await analyzer.analyze();
+      await analyzer.analyze('ergo');
 
       expect(analyzer['lockedTokens'].map((l) => l.tokenId)).toContain(
         NETWORKS.ergo.nativeToken,
@@ -66,11 +66,11 @@ describe('TokensAnalyzer', () => {
       tokenMap,
     }) => {
       const analyzer = new TokensAnalyzer(
-        WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
+        WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
-      await analyzer.analyze();
+      await analyzer.analyze('ergo');
 
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
       expect(analyzer['bridgedTokens']).toEqual([
@@ -104,12 +104,12 @@ describe('TokensAnalyzer', () => {
       await tokenMap.updateConfigByJson(SAMPLE_TOKEN_MAP);
 
       const analyzer = new TokensAnalyzer(
-        WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
+        WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
 
-      await analyzer.analyze();
+      await analyzer.analyze('ergo');
 
       const bridged = analyzer.getBridgedTokens();
       expect(bridged).toHaveLength(1);

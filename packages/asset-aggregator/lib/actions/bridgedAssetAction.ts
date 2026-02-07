@@ -9,6 +9,7 @@ import JsonBigInt from '@rosen-bridge/json-bigint';
 
 import { DEFAULT_DELETE_CHUNK_SIZE } from '../constants';
 import { BridgedAssetEntity } from '../entities';
+import { NetworkItem } from '../types';
 
 export class BridgedAssetAction {
   protected readonly repository: Repository<BridgedAssetEntity>;
@@ -56,15 +57,16 @@ export class BridgedAssetAction {
    * Removes all items from the array except the ones with the specified excludeTokenIds.
    *
    * @param excludeTokenIds
+   * @param chain
    */
-  keepOnly = async (excludeTokenIds: string[] | string) => {
+  keepOnly = async (excludeTokenIds: string[] | string, chain: NetworkItem) => {
     if (!(excludeTokenIds instanceof Array))
       excludeTokenIds = [excludeTokenIds];
 
     const toRemove = (
       await this.repository.find({
         select: ['tokenId'],
-        where: { tokenId: Not(In(excludeTokenIds)) },
+        where: { tokenId: Not(In(excludeTokenIds)), chain },
       })
     ).map((obj) => obj.tokenId);
 

@@ -90,7 +90,8 @@ describe('AbstractDataAdapter', () => {
 
       const chainWrappedTokens = adapter['getAllWrappedTokens']();
 
-      expect(Object.keys(result)).toHaveLength(chainWrappedTokens.length);
+      expect(Object.keys(result)).toHaveLength(3);
+      expect(chainWrappedTokens.length).toEqual(3);
 
       result.forEach((v) => {
         const wrappedAmount = mockTokenMap.wrapAmount(
@@ -103,6 +104,28 @@ describe('AbstractDataAdapter', () => {
           totalSupply: wrappedAmount.amount,
         });
       });
+    });
+
+    /**
+     * @target should throw if one of the token's totalSupply cannot be fetched
+     * @scenario
+     * - Mock the totalSupply method to return undefined at second call
+     * - create an instance of the TestEvmRpcAdapter
+     * - call the getAllTokensTotalSupply method of the adapter
+     * @expected
+     * - calling getAllTokensTotalSupply is expected to throw an error
+     */
+    it('should throw if any token totalSupply cannot be fetched', async () => {
+      const mockTokenMap = new TokenMap();
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      const adapter = new TestAdapter(['0xAddress'], mockTokenMap);
+
+      adapter.getRawTotalSupply = vi.fn().mockImplementation(() => {
+        throw new Error();
+      });
+
+      await expect(adapter.getAllTokensTotalSupply()).rejects.toThrow();
     });
   });
 });

@@ -21,13 +21,13 @@ import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
+import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
 import { ChainChoices, Chains, TotalSupply } from '../types';
 import { DBService } from './db';
 
 export class AssetDataAdapterService extends PeriodicTaskService {
   name = 'AssetDataAdapterService';
-  taskName = 'AssetDataAdapterService';
   private static instance: AssetDataAdapterService;
   readonly dbService: DBService;
   readonly redis;
@@ -55,24 +55,22 @@ export class AssetDataAdapterService extends PeriodicTaskService {
 
   /**
    * calculate total supply of the wrapped-tokens
+   *
+   * @returns { {[chain: string]: TotalSupply[]} }
    */
-  getAssetsTotalSupply = async (): Promise<TotalSupply[]> => {
-    const assets = (
-      await Promise.all(
-        NETWORKS_KEYS.map(async (chain) => {
-          const adapter = this.adapters[chain];
-          if (adapter)
-            return Object.entries(await adapter.getAllTokensTotalSupply()).map(
-              ([k, v]) => ({
-                assetId: k,
-                totalSupply: v.amount,
-              }),
-            );
-        }),
-      )
-    )
-      .flat()
-      .filter((asset) => asset != undefined);
+  getAssetsTotalSupply = async (): Promise<{
+    [chain: string]: TotalSupply[];
+  }> => {
+    const assets: { [chain: string]: TotalSupply[] } = {};
+    await Promise.all(
+      NETWORKS_KEYS.map(async (chain) => {
+        const adapter = this.adapters[chain];
+        if (adapter)
+          assets[chain] = (await adapter.getAllTokensTotalSupply())
+            .flat()
+            .filter((asset) => asset != undefined);
+      }),
+    );
     return assets;
   };
 
@@ -280,7 +278,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set('total_supply', JsonBigInt.stringify(assets));
+    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, JsonBigInt.stringify(assets));
   };
 
   /**

@@ -71,7 +71,7 @@ export abstract class AbstractDataAdapter {
   /**
    * Fetches raw totalSupply for all tokens on this chain.
    *
-   * @returns {Promise<Record<string, RosenAmount>>} tokenId → raw totalSupply
+   * @returns {Promise<TotalSupply[]>}
    */
   getAllTokensTotalSupply = async (): Promise<TotalSupply[]> => {
     const totalSupplies: TotalSupply[] = [];

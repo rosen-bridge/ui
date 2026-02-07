@@ -2,4 +2,4 @@
 '@rosen-bridge/rosen-service2': minor
 ---
 
-Update AssetDataAdapter to store all assets in Redis
+Add support for AssetDataAdapter sub-service in rosen-service2

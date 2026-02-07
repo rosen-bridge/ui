@@ -1,6 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_RESIDENCY, NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
 
 import { BridgedAssetAction, LockedAssetAction, TokenAction } from './actions';
 import { TokensAnalyzer } from './tokensAnalyzer';
@@ -63,7 +63,8 @@ export class AssetAggregator {
    * @param totalSupply
    */
   update = async (
-    chainAssetBalanceInfo: Partial<Record<NetworkItem, AssetBalance>>,
+    chain: NetworkItem,
+    chainAssetBalanceInfo: AssetBalance,
     totalSupply: TotalSupply[],
   ) => {
     this.logger.debug('Starting asset aggregator update process');
@@ -73,7 +74,7 @@ export class AssetAggregator {
       this.tokenMap,
       this.logger,
     );
-    await analyzer.analyze();
+    await analyzer.analyze(chain);
     const bridgedTokens = analyzer.getBridgedTokens();
     const lockedTokens = analyzer.getLockedTokens();
 
@@ -81,7 +82,21 @@ export class AssetAggregator {
     await this.bridgedAssetAction.store(bridgedTokens);
     await this.lockedAssetAction.store(lockedTokens);
     // remove unused locked and bridged tokens
-    await this.bridgedAssetAction.keepOnly(bridgedTokens.map((t) => t.tokenId));
-    await this.lockedAssetAction.keepOnly(lockedTokens.map((t) => t.tokenId));
+    await this.bridgedAssetAction.keepOnly(
+      bridgedTokens.map((t) => t.tokenId),
+      chain,
+    );
+
+    const lockedTokenIds = new Set(lockedTokens.map((t) => t.tokenId));
+    const validStoreTokens = this.tokenMap
+      .getConfig()
+      .flatMap((tokenSets) => Object.entries(tokenSets))
+      .filter(([, tokenSet]) => tokenSet.residency === NATIVE_RESIDENCY)
+      .filter(
+        ([tokenSetChain, tokenSet]) =>
+          chain !== tokenSetChain || lockedTokenIds.has(tokenSet.tokenId),
+      )
+      .map(([, tokenSet]) => tokenSet.tokenId);
+    await this.lockedAssetAction.keepOnly(validStoreTokens);
   };
 }
