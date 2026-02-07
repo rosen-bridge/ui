@@ -20,13 +20,13 @@ interface RowProps extends GuardTokenInfo {
 
 export const mobileHeader = [
   {
-    title: '',
+    title: ' ',
     cellProps: {
       width: '40%',
     },
   },
   {
-    title: '',
+    title: '  ',
     cellProps: {
       width: '60%',
     },
