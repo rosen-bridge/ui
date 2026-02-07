@@ -30,13 +30,13 @@ const StyledBox = styled(Box)({
 
 export const mobileHeader = [
   {
-    title: '',
+    title: ' ',
     cellProps: {
       width: '40%',
     },
   },
   {
-    title: '',
+    title: '  ',
     cellProps: {
       width: '60%',
     },

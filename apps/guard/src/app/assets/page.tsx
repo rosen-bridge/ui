@@ -46,14 +46,14 @@ const Assets = () => {
 
   const renderMobileRow = useCallback(
     (rowData: GuardTokenInfo) => (
-      <MobileRow {...rowData} isLoading={isLoading} />
+      <MobileRow key={rowData.tokenId} {...rowData} isLoading={isLoading} />
     ),
     [isLoading],
   );
 
   const renderTabletRow = useCallback(
     (rowData: GuardTokenInfo) => (
-      <TabletRow {...rowData} isLoading={isLoading} />
+      <TabletRow key={rowData.tokenId} {...rowData} isLoading={isLoading} />
     ),
     [isLoading],
   );

@@ -58,7 +58,9 @@ export const TableSkeleton: FC<TableSkeletonProps> = (props) => {
 
   return (
     <EnhancedTable
-      data={new Array(props.numberOfItems || 5).fill({})}
+      data={new Array(props.numberOfItems || 5).map((item, index) => ({
+        title: index.toString(),
+      }))}
       responsiveHead={tableHeaderProps}
       responsiveRenderRow={tableRenderRowProps}
       paginated={false}

@@ -75,6 +75,7 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
             )}
           </Stack>
           <Typography
+            component="div"
             variant="body2"
             sx={{ color: (theme) => theme.palette.text.secondary, minWidth: 0 }}
           >
