@@ -1,5 +1,6 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
+import { AssetAggregatorService } from 'services/assetAggregator';
 
 import dataSource from './data-source';
 import { AssetDataAdapterService } from './services/assetDataAdapters';
@@ -47,6 +48,13 @@ const startApp = async () => {
   serviceManager.register(AssetDataAdapterService.getInstance());
   logger.debug('asset-data-adapter Service registered to the service manager');
 
+  logger.debug('Initializing asset-aggregator service');
+  AssetAggregatorService.init(
+    CallbackLoggerFactory.getInstance().getLogger('asset-aggregator-service'),
+  );
+  serviceManager.register(AssetAggregatorService.getInstance());
+  logger.debug('asset-aggregator Service registered to the service manager');
+
   logger.debug('Initializing health-check service');
   HealthService.init(
     CallbackLoggerFactory.getInstance().getLogger('health-check-service'),
@@ -56,7 +64,7 @@ const startApp = async () => {
 
   logger.info('Starting service manager...');
   serviceManager.start(HealthService.getInstance().getName());
-  serviceManager.start(AssetDataAdapterService.getInstance().getName());
+  serviceManager.start(AssetAggregatorService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };

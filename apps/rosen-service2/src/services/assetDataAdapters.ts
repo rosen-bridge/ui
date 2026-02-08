@@ -21,14 +21,13 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
-import { ERG_TOTAL_SUPPLY } from '../constants';
+import { ERG_TOTAL_SUPPLY, TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
 import { ChainChoices, Chains, TotalSupply } from '../types';
 import { DBService } from './db';
 
 export class AssetDataAdapterService extends PeriodicTaskService {
   name = 'AssetDataAdapterService';
-  taskName = 'AssetDataAdapterService';
   private static instance: AssetDataAdapterService;
   readonly dbService: DBService;
   readonly redis;
@@ -296,7 +295,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set('total_supply', JsonBigInt.stringify(assets));
+    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, JsonBigInt.stringify(assets));
   };
 
   /**

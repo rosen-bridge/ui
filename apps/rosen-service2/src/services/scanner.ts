@@ -35,7 +35,6 @@ import { DBService } from './db';
 
 export class ScannerService extends PeriodicTaskService {
   name = 'ScannerService';
-  taskName = 'ScannerService';
   private static instance: ScannerService;
   protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
   readonly dbService: DBService;
