@@ -1,17 +1,17 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { OPERATORS, Selected, SortValue } from '../components';
+import { useFramework } from './useFramework';
 
 type Options = {
-  searchParams?: string;
   defaultPageIndex?: number;
   defaultPageSize?: number;
   defaultSortField?: string;
   defaultSortOrder?: 'ASC' | 'DESC';
 };
 
-const getInitialState = (options?: Options) => {
-  const searchParams = new URLSearchParams(options?.searchParams);
+const getInitialState = (search: string, options?: Options) => {
+  const searchParams = new URLSearchParams(search);
 
   const limitRaw = searchParams.get('limit');
   searchParams.delete('limit');
@@ -96,17 +96,17 @@ const getInitialState = (options?: Options) => {
 };
 
 export const useCollection = (options?: Options) => {
-  const [init] = useState(() => getInitialState(options));
+  const framework = useFramework();
 
-  const [fields, setFields] = useState<Selected[] | undefined>(init.fields);
+  const syncing = useRef(false);
 
-  const [pageIndex, setPageIndex] = useState<number | undefined>(
-    init.pageIndex,
-  );
+  const [fields, setFields] = useState<Selected[]>();
 
-  const [pageSize, setPageSize] = useState<number | undefined>(init.pageSize);
+  const [pageIndex, setPageIndex] = useState<number>();
 
-  const [sort, setSort] = useState<SortValue | undefined>(init.sort);
+  const [pageSize, setPageSize] = useState<number>();
+
+  const [sort, setSort] = useState<SortValue>();
 
   const query = useMemo<string | undefined>(() => {
     const params: Record<string, string> = {};
@@ -141,24 +141,59 @@ export const useCollection = (options?: Options) => {
 
     if (!Object.keys(params).length) return;
 
-    return Object.keys(params)
-      .map((key) => `${key}=${params[key]}`)
-      .join('&');
+    return new URLSearchParams(params).toString();
   }, [fields, pageIndex, pageSize, sort]);
 
-  const handleFieldsChange = useCallback((fields: Selected[]) => {
+  useEffect(() => {
+    syncing.current = true;
+
+    const next = getInitialState(framework.router.search, {
+      defaultPageIndex: options?.defaultPageIndex,
+      defaultPageSize: options?.defaultPageSize,
+      defaultSortField: options?.defaultSortField,
+      defaultSortOrder: options?.defaultSortOrder,
+    });
+
+    setFields(next.fields);
+    setPageIndex(next.pageIndex);
+    setPageSize(next.pageSize);
+    setSort(next.sort);
+  }, [
+    framework.router.search,
+    options?.defaultPageIndex,
+    options?.defaultPageSize,
+    options?.defaultSortField,
+    options?.defaultSortOrder,
+  ]);
+
+  const handleFieldsChange = useCallback((fields?: Selected[]) => {
     setFields(fields);
     setPageIndex(0);
   }, []);
 
-  const handlePageSizeChange = useCallback((size: number) => {
+  const handlePageSizeChange = useCallback((size?: number) => {
     setPageSize(size);
     setPageIndex(0);
   }, []);
 
-  const handleSortChange = useCallback((sort: SortValue | undefined) => {
+  const handleSortChange = useCallback((sort?: SortValue) => {
     setSort(sort);
   }, []);
+
+  useEffect(() => {
+    if (syncing.current) {
+      syncing.current = false;
+      return;
+    }
+
+    if (query === framework.router.search) return;
+
+    const url = query
+      ? `${framework.router.pathname}?${query}`
+      : framework.router.pathname;
+
+    framework.router.push(url);
+  }, [query, framework.router]);
 
   return {
     query,

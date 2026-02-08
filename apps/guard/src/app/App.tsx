@@ -1,9 +1,16 @@
 'use client';
 
+import NextImage from 'next/image';
+import NextLink from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
-import { App as AppBase, ApiKeyProvider } from '@rosen-bridge/ui-kit';
+import {
+  App as AppBase,
+  ApiKeyProvider,
+  FrameworkProvider,
+} from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 import { SWRConfig } from 'swr';
 
@@ -14,24 +21,42 @@ import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
 
 export const App = ({ children }: PropsWithChildren) => {
+  const pathname = usePathname();
+
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+
   return (
     <NoSsr>
-      <ApiKeyProvider>
-        <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-          <SWRConfig
-            value={{
-              revalidateOnFocus: false,
-              errorRetryCount: 3,
-              use:
-                process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                  ? [mockMiddlewareFactory(mockedData)]
-                  : [],
-            }}
-          >
-            {children}
-          </SWRConfig>
-        </AppBase>
-      </ApiKeyProvider>
+      <FrameworkProvider
+        components={{
+          Anchor: (props) => <NextLink {...props} />,
+          Image: (props) => <NextImage {...props} />,
+        }}
+        router={{
+          pathname,
+          search: searchParams.toString(),
+          push: router.push,
+        }}
+      >
+        <ApiKeyProvider>
+          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
+            <SWRConfig
+              value={{
+                revalidateOnFocus: false,
+                errorRetryCount: 3,
+                use:
+                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                    ? [mockMiddlewareFactory(mockedData)]
+                    : [],
+              }}
+            >
+              {children}
+            </SWRConfig>
+          </AppBase>
+        </ApiKeyProvider>
+      </FrameworkProvider>
     </NoSsr>
   );
 };

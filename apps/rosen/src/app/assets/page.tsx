@@ -4,7 +4,6 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -32,18 +31,11 @@ import { ViewGridSidebar } from './ViewGridSidebar';
 import { ViewRow } from './ViewRow';
 
 const Assets = () => {
-  const searchParams = useSearchParams();
-
-  const router = useRouter();
-
-  const pathname = usePathname();
-
   const dense = useBreakpoint('laptop-down');
 
   const { openSnackbar } = useSnackbar();
 
   const collection = useCollection({
-    searchParams: searchParams.toString(),
     defaultPageIndex: 0,
     defaultPageSize: 25,
     defaultSortField: 'name',
@@ -68,7 +60,7 @@ const Assets = () => {
       return (data?.items || []).map((item) => getFullAssetData(item));
     }
     return Array(collection.pageSize).fill({});
-  }, [collection.pageSize, data, isLoading]);
+  }, [collection.pageSize, data?.items, isLoading]);
 
   const renderPagination = useCallback(
     () => (
@@ -82,7 +74,14 @@ const Assets = () => {
         onPageSizeChange={collection.setPageSize}
       />
     ),
-    [collection, data, isLoading],
+    [
+      collection.pageSize,
+      collection.pageIndex,
+      collection.setPageIndex,
+      collection.setPageSize,
+      data?.total,
+      isLoading,
+    ],
   );
 
   const renderSearch = useCallback(
@@ -95,7 +94,7 @@ const Assets = () => {
         onChange={collection.setFields}
       />
     ),
-    [collection, isLoading],
+    [collection.fields, collection.setFields, isLoading],
   );
 
   const renderSort = useCallback(
@@ -108,7 +107,7 @@ const Assets = () => {
         onChange={collection.setSort}
       />
     ),
-    [collection, dense, isLoading],
+    [collection.sort, collection.setSort, dense, isLoading],
   );
 
   const renderSidebar = useCallback(() => {
@@ -122,16 +121,8 @@ const Assets = () => {
     () => (
       <ViewToggle defaultView="row" onChangeView={(value) => setView(value)} />
     ),
-    [setView],
+    [],
   );
-
-  useEffect(() => {
-    if (collection.query === searchParams.toString()) return;
-
-    const url = collection.query ? `${pathname}?${collection.query}` : pathname;
-
-    router.replace(url, { scroll: false });
-  }, [collection.query, pathname, router, searchParams]);
 
   useEffect(() => {
     setCurrent(undefined);
