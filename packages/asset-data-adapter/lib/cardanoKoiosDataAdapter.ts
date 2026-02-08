@@ -1,5 +1,5 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import cardanoKoiosClientFactory from '@rosen-clients/cardano-koios';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -7,7 +7,7 @@ import { AbstractDataAdapter } from './abstracts';
 import { CardanoKoiosDataAdapterAuthParams, ChainAssetBalance } from './types';
 
 export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
-  chain: string = NETWORKS.cardano.key;
+  chain = NETWORKS.cardano.key;
   protected koiosApi;
 
   constructor(
@@ -73,5 +73,28 @@ export class CardanoKoiosDataAdapter extends AbstractDataAdapter {
       `Collecting assets data from ${this.chain} and ${address} address done.`,
     );
     return assetBalances;
+  };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param wrappedTokenId - Identifier of the wrapped token.
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  getRawTotalSupply = async (token: RosenChainToken) => {
+    const assetSummary = await this.koiosApi.assetInfo({
+      _asset_list: [
+        [token.extra.policyId as string, token.extra.assetName as string],
+      ],
+    });
+    if (assetSummary.length && assetSummary[0].total_supply) {
+      this.logger.debug(
+        `Total supply of token [${token.extra.policyId}.${token.extra.assetName}] is [${assetSummary[0].total_supply}]`,
+      );
+      return BigInt(assetSummary[0].total_supply);
+    }
+    throw Error(
+      `Total supply of token [${token.extra.policyId}.${token.extra.assetName}] is not calculable`,
+    );
   };
 }

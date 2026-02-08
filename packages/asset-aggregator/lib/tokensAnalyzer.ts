@@ -1,6 +1,5 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
-import { NETWORKS } from '@rosen-ui/constants';
 
 import { BridgedAssetEntity, LockedAssetEntity } from './entities';
 import { AssetBalance, NetworkItem, TotalSupply } from './types';
@@ -120,20 +119,11 @@ export class TokensAnalyzer {
     chainAssets: AssetBalance,
   ) => {
     this.logger.debug(
-      `Token [${token.tokenId}] is wrapped token, storing as bridged asset`,
+      `Token [${token.tokenId}] is wrapped token in ${chain} chain, storing as bridged asset`,
     );
 
-    const tokenDataOnAllChains = this.tokenMap.search(chain, {
-      tokenId: token.tokenId,
-    })?.[0];
-
-    // TODO: filter totalSupply strictly by the provided token parameter (local:ergo/rosen-bridge/ui#1068)
     const assetTotalSupply = this.totalSupply
-      .filter(
-        (t) =>
-          t.assetId ==
-          this.tokenMap.getID(tokenDataOnAllChains, NETWORKS.ergo.key),
-      )
+      .filter((t) => t.assetId == token.tokenId)
       .at(0);
 
     if (!assetTotalSupply) {

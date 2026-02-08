@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
+import { Mock } from 'vitest';
 
 import { ErgoExplorerDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';
@@ -55,6 +55,50 @@ describe('ErgoExplorerDataAdapter', () => {
       const result = await adapter.getAddressAssets('addr1');
 
       expect(result).toEqual(expectedErgoGetAddressAssetsResult);
+    });
+  });
+
+  describe('getRawTotalSupply', () => {
+    /**
+     * @target should return total supply for ERC20-like token
+     * @scenario
+     * - mock the explorerApi.v1.getApiV1TokensP1 to returns tokenDetail with emissionAmount
+     * @expected
+     * - method returns tokenDetail.emissionAmount
+     */
+    it<TestContext>('should return total supply for ERC20-like token', async ({
+      adapter,
+      mockExplorer,
+    }) => {
+      const token = adapter['getAllWrappedTokens']().at(0)!;
+
+      mockExplorer.v1.getApiV1TokensP1.mockResolvedValue({
+        emissionAmount: 1000n,
+      });
+
+      const result = await adapter.getRawTotalSupply(token);
+      expect(result).toBe(1000n);
+      expect(mockExplorer.v1.getApiV1TokensP1).toHaveBeenCalledWith(
+        token.tokenId,
+      );
+    });
+
+    /**
+     * @target should throw if tokenDetail is not returned
+     * @scenario
+     * - mock the explorerApi.v1.getApiV1TokensP1 to returns undefined
+     * @expected
+     * - method throws an error indicating total supply is not calculable
+     */
+    it<TestContext>('should throw if tokenDetail is not returned', async ({
+      adapter,
+      mockExplorer,
+    }) => {
+      const token = adapter['getAllWrappedTokens']().at(0)!;
+
+      mockExplorer.v1.getApiV1TokensP1.mockResolvedValue(undefined);
+
+      await expect(adapter.getRawTotalSupply(token)).rejects.toThrow();
     });
   });
 });
