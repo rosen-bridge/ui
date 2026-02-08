@@ -1137,3 +1137,198 @@ export const userEventUpsertScenarios = {
     ],
   },
 };
+
+export const watcherCountTestData = {
+  ergoNetwork: {
+    network: 'ergo',
+    count: 50,
+  },
+
+  cardanoNetwork: {
+    network: 'cardano',
+    count: 30,
+  },
+
+  ethereumNetwork: {
+    network: 'ethereum',
+    count: 25,
+  },
+
+  binanceNetwork: {
+    network: 'binance',
+    count: 15,
+  },
+
+  bitcoinNetwork: {
+    network: 'bitcoin',
+    count: 10,
+  },
+};
+
+export const getWatcherCountScenarios = {
+  noMatch: {
+    watcherCountRepo: [watcherCountTestData.ergoNetwork],
+    query: 'cardano',
+    expected: null,
+  },
+
+  exactMatch: {
+    watcherCountRepo: [watcherCountTestData.ergoNetwork],
+    query: 'ergo',
+    expected: watcherCountTestData.ergoNetwork,
+  },
+
+  caseSensitive: {
+    watcherCountRepo: [watcherCountTestData.ergoNetwork],
+    query: 'ERGO',
+    expected: null,
+  },
+
+  multipleRecords: {
+    watcherCountRepo: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+      watcherCountTestData.ethereumNetwork,
+    ],
+    query: 'cardano',
+    expected: watcherCountTestData.cardanoNetwork,
+  },
+
+  emptyDatabase: {
+    watcherCountRepo: [],
+    query: 'ergo',
+    expected: null,
+  },
+
+  zeroCount: {
+    watcherCountRepo: [
+      {
+        network: 'ergo',
+        count: 0,
+      },
+    ],
+    query: 'ergo',
+    expected: {
+      network: 'ergo',
+      count: 0,
+    },
+  },
+};
+
+export const upsertWatcherCountScenarios = {
+  insertNew: {
+    initialData: [],
+    upsertData: {
+      network: 'ergo',
+      count: 50,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      network: 'ergo',
+      count: 50,
+    },
+  },
+
+  updateExisting: {
+    initialData: [watcherCountTestData.ergoNetwork],
+    upsertData: {
+      network: 'ergo',
+      count: 75,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      network: 'ergo',
+      count: 75,
+    },
+  },
+
+  zeroCount: {
+    initialData: [],
+    upsertData: {
+      network: 'ergo',
+      count: 0,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      network: 'ergo',
+      count: 0,
+    },
+  },
+
+  insertMultipleDifferentNetworks: {
+    initialData: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+    ],
+    upsertData: {
+      network: 'ethereum',
+      count: 25,
+    },
+    expectedCount: 3,
+    expectedRecords: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+      {
+        network: 'ethereum',
+        count: 25,
+      },
+    ],
+  },
+
+  updateMultipleTimes: {
+    initialData: [],
+    upsertOperations: [
+      {
+        network: 'ergo',
+        count: 10,
+      },
+      {
+        network: 'ergo',
+        count: 25,
+      },
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+    expectedCount: 1,
+    expectedRecord: {
+      network: 'ergo',
+      count: 50,
+    },
+  },
+
+  updateDifferentNetworkKeepsOthers: {
+    initialData: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+      watcherCountTestData.ethereumNetwork,
+    ],
+    upsertData: {
+      network: 'cardano',
+      count: 45,
+    },
+    expectedCount: 3,
+    expectedRecords: [
+      watcherCountTestData.ergoNetwork,
+      {
+        network: 'cardano',
+        count: 45,
+      },
+      watcherCountTestData.ethereumNetwork,
+    ],
+  },
+
+  largeNumber: {
+    initialData: [],
+    upsertData: {
+      network: 'ergo',
+      count: 1000000,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      network: 'ergo',
+      count: 1000000,
+    },
+  },
+};

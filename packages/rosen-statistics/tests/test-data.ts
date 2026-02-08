@@ -1,4 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { RosenTokens } from '@rosen-bridge/tokens';
+
+import { WatcherCountConfig } from '../lib';
 
 export const tokenMapData: RosenTokens = [
   {
@@ -1295,6 +1298,100 @@ export const userEventMetricTestData = {
         { fromAddress: 'addr3', toAddress: 'addr5', count: 1 },
       ],
       totalMetricValue: '4',
+    },
+  },
+};
+
+export const watcherConfig: WatcherCountConfig = {
+  type: 'explorer',
+  url: 'http://test-explorer.com',
+  rwtTokenId: 'repoNFT',
+  rwtNetworkMap: {
+    ergo: 'rwt-ergo-token-id',
+    cardano: 'rwt-cardano-token-id',
+    ethereum: 'rwt-eth-token-id',
+  },
+};
+
+export const mockBoxes = {
+  ergoBox: {
+    register_value: () => ({ to_i64: () => ({ to_str: () => '10' }) }),
+    tokens: () => ({
+      len: () => 1,
+      get: () => ({
+        id: () => ({
+          to_str: () => 'rwt-ergo-token-id',
+        }),
+      }),
+    }),
+  } as unknown as any,
+
+  cardanoBox: {
+    register_value: () => ({ to_i64: () => ({ to_str: () => '20' }) }),
+    tokens: () => ({
+      len: () => 1,
+      get: () => ({
+        id: () => ({
+          to_str: () => 'rwt-cardano-token-id',
+        }),
+      }),
+    }),
+  } as unknown as any,
+
+  ethereumBox: {
+    register_value: () => ({ to_i64: () => ({ to_str: () => '15' }) }),
+    tokens: () => ({
+      len: () => 1,
+      get: () => ({
+        id: () => ({
+          to_str: () => 'rwt-eth-token-id',
+        }),
+      }),
+    }),
+  } as unknown as any,
+};
+
+export const watcherCountTestData = {
+  test1: {
+    boxes: [mockBoxes.ergoBox, mockBoxes.cardanoBox],
+    watcherCountRepo: [],
+    metricRepo: [],
+    expectedResults: {
+      networkCounts: [
+        { network: 'ergo', count: 10 },
+        { network: 'cardano', count: 20 },
+      ],
+      totalWatchers: 30,
+    },
+  },
+
+  test2: {
+    boxes: [mockBoxes.ergoBox, mockBoxes.cardanoBox],
+    watcherCountRepo: [
+      { network: 'ergo', count: 5 },
+      { network: 'cardano', count: 8 },
+    ],
+    metricRepo: [{ key: 'watcher_count_total', value: '13', updatedAt: 1000 }],
+    expectedResults: {
+      networkCounts: [
+        { network: 'ergo', count: 10 },
+        { network: 'cardano', count: 20 },
+      ],
+      totalWatchers: 30,
+    },
+  },
+
+  test3: {
+    boxes: [mockBoxes.ergoBox, mockBoxes.cardanoBox, mockBoxes.ethereumBox],
+    watcherCountRepo: [],
+    metricRepo: [],
+    expectedResults: {
+      networkCounts: [
+        { network: 'ergo', count: 10 },
+        { network: 'cardano', count: 20 },
+        { network: 'ethereum', count: 15 },
+      ],
+      totalWatchers: 45,
     },
   },
 };
