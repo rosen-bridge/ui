@@ -37,7 +37,7 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: router.push,
+          push: (href: string) => router.push(href, { scroll: false }),
         }}
       >
         <ApiKeyProvider>

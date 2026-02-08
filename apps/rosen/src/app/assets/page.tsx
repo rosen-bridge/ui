@@ -13,7 +13,6 @@ import {
   SortField,
   useBreakpoint,
   useCollection,
-  ViewType,
   ViewToggle,
   EmptyState,
   useSnackbar,
@@ -40,9 +39,9 @@ const Assets = () => {
     defaultPageSize: 25,
     defaultSortField: 'name',
     defaultSortOrder: 'DESC',
+    defaultView: 'grid',
+    localStorageKey: 'assets',
   });
-
-  const [view, setView] = useState<ViewType>('row');
 
   const [current, setCurrent] = useState<AssetsFullData>();
 
@@ -111,18 +110,37 @@ const Assets = () => {
   );
 
   const renderSidebar = useCallback(() => {
-    if (view !== 'grid') return null;
+    if (collection.view !== 'grid') return null;
     return (
       <ViewGridSidebar value={current} onClose={() => setCurrent(undefined)} />
     );
-  }, [current, view]);
+  }, [current, collection.view]);
 
   const renderView = useCallback(
     () => (
-      <ViewToggle defaultView="row" onChangeView={(value) => setView(value)} />
+      <ViewToggle
+        value={collection.view}
+        onChangeView={(value) => collection.setView(value)}
+      />
     ),
-    [],
+    [collection.view],
   );
+
+  useEffect(() => {
+    if (!collection.fragment) return;
+
+    const item = items.find((item) => item.id === collection.fragment);
+
+    if (!item) return;
+
+    setCurrent(item);
+  }, [collection.fragment, items]);
+
+  useEffect(() => {
+    if (current?.id) {
+      collection.setFragment(current.id);
+    }
+  }, [collection.setFragment, current?.id]);
 
   useEffect(() => {
     setCurrent(undefined);
@@ -147,7 +165,7 @@ const Assets = () => {
       {!isLoading && !items.length && (
         <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       )}
-      {view === 'grid' && !!items.length && (
+      {collection.view === 'grid' && !!items.length && (
         <ViewGrid
           current={current}
           items={items}
@@ -155,7 +173,7 @@ const Assets = () => {
           setCurrent={setCurrent}
         />
       )}
-      {view === 'row' && !!items.length && (
+      {collection.view === 'row' && !!items.length && (
         <ViewRow
           current={current}
           items={items}
