@@ -1,4 +1,6 @@
-export { BridgedAssetEntity } from './entities/bridgedAssetEntity';
-export { LockedAssetEntity } from './entities/lockedAssetEntity';
-export { TokenEntity } from './entities/tokenEntity';
+export * from './types';
+export { AssetAggregator } from './assetAggregator';
+export { BridgedAssetEntity } from './entities';
+export { LockedAssetEntity } from './entities';
+export { TokenEntity } from './entities';
 export { migrations } from './migrations';

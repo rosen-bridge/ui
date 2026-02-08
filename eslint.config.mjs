@@ -55,6 +55,7 @@ const eslintConfig = [
       'apps/rosen-service2/**/*.{js,jsx,ts,tsx}',
       'networks/**/*.{js,jsx,ts,tsx}',
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
+      'packages/asset-aggregator/**/*.{js,jsx,ts,tsx}',
       'packages/public-status/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
