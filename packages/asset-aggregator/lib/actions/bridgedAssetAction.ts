@@ -7,7 +7,7 @@ import {
 } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 
-import { DEFAULT_DELETE_CHUNK_SIZE } from '../constants';
+import { DELETE_CHUNK_SIZE } from '../constants';
 import { BridgedAssetEntity } from '../entities';
 
 export class BridgedAssetAction {
@@ -44,9 +44,9 @@ export class BridgedAssetAction {
   protected async deleteInChunks(tokenIds: string[]) {
     let offset = 0;
     while (offset < tokenIds.length) {
-      const chunk = tokenIds.slice(offset, offset + DEFAULT_DELETE_CHUNK_SIZE);
+      const chunk = tokenIds.slice(offset, offset + DELETE_CHUNK_SIZE);
       await this.repository.delete({ tokenId: In(chunk) });
-      offset += DEFAULT_DELETE_CHUNK_SIZE;
+      offset += DELETE_CHUNK_SIZE;
     }
     if (tokenIds.length)
       this.logger.debug(`Deleted tokens ${tokenIds} from the database`);

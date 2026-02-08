@@ -312,13 +312,9 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           adapter.chain == NETWORKS.binance.key
             ? async () => {
                 // preventing of overriding old chunks of data
-                const oldData = Object.fromEntries(
-                  Object.entries(
-                    (await this.redis.get<AssetBalance | null>(
-                      adapter.chain,
-                    )) || {},
-                  ).map((kv) => [kv[0], kv[1].filter((v) => v != null)]),
-                );
+                const oldData =
+                  (await this.redis.get<AssetBalance | null>(adapter.chain)) ||
+                  {};
                 const newData = await adapter.fetch();
                 const finalData = oldData;
                 for (const tokenId of Object.keys(newData)) {
