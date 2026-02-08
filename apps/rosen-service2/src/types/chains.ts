@@ -12,16 +12,23 @@ export type ChainChoices = Exclude<
 export type ChainsKeys = keyof (typeof configs)['chains'];
 
 export interface ChainConfigs {
-  version: string;
   addresses: {
     lock: string;
     cold: string;
     WatcherTriggerEvent: string;
     WatcherPermit: string;
     Fraud: string;
+    tokenMap?: string;
   };
   tokens: {
     RWTId: string;
+    tokenMap?: string;
   };
   cleanupConfirm: number;
 }
+
+export type AllChainsConfigs = {
+  version: string;
+} & {
+  [K in ChainChoices]: ChainConfigs;
+};

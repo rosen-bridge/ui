@@ -1,5 +1,11 @@
 # @rosen-ui/constants
 
+## 1.0.0
+
+### Major Changes
+
+- Update NETWORKS runes key to bitcoinRunes
+
 ## 0.4.1
 
 ### Patch Changes

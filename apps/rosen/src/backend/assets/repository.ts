@@ -1,4 +1,8 @@
 import {
+  Filters,
+  filtersToTypeorm,
+} from '@rosen-bridge/ui-kit/dist/components/common/smartSearch/server';
+import {
   BridgedAssetEntity,
   LockedAssetEntity,
   TokenEntity,
@@ -20,9 +24,8 @@ export interface Asset {
   bridged: string | null;
   lockedPerAddress?: Array<{ amount: number; address: string }>;
   chain: Network;
+  ergoSideTokenId: string;
 }
-
-export type AssetFilters = Partial<Pick<Asset, 'chain' | 'name' | 'id'>>;
 
 interface AssetWithTotal extends Asset {
   total: number;
@@ -65,16 +68,30 @@ export const getAsset = async (id: string) => {
 
 /**
  * get paginated list of assets
- * @param offset
- * @param limit
  * @param filters
  */
-export const getAllAssets = async (
-  offset: number,
-  limit: number,
-  filters: AssetFilters = {},
-) => {
-  const rawItems: AssetWithTotal[] = await tokenRepository
+export const getAllAssets = async (filters: Filters) => {
+  if (!filters.sort) {
+    filters.sort = {
+      key: 'name',
+      order: 'ASC',
+    };
+  }
+
+  if (filters.search) {
+    filters.search.in ||= [];
+  }
+
+  let { pagination, query, sort } = filtersToTypeorm(filters, (key) => {
+    switch (key) {
+      case 'bridged':
+        return `sub."${key}Normalized"`;
+      default:
+        return `sub."${key}"`;
+    }
+  });
+
+  const subquery = tokenRepository
     .createQueryBuilder('te')
     .leftJoin(
       (queryBuilder) =>
@@ -104,22 +121,42 @@ export const getAllAssets = async (
       '"isNative"',
       '"bridged"',
       '"lockedPerAddress"',
+      '"ergoSideTokenId"',
       'chain',
+      '(CAST(bridged AS NUMERIC) / POWER(10, COALESCE("significantDecimal", 0))) AS "bridgedNormalized"',
       'count(*) over() AS total',
     ])
-    .where(filters)
-    .orderBy('name', 'ASC')
-    .offset(offset)
-    .limit(limit)
-    .getRawMany();
+    .where('te."isResident" = true');
+
+  let queryBuilder = dataSource
+    .createQueryBuilder()
+    .select(['sub.*', 'COUNT(*) OVER() AS "total"'])
+    .from(`(${subquery.getQuery()})`, 'sub')
+    .setParameters(subquery.getParameters());
+
+  if (query) {
+    queryBuilder = queryBuilder.where(query);
+  }
+
+  if (sort) {
+    queryBuilder = queryBuilder.orderBy(sort.key, sort.order);
+  }
+
+  if (pagination?.offset) {
+    queryBuilder = queryBuilder.offset(pagination.offset);
+  }
+
+  if (pagination?.limit) {
+    queryBuilder = queryBuilder.limit(pagination.limit);
+  }
+
+  const rawItems = await queryBuilder.getRawMany<AssetWithTotal>();
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const items = rawItems.map(({ total, ...item }) => item);
 
-  const total = rawItems[0]?.total ?? 0;
-
   return {
     items,
-    total,
+    total: rawItems[0]?.total ?? 0,
   };
 };

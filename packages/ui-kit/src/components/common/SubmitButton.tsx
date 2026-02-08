@@ -1,12 +1,13 @@
 import { ReactNode } from 'react';
 
-import { LoadingButton } from '../base';
+import { Button } from './Button';
 
-export interface SubmitButtonProps {
+export type SubmitButtonProps = {
   loading: boolean;
   children: ReactNode;
   disabled?: boolean;
-}
+};
+
 /**
  * render a submit button
  *
@@ -19,12 +20,19 @@ export const SubmitButton = ({
   children,
   disabled,
 }: SubmitButtonProps) => (
-  <LoadingButton
-    sx={{
-      width: { mobile: '100%', laptop: '50%' },
+  <Button
+    style={{
+      width: '100%',
       display: 'flex',
-      mt: 3,
-      mx: 'auto',
+      margin: 'auto',
+    }}
+    overrides={{
+      laptop: {
+        style: {
+          width: 'clamp(200px, 100%, 320px)',
+          margin: 'auto',
+        },
+      },
     }}
     variant="contained"
     type="submit"
@@ -32,5 +40,5 @@ export const SubmitButton = ({
     disabled={disabled}
   >
     {children}
-  </LoadingButton>
+  </Button>
 );

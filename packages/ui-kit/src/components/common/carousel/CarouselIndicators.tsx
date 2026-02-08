@@ -19,7 +19,7 @@ const CarouselIndicatorsRoot = styled('div')(({ theme }) => ({
     'height': '0.5rem',
     'borderRadius': '50%',
     '&.active': {
-      backgroundColor: theme.palette.primary.light,
+      backgroundColor: theme.palette.primary.main,
     },
   },
 }));

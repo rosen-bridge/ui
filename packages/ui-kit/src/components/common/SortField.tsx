@@ -7,7 +7,7 @@ import {
   useState,
 } from 'react';
 
-import { Card, SvgIcon, Stack, Divider } from '@mui/material';
+import { Button, Card } from '@mui/material';
 import {
   CaretDown,
   Check,
@@ -18,7 +18,6 @@ import {
 
 import { styled } from '../../styling';
 import {
-  Button,
   Grid,
   IconButton,
   ListItemText,
@@ -27,6 +26,9 @@ import {
   MenuItem,
   Typography,
 } from '../base';
+import { Divider } from './Divider';
+import { Stack } from './Stack';
+import { SvgIcon } from './SvgIcon';
 
 const Root = styled(Card)(({ theme }) => ({
   padding: theme.spacing(1, 0.5),
@@ -113,7 +115,7 @@ export const SortField = ({
   return (
     <Root {...rest}>
       <Grid container alignItems="center" wrap="nowrap" width="auto" gap={1}>
-        <Grid item flexGrow={1}>
+        <Grid flexGrow={1}>
           {dense ? (
             <IconButton disabled={disabled} onClick={handleMenuOpen}>
               <SvgIcon>
@@ -142,7 +144,7 @@ export const SortField = ({
               }
               onClick={handleMenuOpen}
             >
-              <Stack alignItems="start">
+              <Stack align="start">
                 <Typography
                   hidden={dense}
                   variant="caption"
@@ -199,10 +201,10 @@ export const SortField = ({
             ))}
           </Menu>
         </Grid>
-        <Grid item alignSelf="stretch">
+        <Grid alignSelf="stretch">
           <Divider orientation="vertical" />
         </Grid>
-        <Grid item>
+        <Grid>
           <IconButton disabled={disabled} onClick={handleSortOrderChange}>
             <SvgIcon>
               {value?.order == 'ASC' ? <SortAmountDown /> : <SortAmountUp />}

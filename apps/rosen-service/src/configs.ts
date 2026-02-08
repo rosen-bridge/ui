@@ -178,6 +178,7 @@ const getConfig = () => {
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
           handshake: nodeConfig.get<string[]>('calculator.addresses.handshake'),
         },
+        interval: nodeConfig.get<number>('calculator.interval'),
       },
       healthCheck: {
         ergoScannerWarnDiff: nodeConfig.get<number>(

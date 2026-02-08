@@ -19,3 +19,20 @@ COPY entrypoint.sh ./
 ENV SERVICE_NAME=service
 ENV SERVICE_PORT=8080
 ENTRYPOINT ["bash", "entrypoint.sh"]
+
+FROM node:22.18 AS rosen-service
+LABEL maintainer="rosen-bridge team <team@rosen.tech>"
+LABEL description="Docker image for the rosen-service owned by rosen-bridge organization."
+LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
+RUN adduser --disabled-password --home /app --gecos "ErgoPlatform" ergo && \
+    install -m 0740 -o ergo -g ergo -d /app/apps/rosen-service/logs \
+    && chown -R ergo:ergo /app/ && umask 0077
+
+RUN npm i -g npm@11.6.2
+WORKDIR /app
+COPY --chown=ergo:ergo . .
+RUN --mount=type=cache,target=/root/.npm npm ci
+RUN ./build.sh rosen-service
+USER ergo
+WORKDIR  /app/apps/rosen-service/
+ENTRYPOINT ["npm", "run", "start"]

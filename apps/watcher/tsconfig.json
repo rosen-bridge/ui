@@ -20,7 +20,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./app/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
@@ -31,9 +31,6 @@
     },
     {
       "path": "../../packages/swr-helpers"
-    },
-    {
-      "path": "../../packages/swr-mock"
     },
     {
       "path": "../../packages/types"

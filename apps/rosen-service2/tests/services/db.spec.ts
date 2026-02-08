@@ -42,7 +42,7 @@ describe('DBService', () => {
       const result = await service.getLastSavedBlock('scannerA');
 
       expect(result.height).toBe(80);
-      expect(result.scanner).toBe('scannerA');
+      expect(result.timestamp).toBe(1763288720200);
     });
 
     /**

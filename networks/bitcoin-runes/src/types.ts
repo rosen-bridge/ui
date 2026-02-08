@@ -1,9 +1,7 @@
 export interface UnsignedPsbtData {
-  psbt: {
-    base64: string;
-    hex: string;
-  };
-  inputSize: number;
+  psbt: string;
+  psbtHex: string;
+  signInputs: Record<string, number[]>;
 }
 
 export interface TokenInfo {
@@ -56,14 +54,23 @@ export interface UnisatRunesDetail {
   divisibility: number;
 }
 
-export interface UnisatAddressBtcUtxos {
+export interface UnisatPage {
   cursor: number;
   total: number;
+}
+
+export interface UnisatAddressAvailableBtcUtxos extends UnisatPage {
+  utxo: UnisatAddressAvailableBtcUtxo[];
+}
+
+export interface UnisatAddressBtcUtxos extends UnisatPage {
+  totalConfirmed: number;
+  totalUnconfirmed: number;
+  totalUnconfirmedSpend: number;
   utxo: UnisatBtcUtxo[];
 }
 
 export interface UnisatBtcUtxo {
-  confirmations: number;
   txid: string;
   vout: number;
   satoshi: number;
@@ -79,10 +86,28 @@ export interface UnisatBtcUtxo {
   inscriptions: UnisatInscriptionItem[];
 }
 
+export interface UnisatAddressAvailableBtcUtxo extends UnisatBtcUtxo {
+  confirmations: number;
+}
+
 export interface UnisatInscriptionItem {
   inscriptionId: string;
   inscriptionNumber: number;
   isBRC20: boolean;
   moved: boolean;
   offset: number;
+}
+
+export interface Status {
+  confirmed: boolean;
+  block_height?: number;
+  block_hash?: string;
+  block_time?: number;
+}
+
+export interface EsploraUtxo {
+  txid: string;
+  vout: number;
+  status: Status;
+  value: number;
 }

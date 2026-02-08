@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/public-status",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "Core logic package of public status",
   "repository": {
     "type": "git",
@@ -12,20 +12,20 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "tsc --build tsconfig.build.json",
+    "coverage": "npm run test -- --run --coverage",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build tsconfig.build.json",
-    "type-check": "tsc --noEmit",
-    "coverage": "npm run test -- --coverage",
-    "test": "NODE_OPTIONS='--import tsx' vitest"
+    "test": "NODE_OPTIONS='--import tsx' vitest",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/extended-typeorm": "^1.0.0"
+    "@rosen-bridge/extended-typeorm": "^1.0.1"
   },
-  "devDependencies": {
-    "@types/node": "^20.17.10",
-    "typescript": "^5.0.0"
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

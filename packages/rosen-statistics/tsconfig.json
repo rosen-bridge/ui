@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["tests", "lib", "vitest.config.ts"],
+  "references": [
+    {
+      "path": "../rosen-statistics-entity"
+    },
+    {
+      "path": "../data-source"
+    },
+    {
+      "path": "../asset-calculator"
+    }
+  ]
+}

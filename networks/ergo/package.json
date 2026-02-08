@@ -1,31 +1,36 @@
 {
   "name": "@rosen-network/ergo",
-  "version": "2.4.1",
+  "version": "2.5.3",
   "private": true,
-  "license": "MIT",
   "description": "This is a private package utilized within Rosen Bridge UI app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosen-bridge/ui.git"
+  },
+  "license": "MIT",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "type": "module",
   "scripts": {
-    "lint": "eslint --fix .",
-    "lint:check": "eslint .",
+    "build": "tsc --build",
+    "lint": "eslint --fix . && npm run prettify",
+    "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
-    "build": "tsc --build",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/ergo-box-selection": "^1.2.0",
-    "@rosen-bridge/icons": "^2.3.1",
-    "@rosen-bridge/tokens": "^4.0.0",
-    "@rosen-clients/ergo-explorer": "^1.1.5",
-    "@rosen-network/base": "^0.4.1",
-    "@rosen-ui/constants": "^0.4.1",
-    "@rosen-ui/types": "^0.3.7",
+    "@rosen-bridge/ergo-box-selection": "^2.0.1",
+    "@rosen-bridge/icons": "^3.3.0",
+    "@rosen-bridge/tokens": "^4.0.1",
+    "@rosen-clients/ergo-explorer": "^2.1.0",
+    "@rosen-network/base": "^0.5.1",
+    "@rosen-ui/constants": "^1.0.0",
+    "@rosen-ui/types": "^0.4.0",
     "ergo-lib-wasm-nodejs": "^0.24.1"
   },
-  "devDependencies": {
-    "typescript": "^5.0.0"
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

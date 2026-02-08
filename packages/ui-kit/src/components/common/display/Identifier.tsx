@@ -1,12 +1,13 @@
-import { HTMLAttributes, useCallback, useState } from 'react';
+import { HTMLAttributes, useCallback, useMemo, useState } from 'react';
 
-import { SvgIcon, Stack } from '@mui/material';
 import { ExternalLinkAlt, Qrcode } from '@rosen-bridge/icons';
 
 import { IconButton, Skeleton, Tooltip } from '../../base';
-import { CopyButton } from '../button/CopyButton';
+import { CopyButton } from '../CopyButton';
 import { InjectOverrides } from '../InjectOverrides';
 import { QrCodeModal } from '../QrCodeModal';
+import { Stack } from '../Stack';
+import { SvgIcon } from '../SvgIcon';
 
 export type IdentifierProps = HTMLAttributes<HTMLDivElement> & {
   /** If true, enables a button to copy the value to the clipboard */
@@ -26,6 +27,9 @@ export type IdentifierProps = HTMLAttributes<HTMLDivElement> & {
 
   /** The main string value to display (e.g., an identifier or long string) */
   value?: string;
+
+  /** If provided, disables actions and displays this fallback text */
+  fallback?: string;
 };
 
 /**
@@ -51,6 +55,8 @@ const IdentifierBase = ({
   qrcode,
   trailingLength = 5,
   value = '',
+  fallback,
+  style,
   ...props
 }: IdentifierProps) => {
   const [open, setOpen] = useState(false);
@@ -58,58 +64,90 @@ const IdentifierBase = ({
   const handleOpen = useCallback(() => setOpen(true), []);
   const handleClose = useCallback(() => setOpen(false), []);
 
+  const styles = useMemo(
+    () =>
+      Object.assign(
+        {},
+        {
+          minWidth: 0,
+        },
+        style,
+      ),
+    [style],
+  );
+
+  const { showFallback, hideActions } = useMemo(
+    () => ({
+      showFallback: !value && !!fallback,
+      hideActions: !value && !fallback,
+    }),
+    [value, fallback],
+  );
+
   return (
     <Stack
       direction="row"
-      alignItems="center"
-      display="flex"
-      justifyContent="space-between"
-      minWidth={0}
+      align="center"
+      justify="between"
+      style={styles}
       {...props}
     >
-      {loading && <Skeleton style={{ flexGrow: 1 }} />}
+      {loading && <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />}
       {!loading && (
         <>
           <Tooltip title={value}>
             <Stack
               direction="row"
-              alignItems="center"
+              align="center"
               style={{
                 minWidth: 0,
                 fontFamily: 'monospace',
               }}
             >
-              <div
+              <span
                 style={{
-                  display: '-webkit-box',
-                  WebkitLineClamp: 1,
-                  WebkitBoxOrient: 'vertical',
+                  whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   flexShrink: 1,
                   minWidth: 0,
                 }}
               >
-                {value.slice(0, -trailingLength)}
-              </div>
+                {showFallback
+                  ? fallback
+                  : (value ?? '').slice(0, -trailingLength)}
+              </span>
               <span style={{ flexShrink: 0 }}>
-                {value.slice(-trailingLength)}
+                {(value ?? '').slice(-trailingLength)}
               </span>
             </Stack>
           </Tooltip>
-          <Stack direction="row" alignItems="center">
-            {!!href && (
-              <IconButton target="_blank" size="small" href={href}>
-                <SvgIcon fontSize="small">
+          <Stack direction="row" align="center">
+            {!hideActions && !!href && (
+              <IconButton
+                disabled={showFallback}
+                target="_blank"
+                size="small"
+                href={href}
+              >
+                <SvgIcon size="small">
                   <ExternalLinkAlt />
                 </SvgIcon>
               </IconButton>
             )}
-            {copyable && <CopyButton value={value} size="small" />}
-            {qrcode && (
+
+            {!hideActions && copyable && (
+              <CopyButton disabled={showFallback} value={value} size="small" />
+            )}
+
+            {!hideActions && qrcode && (
               <>
-                <IconButton size="small" onClick={handleOpen}>
-                  <SvgIcon fontSize="small">
+                <IconButton
+                  disabled={showFallback}
+                  size="small"
+                  onClick={handleOpen}
+                >
+                  <SvgIcon size="small">
                     <Qrcode />
                   </SvgIcon>
                 </IconButton>

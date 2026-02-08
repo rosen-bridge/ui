@@ -20,4 +20,10 @@ export class TokenEntity {
 
   @Column('varchar')
   chain: Network;
+
+  @Column('varchar')
+  ergoSideTokenId: string;
+
+  @Column('boolean')
+  isResident: boolean;
 }

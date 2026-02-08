@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { Schema } from 'joi';
 import {
-  errorConstructors,
+  addKnownErrorConstructor,
   serializeError,
   deserializeError,
 } from 'serialize-error';
@@ -11,9 +11,7 @@ import { fromSafeData, toSafeData } from './safeData';
 type AsyncFunction = (...args: any[]) => Promise<any>;
 
 type CreateSafeActionConfig = {
-  errors?: {
-    [key: string]: ErrorConstructor;
-  };
+  errors?: Record<string, new (...args: any[]) => Error>;
   deserializeError?: (error: any) => Error;
   serializeError?: (error: unknown) => any;
   onError?: (error: unknown, traceKey?: string, args?: any[]) => Promise<void>;
@@ -77,7 +75,7 @@ export const createSafeAction = (config: CreateSafeActionConfig) => {
   > = {};
 
   Object.keys(config.errors!).forEach((key) => {
-    errorConstructors.set(key, config.errors![key]);
+    addKnownErrorConstructor(config.errors![key]);
   });
 
   const wrap: Wrap = (action, options) => {

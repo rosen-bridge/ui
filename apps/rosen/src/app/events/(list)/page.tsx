@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -7,7 +8,7 @@ import {
   EmptyState,
   EventCard,
   GridContainer,
-  NewPagination,
+  Pagination,
   SmartSearch,
   SortField,
   useBreakpoint,
@@ -15,7 +16,6 @@ import {
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { getDecimalString } from '@rosen-ui/utils';
 import { serializeError } from 'serialize-error';
 import useSWR from 'swr';
 
@@ -26,11 +26,23 @@ import { getFilters, sorts } from './config';
 import { EventSidebar } from './EventSidebar';
 
 const Page = () => {
+  const searchParams = useSearchParams();
+
+  const router = useRouter();
+
+  const pathname = usePathname();
+
   const dense = useBreakpoint('laptop-down');
 
   const { openSnackbar } = useSnackbar();
 
-  const collection = useCollection();
+  const collection = useCollection({
+    searchParams: searchParams.toString(),
+    defaultPageIndex: 0,
+    defaultPageSize: 25,
+    defaultSortField: 'timestamp',
+    defaultSortOrder: 'DESC',
+  });
 
   const tokenMap = useTokenMap();
 
@@ -39,7 +51,7 @@ const Page = () => {
   const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
 
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
-    collection.params && ['/v1/events', collection.params],
+    collection.query && `/v1/events?${collection.query}`,
     fetcher,
     {
       keepPreviousData: true,
@@ -53,8 +65,7 @@ const Page = () => {
 
   const renderPagination = useCallback(
     () => (
-      <NewPagination
-        defaultPageSize={25}
+      <Pagination
         pageSizeOptions={[25, 50, 100]}
         disabled={isLoading}
         total={data?.total}
@@ -72,8 +83,9 @@ const Page = () => {
       <SmartSearch
         disabled={isLoading}
         namespace="events"
-        filters={filters}
-        onChange={collection.setFilters}
+        options={filters}
+        value={collection.fields}
+        onChange={collection.setFields}
       />
     ),
     [collection, filters, isLoading],
@@ -89,8 +101,6 @@ const Page = () => {
   const renderSort = useCallback(
     () => (
       <SortField
-        defaultKey="timestamp"
-        defaultOrder="DESC"
         dense={dense}
         disabled={isLoading}
         value={collection.sort}
@@ -102,8 +112,16 @@ const Page = () => {
   );
 
   useEffect(() => {
+    if (collection.query === searchParams.toString()) return;
+
+    const url = collection.query ? `${pathname}?${collection.query}` : pathname;
+
+    router.replace(url, { scroll: false });
+  }, [collection.query, pathname, router, searchParams]);
+
+  useEffect(() => {
     setCurrent(undefined);
-  }, [collection.sort, collection.filters, collection.pageIndex]);
+  }, [collection.sort, collection.fields, collection.pageIndex]);
 
   useEffect(() => {
     if (error) {
@@ -126,27 +144,26 @@ const Page = () => {
         <GridContainer gap="8px" minWidth="242px">
           {items.map((item, index) => (
             <EventCard
-              key={item.id ?? index}
-              active={!isLoading && current?.id === item.id}
+              key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
+              active={!isLoading && current === item}
               isLoading={isLoading}
               value={
                 !item
                   ? undefined
                   : {
-                      amount: getDecimalString(
-                        item.amount,
-                        item.lockToken?.significantDecimals,
-                      ),
+                      amount: item.amount,
+                      decimal: item.lockToken?.significantDecimal,
                       fromChain: item.fromChain,
                       href: `/events/${item.eventId}`,
                       id: item.eventId,
                       status: item.status,
                       toChain: item.toChain,
                       token: item.lockToken?.name,
+                      ergoSideTokenId: item.lockToken?.ergoSideTokenId,
                       timestamp: item.timestamp,
                     }
               }
-              onClick={() => setCurrent(item)}
+              onClick={() => !isLoading && setCurrent(item)}
             />
           ))}
         </GridContainer>

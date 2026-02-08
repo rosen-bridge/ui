@@ -5,6 +5,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { zipWith } from 'lodash-es';
 
+import { ERG_TOTAL_SUPPLY } from '../../constants';
 import AbstractCalculator from '../abstract-calculator';
 
 export class ErgoCalculator extends AbstractCalculator {
@@ -27,6 +28,12 @@ export class ErgoCalculator extends AbstractCalculator {
    * @returns total supply of the token in Ergo
    */
   totalRawSupply = async (token: RosenChainToken): Promise<bigint> => {
+    if (token.type === NATIVE_TOKEN) {
+      this.logger.debug(
+        `Total supply of token [${token.tokenId}] is [${ERG_TOTAL_SUPPLY}]`,
+      );
+      return ERG_TOTAL_SUPPLY;
+    }
     const tokenDetail = await this.explorerApi.v1.getApiV1TokensP1(
       token.tokenId,
     );

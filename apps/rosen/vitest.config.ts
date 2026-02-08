@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -9,6 +9,11 @@ export default defineConfig({
   },
   test: {
     name: 'rosen-app',
+    coverage: {
+      all: true,
+      provider: 'istanbul',
+      reporter: 'cobertura',
+    },
     globals: true,
     include: ['**/*.(test|spec).?(c|m)[jt]s?(x)'],
     setupFiles: ['./unitTests/setup/setupTests.ts'],

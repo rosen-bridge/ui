@@ -3,6 +3,7 @@ import {
   generateFeeEstimator,
 } from '@rosen-bridge/bitcoin-utxo-selection';
 import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { handleUncoveredAssets } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { Psbt, address, payments } from 'bitcoinjs-lib';
@@ -92,20 +93,10 @@ export const generateUnsignedTx =
       estimateFee,
     );
     if (!coveredBoxes.covered) {
-      const totalInputBtc = utxos.reduce(
-        (sum, walletUtxo) => sum + BigInt(walletUtxo.value),
-        0n,
-      );
-      throw new Error(
-        `Available boxes didn't cover required assets. BTC: ${
-          unwrappedAmount + minSatoshi
-        }`,
-        {
-          cause: {
-            totalInputBtc,
-            fromAddress: fromAddress,
-          },
-        },
+      handleUncoveredAssets(
+        tokenMap,
+        NETWORKS.bitcoin.key,
+        coveredBoxes.uncoveredAssets,
       );
     }
 

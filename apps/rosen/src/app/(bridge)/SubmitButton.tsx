@@ -14,7 +14,7 @@ import {
   EnhancedDialogTitle,
   Identifier,
   Label,
-  LoadingButton,
+  Button,
   Network,
   Stack,
   Typography,
@@ -98,8 +98,8 @@ export const SubmitButton = () => {
     isValidating;
   return (
     <>
-      <LoadingButton
-        sx={{ width: '100%' }}
+      <Button
+        style={{ width: '100%' }}
         variant="contained"
         loading={isFormSubmitting || isTransactionSubmitting || isLoadingFees}
         type="submit"
@@ -109,7 +109,7 @@ export const SubmitButton = () => {
         }}
       >
         SUBMIT
-      </LoadingButton>
+      </Button>
       <EnhancedDialog
         open={open}
         maxWidth="tablet"
@@ -150,7 +150,7 @@ export const SubmitButton = () => {
                   <Label label="Bridge Fee">
                     <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
                   </Label>
-                  <Label label="Received amount">
+                  <Label label="Receiving Amount">
                     <Amount
                       value={receivingAmountRaw}
                       unit={targetTokenInfo?.name}
@@ -166,24 +166,24 @@ export const SubmitButton = () => {
           </Card>
         </EnhancedDialogContent>
         <EnhancedDialogActions>
-          <LoadingButton
+          <Button
             color="secondary"
             variant="contained"
-            sx={{ flexGrow: 2 }}
+            style={{ flexGrow: 2 }}
             onClick={() => setOpen(false)}
           >
             Cancel
-          </LoadingButton>
-          <LoadingButton
+          </Button>
+          <Button
             variant="contained"
-            sx={{ flexGrow: 5 }}
+            style={{ flexGrow: 5 }}
             loading={
               isFormSubmitting || isTransactionSubmitting || isLoadingFees
             }
             onClick={handleFormSubmit}
           >
             Confirm
-          </LoadingButton>
+          </Button>
         </EnhancedDialogActions>
       </EnhancedDialog>
     </>

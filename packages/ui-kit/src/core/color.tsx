@@ -1,4 +1,12 @@
-type Name = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+type Name =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'error'
+  | 'warning'
+  | 'info'
+  | 'success'
+  | 'neutral';
 
 type Shade = 'light' | 'main' | 'dark' | 'contrastText';
 
@@ -8,7 +16,10 @@ export type Colors =
   | Name
   | 'background'
   | 'background.default'
-  | 'background.paper';
+  | 'background.paper'
+  | 'text.primary'
+  | 'text.secondary'
+  | 'text.disabled';
 
 /**
  * Normalizes a given color token to a valid theme color reference.
@@ -24,6 +35,7 @@ export const ensureColor = (color: Colors) => {
     case 'error':
     case 'warning':
     case 'info':
+    case 'neutral':
     case 'success':
       return `${color}.main`;
     default:

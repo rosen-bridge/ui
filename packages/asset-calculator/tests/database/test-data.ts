@@ -11,6 +11,8 @@ const tokens: TokenEntity[] = [
     significantDecimal: 1,
     isNative: true,
     name: 'ERG',
+    ergoSideTokenId: 'erg',
+    isResident: true,
   },
   {
     id: 'ada',
@@ -19,6 +21,8 @@ const tokens: TokenEntity[] = [
     significantDecimal: 1,
     isNative: true,
     name: 'ADA',
+    ergoSideTokenId: 'rsAdaToken',
+    isResident: true,
   },
 ];
 

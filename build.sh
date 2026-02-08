@@ -13,6 +13,7 @@ echo "building monorepo packages for app '$APP' ..."
 
 if [ "$APP" == "rosen-service" ]; then
   npm run build --workspace packages/constants
+  npm run build --workspace packages/types
   npm run build --workspace packages/asset-calculator
 fi
 
@@ -22,12 +23,12 @@ if [ "$APP" == "guard" ] || [ "$APP" == "watcher" ] ||  [ "$APP" == "rosen" ] ||
   npm run build --workspace packages/utils
   npm run build --workspace packages/icons
   npm run build --workspace packages/swr-helpers
-  npm run build --workspace packages/swr-mock
   npm run build --workspace packages/ui-kit
 fi
 
 if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace packages/asset-calculator
+  npm run build --workspace packages/asset-aggregator
   npm run build --workspace packages/asset-data-adapter
   npm run build --workspace networks/base
   npm run build --workspace networks/evm
@@ -52,8 +53,10 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
 fi
 
 if [ "$APP" == "default" ] || [ "$APP" == "rosen" ] || [ "$APP" == "rosen-service" ]; then
+  npm run build --workspace packages/rosen-statistics-entity
   npm run build --workspace packages/public-status
   npm run build --workspace packages/data-source
+  npm run build --workspace packages/rosen-statistics
 fi
 
 # Check if Discord webhook URL is set

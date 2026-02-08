@@ -1,6 +1,8 @@
 import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes-observation-extractor';
+import { UnisatRunesProtocolNetwork } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { RateLimitedAxiosConfig } from '@rosen-clients/rate-limited-axios';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -17,10 +19,25 @@ export const registerBitcoinRunesExtractor = async (
   scanner: BitcoinRpcScanner,
 ) => {
   try {
-    const observationExtractor = new BitcoinRunesRpcObservationExtractor(
-      config.bitcoinRunes.addresses.lock,
+    // TODO: Ordiscan should also be added as an observation network in rosen-service2
+    const observationNetwork = new UnisatRunesProtocolNetwork(
       config.bitcoinRunes.unisatUrl,
       config.bitcoinRunes.unisatApiKey,
+      CallbackLoggerFactory.getInstance().getLogger(
+        'UnisatRunesProtocolNetwork',
+      ),
+    );
+    RateLimitedAxiosConfig.addRule(
+      config.bitcoinRunes.unisatUrl,
+      5, // 5 calls/second
+      1,
+      8000, // timeout
+    );
+    // TODO: add 2000 calls/second rule when multiple rules are supported
+
+    const observationExtractor = new BitcoinRunesRpcObservationExtractor(
+      config.bitcoinRunes.addresses.lock,
+      observationNetwork,
       dataSource,
       await getTokenMap(),
       logger,

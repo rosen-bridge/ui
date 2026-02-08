@@ -1,7 +1,12 @@
 import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
-import { TokenMap, RosenChainToken, NATIVE_TOKEN } from '@rosen-bridge/tokens';
+import {
+  TokenMap,
+  RosenChainToken,
+  NATIVE_TOKEN,
+  NATIVE_RESIDENCY,
+} from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import { difference, differenceWith, isEqual } from 'lodash-es';
@@ -34,6 +39,8 @@ class AssetCalculator {
   protected readonly lockedAssetModel: LockedAssetModel;
   protected readonly tokenModel: TokenModel;
   protected calculatorMap: Map<string, AbstractCalculator> = new Map();
+  protected totalSupplyMap: Map<string, bigint> = new Map();
+  protected totalSupplyInit = false;
 
   constructor(
     tokens: TokenMap,
@@ -72,6 +79,7 @@ class AssetCalculator {
       this.tokens,
       bitcoinRunesCalculator.addresses,
       bitcoinRunesCalculator.unisatUrl,
+      bitcoinRunesCalculator.unisatApiKey,
       logger,
     );
     const ethereumAssetCalculator = new EvmCalculator(
@@ -119,6 +127,50 @@ class AssetCalculator {
   }
 
   /**
+   * Store all token supplies at startup and store them in a map
+   * This method should be called once during service initialization
+   */
+  storeAllTokenSupplies = async (): Promise<void> => {
+    this.logger.info('Starting extraction of all token supplies...');
+    const residencyChains = this.tokens.getAllChains();
+
+    for (const chain of residencyChains) {
+      const calculator = this.calculatorMap.get(chain);
+      if (!calculator) {
+        throw new Error(
+          `Calculator for chain [${chain}] is not available, skipping token supply extraction`,
+        );
+      }
+      // `getTokens` method with from and to same chains results in all tokens on the chain
+      // it includes both wrapped and native tokens
+      const chainTokens = this.tokens.getTokens(chain, chain);
+      this.logger.debug(
+        `Extracting token supplies for ${chainTokens.length} tokens on chain ${chain}`,
+      );
+
+      for (const token of chainTokens) {
+        if (token.residency == NATIVE_RESIDENCY) {
+          this.logger.debug(
+            `Token ${token.name} is native on chain ${chain}, skipping total supply extraction`,
+          );
+          continue;
+        }
+        const totalSupply = await calculator.totalSupply(token);
+        const mapKey = `${chain}-${token.tokenId}`;
+        this.totalSupplyMap.set(mapKey, totalSupply);
+
+        this.logger.debug(
+          `Stored total supply for token [${token.tokenId}] on chain [${chain}]: [${totalSupply}]`,
+        );
+      }
+    }
+
+    this.logger.info(
+      `Completed extraction of token supplies. Total entries stored: ${this.totalSupplyMap.size}`,
+    );
+  };
+
+  /**
    * get a token data on a specific chain
    * @param residentToken
    * @param residencyChain
@@ -158,15 +210,26 @@ class AssetCalculator {
       this.logger.debug(`Token ${token.name} is not supported in ${chain}`);
       return 0n;
     }
-    const emission =
-      (await calculator.totalSupply(chainToken)) -
-      (await calculator.totalBalance(chainToken));
+
+    // Get total supply from stored map, fallback to calculator if not found
+    const tokenMapKey = `${chain}-${chainToken.tokenId}`;
+    let totalSupply = this.totalSupplyMap.get(tokenMapKey);
+    if (!totalSupply) {
+      throw new Error(
+        `ImpossibleBehavior: Total supply for token [${chainToken.tokenId}] on chain [${chain}] not found in map`,
+      );
+    }
+    this.logger.debug(
+      `Total supply for token [${chainToken.tokenId}] on chain [${chain}] is [${totalSupply}]`,
+    );
+
+    const emission = totalSupply - (await calculator.totalBalance(chainToken));
 
     this.logger.debug(
       `Emitted amount of asset [${token.tokenId}] in chain [${chain}] is [${emission}]`,
     );
 
-    return emission;
+    return emission > 0n ? emission : 0n;
   };
 
   /**
@@ -205,6 +268,10 @@ class AssetCalculator {
    * old tokens from the database
    */
   update = async () => {
+    if (!this.totalSupplyInit) {
+      await this.storeAllTokenSupplies();
+      this.totalSupplyInit = true;
+    }
     const allStoredBridgedAssets =
       await this.bridgedAssetModel.getAllStoredAssets();
     this.logger.debug(
@@ -231,124 +298,130 @@ class AssetCalculator {
     const allCurrentTokens = [];
 
     const residencyChains = this.tokens.getAllChains() as Network[];
-
     for (const residencyChain of residencyChains) {
-      const nativeResidentTokens =
-        this.tokens.getAllNativeTokens(residencyChain);
+      const allTokensOnChain = this.tokens.getTokens(
+        residencyChain,
+        residencyChain,
+      );
       this.logger.debug(
-        `All native resident tokens of ${residencyChain} chain are ${JsonBigInt.stringify(
-          nativeResidentTokens,
+        `All tokens of ${residencyChain} chain are ${JsonBigInt.stringify(
+          allTokensOnChain,
         )}`,
       );
 
-      const chains = this.tokens.getSupportedChains(
-        residencyChain,
-      ) as Network[];
-
-      for (const nativeResidentToken of nativeResidentTokens) {
+      for (const token of allTokensOnChain) {
         this.logger.info(
-          `Started calculating values for ${nativeResidentToken.name} native on chain ${residencyChain}`,
+          `Started calculating values for ${token.name} native on chain ${residencyChain}`,
         );
         const significantDecimal = this.tokens.getSignificantDecimals(
-          nativeResidentToken.tokenId,
+          token.tokenId,
         );
         if (significantDecimal == undefined)
           throw new Error(
-            `Failed to retrieve significant decimals for tokenId: ${nativeResidentToken.tokenId}`,
+            `Failed to retrieve significant decimals for tokenId: ${token.tokenId}`,
           );
+        const tokenSet = this.tokens.getTokenSet(token.tokenId);
+        if (!tokenSet) {
+          throw new Error(
+            `ImpossibleBehavior: Token set not found for token ${token.tokenId}`,
+          );
+        }
+        const ergoSideTokenId = this.tokens.getID(tokenSet, NETWORKS.ergo.key);
 
         const newToken = {
-          id: nativeResidentToken.tokenId,
-          decimal: nativeResidentToken.decimals,
+          id: token.tokenId,
+          decimal: token.decimals,
           significantDecimal: significantDecimal,
-          name: nativeResidentToken.name,
+          name: token.name,
           chain: residencyChain,
-          isNative: nativeResidentToken.type === NATIVE_TOKEN,
+          isNative: token.type === NATIVE_TOKEN,
+          isResident: token.residency === NATIVE_RESIDENCY,
+          ergoSideTokenId: ergoSideTokenId,
         };
+
         await this.tokenModel.insertToken(newToken);
         allCurrentTokens.push(newToken.id);
 
-        const locked = await this.calculateLocked(
-          nativeResidentToken,
-          residencyChain,
-        );
-        await Promise.all(
-          locked.map(async (lockedItem) => {
-            const newLockedAsset = {
-              amount: lockedItem.amount,
-              address: lockedItem.address,
-              token: newToken,
-              tokenId: newToken.id,
-            };
-            await this.lockedAssetModel.upsertAsset(newLockedAsset);
-            allCurrentLockedAssets.push({
-              tokenId: newLockedAsset.tokenId,
-              address: newLockedAsset.address,
-            });
-            this.logger.info(
-              `Updated asset [${nativeResidentToken.tokenId}] locked amount to [${lockedItem.amount}] for address [${lockedItem.address}]`,
-            );
-            this.logger.debug(
-              `Updated asset details for [${JsonBigInt.stringify(
-                newLockedAsset,
-              )}]`,
-            );
-          }),
-        );
-
-        try {
-          for (const chain of chains) {
-            const emission = await this.calculateEmissionForChain(
-              nativeResidentToken,
-              chain,
-              residencyChain,
-            );
-            this.logger.debug(
-              `Asset [${nativeResidentToken.tokenId}] emitted amount on chain ${chain} is [${emission}]`,
-            );
-            if (!emission) {
-              this.logger.debug(
-                `Emitted amount of asset ${nativeResidentToken.name} on ${chain} is zero. skipping bridged asset update.`,
+        if (token.residency === NATIVE_TOKEN) {
+          const locked = await this.calculateLocked(token, residencyChain);
+          await Promise.all(
+            locked.map(async (lockedItem) => {
+              const newLockedAsset = {
+                amount: lockedItem.amount,
+                address: lockedItem.address,
+                token: newToken,
+                tokenId: newToken.id,
+              };
+              await this.lockedAssetModel.upsertAsset(newLockedAsset);
+              allCurrentLockedAssets.push({
+                tokenId: newLockedAsset.tokenId,
+                address: newLockedAsset.address,
+              });
+              this.logger.info(
+                `Updated asset [${token.tokenId}] locked amount to [${lockedItem.amount}] for address [${lockedItem.address}]`,
               );
-              continue;
-            }
-
-            const tokenDataOnAllChains = this.tokens.search(residencyChain, {
-              tokenId: newToken.id,
-            })[0];
-
-            const bridgedTokenId = this.tokens.getID(
-              tokenDataOnAllChains,
-              chain,
-            );
-
-            const newBridgedAsset = {
-              amount: emission,
-              chain: chain,
-              token: newToken,
-              tokenId: newToken.id,
-              bridgedTokenId,
-            };
-            await this.bridgedAssetModel.upsertAsset(newBridgedAsset);
-            allCurrentBridgedAssets.push({
-              tokenId: newBridgedAsset.tokenId,
-              chain: newBridgedAsset.chain,
-            });
-            this.logger.info(
-              `Updated asset [${nativeResidentToken.tokenId}] bridged amount on chain ${chain} to [${emission}]`,
-            );
-            this.logger.debug(
-              `Updated bridged asset details for [${JsonBigInt.stringify(
-                newBridgedAsset,
-              )}]`,
-            );
-          }
-        } catch (e) {
-          this.logger.warn(
-            `Skipping asset [${nativeResidentToken.tokenId}] bridged amount update, error: [${e}]`,
+              this.logger.debug(
+                `Updated asset details for [${JsonBigInt.stringify(
+                  newLockedAsset,
+                )}]`,
+              );
+            }),
           );
-          if (e instanceof Error && e.stack)
-            this.logger.debug(`Error stack trace: [${e.stack}]`);
+          const supportedChains = this.tokens.getSupportedChains(
+            residencyChain,
+          ) as Network[];
+          for (const chain of supportedChains) {
+            try {
+              const emission = await this.calculateEmissionForChain(
+                token,
+                chain,
+                residencyChain,
+              );
+              this.logger.debug(
+                `Asset [${token.tokenId}] emitted amount on chain ${chain} is [${emission}]`,
+              );
+              if (!emission) {
+                this.logger.debug(
+                  `Emitted amount of asset ${token.name} on ${chain} is zero. skipping bridged asset update.`,
+                );
+                continue;
+              }
+              const tokenDataOnAllChains = this.tokens.search(residencyChain, {
+                tokenId: newToken.id,
+              })[0];
+              const bridgedTokenId = this.tokens.getID(
+                tokenDataOnAllChains,
+                chain,
+              );
+
+              const newBridgedAsset = {
+                amount: emission,
+                chain: chain,
+                token: newToken,
+                tokenId: newToken.id,
+                bridgedTokenId,
+              };
+              await this.bridgedAssetModel.upsertAsset(newBridgedAsset);
+              allCurrentBridgedAssets.push({
+                tokenId: newBridgedAsset.tokenId,
+                chain: newBridgedAsset.chain,
+              });
+              this.logger.info(
+                `Updated asset [${token.tokenId}] bridged amount on chain ${chain} to [${emission}]`,
+              );
+              this.logger.debug(
+                `Updated bridged asset details for [${JsonBigInt.stringify(
+                  newBridgedAsset,
+                )}]`,
+              );
+            } catch (e) {
+              this.logger.warn(
+                `Skipping asset [${token.tokenId}] bridged amount update, error: [${e}]`,
+              );
+              if (e instanceof Error && e.stack)
+                this.logger.debug(`Error stack trace: [${e.stack}]`);
+            }
+          }
         }
       }
     }

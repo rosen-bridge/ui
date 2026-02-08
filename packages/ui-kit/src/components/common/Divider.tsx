@@ -1,4 +1,4 @@
-import { ComponentProps, forwardRef, HTMLAttributes } from 'react';
+import { ComponentProps, forwardRef, HTMLAttributes, useMemo } from 'react';
 
 import { Divider as MuiDivider } from '@mui/material';
 
@@ -25,7 +25,7 @@ export type DividerPropsBase = HTMLAttributes<HTMLHRElement> & {
    * Only applicable for horizontal orientation.
    * @default 'center'
    */
-  placement?: 'center';
+  placement?: 'left';
 
   /**
    * Thickness of the divider line. Accepts any valid CSS size value.
@@ -55,20 +55,36 @@ const DividerBase = forwardRef<HTMLHRElement, DividerPropsBase>(
       borderStyle = 'solid',
       children,
       orientation = 'horizontal',
-      placement = 'center',
+      placement = 'left',
       thickness = '1px',
       variant = 'full',
       ...rest
     } = props;
 
+    const styles = useMemo(
+      () => ({
+        '&::before, &::after': {
+          borderTopStyle: borderStyle,
+          borderTopWidth: thickness,
+        },
+        '&::before': {
+          flex: placement === 'left' ? 0 : 1,
+        },
+        '&::after': {
+          flex: placement === 'left' ? 1 : 1,
+        },
+        '& .MuiDivider-wrapper': {
+          paddingLeft: placement === 'left' ? 0 : undefined,
+        },
+      }),
+      [borderStyle, thickness, placement],
+    );
+
     return (
       <MuiDivider
         orientation={orientation}
         ref={ref}
-        sx={{
-          borderBottomStyle: borderStyle,
-          borderBottomWidth: thickness,
-        }}
+        sx={styles}
         textAlign={placement}
         variant={variant === 'full' ? 'fullWidth' : variant}
         {...rest}

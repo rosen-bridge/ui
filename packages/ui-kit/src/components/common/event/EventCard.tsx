@@ -1,15 +1,15 @@
 import { forwardRef, HTMLAttributes } from 'react';
 
-import { Skeleton, Stack, Typography } from '@mui/material';
+import { Skeleton, Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { capitalize } from 'lodash-es';
 
-import { Avatar } from '../Avatar';
 import { Card, CardBody } from '../card';
 import { Connector } from '../Connector';
 import { Amount, Identifier, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
+import { Stack } from '../Stack';
+import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
@@ -17,12 +17,14 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
   isLoading?: boolean;
   value?: {
     amount: string;
+    decimal: number;
     fromChain: NetworkType;
     href: string;
     id: string;
     status: EventStatusProps['value'];
     toChain: NetworkType;
-    token: string;
+    token?: string;
+    ergoSideTokenId?: string;
     timestamp?: number;
   };
   onClick?: () => void;
@@ -40,8 +42,8 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
         onClick={onClick}
       >
         <CardBody>
-          <Stack gap={1}>
-            <Stack gap={1} flexDirection="row">
+          <Stack spacing={1}>
+            <Stack spacing={1} align="center" direction="row">
               {isLoading && (
                 <Skeleton
                   variant="circular"
@@ -51,39 +53,33 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 />
               )}
               {!isLoading && value && (
-                <Avatar background="secondary.light" color="secondary.main">
-                  {capitalize(value.token.slice(0, 1))}
-                </Avatar>
-              )}
-              <Stack
-                flexDirection="row"
-                justifyContent="space-between"
-                style={{ width: '100%' }}
-              >
-                <Amount
-                  loading={isLoading}
-                  orientation="vertical"
-                  unit={value?.token}
-                  value={value?.amount}
+                <Token
+                  name={value.token}
+                  ergoSideTokenId={value.ergoSideTokenId}
+                  variant="logo"
+                  style={{ fontSize: '20px' }}
                 />
-                {!!value && 'timestamp' in value && (
-                  <Stack justifyContent="flex-end">
-                    <div style={{ marginBottom: '-4px' }}>
-                      <RelativeTime
-                        isLoading={isLoading}
-                        timestamp={value?.timestamp}
-                      />
-                    </div>
-                  </Stack>
-                )}
-              </Stack>
+              )}
+              <Amount
+                loading={isLoading}
+                orientation="vertical"
+                unit={value?.token}
+                value={value?.amount}
+                decimal={value?.decimal}
+              />
             </Stack>
+            <div style={{ marginBottom: '-4px' }}>
+              <RelativeTime
+                isLoading={isLoading}
+                timestamp={value?.timestamp}
+              />
+            </div>
             <Identifier
               href={value?.href}
               loading={isLoading}
               value={value?.id}
             />
-            <Stack flexDirection="row" justifyContent="space-between">
+            <Stack direction="row" justify="between">
               <Typography component="div" fontSize="12px">
                 <Connector
                   variant="filled"

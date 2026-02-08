@@ -49,6 +49,6 @@ chains:
     initialHeight: 1
     scanInterval: 10
 paths:
-  tokens: config/rosen/tokensMap.json
-  contracts: config/rosen
+  tokens: config/tokensMap.json
+  contracts: config/contracts.json
   healthReport: healthReport.json
