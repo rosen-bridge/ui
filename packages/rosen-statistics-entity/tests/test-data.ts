@@ -620,3 +620,520 @@ export const upsertEventCountScenarios = {
     },
   },
 };
+
+export const userEventTestData = {
+  addr1ToAddr2: {
+    fromAddress: 'addr1',
+    toAddress: 'addr2',
+    count: 5,
+    lastProcessedHeight: 100,
+  },
+
+  addr1ToAddr3: {
+    fromAddress: 'addr1',
+    toAddress: 'addr3',
+    count: 3,
+    lastProcessedHeight: 150,
+  },
+
+  addr2ToAddr4: {
+    fromAddress: 'addr2',
+    toAddress: 'addr4',
+    count: 2,
+    lastProcessedHeight: 200,
+  },
+
+  addr3ToAddr5: {
+    fromAddress: 'addr3',
+    toAddress: 'addr5',
+    count: 4,
+    lastProcessedHeight: 180,
+  },
+
+  addr5ToAddr6: {
+    fromAddress: 'addr5',
+    toAddress: 'addr6',
+    count: 1,
+    lastProcessedHeight: 220,
+  },
+};
+
+const createUserEvent = (
+  baseData: typeof eventTriggerTestData.successfulErgoToCardano,
+  eventId: string,
+  boxId: string,
+  extractor: string,
+  fromAddress: string,
+  toAddress: string,
+  spendHeight: number,
+) => ({
+  ...baseData,
+  eventId,
+  boxId,
+  extractor,
+  fromAddress,
+  toAddress,
+  spendHeight,
+  result: 'successful' as const,
+});
+
+export const userEventLastProcessedHeightScenarios = {
+  empty: {
+    expected: 0,
+  },
+
+  singleRecord: {
+    userEventRepo: [userEventTestData.addr1ToAddr2],
+    expected: 100,
+  },
+
+  multipleRecords: {
+    userEventRepo: [
+      userEventTestData.addr1ToAddr2,
+      userEventTestData.addr1ToAddr3,
+      userEventTestData.addr2ToAddr4,
+    ],
+    expected: 200,
+  },
+
+  mixedHeights: {
+    userEventRepo: [
+      { ...userEventTestData.addr1ToAddr2, lastProcessedHeight: 300 },
+      { ...userEventTestData.addr1ToAddr3, lastProcessedHeight: 250 },
+      { ...userEventTestData.addr2ToAddr4, lastProcessedHeight: 350 },
+    ],
+    expected: 350,
+  },
+};
+
+export const userEventAggregatedScenarios = {
+  emptyDatabase: {
+    lastHeight: 0,
+    expectedCount: 0,
+  },
+
+  singleSuccessfulEvent: {
+    eventTriggerRepo: [eventTriggerTestData.successfulErgoToCardano],
+    lastHeight: 0,
+    expectedCount: 1,
+    expectedGroups: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        userCount: 1,
+        maxHeight: 110,
+      },
+    ],
+  },
+
+  multipleDifferentUserPairs: {
+    eventTriggerRepo: [
+      eventTriggerTestData.successfulErgoToCardano,
+      eventTriggerTestData.successfulCardanoToErgo,
+      eventTriggerTestData.successfulEthereumToErgo,
+    ],
+    lastHeight: 0,
+    expectedCount: 3,
+    expectedGroups: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        userCount: 1,
+        maxHeight: 110,
+      },
+      {
+        fromAddress: 'addr2',
+        toAddress: 'addr3',
+        userCount: 1,
+        maxHeight: 115,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        userCount: 1,
+        maxHeight: 120,
+      },
+    ],
+  },
+
+  filterByLastHeight: {
+    eventTriggerRepo: [
+      eventTriggerTestData.successfulErgoToCardano,
+      eventTriggerTestData.successfulCardanoToErgo,
+      eventTriggerTestData.successfulEthereumToErgo,
+    ],
+    lastHeight: 115,
+    expectedCount: 1,
+    expectedGroups: [
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        userCount: 1,
+        maxHeight: 120,
+      },
+    ],
+  },
+
+  ignoreNonSuccessfulEvents: {
+    eventTriggerRepo: [
+      eventTriggerTestData.successfulErgoToCardano,
+      eventTriggerTestData.fraudErgoToCardano,
+      eventTriggerTestData.pendingEvent,
+      eventTriggerTestData.processingEvent,
+    ],
+    lastHeight: 0,
+    expectedCount: 1,
+    expectedGroups: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        userCount: 1,
+        maxHeight: 110,
+      },
+    ],
+  },
+
+  aggregateSameUserPair: {
+    eventTriggerRepo: [
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event1',
+        'box1',
+        'extractor1',
+        'addr1',
+        'addr2',
+        110,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event2',
+        'box2',
+        'extractor2',
+        'addr1',
+        'addr2',
+        115,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event3',
+        'box3',
+        'extractor3',
+        'addr1',
+        'addr2',
+        120,
+      ),
+    ],
+    lastHeight: 0,
+    expectedCount: 1,
+    expectedGroups: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        userCount: 3,
+        maxHeight: 120,
+      },
+    ],
+  },
+
+  complexScenario: {
+    eventTriggerRepo: [
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event1',
+        'box1',
+        'extractor1',
+        'addr1',
+        'addr2',
+        110,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event2',
+        'box2',
+        'extractor2',
+        'addr1',
+        'addr2',
+        115,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event3',
+        'box3',
+        'extractor3',
+        'addr2',
+        'addr3',
+        120,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event4',
+        'box4',
+        'extractor4',
+        'addr3',
+        'addr4',
+        125,
+      ),
+    ],
+    lastHeight: 0,
+    expectedCount: 3,
+    expectedGroups: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        userCount: 2,
+        maxHeight: 115,
+      },
+      {
+        fromAddress: 'addr2',
+        toAddress: 'addr3',
+        userCount: 1,
+        maxHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        userCount: 1,
+        maxHeight: 125,
+      },
+    ],
+  },
+
+  eventsBelowLastHeight: {
+    eventTriggerRepo: [
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event1',
+        'box1',
+        'extractor1',
+        'addr1',
+        'addr2',
+        90,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event2',
+        'box2',
+        'extractor2',
+        'addr1',
+        'addr2',
+        95,
+      ),
+      createUserEvent(
+        eventTriggerTestData.successfulErgoToCardano,
+        'event3',
+        'box3',
+        'extractor3',
+        'addr1',
+        'addr2',
+        105,
+      ),
+    ],
+    lastHeight: 100,
+    expectedCount: 1,
+    expectedGroups: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        userCount: 1,
+        maxHeight: 105,
+      },
+    ],
+  },
+};
+
+export const userEventExistingScenarios = {
+  noMatch: {
+    userEventRepo: [userEventTestData.addr1ToAddr2],
+    query: {
+      fromAddress: 'addr3',
+      toAddress: 'addr4',
+    },
+    expected: null,
+  },
+
+  exactMatch: {
+    userEventRepo: [userEventTestData.addr1ToAddr2],
+    query: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+    },
+    expected: userEventTestData.addr1ToAddr2,
+  },
+
+  caseSensitiveAddresses: {
+    userEventRepo: [userEventTestData.addr1ToAddr2],
+    query: {
+      fromAddress: 'ADDR1',
+      toAddress: 'ADDR2',
+    },
+    expected: null,
+  },
+
+  multipleRecords: {
+    userEventRepo: [
+      userEventTestData.addr1ToAddr2,
+      userEventTestData.addr1ToAddr3,
+      userEventTestData.addr2ToAddr4,
+    ],
+    query: {
+      fromAddress: 'addr1',
+      toAddress: 'addr3',
+    },
+    expected: userEventTestData.addr1ToAddr3,
+  },
+
+  emptyDatabase: {
+    query: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+    },
+    expected: null,
+  },
+};
+
+export const userEventUpsertScenarios = {
+  insertNew: {
+    initialData: [],
+    upsertData: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 10,
+      maxHeight: 500,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 10,
+      lastProcessedHeight: 500,
+    },
+  },
+
+  updateExisting: {
+    initialData: [userEventTestData.addr1ToAddr2],
+    upsertData: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 15,
+      maxHeight: 600,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 15,
+      lastProcessedHeight: 600,
+    },
+  },
+
+  zeroCount: {
+    initialData: [],
+    upsertData: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 0,
+      maxHeight: 500,
+    },
+    expectedCount: 1,
+    expectedRecord: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 0,
+      lastProcessedHeight: 500,
+    },
+  },
+
+  multipleDifferentPairs: {
+    initialData: [
+      userEventTestData.addr1ToAddr2,
+      userEventTestData.addr1ToAddr3,
+    ],
+    upsertData: {
+      fromAddress: 'addr2',
+      toAddress: 'addr4',
+      count: 8,
+      maxHeight: 400,
+    },
+    expectedCount: 3,
+    expectedRecords: [
+      userEventTestData.addr1ToAddr2,
+      userEventTestData.addr1ToAddr3,
+      {
+        fromAddress: 'addr2',
+        toAddress: 'addr4',
+        count: 8,
+        lastProcessedHeight: 400,
+      },
+    ],
+  },
+
+  updateMultipleTimes: {
+    initialData: [],
+    upsertOperations: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        maxHeight: 300,
+      },
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 10,
+        maxHeight: 500,
+      },
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 15,
+        maxHeight: 600,
+      },
+    ],
+    expectedCount: 1,
+    expectedRecord: {
+      fromAddress: 'addr1',
+      toAddress: 'addr2',
+      count: 15,
+      lastProcessedHeight: 600,
+    },
+  },
+
+  duplicateAddressPairs: {
+    initialData: [],
+    upsertOperations: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 3,
+        maxHeight: 200,
+      },
+      {
+        fromAddress: 'addr2',
+        toAddress: 'addr1',
+        count: 2,
+        maxHeight: 250,
+      },
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 4,
+        maxHeight: 300,
+      },
+    ],
+    expectedCount: 2,
+    expectedRecords: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 4,
+        lastProcessedHeight: 300,
+      },
+      {
+        fromAddress: 'addr2',
+        toAddress: 'addr1',
+        count: 2,
+        lastProcessedHeight: 250,
+      },
+    ],
+  },
+};
