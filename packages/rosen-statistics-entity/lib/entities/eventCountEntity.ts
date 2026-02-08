@@ -5,7 +5,7 @@ import {
   Unique,
 } from '@rosen-bridge/extended-typeorm';
 
-@Unique(['fromChain', 'toChain'])
+@Unique(['status', 'fromChain', 'toChain'])
 @Entity('event_count_entity')
 export class EventCountEntity {
   @PrimaryGeneratedColumn()
@@ -22,4 +22,7 @@ export class EventCountEntity {
 
   @Column({ type: 'varchar' })
   toChain: string;
+
+  @Column({ type: 'int', default: 0 })
+  lastProcessedHeight: number;
 }

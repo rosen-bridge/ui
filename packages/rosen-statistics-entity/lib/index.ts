@@ -7,5 +7,9 @@ export {
   BridgedAmountEntity,
   MetricEntity,
 } from './entities';
-export { MetricAction, LockedAssetsMetricAction } from './actions';
+export {
+  MetricAction,
+  LockedAssetsMetricAction,
+  EventCountMetricAction,
+} from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
