@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OPERATORS, Selected, SortValue } from '../components';
+import { OPERATORS, Selected, SortValue, ViewType } from '../components';
 import { useFramework } from './useFramework';
 
 type Options = {
@@ -8,6 +8,8 @@ type Options = {
   defaultPageSize?: number;
   defaultSortField?: string;
   defaultSortOrder?: 'ASC' | 'DESC';
+  defaultView?: ViewType;
+  localStorageKey?: string;
 };
 
 const getInitialState = (search: string, options?: Options) => {
@@ -87,11 +89,24 @@ const getInitialState = (search: string, options?: Options) => {
     })
     .filter((field) => !!field);
 
+  const fragment = window.location.hash.replace('#', '');
+
+  const raw =
+    window.localStorage.getItem(
+      `rosen:collection:${options?.localStorageKey}`,
+    ) || '';
+
+  const view = ['grid', 'row'].includes(raw)
+    ? (raw as ViewType)
+    : options?.defaultView;
+
   return {
     fields,
+    fragment,
     pageIndex,
     pageSize,
     sort,
+    view,
   };
 };
 
@@ -107,6 +122,10 @@ export const useCollection = (options?: Options) => {
   const [pageSize, setPageSize] = useState<number>();
 
   const [sort, setSort] = useState<SortValue>();
+
+  const [view, setView] = useState<ViewType>();
+
+  const [fragment, setFragment] = useState<string>();
 
   const query = useMemo<string | undefined>(() => {
     const params: Record<string, string> = {};
@@ -152,18 +171,24 @@ export const useCollection = (options?: Options) => {
       defaultPageSize: options?.defaultPageSize,
       defaultSortField: options?.defaultSortField,
       defaultSortOrder: options?.defaultSortOrder,
+      defaultView: options?.defaultView,
+      localStorageKey: options?.localStorageKey,
     });
 
     setFields(next.fields);
+    setFragment(next.fragment);
     setPageIndex(next.pageIndex);
     setPageSize(next.pageSize);
     setSort(next.sort);
+    setView(next.view);
   }, [
     framework.router.search,
     options?.defaultPageIndex,
     options?.defaultPageSize,
     options?.defaultSortField,
     options?.defaultSortOrder,
+    options?.defaultView,
+    options?.localStorageKey,
   ]);
 
   const handleFieldsChange = useCallback((fields?: Selected[]) => {
@@ -176,9 +201,24 @@ export const useCollection = (options?: Options) => {
     setPageIndex(0);
   }, []);
 
-  const handleSortChange = useCallback((sort?: SortValue) => {
-    setSort(sort);
-  }, []);
+  useEffect(() => {
+    if (syncing.current) return;
+
+    setView(view);
+
+    if (!options?.localStorageKey) return;
+
+    if (view) {
+      window.localStorage.setItem(
+        `rosen:collection:${options.localStorageKey}`,
+        view,
+      );
+    } else {
+      window.localStorage.removeItem(
+        `rosen:collection:${options.localStorageKey}`,
+      );
+    }
+  }, [options?.localStorageKey, view]);
 
   useEffect(() => {
     if (syncing.current) {
@@ -186,20 +226,33 @@ export const useCollection = (options?: Options) => {
       return;
     }
 
-    if (query === framework.router.search) return;
+    if (
+      query === framework.router.search &&
+      window.location.hash === `#${fragment}`
+    )
+      return;
 
-    const url = query
-      ? `${framework.router.pathname}?${query}`
-      : framework.router.pathname;
+    let url = framework.router.pathname;
+
+    if (query) {
+      url += `?${query}`;
+    }
+
+    if (fragment) {
+      url += `#${fragment}`;
+    }
 
     framework.router.push(url);
-  }, [query, framework.router]);
+  }, [query, fragment, framework.router]);
 
   return {
     query,
 
     fields,
     setFields: handleFieldsChange,
+
+    fragment,
+    setFragment,
 
     pageIndex,
     setPageIndex,
@@ -208,6 +261,9 @@ export const useCollection = (options?: Options) => {
     setPageSize: handlePageSizeChange,
 
     sort,
-    setSort: handleSortChange,
+    setSort,
+
+    view,
+    setView,
   };
 };

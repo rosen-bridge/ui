@@ -111,6 +111,24 @@ const Page = () => {
   );
 
   useEffect(() => {
+    if (!collection.fragment) return;
+
+    const item = items.find(
+      (item) => item.id?.toString() === collection.fragment,
+    );
+
+    if (!item) return;
+
+    setCurrent(item);
+  }, [collection.fragment, items]);
+
+  useEffect(() => {
+    if (current?.id) {
+      collection.setFragment(current.id.toString());
+    }
+  }, [collection.setFragment, current?.id]);
+
+  useEffect(() => {
     setCurrent(undefined);
   }, [collection.sort, collection.fields, collection.pageIndex]);
 
