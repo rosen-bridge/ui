@@ -6,7 +6,7 @@ import { WatcherCountEntity } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { watcherCountMetric } from '../../lib';
-import { watcherConfig, watcherCountTestData } from '../test-data';
+import { watcherConfig, watcherCountTestData } from '../data/test-data';
 import { createDatabase } from '../utils';
 
 vi.mock('../../lib/services/WatcherBoxService', () => {

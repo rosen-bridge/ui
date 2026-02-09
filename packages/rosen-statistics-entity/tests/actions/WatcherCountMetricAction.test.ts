@@ -6,7 +6,7 @@ import { WatcherCountEntity } from '../../lib/entities';
 import {
   getWatcherCountScenarios,
   upsertWatcherCountScenarios,
-} from '../test-data';
+} from '../test-data/test-data';
 import { createDatabase } from '../utils';
 
 describe('WatcherCountMetricAction', () => {

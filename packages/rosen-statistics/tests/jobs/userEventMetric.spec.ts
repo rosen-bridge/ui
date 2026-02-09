@@ -6,7 +6,7 @@ import { UserEventEntity } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { userEventMetric } from '../../lib';
-import { userEventMetricTestData } from '../test-data';
+import { userEventMetricTestData } from '../data/test-data';
 import { createDatabase } from '../utils';
 
 describe('userEventMetric', () => {

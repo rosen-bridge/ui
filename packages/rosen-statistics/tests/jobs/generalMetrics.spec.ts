@@ -6,7 +6,7 @@ import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { generalMetrics } from '../../lib/jobs';
-import { tokenMapData } from '../test-data';
+import { tokenMapData } from '../data/test-data';
 import { createDatabase } from '../utils';
 
 describe('generalMetrics', () => {

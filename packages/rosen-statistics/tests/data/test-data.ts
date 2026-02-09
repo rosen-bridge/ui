@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RosenTokens } from '@rosen-bridge/tokens';
 
-import { WatcherCountConfig } from '../lib';
+import { WatcherCountConfig } from '../../lib';
 
 export const tokenMapData: RosenTokens = [
   {

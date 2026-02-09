@@ -9,7 +9,7 @@ import {
   aggregatedEventsScenarios,
   existingEventCountScenarios,
   upsertEventCountScenarios,
-} from '../test-data';
+} from '../test-data/test-data';
 import { createDatabase } from '../utils';
 
 describe('EventCountMetricAction', () => {

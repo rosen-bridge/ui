@@ -9,7 +9,7 @@ import {
   userEventAggregatedScenarios,
   userEventExistingScenarios,
   userEventUpsertScenarios,
-} from '../test-data';
+} from '../test-data/test-data';
 import { createDatabase } from '../utils';
 
 describe('UserEventMetricAction', () => {
