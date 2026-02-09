@@ -32,7 +32,6 @@ import { ScannerService } from './scanner';
 
 export class HealthService extends PeriodicTaskService {
   name = 'HealthService';
-  taskName = 'HealthService';
 
   private static instance: HealthService;
   readonly dbService: DBService;

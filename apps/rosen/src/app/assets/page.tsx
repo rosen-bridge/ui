@@ -4,7 +4,6 @@
  * TODO: Convert this page to SSR mode
  * local:ergo/rosen-bridge/ui#307
  */
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -14,7 +13,6 @@ import {
   SortField,
   useBreakpoint,
   useCollection,
-  ViewType,
   ViewToggle,
   EmptyState,
   useSnackbar,
@@ -32,25 +30,18 @@ import { ViewGridSidebar } from './ViewGridSidebar';
 import { ViewRow } from './ViewRow';
 
 const Assets = () => {
-  const searchParams = useSearchParams();
-
-  const router = useRouter();
-
-  const pathname = usePathname();
-
   const dense = useBreakpoint('laptop-down');
 
   const { openSnackbar } = useSnackbar();
 
   const collection = useCollection({
-    searchParams: searchParams.toString(),
     defaultPageIndex: 0,
     defaultPageSize: 25,
     defaultSortField: 'name',
     defaultSortOrder: 'DESC',
+    defaultView: 'grid',
+    localStorageKey: 'assets',
   });
-
-  const [view, setView] = useState<ViewType>('row');
 
   const [current, setCurrent] = useState<AssetsFullData>();
 
@@ -68,7 +59,7 @@ const Assets = () => {
       return (data?.items || []).map((item) => getFullAssetData(item));
     }
     return Array(collection.pageSize).fill({});
-  }, [collection.pageSize, data, isLoading]);
+  }, [collection.pageSize, data?.items, isLoading]);
 
   const renderPagination = useCallback(
     () => (
@@ -82,7 +73,14 @@ const Assets = () => {
         onPageSizeChange={collection.setPageSize}
       />
     ),
-    [collection, data, isLoading],
+    [
+      collection.pageSize,
+      collection.pageIndex,
+      collection.setPageIndex,
+      collection.setPageSize,
+      data?.total,
+      isLoading,
+    ],
   );
 
   const renderSearch = useCallback(
@@ -95,7 +93,7 @@ const Assets = () => {
         onChange={collection.setFields}
       />
     ),
-    [collection, isLoading],
+    [collection.fields, collection.setFields, isLoading],
   );
 
   const renderSort = useCallback(
@@ -108,30 +106,41 @@ const Assets = () => {
         onChange={collection.setSort}
       />
     ),
-    [collection, dense, isLoading],
+    [collection.sort, collection.setSort, dense, isLoading],
   );
 
   const renderSidebar = useCallback(() => {
-    if (view !== 'grid') return null;
+    if (collection.view !== 'grid') return null;
     return (
       <ViewGridSidebar value={current} onClose={() => setCurrent(undefined)} />
     );
-  }, [current, view]);
+  }, [current, collection.view]);
 
   const renderView = useCallback(
     () => (
-      <ViewToggle defaultView="row" onChangeView={(value) => setView(value)} />
+      <ViewToggle
+        value={collection.view}
+        onChangeView={(value) => collection.setView(value)}
+      />
     ),
-    [setView],
+    [collection.view],
   );
 
   useEffect(() => {
-    if (collection.query === searchParams.toString()) return;
+    if (!collection.fragment) return;
 
-    const url = collection.query ? `${pathname}?${collection.query}` : pathname;
+    const item = items.find((item) => item.id === collection.fragment);
 
-    router.replace(url, { scroll: false });
-  }, [collection.query, pathname, router, searchParams]);
+    if (!item) return;
+
+    setCurrent(item);
+  }, [collection.fragment, items]);
+
+  useEffect(() => {
+    if (current?.id) {
+      collection.setFragment(current.id);
+    }
+  }, [collection.setFragment, current?.id]);
 
   useEffect(() => {
     setCurrent(undefined);
@@ -156,7 +165,7 @@ const Assets = () => {
       {!isLoading && !items.length && (
         <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
       )}
-      {view === 'grid' && !!items.length && (
+      {collection.view === 'grid' && !!items.length && (
         <ViewGrid
           current={current}
           items={items}
@@ -164,7 +173,7 @@ const Assets = () => {
           setCurrent={setCurrent}
         />
       )}
-      {view === 'row' && !!items.length && (
+      {collection.view === 'row' && !!items.length && (
         <ViewRow
           current={current}
           items={items}

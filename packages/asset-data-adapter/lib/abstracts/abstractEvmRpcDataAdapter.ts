@@ -1,14 +1,19 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { NATIVE_TOKEN, TokenMap } from '@rosen-bridge/tokens';
+import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { ethers, JsonRpcProvider } from 'ethers';
 
 import { PartialERC20ABI } from '../constants';
-import { ChainAssetBalance, EvmRpcDataAdapterAuthParams } from '../types';
+import {
+  ChainAssetBalance,
+  EVMChainsType,
+  EvmRpcDataAdapterAuthParams,
+  FetchOffsetType,
+} from '../types';
 import { AbstractDataAdapter } from './abstractDataAdapter';
 
 export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
-  abstract chain: string;
-  protected fetchOffsets: Map<string, number> = new Map();
+  abstract chain: EVMChainsType;
+  protected fetchOffsets: FetchOffsetType = {};
   protected readonly provider: JsonRpcProvider;
 
   constructor(
@@ -23,9 +28,10 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
     this.provider = authParams.authToken
       ? new JsonRpcProvider(`${authParams.url}/${authParams.authToken}`)
       : new JsonRpcProvider(`${authParams.url}`);
-    addresses.forEach((address) => {
-      this.fetchOffsets.set(address, 0);
-    });
+    this.fetchOffsets = addresses.reduce<FetchOffsetType>((acc, address) => {
+      acc[address] = 0;
+      return acc;
+    }, {});
   }
 
   /**
@@ -37,7 +43,7 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
     const assets: ChainAssetBalance[] = [];
     const supportedTokens = this.tokenMap.getTokens(this.chain, this.chain);
-    const offset = this.fetchOffsets.get(address) ?? 0;
+    const offset = this.fetchOffsets[address] ?? 0;
     const chunk = supportedTokens.slice(offset, offset + this.chunkSize);
 
     for (const chainTokenDetails of chunk) {
@@ -72,11 +78,33 @@ export abstract class AbstractEvmRpcDataAdapter extends AbstractDataAdapter {
       }
     }
 
-    this.fetchOffsets.set(address, offset + this.chunkSize);
-    if (this.fetchOffsets.get(address)! >= supportedTokens.length) {
-      this.fetchOffsets.set(address, 0);
+    this.fetchOffsets[address] = offset + this.chunkSize;
+    if (this.fetchOffsets[address] >= supportedTokens.length) {
+      this.fetchOffsets[address] = 0;
     }
 
     return assets;
+  };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param wrappedTokenId - Identifier of the wrapped token.
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  getRawTotalSupply = async (token: RosenChainToken) => {
+    const contract = new ethers.Contract(
+      token.tokenId,
+      PartialERC20ABI,
+      this.provider,
+    );
+    const totalSupply = await contract.totalSupply();
+    if (totalSupply) {
+      this.logger.debug(
+        `Total supply of token [${token.tokenId}] on the [${this.chain}] chain is [${totalSupply}]`,
+      );
+      return totalSupply;
+    }
+    throw Error(`Total supply of token [${token.tokenId}] is not calculable`);
   };
 }

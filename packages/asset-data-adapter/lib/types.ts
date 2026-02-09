@@ -1,3 +1,5 @@
+import { Network } from '@rosen-ui/types';
+
 import { BinanceEvmRpcDataAdapter } from './binanceEvmRpcDataAdapter';
 import { BitcoinEsploraDataAdapter } from './bitcoinEsploraDataAdapter';
 import { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
@@ -6,6 +8,15 @@ import { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
 import { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
 
 export type AssetBalance = { [assetId: string]: AddressBalance[] };
+
+export type EVMChainsType = Extract<Network, 'ethereum' | 'binance'>;
+
+export type FetchOffsetType = { [key: string]: number };
+
+export interface TotalSupply {
+  assetId: string;
+  totalSupply: bigint;
+}
 
 export interface AddressBalance {
   address: string;

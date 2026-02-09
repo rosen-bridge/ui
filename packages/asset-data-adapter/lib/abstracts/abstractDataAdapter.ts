@@ -1,10 +1,15 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import {
+  NATIVE_RESIDENCY,
+  RosenChainToken,
+  TokenMap,
+} from '@rosen-bridge/tokens';
+import { Network } from '@rosen-ui/types';
 
-import { AssetBalance, ChainAssetBalance } from '../types';
+import { AssetBalance, ChainAssetBalance, TotalSupply } from '../types';
 
 export abstract class AbstractDataAdapter {
-  abstract chain: string;
+  abstract chain: Network;
 
   constructor(
     protected addresses: string[],
@@ -51,4 +56,42 @@ export abstract class AbstractDataAdapter {
    * @returns {Promise<ChainAssetBalance[]>} list of asset balances for the address
    */
   abstract getAddressAssets: (address: string) => Promise<ChainAssetBalance[]>;
+
+  /**
+   * return all wrapped tokens of the chain
+   *
+   * @return {Promise<RosenChainToken[]>}
+   */
+  protected getAllWrappedTokens = (): RosenChainToken[] => {
+    return this.tokenMap
+      .getTokens(this.chain, this.chain)
+      .filter((t) => t.residency != NATIVE_RESIDENCY);
+  };
+
+  /**
+   * Fetches raw totalSupply for all tokens on this chain.
+   *
+   * @returns {Promise<TotalSupply[]>}
+   */
+  getAllTokensTotalSupply = async (): Promise<TotalSupply[]> => {
+    const totalSupplies: TotalSupply[] = [];
+    for (const wToken of this.getAllWrappedTokens())
+      totalSupplies.push({
+        assetId: wToken.tokenId,
+        totalSupply: this.tokenMap.wrapAmount(
+          wToken.tokenId,
+          await this.getRawTotalSupply(wToken),
+          this.chain,
+        ).amount,
+      });
+    return totalSupplies;
+  };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param token - wrapped token info
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  abstract getRawTotalSupply: (token: RosenChainToken) => Promise<bigint>;
 }

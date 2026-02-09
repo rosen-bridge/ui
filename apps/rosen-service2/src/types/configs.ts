@@ -1,6 +1,7 @@
 export interface RosenService2BaseConfig {
   paths: Paths;
   chains: Chains;
+  dataAggregator: DataAggregator;
   healthCheck: HealthCheck;
   redis: Redis;
   db: Db;
@@ -54,6 +55,10 @@ export interface HealthCheckLogging {
   maxErrors: number;
   maxWarns: number;
   duration: number;
+}
+
+export interface DataAggregator {
+  interval: number;
 }
 
 export interface Chains {

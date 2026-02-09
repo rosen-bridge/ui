@@ -1,5 +1,4 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, expect } from 'vitest';
 
 import { AssetBalance } from '../../lib/types';
 import {
@@ -67,6 +66,66 @@ describe('AbstractDataAdapter', () => {
       const result: AssetBalance = await adapter.fetch();
 
       expect(result).toEqual({});
+    });
+  });
+
+  describe('getAllTokensTotalSupply', () => {
+    /**
+     * @target should return totalSupply for all tokens on the chain
+     * @scenario
+     * - tokenMap initialized
+     * - create instance from simple TestAdapter
+     * - call the getAllTokensTotalSupply method of the adapter
+     * @expected
+     * - result length must be equal to the wrapped-tokens of the chain
+     * - items of result must be as expected value
+     */
+    it('should return totalSupply for all tokens on the chain', async () => {
+      const mockTokenMap = new TokenMap();
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      const adapter = new TestAdapter(['0xAddress'], mockTokenMap);
+
+      const result = await adapter.getAllTokensTotalSupply();
+
+      const chainWrappedTokens = adapter['getAllWrappedTokens']();
+
+      expect(Object.keys(result)).toHaveLength(3);
+      expect(chainWrappedTokens.length).toEqual(3);
+
+      result.forEach((v) => {
+        const wrappedAmount = mockTokenMap.wrapAmount(
+          v.assetId,
+          5000n,
+          adapter.chain,
+        );
+        expect(v).toEqual({
+          assetId: v.assetId,
+          totalSupply: wrappedAmount.amount,
+        });
+      });
+    });
+
+    /**
+     * @target should throw if one of the token's totalSupply cannot be fetched
+     * @scenario
+     * - Mock the totalSupply method to return undefined at second call
+     * - create an instance of the TestEvmRpcAdapter
+     * - call the getAllTokensTotalSupply method of the adapter
+     * @expected
+     * - calling getAllTokensTotalSupply is expected to throw an error
+     */
+    it('should throw if any token totalSupply cannot be fetched', async () => {
+      const mockTokenMap = new TokenMap();
+      await mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+      const adapter = new TestAdapter(['0xAddress'], mockTokenMap);
+
+      adapter.getRawTotalSupply = vi.fn().mockImplementation(() => {
+        throw new Error();
+      });
+
+      await expect(adapter.getAllTokensTotalSupply()).rejects.toThrow();
     });
   });
 });

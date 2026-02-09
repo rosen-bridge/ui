@@ -18,7 +18,6 @@
     "prettify": "npm run prettify --workspaces",
     "prettify:check": "npm run prettify:check --workspaces",
     "test": "npm run test --workspaces",
-    "test:related": "NODE_OPTIONS='--import tsx' vitest related --run",
     "type-check": "npm run type-check --workspaces",
     "version": "npx changeset version && npm i && npx changeset --empty",
     "version:guard": "npx changeset version --ignore=@rosen-bridge/rosen-service --ignore @rosen-bridge/watcher-app --ignore @rosen-bridge/rosen-app --ignore @rosen-network/ergo --ignore @rosen-network/cardano --ignore @rosen-network/bitcoin --ignore @rosen-network/bitcoin-runes --ignore @rosen-network/evm --ignore @rosen-ui/eternl-wallet --ignore @rosen-ui/lace-wallet --ignore @rosen-ui/metamask-wallet --ignore @rosen-ui/nautilus-wallet --ignore @rosen-ui/okx-wallet --ignore @rosen-ui/asset-calculator --ignore @rosen-ui/wallet-api && npm i && npx changeset --empty",

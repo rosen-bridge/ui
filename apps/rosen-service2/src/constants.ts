@@ -24,3 +24,5 @@ export const ERG_TOTAL_SUPPLY = 97_739_924_500_000_000n;
 
 export const TOKEN_MAP_EXTRACTOR_ID = 'token-map-box-extractor';
 export const TOKEN_MAP_REDIS_KEY = 'token-map';
+
+export const TOTAL_SUPPLY_REDIS_KEY = 'total_supply';

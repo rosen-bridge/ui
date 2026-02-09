@@ -1,5 +1,7 @@
+import { NETWORKS } from '@rosen-ui/constants';
+
 import { AbstractEvmRpcDataAdapter } from '../../../../lib';
 
 export class TestEvmRpcAdapter extends AbstractEvmRpcDataAdapter {
-  chain = 'ethereum';
+  chain = NETWORKS.ethereum.key;
 }

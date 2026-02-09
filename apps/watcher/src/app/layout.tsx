@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, Suspense } from 'react';
 
 import { App } from './App';
 
@@ -10,7 +10,9 @@ const RootLayout = ({ children }: PropsWithChildren) => {
      */
     <html lang="en">
       <body>
-        <App>{children}</App>
+        <Suspense fallback={null}>
+          <App>{children}</App>
+        </Suspense>
       </body>
     </html>
   );
