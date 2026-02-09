@@ -127,6 +127,10 @@ const Assets = () => {
   );
 
   useEffect(() => {
+    items && collection.scrollIntoView();
+  }, [collection.scrollIntoView, items]);
+
+  useEffect(() => {
     if (!collection.fragment) return;
 
     const item = items.find((item) => item.id === collection.fragment);

@@ -30,6 +30,7 @@ export const ViewGrid = ({
     <GridContainer minWidth="260px" gap="8px">
       {items.map((item, index) => (
         <Card
+          id={item.id}
           key={item.id || index}
           active={!isLoading && !!item?.id && item?.id === current?.id}
           backgroundColor="background.paper"

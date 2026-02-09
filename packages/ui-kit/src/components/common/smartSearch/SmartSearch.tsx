@@ -75,7 +75,7 @@ export const SmartSearch = ({
 
   const [query, setQuery] = useState('');
 
-  const [selected, setSelected] = useState<Selected[]>(filters || []);
+  const [selected, setSelected] = useState<Selected[]>([]);
 
   const state = useMemo<SmartSearchState>(() => {
     if (!current) return 'idle';
@@ -272,6 +272,8 @@ export const SmartSearch = ({
   }, [current]);
 
   useEffect(() => {
+    setSelected(filters || []);
+
     $search.current?.focus({ preventScroll: true });
 
     setCurrent(undefined);
