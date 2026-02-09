@@ -111,6 +111,10 @@ const Page = () => {
   );
 
   useEffect(() => {
+    items && collection.scrollIntoView();
+  }, [collection.scrollIntoView, items]);
+
+  useEffect(() => {
     if (!collection.fragment) return;
 
     const item = items.find(
@@ -153,6 +157,7 @@ const Page = () => {
         <GridContainer gap="8px" minWidth="242px">
           {items.map((item, index) => (
             <EventCard
+              id={item.id}
               key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
               active={!isLoading && current === item}
               isLoading={isLoading}
