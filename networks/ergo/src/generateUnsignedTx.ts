@@ -37,7 +37,16 @@ export const generateUnsignedTx =
       NETWORKS.ergo.key,
     ).amount;
 
-    const height = await getHeight();
+    const networkHeight = await getHeight();
+
+    /**
+     * Determine the transaction creation height according to EIP-0039:
+     * https://github.com/ergoplatform/eips/blob/master/eip-0039.md
+     */
+    const height = Math.max(
+      networkHeight,
+      ...walletUtxos.map((walletUtxo) => walletUtxo.creationHeight),
+    );
 
     const bridgeFee = BigInt(bridgeFeeString);
     const networkFee = BigInt(networkFeeString);
