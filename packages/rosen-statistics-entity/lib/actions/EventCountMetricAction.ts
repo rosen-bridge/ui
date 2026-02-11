@@ -33,13 +33,6 @@ export class EventCountMetricAction {
         const height = res[0] ? res[0].lastProcessedHeight : 0;
         this.logger.debug(`Last processed height: ${height}`);
         return height;
-      })
-      .catch((error) => {
-        this.logger.debug(`Failed to fetch last processed height: ${error}`, {
-          message: error instanceof Error ? error.message : '',
-          stack: error instanceof Error ? error.stack : undefined,
-        });
-        throw error;
       });
   };
 
@@ -51,38 +44,30 @@ export class EventCountMetricAction {
    */
   getAggregatedEvents = async (lastHeight: number) => {
     this.logger.debug(`Fetching aggregated events since height: ${lastHeight}`);
-    try {
-      const aggregated = await this.eventTriggerRepo
-        .createQueryBuilder('et')
-        .select('et.result', 'status')
-        .addSelect('et.fromChain', 'fromChain')
-        .addSelect('et.toChain', 'toChain')
-        .addSelect('COUNT(et.fromAddress)', 'eventCount')
-        .addSelect('MAX(et.spendHeight)', 'maxHeight')
-        .where('et.spendHeight > :lastHeight', { lastHeight })
-        .andWhere('et.result IN (:...statuses)', {
-          statuses: ['successful', 'fraud'],
-        })
-        .groupBy('et.result')
-        .addGroupBy('et.fromChain')
-        .addGroupBy('et.toChain')
-        .getRawMany<{
-          status: string;
-          fromChain: string;
-          toChain: string;
-          eventCount: number;
-          maxHeight: number;
-        }>();
+    const aggregated = await this.eventTriggerRepo
+      .createQueryBuilder('et')
+      .select('et.result', 'status')
+      .addSelect('et.fromChain', 'fromChain')
+      .addSelect('et.toChain', 'toChain')
+      .addSelect('COUNT(et.fromAddress)', 'eventCount')
+      .addSelect('MAX(et.spendHeight)', 'maxHeight')
+      .where('et.spendHeight > :lastHeight', { lastHeight })
+      .andWhere('et.result IN (:...statuses)', {
+        statuses: ['successful', 'fraud'],
+      })
+      .groupBy('et.result')
+      .addGroupBy('et.fromChain')
+      .addGroupBy('et.toChain')
+      .getRawMany<{
+        status: string;
+        fromChain: string;
+        toChain: string;
+        eventCount: number;
+        maxHeight: number;
+      }>();
 
-      this.logger.debug(`Found ${aggregated.length} aggregated event groups`);
-      return aggregated;
-    } catch (error) {
-      this.logger.debug(`Failed to fetch aggregated events: ${error}`, {
-        message: error instanceof Error ? error.message : '',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-      throw error;
-    }
+    this.logger.debug(`Found ${aggregated.length} aggregated event groups`);
+    return aggregated;
   };
 
   /**
@@ -101,18 +86,10 @@ export class EventCountMetricAction {
     this.logger.debug(
       `Fetching existing event count for ${status}, ${fromChain} -> ${toChain}`,
     );
-    try {
-      const existing = await this.eventCountRepo.findOne({
-        where: { status, fromChain, toChain },
-      });
-      return existing;
-    } catch (error) {
-      this.logger.debug(`Failed to fetch existing event count: ${error}`, {
-        message: error instanceof Error ? error.message : '',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-      throw error;
-    }
+    const existing = await this.eventCountRepo.findOne({
+      where: { status, fromChain, toChain },
+    });
+    return existing;
   };
 
   /**
@@ -135,25 +112,17 @@ export class EventCountMetricAction {
     this.logger.debug(
       `Upserting event count for ${status}, ${fromChain} -> ${toChain}: ${eventCount}`,
     );
-    try {
-      const result = await this.eventCountRepo.upsert(
-        {
-          status,
-          fromChain,
-          toChain,
-          eventCount,
-          lastProcessedHeight: maxHeight,
-        },
-        ['status', 'fromChain', 'toChain'],
-      );
-      this.logger.debug('Event count upserted successfully');
-      return result;
-    } catch (error) {
-      this.logger.debug(`Failed to upsert event count: ${error}`, {
-        message: error instanceof Error ? error.message : '',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-      throw error;
-    }
+    const result = await this.eventCountRepo.upsert(
+      {
+        status,
+        fromChain,
+        toChain,
+        eventCount,
+        lastProcessedHeight: maxHeight,
+      },
+      ['status', 'fromChain', 'toChain'],
+    );
+    this.logger.debug('Event count upserted successfully');
+    return result;
   };
 }

@@ -45,7 +45,7 @@ export class Migration1767795498078 implements MigrationInterface {
                 "status" varchar NOT NULL,
                 "fromChain" varchar NOT NULL,
                 "toChain" varchar NOT NULL,
-                "lastProcessedHeight" integer NOT NULL DEFAULT (0)
+                "lastProcessedHeight" integer NOT NULL
             )
         `);
     await queryRunner.query(`
@@ -77,7 +77,7 @@ export class Migration1767795498078 implements MigrationInterface {
                 "status" varchar NOT NULL,
                 "fromChain" varchar NOT NULL,
                 "toChain" varchar NOT NULL,
-                "lastProcessedHeight" integer NOT NULL DEFAULT (0),
+                "lastProcessedHeight" integer NOT NULL,
                 CONSTRAINT "UQ_035b3c112fd24e7f006ea8fe622" UNIQUE ("status", "fromChain", "toChain")
             )
         `);
@@ -119,7 +119,7 @@ export class Migration1767795498078 implements MigrationInterface {
                 "status" varchar NOT NULL,
                 "fromChain" varchar NOT NULL,
                 "toChain" varchar NOT NULL,
-                "lastProcessedHeight" integer NOT NULL DEFAULT (0)
+                "lastProcessedHeight" integer NOT NULL
             )
         `);
     await queryRunner.query(`
