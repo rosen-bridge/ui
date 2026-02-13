@@ -7,7 +7,7 @@ const createEventTrigger = (
   overrides: Partial<EventTriggerEntity>,
 ): DeepPartial<EventTriggerEntity> => ({
   eventId: 'event',
-  boxId: `box-${Math.random()}`,
+  identifier: `box-${Math.random()}`,
   block: `block-${Math.random()}`,
   height: 100,
   extractor: `ext-${Math.random()}`,
