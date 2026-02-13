@@ -19,7 +19,7 @@ export const registerBitcoinExtractor = async (scanner: BitcoinRpcScanner) => {
       config.bitcoin.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger.child('bitcoinObservationExtractor'),
+      logger.child('bitcoinRpcObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);
