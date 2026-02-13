@@ -2,7 +2,7 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 
-import { Alert } from '@rosen-bridge/ui-kit';
+import { Alert, Typography } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
 
@@ -71,9 +71,14 @@ const RosenBridge = () => {
                         If you are using Ledger, you may need to enable
                         &apos;Blind signing&apos; and &apos;Debug data&apos; in
                         the Ledger (Ethereum &gt; Settings) due to{' '}
-                        <a href="https://github.com/LedgerHQ/app-ethereum/issues/311">
+                        <Typography
+                          color="primary"
+                          component="a"
+                          target="_blank"
+                          href="https://github.com/LedgerHQ/app-ethereum/issues/311"
+                        >
                           a known issue in Ledger and MetaMask interaction
-                        </a>
+                        </Typography>
                         .
                       </Alert>
                     </div>
