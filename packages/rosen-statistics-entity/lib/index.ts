@@ -13,3 +13,4 @@ export {
   EventCountMetricAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
+export { AggregatedEvents, eventCountStatus } from './types';

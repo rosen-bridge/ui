@@ -1,461 +1,426 @@
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
-import { EventCountMetricAction } from '../../lib/actions/EventCountMetricAction';
-import { EventCountEntity } from '../../lib/entities';
 import {
-  lastProcessedHeightScenarios,
-  aggregatedEventsScenarios,
-  existingEventCountScenarios,
-  upsertEventCountScenarios,
-} from '../test-data';
+  METRIC_KEYS,
+  EventCountEntity,
+  MetricEntity,
+  EventCountMetricAction,
+} from '../../lib';
+import { eventCountMetricActionTestData } from '../test-data';
 import { createDatabase } from '../utils';
 
 describe('EventCountMetricAction', () => {
   let dataSource: DataSource;
-  let action: EventCountMetricAction;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let eventCountRepo: Repository<EventCountEntity>;
+  let metricRepo: Repository<MetricEntity>;
+  let logger: AbstractLogger;
+  let action: EventCountMetricAction;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
-    action = new EventCountMetricAction(dataSource);
-
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     eventCountRepo = dataSource.getRepository(EventCountEntity);
+    metricRepo = dataSource.getRepository(MetricEntity);
+    logger = new DummyLogger();
+
+    await eventTriggerRepo.clear();
+    await eventCountRepo.clear();
+    await metricRepo.clear();
+    action = new EventCountMetricAction(dataSource, logger);
   });
 
   describe('getLastProcessedHeight', () => {
-    beforeEach(async () => {
-      await eventCountRepo.clear();
-    });
-
     /**
      * @target getLastProcessedHeight should return 0 when no event count records exist
-     * @dependency database
      * @scenario
-     * - ensure no EventCountEntity records exist
-     * - call getLastProcessedHeight
+     * - No records in EventCountEntity table
+     * - Call getLastProcessedHeight
      * @expected
-     * - returns 0
+     * - Returns 0
      */
-    it('should return 0 when no event count records exist', async () => {
-      const scenario = lastProcessedHeightScenarios.empty;
-      const result = await action.getLastProcessedHeight();
-      expect(result).toBe(scenario.expected);
+    it('should return 0 when no records exist', async () => {
+      const testData =
+        eventCountMetricActionTestData.getLastProcessedHeightNoRecords;
+
+      const height = await action.getLastProcessedHeight();
+
+      expect(height).toBe(testData.expectedHeight);
     });
 
     /**
-     * @target getLastProcessedHeight should return highest lastProcessedHeight
-     * @dependency database
+     * @target getLastProcessedHeight should return the highest lastProcessedHeight from existing records
      * @scenario
-     * - insert EventCountEntity records with different lastProcessedHeights
-     * - call getLastProcessedHeight
+     * - Insert multiple EventCountEntity records with different lastProcessedHeight values
+     * - Call getLastProcessedHeight
      * @expected
-     * - returns the highest lastProcessedHeight
+     * - Returns the maximum lastProcessedHeight value (150)
      */
-    it('should return the highest lastProcessedHeight', async () => {
-      const scenario = lastProcessedHeightScenarios.multipleRecords;
-      await eventCountRepo.insert(scenario.eventCountRepo);
+    it('should return the highest lastProcessedHeight from existing records', async () => {
+      const testData =
+        eventCountMetricActionTestData.getLastProcessedHeightMultipleRecords;
 
-      const result = await action.getLastProcessedHeight();
-      expect(result).toBe(scenario.expected);
-    });
+      await eventCountRepo.insert(testData.eventCountRepo);
 
-    /**
-     * @target getLastProcessedHeight should return value when only one record exists
-     * @dependency database
-     * @scenario
-     * - insert single EventCountEntity record
-     * - call getLastProcessedHeight
-     * @expected
-     * - returns the lastProcessedHeight of the single record
-     */
-    it('should return value when only one record exists', async () => {
-      const scenario = lastProcessedHeightScenarios.singleRecord;
-      await eventCountRepo.insert(scenario.eventCountRepo);
+      const height = await action.getLastProcessedHeight();
 
-      const result = await action.getLastProcessedHeight();
-      expect(result).toBe(scenario.expected);
+      expect(height).toBe(testData.expectedHeight);
     });
   });
 
   describe('getAggregatedEvents', () => {
-    beforeEach(async () => {
-      await eventTriggerRepo.clear();
+    /**
+     * @target getAggregatedEvents should aggregate events by status and chain pairs since last height
+     * @scenario
+     * - Insert events with different statuses (successful, fraud) and chain pairs
+     * - Insert events below lastHeight and with null status (should be ignored)
+     * - Call getAggregatedEvents with lastHeight = 100
+     * @expected
+     * - Returns 3 aggregated groups with correct counts (as numbers) and max heights
+     * - Does not include events below lastHeight or with null status
+     */
+    it('should aggregate events by status and chain pairs since last height', async () => {
+      const testData =
+        eventCountMetricActionTestData.getAggregatedEventsMultipleGroups;
+
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
+
+      const aggregated = await action.getAggregatedEvents(testData.lastHeight);
+
+      const sortedAggregated = [...aggregated].sort((a, b) => {
+        if (a.status !== b.status) return a.status.localeCompare(b.status);
+        if (a.fromChain !== b.fromChain)
+          return a.fromChain.localeCompare(b.fromChain);
+        return a.toChain.localeCompare(b.toChain);
+      });
+
+      const sortedExpected = [...testData.expectedAggregated].sort((a, b) => {
+        if (a.status !== b.status) return a.status.localeCompare(b.status);
+        if (a.fromChain !== b.fromChain)
+          return a.fromChain.localeCompare(b.fromChain);
+        return a.toChain.localeCompare(b.toChain);
+      });
+
+      expect(sortedAggregated).toEqual(sortedExpected);
     });
 
     /**
-     * @target getAggregatedEvents should return empty array when no events exist
-     * @dependency database
+     * @target getAggregatedEvents should aggregate multiple events in same group into single record
      * @scenario
-     * - call getAggregatedEvents on empty database
+     * - Insert 3 successful events from ergo to cardano with different spendHeights
+     * - Call getAggregatedEvents with lastHeight = 100
      * @expected
-     * - returns empty array
+     * - Returns single group with count = 3 (as number) and maxHeight = 120
      */
-    it('should return empty array when no events exist', async () => {
-      const scenario = aggregatedEventsScenarios.emptyDatabase;
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
+    it('should aggregate multiple events in same group into single record', async () => {
+      const testData =
+        eventCountMetricActionTestData.getAggregatedEventsSameGroup;
 
-      expect(result).toHaveLength(scenario.expectedCount);
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
+
+      const aggregated = await action.getAggregatedEvents(testData.lastHeight);
+
+      expect(aggregated).toHaveLength(1);
+      expect(aggregated[0]).toEqual({
+        status: 'successful',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 3,
+        maxHeight: 120,
+      });
     });
 
     /**
-     * @target getAggregatedEvents should group by status, fromChain, toChain
-     * @dependency database
+     * @target getAggregatedEvents should return empty array when no events since last height
      * @scenario
-     * - insert multiple EventTriggerEntity records with same group
-     * - call getAggregatedEvents
+     * - Insert events with spendHeight below lastHeight (150, 180) and lastHeight = 200
+     * - Call getAggregatedEvents with lastHeight = 200
      * @expected
-     * - returns aggregated count for each group
-     * - calculates correct maxHeight per group
+     * - Returns empty array
      */
-    it('should group by status, fromChain, toChain', async () => {
-      const scenario = aggregatedEventsScenarios.aggregateSameGroup;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
+    it('should return empty array when no events since last height', async () => {
+      const testData =
+        eventCountMetricActionTestData.getAggregatedEventsNoNewEvents;
 
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-      expect(result).toHaveLength(scenario.expectedCount);
+      const aggregated = await action.getAggregatedEvents(testData.lastHeight);
 
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.status === expectedGroup.status &&
-          r.fromChain === expectedGroup.fromChain &&
-          r.toChain === expectedGroup.toChain,
-      );
-
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.eventCount).toBe(expectedGroup.eventCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
-    });
-
-    /**
-     * @target getAggregatedEvents should filter by spendHeight > lastHeight
-     * @dependency database
-     * @scenario
-     * - insert EventTriggerEntity records with different spendHeights
-     * - call getAggregatedEvents with specific lastHeight
-     * @expected
-     * - returns only events with spendHeight > lastHeight
-     */
-    it('should filter by spendHeight > lastHeight', async () => {
-      const scenario = aggregatedEventsScenarios.filterByLastHeight;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
-
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
-
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.status === expectedGroup.status &&
-          r.fromChain === expectedGroup.fromChain &&
-          r.toChain === expectedGroup.toChain,
-      );
-
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.eventCount).toBe(expectedGroup.eventCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
-    });
-
-    /**
-     * @target getAggregatedEvents should ignore non-successful/fraud events
-     * @dependency database
-     * @scenario
-     * - insert EventTriggerEntity records with different statuses
-     * - call getAggregatedEvents
-     * @expected
-     * - returns only events with status 'successful' or 'fraud'
-     */
-    it('should ignore non-successful/fraud events', async () => {
-      const scenario = aggregatedEventsScenarios.ignoreNonSuccessfulFraud;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
-
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
-
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.status === expectedGroup.status &&
-          r.fromChain === expectedGroup.fromChain &&
-          r.toChain === expectedGroup.toChain,
-      );
-
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.eventCount).toBe(expectedGroup.eventCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
-    });
-
-    /**
-     * @target getAggregatedEvents should handle complex scenario with multiple groups
-     * @dependency database
-     * @scenario
-     * - insert multiple EventTriggerEntity records with various groups
-     * - call getAggregatedEvents
-     * @expected
-     * - all groups correctly aggregated
-     */
-    it('should handle complex scenario with multiple groups', async () => {
-      const scenario = aggregatedEventsScenarios.complexScenario;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
-
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
-
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      for (const expectedGroup of scenario.expectedGroups) {
-        const actualGroup = result.find(
-          (r) =>
-            r.status === expectedGroup.status &&
-            r.fromChain === expectedGroup.fromChain &&
-            r.toChain === expectedGroup.toChain,
-        );
-
-        expect(actualGroup).toBeDefined();
-        expect(actualGroup?.eventCount).toBe(expectedGroup.eventCount);
-        expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
-      }
+      expect(aggregated).toEqual([]);
     });
   });
 
   describe('getExistingEventCount', () => {
-    beforeEach(async () => {
-      await eventCountRepo.clear();
+    /**
+     * @target getExistingEventCount should return event count when record exists
+     * @scenario
+     * - Insert EventCountEntity record for successful ergo→cardano with count = 10
+     * - Call getExistingEventCount with same status and chain pair
+     * @expected
+     * - Returns 10
+     */
+    it('should return event count when record exists', async () => {
+      const testData =
+        eventCountMetricActionTestData.getExistingEventCountExists;
+
+      await eventCountRepo.insert(testData.eventCountRepo);
+
+      const count = await action.getExistingEventCount(
+        testData.status,
+        testData.fromChain,
+        testData.toChain,
+      );
+
+      expect(count).toBe(testData.expectedCount);
     });
 
     /**
-     * @target getExistingEventCount should return null when no matching record exists
-     * @dependency database
+     * @target getExistingEventCount should return 0 when record does not exist
      * @scenario
-     * - call getExistingEventCount for non-existent group
+     * - Insert EventCountEntity record for successful ergo→cardano
+     * - Call getExistingEventCount with fraud status (no record exists)
      * @expected
-     * - returns null
+     * - Returns 0
      */
-    it('should return null when no matching record exists', async () => {
-      const scenario = existingEventCountScenarios.noMatch;
-      await eventCountRepo.insert(scenario.eventCountRepo);
+    it('should return 0 when record does not exist', async () => {
+      const testData =
+        eventCountMetricActionTestData.getExistingEventCountNotExists;
 
-      const result = await action.getExistingEventCount(
-        scenario.query.status,
-        scenario.query.fromChain,
-        scenario.query.toChain,
+      await eventCountRepo.insert(testData.eventCountRepo);
+
+      const count = await action.getExistingEventCount(
+        testData.status,
+        testData.fromChain,
+        testData.toChain,
       );
 
-      expect(result).toBe(scenario.expected);
-    });
-
-    /**
-     * @target getExistingEventCount should return existing EventCountEntity
-     * @dependency database
-     * @scenario
-     * - insert EventCountEntity record
-     * - call getExistingEventCount for matching group
-     * @expected
-     * - returns the matching EventCountEntity
-     */
-    it('should return existing EventCountEntity', async () => {
-      const scenario = existingEventCountScenarios.exactMatch;
-      await eventCountRepo.insert(scenario.eventCountRepo);
-
-      const result = await action.getExistingEventCount(
-        scenario.query.status,
-        scenario.query.fromChain,
-        scenario.query.toChain,
-      );
-
-      expect(result).not.toBeNull();
-      expect(result?.status).toBe(scenario.expected?.status);
-      expect(result?.fromChain).toBe(scenario.expected?.fromChain);
-      expect(result?.toChain).toBe(scenario.expected?.toChain);
-      expect(result?.eventCount).toBe(scenario.expected?.eventCount);
-    });
-
-    /**
-     * @target getExistingEventCount should be case-sensitive
-     * @dependency database
-     * @scenario
-     * - insert EventCountEntity with lowercase status
-     * - call getExistingEventCount with uppercase status
-     * @expected
-     * - returns null (case doesn't match)
-     */
-    it('should be case-sensitive', async () => {
-      const scenario = existingEventCountScenarios.caseSensitive;
-      await eventCountRepo.insert(scenario.eventCountRepo);
-
-      const result = await action.getExistingEventCount(
-        scenario.query.status,
-        scenario.query.fromChain,
-        scenario.query.toChain,
-      );
-
-      expect(result).toBe(scenario.expected);
+      expect(count).toBe(testData.expectedCount);
     });
   });
 
-  describe('upsertEventCount', () => {
-    beforeEach(async () => {
-      await eventCountRepo.clear();
-    });
-
+  describe('upsertEventsCount', () => {
     /**
-     * @target upsertEventCount should insert new event count record
-     * @dependency database
+     * @target upsertEventsCount should create new event count records and update total metric
      * @scenario
-     * - call upsertEventCount with new data
-     * - verify record was created
+     * - No existing EventCountEntity or MetricEntity records
+     * - Call upsertEventsCount with 2 aggregated event groups and totalCount = 4
      * @expected
-     * - new EventCountEntity record is created
+     * - Creates 2 EventCountEntity records with correct counts and heights
+     * - Records are ordered by status ASC (fraud first, then successful)
+     * - Creates MetricEntity record with EVENT_COUNT_TOTAL = '4'
+     * - All operations succeed in same transaction
      */
-    it('should insert new event count record', async () => {
-      const scenario = upsertEventCountScenarios.insertNew;
-      await eventCountRepo.insert(scenario.initialData);
+    it('should create new event count records and update total metric', async () => {
+      const testData =
+        eventCountMetricActionTestData.upsertEventsCountNewGroups;
 
-      await action.upsertEventCount(
-        scenario.upsertData.status,
-        scenario.upsertData.fromChain,
-        scenario.upsertData.toChain,
-        scenario.upsertData.eventCount,
-        scenario.upsertData.maxHeight,
+      await action.upsertEventsCount(
+        testData.aggregatedEvents,
+        testData.totalCount,
       );
 
-      const allRecords = await eventCountRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      const result = await eventCountRepo.findOne({
-        where: {
-          status: scenario.expectedRecord.status,
-          fromChain: scenario.expectedRecord.fromChain,
-          toChain: scenario.expectedRecord.toChain,
-        },
+      const eventCounts = await eventCountRepo.find({
+        order: { status: 'ASC', fromChain: 'ASC', toChain: 'ASC' },
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.eventCount).toBe(scenario.expectedRecord.eventCount);
-      expect(result?.lastProcessedHeight).toBe(
-        scenario.expectedRecord.lastProcessedHeight,
-      );
-    });
+      expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
 
-    /**
-     * @target upsertEventCount should update existing event count record
-     * @dependency database
-     * @scenario
-     * - insert existing EventCountEntity
-     * - call upsertEventCount with same composite key but different data
-     * - verify record was updated
-     * @expected
-     * - existing EventCountEntity record is updated
-     */
-    it('should update existing event count record', async () => {
-      const scenario = upsertEventCountScenarios.updateExisting;
-      await eventCountRepo.insert(scenario.initialData);
-
-      await action.upsertEventCount(
-        scenario.upsertData.status,
-        scenario.upsertData.fromChain,
-        scenario.upsertData.toChain,
-        scenario.upsertData.eventCount,
-        scenario.upsertData.maxHeight,
-      );
-
-      const allRecords = await eventCountRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      const result = await eventCountRepo.findOne({
-        where: {
-          status: scenario.expectedRecord.status,
-          fromChain: scenario.expectedRecord.fromChain,
-          toChain: scenario.expectedRecord.toChain,
-        },
+      eventCounts.forEach((record, index) => {
+        const expected = testData.expectedEventCounts[index];
+        expect(record.status).toBe(expected.status);
+        expect(record.fromChain).toBe(expected.fromChain);
+        expect(record.toChain).toBe(expected.toChain);
+        expect(record.eventCount).toBe(expected.eventCount);
+        expect(record.lastProcessedHeight).toBe(expected.lastProcessedHeight);
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.eventCount).toBe(scenario.expectedRecord.eventCount);
-      expect(result?.lastProcessedHeight).toBe(
-        scenario.expectedRecord.lastProcessedHeight,
-      );
-    });
-
-    /**
-     * @target upsertEventCount should handle zero event count
-     * @dependency database
-     * @scenario
-     * - call upsertEventCount with eventCount = 0
-     * @expected
-     * - record is created with zero count
-     */
-    it('should handle zero event count', async () => {
-      const scenario = upsertEventCountScenarios.zeroEventCount;
-      await eventCountRepo.insert(scenario.initialData);
-
-      await action.upsertEventCount(
-        scenario.upsertData.status,
-        scenario.upsertData.fromChain,
-        scenario.upsertData.toChain,
-        scenario.upsertData.eventCount,
-        scenario.upsertData.maxHeight,
-      );
-
-      const allRecords = await eventCountRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      const result = await eventCountRepo.findOne({
-        where: {
-          status: scenario.expectedRecord.status,
-          fromChain: scenario.expectedRecord.fromChain,
-          toChain: scenario.expectedRecord.toChain,
-        },
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
       });
-
-      expect(result).not.toBeNull();
-      expect(result?.eventCount).toBe(scenario.expectedRecord.eventCount);
+      expect(metric?.value).toBe(testData.expectedMetricValue);
+      expect(metric?.updatedAt).toBeDefined();
     });
 
     /**
-     * @target upsertEventCount should handle multiple updates to same key
-     * @dependency database
+     * @target upsertEventsCount should replace existing event count records with new values
      * @scenario
-     * - call upsertEventCount multiple times with same composite key
+     * - Insert existing EventCountEntity with count = 5 and lastProcessedHeight = 100
+     * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'
+     * - Call upsertEventsCount with aggregated event (count = 2, maxHeight = 130) and totalCount = 7
      * @expected
-     * - last update wins
+     * - Existing EventCountEntity is REPLACED (not added) with count = 2, height = 130
+     * - MetricEntity is updated to '7'
      */
-    it('should handle multiple updates to same key', async () => {
-      const scenario = upsertEventCountScenarios.updateMultipleTimes;
-      await eventCountRepo.insert(scenario.initialData);
+    it('should replace existing event count records with new values', async () => {
+      const testData =
+        eventCountMetricActionTestData.upsertEventsCountUpdateExisting;
 
-      for (const operation of scenario.upsertOperations) {
-        await action.upsertEventCount(
-          operation.status,
-          operation.fromChain,
-          operation.toChain,
-          operation.eventCount,
-          operation.maxHeight,
-        );
+      await eventCountRepo.insert(testData.existingEventCounts);
+      if (testData.existingMetric) {
+        await metricRepo.insert(testData.existingMetric);
       }
 
-      const allRecords = await eventCountRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
+      await action.upsertEventsCount(
+        testData.aggregatedEvents,
+        testData.totalCount,
+      );
 
-      const result = await eventCountRepo.findOne({
-        where: {
-          status: scenario.expectedRecord.status,
-          fromChain: scenario.expectedRecord.fromChain,
-          toChain: scenario.expectedRecord.toChain,
-        },
+      const eventCounts = await eventCountRepo.find();
+      expect(eventCounts).toHaveLength(1);
+      expect(eventCounts[0].eventCount).toBe(2);
+      expect(eventCounts[0].lastProcessedHeight).toBe(130);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+      });
+      expect(metric?.value).toBe('7');
+    });
+
+    /**
+     * @target upsertEventsCount should handle both new and existing groups in same transaction
+     * @scenario
+     * - Insert existing EventCountEntity for successful ergo→cardano (count = 5)
+     * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'
+     * - Call upsertEventsCount with:
+     *   - Existing group: successful ergo→cardano (count = 3, height = 120)
+     *   - New group: fraud cardano→ergo (count = 2, height = 115)
+     *   - totalCount = 10
+     * @expected
+     * - Existing group is replaced with count = 3, height = 120
+     * - New group is created with count = 2, height = 115
+     * - Records are ordered by status ASC (fraud first, then successful)
+     * - Total metric is updated to '10'
+     */
+    it('should handle both new and existing groups in same transaction', async () => {
+      const testData =
+        eventCountMetricActionTestData.upsertEventsCountMixedGroups;
+
+      await eventCountRepo.insert(testData.existingEventCounts);
+      if (testData.existingMetric) {
+        await metricRepo.insert(testData.existingMetric);
+      }
+
+      await action.upsertEventsCount(
+        testData.aggregatedEvents,
+        testData.totalCount,
+      );
+
+      const eventCounts = await eventCountRepo.find({
+        order: { status: 'ASC', fromChain: 'ASC', toChain: 'ASC' },
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.eventCount).toBe(scenario.expectedRecord.eventCount);
-      expect(result?.lastProcessedHeight).toBe(
-        scenario.expectedRecord.lastProcessedHeight,
+      expect(eventCounts).toHaveLength(2);
+
+      expect(eventCounts[0].status).toBe('fraud');
+      expect(eventCounts[0].fromChain).toBe('cardano');
+      expect(eventCounts[0].toChain).toBe('ergo');
+      expect(eventCounts[0].eventCount).toBe(2);
+      expect(eventCounts[0].lastProcessedHeight).toBe(115);
+
+      expect(eventCounts[1].status).toBe('successful');
+      expect(eventCounts[1].fromChain).toBe('ergo');
+      expect(eventCounts[1].toChain).toBe('cardano');
+      expect(eventCounts[1].eventCount).toBe(3);
+      expect(eventCounts[1].lastProcessedHeight).toBe(120);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+      });
+      expect(metric?.value).toBe('10');
+    });
+
+    /**
+     * @target upsertEventsCount should update only total metric when aggregated events array is empty
+     * @scenario
+     * - Insert existing EventCountEntity with count = 5
+     * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'
+     * - Call upsertEventsCount with empty aggregatedEvents array and totalCount = 5
+     * @expected
+     * - Existing EventCountEntity remains unchanged (count = 5)
+     * - Total metric is updated with provided totalCount value (still '5')
+     */
+    it('should update only total metric when aggregated events array is empty', async () => {
+      const testData = eventCountMetricActionTestData.upsertEventsCountEmpty;
+
+      await eventCountRepo.insert(testData.existingEventCounts);
+      if (testData.existingMetric) {
+        await metricRepo.insert(testData.existingMetric);
+      }
+
+      await action.upsertEventsCount(
+        testData.aggregatedEvents,
+        testData.totalCount,
       );
+
+      const eventCounts = await eventCountRepo.find();
+      expect(eventCounts).toHaveLength(1);
+      expect(eventCounts[0].eventCount).toBe(5);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+      });
+      expect(metric?.value).toBe('5');
+    });
+
+    /**
+     * @target upsertEventsCount should rollback entire transaction on error
+     * @scenario
+     * - Mock createQueryRunner to throw database error
+     * - Call upsertEventsCount with valid aggregated events
+     * @expected
+     * - Function throws error
+     * - No EventCountEntity records are persisted
+     * - No MetricEntity records are persisted
+     */
+    it('should rollback entire transaction on error', async () => {
+      const testData =
+        eventCountMetricActionTestData.upsertEventsCountNewGroups;
+
+      vi.spyOn(
+        eventCountRepo.manager.connection,
+        'createQueryRunner',
+      ).mockImplementationOnce(() => {
+        throw new Error('Database error');
+      });
+
+      await expect(
+        action.upsertEventsCount(
+          testData.aggregatedEvents,
+          testData.totalCount,
+        ),
+      ).rejects.toThrow('Database error');
+
+      const eventCounts = await eventCountRepo.find();
+      expect(eventCounts).toHaveLength(0);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+      });
+      expect(metric).toBeNull();
+
+      vi.restoreAllMocks();
+    });
+
+    /**
+     * @target upsertEventsCount should use provided totalCount for metric value regardless of aggregated events
+     * @scenario
+     * - Call upsertEventsCount with aggregated events and totalCount = 100
+     * @expected
+     * - MetricEntity EVENT_COUNT_TOTAL has value '100'
+     */
+    it('should use provided totalCount for metric value regardless of aggregated events', async () => {
+      const testData =
+        eventCountMetricActionTestData.upsertEventsCountNewGroups;
+
+      await action.upsertEventsCount(testData.aggregatedEvents, 100);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+      });
+      expect(metric?.value).toBe('100');
     });
   });
 });

@@ -2,7 +2,9 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
-import { EventCountEntity } from '../entities';
+import { METRIC_KEYS } from '../constants';
+import { EventCountEntity, MetricEntity } from '../entities';
+import { AggregatedEvents, eventCountStatus } from '../types';
 
 export class EventCountMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
@@ -23,17 +25,14 @@ export class EventCountMetricAction {
    */
   getLastProcessedHeight = async (): Promise<number> => {
     this.logger.debug('Fetching last processed height');
-    return this.eventCountRepo
-      .find({
-        select: ['lastProcessedHeight'],
-        order: { lastProcessedHeight: 'DESC' },
-        take: 1,
-      })
-      .then((res) => {
-        const height = res[0] ? res[0].lastProcessedHeight : 0;
-        this.logger.debug(`Last processed height: ${height}`);
-        return height;
-      });
+    const res = await this.eventCountRepo.find({
+      select: ['lastProcessedHeight'],
+      order: { lastProcessedHeight: 'DESC' },
+      take: 1,
+    });
+    const height = res[0] ? res[0].lastProcessedHeight : 0;
+    this.logger.debug(`Last processed height: ${height}`);
+    return height;
   };
 
   /**
@@ -58,13 +57,7 @@ export class EventCountMetricAction {
       .groupBy('et.result')
       .addGroupBy('et.fromChain')
       .addGroupBy('et.toChain')
-      .getRawMany<{
-        status: string;
-        fromChain: string;
-        toChain: string;
-        eventCount: number;
-        maxHeight: number;
-      }>();
+      .getRawMany<AggregatedEvents>();
 
     this.logger.debug(`Found ${aggregated.length} aggregated event groups`);
     return aggregated;
@@ -73,13 +66,13 @@ export class EventCountMetricAction {
   /**
    * Get existing event count for a specific group
    *
-   * @param status - Event status (successful/fraud)
+   * @param status - eventCountStatus (successful/fraud)
    * @param fromChain - Source chain
    * @param toChain - Target chain
-   * @returns Promise resolving to existing EventCountEntity or null
+   * @returns Promise resolving to existing event count, or 0 if no record exists
    */
   getExistingEventCount = async (
-    status: string,
+    status: eventCountStatus,
     fromChain: string,
     toChain: string,
   ) => {
@@ -89,40 +82,58 @@ export class EventCountMetricAction {
     const existing = await this.eventCountRepo.findOne({
       where: { status, fromChain, toChain },
     });
-    return existing;
+    return existing ? existing.eventCount : 0;
   };
 
   /**
-   * Upsert event count data for a specific group
-   *
-   * @param status - Event status (successful/fraud)
-   * @param fromChain - Source chain
-   * @param toChain - Target chain
-   * @param eventCount - New event count
-   * @param maxHeight - Maximum processed height
-   * @returns Promise resolving to upsert result
+   * Upserts the aggregated events count and total count into the database.
+   * @param  aggregatedEvents - An array of aggregated events to upsert.
+   * @param  totalCount - The total count of events to be updated.
+   * @returns A Promise that resolves when the upsert is completed.
    */
-  upsertEventCount = async (
-    status: string,
-    fromChain: string,
-    toChain: string,
-    eventCount: number,
-    maxHeight: number,
-  ) => {
-    this.logger.debug(
-      `Upserting event count for ${status}, ${fromChain} -> ${toChain}: ${eventCount}`,
-    );
-    const result = await this.eventCountRepo.upsert(
-      {
-        status,
-        fromChain,
-        toChain,
-        eventCount,
-        lastProcessedHeight: maxHeight,
-      },
-      ['status', 'fromChain', 'toChain'],
-    );
-    this.logger.debug('Event count upserted successfully');
-    return result;
+  upsertEventsCount = async (
+    aggregatedEvents: AggregatedEvents[],
+    totalCount: number,
+  ): Promise<void> => {
+    const queryRunner =
+      this.eventCountRepo.manager.connection.createQueryRunner();
+    try {
+      await queryRunner.startTransaction();
+
+      const eventCountRepo =
+        queryRunner.manager.getRepository(EventCountEntity);
+      const metricRepo = queryRunner.manager.getRepository(MetricEntity);
+
+      for (const row of aggregatedEvents) {
+        await eventCountRepo.upsert(
+          {
+            status: row.status,
+            fromChain: row.fromChain,
+            toChain: row.toChain,
+            eventCount: row.eventCount,
+            lastProcessedHeight: row.maxHeight,
+          },
+          ['status', 'fromChain', 'toChain'],
+        );
+      }
+
+      await metricRepo.upsert(
+        {
+          key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+          value: totalCount.toString(),
+          updatedAt: Math.floor(Date.now() / 1000),
+        },
+        ['key'],
+      );
+
+      await queryRunner.commitTransaction();
+      this.logger.debug('Transaction committed successfully');
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      this.logger.debug(`Transaction rolled back due to error: ${error}`);
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
   };
 }
