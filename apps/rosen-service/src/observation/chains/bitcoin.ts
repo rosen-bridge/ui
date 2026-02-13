@@ -1,13 +1,13 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { BitcoinRpcObservationExtractor } from '@rosen-bridge/bitcoin-observation-extractor';
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner
@@ -19,7 +19,7 @@ export const registerBitcoinExtractor = async (scanner: BitcoinRpcScanner) => {
       config.bitcoin.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger,
+      logger.child('bitcoinObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

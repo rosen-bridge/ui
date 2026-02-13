@@ -1,8 +1,8 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
@@ -11,7 +11,7 @@ import { TransactionResponse } from 'ethers';
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * Initializes and configures an Ethereum scanner instance.
@@ -29,7 +29,7 @@ export const buildEthereumEvmScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<TransactionResponse>(
       new FailoverStrategy(),
-      logger,
+      logger.child('ethereumScannerLogger'),
     );
   configs.chains.ethereum.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -41,9 +41,7 @@ export const buildEthereumEvmScannerWithExtractors = async (
     initialHeight: configs.chains.ethereum.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ethereum.blockRetrieveGap,
-    logger: CallbackLoggerFactory.getInstance().getLogger(
-      'ethereum-scanner-logger',
-    ),
+    logger: logger.child('ethereumScannerLogger'),
   });
 
   try {
@@ -53,9 +51,7 @@ export const buildEthereumEvmScannerWithExtractors = async (
       configs.contracts.ethereum.addresses.lock,
       dataSource,
       tokenMap,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'ethereum-observation-extractor',
-      ),
+      logger.child('ethereumObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

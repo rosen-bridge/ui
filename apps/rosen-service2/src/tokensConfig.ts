@@ -1,5 +1,5 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { TokenMap } from '@rosen-bridge/tokens';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
 import fs from 'node:fs';
 import path from 'node:path';
 

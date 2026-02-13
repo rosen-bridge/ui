@@ -6,11 +6,12 @@ import { TokenEntity } from './TokenEntity';
 
 class TokenModel {
   protected readonly tokenRepository: Repository<TokenEntity>;
-  protected readonly logger: AbstractLogger;
 
-  constructor(dataSource: DataSource, logger = new DummyLogger()) {
+  constructor(
+    dataSource: DataSource,
+    protected logger: AbstractLogger = new DummyLogger(),
+  ) {
     this.tokenRepository = dataSource.getRepository(TokenEntity);
-    this.logger = logger;
   }
 
   /**

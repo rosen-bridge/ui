@@ -1,3 +1,4 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   RoundRobinStrategy,
   NetworkConnectorManager,
@@ -7,7 +8,6 @@ import {
   DogeRpcScanner,
   DogeRpcTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import config from '../../configs';
 import {
@@ -20,10 +20,8 @@ import AppError from '../../errors/AppError';
 import observationService from '../../observation/observation-service';
 import { startScanner } from '../scanner-utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
-const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
-  DOGE_SCANNER_LOGGER_NAME,
-);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
+const scannerLogger = logger.child(DOGE_SCANNER_LOGGER_NAME);
 
 /**
  * Creates and configures a NetworkConnectorManager instance for Doge RPC scanner
