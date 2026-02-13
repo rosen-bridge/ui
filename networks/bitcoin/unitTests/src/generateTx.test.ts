@@ -125,7 +125,7 @@ describe('generateUnsignedTx', () => {
 
     await tokenMap.updateConfigByJson(multiDecimalTokenMap);
 
-    const chain = tokenMap.getAllChains()[0] as Network;
+    const chain = tokenMap.getAllChains()[1] as Network;
 
     const token = tokenMap.search(chain, {})[0][chain];
 

@@ -20,10 +20,10 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/ergo-box-selection": "^2.0.1",
+    "@rosen-bridge/ergo-box-selection": "^2.1.1",
     "@rosen-bridge/icons": "^3.3.0",
-    "@rosen-bridge/tokens": "^4.0.1",
-    "@rosen-clients/ergo-explorer": "^2.1.0",
+    "@rosen-bridge/tokens": "^6.0.0",
+    "@rosen-clients/ergo-explorer": "^2.1.1",
     "@rosen-network/base": "^0.5.1",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/types": "^0.4.0",

@@ -52,6 +52,20 @@ export const Picker = ({
     );
   }, [query, value]);
 
+  const apply = useCallback(() => {
+    switch (value?.type) {
+      case 'multiple': {
+        setItems(new Set());
+
+        const next = Array.from(items.values());
+
+        onSelect?.(next);
+
+        break;
+      }
+    }
+  }, [items, value, onSelect]);
+
   const handleClick = useCallback(
     (option: SelectOption) => {
       switch (value?.type) {
@@ -83,19 +97,9 @@ export const Picker = ({
   );
 
   const handleFocusOut = useCallback(() => {
-    switch (value?.type) {
-      case 'multiple': {
-        setItems(new Set());
-
-        const next = Array.from(items.values());
-
-        onSelect?.(next);
-
-        break;
-      }
-    }
+    apply();
     onClose?.();
-  }, [items, value, onClose, onSelect]);
+  }, [apply, onClose]);
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
@@ -112,6 +116,11 @@ export const Picker = ({
       const key = event.key + ':' + value.type;
 
       switch (key) {
+        case 'ArrowLeft:multiple':
+        case 'ArrowRight:multiple': {
+          apply();
+          break;
+        }
         case 'ArrowDown:multiple':
         case 'ArrowDown:select': {
           setIndexSelected(
@@ -128,22 +137,26 @@ export const Picker = ({
         }
         case 'Enter:multiple':
         case 'Enter:select': {
-          if (indexSelected != -1) {
-            handleClick(options[indexSelected]);
-          }
+          if (indexSelected === -1) break;
+          event.stopPropagation();
+          handleClick(options[indexSelected]);
           break;
         }
         case 'Enter:number': {
-          query && !isNaN(Number(query)) && onSelect?.(Number(query));
+          if (!query || isNaN(Number(query))) break;
+          event.stopPropagation();
+          onSelect?.(Number(query));
           break;
         }
         case 'Enter:text': {
-          query && onSelect?.(query);
+          if (!query) break;
+          event.stopPropagation();
+          onSelect?.(query);
           break;
         }
       }
     },
-    [indexSelected, options, query, value, handleClick, onSelect],
+    [indexSelected, options, query, value, apply, handleClick, onSelect],
   );
 
   useEffect(() => {

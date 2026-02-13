@@ -1,6 +1,4 @@
-import { Route } from 'next';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 
 import {
   BitcoinCircle,
@@ -23,10 +21,6 @@ import { VersionConfig } from './VersionConfig';
  * render sidebar log and navigation buttons
  */
 export const SideBar = () => {
-  const pathname = usePathname();
-
-  const router = useRouter();
-
   return (
     <AppBar
       logo={
@@ -36,10 +30,7 @@ export const SideBar = () => {
       }
       versions={<VersionConfig />}
       navigationBar={
-        <NavigationBar
-          isActive={(path) => pathname === path}
-          onClick={(path) => router.push(path as Route)}
-        >
+        <NavigationBar>
           <NavigationButton icon={<Dashboard />} label="Dashboard" path="/" />
           <NavigationButton
             icon={<Heartbeat />}

@@ -29,7 +29,6 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@mui/lab": "^7.0.1-beta.20",
     "@mui/material": "^7.3.6",
     "@rosen-bridge/icons": "^3.3.0",
     "@rosen-ui/constants": "^1.0.0",

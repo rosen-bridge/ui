@@ -34,7 +34,7 @@
     "vitest": "^3.1.4"
   },
   "dependencies": {
-    "@rosen-bridge/abstract-logger": "^3.0.1",
+    "@rosen-bridge/abstract-logger": "^4.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/watcher-data-extractor": "^12.3.0",
     "@rosen-ui/asset-calculator": "^2.3.0"

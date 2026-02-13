@@ -1,5 +1,4 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   Dependency,
@@ -21,14 +20,13 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
-import { ERG_TOTAL_SUPPLY } from '../constants';
+import { ERG_TOTAL_SUPPLY, TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
 import { ChainChoices, Chains, TotalSupply } from '../types';
 import { DBService } from './db';
 
 export class AssetDataAdapterService extends PeriodicTaskService {
   name = 'AssetDataAdapterService';
-  taskName = 'AssetDataAdapterService';
   private static instance: AssetDataAdapterService;
   readonly dbService: DBService;
   readonly redis;
@@ -120,7 +118,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
           },
-          CallbackLoggerFactory.getInstance().getLogger(`ergo-data-adapter`),
+          this.logger.child(`ergoDataAdapter`),
         );
       case NETWORKS.bitcoin.key:
         return new BitcoinEsploraDataAdapter(
@@ -129,7 +127,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
           },
-          CallbackLoggerFactory.getInstance().getLogger('bitcoin-data-adapter'),
+          this.logger.child('bitcoinDataAdapter'),
         );
       case NETWORKS.ethereum.key:
         return new EthereumEvmRpcDataAdapter(
@@ -140,9 +138,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
             authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
           },
           configs.chains.ethereum.adapter.chunkSize,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'ethereum-data-adapter',
-          ),
+          this.logger.child('ethereumDataAdapter'),
         );
       case NETWORKS.binance.key:
         return new BinanceEvmRpcDataAdapter(
@@ -153,7 +149,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
             authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
           },
           configs.chains.binance.adapter.chunkSize,
-          CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
+          this.logger.child('binanceDataAdapter'),
         );
       case NETWORKS.cardano.key:
         return new CardanoKoiosDataAdapter(
@@ -165,7 +161,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
               .at(0)!
               .authToken!.toString(),
           },
-          CallbackLoggerFactory.getInstance().getLogger('cardano-data-adapter'),
+          this.logger.child('cardanoDataAdapter'),
         );
       case NETWORKS.doge.key:
         return new DogeBlockCypherDataAdapter(
@@ -174,7 +170,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
           },
-          CallbackLoggerFactory.getInstance().getLogger('doge-data-adapter'),
+          this.logger.child('dogeDataAdapter'),
         );
     }
 
@@ -296,7 +292,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set('total_supply', JsonBigInt.stringify(assets));
+    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, JsonBigInt.stringify(assets));
   };
 
   /**

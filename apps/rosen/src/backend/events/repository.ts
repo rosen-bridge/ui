@@ -1,5 +1,6 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
+import { In } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   Filters,
@@ -62,24 +63,28 @@ export const getEvents = async (filters: Filters) => {
 
     field.key = 'sourceChainTokenId';
 
-    const token = await tokenRepository.findOne({
+    const originalTokenIds = [field.value].flat();
+
+    const originalTokens = await tokenRepository.find({
       where: {
-        id: field.value as string,
+        id: In(originalTokenIds),
       },
     });
 
-    if (!token) return;
+    const originalErgoSideTokenIds = originalTokens.map(
+      (token) => token.ergoSideTokenId,
+    );
 
-    const tokens = await tokenRepository.find({
+    const ergoSideTokens = await tokenRepository.find({
       select: ['id'],
       where: {
-        ergoSideTokenId: token.ergoSideTokenId,
+        ergoSideTokenId: In(originalErgoSideTokenIds),
       },
     });
 
-    const tokenIds = tokens.map((token) => token.id);
+    const ergoSideTokenIds = ergoSideTokens.map((token) => token.id);
 
-    field.value = tokenIds;
+    field.value = ergoSideTokenIds;
   })();
 
   const statusIndex =

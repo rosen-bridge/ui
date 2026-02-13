@@ -1,7 +1,7 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { BitcoinRunesRpcObservationExtractor } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import { UnisatRunesProtocolNetwork } from '@rosen-bridge/bitcoin-runes-observation-extractor';
 import { BitcoinRpcScanner } from '@rosen-bridge/bitcoin-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { RateLimitedAxiosConfig } from '@rosen-clients/rate-limited-axios';
 
 import config from '../../configs';
@@ -9,7 +9,7 @@ import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner
@@ -23,9 +23,7 @@ export const registerBitcoinRunesExtractor = async (
     const observationNetwork = new UnisatRunesProtocolNetwork(
       config.bitcoinRunes.unisatUrl,
       config.bitcoinRunes.unisatApiKey,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'UnisatRunesProtocolNetwork',
-      ),
+      logger.child('bitcoinRunesUnisatObservationExtractor'),
     );
     RateLimitedAxiosConfig.addRule(
       config.bitcoinRunes.unisatUrl,
@@ -40,7 +38,7 @@ export const registerBitcoinRunesExtractor = async (
       observationNetwork,
       dataSource,
       await getTokenMap(),
-      logger,
+      logger.child('bitcoinRunesRpcObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

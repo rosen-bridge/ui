@@ -1,5 +1,5 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { GeneralScanner } from '@rosen-bridge/abstract-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 
 import AppError from '../errors/AppError';
 import { handleError, runAndSetInterval } from '../utils';
@@ -15,7 +15,7 @@ export const startScanner = async (
   loggerFileName: string,
   updateInterval: number,
 ) => {
-  const logger = CallbackLoggerFactory.getInstance().getLogger(loggerFileName);
+  const logger = DefaultLogger.getInstance().child(loggerFileName);
 
   const tryUpdating = async () => {
     try {

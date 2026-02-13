@@ -1,5 +1,6 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
+import { AssetAggregatorService } from 'services/assetAggregator';
 
 import dataSource from './data-source';
 import { AssetDataAdapterService } from './services/assetDataAdapters';
@@ -8,7 +9,7 @@ import { HealthService } from './services/healthCheck';
 import { ScannerService } from './services/scanner';
 import { TokensConfig } from './tokensConfig';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * Main function for running the Rosen-Service2
@@ -17,46 +18,44 @@ const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
  */
 const startApp = async () => {
   const serviceManager = ServiceManager.setup(
-    CallbackLoggerFactory.getInstance().getLogger('service-manager'),
+    DefaultLogger.getInstance().child('serviceManager'),
   );
 
   logger.debug('Initializing tokens config instance');
-  TokensConfig.init(
-    CallbackLoggerFactory.getInstance().getLogger('token-map-config'),
-  );
+  TokensConfig.init(DefaultLogger.getInstance().child('tokenMapConfig'));
 
   logger.debug('Initializing database service');
-  DBService.init(
-    dataSource,
-    CallbackLoggerFactory.getInstance().getLogger('db-service'),
-  );
+  DBService.init(dataSource, DefaultLogger.getInstance().child('dbService'));
   serviceManager.register(DBService.getInstance());
   logger.debug('Database service registered to the service manager');
 
   logger.debug('Initializing scanner service');
-  ScannerService.init(
-    CallbackLoggerFactory.getInstance().getLogger('ergo-scanner-service'),
-  );
+  ScannerService.init(DefaultLogger.getInstance().child('ergoScannerService'));
   serviceManager.register(ScannerService.getInstance());
   logger.debug('Scanner service registered to the service manager');
 
   logger.debug('Initializing asset-data-adapter service');
   AssetDataAdapterService.init(
-    CallbackLoggerFactory.getInstance().getLogger('asset-data-adapter-service'),
+    DefaultLogger.getInstance().child('assetDataAdapterService'),
   );
   serviceManager.register(AssetDataAdapterService.getInstance());
   logger.debug('asset-data-adapter Service registered to the service manager');
 
-  logger.debug('Initializing health-check service');
-  HealthService.init(
-    CallbackLoggerFactory.getInstance().getLogger('health-check-service'),
+  logger.debug('Initializing asset-aggregator service');
+  AssetAggregatorService.init(
+    DefaultLogger.getInstance().child('assetAggregatorService'),
   );
+  serviceManager.register(AssetAggregatorService.getInstance());
+  logger.debug('asset-aggregator Service registered to the service manager');
+
+  logger.debug('Initializing health-check service');
+  HealthService.init(DefaultLogger.getInstance().child('healthCheckService'));
   serviceManager.register(HealthService.getInstance());
   logger.debug('Health Service registered to the service manager');
 
   logger.info('Starting service manager...');
   serviceManager.start(HealthService.getInstance().getName());
-  serviceManager.start(AssetDataAdapterService.getInstance().getName());
+  serviceManager.start(AssetAggregatorService.getInstance().getName());
 
   await Promise.resolve(() => {});
 };

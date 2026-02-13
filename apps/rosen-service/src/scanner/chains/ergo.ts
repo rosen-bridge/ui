@@ -1,8 +1,8 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoScanner, ErgoExplorerNetwork } from '@rosen-bridge/ergo-scanner';
 import { Transaction } from '@rosen-bridge/scanner-interfaces';
 
@@ -16,12 +16,10 @@ import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import eventTriggerService from '../../event-trigger/event-trigger-service';
 import observationService from '../../observation/observation-service';
-import { startScanner } from '../../scanner/scanner-utils';
+import { startScanner } from '../scanner-utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
-const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
-  ERGO_SCANNER_LOGGER_NAME,
-);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
+const scannerLogger = logger.child(ERGO_SCANNER_LOGGER_NAME);
 
 /**
  * Creates and configures a NetworkConnectorManager instance for Ergo node

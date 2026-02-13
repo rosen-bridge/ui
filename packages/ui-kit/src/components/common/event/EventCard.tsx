@@ -32,7 +32,7 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
 
 const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
   (props, ref) => {
-    const { active, isLoading, value, onClick } = props;
+    const { active, isLoading, value, onClick, ...rest } = props;
     return (
       <Card
         active={active}
@@ -40,6 +40,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
         clickable
         ref={ref}
         onClick={onClick}
+        {...rest}
       >
         <CardBody>
           <Stack spacing={1}>
