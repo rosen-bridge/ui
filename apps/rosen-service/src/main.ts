@@ -1,6 +1,6 @@
 import './bootstrap';
 
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 
 import calculatorService from './calculator/calculator-service';
 import dataSource from './data-source';
@@ -9,7 +9,7 @@ import healthCheckService from './health-check/health-check-service';
 import scannerService from './scanner/scanner-service';
 import { handleError } from './utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 const main = async () => {
   try {
