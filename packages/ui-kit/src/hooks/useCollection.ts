@@ -160,7 +160,9 @@ export const useCollection = (options?: Options) => {
 
     if (!Object.keys(params).length) return;
 
-    return new URLSearchParams(params).toString();
+    return Object.keys(params)
+      .map((key) => `${key}=${params[key]}`)
+      .join('&');
   }, [fields, pageIndex, pageSize, sort]);
 
   useEffect(() => {
@@ -200,6 +202,27 @@ export const useCollection = (options?: Options) => {
     setPageSize(size);
     setPageIndex(0);
   }, []);
+
+  const scrollIntoView = useCallback(() => {
+    if (!fragment) return;
+
+    const element = document.getElementById(fragment);
+
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+
+    const inViewport =
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+
+    if (inViewport) return;
+
+    element.scrollIntoView({ behavior: 'smooth' });
+  }, [fragment]);
 
   useEffect(() => {
     if (syncing.current) return;
@@ -245,8 +268,24 @@ export const useCollection = (options?: Options) => {
     framework.router.push(url);
   }, [query, fragment, framework.router]);
 
+  useEffect(() => {
+    const update = () => {
+      const fragment = window.location.hash.replace('#', '');
+
+      setFragment(fragment);
+    };
+
+    window.addEventListener('hashchange', update);
+
+    return () => window.removeEventListener('hashchange', update);
+  }, []);
+
+  useEffect(scrollIntoView, [scrollIntoView]);
+
   return {
     query,
+
+    scrollIntoView,
 
     fields,
     setFields: handleFieldsChange,

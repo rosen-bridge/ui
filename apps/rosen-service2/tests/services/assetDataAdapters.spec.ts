@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DummyLogger } from '@rosen-bridge/abstract-logger';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { TokenMap } from '@rosen-bridge/tokens';
 import { TokenEntity } from '@rosen-ui/asset-aggregator';
 import { NETWORKS } from '@rosen-ui/constants';
 import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';

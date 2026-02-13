@@ -1,41 +1,25 @@
-image: node:22.18.0
+image: $GITLAB_CI_IMAGE
 
 default:
   interruptible: true
 
-stages:
-  - installation
-  - build
-  - triggers
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE =~ /push/'
+      when: always
+    - when: never
 
-variables:
-  npm_config_cache: '${CI_PROJECT_DIR}/.npm'
-  NPM_VERSION: '11.6.2'
+include:
+  - component: $CI_SERVER_FQDN/${ROOT_COMPONENT}
 
-before_script:
-  - npm i -g npm@${NPM_VERSION}
-
-installation:
-  stage: installation
-  cache:
-    key: ${CI_COMMIT_REF_NAME}
-    policy: push
-    paths:
-      - node_modules
-      - apps/*/node_modules
-      - packages/*/node_modules
-      - networks/*/node_modules
-      - wallets/*/node_modules
-      - .npm
-  script:
-    - npm ci
-
-build:
-  stage: build
-  cache:
-    - key: ${CI_COMMIT_REF_NAME}
-      policy: pull-push
-      paths:
+    inputs:
+      install_cache_paths:
+        - node_modules
+        - apps/*/node_modules
+        - packages/*/node_modules
+        - networks/*/node_modules
+        - wallets/*/node_modules
+      build_cache_paths:
         - node_modules
         - apps/*/node_modules
         - networks/*/node_modules
@@ -44,13 +28,6 @@ build:
         - packages/*/dist
         - wallets/*/node_modules
         - wallets/*/dist
-        - .npm
-  script:
-    - npm run build:mono-packages
-
-run_ci:
-  stage: triggers
-  trigger:
-    include:
-      - local: .gitlab/workflows/ci.yml
-    strategy: mirror
+      build_script: 
+        - npm run build:mono-packages
+      enable_ci_child: true

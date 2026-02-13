@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { CommitmentExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
@@ -9,7 +9,7 @@ import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 import { getTokenMap } from '../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 /**
  * register commitment extractors for all chains
  * @param scanner
@@ -25,9 +25,7 @@ export const registerExtractors = async (scanner: ErgoScanner) => {
         configs[chain].tokens.rwt,
         dataSource,
         await getTokenMap(),
-        CallbackLoggerFactory.getInstance().getLogger(
-          `${chain}-commitment-extractor`,
-        ),
+        logger.child(`${chain}CommitmentExtractor`),
       );
       await scanner.registerExtractor(commitmentExtractor);
     }

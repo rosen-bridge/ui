@@ -1,3 +1,4 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
@@ -14,13 +15,12 @@ import {
   BitcoinRpcTransaction,
   BitcoinEsploraTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * Initializes and configures a Bitcoin RPC scanner instance.
@@ -38,7 +38,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinRpcTransaction>(
       new FailoverStrategy(),
-      logger,
+      logger.child('bitcoinRpcScannerLogger'),
     );
   configs.chains.bitcoin.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -59,9 +59,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    logger: CallbackLoggerFactory.getInstance().getLogger(
-      'bitcoin-scanner-logger',
-    ),
+    logger: logger.child('bitcoinRpcScannerLogger'),
   });
 
   try {
@@ -72,9 +70,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
       configs.contracts.bitcoin.addresses.lock,
       dataSource,
       tokenMap,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'bitcoin-observation-extractor',
-      ),
+      logger.child('bitcoinRpcObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');
@@ -109,7 +105,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinEsploraTransaction>(
       new FailoverStrategy(),
-      logger,
+      logger.child('bitcoinEsploraScannerLogger'),
     );
   configs.chains.bitcoin.esplora.connections.forEach((esplora) => {
     networkConnectorManager.addConnector(
@@ -125,9 +121,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    logger: CallbackLoggerFactory.getInstance().getLogger(
-      'bitcoin-scanner-logger',
-    ),
+    logger: logger.child('bitcoinEsploraScannerLogger'),
   });
 
   try {
@@ -138,9 +132,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
       configs.contracts.bitcoin.addresses.lock,
       dataSource,
       tokenMap,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'bitcoin-observation-extractor',
-      ),
+      logger.child('bitcoinEsploraObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');

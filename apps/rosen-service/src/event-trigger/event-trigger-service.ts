@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { ErgoNetworkType } from '@rosen-bridge/scanner-interfaces';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
@@ -7,31 +7,28 @@ import configs from '../configs';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
-const ergoEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger('ergo-event-trigger-extractor');
-const cardanoEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger(
-    'cardano-event-trigger-extractor',
-  );
-const bitcoinEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger(
-    'bitcoin-event-trigger-extractor',
-  );
-const bitcoinRunesEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger(
-    'bitcoin-runes-event-trigger-extractor',
-  );
-const ethereumEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger(
-    'ethereum-event-trigger-extractor',
-  );
-const binanceEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger(
-    'binance-event-trigger-extractor',
-  );
-const dogeEventTriggerExtractorLogger =
-  CallbackLoggerFactory.getInstance().getLogger('doge-event-trigger-extractor');
+const logger = DefaultLogger.getInstance().child(import.meta.url);
+const ergoEventTriggerExtractorLogger = logger.child(
+  'ergoEventTriggerExtractor',
+);
+const cardanoEventTriggerExtractorLogger = logger.child(
+  'cardanoEventTriggerExtractor',
+);
+const bitcoinEventTriggerExtractorLogger = logger.child(
+  'bitcoinEventTriggerExtractor',
+);
+const bitcoinRunesEventTriggerExtractorLogger = logger.child(
+  'bitcoinRunesEventTriggerExtractor',
+);
+const ethereumEventTriggerExtractorLogger = logger.child(
+  'ethereumEventTriggerExtractor',
+);
+const binanceEventTriggerExtractorLogger = logger.child(
+  'binanceEventTriggerExtractor',
+);
+const dogeEventTriggerExtractorLogger = logger.child(
+  'dogeEventTriggerExtractor',
+);
 
 /**
  * register event trigger extractors for all chains
