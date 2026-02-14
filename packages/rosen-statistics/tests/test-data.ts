@@ -299,6 +299,13 @@ export const eventCountTestData = {
         spendHeight: 95,
         result: 'successful' as const,
       }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 105,
+        result: 'successful' as const,
+      }),
     ],
     eventCountRepo: [
       {
@@ -322,11 +329,11 @@ export const eventCountTestData = {
           status: 'successful',
           fromChain: 'ergo',
           toChain: 'cardano',
-          eventCount: 5,
-          lastProcessedHeight: 100,
+          eventCount: 6,
+          lastProcessedHeight: 105,
         },
       ],
-      totalMetricValue: '5',
+      totalMetricValue: '6',
     },
   },
 

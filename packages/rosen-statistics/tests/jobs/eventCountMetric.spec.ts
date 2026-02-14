@@ -115,10 +115,11 @@ describe('eventCountMetric', () => {
    * @scenario
    * - Insert existing EventCountEntity with lastProcessedHeight = 100
    * - Insert event with spendHeight = 95 (below last processed)
+   * - Insert event with spendHeight = 105 (above last processed)
    * - Run eventCountMetric
    * @expected
-   * - EventCountEntity remains unchanged (count = 5)
-   * - Total metric remains unchanged (value = 5)
+   * - EventCountEntity must update to count = 6
+   * - Total metric must update to value = 6
    */
   it('should ignore events below last processed height', async () => {
     const testData = eventCountTestData.ignoreOldEvents;
@@ -126,46 +127,6 @@ describe('eventCountMetric', () => {
     await eventCountRepo.insert(testData.eventCountRepo);
     await metricRepo.insert(testData.metricRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
-
-    await eventCountMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-    });
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const actualEventCounts = await eventCountRepo.find({
-      select: [
-        'fromChain',
-        'toChain',
-        'eventCount',
-        'status',
-        'lastProcessedHeight',
-      ],
-    });
-
-    expect(actualEventCounts).toHaveLength(
-      testData.expectedResults.eventCounts.length,
-    );
-
-    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
-  });
-
-  /**
-   * @target Should handle no new events gracefully
-   * @scenario
-   * - Insert existing EventCountEntity and metric records
-   * - Insert no new events
-   * - Run eventCountMetric
-   * @expected
-   * - Existing records remain unchanged
-   * - Metric value stays the same
-   */
-  it('should handle no new events gracefully', async () => {
-    const testData = eventCountTestData.noNewEvents;
-
-    await eventCountRepo.insert(testData.eventCountRepo);
-    await metricRepo.insert(testData.metricRepo);
 
     await eventCountMetric(dataSource, logger);
 

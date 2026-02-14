@@ -77,7 +77,7 @@ export const eventCountMetricActionTestData = {
    * - Multiple groups with different statuses
    */
   getAggregatedEventsMultipleGroups: {
-    lastHeight: 100,
+    lastProcessedHeight: 100,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
@@ -104,7 +104,7 @@ export const eventCountMetricActionTestData = {
         eventId: 'event4',
         fromChain: 'ergo',
         toChain: 'cardano',
-        spendHeight: 90, // Below lastHeight - should be ignored
+        spendHeight: 90, // Below lastProcessedHeight - should be ignored
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -145,7 +145,7 @@ export const eventCountMetricActionTestData = {
    * - No new events since last height
    */
   getAggregatedEventsNoNewEvents: {
-    lastHeight: 200,
+    lastProcessedHeight: 200,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
@@ -169,7 +169,7 @@ export const eventCountMetricActionTestData = {
    * - Multiple events in same group
    */
   getAggregatedEventsSameGroup: {
-    lastHeight: 100,
+    lastProcessedHeight: 100,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
