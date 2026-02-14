@@ -1,7 +1,7 @@
-export type eventCountStatus = 'successful' | 'fraud';
+export type EventCountStatus = 'successful' | 'fraud';
 
 export interface AggregatedEvents {
-  status: eventCountStatus;
+  status: EventCountStatus;
   fromChain: string;
   toChain: string;
   eventCount: number;

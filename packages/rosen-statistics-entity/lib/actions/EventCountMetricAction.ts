@@ -4,7 +4,7 @@ import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
 import { METRIC_KEYS } from '../constants';
 import { EventCountEntity, MetricEntity } from '../entities';
-import { AggregatedEvents, eventCountStatus } from '../types';
+import { AggregatedEvents, EventCountStatus } from '../types';
 
 export class EventCountMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
@@ -66,13 +66,13 @@ export class EventCountMetricAction {
   /**
    * Get existing event count for a specific group
    *
-   * @param status - eventCountStatus (successful/fraud)
+   * @param status - EventCountStatus (successful/fraud)
    * @param fromChain - Source chain
    * @param toChain - Target chain
    * @returns Promise resolving to existing event count, or 0 if no record exists
    */
   getExistingEventCount = async (
-    status: eventCountStatus,
+    status: EventCountStatus,
     fromChain: string,
     toChain: string,
   ) => {

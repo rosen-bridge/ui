@@ -1,7 +1,7 @@
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
-import { METRIC_KEYS, eventCountStatus } from '../lib';
+import { METRIC_KEYS, EventCountStatus } from '../lib';
 
 const createEventTrigger = (
   overrides: Partial<EventTriggerEntity>,
@@ -47,21 +47,21 @@ export const eventCountMetricActionTestData = {
   getLastProcessedHeightMultipleRecords: {
     eventCountRepo: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 5,
         lastProcessedHeight: 100,
       },
       {
-        status: 'fraud' as eventCountStatus,
+        status: 'fraud' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 2,
         lastProcessedHeight: 120,
       },
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'cardano',
         toChain: 'ergo',
         eventCount: 3,
@@ -209,12 +209,12 @@ export const eventCountMetricActionTestData = {
    * - Record exists
    */
   getExistingEventCountExists: {
-    status: 'successful' as eventCountStatus,
+    status: 'successful' as EventCountStatus,
     fromChain: 'ergo',
     toChain: 'cardano',
     eventCountRepo: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 10,
@@ -229,12 +229,12 @@ export const eventCountMetricActionTestData = {
    * - Record does not exist
    */
   getExistingEventCountNotExists: {
-    status: 'fraud' as eventCountStatus,
+    status: 'fraud' as EventCountStatus,
     fromChain: 'ergo',
     toChain: 'cardano',
     eventCountRepo: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 10,
@@ -251,14 +251,14 @@ export const eventCountMetricActionTestData = {
   upsertEventsCountNewGroups: {
     aggregatedEvents: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 3,
         maxHeight: 120,
       },
       {
-        status: 'fraud' as eventCountStatus,
+        status: 'fraud' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 1,
@@ -293,7 +293,7 @@ export const eventCountMetricActionTestData = {
   upsertEventsCountUpdateExisting: {
     aggregatedEvents: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 2,
@@ -303,7 +303,7 @@ export const eventCountMetricActionTestData = {
     totalCount: 7,
     existingEventCounts: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 5,
@@ -334,14 +334,14 @@ export const eventCountMetricActionTestData = {
   upsertEventsCountMixedGroups: {
     aggregatedEvents: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 3,
         maxHeight: 120,
       },
       {
-        status: 'fraud' as eventCountStatus,
+        status: 'fraud' as EventCountStatus,
         fromChain: 'cardano',
         toChain: 'ergo',
         eventCount: 2,
@@ -351,7 +351,7 @@ export const eventCountMetricActionTestData = {
     totalCount: 10,
     existingEventCounts: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 5,
@@ -391,7 +391,7 @@ export const eventCountMetricActionTestData = {
     totalCount: 5,
     existingEventCounts: [
       {
-        status: 'successful' as eventCountStatus,
+        status: 'successful' as EventCountStatus,
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 5,
