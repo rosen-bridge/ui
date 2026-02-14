@@ -106,7 +106,7 @@ describe('BridgedAssetAction', () => {
         BridgedAssetTestData.generateTestDataBridgedEntity(tokens);
       await repository.insert(bridgedEntities);
       const remaining = await repository.find();
-      await action.keepOnly([remaining[0].tokenId]);
+      await action.keepOnly(remaining[0].tokenId);
       const dbRemaining = await repository.find();
       expect(dbRemaining).toHaveLength(1);
       expect(dbRemaining[0]).toEqual(remaining[0]);
