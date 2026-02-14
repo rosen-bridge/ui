@@ -47,7 +47,7 @@ export const eventCountMetric = async (
         fromChain: row.fromChain,
         toChain: row.toChain,
         eventCount: existingCount + row.eventCount,
-        maxHeight: row.maxHeight,
+        lastProcessedHeight: row.lastProcessedHeight,
       });
     }
 

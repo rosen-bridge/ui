@@ -65,7 +65,7 @@ describe('eventCountMetric', () => {
       expect(record.toChain).toBe(expected.toChain);
       expect(record.eventCount).toBe(expected.count);
       expect(record.status).toBe(expected.status);
-      expect(record.lastProcessedHeight).toBe(expected.maxHeight);
+      expect(record.lastProcessedHeight).toBe(expected.lastProcessedHeight);
     });
   });
 

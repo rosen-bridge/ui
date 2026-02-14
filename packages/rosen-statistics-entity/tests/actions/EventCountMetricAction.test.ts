@@ -113,7 +113,7 @@ describe('EventCountMetricAction', () => {
      * - Insert 3 successful events from ergo to cardano with different spendHeights
      * - Call getAggregatedEvents with lastHeight = 100
      * @expected
-     * - Returns single group with count = 3 (as number) and maxHeight = 120
+     * - Returns single group with count = 3 (as number) and lastProcessedHeight = 120
      */
     it('should aggregate multiple events in same group into single record', async () => {
       const testData =
@@ -129,7 +129,7 @@ describe('EventCountMetricAction', () => {
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 3,
-        maxHeight: 120,
+        lastProcessedHeight: 120,
       });
     });
 
@@ -249,7 +249,7 @@ describe('EventCountMetricAction', () => {
      * @scenario
      * - Insert existing EventCountEntity with count = 5 and lastProcessedHeight = 100
      * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'
-     * - Call upsertEventsCount with aggregated event (count = 2, maxHeight = 130) and totalCount = 7
+     * - Call upsertEventsCount with aggregated event (count = 2, lastProcessedHeight = 130) and totalCount = 7
      * @expected
      * - Existing EventCountEntity is REPLACED (not added) with count = 2, height = 130
      * - MetricEntity is updated to '7'

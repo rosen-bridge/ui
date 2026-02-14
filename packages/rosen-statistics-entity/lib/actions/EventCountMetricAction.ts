@@ -49,7 +49,7 @@ export class EventCountMetricAction {
       .addSelect('et.fromChain', 'fromChain')
       .addSelect('et.toChain', 'toChain')
       .addSelect('COUNT(et.fromAddress)', 'eventCount')
-      .addSelect('MAX(et.spendHeight)', 'maxHeight')
+      .addSelect('MAX(et.spendHeight)', 'lastProcessedHeight')
       .where('et.spendHeight > :lastHeight', { lastHeight })
       .andWhere('et.result IN (:...statuses)', {
         statuses: ['successful', 'fraud'],
@@ -104,18 +104,11 @@ export class EventCountMetricAction {
         queryRunner.manager.getRepository(EventCountEntity);
       const metricRepo = queryRunner.manager.getRepository(MetricEntity);
 
-      for (const row of aggregatedEvents) {
-        await eventCountRepo.upsert(
-          {
-            status: row.status,
-            fromChain: row.fromChain,
-            toChain: row.toChain,
-            eventCount: row.eventCount,
-            lastProcessedHeight: row.maxHeight,
-          },
-          ['status', 'fromChain', 'toChain'],
-        );
-      }
+      await eventCountRepo.upsert(aggregatedEvents, [
+        'status',
+        'fromChain',
+        'toChain',
+      ]);
 
       await metricRepo.upsert(
         {
@@ -130,7 +123,7 @@ export class EventCountMetricAction {
       this.logger.debug('Transaction committed successfully');
     } catch (error) {
       await queryRunner.rollbackTransaction();
-      this.logger.debug(`Transaction rolled back due to error: ${error}`);
+      this.logger.error(`Transaction rolled back due to error: ${error}`);
       throw error;
     } finally {
       await queryRunner.release();

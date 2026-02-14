@@ -5,5 +5,5 @@ export interface AggregatedEvents {
   fromChain: string;
   toChain: string;
   eventCount: number;
-  maxHeight: number;
+  lastProcessedHeight: number;
 }
