@@ -52,21 +52,20 @@ describe('eventCountMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualEventCounts = await eventCountRepo.find({
-      order: { status: 'ASC', fromChain: 'ASC', toChain: 'ASC' },
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
     });
 
     expect(actualEventCounts).toHaveLength(
       testData.expectedResults.eventCounts.length,
     );
 
-    actualEventCounts.forEach((record, index) => {
-      const expected = testData.expectedResults.eventCounts[index];
-      expect(record.fromChain).toBe(expected.fromChain);
-      expect(record.toChain).toBe(expected.toChain);
-      expect(record.eventCount).toBe(expected.count);
-      expect(record.status).toBe(expected.status);
-      expect(record.lastProcessedHeight).toBe(expected.lastProcessedHeight);
-    });
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
@@ -95,17 +94,20 @@ describe('eventCountMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualEventCounts = await eventCountRepo.find({
-      order: { status: 'ASC', fromChain: 'ASC', toChain: 'ASC' },
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
     });
 
     expect(actualEventCounts).toHaveLength(
       testData.expectedResults.eventCounts.length,
     );
 
-    actualEventCounts.forEach((record, index) => {
-      const expected = testData.expectedResults.eventCounts[index];
-      expect(record.eventCount).toBe(expected.count);
-    });
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
@@ -132,11 +134,21 @@ describe('eventCountMetric', () => {
     });
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    const records = await eventCountRepo.find();
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
 
-    expect(records.length).toBe(1);
-    expect(records[0]?.eventCount).toBe(5);
-    expect(records[0]?.lastProcessedHeight).toBe(100);
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
@@ -162,10 +174,21 @@ describe('eventCountMetric', () => {
     });
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    const records = await eventCountRepo.find();
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
 
-    expect(records.length).toBe(1);
-    expect(records[0]?.eventCount).toBe(5);
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
@@ -189,9 +212,20 @@ describe('eventCountMetric', () => {
     });
     expect(metric?.value).toBe('2');
 
-    const records = await eventCountRepo.find();
-    expect(records).toHaveLength(1);
-    expect(records[0].status).toBe('successful');
-    expect(records[0].eventCount).toBe(2);
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
+
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 });

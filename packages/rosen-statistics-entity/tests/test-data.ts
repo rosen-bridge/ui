@@ -117,13 +117,6 @@ export const eventCountMetricActionTestData = {
     ],
     expectedAggregated: [
       {
-        status: 'successful',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        eventCount: 1,
-        lastProcessedHeight: 110,
-      },
-      {
         status: 'fraud',
         fromChain: 'ergo',
         toChain: 'cardano',
@@ -136,6 +129,13 @@ export const eventCountMetricActionTestData = {
         toChain: 'ergo',
         eventCount: 1,
         lastProcessedHeight: 112,
+      },
+      {
+        status: 'successful',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 1,
+        lastProcessedHeight: 110,
       },
     ],
   },
@@ -269,18 +269,18 @@ export const eventCountMetricActionTestData = {
     existingMetric: null,
     expectedEventCounts: [
       {
-        status: 'fraud',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        eventCount: 1,
-        lastProcessedHeight: 115,
-      },
-      {
         status: 'successful',
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 3,
         lastProcessedHeight: 120,
+      },
+      {
+        status: 'fraud',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 1,
+        lastProcessedHeight: 115,
       },
     ],
     expectedMetricValue: '4',
@@ -365,18 +365,18 @@ export const eventCountMetricActionTestData = {
     },
     expectedEventCounts: [
       {
-        status: 'fraud',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        eventCount: 2,
-        lastProcessedHeight: 115,
-      },
-      {
         status: 'successful',
         fromChain: 'ergo',
         toChain: 'cardano',
         eventCount: 3,
         lastProcessedHeight: 120,
+      },
+      {
+        status: 'fraud',
+        fromChain: 'cardano',
+        toChain: 'ergo',
+        eventCount: 2,
+        lastProcessedHeight: 115,
       },
     ],
     expectedMetricValue: '10',

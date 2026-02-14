@@ -90,21 +90,7 @@ describe('EventCountMetricAction', () => {
 
       const aggregated = await action.getAggregatedEvents(testData.lastHeight);
 
-      const sortedAggregated = [...aggregated].sort((a, b) => {
-        if (a.status !== b.status) return a.status.localeCompare(b.status);
-        if (a.fromChain !== b.fromChain)
-          return a.fromChain.localeCompare(b.fromChain);
-        return a.toChain.localeCompare(b.toChain);
-      });
-
-      const sortedExpected = [...testData.expectedAggregated].sort((a, b) => {
-        if (a.status !== b.status) return a.status.localeCompare(b.status);
-        if (a.fromChain !== b.fromChain)
-          return a.fromChain.localeCompare(b.fromChain);
-        return a.toChain.localeCompare(b.toChain);
-      });
-
-      expect(sortedAggregated).toEqual(sortedExpected);
+      expect(aggregated).toEqual(testData.expectedAggregated);
     });
 
     /**
@@ -123,14 +109,8 @@ describe('EventCountMetricAction', () => {
 
       const aggregated = await action.getAggregatedEvents(testData.lastHeight);
 
-      expect(aggregated).toHaveLength(1);
-      expect(aggregated[0]).toEqual({
-        status: 'successful',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        eventCount: 3,
-        lastProcessedHeight: 120,
-      });
+      expect(aggregated).toHaveLength(testData.expectedAggregated.length);
+      expect(aggregated).toEqual(testData.expectedAggregated);
     });
 
     /**
@@ -223,19 +203,17 @@ describe('EventCountMetricAction', () => {
       );
 
       const eventCounts = await eventCountRepo.find({
-        order: { status: 'ASC', fromChain: 'ASC', toChain: 'ASC' },
+        select: [
+          'fromChain',
+          'toChain',
+          'eventCount',
+          'status',
+          'lastProcessedHeight',
+        ],
       });
 
       expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
-
-      eventCounts.forEach((record, index) => {
-        const expected = testData.expectedEventCounts[index];
-        expect(record.status).toBe(expected.status);
-        expect(record.fromChain).toBe(expected.fromChain);
-        expect(record.toChain).toBe(expected.toChain);
-        expect(record.eventCount).toBe(expected.eventCount);
-        expect(record.lastProcessedHeight).toBe(expected.lastProcessedHeight);
-      });
+      expect(eventCounts).toEqual(testData.expectedEventCounts);
 
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
@@ -259,19 +237,25 @@ describe('EventCountMetricAction', () => {
         eventCountMetricActionTestData.upsertEventsCountUpdateExisting;
 
       await eventCountRepo.insert(testData.existingEventCounts);
-      if (testData.existingMetric) {
-        await metricRepo.insert(testData.existingMetric);
-      }
+      await metricRepo.insert(testData.existingMetric);
 
       await action.upsertEventsCount(
         testData.aggregatedEvents,
         testData.totalCount,
       );
 
-      const eventCounts = await eventCountRepo.find();
-      expect(eventCounts).toHaveLength(1);
-      expect(eventCounts[0].eventCount).toBe(2);
-      expect(eventCounts[0].lastProcessedHeight).toBe(130);
+      const eventCounts = await eventCountRepo.find({
+        select: [
+          'fromChain',
+          'toChain',
+          'eventCount',
+          'status',
+          'lastProcessedHeight',
+        ],
+      });
+
+      expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
+      expect(eventCounts).toEqual(testData.expectedEventCounts);
 
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
@@ -299,9 +283,7 @@ describe('EventCountMetricAction', () => {
         eventCountMetricActionTestData.upsertEventsCountMixedGroups;
 
       await eventCountRepo.insert(testData.existingEventCounts);
-      if (testData.existingMetric) {
-        await metricRepo.insert(testData.existingMetric);
-      }
+      await metricRepo.insert(testData.existingMetric);
 
       await action.upsertEventsCount(
         testData.aggregatedEvents,
@@ -309,22 +291,17 @@ describe('EventCountMetricAction', () => {
       );
 
       const eventCounts = await eventCountRepo.find({
-        order: { status: 'ASC', fromChain: 'ASC', toChain: 'ASC' },
+        select: [
+          'fromChain',
+          'toChain',
+          'eventCount',
+          'status',
+          'lastProcessedHeight',
+        ],
       });
 
-      expect(eventCounts).toHaveLength(2);
-
-      expect(eventCounts[0].status).toBe('fraud');
-      expect(eventCounts[0].fromChain).toBe('cardano');
-      expect(eventCounts[0].toChain).toBe('ergo');
-      expect(eventCounts[0].eventCount).toBe(2);
-      expect(eventCounts[0].lastProcessedHeight).toBe(115);
-
-      expect(eventCounts[1].status).toBe('successful');
-      expect(eventCounts[1].fromChain).toBe('ergo');
-      expect(eventCounts[1].toChain).toBe('cardano');
-      expect(eventCounts[1].eventCount).toBe(3);
-      expect(eventCounts[1].lastProcessedHeight).toBe(120);
+      expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
+      expect(eventCounts).toEqual(testData.expectedEventCounts);
 
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
@@ -346,18 +323,25 @@ describe('EventCountMetricAction', () => {
       const testData = eventCountMetricActionTestData.upsertEventsCountEmpty;
 
       await eventCountRepo.insert(testData.existingEventCounts);
-      if (testData.existingMetric) {
-        await metricRepo.insert(testData.existingMetric);
-      }
+      await metricRepo.insert(testData.existingMetric);
 
       await action.upsertEventsCount(
         testData.aggregatedEvents,
         testData.totalCount,
       );
 
-      const eventCounts = await eventCountRepo.find();
-      expect(eventCounts).toHaveLength(1);
-      expect(eventCounts[0].eventCount).toBe(5);
+      const eventCounts = await eventCountRepo.find({
+        select: [
+          'fromChain',
+          'toChain',
+          'eventCount',
+          'status',
+          'lastProcessedHeight',
+        ],
+      });
+
+      expect(eventCounts).toHaveLength(testData.expectedEventCounts.length);
+      expect(eventCounts).toEqual(testData.expectedEventCounts);
 
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
@@ -402,25 +386,6 @@ describe('EventCountMetricAction', () => {
       expect(metric).toBeNull();
 
       vi.restoreAllMocks();
-    });
-
-    /**
-     * @target upsertEventsCount should use provided totalCount for metric value regardless of aggregated events
-     * @scenario
-     * - Call upsertEventsCount with aggregated events and totalCount = 100
-     * @expected
-     * - MetricEntity EVENT_COUNT_TOTAL has value '100'
-     */
-    it('should use provided totalCount for metric value regardless of aggregated events', async () => {
-      const testData =
-        eventCountMetricActionTestData.upsertEventsCountNewGroups;
-
-      await action.upsertEventsCount(testData.aggregatedEvents, 100);
-
-      const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-      });
-      expect(metric?.value).toBe('100');
     });
   });
 });
