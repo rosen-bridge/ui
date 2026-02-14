@@ -92,37 +92,22 @@ export class AssetAggregatorService extends PeriodicTaskService {
     return [
       {
         fn: async () => {
+          const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
           await Promise.all(
             Object.keys(configs.chains).map(async (chain) => {
-              const assetBalances: Partial<Record<NetworkItem, AssetBalance>> =
-                {};
-              try {
-                const chainConfig = configs.chains[chain as ChainChoices];
-                if (
-                  chain == NETWORKS.ergo.key ||
-                  ('active' in chainConfig && chainConfig.active)
-                ) {
-                  const data = await this.redis.get<AssetBalance | null>(chain);
-                  if (data) assetBalances[chain as ChainChoices] = data;
-                }
-                const totalSupply: TotalSupply[] =
-                  (
-                    await this.redis.get<{ [chain: string]: TotalSupply[] }>(
-                      TOTAL_SUPPLY_REDIS_KEY,
-                    )
-                  )?.[chain] ?? [];
-                await this.assetAggregator.update(
-                  chain as NetworkItem,
-                  assetBalances[chain as NetworkItem] ?? {},
-                  totalSupply,
-                );
-              } catch (err) {
-                this.logger.error(`${err}`);
-                if (err instanceof Error && err.stack)
-                  this.logger.debug(err.stack);
+              const chainConfig = configs.chains[chain as ChainChoices];
+              if (
+                chain == NETWORKS.ergo.key ||
+                ('active' in chainConfig && chainConfig.active)
+              ) {
+                const data = await this.redis.get<AssetBalance | null>(chain);
+                if (data) assetBalances[chain as ChainChoices] = data;
               }
             }),
           );
+          const totalSupply: { [chain: string]: TotalSupply[] } =
+            (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
+          await this.assetAggregator.update(assetBalances, totalSupply);
         },
         interval: configs.dataAggregator.interval * 1000,
       },

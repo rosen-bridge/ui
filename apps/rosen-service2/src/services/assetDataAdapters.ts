@@ -65,10 +65,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
     await Promise.all(
       NETWORKS_KEYS.map(async (chain) => {
         const adapter = this.adapters[chain];
-        if (adapter)
-          assets[chain] = (await adapter.getAllTokensTotalSupply())
-            .flat()
-            .filter((asset) => asset != undefined);
+        if (adapter) assets[chain] = await adapter.getAllTokensTotalSupply();
       }),
     );
     return assets;

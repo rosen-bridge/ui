@@ -23,7 +23,7 @@ describe('TokensAnalyzer', () => {
     context.tokenMap = tokenMap;
     context.analyzer = new TokensAnalyzer(
       {}, // chainAssetBalanceInfo — will set per test
-      [],
+      {},
       tokenMap,
     );
   });
@@ -41,11 +41,11 @@ describe('TokensAnalyzer', () => {
       tokenMap,
     }) => {
       const analyzer = new TokensAnalyzer(
-        NATIVE_TOKEN_CHAIN_BALANCE_INFO.ergo,
+        NATIVE_TOKEN_CHAIN_BALANCE_INFO,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
-      await analyzer.analyze('ergo');
+      await analyzer.analyze();
 
       expect(analyzer['lockedTokens'].map((l) => l.tokenId)).toContain(
         NETWORKS.ergo.nativeToken,
@@ -66,15 +66,15 @@ describe('TokensAnalyzer', () => {
       tokenMap,
     }) => {
       const analyzer = new TokensAnalyzer(
-        WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo,
+        WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
-      await analyzer.analyze('ergo');
+      await analyzer.analyze();
 
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
       expect(analyzer['bridgedTokens']).toEqual([
-        SAMPLE_ANALYZER_BRIDGED_TOKEN[0],
+        SAMPLE_ANALYZER_BRIDGED_TOKEN[1],
       ]);
     });
   });
@@ -104,19 +104,21 @@ describe('TokensAnalyzer', () => {
       await tokenMap.updateConfigByJson(SAMPLE_TOKEN_MAP);
 
       const analyzer = new TokensAnalyzer(
-        WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo,
+        WRAPPED_TOKEN_CHAIN_BALANCE_INFO,
         WRAPPED_TOKEN_TOTAL_SUPPLY,
         tokenMap,
       );
 
-      await analyzer.analyze('ergo');
+      await analyzer.analyze();
 
       const bridged = analyzer.getBridgedTokens();
       expect(bridged).toHaveLength(1);
 
       const token = bridged[0];
 
-      const totalSupply = BigInt(WRAPPED_TOKEN_TOTAL_SUPPLY[0].totalSupply);
+      const totalSupply = BigInt(
+        WRAPPED_TOKEN_TOTAL_SUPPLY.ergo[0].totalSupply,
+      );
 
       const lockedAmount = BigInt(
         WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo[SAMPLE_TOKEN_MAP[2].ergo.tokenId]

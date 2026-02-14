@@ -1,5 +1,6 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { NATIVE_TOKEN, RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
+import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { BridgedAssetEntity, LockedAssetEntity } from './entities';
 import { AssetBalance, NetworkItem, TotalSupply } from './types';
@@ -9,8 +10,8 @@ export class TokensAnalyzer {
   protected bridgedTokens: Omit<BridgedAssetEntity, 'token'>[];
 
   constructor(
-    protected chainAssetBalanceInfo: AssetBalance,
-    protected totalSupply: TotalSupply[],
+    protected chainAssetBalanceInfo: Partial<Record<NetworkItem, AssetBalance>>,
+    protected totalSupply: { [chain: string]: TotalSupply[] },
     protected tokenMap: TokenMap,
     protected logger: AbstractLogger = new DummyLogger(),
   ) {}
@@ -36,10 +37,13 @@ export class TokensAnalyzer {
    * @async
    * @returns {Promise<void>}
    */
-  analyze = async (chain: NetworkItem) => {
+  analyze = async () => {
     this.lockedTokens = [];
     this.bridgedTokens = [];
-    await this.inspectChainTokens(chain, this.chainAssetBalanceInfo);
+    for (const chain of NETWORKS_KEYS as NetworkItem[]) {
+      const chainAssets = this.chainAssetBalanceInfo[chain];
+      if (chainAssets) await this.inspectChainTokens(chain, chainAssets);
+    }
   };
 
   /**
@@ -94,7 +98,7 @@ export class TokensAnalyzer {
       } else {
         const bridgedAsset = await this.handleWrappedToken(
           token,
-          chain,
+          chain as NetworkItem,
           chainAssets,
         );
         if (bridgedAsset) this.bridgedTokens.push(bridgedAsset);
@@ -118,8 +122,8 @@ export class TokensAnalyzer {
       `Token [${token.tokenId}] is wrapped token in ${chain} chain, storing as bridged asset`,
     );
 
-    const assetTotalSupply = this.totalSupply
-      .filter((t) => t.assetId == token.tokenId)
+    const assetTotalSupply = this.totalSupply[chain]
+      ?.filter((t) => t.assetId == token.tokenId)
       .at(0);
 
     if (!assetTotalSupply) {

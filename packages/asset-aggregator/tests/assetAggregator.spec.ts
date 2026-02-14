@@ -20,7 +20,7 @@ vi.mock('../lib/tokensAnalyzer', () => {
     TokensAnalyzer: vi.fn().mockImplementation(() => ({
       analyze: analyzeMock,
       getBridgedTokens: getBridgedTokensMock,
-      getLockedTokens: vi.fn().mockReturnValue([SAMPLE_TOKEN_MAP[0]['ergo']]),
+      getLockedTokens: getLockedTokensMock,
     })),
   };
 });
@@ -69,13 +69,12 @@ describe('AssetAggregator', () => {
     }) => {
       getLockedTokensMock.mockReturnValue([SAMPLE_TOKEN_MAP[0].ergo]);
       getBridgedTokensMock.mockReturnValue([]);
-      await assetAggregator.update('ergo', {}, []);
+      await assetAggregator.update({}, {});
       expect(assetAggregator['lockedAssetAction'].store).toBeCalledWith([
         SAMPLE_TOKEN_MAP[0]['ergo'],
       ]);
       expect(assetAggregator['lockedAssetAction'].keepOnly).toBeCalledWith([
         SAMPLE_TOKEN_MAP[0]['ergo'].tokenId,
-        SAMPLE_TOKEN_MAP[2]['binance'].tokenId,
       ]);
     });
 
@@ -96,14 +95,13 @@ describe('AssetAggregator', () => {
     }) => {
       getLockedTokensMock.mockReturnValue([SAMPLE_TOKEN_MAP[0].ergo]);
       getBridgedTokensMock.mockReturnValue([SAMPLE_TOKEN_MAP[0].binance]);
-      await assetAggregator.update('ergo', {}, []);
+      await assetAggregator.update({}, {});
       expect(assetAggregator['bridgedAssetAction'].store).toBeCalledWith([
         SAMPLE_TOKEN_MAP[0].binance,
       ]);
-      expect(assetAggregator['bridgedAssetAction'].keepOnly).toBeCalledWith(
-        [SAMPLE_TOKEN_MAP[0].binance.tokenId],
-        'ergo',
-      );
+      expect(assetAggregator['bridgedAssetAction'].keepOnly).toBeCalledWith([
+        SAMPLE_TOKEN_MAP[0].binance.tokenId,
+      ]);
     });
 
     /**
@@ -131,17 +129,19 @@ describe('AssetAggregator', () => {
         SAMPLE_TOKEN_MAP[2].ergo,
         SAMPLE_TOKEN_MAP[0].binance,
       ]);
-      await assetAggregator.update('ergo', {}, []);
+
+      await assetAggregator.update({}, {});
       expect(assetAggregator['bridgedAssetAction'].store).toBeCalledWith([
         SAMPLE_TOKEN_MAP[2].ergo,
         SAMPLE_TOKEN_MAP[0].binance,
       ]);
-      expect(assetAggregator['bridgedAssetAction'].keepOnly).toBeCalledWith(
-        [SAMPLE_TOKEN_MAP[2].ergo.tokenId, SAMPLE_TOKEN_MAP[0].binance.tokenId],
-        'ergo',
-      );
+      expect(assetAggregator['bridgedAssetAction'].keepOnly).toBeCalledWith([
+        SAMPLE_TOKEN_MAP[2].ergo.tokenId,
+        SAMPLE_TOKEN_MAP[0].binance.tokenId,
+      ]);
       expect(assetAggregator['lockedAssetAction'].store).toBeCalledWith([
         SAMPLE_TOKEN_MAP[0].ergo,
+        SAMPLE_TOKEN_MAP[2].binance,
       ]);
       expect(assetAggregator['lockedAssetAction'].keepOnly).toBeCalledWith([
         SAMPLE_TOKEN_MAP[0].ergo.tokenId,
@@ -162,9 +162,7 @@ describe('AssetAggregator', () => {
     it<BridgedAssetTestContext>('should handle empty balance array for a token', async ({
       assetAggregator,
     }) => {
-      expect(
-        await assetAggregator.update('ergo', { ergo: [] }, []),
-      ).toBeUndefined();
+      expect(await assetAggregator.update({ ergo: {} }, {})).toBeUndefined();
     });
   });
 

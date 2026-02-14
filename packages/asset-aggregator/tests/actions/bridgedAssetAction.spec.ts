@@ -4,7 +4,7 @@ import {
   Repository,
 } from '@rosen-bridge/extended-typeorm';
 
-import { BridgedAssetEntity, NetworkItem, TokenEntity } from '../../lib';
+import { BridgedAssetEntity, TokenEntity } from '../../lib';
 import { BridgedAssetAction } from '../../lib/actions';
 import { createDatabase } from '../testUtils';
 import { BridgedAssetTestData } from './bridgedAssetActionTestData';
@@ -106,10 +106,7 @@ describe('BridgedAssetAction', () => {
         BridgedAssetTestData.generateTestDataBridgedEntity(tokens);
       await repository.insert(bridgedEntities);
       const remaining = await repository.find();
-      await action.keepOnly(
-        [remaining[0].tokenId],
-        remaining[0].chain as NetworkItem,
-      );
+      await action.keepOnly([remaining[0].tokenId]);
       const dbRemaining = await repository.find();
       expect(dbRemaining).toHaveLength(1);
       expect(dbRemaining[0]).toEqual(remaining[0]);
