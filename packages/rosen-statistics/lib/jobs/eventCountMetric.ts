@@ -6,6 +6,8 @@ import {
   AggregatedEvents,
 } from '@rosen-ui/rosen-statistics-entity';
 
+import { startOfDay } from '../utils';
+
 /**
  * Calculate and persist event count metric.
  *
@@ -18,12 +20,22 @@ export const eventCountMetric = async (
 ): Promise<void> => {
   logger.debug('Starting event count metric calculation job');
 
-  const eventCountAction = new EventCountMetricAction(dataSource, logger);
-  const metricAction = new MetricAction(dataSource, logger);
+  const eventCountAction = new EventCountMetricAction(
+    dataSource,
+    logger.child('eventCountAction'),
+  );
+  const metricAction = new MetricAction(
+    dataSource,
+    logger.child('metricAction'),
+  );
 
   try {
     const lastHeight = await eventCountAction.getLastProcessedHeight();
-    const aggregated = await eventCountAction.getAggregatedEvents(lastHeight);
+    const yesterdayTs = startOfDay(Math.floor(Date.now() / 1000) - 86400);
+    const aggregated = await eventCountAction.getAggregatedEvents(
+      lastHeight,
+      yesterdayTs,
+    );
 
     if (!aggregated.length) {
       logger.debug('No new events to process.');

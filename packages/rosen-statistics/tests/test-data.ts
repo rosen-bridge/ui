@@ -1,3 +1,4 @@
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { RosenTokens } from '@rosen-bridge/tokens';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
@@ -145,6 +146,9 @@ export const lockedAssetsTestData = {
   },
 };
 
+/**
+ * Helper function to create minimal EventTriggerEntity for testing
+ */
 const createEventTrigger = (
   overrides: Partial<EventTriggerEntity>,
 ): DeepPartial<EventTriggerEntity> => ({
@@ -173,7 +177,31 @@ const createEventTrigger = (
   ...overrides,
 });
 
+/**
+ * Helper function to create minimal BlockEntity for testing
+ */
+const createBlock = (
+  overrides: Partial<BlockEntity>,
+): DeepPartial<BlockEntity> => ({
+  id: Math.floor(Math.random() * 10000),
+  height: 100,
+  hash: 'block1',
+  parentHash: `parent-${Math.random()}`,
+  status: PROCEED,
+  scanner: 'ergo',
+  timestamp: 1704153600, // 2024-01-02 00:00:00 UTC (yesterday's start)
+  year: 2024,
+  month: 1,
+  day: 2,
+  ...overrides,
+});
+
 export const eventCountTestData = {
+  /**
+   * Test 1: New events within timestamp range
+   * - 4 events with valid timestamps before yesterday's start
+   * - Different status and chain combinations
+   */
   newEventsTest1: {
     eventTriggerRepo: [
       createEventTrigger({
@@ -181,6 +209,7 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 110,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -188,6 +217,7 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 111,
+        spendBlock: 'block2',
         result: 'fraud' as const,
       }),
       createEventTrigger({
@@ -195,6 +225,7 @@ export const eventCountTestData = {
         fromChain: 'cardano',
         toChain: 'ergo',
         spendHeight: 112,
+        spendBlock: 'block3',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -202,7 +233,30 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 120,
+        spendBlock: 'block4',
         result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC (before yesterday's start)
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704070800, // 2024-01-01 01:00:00 UTC
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704074400, // 2024-01-01 02:00:00 UTC
+        height: 112,
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1704103200, // 2024-01-01 10:00:00 UTC
+        height: 120,
       }),
     ],
     expectedResults: {
@@ -236,7 +290,7 @@ export const eventCountTestData = {
   /**
    * Test 2: Update existing counts with new events
    * Existing count: 5 successful ergo→cardano
-   * New events: 2 more successful ergo→cardano
+   * New events: 2 more successful ergo→cardano with valid timestamps
    */
   updateExistingCounts: {
     eventTriggerRepo: [
@@ -245,6 +299,7 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 115,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -252,7 +307,20 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 116,
+        spendBlock: 'block2',
         result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704081600, // 2024-01-01 04:00:00 UTC
+        height: 115,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704085200, // 2024-01-01 05:00:00 UTC
+        height: 116,
       }),
     ],
     eventCountRepo: [
@@ -289,6 +357,7 @@ export const eventCountTestData = {
    * Test 3: Ignore events below last processed height
    * Existing last processed: 100
    * New event with spendHeight: 95 (ignored)
+   * New event with spendHeight: 105 (processed)
    */
   ignoreOldEvents: {
     eventTriggerRepo: [
@@ -297,6 +366,7 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 95,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -304,7 +374,20 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 105,
+        spendBlock: 'block2',
         result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1703980800, // 2023-12-31 00:00:00 UTC
+        height: 95,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC
+        height: 105,
       }),
     ],
     eventCountRepo: [
@@ -338,10 +421,76 @@ export const eventCountTestData = {
   },
 
   /**
-   * Test 4: No new events
+   * Test 4: Filter events by timestamp
+   * - 3 events with different timestamps
+   * - 2 events with timestamps before yesterday's start
+   * - 1 event with timestamp at yesterday's start (should be excluded)
+   */
+  filterByTimestamp: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 120,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC (before yesterday's start)
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704110400, // 2024-01-01 12:00:00 UTC (before yesterday's start)
+        height: 115,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704153600, // 2024-01-02 00:00:00 UTC (yesterday's start) - excluded
+        height: 120,
+      }),
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 2,
+          lastProcessedHeight: 115,
+        },
+      ],
+      totalMetricValue: '2',
+    },
+  },
+
+  /**
+   * Test 5: No new events
    * Only existing data, no new events
    */
   noNewEvents: {
+    eventTriggerRepo: [],
+    blockRepo: [],
     eventCountRepo: [
       {
         status: 'successful',
@@ -373,7 +522,7 @@ export const eventCountTestData = {
   },
 
   /**
-   * Test 5: Filter null status events
+   * Test 6: Filter null status events
    * 2 successful + 1 null status - only successful should be counted
    */
   filterNullStatusEvents: {
@@ -383,6 +532,7 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 110,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -390,6 +540,7 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 111,
+        spendBlock: 'block2',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -397,7 +548,25 @@ export const eventCountTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 112,
+        spendBlock: 'block3',
         result: null,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704067260, // 2024-01-01 00:01:00 UTC
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704067320, // 2024-01-01 00:02:00 UTC
+        height: 112,
       }),
     ],
     expectedResults: {

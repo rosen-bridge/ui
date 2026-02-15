@@ -1,3 +1,7 @@
+import {
+  BlockEntity,
+  migrations as abstractScannerMigrations,
+} from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   EventTriggerEntity,
@@ -14,8 +18,9 @@ export const createDatabase = async () => {
   const ds = new DataSource({
     type: 'sqlite',
     database: ':memory:',
-    entities: [MetricEntity, EventTriggerEntity, EventCountEntity],
+    entities: [MetricEntity, EventTriggerEntity, EventCountEntity, BlockEntity],
     migrations: [
+      ...abstractScannerMigrations.sqlite,
       ...statisticsMigrations.sqlite,
       ...watcherExtractorMigration.sqlite,
     ],

@@ -1,4 +1,5 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
@@ -9,7 +10,7 @@ import { AggregatedEvents, EventCountStatus } from '../types';
 export class EventCountMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
   private readonly eventCountRepo: Repository<EventCountEntity>;
-  readonly logger: AbstractLogger;
+  private readonly logger: AbstractLogger;
 
   constructor(dataSource: DataSource, logger?: AbstractLogger) {
     this.eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
@@ -36,24 +37,38 @@ export class EventCountMetricAction {
   };
 
   /**
-   * Get aggregated event counts since last processed height
+   * Fetch aggregated event counts starting after a given height
+   * and up to a specific timestamp.
    *
-   * @param lastHeight - The last processed height to start from
-   * @returns Promise resolving to aggregated event data
+   * @param lastProcessedHeight - The last processed block height (exclusive)
+   * @param untilTimestamp - Upper bound timestamp (exclusive, in seconds)
+   * @returns Promise resolving to aggregated event statistics
    */
-  getAggregatedEvents = async (lastHeight: number) => {
-    this.logger.debug(`Fetching aggregated events since height: ${lastHeight}`);
+  getAggregatedEvents = async (
+    lastProcessedHeight: number,
+    untilTimestamp: number,
+  ) => {
+    this.logger.debug(
+      `Fetching aggregated events after height ${lastProcessedHeight} until timestamp ${untilTimestamp}`,
+    );
+
     const aggregated = await this.eventTriggerRepo
       .createQueryBuilder('et')
+      .leftJoin(
+        BlockEntity,
+        'be',
+        `be.hash = et.spendBlock AND be.scanner = 'ergo'`,
+      )
       .select('et.result', 'status')
       .addSelect('et.fromChain', 'fromChain')
       .addSelect('et.toChain', 'toChain')
       .addSelect('COUNT(et.fromAddress)', 'eventCount')
       .addSelect('MAX(et.spendHeight)', 'lastProcessedHeight')
-      .where('et.spendHeight > :lastHeight', { lastHeight })
+      .where('et.spendHeight > :lastProcessedHeight', { lastProcessedHeight })
       .andWhere('et.result IN (:...statuses)', {
         statuses: ['successful', 'fraud'],
       })
+      .andWhere('be.timestamp < :untilTimestamp', { untilTimestamp })
       .groupBy('et.result')
       .addGroupBy('et.fromChain')
       .addGroupBy('et.toChain')
