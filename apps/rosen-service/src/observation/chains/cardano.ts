@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { CardanoKoiosObservationExtractor } from '@rosen-bridge/cardano-observation-extractor';
 import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 
@@ -7,7 +7,7 @@ import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner
@@ -21,7 +21,7 @@ export const registerCardanoExtractor = async (
       config.cardano.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger,
+      logger.child('cardanoKoiosObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

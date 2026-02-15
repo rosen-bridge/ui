@@ -1,9 +1,6 @@
-import { ReactNode } from 'react';
-
 import { styled } from '../../../styling';
-import { NavigationBarContext } from './NavigationBarContext';
 
-const Root = styled('div', {
+export const NavigationBar = styled('div', {
   name: 'RosenNavigationBar',
   slot: 'Root',
   overridesResolver: (props, styles) => styles.root,
@@ -24,25 +21,3 @@ const Root = styled('div', {
     background: theme.palette.background.paper,
   },
 }));
-
-export type NavigationBarProps = {
-  children: ReactNode;
-  isActive: (path: string) => boolean;
-  onClick: (path: string) => void;
-};
-
-export const NavigationBar = ({
-  children,
-  isActive,
-  onClick,
-}: NavigationBarProps) => {
-  const state = {
-    click: onClick,
-    isActive,
-  };
-  return (
-    <NavigationBarContext.Provider value={state}>
-      <Root>{children}</Root>
-    </NavigationBarContext.Provider>
-  );
-};

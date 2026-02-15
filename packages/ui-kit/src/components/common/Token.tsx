@@ -3,6 +3,7 @@ import { HTMLAttributes, useMemo, useState, useEffect, useRef } from 'react';
 import { ExternalLinkAlt, TOKENS } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
+import { useFramework } from '../../hooks';
 import { IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
@@ -66,6 +67,10 @@ const TokenBase = ({
 
   const isLoading = loading || (!!url && !isLoaded);
 
+  const {
+    components: { Image },
+  } = useFramework();
+
   const styles = useMemo(() => {
     return Object.assign(
       {},
@@ -100,11 +105,12 @@ const TokenBase = ({
   return (
     <Stack align="center" style={styles} spacing="0.5em" ref={ref}>
       {!!url && isVisible && (
-        /* eslint-disable-next-line @next/next/no-img-element */
-        <img
+        <Image
           alt={`Token ${name}`}
           src={url}
           loading="lazy"
+          width={40}
+          height={40}
           style={{
             width: '2em',
             height: '2em',

@@ -1,7 +1,13 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
-import { EventCountMetricAction } from '@rosen-ui/rosen-statistics-entity';
+import {
+  MetricAction,
+  METRIC_KEYS,
+  EventCountMetricAction,
+  AggregatedEvents,
+} from '@rosen-ui/rosen-statistics-entity';
+
+import { startOfDay } from '../utils';
 
 /**
  * Calculate and persist event count metric.
@@ -15,24 +21,33 @@ export const eventCountMetric = async (
 ): Promise<void> => {
   logger.debug('Starting event count metric calculation job');
 
-  const eventCountAction = new EventCountMetricAction(dataSource, logger);
-  const metricAction = new MetricAction(dataSource, logger);
+  const eventCountAction = new EventCountMetricAction(
+    dataSource,
+    logger.child('eventCountAction'),
+  );
+  const metricAction = new MetricAction(
+    dataSource,
+    logger.child('metricAction'),
+  );
 
   try {
     const lastHeight = await eventCountAction.getLastProcessedHeight();
-
-    const aggregated = await eventCountAction.getAggregatedEvents(lastHeight);
+    const yesterdayTs = startOfDay(Math.floor(Date.now() / 1000) - 86400);
+    const aggregated = await eventCountAction.getAggregatedEvents(
+      lastHeight,
+      yesterdayTs,
+    );
 
     if (!aggregated.length) {
       logger.debug('No new events to process.');
       return;
     }
 
-    let totalCount = 0;
+    let newTotalCount = 0;
+    const aggregatedEvents: AggregatedEvents[] = [];
 
     for (const row of aggregated) {
-      const count = row.eventCount;
-      totalCount += count;
+      newTotalCount += row.eventCount;
 
       const existingCount = await eventCountAction.getExistingEventCount(
         row.status,
@@ -40,35 +55,25 @@ export const eventCountMetric = async (
         row.toChain,
       );
 
-      const newCount = existingCount ? existingCount.eventCount + count : count;
-
-      await eventCountAction.upsertEventCount(
-        row.status,
-        row.fromChain,
-        row.toChain,
-        newCount,
-        row.maxHeight,
-      );
+      aggregatedEvents.push({
+        status: row.status,
+        fromChain: row.fromChain,
+        toChain: row.toChain,
+        eventCount: existingCount + row.eventCount,
+        lastProcessedHeight: row.lastProcessedHeight,
+      });
     }
 
     const totalExistingEvent = await metricAction.getMetricByKey(
       METRIC_KEYS.EVENT_COUNT_TOTAL,
     );
-    const existingValue = totalExistingEvent
+    const existingTotalCount = totalExistingEvent
       ? Number(totalExistingEvent.value)
       : 0;
 
-    const timestamp = Math.floor(Date.now() / 1000);
-    const newTotal = existingValue + totalCount;
-
-    logger.debug(
-      `Processed ${aggregated.length} event groups, total events: ${totalCount}, new total: ${newTotal}`,
-    );
-
-    await metricAction.upsertMetric(
-      METRIC_KEYS.EVENT_COUNT_TOTAL,
-      newTotal.toString(),
-      timestamp,
+    await eventCountAction.upsertEventsCount(
+      aggregatedEvents,
+      newTotalCount + existingTotalCount,
     );
 
     logger.debug('Event count metric calculation job completed successfully');
@@ -77,6 +82,5 @@ export const eventCountMetric = async (
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    throw error;
   }
 };

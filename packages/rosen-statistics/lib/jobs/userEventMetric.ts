@@ -1,7 +1,13 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
-import { UserEventMetricAction } from '@rosen-ui/rosen-statistics-entity';
+import {
+  MetricAction,
+  METRIC_KEYS,
+  UserEventMetricAction,
+  AggregatedUserEvents,
+} from '@rosen-ui/rosen-statistics-entity';
+
+import { startOfDay } from '../utils';
 
 /**
  * Calculate and persist user event count metric.
@@ -14,58 +20,57 @@ export const userEventMetric = async (
   logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
   logger.debug('Starting user event count metric calculation job');
-  const userEventAction = new UserEventMetricAction(dataSource, logger);
-  const metricAction = new MetricAction(dataSource, logger);
+  const userEventAction = new UserEventMetricAction(
+    dataSource,
+    logger.child('userEventMetric'),
+  );
+  const metricAction = new MetricAction(
+    dataSource,
+    logger.child('metricAction'),
+  );
 
   try {
     const lastHeight = await userEventAction.getLastProcessedHeight();
-
-    const aggregated = await userEventAction.getAggregatedEvents(lastHeight);
+    const yesterdayTs = startOfDay(Math.floor(Date.now() / 1000) - 86400);
+    const aggregated = await userEventAction.getAggregatedEvents(
+      lastHeight,
+      yesterdayTs,
+    );
 
     if (!aggregated.length) {
       logger.debug('No new events to process.');
       return;
     }
 
-    let totalCount = 0;
+    let newTotalCount = 0;
+    const aggregatedUsersEvents: AggregatedUserEvents[] = [];
 
     for (const row of aggregated) {
-      const count = row.userCount;
-      totalCount += count;
+      newTotalCount += row.count;
 
       const existingCount = await userEventAction.getExistingUserEvent(
         row.fromAddress,
         row.toAddress,
       );
 
-      const newCount = existingCount ? existingCount.count + count : count;
-
-      await userEventAction.upsertUserEventCount(
-        row.fromAddress,
-        row.toAddress,
-        newCount,
-        row.maxHeight,
-      );
+      aggregatedUsersEvents.push({
+        fromAddress: row.fromAddress,
+        toAddress: row.toAddress,
+        count: existingCount + row.count,
+        lastProcessedHeight: row.lastProcessedHeight,
+      });
     }
 
     const totalExistingEvent = await metricAction.getMetricByKey(
       METRIC_KEYS.USER_EVENT_TOTAL,
     );
-    const existingValue = totalExistingEvent
+    const existingTotalCount = totalExistingEvent
       ? Number(totalExistingEvent.value)
       : 0;
 
-    const timestamp = Math.floor(Date.now() / 1000);
-    const newTotal = existingValue + totalCount;
-
-    logger.debug(
-      `Processed ${aggregated.length} event groups, total events: ${totalCount}, new total: ${newTotal}`,
-    );
-
-    await metricAction.upsertMetric(
-      METRIC_KEYS.USER_EVENT_TOTAL,
-      newTotal.toString(),
-      timestamp,
+    await userEventAction.upsertEventsCount(
+      aggregatedUsersEvents,
+      newTotalCount + existingTotalCount,
     );
 
     logger.debug(

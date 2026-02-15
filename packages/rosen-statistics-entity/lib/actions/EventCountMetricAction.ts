@@ -1,13 +1,16 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
-import { EventCountEntity } from '../entities';
+import { METRIC_KEYS } from '../constants';
+import { EventCountEntity, MetricEntity } from '../entities';
+import { AggregatedEvents, EventCountStatus } from '../types';
 
 export class EventCountMetricAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
   private readonly eventCountRepo: Repository<EventCountEntity>;
-  readonly logger: AbstractLogger;
+  private readonly logger: AbstractLogger;
 
   constructor(dataSource: DataSource, logger?: AbstractLogger) {
     this.eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
@@ -23,137 +26,122 @@ export class EventCountMetricAction {
    */
   getLastProcessedHeight = async (): Promise<number> => {
     this.logger.debug('Fetching last processed height');
-    return this.eventCountRepo
-      .find({
-        select: ['lastProcessedHeight'],
-        order: { lastProcessedHeight: 'DESC' },
-        take: 1,
-      })
-      .then((res) => {
-        const height = res[0] ? res[0].lastProcessedHeight : 0;
-        this.logger.debug(`Last processed height: ${height}`);
-        return height;
-      })
-      .catch((error) => {
-        this.logger.debug(`Failed to fetch last processed height: ${error}`, {
-          message: error instanceof Error ? error.message : '',
-          stack: error instanceof Error ? error.stack : undefined,
-        });
-        throw error;
-      });
+    const res = await this.eventCountRepo.find({
+      select: ['lastProcessedHeight'],
+      order: { lastProcessedHeight: 'DESC' },
+      take: 1,
+    });
+    const height = res[0] ? res[0].lastProcessedHeight : 0;
+    this.logger.debug(`Last processed height: ${height}`);
+    return height;
   };
 
   /**
-   * Get aggregated event counts since last processed height
+   * Fetch aggregated event counts starting after a given height
+   * and up to a specific timestamp.
    *
-   * @param lastHeight - The last processed height to start from
-   * @returns Promise resolving to aggregated event data
+   * @param lastProcessedHeight - The last processed block height (exclusive)
+   * @param untilTimestamp - Upper bound timestamp (exclusive, in seconds)
+   * @returns Promise resolving to aggregated event statistics
    */
-  getAggregatedEvents = async (lastHeight: number) => {
-    this.logger.debug(`Fetching aggregated events since height: ${lastHeight}`);
-    try {
-      const aggregated = await this.eventTriggerRepo
-        .createQueryBuilder('et')
-        .select('et.result', 'status')
-        .addSelect('et.fromChain', 'fromChain')
-        .addSelect('et.toChain', 'toChain')
-        .addSelect('COUNT(et.fromAddress)', 'eventCount')
-        .addSelect('MAX(et.spendHeight)', 'maxHeight')
-        .where('et.spendHeight > :lastHeight', { lastHeight })
-        .andWhere('et.result IN (:...statuses)', {
-          statuses: ['successful', 'fraud'],
-        })
-        .groupBy('et.result')
-        .addGroupBy('et.fromChain')
-        .addGroupBy('et.toChain')
-        .getRawMany<{
-          status: string;
-          fromChain: string;
-          toChain: string;
-          eventCount: number;
-          maxHeight: number;
-        }>();
+  getAggregatedEvents = async (
+    lastProcessedHeight: number,
+    untilTimestamp: number,
+  ) => {
+    this.logger.debug(
+      `Fetching aggregated events after height ${lastProcessedHeight} until timestamp ${untilTimestamp}`,
+    );
 
-      this.logger.debug(`Found ${aggregated.length} aggregated event groups`);
-      return aggregated;
-    } catch (error) {
-      this.logger.debug(`Failed to fetch aggregated events: ${error}`, {
-        message: error instanceof Error ? error.message : '',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-      throw error;
-    }
+    const aggregated = await this.eventTriggerRepo
+      .createQueryBuilder('et')
+      .leftJoin(
+        BlockEntity,
+        'be',
+        `be.hash = et.spendBlock AND be.scanner = 'ergo'`,
+      )
+      .select('et.result', 'status')
+      .addSelect('et.fromChain', 'fromChain')
+      .addSelect('et.toChain', 'toChain')
+      .addSelect('COUNT(et.fromAddress)', 'eventCount')
+      .addSelect('MAX(et.spendHeight)', 'lastProcessedHeight')
+      .where('et.spendHeight > :lastProcessedHeight', { lastProcessedHeight })
+      .andWhere('et.result IN (:...statuses)', {
+        statuses: ['successful', 'fraud'],
+      })
+      .andWhere('be.timestamp < :untilTimestamp', { untilTimestamp })
+      .groupBy('et.result')
+      .addGroupBy('et.fromChain')
+      .addGroupBy('et.toChain')
+      .getRawMany<AggregatedEvents>();
+
+    this.logger.debug(`Found ${aggregated.length} aggregated event groups`);
+    return aggregated;
   };
 
   /**
    * Get existing event count for a specific group
    *
-   * @param status - Event status (successful/fraud)
+   * @param status - EventCountStatus (successful/fraud)
    * @param fromChain - Source chain
    * @param toChain - Target chain
-   * @returns Promise resolving to existing EventCountEntity or null
+   * @returns Promise resolving to existing event count, or 0 if no record exists
    */
   getExistingEventCount = async (
-    status: string,
+    status: EventCountStatus,
     fromChain: string,
     toChain: string,
   ) => {
     this.logger.debug(
       `Fetching existing event count for ${status}, ${fromChain} -> ${toChain}`,
     );
-    try {
-      const existing = await this.eventCountRepo.findOne({
-        where: { status, fromChain, toChain },
-      });
-      return existing;
-    } catch (error) {
-      this.logger.debug(`Failed to fetch existing event count: ${error}`, {
-        message: error instanceof Error ? error.message : '',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
-      throw error;
-    }
+    const existing = await this.eventCountRepo.findOne({
+      where: { status, fromChain, toChain },
+    });
+    return existing ? existing.eventCount : 0;
   };
 
   /**
-   * Upsert event count data for a specific group
-   *
-   * @param status - Event status (successful/fraud)
-   * @param fromChain - Source chain
-   * @param toChain - Target chain
-   * @param eventCount - New event count
-   * @param maxHeight - Maximum processed height
-   * @returns Promise resolving to upsert result
+   * Upserts the aggregated events count and total count into the database.
+   * @param  aggregatedEvents - An array of aggregated events to upsert.
+   * @param  totalCount - The total count of events to be updated.
+   * @returns A Promise that resolves when the upsert is completed.
    */
-  upsertEventCount = async (
-    status: string,
-    fromChain: string,
-    toChain: string,
-    eventCount: number,
-    maxHeight: number,
-  ) => {
-    this.logger.debug(
-      `Upserting event count for ${status}, ${fromChain} -> ${toChain}: ${eventCount}`,
-    );
+  upsertEventsCount = async (
+    aggregatedEvents: AggregatedEvents[],
+    totalCount: number,
+  ): Promise<void> => {
+    const queryRunner =
+      this.eventCountRepo.manager.connection.createQueryRunner();
     try {
-      const result = await this.eventCountRepo.upsert(
+      await queryRunner.startTransaction();
+
+      const eventCountRepo =
+        queryRunner.manager.getRepository(EventCountEntity);
+      const metricRepo = queryRunner.manager.getRepository(MetricEntity);
+
+      await eventCountRepo.upsert(aggregatedEvents, [
+        'status',
+        'fromChain',
+        'toChain',
+      ]);
+
+      await metricRepo.upsert(
         {
-          status,
-          fromChain,
-          toChain,
-          eventCount,
-          lastProcessedHeight: maxHeight,
+          key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+          value: totalCount.toString(),
+          updatedAt: Math.floor(Date.now() / 1000),
         },
-        ['status', 'fromChain', 'toChain'],
+        ['key'],
       );
-      this.logger.debug('Event count upserted successfully');
-      return result;
+
+      await queryRunner.commitTransaction();
+      this.logger.debug('Transaction committed successfully');
     } catch (error) {
-      this.logger.debug(`Failed to upsert event count: ${error}`, {
-        message: error instanceof Error ? error.message : '',
-        stack: error instanceof Error ? error.stack : undefined,
-      });
+      await queryRunner.rollbackTransaction();
+      this.logger.error(`Transaction rolled back due to error: ${error}`);
       throw error;
+    } finally {
+      await queryRunner.release();
     }
   };
 }

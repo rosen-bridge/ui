@@ -1,5 +1,5 @@
-// tests/jobs/eventCountMetric.spec.ts
-import { DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import {
@@ -7,7 +7,7 @@ import {
   MetricEntity,
   EventCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 
 import { eventCountMetric } from '../../lib';
 import { eventCountTestData } from '../test-data';
@@ -18,268 +18,232 @@ describe('eventCountMetric', () => {
   let metricRepo: Repository<MetricEntity>;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let eventCountRepo: Repository<EventCountEntity>;
-  let logger: DummyLogger;
+  let blockRepo: Repository<BlockEntity>;
+  let logger: AbstractLogger;
 
   beforeEach(async () => {
+    // Set system time to 2024-01-03 14:20:00 UTC
+    vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     eventCountRepo = dataSource.getRepository(EventCountEntity);
+    blockRepo = dataSource.getRepository(BlockEntity);
     logger = new DummyLogger();
 
     await metricRepo.clear();
     await eventTriggerRepo.clear();
     await eventCountRepo.clear();
+    await blockRepo.clear();
+    vi.clearAllMocks();
   });
 
   /**
-   * @target eventCountMetric should calculate and store event counts for multiple groups
-   * @dependency database
+   * @target Should aggregate new events and create event count records
    * @scenario
-   * - insert EventTriggerEntity records with different statuses and chains
-   * - call eventCountMetric
+   * - Insert 4 new events with different and same (status, fromChain, toChain) combinations
+   * - Insert corresponding block records with timestamps before yesterday
+   * - Run eventCountMetric
    * @expected
-   * - EventCountEntity rows are created for each unique group
-   * - total metric EVENT_COUNT_TOTAL is updated with correct value
+   * - Creates 3 EventCountEntity records with correct counts
+   * - Updates total metric to sum of all events (4)
    */
-  it('should calculate and store event counts for multiple groups', async () => {
-    const testData = eventCountTestData.test1;
+  it('should aggregate new events and create event count records', async () => {
+    const testData = eventCountTestData.newEventsTest1;
 
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await eventCountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
     });
-    expect(metric).not.toBeNull();
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    for (const expected of testData.expectedResults.eventCounts) {
-      const countRecord = await eventCountRepo.findOne({
-        where: {
-          status: expected.status,
-          fromChain: expected.fromChain,
-          toChain: expected.toChain,
-        },
-      });
-      expect(countRecord).not.toBeNull();
-      expect(countRecord?.eventCount).toBe(expected.count);
-    }
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
 
-    const allCounts = await eventCountRepo.find();
-    expect(allCounts).toHaveLength(testData.expectedResults.eventCounts.length);
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
-   * @target eventCountMetric should handle no new events gracefully
-   * @dependency database
+   * @target Should update existing counts with new events
    * @scenario
-   * - insert existing EventCountEntity and metric records
-   * - don't insert new events
-   * - call eventCountMetric
+   * - Insert existing EventCountEntity (5 successful ergo→cardano)
+   * - Insert existing total metric (value: 5)
+   * - Insert 2 new events for same group with valid timestamps
+   * - Run eventCountMetric
    * @expected
-   * - existing records remain unchanged
-   * - metric value stays the same
+   * - Updates existing EventCountEntity to 7
+   * - Updates total metric to 7
    */
-  it('should handle no new events gracefully', async () => {
-    const testData = eventCountTestData.test2;
-
-    await eventCountRepo.insert(testData.eventCountRepo);
-    await metricRepo.insert(testData.metricRepo);
-
-    await eventCountMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-    });
-    expect(metric).not.toBeNull();
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    for (const expected of testData.eventCountRepo) {
-      const countRecord = await eventCountRepo.findOne({
-        where: {
-          status: expected.status,
-          fromChain: expected.fromChain,
-          toChain: expected.toChain,
-        },
-      });
-      expect(countRecord).not.toBeNull();
-      expect(countRecord?.eventCount).toBe(expected.eventCount);
-    }
-  });
-
-  /**
-   * @target eventCountMetric should aggregate multiple events for same group
-   * @dependency database
-   * @scenario
-   * - insert multiple EventTriggerEntity records for same (status, fromChain, toChain)
-   * - call eventCountMetric
-   * @expected
-   * - single EventCountEntity created with aggregated count
-   * - uses highest spendHeight as lastProcessedHeight
-   */
-  it('should aggregate multiple events for same group', async () => {
-    const testData = eventCountTestData.test3;
-
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-
-    await eventCountMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-    });
-    expect(metric).not.toBeNull();
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const expected = testData.expectedResults.eventCounts[0];
-    const countRecord = await eventCountRepo.findOne({
-      where: {
-        status: expected.status,
-        fromChain: expected.fromChain,
-        toChain: expected.toChain,
-      },
-    });
-
-    expect(countRecord).not.toBeNull();
-    expect(countRecord?.eventCount).toBe(expected.count);
-
-    expect(countRecord?.lastProcessedHeight).toBe(120);
-  });
-
-  /**
-   * @target eventCountMetric should update existing counts and total metric
-   * @dependency database
-   * @scenario
-   * - insert existing EventCountEntity and metric records
-   * - insert new EventTriggerEntity records
-   * - call eventCountMetric
-   * @expected
-   * - existing EventCountEntity records are updated with new counts
-   * - total metric is incremented correctly
-   */
-  it('should update existing counts and total metric (test4)', async () => {
-    const testData = eventCountTestData.test4;
+  it('should update existing counts with new events', async () => {
+    const testData = eventCountTestData.updateExistingCounts;
 
     await eventCountRepo.insert(testData.eventCountRepo);
     await metricRepo.insert(testData.metricRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await eventCountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
     });
-    expect(metric).not.toBeNull();
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    for (const expected of testData.expectedResults.eventCounts) {
-      const countRecord = await eventCountRepo.findOne({
-        where: {
-          status: expected.status,
-          fromChain: expected.fromChain,
-          toChain: expected.toChain,
-        },
-      });
-      expect(countRecord).not.toBeNull();
-      expect(countRecord?.eventCount).toBe(expected.count);
-    }
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
+
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
-   * @target eventCountMetric should ignore events below last processed height
-   * @dependency database
+   * @target Should ignore events below last processed height
    * @scenario
-   * - insert existing EventCountEntity with lastProcessedHeight
-   * - insert EventTriggerEntity with spendHeight below last processed
-   * - call eventCountMetric
+   * - Insert existing EventCountEntity with lastProcessedHeight = 100
+   * - Insert event with spendHeight = 95 (below last processed)
+   * - Insert event with spendHeight = 105 (above last processed)
+   * - Insert corresponding block records with valid timestamps
+   * - Run eventCountMetric
    * @expected
-   * - EventCountEntity remains unchanged
-   * - total metric remains unchanged
+   * - EventCountEntity must update to count = 6
+   * - Total metric must update to value = 6
    */
   it('should ignore events below last processed height', async () => {
-    const testData = eventCountTestData.test5;
+    const testData = eventCountTestData.ignoreOldEvents;
 
     await eventCountRepo.insert(testData.eventCountRepo);
     await metricRepo.insert(testData.metricRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await eventCountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
     });
-    expect(metric).not.toBeNull();
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    const countRecord = await eventCountRepo.findOne({
-      where: {
-        status: 'successful',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-      },
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
     });
-    expect(countRecord).not.toBeNull();
-    expect(countRecord?.eventCount).toBe(5);
+
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
-   * @target eventCountMetric should handle complex scenario with multiple groups
-   * @dependency database
+   * @target Should filter out events with timestamps after yesterday's start
    * @scenario
-   * - insert multiple EventTriggerEntity records with various groups
-   * - call eventCountMetric
+   * - Insert 3 successful events
+   * - 2 events have timestamps before yesterday's start
+   * - 1 event has timestamp after yesterday's start
+   * - Run eventCountMetric
    * @expected
-   * - all groups correctly aggregated
-   * - total metric reflects sum of all events
+   * - Only counts events with timestamps < yesterdayTs (2 total)
+   * - Events with timestamps >= yesterdayTs are ignored
+   * - Total metric = 2
    */
-  it('should handle complex scenario with multiple groups', async () => {
-    const testData = eventCountTestData.test6;
+  it("should filter out events with timestamps after yesterday's start", async () => {
+    const testData = eventCountTestData.filterByTimestamp;
 
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await eventCountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
     });
-    expect(metric).not.toBeNull();
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    for (const expected of testData.expectedResults.eventCounts) {
-      const countRecord = await eventCountRepo.findOne({
-        where: {
-          status: expected.status,
-          fromChain: expected.fromChain,
-          toChain: expected.toChain,
-        },
-      });
-      expect(countRecord).not.toBeNull();
-      expect(countRecord?.eventCount).toBe(expected.count);
-    }
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
 
-    const allCounts = await eventCountRepo.find();
-    expect(allCounts).toHaveLength(testData.expectedResults.eventCounts.length);
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 
   /**
-   * @target eventCountMetric should not process non-successful/fraud events
-   * @dependency database
+   * @target Should filter out null status events
    * @scenario
-   * - insert EventTriggerEntity with status not in ['successful', 'fraud']
-   * - call eventCountMetric
+   * - Insert 2 successful events and 1 null status event
+   * - Run eventCountMetric
    * @expected
-   * - non-successful/fraud events are ignored
-   * - no EventCountEntity created for those events
+   * - Only counts successful/fraud events (2 total)
+   * - null status event is ignored
+   * - Total metric = 2
    */
-  it('should not process non-successful/fraud events', async () => {
-    const testData = eventCountTestData.test1;
+  it('should filter out null status events', async () => {
+    const testData = eventCountTestData.filterNullStatusEvents;
 
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await eventCountMetric(dataSource, logger);
 
-    const allCounts = await eventCountRepo.find();
-    expect(allCounts).toHaveLength(3);
+    const metric = await metricRepo.findOne({
+      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
+    });
+    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
+
+    const actualEventCounts = await eventCountRepo.find({
+      select: [
+        'fromChain',
+        'toChain',
+        'eventCount',
+        'status',
+        'lastProcessedHeight',
+      ],
+    });
+
+    expect(actualEventCounts).toHaveLength(
+      testData.expectedResults.eventCounts.length,
+    );
+
+    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
   });
 });

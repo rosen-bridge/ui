@@ -20,6 +20,6 @@ export class UserEventEntity {
   @Column({ type: 'int' })
   count: number;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int' })
   lastProcessedHeight: number;
 }

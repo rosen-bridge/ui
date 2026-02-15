@@ -1,5 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
+import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { RosenTokens } from '@rosen-bridge/tokens';
+import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 
 import { WatcherCountConfig } from '../lib';
 
@@ -145,615 +149,442 @@ export const lockedAssetsTestData = {
   },
 };
 
+/**
+ * Helper function to create minimal EventTriggerEntity for testing
+ */
+const createEventTrigger = (
+  overrides: Partial<EventTriggerEntity>,
+): DeepPartial<EventTriggerEntity> => ({
+  eventId: 'event',
+  identifier: `box-${Math.random()}`,
+  block: `block-${Math.random()}`,
+  height: 100,
+  extractor: `ext-${Math.random()}`,
+  txId: 'tx1',
+  fromChain: 'ergo',
+  toChain: 'cardano',
+  fromAddress: 'addr1',
+  toAddress: 'addr2',
+  amount: '100',
+  bridgeFee: '1',
+  networkFee: '0.1',
+  sourceChainTokenId: 'token1',
+  sourceChainHeight: 100,
+  targetChainTokenId: 'token2',
+  sourceTxId: 'sourceTx1',
+  sourceBlockId: 'sourceBlock1',
+  spendBlock: 'block1',
+  spendTxId: 'spendTx1',
+  paymentTxId: 'paymentTx1',
+  WIDsCount: 1,
+  WIDsHash: 'hash1',
+  serialized: '{}',
+  ...overrides,
+});
+
+/**
+ * Helper function to create minimal BlockEntity for testing
+ */
+const createBlock = (
+  overrides: Partial<BlockEntity>,
+): DeepPartial<BlockEntity> => ({
+  id: Math.floor(Math.random() * 10000),
+  height: 100,
+  hash: 'block1',
+  parentHash: `parent-${Math.random()}`,
+  status: PROCEED,
+  scanner: 'ergo',
+  timestamp: 1704153600, // 2024-01-02 00:00:00 UTC (yesterday's start)
+  year: 2024,
+  month: 1,
+  day: 2,
+  ...overrides,
+});
+
 export const eventCountTestData = {
-  test1: {
+  /**
+   * Test 1: New events within timestamp range
+   * - 4 events with valid timestamps before yesterday's start
+   * - Different status and chain combinations
+   */
+  newEventsTest1: {
     eventTriggerRepo: [
-      {
+      createEventTrigger({
         eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 100,
-        extractor: 'ext1',
         fromChain: 'ergo',
         toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 100,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
         spendHeight: 110,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
         eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 101,
-        extractor: 'ext2',
         fromChain: 'ergo',
         toChain: 'cardano',
-        txId: 'tx2',
-        fromAddress: 'addr2',
-        toAddress: 'addr3',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 101,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
         spendHeight: 111,
-        spendTxId: 'spendTx2',
-        result: 'fraud',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-      {
+        spendBlock: 'block2',
+        result: 'fraud' as const,
+      }),
+      createEventTrigger({
         eventId: 'event3',
-        boxId: 'box3',
-        block: 'block3',
-        height: 102,
-        extractor: 'ext3',
         fromChain: 'cardano',
         toChain: 'ergo',
-        txId: 'tx3',
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
-        amount: '300',
-        bridgeFee: '3',
-        networkFee: '0.3',
-        sourceChainTokenId: 'token5',
-        sourceChainHeight: 102,
-        targetChainTokenId: 'token6',
-        sourceTxId: 'sourceTx3',
-        sourceBlockId: 'sourceBlock3',
-        spendBlock: 'block3',
         spendHeight: 112,
-        spendTxId: 'spendTx3',
-        result: 'successful',
-        paymentTxId: 'paymentTx3',
-        WIDsCount: 1,
-        WIDsHash: 'hash3',
-        serialized: '{}',
-      },
-      {
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
         eventId: 'event4',
-        boxId: 'box4',
-        block: 'block4',
-        height: 103,
-        extractor: 'ext4',
         fromChain: 'ergo',
         toChain: 'cardano',
-        txId: 'tx4',
-        fromAddress: 'addr4',
-        toAddress: 'addr5',
-        amount: '400',
-        bridgeFee: '4',
-        networkFee: '0.4',
-        sourceChainTokenId: 'token7',
-        sourceChainHeight: 103,
-        targetChainTokenId: 'token8',
-        sourceTxId: 'sourceTx4',
-        sourceBlockId: 'sourceBlock4',
+        spendHeight: 120,
         spendBlock: 'block4',
-        spendHeight: 113,
-        spendTxId: 'spendTx4',
-        result: 'pending',
-        paymentTxId: 'paymentTx4',
-        WIDsCount: 1,
-        WIDsHash: 'hash4',
-        serialized: '{}',
-      },
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC (before yesterday's start)
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704070800, // 2024-01-01 01:00:00 UTC
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704074400, // 2024-01-01 02:00:00 UTC
+        height: 112,
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1704103200, // 2024-01-01 10:00:00 UTC
+        height: 120,
+      }),
     ],
     expectedResults: {
-      totalCount: 3,
       eventCounts: [
         {
-          status: 'successful',
+          status: 'fraud',
           fromChain: 'ergo',
           toChain: 'cardano',
-          count: 1,
+          eventCount: 1,
+          lastProcessedHeight: 111,
         },
-        { status: 'fraud', fromChain: 'ergo', toChain: 'cardano', count: 1 },
         {
           status: 'successful',
           fromChain: 'cardano',
           toChain: 'ergo',
-          count: 1,
+          eventCount: 1,
+          lastProcessedHeight: 112,
         },
-      ],
-      totalMetricValue: '3',
-    },
-  },
-
-  test2: {
-    eventCountRepo: [
-      {
-        status: 'successful',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        eventCount: 5,
-        lastProcessedHeight: 100,
-      },
-    ],
-    metricRepo: [
-      {
-        key: 'event_count_total',
-        value: '5',
-        updatedAt: 1_000,
-      },
-    ],
-    expectedResults: {
-      totalCount: 0,
-      eventCounts: [],
-      totalMetricValue: '5',
-    },
-  },
-
-  test3: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 100,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 100,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 110,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 101,
-        extractor: 'ext2',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx2',
-        fromAddress: 'addr2',
-        toAddress: 'addr3',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 101,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
-        spendHeight: 115,
-        spendTxId: 'spendTx2',
-        result: 'successful',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event3',
-        boxId: 'box3',
-        block: 'block3',
-        height: 102,
-        extractor: 'ext3',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx3',
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
-        amount: '300',
-        bridgeFee: '3',
-        networkFee: '0.3',
-        sourceChainTokenId: 'token5',
-        sourceChainHeight: 102,
-        targetChainTokenId: 'token6',
-        sourceTxId: 'sourceTx3',
-        sourceBlockId: 'sourceBlock3',
-        spendBlock: 'block3',
-        spendHeight: 120,
-        spendTxId: 'spendTx3',
-        result: 'successful',
-        paymentTxId: 'paymentTx3',
-        WIDsCount: 1,
-        WIDsHash: 'hash3',
-        serialized: '{}',
-      },
-    ],
-    expectedResults: {
-      totalCount: 3,
-      eventCounts: [
         {
           status: 'successful',
           fromChain: 'ergo',
           toChain: 'cardano',
-          count: 3,
+          eventCount: 2,
+          lastProcessedHeight: 120,
         },
       ],
-      totalMetricValue: '3',
+      totalMetricValue: '4',
     },
   },
 
-  test4: {
+  /**
+   * Test 2: Update existing counts with new events
+   * Existing count: 5 successful ergo→cardano
+   * New events: 2 more successful ergo→cardano with valid timestamps
+   */
+  updateExistingCounts: {
     eventTriggerRepo: [
-      {
+      createEventTrigger({
         eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 105,
-        extractor: 'ext1',
         fromChain: 'ergo',
         toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 105,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
         spendHeight: 115,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
         eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 106,
-        extractor: 'ext2',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        txId: 'tx2',
-        fromAddress: 'addr2',
-        toAddress: 'addr3',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 106,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
         spendHeight: 116,
-        spendTxId: 'spendTx2',
-        result: 'fraud',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-    ],
-    eventCountRepo: [
-      {
-        status: 'successful',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        eventCount: 5,
-        lastProcessedHeight: 100,
-      },
-      {
-        status: 'fraud',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        eventCount: 2,
-        lastProcessedHeight: 100,
-      },
-    ],
-    metricRepo: [
-      {
-        key: 'event_count_total',
-        value: '7',
-        updatedAt: 1_000,
-      },
-    ],
-    expectedResults: {
-      totalCount: 2,
-      eventCounts: [
-        {
-          status: 'successful',
-          fromChain: 'ergo',
-          toChain: 'cardano',
-          count: 6,
-        },
-        { status: 'fraud', fromChain: 'cardano', toChain: 'ergo', count: 3 },
-      ],
-      totalMetricValue: '9',
-    },
-  },
-
-  test5: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 90,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 90,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 95,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-    ],
-    eventCountRepo: [
-      {
-        status: 'successful',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        eventCount: 5,
-        lastProcessedHeight: 100,
-      },
-    ],
-    metricRepo: [
-      {
-        key: 'event_count_total',
-        value: '5',
-        updatedAt: 1_000,
-      },
-    ],
-    expectedResults: {
-      totalCount: 0,
-      eventCounts: [
-        {
-          status: 'successful',
-          fromChain: 'ergo',
-          toChain: 'cardano',
-          count: 5,
-        },
-      ],
-      totalMetricValue: '5',
-    },
-  },
-
-  test6: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 100,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 100,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 110,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 101,
-        extractor: 'ext2',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx2',
-        fromAddress: 'addr2',
-        toAddress: 'addr3',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 101,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
         spendBlock: 'block2',
-        spendHeight: 115,
-        spendTxId: 'spendTx2',
-        result: 'successful',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704081600, // 2024-01-01 04:00:00 UTC
+        height: 115,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704085200, // 2024-01-01 05:00:00 UTC
+        height: 116,
+      }),
+    ],
+    eventCountRepo: [
       {
-        eventId: 'event3',
-        boxId: 'box3',
-        block: 'block3',
-        height: 102,
-        extractor: 'ext3',
+        status: 'successful',
         fromChain: 'ergo',
         toChain: 'cardano',
-        txId: 'tx3',
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
-        amount: '300',
-        bridgeFee: '3',
-        networkFee: '0.3',
-        sourceChainTokenId: 'token5',
-        sourceChainHeight: 102,
-        targetChainTokenId: 'token6',
-        sourceTxId: 'sourceTx3',
-        sourceBlockId: 'sourceBlock3',
-        spendBlock: 'block3',
-        spendHeight: 120,
-        spendTxId: 'spendTx3',
-        result: 'successful',
-        paymentTxId: 'paymentTx3',
-        WIDsCount: 1,
-        WIDsHash: 'hash3',
-        serialized: '{}',
+        eventCount: 5,
+        lastProcessedHeight: 100,
       },
+    ],
+    metricRepo: [
       {
-        eventId: 'event4',
-        boxId: 'box4',
-        block: 'block4',
-        height: 103,
-        extractor: 'ext4',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        txId: 'tx4',
-        fromAddress: 'addr4',
-        toAddress: 'addr5',
-        amount: '400',
-        bridgeFee: '4',
-        networkFee: '0.4',
-        sourceChainTokenId: 'token7',
-        sourceChainHeight: 103,
-        targetChainTokenId: 'token8',
-        sourceTxId: 'sourceTx4',
-        sourceBlockId: 'sourceBlock4',
-        spendBlock: 'block4',
-        spendHeight: 113,
-        spendTxId: 'spendTx4',
-        result: 'fraud',
-        paymentTxId: 'paymentTx4',
-        WIDsCount: 1,
-        WIDsHash: 'hash4',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event5',
-        boxId: 'box5',
-        block: 'block5',
-        height: 104,
-        extractor: 'ext5',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        txId: 'tx5',
-        fromAddress: 'addr5',
-        toAddress: 'addr6',
-        amount: '500',
-        bridgeFee: '5',
-        networkFee: '0.5',
-        sourceChainTokenId: 'token9',
-        sourceChainHeight: 104,
-        targetChainTokenId: 'token10',
-        sourceTxId: 'sourceTx5',
-        sourceBlockId: 'sourceBlock5',
-        spendBlock: 'block5',
-        spendHeight: 114,
-        spendTxId: 'spendTx5',
-        result: 'fraud',
-        paymentTxId: 'paymentTx5',
-        WIDsCount: 1,
-        WIDsHash: 'hash5',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event6',
-        boxId: 'box6',
-        block: 'block6',
-        height: 105,
-        extractor: 'ext6',
-        fromChain: 'ethereum',
-        toChain: 'ergo',
-        txId: 'tx6',
-        fromAddress: 'addr6',
-        toAddress: 'addr7',
-        amount: '600',
-        bridgeFee: '6',
-        networkFee: '0.6',
-        sourceChainTokenId: 'token11',
-        sourceChainHeight: 105,
-        targetChainTokenId: 'token12',
-        sourceTxId: 'sourceTx6',
-        sourceBlockId: 'sourceBlock6',
-        spendBlock: 'block6',
-        spendHeight: 115,
-        spendTxId: 'spendTx6',
-        result: 'successful',
-        paymentTxId: 'paymentTx6',
-        WIDsCount: 1,
-        WIDsHash: 'hash6',
-        serialized: '{}',
+        key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
       },
     ],
     expectedResults: {
-      totalCount: 6,
       eventCounts: [
         {
           status: 'successful',
           fromChain: 'ergo',
           toChain: 'cardano',
-          count: 3,
+          eventCount: 7,
+          lastProcessedHeight: 116,
         },
-        { status: 'fraud', fromChain: 'cardano', toChain: 'ergo', count: 2 },
+      ],
+      totalMetricValue: '7',
+    },
+  },
+
+  /**
+   * Test 3: Ignore events below last processed height
+   * Existing last processed: 100
+   * New event with spendHeight: 95 (ignored)
+   * New event with spendHeight: 105 (processed)
+   */
+  ignoreOldEvents: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 95,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 105,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1703980800, // 2023-12-31 00:00:00 UTC
+        height: 95,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC
+        height: 105,
+      }),
+    ],
+    eventCountRepo: [
+      {
+        status: 'successful',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      eventCounts: [
         {
           status: 'successful',
-          fromChain: 'ethereum',
-          toChain: 'ergo',
-          count: 1,
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 6,
+          lastProcessedHeight: 105,
         },
       ],
       totalMetricValue: '6',
+    },
+  },
+
+  /**
+   * Test 4: Filter events by timestamp
+   * - 3 events with different timestamps
+   * - 2 events with timestamps before yesterday's start
+   * - 1 event with timestamp at yesterday's start (should be excluded)
+   */
+  filterByTimestamp: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 120,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC (before yesterday's start)
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704110400, // 2024-01-01 12:00:00 UTC (before yesterday's start)
+        height: 115,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704153600, // 2024-01-02 00:00:00 UTC (yesterday's start) - excluded
+        height: 120,
+      }),
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 2,
+          lastProcessedHeight: 115,
+        },
+      ],
+      totalMetricValue: '2',
+    },
+  },
+
+  /**
+   * Test 5: No new events
+   * Only existing data, no new events
+   */
+  noNewEvents: {
+    eventTriggerRepo: [],
+    blockRepo: [],
+    eventCountRepo: [
+      {
+        status: 'successful',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 5,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalMetricValue: '5',
+    },
+  },
+
+  /**
+   * Test 6: Filter null status events
+   * 2 successful + 1 null status - only successful should be counted
+   */
+  filterNullStatusEvents: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 111,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: null,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704067260, // 2024-01-01 00:01:00 UTC
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704067320, // 2024-01-01 00:02:00 UTC
+        height: 112,
+      }),
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 2,
+          lastProcessedHeight: 111,
+        },
+      ],
+      totalMetricValue: '2',
     },
   },
 };
@@ -789,515 +620,298 @@ export const userEventTestData = {
 };
 
 export const userEventMetricTestData = {
-  test1: {
+  /**
+   * Test 1: New events with different address pairs
+   * - 4 events with different address combinations
+   * - All successful status
+   * - Timestamps before yesterday's start
+   */
+  newEventsDifferentAddresses: {
     eventTriggerRepo: [
-      {
+      createEventTrigger({
         eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 100,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 100,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
         spendHeight: 110,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
         eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 101,
-        extractor: 'ext2',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx2',
         fromAddress: 'addr1',
-        toAddress: 'addr3',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 101,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
+        toAddress: 'addr2',
         spendHeight: 115,
-        spendTxId: 'spendTx2',
-        result: 'successful',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-      {
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
         eventId: 'event3',
-        boxId: 'box3',
-        block: 'block3',
-        height: 102,
-        extractor: 'ext3',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        txId: 'tx3',
-        fromAddress: 'addr2',
-        toAddress: 'addr4',
-        amount: '300',
-        bridgeFee: '3',
-        networkFee: '0.3',
-        sourceChainTokenId: 'token5',
-        sourceChainHeight: 102,
-        targetChainTokenId: 'token6',
-        sourceTxId: 'sourceTx3',
-        sourceBlockId: 'sourceBlock3',
-        spendBlock: 'block3',
-        spendHeight: 120,
-        spendTxId: 'spendTx3',
-        result: 'successful',
-        paymentTxId: 'paymentTx3',
-        WIDsCount: 1,
-        WIDsHash: 'hash3',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event4',
-        boxId: 'box4',
-        block: 'block4',
-        height: 103,
-        extractor: 'ext4',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx4',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '400',
-        bridgeFee: '4',
-        networkFee: '0.4',
-        sourceChainTokenId: 'token7',
-        sourceChainHeight: 103,
-        targetChainTokenId: 'token8',
-        sourceTxId: 'sourceTx4',
-        sourceBlockId: 'sourceBlock4',
-        spendBlock: 'block4',
-        spendHeight: 125,
-        spendTxId: 'spendTx4',
-        result: 'fraud',
-        paymentTxId: 'paymentTx4',
-        WIDsCount: 1,
-        WIDsHash: 'hash4',
-        serialized: '{}',
-      },
-    ],
-    expectedResults: {
-      totalCount: 3,
-      userEvents: [
-        { fromAddress: 'addr1', toAddress: 'addr2', count: 1 },
-        { fromAddress: 'addr1', toAddress: 'addr3', count: 1 },
-        { fromAddress: 'addr2', toAddress: 'addr4', count: 1 },
-      ],
-      totalMetricValue: '3',
-    },
-  },
-
-  test2: {
-    userEventRepo: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        count: 5,
-        lastProcessedHeight: 100,
-      },
-    ],
-    metricRepo: [
-      {
-        key: 'user_event_total',
-        value: '5',
-        updatedAt: 1_000,
-      },
-    ],
-    expectedResults: {
-      totalCount: 0,
-      userEvents: [{ fromAddress: 'addr1', toAddress: 'addr2', count: 5 }],
-      totalMetricValue: '5',
-    },
-  },
-
-  test3: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 100,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 100,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 110,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 101,
-        extractor: 'ext2',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx2',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 101,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
-        spendHeight: 115,
-        spendTxId: 'spendTx2',
-        result: 'successful',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event3',
-        boxId: 'box3',
-        block: 'block3',
-        height: 102,
-        extractor: 'ext3',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx3',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '300',
-        bridgeFee: '3',
-        networkFee: '0.3',
-        sourceChainTokenId: 'token5',
-        sourceChainHeight: 102,
-        targetChainTokenId: 'token6',
-        sourceTxId: 'sourceTx3',
-        sourceBlockId: 'sourceBlock3',
-        spendBlock: 'block3',
-        spendHeight: 120,
-        spendTxId: 'spendTx3',
-        result: 'successful',
-        paymentTxId: 'paymentTx3',
-        WIDsCount: 1,
-        WIDsHash: 'hash3',
-        serialized: '{}',
-      },
-    ],
-    expectedResults: {
-      totalCount: 3,
-      userEvents: [{ fromAddress: 'addr1', toAddress: 'addr2', count: 3 }],
-      totalMetricValue: '3',
-    },
-  },
-
-  test4: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 105,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 105,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 115,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 106,
-        extractor: 'ext2',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        txId: 'tx2',
-        fromAddress: 'addr2',
-        toAddress: 'addr4',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 106,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
-        spendHeight: 116,
-        spendTxId: 'spendTx2',
-        result: 'successful',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-    ],
-    userEventRepo: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        count: 5,
-        lastProcessedHeight: 100,
-      },
-      {
-        fromAddress: 'addr2',
-        toAddress: 'addr4',
-        count: 2,
-        lastProcessedHeight: 100,
-      },
-    ],
-    metricRepo: [
-      {
-        key: 'user_event_total',
-        value: '7',
-        updatedAt: 1_000,
-      },
-    ],
-    expectedResults: {
-      totalCount: 2,
-      userEvents: [
-        { fromAddress: 'addr1', toAddress: 'addr2', count: 6 }, // 5 + 1
-        { fromAddress: 'addr2', toAddress: 'addr4', count: 3 }, // 2 + 1
-      ],
-      totalMetricValue: '9', // 7 + 2
-    },
-  },
-
-  test5: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 90,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 90,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 95,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-    ],
-    userEventRepo: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        count: 5,
-        lastProcessedHeight: 100,
-      },
-    ],
-    metricRepo: [
-      {
-        key: 'user_event_total',
-        value: '5',
-        updatedAt: 1_000,
-      },
-    ],
-    expectedResults: {
-      totalCount: 0,
-      userEvents: [{ fromAddress: 'addr1', toAddress: 'addr2', count: 5 }],
-      totalMetricValue: '5',
-    },
-  },
-
-  test6: {
-    eventTriggerRepo: [
-      {
-        eventId: 'event1',
-        boxId: 'box1',
-        block: 'block1',
-        height: 100,
-        extractor: 'ext1',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx1',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '100',
-        bridgeFee: '1',
-        networkFee: '0.1',
-        sourceChainTokenId: 'token1',
-        sourceChainHeight: 100,
-        targetChainTokenId: 'token2',
-        sourceTxId: 'sourceTx1',
-        sourceBlockId: 'sourceBlock1',
-        spendBlock: 'block1',
-        spendHeight: 110,
-        spendTxId: 'spendTx1',
-        result: 'successful',
-        paymentTxId: 'paymentTx1',
-        WIDsCount: 1,
-        WIDsHash: 'hash1',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event2',
-        boxId: 'box2',
-        block: 'block2',
-        height: 101,
-        extractor: 'ext2',
-        fromChain: 'ergo',
-        toChain: 'cardano',
-        txId: 'tx2',
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        amount: '200',
-        bridgeFee: '2',
-        networkFee: '0.2',
-        sourceChainTokenId: 'token3',
-        sourceChainHeight: 101,
-        targetChainTokenId: 'token4',
-        sourceTxId: 'sourceTx2',
-        sourceBlockId: 'sourceBlock2',
-        spendBlock: 'block2',
-        spendHeight: 115,
-        spendTxId: 'spendTx2',
-        result: 'successful',
-        paymentTxId: 'paymentTx2',
-        WIDsCount: 1,
-        WIDsHash: 'hash2',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event3',
-        boxId: 'box3',
-        block: 'block3',
-        height: 102,
-        extractor: 'ext3',
-        fromChain: 'cardano',
-        toChain: 'ergo',
-        txId: 'tx3',
-        fromAddress: 'addr2',
-        toAddress: 'addr4',
-        amount: '300',
-        bridgeFee: '3',
-        networkFee: '0.3',
-        sourceChainTokenId: 'token5',
-        sourceChainHeight: 102,
-        targetChainTokenId: 'token6',
-        sourceTxId: 'sourceTx3',
-        sourceBlockId: 'sourceBlock3',
-        spendBlock: 'block3',
-        spendHeight: 120,
-        spendTxId: 'spendTx3',
-        result: 'successful',
-        paymentTxId: 'paymentTx3',
-        WIDsCount: 1,
-        WIDsHash: 'hash3',
-        serialized: '{}',
-      },
-      {
-        eventId: 'event4',
-        boxId: 'box4',
-        block: 'block4',
-        height: 103,
-        extractor: 'ext4',
-        fromChain: 'ethereum',
-        toChain: 'ergo',
-        txId: 'tx4',
         fromAddress: 'addr3',
-        toAddress: 'addr5',
-        amount: '400',
-        bridgeFee: '4',
-        networkFee: '0.4',
-        sourceChainTokenId: 'token7',
-        sourceChainHeight: 103,
-        targetChainTokenId: 'token8',
-        sourceTxId: 'sourceTx4',
-        sourceBlockId: 'sourceBlock4',
+        toAddress: 'addr4',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 120,
         spendBlock: 'block4',
-        spendHeight: 125,
-        spendTxId: 'spendTx4',
-        result: 'successful',
-        paymentTxId: 'paymentTx4',
-        WIDsCount: 1,
-        WIDsHash: 'hash4',
-        serialized: '{}',
-      },
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({ hash: 'block1', height: 110, timestamp: 1704067200 }), // 2024-01-01 00:00:00
+      createBlock({ hash: 'block2', height: 115, timestamp: 1704070800 }), // 2024-01-01 01:00:00
+      createBlock({ hash: 'block3', height: 112, timestamp: 1704074400 }), // 2024-01-01 02:00:00
+      createBlock({ hash: 'block4', height: 120, timestamp: 1704103200 }), // 2024-01-01 10:00:00
     ],
     expectedResults: {
-      totalCount: 4,
       userEvents: [
-        { fromAddress: 'addr1', toAddress: 'addr2', count: 2 },
-        { fromAddress: 'addr2', toAddress: 'addr4', count: 1 },
-        { fromAddress: 'addr3', toAddress: 'addr5', count: 1 },
+        {
+          fromAddress: 'addr1',
+          toAddress: 'addr2',
+          count: 2,
+          lastProcessedHeight: 115,
+        },
+        {
+          fromAddress: 'addr3',
+          toAddress: 'addr4',
+          count: 1,
+          lastProcessedHeight: 112,
+        },
+        {
+          fromAddress: 'addr5',
+          toAddress: 'addr6',
+          count: 1,
+          lastProcessedHeight: 120,
+        },
       ],
       totalMetricValue: '4',
+    },
+  },
+
+  /**
+   * Test 2: Update existing counts with new events
+   * Existing count: 5 for addr1→addr2
+   * New events: 2 more for same address pair
+   */
+  updateExistingCounts: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 115,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 116,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({ hash: 'block1', height: 115, timestamp: 1704081600 }), // 2024-01-01 04:00:00
+      createBlock({ hash: 'block2', height: 116, timestamp: 1704085200 }), // 2024-01-01 05:00:00
+    ],
+    userEventRepo: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.USER_EVENT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          toAddress: 'addr2',
+          count: 7,
+          lastProcessedHeight: 116,
+        },
+      ],
+      totalMetricValue: '7',
+    },
+  },
+
+  /**
+   * Test 3: Ignore events below last processed height
+   * Existing last processed: 100
+   * New event with spendHeight: 95 (ignored)
+   * New event with spendHeight: 105 (processed)
+   */
+  ignoreOldEvents: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 95, // Below lastProcessedHeight - ignored
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 105, // Above lastProcessedHeight - processed
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({ hash: 'block1', height: 95, timestamp: 1703980800 }), // 2023-12-31 00:00:00
+      createBlock({ hash: 'block2', height: 105, timestamp: 1704067200 }), // 2024-01-01 00:00:00
+    ],
+    userEventRepo: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.USER_EVENT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          toAddress: 'addr2',
+          count: 6,
+          lastProcessedHeight: 105,
+        },
+      ],
+      totalMetricValue: '6',
+    },
+  },
+
+  /**
+   * Test 4: Filter events by timestamp
+   * - 3 events with different timestamps
+   * - 2 events with timestamps before yesterday's start
+   * - 1 event with timestamp at yesterday's start (excluded)
+   */
+  filterByTimestamp: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({ hash: 'block1', height: 110, timestamp: 1704067200 }), // 2024-01-01 00:00:00 - included
+      createBlock({ hash: 'block2', height: 115, timestamp: 1704110400 }), // 2024-01-01 12:00:00 - included
+      createBlock({ hash: 'block3', height: 112, timestamp: 1704153600 }), // 2024-01-02 00:00:00 - excluded
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          toAddress: 'addr2',
+          count: 2,
+          lastProcessedHeight: 115,
+        },
+      ],
+      totalMetricValue: '2',
+    },
+  },
+
+  /**
+   * Test 5: Filter non-successful events
+   * - 2 successful events
+   * - 1 fraud event (ignored)
+   * - 1 null status event (ignored)
+   */
+  filterNonSuccessfulEvents: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'fraud' as const, // Ignored - not successful
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 120,
+        spendBlock: null,
+        result: null, // Ignored - null status
+      }),
+    ],
+    blockRepo: [
+      createBlock({ hash: 'block1', height: 110, timestamp: 1704067200 }),
+      createBlock({ hash: 'block2', height: 115, timestamp: 1704070800 }),
+      createBlock({ hash: 'block3', height: 112, timestamp: 1704074400 }),
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          toAddress: 'addr2',
+          count: 2,
+          lastProcessedHeight: 115,
+        },
+      ],
+      totalMetricValue: '2',
     },
   },
 };

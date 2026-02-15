@@ -1,8 +1,10 @@
+import { NETWORKS } from '@rosen-ui/constants';
+
 import { AbstractDataAdapter } from '../../../../lib/abstracts/abstractDataAdapter';
 import { ChainAssetBalance } from '../../../../lib/types';
 
 export class TestAdapter extends AbstractDataAdapter {
-  chain = 'ergo';
+  chain = NETWORKS.ergo.key;
 
   getAddressAssets = async (address: string): Promise<ChainAssetBalance[]> => {
     if (address === 'addr1') {
@@ -24,5 +26,9 @@ export class TestAdapter extends AbstractDataAdapter {
       ];
     }
     return [];
+  };
+
+  getRawTotalSupply = async () => {
+    return 5000n;
   };
 }

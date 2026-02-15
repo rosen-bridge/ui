@@ -1,539 +1,373 @@
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { UserEventMetricAction } from '../../lib/actions/UserEventMetricAction';
-import { UserEventEntity } from '../../lib/entities';
 import {
-  userEventLastProcessedHeightScenarios,
-  userEventAggregatedScenarios,
-  userEventExistingScenarios,
-  userEventUpsertScenarios,
-} from '../test-data';
+  METRIC_KEYS,
+  UserEventEntity,
+  MetricEntity,
+  UserEventMetricAction,
+} from '../../lib';
+import { userEventMetricActionTestData } from '../test-data';
 import { createDatabase } from '../utils';
 
 describe('UserEventMetricAction', () => {
   let dataSource: DataSource;
-  let action: UserEventMetricAction;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let userEventRepo: Repository<UserEventEntity>;
+  let metricRepo: Repository<MetricEntity>;
+  let blockRepo: Repository<BlockEntity>;
+  let logger: AbstractLogger;
+  let action: UserEventMetricAction;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
-    action = new UserEventMetricAction(dataSource);
-
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     userEventRepo = dataSource.getRepository(UserEventEntity);
+    metricRepo = dataSource.getRepository(MetricEntity);
+    blockRepo = dataSource.getRepository(BlockEntity);
+    logger = new DummyLogger();
+
+    await eventTriggerRepo.clear();
+    await userEventRepo.clear();
+    await metricRepo.clear();
+    await blockRepo.clear();
+
+    action = new UserEventMetricAction(dataSource, logger);
   });
 
   describe('getLastProcessedHeight', () => {
-    beforeEach(async () => {
-      await userEventRepo.clear();
-    });
-
     /**
      * @target getLastProcessedHeight should return 0 when no user event records exist
-     * @dependency database
      * @scenario
-     * - ensure no UserEventEntity records exist
-     * - call getLastProcessedHeight
+     * - No records in UserEventEntity table
+     * - Call getLastProcessedHeight
      * @expected
-     * - returns 0
+     * - Successfully returns 0
      */
-    it('should return 0 when no user event records exist', async () => {
-      const scenario = userEventLastProcessedHeightScenarios.empty;
-      const result = await action.getLastProcessedHeight();
-      expect(result).toBe(scenario.expected);
+    it('should return 0 when no records exist', async () => {
+      const testData =
+        userEventMetricActionTestData.getLastProcessedHeightNoRecords;
+
+      const height = await action.getLastProcessedHeight();
+
+      expect(height).toBe(testData.expectedHeight);
     });
 
     /**
-     * @target getLastProcessedHeight should return highest lastProcessedHeight
-     * @dependency database
+     * @target getLastProcessedHeight should return the highest lastProcessedHeight from existing records
      * @scenario
-     * - insert UserEventEntity records with different lastProcessedHeights
-     * - call getLastProcessedHeight
+     * - Insert multiple UserEventEntity records with different lastProcessedHeight values (100, 120, 150)
+     * - Call getLastProcessedHeight
      * @expected
-     * - returns the highest lastProcessedHeight
+     * - Successfully returns the maximum lastProcessedHeight value (150)
      */
-    it('should return the highest lastProcessedHeight', async () => {
-      const scenario = userEventLastProcessedHeightScenarios.multipleRecords;
-      await userEventRepo.insert(scenario.userEventRepo);
+    it('should return the highest lastProcessedHeight from existing records', async () => {
+      const testData =
+        userEventMetricActionTestData.getLastProcessedHeightMultipleRecords;
 
-      const result = await action.getLastProcessedHeight();
-      expect(result).toBe(scenario.expected);
-    });
+      await userEventRepo.insert(testData.userEventRepo);
 
-    /**
-     * @target getLastProcessedHeight should return value when only one record exists
-     * @dependency database
-     * @scenario
-     * - insert single UserEventEntity record
-     * - call getLastProcessedHeight
-     * @expected
-     * - returns the lastProcessedHeight of the single record
-     */
-    it('should return value when only one record exists', async () => {
-      const scenario = userEventLastProcessedHeightScenarios.singleRecord;
-      await userEventRepo.insert(scenario.userEventRepo);
+      const height = await action.getLastProcessedHeight();
 
-      const result = await action.getLastProcessedHeight();
-      expect(result).toBe(scenario.expected);
+      expect(height).toBe(testData.expectedHeight);
     });
   });
 
   describe('getAggregatedEvents', () => {
-    beforeEach(async () => {
-      await eventTriggerRepo.clear();
-    });
-
     /**
-     * @target getAggregatedEvents should return empty array when no events exist
-     * @dependency database
+     * @target getAggregatedEvents should aggregate successful events by address pairs since last height
      * @scenario
-     * - call getAggregatedEvents on empty database
+     * - Insert 3 successful events for addr1→addr2 (2 events) and addr3→addr4 (1 event)
+     * - Insert 1 event below lastProcessedHeight (ignored)
+     * - Insert 1 fraud event (ignored - only successful)
+     * - Insert corresponding block records with valid timestamps
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 1704153600
      * @expected
-     * - returns empty array
+     * - Successfully returns 2 aggregated groups
+     * - Each group has correct count and lastProcessedHeight
+     * - Filters out events below lastProcessedHeight, non-successful status, and invalid timestamps
      */
-    it('should return empty array when no events exist', async () => {
-      const scenario = userEventAggregatedScenarios.emptyDatabase;
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
+    it('should aggregate successful events by address pairs since last height', async () => {
+      const testData =
+        userEventMetricActionTestData.getAggregatedEventsMultipleAddresses;
 
-      expect(result).toHaveLength(scenario.expectedCount);
-    });
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
-    /**
-     * @target getAggregatedEvents should aggregate multiple events for same user pair
-     * @dependency database
-     * @scenario
-     * - insert multiple EventTriggerEntity records for same fromAddress/toAddress
-     * - call getAggregatedEvents
-     * @expected
-     * - returns aggregated count for the user pair
-     * - calculates correct maxHeight
-     */
-    it('should aggregate multiple events for same user pair', async () => {
-      const scenario = userEventAggregatedScenarios.aggregateSameUserPair;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
-
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
-
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.fromAddress === expectedGroup.fromAddress &&
-          r.toAddress === expectedGroup.toAddress,
+      const aggregated = await action.getAggregatedEvents(
+        testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.userCount).toBe(expectedGroup.userCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
+      expect(aggregated).toEqual(testData.expectedAggregated);
     });
 
     /**
-     * @target getAggregatedEvents should filter by spendHeight > lastHeight
-     * @dependency database
+     * @target getAggregatedEvents should aggregate multiple events for same address pair into single record
      * @scenario
-     * - insert EventTriggerEntity records with different spendHeights
-     * - call getAggregatedEvents with specific lastHeight
+     * - Insert 3 successful events from addr1→addr2 with spendHeights 110, 115, 120
+     * - Insert corresponding block records with valid timestamps
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 1704153600
      * @expected
-     * - returns only events with spendHeight > lastHeight
+     * - Successfully returns single group
+     * - Correctly aggregates count to '3' (as string)
+     * - Correctly sets lastProcessedHeight to highest spendHeight (120)
      */
-    it('should filter by spendHeight > lastHeight', async () => {
-      const scenario = userEventAggregatedScenarios.filterByLastHeight;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
+    it('should aggregate multiple events for same address pair into single record', async () => {
+      const testData =
+        userEventMetricActionTestData.getAggregatedEventsSameAddress;
 
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.fromAddress === expectedGroup.fromAddress &&
-          r.toAddress === expectedGroup.toAddress,
+      const aggregated = await action.getAggregatedEvents(
+        testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.userCount).toBe(expectedGroup.userCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
+      expect(aggregated).toHaveLength(testData.expectedAggregated.length);
+      expect(aggregated).toEqual(testData.expectedAggregated);
     });
 
     /**
-     * @target getAggregatedEvents should ignore non-successful events
-     * @dependency database
+     * @target getAggregatedEvents should return empty array when no events since last height
      * @scenario
-     * - insert EventTriggerEntity records with different statuses
-     * - call getAggregatedEvents
+     * - Insert event with spendHeight 150 (below lastProcessedHeight = 200)
+     * - Insert corresponding block record
+     * - Call getAggregatedEvents with lastProcessedHeight = 200, untilTimestamp = 1704153600
      * @expected
-     * - returns only events with status 'successful'
+     * - Successfully returns empty array
      */
-    it('should ignore non-successful events', async () => {
-      const scenario = userEventAggregatedScenarios.ignoreNonSuccessfulEvents;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
+    it('should return empty array when no events since last height', async () => {
+      const testData =
+        userEventMetricActionTestData.getAggregatedEventsNoNewEvents;
 
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.fromAddress === expectedGroup.fromAddress &&
-          r.toAddress === expectedGroup.toAddress,
+      const aggregated = await action.getAggregatedEvents(
+        testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.userCount).toBe(expectedGroup.userCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
+      expect(aggregated).toHaveLength(0);
     });
 
     /**
-     * @target getAggregatedEvents should handle complex scenario with multiple user pairs
-     * @dependency database
+     * @target getAggregatedEvents should exclude events with timestamps above untilTimestamp
      * @scenario
-     * - insert multiple EventTriggerEntity records with various user pairs
-     * - call getAggregatedEvents
+     * - Insert 3 successful events
+     * - 2 events have timestamps below untilTimestamp (included)
+     * - 1 event has timestamp above untilTimestamp (excluded)
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 1704074400
      * @expected
-     * - all user pairs correctly aggregated
+     * - Successfully returns 2 groups
+     * - Excludes event with timestamp >= untilTimestamp
      */
-    it('should handle complex scenario with multiple user pairs', async () => {
-      const scenario = userEventAggregatedScenarios.complexScenario;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
+    it('should exclude events with timestamps above untilTimestamp', async () => {
+      const testData =
+        userEventMetricActionTestData.getAggregatedEventsExcludeByTimestamp;
 
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
+      await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      for (const expectedGroup of scenario.expectedGroups) {
-        const actualGroup = result.find(
-          (r) =>
-            r.fromAddress === expectedGroup.fromAddress &&
-            r.toAddress === expectedGroup.toAddress,
-        );
-
-        expect(actualGroup).toBeDefined();
-        expect(actualGroup?.userCount).toBe(expectedGroup.userCount);
-        expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
-      }
-    });
-
-    /**
-     * @target getAggregatedEvents should handle events below last processed height
-     * @dependency database
-     * @scenario
-     * - insert EventTriggerEntity records below and above lastHeight threshold
-     * - call getAggregatedEvents
-     * @expected
-     * - returns only events with spendHeight > lastHeight
-     */
-    it('should handle events below last processed height', async () => {
-      const scenario = userEventAggregatedScenarios.eventsBelowLastHeight;
-      await eventTriggerRepo.insert(scenario.eventTriggerRepo);
-
-      const result = await action.getAggregatedEvents(scenario.lastHeight);
-
-      expect(result).toHaveLength(scenario.expectedCount);
-
-      const expectedGroup = scenario.expectedGroups[0];
-      const actualGroup = result.find(
-        (r) =>
-          r.fromAddress === expectedGroup.fromAddress &&
-          r.toAddress === expectedGroup.toAddress,
+      const aggregated = await action.getAggregatedEvents(
+        testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
-      expect(actualGroup).toBeDefined();
-      expect(actualGroup?.userCount).toBe(expectedGroup.userCount);
-      expect(actualGroup?.maxHeight).toBe(expectedGroup.maxHeight);
+      expect(aggregated).toEqual(testData.expectedAggregated);
     });
   });
 
   describe('getExistingUserEvent', () => {
-    beforeEach(async () => {
-      await userEventRepo.clear();
+    /**
+     * @target getExistingUserEvent should return count when record exists
+     * @scenario
+     * - Insert UserEventEntity record for addr1→addr2 with count = 10
+     * - Call getExistingUserEvent with same address pair
+     * @expected
+     * - Successfully returns existing count (10)
+     */
+    it('should return count when record exists', async () => {
+      const testData = userEventMetricActionTestData.getExistingUserEventExists;
+
+      await userEventRepo.insert(testData.userEventRepo);
+
+      const count = await action.getExistingUserEvent(
+        testData.fromAddress,
+        testData.toAddress,
+      );
+
+      expect(count).toBe(testData.expectedCount);
     });
 
     /**
-     * @target getExistingUserEvent should return null when no matching record exists
-     * @dependency database
+     * @target getExistingUserEvent should return 0 when record does not exist
      * @scenario
-     * - call getExistingUserEvent for non-existent user pair
+     * - Insert UserEventEntity record for addr3→addr4
+     * - Call getExistingUserEvent with addr1→addr2 (different pair with no record)
      * @expected
-     * - returns null
+     * - Successfully returns 0
      */
-    it('should return null when no matching record exists', async () => {
-      const scenario = userEventExistingScenarios.noMatch;
-      await userEventRepo.insert(scenario.userEventRepo);
+    it('should return 0 when record does not exist', async () => {
+      const testData =
+        userEventMetricActionTestData.getExistingUserEventNotExists;
 
-      const result = await action.getExistingUserEvent(
-        scenario.query.fromAddress,
-        scenario.query.toAddress,
+      await userEventRepo.insert(testData.userEventRepo);
+
+      const count = await action.getExistingUserEvent(
+        testData.fromAddress,
+        testData.toAddress,
       );
 
-      expect(result).toBe(scenario.expected);
-    });
-
-    /**
-     * @target getExistingUserEvent should return existing UserEventEntity
-     * @dependency database
-     * @scenario
-     * - insert UserEventEntity record
-     * - call getExistingUserEvent for matching user pair
-     * @expected
-     * - returns the matching UserEventEntity
-     */
-    it('should return existing UserEventEntity', async () => {
-      const scenario = userEventExistingScenarios.exactMatch;
-      await userEventRepo.insert(scenario.userEventRepo);
-
-      const result = await action.getExistingUserEvent(
-        scenario.query.fromAddress,
-        scenario.query.toAddress,
-      );
-
-      expect(result).not.toBeNull();
-      expect(result?.fromAddress).toBe(scenario.expected?.fromAddress);
-      expect(result?.toAddress).toBe(scenario.expected?.toAddress);
-      expect(result?.count).toBe(scenario.expected?.count);
-    });
-
-    /**
-     * @target getExistingUserEvent should be case-sensitive for addresses
-     * @dependency database
-     * @scenario
-     * - insert UserEventEntity with lowercase addresses
-     * - call getExistingUserEvent with uppercase addresses
-     * @expected
-     * - returns null (addresses are case-sensitive)
-     */
-    it('should be case-sensitive for addresses', async () => {
-      const scenario = userEventExistingScenarios.caseSensitiveAddresses;
-      await userEventRepo.insert(scenario.userEventRepo);
-
-      const result = await action.getExistingUserEvent(
-        scenario.query.fromAddress,
-        scenario.query.toAddress,
-      );
-
-      expect(result).toBe(scenario.expected);
-    });
-
-    /**
-     * @target getExistingUserEvent should find correct record among multiple
-     * @dependency database
-     * @scenario
-     * - insert multiple UserEventEntity records
-     * - call getExistingUserEvent for specific user pair
-     * @expected
-     * - returns the correct matching record
-     */
-    it('should find correct record among multiple', async () => {
-      const scenario = userEventExistingScenarios.multipleRecords;
-      await userEventRepo.insert(scenario.userEventRepo);
-
-      const result = await action.getExistingUserEvent(
-        scenario.query.fromAddress,
-        scenario.query.toAddress,
-      );
-
-      expect(result).not.toBeNull();
-      expect(result?.fromAddress).toBe(scenario.expected?.fromAddress);
-      expect(result?.toAddress).toBe(scenario.expected?.toAddress);
-      expect(result?.count).toBe(scenario.expected?.count);
+      expect(count).toBe(testData.expectedCount);
     });
   });
 
-  describe('upsertUserEventCount', () => {
-    beforeEach(async () => {
-      await userEventRepo.clear();
-    });
-
+  describe('upsertEventsCount', () => {
     /**
-     * @target upsertUserEventCount should insert new user event record
-     * @dependency database
+     * @target upsertEventsCount should create new user event records and update total metric
      * @scenario
-     * - call upsertUserEventCount with new data
-     * - verify record was created
+     * - No existing UserEventEntity or MetricEntity records
+     * - Call upsertEventsCount with 2 aggregated user event groups and totalCount = 4
      * @expected
-     * - new UserEventEntity record is created
+     * - Successfully creates 2 UserEventEntity records with correct counts and heights
+     * - Successfully creates MetricEntity record with USER_EVENT_TOTAL = '4'
      */
-    it('should insert new user event record', async () => {
-      const scenario = userEventUpsertScenarios.insertNew;
-      await userEventRepo.insert(scenario.initialData);
+    it('should create new user event records and update total metric', async () => {
+      const testData = userEventMetricActionTestData.upsertEventsCountNewGroups;
 
-      await action.upsertUserEventCount(
-        scenario.upsertData.fromAddress,
-        scenario.upsertData.toAddress,
-        scenario.upsertData.count,
-        scenario.upsertData.maxHeight,
+      await action.upsertEventsCount(
+        testData.aggregatedUsersEvents,
+        testData.totalCount,
       );
 
-      const allRecords = await userEventRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      const result = await userEventRepo.findOne({
-        where: {
-          fromAddress: scenario.expectedRecord.fromAddress,
-          toAddress: scenario.expectedRecord.toAddress,
-        },
+      const userEvents = await userEventRepo.find({
+        select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+        order: { fromAddress: 'ASC', toAddress: 'ASC' },
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.count).toBe(scenario.expectedRecord.count);
-      expect(result?.lastProcessedHeight).toBe(
-        scenario.expectedRecord.lastProcessedHeight,
-      );
+      expect(userEvents).toHaveLength(testData.expectedUserEvents.length);
+      expect(userEvents).toEqual(testData.expectedUserEvents);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      });
+      expect(metric?.value).toBe(testData.expectedMetricValue);
+      expect(metric?.updatedAt).toBeDefined();
     });
 
     /**
-     * @target upsertUserEventCount should update existing user event record
-     * @dependency database
+     * @target upsertEventsCount should replace existing user event records with new values
      * @scenario
-     * - insert existing UserEventEntity
-     * - call upsertUserEventCount with same user pair but different data
-     * - verify record was updated
+     * - Insert existing UserEventEntity with count = 5 and lastProcessedHeight = 100
+     * - Insert existing MetricEntity with USER_EVENT_TOTAL = '5'
+     * - Call upsertEventsCount with aggregated event (count = 2, lastProcessedHeight = 130) and totalCount = 7
      * @expected
-     * - existing UserEventEntity record is updated
+     * - Successfully REPLACES existing UserEventEntity with count = 2, height = 130
+     * - Successfully updates MetricEntity to '7'
      */
-    it('should update existing user event record', async () => {
-      const scenario = userEventUpsertScenarios.updateExisting;
-      await userEventRepo.insert(scenario.initialData);
+    it('should replace existing user event records with new values', async () => {
+      const testData =
+        userEventMetricActionTestData.upsertEventsCountUpdateExisting;
 
-      await action.upsertUserEventCount(
-        scenario.upsertData.fromAddress,
-        scenario.upsertData.toAddress,
-        scenario.upsertData.count,
-        scenario.upsertData.maxHeight,
+      await userEventRepo.insert(testData.existingUserEvents);
+      await metricRepo.insert(testData.existingMetric);
+
+      await action.upsertEventsCount(
+        testData.aggregatedUsersEvents,
+        testData.totalCount,
       );
 
-      const allRecords = await userEventRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      const result = await userEventRepo.findOne({
-        where: {
-          fromAddress: scenario.expectedRecord.fromAddress,
-          toAddress: scenario.expectedRecord.toAddress,
-        },
+      const userEvents = await userEventRepo.find({
+        select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+        order: { fromAddress: 'ASC', toAddress: 'ASC' },
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.count).toBe(scenario.expectedRecord.count);
-      expect(result?.lastProcessedHeight).toBe(
-        scenario.expectedRecord.lastProcessedHeight,
-      );
+      expect(userEvents).toHaveLength(testData.expectedUserEvents.length);
+      expect(userEvents).toEqual(testData.expectedUserEvents);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      });
+      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
 
     /**
-     * @target upsertUserEventCount should handle zero count
-     * @dependency database
+     * @target upsertEventsCount should handle both new and existing groups in same transaction
      * @scenario
-     * - call upsertUserEventCount with count = 0
+     * - Insert existing UserEventEntity for addr1→addr2 (count = 5, height = 100)
+     * - Insert existing MetricEntity with USER_EVENT_TOTAL = '5'
+     * - Call upsertEventsCount with:
+     *   - Existing group: addr1→addr2 (count = 3, height = 120)
+     *   - New group: addr3→addr4 (count = 2, height = 115)
+     *   - totalCount = 10
      * @expected
-     * - record is created with zero count
+     * - Successfully replaces existing group with count = 3, height = 120
+     * - Successfully creates new group with count = 2, height = 115
+     * - Successfully updates total metric to '10'
      */
-    it('should handle zero count', async () => {
-      const scenario = userEventUpsertScenarios.zeroCount;
-      await userEventRepo.insert(scenario.initialData);
+    it('should handle both new and existing groups in same transaction', async () => {
+      const testData =
+        userEventMetricActionTestData.upsertEventsCountMixedGroups;
 
-      await action.upsertUserEventCount(
-        scenario.upsertData.fromAddress,
-        scenario.upsertData.toAddress,
-        scenario.upsertData.count,
-        scenario.upsertData.maxHeight,
+      await userEventRepo.insert(testData.existingUserEvents);
+      await metricRepo.insert(testData.existingMetric);
+
+      await action.upsertEventsCount(
+        testData.aggregatedUsersEvents,
+        testData.totalCount,
       );
 
-      const allRecords = await userEventRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      const result = await userEventRepo.findOne({
-        where: {
-          fromAddress: scenario.expectedRecord.fromAddress,
-          toAddress: scenario.expectedRecord.toAddress,
-        },
+      const userEvents = await userEventRepo.find({
+        select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.count).toBe(scenario.expectedRecord.count);
+      expect(userEvents).toHaveLength(testData.expectedUserEvents.length);
+      expect(userEvents).toEqual(testData.expectedUserEvents);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      });
+      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
 
     /**
-     * @target upsertUserEventCount should handle multiple updates to same user pair
-     * @dependency database
+     * @target upsertEventsCount should update only total metric when aggregated events array is empty
      * @scenario
-     * - call upsertUserEventCount multiple times with same user pair
+     * - Insert existing UserEventEntity with count = 5 and lastProcessedHeight = 100
+     * - Insert existing MetricEntity with USER_EVENT_TOTAL = '5'
+     * - Call upsertEventsCount with empty aggregatedUsersEvents array and totalCount = 5
      * @expected
-     * - last update wins
+     * - Successfully leaves existing UserEventEntity unchanged (count = 5, height = 100)
+     * - Successfully updates total metric with provided totalCount value (still '5')
      */
-    it('should handle multiple updates to same user pair', async () => {
-      const scenario = userEventUpsertScenarios.updateMultipleTimes;
-      await userEventRepo.insert(scenario.initialData);
+    it('should update only total metric when aggregated events array is empty', async () => {
+      const testData = userEventMetricActionTestData.upsertEventsCountEmpty;
 
-      for (const operation of scenario.upsertOperations) {
-        await action.upsertUserEventCount(
-          operation.fromAddress,
-          operation.toAddress,
-          operation.count,
-          operation.maxHeight,
-        );
-      }
+      await userEventRepo.insert(testData.existingUserEvents);
+      await metricRepo.insert(testData.existingMetric);
 
-      const allRecords = await userEventRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
+      await action.upsertEventsCount(
+        testData.aggregatedUsersEvents,
+        testData.totalCount,
+      );
 
-      const result = await userEventRepo.findOne({
-        where: {
-          fromAddress: scenario.expectedRecord.fromAddress,
-          toAddress: scenario.expectedRecord.toAddress,
-        },
+      const userEvents = await userEventRepo.find({
+        select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
       });
 
-      expect(result).not.toBeNull();
-      expect(result?.count).toBe(scenario.expectedRecord.count);
-      expect(result?.lastProcessedHeight).toBe(
-        scenario.expectedRecord.lastProcessedHeight,
-      );
-    });
+      expect(userEvents).toHaveLength(testData.expectedUserEvents.length);
+      expect(userEvents).toEqual(testData.expectedUserEvents);
 
-    /**
-     * @target upsertUserEventCount should treat different address directions as separate pairs
-     * @dependency database
-     * @scenario
-     * - call upsertUserEventCount with addr1->addr2 and addr2->addr1
-     * @expected
-     * - creates two separate records
-     */
-    it('should treat different address directions as separate pairs', async () => {
-      const scenario = userEventUpsertScenarios.duplicateAddressPairs;
-      await userEventRepo.insert(scenario.initialData);
-
-      for (const operation of scenario.upsertOperations) {
-        await action.upsertUserEventCount(
-          operation.fromAddress,
-          operation.toAddress,
-          operation.count,
-          operation.maxHeight,
-        );
-      }
-
-      const allRecords = await userEventRepo.find();
-      expect(allRecords).toHaveLength(scenario.expectedCount);
-
-      // Verify both pairs exist with correct values
-      for (const expectedRecord of scenario.expectedRecords) {
-        const result = await userEventRepo.findOne({
-          where: {
-            fromAddress: expectedRecord.fromAddress,
-            toAddress: expectedRecord.toAddress,
-          },
-        });
-
-        expect(result).not.toBeNull();
-        expect(result?.count).toBe(expectedRecord.count);
-        expect(result?.lastProcessedHeight).toBe(
-          expectedRecord.lastProcessedHeight,
-        );
-      }
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      });
+      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
   });
 });

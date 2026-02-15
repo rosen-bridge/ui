@@ -6,11 +6,12 @@ import { LockedAssetEntity } from './LockedAssetEntity';
 
 class LockedAssetModel {
   protected readonly lockedAssetRepository: Repository<LockedAssetEntity>;
-  protected readonly logger: AbstractLogger;
 
-  constructor(dataSource: DataSource, logger = new DummyLogger()) {
+  constructor(
+    dataSource: DataSource,
+    protected logger: AbstractLogger = new DummyLogger(),
+  ) {
     this.lockedAssetRepository = dataSource.getRepository(LockedAssetEntity);
-    this.logger = logger;
   }
 
   /**

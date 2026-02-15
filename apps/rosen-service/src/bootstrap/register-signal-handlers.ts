@@ -1,10 +1,10 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 import { handleError } from '../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 process.on('SIGTERM', async () => {
   logger.debug(

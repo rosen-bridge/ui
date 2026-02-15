@@ -1,6 +1,5 @@
 'use client';
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
@@ -26,18 +25,11 @@ import { getFilters, sorts } from './config';
 import { EventSidebar } from './EventSidebar';
 
 const Page = () => {
-  const searchParams = useSearchParams();
-
-  const router = useRouter();
-
-  const pathname = usePathname();
-
   const dense = useBreakpoint('laptop-down');
 
   const { openSnackbar } = useSnackbar();
 
   const collection = useCollection({
-    searchParams: searchParams.toString(),
     defaultPageIndex: 0,
     defaultPageSize: 25,
     defaultSortField: 'timestamp',
@@ -61,7 +53,7 @@ const Page = () => {
   const items = useMemo(() => {
     if (!isLoading) return data?.items || [];
     return Array(collection.pageSize).fill({});
-  }, [collection.pageSize, data, isLoading]);
+  }, [collection.pageSize, data?.items, isLoading]);
 
   const renderPagination = useCallback(
     () => (
@@ -75,7 +67,14 @@ const Page = () => {
         onPageSizeChange={collection.setPageSize}
       />
     ),
-    [collection, data, isLoading],
+    [
+      collection.pageSize,
+      collection.pageIndex,
+      collection.setPageIndex,
+      collection.setPageSize,
+      data?.total,
+      isLoading,
+    ],
   );
 
   const renderSearch = useCallback(
@@ -88,7 +87,7 @@ const Page = () => {
         onChange={collection.setFields}
       />
     ),
-    [collection, filters, isLoading],
+    [collection.fields, collection.setFields, filters, isLoading],
   );
 
   const renderSidebar = useCallback(
@@ -108,16 +107,30 @@ const Page = () => {
         onChange={collection.setSort}
       />
     ),
-    [collection, dense, isLoading],
+    [collection.sort, collection.setSort, dense, isLoading],
   );
 
   useEffect(() => {
-    if (collection.query === searchParams.toString()) return;
+    items && collection.scrollIntoView();
+  }, [collection.scrollIntoView, items]);
 
-    const url = collection.query ? `${pathname}?${collection.query}` : pathname;
+  useEffect(() => {
+    if (!collection.fragment) return;
 
-    router.replace(url, { scroll: false });
-  }, [collection.query, pathname, router, searchParams]);
+    const item = items.find(
+      (item) => item.id?.toString() === collection.fragment,
+    );
+
+    if (!item) return;
+
+    setCurrent(item);
+  }, [collection.fragment, items]);
+
+  useEffect(() => {
+    if (current?.id) {
+      collection.setFragment(current.id.toString());
+    }
+  }, [collection.setFragment, current?.id]);
 
   useEffect(() => {
     setCurrent(undefined);
@@ -144,6 +157,7 @@ const Page = () => {
         <GridContainer gap="8px" minWidth="242px">
           {items.map((item, index) => (
             <EventCard
+              id={item.id}
               key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
               active={!isLoading && current === item}
               isLoading={isLoading}
