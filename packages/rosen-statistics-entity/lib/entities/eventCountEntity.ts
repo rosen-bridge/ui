@@ -23,6 +23,6 @@ export class EventCountEntity {
   @Column({ type: 'varchar' })
   toChain: string;
 
-  @Column({ type: 'int', default: 0 })
+  @Column({ type: 'int' })
   lastProcessedHeight: number;
 }

@@ -7,11 +7,12 @@ import { BridgedAssetEntity } from './BridgedAssetEntity';
 
 class BridgedAssetModel {
   protected readonly bridgedAssetRepository: Repository<BridgedAssetEntity>;
-  protected readonly logger: AbstractLogger;
 
-  constructor(dataSource: DataSource, logger = new DummyLogger()) {
+  constructor(
+    dataSource: DataSource,
+    protected logger: AbstractLogger = new DummyLogger(),
+  ) {
     this.bridgedAssetRepository = dataSource.getRepository(BridgedAssetEntity);
-    this.logger = logger;
   }
 
   /**

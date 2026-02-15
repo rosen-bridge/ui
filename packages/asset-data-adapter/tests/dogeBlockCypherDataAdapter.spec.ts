@@ -1,5 +1,4 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
 
 import { DogeBlockCypherDataAdapter } from '../lib';
 import { sampleTokenMapConfig } from './mocked';

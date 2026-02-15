@@ -10,7 +10,7 @@ import {
 } from './types';
 
 export class DogeBlockCypherDataAdapter extends AbstractDataAdapter {
-  chain: string = NETWORKS.doge.key;
+  chain = NETWORKS.doge.key;
   protected client: Axios;
 
   constructor(
@@ -44,4 +44,12 @@ export class DogeBlockCypherDataAdapter extends AbstractDataAdapter {
       },
     ];
   };
+
+  /**
+   * Returns the raw total supply of a wrapped token on the current chain.
+   *
+   * @param wrappedTokenId - Identifier of the wrapped token.
+   * @returns The raw total supply as a bigint (not normalized).
+   */
+  getRawTotalSupply = async () => 0n;
 }

@@ -12,7 +12,7 @@ export class Migration1767795454053 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "event_count_entity"
-            ADD "lastProcessedHeight" integer NOT NULL DEFAULT '0'
+            ADD "lastProcessedHeight" integer NOT NULL
         `);
     await queryRunner.query(`
             ALTER TABLE "event_count_entity"

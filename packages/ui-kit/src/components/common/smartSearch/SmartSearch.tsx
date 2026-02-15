@@ -63,6 +63,8 @@ export const SmartSearch = ({
   value: filters,
   onChange,
 }: SmartSearchProps) => {
+  const timeout = useRef<number>();
+
   const $anchor = useRef<HTMLInputElement>(null);
 
   const $history = useRef<HistoryRef>(null);
@@ -73,7 +75,7 @@ export const SmartSearch = ({
 
   const [query, setQuery] = useState('');
 
-  const [selected, setSelected] = useState<Selected[]>(filters || []);
+  const [selected, setSelected] = useState<Selected[]>([]);
 
   const state = useMemo<SmartSearchState>(() => {
     if (!current) return 'idle';
@@ -171,6 +173,7 @@ export const SmartSearch = ({
   );
 
   const handleInputFocus = useCallback(() => {
+    clearTimeout(timeout.current);
     setCurrent({});
   }, []);
 
@@ -269,6 +272,8 @@ export const SmartSearch = ({
   }, [current]);
 
   useEffect(() => {
+    setSelected(filters || []);
+
     $search.current?.focus({ preventScroll: true });
 
     setCurrent(undefined);
@@ -297,6 +302,7 @@ export const SmartSearch = ({
       <VirtualScroll>
         <Container>
           <Chips
+            disabled={disabled}
             filters={filtersInput}
             value={selectedValidatedWithCurrent}
             onRemove={(item) => {
@@ -313,6 +319,12 @@ export const SmartSearch = ({
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
+            onBlur={() => {
+              if (picker?.type == 'multiple') return;
+              timeout.current = window.setTimeout(() => {
+                setCurrent(undefined);
+              }, 250);
+            }}
           />
           <Picker
             anchorEl={$anchor.current}

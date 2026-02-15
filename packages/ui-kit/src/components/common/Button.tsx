@@ -7,7 +7,7 @@ import {
   HTMLAttributeAnchorTarget,
 } from 'react';
 
-import { LoadingButton } from '@mui/lab';
+import { Button as ButtonMui } from '@mui/material';
 
 import { InjectOverrides } from './InjectOverrides';
 
@@ -52,9 +52,9 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonPropsBase>(
     }, [block]);
 
     return (
-      <LoadingButton sx={sx} size={size} variant={variant} ref={ref} {...rest}>
+      <ButtonMui sx={sx} size={size} variant={variant} ref={ref} {...rest}>
         {children}
-      </LoadingButton>
+      </ButtonMui>
     );
   },
 );

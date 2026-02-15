@@ -2,11 +2,10 @@ import { ReactNode } from 'react';
 
 import { Button } from '@mui/material';
 
-import { useIsMobile, isLegacyTheme } from '../../../hooks';
+import { useIsMobile, isLegacyTheme, useFramework } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
 import { Badge } from '../../base';
 import { SvgIcon } from '../SvgIcon';
-import { useNavigationBar } from './useNavigationBar';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
   'flexDirection': 'column',
@@ -125,7 +124,12 @@ export const NavigationButton = ({
   path,
   disabled,
 }: NavigationButtonProps) => {
-  const { click, isActive } = useNavigationBar();
+  const {
+    components: { Anchor },
+    router,
+  } = useFramework();
+
+  const isActive = router.pathname === path;
 
   const isMobile = useIsMobile();
 
@@ -140,14 +144,15 @@ export const NavigationButton = ({
 
   return (
     <NavigationButtonBase
-      onClick={() => click(path)}
-      className={isActive(path) ? 'active' : undefined}
+      href={path}
+      LinkComponent={Anchor}
+      className={isActive ? 'active' : undefined}
       startIcon={startIcon}
       variant="text"
       disabled={disabled}
       disableRipple
     >
-      {isMobile && isActive(path) ? <NavigationButtonIndicator /> : label}
+      {isMobile && isActive ? <NavigationButtonIndicator /> : label}
     </NavigationButtonBase>
   );
 };

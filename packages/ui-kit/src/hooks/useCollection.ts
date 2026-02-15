@@ -1,17 +1,19 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OPERATORS, Selected, SortValue } from '../components';
+import { OPERATORS, Selected, SortValue, ViewType } from '../components';
+import { useFramework } from './useFramework';
 
 type Options = {
-  searchParams?: string;
   defaultPageIndex?: number;
   defaultPageSize?: number;
   defaultSortField?: string;
   defaultSortOrder?: 'ASC' | 'DESC';
+  defaultView?: ViewType;
+  localStorageKey?: string;
 };
 
-const getInitialState = (options?: Options) => {
-  const searchParams = new URLSearchParams(options?.searchParams);
+const getInitialState = (search: string, options?: Options) => {
+  const searchParams = new URLSearchParams(search);
 
   const limitRaw = searchParams.get('limit');
   searchParams.delete('limit');
@@ -87,26 +89,43 @@ const getInitialState = (options?: Options) => {
     })
     .filter((field) => !!field);
 
+  const fragment = window.location.hash.replace('#', '');
+
+  const raw =
+    window.localStorage.getItem(
+      `rosen:collection:${options?.localStorageKey}`,
+    ) || '';
+
+  const view = ['grid', 'row'].includes(raw)
+    ? (raw as ViewType)
+    : options?.defaultView;
+
   return {
     fields,
+    fragment,
     pageIndex,
     pageSize,
     sort,
+    view,
   };
 };
 
 export const useCollection = (options?: Options) => {
-  const [init] = useState(() => getInitialState(options));
+  const framework = useFramework();
 
-  const [fields, setFields] = useState<Selected[] | undefined>(init.fields);
+  const syncing = useRef(false);
 
-  const [pageIndex, setPageIndex] = useState<number | undefined>(
-    init.pageIndex,
-  );
+  const [fields, setFields] = useState<Selected[]>();
 
-  const [pageSize, setPageSize] = useState<number | undefined>(init.pageSize);
+  const [pageIndex, setPageIndex] = useState<number>();
 
-  const [sort, setSort] = useState<SortValue | undefined>(init.sort);
+  const [pageSize, setPageSize] = useState<number>();
+
+  const [sort, setSort] = useState<SortValue>();
+
+  const [view, setView] = useState<ViewType>();
+
+  const [fragment, setFragment] = useState<string>();
 
   const query = useMemo<string | undefined>(() => {
     const params: Record<string, string> = {};
@@ -146,25 +165,133 @@ export const useCollection = (options?: Options) => {
       .join('&');
   }, [fields, pageIndex, pageSize, sort]);
 
-  const handleFieldsChange = useCallback((fields: Selected[]) => {
+  useEffect(() => {
+    syncing.current = true;
+
+    const next = getInitialState(framework.router.search, {
+      defaultPageIndex: options?.defaultPageIndex,
+      defaultPageSize: options?.defaultPageSize,
+      defaultSortField: options?.defaultSortField,
+      defaultSortOrder: options?.defaultSortOrder,
+      defaultView: options?.defaultView,
+      localStorageKey: options?.localStorageKey,
+    });
+
+    setFields(next.fields);
+    setFragment(next.fragment);
+    setPageIndex(next.pageIndex);
+    setPageSize(next.pageSize);
+    setSort(next.sort);
+    setView(next.view);
+  }, [
+    framework.router.search,
+    options?.defaultPageIndex,
+    options?.defaultPageSize,
+    options?.defaultSortField,
+    options?.defaultSortOrder,
+    options?.defaultView,
+    options?.localStorageKey,
+  ]);
+
+  const handleFieldsChange = useCallback((fields?: Selected[]) => {
     setFields(fields);
     setPageIndex(0);
   }, []);
 
-  const handlePageSizeChange = useCallback((size: number) => {
+  const handlePageSizeChange = useCallback((size?: number) => {
     setPageSize(size);
     setPageIndex(0);
   }, []);
 
-  const handleSortChange = useCallback((sort: SortValue | undefined) => {
-    setSort(sort);
+  const scrollIntoView = useCallback(() => {
+    if (!fragment) return;
+
+    const element = document.getElementById(fragment);
+
+    if (!element) return;
+
+    const rect = element.getBoundingClientRect();
+
+    const inViewport =
+      rect.top >= 0 &&
+      rect.left >= 0 &&
+      rect.bottom <=
+        (window.innerHeight || document.documentElement.clientHeight) &&
+      rect.right <= (window.innerWidth || document.documentElement.clientWidth);
+
+    if (inViewport) return;
+
+    element.scrollIntoView({ behavior: 'smooth' });
+  }, [fragment]);
+
+  useEffect(() => {
+    if (syncing.current) return;
+
+    setView(view);
+
+    if (!options?.localStorageKey) return;
+
+    if (view) {
+      window.localStorage.setItem(
+        `rosen:collection:${options.localStorageKey}`,
+        view,
+      );
+    } else {
+      window.localStorage.removeItem(
+        `rosen:collection:${options.localStorageKey}`,
+      );
+    }
+  }, [options?.localStorageKey, view]);
+
+  useEffect(() => {
+    if (syncing.current) {
+      syncing.current = false;
+      return;
+    }
+
+    if (
+      query === framework.router.search &&
+      window.location.hash === `#${fragment}`
+    )
+      return;
+
+    let url = framework.router.pathname;
+
+    if (query) {
+      url += `?${query}`;
+    }
+
+    if (fragment) {
+      url += `#${fragment}`;
+    }
+
+    framework.router.push(url);
+  }, [query, fragment, framework.router]);
+
+  useEffect(() => {
+    const update = () => {
+      const fragment = window.location.hash.replace('#', '');
+
+      setFragment(fragment);
+    };
+
+    window.addEventListener('hashchange', update);
+
+    return () => window.removeEventListener('hashchange', update);
   }, []);
+
+  useEffect(scrollIntoView, [scrollIntoView]);
 
   return {
     query,
 
+    scrollIntoView,
+
     fields,
     setFields: handleFieldsChange,
+
+    fragment,
+    setFragment,
 
     pageIndex,
     setPageIndex,
@@ -173,6 +300,9 @@ export const useCollection = (options?: Options) => {
     setPageSize: handlePageSizeChange,
 
     sort,
-    setSort: handleSortChange,
+    setSort,
+
+    view,
+    setView,
   };
 };

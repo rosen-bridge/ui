@@ -5,6 +5,14 @@ export const testTokenMap: RosenTokens = JSON.parse(`[]`);
 export const multiDecimalTokenMap: RosenTokens = JSON.parse(`
   [
     { 
+      "ergo" : {
+        "tokenId" : "7a51950e5f548549ec1aa63ffdc38279505b11e7e803d01bcf8347e0123c88b0",
+        "name" : "rsBTC",
+        "decimals" : 8,
+        "type" : "EIP-004",
+        "residency" : "wrapped",
+        "extra" : {}
+      },
       "cardano": {
         "tokenId": "6d7cc9577a04be165cc4f2cf36f580dbeaf88f68e78f790805430940.72734254432d6c6f656e",
         "extra": {
