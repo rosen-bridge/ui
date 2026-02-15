@@ -81,6 +81,5 @@ export const userEventMetric = async (
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    throw error;
   }
 };
