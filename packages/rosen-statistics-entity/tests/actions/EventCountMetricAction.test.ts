@@ -1,4 +1,5 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -17,6 +18,7 @@ describe('EventCountMetricAction', () => {
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let eventCountRepo: Repository<EventCountEntity>;
   let metricRepo: Repository<MetricEntity>;
+  let blockRepo: Repository<BlockEntity>;
   let logger: AbstractLogger;
   let action: EventCountMetricAction;
 
@@ -25,11 +27,14 @@ describe('EventCountMetricAction', () => {
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     eventCountRepo = dataSource.getRepository(EventCountEntity);
     metricRepo = dataSource.getRepository(MetricEntity);
+    blockRepo = dataSource.getRepository(BlockEntity);
     logger = new DummyLogger();
 
     await eventTriggerRepo.clear();
     await eventCountRepo.clear();
     await metricRepo.clear();
+    await blockRepo.clear();
+
     action = new EventCountMetricAction(dataSource, logger);
   });
 
@@ -42,7 +47,7 @@ describe('EventCountMetricAction', () => {
      * @expected
      * - Returns 0
      */
-    it('should return 0 when no records exist', async () => {
+    it('should return 0 when no event count records exist', async () => {
       const testData =
         eventCountMetricActionTestData.getLastProcessedHeightNoRecords;
 
@@ -73,23 +78,27 @@ describe('EventCountMetricAction', () => {
 
   describe('getAggregatedEvents', () => {
     /**
-     * @target getAggregatedEvents should aggregate events by status and chain pairs since last height
+     * @target getAggregatedEvents should aggregate events by status and chain pairs since last height up to timestamp
      * @scenario
-     * - Insert events above lastProcessedHeight with different statuses (successful, fraud) and chain pairs
-     * - Insert events below lastProcessedHeight and with null status (should be ignored)
-     * - Call getAggregatedEvents with lastProcessedHeight = 100
+     * - Insert events above lastProcessedHeight with valid timestamps
+     * - Insert events below lastProcessedHeight (should be ignored)
+     * - Insert event with null status (should be ignored)
+     * - Insert corresponding block records with timestamps
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 2000000
      * @expected
-     * - Returns 3 aggregated groups with correct counts (as numbers) and max heights
+     * - Returns 3 aggregated groups with correct counts
      * - Does not include events below lastProcessedHeight or with null status
      */
-    it('should aggregate events by status and chain pairs since last height', async () => {
+    it('should aggregate events by status and chain pairs since last height up to timestamp', async () => {
       const testData =
         eventCountMetricActionTestData.getAggregatedEventsMultipleGroups;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
       const aggregated = await action.getAggregatedEvents(
         testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
       expect(aggregated).toEqual(testData.expectedAggregated);
@@ -99,7 +108,8 @@ describe('EventCountMetricAction', () => {
      * @target getAggregatedEvents should aggregate multiple events in same group into single record
      * @scenario
      * - Insert 3 successful events from ergo to cardano with different spendHeights
-     * - Call getAggregatedEvents with lastProcessedHeight = 100
+     * - Insert corresponding block records with valid timestamps
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 2000000
      * @expected
      * - Returns single group with count = 3 (as number) and lastProcessedHeight = 120
      */
@@ -108,9 +118,11 @@ describe('EventCountMetricAction', () => {
         eventCountMetricActionTestData.getAggregatedEventsSameGroup;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
       const aggregated = await action.getAggregatedEvents(
         testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
       expect(aggregated).toHaveLength(testData.expectedAggregated.length);
@@ -130,9 +142,11 @@ describe('EventCountMetricAction', () => {
         eventCountMetricActionTestData.getAggregatedEventsNoNewEvents;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
+      await blockRepo.insert(testData.blockRepo);
 
       const aggregated = await action.getAggregatedEvents(
         testData.lastProcessedHeight,
+        testData.untilTimestamp,
       );
 
       expect(aggregated).toHaveLength(0);
@@ -265,7 +279,7 @@ describe('EventCountMetricAction', () => {
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
       });
-      expect(metric?.value).toBe('7');
+      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
 
     /**
@@ -310,7 +324,7 @@ describe('EventCountMetricAction', () => {
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
       });
-      expect(metric?.value).toBe('10');
+      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
 
     /**
@@ -350,7 +364,7 @@ describe('EventCountMetricAction', () => {
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
       });
-      expect(metric?.value).toBe('5');
+      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
   });
 });

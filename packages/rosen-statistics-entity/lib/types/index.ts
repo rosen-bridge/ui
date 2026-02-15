@@ -1,2 +1,1 @@
-export { AggregatedEvents } from './eventsCount';
-export { EventCountStatus } from './eventsCount';
+export { AggregatedEvents, EventCountStatus } from './eventsCount';

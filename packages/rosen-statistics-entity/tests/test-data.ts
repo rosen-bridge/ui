@@ -1,8 +1,12 @@
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
 import { METRIC_KEYS, EventCountStatus } from '../lib';
 
+/**
+ * Helper function to create minimal EventTriggerEntity for testing
+ */
 const createEventTrigger = (
   overrides: Partial<EventTriggerEntity>,
 ): DeepPartial<EventTriggerEntity> => ({
@@ -28,6 +32,25 @@ const createEventTrigger = (
   WIDsCount: 1,
   WIDsHash: 'hash1',
   serialized: '{}',
+  ...overrides,
+});
+
+/**
+ * Helper function to create minimal BlockEntity for testing
+ */
+const createBlock = (
+  overrides: Partial<BlockEntity>,
+): DeepPartial<BlockEntity> => ({
+  id: Math.floor(Math.random() * 10000),
+  height: 100,
+  hash: 'block1',
+  parentHash: 'parent-block-hash',
+  status: PROCEED,
+  scanner: 'ergo',
+  timestamp: 1000000,
+  year: 2024,
+  month: 1,
+  day: 1,
   ...overrides,
 });
 
@@ -73,17 +96,19 @@ export const eventCountMetricActionTestData = {
 
   /**
    * Scenario: Get aggregated events
-   * - New events from height 100
+   * - New events from height 100 up to timestamp 2000000
    * - Multiple groups with different statuses
    */
   getAggregatedEventsMultipleGroups: {
     lastProcessedHeight: 100,
+    untilTimestamp: 2000000,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 110,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -91,6 +116,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 115,
+        spendBlock: 'block2',
         result: 'fraud' as const,
       }),
       createEventTrigger({
@@ -98,6 +124,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'cardano',
         toChain: 'ergo',
         spendHeight: 112,
+        spendBlock: 'block3',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -105,6 +132,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 90, // Below lastProcessedHeight - should be ignored
+        spendBlock: 'block4',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -112,7 +140,50 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ethereum',
         toChain: 'ergo',
         spendHeight: 120,
+        spendBlock: 'block5',
         result: null, // null - should be ignored
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1500000,
+        height: 110,
+        parentHash: 'parent1',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1600000,
+        height: 115,
+        parentHash: 'parent2',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1550000,
+        height: 112,
+        parentHash: 'parent3',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1400000,
+        height: 90,
+        parentHash: 'parent4',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block5',
+        timestamp: 1700000,
+        height: 120,
+        parentHash: 'parent5',
+        status: PROCEED,
+        scanner: 'ergo',
       }),
     ],
     expectedAggregated: [
@@ -146,12 +217,14 @@ export const eventCountMetricActionTestData = {
    */
   getAggregatedEventsNoNewEvents: {
     lastProcessedHeight: 200,
+    untilTimestamp: 2000000,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 150,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -159,9 +232,29 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 180,
+        spendBlock: 'block2',
         result: 'fraud' as const,
       }),
     ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1500000,
+        height: 150,
+        parentHash: 'parent1',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1600000,
+        height: 180,
+        parentHash: 'parent2',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+    ],
+    expectedAggregated: [],
   },
 
   /**
@@ -170,12 +263,14 @@ export const eventCountMetricActionTestData = {
    */
   getAggregatedEventsSameGroup: {
     lastProcessedHeight: 100,
+    untilTimestamp: 2000000,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 110,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -183,6 +278,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 115,
+        spendBlock: 'block2',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -190,7 +286,34 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 120,
+        spendBlock: 'block3',
         result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1500000,
+        height: 110,
+        parentHash: 'parent1',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1600000,
+        height: 115,
+        parentHash: 'parent2',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1700000,
+        height: 120,
+        parentHash: 'parent3',
+        status: PROCEED,
+        scanner: 'ergo',
       }),
     ],
     expectedAggregated: [
