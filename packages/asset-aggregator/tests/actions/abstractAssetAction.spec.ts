@@ -5,32 +5,41 @@ import {
 } from '@rosen-bridge/extended-typeorm';
 
 import { BridgedAssetEntity, TokenEntity } from '../../lib';
-import { BridgedAssetAction } from '../../lib/actions';
+import { AbstractAssetAction } from '../../lib/actions/abstractAssetAction';
 import { createDatabase } from '../testUtils';
-import { BridgedAssetTestData } from './bridgedAssetActionTestData';
+import { AbstractAssetTestData } from './abstractAssetActionTestData';
 
-interface BridgedAssetTestContext {
+interface AbstractAssetTestContext {
   dataSource: DataSource;
   queryRunner: QueryRunner;
   repository: Repository<BridgedAssetEntity>;
   tokenRepository: Repository<TokenEntity>;
-  action: BridgedAssetAction;
+  action: TestAssetAction;
 }
 
-describe('BridgedAssetAction', () => {
-  beforeEach<BridgedAssetTestContext>(async (context) => {
+class TestAssetAction extends AbstractAssetAction<BridgedAssetEntity> {
+  protected readonly repository: Repository<BridgedAssetEntity>;
+
+  constructor(protected dataSource: DataSource) {
+    super(dataSource);
+    this.repository = dataSource.getRepository(BridgedAssetEntity);
+  }
+}
+
+describe('AbstractAssetAction', () => {
+  beforeEach<AbstractAssetTestContext>(async (context) => {
     context.dataSource = await createDatabase();
     context.queryRunner = context.dataSource.createQueryRunner();
     context.repository =
       context.queryRunner.manager.getRepository(BridgedAssetEntity);
     context.tokenRepository =
       context.queryRunner.manager.getRepository(TokenEntity);
-    context.action = new BridgedAssetAction(context.dataSource);
+    context.action = new TestAssetAction(context.dataSource);
   });
 
   describe('store', () => {
     /**
-     * @target should store a single bridged asset
+     * @target should store a single asset
      * @dependencies
      * - TokenEntity (for foreign key constraint)
      * @scenario
@@ -39,15 +48,15 @@ describe('BridgedAssetAction', () => {
      * @expected
      * - New record of BridgedAssetEntity should be stored in database
      */
-    it<BridgedAssetTestContext>('should store a single bridged asset', async ({
+    it<AbstractAssetTestContext>('should store a single asset', async ({
       action,
       repository,
       tokenRepository,
     }) => {
       // Insert required token first
-      await tokenRepository.insert(BridgedAssetTestData.SAMPLE_TOKENS[0]);
+      await tokenRepository.insert(AbstractAssetTestData.SAMPLE_TOKENS[0]);
 
-      const asset = BridgedAssetTestData.createSingleAsset();
+      const asset = AbstractAssetTestData.createSingleAsset();
 
       await action.store(asset);
 
@@ -56,7 +65,7 @@ describe('BridgedAssetAction', () => {
     });
 
     /**
-     * @target should store multiple bridged assets
+     * @target should store multiple assets
      * @dependencies
      * - TokenEntity (for foreign key constraint)
      * @scenario
@@ -65,18 +74,18 @@ describe('BridgedAssetAction', () => {
      * @expected
      * - Multiple records of BridgedAssetEntity should be stored in database
      */
-    it<BridgedAssetTestContext>('should store multiple bridged assets', async ({
+    it<AbstractAssetTestContext>('should store multiple assets', async ({
       action,
       repository,
       tokenRepository,
     }) => {
       // Insert required tokens first
       await tokenRepository.insert([
-        BridgedAssetTestData.SAMPLE_TOKENS[0],
-        BridgedAssetTestData.SAMPLE_TOKENS[1],
+        AbstractAssetTestData.SAMPLE_TOKENS[0],
+        AbstractAssetTestData.SAMPLE_TOKENS[1],
       ]);
 
-      const assets = BridgedAssetTestData.createMultipleAssets(2);
+      const assets = AbstractAssetTestData.createMultipleAssets(2);
 
       await action.store(assets);
 
@@ -87,7 +96,7 @@ describe('BridgedAssetAction', () => {
 
   describe('keepOnly', () => {
     /**
-     * @target should persist a single bridged-token and remove other tokens
+     * @target should persist a single token and remove other tokens
      * @dependencies
      * @scenario
      * - store multiple BridgedAssetEntities to database
@@ -95,16 +104,16 @@ describe('BridgedAssetAction', () => {
      * @expected
      * - All other records of TokenEntity should removed from database
      */
-    it<BridgedAssetTestContext>('should persist a single bridged-token and remove other tokens', async ({
+    it<AbstractAssetTestContext>('should persist a single token and remove other tokens', async ({
       action,
       tokenRepository,
       repository,
     }) => {
-      await tokenRepository.insert(BridgedAssetTestData.SAMPLE_TOKENS);
+      await tokenRepository.insert(AbstractAssetTestData.SAMPLE_TOKENS);
       const tokens = await tokenRepository.find();
-      const bridgedEntities =
-        BridgedAssetTestData.generateTestDataBridgedEntity(tokens);
-      await repository.insert(bridgedEntities);
+      const entities =
+        AbstractAssetTestData.generateTestDataBridgedEntity(tokens);
+      await repository.insert(entities);
       const remaining = await repository.find();
       await action.keepOnly(remaining[0].tokenId);
       const dbRemaining = await repository.find();
