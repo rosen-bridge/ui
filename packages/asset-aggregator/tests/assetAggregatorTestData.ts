@@ -222,16 +222,18 @@ export const NATIVE_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
 export const SAMPLE_ANALYZER_BRIDGED_TOKEN = [
   {
     amount: 7000n,
-    bridgedTokenId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
-    chain: 'binance',
-    tokenId: 'erg',
-  },
-  {
-    amount: 7000n,
     chain: 'ergo',
     tokenId: 'bnb',
     bridgedTokenId:
       '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
+  },
+];
+export const SAMPLE_ANALYZER_BRIDGED_TOKEN_2 = [
+  {
+    amount: 7000n,
+    bridgedTokenId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
+    chain: 'binance',
+    tokenId: 'erg',
   },
 ];
 

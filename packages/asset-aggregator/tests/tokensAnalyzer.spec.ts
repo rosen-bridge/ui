@@ -8,6 +8,7 @@ import {
   WRAPPED_TOKEN_TOTAL_SUPPLY,
   SAMPLE_TOKEN_MAP,
   SAMPLE_ANALYZER_BRIDGED_TOKEN,
+  SAMPLE_ANALYZER_BRIDGED_TOKEN_2,
 } from './tokensAnalyzerTestData';
 
 interface AnalyzerTestContext {
@@ -51,7 +52,10 @@ describe('TokensAnalyzer', () => {
         NETWORKS.ergo.nativeToken,
       );
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
-      expect(analyzer['bridgedTokens']).toEqual(SAMPLE_ANALYZER_BRIDGED_TOKEN);
+      expect(analyzer['bridgedTokens']).toEqual([
+        ...SAMPLE_ANALYZER_BRIDGED_TOKEN_2,
+        ...SAMPLE_ANALYZER_BRIDGED_TOKEN,
+      ]);
     });
 
     /**
@@ -74,7 +78,7 @@ describe('TokensAnalyzer', () => {
 
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
       expect(analyzer['bridgedTokens']).toEqual([
-        SAMPLE_ANALYZER_BRIDGED_TOKEN[1],
+        SAMPLE_ANALYZER_BRIDGED_TOKEN[0],
       ]);
     });
   });
