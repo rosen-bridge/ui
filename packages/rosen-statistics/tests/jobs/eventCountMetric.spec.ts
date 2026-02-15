@@ -39,7 +39,7 @@ describe('eventCountMetric', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.useRealTimers();
   });
 
   /**
