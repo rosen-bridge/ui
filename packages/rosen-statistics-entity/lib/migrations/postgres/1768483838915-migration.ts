@@ -9,7 +9,7 @@ export class Migration1768483838915 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             ALTER TABLE "user_event_entity"
-            ADD "lastProcessedHeight" integer NOT NULL DEFAULT '0'
+            ADD "lastProcessedHeight" integer NOT NULL
         `);
   }
 

@@ -1,9 +1,13 @@
-import { DummyLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
-import { UserEventEntity } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach } from 'vitest';
+import {
+  METRIC_KEYS,
+  MetricEntity,
+  UserEventEntity,
+} from '@rosen-ui/rosen-statistics-entity';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import { userEventMetric } from '../../lib';
 import { userEventMetricTestData } from '../test-data';
@@ -14,272 +18,214 @@ describe('userEventMetric', () => {
   let metricRepo: Repository<MetricEntity>;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let userEventRepo: Repository<UserEventEntity>;
-  let logger: DummyLogger;
+  let blockRepo: Repository<BlockEntity>;
+  let logger: AbstractLogger;
 
   beforeEach(async () => {
+    // Set system time to 2024-01-03 14:20:00 UTC
+    // This makes yesterday's start = 2024-01-02 00:00:00 UTC (1704153600)
+    vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
+
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     userEventRepo = dataSource.getRepository(UserEventEntity);
-
+    blockRepo = dataSource.getRepository(BlockEntity);
     logger = new DummyLogger();
 
     await metricRepo.clear();
     await eventTriggerRepo.clear();
     await userEventRepo.clear();
+    await blockRepo.clear();
+
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   /**
-   * @target userEventMetric should calculate and store user event counts
-   * @dependency database
+   * @target Should aggregate new user events and create event count records
    * @scenario
-   * - insert EventTriggerEntity records with different fromAddress/toAddress pairs
-   * - call userEventMetric
+   * - Set system time to 2024-01-03 14:20:00 UTC (yesterday start = 2024-01-02 00:00:00 UTC)
+   * - Insert 4 successful events with different address pairs
+   * - Insert corresponding block records with timestamps before yesterday (Jan 1, 2024)
+   * - Run userEventMetric
    * @expected
-   * - user event records are created for each unique fromAddress/toAddress pair
-   * - total metric USER_EVENT_TOTAL is updated with correct value
+   * - Creates 3 UserEventEntity records with correct counts
+   * - Updates total metric to sum of all events (4)
    */
-  it('should calculate and store user event counts (test1)', async () => {
-    const testData = userEventMetricTestData.test1;
+  it('should aggregate new user events and create event count records', async () => {
+    const testData = userEventMetricTestData.newEventsDifferentAddresses;
 
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await userEventMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
     });
-    expect(metric).not.toBeNull();
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    for (const expected of testData.expectedResults.userEvents) {
-      const userEventRecord = await userEventRepo.findOne({
-        where: {
-          fromAddress: expected.fromAddress,
-          toAddress: expected.toAddress,
-        },
-      });
-      expect(userEventRecord).not.toBeNull();
-      expect(userEventRecord?.count).toBe(expected.count);
-    }
+    const actualUserEvents = await userEventRepo.find({
+      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+    });
 
-    const allUserEvents = await userEventRepo.find();
-    expect(allUserEvents).toHaveLength(
+    expect(actualUserEvents).toHaveLength(
       testData.expectedResults.userEvents.length,
     );
+
+    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
   });
 
   /**
-   * @target userEventMetric should handle no new events gracefully
-   * @dependency database
+   * @target Should update existing counts with new events
    * @scenario
-   * - insert existing user event and metric records
-   * - don't insert new events
-   * - call userEventMetric
+   * - Set system time to 2024-01-03 14:20:00 UTC
+   * - Insert existing UserEventEntity (5 for addr1→addr2)
+   * - Insert existing total metric (value: 5)
+   * - Insert 2 new successful events for same address pair with timestamps before yesterday
+   * - Run userEventMetric
    * @expected
-   * - existing records remain unchanged
-   * - metric value stays the same
+   * - Updates existing UserEventEntity to 7
+   * - Updates total metric to 7
    */
-  it('should handle no new events gracefully (test2)', async () => {
-    const testData = userEventMetricTestData.test2;
-
-    await userEventRepo.insert(testData.userEventRepo);
-    await metricRepo.insert(testData.metricRepo);
-
-    await userEventMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
-    });
-    expect(metric).not.toBeNull();
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    for (const expected of testData.expectedResults.userEvents) {
-      const userEventRecord = await userEventRepo.findOne({
-        where: {
-          fromAddress: expected.fromAddress,
-          toAddress: expected.toAddress,
-        },
-      });
-      expect(userEventRecord).not.toBeNull();
-      expect(userEventRecord?.count).toBe(expected.count);
-    }
-  });
-
-  /**
-   * @target userEventMetric should aggregate multiple events for same user pair
-   * @dependency database
-   * @scenario
-   * - insert multiple EventTriggerEntity records for same fromAddress/toAddress
-   * - call userEventMetric
-   * @expected
-   * - single user event record created with aggregated count
-   * - uses highest spendHeight as lastProcessedHeight
-   */
-  it('should aggregate multiple events for same user pair (test3)', async () => {
-    const testData = userEventMetricTestData.test3;
-
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-
-    await userEventMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
-    });
-    expect(metric).not.toBeNull();
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const expected = testData.expectedResults.userEvents[0];
-    const userEventRecord = await userEventRepo.findOne({
-      where: {
-        fromAddress: expected.fromAddress,
-        toAddress: expected.toAddress,
-      },
-    });
-
-    expect(userEventRecord).not.toBeNull();
-    expect(userEventRecord?.count).toBe(expected.count);
-
-    expect(userEventRecord?.lastProcessedHeight).toBe(120);
-  });
-
-  /**
-   * @target userEventMetric should update existing user events and total metric
-   * @dependency database
-   * @scenario
-   * - insert existing user events and metric records
-   * - insert new EventTriggerEntity records
-   * - call userEventMetric
-   * @expected
-   * - existing user event records are updated with new counts
-   * - total metric is incremented correctly
-   */
-  it('should update existing user events and total metric (test4)', async () => {
-    const testData = userEventMetricTestData.test4;
+  it('should update existing counts with new events', async () => {
+    const testData = userEventMetricTestData.updateExistingCounts;
 
     await userEventRepo.insert(testData.userEventRepo);
     await metricRepo.insert(testData.metricRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await userEventMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
     });
-    expect(metric).not.toBeNull();
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    for (const expected of testData.expectedResults.userEvents) {
-      const userEventRecord = await userEventRepo.findOne({
-        where: {
-          fromAddress: expected.fromAddress,
-          toAddress: expected.toAddress,
-        },
-      });
-      expect(userEventRecord).not.toBeNull();
-      expect(userEventRecord?.count).toBe(expected.count);
-    }
-  });
-
-  /**
-   * @target userEventMetric should ignore events below last processed height
-   * @dependency database
-   * @scenario
-   * - insert existing user event with lastProcessedHeight
-   * - insert EventTriggerEntity with spendHeight below last processed
-   * - call userEventMetric
-   * @expected
-   * - user event remains unchanged
-   * - total metric remains unchanged
-   */
-  it('should ignore events below last processed height (test5)', async () => {
-    const testData = userEventMetricTestData.test5;
-
-    await userEventRepo.insert(testData.userEventRepo);
-    await metricRepo.insert(testData.metricRepo);
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-
-    await userEventMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+    const actualUserEvents = await userEventRepo.find({
+      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
     });
-    expect(metric).not.toBeNull();
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
-    const userEventRecord = await userEventRepo.findOne({
-      where: {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-      },
-    });
-    expect(userEventRecord).not.toBeNull();
-    expect(userEventRecord?.count).toBe(5);
-  });
-
-  /**
-   * @target userEventMetric should handle complex scenario with multiple user pairs
-   * @dependency database
-   * @scenario
-   * - insert multiple EventTriggerEntity records with various user pairs
-   * - call userEventMetric
-   * @expected
-   * - all user pairs correctly aggregated
-   * - total metric reflects sum of all events
-   */
-  it('should handle complex scenario with multiple user pairs (test6)', async () => {
-    const testData = userEventMetricTestData.test6;
-
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-
-    await userEventMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
-    });
-    expect(metric).not.toBeNull();
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    for (const expected of testData.expectedResults.userEvents) {
-      const userEventRecord = await userEventRepo.findOne({
-        where: {
-          fromAddress: expected.fromAddress,
-          toAddress: expected.toAddress,
-        },
-      });
-      expect(userEventRecord).not.toBeNull();
-      expect(userEventRecord?.count).toBe(expected.count);
-    }
-
-    const allUserEvents = await userEventRepo.find();
-    expect(allUserEvents).toHaveLength(
+    expect(actualUserEvents).toHaveLength(
       testData.expectedResults.userEvents.length,
     );
+
+    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
   });
 
   /**
-   * @target userEventMetric should not process non-successful events
-   * @dependency database
+   * @target Should ignore events below last processed height
    * @scenario
-   * - insert EventTriggerEntity with status not 'successful'
-   * - call userEventMetric
+   * - Set system time to 2024-01-03 14:20:00 UTC
+   * - Insert existing UserEventEntity with lastProcessedHeight = 100
+   * - Insert event with spendHeight = 95 (below last processed)
+   * - Insert event with spendHeight = 105 (above last processed)
+   * - Insert corresponding block records with timestamps before yesterday
+   * - Run userEventMetric
    * @expected
-   * - non-successful events are ignored
-   * - no user event created for those events
+   * - UserEventEntity must update to count = 6
+   * - Total metric must update to value = 6
    */
-  it('should not process non-successful events', async () => {
-    const testData = userEventMetricTestData.test1;
+  it('should ignore events below last processed height', async () => {
+    const testData = userEventMetricTestData.ignoreOldEvents;
 
+    await userEventRepo.insert(testData.userEventRepo);
+    await metricRepo.insert(testData.metricRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
 
     await userEventMetric(dataSource, logger);
-
-    const allUserEvents = await userEventRepo.find();
-    expect(allUserEvents).toHaveLength(3);
 
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
     });
-    expect(metric?.value).toBe('3');
+    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
+
+    const actualUserEvents = await userEventRepo.find({
+      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+    });
+
+    expect(actualUserEvents).toHaveLength(
+      testData.expectedResults.userEvents.length,
+    );
+
+    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
+  });
+
+  /**
+   * @target Should filter out events with timestamps after yesterday's start
+   * @scenario
+   * - Set system time to 2024-01-03 14:20:00 UTC
+   * - Insert 3 successful events
+   * - 2 events have timestamps before yesterday's start (Jan 1, 2024)
+   * - 1 event has timestamp equal to yesterday's start (Jan 2, 2024 00:00:00 UTC)
+   * - Run userEventMetric
+   * @expected
+   * - Only counts events with timestamps < yesterdayTs (2 total)
+   * - Events with timestamps >= yesterdayTs are ignored
+   * - Total metric = 2
+   */
+  it("should filter out events with timestamps after yesterday's start", async () => {
+    const testData = userEventMetricTestData.filterByTimestamp;
+
+    await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
+
+    await userEventMetric(dataSource, logger);
+
+    const metric = await metricRepo.findOne({
+      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+    });
+    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
+
+    const actualUserEvents = await userEventRepo.find({
+      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+    });
+
+    expect(actualUserEvents).toHaveLength(
+      testData.expectedResults.userEvents.length,
+    );
+
+    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
+  });
+
+  /**
+   * @target Should filter out non-successful events
+   * @scenario
+   * - Set system time to 2024-01-03 14:20:00 UTC
+   * - Insert 2 successful events, 1 fraud event, 1 null status event
+   * - Run userEventMetric
+   * @expected
+   * - Only counts successful events (2 total)
+   * - Fraud and null status events are ignored
+   * - Total metric = 2
+   */
+  it('should filter out non-successful events', async () => {
+    const testData = userEventMetricTestData.filterNonSuccessfulEvents;
+
+    await eventTriggerRepo.insert(testData.eventTriggerRepo);
+    await blockRepo.insert(testData.blockRepo);
+
+    await userEventMetric(dataSource, logger);
+
+    const metric = await metricRepo.findOne({
+      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+    });
+    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
+
+    const actualUserEvents = await userEventRepo.find({
+      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+    });
+
+    expect(actualUserEvents).toHaveLength(
+      testData.expectedResults.userEvents.length,
+    );
+
+    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
   });
 });

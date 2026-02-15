@@ -1,8 +1,12 @@
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
 import { METRIC_KEYS, EventCountStatus } from '../lib';
 
+/**
+ * Helper function to create minimal EventTriggerEntity for testing
+ */
 const createEventTrigger = (
   overrides: Partial<EventTriggerEntity>,
 ): DeepPartial<EventTriggerEntity> => ({
@@ -12,6 +16,8 @@ const createEventTrigger = (
   height: 100,
   extractor: `ext-${Math.random()}`,
   txId: 'tx1',
+  fromChain: 'ergo',
+  toChain: 'cardano',
   fromAddress: 'addr1',
   toAddress: 'addr2',
   amount: '100',
@@ -28,6 +34,25 @@ const createEventTrigger = (
   WIDsCount: 1,
   WIDsHash: 'hash1',
   serialized: '{}',
+  ...overrides,
+});
+
+/**
+ * Helper function to create minimal BlockEntity for testing
+ */
+const createBlock = (
+  overrides: Partial<BlockEntity>,
+): DeepPartial<BlockEntity> => ({
+  id: Math.floor(Math.random() * 10000),
+  height: 100,
+  hash: 'block1',
+  parentHash: 'parent-block-hash',
+  status: PROCEED,
+  scanner: 'ergo',
+  timestamp: 1000000,
+  year: 2024,
+  month: 1,
+  day: 1,
   ...overrides,
 });
 
@@ -73,17 +98,19 @@ export const eventCountMetricActionTestData = {
 
   /**
    * Scenario: Get aggregated events
-   * - New events from height 100
+   * - New events from height 100 up to timestamp 2000000
    * - Multiple groups with different statuses
    */
   getAggregatedEventsMultipleGroups: {
     lastProcessedHeight: 100,
+    untilTimestamp: 2000000,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 110,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -91,6 +118,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 115,
+        spendBlock: 'block2',
         result: 'fraud' as const,
       }),
       createEventTrigger({
@@ -98,6 +126,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'cardano',
         toChain: 'ergo',
         spendHeight: 112,
+        spendBlock: 'block3',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -105,6 +134,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 90, // Below lastProcessedHeight - should be ignored
+        spendBlock: 'block4',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -112,7 +142,50 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ethereum',
         toChain: 'ergo',
         spendHeight: 120,
+        spendBlock: 'block5',
         result: null, // null - should be ignored
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1500000,
+        height: 110,
+        parentHash: 'parent1',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1600000,
+        height: 115,
+        parentHash: 'parent2',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1550000,
+        height: 112,
+        parentHash: 'parent3',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1400000,
+        height: 90,
+        parentHash: 'parent4',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block5',
+        timestamp: 1700000,
+        height: 120,
+        parentHash: 'parent5',
+        status: PROCEED,
+        scanner: 'ergo',
       }),
     ],
     expectedAggregated: [
@@ -146,12 +219,14 @@ export const eventCountMetricActionTestData = {
    */
   getAggregatedEventsNoNewEvents: {
     lastProcessedHeight: 200,
+    untilTimestamp: 2000000,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 150,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -159,9 +234,29 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 180,
+        spendBlock: 'block2',
         result: 'fraud' as const,
       }),
     ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1500000,
+        height: 150,
+        parentHash: 'parent1',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1600000,
+        height: 180,
+        parentHash: 'parent2',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+    ],
+    expectedAggregated: [],
   },
 
   /**
@@ -170,12 +265,14 @@ export const eventCountMetricActionTestData = {
    */
   getAggregatedEventsSameGroup: {
     lastProcessedHeight: 100,
+    untilTimestamp: 2000000,
     eventTriggerRepo: [
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 110,
+        spendBlock: 'block1',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -183,6 +280,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 115,
+        spendBlock: 'block2',
         result: 'successful' as const,
       }),
       createEventTrigger({
@@ -190,7 +288,34 @@ export const eventCountMetricActionTestData = {
         fromChain: 'ergo',
         toChain: 'cardano',
         spendHeight: 120,
+        spendBlock: 'block3',
         result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1500000,
+        height: 110,
+        parentHash: 'parent1',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1600000,
+        height: 115,
+        parentHash: 'parent2',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1700000,
+        height: 120,
+        parentHash: 'parent3',
+        status: PROCEED,
+        scanner: 'ergo',
       }),
     ],
     expectedAggregated: [
@@ -453,482 +578,492 @@ export const userEventTestData = {
   },
 };
 
-const createUserEvent = (
-  baseData: typeof eventTriggerTestData.successfulErgoToCardano,
-  eventId: string,
-  boxId: string,
-  extractor: string,
-  fromAddress: string,
-  toAddress: string,
-  spendHeight: number,
-) => ({
-  ...baseData,
-  eventId,
-  boxId,
-  extractor,
-  fromAddress,
-  toAddress,
-  spendHeight,
-  result: 'successful' as const,
-});
-
-export const userEventLastProcessedHeightScenarios = {
-  empty: {
-    expected: 0,
+export const userEventMetricActionTestData = {
+  /**
+   * Scenario: Get last processed height
+   * - No existing records
+   */
+  getLastProcessedHeightNoRecords: {
+    expectedHeight: 0,
   },
 
-  singleRecord: {
-    userEventRepo: [userEventTestData.addr1ToAddr2],
-    expected: 100,
-  },
-
-  multipleRecords: {
+  /**
+   * Scenario: Get last processed height
+   * - Multiple records with different heights
+   */
+  getLastProcessedHeightMultipleRecords: {
     userEventRepo: [
-      userEventTestData.addr1ToAddr2,
-      userEventTestData.addr1ToAddr3,
-      userEventTestData.addr2ToAddr4,
-    ],
-    expected: 200,
-  },
-
-  mixedHeights: {
-    userEventRepo: [
-      { ...userEventTestData.addr1ToAddr2, lastProcessedHeight: 300 },
-      { ...userEventTestData.addr1ToAddr3, lastProcessedHeight: 250 },
-      { ...userEventTestData.addr2ToAddr4, lastProcessedHeight: 350 },
-    ],
-    expected: 350,
-  },
-};
-
-export const userEventAggregatedScenarios = {
-  emptyDatabase: {
-    lastHeight: 0,
-    expectedCount: 0,
-  },
-
-  singleSuccessfulEvent: {
-    eventTriggerRepo: [eventTriggerTestData.successfulErgoToCardano],
-    lastHeight: 0,
-    expectedCount: 1,
-    expectedGroups: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        userCount: 1,
-        maxHeight: 110,
-      },
-    ],
-  },
-
-  multipleDifferentUserPairs: {
-    eventTriggerRepo: [
-      eventTriggerTestData.successfulErgoToCardano,
-      eventTriggerTestData.successfulCardanoToErgo,
-      eventTriggerTestData.successfulEthereumToErgo,
-    ],
-    lastHeight: 0,
-    expectedCount: 3,
-    expectedGroups: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        userCount: 1,
-        maxHeight: 110,
-      },
-      {
-        fromAddress: 'addr2',
-        toAddress: 'addr3',
-        userCount: 1,
-        maxHeight: 115,
-      },
-      {
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
-        userCount: 1,
-        maxHeight: 120,
-      },
-    ],
-  },
-
-  filterByLastHeight: {
-    eventTriggerRepo: [
-      eventTriggerTestData.successfulErgoToCardano,
-      eventTriggerTestData.successfulCardanoToErgo,
-      eventTriggerTestData.successfulEthereumToErgo,
-    ],
-    lastHeight: 115,
-    expectedCount: 1,
-    expectedGroups: [
-      {
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
-        userCount: 1,
-        maxHeight: 120,
-      },
-    ],
-  },
-
-  ignoreNonSuccessfulEvents: {
-    eventTriggerRepo: [
-      eventTriggerTestData.successfulErgoToCardano,
-      eventTriggerTestData.fraudErgoToCardano,
-      eventTriggerTestData.pendingEvent,
-      eventTriggerTestData.processingEvent,
-    ],
-    lastHeight: 0,
-    expectedCount: 1,
-    expectedGroups: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        userCount: 1,
-        maxHeight: 110,
-      },
-    ],
-  },
-
-  aggregateSameUserPair: {
-    eventTriggerRepo: [
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event1',
-        'box1',
-        'extractor1',
-        'addr1',
-        'addr2',
-        110,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event2',
-        'box2',
-        'extractor2',
-        'addr1',
-        'addr2',
-        115,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event3',
-        'box3',
-        'extractor3',
-        'addr1',
-        'addr2',
-        120,
-      ),
-    ],
-    lastHeight: 0,
-    expectedCount: 1,
-    expectedGroups: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        userCount: 3,
-        maxHeight: 120,
-      },
-    ],
-  },
-
-  complexScenario: {
-    eventTriggerRepo: [
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event1',
-        'box1',
-        'extractor1',
-        'addr1',
-        'addr2',
-        110,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event2',
-        'box2',
-        'extractor2',
-        'addr1',
-        'addr2',
-        115,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event3',
-        'box3',
-        'extractor3',
-        'addr2',
-        'addr3',
-        120,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event4',
-        'box4',
-        'extractor4',
-        'addr3',
-        'addr4',
-        125,
-      ),
-    ],
-    lastHeight: 0,
-    expectedCount: 3,
-    expectedGroups: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        userCount: 2,
-        maxHeight: 115,
-      },
-      {
-        fromAddress: 'addr2',
-        toAddress: 'addr3',
-        userCount: 1,
-        maxHeight: 120,
-      },
-      {
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
-        userCount: 1,
-        maxHeight: 125,
-      },
-    ],
-  },
-
-  eventsBelowLastHeight: {
-    eventTriggerRepo: [
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event1',
-        'box1',
-        'extractor1',
-        'addr1',
-        'addr2',
-        90,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event2',
-        'box2',
-        'extractor2',
-        'addr1',
-        'addr2',
-        95,
-      ),
-      createUserEvent(
-        eventTriggerTestData.successfulErgoToCardano,
-        'event3',
-        'box3',
-        'extractor3',
-        'addr1',
-        'addr2',
-        105,
-      ),
-    ],
-    lastHeight: 100,
-    expectedCount: 1,
-    expectedGroups: [
-      {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        userCount: 1,
-        maxHeight: 105,
-      },
-    ],
-  },
-};
-
-export const userEventExistingScenarios = {
-  noMatch: {
-    userEventRepo: [userEventTestData.addr1ToAddr2],
-    query: {
-      fromAddress: 'addr3',
-      toAddress: 'addr4',
-    },
-    expected: null,
-  },
-
-  exactMatch: {
-    userEventRepo: [userEventTestData.addr1ToAddr2],
-    query: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-    },
-    expected: userEventTestData.addr1ToAddr2,
-  },
-
-  caseSensitiveAddresses: {
-    userEventRepo: [userEventTestData.addr1ToAddr2],
-    query: {
-      fromAddress: 'ADDR1',
-      toAddress: 'ADDR2',
-    },
-    expected: null,
-  },
-
-  multipleRecords: {
-    userEventRepo: [
-      userEventTestData.addr1ToAddr2,
-      userEventTestData.addr1ToAddr3,
-      userEventTestData.addr2ToAddr4,
-    ],
-    query: {
-      fromAddress: 'addr1',
-      toAddress: 'addr3',
-    },
-    expected: userEventTestData.addr1ToAddr3,
-  },
-
-  emptyDatabase: {
-    query: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-    },
-    expected: null,
-  },
-};
-
-export const userEventUpsertScenarios = {
-  insertNew: {
-    initialData: [],
-    upsertData: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 10,
-      maxHeight: 500,
-    },
-    expectedCount: 1,
-    expectedRecord: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 10,
-      lastProcessedHeight: 500,
-    },
-  },
-
-  updateExisting: {
-    initialData: [userEventTestData.addr1ToAddr2],
-    upsertData: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 15,
-      maxHeight: 600,
-    },
-    expectedCount: 1,
-    expectedRecord: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 15,
-      lastProcessedHeight: 600,
-    },
-  },
-
-  zeroCount: {
-    initialData: [],
-    upsertData: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 0,
-      maxHeight: 500,
-    },
-    expectedCount: 1,
-    expectedRecord: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 0,
-      lastProcessedHeight: 500,
-    },
-  },
-
-  multipleDifferentPairs: {
-    initialData: [
-      userEventTestData.addr1ToAddr2,
-      userEventTestData.addr1ToAddr3,
-    ],
-    upsertData: {
-      fromAddress: 'addr2',
-      toAddress: 'addr4',
-      count: 8,
-      maxHeight: 400,
-    },
-    expectedCount: 3,
-    expectedRecords: [
-      userEventTestData.addr1ToAddr2,
-      userEventTestData.addr1ToAddr3,
-      {
-        fromAddress: 'addr2',
-        toAddress: 'addr4',
-        count: 8,
-        lastProcessedHeight: 400,
-      },
-    ],
-  },
-
-  updateMultipleTimes: {
-    initialData: [],
-    upsertOperations: [
       {
         fromAddress: 'addr1',
         toAddress: 'addr2',
         count: 5,
-        maxHeight: 300,
+        lastProcessedHeight: 100,
       },
       {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        count: 10,
-        maxHeight: 500,
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 2,
+        lastProcessedHeight: 120,
       },
       {
-        fromAddress: 'addr1',
-        toAddress: 'addr2',
-        count: 15,
-        maxHeight: 600,
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        count: 3,
+        lastProcessedHeight: 150,
       },
     ],
-    expectedCount: 1,
-    expectedRecord: {
-      fromAddress: 'addr1',
-      toAddress: 'addr2',
-      count: 15,
-      lastProcessedHeight: 600,
-    },
+    expectedHeight: 150,
   },
 
-  duplicateAddressPairs: {
-    initialData: [],
-    upsertOperations: [
+  /**
+   * Scenario: Get aggregated events
+   * - Multiple events from different addresses
+   * - All successful status
+   * - With valid timestamps
+   */
+  getAggregatedEventsMultipleAddresses: {
+    lastProcessedHeight: 100,
+    untilTimestamp: 1704153600, // 2024-01-02 00:00:00 UTC
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 90, // Below lastProcessedHeight - ignored
+        spendBlock: 'block4',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event5',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 120,
+        spendBlock: 'block5',
+        result: 'fraud' as const, // Different status - ignored (only successful)
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 110,
+        parentHash: 'parent1',
+        timestamp: 1704067200,
+      }), // 2024-01-01 00:00:00
+      createBlock({
+        hash: 'block2',
+        height: 115,
+        parentHash: 'parent2',
+        timestamp: 1704070800,
+      }), // 2024-01-01 01:00:00
+      createBlock({
+        hash: 'block3',
+        height: 112,
+        parentHash: 'parent3',
+        timestamp: 1704074400,
+      }), // 2024-01-01 02:00:00
+      createBlock({
+        hash: 'block4',
+        height: 90,
+        parentHash: 'parent4',
+        timestamp: 1703980800,
+      }), // 2023-12-31 00:00:00
+      createBlock({
+        hash: 'block5',
+        height: 120,
+        parentHash: 'parent5',
+        timestamp: 1704078000,
+      }), // 2024-01-01 03:00:00
+    ],
+    expectedAggregated: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 2,
+        lastProcessedHeight: 115,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 1,
+        lastProcessedHeight: 112,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - Single address pair with multiple events
+   */
+  getAggregatedEventsSameAddress: {
+    lastProcessedHeight: 100,
+    untilTimestamp: 1704153600,
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 120,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 110,
+        parentHash: 'parent1',
+        timestamp: 1704067200,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 115,
+        parentHash: 'parent2',
+        timestamp: 1704070800,
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 120,
+        parentHash: 'parent3',
+        timestamp: 1704074400,
+      }),
+    ],
+    expectedAggregated: [
       {
         fromAddress: 'addr1',
         toAddress: 'addr2',
         count: 3,
-        maxHeight: 200,
+        lastProcessedHeight: 120,
       },
-      {
-        fromAddress: 'addr2',
-        toAddress: 'addr1',
-        count: 2,
-        maxHeight: 250,
-      },
+    ],
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - No events since last height
+   */
+  getAggregatedEventsNoNewEvents: {
+    lastProcessedHeight: 200,
+    untilTimestamp: 1704153600,
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 150,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 150,
+        parentHash: 'parent1',
+        timestamp: 1704067200,
+      }),
+    ],
+    expectedAggregated: [],
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - Events with timestamps after untilTimestamp
+   */
+  getAggregatedEventsExcludeByTimestamp: {
+    lastProcessedHeight: 100,
+    untilTimestamp: 1704074400, // 2024-01-01 02:00:00 UTC
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 110,
+        parentHash: 'parent1',
+        timestamp: 1704067200,
+      }), // Before - included
+      createBlock({
+        hash: 'block2',
+        height: 115,
+        parentHash: 'parent2',
+        timestamp: 1704078000,
+      }), // After - excluded
+      createBlock({
+        hash: 'block3',
+        height: 112,
+        parentHash: 'parent3',
+        timestamp: 1704070800,
+      }), // Before - included
+    ],
+    expectedAggregated: [
       {
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        count: 4,
-        maxHeight: 300,
+        count: 1,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 1,
+        lastProcessedHeight: 112,
       },
     ],
-    expectedCount: 2,
-    expectedRecords: [
+  },
+
+  /**
+   * Scenario: Get existing user event
+   * - Record exists
+   */
+  getExistingUserEventExists: {
+    fromAddress: 'addr1',
+    toAddress: 'addr2',
+    userEventRepo: [
       {
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        count: 4,
-        lastProcessedHeight: 300,
-      },
-      {
-        fromAddress: 'addr2',
-        toAddress: 'addr1',
-        count: 2,
-        lastProcessedHeight: 250,
+        count: 10,
+        lastProcessedHeight: 200,
       },
     ],
+    expectedCount: 10,
+  },
+
+  /**
+   * Scenario: Get existing user event
+   * - Record does not exist
+   */
+  getExistingUserEventNotExists: {
+    fromAddress: 'addr1',
+    toAddress: 'addr2',
+    userEventRepo: [
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 10,
+        lastProcessedHeight: 200,
+      },
+    ],
+    expectedCount: 0,
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - New user events, no existing records
+   */
+  upsertEventsCountNewGroups: {
+    aggregatedUsersEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 1,
+        lastProcessedHeight: 115,
+      },
+    ],
+    totalCount: 4,
+    existingMetric: null,
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 1,
+        lastProcessedHeight: 115,
+      },
+    ],
+    expectedMetricValue: '4',
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - Update existing user events
+   */
+  upsertEventsCountUpdateExisting: {
+    aggregatedUsersEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 2,
+        lastProcessedHeight: 130,
+      },
+    ],
+    totalCount: 7,
+    existingUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    existingMetric: {
+      key: METRIC_KEYS.USER_EVENT_TOTAL,
+      value: '5',
+      updatedAt: 1000,
+    },
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 2,
+        lastProcessedHeight: 130,
+      },
+    ],
+    expectedMetricValue: '7',
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - Mixed new and existing groups
+   */
+  upsertEventsCountMixedGroups: {
+    aggregatedUsersEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 2,
+        lastProcessedHeight: 115,
+      },
+    ],
+    totalCount: 10,
+    existingUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    existingMetric: {
+      key: METRIC_KEYS.USER_EVENT_TOTAL,
+      value: '5',
+      updatedAt: 1000,
+    },
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        toAddress: 'addr4',
+        count: 2,
+        lastProcessedHeight: 115,
+      },
+    ],
+    expectedMetricValue: '10',
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - Empty aggregated events array
+   */
+  upsertEventsCountEmpty: {
+    aggregatedUsersEvents: [],
+    totalCount: 5,
+    existingUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    existingMetric: {
+      key: METRIC_KEYS.USER_EVENT_TOTAL,
+      value: '5',
+      updatedAt: 1000,
+    },
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    expectedMetricValue: '5',
   },
 };

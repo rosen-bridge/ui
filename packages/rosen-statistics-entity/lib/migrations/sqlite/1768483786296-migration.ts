@@ -13,16 +13,17 @@ export class Migration1768483786296 implements MigrationInterface {
                 "fromAddress" varchar NOT NULL,
                 "toAddress" varchar NOT NULL,
                 "count" integer NOT NULL,
-                "lastProcessedHeight" integer NOT NULL DEFAULT (0),
+                "lastProcessedHeight" integer NOT NULL,
                 CONSTRAINT "UQ_9692a149b96f10f05c5efcc9f54" UNIQUE ("fromAddress", "toAddress")
             )
         `);
     await queryRunner.query(`
-            INSERT INTO "temporary_user_event_entity"("id", "fromAddress", "toAddress", "count")
+            INSERT INTO "temporary_user_event_entity"("id", "fromAddress", "toAddress", "count", "lastProcessedHeight")
             SELECT "id",
                 "fromAddress",
                 "toAddress",
-                "count"
+                "count",
+                0
             FROM "user_event_entity"
         `);
     await queryRunner.query(`
