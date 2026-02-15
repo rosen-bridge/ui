@@ -19,4 +19,5 @@ export {
   AggregatedEvents,
   EventCountStatus,
   AggregatedUserEvents,
+  WatcherCountType,
 } from './types';

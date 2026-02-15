@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { RosenTokens } from '@rosen-bridge/tokens';
@@ -916,96 +916,138 @@ export const userEventMetricTestData = {
   },
 };
 
-export const watcherConfig: WatcherCountConfig = {
-  type: 'explorer',
-  url: 'http://test-explorer.com',
-  rwtTokenId: 'repoNFT',
-  rwtNetworkMap: {
-    ergo: 'rwt-ergo-token-id',
-    cardano: 'rwt-cardano-token-id',
-    ethereum: 'rwt-eth-token-id',
-  },
-};
+/**
+ * Helper to create mock box with network and count
+ */
+const createMockBox = (
+  network: string | undefined,
+  count: number,
+  rwtTokenId?: string,
+) => ({
+  network,
+  count,
+  rwtTokenId,
+});
 
-export const mockBoxes = {
-  ergoBox: {
-    register_value: () => ({ to_i64: () => ({ to_str: () => '10' }) }),
-    tokens: () => ({
-      len: () => 1,
-      get: () => ({
-        id: () => ({
-          to_str: () => 'rwt-ergo-token-id',
-        }),
-      }),
-    }),
-  } as unknown as any,
-
-  cardanoBox: {
-    register_value: () => ({ to_i64: () => ({ to_str: () => '20' }) }),
-    tokens: () => ({
-      len: () => 1,
-      get: () => ({
-        id: () => ({
-          to_str: () => 'rwt-cardano-token-id',
-        }),
-      }),
-    }),
-  } as unknown as any,
-
-  ethereumBox: {
-    register_value: () => ({ to_i64: () => ({ to_str: () => '15' }) }),
-    tokens: () => ({
-      len: () => 1,
-      get: () => ({
-        id: () => ({
-          to_str: () => 'rwt-eth-token-id',
-        }),
-      }),
-    }),
-  } as unknown as any,
-};
-
-export const watcherCountTestData = {
-  test1: {
-    boxes: [mockBoxes.ergoBox, mockBoxes.cardanoBox],
-    watcherCountRepo: [],
-    metricRepo: [],
-    expectedResults: {
-      networkCounts: [
-        { network: 'ergo', count: 10 },
-        { network: 'cardano', count: 20 },
-      ],
-      totalWatchers: 30,
-    },
-  },
-
-  test2: {
-    boxes: [mockBoxes.ergoBox, mockBoxes.cardanoBox],
-    watcherCountRepo: [
-      { network: 'ergo', count: 5 },
-      { network: 'cardano', count: 8 },
+export const watcherCountMetricTestData = {
+  /**
+   * Test 1: Multiple networks with watchers
+   */
+  multipleNetworks: {
+    config: {
+      type: 'explorer' as const,
+      url: 'https://ergo-explorer.com',
+      rwtTokenId: 'valid-rwt-token-id',
+      watcherRegister: 5,
+      rwtNetworkMap: {
+        ergo: 'valid-rwt-token-id',
+        cardano: 'cardano-rwt-token-id',
+        ethereum: 'eth-rwt-token-id',
+      },
+    } as WatcherCountConfig,
+    mockBoxes: [
+      createMockBox('ergo', 5, 'valid-rwt-token-id'),
+      createMockBox('cardano', 4, 'cardano-rwt-token-id'),
+      createMockBox('ethereum', 2, 'eth-rwt-token-id'),
     ],
-    metricRepo: [{ key: 'watcher_count_total', value: '13', updatedAt: 1000 }],
     expectedResults: {
-      networkCounts: [
-        { network: 'ergo', count: 10 },
-        { network: 'cardano', count: 20 },
+      watcherCounts: [
+        {
+          network: 'ergo',
+          count: 5,
+        },
+        {
+          network: 'cardano',
+          count: 4,
+        },
+
+        {
+          network: 'ethereum',
+          count: 2,
+        },
       ],
-      totalWatchers: 30,
+      totalWatchers: '11',
     },
   },
 
-  test3: {
-    boxes: [mockBoxes.ergoBox, mockBoxes.cardanoBox, mockBoxes.ethereumBox],
-    watcherCountRepo: [],
-    metricRepo: [],
+  /**
+   * Test 2: Boxes without valid network (should be skipped)
+   */
+  boxesWithoutValidNetwork: {
+    config: {
+      type: 'explorer' as const,
+      url: 'https://ergo-explorer.com',
+      rwtTokenId: 'valid-rwt-token-id',
+      watcherRegister: 4,
+      rwtNetworkMap: {
+        ergo: 'valid-rwt-token-id',
+      },
+    } as WatcherCountConfig,
+    mockBoxes: [
+      createMockBox('ergo', 5, 'valid-rwt-token-id'),
+      createMockBox(undefined, 4, 'some-other-token-id'),
+    ],
     expectedResults: {
-      networkCounts: [
-        { network: 'ergo', count: 10 },
-        { network: 'cardano', count: 20 },
-        { network: 'ethereum', count: 15 },
+      watcherCounts: [
+        {
+          network: 'ergo',
+          count: 5,
+        },
       ],
-      totalWatchers: 45,
+      totalWatchers: '5',
+    },
+  },
+
+  /**
+   * Test 3: No boxes found
+   */
+  noBoxesFound: {
+    config: {
+      type: 'explorer' as const,
+      url: 'https://ergo-explorer.com',
+      rwtTokenId: 'valid-rwt-token-id',
+      watcherRegister: 4,
+      rwtNetworkMap: {
+        ergo: 'valid-rwt-token-id',
+      },
+    } as WatcherCountConfig,
+    mockBoxes: [],
+    expectedResults: {
+      watcherCounts: [],
+      totalWatchers: 0,
+    },
+  },
+
+  /**
+   * Test 4: Node client configuration
+   */
+  nodeClientConfig: {
+    config: {
+      type: 'node' as const,
+      url: 'https://ergo-node.com',
+      rwtTokenId: 'valid-rwt-token-id',
+      watcherRegister: 4,
+      rwtNetworkMap: {
+        ergo: 'valid-rwt-token-id',
+        cardano: 'valid-rwt-token-id-2',
+      },
+    } as WatcherCountConfig,
+    mockBoxes: [
+      createMockBox('ergo', 5, 'valid-rwt-token-id'),
+      createMockBox('cardano', 3, 'valid-rwt-token-id-2'),
+    ],
+    expectedResults: {
+      watcherCounts: [
+        {
+          network: 'ergo',
+          count: 5,
+        },
+        {
+          network: 'cardano',
+          count: 3,
+        },
+      ],
+      totalWatchers: '8',
     },
   },
 };

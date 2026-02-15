@@ -2,6 +2,7 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 
 import { WatcherCountEntity } from '../entities';
+import { WatcherCountType } from '../types';
 
 export class WatcherCountMetricAction {
   protected readonly watcherRepo: Repository<WatcherCountEntity>;
@@ -21,47 +22,23 @@ export class WatcherCountMetricAction {
    */
   getWatcherCountByNetwork = async (network: string) => {
     this.logger.debug(`Fetching watcher count for network: ${network}`);
-    try {
-      const record = await this.watcherRepo.findOne({
-        where: { network },
-      });
-      return record;
-    } catch (error) {
-      this.logger.debug(
-        `Failed to fetch watcher count for ${network}: ${error}`,
-        {
-          message: error instanceof Error ? error.message : '',
-          stack: error instanceof Error ? error.stack : undefined,
-        },
-      );
-      throw error;
-    }
+    const record = await this.watcherRepo.findOne({
+      where: { network },
+    });
+    return record;
   };
 
   /**
-   * Upsert watcher count record for a network
+   * Upsert watcher counts record for a list of networks
    *
    * @param network - Network identifier
    * @param count - Watcher count
+   * @param watchersCounts
    * @returns Promise resolving to upsert result
    */
-  upsertWatcherCount = async (network: string, count: number) => {
-    this.logger.debug(`Upserting watcher count for ${network}: ${count}`);
-    try {
-      const result = await this.watcherRepo.upsert({ network, count }, [
-        'network',
-      ]);
-      this.logger.debug(`Watcher count upserted for ${network}`);
-      return result;
-    } catch (error) {
-      this.logger.debug(
-        `Failed to upsert watcher count for ${network}: ${error}`,
-        {
-          message: error instanceof Error ? error.message : '',
-          stack: error instanceof Error ? error.stack : undefined,
-        },
-      );
-      throw error;
-    }
+  upsertWatcherCount = async (watchersCounts: WatcherCountType[]) => {
+    this.logger.debug('Upserting watchers counts...');
+    await this.watcherRepo.upsert(watchersCounts, ['network']);
+    this.logger.debug('Watchers counts upserted');
   };
 }

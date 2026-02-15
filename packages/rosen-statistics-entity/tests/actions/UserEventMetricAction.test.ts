@@ -248,7 +248,6 @@ describe('UserEventMetricAction', () => {
 
       const userEvents = await userEventRepo.find({
         select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
-        order: { fromAddress: 'ASC', toAddress: 'ASC' },
       });
 
       expect(userEvents).toHaveLength(testData.expectedUserEvents.length);
@@ -285,7 +284,6 @@ describe('UserEventMetricAction', () => {
 
       const userEvents = await userEventRepo.find({
         select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
-        order: { fromAddress: 'ASC', toAddress: 'ASC' },
       });
 
       expect(userEvents).toHaveLength(testData.expectedUserEvents.length);

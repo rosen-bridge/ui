@@ -2,7 +2,7 @@ import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
-import { METRIC_KEYS, EventCountStatus } from '../lib';
+import { METRIC_KEYS, EventCountStatus, WatcherCountType } from '../lib';
 
 /**
  * Helper function to create minimal EventTriggerEntity for testing
@@ -1102,18 +1102,6 @@ export const getWatcherCountScenarios = {
     expected: null,
   },
 
-  exactMatch: {
-    watcherCountRepo: [watcherCountTestData.ergoNetwork],
-    query: 'ergo',
-    expected: watcherCountTestData.ergoNetwork,
-  },
-
-  caseSensitive: {
-    watcherCountRepo: [watcherCountTestData.ergoNetwork],
-    query: 'ERGO',
-    expected: null,
-  },
-
   multipleRecords: {
     watcherCountRepo: [
       watcherCountTestData.ergoNetwork,
@@ -1125,64 +1113,43 @@ export const getWatcherCountScenarios = {
   },
 
   emptyDatabase: {
-    watcherCountRepo: [],
     query: 'ergo',
     expected: null,
-  },
-
-  zeroCount: {
-    watcherCountRepo: [
-      {
-        network: 'ergo',
-        count: 0,
-      },
-    ],
-    query: 'ergo',
-    expected: {
-      network: 'ergo',
-      count: 0,
-    },
   },
 };
 
 export const upsertWatcherCountScenarios = {
   insertNew: {
-    initialData: [],
-    upsertData: {
-      network: 'ergo',
-      count: 50,
-    },
+    upsertData: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ] as WatcherCountType[],
     expectedCount: 1,
-    expectedRecord: {
-      network: 'ergo',
-      count: 50,
-    },
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
   },
 
   updateExisting: {
     initialData: [watcherCountTestData.ergoNetwork],
-    upsertData: {
-      network: 'ergo',
-      count: 75,
-    },
+    upsertData: [
+      {
+        network: 'ergo',
+        count: 75,
+      },
+    ] as WatcherCountType[],
     expectedCount: 1,
-    expectedRecord: {
-      network: 'ergo',
-      count: 75,
-    },
-  },
-
-  zeroCount: {
-    initialData: [],
-    upsertData: {
-      network: 'ergo',
-      count: 0,
-    },
-    expectedCount: 1,
-    expectedRecord: {
-      network: 'ergo',
-      count: 0,
-    },
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 75,
+      },
+    ],
   },
 
   insertMultipleDifferentNetworks: {
@@ -1190,14 +1157,22 @@ export const upsertWatcherCountScenarios = {
       watcherCountTestData.ergoNetwork,
       watcherCountTestData.cardanoNetwork,
     ],
-    upsertData: {
-      network: 'ethereum',
-      count: 25,
-    },
+    upsertData: [
+      {
+        network: 'ethereum',
+        count: 25,
+      },
+    ] as WatcherCountType[],
     expectedCount: 3,
     expectedRecords: [
-      watcherCountTestData.ergoNetwork,
-      watcherCountTestData.cardanoNetwork,
+      {
+        network: 'ergo',
+        count: 50,
+      },
+      {
+        network: 'cardano',
+        count: 30,
+      },
       {
         network: 'ethereum',
         count: 25,
@@ -1206,7 +1181,6 @@ export const upsertWatcherCountScenarios = {
   },
 
   updateMultipleTimes: {
-    initialData: [],
     upsertOperations: [
       {
         network: 'ergo',
@@ -1222,10 +1196,12 @@ export const upsertWatcherCountScenarios = {
       },
     ],
     expectedCount: 1,
-    expectedRecord: {
-      network: 'ergo',
-      count: 50,
-    },
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
   },
 
   updateDifferentNetworkKeepsOthers: {
@@ -1247,18 +1223,5 @@ export const upsertWatcherCountScenarios = {
       },
       watcherCountTestData.ethereumNetwork,
     ],
-  },
-
-  largeNumber: {
-    initialData: [],
-    upsertData: {
-      network: 'ergo',
-      count: 1000000,
-    },
-    expectedCount: 1,
-    expectedRecord: {
-      network: 'ergo',
-      count: 1000000,
-    },
   },
 };

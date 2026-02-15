@@ -7,7 +7,7 @@ import {
   MetricEntity,
   EventCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import { eventCountMetric } from '../../lib';
 import { eventCountTestData } from '../test-data';
@@ -36,6 +36,10 @@ describe('eventCountMetric', () => {
     await eventCountRepo.clear();
     await blockRepo.clear();
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   /**

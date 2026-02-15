@@ -1,7 +1,11 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
-import { WatcherCountMetricAction } from '@rosen-ui/rosen-statistics-entity';
+import {
+  MetricAction,
+  METRIC_KEYS,
+  WatcherCountType,
+  WatcherCountMetricAction,
+} from '@rosen-ui/rosen-statistics-entity';
 
 import { WatcherBoxService } from '../services';
 import { WatcherCountConfig } from '../types';
@@ -20,44 +24,36 @@ export const watcherCountMetric = async (
 ): Promise<void> => {
   logger.debug('Starting watcher count metric calculation job');
 
-  const watcherAction = new WatcherCountMetricAction(dataSource, logger);
-  const metricAction = new MetricAction(dataSource, logger);
-  const boxService = new WatcherBoxService(config);
+  const watcherAction = new WatcherCountMetricAction(
+    dataSource,
+    logger.child('watcherCountMetric'),
+  );
+  const metricAction = new MetricAction(
+    dataSource,
+    logger.child('metricAction'),
+  );
+  const boxService = new WatcherBoxService(
+    config,
+    logger.child('watcherBoxService'),
+  );
   try {
     const boxes = await boxService.fetchWatcherBoxes();
     logger.debug(`Fetched ${boxes.length} watcher boxes`);
 
-    const networkWatcherCounts: Record<string, number> = {};
+    const networkWatcherCounts: WatcherCountType[] = [];
+    let totalWatchers = 0;
 
     for (const box of boxes) {
-      const watcherCount = boxService.extractWatcherCount(box);
       const network = boxService.extractNetwork(box);
       if (!network) continue;
-      networkWatcherCounts[network] = watcherCount;
+      const count = boxService.extractWatcherCount(box);
+      networkWatcherCounts.push({ network, count });
+      totalWatchers += count;
     }
 
-    logger.debug(
-      `Found watchers in ${Object.keys(networkWatcherCounts).length} networks`,
-    );
+    logger.debug(`Found watchers in ${networkWatcherCounts.length} networks`);
 
-    for (const [network, count] of Object.entries(networkWatcherCounts)) {
-      const existing = await watcherAction.getWatcherCountByNetwork(network);
-
-      if (existing) {
-        logger.debug(
-          `Updating watcher count for ${network}: ${existing.count} -> ${count}`,
-        );
-      } else {
-        logger.debug(`Creating watcher count for ${network}: ${count}`);
-      }
-
-      await watcherAction.upsertWatcherCount(network, count);
-    }
-
-    const totalWatchers = Object.values(networkWatcherCounts).reduce(
-      (a: number, b: number) => a + b,
-      0,
-    );
+    await watcherAction.upsertWatcherCount(networkWatcherCounts);
 
     await metricAction.upsertMetric(
       METRIC_KEYS.WATCHER_COUNT_TOTAL,
@@ -70,6 +66,5 @@ export const watcherCountMetric = async (
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });
-    throw error;
   }
 };
