@@ -1,8 +1,7 @@
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { WatcherCountEntity } from '../../lib';
-import { WatcherCountMetricAction } from '../../lib/';
+import { WatcherCountEntity, WatcherCountMetricAction } from '../../lib';
 import {
   getWatcherCountScenarios,
   upsertWatcherCountScenarios,

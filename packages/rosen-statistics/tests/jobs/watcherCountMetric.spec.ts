@@ -8,8 +8,7 @@ import {
 } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
-import { watcherCountMetric } from '../../lib';
-import { WatcherBoxService } from '../../lib/services';
+import { watcherCountMetric, WatcherBoxService } from '../../lib';
 import { watcherCountMetricTestData } from '../test-data';
 import { createDatabase } from '../utils';
 

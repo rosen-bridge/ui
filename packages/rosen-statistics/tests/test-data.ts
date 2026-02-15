@@ -1,4 +1,3 @@
- 
 import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { RosenTokens } from '@rosen-bridge/tokens';
