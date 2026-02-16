@@ -41,6 +41,8 @@ describe('EventCountMetricAction', () => {
   describe('getLastProcessedHeight', () => {
     /**
      * @target getLastProcessedHeight should return 0 when no event count records exist
+     * @dependencies
+     * - database
      * @scenario
      * - No records in EventCountEntity table
      * - Call getLastProcessedHeight
@@ -58,6 +60,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target getLastProcessedHeight should return the highest lastProcessedHeight from existing records
+     * @dependencies
+     * - database
      * @scenario
      * - Insert multiple EventCountEntity records with different lastProcessedHeight values
      * - Call getLastProcessedHeight
@@ -79,6 +83,8 @@ describe('EventCountMetricAction', () => {
   describe('getAggregatedEvents', () => {
     /**
      * @target getAggregatedEvents should aggregate events by status and chain pairs since last height up to timestamp
+     * @dependencies
+     * - database
      * @scenario
      * - Insert events above lastProcessedHeight with valid timestamps
      * - Insert events below lastProcessedHeight (should be ignored)
@@ -108,6 +114,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target getAggregatedEvents should aggregate multiple events in same group into single record
+     * @dependencies
+     * - database
      * @scenario
      * - Insert 3 successful events from ergo to cardano with different spendHeights
      * - Insert corresponding block records with valid timestamps
@@ -133,6 +141,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target getAggregatedEvents should return empty array when no events since last height
+     * @dependencies
+     * - database
      * @scenario
      * - Insert events with spendHeight below lastProcessedHeight (150, 180) and lastProcessedHeight = 200
      * - Call getAggregatedEvents with lastProcessedHeight = 200
@@ -158,6 +168,8 @@ describe('EventCountMetricAction', () => {
   describe('getExistingEventCount', () => {
     /**
      * @target getExistingEventCount should return event count when record exists
+     * @dependencies
+     * - database
      * @scenario
      * - Insert EventCountEntity record for successful ergo→cardano with count = 10
      * - Call getExistingEventCount with same status and chain pair
@@ -181,6 +193,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target getExistingEventCount should return 0 when record does not exist
+     * @dependencies
+     * - database
      * @scenario
      * - Insert EventCountEntity record for successful ergo→cardano
      * - Call getExistingEventCount with fraud status (no record exists)
@@ -206,6 +220,8 @@ describe('EventCountMetricAction', () => {
   describe('upsertEventsCount', () => {
     /**
      * @target upsertEventsCount should create new event count records and update total metric
+     * @dependencies
+     * - database
      * @scenario
      * - No existing EventCountEntity or MetricEntity records
      * - Call upsertEventsCount with 2 aggregated event groups and totalCount = 4
@@ -245,6 +261,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target upsertEventsCount should replace existing event count records with new values
+     * @dependencies
+     * - database
      * @scenario
      * - Insert existing EventCountEntity with count = 5 and lastProcessedHeight = 100
      * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'
@@ -286,6 +304,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target upsertEventsCount should handle both new and existing groups in same transaction
+     * @dependencies
+     * - database
      * @scenario
      * - Insert existing EventCountEntity for successful ergo→cardano (count = 5)
      * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'
@@ -331,6 +351,8 @@ describe('EventCountMetricAction', () => {
 
     /**
      * @target upsertEventsCount should update only total metric when aggregated events array is empty
+     * @dependencies
+     * - database
      * @scenario
      * - Insert existing EventCountEntity with count = 5
      * - Insert existing MetricEntity with EVENT_COUNT_TOTAL = '5'

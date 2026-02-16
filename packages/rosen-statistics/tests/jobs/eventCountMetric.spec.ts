@@ -10,6 +10,7 @@ import {
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import { eventCountMetric } from '../../lib';
+import { applyStartOfDayMock } from '../mocked/timeHelpers';
 import { eventCountTestData } from '../test-data';
 import { createDatabase } from '../utils';
 
@@ -22,14 +23,8 @@ describe('eventCountMetric', () => {
   let logger: AbstractLogger;
 
   beforeEach(async () => {
-    vi.mock('../../lib/utils', () => ({
-      startOfDay: vi.fn((timestamp) => {
-        const d = new Date(timestamp * 1000);
-        d.setUTCHours(0, 0, 0, 0);
-        return Math.floor(d.getTime() / 1000);
-      }),
-    }));
     vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
+    applyStartOfDayMock();
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
@@ -51,6 +46,10 @@ describe('eventCountMetric', () => {
 
   /**
    * @target Should aggregate new events and create event count records
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
    * @scenario
    * - Insert 4 new events with different and same (status, fromChain, toChain) combinations
    * - Insert corresponding block records with timestamps before yesterday
@@ -91,6 +90,10 @@ describe('eventCountMetric', () => {
 
   /**
    * @target Should update existing counts with new events
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
    * @scenario
    * - Insert existing EventCountEntity (5 successful ergo→cardano)
    * - Insert existing total metric (value: 5)
@@ -134,6 +137,10 @@ describe('eventCountMetric', () => {
 
   /**
    * @target Should ignore events below last processed height
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
    * @scenario
    * - Insert existing EventCountEntity with lastProcessedHeight = 100
    * - Insert event with spendHeight = 99 (below last processed)
@@ -179,6 +186,11 @@ describe('eventCountMetric', () => {
 
   /**
    * @target Should filter out events with timestamps after yesterday's start
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
+   * - BlockEntity
    * @scenario
    * - Insert 3 successful events
    * - 2 events have timestamps before yesterday's start
@@ -221,6 +233,10 @@ describe('eventCountMetric', () => {
 
   /**
    * @target Should filter out null status events
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
    * @scenario
    * - Insert 2 successful events and 1 null status event
    * - Run eventCountMetric
