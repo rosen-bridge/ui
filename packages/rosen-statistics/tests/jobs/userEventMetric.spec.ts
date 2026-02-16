@@ -22,10 +22,14 @@ describe('userEventMetric', () => {
   let logger: AbstractLogger;
 
   beforeEach(async () => {
-    // Set system time to 2024-01-03 14:20:00 UTC
-    // This makes yesterday's start = 2024-01-02 00:00:00 UTC (1704153600)
+    vi.mock('../../lib/utils', () => ({
+      startOfDay: vi.fn((timestamp) => {
+        const d = new Date(timestamp * 1000);
+        d.setUTCHours(0, 0, 0, 0);
+        return Math.floor(d.getTime() / 1000);
+      }),
+    }));
     vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
-
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
@@ -49,8 +53,9 @@ describe('userEventMetric', () => {
    * @target Should aggregate new user events and create event count records
    * @scenario
    * - Set system time to 2024-01-03 14:20:00 UTC (yesterday start = 2024-01-02 00:00:00 UTC)
-   * - Insert 4 successful events with different address pairs
+   * - Insert 6 successful events with different address pairs
    * - Insert corresponding block records with timestamps before yesterday (Jan 1, 2024)
+   * - Insert some blocks records with timestamps after yesterday (must be ignore)
    * - Run userEventMetric
    * @expected
    * - Creates 3 UserEventEntity records with correct counts
@@ -123,8 +128,9 @@ describe('userEventMetric', () => {
    * @scenario
    * - Set system time to 2024-01-03 14:20:00 UTC
    * - Insert existing UserEventEntity with lastProcessedHeight = 100
-   * - Insert event with spendHeight = 95 (below last processed)
-   * - Insert event with spendHeight = 105 (above last processed)
+   * - Insert event with spendHeight = 99 (below last processed)
+   * - Insert event with spendHeight = 100 (equal last processed)
+   * - Insert event with spendHeight = 101 (above last processed)
    * - Insert corresponding block records with timestamps before yesterday
    * - Run userEventMetric
    * @expected

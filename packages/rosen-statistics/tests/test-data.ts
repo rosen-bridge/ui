@@ -670,12 +670,30 @@ export const userEventMetricTestData = {
         spendBlock: 'block4',
         result: 'successful' as const,
       }),
+      createEventTrigger({
+        eventId: 'event5',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 125,
+        spendBlock: 'block5',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 130,
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
     ],
     blockRepo: [
       createBlock({ hash: 'block1', height: 110, timestamp: 1704067200 }), // 2024-01-01 00:00:00
-      createBlock({ hash: 'block2', height: 115, timestamp: 1704070800 }), // 2024-01-01 01:00:00
+      createBlock({ hash: 'block2', height: 115, timestamp: 1704153599 }), // 2024-01-01 23:59:59
       createBlock({ hash: 'block3', height: 112, timestamp: 1704074400 }), // 2024-01-01 02:00:00
       createBlock({ hash: 'block4', height: 120, timestamp: 1704103200 }), // 2024-01-01 10:00:00
+      createBlock({ hash: 'block5', height: 125, timestamp: 1704153600 }), // 2024-01-02 00:00:00
+      createBlock({ hash: 'block6', height: 130, timestamp: 1704153601 }), // 2024-01-02 00:00:01
     ],
     expectedResults: {
       userEvents: [
@@ -763,6 +781,7 @@ export const userEventMetricTestData = {
    * Existing last processed: 100
    * New event with spendHeight: 95 (ignored)
    * New event with spendHeight: 105 (processed)
+   * New event with spendHeight: 100 (ignored)
    */
   ignoreOldEvents: {
     eventTriggerRepo: [
@@ -770,7 +789,7 @@ export const userEventMetricTestData = {
         eventId: 'event1',
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        spendHeight: 95, // Below lastProcessedHeight - ignored
+        spendHeight: 99, // Below lastProcessedHeight - ignored
         spendBlock: 'block1',
         result: 'successful' as const,
       }),
@@ -778,14 +797,23 @@ export const userEventMetricTestData = {
         eventId: 'event2',
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        spendHeight: 105, // Above lastProcessedHeight - processed
+        spendHeight: 101, // Above lastProcessedHeight - processed
         spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 100, // equal lastProcessedHeight - ignored
+        spendBlock: 'block3',
         result: 'successful' as const,
       }),
     ],
     blockRepo: [
-      createBlock({ hash: 'block1', height: 95, timestamp: 1703980800 }), // 2023-12-31 00:00:00
-      createBlock({ hash: 'block2', height: 105, timestamp: 1704067200 }), // 2024-01-01 00:00:00
+      createBlock({ hash: 'block1', height: 99, timestamp: 1703980800 }), // 2023-12-31 00:00:00
+      createBlock({ hash: 'block2', height: 101, timestamp: 1704067200 }), // 2024-01-01 00:00:00
+      createBlock({ hash: 'block3', height: 100, timestamp: 1704066200 }), // 2023-12-31 23:43:20
     ],
     userEventRepo: [
       {
@@ -808,7 +836,7 @@ export const userEventMetricTestData = {
           fromAddress: 'addr1',
           toAddress: 'addr2',
           count: 6,
-          lastProcessedHeight: 105,
+          lastProcessedHeight: 101,
         },
       ],
       totalMetricValue: '6',
@@ -850,7 +878,7 @@ export const userEventMetricTestData = {
     ],
     blockRepo: [
       createBlock({ hash: 'block1', height: 110, timestamp: 1704067200 }), // 2024-01-01 00:00:00 - included
-      createBlock({ hash: 'block2', height: 115, timestamp: 1704110400 }), // 2024-01-01 12:00:00 - included
+      createBlock({ hash: 'block2', height: 115, timestamp: 1704153599 }), // 2024-01-01 23:59:59 - included
       createBlock({ hash: 'block3', height: 112, timestamp: 1704153600 }), // 2024-01-02 00:00:00 - excluded
     ],
     expectedResults: {
