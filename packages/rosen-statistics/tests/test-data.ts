@@ -356,10 +356,11 @@ export const eventCountTestData = {
   },
 
   /**
-   * Test 3: Ignore events below last processed height
+   * Test 3: Ignore events below or equal last processed height
    * Existing last processed: 100
-   * New event with spendHeight: 95 (ignored)
-   * New event with spendHeight: 105 (processed)
+   * New event with spendHeight: 99 (ignored)
+   * New event with spendHeight: 100 (ignored)
+   * New event with spendHeight: 101 (processed)
    */
   ignoreOldEvents: {
     eventTriggerRepo: [
@@ -367,7 +368,7 @@ export const eventCountTestData = {
         eventId: 'event1',
         fromChain: 'ergo',
         toChain: 'cardano',
-        spendHeight: 95,
+        spendHeight: 99,
         spendBlock: 'block1',
         result: 'successful' as const,
       }),
@@ -375,8 +376,16 @@ export const eventCountTestData = {
         eventId: 'event2',
         fromChain: 'ergo',
         toChain: 'cardano',
-        spendHeight: 105,
+        spendHeight: 101,
         spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 100,
+        spendBlock: 'block3',
         result: 'successful' as const,
       }),
     ],
@@ -384,12 +393,17 @@ export const eventCountTestData = {
       createBlock({
         hash: 'block1',
         timestamp: 1703980800, // 2023-12-31 00:00:00 UTC
-        height: 95,
+        height: 99,
       }),
       createBlock({
         hash: 'block2',
         timestamp: 1704067200, // 2024-01-01 00:00:00 UTC
-        height: 105,
+        height: 101,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704067200, // 2024-01-01 00:00:00 UTC
+        height: 100,
       }),
     ],
     eventCountRepo: [
@@ -415,7 +429,7 @@ export const eventCountTestData = {
           fromChain: 'ergo',
           toChain: 'cardano',
           eventCount: 6,
-          lastProcessedHeight: 105,
+          lastProcessedHeight: 101,
         },
       ],
       totalMetricValue: '6',
@@ -504,8 +518,6 @@ export const eventCountTestData = {
    * Only existing data, no new events
    */
   noNewEvents: {
-    eventTriggerRepo: [],
-    blockRepo: [],
     eventCountRepo: [
       {
         status: 'successful',

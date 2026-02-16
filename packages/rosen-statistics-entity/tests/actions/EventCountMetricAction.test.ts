@@ -82,6 +82,7 @@ describe('EventCountMetricAction', () => {
      * @scenario
      * - Insert events above lastProcessedHeight with valid timestamps
      * - Insert events below lastProcessedHeight (should be ignored)
+     * - Insert events equal lastProcessedHeight (should be ignored)
      * - Insert event with null status (should be ignored)
      * - Insert events equal timestamp (should be ignored)
      * - Insert events above timestamp (should be ignored)

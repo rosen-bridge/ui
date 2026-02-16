@@ -96,7 +96,7 @@ export class UserEventMetricAction {
    * @param  totalCount - The total count of events to be updated.
    * @returns A Promise that resolves when the upsert is completed.
    */
-  upsertEventsCount = async (
+  upsertUserEventsCount = async (
     aggregatedUsersEvents: AggregatedUserEvents[],
     totalCount: number,
   ): Promise<void> => {

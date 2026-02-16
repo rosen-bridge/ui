@@ -136,8 +136,9 @@ describe('eventCountMetric', () => {
    * @target Should ignore events below last processed height
    * @scenario
    * - Insert existing EventCountEntity with lastProcessedHeight = 100
-   * - Insert event with spendHeight = 95 (below last processed)
-   * - Insert event with spendHeight = 105 (above last processed)
+   * - Insert event with spendHeight = 99 (below last processed)
+   * - Insert event with spendHeight = 100 (equal last processed)
+   * - Insert event with spendHeight = 101 (above last processed)
    * - Insert corresponding block records with valid timestamps
    * - Run eventCountMetric
    * @expected

@@ -82,6 +82,8 @@ describe('UserEventMetricAction', () => {
      * @scenario
      * - Insert 3 successful events for addr1→addr2 (2 events) and addr3→addr4 (1 event)
      * - Insert 1 event below lastProcessedHeight (ignored)
+     * - Insert 1 event after timestamp (ignored)
+     * - Insert 1 event equal lastProcessedHeight (ignored)
      * - Insert 1 fraud event (ignored - only successful)
      * - Insert corresponding block records with valid timestamps
      * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 1704153600
@@ -241,7 +243,7 @@ describe('UserEventMetricAction', () => {
     it('should create new user event records and update total metric', async () => {
       const testData = userEventMetricActionTestData.upsertEventsCountNewGroups;
 
-      await action.upsertEventsCount(
+      await action.upsertUserEventsCount(
         testData.aggregatedUsersEvents,
         testData.totalCount,
       );
@@ -277,7 +279,7 @@ describe('UserEventMetricAction', () => {
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertEventsCount(
+      await action.upsertUserEventsCount(
         testData.aggregatedUsersEvents,
         testData.totalCount,
       );
@@ -316,7 +318,7 @@ describe('UserEventMetricAction', () => {
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertEventsCount(
+      await action.upsertUserEventsCount(
         testData.aggregatedUsersEvents,
         testData.totalCount,
       );
@@ -350,7 +352,7 @@ describe('UserEventMetricAction', () => {
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertEventsCount(
+      await action.upsertUserEventsCount(
         testData.aggregatedUsersEvents,
         testData.totalCount,
       );

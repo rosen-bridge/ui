@@ -68,7 +68,7 @@ export const userEventMetric = async (
       ? Number(totalExistingEvent.value)
       : 0;
 
-    await userEventAction.upsertEventsCount(
+    await userEventAction.upsertUserEventsCount(
       aggregatedUsersEvents,
       newTotalCount + existingTotalCount,
     );

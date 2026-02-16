@@ -125,7 +125,7 @@ export const eventCountMetricActionTestData = {
         eventId: 'event3',
         fromChain: 'cardano',
         toChain: 'ergo',
-        spendHeight: 112,
+        spendHeight: 101,
         spendBlock: 'block3',
         result: 'successful' as const,
       }),
@@ -133,7 +133,7 @@ export const eventCountMetricActionTestData = {
         eventId: 'event4',
         fromChain: 'ergo',
         toChain: 'cardano',
-        spendHeight: 90, // Below lastProcessedHeight - should be ignored
+        spendHeight: 99, // Below lastProcessedHeight - should be ignored
         spendBlock: 'block4',
         result: 'successful' as const,
       }),
@@ -161,6 +161,14 @@ export const eventCountMetricActionTestData = {
         spendBlock: 'block7',
         result: 'successful' as const,
       }),
+      createEventTrigger({
+        eventId: 'event8',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 100, // Equal lastProcessedHeight - should be ignored
+        spendBlock: 'block8',
+        result: 'successful' as const,
+      }),
     ],
     blockRepo: [
       createBlock({
@@ -182,7 +190,7 @@ export const eventCountMetricActionTestData = {
       createBlock({
         hash: 'block3',
         timestamp: 1550000,
-        height: 112,
+        height: 101,
         parentHash: 'parent3',
         status: PROCEED,
         scanner: 'ergo',
@@ -190,7 +198,7 @@ export const eventCountMetricActionTestData = {
       createBlock({
         hash: 'block4',
         timestamp: 1400000,
-        height: 90,
+        height: 99,
         parentHash: 'parent4',
         status: PROCEED,
         scanner: 'ergo',
@@ -219,6 +227,14 @@ export const eventCountMetricActionTestData = {
         status: PROCEED,
         scanner: 'ergo',
       }),
+      createBlock({
+        hash: 'block8',
+        timestamp: 1999999,
+        height: 100,
+        parentHash: 'parent8',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
     ],
     expectedAggregated: [
       {
@@ -233,7 +249,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'cardano',
         toChain: 'ergo',
         eventCount: 1,
-        lastProcessedHeight: 112,
+        lastProcessedHeight: 101,
       },
       {
         status: 'successful',
@@ -650,7 +666,8 @@ export const userEventMetricActionTestData = {
    * Scenario: Get aggregated events
    * - Multiple events from different addresses
    * - All successful status
-   * - With valid timestamps
+   * - With valid and unvalid timestamps
+   * - With valid and unvalid spendHeight
    */
   getAggregatedEventsMultipleAddresses: {
     lastProcessedHeight: 100,
@@ -660,7 +677,7 @@ export const userEventMetricActionTestData = {
         eventId: 'event1',
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        spendHeight: 110,
+        spendHeight: 101,
         spendBlock: 'block1',
         result: 'successful' as const,
       }),
@@ -684,7 +701,7 @@ export const userEventMetricActionTestData = {
         eventId: 'event4',
         fromAddress: 'addr1',
         toAddress: 'addr2',
-        spendHeight: 90, // Below lastProcessedHeight - ignored
+        spendHeight: 99, // Below lastProcessedHeight - ignored
         spendBlock: 'block4',
         result: 'successful' as const,
       }),
@@ -696,14 +713,30 @@ export const userEventMetricActionTestData = {
         spendBlock: 'block5',
         result: 'fraud' as const, // Different status - ignored (only successful)
       }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 100, // equal lastProcessedHeight - ignored
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event7',
+        fromAddress: 'addr1',
+        toAddress: 'addr2',
+        spendHeight: 101,
+        spendBlock: 'block7',
+        result: 'successful' as const,
+      }),
     ],
     blockRepo: [
       createBlock({
         hash: 'block1',
-        height: 110,
+        height: 101,
         parentHash: 'parent1',
-        timestamp: 1704067200,
-      }), // 2024-01-01 00:00:00
+        timestamp: 1704153599,
+      }), // 2024-01-01 23:59:59
       createBlock({
         hash: 'block2',
         height: 115,
@@ -718,7 +751,7 @@ export const userEventMetricActionTestData = {
       }), // 2024-01-01 02:00:00
       createBlock({
         hash: 'block4',
-        height: 90,
+        height: 99,
         parentHash: 'parent4',
         timestamp: 1703980800,
       }), // 2023-12-31 00:00:00
@@ -728,6 +761,18 @@ export const userEventMetricActionTestData = {
         parentHash: 'parent5',
         timestamp: 1704078000,
       }), // 2024-01-01 03:00:00
+      createBlock({
+        hash: 'block6',
+        height: 100,
+        parentHash: 'parent6',
+        timestamp: 1703980800,
+      }), // 2023-12-31 00:00:00
+      createBlock({
+        hash: 'block7',
+        height: 101,
+        parentHash: 'parent7',
+        timestamp: 1704153600,
+      }), // 2024-01-02 00:00:00
     ],
     expectedAggregated: [
       {
