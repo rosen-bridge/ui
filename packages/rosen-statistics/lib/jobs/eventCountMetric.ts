@@ -32,6 +32,7 @@ export const eventCountMetric = async (
   try {
     const lastHeight = await eventCountAction.getLastProcessedHeight();
     const yesterdayTs = startOfDay(Math.floor(Date.now() / 1000) - 86400);
+    console.warn(yesterdayTs);
     const aggregated = await eventCountAction.getAggregatedEvents(
       lastHeight,
       yesterdayTs,

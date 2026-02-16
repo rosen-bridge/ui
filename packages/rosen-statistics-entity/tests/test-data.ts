@@ -143,11 +143,27 @@ export const eventCountMetricActionTestData = {
         spendBlock: 'block5',
         result: null, // null - should be ignored
       }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromChain: 'ethereum',
+        toChain: 'ergo',
+        spendHeight: 130,
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event7',
+        fromChain: 'ethereum',
+        toChain: 'ergo',
+        spendHeight: 132,
+        spendBlock: 'block7',
+        result: 'successful' as const,
+      }),
     ],
     blockRepo: [
       createBlock({
         hash: 'block1',
-        timestamp: 1500000,
+        timestamp: 1999999,
         height: 110,
         parentHash: 'parent1',
         status: PROCEED,
@@ -182,6 +198,22 @@ export const eventCountMetricActionTestData = {
         timestamp: 1700000,
         height: 120,
         parentHash: 'parent5',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block6',
+        timestamp: 2000000, // should be ignored
+        height: 130,
+        parentHash: 'parent6',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block7',
+        timestamp: 2000001, // should be ignored
+        height: 132,
+        parentHash: 'parent7',
         status: PROCEED,
         scanner: 'ergo',
       }),
@@ -254,7 +286,6 @@ export const eventCountMetricActionTestData = {
         scanner: 'ergo',
       }),
     ],
-    expectedAggregated: [],
   },
 
   /**
