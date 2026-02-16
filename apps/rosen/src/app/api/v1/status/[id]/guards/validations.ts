@@ -27,11 +27,11 @@ const ParamsSchema = Joi.object<GetGuardStatusTimelineParams>().keys({
 
 export const validator = async (
   request: NextRequest,
-  context?: { params: GetGuardStatusTimelineRouteParam },
+  context: { params: Promise<GetGuardStatusTimelineRouteParam> },
 ) => {
   return ParamsSchema.validate(
     Object.assign(Object.fromEntries(request.nextUrl.searchParams), {
-      id: context?.params.id,
+      id: (await context.params)?.id,
       guardPks: (await request.json()).guardPks,
     }),
   );
