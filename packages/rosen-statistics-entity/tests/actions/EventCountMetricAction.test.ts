@@ -83,7 +83,8 @@ describe('EventCountMetricAction', () => {
      * - Insert events above lastProcessedHeight with valid timestamps
      * - Insert events below lastProcessedHeight (should be ignored)
      * - Insert event with null status (should be ignored)
-     * - Insert corresponding block records with timestamps
+     * - Insert events equal timestamp (should be ignored)
+     * - Insert events above timestamp (should be ignored)
      * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 2000000
      * @expected
      * - Returns 3 aggregated groups with correct counts
