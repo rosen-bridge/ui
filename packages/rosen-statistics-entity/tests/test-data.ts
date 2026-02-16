@@ -123,7 +123,7 @@ export const eventCountMetricActionTestData = {
         eventId: 'event3',
         fromChain: 'cardano',
         toChain: 'ergo',
-        spendHeight: 112,
+        spendHeight: 101,
         spendBlock: 'block3',
         result: 'successful' as const,
       }),
@@ -131,7 +131,7 @@ export const eventCountMetricActionTestData = {
         eventId: 'event4',
         fromChain: 'ergo',
         toChain: 'cardano',
-        spendHeight: 90, // Below lastProcessedHeight - should be ignored
+        spendHeight: 99, // Below lastProcessedHeight - should be ignored
         spendBlock: 'block4',
         result: 'successful' as const,
       }),
@@ -143,11 +143,35 @@ export const eventCountMetricActionTestData = {
         spendBlock: 'block5',
         result: null, // null - should be ignored
       }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromChain: 'ethereum',
+        toChain: 'ergo',
+        spendHeight: 130,
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event7',
+        fromChain: 'ethereum',
+        toChain: 'ergo',
+        spendHeight: 132,
+        spendBlock: 'block7',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event8',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 100, // Equal lastProcessedHeight - should be ignored
+        spendBlock: 'block8',
+        result: 'successful' as const,
+      }),
     ],
     blockRepo: [
       createBlock({
         hash: 'block1',
-        timestamp: 1500000,
+        timestamp: 1999999,
         height: 110,
         parentHash: 'parent1',
         status: PROCEED,
@@ -164,7 +188,7 @@ export const eventCountMetricActionTestData = {
       createBlock({
         hash: 'block3',
         timestamp: 1550000,
-        height: 112,
+        height: 101,
         parentHash: 'parent3',
         status: PROCEED,
         scanner: 'ergo',
@@ -172,7 +196,7 @@ export const eventCountMetricActionTestData = {
       createBlock({
         hash: 'block4',
         timestamp: 1400000,
-        height: 90,
+        height: 99,
         parentHash: 'parent4',
         status: PROCEED,
         scanner: 'ergo',
@@ -182,6 +206,30 @@ export const eventCountMetricActionTestData = {
         timestamp: 1700000,
         height: 120,
         parentHash: 'parent5',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block6',
+        timestamp: 2000000, // should be ignored
+        height: 130,
+        parentHash: 'parent6',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block7',
+        timestamp: 2000001, // should be ignored
+        height: 132,
+        parentHash: 'parent7',
+        status: PROCEED,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block8',
+        timestamp: 1999999,
+        height: 100,
+        parentHash: 'parent8',
         status: PROCEED,
         scanner: 'ergo',
       }),
@@ -199,7 +247,7 @@ export const eventCountMetricActionTestData = {
         fromChain: 'cardano',
         toChain: 'ergo',
         eventCount: 1,
-        lastProcessedHeight: 112,
+        lastProcessedHeight: 101,
       },
       {
         status: 'successful',
@@ -254,7 +302,6 @@ export const eventCountMetricActionTestData = {
         scanner: 'ergo',
       }),
     ],
-    expectedAggregated: [],
   },
 
   /**

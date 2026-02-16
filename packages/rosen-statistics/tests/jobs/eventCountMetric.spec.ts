@@ -22,7 +22,13 @@ describe('eventCountMetric', () => {
   let logger: AbstractLogger;
 
   beforeEach(async () => {
-    // Set system time to 2024-01-03 14:20:00 UTC
+    vi.mock('../../lib/utils', () => ({
+      startOfDay: vi.fn((timestamp) => {
+        const d = new Date(timestamp * 1000);
+        d.setUTCHours(0, 0, 0, 0);
+        return Math.floor(d.getTime() / 1000);
+      }),
+    }));
     vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
@@ -40,6 +46,7 @@ describe('eventCountMetric', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
   });
 
   /**
@@ -129,8 +136,9 @@ describe('eventCountMetric', () => {
    * @target Should ignore events below last processed height
    * @scenario
    * - Insert existing EventCountEntity with lastProcessedHeight = 100
-   * - Insert event with spendHeight = 95 (below last processed)
-   * - Insert event with spendHeight = 105 (above last processed)
+   * - Insert event with spendHeight = 99 (below last processed)
+   * - Insert event with spendHeight = 100 (equal last processed)
+   * - Insert event with spendHeight = 101 (above last processed)
    * - Insert corresponding block records with valid timestamps
    * - Run eventCountMetric
    * @expected
@@ -174,7 +182,7 @@ describe('eventCountMetric', () => {
    * @scenario
    * - Insert 3 successful events
    * - 2 events have timestamps before yesterday's start
-   * - 1 event has timestamp after yesterday's start
+   * - 2 event has timestamp after yesterday's start
    * - Run eventCountMetric
    * @expected
    * - Only counts events with timestamps < yesterdayTs (2 total)
