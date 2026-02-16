@@ -2,7 +2,7 @@ import { Network } from '@rosen-ui/types';
 
 import { BridgedAssetEntity, TokenEntity } from '../../lib/entities';
 
-export class BridgedAssetTestData {
+export class AbstractAssetTestData {
   /**
    * Sample token entities required for foreign key constraints
    */
