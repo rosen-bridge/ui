@@ -1,4 +1,5 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   MetricAction,
@@ -6,8 +7,6 @@ import {
   UserEventMetricAction,
   AggregatedUserEvents,
 } from '@rosen-ui/rosen-statistics-entity';
-
-import { startOfDay } from '../utils';
 
 /**
  * Calculate and persist user event count metric.
@@ -28,13 +27,22 @@ export const userEventMetric = async (
     dataSource,
     logger.child('metricAction'),
   );
+  const blockDbAction = new BlockDbAction(
+    dataSource,
+    'ergo',
+    logger.child('blockDbAction'),
+  );
 
   try {
+    const lastBlock = await blockDbAction.getLastSavedBlock();
+    if (!lastBlock) {
+      logger.debug('No block exist.');
+      return;
+    }
     const lastHeight = await userEventAction.getLastProcessedHeight();
-    const yesterdayTs = startOfDay(Math.floor(Date.now() / 1000) - 86400);
     const aggregated = await userEventAction.getAggregatedEvents(
       lastHeight,
-      yesterdayTs,
+      lastBlock.height - 720,
     );
 
     if (!aggregated.length) {
@@ -68,7 +76,7 @@ export const userEventMetric = async (
       ? Number(totalExistingEvent.value)
       : 0;
 
-    await userEventAction.upsertEventsCount(
+    await userEventAction.upsertUserEventsCount(
       aggregatedUsersEvents,
       newTotalCount + existingTotalCount,
     );

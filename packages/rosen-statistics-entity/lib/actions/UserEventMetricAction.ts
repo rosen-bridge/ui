@@ -1,5 +1,4 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
@@ -40,31 +39,28 @@ export class UserEventMetricAction {
    * Get aggregated user event counts since last processed height
    *
    * @param lastProcessedHeight - The last processed block height (exclusive)
-   * @param untilTimestamp - Upper bound timestamp (exclusive, in seconds)
+   * @param untilTimestamp - Upper bound timestamp (exclusive)
    * @returns - Promise resolving to aggregated user event data
    */
   getAggregatedEvents = async (
     lastProcessedHeight: number,
-    untilTimestamp: number,
+    untilProcessedHeight: number,
   ): Promise<AggregatedUserEvents[]> => {
     this.logger.debug(
-      `Fetching aggregated events after height ${lastProcessedHeight} until timestamp ${untilTimestamp}`,
+      `Fetching aggregated events after height ${lastProcessedHeight} until height ${untilProcessedHeight}`,
     );
 
     const aggregated = await this.eventTriggerRepo
       .createQueryBuilder('et')
-      .leftJoin(
-        BlockEntity,
-        'be',
-        `be.hash = et.spendBlock AND be.scanner = 'ergo'`,
-      )
       .select('et.fromAddress', 'fromAddress')
       .addSelect('et.toAddress', 'toAddress')
       .addSelect('COUNT(*)', 'count')
       .addSelect('MAX(et.spendHeight)', 'lastProcessedHeight')
-      .where('et.spendHeight > :lastProcessedHeight', { lastProcessedHeight })
-      .andWhere('et.result = :status', { status: 'successful' })
-      .andWhere('be.timestamp < :untilTimestamp', { untilTimestamp })
+      .where('et.result = :status', { status: 'successful' })
+      .andWhere('et.spendHeight > :start AND et.spendHeight < :end', {
+        start: lastProcessedHeight,
+        end: untilProcessedHeight,
+      })
       .groupBy('et.fromAddress')
       .addGroupBy('et.toAddress')
       .getRawMany<AggregatedUserEvents>();
@@ -96,7 +92,7 @@ export class UserEventMetricAction {
    * @param  totalCount - The total count of events to be updated.
    * @returns A Promise that resolves when the upsert is completed.
    */
-  upsertEventsCount = async (
+  upsertUserEventsCount = async (
     aggregatedUsersEvents: AggregatedUserEvents[],
     totalCount: number,
   ): Promise<void> => {

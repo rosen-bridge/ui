@@ -1,5 +1,4 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
@@ -38,37 +37,33 @@ export class EventCountMetricAction {
 
   /**
    * Fetch aggregated event counts starting after a given height
-   * and up to a specific timestamp.
+   * and up to a specific height.
    *
    * @param lastProcessedHeight - The last processed block height (exclusive)
-   * @param untilTimestamp - Upper bound timestamp (exclusive, in seconds)
+   * @param untilProcessedHeight - Upper bound height (exclusive)
    * @returns Promise resolving to aggregated event statistics
    */
   getAggregatedEvents = async (
     lastProcessedHeight: number,
-    untilTimestamp: number,
+    untilProcessedHeight: number,
   ) => {
     this.logger.debug(
-      `Fetching aggregated events after height ${lastProcessedHeight} until timestamp ${untilTimestamp}`,
+      `Fetching aggregated events after height ${lastProcessedHeight} until height ${untilProcessedHeight}`,
     );
-
     const aggregated = await this.eventTriggerRepo
       .createQueryBuilder('et')
-      .leftJoin(
-        BlockEntity,
-        'be',
-        `be.hash = et.spendBlock AND be.scanner = 'ergo'`,
-      )
       .select('et.result', 'status')
       .addSelect('et.fromChain', 'fromChain')
       .addSelect('et.toChain', 'toChain')
       .addSelect('COUNT(et.fromAddress)', 'eventCount')
       .addSelect('MAX(et.spendHeight)', 'lastProcessedHeight')
-      .where('et.spendHeight > :lastProcessedHeight', { lastProcessedHeight })
       .andWhere('et.result IN (:...statuses)', {
         statuses: ['successful', 'fraud'],
       })
-      .andWhere('be.timestamp < :untilTimestamp', { untilTimestamp })
+      .andWhere('et.spendHeight > :start AND et.spendHeight < :end', {
+        start: lastProcessedHeight,
+        end: untilProcessedHeight,
+      })
       .groupBy('et.result')
       .addGroupBy('et.fromChain')
       .addGroupBy('et.toChain')

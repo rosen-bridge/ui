@@ -7,7 +7,7 @@ import {
   MetricEntity,
   EventCountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { eventCountMetric } from '../../lib';
 import { eventCountTestData } from '../test-data';
@@ -22,8 +22,6 @@ describe('eventCountMetric', () => {
   let logger: AbstractLogger;
 
   beforeEach(async () => {
-    // Set system time to 2024-01-03 14:20:00 UTC
-    vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
@@ -35,18 +33,19 @@ describe('eventCountMetric', () => {
     await eventTriggerRepo.clear();
     await eventCountRepo.clear();
     await blockRepo.clear();
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   /**
    * @target Should aggregate new events and create event count records
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
+   * - BlockDbAction
    * @scenario
-   * - Insert 4 new events with different and same (status, fromChain, toChain) combinations
-   * - Insert corresponding block records with timestamps before yesterday
+   * - Insert 6 new events with different and same (status, fromChain, toChain) combinations
+   * - Insert corresponding block records (last PROCEED hight is 841)
+   * - lastProcessedHeight = 0 ,untilProcessedHeight: 121 => 4 events are valid
    * - Run eventCountMetric
    * @expected
    * - Creates 3 EventCountEntity records with correct counts
@@ -84,10 +83,16 @@ describe('eventCountMetric', () => {
 
   /**
    * @target Should update existing counts with new events
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
+   * - BlockDbAction
    * @scenario
-   * - Insert existing EventCountEntity (5 successful ergo→cardano)
+   * - Insert existing EventCountEntity (5 successful ergo→cardano + some events that must be ignore)
    * - Insert existing total metric (value: 5)
-   * - Insert 2 new events for same group with valid timestamps
+   * - Insert corresponding block records (last PROCEED hight is 837)
+   * - lastProcessedHeight = 100 ,untilProcessedHeight: 116 => 4 events are valid
    * - Run eventCountMetric
    * @expected
    * - Updates existing EventCountEntity to 7
@@ -126,93 +131,12 @@ describe('eventCountMetric', () => {
   });
 
   /**
-   * @target Should ignore events below last processed height
-   * @scenario
-   * - Insert existing EventCountEntity with lastProcessedHeight = 100
-   * - Insert event with spendHeight = 95 (below last processed)
-   * - Insert event with spendHeight = 105 (above last processed)
-   * - Insert corresponding block records with valid timestamps
-   * - Run eventCountMetric
-   * @expected
-   * - EventCountEntity must update to count = 6
-   * - Total metric must update to value = 6
-   */
-  it('should ignore events below last processed height', async () => {
-    const testData = eventCountTestData.ignoreOldEvents;
-
-    await eventCountRepo.insert(testData.eventCountRepo);
-    await metricRepo.insert(testData.metricRepo);
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-    await blockRepo.insert(testData.blockRepo);
-
-    await eventCountMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-    });
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const actualEventCounts = await eventCountRepo.find({
-      select: [
-        'fromChain',
-        'toChain',
-        'eventCount',
-        'status',
-        'lastProcessedHeight',
-      ],
-    });
-
-    expect(actualEventCounts).toHaveLength(
-      testData.expectedResults.eventCounts.length,
-    );
-
-    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
-  });
-
-  /**
-   * @target Should filter out events with timestamps after yesterday's start
-   * @scenario
-   * - Insert 3 successful events
-   * - 2 events have timestamps before yesterday's start
-   * - 1 event has timestamp after yesterday's start
-   * - Run eventCountMetric
-   * @expected
-   * - Only counts events with timestamps < yesterdayTs (2 total)
-   * - Events with timestamps >= yesterdayTs are ignored
-   * - Total metric = 2
-   */
-  it("should filter out events with timestamps after yesterday's start", async () => {
-    const testData = eventCountTestData.filterByTimestamp;
-
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-    await blockRepo.insert(testData.blockRepo);
-
-    await eventCountMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.EVENT_COUNT_TOTAL },
-    });
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const actualEventCounts = await eventCountRepo.find({
-      select: [
-        'fromChain',
-        'toChain',
-        'eventCount',
-        'status',
-        'lastProcessedHeight',
-      ],
-    });
-
-    expect(actualEventCounts).toHaveLength(
-      testData.expectedResults.eventCounts.length,
-    );
-
-    expect(actualEventCounts).toEqual(testData.expectedResults.eventCounts);
-  });
-
-  /**
    * @target Should filter out null status events
+   * @dependencies
+   * - database
+   * - EventCountMetricAction
+   * - MetricAction
+   * - BlockDbAction
    * @scenario
    * - Insert 2 successful events and 1 null status event
    * - Run eventCountMetric
