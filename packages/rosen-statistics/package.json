@@ -37,11 +37,13 @@
   },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^4.0.0",
+    "@rosen-bridge/abstract-scanner": "^1.0.1",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
     "@rosen-bridge/token-price-entity": "^0.2.1",
     "@rosen-bridge/tokens": "^6.0.0",
+    "@rosen-bridge/watcher-data-extractor": "^13.0.2",
+    "@rosen-ui/asset-calculator": "^2.3.0",
     "@rosen-ui/data-source": "^0.2.1",
-    "@rosen-ui/rosen-statistics-entity": "^0.1.0",
-    "@rosen-ui/asset-calculator": "^2.3.0"
+    "@rosen-ui/rosen-statistics-entity": "^0.1.0"
   }
 }
