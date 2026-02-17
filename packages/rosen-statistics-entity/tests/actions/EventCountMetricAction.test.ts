@@ -1,5 +1,4 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
-import { BlockEntity } from '@rosen-bridge/abstract-scanner';
 import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { describe, it, expect, beforeEach } from 'vitest';
@@ -18,7 +17,6 @@ describe('EventCountMetricAction', () => {
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let eventCountRepo: Repository<EventCountEntity>;
   let metricRepo: Repository<MetricEntity>;
-  let blockRepo: Repository<BlockEntity>;
   let logger: AbstractLogger;
   let action: EventCountMetricAction;
 
@@ -27,13 +25,11 @@ describe('EventCountMetricAction', () => {
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     eventCountRepo = dataSource.getRepository(EventCountEntity);
     metricRepo = dataSource.getRepository(MetricEntity);
-    blockRepo = dataSource.getRepository(BlockEntity);
     logger = new DummyLogger();
 
     await eventTriggerRepo.clear();
     await eventCountRepo.clear();
     await metricRepo.clear();
-    await blockRepo.clear();
 
     action = new EventCountMetricAction(dataSource, logger);
   });
@@ -82,31 +78,30 @@ describe('EventCountMetricAction', () => {
 
   describe('getAggregatedEvents', () => {
     /**
-     * @target getAggregatedEvents should aggregate events by status and chain pairs since last height up to timestamp
+     * @target getAggregatedEvents should aggregate events by status and chain pairs since last height up to untilProcessedHeight
      * @dependencies
      * - database
      * @scenario
-     * - Insert events above lastProcessedHeight with valid timestamps
+     * - Insert events above lastProcessedHeight in valid range
      * - Insert events below lastProcessedHeight (should be ignored)
      * - Insert events equal lastProcessedHeight (should be ignored)
      * - Insert event with null status (should be ignored)
-     * - Insert events equal timestamp (should be ignored)
-     * - Insert events above timestamp (should be ignored)
-     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 2000000
+     * - Insert events equal untilProcessedHeight (should be ignored)
+     * - Insert events above untilProcessedHeight (should be ignored)
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilProcessedHeight = 130
      * @expected
      * - Returns 3 aggregated groups with correct counts
-     * - Does not include events below lastProcessedHeight or with null status
+     * - Does not include events that are not in valid range or with null status
      */
-    it('should aggregate events by status and chain pairs since last height up to timestamp', async () => {
+    it('should aggregate events by status and chain pairs since last height up to untilProcessedHeight', async () => {
       const testData =
         eventCountMetricActionTestData.getAggregatedEventsMultipleGroups;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
-      await blockRepo.insert(testData.blockRepo);
 
       const aggregated = await action.getAggregatedEvents(
         testData.lastProcessedHeight,
-        testData.untilTimestamp,
+        testData.untilProcessedHeight,
       );
 
       expect(aggregated).toEqual(testData.expectedAggregated);
@@ -118,21 +113,19 @@ describe('EventCountMetricAction', () => {
      * - database
      * @scenario
      * - Insert 3 successful events from ergo to cardano with different spendHeights
-     * - Insert corresponding block records with valid timestamps
-     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilTimestamp = 2000000
+     * - Call getAggregatedEvents with lastProcessedHeight = 100, untilProcessedHeight = 2000000
      * @expected
-     * - Returns single group with count = 3 (as number) and lastProcessedHeight = 120
+     * - Returns single group with count = 3 (as number) and lastProcessedHeight = 121
      */
     it('should aggregate multiple events in same group into single record', async () => {
       const testData =
         eventCountMetricActionTestData.getAggregatedEventsSameGroup;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
-      await blockRepo.insert(testData.blockRepo);
 
       const aggregated = await action.getAggregatedEvents(
         testData.lastProcessedHeight,
-        testData.untilTimestamp,
+        testData.untilProcessedHeight,
       );
 
       expect(aggregated).toHaveLength(testData.expectedAggregated.length);
@@ -154,11 +147,10 @@ describe('EventCountMetricAction', () => {
         eventCountMetricActionTestData.getAggregatedEventsNoNewEvents;
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
-      await blockRepo.insert(testData.blockRepo);
 
       const aggregated = await action.getAggregatedEvents(
         testData.lastProcessedHeight,
-        testData.untilTimestamp,
+        testData.untilProcessedHeight,
       );
 
       expect(aggregated).toHaveLength(0);
