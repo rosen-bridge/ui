@@ -7,7 +7,7 @@ import {
   MetricEntity,
   UserEventEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { userEventMetric } from '../../lib';
 import { userEventMetricTestData } from '../test-data';
@@ -22,14 +22,6 @@ describe('userEventMetric', () => {
   let logger: AbstractLogger;
 
   beforeEach(async () => {
-    vi.mock('../../lib/utils', () => ({
-      startOfDay: vi.fn((timestamp) => {
-        const d = new Date(timestamp * 1000);
-        d.setUTCHours(0, 0, 0, 0);
-        return Math.floor(d.getTime() / 1000);
-      }),
-    }));
-    vi.setSystemTime(new Date('2024-01-03T14:20:00Z'));
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
@@ -41,27 +33,25 @@ describe('userEventMetric', () => {
     await eventTriggerRepo.clear();
     await userEventRepo.clear();
     await blockRepo.clear();
-
-    vi.clearAllMocks();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   /**
-   * @target Should aggregate new user events and create event count records
+   * @target Should aggregate new user events and create user event records
+   * @dependencies
+   * - database
+   * - UserEventMetricAction
+   * - MetricAction
+   * - BlockDbAction
    * @scenario
-   * - Set system time to 2024-01-03 14:20:00 UTC (yesterday start = 2024-01-02 00:00:00 UTC)
-   * - Insert 6 successful events with different address pairs
-   * - Insert corresponding block records with timestamps before yesterday (Jan 1, 2024)
-   * - Insert some blocks records with timestamps after yesterday (must be ignore)
+   * - Insert 6 new events with different address pairs (all successful)
+   * - Insert corresponding block records
+   * - lastProcessedHeight = 0, untilProcessedHeight = 121 (last block height - 720)
    * - Run userEventMetric
    * @expected
-   * - Creates 3 UserEventEntity records with correct counts
-   * - Updates total metric to sum of all events (4)
+   * - Creates 4 UserEventEntity records with correct counts (events with height <= 121)
+   * - Updates total metric to sum of all valid events (4)
    */
-  it('should aggregate new user events and create event count records', async () => {
+  it('should aggregate new events and create user event records', async () => {
     const testData = userEventMetricTestData.newEventsDifferentAddresses;
 
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
@@ -86,15 +76,21 @@ describe('userEventMetric', () => {
   });
 
   /**
-   * @target Should update existing counts with new events
+   * @target Should update existing user event counts with new events
+   * @dependencies
+   * - database
+   * - UserEventMetricAction
+   * - MetricAction
+   * - BlockDbAction
    * @scenario
-   * - Set system time to 2024-01-03 14:20:00 UTC
-   * - Insert existing UserEventEntity (5 for addr1→addr2)
+   * - Insert existing UserEventEntity (5 count for addr1→addr2 at height 100)
    * - Insert existing total metric (value: 5)
-   * - Insert 2 new successful events for same address pair with timestamps before yesterday
+   * - Insert 2 new successful events for same address pair (heights 115, 116)
+   * - Insert corresponding block records
+   * - lastProcessedHeight = 100, untilProcessedHeight = 116 => 2 events are valid
    * - Run userEventMetric
    * @expected
-   * - Updates existing UserEventEntity to 7
+   * - Updates existing UserEventEntity to count 7 with lastProcessedHeight 116
    * - Updates total metric to 7
    */
   it('should update existing counts with new events', async () => {
@@ -124,87 +120,16 @@ describe('userEventMetric', () => {
   });
 
   /**
-   * @target Should ignore events below last processed height
-   * @scenario
-   * - Set system time to 2024-01-03 14:20:00 UTC
-   * - Insert existing UserEventEntity with lastProcessedHeight = 100
-   * - Insert event with spendHeight = 99 (below last processed)
-   * - Insert event with spendHeight = 100 (equal last processed)
-   * - Insert event with spendHeight = 101 (above last processed)
-   * - Insert corresponding block records with timestamps before yesterday
-   * - Run userEventMetric
-   * @expected
-   * - UserEventEntity must update to count = 6
-   * - Total metric must update to value = 6
-   */
-  it('should ignore events below last processed height', async () => {
-    const testData = userEventMetricTestData.ignoreOldEvents;
-
-    await userEventRepo.insert(testData.userEventRepo);
-    await metricRepo.insert(testData.metricRepo);
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-    await blockRepo.insert(testData.blockRepo);
-
-    await userEventMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
-    });
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const actualUserEvents = await userEventRepo.find({
-      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
-    });
-
-    expect(actualUserEvents).toHaveLength(
-      testData.expectedResults.userEvents.length,
-    );
-
-    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
-  });
-
-  /**
-   * @target Should filter out events with timestamps after yesterday's start
-   * @scenario
-   * - Set system time to 2024-01-03 14:20:00 UTC
-   * - Insert 3 successful events
-   * - 2 events have timestamps before yesterday's start (Jan 1, 2024)
-   * - 1 event has timestamp equal to yesterday's start (Jan 2, 2024 00:00:00 UTC)
-   * - Run userEventMetric
-   * @expected
-   * - Only counts events with timestamps < yesterdayTs (2 total)
-   * - Events with timestamps >= yesterdayTs are ignored
-   * - Total metric = 2
-   */
-  it("should filter out events with timestamps after yesterday's start", async () => {
-    const testData = userEventMetricTestData.filterByTimestamp;
-
-    await eventTriggerRepo.insert(testData.eventTriggerRepo);
-    await blockRepo.insert(testData.blockRepo);
-
-    await userEventMetric(dataSource, logger);
-
-    const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
-    });
-    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
-
-    const actualUserEvents = await userEventRepo.find({
-      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
-    });
-
-    expect(actualUserEvents).toHaveLength(
-      testData.expectedResults.userEvents.length,
-    );
-
-    expect(actualUserEvents).toEqual(testData.expectedResults.userEvents);
-  });
-
-  /**
    * @target Should filter out non-successful events
+   * @dependencies
+   * - database
+   * - UserEventMetricAction
+   * - MetricAction
+   * - BlockDbAction
    * @scenario
-   * - Set system time to 2024-01-03 14:20:00 UTC
-   * - Insert 2 successful events, 1 fraud event, 1 null status event
+   * - Insert 2 successful events, 1 fraud event, and 1 null status event
+   * - Insert corresponding block records
+   * - lastProcessedHeight = 0, untilProcessedHeight = 112 => 2 successful events are valid
    * - Run userEventMetric
    * @expected
    * - Only counts successful events (2 total)
