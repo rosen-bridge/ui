@@ -227,11 +227,13 @@ export const SAMPLE_ANALYZER_BRIDGED_TOKEN = [
     bridgedTokenId:
       '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
   },
+];
+export const SAMPLE_ANALYZER_BRIDGED_TOKEN_2 = [
   {
     amount: 7000n,
+    bridgedTokenId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
     chain: 'binance',
     tokenId: 'erg',
-    bridgedTokenId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
   },
 ];
 
@@ -250,13 +252,18 @@ export const WRAPPED_TOKEN_CHAIN_BALANCE_INFO: Record<string, AssetBalance> = {
 /**
  * sample wrapped token total supply
  */
-export const WRAPPED_TOKEN_TOTAL_SUPPLY: TotalSupply[] = [
-  {
-    assetId: '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
-    totalSupply: 10000n,
-  },
-  {
-    assetId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
-    totalSupply: 10000n,
-  },
-];
+export const WRAPPED_TOKEN_TOTAL_SUPPLY: { [chain: string]: TotalSupply[] } = {
+  ergo: [
+    {
+      assetId:
+        '92f7cec6d682e8a0d965e6d93de66ec18933f72181c59a5d85802f0fe2afc900',
+      totalSupply: 10000n,
+    },
+  ],
+  binance: [
+    {
+      assetId: '0xce5307d968c5d298239ffb7a6b0abd31aba5712e',
+      totalSupply: 10000n,
+    },
+  ],
+};

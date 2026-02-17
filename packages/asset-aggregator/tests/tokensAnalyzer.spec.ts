@@ -8,6 +8,7 @@ import {
   WRAPPED_TOKEN_TOTAL_SUPPLY,
   SAMPLE_TOKEN_MAP,
   SAMPLE_ANALYZER_BRIDGED_TOKEN,
+  SAMPLE_ANALYZER_BRIDGED_TOKEN_2,
 } from './tokensAnalyzerTestData';
 
 interface AnalyzerTestContext {
@@ -23,7 +24,7 @@ describe('TokensAnalyzer', () => {
     context.tokenMap = tokenMap;
     context.analyzer = new TokensAnalyzer(
       {}, // chainAssetBalanceInfo — will set per test
-      [],
+      {},
       tokenMap,
     );
   });
@@ -51,7 +52,10 @@ describe('TokensAnalyzer', () => {
         NETWORKS.ergo.nativeToken,
       );
       expect(analyzer['bridgedTokens'][0].amount).toBeTypeOf('bigint');
-      expect(analyzer['bridgedTokens']).toEqual(SAMPLE_ANALYZER_BRIDGED_TOKEN);
+      expect(analyzer['bridgedTokens']).toEqual([
+        ...SAMPLE_ANALYZER_BRIDGED_TOKEN_2,
+        ...SAMPLE_ANALYZER_BRIDGED_TOKEN,
+      ]);
     });
 
     /**
@@ -116,7 +120,9 @@ describe('TokensAnalyzer', () => {
 
       const token = bridged[0];
 
-      const totalSupply = BigInt(WRAPPED_TOKEN_TOTAL_SUPPLY[0].totalSupply);
+      const totalSupply = BigInt(
+        WRAPPED_TOKEN_TOTAL_SUPPLY.ergo[0].totalSupply,
+      );
 
       const lockedAmount = BigInt(
         WRAPPED_TOKEN_CHAIN_BALANCE_INFO.ergo[SAMPLE_TOKEN_MAP[2].ergo.tokenId]

@@ -105,8 +105,8 @@ export class AssetAggregatorService extends PeriodicTaskService {
               }
             }),
           );
-          const totalSupply: TotalSupply[] =
-            (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? [];
+          const totalSupply: { [chain: string]: TotalSupply[] } =
+            (await this.redis.get(TOTAL_SUPPLY_REDIS_KEY)) ?? {};
           await this.assetAggregator.update(assetBalances, totalSupply);
         },
         interval: configs.dataAggregator.interval * 1000,

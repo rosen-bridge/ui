@@ -1,4 +1,8 @@
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
+import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { RosenTokens } from '@rosen-bridge/tokens';
+import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 
 export const tokenMapData: RosenTokens = [
   {
@@ -139,5 +143,365 @@ export const lockedAssetsTestData = {
         amount: BigInt(10),
       },
     ],
+  },
+};
+
+/**
+ * Helper function to create minimal EventTriggerEntity for testing
+ */
+const createEventTrigger = (
+  overrides: Partial<EventTriggerEntity>,
+): DeepPartial<EventTriggerEntity> => ({
+  eventId: 'event',
+  identifier: `box-${Math.random()}`,
+  block: `block-${Math.random()}`,
+  height: 100,
+  extractor: `ext-${Math.random()}`,
+  txId: 'tx1',
+  fromAddress: 'addr1',
+  toAddress: 'addr2',
+  amount: '100',
+  bridgeFee: '1',
+  networkFee: '0.1',
+  sourceChainTokenId: 'token1',
+  sourceChainHeight: 100,
+  targetChainTokenId: 'token2',
+  sourceTxId: 'sourceTx1',
+  sourceBlockId: 'sourceBlock1',
+  spendBlock: 'block1',
+  spendTxId: 'spendTx1',
+  paymentTxId: 'paymentTx1',
+  WIDsCount: 1,
+  WIDsHash: 'hash1',
+  serialized: '{}',
+  ...overrides,
+});
+
+/**
+ * Helper function to create minimal BlockEntity for testing
+ */
+const createBlock = (
+  overrides: Partial<BlockEntity>,
+): DeepPartial<BlockEntity> => ({
+  id: Math.floor(Math.random() * 10000),
+  height: 100,
+  hash: 'block1',
+  parentHash: `parent-${Math.random()}`,
+  status: PROCEED,
+  scanner: 'ergo',
+  timestamp: 1704153600,
+  year: 2024,
+  month: 1,
+  day: 2,
+  ...overrides,
+});
+
+export const eventCountTestData = {
+  /**
+   * Test 1: New events within timestamp range
+   * - 6 events that 4 events of them are valid (in range)
+   * - Different status and chain combinations
+   */
+  newEventsTest1: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 111,
+        spendBlock: 'block2',
+        result: 'fraud' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'cardano',
+        toChain: 'ergo',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 120,
+        spendBlock: 'block4',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event5',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 121,
+        spendBlock: 'block5',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 841,
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200,
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704070800,
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704074400,
+        height: 112,
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1704103400,
+        height: 120,
+      }),
+      createBlock({
+        hash: 'block5',
+        timestamp: 1704103500,
+        height: 121,
+      }),
+      createBlock({
+        hash: 'block6',
+        timestamp: 1704103600,
+        height: 841,
+      }),
+      createBlock({
+        hash: 'block7',
+        timestamp: 1704103800,
+        height: 843,
+        status: 'PROCESSING',
+      }),
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'fraud',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 1,
+          lastProcessedHeight: 111,
+        },
+        {
+          status: 'successful',
+          fromChain: 'cardano',
+          toChain: 'ergo',
+          eventCount: 1,
+          lastProcessedHeight: 112,
+        },
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 2,
+          lastProcessedHeight: 120,
+        },
+      ],
+      totalMetricValue: '4',
+    },
+  },
+
+  /**
+   * Test 2: Update existing counts with new events
+   * Existing count: 5 successful ergo→cardano
+   * New events: 2 more successful ergo→cardano in valid range
+   */
+  updateExistingCounts: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event0',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 100,
+        spendBlock: 'block0',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 115,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 116,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block0',
+        timestamp: 1704081100,
+        height: 100,
+      }),
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704081600,
+        height: 115,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704085200,
+        height: 116,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704085400,
+        height: 837,
+      }),
+    ],
+    eventCountRepo: [
+      {
+        status: 'successful',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 7,
+          lastProcessedHeight: 116,
+        },
+      ],
+      totalMetricValue: '7',
+    },
+  },
+
+  /**
+   * Test 5: No new events
+   * Only existing data, no new events
+   */
+  noNewEvents: {
+    eventCountRepo: [
+      {
+        status: 'successful',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        eventCount: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.EVENT_COUNT_TOTAL,
+        value: '5',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 5,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalMetricValue: '5',
+    },
+  },
+
+  /**
+   * Test 6: Filter null status events
+   * 2 successful + 1 null status - only successful should be counted
+   */
+  filterNullStatusEvents: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 111,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        toChain: 'cardano',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: null,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200,
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704067260,
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704067320,
+        height: 112,
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1704069320,
+        height: 833,
+      }),
+    ],
+    expectedResults: {
+      eventCounts: [
+        {
+          status: 'successful',
+          fromChain: 'ergo',
+          toChain: 'cardano',
+          eventCount: 2,
+          lastProcessedHeight: 111,
+        },
+      ],
+      totalMetricValue: '2',
+    },
   },
 };
