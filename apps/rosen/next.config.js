@@ -43,6 +43,10 @@ const nextConfig = {
     config.resolve.fallback = {
       ...config.resolve.fallback,
       'fs': false,
+
+      // Ignore the dependency imported internally by @reown/appkit since we don't use Solana
+      '@solana/kit': false,
+
       // Ignore the dependency warning from @metamask/sdk
       '@react-native-async-storage/async-storage': false,
     };
