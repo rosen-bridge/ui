@@ -508,40 +508,10 @@ export const eventCountTestData = {
   },
 };
 
-export const userEventTestData = {
-  userEvent1: {
-    fromAddress: 'addr1',
-    toAddress: 'addr2',
-    count: 5,
-    lastProcessedHeight: 100,
-  },
-
-  userEvent2: {
-    fromAddress: 'addr1',
-    toAddress: 'addr3',
-    count: 3,
-    lastProcessedHeight: 150,
-  },
-
-  userEvent3: {
-    fromAddress: 'addr2',
-    toAddress: 'addr4',
-    count: 2,
-    lastProcessedHeight: 200,
-  },
-
-  userEvent4: {
-    fromAddress: 'addr3',
-    toAddress: 'addr5',
-    count: 4,
-    lastProcessedHeight: 180,
-  },
-};
-
 export const userEventMetricTestData = {
   /**
-   * Test 1: New events with different address pairs
-   * - 6 events with different address combinations
+   * Test 1: New events with different address and chain pairs
+   * - 6 events with different address and chaain combinations
    * - All successful status
    * - lastProcessedHeight = 0, untilProcessedHeight = 121 => 4 events are valid
    * - Events with height > 121 should be ignored
@@ -551,7 +521,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 110,
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -559,7 +531,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr4',
+        fromChain: 'bitcoin',
         toAddress: 'addr3',
+        toChain: 'binance',
         spendHeight: 111,
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -567,7 +541,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 112,
         spendBlock: 'block3',
         result: 'successful' as const,
@@ -575,7 +551,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event4',
         fromAddress: 'addr3',
+        fromChain: 'cardano',
         toAddress: 'addr4',
+        toChain: 'ergo',
         spendHeight: 120,
         spendBlock: 'block4',
         result: 'successful' as const,
@@ -639,19 +617,25 @@ export const userEventMetricTestData = {
       userEvents: [
         {
           fromAddress: 'addr1',
+          fromChain: 'ergo',
           toAddress: 'addr2',
+          toChain: 'cardano',
           count: 2,
           lastProcessedHeight: 112,
         },
         {
           fromAddress: 'addr3',
+          fromChain: 'cardano',
           toAddress: 'addr4',
+          toChain: 'ergo',
           count: 1,
           lastProcessedHeight: 120,
         },
         {
           fromAddress: 'addr4',
+          fromChain: 'bitcoin',
           toAddress: 'addr3',
+          toChain: 'binance',
           count: 1,
           lastProcessedHeight: 111,
         },
@@ -671,7 +655,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 115,
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -679,7 +665,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 116,
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -705,7 +693,9 @@ export const userEventMetricTestData = {
     userEventRepo: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 5,
         lastProcessedHeight: 100,
       },
@@ -721,7 +711,9 @@ export const userEventMetricTestData = {
       userEvents: [
         {
           fromAddress: 'addr1',
+          fromChain: 'ergo',
           toAddress: 'addr2',
+          toChain: 'cardano',
           count: 7,
           lastProcessedHeight: 116,
         },
@@ -742,7 +734,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 110,
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -750,7 +744,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 112,
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -758,7 +754,9 @@ export const userEventMetricTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromAddress: 'addr3',
+        fromChain: 'bitcoin',
         toAddress: 'addr4',
+        toChain: 'binance',
         spendHeight: 115,
         spendBlock: 'block3',
         result: 'fraud' as const, // Ignored - not successful
@@ -782,7 +780,9 @@ export const userEventMetricTestData = {
       userEvents: [
         {
           fromAddress: 'addr1',
+          fromChain: 'ergo',
           toAddress: 'addr2',
+          toChain: 'cardano',
           count: 2,
           lastProcessedHeight: 112,
         },

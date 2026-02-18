@@ -472,19 +472,25 @@ export const userEventMetricActionTestData = {
     userEventRepo: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 5,
         lastProcessedHeight: 100,
       },
       {
         fromAddress: 'addr3',
+        fromChain: 'ergo',
         toAddress: 'addr4',
+        toChain: 'cardano',
         count: 2,
         lastProcessedHeight: 120,
       },
       {
         fromAddress: 'addr5',
+        fromChain: 'ergo',
         toAddress: 'addr6',
+        toChain: 'cardano',
         count: 3,
         lastProcessedHeight: 150,
       },
@@ -507,7 +513,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 101, // Included (> 100)
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -515,7 +523,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 115, // Included (> 100, < 120)
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -523,7 +533,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromAddress: 'addr3',
+        fromChain: 'bitcoin',
         toAddress: 'addr4',
+        toChain: 'binance',
         spendHeight: 112, // Included (> 100, < 120)
         spendBlock: 'block3',
         result: 'successful' as const,
@@ -531,7 +543,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event4',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 99, // Below lastProcessedHeight - ignored (not > 100)
         spendBlock: 'block4',
         result: 'successful' as const,
@@ -539,7 +553,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event5',
         fromAddress: 'addr5',
+        fromChain: 'ergo',
         toAddress: 'addr6',
+        toChain: 'cardano',
         spendHeight: 120, // Equal to untilProcessedHeight - ignored (not < 120)
         spendBlock: 'block5',
         result: 'fraud' as const, // Different status - ignored (only successful)
@@ -547,7 +563,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event6',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 100, // Equal to lastProcessedHeight - ignored (not > 100)
         spendBlock: 'block6',
         result: 'successful' as const,
@@ -555,7 +573,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event7',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 101, // Duplicate address pair in same height - inclulde
         spendBlock: 'block7',
         result: 'successful' as const,
@@ -564,13 +584,17 @@ export const userEventMetricActionTestData = {
     expectedAggregated: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 3, // events at heights 101 and 115
         lastProcessedHeight: 115,
       },
       {
         fromAddress: 'addr3',
+        fromChain: 'bitcoin',
         toAddress: 'addr4',
+        toChain: 'binance',
         count: 1, // event at height 112
         lastProcessedHeight: 112,
       },
@@ -589,7 +613,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 110,
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -597,7 +623,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 115,
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -605,7 +633,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 120,
         spendBlock: 'block3',
         result: 'successful' as const,
@@ -614,7 +644,9 @@ export const userEventMetricActionTestData = {
     expectedAggregated: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 3,
         lastProcessedHeight: 120,
       },
@@ -632,7 +664,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 150, // Below lastProcessedHeight
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -640,7 +674,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 200, // Equal to lastProcessedHeight - ignored
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -659,7 +695,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 110, // Included (< 115)
         spendBlock: 'block1',
         result: 'successful' as const,
@@ -667,7 +705,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         spendHeight: 115, // Equal to untilProcessedHeight - excluded (not < 115)
         spendBlock: 'block2',
         result: 'successful' as const,
@@ -675,7 +715,9 @@ export const userEventMetricActionTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromAddress: 'addr3',
-        toAddress: 'addr4',
+        fromChain: 'bitcoin',
+        toAddress: 'addr2',
+        toChain: 'binance',
         spendHeight: 120, // Above untilProcessedHeight - excluded
         spendBlock: 'block3',
         result: 'successful' as const,
@@ -684,7 +726,9 @@ export const userEventMetricActionTestData = {
     expectedAggregated: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 1,
         lastProcessedHeight: 110,
       },
@@ -697,11 +741,15 @@ export const userEventMetricActionTestData = {
    */
   getExistingUserEventExists: {
     fromAddress: 'addr1',
+    fromChain: 'ergo',
     toAddress: 'addr2',
+    toChain: 'cardano',
     userEventRepo: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 10,
         lastProcessedHeight: 200,
       },
@@ -715,11 +763,15 @@ export const userEventMetricActionTestData = {
    */
   getExistingUserEventNotExists: {
     fromAddress: 'addr1',
+    fromChain: 'ergo',
     toAddress: 'addr2',
+    toChain: 'ergo',
     userEventRepo: [
       {
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
+        fromAddress: 'addr1',
+        fromChain: 'cardano',
+        toAddress: 'addr2',
+        toChain: 'ergo',
         count: 10,
         lastProcessedHeight: 200,
       },
@@ -735,13 +787,17 @@ export const userEventMetricActionTestData = {
     aggregatedUsersEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 3,
         lastProcessedHeight: 120,
       },
       {
         fromAddress: 'addr3',
+        fromChain: 'ergo',
         toAddress: 'addr4',
+        toChain: 'cardano',
         count: 1,
         lastProcessedHeight: 115,
       },
@@ -751,13 +807,17 @@ export const userEventMetricActionTestData = {
     expectedUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 3,
         lastProcessedHeight: 120,
       },
       {
         fromAddress: 'addr3',
+        fromChain: 'ergo',
         toAddress: 'addr4',
+        toChain: 'cardano',
         count: 1,
         lastProcessedHeight: 115,
       },
@@ -773,7 +833,9 @@ export const userEventMetricActionTestData = {
     aggregatedUsersEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 2, // This is the NEW count, not incremental
         lastProcessedHeight: 130,
       },
@@ -782,7 +844,9 @@ export const userEventMetricActionTestData = {
     existingUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 5, // Old count - will be replaced
         lastProcessedHeight: 100,
       },
@@ -795,7 +859,9 @@ export const userEventMetricActionTestData = {
     expectedUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 2, // Replaced with new count
         lastProcessedHeight: 130,
       },
@@ -811,13 +877,17 @@ export const userEventMetricActionTestData = {
     aggregatedUsersEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 3, // New count for existing group
         lastProcessedHeight: 120,
       },
       {
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
+        fromAddress: 'addr1',
+        fromChain: 'cardano',
+        toAddress: 'addr2',
+        toChain: 'ergo',
         count: 2, // New group
         lastProcessedHeight: 115,
       },
@@ -826,7 +896,9 @@ export const userEventMetricActionTestData = {
     existingUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 5, // Old count - will be replaced
         lastProcessedHeight: 100,
       },
@@ -839,13 +911,17 @@ export const userEventMetricActionTestData = {
     expectedUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 3, // Replaced with new count
         lastProcessedHeight: 120,
       },
       {
-        fromAddress: 'addr3',
-        toAddress: 'addr4',
+        fromAddress: 'addr1',
+        fromChain: 'cardano',
+        toAddress: 'addr2',
+        toChain: 'ergo',
         count: 2,
         lastProcessedHeight: 115,
       },
@@ -863,7 +939,9 @@ export const userEventMetricActionTestData = {
     existingUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 5,
         lastProcessedHeight: 100,
       },
@@ -876,7 +954,9 @@ export const userEventMetricActionTestData = {
     expectedUserEvents: [
       {
         fromAddress: 'addr1',
+        fromChain: 'ergo',
         toAddress: 'addr2',
+        toChain: 'cardano',
         count: 5, // Unchanged
         lastProcessedHeight: 100,
       },

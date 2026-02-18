@@ -54,6 +54,8 @@ export class UserEventMetricAction {
       .createQueryBuilder('et')
       .select('et.fromAddress', 'fromAddress')
       .addSelect('et.toAddress', 'toAddress')
+      .addSelect('et.fromChain', 'fromChain')
+      .addSelect('et.toChain', 'toChain')
       .addSelect('COUNT(*)', 'count')
       .addSelect('MAX(et.spendHeight)', 'lastProcessedHeight')
       .where('et.result = :status', { status: 'successful' })
@@ -63,6 +65,8 @@ export class UserEventMetricAction {
       })
       .groupBy('et.fromAddress')
       .addGroupBy('et.toAddress')
+      .addGroupBy('et.fromChain')
+      .addGroupBy('toChain')
       .getRawMany<AggregatedUserEvents>();
 
     this.logger.debug(`Found ${aggregated.length} aggregated events`);
@@ -73,15 +77,27 @@ export class UserEventMetricAction {
    * Get existing UserEventEntity for a specific from/to address pair
    *
    * @param fromAddress - Source address
+   * @param fromChain  - Source chain
    * @param toAddress - Target address
+   * @param toAddress - Target chain
    * @returns Promise resolving to existing user event count, or 0 if no record exists
    */
-  getExistingUserEvent = async (fromAddress: string, toAddress: string) => {
+  getExistingUserEvent = async (
+    fromAddress: string,
+    fromChain: string,
+    toAddress: string,
+    toChain: string,
+  ) => {
     this.logger.debug(
-      `Fetching existing user event for  ${fromAddress} -> ${toAddress}`,
+      `Fetching existing user event: ${fromAddress}/${fromChain} -> ${toAddress}/${toChain}`,
     );
     const existing = await this.userEventRepo.findOne({
-      where: { fromAddress, toAddress },
+      where: {
+        fromAddress,
+        fromChain,
+        toAddress,
+        toChain,
+      },
     });
     return existing ? existing.count : 0;
   };
@@ -108,6 +124,8 @@ export class UserEventMetricAction {
       await userEventCountRepo.upsert(aggregatedUsersEvents, [
         'fromAddress',
         'toAddress',
+        'fromChain',
+        'toChain',
       ]);
 
       await metricRepo.upsert(

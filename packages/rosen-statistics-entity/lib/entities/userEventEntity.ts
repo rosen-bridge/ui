@@ -5,7 +5,7 @@ import {
   Unique,
 } from '@rosen-bridge/extended-typeorm';
 
-@Unique(['fromAddress', 'toAddress'])
+@Unique(['fromAddress', 'toAddress', 'fromChain', 'toChain'])
 @Entity('user_event_entity')
 export class UserEventEntity {
   @PrimaryGeneratedColumn()
@@ -16,6 +16,12 @@ export class UserEventEntity {
 
   @Column({ type: 'varchar' })
   toAddress: string;
+
+  @Column({ type: 'varchar' })
+  fromChain: string;
+
+  @Column({ type: 'varchar' })
+  toChain: string;
 
   @Column({ type: 'int' })
   count: number;

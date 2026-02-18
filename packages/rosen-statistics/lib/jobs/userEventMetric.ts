@@ -58,7 +58,9 @@ export const userEventMetric = async (
 
       const existingCount = await userEventAction.getExistingUserEvent(
         row.fromAddress,
+        row.fromChain,
         row.toAddress,
+        row.toChain,
       );
 
       aggregatedUsersEvents.push({
@@ -66,6 +68,8 @@ export const userEventMetric = async (
         toAddress: row.toAddress,
         count: existingCount + row.count,
         lastProcessedHeight: row.lastProcessedHeight,
+        fromChain: row.fromChain,
+        toChain: row.toChain,
       });
     }
 

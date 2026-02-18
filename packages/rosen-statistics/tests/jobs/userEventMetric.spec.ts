@@ -65,9 +65,15 @@ describe('userEventMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualUserEvents = await userEventRepo.find({
-      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+      select: [
+        'fromAddress',
+        'fromChain',
+        'toAddress',
+        'toChain',
+        'count',
+        'lastProcessedHeight',
+      ],
     });
-
     expect(actualUserEvents).toHaveLength(
       testData.expectedResults.userEvents.length,
     );
@@ -109,7 +115,14 @@ describe('userEventMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualUserEvents = await userEventRepo.find({
-      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+      select: [
+        'fromAddress',
+        'fromChain',
+        'toAddress',
+        'toChain',
+        'count',
+        'lastProcessedHeight',
+      ],
     });
 
     expect(actualUserEvents).toHaveLength(
@@ -150,7 +163,14 @@ describe('userEventMetric', () => {
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
     const actualUserEvents = await userEventRepo.find({
-      select: ['fromAddress', 'toAddress', 'count', 'lastProcessedHeight'],
+      select: [
+        'fromAddress',
+        'fromChain',
+        'toAddress',
+        'toChain',
+        'count',
+        'lastProcessedHeight',
+      ],
     });
 
     expect(actualUserEvents).toHaveLength(
