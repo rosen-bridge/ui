@@ -27,7 +27,7 @@
     "@types/json-bigint": "^1.0.1"
   },
   "peerDependencies": {
-    "swr": "^2.2.0"
+    "swr": "^2.4.0"
   },
   "engines": {
     "node": ">=22.18.0",

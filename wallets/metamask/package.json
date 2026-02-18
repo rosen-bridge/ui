@@ -20,7 +20,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@metamask/sdk": "^0.28.2",
+    "@metamask/sdk": "^0.34.0",
     "@rosen-bridge/tokens": "^6.0.0",
     "@rosen-network/binance": "^0.4.3",
     "@rosen-network/ethereum": "^0.4.3",

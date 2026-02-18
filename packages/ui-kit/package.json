@@ -29,7 +29,7 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@mui/material": "^7.3.6",
+    "@mui/material": "^7.3.8",
     "@rosen-bridge/icons": "^3.3.0",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
@@ -38,21 +38,19 @@
     "joi": "^17.11.0",
     "lodash-es": "^4.17.21",
     "moment": "^2.29.4",
-    "qrcode.react": "^3.1.0",
-    "react-hook-form": "^7.45.1",
+    "qrcode.react": "^4.2.0",
+    "react-hook-form": "^7.71.1",
     "react-sticky-box": "^2.0.5"
   },
   "devDependencies": {
-    "@rosen-ui/types": "^0.4.0",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1"
+    "@rosen-ui/types": "^0.4.0"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "swr": "^2.1.5"
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "swr": "^2.4.0"
   },
   "engines": {
     "node": ">=22.18.0",
