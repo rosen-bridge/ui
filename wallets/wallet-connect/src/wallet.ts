@@ -52,6 +52,8 @@ const createModal = (projectId: string) => {
 
   modal.subscribeEvents((event) => {
     switch (event.data.event) {
+      // TODO
+      // case 'USER_REJECTED':
       case 'CONNECT_ERROR':
         connected.reject();
         break;
