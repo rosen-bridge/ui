@@ -12,16 +12,8 @@ export class Migration1767795454053 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "event_count_entity"
-            ADD "lastProcessedHeight" integer
+            ADD "lastProcessedHeight" integer NOT NULL
         `);
-    await queryRunner.query(`
-      UPDATE "event_count_entity"
-      SET "lastProcessedHeight" = 0
-    `);
-    await queryRunner.query(`
-      ALTER TABLE "event_count_entity"
-      ALTER COLUMN "lastProcessedHeight" SET NOT NULL
-    `);
     await queryRunner.query(`
             ALTER TABLE "event_count_entity"
             ADD CONSTRAINT "UQ_035b3c112fd24e7f006ea8fe622" UNIQUE ("status", "fromChain", "toChain")
