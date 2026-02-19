@@ -743,6 +743,60 @@
           }
         }
       },
+      "bitcoinRuns": {
+        "type": "object",
+        "children": {
+          "active": {
+            "type": "boolean",
+            "description": "bitcoin activation state",
+            "default": false,
+            "validations": [
+              {
+                "required": true,
+                "error": "bitcoin activation state must be set"
+              }
+            ]
+          },
+          "initialHeight": {
+            "type": "number",
+            "default": 1,
+            "description": "bitcoin initial height",
+            "validations": [
+              {
+                "required": true,
+                "error": "bitcoin initial height must be specified"
+              }
+            ]
+          },
+          "scanInterval": {
+            "type": "number",
+            "default": 600,
+            "description": "bitcoin scanInterval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "bitcoin scanInterval must be specified (in seconds)"
+              }
+            ]
+          },
+          "unisatUrl": {
+                      "type": "string",
+                      "description": "bitcoin rpc url",
+                      "validations": [
+                        {
+                          "required": true,
+                          "error": "bitcoin runs url must be specified"
+                        }
+                      ]
+                    },
+            "unisatApiKey": {
+                      "type": "string"
+                    }
+                
+       
+             
+            }
+          },
       "doge": {
         "type": "object",
         "children": {

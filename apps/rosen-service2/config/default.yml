@@ -35,6 +35,12 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 600
+  bitcoin-runes:
+      active: false
+      initialHeight:
+      scanInterval: 600
+      unisatUrl: https://open-api.unisat.io
+      unisatApiKey:
   doge:
     active: false
     initialHeight: 1

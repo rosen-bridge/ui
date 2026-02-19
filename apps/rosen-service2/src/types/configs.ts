@@ -65,6 +65,7 @@ export interface Chains {
   ergo: ChainsErgo;
   cardano: ChainsCardano;
   bitcoin: ChainsBitcoin;
+  bitcoinRuns: ChainsBitcoinRuns;
   doge: ChainsDoge;
   ethereum: ChainsEthereum;
   binance: ChainsBinance;
@@ -157,6 +158,14 @@ export interface ChainsDogeAdapter {
 
 export interface ChainsDogeAdapterBlockCypher {
   url: string;
+}
+
+export interface ChainsBitcoinRuns {
+  active: boolean;
+  initialHeight: number;
+  scanInterval: number;
+  unisatUrl: string;
+  unisatApiKey?: string;
 }
 
 export interface ChainsBitcoin {
