@@ -1,5 +1,36 @@
 # @rosen-bridge/ui-kit
 
+## 5.2.0
+
+### Minor Changes
+
+- Update the `Token` component and related components to support the `ergoSideTokenId` property
+- Add `price`, `decimal`, and `loading` props to the `EventDetails` component
+- Improve readability of the `pagination` text for items per page
+- Add price prop to display the dollar value in the `Amount` component
+- Update the `SmartSearch` component and `useCollection` hook to synchronize query filters, sorting, and pagination state with the browser URL
+- Add `view` and `fragment` support to the collection hook to persist active view and section across page reloads
+- Add a `variant` prop to the `Token` component to support `both`, `logo`, and `title` values
+- Fix `LoadingButton` deprecation warning
+- Implement self-contained `AppLogo` component with no external asset dependencies to improve consistency and ease of use
+- Fix hydration warnings
+- Add support for a `tertiary` color in the theme type definition
+
+### Patch Changes
+
+- Update the `Amount`, `Identifier`, `Network`, `DateTime`, `RelativeTime`, and `Text` components to use a consistent skeleton style
+- Update the `EventCard` component to use the `Token` component instead of `Avatar`
+- Update `AlertCard`, `ApiKeyModalWarning`, and `SubmitButton` components to improve responsiveness and usability
+- Improve `Smart Search` UX with enhanced keyboard navigation support
+- Introduce a framework provider to inject framework-specific utilities
+- Remove navigation context usage from `NavigationBar` and update `NavigationButton` to consume the new `useFramework` hook
+- Update the `Token` component to use the framework-provided Image abstraction
+- Add automatic reset behavior to `useCollection` instead of implementing reset logic in individual pages
+- Remove `flows` prop from the `EventCard` component
+- Update dependencies
+  - @rosen-ui/utils@1.0.2
+  - @rosen-bridge/icons@3.4.0
+
 ## 5.1.0
 
 ### Minor Changes

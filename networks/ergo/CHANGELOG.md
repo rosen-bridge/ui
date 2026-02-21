@@ -1,5 +1,18 @@
 # @rosen-network/ergo
 
+## 2.5.4
+
+### Patch Changes
+
+- Fix `Ergo` transaction creation by setting transaction height to the maximum between `network height` and all `UTXO` creation heights
+- Update dependencies
+  - @rosen-bridge/ergo-box-selection@2.1.1
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-clients/ergo-explorer@2.1.1
+  - @rosen-network/base@0.5.2
+  - @rosen-ui/types@0.4.1
+  - @rosen-bridge/icons@3.4.0
+
 ## 2.5.3
 
 ### Patch Changes
