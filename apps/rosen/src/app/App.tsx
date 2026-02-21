@@ -3,6 +3,7 @@
 /**
  * FIXME: import NoSsr from ui-kit
  * local:ergo/rosen-bridge/ui#193
+ * *
  */
 import NextImage from 'next/image';
 import NextLink from 'next/link';
