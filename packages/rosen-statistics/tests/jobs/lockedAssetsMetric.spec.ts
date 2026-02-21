@@ -6,7 +6,7 @@ import { METRIC_KEYS, MetricEntity } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { lockedAssetsMetric } from '../../lib';
-import { lockedAssetsTestData } from '../test-data';
+import { lockedAssetsTestData } from '../testData';
 import { createDatabase } from '../utils';
 
 describe('lockedAssetsMetric', () => {

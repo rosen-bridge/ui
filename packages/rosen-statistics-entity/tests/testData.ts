@@ -802,7 +802,6 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 115,
       },
     ],
-    totalCount: 4,
     existingMetric: null,
     expectedUserEvents: [
       {
@@ -822,7 +821,7 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 115,
       },
     ],
-    expectedMetricValue: '4',
+    expectedMetricValue: '2',
   },
 
   /**
@@ -840,7 +839,6 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 130,
       },
     ],
-    totalCount: 7, // New total count
     existingUserEvents: [
       {
         fromAddress: 'addr1',
@@ -852,8 +850,8 @@ export const userEventMetricActionTestData = {
       },
     ],
     existingMetric: {
-      key: METRIC_KEYS.USER_EVENT_TOTAL,
-      value: '5',
+      key: METRIC_KEYS.USER_COUNT_TOTAL,
+      value: '1',
       updatedAt: 1000,
     },
     expectedUserEvents: [
@@ -866,7 +864,7 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 130,
       },
     ],
-    expectedMetricValue: '7',
+    expectedMetricValue: '1',
   },
 
   /**
@@ -892,7 +890,6 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 115,
       },
     ],
-    totalCount: 10,
     existingUserEvents: [
       {
         fromAddress: 'addr1',
@@ -904,8 +901,8 @@ export const userEventMetricActionTestData = {
       },
     ],
     existingMetric: {
-      key: METRIC_KEYS.USER_EVENT_TOTAL,
-      value: '5',
+      key: METRIC_KEYS.USER_COUNT_TOTAL,
+      value: '1',
       updatedAt: 1000,
     },
     expectedUserEvents: [
@@ -926,7 +923,7 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 115,
       },
     ],
-    expectedMetricValue: '10',
+    expectedMetricValue: '2',
   },
 
   /**
@@ -935,7 +932,6 @@ export const userEventMetricActionTestData = {
    */
   upsertEventsCountEmpty: {
     aggregatedUsersEvents: [],
-    totalCount: 5,
     existingUserEvents: [
       {
         fromAddress: 'addr1',
@@ -947,8 +943,8 @@ export const userEventMetricActionTestData = {
       },
     ],
     existingMetric: {
-      key: METRIC_KEYS.USER_EVENT_TOTAL,
-      value: '5',
+      key: METRIC_KEYS.USER_COUNT_TOTAL,
+      value: '1',
       updatedAt: 1000,
     },
     expectedUserEvents: [
@@ -961,6 +957,6 @@ export const userEventMetricActionTestData = {
         lastProcessedHeight: 100,
       },
     ],
-    expectedMetricValue: '5',
+    expectedMetricValue: '1',
   },
 };

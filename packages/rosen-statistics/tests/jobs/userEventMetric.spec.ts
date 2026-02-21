@@ -10,7 +10,7 @@ import {
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { userEventMetric } from '../../lib';
-import { userEventMetricTestData } from '../test-data';
+import { userEventMetricTestData } from '../testData';
 import { createDatabase } from '../utils';
 
 describe('userEventMetric', () => {
@@ -49,7 +49,7 @@ describe('userEventMetric', () => {
    * - Run userEventMetric
    * @expected
    * - Creates 4 UserEventEntity records with correct counts (events with height <= 121)
-   * - Updates total metric to sum of all valid events (4)
+   * - Updates total metric to 3 ( unique address pairs counted )
    */
   it('should aggregate new events and create user event records', async () => {
     const testData = userEventMetricTestData.newEventsDifferentAddresses;
@@ -60,7 +60,7 @@ describe('userEventMetric', () => {
     await userEventMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
     });
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
@@ -90,14 +90,14 @@ describe('userEventMetric', () => {
    * - BlockDbAction
    * @scenario
    * - Insert existing UserEventEntity (5 count for addr1→addr2 at height 100)
-   * - Insert existing total metric (value: 5)
+   * - Insert existing total metric (value: 1)
    * - Insert 2 new successful events for same address pair (heights 115, 116)
    * - Insert corresponding block records
    * - lastProcessedHeight = 100, untilProcessedHeight = 116 => 2 events are valid
    * - Run userEventMetric
    * @expected
    * - Updates existing UserEventEntity to count 7 with lastProcessedHeight 116
-   * - Updates total metric to 7
+   * - Updates total metric to 1 ( unique address pair already counted )
    */
   it('should update existing counts with new events', async () => {
     const testData = userEventMetricTestData.updateExistingCounts;
@@ -110,7 +110,7 @@ describe('userEventMetric', () => {
     await userEventMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
     });
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 
@@ -147,7 +147,7 @@ describe('userEventMetric', () => {
    * @expected
    * - Only counts successful events (2 total)
    * - Fraud and null status events are ignored
-   * - Total metric = 2
+   * - Total metric = 1 (only one unique address pair )
    */
   it('should filter out non-successful events', async () => {
     const testData = userEventMetricTestData.filterNonSuccessfulEvents;
@@ -158,7 +158,7 @@ describe('userEventMetric', () => {
     await userEventMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+      where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
     });
     expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
 

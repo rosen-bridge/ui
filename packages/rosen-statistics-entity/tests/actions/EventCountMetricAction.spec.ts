@@ -9,7 +9,7 @@ import {
   MetricEntity,
   EventCountMetricAction,
 } from '../../lib';
-import { eventCountMetricActionTestData } from '../test-data';
+import { eventCountMetricActionTestData } from '../testData';
 import { createDatabase } from '../utils';
 
 describe('EventCountMetricAction', () => {

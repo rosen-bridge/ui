@@ -42,7 +42,7 @@ export class UserEventMetricAction {
    * @param untilTimestamp - Upper bound timestamp (exclusive)
    * @returns - Promise resolving to aggregated user event data
    */
-  getAggregatedEvents = async (
+  getAggregatedUsersEvents = async (
     lastProcessedHeight: number,
     untilProcessedHeight: number,
   ): Promise<AggregatedUserEvents[]> => {
@@ -105,12 +105,10 @@ export class UserEventMetricAction {
   /**
    * Upserts the aggregated users events count and total count into the database.
    * @param  aggregatedUsersEvents - An array of aggregated users events to upsert.
-   * @param  totalCount - The total count of events to be updated.
    * @returns A Promise that resolves when the upsert is completed.
    */
   upsertUserEventsCount = async (
     aggregatedUsersEvents: AggregatedUserEvents[],
-    totalCount: number,
   ): Promise<void> => {
     const queryRunner =
       this.userEventRepo.manager.connection.createQueryRunner();
@@ -128,9 +126,11 @@ export class UserEventMetricAction {
         'toChain',
       ]);
 
+      const totalCount = await userEventCountRepo.count();
+
       await metricRepo.upsert(
         {
-          key: METRIC_KEYS.USER_EVENT_TOTAL,
+          key: METRIC_KEYS.USER_COUNT_TOTAL,
           value: totalCount.toString(),
           updatedAt: Math.floor(Date.now() / 1000),
         },

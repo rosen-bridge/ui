@@ -640,7 +640,7 @@ export const userEventMetricTestData = {
           lastProcessedHeight: 111,
         },
       ],
-      totalMetricValue: '4',
+      totalMetricValue: '3',
     },
   },
 
@@ -702,8 +702,8 @@ export const userEventMetricTestData = {
     ],
     metricRepo: [
       {
-        key: METRIC_KEYS.USER_EVENT_TOTAL,
-        value: '5',
+        key: METRIC_KEYS.USER_COUNT_TOTAL,
+        value: '1',
         updatedAt: 1000,
       },
     ],
@@ -718,7 +718,7 @@ export const userEventMetricTestData = {
           lastProcessedHeight: 116,
         },
       ],
-      totalMetricValue: '7',
+      totalMetricValue: '1',
     },
   },
 
@@ -787,7 +787,7 @@ export const userEventMetricTestData = {
           lastProcessedHeight: 112,
         },
       ],
-      totalMetricValue: '2',
+      totalMetricValue: '1',
     },
   },
 };

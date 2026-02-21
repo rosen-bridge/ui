@@ -9,7 +9,7 @@ import {
   MetricEntity,
   UserEventMetricAction,
 } from '../../lib';
-import { userEventMetricActionTestData } from '../test-data';
+import { userEventMetricActionTestData } from '../testData';
 import { createDatabase } from '../utils';
 
 describe('UserEventMetricAction', () => {
@@ -81,9 +81,9 @@ describe('UserEventMetricAction', () => {
     });
   });
 
-  describe('getAggregatedEvents', () => {
+  describe('getAggregatedUsersEvents', () => {
     /**
-     * @target getAggregatedEvents should aggregate successful events by address pairs
+     * @target getAggregatedUsersEvents should aggregate successful events by address pairs
      * @dependencies
      * - database
      * - UserEventMetricAction
@@ -95,7 +95,7 @@ describe('UserEventMetricAction', () => {
      *   - Above lastProcessedHeight (101, 115) - included
      *   - Equal to untilProcessedHeight (120) - excluded
      *   - Non-successful status (120) - excluded
-     * - Call getAggregatedEvents with lastProcessedHeight=100, untilProcessedHeight=120
+     * - Call getAggregatedUsersEvents with lastProcessedHeight=100, untilProcessedHeight=120
      * @expected
      * - Returns 2 aggregated groups:
      *   - addr1→addr2: count=2 (events at 101 and 115), lastProcessedHeight=115
@@ -107,7 +107,7 @@ describe('UserEventMetricAction', () => {
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-      const aggregated = await action.getAggregatedEvents(
+      const aggregated = await action.getAggregatedUsersEvents(
         testData.lastProcessedHeight,
         testData.untilProcessedHeight,
       );
@@ -116,14 +116,14 @@ describe('UserEventMetricAction', () => {
     });
 
     /**
-     * @target getAggregatedEvents should aggregate multiple events for same address pair into single record
+     * @target getAggregatedUsersEvents should aggregate multiple events for same address pair into single record
      * @dependencies
      * - database
      * - UserEventMetricAction
      * - EventTriggerEntity
      * @scenario
      * - Insert 3 successful events from addr1→addr2 with spendHeights 110, 115, 120
-     * - Call getAggregatedEvents with lastProcessedHeight=100, untilProcessedHeight=130
+     * - Call getAggregatedUsersEvents with lastProcessedHeight=100, untilProcessedHeight=130
      * @expected
      * - Returns single group with:
      *   - count = 3 (all events aggregated)
@@ -135,7 +135,7 @@ describe('UserEventMetricAction', () => {
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-      const aggregated = await action.getAggregatedEvents(
+      const aggregated = await action.getAggregatedUsersEvents(
         testData.lastProcessedHeight,
         testData.untilProcessedHeight,
       );
@@ -145,7 +145,7 @@ describe('UserEventMetricAction', () => {
     });
 
     /**
-     * @target getAggregatedEvents should return empty array when no events since last height
+     * @target getAggregatedUsersEvents should return empty array when no events since last height
      * @dependencies
      * - database
      * - UserEventMetricAction
@@ -154,7 +154,7 @@ describe('UserEventMetricAction', () => {
      * - Insert events with spendHeights:
      *   - 150 (below lastProcessedHeight=200) - excluded
      *   - 200 (equal to lastProcessedHeight) - excluded
-     * - Call getAggregatedEvents with lastProcessedHeight=200, untilProcessedHeight=300
+     * - Call getAggregatedUsersEvents with lastProcessedHeight=200, untilProcessedHeight=300
      * @expected
      * - Returns empty array (no events in valid range)
      */
@@ -164,7 +164,7 @@ describe('UserEventMetricAction', () => {
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-      const aggregated = await action.getAggregatedEvents(
+      const aggregated = await action.getAggregatedUsersEvents(
         testData.lastProcessedHeight,
         testData.untilProcessedHeight,
       );
@@ -173,7 +173,7 @@ describe('UserEventMetricAction', () => {
     });
 
     /**
-     * @target getAggregatedEvents should exclude events with spendHeight at or above untilProcessedHeight
+     * @target getAggregatedUsersEvents should exclude events with spendHeight at or above untilProcessedHeight
      * @dependencies
      * - database
      * - UserEventMetricAction
@@ -183,7 +183,7 @@ describe('UserEventMetricAction', () => {
      *   - 110 (below untilProcessedHeight=115) - included
      *   - 115 (equal to untilProcessedHeight) - excluded
      *   - 120 (above untilProcessedHeight) - excluded
-     * - Call getAggregatedEvents with lastProcessedHeight=100, untilProcessedHeight=115
+     * - Call getAggregatedUsersEvents with lastProcessedHeight=100, untilProcessedHeight=115
      * @expected
      * - Returns single group with:
      *   - count = 1 (only event at height 110)
@@ -195,7 +195,7 @@ describe('UserEventMetricAction', () => {
 
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-      const aggregated = await action.getAggregatedEvents(
+      const aggregated = await action.getAggregatedUsersEvents(
         testData.lastProcessedHeight,
         testData.untilProcessedHeight,
       );
@@ -273,19 +273,14 @@ describe('UserEventMetricAction', () => {
      * - No existing UserEventEntity or MetricEntity records
      * - Call upsertUserEventsCount with:
      *   - 2 aggregated user event groups
-     *   - totalCount = 4
      * @expected
      * - Creates 2 UserEventEntity records with correct counts and heights
-     * - Creates MetricEntity record with USER_EVENT_TOTAL = '4'
-     * - updatedAt timestamp is set
+     * - Creates MetricEntity record with USER_COUNT_TOTAL = '2'(total unique groups after upsert)
      */
     it('should create new user event records and update total metric', async () => {
       const testData = userEventMetricActionTestData.upsertEventsCountNewGroups;
 
-      await action.upsertUserEventsCount(
-        testData.aggregatedUsersEvents,
-        testData.totalCount,
-      );
+      await action.upsertUserEventsCount(testData.aggregatedUsersEvents);
 
       const userEvents = await userEventRepo.find({
         select: [
@@ -302,10 +297,9 @@ describe('UserEventMetricAction', () => {
       expect(userEvents).toEqual(testData.expectedUserEvents);
 
       const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
       });
       expect(metric?.value).toBe(testData.expectedMetricValue);
-      expect(metric?.updatedAt).toBeDefined();
     });
 
     /**
@@ -317,13 +311,12 @@ describe('UserEventMetricAction', () => {
      * - MetricEntity
      * @scenario
      * - Insert existing UserEventEntity with count = 5 and lastProcessedHeight = 100
-     * - Insert existing MetricEntity with USER_EVENT_TOTAL = '5'
+     * - Insert existing MetricEntity with USER_COUNT_TOTAL = '1'
      * - Call upsertUserEventsCount with:
      *   - aggregated event (count = 2, lastProcessedHeight = 130)
-     *   - totalCount = 7
      * @expected
      * - REPLACES existing UserEventEntity (count becomes 2, height becomes 130)
-     * - Updates MetricEntity to '7'
+     * - Updates MetricEntity to '1'(total unique groups after upsert remains 1)
      */
     it('should replace existing user event records with new values', async () => {
       const testData =
@@ -332,10 +325,7 @@ describe('UserEventMetricAction', () => {
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertUserEventsCount(
-        testData.aggregatedUsersEvents,
-        testData.totalCount,
-      );
+      await action.upsertUserEventsCount(testData.aggregatedUsersEvents);
 
       const userEvents = await userEventRepo.find({
         select: [
@@ -352,7 +342,7 @@ describe('UserEventMetricAction', () => {
       expect(userEvents).toEqual(testData.expectedUserEvents);
 
       const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
       });
       expect(metric?.value).toBe(testData.expectedMetricValue);
     });
@@ -366,15 +356,14 @@ describe('UserEventMetricAction', () => {
      * - MetricEntity
      * @scenario
      * - Insert existing UserEventEntity for addr1→addr2 (count = 5, height = 100)
-     * - Insert existing MetricEntity with USER_EVENT_TOTAL = '5'
+     * - Insert existing MetricEntity with USER_COUNT_TOTAL = '1'
      * - Call upsertUserEventsCount with:
      *   - Existing group: addr1→addr2 (count = 3, height = 120)
      *   - New group: addr3→addr4 (count = 2, height = 115)
-     *   - totalCount = 10
      * @expected
      * - Replaces existing group with count = 3, height = 120
      * - Creates new group with count = 2, height = 115
-     * - Updates total metric to '10'
+     * - Updates total metric to '2' (total unique groups after upsert)
      */
     it('should handle both new and existing groups in same transaction', async () => {
       const testData =
@@ -383,10 +372,7 @@ describe('UserEventMetricAction', () => {
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertUserEventsCount(
-        testData.aggregatedUsersEvents,
-        testData.totalCount,
-      );
+      await action.upsertUserEventsCount(testData.aggregatedUsersEvents);
 
       const userEvents = await userEventRepo.find({
         select: [
@@ -403,7 +389,7 @@ describe('UserEventMetricAction', () => {
       expect(userEvents).toEqual(testData.expectedUserEvents);
 
       const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
       });
       expect(metric?.value).toBe(testData.expectedMetricValue);
     });
@@ -417,13 +403,12 @@ describe('UserEventMetricAction', () => {
      * - MetricEntity
      * @scenario
      * - Insert existing UserEventEntity with count = 5 and lastProcessedHeight = 100
-     * - Insert existing MetricEntity with USER_EVENT_TOTAL = '5'
+     * - Insert existing MetricEntity with USER_COUNT_TOTAL = '1'
      * - Call upsertUserEventsCount with:
      *   - empty aggregatedUsersEvents array
-     *   - totalCount = 5
      * @expected
      * - Existing UserEventEntity remains unchanged (count = 5, height = 100)
-     * - Updates total metric with provided totalCount value (still '5')
+     * - Updates total metric with provided totalCount value (still '1' since no new groups added)
      */
     it('should update only total metric when aggregated events array is empty', async () => {
       const testData = userEventMetricActionTestData.upsertEventsCountEmpty;
@@ -431,10 +416,7 @@ describe('UserEventMetricAction', () => {
       await userEventRepo.insert(testData.existingUserEvents);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertUserEventsCount(
-        testData.aggregatedUsersEvents,
-        testData.totalCount,
-      );
+      await action.upsertUserEventsCount(testData.aggregatedUsersEvents);
 
       const userEvents = await userEventRepo.find({
         select: [
@@ -451,7 +433,7 @@ describe('UserEventMetricAction', () => {
       expect(userEvents).toEqual(testData.expectedUserEvents);
 
       const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.USER_EVENT_TOTAL },
+        where: { key: METRIC_KEYS.USER_COUNT_TOTAL },
       });
       expect(metric?.value).toBe(testData.expectedMetricValue);
     });
