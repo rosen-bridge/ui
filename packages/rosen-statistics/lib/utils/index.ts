@@ -1,1 +1,6 @@
-export { startOfDay } from './timeHelpers';
+export {
+  getDecimalString,
+  getNonDecimalString,
+  getNumberOfDecimals,
+  scientificToString,
+} from './decimals';

@@ -10,7 +10,7 @@ import {
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import { eventCountMetric } from '../../lib';
-import { eventCountTestData } from '../test-data';
+import { eventCountTestData } from '../testData';
 import { createDatabase } from '../utils';
 
 describe('eventCountMetric', () => {
