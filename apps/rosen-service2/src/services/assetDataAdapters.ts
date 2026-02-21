@@ -9,6 +9,7 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
+  BitcoinRunesDataAdapter,
   CardanoKoiosDataAdapter,
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
@@ -107,6 +108,14 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
           },
+          this.logger.child('bitcoinDataAdapter'),
+        );
+      case NETWORKS['bitcoin-runes'].key:
+        return new BitcoinRunesDataAdapter(
+          addresses,
+          tokenMap,
+          configs.chains['bitcoin-runes'].unisatUrl,
+          configs.chains['bitcoin-runes'].unisatApiKey,
           this.logger.child('bitcoinDataAdapter'),
         );
       case NETWORKS.ethereum.key:

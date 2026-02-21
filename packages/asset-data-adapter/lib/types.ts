@@ -2,6 +2,7 @@ import { Network } from '@rosen-ui/types';
 
 import { BinanceEvmRpcDataAdapter } from './binanceEvmRpcDataAdapter';
 import { BitcoinEsploraDataAdapter } from './bitcoinEsploraDataAdapter';
+import { BitcoinRunesDataAdapter } from './bitcoinRunsDataAdapter';
 import { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
 import { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
 import { ErgoExplorerDataAdapter } from './ergoExplorerDataAdapter';
@@ -33,6 +34,7 @@ export type ChainsAdapters =
   | BitcoinEsploraDataAdapter
   | EthereumEvmRpcDataAdapter
   | BinanceEvmRpcDataAdapter
+  | BitcoinRunesDataAdapter
   | CardanoKoiosDataAdapter
   | DogeBlockCypherDataAdapter;
 

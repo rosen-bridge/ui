@@ -2,8 +2,8 @@ db:
   host: localhost
   port: 5432
   username: postgres
-  password: ''
-  name: rosen_service
+  password: 'admin'
+  name: my-postgres6
 healthCheck:
   logging:
     maxErrors: 10
@@ -57,6 +57,6 @@ chains:
     initialHeight: 1
     scanInterval: 10
 paths:
-  tokens: config/tokensMap.json
+  tokens: config/tokens.json
   contracts: config/contracts.json
   healthReport: healthReport.json

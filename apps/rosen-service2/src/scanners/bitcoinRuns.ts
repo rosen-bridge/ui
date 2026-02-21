@@ -61,15 +61,15 @@ export const buildBitcoinRunesRpcScannerWithExtractors = async (
     let runesClient: AbstractRunesProtocolNetwork;
 
     runesClient = new UnisatRunesProtocolNetwork(
-      configs.chains.bitcoinRuns.unisatUrl,
-      configs.chains.bitcoinRuns.unisatApiKey!,
+      configs.chains['bitcoin-runes'].unisatUrl,
+      configs.chains['bitcoin-runes'].unisatApiKey!,
       logger.child('runesClient'),
     );
 
     logger.debug('Creating Bitcoin Runes RPC observation extractor...');
 
     const observationExtractor = new BitcoinRunesRpcObservationExtractor(
-      configs.contracts.bitcoin.addresses.lock,
+      configs.contracts['bitcoin-runes'].addresses.lock,
       runesClient,
       dataSource,
       tokenMap,
@@ -129,15 +129,15 @@ export const buildBitcoinRunesEsploraScannerWithExtractors = async (
 
     let runesClient: AbstractRunesProtocolNetwork;
     runesClient = new UnisatRunesProtocolNetwork(
-      configs.chains.bitcoinRuns.unisatUrl,
-      configs.chains.bitcoinRuns.unisatApiKey!,
+      configs.chains['bitcoin-runes'].unisatUrl,
+      configs.chains['bitcoin-runes'].unisatApiKey!,
       logger.child('runesClient'),
     );
 
     logger.debug('Creating Bitcoin Runes Esplora observation extractor...');
 
     const observationExtractor = new BitcoinRunesEsploraObservationExtractor(
-      configs.contracts.bitcoin.addresses.lock,
+      configs.contracts['bitcoin-runes'].addresses.lock,
       runesClient,
       dataSource,
       tokenMap,

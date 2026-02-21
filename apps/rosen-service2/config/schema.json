@@ -743,7 +743,7 @@
           }
         }
       },
-      "bitcoinRuns": {
+      "bitcoin-runes": {
         "type": "object",
         "children": {
           "active": {
@@ -778,6 +778,15 @@
                 "error": "bitcoin scanInterval must be specified (in seconds)"
               }
             ]
+          },
+             "adapter": {
+            "type": "object",
+            "children": {
+              "extraAddresses": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
           },
           "unisatUrl": {
                       "type": "string",
