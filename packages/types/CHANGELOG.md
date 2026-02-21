@@ -1,5 +1,11 @@
 # @rosen-ui/types
 
+## 0.4.1
+
+### Patch Changes
+
+- Remove the useless `LayoutProps` type
+
 ## 0.4.0
 
 ### Minor Changes

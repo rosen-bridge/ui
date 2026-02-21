@@ -1,5 +1,56 @@
 # @rosen-bridge/rosen-app
 
+## 5.0.0
+
+### Major Changes
+
+- Upgrade Next.js to v15.5.12
+- Remove Token Map dependency from Event APIs by moving token aggregation logic into the database layer
+
+### Minor Changes
+
+- Add `pricing` information to the Event Details API
+- Update the `Assets` and `Events` pages and their components to support `ergoSideTokenId` for loading token images
+- Update the `Events` and `Assets` pages to support persistent `filters`, `sorting`, and `pagination` after page reload
+- Improve Alert link readability in Dark Mode
+
+### Patch Changes
+
+- Validate the address after auto-connection or when a new wallet is selected, and return an appropriate error message to the user
+- Block transactions initiated from Xverse wallet addresses that are not native SegWit
+- Update sidebar to be compatible with the new `NavigationBar` implementation
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.2
+  - @rosen-bridge/abstract-scanner@1.0.1
+  - @rosen-bridge/encryption@1.0.1
+  - @rosen-bridge/token-price-entity@0.2.1
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-bridge/watcher-data-extractor@13.0.2
+  - @rosen-ui/asset-calculator@2.3.1
+  - @rosen-bridge/ui-kit@5.2.0
+  - @rosen-ui/wallet-connect@0.2.7
+  - @rosen-ui/wallet-api@3.1.0
+  - @rosen-network/ethereum@0.4.4
+  - @rosen-network/binance@0.4.4
+  - @rosen-ui/nautilus-wallet@3.1.5
+  - @rosen-ui/eternl-wallet@3.1.5
+  - @rosen-ui/xverse-wallet@0.4.0
+  - @rosen-ui/lace-wallet@3.1.5
+  - @rosen-network/base@0.5.2
+  - @rosen-network/ergo@2.5.4
+  - @rosen-ui/okx-wallet@2.2.0
+  - @rosen-network/bitcoin@2.4.3
+  - @rosen-network/doge@0.4.3
+  - @rosen-ui/types@0.4.1
+  - @rosen-network/evm@0.3.6
+  - @rosen-ui/utils@1.0.2
+  - @rosen-ui/data-source@0.2.2
+  - @rosen-bridge/icons@3.4.0
+  - @rosen-network/cardano@2.5.3
+  - @rosen-network/bitcoin-runes@1.0.3
+  - @rosen-ui/metamask-wallet@2.1.7
+  - @rosen-ui/my-doge-wallet@1.1.7
+
 ## 4.11.0
 
 ### Minor Changes

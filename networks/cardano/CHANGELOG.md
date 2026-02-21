@@ -1,5 +1,18 @@
 # @rosen-network/cardano
 
+## 2.5.3
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/cardano-utxo-selection@3.0.3
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-clients/cardano-koios@3.1.1
+  - @rosen-network/base@0.5.2
+  - @rosen-ui/types@0.4.1
+  - @rosen-ui/utils@1.0.2
+  - @rosen-bridge/icons@3.4.0
+
 ## 2.5.2
 
 ### Patch Changes
