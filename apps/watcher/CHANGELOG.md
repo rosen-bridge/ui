@@ -1,5 +1,25 @@
 # @rosen-bridge/watcher-app
 
+## 4.0.0
+
+### Major Changes
+
+- Upgrade Next.js to v15.5.12
+
+### Minor Changes
+
+- Fix hydration warnings
+
+### Patch Changes
+
+- Refactor folder structure for better maintainability
+- Update sidebar to be compatible with the new `NavigationBar` implementation
+- Improve form code maintainability, remove unnecessary React imports, update the chart skeleton, and refactor form layouts to align with the latest UI Kit changes for `AlertCard`, `ApiKeyModalWarning`, and `SubmitButton` components.
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.2.0
+  - @rosen-ui/utils@1.0.2
+  - @rosen-bridge/icons@3.4.0
+
 ## 3.9.0
 
 ### Minor Changes

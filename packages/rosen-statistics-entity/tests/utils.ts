@@ -12,6 +12,7 @@ import {
 import {
   MetricEntity,
   EventCountEntity,
+  UserEventEntity,
   migrations as statisticsMigrations,
 } from '../lib';
 
@@ -25,6 +26,7 @@ export const createDatabase = async () => {
       EventCountEntity,
       LockedAssetEntity,
       TokenEntity,
+      UserEventEntity,
     ],
     migrations: [
       ...statisticsMigrations.sqlite,

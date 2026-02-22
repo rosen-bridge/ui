@@ -15,6 +15,8 @@ const createEventTrigger = (
   height: 100,
   extractor: `ext-${Math.random()}`,
   txId: 'tx1',
+  fromChain: 'ergo',
+  toChain: 'cardano',
   fromAddress: 'addr1',
   toAddress: 'addr2',
   amount: '100',
@@ -524,5 +526,510 @@ export const lockedAssetsMetricActionTestData = {
         significantDecimal: 0,
       },
     ],
+  },
+};
+export const userEventMetricActionTestData = {
+  /**
+   * Scenario: Get last processed height
+   * - No existing records
+   */
+  getLastProcessedHeightNoRecords: {
+    expectedHeight: 0,
+  },
+
+  /**
+   * Scenario: Get last processed height
+   * - Multiple records with different heights
+   */
+  getLastProcessedHeightMultipleRecords: {
+    userEventRepo: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+      {
+        fromAddress: 'addr3',
+        fromChain: 'ergo',
+        toAddress: 'addr4',
+        toChain: 'cardano',
+        count: 2,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr5',
+        fromChain: 'ergo',
+        toAddress: 'addr6',
+        toChain: 'cardano',
+        count: 3,
+        lastProcessedHeight: 150,
+      },
+    ],
+    expectedHeight: 150,
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - Multiple events from different addresses
+   * - All successful status
+   * - Test boundary conditions:
+   *   - spendHeight > lastProcessedHeight (exclusive)
+   *   - spendHeight < untilProcessedHeight (exclusive)
+   */
+  getAggregatedEventsMultipleAddresses: {
+    lastProcessedHeight: 100,
+    untilProcessedHeight: 120,
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 101, // Included (> 100)
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 115, // Included (> 100, < 120)
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        fromChain: 'bitcoin',
+        toAddress: 'addr4',
+        toChain: 'binance',
+        spendHeight: 112, // Included (> 100, < 120)
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 99, // Below lastProcessedHeight - ignored (not > 100)
+        spendBlock: 'block4',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event5',
+        fromAddress: 'addr5',
+        fromChain: 'ergo',
+        toAddress: 'addr6',
+        toChain: 'cardano',
+        spendHeight: 120, // Equal to untilProcessedHeight - ignored (not < 120)
+        spendBlock: 'block5',
+        result: 'fraud' as const, // Different status - ignored (only successful)
+      }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 100, // Equal to lastProcessedHeight - ignored (not > 100)
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event7',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 101, // Duplicate address pair in same height - inclulde
+        spendBlock: 'block7',
+        result: 'successful' as const,
+      }),
+    ],
+    expectedAggregated: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 3, // events at heights 101 and 115
+        lastProcessedHeight: 115,
+      },
+      {
+        fromAddress: 'addr3',
+        fromChain: 'bitcoin',
+        toAddress: 'addr4',
+        toChain: 'binance',
+        count: 1, // event at height 112
+        lastProcessedHeight: 112,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - Single address pair with multiple events
+   * - Test proper aggregation of count and max height
+   */
+  getAggregatedEventsSameAddress: {
+    lastProcessedHeight: 100,
+    untilProcessedHeight: 130,
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 115,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 120,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    expectedAggregated: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - No events since last height (all below or equal)
+   */
+  getAggregatedEventsNoNewEvents: {
+    lastProcessedHeight: 200,
+    untilProcessedHeight: 300,
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 150, // Below lastProcessedHeight
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 200, // Equal to lastProcessedHeight - ignored
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+    ],
+  },
+
+  /**
+   * Scenario: Get aggregated events
+   * - Events with spendHeight at or above untilProcessedHeight
+   */
+  getAggregatedEventsExcludeByHeight: {
+    lastProcessedHeight: 100,
+    untilProcessedHeight: 115,
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 110, // Included (< 115)
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 115, // Equal to untilProcessedHeight - excluded (not < 115)
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        fromChain: 'bitcoin',
+        toAddress: 'addr2',
+        toChain: 'binance',
+        spendHeight: 120, // Above untilProcessedHeight - excluded
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+    ],
+    expectedAggregated: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 1,
+        lastProcessedHeight: 110,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Get existing user event
+   * - Record exists
+   */
+  getExistingUserEventExists: {
+    fromAddress: 'addr1',
+    fromChain: 'ergo',
+    toAddress: 'addr2',
+    toChain: 'cardano',
+    userEventRepo: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 10,
+        lastProcessedHeight: 200,
+      },
+    ],
+    expectedCount: 10,
+  },
+
+  /**
+   * Scenario: Get existing user event
+   * - Record does not exist
+   */
+  getExistingUserEventNotExists: {
+    fromAddress: 'addr1',
+    fromChain: 'ergo',
+    toAddress: 'addr2',
+    toChain: 'ergo',
+    userEventRepo: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'cardano',
+        toAddress: 'addr2',
+        toChain: 'ergo',
+        count: 10,
+        lastProcessedHeight: 200,
+      },
+    ],
+    expectedCount: 0,
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - New user events, no existing records
+   */
+  upsertEventsCountNewGroups: {
+    aggregatedUsersEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        fromChain: 'ergo',
+        toAddress: 'addr4',
+        toChain: 'cardano',
+        count: 1,
+        lastProcessedHeight: 115,
+      },
+    ],
+    existingMetric: null,
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 3,
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr3',
+        fromChain: 'ergo',
+        toAddress: 'addr4',
+        toChain: 'cardano',
+        count: 1,
+        lastProcessedHeight: 115,
+      },
+    ],
+    expectedMetricValue: '2',
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - Update existing user events (UPSERT replaces the entire record)
+   */
+  upsertEventsCountUpdateExisting: {
+    aggregatedUsersEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 2, // This is the NEW count, not incremental
+        lastProcessedHeight: 130,
+      },
+    ],
+    existingUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 5, // Old count - will be replaced
+        lastProcessedHeight: 100,
+      },
+    ],
+    existingMetric: {
+      key: METRIC_KEYS.USER_COUNT_TOTAL,
+      value: '1',
+      updatedAt: 1000,
+    },
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 2, // Replaced with new count
+        lastProcessedHeight: 130,
+      },
+    ],
+    expectedMetricValue: '1',
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - Mixed new and existing groups
+   */
+  upsertEventsCountMixedGroups: {
+    aggregatedUsersEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 3, // New count for existing group
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr1',
+        fromChain: 'cardano',
+        toAddress: 'addr2',
+        toChain: 'ergo',
+        count: 2, // New group
+        lastProcessedHeight: 115,
+      },
+    ],
+    existingUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 5, // Old count - will be replaced
+        lastProcessedHeight: 100,
+      },
+    ],
+    existingMetric: {
+      key: METRIC_KEYS.USER_COUNT_TOTAL,
+      value: '1',
+      updatedAt: 1000,
+    },
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 3, // Replaced with new count
+        lastProcessedHeight: 120,
+      },
+      {
+        fromAddress: 'addr1',
+        fromChain: 'cardano',
+        toAddress: 'addr2',
+        toChain: 'ergo',
+        count: 2,
+        lastProcessedHeight: 115,
+      },
+    ],
+    expectedMetricValue: '2',
+  },
+
+  /**
+   * Scenario: Upsert events count
+   * - Empty aggregated events array (only update total metric)
+   */
+  upsertEventsCountEmpty: {
+    aggregatedUsersEvents: [],
+    existingUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    existingMetric: {
+      key: METRIC_KEYS.USER_COUNT_TOTAL,
+      value: '1',
+      updatedAt: 1000,
+    },
+    expectedUserEvents: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 5, // Unchanged
+        lastProcessedHeight: 100,
+      },
+    ],
+    expectedMetricValue: '1',
   },
 };

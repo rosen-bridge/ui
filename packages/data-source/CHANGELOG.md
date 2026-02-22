@@ -1,5 +1,17 @@
 # @rosen-ui/data-source
 
+## 0.2.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.2
+  - @rosen-bridge/abstract-scanner@1.0.1
+  - @rosen-bridge/token-price-entity@0.2.1
+  - @rosen-bridge/watcher-data-extractor@13.0.2
+  - @rosen-ui/asset-calculator@2.3.1
+  - @rosen-ui/rosen-statistics-entity@0.2.0
+
 ## 0.2.1
 
 ### Patch Changes

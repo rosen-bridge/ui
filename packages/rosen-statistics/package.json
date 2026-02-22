@@ -27,7 +27,6 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@rosen-ui/asset-calculator": "^2.3.0",
     "@vitest/coverage-istanbul": "^3.1.4",
     "tsx": "^4.19.4",
     "vitest": "^3.1.4"
@@ -43,8 +42,9 @@
     "@rosen-bridge/token-price-entity": "^0.2.1",
     "@rosen-bridge/tokens": "^6.0.0",
     "@rosen-bridge/watcher-data-extractor": "^13.0.2",
-    "@rosen-ui/data-source": "^0.2.1",
-    "@rosen-ui/rosen-statistics-entity": "^0.1.0",
-    "lodash-es": "^4.17.21"
+    "lodash-es": "^4.17.21",
+    "@rosen-ui/asset-calculator": "^2.3.1",
+    "@rosen-ui/data-source": "^0.2.2",
+    "@rosen-ui/rosen-statistics-entity": "^0.2.0"
   }
 }

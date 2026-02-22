@@ -11,6 +11,12 @@ export {
   MetricAction,
   LockedAssetsMetricAction,
   EventCountMetricAction,
+  UserEventMetricAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
-export { AggregatedEvents, EventCountStatus, LockedAssetsType } from './types';
+export {
+  AggregatedEvents,
+  EventCountStatus,
+  AggregatedUserEvents,
+  LockedAssetsType,
+} from './types';
