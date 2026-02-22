@@ -1,8 +1,9 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { MetricAction, METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 import {
+  MetricAction,
+  METRIC_KEYS,
   EventCountMetricAction,
   AggregatedEvents,
 } from '@rosen-ui/rosen-statistics-entity';

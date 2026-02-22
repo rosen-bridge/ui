@@ -7,6 +7,7 @@ import {
 import {
   MetricEntity,
   EventCountEntity,
+  UserEventEntity,
   migrations as statisticsMigrations,
 } from '../lib';
 
@@ -14,7 +15,12 @@ export const createDatabase = async () => {
   const ds = new DataSource({
     type: 'sqlite',
     database: ':memory:',
-    entities: [MetricEntity, EventTriggerEntity, EventCountEntity],
+    entities: [
+      MetricEntity,
+      EventTriggerEntity,
+      EventCountEntity,
+      UserEventEntity,
+    ],
     migrations: [
       ...statisticsMigrations.sqlite,
       ...watcherExtractorMigration.sqlite,

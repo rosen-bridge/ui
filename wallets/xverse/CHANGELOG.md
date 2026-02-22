@@ -1,5 +1,21 @@
 # @rosen-ui/xverse-wallet
 
+## 0.4.0
+
+### Minor Changes
+
+- Throw the appropriate `NonNativeSegWitAddressError` during address validation for `OKX` and `Xverse` wallets on the `Bitcoin` and `Bitcoin-Runes` networks
+
+### Patch Changes
+
+- Fix `Xverse` address validation to correctly support Bitcoin Runes transactions by accepting valid Runes-compatible (Taproot) Bitcoin addresses
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-ui/wallet-api@3.1.0
+  - @rosen-network/bitcoin@2.4.3
+  - @rosen-ui/types@0.4.1
+  - @rosen-network/bitcoin-runes@1.0.3
+
 ## 0.3.2
 
 ### Patch Changes

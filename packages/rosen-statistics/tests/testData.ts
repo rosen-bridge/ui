@@ -158,6 +158,8 @@ const createEventTrigger = (
   height: 100,
   extractor: `ext-${Math.random()}`,
   txId: 'tx1',
+  fromChain: 'ergo',
+  toChain: 'cardano',
   fromAddress: 'addr1',
   toAddress: 'addr2',
   amount: '100',
@@ -502,6 +504,290 @@ export const eventCountTestData = {
         },
       ],
       totalMetricValue: '2',
+    },
+  },
+};
+
+export const userEventMetricTestData = {
+  /**
+   * Test 1: New events with different address and chain pairs
+   * - 6 events with different address and chaain combinations
+   * - All successful status
+   * - lastProcessedHeight = 0, untilProcessedHeight = 121 => 4 events are valid
+   * - Events with height > 121 should be ignored
+   */
+  newEventsDifferentAddresses: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr4',
+        fromChain: 'bitcoin',
+        toAddress: 'addr3',
+        toChain: 'binance',
+        spendHeight: 111,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 112,
+        spendBlock: 'block3',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromAddress: 'addr3',
+        fromChain: 'cardano',
+        toAddress: 'addr4',
+        toChain: 'ergo',
+        spendHeight: 120,
+        spendBlock: 'block4',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event5',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 121,
+        spendBlock: 'block5',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event6',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 841,
+        spendBlock: 'block6',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704067200,
+        height: 110,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704070800,
+        height: 111,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704074400,
+        height: 112,
+      }),
+      createBlock({
+        hash: 'block4',
+        timestamp: 1704103400,
+        height: 120,
+      }),
+      createBlock({
+        hash: 'block5',
+        timestamp: 1704103500,
+        height: 121,
+      }),
+      createBlock({
+        hash: 'block6',
+        timestamp: 1704103600,
+        height: 841,
+      }),
+      createBlock({
+        hash: 'block7',
+        timestamp: 1704103800,
+        height: 843,
+        status: 'PROCESSING',
+      }),
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          fromChain: 'ergo',
+          toAddress: 'addr2',
+          toChain: 'cardano',
+          count: 2,
+          lastProcessedHeight: 112,
+        },
+        {
+          fromAddress: 'addr3',
+          fromChain: 'cardano',
+          toAddress: 'addr4',
+          toChain: 'ergo',
+          count: 1,
+          lastProcessedHeight: 120,
+        },
+        {
+          fromAddress: 'addr4',
+          fromChain: 'bitcoin',
+          toAddress: 'addr3',
+          toChain: 'binance',
+          count: 1,
+          lastProcessedHeight: 111,
+        },
+      ],
+      totalMetricValue: '3',
+    },
+  },
+
+  /**
+   * Test 2: Update existing counts with new events
+   * - Existing count: 5 for addr1→addr2 at height 100
+   * - New events: 2 more for same address pair (heights 115, 116)
+   * - lastProcessedHeight = 100, untilProcessedHeight = 116 => 2 events are valid
+   */
+  updateExistingCounts: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 115,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 116,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+    ],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        timestamp: 1704081600,
+        height: 115,
+      }),
+      createBlock({
+        hash: 'block2',
+        timestamp: 1704085200,
+        height: 116,
+      }),
+      createBlock({
+        hash: 'block3',
+        timestamp: 1704085400,
+        height: 837,
+      }),
+    ],
+    userEventRepo: [
+      {
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        count: 5,
+        lastProcessedHeight: 100,
+      },
+    ],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.USER_COUNT_TOTAL,
+        value: '1',
+        updatedAt: 1000,
+      },
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          fromChain: 'ergo',
+          toAddress: 'addr2',
+          toChain: 'cardano',
+          count: 7,
+          lastProcessedHeight: 116,
+        },
+      ],
+      totalMetricValue: '1',
+    },
+  },
+
+  /**
+   * Test 3: Filter non-successful events
+   * - 2 successful events (addr1→addr2 at heights 110, 112)
+   * - 1 fraud event (ignored)
+   * - 1 null status event (ignored)
+   * - lastProcessedHeight = 0, untilProcessedHeight = 112 => 2 events are valid
+   */
+  filterNonSuccessfulEvents: {
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 110,
+        spendBlock: 'block1',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromAddress: 'addr1',
+        fromChain: 'ergo',
+        toAddress: 'addr2',
+        toChain: 'cardano',
+        spendHeight: 112,
+        spendBlock: 'block2',
+        result: 'successful' as const,
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromAddress: 'addr3',
+        fromChain: 'bitcoin',
+        toAddress: 'addr4',
+        toChain: 'binance',
+        spendHeight: 115,
+        spendBlock: 'block3',
+        result: 'fraud' as const, // Ignored - not successful
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromAddress: 'addr5',
+        toAddress: 'addr6',
+        spendHeight: 120,
+        spendBlock: null,
+        result: null, // Ignored - null status
+      }),
+    ],
+    blockRepo: [
+      createBlock({ hash: 'block1', height: 110, timestamp: 1704067200 }),
+      createBlock({ hash: 'block2', height: 112, timestamp: 1704070800 }),
+      createBlock({ hash: 'block3', height: 115, timestamp: 1704074400 }),
+      createBlock({ hash: 'block4', height: 836, timestamp: 1704079400 }),
+    ],
+    expectedResults: {
+      userEvents: [
+        {
+          fromAddress: 'addr1',
+          fromChain: 'ergo',
+          toAddress: 'addr2',
+          toChain: 'cardano',
+          count: 2,
+          lastProcessedHeight: 112,
+        },
+      ],
+      totalMetricValue: '1',
     },
   },
 };
