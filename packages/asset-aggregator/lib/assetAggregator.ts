@@ -64,7 +64,7 @@ export class AssetAggregator {
    */
   update = async (
     chainAssetBalanceInfo: Partial<Record<NetworkItem, AssetBalance>>,
-    totalSupply: TotalSupply[],
+    totalSupply: { [chain: string]: TotalSupply[] },
   ) => {
     this.logger.debug('Starting asset aggregator update process');
     const analyzer = new TokensAnalyzer(

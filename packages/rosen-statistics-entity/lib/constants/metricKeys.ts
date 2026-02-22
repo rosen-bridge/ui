@@ -5,6 +5,7 @@ export const METRIC_KEYS = {
   TOTAL_LOCKED_ASSETS_USD: 'total_locked_assets_usd',
   EVENT_COUNT_TOTAL: 'event_count_total',
   USER_EVENT_TOTAL: 'user_event_total',
+  USER_COUNT_TOTAL: 'user_count_total',
   WATCHER_COUNT_TOTAL: 'watcher_count_total',
 } as const;
 

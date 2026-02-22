@@ -1,5 +1,5 @@
 export { MetricAction } from './MetricAction';
 export { LockedAssetsMetricAction } from './LockedAssetsMetricAction';
 export { EventCountMetricAction } from './EventCountMetricAction';
-export { UserEventMetricAction } from './UserEventMetricAction';
+export { UserEventMetricAction } from './userEventMetricAction';
 export { WatcherCountMetricAction } from './WatcherCountMetricAction';

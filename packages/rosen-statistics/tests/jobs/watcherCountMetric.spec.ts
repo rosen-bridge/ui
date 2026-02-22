@@ -9,7 +9,7 @@ import {
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest';
 
 import { watcherCountMetric, WatcherBoxService } from '../../lib';
-import { watcherCountMetricTestData } from '../test-data';
+import { watcherCountMetricTestData } from '../testData';
 import { createDatabase } from '../utils';
 
 vi.mock('../../lib/services/WatcherBoxService');

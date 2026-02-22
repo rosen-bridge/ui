@@ -1,5 +1,12 @@
 # @rosen-bridge/icons
 
+## 3.4.0
+
+### Minor Changes
+
+- Add build lint check for icons index file
+- Add token images and update the build logic to include them as assets in consumer packages
+
 ## 3.3.0
 
 ### Minor Changes

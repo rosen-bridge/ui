@@ -1,5 +1,21 @@
 # @rosen-ui/wallet-api
 
+## 3.1.0
+
+### Minor Changes
+
+- Add a `NonNativeSegWitAddressError` class
+- Ensure all wallet errors extend the `WalletError` base class
+- Update the `getAddress` function to properly handle address validation errors
+- Define an error named `NonTaprootAddressError` for invalid (non-Taproot) addresses
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-network/base@0.5.2
+  - @rosen-ui/types@0.4.1
+
 ## 3.0.5
 
 ### Patch Changes

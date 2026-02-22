@@ -2,8 +2,6 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  MetricAction,
-  METRIC_KEYS,
   UserEventMetricAction,
   AggregatedUserEvents,
 } from '@rosen-ui/rosen-statistics-entity';
@@ -21,11 +19,7 @@ export const userEventMetric = async (
   logger.debug('Starting user event count metric calculation job');
   const userEventAction = new UserEventMetricAction(
     dataSource,
-    logger.child('userEventMetric'),
-  );
-  const metricAction = new MetricAction(
-    dataSource,
-    logger.child('metricAction'),
+    logger.child('userEventMetricAction'),
   );
   const blockDbAction = new BlockDbAction(
     dataSource,
@@ -40,7 +34,7 @@ export const userEventMetric = async (
       return;
     }
     const lastHeight = await userEventAction.getLastProcessedHeight();
-    const aggregated = await userEventAction.getAggregatedEvents(
+    const aggregated = await userEventAction.getAggregatedUsersEvents(
       lastHeight,
       lastBlock.height - 720,
     );
@@ -50,15 +44,14 @@ export const userEventMetric = async (
       return;
     }
 
-    let newTotalCount = 0;
     const aggregatedUsersEvents: AggregatedUserEvents[] = [];
 
     for (const row of aggregated) {
-      newTotalCount += row.count;
-
       const existingCount = await userEventAction.getExistingUserEvent(
         row.fromAddress,
+        row.fromChain,
         row.toAddress,
+        row.toChain,
       );
 
       aggregatedUsersEvents.push({
@@ -66,20 +59,12 @@ export const userEventMetric = async (
         toAddress: row.toAddress,
         count: existingCount + row.count,
         lastProcessedHeight: row.lastProcessedHeight,
+        fromChain: row.fromChain,
+        toChain: row.toChain,
       });
     }
 
-    const totalExistingEvent = await metricAction.getMetricByKey(
-      METRIC_KEYS.USER_EVENT_TOTAL,
-    );
-    const existingTotalCount = totalExistingEvent
-      ? Number(totalExistingEvent.value)
-      : 0;
-
-    await userEventAction.upsertUserEventsCount(
-      aggregatedUsersEvents,
-      newTotalCount + existingTotalCount,
-    );
+    await userEventAction.upsertUserEventsCount(aggregatedUsersEvents);
 
     logger.debug(
       'User event count metric calculation job completed successfully',
