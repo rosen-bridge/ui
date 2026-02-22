@@ -54,13 +54,9 @@ export class BitcoinRunesDataAdapter extends AbstractDataAdapter {
 
     const tokens = this.tokenMap.getTokens(this.chain, this.chain);
     for (const token of tokens) {
-      console.log(
-        `/v1/indexer/address/${address}/runes/${token.tokenId}/balance`,
-      );
       const response = await this.client.get<
         UnisatResponse<AddressRunesBalance>
       >(`/v1/indexer/address/${address}/runes/${token.tokenId}/balance`);
-      console.log(response.data.data);
       const amount = response.data.data
         ? BigInt(response.data.data.amount)
         : 0n;

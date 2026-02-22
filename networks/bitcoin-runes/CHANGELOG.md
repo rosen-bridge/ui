@@ -1,5 +1,18 @@
 # @rosen-network/bitcoin-runes
 
+## 1.0.3
+
+### Patch Changes
+
+- Enforce native SegWit (P2WPKH, P2WSH) address validation for Bitcoin Runes transactions
+- Update dependencies
+  - @rosen-bridge/address-codec@1.1.1
+  - @rosen-bridge/bitcoin-runes-utxo-selection@2.0.3
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-network/base@0.5.2
+  - @rosen-ui/types@0.4.1
+  - @rosen-bridge/icons@3.4.0
+
 ## 1.0.2
 
 ### Patch Changes
