@@ -5,6 +5,7 @@ import {
   LockedAssetsMetricAction,
   METRIC_KEYS,
   MetricAction,
+  LockedAssetsType,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import {
@@ -50,10 +51,7 @@ export const lockedAssetsMetric = async (
 
     let maxDecimals = 0;
     let totalRawNormalized = 0n;
-    const processedAssets: {
-      raw: bigint;
-      decimals: number;
-    }[] = [];
+    const processedAssets: LockedAssetsType[] = [];
 
     for (const asset of lockedAssets) {
       const tokenUsdPrice = await tokenPriceAction.getLatestTokenPrice(
@@ -71,22 +69,15 @@ export const lockedAssetsMetric = async (
 
       const rawUsdValue = asset.amount * BigInt(tokenUsdPriceInteger);
 
-      const tokenDecimals =
-        (await lockedAssetsMetricAction.getSignificantDecimals(
-          asset.tokenId,
-        )) ?? 0;
-
-      const usdValueDecimals = tokenDecimals + tokenUsdPriceDecimals;
+      const usdValueDecimals = asset.significantDecimal + tokenUsdPriceDecimals;
 
       maxDecimals = Math.max(maxDecimals, usdValueDecimals);
 
       processedAssets.push({
-        raw: rawUsdValue,
-        decimals: usdValueDecimals,
+        amount: rawUsdValue,
+        significantDecimal: usdValueDecimals,
+        tokenId: asset.tokenId,
       });
-
-      const usdValueString = getDecimalString(rawUsdValue, usdValueDecimals);
-      console.warn(`Asset [${asset.tokenId}]: $${usdValueString}`);
     }
 
     if (!processedAssets.length) {
@@ -94,12 +85,13 @@ export const lockedAssetsMetric = async (
       return;
     }
 
-    for (const { raw, decimals } of processedAssets) {
-      if (decimals < maxDecimals) {
-        const multiplier = 10n ** BigInt(maxDecimals - decimals);
-        totalRawNormalized += raw * multiplier;
+    for (const { amount, significantDecimal } of processedAssets) {
+      if (significantDecimal < maxDecimals) {
+        totalRawNormalized += BigInt(
+          amount.toString() + '0'.repeat(maxDecimals - significantDecimal),
+        );
       } else {
-        totalRawNormalized += raw;
+        totalRawNormalized += amount;
       }
     }
 

@@ -1,6 +1,8 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
-import { LockedAssetEntity, TokenEntity } from '@rosen-ui/asset-calculator';
+import { LockedAssetEntity } from '@rosen-ui/asset-calculator';
+
+import { LockedAssetsType } from '../types';
 
 export class LockedAssetsMetricAction {
   private readonly logger: AbstractLogger;
@@ -14,44 +16,23 @@ export class LockedAssetsMetricAction {
   }
 
   /**
-   * Fetches all locked assets from the database.
+   * Fetches all locked assets
    *
-   * @returns A promise that resolves to an array of locked asset entities
+   * @returns A promise that resolves to an array of LockedAssetsType
    */
-  getLockedAssets = async (): Promise<LockedAssetEntity[]> => {
-    this.logger.debug('Fetching all locked assets from database...');
-    const assets = await this.dataSource
+  getLockedAssets = async (): Promise<LockedAssetsType[]> => {
+    const lockedAssets = await this.dataSource
       .getRepository(LockedAssetEntity)
-      .find();
-    this.logger.debug(`Fetched ${assets.length} locked assets`);
-    return assets;
-  };
+      .createQueryBuilder('la')
+      .leftJoinAndSelect('la.token', 'token')
+      .select(['la.tokenId', 'la.amount', 'token.significantDecimal'])
+      .getMany();
 
-  /**
-   * Retrieves the significant decimals for a given token ID.
-   *
-   * @param tokenId - The unique identifier of the token
-   * @returns A promise that resolves to:
-   *          - The number of significant decimals if the token exists
-   *          - `undefined` if the token is not found
-   */
-  getSignificantDecimals = async (
-    tokenId: string,
-  ): Promise<number | undefined> => {
-    this.logger.debug(`Fetching significant decimals for tokenId: ${tokenId}`);
-    const token = await this.dataSource.getRepository(TokenEntity).findOne({
-      where: { id: tokenId },
-      select: { significantDecimal: true },
-    });
-
-    if (!token) {
-      this.logger.debug(`Token with id ${tokenId} not found`);
-      return;
-    }
-
-    this.logger.debug(
-      `Token ${tokenId} has significant decimals: ${token.significantDecimal}`,
-    );
-    return token.significantDecimal;
+    this.logger.debug(`Found ${lockedAssets.length} locked assets`);
+    return lockedAssets.map((asset) => ({
+      tokenId: asset.tokenId,
+      amount: asset.amount,
+      significantDecimal: asset.token.significantDecimal,
+    }));
   };
 }

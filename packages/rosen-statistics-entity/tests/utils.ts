@@ -3,6 +3,11 @@ import {
   EventTriggerEntity,
   migrations as watcherExtractorMigration,
 } from '@rosen-bridge/watcher-data-extractor';
+import {
+  LockedAssetEntity,
+  TokenEntity,
+  migrations as assetCalculatorMigrations,
+} from '@rosen-ui/asset-calculator';
 
 import {
   MetricEntity,
@@ -14,10 +19,17 @@ export const createDatabase = async () => {
   const ds = new DataSource({
     type: 'sqlite',
     database: ':memory:',
-    entities: [MetricEntity, EventTriggerEntity, EventCountEntity],
+    entities: [
+      MetricEntity,
+      EventTriggerEntity,
+      EventCountEntity,
+      LockedAssetEntity,
+      TokenEntity,
+    ],
     migrations: [
       ...statisticsMigrations.sqlite,
       ...watcherExtractorMigration.sqlite,
+      ...assetCalculatorMigrations.sqlite,
     ],
     synchronize: false,
     logging: false,

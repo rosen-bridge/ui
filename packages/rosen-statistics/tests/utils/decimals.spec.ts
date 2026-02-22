@@ -322,7 +322,7 @@ describe('scientificToString', () => {
    * - Returns string with trailing zeros trimmed
    */
   it('should trim trailing zeros after decimal point', () => {
-    expect(scientificToString('1.2300e2')).toBe('123');
+    expect(scientificToString('1.2300e02')).toBe('123');
     expect(scientificToString('1.200e1')).toBe('12');
     expect(scientificToString('1.000e-3')).toBe('0.001');
   });

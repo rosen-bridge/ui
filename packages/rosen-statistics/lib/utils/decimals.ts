@@ -89,7 +89,7 @@ export const scientificToString = (value?: number | string): string => {
   if (!value) return '0';
 
   const str = value.toString();
-  if (parseFloat(str) === 0) {
+  if (str.startsWith('0') && !str.includes('.')) {
     return '0';
   }
 
