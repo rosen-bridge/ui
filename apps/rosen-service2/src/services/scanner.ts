@@ -10,7 +10,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import {
   buildBitcoinRunesEsploraScannerWithExtractors,
   buildBitcoinRunesRpcScannerWithExtractors,
-} from 'scanners/bitcoinRuns';
+} from 'scanners/bitcoinRunes';
 
 import { configs } from '../configs';
 import {

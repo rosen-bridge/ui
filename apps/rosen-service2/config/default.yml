@@ -2,8 +2,8 @@ db:
   host: localhost
   port: 5432
   username: postgres
-  password: 'admin'
-  name: my-postgres6
+  password: ''
+  name: rosen_service
 healthCheck:
   logging:
     maxErrors: 10
@@ -36,11 +36,9 @@ chains:
     initialHeight: 1
     scanInterval: 600
   bitcoin-runes:
-      active: false
-      initialHeight:
-      scanInterval: 600
-      unisatUrl: https://open-api.unisat.io
-      unisatApiKey:
+    active: false
+    initialHeight: 1
+    scanInterval: 600
   doge:
     active: false
     initialHeight: 1
@@ -57,6 +55,6 @@ chains:
     initialHeight: 1
     scanInterval: 10
 paths:
-  tokens: config/tokens.json
+  tokens: config/tokensMap.json
   contracts: config/contracts.json
   healthReport: healthReport.json

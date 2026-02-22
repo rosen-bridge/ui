@@ -794,7 +794,11 @@
                       "validations": [
                         {
                           "required": true,
-                          "error": "bitcoin runs url must be specified"
+                          "error": "bitcoin runs url must be specified",
+                          "when": {
+                            "path": "chains.bitcoin-runes.active",
+                            "value": true
+                          }
                         }
                       ]
                     },
