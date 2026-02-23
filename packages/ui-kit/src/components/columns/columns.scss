@@ -1,0 +1,7 @@
+.rosen-columns > * {
+  break-inside: avoid;
+}
+
+.rosen-center[data-rule] {
+  column-rule: 1px dashed var(--rosen-TODO);
+}
