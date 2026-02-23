@@ -1,0 +1,17 @@
+@use './center/center.scss' as *;
+@use './columns/columns.scss' as *;
+@use './gridContainer/gridContainer.scss' as *;
+@use './icon/icon.scss' as *;
+@use './stack/stack.scss' as *;
+
+:root {
+  --rosen-spacing: 8px;
+  --rosen-palette-background: var(--rosen-palette-background-default);
+  --rosen-palette-error: var(--rosen-palette-error-main);
+  --rosen-palette-info: var(--rosen-palette-info-main);
+  --rosen-palette-neutral: var(--rosen-palette-neutral-main);
+  --rosen-palette-primary: var(--rosen-palette-primary-main);
+  --rosen-palette-secondary: var(--rosen-palette-secondary-main);
+  --rosen-palette-success: var(--rosen-palette-success-main);
+  --rosen-palette-warning: var(--rosen-palette-warning-main);
+}

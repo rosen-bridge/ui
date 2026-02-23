@@ -44,7 +44,9 @@ export const ThemeProvider = ({
 
   const final = useMemo(() => {
     return createTheme({
-      cssVariables: true,
+      cssVariables: {
+        cssVarPrefix: 'rosen',
+      },
       ...theme,
     });
   }, [theme]);
