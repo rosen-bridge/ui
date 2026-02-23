@@ -117,6 +117,25 @@ export const Wrap = <P extends object, R = unknown>(
 
               break;
             }
+            //   case 'size': {
+            //     const option = new Option();
+
+            //     option.style.width = `${value}`;
+
+            //     const isValid = option.style.width !== '';
+
+            //     if (typeof value === 'number') {
+            //       result[key] = `calc(var(--${prefix}-spacing, 1px) * ${value})`;
+            //     }
+            //     else if(isValid) {
+            //       result[key] = value;
+            //     }
+            //     else {
+            //       result[key] = `var(--${prefix}-${componentName}-${key})`;
+            //     }
+
+            //     break;
+            //   }
           }
         }
 
