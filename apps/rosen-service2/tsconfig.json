@@ -8,7 +8,7 @@
   },
   "include": ["src"],
   "references": [
-    { "path": "../../packages/asset-calculator/" },
+    { "path": "../../packages/asset-aggregator/" },
     { "path": "../../packages/constants" },
     { "path": "../../packages/asset-data-adapter/" }
   ]

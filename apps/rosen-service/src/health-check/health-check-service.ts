@@ -1,4 +1,5 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
+import CallbackLogger from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import { HealthCheck, HealthStatusLevel } from '@rosen-bridge/health-check';
 import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
@@ -24,7 +25,7 @@ import {
 import scannerService from '../scanner/scanner-service';
 import { getLastSavedBlock } from './health-check-utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * Get notify and notificationConfig if discord is configured
@@ -147,7 +148,6 @@ const start = async () => {
     const healthCheck = new HealthCheck(notify, notificationConfig);
 
     const warnLogCheck = new LogLevelHealthCheck(
-      CallbackLoggerFactory.getInstance(),
       HealthStatusLevel.UNSTABLE,
       config.healthCheck.warnLogAllowedCount,
       config.healthCheck.logDuration,
@@ -156,7 +156,6 @@ const start = async () => {
     healthCheck.register(warnLogCheck);
 
     const errorLogCheck = new LogLevelHealthCheck(
-      CallbackLoggerFactory.getInstance(),
       HealthStatusLevel.UNSTABLE,
       config.healthCheck.errorLogAllowedCount,
       config.healthCheck.logDuration,

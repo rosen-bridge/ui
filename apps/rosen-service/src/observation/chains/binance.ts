@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { BinanceRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
@@ -7,7 +7,7 @@ import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner
@@ -19,7 +19,7 @@ export const registerBinanceExtractor = async (scanner: EvmRpcScanner) => {
       config.binance.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger,
+      logger.child('binanceObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

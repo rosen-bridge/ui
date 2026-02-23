@@ -1,5 +1,5 @@
 import { TokenMap } from '@rosen-bridge/tokens';
-import { describe, it, beforeEach, expect, vi } from 'vitest';
+import { Mock } from 'vitest';
 
 import { AbstractDataAdapter } from '../../lib';
 import { ChainAssetBalance } from '../../lib/types';
@@ -9,37 +9,45 @@ import { expectedGetAddressAssetsResult, TestEvmRpcAdapter } from '../mocked';
 interface TestContext {
   adapter: AbstractDataAdapter;
   mockTokenMap: TokenMap;
+  mockedTotalSupply: Mock;
 }
 
+const mockedTotalSupplyMock = vi.fn();
+
 describe('AbstractEvmRpcDataAdapter', () => {
-  describe('getAddressAssets', () => {
-    beforeEach<TestContext>(async (ctx) => {
-      vi.mock('ethers', () => {
-        const balanceOf = vi.fn().mockResolvedValue(BigInt(2000));
-        const getBalance = vi.fn().mockResolvedValue(BigInt(1000));
-        const Contract = vi.fn().mockImplementation(() => ({ balanceOf }));
-        const JsonRpcProvider = vi
-          .fn()
-          .mockImplementation(() => ({ getBalance }));
+  beforeEach<TestContext>(async (ctx) => {
+    ctx.mockedTotalSupply = mockedTotalSupplyMock;
 
-        return {
-          ethers: { Contract },
-          Contract,
-          JsonRpcProvider,
-        };
-      });
+    vi.mock('ethers', () => {
+      const balanceOf = vi.fn().mockResolvedValue(BigInt(2000));
+      const getBalance = vi.fn().mockResolvedValue(BigInt(1000));
+      const Contract = vi.fn().mockImplementation(() => ({
+        balanceOf,
+        totalSupply: mockedTotalSupplyMock,
+      }));
+      const JsonRpcProvider = vi
+        .fn()
+        .mockImplementation(() => ({ getBalance }));
 
-      ctx.mockTokenMap = new TokenMap();
-      await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-
-      ctx.adapter = new TestEvmRpcAdapter(
-        ['0xAddress'],
-        ctx.mockTokenMap,
-        { url: 'http://rpc', authToken: '' },
-        100,
-      );
+      return {
+        ethers: { Contract },
+        Contract,
+        JsonRpcProvider,
+      };
     });
 
+    ctx.mockTokenMap = new TokenMap();
+    await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
+
+    ctx.adapter = new TestEvmRpcAdapter(
+      ['0xAddress'],
+      ctx.mockTokenMap,
+      { url: 'http://rpc', authToken: '' },
+      100,
+    );
+  });
+
+  describe('getAddressAssets', () => {
     /**
      * @target should fetch balances for native and ERC20 tokens
      * @scenario
@@ -61,22 +69,24 @@ describe('AbstractEvmRpcDataAdapter', () => {
     });
 
     /**
-     * @target should paginate address assets using offset
+     * @target should paginate by multiple addresses assets
      * @scenario
      * - call adapter.getAddressAssets to return a list of all assets
-     * - call adapterByFetchParameters.getAddressAssets repeatedly
+     * - call adapterByFetchParameters.getAddressAssets repeatedly by different addresses
      * @expected
-     * - first call → expect the first asset
-     * - second call → expect the second asset
-     * - third call → expect the third asset
-     * - third call → expect the first asset
+     * - first call by first address → expect the first asset
+     * - first call by second address → expect the first asset
+     * - second call by first address → expect the second asset
+     * - second call by second address → expect the second asset
+     * - third call by first address → expect the third asset
+     * - third call by second address → expect the first asset
      */
-    it<TestContext>('should paginate address assets using offset', async ({
+    it<TestContext>('should paginate by multiple addresses assets', async ({
       adapter,
       mockTokenMap,
     }) => {
       const adapterByFetchParameters = new TestEvmRpcAdapter(
-        ['0xAddress'],
+        ['0xAddress1', '0xAddress2'],
         mockTokenMap,
         { url: 'http://rpc', authToken: '' },
         1,
@@ -84,17 +94,31 @@ describe('AbstractEvmRpcDataAdapter', () => {
 
       const totalAssets = await adapter.getAddressAssets('0xAddress');
 
-      let assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[0]]);
+      let assets1 =
+        await adapterByFetchParameters.getAddressAssets('0xAddress1');
+      expect(assets1).toEqual([totalAssets[0]]);
 
-      assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[1]]);
+      let assets2 =
+        await adapterByFetchParameters.getAddressAssets('0xAddress2');
+      expect(assets2).toEqual([totalAssets[0]]);
 
-      assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[2]]);
+      assets1 = await adapterByFetchParameters.getAddressAssets('0xAddress1');
+      expect(assets1).toEqual([totalAssets[1]]);
 
-      assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
-      expect(assets).toEqual([totalAssets[0]]);
+      assets2 = await adapterByFetchParameters.getAddressAssets('0xAddress2');
+      expect(assets2).toEqual([totalAssets[1]]);
+
+      assets1 = await adapterByFetchParameters.getAddressAssets('0xAddress1');
+      expect(assets1).toEqual([totalAssets[2]]);
+
+      assets2 = await adapterByFetchParameters.getAddressAssets('0xAddress2');
+      expect(assets2).toEqual([totalAssets[2]]);
+
+      assets1 = await adapterByFetchParameters.getAddressAssets('0xAddress1');
+      expect(assets1).toEqual([totalAssets[0]]);
+
+      assets2 = await adapterByFetchParameters.getAddressAssets('0xAddress2');
+      expect(assets2).toEqual([totalAssets[0]]);
     });
 
     /**
@@ -129,6 +153,53 @@ describe('AbstractEvmRpcDataAdapter', () => {
 
       assets = await adapterByFetchParameters.getAddressAssets('0xAddress');
       expect(assets).toEqual([totalAssets[2]]);
+    });
+  });
+
+  describe('getRawTotalSupply', () => {
+    /**
+     * @target should return raw totalSupply for wrapped token
+     * @scenario
+     * - get a wrapped token from the token map
+     * - mock the totalSupply method to return a bigint value
+     * - call the getRawTotalSupply method of the adapter
+     * @expected
+     * - getRawTotalSupply returns the mocked raw totalSupply value
+     */
+    it<TestContext>('should return raw totalSupply for wrapped token', async ({
+      adapter,
+      mockTokenMap,
+      mockedTotalSupply,
+    }) => {
+      const wrappedToken = mockTokenMap.getTokens('ethereum', 'ethereum')[0];
+
+      // set TotalSupply mock value
+      mockedTotalSupply.mockResolvedValue(9999n);
+
+      const result = await adapter.getRawTotalSupply(wrappedToken);
+
+      expect(result).toBe(9999n);
+    });
+
+    /**
+     * @target should throw if totalSupply cannot be fetched
+     * @scenario
+     * - get a wrapped token from the token map
+     * - mock the totalSupply method to return undefined
+     * - call the getRawTotalSupply method of the adapter
+     * @expected
+     * - calling getRawTotalSupply throws an error
+     */
+    it<TestContext>('should throw if totalSupply cannot be fetched', async ({
+      adapter,
+      mockTokenMap,
+      mockedTotalSupply,
+    }) => {
+      const wrappedToken = mockTokenMap.getTokens('ethereum', 'ethereum')[0];
+
+      mockedTotalSupply.mockResolvedValue(undefined);
+
+      await expect(adapter.getRawTotalSupply(wrappedToken)).rejects.toThrow();
     });
   });
 });

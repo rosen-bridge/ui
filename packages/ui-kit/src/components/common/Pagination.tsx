@@ -195,7 +195,7 @@ export const Pagination = ({
                     },
                   }}
                 >
-                  Items per page {pageSizeCurrent}
+                  Items per page: {pageSizeCurrent}
                 </Typography>
 
                 <SvgIcon
@@ -248,7 +248,7 @@ export const Pagination = ({
                 }}
               >
                 <Typography variant="body2" color="text.secondary">
-                  Items per page {pageSizeCurrent}
+                  Items per page: {pageSizeCurrent}
                 </Typography>
               </ListSubheader>
               {pageSizeOptions.map((option) => (

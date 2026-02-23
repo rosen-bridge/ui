@@ -50,17 +50,21 @@ type SmartSearchState = 'idle' | 'flow' | 'operator' | 'value' | 'complete';
 
 export type SmartSearchProps = {
   disabled?: boolean;
-  filters: Filter[];
+  options: Filter[];
   namespace: string;
-  onChange: (params: Record<string, unknown>) => void;
+  value?: Selected[];
+  onChange: (filters: Selected[]) => void;
 };
 
 export const SmartSearch = ({
   disabled,
-  filters: filtersInput,
+  options: filtersInput,
   namespace,
+  value: filters,
   onChange,
 }: SmartSearchProps) => {
+  const timeout = useRef<number>();
+
   const $anchor = useRef<HTMLInputElement>(null);
 
   const $history = useRef<HistoryRef>(null);
@@ -68,8 +72,6 @@ export const SmartSearch = ({
   const $search = useRef<HTMLButtonElement>(null);
 
   const [current, setCurrent] = useState<Partial<Selected>>();
-
-  const [filters, setFilters] = useState<Selected[]>([]);
 
   const [query, setQuery] = useState('');
 
@@ -171,6 +173,7 @@ export const SmartSearch = ({
   );
 
   const handleInputFocus = useCallback(() => {
+    clearTimeout(timeout.current);
     setCurrent({});
   }, []);
 
@@ -179,7 +182,7 @@ export const SmartSearch = ({
       switch (event.key) {
         case 'Enter': {
           if (state == 'flow' && !query) {
-            setFilters(selected);
+            onChange(selected);
           }
           break;
         }
@@ -230,7 +233,15 @@ export const SmartSearch = ({
         }
       }
     },
-    [current, filtersInput, query, selected, selectedValidated, state],
+    [
+      current,
+      filtersInput,
+      query,
+      selected,
+      selectedValidated,
+      state,
+      onChange,
+    ],
   );
 
   const handlePickerSelect = useCallback(
@@ -261,28 +272,16 @@ export const SmartSearch = ({
   }, [current]);
 
   useEffect(() => {
+    setSelected(filters || []);
+
     $search.current?.focus({ preventScroll: true });
 
     setCurrent(undefined);
 
+    if (!filters) return;
+
     $history.current?.add(filters);
-
-    const params: Record<string, unknown> = {};
-
-    for (const item of filters) {
-      const parsed = parseFilter(filtersInput, item)!;
-
-      const operator = parsed.operator!.symbol;
-
-      const array = Array.isArray(item.value) ? '[]' : '';
-
-      const value = [item.value].flat().join(',');
-
-      params[`${item.flow}${array}${operator.replace('=', '')}`] = value;
-    }
-
-    onChange(params);
-  }, [filters, filtersInput, onChange]);
+  }, [filters]);
 
   return (
     <Root>
@@ -293,7 +292,7 @@ export const SmartSearch = ({
         ref={$history}
         onSelect={(selected) => {
           setSelected(selected);
-          setFilters(selected);
+          onChange(selected);
         }}
       />
       <Divider
@@ -303,6 +302,7 @@ export const SmartSearch = ({
       <VirtualScroll>
         <Container>
           <Chips
+            disabled={disabled}
             filters={filtersInput}
             value={selectedValidatedWithCurrent}
             onRemove={(item) => {
@@ -319,6 +319,12 @@ export const SmartSearch = ({
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
+            onBlur={() => {
+              if (picker?.type == 'multiple') return;
+              timeout.current = window.setTimeout(() => {
+                setCurrent(undefined);
+              }, 250);
+            }}
           />
           <Picker
             anchorEl={$anchor.current}
@@ -335,7 +341,7 @@ export const SmartSearch = ({
       <IconButton
         disabled={disabled}
         ref={$search}
-        onClick={() => setFilters(selected)}
+        onClick={() => onChange(selected)}
       >
         <SvgIcon>
           <Search />

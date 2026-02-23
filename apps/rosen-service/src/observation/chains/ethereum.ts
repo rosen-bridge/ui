@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { EthereumRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
@@ -7,7 +7,7 @@ import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner
@@ -19,7 +19,7 @@ export const registerEthereumExtractor = async (scanner: EvmRpcScanner) => {
       config.ethereum.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger,
+      logger.child('ethereumRpcObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

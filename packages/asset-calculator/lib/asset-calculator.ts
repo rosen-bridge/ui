@@ -57,26 +57,27 @@ class AssetCalculator {
       this.tokens,
       ergoCalculator.addresses,
       ergoCalculator.explorerUrl,
-      logger,
+      logger.child('ergoCalculator'),
     );
     const cardanoAssetCalculator = new CardanoCalculator(
       this.tokens,
       cardanoCalculator.addresses,
       cardanoCalculator.authToken,
-      logger,
+      logger.child('cardanoCalculator'),
       cardanoCalculator.koiosUrl,
     );
     const bitcoinAssetCalculator = new BitcoinCalculator(
       this.tokens,
       bitcoinCalculator.addresses,
       bitcoinCalculator.esploraUrl,
-      logger,
+      logger.child('bitcoinCalculator'),
     );
     const bitcoinRunesAssetCalculator = new BitcoinRunesCalculator(
       this.tokens,
       bitcoinRunesCalculator.addresses,
       bitcoinRunesCalculator.unisatUrl,
-      logger,
+      bitcoinRunesCalculator.unisatApiKey,
+      logger.child('bitcoinRunesCalculator'),
     );
     const ethereumAssetCalculator = new EvmCalculator(
       NETWORKS.ethereum.key,
@@ -84,7 +85,7 @@ class AssetCalculator {
       ethereumCalculator.addresses,
       ethereumCalculator.rpcUrl,
       ethereumCalculator.authToken,
-      logger,
+      logger.child('ethereumCalculator'),
     );
     const binanceAssetCalculator = new EvmCalculator(
       NETWORKS.binance.key,
@@ -92,13 +93,13 @@ class AssetCalculator {
       binanceCalculator.addresses,
       binanceCalculator.rpcUrl,
       binanceCalculator.authToken,
-      logger,
+      logger.child('binanceCalculator'),
     );
     const dogeAssetCalculator = new DogeCalculator(
       this.tokens,
       dogeCalculator.addresses,
       dogeCalculator.blockcypherUrl,
-      logger,
+      logger.child('dogeCalculator'),
     );
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
@@ -110,9 +111,15 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
-    this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
-    this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
-    this.tokenModel = new TokenModel(dataSource, logger);
+    this.bridgedAssetModel = new BridgedAssetModel(
+      dataSource,
+      logger.child('bridgedAssetModel'),
+    );
+    this.lockedAssetModel = new LockedAssetModel(
+      dataSource,
+      logger.child('lockedAssetModel'),
+    );
+    this.tokenModel = new TokenModel(dataSource, logger.child('tokenModel'));
   }
 
   /**

@@ -8,7 +8,9 @@ import { Network } from '@rosen-ui/types';
  * local:ergo/rosen-bridge/ui#296
  */
 
-const baseTxURLs: { [key in Network]: string } = {
+type HttpsURL = `https://${string}`;
+
+const baseTxURLs: { [key in Network]: HttpsURL } = {
   [NETWORKS.binance.key]: 'https://bscscan.com/tx',
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/transactions',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/transaction',
@@ -21,7 +23,7 @@ const baseTxURLs: { [key in Network]: string } = {
 export const getTxURL = (
   network?: Network,
   tx?: string,
-): string | undefined => {
+): HttpsURL | undefined => {
   if (!network || !tx) return;
 
   const baseURL = baseTxURLs[network as keyof typeof baseTxURLs];

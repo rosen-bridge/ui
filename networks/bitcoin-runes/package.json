@@ -1,6 +1,6 @@
 {
   "name": "@rosen-network/bitcoin-runes",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "repository": {
@@ -23,14 +23,14 @@
   },
   "dependencies": {
     "@magiceden-oss/runestone-lib": "^1.0.2",
-    "@rosen-bridge/address-codec": "^1.0.1",
-    "@rosen-bridge/bitcoin-runes-utxo-selection": "^2.0.1",
-    "@rosen-bridge/icons": "^3.3.0",
+    "@rosen-bridge/address-codec": "^1.1.1",
+    "@rosen-bridge/bitcoin-runes-utxo-selection": "^2.0.3",
+    "@rosen-bridge/icons": "^3.4.0",
     "@rosen-bridge/json-bigint": "^1.1.0",
-    "@rosen-bridge/tokens": "^4.0.1",
-    "@rosen-network/base": "^0.5.1",
+    "@rosen-bridge/tokens": "^6.0.0",
+    "@rosen-network/base": "^0.5.2",
     "@rosen-ui/constants": "^1.0.0",
-    "@rosen-ui/types": "^0.4.0",
+    "@rosen-ui/types": "^0.4.1",
     "axios": "^1.7.2",
     "bitcoinjs-lib": "^6.1.6"
   },

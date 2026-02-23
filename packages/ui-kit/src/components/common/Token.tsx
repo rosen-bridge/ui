@@ -1,8 +1,9 @@
-import { HTMLAttributes, useMemo } from 'react';
+import { HTMLAttributes, useMemo, useState, useEffect, useRef } from 'react';
 
-import { ExternalLinkAlt } from '@rosen-bridge/icons';
+import { ExternalLinkAlt, TOKENS } from '@rosen-bridge/icons';
 import { capitalize } from 'lodash-es';
 
+import { useFramework } from '../../hooks';
 import { IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
@@ -32,12 +33,44 @@ export type TokenProps = HTMLAttributes<HTMLDivElement> & {
    * If true, show the avatar and text in reverse order.
    */
   reverse?: boolean;
+
+  /**
+   * Token id used to resolve icon.
+   */
+  ergoSideTokenId?: string;
+
+  /**
+   * Visual variant.
+   */
+  variant?: 'both' | 'logo' | 'title';
 };
 
 /**
  * Displays a token with an avatar and its name.
  */
-const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
+const TokenBase = ({
+  href,
+  loading,
+  name = 'Unsupported token',
+  reverse,
+  style,
+  ergoSideTokenId,
+  variant = 'both',
+}: TokenProps) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  const url = TOKENS[ergoSideTokenId as keyof typeof TOKENS];
+
+  const isLoading = loading || (!!url && !isLoaded);
+
+  const {
+    components: { Image },
+  } = useFramework();
+
   const styles = useMemo(() => {
     return Object.assign(
       {},
@@ -49,21 +82,66 @@ const TokenBase = ({ href, loading, name, reverse, style }: TokenProps) => {
       style,
     );
   }, [reverse, style]);
-  return (
-    <Stack align="center" style={styles} spacing="0.5em">
-      <Avatar
-        background="secondary.light"
-        color="secondary"
-        loading={loading}
-        size="2em"
-        style={{ fontSize: '1em' }}
-      >
-        {capitalize(name).slice(0, 1)}
-      </Avatar>
 
-      <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
-        <Truncate lines={1}>{name}</Truncate>
-      </Text>
+  useEffect(() => {
+    if (!ref.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+
+        setIsVisible(true);
+
+        observer.disconnect();
+      },
+      { threshold: 0.1 },
+    );
+
+    observer.observe(ref.current);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <Stack align="center" style={styles} spacing="0.5em" ref={ref}>
+      {!!url && isVisible && (
+        <Image
+          alt={`Token ${name}`}
+          src={url}
+          loading="lazy"
+          width={40}
+          height={40}
+          style={{
+            width: '2em',
+            height: '2em',
+            borderRadius: '50%',
+            objectFit: 'cover',
+            opacity: isLoading ? '0' : '1',
+            position: isLoading ? 'absolute' : 'static',
+            pointerEvents: isLoading ? 'none' : 'auto',
+            background: 'rgb(245, 245, 245)',
+            padding: '2px',
+          }}
+          onLoad={() => setIsLoaded(true)}
+          onError={() => setIsLoaded(true)}
+        />
+      )}
+      {(!url || isLoading) && (
+        <Avatar
+          background="secondary.light"
+          color="secondary"
+          loading={isLoading}
+          size="2em"
+          style={{ fontSize: '1em' }}
+        >
+          {capitalize(name).slice(0, 1)}
+        </Avatar>
+      )}
+      {(variant === 'both' || variant === 'title') && (
+        <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
+          <Truncate lines={1}>{name}</Truncate>
+        </Text>
+      )}
       {!!href && (
         <IconButton target="_blank" size="small" href={href}>
           <SvgIcon size="small">

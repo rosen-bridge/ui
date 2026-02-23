@@ -120,31 +120,35 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             <Amount
               style={{ height: '20px' }}
               loading={isLoading}
-              fallback="-"
+              value={data?.price}
+              unit="$"
             />
           </Label>
           <Label label="Fee Sum">
             <Amount
               loading={isLoading}
               value={data?.totalFee}
-              decimal={data?.lockToken?.significantDecimals}
+              decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
+              price={data?.price}
             />
           </Label>
           <Label label="Bridge Fee" inset>
             <Amount
               loading={isLoading}
               value={data?.bridgeFee}
-              decimal={data?.lockToken?.significantDecimals}
+              decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
+              price={data?.price}
             />
           </Label>
           <Label label="Network Fee" inset>
             <Amount
               loading={isLoading}
               value={data?.networkFee}
-              decimal={data?.lockToken?.significantDecimals}
+              decimal={data?.lockToken?.significantDecimal}
               unit={data?.lockToken?.name}
+              price={data?.price}
             />
           </Label>
         </div>

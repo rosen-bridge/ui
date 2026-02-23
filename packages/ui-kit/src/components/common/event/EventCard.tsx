@@ -2,15 +2,14 @@ import { forwardRef, HTMLAttributes } from 'react';
 
 import { Skeleton, Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
-import { capitalize } from 'lodash-es';
 
-import { Avatar } from '../Avatar';
 import { Card, CardBody } from '../card';
 import { Connector } from '../Connector';
 import { Amount, Identifier, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { Stack } from '../Stack';
+import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
@@ -24,16 +23,16 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
     id: string;
     status: EventStatusProps['value'];
     toChain: NetworkType;
-    token: string;
+    token?: string;
+    ergoSideTokenId?: string;
     timestamp?: number;
-    flows?: number;
   };
   onClick?: () => void;
 };
 
 const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
   (props, ref) => {
-    const { active, isLoading, value, onClick } = props;
+    const { active, isLoading, value, onClick, ...rest } = props;
     return (
       <Card
         active={active}
@@ -41,6 +40,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
         clickable
         ref={ref}
         onClick={onClick}
+        {...rest}
       >
         <CardBody>
           <Stack spacing={1}>
@@ -54,9 +54,12 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 />
               )}
               {!isLoading && value && (
-                <Avatar background="secondary.light" color="secondary">
-                  {capitalize(value.token.slice(0, 1))}
-                </Avatar>
+                <Token
+                  name={value.token}
+                  ergoSideTokenId={value.ergoSideTokenId}
+                  variant="logo"
+                  style={{ fontSize: '20px' }}
+                />
               )}
               <Amount
                 loading={isLoading}
@@ -66,33 +69,12 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                 decimal={value?.decimal}
               />
             </Stack>
-            {!!value && ('timestamp' in value || 'flows' in value) && (
-              <Stack
-                direction="row"
-                align="center"
-                justify="between"
-                style={{ marginBottom: '-4px' }}
-              >
-                <div>
-                  {!!value && 'timestamp' in value && (
-                    <RelativeTime
-                      isLoading={isLoading}
-                      timestamp={value?.timestamp}
-                    />
-                  )}
-                </div>
-                {!!value && 'flows' in value && (
-                  <>
-                    {!isLoading && (
-                      <Typography color="text.secondary" variant="body2">
-                        with {value.flows} flow(s)
-                      </Typography>
-                    )}
-                    {!!isLoading && <Skeleton width="80px" variant="text" />}
-                  </>
-                )}
-              </Stack>
-            )}
+            <div style={{ marginBottom: '-4px' }}>
+              <RelativeTime
+                isLoading={isLoading}
+                timestamp={value?.timestamp}
+              />
+            </div>
             <Identifier
               href={value?.href}
               loading={isLoading}

@@ -55,6 +55,7 @@ export const Overview = ({ id }: { id: string }) => {
           <Token
             loading={isLoading}
             name={data?.lockToken?.name}
+            ergoSideTokenId={data?.lockToken?.ergoSideTokenId}
             reverse
             overrides={{
               tablet: {
@@ -75,9 +76,10 @@ export const Overview = ({ id }: { id: string }) => {
           <Amount
             loading={isLoading}
             value={data?.amount}
-            decimal={data?.lockToken?.significantDecimals}
+            decimal={data?.lockToken?.significantDecimal}
             orientation="horizontal"
             unit={data?.lockToken?.name}
+            price={data?.price}
           />
         </Label>
         <Label
@@ -153,8 +155,9 @@ export const Overview = ({ id }: { id: string }) => {
           <Amount
             loading={isLoading}
             value={data?.totalFee}
-            decimal={data?.lockToken?.significantDecimals}
+            decimal={data?.lockToken?.significantDecimal}
             unit={data?.lockToken?.name}
+            price={data?.price}
           />
         </Label>
       </Columns>

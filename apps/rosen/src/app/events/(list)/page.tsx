@@ -29,7 +29,12 @@ const Page = () => {
 
   const { openSnackbar } = useSnackbar();
 
-  const collection = useCollection();
+  const collection = useCollection({
+    defaultPageIndex: 0,
+    defaultPageSize: 25,
+    defaultSortField: 'timestamp',
+    defaultSortOrder: 'DESC',
+  });
 
   const tokenMap = useTokenMap();
 
@@ -38,7 +43,7 @@ const Page = () => {
   const filters = useMemo(() => getFilters(tokenMap), [tokenMap]);
 
   const { data, error, isLoading } = useSWR<ApiEventResponse>(
-    collection.params && ['/v1/events', collection.params],
+    collection.query && `/v1/events?${collection.query}`,
     fetcher,
     {
       keepPreviousData: true,
@@ -48,12 +53,11 @@ const Page = () => {
   const items = useMemo(() => {
     if (!isLoading) return data?.items || [];
     return Array(collection.pageSize).fill({});
-  }, [collection.pageSize, data, isLoading]);
+  }, [collection.pageSize, data?.items, isLoading]);
 
   const renderPagination = useCallback(
     () => (
       <Pagination
-        defaultPageSize={25}
         pageSizeOptions={[25, 50, 100]}
         disabled={isLoading}
         total={data?.total}
@@ -63,7 +67,14 @@ const Page = () => {
         onPageSizeChange={collection.setPageSize}
       />
     ),
-    [collection, data, isLoading],
+    [
+      collection.pageSize,
+      collection.pageIndex,
+      collection.setPageIndex,
+      collection.setPageSize,
+      data?.total,
+      isLoading,
+    ],
   );
 
   const renderSearch = useCallback(
@@ -71,11 +82,12 @@ const Page = () => {
       <SmartSearch
         disabled={isLoading}
         namespace="events"
-        filters={filters}
-        onChange={collection.setFilters}
+        options={filters}
+        value={collection.fields}
+        onChange={collection.setFields}
       />
     ),
-    [collection, filters, isLoading],
+    [collection.fields, collection.setFields, filters, isLoading],
   );
 
   const renderSidebar = useCallback(
@@ -88,8 +100,6 @@ const Page = () => {
   const renderSort = useCallback(
     () => (
       <SortField
-        defaultKey="timestamp"
-        defaultOrder="DESC"
         dense={dense}
         disabled={isLoading}
         value={collection.sort}
@@ -97,12 +107,34 @@ const Page = () => {
         onChange={collection.setSort}
       />
     ),
-    [collection, dense, isLoading],
+    [collection.sort, collection.setSort, dense, isLoading],
   );
 
   useEffect(() => {
+    items && collection.scrollIntoView();
+  }, [collection.scrollIntoView, items]);
+
+  useEffect(() => {
+    if (!collection.fragment) return;
+
+    const item = items.find(
+      (item) => item.id?.toString() === collection.fragment,
+    );
+
+    if (!item) return;
+
+    setCurrent(item);
+  }, [collection.fragment, items]);
+
+  useEffect(() => {
+    if (current?.id) {
+      collection.setFragment(current.id.toString());
+    }
+  }, [collection.setFragment, current?.id]);
+
+  useEffect(() => {
     setCurrent(undefined);
-  }, [collection.sort, collection.filters, collection.pageIndex]);
+  }, [collection.sort, collection.fields, collection.pageIndex]);
 
   useEffect(() => {
     if (error) {
@@ -125,6 +157,7 @@ const Page = () => {
         <GridContainer gap="8px" minWidth="242px">
           {items.map((item, index) => (
             <EventCard
+              id={item.id}
               key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
               active={!isLoading && current === item}
               isLoading={isLoading}
@@ -133,13 +166,14 @@ const Page = () => {
                   ? undefined
                   : {
                       amount: item.amount,
-                      decimal: item.lockToken?.significantDecimals,
+                      decimal: item.lockToken?.significantDecimal,
                       fromChain: item.fromChain,
                       href: `/events/${item.eventId}`,
                       id: item.eventId,
                       status: item.status,
                       toChain: item.toChain,
                       token: item.lockToken?.name,
+                      ergoSideTokenId: item.lockToken?.ergoSideTokenId,
                       timestamp: item.timestamp,
                     }
               }

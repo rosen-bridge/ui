@@ -7,3 +7,15 @@ export {
   BridgedAmountEntity,
   MetricEntity,
 } from './entities';
+export {
+  MetricAction,
+  LockedAssetsMetricAction,
+  EventCountMetricAction,
+  UserEventMetricAction,
+} from './actions';
+export { METRIC_KEYS, MetricKey } from './constants';
+export {
+  AggregatedEvents,
+  EventCountStatus,
+  AggregatedUserEvents,
+} from './types';

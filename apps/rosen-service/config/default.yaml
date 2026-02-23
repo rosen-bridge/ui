@@ -98,6 +98,7 @@ postgres:
   logging: false
   useSSL: false
 calculator:
+  interval: 60
   addresses:
     ergo: []
     cardano: []

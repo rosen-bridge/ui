@@ -1,8 +1,7 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
 import config from '../configs';
-import { ASSET_CALCULATOR_INTERVAL } from '../constants';
 import dataSource from '../data-source';
 import AppError from '../errors/AppError';
 import { getTokenMap, handleError, runAndSetInterval } from '../utils';
@@ -16,7 +15,7 @@ const startUpdateJob = async (
   calculator: AssetCalculator,
   updateInterval: number,
 ) => {
-  const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+  const logger = DefaultLogger.getInstance().child(import.meta.url);
 
   const tryUpdating = async () => {
     try {
@@ -44,7 +43,7 @@ const startUpdateJob = async (
  * start asset calculator service
  */
 const start = async () => {
-  const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+  const logger = DefaultLogger.getInstance().child(import.meta.url);
   const assetCalculator = new AssetCalculator(
     await getTokenMap(),
     {
@@ -63,6 +62,7 @@ const start = async () => {
     {
       addresses: config.calculator.addresses.bitcoinRunes,
       unisatUrl: config.bitcoinRunes.unisatUrl,
+      unisatApiKey: config.bitcoinRunes.unisatApiKey,
     },
     {
       addresses: config.calculator.addresses.ethereum,
@@ -82,7 +82,7 @@ const start = async () => {
     logger,
   );
 
-  await startUpdateJob(assetCalculator, ASSET_CALCULATOR_INTERVAL);
+  await startUpdateJob(assetCalculator, config.calculator.interval * 1000);
 };
 
 const calculatorService = {

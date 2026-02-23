@@ -1,20 +1,19 @@
 /** @type {import('next').NextConfig} */
+const path = require('path');
 
 const nextConfig = {
-  experimental: {
-    outputFileTracingIncludes: {
-      /**
-       * Transfer the 'configs' directory to the production build to ensure
-       * the 'tokensMap.json' file is accessible in the production environment.
-       */
-      '/': ['./configs/*'],
-    },
-    serverComponentsExternalPackages: [
-      'ergo-lib-wasm-nodejs',
-      '@emurgo/cardano-serialization-lib-nodejs',
-      'typeorm',
-    ],
+  outputFileTracingIncludes: {
+    /**
+     * Transfer the 'configs' directory to the production build to ensure
+     * the 'tokensMap.json' file is accessible in the production environment.
+     */
+    '/': ['./configs/*'],
   },
+  serverExternalPackages: [
+    'ergo-lib-wasm-nodejs',
+    '@emurgo/cardano-serialization-lib-nodejs',
+    'typeorm',
+  ],
   async headers() {
     return [
       {
@@ -45,6 +44,7 @@ const nextConfig = {
     }
     return config;
   },
+  outputFileTracingRoot: path.join(__dirname, '../../'),
 };
 
 module.exports = nextConfig;

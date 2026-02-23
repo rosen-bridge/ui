@@ -30,7 +30,7 @@ RUN adduser --disabled-password --home /app --gecos "ErgoPlatform" ergo && \
 
 RUN npm i -g npm@11.6.2
 WORKDIR /app
-COPY . .
+COPY --chown=ergo:ergo . .
 RUN --mount=type=cache,target=/root/.npm npm ci
 RUN ./build.sh rosen-service
 USER ergo

@@ -4,6 +4,8 @@ import { BitcoinNetwork } from '@rosen-network/bitcoin/dist/client';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
+  NonNativeSegWitAddressError,
+  NonTaprootAddressError,
   SubmitTransactionError,
   UnsupportedChainError,
   UserDeniedTransactionSignatureError,
@@ -31,10 +33,15 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     NETWORKS['bitcoin-runes'].key,
   ];
 
-  get purpose() {
-    return this.currentChain === NETWORKS['bitcoin-runes'].key
-      ? AddressPurpose.Ordinals
-      : AddressPurpose.Payment;
+  get purposes() {
+    switch (this.currentChain) {
+      case 'bitcoin':
+        return [AddressPurpose.Payment];
+      case 'bitcoin-runes':
+        return [AddressPurpose.Payment, AddressPurpose.Ordinals];
+      default:
+        return [];
+    }
   }
 
   performConnect = async (): Promise<void> => {
@@ -54,49 +61,59 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
-    const response = await request('getAddresses', {
-      purposes: [this.purpose],
-    });
-
-    if (response.status == 'error') throw response.error;
-
-    const address = response.result.addresses.find(
-      (address) => address.purpose === this.purpose,
-    );
-
-    return address!.address;
+    switch (this.currentChain) {
+      case 'bitcoin':
+        return await this.findAddress(AddressPurpose.Payment).then(
+          (address) => address.address,
+        );
+      case 'bitcoin-runes':
+        await this.findAddress(AddressPurpose.Payment).then(
+          (address) => address.address,
+        );
+        return await this.findAddress(AddressPurpose.Ordinals).then(
+          (address) => address.address,
+        );
+    }
   };
 
-  fetchPaymentAddress = async (): Promise<string> => {
+  findAddress = async (purpose: AddressPurpose) => {
     const response = await request('getAddresses', {
-      purposes: [AddressPurpose.Payment],
+      purposes: [purpose],
     });
 
     if (response.status == 'error') throw response.error;
 
     const address = response.result.addresses.find(
-      (address) => address.purpose === AddressPurpose.Payment,
+      (address) => address.purpose === purpose,
     );
 
-    if (address === undefined)
-      throw Error(`Found no address with Payment purpose`);
-    return address.address;
-  };
+    switch (purpose) {
+      case AddressPurpose.Ordinals: {
+        const isNonTaproot =
+          !address || !address.address.toLowerCase().startsWith('bc1p');
 
-  fetchPublicKey = async (): Promise<string> => {
-    const response = await request('getAddresses', {
-      purposes: [this.purpose],
-    });
+        if (isNonTaproot) {
+          throw new NonTaprootAddressError(this.name);
+        }
 
-    if (response.status == 'error') throw response.error;
+        break;
+      }
+      case AddressPurpose.Payment: {
+        const isNonNativeSegWit =
+          !address || !address.address.toLowerCase().startsWith('bc1q');
 
-    const address = response.result.addresses.find(
-      (address) => address.purpose === this.purpose,
-    );
+        if (isNonNativeSegWit) {
+          throw new NonNativeSegWitAddressError(this.name);
+        }
 
-    if (address === undefined)
-      throw Error(`Found no address with ${this.purpose} purpose`);
-    return address.publicKey;
+        break;
+      }
+      default: {
+        throw new Error(`Found no address with ${purpose} purpose`);
+      }
+    }
+
+    return address;
   };
 
   fetchBalance = async (token?: RosenChainToken): Promise<string> => {
@@ -127,11 +144,10 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
   };
 
   hasConnection = async (): Promise<boolean> => {
-    try {
-      return !!(await this.fetchAddress());
-    } catch {
-      return false;
-    }
+    const response = await request('getAddresses', {
+      purposes: this.purposes,
+    });
+    return response.status == 'success';
   };
 
   performSwitchChain = async (chain: Network): Promise<void> => {
@@ -158,8 +174,12 @@ export class XverseWallet extends Wallet<XverseWalletConfig> {
     let signedPsbtBase64;
 
     if (this.currentNetwork instanceof BitcoinRunesNetwork) {
-      const userPublicKey = await this.fetchPublicKey();
-      const userPaymentAddress = await this.fetchPaymentAddress();
+      const { publicKey: userPublicKey } = await this.findAddress(
+        AddressPurpose.Ordinals,
+      );
+      const { address: userPaymentAddress } = await this.findAddress(
+        AddressPurpose.Payment,
+      );
 
       const { psbt, signInputs } = await this.currentNetwork.generateUnsignedTx(
         params.lockAddress,

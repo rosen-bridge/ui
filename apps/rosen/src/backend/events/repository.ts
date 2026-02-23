@@ -1,5 +1,7 @@
 import { ObservationEntity } from '@rosen-bridge/abstract-observation-extractor';
 import { BlockEntity } from '@rosen-bridge/abstract-scanner';
+import { In } from '@rosen-bridge/extended-typeorm';
+import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
   Filters,
   filtersToTypeorm,
@@ -8,10 +10,10 @@ import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import { Network } from '@rosen-ui/types';
 
-import { getTokenMap } from '@/tokenMap/getServerTokenMap';
-
 import { dataSource } from '../dataSource';
 import '../initialize-datasource-if-needed';
+
+const tokenPriceAction = new TokenPriceAction(dataSource);
 
 const blockRepository = dataSource.getRepository(BlockEntity);
 const eventTriggerRepository = dataSource.getRepository(EventTriggerEntity);
@@ -29,6 +31,7 @@ interface EventWithTotal
   status: 'fraud' | 'processing' | 'successful' | 'multipleFlows';
   fromChain: Network;
   toChain: Network;
+  lockToken?: TokenEntity;
 }
 
 type EventDetailsType = Omit<EventWithTotal, 'total'>;
@@ -39,8 +42,6 @@ type EventDetailsType = Omit<EventWithTotal, 'total'>;
  * @param limit
  */
 export const getEvents = async (filters: Filters) => {
-  const tokenMap = await getTokenMap();
-
   filters.sort = Object.assign(
     {
       key: 'timestamp',
@@ -53,32 +54,37 @@ export const getEvents = async (filters: Filters) => {
     filters.search.in ||= [];
   }
 
-  (() => {
+  await (async () => {
     const field = filters.fields?.find(
-      (field) => field.key == 'sourceChainTokenId',
+      (field) => field.key == 'originalTokenId',
     );
 
     if (!field) return;
 
-    const tokenIds: string[] = [];
+    field.key = 'sourceChainTokenId';
 
-    const values = [field.value].flat();
+    const originalTokenIds = [field.value].flat();
 
-    const collections = tokenMap.getConfig();
+    const originalTokens = await tokenRepository.find({
+      where: {
+        id: In(originalTokenIds),
+      },
+    });
 
-    for (const collection of collections) {
-      const tokens = Object.values(collection);
-      for (const value of values) {
-        for (const token of tokens) {
-          if (token.tokenId !== value) continue;
-          const ids = tokens.map((token) => token.tokenId);
-          tokenIds.push(...ids);
-          break;
-        }
-      }
-    }
+    const originalErgoSideTokenIds = originalTokens.map(
+      (token) => token.ergoSideTokenId,
+    );
 
-    field.value = tokenIds;
+    const ergoSideTokens = await tokenRepository.find({
+      select: ['id'],
+      where: {
+        ergoSideTokenId: In(originalErgoSideTokenIds),
+      },
+    });
+
+    const ergoSideTokenIds = ergoSideTokens.map((token) => token.id);
+
+    field.value = ergoSideTokenIds;
   })();
 
   const statusIndex =
@@ -133,6 +139,7 @@ export const getEvents = async (filters: Filters) => {
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.id AS "eventTriggerId"',
+      'to_jsonb(te) AS "lockToken"',
       'COALESCE(ete.result, \'processing\') AS "status"',
       '(CAST(oe.amount AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "amountNormalized"',
       '(CAST(oe.networkFee AS DOUBLE PRECISION) / POWER(10, COALESCE(te.significantDecimal, 0))) AS "networkFeeNormalized"',
@@ -191,11 +198,12 @@ export const getEvents = async (filters: Filters) => {
 };
 
 export const getEvent = async (id: string) => {
-  return dataSource
+  const event = await dataSource
     .getRepository(ObservationEntity)
     .createQueryBuilder('oe')
     .leftJoin(BlockEntity, 'be', 'be.hash = oe.block')
     .leftJoin(EventTriggerEntity, 'ete', 'ete.eventId = oe.requestId')
+    .leftJoin(TokenEntity, 'te', 'te.id = oe.sourceChainTokenId')
     .select([
       'oe.id AS "id"',
       'oe.fromChain AS "fromChain"',
@@ -214,6 +222,7 @@ export const getEvent = async (id: string) => {
       'ete.paymentTxId AS "paymentTxId"',
       'ete.spendTxId AS "spendTxId"',
       'ete.txId AS "txId"',
+      'to_jsonb(te) AS "lockToken"',
       /**
        * There may be multiple event triggers for the same events, but we should
        * only select one based on the results. The order is:
@@ -230,4 +239,25 @@ export const getEvent = async (id: string) => {
     ])
     .where('oe.requestId = :id', { id })
     .getRawOne<EventDetailsType>();
+
+  if (!event || !event.lockToken) throw new Error(`Not found`);
+
+  const token = await tokenRepository.findOne({
+    where: {
+      isResident: true,
+      ergoSideTokenId: event.lockToken.ergoSideTokenId,
+    },
+  });
+
+  if (!token) throw new Error(`Not found`);
+
+  const price = await tokenPriceAction.getLatestTokenPrice(
+    token.id,
+    event.timestamp,
+  );
+
+  return {
+    ...event,
+    price,
+  };
 };
