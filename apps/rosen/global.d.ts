@@ -1,3 +1,4 @@
+import * as AllIcons from '@rosen-bridge/icons';
 import type { DefaultColor } from '@rosen-bridge/ui-kit';
 
 declare module '@rosen-bridge/ui-kit' {
@@ -7,6 +8,8 @@ declare module '@rosen-bridge/ui-kit' {
 
   interface GapOverrides {}
 
-  interface IconOverrides {}
+  interface IconOverrides {
+    name: Omit<keyof typeof AllIcons, 'TOKENS'>;
+  }
 }
 export {};
