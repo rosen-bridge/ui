@@ -249,16 +249,18 @@ export const useCollection = (options?: Options) => {
       return;
     }
 
-    if (
-      query === framework.router.search &&
-      window.location.hash === `#${fragment}`
-    )
-      return;
+    const currentSearch = framework.router.search?.replace(/^\?/, '') || '';
+    const nextSearch = query || '';
+
+    const currentHash = window.location.hash || '';
+    const nextHash = fragment ? `#${fragment}` : '';
+
+    if (currentSearch === nextSearch && currentHash === nextHash) return;
 
     let url = framework.router.pathname;
 
-    if (query) {
-      url += `?${query}`;
+    if (nextSearch) {
+      url += `?${nextSearch}`;
     }
 
     if (fragment) {
