@@ -243,6 +243,11 @@ export const useCollection = (options?: Options) => {
     }
   }, [options?.localStorageKey, view]);
 
+  /**
+   * WARNING:
+   * This logic prevents a production infinite request loop.
+   * Any change to query comparison must keep normalization intact.
+   */
   useEffect(() => {
     if (syncing.current) {
       syncing.current = false;
