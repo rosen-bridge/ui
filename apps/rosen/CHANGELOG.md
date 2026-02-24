@@ -1,5 +1,12 @@
 # @rosen-bridge/rosen-app
 
+## 5.0.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.2.1
+
 ## 5.0.0
 
 ### Major Changes

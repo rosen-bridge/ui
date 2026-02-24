@@ -1,5 +1,12 @@
 # @rosen-bridge/guard-app
 
+## 4.0.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.2.1
+
 ## 4.0.0
 
 ### Major Changes
