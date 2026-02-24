@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 5.2.1
+
+### Patch Changes
+
+- Fix infinite revalidation in `useCollection` by normalizing query comparison before calling `router.push()`
+
 ## 5.2.0
 
 ### Minor Changes

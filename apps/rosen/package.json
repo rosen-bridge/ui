@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/rosen-app",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "private": true,
   "repository": {
     "type": "git",
@@ -29,7 +29,7 @@
     "@rosen-bridge/icons": "^3.4.0",
     "@rosen-bridge/token-price-entity": "^0.2.1",
     "@rosen-bridge/tokens": "^6.0.0",
-    "@rosen-bridge/ui-kit": "^5.2.0",
+    "@rosen-bridge/ui-kit": "^5.2.1",
     "@rosen-bridge/watcher-data-extractor": "^13.0.2",
     "@rosen-network/base": "^0.5.2",
     "@rosen-network/binance": "^0.4.4",
