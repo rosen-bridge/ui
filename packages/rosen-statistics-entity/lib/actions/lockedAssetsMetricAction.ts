@@ -23,11 +23,9 @@ export class LockedAssetsMetricAction {
   getLockedAssets = async (): Promise<LockedAssetsType[]> => {
     const lockedAssets = await this.dataSource
       .getRepository(LockedAssetEntity)
-      .createQueryBuilder('la')
-      .leftJoinAndSelect('la.token', 'token')
-      .select(['la.tokenId', 'la.amount', 'token.significantDecimal'])
-      .getMany();
-
+      .find({
+        relations: { token: true },
+      });
     this.logger.debug(`Found ${lockedAssets.length} locked assets`);
     return lockedAssets.map((asset) => ({
       tokenId: asset.tokenId,

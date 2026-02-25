@@ -3,4 +3,5 @@ export {
   getNonDecimalString,
   getNumberOfDecimals,
   scientificToString,
+  multiplyByPowerOfTen,
 } from './decimals';

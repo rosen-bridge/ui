@@ -5,6 +5,7 @@ import {
   getNonDecimalString,
   getNumberOfDecimals,
   scientificToString,
+  multiplyByPowerOfTen,
 } from '../../lib/utils';
 
 describe('getDecimalString', () => {
@@ -339,5 +340,95 @@ describe('scientificToString', () => {
     expect(scientificToString('0')).toBe('0');
     expect(scientificToString('0e10')).toBe('0');
     expect(scientificToString('0e-10')).toBe('0');
+  });
+});
+
+describe('multiplyByPowerOfTen', () => {
+  /**
+   * @target multiplyByPowerOfTen should multiply string values by 10^power
+   * @scenario
+   * - Provide numeric strings with various powers
+   * @expected
+   * - Returns normalized numeric string multiplied by power of ten
+   */
+  it('should multiply string values by power of ten', () => {
+    expect(multiplyByPowerOfTen('1', 1)).toBe('10');
+    expect(multiplyByPowerOfTen('12', 2)).toBe('1200');
+    expect(multiplyByPowerOfTen('123', 5)).toBe('12300000');
+  });
+
+  /**
+   * @target multiplyByPowerOfTen should multiply bigint values by 10^power
+   * @scenario
+   * - Provide bigint inputs with various powers
+   * @expected
+   * - Returns correct normalized string representation
+   */
+  it('should multiply bigint values by power of ten', () => {
+    expect(multiplyByPowerOfTen(1n, 3)).toBe('1000');
+    expect(multiplyByPowerOfTen(45n, 2)).toBe('4500');
+    expect(multiplyByPowerOfTen(123456n, 4)).toBe('1234560000');
+  });
+
+  /**
+   * @target multiplyByPowerOfTen should normalize leading zeros in input
+   * @scenario
+   * - Provide values with leading zeros
+   * @expected
+   * - Removes leading zeros in the final result
+   */
+  it('should normalize leading zeros in input', () => {
+    expect(multiplyByPowerOfTen('00123', 2)).toBe('12300');
+    expect(multiplyByPowerOfTen('0000', 5)).toBe('0');
+    expect(multiplyByPowerOfTen('00045', 0)).toBe('45');
+  });
+
+  /**
+   * @target multiplyByPowerOfTen should return original normalized value when power is zero
+   * @scenario
+   * - Call function with power = 0
+   * @expected
+   * - Returns normalized original value
+   */
+  it('should return original normalized value when power is zero', () => {
+    expect(multiplyByPowerOfTen('00123', 0)).toBe('123');
+    expect(multiplyByPowerOfTen(123n, 0)).toBe('123');
+  });
+
+  /**
+   * @target multiplyByPowerOfTen should handle negative power values safely
+   * @scenario
+   * - Call function with negative power
+   * @expected
+   * - Returns normalized original value without modification
+   */
+  it('should handle negative power values safely', () => {
+    expect(multiplyByPowerOfTen('00123', -3)).toBe('123');
+    expect(multiplyByPowerOfTen(123n, -1)).toBe('123');
+  });
+
+  /**
+   * @target multiplyByPowerOfTen should handle zero values correctly
+   * @scenario
+   * - Provide zero as string or bigint with various powers
+   * @expected
+   * - Always returns "0"
+   */
+  it('should handle zero values correctly', () => {
+    expect(multiplyByPowerOfTen('0', 5)).toBe('0');
+    expect(multiplyByPowerOfTen('0000', 10)).toBe('0');
+    expect(multiplyByPowerOfTen(0n, 3)).toBe('0');
+  });
+
+  /**
+   * @target multiplyByPowerOfTen should handle very large powers
+   * @scenario
+   * - Provide large power values
+   * @expected
+   * - Returns correctly normalized numeric string
+   */
+  it('should handle very large powers', () => {
+    const result = multiplyByPowerOfTen('1', 50);
+    expect(result).toBe('1' + '0'.repeat(50));
   });
 });

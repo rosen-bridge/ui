@@ -89,11 +89,12 @@ export const scientificToString = (value?: number | string): string => {
   if (!value) return '0';
 
   const str = value.toString();
+
+  if (!/e/i.test(str)) return str;
+
   if (str.startsWith('0') && !str.includes('.')) {
     return '0';
   }
-
-  if (!/e/i.test(str)) return str;
 
   const [base, exponent] = str.toLowerCase().split('e');
   const exp = Number(exponent);
@@ -118,4 +119,28 @@ export const scientificToString = (value?: number | string): string => {
     );
   }
   return isNegative ? `-${result}` : result;
+};
+
+/**
+ * Multiplies a numeric value by 10^power using string-based logic
+ * and normalizes the result by trimming leading zeros.
+ *
+ * @param value - Input number as string or bigint
+ * @param power - Exponent of 10
+ * @returns Normalized numeric string
+ */
+export const multiplyByPowerOfTen = (
+  value: string | bigint,
+  power: number,
+): string => {
+  if (!value) return '0';
+
+  const base = value.toString();
+
+  if (!power || power <= 0) {
+    return base.replace(/^0+/, '') || '0';
+  }
+
+  const result = base + '0'.repeat(power);
+  return result.replace(/^0+/, '') || '0';
 };

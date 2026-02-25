@@ -12,6 +12,7 @@ import {
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
+  multiplyByPowerOfTen,
   scientificToString,
 } from '../utils';
 
@@ -88,7 +89,7 @@ export const lockedAssetsMetric = async (
     for (const { amount, significantDecimal } of processedAssets) {
       if (significantDecimal < maxDecimals) {
         totalRawNormalized += BigInt(
-          amount.toString() + '0'.repeat(maxDecimals - significantDecimal),
+          multiplyByPowerOfTen(amount, maxDecimals - significantDecimal),
         );
       } else {
         totalRawNormalized += amount;
