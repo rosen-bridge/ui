@@ -1,1 +1,1 @@
-export { WatcherBoxService } from './WatcherBoxService';
+export { WatcherBoxService } from './watcherBoxService';

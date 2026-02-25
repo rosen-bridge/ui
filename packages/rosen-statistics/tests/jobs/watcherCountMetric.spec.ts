@@ -12,7 +12,7 @@ import { watcherCountMetric, WatcherBoxService } from '../../lib';
 import { watcherCountMetricTestData } from '../testData';
 import { createDatabase } from '../utils';
 
-vi.mock('../../lib/services/WatcherBoxService');
+vi.mock('../../lib/services/watcherBoxService');
 
 describe('watcherCountMetric', () => {
   let dataSource: DataSource;
