@@ -1,6 +1,7 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
 import { AssetAggregatorService } from 'services/assetAggregator';
+import { GeneralMetricsService } from 'services/generalMetrics';
 
 import dataSource from './data-source';
 import { AssetDataAdapterService } from './services/assetDataAdapters';
@@ -33,6 +34,13 @@ const startApp = async () => {
   ScannerService.init(DefaultLogger.getInstance().child('ergoScannerService'));
   serviceManager.register(ScannerService.getInstance());
   logger.debug('Scanner service registered to the service manager');
+
+  logger.debug('Initializing general metrics service');
+  GeneralMetricsService.init(
+    DefaultLogger.getInstance().child('generalMetricsService'),
+  );
+  serviceManager.register(GeneralMetricsService.getInstance());
+  logger.debug('General metrics service registered to the service manager');
 
   logger.debug('Initializing asset-data-adapter service');
   AssetDataAdapterService.init(
