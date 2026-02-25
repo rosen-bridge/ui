@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/watcher-app",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "private": true,
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@rosen-bridge/icons": "^3.4.0",
-    "@rosen-bridge/ui-kit": "^5.2.0",
+    "@rosen-bridge/ui-kit": "^5.2.1",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.2",
