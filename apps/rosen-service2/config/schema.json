@@ -830,7 +830,7 @@
           "unisatUrl": {
             "type": "string",
             "default": "https://open-api.unisat.io",
-            "description": "bitcoin rpc url",
+            "description": "bitcoin runes unisat url",
             "validations": [
               {
                 "required": true,
@@ -843,7 +843,18 @@
             ]
           },
           "unisatApiKey": {
-            "type": "string"
+            "type": "string",
+            "description": "bitcoin runes ApiKey url",
+            "validations": [
+              {
+                "required": true,
+                "error": "bitcoin runs ApiKey must be specified",
+                "when": {
+                  "path": "chains.bitcoin-runes.active",
+                  "value": true
+                }
+              }
+            ]
           }
         }
       },

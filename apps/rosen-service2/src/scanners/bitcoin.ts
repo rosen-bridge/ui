@@ -78,6 +78,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
       tokenMap,
       logger.child('bitcoinRpcObservationExtractor'),
     );
+
     logger.debug('Registering observation extractor with scanner...');
     await bitcoinScanner.registerExtractor(observationExtractor);
     logger.info('Bitcoin observation extractor registered successfully');
@@ -151,6 +152,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
 
   try {
     const tokenMap = TokensConfig.getInstance().getTokenMap();
+
     logger.debug('Creating Bitcoin observation extractor...');
     const observationExtractor = new BitcoinEsploraObservationExtractor(
       configs.contracts.bitcoin.addresses.lock,

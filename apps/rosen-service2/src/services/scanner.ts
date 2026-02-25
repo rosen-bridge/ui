@@ -146,6 +146,14 @@ export class ScannerService extends PeriodicTaskService {
         this.scanners[NETWORKS.binance.key] =
           await buildBinanceRpcScannerWithExtractors(this.dbService.dataSource);
       }
+      if (
+        configs.chains['bitcoin-runes'].active &&
+        !configs.chains.bitcoin.active
+      ) {
+        throw new Error(
+          'When the bitcoin-runes chain is activated, Bitcoin must also be active.',
+        );
+      }
     } catch (error) {
       throw new Error(
         `cannot create or register event trigger extractors due to error: ${error}`,

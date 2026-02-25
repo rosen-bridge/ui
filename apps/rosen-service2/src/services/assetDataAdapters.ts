@@ -124,9 +124,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-            authToken:
-              configs.chains.ethereum.rpc.connections.at(0)?.authToken ||
-              undefined,
+            authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
           },
           configs.chains.ethereum.adapter.chunkSize,
           this.logger.child('ethereumDataAdapter'),
@@ -137,9 +135,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             url: configs.chains.binance.rpc.connections.at(0)!.url!,
-            authToken:
-              configs.chains.binance.rpc.connections.at(0)?.authToken ||
-              undefined,
+            authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
           },
           configs.chains.binance.adapter.chunkSize,
           this.logger.child('binanceDataAdapter'),
@@ -150,10 +146,9 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
-            authToken:
-              configs.chains.cardano.koios.connections
-                .at(0)
-                ?.authToken?.toString() || '',
+            authToken: configs.chains.cardano.koios.connections
+              .at(0)
+              ?.authToken?.toString(),
           },
           this.logger.child('cardanoDataAdapter'),
         );
