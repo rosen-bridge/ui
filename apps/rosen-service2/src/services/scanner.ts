@@ -7,10 +7,6 @@ import {
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
-import {
-  buildBitcoinRunesEsploraScannerWithExtractors,
-  buildBitcoinRunesRpcScannerWithExtractors,
-} from 'scanners/bitcoinRunes';
 
 import { configs } from '../configs';
 import {
@@ -119,23 +115,6 @@ export class ScannerService extends PeriodicTaskService {
           case BITCOIN_METHOD_RPC:
             this.scanners[NETWORKS.bitcoin.key] =
               await buildBitcoinRpcScannerWithExtractors(
-                this.dbService.dataSource,
-              );
-            break;
-        }
-      }
-      if (configs.chains['bitcoin-runes'].active) {
-        switch (configs.chains.bitcoin.method) {
-          case BITCOIN_METHOD_RPC:
-            this.scanners[NETWORKS['bitcoin-runes'].key] =
-              await buildBitcoinRunesRpcScannerWithExtractors(
-                this.dbService.dataSource,
-              );
-            break;
-
-          case BITCOIN_METHOD_ESPLORA:
-            this.scanners[NETWORKS['bitcoin-runes'].key] =
-              await buildBitcoinRunesEsploraScannerWithExtractors(
                 this.dbService.dataSource,
               );
             break;

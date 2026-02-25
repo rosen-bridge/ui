@@ -162,10 +162,9 @@ export interface ChainsDogeAdapterBlockCypher {
 
 export interface ChainsBitcoinRunes {
   active: boolean;
-  initialHeight: number;
   scanInterval: number;
   adapter: ChainsBitcoinRunesAdapter;
-  unisatUrl: string;
+  unisatUrl?: string;
   unisatApiKey?: string;
 }
 

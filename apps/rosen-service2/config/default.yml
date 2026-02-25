@@ -37,8 +37,8 @@ chains:
     scanInterval: 600
   bitcoin-runes:
     active: false
-    initialHeight: 1
     scanInterval: 600
+    unisatUrl: https://open-api.unisat.io
   doge:
     active: false
     initialHeight: 1
@@ -55,6 +55,6 @@ chains:
     initialHeight: 1
     scanInterval: 10
 paths:
-  tokens: config/tokensMap.json
-  contracts: config/contracts.json
+  tokens: config/rosen/tokensMap.json
+  contracts: config/rosen
   healthReport: healthReport.json
