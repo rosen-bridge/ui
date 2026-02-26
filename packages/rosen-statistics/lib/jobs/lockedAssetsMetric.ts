@@ -113,7 +113,7 @@ export const lockedAssetsMetric = async (
       'Locked assets USD metric calculation job completed successfully',
     );
   } catch (error) {
-    logger.debug('Locked assets USD metric calculation job failed', {
+    logger.error('Locked assets USD metric calculation job failed', {
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });

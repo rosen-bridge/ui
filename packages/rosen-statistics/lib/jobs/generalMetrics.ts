@@ -73,7 +73,7 @@ export const generalMetrics = async (
 
     logger.debug('General metrics calculation job completed successfully');
   } catch (error) {
-    logger.debug('General metrics calculation job failed', {
+    logger.error('General metrics calculation job failed', {
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });
