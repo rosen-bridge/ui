@@ -15,7 +15,7 @@ healthCheck:
   updateInterval: 60
 dataAggregator:
   interval: 60
-rosenStatistics:
+statistics:
   generalMetrics:
     interval: 86400
 chains:

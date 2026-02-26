@@ -124,7 +124,7 @@ export class GeneralMetricsService extends PeriodicTaskService {
           }
         }
       },
-      interval: configs.rosenStatistics.generalMetrics.interval * 1000,
+      interval: configs.statistics.generalMetrics.interval * 1000,
     });
     return tasks;
   };
