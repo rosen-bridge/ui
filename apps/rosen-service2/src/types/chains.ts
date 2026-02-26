@@ -29,6 +29,9 @@ export interface ChainConfigs {
 
 export type AllChainsConfigs = {
   version: string;
+  tokens: {
+    RSN: string;
+  };
 } & {
   [K in ChainChoices]: ChainConfigs;
 };

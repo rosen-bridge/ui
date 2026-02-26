@@ -1,6 +1,7 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
 import { AssetAggregatorService } from 'services/assetAggregator';
+import { GeneralMetricsService } from 'services/generalMetrics';
 import { LockedAssetsMetricService } from 'services/lockedAssetsMetric';
 
 import dataSource from './data-source';
@@ -43,6 +44,12 @@ const startApp = async () => {
   logger.debug(
     'Locked assets metrics service registered to the service manager',
   );
+  logger.debug('Initializing general metrics service');
+  GeneralMetricsService.init(
+    DefaultLogger.getInstance().child('generalMetricsService'),
+  );
+  serviceManager.register(GeneralMetricsService.getInstance());
+  logger.debug('General metrics service registered to the service manager');
 
   logger.debug('Initializing asset-data-adapter service');
   AssetDataAdapterService.init(

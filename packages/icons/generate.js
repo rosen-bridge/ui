@@ -19,7 +19,6 @@ glob
 
     lines.push(
       `export { default as ${componentName} } from './${file}?react';`,
-      `export { default as ${componentName}Raw } from './${file}?raw';`,
       '',
     );
   });

@@ -18,6 +18,8 @@ dataAggregator:
 statistics:
   lockedAssetsMetrics:
     interval: 86400
+  generalMetrics:
+    interval: 86400
 chains:
   ergo:
     initialHeight: 1

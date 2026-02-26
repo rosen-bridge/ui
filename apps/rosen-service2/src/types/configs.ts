@@ -64,7 +64,12 @@ export interface DataAggregator {
 export interface lockedAssetsMetrics {
   interval: number;
 }
+export interface GeneralMetrics {
+  interval: number;
+}
+
 export interface Statistics {
+  generalMetrics: GeneralMetrics;
   lockedAssetsMetrics: lockedAssetsMetrics;
 }
 export interface Chains {
