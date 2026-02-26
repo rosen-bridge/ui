@@ -259,6 +259,27 @@
       }
     }
   },
+  "statistics": {
+    "type": "object",
+    "children": {
+      "generalMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "general metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "general metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
   "chains": {
     "type": "object",
     "children": {
