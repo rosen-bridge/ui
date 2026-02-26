@@ -2,10 +2,7 @@ import { DataSource, Repository } from '@rosen-bridge/extended-typeorm';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { WatcherCountEntity, WatcherCountMetricAction } from '../../lib';
-import {
-  getWatcherCountScenarios,
-  upsertWatcherCountScenarios,
-} from '../testData';
+import { upsertWatcherCountScenarios } from '../testData';
 import { createDatabase } from '../utils';
 
 describe('WatcherCountMetricAction', () => {
@@ -17,62 +14,6 @@ describe('WatcherCountMetricAction', () => {
     dataSource = await createDatabase();
     action = new WatcherCountMetricAction(dataSource);
     watcherRepo = dataSource.getRepository(WatcherCountEntity);
-  });
-
-  describe('getWatcherCountByNetwork', () => {
-    beforeEach(async () => {
-      await watcherRepo.clear();
-    });
-
-    /**
-     * @target getWatcherCountByNetwork should return null when no matching record exists
-     * @dependency database
-     * @scenario
-     * - insert watcher count record
-     * - call getWatcherCountByNetwork for different network
-     * @expected
-     * - returns null
-     */
-    it('should return null when no matching record exists', async () => {
-      const scenario = getWatcherCountScenarios.noMatch;
-      await watcherRepo.insert(scenario.watcherCountRepo);
-
-      const result = await action.getWatcherCountByNetwork(scenario.query);
-      expect(result).toBe(scenario.expected);
-    });
-
-    /**
-     * @target getWatcherCountByNetwork should return correct record from multiple
-     * @dependency database
-     * @scenario
-     * - insert multiple watcher count records
-     * - call getWatcherCountByNetwork for specific network
-     * @expected
-     * - returns the correct matching record
-     */
-    it('should return correct record from multiple', async () => {
-      const scenario = getWatcherCountScenarios.multipleRecords;
-      await watcherRepo.insert(scenario.watcherCountRepo);
-
-      const result = await action.getWatcherCountByNetwork(scenario.query);
-
-      expect(result?.network).toBe(scenario.expected?.network);
-      expect(result?.count).toBe(scenario.expected?.count);
-    });
-
-    /**
-     * @target getWatcherCountByNetwork should return null for empty database
-     * @dependency database
-     * @scenario
-     * - call getWatcherCountByNetwork on empty database
-     * @expected
-     * - returns null
-     */
-    it('should return null for empty database', async () => {
-      const scenario = getWatcherCountScenarios.emptyDatabase;
-      const result = await action.getWatcherCountByNetwork(scenario.query);
-      expect(result).toBe(scenario.expected);
-    });
   });
 
   describe('upsertWatcherCount', () => {

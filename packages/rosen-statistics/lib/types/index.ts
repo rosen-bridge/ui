@@ -1,1 +1,1 @@
-export { WatcherCountConfig } from './watcherCountConfig';
+export { WatcherCountConfig, BoxFetcher } from './watcherCountConfig';

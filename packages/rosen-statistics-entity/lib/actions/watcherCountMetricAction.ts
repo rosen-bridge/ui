@@ -15,20 +15,6 @@ export class WatcherCountMetricAction {
   }
 
   /**
-   * Get watcher count for specific network
-   *
-   * @param network - Network identifier
-   * @returns Promise resolving to WatcherCountEntity or null
-   */
-  getWatcherCountByNetwork = async (network: string) => {
-    this.logger.debug(`Fetching watcher count for network: ${network}`);
-    const record = await this.watcherRepo.findOne({
-      where: { network },
-    });
-    return record;
-  };
-
-  /**
    * Upsert watcher counts record for a list of networks
    *
    * @param network - Network identifier

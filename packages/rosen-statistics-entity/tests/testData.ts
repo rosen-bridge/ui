@@ -988,29 +988,6 @@ export const watcherCountTestData = {
   },
 };
 
-export const getWatcherCountScenarios = {
-  noMatch: {
-    watcherCountRepo: [watcherCountTestData.ergoNetwork],
-    query: 'cardano',
-    expected: null,
-  },
-
-  multipleRecords: {
-    watcherCountRepo: [
-      watcherCountTestData.ergoNetwork,
-      watcherCountTestData.cardanoNetwork,
-      watcherCountTestData.ethereumNetwork,
-    ],
-    query: 'cardano',
-    expected: watcherCountTestData.cardanoNetwork,
-  },
-
-  emptyDatabase: {
-    query: 'ergo',
-    expected: null,
-  },
-};
-
 export const upsertWatcherCountScenarios = {
   insertNew: {
     upsertData: [

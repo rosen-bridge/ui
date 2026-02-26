@@ -795,16 +795,45 @@ export const userEventMetricTestData = {
 };
 
 /**
- * Helper to create mock box with network and count
+ * Helper to create mock box for explorer
  */
-const createMockBox = (
-  network: string | undefined,
-  count: number,
-  rwtTokenId?: string,
-) => ({
-  network,
-  count,
-  rwtTokenId,
+const createMockExplorerBox = (count: string, rwtTokenId?: string) => ({
+  additionalRegisters: {
+    R5: {
+      renderedValue: count,
+    },
+  },
+  assets: [
+    {
+      tokenId: 'test-tokenId-1',
+    },
+    {
+      tokenId: rwtTokenId,
+    },
+    {
+      tokenId: 'test-tokenId-2',
+    },
+  ],
+});
+
+/**
+ * Helper to create mock box for node
+ */
+const createMockNodeBox = (count: string, rwtTokenId?: string) => ({
+  additionalRegisters: {
+    R5: count,
+  },
+  assets: [
+    {
+      tokenId: 'test-tokenId-1',
+    },
+    {
+      tokenId: rwtTokenId,
+    },
+    {
+      tokenId: 'test-tokenId-2',
+    },
+  ],
 });
 
 export const watcherCountMetricTestData = {
@@ -815,18 +844,17 @@ export const watcherCountMetricTestData = {
     config: {
       type: 'explorer' as const,
       url: 'https://ergo-explorer.com',
-      rwtTokenId: 'valid-rwt-token-id',
-      watcherRegister: 5,
-      rwtNetworkMap: {
-        ergo: 'valid-rwt-token-id',
-        cardano: 'cardano-rwt-token-id',
-        ethereum: 'eth-rwt-token-id',
-      },
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([
+        ['valid-rwt-token-id', 'ergo'],
+        ['cardano-rwt-token-id', 'cardano'],
+        ['eth-rwt-token-id', 'ethereum'],
+      ]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockBox('ergo', 5, 'valid-rwt-token-id'),
-      createMockBox('cardano', 4, 'cardano-rwt-token-id'),
-      createMockBox('ethereum', 2, 'eth-rwt-token-id'),
+      createMockExplorerBox('5', 'valid-rwt-token-id'),
+      createMockExplorerBox('4', 'cardano-rwt-token-id'),
+      createMockExplorerBox('2', 'eth-rwt-token-id'),
     ],
     expectedResults: {
       watcherCounts: [
@@ -855,15 +883,12 @@ export const watcherCountMetricTestData = {
     config: {
       type: 'explorer' as const,
       url: 'https://ergo-explorer.com',
-      rwtTokenId: 'valid-rwt-token-id',
-      watcherRegister: 4,
-      rwtNetworkMap: {
-        ergo: 'valid-rwt-token-id',
-      },
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockBox('ergo', 5, 'valid-rwt-token-id'),
-      createMockBox(undefined, 4, 'some-other-token-id'),
+      createMockExplorerBox('5', 'valid-rwt-token-id'),
+      createMockExplorerBox('4', 'some-other-token-id'),
     ],
     expectedResults: {
       watcherCounts: [
@@ -883,11 +908,8 @@ export const watcherCountMetricTestData = {
     config: {
       type: 'explorer' as const,
       url: 'https://ergo-explorer.com',
-      rwtTokenId: 'valid-rwt-token-id',
-      watcherRegister: 4,
-      rwtNetworkMap: {
-        ergo: 'valid-rwt-token-id',
-      },
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
     } as WatcherCountConfig,
     mockBoxes: [],
     expectedResults: {
@@ -903,29 +925,28 @@ export const watcherCountMetricTestData = {
     config: {
       type: 'node' as const,
       url: 'https://ergo-node.com',
-      rwtTokenId: 'valid-rwt-token-id',
-      watcherRegister: 4,
-      rwtNetworkMap: {
-        ergo: 'valid-rwt-token-id',
-        cardano: 'valid-rwt-token-id-2',
-      },
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([
+        ['valid-rwt-token-id', 'ergo'],
+        ['valid-rwt-token-id-2', 'cardano'],
+      ]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockBox('ergo', 5, 'valid-rwt-token-id'),
-      createMockBox('cardano', 3, 'valid-rwt-token-id-2'),
+      createMockNodeBox('05e401', 'valid-rwt-token-id'),
+      createMockNodeBox('0526', 'valid-rwt-token-id-2'),
     ],
     expectedResults: {
       watcherCounts: [
         {
           network: 'ergo',
-          count: 5,
+          count: 114,
         },
         {
           network: 'cardano',
-          count: 3,
+          count: 19,
         },
       ],
-      totalWatchers: '8',
+      totalWatchers: '133',
     },
   },
 };

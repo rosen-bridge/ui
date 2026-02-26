@@ -5,9 +5,11 @@ import {
   METRIC_KEYS,
   WatcherCountType,
   WatcherCountMetricAction,
+  WATCHER_REGISTER,
 } from '@rosen-ui/rosen-statistics-entity';
+import { Constant } from 'ergo-lib-wasm-nodejs';
 
-import { WatcherBoxService } from '../services';
+import { NodeBoxFetcher, ExplorerBoxFetcher } from '../services';
 import { WatcherCountConfig } from '../types';
 
 /**
@@ -32,23 +34,46 @@ export const watcherCountMetric = async (
     dataSource,
     logger.child('metricAction'),
   );
-  const boxService = new WatcherBoxService(
-    config,
-    logger.child('watcherBoxService'),
-  );
+  const boxService =
+    config.url === 'explorer'
+      ? new ExplorerBoxFetcher(config.url, logger.child('explorerFetcher'))
+      : new NodeBoxFetcher(config.url, logger.child('nodeFetcher'));
   try {
-    const boxes = await boxService.fetchWatcherBoxes();
+    const boxes = await boxService.fetchUnspentBoxesByTokenId(
+      config.rwtRepoNFT,
+    );
     logger.debug(`Fetched ${boxes.length} watcher boxes`);
 
     const networkWatcherCounts: WatcherCountType[] = [];
     let totalWatchers = 0;
 
     for (const box of boxes) {
-      const network = boxService.extractNetwork(box);
+      const networkToken = box.assets?.find((asset) =>
+        config.rwtTokenMap.has(asset.tokenId),
+      );
+
+      if (!networkToken) {
+        logger.debug(
+          `Skipping box with unknown network - no matching token ID found in map`,
+        );
+        continue;
+      }
+      const network = config.rwtTokenMap.get(networkToken.tokenId);
       if (!network) continue;
-      const count = boxService.extractWatcherCount(box);
+
+      const watcherRegister = box.additionalRegisters[WATCHER_REGISTER];
+      if (!watcherRegister) continue;
+
+      const count =
+        typeof watcherRegister === 'object'
+          ? Number(watcherRegister.renderedValue)
+          : Number(
+              Constant.decode_from_base16(watcherRegister).to_i64().to_str(),
+            );
+
       networkWatcherCounts.push({ network, count });
       totalWatchers += count;
+      logger.debug(`Network: ${network}, Watchers: ${count}`);
     }
 
     logger.debug(`Found watchers in ${networkWatcherCounts.length} networks`);
@@ -62,7 +87,7 @@ export const watcherCountMetric = async (
     );
     logger.debug(`WatcherCount updated. Total watchers: ${totalWatchers}`);
   } catch (error) {
-    logger.debug(`Watcher count metric calculation job failed: ${error}`, {
+    logger.error(`Watcher count metric calculation job failed: ${error}`, {
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });
