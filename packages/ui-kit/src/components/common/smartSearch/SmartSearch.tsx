@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import { Card } from '@mui/material';
-import { Search } from '@rosen-bridge/icons';
+import { Search, Times } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { IconButton } from '../../base';
@@ -283,6 +283,18 @@ export const SmartSearch = ({
     $history.current?.add(filters);
   }, [filters]);
 
+  const handleClearAll = useCallback(() => {
+    setSelected([]);
+    setCurrent(undefined);
+    setQuery('');
+    onChange([]);
+  }, [onChange]);
+
+  const hasFilters = useMemo(
+    () => selectedValidated.length > 0,
+    [selectedValidated],
+  );
+
   return (
     <Root>
       <History
@@ -338,6 +350,13 @@ export const SmartSearch = ({
           />
         </Container>
       </VirtualScroll>
+      {hasFilters && (
+        <IconButton disabled={disabled} onClick={handleClearAll}>
+          <SvgIcon>
+            <Times />
+          </SvgIcon>
+        </IconButton>
+      )}
       <IconButton
         disabled={disabled}
         ref={$search}
