@@ -1,4 +1,11 @@
+import { useId } from 'react';
+
 export const UnderDevelopSection = () => {
+  const id = useId();
+
+  const clip0 = `clip0-${id}`;
+  const clip1 = `clip1-${id}`;
+
   return (
     <svg
       width="96"
@@ -8,7 +15,7 @@ export const UnderDevelopSection = () => {
       xmlns="http://www.w3.org/2000/svg"
     >
       <g opacity="0.5">
-        <g clip-path="url(#clip0_5276_48581)">
+        <g clipPath={`url(#${clip0})`}>
           <rect width="96" height="96" rx="48" fill="#D9DDEC" />
           <path
             d="M54.3903 37.4898L37.623 32.997L8.99965 59.5241L25.7669 64.0169L54.3903 37.4898Z"
@@ -30,7 +37,7 @@ export const UnderDevelopSection = () => {
             d="M8.43025 25.1576C8.43025 25.1576 5.24029 23.7686 4.14048 27.8731L-3.42911 56.1232L0.908109 57.2854L29.5181 30.8081L8.43025 25.1576Z"
             fill="white"
           />
-          <g clip-path="url(#clip1_5276_48581)">
+          <g clipPath={`url(#${clip1})`}>
             <path
               d="M25.2631 42.3154H22.9894C22.3615 42.3154 21.8525 41.8064 21.8525 41.1785V34.3574H26.3999V41.1785C26.3999 41.8065 25.8909 42.3154 25.2631 42.3154Z"
               fill="#B9BAA6"
@@ -67,10 +74,10 @@ export const UnderDevelopSection = () => {
         </g>
       </g>
       <defs>
-        <clipPath id="clip0_5276_48581">
+        <clipPath id={clip0}>
           <rect width="96" height="96" rx="48" fill="white" />
         </clipPath>
-        <clipPath id="clip1_5276_48581">
+        <clipPath id={clip1}>
           <rect
             width="54"
             height="54"
