@@ -4,7 +4,7 @@ import { Button } from '@mui/material';
 import { AngleRight } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
-import { Columns } from '../Columns';
+import { Columns } from '../../columns';
 import { Amount, Label, LabelGroup, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';

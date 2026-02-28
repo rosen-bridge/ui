@@ -41,8 +41,6 @@ export * from './Chip';
 export * from './RelativeTime';
 export * from './ViewToggle';
 export * from './EmptyState';
-export * from './GridContainer';
-export * from './Columns';
 export * from './Illustrations';
 export * from './Truncate';
 export * from './card';

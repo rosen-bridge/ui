@@ -30,7 +30,7 @@ export type WrapProps<P> = {
 export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseComponent: ComponentType<P>) => {
   const componentName = BaseComponent.displayName || BaseComponent.name || 'Wrap';
 
-  const WrappedComponent = forwardRef<E, WrapProps<P>>((props, ref) => {
+  const WrappedComponent = forwardRef<any, WrapProps<P>>((props, ref) => {
     const { className, hidden, rewrite, ...rest } = props;
 
     const config = useConfigs();
@@ -124,5 +124,5 @@ export const Root = <E extends ElementType>(props: RootProps<E>) => {
 
   const mergedStyles = Object.assign({}, colors, styles, style);
 
-  return <Component {...reflected} {...mergedStyles} {...rest} />
+  return <Component {...reflected} style={mergedStyles} {...rest} />
 }

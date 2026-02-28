@@ -1,9 +1,10 @@
-.rosen-grid-container {
+.rosen-GridContainer {
   display: grid;
   width: 100%;
-  gap: var(--rosen-grid-container-gap, 0);
-  grid-template-columns: repeat(
-    auto-fill,
-    minmax(var(--rosen-grid-container-min-width, 0), 1fr)
-  );
+  // TODO
+  // gap: var(--rosen-grid-container-gap, 0);
+  // grid-template-columns: repeat(
+  //   auto-fill,
+  //   minmax(var(--rosen-grid-container-min-width, 0), 1fr)
+  // );
 }

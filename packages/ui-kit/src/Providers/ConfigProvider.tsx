@@ -2,17 +2,19 @@ import { createContext, ReactNode, useContext } from 'react';
 
 import type {
   CenterProps,
-  ColumnsPropsNext,
-  GridContainerPropsNext,
+  ColumnsProps,
+  GridContainerProps,
   IconProps,
+  IdentifierProps,
   StackProps,
 } from '../components';
 
 type Components = {
   Center: CenterProps;
-  Columns: ColumnsPropsNext;
-  GridContainer: GridContainerPropsNext;
+  Columns: ColumnsProps;
+  GridContainer: GridContainerProps;
   Icon: IconProps;
+  Identifier: IdentifierProps;
   StackProps: StackProps;
 };
 
