@@ -3,9 +3,10 @@ import { getTokenUrl } from '@rosen-ui/utils';
 
 import { Typography } from '../base';
 import { Avatar } from './Avatar';
-import { Amount, Identifier } from './display';
-import { Stack } from './Stack';
+import { Amount } from './display';
+import { Stack } from '../stack';
 import { Text } from './Text';
+import { Identifier } from '../identifier';
 
 export interface TokensListProps {
   chain?: Network;

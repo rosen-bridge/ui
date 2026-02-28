@@ -9,7 +9,7 @@ import {
 import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
 import { Box, Typography, MenuItem, Menu, ListSubheader } from '../base';
-import { Stack } from './Stack';
+import { Stack } from '../stack';
 
 export interface PaginationProps {
   defaultPageIndex?: number;

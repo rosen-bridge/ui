@@ -10,7 +10,7 @@ import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
 import { EnhancedDialogTitle } from './EnhancedDialogTitle';
-import { Stack } from './Stack';
+import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';
 
 type NetworkHeight = {

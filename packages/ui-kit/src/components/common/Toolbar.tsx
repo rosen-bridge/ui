@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from './Stack';
+import { Stack } from '../stack';
 
 export interface ToolbarProps {
   children?: React.ReactNode;

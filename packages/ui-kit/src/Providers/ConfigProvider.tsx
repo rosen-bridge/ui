@@ -1,19 +1,19 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import type {
-  CenterPropsNext,
+  CenterProps,
   ColumnsPropsNext,
   GridContainerPropsNext,
-  IconPropsNext,
-  StackPropsNext,
+  IconProps,
+  StackProps,
 } from '../components';
 
 type Components = {
-  Center: CenterPropsNext;
+  Center: CenterProps;
   Columns: ColumnsPropsNext;
   GridContainer: GridContainerPropsNext;
-  Icon: IconPropsNext;
-  StackProps: StackPropsNext;
+  Icon: IconProps;
+  StackProps: StackProps;
 };
 
 export const useConfigs = () => {

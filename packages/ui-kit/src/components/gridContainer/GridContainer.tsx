@@ -30,15 +30,6 @@ export const GridContainerBase = ({
 
 GridContainerBase.displayName = 'GridContainer';
 
-export const GridContainer = Wrap(GridContainerBase, {
-  props: {
-    gap: {
-      parser: 'size',
-    },
-    minWidth: {
-      parser: 'size',
-    },
-  },
-});
+export const GridContainer = Wrap(GridContainerBase);
 
 export type GridContainerProps = ComponentProps<typeof GridContainer>;

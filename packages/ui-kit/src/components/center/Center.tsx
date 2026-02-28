@@ -1,24 +1,16 @@
-import { ComponentProps, HTMLAttributes } from 'react';
-
-import { Wrap } from '../../core';
-
-export type CenterPropsBase = HTMLAttributes<HTMLDivElement> & {
+import { ComponentProps } from 'react';
+import { ElementPropsBase, Root, Wrap } from '../../core'; 
+ 
+export type CenterPropsBase = {
   inline?: boolean;
-};
+} & ElementPropsBase<'div'>;
 
 export const CenterBase = ({ inline, ...rest }: CenterPropsBase) => {
-  void inline;
-  return <div {...rest} />;
+  return <Root reflects={{ inline }} {...rest} />;
 };
 
 CenterBase.displayName = 'Center';
 
-export const Center = Wrap(CenterBase, {
-  props: {
-    inline: {
-      reflect: true,
-    },
-  },
-});
+export const Center = Wrap(CenterBase);
 
 export type CenterProps = ComponentProps<typeof Center>;

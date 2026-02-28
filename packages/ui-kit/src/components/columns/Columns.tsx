@@ -48,18 +48,6 @@ export const ColumnsBase = ({
 
 ColumnsBase.displayName = 'Columns';
 
-export const Columns = Wrap(ColumnsBase, {
-  props: {
-    gap: {
-      parser: 'size',
-    },
-    rule: {
-      reflect: true,
-    },
-    width: {
-      parser: 'size',
-    },
-  },
-});
+export const Columns = Wrap(ColumnsBase);
 
 export type ColumnsProps = ComponentProps<typeof Columns>;

@@ -1,5 +1,5 @@
 import { Typography } from '../../base';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
 
 export const UnderDevelop = () => {
   return (

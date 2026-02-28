@@ -27,7 +27,7 @@ import {
   Typography,
 } from '../base';
 import { Divider } from './Divider';
-import { Stack } from './Stack';
+import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';
 
 const Root = styled(Card)(({ theme }) => ({

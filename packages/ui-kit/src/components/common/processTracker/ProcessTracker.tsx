@@ -9,7 +9,7 @@ import {
 
 import { Box, Skeleton, Typography } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
 import { ProcessIcon } from './ProcessIcon';
 import { ProcessLabel } from './ProcessLabel';
 import { SubItem } from './SubItem';

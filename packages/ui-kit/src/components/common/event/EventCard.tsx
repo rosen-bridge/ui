@@ -5,12 +5,13 @@ import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Card, CardBody } from '../card';
 import { Connector } from '../Connector';
-import { Amount, Identifier, Network } from '../display';
+import { Amount, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
 import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
+import { Identifier } from '../../identifier';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean;

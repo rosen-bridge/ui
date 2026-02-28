@@ -3,7 +3,7 @@ import React from 'react';
 import { StepLabel } from '@mui/material';
 
 import { Tooltip, Typography } from '../../base';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
 import { ProcessTrackerSubItem } from './types';
 
 type LabelProps = {

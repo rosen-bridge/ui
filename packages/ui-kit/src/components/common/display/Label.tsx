@@ -5,7 +5,7 @@ import { ExclamationCircle } from '@rosen-bridge/icons';
 
 import { Tooltip } from '../../base';
 import { InjectOverrides } from '../InjectOverrides';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
 
 /**
  * Props for the `Label` component.

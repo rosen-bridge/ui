@@ -5,14 +5,15 @@ import { AngleRight } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Columns } from '../Columns';
-import { Amount, Identifier, Label, LabelGroup, Network } from '../display';
+import { Amount, Label, LabelGroup, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { Stack } from '../Stack';
+import { Stack } from '../../stack';
 import { SvgIcon } from '../SvgIcon';
 import { Text } from '../Text';
 import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
+import { Identifier } from '../../identifier';
 
 export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
   loading?: boolean;

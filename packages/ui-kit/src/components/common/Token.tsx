@@ -7,7 +7,7 @@ import { useFramework } from '../../hooks';
 import { IconButton } from '../base';
 import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
-import { Stack } from './Stack';
+import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';
 import { Text } from './Text';
 import { Truncate } from './Truncate';

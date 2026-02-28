@@ -9,7 +9,8 @@ import {
 import { HealthParamInfo } from '@rosen-ui/types';
 import moment from 'moment';
 
-import { Card, CardBody, CardHeader, CardTitle, Stack, SvgIcon } from '.';
+import { Stack } from '../stack';
+import { Card, CardBody, CardHeader, CardTitle, SvgIcon } from '.';
 import { Colors } from '../../core';
 import { useTheme } from '../../hooks';
 import { Alert, Tooltip, Typography } from '../base';

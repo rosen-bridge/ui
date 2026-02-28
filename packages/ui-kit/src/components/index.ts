@@ -1,10 +1,7 @@
 export * from './base';
 export * from './common';
 
-export {
-  Center as CenterNext,
-  type CenterProps as CenterPropsNext,
-} from './center';
+export * from './center';
 
 export {
   Columns as ColumnsNext,
@@ -18,14 +15,6 @@ export {
   type GridContainerOverrides,
 } from './gridContainer';
 
-export {
-  Icon as IconNext,
-  type IconProps as IconPropsNext,
-  type IconOverrides,
-} from './icon';
-
-export {
-  Stack as StackNext,
-  type StackProps as StackPropsNext,
-  type StackOverrides,
-} from './stack';
+export * from './icon';
+export * from './identifier';
+export * from './stack';

@@ -1,4 +1,4 @@
-.rosen-icon {
+.rosen-Icon {
   user-select: none;
   width: 1em;
   height: 1em;
@@ -8,14 +8,14 @@
   font-size: var(--rosen-icon-size, medium);
 }
 
-.rosen-icon[data-size='small'] {
+.rosen-Icon[data-size='small'] {
   --rosen-icon-size: 1.25rem;
 }
 
-.rosen-icon[data-size='medium'] {
+.rosen-Icon[data-size='medium'] {
   --rosen-icon-size: 1.5rem;
 }
 
-.rosen-icon[data-size='large'] {
+.rosen-Icon[data-size='large'] {
   --rosen-icon-size: 2.1875rem;
 }
