@@ -63,12 +63,12 @@ export const lockedAssetsMetric = async (
 
       const tokenUsdPriceString = scientificToString(tokenUsdPrice);
       const tokenUsdPriceDecimals = getNumberOfDecimals(tokenUsdPriceString);
-      const tokenUsdPriceInteger = getNonDecimalString(
+      const tokenUsdPriceRaw = getNonDecimalString(
         tokenUsdPriceString,
         tokenUsdPriceDecimals,
       );
 
-      const rawUsdValue = asset.amount * BigInt(tokenUsdPriceInteger);
+      const rawUsdValue = asset.amount * BigInt(tokenUsdPriceRaw);
 
       const usdValueDecimals = asset.significantDecimal + tokenUsdPriceDecimals;
 

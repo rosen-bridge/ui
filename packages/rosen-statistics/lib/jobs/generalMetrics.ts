@@ -68,7 +68,7 @@ export const generalMetrics = async (
         timestamp,
       );
     } else {
-      logger.debug('RSN price not found, skipping RSN_PRICE_USD metric');
+      logger.warn('RSN price not found, skipping RSN_PRICE_USD metric');
     }
 
     logger.debug('General metrics calculation job completed successfully');
