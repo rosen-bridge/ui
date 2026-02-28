@@ -26,15 +26,6 @@
     "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@vitest/coverage-istanbul": "^3.1.4",
-    "tsx": "^4.19.4",
-    "vitest": "^3.1.4"
-  },
-  "engines": {
-    "node": ">=22.18.0",
-    "npm": "11.6.2"
-  },
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^4.0.0",
     "@rosen-bridge/abstract-scanner": "^1.0.1",
@@ -44,6 +35,16 @@
     "@rosen-bridge/watcher-data-extractor": "^13.0.2",
     "@rosen-ui/asset-calculator": "^2.3.1",
     "@rosen-ui/data-source": "^0.2.2",
-    "@rosen-ui/rosen-statistics-entity": "^0.2.0"
+    "@rosen-ui/rosen-statistics-entity": "^0.2.0",
+    "lodash-es": "^4.17.23"
+  },
+  "devDependencies": {
+    "@vitest/coverage-istanbul": "^3.1.4",
+    "tsx": "^4.19.4",
+    "vitest": "^3.1.4"
+  },
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }
