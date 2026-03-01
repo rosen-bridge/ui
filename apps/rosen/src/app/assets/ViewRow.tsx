@@ -38,10 +38,10 @@ export const ViewRow = ({
       <TableGridHeader>
         <TableGridCell>Name</TableGridCell>
         <TableGridCell>Network</TableGridCell>
-        <TableGridCell hidden="tablet-down">Locked</TableGridCell>
-        <TableGridCell hidden="desktop-down">Hot</TableGridCell>
-        <TableGridCell hidden="desktop-down">Cold</TableGridCell>
-        <TableGridCell hidden="laptop-down">Bridged</TableGridCell>
+        <TableGridCell skip="tablet-down">Locked</TableGridCell>
+        <TableGridCell skip="desktop-down">Hot</TableGridCell>
+        <TableGridCell skip="desktop-down">Cold</TableGridCell>
+        <TableGridCell skip="laptop-down">Bridged</TableGridCell>
         <TableGridCell width="3.65rem" />
       </TableGridHeader>
       <TableGridBody>
@@ -54,7 +54,7 @@ export const ViewRow = ({
                 style={{ gridColumn: '1/-1' }}
               />
             )}
-            <TableGridRow hidden={isLoading} id={item.id}>
+            <TableGridRow id={item.id} skip={isLoading}>
               <TableGridCell>
                 <Token
                   href={item.tokenUrl}
@@ -65,16 +65,16 @@ export const ViewRow = ({
               <TableGridCell>
                 <Network name={item.chain} />
               </TableGridCell>
-              <TableGridCell hidden="tablet-down">
+              <TableGridCell skip="tablet-down">
                 <Amount value={item.lockedAmount} />
               </TableGridCell>
-              <TableGridCell hidden="desktop-down">
+              <TableGridCell skip="desktop-down">
                 <Amount value={item.hotAmount} href={item.hotUrl} />
               </TableGridCell>
-              <TableGridCell hidden="desktop-down">
+              <TableGridCell skip="desktop-down">
                 <Amount value={item.coldAmount} href={item.coldUrl} />
               </TableGridCell>
-              <TableGridCell hidden="laptop-down">
+              <TableGridCell skip="laptop-down">
                 <Amount value={item.bridgedAmount} />
               </TableGridCell>
               <TableGridCell>

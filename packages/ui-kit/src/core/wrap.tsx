@@ -24,23 +24,23 @@ export type ElementPropsBase<E extends ElementType> = {
 
 export type WrapProps<P> = {
   className?: string;
-  hidden?: boolean | Breakpoint | `${Breakpoint}-${'up' | 'down' | 'not'}` | `${Breakpoint}-to-${Breakpoint}`;
+  skip?: boolean | Breakpoint | `${Breakpoint}-${'up' | 'down' | 'not'}` | `${Breakpoint}-to-${Breakpoint}`;
   rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
-} & Omit<P, 'hidden'>;
+} & P;
 
 export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseComponent: ComponentType<P>) => {
   const componentName = BaseComponent.displayName || BaseComponent.name || 'Wrap';
 
   const WrappedComponent = forwardRef<any, WrapProps<any>>((props, ref) => {
-    const { className, hidden, rewrite, ...rest } = props;
+    const { className, rewrite, skip, ...rest } = props;
 
     const config = useConfigs();
 
     const current = useCurrentBreakpoint();
 
-    const matchesHiddenBreakpoint = typeof hidden === 'string' ? useBreakpoint(hidden as any) : false;
+    const matchesSkippedBreakpoint = typeof skip === 'string' ? useBreakpoint(skip as any) : false;
 
-    const isHidden = hidden === true || matchesHiddenBreakpoint;
+    const isSkipped = skip === true || matchesSkippedBreakpoint;
 
     const classes = useMemo(() => {
       return [`${PREFIX}-${componentName}`, className]
@@ -74,7 +74,7 @@ export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseC
       return { ...baseProps, ...applied };
     }, [config, componentName, current, rest, rewrite]);
 
-    if (isHidden) return null;
+    if (isSkipped) return null;
 
     return (
       <BaseComponent
