@@ -1,0 +1,9 @@
+.rosen-TableGridBodyDetails {
+  grid-column: 1 / -1;
+}
+
+.rosen-TableGridBodyDetails .MuiCollapse-wrapperInner {
+  border-top: 1px solid var(--rosen-palette-divider);
+  padding: 0 calc(var(--rosen-spacing) * 2) var(--rosen-spacing);
+  margin-top: var(--rosen-spacing);
+}

@@ -11,32 +11,37 @@ import {
 
 import { Breakpoint } from '@mui/material';
 
-import { useCurrentBreakpoint } from '../hooks';
+import { useBreakpoint, useCurrentBreakpoint } from '../hooks';
 import { useConfigs } from '../Providers';
 
 const BREAKPOINT_ORDER: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop'];
 
 const PREFIX = 'rosen';
 
-export type ElementPropsBase<E extends ElementType> =  {
+export type ElementPropsBase<E extends ElementType> = {
   as?: E;
 } & ComponentPropsWithoutRef<E>;
 
 export type WrapProps<P> = {
   className?: string;
+  hidden?: boolean | Breakpoint | `${Breakpoint}-${'up' | 'down' | 'not'}` | `${Breakpoint}-to-${Breakpoint}`;
   rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
-} & P;
+} & Omit<P, 'hidden'>;
 
 export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseComponent: ComponentType<P>) => {
   const componentName = BaseComponent.displayName || BaseComponent.name || 'Wrap';
 
-  const WrappedComponent = forwardRef<any, WrapProps<P>>((props, ref) => {
+  const WrappedComponent = forwardRef<any, WrapProps<any>>((props, ref) => {
     const { className, hidden, rewrite, ...rest } = props;
 
     const config = useConfigs();
 
     const current = useCurrentBreakpoint();
-    
+
+    const matchesHiddenBreakpoint = typeof hidden === 'string' ? useBreakpoint(hidden as any) : false;
+
+    const isHidden = hidden === true || matchesHiddenBreakpoint;
+
     const classes = useMemo(() => {
       return [`${PREFIX}-${componentName}`, className]
         .filter(Boolean)
@@ -69,7 +74,7 @@ export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseC
       return { ...baseProps, ...applied };
     }, [config, componentName, current, rest, rewrite]);
 
-    if (hidden) return null;
+    if (isHidden) return null;
 
     return (
       <BaseComponent
@@ -111,18 +116,28 @@ export const Root = <E extends ElementType>(props: RootProps<E>) => {
 
       const isValid = option.style.color !== '';
 
-      result[`--${PREFIX}-${key}`] = isValid 
-        ? `${value}` 
+      result[`--${PREFIX}-${key}`] = isValid
+        ? `${value}`
         : `var(--${PREFIX}-palette-${value})`;
 
       return result;
     }, {} as Record<string, string>);
 
-  const reflected = Object.fromEntries(
-    Object.entries(reflects || {}).map(([key, value]) => [`data-${key}`, `${value}`])
-  );
+  const reflected = useMemo(() => {
+    if (!reflects) return {};
 
-  const mergedStyles = Object.assign({}, colors, styles, style);
+    const result: Record<string, string> = {};
+
+    for (const key in reflects) {
+      const value = reflects[key];
+      if (value === undefined) continue;
+      result[`data-${key}`] = String(value);
+    }
+
+    return result;
+  }, [reflects]);
+
+  const mergedStyles = useMemo(() => Object.assign({}, colors, styles, style), [colors, styles, style]);
 
   return <Component {...reflected} style={mergedStyles} {...rest} />
 }

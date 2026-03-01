@@ -1,0 +1,24 @@
+.rosen-TableGridCell {
+  align-self: center;
+  min-width: 0px;
+  color: var(--rosen-palette-text-primary);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 calc(var(--rosen-spacing) * 1.5);
+  &:first-of-type {
+    padding-left: calc(var(--rosen-spacing) * 2),
+  }
+  &:last-of-type {
+    padding-right: calc(var(--rosen-spacing) * 2),
+  }
+}
+
+.rosen-TableGridHeader .rosen-TableGridCell {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--rosen-palette-text-secondary);
+  text-transform: uppercase;
+}

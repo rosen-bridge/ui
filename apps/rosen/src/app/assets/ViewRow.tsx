@@ -1,21 +1,19 @@
 import { Fragment } from 'react';
 
-import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Amount,
   Columns,
+  Icon,
   IconButton,
   Label,
   Network,
   Skeleton,
-  SvgIcon,
   TableGrid,
   TableGridBody,
-  TableGridBodyCol,
   TableGridBodyDetails,
-  TableGridBodyRow,
-  TableGridHead,
-  TableGridHeadCol,
+  TableGridCell,
+  TableGridHeader,
+  TableGridRow,
   Token,
 } from '@rosen-bridge/ui-kit';
 
@@ -37,15 +35,15 @@ export const ViewRow = ({
 }: ViewRowProps) => {
   return (
     <TableGrid>
-      <TableGridHead>
-        <TableGridHeadCol>Name</TableGridHeadCol>
-        <TableGridHeadCol>Network</TableGridHeadCol>
-        <TableGridHeadCol hideOn="tablet-down">Locked</TableGridHeadCol>
-        <TableGridHeadCol hideOn="desktop-down">Hot</TableGridHeadCol>
-        <TableGridHeadCol hideOn="desktop-down">Cold</TableGridHeadCol>
-        <TableGridHeadCol hideOn="laptop-down">Bridged</TableGridHeadCol>
-        <TableGridHeadCol style={{ padding: 0 }} width="2.5rem" />
-      </TableGridHead>
+      <TableGridHeader>
+        <TableGridCell>Name</TableGridCell>
+        <TableGridCell>Network</TableGridCell>
+        <TableGridCell hidden="tablet-down">Locked</TableGridCell>
+        <TableGridCell hidden="desktop-down">Hot</TableGridCell>
+        <TableGridCell hidden="desktop-down">Cold</TableGridCell>
+        <TableGridCell hidden="laptop-down">Bridged</TableGridCell>
+        <TableGridCell width="3.65rem" />
+      </TableGridHeader>
       <TableGridBody>
         {items.map((item, index) => (
           <Fragment key={item.id || index}>
@@ -56,94 +54,90 @@ export const ViewRow = ({
                 style={{ gridColumn: '1/-1' }}
               />
             )}
-            {!isLoading && (
-              <TableGridBodyRow id={item.id}>
-                <TableGridBodyCol>
-                  <Token
-                    href={item.tokenUrl}
-                    name={item.name}
-                    ergoSideTokenId={item.ergoSideTokenId}
-                  />
-                </TableGridBodyCol>
-                <TableGridBodyCol>
-                  <Network name={item.chain} />
-                </TableGridBodyCol>
-                <TableGridBodyCol>
-                  <Amount value={item.lockedAmount} />
-                </TableGridBodyCol>
-                <TableGridBodyCol>
-                  <Amount value={item.hotAmount} href={item.hotUrl} />
-                </TableGridBodyCol>
-                <TableGridBodyCol>
-                  <Amount value={item.coldAmount} href={item.coldUrl} />
-                </TableGridBodyCol>
-                <TableGridBodyCol>
-                  <Amount value={item.bridgedAmount} />
-                </TableGridBodyCol>
-                <TableGridBodyCol style={{ padding: 0 }}>
-                  <IconButton
-                    size="small"
-                    onClick={() => {
-                      setCurrent(current?.id === item.id ? undefined : item);
+            <TableGridRow hidden={isLoading} id={item.id}>
+              <TableGridCell>
+                <Token
+                  href={item.tokenUrl}
+                  name={item.name}
+                  ergoSideTokenId={item.ergoSideTokenId}
+                />
+              </TableGridCell>
+              <TableGridCell>
+                <Network name={item.chain} />
+              </TableGridCell>
+              <TableGridCell hidden="tablet-down">
+                <Amount value={item.lockedAmount} />
+              </TableGridCell>
+              <TableGridCell hidden="desktop-down">
+                <Amount value={item.hotAmount} href={item.hotUrl} />
+              </TableGridCell>
+              <TableGridCell hidden="desktop-down">
+                <Amount value={item.coldAmount} href={item.coldUrl} />
+              </TableGridCell>
+              <TableGridCell hidden="laptop-down">
+                <Amount value={item.bridgedAmount} />
+              </TableGridCell>
+              <TableGridCell>
+                <IconButton
+                  size="small"
+                  onClick={() => {
+                    setCurrent(current?.id === item.id ? undefined : item);
+                  }}
+                >
+                  <Icon name={current?.id === item.id ? 'AngleUp' : 'AngleDown'} />
+                </IconButton>
+              </TableGridCell>
+              <TableGridBodyDetails expanded={current?.id === item.id}>
+                <Columns width="175px" count={2} rule gap="16px">
+                  <Label
+                    label="Locked"
+                    orientation="horizontal"
+                    overrides={{
+                      tablet: {
+                        style: { display: 'none' },
+                      },
                     }}
                   >
-                    <SvgIcon>
-                      {current?.id === item.id ? <AngleUp /> : <AngleDown />}
-                    </SvgIcon>
-                  </IconButton>
-                </TableGridBodyCol>
-                <TableGridBodyDetails expanded={current?.id === item.id}>
-                  <Columns width="175px" count={2} rule gap="16px">
-                    <Label
-                      label="Locked"
-                      orientation="horizontal"
-                      overrides={{
-                        tablet: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.lockedAmount} />
-                    </Label>
-                    <Label
-                      label="Hot"
-                      orientation="horizontal"
-                      overrides={{
-                        desktop: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.hotAmount} />
-                    </Label>
-                    <Label
-                      label="Cold"
-                      orientation="horizontal"
-                      overrides={{
-                        desktop: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.coldAmount} />
-                    </Label>
-                    <Label
-                      label="Bridged"
-                      orientation="horizontal"
-                      overrides={{
-                        laptop: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.bridgedAmount} />
-                    </Label>
-                  </Columns>
-                  <Label label="Bridged to" />
-                  {current?.id === item.id && <BridgedList value={item} />}
-                </TableGridBodyDetails>
-              </TableGridBodyRow>
-            )}
+                    <Amount value={item.lockedAmount} />
+                  </Label>
+                  <Label
+                    label="Hot"
+                    orientation="horizontal"
+                    overrides={{
+                      desktop: {
+                        style: { display: 'none' },
+                      },
+                    }}
+                  >
+                    <Amount value={item.hotAmount} />
+                  </Label>
+                  <Label
+                    label="Cold"
+                    orientation="horizontal"
+                    overrides={{
+                      desktop: {
+                        style: { display: 'none' },
+                      },
+                    }}
+                  >
+                    <Amount value={item.coldAmount} />
+                  </Label>
+                  <Label
+                    label="Bridged"
+                    orientation="horizontal"
+                    overrides={{
+                      laptop: {
+                        style: { display: 'none' },
+                      },
+                    }}
+                  >
+                    <Amount value={item.bridgedAmount} />
+                  </Label>
+                </Columns>
+                <Label label="Bridged to" />
+                {current?.id === item.id && <BridgedList value={item} />}
+              </TableGridBodyDetails>
+            </TableGridRow>
           </Fragment>
         ))}
       </TableGridBody>
