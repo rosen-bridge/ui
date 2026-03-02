@@ -22,7 +22,7 @@ import {
 import { IconButton } from '../../base';
 import { Divider } from '../Divider';
 import { SvgIcon } from '../SvgIcon';
-import { Truncate } from '../Truncate';
+import { Truncate } from '../../truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';

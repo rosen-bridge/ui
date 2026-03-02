@@ -1,5 +1,6 @@
 @use './center/center';
 @use './columns/columns';
+@use './connector/connector';
 @use './gridContainer/gridContainer';
 @use './icon/icon';
 @use './identifier/identifier';
@@ -9,6 +10,7 @@
 @use './tableGrid/tableGridCell';
 @use './tableGrid/tableGridHeader';
 @use './tableGrid/tableGridRow';
+@use './truncate/truncate';
 
 :root {
   --rosen-spacing: 8px;

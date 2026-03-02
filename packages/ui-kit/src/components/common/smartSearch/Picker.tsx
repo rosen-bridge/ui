@@ -212,7 +212,6 @@ export const Picker = ({
                 secondaryAction={post}
               >
                 <ListItemButton
-                  ref={(el) => (itemRefs.current[index] = el)}
                   selected={indexSelected === index}
                   onClick={() => handleClick(option)}
                 >

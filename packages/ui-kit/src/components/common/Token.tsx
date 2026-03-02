@@ -10,7 +10,7 @@ import { InjectOverrides } from './InjectOverrides';
 import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';
 import { Text } from './Text';
-import { Truncate } from './Truncate';
+import { Truncate } from '../truncate';
 
 /**
  * Props for the Token component.

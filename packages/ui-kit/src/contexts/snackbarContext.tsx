@@ -151,7 +151,7 @@ function snackbarReducer(state: State, action: SnackbarAction) {
  * </SnackbarProvider>
  */
 export const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
-  const [state, dispatch] = useReducer<typeof snackbarReducer>(
+  const [state, dispatch] = useReducer(
     snackbarReducer,
     {
       isOpen: false,

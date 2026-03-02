@@ -4,7 +4,7 @@ import { Skeleton, Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Card, CardBody } from '../card';
-import { Connector } from '../Connector';
+import { Connector } from '../../connector';
 import { Amount, Network } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';

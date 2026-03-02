@@ -9,7 +9,7 @@ declare module '@rosen-bridge/ui-kit' {
   interface GapOverrides {}
 
   interface IconOverrides {
-    name: Omit<keyof typeof AllIcons, 'TOKENS'>;
+    name: Exclude<keyof typeof AllIcons, 'TOKENS'>;
   }
 }
 export {};

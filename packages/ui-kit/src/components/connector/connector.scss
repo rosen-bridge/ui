@@ -1,0 +1,15 @@
+.rosen-Connector { 
+  display: inline-flex;
+  padding: calc(var(--rosen-spacing) * 0.5);
+  border-radius: calc(var(--rosen-spacing) * 4);
+  flex-direction: row;
+  align-items: center;
+}
+
+.rosen-Connector[data-variant=filled] {
+  background-color: var(--rosen-palette-neutral-light);
+}
+
+.rosen-Connector[data-variant=standard] {
+  background-color: transparent;
+}
