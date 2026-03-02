@@ -455,6 +455,79 @@ export const eventCountMetricActionTestData = {
   },
 };
 
+export const lockedAssetsMetricActionTestData = {
+  /**
+   * Scenario: Get locked assets with multiple tokens
+   * - 3 tokens with different significantDecimals
+   * - Multiple locked assets for each token
+   */
+  getLockedAssetsMultipleTokens: {
+    tokens: [
+      {
+        id: 'token-1',
+        name: 'Token 1',
+        decimal: 8,
+        significantDecimal: 8,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-2',
+        name: 'Token 2',
+        decimal: 6,
+        significantDecimal: 6,
+        isNative: false,
+        chain: 'cardano' as const,
+        ergoSideTokenId: 'cardano-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-3',
+        name: 'Token 3',
+        decimal: 18,
+        significantDecimal: 18,
+        isNative: true,
+        chain: 'ethereum' as const,
+        ergoSideTokenId: 'eth-token-1',
+        isResident: false,
+      },
+      {
+        id: 'token-4',
+        name: 'Token 4',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: true,
+        chain: 'bitcoin' as const,
+        ergoSideTokenId: 'btc-token-1',
+        isResident: true,
+      },
+    ],
+    lockedAssets: [
+      { address: 'addr1', tokenId: 'token-1', amount: 1000n },
+      { address: 'addr2', tokenId: 'token-1', amount: 2000n },
+      { address: 'addr3', tokenId: 'token-1', amount: 1500n },
+      { address: 'addr4', tokenId: 'token-2', amount: 500n },
+      { address: 'addr5', tokenId: 'token-2', amount: 500n },
+      { address: 'addr6', tokenId: 'token-3', amount: 1000000n },
+      { address: 'addr7', tokenId: 'token-4', amount: 9223372036854775807n }, // Max safe integer
+    ],
+    expectedResults: [
+      { tokenId: 'token-1', amount: 1000n, significantDecimal: 8 },
+      { tokenId: 'token-1', amount: 2000n, significantDecimal: 8 },
+      { tokenId: 'token-1', amount: 1500n, significantDecimal: 8 },
+      { tokenId: 'token-2', amount: 500n, significantDecimal: 6 },
+      { tokenId: 'token-2', amount: 500n, significantDecimal: 6 },
+      { tokenId: 'token-3', amount: 1000000n, significantDecimal: 18 },
+      {
+        tokenId: 'token-4',
+        amount: 9223372036854775808n,
+        significantDecimal: 0,
+      },
+    ],
+  },
+};
 export const userEventMetricActionTestData = {
   /**
    * Scenario: Get last processed height
