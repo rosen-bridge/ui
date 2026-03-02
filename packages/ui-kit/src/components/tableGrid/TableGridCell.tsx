@@ -1,11 +1,23 @@
 import { ComponentProps } from 'react';
-import { ElementPropsBase, Root, Wrap } from '../../core'; 
+import { ElementBaseProps, Root, Wrap } from '../../core';
+import { OverridableType } from '../../@types';
 
-export type TableGridCellPropsBase = {
-    width?: string;
-} & ElementPropsBase<'div'>;
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface TableGridCellOverrides {}
 
-export const TableGridCellBase = ({ width, ...rest }: TableGridCellPropsBase) => {
+export type TableGridCellOwnProps = { 
+  width?: string;
+};
+
+export type TableGridCellBaseProps = ElementBaseProps<'div', TableGridCellOwnProps>;
+
+export type TableGridCellOverriddenProps = OverridableType<
+  TableGridCellBaseProps,
+  TableGridCellOverrides,
+  never
+>;
+
+export const TableGridCellBase = ({ width, ...rest }: TableGridCellOverriddenProps) => {
   return <Root reflects={{ width }} {...rest} />;
 };
 

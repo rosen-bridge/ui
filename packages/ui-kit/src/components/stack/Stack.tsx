@@ -1,9 +1,9 @@
 import { ComponentProps } from 'react';
 
 import { GapOverridden, OverridableType } from '../../@types';
-import { ElementPropsBase, Root, Wrap } from '../../core';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
-const ALIGN_MAP: Record<NonNullable<StackPropsBase['align']>, string> = {
+const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {
   baseline: 'baseline',
   center: 'center',
   end: 'flex-end',
@@ -11,7 +11,7 @@ const ALIGN_MAP: Record<NonNullable<StackPropsBase['align']>, string> = {
   stretch: 'stretch',
 };
 
-const JUSTIFY_MAP: Record<NonNullable<StackPropsBase['justify']>, string> = {
+const JUSTIFY_MAP: Record<NonNullable<StackBaseProps['justify']>, string> = {
   around: 'space-around',
   between: 'space-between',
   center: 'center',
@@ -23,7 +23,7 @@ const JUSTIFY_MAP: Record<NonNullable<StackPropsBase['justify']>, string> = {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface StackOverrides { }
 
-export type StackPropsBase = {
+export type StackOwnProps = {
   /** Defines how children are aligned along the cross-axis. */
   align?: 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 
@@ -41,10 +41,12 @@ export type StackPropsBase = {
 
   /** Whether children should wrap to the next line/column. */
   wrap?: boolean;
-} & ElementPropsBase<'div'>;
+};
 
-export type StackPropsBaseOverridden = OverridableType<
-  StackPropsBase,
+export type StackBaseProps = ElementBaseProps<'div', StackOwnProps>;
+
+export type StackOverriddenProps = OverridableType<
+  StackBaseProps,
   StackOverrides,
   'spacing'
 >;
@@ -68,7 +70,7 @@ export const StackBase = ({
   inline,
   justify,
   ...rest
-}: StackPropsBaseOverridden) => {
+}: StackOverriddenProps) => {
   const styles = {
     display: inline ? 'inline-flex' : 'flex',
     flexDirection: direction,

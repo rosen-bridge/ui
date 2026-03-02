@@ -28,18 +28,17 @@
     "type-check": "tsc"
   },
   "devDependencies": {
-    "@types/react": "^18.3.1",
     "glob": "^11.0.1",
     "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4",
     "vite-plugin-static-copy": "^3.1.4",
     "vite-plugin-svgr": "^4.5.0"
   },
-  "peerDependencies": {
-    "react": "^18.3.1"
-  },
   "engines": {
     "node": ">=22.18.0",
     "npm": "11.6.2"
+  },
+  "peerDependencies": {
+    "react": "^19.2.4"
   }
 }

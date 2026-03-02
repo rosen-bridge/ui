@@ -1,12 +1,12 @@
 import { ComponentProps } from 'react';
 
 import { GapOverridden, OverridableType } from '../../@types';
-import { ElementPropsBase, Root, Wrap } from '../../core';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GridContainerOverrides {}
 
-export type GridContainerPropsBase = {
+export type GridContainerOwnProps = {
   /**
    * The gap between grid items.
    * If a number is provided, it will be interpreted as pixels (`px`).
@@ -22,10 +22,12 @@ export type GridContainerPropsBase = {
    * You can also pass a CSS length string.
    */
   minWidth?: number | string;
-} & ElementPropsBase<'div'>;
+};
 
-export type GridContainerPropsBaseOverridden = OverridableType<
-  GridContainerPropsBase,
+export type GridContainerBaseProps = ElementBaseProps<'div', GridContainerOwnProps>;
+
+export type GridContainerOverriddenProps = OverridableType<
+  GridContainerBaseProps,
   GridContainerOverrides,
   'gap'
 >;
@@ -51,7 +53,7 @@ export const GridContainerBase = ({
   gap,
   minWidth,
   ...rest
-}: GridContainerPropsBaseOverridden) => {
+}: GridContainerOverriddenProps) => {
   const styles = {
     gap,
     gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}, 1fr))`,

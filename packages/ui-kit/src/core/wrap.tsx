@@ -1,11 +1,8 @@
-/* eslint-disable */
-
 import {
-  ComponentPropsWithoutRef,
+  ComponentPropsWithRef,
   ComponentType,
   CSSProperties,
   ElementType,
-  forwardRef,
   useMemo,
 } from 'react';
 
@@ -18,9 +15,7 @@ const BREAKPOINT_ORDER: Breakpoint[] = ['mobile', 'tablet', 'laptop', 'desktop']
 
 const PREFIX = 'rosen';
 
-export type ElementPropsBase<E extends ElementType> = {
-  as?: E;
-} & ComponentPropsWithoutRef<E>;
+export type ElementBaseProps<E extends ElementType, P = {}> = P & Omit<ComponentPropsWithRef<E>, keyof P>;
 
 export type WrapProps<P> = {
   className?: string;
@@ -28,12 +23,10 @@ export type WrapProps<P> = {
   rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
 } & P;
 
-export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseComponent: ComponentType<P>) => {
-  const componentName = BaseComponent.displayName || BaseComponent.name || 'Wrap';
+export const Wrap = <P,>(Base: ComponentType<P>) => {
+  const componentName = Base.displayName || Base.name || 'Wrap';
 
-  const WrappedComponent = forwardRef<any, WrapProps<any>>((props, ref) => {
-    const { className, rewrite, skip, ...rest } = props;
-
+  const Wrapped = ({ className, rewrite, skip, ...rest }: WrapProps<P>) => {
     const config = useConfigs();
 
     const current = useCurrentBreakpoint();
@@ -76,52 +69,29 @@ export const Wrap = <E extends ElementType, P extends ElementPropsBase<E>>(BaseC
 
     if (isSkipped) return null;
 
-    return (
-      <BaseComponent
-        className={classes}
-        ref={ref}
-        {...mergedProps}
-      />
-    );
-  });
+    return <Base className={classes} {...mergedProps} />;
+  }
 
-  WrappedComponent.displayName = componentName;
+  Wrapped.displayName = componentName;
 
-  return WrappedComponent;
+  return Wrapped;
 }
 
-export type RootProps<E extends ElementType> = {
-  cssColorVars?: Record<string, string>;
+export type RootProps<E extends ElementType> = ElementBaseProps<E, {
+  as?: E;
   reflects?: Record<string, boolean | number | string | undefined>;
+  style?: CSSProperties;
   styles?: CSSProperties;
-} & ElementPropsBase<E>;
+}>;
 
-export const Root = <E extends ElementType>(props: RootProps<E>) => {
-  const {
-    as,
-    cssColorVars,
-    cssSizeVars,
-    reflects,
-    style,
-    styles,
-    ...rest
-  } = props;
+export const Root = <E extends ElementType = 'div'>({
+  as,
+  reflects,
+  style,
+  styles,
+  ...rest
+}: RootProps<E>) => {
   const Component = (as || 'div') as ElementType;
-
-  const colors = Object.entries(cssSizeVars || {})
-    .reduce((result, [key, value]) => {
-      const option = new Option();
-
-      option.style.color = `${value}`;
-
-      const isValid = option.style.color !== '';
-
-      result[`--${PREFIX}-${key}`] = isValid
-        ? `${value}`
-        : `var(--${PREFIX}-palette-${value})`;
-
-      return result;
-    }, {} as Record<string, string>);
 
   const reflected = useMemo(() => {
     if (!reflects) return {};
@@ -137,7 +107,7 @@ export const Root = <E extends ElementType>(props: RootProps<E>) => {
     return result;
   }, [reflects]);
 
-  const mergedStyles = useMemo(() => Object.assign({}, colors, styles, style), [colors, styles, style]);
+  const mergedStyles = useMemo(() => Object.assign({}, styles, style), [styles, style]);
 
   return <Component {...reflected} style={mergedStyles} {...rest} />
 }

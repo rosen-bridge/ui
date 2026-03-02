@@ -1,7 +1,7 @@
 import { ComponentProps, useState } from 'react';
 
 import { OverridableType } from '../../@types';
-import { ElementPropsBase, Root, Wrap } from '../../core';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 import { IconButton, Skeleton, Tooltip } from '../base';
 import { CopyButton, QrCodeModal } from '../common';
@@ -10,7 +10,7 @@ import { Icon } from '../icon';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IdentifierOverrides { }
 
-export type IdentifierPropsBase = {
+export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
   copyable?: boolean;
 
@@ -31,10 +31,12 @@ export type IdentifierPropsBase = {
 
   /** The main string value to display (e.g., an identifier or long string) */
   value?: string;
-} & ElementPropsBase<'div'>;
+};
 
-export type IdentifierPropsBaseOverridden = OverridableType<
-  IdentifierPropsBase,
+export type IdentifierBaseProps = ElementBaseProps<'div', IdentifierOwnProps>;
+
+export type IdentifierOverriddenProps = OverridableType<
+  IdentifierBaseProps,
   IdentifierOverrides,
   never
 >;
@@ -64,7 +66,7 @@ export const IdentifierBase = ({
   trailingLength = 5,
   value = '',
   ...rest
-}: IdentifierPropsBaseOverridden) => {
+}: IdentifierOverriddenProps) => {
   const [open, setOpen] = useState(false);
 
   const hasValue = Boolean(value);

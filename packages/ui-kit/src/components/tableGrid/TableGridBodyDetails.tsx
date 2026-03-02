@@ -1,12 +1,24 @@
 import { ComponentProps } from 'react';
-import { ElementPropsBase, Root, Wrap } from '../../core';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 import { Collapse } from '../base';
+import { OverridableType } from '../../@types';
 
-export type TableGridBodyDetailsPropsBase = {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface TableGridBodyDetailsOverrides {}
+
+export type TableGridBodyDetailsOwnProps = { 
   expanded?: boolean;
-} & ElementPropsBase<'div'>;
+};
 
-export const TableGridBodyDetailsBase = ({ children, expanded, ...rest }: TableGridBodyDetailsPropsBase) => {
+export type TableGridBodyDetailsBaseProps = ElementBaseProps<'div', TableGridBodyDetailsOwnProps>;
+
+export type TableGridBodyDetailsOverriddenProps = OverridableType<
+  TableGridBodyDetailsBaseProps,
+  TableGridBodyDetailsOverrides,
+  never
+>;
+
+export const TableGridBodyDetailsBase = ({ children, expanded, ...rest }: TableGridBodyDetailsOverriddenProps) => {
   return (
     <Root {...rest}>
       <Collapse in={expanded}>

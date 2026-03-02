@@ -1,12 +1,12 @@
 import { ComponentProps } from 'react';
 
 import { GapOverridden, OverridableType } from '../../@types';
-import { ElementPropsBase, Root, Wrap } from '../../core';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ColumnsOverrides {}
 
-export type ColumnsPropsBase = {
+export type ColumnsOwnProps = {
   /**
    * The count.
    * To specify the desired column
@@ -30,10 +30,12 @@ export type ColumnsPropsBase = {
    * Accepts any valid CSS length, e.g. `'240px'`.
    */
   width?: number | string;
-} & ElementPropsBase<'div'>;
+};
 
-export type ColumnsPropsBaseOverridden = OverridableType<
-  ColumnsPropsBase,
+export type ColumnsBaseProps = ElementBaseProps<'div', ColumnsOwnProps>;
+
+export type ColumnsOverriddenProps = OverridableType<
+  ColumnsBaseProps,
   ColumnsOverrides,
   'gap'
 >;
@@ -49,7 +51,7 @@ export const ColumnsBase = ({
   rule,
   width,
   ...rest
-}: ColumnsPropsBaseOverridden) => {
+}: ColumnsOverriddenProps) => {
   const styles = {
     columnWidth: width,
     columnGap: gap,

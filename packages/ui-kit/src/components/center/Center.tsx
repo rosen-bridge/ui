@@ -1,11 +1,23 @@
 import { ComponentProps } from 'react';
-import { ElementPropsBase, Root, Wrap } from '../../core'; 
- 
-export type CenterPropsBase = {
-  inline?: boolean;
-} & ElementPropsBase<'div'>;
+import { ElementBaseProps, Root, Wrap } from '../../core';
+import { OverridableType } from '../../@types';
 
-export const CenterBase = ({ inline, ...rest }: CenterPropsBase) => {
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CenterOverrides {}
+
+export type CenterOwnProps = {
+  inline?: boolean;
+};
+
+export type CenterBaseProps = ElementBaseProps<'div', CenterOwnProps>;
+
+export type CenterOverriddenProps = OverridableType<
+  CenterBaseProps,
+  CenterOverrides,
+  never
+>;
+
+export const CenterBase = ({ inline, ...rest  }: CenterOverriddenProps) => {
   return <Root reflects={{ inline }} {...rest} />;
 };
 

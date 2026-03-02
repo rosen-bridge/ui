@@ -1,20 +1,22 @@
 import { ComponentProps, FC, SVGAttributes } from 'react';
 
 import { ColorOverridden, OverridableType } from '../../@types';
-import { ElementPropsBase, Root, Wrap } from '../../core';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconOverrides {}
 
-export type IconPropsBase = {
+export type IconOwnProps = {
   color?: ColorOverridden;
   icons?: Record<string, FC<SVGAttributes<SVGElement>>>;
   name?: string & {};
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
-} & ElementPropsBase<'svg'>;
+};
 
-export type IconPropsBaseOverridden = OverridableType<
-  IconPropsBase,
+export type IconBaseProps = ElementBaseProps<'svg', IconOwnProps>;
+
+export type IconOverriddenProps = OverridableType<
+  IconBaseProps,
   IconOverrides,
   'color' | 'name' | 'size'
 >;
@@ -25,7 +27,7 @@ export const IconBase = ({
   name,
   size = 'medium',
   ...rest
-}: IconPropsBaseOverridden) => {
+}: IconOverriddenProps) => {
   if (!icons || !name || !(name in icons)) return null;
 
   const Icon = icons[name];
@@ -36,7 +38,7 @@ export const IconBase = ({
 
   // TODO: parser for color and size
 
-  return <Root reflects={{ color, size }} {...rest} as={Icon} />;
+  return <Root as={Icon} reflects={{ color, size }} {...rest} />;
 };
 
 IconBase.displayName = 'Icon';

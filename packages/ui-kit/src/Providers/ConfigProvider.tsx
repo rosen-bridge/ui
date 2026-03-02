@@ -1,21 +1,33 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import type {
-  CenterProps,
-  ColumnsProps,
-  GridContainerProps,
-  IconProps,
-  IdentifierProps,
-  StackProps,
+  CenterOverriddenProps,
+  ColumnsOverriddenProps,
+  GridContainerOverriddenProps,
+  IconOverriddenProps,
+  IdentifierOverriddenProps,
+  StackOverriddenProps,
+  TableGridOverriddenProps,
+  TableGridBodyOverriddenProps,
+  TableGridBodyDetailsOverriddenProps,
+  TableGridCellOverriddenProps,
+  TableGridHeaderOverriddenProps,
+  TableGridRowOverriddenProps,
 } from '../components';
 
 type Components = {
-  Center: CenterProps;
-  Columns: ColumnsProps;
-  GridContainer: GridContainerProps;
-  Icon: IconProps;
-  Identifier: IdentifierProps;
-  StackProps: StackProps;
+  Center: CenterOverriddenProps;
+  Columns: ColumnsOverriddenProps;
+  GridContainer: GridContainerOverriddenProps;
+  Icon: IconOverriddenProps;
+  Identifier: IdentifierOverriddenProps;
+  Stack: StackOverriddenProps;
+  TableGrid: TableGridOverriddenProps;
+  TableGridBody: TableGridBodyOverriddenProps;
+  TableGridBodyDetails: TableGridBodyDetailsOverriddenProps;
+  TableGridCell: TableGridCellOverriddenProps;
+  TableGridHeader: TableGridHeaderOverriddenProps;
+  TableGridRow: TableGridRowOverriddenProps;
 };
 
 export const useConfigs = () => {

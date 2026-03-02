@@ -27,18 +27,16 @@
     "@rosen-ui/utils": "^1.0.2",
     "moment": "^2.29.4",
     "next": "^15.5.12",
-    "react": "^18.3.1",
+    "react": "^19.2.4",
     "react-apexcharts": "^1.4.0",
-    "react-dom": "^18.3.1",
-    "react-hook-form": "^7.45.1",
-    "swr": "^2.2.0"
+    "react-dom": "^19.2.4",
+    "react-hook-form": "^7.71.2",
+    "swr": "^2.4.1"
   },
   "devDependencies": {
     "@rosen-ui/types": "^0.4.1",
     "@tauri-apps/cli": "^1.4.0",
-    "@types/moment": "^2.13.0",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.1"
+    "@types/moment": "^2.13.0"
   },
   "engines": {
     "node": ">=22.18.0",
