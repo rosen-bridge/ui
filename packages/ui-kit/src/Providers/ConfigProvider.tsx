@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext } from 'react';
 import type {
   CenterOverriddenProps,
   ColumnsOverriddenProps,
+  ConnectorOverriddenProps,
   GridContainerOverriddenProps,
   IconOverriddenProps,
   IdentifierOverriddenProps,
@@ -13,11 +14,13 @@ import type {
   TableGridCellOverriddenProps,
   TableGridHeaderOverriddenProps,
   TableGridRowOverriddenProps,
+  TruncateOverriddenProps,
 } from '../components';
 
 type Components = {
   Center: CenterOverriddenProps;
   Columns: ColumnsOverriddenProps;
+  Connector: ConnectorOverriddenProps;
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
   Identifier: IdentifierOverriddenProps;
@@ -28,6 +31,7 @@ type Components = {
   TableGridCell: TableGridCellOverriddenProps;
   TableGridHeader: TableGridHeaderOverriddenProps;
   TableGridRow: TableGridRowOverriddenProps;
+  Truncate: TruncateOverriddenProps;
 };
 
 export const useConfigs = () => {
