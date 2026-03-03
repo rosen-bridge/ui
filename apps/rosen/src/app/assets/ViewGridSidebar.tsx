@@ -43,7 +43,7 @@ const Content = ({ value }: ViewGridSidebarProps) => {
         />
       </Label>
       <Label label="Network">
-        <Network name={value.chain} reverse />
+        <Network name={value.chain} variant='reverse' />
       </Label>
       <Label label="Locked" orientation="horizontal">
         <Amount value={value.lockedAmount} />

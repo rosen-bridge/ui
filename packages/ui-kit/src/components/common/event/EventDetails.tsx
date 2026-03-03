@@ -5,7 +5,8 @@ import { AngleRight } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Columns } from '../../columns';
-import { Amount, Label, LabelGroup, Network } from '../display';
+import { Amount, Label, LabelGroup } from '../display';
+import { Network } from '../../network';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { Stack } from '../../stack';
@@ -87,10 +88,10 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
             <Label label="Chain" />
             <LabelGroup>
               <Label label="From" inset>
-                <Network name={value.fromChain} reverse loading={loading} />
+                <Network name={value.fromChain} variant='reverse' loading={loading} />
               </Label>
               <Label label="To" inset>
-                <Network name={value.toChain} reverse loading={loading} />
+                <Network name={value.toChain} variant='reverse' loading={loading} />
               </Label>
             </LabelGroup>
           </div>

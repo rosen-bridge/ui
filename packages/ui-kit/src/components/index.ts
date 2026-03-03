@@ -7,6 +7,7 @@ export * from './connector';
 export * from './gridContainer';
 export * from './icon';
 export * from './identifier';
+export * from './network';
 export * from './stack';
 export * from './tableGrid';
 export * from './truncate';

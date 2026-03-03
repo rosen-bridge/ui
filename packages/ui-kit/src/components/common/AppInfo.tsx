@@ -5,7 +5,7 @@ import { ExclamationCircle, InfoCircle } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Avatar } from './Avatar';
-import { Network } from './display';
+import { Network } from '../network';
 import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';

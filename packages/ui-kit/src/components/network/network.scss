@@ -1,0 +1,12 @@
+.rosen-Network { 
+  display: flex;
+  width: fit-content;
+  align-items: center;
+  font-size: inherit;
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.rosen-Network[data-variant=reverse] {
+  flex-direction: row-reverse;
+}

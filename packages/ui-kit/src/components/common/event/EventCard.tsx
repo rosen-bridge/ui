@@ -5,7 +5,8 @@ import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Card, CardBody } from '../card';
 import { Connector } from '../../connector';
-import { Amount, Network } from '../display';
+import { Amount } from '../display';
+import { Network } from '../../network';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { Stack } from '../../stack';

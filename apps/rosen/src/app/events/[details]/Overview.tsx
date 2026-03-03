@@ -97,7 +97,7 @@ export const Overview = ({ id }: { id: string }) => {
                 loading={isLoading}
                 variant="logo"
                 name={data?.fromChain as NetworkType}
-                overrides={{
+                rewrite={{
                   tablet: {
                     variant: 'both',
                   },
@@ -109,7 +109,7 @@ export const Overview = ({ id }: { id: string }) => {
                 loading={isLoading}
                 variant="logo"
                 name={data?.toChain as NetworkType}
-                overrides={{
+                rewrite={{
                   tablet: {
                     variant: 'both',
                   },

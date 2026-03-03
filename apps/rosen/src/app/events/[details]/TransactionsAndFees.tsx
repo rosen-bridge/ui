@@ -67,7 +67,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
     <Section error={error} load={mutate} title="Transactions and Fees">
       <Columns
         gap="24px"
-        overrides={{
+        rewrite={{
           mobile: { count: 1 },
           tablet: { count: 1 },
           laptop: { count: 2 },

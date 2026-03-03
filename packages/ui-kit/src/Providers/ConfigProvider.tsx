@@ -7,6 +7,7 @@ import type {
   GridContainerOverriddenProps,
   IconOverriddenProps,
   IdentifierOverriddenProps,
+  NetworkOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
   TableGridBodyOverriddenProps,
@@ -24,6 +25,7 @@ type Components = {
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
   Identifier: IdentifierOverriddenProps;
+  Network: NetworkOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;
   TableGridBody: TableGridBodyOverriddenProps;
