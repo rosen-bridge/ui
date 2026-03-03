@@ -11,6 +11,7 @@
 @use './tableGrid/tableGridHeader';
 @use './tableGrid/tableGridRow';
 @use './truncate/truncate';
+@use './viewToggle/viewToggle';
 
 :root {
   --rosen-spacing: 8px;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OPERATORS, Selected, SortValue, ViewType } from '../components';
+import { OPERATORS, Selected, SortValue, ViewToggleType } from '../components';
 import { useFramework } from './useFramework';
 
 type Options = {
@@ -8,7 +8,7 @@ type Options = {
   defaultPageSize?: number;
   defaultSortField?: string;
   defaultSortOrder?: 'ASC' | 'DESC';
-  defaultView?: ViewType;
+  defaultView?: ViewToggleType;
   localStorageKey?: string;
 };
 
@@ -97,7 +97,7 @@ const getInitialState = (search: string, options?: Options) => {
     ) || '';
 
   const view = ['grid', 'row'].includes(raw)
-    ? (raw as ViewType)
+    ? (raw as ViewToggleType)
     : options?.defaultView;
 
   return {
@@ -123,7 +123,7 @@ export const useCollection = (options?: Options) => {
 
   const [sort, setSort] = useState<SortValue>();
 
-  const [view, setView] = useState<ViewType>();
+  const [view, setView] = useState<ViewToggleType>();
 
   const [fragment, setFragment] = useState<string>();
 

@@ -37,7 +37,6 @@ export * from './ToolbarThemeTogglerAction';
 export * from './Token';
 export * from './Chip';
 export * from './RelativeTime';
-export * from './ViewToggle';
 export * from './EmptyState';
 export * from './Illustrations';
 export * from './card';

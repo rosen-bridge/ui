@@ -1,0 +1,34 @@
+.rosen-ViewToggle { 
+  display: inline-flex;
+  background-color: var(--rosen-palette-background-paper);
+  border-radius: var(--rosen-shape-borderRadius);
+  padding: var(--rosen-spacing);
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rosen-spacing);
+}
+
+.rosen-ViewToggle button { 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  cursor: pointer;
+  padding: 0px;
+  border-radius: 50%;
+  transition: background 0.2s;
+  background: transparent;
+  svg {
+    fill: var(--rosen-palette-text-secondary);
+  }
+}
+
+.rosen-ViewToggle button.active {  
+  background: var(--rosen-palette-primary-main);
+  svg {
+    fill: var(--rosen-palette-primary-light);
+  }
+}

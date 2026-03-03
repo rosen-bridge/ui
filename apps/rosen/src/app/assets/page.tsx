@@ -119,11 +119,12 @@ const Assets = () => {
   const renderView = useCallback(
     () => (
       <ViewToggle
+        disabled={true}
         value={collection.view}
-        onChangeView={(value) => collection.setView(value)}
+        onChange={(value) => collection.setView(value)}
       />
     ),
-    [collection.view],
+    [collection.view, isLoading],
   );
 
   useEffect(() => {

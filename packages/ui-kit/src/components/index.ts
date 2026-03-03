@@ -10,3 +10,4 @@ export * from './identifier';
 export * from './stack';
 export * from './tableGrid';
 export * from './truncate';
+export * from './viewToggle';
