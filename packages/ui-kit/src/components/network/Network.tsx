@@ -23,7 +23,7 @@ export type NetworkOwnProps = {
   name?: string & {};
 
   /** Static registry */
-  networks?: Record<NonNullable<NetworkOwnProps['name']>, NetworkMeta>;
+  networks?: Record<NonNullable<NetworkOverriddenProps['name']>, NetworkMeta>;
 
   /** What to show */
   variant?: 'both' | 'logo' | 'label' | 'reverse';

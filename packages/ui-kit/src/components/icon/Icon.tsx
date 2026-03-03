@@ -8,7 +8,7 @@ export interface IconOverrides {}
 
 export type IconOwnProps = {
   color?: ColorOverridden;
-  icons?: Record<string, FC<SVGAttributes<SVGElement>>>;
+  icons?: Record<NonNullable<IconOverriddenProps['name']>, FC<SVGAttributes<SVGElement>>>;
   name?: string & {};
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
 };
