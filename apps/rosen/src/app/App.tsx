@@ -32,10 +32,6 @@ function kebabToPascal(value: string): string {
     .join('');
 }
 
-const icons = Object.fromEntries(
-  Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
-);
-
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
 
@@ -48,7 +44,13 @@ export const App = ({ children }: PropsWithChildren) => {
       <ConfigProvider
         configs={{
           components: {
-            Icon: { defaultProps: { icons } },
+            Icon: {
+              defaultProps: {
+                icons: Object.fromEntries(
+                  Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
+                )
+              }
+            },
             Network: {
               defaultProps: {
                 networks: Object.fromEntries(
