@@ -1,5 +1,13 @@
 # @rosen-bridge/watcher-app
 
+## 4.0.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.5.0
+  - @rosen-bridge/ui-kit@5.3.0
+
 ## 4.0.1
 
 ### Patch Changes
