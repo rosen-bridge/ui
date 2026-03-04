@@ -8,6 +8,7 @@ import type {
   IconOverriddenProps,
   IdentifierOverriddenProps,
   LabelGroupOverriddenProps,
+  LinkOverriddenProps,
   NetworkOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
@@ -29,6 +30,7 @@ type Components = {
   Icon: IconOverriddenProps;
   Identifier: IdentifierOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
+  Link: LinkOverriddenProps;
   Network: NetworkOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;

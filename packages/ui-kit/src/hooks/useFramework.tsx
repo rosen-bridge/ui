@@ -35,7 +35,6 @@ export type AnchorComponent = ComponentType<AnchorProps>;
 
 export type FrameworkContextType = {
   components: {
-    Anchor: AnchorComponent;
     Image: ImageComponent;
   };
   router: {
@@ -52,7 +51,6 @@ export const FrameworkContext = createContext<FrameworkContextType | undefined>(
 export type FrameworkProviderProps = {
   children?: ReactNode;
   components: {
-    Anchor: AnchorComponent;
     Image: ImageComponent;
   };
   router: {
@@ -70,7 +68,6 @@ export const FrameworkProvider = ({
   const value = useMemo<FrameworkContextType>(
     () => ({
       components: {
-        Anchor: components.Anchor,
         Image: components.Image,
       },
       router: {
@@ -80,7 +77,6 @@ export const FrameworkProvider = ({
       },
     }),
     [
-      components.Anchor,
       components.Image,
       router.pathname,
       router.search,

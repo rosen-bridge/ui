@@ -23,6 +23,7 @@ import { theme } from '@/theme/theme';
 import { TokenMapProvider } from '../hooks';
 import { SideBar } from './SideBar';
 import { Toolbar } from './Toolbar';
+import { Route } from 'next';
 
 function kebabToPascal(value: string): string {
   return value
@@ -51,6 +52,11 @@ export const App = ({ children }: PropsWithChildren) => {
                 )
               }
             },
+            Link: {
+              defaultProps: {
+                as: NextLink
+              },
+            },
             Network: {
               defaultProps: {
                 networks: Object.fromEntries(
@@ -63,13 +69,12 @@ export const App = ({ children }: PropsWithChildren) => {
       >
         <FrameworkProvider
           components={{
-            Anchor: (props) => <NextLink {...props} />,
             Image: (props) => <NextImage {...props} />,
           }}
           router={{
             pathname,
             search: searchParams.toString(),
-            push: (href: string) => router.push(href, { scroll: false }),
+            push: (href) => router.push(href as unknown as Route, { scroll: false }),
           }}
         >
           <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>

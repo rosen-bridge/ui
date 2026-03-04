@@ -6,6 +6,7 @@ import { useIsMobile, isLegacyTheme, useFramework } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
 import { Badge } from '../../base';
 import { SvgIcon } from '../SvgIcon';
+import { Link } from '../../link';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
   'flexDirection': 'column',
@@ -125,7 +126,6 @@ export const NavigationButton = ({
   disabled,
 }: NavigationButtonProps) => {
   const {
-    components: { Anchor },
     router,
   } = useFramework();
 
@@ -145,7 +145,7 @@ export const NavigationButton = ({
   return (
     <NavigationButtonBase
       href={path}
-      LinkComponent={Anchor}
+      LinkComponent={Link}
       className={isActive ? 'active' : undefined}
       startIcon={startIcon}
       variant="text"

@@ -10,6 +10,7 @@ export * from './icon';
 export * from './iconButton';
 export * from './identifier';
 export * from './labelGroup';
+export * from './link';
 export * from './network';
 export * from './stack';
 export * from './tableGrid';
