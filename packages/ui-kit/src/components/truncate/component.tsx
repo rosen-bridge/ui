@@ -9,7 +9,7 @@ export interface TruncateOverrides { }
 export type TruncateOwnProps = {
   /**
    * Number of lines to display before truncating the content.
-   * @default 3
+   * @default 1
    */
   lines?: number;
 };
@@ -35,7 +35,7 @@ export type TruncateOverriddenProps = OverridableType<
  * </Truncate>
  * ```
  */
-export const TruncateBase = ({ children, lines = 3, ...rest }: TruncateOverriddenProps) => {
+export const TruncateBase = ({ children, lines = 1, ...rest }: TruncateOverriddenProps) => {
   return (
     <Tooltip title={children} placement="top">
       <Root styles={{ WebkitLineClamp: lines }} {...rest}>

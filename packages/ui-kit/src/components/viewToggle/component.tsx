@@ -1,13 +1,14 @@
 import { ComponentProps } from 'react';
 import { ElementBaseProps, Root, Wrap } from '../../core';
 import { OverridableType } from '../../@types';
-import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ViewToggleOverrides { }
 
 export type ViewToggleType = 'grid' | 'row';
 
+// TODO: add slots, size, ...
 export type ViewToggleOwnProps = {
   disabled?: boolean;
   value?: ViewToggleType;
@@ -28,22 +29,18 @@ export type ViewToggleOverriddenProps = OverridableType<
 export const ViewToggleBase = ({ disabled, value, onChange, ...rest }: ViewToggleOverriddenProps) => {
   return (
     <Root {...rest}>
-      <button
+      <IconButton
         className={value === 'row' ? 'active' : ''}
         disabled={disabled}
-        type="button"
+        icon="Row"
         onClick={() => onChange?.('row')}
-      >
-        <Icon name="Row" />
-      </button>
-      <button
+      />
+      <IconButton
         className={value === 'grid' ? 'active' : ''}
         disabled={disabled}
-        type="button"
+        icon="Grid"
         onClick={() => onChange?.('grid')}
-      >
-        <Icon name="Grid" />
-      </button>
+      />
     </Root>
   )
 };

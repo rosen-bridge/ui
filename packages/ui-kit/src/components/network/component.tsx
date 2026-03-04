@@ -3,6 +3,7 @@ import { ElementBaseProps, Root, Wrap } from '../../core';
 import { OverridableType } from '../../@types';
 import { Skeleton } from '../base';
 import { Logo } from './logo';
+import { Truncate } from '../truncate';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NetworkOverrides { }
@@ -51,16 +52,16 @@ export const NetworkBase = ({ fallback, loading, name = '', networks, variant = 
   return (
     <Root reflects={{ variant }} {...rest}>
       {showLogo && loading && (
-        <Skeleton sx={{ width: '2em', height: '2em' }} variant="circular" />
+        <Skeleton variant="circular" />
       )}
       {showLogo && !loading && Logo && (
-        <Logo width="2em" height="2em" />
+        <Logo />
       )}
       {showLabel && loading && (
-        <Skeleton width={60} sx={{ borderRadius: 0.3 }} />
+        <Skeleton width={60} />
       )}
       {showLabel && !loading && (
-        <div>{label}</div>
+        <Truncate className="label">{label}</Truncate>
       )}
     </Root>
   )

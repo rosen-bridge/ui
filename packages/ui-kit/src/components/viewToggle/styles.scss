@@ -9,23 +9,7 @@
   gap: var(--rosen-spacing);
 }
 
-.rosen-ViewToggle button { 
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  border: none;
-  cursor: pointer;
-  padding: 0px;
-  border-radius: 50%;
-  transition: background 0.2s;
-  background: transparent;
-  svg {
-    fill: var(--rosen-palette-text-secondary);
-  }
-}
-
+// TODO: make it better
 .rosen-ViewToggle button.active {  
   background: var(--rosen-palette-primary-main);
   svg {

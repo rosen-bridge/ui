@@ -4,8 +4,9 @@ import { OverridableType } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
 
 import { IconButton, Skeleton, Tooltip } from '../base';
-import { CopyButton, QrCodeModal } from '../common';
+import { QrCodeModal } from '../common';
 import { Icon } from '../icon';
+import { CopyButton } from '../copyButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IdentifierOverrides { }

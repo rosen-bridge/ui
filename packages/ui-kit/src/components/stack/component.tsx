@@ -2,6 +2,7 @@ import { ComponentProps } from 'react';
 
 import { GapOverridden, OverridableType } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
+import { toCSSUnit } from '../../utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {
   baseline: 'baseline',
@@ -76,7 +77,7 @@ export const StackBase = ({
     flexDirection: direction,
     alignItems: align ? ALIGN_MAP[align] : undefined,
     justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
-    gap: spacing,
+    gap: toCSSUnit('spacing', spacing)
   };
   return <Root styles={styles} {...rest} />;
 };

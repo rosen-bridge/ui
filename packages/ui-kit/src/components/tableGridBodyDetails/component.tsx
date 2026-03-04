@@ -6,11 +6,9 @@ import { OverridableType } from '../../@types';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridBodyDetailsOverrides {}
 
-export type TableGridBodyDetailsOwnProps = { 
-  expanded?: boolean;
-};
+export type TableGridBodyDetailsOwnProps = {};
 
-export type TableGridBodyDetailsBaseProps = ElementBaseProps<'div', TableGridBodyDetailsOwnProps>;
+export type TableGridBodyDetailsBaseProps = ElementBaseProps<typeof Collapse, TableGridBodyDetailsOwnProps>;
 
 export type TableGridBodyDetailsOverriddenProps = OverridableType<
   TableGridBodyDetailsBaseProps,
@@ -18,14 +16,8 @@ export type TableGridBodyDetailsOverriddenProps = OverridableType<
   never
 >;
 
-export const TableGridBodyDetailsBase = ({ children, expanded, ...rest }: TableGridBodyDetailsOverriddenProps) => {
-  return (
-    <Root {...rest}>
-      <Collapse in={expanded}>
-        {children}
-      </Collapse>
-    </Root>
-  )
+export const TableGridBodyDetailsBase = ({ ...rest }: TableGridBodyDetailsOverriddenProps) => {
+  return <Root as={Collapse} {...rest} />;
 };
 
 TableGridBodyDetailsBase.displayName = 'TableGridBodyDetails';

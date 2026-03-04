@@ -1,16 +1,20 @@
 import { ComponentProps, ReactNode } from 'react';
 import { ElementBaseProps, Root, Wrap } from '../../core';
 import { OverridableType } from '../../@types';
-import { Icon } from '../icon';
+import { Icon, IconOverriddenProps } from '../icon';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ConnectorOverrides {}
+export interface ConnectorOverrides { }
 
 export type ConnectorOwnProps = {
   /**
    * The element to render on the right side (e.g. a label or icon).
    */
   end: ReactNode;
+
+  slots?: {
+    icon?: IconOverriddenProps;
+  };
 
   /**
    * The element to render on the left side (e.g. a label or icon).
@@ -34,11 +38,11 @@ export type ConnectorOverriddenProps = OverridableType<
 /**
  * Connector component: visually connects two elements with an arrow.
  */
-export const ConnectorBase = ({ end, start, variant = 'standard', ...rest  }: ConnectorOverriddenProps) => {
+export const ConnectorBase = ({ end, slots, start, variant = 'standard', ...rest }: ConnectorOverriddenProps) => {
   return (
     <Root reflects={{ variant }} {...rest}>
       {start}
-      <Icon color="text-secondary" name="ArrowRight" />
+      <Icon color="text-secondary" name="ArrowRight" {...slots?.icon} />
       {end}
     </Root>
   )

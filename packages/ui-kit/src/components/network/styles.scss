@@ -10,3 +10,9 @@
 .rosen-Network[data-variant=reverse] {
   flex-direction: row-reverse;
 }
+
+.rosen-Network svg,
+.rosen-Network .MuiSkeleton-root {
+  width: 2em;
+  height: 2em;
+}
