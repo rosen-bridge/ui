@@ -11,11 +11,11 @@ import {
   DialogContent,
   DialogTitle,
   Tooltip,
-  IconButton,
   InputAdornment,
   TextField,
   Typography,
 } from '../base';
+import { IconButton } from '../iconButton';
 import { SvgIcon } from './SvgIcon';
 
 interface FormValues {

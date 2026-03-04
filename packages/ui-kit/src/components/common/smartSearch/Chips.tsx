@@ -1,7 +1,8 @@
 import { Times } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
-import { IconButton, Typography } from '../../base';
+import { Typography } from '../../base';
+import { IconButton } from '../../iconButton';
 import { SvgIcon } from '../SvgIcon';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';

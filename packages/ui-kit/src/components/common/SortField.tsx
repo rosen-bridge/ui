@@ -19,13 +19,13 @@ import {
 import { styled } from '../../styling';
 import {
   Grid,
-  IconButton,
   ListItemText,
   ListSubheader,
   Menu,
   MenuItem,
   Typography,
 } from '../base';
+import { IconButton } from '../iconButton';
 import { Divider } from './Divider';
 import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';

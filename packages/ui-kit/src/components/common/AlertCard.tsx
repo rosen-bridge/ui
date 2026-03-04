@@ -2,7 +2,8 @@ import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
 import { Times } from '@rosen-bridge/icons';
 
-import { Alert, AlertProps, Collapse, IconButton } from '../base';
+import { Alert, AlertProps, Collapse } from '../base';
+import { IconButton } from '../iconButton';
 import { Button } from './Button';
 import { SvgIcon } from './SvgIcon';
 

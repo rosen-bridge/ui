@@ -2,7 +2,7 @@ import React from 'react';
 
 import {
   Toolbar as UiKitToolbar,
-  ToolbarThemeTogglerAction,
+  ThemeToggler,
   useIsMobile,
 } from '@rosen-bridge/ui-kit';
 
@@ -16,7 +16,7 @@ export const Toolbar = () => {
   return (
     <UiKitToolbar>
       {isMobile && <VersionConfig />}
-      <ToolbarThemeTogglerAction />
+      <ThemeToggler />
     </UiKitToolbar>
   );
 };

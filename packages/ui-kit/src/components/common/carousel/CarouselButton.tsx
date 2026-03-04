@@ -1,6 +1,6 @@
 import { AngleLeft, AngleRight } from '@rosen-bridge/icons';
 
-import { IconButton } from '../../base';
+import { IconButton } from '../../iconButton';
 import { SvgIcon } from '../SvgIcon';
 import { useCarousel } from './useCarousel';
 

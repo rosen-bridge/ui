@@ -4,7 +4,8 @@ import { FileCopyAlt } from '@rosen-bridge/icons';
 
 import { useSnackbar } from '../../hooks';
 import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
-import { Snackbar, Alert, IconButton } from '../base';
+import { Snackbar, Alert } from '../base';
+import { IconButton } from '../iconButton';
 import { SvgIcon } from './SvgIcon';
 
 /**

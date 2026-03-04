@@ -2,6 +2,7 @@ import { ComponentProps } from 'react';
 import { ElementBaseProps, Root, Wrap } from '../../core';
 import { OverridableType } from '../../@types';
 import { IconButton } from '../iconButton';
+import { Icon } from '../icon';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ViewToggleOverrides { }
@@ -32,15 +33,17 @@ export const ViewToggleBase = ({ disabled, value, onChange, ...rest }: ViewToggl
       <IconButton
         className={value === 'row' ? 'active' : ''}
         disabled={disabled}
-        icon="Row"
         onClick={() => onChange?.('row')}
-      />
+      >
+        <Icon name="Row" />
+      </IconButton>
       <IconButton
         className={value === 'grid' ? 'active' : ''}
         disabled={disabled}
-        icon="Grid"
         onClick={() => onChange?.('grid')}
-      />
+      >
+        <Icon name="Grid" />
+      </IconButton>
     </Root>
   )
 };

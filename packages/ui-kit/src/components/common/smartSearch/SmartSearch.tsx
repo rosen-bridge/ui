@@ -12,7 +12,7 @@ import { Card } from '@mui/material';
 import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
-import { IconButton } from '../../base';
+import { IconButton } from '../../iconButton';
 import { Divider } from '../Divider';
 import { SvgIcon } from '../SvgIcon';
 import { Chips } from './Chips';

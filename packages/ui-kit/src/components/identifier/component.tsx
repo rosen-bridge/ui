@@ -3,7 +3,8 @@ import { ComponentProps, useState } from 'react';
 import { OverridableType } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
 
-import { IconButton, Skeleton, Tooltip } from '../base';
+import { Skeleton, Tooltip } from '../base';
+import { IconButton } from '../iconButton';
 import { QrCodeModal } from '../common';
 import { Icon } from '../icon';
 import { CopyButton } from '../copyButton';

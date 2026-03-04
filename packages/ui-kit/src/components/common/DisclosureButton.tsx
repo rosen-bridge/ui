@@ -1,7 +1,8 @@
 import { AngleDown, SyncExclamation } from '@rosen-bridge/icons';
 
 import { useDisclosure } from '../../hooks/useDisclosure';
-import { CircularProgress, IconButton } from '../base';
+import { CircularProgress } from '../base';
+import { IconButton } from '../iconButton';
 import { SvgIcon } from './SvgIcon';
 
 /**

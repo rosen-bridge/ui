@@ -19,7 +19,7 @@ import {
   ListItemText,
   ListSubheader,
 } from '../../base';
-import { IconButton } from '../../base';
+import { IconButton } from '../../iconButton';
 import { Divider } from '../Divider';
 import { SvgIcon } from '../SvgIcon';
 import { Truncate } from '../../truncate';

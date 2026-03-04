@@ -3,7 +3,8 @@ import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { styled } from '@mui/material';
 import { Times } from '@rosen-bridge/icons';
 
-import { DialogTitle, IconButton } from '../base';
+import { DialogTitle } from '../base';
+import { IconButton } from '../iconButton';
 import { SvgIcon } from './SvgIcon';
 
 const IconContainer = styled('div')(({ theme }) => ({

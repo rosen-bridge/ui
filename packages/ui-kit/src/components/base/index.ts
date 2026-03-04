@@ -15,7 +15,6 @@ export * from './DialogTitle';
 export * from './FormControl';
 export * from './Grid';
 export * from './InputAdornment';
-export * from './IconButton';
 export * from './InputLabel';
 export * from './Link';
 export * from './List';
