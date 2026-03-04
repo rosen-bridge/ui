@@ -1,18 +1,18 @@
-@use './center/center';
-@use './columns/columns';
-@use './connector/connector';
-@use './gridContainer/gridContainer';
-@use './icon/icon';
-@use './identifier/identifier';
-@use './network/network';
-@use './tableGrid/tableGrid';
-@use './tableGrid/tableGridBody';
-@use './tableGrid/tableGridBodyDetails';
-@use './tableGrid/tableGridCell';
-@use './tableGrid/tableGridHeader';
-@use './tableGrid/tableGridRow';
-@use './truncate/truncate';
-@use './viewToggle/viewToggle';
+@use './center/styles' as *;
+@use './columns/styles' as *;
+@use './connector/styles' as *;
+@use './gridContainer/styles' as *;
+@use './icon/styles' as *;
+@use './identifier/styles' as *;
+@use './network/styles' as *;
+@use './tableGrid/styles' as *;
+@use './tableGridBody/styles' as *;
+@use './tableGridBodyDetails/styles' as *;
+@use './tableGridCell/styles' as *;
+@use './tableGridHeader/styles' as *;
+@use './tableGridRow/styles' as *;
+@use './truncate/styles' as *;
+@use './viewToggle/styles' as *;
 
 :root {
   --rosen-spacing: 8px;

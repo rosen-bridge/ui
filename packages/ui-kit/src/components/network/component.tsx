@@ -2,7 +2,7 @@ import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 import { ElementBaseProps, Root, Wrap } from '../../core';
 import { OverridableType } from '../../@types';
 import { Skeleton } from '../base';
-import { DefaultLogo } from './DefaultLogo';
+import { Logo } from './logo';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NetworkOverrides { }
@@ -39,7 +39,7 @@ export type NetworkOverriddenProps = OverridableType<
 
 const DEFAULT_NETWORK: NetworkMeta = {
   label: 'Unsupported',
-  logo: DefaultLogo
+  logo: Logo
 };
 
 export const NetworkBase = ({ fallback, loading, name = '', networks, variant = 'both', ...rest }: NetworkOverriddenProps) => {

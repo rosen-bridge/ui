@@ -1,1 +1,1 @@
-export * from './Truncate';
+export * from './component';

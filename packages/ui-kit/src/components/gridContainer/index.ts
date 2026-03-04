@@ -1,1 +1,1 @@
-export * from './GridContainer';
+export * from './component';

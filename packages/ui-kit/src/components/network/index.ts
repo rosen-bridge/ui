@@ -1,1 +1,1 @@
-export * from './Network';
+export * from './component';

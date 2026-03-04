@@ -1,1 +1,1 @@
-export * from './ViewToggle';
+export * from './component';
