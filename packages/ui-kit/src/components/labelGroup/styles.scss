@@ -1,0 +1,25 @@
+.rosen-LabelGroup {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+
+  // TODO
+  .rosen-label-horizontal {
+    grid-column: 1 / 4;
+    display: grid;
+    grid-template-columns: subgrid;
+
+    .rosen-label-inset {
+      grid-column: 1 / 2;
+    }
+
+    .rosen-label-container {
+      grid-column: 2 / 4;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    .rosen-label-label {
+      grid-column: 1 / 2;
+    }
+  }
+}

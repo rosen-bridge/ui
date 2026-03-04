@@ -1,5 +1,5 @@
 import {
-  ThemeToggler,
+  ThemeToggleButton,
   Toolbar as UiKitToolbar,
   useIsMobile,
   ApiKeyModal,
@@ -14,7 +14,7 @@ export const Toolbar = () => {
     <UiKitToolbar>
       {isMobile && <VersionConfig />}
       <ApiKeyModal />
-      <ThemeToggler />
+      <ThemeToggleButton />
     </UiKitToolbar>
   );
 };

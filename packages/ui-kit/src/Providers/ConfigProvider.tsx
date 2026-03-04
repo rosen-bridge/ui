@@ -7,6 +7,7 @@ import type {
   GridContainerOverriddenProps,
   IconOverriddenProps,
   IdentifierOverriddenProps,
+  LabelGroupOverriddenProps,
   NetworkOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
@@ -15,7 +16,9 @@ import type {
   TableGridCellOverriddenProps,
   TableGridHeaderOverriddenProps,
   TableGridRowOverriddenProps,
+  ThemeToggleButtonOverriddenProps,
   TruncateOverriddenProps,
+  ViewToggleOverriddenProps,
 } from '../components';
 
 type Components = {
@@ -25,6 +28,7 @@ type Components = {
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
   Identifier: IdentifierOverriddenProps;
+  LabelGroup: LabelGroupOverriddenProps;
   Network: NetworkOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;
@@ -33,7 +37,9 @@ type Components = {
   TableGridCell: TableGridCellOverriddenProps;
   TableGridHeader: TableGridHeaderOverriddenProps;
   TableGridRow: TableGridRowOverriddenProps;
+  ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Truncate: TruncateOverriddenProps;
+  ViewToggle: ViewToggleOverriddenProps;
 };
 
 export const useConfigs = () => {

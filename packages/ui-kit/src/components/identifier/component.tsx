@@ -8,6 +8,7 @@ import { IconButton } from '../iconButton';
 import { QrCodeModal } from '../common';
 import { Icon } from '../icon';
 import { CopyButton } from '../copyButton';
+import { Truncate } from '../truncate';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IdentifierOverrides { }
@@ -91,7 +92,7 @@ export const IdentifierBase = ({
     <Root {...rest}>
       <Tooltip title={value}>
         <div className="value">
-          <span className="leading">{leading}</span>
+          <Truncate className="leading">{leading}</Truncate>
           {trailing && <span className="trailing">{trailing}</span>}
         </div>
       </Tooltip>

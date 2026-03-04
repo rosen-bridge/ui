@@ -1,5 +1,5 @@
 import {
-  ThemeToggler,
+  ThemeToggleButton,
   Toolbar as UiKitToolbar,
   useIsMobile,
 } from '@rosen-bridge/ui-kit';
@@ -17,7 +17,7 @@ export const Toolbar = () => {
     <UiKitToolbar>
       {isMobile && <VersionConfig />}
       <ApiKeyModal />
-      <ThemeToggler />
+      <ThemeToggleButton />
     </UiKitToolbar>
   );
 };
