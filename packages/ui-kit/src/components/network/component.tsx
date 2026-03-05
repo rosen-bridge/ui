@@ -4,6 +4,8 @@ import { OverridableType } from '../../@types';
 import { Skeleton } from '../base';
 import { Logo } from './logo';
 import { Truncate } from '../truncate';
+import { Icon, IconOverriddenProps } from '../icon';
+import { Text, TextOverriddenProps } from '../text';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NetworkOverrides { }
@@ -26,6 +28,11 @@ export type NetworkOwnProps = {
   /** Static registry */
   networks?: Record<NonNullable<NetworkOverriddenProps['name']>, NetworkMeta>;
 
+  slots?: {
+    label?: TextOverriddenProps;
+    logo?: IconOverriddenProps;
+  }
+
   /** What to show */
   variant?: 'both' | 'logo' | 'label' | 'reverse';
 };
@@ -43,7 +50,7 @@ const DEFAULT_NETWORK: NetworkMeta = {
   logo: Logo
 };
 
-export const NetworkBase = ({ fallback, loading, name = '', networks, variant = 'both', ...rest }: NetworkOverriddenProps) => {
+export const NetworkBase = ({ fallback, loading, name = '', networks, slots, variant = 'both', ...rest }: NetworkOverriddenProps) => {
   const showLabel = variant !== 'logo';
   const showLogo = variant !== 'label';
 
@@ -54,15 +61,23 @@ export const NetworkBase = ({ fallback, loading, name = '', networks, variant = 
       {showLogo && loading && (
         <Skeleton variant="circular" />
       )}
-      {showLogo && !loading && Logo && (
-        <Logo />
-      )}
-      {showLabel && loading && (
-        <Skeleton width={60} />
-      )}
-      {showLabel && !loading && (
-        <Truncate className="label">{label}</Truncate>
-      )}
+      <Icon
+        className="logo"
+        icons={{ [name]: Logo }}
+        name={name}
+        size="2em"
+        skip={!(showLogo && !loading && Logo)}
+        {...slots?.logo}
+      />
+      <Text
+        asChild
+        className="label"
+        loading={loading}
+        skip={!showLabel}
+        {...slots?.label}
+      >
+        <Truncate>{label}</Truncate>
+      </Text>
     </Root>
   )
 };

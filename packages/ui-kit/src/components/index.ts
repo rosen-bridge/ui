@@ -19,6 +19,7 @@ export * from './tableGridBodyDetails';
 export * from './tableGridCell';
 export * from './tableGridHeader';
 export * from './tableGridRow';
+export * from './text';
 export * from './themeToggleButton';
 export * from './truncate';
 export * from './viewToggle';

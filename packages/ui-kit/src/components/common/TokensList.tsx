@@ -5,7 +5,7 @@ import { Typography } from '../base';
 import { Avatar } from './Avatar';
 import { Amount } from './display';
 import { Stack } from '../stack';
-import { Text } from './Text';
+import { Text } from '../text';
 import { Identifier } from '../identifier';
 
 export interface TokensListProps {

@@ -17,6 +17,7 @@ import type {
   TableGridCellOverriddenProps,
   TableGridHeaderOverriddenProps,
   TableGridRowOverriddenProps,
+  TextOverriddenProps,
   ThemeToggleButtonOverriddenProps,
   TruncateOverriddenProps,
   ViewToggleOverriddenProps,
@@ -39,6 +40,7 @@ type Components = {
   TableGridCell: TableGridCellOverriddenProps;
   TableGridHeader: TableGridHeaderOverriddenProps;
   TableGridRow: TableGridRowOverriddenProps;
+  TextOverriddenProps: TextOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Truncate: TruncateOverriddenProps;
   ViewToggle: ViewToggleOverriddenProps;

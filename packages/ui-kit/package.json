@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "@mui/material": "^7.3.8",
+    "@radix-ui/react-slot": "^1.2.4",
     "@rosen-bridge/icons": "^3.4.0",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",

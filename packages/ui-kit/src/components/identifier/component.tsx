@@ -9,6 +9,7 @@ import { QrCodeModal } from '../common';
 import { Icon } from '../icon';
 import { CopyButton } from '../copyButton';
 import { Truncate } from '../truncate';
+import { Text, TextOverriddenProps } from '../text';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IdentifierOverrides { }
@@ -28,6 +29,11 @@ export type IdentifierOwnProps = {
 
   /** If true, displays a QR code icon */
   qrcode?: boolean;
+
+  slots?: {
+    leading?: TextOverriddenProps;
+    trailing?: TextOverriddenProps;
+  }
 
   /** Number of characters to show at the end*/
   trailingLength?: number;
@@ -66,6 +72,7 @@ export const IdentifierBase = ({
   href,
   loading,
   qrcode,
+  slots,
   trailingLength = 5,
   value = '',
   ...rest
@@ -76,59 +83,64 @@ export const IdentifierBase = ({
 
   const hasFallback = !hasValue && Boolean(fallback);
 
-  const hasActions = (hasValue || hasFallback) && Boolean(copyable || href || qrcode);
+  const hasActions = (hasValue || hasFallback) && Boolean(copyable || href || qrcode) && !loading;
 
-  const disableActions = hasFallback;
+  const disableActions = hasFallback || !hasValue || loading;
 
   const leading = hasFallback ? fallback : (value ?? '').slice(0, -trailingLength);
 
   const trailing = (value ?? '').slice(-trailingLength);
 
-  if (loading) {
-    return <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />;
-  }
-
   return (
     <Root {...rest}>
-      <Tooltip title={value}>
-        <div className="value">
-          <Truncate className="leading">{leading}</Truncate>
-          {trailing && <span className="trailing">{trailing}</span>}
-        </div>
-      </Tooltip>
+      {loading && (
+        <>
+          <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />
+          <CopyButton className='loading' disabled size="small" />
+        </>
+      )}
+      {!loading && (
+        <Tooltip title={value}>
+          <div className="value">
+            <Text asChild className="leading" {...slots?.leading}>
+              <Truncate>{leading}</Truncate>
+            </Text>
+            <Text className="trailing" {...slots?.trailing}>
+              {trailing}
+            </Text>
+          </div>
+        </Tooltip>
+      )}
       {hasActions && (
         <div className="actions">
-          {!!copyable && (
-            <CopyButton disabled={disableActions} value={value} size="small" />
-          )}
-
-          {!!href && (
-            <IconButton
-              disabled={disableActions}
-              target="_blank"
-              size="small"
-              href={href}
-            >
-              <Icon name="ExternalLinkAlt" size="small" />
-            </IconButton>
-          )}
-
-          {!!qrcode && (
-            <>
-              <IconButton
-                disabled={disableActions}
-                size="small"
-                onClick={() => setOpen(true)}
-              >
-                <Icon name="Qrcode" size="small" />
-              </IconButton>
-              <QrCodeModal
-                open={open}
-                text={value}
-                handleClose={() => setOpen(false)}
-              />
-            </>
-          )}
+          <CopyButton
+            disabled={disableActions}
+            size="small"
+            skip={!copyable}
+            value={value}
+          />
+          <IconButton
+            disabled={disableActions}
+            href={href}
+            size="small"
+            skip={!href}
+            target="_blank"
+          >
+            <Icon name="ExternalLinkAlt" size="small" />
+          </IconButton>
+          <IconButton
+            disabled={disableActions}
+            size="small"
+            skip={!qrcode}
+            onClick={() => setOpen(true)}
+          >
+            <Icon name="Qrcode" size="small" />
+          </IconButton>
+          <QrCodeModal
+            open={open}
+            text={value}
+            handleClose={() => setOpen(false)}
+          />
         </div>
       )}
     </Root>

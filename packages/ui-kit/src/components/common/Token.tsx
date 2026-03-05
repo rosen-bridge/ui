@@ -9,7 +9,7 @@ import { Avatar } from './Avatar';
 import { InjectOverrides } from './InjectOverrides';
 import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';
-import { Text } from './Text';
+import { Text } from '../text';
 import { Truncate } from '../truncate';
 
 /**

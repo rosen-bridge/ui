@@ -12,7 +12,7 @@ import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { Stack } from '../../stack';
 import { SvgIcon } from '../SvgIcon';
-import { Text } from '../Text';
+import { Text } from '../../text';
 import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 import { Identifier } from '../../identifier';

@@ -28,4 +28,11 @@
     flex-direction: row;
     align-items: center;
   }
+
+  .rosen-CopyButton.loading {
+    opacity: 0;
+    width: 0;
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
