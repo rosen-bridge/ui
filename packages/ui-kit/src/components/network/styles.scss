@@ -1,4 +1,4 @@
-.rosen-Network { 
+.rosen-Network {
   display: flex;
   width: fit-content;
   align-items: center;
@@ -7,7 +7,7 @@
   gap: 0.5em;
 }
 
-.rosen-Network[data-variant=reverse] {
+.rosen-Network[data-variant='reverse'] {
   flex-direction: row-reverse;
 }
 

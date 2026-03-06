@@ -1,7 +1,8 @@
 import { ComponentProps } from 'react';
 
-import { GapOverridden, OverridableType } from '../../@types';
+import { GapOverridden, OverridableType, WidthOverridden } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
+import { toCSSUnit } from '../../utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ColumnsOverrides {}
@@ -29,7 +30,7 @@ export type ColumnsOwnProps = {
    * Determines how wide each column can be.
    * Accepts any valid CSS length, e.g. `'240px'`.
    */
-  width?: number | string;
+  width?: WidthOverridden;
 };
 
 export type ColumnsBaseProps = ElementBaseProps<'div', ColumnsOwnProps>;
@@ -37,7 +38,7 @@ export type ColumnsBaseProps = ElementBaseProps<'div', ColumnsOwnProps>;
 export type ColumnsOverriddenProps = OverridableType<
   ColumnsBaseProps,
   ColumnsOverrides,
-  'gap'
+  'gap' | 'width'
 >;
 
 /**
@@ -53,10 +54,10 @@ export const ColumnsBase = ({
   ...rest
 }: ColumnsOverriddenProps) => {
   const styles = {
-    columnWidth: width,
-    columnGap: gap,
+    columnWidth: toCSSUnit('width', width),
+    columnGap: toCSSUnit('gap', gap),
     columnCount: count || 'auto',
-  }
+  };
   return <Root reflects={{ rule }} styles={styles} {...rest} />;
 };
 

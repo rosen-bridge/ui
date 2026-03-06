@@ -1,4 +1,10 @@
 .rosen-Icon {
+  --rosen-icon-size-small: 1.25rem;
+  --rosen-icon-size-medium: 1.5rem;
+  --rosen-icon-size-large: 2.1875rem;
+}
+
+.rosen-Icon {
   user-select: none;
   width: 1em;
   height: 1em;
@@ -6,16 +12,4 @@
   fill: var(--rosen-icon-color, currentColor);
   flex-shrink: 0;
   font-size: var(--rosen-icon-size, medium);
-}
-
-.rosen-Icon[data-size='small'] {
-  --rosen-icon-size: 1.25rem;
-}
-
-.rosen-Icon[data-size='medium'] {
-  --rosen-icon-size: 1.5rem;
-}
-
-.rosen-Icon[data-size='large'] {
-  --rosen-icon-size: 2.1875rem;
 }

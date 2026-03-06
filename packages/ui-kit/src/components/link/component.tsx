@@ -1,9 +1,10 @@
 import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+
 import { ColorOverridden, OverridableType } from '../../@types';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface LinkOverrides { }
+export interface LinkOverrides {}
 
 export type LinkOwnProps = {
   as?: ElementType<ComponentPropsWithRef<'a'>>;
@@ -11,7 +12,7 @@ export type LinkOwnProps = {
   underline?: 'always' | 'hover' | 'none';
 };
 
-export type LinkBaseProps= ElementBaseProps<'a', LinkOwnProps>;
+export type LinkBaseProps = ElementBaseProps<'a', LinkOwnProps>;
 
 export type LinkOverriddenProps = OverridableType<
   LinkBaseProps,
@@ -19,8 +20,12 @@ export type LinkOverriddenProps = OverridableType<
   'color' | 'href'
 >;
 
-export const LinkBase = ({ color, underline = 'always', ...rest }: LinkOverriddenProps) => {
-  return <Root reflects={{ color, underline }} {...rest} />
+export const LinkBase = ({
+  color,
+  underline = 'always',
+  ...rest
+}: LinkOverriddenProps) => {
+  return <Root reflects={{ color, underline }} {...rest} />;
 };
 
 LinkBase.displayName = 'Link';

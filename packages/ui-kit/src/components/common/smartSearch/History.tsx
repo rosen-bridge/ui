@@ -20,9 +20,9 @@ import {
   ListSubheader,
 } from '../../base';
 import { IconButton } from '../../iconButton';
+import { Truncate } from '../../truncate';
 import { Divider } from '../Divider';
 import { SvgIcon } from '../SvgIcon';
-import { Truncate } from '../../truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';

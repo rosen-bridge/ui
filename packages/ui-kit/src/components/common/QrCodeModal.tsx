@@ -1,5 +1,5 @@
 import { Button } from '@mui/material';
-import {QRCodeCanvas} from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 
 import {
   Box,

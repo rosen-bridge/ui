@@ -1,4 +1,4 @@
-.rosen-ViewToggle { 
+.rosen-ViewToggle {
   display: inline-flex;
   background-color: var(--rosen-palette-background-paper);
   border-radius: var(--rosen-shape-borderRadius);
@@ -10,7 +10,7 @@
 }
 
 // TODO: make it better
-.rosen-ViewToggle button.active {  
+.rosen-ViewToggle button.active {
   background: var(--rosen-palette-primary-main);
   svg {
     fill: var(--rosen-palette-primary-light);

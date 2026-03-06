@@ -4,8 +4,8 @@ import { Box, Typography, SvgIcon } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
 import { Tooltip } from '../../base';
-import { InjectOverrides } from '../InjectOverrides';
 import { Stack } from '../../stack';
+import { InjectOverrides } from '../InjectOverrides';
 
 /**
  * Props for the `Label` component.

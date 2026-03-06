@@ -1,10 +1,11 @@
 import { ComponentProps } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+
 import { OverridableType } from '../../@types';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 import { Tooltip } from '../base';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TruncateOverrides { }
+export interface TruncateOverrides {}
 
 export type TruncateOwnProps = {
   /**
@@ -35,14 +36,18 @@ export type TruncateOverriddenProps = OverridableType<
  * </Truncate>
  * ```
  */
-export const TruncateBase = ({ children, lines = 1, ...rest }: TruncateOverriddenProps) => {
+export const TruncateBase = ({
+  children,
+  lines = 1,
+  ...rest
+}: TruncateOverriddenProps) => {
   return (
     <Tooltip title={children} placement="top">
       <Root styles={{ WebkitLineClamp: lines }} {...rest}>
         {children}
       </Root>
     </Tooltip>
-  )
+  );
 };
 
 TruncateBase.displayName = 'Truncate';

@@ -1,12 +1,13 @@
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+
 import { OverridableType } from '../../@types';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 import { Tooltip } from '../base';
-import { IconButton } from '../iconButton';
 import { Icon, IconOverriddenProps } from '../icon';
+import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CopyButtonOverrides { }
+export interface CopyButtonOverrides {}
 
 export type CopyButtonStatus = 'idle' | 'copying' | 'copied' | 'failed';
 
@@ -22,7 +23,10 @@ export type CopyButtonOwnProps = {
   value?: string;
 };
 
-export type CopyButtonBaseProps = Omit<ElementBaseProps<typeof IconButton, CopyButtonOwnProps>, 'icon'>;
+export type CopyButtonBaseProps = Omit<
+  ElementBaseProps<typeof IconButton, CopyButtonOwnProps>,
+  'icon'
+>;
 
 export type CopyButtonOverriddenProps = OverridableType<
   CopyButtonBaseProps,
@@ -33,7 +37,11 @@ export type CopyButtonOverriddenProps = OverridableType<
 /**
  * A button that copies text to the clipboard and shows the status with an icon.
  */
-export const CopyButtonBase = ({ icons, value = '', ...rest }: CopyButtonOverriddenProps) => {
+export const CopyButtonBase = ({
+  icons,
+  value = '',
+  ...rest
+}: CopyButtonOverriddenProps) => {
   const [status, setStatus] = useState<CopyButtonStatus>('idle');
 
   const icon = useMemo(() => {
@@ -45,7 +53,7 @@ export const CopyButtonBase = ({ icons, value = '', ...rest }: CopyButtonOverrid
       case 'copied':
         return icons?.copied || 'Check';
       case 'failed':
-        return icons?.failed || 'Times'; 
+        return icons?.failed || 'Times';
     }
   }, [icons, status]);
 
@@ -70,7 +78,7 @@ export const CopyButtonBase = ({ icons, value = '', ...rest }: CopyButtonOverrid
         <Icon name={icon} />
       </Root>
     </Tooltip>
-  )
+  );
 };
 
 CopyButtonBase.displayName = 'CopyButton';

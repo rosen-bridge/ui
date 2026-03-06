@@ -1,10 +1,12 @@
 import { ComponentProps } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+
 import { OverridableType } from '../../@types';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface LabelGroupOverrides { }
+export interface LabelGroupOverrides {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type LabelGroupOwnProps = {};
 
 export type LabelGroupBaseProps = ElementBaseProps<'div', LabelGroupOwnProps>;
@@ -16,7 +18,7 @@ export type LabelGroupOverriddenProps = OverridableType<
 >;
 
 export const LabelGroupBase = ({ ...rest }: LabelGroupOverriddenProps) => {
-  return <Root {...rest} />
+  return <Root {...rest} />;
 };
 
 LabelGroupBase.displayName = 'LabelGroup';

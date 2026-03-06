@@ -8,8 +8,8 @@ import {
 } from '@mui/material';
 
 import { Box, Skeleton, Typography } from '../../base';
-import { InjectOverrides } from '../InjectOverrides';
 import { Stack } from '../../stack';
+import { InjectOverrides } from '../InjectOverrides';
 import { ProcessIcon } from './ProcessIcon';
 import { ProcessLabel } from './ProcessLabel';
 import { SubItem } from './SubItem';

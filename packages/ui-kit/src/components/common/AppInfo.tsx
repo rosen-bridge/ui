@@ -4,13 +4,13 @@ import { CircularProgress, Typography, IconButton } from '@mui/material';
 import { ExclamationCircle, InfoCircle } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
-import { Avatar } from './Avatar';
 import { Network } from '../network';
+import { Stack } from '../stack';
+import { Avatar } from './Avatar';
 import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
 import { EnhancedDialogTitle } from './EnhancedDialogTitle';
-import { Stack } from '../stack';
 import { SvgIcon } from './SvgIcon';
 
 type NetworkHeight = {

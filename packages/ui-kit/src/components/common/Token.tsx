@@ -5,12 +5,12 @@ import { capitalize } from 'lodash-es';
 
 import { useFramework } from '../../hooks';
 import { IconButton } from '../iconButton';
-import { Avatar } from './Avatar';
-import { InjectOverrides } from './InjectOverrides';
 import { Stack } from '../stack';
-import { SvgIcon } from './SvgIcon';
 import { Text } from '../text';
 import { Truncate } from '../truncate';
+import { Avatar } from './Avatar';
+import { InjectOverrides } from './InjectOverrides';
+import { SvgIcon } from './SvgIcon';
 
 /**
  * Props for the Token component.

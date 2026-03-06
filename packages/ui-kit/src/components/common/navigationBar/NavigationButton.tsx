@@ -5,8 +5,8 @@ import { Button } from '@mui/material';
 import { useIsMobile, isLegacyTheme, useFramework } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
 import { Badge } from '../../base';
-import { SvgIcon } from '../SvgIcon';
 import { Link } from '../../link';
+import { SvgIcon } from '../SvgIcon';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
   'flexDirection': 'column',
@@ -125,9 +125,7 @@ export const NavigationButton = ({
   path,
   disabled,
 }: NavigationButtonProps) => {
-  const {
-    router,
-  } = useFramework();
+  const { router } = useFramework();
 
   const isActive = router.pathname === path;
 

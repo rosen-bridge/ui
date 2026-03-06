@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   min-width: 0;
-  
+
   .value {
     display: flex;
     flex-direction: row;
@@ -19,7 +19,7 @@
     min-width: 0;
   }
 
-  .trailing { 
+  .trailing {
     flex-shrink: 0;
   }
 

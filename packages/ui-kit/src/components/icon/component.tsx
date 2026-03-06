@@ -1,14 +1,18 @@
-import { ComponentProps, FC, SVGAttributes } from 'react';
+import { ComponentProps, CSSProperties, FC, SVGAttributes } from 'react';
 
 import { ColorOverridden, OverridableType } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
+import { toCSSColor, toCSSUnit } from '../../utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconOverrides {}
 
 export type IconOwnProps = {
   color?: ColorOverridden;
-  icons?: Record<NonNullable<IconOverriddenProps['name']>, FC<SVGAttributes<SVGElement>>>;
+  icons?: Record<
+    NonNullable<IconOverriddenProps['name']>,
+    FC<SVGAttributes<SVGElement>>
+  >;
   name?: string & {};
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
 };
@@ -34,11 +38,16 @@ export const IconBase = ({
 
   if (!Icon) {
     console.warn(`Icon '${name}' not found`);
-  };
+  }
+
+  const styles = {
+    '--rosen-icon-color': toCSSColor(color),
+    '--rosen-icon-size': toCSSUnit('icon-size', size),
+  } as CSSProperties;
 
   // TODO: parser for color and size
 
-  return <Root as={Icon} reflects={{ color, size }} {...rest} />;
+  return <Root as={Icon} style={styles} {...rest} />;
 };
 
 IconBase.displayName = 'Icon';

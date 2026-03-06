@@ -1,13 +1,18 @@
 import { ComponentProps } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core'; 
+
 import { OverridableType } from '../../@types';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridBodyOverrides {}
 
-export type TableGridBodyOwnProps = { };
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export type TableGridBodyOwnProps = {};
 
-export type TableGridBodyBaseProps = ElementBaseProps<'div', TableGridBodyOwnProps>;
+export type TableGridBodyBaseProps = ElementBaseProps<
+  'div',
+  TableGridBodyOwnProps
+>;
 
 export type TableGridBodyOverriddenProps = OverridableType<
   TableGridBodyBaseProps,
@@ -15,7 +20,9 @@ export type TableGridBodyOverriddenProps = OverridableType<
   never
 >;
 
-export const TableGridBodyBase = ({ ...rest }: TableGridBodyOverriddenProps) => {
+export const TableGridBodyBase = ({
+  ...rest
+}: TableGridBodyOverriddenProps) => {
   return <Root {...rest} />;
 };
 

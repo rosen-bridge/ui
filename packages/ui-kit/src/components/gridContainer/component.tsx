@@ -1,7 +1,8 @@
 import { ComponentProps } from 'react';
 
-import { GapOverridden, OverridableType } from '../../@types';
+import { GapOverridden, OverridableType, WidthOverridden } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
+import { toCSSUnit } from '../../utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GridContainerOverrides {}
@@ -18,18 +19,20 @@ export type GridContainerOwnProps = {
 
   /**
    * The minimum width of each grid column.
-   * If a number is provided, it will be interpreted as pixels (`px`).
    * You can also pass a CSS length string.
    */
-  minWidth?: number | string;
+  minWidth?: WidthOverridden;
 };
 
-export type GridContainerBaseProps = ElementBaseProps<'div', GridContainerOwnProps>;
+export type GridContainerBaseProps = ElementBaseProps<
+  'div',
+  GridContainerOwnProps
+>;
 
 export type GridContainerOverriddenProps = OverridableType<
   GridContainerBaseProps,
   GridContainerOverrides,
-  'gap'
+  'gap' | 'minWidth'
 >;
 
 /**
@@ -55,9 +58,9 @@ export const GridContainerBase = ({
   ...rest
 }: GridContainerOverriddenProps) => {
   const styles = {
-    gap,
-    gridTemplateColumns: `repeat(auto-fill, minmax(${minWidth}, 1fr))`,
-  }
+    gap: toCSSUnit('gap', gap),
+    gridTemplateColumns: `repeat(auto-fill, minmax(${toCSSUnit('width', minWidth)}, 1fr))`,
+  };
   return <Root styles={styles} {...rest} />;
 };
 

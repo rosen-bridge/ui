@@ -3,16 +3,16 @@ import { forwardRef, HTMLAttributes } from 'react';
 import { Skeleton, Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
-import { Card, CardBody } from '../card';
 import { Connector } from '../../connector';
-import { Amount } from '../display';
+import { Identifier } from '../../identifier';
 import { Network } from '../../network';
+import { Stack } from '../../stack';
+import { Card, CardBody } from '../card';
+import { Amount } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { Stack } from '../../stack';
 import { Token } from '../Token';
 import { EventStatus, EventStatusProps } from './EventStatus';
-import { Identifier } from '../../identifier';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
   active?: boolean;

@@ -2,17 +2,16 @@ import { ComponentProps, useState } from 'react';
 
 import { OverridableType } from '../../@types';
 import { ElementBaseProps, Root, Wrap } from '../../core';
-
 import { Skeleton, Tooltip } from '../base';
-import { IconButton } from '../iconButton';
 import { QrCodeModal } from '../common';
-import { Icon } from '../icon';
 import { CopyButton } from '../copyButton';
-import { Truncate } from '../truncate';
+import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
 import { Text, TextOverriddenProps } from '../text';
+import { Truncate } from '../truncate';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides { }
+export interface IdentifierOverrides {}
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -33,7 +32,7 @@ export type IdentifierOwnProps = {
   slots?: {
     leading?: TextOverriddenProps;
     trailing?: TextOverriddenProps;
-  }
+  };
 
   /** Number of characters to show at the end*/
   trailingLength?: number;
@@ -83,11 +82,16 @@ export const IdentifierBase = ({
 
   const hasFallback = !hasValue && Boolean(fallback);
 
-  const hasActions = (hasValue || hasFallback) && Boolean(copyable || href || qrcode) && !loading;
+  const hasActions =
+    (hasValue || hasFallback) &&
+    Boolean(copyable || href || qrcode) &&
+    !loading;
 
   const disableActions = hasFallback || !hasValue || loading;
 
-  const leading = hasFallback ? fallback : (value ?? '').slice(0, -trailingLength);
+  const leading = hasFallback
+    ? fallback
+    : (value ?? '').slice(0, -trailingLength);
 
   const trailing = (value ?? '').slice(-trailingLength);
 
@@ -96,7 +100,7 @@ export const IdentifierBase = ({
       {loading && (
         <>
           <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />
-          <CopyButton className='loading' disabled size="small" />
+          <CopyButton className="loading" disabled size="small" />
         </>
       )}
       {!loading && (

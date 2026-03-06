@@ -76,12 +76,7 @@ export const FrameworkProvider = ({
         push: router.push,
       },
     }),
-    [
-      components.Image,
-      router.pathname,
-      router.search,
-      router.push,
-    ],
+    [components.Image, router.pathname, router.search, router.push],
   );
 
   return (

@@ -10,8 +10,8 @@ import { getDecimalString } from '@rosen-ui/utils';
 
 import { Skeleton, Tooltip, Typography } from '../../base';
 import { IconButton } from '../../iconButton';
-import { InjectOverrides } from '../InjectOverrides';
 import { Stack } from '../../stack';
+import { InjectOverrides } from '../InjectOverrides';
 import { SvgIcon } from '../SvgIcon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {

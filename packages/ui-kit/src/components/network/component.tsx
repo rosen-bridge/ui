@@ -1,14 +1,15 @@
 import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+
 import { OverridableType } from '../../@types';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 import { Skeleton } from '../base';
-import { Logo } from './logo';
-import { Truncate } from '../truncate';
 import { Icon, IconOverriddenProps } from '../icon';
 import { Text, TextOverriddenProps } from '../text';
+import { Truncate } from '../truncate';
+import { Logo } from './logo';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface NetworkOverrides { }
+export interface NetworkOverrides {}
 
 export type NetworkMeta = {
   label: string;
@@ -31,7 +32,7 @@ export type NetworkOwnProps = {
   slots?: {
     label?: TextOverriddenProps;
     logo?: IconOverriddenProps;
-  }
+  };
 
   /** What to show */
   variant?: 'both' | 'logo' | 'label' | 'reverse';
@@ -47,20 +48,29 @@ export type NetworkOverriddenProps = OverridableType<
 
 const DEFAULT_NETWORK: NetworkMeta = {
   label: 'Unsupported',
-  logo: Logo
+  logo: Logo,
 };
 
-export const NetworkBase = ({ fallback, loading, name = '', networks, slots, variant = 'both', ...rest }: NetworkOverriddenProps) => {
+export const NetworkBase = ({
+  fallback,
+  loading,
+  name = '',
+  networks,
+  slots,
+  variant = 'both',
+  ...rest
+}: NetworkOverriddenProps) => {
   const showLabel = variant !== 'logo';
   const showLogo = variant !== 'label';
 
-  const { logo: Logo, label } = useMemo(() => Object.assign({}, DEFAULT_NETWORK, fallback, networks?.[name]), [fallback, name, networks]);
+  const { logo: Logo, label } = useMemo(
+    () => Object.assign({}, DEFAULT_NETWORK, fallback, networks?.[name]),
+    [fallback, name, networks],
+  );
 
   return (
     <Root reflects={{ variant }} {...rest}>
-      {showLogo && loading && (
-        <Skeleton variant="circular" />
-      )}
+      {showLogo && loading && <Skeleton variant="circular" />}
       <Icon
         className="logo"
         icons={{ [name]: Logo }}
@@ -79,7 +89,7 @@ export const NetworkBase = ({ fallback, loading, name = '', networks, slots, var
         <Truncate>{label}</Truncate>
       </Text>
     </Root>
-  )
+  );
 };
 
 NetworkBase.displayName = 'Network';

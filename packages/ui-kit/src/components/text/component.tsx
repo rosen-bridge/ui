@@ -1,11 +1,13 @@
 import { ComponentProps } from 'react';
-import { ElementBaseProps, Wrap } from '../../core';
-import { OverridableType } from '../../@types';
-import { Skeleton, Typography } from '../base';
+
 import { Slot } from '@radix-ui/react-slot';
 
+import { OverridableType } from '../../@types';
+import { ElementBaseProps, Wrap } from '../../core';
+import { Skeleton, Typography } from '../base';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TextOverrides { }
+export interface TextOverrides {}
 
 export type TextOwnProps = {
   asChild?: boolean;
@@ -20,19 +22,22 @@ export type TextOverriddenProps = OverridableType<
   never
 >;
 
-export const TextBase = ({ asChild, children, loading, ...rest }: TextOverriddenProps) => {
+export const TextBase = ({
+  asChild,
+  children,
+  loading,
+  ...rest
+}: TextOverriddenProps) => {
   if (asChild) {
     return (
-      <Slot {...rest}>
-        {loading ? <Skeleton width="80px" /> : children}
-      </Slot>
-    )
+      <Slot {...rest}>{loading ? <Skeleton width="80px" /> : children}</Slot>
+    );
   } else {
     return (
       <Typography component="div" {...rest}>
         {loading ? <Skeleton width="80px" /> : children}
       </Typography>
-    )
+    );
   }
 };
 

@@ -22,7 +22,7 @@ const JUSTIFY_MAP: Record<NonNullable<StackBaseProps['justify']>, string> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface StackOverrides { }
+export interface StackOverrides {}
 
 export type StackOwnProps = {
   /** Defines how children are aligned along the cross-axis. */
@@ -77,7 +77,7 @@ export const StackBase = ({
     flexDirection: direction,
     alignItems: align ? ALIGN_MAP[align] : undefined,
     justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
-    gap: toCSSUnit('spacing', spacing)
+    gap: toCSSUnit('gap', spacing),
   };
   return <Root styles={styles} {...rest} />;
 };

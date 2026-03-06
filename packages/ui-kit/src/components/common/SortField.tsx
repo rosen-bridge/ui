@@ -26,8 +26,8 @@ import {
   Typography,
 } from '../base';
 import { IconButton } from '../iconButton';
-import { Divider } from './Divider';
 import { Stack } from '../stack';
+import { Divider } from './Divider';
 import { SvgIcon } from './SvgIcon';
 
 const Root = styled(Card)(({ theme }) => ({

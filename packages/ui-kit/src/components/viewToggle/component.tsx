@@ -1,13 +1,13 @@
 // TODO: use ToggleButton button
-
 import { ComponentProps } from 'react';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+
 import { OverridableType } from '../../@types';
-import { IconButton } from '../iconButton';
+import { ElementBaseProps, Root, Wrap } from '../../core';
 import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ViewToggleOverrides { }
+export interface ViewToggleOverrides {}
 
 export type ViewToggleType = 'grid' | 'row';
 
@@ -29,7 +29,12 @@ export type ViewToggleOverriddenProps = OverridableType<
 /**
  * A simple toggle component for switching between 'grid' and 'row' view modes.
  */
-export const ViewToggleBase = ({ disabled, value, onChange, ...rest }: ViewToggleOverriddenProps) => {
+export const ViewToggleBase = ({
+  disabled,
+  value,
+  onChange,
+  ...rest
+}: ViewToggleOverriddenProps) => {
   return (
     <Root {...rest}>
       <IconButton
@@ -47,7 +52,7 @@ export const ViewToggleBase = ({ disabled, value, onChange, ...rest }: ViewToggl
         <Icon name="Grid" />
       </IconButton>
     </Root>
-  )
+  );
 };
 
 ViewToggleBase.displayName = 'ViewToggle';
