@@ -12,7 +12,7 @@
   "type": "module",
   "exports": {
     ".": "./dist/index.js",
-    "./index.css": "./dist/index.css",
+    "./style.css": "./dist/style.css",
     "./dist/components/common/smartSearch/server": "./dist/components/common/smartSearch/server.js"
   },
   "main": "./dist/index.js",
@@ -20,9 +20,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc --build && npm run build:style",
-    "build:style": "vite build",
-    "build:watch": "tsc --watch",
+    "build": "tsdown",
+    "build:watch": "tsdown --watch",
     "lint": "eslint --fix . && npm run prettify",
     "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
@@ -47,8 +46,10 @@
   },
   "devDependencies": {
     "@rosen-ui/types": "^0.4.1",
+    "@tsdown/css": "^0.21.0",
+    "autoprefixer": "^10.4.27",
     "sass": "^1.97.3",
-    "vite": "^7.3.1"
+    "tsdown": "^0.21.0"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",

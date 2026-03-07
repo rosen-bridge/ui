@@ -1,10 +1,12 @@
 // TODO: use ToggleButton button
 import { ComponentProps } from 'react';
 
-import { OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+import { OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ViewToggleOverrides {}

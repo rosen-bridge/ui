@@ -1,5 +1,3 @@
-'use client';
-
 import { FileCopyAlt } from '@rosen-bridge/icons';
 
 import { useSnackbar } from '../../hooks';

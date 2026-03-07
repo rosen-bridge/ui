@@ -1,8 +1,8 @@
 import { ComponentProps } from 'react';
 
-import { GapOverridden, OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
-import { toCSSUnit } from '../../utils';
+import { GapOverridden, OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+import { toCSSUnit } from '@/utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {
   baseline: 'baseline',

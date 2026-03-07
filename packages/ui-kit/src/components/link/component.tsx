@@ -1,7 +1,9 @@
 import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
 
-import { ColorOverridden, OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+import { ColorOverridden, OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LinkOverrides {}

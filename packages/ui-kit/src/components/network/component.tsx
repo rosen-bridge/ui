@@ -1,12 +1,14 @@
 import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 
-import { OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+import { OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+
 import { Skeleton } from '../base';
 import { Icon, IconOverriddenProps } from '../icon';
 import { Text, TextOverriddenProps } from '../text';
 import { Truncate } from '../truncate';
 import { Logo } from './logo';
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NetworkOverrides {}

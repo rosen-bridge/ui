@@ -1,7 +1,8 @@
 import { ComponentProps, useState } from 'react';
 
-import { OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+import { OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+
 import { Skeleton, Tooltip } from '../base';
 import { QrCodeModal } from '../common';
 import { CopyButton } from '../copyButton';
@@ -9,6 +10,7 @@ import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Text, TextOverriddenProps } from '../text';
 import { Truncate } from '../truncate';
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IdentifierOverrides {}

@@ -1,8 +1,10 @@
 import { ComponentProps } from 'react';
 
-import { GapOverridden, OverridableType, WidthOverridden } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
-import { toCSSUnit } from '../../utils';
+import { GapOverridden, OverridableType, WidthOverridden } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+import { toCSSUnit } from '@/utils';
+
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface GridContainerOverrides {}

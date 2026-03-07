@@ -1,7 +1,8 @@
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
 
-import { OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
+import { OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+
 import { Tooltip } from '../base';
 import { Icon, IconOverriddenProps } from '../icon';
 import { IconButton } from '../iconButton';

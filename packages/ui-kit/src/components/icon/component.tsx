@@ -1,8 +1,10 @@
 import { ComponentProps, CSSProperties, FC, SVGAttributes } from 'react';
 
-import { ColorOverridden, OverridableType } from '../../@types';
-import { ElementBaseProps, Root, Wrap } from '../../core';
-import { toCSSColor, toCSSUnit } from '../../utils';
+import { ColorOverridden, OverridableType } from '@/@types';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+import { toCSSColor, toCSSUnit } from '@/utils';
+
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconOverrides {}
