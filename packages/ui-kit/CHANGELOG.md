@@ -1,5 +1,17 @@
 # @rosen-bridge/ui-kit
 
+## 5.3.0
+
+### Minor Changes
+
+- Add `Clear Filters` action to `SmartSearch` component
+- Add under development illustration SVG
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.5.0
+
 ## 5.2.1
 
 ### Patch Changes
