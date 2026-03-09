@@ -81,7 +81,7 @@ export const lockedAssetsTestData = {
         id: 'token-1',
         name: 'Token 1',
         decimal: 0,
-        significantDecimal: 0,
+        significantDecimal: 9,
         isNative: false,
         chain: 'ergo' as const,
         ergoSideTokenId: 'ergo-token-1',
@@ -91,7 +91,7 @@ export const lockedAssetsTestData = {
         id: 'token-2',
         name: 'Token 2',
         decimal: 0,
-        significantDecimal: 0,
+        significantDecimal: 9,
         isNative: false,
         chain: 'ergo' as const,
         ergoSideTokenId: 'ergo-token-2',
@@ -99,30 +99,32 @@ export const lockedAssetsTestData = {
       },
     ],
     lockedAssetRepo: [
-      { address: 'addr1', tokenId: 'token-1', amount: BigInt(10) },
+      { address: 'addr1', tokenId: 'token-1', amount: BigInt(38499495) },
       { address: 'addr2', tokenId: 'token-1', amount: BigInt(7) },
       { address: 'addr3', tokenId: 'token-1', amount: BigInt(3) },
 
-      { address: 'addr4', tokenId: 'token-2', amount: BigInt(5) },
+      { address: 'addr4', tokenId: 'token-2', amount: BigInt(1) },
       { address: 'addr5', tokenId: 'token-2', amount: BigInt(2) },
+      { address: 'addr6', tokenId: 'token-2', amount: BigInt(64451890024) },
     ],
     tokenPriceRepo: [
       {
         tokenId: 'token-1',
-        price: 10,
+        price: 3500,
         timestamp: 2_000,
       },
       {
         tokenId: 'token-2',
-        price: 4,
-        timestamp: 2_000,
+        price: 2,
+        timestamp: 2_000, // This is the latest price for token-2 at calculation time
       },
       {
         tokenId: 'token-2',
         price: 3,
-        timestamp: 3_000,
+        timestamp: 1_000, // Should not be used
       },
     ],
+    expectedTotalUsd: '263.652047554',
   },
 
   test2: {
@@ -145,6 +147,261 @@ export const lockedAssetsTestData = {
         amount: BigInt(10),
       },
     ],
+  },
+
+  test3: {
+    tokenRepo: [
+      {
+        id: 'token-large',
+        name: 'Large Token',
+        decimal: 0,
+        significantDecimal: 18,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-large',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      {
+        address: 'addr1',
+        tokenId: 'token-large',
+        amount: 1000000000000000000n,
+      },
+    ],
+    tokenPriceRepo: [
+      {
+        tokenId: 'token-large',
+        price: 100000.7,
+        timestamp: 2_000,
+      },
+    ],
+    expectedTotalUsd: '100000.7',
+  },
+
+  test4: {
+    tokenRepo: [
+      {
+        id: 'token-micro',
+        name: 'Micro Token',
+        decimal: 0,
+        significantDecimal: 18,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-micro',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      {
+        address: 'addr1',
+        tokenId: 'token-micro',
+        amount: BigInt('1000000000000000000'),
+      }, // 1e18
+    ],
+    tokenPriceRepo: [
+      {
+        tokenId: 'token-micro',
+        price: 0.000000000000001, // 1e-15
+        timestamp: 2_000,
+      },
+    ],
+    expectedTotalUsd: '0.000000000000001',
+  },
+
+  test5: {
+    tokenRepo: [
+      {
+        id: 'token-zero',
+        name: 'Zero Token',
+        decimal: 0,
+        significantDecimal: 9,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-zero',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      { address: 'addr1', tokenId: 'token-zero', amount: BigInt(0) },
+    ],
+    tokenPriceRepo: [
+      {
+        tokenId: 'token-zero',
+        price: 100,
+        timestamp: 2_000,
+      },
+    ],
+    expectedTotalUsd: '0',
+  },
+
+  test6: {
+    tokenRepo: [
+      {
+        id: 'token-dec-0',
+        name: 'Token 0 decimals',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-0',
+        isResident: true,
+      },
+      {
+        id: 'token-dec-6',
+        name: 'Token 6 decimals',
+        decimal: 6,
+        significantDecimal: 6,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-6',
+        isResident: true,
+      },
+      {
+        id: 'token-dec-18',
+        name: 'Token 18 decimals',
+        decimal: 18,
+        significantDecimal: 18,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-18',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      { address: 'addr1', tokenId: 'token-dec-0', amount: BigInt(100) },
+      { address: 'addr1', tokenId: 'token-dec-6', amount: BigInt(1000000) }, // 1 token with 6 decimals
+      {
+        address: 'addr1',
+        tokenId: 'token-dec-18',
+        amount: BigInt('1800000000000000000'),
+      }, // 1.8 token with 18 decimals
+    ],
+    tokenPriceRepo: [
+      { tokenId: 'token-dec-0', price: 0.2, timestamp: 2_000 },
+      { tokenId: 'token-dec-6', price: 10, timestamp: 2_000 },
+      { tokenId: 'token-dec-18', price: 10, timestamp: 2_000 },
+    ],
+    expectedTotalUsd: '48',
+  },
+
+  test7: {
+    tokenRepo: [
+      {
+        id: 'token-with-price',
+        name: 'With Price',
+        decimal: 0,
+        significantDecimal: 2,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-price',
+        isResident: true,
+      },
+      {
+        id: 'token-no-price',
+        name: 'No Price',
+        decimal: 0,
+        significantDecimal: 9,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-no-price',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      {
+        address: 'addr1',
+        tokenId: 'token-with-price',
+        amount: BigInt(45895321),
+      },
+      { address: 'addr1', tokenId: 'token-no-price', amount: BigInt(1000) },
+    ],
+    tokenPriceRepo: [
+      {
+        tokenId: 'token-with-price',
+        price: 0.0045,
+        timestamp: 2_000,
+      },
+    ],
+    expectedTotalUsd: '2065.289445',
+  },
+
+  test8: {
+    tokenRepo: [
+      {
+        id: 'token-time',
+        name: 'Time Token',
+        decimal: 0,
+        significantDecimal: 4,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-time',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      { address: 'addr1', tokenId: 'token-time', amount: BigInt(7529654) },
+    ],
+    tokenPriceRepo: [
+      { tokenId: 'token-time', price: 5, timestamp: 1_000 }, // Old price
+      { tokenId: 'token-time', price: 1, timestamp: 2_000 }, // New price (should be used)
+      { tokenId: 'token-time', price: 1.5, timestamp: 3_000 }, // Future price (not used)
+    ],
+    expectedTotalUsd: '1129.4481',
+  },
+
+  test9: {
+    tokenRepo: [
+      {
+        id: 'token-sci',
+        name: 'Scientific Token',
+        decimal: 0,
+        significantDecimal: 3,
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-sci',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      { address: 'addr1', tokenId: 'token-sci', amount: BigInt(2504567) },
+    ],
+    tokenPriceRepo: [{ tokenId: 'token-sci', price: 2.1e-8, timestamp: 2_000 }],
+    expectedTotalUsd: '0.000052595907',
+  },
+
+  test10: {
+    tokenRepo: [
+      {
+        id: 'token-mixed-1',
+        name: 'Mixed Token 1',
+        decimal: 0,
+        significantDecimal: 2, // Only 2 significant decimals
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-mixed-1',
+        isResident: true,
+      },
+      {
+        id: 'token-mixed-2',
+        name: 'Mixed Token 2',
+        decimal: 0,
+        significantDecimal: 8, // 8 significant decimals
+        isNative: false,
+        chain: 'ergo' as const,
+        ergoSideTokenId: 'ergo-token-mixed-2',
+        isResident: true,
+      },
+    ],
+    lockedAssetRepo: [
+      { address: 'addr1', tokenId: 'token-mixed-1', amount: BigInt(123456) },
+      { address: 'addr1', tokenId: 'token-mixed-2', amount: BigInt(789012) },
+    ],
+    tokenPriceRepo: [
+      { tokenId: 'token-mixed-1', price: 0.12345678, timestamp: 2_000 },
+      { tokenId: 'token-mixed-2', price: 0.00001234, timestamp: 2_000 },
+    ],
+    expectedTotalUsd: '152.4148024141640808',
   },
 };
 

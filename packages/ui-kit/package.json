@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "version": "5.2.0",
+  "version": "5.3.0",
   "private": true,
   "description": "ui kit for Rosen projects",
   "repository": {
@@ -26,11 +26,12 @@
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
     "release": "npm run build && npm publish --access public",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc"
   },
   "dependencies": {
     "@mui/material": "^7.3.6",
-    "@rosen-bridge/icons": "^3.4.0",
+    "@rosen-bridge/icons": "^3.5.0",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.2",

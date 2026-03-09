@@ -86,7 +86,7 @@ export const eventCountMetric = async (
 
     logger.debug('Event count metric calculation job completed successfully');
   } catch (error) {
-    logger.debug(`Event count metric calculation job failed: ${error}`, {
+    logger.error(`Event count metric calculation job failed: ${error}`, {
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });

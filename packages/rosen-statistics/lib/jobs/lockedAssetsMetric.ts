@@ -5,10 +5,19 @@ import {
   LockedAssetsMetricAction,
   METRIC_KEYS,
   MetricAction,
+  LockedAssetsType,
 } from '@rosen-ui/rosen-statistics-entity';
 
+import {
+  getDecimalString,
+  getNonDecimalString,
+  getNumberOfDecimals,
+  multiplyByPowerOfTen,
+  scientificToString,
+} from '../utils';
+
 /**
- * Calculate and persist locked assets usd metric.
+ * Calculate and persist locked assets USD metric.
  *
  * @param dataSource DataSource instance for database operations
  * @param logger     Optional logger instance
@@ -17,47 +26,96 @@ export const lockedAssetsMetric = async (
   dataSource: DataSource,
   logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
-  logger.debug('Calculating and storing locked assets usd metric...');
+  logger.debug('Starting locked assets USD metric calculation job');
+
   const lockedAssetsMetricAction = new LockedAssetsMetricAction(
     dataSource,
-    logger,
+    logger.child('lockedAssetsMetricAction'),
   );
-  const metricAction = new MetricAction(dataSource, logger);
-  const tokenPriceAction = new TokenPriceAction(dataSource, logger);
+  const metricAction = new MetricAction(
+    dataSource,
+    logger.child('metricAction'),
+  );
+  const tokenPriceAction = new TokenPriceAction(
+    dataSource,
+    logger.child('tokenPriceAction'),
+  );
+
   const timestamp = Math.floor(Date.now() / 1000);
 
-  const lockedAssets = await lockedAssetsMetricAction.getLockedAssets();
-  if (!lockedAssets.length) {
-    logger.debug('No locked assets found');
-    return;
-  }
+  try {
+    const lockedAssets = await lockedAssetsMetricAction.getLockedAssets();
+    if (!lockedAssets.length) {
+      logger.debug('No locked assets found');
+      return;
+    }
 
-  const tokenIds = new Set(lockedAssets.map((a) => a.tokenId));
-  const latestPriceMap = new Map<string, number>();
+    let maxDecimals = 0;
+    let totalRawNormalized = 0n;
+    const processedAssets: LockedAssetsType[] = [];
 
-  for (const tokenId of tokenIds) {
-    const price = await tokenPriceAction.getLatestTokenPrice(
-      tokenId,
+    for (const asset of lockedAssets) {
+      const tokenUsdPrice = await tokenPriceAction.getLatestTokenPrice(
+        asset.tokenId,
+        timestamp,
+      );
+      if (tokenUsdPrice === undefined) continue;
+
+      const tokenUsdPriceString = scientificToString(tokenUsdPrice);
+      const tokenUsdPriceDecimals = getNumberOfDecimals(tokenUsdPriceString);
+      const tokenUsdPriceRaw = getNonDecimalString(
+        tokenUsdPriceString,
+        tokenUsdPriceDecimals,
+      );
+
+      const rawUsdValue = asset.amount * BigInt(tokenUsdPriceRaw);
+
+      const usdValueDecimals = asset.significantDecimal + tokenUsdPriceDecimals;
+
+      maxDecimals = Math.max(maxDecimals, usdValueDecimals);
+
+      processedAssets.push({
+        amount: rawUsdValue,
+        significantDecimal: usdValueDecimals,
+        tokenId: asset.tokenId,
+      });
+    }
+
+    if (!processedAssets.length) {
+      logger.debug('No assets with valid prices');
+      return;
+    }
+
+    for (const { amount, significantDecimal } of processedAssets) {
+      if (significantDecimal < maxDecimals) {
+        totalRawNormalized += BigInt(
+          multiplyByPowerOfTen(amount, maxDecimals - significantDecimal),
+        );
+      } else {
+        totalRawNormalized += amount;
+      }
+    }
+
+    const totalUsdValueString = getDecimalString(
+      totalRawNormalized,
+      maxDecimals,
+    );
+
+    logger.debug(`Total locked assets USD value: [${totalUsdValueString}]`);
+
+    await metricAction.upsertMetric(
+      METRIC_KEYS.TOTAL_LOCKED_ASSETS_USD,
+      totalUsdValueString,
       timestamp,
     );
-    if (!price) continue;
-    latestPriceMap.set(tokenId, price);
+
+    logger.debug(
+      'Locked assets USD metric calculation job completed successfully',
+    );
+  } catch (error) {
+    logger.error('Locked assets USD metric calculation job failed', {
+      message: error instanceof Error ? error.message : '',
+      stack: error instanceof Error ? error.stack : undefined,
+    });
   }
-  const totalUsdValue = lockedAssets.reduce((sum, asset) => {
-    const price = latestPriceMap.get(asset.tokenId);
-    return sum + (price ? asset.amount * BigInt(price) : 0n);
-  }, 0n);
-
-  if (totalUsdValue === 0n) {
-    logger.debug('No locked assets with valid prices found');
-    return;
-  }
-
-  logger.debug(`Total locked assets USD value: [${totalUsdValue}]`);
-
-  await metricAction.upsertMetric(
-    METRIC_KEYS.TOTAL_LOCKED_ASSETS_USD,
-    totalUsdValue.toString(),
-    timestamp,
-  );
 };

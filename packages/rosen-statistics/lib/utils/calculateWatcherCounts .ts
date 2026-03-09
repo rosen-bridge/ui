@@ -2,7 +2,7 @@ import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
 
 import { WATCHER_COUNT_REGISTER } from '../constants';
-import { WatcherBox, WatcherCountConfig } from '../types';
+import { WatcherBoxType, WatcherCountConfig } from '../types';
 
 /**
  * Calculate watcher counts for a list of boxes grouped by network.
@@ -15,8 +15,8 @@ import { WatcherBox, WatcherCountConfig } from '../types';
  * @returns Object containing networkWatcherCounts array and totalWatchers number
  */
 export const calculateWatcherCounts = (
-  boxes: WatcherBox[],
-  getRegisterValue: (box: WatcherBox, register: string) => number,
+  boxes: WatcherBoxType[],
+  getRegisterValue: (box: WatcherBoxType, register: string) => number,
   config: WatcherCountConfig,
   logger: AbstractLogger,
 ): { networkWatcherCounts: WatcherCountType[]; totalWatchers: number } => {

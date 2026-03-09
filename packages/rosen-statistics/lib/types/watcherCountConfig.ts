@@ -7,4 +7,4 @@ export interface WatcherCountConfig {
   rwtRepoNFT: string;
   rwtTokenMap: Map<string, string>;
 }
-export type WatcherBox = V1.OutputInfo | IndexedErgoBox;
+export type WatcherBoxType = V1.OutputInfo | IndexedErgoBox;
