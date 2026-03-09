@@ -3,9 +3,9 @@ import { ComponentProps, useCallback, useMemo, useState } from 'react';
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Tooltip } from '../base';
 import { Icon, IconOverriddenProps } from '../icon';
 import { IconButton } from '../iconButton';
+import { Tooltip, TooltipOverriddenProps } from '../tooltip';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CopyButtonOverrides {}
@@ -17,6 +17,11 @@ export type CopyButtonOwnProps = {
    * Icons to use for each status.
    */
   icons?: Record<CopyButtonStatus, IconOverriddenProps['name']>;
+
+  slots?: {
+    icon?: IconOverriddenProps;
+    tooltip?: TooltipOverriddenProps;
+  };
 
   /**
    * The text value to copy.
@@ -40,6 +45,7 @@ export type CopyButtonOverriddenProps = OverridableType<
  */
 export const CopyButtonBase = ({
   icons,
+  slots,
   value = '',
   ...rest
 }: CopyButtonOverriddenProps) => {
@@ -73,10 +79,9 @@ export const CopyButtonBase = ({
   }, [value]);
 
   return (
-    // TODO: add tooltip and icon in slots
-    <Tooltip title="Copy">
+    <Tooltip title="Copy" {...slots?.tooltip}>
       <Root as={IconButton} onClick={handleCopy} {...rest}>
-        <Icon name={icon} />
+        <Icon name={icon} {...slots?.icon} />
       </Root>
     </Tooltip>
   );

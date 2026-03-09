@@ -4,8 +4,10 @@ import type {
   CenterOverriddenProps,
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
+  CopyButtonOverriddenProps,
   GridContainerOverriddenProps,
   IconOverriddenProps,
+  IconButtonOverriddenProps,
   IdentifierOverriddenProps,
   LabelGroupOverriddenProps,
   LinkOverriddenProps,
@@ -19,6 +21,8 @@ import type {
   TableGridRowOverriddenProps,
   TextOverriddenProps,
   ThemeToggleButtonOverriddenProps,
+  ToolbarOverriddenProps,
+  TooltipOverriddenProps,
   TruncateOverriddenProps,
   ViewToggleOverriddenProps,
 } from '../components';
@@ -27,8 +31,10 @@ type Components = {
   Center: CenterOverriddenProps;
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
+  CopyButton: CopyButtonOverriddenProps;
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
+  IconButton: IconButtonOverriddenProps;
   Identifier: IdentifierOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
   Link: LinkOverriddenProps;
@@ -40,8 +46,10 @@ type Components = {
   TableGridCell: TableGridCellOverriddenProps;
   TableGridHeader: TableGridHeaderOverriddenProps;
   TableGridRow: TableGridRowOverriddenProps;
-  TextOverriddenProps: TextOverriddenProps;
+  Text: TextOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
+  Toolbar: ToolbarOverriddenProps;
+  Tooltip: TooltipOverriddenProps;
   Truncate: TruncateOverriddenProps;
   ViewToggle: ViewToggleOverriddenProps;
 };

@@ -1,4 +1,4 @@
-// TODO: use ToggleButton button
+// TODO: use ToggleButton button and add slots
 import { ComponentProps } from 'react';
 
 import { OverridableType } from '@/@types';

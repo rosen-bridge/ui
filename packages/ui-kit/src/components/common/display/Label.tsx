@@ -3,8 +3,8 @@ import { HTMLAttributes } from 'react';
 import { Box, Typography, SvgIcon } from '@mui/material';
 import { ExclamationCircle } from '@rosen-bridge/icons';
 
-import { Tooltip } from '../../base';
 import { Stack } from '../../stack';
+import { Tooltip } from '../../tooltip';
 import { InjectOverrides } from '../InjectOverrides';
 
 /**

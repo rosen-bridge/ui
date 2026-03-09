@@ -1,20 +1,28 @@
 import { ComponentProps } from 'react';
 
+import { Slot } from '@radix-ui/react-slot';
+
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Tooltip } from '../base';
+import { Tooltip, TooltipOverriddenProps } from '../tooltip';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TruncateOverrides {}
 
 export type TruncateOwnProps = {
+  asChild?: boolean;
+
   /**
    * Number of lines to display before truncating the content.
    * @default 1
    */
   lines?: number;
+
+  slots?: {
+    tooltip?: TooltipOverriddenProps;
+  };
 };
 
 export type TruncateBaseProps = ElementBaseProps<'div', TruncateOwnProps>;
@@ -39,13 +47,19 @@ export type TruncateOverriddenProps = OverridableType<
  * ```
  */
 export const TruncateBase = ({
+  asChild,
   children,
   lines = 1,
+  slots,
   ...rest
 }: TruncateOverriddenProps) => {
   return (
-    <Tooltip title={children} placement="top">
-      <Root styles={{ WebkitLineClamp: lines }} {...rest}>
+    <Tooltip title={children} placement="top" {...slots?.tooltip}>
+      <Root
+        as={asChild ? Slot : 'div'}
+        styles={{ WebkitLineClamp: lines }}
+        {...rest}
+      >
         {children}
       </Root>
     </Tooltip>

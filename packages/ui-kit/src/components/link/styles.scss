@@ -1,13 +1,14 @@
-// TODO
-
-.rosen-Link {
-}
-
 .rosen-Link[data-underline='always'] {
+  text-decoration: underline;
 }
 
 .rosen-Link[data-underline='hover'] {
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 .rosen-Link[data-underline='none'] {
+  text-decoration: none;
 }

@@ -2,8 +2,9 @@ import React from 'react';
 
 import { StepLabel } from '@mui/material';
 
-import { Tooltip, Typography } from '../../base';
+import { Typography } from '../../base';
 import { Stack } from '../../stack';
+import { Tooltip } from '../../tooltip';
 import { ProcessTrackerSubItem } from './types';
 
 type LabelProps = {
@@ -107,20 +108,21 @@ export const ProcessLabel = ({ icon, info, step, onClick }: LabelProps) => {
   return (
     <Tooltip
       arrow
-      slotProps={{
-        tooltip: {
-          sx: {
-            'backgroundColor': 'success.light',
-            'color': 'black',
-            'cursor': 'text',
-            'padding': 1,
-            'borderRadius': 1,
-            '& .MuiTooltip-arrow': {
-              color: 'success.light',
-            },
-          },
-        },
-      }}
+      // TODO
+      // slotProps={{
+      //   tooltip: {
+      //     sx: {
+      //       'backgroundColor': 'success.light',
+      //       'color': 'black',
+      //       'cursor': 'text',
+      //       'padding': 1,
+      //       'borderRadius': 1,
+      //       '& .MuiTooltip-arrow': {
+      //         color: 'success.light',
+      //       },
+      //     },
+      //   },
+      // }}
       title={
         <Stack style={{ cursor: 'text' }}>
           <Typography textAlign="center" color="success.main" variant="body2">

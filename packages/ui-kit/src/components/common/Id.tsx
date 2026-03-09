@@ -1,7 +1,8 @@
 import { SvgIcon } from '@mui/material';
 import { ExternalLinkAlt } from '@rosen-bridge/icons';
 
-import { Typography, Tooltip } from '../base';
+import { Typography } from '../base';
+import { Tooltip } from '../tooltip';
 
 export interface IdProps {
   id: string;

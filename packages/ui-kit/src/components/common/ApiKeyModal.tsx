@@ -10,12 +10,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Tooltip,
   InputAdornment,
   TextField,
   Typography,
 } from '../base';
 import { IconButton } from '../iconButton';
+import { Tooltip } from '../tooltip';
 import { SvgIcon } from './SvgIcon';
 
 interface FormValues {

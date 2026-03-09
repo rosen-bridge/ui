@@ -8,9 +8,10 @@ import {
 } from '@rosen-bridge/icons';
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { Skeleton, Tooltip, Typography } from '../../base';
+import { Skeleton, Typography } from '../../base';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
+import { Tooltip } from '../../tooltip';
 import { InjectOverrides } from '../InjectOverrides';
 import { SvgIcon } from '../SvgIcon';
 

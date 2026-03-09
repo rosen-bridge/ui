@@ -9,8 +9,8 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 export interface IconButtonOverrides {}
 
 export type IconButtonOwnProps = {
-  href?: string | undefined;
-  target?: HTMLAttributeAnchorTarget | undefined;
+  href?: string;
+  target?: HTMLAttributeAnchorTarget;
 };
 
 export type IconButtonBaseProps = ElementBaseProps<

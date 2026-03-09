@@ -4,14 +4,18 @@ import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { useIsDarkMode, useThemeToggler } from '@/hooks';
 
-import { Icon } from '../icon';
+import { Icon, IconOverriddenProps } from '../icon';
 import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ThemeToggleButtonOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type ThemeToggleButtonOwnProps = {};
+export type ThemeToggleButtonOwnProps = {
+  slots?: {
+    darkIcon?: IconOverriddenProps;
+    lightIcon?: IconOverriddenProps;
+  };
+};
 
 export type ThemeToggleButtonBaseProps = ElementBaseProps<
   typeof IconButton,
@@ -25,6 +29,7 @@ export type ThemeToggleButtonOverriddenProps = OverridableType<
 >;
 
 export const ThemeToggleButtonBase = ({
+  slots,
   ...rest
 }: ThemeToggleButtonOverriddenProps) => {
   const isDarkMode = useIsDarkMode();
@@ -38,7 +43,11 @@ export const ThemeToggleButtonBase = ({
       onClick={themeToggler.toggle}
       {...rest}
     >
-      <Icon name={isDarkMode ? 'Sun' : 'Moon'} />
+      {isDarkMode ? (
+        <Icon name="Sun" {...slots?.darkIcon} />
+      ) : (
+        <Icon name="Moon" {...slots?.lightIcon} />
+      )}
     </Root>
   );
 };

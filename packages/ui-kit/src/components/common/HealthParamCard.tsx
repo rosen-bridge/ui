@@ -12,8 +12,9 @@ import moment from 'moment';
 import { Card, CardBody, CardHeader, CardTitle, SvgIcon } from '.';
 import { Colors } from '../../core';
 import { useTheme } from '../../hooks';
-import { Alert, Tooltip, Typography } from '../base';
+import { Alert, Typography } from '../base';
 import { Stack } from '../stack';
+import { Tooltip } from '../tooltip';
 import { Button } from './Button';
 
 export type HealthParamCardProps = HealthParamInfo & {

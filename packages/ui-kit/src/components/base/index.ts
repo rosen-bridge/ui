@@ -44,5 +44,4 @@ export * from './TablePagination';
 export * from './TableRow';
 export * from './ToggleButton';
 export * from './ToggleButtonGroup';
-export * from './Tooltip';
 export * from './Typography';

@@ -30,7 +30,6 @@ export * from './SortField';
 export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
 export * from './TokensCard';
-export * from './Toolbar';
 export * from './AppSnackbar';
 export * from './Token';
 export * from './Chip';

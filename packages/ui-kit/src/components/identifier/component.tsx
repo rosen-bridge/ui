@@ -3,12 +3,13 @@ import { ComponentProps, useState } from 'react';
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Skeleton, Tooltip } from '../base';
+import { Skeleton } from '../base';
 import { QrCodeModal } from '../common';
 import { CopyButton } from '../copyButton';
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Text, TextOverriddenProps } from '../text';
+import { Tooltip, TooltipOverriddenProps } from '../tooltip';
 import { Truncate } from '../truncate';
 import './styles.scss';
 
@@ -34,6 +35,7 @@ export type IdentifierOwnProps = {
   slots?: {
     leading?: TextOverriddenProps;
     trailing?: TextOverriddenProps;
+    tooltip?: TooltipOverriddenProps;
   };
 
   /** Number of characters to show at the end*/
@@ -106,7 +108,7 @@ export const IdentifierBase = ({
         </>
       )}
       {!loading && (
-        <Tooltip title={value}>
+        <Tooltip title={value} {...slots?.tooltip}>
           <div className="value">
             <Text asChild className="leading" {...slots?.leading}>
               <Truncate>{leading}</Truncate>
