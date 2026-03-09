@@ -7,6 +7,7 @@ import {
 import { lockedAssetsMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
+import { AssetAggregatorService } from './assetAggregator';
 import { DBService } from './db';
 
 export class LockedAssetsMetricService extends PeriodicTaskService {
@@ -16,6 +17,10 @@ export class LockedAssetsMetricService extends PeriodicTaskService {
   protected dependencies: Dependency[] = [
     {
       serviceName: DBService.name,
+      allowedStatuses: [ServiceStatus.running],
+    },
+    {
+      serviceName: AssetAggregatorService.name,
       allowedStatuses: [ServiceStatus.running],
     },
   ];
@@ -63,7 +68,7 @@ export class LockedAssetsMetricService extends PeriodicTaskService {
     try {
       await lockedAssetsMetric(
         this.dbService.dataSource,
-        this.logger.child('lockedAssetsCalculationJob'),
+        this.logger.child('lockedAssetsMetric'),
       );
 
       this.logger.info('Locked assets calculation job completed successfully');
@@ -77,24 +82,13 @@ export class LockedAssetsMetricService extends PeriodicTaskService {
 
   /**
    * Pre-start hook to prepare the service
-   *
-   * @protected
-   * @returns {Promise<void>}
    */
-  protected preStart = async (): Promise<void> => {
-    this.setStatus(ServiceStatus.started);
-    this.logger.info('LockedAssetsMetricService started successfully');
-  };
+  protected preStart = async (): Promise<void> => {};
 
   /**
    * Post-stop hook for cleanup
-   *
-   * @protected
-   * @returns {Promise<void>}
    */
-  protected postStop = async (): Promise<void> => {
-    this.logger.info('LockedAssetsMetricService stopped');
-  };
+  protected postStop = async (): Promise<void> => {};
 
   /**
    * Builds a list of asynchronous tasks for locked assets calculation.

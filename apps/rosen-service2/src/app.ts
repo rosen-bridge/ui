@@ -36,14 +36,6 @@ const startApp = async () => {
   serviceManager.register(ScannerService.getInstance());
   logger.debug('Scanner service registered to the service manager');
 
-  logger.debug('Initializing locked assets metrics service');
-  LockedAssetsMetricService.init(
-    DefaultLogger.getInstance().child('lockedAssetsMetricsService'),
-  );
-  serviceManager.register(LockedAssetsMetricService.getInstance());
-  logger.debug(
-    'Locked assets metrics service registered to the service manager',
-  );
   logger.debug('Initializing general metrics service');
   GeneralMetricsService.init(
     DefaultLogger.getInstance().child('generalMetricsService'),
@@ -64,6 +56,15 @@ const startApp = async () => {
   );
   serviceManager.register(AssetAggregatorService.getInstance());
   logger.debug('asset-aggregator Service registered to the service manager');
+
+  logger.debug('Initializing locked assets metrics service');
+  LockedAssetsMetricService.init(
+    DefaultLogger.getInstance().child('lockedAssetsMetricsService'),
+  );
+  serviceManager.register(LockedAssetsMetricService.getInstance());
+  logger.debug(
+    'Locked assets metrics service registered to the service manager',
+  );
 
   logger.debug('Initializing health-check service');
   HealthService.init(DefaultLogger.getInstance().child('healthCheckService'));
