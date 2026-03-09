@@ -9,5 +9,3 @@ export const METRIC_KEYS = {
 } as const;
 
 export type MetricKey = (typeof METRIC_KEYS)[keyof typeof METRIC_KEYS];
-
-export const WATCHER_REGISTER = 'R5';

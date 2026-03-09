@@ -14,7 +14,7 @@ export {
   UserEventMetricAction,
   WatcherCountMetricAction,
 } from './actions';
-export { METRIC_KEYS, MetricKey, WATCHER_REGISTER } from './constants';
+export { METRIC_KEYS, MetricKey } from './constants';
 export {
   AggregatedEvents,
   EventCountStatus,

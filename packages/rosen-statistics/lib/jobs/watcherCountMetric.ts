@@ -1,16 +1,16 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
+import { V1 } from '@rosen-clients/ergo-explorer';
+import { IndexedErgoBox } from '@rosen-clients/ergo-node';
 import {
   MetricAction,
   METRIC_KEYS,
-  WatcherCountType,
   WatcherCountMetricAction,
-  WATCHER_REGISTER,
 } from '@rosen-ui/rosen-statistics-entity';
-import { Constant } from 'ergo-lib-wasm-nodejs';
 
 import { NodeBoxFetcher, ExplorerBoxFetcher } from '../services';
 import { WatcherCountConfig } from '../types';
+import { calculateWatcherCounts } from '../utils';
 
 /**
  * Calculate and persist watcher count metric.
@@ -34,48 +34,42 @@ export const watcherCountMetric = async (
     dataSource,
     logger.child('metricAction'),
   );
-  const boxService =
-    config.url === 'explorer'
-      ? new ExplorerBoxFetcher(config.url, logger.child('explorerFetcher'))
-      : new NodeBoxFetcher(config.url, logger.child('nodeFetcher'));
   try {
-    const boxes = await boxService.fetchUnspentBoxesByTokenId(
-      config.rwtRepoNFT,
-    );
-    logger.debug(`Fetched ${boxes.length} watcher boxes`);
+    let result;
 
-    const networkWatcherCounts: WatcherCountType[] = [];
-    let totalWatchers = 0;
-
-    for (const box of boxes) {
-      const networkToken = box.assets?.find((asset) =>
-        config.rwtTokenMap.has(asset.tokenId),
+    if (config.type === 'explorer') {
+      const boxService = new ExplorerBoxFetcher(
+        config.url,
+        logger.child('explorerFetcher'),
       );
-
-      if (!networkToken) {
-        logger.debug(
-          `Skipping box with unknown network - no matching token ID found in map`,
-        );
-        continue;
-      }
-      const network = config.rwtTokenMap.get(networkToken.tokenId);
-      if (!network) continue;
-
-      const watcherRegister = box.additionalRegisters[WATCHER_REGISTER];
-      if (!watcherRegister) continue;
-
-      const count =
-        typeof watcherRegister === 'object'
-          ? Number(watcherRegister.renderedValue)
-          : Number(
-              Constant.decode_from_base16(watcherRegister).to_i64().to_str(),
-            );
-
-      networkWatcherCounts.push({ network, count });
-      totalWatchers += count;
-      logger.debug(`Network: ${network}, Watchers: ${count}`);
+      const boxes = await boxService.fetchUnspentBoxesByTokenId(
+        config.rwtRepoNFT,
+      );
+      logger.debug(`Fetched ${boxes.length} watcher boxes`);
+      result = calculateWatcherCounts(
+        boxes,
+        (box, key) => boxService.getRegisterValue(box as V1.OutputInfo, key),
+        config,
+        logger,
+      );
+    } else {
+      const boxService = new NodeBoxFetcher(
+        config.url,
+        logger.child('nodeFetcher'),
+      );
+      const boxes = await boxService.fetchUnspentBoxesByTokenId(
+        config.rwtRepoNFT,
+      );
+      logger.debug(`Fetched ${boxes.length} watcher boxes`);
+      result = calculateWatcherCounts(
+        boxes,
+        (box, key) => boxService.getRegisterValue(box as IndexedErgoBox, key),
+        config,
+        logger,
+      );
     }
 
+    const { networkWatcherCounts, totalWatchers } = result;
     logger.debug(`Found watchers in ${networkWatcherCounts.length} networks`);
 
     await watcherAction.upsertWatcherCount(networkWatcherCounts);

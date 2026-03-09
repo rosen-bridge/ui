@@ -800,7 +800,7 @@ export const userEventMetricTestData = {
 const createMockExplorerBox = (count: string, rwtTokenId?: string) => ({
   additionalRegisters: {
     R5: {
-      renderedValue: count,
+      serializedValue: count,
     },
   },
   assets: [
@@ -848,31 +848,24 @@ export const watcherCountMetricTestData = {
       rwtTokenMap: new Map<string, string>([
         ['valid-rwt-token-id', 'ergo'],
         ['cardano-rwt-token-id', 'cardano'],
-        ['eth-rwt-token-id', 'ethereum'],
       ]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockExplorerBox('5', 'valid-rwt-token-id'),
-      createMockExplorerBox('4', 'cardano-rwt-token-id'),
-      createMockExplorerBox('2', 'eth-rwt-token-id'),
+      createMockExplorerBox('05e401', 'valid-rwt-token-id'),
+      createMockExplorerBox('0526', 'cardano-rwt-token-id'),
     ],
     expectedResults: {
       watcherCounts: [
         {
           network: 'ergo',
-          count: 5,
+          count: 114,
         },
         {
           network: 'cardano',
-          count: 4,
-        },
-
-        {
-          network: 'ethereum',
-          count: 2,
+          count: 19,
         },
       ],
-      totalWatchers: '11',
+      totalWatchers: '133',
     },
   },
 
@@ -887,17 +880,17 @@ export const watcherCountMetricTestData = {
       rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockExplorerBox('5', 'valid-rwt-token-id'),
-      createMockExplorerBox('4', 'some-other-token-id'),
+      createMockExplorerBox('0526', 'valid-rwt-token-id'),
+      createMockExplorerBox('05e401', 'some-other-token-id'),
     ],
     expectedResults: {
       watcherCounts: [
         {
           network: 'ergo',
-          count: 5,
+          count: 19,
         },
       ],
-      totalWatchers: '5',
+      totalWatchers: '19',
     },
   },
 
@@ -947,6 +940,39 @@ export const watcherCountMetricTestData = {
         },
       ],
       totalWatchers: '133',
+    },
+  },
+
+  /**
+   * Test 5: Error scenario with existing data
+   */
+  errorWithExistingData: {
+    config: {
+      type: 'explorer' as const,
+      url: 'https://ergo-explorer.com',
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([
+        ['valid-rwt-token-id', 'ergo'],
+        ['cardano-rwt-token-id', 'cardano'],
+      ]),
+    } as WatcherCountConfig,
+    existingData: {
+      watcherCounts: [
+        { network: 'ergo', count: 100 },
+        { network: 'cardano', count: 50 },
+      ],
+      totalMetric: {
+        key: METRIC_KEYS.WATCHER_COUNT_TOTAL,
+        value: '150',
+        updatedAt: 12000,
+      },
+    },
+    expectedResults: {
+      watcherCounts: [
+        { network: 'ergo', count: 100 },
+        { network: 'cardano', count: 50 },
+      ],
+      totalWatchers: '150',
     },
   },
 };
