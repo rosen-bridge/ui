@@ -23,11 +23,12 @@ export type LinkOverriddenProps = OverridableType<
 >;
 
 export const LinkBase = ({
+  as = 'a',
   color,
   underline = 'always',
   ...rest
 }: LinkOverriddenProps) => {
-  return <Root reflects={{ color, underline }} {...rest} />;
+  return <Root as={as} reflects={{ color, underline }} {...rest} />;
 };
 
 LinkBase.displayName = 'Link';

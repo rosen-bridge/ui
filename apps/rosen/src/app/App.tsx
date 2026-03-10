@@ -60,7 +60,7 @@ export const App = ({ children }: PropsWithChildren) => {
             Network: {
               defaultProps: {
                 networks: Object.fromEntries(
-                  Object.entries(NETWORKS).map(([key, value]) => [key, { label: value.label, logo: (AllIcons as any)[kebabToPascal(key)] }])
+                  Object.entries(NETWORKS).map(([key, value]) => [key, { label: value.label, logo: AllIcons[kebabToPascal(key) as keyof typeof AllIcons] }])
                 ),
               }
             }

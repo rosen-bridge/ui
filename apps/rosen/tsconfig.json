@@ -25,7 +25,7 @@
     "types": ["vitest/globals"]
   },
   "include": [
-    "global.d.ts",
+    "ui-kit.d.ts",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
