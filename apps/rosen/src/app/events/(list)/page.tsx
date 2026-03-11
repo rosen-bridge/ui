@@ -172,8 +172,8 @@ const Page = () => {
                       id: item.eventId,
                       status: item.status,
                       toChain: item.toChain,
-                      token: item.lockToken?.name,
-                      ergoSideTokenId: item.lockToken?.ergoSideTokenId,
+                      token: item.lockToken?.id,
+                      unit: item?.lockToken?.name,
                       timestamp: item.timestamp,
                     }
               }

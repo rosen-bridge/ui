@@ -57,7 +57,7 @@ const Content = ({ value }: EventSidebarProps) => {
       toAddress: data?.toAddress,
       toAddressUrl: getAddressUrl(data?.toChain, data?.toAddress),
       toChain: data?.toChain,
-      token: data?.lockToken?.name,
+      token: data?.lockToken?.id,
       timestamp: data?.timestamp,
     };
 

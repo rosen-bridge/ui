@@ -54,12 +54,11 @@ export const Overview = ({ id }: { id: string }) => {
         >
           <Token
             loading={isLoading}
-            name={data?.lockToken?.name}
-            ergoSideTokenId={data?.lockToken?.ergoSideTokenId}
-            reverse
-            overrides={{
+            value={data?.lockToken?.id}
+            variant="reverse"
+            rewrite={{
               tablet: {
-                reverse: false,
+                variant: 'both',
               },
             }}
           />
@@ -96,7 +95,7 @@ export const Overview = ({ id }: { id: string }) => {
               <Network
                 loading={isLoading}
                 variant="logo"
-                name={data?.fromChain as NetworkType}
+                value={data?.fromChain as NetworkType}
                 rewrite={{
                   tablet: {
                     variant: 'both',
@@ -108,7 +107,7 @@ export const Overview = ({ id }: { id: string }) => {
               <Network
                 loading={isLoading}
                 variant="logo"
-                name={data?.toChain as NetworkType}
+                value={data?.toChain as NetworkType}
                 rewrite={{
                   tablet: {
                     variant: 'both',

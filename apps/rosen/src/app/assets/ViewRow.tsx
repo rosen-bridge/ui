@@ -56,14 +56,10 @@ export const ViewRow = ({
             )}
             <TableGridRow id={item.id} skip={isLoading}>
               <TableGridCell>
-                <Token
-                  href={item.tokenUrl}
-                  name={item.name}
-                  ergoSideTokenId={item.ergoSideTokenId}
-                />
+                <Token href={item.tokenUrl} value={item.id} />
               </TableGridCell>
               <TableGridCell>
-                <Network name={item.chain} />
+                <Network value={item.chain} />
               </TableGridCell>
               <TableGridCell skip="tablet-down">
                 <Amount value={item.lockedAmount} />
@@ -84,7 +80,9 @@ export const ViewRow = ({
                     setCurrent(current?.id === item.id ? undefined : item);
                   }}
                 >
-                  <Icon name={current?.id === item.id ? 'AngleUp' : 'AngleDown'} />
+                  <Icon
+                    name={current?.id === item.id ? 'AngleUp' : 'AngleDown'}
+                  />
                 </IconButton>
               </TableGridCell>
               <TableGridBodyDetails in={current?.id === item.id}>

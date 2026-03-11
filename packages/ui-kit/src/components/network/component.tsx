@@ -25,16 +25,16 @@ export type NetworkOwnProps = {
   /** If true, show loading placeholders */
   loading?: boolean;
 
-  /** The name of the network (like 'binance', 'bitcoin', etc.). Optional, fallback will be used if missing */
-  name?: string & {};
-
   /** Static registry */
-  networks?: Record<NonNullable<NetworkOverriddenProps['name']>, NetworkMeta>;
+  networks?: Record<NonNullable<NetworkOverriddenProps['value']>, NetworkMeta>;
 
   slots?: {
     label?: TextOverriddenProps;
     logo?: IconOverriddenProps;
   };
+
+  /** The name of the network (like 'binance', 'bitcoin', etc.). Optional, fallback will be used if missing */
+  value?: string & {};
 
   /** What to show */
   variant?: 'both' | 'logo' | 'label' | 'reverse';
@@ -45,7 +45,7 @@ export type NetworkBaseProps = ElementBaseProps<'div', NetworkOwnProps>;
 export type NetworkOverriddenProps = OverridableType<
   NetworkBaseProps,
   NetworkOverrides,
-  'name'
+  'value'
 >;
 
 const DEFAULT_NETWORK: NetworkMeta = {
@@ -56,7 +56,7 @@ const DEFAULT_NETWORK: NetworkMeta = {
 export const NetworkBase = ({
   fallback,
   loading,
-  name = '',
+  value = '',
   networks,
   slots,
   variant = 'both',
@@ -66,8 +66,8 @@ export const NetworkBase = ({
   const showLogo = variant !== 'label';
 
   const { logo: Logo, label } = useMemo(
-    () => Object.assign({}, DEFAULT_NETWORK, fallback, networks?.[name]),
-    [fallback, name, networks],
+    () => Object.assign({}, DEFAULT_NETWORK, fallback, networks?.[value]),
+    [fallback, networks, value],
   );
 
   return (
@@ -75,8 +75,8 @@ export const NetworkBase = ({
       {showLogo && loading && <Skeleton variant="circular" />}
       <Icon
         className="logo"
-        icons={{ [name]: Logo }}
-        name={name}
+        icons={{ [value]: Logo }}
+        name={value}
         size="2em"
         skip={!(showLogo && !loading && Logo)}
         {...slots?.logo}

@@ -14,7 +14,7 @@ import { Amount, Label } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
 import { SvgIcon } from '../SvgIcon';
-import { Token } from '../Token';
+import { Token } from '../../token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
@@ -40,7 +40,6 @@ export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
     toAddressUrl?: string;
     toChain?: NetworkType;
     token?: string;
-    ergoSideTokenId?: string;
     paymentTxId?: string;
     paymentTxIdUrl?: string;
     spendTxId?: string;
@@ -67,9 +66,8 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         {'token' in value && (
           <Label label="Token">
             <Token
-              reverse
-              name={value.token}
-              ergoSideTokenId={value.ergoSideTokenId}
+              variant='reverse'
+              value={value.token}
               loading={loading}
             />
           </Label>
@@ -90,14 +88,14 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
             <LabelGroup>
               <Label label="From" inset>
                 <Network
-                  name={value.fromChain}
+                  value={value.fromChain}
                   variant="reverse"
                   loading={loading}
                 />
               </Label>
               <Label label="To" inset>
                 <Network
-                  name={value.toChain}
+                  value={value.toChain}
                   variant="reverse"
                   loading={loading}
                 />

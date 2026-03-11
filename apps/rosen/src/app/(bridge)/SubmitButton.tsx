@@ -137,8 +137,8 @@ export const SubmitButton = () => {
                   </Typography>
                   {source && target && (
                     <Connector
-                      start={<Network name={source.name} />}
-                      end={<Network name={target.name} />}
+                      start={<Network value={source.name} />}
+                      end={<Network value={target.name} />}
                     />
                   )}
                 </Stack>

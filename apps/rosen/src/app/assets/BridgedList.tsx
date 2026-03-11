@@ -49,7 +49,7 @@ export const BridgedList = ({ value }: BridgedListProps) => {
               gap={1}
               fontSize="0.875rem"
             >
-              <Network loading={isLoading} name={item.chain} />
+              <Network loading={isLoading} value={item.chain} />
               <Amount
                 loading={isLoading}
                 value={item.amount}

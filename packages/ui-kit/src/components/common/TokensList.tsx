@@ -5,7 +5,7 @@ import { Typography } from '../base';
 import { Identifier } from '../identifier';
 import { Stack } from '../stack';
 import { Text } from '../text';
-import { Avatar } from './Avatar';
+import { Avatar } from '../avatar';
 import { Amount } from './display';
 
 export interface TokensListProps {
@@ -46,8 +46,8 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
           <Avatar
             loading={isLoading}
             color="primary"
-            background="primary.light"
-            size={44}
+            background="primary-light"
+            size="44px"
             style={{
               gridRow: 'span 2',
             }}

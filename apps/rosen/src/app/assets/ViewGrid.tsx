@@ -46,18 +46,13 @@ export const ViewGrid = ({
               spacing={1}
               style={{ maxWidth: 600 }}
             >
-              <Token
-                loading={isLoading}
-                name={item.name}
-                ergoSideTokenId={item.ergoSideTokenId}
-                style={{ flex: 1 }}
-              />
+              <Token loading={isLoading} value={item.id} style={{ flex: 1 }} />
               <Chip
                 color="neutral"
                 loading={isLoading}
                 style={{ fontSize: '13px' }}
               >
-                <Network name={item.chain} />
+                <Network value={item.chain} />
               </Chip>
             </Stack>
             <Box mt={1} mb={-1}>

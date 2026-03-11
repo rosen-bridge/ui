@@ -35,15 +35,10 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   return (
     <Columns width="250px" count={2} rule gap="32px">
       <Label label="Token" orientation="horizontal">
-        <Token
-          name={value.name}
-          ergoSideTokenId={value.ergoSideTokenId}
-          href={value.tokenUrl}
-          reverse
-        />
+        <Token value={value.id} href={value.tokenUrl} variant="reverse" />
       </Label>
       <Label label="Network">
-        <Network name={value.chain} variant='reverse' />
+        <Network value={value.chain} variant="reverse" />
       </Label>
       <Label label="Locked" orientation="horizontal">
         <Amount value={value.lockedAmount} />

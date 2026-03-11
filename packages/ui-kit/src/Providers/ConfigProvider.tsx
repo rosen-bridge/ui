@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import type {
+  AvatarOverriddenProps,
   CenterOverriddenProps,
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
@@ -9,6 +10,7 @@ import type {
   IconOverriddenProps,
   IconButtonOverriddenProps,
   IdentifierOverriddenProps,
+  ImageOverriddenProps,
   LabelGroupOverriddenProps,
   LinkOverriddenProps,
   NetworkOverriddenProps,
@@ -21,6 +23,7 @@ import type {
   TableGridRowOverriddenProps,
   TextOverriddenProps,
   ThemeToggleButtonOverriddenProps,
+  TokenOverriddenProps,
   ToolbarOverriddenProps,
   TooltipOverriddenProps,
   TruncateOverriddenProps,
@@ -28,6 +31,7 @@ import type {
 } from '../components';
 
 type Components = {
+  Avatar: AvatarOverriddenProps;
   Center: CenterOverriddenProps;
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
@@ -36,6 +40,7 @@ type Components = {
   Icon: IconOverriddenProps;
   IconButton: IconButtonOverriddenProps;
   Identifier: IdentifierOverriddenProps;
+  Image: ImageOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
   Link: LinkOverriddenProps;
   Network: NetworkOverriddenProps;
@@ -48,6 +53,7 @@ type Components = {
   TableGridRow: TableGridRowOverriddenProps;
   Text: TextOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
+  Token: TokenOverriddenProps;
   Toolbar: ToolbarOverriddenProps;
   Tooltip: TooltipOverriddenProps;
   Truncate: TruncateOverriddenProps;

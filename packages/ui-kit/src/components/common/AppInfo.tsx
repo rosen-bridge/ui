@@ -6,7 +6,7 @@ import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Network } from '../network';
 import { Stack } from '../stack';
-import { Avatar } from './Avatar';
+import { Avatar } from '../avatar';
 import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
@@ -65,7 +65,7 @@ export const AppInfo = ({
                 {versions.map(({ label, icon: Icon, value }) => (
                   <Stack key={label} direction="row" justify="between">
                     <Stack direction="row" spacing={1} align="center">
-                      <Avatar size="32px" background="neutral.contrastText">
+                      <Avatar size="32px" background="neutral-contrastText">
                         <SvgIcon size="medium">{Icon}</SvgIcon>
                       </Avatar>
                       <Typography noWrap variant="body1">
@@ -87,7 +87,7 @@ export const AppInfo = ({
                 </Divider>
                 {networks.map(({ network, height }) => (
                   <Stack key={network} direction="row" justify="between">
-                    <Network name={network} />
+                    <Network value={network} />
                     <Typography>{height}</Typography>
                   </Stack>
                 ))}

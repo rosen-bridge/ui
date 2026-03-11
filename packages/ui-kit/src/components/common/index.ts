@@ -1,4 +1,3 @@
-export * from './Avatar';
 export * from './carousel';
 export * from './smartSearch';
 export * from './Button';
@@ -31,7 +30,6 @@ export * from './SuccessfulCopySnackbar';
 export * from './SubmitButton';
 export * from './TokensCard';
 export * from './AppSnackbar';
-export * from './Token';
 export * from './Chip';
 export * from './RelativeTime';
 export * from './EmptyState';

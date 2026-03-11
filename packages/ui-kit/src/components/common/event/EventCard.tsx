@@ -11,7 +11,7 @@ import { Card, CardBody } from '../card';
 import { Amount } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { Token } from '../Token';
+import { Token } from '../../token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
@@ -26,7 +26,7 @@ export type EventCardProps = HTMLAttributes<HTMLDivElement> & {
     status: EventStatusProps['value'];
     toChain: NetworkType;
     token?: string;
-    ergoSideTokenId?: string;
+    unit?: string;
     timestamp?: number;
   };
   onClick?: () => void;
@@ -57,8 +57,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
               )}
               {!isLoading && value && (
                 <Token
-                  name={value.token}
-                  ergoSideTokenId={value.ergoSideTokenId}
+                  value={value.token}
                   variant="logo"
                   style={{ fontSize: '20px' }}
                 />
@@ -66,7 +65,7 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
               <Amount
                 loading={isLoading}
                 orientation="vertical"
-                unit={value?.token}
+                unit={value?.unit}
                 value={value?.amount}
                 decimal={value?.decimal}
               />
@@ -89,14 +88,14 @@ const EventCardBase = forwardRef<HTMLDivElement, EventCardProps>(
                   start={
                     <Network
                       loading={isLoading}
-                      name={value?.fromChain}
+                      value={value?.fromChain}
                       variant="logo"
                     />
                   }
                   end={
                     <Network
                       loading={isLoading}
-                      name={value?.toChain}
+                      value={value?.toChain}
                       variant="logo"
                     />
                   }
