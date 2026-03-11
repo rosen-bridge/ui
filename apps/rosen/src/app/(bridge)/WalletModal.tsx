@@ -1,6 +1,5 @@
 import { MouseEvent, useEffect, useState } from 'react';
 
-import { Wallet } from '@rosen-bridge/icons';
 import {
   Alert,
   Card,
@@ -12,7 +11,7 @@ import {
   EnhancedDialogTitle,
   Tooltip,
   Stack,
-  SvgIcon,
+  Icon,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -46,7 +45,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
 
   return (
     <Dialog open={open} maxWidth="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon={<Wallet />} onClose={onClose}>
+      <EnhancedDialogTitle icon="Wallet" onClose={onClose}>
         Choose Wallet
       </EnhancedDialogTitle>
       <DialogContent>
@@ -68,8 +67,6 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
         </Stack>
         <Stack direction="row" justify="center" spacing={2} wrap>
           {wallet.wallets.map((item) => {
-            const Icon = item.iconReact;
-
             const isConnected = wallet.selected?.name === item.name;
 
             const handleClick = async (event: MouseEvent) => {
@@ -89,9 +86,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
                 <CardBody>
                   <Tooltip title={item.name}>
                     <Stack align="center" spacing={3}>
-                      <SvgIcon size={13}>
-                        <Icon />
-                      </SvgIcon>
+                      <Icon name="Wallet" size={13} icons={{ 'Wallet': item.iconReact }} />
                       <Button
                         variant="contained"
                         size="small"

@@ -1,14 +1,6 @@
 'use client';
 
-import {
-  ExclamationTriangle,
-  LockAlt,
-  ShieldCheck,
-  ShieldExclamation,
-  Wallet,
-} from '@rosen-bridge/icons';
-import * as Icons from '@rosen-bridge/icons';
-import { Box } from '@rosen-bridge/ui-kit';
+import { Box, IconProps } from '@rosen-bridge/ui-kit';
 import { healthStatusColorMap, NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { AugmentedPalette } from '@rosen-ui/types';
@@ -38,7 +30,7 @@ const InfoWidgets = () => {
   let titleERSN =
     eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
       ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
-        ' eRSN'
+      ' eRSN'
       : '';
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
@@ -47,25 +39,20 @@ const InfoWidgets = () => {
     data?.network.replace(/(^\w|-\w)/g, (match) =>
       match.replace('-', '').toUpperCase(),
     ) || '',
-  );
-
-  const NetworkIcon =
-    networkIcoName in Icons
-      ? Icons[networkIcoName as keyof typeof Icons]
-      : ExclamationTriangle;
+  ) as IconProps['name'];
 
   const totalPermits = data
     ? Math.floor(
-        (data.permitCount.total - (data.permitCount.total ? 1 : 0)) /
-          data.permitsPerEvent,
-      )
+      (data.permitCount.total - (data.permitCount.total ? 1 : 0)) /
+      data.permitsPerEvent,
+    )
     : 0n;
 
   const allowedPermits = data
     ? Math.floor(
-        (data.permitCount.active - (data.permitCount.active ? 1 : 0)) /
-          data.permitsPerEvent,
-      )
+      (data.permitCount.active - (data.permitCount.active ? 1 : 0)) /
+      data.permitsPerEvent,
+    )
     : 0n;
 
   return (
@@ -96,7 +83,7 @@ const InfoWidgets = () => {
             ? NETWORKS[data.network as keyof typeof NETWORKS].label
             : ''
         }
-        icon={<NetworkIcon />}
+        icon={networkIcoName}
         color="primary"
         isLoading={isInfoLoading}
       />
@@ -105,24 +92,24 @@ const InfoWidgets = () => {
         value={
           data
             ? `${getDecimalString(
-                data.permitCount.active.toString() ?? '0',
-                rsnToken?.decimals ?? 0,
-                1,
-              )} / ${getDecimalString(
-                data.permitCount.total.toString() ?? '0',
-                rsnToken?.decimals ?? 0,
-                1,
-              )}`
+              data.permitCount.active.toString() ?? '0',
+              rsnToken?.decimals ?? 0,
+              1,
+            )} / ${getDecimalString(
+              data.permitCount.total.toString() ?? '0',
+              rsnToken?.decimals ?? 0,
+              1,
+            )}`
             : ''
         }
-        icon={<LockAlt />}
+        icon="LockAlt"
         color="info"
         isLoading={isInfoLoading}
       />
       <InfoWidgetCard
         title="Available / Total Reports"
         value={`${allowedPermits} / ${totalPermits}`}
-        icon={<LockAlt />}
+        icon="LockAlt"
         color="info"
         isLoading={isInfoLoading}
       />
@@ -133,37 +120,25 @@ const InfoWidgets = () => {
             ? getDecimalString(ergToken.amount.toString(), ergToken.decimals)
             : ''
         }
-        icon={<Wallet />}
+        icon="Wallet"
         isLoading={isErgTokenLoading}
       />
       <InfoWidgetCard
         value={titleRSN || titleERSN || '0 RSN'}
         title={rsnToken?.amount === 0 ? '' : titleERSN}
-        icon={
-          /**
-           * FIXME: Use an appropriate icon
-           * local:ergo/rosen-bridge/ui#64
-           */
-          <Wallet />
-        }
+        icon="Wallet"
         color="warning"
         isLoading={isRsnTokenLoading || isERsnTokenLoading}
       />
       <InfoWidgetCard
         title="Health"
         value={data?.health.status ?? ''}
-        icon={
-          data?.health.status === 'Healthy' ? (
-            <ShieldCheck />
-          ) : (
-            <ShieldExclamation />
-          )
-        }
+        icon={data?.health.status === 'Healthy' ? 'ShieldCheck' : 'ShieldExclamation'}
         color={
           data?.health
             ? (healthStatusColorMap[
-                data.health.status
-              ] as keyof AugmentedPalette)
+              data.health.status
+            ] as keyof AugmentedPalette)
             : 'success'
         }
         isLoading={isInfoLoading}

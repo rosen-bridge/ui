@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { CommentAltExclamation } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
@@ -117,7 +116,7 @@ export const SubmitButton = () => {
         onClose={() => setOpen(false)}
       >
         <EnhancedDialogTitle
-          icon={<CommentAltExclamation />}
+          icon="CommentAltExclamation"
           onClose={() => setOpen(false)}
         >
           Confirm Transaction

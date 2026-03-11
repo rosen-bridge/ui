@@ -1,11 +1,10 @@
 import { Typography } from '@mui/material';
-import { AngleRight } from '@rosen-bridge/icons';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import { Button } from './Button';
 import { Card, CardBody, CardHeader, CardTitle } from './card';
-import { SvgIcon } from './SvgIcon';
 import { TokensList } from './TokensList';
+import { Icon } from '../icon';
 
 export type TokensCardProps = {
   chain?: Network;
@@ -40,11 +39,7 @@ export const TokensCard = ({
             size="medium"
             target="_blank"
             href={href}
-            endIcon={
-              <SvgIcon>
-                <AngleRight />
-              </SvgIcon>
-            }
+            endIcon={<Icon name="AngleRight" />}
           >
             See All
           </Button>

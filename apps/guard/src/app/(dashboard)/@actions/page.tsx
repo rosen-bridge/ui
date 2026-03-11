@@ -3,21 +3,13 @@
 import { SyntheticEvent, useState } from 'react';
 
 import {
-  KeySkeleton,
-  Pause,
-  Redo,
-  StopCircle,
-  ReceiptAlt,
-  FileEditAlt,
-} from '@rosen-bridge/icons';
-import {
   Box,
   Grid,
   Tab,
   Tabs,
   styled,
   useResponsiveValue,
-  SvgIcon,
+  Icon,
 } from '@rosen-bridge/ui-kit';
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
@@ -154,69 +146,41 @@ const Actions = () => {
           disabled
           iconPosition={iconPosition}
           label="Pause Service"
-          icon={
-            <SvgIcon size="small">
-              <Pause />
-            </SvgIcon>
-          }
+          icon={<Icon name='Pause' size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Stop Service"
-          icon={
-            <SvgIcon size="small">
-              <StopCircle />
-            </SvgIcon>
-          }
+          icon={<Icon name='StopCircle' size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Pause Network"
-          icon={
-            <SvgIcon size="small">
-              <Pause />
-            </SvgIcon>
-          }
+          icon={<Icon name='Pause' size="small" />}
         />
         <Tab
           iconPosition={iconPosition}
           label="Request To Sign"
-          icon={
-            <SvgIcon size="small">
-              <FileEditAlt />
-            </SvgIcon>
-          }
+          icon={<Icon name='FileEditAlt' size="small" />}
         />
         <Tab
           iconPosition={iconPosition}
           label="Request An Order"
-          icon={
-            <SvgIcon size="small">
-              <ReceiptAlt />
-            </SvgIcon>
-          }
+          icon={<Icon name='ReceiptAlt' size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Generate Key"
-          icon={
-            <SvgIcon size="small">
-              <KeySkeleton />
-            </SvgIcon>
-          }
+          icon={<Icon name='KeySkeleton' size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Key Reconstruction"
-          icon={
-            <SvgIcon size="small">
-              <Redo />
-            </SvgIcon>
-          }
+          icon={<Icon name='Redo' size="small" />}
         />
       </Tabs>
     </TabsContainer>

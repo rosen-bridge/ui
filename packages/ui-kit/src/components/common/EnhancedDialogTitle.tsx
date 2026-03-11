@@ -1,11 +1,10 @@
 import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 
 import { styled } from '@mui/material';
-import { Times } from '@rosen-bridge/icons';
 
 import { DialogTitle } from '../base';
 import { IconButton } from '../iconButton';
-import { SvgIcon } from './SvgIcon';
+import { Icon, IconProps } from '../icon';
 
 const IconContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -16,7 +15,7 @@ const IconContainer = styled('div')(({ theme }) => ({
 
 export type EnhancedDialogTitleProps = {
   children?: ReactNode;
-  icon?: ReactNode;
+  icon?: IconProps['name'];
   onClose?: MouseEventHandler<HTMLButtonElement>;
 } & HTMLAttributes<HTMLHeadingElement>;
 
@@ -32,15 +31,13 @@ export const EnhancedDialogTitle = ({
     <DialogTitle display="flex" alignItems="center" flexDirection="row" gap={2}>
       {icon && (
         <IconContainer>
-          <SvgIcon size="small">{icon}</SvgIcon>
+          <Icon name={icon} size="small" />
         </IconContainer>
       )}
       <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>
       {onClose && (
         <IconButton onClick={onClose}>
-          <SvgIcon>
-            <Times />
-          </SvgIcon>
+          <Icon name='Times' />
         </IconButton>
       )}
     </DialogTitle>

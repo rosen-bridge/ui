@@ -26,7 +26,7 @@ export type CopyButtonOwnProps = {
   /**
    * The text value to copy.
    */
-  value?: string;
+  value?: string | (() => string | undefined);
 };
 
 export type CopyButtonBaseProps = Omit<
@@ -46,7 +46,7 @@ export type CopyButtonOverriddenProps = OverridableType<
 export const CopyButtonBase = ({
   icons,
   slots,
-  value = '',
+  value,
   ...rest
 }: CopyButtonOverriddenProps) => {
   const [status, setStatus] = useState<CopyButtonStatus>('idle');
@@ -66,8 +66,10 @@ export const CopyButtonBase = ({
 
   const handleCopy = useCallback(() => {
     setStatus('copying');
+    const text = typeof value === 'function' ? value() : value;
+    if (!text) return;
     navigator.clipboard
-      .writeText(value)
+      .writeText(text)
       .then(() => {
         setStatus('copied');
         setTimeout(() => setStatus('idle'), 1500);

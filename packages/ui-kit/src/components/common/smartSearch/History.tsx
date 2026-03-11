@@ -9,7 +9,6 @@ import {
 } from 'react';
 
 import { ClickAwayListener } from '@mui/material';
-import { Favorite, History as HistoryIcon, Times } from '@rosen-bridge/icons';
 
 import { useBreakpoint } from '../../../hooks';
 import {
@@ -22,10 +21,10 @@ import {
 import { IconButton } from '../../iconButton';
 import { Truncate } from '../../truncate';
 import { Divider } from '../Divider';
-import { SvgIcon } from '../SvgIcon';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
+import { Icon } from '../../icon';
 
 type Item = {
   bookmark: boolean;
@@ -187,9 +186,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
             ref={$anchor}
             onClick={() => setOpen(!open)}
           >
-            <SvgIcon>
-              <HistoryIcon />
-            </SvgIcon>
+            <Icon name='History' />
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
             <div
@@ -213,9 +210,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                               remove(item);
                             }}
                           >
-                            <SvgIcon>
-                              <Times />
-                            </SvgIcon>
+                            <Icon name='Times' />
                           </IconButton>
                         }
                         onClick={() => handleClick(item)}
@@ -251,9 +246,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                           book(item);
                         }}
                       >
-                        <SvgIcon>
-                          <Favorite />
-                        </SvgIcon>
+                        <Icon name='Favorite' />
                       </IconButton>
                     }
                     onClick={() => handleClick(item)}

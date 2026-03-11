@@ -1,10 +1,6 @@
-import { FileCopyAlt } from '@rosen-bridge/icons';
-
 import { useSnackbar } from '../../hooks';
-import { isLegacyTheme, useTheme } from '../../hooks/useTheme';
 import { Snackbar, Alert } from '../base';
-import { IconButton } from '../iconButton';
-import { SvgIcon } from './SvgIcon';
+import { CopyButton } from '../copyButton';
 
 /**
  * global snackbar component that connects to snackbar context and shows and
@@ -12,19 +8,10 @@ import { SvgIcon } from './SvgIcon';
  */
 export const AppSnackbar = () => {
   const { state, closeSnackbar } = useSnackbar();
-  const theme = useTheme();
 
-  const handleCopyMore = async () => {
-    if (state.more) {
-      try {
-        await navigator.clipboard.writeText(state.more());
-      } catch (err) {
-        console.error('Failed to copy:', err);
-      }
-    }
-  };
+  if (!state.isOpen) return null;
 
-  return state.isOpen ? (
+  return (
     <Snackbar
       open={state.isOpen}
       onClose={closeSnackbar}
@@ -35,25 +22,21 @@ export const AppSnackbar = () => {
       }}
     >
       <Alert
-        variant={isLegacyTheme(theme) ? 'filled' : 'standard'}
+        variant="standard"
         severity={state.severity!}
         action={
           state.more && (
-            <IconButton
+            <CopyButton
+              value={() => state.more?.()}
               color="inherit"
               size="small"
               style={{ paddingTop: '5px', paddingBottom: '5px' }}
-              onClick={handleCopyMore}
-            >
-              <SvgIcon>
-                <FileCopyAlt />
-              </SvgIcon>
-            </IconButton>
+            />
           )
         }
       >
         {state.message}
       </Alert>
     </Snackbar>
-  ) : null;
+  )
 };

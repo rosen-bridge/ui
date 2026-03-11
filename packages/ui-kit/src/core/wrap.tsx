@@ -34,7 +34,7 @@ export type WrapProps<P> = {
 } & P;
 
 export const Wrap = <P,>(Base: ComponentType<P>) => {
-  const componentName = Base.displayName || Base.name || 'Wrap';
+  const componentName = Base.displayName || Base.name;
 
   const Wrapped = ({ className, rewrite, skip, ...rest }: WrapProps<P>) => {
     const breakpoint = useBreakpoint(

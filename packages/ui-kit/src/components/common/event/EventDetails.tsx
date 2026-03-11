@@ -1,7 +1,6 @@
 import { forwardRef, HTMLAttributes } from 'react';
 
 import { Button } from '@mui/material';
-import { AngleRight } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Columns } from '../../columns';
@@ -13,9 +12,9 @@ import { Text } from '../../text';
 import { Amount, Label } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { SvgIcon } from '../SvgIcon';
 import { Token } from '../../token';
 import { EventStatus, EventStatusProps } from './EventStatus';
+import { Icon } from '../../icon';
 
 export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
   loading?: boolean;
@@ -208,11 +207,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
               target="_blank"
               href={value.href}
               loading={loading}
-              endIcon={
-                <SvgIcon>
-                  <AngleRight />
-                </SvgIcon>
-              }
+              endIcon={<Icon name='AngleRight' />}
             >
               SEE DETAILS
             </Button>

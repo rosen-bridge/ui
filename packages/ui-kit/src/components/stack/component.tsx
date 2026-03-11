@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, CSSProperties } from 'react';
 
 import { GapOverridden, OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
@@ -70,15 +70,17 @@ export const StackBase = ({
   spacing,
   inline,
   justify,
+  wrap,
   ...rest
 }: StackOverriddenProps) => {
   const styles = {
     display: inline ? 'inline-flex' : 'flex',
     flexDirection: direction,
+    flexWrap: wrap ? 'wrap' : 'nowrap',
     alignItems: align ? ALIGN_MAP[align] : undefined,
     justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
     gap: toCSSUnit('gap', spacing),
-  };
+  } as CSSProperties;
   return <Root styles={styles} {...rest} />;
 };
 

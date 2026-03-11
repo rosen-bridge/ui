@@ -1,11 +1,9 @@
-import { Times } from '@rosen-bridge/icons';
-
 import { styled } from '../../../styling';
 import { Typography } from '../../base';
 import { IconButton } from '../../iconButton';
-import { SvgIcon } from '../SvgIcon';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
+import { Icon } from '../../icon';
 
 const Root = styled('div')(({ theme }) => ({
   'display': 'flex',
@@ -108,9 +106,7 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                   disabled={disabled}
                   onClick={() => onRemove?.(item)}
                 >
-                  <SvgIcon>
-                    <Times />
-                  </SvgIcon>
+                  <Icon name='Times'/>
                 </IconButton>
               </div>
             )}

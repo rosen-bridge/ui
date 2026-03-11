@@ -2,14 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 
-import {
-  LockAlt,
-  MoneyWithdrawal,
-  Pause,
-  SquareShape,
-  Unlock,
-} from '@rosen-bridge/icons';
-import { Button, Divider, Stack, styled, SvgIcon } from '@rosen-bridge/ui-kit';
+import { Button, Divider, Icon, Stack, styled } from '@rosen-bridge/ui-kit';
 
 const HomeActionButtonBase = styled(Button)(({ theme }) => ({
   'display': 'flex',
@@ -41,11 +34,7 @@ const Actions = () => {
       }}
     >
       <HomeActionButtonBase
-        startIcon={
-          <SvgIcon>
-            <MoneyWithdrawal />
-          </SvgIcon>
-        }
+        startIcon={<Icon name="MoneyWithdrawal" />}
         onClick={() => router.push('/actions/withdraw')}
       >
         Withdraw
@@ -53,11 +42,7 @@ const Actions = () => {
       <Divider orientation="vertical" />
       <HomeActionButtonBase
         disabled={true}
-        startIcon={
-          <SvgIcon>
-            <Pause />
-          </SvgIcon>
-        }
+        startIcon={<Icon name="Pause" />}
         onClick={() => router.push('/actions/pause')}
       >
         Pause
@@ -65,33 +50,21 @@ const Actions = () => {
       <Divider orientation="vertical" />
       <HomeActionButtonBase
         disabled={true}
-        startIcon={
-          <SvgIcon>
-            <SquareShape />
-          </SvgIcon>
-        }
+        startIcon={<Icon name="SquareShape" />}
         onClick={() => router.push('/actions/stop')}
       >
         Stop
       </HomeActionButtonBase>
       <Divider orientation="vertical" />
       <HomeActionButtonBase
-        startIcon={
-          <SvgIcon>
-            <LockAlt />
-          </SvgIcon>
-        }
+        startIcon={<Icon name="LockAlt" />}
         onClick={() => router.push('/actions/lock')}
       >
         Lock
       </HomeActionButtonBase>
       <Divider orientation="vertical" />
       <HomeActionButtonBase
-        startIcon={
-          <SvgIcon>
-            <Unlock />
-          </SvgIcon>
-        }
+        startIcon={<Icon name="Unlock" />}
         onClick={() => router.push('/actions/unlock')}
       >
         Unlock

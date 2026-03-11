@@ -1,7 +1,6 @@
 import { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 
-import { AngleDown } from '@rosen-bridge/icons';
-import { Box, Button, Menu, MenuItem, SvgIcon } from '@rosen-bridge/ui-kit';
+import { Box, Button, Icon, Menu, MenuItem } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
 
 const periodOptions = ['week', 'month', 'year'] as const;
@@ -71,11 +70,7 @@ export const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
     <Box>
       <Button
         onClick={handleClick}
-        endIcon={
-          <SvgIcon>
-            <AngleDown size={20} />
-          </SvgIcon>
-        }
+        endIcon={<Icon name="AngleDown" size="20px" />}
         size="small"
       >
         {period}

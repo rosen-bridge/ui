@@ -9,18 +9,17 @@ import {
 } from 'react';
 
 import { Card } from '@mui/material';
-import { Search } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { IconButton } from '../../iconButton';
 import { Divider } from '../Divider';
-import { SvgIcon } from '../SvgIcon';
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';
 import { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
 import { VirtualScroll } from './VirtualScroll';
+import { Icon } from '../../icon';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
@@ -343,9 +342,7 @@ export const SmartSearch = ({
         ref={$search}
         onClick={() => onChange(selected)}
       >
-        <SvgIcon>
-          <Search />
-        </SvgIcon>
+        <Icon name='Search' /> 
       </IconButton>
     </Root>
   );

@@ -1,36 +1,27 @@
-import { ReactNode } from 'react';
-
 import { Button } from '@mui/material';
 
-import { useIsMobile, isLegacyTheme, useFramework } from '../../../hooks';
+import { useIsMobile, useFramework } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
 import { Badge } from '../../base';
 import { Link } from '../../link';
-import { SvgIcon } from '../SvgIcon';
+import { Icon, IconOverriddenProps } from '../../icon';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
   'flexDirection': 'column',
   'fontSize': theme.typography.subtitle2.fontSize,
-  'gap': theme.spacing(0.5),
-  ...(isLegacyTheme(theme)
-    ? {
-        color: theme.palette.primary.contrastText,
-      }
-    : {
-        gap: theme.spacing(1),
-        color: theme.palette.common.white,
-        backgroundColor: 'transparent!important',
-        padding: theme.spacing(1),
-        fontWeight: 700,
-        lineHeight: 1,
-      }),
+  gap: theme.spacing(1),
+  color: theme.palette.common.white,
+  backgroundColor: 'transparent!important',
+  padding: theme.spacing(1),
+  fontWeight: 700,
+  lineHeight: 1,
   'opacity': 0.8,
   '&:hover': {
     opacity: 1,
   },
   '& .MuiButton-startIcon': {
     backgroundColor: alpha(theme.palette.common.black, 0.25),
-    padding: isLegacyTheme(theme) ? theme.spacing(1) : theme.spacing(1.5),
+    padding: theme.spacing(1.5),
     margin: 0,
     borderRadius: theme.shape.borderRadius,
   },
@@ -47,40 +38,22 @@ const NavigationButtonBase = styled(Button)(({ theme }) => ({
         ? theme.palette.common.white
         : theme.palette.primary.main,
     '& .MuiButton-startIcon': {
-      color: isLegacyTheme(theme)
-        ? theme.palette.info.dark
-        : theme.palette.mode === 'light'
-          ? alpha(theme.palette.common.black, 0.8)
-          : theme.palette.primary.contrastText,
-      backgroundColor: isLegacyTheme(theme)
-        ? theme.palette.mode === 'light'
-          ? theme.palette.common.white
-          : theme.palette.info.light
-        : theme.palette.mode === 'light'
-          ? theme.palette.common.white
-          : theme.palette.primary.main,
+      color: theme.palette.mode === 'light' ? alpha(theme.palette.common.black, 0.8) : theme.palette.primary.contrastText,
+      backgroundColor: theme.palette.mode === 'light' ? theme.palette.common.white : theme.palette.primary.main,
     },
   },
   [theme.breakpoints.down('tablet')]: {
-    'color': isLegacyTheme(theme)
-      ? theme.palette.mode === 'light'
-        ? theme.palette.primary.dark
-        : theme.palette.common.white
-      : theme.palette.primary.main,
+    'color': theme.palette.primary.main,
     '& .MuiButton-startIcon': {
       backgroundColor: 'transparent',
       padding: 0,
     },
     '&.active': {
       '& .MuiButton-startIcon': {
-        'color': isLegacyTheme(theme)
-          ? theme.palette.mode === 'light'
-            ? theme.palette.primary.dark
-            : theme.palette.common.white
-          : theme.palette.primary.main,
+        'color': theme.palette.primary.main,
         'backgroundColor': 'transparent',
         '&  > svg': {
-          fontSize: isLegacyTheme(theme) ? '24px' : '32px',
+          fontSize: '32px',
         },
       },
     },
@@ -103,7 +76,7 @@ const NavigationButtonIndicator = styled('div', {
 
 export type NavigationButtonProps = {
   label: string;
-  icon: ReactNode;
+  icon: IconOverriddenProps['name'];
   path: string;
   disabled?: boolean;
   badge?: string;
@@ -113,7 +86,7 @@ export type NavigationButtonProps = {
  * renders a navigation button with styles and adopts based on screen size
  *
  * @property {string} label - button label
- * @property {ReactNode} icon - the icon for the button
+ * @property {string} icon - the icon for the button
  * @property {string} href - href property to set on the button
  * @property {boolean} isActive - if true the component will be rendered in active state
  * @property {boolean} disabled - if true the component will be rendered in disabled state
@@ -131,7 +104,7 @@ export const NavigationButton = ({
 
   const isMobile = useIsMobile();
 
-  let startIcon = <SvgIcon>{icon}</SvgIcon>;
+  let startIcon = <Icon name={icon} />;
 
   if (badge)
     startIcon = (
@@ -143,7 +116,7 @@ export const NavigationButton = ({
   return (
     <NavigationButtonBase
       href={path}
-      LinkComponent={Link}
+      LinkComponent={(props) => <Link {...props} underline="none" />}
       className={isActive ? 'active' : undefined}
       startIcon={startIcon}
       variant="text"

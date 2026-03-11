@@ -1,6 +1,6 @@
 import { OverridableValue } from './overridableValue';
 
-export type Color = string & {};
+export type Color = DefaultColor;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ColorOverrides {}

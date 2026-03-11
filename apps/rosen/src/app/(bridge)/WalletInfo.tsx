@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-import { LinkBroken } from '@rosen-bridge/icons';
 import { Wallet } from '@rosen-bridge/icons';
 import {
   Card,
@@ -8,6 +7,7 @@ import {
   Button,
   SvgIcon,
   Typography,
+  Icon,
 } from '@rosen-bridge/ui-kit';
 
 import { useWallet } from '@/hooks';
@@ -18,8 +18,6 @@ export const WalletInfo = () => {
   const wallet = useWallet();
 
   const [open, setOpen] = useState(false);
-
-  const Icon = wallet.selected?.iconReact;
 
   return (
     <Card
@@ -53,11 +51,7 @@ export const WalletInfo = () => {
         {wallet.state === 'DISCONNECTED' && (
           <Button
             variant="text"
-            startIcon={
-              <SvgIcon>
-                <Wallet />
-              </SvgIcon>
-            }
+            startIcon={<Icon name="Wallet" />}
             style={{ marginLeft: '-8px' }}
             onClick={() => setOpen(true)}
           >
@@ -68,7 +62,9 @@ export const WalletInfo = () => {
           <>
             <Button
               color="inherit"
-              startIcon={<SvgIcon size="24px">{Icon && <Icon />}</SvgIcon>}
+              startIcon={wallet.selected && (
+                <Icon name="Wallet" icons={{ 'Wallet': wallet.selected.iconReact }} />
+              )}
               style={{ marginLeft: '-8px', textTransform: 'none' }}
               onClick={() => setOpen(true)}
             >
@@ -76,11 +72,7 @@ export const WalletInfo = () => {
             </Button>
             <Button
               color="secondary"
-              startIcon={
-                <SvgIcon size="24px">
-                  <LinkBroken />
-                </SvgIcon>
-              }
+              startIcon={<Icon name="LinkBroken" />}
               style={{ marginRight: '-8px' }}
               onClick={() => wallet.disconnect()}
             >

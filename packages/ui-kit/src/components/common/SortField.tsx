@@ -8,13 +8,6 @@ import {
 } from 'react';
 
 import { Button, Card } from '@mui/material';
-import {
-  CaretDown,
-  Check,
-  ListUiAlt,
-  SortAmountDown,
-  SortAmountUp,
-} from '@rosen-bridge/icons';
 
 import { styled } from '../../styling';
 import {
@@ -28,7 +21,7 @@ import {
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
 import { Divider } from './Divider';
-import { SvgIcon } from './SvgIcon';
+import { Icon } from '../icon';
 
 const Root = styled(Card)(({ theme }) => ({
   padding: theme.spacing(1, 0.5),
@@ -118,9 +111,7 @@ export const SortField = ({
         <Grid flexGrow={1}>
           {dense ? (
             <IconButton disabled={disabled} onClick={handleMenuOpen}>
-              <SvgIcon>
-                <ListUiAlt />
-              </SvgIcon>
+              <Icon name='ListUiAlt' />
             </IconButton>
           ) : (
             <Button
@@ -133,15 +124,7 @@ export const SortField = ({
                 justifyContent: 'space-between',
                 padding: '2px 8px',
               }}
-              endIcon={
-                <SvgIcon
-                  style={{
-                    rotate: open ? '180deg' : '0deg',
-                  }}
-                >
-                  <CaretDown />
-                </SvgIcon>
-              }
+              endIcon={<Icon name='CaretDown' style={{ rotate: open ? '180deg' : '0deg' }} />}
               onClick={handleMenuOpen}
             >
               <Stack align="start">
@@ -187,16 +170,7 @@ export const SortField = ({
                 onClick={() => handleSortChange(item)}
               >
                 <ListItemText> {item.label}</ListItemText>
-                <SvgIcon
-                  style={{
-                    display:
-                      dense && current && item.value === current.value
-                        ? 'flex'
-                        : 'none',
-                  }}
-                >
-                  <Check />
-                </SvgIcon>
+                <Icon name='Check' style={{ display: dense && current && item.value === current.value ? 'flex' : 'none' }} />
               </MenuItem>
             ))}
           </Menu>
@@ -206,9 +180,7 @@ export const SortField = ({
         </Grid>
         <Grid>
           <IconButton disabled={disabled} onClick={handleSortOrderChange}>
-            <SvgIcon>
-              {value?.order == 'ASC' ? <SortAmountDown /> : <SortAmountUp />}
-            </SvgIcon>
+            <Icon name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'} />
           </IconButton>
         </Grid>
       </Grid>

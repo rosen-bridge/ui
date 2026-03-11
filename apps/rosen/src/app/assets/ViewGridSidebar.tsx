@@ -1,4 +1,3 @@
-import { BitcoinCircle } from '@rosen-bridge/icons';
 import {
   Amount,
   Card,
@@ -63,7 +62,7 @@ const Content = ({ value }: ViewGridSidebarProps) => {
 const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon={<BitcoinCircle />} onClose={onClose}>
+      <EnhancedDialogTitle icon="BitcoinCircle" onClose={onClose}>
         Asset Details
       </EnhancedDialogTitle>
       <EnhancedDialogContent>

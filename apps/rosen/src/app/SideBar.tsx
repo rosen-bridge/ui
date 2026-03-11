@@ -2,13 +2,6 @@ import Link from 'next/link';
 import React from 'react';
 
 import {
-  Archway,
-  BitcoinCircle,
-  Dashboard,
-  Exchange,
-  Headphones,
-} from '@rosen-bridge/icons';
-import {
   AppBar,
   AppLogo,
   NavigationBar,
@@ -31,27 +24,27 @@ export const SideBar = () => {
       versions={<VersionConfig />}
       navigationBar={
         <NavigationBar>
-          <NavigationButton icon={<Archway />} label="Bridge" path="/" />
+          <NavigationButton icon="Archway" label="Bridge" path="/" />
           <NavigationButton
             badge="Beta"
-            icon={<Exchange />}
+            icon="Exchange"
             label="Events"
             path="/events"
           />
           <NavigationButton
-            icon={<BitcoinCircle />}
+            icon="BitcoinCircle"
             label="Assets"
             path="/assets"
           />
           <NavigationButton
             disabled={true}
-            icon={<Headphones />}
+            icon="Headphones"
             label="Support"
             path="/support"
           />
           <NavigationButton
             disabled={true}
-            icon={<Dashboard />}
+            icon="Dashboard"
             label="Dashboard"
             path="/dashboard"
           />

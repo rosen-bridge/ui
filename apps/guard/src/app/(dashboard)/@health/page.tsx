@@ -3,18 +3,13 @@
 import { useMemo } from 'react';
 
 import {
-  CloseCircle,
-  ExclamationOctagon,
-  ExclamationTriangleFill,
-  ShieldCheck,
-} from '@rosen-bridge/icons';
-import {
   Box,
   Card,
   CardBody,
+  Icon,
+  IconProps,
   Skeleton,
   Stack,
-  SvgIcon,
   Tooltip,
   Typography,
   useBreakpoint,
@@ -24,40 +19,32 @@ import useSWR from 'swr';
 
 import { ApiInfoResponse } from '@/types/api';
 
-const VARIANTS = {
-  broken: {
+const VARIANTS: Record<ApiInfoResponse['health']['status'], { color: IconProps['color']; status: string; icon: IconProps['name']; }> = {
+  Broken: {
     color: 'error',
     status: 'BROKEN',
-    Icon: CloseCircle,
+    icon: 'CloseCircle',
   },
-  healthy: {
+  Healthy: {
     color: 'success',
     status: 'OK',
-    Icon: ShieldCheck,
+    icon: 'ShieldCheck',
   },
-  unstable: {
+  Unstable: {
     color: 'warning',
     status: 'UNSTABLE',
-    Icon: ExclamationOctagon,
+    icon: 'ExclamationOctagon',
   },
 } as const;
-
-type StatusType = keyof typeof VARIANTS;
 
 const Health = () => {
   const { data, isLoading } = useSWR<ApiInfoResponse>('/info', fetcher);
 
   const isSmall = useBreakpoint('laptop-down');
 
-  const status = useMemo(
-    () => (data?.health.status.toLowerCase() || 'broken') as StatusType,
-    [data],
-  );
+  const status = useMemo(() => (data?.health.status || 'Broken'), [data]);
 
-  const trialErrors = useMemo(
-    () => data?.health.trialErrors.join('\n'),
-    [data],
-  );
+  const trialErrors = useMemo(() => data?.health.trialErrors.join('\n'), [data]);
 
   const variant = useMemo(() => VARIANTS[status], [status]);
 
@@ -80,9 +67,7 @@ const Health = () => {
           {isLoading ? (
             <Skeleton variant="circular" width={32} height={32} />
           ) : (
-            <SvgIcon size="32px" color={variant.color}>
-              <variant.Icon />
-            </SvgIcon>
+            <Icon color={variant.color} name={variant.icon} size="32px" />
           )}
 
           {isLoading ? (
@@ -114,9 +99,7 @@ const Health = () => {
             )}
             {!isLoading && trialErrors && (
               <Tooltip title={trialErrors}>
-                <SvgIcon color={`${variant.color}.dark`}>
-                  <ExclamationTriangleFill />
-                </SvgIcon>
+                <Icon color={`${variant.color}-dark`} name='ExclamationTriangleFill' />
               </Tooltip>
             )}
           </div>
@@ -134,9 +117,7 @@ const Health = () => {
         {isLoading ? (
           <Skeleton variant="circular" width={184} height={184} />
         ) : (
-          <SvgIcon size={'184px'} opacity="0.2" color={`${variant.color}.dark`}>
-            <variant.Icon />
-          </SvgIcon>
+          <Icon color={`${variant.color}-dark`} name={variant.icon} opacity="0.2" size="184px" />
         )}
       </div>
     </Card>

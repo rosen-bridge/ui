@@ -1,21 +1,15 @@
 import { useMemo } from 'react';
 
-import {
-  ExclamationTriangle,
-  ShieldCheck,
-  ShieldExclamation,
-  ShieldQuestion,
-} from '@rosen-bridge/icons';
 import { HealthParamInfo } from '@rosen-ui/types';
 import moment from 'moment';
 
-import { Card, CardBody, CardHeader, CardTitle, SvgIcon } from '.';
-import { Colors } from '../../core';
+import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';
 import { Alert, Typography } from '../base';
 import { Stack } from '../stack';
 import { Tooltip } from '../tooltip';
 import { Button } from './Button';
+import { Icon, IconProps } from '../icon';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;
@@ -79,10 +73,10 @@ export const HealthParamCard = ({
     }
   }, [color, lastCheck, theme]);
 
-  const Icon = useMemo(() => {
-    if (!lastCheck) return ShieldQuestion;
-    if (status === 'Healthy') return ShieldCheck;
-    return ShieldExclamation;
+  const icon = useMemo<IconProps['name']>(() => {
+    if (!lastCheck) return 'ShieldQuestion';
+    if (status === 'Healthy') return 'ShieldCheck';
+    return 'ShieldExclamation';
   }, [lastCheck, status]);
 
   return (
@@ -99,17 +93,13 @@ export const HealthParamCard = ({
         action={
           lastTrialErrorTime && (
             <Tooltip title={lastTrialErrorMessage}>
-              <SvgIcon color="warning">
-                <ExclamationTriangle />
-              </SvgIcon>
+              <Icon color="warning" name="ExclamationTriangle" />
             </Tooltip>
           )
         }
       >
         <Stack spacing={2} direction="row">
-          <SvgIcon color={colors.cardColor as Colors}>
-            <Icon />
-          </SvgIcon>
+          <Icon color={colors.cardColor.replace('.', '-')} name={icon} />
           <CardTitle>
             <Typography color={colors.cardColor} fontWeight="700">
               {lastCheck ? status : 'Unknown'}

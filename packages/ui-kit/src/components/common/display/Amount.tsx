@@ -2,7 +2,6 @@ import { HTMLAttributes, useMemo } from 'react';
 
 import {
   ExclamationTriangle,
-  ExternalLinkAlt,
   Fire,
   SnowFlake,
 } from '@rosen-bridge/icons';
@@ -14,6 +13,7 @@ import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
 import { InjectOverrides } from '../InjectOverrides';
 import { SvgIcon } from '../SvgIcon';
+import { Icon } from '../../icon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Number of decimal places to shift the value before formatting */
@@ -316,9 +316,7 @@ const AmountBase = ({
             size="small"
             href={href}
           >
-            <SvgIcon size="small">
-              <ExternalLinkAlt />
-            </SvgIcon>
+            <Icon name='ExternalLinkAlt' size="small" />
           </IconButton>
         )}
       </Stack>

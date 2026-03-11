@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 
-import { AngleRight, Exchange } from '@rosen-bridge/icons';
 import {
   Button,
   Card,
@@ -13,7 +12,7 @@ import {
   EnhancedDialogTitle,
   EventDetails,
   EventDetailsProps,
-  SvgIcon,
+  Icon,
   Typography,
   useBreakpoint,
   useStickyBox,
@@ -104,7 +103,7 @@ const Content = ({ value }: EventSidebarProps) => {
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon={<Exchange />} onClose={onClose}>
+      <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
         Event Details
       </EnhancedDialogTitle>
       <EnhancedDialogContent>
@@ -145,11 +144,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
                 size="small"
                 target="_blank"
                 href={`/events/${value.eventId}`}
-                endIcon={
-                  <SvgIcon>
-                    <AngleRight />
-                  </SvgIcon>
-                }
+                endIcon={<Icon name="AngleRight" />}
               >
                 SEE DETAILS
               </Button>

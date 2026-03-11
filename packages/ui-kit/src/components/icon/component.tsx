@@ -1,8 +1,9 @@
-import { ComponentProps, CSSProperties, FC, SVGAttributes } from 'react';
+import { ComponentProps, CSSProperties, FC, SVGAttributes, useMemo } from 'react';
 
 import { ColorOverridden, OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { toCSSColor, toCSSUnit } from '@/utils';
+import * as Icons from '@rosen-bridge/icons';
 
 import './styles.scss';
 
@@ -11,11 +12,12 @@ export interface IconOverrides {}
 
 export type IconOwnProps = {
   color?: ColorOverridden;
+  fallback?: Exclude<keyof typeof Icons, 'TOKENS'>;
   icons?: Record<
     NonNullable<IconOverriddenProps['name']>,
     FC<SVGAttributes<SVGElement>>
   >;
-  name?: string & {};
+  name?: Exclude<keyof typeof Icons, 'TOKENS'>;
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
 };
 
@@ -29,23 +31,22 @@ export type IconOverriddenProps = OverridableType<
 
 export const IconBase = ({
   color = 'inherit',
+  fallback,
   icons,
   name,
   size = 'medium',
   ...rest
 }: IconOverriddenProps) => {
-  if (!icons || !name || !(name in icons)) return null;
-
-  const Icon = icons[name];
+  const Icon = icons?.[name as keyof typeof icons] || icons?.[fallback as keyof typeof icons] ;
 
   if (!Icon) {
-    console.warn(`Icon '${name}' not found`);
+    console.error(`Icon '${name}' not found`);
   }
 
-  const styles = {
+  const styles = useMemo(() => ({
     '--rosen-icon-color': toCSSColor(color),
     '--rosen-icon-size': toCSSUnit('icon-size', size),
-  } as CSSProperties;
+  } as CSSProperties), [color, size]);
 
   return <Root as={Icon} style={styles} {...rest} />;
 };

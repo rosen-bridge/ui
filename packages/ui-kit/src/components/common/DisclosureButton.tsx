@@ -1,9 +1,7 @@
-import { AngleDown, SyncExclamation } from '@rosen-bridge/icons';
-
 import { useDisclosure } from '../../hooks/useDisclosure';
 import { CircularProgress } from '../base';
 import { IconButton } from '../iconButton';
-import { SvgIcon } from './SvgIcon';
+import { Icon } from '../icon';
 
 /**
  * Return type of the useDisclosure hook for type safety
@@ -75,9 +73,7 @@ export const DisclosureButton = ({
       {disclosure.state == 'loading' ? (
         <CircularProgress size={24} />
       ) : (
-        <SvgIcon>
-          {disclosure.state == 'error' ? <SyncExclamation /> : <AngleDown />}
-        </SvgIcon>
+        <Icon name={disclosure.state == 'error' ? 'SyncExclamation' : 'AngleDown'} />
       )}
     </IconButton>
   );

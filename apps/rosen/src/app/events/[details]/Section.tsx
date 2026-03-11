@@ -2,7 +2,6 @@
 
 import { ReactNode } from 'react';
 
-import { SyncExclamation } from '@rosen-bridge/icons';
 import {
   Button,
   Card,
@@ -12,8 +11,8 @@ import {
   Center,
   Collapse,
   DisclosureButton,
+  Icon,
   Stack,
-  SvgIcon,
   Typography,
   useDisclosure,
 } from '@rosen-bridge/ui-kit';
@@ -58,9 +57,7 @@ export const Section = ({
             <Center style={{ height: '20rem' }}>
               <Button variant="text" onClick={() => load?.()}>
                 <Stack direction="column" align="center">
-                  <SvgIcon color="error">
-                    <SyncExclamation />
-                  </SvgIcon>
+                  <Icon color="error" name="SyncExclamation" />
                   <Typography color="error.main">TRY AGAIN!</Typography>
                 </Stack>
               </Button>

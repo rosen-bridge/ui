@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { CircularProgress, Typography, IconButton } from '@mui/material';
-import { ExclamationCircle, InfoCircle } from '@rosen-bridge/icons';
+import { InfoCircle } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Network } from '../network';
@@ -46,7 +46,7 @@ export const AppInfo = ({
         onClose={() => setOpen(false)}
       >
         <EnhancedDialogTitle
-          icon={<ExclamationCircle />}
+          icon="ExclamationCircle"
           onClose={() => setOpen(false)}
         >
           <Typography variant="h2" fontWeight="bold">

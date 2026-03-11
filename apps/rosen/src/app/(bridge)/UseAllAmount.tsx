@@ -1,11 +1,10 @@
-import { SyncExclamation } from '@rosen-bridge/icons';
 import {
   Button,
   CircularProgress,
   Divider,
+  Icon,
   IconButton,
   Stack,
-  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {
@@ -49,9 +48,7 @@ export const UseAllAmount = ({
       )}
       {error && !loading && (
         <IconButton onClick={onRetry}>
-          <SvgIcon color="error">
-            <SyncExclamation />
-          </SvgIcon>
+          <Icon color="error" name="SyncExclamation" />
         </IconButton>
       )}
     </Stack>

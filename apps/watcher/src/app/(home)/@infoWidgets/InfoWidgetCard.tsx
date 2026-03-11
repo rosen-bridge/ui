@@ -1,8 +1,6 @@
 import { ReactNode } from 'react';
 
-import { ExclamationTriangleFill } from '@rosen-bridge/icons';
 import {
-  SvgIcon,
   Tooltip,
   Typography,
   Stack,
@@ -10,12 +8,14 @@ import {
   CardBody,
   Truncate,
   CircularProgress,
+  Icon,
+  IconProps,
 } from '@rosen-bridge/ui-kit';
 import { AugmentedPalette } from '@rosen-ui/types';
 
 interface InfoWidgetCardProps {
   color?: keyof AugmentedPalette;
-  icon: ReactNode;
+  icon: IconProps['name'];
   isLoading?: boolean;
   title: string;
   value: ReactNode;
@@ -42,9 +42,7 @@ export const InfoWidgetCard = ({
     <Card backgroundColor={`${color}.main`}>
       <CardBody>
         <Stack direction="row" align="center" spacing={2}>
-          <SvgIcon color="primary.contrastText" size="large">
-            {icon}
-          </SvgIcon>
+          <Icon color="primary-contrastText" fallback="ExclamationTriangle" name={icon} size="large" />
           <Stack direction="column" style={{ flexGrow: 1, minWidth: 0 }}>
             <Stack direction="row" align="center" justify="between">
               <Typography
@@ -59,9 +57,7 @@ export const InfoWidgetCard = ({
                 <Tooltip
                   title={<div style={{ whiteSpace: 'pre' }}>{warning}</div>}
                 >
-                  <SvgIcon color="primary.contrastText" size="small">
-                    <ExclamationTriangleFill />
-                  </SvgIcon>
+                  <Icon color="primary-contrastText" name="ExclamationTriangleFill" size="small" />
                 </Tooltip>
               )}
             </Stack>

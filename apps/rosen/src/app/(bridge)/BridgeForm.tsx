@@ -2,21 +2,18 @@
 
 import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
 
-import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
   TextField,
-  Typography,
-  ListItemIcon,
   MenuItem,
   CircularProgress,
-  SvgIcon,
   Alert,
   Autocomplete,
   InputAdornment,
   IconButton,
-  Stack,
+  Icon,
+  Network,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -63,15 +60,7 @@ export const BridgeForm = () => {
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
-    const Logo = network.logo;
-    return (
-      <Stack direction="row" align="center" spacing={1}>
-        <SvgIcon>
-          <Logo />
-        </SvgIcon>
-        <Typography color="text.secondary">{network.label}</Typography>
-      </Stack>
-    );
+    return <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
   };
 
   const handleTokenChange = useCallback(
@@ -152,12 +141,7 @@ export const BridgeForm = () => {
           >
             {availableSources.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <SvgIcon>
-                    <Logo />
-                  </SvgIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
+                <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
               </MenuItem>
             ))}
           </TextField>
@@ -181,14 +165,7 @@ export const BridgeForm = () => {
           >
             {availableTargets.map(({ logo: Logo, ...network }) => (
               <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <ListItemIcon>
-                    <SvgIcon>
-                      <Logo />
-                    </SvgIcon>
-                  </ListItemIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
+                <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
               </MenuItem>
             ))}
           </TextField>
@@ -214,9 +191,7 @@ export const BridgeForm = () => {
                   }
                 }}
               >
-                <SvgIcon opacity="0.6">
-                  <ClipboardNotes />
-                </SvgIcon>
+                <Icon color="text-disabled" name="ClipboardNotes" />
               </IconButton>
             </InputAdornment>
           ),

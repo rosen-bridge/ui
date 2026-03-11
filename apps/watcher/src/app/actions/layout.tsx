@@ -5,19 +5,12 @@ import { useRouter, useSelectedLayoutSegments } from 'next/navigation';
 import { Fragment, ReactNode, SyntheticEvent } from 'react';
 
 import {
-  LockAlt,
-  MoneyWithdrawal,
-  Pause,
-  SquareShape,
-  Unlock,
-} from '@rosen-bridge/icons';
-import {
   Box,
-  SvgIcon,
   ToggleButtonGroup,
   styled,
   Grid,
   PageHeading,
+  Icon,
 } from '@rosen-bridge/ui-kit';
 
 import { ToggleButton } from './ToggleButton';
@@ -86,53 +79,33 @@ const Actions = ({ form, text }: ActionsProps) => {
           <ToggleButton
             value="withdraw"
             label="Withdraw"
-            icon={
-              <SvgIcon>
-                <MoneyWithdrawal />
-              </SvgIcon>
-            }
+            icon={<Icon name="MoneyWithdrawal" />}
           />
           <ActionsDivider />
           <ToggleButton
             value="pause"
             label="Pause"
             disabled
-            icon={
-              <SvgIcon>
-                <Pause />
-              </SvgIcon>
-            }
+            icon={<Icon name="Pause" />}
           />
           <ActionsDivider />
           <ToggleButton
             value="stop"
             label="Stop"
             disabled
-            icon={
-              <SvgIcon>
-                <SquareShape />
-              </SvgIcon>
-            }
+            icon={<Icon name="SquareShape" />}
           />
           <ActionsDivider />
           <ToggleButton
             value="lock"
             label="Lock"
-            icon={
-              <SvgIcon>
-                <LockAlt />
-              </SvgIcon>
-            }
+            icon={<Icon name="LockAlt" />}
           />
           <ActionsDivider />
           <ToggleButton
             value="unlock"
             label="Unlock"
-            icon={
-              <SvgIcon>
-                <Unlock />
-              </SvgIcon>
-            }
+            icon={<Icon name="Unlock" />}
           />
         </CustomToggleButtonGroup>
       </ScrollableContainer>

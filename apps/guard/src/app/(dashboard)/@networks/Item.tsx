@@ -2,14 +2,13 @@
 
 import { useMemo } from 'react';
 
-import { ExclamationTriangle } from '@rosen-bridge/icons';
 import {
   Card,
   CardBody,
   Divider,
+  Icon,
   Network,
   Stack,
-  SvgIcon,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -58,7 +57,7 @@ export const Item = ({ network }: ItemProps) => {
     >
       <CardBody>
         <Stack align="stretch" justify="start" spacing={1}>
-          <Network loading={isLoading} name={network} />
+          <Network loading={isLoading} value={network} />
           <ItemAddress loading={isLoading} state="hot" value={hot} />
           <Divider variant="full" />
           <ItemAddress loading={isLoading} state="cold" value={cold} />
@@ -74,9 +73,7 @@ export const Item = ({ network }: ItemProps) => {
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <SvgIcon size="184px" opacity="0.075" color="warning.dark">
-            <ExclamationTriangle />
-          </SvgIcon>
+          <Icon color='warning-dark' name='ExclamationTriangle' opacity="0.075" size="184px" />
         </div>
       )}
     </Card>
