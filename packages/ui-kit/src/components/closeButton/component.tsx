@@ -7,15 +7,18 @@ import { Icon, IconOverriddenProps } from '../icon';
 import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CloseButtonOverrides { }
+export interface CloseButtonOverrides {}
 
 export type CloseButtonOwnProps = {
   slots?: {
-    icon?: IconOverriddenProps
-  }
+    icon?: IconOverriddenProps;
+  };
 };
 
-export type CloseButtonBaseProps = ElementBaseProps<typeof IconButton, CloseButtonOwnProps>;
+export type CloseButtonBaseProps = ElementBaseProps<
+  typeof IconButton,
+  CloseButtonOwnProps
+>;
 
 export type CloseButtonOverriddenProps = OverridableType<
   CloseButtonBaseProps,
@@ -23,10 +26,13 @@ export type CloseButtonOverriddenProps = OverridableType<
   never
 >;
 
-export const CloseButtonBase = ({ slots, ...rest }: CloseButtonOverriddenProps) => {
+export const CloseButtonBase = ({
+  slots,
+  ...rest
+}: CloseButtonOverriddenProps) => {
   return (
     <Root as={IconButton} {...rest}>
-      <Icon name='Times' {...slots?.icon} />
+      <Icon name="Times" {...slots?.icon} />
     </Root>
   );
 };

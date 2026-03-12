@@ -11,6 +11,8 @@ import {
 import { Card } from '@mui/material';
 
 import { styled } from '../../../styling';
+import { CloseButton } from '../../closeButton';
+import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Divider } from '../Divider';
 import { Chips } from './Chips';
@@ -19,8 +21,6 @@ import { Picker } from './Picker';
 import { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
 import { VirtualScroll } from './VirtualScroll';
-import { Icon } from '../../icon';
-import { CloseButton } from '../../closeButton';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
@@ -358,7 +358,7 @@ export const SmartSearch = ({
         ref={$search}
         onClick={() => onChange(selected)}
       >
-        <Icon name='Search' />
+        <Icon name="Search" />
       </IconButton>
     </Root>
   );

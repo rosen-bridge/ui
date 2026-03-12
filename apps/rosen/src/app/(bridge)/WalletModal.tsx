@@ -86,7 +86,11 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
                 <CardBody>
                   <Tooltip title={item.name}>
                     <Stack align="center" spacing={3}>
-                      <Icon name="Wallet" size={13} icons={{ 'Wallet': item.iconReact }} />
+                      <Icon
+                        name="Wallet"
+                        size={13}
+                        icons={{ Wallet: item.iconReact }}
+                      />
                       <Button
                         variant="contained"
                         size="small"

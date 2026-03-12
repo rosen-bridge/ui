@@ -13,7 +13,7 @@ export const LOCK_ADDRESSES: { [key in keyof typeof NETWORKS]: string } = {
 } as any;
 
 export const TOKENS_MAPPER: {
-  [key: string]: { name: string; ergoSideTokenId: string; }
+  [key: string]: { name: string; ergoSideTokenId: string };
 } = {
   //
 } as any;

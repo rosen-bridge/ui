@@ -19,7 +19,10 @@ import useSWR from 'swr';
 
 import { ApiInfoResponse } from '@/types/api';
 
-const VARIANTS: Record<ApiInfoResponse['health']['status'], { color: IconProps['color']; status: string; icon: IconProps['name']; }> = {
+const VARIANTS: Record<
+  ApiInfoResponse['health']['status'],
+  { color: IconProps['color']; status: string; icon: IconProps['name'] }
+> = {
   Broken: {
     color: 'error',
     status: 'BROKEN',
@@ -42,9 +45,12 @@ const Health = () => {
 
   const isSmall = useBreakpoint('laptop-down');
 
-  const status = useMemo(() => (data?.health.status || 'Broken'), [data]);
+  const status = useMemo(() => data?.health.status || 'Broken', [data]);
 
-  const trialErrors = useMemo(() => data?.health.trialErrors.join('\n'), [data]);
+  const trialErrors = useMemo(
+    () => data?.health.trialErrors.join('\n'),
+    [data],
+  );
 
   const variant = useMemo(() => VARIANTS[status], [status]);
 
@@ -99,7 +105,10 @@ const Health = () => {
             )}
             {!isLoading && trialErrors && (
               <Tooltip title={trialErrors}>
-                <Icon color={`${variant.color}-dark`} name='ExclamationTriangleFill' />
+                <Icon
+                  color={`${variant.color}-dark` as IconProps['color']}
+                  name="ExclamationTriangleFill"
+                />
               </Tooltip>
             )}
           </div>
@@ -117,7 +126,12 @@ const Health = () => {
         {isLoading ? (
           <Skeleton variant="circular" width={184} height={184} />
         ) : (
-          <Icon color={`${variant.color}-dark`} name={variant.icon} opacity="0.2" size="184px" />
+          <Icon
+            color={`${variant.color}-dark` as IconProps['color']}
+            name={variant.icon}
+            opacity="0.2"
+            size="184px"
+          />
         )}
       </div>
     </Card>

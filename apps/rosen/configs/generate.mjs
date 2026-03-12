@@ -34,7 +34,7 @@ const content = [
   `} as any;`,
   '',
   `export const TOKENS_MAPPER: {`,
-  `  [key: string]: { name: string; ergoSideTokenId: string; }`,
+  `  [key: string]: { name: string; ergoSideTokenId: string };`,
   `} = {`,
   ...tokensMap.tokens
     .map((tokens) => {

@@ -18,10 +18,10 @@ import {
   MenuItem,
   Typography,
 } from '../base';
+import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
 import { Divider } from './Divider';
-import { Icon } from '../icon';
 
 const Root = styled(Card)(({ theme }) => ({
   padding: theme.spacing(1, 0.5),
@@ -111,7 +111,7 @@ export const SortField = ({
         <Grid flexGrow={1}>
           {dense ? (
             <IconButton disabled={disabled} onClick={handleMenuOpen}>
-              <Icon name='ListUiAlt' />
+              <Icon name="ListUiAlt" />
             </IconButton>
           ) : (
             <Button
@@ -124,7 +124,12 @@ export const SortField = ({
                 justifyContent: 'space-between',
                 padding: '2px 8px',
               }}
-              endIcon={<Icon name='CaretDown' style={{ rotate: open ? '180deg' : '0deg' }} />}
+              endIcon={
+                <Icon
+                  name="CaretDown"
+                  style={{ rotate: open ? '180deg' : '0deg' }}
+                />
+              }
               onClick={handleMenuOpen}
             >
               <Stack align="start">
@@ -170,7 +175,15 @@ export const SortField = ({
                 onClick={() => handleSortChange(item)}
               >
                 <ListItemText> {item.label}</ListItemText>
-                <Icon name='Check' style={{ display: dense && current && item.value === current.value ? 'flex' : 'none' }} />
+                <Icon
+                  name="Check"
+                  style={{
+                    display:
+                      dense && current && item.value === current.value
+                        ? 'flex'
+                        : 'none',
+                  }}
+                />
               </MenuItem>
             ))}
           </Menu>
@@ -180,7 +193,9 @@ export const SortField = ({
         </Grid>
         <Grid>
           <IconButton disabled={disabled} onClick={handleSortOrderChange}>
-            <Icon name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'} />
+            <Icon
+              name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
+            />
           </IconButton>
         </Grid>
       </Grid>

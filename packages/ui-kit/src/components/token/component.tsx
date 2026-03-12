@@ -1,19 +1,20 @@
 import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 
+import { capitalize } from 'lodash-es';
+
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import './styles.scss';
-import { IconButton } from '../iconButton';
-import { Icon } from '../icon';
-import { Truncate } from '../truncate';
 import { Avatar, AvatarOverriddenProps } from '../avatar';
-import { Text } from '../text';
+import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
 import { Image, ImageOverriddenProps } from '../image';
-import { capitalize } from 'lodash-es';
+import { Text } from '../text';
+import { Truncate } from '../truncate';
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TokenOverrides { }
+export interface TokenOverrides {}
 
 export type TokenMeta = {
   label: string;
@@ -72,7 +73,6 @@ export const TokenBase = ({
   href,
   loading,
   slots,
-  style,
   tokens,
   value = '',
   variant = 'both',

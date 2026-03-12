@@ -1,12 +1,4 @@
-import {
-  AnchorHTMLAttributes,
-  ComponentType,
-  createContext,
-  ImgHTMLAttributes,
-  ReactNode,
-  useContext,
-  useMemo,
-} from 'react';
+import { createContext, ReactNode, useContext, useMemo } from 'react';
 
 export const useFramework = () => {
   const context = useContext(FrameworkContext);

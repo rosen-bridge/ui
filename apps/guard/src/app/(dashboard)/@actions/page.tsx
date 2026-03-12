@@ -146,41 +146,41 @@ const Actions = () => {
           disabled
           iconPosition={iconPosition}
           label="Pause Service"
-          icon={<Icon name='Pause' size="small" />}
+          icon={<Icon name="Pause" size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Stop Service"
-          icon={<Icon name='StopCircle' size="small" />}
+          icon={<Icon name="StopCircle" size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Pause Network"
-          icon={<Icon name='Pause' size="small" />}
+          icon={<Icon name="Pause" size="small" />}
         />
         <Tab
           iconPosition={iconPosition}
           label="Request To Sign"
-          icon={<Icon name='FileEditAlt' size="small" />}
+          icon={<Icon name="FileEditAlt" size="small" />}
         />
         <Tab
           iconPosition={iconPosition}
           label="Request An Order"
-          icon={<Icon name='ReceiptAlt' size="small" />}
+          icon={<Icon name="ReceiptAlt" size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Generate Key"
-          icon={<Icon name='KeySkeleton' size="small" />}
+          icon={<Icon name="KeySkeleton" size="small" />}
         />
         <Tab
           disabled
           iconPosition={iconPosition}
           label="Key Reconstruction"
-          icon={<Icon name='Redo' size="small" />}
+          icon={<Icon name="Redo" size="small" />}
         />
       </Tabs>
     </TabsContainer>

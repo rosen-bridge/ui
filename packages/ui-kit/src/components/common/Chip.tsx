@@ -1,14 +1,9 @@
-import {
-  ComponentProps,
-  forwardRef,
-  HtmlHTMLAttributes,
-  useMemo,
-} from 'react';
+import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
 
 import { styled } from '../../styling';
 import { Typography, Skeleton } from '../base';
-import { InjectOverrides } from './InjectOverrides';
 import { Icon, IconProps } from '../icon';
+import { InjectOverrides } from './InjectOverrides';
 
 /**
  * Props for the Chip component.
@@ -86,9 +81,7 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
 
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
-    return (
-      <Icon name={icon} style={{ marginRight: '4px' }} />
-    );
+    return <Icon name={icon} style={{ marginRight: '4px' }} />;
   }, [icon]);
 
   if (loading) {

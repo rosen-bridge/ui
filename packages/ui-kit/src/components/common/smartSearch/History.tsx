@@ -18,14 +18,14 @@ import {
   ListItemText,
   ListSubheader,
 } from '../../base';
+import { CloseButton } from '../../closeButton';
+import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Truncate } from '../../truncate';
 import { Divider } from '../Divider';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
-import { Icon } from '../../icon';
-import { CloseButton } from '../../closeButton';
 
 type Item = {
   bookmark: boolean;
@@ -187,7 +187,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
             ref={$anchor}
             onClick={() => setOpen(!open)}
           >
-            <Icon name='History' />
+            <Icon name="History" />
           </IconButton>
           <Popup anchorEl={$anchor.current} open={open}>
             <div
@@ -245,7 +245,7 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                           book(item);
                         }}
                       >
-                        <Icon name='Favorite' />
+                        <Icon name="Favorite" />
                       </IconButton>
                     }
                     onClick={() => handleClick(item)}

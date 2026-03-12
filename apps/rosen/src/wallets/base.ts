@@ -25,10 +25,11 @@ Object.defineProperty(Wallet.prototype, 'iconReact', {
       };
     }
 
-    return (props) => createElement('svg', {
-      ...props,
-      viewBox: this._iconReactCache.viewBox,
-      dangerouslySetInnerHTML: { __html: this._iconReactCache.innerHTML },
-    })
+    return (props) =>
+      createElement('svg', {
+        ...props,
+        viewBox: this._iconReactCache.viewBox,
+        dangerouslySetInnerHTML: { __html: this._iconReactCache.innerHTML },
+      });
   },
 });

@@ -1,10 +1,10 @@
 import { Typography } from '@mui/material';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
+import { Icon } from '../icon';
 import { Button } from './Button';
 import { Card, CardBody, CardHeader, CardTitle } from './card';
 import { TokensList } from './TokensList';
-import { Icon } from '../icon';
 
 export type TokensCardProps = {
   chain?: Network;

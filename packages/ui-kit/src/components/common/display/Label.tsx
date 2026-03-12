@@ -2,10 +2,10 @@ import { HTMLAttributes } from 'react';
 
 import { Box, Typography } from '@mui/material';
 
+import { Icon } from '../../icon';
 import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
 import { InjectOverrides } from '../InjectOverrides';
-import { Icon } from '../../icon';
 
 /**
  * Props for the `Label` component.
@@ -119,7 +119,14 @@ const LabelBase = ({
           </Typography>
           {info && (
             <Tooltip arrow title={info}>
-              <Icon color={color === 'textSecondary' ? 'text-secondary' : 'text-primary'} name="ExclamationCircle" size="16px" style={{ cursor: 'pointer' }} />
+              <Icon
+                color={
+                  color === 'textSecondary' ? 'text-secondary' : 'text-primary'
+                }
+                name="ExclamationCircle"
+                size="16px"
+                style={{ cursor: 'pointer' }}
+              />
             </Tooltip>
           )}
         </Stack>

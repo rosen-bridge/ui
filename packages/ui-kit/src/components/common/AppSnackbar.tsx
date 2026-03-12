@@ -38,5 +38,5 @@ export const AppSnackbar = () => {
         {state.message}
       </Alert>
     </Snackbar>
-  )
+  );
 };

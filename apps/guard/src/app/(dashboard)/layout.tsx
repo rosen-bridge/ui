@@ -29,7 +29,7 @@ const Layout = ({
           style={{
             flexShrink: 0,
           }}
-          overrides={{
+          rewrite={{
             laptop: {
               direction: 'row',
               align: 'center',
@@ -38,7 +38,7 @@ const Layout = ({
         >
           <Stack
             style={{ width: '100%' }}
-            overrides={{
+            rewrite={{
               laptop: {
                 style: { minWidth: '200px' },
               },

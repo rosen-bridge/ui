@@ -1,6 +1,6 @@
 import { Typography } from '../base';
-import { Tooltip } from '../tooltip';
 import { Icon } from '../icon';
+import { Tooltip } from '../tooltip';
 
 export interface IdProps {
   id: string;
@@ -39,7 +39,11 @@ export const Id = ({ id, indicator, href }: IdProps) => {
           <Typography noWrap variant="caption" component="span">
             {text}
           </Typography>
-          <Icon color='primary' name='ExternalLinkAlt' style={{ display: 'block', fontSize: "inherit" }} />
+          <Icon
+            color="primary"
+            name="ExternalLinkAlt"
+            style={{ display: 'block', fontSize: 'inherit' }}
+          />
         </a>
       ) : (
         <Typography noWrap variant="caption">

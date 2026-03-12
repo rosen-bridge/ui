@@ -1,8 +1,8 @@
 import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
 import { Alert, AlertProps, Collapse } from '../base';
-import { Button } from './Button';
 import { CloseButton } from '../closeButton';
+import { Button } from './Button';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;

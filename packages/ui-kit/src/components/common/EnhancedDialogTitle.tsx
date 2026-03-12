@@ -3,8 +3,8 @@ import { HTMLAttributes, MouseEventHandler, ReactNode } from 'react';
 import { styled } from '@mui/material';
 
 import { DialogTitle } from '../base';
-import { Icon, IconProps } from '../icon';
 import { CloseButton } from '../closeButton';
+import { Icon, IconProps } from '../icon';
 
 const IconContainer = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -35,9 +35,7 @@ export const EnhancedDialogTitle = ({
         </IconContainer>
       )}
       <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>
-      {onClose && (
-        <CloseButton onClick={onClose} />
-      )}
+      {onClose && <CloseButton onClick={onClose} />}
     </DialogTitle>
   );
 };

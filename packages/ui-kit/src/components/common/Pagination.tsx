@@ -1,14 +1,10 @@
 import { MouseEvent, useEffect, useRef, useState } from 'react';
 
-import {
-  Pagination as PaginationMui,
-  Divider,
-  Button,
-} from '@mui/material';
+import { Pagination as PaginationMui, Divider, Button } from '@mui/material';
 
 import { Box, Typography, MenuItem, Menu, ListSubheader } from '../base';
-import { Stack } from '../stack';
 import { Icon } from '../icon';
+import { Stack } from '../stack';
 
 export interface PaginationProps {
   defaultPageIndex?: number;
@@ -205,7 +201,7 @@ export const Pagination = ({
                     },
                   }}
                 >
-                  <Icon color='text-secondary' name='CaretDown' size="24px" />
+                  <Icon color="text-secondary" name="CaretDown" size="24px" />
                 </Box>
 
                 <Box
@@ -216,7 +212,7 @@ export const Pagination = ({
                     },
                   }}
                 >
-                  <Icon color='text-secondary' name='AlignCenter' size="24px" />
+                  <Icon color="text-secondary" name="AlignCenter" size="24px" />
                 </Box>
               </Stack>
             </Button>

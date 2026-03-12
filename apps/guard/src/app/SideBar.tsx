@@ -24,31 +24,19 @@ export const SideBar = () => {
       navigationBar={
         <NavigationBar>
           <NavigationButton icon="Dashboard" label="Dashboard" path="/" />
-          <NavigationButton
-            icon="Heartbeat"
-            label="Health"
-            path="/health"
-          />
+          <NavigationButton icon="Heartbeat" label="Health" path="/health" />
           <NavigationButton
             icon="ClipboardNotes"
             label="Events"
             path="/events"
           />
-          <NavigationButton
-            icon="History"
-            label="History"
-            path="/history"
-          />
+          <NavigationButton icon="History" label="History" path="/history" />
           <NavigationButton
             icon="BitcoinCircle"
             label="Assets"
             path="/assets"
           />
-          <NavigationButton
-            icon="Moneybag"
-            label="Revenues"
-            path="/revenues"
-          />
+          <NavigationButton icon="Moneybag" label="Revenues" path="/revenues" />
         </NavigationBar>
       }
     />

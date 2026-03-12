@@ -1,12 +1,12 @@
 import { ComponentProps, forwardRef, HTMLAttributes, useMemo } from 'react';
 
 import { Skeleton, Typography } from '@mui/material';
-import { ExclamationTriangle } from '@rosen-bridge/icons';
+
+import { Icon } from '@/components/icon';
 
 import { formatDuration } from '../../../utils';
+import { Stack } from '../../stack';
 import { InjectOverrides } from '../InjectOverrides';
-import { Stack } from '../Stack';
-import { SvgIcon } from '../SvgIcon';
 
 export type DurationBaseProps = HTMLAttributes<HTMLDivElement> & {
   /**
@@ -37,9 +37,7 @@ const DurationBase = forwardRef<HTMLDivElement, DurationBaseProps>(
         {loading ? (
           <Skeleton width={80} variant="text" />
         ) : error ? (
-          <SvgIcon size="small">
-            <ExclamationTriangle />
-          </SvgIcon>
+          <Icon name="ExclamationTriangle" size="small" />
         ) : value === undefined && fallBack ? (
           <Typography variant="body1">{fallBack}</Typography>
         ) : (

@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
+import { Avatar } from '../avatar';
+import { Icon, IconProps } from '../icon';
+import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
-import { Avatar } from '../avatar';
 import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
 import { EnhancedDialogTitle } from './EnhancedDialogTitle';
-import { Icon, IconProps } from '../icon';
-import { IconButton } from '../iconButton';
 
 type NetworkHeight = {
   network: NetworkType;
@@ -98,12 +98,12 @@ export const AppInfo = ({
         </EnhancedDialogContent>
       </EnhancedDialog>
       <IconButton
-        color='inherit'
+        color="inherit"
         disabled={loading}
         loading={loading}
         onClick={() => setOpen(!open)}
       >
-        <Icon name='InfoCircle' />
+        <Icon name="InfoCircle" />
       </IconButton>
     </div>
   );

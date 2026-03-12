@@ -30,7 +30,7 @@ const InfoWidgets = () => {
   let titleERSN =
     eRsnToken?.amount !== undefined && eRsnToken?.amount !== 0
       ? getDecimalString(eRsnToken?.amount.toString(), eRsnToken.decimals) +
-      ' eRSN'
+        ' eRSN'
       : '';
 
   const { token: ergToken, isLoading: isErgTokenLoading } = useToken('erg');
@@ -43,16 +43,16 @@ const InfoWidgets = () => {
 
   const totalPermits = data
     ? Math.floor(
-      (data.permitCount.total - (data.permitCount.total ? 1 : 0)) /
-      data.permitsPerEvent,
-    )
+        (data.permitCount.total - (data.permitCount.total ? 1 : 0)) /
+          data.permitsPerEvent,
+      )
     : 0n;
 
   const allowedPermits = data
     ? Math.floor(
-      (data.permitCount.active - (data.permitCount.active ? 1 : 0)) /
-      data.permitsPerEvent,
-    )
+        (data.permitCount.active - (data.permitCount.active ? 1 : 0)) /
+          data.permitsPerEvent,
+      )
     : 0n;
 
   return (
@@ -92,14 +92,14 @@ const InfoWidgets = () => {
         value={
           data
             ? `${getDecimalString(
-              data.permitCount.active.toString() ?? '0',
-              rsnToken?.decimals ?? 0,
-              1,
-            )} / ${getDecimalString(
-              data.permitCount.total.toString() ?? '0',
-              rsnToken?.decimals ?? 0,
-              1,
-            )}`
+                data.permitCount.active.toString() ?? '0',
+                rsnToken?.decimals ?? 0,
+                1,
+              )} / ${getDecimalString(
+                data.permitCount.total.toString() ?? '0',
+                rsnToken?.decimals ?? 0,
+                1,
+              )}`
             : ''
         }
         icon="LockAlt"
@@ -133,12 +133,16 @@ const InfoWidgets = () => {
       <InfoWidgetCard
         title="Health"
         value={data?.health.status ?? ''}
-        icon={data?.health.status === 'Healthy' ? 'ShieldCheck' : 'ShieldExclamation'}
+        icon={
+          data?.health.status === 'Healthy'
+            ? 'ShieldCheck'
+            : 'ShieldExclamation'
+        }
         color={
           data?.health
             ? (healthStatusColorMap[
-              data.health.status
-            ] as keyof AugmentedPalette)
+                data.health.status
+              ] as keyof AugmentedPalette)
             : 'success'
         }
         isLoading={isInfoLoading}

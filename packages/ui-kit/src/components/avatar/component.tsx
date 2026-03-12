@@ -1,12 +1,13 @@
 // TODO: replace MUI
 import { ComponentProps, useMemo } from 'react';
 
-import { ColorOverridden, OverridableType } from '@/@types';
-import { Colors, ElementBaseProps, ensureColor, Root, Wrap } from '@/core';
 import { Avatar as AvatarMUI, Skeleton, SxProps, Theme } from '@mui/material';
 
+import { ColorOverridden, OverridableType } from '@/@types';
+import { Colors, ElementBaseProps, ensureColor, Root, Wrap } from '@/core';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface AvatarOverrides { }
+export interface AvatarOverrides {}
 
 export type AvatarOwnProps = {
   /** Background color (theme key or raw CSS). */
@@ -31,13 +32,24 @@ export type AvatarOverriddenProps = OverridableType<
 >;
 
 /** Theme-aware Avatar component with customizable colors and size. */
-export const AvatarBase = ({ background, color, loading, size, style, ...rest }: AvatarOverriddenProps) => {
+export const AvatarBase = ({
+  background,
+  color,
+  loading,
+  size,
+  style,
+  ...rest
+}: AvatarOverriddenProps) => {
   const sx = useMemo<SxProps<Theme>>(() => {
     return {
-      color: color ? ensureColor(color?.replace('-', '.') as Colors) : undefined,
+      color: color
+        ? ensureColor(color?.replace('-', '.') as Colors)
+        : undefined,
       width: size,
       height: size,
-      backgroundColor: background ? ensureColor(background?.replace('-', '.') as Colors) : undefined,
+      backgroundColor: background
+        ? ensureColor(background?.replace('-', '.') as Colors)
+        : undefined,
     };
   }, [color, size, background]);
 
@@ -47,7 +59,7 @@ export const AvatarBase = ({ background, color, loading, size, style, ...rest }:
     );
   }
 
-  return <Root as={AvatarMUI} style={style} sx={sx} {...rest} />
+  return <Root as={AvatarMUI} style={style} sx={sx} {...rest} />;
 };
 
 AvatarBase.displayName = 'Avatar';

@@ -70,7 +70,7 @@ export const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
     <Box>
       <Button
         onClick={handleClick}
-        endIcon={<Icon name='AngleDown' size="20px" />}
+        endIcon={<Icon name="AngleDown" size="20px" />}
         size="small"
       >
         {period}

@@ -60,7 +60,9 @@ export const BridgeForm = () => {
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
-    return <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
+    return (
+      <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
+    );
   };
 
   const handleTokenChange = useCallback(
@@ -139,9 +141,12 @@ export const BridgeForm = () => {
             }}
             onChange={handleSourceChange}
           >
-            {availableSources.map(({ logo: Logo, ...network }) => (
+            {availableSources.map((network) => (
               <MenuItem key={network.name} value={network.name}>
-                <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
+                <Network
+                  value={network.name}
+                  slots={{ logo: { size: 'medium' } }}
+                />
               </MenuItem>
             ))}
           </TextField>
@@ -163,9 +168,12 @@ export const BridgeForm = () => {
             }}
             onChange={handleTargetChange}
           >
-            {availableTargets.map(({ logo: Logo, ...network }) => (
+            {availableTargets.map((network) => (
               <MenuItem key={network.name} value={network.name}>
-                <Network value={network.name} slots={{ logo: { size: 'medium' } }} />
+                <Network
+                  value={network.name}
+                  slots={{ logo: { size: 'medium' } }}
+                />
               </MenuItem>
             ))}
           </TextField>

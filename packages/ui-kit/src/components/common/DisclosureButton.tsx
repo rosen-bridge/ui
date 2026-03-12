@@ -1,6 +1,6 @@
 import { useDisclosure } from '../../hooks/useDisclosure';
-import { IconButton } from '../iconButton';
 import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
 
 /**
  * Return type of the useDisclosure hook for type safety
@@ -70,7 +70,9 @@ export const DisclosureButton = ({
         }
       }}
     >
-      <Icon name={disclosure.state == 'error' ? 'SyncExclamation' : 'AngleDown'} />
+      <Icon
+        name={disclosure.state == 'error' ? 'SyncExclamation' : 'AngleDown'}
+      />
     </IconButton>
   );
 };

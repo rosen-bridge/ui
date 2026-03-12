@@ -70,7 +70,7 @@ export const EmptyState = (props: EmptyStateProps) => {
     <Root {...props}>
       <IconWrapper>
         <SearchCircle>
-          <Icon name='Search' />
+          <Icon name="Search" />
           <CountBadge>
             <Typography
               typography="span"

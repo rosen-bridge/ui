@@ -1,8 +1,8 @@
 import { styled } from '../../../styling';
 import { Typography } from '../../base';
+import { CloseButton } from '../../closeButton';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
-import { CloseButton } from '../../closeButton';
 
 const Root = styled('div')(({ theme }) => ({
   'display': 'flex',
@@ -101,7 +101,11 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                     </div>
                   );
                 })}
-                <CloseButton disabled={disabled} size="small" onClick={() => onRemove?.(item)}/>
+                <CloseButton
+                  disabled={disabled}
+                  size="small"
+                  onClick={() => onRemove?.(item)}
+                />
               </div>
             )}
           </div>

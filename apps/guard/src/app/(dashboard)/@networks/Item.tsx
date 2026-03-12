@@ -73,7 +73,12 @@ export const Item = ({ network }: ItemProps) => {
             transform: 'translate(-50%, -50%)',
           }}
         >
-          <Icon color='warning-dark' name='ExclamationTriangle' opacity="0.075" size="184px" />
+          <Icon
+            color="warning-dark"
+            name="ExclamationTriangle"
+            opacity="0.075"
+            size="184px"
+          />
         </div>
       )}
     </Card>

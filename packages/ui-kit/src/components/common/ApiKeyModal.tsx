@@ -13,10 +13,10 @@ import {
   TextField,
   Typography,
 } from '../base';
+import { CloseButton } from '../closeButton';
+import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Tooltip } from '../tooltip';
-import { Icon } from '../icon';
-import { CloseButton } from '../closeButton';
 
 interface FormValues {
   apiKey: string;
@@ -62,7 +62,7 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
     <>
       {children?.(handleOpenModal) || (
         <IconButton onClick={handleOpenModal} color="inherit">
-          <Icon name='KeySkeleton' />
+          <Icon name="KeySkeleton" />
         </IconButton>
       )}
       <Dialog

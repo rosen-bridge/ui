@@ -24,11 +24,7 @@ export const SideBar = () => {
       navigationBar={
         <NavigationBar>
           <NavigationButton icon="Estate" label="Home" path="/" />
-          <NavigationButton
-            icon="Heartbeat"
-            label="Health"
-            path="/health"
-          />
+          <NavigationButton icon="Heartbeat" label="Health" path="/health" />
           <NavigationButton
             icon="Newspaper"
             label="Observations"
@@ -39,11 +35,7 @@ export const SideBar = () => {
             label="Events"
             path="/events"
           />
-          <NavigationButton
-            icon="Moneybag"
-            label="Revenues"
-            path="/revenues"
-          />
+          <NavigationButton icon="Moneybag" label="Revenues" path="/revenues" />
         </NavigationBar>
       }
     />

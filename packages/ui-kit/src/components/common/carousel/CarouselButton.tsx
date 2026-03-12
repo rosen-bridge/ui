@@ -1,6 +1,6 @@
+import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { useCarousel } from './useCarousel';
-import { Icon } from '../../icon';
 
 export const CarouselButton = ({ type }: { type: 'next' | 'prev' }) => {
   const api = useCarousel();

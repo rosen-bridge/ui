@@ -6,7 +6,7 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ToolbarOverrides { }
+export interface ToolbarOverrides {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ToolbarOwnProps = {};
@@ -20,7 +20,7 @@ export type ToolbarOverriddenProps = OverridableType<
 >;
 
 export const ToolbarBase = ({ ...rest }: ToolbarOverriddenProps) => {
-  return <Root {...rest} />
+  return <Root {...rest} />;
 };
 
 ToolbarBase.displayName = 'Toolbar';

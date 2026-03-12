@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 import { Stack } from '@mui/material';
 
 import { Typography } from '../../base';
-import { ProcessTrackerStateIcon } from './types';
 import { Icon } from '../../icon';
+import { ProcessTrackerStateIcon } from './types';
 
 /**
  * ProcessIcon renders a circular icon representing the state of a process step.
@@ -48,10 +48,10 @@ export const ProcessIcon = ({
   let iconContent: ReactNode;
   switch (state) {
     case 'done':
-      iconContent = <Icon name='Check' style={{fill: '#fff'}} />
+      iconContent = <Icon name="Check" style={{ fill: '#fff' }} />;
       break;
     case 'pending':
-      iconContent = <Icon name='Hourglass' style={{fill: '#fff'}} />
+      iconContent = <Icon name="Hourglass" style={{ fill: '#fff' }} />;
       break;
     case 'idle':
       iconContent = (

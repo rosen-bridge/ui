@@ -7,9 +7,9 @@ import {
   ListItemIcon,
   ListItemText,
 } from '../../base';
+import { Icon } from '../../icon';
 import { Popup } from './Popup';
 import { Input, SelectOption, Selected } from './types';
-import { Icon } from '../../icon';
 
 export type PickerProps = {
   anchorEl?: HTMLInputElement | null;
@@ -195,7 +195,7 @@ export const Picker = ({
             const post = (() => {
               switch (value.type) {
                 case 'multiple':
-                  return (items.has(option.value) && <Icon name='Check' />)
+                  return items.has(option.value) && <Icon name="Check" />;
                 case 'select':
                   return option.post;
               }

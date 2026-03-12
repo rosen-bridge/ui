@@ -1,19 +1,13 @@
 import { HTMLAttributes, useMemo } from 'react';
 
-import {
-  ExclamationTriangle,
-  Fire,
-  SnowFlake,
-} from '@rosen-bridge/icons';
 import { getDecimalString } from '@rosen-ui/utils';
 
 import { Skeleton, Typography } from '../../base';
+import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
 import { InjectOverrides } from '../InjectOverrides';
-import { SvgIcon } from '../SvgIcon';
-import { Icon } from '../../icon';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Number of decimal places to shift the value before formatting */
@@ -241,10 +235,18 @@ const AmountBase = ({
       {...props}
     >
       {variant === 'cold' && (
-        <Icon color="tertiary-dark" name="SnowFlake" style={{ fontSize: 'inherit' }} />
+        <Icon
+          color="tertiary-dark"
+          name="SnowFlake"
+          style={{ fontSize: 'inherit' }}
+        />
       )}
       {variant === 'hot' && (
-        <Icon color="secondary-dark" name="Fire" style={{ fontSize: 'inherit' }} />
+        <Icon
+          color="secondary-dark"
+          name="Fire"
+          style={{ fontSize: 'inherit' }}
+        />
       )}
       <Stack align="center" direction="row">
         <Stack
@@ -255,7 +257,10 @@ const AmountBase = ({
           <>
             {loading && <Skeleton width={80} />}
             {!loading && !!error && (
-              <Icon name="ExclamationTriangle" style={{ fontSize: 'inherit' }} />
+              <Icon
+                name="ExclamationTriangle"
+                style={{ fontSize: 'inherit' }}
+              />
             )}
             {!loading && !error && !!parts && (
               <Tooltip title={tooltip}>
@@ -306,7 +311,7 @@ const AmountBase = ({
             size="small"
             href={href}
           >
-            <Icon name='ExternalLinkAlt' size="small" />
+            <Icon name="ExternalLinkAlt" size="small" />
           </IconButton>
         )}
       </Stack>

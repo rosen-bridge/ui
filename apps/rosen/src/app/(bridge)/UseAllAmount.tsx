@@ -1,10 +1,4 @@
-import {
-  Button,
-  Divider,
-  Icon,
-  IconButton,
-  Stack,
-} from '@rosen-bridge/ui-kit';
+import { Button, Divider, Icon, IconButton, Stack } from '@rosen-bridge/ui-kit';
 
 export interface UseAllAmountProps {
   disabled: boolean;

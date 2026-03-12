@@ -7,11 +7,11 @@ import { Connector } from '../../connector';
 import { Identifier } from '../../identifier';
 import { Network } from '../../network';
 import { Stack } from '../../stack';
+import { Token } from '../../token';
 import { Card, CardBody } from '../card';
 import { Amount } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { Token } from '../../token';
 import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventCardProps = HTMLAttributes<HTMLDivElement> & {

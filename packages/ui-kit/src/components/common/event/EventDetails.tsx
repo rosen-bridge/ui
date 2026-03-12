@@ -4,17 +4,17 @@ import { Button } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Columns } from '../../columns';
+import { Icon } from '../../icon';
 import { Identifier } from '../../identifier';
 import { LabelGroup } from '../../labelGroup';
 import { Network } from '../../network';
 import { Stack } from '../../stack';
 import { Text } from '../../text';
+import { Token } from '../../token';
 import { Amount, Label } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { Token } from '../../token';
 import { EventStatus, EventStatusProps } from './EventStatus';
-import { Icon } from '../../icon';
 
 export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
   loading?: boolean;
@@ -64,11 +64,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
         )}
         {'token' in value && (
           <Label label="Token">
-            <Token
-              variant='reverse'
-              value={value.token}
-              loading={loading}
-            />
+            <Token variant="reverse" value={value.token} loading={loading} />
           </Label>
         )}
         {'amount' in value && (
@@ -207,7 +203,7 @@ const EventDetailsBase = forwardRef<HTMLDivElement, EventDetailsProps>(
               target="_blank"
               href={value.href}
               loading={loading}
-              endIcon={<Icon name='AngleRight' />}
+              endIcon={<Icon name="AngleRight" />}
             >
               SEE DETAILS
             </Button>

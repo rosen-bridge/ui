@@ -1,14 +1,6 @@
 import { useState } from 'react';
 
-import { Wallet } from '@rosen-bridge/icons';
-import {
-  Card,
-  CardBody,
-  Button,
-  SvgIcon,
-  Typography,
-  Icon,
-} from '@rosen-bridge/ui-kit';
+import { Card, CardBody, Button, Typography, Icon } from '@rosen-bridge/ui-kit';
 
 import { useWallet } from '@/hooks';
 
@@ -62,9 +54,14 @@ export const WalletInfo = () => {
           <>
             <Button
               color="inherit"
-              startIcon={wallet.selected && (
-                <Icon name="Wallet" icons={{ 'Wallet': wallet.selected.iconReact }} />
-              )}
+              startIcon={
+                wallet.selected && (
+                  <Icon
+                    name="Wallet"
+                    icons={{ Wallet: wallet.selected.iconReact }}
+                  />
+                )
+              }
               style={{ marginLeft: '-8px', textTransform: 'none' }}
               onClick={() => setOpen(true)}
             >

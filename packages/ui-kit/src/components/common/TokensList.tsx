@@ -1,11 +1,11 @@
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
+import { Avatar } from '../avatar';
 import { Typography } from '../base';
 import { Identifier } from '../identifier';
 import { Stack } from '../stack';
 import { Text } from '../text';
-import { Avatar } from '../avatar';
 import { Amount } from './display';
 
 export interface TokensListProps {

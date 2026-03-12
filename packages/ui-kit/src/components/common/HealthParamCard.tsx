@@ -6,10 +6,10 @@ import moment from 'moment';
 import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';
 import { Alert, Typography } from '../base';
+import { Icon, IconProps } from '../icon';
 import { Stack } from '../stack';
 import { Tooltip } from '../tooltip';
 import { Button } from './Button';
-import { Icon, IconProps } from '../icon';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;
