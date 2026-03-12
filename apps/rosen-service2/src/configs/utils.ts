@@ -88,7 +88,6 @@ export const validateConfigs = (): RosenService2Configs => {
   confValidator.validateConfig(configs);
 
   configs.contracts = {};
-  // TODO: implement Bitcoin-Runes support later
   configs.contracts = readContractConfigs(configs.paths.contracts);
 
   return configs;
