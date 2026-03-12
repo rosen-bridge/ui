@@ -6,11 +6,12 @@ import { MetricEntity } from '../entities';
 
 export class MetricAction {
   private readonly repository: Repository<MetricEntity>;
-  readonly logger: AbstractLogger;
+  private readonly logger: AbstractLogger;
 
   constructor(dataSource: DataSource, logger?: AbstractLogger) {
     this.repository = dataSource.getRepository(MetricEntity);
     this.logger = logger ?? new DummyLogger();
+    this.logger.debug('MetricAction initialized');
   }
 
   /**

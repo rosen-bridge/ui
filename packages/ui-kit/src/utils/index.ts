@@ -1,3 +1,4 @@
+export * from './formatDuration';
 export * from './themeUtils';
 export * from './themeOptions';
 export * from './toCSSColor';

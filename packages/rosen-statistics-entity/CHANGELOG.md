@@ -1,5 +1,11 @@
 # @rosen-ui/rosen-statistics-entity
 
+## 0.2.1
+
+### Patch Changes
+
+- Add getSignificantDecimals by TokenId to LockedAssetsMetricAction
+
 ## 0.2.0
 
 ### Minor Changes

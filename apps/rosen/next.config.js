@@ -28,7 +28,7 @@ const nextConfig = {
       },
     ];
   },
-  webpack: function (config) {
+  webpack: function (config, options) {
     /**
      * This configuration should be applied as recommended in:
      * https://docs.reown.com/appkit/next/core/installation#extra-configuration
@@ -40,11 +40,9 @@ const nextConfig = {
       syncWebAssembly: true,
       layers: true,
     };
-    // Fix fallback overrides
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-    };
+    if (!options.isServer) {
+      config.resolve.fallback.fs = false;
+    }
     return config;
   },
   outputFileTracingRoot: path.join(__dirname, '../../'),

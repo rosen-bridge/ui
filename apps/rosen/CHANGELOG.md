@@ -1,5 +1,36 @@
 # @rosen-bridge/rosen-app
 
+## 5.0.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.5.0
+  - @rosen-bridge/ui-kit@5.3.0
+  - @rosen-network/binance@0.4.5
+  - @rosen-network/bitcoin@2.4.4
+  - @rosen-network/bitcoin-runes@1.0.4
+  - @rosen-network/cardano@2.5.4
+  - @rosen-network/doge@0.4.4
+  - @rosen-network/ergo@2.5.5
+  - @rosen-network/ethereum@0.4.5
+  - @rosen-ui/data-source@0.2.3
+  - @rosen-ui/metamask-wallet@2.1.8
+  - @rosen-ui/wallet-connect@0.2.8
+  - @rosen-ui/okx-wallet@2.2.1
+  - @rosen-ui/xverse-wallet@0.4.1
+  - @rosen-ui/eternl-wallet@3.1.6
+  - @rosen-ui/lace-wallet@3.1.6
+  - @rosen-ui/my-doge-wallet@1.1.8
+  - @rosen-ui/nautilus-wallet@3.1.6
+
+## 5.0.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.2.1
+
 ## 5.0.0
 
 ### Major Changes

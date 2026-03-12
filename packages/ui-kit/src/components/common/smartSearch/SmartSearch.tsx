@@ -20,6 +20,7 @@ import { Filter, Input, Selected } from './types';
 import { parseFilter } from './utils';
 import { VirtualScroll } from './VirtualScroll';
 import { Icon } from '../../icon';
+import { CloseButton } from '../../closeButton';
 
 const Root = styled(Card)(({ theme }) => ({
   flexGrow: 1,
@@ -282,6 +283,18 @@ export const SmartSearch = ({
     $history.current?.add(filters);
   }, [filters]);
 
+  const handleClearAll = useCallback(() => {
+    setSelected([]);
+    setCurrent(undefined);
+    setQuery('');
+    onChange([]);
+  }, [onChange]);
+
+  const hasFilters = useMemo(
+    () => selectedValidated.length > 0,
+    [selectedValidated],
+  );
+
   return (
     <Root>
       <History
@@ -337,12 +350,15 @@ export const SmartSearch = ({
           />
         </Container>
       </VirtualScroll>
+      {hasFilters && (
+        <CloseButton disabled={disabled} onClick={handleClearAll} />
+      )}
       <IconButton
         disabled={disabled}
         ref={$search}
         onClick={() => onChange(selected)}
       >
-        <Icon name='Search' /> 
+        <Icon name='Search' />
       </IconButton>
     </Root>
   );
