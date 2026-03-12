@@ -116,7 +116,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           configs.chains['bitcoin-runes'].unisatUrl,
           configs.chains['bitcoin-runes'].unisatApiKey,
-          this.logger.child('bitcoinDataAdapter'),
+          this.logger.child('bitcoinRunesDataAdapter'),
         );
       case NETWORKS.ethereum.key:
         return new EthereumEvmRpcDataAdapter(
