@@ -1,5 +1,4 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   Dependency,
   PeriodicTaskService,
@@ -9,6 +8,7 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
+  BitcoinRunesDataAdapter,
   CardanoKoiosDataAdapter,
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
@@ -23,6 +23,7 @@ import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
 import { ChainChoices, Chains, TotalSupply } from '../types';
+import { stringSerializer } from '../utils';
 import { DBService } from './db';
 
 export class AssetDataAdapterService extends PeriodicTaskService {
@@ -109,13 +110,21 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           },
           this.logger.child('bitcoinDataAdapter'),
         );
+      case NETWORKS['bitcoin-runes'].key:
+        return new BitcoinRunesDataAdapter(
+          addresses,
+          tokenMap,
+          configs.chains['bitcoin-runes'].unisatUrl,
+          configs.chains['bitcoin-runes'].unisatApiKey,
+          this.logger.child('bitcoinRunesDataAdapter'),
+        );
       case NETWORKS.ethereum.key:
         return new EthereumEvmRpcDataAdapter(
           addresses,
           tokenMap,
           {
             url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
+            authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
           },
           configs.chains.ethereum.adapter.chunkSize,
           this.logger.child('ethereumDataAdapter'),
@@ -126,7 +135,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             url: configs.chains.binance.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
+            authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
           },
           configs.chains.binance.adapter.chunkSize,
           this.logger.child('binanceDataAdapter'),
@@ -138,8 +147,8 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
             authToken: configs.chains.cardano.koios.connections
-              .at(0)!
-              .authToken!.toString(),
+              .at(0)
+              ?.authToken?.toString(),
           },
           this.logger.child('cardanoDataAdapter'),
         );
@@ -153,8 +162,6 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           this.logger.child('dogeDataAdapter'),
         );
     }
-
-    throw new Error(`No adapter class found for chain: ${chain}`);
   };
 
   /**
@@ -199,6 +206,12 @@ export class AssetDataAdapterService extends PeriodicTaskService {
         // Create Bitcoin data-adapter
         this.adapters[NETWORKS.bitcoin.key] =
           this.createChainSpecificDataAdapter(NETWORKS.bitcoin.key);
+      }
+
+      if (configs.chains['bitcoin-runes'].active) {
+        // Create bitcoin-runes data-adapter
+        this.adapters[NETWORKS['bitcoin-runes'].key] =
+          this.createChainSpecificDataAdapter(NETWORKS['bitcoin-runes'].key);
       }
 
       if (configs.chains.doge.active) {
@@ -272,7 +285,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, JsonBigInt.stringify(assets));
+    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
   };
 
   /**
@@ -311,12 +324,12 @@ export class AssetDataAdapterService extends PeriodicTaskService {
                     });
                   }
                 }
-                this.redis.set(adapter.chain, JsonBigInt.stringify(finalData));
+                this.redis.set(adapter.chain, stringSerializer(finalData));
               }
             : async () => {
                 this.redis.set(
                   adapter.chain,
-                  JsonBigInt.stringify(await adapter.fetch()),
+                  stringSerializer(await adapter.fetch()),
                 );
               },
         interval:
