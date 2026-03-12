@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { CircularProgress, Typography, IconButton } from '@mui/material';
+import { Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Network } from '../network';
@@ -11,6 +11,7 @@ import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
 import { EnhancedDialogTitle } from './EnhancedDialogTitle';
 import { Icon, IconProps } from '../icon';
+import { IconButton } from '../iconButton';
 
 type NetworkHeight = {
   network: NetworkType;
@@ -96,17 +97,13 @@ export const AppInfo = ({
           {children}
         </EnhancedDialogContent>
       </EnhancedDialog>
-
       <IconButton
+        color='inherit'
         disabled={loading}
-        sx={{ padding: '12px', color: 'inherit' }}
+        loading={loading}
         onClick={() => setOpen(!open)}
       >
-        {loading ? (
-          <CircularProgress size={15} color="inherit" />
-        ) : (
-          <Icon name='InfoCircle' />
-        )}
+        <Icon name='InfoCircle' />
       </IconButton>
     </div>
   );

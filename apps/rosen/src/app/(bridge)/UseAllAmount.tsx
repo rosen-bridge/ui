@@ -1,6 +1,5 @@
 import {
   Button,
-  CircularProgress,
   Divider,
   Icon,
   IconButton,
@@ -32,13 +31,8 @@ export const UseAllAmount = ({
         orientation="vertical"
         style={{ alignSelf: 'stretch', height: 'auto' }}
       />
-      {loading && (
-        <IconButton disabled>
-          <CircularProgress size={24} />
-        </IconButton>
-      )}
-      {!error && !loading && (
-        <Button disabled={disabled} onClick={onClick}>
+      {!error && (
+        <Button disabled={disabled} loading={loading} onClick={onClick}>
           <span style={{ whiteSpace: 'nowrap' }}>
             Use all
             <br />
