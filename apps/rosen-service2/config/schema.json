@@ -693,6 +693,14 @@
                 }
               },
               {
+                "required": true,
+                "error": "bitcoin network connection method must be set",
+                "when": {
+                  "path": "chains.bitcoin-runes.active",
+                  "value": true
+                }
+              },
+              {
                 "choices": [
                   "rpc",
                   "esplora"

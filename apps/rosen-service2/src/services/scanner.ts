@@ -104,7 +104,10 @@ export class ScannerService extends PeriodicTaskService {
             break;
         }
       }
-      if (configs.chains.bitcoin.active) {
+      if (
+        configs.chains.bitcoin.active ||
+        configs.chains['bitcoin-runes'].active
+      ) {
         switch (configs.chains.bitcoin.method) {
           case BITCOIN_METHOD_ESPLORA:
             this.scanners[NETWORKS.bitcoin.key] =
@@ -145,14 +148,6 @@ export class ScannerService extends PeriodicTaskService {
       if (configs.chains.binance.active) {
         this.scanners[NETWORKS.binance.key] =
           await buildBinanceRpcScannerWithExtractors(this.dbService.dataSource);
-      }
-      if (
-        configs.chains['bitcoin-runes'].active &&
-        !configs.chains.bitcoin.active
-      ) {
-        throw new Error(
-          'When the bitcoin-runes chain is activated, Bitcoin must also be active.',
-        );
       }
     } catch (error) {
       throw new Error(
