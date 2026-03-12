@@ -1,9 +1,8 @@
 import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
 import { Alert, AlertProps, Collapse } from '../base';
-import { IconButton } from '../iconButton';
 import { Button } from './Button';
-import { Icon } from '../icon';
+import { CloseButton } from '../closeButton';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;
@@ -32,15 +31,12 @@ export const AlertCard = ({
         severity={severity || undefined}
         action={
           onClose && (
-            <IconButton
+            <CloseButton
               aria-label="close"
               color="inherit"
               size="small"
-              className="close-button"
               onClick={onClose}
-            >
-              <Icon name='Times' /> 
-            </IconButton>
+            />
           )
         }
         variant="filled"

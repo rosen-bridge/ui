@@ -16,6 +16,7 @@ import {
 import { IconButton } from '../iconButton';
 import { Tooltip } from '../tooltip';
 import { Icon } from '../icon';
+import { CloseButton } from '../closeButton';
 
 interface FormValues {
   apiKey: string;
@@ -88,9 +89,7 @@ export const ApiKeyModal = ({ children }: ApiKeyModalProps) => {
                     endAdornment: (
                       <InputAdornment position="end">
                         <Tooltip title="Clear">
-                          <IconButton onClick={() => reset()}>
-                            <Icon name='Times' />
-                          </IconButton>
+                          <CloseButton onClick={() => reset()} />
                         </Tooltip>
                         <Tooltip title={showKey ? 'Hide key' : 'Show key'}>
                           <IconButton onClick={handleToggleShowKey}>

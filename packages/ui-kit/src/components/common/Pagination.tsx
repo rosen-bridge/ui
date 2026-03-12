@@ -2,14 +2,13 @@ import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import {
   Pagination as PaginationMui,
-  SvgIcon,
   Divider,
   Button,
 } from '@mui/material';
-import { CaretDown, AlignCenter } from '@rosen-bridge/icons';
 
 import { Box, Typography, MenuItem, Menu, ListSubheader } from '../base';
 import { Stack } from '../stack';
+import { Icon } from '../icon';
 
 export interface PaginationProps {
   defaultPageIndex?: number;
@@ -198,34 +197,27 @@ export const Pagination = ({
                   Items per page: {pageSizeCurrent}
                 </Typography>
 
-                <SvgIcon
+                <Box
                   sx={{
-                    'color': (theme) => theme.palette.text.secondary,
-                    'width': 24,
-                    'height': 24,
                     'display': 'none',
                     '@container (min-width: 865px)': {
-                      display: 'inline',
+                      display: 'flex',
                     },
                   }}
                 >
-                  <CaretDown />
-                </SvgIcon>
+                  <Icon color='text-secondary' name='CaretDown' size="24px" />
+                </Box>
 
-                <SvgIcon
+                <Box
                   sx={{
-                    'color': (theme) => theme.palette.text.secondary,
-                    'width': 24,
-                    'height': 24,
-                    'display': 'initial',
-
+                    'display': 'flex',
                     '@container (min-width: 865px)': {
                       display: 'none',
                     },
                   }}
                 >
-                  <AlignCenter />
-                </SvgIcon>
+                  <Icon color='text-secondary' name='AlignCenter' size="24px" />
+                </Box>
               </Stack>
             </Button>
 

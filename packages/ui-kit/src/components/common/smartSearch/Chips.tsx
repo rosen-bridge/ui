@@ -1,9 +1,8 @@
 import { styled } from '../../../styling';
 import { Typography } from '../../base';
-import { IconButton } from '../../iconButton';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
-import { Icon } from '../../icon';
+import { CloseButton } from '../../closeButton';
 
 const Root = styled('div')(({ theme }) => ({
   'display': 'flex',
@@ -102,12 +101,7 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                     </div>
                   );
                 })}
-                <IconButton
-                  disabled={disabled}
-                  onClick={() => onRemove?.(item)}
-                >
-                  <Icon name='Times'/>
-                </IconButton>
+                <CloseButton disabled={disabled} size="small" onClick={() => onRemove?.(item)}/>
               </div>
             )}
           </div>

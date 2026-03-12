@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { FileAlt, Swatchbook, ShieldCheck } from '@rosen-bridge/icons';
-import { AppInfo } from '@rosen-bridge/ui-kit';
+import { AppInfo, IconProps } from '@rosen-bridge/ui-kit';
 
 import { useInfo } from '@/hooks';
 
@@ -15,17 +14,17 @@ export const VersionConfig = () => {
       {
         label: 'Watcher',
         value: info?.versions.app,
-        icon: <ShieldCheck />,
+        icon: 'ShieldCheck' as IconProps['name'],
       },
       {
         label: 'UI',
         value: packageJson.version,
-        icon: <Swatchbook />,
+        icon: 'Swatchbook' as IconProps['name'],
       },
       {
         label: 'Contract',
         value: info?.versions.contract,
-        icon: <FileAlt />,
+        icon: 'FileAlt' as IconProps['name'],
       },
     ];
     return result;

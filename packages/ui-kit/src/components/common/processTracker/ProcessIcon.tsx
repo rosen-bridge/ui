@@ -1,11 +1,10 @@
 import { ReactNode } from 'react';
 
 import { Stack } from '@mui/material';
-import { Check, Hourglass } from '@rosen-bridge/icons';
 
 import { Typography } from '../../base';
-import { SvgIcon } from '../SvgIcon';
 import { ProcessTrackerStateIcon } from './types';
+import { Icon } from '../../icon';
 
 /**
  * ProcessIcon renders a circular icon representing the state of a process step.
@@ -49,18 +48,10 @@ export const ProcessIcon = ({
   let iconContent: ReactNode;
   switch (state) {
     case 'done':
-      iconContent = (
-        <SvgIcon>
-          <Check fontSize="small" color="#fff" />
-        </SvgIcon>
-      );
+      iconContent = <Icon name='Check' style={{fill: '#fff'}} />
       break;
     case 'pending':
-      iconContent = (
-        <SvgIcon>
-          <Hourglass fontSize="small" color="#fff" />
-        </SvgIcon>
-      );
+      iconContent = <Icon name='Hourglass' style={{fill: '#fff'}} />
       break;
     case 'idle':
       iconContent = (

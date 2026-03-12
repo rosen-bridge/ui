@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { CircularProgress, Typography, IconButton } from '@mui/material';
-import { InfoCircle } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Network } from '../network';
@@ -11,7 +10,7 @@ import { Divider } from './Divider';
 import { EnhancedDialog } from './EnhancedDialog';
 import { EnhancedDialogContent } from './EnhancedDialogContent';
 import { EnhancedDialogTitle } from './EnhancedDialogTitle';
-import { SvgIcon } from './SvgIcon';
+import { Icon, IconProps } from '../icon';
 
 type NetworkHeight = {
   network: NetworkType;
@@ -21,7 +20,7 @@ type NetworkHeight = {
 type VersionApp = {
   label?: string;
   value?: string;
-  icon: React.ReactNode;
+  icon: IconProps['name'];
 };
 
 export type AppInfoProps = {
@@ -62,11 +61,11 @@ export const AppInfo = ({
             </Divider>
             {versions && (
               <>
-                {versions.map(({ label, icon: Icon, value }) => (
+                {versions.map(({ label, icon, value }) => (
                   <Stack key={label} direction="row" justify="between">
                     <Stack direction="row" spacing={1} align="center">
                       <Avatar size="32px" background="neutral-contrastText">
-                        <SvgIcon size="medium">{Icon}</SvgIcon>
+                        <Icon name={icon} />
                       </Avatar>
                       <Typography noWrap variant="body1">
                         {label}
@@ -106,9 +105,7 @@ export const AppInfo = ({
         {loading ? (
           <CircularProgress size={15} color="inherit" />
         ) : (
-          <SvgIcon size="medium">
-            <InfoCircle fill="currentColor" />
-          </SvgIcon>
+          <Icon name='InfoCircle' />
         )}
       </IconButton>
     </div>

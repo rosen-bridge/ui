@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Check } from '@rosen-bridge/icons';
-
 import {
   List,
   ListItem,
@@ -9,9 +7,9 @@ import {
   ListItemIcon,
   ListItemText,
 } from '../../base';
-import { SvgIcon } from '../SvgIcon';
 import { Popup } from './Popup';
 import { Input, SelectOption, Selected } from './types';
+import { Icon } from '../../icon';
 
 export type PickerProps = {
   anchorEl?: HTMLInputElement | null;
@@ -197,9 +195,7 @@ export const Picker = ({
             const post = (() => {
               switch (value.type) {
                 case 'multiple':
-                  return (
-                    <SvgIcon>{items.has(option.value) && <Check />}</SvgIcon>
-                  );
+                  return (items.has(option.value) && <Icon name='Check' />)
                 case 'select':
                   return option.post;
               }

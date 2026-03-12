@@ -3,6 +3,7 @@ import { createContext, ReactNode, useContext } from 'react';
 import type {
   AvatarOverriddenProps,
   CenterOverriddenProps,
+  CloseButtonOverriddenProps,
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
   CopyButtonOverriddenProps,
@@ -33,6 +34,7 @@ import type {
 type Components = {
   Avatar: AvatarOverriddenProps;
   Center: CenterOverriddenProps;
+  CloseButton: CloseButtonOverriddenProps;
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
   CopyButton: CopyButtonOverriddenProps;

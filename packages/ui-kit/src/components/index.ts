@@ -5,6 +5,7 @@ export * from './common';
 
 export * from './avatar';
 export * from './center';
+export * from './closeButton';
 export * from './columns';
 export * from './connector';
 export * from './copyButton';

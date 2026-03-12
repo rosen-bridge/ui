@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import { FileAlt, Swatchbook } from '@rosen-bridge/icons';
-import { AppInfo } from '@rosen-bridge/ui-kit';
+import { AppInfo, IconProps } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import useSWR from 'swr';
 
@@ -18,12 +17,12 @@ export const VersionConfig = () => {
       {
         label: 'UI',
         value: packageJson.version,
-        icon: <Swatchbook />,
+        icon: 'Swatchbook' as IconProps['name'],
       },
       {
         label: 'Contract',
         value: CONTRACT_VERSION,
-        icon: <FileAlt />,
+        icon: 'FileAlt' as IconProps['name'],
       },
     ];
     return result;

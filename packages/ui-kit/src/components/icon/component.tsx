@@ -48,7 +48,7 @@ export const IconBase = ({
     '--rosen-icon-size': toCSSUnit('icon-size', size),
   } as CSSProperties), [color, size]);
 
-  return <Root as={Icon} style={styles} {...rest} />;
+  return <Root as={Icon} styles={styles} {...rest} />;
 };
 
 IconBase.displayName = 'Icon';

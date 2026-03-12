@@ -1,11 +1,11 @@
 import { HTMLAttributes } from 'react';
 
-import { Box, Typography, SvgIcon } from '@mui/material';
-import { ExclamationCircle } from '@rosen-bridge/icons';
+import { Box, Typography } from '@mui/material';
 
 import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
 import { InjectOverrides } from '../InjectOverrides';
+import { Icon } from '../../icon';
 
 /**
  * Props for the `Label` component.
@@ -119,19 +119,7 @@ const LabelBase = ({
           </Typography>
           {info && (
             <Tooltip arrow title={info}>
-              <SvgIcon
-                sx={{
-                  width: '16px',
-                  height: '16px',
-                  cursor: 'pointer',
-                  color: (theme) =>
-                    color === 'textSecondary'
-                      ? theme.palette.text.secondary
-                      : theme.palette.text.primary,
-                }}
-              >
-                <ExclamationCircle />
-              </SvgIcon>
+              <Icon color={color === 'textSecondary' ? 'text-secondary' : 'text-primary'} name="ExclamationCircle" size="16px" style={{ cursor: 'pointer' }} />
             </Tooltip>
           )}
         </Stack>

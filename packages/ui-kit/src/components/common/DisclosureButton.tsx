@@ -1,5 +1,4 @@
 import { useDisclosure } from '../../hooks/useDisclosure';
-import { CircularProgress } from '../base';
 import { IconButton } from '../iconButton';
 import { Icon } from '../icon';
 
@@ -47,6 +46,7 @@ export const DisclosureButton = ({
     <IconButton
       size={size}
       disabled={disclosure.state == 'loading' || disabled}
+      loading={disclosure.state == 'loading'}
       sx={{
         color: disclosure.state == 'error' ? 'red' : undefined,
         transform: `rotate(${disclosure.state == 'open' ? 180 : 0}deg)`,
@@ -70,11 +70,7 @@ export const DisclosureButton = ({
         }
       }}
     >
-      {disclosure.state == 'loading' ? (
-        <CircularProgress size={24} />
-      ) : (
-        <Icon name={disclosure.state == 'error' ? 'SyncExclamation' : 'AngleDown'} />
-      )}
+      <Icon name={disclosure.state == 'error' ? 'SyncExclamation' : 'AngleDown'} />
     </IconButton>
   );
 };

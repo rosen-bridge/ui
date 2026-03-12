@@ -241,14 +241,10 @@ const AmountBase = ({
       {...props}
     >
       {variant === 'cold' && (
-        <SvgIcon style={{ fontSize: 'inherit' }} color="tertiary.dark">
-          <SnowFlake />
-        </SvgIcon>
+        <Icon color="tertiary-dark" name="SnowFlake" style={{ fontSize: 'inherit' }} />
       )}
       {variant === 'hot' && (
-        <SvgIcon style={{ fontSize: 'inherit' }} color="secondary.dark">
-          <Fire />
-        </SvgIcon>
+        <Icon color="secondary-dark" name="Fire" style={{ fontSize: 'inherit' }} />
       )}
       <Stack align="center" direction="row">
         <Stack
@@ -259,13 +255,7 @@ const AmountBase = ({
           <>
             {loading && <Skeleton width={80} />}
             {!loading && !!error && (
-              <SvgIcon
-                style={{
-                  fontSize: 'inherit',
-                }}
-              >
-                <ExclamationTriangle />
-              </SvgIcon>
+              <Icon name="ExclamationTriangle" style={{ fontSize: 'inherit' }} />
             )}
             {!loading && !error && !!parts && (
               <Tooltip title={tooltip}>

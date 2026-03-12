@@ -1,8 +1,6 @@
-import { SvgIcon } from '@mui/material';
-import { ExternalLinkAlt } from '@rosen-bridge/icons';
-
 import { Typography } from '../base';
 import { Tooltip } from '../tooltip';
+import { Icon } from '../icon';
 
 export interface IdProps {
   id: string;
@@ -41,15 +39,7 @@ export const Id = ({ id, indicator, href }: IdProps) => {
           <Typography noWrap variant="caption" component="span">
             {text}
           </Typography>
-          <SvgIcon
-            fontSize="inherit"
-            sx={{
-              display: 'block',
-              color: (theme) => theme.palette.primary.main,
-            }}
-          >
-            <ExternalLinkAlt />
-          </SvgIcon>
+          <Icon color='primary' name='ExternalLinkAlt' style={{ display: 'block', fontSize: "inherit" }} />
         </a>
       ) : (
         <Typography noWrap variant="caption">

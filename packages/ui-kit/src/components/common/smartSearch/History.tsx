@@ -25,6 +25,7 @@ import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 import { Icon } from '../../icon';
+import { CloseButton } from '../../closeButton';
 
 type Item = {
   bookmark: boolean;
@@ -203,15 +204,13 @@ export const History = forwardRef<HistoryRef, HistoryProps>(
                         disablePadding
                         key={getKey(item.selected)}
                         secondaryAction={
-                          <IconButton
+                          <CloseButton
                             edge="end"
                             onClick={(event) => {
                               event.stopPropagation();
                               remove(item);
                             }}
-                          >
-                            <Icon name='Times' />
-                          </IconButton>
+                          />
                         }
                         onClick={() => handleClick(item)}
                       >

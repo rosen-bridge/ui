@@ -29,10 +29,7 @@ export type CopyButtonOwnProps = {
   value?: string | (() => string | undefined);
 };
 
-export type CopyButtonBaseProps = Omit<
-  ElementBaseProps<typeof IconButton, CopyButtonOwnProps>,
-  'icon'
->;
+export type CopyButtonBaseProps = ElementBaseProps<typeof IconButton, CopyButtonOwnProps>
 
 export type CopyButtonOverriddenProps = OverridableType<
   CopyButtonBaseProps,
