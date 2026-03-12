@@ -163,6 +163,16 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
           configs.contracts.ethereum,
         ),
       );
+    if (configs.chains['bitcoin-runes'].active)
+      await ergoScanner.registerExtractor(
+        createEventTrigger(
+          NETWORKS['bitcoin-runes'].key,
+          networkType,
+          url,
+          dataSource,
+          configs.contracts['bitcoin-runes'],
+        ),
+      );
     if (configs.chains.binance.active)
       await ergoScanner.registerExtractor(
         createEventTrigger(

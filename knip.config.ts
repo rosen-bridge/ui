@@ -27,10 +27,10 @@ const config: KnipConfig = {
     '@mui/material',
     '@next/eslint-plugin-next',
     '@types/moment',
-    '@types/react',
     '@vitest/runner',
     'eslint-config-next',
     'pg',
+    'sass',
   ],
 };
 

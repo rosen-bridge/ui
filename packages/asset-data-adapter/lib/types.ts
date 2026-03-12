@@ -48,7 +48,7 @@ export interface BitcoinEsploraDataAdapterAuthParams {
 
 export interface CardanoKoiosDataAdapterAuthParams {
   koiosUrl: string | undefined;
-  authToken: string;
+  authToken: string | undefined;
 }
 
 export interface DogeBlockCypherDataAdapterAuthParams {

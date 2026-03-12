@@ -48,6 +48,7 @@
     "@rosen-ui/types": "^0.4.1",
     "@tsdown/css": "^0.21.0",
     "autoprefixer": "^10.4.27",
+    "sass": "^1.98.0",
     "tsdown": "^0.21.0"
   },
   "peerDependencies": {
