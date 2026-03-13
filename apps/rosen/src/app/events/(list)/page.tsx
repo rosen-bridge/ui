@@ -160,7 +160,7 @@ const Page = () => {
               id={item.id}
               key={item.id ? `${item.id}:${item.eventTriggerId}` : index}
               active={!isLoading && current === item}
-              isLoading={isLoading}
+              loading={isLoading}
               value={
                 !item
                   ? undefined

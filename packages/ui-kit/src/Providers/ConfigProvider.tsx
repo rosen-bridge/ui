@@ -7,6 +7,7 @@ import type {
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
   CopyButtonOverriddenProps,
+  EventCardOverriddenProps,
   GridContainerOverriddenProps,
   IconOverriddenProps,
   IconButtonOverriddenProps,
@@ -38,6 +39,7 @@ type Components = {
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
   CopyButton: CopyButtonOverriddenProps;
+  EventCard: EventCardOverriddenProps;
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
   IconButton: IconButtonOverriddenProps;

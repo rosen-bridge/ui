@@ -176,7 +176,7 @@ export const RelativeTime = ({ timestamp, isLoading }: RelativeTimeProps) => {
   if (isLoading) {
     return (
       <Root>
-        <Skeleton width={80} />
+        <Skeleton width={80} height={27} />
       </Root>
     );
   }

@@ -9,6 +9,7 @@ export * from './closeButton';
 export * from './columns';
 export * from './connector';
 export * from './copyButton';
+export * from './eventCard';
 export * from './gridContainer';
 export * from './icon';
 export * from './iconButton';
