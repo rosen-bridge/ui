@@ -43,6 +43,7 @@ export const ThemeProvider = ({
   };
 
   const final = useMemo(() => {
+    document.body.setAttribute('data-theme', theme.palette.mode);
     return createTheme({
       cssVariables: {
         cssVarPrefix: 'rosen',

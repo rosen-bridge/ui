@@ -3,15 +3,24 @@ import { ComponentProps } from 'react';
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import './styles.scss';
-import { Amount, AmountProps, Card, CardBody, EventStatus, EventStatusProps, RelativeTime, RelativeTimeProps } from '../common';
-import { Token, TokenProps } from '../token';
-import { Identifier, IdentifierProps } from '../identifier';
+import {
+  Amount,
+  AmountProps,
+  Card,
+  CardBody,
+  EventStatus,
+  EventStatusProps,
+  RelativeTime,
+  RelativeTimeProps,
+} from '../common';
 import { Connector } from '../connector';
+import { Identifier, IdentifierProps } from '../identifier';
 import { Network, NetworkProps } from '../network';
+import { Token, TokenProps } from '../token';
+import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface EventCardOverrides { }
+export interface EventCardOverrides {}
 
 export type EventCardOwnProps = {
   loading?: boolean;
@@ -29,7 +38,10 @@ export type EventCardOwnProps = {
   };
 };
 
-export type EventCardBaseProps = ElementBaseProps<typeof Card, EventCardOwnProps>;
+export type EventCardBaseProps = ElementBaseProps<
+  typeof Card,
+  EventCardOwnProps
+>;
 
 export type EventCardOverriddenProps = OverridableType<
   EventCardBaseProps,
@@ -37,7 +49,11 @@ export type EventCardOverriddenProps = OverridableType<
   never
 >;
 
-export const EventCardBase = ({ loading, value, ...rest }: EventCardOverriddenProps) => {
+export const EventCardBase = ({
+  loading,
+  value,
+  ...rest
+}: EventCardOverriddenProps) => {
   return (
     <Root as={Card} backgroundColor="background.paper" {...rest}>
       <CardBody className="rosen-CardBody">
@@ -56,10 +72,7 @@ export const EventCardBase = ({ loading, value, ...rest }: EventCardOverriddenPr
             decimal={value?.decimal}
           />
         </div>
-        <RelativeTime
-          isLoading={loading}
-          timestamp={value?.timestamp}
-        />
+        <RelativeTime isLoading={loading} timestamp={value?.timestamp} />
         <Identifier
           href={value?.href}
           loading={loading}

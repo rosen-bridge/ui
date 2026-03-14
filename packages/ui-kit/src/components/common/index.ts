@@ -7,7 +7,6 @@ export * from './navigationBar';
 export * from './AlertCard';
 export * from './ApiKeyModal';
 export * from './ApiKeyModalWarning';
-export * from './App';
 export * from './AppLogo';
 export * from './DisclosureButton';
 export * from './EnhancedDialog';

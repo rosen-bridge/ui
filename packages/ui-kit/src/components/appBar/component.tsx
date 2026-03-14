@@ -2,12 +2,12 @@ import { ComponentProps, ReactNode } from 'react';
 
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
-
-import './styles.scss';
 import { useIsMobile } from '@/hooks';
 
+import './styles.scss';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface AppBarOverrides { }
+export interface AppBarOverrides {}
 
 export type AppBarOwnProps = {
   actions?: ReactNode;
@@ -27,10 +27,18 @@ export type AppBarOverriddenProps = OverridableType<
  * renders a appBar wrapper
  * this component set the appBar size and orientation in different screen sizes
  */
-export const AppBarBase = ({ actions, links, logo, ...rest }: AppBarOverriddenProps) => {
+export const AppBarBase = ({
+  actions,
+  links,
+  logo,
+  ...rest
+}: AppBarOverriddenProps) => {
   const isMobile = useIsMobile();
   return (
-    <Root reflects={{direction: isMobile ? 'horizontal' : 'vertical'}} {...rest}>
+    <Root
+      reflects={{ direction: isMobile ? 'horizontal' : 'vertical' }}
+      {...rest}
+    >
       {logo}
       {links}
       {actions}

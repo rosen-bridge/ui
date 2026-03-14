@@ -104,7 +104,7 @@ export const Chips = ({ disabled, filters, value, onRemove }: ChipsProps) => {
                 <CloseButton
                   disabled={disabled}
                   size="small"
-                  slots={{icon:{size:'small'}}}
+                  slots={{ icon: { size: 'small' } }}
                   onClick={() => onRemove?.(item)}
                 />
               </div>

@@ -3,6 +3,7 @@ import './index.scss';
 export * from './base';
 export * from './common';
 
+export * from './app';
 export * from './appBar';
 export * from './avatar';
 export * from './center';

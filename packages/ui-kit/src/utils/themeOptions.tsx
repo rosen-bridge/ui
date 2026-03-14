@@ -1,7 +1,6 @@
 import {
   alpha,
   ComponentsOverrides,
-  ComponentsVariants,
   SvgIcon,
   Theme,
   ThemeOptions,
@@ -12,8 +11,6 @@ import {
   ExclamationTriangle,
   InfoCircle,
 } from '@rosen-bridge/icons';
-
-import { AppProps } from '../components';
 
 declare module '@mui/material/styles' {
   interface TypeBackground {
@@ -45,20 +42,10 @@ declare module '@mui/material/styles' {
   }
 
   interface ComponentNameToClassKey {
-    RosenApp: 'root' | 'main';
     RosenNavigationBar: 'root';
   }
 
-  interface ComponentsPropsList {
-    RosenApp: Partial<AppProps>;
-  }
-
   interface Components {
-    RosenApp?: {
-      defaultProps?: ComponentsPropsList['RosenApp'];
-      styleOverrides?: ComponentsOverrides<Theme>['RosenApp'];
-      variants?: ComponentsVariants['RosenApp'];
-    };
     RosenNavigationBar?: {
       styleOverrides?: ComponentsOverrides<Theme>['RosenNavigationBar'];
     };
@@ -370,26 +357,6 @@ export const lightThemeOptions: ThemeOptions = {
             borderColor: theme.palette.primary.light,
             background: theme.palette.background.paper,
             boxShadow: `0px 8px 8px 0px ${theme.palette.background.default}`,
-          },
-        }),
-      },
-    },
-    RosenApp: {
-      styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
-          background:
-            theme.palette.mode === 'light'
-              ? `linear-gradient(180deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-              : theme.palette.background.paper,
-          color:
-            theme.palette.mode === 'light'
-              ? theme.palette.common.white
-              : theme.palette.text.primary,
-          [theme.breakpoints.down('tablet')]: {
-            background:
-              theme.palette.mode === 'light'
-                ? `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`
-                : theme.palette.primary.light,
           },
         }),
       },

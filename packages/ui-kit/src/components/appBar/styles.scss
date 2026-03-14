@@ -6,7 +6,7 @@
   flex-shrink: 0;
   padding: calc(var(--rosen-spacing) * 2);
 
-  &[data-direction=horizontal] {
+  &[data-direction='horizontal'] {
     flex-direction: row;
     padding: calc(var(--rosen-spacing) * 1.5) calc(var(--rosen-spacing) * 2);
   }

@@ -1,6 +1,8 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import type {
+  AppOverriddenProps,
+  AppBarOverriddenProps,
   AvatarOverriddenProps,
   CenterOverriddenProps,
   CloseButtonOverriddenProps,
@@ -34,6 +36,8 @@ import type {
 } from '../components';
 
 type Components = {
+  App: AppOverriddenProps;
+  AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
   Center: CenterOverriddenProps;
   CloseButton: CloseButtonOverriddenProps;

@@ -14,7 +14,7 @@ import { Truncate } from '../truncate';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides { }
+export interface IdentifierOverrides {}
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -104,7 +104,12 @@ export const IdentifierBase = ({
       {loading && (
         <>
           <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />
-          <CopyButton className="loading" disabled size="small" slots={{ icon: { size: 'small' } }} />
+          <CopyButton
+            className="loading"
+            disabled
+            size="small"
+            slots={{ icon: { size: 'small' } }}
+          />
         </>
       )}
       {!loading && (
