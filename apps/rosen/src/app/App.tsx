@@ -19,8 +19,7 @@ import { theme } from '@/theme/theme';
 
 import { TokenMapProvider } from '../hooks';
 import { configs } from '../ui-kit.config';
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
+import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -40,7 +39,7 @@ export const App = ({ children }: PropsWithChildren) => {
               router.push(href as unknown as Route, { scroll: false }),
           }}
         >
-          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
+          <AppBase sidebar={<Sidebar />} theme={theme}>
             <TokenMapProvider>{children}</TokenMapProvider>
           </AppBase>
         </FrameworkProvider>

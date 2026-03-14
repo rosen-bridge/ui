@@ -32,7 +32,7 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   }
 
   return (
-    <Columns width="250px" count={2} rule gap="32px">
+    <Columns width="250px" count={2} rule gap={4}>
       <Label label="Token" orientation="horizontal">
         <Token value={value.id} href={value.tokenUrl} variant="reverse" />
       </Label>

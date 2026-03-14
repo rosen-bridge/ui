@@ -14,6 +14,7 @@ import type {
   IdentifierOverriddenProps,
   ImageOverriddenProps,
   LabelGroupOverriddenProps,
+  LayoutListOverriddenProps,
   LinkOverriddenProps,
   NetworkOverriddenProps,
   StackOverriddenProps,
@@ -46,6 +47,7 @@ type Components = {
   Identifier: IdentifierOverriddenProps;
   Image: ImageOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
+  LayoutList: LayoutListOverriddenProps;
   Link: LinkOverriddenProps;
   Network: NetworkOverriddenProps;
   Stack: StackOverriddenProps;

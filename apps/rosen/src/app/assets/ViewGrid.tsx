@@ -27,7 +27,7 @@ export const ViewGrid = ({
   setCurrent,
 }: ViewGridProps) => {
   return (
-    <GridContainer minWidth="260px" gap="8px">
+    <GridContainer minWidth="260px" gap={1}>
       {items.map((item, index) => (
         <Card
           id={item.id}

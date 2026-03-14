@@ -7,7 +7,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  DataLayout,
+  LayoutList,
   Pagination,
   SmartSearch,
   SortField,
@@ -160,7 +160,7 @@ const Assets = () => {
   }, [error]);
 
   return (
-    <DataLayout
+    <LayoutList
       search={renderSearch()}
       sort={renderSort()}
       sidebar={renderSidebar()}
@@ -168,7 +168,7 @@ const Assets = () => {
       view={renderView()}
     >
       {!isLoading && !items.length && (
-        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+        <EmptyState style={{ height: '100%' }} />
       )}
       {collection.view === 'grid' && !!items.length && (
         <ViewGrid
@@ -186,7 +186,7 @@ const Assets = () => {
           setCurrent={setCurrent}
         />
       )}
-    </DataLayout>
+    </LayoutList>
   );
 };
 

@@ -1,0 +1,13 @@
+.rosen-AppBar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  padding: calc(var(--rosen-spacing) * 2);
+
+  &[data-direction=horizontal] {
+    flex-direction: row;
+    padding: calc(var(--rosen-spacing) * 1.5) calc(var(--rosen-spacing) * 2);
+  }
+}

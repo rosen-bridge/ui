@@ -8,21 +8,20 @@ import {
   NavigationButton,
 } from '@rosen-bridge/ui-kit';
 
-import { VersionConfig } from './VersionConfig';
+import { Actions } from './Actions';
 
 /**
  * render sidebar log and navigaiton buttons
  */
-export const SideBar = () => {
+export const Sidebar = () => {
   return (
     <AppBar
       logo={
-        <Link href="/">
+        <Link href="/" style={{ display: 'flex' }}>
           <AppLogo />
         </Link>
       }
-      versions={<VersionConfig />}
-      navigationBar={
+      links={
         <NavigationBar>
           <NavigationButton icon="Archway" label="Bridge" path="/" />
           <NavigationButton
@@ -50,6 +49,7 @@ export const SideBar = () => {
           />
         </NavigationBar>
       }
+      actions={<Actions sidebar />}
     />
   );
 };

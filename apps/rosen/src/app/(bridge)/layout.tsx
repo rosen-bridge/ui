@@ -5,6 +5,7 @@ import { Fragment, PropsWithChildren } from 'react';
 import { PageHeading, styled } from '@rosen-bridge/ui-kit';
 
 import { CubeNetSvg } from './CubeNet';
+import { Actions } from '../Actions';
 
 const Background = styled('div')(({ theme }) => ({
   'position': 'absolute',
@@ -75,7 +76,7 @@ const Main = styled('main')(({ theme }) => ({
 const PageLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
-      <PageHeading title="Rosen Bridge" />
+      <PageHeading title="Rosen Bridge" actions={<Actions />} />
       <Main>{children}</Main>
       <Background>
         <CubeNetSvg color="primary" className="top" />

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import {
-  DataLayout,
+  LayoutList,
   EmptyState,
   EventCard,
   GridContainer,
@@ -145,16 +145,16 @@ const Page = () => {
   }, [error]);
 
   return (
-    <DataLayout
+    <LayoutList
       search={renderSearch()}
       sort={renderSort()}
       sidebar={renderSidebar()}
       pagination={renderPagination()}
     >
       {!isLoading && !data?.items.length ? (
-        <EmptyState style={{ height: 'calc(100vh - 288px)' }} />
+        <EmptyState style={{ height: '100%' }} />
       ) : (
-        <GridContainer gap="8px" minWidth="242px">
+        <GridContainer gap={1} minWidth="242px">
           {items.map((item, index) => (
             <EventCard
               id={item.id}
@@ -182,7 +182,7 @@ const Page = () => {
           ))}
         </GridContainer>
       )}
-    </DataLayout>
+    </LayoutList>
   );
 };
 

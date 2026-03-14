@@ -1,7 +1,6 @@
-import { ReactNode, useEffect, useRef, useState } from 'react';
+import { ReactNode } from 'react';
 
 import { SnackbarProvider } from '../../contexts';
-import { useMediaQuery } from '../../hooks';
 import { ThemeProvider, ThemeProviderProps } from '../../Providers';
 import { styled } from '../../styling';
 import { CssBaseline } from '../base';
@@ -19,23 +18,6 @@ const Root = styled('div', {
   [theme.breakpoints.down('tablet')]: {
     flexDirection: 'column',
   },
-}));
-
-interface MobileHeaderProps {
-  'data-isshrunk': boolean;
-}
-
-const MobileHeader = styled('div', {
-  name: 'RosenMobileHeader',
-  slot: 'Root',
-  overridesResolver: (props, styles) => styles.root,
-})<MobileHeaderProps>(({ theme, ...restProps }) => ({
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  padding: restProps['data-isshrunk'] ? theme.spacing(1, 2) : theme.spacing(2),
-  transition: 'ease-in-out 100ms',
 }));
 
 const Main = styled('div', {
@@ -72,65 +54,20 @@ const Paper = styled('div', {
 
 export interface AppProps {
   children: ReactNode;
-  sideBar: ReactNode;
+  sidebar: ReactNode;
   theme: ThemeProviderProps['theme'];
-  toolbar: ReactNode;
 }
 
-export const App = ({ children, sideBar, theme, toolbar }: AppProps) => {
-  const main = useRef<HTMLDivElement>(null);
-  const [isShrunk, setShrunk] = useState<boolean>(false);
-  const isMobile = useMediaQuery(
-    ('light' in theme ? theme.light : theme).breakpoints.down('tablet'),
-  );
-  useEffect(() => {
-    const element = main.current;
-    const handler = () => {
-      if (!element) return;
-      setShrunk((isShrunk) => {
-        if (!isShrunk && element.scrollTop > 20) {
-          return true;
-        }
-        if (isShrunk && element.scrollTop < 4) {
-          return false;
-        }
-        return isShrunk;
-      });
-    };
-    handler();
-    element && element.addEventListener('scroll', handler);
-    return () => {
-      element && element.removeEventListener('scroll', handler);
-    };
-  }, []);
-
+export const App = ({ children, sidebar, theme }: AppProps) => {
   return (
     <ThemeProvider theme={theme}>
       <>
         <CssBaseline />
         <SnackbarProvider>
           <Root>
-            {isMobile ? (
-              <MobileHeader data-isshrunk={isShrunk}>
-                {sideBar}
-                {toolbar}
-              </MobileHeader>
-            ) : (
-              sideBar
-            )}
-            <Main ref={main}>
+            {sidebar}
+            <Main>
               <Paper>
-                {!isMobile && (
-                  <div
-                    style={{
-                      position: 'relative',
-                      zIndex: '1',
-                      float: 'right',
-                    }}
-                  >
-                    {toolbar}
-                  </div>
-                )}
                 {children}
               </Paper>
             </Main>
