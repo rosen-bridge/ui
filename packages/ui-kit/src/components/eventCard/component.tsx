@@ -57,7 +57,7 @@ export const EventCardBase = ({
   return (
     <Root as={Card} backgroundColor="background.paper" {...rest}>
       <CardBody className="rosen-CardBody">
-        <div className="header">
+        <div className="rosen-EventCard__header">
           <Token
             loading={loading}
             value={value?.token}
@@ -79,7 +79,7 @@ export const EventCardBase = ({
           value={value?.id}
           style={{ marginTop: '-4px' }}
         />
-        <div className="footer">
+        <div className="rosen-EventCard__footer">
           <Connector
             variant="filled"
             start={

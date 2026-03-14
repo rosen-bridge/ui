@@ -35,17 +35,17 @@ export const LayoutListBase = ({
 }: LayoutListOverriddenProps) => {
   return (
     <Root {...rest}>
-      <div className="toolbar">
-        <div className="search">{search}</div>
-        {sort && <div className="sort">{sort}</div>}
-        {view && <div className="view">{view}</div>}
+      <div className="rosen-LayoutList__toolbar">
+        <div className="rosen-LayoutList__search">{search}</div>
+        {sort && <div className="rosen-LayoutList__sort">{sort}</div>}
+        {view && <div className="rosen-LayoutList__view">{view}</div>}
       </div>
-      <div className="body">
-        <div className="main">
-          <div className="content">{children}</div>
-          <div className="pagination">{pagination}</div>
+      <div className="rosen-LayoutList__body">
+        <div className="rosen-LayoutList__main">
+          <div className="rosen-LayoutList__content">{children}</div>
+          <div className="rosen-LayoutList__pagination">{pagination}</div>
         </div>
-        {sidebar && <div className="sidebar">{sidebar}</div>}
+        {sidebar && <div className="rosen-LayoutList__sidebar">{sidebar}</div>}
       </div>
     </Root>
   );

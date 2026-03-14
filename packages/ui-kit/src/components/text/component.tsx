@@ -6,7 +6,6 @@ import { OverridableType } from '@/@types';
 import { ElementBaseProps, Wrap } from '@/core';
 
 import { Skeleton, Typography } from '../base';
-import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TextOverrides {}

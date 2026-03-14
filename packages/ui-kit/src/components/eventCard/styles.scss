@@ -1,20 +1,18 @@
-.rosen-EventCard {
-  .rosen-CardBody {
-    display: flex;
-    flex-direction: column;
-    gap: calc(var(--rosen-spacing) * 1);
-  }
+.rosen-CardBody {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--rosen-spacing) * 1);
+}
 
-  .header {
-    display: flex;
-    flex-direction: row;
-    gap: var(--rosen-spacing);
-  }
+.rosen-EventCard__header {
+  display: flex;
+  flex-direction: row;
+  gap: var(--rosen-spacing);
+}
 
-  .footer {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    font-size: 12px;
-  }
+.rosen-EventCard__footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 12px;
 }
