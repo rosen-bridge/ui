@@ -56,10 +56,7 @@ export const WalletInfo = () => {
               color="inherit"
               startIcon={
                 wallet.selected && (
-                  <Icon
-                    name="Wallet"
-                    icons={{ Wallet: wallet.selected.iconReact }}
-                  />
+                  <Icon as={wallet.selected.iconReact} />
                 )
               }
               style={{ marginLeft: '-8px', textTransform: 'none' }}

@@ -18,6 +18,7 @@ import './styles.scss';
 export interface IconOverrides {}
 
 export type IconOwnProps = {
+  as?: FC<SVGAttributes<SVGElement>>;
   color?: ColorOverridden;
   fallback?: Exclude<keyof typeof Icons, 'TOKENS'>;
   icons?: Record<
@@ -37,6 +38,7 @@ export type IconOverriddenProps = OverridableType<
 >;
 
 export const IconBase = ({
+  as,
   color = 'inherit',
   fallback,
   icons,
@@ -45,6 +47,7 @@ export const IconBase = ({
   ...rest
 }: IconOverriddenProps) => {
   const Icon =
+    as ||
     icons?.[name as keyof typeof icons] ||
     icons?.[fallback as keyof typeof icons];
 
