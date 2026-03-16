@@ -1,7 +1,9 @@
 import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
 
+import { Skeleton2 } from '@/components';
+
 import { styled } from '../../styling';
-import { Typography, Skeleton } from '../base';
+import { Typography } from '../base';
 import { Icon, IconProps } from '../icon';
 import { InjectOverrides } from './InjectOverrides';
 
@@ -77,16 +79,12 @@ const ChipWrapper = styled('div')<ChipBaseProps>(({
  * ```
  */
 const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
-  const { label, icon, children, color = 'primary', loading } = props;
+  const { label, icon, children, color = 'primary', loading, ...rest } = props;
 
   const RenderedIcon = useMemo(() => {
     if (!icon) return null;
     return <Icon name={icon} style={{ marginRight: '4px' }} />;
   }, [icon]);
-
-  if (loading) {
-    return <Skeleton width={80} height={32} variant="rounded" />;
-  }
 
   const hasContent = !!children || !!label;
 
@@ -95,9 +93,10 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
     : 'Invalid';
 
   return (
-    <ChipWrapper color={color} ref={ref} {...props}>
+    <ChipWrapper color={color} ref={ref} {...rest}>
       {RenderedIcon}
       {content}
+      {loading && <Skeleton2 attached variant="circular" />}
     </ChipWrapper>
   );
 });

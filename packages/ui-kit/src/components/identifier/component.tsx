@@ -2,7 +2,7 @@ import { ComponentProps, useState } from 'react';
 
 import { OverridableType } from '@/@types';
 import {
-  Skeleton,
+  Skeleton2,
   QrCodeModal,
   CopyButton,
   Icon,
@@ -105,29 +105,17 @@ export const IdentifierBase = ({
 
   return (
     <Root {...rest}>
-      {loading && (
-        <>
-          <Skeleton style={{ flexGrow: 1, minWidth: '80px' }} />
-          <CopyButton
-            className="loading"
-            disabled
-            size="small"
-            slots={{ icon: { size: 'small' } }}
-          />
-        </>
-      )}
-      {!loading && (
-        <Tooltip title={value} {...slots?.tooltip}>
-          <div className="value">
-            <Text asChild className="leading" {...slots?.leading}>
-              <Truncate tooltip={false}>{leading}</Truncate>
-            </Text>
-            <Text className="trailing" {...slots?.trailing}>
-              {trailing}
-            </Text>
-          </div>
-        </Tooltip>
-      )}
+      {loading && <Skeleton2 attached />}
+      <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
+        <div className="value">
+          <Text asChild className="leading" {...slots?.leading}>
+            <Truncate tooltip={false}>{leading}</Truncate>
+          </Text>
+          <Text className="trailing" {...slots?.trailing}>
+            {trailing}
+          </Text>
+        </div>
+      </Tooltip>
       {hasActions && (
         <div className="actions">
           <CopyButton

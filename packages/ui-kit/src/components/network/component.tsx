@@ -4,7 +4,7 @@ import { OverridableType } from '@/@types';
 import {
   Icon,
   IconOverriddenProps,
-  Skeleton,
+  Skeleton2,
   Text,
   TextOverriddenProps,
   Truncate,
@@ -76,24 +76,22 @@ export const NetworkBase = ({
 
   return (
     <Root reflects={{ variant }} {...rest}>
-      {showLogo && loading && <Skeleton variant="circular" />}
-      <Icon
-        className="logo"
-        icons={{ [value]: Logo }}
-        name={value}
-        size="2em"
-        skip={!(showLogo && !loading && Logo)}
-        {...slots?.logo}
-      />
-      <Text
-        asChild
-        className="label"
-        loading={loading}
-        skip={!showLabel}
-        {...slots?.label}
-      >
-        <Truncate>{label}</Truncate>
-      </Text>
+      {showLogo && loading && (
+        <Skeleton2 width="2em" height="2em" variant="circular" />
+      )}
+      {showLogo && !loading && Logo && (
+        <Icon as={Logo} className="logo" size="2em" {...slots?.logo} />
+      )}
+      {showLabel && (
+        <Text
+          asChild={!loading}
+          className="label"
+          loading={loading}
+          {...slots?.label}
+        >
+          {!loading && <Truncate>{label}</Truncate>}
+        </Text>
+      )}
     </Root>
   );
 };

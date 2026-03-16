@@ -8,7 +8,7 @@ import { ElementBaseProps, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TooltipOverrides { }
+export interface TooltipOverrides {}
 
 export type TooltipOwnProps = {
   children: ReactElement;

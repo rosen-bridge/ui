@@ -2,7 +2,9 @@ import { HTMLAttributes, useMemo } from 'react';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { Skeleton, Typography } from '../../base';
+import { Text } from '@/components';
+
+import { Typography } from '../../base';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
@@ -255,48 +257,50 @@ const AmountBase = ({
           spacing="4px"
         >
           <>
-            {loading && <Skeleton width={80} />}
-            {!loading && !!error && (
+            {!!error && (
               <Icon
                 name="ExclamationTriangle"
                 style={{ fontSize: 'inherit' }}
               />
             )}
-            {!loading && !error && !!parts && (
-              <Tooltip title={tooltip}>
-                <Typography
-                  fontSize="inherit"
-                  component="span"
-                  whiteSpace="nowrap"
+            {!error && (
+              <Tooltip disabled={loading} title={tooltip}>
+                <Text
+                  loading={loading}
+                  style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
                 >
-                  {parts.number}
-                  {parts.fraction && (
-                    <Typography
-                      component="span"
-                      fontSize="75%"
-                      style={{ opacity: 0.7 }}
-                    >
-                      .{!!parts.zeros && '0'}
-                      {!!parts.zeros && (
-                        <sub style={{ fontSize: '0.75em' }}>{parts.zeros}</sub>
+                  {!!parts && (
+                    <>
+                      {parts.number}
+                      {parts.fraction && (
+                        <Typography
+                          component="span"
+                          fontSize="75%"
+                          style={{ opacity: 0.7 }}
+                        >
+                          .{!!parts.zeros && '0'}
+                          {!!parts.zeros && (
+                            <sub style={{ fontSize: '0.75em' }}>
+                              {parts.zeros}
+                            </sub>
+                          )}
+                          {parts.fraction}
+                        </Typography>
                       )}
-                      {parts.fraction}
-                    </Typography>
+                      {!!parts.unit && ` ${parts.unit}`}
+                    </>
                   )}
-                  {!!parts.unit && ` ${parts.unit}`}
-                </Typography>
+                </Text>
               </Tooltip>
             )}
-            {!loading &&
-              !error &&
-              !parts &&
-              !!fallback &&
-              value === undefined && <>{fallback}</>}
+            {!error && !parts && !!fallback && value === undefined && (
+              <>{fallback}</>
+            )}
           </>
           {unit && (
-            <Typography fontSize="75%" component="div" style={{ opacity: 0.7 }}>
+            <Text loading={loading} style={{ fontSize: '75%', opacity: 0.7 }}>
               {unit}
-            </Typography>
+            </Text>
           )}
           {formattedPrice && (
             <Typography style={{ opacity: 0.5 }}>

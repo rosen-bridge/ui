@@ -7,9 +7,8 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TableGridBodyDetailsOverrides { }
+export interface TableGridBodyDetailsOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type TableGridBodyDetailsOwnProps = CollapsibleOverriddenProps & {};
 
 export type TableGridBodyDetailsBaseProps = ElementBaseProps<
@@ -27,7 +26,11 @@ export const TableGridBodyDetailsBase = ({
   children,
   ...rest
 }: TableGridBodyDetailsOverriddenProps) => {
-  return <Root as={Collapsible} {...rest}><div className='rosen-TableGridBodyDetails__content'>{children}</div></Root>;
+  return (
+    <Root as={Collapsible} {...rest}>
+      <div className="rosen-TableGridBodyDetails__content">{children}</div>
+    </Root>
+  );
 };
 
 TableGridBodyDetailsBase.displayName = 'TableGridBodyDetails';

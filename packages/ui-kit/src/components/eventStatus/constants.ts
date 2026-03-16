@@ -1,9 +1,6 @@
-import { forwardRef, HTMLAttributes } from 'react';
+import type { EventStatusMeta } from './component';
 
-import { Chip } from '../Chip';
-import { InjectOverrides } from '../InjectOverrides';
-
-const STATUS_MAP = {
+export const STATUS_MAP: Record<string, EventStatusMeta> = {
   processing: {
     label: 'Processing',
     color: 'info',
@@ -120,34 +117,3 @@ const STATUS_MAP = {
     icon: 'CodeBranch',
   },
 } as const;
-
-export type EventStatusProps = HTMLAttributes<HTMLButtonElement> & {
-  loading?: boolean;
-  value?: keyof typeof STATUS_MAP;
-};
-
-const EventStatusBase = forwardRef<HTMLDivElement, EventStatusProps>(
-  (props, ref) => {
-    const { loading, value } = props;
-
-    if (loading) return <Chip loading />;
-
-    const status = value && STATUS_MAP[value];
-
-    if (!status)
-      return <Chip label="Unknown" color="neutral" icon="ExclamationCircle" />;
-
-    return (
-      <Chip
-        ref={ref}
-        label={status.label}
-        color={status.color}
-        icon={status.icon}
-      />
-    );
-  },
-);
-
-EventStatusBase.displayName = 'EventStatus';
-
-export const EventStatus = InjectOverrides(EventStatusBase);

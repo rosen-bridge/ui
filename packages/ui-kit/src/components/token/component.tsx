@@ -154,7 +154,7 @@ export const TokenBase = ({
       )}
       {showLabel && (
         <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
-          <Truncate>{label}</Truncate>
+          {!loading && <Truncate>{label}</Truncate>}
         </Text>
       )}
       {!!href && (

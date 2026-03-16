@@ -1,14 +1,14 @@
 import { ComponentProps, ReactNode } from 'react';
 
 import { OverridableType } from '@/@types';
-import { ElementBaseProps, Root, Wrap } from '@/core';
-
-import './styles.scss';
 import { Typography } from '@/components';
+import { ElementBaseProps, Root, Wrap } from '@/core';
 import { useIsMobile } from '@/hooks';
 
+import './styles.scss';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface PageHeadingOverrides { }
+export interface PageHeadingOverrides {}
 
 export type PageHeadingOwnProps = {
   actions?: ReactNode;
@@ -23,7 +23,11 @@ export type PageHeadingOverriddenProps = OverridableType<
   never
 >;
 
-export const PageHeadingBase = ({ actions, title, ...rest }: PageHeadingOverriddenProps) => {
+export const PageHeadingBase = ({
+  actions,
+  title,
+  ...rest
+}: PageHeadingOverriddenProps) => {
   const isMobile = useIsMobile();
   return (
     <Root reflects={{ mobile: isMobile }} {...rest}>

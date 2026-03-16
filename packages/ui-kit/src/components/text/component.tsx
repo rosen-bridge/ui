@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
 import { OverridableType } from '@/@types';
-import { Skeleton, Typography } from '@/components';
+import { Skeleton2, Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -29,13 +29,12 @@ export const TextBase = ({
   ...rest
 }: TextOverriddenProps) => {
   if (asChild) {
-    return (
-      <Slot {...rest}>{loading ? <Skeleton width="80px" /> : children}</Slot>
-    );
+    return <Slot {...rest}>{loading ? <Skeleton2 attached /> : children}</Slot>;
   } else {
     return (
       <Typography component="div" {...rest}>
-        {loading ? <Skeleton width="80px" /> : children}
+        {children}
+        {loading && <Skeleton2 attached />}
       </Typography>
     );
   }

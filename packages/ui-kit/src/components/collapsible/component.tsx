@@ -1,13 +1,14 @@
 import { ComponentProps } from 'react';
 
+import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
+
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
-import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CollapsibleOverrides { }
+export interface CollapsibleOverrides {}
 
 export type CollapsibleOwnProps = {
   open?: boolean;
@@ -21,7 +22,10 @@ export type CollapsibleOverriddenProps = OverridableType<
   never
 >;
 
-export const CollapsibleBase = ({ children, ...rest }: CollapsibleOverriddenProps) => {
+export const CollapsibleBase = ({
+  children,
+  ...rest
+}: CollapsibleOverriddenProps) => {
   return (
     <Root as={CollapsibleBaseUI.Root} {...rest}>
       <CollapsibleBaseUI.Panel className="rosen-Collapsible__panel">

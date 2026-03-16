@@ -4,6 +4,7 @@ import { Button } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { Columns } from '../../columns';
+import { EventStatus, EventStatusProps } from '../../eventStatus';
 import { Icon } from '../../icon';
 import { Identifier } from '../../identifier';
 import { LabelGroup } from '../../labelGroup';
@@ -14,7 +15,6 @@ import { Token } from '../../token';
 import { Amount, Label } from '../display';
 import { InjectOverrides } from '../InjectOverrides';
 import { RelativeTime } from '../RelativeTime';
-import { EventStatus, EventStatusProps } from './EventStatus';
 
 export type EventDetailsProps = HTMLAttributes<HTMLDivElement> & {
   loading?: boolean;

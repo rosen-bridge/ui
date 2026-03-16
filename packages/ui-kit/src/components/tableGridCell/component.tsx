@@ -7,7 +7,7 @@ import { toCSSUnit } from '@/utils';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TableGridCellOverrides { }
+export interface TableGridCellOverrides {}
 
 export type TableGridCellOwnProps = {
   width?: WidthOverridden;
@@ -28,7 +28,7 @@ export const TableGridCellBase = ({
   width,
   ...rest
 }: TableGridCellOverriddenProps) => {
-  const size = useMemo(() => toCSSUnit('width', width), [width])
+  const size = useMemo(() => toCSSUnit('width', width), [width]);
   return <Root reflects={{ width: size }} {...rest} />;
 };
 
