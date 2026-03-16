@@ -8,6 +8,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
 import { TOKENS_MAPPER } from '../configs';
+import { Actions } from './app/Actions';
 
 declare module '@rosen-bridge/ui-kit' {
   interface ColorOverrides extends Record<DefaultColor, true> {
@@ -27,7 +28,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const configs: ConfigProviderProps['configs'] = {
+export const uiKitConfigs: ConfigProviderProps['configs'] = {
   components: {
     Icon: {
       defaultProps: {
@@ -64,6 +65,11 @@ export const configs: ConfigProviderProps['configs'] = {
           ]),
         ),
       },
+    },
+    PageHeading: {
+      defaultProps: {
+        actions: <Actions />
+      }
     },
     Token: {
       defaultProps: {

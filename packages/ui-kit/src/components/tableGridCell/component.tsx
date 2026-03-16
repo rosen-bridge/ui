@@ -1,4 +1,4 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 import { OverridableType, WidthOverridden } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
@@ -7,7 +7,7 @@ import { toCSSUnit } from '@/utils';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TableGridCellOverrides {}
+export interface TableGridCellOverrides { }
 
 export type TableGridCellOwnProps = {
   width?: WidthOverridden;
@@ -28,10 +28,8 @@ export const TableGridCellBase = ({
   width,
   ...rest
 }: TableGridCellOverriddenProps) => {
-  const styles = {
-    width: toCSSUnit('width', width),
-  };
-  return <Root styles={styles} {...rest} />;
+  const size = useMemo(() => toCSSUnit('width', width), [width])
+  return <Root reflects={{ width: size }} {...rest} />;
 };
 
 TableGridCellBase.displayName = 'TableGridCell';

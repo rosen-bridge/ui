@@ -1,8 +1,9 @@
 import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 
-import { Alert, AlertProps, Collapse } from '../base';
+import { Alert, AlertProps } from '../base';
 import { CloseButton } from '../closeButton';
 import { Button } from './Button';
+import { Collapsible } from '../collapsible';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;
@@ -26,7 +27,7 @@ export const AlertCard = ({
   more,
 }: AlertCardProps) => {
   return (
-    <Collapse in={!!severity}>
+    <Collapsible open={!!severity}>
       <Alert
         severity={severity || undefined}
         action={
@@ -61,6 +62,6 @@ export const AlertCard = ({
           </>
         )}
       </Alert>
-    </Collapse>
+    </Collapsible>
   );
 };

@@ -2,7 +2,7 @@
 
 import { Fragment, ReactNode } from 'react';
 
-import { Box, Grid, PageHeading, Stack } from '@rosen-bridge/ui-kit';
+import { PageHeading, Stack } from '@rosen-bridge/ui-kit';
 
 type LayoutProps = {
   actions: ReactNode;
@@ -21,40 +21,36 @@ const Layout = ({
 }: LayoutProps) => (
   <Fragment>
     <PageHeading title="Dashboard" />
-    <Grid container spacing={3}>
-      <Grid size={{ mobile: 12 }}>
+    <Stack spacing={3}>
+      <Stack
+        spacing={2}
+        direction="column"
+        style={{
+          flexShrink: 0,
+        }}
+        rewrite={{
+          laptop: {
+            direction: 'row',
+            align: 'center',
+          },
+        }}
+      >
         <Stack
-          spacing={2}
-          direction="column"
-          style={{
-            flexShrink: 0,
-          }}
+          style={{ width: '100%' }}
           rewrite={{
             laptop: {
-              direction: 'row',
-              align: 'center',
+              style: { minWidth: '200px' },
             },
           }}
         >
-          <Stack
-            style={{ width: '100%' }}
-            rewrite={{
-              laptop: {
-                style: { minWidth: '200px' },
-              },
-            }}
-          >
-            {health}
-          </Stack>
-          <div style={{ minWidth: 0, flexGrow: 1 }}>{networks}</div>
+          {health}
         </Stack>
-      </Grid>
-      <Grid size={12}>{revenue}</Grid>
-      <Box mt={3} width="1">
-        {actions}
-      </Box>
+        <div style={{ minWidth: 0, flexGrow: 1 }}>{networks}</div>
+      </Stack>
+      {revenue}
+      {actions}
       {tokens}
-    </Grid>
+    </Stack>
   </Fragment>
 );
 

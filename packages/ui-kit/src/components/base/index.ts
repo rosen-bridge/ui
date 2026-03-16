@@ -4,7 +4,6 @@ export * from './Badge';
 export * from './Box';
 export * from './Checkbox';
 export * from './CircularProgress';
-export * from './Collapse';
 export * from './CssBaseLine';
 export * from './Drawer';
 export * from './Dialog';

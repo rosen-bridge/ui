@@ -21,7 +21,7 @@ export const Id = ({ id, indicator, href }: IdProps) => {
   }
 
   return (
-    <Tooltip placement="top" title={id}>
+    <Tooltip title={id}>
       {href ? (
         <a
           href={href}

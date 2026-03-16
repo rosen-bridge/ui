@@ -106,20 +106,16 @@ const History = () => {
   );
 
   return isFirstLoad ? (
-    <Grid>
-      <TableSkeleton numberOfItems={pageSize} />
-    </Grid>
+    <TableSkeleton numberOfItems={pageSize} />
   ) : (
     data && (
-      <Grid container>
-        <EnhancedTable
-          data={data.items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={true}
-          tablePaginationProps={paginationProps}
-        />
-      </Grid>
+      <EnhancedTable
+        data={data.items}
+        responsiveHead={tableHeaderProps}
+        responsiveRenderRow={tableRenderRowProps}
+        paginated={true}
+        tablePaginationProps={paginationProps}
+      />
     )
   );
 };

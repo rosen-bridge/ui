@@ -75,19 +75,15 @@ const Assets = () => {
   );
 
   return isLoading ? (
-    <Grid>
-      <TableSkeleton numberOfItems={25} />
-    </Grid>
+    <TableSkeleton numberOfItems={25} />
   ) : (
     data && (
-      <Grid container>
-        <EnhancedTable
-          data={items}
-          responsiveHead={tableHeaderProps}
-          responsiveRenderRow={tableRenderRowProps}
-          paginated={false}
-        />
-      </Grid>
+      <EnhancedTable
+        data={items}
+        responsiveHead={tableHeaderProps}
+        responsiveRenderRow={tableRenderRowProps}
+        paginated={false}
+      />
     )
   );
 };

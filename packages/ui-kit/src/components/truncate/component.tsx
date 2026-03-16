@@ -3,9 +3,9 @@ import { ComponentProps } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
 import { OverridableType } from '@/@types';
+import { Tooltip, TooltipOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Tooltip, TooltipOverriddenProps } from '../tooltip';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -57,7 +57,7 @@ export const TruncateBase = ({
   ...rest
 }: TruncateOverriddenProps) => {
   return (
-    <Tooltip disabled={!tooltip} title={children} placement="top" {...slots?.tooltip}>
+    <Tooltip disabled={!tooltip} title={children} {...slots?.tooltip}>
       <Root
         as={asChild ? Slot : 'div'}
         styles={{ WebkitLineClamp: lines }}

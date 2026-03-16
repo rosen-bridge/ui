@@ -1,22 +1,25 @@
 import { ComponentProps } from 'react';
 
 import { OverridableType } from '@/@types';
-import { ElementBaseProps, Root, Wrap } from '@/core';
-
 import {
   Amount,
   AmountProps,
   Card,
   CardBody,
+  Connector,
   EventStatus,
   EventStatusProps,
+  Identifier,
+  IdentifierProps,
+  Network,
+  NetworkProps,
   RelativeTime,
   RelativeTimeProps,
-} from '../common';
-import { Connector } from '../connector';
-import { Identifier, IdentifierProps } from '../identifier';
-import { Network, NetworkProps } from '../network';
-import { Token, TokenProps } from '../token';
+  Token,
+  TokenProps,
+} from '@/components';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

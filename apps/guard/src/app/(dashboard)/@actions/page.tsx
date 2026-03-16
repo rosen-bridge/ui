@@ -128,92 +128,84 @@ const Actions = () => {
     setTab(newValue);
   };
 
-  const renderTabs = () => (
-    <TabsContainer>
-      <Box className="card">
-        <Box className="top" style={{ height: 40 + tab * 48 }} />
-        <Box className="space" />
-        <Box className="bottom" />
-      </Box>
-      <Tabs
-        value={tab}
-        onChange={handleTabChange}
-        variant="scrollable"
-        scrollButtons={false}
-        orientation={orientation}
-      >
-        <Tab
-          disabled
-          iconPosition={iconPosition}
-          label="Pause Service"
-          icon={<Icon name="Pause" size="small" />}
-        />
-        <Tab
-          disabled
-          iconPosition={iconPosition}
-          label="Stop Service"
-          icon={<Icon name="StopCircle" size="small" />}
-        />
-        <Tab
-          disabled
-          iconPosition={iconPosition}
-          label="Pause Network"
-          icon={<Icon name="Pause" size="small" />}
-        />
-        <Tab
-          iconPosition={iconPosition}
-          label="Request To Sign"
-          icon={<Icon name="FileEditAlt" size="small" />}
-        />
-        <Tab
-          iconPosition={iconPosition}
-          label="Request An Order"
-          icon={<Icon name="ReceiptAlt" size="small" />}
-        />
-        <Tab
-          disabled
-          iconPosition={iconPosition}
-          label="Generate Key"
-          icon={<Icon name="KeySkeleton" size="small" />}
-        />
-        <Tab
-          disabled
-          iconPosition={iconPosition}
-          label="Key Reconstruction"
-          icon={<Icon name="Redo" size="small" />}
-        />
-      </Tabs>
-    </TabsContainer>
-  );
-
-  const renderTabPanels = () => (
-    <>
-      <TabPanel in={tab === 0}></TabPanel>
-      <TabPanel in={tab === 1}></TabPanel>
-      <TabPanel in={tab === 2}></TabPanel>
-      <TabPanel in={tab === 3}>
-        <RequestToSignForm />
-      </TabPanel>
-      <TabPanel in={tab === 4}>
-        <RequestAnOrderForm />
-      </TabPanel>
-      <TabPanel in={tab === 5}></TabPanel>
-      <TabPanel in={tab === 6}></TabPanel>
-    </>
-  );
-
   return (
     <Root>
       <Grid container spacing={3} style={{ width: '100%' }}>
         <Grid size={{ mobile: 12, tablet: 4 }} flexBasis="auto">
-          {renderTabs()}
+          <TabsContainer>
+            <Box className="card">
+              <Box className="top" style={{ height: 40 + tab * 48 }} />
+              <Box className="space" />
+              <Box className="bottom" />
+            </Box>
+            <Tabs
+              value={tab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons={false}
+              orientation={orientation}
+            >
+              <Tab
+                disabled
+                iconPosition={iconPosition}
+                label="Pause Service"
+                icon={<Icon name="Pause" size="small" />}
+              />
+              <Tab
+                disabled
+                iconPosition={iconPosition}
+                label="Stop Service"
+                icon={<Icon name="StopCircle" size="small" />}
+              />
+              <Tab
+                disabled
+                iconPosition={iconPosition}
+                label="Pause Network"
+                icon={<Icon name="Pause" size="small" />}
+              />
+              <Tab
+                iconPosition={iconPosition}
+                label="Request To Sign"
+                icon={<Icon name="FileEditAlt" size="small" />}
+              />
+              <Tab
+                iconPosition={iconPosition}
+                label="Request An Order"
+                icon={<Icon name="ReceiptAlt" size="small" />}
+              />
+              <Tab
+                disabled
+                iconPosition={iconPosition}
+                label="Generate Key"
+                icon={<Icon name="KeySkeleton" size="small" />}
+              />
+              <Tab
+                disabled
+                iconPosition={iconPosition}
+                label="Key Reconstruction"
+                icon={<Icon name="Redo" size="small" />}
+              />
+            </Tabs>
+          </TabsContainer>
         </Grid>
         <Grid
           size={{ mobile: 12, tablet: 8 }}
           flexGrow={1}
           style={{ overflow: 'hidden' }}
         >
-          {renderTabPanels()}
+          <>
+            <TabPanel in={tab === 0}></TabPanel>
+            <TabPanel in={tab === 1}></TabPanel>
+            <TabPanel in={tab === 2}></TabPanel>
+            <TabPanel in={tab === 3}>
+              <RequestToSignForm />
+            </TabPanel>
+            <TabPanel in={tab === 4}>
+              <RequestAnOrderForm />
+            </TabPanel>
+            <TabPanel in={tab === 5}></TabPanel>
+            <TabPanel in={tab === 6}></TabPanel>
+          </>
         </Grid>
       </Grid>
     </Root>

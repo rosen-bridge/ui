@@ -11,7 +11,6 @@ import { Button, Card } from '@mui/material';
 
 import { styled } from '../../styling';
 import {
-  Grid,
   ListItemText,
   ListSubheader,
   Menu,
@@ -24,6 +23,10 @@ import { Stack } from '../stack';
 import { Divider } from './Divider';
 
 const Root = styled(Card)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  flexWrap: 'nowrap',
+  gap: theme.spacing(1),
   padding: theme.spacing(1, 0.5),
 }));
 
@@ -107,98 +110,92 @@ export const SortField = ({
 
   return (
     <Root {...rest}>
-      <Grid container alignItems="center" wrap="nowrap" width="auto" gap={1}>
-        <Grid flexGrow={1}>
-          {dense ? (
-            <IconButton disabled={disabled} onClick={handleMenuOpen}>
-              <Icon name="ListUiAlt" />
-            </IconButton>
-          ) : (
-            <Button
-              disabled={disabled}
-              style={{
-                whiteSpace: 'nowrap',
-                textTransform: 'none',
-                color: 'inherit',
-                width: '100%',
-                justifyContent: 'space-between',
-                padding: '2px 8px',
-              }}
-              endIcon={
-                <Icon
-                  name="CaretDown"
-                  style={{ rotate: open ? '180deg' : '0deg' }}
-                />
-              }
-              onClick={handleMenuOpen}
-            >
-              <Stack align="start">
-                <Typography
-                  hidden={dense}
-                  variant="caption"
-                  color="text.secondary"
-                  lineHeight="12px"
-                >
-                  Sort by
-                </Typography>
-                <Typography variant="body1" lineHeight="24px">
-                  {current?.label}
-                </Typography>
-              </Stack>
-            </Button>
-          )}
-          <Menu
-            anchorEl={anchorEl}
-            open={open}
-            PaperProps={{
-              style: {
-                marginTop: 12,
-                marginLeft: -4,
-              },
-            }}
-            onClose={handleMenuClose}
-          >
-            <ListSubheader
-              style={{
-                display: dense ? 'flex' : 'none',
-                backgroundColor: 'transparent',
-              }}
-            >
-              <Typography variant="caption" color="text.secondary">
-                Sort by
-              </Typography>
-            </ListSubheader>
-            {options.map((item) => (
-              <MenuItem
-                key={item.value}
-                value={item.value}
-                onClick={() => handleSortChange(item)}
-              >
-                <ListItemText> {item.label}</ListItemText>
-                <Icon
-                  name="Check"
-                  style={{
-                    display:
-                      dense && current && item.value === current.value
-                        ? 'flex'
-                        : 'none',
-                  }}
-                />
-              </MenuItem>
-            ))}
-          </Menu>
-        </Grid>
-        <Grid alignSelf="stretch">
-          <Divider orientation="vertical" />
-        </Grid>
-        <Grid>
-          <IconButton disabled={disabled} onClick={handleSortOrderChange}>
+      {dense ? (
+        <IconButton disabled={disabled} onClick={handleMenuOpen}>
+          <Icon name="ListUiAlt" />
+        </IconButton>
+      ) : (
+        <Button
+          disabled={disabled}
+          style={{
+            whiteSpace: 'nowrap',
+            textTransform: 'none',
+            color: 'inherit',
+            width: '100%',
+            justifyContent: 'space-between',
+            padding: '2px 8px',
+          }}
+          endIcon={
             <Icon
-              name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
+              name="CaretDown"
+              style={{ rotate: open ? '180deg' : '0deg' }}
             />
-          </IconButton>
-        </Grid>
-      </Grid>
+          }
+          onClick={handleMenuOpen}
+        >
+          <Stack align="start">
+            <Typography
+              hidden={dense}
+              variant="caption"
+              color="text.secondary"
+              lineHeight="12px"
+            >
+              Sort by
+            </Typography>
+            <Typography variant="body1" lineHeight="24px">
+              {current?.label}
+            </Typography>
+          </Stack>
+        </Button>
+      )}
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        PaperProps={{
+          style: {
+            marginTop: 12,
+            marginLeft: -4,
+          },
+        }}
+        onClose={handleMenuClose}
+      >
+        <ListSubheader
+          style={{
+            display: dense ? 'flex' : 'none',
+            backgroundColor: 'transparent',
+          }}
+        >
+          <Typography variant="caption" color="text.secondary">
+            Sort by
+          </Typography>
+        </ListSubheader>
+        {options.map((item) => (
+          <MenuItem
+            key={item.value}
+            value={item.value}
+            onClick={() => handleSortChange(item)}
+          >
+            <ListItemText> {item.label}</ListItemText>
+            <Icon
+              name="Check"
+              style={{
+                display:
+                  dense && current && item.value === current.value
+                    ? 'flex'
+                    : 'none',
+              }}
+            />
+          </MenuItem>
+        ))}
+      </Menu>
+      <div style={{ alignSelf: 'stretch' }}>
+        <Divider orientation="vertical" />
+      </div>
+      <IconButton disabled={disabled} onClick={handleSortOrderChange}>
+        <Icon
+          name={value?.order == 'ASC' ? 'SortAmountDown' : 'SortAmountUp'}
+        />
+      </IconButton>
     </Root>
   );
 };

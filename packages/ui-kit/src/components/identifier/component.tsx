@@ -1,16 +1,20 @@
 import { ComponentProps, useState } from 'react';
 
 import { OverridableType } from '@/@types';
+import {
+  Skeleton,
+  QrCodeModal,
+  CopyButton,
+  Icon,
+  IconButton,
+  Text,
+  TextOverriddenProps,
+  Tooltip,
+  TooltipOverriddenProps,
+  Truncate,
+} from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Skeleton } from '../base';
-import { QrCodeModal } from '../common';
-import { CopyButton } from '../copyButton';
-import { Icon } from '../icon';
-import { IconButton } from '../iconButton';
-import { Text, TextOverriddenProps } from '../text';
-import { Tooltip, TooltipOverriddenProps } from '../tooltip';
-import { Truncate } from '../truncate';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

@@ -3,14 +3,18 @@ import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 import { capitalize } from 'lodash-es';
 
 import { OverridableType } from '@/@types';
+import {
+  Avatar,
+  AvatarOverriddenProps,
+  Icon,
+  IconButton,
+  Image,
+  ImageOverriddenProps,
+  Text,
+  Truncate,
+} from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Avatar, AvatarOverriddenProps } from '../avatar';
-import { Icon } from '../icon';
-import { IconButton } from '../iconButton';
-import { Image, ImageOverriddenProps } from '../image';
-import { Text } from '../text';
-import { Truncate } from '../truncate';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

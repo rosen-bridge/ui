@@ -85,7 +85,7 @@ export const ViewRow = ({
                   />
                 </IconButton>
               </TableGridCell>
-              <TableGridBodyDetails in={current?.id === item.id}>
+              <TableGridBodyDetails open={current?.id === item.id}>
                 <Columns width="175px" count={2} rule gap="16px">
                   <Label
                     label="Locked"

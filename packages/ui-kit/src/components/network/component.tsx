@@ -1,12 +1,16 @@
 import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 
 import { OverridableType } from '@/@types';
+import {
+  Icon,
+  IconOverriddenProps,
+  Skeleton,
+  Text,
+  TextOverriddenProps,
+  Truncate,
+} from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
-import { Skeleton } from '../base';
-import { Icon, IconOverriddenProps } from '../icon';
-import { Text, TextOverriddenProps } from '../text';
-import { Truncate } from '../truncate';
 import { Logo } from './logo';
 import './styles.scss';
 

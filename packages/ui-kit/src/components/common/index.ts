@@ -20,7 +20,6 @@ export * from './HealthParamCardSkeleton';
 export * from './Id';
 export * from './Pagination';
 export * from './AppInfo';
-export * from './PageHeading';
 export * from './QrCodeModal';
 export * from './SortField';
 export * from './SubmitButton';

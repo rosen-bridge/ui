@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 
 import {
-  Grid,
+  GridContainer,
   HealthParamCard,
   HealthParamCardSkeleton,
   useSnackbar,
@@ -51,7 +51,7 @@ const Health = () => {
         if (
           currentHealthParamInfo.lastCheck === newHealthParamInfo.lastCheck &&
           currentHealthParamInfo.lastTrialErrorTime ===
-            newHealthParamInfo.lastTrialErrorTime
+          newHealthParamInfo.lastTrialErrorTime
         ) {
           return void setTimeout(trying, 1000);
         }
@@ -75,35 +75,34 @@ const Health = () => {
     [data, mutate, openSnackbar],
   );
 
-  return isLoading ? (
-    <Grid container spacing={3}>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={0}>
-        <HealthParamCardSkeleton />
-      </Grid>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={1}>
-        <HealthParamCardSkeleton />
-      </Grid>
-      <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={2}>
-        <HealthParamCardSkeleton />
-      </Grid>
-    </Grid>
-  ) : (
-    data && (
-      <Grid container spacing={3}>
-        {data
-          .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
-          .map((item) => (
-            <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }} key={item.id}>
-              <HealthParamCard
-                {...item}
-                checking={checking.includes(item.id)}
-                handleCheckNow={() => handleCheckNow(item.id)}
-              />
-            </Grid>
-          ))}
-      </Grid>
-    )
-  );
+  return (
+    <GridContainer
+      gap={3}
+      rewrite={{
+        'mobile': { minWidth: '100%' },
+        'tablet': { minWidth: '35%' },
+        'laptop': { minWidth: '25%' },
+      }}
+    >
+      {isLoading && (
+        <>
+          <HealthParamCardSkeleton />
+          <HealthParamCardSkeleton />
+          <HealthParamCardSkeleton />
+        </>
+      )}
+      {data && data
+        .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
+        .map((item) => (
+          <HealthParamCard
+            key={item.id}
+            {...item}
+            checking={checking.includes(item.id)}
+            handleCheckNow={() => handleCheckNow(item.id)}
+          />
+        ))}
+    </GridContainer>
+  )
 };
 
 export default Health;

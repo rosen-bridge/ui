@@ -1,13 +1,12 @@
 import { ComponentProps, ReactNode } from 'react';
 
 import { OverridableType } from '@/@types';
+import { AppSnackbar, CssBaseline } from '@/components';
 import { SnackbarProvider } from '@/contexts';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { useIsMobile } from '@/hooks';
 import { ThemeProvider, ThemeProviderProps } from '@/Providers';
 
-import { CssBaseline } from '../base';
-import { AppSnackbar } from '../common';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

@@ -9,6 +9,7 @@ import type {
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
   CopyButtonOverriddenProps,
+  CollapsibleOverriddenProps,
   EventCardOverriddenProps,
   GridContainerOverriddenProps,
   IconOverriddenProps,
@@ -19,6 +20,7 @@ import type {
   LayoutListOverriddenProps,
   LinkOverriddenProps,
   NetworkOverriddenProps,
+  PageHeadingOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
   TableGridBodyOverriddenProps,
@@ -44,6 +46,7 @@ type Components = {
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
   CopyButton: CopyButtonOverriddenProps;
+  Collapsible: CollapsibleOverriddenProps;
   EventCard: EventCardOverriddenProps;
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
@@ -54,6 +57,7 @@ type Components = {
   LayoutList: LayoutListOverriddenProps;
   Link: LinkOverriddenProps;
   Network: NetworkOverriddenProps;
+  PageHeading: PageHeadingOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;
   TableGridBody: TableGridBodyOverriddenProps;

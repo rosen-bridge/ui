@@ -1,21 +1,20 @@
-import { cloneElement, ComponentProps, ReactNode } from 'react';
+import { cloneElement, ComponentProps, ReactElement, ReactNode } from 'react';
 
-import { Tooltip as TooltipBaseUi } from '@base-ui/react/tooltip';
-
-import './styles.scss';
+import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
 
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Wrap } from '@/core';
 
+import './styles.scss';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TooltipOverrides { }
+export interface TooltipOverrides {}
 
 export type TooltipOwnProps = {
-  children: React.ReactElement<unknown, any>;
+  children: ReactElement;
   disabled?: boolean;
-  placement?: 'auto' | 'auto-start' | 'auto-end' | 'top' | 'bottom' | 'right' | 'left' | 'top-start' | 'top-end' | 'bottom-start' | 'bottom-end' | 'right-start' | 'right-end' | 'left-start' | 'left-end';
   title?: ReactNode;
-}
+};
 
 export type TooltipBaseProps = ElementBaseProps<'div', TooltipOwnProps>;
 
@@ -37,18 +36,20 @@ export const TooltipBase = ({
 
   return (
     <>
-      <TooltipBaseUi.Provider>
-        <TooltipBaseUi.Root>
-          <TooltipBaseUi.Trigger render={(props) => cloneElement(children, props)} />
-          <TooltipBaseUi.Portal>
-            <TooltipBaseUi.Positioner sideOffset={10}>
-              <TooltipBaseUi.Popup className="rosen-Tooltip">
+      <TooltipBaseUI.Provider>
+        <TooltipBaseUI.Root>
+          <TooltipBaseUI.Trigger
+            render={(props) => cloneElement(children, props)}
+          />
+          <TooltipBaseUI.Portal>
+            <TooltipBaseUI.Positioner sideOffset={10}>
+              <TooltipBaseUI.Popup className="rosen-Tooltip" {...rest}>
                 {title}
-              </TooltipBaseUi.Popup>
-            </TooltipBaseUi.Positioner>
-          </TooltipBaseUi.Portal>
-        </TooltipBaseUi.Root>
-      </TooltipBaseUi.Provider>
+              </TooltipBaseUI.Popup>
+            </TooltipBaseUI.Positioner>
+          </TooltipBaseUI.Portal>
+        </TooltipBaseUI.Root>
+      </TooltipBaseUI.Provider>
     </>
   );
 };

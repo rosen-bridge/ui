@@ -3,9 +3,8 @@ import { ComponentProps } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
 import { OverridableType } from '@/@types';
+import { Skeleton, Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-
-import { Skeleton, Typography } from '../base';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TextOverrides {}

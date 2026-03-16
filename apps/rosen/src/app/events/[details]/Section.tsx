@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
   Center,
-  Collapse,
+  Collapsible,
   DisclosureButton,
   Icon,
   Stack,
@@ -50,7 +50,7 @@ export const Section = ({
           </Typography>
         </CardTitle>
       </CardHeader>
-      <Collapse in={!collapsible || disclosure.state == 'open' || !!error}>
+      <Collapsible open={!collapsible || disclosure.state == 'open' || !!error}>
         <CardBody>
           {!error && children}
           {!!error && (
@@ -64,7 +64,7 @@ export const Section = ({
             </Center>
           )}
         </CardBody>
-      </Collapse>
+      </Collapsible>
     </Card>
   );
 };

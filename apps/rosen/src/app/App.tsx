@@ -18,7 +18,7 @@ import {
 import { theme } from '@/theme/theme';
 
 import { TokenMapProvider } from '../hooks';
-import { configs } from '../ui-kit.config';
+import { uiKitConfigs } from '../uiKitConfigs';
 import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
@@ -30,7 +30,7 @@ export const App = ({ children }: PropsWithChildren) => {
 
   return (
     <NoSsr>
-      <ConfigProvider configs={configs}>
+      <ConfigProvider configs={uiKitConfigs}>
         <FrameworkProvider
           router={{
             pathname,

@@ -2,6 +2,7 @@ import {
   Toolbar,
   ThemeToggleButton,
   useIsMobile,
+  ApiKeyModal,
 } from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
@@ -14,6 +15,7 @@ export const Actions = ({ sidebar }: { sidebar?: boolean }) => {
   return (
     <Toolbar>
       {sidebar && <VersionConfig />}
+      {((sidebar && isMobile) || (!sidebar && !isMobile)) && <ApiKeyModal />}
       {((sidebar && isMobile) || (!sidebar && !isMobile)) && <ThemeToggleButton />}
     </Toolbar>
   );
