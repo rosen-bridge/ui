@@ -298,6 +298,10 @@ export const TOKENS = {
     /* @vite-ignore */ 'tokens/4ba9550720bc6520c8d58b1e8d7615627b775440f8d642415df1581eacf6d68a.png',
     import.meta.url,
   ).href,
+  '49cb7b7cbdb799b8dff2d1378ce9ebaf1e48945b34b47865b3d1b6ae4a467011': new URL(
+    /* @vite-ignore */ 'tokens/49cb7b7cbdb799b8dff2d1378ce9ebaf1e48945b34b47865b3d1b6ae4a467011.png',
+    import.meta.url,
+  ).href,
   '48132396ebd00831e603c73cf01e01f248dd1966d2cc976caf52ef76f7ac6e36': new URL(
     /* @vite-ignore */ 'tokens/48132396ebd00831e603c73cf01e01f248dd1966d2cc976caf52ef76f7ac6e36.svg',
     import.meta.url,
