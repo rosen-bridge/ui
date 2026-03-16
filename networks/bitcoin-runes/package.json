@@ -23,8 +23,8 @@
   },
   "dependencies": {
     "@magiceden-oss/runestone-lib": "^1.0.2",
-    "@rosen-bridge/address-codec": "^1.1.1",
-    "@rosen-bridge/bitcoin-runes-utxo-selection": "^2.0.3",
+    "@rosen-bridge/address-codec": "^1.2.0",
+    "@rosen-bridge/bitcoin-runes-utxo-selection": "^2.1.0",
     "@rosen-bridge/icons": "^3.5.0",
     "@rosen-bridge/json-bigint": "^1.1.0",
     "@rosen-bridge/tokens": "^6.0.0",
