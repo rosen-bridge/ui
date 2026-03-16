@@ -22,14 +22,14 @@
   "dependencies": {
     "@rosen-ui/constants": "^1.0.0"
   },
-  "engines": {
-    "node": ">=22.18.0",
-    "npm": "11.6.2"
+  "devDependencies": {
+    "@mui/material": "^7.3.9"
   },
   "peerDependencies": {
     "react": "^19.2.4"
   },
-  "devDependencies": {
-    "@mui/material": "^7.3.8"
+  "engines": {
+    "node": ">=22.18.0",
+    "npm": "11.6.2"
   }
 }

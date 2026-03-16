@@ -14,6 +14,7 @@ interface QrCodeModalProps {
   handleClose: () => void;
   open: boolean;
 }
+
 /**
  * render a modal showing qrcode for the provided text
  *

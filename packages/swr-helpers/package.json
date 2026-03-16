@@ -26,11 +26,11 @@
   "devDependencies": {
     "@types/json-bigint": "^1.0.1"
   },
+  "peerDependencies": {
+    "swr": "^2.4.1"
+  },
   "engines": {
     "node": ">=22.18.0",
     "npm": "11.6.2"
-  },
-  "peerDependencies": {
-    "swr": "^2.4.1"
   }
 }

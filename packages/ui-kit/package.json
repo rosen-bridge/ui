@@ -31,7 +31,7 @@
     "type-check": "tsc"
   },
   "dependencies": {
-    "@mui/material": "^7.3.8",
+    "@mui/material": "^7.3.9",
     "@radix-ui/react-slot": "^1.2.4",
     "@rosen-bridge/icons": "^3.5.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
