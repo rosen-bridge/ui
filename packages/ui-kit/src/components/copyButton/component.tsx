@@ -5,13 +5,11 @@ import {
   Icon,
   IconButton,
   IconOverriddenProps,
-  Tooltip,
-  TooltipOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface CopyButtonOverrides {}
+export interface CopyButtonOverrides { }
 
 export type CopyButtonStatus = 'idle' | 'copying' | 'copied' | 'failed';
 
@@ -23,7 +21,6 @@ export type CopyButtonOwnProps = {
 
   slots?: {
     icon?: IconOverriddenProps;
-    tooltip?: TooltipOverriddenProps;
   };
 
   /**
@@ -84,11 +81,9 @@ export const CopyButtonBase = ({
   }, [value]);
 
   return (
-    <Tooltip title="Copy" {...slots?.tooltip}>
-      <Root as={IconButton} onClick={handleCopy} {...rest}>
-        <Icon name={icon} {...slots?.icon} />
-      </Root>
-    </Tooltip>
+    <Root as={IconButton} onClick={handleCopy} {...rest}>
+      <Icon name={icon} {...slots?.icon} />
+    </Root>
   );
 };
 

@@ -8,7 +8,7 @@ import { ElementBaseProps, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TooltipOverrides {}
+export interface TooltipOverrides { }
 
 export type TooltipOwnProps = {
   children: ReactElement;
@@ -42,7 +42,7 @@ export const TooltipBase = ({
             render={(props) => cloneElement(children, props)}
           />
           <TooltipBaseUI.Portal>
-            <TooltipBaseUI.Positioner sideOffset={10}>
+            <TooltipBaseUI.Positioner sideOffset={8}>
               <TooltipBaseUI.Popup className="rosen-Tooltip" {...rest}>
                 {title}
               </TooltipBaseUI.Popup>

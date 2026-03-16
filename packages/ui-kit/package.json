@@ -39,8 +39,6 @@
     "@rosen-ui/utils": "^1.0.2",
     "embla-carousel-react": "^8.5.2",
     "joi": "^17.11.0",
-    "lodash-es": "^4.17.21",
-    "moment": "^2.29.4",
     "qrcode.react": "^4.2.0",
     "react-hook-form": "^7.71.2",
     "react-sticky-box": "^2.0.5"

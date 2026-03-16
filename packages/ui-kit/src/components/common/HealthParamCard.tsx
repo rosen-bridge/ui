@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
 import { HealthParamInfo } from '@rosen-ui/types';
-import moment from 'moment';
 
 import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';
@@ -79,6 +78,20 @@ export const HealthParamCard = ({
     return 'ShieldExclamation';
   }, [lastCheck, status]);
 
+  const formattedLastCheck = useMemo(() => {
+    if (!lastCheck) return;
+    return new Intl.DateTimeFormat('en-US', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+    })
+      .format(new Date(lastCheck));
+  }, [lastCheck]);
+
   return (
     <Card
       style={{
@@ -139,8 +152,7 @@ export const HealthParamCard = ({
             >
               {checking ? 'Checking' : 'Check now'}
             </Button>
-            {lastCheck &&
-              `(Last check: ${moment(lastCheck).format('DD/MM/YYYY HH:mm:ss')})`}
+            {formattedLastCheck && `(Last check: ${formattedLastCheck})`}
           </Typography>
         </Stack>
       </CardBody>

@@ -1,7 +1,5 @@
 import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 
-import { capitalize } from 'lodash-es';
-
 import { OverridableType } from '@/@types';
 import {
   Avatar,
@@ -151,7 +149,7 @@ export const TokenBase = ({
           style={{ fontSize: '1em' }}
           {...slots?.fallback}
         >
-          {capitalize(label).slice(0, 1)}
+          {label?.at(0)?.toUpperCase()}
         </Avatar>
       )}
       {showLabel && (
