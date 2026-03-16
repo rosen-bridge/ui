@@ -1,0 +1,24 @@
+.rosen-Tooltip {
+  box-sizing: border-box;
+  background-color: var(--rosen-palette-primary-dark);
+  border-radius: calc(var(--rosen-shape-borderRadius) / 2);
+  color: var(--rosen-palette-primary-contrastText);
+  padding: 4px 8px;
+  font-size: 0.6875rem;
+  max-width: 300px;
+  margin: 2px;
+  word-wrap: break-word;
+  font-weight: 500;
+  transform-origin: var(--transform-origin);
+  transition: opacity 200ms cubic-bezier(0.4, 0, 0.2, 1), transform 133ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  &[data-instant] {
+    transition: none;
+  }
+}

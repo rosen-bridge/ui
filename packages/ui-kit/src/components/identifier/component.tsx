@@ -116,7 +116,7 @@ export const IdentifierBase = ({
         <Tooltip title={value} {...slots?.tooltip}>
           <div className="value">
             <Text asChild className="leading" {...slots?.leading}>
-              <Truncate>{leading}</Truncate>
+              <Truncate tooltip={false}>{leading}</Truncate>
             </Text>
             <Text className="trailing" {...slots?.trailing}>
               {trailing}

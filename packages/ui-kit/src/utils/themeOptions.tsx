@@ -331,18 +331,6 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
-    MuiTooltip: {
-      styleOverrides: {
-        tooltip: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.primary.contrastText,
-          backgroundColor: theme.palette.primary.dark,
-          borderRadius: theme.shape.borderRadius / 2,
-        }),
-        arrow: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.primary.dark,
-        }),
-      },
-    },
     MuiSkeleton: {
       styleOverrides: {
         text: ({ theme }: { theme: Theme }) => ({

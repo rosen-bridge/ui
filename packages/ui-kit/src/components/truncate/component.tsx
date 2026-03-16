@@ -23,6 +23,8 @@ export type TruncateOwnProps = {
   slots?: {
     tooltip?: TooltipOverriddenProps;
   };
+
+  tooltip?: boolean;
 };
 
 export type TruncateBaseProps = ElementBaseProps<'div', TruncateOwnProps>;
@@ -51,10 +53,11 @@ export const TruncateBase = ({
   children,
   lines = 1,
   slots,
+  tooltip = true,
   ...rest
 }: TruncateOverriddenProps) => {
   return (
-    <Tooltip title={children} placement="top" {...slots?.tooltip}>
+    <Tooltip disabled={!tooltip} title={children} placement="top" {...slots?.tooltip}>
       <Root
         as={asChild ? Slot : 'div'}
         styles={{ WebkitLineClamp: lines }}

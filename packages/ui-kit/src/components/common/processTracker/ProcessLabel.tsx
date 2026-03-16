@@ -107,7 +107,6 @@ export const ProcessLabel = ({ icon, info, step, onClick }: LabelProps) => {
 
   return (
     <Tooltip
-      arrow
       // TODO
       // slotProps={{
       //   tooltip: {

@@ -118,7 +118,7 @@ const LabelBase = ({
             {label}
           </Typography>
           {info && (
-            <Tooltip arrow title={info}>
+            <Tooltip title={info}>
               <Icon
                 color={
                   color === 'textSecondary' ? 'text-secondary' : 'text-primary'
