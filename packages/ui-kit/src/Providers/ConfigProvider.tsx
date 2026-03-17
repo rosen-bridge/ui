@@ -6,21 +6,26 @@ import type {
   AvatarOverriddenProps,
   CenterOverriddenProps,
   CloseButtonOverriddenProps,
+  CollapsibleOverrides,
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
   CopyButtonOverriddenProps,
   CollapsibleOverriddenProps,
   EventCardOverriddenProps,
+  EventDetailsOverriddenProps,
+  EventStatusOverriddenProps,
   GridContainerOverriddenProps,
   IconOverriddenProps,
   IconButtonOverriddenProps,
   IdentifierOverriddenProps,
   ImageOverriddenProps,
+  InfoIconOverriddenProps,
   LabelGroupOverriddenProps,
   LayoutListOverriddenProps,
   LinkOverriddenProps,
   NetworkOverriddenProps,
   PageHeadingOverriddenProps,
+  SkeletonOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
   TableGridBodyOverriddenProps,
@@ -43,21 +48,26 @@ type Components = {
   Avatar: AvatarOverriddenProps;
   Center: CenterOverriddenProps;
   CloseButton: CloseButtonOverriddenProps;
+  CollapsibleOverrides: CollapsibleOverrides;
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
   CopyButton: CopyButtonOverriddenProps;
   Collapsible: CollapsibleOverriddenProps;
   EventCard: EventCardOverriddenProps;
+  EventDetails: EventDetailsOverriddenProps;
+  EventStatus: EventStatusOverriddenProps;
   GridContainer: GridContainerOverriddenProps;
   Icon: IconOverriddenProps;
   IconButton: IconButtonOverriddenProps;
   Identifier: IdentifierOverriddenProps;
   Image: ImageOverriddenProps;
+  InfoIcon: InfoIconOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
   LayoutList: LayoutListOverriddenProps;
   Link: LinkOverriddenProps;
   Network: NetworkOverriddenProps;
   PageHeading: PageHeadingOverriddenProps;
+  Skeleton: SkeletonOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;
   TableGridBody: TableGridBodyOverriddenProps;

@@ -2,7 +2,6 @@ import { ComponentProps, ReactNode } from 'react';
 
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
-import { useIsMobile } from '@/hooks';
 
 import './styles.scss';
 
@@ -33,12 +32,8 @@ export const AppBarBase = ({
   logo,
   ...rest
 }: AppBarOverriddenProps) => {
-  const isMobile = useIsMobile();
   return (
-    <Root
-      reflects={{ direction: isMobile ? 'horizontal' : 'vertical' }}
-      {...rest}
-    >
+    <Root {...rest}>
       {logo}
       {links}
       {actions}

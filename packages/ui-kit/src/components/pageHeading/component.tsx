@@ -3,7 +3,6 @@ import { ComponentProps, ReactNode } from 'react';
 import { OverridableType } from '@/@types';
 import { Typography } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
-import { useIsMobile } from '@/hooks';
 
 import './styles.scss';
 
@@ -28,9 +27,8 @@ export const PageHeadingBase = ({
   title,
   ...rest
 }: PageHeadingOverriddenProps) => {
-  const isMobile = useIsMobile();
   return (
-    <Root reflects={{ mobile: isMobile }} {...rest}>
+    <Root {...rest}>
       <Typography variant="h1">{title}</Typography>
       {actions}
     </Root>

@@ -5,7 +5,6 @@ export * from './Box';
 export * from './Checkbox';
 export * from './CircularProgress';
 export * from './CssBaseLine';
-export * from './Drawer';
 export * from './Dialog';
 export * from './DialogActions';
 export * from './DialogContent';

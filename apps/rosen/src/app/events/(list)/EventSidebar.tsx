@@ -25,8 +25,6 @@ import useSWR from 'swr';
 import { EventItem } from '@/types';
 
 const Content = ({ value }: EventSidebarProps) => {
-  const isTablet = useBreakpoint('laptop-down');
-
   const shouldLoad = useMemo(() => {
     return !!value && !!value.eventId && value.status !== 'multipleFlows';
   }, [value]);
@@ -39,16 +37,15 @@ const Content = ({ value }: EventSidebarProps) => {
   const eventData = useMemo(() => {
     const result: EventDetailsProps['value'] = {
       amount: data?.amount,
-      decimal: data?.lockToken?.significantDecimal,
-      price: data?.price,
       bridgeFee: data?.bridgeFee,
+      decimal: data?.lockToken?.significantDecimal,
       fromAddress: data?.fromAddress,
       fromAddressUrl: getAddressUrl(data?.fromChain, data?.fromAddress),
       fromChain: data?.fromChain,
       height: data?.height,
-      href: `/events/${data?.eventId}`,
       id: data?.eventId,
       networkFee: data?.networkFee,
+      price: data?.price,
       reports: data?.WIDsCount,
       sourceTxId: data?.sourceTxId,
       sourceTxIdUrl: getTxURL(data?.fromChain, data?.sourceTxId),
@@ -56,8 +53,8 @@ const Content = ({ value }: EventSidebarProps) => {
       toAddress: data?.toAddress,
       toAddressUrl: getAddressUrl(data?.toChain, data?.toAddress),
       toChain: data?.toChain,
-      token: data?.lockToken?.id,
       timestamp: data?.timestamp,
+      token: data?.lockToken?.id,
     };
 
     if (result.status !== 'fraud') {
@@ -80,19 +77,26 @@ const Content = ({ value }: EventSidebarProps) => {
     );
   }
 
-  return (
-    <EventDetails
-      loading={isLoading}
-      value={eventData}
-      showSeeDetailsButton={isTablet}
-    />
-  );
+  return <EventDetails loading={isLoading} value={eventData} />
 };
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
   return (
     <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="Exchange" onClose={onClose}>
+      <EnhancedDialogTitle
+        actions={value?.eventId && (
+          <Button
+            variant="text"
+            target="_blank"
+            href={`/events/${value?.eventId}`}
+            endIcon={<Icon name="AngleRight" />}
+          >
+            SEE DETAILS
+          </Button>
+        )}
+        icon="Exchange"
+        onClose={onClose}
+      >
         Event Details
       </EnhancedDialogTitle>
       <EnhancedDialogContent>

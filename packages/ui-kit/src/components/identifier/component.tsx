@@ -18,7 +18,7 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides { }
+export interface IdentifierOverrides {}
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -125,7 +125,6 @@ export const IdentifierBase = ({
               value={value}
               slots={{ icon: { size: 'small' } }}
             />
-
           )}
           {href && (
             <IconButton

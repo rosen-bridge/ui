@@ -14,6 +14,7 @@ const IconContainer = styled('div')(({ theme }) => ({
 }));
 
 export type EnhancedDialogTitleProps = {
+  actions?: ReactNode;
   children?: ReactNode;
   icon?: IconProps['name'];
   onClose?: MouseEventHandler<HTMLButtonElement>;
@@ -23,6 +24,7 @@ export type EnhancedDialogTitleProps = {
  * renders an enhanced version of material ui DialogTitle
  */
 export const EnhancedDialogTitle = ({
+  actions,
   children,
   icon,
   onClose,
@@ -35,6 +37,7 @@ export const EnhancedDialogTitle = ({
         </IconContainer>
       )}
       <span style={{ flexGrow: 1, whiteSpace: 'nowrap' }}>{children}</span>
+      {actions}
       {onClose && <CloseButton onClick={onClose} />}
     </DialogTitle>
   );
