@@ -163,6 +163,7 @@ export { default as Doge } from './networks/doge.svg?react';
 export { default as Ergo } from './networks/ergo.svg?react';
 
 export { default as Ethereum } from './networks/ethereum.svg?react';
+export { default as Firo } from './networks/firo.svg?react';
 
 export const TOKENS = {
   'fcfca7654fb0da57ecf9a3f489bcbeb1d43b56dce7e73b352f7bc6f2561d2a1b': new URL(

@@ -65,6 +65,14 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  'firo': {
+    index: 7,
+    key: 'firo',
+    label: 'Firo',
+    nativeToken: 'firo',
+    id: '',
+    hasTokenSupport: false,
+  },
 } as const;
 
 export const NETWORKS_KEYS = Object.values(NETWORKS).map(
