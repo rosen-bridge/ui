@@ -18,7 +18,7 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides {}
+export interface IdentifierOverrides { }
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -118,35 +118,41 @@ export const IdentifierBase = ({
       </Tooltip>
       {hasActions && (
         <div className="actions">
-          <CopyButton
-            disabled={disableActions}
-            size="small"
-            skip={!copyable}
-            value={value}
-            slots={{ icon: { size: 'small' } }}
-          />
-          <IconButton
-            disabled={disableActions}
-            href={href}
-            size="small"
-            skip={!href}
-            target="_blank"
-          >
-            <Icon name="ExternalLinkAlt" size="small" />
-          </IconButton>
-          <IconButton
-            disabled={disableActions}
-            size="small"
-            skip={!qrcode}
-            onClick={() => setOpen(true)}
-          >
-            <Icon name="Qrcode" size="small" />
-          </IconButton>
-          <QrCodeModal
-            open={open}
-            text={value}
-            handleClose={() => setOpen(false)}
-          />
+          {copyable && (
+            <CopyButton
+              disabled={disableActions}
+              size="small"
+              value={value}
+              slots={{ icon: { size: 'small' } }}
+            />
+
+          )}
+          {href && (
+            <IconButton
+              disabled={disableActions}
+              href={href}
+              size="small"
+              target="_blank"
+            >
+              <Icon name="ExternalLinkAlt" size="small" />
+            </IconButton>
+          )}
+          {qrcode && (
+            <>
+              <IconButton
+                disabled={disableActions}
+                size="small"
+                onClick={() => setOpen(true)}
+              >
+                <Icon name="Qrcode" size="small" />
+              </IconButton>
+              <QrCodeModal
+                open={open}
+                text={value}
+                handleClose={() => setOpen(false)}
+              />
+            </>
+          )}
         </div>
       )}
     </Root>
