@@ -3,12 +3,11 @@
 import { Fragment, PropsWithChildren } from 'react';
 
 import { PageHeading } from '@rosen-bridge/ui-kit';
-import { Actions } from '../Actions';
 
 const PageLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
-      <PageHeading title="Assets" actions={<Actions />} />
+      <PageHeading title="Assets" />
       {children}
     </Fragment>
   );
