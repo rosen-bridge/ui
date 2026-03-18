@@ -32,11 +32,20 @@ declare module '@rosen-bridge/ui-kit' {
 
 export const getUiKitConfigs: (tokenMap: TokenMap) => ConfigProviderProps['configs'] = (tokenMap) => ({
   components: {
+    Connector: {
+      defaultProps: {
+        slots: {
+          icon: {
+            color: 'text-secondary'
+          }
+        }
+      }
+    },
     DialogTitle: {
       defaultProps: {
+        color: 'secondary-dark',
         variant: 'h2',
         // TODO: this old ThemeOptions
-        // color: theme.palette.secondary.dark,
         // fontSize: theme.spacing(3),
       }
     },

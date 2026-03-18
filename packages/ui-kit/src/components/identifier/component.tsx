@@ -2,16 +2,16 @@ import { ComponentProps, useState } from 'react';
 
 import { OverridableType } from '@/@types';
 import {
-  Skeleton2,
+  Skeleton,
   QrCodeDialog,
   CopyButton,
   Icon,
   IconButton,
-  Text,
-  TextOverriddenProps,
   Tooltip,
   TooltipOverriddenProps,
   Truncate,
+  Typography,
+  TypographyOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
@@ -37,8 +37,8 @@ export type IdentifierOwnProps = {
   qrcode?: boolean;
 
   slots?: {
-    leading?: TextOverriddenProps;
-    trailing?: TextOverriddenProps;
+    leading?: TypographyOverriddenProps;
+    trailing?: TypographyOverriddenProps;
     tooltip?: TooltipOverriddenProps;
   };
 
@@ -105,15 +105,20 @@ export const IdentifierBase = ({
 
   return (
     <Root {...rest}>
-      {loading && <Skeleton2 attached />}
+      {loading && <Skeleton attached />}
       <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
         <div className="value">
-          <Text asChild className="leading" {...slots?.leading}>
+          <Typography
+            asChild
+            className="leading"
+            component="div"
+            {...slots?.leading}
+          >
             <Truncate tooltip={false}>{leading}</Truncate>
-          </Text>
-          <Text className="trailing" {...slots?.trailing}>
+          </Typography>
+          <Typography className="trailing" component="div" {...slots?.trailing}>
             {trailing}
-          </Text>
+          </Typography>
         </div>
       </Tooltip>
       {hasActions && (

@@ -7,3 +7,12 @@
 .rosen-DialogHeader__spacer {
   flex-grow: 1;
 }
+
+.rosen-DialogHeader > .rosen-Icon:first-child {
+  display: flex;
+  box-sizing: content-box;
+  border-radius: 50%;
+  color: var(--rosen-palette-secondary-dark);
+  background: var(--rosen-palette-secondary-light);
+  border: solid 8px var(--rosen-palette-secondary-light);
+}

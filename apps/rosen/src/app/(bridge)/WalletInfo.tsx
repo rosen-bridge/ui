@@ -28,17 +28,17 @@ export const WalletInfo = () => {
         }}
       >
         {wallet.state === 'IDLE' && (
-          <Typography color="text.secondary" variant="body2">
+          <Typography color="text-secondary" variant="body2">
             Select source to see available wallets.
           </Typography>
         )}
         {wallet.state === 'CONNECTING' && (
-          <Typography color="text.secondary">
+          <Typography color="text-secondary">
             Connecting to wallet...
           </Typography>
         )}
         {wallet.state === 'DISCONNECTING' && (
-          <Typography color="text.secondary">Disconnecting...</Typography>
+          <Typography color="text-secondary">Disconnecting...</Typography>
         )}
         {wallet.state === 'DISCONNECTED' && (
           <Button

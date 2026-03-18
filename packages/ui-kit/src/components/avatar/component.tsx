@@ -4,7 +4,7 @@ import { ComponentProps, useMemo } from 'react';
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
 import { ColorOverridden, OverridableType } from '@/@types';
-import { Skeleton2 } from '@/components';
+import { Skeleton } from '@/components';
 import { Colors, ElementBaseProps, ensureColor, Root, Wrap } from '@/core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -56,7 +56,7 @@ export const AvatarBase = ({
 
   if (loading) {
     return (
-      <Skeleton2 style={style} width={size} height={size} variant="circular" />
+      <Skeleton style={style} width={size} height={size} variant="circular" />
     );
   }
 

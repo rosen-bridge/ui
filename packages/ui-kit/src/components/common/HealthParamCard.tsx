@@ -4,11 +4,13 @@ import { HealthParamInfo } from '@rosen-ui/types';
 
 import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';
-import { Alert, Typography } from '../base';
+import { Alert } from '../base';
 import { Icon, IconProps } from '../icon';
 import { Stack } from '../stack';
 import { Tooltip } from '../tooltip';
+import { Typography } from '../typography';
 import { Button } from './Button';
+import { Color } from '@/@types';
 
 export type HealthParamCardProps = HealthParamInfo & {
   checking?: boolean;
@@ -56,7 +58,7 @@ export const HealthParamCard = ({
     if (lastCheck) {
       return {
         cardBackground: `${color}.light`,
-        cardColor: `${color}.dark`,
+        cardColor: `${color}-dark`,
         button: color,
         alertBackground: `${color}.main`,
         alert: `${color}.light`,
@@ -111,9 +113,9 @@ export const HealthParamCard = ({
         }
       >
         <Stack spacing={2} direction="row">
-          <Icon color={colors.cardColor.replace('.', '-')} name={icon} />
+          <Icon color={colors.cardColor as Color} name={icon} />
           <CardTitle>
-            <Typography color={colors.cardColor} fontWeight="700">
+            <Typography color={colors.cardColor as Color} fontWeight="700">
               {lastCheck ? status : 'Unknown'}
             </Typography>
           </CardTitle>

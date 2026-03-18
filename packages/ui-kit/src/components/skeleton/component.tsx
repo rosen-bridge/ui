@@ -1,5 +1,7 @@
 import { ComponentProps } from 'react';
 
+import { Skeleton as SkeletonMUI } from '@mui/material';
+
 import { OverridableType } from '@/@types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
@@ -9,6 +11,7 @@ import './styles.scss';
 export interface SkeletonOverrides {}
 
 export type SkeletonOwnProps = {
+  animation?: 'pulse' | 'wave' | false;
   attached?: boolean;
   height?: (number & {}) | (string & {});
   variant?: 'circular' | 'rounded' | 'text';
@@ -24,12 +27,23 @@ export type SkeletonOverriddenProps = OverridableType<
 >;
 
 export const SkeletonBase = ({
+  animation,
   attached = false,
   height,
   variant = 'text',
   width,
   ...rest
 }: SkeletonOverriddenProps) => {
+  if (!attached)
+    return (
+      <SkeletonMUI
+        animation={animation}
+        height={height}
+        variant={variant}
+        width={width}
+        {...rest}
+      />
+    );
   return (
     <>
       <Root
@@ -44,6 +58,6 @@ export const SkeletonBase = ({
 
 SkeletonBase.displayName = 'Skeleton';
 
-export const Skeleton2 = Wrap(SkeletonBase);
+export const Skeleton = Wrap(SkeletonBase);
 
-export type SkeletonProps2 = ComponentProps<typeof Skeleton2>;
+export type SkeletonProps = ComponentProps<typeof Skeleton>;

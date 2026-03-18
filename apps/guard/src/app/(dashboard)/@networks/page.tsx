@@ -29,7 +29,7 @@ const Networks = () => {
   return (
     <CarouselProvider>
       <Stack direction="row" align="center" justify="between">
-        <Typography variant="h2" fontWeight="300" color="text.secondary">
+        <Typography variant="h2" fontWeight="300" color="text-secondary">
           Networks
         </Typography>
         <Stack direction="row" align="center" spacing="0.5rem">

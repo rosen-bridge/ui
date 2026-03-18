@@ -10,16 +10,11 @@ import {
 import { Button, Card } from '@mui/material';
 
 import { styled } from '../../styling';
-import {
-  ListItemText,
-  ListSubheader,
-  Menu,
-  MenuItem,
-  Typography,
-} from '../base';
+import { ListItemText, ListSubheader, Menu, MenuItem } from '../base';
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
+import { Typography } from '../typography';
 import { Divider } from './Divider';
 
 const Root = styled(Card)(({ theme }) => ({
@@ -137,7 +132,7 @@ export const SortField = ({
             <Typography
               hidden={dense}
               variant="caption"
-              color="text.secondary"
+              color="text-secondary"
               lineHeight="12px"
             >
               Sort by
@@ -165,7 +160,7 @@ export const SortField = ({
             backgroundColor: 'transparent',
           }}
         >
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color="text-secondary">
             Sort by
           </Typography>
         </ListSubheader>

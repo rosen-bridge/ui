@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 
 import { Stack } from '@mui/material';
 
-import { Typography } from '../../base';
 import { Icon } from '../../icon';
+import { Typography } from '../../typography';
 import { ProcessTrackerStateIcon } from './types';
 
 /**
@@ -55,7 +55,7 @@ export const ProcessIcon = ({
       break;
     case 'idle':
       iconContent = (
-        <Typography fontWeight="bold" color="#fff">
+        <Typography fontWeight="bold" style={{ color: '#fff' }}>
           {index}
         </Typography>
       );

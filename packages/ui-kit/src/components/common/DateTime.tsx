@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Skeleton, Typography } from '../base';
+import { Skeleton, Typography } from '@/components';
 
 /**
  * Props for the DateTime component.
@@ -22,10 +20,7 @@ export type DateTimeProps = {
 const Loading = () => {
   return (
     <Typography variant="body1" gutterBottom>
-      <Skeleton
-        width={80}
-        sx={{ borderRadius: (theme) => theme.spacing(0.5) }}
-      />
+      <Skeleton width={80} />
     </Typography>
   );
 };
@@ -45,7 +40,7 @@ export const DateTime = ({ timestamp, loading }: DateTimeProps) => {
 
   if (!timestamp) {
     return (
-      <Typography variant="body1" color="textPrimary">
+      <Typography variant="body1" color="text-primary">
         Invalid DateTime
       </Typography>
     );
@@ -66,7 +61,7 @@ export const DateTime = ({ timestamp, loading }: DateTimeProps) => {
     .replace(/,\s*/g, ' ');
 
   return (
-    <Typography variant="body1" color="textPrimary">
+    <Typography variant="body1" color="text-primary">
       {parts}
     </Typography>
   );

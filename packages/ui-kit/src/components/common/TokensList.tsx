@@ -1,12 +1,7 @@
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
-import { Avatar } from '../avatar';
-import { Typography } from '../base';
-import { Identifier } from '../identifier';
-import { Stack } from '../stack';
-import { Text } from '../text';
-import { Amount } from './display';
+import { Avatar, Typography, Identifier, Stack, Amount } from '@/components';
 
 export interface TokensListProps {
   chain?: Network;
@@ -54,9 +49,13 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
           >
             {token.name?.at(0)}
           </Avatar>
-          <Text loading={isLoading} style={{ minWidth: 0 }}>
+          <Typography
+            component="div"
+            loading={isLoading}
+            style={{ minWidth: 0 }}
+          >
             {token.name}
-          </Text>
+          </Typography>
           <Stack direction="row" align="center" justify="end" spacing={0.5}>
             {hasCold && (
               <Amount
@@ -76,9 +75,10 @@ export const TokensList = ({ chain, tokens, isLoading }: TokensListProps) => (
             )}
           </Stack>
           <Typography
+            color="text-secondary"
             component="div"
             variant="body2"
-            sx={{ color: (theme) => theme.palette.text.secondary, minWidth: 0 }}
+            style={{ minWidth: 0 }}
           >
             <Identifier
               loading={isLoading}

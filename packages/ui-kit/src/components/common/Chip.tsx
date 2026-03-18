@@ -1,10 +1,10 @@
 import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
 
-import { Skeleton2 } from '@/components';
+import { Skeleton } from '@/components';
 
 import { styled } from '../../styling';
-import { Typography } from '../base';
 import { Icon, IconProps } from '../icon';
+import { Typography } from '../typography';
 import { InjectOverrides } from './InjectOverrides';
 
 /**
@@ -96,7 +96,7 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
     <ChipWrapper color={color} ref={ref} {...rest}>
       {RenderedIcon}
       {content}
-      {loading && <Skeleton2 attached variant="circular" />}
+      {loading && <Skeleton attached variant="circular" />}
     </ChipWrapper>
   );
 });

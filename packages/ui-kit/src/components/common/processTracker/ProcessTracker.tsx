@@ -7,8 +7,10 @@ import {
   Stepper as StepperMui,
 } from '@mui/material';
 
-import { Box, Skeleton, Typography } from '../../base';
+import { Box } from '../../base';
+import { Skeleton } from '../../skeleton';
 import { Stack } from '../../stack';
+import { Typography } from '../../typography';
 import { InjectOverrides } from '../InjectOverrides';
 import { ProcessIcon } from './ProcessIcon';
 import { ProcessLabel } from './ProcessLabel';
@@ -56,7 +58,8 @@ const Loading = () => {
   return (
     <Skeleton
       variant="rounded"
-      sx={{ width: '100%', height: '167px', display: 'block' }}
+      // TODO
+      // sx={{ width: '100%', height: '167px', display: 'block' }}
     />
   );
 };
@@ -186,10 +189,10 @@ const ProcessTrackerBase = ({
                     toggleStep(index, step.state as ProcessTrackerStateIcon)
                   }
                 >
-                  <Typography color="success.main" variant="body2">
+                  <Typography color="success" variant="body2">
                     {step.subtitle}
                   </Typography>
-                  <Typography color="success.dark" variant="body2">
+                  <Typography color="success-dark" variant="body2">
                     {step.description}
                   </Typography>
                 </Box>

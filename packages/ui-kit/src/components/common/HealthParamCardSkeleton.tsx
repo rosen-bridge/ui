@@ -1,4 +1,4 @@
-import { Skeleton } from '../base';
+import { Skeleton } from '@/components';
 
 /**
  * render a skeleton element for `HealthParamCard`

@@ -1,6 +1,6 @@
 import { styled } from '../../../styling';
-import { Typography } from '../../base';
 import { CloseButton } from '../../closeButton';
+import { Typography } from '../../typography';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
 

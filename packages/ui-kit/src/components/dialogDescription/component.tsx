@@ -1,18 +1,18 @@
 import { ComponentProps } from 'react';
 
 import { OverridableType } from '@/@types';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { Typography, TypographyProps } from '@/components';
+import { ElementBaseProps, Wrap } from '@/core';
 
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DialogDescriptionOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type DialogDescriptionOwnProps = {};
+export type DialogDescriptionOwnProps = TypographyProps & {};
 
 export type DialogDescriptionBaseProps = ElementBaseProps<
-  'div',
+  typeof Typography,
   DialogDescriptionOwnProps
 >;
 
@@ -25,7 +25,8 @@ export type DialogDescriptionOverriddenProps = OverridableType<
 export const DialogDescriptionBase = ({
   ...rest
 }: DialogDescriptionOverriddenProps) => {
-  return <Root {...rest} />;
+  // TODO: use Root element
+  return <Typography component="p" {...rest} />;
 };
 
 DialogDescriptionBase.displayName = 'DialogDescription';

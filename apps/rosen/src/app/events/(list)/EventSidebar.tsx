@@ -71,7 +71,7 @@ const Content = ({ value }: EventSidebarProps) => {
   if (!value || value.status === 'multipleFlows') {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="text-secondary">
           {value ? <>This event has multiple flows. Click <b>See Details</b> for more information.</> : <>Select an event to see its details.</>}
         </Typography>
       </Center>

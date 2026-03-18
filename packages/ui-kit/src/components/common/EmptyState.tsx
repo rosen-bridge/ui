@@ -1,8 +1,8 @@
 import { HTMLAttributes } from 'react';
 
 import { styled } from '../../styling';
-import { Typography } from '../base';
 import { Icon } from '../icon';
+import { Typography } from '../typography';
 
 const Root = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -75,7 +75,7 @@ export const EmptyState = (props: EmptyStateProps) => {
             <Typography
               typography="span"
               variant="body2"
-              color={'background.paper'}
+              color={'background-paper'}
             >
               0
             </Typography>

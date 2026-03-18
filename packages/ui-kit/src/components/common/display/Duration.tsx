@@ -1,8 +1,8 @@
 import { ComponentProps, forwardRef, HTMLAttributes, useMemo } from 'react';
 
-import { Skeleton, Typography } from '@mui/material';
-
 import { Icon } from '@/components/icon';
+import { Skeleton } from '@/components/skeleton';
+import { Typography } from '@/components/typography';
 
 import { formatDuration } from '../../../utils';
 import { Stack } from '../../stack';
@@ -47,7 +47,7 @@ const DurationBase = forwardRef<HTMLDivElement, DurationBaseProps>(
               <Typography
                 fontSize="12px"
                 sx={{ opacity: 0.7 }}
-                color="text.primary"
+                color="text-primary"
               >
                 {p.unit}
                 {p.value > 1 ? 's' : ''}

@@ -4,10 +4,10 @@ import { OverridableType } from '@/@types';
 import {
   Icon,
   IconOverriddenProps,
-  Skeleton2,
-  Text,
-  TextOverriddenProps,
+  Skeleton,
   Truncate,
+  Typography,
+  TypographyOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
@@ -33,7 +33,7 @@ export type NetworkOwnProps = {
   networks?: Record<NonNullable<NetworkOverriddenProps['value']>, NetworkMeta>;
 
   slots?: {
-    label?: TextOverriddenProps;
+    label?: TypographyOverriddenProps;
     logo?: IconOverriddenProps;
   };
 
@@ -77,20 +77,22 @@ export const NetworkBase = ({
   return (
     <Root reflects={{ variant }} {...rest}>
       {showLogo && loading && (
-        <Skeleton2 width="2em" height="2em" variant="circular" />
+        // TODO add slot
+        <Skeleton width="2em" height="2em" variant="circular" />
       )}
       {showLogo && !loading && Logo && (
         <Icon as={Logo} className="logo" size="2em" {...slots?.logo} />
       )}
       {showLabel && (
-        <Text
+        <Typography
           asChild={!loading}
           className="label"
+          component="div"
           loading={loading}
           {...slots?.label}
         >
           {!loading && <Truncate>{label}</Truncate>}
-        </Text>
+        </Typography>
       )}
     </Root>
   );

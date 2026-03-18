@@ -1,10 +1,10 @@
-import React from 'react';
+import { ElementType } from 'react';
 
 import { StepLabel } from '@mui/material';
 
-import { Typography } from '../../base';
 import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
+import { Typography } from '../../typography';
 import { ProcessTrackerSubItem } from './types';
 
 type LabelProps = {
@@ -12,7 +12,7 @@ type LabelProps = {
    * The icon component to display for the step.
    * This will be passed to MUI's `StepLabel` as the `StepIconComponent`.
    */
-  icon: React.ElementType;
+  icon: ElementType;
 
   /**
    * Optional additional information to show in a tooltip.
@@ -63,11 +63,11 @@ export const ProcessLabel = ({ icon, info, step, onClick }: LabelProps) => {
   const getColor = () => {
     switch (step.state) {
       case 'pending':
-        return 'info.dark';
+        return 'info-dark';
       case 'idle':
-        return 'neutral.dark';
+        return 'neutral-dark';
       default:
-        return 'success.main';
+        return 'success';
     }
   };
 
@@ -124,10 +124,10 @@ export const ProcessLabel = ({ icon, info, step, onClick }: LabelProps) => {
       // }}
       title={
         <Stack style={{ cursor: 'text' }}>
-          <Typography textAlign="center" color="success.main" variant="body2">
+          <Typography textAlign="center" color="success" variant="body2">
             {info.subTittle}
           </Typography>
-          <Typography color="success.dark" variant="body2">
+          <Typography color="success" variant="body2">
             {info.description}
           </Typography>
         </Stack>

@@ -8,6 +8,7 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconButtonOverrides {}
 
+// TODO
 export type IconButtonOwnProps = {
   href?: string;
   target?: HTMLAttributeAnchorTarget;

@@ -2,9 +2,10 @@ import { MouseEvent, useEffect, useRef, useState } from 'react';
 
 import { Pagination as PaginationMui, Divider, Button } from '@mui/material';
 
-import { Box, Typography, MenuItem, Menu, ListSubheader } from '../base';
+import { Box, MenuItem, Menu, ListSubheader } from '../base';
 import { Icon } from '../icon';
 import { Stack } from '../stack';
+import { Typography } from '../typography';
 
 export interface PaginationProps {
   defaultPageIndex?: number;
@@ -98,7 +99,7 @@ export const Pagination = ({
       <Box sx={{ display: 'flex', alignItems: 'center' }}>
         <Typography
           variant="body2"
-          color="text.secondary"
+          color="text-secondary"
           sx={{
             '&::before': { content: '"Showing "' },
             '& span.mobile-hide': { display: 'inline' },
@@ -182,7 +183,7 @@ export const Pagination = ({
                 spacing={1}
               >
                 <Typography
-                  color="text.secondary"
+                  color="text-secondary"
                   variant="body2"
                   sx={{
                     '@container (max-width: 864px)': {
@@ -235,7 +236,7 @@ export const Pagination = ({
                   },
                 }}
               >
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant="body2" color="text-secondary">
                   Items per page: {pageSizeCurrent}
                 </Typography>
               </ListSubheader>

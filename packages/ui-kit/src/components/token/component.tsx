@@ -8,8 +8,9 @@ import {
   IconButton,
   Image,
   ImageOverriddenProps,
-  Text,
   Truncate,
+  Typography,
+  TypographyOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
@@ -37,6 +38,7 @@ export type TokenOwnProps = {
 
   slots?: {
     fallback?: AvatarOverriddenProps;
+    label?: TypographyOverriddenProps;
     logo?: ImageOverriddenProps;
   };
 
@@ -153,9 +155,15 @@ export const TokenBase = ({
         </Avatar>
       )}
       {showLabel && (
-        <Text loading={loading} style={{ fontSize: 'inherit', minWidth: 0 }}>
+        <Typography
+          component="div"
+          loading={loading}
+          variant="inherit"
+          style={{ minWidth: 0 }}
+          {...slots?.label}
+        >
           {!loading && <Truncate>{label}</Truncate>}
-        </Text>
+        </Typography>
       )}
       {!!href && (
         <IconButton target="_blank" size="small" href={href}>

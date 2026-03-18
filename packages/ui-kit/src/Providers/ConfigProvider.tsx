@@ -42,12 +42,12 @@ import type {
   TableGridCellOverriddenProps,
   TableGridHeaderOverriddenProps,
   TableGridRowOverriddenProps,
-  TextOverriddenProps,
   ThemeToggleButtonOverriddenProps,
   TokenOverriddenProps,
   ToolbarOverriddenProps,
   TooltipOverriddenProps,
   TruncateOverriddenProps,
+  TypographyOverriddenProps,
   ViewToggleOverriddenProps,
 } from '../components';
 
@@ -93,12 +93,12 @@ type Components = {
   TableGridCell: TableGridCellOverriddenProps;
   TableGridHeader: TableGridHeaderOverriddenProps;
   TableGridRow: TableGridRowOverriddenProps;
-  Text: TextOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Token: TokenOverriddenProps;
   Toolbar: ToolbarOverriddenProps;
   Tooltip: TooltipOverriddenProps;
   Truncate: TruncateOverriddenProps;
+  Typography: TypographyOverriddenProps;
   ViewToggle: ViewToggleOverriddenProps;
 };
 

@@ -1,8 +1,8 @@
 import { HTMLAttributes } from 'react';
 
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
-import { InfoIcon } from '@/components';
+import { InfoIcon, Typography } from '@/components';
 
 import { Stack } from '../../stack';
 import { InjectOverrides } from '../InjectOverrides';
@@ -16,7 +16,7 @@ export type LabelProps = HTMLAttributes<HTMLDivElement> & {
    * - `textSecondary` (default)
    * - `textPrimary`
    */
-  color?: 'textSecondary' | 'textPrimary';
+  color?: 'text-secondary' | 'text-primary';
 
   /**
    * Reduces vertical padding for a denser layout.
@@ -56,7 +56,7 @@ export type LabelProps = HTMLAttributes<HTMLDivElement> & {
  */
 const LabelBase = ({
   children,
-  color = 'textSecondary',
+  color = 'text-secondary',
   className,
   dense,
   info,
@@ -117,14 +117,7 @@ const LabelBase = ({
           >
             {label}
           </Typography>
-          {info && (
-            <InfoIcon
-              color={
-                color === 'textSecondary' ? 'text-secondary' : 'text-primary'
-              }
-              info={info}
-            />
-          )}
+          {info && <InfoIcon color={color} info={info} />}
         </Stack>
         <Stack
           direction="row"

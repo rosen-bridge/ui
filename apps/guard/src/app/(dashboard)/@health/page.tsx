@@ -79,13 +79,13 @@ const Health = () => {
           {isLoading ? (
             <Skeleton variant="text" width={80} height={24} />
           ) : (
-            <Typography color={`${variant.color}.main`}>Health is</Typography>
+            <Typography color={variant.color}>Health is</Typography>
           )}
 
           {isLoading ? (
             <Skeleton variant="text" width={60} height={32} />
           ) : (
-            <Typography color={`${variant.color}.dark`} variant="h3">
+            <Typography color={`${variant.color}-dark`} variant="h3">
               {variant.status}
             </Typography>
           )}

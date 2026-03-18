@@ -50,7 +50,7 @@ export const AppInfo = ({
         <DialogContent>
           <Stack spacing={1}>
             <Divider borderStyle="dashed">
-              <Typography noWrap color="text.secondary" variant="body2">
+              <Typography noWrap color="text-secondary" variant="body2">
                 App Version
               </Typography>
             </Divider>
@@ -75,7 +75,7 @@ export const AppInfo = ({
             {networks && (
               <>
                 <Divider borderStyle="dashed">
-                  <Typography noWrap color="text.secondary" variant="body2">
+                  <Typography noWrap color="text-secondary" variant="body2">
                     Network Height
                   </Typography>
                 </Divider>

@@ -45,7 +45,7 @@ export const Section = ({
         action={collapsible && <DisclosureButton disclosure={disclosure} />}
       >
         <CardTitle>
-          <Typography variant="h2" color="text.secondary">
+          <Typography variant="h2" color="text-secondary">
             {title}
           </Typography>
         </CardTitle>
@@ -58,7 +58,7 @@ export const Section = ({
               <Button variant="text" onClick={() => load?.()}>
                 <Stack direction="column" align="center">
                   <Icon color="error" name="SyncExclamation" />
-                  <Typography color="error.main">TRY AGAIN!</Typography>
+                  <Typography color="error">TRY AGAIN!</Typography>
                 </Stack>
               </Button>
             </Center>

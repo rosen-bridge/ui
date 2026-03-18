@@ -15,9 +15,9 @@ import {
   NetworkProps,
   RelativeTime,
   RelativeTimeProps,
-  Text,
   Token,
   TokenProps,
+  Typography,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
@@ -70,7 +70,7 @@ export const EventDetailsBase = ({
   ...rest
 }: EventDetailsOverriddenProps) => {
   return (
-    <Root as={Columns} gap="32px" width="20rem" rule {...rest}>
+    <Root as={Columns} gap={4} width="20rem" rule {...rest}>
       {'id' in value && (
         <Label orientation="horizontal" label="Event Id">
           <Identifier copyable loading={loading} value={value.id} />
@@ -206,12 +206,16 @@ export const EventDetailsBase = ({
       )}
       {'reports' in value && (
         <Label label="Reports">
-          <Text loading={loading}>{value.reports}</Text>
+          <Typography component="div" loading={loading}>
+            {value.reports}
+          </Typography>
         </Label>
       )}
       {'height' in value && (
         <Label label="Height">
-          <Text loading={loading}>{value.height}</Text>
+          <Typography component="div" loading={loading}>
+            {value.height}
+          </Typography>
         </Label>
       )}
     </Root>

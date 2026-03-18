@@ -2,13 +2,11 @@ import { HTMLAttributes, useMemo } from 'react';
 
 import { getDecimalString } from '@rosen-ui/utils';
 
-import { Text } from '@/components';
-
-import { Typography } from '../../base';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
+import { Typography } from '../../typography';
 import { InjectOverrides } from '../InjectOverrides';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
@@ -265,7 +263,8 @@ const AmountBase = ({
             )}
             {!error && (
               <Tooltip disabled={loading} title={tooltip}>
-                <Text
+                <Typography
+                  component="div"
                   loading={loading}
                   style={{ fontSize: 'inherit', whiteSpace: 'nowrap' }}
                 >
@@ -290,7 +289,7 @@ const AmountBase = ({
                       {!!parts.unit && ` ${parts.unit}`}
                     </>
                   )}
-                </Text>
+                </Typography>
               </Tooltip>
             )}
             {!error && !parts && !!fallback && value === undefined && (
@@ -298,9 +297,13 @@ const AmountBase = ({
             )}
           </>
           {unit && (
-            <Text loading={loading} style={{ fontSize: '75%', opacity: 0.7 }}>
+            <Typography
+              component="div"
+              loading={loading}
+              style={{ fontSize: '75%', opacity: 0.7 }}
+            >
               {unit}
-            </Text>
+            </Typography>
           )}
           {formattedPrice && (
             <Typography style={{ opacity: 0.5 }}>

@@ -51,7 +51,7 @@ export const ConnectorBase = ({
   return (
     <Root reflects={{ variant }} {...rest}>
       {start}
-      <Icon color="text-secondary" name="ArrowRight" {...slots?.icon} />
+      <Icon name="ArrowRight" {...slots?.icon} />
       {end}
     </Root>
   );

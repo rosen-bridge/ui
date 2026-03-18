@@ -1,6 +1,6 @@
-import { Typography } from '../base';
 import { Icon } from '../icon';
 import { Tooltip } from '../tooltip';
+import { Typography } from '../typography';
 
 export interface IdProps {
   id: string;

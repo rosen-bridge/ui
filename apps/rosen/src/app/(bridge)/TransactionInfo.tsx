@@ -58,7 +58,7 @@ export const TransactionInfo = () => {
       }}
     >
       <CardBody>
-        <Label label="You Will Receive" color="textPrimary" dense>
+        <Label label="You Will Receive" color="text-primary" dense>
           <Amount
             value={
               !tokenValue || receivingAmountRaw === '0'

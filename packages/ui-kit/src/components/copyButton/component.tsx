@@ -62,8 +62,11 @@ export const CopyButtonBase = ({
 
   const handleCopy = useCallback(() => {
     setStatus('copying');
+
     const text = typeof value === 'function' ? value() : value;
+
     if (!text) return;
+
     navigator.clipboard
       .writeText(text)
       .then(() => {

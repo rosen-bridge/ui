@@ -25,7 +25,7 @@ const Content = ({ value }: ViewGridSidebarProps) => {
   if (!value) {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
-        <Typography variant="body1" color="text.secondary">
+        <Typography variant="body1" color="text-secondary">
           Select an event to see its details.
         </Typography>
       </Center>

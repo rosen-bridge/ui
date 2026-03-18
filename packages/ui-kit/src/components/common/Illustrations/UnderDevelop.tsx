@@ -1,5 +1,5 @@
-import { Typography } from '../../base';
 import { Stack } from '../../stack';
+import { Typography } from '../../typography';
 
 export const UnderDevelop = () => {
   return (
@@ -69,7 +69,7 @@ export const UnderDevelop = () => {
           </clipPath>
         </defs>
       </svg>
-      <Typography variant="h2" color="primary.main" sx={{ opacity: 0.5 }}>
+      <Typography variant="h2" color="primary" sx={{ opacity: 0.5 }}>
         Page Is Under Develop
       </Typography>
     </Stack>

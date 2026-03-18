@@ -28,6 +28,7 @@ export const InfoIconBase = ({
   ...rest
 }: InfoIconOverriddenProps) => {
   return (
+    // TODO add styles
     <Tooltip title={info} {...slots?.tooltip}>
       <Root
         as={Icon}

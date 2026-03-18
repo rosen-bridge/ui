@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 
+import { Skeleton, Typography } from '@/components';
+
 import { styled } from '../../styling';
-import { Skeleton, Typography } from '../base';
 
 /**
  * Properties for the {@link RelativeTime} component.

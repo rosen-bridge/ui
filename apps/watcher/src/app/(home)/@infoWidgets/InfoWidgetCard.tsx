@@ -52,7 +52,7 @@ export const InfoWidgetCard = ({
             <Stack direction="row" align="center" justify="between">
               <Typography
                 variant="h6"
-                color="primary.contrastText"
+                color="primary-contrastText"
                 lineHeight="normal"
               >
                 {isLoading && <CircularProgress size={16} color="inherit" />}
@@ -73,7 +73,7 @@ export const InfoWidgetCard = ({
             <Typography
               component="div"
               variant="body2"
-              color="primary.contrastText"
+              color="primary-contrastText"
               style={{ opacity: 0.6 }}
             >
               <Truncate lines={1}>{title}</Truncate>
