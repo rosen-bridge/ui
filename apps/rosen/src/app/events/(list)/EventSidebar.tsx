@@ -7,9 +7,10 @@ import {
   CardHeader,
   CardTitle,
   Center,
-  EnhancedDialog,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   EventDetails,
   EventDetailsProps,
   Icon,
@@ -82,8 +83,8 @@ const Content = ({ value }: EventSidebarProps) => {
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
   return (
-    <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle
+    <Dialog open={!!value} stickOn="laptop" onClose={onClose}>
+      <DialogHeader
         actions={value?.eventId && (
           <Button
             variant="text"
@@ -95,14 +96,15 @@ const Drawer = ({ value, onClose }: EventSidebarProps) => {
           </Button>
         )}
         icon="Exchange"
-        onClose={onClose}
       >
-        Event Details
-      </EnhancedDialogTitle>
-      <EnhancedDialogContent>
+        <DialogTitle>
+          Event Details
+        </DialogTitle>
+      </DialogHeader>
+      <DialogContent>
         <Content value={value} />
-      </EnhancedDialogContent>
-    </EnhancedDialog>
+      </DialogContent>
+    </Dialog>
   );
 };
 

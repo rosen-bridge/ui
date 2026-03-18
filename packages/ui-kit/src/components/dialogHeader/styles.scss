@@ -1,0 +1,9 @@
+.rosen-DialogHeader {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--rosen-spacing) * 2);
+}
+
+.rosen-DialogHeader__spacer {
+  flex-grow: 1;
+}

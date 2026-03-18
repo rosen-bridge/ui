@@ -1,0 +1,55 @@
+// TODO
+
+.rosen-Dialog {
+  box-sizing: border-box;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24rem;
+  max-width: calc(100vw - 3rem);
+  margin-top: -2rem;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  outline: 1px solid var(--color-gray-200);
+  background-color: var(--rosen-palette-background-paper);
+  color: var(--color-gray-900);
+  transition: all 150ms;
+  touch-action: none;
+  z-index: 4; // TODO
+
+  @media (prefers-color-scheme: dark) {
+    outline: 1px solid var(--color-gray-300);
+  }
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+.rosen-Dialog__backdrop {
+  position: fixed;
+  min-height: 100dvh;
+  inset: 0;
+  background-color: black;
+  opacity: 0.2;
+  transition: opacity 150ms cubic-bezier(0.45, 1.005, 0, 1.005);
+  touch-action: none;
+  z-index: 3; // TODO
+
+  /* iOS 26+: Ensure the backdrop covers the entire visible viewport. */
+  @supports (-webkit-touch-callout: none) {
+    position: absolute;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    opacity: 0.7;
+  }
+
+  &[data-starting-style],
+  &[data-ending-style] {
+    opacity: 0;
+  }
+}

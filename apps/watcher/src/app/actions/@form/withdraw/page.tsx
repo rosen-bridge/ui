@@ -19,7 +19,7 @@ import {
   SubmitButton,
   TextField,
   useApiKey,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Link,
   Stack,
 } from '@rosen-bridge/ui-kit';
@@ -261,7 +261,7 @@ const WithdrawForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderAddressTextField()}
           <Grid container spacing={2}>
             <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>

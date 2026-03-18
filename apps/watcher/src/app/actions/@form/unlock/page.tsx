@@ -9,7 +9,7 @@ import {
   AlertProps,
   SubmitButton,
   useApiKey,
-  ApiKeyModalWarning,
+  ApiKeyDialogWarning,
   Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -196,7 +196,7 @@ const UnlockForm = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={2}>
           {renderAlert()}
-          <ApiKeyModalWarning />
+          <ApiKeyDialogWarning />
           {renderTokenAmountTextField()}
           <SubmitButton
             loading={isUnlockPending}

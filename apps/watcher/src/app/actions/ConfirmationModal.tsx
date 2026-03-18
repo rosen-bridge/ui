@@ -2,9 +2,9 @@ import { ReactNode, useState } from 'react';
 
 import {
   Dialog,
-  DialogActions,
   DialogContent,
-  DialogContentText,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
   Button,
 } from '@rosen-bridge/ui-kit';
@@ -45,16 +45,13 @@ export const ConfirmationModal = ({
   };
 
   return (
-    <Dialog onClose={handleClose} open={open} maxWidth="tablet">
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        {typeof content === 'string' ? (
-          <DialogContentText>{content}</DialogContentText>
-        ) : (
-          content
-        )}
-      </DialogContent>
-      <DialogActions>
+    <Dialog maxWidth="tablet" open={open} onClose={handleClose}>
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+      </DialogHeader>
+      {/* TODO */}
+      <DialogContent>{content}</DialogContent>
+      <DialogFooter>
         <Button
           variant="text"
           loading={buttonLoading}
@@ -62,7 +59,7 @@ export const ConfirmationModal = ({
         >
           {buttonText}
         </Button>
-      </DialogActions>
+      </DialogFooter>
     </Dialog>
   );
 };

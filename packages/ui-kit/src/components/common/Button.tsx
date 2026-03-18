@@ -30,6 +30,7 @@ type ButtonPropsBase = HTMLAttributes<HTMLButtonElement> & {
   startIcon?: ReactNode;
   endIcon?: ReactNode;
   variant?: 'outlined' | 'contained' | 'text';
+  form?: string;
 };
 
 const ButtonBase = forwardRef<HTMLButtonElement, ButtonPropsBase>(
@@ -39,6 +40,7 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonPropsBase>(
       children,
       size = 'medium',
       variant = 'text',
+      form,
       ...rest
     } = props;
 
@@ -52,7 +54,7 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonPropsBase>(
     }, [block]);
 
     return (
-      <ButtonMui sx={sx} size={size} variant={variant} ref={ref} {...rest}>
+      <ButtonMui sx={sx} size={size} variant={variant} form={form} ref={ref} {...rest}>
         {children}
       </ButtonMui>
     );

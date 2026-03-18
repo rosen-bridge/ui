@@ -117,45 +117,45 @@ export const EventDetailsBase = ({
           </LabelGroup>
         </div>
       )}
-      {'sourceTxId' in value ||
+      {('sourceTxId' in value ||
         'paymentTxId' in value ||
-        ('spendTxId' in value && (
-          <div>
-            <Label label="Tx ID" />
-            <LabelGroup>
-              {'sourceTxId' in value && (
-                <Label label="Lock Tx" inset>
-                  <Identifier
-                    copyable
-                    href={value.sourceTxIdUrl}
-                    loading={loading}
-                    value={value.sourceTxId}
-                  />
-                </Label>
-              )}
-              {'paymentTxId' in value && (
-                <Label label="Payment Tx" inset>
-                  <Identifier
-                    copyable
-                    href={value.paymentTxIdUrl}
-                    loading={loading}
-                    value={value.paymentTxId}
-                  />
-                </Label>
-              )}
-              {'spendTxId' in value && (
-                <Label label="Reward Tx" inset>
-                  <Identifier
-                    copyable
-                    href={value.spendTxIdUrl}
-                    loading={loading}
-                    value={value.spendTxId}
-                  />
-                </Label>
-              )}
-            </LabelGroup>
-          </div>
-        ))}
+        'spendTxId' in value) && (
+        <div>
+          <Label label="Tx ID" />
+          <LabelGroup>
+            {'sourceTxId' in value && (
+              <Label label="Lock Tx" inset>
+                <Identifier
+                  copyable
+                  href={value.sourceTxIdUrl}
+                  loading={loading}
+                  value={value.sourceTxId}
+                />
+              </Label>
+            )}
+            {'paymentTxId' in value && (
+              <Label label="Payment Tx" inset>
+                <Identifier
+                  copyable
+                  href={value.paymentTxIdUrl}
+                  loading={loading}
+                  value={value.paymentTxId}
+                />
+              </Label>
+            )}
+            {'spendTxId' in value && (
+              <Label label="Reward Tx" inset>
+                <Identifier
+                  copyable
+                  href={value.spendTxIdUrl}
+                  loading={loading}
+                  value={value.spendTxId}
+                />
+              </Label>
+            )}
+          </LabelGroup>
+        </div>
+      )}
       {'fromAddress' in value && 'toAddress' in value && (
         <div>
           <Label label="Address" />

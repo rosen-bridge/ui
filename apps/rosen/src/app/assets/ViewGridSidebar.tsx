@@ -6,9 +6,10 @@ import {
   CardTitle,
   Center,
   Columns,
-  EnhancedDialog,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   Label,
   Network,
   Token,
@@ -61,14 +62,16 @@ const Content = ({ value }: ViewGridSidebarProps) => {
 
 const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
   return (
-    <EnhancedDialog open={!!value} stickOn="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="BitcoinCircle" onClose={onClose}>
-        Asset Details
-      </EnhancedDialogTitle>
-      <EnhancedDialogContent>
+    <Dialog open={!!value} stickOn="laptop" onClose={onClose}>
+      <DialogHeader icon="BitcoinCircle">
+        <DialogTitle>
+          Asset Details
+        </DialogTitle>
+      </DialogHeader>
+      <DialogContent>
         <Content value={value} />
-      </EnhancedDialogContent>
-    </EnhancedDialog>
+      </DialogContent>
+    </Dialog>
   );
 };
 

@@ -3,15 +3,14 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components';
+
 import { Avatar } from '../avatar';
 import { Icon, IconProps } from '../icon';
 import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
 import { Divider } from './Divider';
-import { EnhancedDialog } from './EnhancedDialog';
-import { EnhancedDialogContent } from './EnhancedDialogContent';
-import { EnhancedDialogTitle } from './EnhancedDialogTitle';
 
 type NetworkHeight = {
   network: NetworkType;
@@ -39,21 +38,16 @@ export const AppInfo = ({
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <EnhancedDialog
+      <Dialog
         maxWidth="tablet"
         open={open}
         stickOn="tablet"
         onClose={() => setOpen(false)}
       >
-        <EnhancedDialogTitle
-          icon="ExclamationCircle"
-          onClose={() => setOpen(false)}
-        >
-          <Typography variant="h2" fontWeight="bold">
-            About Rosen Bridge
-          </Typography>
-        </EnhancedDialogTitle>
-        <EnhancedDialogContent>
+        <DialogHeader closeable icon="ExclamationCircle">
+          <DialogTitle>About Rosen Bridge</DialogTitle>
+        </DialogHeader>
+        <DialogContent>
           <Stack spacing={1}>
             <Divider borderStyle="dashed">
               <Typography noWrap color="text.secondary" variant="body2">
@@ -95,8 +89,8 @@ export const AppInfo = ({
             )}
           </Stack>
           {children}
-        </EnhancedDialogContent>
-      </EnhancedDialog>
+        </DialogContent>
+      </Dialog>
       <IconButton
         color="inherit"
         disabled={loading}

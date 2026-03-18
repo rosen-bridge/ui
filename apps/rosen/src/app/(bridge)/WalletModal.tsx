@@ -7,11 +7,12 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogContentText,
-  EnhancedDialogTitle,
+  DialogTitle,
   Tooltip,
   Stack,
   Icon,
+  DialogDescription,
+  DialogHeader,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -45,14 +46,15 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
 
   return (
     <Dialog open={open} maxWidth="laptop" onClose={onClose}>
-      <EnhancedDialogTitle icon="Wallet" onClose={onClose}>
-        Choose Wallet
-      </EnhancedDialogTitle>
+      <DialogHeader closeable icon="Wallet">
+        <DialogTitle>
+          Choose Wallet
+        </DialogTitle>
+      </DialogHeader>
+      <DialogDescription>
+        Please choose any of the supported wallets for {network.selectedSource?.name} chain.
+      </DialogDescription>
       <DialogContent>
-        <DialogContentText>
-          Please choose any of the supported wallets for{' '}
-          {network.selectedSource?.name} chain.
-        </DialogContentText>
         <Stack spacing={2} style={{ margin: '1rem 0' }}>
           <Alert severity="warning">
             It may be necessary to reload this page after the following

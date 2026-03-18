@@ -3,7 +3,7 @@ import { ComponentProps, useState } from 'react';
 import { OverridableType } from '@/@types';
 import {
   Skeleton2,
-  QrCodeModal,
+  QrCodeDialog,
   CopyButton,
   Icon,
   IconButton,
@@ -145,10 +145,10 @@ export const IdentifierBase = ({
               >
                 <Icon name="Qrcode" size="small" />
               </IconButton>
-              <QrCodeModal
+              <QrCodeDialog
                 open={open}
-                text={value}
-                handleClose={() => setOpen(false)}
+                value={value}
+                onClose={() => setOpen(false)}
               />
             </>
           )}

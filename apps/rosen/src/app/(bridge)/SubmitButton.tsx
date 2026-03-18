@@ -6,11 +6,12 @@ import {
   Card,
   CardBody,
   Connector,
+  DialogTitle,
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
   Divider,
-  EnhancedDialog,
-  EnhancedDialogActions,
-  EnhancedDialogContent,
-  EnhancedDialogTitle,
   Identifier,
   Label,
   Button,
@@ -109,19 +110,18 @@ export const SubmitButton = () => {
       >
         SUBMIT
       </Button>
-      <EnhancedDialog
+      <Dialog
         open={open}
         maxWidth="tablet"
         stickOn="mobile"
         onClose={() => setOpen(false)}
       >
-        <EnhancedDialogTitle
-          icon="CommentAltExclamation"
-          onClose={() => setOpen(false)}
-        >
-          Confirm Transaction
-        </EnhancedDialogTitle>
-        <EnhancedDialogContent
+        <DialogHeader icon="CommentAltExclamation">
+          <DialogTitle>
+            Confirm Transaction
+          </DialogTitle>
+        </DialogHeader>
+        <DialogContent
           style={{
             paddingTop: 0,
             paddingBottom: 0,
@@ -163,8 +163,8 @@ export const SubmitButton = () => {
               </Stack>
             </CardBody>
           </Card>
-        </EnhancedDialogContent>
-        <EnhancedDialogActions>
+        </DialogContent>
+        <DialogFooter>
           <Button
             color="secondary"
             variant="contained"
@@ -183,8 +183,8 @@ export const SubmitButton = () => {
           >
             Confirm
           </Button>
-        </EnhancedDialogActions>
-      </EnhancedDialog>
+        </DialogFooter>
+      </Dialog>
     </>
   );
 };

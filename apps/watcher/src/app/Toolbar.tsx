@@ -3,7 +3,7 @@ import {
   Toolbar as UiKitToolbar,
   useIsMobile,
 } from '@rosen-bridge/ui-kit';
-import { ApiKeyModal } from '@rosen-bridge/ui-kit';
+import { ApiKeyDialogButton } from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
 
@@ -16,7 +16,7 @@ export const Toolbar = () => {
   return (
     <UiKitToolbar>
       {isMobile && <VersionConfig />}
-      <ApiKeyModal />
+      <ApiKeyDialogButton />
       <ThemeToggleButton />
     </UiKitToolbar>
   );
