@@ -76,12 +76,13 @@ export interface Statistics {
   eventCountMetrics: EventCountMetrics;
 }
 export interface Chains {
-  ergo: ChainsErgo;
-  cardano: ChainsCardano;
-  bitcoin: ChainsBitcoin;
-  doge: ChainsDoge;
-  ethereum: ChainsEthereum;
-  binance: ChainsBinance;
+  'ergo': ChainsErgo;
+  'cardano': ChainsCardano;
+  'bitcoin': ChainsBitcoin;
+  'bitcoin-runes': ChainsBitcoinRunes;
+  'doge': ChainsDoge;
+  'ethereum': ChainsEthereum;
+  'binance': ChainsBinance;
 }
 
 export interface ChainsBinance {
@@ -171,6 +172,18 @@ export interface ChainsDogeAdapter {
 
 export interface ChainsDogeAdapterBlockCypher {
   url: string;
+}
+
+export interface ChainsBitcoinRunes {
+  active: boolean;
+  scanInterval: number;
+  adapter: ChainsBitcoinRunesAdapter;
+  unisatUrl?: string;
+  unisatApiKey?: string;
+}
+
+export interface ChainsBitcoinRunesAdapter {
+  extraAddresses?: string[];
 }
 
 export interface ChainsBitcoin {
