@@ -1,5 +1,13 @@
-import { cloneElement, ComponentProps, ReactElement, ReactNode } from 'react';
+import {
+  Children,
+  cloneElement,
+  ComponentProps,
+  ReactElement,
+  ReactNode,
+  useMemo,
+} from 'react';
 
+import { mergeProps } from '@base-ui/react/merge-props';
 import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
 
 import { OverridableType } from '@/@types';
@@ -30,6 +38,12 @@ export const TooltipBase = ({
   title,
   ...rest
 }: TooltipOverriddenProps) => {
+  const child = useMemo(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    () => Children.only(children) as ReactElement<any, any>,
+    [children],
+  );
+
   if (disabled) return children;
 
   if (!title) return children;
@@ -39,10 +53,16 @@ export const TooltipBase = ({
       <TooltipBaseUI.Provider>
         <TooltipBaseUI.Root>
           <TooltipBaseUI.Trigger
-            render={(props) => cloneElement(children, props)}
+            render={(props) =>
+              cloneElement(children, mergeProps(props, child.props))
+            }
           />
           <TooltipBaseUI.Portal>
-            <TooltipBaseUI.Positioner sideOffset={8}>
+            <TooltipBaseUI.Positioner
+              className="rosen-Tooltip__positioner"
+              positionMethod="fixed"
+              sideOffset={8}
+            >
               <TooltipBaseUI.Popup className="rosen-Tooltip" {...rest}>
                 {title}
               </TooltipBaseUI.Popup>

@@ -54,7 +54,14 @@ const ButtonBase = forwardRef<HTMLButtonElement, ButtonPropsBase>(
     }, [block]);
 
     return (
-      <ButtonMui sx={sx} size={size} variant={variant} form={form} ref={ref} {...rest}>
+      <ButtonMui
+        sx={sx}
+        size={size}
+        variant={variant}
+        form={form}
+        ref={ref}
+        {...rest}
+      >
         {children}
       </ButtonMui>
     );

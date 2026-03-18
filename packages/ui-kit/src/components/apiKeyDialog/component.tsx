@@ -1,13 +1,27 @@
 import { ComponentProps, FormEvent, useEffect, useState } from 'react';
-
-import { OverridableType } from '@/@types';
-import { Button, CloseButton, Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, Icon, IconButton, InputAdornment, TextField, Tooltip } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
-import { useApiKey, useSnackbar } from '@/hooks';
 import { Controller, useForm } from 'react-hook-form';
 
+import { OverridableType } from '@/@types';
+import {
+  Button,
+  CloseButton,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  Icon,
+  IconButton,
+  InputAdornment,
+  TextField,
+  Tooltip,
+} from '@/components';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+import { useApiKey, useSnackbar } from '@/hooks';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ApiKeyDialogOverrides { }
+export interface ApiKeyDialogOverrides {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ApiKeyDialogOwnProps = {};
@@ -25,9 +39,13 @@ export type ApiKeyDialogOverriddenProps = OverridableType<
 
 type FormValues = {
   apiKey: string;
-}
+};
 
-export const ApiKeyDialogBase = ({ open, onClose, ...rest }: ApiKeyDialogOverriddenProps) => {
+export const ApiKeyDialogBase = ({
+  open,
+  onClose,
+  ...rest
+}: ApiKeyDialogOverriddenProps) => {
   const { apiKey, setApiKey } = useApiKey();
 
   const { openSnackbar } = useSnackbar();
@@ -59,13 +77,17 @@ export const ApiKeyDialogBase = ({ open, onClose, ...rest }: ApiKeyDialogOverrid
 
   return (
     <>
-      <Root as={Dialog} maxWidth="tablet" open={open} onClose={onClose} {...rest}>
+      <Root
+        as={Dialog}
+        maxWidth="tablet"
+        open={open}
+        onClose={onClose}
+        {...rest}
+      >
         <DialogHeader>
           <DialogTitle>Authorization</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          Set API key to access actions
-        </DialogDescription>
+        <DialogDescription>Set API key to access actions</DialogDescription>
         {/* TODO dividers */}
         <DialogContent>
           <form id="api-key-form" onSubmit={onSubmit}>
@@ -93,7 +115,7 @@ export const ApiKeyDialogBase = ({ open, onClose, ...rest }: ApiKeyDialogOverrid
                           </Tooltip>
                         </InputAdornment>
                       ),
-                    }
+                    },
                   }}
                 />
               )}
@@ -102,7 +124,9 @@ export const ApiKeyDialogBase = ({ open, onClose, ...rest }: ApiKeyDialogOverrid
         </DialogContent>
         <DialogFooter>
           <Button onClick={onClose}>Cancel</Button>
-          <Button form="api-key-form" type="submit">Set key</Button>
+          <Button form="api-key-form" type="submit">
+            Set key
+          </Button>
         </DialogFooter>
       </Root>
     </>

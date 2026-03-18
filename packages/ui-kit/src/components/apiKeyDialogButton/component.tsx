@@ -5,7 +5,7 @@ import { ApiKeyDialog, Icon, IconButton } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface ApiKeyDialogButtonOverrides { }
+export interface ApiKeyDialogButtonOverrides {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type ApiKeyDialogButtonOwnProps = {};
@@ -21,7 +21,9 @@ export type ApiKeyDialogButtonOverriddenProps = OverridableType<
   never
 >;
 
-export const ApiKeyDialogButtonBase = ({ ...rest }: ApiKeyDialogButtonOverriddenProps) => {
+export const ApiKeyDialogButtonBase = ({
+  ...rest
+}: ApiKeyDialogButtonOverriddenProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
