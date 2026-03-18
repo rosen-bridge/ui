@@ -70,7 +70,7 @@ describe('watcherCountMetric', () => {
   });
 
   /**
-   * @target Should skip boxes without valid network
+   * @target Should skip boxes without valid RWT token
    * @dependencies
    * - database
    * - ExplorerBoxFetcher
@@ -85,7 +85,7 @@ describe('watcherCountMetric', () => {
    * - Box without valid network is skipped
    * - Total metric = 5
    */
-  it('should skip boxes without valid network', async () => {
+  it('Should skip boxes without valid RWT token', async () => {
     const testData = watcherCountMetricTestData.boxesWithoutValidNetwork;
 
     setupExplorerMock(testData.mockBoxes);

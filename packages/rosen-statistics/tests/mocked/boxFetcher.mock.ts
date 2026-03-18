@@ -16,8 +16,11 @@ const RealNode = Services.NodeBoxFetcher;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setupExplorerMock = (returnValue: any) => {
-  mockFetchUnspentBoxes.mockResolvedValue(returnValue);
-
+  if (returnValue instanceof Error) {
+    mockFetchUnspentBoxes.mockRejectedValue(returnValue);
+  } else {
+    mockFetchUnspentBoxes.mockResolvedValue(returnValue);
+  }
   vi.spyOn(Services, 'ExplorerBoxFetcher').mockImplementation(
     (...args: ConstructorParameters<typeof RealExplorer>) => {
       const instance = new RealExplorer(...args);
@@ -40,8 +43,11 @@ export const setupExplorerMock = (returnValue: any) => {
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const setupNodeMock = (returnValue: any) => {
-  mockFetchUnspentBoxes.mockResolvedValue(returnValue);
-
+  if (returnValue instanceof Error) {
+    mockFetchUnspentBoxes.mockRejectedValue(returnValue);
+  } else {
+    mockFetchUnspentBoxes.mockResolvedValue(returnValue);
+  }
   vi.spyOn(Services, 'NodeBoxFetcher').mockImplementation(
     (...args: ConstructorParameters<typeof RealNode>) => {
       const instance = new RealNode(...args);

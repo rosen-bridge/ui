@@ -24,13 +24,12 @@ export class ExplorerBoxFetcher {
     tokenId: string,
   ): Promise<V1.OutputInfo[]> => {
     const boxes: V1.OutputInfo[] = [];
-    let currentPage = 0;
+    let total = 0;
+    let offset = 0;
 
     this.logger.debug(`Fetching boxes from explorer for token ${tokenId}`);
 
-    while (true) {
-      const offset = currentPage * this.PAGE_SIZE;
-
+    do {
       const page = await this.client.v1.getApiV1BoxesUnspentBytokenidP1(
         tokenId,
         {
@@ -39,15 +38,17 @@ export class ExplorerBoxFetcher {
         },
       );
 
-      if (!page.items?.length) {
-        this.logger.debug('No more boxes returned from explorer');
-        break;
-      }
+      const items = page.items ?? [];
+      boxes.push(...items);
 
-      boxes.push(...page.items);
+      total = page.total ?? 0;
 
-      currentPage++;
-    }
+      this.logger.debug(
+        `Fetched page: offset=${offset}, received=${items.length}, total=${total}`,
+      );
+
+      offset += this.PAGE_SIZE;
+    } while (offset < total);
 
     this.logger.debug(`Fetched ${boxes.length} boxes from explorer`);
     return boxes;
@@ -58,11 +59,11 @@ export class ExplorerBoxFetcher {
    *
    * @param box - The OutputInfo box to read the register from
    * @param key - The register key to extract the value from
-   * @returns Number value decoded from the register, 0 if not present
+   * @returns Number value decoded from the register, undefined if not present
    */
-  getRegisterValue = (box: V1.OutputInfo, key: string): number => {
+  getRegisterValue = (box: V1.OutputInfo, key: string): number | undefined => {
     const reg = box.additionalRegisters[key];
-    if (!reg) return 0;
+    if (!reg) return undefined;
     return Number(
       Constant.decode_from_base16(reg.serializedValue).to_i64().to_str(),
     );

@@ -56,11 +56,11 @@ export class NodeBoxFetcher {
    *
    * @param box - The IndexedErgoBox to read the register from
    * @param key - The register key to extract the value from
-   * @returns Number value decoded from the register, 0 if register is not present
+   * @returns Number value decoded from the register, undefined if register is not present
    */
-  getRegisterValue = (box: IndexedErgoBox, key: string): number => {
+  getRegisterValue = (box: IndexedErgoBox, key: string): number | undefined => {
     const reg = box.additionalRegisters[key];
-    if (!reg) return 0;
+    if (!reg) return undefined;
 
     return Number(Constant.decode_from_base16(reg).to_i64().to_str());
   };
