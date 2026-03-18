@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/data-source",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "DataSource implementation to be used across ui apps",
   "repository": {
     "type": "git",
@@ -27,7 +27,7 @@
     "@rosen-bridge/watcher-data-extractor": "^13.0.2",
     "@rosen-ui/asset-calculator": "^2.3.1",
     "@rosen-ui/public-status": "^0.1.0",
-    "@rosen-ui/rosen-statistics-entity": "^0.2.0"
+    "@rosen-ui/rosen-statistics-entity": "^0.2.1"
   },
   "engines": {
     "node": ">=22.18.0",

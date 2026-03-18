@@ -3,6 +3,7 @@ export interface RosenService2BaseConfig {
   chains: Chains;
   dataAggregator: DataAggregator;
   healthCheck: HealthCheck;
+  statistics: Statistics;
   redis: Redis;
   db: Db;
   logs: Logs[];
@@ -60,7 +61,20 @@ export interface HealthCheckLogging {
 export interface DataAggregator {
   interval: number;
 }
-
+export interface lockedAssetsMetrics {
+  interval: number;
+}
+export interface GeneralMetrics {
+  interval: number;
+}
+export interface EventCountMetrics {
+  interval: number;
+}
+export interface Statistics {
+  generalMetrics: GeneralMetrics;
+  lockedAssetsMetrics: lockedAssetsMetrics;
+  eventCountMetrics: EventCountMetrics;
+}
 export interface Chains {
   ergo: ChainsErgo;
   cardano: ChainsCardano;

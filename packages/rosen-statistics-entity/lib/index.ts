@@ -18,4 +18,5 @@ export {
   AggregatedEvents,
   EventCountStatus,
   AggregatedUserEvents,
+  LockedAssetsType,
 } from './types';

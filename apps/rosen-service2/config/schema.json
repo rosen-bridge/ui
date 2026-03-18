@@ -259,6 +259,59 @@
       }
     }
   },
+  "statistics": {
+    "type": "object",
+    "children": {
+      "lockedAssetsMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "locked assets metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "locked assets metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
+      },
+      "generalMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "general metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "general metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
+      },
+      "eventCountMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "event count metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "event count metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
   "chains": {
     "type": "object",
     "children": {
