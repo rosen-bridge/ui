@@ -1,16 +1,24 @@
 import { createContext, ReactNode, useContext } from 'react';
 
 import type {
+  ApiKeyDialogOverriddenProps,
+  ApiKeyDialogButtonOverriddenProps,
+  ApiKeyDialogWarningOverriddenProps,
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
   CenterOverriddenProps,
   CloseButtonOverriddenProps,
-  CollapsibleOverrides,
+  CollapsibleOverriddenProps,
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
   CopyButtonOverriddenProps,
-  CollapsibleOverriddenProps,
+  DialogOverriddenProps,
+  DialogContentOverriddenProps,
+  DialogDescriptionOverriddenProps,
+  DialogFooterOverriddenProps,
+  DialogHeaderOverriddenProps,
+  DialogTitleOverriddenProps,
   EventCardOverriddenProps,
   EventDetailsOverriddenProps,
   EventStatusOverriddenProps,
@@ -25,6 +33,7 @@ import type {
   LinkOverriddenProps,
   NetworkOverriddenProps,
   PageHeadingOverriddenProps,
+  QrCodeDialogOverriddenProps,
   SkeletonOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
@@ -43,16 +52,24 @@ import type {
 } from '../components';
 
 type Components = {
+  ApiKeyDialog: ApiKeyDialogOverriddenProps;
+  ApiKeyDialogButton: ApiKeyDialogButtonOverriddenProps;
+  ApiKeyDialogWarning: ApiKeyDialogWarningOverriddenProps;
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
   Center: CenterOverriddenProps;
   CloseButton: CloseButtonOverriddenProps;
-  CollapsibleOverrides: CollapsibleOverrides;
+  Collapsible: CollapsibleOverriddenProps;
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
   CopyButton: CopyButtonOverriddenProps;
-  Collapsible: CollapsibleOverriddenProps;
+  Dialog: DialogOverriddenProps;
+  DialogContent: DialogContentOverriddenProps;
+  DialogDescription: DialogDescriptionOverriddenProps;
+  DialogFooter: DialogFooterOverriddenProps;
+  DialogHeader: DialogHeaderOverriddenProps;
+  DialogTitle: DialogTitleOverriddenProps;
   EventCard: EventCardOverriddenProps;
   EventDetails: EventDetailsOverriddenProps;
   EventStatus: EventStatusOverriddenProps;
@@ -67,6 +84,7 @@ type Components = {
   Link: LinkOverriddenProps;
   Network: NetworkOverriddenProps;
   PageHeading: PageHeadingOverriddenProps;
+  QrCodeDialog: QrCodeDialogOverriddenProps;
   Skeleton: SkeletonOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;

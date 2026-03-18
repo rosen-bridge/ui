@@ -1,18 +1,17 @@
-import { ComponentProps, ElementType } from 'react';
+import { ComponentProps } from 'react';
 
 import { OverridableType } from '@/@types';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 
 import './styles.scss';
+import { Typography, TypographyProps } from '@/components';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DialogTitleOverrides {}
 
-export type DialogTitleOwnProps = {
-  as?: ElementType;
-};
+export type DialogTitleOwnProps = TypographyProps & {};
 
-export type DialogTitleBaseProps = ElementBaseProps<'h2', DialogTitleOwnProps>;
+export type DialogTitleBaseProps = ElementBaseProps<typeof Typography, DialogTitleOwnProps>;
 
 export type DialogTitleOverriddenProps = OverridableType<
   DialogTitleBaseProps,
@@ -21,10 +20,9 @@ export type DialogTitleOverriddenProps = OverridableType<
 >;
 
 export const DialogTitleBase = ({
-  as = 'h2',
   ...rest
 }: DialogTitleOverriddenProps) => {
-  return <Root as={as} {...rest} />;
+  return <Typography component="h2" {...rest} />;
 };
 
 DialogTitleBase.displayName = 'DialogTitle';

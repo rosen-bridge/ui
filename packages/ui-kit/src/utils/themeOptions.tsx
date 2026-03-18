@@ -182,28 +182,13 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          backgroundImage: 'none',
-        },
-      },
-    },
-    MuiDialogTitle: {
-      styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.secondary.dark,
-          fontSize: theme.spacing(3),
-        }),
-      },
-    },
-    MuiDialogActions: {
-      styleOverrides: {
-        root: ({ theme }: { theme: Theme }) => ({
-          padding: theme.spacing(3),
-        }),
-      },
-    },
+    // MuiDialogActions: {
+    //   styleOverrides: {
+    //     root: ({ theme }: { theme: Theme }) => ({
+    //       padding: theme.spacing(3),
+    //     }),
+    //   },
+    // },
     MuiTextField: {
       defaultProps: {
         fullWidth: true,

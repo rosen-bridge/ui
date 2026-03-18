@@ -9,16 +9,12 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
 import { NoSsr } from '@mui/material';
-import {
-  App as AppBase,
-  ConfigProvider,
-  FrameworkProvider,
-} from '@rosen-bridge/ui-kit';
+import { App as AppBase, FrameworkProvider } from '@rosen-bridge/ui-kit';
 
 import { theme } from '@/theme/theme';
 
 import { TokenMapProvider } from '../hooks';
-import { uiKitConfigs } from '../uiKitConfigs';
+import { UIKitProvider } from '../uiKitProvider';
 import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
@@ -30,20 +26,22 @@ export const App = ({ children }: PropsWithChildren) => {
 
   return (
     <NoSsr>
-      <ConfigProvider configs={uiKitConfigs}>
-        <FrameworkProvider
-          router={{
-            pathname,
-            search: searchParams.toString(),
-            push: (href) =>
-              router.push(href as unknown as Route, { scroll: false }),
-          }}
-        >
-          <AppBase sidebar={<Sidebar />} theme={theme}>
-            <TokenMapProvider>{children}</TokenMapProvider>
-          </AppBase>
-        </FrameworkProvider>
-      </ConfigProvider>
+      <FrameworkProvider
+        router={{
+          pathname,
+          search: searchParams.toString(),
+          push: (href) =>
+            router.push(href as unknown as Route, { scroll: false }),
+        }}
+      >
+        <TokenMapProvider>
+          <UIKitProvider>
+            <AppBase sidebar={<Sidebar />} theme={theme}>
+              {children}
+            </AppBase>
+          </UIKitProvider>
+        </TokenMapProvider>
+      </FrameworkProvider>
     </NoSsr>
   );
 };
