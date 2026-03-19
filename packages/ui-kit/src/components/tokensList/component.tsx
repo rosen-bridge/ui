@@ -40,7 +40,7 @@ export const TokensListBase = ({
       {tokens.map((token) => {
         const hasCold = 'coldAmount' in token;
         return (
-          <div className="rosen-TokensList__item" key={token.tokenId}>
+          <div className="RosenTokensList-item" key={token.tokenId}>
             <Token
               label={token.name}
               loading={loading}

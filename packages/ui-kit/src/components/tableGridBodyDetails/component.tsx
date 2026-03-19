@@ -28,7 +28,7 @@ export const TableGridBodyDetailsBase = ({
 }: TableGridBodyDetailsOverriddenProps) => {
   return (
     <Root as={Collapsible} {...rest}>
-      <div className="rosen-TableGridBodyDetails__content">{children}</div>
+      <div className="RosenTableGridBodyDetails-content">{children}</div>
     </Root>
   );
 };

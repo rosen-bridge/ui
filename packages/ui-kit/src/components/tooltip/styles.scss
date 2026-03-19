@@ -1,4 +1,4 @@
-.rosen-Tooltip {
+.RosenTooltip {
   box-sizing: border-box;
   background-color: var(--rosen-palette-primary-dark);
   border-radius: calc(var(--rosen-shape-borderRadius) / 2);
@@ -25,6 +25,6 @@
   }
 }
 
-.rosen-Tooltip__positioner {
+.RosenTooltip-positioner {
   z-index: 1000;
 }

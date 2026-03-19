@@ -59,11 +59,11 @@ export const TooltipBase = ({
           />
           <TooltipBaseUI.Portal>
             <TooltipBaseUI.Positioner
-              className="rosen-Tooltip__positioner"
+              className="RosenTooltip-positioner"
               positionMethod="fixed"
               sideOffset={8}
             >
-              <TooltipBaseUI.Popup className="rosen-Tooltip" {...rest}>
+              <TooltipBaseUI.Popup className="RosenTooltip" {...rest}>
                 {title}
               </TooltipBaseUI.Popup>
             </TooltipBaseUI.Positioner>

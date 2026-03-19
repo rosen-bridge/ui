@@ -1,4 +1,4 @@
-.rosen-Center {
+.RosenCenter {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,6 +6,6 @@
   height: 100%;
 }
 
-.rosen-Center[data-inline] {
+.RosenCenter[data-inline] {
   display: inline-flex;
 }

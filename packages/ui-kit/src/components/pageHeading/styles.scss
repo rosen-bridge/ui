@@ -1,4 +1,4 @@
-.rosen-PageHeading {
+.RosenPageHeading {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -7,7 +7,7 @@
   margin-bottom: calc(var(--rosen-spacing) * 4);
 }
 
-.rosen-App[data-orientation='vertical'] .rosen-PageHeading {
+.RosenApp[data-orientation='vertical'] .RosenPageHeading {
   justify-content: center;
   margin-bottom: calc(var(--rosen-spacing) * 2);
 }

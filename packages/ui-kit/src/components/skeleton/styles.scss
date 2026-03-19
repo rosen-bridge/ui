@@ -1,36 +1,36 @@
-.rosen-Skeleton {
+.RosenSkeleton {
   background-color: var(--rosen-palette-Skeleton-bg);
   transform-origin: 0 55%;
   animation: shimmer 2s ease-in-out 0.5s infinite;
   border-radius: 4px;
 }
 
-.rosen-Skeleton[data-attached='true'] {
+.RosenSkeleton[data-attached='true'] {
   position: absolute;
   inset: 0;
 }
 
-*:has(> .rosen-Skeleton[data-attached='true']) {
+*:has(> .RosenSkeleton[data-attached='true']) {
   position: relative !important;
   overflow: hidden !important;
   color: transparent !important;
   background-color: transparent !important;
   min-width: 80px !important;
 
-  *:not(.rosen-Skeleton) {
+  *:not(.RosenSkeleton) {
     opacity: 0 !important;
   }
 }
 
-.rosen-Skeleton[data-variant='circular'] {
+.RosenSkeleton[data-variant='circular'] {
   border-radius: 10000px;
 }
 
-.rosen-Skeleton[data-variant='rounded'] {
+.RosenSkeleton[data-variant='rounded'] {
   border-radius: 4px;
 }
 
-.rosen-Skeleton[data-variant='text'] {
+.RosenSkeleton[data-variant='text'] {
   border-radius: 4px;
   transform: scale(1, 0.6);
 }

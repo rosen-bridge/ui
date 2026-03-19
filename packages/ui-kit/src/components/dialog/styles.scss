@@ -1,6 +1,6 @@
 // TODO
 
-.rosen-Dialog {
+.RosenDialog {
   box-sizing: border-box;
   position: fixed;
   top: 50%;
@@ -29,7 +29,7 @@
   }
 }
 
-.rosen-Dialog__backdrop {
+.RosenDialog-backdrop {
   position: fixed;
   min-height: 100dvh;
   inset: 0;

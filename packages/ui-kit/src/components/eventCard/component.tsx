@@ -59,8 +59,8 @@ export const EventCardBase = ({
 }: EventCardOverriddenProps) => {
   return (
     <Root as={Card} backgroundColor="background.paper" {...rest}>
-      <CardBody className="rosen-CardBody">
-        <div className="rosen-EventCard__header">
+      <CardBody className="RosenCardBody">
+        <div className="RosenEventCard-header">
           <Token
             loading={loading}
             value={value?.token}
@@ -82,7 +82,7 @@ export const EventCardBase = ({
           value={value?.id}
           style={{ marginTop: '-4px' }}
         />
-        <div className="rosen-EventCard__footer">
+        <div className="RosenEventCard-footer">
           <Connector
             variant="filled"
             start={

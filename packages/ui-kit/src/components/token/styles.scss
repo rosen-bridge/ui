@@ -1,4 +1,4 @@
-.rosen-Token {
+.RosenToken {
   display: inline-flex;
   flex-direction: row;
   align-items: center;
@@ -7,6 +7,6 @@
   min-width: 0;
 }
 
-.rosen-Token[data-variant='reverse'] {
+.RosenToken[data-variant='reverse'] {
   flex-direction: row-reverse;
 }

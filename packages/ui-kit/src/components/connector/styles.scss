@@ -1,4 +1,4 @@
-.rosen-Connector {
+.RosenConnector {
   display: inline-flex;
   padding: calc(var(--rosen-spacing) * 0.5);
   border-radius: calc(var(--rosen-spacing) * 4);
@@ -6,10 +6,10 @@
   align-items: center;
 }
 
-.rosen-Connector[data-variant='filled'] {
+.RosenConnector[data-variant='filled'] {
   background-color: var(--rosen-palette-neutral-light);
 }
 
-.rosen-Connector[data-variant='standard'] {
+.RosenConnector[data-variant='standard'] {
   background-color: transparent;
 }

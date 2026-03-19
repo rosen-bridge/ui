@@ -1,4 +1,4 @@
-.rosen-Network {
+.RosenNetwork {
   display: flex;
   width: fit-content;
   align-items: center;
@@ -7,12 +7,12 @@
   gap: 0.5em;
 }
 
-.rosen-Network[data-variant='reverse'] {
+.RosenNetwork[data-variant='reverse'] {
   flex-direction: row-reverse;
 }
 
 // TODO
-.rosen-Network .MuiSkeleton-root {
+.RosenNetwork .MuiSkeleton-root {
   width: 2em;
   height: 2em;
 }

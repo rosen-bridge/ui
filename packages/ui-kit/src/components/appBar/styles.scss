@@ -1,4 +1,4 @@
-.rosen-AppBar {
+.RosenAppBar {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -7,7 +7,7 @@
   padding: calc(var(--rosen-spacing) * 2);
 }
 
-.rosen-App[data-orientation='vertical'] .rosen-AppBar {
+.RosenApp[data-orientation='vertical'] .RosenAppBar {
   flex-direction: row;
   padding: calc(var(--rosen-spacing) * 1.5) calc(var(--rosen-spacing) * 2);
 }

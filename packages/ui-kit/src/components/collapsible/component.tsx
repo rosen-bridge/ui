@@ -28,7 +28,7 @@ export const CollapsibleBase = ({
 }: CollapsibleOverriddenProps) => {
   return (
     <Root as={CollapsibleBaseUI.Root} {...rest}>
-      <CollapsibleBaseUI.Panel className="rosen-Collapsible__panel">
+      <CollapsibleBaseUI.Panel className="RosenCollapsible-panel">
         {children}
       </CollapsibleBaseUI.Panel>
     </Root>

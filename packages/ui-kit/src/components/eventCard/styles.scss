@@ -1,16 +1,16 @@
-.rosen-CardBody {
+.RosenCardBody {
   display: flex;
   flex-direction: column;
   gap: calc(var(--rosen-spacing) * 1);
 }
 
-.rosen-EventCard__header {
+.RosenEventCard-header {
   display: flex;
   flex-direction: row;
   gap: var(--rosen-spacing);
 }
 
-.rosen-EventCard__footer {
+.RosenEventCard-footer {
   display: flex;
   flex-direction: row;
   justify-content: space-between;

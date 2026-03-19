@@ -34,8 +34,8 @@ const Content = ({ children, sidebar, ...rest }: AppOverriddenProps) => {
       {...rest}
     >
       {sidebar}
-      <div className="rosen-App__main">
-        <div className="rosen-App__paper">{children}</div>
+      <div className="RosenApp-main">
+        <div className="RosenApp-paper">{children}</div>
       </div>
       <AppSnackbar />
     </Root>

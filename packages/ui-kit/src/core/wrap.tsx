@@ -18,8 +18,6 @@ const BREAKPOINT_ORDER: Breakpoint[] = [
   'desktop',
 ];
 
-const PREFIX = 'rosen';
-
 export type ElementBaseProps<E extends ElementType, P> = P &
   Omit<ComponentPropsWithRef<E>, keyof P>;
 
@@ -49,7 +47,7 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
       skip === true || (typeof skip === 'string' ? breakpoint : false);
 
     const classes = useMemo(() => {
-      return [`${PREFIX}-${componentName}`, className]
+      return [`Rosen${componentName}`, className]
         .filter(Boolean)
         .join(' ')
         .trim();

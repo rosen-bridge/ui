@@ -1,14 +1,14 @@
-.rosen-DialogHeader {
+.RosenDialogHeader {
   display: flex;
   align-items: center;
   gap: calc(var(--rosen-spacing) * 2);
 }
 
-.rosen-DialogHeader__spacer {
+.RosenDialogHeader-spacer {
   flex-grow: 1;
 }
 
-.rosen-DialogHeader > .rosen-Icon:first-child {
+.RosenDialogHeader > .RosenIcon:first-child {
   display: flex;
   box-sizing: content-box;
   border-radius: 50%;

@@ -40,7 +40,7 @@ export const DialogHeaderBase = ({
     <Root {...rest}>
       {icon && <Icon name={icon} />}
       {children}
-      <div className="rosen-DialogHeader__spacer" />
+      <div className="RosenDialogHeader-spacer" />
       {actions}
       {closeable && (
         <DialogBaseUI.Close

@@ -1,4 +1,4 @@
-.rosen-App {
+.RosenApp {
   width: 100vw;
   height: 100vh;
   display: flex;
@@ -12,13 +12,13 @@
   }
 }
 
-.rosen-App__main {
+.RosenApp-main {
   position: relative;
   flex-grow: 1;
   overflow-y: auto;
 }
 
-.rosen-App__paper {
+.RosenApp-paper {
   position: relative;
   min-height: 100vh;
   background-color: var(--rosen-palette-background-default);
@@ -27,20 +27,20 @@
   transition: ease-in-out 100ms;
 }
 
-.rosen-App[data-orientation='horizontal'] .rosen-App__paper {
+.RosenApp[data-orientation='horizontal'] .RosenApp-paper {
   padding: calc(var(--rosen-spacing) * 4);
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
 }
 
-.rosen-App[data-orientation='vertical'] .rosen-App__paper {
+.RosenApp[data-orientation='vertical'] .RosenApp-paper {
   padding: calc(var(--rosen-spacing) * 4) calc(var(--rosen-spacing) * 2)
     calc(var(--rosen-spacing) * 12);
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
 
-[data-theme='light'] .rosen-App {
+[data-theme='light'] .RosenApp {
   background: linear-gradient(
     180deg,
     var(--rosen-palette-primary-dark) 0%,
@@ -56,7 +56,7 @@
   }
 }
 
-[data-theme='dark'] .rosen-App {
+[data-theme='dark'] .RosenApp {
   background: var(--rosen-palette-background-paper);
   color: var(--rosen-palette-text-primary);
   &[data-orientation='vertical'] {

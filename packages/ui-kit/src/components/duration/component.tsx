@@ -63,7 +63,7 @@ export const DurationBase = ({
       )}
       {ready &&
         parts.map((part) => (
-          <div className="rosen-Duration__part" key={part.value + part.unit}>
+          <div className="RosenDuration-part" key={part.value + part.unit}>
             <Typography component="div" {...slots?.value}>
               {part.value}
             </Typography>

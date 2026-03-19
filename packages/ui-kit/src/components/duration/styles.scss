@@ -1,10 +1,10 @@
-.rosen-Duration {
+.RosenDuration {
   display: flex;
   align-items: baseline;
   gap: calc(var(--rosen-spacing) * 1);
 }
 
-.rosen-Duration__part {
+.RosenDuration-part {
   display: flex;
   align-items: baseline;
   gap: calc(var(--rosen-spacing) * 0.5);

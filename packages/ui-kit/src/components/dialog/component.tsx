@@ -41,7 +41,7 @@ export const DialogBase = ({
       onOpenChange={(open) => !open && onClose?.()}
     >
       <DialogBaseUI.Portal>
-        <DialogBaseUI.Backdrop className="rosen-Dialog__backdrop" />
+        <DialogBaseUI.Backdrop className="RosenDialog-backdrop" />
         <Root as={DialogBaseUI.Popup} {...rest} />
       </DialogBaseUI.Portal>
     </DialogBaseUI.Root>

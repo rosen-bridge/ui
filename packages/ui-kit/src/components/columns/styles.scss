@@ -1,7 +1,7 @@
-.rosen-Columns > * {
+.RosenColumns > * {
   break-inside: avoid;
 }
 
-.rosen-Columns[data-rule] {
+.RosenColumns[data-rule] {
   column-rule: 1px dashed var(--rosen-palette-divider);
 }

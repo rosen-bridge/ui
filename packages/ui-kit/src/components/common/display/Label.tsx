@@ -74,7 +74,7 @@ const LabelBase = ({
     >
       {inset && (
         <Box
-          className="rosen-label-inset"
+          className="Rosenlabel-inset"
           sx={{
             height: 'auto',
             width: 12,
@@ -90,7 +90,7 @@ const LabelBase = ({
         />
       )}
       <Stack
-        className="rosen-label-container"
+        className="Rosenlabel-container"
         align={orientation === 'vertical' ? 'start' : 'center'}
         direction={orientation === 'vertical' ? 'column' : 'row'}
         spacing={orientation === 'vertical' ? 0 : 2}
@@ -101,7 +101,7 @@ const LabelBase = ({
         }}
       >
         <Stack
-          className="rosen-label-label"
+          className="Rosenlabel-label"
           spacing={1}
           direction="row"
           align="center"
