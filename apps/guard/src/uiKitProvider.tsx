@@ -30,7 +30,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const getUiKitConfigs: () => ConfigProviderProps['configs'] = () => ({
+export const getUiKitConfig: () => ConfigProviderProps['value'] = () => ({
   components: {
     Connector: {
       defaultProps: {
@@ -89,7 +89,6 @@ export const getUiKitConfigs: () => ConfigProviderProps['configs'] = () => ({
 });
 
 export const UIKitProvider = ({ children }: PropsWithChildren) => {
-  const configs = useMemo(() => getUiKitConfigs(), []);
-
-  return <ConfigProvider configs={configs}>{children}</ConfigProvider>;
+  const config = useMemo(() => getUiKitConfig(), []);
+  return <ConfigProvider value={config}>{children}</ConfigProvider>;
 };

@@ -1,17 +1,31 @@
-import { PropsWithChildren, useMemo } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
-import { Breakpoint, styled } from '@mui/material';
+import { Breakpoint } from '@mui/material';
 
-import { useCurrentBreakpoint } from '../../../hooks';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+import { useCurrentBreakpoint } from '@/hooks';
+import { OverridableType } from '@/types';
 
-type SizeProps = {
+import './styles.scss';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface CarouselItemOverrides {}
+
+export type CarouselItemOwnProps = {
   size: string | Partial<Record<Breakpoint, string>>;
 };
 
-const CarouselItemRoot = styled('div')(() => ({
-  transform: 'translate3d(0, 0, 0)',
-  minWidth: '0',
-}));
+export type CarouselItemBaseProps = ElementBaseProps<
+  'div',
+  CarouselItemOwnProps
+>;
+
+export type CarouselItemOverriddenProps = OverridableType<
+  CarouselItemBaseProps,
+  CarouselItemOverrides,
+  never
+>;
+
 /**
  * `CarouselItem` is a flexible container for carousel slides.
  * It accepts a `size` prop that controls the responsive width of the item.
@@ -45,10 +59,10 @@ const CarouselItemRoot = styled('div')(() => ({
  * @param size A string for fixed width, or a partial map of breakpoints to widths.
  */
 
-export const CarouselItem = ({
-  children,
+export const CarouselItemBase = ({
   size,
-}: PropsWithChildren<SizeProps>) => {
+  ...rest
+}: CarouselItemOverriddenProps) => {
   const currentBreakpoint = useCurrentBreakpoint();
 
   const resolvedSize = useMemo(() => {
@@ -61,9 +75,11 @@ export const CarouselItem = ({
     return size.desktop ?? '100%';
   }, [size, currentBreakpoint]);
 
-  return (
-    <CarouselItemRoot style={{ flex: `0 0 ${resolvedSize}` }}>
-      {children}
-    </CarouselItemRoot>
-  );
+  return <Root styles={{ flex: `0 0 ${resolvedSize}` }} {...rest} />;
 };
+
+CarouselItemBase.displayName = 'CarouselItem';
+
+export const CarouselItem = Wrap(CarouselItemBase);
+
+export type CarouselItemProps = ComponentProps<typeof CarouselItem>;

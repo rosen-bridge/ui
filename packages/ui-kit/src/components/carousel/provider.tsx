@@ -1,36 +1,8 @@
-import {
-  PropsWithChildren,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { PropsWithChildren, useCallback, useEffect, useState } from 'react';
 
 import useEmblaCarousel from 'embla-carousel-react';
 
-export const CarouselContext = createContext<CarouselContextType | null>(null);
-
-export type CarouselContextType = {
-  count: number;
-  current: number;
-  canScrollPrev: boolean;
-  canScrollNext: boolean;
-  scrollPrev: () => void;
-  scrollNext: () => void;
-  scrollTo: (index: number) => void;
-  ref: (element: HTMLElement | null) => void;
-};
-
-export const useCarousel = () => {
-  const context = useContext(CarouselContext);
-
-  if (!context) {
-    throw new Error('useCarousel must be used within CarouselProvider');
-  }
-
-  return context;
-};
+import { CarouselContext } from './context';
 
 export const CarouselProvider = ({ children }: PropsWithChildren) => {
   const [ref, api] = useEmblaCarousel({ dragFree: true });

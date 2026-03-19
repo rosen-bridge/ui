@@ -1,4 +1,3 @@
-export * from './carousel';
 export * from './smartSearch';
 export * from './Button';
 export * from './display';

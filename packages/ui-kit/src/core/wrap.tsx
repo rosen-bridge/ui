@@ -8,8 +8,8 @@ import {
 
 import { Breakpoint } from '@mui/material';
 
-import { useBreakpoint, useCurrentBreakpoint } from '../hooks';
-import { useConfigs } from '../Providers';
+import { useConfig } from '@/config';
+import { useBreakpoint, useCurrentBreakpoint } from '@/hooks';
 
 const BREAKPOINT_ORDER: Breakpoint[] = [
   'mobile',
@@ -39,7 +39,7 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
       !skip ? 'mobile-up' : skip === true ? 'mobile-down' : skip,
     );
 
-    const config = useConfigs();
+    const config = useConfig();
 
     const current = useCurrentBreakpoint();
 

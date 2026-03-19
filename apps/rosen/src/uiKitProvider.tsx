@@ -34,9 +34,9 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const getUiKitConfigs: (
+export const getUiKitConfig: (
   tokenMap: TokenMap,
-) => ConfigProviderProps['configs'] = (tokenMap) => ({
+) => ConfigProviderProps['value'] = (tokenMap) => ({
   components: {
     Connector: {
       defaultProps: {
@@ -122,7 +122,7 @@ export const getUiKitConfigs: (
 export const UIKitProvider = ({ children }: PropsWithChildren) => {
   const tokenMap = useTokenMap();
 
-  const configs = useMemo(() => getUiKitConfigs(tokenMap), [tokenMap]);
+  const config = useMemo(() => getUiKitConfig(tokenMap), [tokenMap]);
 
-  return <ConfigProvider configs={configs}>{children}</ConfigProvider>;
+  return <ConfigProvider value={config}>{children}</ConfigProvider>;
 };
