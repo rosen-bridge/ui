@@ -1,6 +1,6 @@
 import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import {
   Avatar,
   AvatarOverriddenProps,

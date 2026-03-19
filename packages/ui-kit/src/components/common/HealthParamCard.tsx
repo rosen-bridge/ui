@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { HealthParamInfo } from '@rosen-ui/types';
 
-import { Color } from '@/@types';
+import { Color } from '@/types';
 
 import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';

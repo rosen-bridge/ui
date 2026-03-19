@@ -1,7 +1,7 @@
 import { ComponentProps, FormEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import {
   Button,
   CloseButton,

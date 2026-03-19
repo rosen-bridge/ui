@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 import './styles.scss';

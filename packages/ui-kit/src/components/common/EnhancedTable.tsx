@@ -2,7 +2,7 @@ import { ReactNode } from 'react';
 
 import { Breakpoint } from '@mui/material';
 
-import type { ResponsiveValueOptionsBase } from '../../@types';
+import type { ResponsiveValueOptionsBase } from '../../types';
 import { useResponsiveValue } from '../../hooks';
 import {
   Table as MuiTable,

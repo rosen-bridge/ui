@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import { TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { Amount, Identifier, NetworkProps, Token } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 

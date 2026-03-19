@@ -1,6 +1,6 @@
 import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import {
   Icon,
   IconOverriddenProps,

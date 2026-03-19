@@ -1,6 +1,6 @@
 import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

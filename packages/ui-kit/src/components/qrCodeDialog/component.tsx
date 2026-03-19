@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { QRCodeCanvas } from 'qrcode.react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import {
   Button,
   Dialog,

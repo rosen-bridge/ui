@@ -8,7 +8,7 @@ import {
 
 import * as Icons from '@rosen-bridge/icons';
 
-import { ColorOverridden, OverridableType } from '@/@types';
+import { ColorOverridden, OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { toCSSColor, toCSSUnit } from '@/utils';
 

@@ -1,6 +1,6 @@
 import { ComponentProps, useMemo } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { Chip, ChipProps, IconOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 

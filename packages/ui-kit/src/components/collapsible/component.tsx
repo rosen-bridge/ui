@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 import './styles.scss';

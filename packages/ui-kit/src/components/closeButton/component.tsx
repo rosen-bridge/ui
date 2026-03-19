@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { Icon, IconButton, IconOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 

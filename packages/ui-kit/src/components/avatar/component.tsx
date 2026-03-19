@@ -3,7 +3,7 @@ import { ComponentProps, useMemo } from 'react';
 
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
-import { ColorOverridden, OverridableType } from '@/@types';
+import { ColorOverridden, OverridableType } from '@/types';
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { toCSSColor } from '@/utils';

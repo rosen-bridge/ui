@@ -1,6 +1,6 @@
 import { ComponentProps, useState } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { ApiKeyDialog, Icon, IconButton } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 

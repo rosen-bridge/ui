@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import {
   Amount,
   AmountProps,

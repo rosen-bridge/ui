@@ -1,6 +1,6 @@
 import { ComponentProps, useEffect, useRef } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 import './styles.scss';

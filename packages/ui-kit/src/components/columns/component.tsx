@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { GapOverridden, OverridableType, WidthOverridden } from '@/@types';
+import { GapOverridden, OverridableType, WidthOverridden } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { toCSSUnit } from '@/utils';
 

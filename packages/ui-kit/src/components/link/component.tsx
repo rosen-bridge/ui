@@ -1,6 +1,6 @@
 import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
 
-import { ColorOverridden, OverridableType } from '@/@types';
+import { ColorOverridden, OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 import './styles.scss';

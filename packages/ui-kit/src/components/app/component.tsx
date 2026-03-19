@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { AppSnackbar, CssBaseline } from '@/components';
 import { SnackbarProvider } from '@/contexts';
 import { ElementBaseProps, Root, Wrap } from '@/core';

@@ -6,7 +6,7 @@ import {
 } from '@mui/material';
 import { Slot } from '@radix-ui/react-slot';
 
-import { ColorOverridden, OverridableType } from '@/@types';
+import { ColorOverridden, OverridableType } from '@/types';
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { toCSSColor } from '@/utils';

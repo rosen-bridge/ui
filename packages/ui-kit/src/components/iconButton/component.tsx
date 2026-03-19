@@ -2,7 +2,7 @@ import { ComponentProps, HTMLAttributeAnchorTarget } from 'react';
 
 import { IconButton as IconButtonMUI } from '@mui/material';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

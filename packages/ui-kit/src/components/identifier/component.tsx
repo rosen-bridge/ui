@@ -1,6 +1,6 @@
 import { ComponentProps, useState } from 'react';
 
-import { OverridableType } from '@/@types';
+import { OverridableType } from '@/types';
 import {
   Skeleton,
   QrCodeDialog,
