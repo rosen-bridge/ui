@@ -6,14 +6,17 @@ import {
   Button,
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
   Stack,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface QrCodeDialogOverrides {}
+export interface QrCodeDialogOverrides { }
 
 export type QrCodeDialogOwnProps = {
   value: string;
@@ -37,6 +40,14 @@ export const QrCodeDialogBase = ({
 }: QrCodeDialogOverriddenProps) => {
   return (
     <Root as={Dialog} maxWidth="tablet" onClose={onClose} {...rest}>
+      <DialogHeader>
+        <DialogTitle>
+          Scan QR Code
+        </DialogTitle>
+      </DialogHeader>
+      <DialogDescription>
+        Scan this code with your mobile device to access the content.
+      </DialogDescription>
       <DialogContent>
         <Stack align="center" justify="center" spacing={2}>
           <QRCodeCanvas size={200} value={value} />
