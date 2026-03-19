@@ -12,7 +12,22 @@ import {
   InfoCircle,
 } from '@rosen-bridge/icons';
 
+export { alpha, createTheme, styled, type Theme } from '@mui/material';
+
 declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    laptop: true;
+    tablet: true;
+    mobile: true;
+    desktop: true;
+
+    xs: false;
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+  }
+
   interface TypeBackground {
     shadow: string;
   }
@@ -38,6 +53,7 @@ declare module '@mui/material/styles' {
   }
 
   interface PaletteOptions {
+    background?: Partial<TypeBackground>;
     neutral?: Partial<TypeNeutral>;
   }
 
@@ -49,6 +65,10 @@ declare module '@mui/material/styles' {
     RosenNavigationBar?: {
       styleOverrides?: ComponentsOverrides<Theme>['RosenNavigationBar'];
     };
+  }
+
+  interface Shape {
+    borderRadius: number;
   }
 }
 
@@ -313,13 +333,6 @@ export const lightThemeOptions: ThemeOptions = {
         standardWarning: ({ theme }: { theme: Theme }) => ({
           color: theme.palette.warning.main,
           backgroundColor: theme.palette.warning.light,
-        }),
-      },
-    },
-    MuiSkeleton: {
-      styleOverrides: {
-        text: ({ theme }: { theme: Theme }) => ({
-          borderRadius: theme.spacing(0.5),
         }),
       },
     },

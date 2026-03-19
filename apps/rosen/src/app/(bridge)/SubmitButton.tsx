@@ -117,9 +117,7 @@ export const SubmitButton = () => {
         onClose={() => setOpen(false)}
       >
         <DialogHeader icon="CommentAltExclamation">
-          <DialogTitle>
-            Confirm Transaction
-          </DialogTitle>
+          <DialogTitle>Confirm Transaction</DialogTitle>
         </DialogHeader>
         <DialogContent
           style={{

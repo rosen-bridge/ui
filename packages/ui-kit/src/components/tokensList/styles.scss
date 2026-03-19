@@ -1,0 +1,14 @@
+.rosen-TokensList {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  row-gap: 16px;
+}
+
+.rosen-TokensList__item {
+  display: grid;
+  grid-template-rows: auto auto;
+  column-gap: 8px;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: center;
+}

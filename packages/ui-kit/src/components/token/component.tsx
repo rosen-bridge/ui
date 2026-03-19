@@ -8,7 +8,6 @@ import {
   IconButton,
   Image,
   ImageOverriddenProps,
-  Truncate,
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
@@ -31,10 +30,14 @@ export type TokenOwnProps = {
   /** If provided, renders an external link that opens in a new tab */
   href?: string;
 
+  label?: string;
+
   /**
    * If true, the token is in loading state and shows a skeleton placeholder.
    */
   loading?: boolean;
+
+  logo?: string;
 
   slots?: {
     fallback?: AvatarOverriddenProps;
@@ -75,7 +78,9 @@ const DEFAULT_NETWORK: TokenMeta = {
 export const TokenBase = ({
   fallback,
   href,
+  label,
   loading,
+  logo,
   slots,
   tokens,
   value = '',
@@ -91,12 +96,16 @@ export const TokenBase = ({
 
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const { logo: url, label } = useMemo(
+  const resolved = useMemo(
     () => Object.assign({}, DEFAULT_NETWORK, fallback, tokens?.[value]),
     [fallback, tokens, value],
   );
 
-  const isLoading = loading || (!!url && !isLoaded);
+  const displayLabel = label || resolved.label;
+
+  const displayLogo = logo || resolved.logo;
+
+  const isLoading = loading || (!!displayLogo && !isLoaded);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -119,10 +128,10 @@ export const TokenBase = ({
 
   return (
     <Root reflects={{ variant }} {...rest} ref={ref}>
-      {showLogo && !!url && isVisible && (
+      {showLogo && !!displayLogo && isVisible && (
         <Image
-          alt={`Token ${label}`}
-          src={url}
+          alt={`Token ${displayLabel}`}
+          src={displayLogo}
           loading="lazy"
           width={40}
           height={40}
@@ -142,7 +151,7 @@ export const TokenBase = ({
           {...slots?.logo}
         />
       )}
-      {showLogo && (!url || isLoading) && (
+      {showLogo && (!displayLogo || isLoading) && (
         <Avatar
           background="secondary-light"
           color="secondary"
@@ -151,18 +160,19 @@ export const TokenBase = ({
           style={{ fontSize: '1em' }}
           {...slots?.fallback}
         >
-          {label?.at(0)?.toUpperCase()}
+          {displayLabel?.at(0)?.toUpperCase()}
         </Avatar>
       )}
       {showLabel && (
         <Typography
           component="div"
           loading={loading}
+          noWrap
           variant="inherit"
           style={{ minWidth: 0 }}
           {...slots?.label}
         >
-          {!loading && <Truncate>{label}</Truncate>}
+          {displayLabel}
         </Typography>
       )}
       {!!href && (

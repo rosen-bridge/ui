@@ -7,9 +7,8 @@ import {
   useState,
 } from 'react';
 
-import { Button, Card } from '@mui/material';
+import { Button, Card, styled } from '@mui/material';
 
-import { styled } from '../../styling';
 import { ListItemText, ListSubheader, Menu, MenuItem } from '../base';
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';

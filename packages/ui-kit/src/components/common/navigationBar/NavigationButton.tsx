@@ -1,7 +1,6 @@
-import { Button } from '@mui/material';
+import { alpha, Button, styled } from '@mui/material';
 
 import { useIsMobile, useFramework } from '../../../hooks';
-import { alpha, styled } from '../../../styling';
 import { Badge } from '../../base';
 import { Icon, IconOverriddenProps } from '../../icon';
 import { Link } from '../../link';

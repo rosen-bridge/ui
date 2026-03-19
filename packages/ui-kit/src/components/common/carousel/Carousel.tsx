@@ -1,6 +1,7 @@
 import { PropsWithChildren } from 'react';
 
-import { styled } from '../../../styling';
+import { styled } from '@mui/material';
+
 import { useCarousel } from './useCarousel';
 
 const CarouselViewport = styled('div')(() => ({

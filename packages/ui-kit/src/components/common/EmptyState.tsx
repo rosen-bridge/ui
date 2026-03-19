@@ -1,6 +1,7 @@
 import { HTMLAttributes } from 'react';
 
-import { styled } from '../../styling';
+import { styled } from '@mui/material';
+
 import { Icon } from '../icon';
 import { Typography } from '../typography';
 

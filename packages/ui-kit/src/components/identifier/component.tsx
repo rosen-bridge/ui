@@ -9,7 +9,6 @@ import {
   IconButton,
   Tooltip,
   TooltipOverriddenProps,
-  Truncate,
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
@@ -38,6 +37,7 @@ export type IdentifierOwnProps = {
 
   slots?: {
     leading?: TypographyOverriddenProps;
+    text?: TypographyOverriddenProps;
     trailing?: TypographyOverriddenProps;
     tooltip?: TooltipOverriddenProps;
   };
@@ -109,14 +109,20 @@ export const IdentifierBase = ({
       <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
         <div className="value">
           <Typography
-            asChild
             className="leading"
             component="div"
+            noWrap
+            {...slots?.text}
             {...slots?.leading}
           >
-            <Truncate tooltip={false}>{leading}</Truncate>
+            {leading}
           </Typography>
-          <Typography className="trailing" component="div" {...slots?.trailing}>
+          <Typography
+            className="trailing"
+            component="div"
+            {...slots?.text}
+            {...slots?.trailing}
+          >
             {trailing}
           </Typography>
         </div>

@@ -1,8 +1,4 @@
-import {
-  Toolbar,
-  ThemeToggleButton,
-  useIsMobile,
-} from '@rosen-bridge/ui-kit';
+import { Toolbar, ThemeToggleButton, useIsMobile } from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
 
@@ -14,7 +10,9 @@ export const Actions = ({ sidebar }: { sidebar?: boolean }) => {
   return (
     <Toolbar>
       {sidebar && <VersionConfig />}
-      {((sidebar && isMobile) || (!sidebar && !isMobile)) && <ThemeToggleButton />}
+      {((sidebar && isMobile) || (!sidebar && !isMobile)) && (
+        <ThemeToggleButton />
+      )}
     </Toolbar>
   );
 };

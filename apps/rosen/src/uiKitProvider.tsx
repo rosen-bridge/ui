@@ -1,16 +1,20 @@
 import { Route } from 'next';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
+import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';
-import { ConfigProvider, type ConfigProviderProps, type DefaultColor } from '@rosen-bridge/ui-kit';
+import { TokenMap } from '@rosen-bridge/tokens';
+import {
+  ConfigProvider,
+  type ConfigProviderProps,
+  type DefaultColor,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
 import { Actions } from './app/Actions';
 import { useTokenMap } from './hooks';
-import { PropsWithChildren, useMemo } from 'react';
-import { TokenMap } from '@rosen-bridge/tokens';
 
 declare module '@rosen-bridge/ui-kit' {
   interface ColorOverrides extends Record<DefaultColor, true> {
@@ -30,16 +34,18 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const getUiKitConfigs: (tokenMap: TokenMap) => ConfigProviderProps['configs'] = (tokenMap) => ({
+export const getUiKitConfigs: (
+  tokenMap: TokenMap,
+) => ConfigProviderProps['configs'] = (tokenMap) => ({
   components: {
     Connector: {
       defaultProps: {
         slots: {
           icon: {
-            color: 'text-secondary'
-          }
-        }
-      }
+            color: 'text-secondary',
+          },
+        },
+      },
     },
     DialogTitle: {
       defaultProps: {
@@ -47,7 +53,7 @@ export const getUiKitConfigs: (tokenMap: TokenMap) => ConfigProviderProps['confi
         variant: 'h2',
         // TODO: this old ThemeOptions
         // fontSize: theme.spacing(3),
-      }
+      },
     },
     Icon: {
       defaultProps: {
@@ -87,17 +93,27 @@ export const getUiKitConfigs: (tokenMap: TokenMap) => ConfigProviderProps['confi
     },
     PageHeading: {
       defaultProps: {
-        actions: <Actions />
-      }
+        actions: <Actions />,
+      },
     },
     Token: {
       defaultProps: {
         tokens: Object.fromEntries(
           tokenMap
-          .getConfig()
-          .map((tokens) => Object.entries(tokens).map(([chain, token]) => [token.tokenId, { label: token.name, logo: AllIcons.TOKENS[tokens.ergo.tokenId as keyof (typeof AllIcons)['TOKENS']] }]))
-          .flat(1)
-        )
+            .getConfig()
+            .map((tokens) =>
+              Object.entries(tokens).map(([, token]) => [
+                token.tokenId,
+                {
+                  label: token.name,
+                  logo: AllIcons.TOKENS[
+                    tokens.ergo.tokenId as keyof (typeof AllIcons)['TOKENS']
+                  ],
+                },
+              ]),
+            )
+            .flat(1),
+        ),
       },
     },
   },
@@ -108,9 +124,5 @@ export const UIKitProvider = ({ children }: PropsWithChildren) => {
 
   const configs = useMemo(() => getUiKitConfigs(tokenMap), [tokenMap]);
 
-  return (
-    <ConfigProvider configs={configs}>
-      {children}
-    </ConfigProvider>
-  );
+  return <ConfigProvider configs={configs}>{children}</ConfigProvider>;
 };

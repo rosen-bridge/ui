@@ -55,9 +55,7 @@ export const WalletInfo = () => {
             <Button
               color="inherit"
               startIcon={
-                wallet.selected && (
-                  <Icon as={wallet.selected.iconReact} />
-                )
+                wallet.selected && <Icon as={wallet.selected.iconReact} />
               }
               style={{ marginLeft: '-8px', textTransform: 'none' }}
               onClick={() => setOpen(true)}

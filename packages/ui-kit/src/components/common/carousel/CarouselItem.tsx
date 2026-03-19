@@ -1,9 +1,8 @@
 import { PropsWithChildren, useMemo } from 'react';
 
-import { Breakpoint } from '@mui/material';
+import { Breakpoint, styled } from '@mui/material';
 
 import { useCurrentBreakpoint } from '../../../hooks';
-import { styled } from '../../../styling';
 
 type SizeProps = {
   size: string | Partial<Record<Breakpoint, string>>;

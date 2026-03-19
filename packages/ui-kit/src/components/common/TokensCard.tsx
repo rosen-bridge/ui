@@ -2,9 +2,9 @@ import { Typography } from '@mui/material';
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import { Icon } from '../icon';
+import { TokensList } from '../tokensList';
 import { Button } from './Button';
 import { Card, CardBody, CardHeader, CardTitle } from './card';
-import { TokensList } from './TokensList';
 
 export type TokensCardProps = {
   chain?: Network;
@@ -51,7 +51,7 @@ export const TokensCard = ({
       </CardTitle>
     </CardHeader>
     <CardBody>
-      <TokensList chain={chain} tokens={tokens ?? []} isLoading={isLoading} />
+      <TokensList chain={chain} tokens={tokens ?? []} loading={isLoading} />
     </CardBody>
   </Card>
 );

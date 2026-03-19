@@ -5,7 +5,8 @@ import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
 import { ColorOverridden, OverridableType } from '@/@types';
 import { Skeleton } from '@/components';
-import { Colors, ElementBaseProps, ensureColor, Root, Wrap } from '@/core';
+import { ElementBaseProps, Root, Wrap } from '@/core';
+import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AvatarOverrides {}
@@ -43,14 +44,10 @@ export const AvatarBase = ({
 }: AvatarOverriddenProps) => {
   const sx = useMemo<SxProps<Theme>>(() => {
     return {
-      color: color
-        ? ensureColor(color?.replace('-', '.') as Colors)
-        : undefined,
+      color: toCSSColor(color),
       width: size,
       height: size,
-      backgroundColor: background
-        ? ensureColor(background?.replace('-', '.') as Colors)
-        : undefined,
+      backgroundColor: toCSSColor(background),
     };
   }, [color, size, background]);
 

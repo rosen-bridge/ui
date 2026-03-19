@@ -8,9 +8,8 @@ import {
   useState,
 } from 'react';
 
-import { Card } from '@mui/material';
+import { Card, styled } from '@mui/material';
 
-import { styled } from '../../../styling';
 import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';

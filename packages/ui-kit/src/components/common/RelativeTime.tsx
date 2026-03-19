@@ -1,8 +1,8 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
+
+import { styled } from '@mui/material';
 
 import { Skeleton, Typography } from '@/components';
-
-import { styled } from '../../styling';
 
 /**
  * Properties for the {@link RelativeTime} component.

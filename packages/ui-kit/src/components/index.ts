@@ -47,6 +47,7 @@ export * from './tableGridHeader';
 export * from './tableGridRow';
 export * from './themeToggleButton';
 export * from './token';
+export * from './tokensList';
 export * from './toolbar';
 export * from './tooltip';
 export * from './truncate';

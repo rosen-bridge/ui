@@ -64,9 +64,7 @@ const DetailsDrawer = ({ value, onClose }: ViewGridSidebarProps) => {
   return (
     <Dialog open={!!value} stickOn="laptop" onClose={onClose}>
       <DialogHeader icon="BitcoinCircle">
-        <DialogTitle>
-          Asset Details
-        </DialogTitle>
+        <DialogTitle>Asset Details</DialogTitle>
       </DialogHeader>
       <DialogContent>
         <Content value={value} />

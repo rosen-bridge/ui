@@ -75,7 +75,10 @@ const Main = styled('main')(({ theme }) => ({
 const PageLayout = ({ children }: PropsWithChildren) => {
   return (
     <Fragment>
-      <PageHeading title="Rosen Bridge" style={{ position: 'relative', zIndex: 1 }} />
+      <PageHeading
+        title="Rosen Bridge"
+        style={{ position: 'relative', zIndex: 1 }}
+      />
       <Main>{children}</Main>
       <Background>
         <CubeNetSvg color="primary" className="top" />

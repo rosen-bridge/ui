@@ -47,12 +47,11 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
   return (
     <Dialog open={open} maxWidth="laptop" onClose={onClose}>
       <DialogHeader closeable icon="Wallet">
-        <DialogTitle>
-          Choose Wallet
-        </DialogTitle>
+        <DialogTitle>Choose Wallet</DialogTitle>
       </DialogHeader>
       <DialogDescription>
-        Please choose any of the supported wallets for {network.selectedSource?.name} chain.
+        Please choose any of the supported wallets for{' '}
+        {network.selectedSource?.name} chain.
       </DialogDescription>
       <DialogContent>
         <Stack spacing={2} style={{ margin: '1rem 0' }}>

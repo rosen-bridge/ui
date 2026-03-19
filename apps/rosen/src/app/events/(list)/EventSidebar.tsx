@@ -72,34 +72,41 @@ const Content = ({ value }: EventSidebarProps) => {
     return (
       <Center style={{ minHeight: 'calc(100vh - 304px)' }}>
         <Typography variant="body1" color="text-secondary">
-          {value ? <>This event has multiple flows. Click <b>See Details</b> for more information.</> : <>Select an event to see its details.</>}
+          {value ? (
+            <>
+              This event has multiple flows. Click <b>See Details</b> for more
+              information.
+            </>
+          ) : (
+            <>Select an event to see its details.</>
+          )}
         </Typography>
       </Center>
     );
   }
 
-  return <EventDetails loading={isLoading} value={eventData} />
+  return <EventDetails loading={isLoading} value={eventData} />;
 };
 
 const Drawer = ({ value, onClose }: EventSidebarProps) => {
   return (
     <Dialog open={!!value} stickOn="laptop" onClose={onClose}>
       <DialogHeader
-        actions={value?.eventId && (
-          <Button
-            variant="text"
-            target="_blank"
-            href={`/events/${value?.eventId}`}
-            endIcon={<Icon name="AngleRight" />}
-          >
-            SEE DETAILS
-          </Button>
-        )}
+        actions={
+          value?.eventId && (
+            <Button
+              variant="text"
+              target="_blank"
+              href={`/events/${value?.eventId}`}
+              endIcon={<Icon name="AngleRight" />}
+            >
+              SEE DETAILS
+            </Button>
+          )
+        }
         icon="Exchange"
       >
-        <DialogTitle>
-          Event Details
-        </DialogTitle>
+        <DialogTitle>Event Details</DialogTitle>
       </DialogHeader>
       <DialogContent>
         <Content value={value} />

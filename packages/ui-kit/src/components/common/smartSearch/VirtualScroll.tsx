@@ -1,6 +1,6 @@
 import { ReactNode, useCallback, useEffect, useRef } from 'react';
 
-import { styled } from '../../../styling';
+import { styled } from '@mui/material';
 
 const Viewport = styled('div')(() => ({
   overflow: 'hidden',

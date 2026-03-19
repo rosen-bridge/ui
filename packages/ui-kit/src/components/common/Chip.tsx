@@ -1,8 +1,9 @@
 import { ComponentProps, forwardRef, HtmlHTMLAttributes, useMemo } from 'react';
 
+import { styled } from '@mui/material';
+
 import { Skeleton } from '@/components';
 
-import { styled } from '../../styling';
 import { Icon, IconProps } from '../icon';
 import { Typography } from '../typography';
 import { InjectOverrides } from './InjectOverrides';

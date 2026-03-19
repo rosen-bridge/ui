@@ -1,4 +1,5 @@
-import { styled } from '../../../styling';
+import { styled } from '@mui/material';
+
 import { CloseButton } from '../../closeButton';
 import { Typography } from '../../typography';
 import { Filter, Selected } from './types';

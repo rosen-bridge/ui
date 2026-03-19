@@ -45,6 +45,7 @@ import type {
   TableGridRowOverriddenProps,
   ThemeToggleButtonOverriddenProps,
   TokenOverriddenProps,
+  TokensListOverriddenProps,
   ToolbarOverriddenProps,
   TooltipOverriddenProps,
   TruncateOverriddenProps,
@@ -97,6 +98,7 @@ type Components = {
   TableGridRow: TableGridRowOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Token: TokenOverriddenProps;
+  TokensList: TokensListOverriddenProps;
   Toolbar: ToolbarOverriddenProps;
   Tooltip: TooltipOverriddenProps;
   Truncate: TruncateOverriddenProps;

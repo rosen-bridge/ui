@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { styled } from '../../../styling';
+import { styled } from '@mui/material';
+
 import { useCarousel } from './useCarousel';
 
 const CarouselIndicatorsRoot = styled('div')(({ theme }) => ({

@@ -5,7 +5,6 @@ import {
   Icon,
   IconOverriddenProps,
   Skeleton,
-  Truncate,
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
@@ -85,13 +84,13 @@ export const NetworkBase = ({
       )}
       {showLabel && (
         <Typography
-          asChild={!loading}
           className="label"
           component="div"
           loading={loading}
+          noWrap
           {...slots?.label}
         >
-          {!loading && <Truncate>{label}</Truncate>}
+          {label}
         </Typography>
       )}
     </Root>
