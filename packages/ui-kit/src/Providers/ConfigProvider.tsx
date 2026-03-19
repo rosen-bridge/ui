@@ -19,6 +19,7 @@ import type {
   DialogFooterOverriddenProps,
   DialogHeaderOverriddenProps,
   DialogTitleOverriddenProps,
+  DurationOverriddenProps,
   EventCardOverriddenProps,
   EventDetailsOverriddenProps,
   EventStatusOverriddenProps,
@@ -70,6 +71,7 @@ type Components = {
   DialogFooter: DialogFooterOverriddenProps;
   DialogHeader: DialogHeaderOverriddenProps;
   DialogTitle: DialogTitleOverriddenProps;
+  Duration: DurationOverriddenProps;
   EventCard: EventCardOverriddenProps;
   EventDetails: EventDetailsOverriddenProps;
   EventStatus: EventStatusOverriddenProps;
