@@ -1,9 +1,9 @@
 // TODO: use ToggleButton button and add slots
 import { ComponentProps } from 'react';
 
-import { OverridableType } from '@/types';
 import { Icon, IconButton } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

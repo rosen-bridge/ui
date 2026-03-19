@@ -1,8 +1,8 @@
 import { ComponentProps, useMemo } from 'react';
 
-import { OverridableType } from '@/types';
 import { Chip, ChipProps, IconOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import { STATUS_MAP } from './constants';
 

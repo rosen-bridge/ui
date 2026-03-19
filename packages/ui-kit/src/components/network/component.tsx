@@ -1,6 +1,5 @@
 import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 
-import { OverridableType } from '@/types';
 import {
   Icon,
   IconOverriddenProps,
@@ -9,6 +8,7 @@ import {
   TypographyOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import { Logo } from './logo';
 import './styles.scss';

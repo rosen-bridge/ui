@@ -1,7 +1,7 @@
 import { ComponentProps, useMemo } from 'react';
 
-import { OverridableType, WidthOverridden } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType, WidthOverridden } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';

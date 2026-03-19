@@ -10,8 +10,8 @@ import {
 import { mergeProps } from '@base-ui/react/merge-props';
 import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
 
-import { OverridableType } from '@/types';
 import { ElementBaseProps, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

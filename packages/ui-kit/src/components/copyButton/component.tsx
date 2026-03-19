@@ -1,8 +1,8 @@
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
 
-import { OverridableType } from '@/types';
 import { Icon, IconButton, IconOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CopyButtonOverrides {}

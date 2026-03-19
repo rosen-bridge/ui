@@ -1,7 +1,6 @@
 import { ComponentProps, FormEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
-import { OverridableType } from '@/types';
 import {
   Button,
   CloseButton,
@@ -19,6 +18,7 @@ import {
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { useApiKey, useSnackbar } from '@/hooks';
+import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogOverrides {}

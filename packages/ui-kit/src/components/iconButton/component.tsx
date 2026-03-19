@@ -2,8 +2,8 @@ import { ComponentProps, HTMLAttributeAnchorTarget } from 'react';
 
 import { IconButton as IconButtonMUI } from '@mui/material';
 
-import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconButtonOverrides {}

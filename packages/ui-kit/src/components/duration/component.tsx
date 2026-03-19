@@ -1,8 +1,8 @@
 import { ComponentProps, useMemo } from 'react';
 
-import { OverridableType } from '@/types';
 import { Typography, TypographyOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 import { formatDuration } from '@/utils';
 
 import './styles.scss';

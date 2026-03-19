@@ -1,6 +1,5 @@
 import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 
-import { OverridableType } from '@/types';
 import {
   Avatar,
   AvatarOverriddenProps,
@@ -12,6 +11,7 @@ import {
   TypographyOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

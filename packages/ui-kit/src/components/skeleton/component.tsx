@@ -2,8 +2,8 @@ import { ComponentProps } from 'react';
 
 import { Skeleton as SkeletonMUI } from '@mui/material';
 
-import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

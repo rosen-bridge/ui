@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 
-import { OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

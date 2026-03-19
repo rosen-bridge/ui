@@ -1,9 +1,8 @@
 'use client';
 
 import { Box, IconProps } from '@rosen-bridge/ui-kit';
-import { healthStatusColorMap, NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
-import { AugmentedPalette } from '@rosen-ui/types';
 import { getDecimalString } from '@rosen-ui/utils';
 import { upperFirst } from 'lodash-es';
 import useSWR from 'swr';
@@ -11,7 +10,16 @@ import useSWR from 'swr';
 import { useERsnToken, useRsnToken, useToken } from '@/hooks';
 import { ApiInfoResponse } from '@/types/api';
 
-import { InfoWidgetCard } from './InfoWidgetCard';
+import { InfoWidgetCard, InfoWidgetCardProps } from './InfoWidgetCard';
+
+const healthStatusColorMap: Record<
+  ApiInfoResponse['health']['status'],
+  InfoWidgetCardProps['color']
+> = {
+  Healthy: 'success',
+  Unstable: 'warning',
+  Broken: 'error',
+};
 
 const InfoWidgets = () => {
   const { data, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -139,11 +147,7 @@ const InfoWidgets = () => {
             : 'ShieldExclamation'
         }
         color={
-          data?.health
-            ? (healthStatusColorMap[
-                data.health.status
-              ] as keyof AugmentedPalette)
-            : 'success'
+          data?.health ? healthStatusColorMap[data.health.status] : 'success'
         }
         isLoading={isInfoLoading}
         warning={data?.health.trialErrors.join('\n')}

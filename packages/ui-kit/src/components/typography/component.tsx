@@ -6,9 +6,9 @@ import {
 } from '@mui/material';
 import { Slot } from '@radix-ui/react-slot';
 
-import { ColorOverridden, OverridableType } from '@/types';
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
+import { ColorOverridden, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

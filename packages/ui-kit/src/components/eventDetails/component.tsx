@@ -1,6 +1,5 @@
 import { ComponentProps } from 'react';
 
-import { OverridableType } from '@/types';
 import {
   Amount,
   AmountProps,
@@ -20,6 +19,7 @@ import {
   Typography,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventDetailsOverrides {}

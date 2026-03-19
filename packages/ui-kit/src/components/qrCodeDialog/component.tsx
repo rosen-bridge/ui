@@ -2,7 +2,6 @@ import { ComponentProps } from 'react';
 
 import { QRCodeCanvas } from 'qrcode.react';
 
-import { OverridableType } from '@/types';
 import {
   Button,
   Dialog,
@@ -11,6 +10,7 @@ import {
   Stack,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface QrCodeDialogOverrides {}

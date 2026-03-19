@@ -11,16 +11,15 @@ import {
   Icon,
   IconProps,
 } from '@rosen-bridge/ui-kit';
-import { AugmentedPalette } from '@rosen-ui/types';
 
-interface InfoWidgetCardProps {
-  color?: keyof AugmentedPalette;
+export type InfoWidgetCardProps = {
+  color?: 'primary' | 'secondary' | 'info' | 'warning' | 'success' | 'error';
   icon: IconProps['name'];
   isLoading?: boolean;
   title: string;
   value: ReactNode;
   warning?: string;
-}
+};
 /**
  * render an info widget card containing data
  *

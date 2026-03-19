@@ -2,9 +2,9 @@ import { ComponentProps, ReactNode } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { OverridableType } from '@/types';
 import { CloseButton, CloseButtonProps, Icon, IconProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

@@ -1,6 +1,5 @@
 import { ComponentProps, useState } from 'react';
 
-import { OverridableType } from '@/types';
 import {
   Skeleton,
   QrCodeDialog,
@@ -13,11 +12,12 @@ import {
   TypographyOverriddenProps,
 } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides { }
+export interface IdentifierOverrides {}
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -49,7 +49,7 @@ export type IdentifierOwnProps = {
   value?: string;
 
   // THIS SHOULD BE REMOVED AFTER UPGRADE GUARD AND WATCHER APPS
-  variant?: 'legacy' | 'legacy-middle'
+  variant?: 'legacy' | 'legacy-middle';
 };
 
 export type IdentifierBaseProps = ElementBaseProps<'div', IdentifierOwnProps>;

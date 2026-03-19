@@ -1,8 +1,8 @@
 import { ComponentProps } from 'react';
 
-import { OverridableType } from '@/types';
 import { Icon, Tooltip, TooltipOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

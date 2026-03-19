@@ -1,7 +1,7 @@
 import { ComponentProps, CSSProperties } from 'react';
 
-import { GapOverridden, OverridableType } from '@/types';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { GapOverridden, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {

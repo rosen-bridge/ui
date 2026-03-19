@@ -3,9 +3,9 @@ import { ComponentProps, useMemo } from 'react';
 
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
-import { ColorOverridden, OverridableType } from '@/types';
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ColorOverridden, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

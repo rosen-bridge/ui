@@ -2,9 +2,9 @@ import { ComponentProps } from 'react';
 
 import { Slot } from '@radix-ui/react-slot';
 
-import { OverridableType } from '@/types';
 import { Tooltip, TooltipOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 

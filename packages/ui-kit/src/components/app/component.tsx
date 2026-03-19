@@ -1,11 +1,11 @@
 import { ComponentProps, ReactNode } from 'react';
 
-import { OverridableType } from '@/types';
 import { AppSnackbar, CssBaseline } from '@/components';
 import { SnackbarProvider } from '@/contexts';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 import { useIsMobile } from '@/hooks';
 import { ThemeProvider, ThemeProviderProps } from '@/Providers';
+import { OverridableType } from '@/types';
 
 import './styles.scss';
 
