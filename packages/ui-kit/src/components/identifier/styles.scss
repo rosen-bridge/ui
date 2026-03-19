@@ -4,35 +4,28 @@
   align-items: center;
   justify-content: space-between;
   min-width: 0;
+}
 
-  .value {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    min-width: 0;
-    font-family: monospace;
-  }
+.RosenIdentifier-value {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 0;
+  font-family: monospace;
+}
 
-  .leading {
-    white-space: nowrap;
-    flex-shrink: 1;
-    min-width: 0;
-  }
+.RosenIdentifier-leading {
+  white-space: nowrap;
+  flex-shrink: 1;
+  min-width: 0;
+}
 
-  .trailing {
-    flex-shrink: 0;
-  }
+.RosenIdentifier-trailing {
+  flex-shrink: 0;
+}
 
-  .actions {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .RosenCopyButton.loading {
-    opacity: 0;
-    width: 0;
-    padding-left: 0;
-    padding-right: 0;
-  }
+.RosenIdentifier-actions {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }

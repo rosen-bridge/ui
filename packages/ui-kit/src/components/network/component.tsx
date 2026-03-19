@@ -80,11 +80,11 @@ export const NetworkBase = ({
         <Skeleton width="2em" height="2em" variant="circular" />
       )}
       {showLogo && !loading && Logo && (
-        <Icon as={Logo} className="logo" size="2em" {...slots?.logo} />
+        <Icon as={Logo} className="RosenNetwork-logo" size="2em" {...slots?.logo} />
       )}
       {showLabel && (
         <Typography
-          className="label"
+          className="RosenNetwork-label"
           component="div"
           loading={loading}
           noWrap

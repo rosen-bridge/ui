@@ -67,14 +67,14 @@ const LabelBase = ({
 }: LabelProps) => {
   return (
     <Stack
-      className={`rosen-label rosen-label-${orientation} ${className || ''}`}
+      className={`RosenLabel RosenLabel-${orientation} ${className || ''}`}
       direction="row"
       justify="start"
       {...props}
     >
       {inset && (
         <Box
-          className="Rosenlabel-inset"
+          className="RosenLabel-inset"
           sx={{
             height: 'auto',
             width: 12,
@@ -90,7 +90,7 @@ const LabelBase = ({
         />
       )}
       <Stack
-        className="Rosenlabel-container"
+        className="RosenLabel-container"
         align={orientation === 'vertical' ? 'start' : 'center'}
         direction={orientation === 'vertical' ? 'column' : 'row'}
         spacing={orientation === 'vertical' ? 0 : 2}
@@ -101,7 +101,7 @@ const LabelBase = ({
         }}
       >
         <Stack
-          className="Rosenlabel-label"
+          className="RosenLabel-label"
           spacing={1}
           direction="row"
           align="center"

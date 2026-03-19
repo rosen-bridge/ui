@@ -153,9 +153,9 @@ export const IdentifierBase = ({
     <Root {...rest}>
       {loading && <Skeleton attached />}
       <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
-        <div className="value">
+        <div className="RosenIdentifier-value">
           <Typography
-            className="leading"
+            className="RosenIdentifier-leading"
             component="div"
             noWrap
             {...slots?.text}
@@ -164,7 +164,7 @@ export const IdentifierBase = ({
             {leading}
           </Typography>
           <Typography
-            className="trailing"
+            className="RosenIdentifier-trailing"
             component="div"
             {...slots?.text}
             {...slots?.trailing}
@@ -174,7 +174,7 @@ export const IdentifierBase = ({
         </div>
       </Tooltip>
       {hasActions && (
-        <div className="actions">
+        <div className="RosenIdentifier-actions">
           {copyable && (
             <CopyButton
               disabled={disableActions}

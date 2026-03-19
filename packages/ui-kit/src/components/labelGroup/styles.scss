@@ -3,22 +3,22 @@
   grid-template-columns: auto auto 1fr;
 
   // TODO
-  .rosen-label-horizontal {
+  .RosenLabel-horizontal {
     grid-column: 1 / 4;
-    display: grid;
+    display: grid !important;
     grid-template-columns: subgrid;
 
-    .rosen-label-inset {
+    .RosenLabel-inset {
       grid-column: 1 / 2;
     }
 
-    .rosen-label-container {
+    .RosenLabel-container {
       grid-column: 2 / 4;
-      display: grid;
+      display: grid !important;
       grid-template-columns: subgrid;
     }
 
-    .rosen-label-label {
+    .RosenLabel-label {
       grid-column: 1 / 2;
     }
   }
