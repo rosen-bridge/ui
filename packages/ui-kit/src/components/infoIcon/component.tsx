@@ -4,6 +4,8 @@ import { OverridableType } from '@/@types';
 import { Icon, Tooltip, TooltipOverriddenProps } from '@/components';
 import { ElementBaseProps, Root, Wrap } from '@/core';
 
+import './styles.scss';
+
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InfoIconOverrides {}
 
@@ -28,15 +30,8 @@ export const InfoIconBase = ({
   ...rest
 }: InfoIconOverriddenProps) => {
   return (
-    // TODO add styles
     <Tooltip title={info} {...slots?.tooltip}>
-      <Root
-        as={Icon}
-        name="ExclamationCircle"
-        size="16px"
-        styles={{ cursor: 'pointer' }}
-        {...rest}
-      />
+      <Root as={Icon} name="ExclamationCircle" size="16px" {...rest} />
     </Tooltip>
   );
 };

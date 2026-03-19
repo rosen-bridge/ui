@@ -1,5 +1,6 @@
 'use client';
 
+import { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
@@ -8,16 +9,15 @@ import {
   App as AppBase,
   ApiKeyProvider,
   FrameworkProvider,
-  ConfigProvider,
 } from '@rosen-bridge/ui-kit';
 import { mockMiddlewareFactory } from '@rosen-ui/swr-helpers';
 import { SWRConfig } from 'swr';
 
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
+import { UIKitProvider } from '@/uiKitProvider';
 
 import { Sidebar } from './Sidebar';
-import { uiKitConfigs } from '@/uiKitConfigs';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -28,32 +28,33 @@ export const App = ({ children }: PropsWithChildren) => {
 
   return (
     <NoSsr>
-      <ConfigProvider configs={uiKitConfigs}>
-        <FrameworkProvider
-          router={{
-            pathname,
-            search: searchParams.toString(),
-            push: (href: string) => router.push(href, { scroll: false }),
-          }}
-        >
+      <FrameworkProvider
+        router={{
+          pathname,
+          search: searchParams.toString(),
+          push: (href) =>
+            router.push(href as unknown as Route, { scroll: false }),
+        }}
+      >
+        <UIKitProvider>
           <ApiKeyProvider>
-            <AppBase sidebar={<Sidebar />} theme={theme}>
-              <SWRConfig
-                value={{
-                  revalidateOnFocus: false,
-                  errorRetryCount: 3,
-                  use:
-                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                      ? [mockMiddlewareFactory(mockedData)]
-                      : [],
-                }}
-              >
+            <SWRConfig
+              value={{
+                revalidateOnFocus: false,
+                errorRetryCount: 3,
+                use:
+                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                    ? [mockMiddlewareFactory(mockedData)]
+                    : [],
+              }}
+            >
+              <AppBase sidebar={<Sidebar />} theme={theme}>
                 {children}
-              </SWRConfig>
-            </AppBase>
+              </AppBase>
+            </SWRConfig>
           </ApiKeyProvider>
-        </FrameworkProvider>
-      </ConfigProvider>
+        </UIKitProvider>
+      </FrameworkProvider>
     </NoSsr>
   );
 };

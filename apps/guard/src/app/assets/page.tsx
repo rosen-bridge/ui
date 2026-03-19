@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo } from 'react';
 
-import { EnhancedTable, Grid } from '@rosen-bridge/ui-kit';
+import { EnhancedTable } from '@rosen-bridge/ui-kit';
 import { Network } from '@rosen-ui/types';
 
 import { useBalance } from '@/hooks';

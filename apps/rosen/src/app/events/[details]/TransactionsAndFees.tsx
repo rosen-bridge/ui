@@ -82,7 +82,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             label="Duration"
             info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
           >
-            <Duration loading={isLoading} fallBack="-" />
+            <Duration fallback="-" loading={isLoading} />
           </Label>
           <Label label="Total Emission">
             <Amount

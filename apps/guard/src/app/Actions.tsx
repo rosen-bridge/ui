@@ -15,8 +15,12 @@ export const Actions = ({ sidebar }: { sidebar?: boolean }) => {
   return (
     <Toolbar>
       {sidebar && <VersionConfig />}
-      {((sidebar && isMobile) || (!sidebar && !isMobile)) && <ApiKeyDialogButton />}
-      {((sidebar && isMobile) || (!sidebar && !isMobile)) && <ThemeToggleButton />}
+      {((sidebar && isMobile) || (!sidebar && !isMobile)) && (
+        <ApiKeyDialogButton />
+      )}
+      {((sidebar && isMobile) || (!sidebar && !isMobile)) && (
+        <ThemeToggleButton />
+      )}
     </Toolbar>
   );
 };

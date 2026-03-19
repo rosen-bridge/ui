@@ -51,7 +51,7 @@ const Health = () => {
         if (
           currentHealthParamInfo.lastCheck === newHealthParamInfo.lastCheck &&
           currentHealthParamInfo.lastTrialErrorTime ===
-          newHealthParamInfo.lastTrialErrorTime
+            newHealthParamInfo.lastTrialErrorTime
         ) {
           return void setTimeout(trying, 1000);
         }
@@ -79,9 +79,9 @@ const Health = () => {
     <GridContainer
       gap={3}
       rewrite={{
-        'mobile': { minWidth: '100%' },
-        'tablet': { minWidth: '35%' },
-        'laptop': { minWidth: '25%' },
+        mobile: { minWidth: '100%' },
+        tablet: { minWidth: '35%' },
+        laptop: { minWidth: '25%' },
       }}
     >
       {isLoading && (
@@ -91,18 +91,19 @@ const Health = () => {
           <HealthParamCardSkeleton />
         </>
       )}
-      {data && data
-        .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
-        .map((item) => (
-          <HealthParamCard
-            key={item.id}
-            {...item}
-            checking={checking.includes(item.id)}
-            handleCheckNow={() => handleCheckNow(item.id)}
-          />
-        ))}
+      {data &&
+        data
+          .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
+          .map((item) => (
+            <HealthParamCard
+              key={item.id}
+              {...item}
+              checking={checking.includes(item.id)}
+              handleCheckNow={() => handleCheckNow(item.id)}
+            />
+          ))}
     </GridContainer>
-  )
+  );
 };
 
 export default Health;

@@ -4,7 +4,6 @@ import { ChangeEvent, MouseEvent, useCallback, useMemo } from 'react';
 
 import {
   EnhancedTable,
-  Grid,
   TablePaginationProps,
   useTableDataPagination,
 } from '@rosen-bridge/ui-kit';

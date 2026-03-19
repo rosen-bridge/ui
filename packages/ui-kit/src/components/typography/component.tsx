@@ -12,7 +12,7 @@ import { ElementBaseProps, Wrap } from '@/core';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TypographyOverrides { }
+export interface TypographyOverrides {}
 
 export type TypographyOwnProps = TypographyPropsMUI & {
   asChild?: boolean;

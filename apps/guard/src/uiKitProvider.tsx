@@ -1,9 +1,15 @@
 import { Route } from 'next';
+import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';
-import type { ConfigProviderProps, DefaultColor } from '@rosen-bridge/ui-kit';
+import {
+  ConfigProvider,
+  type ConfigProviderProps,
+  type DefaultColor,
+} from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
+
 import { Actions } from './app/Actions';
 
 declare module '@rosen-bridge/ui-kit' {
@@ -24,8 +30,25 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const uiKitConfigs: ConfigProviderProps['configs'] = {
+export const getUiKitConfigs: () => ConfigProviderProps['configs'] = () => ({
   components: {
+    Connector: {
+      defaultProps: {
+        slots: {
+          icon: {
+            color: 'text-secondary',
+          },
+        },
+      },
+    },
+    DialogTitle: {
+      defaultProps: {
+        color: 'secondary-dark',
+        variant: 'h2',
+        // TODO: this old ThemeOptions
+        // fontSize: theme.spacing(3),
+      },
+    },
     Icon: {
       defaultProps: {
         icons: Object.fromEntries(
@@ -54,8 +77,19 @@ export const uiKitConfigs: ConfigProviderProps['configs'] = {
     },
     PageHeading: {
       defaultProps: {
-        actions: <Actions />
-      }
+        actions: <Actions />,
+      },
+    },
+    Token: {
+      defaultProps: {
+        tokens: {},
+      },
     },
   },
+});
+
+export const UIKitProvider = ({ children }: PropsWithChildren) => {
+  const configs = useMemo(() => getUiKitConfigs(), []);
+
+  return <ConfigProvider configs={configs}>{children}</ConfigProvider>;
 };
