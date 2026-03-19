@@ -17,7 +17,7 @@ import { ElementBaseProps, Root, Wrap } from '@/core';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides {}
+export interface IdentifierOverrides { }
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -47,6 +47,9 @@ export type IdentifierOwnProps = {
 
   /** The main string value to display (e.g., an identifier or long string) */
   value?: string;
+
+  // THIS SHOULD BE REMOVED AFTER UPGRADE GUARD AND WATCHER APPS
+  variant?: 'legacy' | 'legacy-middle'
 };
 
 export type IdentifierBaseProps = ElementBaseProps<'div', IdentifierOwnProps>;
@@ -82,6 +85,7 @@ export const IdentifierBase = ({
   slots,
   trailingLength = 5,
   value = '',
+  variant,
   ...rest
 }: IdentifierOverriddenProps) => {
   const [open, setOpen] = useState(false);
@@ -102,6 +106,48 @@ export const IdentifierBase = ({
     : (value ?? '').slice(0, -trailingLength);
 
   const trailing = (value ?? '').slice(-trailingLength);
+
+  // THIS SHOULD BE REMOVED AFTER UPGRADE GUARD AND WATCHER APPS
+  if (variant) {
+    let text = value.slice(0, 10);
+
+    if (variant === 'legacy-middle') {
+      text += '...' + value.slice(-8);
+    }
+
+    return (
+      <Tooltip title={value}>
+        {href ? (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={(event) => event.stopPropagation()}
+            style={{
+              textDecoration: 'none',
+              color: 'inherit',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <Typography noWrap variant="caption" component="span">
+              {text}
+            </Typography>
+            <Icon
+              color="primary"
+              name="ExternalLinkAlt"
+              style={{ display: 'block', fontSize: 'inherit' }}
+            />
+          </a>
+        ) : (
+          <Typography noWrap variant="caption">
+            {text}
+          </Typography>
+        )}
+      </Tooltip>
+    );
+  }
 
   return (
     <Root {...rest}>

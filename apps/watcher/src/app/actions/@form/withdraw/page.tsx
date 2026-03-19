@@ -13,7 +13,7 @@ import {
   AlertProps,
   CircularProgress,
   Grid,
-  Id,
+  Identifier,
   InputAdornment,
   MenuItem,
   SubmitButton,
@@ -240,7 +240,7 @@ const WithdrawForm = () => {
           &nbsp;
           {!token.isNativeToken && (
             <>
-              (<Id id={token.tokenId} indicator="middle" />)
+              (<Identifier value={token.tokenId} variant="legacy-middle" />)
             </>
           )}
         </MenuItem>

@@ -6,7 +6,7 @@ import {
   Box,
   Button,
   EnhancedTableCell,
-  Id,
+  Identifier,
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { getTxURL } from '@rosen-ui/utils';
@@ -130,9 +130,10 @@ export const MobileRow: FC<RowProps> = (props) => {
       <TableRow style={rowStyles}>
         <EnhancedTableCell>Tx Id</EnhancedTableCell>
         <EnhancedTableCell>
-          <Id
-            id={row.sourceTxId}
+          <Identifier
+            value={row.sourceTxId}
             href={getTxURL(row.fromChain, row.sourceTxId)}
+            variant="legacy"
           />
         </EnhancedTableCell>
       </TableRow>
@@ -145,13 +146,13 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>From Address</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.fromAddress} />
+              <Identifier value={row.fromAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
             <EnhancedTableCell>To Address</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.toAddress} />
+              <Identifier value={row.toAddress} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -179,7 +180,7 @@ export const MobileRow: FC<RowProps> = (props) => {
           <TableRow style={rowStyles}>
             <EnhancedTableCell>Event Id</EnhancedTableCell>
             <EnhancedTableCell>
-              <Id id={row.eventId} />
+              <Identifier value={row.eventId} variant="legacy" />
             </EnhancedTableCell>
           </TableRow>
           <TableRow style={rowStyles}>
@@ -223,18 +224,19 @@ export const TabletRow: FC<RowProps> = (props) => {
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
         <Box style={{ display: 'flex', justifyContent: 'center' }}>
-          <Id
-            id={row.sourceTxId}
+          <Identifier
+            value={row.sourceTxId}
             href={getTxURL(row.fromChain, row.sourceTxId)}
+            variant="legacy"
           />
         </Box>
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.fromAddress} />
+        <Identifier value={row.fromAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.toAddress} />
+        <Identifier value={row.toAddress} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.height}</EnhancedTableCell>
       <EnhancedTableCell align="center">
@@ -247,7 +249,7 @@ export const TabletRow: FC<RowProps> = (props) => {
         <Amount value={row.networkFee} decimal={row.lockToken.decimals} />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">
-        <Id id={row.eventId} />
+        <Identifier value={row.eventId} variant="legacy" />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.WIDsCount}</EnhancedTableCell>
       <EnhancedTableCell align="center">

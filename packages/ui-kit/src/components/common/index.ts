@@ -10,7 +10,6 @@ export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './HealthParamCard';
 export * from './HealthParamCardSkeleton';
-export * from './Id';
 export * from './Pagination';
 export * from './AppInfo';
 export * from './SortField';
