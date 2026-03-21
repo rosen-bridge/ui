@@ -1,4 +1,4 @@
-import React, { HTMLAttributes, useEffect, useState } from 'react';
+import { HTMLAttributes, useEffect, useState } from 'react';
 
 import {
   Step,
@@ -58,8 +58,7 @@ const Loading = () => {
   return (
     <Skeleton
       variant="rounded"
-      // TODO
-      // sx={{ width: '100%', height: '167px', display: 'block' }}
+      style={{ width: '100%', height: '167px', display: 'block' }}
     />
   );
 };

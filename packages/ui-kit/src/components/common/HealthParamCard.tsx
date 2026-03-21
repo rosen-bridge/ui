@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { HealthParamInfo } from '@rosen-ui/types';
 
-import { Color } from '@/types';
+import { ColorOverridden } from '@/types';
 
 import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';
@@ -114,9 +114,12 @@ export const HealthParamCard = ({
         }
       >
         <Stack spacing={2} direction="row">
-          <Icon color={colors.cardColor as Color} name={icon} />
+          <Icon color={colors.cardColor as ColorOverridden} name={icon} />
           <CardTitle>
-            <Typography color={colors.cardColor as Color} fontWeight="700">
+            <Typography
+              color={colors.cardColor as ColorOverridden}
+              fontWeight="700"
+            >
               {lastCheck ? status : 'Unknown'}
             </Typography>
           </CardTitle>

@@ -29,7 +29,7 @@ export const Overview = ({ id }: { id: string }) => {
       <Label
         label="Event Id"
         orientation="horizontal"
-        overrides={{
+        rewrite={{
           tablet: {
             orientation: 'vertical',
           },
@@ -46,7 +46,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="Token"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -66,7 +66,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="Amount"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -84,7 +84,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="Chain"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -120,7 +120,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="Status"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -131,7 +131,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="Time"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -145,7 +145,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="Fee Sum"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -164,7 +164,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="From Address"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },
@@ -181,7 +181,7 @@ export const Overview = ({ id }: { id: string }) => {
         <Label
           label="To Address"
           orientation="horizontal"
-          overrides={{
+          rewrite={{
             tablet: {
               orientation: 'vertical',
             },

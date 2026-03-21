@@ -1,0 +1,72 @@
+.RosenLabel {
+  display: flex;
+  justify-content: start;
+}
+
+.RosenLabel-inset {
+  height: auto;
+  width: 12px;
+  border-style: dashed;
+  border-image: initial;
+  border-width: 0px 0px 1px 1px;
+  border-bottom-left-radius: 6px;
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(-50%);
+  margin-left: var(--rosen-spacing);
+  margin-right: calc(var(--rosen-spacing) * 0.5);
+  flex-shrink: 0;
+}
+
+.RosenLabel-container {
+  display: flex;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.RosenLabel[data-dense=false] .RosenLabel-container {
+  padding: 4px 0;
+}
+
+.RosenLabel[data-dense=true] .RosenLabel-container {
+  padding: 0;
+}
+
+.RosenLabel[data-orientation=horizontal] .RosenLabel-container {
+  flex-direction: row;
+  align-items: center;
+  gap: calc(var(--rosen-spacing) * 2);
+}
+
+.RosenLabel[data-orientation=vertical] .RosenLabel-container {
+  flex-direction: column;
+  align-items: start;
+  gap: 0;
+}
+
+.RosenLabel-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--rosen-spacing) * 1);
+}
+
+.RosenLabel-content {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.RosenLabel[data-orientation=horizontal] .RosenLabel-content {
+  height: unset;
+  flex-grow: 1;
+  align-self: center;
+  justify-content: end;
+}
+
+.RosenLabel[data-orientation=vertical] .RosenLabel-content {
+  height: 2em;
+  flex-grow: 0;
+  align-self: stretch;
+  justify-content: start;
+}

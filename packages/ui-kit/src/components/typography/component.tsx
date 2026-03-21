@@ -28,7 +28,7 @@ export type TypographyBaseProps = ElementBaseProps<
 export type TypographyOverriddenProps = OverridableType<
   TypographyBaseProps,
   TypographyOverrides,
-  never
+  'color'
 >;
 
 export const TypographyBase = ({

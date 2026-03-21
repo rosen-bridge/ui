@@ -2,8 +2,7 @@
   display: grid;
   grid-template-columns: auto auto 1fr;
 
-  // TODO
-  .RosenLabel-horizontal {
+  .RosenLabel[data-orientation=horizontal] {
     grid-column: 1 / 4;
     display: grid !important;
     grid-template-columns: subgrid;
@@ -18,7 +17,7 @@
       grid-template-columns: subgrid;
     }
 
-    .RosenLabel-label {
+    .RosenLabel-header {
       grid-column: 1 / 2;
     }
   }

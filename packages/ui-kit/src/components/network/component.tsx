@@ -66,6 +66,7 @@ export const NetworkBase = ({
   ...rest
 }: NetworkOverriddenProps) => {
   const showLabel = variant !== 'logo';
+
   const showLogo = variant !== 'label';
 
   const { logo: Logo, label } = useMemo(

@@ -35,6 +35,7 @@ export * from './iconButton';
 export * from './identifier';
 export * from './image';
 export * from './infoIcon';
+export * from './label';
 export * from './labelGroup';
 export * from './layoutList';
 export * from './link';
