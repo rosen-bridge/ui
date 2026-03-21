@@ -62,33 +62,30 @@ export type LabelOverriddenProps = OverridableType<
 export const LabelBase = ({
   children,
   color = 'text-secondary',
-  dense,
+  dense = false,
   info,
-  inset,
+  inset = false,
   label,
   orientation = 'horizontal',
   ...rest
 }: LabelOverriddenProps) => {
   return (
-    <Root reflects={{ dense, orientation }} {...rest}>
-      {inset && <div className='RosenLabel-inset' />}
-      <div className='RosenLabel-container'>
-        <div className='RosenLabel-header'>
-          <Typography
-            color={color}
-            lineHeight="1.5rem"
-            noWrap
-            variant="body2"
-            sx={{
-              my: orientation === 'vertical' ? 0 : 0.5,
-            }}
-          >
-            {label}
-          </Typography>
-          {info && <InfoIcon color={color} info={info} />}
-        </div>
-        <div className='RosenLabel-content'>{children}</div>
+    <Root reflects={{ dense, inset, orientation }} {...rest}>
+      <div className='RosenLabel-header'>
+        <Typography
+          color={color}
+          lineHeight="1.5rem"
+          noWrap
+          variant="body2"
+          sx={{
+            my: orientation === 'vertical' ? 0 : 0.5,
+          }}
+        >
+          {label}
+        </Typography>
+        {info && <InfoIcon color={color} info={info} />}
       </div>
+      <div className='RosenLabel-content'>{children}</div>
     </Root>
   )
 };

@@ -177,7 +177,7 @@ export const TokenBase = ({
       )}
       {!!href && (
         <IconButton target="_blank" size="small" href={href}>
-          <Icon name="ExternalLinkAlt" size="medium" />
+          <Icon name="ExternalLinkAlt" size="small" />
         </IconButton>
       )}
     </Root>

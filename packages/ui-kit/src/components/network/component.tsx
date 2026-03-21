@@ -94,6 +94,7 @@ export const NetworkBase = ({
           component="div"
           loading={loading}
           noWrap
+          variant='inherit'
           {...slots?.label}
         >
           {label}

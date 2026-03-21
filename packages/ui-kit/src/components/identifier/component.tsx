@@ -17,7 +17,7 @@ import { OverridableType } from '@/types';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides {}
+export interface IdentifierOverrides { }
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -158,6 +158,7 @@ export const IdentifierBase = ({
             className="RosenIdentifier-leading"
             component="div"
             noWrap
+            variant='inherit'
             {...slots?.text}
             {...slots?.leading}
           >
@@ -166,6 +167,7 @@ export const IdentifierBase = ({
           <Typography
             className="RosenIdentifier-trailing"
             component="div"
+            variant='inherit'
             {...slots?.text}
             {...slots?.trailing}
           >
@@ -175,14 +177,6 @@ export const IdentifierBase = ({
       </Tooltip>
       {hasActions && (
         <div className="RosenIdentifier-actions">
-          {copyable && (
-            <CopyButton
-              disabled={disableActions}
-              size="small"
-              value={value}
-              slots={{ icon: { size: 'small' } }}
-            />
-          )}
           {href && (
             <IconButton
               disabled={disableActions}
@@ -192,6 +186,14 @@ export const IdentifierBase = ({
             >
               <Icon name="ExternalLinkAlt" size="small" />
             </IconButton>
+          )}
+          {copyable && (
+            <CopyButton
+              disabled={disableActions}
+              size="small"
+              value={value}
+              slots={{ icon: { size: 'small' } }}
+            />
           )}
           {qrcode && (
             <>

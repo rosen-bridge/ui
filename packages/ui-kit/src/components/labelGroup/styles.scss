@@ -1,24 +1,10 @@
 .RosenLabelGroup {
   display: grid;
-  grid-template-columns: auto auto 1fr;
+  grid-template-columns: auto 1fr;
+}
 
-  .RosenLabel[data-orientation=horizontal] {
-    grid-column: 1 / 4;
-    display: grid !important;
-    grid-template-columns: subgrid;
-
-    .RosenLabel-inset {
-      grid-column: 1 / 2;
-    }
-
-    .RosenLabel-container {
-      grid-column: 2 / 4;
-      display: grid !important;
-      grid-template-columns: subgrid;
-    }
-
-    .RosenLabel-header {
-      grid-column: 1 / 2;
-    }
-  }
+.RosenLabelGroup .RosenLabel[data-orientation=horizontal] {
+  grid-column: 1 / 3;
+  display: grid !important;
+  grid-template-columns: subgrid;
 }
