@@ -10,7 +10,7 @@ import {
 import { EventStatus, TxStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
-@Entity()
+@Entity('guard_status_changed_entity')
 export class GuardStatusChangedEntity {
   @PrimaryGeneratedColumn()
   id: number;
