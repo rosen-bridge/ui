@@ -22,7 +22,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@rosen-bridge/address-codec": "^1.1.1",
+    "@rosen-bridge/address-codec": "^1.2.0",
     "@rosen-bridge/bitcoin-utxo-selection": "^2.0.3",
     "@rosen-bridge/icons": "^3.5.0",
     "@rosen-bridge/tokens": "^6.0.0",

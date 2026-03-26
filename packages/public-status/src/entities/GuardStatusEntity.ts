@@ -9,7 +9,7 @@ import {
 import { EventStatus, TxStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
-@Entity()
+@Entity('guard_status_entity')
 export class GuardStatusEntity {
   @PrimaryColumn('varchar')
   eventId: string;
