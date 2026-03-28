@@ -64,8 +64,18 @@ export class ExplorerBoxFetcher {
   getRegisterValue = (box: V1.OutputInfo, key: string): number | undefined => {
     const reg = box.additionalRegisters[key];
     if (!reg) return undefined;
-    return Number(
-      Constant.decode_from_base16(reg.serializedValue).to_i64().to_str(),
-    );
+
+    try {
+      const decoded = Constant.decode_from_base16(reg.serializedValue)
+        .to_i64()
+        .to_str();
+
+      return Number(decoded);
+    } catch (err) {
+      this.logger.warn(
+        `Failed to decode register ${key} with value ${reg.serializedValue}: ${err}`,
+      );
+      return undefined;
+    }
   };
 }

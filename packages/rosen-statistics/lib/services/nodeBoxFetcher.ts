@@ -62,6 +62,15 @@ export class NodeBoxFetcher {
     const reg = box.additionalRegisters[key];
     if (!reg) return undefined;
 
-    return Number(Constant.decode_from_base16(reg).to_i64().to_str());
+    try {
+      const decoded = Constant.decode_from_base16(reg).to_i64().to_str();
+
+      return Number(decoded);
+    } catch (err) {
+      this.logger.warn(
+        `Failed to decode register ${key} with value ${reg}: ${err}`,
+      );
+      return undefined;
+    }
   };
 }

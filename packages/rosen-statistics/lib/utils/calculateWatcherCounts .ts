@@ -46,7 +46,7 @@ export const calculateWatcherCounts = (
     if (!network) continue;
 
     logger.debug(
-      `Resolved network ${network} from rwt token ${networkToken.tokenId} in box ${box.boxId}`,
+      `Resolved network ${network} with rwt token id ${networkToken.tokenId} in box ${box.boxId}`,
     );
 
     const count = getWatcherCount(box, WATCHER_COUNT_REGISTER);
@@ -62,7 +62,7 @@ export const calculateWatcherCounts = (
     totalWatchers += count;
 
     logger.debug(
-      `Watcher count extracted ->  network: ${network}, watchers: ${count}`,
+      `Extracted watcher count from box ${box.boxId}: network=${network}, count=${count}`,
     );
   }
 
