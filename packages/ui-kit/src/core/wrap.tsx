@@ -8,7 +8,7 @@ import {
 
 import { Breakpoint } from '@mui/material';
 
-import { useConfig } from '@/config';
+import { useConfig } from '@/configuration';
 import { useBreakpoint, useCurrentBreakpoint } from '@/hooks';
 
 const BREAKPOINT_ORDER: Breakpoint[] = [
