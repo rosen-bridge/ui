@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { styled } from '@mui/material';
 
 import { Skeleton, Typography } from '@/components';
+import { calculateRelativeTime } from '@/utils';
 
 /**
  * Properties for the {@link RelativeTime} component.
@@ -28,22 +29,6 @@ export type RelativeTimeProps = {
    */
   isLoading?: boolean;
 };
-/**
- * Configuration for each time unit used by {@link RelativeTime}.
- *
- * @internal
- */
-type UnitConfig = {
-  /**
-   * Unit name, valid for {@link Intl.RelativeTimeFormat}.
-   */
-  name: Intl.RelativeTimeFormatUnit;
-
-  /**
-   * Unit duration in milliseconds.
-   */
-  value: number;
-};
 
 /**
  * The styled root container for {@link RelativeTime}.
@@ -56,36 +41,6 @@ const Root = styled('div')(({ theme }) => ({
   alignItems: 'center',
   gap: theme.spacing(0.5),
 }));
-
-/**
- * Ordered time units for relative calculation.
- *
- * @internal
- */
-const RELATIVE_TIME_UNITS: UnitConfig[] = [
-  { name: 'year', value: 365 * 24 * 60 * 60 * 1000 },
-  { name: 'month', value: 30 * 24 * 60 * 60 * 1000 },
-  { name: 'week', value: 7 * 24 * 60 * 60 * 1000 },
-  { name: 'day', value: 24 * 60 * 60 * 1000 },
-  { name: 'hour', value: 60 * 60 * 1000 },
-  { name: 'minute', value: 60 * 1000 },
-  { name: 'second', value: 1000 },
-];
-
-/**
- * Convert input to milliseconds.
- *
- * @param input - {@link Date} or `number` (interpreted as seconds).
- * @returns Milliseconds since epoch.
- *
- * @internal
- */
-const getTimeValue = (input: Date | number): number => {
-  if (input instanceof Date) {
-    return input.getTime();
-  }
-  return input * 1000;
-};
 
 /**
  * Convert input timestamp to milliseconds.
@@ -124,55 +79,10 @@ const renderTypography = (text: string) => (
  * @returns React element showing relative time.
  */
 export const RelativeTime = ({ timestamp, isLoading }: RelativeTimeProps) => {
-  const { prefix, number, unit, suffix, displayText } = useMemo(() => {
-    if (!timestamp) {
-      return { displayText: 'invalid' };
-    }
-
-    const now = Date.now();
-    const target = getTimeValue(timestamp);
-    const diff = target - now;
-    const abs = Math.abs(diff);
-
-    /**
-     * If the time difference is less than 10 seconds,
-     * treat it as "now" to avoid confusing rapidly changing text like
-     * "in 1 second" or "1 second ago".
-     */
-    if (abs < 10 * 1000) {
-      return {
-        prefix: '',
-        number: 'now',
-        unit: '',
-        suffix: '',
-        displayText: undefined,
-      };
-    }
-
-    const unitObj =
-      RELATIVE_TIME_UNITS.find((u) => abs >= u.value) ??
-      RELATIVE_TIME_UNITS.at(-1)!;
-    const value = Math.round(abs / unitObj.value) || 1;
-    const pluralizedUnit = value > 1 ? unitObj.name + 's' : unitObj.name;
-
-    if (diff > 0) {
-      return {
-        prefix: 'in',
-        number: value.toString(),
-        unit: pluralizedUnit,
-        suffix: '',
-        displayText: undefined,
-      };
-    } else {
-      return {
-        prefix: '',
-        number: value.toString(),
-        unit: pluralizedUnit + ' ago',
-        suffix: '',
-        displayText: undefined,
-      };
-    }
-  }, [timestamp]);
+  const { prefix, number, unit, suffix, displayText } = useMemo(
+    () => calculateRelativeTime(timestamp),
+    [timestamp],
+  );
 
   if (isLoading) {
     return (

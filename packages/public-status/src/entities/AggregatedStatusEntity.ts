@@ -9,7 +9,7 @@ import {
 import { AggregateTxStatus, AggregateEventStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
-@Entity()
+@Entity('aggregated_status_entity')
 export class AggregatedStatusEntity {
   @PrimaryColumn('varchar')
   eventId: string;
