@@ -4,6 +4,6 @@ export * from './components';
 export * from './configuration';
 export * from './contexts';
 export * from './hooks';
-export * from './providers';
+export * from './Providers';
 export * from './types';
 export * from './utils';
