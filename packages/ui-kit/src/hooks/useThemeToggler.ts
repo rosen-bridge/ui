@@ -1,5 +1,5 @@
 import { useContext } from 'react';
 
-import { ThemeTogglerContext } from '@/providers';
+import { ThemeTogglerContext } from '@/Providers';
 
 export const useThemeToggler = () => useContext(ThemeTogglerContext);
