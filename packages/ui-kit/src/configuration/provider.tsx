@@ -30,8 +30,8 @@ export type ConfigProviderProps = {
 
 export const ConfigProvider = ({ children, configs }: ConfigProviderProps) => {
   return (
-    <ConfigsContext.Provider value={configs}>
+    <ConfigContext.Provider value={configs}>
       {children}
-    </ConfigsContext.Provider>
+    </ConfigContext.Provider>
   );
 };
