@@ -1,13 +1,13 @@
 import { Route } from 'next';
 import NextImage from 'next/image';
-import NextLink from 'next/link';
+// import NextLink from 'next/link';
 import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';
 import { TokenMap } from '@rosen-bridge/tokens';
 import {
   ConfigProvider,
-  type ConfigProviderProps,
+  type ConfigContextType,
   type DefaultColor,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -36,7 +36,7 @@ declare module '@rosen-bridge/ui-kit' {
 
 export const getUiKitConfig: (
   tokenMap: TokenMap,
-) => ConfigProviderProps['value'] = (tokenMap) => ({
+) => ConfigContextType = (tokenMap) => ({
   components: {
     Connector: {
       defaultProps: {
@@ -69,7 +69,7 @@ export const getUiKitConfig: (
     },
     Link: {
       defaultProps: {
-        as: NextLink,
+        // as: NextLink,
       },
     },
     Network: {

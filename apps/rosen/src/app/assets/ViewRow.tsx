@@ -91,7 +91,7 @@ export const ViewRow = ({
                     <Label
                       label="Locked"
                       orientation="horizontal"
-                      overrides={{
+                      rewrite={{
                         tablet: {
                           style: { display: 'none' },
                         },
@@ -102,7 +102,7 @@ export const ViewRow = ({
                     <Label
                       label="Hot"
                       orientation="horizontal"
-                      overrides={{
+                      rewrite={{
                         desktop: {
                           style: { display: 'none' },
                         },
@@ -113,7 +113,7 @@ export const ViewRow = ({
                     <Label
                       label="Cold"
                       orientation="horizontal"
-                      overrides={{
+                      rewrite={{
                         desktop: {
                           style: { display: 'none' },
                         },
@@ -124,7 +124,7 @@ export const ViewRow = ({
                     <Label
                       label="Bridged"
                       orientation="horizontal"
-                      overrides={{
+                      rewrite={{
                         laptop: {
                           style: { display: 'none' },
                         },

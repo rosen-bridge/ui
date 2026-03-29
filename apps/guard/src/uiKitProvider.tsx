@@ -4,7 +4,7 @@ import { PropsWithChildren, useMemo } from 'react';
 import * as AllIcons from '@rosen-bridge/icons';
 import {
   ConfigProvider,
-  type ConfigProviderProps,
+  type ConfigContextType,
   type DefaultColor,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -30,7 +30,7 @@ declare module '@rosen-bridge/ui-kit' {
   }
 }
 
-export const getUiKitConfig: () => ConfigProviderProps['value'] = () => ({
+export const getUiKitConfig: () => ConfigContextType = () => ({
   components: {
     Connector: {
       defaultProps: {

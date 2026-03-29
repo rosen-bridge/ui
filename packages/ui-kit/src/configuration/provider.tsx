@@ -2,7 +2,7 @@ import { createContext, ReactNode, useContext } from 'react';
 import { Components } from './components';
 
 export const useConfig = () => {
-  const context = useContext(ConfigsContext);
+  const context = useContext(ConfigContext);
 
   if (context === null) {
     throw new Error('useConfigs must be used within ConfigProvider');
@@ -11,9 +11,9 @@ export const useConfig = () => {
   return context;
 };
 
-export type ConfigsContextType = ConfigProviderProps['configs'];
+export type ConfigContextType = ConfigProviderProps['configs'];
 
-export const ConfigsContext = createContext<ConfigsContextType | null>(null);
+export const ConfigContext = createContext<ConfigContextType | null>(null);
 
 export type ConfigProviderProps = {
   children?: ReactNode;
