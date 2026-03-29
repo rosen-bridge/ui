@@ -124,5 +124,5 @@ export const UIKitProvider = ({ children }: PropsWithChildren) => {
 
   const config = useMemo(() => getUiKitConfig(tokenMap), [tokenMap]);
 
-  return <ConfigProvider value={config}>{children}</ConfigProvider>;
+  return <ConfigProvider configs={config}>{children}</ConfigProvider>;
 };

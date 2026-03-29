@@ -90,5 +90,5 @@ export const getUiKitConfig: () => ConfigProviderProps['value'] = () => ({
 
 export const UIKitProvider = ({ children }: PropsWithChildren) => {
   const config = useMemo(() => getUiKitConfig(), []);
-  return <ConfigProvider value={config}>{children}</ConfigProvider>;
+  return <ConfigProvider configs={config}>{children}</ConfigProvider>;
 };

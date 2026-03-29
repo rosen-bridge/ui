@@ -74,8 +74,8 @@ const RosenBridge = () => {
                         <Typography
                           color="primary"
                           component="a"
-                          target="_blank"
-                          href="https://github.com/LedgerHQ/app-ethereum/issues/311"
+                          // target="_blank"
+                          // href="https://github.com/LedgerHQ/app-ethereum/issues/311"
                         >
                           a known issue in Ledger and MetaMask interaction
                         </Typography>
