@@ -34,7 +34,9 @@ export type WrapProps<P> = {
 export const Wrap = <P,>(Base: ComponentType<P>) => {
   const componentName = Base.displayName || Base.name;
 
-  const Wrapped = ({ className, rewrite, skip, ...rest }: WrapProps<P>) => {
+  const Wrapped = (props: WrapProps<P>) => {
+    const { className, rewrite, skip, ...rest } = props;
+
     const breakpoint = useBreakpoint(
       !skip ? 'mobile-up' : skip === true ? 'mobile-down' : skip,
     );
@@ -58,7 +60,9 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
 
       const globalDefaultProps =
         config.components?.[componentName as keyof typeof config.components]
-          ?.defaultProps || {};
+          ?.defaultProps;
+
+      if (!globalDefaultProps) return rest;
 
       const baseProps = { ...globalDefaultProps, ...rest };
 
@@ -76,7 +80,7 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
       );
 
       return { ...baseProps, ...applied };
-    }, [config, componentName, current, rest, rewrite]);
+    }, [config, componentName, current, props, rewrite]);
 
     if (isSkipped) return null;
 
