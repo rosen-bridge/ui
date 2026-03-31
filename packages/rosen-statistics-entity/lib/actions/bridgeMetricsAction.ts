@@ -6,15 +6,15 @@ import { TokenEntity } from '@rosen-ui/asset-calculator';
 
 import { METRIC_KEYS } from '../constants';
 import { BridgeFeeEntity, MetricEntity } from '../entities';
-import { BridgeFeeAggregatedData, BridgeFeeType } from '../types';
+import { BridgeAggregatedData, BridgeType } from '../types';
 
-export class BridgeFeeMetricAction {
+export class BridgeMetricsAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
   private readonly bridgeFeeRepo: Repository<BridgeFeeEntity>;
   readonly logger: AbstractLogger;
 
   /**
-   * Constructor for BridgeFeeMetricAction
+   * Constructor for BridgeMetricsAction
    *
    * @param dataSource - TypeORM DataSource instance for database operations
    * @param logger - Optional logger instance; uses DummyLogger if not provided
@@ -23,7 +23,7 @@ export class BridgeFeeMetricAction {
     this.eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     this.bridgeFeeRepo = dataSource.getRepository(BridgeFeeEntity);
     this.logger = logger ?? new DummyLogger();
-    this.logger.debug('BridgeFeeMetricAction initialized');
+    this.logger.debug('BridgeMetricsAction initialized');
   }
 
   /**
@@ -83,12 +83,12 @@ export class BridgeFeeMetricAction {
    *
    * @param startTs - Start timestamp (inclusive)
    * @param endTs - End timestamp (exclusive)
-   * @returns Promise resolving to aggregated bridge fee statistics
+   * @returns Promise resolving to aggregated bridge statistics
    */
   getEventsInRange = async (
     startTs: number,
     endTs: number,
-  ): Promise<BridgeFeeAggregatedData[]> => {
+  ): Promise<BridgeAggregatedData[]> => {
     this.logger.debug(
       `Fetching events in timestamp range: ${startTs} to ${endTs}`,
     );
@@ -117,9 +117,9 @@ export class BridgeFeeMetricAction {
         start: startTs,
         end: endTs,
       })
-      .getRawMany<BridgeFeeAggregatedData>();
+      .getRawMany<BridgeAggregatedData>();
 
-    this.logger.debug(`Found ${events.length} aggregated bridge fee entries`);
+    this.logger.debug(`Found ${events.length} aggregated bridge entries`);
     return events;
   };
 
@@ -130,7 +130,7 @@ export class BridgeFeeMetricAction {
    * @returns A Promise that resolves when the upsert is completed.
    */
   upsertBridgeFees = async (
-    aggregatedBridgeFees: BridgeFeeType[],
+    aggregatedBridgeFees: BridgeType[],
     totalCount: string,
   ): Promise<void> => {
     const queryRunner =

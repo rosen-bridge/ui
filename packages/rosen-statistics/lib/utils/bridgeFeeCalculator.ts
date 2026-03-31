@@ -1,8 +1,8 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
-  BridgeFeeAggregatedData,
-  BridgeFeeType,
+  BridgeAggregatedData,
+  BridgeType,
 } from '@rosen-ui/rosen-statistics-entity';
 
 import { BridgeFeeCalculationResult, AggregatedBridgeFeeData } from '../types';
@@ -24,7 +24,7 @@ import {
  * @returns Object containing bridge fee records, day total raw value, and max decimals
  */
 export const calculateBridgeFees = async (
-  events: BridgeFeeAggregatedData[],
+  events: BridgeAggregatedData[],
   tokenPriceAction: TokenPriceAction,
   logger: AbstractLogger,
 ): Promise<BridgeFeeCalculationResult> => {
@@ -92,7 +92,7 @@ export const calculateBridgeFees = async (
     dayMaxDecimals = Math.max(dayMaxDecimals, usdValueDecimals);
   }
 
-  const bridgeFeeRecords: BridgeFeeType[] = [];
+  const bridgeFeeRecords: BridgeType[] = [];
   let dayTotalRaw = 0n;
 
   for (const [fromChain, data] of aggregated.entries()) {

@@ -1296,6 +1296,14 @@ export const bridgeFeeMetricTestData = {
         month: 1,
         year: 2024,
       }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704400199, // Jan 4, 2024
+        day: 4,
+        month: 1,
+        year: 2024,
+      }),
     ],
     tokenRepo: [
       createToken({
@@ -1424,6 +1432,14 @@ export const bridgeFeeMetricTestData = {
         month: 1,
         year: 2024,
       }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704400199, // Jan 4, 2024
+        day: 4,
+        month: 1,
+        year: 2024,
+      }),
     ],
     tokenRepo: [
       createToken({
@@ -1501,6 +1517,14 @@ export const bridgeFeeMetricTestData = {
         height: 200,
         timestamp: 1704153599,
         day: 2,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704400199, // Jan 4, 2024
+        day: 4,
         month: 1,
         year: 2024,
       }),
@@ -1588,6 +1612,14 @@ export const bridgeFeeMetricTestData = {
         month: 1,
         year: 2024,
       }),
+      createBlock({
+        hash: 'block4',
+        height: 400,
+        timestamp: 1704313799, // Jan 3, 2024
+        day: 3,
+        month: 1,
+        year: 2024,
+      }),
     ],
     tokenRepo: [
       createToken({
@@ -1669,6 +1701,14 @@ export const bridgeFeeMetricTestData = {
         height: 300,
         timestamp: 1704240000, // Jan 3
         day: 3,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block4',
+        height: 400,
+        timestamp: 1704486599, // Jan 5, 2024
+        day: 5,
         month: 1,
         year: 2024,
       }),
@@ -1783,6 +1823,14 @@ export const bridgeFeeMetricTestData = {
         month: 1,
         year: 2024,
       }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704313799, // Jan 3, 2024
+        day: 3,
+        month: 1,
+        year: 2024,
+      }),
     ],
     tokenRepo: [
       createToken({
@@ -1830,6 +1878,14 @@ export const bridgeFeeMetricTestData = {
         height: 100,
         timestamp: 1704067200,
         day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704313799, // Jan 3, 2024
+        day: 3,
         month: 1,
         year: 2024,
       }),

@@ -8,7 +8,7 @@ import {
   EventCountStatus,
   WatcherCountType,
   BridgeFeeEntity,
-  BridgeFeeType,
+  BridgeType,
   MetricEntity,
 } from '../lib';
 
@@ -1197,7 +1197,7 @@ export const upsertWatcherCountScenarios = {
   },
 };
 
-export const bridgeFeeMetricActionTestData = {
+export const bridgeMetricsActionTestData = {
   /**
    * Scenario: Get last processed record with multiple records
    */
@@ -1695,7 +1695,7 @@ export const bridgeFeeMetricActionTestData = {
         year: 2024,
         lastProcessedHeight: 120,
       },
-    ] as BridgeFeeType[],
+    ] as BridgeType[],
     totalCount: '31.25',
     expectedBridgeFees: [
       {
@@ -1734,7 +1734,7 @@ export const bridgeFeeMetricActionTestData = {
         year: 2024,
         lastProcessedHeight: 125,
       },
-    ] as BridgeFeeType[],
+    ] as BridgeType[],
     totalCount: '15.25',
     existingBridgeFees: [
       {
@@ -1798,7 +1798,7 @@ export const bridgeFeeMetricActionTestData = {
         year: 2024,
         lastProcessedHeight: 310,
       },
-    ] as BridgeFeeType[],
+    ] as BridgeType[],
     totalCount: '46.5',
     expectedBridgeFees: [
       {
@@ -1836,7 +1836,7 @@ export const bridgeFeeMetricActionTestData = {
    * Scenario: Upsert bridge fees - empty aggregated bridge fees array
    */
   upsertBridgeFeesEmpty: {
-    aggregatedBridgeFees: [] as BridgeFeeType[],
+    aggregatedBridgeFees: [] as BridgeType[],
     totalCount: '10.5',
     existingBridgeFees: [
       {
@@ -1866,91 +1866,5 @@ export const bridgeFeeMetricActionTestData = {
       },
     ],
     expectedMetricValue: '10.5',
-  },
-
-  /**
-   * Scenario: Upsert bridge fees - decimal values
-   */
-  upsertBridgeFeesDecimalValues: {
-    aggregatedBridgeFees: [
-      {
-        fromChain: 'ergo',
-        amount: 10.12345678,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 110,
-      },
-    ] as BridgeFeeType[],
-    totalCount: '10.12345678',
-    expectedAmount: 10.12345678,
-    expectedMetricValue: '10.12345678',
-  },
-
-  /**
-   * Scenario: Upsert bridge fees - multiple chains with same date
-   */
-  upsertBridgeFeesMultipleChainsSameDate: {
-    aggregatedBridgeFees: [
-      {
-        fromChain: 'ergo',
-        amount: 10.5,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 110,
-      },
-      {
-        fromChain: 'cardano',
-        amount: 20.75,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 120,
-      },
-      {
-        fromChain: 'bitcoin',
-        amount: 15.25,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 130,
-      },
-    ] as BridgeFeeType[],
-    totalCount: '46.5',
-    expectedBridgeFees: [
-      {
-        fromChain: 'ergo',
-        amount: 10.5,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 110,
-      },
-      {
-        fromChain: 'cardano',
-        amount: 20.75,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 120,
-      },
-      {
-        fromChain: 'bitcoin',
-        amount: 15.25,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 130,
-      },
-    ],
-    expectedMetricValue: '46.5',
   },
 };

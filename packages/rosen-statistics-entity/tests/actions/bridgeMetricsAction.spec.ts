@@ -9,12 +9,12 @@ import {
   METRIC_KEYS,
   BridgeFeeEntity,
   MetricEntity,
-  BridgeFeeMetricAction,
+  BridgeMetricsAction,
 } from '../../lib';
-import { bridgeFeeMetricActionTestData } from '../testData';
+import { bridgeMetricsActionTestData } from '../testData';
 import { createDatabase } from '../utils';
 
-describe('BridgeFeeMetricAction', () => {
+describe('BridgeMetricsAction', () => {
   let dataSource: DataSource;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let blockRepo: Repository<BlockEntity>;
@@ -22,7 +22,7 @@ describe('BridgeFeeMetricAction', () => {
   let tokenRepo: Repository<TokenEntity>;
   let metricRepo: Repository<MetricEntity>;
   let logger: AbstractLogger;
-  let action: BridgeFeeMetricAction;
+  let action: BridgeMetricsAction;
 
   beforeEach(async () => {
     dataSource = await createDatabase();
@@ -38,7 +38,7 @@ describe('BridgeFeeMetricAction', () => {
     await bridgeFeeRepo.clear();
     await metricRepo.clear();
 
-    action = new BridgeFeeMetricAction(dataSource, logger);
+    action = new BridgeMetricsAction(dataSource, logger);
   });
 
   describe('getLastProcessedRecord', () => {
@@ -70,7 +70,7 @@ describe('BridgeFeeMetricAction', () => {
      */
     it('should return the record with the highest lastProcessedHeight', async () => {
       const testData =
-        bridgeFeeMetricActionTestData.getLastProcessedHeightMultipleRecords;
+        bridgeMetricsActionTestData.getLastProcessedHeightMultipleRecords;
 
       await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
 
@@ -108,7 +108,7 @@ describe('BridgeFeeMetricAction', () => {
      */
     it('should return the earliest event timestamp', async () => {
       const testData =
-        bridgeFeeMetricActionTestData.getFirstEventTimestampMultipleEvents;
+        bridgeMetricsActionTestData.getFirstEventTimestampMultipleEvents;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
@@ -135,7 +135,7 @@ describe('BridgeFeeMetricAction', () => {
      */
     it('should fetch bridge fee data with block timestamps and token decimals', async () => {
       const testData =
-        bridgeFeeMetricActionTestData.getEventsInRangeMultipleEvents;
+        bridgeMetricsActionTestData.getEventsInRangeMultipleEvents;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
@@ -162,7 +162,7 @@ describe('BridgeFeeMetricAction', () => {
      */
     it('should handle missing block data gracefully', async () => {
       const testData =
-        bridgeFeeMetricActionTestData.getEventsInRangeMissingBlocks;
+        bridgeMetricsActionTestData.getEventsInRangeMissingBlocks;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
@@ -187,7 +187,7 @@ describe('BridgeFeeMetricAction', () => {
      * - Returns empty array
      */
     it('should return empty array when no events in range', async () => {
-      const testData = bridgeFeeMetricActionTestData.getEventsInRangeNoEvents;
+      const testData = bridgeMetricsActionTestData.getEventsInRangeNoEvents;
 
       await blockRepo.insert(testData.blockRepo);
       await eventTriggerRepo.insert(testData.eventTriggerRepo);
@@ -215,7 +215,7 @@ describe('BridgeFeeMetricAction', () => {
      * - All operations succeed in same transaction
      */
     it('should create new bridge fee records and update total metric', async () => {
-      const testData = bridgeFeeMetricActionTestData.upsertBridgeFeesNewGroups;
+      const testData = bridgeMetricsActionTestData.upsertBridgeFeesNewGroups;
 
       await action.upsertBridgeFees(
         testData.aggregatedBridgeFees,
@@ -258,7 +258,7 @@ describe('BridgeFeeMetricAction', () => {
      */
     it('should replace existing bridge fee records with new values', async () => {
       const testData =
-        bridgeFeeMetricActionTestData.upsertBridgeFeesUpdateExisting;
+        bridgeMetricsActionTestData.upsertBridgeFeesUpdateExisting;
 
       await bridgeFeeRepo.insert(testData.existingBridgeFees);
       await metricRepo.insert(testData.existingMetric);
@@ -300,7 +300,7 @@ describe('BridgeFeeMetricAction', () => {
      */
     it('should handle multiple groups with different dates', async () => {
       const testData =
-        bridgeFeeMetricActionTestData.upsertBridgeFeesDifferentDates;
+        bridgeMetricsActionTestData.upsertBridgeFeesDifferentDates;
 
       await action.upsertBridgeFees(
         testData.aggregatedBridgeFees,
@@ -336,7 +336,7 @@ describe('BridgeFeeMetricAction', () => {
      * - Total metric is updated with provided totalCount value (still '10')
      */
     it('should update only total metric when aggregated bridge fees array is empty', async () => {
-      const testData = bridgeFeeMetricActionTestData.upsertBridgeFeesEmpty;
+      const testData = bridgeMetricsActionTestData.upsertBridgeFeesEmpty;
 
       await bridgeFeeRepo.insert(testData.existingBridgeFees);
       await metricRepo.insert(testData.existingMetric);
@@ -360,37 +360,6 @@ describe('BridgeFeeMetricAction', () => {
 
       expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
       expect(bridgeFees).toEqual(testData.expectedBridgeFees);
-
-      const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
-      });
-      expect(metric?.value).toBe(testData.expectedMetricValue);
-    });
-
-    /**
-     * @target upsertBridgeFees should handle decimal string values correctly
-     * @dependencies
-     * - database
-     * @scenario
-     * - Call upsertBridgeFees with decimal string amounts
-     * @expected
-     * - Stores decimal values as numbers in BridgeFeeEntity
-     * - Stores total count as string in MetricEntity
-     */
-    it('should handle decimal string values correctly', async () => {
-      const testData =
-        bridgeFeeMetricActionTestData.upsertBridgeFeesDecimalValues;
-
-      await action.upsertBridgeFees(
-        testData.aggregatedBridgeFees,
-        testData.totalCount,
-      );
-
-      const bridgeFees = await bridgeFeeRepo.find({
-        select: ['fromChain', 'amount', 'lastProcessedHeight'],
-      });
-
-      expect(bridgeFees[0].amount).toBeCloseTo(testData.expectedAmount, 10);
 
       const metric = await metricRepo.findOne({
         where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },

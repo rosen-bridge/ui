@@ -1,4 +1,4 @@
-export interface BridgeFeeType {
+export interface BridgeType {
   fromChain: string;
   amount: number;
   day: number;
@@ -8,7 +8,7 @@ export interface BridgeFeeType {
   lastProcessedHeight: number;
 }
 
-export interface BridgeFeeAggregatedData {
+export interface BridgeAggregatedData {
   fromChain: string;
   bridgeFee: string;
   tokenId: string;

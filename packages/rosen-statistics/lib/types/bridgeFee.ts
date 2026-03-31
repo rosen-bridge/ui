@@ -1,4 +1,4 @@
-import { BridgeFeeType } from '@rosen-ui/rosen-statistics-entity';
+import { BridgeType } from '@rosen-ui/rosen-statistics-entity';
 
 /**
  * Aggregated bridge fee data for a specific chain
@@ -17,7 +17,7 @@ export interface AggregatedBridgeFeeData {
  * Result of bridge fee calculation for a day
  */
 export interface BridgeFeeCalculationResult {
-  bridgeFeeRecords: BridgeFeeType[];
+  bridgeFeeRecords: BridgeType[];
   dayTotalRaw: bigint;
   dayMaxDecimals: number;
   totalEventsProcessed: number;

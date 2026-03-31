@@ -13,7 +13,7 @@ export {
   EventCountMetricAction,
   UserEventMetricAction,
   WatcherCountMetricAction,
-  BridgeFeeMetricAction,
+  BridgeMetricsAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
 export {
@@ -22,6 +22,6 @@ export {
   AggregatedUserEvents,
   WatcherCountType,
   LockedAssetsType,
-  BridgeFeeAggregatedData,
-  BridgeFeeType,
+  BridgeAggregatedData,
+  BridgeType,
 } from './types';

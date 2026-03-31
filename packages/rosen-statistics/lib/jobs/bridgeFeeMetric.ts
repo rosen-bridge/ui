@@ -1,8 +1,9 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
+import { BlockDbAction } from '@rosen-bridge/abstract-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
-  BridgeFeeMetricAction,
+  BridgeMetricsAction,
   MetricAction,
   METRIC_KEYS,
 } from '@rosen-ui/rosen-statistics-entity';
@@ -27,7 +28,7 @@ export const bridgeFeeMetric = async (
 ): Promise<void> => {
   logger.debug('Starting bridge fee metric calculation job');
 
-  const bridgeFeeAction = new BridgeFeeMetricAction(
+  const bridgeFeeAction = new BridgeMetricsAction(
     dataSource,
     logger.child('bridgeFeeMetricAction'),
   );
@@ -39,8 +40,18 @@ export const bridgeFeeMetric = async (
     dataSource,
     logger.child('tokenPriceAction'),
   );
+  const blockDbAction = new BlockDbAction(
+    dataSource,
+    'ergo',
+    logger.child('blockDbAction'),
+  );
 
   try {
+    const lastBlock = await blockDbAction.getLastSavedBlock();
+    if (!lastBlock || !lastBlock.year || !lastBlock.month || !lastBlock.day) {
+      logger.debug('No valid block found with required date fields.');
+      return;
+    }
     const lastProcessedRecord = await bridgeFeeAction.getLastProcessedRecord();
     const lastTotalUsd = await metricAction.getMetricByKey(
       METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
@@ -69,10 +80,9 @@ export const bridgeFeeMetric = async (
       return;
     }
 
-    const now = new Date();
     const yesterdayTs =
       Math.floor(
-        new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() /
+        new Date(lastBlock.year, lastBlock.month - 1, lastBlock.day).getTime() /
           1000,
       ) - 86400;
 

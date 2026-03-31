@@ -9,7 +9,7 @@ import {
   MetricEntity,
   BridgeFeeEntity,
 } from '@rosen-ui/rosen-statistics-entity';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 
 import { bridgeFeeMetric } from '../../lib';
 import { bridgeFeeMetricTestData } from '../testData';
@@ -41,12 +41,6 @@ describe('bridgeFeeMetric', () => {
     await blockRepo.clear();
     await tokenRepo.clear();
     await tokenPriceRepo.clear();
-
-    vi.useFakeTimers();
-  });
-
-  afterEach(() => {
-    vi.useRealTimers();
   });
 
   /**
@@ -58,7 +52,6 @@ describe('bridgeFeeMetric', () => {
    * - calculateBridgeFees
    * @scenario
    * - Insert blocks, events, tokens, and token prices for multiple chains
-   * - Set system time to Jan 3, 2024 (day after last event)
    * - Run bridgeFeeMetric
    * @expected
    * - Creates BridgeFeeEntity records for each chain with correct amounts
@@ -67,8 +60,6 @@ describe('bridgeFeeMetric', () => {
   it('should calculate bridge fees for multiple chains', async () => {
     const testData = bridgeFeeMetricTestData.multipleChains;
 
-    // Set system time to Jan 3, 2024 (day after last event)
-    vi.setSystemTime(new Date('2024-01-03T00:00:00Z'));
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
@@ -109,7 +100,6 @@ describe('bridgeFeeMetric', () => {
    * @scenario
    * - Insert existing bridge fee record (2.5 USD) and total metric (2.5)
    * - Insert new event after last processed record (3.0 USD)
-   * - Set system time to Jan 4, 2024
    * - Run bridgeFeeMetric
    * @expected
    * - Updates existing bridge fee record to 5.5 USD
@@ -118,7 +108,6 @@ describe('bridgeFeeMetric', () => {
   it('should resume from last processed record', async () => {
     const testData = bridgeFeeMetricTestData.resumeFromLastRecord;
 
-    vi.setSystemTime(new Date('2024-01-04T00:00:00Z'));
     await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
     await metricRepo.insert(testData.metricRepo);
     await blockRepo.insert(testData.blockRepo);
@@ -160,7 +149,6 @@ describe('bridgeFeeMetric', () => {
    * - calculateBridgeFees
    * @scenario
    * - Insert events for ergo (has price) and cardano (no price)
-   * - Set system time to Jan 3, 2024
    * - Run bridgeFeeMetric
    * @expected
    * - Only ergo event is processed (2.5 USD)
@@ -170,7 +158,6 @@ describe('bridgeFeeMetric', () => {
   it('should skip events without token prices', async () => {
     const testData = bridgeFeeMetricTestData.skipEventsWithoutPrices;
 
-    vi.setSystemTime(new Date('2024-01-03T00:00:00Z'));
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
@@ -210,7 +197,6 @@ describe('bridgeFeeMetric', () => {
    * - calculateBridgeFees
    * @scenario
    * - Insert 3 successful events for ergo on same day (2.5, 5.0, 7.5 USD)
-   * - Set system time to Jan 3, 2024 (day after event)
    * - Run bridgeFeeMetric
    * @expected
    * - Creates single bridge fee record with aggregated amount (15.0 USD)
@@ -219,7 +205,6 @@ describe('bridgeFeeMetric', () => {
   it('should aggregate multiple events per chain per day', async () => {
     const testData = bridgeFeeMetricTestData.aggregateMultipleEvents;
 
-    vi.setSystemTime(new Date('2024-01-03T00:00:00Z'));
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
@@ -259,7 +244,6 @@ describe('bridgeFeeMetric', () => {
    * - calculateBridgeFees
    * @scenario
    * - Insert events spanning 3 days (2.5, 6.0, 10.5 USD)
-   * - Set system time to Jan 5, 2024 (day after last event)
    * - Run bridgeFeeMetric
    * @expected
    * - Creates bridge fee records for each day
@@ -268,7 +252,6 @@ describe('bridgeFeeMetric', () => {
   it('should process multiple days of events', async () => {
     const testData = bridgeFeeMetricTestData.processMultipleDays;
 
-    vi.setSystemTime(new Date('2024-01-05T00:00:00Z'));
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
@@ -307,14 +290,12 @@ describe('bridgeFeeMetric', () => {
    * - TokenPriceAction
    * @scenario
    * - No events in database
-   * - Set system time to Jan 20, 2024
    * - Run bridgeFeeMetric
    * @expected
    * - No bridge fee records created
    * - No metric created
    */
   it('should handle no events found', async () => {
-    vi.setSystemTime(new Date('2024-01-20T00:00:00Z'));
     await bridgeFeeMetric(dataSource, logger);
 
     const bridgeFees = await bridgeFeeRepo.find();
@@ -335,7 +316,6 @@ describe('bridgeFeeMetric', () => {
    * @scenario
    * - Insert existing bridge fee record (2.5 USD) and total metric (2.5)
    * - No new events in range
-   * - Set system time to Jan 3, 2024 (day after existing event)
    * - Run bridgeFeeMetric
    * @expected
    * - Existing data remains unchanged (2.5 USD)
@@ -343,7 +323,6 @@ describe('bridgeFeeMetric', () => {
   it('should preserve existing data when no new events', async () => {
     const testData = bridgeFeeMetricTestData.preserveExistingData;
 
-    vi.setSystemTime(new Date('2024-01-03T00:00:00Z'));
     await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
     await metricRepo.insert(testData.metricRepo);
 
@@ -380,7 +359,6 @@ describe('bridgeFeeMetric', () => {
    * - calculateBridgeFees
    * @scenario
    * - Insert events for tokens with different decimals (8, 6, 18, 0)
-   * - Set system time to Jan 3, 2024 (day after event)
    * - Run bridgeFeeMetric
    * @expected
    * - Correctly calculates USD values with proper decimal handling
@@ -389,7 +367,6 @@ describe('bridgeFeeMetric', () => {
   it('should handle tokens with different decimals correctly', async () => {
     const testData = bridgeFeeMetricTestData.differentDecimals;
 
-    vi.setSystemTime(new Date('2024-01-03T00:00:00Z'));
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
