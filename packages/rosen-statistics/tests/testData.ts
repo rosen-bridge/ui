@@ -1,10 +1,50 @@
 import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
+import { TokenPriceEntity } from '@rosen-bridge/token-price-entity';
 import { RosenTokens } from '@rosen-bridge/tokens';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
-import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
+import { TokenEntity } from '@rosen-ui/asset-calculator';
+import {
+  BridgeFeeEntity,
+  METRIC_KEYS,
+  MetricEntity,
+} from '@rosen-ui/rosen-statistics-entity';
 
 import { WatcherCountConfig } from '../lib';
+
+/**
+ * Helper function to create a TokenEntity for tests
+ */
+export const createToken = (
+  overrides: Partial<TokenEntity> = {},
+): DeepPartial<TokenEntity> => {
+  return {
+    id: 'token-1',
+    name: 'Token 1',
+    decimal: 8,
+    significantDecimal: 8,
+    isNative: true,
+    chain: 'ergo',
+    ergoSideTokenId: 'ergo-token-1',
+    isResident: true,
+    ...overrides,
+  } as TokenEntity;
+};
+
+/**
+ * Helper function to create a TokenPriceEntity for tests
+ */
+export const createTokenPrice = (
+  tokenId: string,
+  price: number,
+  timestamp: number,
+): DeepPartial<TokenPriceEntity> => {
+  return {
+    tokenId,
+    price,
+    timestamp,
+  };
+};
 
 export const tokenMapData: RosenTokens = [
   {
@@ -1230,6 +1270,680 @@ export const watcherCountMetricTestData = {
         { network: 'cardano', count: 50 },
       ],
       totalWatchers: '150',
+    },
+  },
+};
+
+export const bridgeFeeMetricTestData = {
+  /**
+   * Scenario: Calculate bridge fees for multiple chains
+   */
+  multipleChains: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200, // Jan 1, 2024
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704153599, // Jan 2, 2024
+        day: 2,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+      createToken({
+        id: 'token-2',
+        decimal: 6,
+        significantDecimal: 6,
+        chain: 'cardano',
+      }),
+      createToken({
+        id: 'token-3',
+        decimal: 18,
+        significantDecimal: 18,
+        chain: 'ethereum',
+      }),
+    ],
+    tokenPriceRepo: [
+      createTokenPrice('token-1', 2.5, 1704067100),
+      createTokenPrice('token-2', 1.5, 1704153500),
+      createTokenPrice('token-3', 3.0, 1704153500),
+    ],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '10000', // 0.0001 token * 2.5 = 0.00025 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'cardano',
+        bridgeFee: '2000000', // 2 tokens * 1.5 = 3.0 USD
+        sourceChainTokenId: 'token-2',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ethereum',
+        bridgeFee: '1000000000000000000', // 1 token * 3.0 = 3.0 USD
+        sourceChainTokenId: 'token-3',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 0.00025,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'cardano',
+          amount: 3.0,
+          day: 2,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+        {
+          fromChain: 'ethereum',
+          amount: 3.0,
+          day: 2,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      totalMetricValue: '6.00025',
+    },
+  },
+
+  /**
+   * Scenario: Resume from last processed record
+   */
+  resumeFromLastRecord: {
+    bridgeFeeRepo: [
+      {
+        fromChain: 'ergo',
+        amount: 2.5,
+        day: 1,
+        week: 2817,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 100,
+      },
+    ] as BridgeFeeEntity[],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+        value: '2.5',
+        updatedAt: 1704067200,
+      },
+    ] as MetricEntity[],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200, // Jan 1, 2024
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704227399, // Jan 2, 2024
+        day: 2,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+    ],
+    tokenPriceRepo: [
+      createTokenPrice('token-1', 2.5, 1704067199),
+      createTokenPrice('token-1', 3.0, 1704153500),
+    ],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 1 token * 3.0 = 3.0 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeCount: 2,
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 3.0,
+          day: 2,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      totalMetricValue: '5.5',
+    },
+  },
+
+  /**
+   * Scenario: Skip events without token prices
+   */
+  skipEventsWithoutPrices: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200,
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704153599,
+        day: 2,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+      createToken({
+        id: 'token-2',
+        decimal: 6,
+        significantDecimal: 6,
+        chain: 'cardano',
+      }),
+    ],
+    tokenPriceRepo: [
+      createTokenPrice('token-1', 2.5, 1704067100),
+      // No price for token-2
+    ],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // Has price
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'cardano',
+        bridgeFee: '2000000', // No price - should be skipped
+        sourceChainTokenId: 'token-2',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalMetricValue: '2.5',
+    },
+  },
+
+  /**
+   * Scenario: Aggregate multiple events per chain per day
+   */
+  aggregateMultipleEvents: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200,
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704067300,
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704067400,
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+    ],
+    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704067100)],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 2.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        bridgeFee: '200000000', // 5.0 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        bridgeFee: '300000000', // 7.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block3',
+        spendHeight: 300,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 15, // Sum: 2.5 + 5.0 + 7.5
+          day: 1,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 300, // Highest height
+          week: Math.floor(1704067200 / 604800),
+        },
+      ],
+      totalMetricValue: '15',
+    },
+  },
+
+  /**
+   * Scenario: Process multiple days of events
+   */
+  processMultipleDays: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200, // Jan 1
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704153600, // Jan 2
+        day: 2,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704240000, // Jan 3
+        day: 3,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+    ],
+    tokenPriceRepo: [
+      createTokenPrice('token-1', 2.5, 1704067100),
+      createTokenPrice('token-1', 3.0, 1704153500),
+      createTokenPrice('token-1', 3.5, 1704239900),
+    ],
+    eventTriggerRepo: [
+      // Day 1
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 2.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      // Day 2
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        bridgeFee: '200000000', // 6.0 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+      // Day 3
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ergo',
+        bridgeFee: '300000000', // 10.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block3',
+        spendHeight: 300,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 6.0,
+          day: 2,
+          week: Math.floor(1704153600 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 10.5,
+          day: 3,
+          week: Math.floor(1704240000 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 300,
+        },
+      ],
+      totalMetricValue: '19', // 2.5 + 6.0 + 10.5
+    },
+  },
+
+  /**
+   * Scenario: Preserve existing data when no new events
+   */
+  preserveExistingData: {
+    bridgeFeeRepo: [
+      {
+        fromChain: 'ergo',
+        amount: 2.5,
+        day: 1,
+        week: 2817,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 100,
+      },
+    ] as BridgeFeeEntity[],
+    metricRepo: [
+      {
+        key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+        value: '2.5',
+        updatedAt: 1704067200,
+      },
+    ] as MetricEntity[],
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200, // Jan 1, 2024
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+    ],
+    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704067199)],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalMetricValue: '2.5',
+    },
+  },
+
+  /**
+   * Scenario: Handle tokens with different decimals
+   */
+  differentDecimals: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200,
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+      createToken({
+        id: 'token-2',
+        decimal: 6,
+        significantDecimal: 6,
+        chain: 'cardano',
+      }),
+      createToken({
+        id: 'token-3',
+        decimal: 18,
+        significantDecimal: 18,
+        chain: 'ethereum',
+      }),
+      createToken({
+        id: 'token-4',
+        decimal: 0,
+        significantDecimal: 0,
+        chain: 'bitcoin',
+      }),
+    ],
+    tokenPriceRepo: [
+      createTokenPrice('token-1', 2.5, 1704067100),
+      createTokenPrice('token-2', 1.5, 1704067100),
+      createTokenPrice('token-3', 3.0, 1704067100),
+      createTokenPrice('token-4', 50000, 1704067100),
+    ],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'cardano',
+        bridgeFee: '2000000', // 2 tokens * 1.5 = 3.0 USD
+        sourceChainTokenId: 'token-2',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ethereum',
+        bridgeFee: '1000000000000000000', // 1 token * 3.0 = 3.0 USD
+        sourceChainTokenId: 'token-3',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromChain: 'bitcoin',
+        bridgeFee: '1', // 1 BTC * 50000 = 50000 USD
+        sourceChainTokenId: 'token-4',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'cardano',
+          amount: 3.0,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ethereum',
+          amount: 3.0,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'bitcoin',
+          amount: 50000,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalMetricValue: '50008.5', // 50000 + 3.0 + 2.5 + 3.0
     },
   },
 };
