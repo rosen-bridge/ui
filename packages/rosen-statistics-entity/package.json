@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/rosen-statistics-entity",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": true,
   "description": "Rosen statistics entity and migrations",
   "repository": {
@@ -36,7 +36,7 @@
   "dependencies": {
     "@rosen-bridge/abstract-logger": "^4.0.0",
     "@rosen-bridge/extended-typeorm": "^1.0.1",
-    "@rosen-bridge/watcher-data-extractor": "^13.0.2",
+    "@rosen-bridge/watcher-data-extractor": "^13.0.4",
     "@rosen-ui/asset-calculator": "^2.3.1"
   },
   "engines": {

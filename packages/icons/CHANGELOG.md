@@ -1,5 +1,11 @@
 # @rosen-bridge/icons
 
+## 3.5.0
+
+### Minor Changes
+
+- Remove Raw SVG exports
+
 ## 3.4.0
 
 ### Minor Changes

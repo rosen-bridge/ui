@@ -6,6 +6,7 @@ import {
   Amount,
   Box as BoxMui,
   Columns,
+  Duration,
   Identifier,
   InjectOverrides,
   Label,
@@ -81,7 +82,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             label="Duration"
             info="How long it takes from when the lock transaction is recorded on the blockchain until the reward transaction is confirmed. (Note: the actual payment may arrive before this full interval.)"
           >
-            -
+            <Duration loading={isLoading} fallBack="-" />
           </Label>
           <Label label="Total Emission">
             <Amount

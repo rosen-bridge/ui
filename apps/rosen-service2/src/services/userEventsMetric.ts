@@ -8,6 +8,7 @@ import { userEventMetric } from '@rosen-ui/rosen-statistics';
 
 import { configs } from '../configs';
 import { DBService } from './db';
+import { ScannerService } from './scanner';
 
 export class UserEventsMetricService extends PeriodicTaskService {
   name = 'UserEventsMetricService';
@@ -16,6 +17,10 @@ export class UserEventsMetricService extends PeriodicTaskService {
   protected dependencies: Dependency[] = [
     {
       serviceName: DBService.name,
+      allowedStatuses: [ServiceStatus.running],
+    },
+    {
+      serviceName: ScannerService.name,
       allowedStatuses: [ServiceStatus.running],
     },
   ];
@@ -63,7 +68,7 @@ export class UserEventsMetricService extends PeriodicTaskService {
     try {
       await userEventMetric(
         this.dbService.dataSource,
-        this.logger.child('userEventsCalculationJob'),
+        this.logger.child('userEventMetric'),
       );
 
       this.logger.info('User events calculation job completed successfully');
@@ -81,10 +86,7 @@ export class UserEventsMetricService extends PeriodicTaskService {
    * @protected
    * @returns {Promise<void>}
    */
-  protected preStart = async (): Promise<void> => {
-    this.setStatus(ServiceStatus.started);
-    this.logger.info('UserEventsMetricService started successfully');
-  };
+  protected preStart = async (): Promise<void> => {};
 
   /**
    * Post-stop hook for cleanup
@@ -92,9 +94,7 @@ export class UserEventsMetricService extends PeriodicTaskService {
    * @protected
    * @returns {Promise<void>}
    */
-  protected postStop = async (): Promise<void> => {
-    this.logger.info('UserEventsMetricService stopped');
-  };
+  protected postStop = async (): Promise<void> => {};
 
   /**
    * Builds a list of asynchronous tasks for user events calculation.

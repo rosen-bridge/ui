@@ -104,7 +104,10 @@ export class ScannerService extends PeriodicTaskService {
             break;
         }
       }
-      if (configs.chains.bitcoin.active) {
+      if (
+        configs.chains.bitcoin.active ||
+        configs.chains['bitcoin-runes'].active
+      ) {
         switch (configs.chains.bitcoin.method) {
           case BITCOIN_METHOD_ESPLORA:
             this.scanners[NETWORKS.bitcoin.key] =

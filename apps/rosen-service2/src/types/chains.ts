@@ -1,13 +1,8 @@
 import { NETWORKS_KEYS } from '@rosen-ui/constants';
 
 import { configs } from '../configs';
-import { BITCOIN_RUNES_NETWORKS_KEY } from '../constants';
 
-// TODO: implement Bitcoin-Runes support later
-export type ChainChoices = Exclude<
-  (typeof NETWORKS_KEYS)[number],
-  typeof BITCOIN_RUNES_NETWORKS_KEY
->;
+export type ChainChoices = (typeof NETWORKS_KEYS)[number];
 
 export type ChainsKeys = keyof (typeof configs)['chains'];
 
@@ -29,6 +24,9 @@ export interface ChainConfigs {
 
 export type AllChainsConfigs = {
   version: string;
+  tokens: {
+    RSN: string;
+  };
 } & {
   [K in ChainChoices]: ChainConfigs;
 };

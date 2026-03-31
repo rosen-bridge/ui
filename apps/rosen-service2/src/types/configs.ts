@@ -64,16 +64,29 @@ export interface DataAggregator {
 export interface userEventMetrics {
   interval: number;
 }
+export interface lockedAssetsMetrics {
+  interval: number;
+}
+export interface GeneralMetrics {
+  interval: number;
+}
+export interface EventCountMetrics {
+  interval: number;
+}
 export interface Statistics {
+  generalMetrics: GeneralMetrics;
+  lockedAssetsMetrics: lockedAssetsMetrics;
+  eventCountMetrics: EventCountMetrics;
   userEventsMetric: userEventMetrics;
 }
 export interface Chains {
-  ergo: ChainsErgo;
-  cardano: ChainsCardano;
-  bitcoin: ChainsBitcoin;
-  doge: ChainsDoge;
-  ethereum: ChainsEthereum;
-  binance: ChainsBinance;
+  'ergo': ChainsErgo;
+  'cardano': ChainsCardano;
+  'bitcoin': ChainsBitcoin;
+  'bitcoin-runes': ChainsBitcoinRunes;
+  'doge': ChainsDoge;
+  'ethereum': ChainsEthereum;
+  'binance': ChainsBinance;
 }
 
 export interface ChainsBinance {
@@ -163,6 +176,18 @@ export interface ChainsDogeAdapter {
 
 export interface ChainsDogeAdapterBlockCypher {
   url: string;
+}
+
+export interface ChainsBitcoinRunes {
+  active: boolean;
+  scanInterval: number;
+  adapter: ChainsBitcoinRunesAdapter;
+  unisatUrl?: string;
+  unisatApiKey?: string;
+}
+
+export interface ChainsBitcoinRunesAdapter {
+  extraAddresses?: string[];
 }
 
 export interface ChainsBitcoin {

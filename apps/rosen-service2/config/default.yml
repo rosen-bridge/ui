@@ -18,6 +18,12 @@ dataAggregator:
 statistics:
   userEventsMetric:
     interval: 86400
+  eventCountMetrics:
+    interval: 86400
+  lockedAssetsMetrics:
+    interval: 86400
+  generalMetrics:
+    interval: 86400
 chains:
   ergo:
     initialHeight: 1
@@ -38,6 +44,10 @@ chains:
     active: false
     initialHeight: 1
     scanInterval: 600
+  bitcoin-runes:
+    active: false
+    scanInterval: 600
+    unisatUrl: https://open-api.unisat.io
   doge:
     active: false
     initialHeight: 1

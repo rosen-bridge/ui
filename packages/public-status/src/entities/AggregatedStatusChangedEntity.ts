@@ -10,7 +10,7 @@ import {
 import { AggregateTxStatus, AggregateEventStatus } from '../constants';
 import { TxEntity } from './TxEntity';
 
-@Entity()
+@Entity('aggregated_status_changed_entity')
 export class AggregatedStatusChangedEntity {
   @PrimaryGeneratedColumn()
   id: number;

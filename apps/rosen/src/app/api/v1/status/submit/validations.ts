@@ -28,8 +28,7 @@ export interface Params {
 
 const TxSchema = Joi.object<TxParams>().keys({
   txId: Joi.string()
-    .length(64)
-    .pattern(/^[a-fA-F0-9]+$/)
+    .pattern(/^(?:0x)?[a-fA-F0-9]{64}$/)
     .required(),
   chain: Joi.string().min(1).max(20).required(),
   txType: Joi.string()

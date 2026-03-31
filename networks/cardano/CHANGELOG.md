@@ -1,5 +1,12 @@
 # @rosen-network/cardano
 
+## 2.5.4
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.5.0
+
 ## 2.5.3
 
 ### Patch Changes
