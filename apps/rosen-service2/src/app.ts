@@ -1,6 +1,7 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { ServiceManager } from '@rosen-bridge/service-manager';
 import { AssetAggregatorService } from 'services/assetAggregator';
+import { EventCountMetricService } from 'services/eventCountMetric';
 import { GeneralMetricsService } from 'services/generalMetrics';
 import { LockedAssetsMetricService } from 'services/lockedAssetsMetric';
 
@@ -65,6 +66,13 @@ const startApp = async () => {
   logger.debug(
     'Locked assets metrics service registered to the service manager',
   );
+
+  logger.debug('Initializing event count metrics service');
+  EventCountMetricService.init(
+    DefaultLogger.getInstance().child('eventCountMetricsService'),
+  );
+  serviceManager.register(EventCountMetricService.getInstance());
+  logger.debug('Event count metrics service registered to the service manager');
 
   logger.debug('Initializing health-check service');
   HealthService.init(DefaultLogger.getInstance().child('healthCheckService'));

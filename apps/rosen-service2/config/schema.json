@@ -314,6 +314,22 @@
             ]
           }
         }
+      },
+      "eventCountMetrics": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "event count metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "event count metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
       }
     }
   },
