@@ -15,8 +15,9 @@ import { getDecimalString } from '@rosen-ui/utils';
 import { useBalance } from './useBalance';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
-import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
+import { useBridgeForm } from './useBridgeForm';
+import { useBridgeFormValues } from './useBridgeFormValues';
 
 const MaxTransferContext = createContext<MaxTransferContextType | null>(null);
 
@@ -48,7 +49,9 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
 
   const tokenMap = useTokenMap();
 
-  const transactionFormData = useTransactionFormData();
+  const { formState } = useBridgeForm();
+
+  const { target, token, walletAddress } = useBridgeFormValues();
 
   const wallet = useWallet();
 
@@ -61,12 +64,12 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
   const isLoading = balance.isLoading || isTransitionLoading;
 
   const raw = useMemo(() => {
-    if (!amount || !tokenMap || !transactionFormData.tokenValue) return '0';
+    if (!amount || !tokenMap || !token) return '0';
     return getDecimalString(
       amount,
-      tokenMap.getSignificantDecimals(transactionFormData.tokenValue.tokenId),
+      tokenMap.getSignificantDecimals(token.tokenId),
     );
-  }, [amount, tokenMap, transactionFormData.tokenValue]);
+  }, [amount, tokenMap, token]);
 
   const load = useCallback(() => {
     setAmount(0n);
@@ -77,10 +80,10 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
       !balance.amount ||
       balance.isLoading ||
       !network.selectedSource ||
-      !transactionFormData.targetValue ||
-      !transactionFormData.tokenValue ||
+      !target ||
+      !token ||
       !wallet.selected ||
-      transactionFormData.formState.errors?.walletAddress
+      formState.errors?.walletAddress
     )
       return;
 
@@ -88,11 +91,11 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
       try {
         const amount = await network.selectedSource!.getMaxTransfer({
           balance: balance.amount,
-          isNative: transactionFormData.tokenValue.type === 'native',
+          isNative: token.type === 'native',
           eventData: {
             fromAddress: await wallet.selected!.getAddress(),
-            toAddress: transactionFormData.walletAddressValue,
-            toChain: transactionFormData.targetValue!,
+            toAddress: walletAddress!,
+            toChain: target!,
           },
         });
 
@@ -106,10 +109,10 @@ export const MaxTransferProvider = ({ children }: PropsWithChildren) => {
     balance.isLoading,
     network.selectedSource,
     wallet.selected,
-    transactionFormData.formState.errors,
-    transactionFormData.targetValue,
-    transactionFormData.tokenValue,
-    transactionFormData.walletAddressValue,
+    formState.errors,
+    target,
+    token,
+    walletAddress,
   ]);
 
   useEffect(load, [load]);

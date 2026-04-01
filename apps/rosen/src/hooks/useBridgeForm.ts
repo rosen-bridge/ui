@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
@@ -8,8 +8,8 @@ import * as networks from '@/networks';
 
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useTokenMap } from './useTokenMap';
-import { useTransactionFormData } from './useTransactionFormData';
 import { WalletContext } from './useWallet';
+import { BridgeForm } from '@/app/(bridge)/page';
 
 /**
  * handles the form field registrations and form state changes
@@ -17,8 +17,7 @@ import { WalletContext } from './useWallet';
  */
 
 export const useBridgeForm = () => {
-  const { control, resetField, reset, setValue, formState, setFocus } =
-    useTransactionFormData();
+  const { control, ...rest } = useFormContext<BridgeForm>();
 
   const tokenMap = useTokenMap();
 
@@ -140,15 +139,12 @@ export const useBridgeForm = () => {
   });
 
   return {
-    reset,
-    setValue,
-    resetField,
-    setFocus,
+    ...rest,
+    control,
     sourceField,
     targetField,
     tokenField,
     amountField,
     addressField,
-    formState,
   };
 };

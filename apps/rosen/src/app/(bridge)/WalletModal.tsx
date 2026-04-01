@@ -16,7 +16,7 @@ import {
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
-import { useNetwork, useTransactionFormData, useWallet } from '@/hooks';
+import { useBridgeFormValues, useNetwork, useWallet } from '@/hooks';
 
 export type WalletModalProps = {
   open: boolean;
@@ -28,7 +28,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
 
   const network = useNetwork();
 
-  const transactionFormData = useTransactionFormData();
+  const { source } = useBridgeFormValues();
 
   const wallet = useWallet();
 
@@ -59,7 +59,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
             It may be necessary to reload this page after the following
             extensions have been installed in order to connect to them.
           </Alert>
-          {transactionFormData.sourceValue == NETWORKS.bitcoin.key && (
+          {source == NETWORKS.bitcoin.key && (
             <Alert severity="warning">
               We only support native SegWit addresses (P2WPKH or P2WSH) for the
               source address.

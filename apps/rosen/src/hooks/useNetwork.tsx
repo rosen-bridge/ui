@@ -99,6 +99,7 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
    * unsupported networks
    */
   const targets = useMemo(() => {
+    if (!sourceField.value) return [];
     return (tokenMap.getSupportedChains(sourceField.value) as NetworkKey[])
       .filter((chain) => !!NETWORKS[chain])
       .map((chain) => getNetwork(chain))
@@ -114,9 +115,9 @@ export const NetworkProvider = ({ children }: { children: ReactNode }) => {
     return tokenMap.getTokens(sourceField.value, targetField.value);
   }, [targetField.value, sourceField.value, tokenMap]);
 
-  const selectedSource = getNetwork(sourceField.value);
+  const selectedSource = sourceField.value ? getNetwork(sourceField.value) : undefined;
 
-  const selectedTarget = getNetwork(targetField.value);
+  const selectedTarget = targetField.value ? getNetwork(targetField.value) : undefined;
 
   useEffect(() => {
     if (!blacklist) return;

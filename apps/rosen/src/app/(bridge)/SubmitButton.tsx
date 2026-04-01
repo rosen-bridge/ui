@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { CommentAltExclamation } from '@rosen-bridge/icons';
-import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Amount,
   Card,
@@ -21,11 +20,12 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import {
+  useBridgeForm,
+  useBridgeFormValues,
   useNetwork,
   useTokenMap,
   useTransaction,
   useTransactionFees,
-  useTransactionFormData,
   useWallet,
 } from '@/hooks';
 
@@ -34,15 +34,18 @@ export const SubmitButton = () => {
 
   const tokenMap = useTokenMap();
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
+  const {   
     formState: { isSubmitting: isFormSubmitting, errors, isValidating },
-    walletAddressValue,
     handleSubmit,
-  } = useTransactionFormData();
+  } = useBridgeForm();
+
+  const {
+    source: sourceValue,
+    target: targetValue,
+    token: tokenValue,
+    amount: amountValue,
+    walletAddress: walletAddressValue,
+  } = useBridgeFormValues();
 
   const {
     networkFee,
@@ -72,17 +75,11 @@ export const SubmitButton = () => {
     (availableNetwork) => availableNetwork.name == targetValue,
   );
 
-  const tokenInfo = tokenValue as RosenChainToken;
+  const targetTokenSearchResults = sourceValue && tokenValue?.tokenId
+    ? tokenMap.search(sourceValue, { tokenId: tokenValue.tokenId })
+    : undefined;
 
-  const targetTokenSearchResults =
-    sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
-    tokenMap.search(sourceValue, {
-      tokenId: tokenValue.tokenId,
-    });
-  const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+  const targetTokenInfo = targetValue && targetTokenSearchResults?.[0]?.[targetValue]; 
 
   const disabled =
     !selectedWallet ||
@@ -133,7 +130,7 @@ export const SubmitButton = () => {
               <Stack spacing={2}>
                 <Stack align="center" spacing={2}>
                   <Typography variant="subtitle1">
-                    <Amount value={amountValue || 0} unit={tokenInfo?.name} />
+                    <Amount value={amountValue || 0} unit={tokenValue?.name} />
                   </Typography>
                   {source && target && (
                     <Connector
@@ -145,10 +142,10 @@ export const SubmitButton = () => {
                 <Divider />
                 <div>
                   <Label label="Transaction Fee">
-                    <Amount value={networkFeeRaw} unit={tokenInfo?.name} />
+                    <Amount value={networkFeeRaw} unit={tokenValue?.name} />
                   </Label>
                   <Label label="Bridge Fee">
-                    <Amount value={bridgeFeeRaw} unit={tokenInfo?.name} />
+                    <Amount value={bridgeFeeRaw} unit={tokenValue?.name} />
                   </Label>
                   <Label label="Receiving Amount">
                     <Amount
@@ -159,7 +156,7 @@ export const SubmitButton = () => {
                 </div>
                 <Divider />
                 <Label label="Destination Address" orientation="vertical">
-                  <Identifier value={walletAddressValue} copyable />
+                  <Identifier value={walletAddressValue || undefined} copyable />
                 </Label>
               </Stack>
             </CardBody>

@@ -1,6 +1,5 @@
 'use client';
 
-import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Alert,
   Amount,
@@ -12,9 +11,9 @@ import {
 } from '@rosen-bridge/ui-kit';
 
 import {
+  useBridgeFormValues,
   useTokenMap,
   useTransactionFees,
-  useTransactionFormData,
 } from '@/hooks';
 
 /**
@@ -22,7 +21,7 @@ import {
  * and wallet connection
  */
 export const TransactionInfo = () => {
-  const { sourceValue, targetValue, tokenValue } = useTransactionFormData();
+  const { source, target, token } = useBridgeFormValues();
 
   const tokenMap = useTokenMap();
 
@@ -31,23 +30,17 @@ export const TransactionInfo = () => {
     networkFeeRaw,
     bridgeFeeRaw,
     receivingAmountRaw,
-    isLoading: isLoadingFees,
+    isLoading,
     minTransferRaw,
   } = useTransactionFees();
 
-  const tokenInfo = tokenValue as RosenChainToken;
+  const targetTokenSearchResults = source && token?.tokenId
+    ? tokenMap.search(source, { tokenId: token.tokenId })
+    : undefined;
 
-  const targetTokenSearchResults =
-    sourceValue &&
-    tokenValue &&
-    tokenValue.tokenId &&
-    tokenMap.search(sourceValue, {
-      tokenId: tokenValue.tokenId,
-    });
-  const targetTokenInfo =
-    targetValue && targetTokenSearchResults?.[0]?.[targetValue];
+  const targetToken = target && targetTokenSearchResults?.[0]?.[target]; 
 
-  const isPending = isLoadingFees && sourceValue && targetValue && tokenValue;
+  const isPending = !!(isLoading && source && target && token);
 
   return (
     <Card
@@ -61,11 +54,11 @@ export const TransactionInfo = () => {
         <Label label="You Will Receive" color="textPrimary" dense>
           <Amount
             value={
-              !tokenValue || receivingAmountRaw === '0'
+              !token || receivingAmountRaw === '0'
                 ? undefined
                 : receivingAmountRaw
             }
-            unit={targetTokenInfo?.name}
+            unit={targetToken?.name}
             fallback="0"
             loading={isPending}
           />
@@ -73,25 +66,25 @@ export const TransactionInfo = () => {
         <Divider borderStyle="dashed" style={{ margin: '8px 0' }} />
         <Label label="Transaction Fee" dense>
           <Amount
-            value={!tokenValue ? undefined : networkFeeRaw}
-            unit={tokenInfo?.name}
+            value={token ? networkFeeRaw : undefined}
+            unit={token?.name}
             fallback="0"
             loading={isPending}
           />
         </Label>
         <Label label="Bridge Fee" dense>
           <Amount
-            value={!tokenValue ? undefined : bridgeFeeRaw}
-            unit={tokenInfo?.name}
+            value={token ? bridgeFeeRaw : undefined}
+            unit={token?.name}
             fallback="0"
             loading={isPending}
           />
         </Label>
         <Label label="Min Transfer" dense>
           <Amount
-            value={!tokenValue ? undefined : minTransferRaw}
+            value={token ? minTransferRaw : undefined}
             fallback="0"
-            unit={tokenInfo?.name}
+            unit={token?.name}
             loading={isPending}
           />
         </Label>

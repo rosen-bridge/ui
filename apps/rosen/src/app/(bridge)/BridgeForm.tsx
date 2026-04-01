@@ -23,13 +23,14 @@ import { NETWORKS } from '@rosen-ui/constants';
 import {
   useBalance,
   useBridgeForm,
+  useBridgeFormValues,
   useMaxTransfer,
   useNetwork,
-  useTransactionFormData,
   useWallet,
 } from '@/hooks';
 
 import { UseAllAmount } from './UseAllAmount';
+import { Network } from '@rosen-ui/types';
 
 /**
  * renders the bridge main form
@@ -44,13 +45,10 @@ export const BridgeForm = () => {
     tokenField,
     amountField,
     addressField,
-    formState: { errors },
+    formState: { errors, isValidating },
   } = useBridgeForm();
 
-  const {
-    tokenValue,
-    formState: { isValidating },
-  } = useTransactionFormData();
+  const { token } = useBridgeFormValues();
 
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
@@ -77,8 +75,7 @@ export const BridgeForm = () => {
   const handleTokenChange = useCallback(
     (e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
       if (reason == 'clear') return;
-      const currentToken = value || undefined;
-      setValue('token', currentToken, {
+      setValue('token', value, {
         shouldDirty: true,
         shouldTouch: true,
       });
@@ -96,7 +93,7 @@ export const BridgeForm = () => {
           token: null,
           amount: '',
           walletAddress: '',
-          source: e.target.value,
+          source: e.target.value as Network,
         });
       }
     },
@@ -108,7 +105,7 @@ export const BridgeForm = () => {
       if (e.target.value !== targetField.value) {
         reset({
           source: sourceField.value,
-          target: e.target.value,
+          target: e.target.value as Network,
           token: null,
           amount: '',
           walletAddress: '',
@@ -277,13 +274,13 @@ export const BridgeForm = () => {
         helperText={errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
-          endAdornment: tokenField.value && selectedWallet && (
+          endAdornment: token && selectedWallet && (
             <UseAllAmount
               disabled={!addressField.value || !!errors?.walletAddress}
               error={!!error}
               loading={isLoading || isMaxLoading}
               value={balanceRaw}
-              unit={(tokenValue as RosenChainToken)?.name}
+              unit={token.name}
               onClick={handleSelectMax}
               onRetry={load}
             />
