@@ -31,27 +31,25 @@ export const calculateWatcherCounts = (
   let totalWatchers = 0;
 
   for (const box of boxes) {
-    const networkToken = box.assets?.find((asset) =>
-      config.rwtTokenMap.has(asset.tokenId),
-    );
+    let network: string | undefined;
 
-    if (!networkToken) {
+    for (const asset of box.assets || []) {
+      network = config.rwtTokenMap.get(asset.tokenId);
+      if (network) break;
+    }
+
+    if (!network) {
       logger.debug(
-        `Skipping box ${box.boxId}: rwtTokenId not found in box assets`,
+        `Skipping box ${box.boxId}: no valid RWT token found in box assets`,
       );
       continue;
     }
 
-    const network = config.rwtTokenMap.get(networkToken.tokenId);
-    if (!network) continue;
-
-    logger.debug(
-      `Resolved network ${network} with rwt token id ${networkToken.tokenId} in box ${box.boxId}`,
-    );
+    logger.debug(`Resolved network ${network} for box ${box.boxId}`);
 
     const count = getWatcherCount(box, WATCHER_COUNT_REGISTER);
 
-    if (!count) {
+    if (count === undefined) {
       logger.debug(
         `Skipping box ${box.boxId}: watcher count register not found`,
       );

@@ -2,4 +2,4 @@ export {
   WatcherCountConfig,
   WatcherBoxType,
   WatcherCountResult,
-} from './watcherCountConfig';
+} from './watcherCount';

@@ -28,7 +28,7 @@ export const watcherCountMetric = async (
 
   const watcherAction = new WatcherCountMetricAction(
     dataSource,
-    logger.child('watcherCountMetric'),
+    logger.child('watcherCountMetricAction'),
   );
   const metricAction = new MetricAction(
     dataSource,
@@ -40,7 +40,7 @@ export const watcherCountMetric = async (
     if (config.type === 'explorer') {
       const boxService = new ExplorerBoxFetcher(
         config.url,
-        logger.child('explorerFetcher'),
+        logger.child('explorerBoxFetcher'),
       );
       const boxes = await boxService.fetchUnspentBoxesByTokenId(
         config.rwtRepoNFT,
@@ -57,7 +57,7 @@ export const watcherCountMetric = async (
     } else {
       const boxService = new NodeBoxFetcher(
         config.url,
-        logger.child('nodeFetcher'),
+        logger.child('nodeBoxFetcher'),
       );
       const boxes = await boxService.fetchUnspentBoxesByTokenId(
         config.rwtRepoNFT,
