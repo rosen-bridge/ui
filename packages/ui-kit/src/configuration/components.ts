@@ -5,12 +5,17 @@ import type {
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
+  CarouselOverriddenProps,
+  CarouselButtonOverriddenProps,
+  CarouselIndicatorsOverriddenProps,
+  CarouselItemOverriddenProps,
   CenterOverriddenProps,
   CloseButtonOverriddenProps,
   CollapsibleOverriddenProps,
   ColumnsOverriddenProps,
   ConnectorOverriddenProps,
   CopyButtonOverriddenProps,
+  DateTimeOverriddenProps,
   DialogOverriddenProps,
   DialogContentOverriddenProps,
   DialogDescriptionOverriddenProps,
@@ -27,6 +32,7 @@ import type {
   IdentifierOverriddenProps,
   ImageOverriddenProps,
   InfoIconOverriddenProps,
+  LabelOverriddenProps,
   LabelGroupOverriddenProps,
   LayoutListOverriddenProps,
   LinkOverriddenProps,
@@ -58,12 +64,17 @@ export type Components = {
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
+  Carousel: CarouselOverriddenProps;
+  CarouselButton: CarouselButtonOverriddenProps;
+  CarouselIndicators: CarouselIndicatorsOverriddenProps;
+  CarouselItem: CarouselItemOverriddenProps;
   Center: CenterOverriddenProps;
   CloseButton: CloseButtonOverriddenProps;
   Collapsible: CollapsibleOverriddenProps;
   Columns: ColumnsOverriddenProps;
   Connector: ConnectorOverriddenProps;
   CopyButton: CopyButtonOverriddenProps;
+  DateTime: DateTimeOverriddenProps;
   Dialog: DialogOverriddenProps;
   DialogContent: DialogContentOverriddenProps;
   DialogDescription: DialogDescriptionOverriddenProps;
@@ -80,6 +91,7 @@ export type Components = {
   Identifier: IdentifierOverriddenProps;
   Image: ImageOverriddenProps;
   InfoIcon: InfoIconOverriddenProps;
+  Label: LabelOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
   LayoutList: LayoutListOverriddenProps;
   Link: LinkOverriddenProps;
