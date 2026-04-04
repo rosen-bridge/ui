@@ -22,7 +22,6 @@ import type { FiroUtxo, BlockCypherAddress } from './types';
  * generates metadata for lock transaction
  * @param toChain
  * @param toAddress
- * @param fromAddress
  * @param networkFee
  * @param bridgeFee
  * @returns
@@ -124,7 +123,7 @@ export const getMinimumMeaningfulFiro = (feeRatio: number): bigint => {
  * inputs and outputs required fee are estimated by FIRO_INPUT_SIZE and FIRO_OUTPUT_SIZE
  * @param inputSize
  * @param outputSize
- * @param feeRatio
+ * @param opReturnLength
  */
 export const estimateTxSize = (
   inputSize: number,
