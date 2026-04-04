@@ -39,6 +39,7 @@ import type {
   NetworkOverriddenProps,
   PageHeadingOverriddenProps,
   QrCodeDialogOverriddenProps,
+  RelativeTimeOverriddenProps,
   SkeletonOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
@@ -98,6 +99,7 @@ export type Components = {
   Network: NetworkOverriddenProps;
   PageHeading: PageHeadingOverriddenProps;
   QrCodeDialog: QrCodeDialogOverriddenProps;
+  RelativeTime: RelativeTimeOverriddenProps;
   Skeleton: SkeletonOverriddenProps;
   Stack: StackOverriddenProps;
   TableGrid: TableGridOverriddenProps;

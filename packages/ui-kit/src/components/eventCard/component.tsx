@@ -75,7 +75,7 @@ export const EventCardBase = ({
             decimal={value?.decimal}
           />
         </div>
-        <RelativeTime isLoading={loading} timestamp={value?.timestamp} />
+        <RelativeTime loading={loading} value={value?.timestamp} />
         <Identifier
           href={value?.href}
           loading={loading}

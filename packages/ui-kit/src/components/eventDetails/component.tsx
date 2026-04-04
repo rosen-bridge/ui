@@ -181,7 +181,7 @@ export const EventDetailsBase = ({
       )}
       {'timestamp' in value && (
         <Label label="Time">
-          <RelativeTime timestamp={value.timestamp} isLoading={loading} />
+          <RelativeTime loading={loading} value={value.timestamp} />
         </Label>
       )}
       {'bridgeFee' in value && (

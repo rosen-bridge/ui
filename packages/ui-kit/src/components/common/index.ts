@@ -16,7 +16,6 @@ export * from './SubmitButton';
 export * from './TokensCard';
 export * from './AppSnackbar';
 export * from './Chip';
-export * from './RelativeTime';
 export * from './EmptyState';
 export * from './Illustrations';
 export * from './card';

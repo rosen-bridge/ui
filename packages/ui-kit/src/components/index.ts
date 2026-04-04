@@ -43,6 +43,7 @@ export * from './link';
 export * from './network';
 export * from './pageHeading';
 export * from './qrCodeDialog';
+export * from './relativeTime';
 export * from './skeleton';
 export * from './stack';
 export * from './tableGrid';
