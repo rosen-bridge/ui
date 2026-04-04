@@ -62,8 +62,6 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
         config.components?.[componentName as keyof typeof config.components]
           ?.defaultProps;
 
-      if (!globalDefaultProps) return rest;
-
       const baseProps = { ...globalDefaultProps, ...rest };
 
       if (!rewrite || !current) return baseProps;
@@ -80,7 +78,7 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
       );
 
       return { ...baseProps, ...applied };
-    }, [config, componentName, current, props, rewrite]);
+    }, [config, componentName, current, rest, rewrite]);
 
     if (isSkipped) return null;
 
