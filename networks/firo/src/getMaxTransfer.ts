@@ -29,7 +29,7 @@ export const getMaxTransferCreator =
     if (!eventData.toAddress) return 0n;
 
     const feeRatio = await getFeeRatio();
-    const opRetrunDataLength = (
+    const opReturnDataLength = (
       await generateOpReturnData(
         eventData.toChain,
         eventData.toAddress,
@@ -46,7 +46,7 @@ export const getMaxTransferCreator =
        */
       utxos.length,
       2,
-      opRetrunDataLength,
+      opReturnDataLength,
     );
     const estimatedFee = Math.ceil(estimatedTxSize * feeRatio);
     const minFiro = getMinimumMeaningfulFiro(feeRatio);
