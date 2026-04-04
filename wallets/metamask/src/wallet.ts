@@ -15,7 +15,6 @@ import {
   UserDeniedTransactionSignatureError,
   CurrentChainError,
 } from '@rosen-ui/wallet-api';
-import { BrowserProvider, Contract } from 'ethers';
 
 import { ICON } from './icon';
 import { MetaMaskWalletConfig } from './types';
@@ -67,7 +66,7 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     })) as { caveats: { type: string; value: string[] }[] }[];
   };
 
-  initialize = async (): Promise<void> => { 
+  initialize = async (): Promise<void> => {
     const { MetaMaskSDK } = await import('@metamask/sdk');
 
     this._api ||= new MetaMaskSDK({
@@ -99,6 +98,8 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   fetchBalance = async (
     token: RosenChainToken,
   ): Promise<string | undefined> => {
+    const { BrowserProvider, Contract } = await import('ethers');
+
     const address = await this.getAddress();
 
     let amount;
