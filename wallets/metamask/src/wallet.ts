@@ -1,4 +1,4 @@
-import { MetaMaskSDK } from '@metamask/sdk';
+import type { MetaMaskSDK } from '@metamask/sdk';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
@@ -34,18 +34,9 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   private _api?: MetaMaskSDK;
 
   private get api(): MetaMaskSDK {
-    if (typeof window === 'undefined') {
+    if (typeof window === 'undefined' || !this._api) {
       throw new InteractionError(this.name);
     }
-
-    this._api ||= new MetaMaskSDK({
-      dappMetadata: {
-        name: 'Rosen Bridge',
-        url: window.location.origin,
-      },
-      enableAnalytics: false,
-    });
-
     return this._api;
   }
 
@@ -74,6 +65,20 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
       method: 'wallet_getPermissions',
       params: [],
     })) as { caveats: { type: string; value: string[] }[] }[];
+  };
+
+  initialize = async (): Promise<void> => { 
+    const { MetaMaskSDK } = await import('@metamask/sdk');
+
+    this._api ||= new MetaMaskSDK({
+      dappMetadata: {
+        name: 'Rosen Bridge',
+        url: window.location.origin,
+      },
+      enableAnalytics: false,
+    });
+
+    this.isInitialized = true;
   };
 
   performConnect = async (): Promise<void> => {
