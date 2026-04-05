@@ -24,7 +24,7 @@ const Actions = () => {
     mobile: 'top',
     tablet: 'start',
   });
-
+  // TODO
   return (
     <Tabs
       className='actions'
@@ -45,7 +45,7 @@ const Actions = () => {
       >
         <TabsTrigger
           disabled
-          icon={<Icon name="Pause" size="small" />}
+          icon="Pause"
           iconPosition={iconPosition}
           value={0}
         >
@@ -53,7 +53,7 @@ const Actions = () => {
         </TabsTrigger>
         <TabsTrigger
           disabled
-          icon={<Icon name="StopCircle" size="small" />}
+          icon="StopCircle"
           iconPosition={iconPosition}
           value={1}
         >
@@ -61,21 +61,21 @@ const Actions = () => {
         </TabsTrigger>
         <TabsTrigger
           disabled
-          icon={<Icon name="Pause" size="small" />}
+          icon="Pause"
           iconPosition={iconPosition}
           value={2}
         >
           Pause Network
         </TabsTrigger>
         <TabsTrigger
-          icon={<Icon name="FileEditAlt" size="small" />}
+          icon="FileEditAlt"
           iconPosition={iconPosition}
           value={3}
         >
           Request To Sign
         </TabsTrigger>
         <TabsTrigger
-          icon={<Icon name="ReceiptAlt" size="small" />}
+          icon="ReceiptAlt"
           iconPosition={iconPosition}
           value={4}
         >
@@ -83,7 +83,7 @@ const Actions = () => {
         </TabsTrigger>
         <TabsTrigger
           disabled
-          icon={<Icon name="KeySkeleton" size="small" />}
+          icon="KeySkeleton"
           iconPosition={iconPosition}
           value={5}
         >
@@ -91,7 +91,7 @@ const Actions = () => {
         </TabsTrigger>
         <TabsTrigger
           disabled
-          icon={<Icon name="Redo" size="small" />}
+          icon="Redo"
           iconPosition={iconPosition}
           value={6}
         >

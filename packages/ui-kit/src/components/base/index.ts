@@ -32,5 +32,3 @@ export * from './TableFooter';
 export * from './TableHead';
 export * from './TablePagination';
 export * from './TableRow';
-export * from './ToggleButton';
-export * from './ToggleButtonGroup';

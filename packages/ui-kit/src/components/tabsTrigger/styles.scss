@@ -1,14 +1,18 @@
 .RosenTabsTrigger {
   display: flex;
   align-items: center;
-}
 
-.RosenTabsTrigger[data-icon-position="start"] {
-  flex-direction: row;
-  justify-content: flex-start;
-}
+  &:not([data-disabled]) {
+    cursor: pointer;
+  }
 
-.RosenTabsTrigger[data-icon-position="top"] {
-  flex-direction: column;
-  justify-content: center;
+  &[data-icon-position="start"] {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  &[data-icon-position="top"] {
+    flex-direction: column;
+    justify-content: center;
+  }
 }

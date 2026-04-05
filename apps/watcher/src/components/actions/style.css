@@ -1,0 +1,45 @@
+.RosenTabs.actions {
+  height: 100%;
+}
+
+.RosenTabs.actions .RosenTabsTrigger {
+  background-color: var(--rosen-palette-primary-light);
+  border: none;
+  border-radius: var(--rosen-shape-borderRadius);
+  gap: calc(var(--rosen-spacing) * 0.5);
+  flex-basis: 20%;
+  font-weight: 500;
+  font-size: 0.875rem;
+  min-height: 80px;
+  line-height: 1.75;
+  padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
+  text-transform: uppercase;
+
+  &:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  &:not(:last-child) {
+    border-right: solid 1px var(--rosen-palette-divider);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &[data-disabled] {
+    color: var(--rosen-palette-action-disabled);
+  }
+
+  &:not([data-disabled]) {
+    color: var(--rosen-palette-primary-main);
+    &:hover {
+      background-color: var(--rosen-palette-primary-dark);
+      color: var(--rosen-palette-primary-contrastText);
+    }
+  }
+
+  &[data-active] {
+    background-color: var(--rosen-palette-primary-dark);
+    color: var(--rosen-palette-primary-contrastText);
+  }
+}
