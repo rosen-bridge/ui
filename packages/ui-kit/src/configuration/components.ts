@@ -51,8 +51,7 @@ import type {
   TabsOverriddenProps,
   TabsListOverriddenProps,
   TabsPanelOverriddenProps,
-  TabsPanelsOverriddenProps,
-  TabsTriggerOverriddenProps,
+  TabsTabOverriddenProps,
   ThemeToggleButtonOverriddenProps,
   TokenOverriddenProps,
   TokensListOverriddenProps,
@@ -116,8 +115,7 @@ export type Components = {
   Tabs: TabsOverriddenProps;
   TabsList: TabsListOverriddenProps;
   TabsPanel: TabsPanelOverriddenProps;
-  TabsPanels: TabsPanelsOverriddenProps;
-  TabsTrigger: TabsTriggerOverriddenProps;
+  TabsTab: TabsTabOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Token: TokenOverriddenProps;
   TokensList: TokensListOverriddenProps;

@@ -1,17 +1,17 @@
 .RosenTabs.actions {
-  height: 100%;
+  min-height: 100%;
 }
 
-.RosenTabs.actions .RosenTabsTrigger {
+.RosenTabs.actions .RosenTabsList {
+  flex-grow: 1;
+}
+
+.RosenTabs.actions .RosenTabsTab {
   background-color: var(--rosen-palette-primary-light);
-  border: none;
   border-radius: var(--rosen-shape-borderRadius);
   gap: calc(var(--rosen-spacing) * 0.5);
   flex-basis: 20%;
-  font-weight: 500;
-  font-size: 0.875rem;
   min-height: 80px;
-  line-height: 1.75;
   padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
   text-transform: uppercase;
 

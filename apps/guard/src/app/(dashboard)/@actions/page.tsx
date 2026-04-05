@@ -3,12 +3,10 @@
 import { useState } from 'react';
 
 import {
-  Icon,
   Tabs,
   TabsList,
-  TabsTrigger,
-  TabsPanels,
   TabsPanel,
+  TabsTab,
   useResponsiveValue,
 } from '@rosen-bridge/ui-kit';
 
@@ -43,74 +41,72 @@ const Actions = () => {
           tablet: { grow: false },
         }}
       >
-        <TabsTrigger
+        <TabsTab
           disabled
           icon="Pause"
           iconPosition={iconPosition}
           value={0}
         >
           Pause Service
-        </TabsTrigger>
-        <TabsTrigger
+        </TabsTab>
+        <TabsTab
           disabled
           icon="StopCircle"
           iconPosition={iconPosition}
           value={1}
         >
           Stop Service
-        </TabsTrigger>
-        <TabsTrigger
+        </TabsTab>
+        <TabsTab
           disabled
           icon="Pause"
           iconPosition={iconPosition}
           value={2}
         >
           Pause Network
-        </TabsTrigger>
-        <TabsTrigger
+        </TabsTab>
+        <TabsTab
           icon="FileEditAlt"
           iconPosition={iconPosition}
           value={3}
         >
           Request To Sign
-        </TabsTrigger>
-        <TabsTrigger
+        </TabsTab>
+        <TabsTab
           icon="ReceiptAlt"
           iconPosition={iconPosition}
           value={4}
         >
           Request An Order
-        </TabsTrigger>
-        <TabsTrigger
+        </TabsTab>
+        <TabsTab
           disabled
           icon="KeySkeleton"
           iconPosition={iconPosition}
           value={5}
         >
           Generate Key
-        </TabsTrigger>
-        <TabsTrigger
+        </TabsTab>
+        <TabsTab
           disabled
           icon="Redo"
           iconPosition={iconPosition}
           value={6}
         >
           Key Reconstruction
-        </TabsTrigger>
+        </TabsTab>
       </TabsList>
-      <TabsPanels>
-        <TabsPanel value={0}></TabsPanel>
-        <TabsPanel value={1}></TabsPanel>
-        <TabsPanel value={2}></TabsPanel>
-        <TabsPanel value={3}>
-          <RequestToSignForm />
-        </TabsPanel>
-        <TabsPanel value={4}>
-          <RequestAnOrderForm />
-        </TabsPanel>
-        <TabsPanel value={5}></TabsPanel>
-        <TabsPanel value={6}></TabsPanel>
-      </TabsPanels>
+      <TabsPanel value={0}></TabsPanel>
+      <TabsPanel value={1}></TabsPanel>
+      <TabsPanel value={2}></TabsPanel>
+      <TabsPanel value={3}>
+        <RequestToSignForm />
+      </TabsPanel>
+      <TabsPanel value={4}>
+        <RequestAnOrderForm />
+      </TabsPanel>
+      <TabsPanel value={5}></TabsPanel>
+      <TabsPanel value={6}></TabsPanel>
     </Tabs>
   );
 };

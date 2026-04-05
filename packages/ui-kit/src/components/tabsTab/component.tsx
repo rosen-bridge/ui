@@ -9,9 +9,9 @@ import { OverridableType } from '@/types';
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface TabsTriggerOverrides {}
+export interface TabsTabOverrides {}
 
-export type TabsTriggerOwnProps = {
+export type TabsTabOwnProps = {
   icon?: IconOverriddenProps['name'];
   iconPosition?: 'start' | 'top';
   slots?: {
@@ -20,15 +20,15 @@ export type TabsTriggerOwnProps = {
   value?: number | string;
 };
 
-export type TabsTriggerBaseProps = ElementBaseProps<'button', TabsTriggerOwnProps>;
+export type TabsTabBaseProps = ElementBaseProps<'button', TabsTabOwnProps>;
 
-export type TabsTriggerOverriddenProps = OverridableType<
-  TabsTriggerBaseProps,
-  TabsTriggerOverrides,
+export type TabsTabOverriddenProps = OverridableType<
+  TabsTabBaseProps,
+  TabsTabOverrides,
   never
 >;
 
-export const TabsTriggerBase = ({ children, icon, iconPosition, slots, value, ...rest }: TabsTriggerOverriddenProps) => {
+export const TabsTabBase = ({ children, icon, iconPosition, slots, value, ...rest }: TabsTabOverriddenProps) => {
   return (
     <Root as={Tabs.Tab} reflects={{ iconPosition }} value={value} {...rest}>
       {icon && <Icon name={icon} size="small" {...slots?.icon} />}
@@ -37,8 +37,8 @@ export const TabsTriggerBase = ({ children, icon, iconPosition, slots, value, ..
   );
 };
 
-TabsTriggerBase.displayName = 'TabsTrigger';
+TabsTabBase.displayName = 'TabsTab';
 
-export const TabsTrigger = Wrap(TabsTriggerBase);
+export const TabsTab = Wrap(TabsTabBase);
 
-export type TabsTriggerProps = ComponentProps<typeof TabsTrigger>;
+export type TabsTabProps = ComponentProps<typeof TabsTab>;
