@@ -118,7 +118,7 @@ export const RequestToSignForm = () => {
   );
 
   return (
-    <Card backgroundColor="background.paper">
+    <Card backgroundColor="transparent">
       <CardHeader>
         <CardTitle>
           <Typography variant="h5" fontWeight="bold">

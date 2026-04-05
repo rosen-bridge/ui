@@ -48,6 +48,11 @@ import type {
   TableGridCellOverriddenProps,
   TableGridHeaderOverriddenProps,
   TableGridRowOverriddenProps,
+  TabsOverriddenProps,
+  TabsListOverriddenProps,
+  TabsPanelOverriddenProps,
+  TabsPanelsOverriddenProps,
+  TabsTriggerOverriddenProps,
   ThemeToggleButtonOverriddenProps,
   TokenOverriddenProps,
   TokensListOverriddenProps,
@@ -108,6 +113,11 @@ export type Components = {
   TableGridCell: TableGridCellOverriddenProps;
   TableGridHeader: TableGridHeaderOverriddenProps;
   TableGridRow: TableGridRowOverriddenProps;
+  Tabs: TabsOverriddenProps;
+  TabsList: TabsListOverriddenProps;
+  TabsPanel: TabsPanelOverriddenProps;
+  TabsPanels: TabsPanelsOverriddenProps;
+  TabsTrigger: TabsTriggerOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Token: TokenOverriddenProps;
   TokensList: TokensListOverriddenProps;

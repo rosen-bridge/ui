@@ -1,5 +1,6 @@
 'use client';
 
+import { Route } from 'next';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { PropsWithChildren } from 'react';
 
@@ -20,8 +21,8 @@ import { Favicon } from '@/components';
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
 
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
+import { Sidebar } from './SideBar';
+import { UIKitProvider } from '@/uiKitProvider';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -36,24 +37,27 @@ export const App = ({ children }: PropsWithChildren) => {
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href: string) => router.push(href, { scroll: false }),
+          push: (href) =>
+            router.push(href as unknown as Route, { scroll: false }),
         }}
       >
-        <ApiKeyProvider>
-          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-            <Favicon />
-            <SWRConfig
-              value={{
-                use:
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    ? [mockMiddlewareFactory(mockedData)]
-                    : [],
-              }}
-            >
-              {children}
-            </SWRConfig>
-          </AppBase>
-        </ApiKeyProvider>
+        <UIKitProvider>
+          <ApiKeyProvider>
+            <AppBase sidebar={<Sidebar />} theme={theme}>
+              <Favicon />
+              <SWRConfig
+                value={{
+                  use:
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                      ? [mockMiddlewareFactory(mockedData)]
+                      : [],
+                }}
+              >
+                {children}
+              </SWRConfig>
+            </AppBase>
+          </ApiKeyProvider>
+        </UIKitProvider>
       </FrameworkProvider>
     </NoSsr>
   );

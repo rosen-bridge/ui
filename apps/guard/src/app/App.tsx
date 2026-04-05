@@ -38,20 +38,20 @@ export const App = ({ children }: PropsWithChildren) => {
       >
         <UIKitProvider>
           <ApiKeyProvider>
-            <SWRConfig
-              value={{
-                revalidateOnFocus: false,
-                errorRetryCount: 3,
-                use:
-                  process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
-                    ? [mockMiddlewareFactory(mockedData)]
-                    : [],
-              }}
-            >
-              <AppBase sidebar={<Sidebar />} theme={theme}>
-                {children}
-              </AppBase>
-            </SWRConfig>
+            <AppBase sidebar={<Sidebar />} theme={theme}>
+              <SWRConfig
+                value={{
+                  revalidateOnFocus: false,
+                  errorRetryCount: 3,
+                  use:
+                    process.env.NEXT_PUBLIC_USE_MOCKED_APIS === 'true'
+                      ? [mockMiddlewareFactory(mockedData)]
+                      : [],
+                }}
+              >
+                  {children}
+              </SWRConfig>
+            </AppBase>
           </ApiKeyProvider>
         </UIKitProvider>
       </FrameworkProvider>

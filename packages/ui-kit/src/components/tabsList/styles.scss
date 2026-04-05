@@ -1,0 +1,27 @@
+.RosenTabsList {
+  display: flex;
+}
+
+.RosenTabsList[data-align="start"] {
+  justify-content: flex-start;
+}
+
+.RosenTabsList[data-align="center"] {
+  justify-content: center;
+}
+
+.RosenTabsList[data-align="end"] {
+  justify-content: flex-end;
+}
+
+.RosenTabsList[data-grow="true"] > * {
+  flex-grow: 1;
+}
+
+.RosenTabsList[data-orientation="horizontal"] {
+  flex-direction: row;
+}
+
+.RosenTabsList[data-orientation="vertical"] {
+  flex-direction: column;
+}

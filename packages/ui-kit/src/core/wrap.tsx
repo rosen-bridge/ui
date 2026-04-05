@@ -117,7 +117,7 @@ export const Root = <E extends ElementType = 'div'>({
     for (const key in reflects) {
       const value = reflects[key];
       if (value === undefined) continue;
-      result[`data-${key}`] = String(value);
+      result[`data-${key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}`] = String(value);
     }
 
     return result;

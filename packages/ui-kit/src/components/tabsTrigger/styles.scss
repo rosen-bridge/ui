@@ -1,0 +1,14 @@
+.RosenTabsTrigger {
+  display: flex;
+  align-items: center;
+}
+
+.RosenTabsTrigger[data-icon-position="start"] {
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.RosenTabsTrigger[data-icon-position="top"] {
+  flex-direction: column;
+  justify-content: center;
+}

@@ -23,8 +23,6 @@ export * from './Select';
 export * from './Slide';
 export * from './Snackbar';
 export * from './Switch';
-export * from './Tab';
-export * from './Tabs';
 export * from './TextField';
 export * from './Table';
 export * from './TableBody';
