@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableRowProps,
   TableBody,
   TableCell,
   TablePagination,
@@ -16,7 +17,9 @@ import {
   Box,
   TableFooter,
   TableCellProps,
-} from '../base';
+} from '@mui/material';
+
+export { TableCell, type TableCellProps, TableRow, type TableRowProps, type TablePaginationProps }
 
 export interface TableHeadItem {
   cellProps?: TableCellProps;
