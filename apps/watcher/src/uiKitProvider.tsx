@@ -1,6 +1,8 @@
 import { Route } from 'next';
 import { PropsWithChildren, useMemo } from 'react';
 
+import NextLink from 'next/link';
+
 import * as AllIcons from '@rosen-bridge/icons';
 import {
   ConfigProvider,
@@ -54,6 +56,11 @@ export const getUiKitConfig: () => ConfigContextType = () => ({
         icons: Object.fromEntries(
           Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
         ),
+      },
+    },
+    Link: {
+      defaultProps: {
+        as: NextLink,
       },
     },
     Network: {

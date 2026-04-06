@@ -9,6 +9,7 @@ export * from './apiKeyDialogWarning';
 export * from './app';
 export * from './appBar';
 export * from './avatar';
+export * from './buttonBase';
 export * from './carousel';
 export * from './carouselButton';
 export * from './carouselIndicators';

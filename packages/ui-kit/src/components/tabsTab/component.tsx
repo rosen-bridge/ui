@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Tabs } from '@base-ui/react/tabs';
 
-import { Icon, IconOverriddenProps } from '@/components';
+import { ButtonBase, Icon, IconOverriddenProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -17,30 +17,51 @@ export type TabsTabOwnProps = {
   slots?: {
     icon?: IconOverriddenProps;
   };
-  value?: number | string;
 };
 
-export type TabsTabBaseProps = ElementBaseProps<'button', TabsTabOwnProps>;
-
-export type TabsTabOverriddenProps = OverridableType<
-  TabsTabBaseProps,
-  TabsTabOverrides,
-  never
+type TabsTabAsAnchor = ElementBaseProps<
+  'a',
+  TabsTabOwnProps & { href: string | undefined; }
 >;
+
+type TabsTabAsButton = ElementBaseProps<
+  'button',
+  TabsTabOwnProps & { href?: never; value: number | string | undefined }
+>;
+
+export type TabsTabBaseProps = TabsTabAsAnchor | TabsTabAsButton;
+
+export type TabsTabOverriddenProps =
+  | OverridableType<TabsTabAsAnchor, TabsTabOverrides, never>
+  | OverridableType<TabsTabAsButton, TabsTabOverrides, never>;
 
 export const TabsTabBase = ({
   children,
   icon,
   iconPosition,
   slots,
-  value,
   ...rest
 }: TabsTabOverriddenProps) => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const Component = Tabs.Tab as any;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const value = (rest as any).value;
+
   return (
-    <Tabs.Tab data-icon-position={iconPosition} value={value} {...rest}>
-      {icon && <Icon name={icon} size="small" {...slots?.icon} />}
-      {children && <span>{children}</span>}
-    </Tabs.Tab>
+    <Component
+      data-icon-position={iconPosition}
+      nativeButton={!rest.href}
+      {...rest}
+      value={rest.href ?? value}
+      // eslint-disable-next-line @typescript-eslint/no-empty-object-type
+      render={(props: {}) => (
+        <ButtonBase {...props} {...rest}>
+          {icon && <Icon name={icon} size="small" {...slots?.icon} />}
+          {children && <span>{children}</span>}
+        </ButtonBase>
+      )}
+    />
   );
 };
 

@@ -69,7 +69,7 @@ export const getUiKitConfig: (
     },
     Link: {
       defaultProps: {
-        // as: NextLink,
+        as: NextLink,
       },
     },
     Network: {

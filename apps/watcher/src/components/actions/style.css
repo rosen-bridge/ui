@@ -12,15 +12,13 @@
   gap: calc(var(--rosen-spacing) * 0.5);
   flex-basis: 20%;
   min-height: 80px;
-  padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
-  text-transform: uppercase;
 
-  &:not(:first-of-type) {
+  &:not(:first-child) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  &:not(:last-of-type) {
+  &:not(:last-child) {
     border-right: solid 1px var(--rosen-palette-divider);
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

@@ -1,7 +1,6 @@
 'use client';
 
-import { Route } from 'next';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import { Tabs, TabsList, TabsTab } from '@rosen-bridge/ui-kit';
 
@@ -15,15 +14,13 @@ export type ActionsProps = {
 export const Actions = ({ children }: ActionsProps) => {
   const pathname = usePathname();
 
-  const router = useRouter();
-
   return (
-    <Tabs className="actions" value={pathname} onChange={(value) => router.push(value as Route)}>
+    <Tabs className="actions" value={pathname}>
       <TabsList grow>
         <TabsTab
+          href="/actions/withdraw"
           icon="MoneyWithdrawal"
           iconPosition="top"
-          value="/actions/withdraw"
         >
           Withdraw
         </TabsTab>
@@ -31,7 +28,7 @@ export const Actions = ({ children }: ActionsProps) => {
           disabled
           icon="Pause"
           iconPosition="top"
-          value="/actions/pause"
+          value=""
         >
           Pause
         </TabsTab>
@@ -39,21 +36,21 @@ export const Actions = ({ children }: ActionsProps) => {
           disabled
           icon="SquareShape"
           iconPosition="top"
-          value="/actions/stop"
+          value=""
         >
           Stop
         </TabsTab>
         <TabsTab
+          href="/actions/lock"
           icon="LockAlt"
           iconPosition="top"
-          value="/actions/lock"
         >
           Lock
         </TabsTab>
         <TabsTab
+          href="/actions/unlock"
           icon="Unlock"
           iconPosition="top"
-          value="/actions/unlock"
         >
           Unlock
         </TabsTab>

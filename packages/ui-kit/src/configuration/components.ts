@@ -5,6 +5,7 @@ import type {
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
+  ButtonBaseOverriddenProps,
   CarouselOverriddenProps,
   CarouselButtonOverriddenProps,
   CarouselIndicatorsOverriddenProps,
@@ -69,6 +70,7 @@ export type Components = {
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
+  ButtonBase: ButtonBaseOverriddenProps;
   Carousel: CarouselOverriddenProps;
   CarouselButton: CarouselButtonOverriddenProps;
   CarouselIndicators: CarouselIndicatorsOverriddenProps;
