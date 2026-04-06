@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Tabs } from '@base-ui/react/tabs';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -23,9 +23,7 @@ export type TabsPanelOverriddenProps = OverridableType<
 >;
 
 export const TabsPanelBase = ({ value, ...rest }: TabsPanelOverriddenProps) => {
-  return (
-    <Root as={Tabs.Panel} value={value} {...rest} />
-  );
+  return <Tabs.Panel value={value} {...rest} />;
 };
 
 TabsPanelBase.displayName = 'TabsPanel';

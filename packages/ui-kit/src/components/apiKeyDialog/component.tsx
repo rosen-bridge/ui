@@ -16,7 +16,7 @@ import {
   TextField,
   Tooltip,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { useApiKey, useSnackbar } from '@/hooks';
 import { OverridableType } from '@/types';
 
@@ -77,13 +77,7 @@ export const ApiKeyDialogBase = ({
 
   return (
     <>
-      <Root
-        as={Dialog}
-        maxWidth="tablet"
-        open={open}
-        onClose={onClose}
-        {...rest}
-      >
+      <Dialog maxWidth="tablet" open={open} onClose={onClose} {...rest}>
         <DialogHeader>
           <DialogTitle>Authorization</DialogTitle>
         </DialogHeader>
@@ -128,7 +122,7 @@ export const ApiKeyDialogBase = ({
             Set key
           </Button>
         </DialogFooter>
-      </Root>
+      </Dialog>
     </>
   );
 };

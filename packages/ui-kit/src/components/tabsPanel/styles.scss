@@ -1,21 +1,6 @@
 .RosenTabsPanel {
   flex-grow: 1;
 
-  // TODO
-  // position: relative;
-  // display: flex;
-  // align-items: center;
-  // justify-content: center;
-  // height: 8rem;
-  // outline: 0;
-  
-  // TODO
-  // &:focus-visible {
-    //   outline: 2px solid var(--color-blue);
-  //   outline-offset: -1px;
-  //   border-radius: 0.375rem;
-  // }
-
   &[hidden] {
     display: none;
   }

@@ -1,7 +1,7 @@
 import { ComponentProps, useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
 import { Typography } from '@/components';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 import { formatDateTime } from '@/utils';
 
@@ -40,10 +40,20 @@ export type DateTimeOverriddenProps = OverridableType<
  *
  * Example output: `"Aug 27 2025 01:33:12"`.
  */
-export const DateTimeBase = ({ loading, timestamp, ...rest}: DateTimeOverriddenProps) => {
+export const DateTimeBase = ({
+  loading,
+  timestamp,
+  ...rest
+}: DateTimeOverriddenProps) => {
   const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
   return (
-    <Typography color="text-primary" gutterBottom={loading} loading={loading} variant="body1" {...rest}>
+    <Typography
+      color="text-primary"
+      gutterBottom={loading}
+      loading={loading}
+      variant="body1"
+      {...rest}
+    >
       {parts}
     </Typography>
   );

@@ -1,6 +1,6 @@
 import { ComponentProps, useMemo } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType, WidthOverridden } from '@/types';
 import { toCSSUnit } from '@/utils';
 
@@ -29,7 +29,7 @@ export const TableGridCellBase = ({
   ...rest
 }: TableGridCellOverriddenProps) => {
   const size = useMemo(() => toCSSUnit('width', width), [width]);
-  return <Root reflects={{ width: size }} {...rest} />;
+  return <div data-width={size} {...rest} />;
 };
 
 TableGridCellBase.displayName = 'TableGridCell';

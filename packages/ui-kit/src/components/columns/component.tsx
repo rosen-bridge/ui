@@ -1,6 +1,6 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { GapOverridden, OverridableType, WidthOverridden } from '@/types';
 import { toCSSUnit } from '@/utils';
 
@@ -52,15 +52,21 @@ export const ColumnsBase = ({
   count,
   gap,
   rule,
+  style,
   width,
   ...rest
 }: ColumnsOverriddenProps) => {
-  const styles = {
-    columnWidth: toCSSUnit('width', width),
-    columnGap: toCSSUnit('gap', gap),
-    columnCount: count || 'auto',
-  };
-  return <Root reflects={{ rule }} styles={styles} {...rest} />;
+  const styles = useMemo(
+    () => ({
+      columnWidth: toCSSUnit('width', width),
+      columnGap: toCSSUnit('gap', gap),
+      columnCount: count || 'auto',
+      ...style,
+    }),
+    [style],
+  );
+
+  return <div data-rule={!!rule} style={styles} {...rest} />;
 };
 
 ColumnsBase.displayName = 'Columns';

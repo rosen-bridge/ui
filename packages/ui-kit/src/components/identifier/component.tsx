@@ -11,13 +11,13 @@ import {
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface IdentifierOverrides { }
+export interface IdentifierOverrides {}
 
 export type IdentifierOwnProps = {
   /** If true, enables a button to copy the value to the clipboard */
@@ -150,7 +150,7 @@ export const IdentifierBase = ({
   }
 
   return (
-    <Root {...rest}>
+    <div {...rest}>
       {loading && <Skeleton attached />}
       <Tooltip disabled={loading} title={value} {...slots?.tooltip}>
         <div className="RosenIdentifier-value">
@@ -158,7 +158,7 @@ export const IdentifierBase = ({
             className="RosenIdentifier-leading"
             component="div"
             noWrap
-            variant='inherit'
+            variant="inherit"
             {...slots?.text}
             {...slots?.leading}
           >
@@ -167,7 +167,7 @@ export const IdentifierBase = ({
           <Typography
             className="RosenIdentifier-trailing"
             component="div"
-            variant='inherit'
+            variant="inherit"
             {...slots?.text}
             {...slots?.trailing}
           >
@@ -213,7 +213,7 @@ export const IdentifierBase = ({
           )}
         </div>
       )}
-    </Root>
+    </div>
   );
 };
 

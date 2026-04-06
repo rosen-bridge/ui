@@ -1,6 +1,6 @@
 import { ComponentProps, useEffect, useRef } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -67,11 +67,11 @@ export const TableGridHeaderBase = ({
   }, []);
 
   return (
-    <Root {...rest}>
+    <div {...rest}>
       <div ref={ref} style={{ display: 'contents' }}>
         {children}
       </div>
-    </Root>
+    </div>
   );
 };
 

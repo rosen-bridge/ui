@@ -1,6 +1,6 @@
-import { ComponentProps, CSSProperties } from 'react';
+import { ComponentProps, CSSProperties, useMemo } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { GapOverridden, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
@@ -71,17 +71,23 @@ export const StackBase = ({
   inline,
   justify,
   wrap,
+  style,
   ...rest
 }: StackOverriddenProps) => {
-  const styles = {
-    display: inline ? 'inline-flex' : 'flex',
-    flexDirection: direction,
-    flexWrap: wrap ? 'wrap' : 'nowrap',
-    alignItems: align ? ALIGN_MAP[align] : undefined,
-    justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
-    gap: toCSSUnit('gap', spacing),
-  } as CSSProperties;
-  return <Root styles={styles} {...rest} />;
+  const styles = useMemo(
+    () =>
+      ({
+        display: inline ? 'inline-flex' : 'flex',
+        flexDirection: direction,
+        flexWrap: wrap ? 'wrap' : 'nowrap',
+        alignItems: align ? ALIGN_MAP[align] : undefined,
+        justifyContent: justify ? JUSTIFY_MAP[justify] : undefined,
+        gap: toCSSUnit('gap', spacing),
+        ...style,
+      }) as CSSProperties,
+    [align, direction, spacing, inline, justify, wrap, style],
+  );
+  return <div style={styles} {...rest} />;
 };
 
 StackBase.displayName = 'Stack';

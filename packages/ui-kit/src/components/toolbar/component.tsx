@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -20,7 +20,7 @@ export type ToolbarOverriddenProps = OverridableType<
 >;
 
 export const ToolbarBase = ({ ...rest }: ToolbarOverriddenProps) => {
-  return <Root {...rest} />;
+  return <div {...rest} />;
 };
 
 ToolbarBase.displayName = 'Toolbar';

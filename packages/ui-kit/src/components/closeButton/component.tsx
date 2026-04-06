@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 
 import { Icon, IconButton, IconOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -29,9 +29,9 @@ export const CloseButtonBase = ({
   ...rest
 }: CloseButtonOverriddenProps) => {
   return (
-    <Root as={IconButton} {...rest}>
+    <IconButton {...rest}>
       <Icon name="Times" {...slots?.icon} />
-    </Root>
+    </IconButton>
   );
 };
 

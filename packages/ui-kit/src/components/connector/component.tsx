@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 
 import { Icon, IconOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -49,11 +49,11 @@ export const ConnectorBase = ({
   ...rest
 }: ConnectorOverriddenProps) => {
   return (
-    <Root reflects={{ variant }} {...rest}>
+    <div data-variant={variant} {...rest}>
       {start}
       <Icon name="ArrowRight" {...slots?.icon} />
       {end}
-    </Root>
+    </div>
   );
 };
 

@@ -1,9 +1,6 @@
 import { ReactNode } from 'react';
 
 import { Breakpoint } from '@mui/material';
-
-import { useResponsiveValue } from '../../hooks';
-import type { ResponsiveValueOptionsBase } from '../../types';
 import {
   Table as MuiTable,
   TableContainer,
@@ -19,7 +16,16 @@ import {
   TableCellProps,
 } from '@mui/material';
 
-export { TableCell, type TableCellProps, TableRow, type TableRowProps, type TablePaginationProps }
+import { useResponsiveValue } from '../../hooks';
+import type { ResponsiveValueOptionsBase } from '../../types';
+
+export {
+  TableCell,
+  type TableCellProps,
+  TableRow,
+  type TableRowProps,
+  type TablePaginationProps,
+};
 
 export interface TableHeadItem {
   cellProps?: TableCellProps;

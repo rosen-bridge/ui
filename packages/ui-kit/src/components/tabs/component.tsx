@@ -1,12 +1,12 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 import { Tabs as TabsBaseUI } from '@base-ui/react/tabs';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { GapOverridden, OverridableType } from '@/types';
+import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
-import { toCSSUnit } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TabsOverrides {}
@@ -15,7 +15,7 @@ export type TabsOwnProps = {
   gap?: GapOverridden;
   orientation?: 'horizontal' | 'vertical';
   value?: number | string;
-  onChange?: (value: number | string) => void
+  onChange?: (value: number | string) => void;
 };
 
 export type TabsBaseProps = ElementBaseProps<'div', TabsOwnProps>;
@@ -26,11 +26,21 @@ export type TabsOverriddenProps = OverridableType<
   'gap'
 >;
 
-export const TabsBase = ({ gap, value, onChange, ...rest }: TabsOverriddenProps) => {
+export const TabsBase = ({
+  gap,
+  style,
+  value,
+  onChange,
+  ...rest
+}: TabsOverriddenProps) => {
+  const styles = useMemo(
+    () => ({ gap: toCSSUnit('gap', gap), ...style }),
+    [gap, style],
+  );
+
   return (
-    <Root 
-      as={TabsBaseUI.Root}
-      styles={{ gap: toCSSUnit('gap', gap) }}
+    <TabsBaseUI.Root
+      style={styles}
       value={value}
       onValueChange={(value) => onChange?.(value)}
       {...rest}

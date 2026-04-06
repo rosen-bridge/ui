@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -42,7 +42,7 @@ export const DialogBase = ({
     >
       <DialogBaseUI.Portal>
         <DialogBaseUI.Backdrop className="RosenDialog-backdrop" />
-        <Root as={DialogBaseUI.Popup} {...rest} />
+        <DialogBaseUI.Popup {...rest} />
       </DialogBaseUI.Portal>
     </DialogBaseUI.Root>
   );

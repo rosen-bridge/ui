@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Tabs } from '@base-ui/react/tabs';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -13,6 +13,7 @@ export interface TabsListOverrides {}
 export type TabsListOwnProps = {
   align?: 'start' | 'center' | 'end';
   grow?: boolean;
+  indicator?: boolean;
 };
 
 export type TabsListBaseProps = ElementBaseProps<'div', TabsListOwnProps>;
@@ -23,13 +24,18 @@ export type TabsListOverriddenProps = OverridableType<
   never
 >;
 
-export const TabsListBase = ({ align, children, grow, ...rest }: TabsListOverriddenProps) => {
+export const TabsListBase = ({
+  align,
+  children,
+  grow,
+  indicator,
+  ...rest
+}: TabsListOverriddenProps) => {
   return (
-    <Root as={Tabs.List} reflects={{ align, grow }} {...rest}>
+    <Tabs.List data-align={align} data-grow={grow} {...rest}>
       {children}
-      {/* TODO */}
-      {/* <Tabs.Indicator /> */}
-    </Root>
+      {indicator && <Tabs.Indicator />}
+    </Tabs.List>
   );
 };
 

@@ -2,7 +2,7 @@ import { ComponentProps, ReactNode } from 'react';
 
 import { AppSnackbar, CssBaseline } from '@/components';
 import { SnackbarProvider } from '@/contexts';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { useIsMobile } from '@/hooks';
 import { ThemeProvider, ThemeProviderProps } from '@/Providers';
 import { OverridableType } from '@/types';
@@ -29,16 +29,13 @@ export type AppOverriddenProps = OverridableType<
 const Content = ({ children, sidebar, ...rest }: AppOverriddenProps) => {
   const isMobile = useIsMobile();
   return (
-    <Root
-      reflects={{ orientation: isMobile ? 'vertical' : 'horizontal' }}
-      {...rest}
-    >
+    <div data-orientation={isMobile ? 'vertical' : 'horizontal'} {...rest}>
       {sidebar}
       <div className="RosenApp-main">
         <div className="RosenApp-paper">{children}</div>
       </div>
       <AppSnackbar />
-    </Root>
+    </div>
   );
 };
 

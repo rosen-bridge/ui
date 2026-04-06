@@ -3,7 +3,7 @@ import { ComponentProps, ReactNode } from 'react';
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
 import { CloseButton, CloseButtonProps, Icon, IconProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -37,7 +37,7 @@ export const DialogHeaderBase = ({
   ...rest
 }: DialogHeaderOverriddenProps) => {
   return (
-    <Root {...rest}>
+    <div {...rest}>
       {icon && <Icon name={icon} />}
       {children}
       <div className="RosenDialogHeader-spacer" />
@@ -49,7 +49,7 @@ export const DialogHeaderBase = ({
           )}
         />
       )}
-    </Root>
+    </div>
   );
 };
 

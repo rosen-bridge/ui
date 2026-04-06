@@ -1,7 +1,7 @@
 import { ComponentProps, useCallback, useMemo, useState } from 'react';
 
 import { Icon, IconButton, IconOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -80,9 +80,9 @@ export const CopyButtonBase = ({
   }, [value]);
 
   return (
-    <Root as={IconButton} onClick={handleCopy} {...rest}>
+    <IconButton onClick={handleCopy} {...rest}>
       <Icon name={icon} {...slots?.icon} />
-    </Root>
+    </IconButton>
   );
 };
 

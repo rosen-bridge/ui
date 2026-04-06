@@ -18,7 +18,7 @@ import {
   TokenProps,
   Typography,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -48,7 +48,7 @@ export type EventDetailsOwnProps = {
     toAddress?: IdentifierProps['value'];
     toAddressUrl?: IdentifierProps['href'];
     toChain?: NetworkProps['value'];
-    timestamp?: RelativeTimeProps['timestamp'];
+    timestamp?: RelativeTimeProps['value'];
     token?: TokenProps['value'];
   };
 };
@@ -70,7 +70,7 @@ export const EventDetailsBase = ({
   ...rest
 }: EventDetailsOverriddenProps) => {
   return (
-    <Root as={Columns} gap={4} width="20rem" rule {...rest}>
+    <Columns gap={4} width="20rem" rule {...rest}>
       {'id' in value && (
         <Label orientation="horizontal" label="Event Id">
           <Identifier copyable loading={loading} value={value.id} />
@@ -218,7 +218,7 @@ export const EventDetailsBase = ({
           </Typography>
         </Label>
       )}
-    </Root>
+    </Columns>
   );
 };
 

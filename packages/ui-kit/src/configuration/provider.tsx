@@ -1,4 +1,5 @@
 import { createContext, ReactNode, useContext } from 'react';
+
 import { Components } from './components';
 
 export const useConfig = () => {
@@ -30,8 +31,6 @@ export type ConfigProviderProps = {
 
 export const ConfigProvider = ({ children, configs }: ConfigProviderProps) => {
   return (
-    <ConfigContext.Provider value={configs}>
-      {children}
-    </ConfigContext.Provider>
+    <ConfigContext.Provider value={configs}>{children}</ConfigContext.Provider>
   );
 };

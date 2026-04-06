@@ -1,7 +1,7 @@
 import { ComponentProps, ReactNode } from 'react';
 
 import { Typography } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -28,10 +28,10 @@ export const PageHeadingBase = ({
   ...rest
 }: PageHeadingOverriddenProps) => {
   return (
-    <Root {...rest}>
+    <div {...rest}>
       <Typography variant="h1">{title}</Typography>
       {actions}
-    </Root>
+    </div>
   );
 };
 

@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -33,11 +33,11 @@ export const AppBarBase = ({
   ...rest
 }: AppBarOverriddenProps) => {
   return (
-    <Root {...rest}>
+    <div {...rest}>
       {logo}
       {links}
       {actions}
-    </Root>
+    </div>
   );
 };
 

@@ -15,12 +15,12 @@
   padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
   text-transform: uppercase;
 
-  &:not(:first-child) {
+  &:not(:first-of-type) {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  &:not(:last-child) {
+  &:not(:last-of-type) {
     border-right: solid 1px var(--rosen-palette-divider);
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

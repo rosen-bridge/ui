@@ -1,7 +1,7 @@
 import { ComponentProps, useMemo } from 'react';
 
 import { Typography, TypographyOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 import { formatDuration } from '@/utils';
 
@@ -55,7 +55,7 @@ export const DurationBase = ({
     !error && !loading && !(fallback && value === undefined) && parts;
 
   return (
-    <Root {...rest}>
+    <div {...rest}>
       {!ready && (
         <Typography component="div" loading={loading} {...slots?.fallback}>
           {fallback || 'Invalid'}
@@ -78,7 +78,7 @@ export const DurationBase = ({
             </Typography>
           </div>
         ))}
-    </Root>
+    </div>
   );
 };
 

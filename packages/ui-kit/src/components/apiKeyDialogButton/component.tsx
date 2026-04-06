@@ -1,7 +1,7 @@
 import { ComponentProps, useState } from 'react';
 
 import { ApiKeyDialog, Icon, IconButton } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -28,14 +28,9 @@ export const ApiKeyDialogButtonBase = ({
 
   return (
     <>
-      <Root
-        as={IconButton}
-        color="inherit"
-        onClick={() => setIsOpen(true)}
-        {...rest}
-      >
+      <IconButton color="inherit" onClick={() => setIsOpen(true)} {...rest}>
         <Icon name="KeySkeleton" />
-      </Root>
+      </IconButton>
       <ApiKeyDialog open={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );

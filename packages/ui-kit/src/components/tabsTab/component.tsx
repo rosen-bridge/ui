@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import { Tabs } from '@base-ui/react/tabs';
 
 import { Icon, IconOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -15,7 +15,7 @@ export type TabsTabOwnProps = {
   icon?: IconOverriddenProps['name'];
   iconPosition?: 'start' | 'top';
   slots?: {
-    icon?: IconOverriddenProps
+    icon?: IconOverriddenProps;
   };
   value?: number | string;
 };
@@ -28,12 +28,19 @@ export type TabsTabOverriddenProps = OverridableType<
   never
 >;
 
-export const TabsTabBase = ({ children, icon, iconPosition, slots, value, ...rest }: TabsTabOverriddenProps) => {
+export const TabsTabBase = ({
+  children,
+  icon,
+  iconPosition,
+  slots,
+  value,
+  ...rest
+}: TabsTabOverriddenProps) => {
   return (
-    <Root as={Tabs.Tab} reflects={{ iconPosition }} value={value} {...rest}>
+    <Tabs.Tab data-icon-position={iconPosition} value={value} {...rest}>
       {icon && <Icon name={icon} size="small" {...slots?.icon} />}
       {children && <span>{children}</span>}
-    </Root>
+    </Tabs.Tab>
   );
 };
 

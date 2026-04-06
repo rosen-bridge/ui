@@ -1,6 +1,6 @@
 import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -18,8 +18,11 @@ export type ImageOverriddenProps = OverridableType<
   never
 >;
 
-export const ImageBase = ({ as = 'img', ...rest }: ImageOverriddenProps) => {
-  return <Root as={as} {...rest} />;
+export const ImageBase = ({
+  as: Component = 'img',
+  ...rest
+}: ImageOverriddenProps) => {
+  return <Component {...rest} />;
 };
 
 ImageBase.displayName = 'Image';

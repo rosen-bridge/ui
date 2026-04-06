@@ -1,13 +1,13 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { InfoIcon, Typography } from '@/components';
+import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
 
 import './styles.scss';
-import { InfoIcon, Typography } from '@/components';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export interface LabelOverrides { }
+export interface LabelOverrides {}
 
 export type LabelOwnProps = {
   /**
@@ -62,16 +62,21 @@ export type LabelOverriddenProps = OverridableType<
 export const LabelBase = ({
   children,
   color = 'text-secondary',
-  dense = false,
+  dense,
   info,
-  inset = false,
+  inset,
   label,
   orientation = 'horizontal',
   ...rest
 }: LabelOverriddenProps) => {
   return (
-    <Root reflects={{ dense, inset, orientation }} {...rest}>
-      <div className='RosenLabel-header'>
+    <div
+      data-dense={!!dense}
+      data-inset={!!inset}
+      data-orientation={orientation}
+      {...rest}
+    >
+      <div className="RosenLabel-header">
         <Typography
           color={color}
           lineHeight="1.5rem"
@@ -85,9 +90,9 @@ export const LabelBase = ({
         </Typography>
         {info && <InfoIcon color={color} info={info} />}
       </div>
-      <div className='RosenLabel-content'>{children}</div>
-    </Root>
-  )
+      <div className="RosenLabel-content">{children}</div>
+    </div>
+  );
 };
 
 LabelBase.displayName = 'Label';

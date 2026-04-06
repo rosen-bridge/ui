@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -23,7 +23,7 @@ export type DialogFooterOverriddenProps = OverridableType<
 >;
 
 export const DialogFooterBase = ({ ...rest }: DialogFooterOverriddenProps) => {
-  return <Root {...rest} />;
+  return <div {...rest} />;
 };
 
 DialogFooterBase.displayName = 'DialogFooter';

@@ -1,6 +1,6 @@
 import { ComponentProps, ReactNode } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -34,7 +34,7 @@ export const LayoutListBase = ({
   ...rest
 }: LayoutListOverriddenProps) => {
   return (
-    <Root {...rest}>
+    <div {...rest}>
       <div className="RosenLayoutList-toolbar">
         <div className="RosenLayoutList-search">{search}</div>
         {sort && <div className="RosenLayoutList-sort">{sort}</div>}
@@ -47,7 +47,7 @@ export const LayoutListBase = ({
         </div>
         {sidebar && <div className="RosenLayoutList-sidebar">{sidebar}</div>}
       </div>
-    </Root>
+    </div>
   );
 };
 

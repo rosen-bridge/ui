@@ -4,7 +4,7 @@ import { ComponentProps, useMemo } from 'react';
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
 import { Skeleton } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
@@ -57,7 +57,7 @@ export const AvatarBase = ({
     );
   }
 
-  return <Root as={AvatarMUI} style={style} sx={sx} {...rest} />;
+  return <AvatarMUI style={style} sx={sx} {...rest} />;
 };
 
 AvatarBase.displayName = 'Avatar';

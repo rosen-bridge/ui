@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 
 import { Collapsible, CollapsibleOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -27,9 +27,9 @@ export const TableGridBodyDetailsBase = ({
   ...rest
 }: TableGridBodyDetailsOverriddenProps) => {
   return (
-    <Root as={Collapsible} {...rest}>
+    <Collapsible {...rest}>
       <div className="RosenTableGridBodyDetails-content">{children}</div>
-    </Root>
+    </Collapsible>
   );
 };
 

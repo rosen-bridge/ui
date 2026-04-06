@@ -1,14 +1,8 @@
-import {
-  ComponentProps,
-  CSSProperties,
-  FC,
-  SVGAttributes,
-  useMemo,
-} from 'react';
+import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
 
@@ -44,6 +38,7 @@ export const IconBase = ({
   icons,
   name,
   size = 'medium',
+  style,
   ...rest
 }: IconOverriddenProps) => {
   const Icon =
@@ -56,15 +51,17 @@ export const IconBase = ({
   }
 
   const styles = useMemo(
-    () =>
-      ({
-        '--rosen-icon-color': toCSSColor(color),
-        '--rosen-icon-size': toCSSUnit('icon-size', size),
-      }) as CSSProperties,
-    [color, size],
+    () => ({
+      '--rosen-icon-color': toCSSColor(color),
+      '--rosen-icon-size': toCSSUnit('icon-size', size),
+      ...style,
+    }),
+    [color, size, style],
   );
 
-  return <Root as={Icon} styles={styles} {...rest} />;
+  if (!Icon) return null;
+
+  return <Icon style={styles} {...rest} />;
 };
 
 IconBase.displayName = 'Icon';

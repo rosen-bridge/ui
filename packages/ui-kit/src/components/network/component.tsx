@@ -7,7 +7,7 @@ import {
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import { Logo } from './logo';
@@ -75,7 +75,7 @@ export const NetworkBase = ({
   );
 
   return (
-    <Root reflects={{ variant }} {...rest}>
+    <div data-variant={variant} {...rest}>
       {showLogo && loading && (
         // TODO add slot
         <Skeleton width="2em" height="2em" variant="circular" />
@@ -94,13 +94,13 @@ export const NetworkBase = ({
           component="div"
           loading={loading}
           noWrap
-          variant='inherit'
+          variant="inherit"
           {...slots?.label}
         >
           {label}
         </Typography>
       )}
-    </Root>
+    </div>
   );
 };
 

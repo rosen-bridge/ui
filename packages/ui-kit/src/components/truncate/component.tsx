@@ -3,7 +3,7 @@ import { ComponentProps } from 'react';
 import { Slot } from '@radix-ui/react-slot';
 
 import { Tooltip, TooltipOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -56,15 +56,12 @@ export const TruncateBase = ({
   tooltip = true,
   ...rest
 }: TruncateOverriddenProps) => {
+  const Component = asChild ? Slot : 'div';
   return (
     <Tooltip disabled={!tooltip} title={children} {...slots?.tooltip}>
-      <Root
-        as={asChild ? Slot : 'div'}
-        styles={{ WebkitLineClamp: lines }}
-        {...rest}
-      >
+      <Component style={{ WebkitLineClamp: lines }} {...rest}>
         {children}
-      </Root>
+      </Component>
     </Tooltip>
   );
 };

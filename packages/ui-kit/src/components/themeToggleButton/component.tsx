@@ -1,7 +1,7 @@
 import { ComponentProps } from 'react';
 
 import { Icon, IconButton, IconOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { useIsDarkMode, useThemeToggler } from '@/hooks';
 import { OverridableType } from '@/types';
 
@@ -35,18 +35,13 @@ export const ThemeToggleButtonBase = ({
   const themeToggler = useThemeToggler();
 
   return (
-    <Root
-      as={IconButton}
-      color="inherit"
-      onClick={themeToggler.toggle}
-      {...rest}
-    >
+    <IconButton color="inherit" onClick={themeToggler.toggle} {...rest}>
       {isDarkMode ? (
         <Icon name="Sun" {...slots?.darkIcon} />
       ) : (
         <Icon name="Moon" {...slots?.lightIcon} />
       )}
-    </Root>
+    </IconButton>
   );
 };
 

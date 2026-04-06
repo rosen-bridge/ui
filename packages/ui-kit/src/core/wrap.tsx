@@ -1,7 +1,6 @@
 import {
   ComponentPropsWithRef,
   ComponentType,
-  CSSProperties,
   ElementType,
   useMemo,
 } from 'react';
@@ -88,45 +87,4 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
   Wrapped.displayName = componentName;
 
   return Wrapped;
-};
-
-export type RootProps<E extends ElementType> = ElementBaseProps<
-  E,
-  {
-    as?: E;
-    reflects?: Record<string, boolean | number | string | undefined>;
-    style?: CSSProperties;
-    styles?: CSSProperties;
-  }
->;
-
-export const Root = <E extends ElementType = 'div'>({
-  as,
-  reflects,
-  style,
-  styles,
-  ...rest
-}: RootProps<E>) => {
-  const Component = (as || 'div') as ElementType;
-
-  const reflected = useMemo(() => {
-    if (!reflects) return {};
-
-    const result: Record<string, string> = {};
-
-    for (const key in reflects) {
-      const value = reflects[key];
-      if (value === undefined) continue;
-      result[`data-${key.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()}`] = String(value);
-    }
-
-    return result;
-  }, [reflects]);
-
-  const mergedStyles = useMemo(
-    () => Object.assign({}, styles, style),
-    [styles, style],
-  );
-
-  return <Component {...reflected} style={mergedStyles} {...rest} />;
 };

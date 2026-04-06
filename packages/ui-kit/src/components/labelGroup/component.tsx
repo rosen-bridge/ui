@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -20,7 +20,7 @@ export type LabelGroupOverriddenProps = OverridableType<
 >;
 
 export const LabelGroupBase = ({ ...rest }: LabelGroupOverriddenProps) => {
-  return <Root {...rest} />;
+  return <div {...rest} />;
 };
 
 LabelGroupBase.displayName = 'LabelGroup';

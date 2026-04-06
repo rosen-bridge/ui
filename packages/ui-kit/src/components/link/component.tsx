@@ -1,6 +1,6 @@
 import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
 
 import './styles.scss';
@@ -23,12 +23,12 @@ export type LinkOverriddenProps = OverridableType<
 >;
 
 export const LinkBase = ({
-  as = 'a',
+  as: Component = 'a',
   color,
   underline = 'always',
   ...rest
 }: LinkOverriddenProps) => {
-  return <Root as={as} reflects={{ color, underline }} {...rest} />;
+  return <Component data-color={color} data-underline={underline} {...rest} />;
 };
 
 LinkBase.displayName = 'Link';

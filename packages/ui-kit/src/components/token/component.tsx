@@ -10,7 +10,7 @@ import {
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -127,7 +127,7 @@ export const TokenBase = ({
   }, []);
 
   return (
-    <Root reflects={{ variant }} {...rest} ref={ref}>
+    <div data-variant={variant} {...rest} ref={ref}>
       {showLogo && !!displayLogo && isVisible && (
         <Image
           alt={`Token ${displayLabel}`}
@@ -180,7 +180,7 @@ export const TokenBase = ({
           <Icon name="ExternalLinkAlt" size="small" />
         </IconButton>
       )}
-    </Root>
+    </div>
   );
 };
 

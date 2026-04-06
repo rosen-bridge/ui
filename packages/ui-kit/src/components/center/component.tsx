@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -21,7 +21,7 @@ export type CenterOverriddenProps = OverridableType<
 >;
 
 export const CenterBase = ({ inline, ...rest }: CenterOverriddenProps) => {
-  return <Root reflects={{ inline }} {...rest} />;
+  return <div data-inline={!!inline} {...rest} />;
 };
 
 CenterBase.displayName = 'Center';

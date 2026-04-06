@@ -1,7 +1,7 @@
-import { ComponentProps, useState } from 'react';
+import { ComponentProps, useMemo, useState } from 'react';
 
 import { Alert, ApiKeyDialog, Button } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { useApiKey } from '@/hooks';
 import { OverridableType } from '@/types';
 
@@ -23,16 +23,22 @@ export type ApiKeyDialogWarningOverriddenProps = OverridableType<
 >;
 
 export const ApiKeyDialogWarningBase = ({
+  style,
   ...rest
 }: ApiKeyDialogWarningOverriddenProps) => {
   const { apiKey } = useApiKey();
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const styles = useMemo(
+    () => ({ containerType: 'inline-size', ...style }),
+    [style],
+  );
+
   if (apiKey) return null;
 
   return (
-    <Root styles={{ containerType: 'inline-size' }} {...rest}>
+    <div style={styles} {...rest}>
       <Alert
         severity="warning"
         sx={{
@@ -54,7 +60,7 @@ export const ApiKeyDialogWarningBase = ({
         You need to set an Api Key before sending.
       </Alert>
       <ApiKeyDialog open={isOpen} onClose={() => setIsOpen(false)} />
-    </Root>
+    </div>
   );
 };
 

@@ -1,8 +1,8 @@
-import { ComponentProps } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 import { Skeleton as SkeletonMUI } from '@mui/material';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -28,12 +28,18 @@ export type SkeletonOverriddenProps = OverridableType<
 
 export const SkeletonBase = ({
   animation,
-  attached = false,
+  attached,
   height,
+  style,
   variant = 'text',
   width,
   ...rest
 }: SkeletonOverriddenProps) => {
+  const styles = useMemo(
+    () => ({ height, width, ...style }),
+    [height, width, style],
+  );
+
   if (!attached)
     return (
       <SkeletonMUI
@@ -41,14 +47,17 @@ export const SkeletonBase = ({
         height={height}
         variant={variant}
         width={width}
+        style={style}
         {...rest}
       />
     );
+
   return (
     <>
-      <Root
-        reflects={{ attached, variant }}
-        styles={{ height, width }}
+      <div
+        data-attached={!!attached}
+        data-variant={variant}
+        style={styles}
         {...rest}
       />
       {attached && <>&nbsp;</>}

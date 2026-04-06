@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Icon, IconButton, IconOverriddenProps } from '@/components';
 import { useCarousel } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -39,10 +39,10 @@ export const CarouselButtonBase = ({
   const scroll = type == 'next' ? api.scrollNext : api.scrollPrev;
 
   return (
-    <Root as={IconButton} disabled={!canScroll} onClick={scroll} {...rest}>
+    <IconButton disabled={!canScroll} onClick={scroll} {...rest}>
       {type === 'prev' && <Icon name="AngleLeft" {...slots?.prev} />}
       {type === 'next' && <Icon name="AngleRight" {...slots?.next} />}
-    </Root>
+    </IconButton>
   );
 };
 

@@ -9,7 +9,7 @@ import {
   DialogFooter,
   Stack,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -36,7 +36,7 @@ export const QrCodeDialogBase = ({
   ...rest
 }: QrCodeDialogOverriddenProps) => {
   return (
-    <Root as={Dialog} maxWidth="tablet" onClose={onClose} {...rest}>
+    <Dialog maxWidth="tablet" onClose={onClose} {...rest}>
       <DialogContent>
         <Stack align="center" justify="center" spacing={2}>
           <QRCodeCanvas size={200} value={value} />
@@ -48,7 +48,7 @@ export const QrCodeDialogBase = ({
       <DialogFooter>
         <Button onClick={onClose}>Close</Button>
       </DialogFooter>
-    </Root>
+    </Dialog>
   );
 };
 

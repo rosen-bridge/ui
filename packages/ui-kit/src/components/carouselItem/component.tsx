@@ -2,7 +2,7 @@ import { ComponentProps, useMemo } from 'react';
 
 import { Breakpoint } from '@mui/material';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { useCurrentBreakpoint } from '@/hooks';
 import { OverridableType } from '@/types';
 
@@ -61,21 +61,26 @@ export type CarouselItemOverriddenProps = OverridableType<
 
 export const CarouselItemBase = ({
   size,
+  style,
   ...rest
 }: CarouselItemOverriddenProps) => {
   const currentBreakpoint = useCurrentBreakpoint();
 
-  const resolvedSize = useMemo(() => {
-    if (typeof size === 'string') {
-      return size;
-    }
-    if (currentBreakpoint && size[currentBreakpoint]) {
-      return size[currentBreakpoint]!;
-    }
-    return size.desktop ?? '100%';
-  }, [size, currentBreakpoint]);
+  const styles = useMemo(() => {
+    let result = '';
 
-  return <Root styles={{ flex: `0 0 ${resolvedSize}` }} {...rest} />;
+    if (typeof size === 'string') {
+      result = size;
+    } else if (currentBreakpoint && size[currentBreakpoint]) {
+      result = size[currentBreakpoint];
+    } else {
+      result = size.desktop ?? '100%';
+    }
+
+    return { flex: `0 0 ${result}`, ...style };
+  }, [currentBreakpoint, size, style]);
+
+  return <div style={styles} {...rest} />;
 };
 
 CarouselItemBase.displayName = 'CarouselItem';

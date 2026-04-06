@@ -17,7 +17,7 @@ import {
   Token,
   TokenProps,
 } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -35,7 +35,7 @@ export type EventCardOwnProps = {
     id: IdentifierProps['value'];
     status: EventStatusProps['value'];
     toChain: NetworkProps['value'];
-    timestamp?: RelativeTimeProps['timestamp'];
+    timestamp?: RelativeTimeProps['value'];
     token?: TokenProps['value'];
     unit: AmountProps['unit'];
   };
@@ -58,7 +58,7 @@ export const EventCardBase = ({
   ...rest
 }: EventCardOverriddenProps) => {
   return (
-    <Root as={Card} backgroundColor="background.paper" {...rest}>
+    <Card backgroundColor="background.paper" {...rest}>
       <CardBody className="RosenCardBody">
         <div className="RosenEventCard-header">
           <Token
@@ -103,7 +103,7 @@ export const EventCardBase = ({
           <EventStatus loading={loading} value={value?.status} />
         </div>
       </CardBody>
-    </Root>
+    </Card>
   );
 };
 

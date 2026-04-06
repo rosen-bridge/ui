@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import { useCarousel } from './hook';
@@ -26,9 +26,9 @@ export const CarouselBase = ({
 }: CarouselOverriddenProps) => {
   const api = useCarousel();
   return (
-    <Root {...rest} ref={api.ref}>
+    <div {...rest} ref={api.ref}>
       <div className="RosenCarousel-container">{children}</div>
-    </Root>
+    </div>
   );
 };
 

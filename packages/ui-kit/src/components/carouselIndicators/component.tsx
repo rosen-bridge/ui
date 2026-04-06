@@ -1,7 +1,7 @@
 import { ComponentProps, useMemo } from 'react';
 
 import { useCarousel } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -33,7 +33,7 @@ export const CarouselIndicatorsBase = ({
   }, [api.count]);
 
   return (
-    <Root {...rest}>
+    <div {...rest}>
       {items.map((index) => (
         <button
           key={index}
@@ -42,7 +42,7 @@ export const CarouselIndicatorsBase = ({
           onClick={() => api.scrollTo(index)}
         />
       ))}
-    </Root>
+    </div>
   );
 };
 

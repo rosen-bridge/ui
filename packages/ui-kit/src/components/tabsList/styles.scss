@@ -1,34 +1,29 @@
 .RosenTabsList {
   display: flex;
+  position: relative;
+  z-index: 0;
 
-  // TODO
-  // position: relative;
-  // z-index: 0;
-  // padding-inline: 0.25rem;
-  // gap: 0.25rem;
-  // box-shadow: inset 0 -1px var(--color-gray-200);
-}
+  &[data-align='start'] {
+    justify-content: flex-start;
+  }
 
-.RosenTabsList[data-align="start"] {
-  justify-content: flex-start;
-}
+  &[data-align='center'] {
+    justify-content: center;
+  }
 
-.RosenTabsList[data-align="center"] {
-  justify-content: center;
-}
+  &[data-align='end'] {
+    justify-content: flex-end;
+  }
 
-.RosenTabsList[data-align="end"] {
-  justify-content: flex-end;
-}
+  &[data-grow='true'] > * {
+    flex-grow: 1;
+  }
 
-.RosenTabsList[data-grow="true"] > * {
-  flex-grow: 1;
-}
+  &[data-orientation='horizontal'] {
+    flex-direction: row;
+  }
 
-.RosenTabsList[data-orientation="horizontal"] {
-  flex-direction: row;
-}
-
-.RosenTabsList[data-orientation="vertical"] {
-  flex-direction: column;
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+  }
 }

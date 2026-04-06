@@ -1,7 +1,7 @@
 import { ComponentProps, useMemo } from 'react';
 
 import { Chip, ChipProps, IconOverriddenProps } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import { STATUS_MAP } from './constants';
@@ -52,7 +52,7 @@ export const EventStatusBase = ({
       ),
     [fallback, value],
   );
-  return <Root as={Chip} color={color} icon={icon} label={label} {...rest} />;
+  return <Chip color={color} icon={icon} label={label} {...rest} />;
 };
 
 EventStatusBase.displayName = 'EventStatus';

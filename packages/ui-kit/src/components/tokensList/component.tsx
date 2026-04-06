@@ -4,7 +4,7 @@ import { TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
 import { Amount, Identifier, NetworkProps, Token } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -36,7 +36,7 @@ export const TokensListBase = ({
   ...rest
 }: TokensListOverriddenProps) => {
   return (
-    <Root {...rest}>
+    <div {...rest}>
       {tokens.map((token) => {
         const hasCold = 'coldAmount' in token;
         return (
@@ -93,7 +93,7 @@ export const TokensListBase = ({
           </div>
         );
       })}
-    </Root>
+    </div>
   );
 };
 

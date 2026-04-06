@@ -2,7 +2,7 @@ import { ComponentProps, HTMLAttributeAnchorTarget } from 'react';
 
 import { IconButton as IconButtonMUI } from '@mui/material';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -27,7 +27,7 @@ export type IconButtonOverriddenProps = OverridableType<
 
 export const IconButtonBase = ({ ...rest }: IconButtonOverriddenProps) => {
   // TODO: extend from Button instead of MUI
-  return <Root as={IconButtonMUI} {...rest} />;
+  return <IconButtonMUI {...rest} />;
 };
 
 IconButtonBase.displayName = 'IconButton';

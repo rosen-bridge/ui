@@ -2,7 +2,7 @@
 import { ComponentProps } from 'react';
 
 import { Icon, IconButton } from '@/components';
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -37,7 +37,7 @@ export const ViewToggleBase = ({
   ...rest
 }: ViewToggleOverriddenProps) => {
   return (
-    <Root {...rest}>
+    <div {...rest}>
       <IconButton
         className={value === 'row' ? 'active' : ''}
         disabled={disabled}
@@ -52,7 +52,7 @@ export const ViewToggleBase = ({
       >
         <Icon name="Grid" />
       </IconButton>
-    </Root>
+    </div>
   );
 };
 

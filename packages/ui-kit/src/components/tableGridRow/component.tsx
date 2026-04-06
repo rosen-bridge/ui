@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { ElementBaseProps, Root, Wrap } from '@/core';
+import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -23,7 +23,7 @@ export type TableGridRowOverriddenProps = OverridableType<
 >;
 
 export const TableGridRowBase = ({ ...rest }: TableGridRowOverriddenProps) => {
-  return <Root {...rest} />;
+  return <div {...rest} />;
 };
 
 TableGridRowBase.displayName = 'TableGridRow';
