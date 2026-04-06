@@ -1,6 +1,6 @@
 import { ComponentProps } from 'react';
 
-import { TokenInfoWithColdAmount } from '@rosen-ui/types';
+import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
 import { Amount, Identifier, NetworkProps, Token } from '@/components';
@@ -73,7 +73,7 @@ export const TokensListBase = ({
               href={
                 token.isNativeToken
                   ? undefined
-                  : getTokenUrl(chain, token.tokenId)
+                  : getTokenUrl(chain as Network, token.tokenId)
               }
               loading={loading}
               slots={{ text: { color: 'text-secondary', variant: 'body2' } }}

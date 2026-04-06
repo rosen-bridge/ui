@@ -5,7 +5,6 @@ import type {
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
-  ButtonBaseOverriddenProps,
   CarouselOverriddenProps,
   CarouselButtonOverriddenProps,
   CarouselIndicatorsOverriddenProps,
@@ -33,6 +32,7 @@ import type {
   IdentifierOverriddenProps,
   ImageOverriddenProps,
   InfoIconOverriddenProps,
+  InteractiveOverriddenProps,
   LabelOverriddenProps,
   LabelGroupOverriddenProps,
   LayoutListOverriddenProps,
@@ -70,7 +70,6 @@ export type Components = {
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
-  ButtonBase: ButtonBaseOverriddenProps;
   Carousel: CarouselOverriddenProps;
   CarouselButton: CarouselButtonOverriddenProps;
   CarouselIndicators: CarouselIndicatorsOverriddenProps;
@@ -98,6 +97,7 @@ export type Components = {
   Identifier: IdentifierOverriddenProps;
   Image: ImageOverriddenProps;
   InfoIcon: InfoIconOverriddenProps;
+  Interactive: InteractiveOverriddenProps;
   Label: LabelOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
   LayoutList: LayoutListOverriddenProps;

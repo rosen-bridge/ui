@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Tabs } from '@base-ui/react/tabs';
 
-import { ButtonBase, Icon, IconOverriddenProps } from '@/components';
+import { Icon, IconOverriddenProps, Interactive } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -21,7 +21,7 @@ export type TabsTabOwnProps = {
 
 type TabsTabAsAnchor = ElementBaseProps<
   'a',
-  TabsTabOwnProps & { href: string | undefined; }
+  TabsTabOwnProps & { href: string | undefined }
 >;
 
 type TabsTabAsButton = ElementBaseProps<
@@ -56,10 +56,10 @@ export const TabsTabBase = ({
       value={rest.href ?? value}
       // eslint-disable-next-line @typescript-eslint/no-empty-object-type
       render={(props: {}) => (
-        <ButtonBase {...props} {...rest}>
+        <Interactive {...props} {...rest}>
           {icon && <Icon name={icon} size="small" {...slots?.icon} />}
           {children && <span>{children}</span>}
-        </ButtonBase>
+        </Interactive>
       )}
     />
   );

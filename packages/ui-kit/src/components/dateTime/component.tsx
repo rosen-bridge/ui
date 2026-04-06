@@ -41,11 +41,15 @@ export type DateTimeOverriddenProps = OverridableType<
  * Example output: `"Aug 27 2025 01:33:12"`.
  */
 export const DateTimeBase = ({
+  color,
   loading,
   timestamp,
   ...rest
 }: DateTimeOverriddenProps) => {
+  void color;
+
   const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
+
   return (
     <Typography
       color="text-primary"
