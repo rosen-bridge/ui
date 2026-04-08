@@ -6,4 +6,4 @@ export {
   watcherCountMetric,
 } from './jobs';
 export { WatcherCountConfig } from './types';
-export { NodeBoxFetcher, ExplorerBoxFetcher } from './services';
+export { NodeBoxFetcher } from './fetchers';

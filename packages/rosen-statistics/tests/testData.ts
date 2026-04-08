@@ -1052,28 +1052,6 @@ export const userEventMetricTestData = {
 };
 
 /**
- * Helper to create mock box for explorer
- */
-const createMockExplorerBox = (count: string, rwtTokenId?: string) => ({
-  additionalRegisters: {
-    R5: {
-      serializedValue: count,
-    },
-  },
-  assets: [
-    {
-      tokenId: 'test-tokenId-1',
-    },
-    {
-      tokenId: rwtTokenId,
-    },
-    {
-      tokenId: 'test-tokenId-2',
-    },
-  ],
-});
-
-/**
  * Helper to create mock box for node
  */
 const createMockNodeBox = (count: string, rwtTokenId?: string) => ({
@@ -1099,8 +1077,7 @@ export const watcherCountMetricTestData = {
    */
   multipleNetworks: {
     config: {
-      type: 'explorer' as const,
-      url: 'https://ergo-explorer.com',
+      url: 'https://ergo-node.com',
       rwtRepoNFT: 'valid-rwt-token-id',
       rwtTokenMap: new Map<string, string>([
         ['valid-rwt-token-id', 'ergo'],
@@ -1108,8 +1085,8 @@ export const watcherCountMetricTestData = {
       ]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockExplorerBox('05e401', 'valid-rwt-token-id'),
-      createMockExplorerBox('0526', 'cardano-rwt-token-id'),
+      createMockNodeBox('05e401', 'valid-rwt-token-id'),
+      createMockNodeBox('0526', 'cardano-rwt-token-id'),
     ],
     expectedResults: {
       watcherCounts: [
@@ -1131,14 +1108,13 @@ export const watcherCountMetricTestData = {
    */
   boxesWithoutValidNetwork: {
     config: {
-      type: 'explorer' as const,
-      url: 'https://ergo-explorer.com',
+      url: 'https://ergo-node.com',
       rwtRepoNFT: 'valid-rwt-token-id',
       rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
     } as WatcherCountConfig,
     mockBoxes: [
-      createMockExplorerBox('0526', 'valid-rwt-token-id'),
-      createMockExplorerBox('05e401', 'some-other-token-id'),
+      createMockNodeBox('0526', 'valid-rwt-token-id'),
+      createMockNodeBox('05e401', 'some-other-token-id'),
     ],
     expectedResults: {
       watcherCounts: [
@@ -1156,8 +1132,7 @@ export const watcherCountMetricTestData = {
    */
   noBoxesFound: {
     config: {
-      type: 'explorer' as const,
-      url: 'https://ergo-explorer.com',
+      url: 'https://ergo-node.com',
       rwtRepoNFT: 'valid-rwt-token-id',
       rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
     } as WatcherCountConfig,
@@ -1173,7 +1148,6 @@ export const watcherCountMetricTestData = {
    */
   nodeClientConfig: {
     config: {
-      type: 'node' as const,
       url: 'https://ergo-node.com',
       rwtRepoNFT: 'valid-rwt-token-id',
       rwtTokenMap: new Map<string, string>([
@@ -1205,8 +1179,7 @@ export const watcherCountMetricTestData = {
    */
   errorWithExistingData: {
     config: {
-      type: 'explorer' as const,
-      url: 'https://ergo-explorer.com',
+      url: 'https://ergo-node.com',
       rwtRepoNFT: 'valid-rwt-token-id',
       rwtTokenMap: new Map<string, string>([
         ['valid-rwt-token-id', 'ergo'],

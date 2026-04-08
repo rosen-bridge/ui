@@ -1,5 +1,1 @@
-export {
-  WatcherCountConfig,
-  WatcherBoxType,
-  WatcherCountResult,
-} from './watcherCount';
+export { WatcherCountConfig, WatcherCountResult } from './watcherCount';

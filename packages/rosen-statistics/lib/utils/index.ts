@@ -6,3 +6,4 @@ export {
   scientificToString,
   multiplyByPowerOfTen,
 } from './decimals';
+export { getRegisterValue } from './getRegisterValue';

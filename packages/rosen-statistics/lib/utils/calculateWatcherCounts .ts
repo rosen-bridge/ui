@@ -1,12 +1,10 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { IndexedErgoBox } from '@rosen-clients/ergo-node';
 import { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
 
 import { WATCHER_COUNT_REGISTER } from '../constants';
-import {
-  WatcherBoxType,
-  WatcherCountConfig,
-  WatcherCountResult,
-} from '../types';
+import { WatcherCountConfig, WatcherCountResult } from '../types';
+import { getRegisterValue } from './getRegisterValue';
 
 /**
  * Calculate watcher counts for a list of boxes grouped by network.
@@ -19,11 +17,7 @@ import {
  * @returns Object containing networkWatcherCounts array and totalWatchers number
  */
 export const calculateWatcherCounts = (
-  boxes: WatcherBoxType[],
-  getWatcherCount: (
-    box: WatcherBoxType,
-    register: string,
-  ) => number | undefined,
+  boxes: IndexedErgoBox[],
   config: WatcherCountConfig,
   logger: AbstractLogger,
 ): WatcherCountResult => {
@@ -47,7 +41,11 @@ export const calculateWatcherCounts = (
 
     logger.debug(`Resolved network ${network} for box ${box.boxId}`);
 
-    const count = getWatcherCount(box, WATCHER_COUNT_REGISTER);
+    const count = getRegisterValue(
+      box,
+      WATCHER_COUNT_REGISTER,
+      logger.child('getRegisterValue'),
+    );
 
     if (count === undefined) {
       logger.debug(
