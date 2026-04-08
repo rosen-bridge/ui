@@ -2,7 +2,6 @@ import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import ergoNodeClientFactory, {
   IndexedErgoBox,
 } from '@rosen-clients/ergo-node';
-import { Constant } from 'ergo-lib-wasm-nodejs';
 
 export class NodeBoxFetcher {
   private readonly PAGE_SIZE = 100;
@@ -49,28 +48,5 @@ export class NodeBoxFetcher {
 
     this.logger.debug(`Fetched ${boxes.length} boxes from node`);
     return boxes;
-  };
-
-  /**
-   * Get the numeric value stored in a specific register of a node box.
-   *
-   * @param box - The IndexedErgoBox to read the register from
-   * @param key - The register key to extract the value from
-   * @returns Number value decoded from the register, undefined if register is not present
-   */
-  getRegisterValue = (box: IndexedErgoBox, key: string): number | undefined => {
-    const reg = box.additionalRegisters[key];
-    if (!reg) return undefined;
-
-    try {
-      const decoded = Constant.decode_from_base16(reg).to_i64().to_str();
-
-      return Number(decoded);
-    } catch (err) {
-      this.logger.warn(
-        `Failed to decode register ${key} with value ${reg}: ${err}`,
-      );
-      return undefined;
-    }
   };
 }

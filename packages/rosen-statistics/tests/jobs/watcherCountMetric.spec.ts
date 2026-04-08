@@ -8,11 +8,7 @@ import {
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { watcherCountMetric } from '../../lib';
-import {
-  setupExplorerMock,
-  setupNodeMock,
-  resetMocks,
-} from '../mocked/boxFetcher.mock';
+import { setupNodeMock, resetMocks } from '../mocked/boxFetcher.mock';
 import { watcherCountMetricTestData } from '../testData';
 import { createDatabase } from '../utils';
 
@@ -37,12 +33,12 @@ describe('watcherCountMetric', () => {
    * @target Should calculate watcher counts for multiple networks
    * @dependencies
    * - database
-   * - ExplorerBoxFetcher
+   * - NodeBoxFetcher
    * - calculateWatcherCounts
    * - WatcherCountMetricAction
    * - MetricAction
    * @scenario
-   * - Configure explorer client with multiple network mappings (ergo, cardano, ethereum)
+   * - Configure node client with multiple network mappings (ergo, cardano, ethereum)
    * - Run watcherCountMetric
    * @expected
    * - Creates 3 WatcherCountEntity records with correct sums per network
@@ -51,7 +47,7 @@ describe('watcherCountMetric', () => {
   it('should calculate watcher counts for multiple networks', async () => {
     const testData = watcherCountMetricTestData.multipleNetworks;
 
-    setupExplorerMock(testData.mockBoxes);
+    setupNodeMock(testData.mockBoxes);
 
     await watcherCountMetric(dataSource, testData.config, logger);
 
@@ -73,12 +69,12 @@ describe('watcherCountMetric', () => {
    * @target Should skip boxes without valid RWT token
    * @dependencies
    * - database
-   * - ExplorerBoxFetcher
+   * - NodeBoxFetcher
    * - calculateWatcherCounts
    * - WatcherCountMetricAction
    * - MetricAction
    * @scenario
-   * - Configure explorer client with ergo network mapping
+   * - Configure node client with ergo network mapping
    * - Run watcherCountMetric
    * @expected
    * - Creates 1 WatcherCountEntity record with sum of valid boxes only (5)
@@ -88,7 +84,7 @@ describe('watcherCountMetric', () => {
   it('Should skip boxes without valid RWT token', async () => {
     const testData = watcherCountMetricTestData.boxesWithoutValidNetwork;
 
-    setupExplorerMock(testData.mockBoxes);
+    setupNodeMock(testData.mockBoxes);
 
     await watcherCountMetric(dataSource, testData.config, logger);
 
@@ -111,12 +107,12 @@ describe('watcherCountMetric', () => {
    * @target Should handle no boxes found
    * @dependencies
    * - database
-   * - ExplorerBoxFetcher
+   * - NodeBoxFetcher
    * - calculateWatcherCounts
    * - WatcherCountMetricAction
    * - MetricAction
    * @scenario
-   * - Configure explorer client with ergo network mapping
+   * - Configure node client with ergo network mapping
    * - Run watcherCountMetric
    * @expected
    * - No WatcherCountEntity records created
@@ -125,7 +121,7 @@ describe('watcherCountMetric', () => {
   it('should handle no boxes found', async () => {
     const testData = watcherCountMetricTestData.noBoxesFound;
 
-    setupExplorerMock(testData.mockBoxes);
+    setupNodeMock(testData.mockBoxes);
 
     await watcherCountMetric(dataSource, testData.config, logger);
 
@@ -180,13 +176,13 @@ describe('watcherCountMetric', () => {
    * @target Should preserve existing data when box service fails
    * @dependencies
    * - database
-   * - ExplorerBoxFetcher
+   * - NodeBoxFetcher
    * - calculateWatcherCounts
    * - WatcherCountMetricAction
    * - MetricAction
    * @scenario
    * - Insert existing watcher counts and total metric in database from testData
-   * - Configure explorer client
+   * - Configure node client
    * - Mock fetchUnspentBoxesByTokenId to throw error
    * - Run watcherCountMetric
    * @expected
@@ -199,7 +195,7 @@ describe('watcherCountMetric', () => {
     await watcherCountRepo.save(testData.existingData.watcherCounts);
     await metricRepo.save(testData.existingData.totalMetric);
 
-    setupExplorerMock(new Error('Network error'));
+    setupNodeMock(new Error('Network error'));
 
     await watcherCountMetric(dataSource, testData.config, logger);
 

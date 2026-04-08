@@ -1,12 +1,10 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { IndexedErgoBox } from '@rosen-clients/ergo-node';
 import { WatcherCountType } from '@rosen-ui/rosen-statistics-entity';
 
 import { WATCHER_COUNT_REGISTER } from '../constants';
-import {
-  WatcherBoxType,
-  WatcherCountConfig,
-  WatcherCountResult,
-} from '../types';
+import { WatcherCountConfig, WatcherCountResult } from '../types';
+import { getRegisterValue } from './getRegisterValue';
 
 /**
  * Calculate watcher counts for a list of boxes grouped by network.
@@ -19,11 +17,7 @@ import {
  * @returns Object containing networkWatcherCounts array and totalWatchers number
  */
 export const calculateWatcherCounts = (
-  boxes: WatcherBoxType[],
-  getWatcherCount: (
-    box: WatcherBoxType,
-    register: string,
-  ) => number | undefined,
+  boxes: IndexedErgoBox[],
   config: WatcherCountConfig,
   logger: AbstractLogger,
 ): WatcherCountResult => {
@@ -31,27 +25,29 @@ export const calculateWatcherCounts = (
   let totalWatchers = 0;
 
   for (const box of boxes) {
-    const networkToken = box.assets?.find((asset) =>
-      config.rwtTokenMap.has(asset.tokenId),
-    );
+    let network: string | undefined;
 
-    if (!networkToken) {
+    for (const asset of box.assets || []) {
+      network = config.rwtTokenMap.get(asset.tokenId);
+      if (network) break;
+    }
+
+    if (!network) {
       logger.debug(
-        `Skipping box ${box.boxId}: rwtTokenId not found in box assets`,
+        `Skipping box ${box.boxId}: no valid RWT token found in box assets`,
       );
       continue;
     }
 
-    const network = config.rwtTokenMap.get(networkToken.tokenId);
-    if (!network) continue;
+    logger.debug(`Resolved network ${network} for box ${box.boxId}`);
 
-    logger.debug(
-      `Resolved network ${network} with rwt token id ${networkToken.tokenId} in box ${box.boxId}`,
+    const count = getRegisterValue(
+      box,
+      WATCHER_COUNT_REGISTER,
+      logger.child('getRegisterValue'),
     );
 
-    const count = getWatcherCount(box, WATCHER_COUNT_REGISTER);
-
-    if (!count) {
+    if (count === undefined) {
       logger.debug(
         `Skipping box ${box.boxId}: watcher count register not found`,
       );

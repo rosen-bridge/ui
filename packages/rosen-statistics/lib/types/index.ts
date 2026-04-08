@@ -1,9 +1,5 @@
 export {
-  WatcherCountConfig,
-  WatcherBoxType,
-  WatcherCountResult,
-} from './watcherCountConfig';
-export {
   AggregatedBridgeFeeData,
   BridgeFeeCalculationResult,
 } from './bridgeFee';
+export { WatcherCountConfig, WatcherCountResult } from './watcherCount';
