@@ -21,6 +21,7 @@ type ColorShade = 'light' | 'dark' | 'contrastText';
 
 export type DefaultColor =
   | 'inherit'
+  | 'transparent'
   | `${ColorName}-${ColorShade}`
   | ColorName
   | 'background'

@@ -125,7 +125,7 @@ export const SubmitButton = () => {
             paddingBottom: 0,
           }}
         >
-          <Card backgroundColor="primary.light">
+          <Card backgroundColor="primary-light">
             <CardBody>
               <Stack spacing={2}>
                 <Stack align="center" spacing={2}>

@@ -5,11 +5,11 @@ import { useState } from 'react';
 
 import {
   Card,
+  CardAction,
   CardBody,
   CardHeader,
   CardTitle,
   Skeleton,
-  Typography,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
@@ -36,13 +36,14 @@ const Revenue = () => {
   );
 
   return (
-    <Card style={{ minWidth: 0 }} backgroundColor="background.paper">
-      <CardHeader
-        action={<PeriodSelect period={period} setPeriod={setPeriod} />}
-      >
-        <CardTitle>
-          <Typography fontWeight="700">Revenue</Typography>
+    <Card style={{ minWidth: 0 }}>
+      <CardHeader>
+        <CardTitle fontWeight="700">
+          Revenue
         </CardTitle>
+        <CardAction>
+          <PeriodSelect period={period} setPeriod={setPeriod} />
+        </CardAction>
       </CardHeader>
       <CardBody>
         {isLoading && (

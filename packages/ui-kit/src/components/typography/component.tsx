@@ -41,7 +41,6 @@ export const TypographyBase = ({
   if (asChild) {
     return <Slot {...rest}>{loading ? <Skeleton attached /> : children}</Slot>;
   } else {
-    // TODO
     return (
       <TypographyMUI style={{ color: toCSSColor(color) }} {...rest}>
         {children}

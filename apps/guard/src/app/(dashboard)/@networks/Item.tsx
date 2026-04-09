@@ -49,12 +49,7 @@ export const Item = ({ network }: ItemProps) => {
   }, [cold, error, hot, isLoading, network]);
 
   return (
-    <Card
-      backgroundColor="background.paper"
-      style={{
-        userSelect: 'none',
-      }}
-    >
+    <Card style={{ userSelect: 'none' }}>
       <CardBody>
         <Stack align="stretch" justify="start" spacing={1}>
           <Network loading={isLoading} value={network} />

@@ -33,7 +33,6 @@ export const ViewGrid = ({
           id={item.id}
           key={item.id || index}
           active={!isLoading && !!item?.id && item?.id === current?.id}
-          backgroundColor="background.paper"
           clickable
           onClick={() => {
             setCurrent(item);

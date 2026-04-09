@@ -1,0 +1,6 @@
+.RosenCardHeader {
+  display: flex;
+  align-items: center;
+  border-radius: calc(var(--rosen-spacing) * 2);
+  padding: var(--padding);
+}

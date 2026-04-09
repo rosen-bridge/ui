@@ -21,20 +21,32 @@ import { ApiInfoResponse } from '@/types/api';
 
 const VARIANTS: Record<
   ApiInfoResponse['health']['status'],
-  { color: IconProps['color']; status: string; icon: IconProps['name'] }
+  { 
+    color: IconProps['color']; 
+    darkColor: IconProps['color']; 
+    lightColor: IconProps['color']; 
+    status: string; 
+    icon: IconProps['name']
+  }
 > = {
   Broken: {
     color: 'error',
+    darkColor: 'error-dark',
+    lightColor: 'error-light',
     status: 'BROKEN',
     icon: 'CloseCircle',
   },
   Healthy: {
     color: 'success',
+    darkColor: 'success-dark',
+    lightColor: 'success-light',
     status: 'OK',
     icon: 'ShieldCheck',
   },
   Unstable: {
     color: 'warning',
+    darkColor: 'warning-dark',
+    lightColor: 'warning-light',
     status: 'UNSTABLE',
     icon: 'ExclamationOctagon',
   },
@@ -56,9 +68,7 @@ const Health = () => {
 
   return (
     <Card
-      backgroundColor={
-        isLoading ? 'background.paper' : `${variant.color}.light`
-      }
+      backgroundColor={isLoading ? 'background-paper' : variant.lightColor}
       style={{ overflow: 'hidden' }}
     >
       <CardBody>
@@ -85,7 +95,7 @@ const Health = () => {
           {isLoading ? (
             <Skeleton variant="text" width={60} height={32} />
           ) : (
-            <Typography color={`${variant.color}-dark`} variant="h3">
+            <Typography color={variant.darkColor} variant="h3">
               {variant.status}
             </Typography>
           )}
@@ -106,7 +116,7 @@ const Health = () => {
             {!isLoading && trialErrors && (
               <Tooltip title={trialErrors}>
                 <Icon
-                  color={`${variant.color}-dark` as IconProps['color']}
+                  color={variant.darkColor}
                   name="ExclamationTriangleFill"
                 />
               </Tooltip>
@@ -127,7 +137,7 @@ const Health = () => {
           <Skeleton variant="circular" width={184} height={184} />
         ) : (
           <Icon
-            color={`${variant.color}-dark` as IconProps['color']}
+            color={variant.darkColor}
             name={variant.icon}
             opacity="0.2"
             size="184px"

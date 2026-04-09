@@ -83,7 +83,7 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
             };
 
             return (
-              <Card key={item.label} backgroundColor="background.paper">
+              <Card key={item.label}>
                 <CardBody>
                   <Tooltip title={item.name}>
                     <Stack align="center" spacing={3}>

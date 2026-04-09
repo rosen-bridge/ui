@@ -1,6 +1,6 @@
 import { Route } from 'next';
 import NextImage from 'next/image';
-// import NextLink from 'next/link';
+import NextLink from 'next/link';
 import { PropsWithChildren, useMemo } from 'react';
 
 import * as AllIcons from '@rosen-bridge/icons';

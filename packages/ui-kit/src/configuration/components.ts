@@ -6,6 +6,11 @@ import type {
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
+  CardOverriddenProps,
+  CardActionOverriddenProps,
+  CardBodyOverriddenProps,
+  CardHeaderOverriddenProps,
+  CardTitleOverriddenProps,
   CarouselOverriddenProps,
   CarouselButtonOverriddenProps,
   CarouselIndicatorsOverriddenProps,
@@ -55,13 +60,14 @@ import type {
   TabsTabOverriddenProps,
   ThemeToggleButtonOverriddenProps,
   TokenOverriddenProps,
+  TokensCardOverriddenProps,
   TokensListOverriddenProps,
   ToolbarOverriddenProps,
   TooltipOverriddenProps,
   TruncateOverriddenProps,
   TypographyOverriddenProps,
   ViewToggleOverriddenProps,
-} from '../components';
+} from '@/components';
 
 export type Components = {
   Action: ActionOverriddenProps;
@@ -71,6 +77,11 @@ export type Components = {
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
+  Card: CardOverriddenProps;
+  CardAction: CardActionOverriddenProps;
+  CardBody: CardBodyOverriddenProps;
+  CardHeader: CardHeaderOverriddenProps;
+  CardTitle: CardTitleOverriddenProps;
   Carousel: CarouselOverriddenProps;
   CarouselButton: CarouselButtonOverriddenProps;
   CarouselIndicators: CarouselIndicatorsOverriddenProps;
@@ -120,6 +131,7 @@ export type Components = {
   TabsTab: TabsTabOverriddenProps;
   ThemeToggleButton: ThemeToggleButtonOverriddenProps;
   Token: TokenOverriddenProps;
+  TokensCard: TokensCardOverriddenProps;
   TokensList: TokensListOverriddenProps;
   Toolbar: ToolbarOverriddenProps;
   Tooltip: TooltipOverriddenProps;

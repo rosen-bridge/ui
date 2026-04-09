@@ -9,7 +9,6 @@ import {
   MenuItem,
   SubmitButton,
   TextField,
-  Typography,
   useApiKey,
   CardHeader,
   CardTitle,
@@ -107,10 +106,8 @@ export const RequestAnOrderForm = () => {
   return (
     <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle>
-          <Typography variant="h5" fontWeight="bold">
-            Request An Order
-          </Typography>
+        <CardTitle variant="h5" fontWeight="bold">
+          Request An Order
         </CardTitle>
       </CardHeader>
       <CardBody>

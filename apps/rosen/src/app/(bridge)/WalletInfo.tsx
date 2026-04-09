@@ -15,8 +15,8 @@ export const WalletInfo = () => {
     <Card
       backgroundColor={
         wallet.state === 'CONNECTED' || wallet.state === 'DISCONNECTING'
-          ? 'secondary.light'
-          : 'primary.light'
+          ? 'secondary-light'
+          : 'primary-light'
       }
     >
       <CardBody

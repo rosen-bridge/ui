@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import {
   Button,
   Card,
+  CardAction,
   CardBody,
   CardHeader,
   CardTitle,
@@ -123,38 +124,34 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
   return (
     <Card
       ref={stickyRef}
-      separated
-      backgroundColor="background.paper"
+      variant="separated"
       style={{
         width: '330px',
         marginLeft: '16px',
       }}
     >
-      <CardHeader
-        action={
-          value && (
-            <div
-              style={{
-                height: 0,
-                display: 'flex',
-                alignItems: 'center',
-                marginRight: '-1rem',
-              }}
-            >
-              <Button
-                variant="text"
-                size="small"
-                target="_blank"
-                href={`/events/${value.eventId}`}
-                endIcon={<Icon name="AngleRight" />}
-              >
-                SEE DETAILS
-              </Button>
-            </div>
-          )
-        }
-      >
+      <CardHeader>
         <CardTitle>Event</CardTitle>
+        {value && (
+          <CardAction 
+            style={{
+              height: 0,
+              display: 'flex',
+              alignItems: 'center',
+              marginRight: '-1rem',
+            }}
+          >
+            <Button
+              variant="text"
+              size="small"
+              target="_blank"
+              href={`/events/${value.eventId}`}
+              endIcon={<Icon name="AngleRight" />}
+            >
+              SEE DETAILS
+            </Button>
+          </CardAction>
+        )}
       </CardHeader>
       <CardBody>
         <Content value={value} />

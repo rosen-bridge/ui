@@ -32,7 +32,7 @@ export const TabsListBase = ({
   return (
     <Tabs.List data-align={align} data-grow={grow} {...rest}>
       {children}
-      <Tabs.Indicator />
+      <Tabs.Indicator className="RosenTabsIndicator" />
     </Tabs.List>
   );
 };

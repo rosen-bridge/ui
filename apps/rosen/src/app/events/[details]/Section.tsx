@@ -5,6 +5,7 @@ import { ReactNode } from 'react';
 import {
   Button,
   Card,
+  CardAction,
   CardBody,
   CardHeader,
   CardTitle,
@@ -40,15 +41,16 @@ export const Section = ({
   });
 
   return (
-    <Card variant="section" backgroundColor="background.paper">
-      <CardHeader
-        action={collapsible && <DisclosureButton disclosure={disclosure} />}
-      >
-        <CardTitle>
-          <Typography variant="h2" color="text-secondary">
-            {title}
-          </Typography>
+    <Card variant="section">
+      <CardHeader>
+        <CardTitle variant="h2" color="text-secondary">
+          {title}
         </CardTitle>
+        {collapsible && (
+          <CardAction>
+            <DisclosureButton disclosure={disclosure} />
+          </CardAction>
+        )}
       </CardHeader>
       <Collapsible open={!collapsible || disclosure.state == 'open' || !!error}>
         <CardBody>

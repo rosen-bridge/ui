@@ -52,9 +52,9 @@ const Token = ({ chain }: { chain: Network }) => {
   return (
     <TokensCard
       chain={chain}
-      tokens={tokens}
-      isLoading={isLoading}
+      loading={isLoading}
       title={NETWORKS[chain].label}
+      tokens={tokens}
     />
   );
 };

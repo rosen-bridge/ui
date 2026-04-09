@@ -2,9 +2,15 @@ import { useMemo } from 'react';
 
 import { HealthParamInfo } from '@rosen-ui/types';
 
+import {
+  Card,
+  CardAction,
+  CardBody,
+  CardHeader,
+  CardTitle,
+} from '@/components';
 import { ColorOverridden } from '@/types';
 
-import { Card, CardBody, CardHeader, CardTitle } from '.';
 import { useTheme } from '../../hooks';
 import { Alert } from '../base';
 import { Icon, IconProps } from '../icon';
@@ -58,7 +64,7 @@ export const HealthParamCard = ({
   const colors = useMemo(() => {
     if (lastCheck) {
       return {
-        cardBackground: `${color}.light`,
+        cardBackground: `${color}-light`,
         cardColor: `${color}-dark`,
         button: color,
         alertBackground: `${color}.main`,
@@ -66,7 +72,7 @@ export const HealthParamCard = ({
       };
     } else {
       return {
-        cardBackground: theme.palette.neutral.light,
+        cardBackground: 'neutral-light',
         cardColor: 'inherit',
         button: 'inherit',
         alertBackground: 'inherit',
@@ -102,28 +108,25 @@ export const HealthParamCard = ({
         flexDirection: 'column',
         minWidth: 0,
       }}
-      backgroundColor={colors.cardBackground}
+      backgroundColor={colors.cardBackground as ColorOverridden}
     >
-      <CardHeader
-        action={
-          lastTrialErrorTime && (
+      <CardHeader>
+        <Stack spacing={2} direction="row">
+          <Icon color={colors.cardColor as ColorOverridden} name={icon} />
+          <CardTitle
+            color={colors.cardColor as ColorOverridden}
+            fontWeight="700"
+          >
+            {lastCheck ? status : 'Unknown'}
+          </CardTitle>
+        </Stack>
+        {lastTrialErrorTime && (
+          <CardAction>
             <Tooltip title={lastTrialErrorMessage}>
               <Icon color="warning" name="ExclamationTriangle" />
             </Tooltip>
-          )
-        }
-      >
-        <Stack spacing={2} direction="row">
-          <Icon color={colors.cardColor as ColorOverridden} name={icon} />
-          <CardTitle>
-            <Typography
-              color={colors.cardColor as ColorOverridden}
-              fontWeight="700"
-            >
-              {lastCheck ? status : 'Unknown'}
-            </Typography>
-          </CardTitle>
-        </Stack>
+          </CardAction>
+        )}
       </CardHeader>
       <CardBody style={{ height: '100%' }}>
         <Stack style={{ flex: 1, height: '100%' }}>

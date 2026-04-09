@@ -1,7 +1,11 @@
 import { ComponentProps } from 'react';
 
-import { Icon, IconButton, IconOverriddenProps } from '@/components';
-import { useCarousel } from '@/components';
+import {
+  Icon,
+  IconButton,
+  IconOverriddenProps,
+  useCarousel,
+} from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 

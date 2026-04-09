@@ -51,7 +51,7 @@ export const TransactionInfo = () => {
 
   return (
     <Card
-      backgroundColor="primary.light"
+      backgroundColor="primary-light"
       style={{
         alignContent: 'end',
         flexGrow: 1,

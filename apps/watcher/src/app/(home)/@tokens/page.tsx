@@ -19,10 +19,10 @@ const Tokens = () => {
 
   return (
     <TokensCard
-      tokens={data?.items.filter((token) => !!token.amount) ?? []}
-      isLoading={isLoading}
-      title="Tokens"
       href={getAddressUrl(NETWORKS.ergo.key, info?.address)}
+      loading={isLoading}
+      title="Tokens"
+      tokens={data?.items.filter((token) => !!token.amount) ?? []}
     />
   );
 };

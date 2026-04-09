@@ -1,0 +1,78 @@
+import { ComponentProps } from 'react';
+
+import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
+
+import {
+  Button,
+  Card,
+  CardAction,
+  CardBody,
+  CardHeader,
+  CardTitle,
+  Icon,
+  TokensList,
+} from '@/components';
+import { ElementBaseProps, Wrap } from '@/core';
+import { OverridableType } from '@/types';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface TokensCardOverrides {}
+
+export type TokensCardOwnProps = {
+  chain?: Network;
+  href?: string;
+  loading: boolean;
+  title: string;
+  tokens: TokenInfoWithColdAmount[];
+};
+
+export type TokensCardBaseProps = ElementBaseProps<'div', TokensCardOwnProps>;
+
+export type TokensCardOverriddenProps = OverridableType<
+  TokensCardBaseProps,
+  TokensCardOverrides,
+  never
+>;
+
+/**
+ * a wrapper for `TokensList` which also renders a title and a "See All" action
+ * button
+ */
+export const TokensCardBase = ({
+  chain,
+  href,
+  loading,
+  title,
+  tokens,
+  ...rest
+}: TokensCardOverriddenProps) => {
+  return (
+    <Card style={{ height: '100%' }} {...rest}>
+      <CardHeader>
+        <CardTitle fontWeight="700">{title}</CardTitle>
+        {href && (
+          <CardAction>
+            <Button
+              variant="text"
+              size="medium"
+              target="_blank"
+              href={href}
+              endIcon={<Icon name="AngleRight" />}
+            >
+              See All
+            </Button>
+          </CardAction>
+        )}
+      </CardHeader>
+      <CardBody>
+        <TokensList chain={chain} loading={loading} tokens={tokens ?? []} />
+      </CardBody>
+    </Card>
+  );
+};
+
+TokensCardBase.displayName = 'TokensCard';
+
+export const TokensCard = Wrap(TokensCardBase);
+
+export type TokensCardProps = ComponentProps<typeof TokensCard>;

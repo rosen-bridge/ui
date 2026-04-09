@@ -120,10 +120,8 @@ export const RequestToSignForm = () => {
   return (
     <Card backgroundColor="transparent">
       <CardHeader>
-        <CardTitle>
-          <Typography variant="h5" fontWeight="bold">
-            Request To Sign
-          </Typography>
+        <CardTitle variant="h5" fontWeight="bold">
+          Request To Sign
         </CardTitle>
       </CardHeader>
       <CardBody>

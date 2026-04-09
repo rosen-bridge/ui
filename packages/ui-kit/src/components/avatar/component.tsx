@@ -1,4 +1,3 @@
-// TODO: replace MUI
 import { ComponentProps, useMemo } from 'react';
 
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
@@ -22,7 +21,7 @@ export type AvatarOwnProps = {
   loading?: boolean;
 
   /** Avatar size (width/height). */
-  size?: (number & {}) | (string & {}); // TODO: add predefined sizes
+  size?: (number & {}) | (string & {});
 };
 
 export type AvatarBaseProps = ElementBaseProps<'div', AvatarOwnProps>;

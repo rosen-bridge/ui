@@ -8,8 +8,8 @@ import {
   CardHeader,
   CardTitle,
   CardBody,
-  Typography,
   Skeleton,
+  CardAction,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { ChartPeriod } from '@rosen-ui/types';
@@ -36,15 +36,14 @@ const Revenue = () => {
   );
 
   return (
-    <Card backgroundColor="background.paper">
-      <CardHeader
-        action={<PeriodSelect period={period} setPeriod={setPeriod} />}
-      >
-        <CardTitle>
-          <Typography variant="h5" fontWeight="bold">
-            Revenue
-          </Typography>
+    <Card>
+      <CardHeader>
+        <CardTitle variant="h5" fontWeight="bold">
+          Revenue
         </CardTitle>
+        <CardAction>
+          <PeriodSelect period={period} setPeriod={setPeriod} />
+        </CardAction>
       </CardHeader>
       <CardBody>
         {isLoading && (

@@ -54,7 +54,7 @@ export const SkeletonBase = ({
 
   return (
     <>
-      <div
+      <span
         data-attached={!!attached}
         data-variant={variant}
         style={styles}

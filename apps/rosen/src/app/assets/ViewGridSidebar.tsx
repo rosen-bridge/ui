@@ -81,8 +81,7 @@ const DetailsSidebar = ({ value }: ViewGridSidebarProps) => {
   return (
     <Card
       ref={stickyRef}
-      separated
-      backgroundColor="background.paper"
+      variant="separated"
       style={{
         width: '330px',
         marginLeft: '16px',

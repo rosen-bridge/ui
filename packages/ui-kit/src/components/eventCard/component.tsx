@@ -58,8 +58,8 @@ export const EventCardBase = ({
   ...rest
 }: EventCardOverriddenProps) => {
   return (
-    <Card backgroundColor="background.paper" {...rest}>
-      <CardBody className="RosenCardBody">
+    <Card {...rest}>
+      <CardBody className="RosenEventCard-body">
         <div className="RosenEventCard-header">
           <Token
             loading={loading}

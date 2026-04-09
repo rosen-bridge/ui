@@ -39,7 +39,7 @@ export const BridgedList = ({ value }: BridgedListProps) => {
   return (
     <GridContainer minWidth="220px" gap="0.5rem">
       {items.map((item, index) => (
-        <Card key={item.id ?? index} backgroundColor="neutral.light">
+        <Card key={item.id ?? index} backgroundColor="neutral-light">
           <CardBody>
             <Box
               display="flex"
