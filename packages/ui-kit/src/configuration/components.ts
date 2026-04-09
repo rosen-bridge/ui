@@ -1,4 +1,5 @@
 import type {
+  ActionOverriddenProps,
   ApiKeyDialogOverriddenProps,
   ApiKeyDialogButtonOverriddenProps,
   ApiKeyDialogWarningOverriddenProps,
@@ -32,7 +33,6 @@ import type {
   IdentifierOverriddenProps,
   ImageOverriddenProps,
   InfoIconOverriddenProps,
-  InteractiveOverriddenProps,
   LabelOverriddenProps,
   LabelGroupOverriddenProps,
   LayoutListOverriddenProps,
@@ -64,6 +64,7 @@ import type {
 } from '../components';
 
 export type Components = {
+  Action: ActionOverriddenProps;
   ApiKeyDialog: ApiKeyDialogOverriddenProps;
   ApiKeyDialogButton: ApiKeyDialogButtonOverriddenProps;
   ApiKeyDialogWarning: ApiKeyDialogWarningOverriddenProps;
@@ -97,7 +98,6 @@ export type Components = {
   Identifier: IdentifierOverriddenProps;
   Image: ImageOverriddenProps;
   InfoIcon: InfoIconOverriddenProps;
-  Interactive: InteractiveOverriddenProps;
   Label: LabelOverriddenProps;
   LabelGroup: LabelGroupOverriddenProps;
   LayoutList: LayoutListOverriddenProps;

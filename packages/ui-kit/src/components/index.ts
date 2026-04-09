@@ -3,6 +3,7 @@ import './index.scss';
 export * from './base';
 export * from './common';
 
+export * from './action';
 export * from './apiKeyDialog';
 export * from './apiKeyDialogButton';
 export * from './apiKeyDialogWarning';
@@ -36,7 +37,6 @@ export * from './iconButton';
 export * from './identifier';
 export * from './image';
 export * from './infoIcon';
-export * from './interactive';
 export * from './label';
 export * from './labelGroup';
 export * from './layoutList';

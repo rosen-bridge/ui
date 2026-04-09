@@ -2,7 +2,7 @@ import { ComponentProps } from 'react';
 
 import { Tabs } from '@base-ui/react/tabs';
 
-import { Icon, IconOverriddenProps, Interactive } from '@/components';
+import { Action, Icon, IconOverriddenProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -56,10 +56,10 @@ export const TabsTabBase = ({
       value={rest.href ?? value}
       // eslint-disable-next-line @typescript-eslint/no-empty-object-type
       render={(props: {}) => (
-        <Interactive {...props} {...rest}>
+        <Action {...props} {...rest}>
           {icon && <Icon name={icon} size="small" {...slots?.icon} />}
           {children && <span>{children}</span>}
-        </Interactive>
+        </Action>
       )}
     />
   );

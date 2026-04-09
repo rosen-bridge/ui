@@ -13,7 +13,6 @@ export interface TabsListOverrides {}
 export type TabsListOwnProps = {
   align?: 'start' | 'center' | 'end';
   grow?: boolean;
-  indicator?: boolean;
 };
 
 export type TabsListBaseProps = ElementBaseProps<'div', TabsListOwnProps>;
@@ -28,13 +27,12 @@ export const TabsListBase = ({
   align,
   children,
   grow,
-  indicator,
   ...rest
 }: TabsListOverriddenProps) => {
   return (
     <Tabs.List data-align={align} data-grow={grow} {...rest}>
       {children}
-      {indicator && <Tabs.Indicator />}
+      <Tabs.Indicator />
     </Tabs.List>
   );
 };
