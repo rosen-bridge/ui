@@ -8,6 +8,7 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
+  Skeleton,
 } from '@/components';
 import { ColorOverridden } from '@/types';
 
@@ -19,39 +20,25 @@ import { Tooltip } from '../tooltip';
 import { Typography } from '../typography';
 import { Button } from './Button';
 
-export type HealthParamCardProps = HealthParamInfo & {
+export type HealthParamCardProps = {
   checking?: boolean;
-  handleCheckNow: () => void;
+  handleCheckNow?: () => void;
+  loading?: boolean;
+  value?: HealthParamInfo;
 };
 /**
- * render a healt param card to be used in health page
- *
- * @param id
- * @param title
- * @param details
- * @param status
- * @param description
- * @param lastCheck
- * @param lastTrialErrorMessage
- * @param lastTrialErrorTime
- * @param checking
- * @param handleCheckNow
+ * render a health param card to be used in health page
  */
 export const HealthParamCard = ({
-  title,
-  details,
-  status,
-  description,
-  lastCheck,
-  lastTrialErrorMessage,
-  lastTrialErrorTime,
   checking,
   handleCheckNow,
+  loading,
+  value,
 }: HealthParamCardProps) => {
   const theme = useTheme();
 
   const color = useMemo(() => {
-    switch (status) {
+    switch (value?.status) {
       case 'Healthy':
         return 'success';
       case 'Unstable':
@@ -59,10 +46,10 @@ export const HealthParamCard = ({
       default:
         return 'error';
     }
-  }, [status]);
+  }, [value?.status]);
 
   const colors = useMemo(() => {
-    if (lastCheck) {
+    if (value?.lastCheck) {
       return {
         cardBackground: `${color}-light`,
         cardColor: `${color}-dark`,
@@ -79,16 +66,16 @@ export const HealthParamCard = ({
         alert: 'inherit',
       };
     }
-  }, [color, lastCheck, theme]);
+  }, [color, value?.lastCheck, theme]);
 
   const icon = useMemo<IconProps['name']>(() => {
-    if (!lastCheck) return 'ShieldQuestion';
-    if (status === 'Healthy') return 'ShieldCheck';
+    if (!value?.lastCheck) return 'ShieldQuestion';
+    if (value?.status === 'Healthy') return 'ShieldCheck';
     return 'ShieldExclamation';
-  }, [lastCheck, status]);
+  }, [value?.lastCheck, value?.status]);
 
   const formattedLastCheck = useMemo(() => {
-    if (!lastCheck) return;
+    if (!value?.lastCheck) return;
     return new Intl.DateTimeFormat('en-US', {
       day: '2-digit',
       month: '2-digit',
@@ -97,8 +84,12 @@ export const HealthParamCard = ({
       minute: '2-digit',
       second: '2-digit',
       hour12: false,
-    }).format(new Date(lastCheck));
-  }, [lastCheck]);
+    }).format(new Date(value.lastCheck));
+  }, [value?.lastCheck]);
+
+  if (loading) {
+    return <Skeleton height={180} variant="rounded" />;
+  }
 
   return (
     <Card
@@ -111,57 +102,63 @@ export const HealthParamCard = ({
       backgroundColor={colors.cardBackground as ColorOverridden}
     >
       <CardHeader>
-        <Stack spacing={2} direction="row">
-          <Icon color={colors.cardColor as ColorOverridden} name={icon} />
-          <CardTitle
-            color={colors.cardColor as ColorOverridden}
-            fontWeight="700"
-          >
-            {lastCheck ? status : 'Unknown'}
-          </CardTitle>
-        </Stack>
-        {lastTrialErrorTime && (
+        <Icon color={colors.cardColor as ColorOverridden} name={icon} />
+        <CardTitle color={colors.cardColor as ColorOverridden} fontWeight="700">
+          {value?.lastCheck ? value?.status : 'Unknown'}
+        </CardTitle>
+        {value?.lastTrialErrorTime && (
           <CardAction>
-            <Tooltip title={lastTrialErrorMessage}>
+            <Tooltip title={value.lastTrialErrorMessage}>
               <Icon color="warning" name="ExclamationTriangle" />
             </Tooltip>
           </CardAction>
         )}
       </CardHeader>
-      <CardBody style={{ height: '100%' }}>
-        <Stack style={{ flex: 1, height: '100%' }}>
-          <Typography gutterBottom>{title}</Typography>
-          <Typography variant="body2">{description}</Typography>
-          {details && (
-            <Alert
-              variant="filled"
-              sx={{
-                bgcolor: colors.alertBackground,
-                color: colors.alert,
-                mt: 2,
-                wordBreak: 'normal',
-                overflowWrap: 'break-word',
-              }}
-            >
-              {details}
-            </Alert>
-          )}
-          <Typography variant="body2" style={{ marginTop: 'auto' }}>
-            {/* Note that "Check now" feature only works with a real watcher
-          instance and its functionality cannot be mocked now */}
-            <Button
-              loading={checking}
-              size="small"
-              variant="text"
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              color={colors.button as any}
-              style={{ fontSize: 'inherit' }}
-              onClick={handleCheckNow}
-            >
-              {checking ? 'Checking' : 'Check now'}
-            </Button>
-            {formattedLastCheck && `(Last check: ${formattedLastCheck})`}
+      <CardBody
+        style={{
+          height: '100%',
+          display: 'flex',
+          flexFlow: 'column',
+          flex: '1 1 0%',
+        }}
+      >
+        <Typography gutterBottom>{value?.title}</Typography>
+        <Typography variant="body2">{value?.description}</Typography>
+        {value?.details && (
+          <Alert
+            variant="filled"
+            sx={{
+              bgcolor: colors.alertBackground,
+              color: colors.alert,
+              mt: 2,
+              wordBreak: 'normal',
+              overflowWrap: 'break-word',
+            }}
+          >
+            {value.details}
+          </Alert>
+        )}
+        <Stack
+          align="center"
+          direction="row"
+          justify="between"
+          style={{ marginTop: 'auto' }}
+        >
+          <Typography variant="body2">
+            Last check: {formattedLastCheck}
           </Typography>
+          {/* Note that "Check now" feature only works with a real watcher instance and its functionality cannot be mocked now */}
+          <Button
+            loading={checking}
+            size="small"
+            variant="text"
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            color={colors.button as any}
+            style={{ fontSize: 'inherit' }}
+            onClick={handleCheckNow}
+          >
+            {checking ? 'Checking' : 'Check now'}
+          </Button>
         </Stack>
       </CardBody>
     </Card>

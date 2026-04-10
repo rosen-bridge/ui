@@ -5,7 +5,6 @@ import { useCallback, useState } from 'react';
 import {
   GridContainer,
   HealthParamCard,
-  HealthParamCardSkeleton,
   useSnackbar,
 } from '@rosen-bridge/ui-kit';
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
@@ -86,22 +85,21 @@ const Health = () => {
     >
       {isLoading && (
         <>
-          <HealthParamCardSkeleton />
-          <HealthParamCardSkeleton />
-          <HealthParamCardSkeleton />
+          <HealthParamCard loading  />
+          <HealthParamCard loading />
+          <HealthParamCard loading />
         </>
       )}
-      {data &&
-        data
-          .sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
-          .map((item) => (
-            <HealthParamCard
-              key={item.id}
-              {...item}
-              checking={checking.includes(item.id)}
-              handleCheckNow={() => handleCheckNow(item.id)}
-            />
-          ))}
+      {data
+        ?.sort((a, b) => (a.id.toLowerCase() > b.id.toLowerCase() ? 1 : -1))
+        ?.map((item) => (
+          <HealthParamCard
+            key={item.id}
+            value={item}
+            checking={checking.includes(item.id)}
+            handleCheckNow={() => handleCheckNow(item.id)}
+          />
+        ))}
     </GridContainer>
   );
 };

@@ -38,7 +38,7 @@ export const InfoWidgetCard = ({
   warning,
 }: InfoWidgetCardProps) => {
   return (
-    <Card backgroundColor={`${color}-main`}>
+    <Card backgroundColor={color}>
       <CardBody>
         <Stack direction="row" align="center" spacing={2}>
           <Icon

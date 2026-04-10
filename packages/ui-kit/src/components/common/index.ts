@@ -8,7 +8,6 @@ export * from './DisclosureButton';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './HealthParamCard';
-export * from './HealthParamCardSkeleton';
 export * from './Pagination';
 export * from './AppInfo';
 export * from './SortField';

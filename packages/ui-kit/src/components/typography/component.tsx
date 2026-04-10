@@ -4,7 +4,6 @@ import {
   Typography as TypographyMUI,
   TypographyProps as TypographyPropsMUI,
 } from '@mui/material';
-import { Slot } from '@radix-ui/react-slot';
 
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
@@ -15,7 +14,6 @@ import { toCSSColor } from '@/utils';
 export interface TypographyOverrides {}
 
 export type TypographyOwnProps = TypographyPropsMUI & {
-  asChild?: boolean;
   color?: ColorOverridden;
   loading?: boolean;
 };
@@ -32,22 +30,18 @@ export type TypographyOverriddenProps = OverridableType<
 >;
 
 export const TypographyBase = ({
-  asChild,
   children,
   color,
   loading,
+  style,
   ...rest
 }: TypographyOverriddenProps) => {
-  if (asChild) {
-    return <Slot {...rest}>{loading ? <Skeleton attached /> : children}</Slot>;
-  } else {
-    return (
-      <TypographyMUI style={{ color: toCSSColor(color) }} {...rest}>
-        {children}
-        {loading && <Skeleton attached />}
-      </TypographyMUI>
-    );
-  }
+  return (
+    <TypographyMUI style={{ color: toCSSColor(color), ...style }} {...rest}>
+      {children}
+      {loading && <Skeleton attached />}
+    </TypographyMUI>
+  );
 };
 
 TypographyBase.displayName = 'Typography';

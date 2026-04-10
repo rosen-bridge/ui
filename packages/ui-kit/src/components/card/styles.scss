@@ -20,7 +20,7 @@
 .RosenCard[data-variant='separated'] .RosenCardHeader {
   position: relative;
   &::after {
-    content: "";
+    content: '';
     position: absolute;
     bottom: 0;
     left: calc(var(--rosen-spacing) * 2);

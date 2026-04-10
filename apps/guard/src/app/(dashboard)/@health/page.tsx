@@ -86,19 +86,13 @@ const Health = () => {
             <Icon color={variant.color} name={variant.icon} size="32px" />
           )}
 
-          {isLoading ? (
-            <Skeleton variant="text" width={80} height={24} />
-          ) : (
-            <Typography color={variant.color}>Health is</Typography>
-          )}
+          <Typography color={variant.color} loading={isLoading}>
+            Health is
+          </Typography>
 
-          {isLoading ? (
-            <Skeleton variant="text" width={60} height={32} />
-          ) : (
-            <Typography color={variant.darkColor} variant="h3">
-              {variant.status}
-            </Typography>
-          )}
+          <Typography color={variant.darkColor} loading={isLoading} variant="h3">
+            {variant.status}
+          </Typography>
 
           {isSmall && <Box flexGrow={1} />}
 
