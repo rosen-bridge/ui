@@ -85,7 +85,7 @@ const Health = () => {
     >
       {isLoading && (
         <>
-          <HealthParamCard loading  />
+          <HealthParamCard loading />
           <HealthParamCard loading />
           <HealthParamCard loading />
         </>

@@ -48,7 +48,6 @@ const Revenue = () => {
       <CardBody>
         {isLoading && (
           <Skeleton
-            animation="wave"
             height={285}
             width="100%"
             variant="rounded"

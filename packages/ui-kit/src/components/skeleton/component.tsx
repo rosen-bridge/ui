@@ -11,7 +11,6 @@ import './styles.scss';
 export interface SkeletonOverrides {}
 
 export type SkeletonOwnProps = {
-  animation?: 'pulse' | 'wave' | false;
   attached?: boolean;
   height?: (number & {}) | (string & {});
   variant?: 'circular' | 'rounded' | 'text';
@@ -27,7 +26,6 @@ export type SkeletonOverriddenProps = OverridableType<
 >;
 
 export const SkeletonBase = ({
-  animation,
   attached,
   height,
   style,
@@ -43,7 +41,6 @@ export const SkeletonBase = ({
   if (!attached)
     return (
       <SkeletonMUI
-        animation={animation}
         height={height}
         variant={variant}
         width={width}

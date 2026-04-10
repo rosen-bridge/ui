@@ -12,7 +12,6 @@ import {
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
 import { RequestToSignForm } from './RequestToSignForm';
-
 import './style.css';
 
 const Actions = () => {
@@ -25,28 +24,23 @@ const Actions = () => {
   // TODO
   return (
     <Tabs
-      className='actions'
+      className="actions"
       gap={2}
       value={tab}
-      rewrite={{ 
+      rewrite={{
         mobile: { orientation: 'horizontal' },
-        tablet: { orientation: 'vertical' }
+        tablet: { orientation: 'vertical' },
       }}
       onChange={(value) => setTab(value as number)}
     >
-      <TabsList 
-        align="center" 
-        rewrite={{ 
+      <TabsList
+        align="center"
+        rewrite={{
           mobile: { grow: true },
           tablet: { grow: false },
         }}
       >
-        <TabsTab
-          disabled
-          icon="Pause"
-          iconPosition={iconPosition}
-          value={0}
-        >
+        <TabsTab disabled icon="Pause" iconPosition={iconPosition} value={0}>
           Pause Service
         </TabsTab>
         <TabsTab
@@ -57,26 +51,13 @@ const Actions = () => {
         >
           Stop Service
         </TabsTab>
-        <TabsTab
-          disabled
-          icon="Pause"
-          iconPosition={iconPosition}
-          value={2}
-        >
+        <TabsTab disabled icon="Pause" iconPosition={iconPosition} value={2}>
           Pause Network
         </TabsTab>
-        <TabsTab
-          icon="FileEditAlt"
-          iconPosition={iconPosition}
-          value={3}
-        >
+        <TabsTab icon="FileEditAlt" iconPosition={iconPosition} value={3}>
           Request To Sign
         </TabsTab>
-        <TabsTab
-          icon="ReceiptAlt"
-          iconPosition={iconPosition}
-          value={4}
-        >
+        <TabsTab icon="ReceiptAlt" iconPosition={iconPosition} value={4}>
           Request An Order
         </TabsTab>
         <TabsTab
@@ -87,12 +68,7 @@ const Actions = () => {
         >
           Generate Key
         </TabsTab>
-        <TabsTab
-          disabled
-          icon="Redo"
-          iconPosition={iconPosition}
-          value={6}
-        >
+        <TabsTab disabled icon="Redo" iconPosition={iconPosition} value={6}>
           Key Reconstruction
         </TabsTab>
       </TabsList>
@@ -114,7 +90,8 @@ const Actions = () => {
 export default Actions;
 
 // TODO
-{/* <Slide
+{
+  /* <Slide
   direction="up"
   in={isIn}
   unmountOnExit
@@ -125,7 +102,8 @@ export default Actions;
   }}
 >
   <Box>{children}</Box>
-</Slide> */}
+</Slide> */
+}
 
 // const Root = styled(Box)(({ theme }) => ({
 //   display: 'flex',

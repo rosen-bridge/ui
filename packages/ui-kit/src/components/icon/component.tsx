@@ -2,6 +2,7 @@ import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 
+import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
@@ -19,6 +20,7 @@ export type IconOwnProps = {
     NonNullable<IconOverriddenProps['name']>,
     FC<SVGAttributes<SVGElement>>
   >;
+  loading?: boolean;
   name?: Exclude<keyof typeof Icons, 'TOKENS'>;
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
 };
@@ -36,6 +38,7 @@ export const IconBase = ({
   color = 'inherit',
   fallback,
   icons,
+  loading,
   name,
   size = 'medium',
   style,
@@ -46,10 +49,6 @@ export const IconBase = ({
     icons?.[name as keyof typeof icons] ||
     icons?.[fallback as keyof typeof icons];
 
-  if (!Icon) {
-    console.error(`Icon '${name}' not found`);
-  }
-
   const styles = useMemo(
     () => ({
       '--rosen-icon-color': toCSSColor(color),
@@ -59,7 +58,22 @@ export const IconBase = ({
     [color, size, style],
   );
 
-  if (!Icon) return null;
+  if (loading) {
+    return (
+      <Skeleton
+        className="RosenIcon"
+        height={toCSSUnit('icon-size', size)}
+        width={toCSSUnit('icon-size', size)}
+        variant="circular"
+        style={style}
+      />
+    );
+  }
+
+  if (!Icon) {
+    console.error(`Icon '${name}' not found`);
+    return null;
+  }
 
   return <Icon style={styles} {...rest} />;
 };

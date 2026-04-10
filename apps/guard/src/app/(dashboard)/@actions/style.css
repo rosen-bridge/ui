@@ -22,7 +22,7 @@
     font-size: 0.875rem;
     padding: 9px 16px;
 
-    &[data-active] { 
+    &[data-active] {
       background-color: var(--rosen-palette-background-paper);
       color: var(--rosen-palette-primary-dark);
     }

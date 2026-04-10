@@ -2,4 +2,6 @@
 
 import { Actions } from "@/components";
 
-export default () => <Actions />;
+const Page = () => <Actions />;
+
+export default Page

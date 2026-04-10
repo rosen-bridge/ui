@@ -8,7 +8,6 @@ import {
   CardBody,
   Icon,
   IconProps,
-  Skeleton,
   Stack,
   Tooltip,
   Typography,
@@ -21,12 +20,12 @@ import { ApiInfoResponse } from '@/types/api';
 
 const VARIANTS: Record<
   ApiInfoResponse['health']['status'],
-  { 
-    color: IconProps['color']; 
-    darkColor: IconProps['color']; 
-    lightColor: IconProps['color']; 
-    status: string; 
-    icon: IconProps['name']
+  {
+    color: IconProps['color'];
+    darkColor: IconProps['color'];
+    lightColor: IconProps['color'];
+    status: string;
+    icon: IconProps['name'];
   }
 > = {
   Broken: {
@@ -80,45 +79,50 @@ const Health = () => {
         >
           {!isSmall && <Box flexGrow={1} />}
 
-          {isLoading ? (
-            <Skeleton variant="circular" width={32} height={32} />
-          ) : (
-            <Icon color={variant.color} name={variant.icon} size="32px" />
-          )}
+          <Icon
+            color={variant.color}
+            loading={isLoading}
+            name={variant.icon}
+            size="32px"
+          />
 
           <Typography color={variant.color} loading={isLoading}>
             Health is
           </Typography>
 
-          <Typography color={variant.darkColor} loading={isLoading} variant="h3">
+          <Typography
+            color={variant.darkColor}
+            loading={isLoading}
+            variant="h3"
+          >
             {variant.status}
           </Typography>
 
           {isSmall && <Box flexGrow={1} />}
 
-          <div
-            style={{
-              position: isSmall ? 'static' : 'absolute',
-              top: '1rem',
-              right: '1rem',
-              zIndex: 2,
-            }}
-          >
-            {isLoading && (
-              <Skeleton variant="circular" width={24} height={24} />
-            )}
-            {!isLoading && trialErrors && (
-              <Tooltip title={trialErrors}>
-                <Icon
-                  color={variant.darkColor}
-                  name="ExclamationTriangleFill"
-                />
-              </Tooltip>
-            )}
-          </div>
+          {(isLoading || trialErrors) && (
+            <Tooltip disabled={isLoading} title={trialErrors}>
+              <Icon
+                color={variant.darkColor}
+                loading={isLoading}
+                name="ExclamationTriangleFill"
+                style={{
+                  position: isSmall ? 'static' : 'absolute',
+                  top: '1rem',
+                  right: '1rem',
+                  zIndex: 2,
+                }}
+              />
+            </Tooltip>
+          )}
         </Stack>
       </CardBody>
-      <div
+      <Icon
+        color={variant.darkColor}
+        loading={isLoading}
+        name={variant.icon}
+        opacity="0.2"
+        size="184px"
         style={{
           zIndex: 1,
           position: 'absolute',
@@ -126,18 +130,7 @@ const Health = () => {
           right: isSmall ? '0' : '50%',
           transform: isSmall ? 'translate(0, -50%)' : 'translate(50%, 0)',
         }}
-      >
-        {isLoading ? (
-          <Skeleton variant="circular" width={184} height={184} />
-        ) : (
-          <Icon
-            color={variant.darkColor}
-            name={variant.icon}
-            opacity="0.2"
-            size="184px"
-          />
-        )}
-      </div>
+      />
     </Card>
   );
 };

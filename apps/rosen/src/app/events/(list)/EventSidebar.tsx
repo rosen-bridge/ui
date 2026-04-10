@@ -133,7 +133,7 @@ const DetailsSidebar = ({ value }: EventSidebarProps) => {
       <CardHeader>
         <CardTitle>Event</CardTitle>
         {value && (
-          <CardAction 
+          <CardAction
             style={{
               height: 0,
               display: 'flex',

@@ -3,7 +3,6 @@ import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
 import {
   Icon,
   IconOverriddenProps,
-  Skeleton,
   Typography,
   TypographyOverriddenProps,
 } from '@/components';
@@ -76,14 +75,11 @@ export const NetworkBase = ({
 
   return (
     <div data-variant={variant} {...rest}>
-      {showLogo && loading && (
-        // TODO add slot
-        <Skeleton width="2em" height="2em" variant="circular" />
-      )}
-      {showLogo && !loading && Logo && (
+      {showLogo && Logo && (
         <Icon
           as={Logo}
           className="RosenNetwork-logo"
+          loading={loading}
           size="2em"
           {...slots?.logo}
         />

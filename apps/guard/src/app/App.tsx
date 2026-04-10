@@ -49,7 +49,7 @@ export const App = ({ children }: PropsWithChildren) => {
                       : [],
                 }}
               >
-                  {children}
+                {children}
               </SWRConfig>
             </AppBase>
           </ApiKeyProvider>

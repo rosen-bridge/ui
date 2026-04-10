@@ -29,7 +29,7 @@ import {
 import { UseAllAmount } from './UseAllAmount';
 
 /**
- * renders the bridge main form 
+ * renders the bridge main form
  */
 export const BridgeForm = () => {
   const {
