@@ -4,6 +4,8 @@ import { RosenTokens } from '@rosen-bridge/tokens';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { METRIC_KEYS } from '@rosen-ui/rosen-statistics-entity';
 
+import { WatcherCountConfig } from '../lib';
+
 export const tokenMapData: RosenTokens = [
   {
     ergo: {
@@ -1045,6 +1047,162 @@ export const userEventMetricTestData = {
         },
       ],
       totalMetricValue: '1',
+    },
+  },
+};
+
+/**
+ * Helper to create mock box for node
+ */
+const createMockNodeBox = (count: string, rwtTokenId?: string) => ({
+  additionalRegisters: {
+    R5: count,
+  },
+  assets: [
+    {
+      tokenId: 'test-tokenId-1',
+    },
+    {
+      tokenId: rwtTokenId,
+    },
+    {
+      tokenId: 'test-tokenId-2',
+    },
+  ],
+});
+
+export const watcherCountMetricTestData = {
+  /**
+   * Test 1: Multiple networks with watchers
+   */
+  multipleNetworks: {
+    config: {
+      url: 'https://ergo-node.com',
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([
+        ['valid-rwt-token-id', 'ergo'],
+        ['cardano-rwt-token-id', 'cardano'],
+      ]),
+    } as WatcherCountConfig,
+    mockBoxes: [
+      createMockNodeBox('05e401', 'valid-rwt-token-id'),
+      createMockNodeBox('0526', 'cardano-rwt-token-id'),
+    ],
+    expectedResults: {
+      watcherCounts: [
+        {
+          network: 'ergo',
+          count: 114,
+        },
+        {
+          network: 'cardano',
+          count: 19,
+        },
+      ],
+      totalWatchers: '133',
+    },
+  },
+
+  /**
+   * Test 2: Boxes without valid network (should be skipped)
+   */
+  boxesWithoutValidNetwork: {
+    config: {
+      url: 'https://ergo-node.com',
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
+    } as WatcherCountConfig,
+    mockBoxes: [
+      createMockNodeBox('0526', 'valid-rwt-token-id'),
+      createMockNodeBox('05e401', 'some-other-token-id'),
+    ],
+    expectedResults: {
+      watcherCounts: [
+        {
+          network: 'ergo',
+          count: 19,
+        },
+      ],
+      totalWatchers: '19',
+    },
+  },
+
+  /**
+   * Test 3: No boxes found
+   */
+  noBoxesFound: {
+    config: {
+      url: 'https://ergo-node.com',
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([['valid-rwt-token-id', 'ergo']]),
+    } as WatcherCountConfig,
+    mockBoxes: [],
+    expectedResults: {
+      watcherCounts: [],
+      totalWatchers: 0,
+    },
+  },
+
+  /**
+   * Test 4: Node client configuration
+   */
+  nodeClientConfig: {
+    config: {
+      url: 'https://ergo-node.com',
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([
+        ['valid-rwt-token-id', 'ergo'],
+        ['valid-rwt-token-id-2', 'cardano'],
+      ]),
+    } as WatcherCountConfig,
+    mockBoxes: [
+      createMockNodeBox('05e401', 'valid-rwt-token-id'),
+      createMockNodeBox('0526', 'valid-rwt-token-id-2'),
+    ],
+    expectedResults: {
+      watcherCounts: [
+        {
+          network: 'ergo',
+          count: 114,
+        },
+        {
+          network: 'cardano',
+          count: 19,
+        },
+      ],
+      totalWatchers: '133',
+    },
+  },
+
+  /**
+   * Test 5: Error scenario with existing data
+   */
+  errorWithExistingData: {
+    config: {
+      url: 'https://ergo-node.com',
+      rwtRepoNFT: 'valid-rwt-token-id',
+      rwtTokenMap: new Map<string, string>([
+        ['valid-rwt-token-id', 'ergo'],
+        ['cardano-rwt-token-id', 'cardano'],
+      ]),
+    } as WatcherCountConfig,
+    existingData: {
+      watcherCounts: [
+        { network: 'ergo', count: 100 },
+        { network: 'cardano', count: 50 },
+      ],
+      totalMetric: {
+        key: METRIC_KEYS.WATCHER_COUNT_TOTAL,
+        value: '150',
+        updatedAt: 12000,
+      },
+    },
+    expectedResults: {
+      watcherCounts: [
+        { network: 'ergo', count: 100 },
+        { network: 'cardano', count: 50 },
+      ],
+      totalWatchers: '150',
     },
   },
 };
