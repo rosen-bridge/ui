@@ -22,7 +22,7 @@ import { createClient } from '@vercel/kv';
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
-import { ChainChoices, Chains, TotalSupply } from '../types';
+import { ChainChoices, TotalSupply } from '../types';
 import { stringSerializer } from '../utils';
 import { DBService } from './db';
 
@@ -332,8 +332,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
                   stringSerializer(await adapter.fetch()),
                 );
               },
-        interval:
-          configs.chains[adapter.chain as keyof Chains].scanInterval * 1000,
+        interval: configs.dataAggregator.interval * 1000,
       });
     }
     return tasks;
