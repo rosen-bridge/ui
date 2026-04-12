@@ -11,12 +11,13 @@ export class Migration1775986364817 implements MigrationInterface {
             CREATE TABLE "temporary_bridged_amount_entity" (
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "fromChain" varchar NOT NULL,
-                "lastProcessedHeight" varchar NOT NULL,
+                "lastProcessedHeight" integer NOT NULL,
                 "day" integer NOT NULL,
                 "month" integer NOT NULL,
                 "year" integer NOT NULL,
                 "week" integer NOT NULL,
-                "amount" float NOT NULL
+                "amount" float NOT NULL,
+                CONSTRAINT "UQ_58ac9b1052d94a3a68b1630cd1b" UNIQUE ("fromChain", "day", "month", "year")
             )
         `);
     await queryRunner.query(`
@@ -47,56 +48,15 @@ export class Migration1775986364817 implements MigrationInterface {
             ALTER TABLE "temporary_bridged_amount_entity"
                 RENAME TO "bridged_amount_entity"
         `);
-    await queryRunner.query(`
-            CREATE TABLE "temporary_bridged_amount_entity" (
-                "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-                "fromChain" varchar NOT NULL,
-                "lastProcessedHeight" integer NOT NULL,
-                "day" integer NOT NULL,
-                "month" integer NOT NULL,
-                "year" integer NOT NULL,
-                "week" integer NOT NULL,
-                "amount" float NOT NULL,
-                CONSTRAINT "UQ_58ac9b1052d94a3a68b1630cd1b" UNIQUE ("fromChain", "day", "month", "year")
-            )
-        `);
-    await queryRunner.query(`
-            INSERT INTO "temporary_bridged_amount_entity"(
-                    "id",
-                    "fromChain",
-                    "lastProcessedHeight",
-                    "day",
-                    "month",
-                    "year",
-                    "week",
-                    "amount"
-                )
-            SELECT "id",
-                "fromChain",
-                "lastProcessedHeight",
-                "day",
-                "month",
-                "year",
-                "week",
-                "amount"
-            FROM "bridged_amount_entity"
-        `);
-    await queryRunner.query(`
-            DROP TABLE "bridged_amount_entity"
-        `);
-    await queryRunner.query(`
-            ALTER TABLE "temporary_bridged_amount_entity"
-                RENAME TO "bridged_amount_entity"
-        `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
-            ALTER TABLE "bridge_amount_entity"
+            ALTER TABLE "bridged_amount_entity"
                 RENAME TO "temporary_bridge_amount_entity"
         `);
     await queryRunner.query(`
-            CREATE TABLE "bridge_amount_entity" (
+            CREATE TABLE "bridged_amount_entity" (
                 "id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
                 "fromChain" varchar NOT NULL,
                 "toChain" vatchar NOT NULL,
@@ -108,7 +68,7 @@ export class Migration1775986364817 implements MigrationInterface {
             )
         `);
     await queryRunner.query(`
-            INSERT INTO "bridge_amount_entity"(
+            INSERT INTO "bridged_amount_entity"(
                     "id",
                     "fromChain",
                     "toChain",
@@ -126,10 +86,10 @@ export class Migration1775986364817 implements MigrationInterface {
                 "year",
                 "week",
                 "amount"
-            FROM "temporary_bridge_amount_entity"
+            FROM "temporary_bridged_amount_entity"
         `);
     await queryRunner.query(`
-            DROP TABLE "temporary_bridge_amount_entity"
+            DROP TABLE "temporary_bridged_amount_entity"
         `);
   }
 }
