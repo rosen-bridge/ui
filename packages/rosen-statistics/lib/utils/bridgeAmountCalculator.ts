@@ -16,15 +16,15 @@ import {
 } from './index';
 
 /**
- * Calculate bridge fee USD values from events
+ * Calculate bridge amount USD values from events
  *
- * @param events - Array of bridge fee events
+ * @param events - Array of bridge amount events
  * @param tokenPriceAction - Token price action instance for fetching prices
  * @param logger - Logger instance
  *
- * @returns Object containing bridge fee records, day total raw value, and max decimals
+ * @returns Object containing bridge amount records, day total raw value, and max decimals
  */
-export const calculateBridgeFees = async (
+export const calculateBridgeAmount = async (
   events: BridgeEventData[],
   tokenPriceAction: TokenPriceAction,
   logger: AbstractLogger,
@@ -51,9 +51,9 @@ export const calculateBridgeFees = async (
       tokenUsdPriceDecimals,
     );
 
-    // Calculate USD value: bridgeFee (token decimals) * tokenPrice (price decimals)
+    // Calculate USD value: bridgeAMount (token decimals) * tokenPrice (price decimals)
     // Result decimals = token decimals + price decimals
-    const rawUsdValue = BigInt(e.bridgeFee) * BigInt(tokenUsdPriceRaw);
+    const rawUsdValue = BigInt(e.bridgeAmount) * BigInt(tokenUsdPriceRaw);
     const usdValueDecimals = e.decimal + tokenUsdPriceDecimals;
 
     const current = aggregated.get(e.fromChain);
@@ -99,7 +99,7 @@ export const calculateBridgeFees = async (
     dayMaxDecimals = Math.max(dayMaxDecimals, usdValueDecimals);
   }
 
-  const bridgeFeeRecords: BridgeMetricRecord[] = [];
+  const bridgeAmountRecords: BridgeMetricRecord[] = [];
   let dayTotalRaw = 0n;
 
   // Normalize all chain values to same precision before summing
@@ -115,7 +115,7 @@ export const calculateBridgeFees = async (
 
     const usdAmountString = getDecimalString(data.rawUsd, data.decimals);
 
-    bridgeFeeRecords.push({
+    bridgeAmountRecords.push({
       fromChain,
       day: data.day,
       month: data.month,
@@ -126,12 +126,12 @@ export const calculateBridgeFees = async (
     });
 
     logger.debug(
-      `Processed bridge fee for chain ${fromChain}: ${usdAmountString} USD`,
+      `Processed bridge amount for chain ${fromChain}: ${usdAmountString} USD`,
     );
   }
 
   return {
-    bridgeMetricRecords: bridgeFeeRecords,
+    bridgeMetricRecords: bridgeAmountRecords,
     dayTotalRaw,
     dayMaxDecimals,
     totalEventsProcessed: events.length,

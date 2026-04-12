@@ -5,12 +5,17 @@ import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 
 import { METRIC_KEYS } from '../constants';
-import { BridgeFeeEntity, MetricEntity } from '../entities';
+import {
+  BridgedAmountEntity,
+  BridgeFeeEntity,
+  MetricEntity,
+} from '../entities';
 import { BridgeEventData, BridgeMetricRecord } from '../types';
 
 export class BridgeMetricsAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
   private readonly bridgeFeeRepo: Repository<BridgeFeeEntity>;
+  private readonly bridgeAmountRepo: Repository<BridgedAmountEntity>;
   readonly logger: AbstractLogger;
 
   /**
@@ -22,6 +27,7 @@ export class BridgeMetricsAction {
   constructor(dataSource: DataSource, logger?: AbstractLogger) {
     this.eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     this.bridgeFeeRepo = dataSource.getRepository(BridgeFeeEntity);
+    this.bridgeAmountRepo = dataSource.getRepository(BridgedAmountEntity);
     this.logger = logger ?? new DummyLogger();
     this.logger.debug('BridgeMetricsAction initialized');
   }
@@ -31,9 +37,37 @@ export class BridgeMetricsAction {
    *
    * @returns Promise resolving to the last processed record, or undefined if no records exist
    */
-  getLastProcessedRecord = async (): Promise<BridgeFeeEntity | undefined> => {
+  getLastBridgeFeeRecord = async (): Promise<BridgeFeeEntity | undefined> => {
     this.logger.debug('Fetching last processed record');
     const res = await this.bridgeFeeRepo.find({
+      select: [
+        'fromChain',
+        'amount',
+        'day',
+        'week',
+        'month',
+        'year',
+        'lastProcessedHeight',
+      ],
+      order: { lastProcessedHeight: 'DESC' },
+      take: 1,
+    });
+    const height = res[0] ? res[0].lastProcessedHeight : 0;
+    const lastProcessedRecord = res[0];
+    this.logger.debug(`Last processed record at height: ${height}`);
+    return lastProcessedRecord;
+  };
+
+  /**
+   * Get the last processed record from BridgeAmountEntity records
+   *
+   * @returns Promise resolving to the last processed record, or undefined if no records exist
+   */
+  getLastBridgeAmountRecord = async (): Promise<
+    BridgedAmountEntity | undefined
+  > => {
+    this.logger.debug('Fetching last processed record');
+    const res = await this.bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -111,6 +145,7 @@ export class BridgeMetricsAction {
       .select([
         'et.fromChain as fromChain',
         'et.bridgeFee as bridgeFee',
+        'et.amount as bridgeAmount',
         'et.sourceChainTokenId as tokenId',
         'et.sourceChainHeight as eventHeight',
         'be.timestamp as timestamp',
@@ -154,6 +189,47 @@ export class BridgeMetricsAction {
       await metricRepo.upsert(
         {
           key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+          value: totalCount,
+          updatedAt: Math.floor(Date.now() / 1000),
+        },
+        ['key'],
+      );
+
+      await queryRunner.commitTransaction();
+      this.logger.debug('Transaction committed successfully');
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      this.logger.error(`Transaction rolled back due to error: ${error}`);
+      throw error;
+    } finally {
+      await queryRunner.release();
+    }
+  };
+
+  /**
+   * Insert the aggregated bridge amount and upsert total count into the database.
+   * @param aggregatedBridgeAmount - An array of aggregated bridge amount to insert.
+   * @param totalCount - The total bridge amount value to be updated.
+   * @returns A Promise that resolves when the save is completed.
+   */
+  saveBridgeAmount = async (
+    aggregatedBridgeAmount: BridgeMetricRecord[],
+    totalCount: string,
+  ): Promise<void> => {
+    const queryRunner =
+      this.bridgeAmountRepo.manager.connection.createQueryRunner();
+    try {
+      await queryRunner.startTransaction();
+
+      const bridgeAmountRepo =
+        queryRunner.manager.getRepository(BridgedAmountEntity);
+      const metricRepo = queryRunner.manager.getRepository(MetricEntity);
+
+      await bridgeAmountRepo.insert(aggregatedBridgeAmount);
+
+      await metricRepo.upsert(
+        {
+          key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD,
           value: totalCount,
           updatedAt: Math.floor(Date.now() / 1000),
         },

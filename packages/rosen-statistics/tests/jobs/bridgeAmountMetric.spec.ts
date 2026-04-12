@@ -7,18 +7,18 @@ import { TokenEntity } from '@rosen-ui/asset-calculator';
 import {
   METRIC_KEYS,
   MetricEntity,
-  BridgeFeeEntity,
+  BridgedAmountEntity,
 } from '@rosen-ui/rosen-statistics-entity';
 import { describe, it, expect, beforeEach } from 'vitest';
 
-import { bridgeFeeMetric } from '../../lib';
+import { bridgeAmountMetric } from '../../lib';
 import { bridgeMetricTestData } from '../testData';
 import { createDatabase } from '../utils';
 
-describe('bridgeFeeMetric', () => {
+describe('bridgeAmountMetric', () => {
   let dataSource: DataSource;
   let metricRepo: Repository<MetricEntity>;
-  let bridgeFeeRepo: Repository<BridgeFeeEntity>;
+  let bridgeAmountRepo: Repository<BridgedAmountEntity>;
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let blockRepo: Repository<BlockEntity>;
   let tokenRepo: Repository<TokenEntity>;
@@ -28,7 +28,7 @@ describe('bridgeFeeMetric', () => {
   beforeEach(async () => {
     dataSource = await createDatabase();
     metricRepo = dataSource.getRepository(MetricEntity);
-    bridgeFeeRepo = dataSource.getRepository(BridgeFeeEntity);
+    bridgeAmountRepo = dataSource.getRepository(BridgedAmountEntity);
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     blockRepo = dataSource.getRepository(BlockEntity);
     tokenRepo = dataSource.getRepository(TokenEntity);
@@ -36,7 +36,7 @@ describe('bridgeFeeMetric', () => {
     logger = new DummyLogger();
 
     await metricRepo.clear();
-    await bridgeFeeRepo.clear();
+    await bridgeAmountRepo.clear();
     await eventTriggerRepo.clear();
     await blockRepo.clear();
     await tokenRepo.clear();
@@ -44,21 +44,21 @@ describe('bridgeFeeMetric', () => {
   });
 
   /**
-   * @target Should calculate bridge fees for multiple chains (first run)
+   * @target Should calculate bridge amount for multiple chains (first run)
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
-   * - calculateBridgeFees
+   * - calculateBridgeAmount
    * @scenario
    * - FIRST RUN SCENARIO - No existing data in database
    * - Insert blocks, events, tokens, and token prices for multiple chains
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
-   * - Creates BridgeFeeEntity records for each chain with correct amounts
-   * - Updates total metric to sum of all bridge fees (6.00025 USD)
+   * - Creates BridgeAmountEntity records for each chain with correct amounts
+   * - Updates total metric to sum of all bridge amount (58 USD)
    */
-  it('should calculate bridge fees for multiple chains (first run)', async () => {
+  it('should calculate bridge amount for multiple chains (first run)', async () => {
     const testData = bridgeMetricTestData.multipleChains;
 
     await blockRepo.insert(testData.blockRepo);
@@ -66,16 +66,16 @@ describe('bridgeFeeMetric', () => {
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
 
-    const actualBridgeFees = await bridgeFeeRepo.find({
+    const actualBridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -87,47 +87,49 @@ describe('bridgeFeeMetric', () => {
       ],
     });
 
-    expect(actualBridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(actualBridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(actualBridgeAmount).toEqual(
+      testData.expectedResults.bridgeAmountRecords,
+    );
   });
 
   /**
    * @target Should resume from last processed record
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
-   * - calculateBridgeFees
+   * - calculateBridgeAmount
    * @scenario
-   * - Insert existing bridge fee record (2.5 USD) and total metric (2.5)
+   * - Insert existing bridge amount record (2.5 USD) and total metric (2.5)
    * - Insert new event after last processed record (3.0 USD)
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
-   * - Creates NEW bridge fee record for Day 2 (3.0 USD)
+   * - Creates NEW bridge amount record for Day 2 (3.0 USD)
    * - Updates total metric to 5.5 USD (2.5 + 3.0)
    */
   it('should resume from last processed record', async () => {
     const testData = bridgeMetricTestData.resumeFromLastRecord;
 
-    await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
+    await bridgeAmountRepo.insert(testData.bridgeAmountRepo);
     await metricRepo.insert(testData.metricRepo);
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
 
-    const actualBridgeFees = await bridgeFeeRepo.find({
+    const actualBridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -139,22 +141,24 @@ describe('bridgeFeeMetric', () => {
       ],
     });
 
-    expect(actualBridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(actualBridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(actualBridgeAmount).toEqual(
+      testData.expectedResults.bridgeAmountRecords,
+    );
   });
 
   /**
    * @target Should skip events without token prices
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
-   * - calculateBridgeFees
+   * - calculateBridgeAmount
    * @scenario
    * - Insert events for ergo (has price) and cardano (no price)
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
    * - Only ergo event is processed (2.5 USD)
    * - Cardano event is skipped
@@ -168,16 +172,16 @@ describe('bridgeFeeMetric', () => {
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
 
-    const actualBridgeFees = await bridgeFeeRepo.find({
+    const actualBridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -189,25 +193,27 @@ describe('bridgeFeeMetric', () => {
       ],
     });
 
-    expect(actualBridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(actualBridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(actualBridgeAmount).toEqual(
+      testData.expectedResults.bridgeAmountRecords,
+    );
   });
 
   /**
    * @target Should aggregate multiple events per chain per day
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
-   * - calculateBridgeFees
+   * - calculateBridgeAmount
    * @scenario
    * - Insert 3 successful events for ergo on same day (2.5, 5.0, 7.5 USD)
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
    * - Total metric = 15
-   * - Creates single bridge fee record with aggregated amount (15.0 USD)
+   * - Creates single bridge amount record with aggregated amount (15.0 USD)
    */
   it('should aggregate multiple events per chain per day', async () => {
     const testData = bridgeMetricTestData.aggregateMultipleEvents;
@@ -217,16 +223,16 @@ describe('bridgeFeeMetric', () => {
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
 
-    const actualBridgeFees = await bridgeFeeRepo.find({
+    const actualBridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -238,24 +244,26 @@ describe('bridgeFeeMetric', () => {
       ],
     });
 
-    expect(actualBridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(actualBridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(actualBridgeAmount).toEqual(
+      testData.expectedResults.bridgeAmountRecords,
+    );
   });
 
   /**
    * @target Should process multiple days of events
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
-   * - calculateBridgeFees
+   * - calculateBridgeAmount
    * @scenario
    * - Insert events spanning 3 days (2.5, 6.0, 10.5 USD)
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
-   * - Creates bridge fee records for each day
+   * - Creates bridge amount records for each day
    * - Total metric = 19.0 USD
    */
   it('should process multiple days of events', async () => {
@@ -266,16 +274,16 @@ describe('bridgeFeeMetric', () => {
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
 
-    const actualBridgeFees = await bridgeFeeRepo.find({
+    const actualBridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -287,33 +295,35 @@ describe('bridgeFeeMetric', () => {
       ],
     });
 
-    expect(actualBridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(actualBridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(actualBridgeAmount).toEqual(
+      testData.expectedResults.bridgeAmountRecords,
+    );
   });
 
   /**
    * @target Should handle no events found
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
    * @scenario
    * - No events in database
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
-   * - No bridge fee records created
+   * - No bridge amount records created
    * - No metric created
    */
   it('should handle no events found', async () => {
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
-    const bridgeFees = await bridgeFeeRepo.find();
-    expect(bridgeFees).toHaveLength(0);
+    const bridgeAmount = await bridgeAmountRepo.find();
+    expect(bridgeAmount).toHaveLength(0);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric).toBeNull();
   });
@@ -322,24 +332,24 @@ describe('bridgeFeeMetric', () => {
    * @target Should preserve existing data when no new events
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
    * @scenario
-   * - Insert existing bridge fee record (2.5 USD) and total metric (2.5)
+   * - Insert existing bridge amount record (2.5 USD) and total metric (2.5)
    * - No new events in range
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
    * - Existing data remains unchanged (2.5 USD)
    */
   it('should preserve existing data when no new events', async () => {
     const testData = bridgeMetricTestData.preserveExistingData;
 
-    await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
+    await bridgeAmountRepo.insert(testData.bridgeAmountRepo);
     await metricRepo.insert(testData.metricRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
-    const bridgeFees = await bridgeFeeRepo.find({
+    const bridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -350,16 +360,16 @@ describe('bridgeFeeMetric', () => {
         'lastProcessedHeight',
       ],
     });
-    expect(bridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(bridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(bridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(bridgeAmount).toEqual(testData.expectedResults.bridgeAmountRecords);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
   });
 
@@ -367,12 +377,12 @@ describe('bridgeFeeMetric', () => {
    * @target Should handle tokens with different decimals correctly
    * @dependencies
    * - database
-   * - BridgeFeeMetricAction
+   * - BridgeAmountMetricAction
    * - TokenPriceAction
-   * - calculateBridgeFees
+   * - calculateBridgeAmount
    * @scenario
    * - Insert events for tokens with different decimals (8, 6, 18, 0)
-   * - Run bridgeFeeMetric
+   * - Run bridgeAmountMetric
    * @expected
    * - Correctly calculates USD values with proper decimal handling
    * - Total metric = 50008.5 USD
@@ -385,16 +395,16 @@ describe('bridgeFeeMetric', () => {
     await tokenPriceRepo.insert(testData.tokenPriceRepo);
     await eventTriggerRepo.insert(testData.eventTriggerRepo);
 
-    await bridgeFeeMetric(dataSource, logger);
+    await bridgeAmountMetric(dataSource, logger);
 
     const metric = await metricRepo.findOne({
-      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
     expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeFeeMetricValue,
+      testData.expectedResults.totalBridgeAmountMetricValue,
     );
 
-    const actualBridgeFees = await bridgeFeeRepo.find({
+    const actualBridgeAmount = await bridgeAmountRepo.find({
       select: [
         'fromChain',
         'amount',
@@ -406,9 +416,11 @@ describe('bridgeFeeMetric', () => {
       ],
     });
 
-    expect(actualBridgeFees).toHaveLength(
-      testData.expectedResults.bridgeFeeRecords.length,
+    expect(actualBridgeAmount).toHaveLength(
+      testData.expectedResults.bridgeAmountRecords.length,
     );
-    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+    expect(actualBridgeAmount).toEqual(
+      testData.expectedResults.bridgeAmountRecords,
+    );
   });
 });

@@ -2,8 +2,10 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
+  Unique,
 } from '@rosen-bridge/extended-typeorm';
 
+@Unique(['fromChain', 'day', 'month', 'year'])
 @Entity('bridged_amount_entity')
 export class BridgedAmountEntity {
   @PrimaryGeneratedColumn()
@@ -11,9 +13,6 @@ export class BridgedAmountEntity {
 
   @Column({ type: 'varchar' })
   fromChain: string;
-
-  @Column({ type: 'varchar' })
-  toChain: string;
 
   @Column({ type: 'int' })
   day: number;
@@ -29,4 +28,7 @@ export class BridgedAmountEntity {
 
   @Column({ type: 'float' })
   amount: number;
+
+  @Column({ type: 'int' })
+  lastProcessedHeight: number;
 }

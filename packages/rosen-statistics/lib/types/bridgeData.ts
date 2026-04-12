@@ -1,9 +1,9 @@
 import { BridgeMetricRecord } from '@rosen-ui/rosen-statistics-entity';
 
 /**
- * Aggregated bridge fee data for a specific chain
+ * Aggregated bridge data for a specific chain
  */
-export interface AggregatedBridgeFeeData {
+export interface AggregatedBridgeData {
   rawUsd: bigint;
   decimals: number;
   maxHeight: number;
@@ -14,10 +14,10 @@ export interface AggregatedBridgeFeeData {
 }
 
 /**
- * Result of bridge fee calculation for a day
+ * Result of bridge data calculation for a day
  */
-export interface BridgeFeeCalculationResult {
-  bridgeFeeRecords: BridgeMetricRecord[];
+export interface BridgeDataCalculationResult {
+  bridgeMetricRecords: BridgeMetricRecord[];
   dayTotalRaw: bigint;
   dayMaxDecimals: number;
   totalEventsProcessed: number;
