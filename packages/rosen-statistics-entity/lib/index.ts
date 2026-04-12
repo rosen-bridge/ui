@@ -22,6 +22,6 @@ export {
   AggregatedUserEvents,
   WatcherCountType,
   LockedAssetsType,
-  BridgeAggregatedData,
-  BridgeType,
+  BridgeEventData,
+  BridgeMetricRecord,
 } from './types';

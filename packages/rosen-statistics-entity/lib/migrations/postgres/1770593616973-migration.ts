@@ -12,12 +12,20 @@ export class Migration1770593616973 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "bridge_fee_entity"
-            ADD "lastProcessedHeight" integer NOT NULL DEFAULT '0'
+            ADD "lastProcessedHeight" integer
         `);
     await queryRunner.query(`
             ALTER TABLE "bridge_fee_entity"
             ADD CONSTRAINT "UQ_1395986621376af58c09efc82a8" UNIQUE ("fromChain", "day", "month", "year")
         `);
+    await queryRunner.query(`
+      UPDATE "bridge_fee_entity"
+      SET "lastProcessedHeight" = 0
+    `);
+    await queryRunner.query(`
+      ALTER TABLE "bridge_fee_entity"
+      ALTER COLUMN "lastProcessedHeight" SET NOT NULL
+    `);
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
@@ -29,7 +37,15 @@ export class Migration1770593616973 implements MigrationInterface {
         `);
     await queryRunner.query(`
             ALTER TABLE "bridge_fee_entity"
-            ADD "toChain" character varying NOT NULL
+            ADD "toChain" character varying
         `);
+    await queryRunner.query(`
+      UPDATE "bridge_fee_entity"
+      SET "toChain" = ''
+    `);
+    await queryRunner.query(`
+      ALTER TABLE "bridge_fee_entity"
+      ALTER COLUMN "toChain" SET NOT NULL
+    `);
   }
 }

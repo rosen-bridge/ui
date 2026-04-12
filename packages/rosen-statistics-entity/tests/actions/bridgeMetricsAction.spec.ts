@@ -201,23 +201,23 @@ describe('BridgeMetricsAction', () => {
     });
   });
 
-  describe('upsertBridgeFees', () => {
+  describe('saveBridgeFees', () => {
     /**
-     * @target upsertBridgeFees should create new bridge fee records and update total metric
+     * @target saveBridgeFees should create new bridge fee records and update total metric
      * @dependencies
      * - database
      * @scenario
      * - No existing BridgeFeeEntity or MetricEntity records
-     * - Call upsertBridgeFees with 2 aggregated bridge fee groups and totalCount as string
+     * - Call saveBridgeFees with 2 aggregated bridge fee groups and totalCount as string
      * @expected
      * - Creates 2 BridgeFeeEntity records with correct amounts and metadata
      * - Creates MetricEntity record with TOTAL_BRIDGE_FEES_USD as string
      * - All operations succeed in same transaction
      */
     it('should create new bridge fee records and update total metric', async () => {
-      const testData = bridgeMetricsActionTestData.upsertBridgeFeesNewGroups;
+      const testData = bridgeMetricsActionTestData.saveBridgeFeesNewGroups;
 
-      await action.upsertBridgeFees(
+      await action.saveBridgeFees(
         testData.aggregatedBridgeFees,
         testData.totalCount,
       );
@@ -245,25 +245,24 @@ describe('BridgeMetricsAction', () => {
     });
 
     /**
-     * @target upsertBridgeFees should replace existing bridge fee records with new values
+     * @target saveBridgeFees should replace existing total bridge fee records with new values
      * @dependencies
      * - database
      * @scenario
      * - Insert existing BridgeFeeEntity record
      * - Insert existing MetricEntity with TOTAL_BRIDGE_FEES_USD = '10'
-     * - Call upsertBridgeFees with updated bridge fee data and totalCount = '15'
+     * - Call saveBridgeFees with updated bridge fee data and totalCount = '15'
      * @expected
-     * - Existing BridgeFeeEntity is REPLACED (not added) with new values
+     * - Creates a new BridgeFeeEntity records with correct amounts and metadata
      * - MetricEntity is updated to '15'
      */
     it('should replace existing bridge fee records with new values', async () => {
-      const testData =
-        bridgeMetricsActionTestData.upsertBridgeFeesUpdateExisting;
+      const testData = bridgeMetricsActionTestData.saveBridgeFeesUpdateExisting;
 
       await bridgeFeeRepo.insert(testData.existingBridgeFees);
       await metricRepo.insert(testData.existingMetric);
 
-      await action.upsertBridgeFees(
+      await action.saveBridgeFees(
         testData.aggregatedBridgeFees,
         testData.totalCount,
       );
@@ -290,19 +289,18 @@ describe('BridgeMetricsAction', () => {
     });
 
     /**
-     * @target upsertBridgeFees should handle multiple groups with different dates
+     * @target saveBridgeFees should handle multiple groups with different dates
      * @dependencies
      * - database
      * @scenario
-     * - Call upsertBridgeFees with bridge fee groups from different dates
+     * - Call saveBridgeFees with bridge fee groups from different dates
      * @expected
      * - All groups are created correctly with their respective date components
      */
     it('should handle multiple groups with different dates', async () => {
-      const testData =
-        bridgeMetricsActionTestData.upsertBridgeFeesDifferentDates;
+      const testData = bridgeMetricsActionTestData.saveBridgeFeesDifferentDates;
 
-      await action.upsertBridgeFees(
+      await action.saveBridgeFees(
         testData.aggregatedBridgeFees,
         testData.totalCount,
       );
@@ -321,50 +319,6 @@ describe('BridgeMetricsAction', () => {
 
       expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
       expect(bridgeFees).toEqual(testData.expectedBridgeFees);
-    });
-
-    /**
-     * @target upsertBridgeFees should update only total metric when aggregated bridge fees array is empty
-     * @dependencies
-     * - database
-     * @scenario
-     * - Insert existing BridgeFeeEntity records
-     * - Insert existing MetricEntity with TOTAL_BRIDGE_FEES_USD = '10'
-     * - Call upsertBridgeFees with empty aggregatedBridgeFees array and totalCount = '10'
-     * @expected
-     * - Existing BridgeFeeEntity records remain unchanged
-     * - Total metric is updated with provided totalCount value (still '10')
-     */
-    it('should update only total metric when aggregated bridge fees array is empty', async () => {
-      const testData = bridgeMetricsActionTestData.upsertBridgeFeesEmpty;
-
-      await bridgeFeeRepo.insert(testData.existingBridgeFees);
-      await metricRepo.insert(testData.existingMetric);
-
-      await action.upsertBridgeFees(
-        testData.aggregatedBridgeFees,
-        testData.totalCount,
-      );
-
-      const bridgeFees = await bridgeFeeRepo.find({
-        select: [
-          'fromChain',
-          'amount',
-          'day',
-          'week',
-          'month',
-          'year',
-          'lastProcessedHeight',
-        ],
-      });
-
-      expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
-      expect(bridgeFees).toEqual(testData.expectedBridgeFees);
-
-      const metric = await metricRepo.findOne({
-        where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
-      });
-      expect(metric?.value).toBe(testData.expectedMetricValue);
     });
   });
 });

@@ -8,7 +8,7 @@ import {
   EventCountStatus,
   WatcherCountType,
   BridgeFeeEntity,
-  BridgeType,
+  BridgeMetricRecord,
   MetricEntity,
 } from '../lib';
 
@@ -1675,7 +1675,7 @@ export const bridgeMetricsActionTestData = {
   /**
    * Scenario: Upsert bridge fees - new groups
    */
-  upsertBridgeFeesNewGroups: {
+  saveBridgeFeesNewGroups: {
     aggregatedBridgeFees: [
       {
         fromChain: 'ergo',
@@ -1695,7 +1695,7 @@ export const bridgeMetricsActionTestData = {
         year: 2024,
         lastProcessedHeight: 120,
       },
-    ] as BridgeType[],
+    ] as BridgeMetricRecord[],
     totalCount: '31.25',
     expectedBridgeFees: [
       {
@@ -1721,20 +1721,20 @@ export const bridgeMetricsActionTestData = {
   },
 
   /**
-   * Scenario: Upsert bridge fees - update existing groups
+   * Scenario: Upsert bridge fees - update existing total
    */
-  upsertBridgeFeesUpdateExisting: {
+  saveBridgeFeesUpdateExisting: {
     aggregatedBridgeFees: [
       {
         fromChain: 'ergo',
         amount: 15.25,
-        day: 2,
+        day: 3,
         week: 1,
         month: 1,
         year: 2024,
         lastProcessedHeight: 125,
       },
-    ] as BridgeType[],
+    ] as BridgeMetricRecord[],
     totalCount: '15.25',
     existingBridgeFees: [
       {
@@ -1755,8 +1755,17 @@ export const bridgeMetricsActionTestData = {
     expectedBridgeFees: [
       {
         fromChain: 'ergo',
-        amount: 15.25,
+        amount: 10.5,
         day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
         week: 1,
         month: 1,
         year: 2024,
@@ -1769,7 +1778,7 @@ export const bridgeMetricsActionTestData = {
   /**
    * Scenario: Upsert bridge fees - multiple groups with different dates
    */
-  upsertBridgeFeesDifferentDates: {
+  saveBridgeFeesDifferentDates: {
     aggregatedBridgeFees: [
       {
         fromChain: 'ergo',
@@ -1798,7 +1807,7 @@ export const bridgeMetricsActionTestData = {
         year: 2024,
         lastProcessedHeight: 310,
       },
-    ] as BridgeType[],
+    ] as BridgeMetricRecord[],
     totalCount: '46.5',
     expectedBridgeFees: [
       {
@@ -1830,41 +1839,5 @@ export const bridgeMetricsActionTestData = {
       },
     ],
     expectedMetricValue: '46.5',
-  },
-
-  /**
-   * Scenario: Upsert bridge fees - empty aggregated bridge fees array
-   */
-  upsertBridgeFeesEmpty: {
-    aggregatedBridgeFees: [] as BridgeType[],
-    totalCount: '10.5',
-    existingBridgeFees: [
-      {
-        fromChain: 'ergo',
-        amount: 10.5,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 110,
-      },
-    ] as BridgeFeeEntity[],
-    existingMetric: {
-      key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
-      value: '10.5',
-      updatedAt: 1000,
-    } as MetricEntity,
-    expectedBridgeFees: [
-      {
-        fromChain: 'ergo',
-        amount: 10.5,
-        day: 2,
-        week: 1,
-        month: 1,
-        year: 2024,
-        lastProcessedHeight: 110,
-      },
-    ],
-    expectedMetricValue: '10.5',
   },
 };

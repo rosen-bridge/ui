@@ -8,6 +8,7 @@ import {
   METRIC_KEYS,
 } from '@rosen-ui/rosen-statistics-entity';
 
+import { DAY_IN_SECONDS } from '../constants';
 import {
   getDecimalString,
   getNonDecimalString,
@@ -57,6 +58,7 @@ export const bridgeFeeMetric = async (
       METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
     );
 
+    // Load existing total USD value as raw BigInt with its decimals
     let lastTotalUsdValue = lastTotalUsd ? lastTotalUsd.value : '0';
     let lastTotalUsdDecimals = getNumberOfDecimals(lastTotalUsdValue);
     let lastTotalUsdRaw = BigInt(
@@ -68,9 +70,9 @@ export const bridgeFeeMetric = async (
           new Date(
             lastProcessedRecord.year,
             lastProcessedRecord.month - 1,
-            lastProcessedRecord.day + 1,
+            lastProcessedRecord.day,
           ).getTime() / 1000,
-        )
+        ) + DAY_IN_SECONDS
       : await bridgeFeeAction.getFirstEventTimestamp();
 
     if (!startTs) {
@@ -84,7 +86,7 @@ export const bridgeFeeMetric = async (
       Math.floor(
         new Date(lastBlock.year, lastBlock.month - 1, lastBlock.day).getTime() /
           1000,
-      ) - 86400;
+      ) - DAY_IN_SECONDS;
 
     let processedDays = 0;
     let totalEventsProcessed = 0;
@@ -92,21 +94,22 @@ export const bridgeFeeMetric = async (
     let currentMaxDecimals = lastTotalUsdDecimals;
 
     while (startTs < yesterdayTs) {
-      const endTs = startTs + 86400;
+      const endTs = startTs + DAY_IN_SECONDS;
 
       const events = await bridgeFeeAction.getEventsInRange(startTs, endTs);
       if (events.length == 0) {
-        startTs += 86400;
+        startTs += DAY_IN_SECONDS;
         continue;
       }
       const result = await calculateBridgeFees(
         events,
         tokenPriceAction,
-        logger.child('bridgeFeeCalculator'),
+        logger.child('calculateBridgeFees'),
       );
 
       if (result.dayTotalRaw > 0n) {
         if (result.dayMaxDecimals > currentMaxDecimals) {
+          // New value has higher precision: scale up existing total
           currentTotalRaw = BigInt(
             multiplyByPowerOfTen(
               currentTotalRaw,
@@ -116,6 +119,7 @@ export const bridgeFeeMetric = async (
           currentMaxDecimals = result.dayMaxDecimals;
           currentTotalRaw += result.dayTotalRaw;
         } else {
+          // Existing total has higher or equal precision: scale down new value
           const normalizedDayTotal = BigInt(
             multiplyByPowerOfTen(
               result.dayTotalRaw,
@@ -131,7 +135,7 @@ export const bridgeFeeMetric = async (
         currentMaxDecimals,
       );
 
-      await bridgeFeeAction.upsertBridgeFees(
+      await bridgeFeeAction.saveBridgeFees(
         result.bridgeFeeRecords,
         newTotalUsdString,
       );
@@ -146,7 +150,7 @@ export const bridgeFeeMetric = async (
 
       totalEventsProcessed += result.totalEventsProcessed;
       processedDays++;
-      startTs += 86400;
+      startTs += DAY_IN_SECONDS;
     }
 
     logger.debug('Bridge fee metric calculation job completed successfully', {

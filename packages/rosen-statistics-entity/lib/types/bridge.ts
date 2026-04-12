@@ -1,4 +1,4 @@
-export interface BridgeType {
+export interface BridgeMetricRecord {
   fromChain: string;
   amount: number;
   day: number;
@@ -8,7 +8,7 @@ export interface BridgeType {
   lastProcessedHeight: number;
 }
 
-export interface BridgeAggregatedData {
+export interface BridgeEventData {
   fromChain: string;
   bridgeFee: string;
   tokenId: string;

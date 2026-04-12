@@ -6,7 +6,7 @@ import { TokenEntity } from '@rosen-ui/asset-calculator';
 
 import { METRIC_KEYS } from '../constants';
 import { BridgeFeeEntity, MetricEntity } from '../entities';
-import { BridgeAggregatedData, BridgeType } from '../types';
+import { BridgeEventData, BridgeMetricRecord } from '../types';
 
 export class BridgeMetricsAction {
   private readonly eventTriggerRepo: Repository<EventTriggerEntity>;
@@ -62,6 +62,7 @@ export class BridgeMetricsAction {
     const firstEvent = await this.eventTriggerRepo
       .createQueryBuilder('et')
       .select('b.timestamp', 'timestamp')
+      .addSelect('b.id', 'id')
       .innerJoin(
         BlockEntity,
         'b',
@@ -69,12 +70,19 @@ export class BridgeMetricsAction {
         { scanner: 'ergo' },
       )
       .orderBy('b.timestamp', 'ASC')
-      .getRawOne<{ timestamp: number }>();
+      .getRawOne<{ timestamp: number; id: number }>();
 
     const timestamp = firstEvent?.timestamp;
-    this.logger.debug(
-      `First event timestamp: ${timestamp ? timestamp : 'not found'}`,
-    );
+    const id = firstEvent?.id;
+    if (timestamp && id) {
+      this.logger.debug(
+        `First event found - ID: ${id}, Timestamp: ${timestamp}`,
+      );
+    } else {
+      this.logger.debug(
+        'No events found - first event timestamp is not available',
+      );
+    }
     return timestamp;
   };
 
@@ -88,7 +96,7 @@ export class BridgeMetricsAction {
   getEventsInRange = async (
     startTs: number,
     endTs: number,
-  ): Promise<BridgeAggregatedData[]> => {
+  ): Promise<BridgeEventData[]> => {
     this.logger.debug(
       `Fetching events in timestamp range: ${startTs} to ${endTs}`,
     );
@@ -117,20 +125,20 @@ export class BridgeMetricsAction {
         start: startTs,
         end: endTs,
       })
-      .getRawMany<BridgeAggregatedData>();
+      .getRawMany<BridgeEventData>();
 
     this.logger.debug(`Found ${events.length} aggregated bridge entries`);
     return events;
   };
 
   /**
-   * Upserts the aggregated bridge fees and total count into the database.
-   * @param aggregatedBridgeFees - An array of aggregated bridge fees to upsert.
+   * Insert the aggregated bridge fees and upsert total count into the database.
+   * @param aggregatedBridgeFees - An array of aggregated bridge fees to insert.
    * @param totalCount - The total bridge fees value to be updated.
-   * @returns A Promise that resolves when the upsert is completed.
+   * @returns A Promise that resolves when the save is completed.
    */
-  upsertBridgeFees = async (
-    aggregatedBridgeFees: BridgeType[],
+  saveBridgeFees = async (
+    aggregatedBridgeFees: BridgeMetricRecord[],
     totalCount: string,
   ): Promise<void> => {
     const queryRunner =
@@ -141,12 +149,7 @@ export class BridgeMetricsAction {
       const bridgeFeeRepo = queryRunner.manager.getRepository(BridgeFeeEntity);
       const metricRepo = queryRunner.manager.getRepository(MetricEntity);
 
-      await bridgeFeeRepo.upsert(aggregatedBridgeFees, [
-        'fromChain',
-        'day',
-        'month',
-        'year',
-      ]);
+      await bridgeFeeRepo.insert(aggregatedBridgeFees);
 
       await metricRepo.upsert(
         {

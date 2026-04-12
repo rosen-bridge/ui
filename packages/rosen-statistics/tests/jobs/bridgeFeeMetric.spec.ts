@@ -44,20 +44,21 @@ describe('bridgeFeeMetric', () => {
   });
 
   /**
-   * @target Should calculate bridge fees for multiple chains
+   * @target Should calculate bridge fees for multiple chains (first run)
    * @dependencies
    * - database
    * - BridgeFeeMetricAction
    * - TokenPriceAction
    * - calculateBridgeFees
    * @scenario
+   * - FIRST RUN SCENARIO - No existing data in database
    * - Insert blocks, events, tokens, and token prices for multiple chains
    * - Run bridgeFeeMetric
    * @expected
    * - Creates BridgeFeeEntity records for each chain with correct amounts
    * - Updates total metric to sum of all bridge fees (6.00025 USD)
    */
-  it('should calculate bridge fees for multiple chains', async () => {
+  it('should calculate bridge fees for multiple chains (first run)', async () => {
     const testData = bridgeFeeMetricTestData.multipleChains;
 
     await blockRepo.insert(testData.blockRepo);
@@ -102,8 +103,8 @@ describe('bridgeFeeMetric', () => {
    * - Insert new event after last processed record (3.0 USD)
    * - Run bridgeFeeMetric
    * @expected
-   * - Updates existing bridge fee record to 5.5 USD
-   * - Updates total metric to 5.5
+   * - Creates NEW bridge fee record for Day 2 (3.0 USD)
+   * - Updates total metric to 5.5 USD (2.5 + 3.0)
    */
   it('should resume from last processed record', async () => {
     const testData = bridgeFeeMetricTestData.resumeFromLastRecord;
@@ -199,8 +200,8 @@ describe('bridgeFeeMetric', () => {
    * - Insert 3 successful events for ergo on same day (2.5, 5.0, 7.5 USD)
    * - Run bridgeFeeMetric
    * @expected
+   * - Total metric = 15
    * - Creates single bridge fee record with aggregated amount (15.0 USD)
-   * - Uses highest height as lastProcessedHeight (300)
    */
   it('should aggregate multiple events per chain per day', async () => {
     const testData = bridgeFeeMetricTestData.aggregateMultipleEvents;

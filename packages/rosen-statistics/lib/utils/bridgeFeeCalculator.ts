@@ -1,10 +1,11 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
 import {
-  BridgeAggregatedData,
-  BridgeType,
+  BridgeEventData,
+  BridgeMetricRecord,
 } from '@rosen-ui/rosen-statistics-entity';
 
+import { WEEK_IN_SECONDS } from '../constants';
 import { BridgeFeeCalculationResult, AggregatedBridgeFeeData } from '../types';
 import {
   getDecimalString,
@@ -24,7 +25,7 @@ import {
  * @returns Object containing bridge fee records, day total raw value, and max decimals
  */
 export const calculateBridgeFees = async (
-  events: BridgeAggregatedData[],
+  events: BridgeEventData[],
   tokenPriceAction: TokenPriceAction,
   logger: AbstractLogger,
 ): Promise<BridgeFeeCalculationResult> => {
@@ -50,13 +51,17 @@ export const calculateBridgeFees = async (
       tokenUsdPriceDecimals,
     );
 
+    // Calculate USD value: bridgeFee (token decimals) * tokenPrice (price decimals)
+    // Result decimals = token decimals + price decimals
     const rawUsdValue = BigInt(e.bridgeFee) * BigInt(tokenUsdPriceRaw);
     const usdValueDecimals = e.decimal + tokenUsdPriceDecimals;
 
     const current = aggregated.get(e.fromChain);
 
     if (current) {
+      // Normalize decimals before adding to match current precision
       if (usdValueDecimals > current.decimals) {
+        // Scale up current value to new higher precision
         const normalizedCurrent = BigInt(
           multiplyByPowerOfTen(
             current.rawUsd,
@@ -66,6 +71,7 @@ export const calculateBridgeFees = async (
         current.rawUsd = normalizedCurrent + rawUsdValue;
         current.decimals = usdValueDecimals;
       } else if (usdValueDecimals < current.decimals) {
+        // Scale down new value to match current precision
         const normalizedNew = BigInt(
           multiplyByPowerOfTen(
             rawUsdValue,
@@ -74,6 +80,7 @@ export const calculateBridgeFees = async (
         );
         current.rawUsd += normalizedNew;
       } else {
+        // Same precision, direct addition
         current.rawUsd += rawUsdValue;
       }
       current.maxHeight = Math.max(current.maxHeight, e.height);
@@ -88,16 +95,18 @@ export const calculateBridgeFees = async (
         timestamp: e.timestamp,
       });
     }
-
+    // Track highest precision across all chains for final normalization
     dayMaxDecimals = Math.max(dayMaxDecimals, usdValueDecimals);
   }
 
-  const bridgeFeeRecords: BridgeType[] = [];
+  const bridgeFeeRecords: BridgeMetricRecord[] = [];
   let dayTotalRaw = 0n;
 
+  // Normalize all chain values to same precision before summing
   for (const [fromChain, data] of aggregated.entries()) {
     let normalizedRawUsd = data.rawUsd;
     if (data.decimals < dayMaxDecimals) {
+      // Scale up to highest precision
       normalizedRawUsd = BigInt(
         multiplyByPowerOfTen(data.rawUsd, dayMaxDecimals - data.decimals),
       );
@@ -111,7 +120,7 @@ export const calculateBridgeFees = async (
       day: data.day,
       month: data.month,
       year: data.year,
-      week: Math.floor(data.timestamp / 604800),
+      week: Math.floor(data.timestamp / WEEK_IN_SECONDS),
       amount: parseFloat(usdAmountString),
       lastProcessedHeight: data.maxHeight,
     });
