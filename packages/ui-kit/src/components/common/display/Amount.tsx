@@ -7,7 +7,6 @@ import { IconButton } from '../../iconButton';
 import { Stack } from '../../stack';
 import { Tooltip } from '../../tooltip';
 import { Typography } from '../../typography';
-import { InjectOverrides } from '../InjectOverrides';
 
 export type AmountProps = HTMLAttributes<HTMLDivElement> & {
   /** Number of decimal places to shift the value before formatting */
@@ -326,4 +325,4 @@ const AmountBase = ({
   );
 };
 
-export const Amount = InjectOverrides(AmountBase);
+export const Amount = AmountBase;

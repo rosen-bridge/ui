@@ -1,6 +1,5 @@
 export * from './Alert';
 export * from './Autocomplete';
-export * from './Badge';
 export * from './Box';
 export * from './Checkbox';
 export * from './CircularProgress';
@@ -18,7 +17,5 @@ export * from './ListItemText';
 export * from './ListSubheader';
 export * from './Menu';
 export * from './MenuItem';
-export * from './Select';
 export * from './Snackbar';
-export * from './Switch';
 export * from './TextField';

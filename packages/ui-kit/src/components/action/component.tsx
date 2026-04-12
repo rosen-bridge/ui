@@ -14,7 +14,7 @@ export type ActionOwnProps = {};
 
 type ActionAsAnchor = ElementBaseProps<
   'a',
-  ActionOwnProps & { href: string | undefined; disabled?: boolean; }
+  ActionOwnProps & { href: string | undefined; disabled?: boolean }
 >;
 
 type ActionAsButton = ElementBaseProps<
@@ -33,9 +33,9 @@ export const ActionBase = ({ disabled, ...rest }: ActionOverriddenProps) => {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = (isLink ? Link : 'button') as any;
-  
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const props = { ...rest } as any
+  const props = { ...rest } as any;
 
   if (isLink) {
     if (disabled) {
@@ -43,13 +43,13 @@ export const ActionBase = ({ disabled, ...rest }: ActionOverriddenProps) => {
     }
 
     props.tabIndex = disabled ? -1 : rest.tabIndex;
-    
+
     props.underline = 'none';
   } else {
     props.disabled = disabled;
   }
 
-  return <Component {...props} />
+  return <Component {...props} />;
 };
 
 ActionBase.displayName = 'Action';

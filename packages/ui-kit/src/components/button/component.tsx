@@ -38,12 +38,22 @@ export const ButtonBase = ({
   variant = 'text',
   ...rest
 }: ButtonOverriddenProps) => {
-  color;
-  loading;
-  startIcon;
-  endIcon;
+  void color;
+  void loading;
+  void startIcon;
+  void endIcon;
   return (
-    <ButtonMUI data-block={!!block} color={color as any} loading={loading} size={size} startIcon={startIcon} endIcon={endIcon} variant={variant} {...rest} />
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <ButtonMUI
+      data-block={!!block}
+      color={color as any}
+      loading={loading}
+      size={size}
+      startIcon={startIcon}
+      endIcon={endIcon}
+      variant={variant}
+      {...rest}
+    />
     // TODO
     // <Action data-block={!!block} data-size={size} data-variant={variant} {...rest} />
   );

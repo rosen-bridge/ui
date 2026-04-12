@@ -110,10 +110,10 @@ export const Pagination = ({
           }}
         >
           {from} to {to} of {total}
-          <Box component="span" className="mobile-hide">
+          <span className="mobile-hide">
             {' '}
             {Number(total) <= 1 ? 'Entry' : ' Entries'}
-          </Box>
+          </span>
         </Typography>
       </Box>
 

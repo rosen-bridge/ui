@@ -6,7 +6,6 @@ import { Skeleton } from '@/components';
 
 import { Icon, IconProps } from '../icon';
 import { Typography } from '../typography';
-import { InjectOverrides } from './InjectOverrides';
 
 /**
  * Props for the Chip component.
@@ -104,6 +103,6 @@ const ChipBase = forwardRef<HTMLDivElement, ChipBaseProps>((props, ref) => {
 
 ChipBase.displayName = 'Chip';
 
-export const Chip = InjectOverrides(ChipBase);
+export const Chip = ChipBase;
 
 export type ChipProps = ComponentProps<typeof Chip>;

@@ -6,6 +6,7 @@ import type {
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
+  BadgeOverriddenProps,
   ButtonOverriddenProps,
   CardOverriddenProps,
   CardActionOverriddenProps,
@@ -48,6 +49,7 @@ import type {
   QrCodeDialogOverriddenProps,
   RelativeTimeOverriddenProps,
   SkeletonOverriddenProps,
+  SubmitButtonOverriddenProps,
   StackOverriddenProps,
   TableGridOverriddenProps,
   TableGridBodyOverriddenProps,
@@ -78,6 +80,7 @@ export type Components = {
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
+  Badge: BadgeOverriddenProps;
   Button: ButtonOverriddenProps;
   Card: CardOverriddenProps;
   CardAction: CardActionOverriddenProps;
@@ -121,6 +124,7 @@ export type Components = {
   RelativeTime: RelativeTimeOverriddenProps;
   Skeleton: SkeletonOverriddenProps;
   Stack: StackOverriddenProps;
+  SubmitButton: SubmitButtonOverriddenProps;
   TableGrid: TableGridOverriddenProps;
   TableGridBody: TableGridBodyOverriddenProps;
   TableGridBodyDetails: TableGridBodyDetailsOverriddenProps;

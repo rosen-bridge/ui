@@ -1,4 +1,4 @@
-.RosenAction { 
+.RosenAction {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -24,7 +24,7 @@
   }
 
   &.disabled,
-  &[aria-disabled=true] {
+  &[aria-disabled='true'] {
     pointer-events: none;
     cursor: default;
   }

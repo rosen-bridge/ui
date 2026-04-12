@@ -10,7 +10,7 @@ import {
   CardBody,
   CardHeader,
   CardTitle,
-  Icon, 
+  Icon,
   IconProps,
   Skeleton,
   Stack,

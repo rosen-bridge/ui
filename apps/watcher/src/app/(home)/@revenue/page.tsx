@@ -19,13 +19,15 @@ import { ApiRevenueChartResponse } from '@/types/api';
 
 import { PeriodSelect } from './PeriodSelect';
 
+const Loading = () => <Skeleton height={285} width="100%" variant="rounded" />;
+
 /**
  * This is required because revenue chart cannot be pre-rendered in next and
  * throws an error
  */
 const RevenueChart = dynamic(
   () => import('./RevenueChart').then((mod) => mod.RevenueChart),
-  { ssr: false },
+  { ssr: false, loading: () => <Loading /> },
 );
 
 const Revenue = () => {
@@ -46,13 +48,7 @@ const Revenue = () => {
         </CardAction>
       </CardHeader>
       <CardBody>
-        {isLoading && (
-          <Skeleton
-            height={285}
-            width="100%"
-            variant="rounded"
-          />
-        )}
+        {isLoading && <Loading />}
         {!isLoading && data && <RevenueChart period={period} data={data} />}
       </CardBody>
     </Card>

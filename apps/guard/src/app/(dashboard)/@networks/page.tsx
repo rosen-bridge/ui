@@ -7,6 +7,7 @@ import {
   CarouselButton,
   CarouselIndicators,
   CarouselItem,
+  CarouselItemProps,
   CarouselProvider,
   Stack,
   Typography,
@@ -16,12 +17,12 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Item } from './Item';
 
 const Networks = () => {
-  const carouselSize = useMemo(
+  const rewrite = useMemo<CarouselItemProps['rewrite']>(
     () => ({
-      desktop: 'calc(25% - 3rem / 4)',
-      laptop: 'calc(33.33333% - 3rem / 4)',
-      tablet: 'calc(50% - 2rem / 3)',
-      mobile: '100%',
+      desktop: {size: 'calc(25% - 3rem / 4)'},
+      laptop: {size: 'calc(33.33333% - 3rem / 4)'},
+      tablet: {size: 'calc(50% - 2rem / 3)'},
+      mobile: {size: '100%'},
     }),
     [],
   );
@@ -42,7 +43,7 @@ const Networks = () => {
         {Object.values(NETWORKS)
           .sort((a, b) => a.index - b.index)
           .map((network) => (
-            <CarouselItem key={network.key} size={carouselSize}>
+            <CarouselItem key={network.key} rewrite={rewrite}>
               <Item network={network.key} />
             </CarouselItem>
           ))}

@@ -4,11 +4,10 @@ import { useMemo } from 'react';
 
 import {
   Amount,
-  Box as BoxMui,
+  Box,
   Columns,
   Duration,
   Identifier,
-  InjectOverrides,
   Label,
   LabelGroup,
 } from '@rosen-bridge/ui-kit';
@@ -18,8 +17,6 @@ import { getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 
 import { Section } from './Section';
-
-const Box = InjectOverrides(BoxMui);
 
 export const TransactionsAndFees = ({ id }: { id: string }) => {
   const { error, data, isLoading, mutate } = useSWR(
@@ -155,7 +152,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
         </div>
         <Box
           style={{ columnSpan: 'all' }}
-          overrides={{
+          rewrite={{
             desktop: { style: { columnSpan: 'unset' } },
           }}
         >

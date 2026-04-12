@@ -1,7 +1,8 @@
 import { alpha, Button, styled } from '@mui/material';
 
+import { Badge } from '@/components';
+
 import { useIsMobile, useFramework } from '../../../hooks';
-import { Badge } from '../../base';
 import { Icon, IconOverriddenProps } from '../../icon';
 import { Link } from '../../link';
 
@@ -111,12 +112,7 @@ export const NavigationButton = ({
 
   let startIcon = <Icon name={icon} />;
 
-  if (badge)
-    startIcon = (
-      <Badge badgeContent={badge} color="secondary">
-        {startIcon}
-      </Badge>
-    );
+  if (badge) startIcon = <Badge content={badge}>{startIcon}</Badge>;
 
   return (
     <NavigationButtonBase

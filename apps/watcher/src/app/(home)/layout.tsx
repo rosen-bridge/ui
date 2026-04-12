@@ -28,7 +28,7 @@ const Layout = ({
           display: 'grid',
           gap: '16px',
         }}
-        overrides={{
+        rewrite={{
           mobile: {
             gridTemplateColumns: '1fr',
           },

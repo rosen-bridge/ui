@@ -1,10 +1,15 @@
-import { ComponentProps, ComponentPropsWithRef, ElementType, useMemo } from 'react';
+import {
+  ComponentProps,
+  ComponentPropsWithRef,
+  ElementType,
+  useMemo,
+} from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
+import { toCSSColor } from '@/utils';
 
 import './styles.scss';
-import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LinkOverrides {}

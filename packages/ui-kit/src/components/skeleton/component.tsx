@@ -32,10 +32,10 @@ export const SkeletonBase = ({
   ...rest
 }: SkeletonOverriddenProps) => {
   const styles = useMemo(
-    () => ({ 
+    () => ({
       height: typeof height === 'number' ? `${height}px` : height,
       width: typeof width === 'number' ? `${width}px` : width,
-      ...style 
+      ...style,
     }),
     [height, width, style],
   );

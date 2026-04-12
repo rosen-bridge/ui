@@ -69,7 +69,7 @@ const InfoWidgets = () => {
         display: 'grid',
         gap: '16px',
       }}
-      overrides={{
+      rewrite={{
         mobile: {
           gridTemplateColumns: 'repeat(1, 1fr)',
         },
