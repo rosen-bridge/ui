@@ -1,5 +1,4 @@
 export * from './smartSearch';
-export * from './Button';
 export * from './display';
 export * from './navigationBar';
 export * from './AlertCard';

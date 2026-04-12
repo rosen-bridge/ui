@@ -1,0 +1,28 @@
+.RosenButton {
+  &[data-block=false] {
+    display: inline-flex;
+  }
+  &[data-block=true] {
+    display: flex;
+  }
+
+  &[data-size=small] {
+
+  }
+  &[data-size=medium] {
+
+  }
+  &[data-size=large] {
+
+  }
+
+  &[data-variant=contained] {
+
+  }
+  &[data-variant=outlined] {
+
+  }
+  &[data-variant=text] {
+
+  }
+}

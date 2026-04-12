@@ -3,22 +3,21 @@ import { useMemo } from 'react';
 import { HealthParamInfo } from '@rosen-ui/types';
 
 import {
+  Alert,
+  Button,
   Card,
   CardAction,
   CardBody,
   CardHeader,
   CardTitle,
+  Icon, 
+  IconProps,
   Skeleton,
+  Stack,
+  Tooltip,
+  Typography,
 } from '@/components';
 import { ColorOverridden } from '@/types';
-
-import { useTheme } from '../../hooks';
-import { Alert } from '../base';
-import { Icon, IconProps } from '../icon';
-import { Stack } from '../stack';
-import { Tooltip } from '../tooltip';
-import { Typography } from '../typography';
-import { Button } from './Button';
 
 export type HealthParamCardProps = {
   checking?: boolean;
@@ -35,8 +34,6 @@ export const HealthParamCard = ({
   loading,
   value,
 }: HealthParamCardProps) => {
-  const theme = useTheme();
-
   const color = useMemo(() => {
     switch (value?.status) {
       case 'Healthy':
@@ -66,7 +63,7 @@ export const HealthParamCard = ({
         alert: 'inherit',
       };
     }
-  }, [color, value?.lastCheck, theme]);
+  }, [color, value?.lastCheck]);
 
   const icon = useMemo<IconProps['name']>(() => {
     if (!value?.lastCheck) return 'ShieldQuestion';

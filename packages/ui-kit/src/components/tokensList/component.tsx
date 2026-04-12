@@ -68,7 +68,7 @@ export const TokensListBase = ({
               reverse={hasCold}
               value={hasCold ? token.coldAmount : token.amount}
               variant={hasCold ? 'cold' : undefined}
-              style={{ justifyContent: 'flex-end' }}
+              style={{ justifyContent: hasCold ? 'flex-start' : 'flex-end' }}
             />
             <Identifier
               href={

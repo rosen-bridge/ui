@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { Button } from './Button';
+import { Button } from '@/components';
 
 export type SubmitButtonProps = {
   loading: boolean;
@@ -26,7 +26,7 @@ export const SubmitButton = ({
       display: 'flex',
       margin: 'auto',
     }}
-    overrides={{
+    rewrite={{
       laptop: {
         style: {
           width: 'clamp(200px, 100%, 320px)',

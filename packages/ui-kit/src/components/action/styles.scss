@@ -1,0 +1,31 @@
+.RosenAction { 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  background-color: transparent;
+  outline: 0;
+  border: 0;
+  margin: 0;
+  border-radius: 0;
+  padding: 0;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  text-decoration: none;
+  color: inherit;
+
+  &::-moz-focus-inner {
+    border-style: none;
+  }
+
+  &.disabled,
+  &[aria-disabled=true] {
+    pointer-events: none;
+    cursor: default;
+  }
+}

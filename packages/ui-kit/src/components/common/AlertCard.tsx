@@ -3,7 +3,7 @@ import { EventHandler, ReactNode, SyntheticEvent } from 'react';
 import { Alert, AlertProps } from '../base';
 import { CloseButton } from '../closeButton';
 import { Collapsible } from '../collapsible';
-import { Button } from './Button';
+import { Button } from '@/components';
 
 export interface AlertCardProps {
   severity: AlertProps['severity'] | null;

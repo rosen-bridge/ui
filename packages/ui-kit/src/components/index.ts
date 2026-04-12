@@ -10,6 +10,7 @@ export * from './apiKeyDialogWarning';
 export * from './app';
 export * from './appBar';
 export * from './avatar';
+export * from './button';
 export * from './card';
 export * from './cardAction';
 export * from './cardBody';

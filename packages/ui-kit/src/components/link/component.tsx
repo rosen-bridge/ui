@@ -1,9 +1,10 @@
-import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
+import { ComponentProps, ComponentPropsWithRef, ElementType, useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { ColorOverridden, OverridableType } from '@/types';
 
 import './styles.scss';
+import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface LinkOverrides {}
@@ -25,10 +26,19 @@ export type LinkOverriddenProps = OverridableType<
 export const LinkBase = ({
   as: Component = 'a',
   color,
+  style,
   underline = 'always',
   ...rest
 }: LinkOverriddenProps) => {
-  return <Component data-color={color} data-underline={underline} {...rest} />;
+  const styles = useMemo(
+    () => ({
+      color: toCSSColor(color),
+      ...style,
+    }),
+    [color, style],
+  );
+
+  return <Component data-underline={underline} style={styles} {...rest} />;
 };
 
 LinkBase.displayName = 'Link';

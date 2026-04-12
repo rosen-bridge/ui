@@ -6,6 +6,7 @@ import type {
   AppOverriddenProps,
   AppBarOverriddenProps,
   AvatarOverriddenProps,
+  ButtonOverriddenProps,
   CardOverriddenProps,
   CardActionOverriddenProps,
   CardBodyOverriddenProps,
@@ -77,6 +78,7 @@ export type Components = {
   App: AppOverriddenProps;
   AppBar: AppBarOverriddenProps;
   Avatar: AvatarOverriddenProps;
+  Button: ButtonOverriddenProps;
   Card: CardOverriddenProps;
   CardAction: CardActionOverriddenProps;
   CardBody: CardBodyOverriddenProps;
