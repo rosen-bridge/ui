@@ -30,7 +30,7 @@ import {
   buildCardanoBlockFrostScannerWithExtractors,
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
-import { ChainScannersType, ChainsKeys } from '../types';
+import { ChainScannersType, ChainsKeys, ChainsWithScanner } from '../types';
 import { DBService } from './db';
 
 export class ScannerService extends PeriodicTaskService {
@@ -235,7 +235,8 @@ export class ScannerService extends PeriodicTaskService {
             }
           }
         },
-        interval: configs.chains[chain as ChainsKeys].scanInterval * 1000,
+        interval:
+          configs.chains[chain as ChainsWithScanner].scanInterval * 1000,
       });
     }
     return tasks;

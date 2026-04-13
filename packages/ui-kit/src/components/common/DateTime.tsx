@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
+import { formatDateTime } from '../../utils';
 import { Skeleton, Typography } from '../base';
 
 /**
@@ -41,29 +42,9 @@ const Loading = () => {
  * Example output: `"Aug 27 2025 01:33:12"`.
  */
 export const DateTime = ({ timestamp, loading }: DateTimeProps) => {
+  const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
+
   if (loading) return <Loading />;
-
-  if (!timestamp) {
-    return (
-      <Typography variant="body1" color="textPrimary">
-        Invalid DateTime
-      </Typography>
-    );
-  }
-
-  const date = new Date(timestamp);
-
-  const parts = new Intl.DateTimeFormat('en-US', {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-  })
-    .format(date)
-    .replace(/,\s*/g, ' ');
 
   return (
     <Typography variant="body1" color="textPrimary">
