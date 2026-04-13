@@ -176,18 +176,18 @@ export const lightThemeOptions: ThemeOptions = {
         }),
       },
     },
-    MuiCard: {
-      defaultProps: {
-        elevation: 0,
-      },
-    },
-    MuiCardHeader: {
-      styleOverrides: {
-        title: {
-          fontSize: '1rem',
-        },
-      },
-    },
+    // MuiCard: {
+    //   defaultProps: {
+    //     elevation: 0,
+    //   },
+    // },
+    // MuiCardHeader: {
+    //   styleOverrides: {
+    //     title: {
+    //       fontSize: '1rem',
+    //     },
+    //   },
+    // },
     MuiButton: {
       styleOverrides: {
         containedSecondary: ({ theme }: { theme: Theme }) => ({
