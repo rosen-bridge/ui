@@ -43,9 +43,9 @@ export const ButtonBase = ({
   void startIcon;
   void endIcon;
   return (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     <ButtonMUI
       data-block={!!block}
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       color={color as any}
       loading={loading}
       size={size}

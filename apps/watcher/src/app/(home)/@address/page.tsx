@@ -17,9 +17,7 @@ const Address = () => {
   return (
     <Card style={{ minWidth: 0 }}>
       <CardHeader>
-        <CardTitle fontWeight="700">
-          Address
-        </CardTitle>
+        <CardTitle fontWeight="700">Address</CardTitle>
       </CardHeader>
       <CardBody>
         <Identifier copyable qrcode value={data?.address} loading={isLoading} />

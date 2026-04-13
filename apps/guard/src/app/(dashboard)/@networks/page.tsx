@@ -19,10 +19,10 @@ import { Item } from './Item';
 const Networks = () => {
   const rewrite = useMemo<CarouselItemProps['rewrite']>(
     () => ({
-      desktop: {size: 'calc(25% - 3rem / 4)'},
-      laptop: {size: 'calc(33.33333% - 3rem / 4)'},
-      tablet: {size: 'calc(50% - 2rem / 3)'},
-      mobile: {size: '100%'},
+      desktop: { size: 'calc(25% - 3rem / 4)' },
+      laptop: { size: 'calc(33.33333% - 3rem / 4)' },
+      tablet: { size: 'calc(50% - 2rem / 3)' },
+      mobile: { size: '100%' },
     }),
     [],
   );

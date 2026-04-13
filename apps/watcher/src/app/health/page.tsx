@@ -75,7 +75,7 @@ const Health = () => {
   );
 
   return (
-    <GridContainer 
+    <GridContainer
       gap={3}
       rewrite={{
         mobile: { minWidth: '100%' },
@@ -101,7 +101,7 @@ const Health = () => {
           />
         ))}
     </GridContainer>
-  )
+  );
 };
 
 export default Health;

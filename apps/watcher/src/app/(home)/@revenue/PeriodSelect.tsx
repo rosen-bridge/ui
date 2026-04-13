@@ -1,6 +1,6 @@
 import { Dispatch, MouseEvent, SetStateAction, useState } from 'react';
 
-import { Box, Button, Icon, Menu, MenuItem } from '@rosen-bridge/ui-kit';
+import { Button, Icon, Menu, MenuItem } from '@rosen-bridge/ui-kit';
 import { ChartPeriod } from '@rosen-ui/types';
 
 const periodOptions = ['week', 'month', 'year'] as const;
@@ -67,7 +67,7 @@ export const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
   );
 
   return (
-    <Box>
+    <>
       <Button
         onClick={handleClick}
         endIcon={<Icon name="AngleDown" size="20px" />}
@@ -76,6 +76,6 @@ export const PeriodSelect = ({ period, setPeriod }: PeriodSelectProps) => {
         {period}
       </Button>
       {renderPeriodSelectMenu()}
-    </Box>
+    </>
   );
 };

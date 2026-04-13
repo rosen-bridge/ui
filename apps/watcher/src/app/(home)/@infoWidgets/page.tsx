@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, IconProps } from '@rosen-bridge/ui-kit';
+import { GridContainer, IconProps } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -64,24 +64,13 @@ const InfoWidgets = () => {
     : 0n;
 
   return (
-    <Box
-      style={{
-        display: 'grid',
-        gap: '16px',
-      }}
+    <GridContainer
+      gap={2}
       rewrite={{
-        mobile: {
-          gridTemplateColumns: 'repeat(1, 1fr)',
-        },
-        tablet: {
-          gridTemplateColumns: 'repeat(2, 1fr)',
-        },
-        laptop: {
-          gridTemplateColumns: 'repeat(3, 1fr)',
-        },
-        desktop: {
-          gridTemplateColumns: 'repeat(6, 1fr)',
-        },
+        mobile: { minWidth: '100%' },
+        tablet: { minWidth: '35%' },
+        laptop: { minWidth: '25%' },
+        desktop: { minWidth: '15%' },
       }}
     >
       <InfoWidgetCard
@@ -152,7 +141,7 @@ const InfoWidgets = () => {
         isLoading={isInfoLoading}
         warning={data?.health.trialErrors.join('\n')}
       />
-    </Box>
+    </GridContainer>
   );
 };
 

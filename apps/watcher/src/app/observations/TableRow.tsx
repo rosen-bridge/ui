@@ -3,7 +3,6 @@ import { useState, FC, useMemo } from 'react';
 import { AngleDown, AngleUp } from '@rosen-bridge/icons';
 import {
   Amount,
-  Box,
   Button,
   EnhancedTableCell,
   Identifier,
@@ -199,13 +198,12 @@ export const TabletRow: FC<RowProps> = (props) => {
   return (
     <TableRow className="divider" style={rowStyles}>
       <EnhancedTableCell align="center">
-        <Box style={{ display: 'flex', justifyContent: 'center' }}>
-          <Identifier
-            value={row.sourceTxId}
-            href={getTxURL(row.fromChain, row.sourceTxId)}
-            variant="legacy"
-          />
-        </Box>
+        <Identifier
+          value={row.sourceTxId}
+          href={getTxURL(row.fromChain, row.sourceTxId)}
+          variant="legacy"
+          style={{ justifyContent: 'center' }}
+        />
       </EnhancedTableCell>
       <EnhancedTableCell align="center">{row.lockToken.name}</EnhancedTableCell>
       <EnhancedTableCell align="center">

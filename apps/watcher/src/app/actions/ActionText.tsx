@@ -20,9 +20,7 @@ interface ActionText {
 export const ActionText = ({ title, children }: ActionText) => (
   <Card style={{ minWidth: 0 }} backgroundColor="divider">
     <CardHeader>
-      <CardTitle fontWeight="700">
-        {title}
-      </CardTitle>
+      <CardTitle fontWeight="700">{title}</CardTitle>
     </CardHeader>
     <CardBody>
       <Typography component="div" color="text-secondary">

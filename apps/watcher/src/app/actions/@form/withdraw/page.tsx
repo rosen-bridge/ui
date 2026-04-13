@@ -12,7 +12,6 @@ import {
   AlertCard,
   AlertProps,
   CircularProgress,
-  Grid,
   Identifier,
   InputAdornment,
   MenuItem,
@@ -263,14 +262,10 @@ const WithdrawForm = () => {
           {renderAlert()}
           <ApiKeyDialogWarning />
           {renderAddressTextField()}
-          <Grid container spacing={2}>
-            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-              {renderTokensListSelect()}
-            </Grid>
-            <Grid size={{ mobile: 12, tablet: 12, laptop: 6 }}>
-              {renderTokenAmountTextField()}
-            </Grid>
-          </Grid>
+          <Stack spacing={2} rewrite={{ laptop: { direction: 'row' } }}>
+            {renderTokensListSelect()}
+            {renderTokenAmountTextField()}
+          </Stack>
           <SubmitButton
             disabled={!formState.isValid || !apiKey || disabled}
             loading={isWithdrawPending}

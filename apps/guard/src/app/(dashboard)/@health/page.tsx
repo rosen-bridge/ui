@@ -3,7 +3,6 @@
 import { useMemo } from 'react';
 
 import {
-  Box,
   Card,
   CardBody,
   Icon,
@@ -77,7 +76,7 @@ const Health = () => {
           direction={isSmall ? 'row' : 'column'}
           style={{ height: isSmall ? undefined : '230px' }}
         >
-          {!isSmall && <Box flexGrow={1} />}
+          {!isSmall && <div style={{ flexGrow: 1 }} />}
 
           <Icon
             color={variant.color}
@@ -98,7 +97,7 @@ const Health = () => {
             {variant.status}
           </Typography>
 
-          {isSmall && <Box flexGrow={1} />}
+          {!isSmall && <div style={{ flexGrow: 1 }} />}
 
           {(isLoading || trialErrors) && (
             <Tooltip disabled={isLoading} title={trialErrors}>

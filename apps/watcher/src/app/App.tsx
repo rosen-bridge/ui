@@ -20,9 +20,9 @@ import { SWRConfig } from 'swr';
 import { Favicon } from '@/components';
 import { mockedData } from '@/mock/mockedData';
 import { theme } from '@/theme/theme';
+import { UIKitProvider } from '@/uiKitProvider';
 
 import { Sidebar } from './SideBar';
-import { UIKitProvider } from '@/uiKitProvider';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();

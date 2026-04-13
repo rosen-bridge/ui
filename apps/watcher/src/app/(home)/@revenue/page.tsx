@@ -40,9 +40,7 @@ const Revenue = () => {
   return (
     <Card style={{ minWidth: 0 }}>
       <CardHeader>
-        <CardTitle fontWeight="700">
-          Revenue
-        </CardTitle>
+        <CardTitle fontWeight="700">Revenue</CardTitle>
         <CardAction>
           <PeriodSelect period={period} setPeriod={setPeriod} />
         </CardAction>

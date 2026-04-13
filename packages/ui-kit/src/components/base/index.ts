@@ -5,7 +5,6 @@ export * from './Checkbox';
 export * from './CircularProgress';
 export * from './CssBaseLine';
 export * from './FormControl';
-export * from './Grid';
 export * from './InputAdornment';
 export * from './InputLabel';
 export * from './List';

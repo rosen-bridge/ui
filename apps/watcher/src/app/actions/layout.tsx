@@ -2,11 +2,7 @@
 
 import { ReactNode } from 'react';
 
-import {
-  Box,
-  Grid,
-  PageHeading,
-} from '@rosen-bridge/ui-kit';
+import { Box, PageHeading } from '@rosen-bridge/ui-kit';
 
 import { Actions as ActionsCore } from '@/components';
 
@@ -20,13 +16,23 @@ const Actions = ({ form, text }: ActionsProps) => {
     <>
       <PageHeading title="Actions" />
       <ActionsCore>
-        <Box mt={3}>
-          <Grid container spacing={{ mobile: 0, tablet: 6 }}>
-            <Grid size={{ mobile: 12, tablet: 6, laptop: 4 }}>{text}</Grid>
-            <Grid flexGrow={1} size={{ mobile: 12, tablet: 6, laptop: 8 }}>
-              {form}
-            </Grid>
-          </Grid>
+        <Box
+          mt={3}
+          sx={{
+            display: 'grid',
+            gap: {
+              mobile: 0,
+              tablet: 6,
+            },
+            gridTemplateColumns: {
+              mobile: '1fr',
+              tablet: '1fr 1fr',
+              laptop: '1fr 2fr',
+            },
+          }}
+        >
+          <div>{text}</div>
+          <div>{form}</div>
         </Box>
       </ActionsCore>
     </>
