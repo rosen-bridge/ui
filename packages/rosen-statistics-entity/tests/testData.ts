@@ -1,7 +1,7 @@
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 
-import { METRIC_KEYS, EventCountStatus } from '../lib';
+import { METRIC_KEYS, EventCountStatus, WatcherCountType } from '../lib';
 
 /**
  * Helper function to create minimal EventTriggerEntity for testing
@@ -1031,5 +1031,140 @@ export const userEventMetricActionTestData = {
       },
     ],
     expectedMetricValue: '1',
+  },
+};
+
+export const watcherCountTestData = {
+  ergoNetwork: {
+    network: 'ergo',
+    count: 50,
+  },
+
+  cardanoNetwork: {
+    network: 'cardano',
+    count: 30,
+  },
+
+  ethereumNetwork: {
+    network: 'ethereum',
+    count: 25,
+  },
+
+  binanceNetwork: {
+    network: 'binance',
+    count: 15,
+  },
+
+  bitcoinNetwork: {
+    network: 'bitcoin',
+    count: 10,
+  },
+};
+
+export const upsertWatcherCountScenarios = {
+  insertNew: {
+    upsertData: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ] as WatcherCountType[],
+    expectedCount: 1,
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+  },
+
+  updateExisting: {
+    initialData: [watcherCountTestData.ergoNetwork],
+    upsertData: [
+      {
+        network: 'ergo',
+        count: 75,
+      },
+    ] as WatcherCountType[],
+    expectedCount: 1,
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 75,
+      },
+    ],
+  },
+
+  insertMultipleDifferentNetworks: {
+    initialData: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+    ],
+    upsertData: [
+      {
+        network: 'ethereum',
+        count: 25,
+      },
+    ] as WatcherCountType[],
+    expectedCount: 3,
+    expectedRecords: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+      {
+        network: 'cardano',
+        count: 30,
+      },
+      {
+        network: 'ethereum',
+        count: 25,
+      },
+    ],
+  },
+
+  updateMultipleTimes: {
+    upsertOperations: [
+      {
+        network: 'ergo',
+        count: 10,
+      },
+      {
+        network: 'ergo',
+        count: 25,
+      },
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+    expectedCount: 1,
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+  },
+
+  updateDifferentNetworkKeepsOthers: {
+    initialData: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+      watcherCountTestData.ethereumNetwork,
+    ],
+    upsertData: {
+      network: 'cardano',
+      count: 45,
+    },
+    expectedCount: 3,
+    expectedRecords: [
+      watcherCountTestData.ergoNetwork,
+      {
+        network: 'cardano',
+        count: 45,
+      },
+      watcherCountTestData.ethereumNetwork,
+    ],
   },
 };
