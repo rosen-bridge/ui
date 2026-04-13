@@ -7,7 +7,6 @@ export * from './DisclosureButton';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './HealthParamCard';
-export * from './Pagination';
 export * from './AppInfo';
 export * from './SortField';
 export * from './AppSnackbar';

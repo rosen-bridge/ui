@@ -1,0 +1,153 @@
+.RosenPagination-root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  container-type: inline-size;
+
+  background-color: var(--rosen-palette-background-paper);
+  width: 100%;
+  height: 56px;
+
+  gap: calc(var(--rosen-spacing) * 1);
+  padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
+  border-radius: calc(var(--rosen-spacing) * 2);
+
+}
+
+.RosenPagination-info {
+  display: flex;
+  align-items: center;
+
+  .pagination-text::before {
+    content: "Showing ";
+  }
+
+  .pagination-text .mobile-hide {
+    display: inline;
+  }
+
+  @container (max-width: 420px) {
+    .pagination-text::before {
+      content: "";
+    }
+
+    .pagination-text .mobile-hide {
+      display: none;
+    }
+  }
+}
+
+.RosenPagination-pages {
+  display: flex;
+  flex: 1;
+  justify-content: center;
+
+  .MuiPagination-ul {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .MuiPaginationItem-root {
+    font-size: 14px;
+  }
+
+  @container (max-width: 644px) {
+    justify-content: flex-end;
+
+    .MuiPagination-ul {
+      justify-content: space-between;
+    }
+
+    li:not(:first-of-type):not(:last-child) {
+      display: none;
+    }
+  }
+}
+
+.RosenPagination-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rosen-spacing);
+  position: relative;
+
+  .RosenPagination-divider {
+    display: none;
+
+    @container (max-width: 864px) {
+      display: block;
+
+      width: 1px;
+      height: 24px;
+      background-color: var(--rosen-palette-neutral-light);
+
+      align-self: center;
+    }
+  }
+
+  .RosenPagination-actionsInner {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+  }
+
+  .RosenPagination-sizeWrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  .RosenPagination-button {
+    padding: var(--rosen-spacing);
+    text-transform: none;
+  }
+
+  .RosenPagination-size {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--rosen-spacing);
+
+    .RosenPagination-sizeText {
+      @container (max-width: 864px) {
+        display: none;
+      }
+    }
+
+    .RosenPagination-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      &--desktop {
+        display: none;
+
+        @container (min-width: 865px) {
+          display: flex;
+        }
+      }
+
+      &--mobile {
+        display: flex;
+
+        @container (min-width: 865px) {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.RosenPagination-menuPaper {
+  width: 204px;
+}
+
+.RosenPagination-menuHeader {
+  display: none;
+  background-color: transparent;
+
+  @container (max-width: 864px) {
+    display: block;
+  }
+}

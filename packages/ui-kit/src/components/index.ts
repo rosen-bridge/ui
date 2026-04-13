@@ -50,6 +50,7 @@ export * from './layoutList';
 export * from './link';
 export * from './network';
 export * from './pageHeading';
+export * from './pagination';
 export * from './qrCodeDialog';
 export * from './relativeTime';
 export * from './skeleton';

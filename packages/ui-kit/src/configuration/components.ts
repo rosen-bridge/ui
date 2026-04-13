@@ -1,4 +1,4 @@
-import type {
+import {
   ActionProps,
   ApiKeyDialogProps,
   ApiKeyDialogButtonProps,
@@ -70,6 +70,7 @@ import type {
   TruncateProps,
   TypographyProps,
   ViewToggleProps,
+  PaginationProps,
 } from '@/components';
 
 export type Components = {
@@ -120,6 +121,7 @@ export type Components = {
   Link: LinkProps;
   Network: NetworkProps;
   PageHeading: PageHeadingProps;
+  Pagination: PaginationProps;
   QrCodeDialog: QrCodeDialogProps;
   RelativeTime: RelativeTimeProps;
   Skeleton: SkeletonProps;
