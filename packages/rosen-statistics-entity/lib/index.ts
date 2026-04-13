@@ -12,11 +12,13 @@ export {
   LockedAssetsMetricAction,
   EventCountMetricAction,
   UserEventMetricAction,
+  WatcherCountMetricAction,
 } from './actions';
 export { METRIC_KEYS, MetricKey } from './constants';
 export {
   AggregatedEvents,
   EventCountStatus,
   AggregatedUserEvents,
+  WatcherCountType,
   LockedAssetsType,
 } from './types';

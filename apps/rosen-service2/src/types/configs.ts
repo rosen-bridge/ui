@@ -67,10 +67,13 @@ export interface lockedAssetsMetrics {
 export interface GeneralMetrics {
   interval: number;
 }
-
+export interface EventCountMetrics {
+  interval: number;
+}
 export interface Statistics {
   generalMetrics: GeneralMetrics;
   lockedAssetsMetrics: lockedAssetsMetrics;
+  eventCountMetrics: EventCountMetrics;
 }
 export interface Chains {
   'ergo': ChainsErgo;

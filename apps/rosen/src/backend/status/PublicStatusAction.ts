@@ -13,6 +13,7 @@ import {
   GuardStatusEntity,
   TxEntity,
 } from '@rosen-ui/public-status';
+import crypto from 'crypto';
 
 import AggregatedStatusAction from './AggregatedStatusAction';
 import AggregatedStatusChangedAction from './AggregatedStatusChangedAction';
@@ -81,6 +82,17 @@ export class PublicStatusAction {
   ): Promise<void> => {
     // perform operations in a db transaction
     await this.dataSource.manager.transaction(async (entityManager) => {
+      // ensure dataSource type is postgres, since sqlite (used in tests)
+      // does not support this lock function
+      if (this.dataSource.options.type === 'postgres') {
+        // acquire a two-key advisory lock (blocks until available)
+        // automatically released when the transaction commits or rolls back
+        await entityManager.query('SELECT pg_advisory_xact_lock($1, $2)', [
+          1, // namespace
+          this.intHash(eventId),
+        ]);
+      }
+
       // get repositories from transactional entity manager
       const guardStatusRepository =
         entityManager.getRepository(GuardStatusEntity);
@@ -302,5 +314,16 @@ export class PublicStatusAction {
       offset,
       limit,
     );
+  };
+
+  /**
+   * creates a hash from a string value
+   * @param value
+   * @returns first 4 bytes of the hash as number
+   */
+  protected intHash = (value: string): number => {
+    const hash = crypto.createHash('md5').update(value).digest();
+    // read first 4 bytes as a signed 32-bit integer
+    return hash.readInt32BE(0);
   };
 }

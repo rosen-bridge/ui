@@ -16,6 +16,8 @@ healthCheck:
 dataAggregator:
   interval: 60
 statistics:
+  eventCountMetrics:
+    interval: 86400
   lockedAssetsMetrics:
     interval: 86400
   generalMetrics:
