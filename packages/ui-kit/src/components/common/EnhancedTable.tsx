@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 
-import { Breakpoint } from '@mui/material';
 import {
   Table as MuiTable,
   TableContainer,
@@ -17,7 +16,7 @@ import {
 } from '@mui/material';
 
 import { useResponsiveValue } from '../../hooks';
-import type { ResponsiveValueOptionsBase } from '../../types';
+import type { Breakpoint, ResponsiveValueOptionsBase } from '../../types';
 
 export {
   TableCell,

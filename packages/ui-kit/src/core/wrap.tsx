@@ -5,10 +5,9 @@ import {
   useMemo,
 } from 'react';
 
-import { Breakpoint } from '@mui/material';
-
 import { useConfig } from '@/configuration';
-import { useBreakpoint, useCurrentBreakpoint } from '@/hooks';
+import { useCurrentBreakpoint } from '@/hooks';
+import { Breakpoint } from '@/types';
 
 const BREAKPOINT_ORDER: Breakpoint[] = [
   'mobile',
@@ -17,23 +16,12 @@ const BREAKPOINT_ORDER: Breakpoint[] = [
   'desktop',
 ];
 
-export type ElementBaseProps<E extends ElementType, P> = P &
-  Omit<ComponentPropsWithRef<E>, keyof P> & {
-    skip?:
-      | boolean
-      | Breakpoint
-      | `${Breakpoint}-${'up' | 'down' | 'not'}`
-      | `${Breakpoint}-to-${Breakpoint}`;
-    rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
-  };
+export type ElementBaseProps<E extends ElementType, P> = P & Omit<ComponentPropsWithRef<E>, keyof P> & {
+  rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
+};
 
 export type WrapProps<P> = {
   className?: string;
-  skip?:
-    | boolean
-    | Breakpoint
-    | `${Breakpoint}-${'up' | 'down' | 'not'}`
-    | `${Breakpoint}-to-${Breakpoint}`;
   rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
 } & P;
 
@@ -41,24 +29,18 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
   const componentName = Base.displayName || Base.name;
 
   const Wrapped = (props: WrapProps<P>) => {
-    const { className, rewrite, skip, ...rest } = props;
-
-    const breakpoint = useBreakpoint(
-      !skip ? 'mobile-up' : skip === true ? 'mobile-down' : skip,
-    );
+    const { className, rewrite, ...rest } = props;
 
     const config = useConfig();
 
     const current = useCurrentBreakpoint();
 
-    const isSkipped =
-      skip === true || (typeof skip === 'string' ? breakpoint : false);
-
     const classes = useMemo(() => {
-      return [`Rosen${componentName}`, className]
-        .filter(Boolean)
-        .join(' ')
-        .trim();
+      const base = 'Rosen' + componentName;
+
+      if (!className) return base;
+
+      return base + ' ' + className;
     }, [className, componentName]);
 
     const mergedProps = useMemo(() => {
@@ -85,8 +67,6 @@ export const Wrap = <P,>(Base: ComponentType<P>) => {
 
       return { ...baseProps, ...applied };
     }, [config, componentName, current, rest, rewrite]);
-
-    if (isSkipped) return null;
 
     return <Base className={classes} {...mergedProps} />;
   };

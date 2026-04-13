@@ -1,5 +1,6 @@
-import { Breakpoint } from '@mui/material';
+import { Breakpoint } from './breakpoint';
 
+export * from './breakpoint';
 export * from './color';
 export * from './gap';
 export * from './overridableType';

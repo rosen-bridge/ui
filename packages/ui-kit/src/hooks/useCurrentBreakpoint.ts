@@ -1,4 +1,6 @@
-import { useTheme, useMediaQuery, Breakpoint } from '@mui/material';
+import { useTheme, useMediaQuery } from '@mui/material';
+
+import { Breakpoint } from '@/types';
 
 /**
  * List of custom breakpoints.
