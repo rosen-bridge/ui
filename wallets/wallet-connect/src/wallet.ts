@@ -85,7 +85,9 @@ export class WalletConnect<
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
-  get currentChain(): Network {
+  currentChain: Network = NETWORKS.ethereum.key;
+
+  get activeChain(): Network {
     switch (this.modal.getChainId()) {
       case 1:
         return NETWORKS.ethereum.key;
@@ -137,12 +139,17 @@ export class WalletConnect<
 
   fetchAddress = async (): Promise<string | undefined> => {
     await this.initialize();
+
+    await this.ensureCorrectChain();
+
     return this.modal.getAddress();
   };
 
   fetchBalance = async (
     token: RosenChainToken,
   ): Promise<string | undefined> => {
+    await this.ensureCorrectChain();
+
     const address = await this.getAddress();
 
     let request;
@@ -168,10 +175,29 @@ export class WalletConnect<
     return await this.provider.request(request);
   };
 
+  ensureCorrectChain = async () => {
+    if (this.currentChain === this.activeChain) return;
+
+    await this.performSwitchChain(this.currentChain);
+
+    let retries = 20;
+
+    while (retries--) {
+      if (this.currentChain === this.activeChain) {
+        return;
+      }
+      await new Promise((resolve) => setTimeout(resolve, 250));
+    }
+
+    throw new CurrentChainError(this.name);
+  };
+
   performSwitchChain = async (chain: Network): Promise<void> => {
     if (this.modal.getChainId() == Number(NETWORKS[chain].id)) {
       return;
     }
+
+    this.currentChain = chain;
 
     switch (chain) {
       case 'binance':
@@ -190,6 +216,8 @@ export class WalletConnect<
     ) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
+
+    await this.ensureCorrectChain();
 
     const address = await this.getAddress();
 
