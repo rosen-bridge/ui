@@ -1,4 +1,4 @@
-import { ComponentProps, FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import {
@@ -31,7 +31,7 @@ export type ApiKeyDialogBaseProps = ElementBaseProps<
   ApiKeyDialogOwnProps
 >;
 
-export type ApiKeyDialogOverriddenProps = OverridableType<
+export type ApiKeyDialogProps = OverridableType<
   ApiKeyDialogBaseProps,
   ApiKeyDialogOverrides,
   never
@@ -45,7 +45,7 @@ export const ApiKeyDialogBase = ({
   open,
   onClose,
   ...rest
-}: ApiKeyDialogOverriddenProps) => {
+}: ApiKeyDialogProps) => {
   const { apiKey, setApiKey } = useApiKey();
 
   const { openSnackbar } = useSnackbar();
@@ -130,5 +130,3 @@ export const ApiKeyDialogBase = ({
 ApiKeyDialogBase.displayName = 'ApiKeyDialog';
 
 export const ApiKeyDialog = Wrap(ApiKeyDialogBase);
-
-export type ApiKeyDialogProps = ComponentProps<typeof ApiKeyDialog>;

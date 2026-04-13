@@ -1,6 +1,4 @@
-import { ComponentProps } from 'react';
-
-import { Icon, IconButton, IconOverriddenProps } from '@/components';
+import { Icon, IconButton, IconProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -9,7 +7,7 @@ export interface CloseButtonOverrides {}
 
 export type CloseButtonOwnProps = {
   slots?: {
-    icon?: IconOverriddenProps;
+    icon?: IconProps;
   };
 };
 
@@ -18,16 +16,13 @@ export type CloseButtonBaseProps = ElementBaseProps<
   CloseButtonOwnProps
 >;
 
-export type CloseButtonOverriddenProps = OverridableType<
+export type CloseButtonProps = OverridableType<
   CloseButtonBaseProps,
   CloseButtonOverrides,
   never
 >;
 
-export const CloseButtonBase = ({
-  slots,
-  ...rest
-}: CloseButtonOverriddenProps) => {
+export const CloseButtonBase = ({ slots, ...rest }: CloseButtonProps) => {
   return (
     <IconButton {...rest}>
       <Icon name="Times" {...slots?.icon} />
@@ -38,5 +33,3 @@ export const CloseButtonBase = ({
 CloseButtonBase.displayName = 'CloseButton';
 
 export const CloseButton = Wrap(CloseButtonBase);
-
-export type CloseButtonProps = ComponentProps<typeof CloseButton>;

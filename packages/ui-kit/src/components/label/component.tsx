@@ -1,8 +1,6 @@
-import { ComponentProps } from 'react';
-
 import { InfoIcon, Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -13,7 +11,7 @@ export type LabelOwnProps = {
   /**
    * The color of the label text.
    */
-  color?: ColorOverridden;
+  color?: Color;
 
   /**
    * Reduces vertical padding for a denser layout.
@@ -47,7 +45,7 @@ export type LabelOwnProps = {
 
 export type LabelBaseProps = ElementBaseProps<'div', LabelOwnProps>;
 
-export type LabelOverriddenProps = OverridableType<
+export type LabelProps = OverridableType<
   LabelBaseProps,
   LabelOverrides,
   'color'
@@ -68,7 +66,7 @@ export const LabelBase = ({
   label,
   orientation = 'horizontal',
   ...rest
-}: LabelOverriddenProps) => {
+}: LabelProps) => {
   return (
     <div
       data-dense={!!dense}
@@ -98,5 +96,3 @@ export const LabelBase = ({
 LabelBase.displayName = 'Label';
 
 export const Label = Wrap(LabelBase);
-
-export type LabelProps = ComponentProps<typeof Label>;

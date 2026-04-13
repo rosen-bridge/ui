@@ -1,7 +1,7 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { GapOverridden, OverridableType, WidthOverridden } from '@/types';
+import { Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -20,7 +20,7 @@ export type ColumnsOwnProps = {
    * The gap between columns.
    * Accepts any valid CSS length, e.g. `'1rem'` or `'16px'`.
    */
-  gap?: GapOverridden;
+  gap?: Gap;
 
   /**
    * Whether to show a dividing line (`columnRule`) between columns.
@@ -32,12 +32,12 @@ export type ColumnsOwnProps = {
    * Determines how wide each column can be.
    * Accepts any valid CSS length, e.g. `'240px'`.
    */
-  width?: WidthOverridden;
+  width?: Width;
 };
 
 export type ColumnsBaseProps = ElementBaseProps<'div', ColumnsOwnProps>;
 
-export type ColumnsOverriddenProps = OverridableType<
+export type ColumnsProps = OverridableType<
   ColumnsBaseProps,
   ColumnsOverrides,
   'gap' | 'width'
@@ -55,7 +55,7 @@ export const ColumnsBase = ({
   style,
   width,
   ...rest
-}: ColumnsOverriddenProps) => {
+}: ColumnsProps) => {
   const styles = useMemo(
     () => ({
       columnWidth: toCSSUnit('width', width),
@@ -72,5 +72,3 @@ export const ColumnsBase = ({
 ColumnsBase.displayName = 'Columns';
 
 export const Columns = Wrap(ColumnsBase);
-
-export type ColumnsProps = ComponentProps<typeof Columns>;

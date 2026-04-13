@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -16,18 +14,16 @@ export type DialogFooterBaseProps = ElementBaseProps<
   DialogFooterOwnProps
 >;
 
-export type DialogFooterOverriddenProps = OverridableType<
+export type DialogFooterProps = OverridableType<
   DialogFooterBaseProps,
   DialogFooterOverrides,
   never
 >;
 
-export const DialogFooterBase = ({ ...rest }: DialogFooterOverriddenProps) => {
+export const DialogFooterBase = ({ ...rest }: DialogFooterProps) => {
   return <div {...rest} />;
 };
 
 DialogFooterBase.displayName = 'DialogFooter';
 
 export const DialogFooter = Wrap(DialogFooterBase);
-
-export type DialogFooterProps = ComponentProps<typeof DialogFooter>;

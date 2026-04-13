@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Button } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -15,13 +13,13 @@ export type SubmitButtonBaseProps = ElementBaseProps<
   SubmitButtonOwnProps
 >;
 
-export type SubmitButtonOverriddenProps = OverridableType<
+export type SubmitButtonProps = OverridableType<
   SubmitButtonBaseProps,
   SubmitButtonOverrides,
   never
 >;
 
-export const SubmitButtonBase = ({ ...rest }: SubmitButtonOverriddenProps) => {
+export const SubmitButtonBase = ({ ...rest }: SubmitButtonProps) => {
   return (
     <Button
       style={{
@@ -47,5 +45,3 @@ export const SubmitButtonBase = ({ ...rest }: SubmitButtonOverriddenProps) => {
 SubmitButtonBase.displayName = 'SubmitButton';
 
 export const SubmitButton = Wrap(SubmitButtonBase);
-
-export type SubmitButtonProps = ComponentProps<typeof SubmitButton>;

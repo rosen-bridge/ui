@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -16,7 +16,7 @@ export type AppBarOwnProps = {
 
 export type AppBarBaseProps = ElementBaseProps<'div', AppBarOwnProps>;
 
-export type AppBarOverriddenProps = OverridableType<
+export type AppBarProps = OverridableType<
   AppBarBaseProps,
   AppBarOverrides,
   never
@@ -26,12 +26,7 @@ export type AppBarOverriddenProps = OverridableType<
  * renders a appBar wrapper
  * this component set the appBar size and orientation in different screen sizes
  */
-export const AppBarBase = ({
-  actions,
-  links,
-  logo,
-  ...rest
-}: AppBarOverriddenProps) => {
+export const AppBarBase = ({ actions, links, logo, ...rest }: AppBarProps) => {
   return (
     <div {...rest}>
       {logo}
@@ -44,5 +39,3 @@ export const AppBarBase = ({
 AppBarBase.displayName = 'AppBar';
 
 export const AppBar = Wrap(AppBarBase);
-
-export type AppBarProps = ComponentProps<typeof AppBar>;

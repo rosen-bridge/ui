@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
@@ -20,7 +18,7 @@ export type TokensListOwnProps = {
 
 export type TokensListBaseProps = ElementBaseProps<'div', TokensListOwnProps>;
 
-export type TokensListOverriddenProps = OverridableType<
+export type TokensListProps = OverridableType<
   TokensListBaseProps,
   TokensListOverrides,
   never
@@ -34,7 +32,7 @@ export const TokensListBase = ({
   loading,
   tokens,
   ...rest
-}: TokensListOverriddenProps) => {
+}: TokensListProps) => {
   return (
     <div {...rest}>
       {tokens.map((token) => {
@@ -101,5 +99,3 @@ export const TokensListBase = ({
 TokensListBase.displayName = 'TokensList';
 
 export const TokensList = Wrap(TokensListBase);
-
-export type TokensListProps = ComponentProps<typeof TokensList>;

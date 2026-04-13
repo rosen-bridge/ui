@@ -1,6 +1,6 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { Typography, TypographyOverriddenProps } from '@/components';
+import { Typography, TypographyProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 import { formatDuration } from '@/utils';
@@ -21,9 +21,9 @@ export type DurationOwnProps = {
   loading?: boolean;
 
   slots?: {
-    fallback?: TypographyOverriddenProps;
-    value?: TypographyOverriddenProps;
-    unit?: TypographyOverriddenProps;
+    fallback?: TypographyProps;
+    value?: TypographyProps;
+    unit?: TypographyProps;
   };
 
   /** Duration in milliseconds; negative, NaN, or non-finite values are errors */
@@ -32,7 +32,7 @@ export type DurationOwnProps = {
 
 export type DurationBaseProps = ElementBaseProps<'div', DurationOwnProps>;
 
-export type DurationOverriddenProps = OverridableType<
+export type DurationProps = OverridableType<
   DurationBaseProps,
   DurationOverrides,
   never
@@ -48,7 +48,7 @@ export const DurationBase = ({
   slots,
   value,
   ...rest
-}: DurationOverriddenProps) => {
+}: DurationProps) => {
   const { parts, error } = useMemo(() => formatDuration(value), [value]);
 
   const ready =
@@ -85,5 +85,3 @@ export const DurationBase = ({
 DurationBase.displayName = 'Duration';
 
 export const Duration = Wrap(DurationBase);
-
-export type DurationProps = ComponentProps<typeof Duration>;

@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -16,20 +14,16 @@ export type DialogContentBaseProps = ElementBaseProps<
   DialogContentOwnProps
 >;
 
-export type DialogContentOverriddenProps = OverridableType<
+export type DialogContentProps = OverridableType<
   DialogContentBaseProps,
   DialogContentOverrides,
   never
 >;
 
-export const DialogContentBase = ({
-  ...rest
-}: DialogContentOverriddenProps) => {
+export const DialogContentBase = ({ ...rest }: DialogContentProps) => {
   return <div {...rest} />;
 };
 
 DialogContentBase.displayName = 'DialogContent';
 
 export const DialogContent = Wrap(DialogContentBase);
-
-export type DialogContentProps = ComponentProps<typeof DialogContent>;

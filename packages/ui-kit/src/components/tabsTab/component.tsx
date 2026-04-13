@@ -1,8 +1,6 @@
-import { ComponentProps } from 'react';
-
 import { Tabs } from '@base-ui/react/tabs';
 
-import { Action, Icon, IconOverriddenProps } from '@/components';
+import { Action, Icon, IconProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -12,10 +10,10 @@ import './styles.scss';
 export interface TabsTabOverrides {}
 
 export type TabsTabOwnProps = {
-  icon?: IconOverriddenProps['name'];
+  icon?: IconProps['name'];
   iconPosition?: 'start' | 'top';
   slots?: {
-    icon?: IconOverriddenProps;
+    icon?: IconProps;
   };
 };
 
@@ -31,7 +29,7 @@ type TabsTabAsButton = ElementBaseProps<
 
 export type TabsTabBaseProps = TabsTabAsAnchor | TabsTabAsButton;
 
-export type TabsTabOverriddenProps =
+export type TabsTabProps =
   | OverridableType<TabsTabAsAnchor, TabsTabOverrides, never>
   | OverridableType<TabsTabAsButton, TabsTabOverrides, never>;
 
@@ -41,7 +39,7 @@ export const TabsTabBase = ({
   iconPosition,
   slots,
   ...rest
-}: TabsTabOverriddenProps) => {
+}: TabsTabProps) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = Tabs.Tab as any;
 
@@ -68,5 +66,3 @@ export const TabsTabBase = ({
 TabsTabBase.displayName = 'TabsTab';
 
 export const TabsTab = Wrap(TabsTabBase);
-
-export type TabsTabProps = ComponentProps<typeof TabsTab>;

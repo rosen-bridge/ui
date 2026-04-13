@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
 import { ElementBaseProps, Wrap } from '@/core';
@@ -20,7 +18,7 @@ export type DialogOwnProps = {
 
 export type DialogBaseProps = ElementBaseProps<'div', DialogOwnProps>;
 
-export type DialogOverriddenProps = OverridableType<
+export type DialogProps = OverridableType<
   DialogBaseProps,
   DialogOverrides,
   never
@@ -32,7 +30,7 @@ export const DialogBase = ({
   stickOn,
   onClose,
   ...rest
-}: DialogOverriddenProps) => {
+}: DialogProps) => {
   void maxWidth;
   void stickOn;
   return (
@@ -51,5 +49,3 @@ export const DialogBase = ({
 DialogBase.displayName = 'Dialog';
 
 export const Dialog = Wrap(DialogBase);
-
-export type DialogProps = ComponentProps<typeof Dialog>;

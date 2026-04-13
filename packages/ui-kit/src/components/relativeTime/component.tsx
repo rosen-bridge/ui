@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { Skeleton, Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
@@ -27,7 +27,7 @@ export type RelativeTimeBaseProps = ElementBaseProps<
   RelativeTimeOwnProps
 >;
 
-export type RelativeTimeOverriddenProps = OverridableType<
+export type RelativeTimeProps = OverridableType<
   RelativeTimeBaseProps,
   RelativeTimeOverrides,
   never
@@ -40,7 +40,7 @@ export const RelativeTimeBase = ({
   loading,
   value,
   ...rest
-}: RelativeTimeOverriddenProps) => {
+}: RelativeTimeProps) => {
   const { prefix, number, unit, suffix, displayText } = useMemo(
     () => calculateRelativeTime(value),
     [value],
@@ -87,5 +87,3 @@ export const RelativeTimeBase = ({
 RelativeTimeBase.displayName = 'RelativeTime';
 
 export const RelativeTime = Wrap(RelativeTimeBase);
-
-export type RelativeTimeProps = ComponentProps<typeof RelativeTime>;

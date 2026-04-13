@@ -1,7 +1,7 @@
-import { ComponentProps, CSSProperties, useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { GapOverridden, OverridableType } from '@/types';
+import { Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {
@@ -32,7 +32,7 @@ export type StackOwnProps = {
   direction?: 'row' | 'column' | 'row-reverse' | 'column-reverse';
 
   /** Gap between child elements. */
-  spacing?: GapOverridden;
+  spacing?: Gap;
 
   /** If true, the Stack will use `display: inline-flex` instead of `flex`. */
   inline?: boolean;
@@ -46,7 +46,7 @@ export type StackOwnProps = {
 
 export type StackBaseProps = ElementBaseProps<'div', StackOwnProps>;
 
-export type StackOverriddenProps = OverridableType<
+export type StackProps = OverridableType<
   StackBaseProps,
   StackOverrides,
   'spacing'
@@ -73,7 +73,7 @@ export const StackBase = ({
   wrap,
   style,
   ...rest
-}: StackOverriddenProps) => {
+}: StackProps) => {
   const styles = useMemo(
     () =>
       ({
@@ -93,5 +93,3 @@ export const StackBase = ({
 StackBase.displayName = 'Stack';
 
 export const Stack = Wrap(StackBase);
-
-export type StackProps = ComponentProps<typeof Stack>;

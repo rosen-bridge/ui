@@ -1,6 +1,6 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
-import { Chip, ChipProps, IconOverriddenProps } from '@/components';
+import { Chip, ChipProps, IconProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -12,7 +12,7 @@ export interface EventStatusOverrides {}
 export type EventStatusMeta = {
   label: string;
   color: ChipProps['color'];
-  icon: IconOverriddenProps['name'];
+  icon: IconProps['name'];
 };
 
 export type EventStatusOwnProps = {
@@ -25,7 +25,7 @@ export type EventStatusBaseProps = ElementBaseProps<
   EventStatusOwnProps
 >;
 
-export type EventStatusOverriddenProps = OverridableType<
+export type EventStatusProps = OverridableType<
   EventStatusBaseProps,
   EventStatusOverrides,
   never
@@ -41,7 +41,7 @@ export const EventStatusBase = ({
   fallback,
   value,
   ...rest
-}: EventStatusOverriddenProps) => {
+}: EventStatusProps) => {
   const { color, icon, label } = useMemo(
     () =>
       Object.assign(
@@ -58,5 +58,3 @@ export const EventStatusBase = ({
 EventStatusBase.displayName = 'EventStatus';
 
 export const EventStatus = Wrap(EventStatusBase);
-
-export type EventStatusProps = ComponentProps<typeof EventStatus>;

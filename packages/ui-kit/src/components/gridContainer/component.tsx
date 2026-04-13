@@ -1,7 +1,7 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { GapOverridden, OverridableType, WidthOverridden } from '@/types';
+import { Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -17,13 +17,13 @@ export type GridContainerOwnProps = {
    *
    * @default 0
    */
-  gap?: GapOverridden;
+  gap?: Gap;
 
   /**
    * The minimum width of each grid column.
    * You can also pass a CSS length string.
    */
-  minWidth?: WidthOverridden;
+  minWidth?: Width;
 };
 
 export type GridContainerBaseProps = ElementBaseProps<
@@ -31,7 +31,7 @@ export type GridContainerBaseProps = ElementBaseProps<
   GridContainerOwnProps
 >;
 
-export type GridContainerOverriddenProps = OverridableType<
+export type GridContainerProps = OverridableType<
   GridContainerBaseProps,
   GridContainerOverrides,
   'gap' | 'minWidth'
@@ -59,7 +59,7 @@ export const GridContainerBase = ({
   minWidth,
   style,
   ...rest
-}: GridContainerOverriddenProps) => {
+}: GridContainerProps) => {
   const styles = useMemo(
     () => ({
       gap: toCSSUnit('gap', gap),
@@ -75,5 +75,3 @@ export const GridContainerBase = ({
 GridContainerBase.displayName = 'GridContainer';
 
 export const GridContainer = Wrap(GridContainerBase);
-
-export type GridContainerProps = ComponentProps<typeof GridContainer>;

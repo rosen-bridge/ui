@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -13,18 +11,16 @@ export type ToolbarOwnProps = {};
 
 export type ToolbarBaseProps = ElementBaseProps<'div', ToolbarOwnProps>;
 
-export type ToolbarOverriddenProps = OverridableType<
+export type ToolbarProps = OverridableType<
   ToolbarBaseProps,
   ToolbarOverrides,
   never
 >;
 
-export const ToolbarBase = ({ ...rest }: ToolbarOverriddenProps) => {
+export const ToolbarBase = ({ ...rest }: ToolbarProps) => {
   return <div {...rest} />;
 };
 
 ToolbarBase.displayName = 'Toolbar';
 
 export const Toolbar = Wrap(ToolbarBase);
-
-export type ToolbarProps = ComponentProps<typeof Toolbar>;

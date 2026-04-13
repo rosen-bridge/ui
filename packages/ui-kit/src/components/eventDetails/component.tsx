@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import {
   Amount,
   AmountProps,
@@ -58,7 +56,7 @@ export type EventDetailsBaseProps = ElementBaseProps<
   EventDetailsOwnProps
 >;
 
-export type EventDetailsOverriddenProps = OverridableType<
+export type EventDetailsProps = OverridableType<
   EventDetailsBaseProps,
   EventDetailsOverrides,
   never
@@ -68,7 +66,7 @@ export const EventDetailsBase = ({
   loading,
   value,
   ...rest
-}: EventDetailsOverriddenProps) => {
+}: EventDetailsProps) => {
   return (
     <Columns gap={4} width="20rem" rule {...rest}>
       {'id' in value && (
@@ -225,5 +223,3 @@ export const EventDetailsBase = ({
 EventDetailsBase.displayName = 'EventDetails';
 
 export const EventDetails = Wrap(EventDetailsBase);
-
-export type EventDetailsProps = ComponentProps<typeof EventDetails>;

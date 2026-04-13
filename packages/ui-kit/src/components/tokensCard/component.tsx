@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
 import {
@@ -28,7 +26,7 @@ export type TokensCardOwnProps = {
 
 export type TokensCardBaseProps = ElementBaseProps<'div', TokensCardOwnProps>;
 
-export type TokensCardOverriddenProps = OverridableType<
+export type TokensCardProps = OverridableType<
   TokensCardBaseProps,
   TokensCardOverrides,
   never
@@ -45,7 +43,7 @@ export const TokensCardBase = ({
   title,
   tokens,
   ...rest
-}: TokensCardOverriddenProps) => {
+}: TokensCardProps) => {
   return (
     <Card style={{ height: '100%' }} {...rest}>
       <CardHeader>
@@ -74,5 +72,3 @@ export const TokensCardBase = ({
 TokensCardBase.displayName = 'TokensCard';
 
 export const TokensCard = Wrap(TokensCardBase);
-
-export type TokensCardProps = ComponentProps<typeof TokensCard>;

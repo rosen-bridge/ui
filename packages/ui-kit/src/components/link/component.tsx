@@ -1,12 +1,7 @@
-import {
-  ComponentProps,
-  ComponentPropsWithRef,
-  ElementType,
-  useMemo,
-} from 'react';
+import { ComponentPropsWithRef, ElementType, useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.scss';
@@ -16,13 +11,13 @@ export interface LinkOverrides {}
 
 export type LinkOwnProps = {
   as?: ElementType<ComponentPropsWithRef<'a'>>;
-  color?: ColorOverridden;
+  color?: Color;
   underline?: 'always' | 'hover' | 'none';
 };
 
 export type LinkBaseProps = ElementBaseProps<'a', LinkOwnProps>;
 
-export type LinkOverriddenProps = OverridableType<
+export type LinkProps = OverridableType<
   LinkBaseProps,
   LinkOverrides,
   'color' | 'href'
@@ -34,7 +29,7 @@ export const LinkBase = ({
   style,
   underline = 'always',
   ...rest
-}: LinkOverriddenProps) => {
+}: LinkProps) => {
   const styles = useMemo(
     () => ({
       color: toCSSColor(color),
@@ -49,5 +44,3 @@ export const LinkBase = ({
 LinkBase.displayName = 'Link';
 
 export const Link = Wrap(LinkBase);
-
-export type LinkProps = ComponentProps<typeof Link>;

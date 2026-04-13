@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -17,7 +17,7 @@ export type CarouselItemBaseProps = ElementBaseProps<
   CarouselItemOwnProps
 >;
 
-export type CarouselItemOverriddenProps = OverridableType<
+export type CarouselItemProps = OverridableType<
   CarouselItemBaseProps,
   CarouselItemOverrides,
   never
@@ -31,7 +31,7 @@ export const CarouselItemBase = ({
   size,
   style,
   ...rest
-}: CarouselItemOverriddenProps) => {
+}: CarouselItemProps) => {
   const styles = useMemo(() => {
     if (!size) return style;
     return { flex: `0 0 ${size}`, ...style };
@@ -43,5 +43,3 @@ export const CarouselItemBase = ({
 CarouselItemBase.displayName = 'CarouselItem';
 
 export const CarouselItem = Wrap(CarouselItemBase);
-
-export type CarouselItemProps = ComponentProps<typeof CarouselItem>;

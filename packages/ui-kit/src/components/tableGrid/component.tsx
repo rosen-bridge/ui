@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -13,18 +11,16 @@ export type TableGridOwnProps = {};
 
 export type TableGridBaseProps = ElementBaseProps<'div', TableGridOwnProps>;
 
-export type TableGridOverriddenProps = OverridableType<
+export type TableGridProps = OverridableType<
   TableGridBaseProps,
   TableGridOverrides,
   never
 >;
 
-export const TableGridBase = ({ ...rest }: TableGridOverriddenProps) => {
+export const TableGridBase = ({ ...rest }: TableGridProps) => {
   return <div {...rest} />;
 };
 
 TableGridBase.displayName = 'TableGrid';
 
 export const TableGrid = Wrap(TableGridBase);
-
-export type TableGridProps = ComponentProps<typeof TableGrid>;

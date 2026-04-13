@@ -3,7 +3,7 @@ import { alpha, Button, styled } from '@mui/material';
 import { Badge } from '@/components';
 
 import { useIsMobile, useFramework } from '../../../hooks';
-import { Icon, IconOverriddenProps } from '../../icon';
+import { Icon, IconProps } from '../../icon';
 import { Link } from '../../link';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
@@ -82,7 +82,7 @@ const NavigationButtonIndicator = styled('div', {
 
 export type NavigationButtonProps = {
   label: string;
-  icon: IconOverriddenProps['name'];
+  icon: IconProps['name'];
   path: string;
   disabled?: boolean;
   badge?: string;

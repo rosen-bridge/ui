@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -13,18 +11,16 @@ export type CardActionOwnProps = {};
 
 export type CardActionBaseProps = ElementBaseProps<'div', CardActionOwnProps>;
 
-export type CardActionOverriddenProps = OverridableType<
+export type CardActionProps = OverridableType<
   CardActionBaseProps,
   CardActionOverrides,
   never
 >;
 
-export const CardActionBase = ({ ...rest }: CardActionOverriddenProps) => {
+export const CardActionBase = ({ ...rest }: CardActionProps) => {
   return <div {...rest} />;
 };
 
 CardActionBase.displayName = 'CardAction';
 
 export const CardAction = Wrap(CardActionBase);
-
-export type CardActionProps = ComponentProps<typeof CardAction>;

@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { Alert, ApiKeyDialog, Button } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
@@ -16,7 +16,7 @@ export type ApiKeyDialogWarningBaseProps = ElementBaseProps<
   ApiKeyDialogWarningOwnProps
 >;
 
-export type ApiKeyDialogWarningOverriddenProps = OverridableType<
+export type ApiKeyDialogWarningProps = OverridableType<
   ApiKeyDialogWarningBaseProps,
   ApiKeyDialogWarningOverrides,
   never
@@ -25,7 +25,7 @@ export type ApiKeyDialogWarningOverriddenProps = OverridableType<
 export const ApiKeyDialogWarningBase = ({
   style,
   ...rest
-}: ApiKeyDialogWarningOverriddenProps) => {
+}: ApiKeyDialogWarningProps) => {
   const { apiKey } = useApiKey();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -67,7 +67,3 @@ export const ApiKeyDialogWarningBase = ({
 ApiKeyDialogWarningBase.displayName = 'ApiKeyDialogWarning';
 
 export const ApiKeyDialogWarning = Wrap(ApiKeyDialogWarningBase);
-
-export type ApiKeyDialogWarningProps = ComponentProps<
-  typeof ApiKeyDialogWarning
->;

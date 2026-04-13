@@ -1,14 +1,14 @@
-import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import {
   Avatar,
-  AvatarOverriddenProps,
+  AvatarProps,
   Icon,
   IconButton,
   Image,
-  ImageOverriddenProps,
+  ImageProps,
   Typography,
-  TypographyOverriddenProps,
+  TypographyProps,
 } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -40,13 +40,13 @@ export type TokenOwnProps = {
   logo?: string;
 
   slots?: {
-    fallback?: AvatarOverriddenProps;
-    label?: TypographyOverriddenProps;
-    logo?: ImageOverriddenProps;
+    fallback?: AvatarProps;
+    label?: TypographyProps;
+    logo?: ImageProps;
   };
 
   /** Static registry */
-  tokens?: Record<NonNullable<TokenOverriddenProps['value']>, TokenMeta>;
+  tokens?: Record<NonNullable<TokenProps['value']>, TokenMeta>;
 
   /**
    * The name of the token to display.
@@ -61,7 +61,7 @@ export type TokenOwnProps = {
 
 export type TokenBaseProps = ElementBaseProps<'div', TokenOwnProps>;
 
-export type TokenOverriddenProps = OverridableType<
+export type TokenProps = OverridableType<
   TokenBaseProps,
   TokenOverrides,
   'value'
@@ -86,7 +86,7 @@ export const TokenBase = ({
   value = '',
   variant = 'both',
   ...rest
-}: TokenOverriddenProps) => {
+}: TokenProps) => {
   const showLabel = variant !== 'logo';
   const showLogo = variant !== 'label';
 
@@ -187,5 +187,3 @@ export const TokenBase = ({
 TokenBase.displayName = 'Token';
 
 export const Token = Wrap(TokenBase);
-
-export type TokenProps = ComponentProps<typeof Token>;

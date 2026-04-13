@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -13,18 +11,16 @@ export type CardHeaderOwnProps = {};
 
 export type CardHeaderBaseProps = ElementBaseProps<'div', CardHeaderOwnProps>;
 
-export type CardHeaderOverriddenProps = OverridableType<
+export type CardHeaderProps = OverridableType<
   CardHeaderBaseProps,
   CardHeaderOverrides,
   never
 >;
 
-export const CardHeaderBase = ({ ...rest }: CardHeaderOverriddenProps) => {
+export const CardHeaderBase = ({ ...rest }: CardHeaderProps) => {
   return <div {...rest} />;
 };
 
 CardHeaderBase.displayName = 'CardHeader';
 
 export const CardHeader = Wrap(CardHeaderBase);
-
-export type CardHeaderProps = ComponentProps<typeof CardHeader>;

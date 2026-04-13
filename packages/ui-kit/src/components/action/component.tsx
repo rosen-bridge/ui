@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Link } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -24,11 +22,11 @@ type ActionAsButton = ElementBaseProps<
 
 export type ActionBaseProps = ActionAsAnchor | ActionAsButton;
 
-export type ActionOverriddenProps =
+export type ActionProps =
   | OverridableType<ActionAsAnchor, ActionOverrides, never>
   | OverridableType<ActionAsButton, ActionOverrides, never>;
 
-export const ActionBase = ({ disabled, ...rest }: ActionOverriddenProps) => {
+export const ActionBase = ({ disabled, ...rest }: ActionProps) => {
   const isLink = 'href' in rest;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -55,5 +53,3 @@ export const ActionBase = ({ disabled, ...rest }: ActionOverriddenProps) => {
 ActionBase.displayName = 'Action';
 
 export const Action = Wrap(ActionBase);
-
-export type ActionProps = ComponentProps<typeof Action>;

@@ -1,8 +1,6 @@
-import { ComponentProps } from 'react';
-
 import { Slot } from '@radix-ui/react-slot';
 
-import { Tooltip, TooltipOverriddenProps } from '@/components';
+import { Tooltip, TooltipProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -21,7 +19,7 @@ export type TruncateOwnProps = {
   lines?: number;
 
   slots?: {
-    tooltip?: TooltipOverriddenProps;
+    tooltip?: TooltipProps;
   };
 
   tooltip?: boolean;
@@ -29,7 +27,7 @@ export type TruncateOwnProps = {
 
 export type TruncateBaseProps = ElementBaseProps<'div', TruncateOwnProps>;
 
-export type TruncateOverriddenProps = OverridableType<
+export type TruncateProps = OverridableType<
   TruncateBaseProps,
   TruncateOverrides,
   never
@@ -55,7 +53,7 @@ export const TruncateBase = ({
   slots,
   tooltip = true,
   ...rest
-}: TruncateOverriddenProps) => {
+}: TruncateProps) => {
   const Component = asChild ? Slot : 'div';
   return (
     <Tooltip disabled={!tooltip} title={children} {...slots?.tooltip}>
@@ -69,5 +67,3 @@ export const TruncateBase = ({
 TruncateBase.displayName = 'Truncate';
 
 export const Truncate = Wrap(TruncateBase);
-
-export type TruncateProps = ComponentProps<typeof Truncate>;

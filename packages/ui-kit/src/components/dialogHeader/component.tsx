@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
@@ -23,7 +23,7 @@ export type DialogHeaderBaseProps = ElementBaseProps<
   DialogHeaderOwnProps
 >;
 
-export type DialogHeaderOverriddenProps = OverridableType<
+export type DialogHeaderProps = OverridableType<
   DialogHeaderBaseProps,
   DialogHeaderOverrides,
   never
@@ -35,7 +35,7 @@ export const DialogHeaderBase = ({
   children,
   icon,
   ...rest
-}: DialogHeaderOverriddenProps) => {
+}: DialogHeaderProps) => {
   return (
     <div {...rest}>
       {icon && <Icon name={icon} />}
@@ -56,5 +56,3 @@ export const DialogHeaderBase = ({
 DialogHeaderBase.displayName = 'DialogHeader';
 
 export const DialogHeader = Wrap(DialogHeaderBase);
-
-export type DialogHeaderProps = ComponentProps<typeof DialogHeader>;

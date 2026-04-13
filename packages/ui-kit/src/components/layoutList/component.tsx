@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -18,7 +18,7 @@ export type LayoutListOwnProps = {
 
 export type LayoutListBaseProps = ElementBaseProps<'div', LayoutListOwnProps>;
 
-export type LayoutListOverriddenProps = OverridableType<
+export type LayoutListProps = OverridableType<
   LayoutListBaseProps,
   LayoutListOverrides,
   never
@@ -32,7 +32,7 @@ export const LayoutListBase = ({
   sort,
   view,
   ...rest
-}: LayoutListOverriddenProps) => {
+}: LayoutListProps) => {
   return (
     <div {...rest}>
       <div className="RosenLayoutList-toolbar">
@@ -54,5 +54,3 @@ export const LayoutListBase = ({
 LayoutListBase.displayName = 'LayoutList';
 
 export const LayoutList = Wrap(LayoutListBase);
-
-export type LayoutListProps = ComponentProps<typeof LayoutList>;

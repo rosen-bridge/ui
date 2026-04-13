@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Tabs } from '@base-ui/react/tabs';
 
 import { ElementBaseProps, Wrap } from '@/core';
@@ -16,18 +14,16 @@ export type TabsPanelOwnProps = {
 
 export type TabsPanelBaseProps = ElementBaseProps<'div', TabsPanelOwnProps>;
 
-export type TabsPanelOverriddenProps = OverridableType<
+export type TabsPanelProps = OverridableType<
   TabsPanelBaseProps,
   TabsPanelOverrides,
   never
 >;
 
-export const TabsPanelBase = ({ value, ...rest }: TabsPanelOverriddenProps) => {
+export const TabsPanelBase = ({ value, ...rest }: TabsPanelProps) => {
   return <Tabs.Panel value={value} {...rest} />;
 };
 
 TabsPanelBase.displayName = 'TabsPanel';
 
 export const TabsPanel = Wrap(TabsPanelBase);
-
-export type TabsPanelProps = ComponentProps<typeof TabsPanel>;

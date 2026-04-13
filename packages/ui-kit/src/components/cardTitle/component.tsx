@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -17,18 +15,16 @@ export type CardTitleBaseProps = ElementBaseProps<
   CardTitleOwnProps
 >;
 
-export type CardTitleOverriddenProps = OverridableType<
+export type CardTitleProps = OverridableType<
   CardTitleBaseProps,
   CardTitleOverrides,
   never
 >;
 
-export const CardTitleBase = ({ ...rest }: CardTitleOverriddenProps) => {
+export const CardTitleBase = ({ ...rest }: CardTitleProps) => {
   return <Typography {...rest} />;
 };
 
 CardTitleBase.displayName = 'CardTitle';
 
 export const CardTitle = Wrap(CardTitleBase);
-
-export type CardTitleProps = ComponentProps<typeof CardTitle>;

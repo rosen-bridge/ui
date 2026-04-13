@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { AppSnackbar, CssBaseline } from '@/components';
 import { SnackbarProvider } from '@/contexts';
@@ -20,13 +20,9 @@ export type AppOwnProps = {
 
 export type AppBaseProps = ElementBaseProps<'div', AppOwnProps>;
 
-export type AppOverriddenProps = OverridableType<
-  AppBaseProps,
-  AppOverrides,
-  never
->;
+export type AppProps = OverridableType<AppBaseProps, AppOverrides, never>;
 
-const Content = ({ children, sidebar, ...rest }: AppOverriddenProps) => {
+const Content = ({ children, sidebar, ...rest }: AppProps) => {
   const isMobile = useIsMobile();
   return (
     <div data-orientation={isMobile ? 'vertical' : 'horizontal'} {...rest}>
@@ -39,7 +35,7 @@ const Content = ({ children, sidebar, ...rest }: AppOverriddenProps) => {
   );
 };
 
-export const AppBase = (props: AppOverriddenProps) => {
+export const AppBase = (props: AppProps) => {
   return (
     <ThemeProvider theme={props.theme}>
       <>
@@ -55,5 +51,3 @@ export const AppBase = (props: AppOverriddenProps) => {
 AppBase.displayName = 'App';
 
 export const App = Wrap(AppBase);
-
-export type AppProps = ComponentProps<typeof App>;

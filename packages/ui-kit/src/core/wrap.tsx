@@ -18,7 +18,14 @@ const BREAKPOINT_ORDER: Breakpoint[] = [
 ];
 
 export type ElementBaseProps<E extends ElementType, P> = P &
-  Omit<ComponentPropsWithRef<E>, keyof P>;
+  Omit<ComponentPropsWithRef<E>, keyof P> & {
+    skip?:
+      | boolean
+      | Breakpoint
+      | `${Breakpoint}-${'up' | 'down' | 'not'}`
+      | `${Breakpoint}-to-${Breakpoint}`;
+    rewrite?: Partial<Record<Breakpoint, Partial<P>>>;
+  };
 
 export type WrapProps<P> = {
   className?: string;

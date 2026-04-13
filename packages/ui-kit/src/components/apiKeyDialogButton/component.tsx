@@ -1,4 +1,4 @@
-import { ComponentProps, useState } from 'react';
+import { useState } from 'react';
 
 import { ApiKeyDialog, Icon, IconButton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
@@ -15,7 +15,7 @@ export type ApiKeyDialogButtonBaseProps = ElementBaseProps<
   ApiKeyDialogButtonOwnProps
 >;
 
-export type ApiKeyDialogButtonOverriddenProps = OverridableType<
+export type ApiKeyDialogButtonProps = OverridableType<
   ApiKeyDialogButtonBaseProps,
   ApiKeyDialogButtonOverrides,
   never
@@ -23,7 +23,7 @@ export type ApiKeyDialogButtonOverriddenProps = OverridableType<
 
 export const ApiKeyDialogButtonBase = ({
   ...rest
-}: ApiKeyDialogButtonOverriddenProps) => {
+}: ApiKeyDialogButtonProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -39,5 +39,3 @@ export const ApiKeyDialogButtonBase = ({
 ApiKeyDialogButtonBase.displayName = 'ApiKeyDialogButton';
 
 export const ApiKeyDialogButton = Wrap(ApiKeyDialogButtonBase);
-
-export type ApiKeyDialogButtonProps = ComponentProps<typeof ApiKeyDialogButton>;

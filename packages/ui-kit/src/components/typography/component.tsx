@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import {
   Typography as TypographyMUI,
   TypographyProps as TypographyPropsMUI,
@@ -7,14 +5,14 @@ import {
 
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TypographyOverrides {}
 
 export type TypographyOwnProps = TypographyPropsMUI & {
-  color?: ColorOverridden;
+  color?: Color;
   loading?: boolean;
 };
 
@@ -23,7 +21,7 @@ export type TypographyBaseProps = ElementBaseProps<
   TypographyOwnProps
 >;
 
-export type TypographyOverriddenProps = OverridableType<
+export type TypographyProps = OverridableType<
   TypographyBaseProps,
   TypographyOverrides,
   'color'
@@ -35,7 +33,7 @@ export const TypographyBase = ({
   loading,
   style,
   ...rest
-}: TypographyOverriddenProps) => {
+}: TypographyProps) => {
   return (
     <TypographyMUI style={{ color: toCSSColor(color), ...style }} {...rest}>
       {children}
@@ -47,5 +45,3 @@ export const TypographyBase = ({
 TypographyBase.displayName = 'Typography';
 
 export const Typography = Wrap(TypographyBase);
-
-export type TypographyProps = ComponentProps<typeof Typography>;

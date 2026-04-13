@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -13,18 +11,16 @@ export type CardBodyOwnProps = {};
 
 export type CardBodyBaseProps = ElementBaseProps<'div', CardBodyOwnProps>;
 
-export type CardBodyOverriddenProps = OverridableType<
+export type CardBodyProps = OverridableType<
   CardBodyBaseProps,
   CardBodyOverrides,
   never
 >;
 
-export const CardBodyBase = ({ ...rest }: CardBodyOverriddenProps) => {
+export const CardBodyBase = ({ ...rest }: CardBodyProps) => {
   return <div {...rest} />;
 };
 
 CardBodyBase.displayName = 'CardBody';
 
 export const CardBody = Wrap(CardBodyBase);
-
-export type CardBodyProps = ComponentProps<typeof CardBody>;

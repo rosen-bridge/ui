@@ -1,10 +1,10 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -12,10 +12,10 @@ export interface AvatarOverrides {}
 
 export type AvatarOwnProps = {
   /** Background color (theme key or raw CSS). */
-  background?: ColorOverridden;
+  background?: Color;
 
   /** Text color (theme key or raw CSS). */
-  color?: ColorOverridden;
+  color?: Color;
 
   /** loading state for the component. */
   loading?: boolean;
@@ -26,7 +26,7 @@ export type AvatarOwnProps = {
 
 export type AvatarBaseProps = ElementBaseProps<'div', AvatarOwnProps>;
 
-export type AvatarOverriddenProps = OverridableType<
+export type AvatarProps = OverridableType<
   AvatarBaseProps,
   AvatarOverrides,
   'background' | 'color' | 'size'
@@ -40,7 +40,7 @@ export const AvatarBase = ({
   size,
   style,
   ...rest
-}: AvatarOverriddenProps) => {
+}: AvatarProps) => {
   const sx = useMemo<SxProps<Theme>>(() => {
     return {
       color: toCSSColor(color),
@@ -62,5 +62,3 @@ export const AvatarBase = ({
 AvatarBase.displayName = 'Avatar';
 
 export const Avatar = Wrap(AvatarBase);
-
-export type AvatarProps = ComponentProps<typeof Avatar>;

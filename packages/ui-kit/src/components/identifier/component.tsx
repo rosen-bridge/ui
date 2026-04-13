@@ -1,4 +1,4 @@
-import { ComponentProps, useState } from 'react';
+import { useState } from 'react';
 
 import {
   Skeleton,
@@ -7,9 +7,9 @@ import {
   Icon,
   IconButton,
   Tooltip,
-  TooltipOverriddenProps,
+  TooltipProps,
   Typography,
-  TypographyOverriddenProps,
+  TypographyProps,
 } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -36,10 +36,10 @@ export type IdentifierOwnProps = {
   qrcode?: boolean;
 
   slots?: {
-    leading?: TypographyOverriddenProps;
-    text?: TypographyOverriddenProps;
-    trailing?: TypographyOverriddenProps;
-    tooltip?: TooltipOverriddenProps;
+    leading?: TypographyProps;
+    text?: TypographyProps;
+    trailing?: TypographyProps;
+    tooltip?: TooltipProps;
   };
 
   /** Number of characters to show at the end*/
@@ -54,7 +54,7 @@ export type IdentifierOwnProps = {
 
 export type IdentifierBaseProps = ElementBaseProps<'div', IdentifierOwnProps>;
 
-export type IdentifierOverriddenProps = OverridableType<
+export type IdentifierProps = OverridableType<
   IdentifierBaseProps,
   IdentifierOverrides,
   never
@@ -87,7 +87,7 @@ export const IdentifierBase = ({
   value = '',
   variant,
   ...rest
-}: IdentifierOverriddenProps) => {
+}: IdentifierProps) => {
   const [open, setOpen] = useState(false);
 
   const hasValue = Boolean(value);
@@ -220,5 +220,3 @@ export const IdentifierBase = ({
 IdentifierBase.displayName = 'Identifier';
 
 export const Identifier = Wrap(IdentifierBase);
-
-export type IdentifierProps = ComponentProps<typeof Identifier>;

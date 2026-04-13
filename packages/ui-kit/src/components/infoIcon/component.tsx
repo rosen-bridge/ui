@@ -1,6 +1,4 @@
-import { ComponentProps } from 'react';
-
-import { Icon, Tooltip, TooltipOverriddenProps } from '@/components';
+import { Icon, Tooltip, TooltipProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -10,25 +8,21 @@ import './styles.scss';
 export interface InfoIconOverrides {}
 
 export type InfoIconOwnProps = {
-  info?: TooltipOverriddenProps['title'];
+  info?: TooltipProps['title'];
   slots?: {
-    tooltip?: TooltipOverriddenProps;
+    tooltip?: TooltipProps;
   };
 };
 
 export type InfoIconBaseProps = ElementBaseProps<typeof Icon, InfoIconOwnProps>;
 
-export type InfoIconOverriddenProps = OverridableType<
+export type InfoIconProps = OverridableType<
   InfoIconBaseProps,
   InfoIconOverrides,
   never
 >;
 
-export const InfoIconBase = ({
-  info,
-  slots,
-  ...rest
-}: InfoIconOverriddenProps) => {
+export const InfoIconBase = ({ info, slots, ...rest }: InfoIconProps) => {
   return (
     <Tooltip title={info} {...slots?.tooltip}>
       <Icon name="ExclamationCircle" size="16px" {...rest} />
@@ -39,5 +33,3 @@ export const InfoIconBase = ({
 InfoIconBase.displayName = 'InfoIcon';
 
 export const InfoIcon = Wrap(InfoIconBase);
-
-export type InfoIconProps = ComponentProps<typeof InfoIcon>;

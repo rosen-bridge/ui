@@ -1,11 +1,4 @@
-import { ComponentProps } from 'react';
-
-import {
-  Icon,
-  IconButton,
-  IconOverriddenProps,
-  useCarousel,
-} from '@/components';
+import { Icon, IconButton, IconProps, useCarousel } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -14,8 +7,8 @@ export interface CarouselButtonOverrides {}
 
 export type CarouselButtonOwnProps = {
   slots?: {
-    prev?: IconOverriddenProps;
-    next?: IconOverriddenProps;
+    prev?: IconProps;
+    next?: IconProps;
   };
   type: 'next' | 'prev';
 };
@@ -25,7 +18,7 @@ export type CarouselButtonBaseProps = ElementBaseProps<
   CarouselButtonOwnProps
 >;
 
-export type CarouselButtonOverriddenProps = OverridableType<
+export type CarouselButtonProps = OverridableType<
   CarouselButtonBaseProps,
   CarouselButtonOverrides,
   never
@@ -35,7 +28,7 @@ export const CarouselButtonBase = ({
   slots,
   type,
   ...rest
-}: CarouselButtonOverriddenProps) => {
+}: CarouselButtonProps) => {
   const api = useCarousel();
 
   const canScroll = type == 'next' ? api.canScrollNext : api.canScrollPrev;
@@ -53,5 +46,3 @@ export const CarouselButtonBase = ({
 CarouselButtonBase.displayName = 'CarouselButton';
 
 export const CarouselButton = Wrap(CarouselButtonBase);
-
-export type CarouselButtonProps = ComponentProps<typeof CarouselButton>;

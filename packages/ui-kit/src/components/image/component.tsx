@@ -1,4 +1,4 @@
-import { ComponentProps, ComponentPropsWithRef, ElementType } from 'react';
+import { ComponentPropsWithRef, ElementType } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -12,21 +12,12 @@ export type ImageOwnProps = {
 
 export type ImageBaseProps = ElementBaseProps<'img', ImageOwnProps>;
 
-export type ImageOverriddenProps = OverridableType<
-  ImageBaseProps,
-  ImageOverrides,
-  never
->;
+export type ImageProps = OverridableType<ImageBaseProps, ImageOverrides, never>;
 
-export const ImageBase = ({
-  as: Component = 'img',
-  ...rest
-}: ImageOverriddenProps) => {
+export const ImageBase = ({ as: Component = 'img', ...rest }: ImageProps) => {
   return <Component {...rest} />;
 };
 
 ImageBase.displayName = 'Image';
 
 export const Image = Wrap(ImageBase);
-
-export type ImageProps = ComponentProps<typeof Image>;

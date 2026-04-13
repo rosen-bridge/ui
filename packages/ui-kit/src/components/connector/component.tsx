@@ -1,6 +1,6 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-import { Icon, IconOverriddenProps } from '@/components';
+import { Icon, IconProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -16,7 +16,7 @@ export type ConnectorOwnProps = {
   end: ReactNode;
 
   slots?: {
-    icon?: IconOverriddenProps;
+    icon?: IconProps;
   };
 
   /**
@@ -32,7 +32,7 @@ export type ConnectorOwnProps = {
 
 export type ConnectorBaseProps = ElementBaseProps<'div', ConnectorOwnProps>;
 
-export type ConnectorOverriddenProps = OverridableType<
+export type ConnectorProps = OverridableType<
   ConnectorBaseProps,
   ConnectorOverrides,
   never
@@ -47,7 +47,7 @@ export const ConnectorBase = ({
   start,
   variant = 'standard',
   ...rest
-}: ConnectorOverriddenProps) => {
+}: ConnectorProps) => {
   return (
     <div data-variant={variant} {...rest}>
       {start}
@@ -60,5 +60,3 @@ export const ConnectorBase = ({
 ConnectorBase.displayName = 'Connector';
 
 export const Connector = Wrap(ConnectorBase);
-
-export type ConnectorProps = ComponentProps<typeof Connector>;

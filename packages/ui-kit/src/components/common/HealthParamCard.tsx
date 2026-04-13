@@ -17,7 +17,7 @@ import {
   Tooltip,
   Typography,
 } from '@/components';
-import { ColorOverridden } from '@/types';
+import { Color } from '@/types';
 
 export type HealthParamCardProps = {
   checking?: boolean;
@@ -96,11 +96,11 @@ export const HealthParamCard = ({
         flexDirection: 'column',
         minWidth: 0,
       }}
-      backgroundColor={colors.cardBackground as ColorOverridden}
+      backgroundColor={colors.cardBackground as Color}
     >
       <CardHeader>
-        <Icon color={colors.cardColor as ColorOverridden} name={icon} />
-        <CardTitle color={colors.cardColor as ColorOverridden} fontWeight="700">
+        <Icon color={colors.cardColor as Color} name={icon} />
+        <CardTitle color={colors.cardColor as Color} fontWeight="700">
           {value?.lastCheck ? value?.status : 'Unknown'}
         </CardTitle>
         {value?.lastTrialErrorTime && (

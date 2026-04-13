@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -14,17 +12,9 @@ export type BadgeOwnProps = {
 
 export type BadgeBaseProps = ElementBaseProps<'span', BadgeOwnProps>;
 
-export type BadgeOverriddenProps = OverridableType<
-  BadgeBaseProps,
-  BadgeOverrides,
-  never
->;
+export type BadgeProps = OverridableType<BadgeBaseProps, BadgeOverrides, never>;
 
-export const BadgeBase = ({
-  children,
-  content,
-  ...rest
-}: BadgeOverriddenProps) => {
+export const BadgeBase = ({ children, content, ...rest }: BadgeProps) => {
   return (
     <span {...rest}>
       {children}
@@ -36,5 +26,3 @@ export const BadgeBase = ({
 BadgeBase.displayName = 'Badge';
 
 export const Badge = Wrap(BadgeBase);
-
-export type BadgeProps = ComponentProps<typeof Badge>;

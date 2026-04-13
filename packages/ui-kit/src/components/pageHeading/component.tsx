@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
@@ -16,7 +16,7 @@ export type PageHeadingOwnProps = {
 
 export type PageHeadingBaseProps = ElementBaseProps<'div', PageHeadingOwnProps>;
 
-export type PageHeadingOverriddenProps = OverridableType<
+export type PageHeadingProps = OverridableType<
   PageHeadingBaseProps,
   PageHeadingOverrides,
   never
@@ -26,7 +26,7 @@ export const PageHeadingBase = ({
   actions,
   title,
   ...rest
-}: PageHeadingOverriddenProps) => {
+}: PageHeadingProps) => {
   return (
     <div {...rest}>
       <Typography variant="h1">{title}</Typography>
@@ -38,5 +38,3 @@ export const PageHeadingBase = ({
 PageHeadingBase.displayName = 'PageHeading';
 
 export const PageHeading = Wrap(PageHeadingBase);
-
-export type PageHeadingProps = ComponentProps<typeof PageHeading>;

@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -17,7 +17,7 @@ export type SkeletonOwnProps = {
 
 export type SkeletonBaseProps = ElementBaseProps<'span', SkeletonOwnProps>;
 
-export type SkeletonOverriddenProps = OverridableType<
+export type SkeletonProps = OverridableType<
   SkeletonBaseProps,
   SkeletonOverrides,
   never
@@ -30,7 +30,7 @@ export const SkeletonBase = ({
   variant = 'text',
   width,
   ...rest
-}: SkeletonOverriddenProps) => {
+}: SkeletonProps) => {
   const styles = useMemo(
     () => ({
       height: typeof height === 'number' ? `${height}px` : height,
@@ -56,5 +56,3 @@ export const SkeletonBase = ({
 SkeletonBase.displayName = 'Skeleton';
 
 export const Skeleton = Wrap(SkeletonBase);
-
-export type SkeletonProps = ComponentProps<typeof Skeleton>;

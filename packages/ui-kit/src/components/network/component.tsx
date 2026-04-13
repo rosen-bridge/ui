@@ -1,11 +1,6 @@
-import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
+import { FC, SVGAttributes, useMemo } from 'react';
 
-import {
-  Icon,
-  IconOverriddenProps,
-  Typography,
-  TypographyOverriddenProps,
-} from '@/components';
+import { Icon, IconProps, Typography, TypographyProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -28,11 +23,11 @@ export type NetworkOwnProps = {
   loading?: boolean;
 
   /** Static registry */
-  networks?: Record<NonNullable<NetworkOverriddenProps['value']>, NetworkMeta>;
+  networks?: Record<NonNullable<NetworkProps['value']>, NetworkMeta>;
 
   slots?: {
-    label?: TypographyOverriddenProps;
-    logo?: IconOverriddenProps;
+    label?: TypographyProps;
+    logo?: IconProps;
   };
 
   /** The name of the network (like 'binance', 'bitcoin', etc.). Optional, fallback will be used if missing */
@@ -44,7 +39,7 @@ export type NetworkOwnProps = {
 
 export type NetworkBaseProps = ElementBaseProps<'div', NetworkOwnProps>;
 
-export type NetworkOverriddenProps = OverridableType<
+export type NetworkProps = OverridableType<
   NetworkBaseProps,
   NetworkOverrides,
   'value'
@@ -63,7 +58,7 @@ export const NetworkBase = ({
   slots,
   variant = 'both',
   ...rest
-}: NetworkOverriddenProps) => {
+}: NetworkProps) => {
   const showLabel = variant !== 'logo';
 
   const showLogo = variant !== 'label';
@@ -103,5 +98,3 @@ export const NetworkBase = ({
 NetworkBase.displayName = 'Network';
 
 export const Network = Wrap(NetworkBase);
-
-export type NetworkProps = ComponentProps<typeof Network>;

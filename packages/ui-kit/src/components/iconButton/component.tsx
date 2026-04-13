@@ -1,4 +1,4 @@
-import { ComponentProps, HTMLAttributeAnchorTarget } from 'react';
+import { HTMLAttributeAnchorTarget } from 'react';
 
 import { IconButton as IconButtonMUI } from '@mui/material';
 
@@ -19,13 +19,13 @@ export type IconButtonBaseProps = ElementBaseProps<
   IconButtonOwnProps
 >;
 
-export type IconButtonOverriddenProps = OverridableType<
+export type IconButtonProps = OverridableType<
   IconButtonBaseProps,
   IconButtonOverrides,
   never
 >;
 
-export const IconButtonBase = ({ ...rest }: IconButtonOverriddenProps) => {
+export const IconButtonBase = ({ ...rest }: IconButtonProps) => {
   // TODO: extend from Button instead of MUI
   return <IconButtonMUI {...rest} />;
 };
@@ -33,5 +33,3 @@ export const IconButtonBase = ({ ...rest }: IconButtonOverriddenProps) => {
 IconButtonBase.displayName = 'IconButton';
 
 export const IconButton = Wrap(IconButtonBase);
-
-export type IconButtonProps = ComponentProps<typeof IconButton>;

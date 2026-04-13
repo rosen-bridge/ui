@@ -1,9 +1,9 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { Tabs as TabsBaseUI } from '@base-ui/react/tabs';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { GapOverridden, OverridableType } from '@/types';
+import { Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -12,7 +12,7 @@ import './styles.scss';
 export interface TabsOverrides {}
 
 export type TabsOwnProps = {
-  gap?: GapOverridden;
+  gap?: Gap;
   orientation?: 'horizontal' | 'vertical';
   value?: number | string;
   onChange?: (value: number | string) => void;
@@ -20,11 +20,7 @@ export type TabsOwnProps = {
 
 export type TabsBaseProps = ElementBaseProps<'div', TabsOwnProps>;
 
-export type TabsOverriddenProps = OverridableType<
-  TabsBaseProps,
-  TabsOverrides,
-  'gap'
->;
+export type TabsProps = OverridableType<TabsBaseProps, TabsOverrides, 'gap'>;
 
 export const TabsBase = ({
   gap,
@@ -32,7 +28,7 @@ export const TabsBase = ({
   value,
   onChange,
   ...rest
-}: TabsOverriddenProps) => {
+}: TabsProps) => {
   const styles = useMemo(
     () => ({ gap: toCSSUnit('gap', gap), ...style }),
     [gap, style],
@@ -51,5 +47,3 @@ export const TabsBase = ({
 TabsBase.displayName = 'Tabs';
 
 export const Tabs = Wrap(TabsBase);
-
-export type TabsProps = ComponentProps<typeof Tabs>;

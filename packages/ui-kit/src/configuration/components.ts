@@ -1,147 +1,147 @@
 import type {
-  ActionOverriddenProps,
-  ApiKeyDialogOverriddenProps,
-  ApiKeyDialogButtonOverriddenProps,
-  ApiKeyDialogWarningOverriddenProps,
-  AppOverriddenProps,
-  AppBarOverriddenProps,
-  AvatarOverriddenProps,
-  BadgeOverriddenProps,
-  ButtonOverriddenProps,
-  CardOverriddenProps,
-  CardActionOverriddenProps,
-  CardBodyOverriddenProps,
-  CardHeaderOverriddenProps,
-  CardTitleOverriddenProps,
-  CarouselOverriddenProps,
-  CarouselButtonOverriddenProps,
-  CarouselIndicatorsOverriddenProps,
-  CarouselItemOverriddenProps,
-  CenterOverriddenProps,
-  CloseButtonOverriddenProps,
-  CollapsibleOverriddenProps,
-  ColumnsOverriddenProps,
-  ConnectorOverriddenProps,
-  CopyButtonOverriddenProps,
-  DateTimeOverriddenProps,
-  DialogOverriddenProps,
-  DialogContentOverriddenProps,
-  DialogDescriptionOverriddenProps,
-  DialogFooterOverriddenProps,
-  DialogHeaderOverriddenProps,
-  DialogTitleOverriddenProps,
-  DurationOverriddenProps,
-  EventCardOverriddenProps,
-  EventDetailsOverriddenProps,
-  EventStatusOverriddenProps,
-  GridContainerOverriddenProps,
-  IconOverriddenProps,
-  IconButtonOverriddenProps,
-  IdentifierOverriddenProps,
-  ImageOverriddenProps,
-  InfoIconOverriddenProps,
-  LabelOverriddenProps,
-  LabelGroupOverriddenProps,
-  LayoutListOverriddenProps,
-  LinkOverriddenProps,
-  NetworkOverriddenProps,
-  PageHeadingOverriddenProps,
-  QrCodeDialogOverriddenProps,
-  RelativeTimeOverriddenProps,
-  SkeletonOverriddenProps,
-  SubmitButtonOverriddenProps,
-  StackOverriddenProps,
-  TableGridOverriddenProps,
-  TableGridBodyOverriddenProps,
-  TableGridBodyDetailsOverriddenProps,
-  TableGridCellOverriddenProps,
-  TableGridHeaderOverriddenProps,
-  TableGridRowOverriddenProps,
-  TabsOverriddenProps,
-  TabsListOverriddenProps,
-  TabsPanelOverriddenProps,
-  TabsTabOverriddenProps,
-  ThemeToggleButtonOverriddenProps,
-  TokenOverriddenProps,
-  TokensCardOverriddenProps,
-  TokensListOverriddenProps,
-  ToolbarOverriddenProps,
-  TooltipOverriddenProps,
-  TruncateOverriddenProps,
-  TypographyOverriddenProps,
-  ViewToggleOverriddenProps,
+  ActionProps,
+  ApiKeyDialogProps,
+  ApiKeyDialogButtonProps,
+  ApiKeyDialogWarningProps,
+  AppProps,
+  AppBarProps,
+  AvatarProps,
+  BadgeProps,
+  ButtonProps,
+  CardProps,
+  CardActionProps,
+  CardBodyProps,
+  CardHeaderProps,
+  CardTitleProps,
+  CarouselProps,
+  CarouselButtonProps,
+  CarouselIndicatorsProps,
+  CarouselItemProps,
+  CenterProps,
+  CloseButtonProps,
+  CollapsibleProps,
+  ColumnsProps,
+  ConnectorProps,
+  CopyButtonProps,
+  DateTimeProps,
+  DialogProps,
+  DialogContentProps,
+  DialogDescriptionProps,
+  DialogFooterProps,
+  DialogHeaderProps,
+  DialogTitleProps,
+  DurationProps,
+  EventCardProps,
+  EventDetailsProps,
+  EventStatusProps,
+  GridContainerProps,
+  IconProps,
+  IconButtonProps,
+  IdentifierProps,
+  ImageProps,
+  InfoIconProps,
+  LabelProps,
+  LabelGroupProps,
+  LayoutListProps,
+  LinkProps,
+  NetworkProps,
+  PageHeadingProps,
+  QrCodeDialogProps,
+  RelativeTimeProps,
+  SkeletonProps,
+  SubmitButtonProps,
+  StackProps,
+  TableGridProps,
+  TableGridBodyProps,
+  TableGridBodyDetailsProps,
+  TableGridCellProps,
+  TableGridHeaderProps,
+  TableGridRowProps,
+  TabsProps,
+  TabsListProps,
+  TabsPanelProps,
+  TabsTabProps,
+  ThemeToggleButtonProps,
+  TokenProps,
+  TokensCardProps,
+  TokensListProps,
+  ToolbarProps,
+  TooltipProps,
+  TruncateProps,
+  TypographyProps,
+  ViewToggleProps,
 } from '@/components';
 
 export type Components = {
-  Action: ActionOverriddenProps;
-  ApiKeyDialog: ApiKeyDialogOverriddenProps;
-  ApiKeyDialogButton: ApiKeyDialogButtonOverriddenProps;
-  ApiKeyDialogWarning: ApiKeyDialogWarningOverriddenProps;
-  App: AppOverriddenProps;
-  AppBar: AppBarOverriddenProps;
-  Avatar: AvatarOverriddenProps;
-  Badge: BadgeOverriddenProps;
-  Button: ButtonOverriddenProps;
-  Card: CardOverriddenProps;
-  CardAction: CardActionOverriddenProps;
-  CardBody: CardBodyOverriddenProps;
-  CardHeader: CardHeaderOverriddenProps;
-  CardTitle: CardTitleOverriddenProps;
-  Carousel: CarouselOverriddenProps;
-  CarouselButton: CarouselButtonOverriddenProps;
-  CarouselIndicators: CarouselIndicatorsOverriddenProps;
-  CarouselItem: CarouselItemOverriddenProps;
-  Center: CenterOverriddenProps;
-  CloseButton: CloseButtonOverriddenProps;
-  Collapsible: CollapsibleOverriddenProps;
-  Columns: ColumnsOverriddenProps;
-  Connector: ConnectorOverriddenProps;
-  CopyButton: CopyButtonOverriddenProps;
-  DateTime: DateTimeOverriddenProps;
-  Dialog: DialogOverriddenProps;
-  DialogContent: DialogContentOverriddenProps;
-  DialogDescription: DialogDescriptionOverriddenProps;
-  DialogFooter: DialogFooterOverriddenProps;
-  DialogHeader: DialogHeaderOverriddenProps;
-  DialogTitle: DialogTitleOverriddenProps;
-  Duration: DurationOverriddenProps;
-  EventCard: EventCardOverriddenProps;
-  EventDetails: EventDetailsOverriddenProps;
-  EventStatus: EventStatusOverriddenProps;
-  GridContainer: GridContainerOverriddenProps;
-  Icon: IconOverriddenProps;
-  IconButton: IconButtonOverriddenProps;
-  Identifier: IdentifierOverriddenProps;
-  Image: ImageOverriddenProps;
-  InfoIcon: InfoIconOverriddenProps;
-  Label: LabelOverriddenProps;
-  LabelGroup: LabelGroupOverriddenProps;
-  LayoutList: LayoutListOverriddenProps;
-  Link: LinkOverriddenProps;
-  Network: NetworkOverriddenProps;
-  PageHeading: PageHeadingOverriddenProps;
-  QrCodeDialog: QrCodeDialogOverriddenProps;
-  RelativeTime: RelativeTimeOverriddenProps;
-  Skeleton: SkeletonOverriddenProps;
-  Stack: StackOverriddenProps;
-  SubmitButton: SubmitButtonOverriddenProps;
-  TableGrid: TableGridOverriddenProps;
-  TableGridBody: TableGridBodyOverriddenProps;
-  TableGridBodyDetails: TableGridBodyDetailsOverriddenProps;
-  TableGridCell: TableGridCellOverriddenProps;
-  TableGridHeader: TableGridHeaderOverriddenProps;
-  TableGridRow: TableGridRowOverriddenProps;
-  Tabs: TabsOverriddenProps;
-  TabsList: TabsListOverriddenProps;
-  TabsPanel: TabsPanelOverriddenProps;
-  TabsTab: TabsTabOverriddenProps;
-  ThemeToggleButton: ThemeToggleButtonOverriddenProps;
-  Token: TokenOverriddenProps;
-  TokensCard: TokensCardOverriddenProps;
-  TokensList: TokensListOverriddenProps;
-  Toolbar: ToolbarOverriddenProps;
-  Tooltip: TooltipOverriddenProps;
-  Truncate: TruncateOverriddenProps;
-  Typography: TypographyOverriddenProps;
-  ViewToggle: ViewToggleOverriddenProps;
+  Action: ActionProps;
+  ApiKeyDialog: ApiKeyDialogProps;
+  ApiKeyDialogButton: ApiKeyDialogButtonProps;
+  ApiKeyDialogWarning: ApiKeyDialogWarningProps;
+  App: AppProps;
+  AppBar: AppBarProps;
+  Avatar: AvatarProps;
+  Badge: BadgeProps;
+  Button: ButtonProps;
+  Card: CardProps;
+  CardAction: CardActionProps;
+  CardBody: CardBodyProps;
+  CardHeader: CardHeaderProps;
+  CardTitle: CardTitleProps;
+  Carousel: CarouselProps;
+  CarouselButton: CarouselButtonProps;
+  CarouselIndicators: CarouselIndicatorsProps;
+  CarouselItem: CarouselItemProps;
+  Center: CenterProps;
+  CloseButton: CloseButtonProps;
+  Collapsible: CollapsibleProps;
+  Columns: ColumnsProps;
+  Connector: ConnectorProps;
+  CopyButton: CopyButtonProps;
+  DateTime: DateTimeProps;
+  Dialog: DialogProps;
+  DialogContent: DialogContentProps;
+  DialogDescription: DialogDescriptionProps;
+  DialogFooter: DialogFooterProps;
+  DialogHeader: DialogHeaderProps;
+  DialogTitle: DialogTitleProps;
+  Duration: DurationProps;
+  EventCard: EventCardProps;
+  EventDetails: EventDetailsProps;
+  EventStatus: EventStatusProps;
+  GridContainer: GridContainerProps;
+  Icon: IconProps;
+  IconButton: IconButtonProps;
+  Identifier: IdentifierProps;
+  Image: ImageProps;
+  InfoIcon: InfoIconProps;
+  Label: LabelProps;
+  LabelGroup: LabelGroupProps;
+  LayoutList: LayoutListProps;
+  Link: LinkProps;
+  Network: NetworkProps;
+  PageHeading: PageHeadingProps;
+  QrCodeDialog: QrCodeDialogProps;
+  RelativeTime: RelativeTimeProps;
+  Skeleton: SkeletonProps;
+  Stack: StackProps;
+  SubmitButton: SubmitButtonProps;
+  TableGrid: TableGridProps;
+  TableGridBody: TableGridBodyProps;
+  TableGridBodyDetails: TableGridBodyDetailsProps;
+  TableGridCell: TableGridCellProps;
+  TableGridHeader: TableGridHeaderProps;
+  TableGridRow: TableGridRowProps;
+  Tabs: TabsProps;
+  TabsList: TabsListProps;
+  TabsPanel: TabsPanelProps;
+  TabsTab: TabsTabProps;
+  ThemeToggleButton: ThemeToggleButtonProps;
+  Token: TokenProps;
+  TokensCard: TokensCardProps;
+  TokensList: TokensListProps;
+  Toolbar: ToolbarProps;
+  Tooltip: TooltipProps;
+  Truncate: TruncateProps;
+  Typography: TypographyProps;
+  ViewToggle: ViewToggleProps;
 };

@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { QRCodeCanvas } from 'qrcode.react';
 
 import {
@@ -24,7 +22,7 @@ export type QrCodeDialogBaseProps = ElementBaseProps<
   QrCodeDialogOwnProps
 >;
 
-export type QrCodeDialogOverriddenProps = OverridableType<
+export type QrCodeDialogProps = OverridableType<
   QrCodeDialogBaseProps,
   QrCodeDialogOverrides,
   never
@@ -34,7 +32,7 @@ export const QrCodeDialogBase = ({
   value,
   onClose,
   ...rest
-}: QrCodeDialogOverriddenProps) => {
+}: QrCodeDialogProps) => {
   return (
     <Dialog maxWidth="tablet" onClose={onClose} {...rest}>
       <DialogContent>
@@ -55,5 +53,3 @@ export const QrCodeDialogBase = ({
 QrCodeDialogBase.displayName = 'QrCodeDialog';
 
 export const QrCodeDialog = Wrap(QrCodeDialogBase);
-
-export type QrCodeDialogProps = ComponentProps<typeof QrCodeDialog>;

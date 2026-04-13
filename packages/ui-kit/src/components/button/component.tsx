@@ -1,9 +1,9 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { Button as ButtonMUI } from '@mui/material';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -12,7 +12,7 @@ export interface ButtonOverrides {}
 
 export type ButtonOwnProps = {
   block?: boolean;
-  color?: ColorOverridden;
+  color?: Color;
   loading?: boolean;
   size?: 'small' | 'medium' | 'large';
   startIcon?: ReactNode;
@@ -22,7 +22,7 @@ export type ButtonOwnProps = {
 
 export type ButtonBaseProps = ElementBaseProps<'button', ButtonOwnProps>;
 
-export type ButtonOverriddenProps = OverridableType<
+export type ButtonProps = OverridableType<
   ButtonBaseProps,
   ButtonOverrides,
   'color'
@@ -37,7 +37,7 @@ export const ButtonBase = ({
   endIcon,
   variant = 'text',
   ...rest
-}: ButtonOverriddenProps) => {
+}: ButtonProps) => {
   void color;
   void loading;
   void startIcon;
@@ -62,5 +62,3 @@ export const ButtonBase = ({
 ButtonBase.displayName = 'Button';
 
 export const Button = Wrap(ButtonBase);
-
-export type ButtonProps = ComponentProps<typeof Button>;

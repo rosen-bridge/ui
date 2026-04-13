@@ -1,10 +1,10 @@
-import { ComponentProps, FC, SVGAttributes, useMemo } from 'react';
+import { FC, SVGAttributes, useMemo } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 
 import { Skeleton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -14,12 +14,9 @@ export interface IconOverrides {}
 
 export type IconOwnProps = {
   as?: FC<SVGAttributes<SVGElement>>;
-  color?: ColorOverridden;
+  color?: Color;
   fallback?: Exclude<keyof typeof Icons, 'TOKENS'>;
-  icons?: Record<
-    NonNullable<IconOverriddenProps['name']>,
-    FC<SVGAttributes<SVGElement>>
-  >;
+  icons?: Record<NonNullable<IconProps['name']>, FC<SVGAttributes<SVGElement>>>;
   loading?: boolean;
   name?: Exclude<keyof typeof Icons, 'TOKENS'>;
   size?: 'small' | 'medium' | 'large' | (number & {}) | (string & {});
@@ -27,7 +24,7 @@ export type IconOwnProps = {
 
 export type IconBaseProps = ElementBaseProps<'svg', IconOwnProps>;
 
-export type IconOverriddenProps = OverridableType<
+export type IconProps = OverridableType<
   IconBaseProps,
   IconOverrides,
   'color' | 'name' | 'size'
@@ -43,7 +40,7 @@ export const IconBase = ({
   size = 'medium',
   style,
   ...rest
-}: IconOverriddenProps) => {
+}: IconProps) => {
   const Icon =
     as ||
     icons?.[name as keyof typeof icons] ||
@@ -81,5 +78,3 @@ export const IconBase = ({
 IconBase.displayName = 'Icon';
 
 export const Icon = Wrap(IconBase);
-
-export type IconProps = ComponentProps<typeof Icon>;

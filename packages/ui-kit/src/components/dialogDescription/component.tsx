@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Typography, TypographyProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -16,15 +14,13 @@ export type DialogDescriptionBaseProps = ElementBaseProps<
   DialogDescriptionOwnProps
 >;
 
-export type DialogDescriptionOverriddenProps = OverridableType<
+export type DialogDescriptionProps = OverridableType<
   DialogDescriptionBaseProps,
   DialogDescriptionOverrides,
   never
 >;
 
-export const DialogDescriptionBase = ({
-  ...rest
-}: DialogDescriptionOverriddenProps) => {
+export const DialogDescriptionBase = ({ ...rest }: DialogDescriptionProps) => {
   // TODO: use Root element
   return <Typography component="p" {...rest} />;
 };
@@ -32,5 +28,3 @@ export const DialogDescriptionBase = ({
 DialogDescriptionBase.displayName = 'DialogDescription';
 
 export const DialogDescription = Wrap(DialogDescriptionBase);
-
-export type DialogDescriptionProps = ComponentProps<typeof DialogDescription>;

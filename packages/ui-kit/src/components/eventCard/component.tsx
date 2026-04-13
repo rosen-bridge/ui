@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import {
   Amount,
   AmountProps,
@@ -46,17 +44,13 @@ export type EventCardBaseProps = ElementBaseProps<
   EventCardOwnProps
 >;
 
-export type EventCardOverriddenProps = OverridableType<
+export type EventCardProps = OverridableType<
   EventCardBaseProps,
   EventCardOverrides,
   never
 >;
 
-export const EventCardBase = ({
-  loading,
-  value,
-  ...rest
-}: EventCardOverriddenProps) => {
+export const EventCardBase = ({ loading, value, ...rest }: EventCardProps) => {
   return (
     <Card {...rest}>
       <CardBody className="RosenEventCard-body">
@@ -110,5 +104,3 @@ export const EventCardBase = ({
 EventCardBase.displayName = 'EventCard';
 
 export const EventCard = Wrap(EventCardBase);
-
-export type EventCardProps = ComponentProps<typeof EventCard>;

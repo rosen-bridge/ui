@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -14,18 +12,16 @@ export type CenterOwnProps = {
 
 export type CenterBaseProps = ElementBaseProps<'div', CenterOwnProps>;
 
-export type CenterOverriddenProps = OverridableType<
+export type CenterProps = OverridableType<
   CenterBaseProps,
   CenterOverrides,
   never
 >;
 
-export const CenterBase = ({ inline, ...rest }: CenterOverriddenProps) => {
+export const CenterBase = ({ inline, ...rest }: CenterProps) => {
   return <div data-inline={!!inline} {...rest} />;
 };
 
 CenterBase.displayName = 'Center';
 
 export const Center = Wrap(CenterBase);
-
-export type CenterProps = ComponentProps<typeof Center>;

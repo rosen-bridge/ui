@@ -1,6 +1,4 @@
 // TODO: use ToggleButton button and add slots
-import { ComponentProps } from 'react';
-
 import { Icon, IconButton } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -21,7 +19,7 @@ export type ViewToggleOwnProps = {
 
 export type ViewToggleBaseProps = ElementBaseProps<'div', ViewToggleOwnProps>;
 
-export type ViewToggleOverriddenProps = OverridableType<
+export type ViewToggleProps = OverridableType<
   ViewToggleBaseProps,
   ViewToggleOverrides,
   never
@@ -35,7 +33,7 @@ export const ViewToggleBase = ({
   value,
   onChange,
   ...rest
-}: ViewToggleOverriddenProps) => {
+}: ViewToggleProps) => {
   return (
     <div {...rest}>
       <IconButton
@@ -59,5 +57,3 @@ export const ViewToggleBase = ({
 ViewToggleBase.displayName = 'ViewToggle';
 
 export const ViewToggle = Wrap(ViewToggleBase);
-
-export type ViewToggleProps = ComponentProps<typeof ViewToggle>;

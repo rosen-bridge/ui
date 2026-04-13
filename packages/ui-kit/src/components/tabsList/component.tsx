@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Tabs } from '@base-ui/react/tabs';
 
 import { ElementBaseProps, Wrap } from '@/core';
@@ -17,7 +15,7 @@ export type TabsListOwnProps = {
 
 export type TabsListBaseProps = ElementBaseProps<'div', TabsListOwnProps>;
 
-export type TabsListOverriddenProps = OverridableType<
+export type TabsListProps = OverridableType<
   TabsListBaseProps,
   TabsListOverrides,
   never
@@ -28,7 +26,7 @@ export const TabsListBase = ({
   children,
   grow,
   ...rest
-}: TabsListOverriddenProps) => {
+}: TabsListProps) => {
   return (
     <Tabs.List data-align={align} data-grow={grow} {...rest}>
       {children}
@@ -40,5 +38,3 @@ export const TabsListBase = ({
 TabsListBase.displayName = 'TabsList';
 
 export const TabsList = Wrap(TabsListBase);
-
-export type TabsListProps = ComponentProps<typeof TabsList>;

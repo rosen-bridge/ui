@@ -1,4 +1,4 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { Typography } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
@@ -24,7 +24,7 @@ export type DateTimeOwnProps = {
 
 export type DateTimeBaseProps = ElementBaseProps<'div', DateTimeOwnProps>;
 
-export type DateTimeOverriddenProps = OverridableType<
+export type DateTimeProps = OverridableType<
   DateTimeBaseProps,
   DateTimeOverrides,
   never
@@ -45,7 +45,7 @@ export const DateTimeBase = ({
   loading,
   timestamp,
   ...rest
-}: DateTimeOverriddenProps) => {
+}: DateTimeProps) => {
   void color;
 
   const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
@@ -66,5 +66,3 @@ export const DateTimeBase = ({
 DateTimeBase.displayName = 'DateTime';
 
 export const DateTime = Wrap(DateTimeBase);
-
-export type DateTimeProps = ComponentProps<typeof DateTime>;

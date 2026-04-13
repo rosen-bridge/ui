@@ -1,4 +1,4 @@
-import { ComponentProps, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
@@ -16,7 +16,7 @@ export type TableGridHeaderBaseProps = ElementBaseProps<
   TableGridHeaderOwnProps
 >;
 
-export type TableGridHeaderOverriddenProps = OverridableType<
+export type TableGridHeaderProps = OverridableType<
   TableGridHeaderBaseProps,
   TableGridHeaderOverrides,
   never
@@ -25,7 +25,7 @@ export type TableGridHeaderOverriddenProps = OverridableType<
 export const TableGridHeaderBase = ({
   children,
   ...rest
-}: TableGridHeaderOverriddenProps) => {
+}: TableGridHeaderProps) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -78,5 +78,3 @@ export const TableGridHeaderBase = ({
 TableGridHeaderBase.displayName = 'TableGridHeader';
 
 export const TableGridHeader = Wrap(TableGridHeaderBase);
-
-export type TableGridHeaderProps = ComponentProps<typeof TableGridHeader>;

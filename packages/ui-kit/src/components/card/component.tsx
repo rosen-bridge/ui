@@ -1,7 +1,7 @@
-import { ComponentProps, useMemo } from 'react';
+import { useMemo } from 'react';
 
 import { ElementBaseProps, Wrap } from '@/core';
-import { ColorOverridden, OverridableType } from '@/types';
+import { Color, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.scss';
@@ -18,7 +18,7 @@ export type CardOwnProps = {
   /**
    * Background color of the card.
    */
-  backgroundColor?: ColorOverridden;
+  backgroundColor?: Color;
 
   /**
    * If `true`, the card will show a pointer cursor on hover,
@@ -34,7 +34,7 @@ export type CardOwnProps = {
 
 export type CardBaseProps = ElementBaseProps<'div', CardOwnProps>;
 
-export type CardOverriddenProps = OverridableType<
+export type CardProps = OverridableType<
   CardBaseProps,
   CardOverrides,
   'backgroundColor'
@@ -47,7 +47,7 @@ export const CardBase = ({
   style,
   variant,
   ...rest
-}: CardOverriddenProps) => {
+}: CardProps) => {
   const styles = useMemo(
     () => ({
       backgroundColor: toCSSColor(backgroundColor),
@@ -70,5 +70,3 @@ export const CardBase = ({
 CardBase.displayName = 'Card';
 
 export const Card = Wrap(CardBase);
-
-export type CardProps = ComponentProps<typeof Card>;

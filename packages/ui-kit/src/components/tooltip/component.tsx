@@ -1,7 +1,6 @@
 import {
   Children,
   cloneElement,
-  ComponentProps,
   ReactElement,
   ReactNode,
   useMemo,
@@ -26,7 +25,7 @@ export type TooltipOwnProps = {
 
 export type TooltipBaseProps = ElementBaseProps<'div', TooltipOwnProps>;
 
-export type TooltipOverriddenProps = OverridableType<
+export type TooltipProps = OverridableType<
   TooltipBaseProps,
   TooltipOverrides,
   never
@@ -37,7 +36,7 @@ export const TooltipBase = ({
   disabled,
   title,
   ...rest
-}: TooltipOverriddenProps) => {
+}: TooltipProps) => {
   const child = useMemo(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     () => Children.only(children) as ReactElement<any, any>,
@@ -77,5 +76,3 @@ export const TooltipBase = ({
 TooltipBase.displayName = 'Tooltip';
 
 export const Tooltip = Wrap(TooltipBase);
-
-export type TooltipProps = ComponentProps<typeof Tooltip>;

@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 
 import { ElementBaseProps, Wrap } from '@/core';
@@ -16,16 +14,13 @@ export type CollapsibleOwnProps = {
 
 export type CollapsibleBaseProps = ElementBaseProps<'div', CollapsibleOwnProps>;
 
-export type CollapsibleOverriddenProps = OverridableType<
+export type CollapsibleProps = OverridableType<
   CollapsibleBaseProps,
   CollapsibleOverrides,
   never
 >;
 
-export const CollapsibleBase = ({
-  children,
-  ...rest
-}: CollapsibleOverriddenProps) => {
+export const CollapsibleBase = ({ children, ...rest }: CollapsibleProps) => {
   return (
     <CollapsibleBaseUI.Root {...rest}>
       <CollapsibleBaseUI.Panel className="RosenCollapsible-panel">
@@ -38,5 +33,3 @@ export const CollapsibleBase = ({
 CollapsibleBase.displayName = 'Collapsible';
 
 export const Collapsible = Wrap(CollapsibleBase);
-
-export type CollapsibleProps = ComponentProps<typeof Collapsible>;

@@ -1,6 +1,6 @@
-import { ComponentProps, useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
-import { Icon, IconButton, IconOverriddenProps } from '@/components';
+import { Icon, IconButton, IconProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -13,10 +13,10 @@ export type CopyButtonOwnProps = {
   /**
    * Icons to use for each status.
    */
-  icons?: Record<CopyButtonStatus, IconOverriddenProps['name']>;
+  icons?: Record<CopyButtonStatus, IconProps['name']>;
 
   slots?: {
-    icon?: IconOverriddenProps;
+    icon?: IconProps;
   };
 
   /**
@@ -30,7 +30,7 @@ export type CopyButtonBaseProps = ElementBaseProps<
   CopyButtonOwnProps
 >;
 
-export type CopyButtonOverriddenProps = OverridableType<
+export type CopyButtonProps = OverridableType<
   CopyButtonBaseProps,
   CopyButtonOverrides,
   never
@@ -44,7 +44,7 @@ export const CopyButtonBase = ({
   slots,
   value,
   ...rest
-}: CopyButtonOverriddenProps) => {
+}: CopyButtonProps) => {
   const [status, setStatus] = useState<CopyButtonStatus>('idle');
 
   const icon = useMemo(() => {
@@ -89,5 +89,3 @@ export const CopyButtonBase = ({
 CopyButtonBase.displayName = 'CopyButton';
 
 export const CopyButton = Wrap(CopyButtonBase);
-
-export type CopyButtonProps = ComponentProps<typeof CopyButton>;

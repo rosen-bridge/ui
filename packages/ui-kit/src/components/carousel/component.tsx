@@ -1,5 +1,3 @@
-import { ComponentProps } from 'react';
-
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -14,16 +12,13 @@ export type CarouselOwnProps = {};
 
 export type CarouselBaseProps = ElementBaseProps<'div', CarouselOwnProps>;
 
-export type CarouselOverriddenProps = OverridableType<
+export type CarouselProps = OverridableType<
   CarouselBaseProps,
   CarouselOverrides,
   never
 >;
 
-export const CarouselBase = ({
-  children,
-  ...rest
-}: CarouselOverriddenProps) => {
+export const CarouselBase = ({ children, ...rest }: CarouselProps) => {
   const api = useCarousel();
   return (
     <div {...rest} ref={api.ref}>
@@ -35,5 +30,3 @@ export const CarouselBase = ({
 CarouselBase.displayName = 'Carousel';
 
 export const Carousel = Wrap(CarouselBase);
-
-export type CarouselProps = ComponentProps<typeof Carousel>;

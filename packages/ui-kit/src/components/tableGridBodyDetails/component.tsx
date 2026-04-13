@@ -1,6 +1,4 @@
-import { ComponentProps } from 'react';
-
-import { Collapsible, CollapsibleOverriddenProps } from '@/components';
+import { Collapsible, CollapsibleProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -9,14 +7,14 @@ import './styles.scss';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TableGridBodyDetailsOverrides {}
 
-export type TableGridBodyDetailsOwnProps = CollapsibleOverriddenProps & {};
+export type TableGridBodyDetailsOwnProps = CollapsibleProps & {};
 
 export type TableGridBodyDetailsBaseProps = ElementBaseProps<
   typeof Collapsible,
   TableGridBodyDetailsOwnProps
 >;
 
-export type TableGridBodyDetailsOverriddenProps = OverridableType<
+export type TableGridBodyDetailsProps = OverridableType<
   TableGridBodyDetailsBaseProps,
   TableGridBodyDetailsOverrides,
   never
@@ -25,7 +23,7 @@ export type TableGridBodyDetailsOverriddenProps = OverridableType<
 export const TableGridBodyDetailsBase = ({
   children,
   ...rest
-}: TableGridBodyDetailsOverriddenProps) => {
+}: TableGridBodyDetailsProps) => {
   return (
     <Collapsible {...rest}>
       <div className="RosenTableGridBodyDetails-content">{children}</div>
@@ -36,7 +34,3 @@ export const TableGridBodyDetailsBase = ({
 TableGridBodyDetailsBase.displayName = 'TableGridBodyDetails';
 
 export const TableGridBodyDetails = Wrap(TableGridBodyDetailsBase);
-
-export type TableGridBodyDetailsProps = ComponentProps<
-  typeof TableGridBodyDetails
->;

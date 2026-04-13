@@ -1,6 +1,4 @@
-import { ComponentProps } from 'react';
-
-import { Icon, IconButton, IconOverriddenProps } from '@/components';
+import { Icon, IconButton, IconProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { useIsDarkMode, useThemeToggler } from '@/hooks';
 import { OverridableType } from '@/types';
@@ -10,8 +8,8 @@ export interface ThemeToggleButtonOverrides {}
 
 export type ThemeToggleButtonOwnProps = {
   slots?: {
-    darkIcon?: IconOverriddenProps;
-    lightIcon?: IconOverriddenProps;
+    darkIcon?: IconProps;
+    lightIcon?: IconProps;
   };
 };
 
@@ -20,7 +18,7 @@ export type ThemeToggleButtonBaseProps = ElementBaseProps<
   ThemeToggleButtonOwnProps
 >;
 
-export type ThemeToggleButtonOverriddenProps = OverridableType<
+export type ThemeToggleButtonProps = OverridableType<
   ThemeToggleButtonBaseProps,
   ThemeToggleButtonOverrides,
   never
@@ -29,7 +27,7 @@ export type ThemeToggleButtonOverriddenProps = OverridableType<
 export const ThemeToggleButtonBase = ({
   slots,
   ...rest
-}: ThemeToggleButtonOverriddenProps) => {
+}: ThemeToggleButtonProps) => {
   const isDarkMode = useIsDarkMode();
 
   const themeToggler = useThemeToggler();
@@ -48,5 +46,3 @@ export const ThemeToggleButtonBase = ({
 ThemeToggleButtonBase.displayName = 'ThemeToggleButton';
 
 export const ThemeToggleButton = Wrap(ThemeToggleButtonBase);
-
-export type ThemeToggleButtonProps = ComponentProps<typeof ThemeToggleButton>;
