@@ -159,6 +159,13 @@ export const Picker = ({
     [indexSelected, options, query, value, apply, handleClick, onSelect],
   );
 
+  const setItemRef = useCallback(
+    (index: number) => (el: HTMLDivElement | null) => {
+      itemRefs.current[index] = el;
+    },
+    [],
+  );
+
   useEffect(() => {
     setIndexSelected(-1);
   }, [open, query]);
@@ -212,7 +219,7 @@ export const Picker = ({
                 secondaryAction={post}
               >
                 <ListItemButton
-                  ref={(el) => (itemRefs.current[index] = el)}
+                  ref={setItemRef(index)}
                   selected={indexSelected === index}
                   onClick={() => handleClick(option)}
                 >
