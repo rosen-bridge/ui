@@ -150,7 +150,7 @@ describe('bridgeAmountMetric', () => {
   });
 
   /**
-   * @target Should skip events without token prices
+   * @target Should throw error when token price is missing
    * @dependencies
    * - database
    * - BridgeAmountMetricAction
@@ -160,12 +160,11 @@ describe('bridgeAmountMetric', () => {
    * - Insert events for ergo (has price) and cardano (no price)
    * - Run bridgeAmountMetric
    * @expected
-   * - Only ergo event is processed (2.5 USD)
-   * - Cardano event is skipped
-   * - Total metric = 2.5
+   * - No metrics are saved for the day with missing price
+   * - No bridge amount records are saved for the problematic day
    */
-  it('should skip events without token prices', async () => {
-    const testData = bridgeMetricTestData.skipEventsWithoutPrices;
+  it('should throw error when token price is missing', async () => {
+    const testData = bridgeMetricTestData.missingTokenPrice;
 
     await blockRepo.insert(testData.blockRepo);
     await tokenRepo.insert(testData.tokenRepo);
@@ -177,28 +176,10 @@ describe('bridgeAmountMetric', () => {
     const metric = await metricRepo.findOne({
       where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
     });
-    expect(metric?.value).toBe(
-      testData.expectedResults.totalBridgeAmountMetricValue,
-    );
+    expect(metric).toBeNull();
 
-    const actualBridgeAmount = await bridgeAmountRepo.find({
-      select: [
-        'fromChain',
-        'amount',
-        'day',
-        'week',
-        'month',
-        'year',
-        'lastProcessedHeight',
-      ],
-    });
-
-    expect(actualBridgeAmount).toHaveLength(
-      testData.expectedResults.bridgeAmountRecords.length,
-    );
-    expect(actualBridgeAmount).toEqual(
-      testData.expectedResults.bridgeAmountRecords,
-    );
+    const actualBridgeAmount = await bridgeAmountRepo.find();
+    expect(actualBridgeAmount).toHaveLength(0);
   });
 
   /**

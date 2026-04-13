@@ -40,8 +40,10 @@ export const calculateBridgeFees = async (
       e.timestamp, // ignoring exact price timestamp for simplicity
     );
     if (tokenUsdPrice === undefined) {
-      logger.debug(`Skipping event: missing price for token ${e.tokenId}`);
-      continue;
+      logger.warn(
+        `Cannot calculate bridge fee: missing price for token ${e.tokenId} at timestamp ${e.timestamp}`,
+      );
+      throw new Error(`Missing token price for token ${e.tokenId}`);
     }
 
     const tokenUsdPriceString = scientificToString(tokenUsdPrice);

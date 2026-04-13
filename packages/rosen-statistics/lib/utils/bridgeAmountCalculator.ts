@@ -40,8 +40,10 @@ export const calculateBridgeAmount = async (
       e.timestamp, // ignoring exact price timestamp for simplicity
     );
     if (tokenUsdPrice === undefined) {
-      logger.debug(`Skipping event: missing price for token ${e.tokenId}`);
-      continue;
+      logger.warn(
+        `Cannot calculate bridge amount: missing price for token ${e.tokenId} at timestamp ${e.timestamp}`,
+      );
+      throw new Error(`Missing token price for token ${e.tokenId}`);
     }
 
     const tokenUsdPriceString = scientificToString(tokenUsdPrice);
@@ -51,7 +53,7 @@ export const calculateBridgeAmount = async (
       tokenUsdPriceDecimals,
     );
 
-    // Calculate USD value: bridgeAMount (token decimals) * tokenPrice (price decimals)
+    // Calculate USD value: bridgeAmount (token decimals) * tokenPrice (price decimals)
     // Result decimals = token decimals + price decimals
     const rawUsdValue = BigInt(e.bridgeAmount) * BigInt(tokenUsdPriceRaw);
     const usdValueDecimals = e.decimal + tokenUsdPriceDecimals;
