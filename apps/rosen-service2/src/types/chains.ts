@@ -5,6 +5,7 @@ import { configs } from '../configs';
 export type ChainChoices = (typeof NETWORKS_KEYS)[number];
 
 export type ChainsKeys = keyof (typeof configs)['chains'];
+export type ChainsWithScanner = Exclude<ChainsKeys, 'bitcoin-runes'>;
 
 export interface ChainConfigs {
   addresses: {
