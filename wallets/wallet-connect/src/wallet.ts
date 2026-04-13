@@ -53,19 +53,19 @@ const createModal = (projectId: string) => {
   modal.subscribeEvents((event) => {
     switch (event.data.event) {
       case 'CONNECT_ERROR':
-        connected.reject();
+        connected?.reject();
         break;
       case 'CONNECT_SUCCESS':
-        connected.resolve();
+        connected?.resolve();
         break;
       case 'INITIALIZE':
         initialized.resolve();
         break;
       case 'MODAL_CLOSE':
         if (modal!.getIsConnectedState()) {
-          connected.resolve();
+          connected?.resolve();
         } else {
-          connected.reject();
+          connected?.reject();
         }
         break;
     }
