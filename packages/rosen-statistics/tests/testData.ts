@@ -1473,9 +1473,9 @@ export const bridgeFeeMetricTestData = {
   },
 
   /**
-   * Scenario: Skip events without token prices
+   * Scenario: Should throw error when token price is missing
    */
-  skipEventsWithoutPrices: {
+  missingTokenPrice: {
     blockRepo: [
       createBlock({
         hash: 'block1',
@@ -1490,14 +1490,6 @@ export const bridgeFeeMetricTestData = {
         height: 200,
         timestamp: 1704153599,
         day: 2,
-        month: 1,
-        year: 2024,
-      }),
-      createBlock({
-        hash: 'block3',
-        height: 300,
-        timestamp: 1704400199, // Jan 4, 2024
-        day: 4,
         month: 1,
         year: 2024,
       }),
@@ -1533,27 +1525,13 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'cardano',
-        bridgeFee: '2000000', // No price - should be skipped
+        bridgeFee: '2000000', // No price - should cause error
         sourceChainTokenId: 'token-2',
         spendBlock: 'block2',
         spendHeight: 200,
         result: 'successful',
       }),
     ],
-    expectedResults: {
-      bridgeFeeRecords: [
-        {
-          fromChain: 'ergo',
-          amount: 2.5,
-          day: 1,
-          week: 2817,
-          month: 1,
-          year: 2024,
-          lastProcessedHeight: 100,
-        },
-      ],
-      totalMetricValue: '2.5',
-    },
   },
 
   /**
