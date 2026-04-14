@@ -74,6 +74,12 @@ export abstract class Wallet<Config extends WalletConfig = WalletConfig> {
     }
   };
 
+  isInitialized: boolean = false;
+
+  initialize = async (): Promise<void> => {
+    this.isInitialized = true;
+  };
+
   switchChain = async (chain: Network, silent?: boolean): Promise<void> => {
     this.requireAvailable();
 

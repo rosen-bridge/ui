@@ -1,5 +1,4 @@
-import { AppKit, Provider, createAppKit } from '@reown/appkit';
-import { EthersAdapter } from '@reown/appkit-adapter-ethers';
+import type { AppKit, Provider } from '@reown/appkit';
 import { mainnet, bsc } from '@reown/appkit/networks';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
@@ -35,10 +34,20 @@ const createDeferred = () => {
   return { promise, resolve, reject };
 };
 
-const createModal = (projectId: string) => {
+const createModal = async (projectId: string) => {
   if (modal) return;
 
+  if (initialized?.promise) {
+    return await initialized.promise;
+  }
+
   initialized = createDeferred();
+
+  /**
+   * Lazy-load wallet resource to reduce initial bundle size and improve app startup performance
+   */
+  const { createAppKit } = await import('@reown/appkit');
+  const { EthersAdapter } = await import('@reown/appkit-adapter-ethers');
 
   modal = createAppKit({
     networks: [mainnet, bsc],
@@ -107,9 +116,11 @@ export class WalletConnect<
   }
 
   initialize = async (): Promise<void> => {
-    createModal(this.config.projectId);
+    await createModal(this.config.projectId);
 
     await initialized.promise;
+
+    this.isInitialized = true;
   };
 
   performConnect = async (): Promise<void> => {
