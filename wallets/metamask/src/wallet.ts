@@ -31,12 +31,23 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
-  private api = new MetaMaskSDK({
-    dappMetadata: {
-      name: 'Rosen Bridge',
-    },
-    enableAnalytics: false,
-  });
+  private _api?: MetaMaskSDK;
+
+  private get api(): MetaMaskSDK {
+    if (typeof window === 'undefined') {
+      throw new InteractionError(this.name);
+    }
+
+    this._api ||= new MetaMaskSDK({
+      dappMetadata: {
+        name: 'Rosen Bridge',
+        url: window.location.origin,
+      },
+      enableAnalytics: false,
+    });
+
+    return this._api;
+  }
 
   get currentChain(): Network {
     const chain = Object.values(NETWORKS).find(

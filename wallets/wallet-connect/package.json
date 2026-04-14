@@ -20,8 +20,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@reown/appkit": "^1.7.5",
-    "@reown/appkit-adapter-ethers": "^1.7.11",
+    "@reown/appkit": "^1.8.19",
+    "@reown/appkit-adapter-ethers": "^1.8.19",
     "@rosen-bridge/tokens": "^6.0.0",
     "@rosen-network/binance": "^0.4.5",
     "@rosen-network/ethereum": "^0.4.5",
