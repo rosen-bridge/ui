@@ -7,7 +7,7 @@ import {
   AlertCard,
   AlertProps,
   ApiKeyModalWarning,
-  Link,
+  Id,
   Stack,
   SubmitButton,
   Typography,
@@ -111,12 +111,11 @@ const LockForm = () => {
           message: (
             <>
               Lock operation is in progress. Wait for tx [
-              <Link
-                target="_blank"
+              <Id
+                id={response.txId}
+                indicator="middle"
                 href={getTxURL(NETWORKS.ergo.key, response.txId)}
-              >
-                {response.txId}
-              </Link>
+              />
               ] to be confirmed by some blocks, so your new permits will be
               activated.
             </>
