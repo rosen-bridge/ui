@@ -382,4 +382,52 @@ describe('bridgeFeeMetric', () => {
     );
     expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
   });
+
+  /**
+   * @target Should store events in different days when timestamp crosses midnight
+   * @dependencies
+   * - database
+   * - BridgeFeeMetricAction
+   * - TokenPriceAction
+   * - calculateBridgeFees
+   * @scenario
+   * - First event: noon of day 1
+   * - Second event: midnight of day 2
+   * - Run bridgeFeeMetric
+   * @expected
+   * - Creates TWO separate bridge fee records (one for day 1, one for day 2)
+   * - Even though events are close in time, they belong to different days
+   */
+  it('should store events in different days when timestamp crosses midnight', async () => {
+    const testData = bridgeFeeMetricTestData.crossMidnight;
+
+    await blockRepo.insert(testData.blockRepo);
+    await tokenRepo.insert(testData.tokenRepo);
+    await tokenPriceRepo.insert(testData.tokenPriceRepo);
+    await eventTriggerRepo.insert(testData.eventTriggerRepo);
+
+    await bridgeFeeMetric(dataSource, logger);
+
+    const metric = await metricRepo.findOne({
+      where: { key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD },
+    });
+    expect(metric?.value).toBe(testData.expectedResults.totalMetricValue);
+
+    const actualBridgeFees = await bridgeFeeRepo.find({
+      select: [
+        'fromChain',
+        'amount',
+        'day',
+        'week',
+        'month',
+        'year',
+        'lastProcessedHeight',
+      ],
+    });
+
+    expect(actualBridgeFees).toHaveLength(
+      testData.expectedResults.bridgeFeeRecords.length,
+    );
+    expect(actualBridgeFees).toEqual(testData.expectedResults.bridgeFeeRecords);
+  });
 });

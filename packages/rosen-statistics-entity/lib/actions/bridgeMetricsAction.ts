@@ -109,16 +109,16 @@ export class BridgeMetricsAction {
       )
       .innerJoin(TokenEntity, 'te', `te.id = et.sourceChainTokenId`)
       .select([
-        'et.fromChain as fromChain',
-        'et.bridgeFee as bridgeFee',
-        'et.sourceChainTokenId as tokenId',
-        'et.sourceChainHeight as eventHeight',
-        'be.timestamp as timestamp',
-        'be.height as height',
-        'be.day as day',
-        'be.month as month',
-        'be.year as year',
-        'te.significantDecimal as decimal',
+        'et.fromChain as "fromChain"',
+        'et.bridgeFee as "bridgeFee"',
+        'et.sourceChainTokenId as "tokenId"',
+        'et.sourceChainHeight as "eventHeight"',
+        'be.timestamp as "timestamp"',
+        'be.height as "height"',
+        'be.day as "day"',
+        'be.month as "month"',
+        'be.year as "year"',
+        'te.significantDecimal as "decimal"',
       ])
       .where('et.result = :status', { status: 'successful' })
       .andWhere('be.timestamp >= :start AND be.timestamp < :end', {

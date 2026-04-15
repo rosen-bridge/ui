@@ -31,7 +31,7 @@ export const bridgeFeeMetric = async (
 
   const bridgeFeeAction = new BridgeMetricsAction(
     dataSource,
-    logger.child('bridgeFeeMetricAction'),
+    logger.child('BridgeMetricsAction'),
   );
   const metricAction = new MetricAction(
     dataSource,
@@ -65,21 +65,35 @@ export const bridgeFeeMetric = async (
       getNonDecimalString(lastTotalUsdValue, lastTotalUsdDecimals),
     );
 
-    let startTs = lastProcessedRecord
-      ? Math.floor(
+    let startTs: number;
+    if (!lastProcessedRecord) {
+      logger.debug(
+        'No previous bridge fee records found, starting from first event timestamp',
+      );
+      const firstEventTs = await bridgeFeeAction.getFirstEventTimestamp();
+      if (!firstEventTs) {
+        logger.debug(
+          'No events found in database, skipping bridge fee metric calculation',
+        );
+        return;
+      }
+      const startDate = new Date(firstEventTs * 1000);
+      startTs = Math.floor(
+        new Date(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate(),
+        ).getTime() / 1000,
+      );
+    } else {
+      startTs =
+        Math.floor(
           new Date(
             lastProcessedRecord.year,
             lastProcessedRecord.month - 1,
             lastProcessedRecord.day,
           ).getTime() / 1000,
-        ) + DAY_IN_SECONDS
-      : await bridgeFeeAction.getFirstEventTimestamp();
-
-    if (!startTs) {
-      logger.debug(
-        'No events found in database, skipping bridge fee metric calculation',
-      );
-      return;
+        ) + DAY_IN_SECONDS;
     }
 
     const yesterdayTs =
