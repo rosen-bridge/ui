@@ -31,7 +31,7 @@ export const bridgeFeeMetric = async (
 
   const bridgeFeeAction = new BridgeMetricsAction(
     dataSource,
-    logger.child('BridgeMetricsAction'),
+    logger.child('bridgeMetricsAction'),
   );
   const metricAction = new MetricAction(
     dataSource,
