@@ -2147,4 +2147,114 @@ export const bridgeMetricTestData = {
       totalBridgeAmountMetricValue: '50008.5', // 50000 + 3.0 + 2.5 + 3.0
     },
   },
+
+  /**
+   * Scenario: Store events in different days when timestamp crosses midnight
+   * First event: noon of day 1 (12:00)
+   * Second event: midnight of day 2 (00:00)
+   * Expected: Two separate records for different days
+   */
+  crossMidnight: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704110400, // Jan 1, 2024, 12:00:00 (noon)
+        day: 1,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704153600, // Jan 2, 2024, 00:00:00 (midnight)
+        day: 2,
+        month: 1,
+        year: 2024,
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 400,
+        timestamp: 1704419799, // Jan 5, 2024
+        day: 5,
+        month: 1,
+        year: 2024,
+      }),
+    ],
+    tokenRepo: [
+      createToken({
+        id: 'token-1',
+        decimal: 8,
+        significantDecimal: 8,
+        chain: 'ergo',
+      }),
+    ],
+    tokenPriceRepo: [createTokenPrice('token-1', 2.5, 1704110100)],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        amount: '100000000', // 1 token * 2.5 = 2.5 USD
+        bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        amount: '200000000', // 2 tokens * 2.5 = 5.0 USD
+        bridgeFee: '200000000', // 2 tokens * 2.5 = 5.0 USD
+        sourceChainTokenId: 'token-1',
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+    ],
+    expectedResults: {
+      bridgeFeeRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5, // first event in day 1
+          day: 1,
+          week: Math.floor(1704110400 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 5.0, // second event in day 2
+          day: 2,
+          week: Math.floor(1704153600 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5, // first event in day 1
+          day: 1,
+          week: Math.floor(1704110400 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 5.0, // second event in day 2
+          day: 2,
+          week: Math.floor(1704153600 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      totalBridgeFeeMetricValue: '7.5', // 2.5 + 5.0
+      totalBridgeAmountMetricValue: '7.5', // 2.5 + 5.0
+    },
+  },
 };
