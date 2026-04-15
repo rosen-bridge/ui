@@ -106,15 +106,8 @@ export class UserEventsMetricService extends PeriodicTaskService {
 
     tasks.push({
       fn: async () => {
-        try {
-          this.logger.info(`Running ${this.name} job`);
-          await this.userEventsCalculation();
-        } catch (err) {
-          this.logger.error(`${this.name} job failed: ${err}`);
-          if (err instanceof Error && err.stack) {
-            this.logger.debug(err.stack);
-          }
-        }
+        this.logger.info(`Running ${this.name} job`);
+        await this.userEventsCalculation();
       },
       interval: configs.statistics.userEventsMetric.interval * 1000,
     });
