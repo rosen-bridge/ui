@@ -50,7 +50,7 @@ export class UserEventMetricAction {
       `Fetching aggregated events after height ${lastProcessedHeight} until height ${untilProcessedHeight}`,
     );
 
-    const aggregated = await this.eventTriggerRepo
+    const rawResult = await this.eventTriggerRepo
       .createQueryBuilder('et')
       .select('et.fromAddress', 'fromAddress')
       .addSelect('et.toAddress', 'toAddress')
@@ -66,8 +66,13 @@ export class UserEventMetricAction {
       .groupBy('et.fromAddress')
       .addGroupBy('et.toAddress')
       .addGroupBy('et.fromChain')
-      .addGroupBy('toChain')
-      .getRawMany<AggregatedUserEvents>();
+      .addGroupBy('et.toChain')
+      .getRawMany();
+
+    const aggregated = rawResult.map((item) => ({
+      ...item,
+      count: Number(item.count),
+    })) as AggregatedUserEvents[];
 
     this.logger.debug(`Found ${aggregated.length} aggregated events`);
     return aggregated;
