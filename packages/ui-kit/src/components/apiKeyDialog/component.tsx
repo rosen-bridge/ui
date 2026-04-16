@@ -17,7 +17,7 @@ import {
   Tooltip,
 } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-import { useApiKey, useSnackbar } from '@/hooks';
+import { useApiKey, useToast } from '@/hooks';
 import { OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -48,7 +48,7 @@ export const ApiKeyDialogBase = ({
 }: ApiKeyDialogProps) => {
   const { apiKey, setApiKey } = useApiKey();
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const [showKey, setShowKey] = useState(false);
 
@@ -63,7 +63,10 @@ export const ApiKeyDialogBase = ({
   const handleSetKey = (values: FormValues) => {
     setApiKey(values.apiKey);
     onClose?.();
-    openSnackbar('API key is set!', 'success');
+    toast.add({
+      type: 'success',
+      description: 'API key is set!',
+    })
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {

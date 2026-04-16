@@ -9,7 +9,7 @@ import {
   useTransition,
 } from 'react';
 
-import { useSnackbar } from '@rosen-bridge/ui-kit';
+import { useToast } from '@rosen-bridge/ui-kit';
 import { RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 
@@ -53,7 +53,7 @@ export const TransactionFeesContext =
 export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const { selectedSource } = useNetwork();
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const tokenMap = useTokenMap();
 
@@ -165,17 +165,20 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
           parsedData.fees.bridgeFee !== parsedData.nextFees.bridgeFee ||
           parsedData.fees.networkFee !== parsedData.nextFees.networkFee
         ) {
-          openSnackbar(
-            'Fees might change depending on the height of mining the transactions.',
-            'warning',
-          );
+          toast.add({
+            type: 'warning',
+            description: 'Fees might change depending on the height of mining the transactions.',
+          })
         }
 
         setFeesInfo({ tokenId, ...parsedData.fees });
       } catch (error) {
         setFeesInfo({ tokenId });
 
-        openSnackbar('something went wrong! please try again', 'error');
+        toast.add({
+          type: 'error',
+          description: 'something went wrong! please try again',
+        })
 
         setError(error);
       }
@@ -186,7 +189,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
     sourceValue,
     targetValue,
     tokenId,
-    openSnackbar,
+    toast.add,
   ]);
 
   useEffect(() => {

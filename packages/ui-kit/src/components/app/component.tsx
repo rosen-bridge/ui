@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
-import { AppSnackbar, CssBaseline } from '@/components';
-import { SnackbarProvider } from '@/contexts';
+import { CssBaseline } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { useIsMobile } from '@/hooks';
-import { ThemeProvider, ThemeProviderProps } from '@/Providers';
+import { ThemeProvider, ThemeProviderProps, ToastProvider } from '@/Providers';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -30,7 +29,6 @@ const Content = ({ children, sidebar, ...rest }: AppProps) => {
       <div className="RosenApp-main">
         <div className="RosenApp-paper">{children}</div>
       </div>
-      <AppSnackbar />
     </div>
   );
 };
@@ -40,9 +38,9 @@ export const AppBase = (props: AppProps) => {
     <ThemeProvider theme={props.theme}>
       <>
         <CssBaseline />
-        <SnackbarProvider>
+        <ToastProvider>
           <Content {...props} />
-        </SnackbarProvider>
+        </ToastProvider>
       </>
     </ThemeProvider>
   );
