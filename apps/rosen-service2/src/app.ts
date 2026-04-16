@@ -4,6 +4,7 @@ import { AssetAggregatorService } from 'services/assetAggregator';
 import { EventCountMetricService } from 'services/eventCountMetric';
 import { GeneralMetricsService } from 'services/generalMetrics';
 import { LockedAssetsMetricService } from 'services/lockedAssetsMetric';
+import { UserEventsMetricService } from 'services/userEventsMetric';
 
 import dataSource from './data-source';
 import { AssetDataAdapterService } from './services/assetDataAdapters';
@@ -73,6 +74,13 @@ const startApp = async () => {
   );
   serviceManager.register(EventCountMetricService.getInstance());
   logger.debug('Event count metrics service registered to the service manager');
+
+  logger.debug('Initializing user events metrics service');
+  UserEventsMetricService.init(
+    DefaultLogger.getInstance().child('userEventsMetricService'),
+  );
+  serviceManager.register(UserEventsMetricService.getInstance());
+  logger.debug('User events metrics service registered to the service manager');
 
   logger.debug('Initializing health-check service');
   HealthService.init(DefaultLogger.getInstance().child('healthCheckService'));
