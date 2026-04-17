@@ -332,8 +332,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
                   stringSerializer(await adapter.fetch()),
                 );
               },
-        interval:
-          configs.chains[adapter.chain as keyof Chains].scanInterval * 1000,
+        interval: configs.dataAggregator.interval * 1000,
       });
     }
     return tasks;

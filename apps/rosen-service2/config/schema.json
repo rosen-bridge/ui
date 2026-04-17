@@ -330,6 +330,22 @@
             ]
           }
         }
+      },
+      "userEventsMetric": {
+        "type": "object",
+        "children": {
+          "interval": {
+            "type": "number",
+            "default": 86400,
+            "description": "user events metrics update interval threshold in seconds",
+            "validations": [
+              {
+                "required": true,
+                "error": "user events metrics update interval must be specified (in seconds)"
+              }
+            ]
+          }
+        }
       }
     }
   },
@@ -866,17 +882,6 @@
               }
             ]
           },
-          "scanInterval": {
-            "type": "number",
-            "default": 600,
-            "description": "bitcoin scanInterval threshold in seconds",
-            "validations": [
-              {
-                "required": true,
-                "error": "bitcoin scanInterval must be specified (in seconds)"
-              }
-            ]
-          },
           "adapter": {
             "type": "object",
             "children": {
@@ -1322,7 +1327,7 @@
     "children": {
       "tokens": {
         "type": "string",
-        "default": "config/rosen/tokensMap.json",
+        "default": "config/tokensMap.json",
         "validations": [
           {
             "required": true,
@@ -1332,7 +1337,7 @@
       },
       "contracts": {
         "type": "string",
-        "default": "config/rosen",
+        "default": "config/contracts.json",
         "validations": [
           {
             "required": true,

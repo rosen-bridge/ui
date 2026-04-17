@@ -16,11 +16,13 @@ healthCheck:
 dataAggregator:
   interval: 60
 statistics:
-  eventCountMetrics:
+  userEventsMetric:
     interval: 86400
   lockedAssetsMetrics:
     interval: 86400
   generalMetrics:
+    interval: 86400
+  eventCountMetrics:
     interval: 86400
 chains:
   ergo:
@@ -44,7 +46,6 @@ chains:
     scanInterval: 600
   bitcoin-runes:
     active: false
-    scanInterval: 600
     unisatUrl: https://open-api.unisat.io
   doge:
     active: false

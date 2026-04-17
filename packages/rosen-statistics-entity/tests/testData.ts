@@ -1,7 +1,16 @@
+import { BlockEntity, PROCEED } from '@rosen-bridge/abstract-scanner';
 import { DeepPartial } from '@rosen-bridge/extended-typeorm';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
+import { TokenEntity } from '@rosen-ui/asset-calculator';
 
-import { METRIC_KEYS, EventCountStatus } from '../lib';
+import {
+  METRIC_KEYS,
+  EventCountStatus,
+  WatcherCountType,
+  BridgeFeeEntity,
+  BridgeMetricRecord,
+  MetricEntity,
+} from '../lib';
 
 /**
  * Helper function to create minimal EventTriggerEntity for testing
@@ -33,6 +42,25 @@ const createEventTrigger = (
   WIDsCount: 1,
   WIDsHash: 'hash1',
   serialized: '{}',
+  ...overrides,
+});
+
+/**
+ * Helper function to create minimal BlockEntity for testing
+ */
+const createBlock = (
+  overrides: Partial<BlockEntity>,
+): DeepPartial<BlockEntity> => ({
+  id: Math.floor(Math.random() * 10000),
+  height: 100,
+  hash: 'block1',
+  parentHash: `parent-${Math.random()}`,
+  status: PROCEED,
+  scanner: 'ergo',
+  timestamp: 1704153600,
+  year: 2024,
+  month: 1,
+  day: 2,
   ...overrides,
 });
 
@@ -1031,5 +1059,785 @@ export const userEventMetricActionTestData = {
       },
     ],
     expectedMetricValue: '1',
+  },
+};
+
+export const watcherCountTestData = {
+  ergoNetwork: {
+    network: 'ergo',
+    count: 50,
+  },
+
+  cardanoNetwork: {
+    network: 'cardano',
+    count: 30,
+  },
+
+  ethereumNetwork: {
+    network: 'ethereum',
+    count: 25,
+  },
+
+  binanceNetwork: {
+    network: 'binance',
+    count: 15,
+  },
+
+  bitcoinNetwork: {
+    network: 'bitcoin',
+    count: 10,
+  },
+};
+
+export const upsertWatcherCountScenarios = {
+  insertNew: {
+    upsertData: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ] as WatcherCountType[],
+    expectedCount: 1,
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+  },
+
+  updateExisting: {
+    initialData: [watcherCountTestData.ergoNetwork],
+    upsertData: [
+      {
+        network: 'ergo',
+        count: 75,
+      },
+    ] as WatcherCountType[],
+    expectedCount: 1,
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 75,
+      },
+    ],
+  },
+
+  insertMultipleDifferentNetworks: {
+    initialData: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+    ],
+    upsertData: [
+      {
+        network: 'ethereum',
+        count: 25,
+      },
+    ] as WatcherCountType[],
+    expectedCount: 3,
+    expectedRecords: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+      {
+        network: 'cardano',
+        count: 30,
+      },
+      {
+        network: 'ethereum',
+        count: 25,
+      },
+    ],
+  },
+
+  updateMultipleTimes: {
+    upsertOperations: [
+      {
+        network: 'ergo',
+        count: 10,
+      },
+      {
+        network: 'ergo',
+        count: 25,
+      },
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+    expectedCount: 1,
+    expectedRecord: [
+      {
+        network: 'ergo',
+        count: 50,
+      },
+    ],
+  },
+
+  updateDifferentNetworkKeepsOthers: {
+    initialData: [
+      watcherCountTestData.ergoNetwork,
+      watcherCountTestData.cardanoNetwork,
+      watcherCountTestData.ethereumNetwork,
+    ],
+    upsertData: {
+      network: 'cardano',
+      count: 45,
+    },
+    expectedCount: 3,
+    expectedRecords: [
+      watcherCountTestData.ergoNetwork,
+      {
+        network: 'cardano',
+        count: 45,
+      },
+      watcherCountTestData.ethereumNetwork,
+    ],
+  },
+};
+
+export const bridgeMetricsActionTestData = {
+  /**
+   * Scenario: Get last processed record with multiple records
+   */
+  getLastProcessedHeightMultipleRecords: {
+    bridgeFeeRepo: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 100,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 150,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 4,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 200,
+      },
+    ] as BridgeFeeEntity[],
+    expectedRecord: {
+      fromChain: 'ergo',
+      amount: 15.25,
+      day: 4,
+      week: 1,
+      month: 1,
+      year: 2024,
+      lastProcessedHeight: 200,
+    },
+  },
+
+  /**
+   * Scenario: Get first event timestamp with multiple events
+   */
+  getFirstEventTimestampMultipleEvents: {
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200, // Jan 1, 2024 00:00:00
+        day: 1,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704153600, // Jan 2, 2024 00:00:00
+        day: 2,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704240000, // Jan 3, 2024 00:00:00
+        day: 3,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+    ],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        spendBlock: 'block2',
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        spendBlock: 'block1',
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        spendBlock: 'block3',
+        result: 'successful',
+      }),
+    ],
+    expectedTimestamp: 1704067200, // Earliest: block1 timestamp
+  },
+
+  /**
+   * Scenario: Get events in range with multiple events and token decimals
+   */
+  getEventsInRangeMultipleEvents: {
+    startTs: 1704067200, // Jan 1, 2024
+    endTs: 1704240000, // Jan 3, 2024
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200,
+        day: 1,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block2',
+        height: 200,
+        timestamp: 1704153600,
+        day: 2,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+      createBlock({
+        hash: 'block3',
+        height: 300,
+        timestamp: 1704240000,
+        day: 3,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+    ],
+    tokenRepo: [
+      {
+        id: 'token-1',
+        name: 'Token 1',
+        decimal: 8,
+        significantDecimal: 8,
+        isNative: true,
+        chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-2',
+        name: 'Token 2',
+        decimal: 6,
+        significantDecimal: 6,
+        isNative: false,
+        chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-3',
+        name: 'Token 3',
+        decimal: 18,
+        significantDecimal: 18,
+        isNative: true,
+        chain: 'ethereum',
+        ergoSideTokenId: 'eth-token-1',
+        isResident: false,
+      },
+      {
+        id: 'token-4',
+        name: 'Token 4',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: true,
+        chain: 'bitcoin',
+        ergoSideTokenId: 'btc-token-1',
+        isResident: true,
+      },
+    ] as TokenEntity[],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 1 token with 8 decimals (1 * 10^8)
+        sourceChainTokenId: 'token-1',
+        sourceChainHeight: 50,
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'cardano',
+        bridgeFee: '2000000', // 2 tokens with 6 decimals (2 * 10^6)
+        sourceChainTokenId: 'token-2',
+        sourceChainHeight: 150,
+        spendBlock: 'block2',
+        spendHeight: 200,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ethereum',
+        bridgeFee: '3000000000000000000', // 3 tokens with 18 decimals (3 * 10^18)
+        sourceChainTokenId: 'token-3',
+        sourceChainHeight: 250,
+        spendBlock: 'block3',
+        spendHeight: 300,
+        result: 'fraud', // Should be ignored
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromChain: 'bitcoin',
+        bridgeFee: '1', // 1 token with 0 decimals (1)
+        sourceChainTokenId: 'token-4',
+        sourceChainHeight: 350,
+        spendBlock: 'block3',
+        spendHeight: 400,
+        result: 'successful',
+      }),
+    ],
+    expectedEvents: [
+      {
+        fromChain: 'ergo',
+        bridgeFee: '100000000',
+        tokenId: 'token-1',
+        eventHeight: 50,
+        timestamp: 1704067200,
+        height: 100,
+        day: 1,
+        month: 1,
+        year: 2024,
+        decimal: 8,
+      },
+      {
+        fromChain: 'cardano',
+        bridgeFee: '2000000',
+        tokenId: 'token-2',
+        eventHeight: 150,
+        timestamp: 1704153600,
+        height: 200,
+        day: 2,
+        month: 1,
+        year: 2024,
+        decimal: 6,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Get events in range with missing blocks
+   */
+  getEventsInRangeMissingBlocks: {
+    startTs: 1704067200,
+    endTs: 1704240000,
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200,
+        day: 1,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+    ],
+    tokenRepo: [
+      {
+        id: 'token-1',
+        name: 'Token 1',
+        decimal: 8,
+        significantDecimal: 8,
+        isNative: true,
+        chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
+        isResident: true,
+      },
+    ] as TokenEntity[],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000',
+        sourceChainTokenId: 'token-1',
+        sourceChainHeight: 50,
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'ergo',
+        bridgeFee: '200000000',
+        sourceChainTokenId: 'token-1',
+        sourceChainHeight: 150,
+        spendBlock: '',
+        spendHeight: 200,
+        result: 'fraud', // Should be ignored
+      }),
+    ],
+    expectedEvents: [
+      {
+        fromChain: 'ergo',
+        bridgeFee: '100000000',
+        tokenId: 'token-1',
+        eventHeight: 50,
+        timestamp: 1704067200,
+        height: 100,
+        day: 1,
+        month: 1,
+        year: 2024,
+        decimal: 8,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Get events in range - no events
+   */
+  getEventsInRangeNoEvents: {
+    startTs: 1704240000,
+    endTs: 1704326400,
+    blockRepo: [],
+    eventTriggerRepo: [],
+  },
+
+  /**
+   * Scenario: Get events in range with different token decimals
+   */
+  getEventsInRangeDifferentDecimals: {
+    startTs: 1704067200,
+    endTs: 1704240000,
+    blockRepo: [
+      createBlock({
+        hash: 'block1',
+        height: 100,
+        timestamp: 1704067200,
+        day: 1,
+        month: 1,
+        year: 2024,
+        scanner: 'ergo',
+      }),
+    ],
+    tokenRepo: [
+      {
+        id: 'token-1',
+        name: 'Token 1',
+        decimal: 8,
+        significantDecimal: 8,
+        isNative: true,
+        chain: 'ergo',
+        ergoSideTokenId: 'ergo-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-2',
+        name: 'Token 2',
+        decimal: 6,
+        significantDecimal: 6,
+        isNative: false,
+        chain: 'cardano',
+        ergoSideTokenId: 'cardano-token-1',
+        isResident: true,
+      },
+      {
+        id: 'token-3',
+        name: 'Token 3',
+        decimal: 18,
+        significantDecimal: 18,
+        isNative: true,
+        chain: 'ethereum',
+        ergoSideTokenId: 'eth-token-1',
+        isResident: false,
+      },
+      {
+        id: 'token-4',
+        name: 'Token 4',
+        decimal: 0,
+        significantDecimal: 0,
+        isNative: true,
+        chain: 'bitcoin',
+        ergoSideTokenId: 'btc-token-1',
+        isResident: true,
+      },
+    ] as TokenEntity[],
+    eventTriggerRepo: [
+      createEventTrigger({
+        eventId: 'event1',
+        fromChain: 'ergo',
+        bridgeFee: '100000000', // 1 token with 8 decimals
+        sourceChainTokenId: 'token-1',
+        sourceChainHeight: 50,
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event2',
+        fromChain: 'cardano',
+        bridgeFee: '2000000', // 2 tokens with 6 decimals
+        sourceChainTokenId: 'token-2',
+        sourceChainHeight: 150,
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event3',
+        fromChain: 'ethereum',
+        bridgeFee: '3000000000000000000', // 3 tokens with 18 decimals
+        sourceChainTokenId: 'token-3',
+        sourceChainHeight: 250,
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+      createEventTrigger({
+        eventId: 'event4',
+        fromChain: 'bitcoin',
+        bridgeFee: '5', // 5 tokens with 0 decimals
+        sourceChainTokenId: 'token-4',
+        sourceChainHeight: 350,
+        spendBlock: 'block1',
+        spendHeight: 100,
+        result: 'successful',
+      }),
+    ],
+    expectedEvents: [
+      {
+        fromChain: 'ergo',
+        bridgeFee: '100000000',
+        tokenId: 'token-1',
+        eventHeight: 50,
+        timestamp: 1704067200,
+        height: 100,
+        day: 1,
+        month: 1,
+        year: 2024,
+        decimal: 8,
+      },
+      {
+        fromChain: 'cardano',
+        bridgeFee: '2000000',
+        tokenId: 'token-2',
+        eventHeight: 150,
+        timestamp: 1704067200,
+        height: 100,
+        day: 1,
+        month: 1,
+        year: 2024,
+        decimal: 6,
+      },
+      {
+        fromChain: 'ethereum',
+        bridgeFee: '3000000000000000000',
+        tokenId: 'token-3',
+        eventHeight: 250,
+        timestamp: 1704067200,
+        height: 100,
+        day: 1,
+        month: 1,
+        year: 2024,
+        decimal: 18,
+      },
+      {
+        fromChain: 'bitcoin',
+        bridgeFee: '5',
+        tokenId: 'token-4',
+        eventHeight: 350,
+        timestamp: 1704067200,
+        height: 100,
+        day: 1,
+        month: 1,
+        year: 2024,
+        decimal: 0,
+      },
+    ],
+  },
+
+  /**
+   * Scenario: Upsert bridge fees - new groups
+   */
+  saveBridgeFeesNewGroups: {
+    aggregatedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 120,
+      },
+    ] as BridgeMetricRecord[],
+    totalCount: '31.25',
+    expectedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 120,
+      },
+    ],
+    expectedMetricValue: '31.25',
+  },
+
+  /**
+   * Scenario: Upsert bridge fees - update existing total
+   */
+  saveBridgeFeesUpdateExisting: {
+    aggregatedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 125,
+      },
+    ] as BridgeMetricRecord[],
+    totalCount: '15.25',
+    existingBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+    ] as BridgeFeeEntity[],
+    existingMetric: {
+      key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+      value: '10.5',
+      updatedAt: 1000,
+    } as MetricEntity,
+    expectedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 125,
+      },
+    ],
+    expectedMetricValue: '15.25',
+  },
+
+  /**
+   * Scenario: Upsert bridge fees - multiple groups with different dates
+   */
+  saveBridgeFeesDifferentDates: {
+    aggregatedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 210,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 4,
+        week: 2,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 310,
+      },
+    ] as BridgeMetricRecord[],
+    totalCount: '46.5',
+    expectedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 210,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 4,
+        week: 2,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 310,
+      },
+    ],
+    expectedMetricValue: '46.5',
   },
 };
