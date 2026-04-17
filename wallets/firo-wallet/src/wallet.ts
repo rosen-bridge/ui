@@ -29,7 +29,7 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
   }
 
   performConnect = async (): Promise<void> => {
-    if (await this.hasConnection()) return;
+    if (await this.isConnected()) return;
     await this.api.connect();
   };
 
