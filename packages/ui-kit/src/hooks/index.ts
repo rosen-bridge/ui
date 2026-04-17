@@ -5,7 +5,6 @@ export * from './useCurrentBreakpoint';
 export * from './useDisclosure';
 export * from './useFramework';
 export * from './useIsDarkMode';
-export * from './useIsMobile';
 export * from './useMediaQuery';
 export * from './useResponsiveValue';
 export * from './useTablePagination';
