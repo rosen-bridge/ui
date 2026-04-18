@@ -19,6 +19,7 @@
 .RosenPagination-info {
   display: flex;
   align-items: center;
+  flex: 0 0 auto;
 
   .pagination-text::before {
     content: "Showing ";
@@ -39,31 +40,52 @@
   }
 }
 
+
 .RosenPagination-pages {
   display: flex;
   flex: 1;
   justify-content: center;
+  flex-direction: row;
+  gap: calc(var(--rosen-spacing) * 1);
 
-  .MuiPagination-ul {
+  container-type: inline-size;
+
+  .Pages {
     display: flex;
-    flex-direction: row;
+    gap: calc(var(--rosen-spacing) * 1);
+
+    button {
+      //TODO
+      width: 32px;
+      height: 32px;
+      border: none;
+      border-radius: 50%;
+      background-color: transparent;
+      cursor: pointer;
+
+      transition: background-color 0.25s ease, transform 0.15s ease;
+      will-change: transform;
+    }
+
+    button[data-type="active"] {
+      background-color: var(--rosen-palette-primary);
+
+      p {
+        color: var(--rosen-palette-primary-light);
+      }
+    }
   }
 
-  .MuiPaginationItem-root {
-    font-size: 14px;
-  }
-
-  @container (max-width: 644px) {
+  @container (max-width: 863px) {
     justify-content: flex-end;
-
-    .MuiPagination-ul {
-      justify-content: space-between;
-    }
-
-    li:not(:first-of-type):not(:last-child) {
-      display: none;
+    @container (max-width: 450px) {
+      .Pages {
+        display: none;
+      }
     }
   }
+
+
 }
 
 .RosenPagination-actions {
@@ -72,6 +94,7 @@
   justify-content: space-between;
   gap: var(--rosen-spacing);
   position: relative;
+  flex: 0 0 auto;
 
   .RosenPagination-divider {
     display: none;

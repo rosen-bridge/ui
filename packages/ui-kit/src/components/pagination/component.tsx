@@ -1,15 +1,9 @@
-import { ComponentType, MouseEvent, useEffect, useRef, useState } from 'react';
+import React, { ComponentType, useState } from 'react';
 
-import { Pagination as PaginationMui } from '@mui/material';
+import { ListSubheader, Menu, MenuItem } from '@mui/material';
 
-import {
-  Button,
-  Icon,
-  ListSubheader,
-  Menu,
-  MenuItem,
-  Typography,
-} from '@/components';
+import { Button, Icon, IconButton, Typography } from '@/components';
+import { usePagination } from '@/components/pagination/usePagination';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -38,6 +32,21 @@ export type PaginationOverriddenProps = OverridableType<
   never
 >;
 
+export type UsePaginationItem = {
+  onClick: React.ReactEventHandler;
+  type:
+    | 'page'
+    | 'first'
+    | 'last'
+    | 'next'
+    | 'previous'
+    | 'start-ellipsis'
+    | 'end-ellipsis';
+  page: number | null;
+  selected: boolean;
+  disabled: boolean;
+};
+
 export const PaginationBase = ({
   defaultPageIndex = 0,
   defaultPageSize = 10,
@@ -49,60 +58,66 @@ export const PaginationBase = ({
   onPageIndexChange,
   onPageSizeChange,
 }: PaginationOverriddenProps) => {
-  const isPageIndexControlled = pageIndex !== undefined;
+  const isControlled = pageIndex !== undefined;
   const isPageSizeControlled = pageSize !== undefined;
 
-  const pageIndexCurrent = isPageIndexControlled ? pageIndex : defaultPageIndex;
+  const [internalPageIndex, setInternalPageIndex] = useState(defaultPageIndex);
 
-  const pageSizeCurrent = isPageSizeControlled ? pageSize : defaultPageSize;
+  const [internalPageSize, setInternalPageSize] = useState(defaultPageSize);
 
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [responsiveSiblingCount, setResponsiveSiblingCount] = useState(1);
+  const currentPageIndex = isControlled ? pageIndex! : internalPageIndex;
 
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
+  const pageSizeCurrent = isPageSizeControlled ? pageSize! : internalPageSize;
 
-    const observer = new ResizeObserver(([entry]) => {
-      const width = entry.contentRect.width;
-      const next = width < 864 ? 0 : 1;
+  // ---------------- Pagination core ----------------
 
-      setResponsiveSiblingCount((prev) => (prev === next ? prev : next));
-    });
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
-  const totalPages = Math.ceil(total / pageSizeCurrent);
-
-  const from = total === 0 ? 0 : pageIndexCurrent * pageSizeCurrent + 1;
-  const to = Math.min((pageIndexCurrent + 1) * pageSizeCurrent, total);
-
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const menuOpen = !!anchorEl;
-
-  const handleMenuOpen = (e: MouseEvent<HTMLElement>) =>
-    setAnchorEl(e.currentTarget);
-
-  const handleMenuClose = () => setAnchorEl(null);
-
-  const handleSelect = (value: number) => {
-    onPageSizeChange?.(value);
-    handleMenuClose();
+  const setPageIndexSafe = (page: number) => {
+    if (!isControlled) {
+      setInternalPageIndex(page);
+    }
+    onPageIndexChange?.(page);
   };
 
-  useEffect(() => {
-    if (!isPageIndexControlled) {
-      onPageIndexChange?.(defaultPageIndex);
-    }
-  }, [isPageIndexControlled, defaultPageIndex, onPageIndexChange]);
-
-  useEffect(() => {
+  const setPageSizeSafe = (size: number) => {
     if (!isPageSizeControlled) {
-      onPageSizeChange?.(defaultPageSize);
+      setInternalPageSize(size);
     }
-  }, [isPageSizeControlled, defaultPageSize, onPageSizeChange]);
+    onPageSizeChange?.(size);
+  };
+
+  const pagination = usePagination({
+    total,
+    currentPage: currentPageIndex + 1,
+    pageSize: pageSizeCurrent,
+    onPageChange: (page) => setPageIndexSafe(page - 1),
+    // stable: false,
+  });
+
+  // ---------------- Menu state ----------------
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const menuOpen = Boolean(anchorEl);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleSelect = (size: number) => {
+    setPageSizeSafe(size);
+
+    // reset page index when page size changes
+    if (!isControlled) {
+      setInternalPageIndex(0);
+    }
+    onPageIndexChange?.(0);
+
+    handleMenuClose();
+  };
 
   return (
     <div className="RosenPagination-root">
@@ -112,25 +127,52 @@ export const PaginationBase = ({
           color="text-secondary"
           className="pagination-text"
         >
-          {from} to {to} of {total}
+          {pagination.from} to {pagination.to} of {total}
           <span className="mobile-hide">
             {' '}
-            {Number(total) <= 1 ? 'Entry' : ' Entries'}
+            {Number(total) <= 1 ? 'Entry' : 'Entries'}
           </span>
         </Typography>
       </div>
+
+      {/* ---------------- Pages ---------------- */}
+
       <div className="RosenPagination-pages">
-        <PaginationMui
+        <IconButton
+          size="small"
+          data-type="prev"
+          onClick={pagination.prev}
           disabled={disabled}
-          color="primary"
-          count={totalPages}
-          page={pageIndexCurrent + 1}
-          onChange={(_, val) => onPageIndexChange?.(val - 1)}
-          size="medium"
-          siblingCount={responsiveSiblingCount}
-          boundaryCount={1}
-        />
+        >
+          <Icon name="AngleLeft" />
+        </IconButton>
+        {/* FULL MODE */}
+        <div
+          style={{ display: disabled ? 'node' : undefined }}
+          className="Pages"
+        >
+          {pagination.pages.map((page, i) => (
+            <button
+              key={i}
+              disabled={disabled || page === '...'}
+              onClick={() => pagination.goTo(page as number)}
+              data-type={page === currentPageIndex + 1 ? 'active' : 'default'}
+            >
+              <Typography variant="body2">{page}</Typography>
+            </button>
+          ))}
+        </div>
+        <IconButton
+          size="small"
+          data-type="next"
+          onClick={pagination.next}
+          disabled={disabled}
+        >
+          <Icon name="AngleRight" />
+        </IconButton>
       </div>
+
+      {/* ---------------- Page Size + Menu ---------------- */}
 
       <div className="RosenPagination-actions">
         <div className="RosenPagination-divider" />
