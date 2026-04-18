@@ -1,13 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import {
   Tabs,
   TabsList,
   TabsPanel,
   TabsTab,
-  useResponsiveValue,
+  TabsTabProps,
 } from '@rosen-bridge/ui-kit';
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
@@ -17,10 +17,11 @@ import './style.css';
 const Actions = () => {
   const [tab, setTab] = useState(3);
 
-  const iconPosition = useResponsiveValue({
-    mobile: 'top',
-    tablet: 'start',
-  });
+  const rewrite = useMemo<TabsTabProps['rewrite']>(() => ({
+    mobile: {iconPosition:'top'},
+    tablet: {iconPosition:'start'},
+  }), []);
+
   // TODO
   return (
     <Tabs
@@ -40,35 +41,25 @@ const Actions = () => {
           tablet: { grow: false },
         }}
       >
-        <TabsTab disabled icon="Pause" iconPosition={iconPosition} value={0}>
+        <TabsTab disabled icon="Pause" value={0} {...rewrite}>
           Pause Service
         </TabsTab>
-        <TabsTab
-          disabled
-          icon="StopCircle"
-          iconPosition={iconPosition}
-          value={1}
-        >
+        <TabsTab disabled icon="StopCircle" value={1} {...rewrite}>
           Stop Service
         </TabsTab>
-        <TabsTab disabled icon="Pause" iconPosition={iconPosition} value={2}>
+        <TabsTab disabled icon="Pause" value={2} {...rewrite}>
           Pause Network
         </TabsTab>
-        <TabsTab icon="FileEditAlt" iconPosition={iconPosition} value={3}>
+        <TabsTab icon="FileEditAlt" value={3} {...rewrite}>
           Request To Sign
         </TabsTab>
-        <TabsTab icon="ReceiptAlt" iconPosition={iconPosition} value={4}>
+        <TabsTab icon="ReceiptAlt" value={4} {...rewrite}>
           Request An Order
         </TabsTab>
-        <TabsTab
-          disabled
-          icon="KeySkeleton"
-          iconPosition={iconPosition}
-          value={5}
-        >
+        <TabsTab disabled icon="KeySkeleton" value={5} {...rewrite}>
           Generate Key
         </TabsTab>
-        <TabsTab disabled icon="Redo" iconPosition={iconPosition} value={6}>
+        <TabsTab disabled icon="Redo" value={6} {...rewrite}>
           Key Reconstruction
         </TabsTab>
       </TabsList>

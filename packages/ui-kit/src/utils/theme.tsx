@@ -282,13 +282,13 @@ export const lightThemeOptions: ThemeOptions = {
         },
       },
     },
-    MuiSnackbar: {
-      styleOverrides: {
-        root: {
-          left: '116px',
-        },
-      },
-    },
+    // MuiSnackbar: {
+    //   styleOverrides: {
+    //     root: {
+    //       left: '116px',
+    //     },
+    //   },
+    // },
     MuiAlert: {
       defaultProps: {
         iconMapping: {

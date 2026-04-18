@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
-import { AppSnackbar, CssBaseline } from '@/components';
-import { SnackbarProvider } from '@/contexts';
+import { CssBaseline } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
-import { useIsMobile } from '@/hooks';
-import { ThemeProvider, ThemeProviderProps } from '@/Providers';
+import { useBreakpoint } from '@/hooks';
+import { ThemeProvider, ThemeProviderProps, ToastProvider } from '@/Providers';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -23,14 +22,13 @@ export type AppBaseProps = ElementBaseProps<'div', AppOwnProps>;
 export type AppProps = OverridableType<AppBaseProps, AppOverrides, never>;
 
 const Content = ({ children, sidebar, ...rest }: AppProps) => {
-  const isMobile = useIsMobile();
+  const isTabletDown = useBreakpoint('tablet-down');
   return (
-    <div data-orientation={isMobile ? 'vertical' : 'horizontal'} {...rest}>
+    <div data-orientation={isTabletDown ? 'vertical' : 'horizontal'} {...rest}>
       {sidebar}
       <div className="RosenApp-main">
         <div className="RosenApp-paper">{children}</div>
       </div>
-      <AppSnackbar />
     </div>
   );
 };
@@ -40,9 +38,9 @@ export const AppBase = (props: AppProps) => {
     <ThemeProvider theme={props.theme}>
       <>
         <CssBaseline />
-        <SnackbarProvider>
+        <ToastProvider>
           <Content {...props} />
-        </SnackbarProvider>
+        </ToastProvider>
       </>
     </ThemeProvider>
   );

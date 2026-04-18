@@ -1,16 +1,16 @@
-import { Toolbar, ThemeToggleButton, useIsMobile } from '@rosen-bridge/ui-kit';
+import { Toolbar, ThemeToggleButton, useBreakpoint } from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
 
 export const Actions = ({ sidebar }: { sidebar?: boolean }) => {
-  const isMobile = useIsMobile();
+  const isTabletDown = useBreakpoint('tablet-down');
 
-  if (isMobile && !sidebar) return null;
+  if (isTabletDown && !sidebar) return null;
 
   return (
     <Toolbar>
       {sidebar && <VersionConfig />}
-      {((sidebar && isMobile) || (!sidebar && !isMobile)) && (
+      {((sidebar && isTabletDown) || (!sidebar && !isTabletDown)) && (
         <ThemeToggleButton />
       )}
     </Toolbar>

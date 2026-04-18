@@ -2,7 +2,7 @@ import { alpha, Button, styled } from '@mui/material';
 
 import { Badge } from '@/components';
 
-import { useIsMobile, useFramework } from '../../../hooks';
+import { useFramework, useBreakpoint } from '../../../hooks';
 import { Icon, IconProps } from '../../icon';
 import { Link } from '../../link';
 
@@ -108,7 +108,7 @@ export const NavigationButton = ({
 
   const isActive = router.pathname === path;
 
-  const isMobile = useIsMobile();
+  const isTabletDown = useBreakpoint('tablet-down');
 
   let startIcon = <Icon name={icon} />;
 
@@ -124,7 +124,7 @@ export const NavigationButton = ({
       disabled={disabled}
       disableRipple
     >
-      {isMobile && isActive ? <NavigationButtonIndicator /> : label}
+      {isTabletDown && isActive ? <NavigationButtonIndicator /> : label}
     </NavigationButtonBase>
   );
 };

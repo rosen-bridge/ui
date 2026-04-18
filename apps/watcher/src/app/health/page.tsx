@@ -5,7 +5,7 @@ import { useCallback, useState } from 'react';
 import {
   GridContainer,
   HealthParamCard,
-  useSnackbar,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -25,7 +25,7 @@ const Health = () => {
     },
   );
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   /**
    * revalidate info of health param with id `paramId`
@@ -60,7 +60,11 @@ const Health = () => {
         const healthParamIndex = data!.findIndex(
           (healthParam) => healthParam.id === paramId,
         );
-        openSnackbar(currentHealthParamInfo.title + ' status updated', 'info');
+
+        toast.add({
+          type: 'info',
+          description: currentHealthParamInfo.title + ' status updated',
+        })
 
         mutate([
           ...data!.slice(0, healthParamIndex),
@@ -71,7 +75,7 @@ const Health = () => {
 
       await trying();
     },
-    [data, mutate, openSnackbar],
+    [data, mutate, toast.add],
   );
 
   return (

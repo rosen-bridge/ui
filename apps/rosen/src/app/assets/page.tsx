@@ -15,7 +15,7 @@ import {
   useCollection,
   ViewToggle,
   EmptyState,
-  useSnackbar,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
@@ -32,7 +32,7 @@ import { ViewRow } from './ViewRow';
 const Assets = () => {
   const dense = useBreakpoint('laptop-down');
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const collection = useCollection({
     defaultPageIndex: 0,
@@ -153,9 +153,11 @@ const Assets = () => {
 
   useEffect(() => {
     if (error) {
-      openSnackbar(error.message, 'error', undefined, () =>
-        JSON.stringify(serializeError(error), null, 2),
-      );
+      toast.add({
+        type: 'error',
+        description: error.message,
+        more: () => JSON.stringify(serializeError(error), null, 2)
+      })
     }
   }, [error]);
 

@@ -9,7 +9,6 @@ export * from './EnhancedTableCell';
 export * from './HealthParamCard';
 export * from './AppInfo';
 export * from './SortField';
-export * from './AppSnackbar';
 export * from './Chip';
 export * from './EmptyState';
 export * from './Illustrations';

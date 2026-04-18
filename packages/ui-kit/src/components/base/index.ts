@@ -16,5 +16,4 @@ export * from './ListItemText';
 export * from './ListSubheader';
 export * from './Menu';
 export * from './MenuItem';
-export * from './Snackbar';
 export * from './TextField';

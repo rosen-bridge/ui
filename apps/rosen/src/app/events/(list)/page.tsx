@@ -12,7 +12,7 @@ import {
   SortField,
   useBreakpoint,
   useCollection,
-  useSnackbar,
+  useToast,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { serializeError } from 'serialize-error';
@@ -27,7 +27,7 @@ import { EventSidebar } from './EventSidebar';
 const Page = () => {
   const dense = useBreakpoint('laptop-down');
 
-  const { openSnackbar } = useSnackbar();
+  const toast = useToast();
 
   const collection = useCollection({
     defaultPageIndex: 0,
@@ -138,9 +138,11 @@ const Page = () => {
 
   useEffect(() => {
     if (error) {
-      openSnackbar(error.message, 'error', undefined, () =>
-        JSON.stringify(serializeError(error), null, 2),
-      );
+      toast.add({
+        type: 'error',
+        description: error.message,
+        more: () => JSON.stringify(serializeError(error), null, 2)
+      })
     }
   }, [error]);
 

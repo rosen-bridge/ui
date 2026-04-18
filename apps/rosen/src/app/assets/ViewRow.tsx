@@ -15,6 +15,7 @@ import {
   TableGridHeader,
   TableGridRow,
   Token,
+  useBreakpoint,
 } from '@rosen-bridge/ui-kit';
 
 import { BridgedList } from './BridgedList';
@@ -33,15 +34,18 @@ export const ViewRow = ({
   isLoading,
   setCurrent,
 }: ViewRowProps) => {
+  const isTabletUp = useBreakpoint('tablet-up');
+  const isDesktopUp = useBreakpoint('desktop-up');
+  const isLaptopUp = useBreakpoint('laptop-up');
   return (
     <TableGrid>
       <TableGridHeader>
-        <TableGridCell>Name</TableGridCell>
+        <TableGridCell>Name </TableGridCell>
         <TableGridCell>Network</TableGridCell>
-        <TableGridCell skip="tablet-down">Locked</TableGridCell>
-        <TableGridCell skip="desktop-down">Hot</TableGridCell>
-        <TableGridCell skip="desktop-down">Cold</TableGridCell>
-        <TableGridCell skip="laptop-down">Bridged</TableGridCell>
+        {isTabletUp && <TableGridCell>Locked</TableGridCell>}
+        {isDesktopUp && <TableGridCell>Hot</TableGridCell>}
+        {isDesktopUp && <TableGridCell>Cold</TableGridCell>}
+        {isLaptopUp && <TableGridCell>Bridged</TableGridCell>}
         <TableGridCell width="3.65rem" />
       </TableGridHeader>
       <TableGridBody>
@@ -62,18 +66,26 @@ export const ViewRow = ({
                 <TableGridCell>
                   <Network value={item.chain} />
                 </TableGridCell>
-                <TableGridCell skip="tablet-down">
-                  <Amount value={item.lockedAmount} />
-                </TableGridCell>
-                <TableGridCell skip="desktop-down">
-                  <Amount value={item.hotAmount} href={item.hotUrl} />
-                </TableGridCell>
-                <TableGridCell skip="desktop-down">
-                  <Amount value={item.coldAmount} href={item.coldUrl} />
-                </TableGridCell>
-                <TableGridCell skip="laptop-down">
-                  <Amount value={item.bridgedAmount} />
-                </TableGridCell>
+                {isTabletUp && (
+                  <TableGridCell>
+                    <Amount value={item.lockedAmount} />
+                  </TableGridCell>
+                )}
+                {isDesktopUp && (
+                  <TableGridCell>
+                    <Amount value={item.hotAmount} href={item.hotUrl} />
+                  </TableGridCell>
+                )}
+                {isDesktopUp && (
+                  <TableGridCell>
+                    <Amount value={item.coldAmount} href={item.coldUrl} />
+                  </TableGridCell>
+                )}
+                {isLaptopUp && (
+                  <TableGridCell>
+                    <Amount value={item.bridgedAmount} />
+                  </TableGridCell>
+                )}
                 <TableGridCell>
                   <IconButton
                     size="small"
