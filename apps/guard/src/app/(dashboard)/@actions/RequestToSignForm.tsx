@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   ApiKeyDialogWarning,
   Card,
@@ -109,12 +109,13 @@ export const RequestToSignForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
+    <Alert
       severity={alertData?.severity}
+      variant="filled"
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+    </Alert>
   );
 
   return (

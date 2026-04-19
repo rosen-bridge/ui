@@ -4,6 +4,7 @@ export * from './base';
 export * from './common';
 
 export * from './action';
+export * from './alert';
 export * from './apiKeyDialog';
 export * from './apiKeyDialogButton';
 export * from './apiKeyDialogWarning';

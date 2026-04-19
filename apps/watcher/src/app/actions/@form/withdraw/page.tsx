@@ -9,7 +9,7 @@ import {
 } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   CircularProgress,
   Identifier,
@@ -40,6 +40,7 @@ import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
+import { CopyDetails } from '@/components';
 
 interface Form extends TokenAmountCompatibleFormSchema {
   address: string;
@@ -181,13 +182,13 @@ const WithdrawForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
+    <Alert
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =

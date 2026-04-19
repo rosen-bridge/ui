@@ -5,7 +5,7 @@ import { useMemo, useState, useEffect, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   SubmitButton,
   useApiKey,
@@ -31,6 +31,7 @@ import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
+import { CopyDetails } from '@/components';
 
 const UnlockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -170,13 +171,13 @@ const UnlockForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
+    <Alert
       severity={alertData?.severity}
       onClose={() => setAlertData(null)}
     >
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =
