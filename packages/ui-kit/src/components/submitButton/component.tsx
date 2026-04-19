@@ -1,6 +1,8 @@
 import { Button } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
+import { useResponsive } from '@/hooks';
 import { OverridableType } from '@/types';
+import { CSSProperties } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SubmitButtonOverrides {}
@@ -19,26 +21,22 @@ export type SubmitButtonProps = OverridableType<
   never
 >;
 
-export const SubmitButtonBase = ({ ...rest }: SubmitButtonProps) => {
+export const SubmitButtonBase = ({ style, ...rest }: SubmitButtonProps) => {
+  const styles = useResponsive<CSSProperties>({
+    mobile: {
+      width: '100%',
+      display: 'flex',
+      margin: 'auto',
+      ...style
+    },
+    laptop: {
+      width: 'clamp(200px, 100%, 320px)',
+      margin: 'auto',
+      ...style
+    },
+  })
   return (
-    <Button
-      style={{
-        width: '100%',
-        display: 'flex',
-        margin: 'auto',
-      }}
-      rewrite={{
-        laptop: {
-          style: {
-            width: 'clamp(200px, 100%, 320px)',
-            margin: 'auto',
-          },
-        },
-      }}
-      variant="contained"
-      type="submit"
-      {...rest}
-    />
+    <Button style={styles} type="submit" variant="contained" {...rest} />
   );
 };
 

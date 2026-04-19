@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
 
 import {
   Amount,
@@ -10,6 +10,7 @@ import {
   Identifier,
   Label,
   LabelGroup,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
@@ -61,18 +62,21 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
     return allTxs;
   }, [data]);
 
+  const boxStyle = useResponsive<CSSProperties>({ 
+    mobile: { columnSpan: 'all' },
+    desktop: { columnSpan: 'unset' },
+  });
+
+  const columnsCount = useResponsive({ 
+    mobile: 1,
+    tablet: 1,
+    laptop: 2,
+    desktop: 3,
+  });
+
   return (
     <Section error={error} load={mutate} title="Transactions and Fees">
-      <Columns
-        gap="24px"
-        rewrite={{
-          mobile: { count: 1 },
-          tablet: { count: 1 },
-          laptop: { count: 2 },
-          desktop: { count: 3 },
-        }}
-        rule
-      >
+      <Columns gap="24px" count={columnsCount} rule>
         <div>
           <Label
             orientation="horizontal"
@@ -150,12 +154,7 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
             />
           </Label>
         </div>
-        <Box
-          style={{ columnSpan: 'all' }}
-          rewrite={{
-            desktop: { style: { columnSpan: 'unset' } },
-          }}
-        >
+        <Box style={boxStyle}>
           <Label label="Tx IDs" />
           <LabelGroup>
             {txIds.map(({ type, label, chain, txId }) => (

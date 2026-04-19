@@ -21,6 +21,7 @@ import {
   ApiKeyDialogWarning,
   Link,
   Stack,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -256,6 +257,11 @@ const WithdrawForm = () => {
     />
   );
 
+  const stackDirection = useResponsive({
+    mobile: 'column',
+    laptop: 'row'
+  } as const)
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -263,7 +269,7 @@ const WithdrawForm = () => {
           {renderAlert()}
           <ApiKeyDialogWarning />
           {renderAddressTextField()}
-          <Stack spacing={2} rewrite={{ laptop: { direction: 'row' } }}>
+          <Stack direction={stackDirection} spacing={2}>
             {renderTokensListSelect()}
             {renderTokenAmountTextField()}
           </Stack>

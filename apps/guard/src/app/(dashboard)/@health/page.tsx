@@ -97,7 +97,7 @@ const Health = () => {
             {variant.status}
           </Typography>
 
-          {!isSmall && <div style={{ flexGrow: 1 }} />}
+          {isSmall && <div style={{ flexGrow: 1 }} />}
 
           {(isLoading || trialErrors) && (
             <Tooltip disabled={isLoading} title={trialErrors}>
