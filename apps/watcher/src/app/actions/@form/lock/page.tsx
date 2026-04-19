@@ -23,6 +23,7 @@ import {
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useRsnToken, useToken } from '@/hooks';
 import {
   ApiPermitRequestBody,
@@ -35,7 +36,6 @@ import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-import { CopyDetails } from '@/components';
 
 const LockForm = () => {
   const { rsnToken, isLoading: isRsnTokenLoading } = useRsnToken();
@@ -150,10 +150,7 @@ const LockForm = () => {
   };
 
   const renderAlert = () => (
-    <Alert
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
+    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
       {alertData?.message}
       <CopyDetails more={alertData?.more} />
     </Alert>

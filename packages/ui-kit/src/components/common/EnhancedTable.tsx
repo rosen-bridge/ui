@@ -139,7 +139,11 @@ export const EnhancedTable = <Row,>(props: EnhancedTableProps<Row>) => {
     paginated ? (
       <TableFooter>
         <TableRow>
-          <TableCell variant="footer" colSpan={tableHead?.length} padding="none">
+          <TableCell
+            variant="footer"
+            colSpan={tableHead?.length}
+            padding="none"
+          >
             <Box py={1}>
               <TablePagination
                 rowsPerPageOptions={DEFAULT_ROWS_PER_PAGE_OPTIONS}

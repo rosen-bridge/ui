@@ -63,7 +63,7 @@ export const BridgeForm = () => {
   const stackDirection = useResponsive<StackProps['direction']>({
     mobile: 'column',
     tablet: 'row',
-  })
+  });
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;

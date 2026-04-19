@@ -7,9 +7,10 @@ import {
 
 import { useConfig } from '@/configuration';
 
-export type ElementBaseProps<E extends ElementType, P> = P & Omit<ComponentPropsWithRef<E>, keyof P>;
+export type ElementBaseProps<E extends ElementType, P> = P &
+  Omit<ComponentPropsWithRef<E>, keyof P>;
 
-export type WrapProps<P> = { className?: string; } & P;   
+export type WrapProps<P> = { className?: string } & P;
 
 export const Wrap = <P,>(Base: ComponentType<P>) => {
   const componentName = Base.displayName || Base.name;

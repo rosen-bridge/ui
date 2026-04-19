@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 
+import { Icon, IconProps, useTheme } from '@rosen-bridge/ui-kit';
 import { upperFirst } from 'lodash-es';
 
 import { useInfo } from '@/hooks';
-import { Icon, IconProps, useTheme } from '@rosen-bridge/ui-kit';
 
 export const Favicon = () => {
   const ref = useRef<SVGSVGElement>(null);
-  
+
   const { data } = useInfo();
-  
+
   const theme = useTheme();
 
   /**
@@ -30,7 +30,7 @@ export const Favicon = () => {
     const url = URL.createObjectURL(blob);
 
     const link = document.createElement('link');
-    
+
     link.rel = 'icon';
     link.href = url;
 
@@ -43,10 +43,12 @@ export const Favicon = () => {
   }, [data, theme.palette.mode]);
 
   return (
-    <Icon 
+    <Icon
       ref={ref}
-      name={upperFirst(data?.network || 'ExclamationTriangle') as IconProps['name']} 
+      name={
+        upperFirst(data?.network || 'ExclamationTriangle') as IconProps['name']
+      }
       style={{ display: 'contents' }}
     />
-  )
+  );
 };

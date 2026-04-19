@@ -27,17 +27,17 @@ export const Overview = ({ id }: { id: string }) => {
 
   const labelOrientation = useResponsive({
     mobile: 'horizontal',
-    tablet: 'vertical'
+    tablet: 'vertical',
   } as const);
 
   const networkVariant = useResponsive({
     mobile: 'logo',
-    tablet: 'both'
+    tablet: 'both',
   } as const);
 
   const tokenVariant = useResponsive({
     mobile: 'reverse',
-    tablet: 'both'
+    tablet: 'both',
   } as const);
 
   return (
@@ -52,7 +52,11 @@ export const Overview = ({ id }: { id: string }) => {
       </Label>
       <Columns count={3} width="320px" gap="24px">
         <Label label="Token" orientation={labelOrientation}>
-          <Token loading={isLoading} value={data?.lockToken?.id} variant={tokenVariant}/>
+          <Token
+            loading={isLoading}
+            value={data?.lockToken?.id}
+            variant={tokenVariant}
+          />
         </Label>
         <Label label="Amount" orientation={labelOrientation}>
           <Amount
@@ -67,10 +71,18 @@ export const Overview = ({ id }: { id: string }) => {
         <Label label="Chain" orientation={labelOrientation}>
           <Connector
             start={
-              <Network loading={isLoading} value={data?.fromChain as NetworkType} variant={networkVariant} />
+              <Network
+                loading={isLoading}
+                value={data?.fromChain as NetworkType}
+                variant={networkVariant}
+              />
             }
             end={
-              <Network loading={isLoading} value={data?.toChain as NetworkType} variant={networkVariant} />
+              <Network
+                loading={isLoading}
+                value={data?.toChain as NetworkType}
+                variant={networkVariant}
+              />
             }
           />
         </Label>

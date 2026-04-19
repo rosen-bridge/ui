@@ -19,6 +19,7 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useRsnToken } from '@/hooks';
 import {
   ApiInfoResponse,
@@ -31,7 +32,6 @@ import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-import { CopyDetails } from '@/components';
 
 const UnlockForm = () => {
   const { data: info, isLoading: isInfoLoading } = useSWR<ApiInfoResponse>(
@@ -171,10 +171,7 @@ const UnlockForm = () => {
   };
 
   const renderAlert = () => (
-    <Alert
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
+    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
       {alertData?.message}
       <CopyDetails more={alertData?.more} />
     </Alert>

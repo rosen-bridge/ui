@@ -66,7 +66,7 @@ export const ApiKeyDialogBase = ({
     toast.add({
       type: 'success',
       description: 'API key is set!',
-    })
+    });
   };
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {

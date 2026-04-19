@@ -29,6 +29,7 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useInfo, useToken } from '@/hooks';
 import {
   ApiAddressAssetsResponse,
@@ -41,7 +42,6 @@ import {
   TokenAmountTextField,
   TokenAmountCompatibleFormSchema,
 } from '../../TokenAmountTextField';
-import { CopyDetails } from '@/components';
 
 interface Form extends TokenAmountCompatibleFormSchema {
   address: string;
@@ -183,10 +183,7 @@ const WithdrawForm = () => {
   };
 
   const renderAlert = () => (
-    <Alert
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
+    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
       {alertData?.message}
       <CopyDetails more={alertData?.more} />
     </Alert>
@@ -259,8 +256,8 @@ const WithdrawForm = () => {
 
   const stackDirection = useResponsive({
     mobile: 'column',
-    laptop: 'row'
-  } as const)
+    laptop: 'row',
+  } as const);
 
   return (
     <FormProvider {...formMethods}>

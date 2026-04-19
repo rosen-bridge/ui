@@ -1,4 +1,8 @@
-import { Toolbar, ThemeToggleButton, useBreakpoint } from '@rosen-bridge/ui-kit';
+import {
+  Toolbar,
+  ThemeToggleButton,
+  useBreakpoint,
+} from '@rosen-bridge/ui-kit';
 
 import { VersionConfig } from './VersionConfig';
 

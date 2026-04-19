@@ -22,7 +22,7 @@ const Layout = ({
   const gridTemplateColumns = useResponsive({
     mobile: '1fr',
     laptop: '1fr 1fr',
-  })
+  });
 
   return (
     <Fragment>
@@ -33,7 +33,7 @@ const Layout = ({
           style={{
             display: 'grid',
             gap: '16px',
-            gridTemplateColumns
+            gridTemplateColumns,
           }}
         >
           {revenue}
@@ -44,6 +44,6 @@ const Layout = ({
       </Stack>
     </Fragment>
   );
-}
+};
 
 export default Layout;

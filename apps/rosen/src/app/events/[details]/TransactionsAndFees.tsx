@@ -62,12 +62,12 @@ export const TransactionsAndFees = ({ id }: { id: string }) => {
     return allTxs;
   }, [data]);
 
-  const boxStyle = useResponsive<CSSProperties>({ 
+  const boxStyle = useResponsive<CSSProperties>({
     mobile: { columnSpan: 'all' },
     desktop: { columnSpan: 'unset' },
   });
 
-  const columnsCount = useResponsive({ 
+  const columnsCount = useResponsive({
     mobile: 1,
     tablet: 1,
     laptop: 2,

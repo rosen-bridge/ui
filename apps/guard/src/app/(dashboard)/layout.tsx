@@ -2,7 +2,12 @@
 
 import { Fragment, ReactNode } from 'react';
 
-import { PageHeading, Stack, StackProps, useResponsive } from '@rosen-bridge/ui-kit';
+import {
+  PageHeading,
+  Stack,
+  StackProps,
+  useResponsive,
+} from '@rosen-bridge/ui-kit';
 
 type LayoutProps = {
   actions: ReactNode;
@@ -28,12 +33,12 @@ const Layout = ({
       direction: 'row',
       align: 'center',
     },
-  })
+  });
 
   const minWidth = useResponsive({
     mobile: '100%',
     laptop: '200px',
-  })
+  });
 
   return (
     <Fragment>
@@ -46,9 +51,7 @@ const Layout = ({
           }}
           {...props}
         >
-          <Stack style={{ minWidth }}>
-            {health}
-          </Stack>
+          <Stack style={{ minWidth }}>{health}</Stack>
           <div style={{ minWidth: 0, flexGrow: 1 }}>{networks}</div>
         </Stack>
         {revenue}
@@ -57,6 +60,6 @@ const Layout = ({
       </Stack>
     </Fragment>
   );
-}
+};
 
 export default Layout;

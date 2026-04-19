@@ -8,9 +8,9 @@ import './ToastProvider.scss';
 
 export type ToastProviderProps = {
   children?: ReactNode;
-}
+};
 
-export const ToastProvider = ({children}: ToastProviderProps) => {
+export const ToastProvider = ({ children }: ToastProviderProps) => {
   return (
     <Toast.Provider limit={1}>
       {children}
@@ -20,8 +20,8 @@ export const ToastProvider = ({children}: ToastProviderProps) => {
         </Toast.Viewport>
       </Toast.Portal>
     </Toast.Provider>
-  )
-}
+  );
+};
 
 const ToastList = () => {
   const { toasts } = Toast.useToastManager();
@@ -47,4 +47,4 @@ const ToastList = () => {
       </Toast.Content>
     </Toast.Root>
   ));
-}
+};

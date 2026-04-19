@@ -68,7 +68,7 @@ const InfoWidgets = () => {
     tablet: '35%',
     laptop: '25%',
     desktop: '15%',
-  })
+  });
 
   return (
     <GridContainer gap={2} minWidth={gridContainerMinWidth}>

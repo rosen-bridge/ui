@@ -156,8 +156,8 @@ const Assets = () => {
       toast.add({
         type: 'error',
         description: error.message,
-        more: () => JSON.stringify(serializeError(error), null, 2)
-      })
+        more: () => JSON.stringify(serializeError(error), null, 2),
+      });
     }
   }, [error]);
 

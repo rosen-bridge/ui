@@ -1,6 +1,6 @@
-import { Button } from "@rosen-bridge/ui-kit";
+import { Button } from '@rosen-bridge/ui-kit';
 
-export const CopyDetails = ({ more }: { more?: () => string; }) => {
+export const CopyDetails = ({ more }: { more?: () => string }) => {
   if (!more) return null;
   return (
     <>
@@ -17,5 +17,5 @@ export const CopyDetails = ({ more }: { more?: () => string; }) => {
         Copy Details
       </Button>
     </>
-  )
-}
+  );
+};

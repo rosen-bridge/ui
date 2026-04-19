@@ -64,7 +64,7 @@ const Health = () => {
         toast.add({
           type: 'info',
           description: currentHealthParamInfo.title + ' status updated',
-        })
+        });
 
         mutate([
           ...data!.slice(0, healthParamIndex),

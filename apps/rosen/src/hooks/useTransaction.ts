@@ -99,16 +99,16 @@ export const useTransaction = () => {
             ['here'],
           ),
           ' to see more details.',
-        ])
-      })
+        ]),
+      });
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.add({
         type: 'error',
         description: error?.info ?? error?.message ?? JSON.stringify(error),
-        more: () => JSON.stringify(serializeError(error), null, 2)
-      })
+        more: () => JSON.stringify(serializeError(error), null, 2),
+      });
 
       if (error instanceof InsufficientAssetsError) return;
 

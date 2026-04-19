@@ -6,29 +6,25 @@ import './styles.scss';
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AlertOverrides {}
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type AlertOwnProps = {};
 
 export type AlertBaseProps = ElementBaseProps<'div', AlertOwnProps>;
 
-export type AlertProps = OverridableType<
-  AlertBaseProps,
-  AlertOverrides,
-  never
->;
- 
+export type AlertProps = OverridableType<AlertBaseProps, AlertOverrides, never>;
+
 export const AlertBase = ({ ...rest }: AlertProps) => {
-  return <div {...rest} />
+  return <div {...rest} />;
 };
 
 AlertBase.displayName = 'Alert';
 
 export const Alert = Wrap(AlertBase);
 
-
 // TODO
 // export { Alert } from '@mui/material';
 // export type { AlertProps } from '@mui/material';
- 
+
 // <Alert
 //   severity="warning"
 //   onClose={() => setAlertData(null)}
@@ -50,8 +46,7 @@ export const Alert = Wrap(AlertBase);
 //       SET API KEY
 //     </Button>
 //   }
-// > 
- 
+// >
 
 // export interface AlertCardProps {
 //   severity: AlertProps['severity'] | null;
@@ -85,11 +80,6 @@ export const Alert = Wrap(AlertBase);
 //     </Collapsible>
 //   );
 // };
-
-
-
-
-
 
 // interface AlertProps {
 //   variant?: 'success' | 'error' | 'warning' | 'info' | 'neutral';

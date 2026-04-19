@@ -80,7 +80,7 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         toast.add({
           type: 'error',
           description: error.message,
-        })
+        });
       }
 
       setSelected(wallet);

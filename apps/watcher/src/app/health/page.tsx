@@ -65,7 +65,7 @@ const Health = () => {
         toast.add({
           type: 'info',
           description: currentHealthParamInfo.title + ' status updated',
-        })
+        });
 
         mutate([
           ...data!.slice(0, healthParamIndex),
@@ -83,7 +83,7 @@ const Health = () => {
     mobile: '100%',
     tablet: '35%',
     laptop: '25%',
-  })
+  });
 
   return (
     <GridContainer gap={3} minWidth={gridContainerMinWidth}>
