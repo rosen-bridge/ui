@@ -95,7 +95,8 @@ export class AssetAggregatorService extends PeriodicTaskService {
           const assetBalances: Partial<Record<NetworkItem, AssetBalance>> = {};
           await Promise.all(
             Object.keys(configs.chains).map(async (chain) => {
-              const chainConfig = configs.chains[chain as ChainChoices];
+              const chainConfig =
+                configs.chains[chain as keyof typeof configs.chains];
               if (
                 chain == NETWORKS.ergo.key ||
                 ('active' in chainConfig && chainConfig.active)
