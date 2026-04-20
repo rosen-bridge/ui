@@ -12,10 +12,17 @@ import {
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
-import { AddressPurpose, request } from 'sats-connect';
+import type { request as Request } from 'sats-connect';
 
 import { ICON } from './icon';
-import { XverseWalletConfig } from './types';
+import { AddressPurpose, XverseWalletConfig } from './types';
+
+const request: typeof Request = (...props) => {
+  /**
+   * Lazy-load wallet resource to reduce initial bundle size and improve app startup performance
+   */
+  return import('sats-connect').then(({ request }) => request(...props));
+};
 
 export class XverseWallet extends Wallet<XverseWalletConfig> {
   icon = ICON;
