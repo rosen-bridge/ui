@@ -21,8 +21,8 @@ const perPackage = (resolver) => (files) => {
 };
 
 const getKnipCommand = (dir) => {
-  const posixRelative = path.posix.relative(process.cwd(), dir);
-  return `knip --dependencies --workspace ${posixRelative}`;
+  const relative = path.relative(process.cwd(), dir).split(path.sep).join('/');
+  return `knip --dependencies --workspace ${relative}`;
 };
 
 const runKnipConditional = (files) => {
