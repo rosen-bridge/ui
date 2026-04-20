@@ -23,7 +23,6 @@ export const usePagination = ({
   pageSize,
   siblingCount = 1,
   boundaryCount = 1,
-  stable = true,
   onPageChange,
 }: UsePaginationParams): UsePaginationReturn => {
   const pagination = useMemo(() => {
@@ -33,9 +32,8 @@ export const usePagination = ({
       pageSize,
       siblingCount,
       boundaryCount,
-      stable,
     });
-  }, [total, currentPage, pageSize, siblingCount, boundaryCount, stable]);
+  }, [total, currentPage, pageSize, siblingCount, boundaryCount]);
 
   const next = useCallback(() => {
     const maxPage = pagination.totalPages;

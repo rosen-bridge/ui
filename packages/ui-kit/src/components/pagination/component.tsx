@@ -59,17 +59,20 @@ export const PaginationBase = ({
   onPageSizeChange,
 }: PaginationOverriddenProps) => {
   const isControlled = pageIndex !== undefined;
+
   const isPageSizeControlled = pageSize !== undefined;
+
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const [internalPageIndex, setInternalPageIndex] = useState(defaultPageIndex);
 
   const [internalPageSize, setInternalPageSize] = useState(defaultPageSize);
 
+  const menuOpen = Boolean(anchorEl);
+
   const currentPageIndex = isControlled ? pageIndex! : internalPageIndex;
 
   const pageSizeCurrent = isPageSizeControlled ? pageSize! : internalPageSize;
-
-  // ---------------- Pagination core ----------------
 
   const setPageIndexSafe = (page: number) => {
     if (!isControlled) {
@@ -90,14 +93,7 @@ export const PaginationBase = ({
     currentPage: currentPageIndex + 1,
     pageSize: pageSizeCurrent,
     onPageChange: (page) => setPageIndexSafe(page - 1),
-    // stable: false,
   });
-
-  // ---------------- Menu state ----------------
-
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-
-  const menuOpen = Boolean(anchorEl);
 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -110,7 +106,6 @@ export const PaginationBase = ({
   const handleSelect = (size: number) => {
     setPageSizeSafe(size);
 
-    // reset page index when page size changes
     if (!isControlled) {
       setInternalPageIndex(0);
     }
@@ -121,32 +116,29 @@ export const PaginationBase = ({
 
   return (
     <div className="RosenPagination-root">
-      <div className="RosenPagination-info">
-        <Typography
-          variant="body2"
-          color="text-secondary"
-          className="pagination-text"
-        >
-          {pagination.from} to {pagination.to} of {total}
-          <span className="mobile-hide">
+      <Typography
+        variant="body2"
+        color="text-secondary"
+        className="RosenPagination-info"
+      >
+        <span className="pagination-text">
+          {pagination.from} to {pagination.to} of {total}{' '}
+          <span className="hide">
             {' '}
-            {Number(total) <= 1 ? 'Entry' : 'Entries'}
+            {Number(total) <= 1 ? ' Entry' : ' Entries'}
           </span>
-        </Typography>
-      </div>
-
-      {/* ---------------- Pages ---------------- */}
+        </span>
+      </Typography>
 
       <div className="RosenPagination-pages">
         <IconButton
           size="small"
-          data-type="prev"
+          data-action="prev"
           onClick={pagination.prev}
           disabled={disabled}
         >
           <Icon name="AngleLeft" />
         </IconButton>
-        {/* FULL MODE */}
         <div
           style={{ display: disabled ? 'node' : undefined }}
           className="Pages"
@@ -155,8 +147,11 @@ export const PaginationBase = ({
             <button
               key={i}
               disabled={disabled || page === '...'}
-              onClick={() => pagination.goTo(page as number)}
-              data-type={page === currentPageIndex + 1 ? 'active' : 'default'}
+              onClick={() => {
+                if (page !== '...') pagination.goTo(page as number);
+              }}
+              data-type={page !== '...' && 'page'}
+              data-action={page === currentPageIndex + 1 ? 'active' : 'default'}
             >
               <Typography variant="body2">{page}</Typography>
             </button>
@@ -164,7 +159,7 @@ export const PaginationBase = ({
         </div>
         <IconButton
           size="small"
-          data-type="next"
+          data-action="next"
           onClick={pagination.next}
           disabled={disabled}
         >
@@ -172,64 +167,62 @@ export const PaginationBase = ({
         </IconButton>
       </div>
 
-      {/* ---------------- Page Size + Menu ---------------- */}
-
       <div className="RosenPagination-actions">
         <div className="RosenPagination-divider" />
 
         <div className="RosenPagination-actionsInner">
-          <div className="RosenPagination-sizeWrapper">
-            <Button
-              disabled={disabled}
-              size="small"
-              className="RosenPagination-button"
-              onClick={handleMenuOpen}
-            >
-              <div className="RosenPagination-size">
-                <Typography
-                  color="text-secondary"
-                  variant="body2"
-                  className="RosenPagination-sizeText"
-                >
-                  Items per page: {pageSizeCurrent}
-                </Typography>
+          <Button
+            disabled={disabled}
+            size="small"
+            className="RosenPagination-button"
+            onClick={handleMenuOpen}
+          >
+            <Typography color="text-secondary" variant="body2">
+              Items per page: {pageSizeCurrent}
+            </Typography>
 
-                <div className="RosenPagination-icon RosenPagination-icon--desktop">
-                  <Icon color="text-secondary" name="CaretDown" size="24px" />
-                </div>
+            <Icon
+              className="RosenPagination-icon"
+              color="text-secondary"
+              data-size="larg"
+              name="CaretDown"
+              size="24px"
+            />
 
-                <div className="RosenPagination-icon RosenPagination-icon--mobile">
-                  <Icon color="text-secondary" name="AlignCenter" size="24px" />
-                </div>
-              </div>
-            </Button>
+            <Icon
+              className="RosenPagination-icon"
+              color="text-secondary"
+              data-size="small"
+              name="AlignCenter"
+              size="24px"
+            />
+          </Button>
 
-            <Menu
-              anchorEl={anchorEl}
-              open={menuOpen}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-              PaperProps={{ className: 'RosenPagination-menuPaper' }}
-              disablePortal
-            >
-              <ListSubheader className="RosenPagination-menuHeader">
-                <Typography variant="body2" color="text-secondary">
-                  Items per page: {pageSizeCurrent}
-                </Typography>
-              </ListSubheader>
+          <Menu
+            anchorEl={anchorEl}
+            open={menuOpen}
+            onClose={handleMenuClose}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            PaperProps={{ className: 'RosenPagination-menuPaper' }}
+            disablePortal
+          >
+            <ListSubheader className="RosenPagination-menuHeader">
+              <Typography variant="body2" color="text-secondary">
+                Items per page: {pageSizeCurrent}
+              </Typography>
+            </ListSubheader>
 
-              {pageSizeOptions.map((option) => (
-                <MenuItem
-                  key={option}
-                  selected={option === pageSizeCurrent}
-                  onClick={() => handleSelect(option)}
-                >
-                  {option}
-                </MenuItem>
-              ))}
-            </Menu>
-          </div>
+            {pageSizeOptions.map((option) => (
+              <MenuItem
+                key={option}
+                selected={option === pageSizeCurrent}
+                onClick={() => handleSelect(option)}
+              >
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
         </div>
       </div>
     </div>

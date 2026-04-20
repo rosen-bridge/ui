@@ -21,25 +21,28 @@
   align-items: center;
   flex: 0 0 auto;
 
+  .pagination-text {
+    display: inline;
+  }
+
   .pagination-text::before {
     content: "Showing ";
   }
 
-  .pagination-text .mobile-hide {
+  .hide {
     display: inline;
   }
 
-  @container (max-width: 420px) {
+  @container (max-width: 480px) {
     .pagination-text::before {
       content: "";
     }
 
-    .pagination-text .mobile-hide {
+    .hide {
       display: none;
     }
   }
 }
-
 
 .RosenPagination-pages {
   display: flex;
@@ -61,13 +64,15 @@
       border: none;
       border-radius: 50%;
       background-color: transparent;
-      cursor: pointer;
-
       transition: background-color 0.25s ease, transform 0.15s ease;
       will-change: transform;
     }
 
-    button[data-type="active"] {
+    button[data-type="page"] {
+      cursor: pointer;
+    }
+
+    button[data-action="active"] {
       background-color: var(--rosen-palette-primary);
 
       p {
@@ -114,49 +119,38 @@
     display: flex;
     align-items: center;
     justify-content: space-evenly;
-  }
-
-  .RosenPagination-sizeWrapper {
-    display: flex;
-    align-items: center;
+    gap: var(--rosen-spacing);
   }
 
   .RosenPagination-button {
     padding: var(--rosen-spacing);
     text-transform: none;
-  }
 
-  .RosenPagination-size {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--rosen-spacing);
-
-    .RosenPagination-sizeText {
+    & p {
       @container (max-width: 864px) {
         display: none;
       }
     }
+  }
 
-    .RosenPagination-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+  .RosenPagination-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-      &--desktop {
-        display: none;
+    &[data-size="larg"] {
+      display: none;
 
-        @container (min-width: 865px) {
-          display: flex;
-        }
-      }
-
-      &--mobile {
+      @container (min-width: 865px) {
         display: flex;
+      }
+    }
 
-        @container (min-width: 865px) {
-          display: none;
-        }
+    &[data-size="small"] {
+      display: flex;
+
+      @container (min-width: 865px) {
+        display: none;
       }
     }
   }
@@ -164,6 +158,9 @@
 
 .RosenPagination-menuPaper {
   width: 204px;
+  container-type: inherit;
+  background-color: aqua;
+
 }
 
 .RosenPagination-menuHeader {
@@ -174,3 +171,5 @@
     display: block;
   }
 }
+
+
