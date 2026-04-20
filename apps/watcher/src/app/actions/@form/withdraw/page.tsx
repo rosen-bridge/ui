@@ -9,7 +9,7 @@ import {
 } from 'react-hook-form';
 
 import {
-  AlertCard,
+  Alert,
   AlertProps,
   CircularProgress,
   Identifier,
@@ -21,6 +21,7 @@ import {
   ApiKeyDialogWarning,
   Link,
   Stack,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
 import { fetcher, mutatorWithHeaders } from '@rosen-ui/swr-helpers';
@@ -28,6 +29,7 @@ import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
 
+import { CopyDetails } from '@/components';
 import { useInfo, useToken } from '@/hooks';
 import {
   ApiAddressAssetsResponse,
@@ -181,13 +183,10 @@ const WithdrawForm = () => {
   };
 
   const renderAlert = () => (
-    <AlertCard
-      more={alertData?.more}
-      severity={alertData?.severity}
-      onClose={() => setAlertData(null)}
-    >
+    <Alert severity={alertData?.severity} onClose={() => setAlertData(null)}>
       {alertData?.message}
-    </AlertCard>
+      <CopyDetails more={alertData?.more} />
+    </Alert>
   );
 
   const disabled =
@@ -255,6 +254,11 @@ const WithdrawForm = () => {
     />
   );
 
+  const stackDirection = useResponsive({
+    mobile: 'column',
+    laptop: 'row',
+  } as const);
+
   return (
     <FormProvider {...formMethods}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -262,7 +266,7 @@ const WithdrawForm = () => {
           {renderAlert()}
           <ApiKeyDialogWarning />
           {renderAddressTextField()}
-          <Stack spacing={2} rewrite={{ laptop: { direction: 'row' } }}>
+          <Stack direction={stackDirection} spacing={2}>
             {renderTokensListSelect()}
             {renderTokenAmountTextField()}
           </Stack>

@@ -1,13 +1,13 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 
 import {
   Tabs,
   TabsList,
   TabsPanel,
   TabsTab,
-  TabsTabProps,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 
 import { RequestAnOrderForm } from './RequestAnOrderForm';
@@ -17,10 +17,20 @@ import './style.css';
 const Actions = () => {
   const [tab, setTab] = useState(3);
 
-  const rewrite = useMemo<TabsTabProps['rewrite']>(() => ({
-    mobile: {iconPosition:'top'},
-    tablet: {iconPosition:'start'},
-  }), []);
+  const tabsListGrow = useResponsive({
+    mobile: true,
+    tablet: false,
+  } as const);
+
+  const tabsOrientation = useResponsive({
+    mobile: 'horizontal',
+    tablet: 'vertical',
+  } as const);
+
+  const tabsTabIconPosition = useResponsive({
+    mobile: 'top',
+    tablet: 'start',
+  } as const);
 
   // TODO
   return (
@@ -28,38 +38,58 @@ const Actions = () => {
       className="actions"
       gap={2}
       value={tab}
-      rewrite={{
-        mobile: { orientation: 'horizontal' },
-        tablet: { orientation: 'vertical' },
-      }}
+      orientation={tabsOrientation}
       onChange={(value) => setTab(value as number)}
     >
-      <TabsList
-        align="center"
-        rewrite={{
-          mobile: { grow: true },
-          tablet: { grow: false },
-        }}
-      >
-        <TabsTab disabled icon="Pause" value={0} {...rewrite}>
+      <TabsList align="center" grow={tabsListGrow}>
+        <TabsTab
+          disabled
+          icon="Pause"
+          iconPosition={tabsTabIconPosition}
+          value={0}
+        >
           Pause Service
         </TabsTab>
-        <TabsTab disabled icon="StopCircle" value={1} {...rewrite}>
+        <TabsTab
+          disabled
+          icon="StopCircle"
+          iconPosition={tabsTabIconPosition}
+          value={1}
+        >
           Stop Service
         </TabsTab>
-        <TabsTab disabled icon="Pause" value={2} {...rewrite}>
+        <TabsTab
+          disabled
+          icon="Pause"
+          iconPosition={tabsTabIconPosition}
+          value={2}
+        >
           Pause Network
         </TabsTab>
-        <TabsTab icon="FileEditAlt" value={3} {...rewrite}>
+        <TabsTab
+          icon="FileEditAlt"
+          iconPosition={tabsTabIconPosition}
+          value={3}
+        >
           Request To Sign
         </TabsTab>
-        <TabsTab icon="ReceiptAlt" value={4} {...rewrite}>
+        <TabsTab icon="ReceiptAlt" iconPosition={tabsTabIconPosition} value={4}>
           Request An Order
         </TabsTab>
-        <TabsTab disabled icon="KeySkeleton" value={5} {...rewrite}>
+        <TabsTab
+          disabled
+          icon="KeySkeleton"
+          iconPosition={tabsTabIconPosition}
+          value={5}
+        >
           Generate Key
         </TabsTab>
-        <TabsTab disabled icon="Redo" value={6} {...rewrite}>
+        <TabsTab
+          disabled
+          icon="Redo"
+          iconPosition={tabsTabIconPosition}
+          value={6}
+        >
           Key Reconstruction
         </TabsTab>
       </TabsList>

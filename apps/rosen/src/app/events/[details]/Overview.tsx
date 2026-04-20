@@ -10,6 +10,7 @@ import {
   Token,
   DateTime,
   EventStatus,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { Network as NetworkType } from '@rosen-ui/types';
@@ -24,17 +25,24 @@ export const Overview = ({ id }: { id: string }) => {
     fetcher,
   );
 
+  const labelOrientation = useResponsive({
+    mobile: 'horizontal',
+    tablet: 'vertical',
+  } as const);
+
+  const networkVariant = useResponsive({
+    mobile: 'logo',
+    tablet: 'both',
+  } as const);
+
+  const tokenVariant = useResponsive({
+    mobile: 'reverse',
+    tablet: 'both',
+  } as const);
+
   return (
     <Section error={error} load={mutate} title="Overview">
-      <Label
-        label="Event Id"
-        orientation="horizontal"
-        rewrite={{
-          tablet: {
-            orientation: 'vertical',
-          },
-        }}
-      >
+      <Label label="Event Id" orientation={labelOrientation}>
         <Identifier
           style={{ width: isLoading ? '100%' : 'auto' }}
           loading={isLoading}
@@ -43,35 +51,14 @@ export const Overview = ({ id }: { id: string }) => {
         />
       </Label>
       <Columns count={3} width="320px" gap="24px">
-        <Label
-          label="Token"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="Token" orientation={labelOrientation}>
           <Token
             loading={isLoading}
             value={data?.lockToken?.id}
-            variant="reverse"
-            rewrite={{
-              tablet: {
-                variant: 'both',
-              },
-            }}
+            variant={tokenVariant}
           />
         </Label>
-        <Label
-          label="Amount"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="Amount" orientation={labelOrientation}>
           <Amount
             loading={isLoading}
             value={data?.amount}
@@ -81,76 +68,34 @@ export const Overview = ({ id }: { id: string }) => {
             price={data?.price}
           />
         </Label>
-        <Label
-          label="Chain"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="Chain" orientation={labelOrientation}>
           <Connector
             start={
               <Network
                 loading={isLoading}
-                variant="logo"
                 value={data?.fromChain as NetworkType}
-                rewrite={{
-                  tablet: {
-                    variant: 'both',
-                  },
-                }}
+                variant={networkVariant}
               />
             }
             end={
               <Network
                 loading={isLoading}
-                variant="logo"
                 value={data?.toChain as NetworkType}
-                rewrite={{
-                  tablet: {
-                    variant: 'both',
-                  },
-                }}
+                variant={networkVariant}
               />
             }
           />
         </Label>
-        <Label
-          label="Status"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="Status" orientation={labelOrientation}>
           <EventStatus value={data?.status} loading={isLoading} />
         </Label>
-        <Label
-          label="Time"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="Time" orientation={labelOrientation}>
           <DateTime
             loading={isLoading}
             timestamp={(data?.timestamp || 0) * 1000}
           />
         </Label>
-        <Label
-          label="Fee Sum"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="Fee Sum" orientation={labelOrientation}>
           <Amount
             loading={isLoading}
             value={data?.totalFee}
@@ -161,15 +106,7 @@ export const Overview = ({ id }: { id: string }) => {
         </Label>
       </Columns>
       <Columns count={3} width="320px" gap="24px">
-        <Label
-          label="From Address"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="From Address" orientation={labelOrientation}>
           <Identifier
             style={{ width: isLoading ? '100%' : 'auto' }}
             loading={isLoading}
@@ -178,15 +115,7 @@ export const Overview = ({ id }: { id: string }) => {
             copyable
           />
         </Label>
-        <Label
-          label="To Address"
-          orientation="horizontal"
-          rewrite={{
-            tablet: {
-              orientation: 'vertical',
-            },
-          }}
-        >
+        <Label label="To Address" orientation={labelOrientation}>
           <Identifier
             style={{ width: isLoading ? '100%' : 'auto' }}
             loading={isLoading}

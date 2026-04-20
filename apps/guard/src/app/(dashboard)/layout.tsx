@@ -2,7 +2,12 @@
 
 import { Fragment, ReactNode } from 'react';
 
-import { PageHeading, Stack } from '@rosen-bridge/ui-kit';
+import {
+  PageHeading,
+  Stack,
+  StackProps,
+  useResponsive,
+} from '@rosen-bridge/ui-kit';
 
 type LayoutProps = {
   actions: ReactNode;
@@ -18,40 +23,43 @@ const Layout = ({
   health,
   networks,
   tokens,
-}: LayoutProps) => (
-  <Fragment>
-    <PageHeading title="Dashboard" />
-    <Stack spacing={3}>
-      <Stack
-        spacing={2}
-        direction="column"
-        style={{
-          flexShrink: 0,
-        }}
-        rewrite={{
-          laptop: {
-            direction: 'row',
-            align: 'center',
-          },
-        }}
-      >
+}: LayoutProps) => {
+  const props = useResponsive<StackProps>({
+    mobile: {
+      direction: 'column',
+      align: 'TODO',
+    },
+    laptop: {
+      direction: 'row',
+      align: 'center',
+    },
+  });
+
+  const minWidth = useResponsive({
+    mobile: '100%',
+    laptop: '200px',
+  });
+
+  return (
+    <Fragment>
+      <PageHeading title="Dashboard" />
+      <Stack spacing={3}>
         <Stack
-          style={{ width: '100%' }}
-          rewrite={{
-            laptop: {
-              style: { minWidth: '200px' },
-            },
+          spacing={2}
+          style={{
+            flexShrink: 0,
           }}
+          {...props}
         >
-          {health}
+          <Stack style={{ minWidth }}>{health}</Stack>
+          <div style={{ minWidth: 0, flexGrow: 1 }}>{networks}</div>
         </Stack>
-        <div style={{ minWidth: 0, flexGrow: 1 }}>{networks}</div>
+        {revenue}
+        {actions}
+        {tokens}
       </Stack>
-      {revenue}
-      {actions}
-      {tokens}
-    </Stack>
-  </Fragment>
-);
+    </Fragment>
+  );
+};
 
 export default Layout;

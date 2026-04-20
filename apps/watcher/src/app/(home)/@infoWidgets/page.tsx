@@ -1,6 +1,6 @@
 'use client';
 
-import { GridContainer, IconProps } from '@rosen-bridge/ui-kit';
+import { GridContainer, IconProps, useResponsive } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 import { fetcher } from '@rosen-ui/swr-helpers';
 import { getDecimalString } from '@rosen-ui/utils';
@@ -63,16 +63,15 @@ const InfoWidgets = () => {
       )
     : 0n;
 
+  const gridContainerMinWidth = useResponsive({
+    mobile: '100%',
+    tablet: '35%',
+    laptop: '25%',
+    desktop: '15%',
+  });
+
   return (
-    <GridContainer
-      gap={2}
-      rewrite={{
-        mobile: { minWidth: '100%' },
-        tablet: { minWidth: '35%' },
-        laptop: { minWidth: '25%' },
-        desktop: { minWidth: '15%' },
-      }}
-    >
+    <GridContainer gap={2} minWidth={gridContainerMinWidth}>
       <InfoWidgetCard
         title="Network"
         value={

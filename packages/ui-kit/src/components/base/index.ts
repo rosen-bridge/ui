@@ -1,4 +1,3 @@
-export * from './Alert';
 export * from './Autocomplete';
 export * from './Box';
 export * from './Checkbox';

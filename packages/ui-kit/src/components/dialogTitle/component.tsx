@@ -2,8 +2,6 @@ import { Typography, TypographyProps } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
-import './styles.scss';
-
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DialogTitleOverrides {}
 
@@ -21,7 +19,6 @@ export type DialogTitleProps = OverridableType<
 >;
 
 export const DialogTitleBase = ({ ...rest }: DialogTitleProps) => {
-  // TODO: use Root element
   return <Typography component="h2" {...rest} />;
 };
 

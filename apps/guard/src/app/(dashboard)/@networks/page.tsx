@@ -1,31 +1,26 @@
 'use client';
 
-import { useMemo } from 'react';
-
 import {
   Carousel,
   CarouselButton,
   CarouselIndicators,
   CarouselItem,
-  CarouselItemProps,
   CarouselProvider,
   Stack,
   Typography,
+  useResponsive,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
 import { Item } from './Item';
 
 const Networks = () => {
-  const rewrite = useMemo<CarouselItemProps['rewrite']>(
-    () => ({
-      desktop: { size: 'calc(25% - 3rem / 4)' },
-      laptop: { size: 'calc(33.33333% - 3rem / 4)' },
-      tablet: { size: 'calc(50% - 2rem / 3)' },
-      mobile: { size: '100%' },
-    }),
-    [],
-  );
+  const carouselItemSize = useResponsive({
+    desktop: 'calc(25% - 3rem / 4)',
+    laptop: 'calc(33.33333% - 3rem / 4)',
+    tablet: 'calc(50% - 2rem / 3)',
+    mobile: '100%',
+  });
 
   return (
     <CarouselProvider>
@@ -43,7 +38,7 @@ const Networks = () => {
         {Object.values(NETWORKS)
           .sort((a, b) => a.index - b.index)
           .map((network) => (
-            <CarouselItem key={network.key} rewrite={rewrite}>
+            <CarouselItem key={network.key} size={carouselItemSize}>
               <Item network={network.key} />
             </CarouselItem>
           ))}

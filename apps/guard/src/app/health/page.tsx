@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import {
   GridContainer,
   HealthParamCard,
+  useResponsive,
   useToast,
 } from '@rosen-bridge/ui-kit';
 import { HEALTH_DATA_REFRESH_INTERVAL } from '@rosen-ui/constants';
@@ -63,7 +64,7 @@ const Health = () => {
         toast.add({
           type: 'info',
           description: currentHealthParamInfo.title + ' status updated',
-        })
+        });
 
         mutate([
           ...data!.slice(0, healthParamIndex),
@@ -77,15 +78,14 @@ const Health = () => {
     [data, mutate, toast.add],
   );
 
+  const gridContainerMinWidth = useResponsive({
+    mobile: '100%',
+    tablet: '35%',
+    laptop: '25%',
+  });
+
   return (
-    <GridContainer
-      gap={3}
-      rewrite={{
-        mobile: { minWidth: '100%' },
-        tablet: { minWidth: '35%' },
-        laptop: { minWidth: '25%' },
-      }}
-    >
+    <GridContainer gap={3} minWidth={gridContainerMinWidth}>
       {isLoading && (
         <>
           <HealthParamCard loading />

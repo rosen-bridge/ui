@@ -167,8 +167,9 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
         ) {
           toast.add({
             type: 'warning',
-            description: 'Fees might change depending on the height of mining the transactions.',
-          })
+            description:
+              'Fees might change depending on the height of mining the transactions.',
+          });
         }
 
         setFeesInfo({ tokenId, ...parsedData.fees });
@@ -178,19 +179,12 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
         toast.add({
           type: 'error',
           description: 'something went wrong! please try again',
-        })
+        });
 
         setError(error);
       }
     });
-  }, [
-    isLoading,
-    selectedSource,
-    sourceValue,
-    targetValue,
-    tokenId,
-    toast.add,
-  ]);
+  }, [isLoading, selectedSource, sourceValue, targetValue, tokenId, toast.add]);
 
   useEffect(() => {
     if (tokenId && tokenId !== feesInfo?.tokenId) {

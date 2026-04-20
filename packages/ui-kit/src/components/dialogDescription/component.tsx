@@ -21,7 +21,6 @@ export type DialogDescriptionProps = OverridableType<
 >;
 
 export const DialogDescriptionBase = ({ ...rest }: DialogDescriptionProps) => {
-  // TODO: use Root element
   return <Typography component="p" {...rest} />;
 };
 

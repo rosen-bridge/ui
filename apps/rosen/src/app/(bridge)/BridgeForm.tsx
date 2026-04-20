@@ -14,6 +14,8 @@ import {
   Icon,
   Network,
   Stack,
+  useResponsive,
+  StackProps,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -57,6 +59,11 @@ export const BridgeForm = () => {
   const { error, isLoading: isMaxLoading, raw, load } = useMaxTransfer();
 
   const { selected: selectedWallet } = useWallet();
+
+  const stackDirection = useResponsive<StackProps['direction']>({
+    mobile: 'column',
+    tablet: 'row',
+  });
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
@@ -126,7 +133,7 @@ export const BridgeForm = () => {
 
   return (
     <>
-      <Stack spacing={2} rewrite={{ tablet: { direction: 'row' } }}>
+      <Stack direction={stackDirection} spacing={2}>
         <TextField
           id="source"
           select

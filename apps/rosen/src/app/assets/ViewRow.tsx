@@ -100,50 +100,26 @@ export const ViewRow = ({
                 </TableGridCell>
                 <TableGridBodyDetails open={current?.id === item.id}>
                   <Columns width="175px" count={2} rule gap="16px">
-                    <Label
-                      label="Locked"
-                      orientation="horizontal"
-                      rewrite={{
-                        tablet: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.lockedAmount} />
-                    </Label>
-                    <Label
-                      label="Hot"
-                      orientation="horizontal"
-                      rewrite={{
-                        desktop: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.hotAmount} />
-                    </Label>
-                    <Label
-                      label="Cold"
-                      orientation="horizontal"
-                      rewrite={{
-                        desktop: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.coldAmount} />
-                    </Label>
-                    <Label
-                      label="Bridged"
-                      orientation="horizontal"
-                      rewrite={{
-                        laptop: {
-                          style: { display: 'none' },
-                        },
-                      }}
-                    >
-                      <Amount value={item.bridgedAmount} />
-                    </Label>
+                    {!isTabletUp && (
+                      <Label label="Locked" orientation="horizontal">
+                        <Amount value={item.lockedAmount} />
+                      </Label>
+                    )}
+                    {!isDesktopUp && (
+                      <Label label="Hot" orientation="horizontal">
+                        <Amount value={item.hotAmount} />
+                      </Label>
+                    )}
+                    {!isDesktopUp && (
+                      <Label label="Cold" orientation="horizontal">
+                        <Amount value={item.coldAmount} />
+                      </Label>
+                    )}
+                    {isLaptopUp && (
+                      <Label label="Bridged" orientation="horizontal">
+                        <Amount value={item.bridgedAmount} />
+                      </Label>
+                    )}
                   </Columns>
                   <Label label="Bridged to" />
                   {current?.id === item.id && <BridgedList value={item} />}
