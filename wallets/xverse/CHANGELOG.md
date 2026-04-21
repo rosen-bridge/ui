@@ -1,5 +1,19 @@
 # @rosen-ui/xverse-wallet
 
+## 0.5.0
+
+### Minor Changes
+
+- Improve performance by lazy loading wallet dependencies and deferring their initialization until needed, reducing initial bundle size and speeding up app load time
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/bitcoin@2.4.5
+  - @rosen-ui/wallet-api@3.2.0
+  - @rosen-network/bitcoin-runes@1.0.5
+
 ## 0.4.1
 
 ### Patch Changes

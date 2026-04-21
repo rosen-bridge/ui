@@ -1,5 +1,20 @@
 # @rosen-ui/metamask-wallet
 
+## 2.2.0
+
+### Minor Changes
+
+- Improve performance by lazy loading wallet dependencies and deferring their initialization until needed, reducing initial bundle size and speeding up app load time
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/evm@0.3.7
+  - @rosen-ui/wallet-api@3.2.0
+  - @rosen-network/binance@0.4.6
+  - @rosen-network/ethereum@0.4.6
+
 ## 2.1.8
 
 ### Patch Changes

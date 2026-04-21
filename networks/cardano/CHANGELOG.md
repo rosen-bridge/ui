@@ -1,5 +1,15 @@
 # @rosen-network/cardano
 
+## 2.5.5
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.6.0
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/base@0.5.3
+  - @rosen-ui/utils@1.0.3
+
 ## 2.5.4
 
 ### Patch Changes
