@@ -4,7 +4,7 @@ import {
   paginationBuilder,
   PaginationBuilderParams,
   PaginationBuilderResult,
-} from '@/components/pagination/buildPagination';
+} from '@/utils';
 
 type UsePaginationParams = PaginationBuilderParams & {
   onPageChange: (page: number) => void;
@@ -61,7 +61,10 @@ export const usePagination = ({
     (page: number | string) => {
       if (page === '...') return;
 
-      const safePage = Math.max(1, Math.min(Number(page), pagination.totalPages));
+      const safePage = Math.max(
+        1,
+        Math.min(Number(page), pagination.totalPages),
+      );
       onPageChange(safePage);
     },
     [pagination.totalPages, onPageChange],

@@ -3,8 +3,8 @@ import React, { ComponentType, useState } from 'react';
 import { ListSubheader, Menu, MenuItem } from '@mui/material';
 
 import { Button, Icon, IconButton, Typography } from '@/components';
-import { usePagination } from '@/components/pagination/usePagination';
 import { ElementBaseProps, Wrap } from '@/core';
+import { usePagination } from '@/hooks';
 import { OverridableType } from '@/types';
 
 import './styles.scss';
@@ -31,21 +31,6 @@ export type PaginationOverriddenProps = OverridableType<
   PaginationOverrides,
   never
 >;
-
-export type UsePaginationItem = {
-  onClick: React.ReactEventHandler;
-  type:
-    | 'page'
-    | 'first'
-    | 'last'
-    | 'next'
-    | 'previous'
-    | 'start-ellipsis'
-    | 'end-ellipsis';
-  page: number | null;
-  selected: boolean;
-  disabled: boolean;
-};
 
 export const PaginationBase = ({
   defaultPageIndex = 0,

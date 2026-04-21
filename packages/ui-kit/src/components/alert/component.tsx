@@ -1,3 +1,6 @@
+import React, { useMemo } from 'react';
+
+import { Icon } from '@/components';
 import { ElementBaseProps, Wrap } from '@/core';
 import { OverridableType } from '@/types';
 
@@ -7,14 +10,37 @@ import './styles.scss';
 export interface AlertOverrides {}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
-export type AlertOwnProps = {};
+export type AlertOwnProps = {
+  severity?: 'info' | 'success' | 'warning' | 'error';
+  children?: React.ReactNode;
+  action?: React.ReactNode;
+};
 
 export type AlertBaseProps = ElementBaseProps<'div', AlertOwnProps>;
 
 export type AlertProps = OverridableType<AlertBaseProps, AlertOverrides, never>;
 
-export const AlertBase = ({ ...rest }: AlertProps) => {
-  return <div {...rest} />;
+export const AlertBase = ({ severity='info', children,action, ...props }: AlertProps) => {
+  const statusIcon = useMemo(() => {
+    switch (severity) {
+      case 'success':
+        return <Icon name="CheckCircle" size="medium" />;
+      case 'warning':
+        return <Icon name="InfoCircle" size="medium" />;
+      case 'error':
+        return <Icon name="ExclamationTriangle" size="medium" />;
+      default:
+        return <Icon name="InfoCircle" size="medium" />;
+    }
+  }, [severity]);
+
+  return (
+    <div {...props} data-alert-severity={severity} className="RosenAlert-root" >
+      <div className="RosenAlert-icon">{statusIcon}</div>
+      <div className="RosenAlert-content">{children}</div>
+      <div className="RosenAlert-action">{action}</div>
+    </div>
+  );
 };
 
 AlertBase.displayName = 'Alert';

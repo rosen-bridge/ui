@@ -1,2 +1,45 @@
-.RosenAlert {
+@use "sass:list";
+
+$alert-colors: (
+        success: (var(--rosen-palette-success-light), var(--rosen-palette-success-dark)),
+        warning: (var(--rosen-palette-warning-light), var(--rosen-palette-warning-dark)),
+        error: (var(--rosen-palette-error-light), var(--rosen-palette-error-dark)),
+        info: (var(--rosen-palette-info-light), var(--rosen-palette-info-dark)),
+);
+
+.RosenAlert-root {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  padding: calc(var(--rosen-spacing) * 1.3) calc(var(--rosen-spacing) * 2);
+  border-radius: calc(var(--rosen-spacing) * 2);
+  gap: calc(var(--rosen-spacing) * 1.3);
+
+  @each $type, $colors in $alert-colors {
+    &[data-alert-severity="#{$type}"] {
+      background-color: list.nth($colors, 1);
+      color: list.nth($colors, 2);
+
+      & svg {
+        color: list.nth($colors, 2);
+      }
+    }
+  }
+
 }
+
+.RosenAlert-icon {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+}
+
+.RosenAlert-content {
+  flex: 1;
+}
+
+.RosenAlert-action {
+  flex: 0 0 auto;
+}
+
