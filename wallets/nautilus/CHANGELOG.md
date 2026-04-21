@@ -1,5 +1,14 @@
 # @rosen-ui/nautilus-wallet
 
+## 3.1.7
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-ui/wallet-api@3.2.0
+  - @rosen-network/ergo@2.5.6
+
 ## 3.1.6
 
 ### Patch Changes

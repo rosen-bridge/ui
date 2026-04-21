@@ -63,7 +63,7 @@ export const SmartSearch = ({
   value: filters,
   onChange,
 }: SmartSearchProps) => {
-  const timeout = useRef<number>();
+  const timeout = useRef<number>(-1);
 
   const $anchor = useRef<HTMLInputElement>(null);
 

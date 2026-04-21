@@ -30,7 +30,7 @@ import {
   buildCardanoBlockFrostScannerWithExtractors,
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
-import { ChainScannersType, ChainsKeys } from '../types';
+import { ChainScannersType, ChainsKeys, ChainsWithScanner } from '../types';
 import { DBService } from './db';
 
 export class ScannerService extends PeriodicTaskService {
@@ -104,7 +104,10 @@ export class ScannerService extends PeriodicTaskService {
             break;
         }
       }
-      if (configs.chains.bitcoin.active) {
+      if (
+        configs.chains.bitcoin.active ||
+        configs.chains['bitcoin-runes'].active
+      ) {
         switch (configs.chains.bitcoin.method) {
           case BITCOIN_METHOD_ESPLORA:
             this.scanners[NETWORKS.bitcoin.key] =
@@ -232,7 +235,8 @@ export class ScannerService extends PeriodicTaskService {
             }
           }
         },
-        interval: configs.chains[chain as ChainsKeys].scanInterval * 1000,
+        interval:
+          configs.chains[chain as ChainsWithScanner].scanInterval * 1000,
       });
     }
     return tasks;

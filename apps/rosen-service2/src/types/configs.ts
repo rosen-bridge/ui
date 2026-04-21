@@ -1,9 +1,9 @@
 export interface RosenService2BaseConfig {
   paths: Paths;
   chains: Chains;
+  statistics: Statistics;
   dataAggregator: DataAggregator;
   healthCheck: HealthCheck;
-  statistics: Statistics;
   redis: Redis;
   db: Db;
   logs: Logs[];
@@ -61,21 +61,36 @@ export interface HealthCheckLogging {
 export interface DataAggregator {
   interval: number;
 }
-export interface GeneralMetrics {
+
+export interface Statistics {
+  lockedAssetsMetrics: StatisticsLockedAssetsMetrics;
+  generalMetrics: StatisticsGeneralMetrics;
+  eventCountMetrics: StatisticsEventCountMetrics;
+  userEventsMetric: StatisticsUserEventMetrics;
+}
+
+export interface StatisticsEventCountMetrics {
   interval: number;
 }
 
-export interface Statistics {
-  generalMetrics: GeneralMetrics;
+export interface StatisticsGeneralMetrics {
+  interval: number;
 }
 
+export interface StatisticsLockedAssetsMetrics {
+  interval: number;
+}
+export interface StatisticsUserEventMetrics {
+  interval: number;
+}
 export interface Chains {
-  ergo: ChainsErgo;
-  cardano: ChainsCardano;
-  bitcoin: ChainsBitcoin;
-  doge: ChainsDoge;
-  ethereum: ChainsEthereum;
-  binance: ChainsBinance;
+  'ergo': ChainsErgo;
+  'cardano': ChainsCardano;
+  'bitcoin': ChainsBitcoin;
+  'bitcoin-runes': ChainsBitcoinRunes;
+  'doge': ChainsDoge;
+  'ethereum': ChainsEthereum;
+  'binance': ChainsBinance;
 }
 
 export interface ChainsBinance {
@@ -165,6 +180,17 @@ export interface ChainsDogeAdapter {
 
 export interface ChainsDogeAdapterBlockCypher {
   url: string;
+}
+
+export interface ChainsBitcoinRunes {
+  active: boolean;
+  adapter: ChainsBitcoinRunesAdapter;
+  unisatUrl?: string;
+  unisatApiKey?: string;
+}
+
+export interface ChainsBitcoinRunesAdapter {
+  extraAddresses?: string[];
 }
 
 export interface ChainsBitcoin {
