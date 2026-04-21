@@ -289,53 +289,53 @@ export const lightThemeOptions: ThemeOptions = {
     //     },
     //   },
     // },
-    MuiAlert: {
-      defaultProps: {
-        iconMapping: {
-          error: (
-            <SvgIcon>
-              <ExclamationTriangle fontSize="inherit" />
-            </SvgIcon>
-          ),
-          info: (
-            <SvgIcon>
-              <InfoCircle fontSize="inherit" />
-            </SvgIcon>
-          ),
-          success: (
-            <SvgIcon>
-              <CheckCircle fontSize="inherit" />
-            </SvgIcon>
-          ),
-          warning: (
-            <SvgIcon>
-              <ExclamationCircle fontSize="inherit" />
-            </SvgIcon>
-          ),
-        },
-      },
-      styleOverrides: {
-        root: {
-          fontSize: '0.875rem',
-        },
-        standardError: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.error.main,
-          backgroundColor: theme.palette.error.light,
-        }),
-        standardInfo: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.info.main,
-          backgroundColor: theme.palette.info.light,
-        }),
-        standardSuccess: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.success.main,
-          backgroundColor: theme.palette.success.light,
-        }),
-        standardWarning: ({ theme }: { theme: Theme }) => ({
-          color: theme.palette.warning.main,
-          backgroundColor: theme.palette.warning.light,
-        }),
-      },
-    },
+    // MuiAlert: {
+    //   defaultProps: {
+    //     iconMapping: {
+    //       error: (
+    //         <SvgIcon>
+    //           <ExclamationTriangle fontSize="inherit" />
+    //         </SvgIcon>
+    //       ),
+    //       info: (
+    //         <SvgIcon>
+    //           <InfoCircle fontSize="inherit" />
+    //         </SvgIcon>
+    //       ),
+    //       success: (
+    //         <SvgIcon>
+    //           <CheckCircle fontSize="inherit" />
+    //         </SvgIcon>
+    //       ),
+    //       warning: (
+    //         <SvgIcon>
+    //           <ExclamationCircle fontSize="inherit" />
+    //         </SvgIcon>
+    //       ),
+    //     },
+    //   },
+    //   styleOverrides: {
+    //     root: {
+    //       fontSize: '0.875rem',
+    //     },
+    //     standardError: ({ theme }: { theme: Theme }) => ({
+    //       color: theme.palette.error.main,
+    //       backgroundColor: theme.palette.error.light,
+    //     }),
+    //     standardInfo: ({ theme }: { theme: Theme }) => ({
+    //       color: theme.palette.info.main,
+    //       backgroundColor: theme.palette.info.light,
+    //     }),
+    //     standardSuccess: ({ theme }: { theme: Theme }) => ({
+    //       color: theme.palette.success.main,
+    //       backgroundColor: theme.palette.success.light,
+    //     }),
+    //     standardWarning: ({ theme }: { theme: Theme }) => ({
+    //       color: theme.palette.warning.main,
+    //       backgroundColor: theme.palette.warning.light,
+    //     }),
+    //   },
+    // },
     RosenNavigationBar: {
       styleOverrides: {
         root: ({ theme }: { theme: Theme }) => ({
