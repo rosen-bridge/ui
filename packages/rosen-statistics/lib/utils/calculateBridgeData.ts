@@ -1,12 +1,13 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { TokenPriceAction } from '@rosen-bridge/token-price-entity';
-import {
-  BridgeEventData,
-  BridgeMetricRecord,
-} from '@rosen-ui/rosen-statistics-entity';
+import { BridgeMetricRecord } from '@rosen-ui/rosen-statistics-entity';
 
 import { WEEK_IN_SECONDS } from '../constants';
-import { BridgeDataCalculationResult, AggregatedBridgeData } from '../types';
+import {
+  BridgeDataCalculationResult,
+  AggregatedBridgeData,
+  MappedBridgeEventData,
+} from '../types';
 import {
   getDecimalString,
   getNonDecimalString,
@@ -16,16 +17,17 @@ import {
 } from './index';
 
 /**
- * Calculate bridge amount USD values from events
+ * Calculate bridge data (amount or fee) USD values from events
  *
- * @param events - Array of bridge amount events
+ * @param events - Array of bridge events data to process
  * @param tokenPriceAction - Token price action instance for fetching prices
  * @param logger - Logger instance
+ * @param metricType - Type of metric being calculated (for logging)
  *
- * @returns Object containing bridge amount records, day total raw value, and max decimals
+ * @returns Object containing bridge metric records, day total raw value, and max decimals
  */
-export const calculateBridgeAmount = async (
-  events: BridgeEventData[],
+export const calculateBridgeData = async (
+  events: MappedBridgeEventData[],
   tokenPriceAction: TokenPriceAction,
   logger: AbstractLogger,
 ): Promise<BridgeDataCalculationResult> => {
@@ -36,12 +38,12 @@ export const calculateBridgeAmount = async (
 
   for (const e of events) {
     const tokenUsdPrice = await tokenPriceAction.getLatestTokenPrice(
-      e.tokenId,
-      e.timestamp, // ignoring exact price timestamp for simplicity
+      e.tokenId, // ignoring exact price timestamp for simplicity
+      e.timestamp,
     );
     if (tokenUsdPrice === undefined) {
       logger.warn(
-        `Cannot calculate bridge amount: missing price for token ${e.tokenId} at timestamp ${e.timestamp}`,
+        `Cannot calculate bridge data: missing price for token ${e.tokenId} at timestamp ${e.timestamp}`,
       );
       throw new Error(`Missing token price for token ${e.tokenId}`);
     }
@@ -53,9 +55,8 @@ export const calculateBridgeAmount = async (
       tokenUsdPriceDecimals,
     );
 
-    // Calculate USD value: bridgeAmount (token decimals) * tokenPrice (price decimals)
-    // Result decimals = token decimals + price decimals
-    const rawUsdValue = BigInt(e.bridgeAmount) * BigInt(tokenUsdPriceRaw);
+    // Calculate USD value: amount (token decimals) * tokenPrice (price decimals)
+    const rawUsdValue = BigInt(e.amount) * BigInt(tokenUsdPriceRaw);
     const usdValueDecimals = e.decimal + tokenUsdPriceDecimals;
 
     const current = aggregated.get(e.fromChain);
@@ -101,7 +102,7 @@ export const calculateBridgeAmount = async (
     dayMaxDecimals = Math.max(dayMaxDecimals, usdValueDecimals);
   }
 
-  const bridgeAmountRecords: BridgeMetricRecord[] = [];
+  const bridgeMetricRecords: BridgeMetricRecord[] = [];
   let dayTotalRaw = 0n;
 
   // Normalize all chain values to same precision before summing
@@ -117,7 +118,7 @@ export const calculateBridgeAmount = async (
 
     const usdAmountString = getDecimalString(data.rawUsd, data.decimals);
 
-    bridgeAmountRecords.push({
+    bridgeMetricRecords.push({
       fromChain,
       day: data.day,
       month: data.month,
@@ -128,12 +129,12 @@ export const calculateBridgeAmount = async (
     });
 
     logger.debug(
-      `Processed bridge amount for chain ${fromChain}: ${usdAmountString} USD`,
+      `Processed bridge data for chain ${fromChain}: ${usdAmountString} USD`,
     );
   }
 
   return {
-    bridgeMetricRecords: bridgeAmountRecords,
+    bridgeMetricRecords,
     dayTotalRaw,
     dayMaxDecimals,
     totalEventsProcessed: events.length,

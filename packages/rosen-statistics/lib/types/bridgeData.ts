@@ -22,3 +22,15 @@ export interface BridgeDataCalculationResult {
   dayMaxDecimals: number;
   totalEventsProcessed: number;
 }
+
+export interface MappedBridgeEventData {
+  fromChain: string;
+  amount: string; // This will be either bridgeAmount or bridgeFee
+  tokenId: string;
+  timestamp: number;
+  height: number;
+  day: number;
+  month: number;
+  year: number;
+  decimal: number;
+}

@@ -9,12 +9,13 @@ import {
 } from '@rosen-ui/rosen-statistics-entity';
 
 import { DAY_IN_SECONDS } from '../constants';
+import { MappedBridgeEventData } from '../types';
 import {
   getDecimalString,
   getNonDecimalString,
   getNumberOfDecimals,
   multiplyByPowerOfTen,
-  calculateBridgeFees,
+  calculateBridgeData,
 } from '../utils';
 
 /**
@@ -115,10 +116,23 @@ export const bridgeFeeMetric = async (
         startTs += DAY_IN_SECONDS;
         continue;
       }
-      const result = await calculateBridgeFees(
-        events,
+
+      const mappedEvents: MappedBridgeEventData[] = events.map((event) => ({
+        fromChain: event.fromChain,
+        amount: event.bridgeFee, // Use bridgeFee as amount
+        tokenId: event.tokenId,
+        timestamp: event.timestamp,
+        height: event.height,
+        day: event.day,
+        month: event.month,
+        year: event.year,
+        decimal: event.decimal,
+      }));
+
+      const result = await calculateBridgeData(
+        mappedEvents,
         tokenPriceAction,
-        logger.child('calculateBridgeFees'),
+        logger.child('calculateBridgeData'),
       );
 
       if (result.dayTotalRaw > 0n) {
