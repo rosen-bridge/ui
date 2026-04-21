@@ -24,7 +24,7 @@ export type WalletModalProps = {
 };
 
 export const WalletModal = ({ open, onClose }: WalletModalProps) => {
-  const [, forceUpdate] = useState('');
+  const [, forceUpdate] = useState(0);
 
   const network = useNetwork();
 
@@ -35,12 +35,22 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
   useEffect(() => {
     if (!open) return;
 
-    const timeout = setInterval(() => {
-      forceUpdate(wallet.wallets.map((item) => item.isAvailable()).join(':'));
-    }, 2000);
+    let timeout = 0;
+
+    const refresh = async () => {
+      const promises = wallet.wallets.map((wallet) => wallet.initialize());
+
+      await Promise.allSettled(promises);
+
+      forceUpdate(Math.random());
+
+      timeout = window.setTimeout(refresh, 2000);
+    };
+
+    refresh();
 
     return () => {
-      clearInterval(timeout);
+      clearTimeout(timeout);
     };
   }, [open, wallet.wallets]);
 
@@ -92,8 +102,9 @@ export const WalletModal = ({ open, onClose }: WalletModalProps) => {
                         variant="contained"
                         size="small"
                         style={{ width: '100%' }}
-                        disabled={!item.isAvailable()}
+                        disabled={!item.isInitialized || !item.isAvailable()}
                         color={isConnected ? 'inherit' : 'primary'}
+                        loading={!item.isInitialized}
                         onClick={handleClick}
                       >
                         {isConnected ? 'Disconnect' : 'Connect'}

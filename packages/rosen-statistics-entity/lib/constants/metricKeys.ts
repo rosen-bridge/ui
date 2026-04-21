@@ -6,6 +6,7 @@ export const METRIC_KEYS = {
   EVENT_COUNT_TOTAL: 'event_count_total',
   USER_COUNT_TOTAL: 'user_count_total',
   WATCHER_COUNT_TOTAL: 'watcher_count_total',
+  TOTAL_BRIDGE_FEES_USD: 'total_bridge_fees_usd',
 } as const;
 
 export type MetricKey = (typeof METRIC_KEYS)[keyof typeof METRIC_KEYS];

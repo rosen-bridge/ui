@@ -66,6 +66,7 @@ export interface Statistics {
   lockedAssetsMetrics: StatisticsLockedAssetsMetrics;
   generalMetrics: StatisticsGeneralMetrics;
   eventCountMetrics: StatisticsEventCountMetrics;
+  userEventsMetric: StatisticsUserEventMetrics;
 }
 
 export interface StatisticsEventCountMetrics {
@@ -79,7 +80,9 @@ export interface StatisticsGeneralMetrics {
 export interface StatisticsLockedAssetsMetrics {
   interval: number;
 }
-
+export interface StatisticsUserEventMetrics {
+  interval: number;
+}
 export interface Chains {
   'ergo': ChainsErgo;
   'cardano': ChainsCardano;

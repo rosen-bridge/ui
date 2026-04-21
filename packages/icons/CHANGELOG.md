@@ -1,5 +1,12 @@
 # @rosen-bridge/icons
 
+## 3.6.0
+
+### Minor Changes
+
+- Add the `Palm` Icon
+- Upgrade React to v19
+
 ## 3.5.0
 
 ### Minor Changes
