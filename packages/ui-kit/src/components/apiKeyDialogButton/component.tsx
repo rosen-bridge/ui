@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
 import { ApiKeyDialog, Icon, IconButton } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogButtonOverrides {}
@@ -21,9 +21,9 @@ export type ApiKeyDialogButtonProps = OverridableType<
   never
 >;
 
-export const ApiKeyDialogButtonBase = ({
-  ...rest
-}: ApiKeyDialogButtonProps) => {
+export const ApiKeyDialogButton = (props: ApiKeyDialogButtonProps) => {
+  const { ...rest } = useConfig('ApiKeyDialogButton', props);
+
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -36,6 +36,4 @@ export const ApiKeyDialogButtonBase = ({
   );
 };
 
-ApiKeyDialogButtonBase.displayName = 'ApiKeyDialogButton';
-
-export const ApiKeyDialogButton = Wrap(ApiKeyDialogButtonBase);
+ApiKeyDialogButton.displayName = 'ApiKeyDialogButton';

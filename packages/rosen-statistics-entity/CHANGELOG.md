@@ -1,5 +1,18 @@
 # @rosen-ui/rosen-statistics-entity
 
+## 0.3.0
+
+### Minor Changes
+
+- Add WatcherCountMetricAction action
+- Add BridgeMetricsAction action
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/watcher-data-extractor@13.0.4
+  - @rosen-ui/asset-calculator@2.3.2
+
 ## 0.2.1
 
 ### Patch Changes

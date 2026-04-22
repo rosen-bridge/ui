@@ -1,5 +1,20 @@
 # @rosen-ui/wallet-connect
 
+## 0.3.0
+
+### Minor Changes
+
+- Improve performance by lazy loading wallet dependencies and deferring their initialization until needed, reducing initial bundle size and speeding up app load time
+
+### Patch Changes
+
+- Fix `WalletConnect` chain reset issue by enforcing desired network via ensureChain before wallet actions to prevent `incorrect balances` after reconnection
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-ui/wallet-api@3.2.0
+  - @rosen-network/binance@0.4.6
+  - @rosen-network/ethereum@0.4.6
+
 ## 0.2.8
 
 ### Patch Changes

@@ -1,5 +1,21 @@
 # @rosen-bridge/ui-kit
 
+## 5.4.0
+
+### Minor Changes
+
+- Implement `Duration` Component
+- Upgrade React to v19
+- Extract DateTime logic into a utility function and add unit tests
+- Separated `calculateRelativeTime` logic from `RelativeTime` component and Add unit tests
+- Maintain consistent height for the `AppInfo` section in the sidebar during loading
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.6.0
+  - @rosen-ui/utils@1.0.3
+
 ## 5.3.0
 
 ### Minor Changes

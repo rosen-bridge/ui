@@ -3,8 +3,8 @@ import { FC, SVGAttributes, useMemo } from 'react';
 import * as Icons from '@rosen-bridge/icons';
 
 import { Skeleton } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -30,17 +30,19 @@ export type IconProps = OverridableType<
   'color' | 'name' | 'size'
 >;
 
-export const IconBase = ({
-  as,
-  color = 'inherit',
-  fallback,
-  icons,
-  loading,
-  name,
-  size = 'medium',
-  style,
-  ...rest
-}: IconProps) => {
+export const Icon = (props: IconProps) => {
+  const {
+    as,
+    color = 'inherit',
+    fallback,
+    icons,
+    loading,
+    name,
+    size = 'medium',
+    style,
+    ...rest
+  } = useConfig('Icon', props);
+
   const Icon =
     as ||
     icons?.[name as keyof typeof icons] ||
@@ -75,6 +77,4 @@ export const IconBase = ({
   return <Icon style={styles} {...rest} />;
 };
 
-IconBase.displayName = 'Icon';
-
-export const Icon = Wrap(IconBase);
+Icon.displayName = 'Icon';

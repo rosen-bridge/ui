@@ -1,9 +1,8 @@
 import { CSSProperties } from 'react';
 
 import { Button } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { useResponsive } from '@/hooks';
-import { OverridableType } from '@/types';
+import { useConfig, useResponsive } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SubmitButtonOverrides {}
@@ -22,7 +21,9 @@ export type SubmitButtonProps = OverridableType<
   never
 >;
 
-export const SubmitButtonBase = ({ style, ...rest }: SubmitButtonProps) => {
+export const SubmitButton = (props: SubmitButtonProps) => {
+  const { style, ...rest } = useConfig('SubmitButton', props);
+
   const styles = useResponsive<CSSProperties>({
     mobile: {
       width: '100%',
@@ -36,9 +37,8 @@ export const SubmitButtonBase = ({ style, ...rest }: SubmitButtonProps) => {
       ...style,
     },
   });
+
   return <Button style={styles} type="submit" variant="contained" {...rest} />;
 };
 
-SubmitButtonBase.displayName = 'SubmitButton';
-
-export const SubmitButton = Wrap(SubmitButtonBase);
+SubmitButton.displayName = 'SubmitButton';

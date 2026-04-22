@@ -1,6 +1,6 @@
 import { Typography, TypographyProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,10 +20,10 @@ export type DialogDescriptionProps = OverridableType<
   never
 >;
 
-export const DialogDescriptionBase = ({ ...rest }: DialogDescriptionProps) => {
+export const DialogDescription = (props: DialogDescriptionProps) => {
+  const { ...rest } = useConfig('DialogDescription', props);
+
   return <Typography component="p" {...rest} />;
 };
 
-DialogDescriptionBase.displayName = 'DialogDescription';
-
-export const DialogDescription = Wrap(DialogDescriptionBase);
+DialogDescription.displayName = 'DialogDescription';

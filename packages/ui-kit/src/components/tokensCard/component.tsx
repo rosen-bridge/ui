@@ -10,8 +10,8 @@ import {
   Icon,
   TokensList,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TokensCardOverrides {}
@@ -36,14 +36,12 @@ export type TokensCardProps = OverridableType<
  * a wrapper for `TokensList` which also renders a title and a "See All" action
  * button
  */
-export const TokensCardBase = ({
-  chain,
-  href,
-  loading,
-  title,
-  tokens,
-  ...rest
-}: TokensCardProps) => {
+export const TokensCard = (props: TokensCardProps) => {
+  const { chain, href, loading, title, tokens, ...rest } = useConfig(
+    'TokensCard',
+    props,
+  );
+
   return (
     <Card style={{ height: '100%' }} {...rest}>
       <CardHeader>
@@ -69,6 +67,4 @@ export const TokensCardBase = ({
   );
 };
 
-TokensCardBase.displayName = 'TokensCard';
-
-export const TokensCard = Wrap(TokensCardBase);
+TokensCard.displayName = 'TokensCard';

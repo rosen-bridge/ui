@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.scss';
@@ -40,14 +40,16 @@ export type CardProps = OverridableType<
   'backgroundColor'
 >;
 
-export const CardBase = ({
-  active,
-  backgroundColor = 'background-paper',
-  clickable,
-  style,
-  variant,
-  ...rest
-}: CardProps) => {
+export const Card = (props: CardProps) => {
+  const {
+    active,
+    backgroundColor = 'background-paper',
+    clickable,
+    style,
+    variant,
+    ...rest
+  } = useConfig('Card', props);
+
   const styles = useMemo(
     () => ({
       backgroundColor: toCSSColor(backgroundColor),
@@ -67,6 +69,4 @@ export const CardBase = ({
   );
 };
 
-CardBase.displayName = 'Card';
-
-export const Card = Wrap(CardBase);
+Card.displayName = 'Card';

@@ -10,8 +10,8 @@ import {
   Typography,
   TypographyProps,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -75,18 +75,20 @@ const DEFAULT_NETWORK: TokenMeta = {
 /**
  * Displays a token with an avatar and its name.
  */
-export const TokenBase = ({
-  fallback,
-  href,
-  label,
-  loading,
-  logo,
-  slots,
-  tokens,
-  value = '',
-  variant = 'both',
-  ...rest
-}: TokenProps) => {
+export const Token = (props: TokenProps) => {
+  const {
+    fallback,
+    href,
+    label,
+    loading,
+    logo,
+    slots,
+    tokens,
+    value = '',
+    variant = 'both',
+    ...rest
+  } = useConfig('Token', props);
+
   const showLabel = variant !== 'logo';
   const showLogo = variant !== 'label';
 
@@ -184,6 +186,4 @@ export const TokenBase = ({
   );
 };
 
-TokenBase.displayName = 'Token';
-
-export const Token = Wrap(TokenBase);
+Token.displayName = 'Token';

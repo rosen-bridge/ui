@@ -1,6 +1,6 @@
 import { Icon, IconButton, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CloseButtonOverrides {}
@@ -22,7 +22,9 @@ export type CloseButtonProps = OverridableType<
   never
 >;
 
-export const CloseButtonBase = ({ slots, ...rest }: CloseButtonProps) => {
+export const CloseButton = (props: CloseButtonProps) => {
+  const { slots, ...rest } = useConfig('CloseButton', props);
+
   return (
     <IconButton {...rest}>
       <Icon name="Times" {...slots?.icon} />
@@ -30,6 +32,4 @@ export const CloseButtonBase = ({ slots, ...rest }: CloseButtonProps) => {
   );
 };
 
-CloseButtonBase.displayName = 'CloseButton';
-
-export const CloseButton = Wrap(CloseButtonBase);
+CloseButton.displayName = 'CloseButton';

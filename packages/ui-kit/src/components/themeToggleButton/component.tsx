@@ -1,7 +1,6 @@
 import { Icon, IconButton, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { useIsDarkMode, useThemeToggler } from '@/hooks';
-import { OverridableType } from '@/types';
+import { useConfig, useIsDarkMode, useThemeToggler } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ThemeToggleButtonOverrides {}
@@ -24,10 +23,9 @@ export type ThemeToggleButtonProps = OverridableType<
   never
 >;
 
-export const ThemeToggleButtonBase = ({
-  slots,
-  ...rest
-}: ThemeToggleButtonProps) => {
+export const ThemeToggleButton = (props: ThemeToggleButtonProps) => {
+  const { slots, ...rest } = useConfig('ThemeToggleButton', props);
+
   const isDarkMode = useIsDarkMode();
 
   const themeToggler = useThemeToggler();
@@ -43,6 +41,4 @@ export const ThemeToggleButtonBase = ({
   );
 };
 
-ThemeToggleButtonBase.displayName = 'ThemeToggleButton';
-
-export const ThemeToggleButton = Wrap(ThemeToggleButtonBase);
+ThemeToggleButton.displayName = 'ThemeToggleButton';

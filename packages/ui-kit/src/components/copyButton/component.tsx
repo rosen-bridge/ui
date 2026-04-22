@@ -1,8 +1,8 @@
 import { useCallback, useMemo, useState } from 'react';
 
 import { Icon, IconButton, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CopyButtonOverrides {}
@@ -39,12 +39,9 @@ export type CopyButtonProps = OverridableType<
 /**
  * A button that copies text to the clipboard and shows the status with an icon.
  */
-export const CopyButtonBase = ({
-  icons,
-  slots,
-  value,
-  ...rest
-}: CopyButtonProps) => {
+export const CopyButton = (props: CopyButtonProps) => {
+  const { icons, slots, value, ...rest } = useConfig('CopyButton', props);
+
   const [status, setStatus] = useState<CopyButtonStatus>('idle');
 
   const icon = useMemo(() => {
@@ -86,6 +83,4 @@ export const CopyButtonBase = ({
   );
 };
 
-CopyButtonBase.displayName = 'CopyButton';
-
-export const CopyButton = Wrap(CopyButtonBase);
+CopyButton.displayName = 'CopyButton';

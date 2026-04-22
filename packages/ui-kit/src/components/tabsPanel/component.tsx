@@ -1,7 +1,7 @@
 import { Tabs } from '@base-ui/react/tabs';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,10 +20,10 @@ export type TabsPanelProps = OverridableType<
   never
 >;
 
-export const TabsPanelBase = ({ value, ...rest }: TabsPanelProps) => {
+export const TabsPanel = (props: TabsPanelProps) => {
+  const { value, ...rest } = useConfig('TabsPanel', props);
+
   return <Tabs.Panel value={value} {...rest} />;
 };
 
-TabsPanelBase.displayName = 'TabsPanel';
-
-export const TabsPanel = Wrap(TabsPanelBase);
+TabsPanel.displayName = 'TabsPanel';

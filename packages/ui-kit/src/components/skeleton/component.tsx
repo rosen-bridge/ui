@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -23,14 +23,16 @@ export type SkeletonProps = OverridableType<
   never
 >;
 
-export const SkeletonBase = ({
-  attached,
-  height,
-  style,
-  variant = 'text',
-  width,
-  ...rest
-}: SkeletonProps) => {
+export const Skeleton = (props: SkeletonProps) => {
+  const {
+    attached,
+    height,
+    style,
+    variant = 'text',
+    width,
+    ...rest
+  } = useConfig('Skeleton', props);
+
   const styles = useMemo(
     () => ({
       height: typeof height === 'number' ? `${height}px` : height,
@@ -53,6 +55,4 @@ export const SkeletonBase = ({
   );
 };
 
-SkeletonBase.displayName = 'Skeleton';
-
-export const Skeleton = Wrap(SkeletonBase);
+Skeleton.displayName = 'Skeleton';

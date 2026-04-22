@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { Gap, OverridableType, Width } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -48,14 +48,12 @@ export type ColumnsProps = OverridableType<
  * It uses CSS columns to automatically split children into multiple columns,
  * with configurable column width, gap, and an optional dividing rule.
  */
-export const ColumnsBase = ({
-  count,
-  gap,
-  rule,
-  style,
-  width,
-  ...rest
-}: ColumnsProps) => {
+export const Columns = (props: ColumnsProps) => {
+  const { count, gap, rule, style, width, ...rest } = useConfig(
+    'Columns',
+    props,
+  );
+
   const styles = useMemo(
     () => ({
       columnWidth: toCSSUnit('width', width),
@@ -69,6 +67,4 @@ export const ColumnsBase = ({
   return <div data-rule={!!rule} style={styles} {...rest} />;
 };
 
-ColumnsBase.displayName = 'Columns';
-
-export const Columns = Wrap(ColumnsBase);
+Columns.displayName = 'Columns';

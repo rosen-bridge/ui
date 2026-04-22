@@ -1,5 +1,17 @@
 # @rosen-ui/wallet-api
 
+## 3.2.0
+
+### Minor Changes
+
+- Introduce initialization status and method to load wallet resources per provider, enabling lazy loading of wallet dependencies and improving performance
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/base@0.5.3
+
 ## 3.1.0
 
 ### Minor Changes

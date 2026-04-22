@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType, Width } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -24,11 +24,12 @@ export type TableGridCellProps = OverridableType<
   'width'
 >;
 
-export const TableGridCellBase = ({ width, ...rest }: TableGridCellProps) => {
+export const TableGridCell = (props: TableGridCellProps) => {
+  const { width, ...rest } = useConfig('TableGridCell', props);
+
   const size = useMemo(() => toCSSUnit('width', width), [width]);
+
   return <div data-width={size} {...rest} />;
 };
 
-TableGridCellBase.displayName = 'TableGridCell';
-
-export const TableGridCell = Wrap(TableGridCellBase);
+TableGridCell.displayName = 'TableGridCell';

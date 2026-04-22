@@ -1,6 +1,6 @@
 import { Collapsible, CollapsibleProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,10 +20,9 @@ export type TableGridBodyDetailsProps = OverridableType<
   never
 >;
 
-export const TableGridBodyDetailsBase = ({
-  children,
-  ...rest
-}: TableGridBodyDetailsProps) => {
+export const TableGridBodyDetails = (props: TableGridBodyDetailsProps) => {
+  const { children, ...rest } = useConfig('TableGridBodyDetails', props);
+
   return (
     <Collapsible {...rest}>
       <div className="RosenTableGridBodyDetails-content">{children}</div>
@@ -31,6 +30,4 @@ export const TableGridBodyDetailsBase = ({
   );
 };
 
-TableGridBodyDetailsBase.displayName = 'TableGridBodyDetails';
-
-export const TableGridBodyDetails = Wrap(TableGridBodyDetailsBase);
+TableGridBodyDetails.displayName = 'TableGridBodyDetails';

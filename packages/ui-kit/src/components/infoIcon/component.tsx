@@ -1,6 +1,6 @@
 import { Icon, Tooltip, TooltipProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -22,7 +22,9 @@ export type InfoIconProps = OverridableType<
   never
 >;
 
-export const InfoIconBase = ({ info, slots, ...rest }: InfoIconProps) => {
+export const InfoIcon = (props: InfoIconProps) => {
+  const { info, slots, ...rest } = useConfig('InfoIcon', props);
+
   return (
     <Tooltip title={info} {...slots?.tooltip}>
       <Icon name="ExclamationCircle" size="16px" {...rest} />
@@ -30,6 +32,4 @@ export const InfoIconBase = ({ info, slots, ...rest }: InfoIconProps) => {
   );
 };
 
-InfoIconBase.displayName = 'InfoIcon';
-
-export const InfoIcon = Wrap(InfoIconBase);
+InfoIcon.displayName = 'InfoIcon';

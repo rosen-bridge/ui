@@ -7,8 +7,8 @@ import {
   DialogFooter,
   Stack,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface QrCodeDialogOverrides {}
@@ -28,11 +28,9 @@ export type QrCodeDialogProps = OverridableType<
   never
 >;
 
-export const QrCodeDialogBase = ({
-  value,
-  onClose,
-  ...rest
-}: QrCodeDialogProps) => {
+export const QrCodeDialog = (props: QrCodeDialogProps) => {
+  const { value, onClose, ...rest } = useConfig('QrCodeDialog', props);
+
   return (
     <Dialog maxWidth="tablet" onClose={onClose} {...rest}>
       <DialogContent>
@@ -50,6 +48,4 @@ export const QrCodeDialogBase = ({
   );
 };
 
-QrCodeDialogBase.displayName = 'QrCodeDialog';
-
-export const QrCodeDialog = Wrap(QrCodeDialogBase);
+QrCodeDialog.displayName = 'QrCodeDialog';

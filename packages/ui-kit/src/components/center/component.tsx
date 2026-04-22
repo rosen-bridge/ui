@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -18,10 +18,10 @@ export type CenterProps = OverridableType<
   never
 >;
 
-export const CenterBase = ({ inline, ...rest }: CenterProps) => {
+export const Center = (props: CenterProps) => {
+  const { inline, ...rest } = useConfig('Center', props);
+
   return <div data-inline={!!inline} {...rest} />;
 };
 
-CenterBase.displayName = 'Center';
-
-export const Center = Wrap(CenterBase);
+Center.displayName = 'Center';

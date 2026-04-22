@@ -2,6 +2,7 @@ import { Breakpoint } from './breakpoint';
 
 export * from './breakpoint';
 export * from './color';
+export * from './elementBaseProps';
 export * from './gap';
 export * from './overridableType';
 export * from './overridableValue';

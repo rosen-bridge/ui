@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { Gap, OverridableType, Width } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 import './styles.scss';
@@ -54,12 +54,9 @@ export type GridContainerProps = OverridableType<
  * </GridContainer>
  * ```
  */
-export const GridContainerBase = ({
-  gap,
-  minWidth,
-  style,
-  ...rest
-}: GridContainerProps) => {
+export const GridContainer = (props: GridContainerProps) => {
+  const { gap, minWidth, style, ...rest } = useConfig('GridContainer', props);
+
   const styles = useMemo(
     () => ({
       gap: toCSSUnit('gap', gap),
@@ -72,6 +69,4 @@ export const GridContainerBase = ({
   return <div style={styles} {...rest} />;
 };
 
-GridContainerBase.displayName = 'GridContainer';
-
-export const GridContainer = Wrap(GridContainerBase);
+GridContainer.displayName = 'GridContainer';

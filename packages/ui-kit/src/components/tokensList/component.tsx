@@ -2,8 +2,8 @@ import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 import { getTokenUrl } from '@rosen-ui/utils';
 
 import { Amount, Identifier, NetworkProps, Token } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -27,12 +27,9 @@ export type TokensListProps = OverridableType<
 /**
  * render a list of `TokenListItem` or some skeletons for the same component
  */
-export const TokensListBase = ({
-  chain,
-  loading,
-  tokens,
-  ...rest
-}: TokensListProps) => {
+export const TokensList = (props: TokensListProps) => {
+  const { chain, loading, tokens, ...rest } = useConfig('TokensList', props);
+
   return (
     <div {...rest}>
       {tokens.map((token) => {
@@ -96,6 +93,4 @@ export const TokensListBase = ({
   );
 };
 
-TokensListBase.displayName = 'TokensList';
-
-export const TokensList = Wrap(TokensListBase);
+TokensList.displayName = 'TokensList';

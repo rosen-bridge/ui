@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -17,10 +17,10 @@ export type LabelGroupProps = OverridableType<
   never
 >;
 
-export const LabelGroupBase = ({ ...rest }: LabelGroupProps) => {
+export const LabelGroup = (props: LabelGroupProps) => {
+  const { ...rest } = useConfig('LabelGroup', props);
+
   return <div {...rest} />;
 };
 
-LabelGroupBase.displayName = 'LabelGroup';
-
-export const LabelGroup = Wrap(LabelGroupBase);
+LabelGroup.displayName = 'LabelGroup';

@@ -3,8 +3,8 @@ import { ReactNode } from 'react';
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
 import { CloseButton, CloseButtonProps, Icon, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -29,13 +29,12 @@ export type DialogHeaderProps = OverridableType<
   never
 >;
 
-export const DialogHeaderBase = ({
-  actions,
-  closeable,
-  children,
-  icon,
-  ...rest
-}: DialogHeaderProps) => {
+export const DialogHeader = (props: DialogHeaderProps) => {
+  const { actions, closeable, children, icon, ...rest } = useConfig(
+    'DialogHeader',
+    props,
+  );
+
   return (
     <div {...rest}>
       {icon && <Icon name={icon} />}
@@ -53,6 +52,4 @@ export const DialogHeaderBase = ({
   );
 };
 
-DialogHeaderBase.displayName = 'DialogHeader';
-
-export const DialogHeader = Wrap(DialogHeaderBase);
+DialogHeader.displayName = 'DialogHeader';

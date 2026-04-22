@@ -1,7 +1,7 @@
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -24,15 +24,15 @@ export type DialogProps = OverridableType<
   never
 >;
 
-export const DialogBase = ({
-  open,
-  maxWidth,
-  stickOn,
-  onClose,
-  ...rest
-}: DialogProps) => {
+export const Dialog = (props: DialogProps) => {
+  const { open, maxWidth, stickOn, onClose, ...rest } = useConfig(
+    'Dialog',
+    props,
+  );
+
   void maxWidth;
   void stickOn;
+
   return (
     <DialogBaseUI.Root
       open={open}
@@ -46,6 +46,4 @@ export const DialogBase = ({
   );
 };
 
-DialogBase.displayName = 'Dialog';
-
-export const Dialog = Wrap(DialogBase);
+Dialog.displayName = 'Dialog';

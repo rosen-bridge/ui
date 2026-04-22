@@ -2,8 +2,8 @@ import { HTMLAttributeAnchorTarget } from 'react';
 
 import { IconButton as IconButtonMUI } from '@mui/material';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconButtonOverrides {}
@@ -25,11 +25,11 @@ export type IconButtonProps = OverridableType<
   never
 >;
 
-export const IconButtonBase = ({ ...rest }: IconButtonProps) => {
+export const IconButton = (props: IconButtonProps) => {
+  const { ...rest } = useConfig('IconButton', props);
+
   // TODO: extend from Button instead of MUI
   return <IconButtonMUI {...rest} />;
 };
 
-IconButtonBase.displayName = 'IconButton';
-
-export const IconButton = Wrap(IconButtonBase);
+IconButton.displayName = 'IconButton';

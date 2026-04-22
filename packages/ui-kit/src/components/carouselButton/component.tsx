@@ -1,6 +1,6 @@
 import { Icon, IconButton, IconProps, useCarousel } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CarouselButtonOverrides {}
@@ -24,11 +24,9 @@ export type CarouselButtonProps = OverridableType<
   never
 >;
 
-export const CarouselButtonBase = ({
-  slots,
-  type,
-  ...rest
-}: CarouselButtonProps) => {
+export const CarouselButton = (props: CarouselButtonProps) => {
+  const { slots, type, ...rest } = useConfig('CarouselButton', props);
+
   const api = useCarousel();
 
   const canScroll = type == 'next' ? api.canScrollNext : api.canScrollPrev;
@@ -43,6 +41,4 @@ export const CarouselButtonBase = ({
   );
 };
 
-CarouselButtonBase.displayName = 'CarouselButton';
-
-export const CarouselButton = Wrap(CarouselButtonBase);
+CarouselButton.displayName = 'CarouselButton';

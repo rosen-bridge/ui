@@ -1,7 +1,7 @@
 // TODO: use ToggleButton button and add slots
 import { Icon, IconButton } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -28,12 +28,9 @@ export type ViewToggleProps = OverridableType<
 /**
  * A simple toggle component for switching between 'grid' and 'row' view modes.
  */
-export const ViewToggleBase = ({
-  disabled,
-  value,
-  onChange,
-  ...rest
-}: ViewToggleProps) => {
+export const ViewToggle = (props: ViewToggleProps) => {
+  const { disabled, value, onChange, ...rest } = useConfig('ViewToggle', props);
+
   return (
     <div {...rest}>
       <IconButton
@@ -54,6 +51,4 @@ export const ViewToggleBase = ({
   );
 };
 
-ViewToggleBase.displayName = 'ViewToggle';
-
-export const ViewToggle = Wrap(ViewToggleBase);
+ViewToggle.displayName = 'ViewToggle';

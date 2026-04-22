@@ -1,5 +1,15 @@
 # @rosen-ui/eternl-wallet
 
+## 3.1.7
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-ui/wallet-api@3.2.0
+  - @rosen-network/cardano@2.5.5
+  - @rosen-ui/utils@1.0.3
+
 ## 3.1.6
 
 ### Patch Changes

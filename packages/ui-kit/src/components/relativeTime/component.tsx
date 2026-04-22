@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { Skeleton, Typography } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 import { calculateRelativeTime } from '@/utils';
 
 import './styles.scss';
@@ -36,11 +36,9 @@ export type RelativeTimeProps = OverridableType<
 /**
  * A lightweight component to display relative time based on a given timestamp.
  */
-export const RelativeTimeBase = ({
-  loading,
-  value,
-  ...rest
-}: RelativeTimeProps) => {
+export const RelativeTime = (props: RelativeTimeProps) => {
+  const { loading, value, ...rest } = useConfig('RelativeTime', props);
+
   const { prefix, number, unit, suffix, displayText } = useMemo(
     () => calculateRelativeTime(value),
     [value],
@@ -84,6 +82,4 @@ export const RelativeTimeBase = ({
   );
 };
 
-RelativeTimeBase.displayName = 'RelativeTime';
-
-export const RelativeTime = Wrap(RelativeTimeBase);
+RelativeTime.displayName = 'RelativeTime';

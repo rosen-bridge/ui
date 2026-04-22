@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -27,11 +27,9 @@ export type CarouselItemProps = OverridableType<
  * `CarouselItem` is a flexible container for carousel slides.
  */
 
-export const CarouselItemBase = ({
-  size,
-  style,
-  ...rest
-}: CarouselItemProps) => {
+export const CarouselItem = (props: CarouselItemProps) => {
+  const { size, style, ...rest } = useConfig('CarouselItem', props);
+
   const styles = useMemo(() => {
     if (!size) return style;
     return { flex: `0 0 ${size}`, ...style };
@@ -40,6 +38,4 @@ export const CarouselItemBase = ({
   return <div style={styles} {...rest} />;
 };
 
-CarouselItemBase.displayName = 'CarouselItem';
-
-export const CarouselItem = Wrap(CarouselItemBase);
+CarouselItem.displayName = 'CarouselItem';

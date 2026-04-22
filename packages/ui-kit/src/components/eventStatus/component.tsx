@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { Chip, ChipProps, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import { STATUS_MAP } from './constants';
 
@@ -37,11 +37,9 @@ const DEFAULT_EVENT_STATUS: EventStatusMeta = {
   icon: 'ExclamationCircle',
 };
 
-export const EventStatusBase = ({
-  fallback,
-  value,
-  ...rest
-}: EventStatusProps) => {
+export const EventStatus = (props: EventStatusProps) => {
+  const { fallback, value, ...rest } = useConfig('EventStatus', props);
+
   const { color, icon, label } = useMemo(
     () =>
       Object.assign(
@@ -52,9 +50,8 @@ export const EventStatusBase = ({
       ),
     [fallback, value],
   );
+
   return <Chip color={color} icon={icon} label={label} {...rest} />;
 };
 
-EventStatusBase.displayName = 'EventStatus';
-
-export const EventStatus = Wrap(EventStatusBase);
+EventStatus.displayName = 'EventStatus';

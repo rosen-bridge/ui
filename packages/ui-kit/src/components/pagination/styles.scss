@@ -13,7 +13,6 @@
   gap: calc(var(--rosen-spacing) * 1);
   padding: calc(var(--rosen-spacing) * 1) calc(var(--rosen-spacing) * 2);
   border-radius: calc(var(--rosen-spacing) * 2);
-
 }
 
 .RosenPagination-info {
@@ -26,7 +25,7 @@
   }
 
   .pagination-text::before {
-    content: "Showing ";
+    content: 'Showing ';
   }
 
   .hide {
@@ -35,7 +34,7 @@
 
   @container (max-width: 480px) {
     .pagination-text::before {
-      content: "";
+      content: '';
     }
 
     .hide {
@@ -64,15 +63,17 @@
       border: none;
       border-radius: 50%;
       background-color: transparent;
-      transition: background-color 0.25s ease, transform 0.15s ease;
+      transition:
+        background-color 0.25s ease,
+        transform 0.15s ease;
       will-change: transform;
     }
 
-    button[data-type="page"] {
+    button[data-type='page'] {
       cursor: pointer;
     }
 
-    button[data-action="active"] {
+    button[data-action='active'] {
       background-color: var(--rosen-palette-primary);
 
       p {
@@ -89,8 +90,6 @@
       }
     }
   }
-
-
 }
 
 .RosenPagination-actions {
@@ -138,7 +137,7 @@
     align-items: center;
     justify-content: center;
 
-    &[data-size="larg"] {
+    &[data-size='larg'] {
       display: none;
 
       @container (min-width: 865px) {
@@ -146,7 +145,7 @@
       }
     }
 
-    &[data-size="small"] {
+    &[data-size='small'] {
       display: flex;
 
       @container (min-width: 865px) {
@@ -160,7 +159,6 @@
   width: 204px;
   container-type: inherit;
   background-color: aqua;
-
 }
 
 .RosenPagination-menuHeader {
@@ -171,5 +169,3 @@
     display: block;
   }
 }
-
-

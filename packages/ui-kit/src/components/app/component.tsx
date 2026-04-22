@@ -1,10 +1,9 @@
 import { ReactNode } from 'react';
 
 import { CssBaseline } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { useBreakpoint } from '@/hooks';
+import { useBreakpoint, useConfig } from '@/hooks';
 import { ThemeProvider, ThemeProviderProps, ToastProvider } from '@/Providers';
-import { OverridableType } from '@/types';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -33,19 +32,19 @@ const Content = ({ children, sidebar, ...rest }: AppProps) => {
   );
 };
 
-export const AppBase = (props: AppProps) => {
+export const App = (props: AppProps) => {
+  const { ...rest } = useConfig('App', props);
+
   return (
-    <ThemeProvider theme={props.theme}>
+    <ThemeProvider theme={rest.theme}>
       <>
         <CssBaseline />
         <ToastProvider>
-          <Content {...props} />
+          <Content {...rest} />
         </ToastProvider>
       </>
     </ThemeProvider>
   );
 };
 
-AppBase.displayName = 'App';
-
-export const App = Wrap(AppBase);
+App.displayName = 'App';

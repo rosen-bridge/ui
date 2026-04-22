@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,10 +20,10 @@ export type DialogContentProps = OverridableType<
   never
 >;
 
-export const DialogContentBase = ({ ...rest }: DialogContentProps) => {
+export const DialogContent = (props: DialogContentProps) => {
+  const { ...rest } = useConfig('DialogContent', props);
+
   return <div {...rest} />;
 };
 
-DialogContentBase.displayName = 'DialogContent';
-
-export const DialogContent = Wrap(DialogContentBase);
+DialogContent.displayName = 'DialogContent';

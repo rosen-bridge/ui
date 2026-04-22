@@ -1,7 +1,7 @@
 import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,7 +20,9 @@ export type CollapsibleProps = OverridableType<
   never
 >;
 
-export const CollapsibleBase = ({ children, ...rest }: CollapsibleProps) => {
+export const Collapsible = (props: CollapsibleProps) => {
+  const { children, ...rest } = useConfig('Collapsible', props);
+
   return (
     <CollapsibleBaseUI.Root {...rest}>
       <CollapsibleBaseUI.Panel className="RosenCollapsible-panel">
@@ -30,6 +32,4 @@ export const CollapsibleBase = ({ children, ...rest }: CollapsibleProps) => {
   );
 };
 
-CollapsibleBase.displayName = 'Collapsible';
-
-export const Collapsible = Wrap(CollapsibleBase);
+Collapsible.displayName = 'Collapsible';

@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 import { Icon, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -41,13 +41,15 @@ export type ConnectorProps = OverridableType<
 /**
  * Connector component: visually connects two elements with an arrow.
  */
-export const ConnectorBase = ({
-  end,
-  slots,
-  start,
-  variant = 'standard',
-  ...rest
-}: ConnectorProps) => {
+export const Connector = (props: ConnectorProps) => {
+  const {
+    end,
+    slots,
+    start,
+    variant = 'standard',
+    ...rest
+  } = useConfig('Connector', props);
+
   return (
     <div data-variant={variant} {...rest}>
       {start}
@@ -57,6 +59,4 @@ export const ConnectorBase = ({
   );
 };
 
-ConnectorBase.displayName = 'Connector';
-
-export const Connector = Wrap(ConnectorBase);
+Connector.displayName = 'Connector';

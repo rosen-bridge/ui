@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -17,10 +17,10 @@ export type CardActionProps = OverridableType<
   never
 >;
 
-export const CardActionBase = ({ ...rest }: CardActionProps) => {
+export const CardAction = (props: CardActionProps) => {
+  const { ...rest } = useConfig('CardAction', props);
+
   return <div {...rest} />;
 };
 
-CardActionBase.displayName = 'CardAction';
-
-export const CardAction = Wrap(CardActionBase);
+CardAction.displayName = 'CardAction';

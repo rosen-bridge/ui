@@ -3,9 +3,8 @@ import React, { ComponentType, useState } from 'react';
 import { ListSubheader, Menu, MenuItem } from '@mui/material';
 
 import { Button, Icon, IconButton, Typography } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { usePagination } from '@/hooks';
-import { OverridableType } from '@/types';
+import { useConfig, usePagination } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -32,17 +31,19 @@ export type PaginationOverriddenProps = OverridableType<
   never
 >;
 
-export const PaginationBase = ({
-  defaultPageIndex = 0,
-  defaultPageSize = 10,
-  disabled,
-  total = 0,
-  pageIndex,
-  pageSize,
-  pageSizeOptions = [10, 25, 100],
-  onPageIndexChange,
-  onPageSizeChange,
-}: PaginationOverriddenProps) => {
+export const Pagination = (props: PaginationOverriddenProps) => {
+  const {
+    defaultPageIndex = 0,
+    defaultPageSize = 10,
+    disabled,
+    total = 0,
+    pageIndex,
+    pageSize,
+    pageSizeOptions = [10, 25, 100],
+    onPageIndexChange,
+    onPageSizeChange,
+  } = useConfig('Pagination', props);
+
   const isControlled = pageIndex !== undefined;
 
   const isPageSizeControlled = pageSize !== undefined;
@@ -214,8 +215,6 @@ export const PaginationBase = ({
   );
 };
 
-PaginationBase.displayName = 'Pagination';
-
-export const Pagination = Wrap(PaginationBase);
+Pagination.displayName = 'Pagination';
 
 export type PaginationProps = ComponentType<typeof Pagination>;

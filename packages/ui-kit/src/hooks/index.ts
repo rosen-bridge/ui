@@ -1,6 +1,7 @@
 export * from './useApiKey';
 export * from './useBreakpoint';
 export * from './useCollection';
+export * from './useConfig';
 export * from './useDisclosure';
 export * from './useFramework';
 export * from './useIsDarkMode';
