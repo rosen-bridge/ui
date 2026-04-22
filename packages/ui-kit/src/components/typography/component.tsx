@@ -4,8 +4,8 @@ import {
 } from '@mui/material';
 
 import { Skeleton } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -27,13 +27,12 @@ export type TypographyProps = OverridableType<
   'color'
 >;
 
-export const TypographyBase = ({
-  children,
-  color,
-  loading,
-  style,
-  ...rest
-}: TypographyProps) => {
+export const Typography = (props: TypographyProps) => {
+  const { children, color, loading, style, ...rest } = useConfig(
+    'Typography',
+    props,
+  );
+
   return (
     <TypographyMUI style={{ color: toCSSColor(color), ...style }} {...rest}>
       {children}
@@ -42,6 +41,4 @@ export const TypographyBase = ({
   );
 };
 
-TypographyBase.displayName = 'Typography';
-
-export const Typography = Wrap(TypographyBase);
+Typography.displayName = 'Typography';

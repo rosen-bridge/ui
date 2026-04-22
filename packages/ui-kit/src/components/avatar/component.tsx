@@ -3,8 +3,8 @@ import { useMemo } from 'react';
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
 import { Skeleton } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -33,14 +33,12 @@ export type AvatarProps = OverridableType<
 >;
 
 /** Theme-aware Avatar component with customizable colors and size. */
-export const AvatarBase = ({
-  background,
-  color,
-  loading,
-  size,
-  style,
-  ...rest
-}: AvatarProps) => {
+export const Avatar = (props: AvatarProps) => {
+  const { background, color, loading, size, style, ...rest } = useConfig(
+    'Avatar',
+    props,
+  );
+
   const sx = useMemo<SxProps<Theme>>(() => {
     return {
       color: toCSSColor(color),
@@ -59,6 +57,4 @@ export const AvatarBase = ({
   return <AvatarMUI style={style} sx={sx} {...rest} />;
 };
 
-AvatarBase.displayName = 'Avatar';
-
-export const Avatar = Wrap(AvatarBase);
+Avatar.displayName = 'Avatar';

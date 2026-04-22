@@ -9,8 +9,8 @@ import {
 import { mergeProps } from '@base-ui/react/merge-props';
 import { Tooltip as TooltipBaseUI } from '@base-ui/react/tooltip';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -31,12 +31,9 @@ export type TooltipProps = OverridableType<
   never
 >;
 
-export const TooltipBase = ({
-  children,
-  disabled,
-  title,
-  ...rest
-}: TooltipProps) => {
+export const Tooltip = (props: TooltipProps) => {
+  const { children, disabled, title, ...rest } = useConfig('Tooltip', props);
+
   const child = useMemo(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     () => Children.only(children) as ReactElement<any, any>,
@@ -73,6 +70,4 @@ export const TooltipBase = ({
   );
 };
 
-TooltipBase.displayName = 'Tooltip';
-
-export const Tooltip = Wrap(TooltipBase);
+Tooltip.displayName = 'Tooltip';

@@ -16,9 +16,8 @@ import {
   TextField,
   Tooltip,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { useApiKey, useToast } from '@/hooks';
-import { OverridableType } from '@/types';
+import { useApiKey, useConfig, useToast } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogOverrides {}
@@ -41,11 +40,9 @@ type FormValues = {
   apiKey: string;
 };
 
-export const ApiKeyDialogBase = ({
-  open,
-  onClose,
-  ...rest
-}: ApiKeyDialogProps) => {
+export const ApiKeyDialog = (props: ApiKeyDialogProps) => {
+  const { open, onClose, ...rest } = useConfig('ApiKeyDialog', props);
+
   const { apiKey, setApiKey } = useApiKey();
 
   const toast = useToast();
@@ -130,6 +127,4 @@ export const ApiKeyDialogBase = ({
   );
 };
 
-ApiKeyDialogBase.displayName = 'ApiKeyDialog';
-
-export const ApiKeyDialog = Wrap(ApiKeyDialogBase);
+ApiKeyDialog.displayName = 'ApiKeyDialog';

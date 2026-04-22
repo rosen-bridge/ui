@@ -1,7 +1,7 @@
 import { Tabs } from '@base-ui/react/tabs';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -21,12 +21,9 @@ export type TabsListProps = OverridableType<
   never
 >;
 
-export const TabsListBase = ({
-  align,
-  children,
-  grow,
-  ...rest
-}: TabsListProps) => {
+export const TabsList = (props: TabsListProps) => {
+  const { align, children, grow, ...rest } = useConfig('TabsList', props);
+
   return (
     <Tabs.List data-align={align} data-grow={grow} {...rest}>
       {children}
@@ -35,6 +32,4 @@ export const TabsListBase = ({
   );
 };
 
-TabsListBase.displayName = 'TabsList';
-
-export const TabsList = Wrap(TabsListBase);
+TabsList.displayName = 'TabsList';

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -26,7 +26,9 @@ export type AppBarProps = OverridableType<
  * renders a appBar wrapper
  * this component set the appBar size and orientation in different screen sizes
  */
-export const AppBarBase = ({ actions, links, logo, ...rest }: AppBarProps) => {
+export const AppBar = (props: AppBarProps) => {
+  const { actions, links, logo, ...rest } = useConfig('AppBar', props);
+
   return (
     <div {...rest}>
       {logo}
@@ -36,6 +38,4 @@ export const AppBarBase = ({ actions, links, logo, ...rest }: AppBarProps) => {
   );
 };
 
-AppBarBase.displayName = 'AppBar';
-
-export const AppBar = Wrap(AppBarBase);
+AppBar.displayName = 'AppBar';

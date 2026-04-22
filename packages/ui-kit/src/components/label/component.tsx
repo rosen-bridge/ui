@@ -1,6 +1,6 @@
 import { InfoIcon, Typography } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -57,16 +57,18 @@ export type LabelProps = OverridableType<
  *
  * Useful for form-like UIs where labels and values need consistent styling.
  */
-export const LabelBase = ({
-  children,
-  color = 'text-secondary',
-  dense,
-  info,
-  inset,
-  label,
-  orientation = 'horizontal',
-  ...rest
-}: LabelProps) => {
+export const Label = (props: LabelProps) => {
+  const {
+    children,
+    color = 'text-secondary',
+    dense,
+    info,
+    inset,
+    label,
+    orientation = 'horizontal',
+    ...rest
+  } = useConfig('Label', props);
+
   return (
     <div
       data-dense={!!dense}
@@ -93,6 +95,4 @@ export const LabelBase = ({
   );
 };
 
-LabelBase.displayName = 'Label';
-
-export const Label = Wrap(LabelBase);
+Label.displayName = 'Label';

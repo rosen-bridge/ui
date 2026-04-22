@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,10 +20,10 @@ export type DialogFooterProps = OverridableType<
   never
 >;
 
-export const DialogFooterBase = ({ ...rest }: DialogFooterProps) => {
+export const DialogFooter = (props: DialogFooterProps) => {
+  const { ...rest } = useConfig('DialogFooter', props);
+
   return <div {...rest} />;
 };
 
-DialogFooterBase.displayName = 'DialogFooter';
-
-export const DialogFooter = Wrap(DialogFooterBase);
+DialogFooter.displayName = 'DialogFooter';

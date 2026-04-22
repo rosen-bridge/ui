@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { Typography } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 import { formatDateTime } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -40,12 +40,9 @@ export type DateTimeProps = OverridableType<
  *
  * Example output: `"Aug 27 2025 01:33:12"`.
  */
-export const DateTimeBase = ({
-  color,
-  loading,
-  timestamp,
-  ...rest
-}: DateTimeProps) => {
+export const DateTime = (props: DateTimeProps) => {
+  const { color, loading, timestamp, ...rest } = useConfig('DateTime', props);
+
   void color;
 
   const parts = useMemo(() => formatDateTime(timestamp), [timestamp]);
@@ -63,6 +60,4 @@ export const DateTimeBase = ({
   );
 };
 
-DateTimeBase.displayName = 'DateTime';
-
-export const DateTime = Wrap(DateTimeBase);
+DateTime.displayName = 'DateTime';

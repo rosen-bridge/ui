@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -20,10 +20,10 @@ export type TableGridRowProps = OverridableType<
   never
 >;
 
-export const TableGridRowBase = ({ ...rest }: TableGridRowProps) => {
+export const TableGridRow = (props: TableGridRowProps) => {
+  const { ...rest } = useConfig('TableGridRow', props);
+
   return <div {...rest} />;
 };
 
-TableGridRowBase.displayName = 'TableGridRow';
-
-export const TableGridRow = Wrap(TableGridRowBase);
+TableGridRow.displayName = 'TableGridRow';

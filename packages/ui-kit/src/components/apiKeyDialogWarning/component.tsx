@@ -1,9 +1,8 @@
 import { useMemo, useState } from 'react';
 
 import { Alert, ApiKeyDialog, Button } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { useApiKey } from '@/hooks';
-import { OverridableType } from '@/types';
+import { useApiKey, useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogWarningOverrides {}
@@ -22,10 +21,9 @@ export type ApiKeyDialogWarningProps = OverridableType<
   never
 >;
 
-export const ApiKeyDialogWarningBase = ({
-  style,
-  ...rest
-}: ApiKeyDialogWarningProps) => {
+export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
+  const { style, ...rest } = useConfig('ApiKeyDialogWarning', props);
+
   const { apiKey } = useApiKey();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +62,4 @@ export const ApiKeyDialogWarningBase = ({
   );
 };
 
-ApiKeyDialogWarningBase.displayName = 'ApiKeyDialogWarning';
-
-export const ApiKeyDialogWarning = Wrap(ApiKeyDialogWarningBase);
+ApiKeyDialogWarning.displayName = 'ApiKeyDialogWarning';

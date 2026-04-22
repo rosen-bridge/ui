@@ -1,8 +1,8 @@
 import { FC, SVGAttributes, useMemo } from 'react';
 
 import { Icon, IconProps, Typography, TypographyProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import { Logo } from './logo';
 import './styles.scss';
@@ -50,15 +50,17 @@ const DEFAULT_NETWORK: NetworkMeta = {
   logo: Logo,
 };
 
-export const NetworkBase = ({
-  fallback,
-  loading,
-  value = '',
-  networks,
-  slots,
-  variant = 'both',
-  ...rest
-}: NetworkProps) => {
+export const Network = (props: NetworkProps) => {
+  const {
+    fallback,
+    loading,
+    value = '',
+    networks,
+    slots,
+    variant = 'both',
+    ...rest
+  } = useConfig('Network', props);
+
   const showLabel = variant !== 'logo';
 
   const showLogo = variant !== 'label';
@@ -95,6 +97,4 @@ export const NetworkBase = ({
   );
 };
 
-NetworkBase.displayName = 'Network';
-
-export const Network = Wrap(NetworkBase);
+Network.displayName = 'Network';

@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -14,7 +14,9 @@ export type BadgeBaseProps = ElementBaseProps<'span', BadgeOwnProps>;
 
 export type BadgeProps = OverridableType<BadgeBaseProps, BadgeOverrides, never>;
 
-export const BadgeBase = ({ children, content, ...rest }: BadgeProps) => {
+export const Badge = (props: BadgeProps) => {
+  const { children, content, ...rest } = useConfig('Badge', props);
+
   return (
     <span {...rest}>
       {children}
@@ -23,6 +25,4 @@ export const BadgeBase = ({ children, content, ...rest }: BadgeProps) => {
   );
 };
 
-BadgeBase.displayName = 'Badge';
-
-export const Badge = Wrap(BadgeBase);
+Badge.displayName = 'Badge';

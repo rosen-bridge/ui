@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { useCarousel } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -23,9 +23,9 @@ export type CarouselIndicatorsProps = OverridableType<
   never
 >;
 
-export const CarouselIndicatorsBase = ({
-  ...rest
-}: CarouselIndicatorsProps) => {
+export const CarouselIndicators = (props: CarouselIndicatorsProps) => {
+  const { ...rest } = useConfig('CarouselIndicators', props);
+
   const api = useCarousel();
 
   const items = useMemo(() => {
@@ -46,6 +46,4 @@ export const CarouselIndicatorsBase = ({
   );
 };
 
-CarouselIndicatorsBase.displayName = 'CarouselIndicators';
-
-export const CarouselIndicators = Wrap(CarouselIndicatorsBase);
+CarouselIndicators.displayName = 'CarouselIndicators';

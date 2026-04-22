@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -17,10 +17,10 @@ export type ToolbarProps = OverridableType<
   never
 >;
 
-export const ToolbarBase = ({ ...rest }: ToolbarProps) => {
+export const Toolbar = (props: ToolbarProps) => {
+  const { ...rest } = useConfig('Toolbar', props);
+
   return <div {...rest} />;
 };
 
-ToolbarBase.displayName = 'Toolbar';
-
-export const Toolbar = Wrap(ToolbarBase);
+Toolbar.displayName = 'Toolbar';

@@ -1,6 +1,6 @@
 import { Typography } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -21,10 +21,10 @@ export type CardTitleProps = OverridableType<
   never
 >;
 
-export const CardTitleBase = ({ ...rest }: CardTitleProps) => {
+export const CardTitle = (props: CardTitleProps) => {
+  const { ...rest } = useConfig('CardTitle', props);
+
   return <Typography {...rest} />;
 };
 
-CardTitleBase.displayName = 'CardTitle';
-
-export const CardTitle = Wrap(CardTitleBase);
+CardTitle.displayName = 'CardTitle';

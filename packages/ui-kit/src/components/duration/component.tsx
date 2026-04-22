@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 
 import { Typography, TypographyProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 import { formatDuration } from '@/utils';
 
 import './styles.scss';
@@ -42,13 +42,12 @@ export type DurationProps = OverridableType<
  * A component for displaying duration values in a human-readable format.
  * It handles loading, invalid values, and fallback states automatically.
  */
-export const DurationBase = ({
-  fallback,
-  loading,
-  slots,
-  value,
-  ...rest
-}: DurationProps) => {
+export const Duration = (props: DurationProps) => {
+  const { fallback, loading, slots, value, ...rest } = useConfig(
+    'Duration',
+    props,
+  );
+
   const { parts, error } = useMemo(() => formatDuration(value), [value]);
 
   const ready =
@@ -82,6 +81,4 @@ export const DurationBase = ({
   );
 };
 
-DurationBase.displayName = 'Duration';
-
-export const Duration = Wrap(DurationBase);
+Duration.displayName = 'Duration';

@@ -1,16 +1,4 @@
-import {
-  alpha,
-  ComponentsOverrides,
-  SvgIcon,
-  Theme,
-  ThemeOptions,
-} from '@mui/material';
-import {
-  CheckCircle,
-  ExclamationCircle,
-  ExclamationTriangle,
-  InfoCircle,
-} from '@rosen-bridge/icons';
+import { alpha, ComponentsOverrides, Theme, ThemeOptions } from '@mui/material';
 
 export { alpha, createTheme, styled, type Theme } from '@mui/material';
 

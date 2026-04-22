@@ -11,8 +11,8 @@ import {
   Typography,
   TypographyProps,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -76,18 +76,20 @@ export type IdentifierProps = OverridableType<
  * />
  *
  */
-export const IdentifierBase = ({
-  copyable,
-  fallback,
-  href,
-  loading,
-  qrcode,
-  slots,
-  trailingLength = 5,
-  value = '',
-  variant,
-  ...rest
-}: IdentifierProps) => {
+export const Identifier = (props: IdentifierProps) => {
+  const {
+    copyable,
+    fallback,
+    href,
+    loading,
+    qrcode,
+    slots,
+    trailingLength = 5,
+    value = '',
+    variant,
+    ...rest
+  } = useConfig('Identifier', props);
+
   const [open, setOpen] = useState(false);
 
   const hasValue = Boolean(value);
@@ -217,6 +219,4 @@ export const IdentifierBase = ({
   );
 };
 
-IdentifierBase.displayName = 'Identifier';
-
-export const Identifier = Wrap(IdentifierBase);
+Identifier.displayName = 'Identifier';

@@ -16,8 +16,8 @@ import {
   TokenProps,
   Typography,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventDetailsOverrides {}
@@ -62,11 +62,9 @@ export type EventDetailsProps = OverridableType<
   never
 >;
 
-export const EventDetailsBase = ({
-  loading,
-  value,
-  ...rest
-}: EventDetailsProps) => {
+export const EventDetails = (props: EventDetailsProps) => {
+  const { loading, value, ...rest } = useConfig('EventDetails', props);
+
   return (
     <Columns gap={4} width="20rem" rule {...rest}>
       {'id' in value && (
@@ -220,6 +218,4 @@ export const EventDetailsBase = ({
   );
 };
 
-EventDetailsBase.displayName = 'EventDetails';
-
-export const EventDetails = Wrap(EventDetailsBase);
+EventDetails.displayName = 'EventDetails';

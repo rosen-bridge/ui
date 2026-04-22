@@ -1,8 +1,8 @@
 import { ReactNode, useMemo } from 'react';
 
 import { Collapsible, Icon, IconProps } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -22,7 +22,22 @@ export type AlertBaseProps = ElementBaseProps<'div', AlertOwnProps>;
 
 export type AlertProps = OverridableType<AlertBaseProps, AlertOverrides, never>;
 
-export const AlertBase = ({ action, children, dismissible, severity = 'info', timeout, variant, onClose, ...rest}: AlertProps) => {
+export const Alert = (props: AlertProps) => {
+  const {
+    action,
+    children,
+    dismissible,
+    severity = 'info',
+    timeout,
+    variant,
+    onClose,
+    ...rest
+  } = useConfig('Alert', props);
+
+  void dismissible;
+  void timeout;
+  void onClose;
+
   const icon = useMemo<IconProps['name']>(() => {
     switch (severity) {
       case 'success':
@@ -37,7 +52,12 @@ export const AlertBase = ({ action, children, dismissible, severity = 'info', ti
   }, [severity]);
 
   return (
-    <Collapsible data-severity={severity} data-variant={variant} open={true} {...rest}>
+    <Collapsible
+      data-severity={severity}
+      data-variant={variant}
+      open={true}
+      {...rest}
+    >
       <div className="RosenAlert-icon">
         <Icon name={icon} size="medium" />
       </div>
@@ -47,6 +67,4 @@ export const AlertBase = ({ action, children, dismissible, severity = 'info', ti
   );
 };
 
-AlertBase.displayName = 'Alert';
-
-export const Alert = Wrap(AlertBase);
+Alert.displayName = 'Alert';

@@ -1,5 +1,5 @@
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import { useCarousel } from './hook';
 import './styles.scss';
@@ -18,8 +18,11 @@ export type CarouselProps = OverridableType<
   never
 >;
 
-export const CarouselBase = ({ children, ...rest }: CarouselProps) => {
+export const Carousel = (props: CarouselProps) => {
+  const { children, ...rest } = useConfig('Carousel', props);
+
   const api = useCarousel();
+
   return (
     <div {...rest} ref={api.ref}>
       <div className="RosenCarousel-container">{children}</div>
@@ -27,6 +30,4 @@ export const CarouselBase = ({ children, ...rest }: CarouselProps) => {
   );
 };
 
-CarouselBase.displayName = 'Carousel';
-
-export const Carousel = Wrap(CarouselBase);
+Carousel.displayName = 'Carousel';

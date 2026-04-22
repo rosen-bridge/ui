@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -24,15 +24,10 @@ export type LayoutListProps = OverridableType<
   never
 >;
 
-export const LayoutListBase = ({
-  children,
-  pagination,
-  search,
-  sidebar,
-  sort,
-  view,
-  ...rest
-}: LayoutListProps) => {
+export const LayoutList = (props: LayoutListProps) => {
+  const { children, pagination, search, sidebar, sort, view, ...rest } =
+    useConfig('LayoutList', props);
+
   return (
     <div {...rest}>
       <div className="RosenLayoutList-toolbar">
@@ -51,6 +46,4 @@ export const LayoutListBase = ({
   );
 };
 
-LayoutListBase.displayName = 'LayoutList';
-
-export const LayoutList = Wrap(LayoutListBase);
+LayoutList.displayName = 'LayoutList';

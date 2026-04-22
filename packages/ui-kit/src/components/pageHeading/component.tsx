@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 
 import { Typography } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -22,11 +22,9 @@ export type PageHeadingProps = OverridableType<
   never
 >;
 
-export const PageHeadingBase = ({
-  actions,
-  title,
-  ...rest
-}: PageHeadingProps) => {
+export const PageHeading = (props: PageHeadingProps) => {
+  const { actions, title, ...rest } = useConfig('PageHeading', props);
+
   return (
     <div {...rest}>
       <Typography variant="h1">{title}</Typography>
@@ -35,6 +33,4 @@ export const PageHeadingBase = ({
   );
 };
 
-PageHeadingBase.displayName = 'PageHeading';
-
-export const PageHeading = Wrap(PageHeadingBase);
+PageHeading.displayName = 'PageHeading';

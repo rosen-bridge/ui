@@ -1,7 +1,7 @@
 import { ComponentPropsWithRef, ElementType, useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
 
 import './styles.scss';
@@ -23,13 +23,15 @@ export type LinkProps = OverridableType<
   'color' | 'href'
 >;
 
-export const LinkBase = ({
-  as: Component = 'a',
-  color,
-  style,
-  underline = 'always',
-  ...rest
-}: LinkProps) => {
+export const Link = (props: LinkProps) => {
+  const {
+    as: Component = 'a',
+    color,
+    style,
+    underline = 'always',
+    ...rest
+  } = useConfig('Link', props);
+
   const styles = useMemo(
     () => ({
       color: toCSSColor(color),
@@ -41,6 +43,4 @@ export const LinkBase = ({
   return <Component data-underline={underline} style={styles} {...rest} />;
 };
 
-LinkBase.displayName = 'Link';
-
-export const Link = Wrap(LinkBase);
+Link.displayName = 'Link';

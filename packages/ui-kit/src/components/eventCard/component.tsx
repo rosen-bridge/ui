@@ -15,8 +15,8 @@ import {
   Token,
   TokenProps,
 } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -50,7 +50,9 @@ export type EventCardProps = OverridableType<
   never
 >;
 
-export const EventCardBase = ({ loading, value, ...rest }: EventCardProps) => {
+export const EventCard = (props: EventCardProps) => {
+  const { loading, value, ...rest } = useConfig('EventCard', props);
+
   return (
     <Card {...rest}>
       <CardBody className="RosenEventCard-body">
@@ -101,6 +103,4 @@ export const EventCardBase = ({ loading, value, ...rest }: EventCardProps) => {
   );
 };
 
-EventCardBase.displayName = 'EventCard';
-
-export const EventCard = Wrap(EventCardBase);
+EventCard.displayName = 'EventCard';

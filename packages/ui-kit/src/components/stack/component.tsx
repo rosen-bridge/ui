@@ -1,7 +1,7 @@
 import { CSSProperties, useMemo } from 'react';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { Gap, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, Gap, OverridableType } from '@/types';
 import { toCSSUnit } from '@/utils';
 
 const ALIGN_MAP: Record<NonNullable<StackBaseProps['align']>, string> = {
@@ -64,16 +64,18 @@ export type StackProps = OverridableType<
  *   <Button>Right</Button>
  * </Stack>
  */
-export const StackBase = ({
-  align,
-  direction = 'column',
-  spacing,
-  inline,
-  justify,
-  wrap,
-  style,
-  ...rest
-}: StackProps) => {
+export const Stack = (props: StackProps) => {
+  const {
+    align,
+    direction = 'column',
+    spacing,
+    inline,
+    justify,
+    wrap,
+    style,
+    ...rest
+  } = useConfig('Stack', props);
+
   const styles = useMemo(
     () =>
       ({
@@ -87,9 +89,8 @@ export const StackBase = ({
       }) as CSSProperties,
     [align, direction, spacing, inline, justify, wrap, style],
   );
+
   return <div style={styles} {...rest} />;
 };
 
-StackBase.displayName = 'Stack';
-
-export const Stack = Wrap(StackBase);
+Stack.displayName = 'Stack';

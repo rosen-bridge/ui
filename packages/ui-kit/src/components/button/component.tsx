@@ -2,8 +2,8 @@ import { ReactNode } from 'react';
 
 import { Button as ButtonMUI } from '@mui/material';
 
-import { ElementBaseProps, Wrap } from '@/core';
-import { Color, OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { Color, ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -28,20 +28,23 @@ export type ButtonProps = OverridableType<
   'color'
 >;
 
-export const ButtonBase = ({
-  block,
-  color = 'primary',
-  loading,
-  size = 'medium',
-  startIcon,
-  endIcon,
-  variant = 'text',
-  ...rest
-}: ButtonProps) => {
+export const Button = (props: ButtonProps) => {
+  const {
+    block,
+    color = 'primary',
+    loading,
+    size = 'medium',
+    startIcon,
+    endIcon,
+    variant = 'text',
+    ...rest
+  } = useConfig('Button', props);
+
   void color;
   void loading;
   void startIcon;
   void endIcon;
+
   return (
     <ButtonMUI
       data-block={!!block}
@@ -59,6 +62,4 @@ export const ButtonBase = ({
   );
 };
 
-ButtonBase.displayName = 'Button';
-
-export const Button = Wrap(ButtonBase);
+Button.displayName = 'Button';

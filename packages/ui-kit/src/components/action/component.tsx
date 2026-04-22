@@ -1,6 +1,6 @@
 import { Link } from '@/components';
-import { ElementBaseProps, Wrap } from '@/core';
-import { OverridableType } from '@/types';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
 import './styles.scss';
 
@@ -26,30 +26,30 @@ export type ActionProps =
   | OverridableType<ActionAsAnchor, ActionOverrides, never>
   | OverridableType<ActionAsButton, ActionOverrides, never>;
 
-export const ActionBase = ({ disabled, ...rest }: ActionProps) => {
+export const Action = (props: ActionProps) => {
+  const { disabled, ...rest } = useConfig('Action', props);
+
   const isLink = 'href' in rest;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const Component = (isLink ? Link : 'button') as any;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const props = { ...rest } as any;
+  const next = { ...rest } as any;
 
   if (isLink) {
     if (disabled) {
-      props['aria-disabled'] = disabled;
+      next['aria-disabled'] = disabled;
     }
 
-    props.tabIndex = disabled ? -1 : rest.tabIndex;
+    next.tabIndex = disabled ? -1 : rest.tabIndex;
 
-    props.underline = 'none';
+    next.underline = 'none';
   } else {
-    props.disabled = disabled;
+    next.disabled = disabled;
   }
 
-  return <Component {...props} />;
+  return <Component {...next} />;
 };
 
-ActionBase.displayName = 'Action';
-
-export const Action = Wrap(ActionBase);
+Action.displayName = 'Action';
