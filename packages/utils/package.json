@@ -13,10 +13,12 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --build",
+    "coverage": "npm run test -- --run --coverage",
     "lint": "eslint --fix . && npm run prettify",
     "lint:check": "eslint . && npm run prettify:check",
     "prettify": "prettier --write . --ignore-path ../../.gitignore",
     "prettify:check": "prettier --check . --ignore-path ../../.gitignore",
+    "test": "NODE_OPTIONS='--import tsx' vitest",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {

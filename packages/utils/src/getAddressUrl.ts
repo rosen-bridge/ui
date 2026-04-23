@@ -2,6 +2,7 @@ import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 
 const baseAddressURLs: { [key in Network]: string } = {
+  [NETWORKS.base.key]: 'https://base.blockscout.com/address',
   [NETWORKS.binance.key]: 'https://bscscan.com/address',
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/en/addresses',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/address',

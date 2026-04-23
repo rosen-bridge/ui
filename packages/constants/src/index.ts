@@ -65,6 +65,14 @@ export const NETWORKS = {
     id: '',
     hasTokenSupport: false,
   },
+  'base': {
+    index: 9,
+    key: 'base',
+    label: 'Base',
+    nativeToken: 'eth',
+    id: '0x2105',
+    hasTokenSupport: true,
+  },
 } as const;
 
 export const NETWORKS_KEYS = Object.values(NETWORKS).map(

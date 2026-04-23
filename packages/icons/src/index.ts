@@ -150,6 +150,8 @@ export { default as Unlock } from './icons/unlock.svg?react';
 
 export { default as Wallet } from './icons/wallet.svg?react';
 
+export { default as Base } from './networks/base.svg?react';
+
 export { default as Binance } from './networks/binance.svg?react';
 
 export { default as BitcoinRunes } from './networks/bitcoin-runes.svg?react';

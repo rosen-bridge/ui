@@ -11,6 +11,7 @@ import { Network } from '@rosen-ui/types';
 type HttpsURL = `https://${string}`;
 
 const baseTxURLs: { [key in Network]: HttpsURL } = {
+  [NETWORKS.base.key]: 'https://base.blockscout.com/tx',
   [NETWORKS.binance.key]: 'https://bscscan.com/tx',
   [NETWORKS.ergo.key]: 'https://explorer.ergoplatform.com/transactions',
   [NETWORKS.cardano.key]: 'https://cardanoscan.io/transaction',
