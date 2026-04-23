@@ -9,6 +9,40 @@ import { bridgedAssets, lockedAssets, tokens } from './database/test-data';
 import { tokenMapData } from './test-data';
 
 describe('AssetCalculator', () => {
+  describe('constructor', () => {
+    /**
+     * @target AssetCalculator.constructor should register Base calculator
+     * @dependencies
+     * - NETWORKS
+     * @scenario
+     * - create AssetCalculator with Base EVM calculator config
+     * - read calculatorMap
+     * @expected
+     * - Base calculator should be available in calculatorMap
+     */
+    it('should register Base calculator', async () => {
+      const dataSource = await initDatabase();
+      const tokenMap = new TokenMap();
+      await tokenMap.updateConfigByJson(tokenMapData);
+      const assetCalculator = new AssetCalculator(
+        tokenMap,
+        { addresses: ['Addr'], explorerUrl: 'explorerUrl' },
+        { addresses: ['Addr'], koiosUrl: 'koiosUrl' },
+        { addresses: ['Addr'], esploraUrl: 'esploraUrl' },
+        { addresses: ['Addr'], unisatUrl: 'unisatUrl' },
+        { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
+        { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], rpcUrl: 'baseRpcUrl' },
+        { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
+        dataSource,
+      );
+
+      expect(assetCalculator['calculatorMap'].has(NETWORKS.base.key)).toBe(
+        true,
+      );
+    });
+  });
+
   describe('calculateEmissionForChain', () => {
     /**
      * Mock database and create the AssetCalculator instance before each test
@@ -29,6 +63,7 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], unisatUrl: 'unisatUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'baseRpcUrl' },
         {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
@@ -116,6 +151,7 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], unisatUrl: 'unisatUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'baseRpcUrl' },
         {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
@@ -192,6 +228,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], unisatUrl: 'unisatUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], rpcUrl: 'baseRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         dataSource,
       );
@@ -228,17 +265,21 @@ describe('AssetCalculator', () => {
         await assetCalculator['lockedAssetModel'].getAllStoredAssets();
       const allStoredTokens =
         await assetCalculator['tokenModel'].getAllStoredTokens();
-      expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(upsertBridgedAssetSpy).to.have.toBeCalledTimes(4);
       expect(upsertLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetSpy).to.have.toBeCalledWith([]);
       expect(removeLockedAssetSpy).to.have.toBeCalledWith([]);
-      expect(insertTokenSpy).toBeCalledTimes(6);
+      expect(insertTokenSpy).toBeCalledTimes(7);
       expect(
         allStoredBridgedAssets.sort((a, b) =>
           a.tokenId.localeCompare(b.tokenId),
         ),
       ).toEqual(
         [
+          {
+            tokenId: tokenMapData[0].ergo.tokenId,
+            chain: NETWORKS.base.key,
+          },
           {
             tokenId: tokenMapData[0].ergo.tokenId,
             chain: NETWORKS.cardano.key,
@@ -267,6 +308,7 @@ describe('AssetCalculator', () => {
       expect(allStoredTokens.sort()).toEqual(
         [
           tokenMapData[0].ergo.tokenId,
+          tokenMapData[0].base.tokenId,
           tokenMapData[1].ergo.tokenId,
           tokenMapData[1].cardano.tokenId,
           tokenMapData[2].cardano.tokenId,
@@ -311,6 +353,7 @@ describe('AssetCalculator', () => {
         { addresses: ['Addr'], unisatUrl: 'unisatUrl' },
         { addresses: ['Addr'], rpcUrl: 'rpcUrl' },
         { addresses: ['Addr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['Addr'], rpcUrl: 'baseRpcUrl' },
         { addresses: ['Addr'], blockcypherUrl: 'blockcypherUrl' },
         dataSource,
       );
@@ -348,7 +391,7 @@ describe('AssetCalculator', () => {
         await assetCalculator['bridgedAssetModel'].getAllStoredAssets();
       const allStoredLockedAssets =
         await assetCalculator['lockedAssetModel'].getAllStoredAssets();
-      expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(3);
+      expect(updateBridgedAssetSpy).to.have.toBeCalledTimes(4);
       expect(updateLockedAssetSpy).to.have.toBeCalledTimes(3);
       expect(removeBridgedAssetsSpy).to.have.toBeCalledWith(
         bridgedAssets.map((asset) => ({
@@ -370,6 +413,10 @@ describe('AssetCalculator', () => {
         ),
       ).toEqual(
         [
+          {
+            tokenId: tokenMapData[0].ergo.tokenId,
+            chain: NETWORKS.base.key,
+          },
           {
             tokenId: tokenMapData[0].ergo.tokenId,
             chain: NETWORKS.cardano.key,
@@ -418,6 +465,7 @@ describe('AssetCalculator', () => {
         { addresses: ['hotAddr', 'coldAddr'], unisatUrl: 'unisatUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'rpcUrl' },
         { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'bnbRpcUrl' },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'baseRpcUrl' },
         {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
@@ -447,10 +495,14 @@ describe('AssetCalculator', () => {
       const cardanoCalculator = {
         totalSupply: vitest.fn().mockResolvedValue(2000n),
       } as unknown as AbstractCalculator;
+      const baseCalculator = {
+        totalSupply: vitest.fn().mockResolvedValue(3000n),
+      } as unknown as AbstractCalculator;
 
       assetCalculator['calculatorMap'] = new Map([
         [NETWORKS.ergo.key, ergoCalculator],
         [NETWORKS.cardano.key, cardanoCalculator],
+        [NETWORKS.base.key, baseCalculator],
       ]);
 
       await assetCalculator['storeAllTokenSupplies']();
@@ -470,9 +522,14 @@ describe('AssetCalculator', () => {
         2000n,
       );
 
+      // Base wrapped token should be stored
+      const baseToken1Key = `${NETWORKS.base.key}-${tokenMapData[0].base.tokenId}`;
+      expect(assetCalculator['totalSupplyMap'].get(baseToken1Key)).toBe(3000n);
+
       // Verify totalSupply was called for wrapped tokens
       expect(ergoCalculator.totalSupply).toHaveBeenCalled();
       expect(cardanoCalculator.totalSupply).toHaveBeenCalled();
+      expect(baseCalculator.totalSupply).toHaveBeenCalled();
     });
 
     /**
@@ -495,6 +552,7 @@ describe('AssetCalculator', () => {
       assetCalculator['calculatorMap'] = new Map([
         [NETWORKS.ergo.key, ergoCalculator],
         [NETWORKS.cardano.key, ergoCalculator],
+        [NETWORKS.base.key, ergoCalculator],
       ]);
 
       await assetCalculator['storeAllTokenSupplies']();

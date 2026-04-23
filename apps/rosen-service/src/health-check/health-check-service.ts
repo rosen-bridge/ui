@@ -9,6 +9,8 @@ import path from 'node:path';
 
 import config from '../configs';
 import {
+  BASE_BLOCK_TIME,
+  BASE_SCANNER_INTERVAL,
   BINANCE_BLOCK_TIME,
   BINANCE_SCANNER_INTERVAL,
   BITCOIN_BLOCK_TIME,
@@ -130,6 +132,17 @@ const registerAllHealthChecks = (healthCheck: HealthCheck) => {
         BINANCE_SCANNER_INTERVAL,
       ),
       label: 'binance',
+    },
+    {
+      instance: new ScannerSyncHealthCheckParam(
+        scannerService.getBaseScanner().name(),
+        async () => getLastSavedBlock(scannerService.getBaseScanner().name()),
+        config.healthCheck.baseScannerWarnDiff,
+        config.healthCheck.baseScannerCriticalDiff,
+        BASE_BLOCK_TIME,
+        BASE_SCANNER_INTERVAL,
+      ),
+      label: 'base',
     },
   ];
 

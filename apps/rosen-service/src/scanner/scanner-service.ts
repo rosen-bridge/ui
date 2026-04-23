@@ -8,6 +8,7 @@ import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 
 import { handleError } from '../utils';
+import { startBaseScanner } from './chains/base';
 import { startBinanceScanner } from './chains/binance';
 import { startBitcoinScanner } from './chains/bitcoin';
 import { startCardanoScanner } from './chains/cardano';
@@ -23,6 +24,7 @@ let cardanoScanner: CardanoKoiosScanner;
 let bitcoinScanner: BitcoinRpcScanner;
 let ethereumScanner: EvmRpcScanner;
 let binanceScanner: EvmRpcScanner;
+let baseScanner: EvmRpcScanner;
 let dogeScanner: DogeRpcScanner;
 
 /**
@@ -36,6 +38,7 @@ const start = async () => {
       bitcoinScanner,
       ethereumScanner,
       binanceScanner,
+      baseScanner,
       dogeScanner,
     ] = await Promise.all([
       startErgoScanner(),
@@ -43,6 +46,7 @@ const start = async () => {
       startBitcoinScanner(),
       startEthereumScanner(),
       startBinanceScanner(),
+      startBaseScanner(),
       startDogeScanner(),
     ]);
 
@@ -53,6 +57,7 @@ const start = async () => {
         bitcoinScanner.name(),
         ethereumScanner.name(),
         binanceScanner.name(),
+        baseScanner.name(),
         dogeScanner.name(),
       ],
     });
@@ -69,6 +74,7 @@ const scannerService = {
   getBitcoinScanner: () => bitcoinScanner,
   getEthereumScanner: () => ethereumScanner,
   getBinanceScanner: () => binanceScanner,
+  getBaseScanner: () => baseScanner,
   getDogeScanner: () => dogeScanner,
 };
 

@@ -48,6 +48,7 @@ class AssetCalculator {
     bitcoinRunesCalculator: BitcoinRunesCalculatorInterface,
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
+    baseCalculator: EvmCalculatorInterface,
     dogeCalculator: DogeCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
@@ -95,6 +96,14 @@ class AssetCalculator {
       binanceCalculator.authToken,
       logger.child('binanceCalculator'),
     );
+    const baseAssetCalculator = new EvmCalculator(
+      NETWORKS.base.key,
+      this.tokens,
+      baseCalculator.addresses,
+      baseCalculator.rpcUrl,
+      baseCalculator.authToken,
+      logger.child('baseCalculator'),
+    );
     const dogeAssetCalculator = new DogeCalculator(
       this.tokens,
       dogeCalculator.addresses,
@@ -110,6 +119,7 @@ class AssetCalculator {
     );
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
+    this.calculatorMap.set(NETWORKS.base.key, baseAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(
       dataSource,
