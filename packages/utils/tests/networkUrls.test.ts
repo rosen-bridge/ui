@@ -7,7 +7,7 @@ import { getTxURL } from '../src/getTxUrl';
 describe('Base explorer URLs', () => {
   it('should return the Base tx explorer URL', () => {
     expect(getTxURL('base', '0x4200000000000000000000000000000000000006')).toBe(
-      'https://base.blockscout.com/tx/0x4200000000000000000000000000000000000006',
+      'https://basescan.org/tx/0x4200000000000000000000000000000000000006',
     );
   });
 
@@ -15,7 +15,7 @@ describe('Base explorer URLs', () => {
     expect(
       getAddressUrl('base', '0x4200000000000000000000000000000000000006'),
     ).toBe(
-      'https://base.blockscout.com/address/0x4200000000000000000000000000000000000006',
+      'https://basescan.org/address/0x4200000000000000000000000000000000000006',
     );
   });
 
@@ -23,7 +23,7 @@ describe('Base explorer URLs', () => {
     expect(
       getTokenUrl('base', '0x4200000000000000000000000000000000000006'),
     ).toBe(
-      'https://base.blockscout.com/token/0x4200000000000000000000000000000000000006',
+      'https://basescan.org/token/0x4200000000000000000000000000000000000006',
     );
   });
 });
