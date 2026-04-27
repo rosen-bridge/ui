@@ -52,7 +52,7 @@ export const DisclosureButton = ({
         transform: `rotate(${disclosure.state == 'open' ? 180 : 0}deg)`,
         transition: (theme) => {
           return theme.transitions.create('transform', {
-            duration: theme.transitions.duration.shortest,
+            duration: theme.transitions.duration.shortest,//TODO check this
           });
         },
       }}

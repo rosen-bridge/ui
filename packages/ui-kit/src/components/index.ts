@@ -35,6 +35,7 @@ export * from './dialogDescription';
 export * from './dialogFooter';
 export * from './dialogHeader';
 export * from './dialogTitle';
+export * from './disclosureButtonNew';
 export * from './duration';
 export * from './eventCard';
 export * from './eventDetails';

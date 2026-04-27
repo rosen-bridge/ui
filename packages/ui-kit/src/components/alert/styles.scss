@@ -1,40 +1,90 @@
-@use 'sass:list';
+@use "sass:map";
 
 $alert-colors: (
-  success: (
-    var(--rosen-palette-success-light),
-    var(--rosen-palette-success-dark),
-  ),
-  warning: (
-    var(--rosen-palette-warning-light),
-    var(--rosen-palette-warning-dark),
-  ),
-  error: (
-    var(--rosen-palette-error-light),
-    var(--rosen-palette-error-dark),
-  ),
-  info: (
-    var(--rosen-palette-info-light),
-    var(--rosen-palette-info-dark),
-  ),
+        success: (
+                light: var(--rosen-palette-success-light),
+                main: var(--rosen-palette-success-main),
+                contrast: var(--rosen-palette-primary-contrastText),
+                text: var(--rosen-palette-neutral-dark),
+        ),
+        warning: (
+                light: var(--rosen-palette-warning-light),
+                main: var(--rosen-palette-warning-main),
+                contrast: var(--rosen-palette-primary-contrastText),
+                text: var(--rosen-palette-neutral-dark),
+        ),
+        error: (
+                light: var(--rosen-palette-error-light),
+                main: var(--rosen-palette-error-main),
+                contrast: var(--rosen-palette-primary-contrastText),
+                text: var(--rosen-palette-neutral-dark),
+        ),
+        info: (
+                light: var(--rosen-palette-info-light),
+                main: var(--rosen-palette-info-main),
+                contrast: var(--rosen-palette-primary-contrastText),
+                text: var(--rosen-palette-neutral-dark),
+        )
 );
 
-.RosenAlert-root {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+$alert-variants: (standard, filled, outlined);
 
-  padding: calc(var(--rosen-spacing) * 1.3) calc(var(--rosen-spacing) * 2);
+.RosenAlert {
   border-radius: calc(var(--rosen-spacing) * 2);
-  gap: calc(var(--rosen-spacing) * 1.3);
 
-  @each $type, $colors in $alert-colors {
-    &[data-alert-severity='#{$type}'] {
-      background-color: list.nth($colors, 1);
-      color: list.nth($colors, 2);
+  //TODO[hazhir]: talk about this with masoud for check this issue in select the children
+  .RosenAlert-inner {
+    display: flex;
+    align-items: center;
 
-      & svg {
-        color: list.nth($colors, 2);
+    padding: var(--rosen-spacing) var(--rosen-spacing) var(--rosen-spacing) calc(var(--rosen-spacing) * 2);
+  }
+
+
+  @each $type, $color in $alert-colors {
+    @each $variant in $alert-variants {
+
+      &[data-severity="#{$type}"][data-variant="#{$variant}"] {
+
+        $light: map.get($color, light);
+        $main: map.get($color, main);
+        $contrast: map.get($color, contrast);
+        $text: map.get($color, text);
+
+        @if $variant == standard {
+          background-color: $light;
+          color: $main;
+
+          .RosenAlert-icon svg {
+            color: $main;
+          }
+        }
+
+        @if $variant == filled {
+          background-color: $main;
+          color: $contrast;
+
+          .RosenAlert-icon svg {
+            color: $contrast;
+          }
+        }
+
+        @if $variant == outlined {
+          background-color: transparent;
+          border: 1px solid $light;
+          color: $text;
+
+          .RosenAlert-icon svg {
+            color: $main;
+          }
+        }
+
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+
+        .RosenAlert-icon svg {
+          margin-right: var(--rosen-spacing);
+        }
       }
     }
   }
@@ -48,8 +98,17 @@ $alert-colors: (
 
 .RosenAlert-content {
   flex: 1;
+  display: flex;
+  font-size: inherit;
+  align-items: center;
+  padding: var(--rosen-spacing) 0;
 }
 
-.RosenAlert-action {
+.RosenAlert-actions {
+  display: flex;
+  flex-direction: row;
+  gap: var(--rosen-spacing);
   flex: 0 0 auto;
+  font-size: inherit;
 }
+
