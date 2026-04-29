@@ -8,10 +8,52 @@
   --rosen-palette-secondary: var(--rosen-palette-secondary-main);
   --rosen-palette-success: var(--rosen-palette-success-main);
   --rosen-palette-warning: var(--rosen-palette-warning-main);
+}
 
 
-  --transition-duration: 300ms;
-  --transition-delay: 0ms;
+.dropdown {
+  padding: 6px;
+  width: 160px;
+  background: #e5e4e7;
+  border-radius: 12px;
+}
+
+/* enter initial */
+.dropdown[data-animation="enter"] {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+/* entering */
+.dropdown[data-animation="entering"] {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+/* entered */
+.dropdown[data-animation="entered"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* exit initial */
+.dropdown[data-animation="exit"] {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* exiting */
+.dropdown[data-animation="exiting"] {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 300ms ease, transform 300ms ease;
+}
+
+/* exited */
+.dropdown[data-animation="exited"] {
+  opacity: 0;
+  transform: translateY(-10px);
 }
 
 

@@ -1,62 +1,96 @@
-import { RefObject, useEffect, useRef, useState } from 'react';
+import { type RefObject, useRef, useState } from 'react';
 
-import {
-  createTransition,
-  getTransitionTotal,
-} from '@/app/new/createTransition';
+type State = 'enter' | 'entering' | 'entered' | 'exit' | 'exiting' | 'exited';
 
-type Phase = 'idle' | 'start' | 'running' | 'end';
-
-type Props = {
-  trigger: boolean;
+export function useTransition({
+  ref,
+  onEntered,
+  onExited,
+}: {
   ref: RefObject<HTMLElement | null>;
-};
+  onEntered?: () => void;
+  onExited?: () => void;
+}) {
+  const [state, setState] = useState<State>('exited');
 
-export function useTransition({ trigger, ref }: Props) {
-  const [state, setState] = useState<Phase>('idle');
+  const cleanupRef = useRef<() => void>(() => {});
+  const lastAction = useRef<'enter' | 'exit' | null>(null);
 
-  //Transition instance
-  const tRef = useRef<any>(null);
+  const clear = () => {
+    cleanupRef.current?.();
+  };
 
-  useEffect(() => {
-    if (!ref.current) return;
+  const onEnd = (node: HTMLElement, cb: () => void) => {
+    let done = false;
 
-    const el = ref.current;
+    const handler = () => {
+      if (done) return;
+      done = true;
 
-    const t = tRef.current;
-
-    if (!tRef.current) {
-      tRef.current = createTransition(el, (phase: Phase) => {
-        setState(phase);
-      });
-    }
-
-    const cycle = () => {
-      t.cancel();
-      t.run();
+      node.removeEventListener('transitionend', handler);
+      cb();
     };
 
-    cycle();
-  }, [trigger, ref]);
+    node.addEventListener('transitionend', handler);
 
-  useEffect(() => {
-    console.log(state);
-  }, [state]);
+    return () => node.removeEventListener('transitionend', handler);
+  };
+
+  const enter = () => {
+    const node = ref.current;
+    if (!node) return;
+
+    lastAction.current = 'enter';
+
+    clear();
+
+    setState('enter');
+
+    requestAnimationFrame(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+      node.offsetHeight;
+    });
+
+    requestAnimationFrame(() => {
+      setState('entering');
+
+      cleanupRef.current = onEnd(node, () => {
+        if (lastAction.current !== 'enter') return;
+        setState('entered');
+        onEntered?.();
+      });
+    });
+  };
+
+  const exit = () => {
+    const node = ref.current;
+    if (!node) return;
+
+    lastAction.current = 'exit';
+    clear();
+
+    setState('exit');
+
+    requestAnimationFrame(() => {
+      setState('exiting');
+
+      cleanupRef.current = onEnd(node, () => {
+        if (lastAction.current !== 'exit') return;
+        setState('exited');
+        onExited?.();
+      });
+    });
+  };
+
+  const stop = () => {
+    clear();
+    lastAction.current = null;
+  };
+
   return {
     state,
+    enter,
+    exit,
+    stop,
   };
 }
-
-
-// const destroyFrame = () => {
-//   if (!ref.current) return;
-//   t.cancel();
-//
-//   const total = getTransitionTotal(ref.current);
-//
-//   const timer = setTimeout(() => {
-//     setState('idle');
-//   }, total);
-//
-//   return () => clearTimeout(timer);
-// };

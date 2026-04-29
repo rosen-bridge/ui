@@ -1,47 +1,50 @@
 'use client';
 
-import { RefObject, useEffect, useRef, useState } from 'react';
+import {  useEffect, useRef, useState } from 'react';
 
 import { useTransition } from '@/app/new/useTransition';
 
 const Page = () => {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const { state } = useTransition({
-    trigger: open,
+  const t = useTransition({
     ref,
+    onEntered: () => console.log('entered'),
+    onExited: () => console.log('exited'),
   });
 
-  // useEffect(() => {
-  //   console.log('status', state, open ? 'opened' : 'closed');
-  // }, [state, open]);
+  const shouldRender = open || t.state !== 'exited';
+
+  useEffect(() => {
+    if (open) {
+      t.enter();
+    } else {
+      t.exit();
+    }
+
+    return () => {
+      t.stop();
+    };
+  }, [open]);
 
   return (
     <div style={{ padding: 40 }}>
       <button
         onClick={() => {
-          setOpen((p) => !p);
+          setOpen((prev) => !prev);
         }}
       >
-        toggle dropdown
+        {open ? 'close' : 'open'}
       </button>
 
-      <div
-        ref={ref}
-        className={`Dropdown`}
-        data-state={state}
-        data-name={open ? 'open' : 'close'}
-      >
-        <div className="Dropdown__content">
-          <div>Item 1</div>
-          <div>Item 2</div>
-          <div>Item 3</div>
+      {shouldRender && (
+        <div ref={ref} className="dropdown" data-animation={t.state}>
+          <div>item 1</div>
+          <div>item 2</div>
+          <div>item 3</div>
         </div>
-      </div>
-
-      <small>state: {state}</small>
+      )}
     </div>
   );
 };
