@@ -1,5 +1,14 @@
 # @rosen-ui/my-doge-wallet
 
+## 1.1.9
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/doge@0.4.5
+  - @rosen-ui/wallet-api@3.2.0
+
 ## 1.1.8
 
 ### Patch Changes

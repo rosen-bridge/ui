@@ -1,5 +1,18 @@
 # @rosen-bridge/watcher-app
 
+## 4.1.0
+
+### Minor Changes
+
+- Upgrade React to v19
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.4.0
+  - @rosen-bridge/icons@3.6.0
+  - @rosen-ui/utils@1.0.3
+
 ## 4.0.2
 
 ### Patch Changes
