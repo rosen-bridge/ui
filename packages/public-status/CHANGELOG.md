@@ -1,5 +1,11 @@
 # @rosen-ui/public-status
 
+## 0.1.1
+
+### Patch Changes
+
+- Add public-status table names to their Entity decorators
+
 ## 0.1.0
 
 ### Minor Changes

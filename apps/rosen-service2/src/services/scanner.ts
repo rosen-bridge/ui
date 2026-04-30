@@ -1,10 +1,12 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import { WebSocketScanner } from '@rosen-bridge/abstract-scanner';
 import { CardanoOgmiosScanner } from '@rosen-bridge/cardano-scanner';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
-  PeriodicTaskService,
   Dependency,
   ServiceStatus,
+  ServiceAction,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
 
@@ -18,7 +20,6 @@ import {
   DOGE_METHOD_RPC,
 } from '../constants';
 import { CARDANO_METHOD_OGMIOS } from '../constants';
-import { initializeErgoScanner } from '../scanners';
 import {
   buildCardanoKoiosScannerWithExtractors,
   buildBitcoinRpcScannerWithExtractors,
@@ -30,39 +31,63 @@ import {
   buildCardanoBlockFrostScannerWithExtractors,
   buildCardanoOgmiosScannerWithExtractors,
 } from '../scanners';
-import { ChainScannersType, ChainsKeys } from '../types';
-import { DBService } from './db';
+import { ChainScannersType, ChainsKeys, ChainsWithScanner } from '../types';
+import { AbstractErgoScannerService } from './types/abstractErgoScanner';
+import { AbstractScannerService } from './types/abstractScannerService';
+import { AbstractTokenMapService } from './types/abstractTokenMapService';
+import { AbstractDBService } from './types/abstrctDb';
 
-export class ScannerService extends PeriodicTaskService {
+export class ScannerService extends AbstractScannerService {
   name = 'ScannerService';
-  private static instance: ScannerService;
   protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
-  readonly dbService: DBService;
+  private dbService: DataSource;
+  private tokenMap: TokenMap;
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
+      serviceName: AbstractDBService.getInstance().getName(),
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractTokenMapService.getInstance().getName(),
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractErgoScannerService.getInstance().getName(),
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
     },
   ];
 
+  assemble = async (): Promise<boolean> => {
+    this.dbService = AbstractDBService.getInstance().getDataSource();
+    await this.generateAndRegisterScannersWithExtractors();
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance();
   }
 
   /**
-   * return scanners
+   * Returns scanner instance for the given chain.
    *
-   * @returns { { [k1 in ChainsKeys]?: ExtraChainScannersType } } scanners
+   * @param {ChainsKeys} chain - Target chain key
+   * @returns {ExtraChainScannersType | undefined} Scanner instance for the chain
    */
-  public getScanners = () => this.scanners;
+  public getScanner = (chain: ChainsKeys) => {
+    this.scanners.ergo =
+      AbstractErgoScannerService.getInstance().getErgoScanner();
+    return this.scanners[chain];
+  };
 
   /**
    * Generates and registers blockchain scanners along with their corresponding event extractors
    * based on the active chains and configured methods.
    *
    * Supported chains:
-   * - Ergo     (Explorer, Node)
    * - Cardano  (Blockfrost, Ogmios, Koios)
    * - Bitcoin  (Esplora, RPC)
    * - Doge     (Esplora, RPC)
@@ -78,44 +103,48 @@ export class ScannerService extends PeriodicTaskService {
    */
   protected generateAndRegisterScannersWithExtractors = async () => {
     try {
-      this.scanners[NETWORKS.ergo.key] = await initializeErgoScanner(
-        this.dbService.dataSource,
-      );
-
       if (configs.chains.cardano.active) {
         switch (configs.chains.cardano.method) {
           case CARDANO_METHOD_BLOCKFROST:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoBlockFrostScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
           case CARDANO_METHOD_OGMIOS:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoOgmiosScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
           case CARDANO_METHOD_KOIOS:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoKoiosScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
         }
       }
-      if (configs.chains.bitcoin.active) {
+      if (
+        configs.chains.bitcoin.active ||
+        configs.chains['bitcoin-runes'].active
+      ) {
         switch (configs.chains.bitcoin.method) {
           case BITCOIN_METHOD_ESPLORA:
             this.scanners[NETWORKS.bitcoin.key] =
               await buildBitcoinEsploraScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
           case BITCOIN_METHOD_RPC:
             this.scanners[NETWORKS.bitcoin.key] =
               await buildBitcoinRpcScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
         }
@@ -125,13 +154,15 @@ export class ScannerService extends PeriodicTaskService {
           case DOGE_METHOD_ESPLORA:
             this.scanners[NETWORKS.doge.key] =
               await buildDogeEsploraScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
           case DOGE_METHOD_RPC:
             this.scanners[NETWORKS.doge.key] =
               await buildDogeRpcScannerWithExtractors(
-                this.dbService.dataSource,
+                this.dbService,
+                this.tokenMap,
               );
             break;
         }
@@ -139,12 +170,16 @@ export class ScannerService extends PeriodicTaskService {
       if (configs.chains.ethereum.active) {
         this.scanners[NETWORKS.ethereum.key] =
           await buildEthereumEvmScannerWithExtractors(
-            this.dbService.dataSource,
+            this.dbService,
+            this.tokenMap,
           );
       }
       if (configs.chains.binance.active) {
         this.scanners[NETWORKS.binance.key] =
-          await buildBinanceRpcScannerWithExtractors(this.dbService.dataSource);
+          await buildBinanceRpcScannerWithExtractors(
+            this.dbService,
+            this.tokenMap,
+          );
       }
     } catch (error) {
       throw new Error(
@@ -162,26 +197,10 @@ export class ScannerService extends PeriodicTaskService {
    * @memberof ScannerService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractScannerService.instance != undefined) {
       return;
     }
-    this.instance = new ScannerService(logger);
-
-    await this.instance.generateAndRegisterScannersWithExtractors();
-  };
-
-  /**
-   * return the singleton instance of ScannerService
-   *
-   * @static
-   * @return {ScannerService}
-   * @memberof ScannerService
-   */
-  static readonly getInstance = (): ScannerService => {
-    if (!this.instance) {
-      throw new Error('ScannerService instances is not initialized yet');
-    }
-    return this.instance;
+    AbstractScannerService.instance = new ScannerService(logger);
   };
 
   /**
@@ -232,7 +251,8 @@ export class ScannerService extends PeriodicTaskService {
             }
           }
         },
-        interval: configs.chains[chain as ChainsKeys].scanInterval * 1000,
+        interval:
+          configs.chains[chain as ChainsWithScanner].scanInterval * 1000,
       });
     }
     return tasks;

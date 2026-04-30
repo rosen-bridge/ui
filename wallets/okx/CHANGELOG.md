@@ -1,5 +1,34 @@
 # @rosen-ui/okx-wallet
 
+## 2.2.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/bitcoin@2.4.5
+  - @rosen-ui/wallet-api@3.2.0
+
+## 2.2.1
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-network/bitcoin@2.4.4
+
+## 2.2.0
+
+### Minor Changes
+
+- Throw the appropriate `NonNativeSegWitAddressError` during address validation for `OKX` and `Xverse` wallets on the `Bitcoin` and `Bitcoin-Runes` networks
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/wallet-api@3.1.0
+  - @rosen-network/bitcoin@2.4.3
+  - @rosen-ui/types@0.4.1
+
 ## 2.1.4
 
 ### Patch Changes

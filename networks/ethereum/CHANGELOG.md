@@ -1,5 +1,31 @@
 # @rosen-network/ethereum
 
+## 0.4.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.6.0
+  - @rosen-network/base@0.5.3
+  - @rosen-network/evm@0.3.7
+
+## 0.4.5
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/icons@3.5.0
+
+## 0.4.4
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-network/base@0.5.2
+  - @rosen-network/evm@0.3.6
+  - @rosen-bridge/icons@3.4.0
+
 ## 0.4.3
 
 ### Patch Changes

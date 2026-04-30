@@ -1,4 +1,4 @@
-import { MetaMaskSDK } from '@metamask/sdk';
+import type { MetaMaskSDK } from '@metamask/sdk';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { BinanceNetwork } from '@rosen-network/binance/dist/client';
 import { EthereumNetwork } from '@rosen-network/ethereum/dist/client';
@@ -15,7 +15,6 @@ import {
   UserDeniedTransactionSignatureError,
   CurrentChainError,
 } from '@rosen-ui/wallet-api';
-import { BrowserProvider, Contract } from 'ethers';
 
 import { ICON } from './icon';
 import { MetaMaskWalletConfig } from './types';
@@ -31,12 +30,14 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.binance.key, NETWORKS.ethereum.key];
 
-  private api = new MetaMaskSDK({
-    dappMetadata: {
-      name: 'Rosen Bridge',
-    },
-    enableAnalytics: false,
-  });
+  private _api?: MetaMaskSDK;
+
+  private get api(): MetaMaskSDK {
+    if (typeof window === 'undefined' || !this._api) {
+      throw new InteractionError(this.name);
+    }
+    return this._api;
+  }
 
   get currentChain(): Network {
     const chain = Object.values(NETWORKS).find(
@@ -65,6 +66,27 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
     })) as { caveats: { type: string; value: string[] }[] }[];
   };
 
+  initialize = async (): Promise<void> => {
+    if (this.isInitialized) return;
+
+    /**
+     * Lazy-load wallet resource to reduce initial bundle size and improve app startup performance
+     */
+    const { MetaMaskSDK } = await import('@metamask/sdk');
+
+    this._api ||= new MetaMaskSDK({
+      dappMetadata: {
+        name: 'Rosen Bridge',
+        url: window.location.origin,
+      },
+      enableAnalytics: false,
+    });
+
+    await this.api.init();
+
+    this.isInitialized = true;
+  };
+
   performConnect = async (): Promise<void> => {
     await this.api.connect();
   };
@@ -83,6 +105,8 @@ export class MetaMaskWallet extends Wallet<MetaMaskWalletConfig> {
   fetchBalance = async (
     token: RosenChainToken,
   ): Promise<string | undefined> => {
+    const { BrowserProvider, Contract } = await import('ethers');
+
     const address = await this.getAddress();
 
     let amount;

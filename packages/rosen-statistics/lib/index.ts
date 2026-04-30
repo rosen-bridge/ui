@@ -1,1 +1,10 @@
-export { generalMetrics, lockedAssetsMetric } from './jobs';
+export {
+  generalMetrics,
+  lockedAssetsMetric,
+  eventCountMetric,
+  userEventMetric,
+  watcherCountMetric,
+  bridgeFeeMetric,
+} from './jobs';
+export { WatcherCountConfig } from './types';
+export { NodeBoxFetcher } from './fetchers';

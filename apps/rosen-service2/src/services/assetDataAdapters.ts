@@ -1,47 +1,55 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
+import { TotalSupply } from '@rosen-ui/asset-aggregator';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
+  BitcoinRunesDataAdapter,
   CardanoKoiosDataAdapter,
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
   EthereumEvmRpcDataAdapter,
 } from '@rosen-ui/asset-data-adapter';
-import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
 import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { TokensConfig } from '../tokensConfig';
-import { ChainChoices, Chains, TotalSupply } from '../types';
-import { DBService } from './db';
+import { ChainChoices } from '../types';
+import { stringSerializer } from '../utils';
+import { AbstractAssetDataAdapterService } from './types/abstractAssetDataAdapterService';
+import { AbstractTokenMapService } from './types/abstractTokenMapService';
+import { AbstractDBService } from './types/abstrctDb';
 
-export class AssetDataAdapterService extends PeriodicTaskService {
+export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
   name = 'AssetDataAdapterService';
-  private static instance: AssetDataAdapterService;
-  readonly dbService: DBService;
   readonly redis;
-  protected adapters: { [key: string]: ChainsAdapters } = {};
   protected explorerApi;
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
+      serviceName: AbstractDBService.getInstance().getName(),
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+    {
+      serviceName: AbstractTokenMapService.getInstance().getName(),
+      allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
     },
   ];
 
+  assemble = async (): Promise<boolean> => {
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance();
     this.redis = createClient({
       url: configs.redis.address,
       token: configs.redis.token,
@@ -82,7 +90,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * const adapter = createDataAdapter(NETWORKS.bitcoin.key, { url: "https://blockstream.info" });
    */
   protected createChainSpecificDataAdapter = (chain: ChainChoices) => {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
+    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
 
     const addresses: string[] = [
       configs.contracts[chain].addresses.lock,
@@ -109,13 +117,21 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           },
           this.logger.child('bitcoinDataAdapter'),
         );
+      case NETWORKS['bitcoin-runes'].key:
+        return new BitcoinRunesDataAdapter(
+          addresses,
+          tokenMap,
+          configs.chains['bitcoin-runes'].unisatUrl,
+          configs.chains['bitcoin-runes'].unisatApiKey,
+          this.logger.child('bitcoinRunesDataAdapter'),
+        );
       case NETWORKS.ethereum.key:
         return new EthereumEvmRpcDataAdapter(
           addresses,
           tokenMap,
           {
             url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
+            authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
           },
           configs.chains.ethereum.adapter.chunkSize,
           this.logger.child('ethereumDataAdapter'),
@@ -126,7 +142,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             url: configs.chains.binance.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
+            authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
           },
           configs.chains.binance.adapter.chunkSize,
           this.logger.child('binanceDataAdapter'),
@@ -138,8 +154,8 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
             authToken: configs.chains.cardano.koios.connections
-              .at(0)!
-              .authToken!.toString(),
+              .at(0)
+              ?.authToken?.toString(),
           },
           this.logger.child('cardanoDataAdapter'),
         );
@@ -153,8 +169,6 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           this.logger.child('dogeDataAdapter'),
         );
     }
-
-    throw new Error(`No adapter class found for chain: ${chain}`);
   };
 
   /**
@@ -201,6 +215,12 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           this.createChainSpecificDataAdapter(NETWORKS.bitcoin.key);
       }
 
+      if (configs.chains['bitcoin-runes'].active) {
+        // Create bitcoin-runes data-adapter
+        this.adapters[NETWORKS['bitcoin-runes'].key] =
+          this.createChainSpecificDataAdapter(NETWORKS['bitcoin-runes'].key);
+      }
+
       if (configs.chains.doge.active) {
         // Create Doge data-adapter
         this.adapters[NETWORKS.doge.key] = this.createChainSpecificDataAdapter(
@@ -243,26 +263,12 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    * @memberof AssetDataAdapterService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractAssetDataAdapterService.instance != undefined) {
       return;
     }
-    this.instance = new AssetDataAdapterService(logger);
-  };
-
-  /**
-   * return the singleton instance of AssetDataAdapterService
-   *
-   * @static
-   * @return {AssetDataAdapterService}
-   * @memberof AssetDataAdapterService
-   */
-  static readonly getInstance = (): AssetDataAdapterService => {
-    if (!this.instance) {
-      throw new Error(
-        'AssetDataAdapterService instances is not initialized yet',
-      );
-    }
-    return this.instance;
+    AbstractAssetDataAdapterService.instance = new AssetDataAdapterService(
+      logger,
+    );
   };
 
   /**
@@ -272,7 +278,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, JsonBigInt.stringify(assets));
+    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
   };
 
   /**
@@ -311,16 +317,15 @@ export class AssetDataAdapterService extends PeriodicTaskService {
                     });
                   }
                 }
-                this.redis.set(adapter.chain, JsonBigInt.stringify(finalData));
+                this.redis.set(adapter.chain, stringSerializer(finalData));
               }
             : async () => {
                 this.redis.set(
                   adapter.chain,
-                  JsonBigInt.stringify(await adapter.fetch()),
+                  stringSerializer(await adapter.fetch()),
                 );
               },
-        interval:
-          configs.chains[adapter.chain as keyof Chains].scanInterval * 1000,
+        interval: configs.dataAggregator.interval * 1000,
       });
     }
     return tasks;

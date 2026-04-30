@@ -4,12 +4,13 @@ import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { describe, it, expect, beforeEach } from 'vitest';
 
 import { DBService } from '../../src/services/db';
+import { AbstractDBService } from '../../src/services/types/abstrctDb';
 import { MockedBlockEntityData } from './mocked/db.mock';
 
 describe('DBService', () => {
   describe('getLastSavedBlock', () => {
     let dataSource: DataSource;
-    let service: DBService;
+    let service: AbstractDBService;
 
     beforeEach(async () => {
       dataSource = new DataSource({
@@ -21,9 +22,9 @@ describe('DBService', () => {
       });
 
       DBService.init(dataSource, new DummyLogger());
-      service = DBService.getInstance();
+      service = AbstractDBService.getInstance();
 
-      await service['start']();
+      await service['assemble']();
     });
 
     /**

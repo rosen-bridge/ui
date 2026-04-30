@@ -8,14 +8,16 @@ import { describe, it, beforeEach, expect, vi, Mock } from 'vitest';
 
 import { AssetDataAdapterService } from '../../src/services/assetDataAdapters';
 import { DBService } from '../../src/services/db';
-import { TokensConfig } from '../../src/tokensConfig';
+import { TokenMapService } from '../../src/services/tokenMap';
+import { AbstractAssetDataAdapterService } from '../../src/services/types/abstractAssetDataAdapterService';
+import { AbstractTokenMapService } from '../../src/services/types/abstractTokenMapService';
 import {
   expectedErgoGetAssetsTotalSupplyResult,
   sampleTokenMapConfig,
 } from './assetDataAdaptersTestData';
 
 interface TestContext {
-  service: AssetDataAdapterService;
+  service: AbstractAssetDataAdapterService;
   mockTokenMap: TokenMap;
   mockExplorer: { v1: { [k: string]: Mock } };
 }
@@ -36,14 +38,15 @@ describe('AssetDataAdapterService', () => {
 
       ctx.mockTokenMap = new TokenMap();
       await ctx.mockTokenMap.updateConfigByJson(sampleTokenMapConfig);
-      TokensConfig.init = vi.fn().mockImplementation(() => {
-        (TokensConfig as any).instance = {
+      TokenMapService.init = vi.fn().mockImplementation(() => {
+        (AbstractTokenMapService as any).instance = {
           tokenMap: ctx.mockTokenMap,
           logger: new DummyLogger(),
+          getName: () => 'Mocked Token Map Service',
         };
       });
-      await TokensConfig.init();
-      TokensConfig.getInstance().getTokenMap = vi
+      await TokenMapService.init();
+      AbstractTokenMapService.getInstance().getTokenMap = vi
         .fn()
         .mockReturnValue(ctx.mockTokenMap);
 
@@ -57,7 +60,7 @@ describe('AssetDataAdapterService', () => {
       DBService.init(dataSource);
 
       await AssetDataAdapterService.init();
-      ctx.service = AssetDataAdapterService.getInstance();
+      ctx.service = AbstractAssetDataAdapterService.getInstance();
 
       ctx.mockExplorer = mockExplorer;
     });

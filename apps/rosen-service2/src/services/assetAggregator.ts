@@ -1,47 +1,65 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
-import { AssetAggregator, NetworkItem } from '@rosen-ui/asset-aggregator';
+import {
+  AssetAggregator,
+  NetworkItem,
+  TotalSupply,
+} from '@rosen-ui/asset-aggregator';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter';
 import { NETWORKS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
 import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
-import { TokensConfig } from '../tokensConfig';
-import { ChainChoices, TotalSupply } from '../types';
-import { AssetDataAdapterService } from './assetDataAdapters';
-import { DBService } from './db';
+import { ChainChoices } from '../types';
+import { AbstractAssetAggregator } from './types/abstractAssetAggregator';
+import { AbstractAssetDataAdapterService } from './types/abstractAssetDataAdapterService';
+import { AbstractTokenMapService } from './types/abstractTokenMapService';
+import { AbstractDBService } from './types/abstrctDb';
 
-export class AssetAggregatorService extends PeriodicTaskService {
+export class AssetAggregatorService extends AbstractAssetAggregator {
   name = 'AssetAggregatorService';
-  readonly assetAggregator;
-  private static instance: AssetAggregatorService;
-  readonly dbService: DBService;
+  private assetAggregator: AssetAggregator;
   readonly redis;
 
   protected dependencies: Dependency[] = [
     {
-      serviceName: AssetDataAdapterService.name,
+      serviceName: AbstractAssetDataAdapterService.getInstance().getName(),
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+    {
+      serviceName: AbstractTokenMapService.getInstance().getName(),
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractDBService.getInstance().getName(),
+      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      action: ServiceAction.assemble,
     },
   ];
 
+  assemble = async (): Promise<boolean> => {
+    this.assetAggregator = new AssetAggregator(
+      AbstractTokenMapService.getInstance().getTokenMap(),
+      AbstractDBService.getInstance().getDataSource(),
+      this.logger,
+    );
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance();
     this.redis = createClient({
       url: configs.redis.address,
       token: configs.redis.token,
     });
-    this.assetAggregator = new AssetAggregator(
-      TokensConfig.getInstance().getTokenMap(),
-      this.dbService.dataSource,
-      this.logger,
-    );
   }
 
   /**
@@ -52,26 +70,10 @@ export class AssetAggregatorService extends PeriodicTaskService {
    * @memberof AssetAggregatorService
    */
   static readonly init = async (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractAssetAggregator.instance != undefined) {
       return;
     }
-    this.instance = new AssetAggregatorService(logger);
-  };
-
-  /**
-   * return the singleton instance of AssetAggregatorService
-   *
-   * @static
-   * @return {AssetAggregatorService}
-   * @memberof AssetAggregatorService
-   */
-  static readonly getInstance = (): AssetAggregatorService => {
-    if (!this.instance) {
-      throw new Error(
-        'AssetAggregatorService instances is not initialized yet',
-      );
-    }
-    return this.instance;
+    AbstractAssetAggregator.instance = new AssetAggregatorService(logger);
   };
 
   /**

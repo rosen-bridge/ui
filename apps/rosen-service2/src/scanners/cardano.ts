@@ -17,10 +17,10 @@ import {
   KoiosNetwork,
   KoiosTransaction,
 } from '@rosen-bridge/cardano-scanner';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
-import { TokensConfig } from '../tokensConfig';
 
 const logger = DefaultLogger.getInstance().child(import.meta.url);
 
@@ -33,6 +33,7 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  */
 export const buildCardanoKoiosScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Cardano scanner initialization...');
 
@@ -55,8 +56,6 @@ export const buildCardanoKoiosScannerWithExtractors = async (
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoKoiosObservationExtractor(
       configs.contracts.cardano.addresses.lock,
@@ -90,6 +89,7 @@ export const buildCardanoKoiosScannerWithExtractors = async (
  */
 export const buildCardanoBlockFrostScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Cardano scanner initialization...');
 
@@ -113,8 +113,6 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
   });
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoBlockFrostObservationExtractor(
       configs.contracts.cardano.addresses.lock,
@@ -149,6 +147,7 @@ export const buildCardanoBlockFrostScannerWithExtractors = async (
  */
 export const buildCardanoOgmiosScannerWithExtractors = async (
   dataSource: DataSource,
+  tokenMap: TokenMap,
 ) => {
   logger.info('Starting Cardano scanner initialization...');
 
@@ -165,8 +164,6 @@ export const buildCardanoOgmiosScannerWithExtractors = async (
   );
 
   try {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-
     logger.debug('Creating Cardano observation extractor...');
     const observationExtractor = new CardanoOgmiosObservationExtractor(
       configs.contracts.cardano.addresses.lock,

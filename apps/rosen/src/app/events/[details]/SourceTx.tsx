@@ -1,6 +1,11 @@
 'use client';
 
-import { Center, Stack, Typography } from '@rosen-bridge/ui-kit';
+import {
+  Center,
+  Stack,
+  Typography,
+  UnderDevelopSection,
+} from '@rosen-bridge/ui-kit';
 
 import { Section } from './Section';
 
@@ -8,19 +13,13 @@ export const SourceTx = () => {
   return (
     <Section collapsible title="Source Tx Metadata">
       <Center>
-        <Stack
-          direction="row"
-          align="center"
-          spacing={1}
-          style={{ height: '100px' }}
-        >
-          <Typography
-            align="center"
-            fontWeight="bold"
-            variant="h5"
-            color="primary"
-          >
-            Section is under develop
+        <Stack align="center" spacing={1}>
+          <UnderDevelopSection />
+          <Typography align="center" variant="body1">
+            This section is under development!
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            We’re working on it.
           </Typography>
         </Stack>
       </Center>

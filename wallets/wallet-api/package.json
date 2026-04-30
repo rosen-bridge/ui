@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/wallet-api",
-  "version": "3.0.5",
+  "version": "3.2.0",
   "private": true,
   "description": "This is a private package utilized within Rosen Bridge UI app",
   "repository": {
@@ -22,8 +22,8 @@
   },
   "dependencies": {
     "@rosen-bridge/tokens": "^6.0.0",
-    "@rosen-network/base": "^0.5.1",
-    "@rosen-ui/types": "^0.4.0"
+    "@rosen-network/base": "^0.5.3",
+    "@rosen-ui/types": "^0.5.0"
   },
   "engines": {
     "node": ">=22.18.0",

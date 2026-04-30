@@ -9,7 +9,7 @@ import { LogLevelHealthCheck } from '@rosen-bridge/log-level-check';
 import { ScannerSyncHealthCheckParam } from '@rosen-bridge/scanner-sync-check';
 import {
   Dependency,
-  PeriodicTaskService,
+  ServiceAction,
   ServiceStatus,
 } from '@rosen-bridge/service-manager';
 import { NETWORKS } from '@rosen-ui/constants';
@@ -26,32 +26,39 @@ import {
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 import { ChainsKeys } from '../types';
-import { DBService } from './db';
 import { ScannerService } from './scanner';
+import { AbstractHealthService } from './types/abstractHealthService';
+import { AbstractScannerService } from './types/abstractScannerService';
+import { AbstractDBService } from './types/abstrctDb';
 
-export class HealthService extends PeriodicTaskService {
+export class HealthService extends AbstractHealthService {
   name = 'HealthService';
-
-  private static instance: HealthService;
-  readonly dbService: DBService;
-  readonly scannerService: ScannerService;
+  readonly dbService: AbstractDBService;
+  readonly scannerService: AbstractScannerService;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
   protected dependencies: Dependency[] = [
     {
-      serviceName: DBService.name,
+      serviceName: AbstractDBService.getInstance().getName(),
       allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
     },
     {
       serviceName: ScannerService.name,
       allowedStatuses: [ServiceStatus.started],
+      action: ServiceAction.start,
     },
   ];
 
+  assemble = async (): Promise<boolean> => {
+    this.setStatus(ServiceStatus.dormant);
+    return true;
+  };
+
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance();
-    this.scannerService = ScannerService.getInstance();
+    this.dbService = AbstractDBService.getInstance();
+    this.scannerService = AbstractScannerService.getInstance();
 
     let notify;
     let notificationConfig;
@@ -130,7 +137,7 @@ export class HealthService extends PeriodicTaskService {
         chain,
         async () =>
           this.dbService.getLastSavedBlock(
-            this.scannerService.getScanners()[chain]!.name(),
+            this.scannerService.getScanner(chain)!.name(),
           ),
         configs.healthCheck.scanner.warnDiff,
         configs.healthCheck.scanner.criticalDiff,
@@ -148,24 +155,10 @@ export class HealthService extends PeriodicTaskService {
    * @memberof HealthService
    */
   static readonly init = (logger?: AbstractLogger) => {
-    if (this.instance != undefined) {
+    if (AbstractHealthService.instance != undefined) {
       return;
     }
-    this.instance = new HealthService(logger);
-  };
-
-  /**
-   * return the singleton instance of HealthService
-   *
-   * @static
-   * @return {HealthService}
-   * @memberof HealthService
-   */
-  static readonly getInstance = (): HealthService => {
-    if (!this.instance) {
-      throw new Error('HealthService instances is not initialized yet');
-    }
-    return this.instance;
+    AbstractHealthService.instance = new HealthService(logger);
   };
 
   /**

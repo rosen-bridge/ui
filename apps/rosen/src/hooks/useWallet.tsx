@@ -69,6 +69,8 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
       try {
         setState('CONNECTING');
 
+        await wallet.initialize();
+
         await wallet.connect();
 
         await wallet.switchChain(selectedSource.name);
@@ -124,12 +126,20 @@ export const WalletProvider = ({ children }: PropsWithChildren) => {
         (wallet) => wallet.name == name,
       );
 
-      if (!wallet || !wallet.isAvailable()) return;
-
-      if (!(await wallet.isConnected())) return;
+      if (!wallet) return;
 
       try {
         setState('CONNECTING');
+
+        await wallet.initialize();
+
+        if (!wallet.isAvailable()) {
+          return void setState('DISCONNECTED');
+        }
+
+        if (!(await wallet.isConnected())) {
+          return void setState('DISCONNECTED');
+        }
 
         await wallet.connect();
 

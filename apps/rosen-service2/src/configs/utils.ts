@@ -1,7 +1,6 @@
 import { ConfigValidator } from '@rosen-bridge/config';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import { TransportOptions } from '@rosen-bridge/winston-logger';
-import config from 'config';
 import * as fs from 'node:fs';
 import path from 'node:path';
 import { exit } from 'node:process';
@@ -78,18 +77,17 @@ export const readContractConfigs = (
  * @return RosenService2Configs
  */
 export const validateConfigs = (): RosenService2Configs => {
-  const rawSchemaData = fs.readFileSync(
+  // const rawSchemaData = fs.readFileSync(
+  //   path.join(__dirname, '../../config/schema.json'),
+  //   'utf-8',
+  // );
+  // const schema = JSON.parse(rawSchemaData);
+  const confValidator = ConfigValidator.fromFile(
     path.join(__dirname, '../../config/schema.json'),
-    'utf-8',
   );
-  const schema = JSON.parse(rawSchemaData);
-  const confValidator = new ConfigValidator(schema);
-  const configs = config.util.toObject();
-  confValidator.validateConfig(configs);
-
+  const configs = confValidator.buildConfigs();
   configs.contracts = {};
-  // TODO: implement Bitcoin-Runes support later
   configs.contracts = readContractConfigs(configs.paths.contracts);
 
-  return configs;
+  return configs as unknown as RosenService2Configs;
 };

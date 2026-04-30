@@ -28,6 +28,6 @@ include:
         - packages/*/dist
         - wallets/*/node_modules
         - wallets/*/dist
-      build_script: 
+      build_script:
         - npm run build:mono-packages
       enable_ci_child: true
