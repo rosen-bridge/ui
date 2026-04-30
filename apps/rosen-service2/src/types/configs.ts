@@ -90,7 +90,6 @@ export interface StatisticsGeneralMetrics {
 export interface StatisticsLockedAssetsMetrics {
   interval: number;
 }
-
 export interface Chains {
   'ergo': ChainsErgo;
   'cardano': ChainsCardano;

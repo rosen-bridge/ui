@@ -62,7 +62,7 @@ export class ScannerService extends AbstractScannerService {
 
   assemble = async (): Promise<boolean> => {
     this.dbService = AbstractDBService.getInstance().getDataSource();
-    await this.generateAndRegisterScannersWithExtractors();
+    this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -209,6 +209,7 @@ export class ScannerService extends AbstractScannerService {
    * @returns void
    */
   protected preStart = async () => {
+    await this.generateAndRegisterScannersWithExtractors();
     for (const [, scanner] of Object.entries(this.scanners)) {
       if (scanner instanceof WebSocketScanner) {
         if (!scanner.getConnectionStatus()) {

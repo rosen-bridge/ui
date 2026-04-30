@@ -60,6 +60,13 @@ const startApp = async () => {
   serviceManager.register(GeneralMetricsService.getInstance());
   logger.debug('General metrics service registered to the service manager');
 
+  logger.debug('Initializing general metrics service');
+  GeneralMetricsService.init(
+    DefaultLogger.getInstance().child('generalMetricsService'),
+  );
+  serviceManager.register(GeneralMetricsService.getInstance());
+  logger.debug('General metrics service registered to the service manager');
+
   logger.debug('Initializing asset-data-adapter service');
   AssetDataAdapterService.init(
     DefaultLogger.getInstance().child('assetDataAdapterService'),
