@@ -256,7 +256,7 @@ export const getFeeRatio = async (): Promise<number> => {
   ]).catch(() => undefined);
   if (smartFee?.feerate && smartFee.feerate >= 0) {
     // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(smartFee.feerate)) / 1000;
+    return Number(firoToSatoshis(smartFee.feerate)) / 1024;
   }
 
   const feeEstimate = await callFiroRpc<number>('estimatefee', [
@@ -264,7 +264,7 @@ export const getFeeRatio = async (): Promise<number> => {
   ]).catch(() => undefined);
   if (feeEstimate && feeEstimate >= 0) {
     // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(feeEstimate)) / 1000;
+    return Number(firoToSatoshis(feeEstimate)) / 1024;
   }
 
   const networkInfo = await callFiroRpc<FiroRpcNetworkInfo>(
@@ -272,7 +272,7 @@ export const getFeeRatio = async (): Promise<number> => {
   ).catch(() => undefined);
   if (networkInfo?.relayfee && networkInfo.relayfee >= 0) {
     // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(networkInfo.relayfee)) / 1000;
+    return Number(firoToSatoshis(networkInfo.relayfee)) / 1024;
   }
 
   throw Error('Firo fee estimate is not available');
@@ -284,7 +284,7 @@ export const getFeeRatio = async (): Promise<number> => {
  * @returns the minimum UNWRAPPED-VALUE amount
  */
 export const getMinimumMeaningfulFiro = (feeRatio: number): bigint => {
-  return BigInt(Math.ceil(feeRatio * FIRO_INPUT_SIZE) + MINIMUM_UTXO_VALUE);
+  return BigInt(Math.ceil(feeRatio * FIRO_INPUT_SIZE)) + MINIMUM_UTXO_VALUE;
 };
 
 /**
