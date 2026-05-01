@@ -1,8 +1,8 @@
-export const CONFIRMATION_TARGET = 10;
+export const CONFIRMATION_TARGET = 6;
 export const FIRO_TX_BASE_SIZE = 10;
 export const FIRO_INPUT_SIZE = 148;
 export const FIRO_OUTPUT_SIZE = 34;
-export const MINIMUM_UTXO_VALUE = 500000; // 0.005 FIRO in sats
+export const MINIMUM_UTXO_VALUE = 500000n; // 0.005 FIRO in sats
 export const FIRO_NETWORK = {
   messagePrefix: '\x18Firo Signed Message:\n',
   bech32: 'firo',
