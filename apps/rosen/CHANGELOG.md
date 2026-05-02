@@ -1,5 +1,46 @@
 # @rosen-bridge/rosen-app
 
+## 5.1.0
+
+### Minor Changes
+
+- Upgrade React to v19
+- Improve performance by lazy loading wallet dependencies and deferring their initialization until needed, reducing initial bundle size and speeding up app load time
+
+### Patch Changes
+
+- Implement a locking mechanism for the public-status insertStatus method in order to make concurrent calls run sequentially
+- Fix public-status submit route txId length validation
+- Update dependencies
+  - @rosen-bridge/abstract-observation-extractor@1.0.3
+  - @rosen-bridge/abstract-scanner@1.0.2
+  - @rosen-bridge/watcher-data-extractor@13.0.4
+  - @rosen-bridge/ui-kit@5.4.0
+  - @rosen-ui/wallet-connect@0.3.0
+  - @rosen-bridge/icons@3.6.0
+  - @rosen-ui/types@0.5.0
+  - @rosen-network/base@0.5.3
+  - @rosen-network/bitcoin@2.4.5
+  - @rosen-network/doge@0.4.5
+  - @rosen-network/evm@0.3.7
+  - @rosen-ui/metamask-wallet@2.2.0
+  - @rosen-ui/xverse-wallet@0.5.0
+  - @rosen-ui/wallet-api@3.2.0
+  - @rosen-network/bitcoin-runes@1.0.5
+  - @rosen-ui/data-source@0.2.4
+  - @rosen-ui/public-status@0.1.1
+  - @rosen-network/binance@0.4.6
+  - @rosen-network/cardano@2.5.5
+  - @rosen-network/ergo@2.5.6
+  - @rosen-network/ethereum@0.4.6
+  - @rosen-ui/asset-calculator@2.3.2
+  - @rosen-ui/utils@1.0.3
+  - @rosen-ui/eternl-wallet@3.1.7
+  - @rosen-ui/lace-wallet@3.1.7
+  - @rosen-ui/my-doge-wallet@1.1.9
+  - @rosen-ui/nautilus-wallet@3.1.7
+  - @rosen-ui/okx-wallet@2.2.2
+
 ## 5.0.2
 
 ### Patch Changes

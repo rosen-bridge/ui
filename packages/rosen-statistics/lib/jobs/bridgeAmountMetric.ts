@@ -19,18 +19,18 @@ import {
 } from '../utils';
 
 /**
- * Calculate and persist bridge fee USD metric.
+ * Calculate and persist bridge amount USD metric.
  *
  * @param dataSource DataSource instance for database operations
  * @param logger     Optional logger instance
  */
-export const bridgeFeeMetric = async (
+export const bridgeAmountMetric = async (
   dataSource: DataSource,
   logger: AbstractLogger = new DummyLogger(),
 ): Promise<void> => {
-  logger.debug('Starting bridge fee metric calculation job');
+  logger.debug('Starting bridge amount metric calculation job');
 
-  const bridgeFeeAction = new BridgeMetricsAction(
+  const bridgeAmountAction = new BridgeMetricsAction(
     dataSource,
     logger.child('bridgeMetricsAction'),
   );
@@ -54,9 +54,10 @@ export const bridgeFeeMetric = async (
       logger.debug('No valid block found with required date fields.');
       return;
     }
-    const lastProcessedRecord = await bridgeFeeAction.getLastBridgeFeeRecord();
+    const lastProcessedRecord =
+      await bridgeAmountAction.getLastBridgeAmountRecord();
     const lastTotalUsd = await metricAction.getMetricByKey(
-      METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+      METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD,
     );
 
     // Load existing total USD value as raw BigInt with its decimals
@@ -69,12 +70,12 @@ export const bridgeFeeMetric = async (
     let startTs: number;
     if (!lastProcessedRecord) {
       logger.debug(
-        'No previous bridge fee records found, starting from first event timestamp',
+        'No previous bridge amount records found, starting from first event timestamp',
       );
-      const firstEventTs = await bridgeFeeAction.getFirstEventTimestamp();
+      const firstEventTs = await bridgeAmountAction.getFirstEventTimestamp();
       if (!firstEventTs) {
         logger.debug(
-          'No events found in database, skipping bridge fee metric calculation',
+          'No events found in database, skipping bridge amount metric calculation',
         );
         return;
       }
@@ -111,7 +112,7 @@ export const bridgeFeeMetric = async (
     while (startTs < yesterdayTs) {
       const endTs = startTs + DAY_IN_SECONDS;
 
-      const events = await bridgeFeeAction.getEventsInRange(startTs, endTs);
+      const events = await bridgeAmountAction.getEventsInRange(startTs, endTs);
       if (events.length == 0) {
         startTs += DAY_IN_SECONDS;
         continue;
@@ -119,7 +120,7 @@ export const bridgeFeeMetric = async (
 
       const mappedEvents: MappedBridgeEventData[] = events.map((event) => ({
         fromChain: event.fromChain,
-        amount: event.bridgeFee, // Use bridgeFee as amount
+        amount: event.bridgeAmount, // Use bridgeAmount as amount
         tokenId: event.tokenId,
         timestamp: event.timestamp,
         height: event.height,
@@ -163,7 +164,7 @@ export const bridgeFeeMetric = async (
         currentMaxDecimals,
       );
 
-      await bridgeFeeAction.saveBridgeFees(
+      await bridgeAmountAction.saveBridgeAmount(
         result.bridgeMetricRecords,
         newTotalUsdString,
       );
@@ -181,13 +182,16 @@ export const bridgeFeeMetric = async (
       startTs += DAY_IN_SECONDS;
     }
 
-    logger.debug('Bridge fee metric calculation job completed successfully', {
-      processedDays,
-      totalEventsProcessed,
-      finalTotalUsd: getDecimalString(currentTotalRaw, currentMaxDecimals),
-    });
+    logger.debug(
+      'Bridge amount metric calculation job completed successfully',
+      {
+        processedDays,
+        totalEventsProcessed,
+        finalTotalUsd: getDecimalString(currentTotalRaw, currentMaxDecimals),
+      },
+    );
   } catch (error) {
-    logger.error(`Bridge fee metric calculation job failed: ${error}`, {
+    logger.error(`Bridge amount metric calculation job failed: ${error}`, {
       message: error instanceof Error ? error.message : '',
       stack: error instanceof Error ? error.stack : undefined,
     });
