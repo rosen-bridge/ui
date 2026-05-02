@@ -10,6 +10,7 @@ import {
   BridgeFeeEntity,
   MetricEntity,
   BridgeMetricsAction,
+  BridgedAmountEntity,
 } from '../../lib';
 import { bridgeMetricsActionTestData } from '../testData';
 import { createDatabase } from '../utils';
@@ -19,6 +20,7 @@ describe('BridgeMetricsAction', () => {
   let eventTriggerRepo: Repository<EventTriggerEntity>;
   let blockRepo: Repository<BlockEntity>;
   let bridgeFeeRepo: Repository<BridgeFeeEntity>;
+  let bridgeAmountRepo: Repository<BridgedAmountEntity>;
   let tokenRepo: Repository<TokenEntity>;
   let metricRepo: Repository<MetricEntity>;
   let logger: AbstractLogger;
@@ -29,6 +31,7 @@ describe('BridgeMetricsAction', () => {
     eventTriggerRepo = dataSource.getRepository(EventTriggerEntity);
     blockRepo = dataSource.getRepository(BlockEntity);
     bridgeFeeRepo = dataSource.getRepository(BridgeFeeEntity);
+    bridgeAmountRepo = dataSource.getRepository(BridgedAmountEntity);
     tokenRepo = dataSource.getRepository(TokenEntity);
     metricRepo = dataSource.getRepository(MetricEntity);
     logger = new DummyLogger();
@@ -36,35 +39,36 @@ describe('BridgeMetricsAction', () => {
     await eventTriggerRepo.clear();
     await blockRepo.clear();
     await bridgeFeeRepo.clear();
+    await bridgeAmountRepo.clear();
     await metricRepo.clear();
 
     action = new BridgeMetricsAction(dataSource, logger);
   });
 
-  describe('getLastProcessedRecord', () => {
+  describe('getLastBridgeFeeRecord', () => {
     /**
-     * @target getLastProcessedRecord should return undefined when no records exist in BridgeFeeEntity
+     * @target getLastBridgeFeeRecord should return undefined when no records exist in BridgeFeeEntity
      * @dependencies
      * - database
      * @scenario
      * - No records in BridgeFeeEntity table
-     * - Call getLastProcessedRecord
+     * - Call getLastBridgeFeeRecord
      * @expected
      * - Returns undefined
      */
     it('should return undefined when no records exist in BridgeFeeEntity', async () => {
-      const lastProcessedRecord = await action.getLastProcessedRecord();
+      const lastProcessedRecord = await action.getLastBridgeFeeRecord();
 
       expect(lastProcessedRecord).toBeUndefined();
     });
 
     /**
-     * @target getLastProcessedRecord should return the record with the highest lastProcessedHeight
+     * @target getLastBridgeFeeRecord should return the record with the highest lastProcessedHeight
      * @dependencies
      * - database
      * @scenario
      * - Insert multiple BridgeFeeEntity records with different lastProcessedHeight values
-     * - Call getLastProcessedRecord
+     * - Call getLastBridgeFeeRecord
      * @expected
      * - Returns the record with the highest lastProcessedHeight
      */
@@ -74,7 +78,46 @@ describe('BridgeMetricsAction', () => {
 
       await bridgeFeeRepo.insert(testData.bridgeFeeRepo);
 
-      const lastProcessedRecord = await action.getLastProcessedRecord();
+      const lastProcessedRecord = await action.getLastBridgeFeeRecord();
+
+      expect(lastProcessedRecord).toEqual(testData.expectedRecord);
+    });
+  });
+
+  describe('getLastBridgeAmountRecord', () => {
+    /**
+     * @target getLastBridgeAmountRecord should return undefined when no records exist in BridgeAmountEntity
+     * @dependencies
+     * - database
+     * @scenario
+     * - No records in BridgeAmountEntity table
+     * - Call getLastBridgeAmountRecord
+     * @expected
+     * - Returns undefined
+     */
+    it('should return undefined when no records exist in BridgeAmountEntity', async () => {
+      const lastProcessedRecord = await action.getLastBridgeAmountRecord();
+
+      expect(lastProcessedRecord).toBeUndefined();
+    });
+
+    /**
+     * @target getLastBridgeAmountRecord should return the record with the highest lastProcessedHeight
+     * @dependencies
+     * - database
+     * @scenario
+     * - Insert multiple BridgeAmountEntity records with different lastProcessedHeight values
+     * - Call getLastBridgeAmountRecord
+     * @expected
+     * - Returns the record with the highest lastProcessedHeight
+     */
+    it('should return the record with the highest lastProcessedHeight', async () => {
+      const testData =
+        bridgeMetricsActionTestData.getLastBridgeAmountWithMultipleRecords;
+
+      await bridgeAmountRepo.insert(testData.bridgeAmountRepo);
+
+      const lastProcessedRecord = await action.getLastBridgeAmountRecord();
 
       expect(lastProcessedRecord).toEqual(testData.expectedRecord);
     });
@@ -120,7 +163,7 @@ describe('BridgeMetricsAction', () => {
 
   describe('getEventsInRange', () => {
     /**
-     * @target getEventsInRange should fetch bridge fee data with block timestamps and token decimals
+     * @target getEventsInRange should fetch bridge amount and bridge fee with block timestamps and token decimals
      * @dependencies
      * - database
      * @scenario
@@ -129,11 +172,11 @@ describe('BridgeMetricsAction', () => {
      * - Insert successful events with spend heights in range
      * - Call getEventsInRange with startTs and endTs
      * @expected
-     * - Returns events with correct bridge fee data, block metadata, and token decimals
+     * - Returns events with correct bridge data, block metadata, and token decimals
      * - Does not include events outside timestamp range
      * - Does not include events with non-successful status
      */
-    it('should fetch bridge fee data with block timestamps and token decimals', async () => {
+    it('should fetch bridge amount and bridge fee with block timestamps and token decimals', async () => {
       const testData =
         bridgeMetricsActionTestData.getEventsInRangeMultipleEvents;
 
@@ -319,6 +362,129 @@ describe('BridgeMetricsAction', () => {
 
       expect(bridgeFees).toHaveLength(testData.expectedBridgeFees.length);
       expect(bridgeFees).toEqual(testData.expectedBridgeFees);
+    });
+  });
+
+  describe('saveBridgeAmount', () => {
+    /**
+     * @target saveBridgeAmount should create new bridge amount records and update total metric
+     * @dependencies
+     * - database
+     * @scenario
+     * - No existing BridgeAmountEntity or MetricEntity records
+     * - Call saveBridgeFees with 2 aggregated bridge amount groups and totalCount as string
+     * @expected
+     * - Creates 2 BridgeAmountEntity records with correct amounts and metadata
+     * - Creates MetricEntity record with TOTAL_BRIDGE_AMOUNT_USD as string
+     * - All operations succeed in same transaction
+     */
+    it('should create new bridge amount records and update total metric', async () => {
+      const testData = bridgeMetricsActionTestData.saveBridgeAmountNewGroups;
+
+      await action.saveBridgeAmount(
+        testData.aggregatedBridgeAmount,
+        testData.totalCount,
+      );
+
+      const bridgeAmount = await bridgeAmountRepo.find({
+        select: [
+          'fromChain',
+          'amount',
+          'day',
+          'week',
+          'month',
+          'year',
+          'lastProcessedHeight',
+        ],
+      });
+
+      expect(bridgeAmount).toHaveLength(testData.expectedBridgeAmount.length);
+      expect(bridgeAmount).toEqual(testData.expectedBridgeAmount);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
+      });
+      expect(metric?.value).toBe(testData.expectedMetricValue);
+      expect(metric?.updatedAt).toBeDefined();
+    });
+
+    /**
+     * @target saveBridgeAmount should replace existing total bridge amount records with new values
+     * @dependencies
+     * - database
+     * @scenario
+     * - Insert existing BridgeAmountEntity record
+     * - Insert existing MetricEntity with TOTAL_BRIDGE_AMOUNT_USD = '10'
+     * - Call saveBridgeAMount with updated bridge amount data and totalCount = '25.25'
+     * @expected
+     * - Creates a new BridgeAmountEntity records with correct amounts and metadata
+     * - MetricEntity is updated to '25.25'
+     */
+    it('should replace existing bridge amount records with new values', async () => {
+      const testData =
+        bridgeMetricsActionTestData.saveBridgeAmountUpdateExisting;
+
+      await bridgeAmountRepo.insert(testData.existingBridgeAmount);
+      await metricRepo.insert(testData.existingMetric);
+
+      await action.saveBridgeAmount(
+        testData.aggregatedBridgeAmount,
+        testData.totalCount,
+      );
+
+      const bridgeAmount = await bridgeAmountRepo.find({
+        select: [
+          'fromChain',
+          'amount',
+          'day',
+          'week',
+          'month',
+          'year',
+          'lastProcessedHeight',
+        ],
+      });
+
+      expect(bridgeAmount).toHaveLength(testData.expectedBridgeAmount.length);
+      expect(bridgeAmount).toEqual(testData.expectedBridgeAmount);
+
+      const metric = await metricRepo.findOne({
+        where: { key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD },
+      });
+      expect(metric?.value).toBe(testData.expectedMetricValue);
+    });
+
+    /**
+     * @target saveBridgeAmount should handle multiple groups with different dates
+     * @dependencies
+     * - database
+     * @scenario
+     * - Call saveBridgeAmount with bridge amount groups from different dates
+     * @expected
+     * - All groups are created correctly with their respective date components
+     */
+    it('should handle multiple groups with different dates', async () => {
+      const testData =
+        bridgeMetricsActionTestData.saveBridgeAmountDifferentDates;
+
+      await action.saveBridgeAmount(
+        testData.aggregatedBridgeAmount,
+        testData.totalCount,
+      );
+
+      const bridgeAmount = await bridgeAmountRepo.find({
+        select: [
+          'fromChain',
+          'amount',
+          'day',
+          'week',
+          'month',
+          'year',
+          'lastProcessedHeight',
+        ],
+      });
+
+      expect(bridgeAmount).toHaveLength(testData.expectedBridgeAmount.length);
+      expect(bridgeAmount).toEqual(testData.expectedBridgeAmount);
     });
   });
 });

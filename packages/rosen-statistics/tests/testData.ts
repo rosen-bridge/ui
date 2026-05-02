@@ -5,6 +5,7 @@ import { RosenTokens } from '@rosen-bridge/tokens';
 import { EventTriggerEntity } from '@rosen-bridge/watcher-data-extractor';
 import { TokenEntity } from '@rosen-ui/asset-calculator';
 import {
+  BridgedAmountEntity,
   BridgeFeeEntity,
   METRIC_KEYS,
   MetricEntity,
@@ -1247,9 +1248,9 @@ export const watcherCountMetricTestData = {
   },
 };
 
-export const bridgeFeeMetricTestData = {
+export const bridgeMetricTestData = {
   /**
-   * Scenario: Calculate bridge fees for multiple chains
+   * Scenario: Calculate bridge data for multiple chains
    */
   multipleChains: {
     blockRepo: [
@@ -1307,6 +1308,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '1000000000', // 10 token * 2.5 = 25 USD
         bridgeFee: '10000', // 0.0001 token * 2.5 = 0.00025 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1316,6 +1318,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'cardano',
+        amount: '2000000', // 2 tokens * 1.5 = 3.0 USD
         bridgeFee: '2000000', // 2 tokens * 1.5 = 3.0 USD
         sourceChainTokenId: 'token-2',
         spendBlock: 'block2',
@@ -1325,6 +1328,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromChain: 'ethereum',
+        amount: '10000000000000000000', // 10 token * 3.0 = 30.0 USD
         bridgeFee: '1000000000000000000', // 1 token * 3.0 = 3.0 USD
         sourceChainTokenId: 'token-3',
         spendBlock: 'block2',
@@ -1362,7 +1366,37 @@ export const bridgeFeeMetricTestData = {
           lastProcessedHeight: 200,
         },
       ],
-      totalMetricValue: '6.00025',
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 25,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'cardano',
+          amount: 3.0,
+          day: 2,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+        {
+          fromChain: 'ethereum',
+          amount: 30.0,
+          day: 2,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      totalBridgeFeeMetricValue: '6.00025',
+      totalBridgeAmountMetricValue: '58',
     },
   },
 
@@ -1381,9 +1415,25 @@ export const bridgeFeeMetricTestData = {
         lastProcessedHeight: 100,
       },
     ] as BridgeFeeEntity[],
+    bridgeAmountRepo: [
+      {
+        fromChain: 'ergo',
+        amount: 2.5,
+        day: 1,
+        week: 2817,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 100,
+      },
+    ] as BridgedAmountEntity[],
     metricRepo: [
       {
         key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+        value: '2.5',
+        updatedAt: 1704067200,
+      },
+      {
+        key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD,
         value: '2.5',
         updatedAt: 1704067200,
       },
@@ -1430,6 +1480,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000', // 1 token * 2.5 = 2.5 USD
         bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1439,6 +1490,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'ergo',
+        amount: '100000000', // 1 token * 3.0 = 3.0 USD
         bridgeFee: '100000000', // 1 token * 3.0 = 3.0 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block2',
@@ -1447,7 +1499,6 @@ export const bridgeFeeMetricTestData = {
       }),
     ],
     expectedResults: {
-      bridgeFeeCount: 2,
       bridgeFeeRecords: [
         {
           fromChain: 'ergo',
@@ -1468,7 +1519,28 @@ export const bridgeFeeMetricTestData = {
           lastProcessedHeight: 200,
         },
       ],
-      totalMetricValue: '5.5',
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 3.0,
+          day: 2,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      totalBridgeFeeMetricValue: '5.5',
+      totalBridgeAmountMetricValue: '5.5',
     },
   },
 
@@ -1516,6 +1588,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000',
         bridgeFee: '100000000', // Has price
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1525,7 +1598,8 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'cardano',
-        bridgeFee: '2000000', // No price - should cause error
+        amount: '2000000',
+        bridgeFee: '2000000', // No price - should be skipped
         sourceChainTokenId: 'token-2',
         spendBlock: 'block2',
         spendHeight: 200,
@@ -1585,6 +1659,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000', // 2.5 USD
         bridgeFee: '100000000', // 2.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1594,6 +1669,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'ergo',
+        amount: '200000000', // 5.0 USD
         bridgeFee: '200000000', // 5.0 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block2',
@@ -1603,6 +1679,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromChain: 'ergo',
+        amount: '300000000', // 7.5 USD
         bridgeFee: '300000000', // 7.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block3',
@@ -1622,7 +1699,19 @@ export const bridgeFeeMetricTestData = {
           week: Math.floor(1704067200 / 604800),
         },
       ],
-      totalMetricValue: '15',
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 15, // Sum: 2.5 + 5.0 + 7.5
+          day: 1,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 300, // Highest height
+          week: Math.floor(1704067200 / 604800),
+        },
+      ],
+      totalBridgeFeeMetricValue: '15',
+      totalBridgeAmountMetricValue: '15',
     },
   },
 
@@ -1682,6 +1771,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000', // 2.5 USD
         bridgeFee: '100000000', // 2.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1692,6 +1782,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'ergo',
+        amount: '200000000', // 6.0 USD
         bridgeFee: '200000000', // 6.0 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block2',
@@ -1702,6 +1793,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromChain: 'ergo',
+        amount: '300000000', // 10.5 USD
         bridgeFee: '300000000', // 10.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block3',
@@ -1739,7 +1831,37 @@ export const bridgeFeeMetricTestData = {
           lastProcessedHeight: 300,
         },
       ],
-      totalMetricValue: '19', // 2.5 + 6.0 + 10.5
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 6.0,
+          day: 2,
+          week: Math.floor(1704153600 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 10.5,
+          day: 3,
+          week: Math.floor(1704240000 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 300,
+        },
+      ],
+      totalBridgeFeeMetricValue: '19', // 2.5 + 6.0 + 10.5
+      totalBridgeAmountMetricValue: '19', // 2.5 + 6.0 + 10.5
     },
   },
 
@@ -1758,9 +1880,25 @@ export const bridgeFeeMetricTestData = {
         lastProcessedHeight: 100,
       },
     ] as BridgeFeeEntity[],
+    bridgeAmountRepo: [
+      {
+        fromChain: 'ergo',
+        amount: 2.5,
+        day: 1,
+        week: 2817,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 100,
+      },
+    ] as BridgedAmountEntity[],
     metricRepo: [
       {
         key: METRIC_KEYS.TOTAL_BRIDGE_FEES_USD,
+        value: '2.5',
+        updatedAt: 1704067200,
+      },
+      {
+        key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD,
         value: '2.5',
         updatedAt: 1704067200,
       },
@@ -1796,6 +1934,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000', // 1 token * 2.5 = 2.5 USD
         bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1815,7 +1954,19 @@ export const bridgeFeeMetricTestData = {
           lastProcessedHeight: 100,
         },
       ],
-      totalMetricValue: '2.5',
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: 2817,
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalBridgeFeeMetricValue: '2.5',
+      totalBridgeAmountMetricValue: '2.5',
     },
   },
 
@@ -1877,6 +2028,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000', // 1 token * 2.5 = 2.5 USD
         bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -1886,6 +2038,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'cardano',
+        amount: '2000000', // 2 tokens * 1.5 = 3.0 USD
         bridgeFee: '2000000', // 2 tokens * 1.5 = 3.0 USD
         sourceChainTokenId: 'token-2',
         spendBlock: 'block1',
@@ -1895,6 +2048,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromChain: 'ethereum',
+        amount: '1000000000000000000', // 1 token * 3.0 = 3.0 USD
         bridgeFee: '1000000000000000000', // 1 token * 3.0 = 3.0 USD
         sourceChainTokenId: 'token-3',
         spendBlock: 'block1',
@@ -1904,6 +2058,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event4',
         fromChain: 'bitcoin',
+        amount: '1', // 1 BTC * 50000 = 50000 USD
         bridgeFee: '1', // 1 BTC * 50000 = 50000 USD
         sourceChainTokenId: 'token-4',
         spendBlock: 'block1',
@@ -1950,7 +2105,46 @@ export const bridgeFeeMetricTestData = {
           lastProcessedHeight: 100,
         },
       ],
-      totalMetricValue: '50008.5', // 50000 + 3.0 + 2.5 + 3.0
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'cardano',
+          amount: 3.0,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ethereum',
+          amount: 3.0,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'bitcoin',
+          amount: 50000,
+          day: 1,
+          week: Math.floor(1704067200 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+      ],
+      totalBridgeFeeMetricValue: '50008.5', // 50000 + 3.0 + 2.5 + 3.0
+      totalBridgeAmountMetricValue: '50008.5', // 50000 + 3.0 + 2.5 + 3.0
     },
   },
 
@@ -2000,6 +2194,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100000000', // 1 token * 2.5 = 2.5 USD
         bridgeFee: '100000000', // 1 token * 2.5 = 2.5 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block1',
@@ -2009,6 +2204,7 @@ export const bridgeFeeMetricTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'ergo',
+        amount: '200000000', // 2 tokens * 2.5 = 5.0 USD
         bridgeFee: '200000000', // 2 tokens * 2.5 = 5.0 USD
         sourceChainTokenId: 'token-1',
         spendBlock: 'block2',
@@ -2037,7 +2233,28 @@ export const bridgeFeeMetricTestData = {
           lastProcessedHeight: 200,
         },
       ],
-      totalMetricValue: '7.5', // 2.5 + 5.0
+      bridgeAmountRecords: [
+        {
+          fromChain: 'ergo',
+          amount: 2.5, // first event in day 1
+          day: 1,
+          week: Math.floor(1704110400 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 100,
+        },
+        {
+          fromChain: 'ergo',
+          amount: 5.0, // second event in day 2
+          day: 2,
+          week: Math.floor(1704153600 / 604800),
+          month: 1,
+          year: 2024,
+          lastProcessedHeight: 200,
+        },
+      ],
+      totalBridgeFeeMetricValue: '7.5', // 2.5 + 5.0
+      totalBridgeAmountMetricValue: '7.5', // 2.5 + 5.0
     },
   },
 };
