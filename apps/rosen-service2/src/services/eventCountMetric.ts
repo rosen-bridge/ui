@@ -14,8 +14,8 @@ import { AbstractScannerService } from './types/abstractScannerService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class EventCountMetricService extends AbstractEventCountMetricService {
-  name = 'EventCountMetricService';
-  readonly dbService: DataSource;
+  name = AbstractEventCountMetricService.Name;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
       serviceName: AbstractDBService.getInstance().getName(),
@@ -30,13 +30,13 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
   ];
 
   protected assemble = async (): Promise<boolean> => {
+    this.dataSource = DBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance().getDataSource();
   }
 
   /**
@@ -64,7 +64,7 @@ export class EventCountMetricService extends AbstractEventCountMetricService {
   private eventCountCalculation = async (): Promise<void> => {
     try {
       await eventCountMetric(
-        this.dbService,
+        this.dataSource,
         this.logger.child('eventCountMetric'),
       );
 

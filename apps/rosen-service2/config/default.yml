@@ -17,7 +17,7 @@ dataAggregator:
   interval: 60
 tokenMap:
   onChainTokenMapEnabled: true
-  path: config/tokenMap.json
+  path: config/tokensMap.json
 statistics:
   userEventsMetric:
     interval: 86400

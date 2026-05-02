@@ -14,16 +14,16 @@ import { AbstractUserEventsMetricService } from './types/abstractUserEventsMetri
 import { AbstractDBService } from './types/abstrctDb';
 
 export class UserEventsMetricService extends AbstractUserEventsMetricService {
-  name = 'UserEventsMetricService';
-  readonly dbService: DataSource;
+  name = AbstractUserEventsMetricService.Name;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
       allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractScannerService.getInstance().getName(),
+      serviceName: AbstractScannerService.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
@@ -31,10 +31,10 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
 
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = DBService.getInstance().getDataSource();
   }
 
   protected assemble = async (): Promise<boolean> => {
+    this.dataSource = DBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -64,7 +64,7 @@ export class UserEventsMetricService extends AbstractUserEventsMetricService {
   private userEventsCalculation = async (): Promise<void> => {
     try {
       await userEventMetric(
-        this.dbService,
+        this.dataSource,
         this.logger.child('userEventMetric'),
       );
 

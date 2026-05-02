@@ -9,7 +9,7 @@ import { TOKEN_MAP_EXTRACTOR_ID } from '../constants';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class DBService extends AbstractDBService {
-  name = 'DBService';
+  name = AbstractDBService.Name;
   readonly dataSource: DataSource;
 
   assemble = async (): Promise<boolean> => {

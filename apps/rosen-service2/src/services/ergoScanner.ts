@@ -26,12 +26,16 @@ import { AbstractTokenMapService } from './types/abstractTokenMapService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class ErgoScannerService extends AbstractErgoScannerService {
-  name = 'ErgoScannerService';
+  name = AbstractErgoScannerService.Name;
   ergoScanner: ErgoScanner;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      serviceName: AbstractDBService.Name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.started,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
     {
@@ -69,7 +73,6 @@ export class ErgoScannerService extends AbstractErgoScannerService {
         AbstractDBService.getInstance().getDataSource(),
       );
       this.setStatus(ServiceStatus.dormant);
-
       return true;
     } catch {
       return false;

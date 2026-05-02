@@ -33,7 +33,12 @@ export class TokenMapService extends AbstractTokenMapService {
   private ergoScanner: ErgoScanner;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractErgoScannerService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
+      allowedStatuses: [ServiceStatus.running],
+      action: ServiceAction.start,
+    },
+    {
+      serviceName: AbstractErgoScannerService.Name,
       allowedStatuses: [
         ServiceStatus.running,
         ServiceStatus.dormant,
@@ -46,11 +51,7 @@ export class TokenMapService extends AbstractTokenMapService {
   assemble = async (): Promise<boolean> => {
     this.ergoScanner =
       AbstractErgoScannerService.getInstance().getErgoScanner();
-    if (!configs.tokenMap.onChainTokenMapEnabled) {
-      await this.loadFromFile();
-    } else {
-      await this.initOnChain();
-    }
+    this.tokenMap = new TokenMap();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -84,19 +85,12 @@ export class TokenMapService extends AbstractTokenMapService {
    */
   protected start = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.started);
-    try {
-      if (!configs.tokenMap.onChainTokenMapEnabled) {
-        await this.loadFromFile();
-      } else {
-        await this.initOnChain();
-      }
-      this.setStatus(ServiceStatus.running);
-    } catch (e) {
-      this.logger.error(
-        `Something went wrong while starting the TokenMapService: ${e}`,
-      );
-      return false;
+    if (!configs.tokenMap.onChainTokenMapEnabled) {
+      await this.loadFromFile();
+    } else {
+      await this.initOnChain();
     }
+    this.setStatus(ServiceStatus.running);
     return true;
   };
 
@@ -120,8 +114,6 @@ export class TokenMapService extends AbstractTokenMapService {
     }
     const tokensJson: string = fs.readFileSync(tokensPath, 'utf8');
     const tokens = JSON.parse(tokensJson);
-
-    this.tokenMap = new TokenMap();
     await this.tokenMap.updateConfigByJson(tokens.tokens);
     this.logger.debug(`TokenMap loaded from ${tokensPath}`);
   }

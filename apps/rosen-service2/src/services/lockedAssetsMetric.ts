@@ -1,4 +1,5 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   Dependency,
   ServiceAction,
@@ -12,16 +13,16 @@ import { AbstractLockedAssetsMetricService } from './types/abstractLockedAssetsM
 import { AbstractDBService } from './types/abstrctDb';
 
 export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService {
-  name = 'LockedAssetsMetricService';
-  private dbService: AbstractDBService;
+  name = AbstractLockedAssetsMetricService.Name;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractAssetAggregator.getInstance().getName(),
+      serviceName: AbstractAssetAggregator.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
@@ -32,7 +33,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
   }
 
   assemble = async (): Promise<boolean> => {
-    this.dbService = AbstractDBService.getInstance();
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
@@ -62,7 +63,7 @@ export class LockedAssetsMetricService extends AbstractLockedAssetsMetricService
   private lockedAssetsCalculation = async (): Promise<void> => {
     try {
       await lockedAssetsMetric(
-        this.dbService.getDataSource(),
+        this.dataSource,
         this.logger.child('lockedAssetsMetric'),
       );
 

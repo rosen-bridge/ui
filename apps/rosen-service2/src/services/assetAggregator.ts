@@ -22,23 +22,23 @@ import { AbstractTokenMapService } from './types/abstractTokenMapService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class AssetAggregatorService extends AbstractAssetAggregator {
-  name = 'AssetAggregatorService';
+  name = AbstractAssetAggregator.Name;
   private assetAggregator: AssetAggregator;
   readonly redis;
 
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractAssetDataAdapterService.getInstance().getName(),
+      serviceName: AbstractAssetDataAdapterService.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
     {
-      serviceName: AbstractTokenMapService.getInstance().getName(),
+      serviceName: AbstractTokenMapService.Name,
       allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractDBService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
       allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },

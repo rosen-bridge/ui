@@ -26,39 +26,46 @@ import {
   ETHEREUM_BLOCK_TIME,
 } from '../constants';
 import { ChainsKeys } from '../types';
-import { ScannerService } from './scanner';
 import { AbstractHealthService } from './types/abstractHealthService';
 import { AbstractScannerService } from './types/abstractScannerService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class HealthService extends AbstractHealthService {
-  name = 'HealthService';
-  readonly dbService: AbstractDBService;
-  readonly scannerService: AbstractScannerService;
+  name = AbstractHealthService.Name;
+  private dbService: AbstractDBService;
+  private scannerService: AbstractScannerService;
   protected healthCheck: HealthCheck;
   protected params: AbstractHealthCheckParam[] = [];
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
-      allowedStatuses: [ServiceStatus.running],
-      action: ServiceAction.start,
+      serviceName: AbstractDBService.Name,
+      allowedStatuses: [
+        ServiceStatus.running,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
     },
     {
-      serviceName: ScannerService.name,
-      allowedStatuses: [ServiceStatus.started],
-      action: ServiceAction.start,
+      serviceName: AbstractScannerService.Name,
+      allowedStatuses: [
+        ServiceStatus.started,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
     },
   ];
 
   assemble = async (): Promise<boolean> => {
+    this.dbService = AbstractDBService.getInstance();
+    this.scannerService = AbstractScannerService.getInstance();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = AbstractDBService.getInstance();
-    this.scannerService = AbstractScannerService.getInstance();
 
     let notify;
     let notificationConfig;
@@ -87,39 +94,6 @@ export class HealthService extends AbstractHealthService {
       };
     }
     this.healthCheck = new HealthCheck(notify, notificationConfig);
-    this.params = [
-      new ScannerSyncHealthCheckParam(
-        NETWORKS.ergo.key,
-        async () => this.dbService.getLastSavedBlock(NETWORKS.ergo.key),
-        configs.healthCheck.scanner.warnDiff,
-        configs.healthCheck.scanner.criticalDiff,
-        ERGO_BLOCK_TIME * 1000,
-      ),
-      new LogLevelHealthCheck(
-        HealthStatusLevel.UNSTABLE,
-        configs.healthCheck.logging.maxWarns,
-        configs.healthCheck.logging.duration * 1000,
-        'warn',
-      ),
-      new LogLevelHealthCheck(
-        HealthStatusLevel.UNSTABLE,
-        configs.healthCheck.logging.maxErrors,
-        configs.healthCheck.logging.duration * 1000,
-        'error',
-      ),
-    ];
-
-    // Add chains Scanner params
-    if (configs.chains.cardano.active)
-      this.addScannerSyncParam(NETWORKS.cardano.key, CARDANO_BLOCK_TIME);
-    if (configs.chains.bitcoin.active)
-      this.addScannerSyncParam(NETWORKS.bitcoin.key, BITCOIN_BLOCK_TIME);
-    if (configs.chains.doge.active)
-      this.addScannerSyncParam(NETWORKS.doge.key, DOGE_BLOCK_TIME);
-    if (configs.chains.ethereum.active)
-      this.addScannerSyncParam(NETWORKS.ethereum.key, ETHEREUM_BLOCK_TIME);
-    if (configs.chains.binance.active)
-      this.addScannerSyncParam(NETWORKS.binance.key, BINANCE_BLOCK_TIME);
   }
 
   /**
@@ -167,6 +141,40 @@ export class HealthService extends AbstractHealthService {
    * @returns void
    */
   protected preStart = async () => {
+    this.params = [
+      new ScannerSyncHealthCheckParam(
+        NETWORKS.ergo.key,
+        async () => this.dbService.getLastSavedBlock(NETWORKS.ergo.key),
+        configs.healthCheck.scanner.warnDiff,
+        configs.healthCheck.scanner.criticalDiff,
+        ERGO_BLOCK_TIME * 1000,
+      ),
+      new LogLevelHealthCheck(
+        HealthStatusLevel.UNSTABLE,
+        configs.healthCheck.logging.maxWarns,
+        configs.healthCheck.logging.duration * 1000,
+        'warn',
+      ),
+      new LogLevelHealthCheck(
+        HealthStatusLevel.UNSTABLE,
+        configs.healthCheck.logging.maxErrors,
+        configs.healthCheck.logging.duration * 1000,
+        'error',
+      ),
+    ];
+
+    // Add chains Scanner params
+    if (configs.chains.cardano.active)
+      this.addScannerSyncParam(NETWORKS.cardano.key, CARDANO_BLOCK_TIME);
+    if (configs.chains.bitcoin.active)
+      this.addScannerSyncParam(NETWORKS.bitcoin.key, BITCOIN_BLOCK_TIME);
+    if (configs.chains.doge.active)
+      this.addScannerSyncParam(NETWORKS.doge.key, DOGE_BLOCK_TIME);
+    if (configs.chains.ethereum.active)
+      this.addScannerSyncParam(NETWORKS.ethereum.key, ETHEREUM_BLOCK_TIME);
+    if (configs.chains.binance.active)
+      this.addScannerSyncParam(NETWORKS.binance.key, BINANCE_BLOCK_TIME);
+
     for (const param of this.params)
       try {
         this.healthCheck.register(param);

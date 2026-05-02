@@ -1,4 +1,5 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   Dependency,
   ServiceAction,
@@ -12,24 +13,24 @@ import { AbstractTokenMapService } from './types/abstractTokenMapService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class GeneralMetricsService extends AbstractGeneralMetricsService {
-  name = 'GeneralMetricsService';
-  readonly dbService: AbstractDBService;
+  name = AbstractGeneralMetricsService.Name;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
       allowedStatuses: [ServiceStatus.running],
-      action: ServiceAction.start,
+      action: ServiceAction.assemble,
     },
   ];
 
   assemble = async (): Promise<boolean> => {
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.setStatus(ServiceStatus.dormant);
     return true;
   };
 
   private constructor(logger?: AbstractLogger) {
     super(logger);
-    this.dbService = AbstractDBService.getInstance();
   }
 
   /**
@@ -58,7 +59,7 @@ export class GeneralMetricsService extends AbstractGeneralMetricsService {
 
     try {
       await generalMetrics(
-        this.dbService.getDataSource(),
+        this.dataSource,
         tokenMap,
         rsnTokenId,
         this.logger.child('generalMetricsJob'),

@@ -28,17 +28,17 @@ import { AbstractTokenMapService } from './types/abstractTokenMapService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
-  name = 'AssetDataAdapterService';
+  name = AbstractAssetDataAdapterService.Name;
   readonly redis;
   protected explorerApi;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
     {
-      serviceName: AbstractTokenMapService.getInstance().getName(),
+      serviceName: AbstractTokenMapService.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
@@ -57,7 +57,6 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
     this.explorerApi = ergoExplorerClientFactory(
       configs.chains.ergo.explorer.connections.at(0)!.url,
     );
-    this.createDataAdapters();
   }
 
   /**
@@ -277,6 +276,7 @@ export class AssetDataAdapterService extends AbstractAssetDataAdapterService {
    * @returns void
    */
   protected preStart = async () => {
+    await this.createDataAdapters();
     const assets = await this.getAssetsTotalSupply();
     this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
   };

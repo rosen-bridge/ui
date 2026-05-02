@@ -77,11 +77,6 @@ export const readContractConfigs = (
  * @return RosenService2Configs
  */
 export const validateConfigs = (): RosenService2Configs => {
-  // const rawSchemaData = fs.readFileSync(
-  //   path.join(__dirname, '../../config/schema.json'),
-  //   'utf-8',
-  // );
-  // const schema = JSON.parse(rawSchemaData);
   const confValidator = ConfigValidator.fromFile(
     path.join(__dirname, '../../config/schema.json'),
   );

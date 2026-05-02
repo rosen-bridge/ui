@@ -1,4 +1,4 @@
-export { calculateBridgeFees } from './bridgeFeeCalculator';
+export { calculateBridgeData } from './calculateBridgeData';
 export { calculateWatcherCounts } from './calculateWatcherCounts';
 export {
   getDecimalString,

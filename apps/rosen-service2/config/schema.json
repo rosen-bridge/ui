@@ -296,7 +296,7 @@
       },
       "path": {
         "type": "string",
-        "default": "config/rosen",
+        "default": "config/tokensMap.json",
         "validations": [
           {
             "required": true,

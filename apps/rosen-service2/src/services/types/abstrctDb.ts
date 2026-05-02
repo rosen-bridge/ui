@@ -4,6 +4,7 @@ import { LastSavedBlock } from '@rosen-bridge/scanner-sync-check';
 import { AbstractService } from '@rosen-bridge/service-manager';
 
 export abstract class AbstractDBService extends AbstractService {
+  static Name = 'DBService';
   protected static instance: AbstractDBService;
 
   /**

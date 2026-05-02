@@ -1,6 +1,8 @@
 import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
+import { TokenMap } from '@rosen-bridge/extended-tokens';
+import { DataSource } from '@rosen-bridge/extended-typeorm';
 import {
   Dependency,
   ServiceAction,
@@ -20,104 +22,36 @@ import { AbstractDBService } from './types/abstrctDb';
 export class ErgoExtractorService extends AbstractErgoExtractorsService {
   private ergoScanner: ErgoScanner;
   name = AbstractErgoExtractorsService.Name;
+  private tokenMap: TokenMap;
+  private dataSource: DataSource;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractTokenMapService.getInstance().getName(),
-      allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
+      serviceName: AbstractTokenMapService.Name,
+      allowedStatuses: [
+        ServiceStatus.started,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
+      action: ServiceAction.assemble,
+    },
+    {
+      serviceName: AbstractDBService.Name,
+      allowedStatuses: [
+        ServiceStatus.started,
+        ServiceStatus.running,
+        ServiceStatus.dormant,
+      ],
       action: ServiceAction.assemble,
     },
   ];
 
   assemble = async (): Promise<boolean> => {
-    const { networkType, url } = resolveErgoNetworkConfig();
     this.ergoScanner =
       AbstractErgoScannerService.getInstance().getErgoScanner();
-    const dataSource = AbstractDBService.getInstance().getDataSource();
-    const tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
-    try {
-      const ergoObservationExtractor = new ErgoObservationExtractor(
-        configs.contracts.ergo.addresses.lock,
-        dataSource,
-        tokenMap,
-        this.logger.child('ergoObservationExtractor'),
-      );
-      await this.ergoScanner.registerExtractor(ergoObservationExtractor);
-      const ergoEventTriggerExtractor = createEventTrigger(
-        NETWORKS.ergo.key,
-        networkType,
-        url,
-        dataSource,
-        configs.contracts.ergo,
-      );
-      await this.ergoScanner.registerExtractor(ergoEventTriggerExtractor);
-      if (configs.chains.cardano.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.cardano.key,
-            networkType,
-            url,
-            dataSource,
-            configs.contracts.cardano,
-          ),
-        );
-      if (configs.chains.bitcoin.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.binance.key,
-            networkType,
-            url,
-            dataSource,
-            configs.contracts.bitcoin,
-          ),
-        );
-      if (configs.chains.doge.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.doge.key,
-            networkType,
-            url,
-            dataSource,
-            configs.contracts.doge,
-          ),
-        );
-      if (configs.chains.ethereum.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.ethereum.key,
-            networkType,
-            url,
-            dataSource,
-            configs.contracts.ethereum,
-          ),
-        );
-      if (configs.chains['bitcoin-runes'].active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS['bitcoin-runes'].key,
-            networkType,
-            url,
-            dataSource,
-            configs.contracts['bitcoin-runes'],
-          ),
-        );
-      if (configs.chains.binance.active)
-        await this.ergoScanner.registerExtractor(
-          createEventTrigger(
-            NETWORKS.binance.key,
-            networkType,
-            url,
-            dataSource,
-            configs.contracts.binance,
-          ),
-        );
-      this.setStatus(ServiceStatus.dormant);
-      return true;
-    } catch (e) {
-      this.logger.error(
-        `Something went wrong while starting the ErgoExtractorService: ${e}`,
-      );
-      return false;
-    }
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
+    this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
+    this.setStatus(ServiceStatus.dormant);
+    return true;
   };
 
   /**
@@ -139,8 +73,91 @@ export class ErgoExtractorService extends AbstractErgoExtractorsService {
    */
   protected start = async (): Promise<boolean> => {
     this.setStatus(ServiceStatus.started);
-    this.setStatus(ServiceStatus.running);
-    return true;
+    const { networkType, url } = resolveErgoNetworkConfig();
+    try {
+      const ergoObservationExtractor = new ErgoObservationExtractor(
+        configs.contracts.ergo.addresses.lock,
+        this.dataSource,
+        this.tokenMap,
+        this.logger.child('ergoObservationExtractor'),
+      );
+      await this.ergoScanner.registerExtractor(ergoObservationExtractor);
+      const ergoEventTriggerExtractor = createEventTrigger(
+        NETWORKS.ergo.key,
+        networkType,
+        url,
+        this.dataSource,
+        configs.contracts.ergo,
+      );
+      await this.ergoScanner.registerExtractor(ergoEventTriggerExtractor);
+      if (configs.chains.cardano.active)
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            NETWORKS.cardano.key,
+            networkType,
+            url,
+            this.dataSource,
+            configs.contracts.cardano,
+          ),
+        );
+      if (configs.chains.bitcoin.active)
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            NETWORKS.binance.key,
+            networkType,
+            url,
+            this.dataSource,
+            configs.contracts.bitcoin,
+          ),
+        );
+      if (configs.chains.doge.active)
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            NETWORKS.doge.key,
+            networkType,
+            url,
+            this.dataSource,
+            configs.contracts.doge,
+          ),
+        );
+      if (configs.chains.ethereum.active)
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            NETWORKS.ethereum.key,
+            networkType,
+            url,
+            this.dataSource,
+            configs.contracts.ethereum,
+          ),
+        );
+      if (configs.chains['bitcoin-runes'].active)
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            NETWORKS['bitcoin-runes'].key,
+            networkType,
+            url,
+            this.dataSource,
+            configs.contracts['bitcoin-runes'],
+          ),
+        );
+      if (configs.chains.binance.active)
+        await this.ergoScanner.registerExtractor(
+          createEventTrigger(
+            NETWORKS.binance.key,
+            networkType,
+            url,
+            this.dataSource,
+            configs.contracts.binance,
+          ),
+        );
+      this.setStatus(ServiceStatus.running);
+      return true;
+    } catch (e) {
+      this.logger.error(
+        `Something went wrong while starting the ErgoExtractorService: ${e}`,
+      );
+      return false;
+    }
   };
 
   /**

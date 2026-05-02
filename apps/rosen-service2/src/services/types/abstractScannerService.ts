@@ -3,6 +3,7 @@ import { PeriodicTaskService } from '@rosen-bridge/service-manager';
 import { ChainScannersType, Chains } from '../../types/index';
 
 export abstract class AbstractScannerService extends PeriodicTaskService {
+  static Name = 'ScannerService';
   protected static instance: AbstractScannerService;
 
   /**

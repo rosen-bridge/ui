@@ -4,6 +4,7 @@ import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
 
 export abstract class AbstractAssetDataAdapterService extends PeriodicTaskService {
   protected static instance: AbstractAssetDataAdapterService;
+  static Name = 'AssetDataAdapterService';
   protected adapters: { [key: string]: ChainsAdapters } = {};
 
   /**

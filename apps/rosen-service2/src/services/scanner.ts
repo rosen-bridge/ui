@@ -38,30 +38,30 @@ import { AbstractTokenMapService } from './types/abstractTokenMapService';
 import { AbstractDBService } from './types/abstrctDb';
 
 export class ScannerService extends AbstractScannerService {
-  name = 'ScannerService';
+  name = AbstractScannerService.Name;
   protected scanners: { [k1 in ChainsKeys]?: ChainScannersType } = {};
-  private dbService: DataSource;
+  private dataSource: DataSource;
   private tokenMap: TokenMap;
   protected dependencies: Dependency[] = [
     {
-      serviceName: AbstractDBService.getInstance().getName(),
+      serviceName: AbstractDBService.Name,
       allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractTokenMapService.getInstance().getName(),
+      serviceName: AbstractTokenMapService.Name,
       allowedStatuses: [ServiceStatus.running, ServiceStatus.dormant],
       action: ServiceAction.assemble,
     },
     {
-      serviceName: AbstractErgoScannerService.getInstance().getName(),
+      serviceName: AbstractErgoScannerService.Name,
       allowedStatuses: [ServiceStatus.running],
       action: ServiceAction.start,
     },
   ];
 
   assemble = async (): Promise<boolean> => {
-    this.dbService = AbstractDBService.getInstance().getDataSource();
+    this.dataSource = AbstractDBService.getInstance().getDataSource();
     this.tokenMap = AbstractTokenMapService.getInstance().getTokenMap();
     this.setStatus(ServiceStatus.dormant);
     return true;
@@ -108,21 +108,21 @@ export class ScannerService extends AbstractScannerService {
           case CARDANO_METHOD_BLOCKFROST:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoBlockFrostScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
           case CARDANO_METHOD_OGMIOS:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoOgmiosScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
           case CARDANO_METHOD_KOIOS:
             this.scanners[NETWORKS.cardano.key] =
               await buildCardanoKoiosScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
@@ -136,14 +136,14 @@ export class ScannerService extends AbstractScannerService {
           case BITCOIN_METHOD_ESPLORA:
             this.scanners[NETWORKS.bitcoin.key] =
               await buildBitcoinEsploraScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
           case BITCOIN_METHOD_RPC:
             this.scanners[NETWORKS.bitcoin.key] =
               await buildBitcoinRpcScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
@@ -154,14 +154,14 @@ export class ScannerService extends AbstractScannerService {
           case DOGE_METHOD_ESPLORA:
             this.scanners[NETWORKS.doge.key] =
               await buildDogeEsploraScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
           case DOGE_METHOD_RPC:
             this.scanners[NETWORKS.doge.key] =
               await buildDogeRpcScannerWithExtractors(
-                this.dbService,
+                this.dataSource,
                 this.tokenMap,
               );
             break;
@@ -170,14 +170,14 @@ export class ScannerService extends AbstractScannerService {
       if (configs.chains.ethereum.active) {
         this.scanners[NETWORKS.ethereum.key] =
           await buildEthereumEvmScannerWithExtractors(
-            this.dbService,
+            this.dataSource,
             this.tokenMap,
           );
       }
       if (configs.chains.binance.active) {
         this.scanners[NETWORKS.binance.key] =
           await buildBinanceRpcScannerWithExtractors(
-            this.dbService,
+            this.dataSource,
             this.tokenMap,
           );
       }
