@@ -73,6 +73,8 @@ export const isValidAddress = (addr: string) => {
  */
 const getChainRpcUrl = (chain: EvmChains) => {
   switch (chain) {
+    case EvmChains.BASE:
+      return process.env.BASE_RPC_API;
     case EvmChains.ETHEREUM:
       return process.env.ETHEREUM_RPC_API;
     case EvmChains.BINANCE:

@@ -1,3 +1,4 @@
+import { registerBaseExtractor } from './chains/base';
 import { registerBinanceExtractor } from './chains/binance';
 import { registerBitcoinExtractor } from './chains/bitcoin';
 import { registerBitcoinRunesExtractor } from './chains/bitcoin-runes';
@@ -14,6 +15,7 @@ const observationService = {
   registerErgoExtractor,
   registerEthereumExtractor,
   registerBinanceExtractor,
+  registerBaseExtractor,
 };
 
 export default observationService;

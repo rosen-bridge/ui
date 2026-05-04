@@ -123,6 +123,21 @@ const getConfig = () => {
         rpcUrl: nodeConfig.get<string>('binance.rpcUrl'),
         rpcAuthToken: getOptionalString('binance.rpcAuthToken'),
       },
+      base: {
+        addresses: {
+          lock: nodeConfig.get<string>('base.addresses.lock'),
+          eventTrigger: nodeConfig.get<string>('base.addresses.eventTrigger'),
+          permit: nodeConfig.get<string>('base.addresses.permit'),
+          fraud: nodeConfig.get<string>('base.addresses.fraud'),
+          commitment: nodeConfig.get<string>('base.addresses.commitment'),
+        },
+        initialHeight: nodeConfig.get<number>('base.initialHeight'),
+        tokens: {
+          rwt: nodeConfig.get<string>('base.tokens.rwt'),
+        },
+        rpcUrl: nodeConfig.get<string>('base.rpcUrl'),
+        rpcAuthToken: getOptionalString('base.rpcAuthToken'),
+      },
       doge: {
         addresses: {
           lock: nodeConfig.get<string>('doge.addresses.lock'),
@@ -159,6 +174,7 @@ const getConfig = () => {
           ),
           ethereum: nodeConfig.get<string[]>('calculator.addresses.ethereum'),
           binance: nodeConfig.get<string[]>('calculator.addresses.binance'),
+          base: nodeConfig.get<string[]>('calculator.addresses.base'),
           doge: nodeConfig.get<string[]>('calculator.addresses.doge'),
         },
         interval: nodeConfig.get<number>('calculator.interval'),
@@ -199,6 +215,12 @@ const getConfig = () => {
         ),
         binanceScannerCriticalDiff: nodeConfig.get<number>(
           'healthCheck.binanceScannerCriticalDiff',
+        ),
+        baseScannerWarnDiff: nodeConfig.get<number>(
+          'healthCheck.baseScannerWarnDiff',
+        ),
+        baseScannerCriticalDiff: nodeConfig.get<number>(
+          'healthCheck.baseScannerCriticalDiff',
         ),
         updateInterval: nodeConfig.get<number>('healthCheck.interval'),
         logDuration: nodeConfig.get<number>('healthCheck.duration'),

@@ -22,6 +22,14 @@ export const tokenMapData: RosenTokens = [
       type: 'tokenType',
       residency: 'wrapped',
     },
+    base: {
+      tokenId: '0x1111111111111111111111111111111111111111',
+      extra: {},
+      name: 'asset1',
+      decimals: 0,
+      type: 'tokenType',
+      residency: 'wrapped',
+    },
   },
   {
     ergo: {
