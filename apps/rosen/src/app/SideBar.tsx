@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 
 import {
@@ -22,10 +21,6 @@ import { VersionConfig } from './VersionConfig';
  * render sidebar log and navigaiton buttons
  */
 export const SideBar = () => {
-  const pathname = usePathname();
-
-  const router = useRouter();
-
   return (
     <AppBar
       logo={
@@ -35,10 +30,7 @@ export const SideBar = () => {
       }
       versions={<VersionConfig />}
       navigationBar={
-        <NavigationBar
-          isActive={(path) => pathname === path}
-          onClick={(path) => router.push(path)}
-        >
+        <NavigationBar>
           <NavigationButton icon={<Archway />} label="Bridge" path="/" />
           <NavigationButton
             badge="Beta"

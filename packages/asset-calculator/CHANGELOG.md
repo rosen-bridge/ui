@@ -1,5 +1,26 @@
 # @rosen-ui/asset-calculator
 
+## 2.3.2
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/types@0.5.0
+
+## 2.3.1
+
+### Patch Changes
+
+- Add unisat api-key to `asset-calculator` package
+- Update dependencies
+  - @rosen-bridge/abstract-logger@4.0.0
+  - @rosen-bridge/tokens@6.0.0
+  - @rosen-clients/cardano-koios@3.1.1
+  - @rosen-clients/ergo-explorer@2.1.1
+  - @rosen-clients/rate-limited-axios@1.1.1
+  - ethers@6.16.0
+  - @rosen-ui/types@0.4.1
+
 ## 2.3.0
 
 ### Minor Changes

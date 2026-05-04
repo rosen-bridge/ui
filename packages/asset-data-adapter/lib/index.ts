@@ -5,4 +5,5 @@ export { CardanoKoiosDataAdapter } from './cardanoKoiosDataAdapter';
 export { BinanceEvmRpcDataAdapter } from './binanceEvmRpcDataAdapter';
 export { EthereumEvmRpcDataAdapter } from './ethereumEvmRpcDataAdapter';
 export { DogeBlockCypherDataAdapter } from './dogeBlockCypherDataAdapter';
-export { ChainsAdapters } from './types';
+export { BitcoinRunesDataAdapter } from './bitcoinRunsDataAdapter';
+export * from './types';

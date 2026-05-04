@@ -1,5 +1,4 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DiscordNotification } from '@rosen-bridge/discord-notification';
 import {
   AbstractHealthCheckParam,
@@ -32,7 +31,6 @@ import { ScannerService } from './scanner';
 
 export class HealthService extends PeriodicTaskService {
   name = 'HealthService';
-  taskName = 'HealthService';
 
   private static instance: HealthService;
   readonly dbService: DBService;
@@ -91,14 +89,12 @@ export class HealthService extends PeriodicTaskService {
         ERGO_BLOCK_TIME * 1000,
       ),
       new LogLevelHealthCheck(
-        CallbackLoggerFactory.getInstance(),
         HealthStatusLevel.UNSTABLE,
         configs.healthCheck.logging.maxWarns,
         configs.healthCheck.logging.duration * 1000,
         'warn',
       ),
       new LogLevelHealthCheck(
-        CallbackLoggerFactory.getInstance(),
         HealthStatusLevel.UNSTABLE,
         configs.healthCheck.logging.maxErrors,
         configs.healthCheck.logging.duration * 1000,

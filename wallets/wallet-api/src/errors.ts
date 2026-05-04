@@ -204,3 +204,17 @@ export class NonNativeSegWitAddressError extends WalletError {
     );
   }
 }
+
+export class NonTaprootAddressError extends WalletError {
+  constructor(
+    public wallet: string,
+    public cause?: unknown,
+  ) {
+    super(
+      `The source address of the selected [${wallet}] wallet is not Taproot.`,
+      {
+        cause,
+      },
+    );
+  }
+}

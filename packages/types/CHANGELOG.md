@@ -1,5 +1,17 @@
 # @rosen-ui/types
 
+## 0.5.0
+
+### Minor Changes
+
+- Upgrade React to v19
+
+## 0.4.1
+
+### Patch Changes
+
+- Remove the useless `LayoutProps` type
+
 ## 0.4.0
 
 ### Minor Changes

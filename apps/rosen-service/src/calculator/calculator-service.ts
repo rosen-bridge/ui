@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { AssetCalculator } from '@rosen-ui/asset-calculator';
 
 import config from '../configs';
@@ -15,7 +15,7 @@ const startUpdateJob = async (
   calculator: AssetCalculator,
   updateInterval: number,
 ) => {
-  const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+  const logger = DefaultLogger.getInstance().child(import.meta.url);
 
   const tryUpdating = async () => {
     try {
@@ -43,7 +43,7 @@ const startUpdateJob = async (
  * start asset calculator service
  */
 const start = async () => {
-  const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+  const logger = DefaultLogger.getInstance().child(import.meta.url);
   const assetCalculator = new AssetCalculator(
     await getTokenMap(),
     {

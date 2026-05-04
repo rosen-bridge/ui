@@ -1,8 +1,8 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   BitcoinRpcScanner,
   DogeRpcScanner,
 } from '@rosen-bridge/bitcoin-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
@@ -17,7 +17,7 @@ import { startErgoScanner } from './chains/ergo';
 import { startEthereumScanner } from './chains/ethereum';
 import { startHandshakeScanner } from './chains/handshake';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 // Scanner instances that will be initialized in start()
 let ergoScanner: ErgoScanner;

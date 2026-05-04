@@ -1,3 +1,4 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
@@ -7,6 +8,12 @@ import {
   BitcoinEsploraObservationExtractor,
 } from '@rosen-bridge/bitcoin-observation-extractor';
 import {
+  AbstractRunesProtocolNetwork,
+  BitcoinRunesEsploraObservationExtractor,
+  BitcoinRunesRpcObservationExtractor,
+  UnisatRunesProtocolNetwork,
+} from '@rosen-bridge/bitcoin-runes-observation-extractor';
+import {
   BitcoinRpcNetwork,
   BitcoinRpcScanner,
   BitcoinEsploraScanner,
@@ -14,13 +21,12 @@ import {
   BitcoinRpcTransaction,
   BitcoinEsploraTransaction,
 } from '@rosen-bridge/bitcoin-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * Initializes and configures a Bitcoin RPC scanner instance.
@@ -38,7 +44,7 @@ export const buildBitcoinRpcScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinRpcTransaction>(
       new FailoverStrategy(),
-      logger,
+      logger.child('bitcoinRpcScannerLogger'),
     );
   configs.chains.bitcoin.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -59,27 +65,44 @@ export const buildBitcoinRpcScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    logger: CallbackLoggerFactory.getInstance().getLogger(
-      'bitcoin-scanner-logger',
-    ),
+    logger: logger.child('bitcoinRpcScannerLogger'),
   });
 
   try {
     const tokenMap = TokensConfig.getInstance().getTokenMap();
+    if (configs.chains.bitcoin.active) {
+      logger.debug('Creating Bitcoin observation extractor...');
+      const observationExtractor = new BitcoinRpcObservationExtractor(
+        configs.contracts.bitcoin.addresses.lock,
+        dataSource,
+        tokenMap,
+        logger.child('bitcoinRpcObservationExtractor'),
+      );
 
-    logger.debug('Creating Bitcoin observation extractor...');
-    const observationExtractor = new BitcoinRpcObservationExtractor(
-      configs.contracts.bitcoin.addresses.lock,
-      dataSource,
-      tokenMap,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'bitcoin-observation-extractor',
-      ),
-    );
-
-    logger.debug('Registering observation extractor with scanner...');
-    await bitcoinScanner.registerExtractor(observationExtractor);
-    logger.info('Bitcoin observation extractor registered successfully');
+      logger.debug('Registering observation extractor with scanner...');
+      await bitcoinScanner.registerExtractor(observationExtractor);
+      logger.info('Bitcoin observation extractor registered successfully');
+    }
+    if (configs.chains['bitcoin-runes'].active) {
+      const runesClient: AbstractRunesProtocolNetwork =
+        new UnisatRunesProtocolNetwork(
+          configs.chains['bitcoin-runes'].unisatUrl!,
+          configs.chains['bitcoin-runes'].unisatApiKey!,
+          logger.child('runesClient'),
+        );
+      logger.debug('Creating Bitcoin Runes RPC observation extractor...');
+      const runesObservationExtractor = new BitcoinRunesRpcObservationExtractor(
+        configs.contracts['bitcoin-runes'].addresses.lock,
+        runesClient,
+        dataSource,
+        tokenMap,
+        logger.child('bitcoinRunesRpcObservationExtractor'),
+      );
+      await bitcoinScanner.registerExtractor(runesObservationExtractor);
+      logger.info(
+        'Bitcoin Runes RPC observation extractor registered successfully',
+      );
+    }
   } catch (error) {
     logger.error(
       `Failed to create or register Bitcoin observation extractor: ${error instanceof Error ? error.message : error}`,
@@ -109,7 +132,7 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<BitcoinEsploraTransaction>(
       new FailoverStrategy(),
-      logger,
+      logger.child('bitcoinEsploraScannerLogger'),
     );
   configs.chains.bitcoin.esplora.connections.forEach((esplora) => {
     networkConnectorManager.addConnector(
@@ -125,27 +148,47 @@ export const buildBitcoinEsploraScannerWithExtractors = async (
     initialHeight: configs.chains.bitcoin.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.bitcoin.blockRetrieveGap,
-    logger: CallbackLoggerFactory.getInstance().getLogger(
-      'bitcoin-scanner-logger',
-    ),
+    logger: logger.child('bitcoinEsploraScannerLogger'),
   });
 
   try {
     const tokenMap = TokensConfig.getInstance().getTokenMap();
+    if (configs.chains.bitcoin.active) {
+      logger.debug('Creating Bitcoin observation extractor...');
+      const observationExtractor = new BitcoinEsploraObservationExtractor(
+        configs.contracts.bitcoin.addresses.lock,
+        dataSource,
+        tokenMap,
+        logger.child('bitcoinEsploraObservationExtractor'),
+      );
 
-    logger.debug('Creating Bitcoin observation extractor...');
-    const observationExtractor = new BitcoinEsploraObservationExtractor(
-      configs.contracts.bitcoin.addresses.lock,
-      dataSource,
-      tokenMap,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'bitcoin-observation-extractor',
-      ),
-    );
+      logger.debug('Registering observation extractor with scanner...');
+      await bitcoinScanner.registerExtractor(observationExtractor);
+      logger.info('Bitcoin observation extractor registered successfully');
+    }
+    if (configs.chains['bitcoin-runes'].active) {
+      const runesClient: AbstractRunesProtocolNetwork =
+        new UnisatRunesProtocolNetwork(
+          configs.chains['bitcoin-runes'].unisatUrl!,
+          configs.chains['bitcoin-runes'].unisatApiKey!,
+          logger.child('runesClient'),
+        );
+      logger.debug('Creating Bitcoin Runes Esplora observation extractor...');
 
-    logger.debug('Registering observation extractor with scanner...');
-    await bitcoinScanner.registerExtractor(observationExtractor);
-    logger.info('Bitcoin observation extractor registered successfully');
+      const runsObservationExtractor =
+        new BitcoinRunesEsploraObservationExtractor(
+          configs.contracts['bitcoin-runes'].addresses.lock,
+          runesClient,
+          dataSource,
+          tokenMap,
+          logger.child('bitcoinRunesEsploraObservationExtractor'),
+        );
+
+      logger.info(
+        'Bitcoin Runes Esplora observation extractor registered successfully',
+      );
+      await bitcoinScanner.registerExtractor(runsObservationExtractor);
+    }
   } catch (error) {
     logger.error(
       `Failed to create or register Bitcoin observation extractor: ${error instanceof Error ? error.message : error}`,

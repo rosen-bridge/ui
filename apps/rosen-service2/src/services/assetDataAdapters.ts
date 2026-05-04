@@ -1,6 +1,4 @@
 import { AbstractLogger } from '@rosen-bridge/abstract-logger';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
   Dependency,
   PeriodicTaskService,
@@ -10,6 +8,7 @@ import ergoExplorerClientFactory from '@rosen-clients/ergo-explorer';
 import {
   BinanceEvmRpcDataAdapter,
   BitcoinEsploraDataAdapter,
+  BitcoinRunesDataAdapter,
   CardanoKoiosDataAdapter,
   DogeBlockCypherDataAdapter,
   ErgoExplorerDataAdapter,
@@ -17,18 +16,18 @@ import {
 } from '@rosen-ui/asset-data-adapter';
 import { ChainsAdapters } from '@rosen-ui/asset-data-adapter';
 import { AssetBalance } from '@rosen-ui/asset-data-adapter/dist/types';
-import { NETWORKS } from '@rosen-ui/constants';
+import { NETWORKS, NETWORKS_KEYS } from '@rosen-ui/constants';
 import { createClient } from '@vercel/kv';
 
 import { configs } from '../configs';
-import { ERG_TOTAL_SUPPLY } from '../constants';
+import { TOTAL_SUPPLY_REDIS_KEY } from '../constants';
 import { TokensConfig } from '../tokensConfig';
-import { ChainChoices, Chains, TotalSupply } from '../types';
+import { ChainChoices, TotalSupply } from '../types';
+import { stringSerializer } from '../utils';
 import { DBService } from './db';
 
 export class AssetDataAdapterService extends PeriodicTaskService {
   name = 'AssetDataAdapterService';
-  taskName = 'AssetDataAdapterService';
   private static instance: AssetDataAdapterService;
   readonly dbService: DBService;
   readonly redis;
@@ -55,40 +54,20 @@ export class AssetDataAdapterService extends PeriodicTaskService {
   }
 
   /**
-   * calculate total supply of the token in Ergo
+   * calculate total supply of the wrapped-tokens
+   *
+   * @returns { {[chain: string]: TotalSupply[]} }
    */
-  getAssetsTotalSupply = async (): Promise<TotalSupply[]> => {
-    const tokenMap = TokensConfig.getInstance().getTokenMap();
-    const rosenTokens = tokenMap.getConfig();
-    const assets = (
-      await Promise.all(
-        rosenTokens.map(async (tokenSet) => {
-          const tokenId = tokenSet[NETWORKS.ergo.key].tokenId;
-          if (tokenId == NETWORKS.ergo.nativeToken) {
-            return {
-              assetId: tokenId,
-              totalSupply: ERG_TOTAL_SUPPLY,
-            };
-          }
-          const tokenDetail =
-            await this.explorerApi.v1.getApiV1TokensP1(tokenId);
-          if (tokenDetail) {
-            this.logger.debug(
-              `Total supply of token [${tokenId}] is [${tokenDetail.emissionAmount}]`,
-            );
-            return {
-              assetId: tokenId,
-              totalSupply: tokenMap.wrapAmount(
-                tokenId,
-                tokenDetail.emissionAmount,
-                NETWORKS.ergo.key,
-              ).amount,
-            };
-          }
-          throw Error(`Total supply of token [${tokenId}] is not calculable`);
-        }),
-      )
-    ).filter((asset) => asset != undefined);
+  getAssetsTotalSupply = async (): Promise<{
+    [chain: string]: TotalSupply[];
+  }> => {
+    const assets: { [chain: string]: TotalSupply[] } = {};
+    await Promise.all(
+      NETWORKS_KEYS.map(async (chain) => {
+        const adapter = this.adapters[chain];
+        if (adapter) assets[chain] = await adapter.getAllTokensTotalSupply();
+      }),
+    );
     return assets;
   };
 
@@ -120,7 +99,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             explorerUrl: configs.chains.ergo.explorer.connections.at(0)!.url,
           },
-          CallbackLoggerFactory.getInstance().getLogger(`ergo-data-adapter`),
+          this.logger.child(`ergoDataAdapter`),
         );
       case NETWORKS.bitcoin.key:
         return new BitcoinEsploraDataAdapter(
@@ -129,7 +108,15 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             url: configs.chains.bitcoin.esplora.connections.at(0)!.url,
           },
-          CallbackLoggerFactory.getInstance().getLogger('bitcoin-data-adapter'),
+          this.logger.child('bitcoinDataAdapter'),
+        );
+      case NETWORKS['bitcoin-runes'].key:
+        return new BitcoinRunesDataAdapter(
+          addresses,
+          tokenMap,
+          configs.chains['bitcoin-runes'].unisatUrl,
+          configs.chains['bitcoin-runes'].unisatApiKey,
+          this.logger.child('bitcoinRunesDataAdapter'),
         );
       case NETWORKS.ethereum.key:
         return new EthereumEvmRpcDataAdapter(
@@ -137,12 +124,10 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             url: configs.chains.ethereum.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.ethereum.rpc.connections.at(0)!.authToken,
+            authToken: configs.chains.ethereum.rpc.connections.at(0)?.authToken,
           },
           configs.chains.ethereum.adapter.chunkSize,
-          CallbackLoggerFactory.getInstance().getLogger(
-            'ethereum-data-adapter',
-          ),
+          this.logger.child('ethereumDataAdapter'),
         );
       case NETWORKS.binance.key:
         return new BinanceEvmRpcDataAdapter(
@@ -150,10 +135,10 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           tokenMap,
           {
             url: configs.chains.binance.rpc.connections.at(0)!.url!,
-            authToken: configs.chains.binance.rpc.connections.at(0)!.authToken,
+            authToken: configs.chains.binance.rpc.connections.at(0)?.authToken,
           },
           configs.chains.binance.adapter.chunkSize,
-          CallbackLoggerFactory.getInstance().getLogger('binance-data-adapter'),
+          this.logger.child('binanceDataAdapter'),
         );
       case NETWORKS.cardano.key:
         return new CardanoKoiosDataAdapter(
@@ -162,10 +147,10 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             koiosUrl: configs.chains.cardano.koios.connections.at(0)!.url,
             authToken: configs.chains.cardano.koios.connections
-              .at(0)!
-              .authToken!.toString(),
+              .at(0)
+              ?.authToken?.toString(),
           },
-          CallbackLoggerFactory.getInstance().getLogger('cardano-data-adapter'),
+          this.logger.child('cardanoDataAdapter'),
         );
       case NETWORKS.doge.key:
         return new DogeBlockCypherDataAdapter(
@@ -174,11 +159,9 @@ export class AssetDataAdapterService extends PeriodicTaskService {
           {
             blockCypherUrl: configs.chains.doge.adapter.blockCypher.url,
           },
-          CallbackLoggerFactory.getInstance().getLogger('doge-data-adapter'),
+          this.logger.child('dogeDataAdapter'),
         );
     }
-
-    throw new Error(`No adapter class found for chain: ${chain}`);
   };
 
   /**
@@ -223,6 +206,12 @@ export class AssetDataAdapterService extends PeriodicTaskService {
         // Create Bitcoin data-adapter
         this.adapters[NETWORKS.bitcoin.key] =
           this.createChainSpecificDataAdapter(NETWORKS.bitcoin.key);
+      }
+
+      if (configs.chains['bitcoin-runes'].active) {
+        // Create bitcoin-runes data-adapter
+        this.adapters[NETWORKS['bitcoin-runes'].key] =
+          this.createChainSpecificDataAdapter(NETWORKS['bitcoin-runes'].key);
       }
 
       if (configs.chains.doge.active) {
@@ -296,7 +285,7 @@ export class AssetDataAdapterService extends PeriodicTaskService {
    */
   protected preStart = async () => {
     const assets = await this.getAssetsTotalSupply();
-    this.redis.set('total_supply', JsonBigInt.stringify(assets));
+    this.redis.set(TOTAL_SUPPLY_REDIS_KEY, stringSerializer(assets));
   };
 
   /**
@@ -335,16 +324,15 @@ export class AssetDataAdapterService extends PeriodicTaskService {
                     });
                   }
                 }
-                this.redis.set(adapter.chain, JsonBigInt.stringify(finalData));
+                this.redis.set(adapter.chain, stringSerializer(finalData));
               }
             : async () => {
                 this.redis.set(
                   adapter.chain,
-                  JsonBigInt.stringify(await adapter.fetch()),
+                  stringSerializer(await adapter.fetch()),
                 );
               },
-        interval:
-          configs.chains[adapter.chain as keyof Chains].scanInterval * 1000,
+        interval: configs.dataAggregator.interval * 1000,
       });
     }
     return tasks;

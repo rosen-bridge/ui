@@ -104,7 +104,7 @@ export const AppInfo = ({
         onClick={() => setOpen(!open)}
       >
         {loading ? (
-          <CircularProgress size={15} color="inherit" />
+          <CircularProgress size={24} color="inherit" />
         ) : (
           <SvgIcon size="medium">
             <InfoCircle fill="currentColor" />

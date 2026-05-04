@@ -1,19 +1,19 @@
 import { CallbackType } from '@rosen-bridge/abstract-extractor';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
 import { ErgoUTXOExtractor } from '@rosen-bridge/address-extractor';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { ErgoObservationExtractor } from '@rosen-bridge/ergo-observation-extractor';
 import {
   ErgoExplorerNetwork,
   ErgoNodeNetwork,
   ErgoScanner,
 } from '@rosen-bridge/ergo-scanner';
+import { ExtendedTokenMap } from '@rosen-bridge/extended-tokens';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import { ErgoNetworkType, Transaction } from '@rosen-bridge/scanner-interfaces';
-import { TokenMap } from '@rosen-bridge/tokens';
 import { EventTriggerExtractor } from '@rosen-bridge/watcher-data-extractor';
 import { NETWORKS } from '@rosen-ui/constants';
 import { createClient, VercelKV } from '@vercel/kv';
@@ -24,13 +24,14 @@ import { configs } from '../configs';
 import {
   ERGO_METHOD_EXPLORER,
   TOKEN_MAP_EXTRACTOR_ID,
+  TOKEN_MAP_EXTRACTOR_LOGGER_NAME,
   TOKEN_MAP_REDIS_KEY,
 } from '../constants';
 import { DBService } from '../services/db';
 import { TokensConfig } from '../tokensConfig';
 import { ChainConfigs } from '../types';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * create an event trigger extractor
@@ -57,9 +58,7 @@ const createEventTrigger = (
     chianConfigs.tokens.RWTId,
     chianConfigs.addresses.WatcherPermit,
     chianConfigs.addresses.Fraud,
-    CallbackLoggerFactory.getInstance().getLogger(
-      `${chain}-event-trigger-extractor`,
-    ),
+    logger.child(`${chain}EventTriggerExtractor`),
   );
 };
 
@@ -73,10 +72,10 @@ const createEventTrigger = (
 export const initializeErgoScanner = async (dataSource: DataSource) => {
   logger.info('Starting Ergo scanner initialization...');
 
-  // Create Ergo scanner with Explorer network settings
+  // Create Ergo scanner with Explorer/Node network settings
   const networkConnectorManager = new NetworkConnectorManager<Transaction>(
     new FailoverStrategy(),
-    logger,
+    logger.child('ergoScannerLogger'),
   );
   if (configs.chains.ergo.method == ERGO_METHOD_EXPLORER) {
     configs.chains.ergo.explorer.connections.forEach((explorer) => {
@@ -94,14 +93,14 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
     initialHeight: configs.chains.ergo.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.ergo.blockRetrieveGap,
-    logger: logger,
+    logger: logger.child('ergoScannerLogger'),
   });
 
   const ergoObservationExtractor = new ErgoObservationExtractor(
     configs.contracts.ergo.addresses.lock,
     dataSource,
     TokensConfig.getInstance().getTokenMap(),
-    logger,
+    logger.child('ergoObservationExtractor'),
   );
   await ergoScanner.registerExtractor(ergoObservationExtractor);
 
@@ -164,6 +163,16 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
           configs.contracts.ethereum,
         ),
       );
+    if (configs.chains['bitcoin-runes'].active)
+      await ergoScanner.registerExtractor(
+        createEventTrigger(
+          NETWORKS['bitcoin-runes'].key,
+          networkType,
+          url,
+          dataSource,
+          configs.contracts['bitcoin-runes'],
+        ),
+      );
     if (configs.chains.binance.active)
       await ergoScanner.registerExtractor(
         createEventTrigger(
@@ -196,11 +205,11 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
       networkType,
       configs.contracts.ergo.addresses.tokenMap,
       [configs.contracts.ergo.tokens.tokenMap],
-      CallbackLoggerFactory.getInstance().getLogger(TOKEN_MAP_EXTRACTOR_ID),
+      logger.child(TOKEN_MAP_EXTRACTOR_LOGGER_NAME),
     );
     await ergoScanner.registerExtractor(tokenMapBoxExtractor);
 
-    const tokenMap = new TokenMap();
+    const tokenMap = new ExtendedTokenMap();
 
     const redis = createClient({
       url: configs.redis.address,
@@ -229,7 +238,7 @@ export const initializeErgoScanner = async (dataSource: DataSource) => {
  * @param tokenMap
  * @param redis
  */
-const updateTokenMap = async (tokenMap: TokenMap, redis: VercelKV) => {
+const updateTokenMap = async (tokenMap: ExtendedTokenMap, redis: VercelKV) => {
   const boxes = await DBService.getInstance().getTokenMapBoxes();
 
   await tokenMap.updateConfigByBoxes(boxes.map((box) => box.serialized));

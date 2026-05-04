@@ -11,7 +11,7 @@ import { AggregatedStatusEntity } from './AggregatedStatusEntity';
 import { GuardStatusChangedEntity } from './GuardStatusChangedEntity';
 import { GuardStatusEntity } from './GuardStatusEntity';
 
-@Entity()
+@Entity('tx_entity')
 export class TxEntity {
   @PrimaryColumn('varchar')
   txId: string;

@@ -1,5 +1,23 @@
 # @rosen-network/evm
 
+## 0.3.7
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/address-codec@1.2.0
+  - @rosen-ui/types@0.5.0
+
+## 0.3.6
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-bridge/address-codec@1.1.1
+  - @rosen-bridge/tokens@6.0.0
+  - ethers@6.16.0
+  - @rosen-ui/types@0.4.1
+
 ## 0.3.5
 
 ### Patch Changes

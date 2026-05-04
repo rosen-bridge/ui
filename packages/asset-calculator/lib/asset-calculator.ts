@@ -1,11 +1,11 @@
-import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
-  TokenMap,
-  RosenChainToken,
-  NATIVE_TOKEN,
   NATIVE_RESIDENCY,
+  NATIVE_TOKEN,
+  RosenChainToken,
+  TokenMap,
 } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -60,27 +60,27 @@ class AssetCalculator {
       this.tokens,
       ergoCalculator.addresses,
       ergoCalculator.explorerUrl,
-      logger,
+      logger.child('ergoCalculator'),
     );
     const cardanoAssetCalculator = new CardanoCalculator(
       this.tokens,
       cardanoCalculator.addresses,
       cardanoCalculator.authToken,
-      logger,
+      logger.child('cardanoCalculator'),
       cardanoCalculator.koiosUrl,
     );
     const bitcoinAssetCalculator = new BitcoinCalculator(
       this.tokens,
       bitcoinCalculator.addresses,
       bitcoinCalculator.esploraUrl,
-      logger,
+      logger.child('bitcoinCalculator'),
     );
     const bitcoinRunesAssetCalculator = new BitcoinRunesCalculator(
       this.tokens,
       bitcoinRunesCalculator.addresses,
       bitcoinRunesCalculator.unisatUrl,
       bitcoinRunesCalculator.unisatApiKey,
-      logger,
+      logger.child('bitcoinRunesCalculator'),
     );
     const ethereumAssetCalculator = new EvmCalculator(
       NETWORKS.ethereum.key,
@@ -88,7 +88,7 @@ class AssetCalculator {
       ethereumCalculator.addresses,
       ethereumCalculator.rpcUrl,
       ethereumCalculator.authToken,
-      logger,
+      logger.child('ethereumCalculator'),
     );
     const binanceAssetCalculator = new EvmCalculator(
       NETWORKS.binance.key,
@@ -96,19 +96,19 @@ class AssetCalculator {
       binanceCalculator.addresses,
       binanceCalculator.rpcUrl,
       binanceCalculator.authToken,
-      logger,
+      logger.child('binanceCalculator'),
     );
     const dogeAssetCalculator = new DogeCalculator(
       this.tokens,
       dogeCalculator.addresses,
       dogeCalculator.blockcypherUrl,
-      logger,
+      logger.child('dogeCalculator'),
     );
     const handshakeAssetCalculator = new HandshakeCalculator(
       this.tokens,
       handshakeCalculator.addresses,
       handshakeCalculator.rpcUrl,
-      logger,
+      logger.child('handshakeCalculator'),
     );
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
@@ -120,10 +120,15 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
-    this.calculatorMap.set(NETWORKS.handshake.key, handshakeAssetCalculator);
-    this.bridgedAssetModel = new BridgedAssetModel(dataSource, logger);
-    this.lockedAssetModel = new LockedAssetModel(dataSource, logger);
-    this.tokenModel = new TokenModel(dataSource, logger);
+    this.bridgedAssetModel = new BridgedAssetModel(
+      dataSource,
+      logger.child('bridgedAssetModel'),
+    );
+    this.lockedAssetModel = new LockedAssetModel(
+      dataSource,
+      logger.child('lockedAssetModel'),
+    );
+    this.tokenModel = new TokenModel(dataSource, logger.child('tokenModel'));
   }
 
   /**

@@ -57,7 +57,7 @@ export const ViewRow = ({
               />
             )}
             {!isLoading && (
-              <TableGridBodyRow>
+              <TableGridBodyRow id={item.id}>
                 <TableGridBodyCol>
                   <Token
                     href={item.tokenUrl}

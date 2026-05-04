@@ -9,7 +9,7 @@ import {
 } from 'react';
 
 import { Card } from '@mui/material';
-import { Search } from '@rosen-bridge/icons';
+import { Search, Times } from '@rosen-bridge/icons';
 
 import { styled } from '../../../styling';
 import { IconButton } from '../../base';
@@ -63,6 +63,8 @@ export const SmartSearch = ({
   value: filters,
   onChange,
 }: SmartSearchProps) => {
+  const timeout = useRef<number>(-1);
+
   const $anchor = useRef<HTMLInputElement>(null);
 
   const $history = useRef<HistoryRef>(null);
@@ -73,7 +75,7 @@ export const SmartSearch = ({
 
   const [query, setQuery] = useState('');
 
-  const [selected, setSelected] = useState<Selected[]>(filters || []);
+  const [selected, setSelected] = useState<Selected[]>([]);
 
   const state = useMemo<SmartSearchState>(() => {
     if (!current) return 'idle';
@@ -171,6 +173,7 @@ export const SmartSearch = ({
   );
 
   const handleInputFocus = useCallback(() => {
+    clearTimeout(timeout.current);
     setCurrent({});
   }, []);
 
@@ -269,6 +272,8 @@ export const SmartSearch = ({
   }, [current]);
 
   useEffect(() => {
+    setSelected(filters || []);
+
     $search.current?.focus({ preventScroll: true });
 
     setCurrent(undefined);
@@ -277,6 +282,18 @@ export const SmartSearch = ({
 
     $history.current?.add(filters);
   }, [filters]);
+
+  const handleClearAll = useCallback(() => {
+    setSelected([]);
+    setCurrent(undefined);
+    setQuery('');
+    onChange([]);
+  }, [onChange]);
+
+  const hasFilters = useMemo(
+    () => selectedValidated.length > 0,
+    [selectedValidated],
+  );
 
   return (
     <Root>
@@ -297,6 +314,7 @@ export const SmartSearch = ({
       <VirtualScroll>
         <Container>
           <Chips
+            disabled={disabled}
             filters={filtersInput}
             value={selectedValidatedWithCurrent}
             onRemove={(item) => {
@@ -313,6 +331,12 @@ export const SmartSearch = ({
             onChange={handleInputChange}
             onFocus={handleInputFocus}
             onKeyDown={handleInputKeyDown}
+            onBlur={() => {
+              if (picker?.type == 'multiple') return;
+              timeout.current = window.setTimeout(() => {
+                setCurrent(undefined);
+              }, 250);
+            }}
           />
           <Picker
             anchorEl={$anchor.current}
@@ -326,6 +350,13 @@ export const SmartSearch = ({
           />
         </Container>
       </VirtualScroll>
+      {hasFilters && (
+        <IconButton disabled={disabled} onClick={handleClearAll}>
+          <SvgIcon>
+            <Times />
+          </SvgIcon>
+        </IconButton>
+      )}
       <IconButton
         disabled={disabled}
         ref={$search}

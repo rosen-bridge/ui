@@ -1,31 +1,12 @@
-import {
-  BigIntValueTransformer,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryColumn,
-} from '@rosen-bridge/extended-typeorm';
+import { Column, Entity, PrimaryColumn } from '@rosen-bridge/extended-typeorm';
 import { Network } from '@rosen-ui/types';
 
-import { TokenEntity } from './tokenEntity';
+import { AbstractAssetEntity } from './abstractAssetEntity';
 
 @Entity('bridged_asset_entity')
-export class BridgedAssetEntity {
-  @Column({ type: 'bigint', transformer: new BigIntValueTransformer() })
-  amount: bigint;
-
+export class BridgedAssetEntity extends AbstractAssetEntity {
   @PrimaryColumn('varchar')
   chain: Network;
-
-  /**
-   * In order to create a foreign key primary column, we need to include the
-   * relation column (tokenId in this case) in addition to the relation itself
-   */
-  @PrimaryColumn('varchar')
-  tokenId: string;
-
-  @ManyToOne(() => TokenEntity, 'id')
-  token: TokenEntity;
 
   @Column('varchar')
   bridgedTokenId: string;

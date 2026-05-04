@@ -55,11 +55,13 @@ const eslintConfig = [
       'apps/rosen-service2/**/*.{js,jsx,ts,tsx}',
       'networks/**/*.{js,jsx,ts,tsx}',
       'packages/asset-calculator/**/*.{js,jsx,ts,tsx}',
+      'packages/asset-aggregator/**/*.{js,jsx,ts,tsx}',
       'packages/public-status/**/*.{js,jsx,ts,tsx}',
     ],
     languageOptions: {
       globals: {
         ...globals.node,
+        ...globals.vitest,
         vi: 'readonly',
         afterAll: 'readonly',
         afterEach: 'readonly',
@@ -104,6 +106,10 @@ const eslintConfig = [
   {
     languageOptions: {
       parser: typescriptParser,
+      globals: {
+        ...globals.node,
+        ...globals.vitest,
+      },
     },
     plugins: {
       '@typescript-eslint': typescriptEslint,

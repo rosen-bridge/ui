@@ -1,5 +1,25 @@
 # @rosen-bridge/icons
 
+## 3.6.0
+
+### Minor Changes
+
+- Add the `Palm` Icon
+- Upgrade React to v19
+
+## 3.5.0
+
+### Minor Changes
+
+- Remove Raw SVG exports
+
+## 3.4.0
+
+### Minor Changes
+
+- Add build lint check for icons index file
+- Add token images and update the build logic to include them as assets in consumer packages
+
 ## 3.3.0
 
 ### Minor Changes

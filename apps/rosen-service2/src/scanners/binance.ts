@@ -1,8 +1,8 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { BinanceRpcObservationExtractor } from '@rosen-bridge/evm-observation-extractor';
 import { EvmRpcNetwork, EvmRpcScanner } from '@rosen-bridge/evm-scanner';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
@@ -11,7 +11,7 @@ import { TransactionResponse } from 'ethers';
 import { configs } from '../configs';
 import { TokensConfig } from '../tokensConfig';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * Initializes and configures a Binance Smart Chain scanner instance.
@@ -29,7 +29,7 @@ export const buildBinanceRpcScannerWithExtractors = async (
   const networkConnectorManager =
     new NetworkConnectorManager<TransactionResponse>(
       new FailoverStrategy(),
-      logger,
+      logger.child('binanceScannerLogger'),
     );
   configs.chains.binance.rpc.connections.forEach((rpc) => {
     networkConnectorManager.addConnector(
@@ -41,9 +41,7 @@ export const buildBinanceRpcScannerWithExtractors = async (
     initialHeight: configs.chains.binance.initialHeight,
     network: networkConnectorManager,
     blockRetrieveGap: configs.chains.binance.blockRetrieveGap,
-    logger: CallbackLoggerFactory.getInstance().getLogger(
-      'binance-scanner-logger',
-    ),
+    logger: logger.child('binanceScannerLogger'),
   });
 
   try {
@@ -53,9 +51,7 @@ export const buildBinanceRpcScannerWithExtractors = async (
       configs.contracts.binance.addresses.lock,
       dataSource,
       tokenMap,
-      CallbackLoggerFactory.getInstance().getLogger(
-        'binance-observation-extractor',
-      ),
+      logger.child('binanceObservationExtractor'),
     );
 
     logger.debug('Registering observation extractor with scanner...');
