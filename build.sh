@@ -41,7 +41,7 @@ if [ "$APP" == "rosen" ] || [ "$APP" == "default" ]; then
   npm run build --workspace networks/ergo
   npm run build --workspace networks/ethereum
   npm run build --workspace wallets/wallet-api
-  npm run build --workspace wallets/shake-wallet
+  npm run build --workspace wallets/shake
   npm run build --workspace wallets/eternl
   npm run build --workspace wallets/lace
   npm run build --workspace wallets/metamask

@@ -120,6 +120,7 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
+    this.calculatorMap.set(NETWORKS.handshake.key, handshakeAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(
       dataSource,
       logger.child('bridgedAssetModel'),

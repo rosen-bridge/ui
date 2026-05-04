@@ -1,4 +1,4 @@
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import { HandshakeRpcObservationExtractor } from '@rosen-bridge/handshake-observation-extractor';
 import { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 
@@ -7,7 +7,7 @@ import dataSource from '../../data-source';
 import AppError from '../../errors/AppError';
 import { getTokenMap } from '../../utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
 
 /**
  * register an observation extractor for the provided scanner
@@ -21,7 +21,7 @@ export const registerHandshakeExtractor = async (
       config.handshake.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger,
+      logger.child('handshakeRpcObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

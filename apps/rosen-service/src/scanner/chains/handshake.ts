@@ -1,8 +1,8 @@
+import { DefaultLogger } from '@rosen-bridge/abstract-logger';
 import {
   FailoverStrategy,
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
-import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import {
   HandshakeRpcNetwork,
   HandshakeRpcScanner,
@@ -20,10 +20,8 @@ import AppError from '../../errors/AppError';
 import observationService from '../../observation/observation-service';
 import { startScanner } from '../scanner-utils';
 
-const logger = CallbackLoggerFactory.getInstance().getLogger(import.meta.url);
-const scannerLogger = CallbackLoggerFactory.getInstance().getLogger(
-  HANDSHAKE_SCANNER_LOGGER_NAME,
-);
+const logger = DefaultLogger.getInstance().child(import.meta.url);
+const scannerLogger = logger.child(HANDSHAKE_SCANNER_LOGGER_NAME);
 
 /**
  * Creates and configures a NetworkConnectorManager instance for handshake scanner

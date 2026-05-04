@@ -426,6 +426,7 @@ describe('AssetCalculator', () => {
           addresses: ['hotAddr', 'coldAddr'],
           blockcypherUrl: 'blockcypherUrl',
         },
+        { addresses: ['hotAddr', 'coldAddr'], rpcUrl: 'handshakeRpcUrl' },
         dataSource,
       );
     });
