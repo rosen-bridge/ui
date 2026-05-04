@@ -1,6 +1,6 @@
 import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
-import { HandshakeRpcObservationExtractor } from '@rosen-bridge/handshake-rpc-observation-extractor';
-import { HandshakeRpcScanner } from '@rosen-bridge/handshake-rpc-scanner';
+import { HandshakeRpcObservationExtractor } from '@rosen-bridge/handshake-observation-extractor';
+import { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';

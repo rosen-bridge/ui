@@ -6,7 +6,7 @@ import { CallbackLoggerFactory } from '@rosen-bridge/callback-logger';
 import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { HandshakeRpcScanner } from '@rosen-bridge/handshake-rpc-scanner';
+import { HandshakeRpcScanner } from '@rosen-bridge/handshake-scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';

@@ -2,10 +2,10 @@ import {
   BitcoinBoxSelection,
   generateFeeEstimator,
 } from '@rosen-bridge/bitcoin-utxo-selection';
-import { TokenMap, RosenChainToken } from '@rosen-bridge/tokens';
+import { RosenChainToken, TokenMap } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { RosenAmountValue } from '@rosen-ui/types';
-import { MTX, Address, Coin, Covenant, Output } from 'hsd';
+import { Address, Coin, Covenant, MTX, Output } from 'hsd';
 
 import {
   SEGWIT_INPUT_WEIGHT_UNIT,
@@ -69,8 +69,8 @@ export const generateUnsignedTx =
     const estimateFee = generateFeeEstimator(
       1,
       42 + // all txs include 40W. P2WPKH txs need additional 2W
-        44 + // OP_RETURN output base weight
-        opReturnData.length * 2, // op_return data weight
+      44 + // OP_RETURN output base weight
+      opReturnData.length * 2, // op_return data weight
       SEGWIT_INPUT_WEIGHT_UNIT,
       SEGWIT_OUTPUT_WEIGHT_UNIT,
       feeRatio,

@@ -7,7 +7,7 @@ import {
   HandshakeRpcNetwork,
   HandshakeRpcScanner,
   HandshakeRpcTransaction,
-} from '@rosen-bridge/handshake-rpc-scanner';
+} from '@rosen-bridge/handshake-scanner';
 
 import config from '../../configs';
 import {
