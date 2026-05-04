@@ -2,9 +2,10 @@
 
 import { useForm, FormProvider } from 'react-hook-form';
 
+import { RosenChainToken } from '@rosen-bridge/tokens';
 import { Alert, Typography } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { RosenAmountValue } from '@rosen-ui/types';
+import { Network } from '@rosen-ui/types';
 
 import {
   BalanceProvider,
@@ -20,22 +21,22 @@ import { TransactionInfo } from './TransactionInfo';
 import { WalletInfo } from './WalletInfo';
 
 export interface BridgeForm {
-  source: string | null;
-  target: string | null;
-  token: string | null;
-  walletAddress: string | null;
-  amount: RosenAmountValue | null;
+  source: Network | null;
+  target: Network | null;
+  token: RosenChainToken | null;
+  walletAddress: string;
+  amount: string;
 }
 
 const RosenBridge = () => {
   const methods = useForm<BridgeForm>({
     mode: 'onBlur',
     defaultValues: {
-      source: '',
-      target: '',
-      token: '',
-      walletAddress: null,
-      amount: null,
+      source: null,
+      target: null,
+      token: null,
+      walletAddress: '',
+      amount: '',
     },
   });
 

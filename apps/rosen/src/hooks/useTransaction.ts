@@ -16,8 +16,8 @@ import { logger } from '@/actions';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
 import { useTransactionFees } from './useTransactionFees';
-import { useTransactionFormData } from './useTransactionFormData';
 import { useWallet } from './useWallet';
+import { useBridgeFormValues } from './useBridgeFormValues';
 
 /**
  * a react hook to create and sign and submit transactions
@@ -31,13 +31,7 @@ export const useTransaction = () => {
 
   const { networkFee, bridgeFee } = useTransactionFees();
 
-  const {
-    sourceValue,
-    targetValue,
-    tokenValue,
-    amountValue,
-    walletAddressValue,
-  } = useTransactionFormData();
+  const bridgeFormValues = useBridgeFormValues();
 
   const { selected: selectedWallet } = useWallet();
 
@@ -45,17 +39,17 @@ export const useTransaction = () => {
 
   const startTransaction = async () => {
     if (
-      !amountValue ||
+      !bridgeFormValues.amount ||
       !bridgeFee ||
       !networkFee ||
-      !sourceValue ||
-      !targetValue ||
+      !bridgeFormValues.source ||
+      !bridgeFormValues.target ||
       !tokenMap ||
-      !tokenValue ||
+      !bridgeFormValues.token ||
       !selectedSource ||
       !selectedTarget ||
       !selectedWallet ||
-      !walletAddressValue
+      !bridgeFormValues.walletAddress
     )
       return;
 
@@ -65,16 +59,16 @@ export const useTransaction = () => {
 
     try {
       parameters = {
-        token: tokenValue as RosenChainToken,
+        token: bridgeFormValues.token as RosenChainToken,
         amount: BigInt(
           getNonDecimalString(
-            amountValue as string,
-            tokenMap.getSignificantDecimals(tokenValue.tokenId) || 0,
+            bridgeFormValues.amount,
+            tokenMap.getSignificantDecimals(bridgeFormValues.token.tokenId) || 0,
           ),
         ),
-        fromChain: sourceValue,
-        toChain: targetValue,
-        address: selectedTarget.toSafeAddress(walletAddressValue),
+        fromChain: bridgeFormValues.source,
+        toChain: bridgeFormValues.target,
+        address: selectedTarget.toSafeAddress(bridgeFormValues.walletAddress),
         bridgeFee,
         networkFee,
         lockAddress: selectedSource.lockAddress,
@@ -88,7 +82,7 @@ export const useTransaction = () => {
           React.createElement(
             'a',
             {
-              href: getTxURL(sourceValue, txId),
+              href: getTxURL(bridgeFormValues.source, txId),
               target: '_blank',
               style: {
                 color: 'inherit',

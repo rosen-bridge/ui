@@ -1,14 +1,14 @@
 import { useContext } from 'react';
-import { useController } from 'react-hook-form';
+import { useController, useFormContext } from 'react-hook-form';
 
 import { Network, RosenAmountValue } from '@rosen-ui/types';
 import { getNonDecimalString } from '@rosen-ui/utils';
 
+import { BridgeForm } from '@/app/(bridge)/page';
 import * as networks from '@/networks';
 
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useTokenMap } from './useTokenMap';
-import { useTransactionFormData } from './useTransactionFormData';
 import { WalletContext } from './useWallet';
 
 /**
@@ -17,8 +17,7 @@ import { WalletContext } from './useWallet';
  */
 
 export const useBridgeForm = () => {
-  const { control, resetField, reset, setValue, formState, setFocus } =
-    useTransactionFormData();
+  const { control, ...rest } = useFormContext<BridgeForm>();
 
   const tokenMap = useTokenMap();
 
@@ -53,6 +52,10 @@ export const useBridgeForm = () => {
           if (isValueInvalid) return 'The amount is not valid';
 
           if (!tokenMap) return 'Token map config is unavailable';
+
+          if (!tokenField.value) {
+            return 'Token is not selected';//TODO : find best message
+          }
           const decimals =
             tokenMap.getSignificantDecimals(tokenField.value.tokenId) || 0;
 
@@ -92,6 +95,10 @@ export const useBridgeForm = () => {
           const network = Object.values(networks).find(
             (network) => network.name == sourceField.value,
           )!;
+
+          if (!targetField.value) {
+            return 'Target is not selected';//TODO : find best message
+          }
 
           const minTransfer = await network.getMinTransfer(
             tokenField.value,
@@ -140,15 +147,12 @@ export const useBridgeForm = () => {
   });
 
   return {
-    reset,
-    setValue,
-    resetField,
-    setFocus,
+    ...rest,
+    control,
     sourceField,
     targetField,
     tokenField,
     amountField,
     addressField,
-    formState,
   };
 };

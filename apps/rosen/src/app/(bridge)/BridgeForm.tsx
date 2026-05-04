@@ -1,15 +1,11 @@
 'use client';
 
-import { useCallback, ChangeEvent, SyntheticEvent } from 'react';
-
 import { ClipboardNotes } from '@rosen-bridge/icons';
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import {
   Grid,
   TextField,
   Typography,
-  ListItemIcon,
-  MenuItem,
   CircularProgress,
   SvgIcon,
   Alert,
@@ -19,16 +15,19 @@ import {
   Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
+import { Network } from '@rosen-ui/types';
 
 import {
   useBalance,
   useBridgeForm,
+  useBridgeFormController,
+  useBridgeFormValues,
   useMaxTransfer,
   useNetwork,
-  useTransactionFormData,
   useWallet,
 } from '@/hooks';
 
+import { NetworkSelectField } from './NetworkSelectField';
 import { UseAllAmount } from './UseAllAmount';
 
 /**
@@ -44,13 +43,10 @@ export const BridgeForm = () => {
     tokenField,
     amountField,
     addressField,
-    formState: { errors },
+    formState: { errors, isValidating },
   } = useBridgeForm();
 
-  const {
-    tokenValue,
-    formState: { isValidating },
-  } = useTransactionFormData();
+  const { token } = useBridgeFormValues();
 
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
@@ -60,6 +56,15 @@ export const BridgeForm = () => {
   const { error, isLoading: isMaxLoading, raw, load } = useMaxTransfer();
 
   const { selected: selectedWallet } = useWallet();
+
+  const controller = useBridgeFormController({
+    reset,
+    setValue,
+    resetField,
+    sourceField,
+    targetField,
+    amountField,
+  });
 
   const renderSelectedNetwork = (value: unknown) => {
     const network = sources.find((network) => network.name === value)!;
@@ -74,152 +79,46 @@ export const BridgeForm = () => {
     );
   };
 
-  const handleTokenChange = useCallback(
-    (e: SyntheticEvent, value: RosenChainToken | null, reason: string) => {
-      if (reason == 'clear') return;
-      const currentToken = value || undefined;
-      setValue('token', currentToken, {
-        shouldDirty: true,
-        shouldTouch: true,
-      });
-      setValue('amount', '');
-      resetField('amount');
-    },
-    [setValue, resetField],
-  );
-
-  const handleSourceChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value !== sourceField.value) {
-        reset({
-          target: null,
-          token: null,
-          amount: '',
-          walletAddress: '',
-          source: e.target.value,
-        });
-      }
-    },
-    [reset, sourceField],
-  );
-
-  const handleTargetChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.value !== targetField.value) {
-        reset({
-          source: sourceField.value,
-          target: e.target.value,
-          token: null,
-          amount: '',
-          walletAddress: '',
-        });
-      }
-    },
-    [reset, sourceField, targetField],
-  );
-
-  const handleAmountChange = useCallback(
-    (event: ChangeEvent<HTMLInputElement>) => {
-      amountField.onChange(event);
-    },
-    [amountField],
-  );
-
-  const handleSelectMax = useCallback(() => {
-    setValue('amount', raw, {
-      shouldDirty: true,
-      shouldTouch: true,
-      shouldValidate: true,
-    });
-  }, [raw, setValue]);
-
   return (
     <>
       <Grid container spacing={2}>
         <Grid size={{ mobile: 12, tablet: 6 }}>
-          <TextField
+          <NetworkSelectField
             id="source"
-            select
             label="Source"
-            inputProps={{ 'aria-label': 'source input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...sourceField}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
-            onChange={handleSourceChange}
-          >
-            {availableSources.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <SvgIcon>
-                    <Logo />
-                  </SvgIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
+            value={sourceField.value}
+            options={availableSources}
+            renderSelected={renderSelectedNetwork}
+            onChange={(v) => controller.handleSourceChange(v as Network)}
+          />
         </Grid>
         <Grid size={{ mobile: 12, tablet: 6 }}>
-          <TextField
+          <NetworkSelectField
             id="target"
-            select
             label="Target"
             disabled={!sourceField.value}
-            inputProps={{ 'aria-label': 'target input' }}
-            InputProps={{ disableUnderline: true }}
-            variant="filled"
-            {...targetField}
-            // CAUTION: THIS LOGICAL OR PREVENTS TO MAKE AN ERROR DURING RUNTIME.
-            value={targetField.value ?? ''}
-            SelectProps={{
-              renderValue: renderSelectedNetwork,
-            }}
-            onChange={handleTargetChange}
-          >
-            {availableTargets.map(({ logo: Logo, ...network }) => (
-              <MenuItem key={network.name} value={network.name}>
-                <ListItemIcon>
-                  <ListItemIcon>
-                    <SvgIcon>
-                      <Logo />
-                    </SvgIcon>
-                  </ListItemIcon>
-                </ListItemIcon>
-                <Typography color="text.secondary">{network.label}</Typography>
-              </MenuItem>
-            ))}
-          </TextField>
+            value={targetField.value}
+            options={availableTargets}
+            renderSelected={renderSelectedNetwork}
+            onChange={(v) => controller.handleTargetChange(v as Network)}
+          />
         </Grid>
       </Grid>
       <TextField
         label="Target Address"
-        InputProps={{
-          disableUnderline: true,
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton
-                onClick={async () => {
-                  try {
-                    const clipboardText = await navigator.clipboard.readText();
-                    setValue('walletAddress', clipboardText.trim(), {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                      shouldValidate: true,
-                    });
-                  } catch (err) {
-                    console.error('Failed to read clipboard: ', err);
-                  }
-                }}
-              >
-                <SvgIcon opacity="0.6">
-                  <ClipboardNotes />
-                </SvgIcon>
-              </IconButton>
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            disableUnderline: true,
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={controller.pasteFromClipboard}>
+                  <SvgIcon opacity="0.6">
+                    <ClipboardNotes />
+                  </SvgIcon>
+                </IconButton>
+              </InputAdornment>
+            ),
+          },
         }}
         variant="filled"
         error={!!errors?.walletAddress}
@@ -266,7 +165,7 @@ export const BridgeForm = () => {
         renderInput={(params) => (
           <TextField {...params} label="Token" name={tokenField.name} />
         )}
-        onChange={handleTokenChange}
+        onChange={controller.handleTokenChange}
       />
       <TextField
         id="amount"
@@ -275,28 +174,32 @@ export const BridgeForm = () => {
         placeholder="0.0"
         error={!!errors?.amount}
         helperText={errors.amount?.message?.toString()}
-        InputProps={{
-          disableUnderline: true,
-          endAdornment: tokenField.value && selectedWallet && (
-            <UseAllAmount
-              disabled={!addressField.value || !!errors?.walletAddress}
-              error={!!error}
-              loading={isLoading || isMaxLoading}
-              value={balanceRaw}
-              unit={(tokenValue as RosenChainToken)?.name}
-              onClick={handleSelectMax}
-              onRetry={load}
-            />
-          ),
-        }}
-        inputProps={{
-          'style': { fontSize: '2rem' },
-          'aria-label': 'amount input',
+        slotProps={{
+          input: {
+            disableUnderline: true,
+            endAdornment: token && selectedWallet && (
+              <UseAllAmount
+                disabled={!addressField.value || !!errors?.walletAddress}
+                error={!!error}
+                loading={isLoading || isMaxLoading}
+                value={balanceRaw}
+                unit={token.name}
+                onClick={() => {
+                  controller.setMaxAmount(raw);
+                }}
+                onRetry={load}
+              />
+            ),
+          },
+          htmlInput: {
+            'style': { fontSize: '2rem' },
+            'aria-label': 'amount input',
+          },
         }}
         variant="filled"
         {...amountField}
         value={amountField.value ?? ''}
-        onChange={handleAmountChange}
+        onChange={controller.handleAmountChange}
         disabled={!tokenField.value}
         autoComplete="off"
       />

@@ -16,7 +16,7 @@ import { getNonDecimalString, getDecimalString } from '@rosen-ui/utils';
 import { FEE_CONFIG_TOKEN_ID } from '../../configs';
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
-import { useTransactionFormData } from './useTransactionFormData';
+import { useBridgeFormValues } from './useBridgeFormValues';
 
 /**
  * calculates the fees for a token swap between
@@ -57,8 +57,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
   const tokenMap = useTokenMap();
 
-  const { sourceValue, targetValue, tokenValue, amountValue } =
-    useTransactionFormData();
+  const {amount,source,target,token} = useBridgeFormValues();
 
   const [error, setError] = useState<unknown>();
 
@@ -71,14 +70,14 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   const [isLoading, startTransition] = useTransition();
 
   const tokenId = useMemo(() => {
-    if (!sourceValue || !tokenValue) return;
+    if (!source || !token) return;
 
-    const tokens = tokenMap.search(sourceValue, {
-      tokenId: tokenValue.tokenId,
+    const tokens = tokenMap.search(source, {
+      tokenId: token.tokenId,
     });
 
-    return tokens[0].ergo.tokenId as string;
-  }, [sourceValue, tokenValue, tokenMap]);
+    return tokens[0].ergo.tokenId;
+  }, [source, token, tokenMap]);
 
   const decimals = useMemo(() => {
     if (!tokenId) return 0;
@@ -98,7 +97,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
     const paymentAmount = (() => {
       try {
-        return BigInt(getNonDecimalString(amountValue, decimals));
+        return BigInt(getNonDecimalString(amount || '0', decimals));
       } catch {
         return 0n;
       }
@@ -141,7 +140,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
       error,
       isLoading,
     };
-  }, [amountValue, decimals, error, feesInfo, isLoading]);
+  }, [amount, decimals, error, feesInfo, isLoading]);
 
   const load = useCallback(() => {
     if (isLoading) return;
@@ -150,12 +149,12 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
     setFeesInfo(undefined);
 
-    if (!selectedSource || !sourceValue || !targetValue || !tokenId) return;
+    if (!selectedSource || !source || !target || !tokenId) return;
 
     startTransition(async () => {
       try {
         const parsedData = await selectedSource.calculateFee(
-          targetValue,
+          target!,
           tokenId,
           selectedSource.nextHeightInterval,
           FEE_CONFIG_TOKEN_ID,
@@ -183,8 +182,8 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
   }, [
     isLoading,
     selectedSource,
-    sourceValue,
-    targetValue,
+    source,
+    target,
     tokenId,
     openSnackbar,
   ]);
@@ -197,7 +196,7 @@ export const TransactionFeesProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     setFeesInfo(undefined);
-  }, [sourceValue, targetValue, tokenValue]);
+  }, [source, target, token]);
 
   return (
     <TransactionFeesContext.Provider value={state}>
