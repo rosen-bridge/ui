@@ -2,7 +2,6 @@ export * from './smartSearch';
 export * from './display';
 export * from './navigationBar';
 export * from './AppLogo';
-export * from './DisclosureButton';
 export * from './EnhancedTable';
 export * from './EnhancedTableCell';
 export * from './HealthParamCard';

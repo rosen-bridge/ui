@@ -1,0 +1,37 @@
+.RosenDisclosureButton {
+
+
+  //==== open state====//
+  &[data-animation='enter'] {
+    transform: rotate(0deg);
+  }
+
+  &[data-animation='entering'] {
+    transform: rotate(180deg);
+    transition: transform 200ms ease;
+
+  }
+
+  &[data-animation='entered'] {
+    transform: rotate(180deg);
+  }
+
+  //==== close state====//
+  &[data-animation='exit'] {
+    transform: rotate(180deg);
+  }
+
+  &[data-animation='exiting'] {
+    transform: rotate(0deg);
+    transition: transform 200ms ease;
+  }
+
+  &[data-animation='exited'] {
+    transform: rotate(0deg);
+  }
+
+  //==== error state====//
+  &[data-error="true"] {
+    color: red;
+  }
+}

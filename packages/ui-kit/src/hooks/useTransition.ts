@@ -2,15 +2,19 @@ import { type RefObject, useRef, useState } from 'react';
 
 type State = 'enter' | 'entering' | 'entered' | 'exit' | 'exiting' | 'exited';
 
-export function useTransition({
-  ref,
-  onEntered,
-  onExited,
-}: {
+type transitionProps = {
   ref: RefObject<HTMLElement | null>;
+  show?: boolean;
   onEntered?: () => void;
   onExited?: () => void;
-}) {
+};
+
+export const useTransition = ({
+  ref,
+  show,
+  onEntered,
+  onExited,
+}: transitionProps) => {
   const [state, setState] = useState<State>('exited');
 
   const cleanupRef = useRef<() => void>(() => {});
@@ -20,7 +24,7 @@ export function useTransition({
     cleanupRef.current?.();
   };
 
-  const onEnd = (node: HTMLElement, cb: () => void) => {
+  const onTransitionEnd = (node: HTMLElement, cb: () => void) => {
     let done = false;
 
     const handler = () => {
@@ -54,7 +58,7 @@ export function useTransition({
     requestAnimationFrame(() => {
       setState('entering');
 
-      cleanupRef.current = onEnd(node, () => {
+      cleanupRef.current = onTransitionEnd(node, () => {
         if (lastAction.current !== 'enter') return;
         setState('entered');
         onEntered?.();
@@ -62,7 +66,7 @@ export function useTransition({
     });
   };
 
-  const exit = () => {
+  const leave = () => {
     const node = ref.current;
     if (!node) return;
 
@@ -74,7 +78,7 @@ export function useTransition({
     requestAnimationFrame(() => {
       setState('exiting');
 
-      cleanupRef.current = onEnd(node, () => {
+      cleanupRef.current = onTransitionEnd(node, () => {
         if (lastAction.current !== 'exit') return;
         setState('exited');
         onExited?.();
@@ -87,10 +91,16 @@ export function useTransition({
     lastAction.current = null;
   };
 
+  const shouldRender = show || state !== 'exited';
+
   return {
+    shouldRender,
     state,
+    animation: {
+      'data-animation': state,
+    },
     enter,
-    exit,
+    leave,
     stop,
   };
-}
+};
