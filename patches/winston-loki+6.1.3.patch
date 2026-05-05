@@ -1,0 +1,202 @@
+diff --git a/node_modules/winston-loki/src/batcher.js b/node_modules/winston-loki/src/batcher.js
+index af50c40..d8d0141 100644
+--- a/node_modules/winston-loki/src/batcher.js
++++ b/node_modules/winston-loki/src/batcher.js
+@@ -4,6 +4,24 @@ const protoHelpers = require('./proto/helpers')
+ const req = require('./requests')
+ let snappy = false
+ 
++// Arsalan >>>
++const isMoreLokiLogEnabled = () => {
++  const raw = process.env.MORE_LOKI_LOG
++  if (raw == null) return false
++  const v = String(raw).trim().toLowerCase()
++  return v === '1' || v === 'true' || v === 'yes' || v === 'y' || v === 'on'
++}
++
++const nowTime = () => {
++  return new Date().toLocaleTimeString(undefined, {
++    hour: '2-digit',
++    minute: '2-digit',
++    second: '2-digit'
++  })
++}
++// Arsalan <<<
++
++
+ /**
+  * A batching transport layer for Grafana Loki
+  *
+@@ -207,11 +225,29 @@ class Batcher {
+     return new Promise((resolve, reject) => {
+       // If the batch is empty, do nothing
+       if (this.batch.streams.length === 0 && !logEntry) {
++
++// Arsalan >>>
++        if (isMoreLokiLogEnabled()) {
++          console.log(`ergo-log: [winston-loki ${nowTime()}] skip send (empty batch)`)
++        }
++// Arsalan <<<
++
+         this.batchSent()
+         resolve()
+       } else {
+         let reqBody
+ 
++// Arsalan >>>
++        if (isMoreLokiLogEnabled()) {
++          console.log(`ergo-log: [winston-loki ${nowTime()}] preparing batch`, {
++            json: Boolean(this.options.json),
++            batching: Boolean(this.options.batching),
++            single: logEntry !== undefined,
++            streams: logEntry !== undefined ? 1 : this.batch.streams.length
++          })
++        }
++// Arsalan <<<
++
+         // If the data format is JSON, there's no need to construct a buffer
+         if (this.options.json) {
+           let preparedJSONBatch
+@@ -256,12 +292,34 @@ class Batcher {
+         // Send the data to Grafana Loki
+         req.post(this.url, this.contentType, this.options.headers, reqBody, this.options.timeout, this.options.httpAgent, this.options.httpsAgent)
+           .then(() => {
++
++// Arsalan >>>
++            if (isMoreLokiLogEnabled()) {
++              console.log(`ergo-log: [winston-loki ${nowTime()}] batch considered delivered`, {
++                single: logEntry !== undefined,
++                cleared: logEntry === undefined,
++                reqBytes: reqBody && reqBody.length !== undefined ? reqBody.length : undefined
++              })
++            }
++// Arsalan <<<
+             // No need to clear the batch if batching is disabled
+             logEntry === undefined && this.clearBatch()
+             this.batchSent()
+             resolve()
+           })
+           .catch(err => {
++
++// Arsalan >>>
++            if (isMoreLokiLogEnabled()) {
++              console.log(`ergo-log: [winston-loki ${nowTime()}] batch send failed`, {
++                single: logEntry !== undefined,
++                clearOnError: Boolean(this.options.clearOnError),
++                streams: logEntry !== undefined ? 1 : this.batch.streams.length,
++                error: String(err && err.stack ? err.stack : err)
++              })
++            }
++// Arsalan <<<
++
+             // Clear the batch on error if enabled
+             this.options.clearOnError && this.clearBatch()
+ 
+@@ -286,6 +344,13 @@ class Batcher {
+       try {
+         await this.sendBatchToLoki()
+         if (this.interval === this.circuitBreakerInterval) {
++
++// Arsalan >>>
++          if (isMoreLokiLogEnabled()) {
++            console.log(`ergo-log: [winston-loki ${nowTime()}] circuit breaker reset (send succeeded) every 5seconds`)
++          }
++// Arsalan <<<
++
+           if (this.options.interval !== undefined) {
+             this.interval = Number(this.options.interval) * 1000
+           } else {
+@@ -293,6 +358,15 @@ class Batcher {
+           }
+         }
+       } catch (e) {
++
++// Arsalan >>>
++        if (isMoreLokiLogEnabled()) {
++          console.log(`ergo-log: [winston-loki ${nowTime()}] circuit breaker engaged (send failed) every 60seconds`, {
++            error: String(e && e.stack ? e.stack : e)
++          })
++        }
++// Arsalan <<<
++
+         this.interval = this.circuitBreakerInterval
+       }
+       await this.wait(this.interval)
+@@ -306,6 +380,13 @@ class Batcher {
+    */
+   close (callback) {
+     this.runLoop = false
++
++// Arsalan >>>
++    if (isMoreLokiLogEnabled()) {
++      console.log(`ergo-log: [winston-loki ${nowTime()}] close() flush requested`)
++    }
++// Arsalan <<<
++
+     this.sendBatchToLoki()
+       .then(() => { if (callback) { callback() } }) // maybe should emit something here
+       .catch(() => { if (callback) { callback() } }) // maybe should emit something here
+diff --git a/node_modules/winston-loki/src/requests.js b/node_modules/winston-loki/src/requests.js
+index 6ada7bc..4a17a14 100644
+--- a/node_modules/winston-loki/src/requests.js
++++ b/node_modules/winston-loki/src/requests.js
+@@ -1,6 +1,24 @@
+ const http = require('http')
+ const https = require('https')
+ 
++// Arsalan >>>
++const isMoreLokiLogEnabled = () => {
++  const raw = process.env.MORE_LOKI_LOG
++  if (raw == null) return false
++  const v = String(raw).trim().toLowerCase()
++  return v === '1' || v === 'true' || v === 'yes' || v === 'y' || v === 'on'
++}
++
++const nowTime = () => {
++  return new Date().toLocaleTimeString(undefined, {
++    hour: '2-digit',
++    minute: '2-digit',
++    second: '2-digit'
++  })
++}
++// Arsalan <<<
++
++
+ const post = async (lokiUrl, contentType, headers = {}, data = '', timeout, httpAgent, httpsAgent) => {
+   // Construct a buffer from the data string to have deterministic data size
+   const dataBuffer = Buffer.from(data, 'utf8')
+@@ -31,11 +49,33 @@ const post = async (lokiUrl, contentType, headers = {}, data = '', timeout, http
+     const req = lib.request(options, res => {
+       let resData = ''
+       res.on('data', _data => (resData += _data))
+-      res.on('end', () => resolve(resData))
++
++// Arsalan >>>
++      res.on('end', () => {
++        if (isMoreLokiLogEnabled()) {
++          console.log(`ergo-log: [winston-loki ${nowTime()}] loki response`, {
++            url: lokiUrl.toString(),
++            statusCode: res.statusCode,
++            statusMessage: res.statusMessage,
++            headers: res.headers,
++            body: resData
++          })
++        }
++        resolve(resData)
++      })
++// Arsalan <<<
+     })
+ 
+     // Error listener
+     req.on('error', error => {
++// Arsalan >>>
++      if (isMoreLokiLogEnabled()) {
++        console.log(`ergo-log: [winston-loki ${nowTime()}] loki request error`, {
++          url: lokiUrl.toString(),
++          error: String(error && error.stack ? error.stack : error)
++        })
++      }
++// Arsalan <<<
+       reject(error)
+     })
+ 
