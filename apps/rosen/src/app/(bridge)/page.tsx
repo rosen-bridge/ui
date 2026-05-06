@@ -47,6 +47,17 @@ const RosenBridge = () => {
             <BalanceProvider>
               <MaxTransferProvider>
                 <TransactionFeesProvider>
+                  <Alert
+                    severity="error"
+                    style={{
+                      textAlign: 'justify',
+                      gridColumn: '1 / -1',
+                    }}
+                  >
+                    The Rosen Bridge is temporarily disabled while we upgrade
+                    our services and perform maintenance. This limitation will
+                    be resolved as soon as possible.
+                  </Alert>
                   <div className="form">
                     <BridgeForm />
                   </div>

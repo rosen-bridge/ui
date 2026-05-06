@@ -138,6 +138,7 @@ export const BridgeForm = () => {
       <Grid container spacing={2}>
         <Grid size={{ mobile: 12, tablet: 6 }}>
           <TextField
+            disabled
             id="source"
             select
             label="Source"
@@ -167,7 +168,8 @@ export const BridgeForm = () => {
             id="target"
             select
             label="Target"
-            disabled={!sourceField.value}
+            // disabled={!sourceField.value}
+            disabled
             inputProps={{ 'aria-label': 'target input' }}
             InputProps={{ disableUnderline: true }}
             variant="filled"
@@ -201,6 +203,7 @@ export const BridgeForm = () => {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton
+                disabled
                 onClick={async () => {
                   try {
                     const clipboardText = await navigator.clipboard.readText();
@@ -230,7 +233,8 @@ export const BridgeForm = () => {
             errors.walletAddress?.message?.toString()
           )
         }
-        disabled={!targetField.value}
+        // disabled={!targetField.value}
+        disabled
         autoComplete="off"
         {...addressField}
         value={addressField.value ?? ''}
@@ -250,7 +254,8 @@ export const BridgeForm = () => {
       )}
       <Autocomplete
         aria-label="token input"
-        disabled={!availableTokens.length}
+        // disabled={!availableTokens.length}
+        disabled
         id="token"
         clearIcon={false}
         disablePortal
@@ -297,7 +302,8 @@ export const BridgeForm = () => {
         {...amountField}
         value={amountField.value ?? ''}
         onChange={handleAmountChange}
-        disabled={!tokenField.value}
+        // disabled={!tokenField.value}
+        disabled
         autoComplete="off"
       />
     </>
