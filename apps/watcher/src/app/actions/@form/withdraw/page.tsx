@@ -35,6 +35,7 @@ import {
   ApiWithdrawRequestBody,
   ApiWithdrawResponse,
 } from '@/types/api';
+import { validateErgoAddress } from '@/utils/validateErgoAddress';
 
 import { ConfirmationModal } from '../../ConfirmationModal';
 import {
@@ -94,14 +95,32 @@ const WithdrawForm = () => {
       amount: '',
     },
   });
-  const { handleSubmit, control, resetField, register, watch, formState } =
-    formMethods;
+  const { handleSubmit, control, resetField, watch, formState } = formMethods;
 
   const formData = watch();
 
   const { field: tokenIdField } = useController({
     control,
     name: 'tokenId',
+  });
+
+  const { field: addressField } = useController({
+    control,
+    name: 'address',
+    rules: {
+      validate: async (value) => {
+        try {
+          if (!value) {
+            return 'Address cannot be empty';
+          }
+          const isValid = await validateErgoAddress(value);
+          if (isValid) return;
+          return 'Invalid Address';
+        } catch {
+          return 'Something went wrong! please try again';
+        }
+      },
+    },
   });
 
   const selectedToken = useMemo(
@@ -198,9 +217,7 @@ const WithdrawForm = () => {
     <TextField
       label="Address"
       disabled={disabled}
-      {...register('address', {
-        required: 'Address is required',
-      })}
+      {...addressField}
       error={!!formMethods.formState.errors.address}
       helperText={
         formMethods.formState.isValidating ? (
@@ -210,6 +227,7 @@ const WithdrawForm = () => {
         )
       }
       onBlur={(e) => {
+        addressField.onBlur(); // preserve RHF touched-state tracking
         const trimmed = e.target.value.trim();
         formMethods.setValue('address', trimmed, {
           shouldDirty: true,
