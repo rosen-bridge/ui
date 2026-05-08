@@ -1,4 +1,4 @@
-.RosenPagination-root {
+.RosenPagination {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -63,10 +63,6 @@
       border: none;
       border-radius: 50%;
       background-color: transparent;
-      transition:
-        background-color 0.25s ease,
-        transform 0.15s ease;
-      will-change: transform;
     }
 
     button[data-type='page'] {
@@ -79,6 +75,11 @@
       p {
         color: var(--rosen-palette-primary-light);
       }
+    }
+
+    button:disabled {
+      cursor: default;
+      opacity: 0.5;
     }
   }
 
@@ -158,7 +159,6 @@
 .RosenPagination-menuPaper {
   width: 204px;
   container-type: inherit;
-  background-color: aqua;
 }
 
 .RosenPagination-menuHeader {

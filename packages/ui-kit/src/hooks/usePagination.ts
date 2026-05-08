@@ -7,7 +7,7 @@ import {
 } from '@/utils';
 
 type UsePaginationParams = PaginationBuilderParams & {
-  onPageChange: (page: number) => void;
+  onPageChange: (page: number) => void; // 1-based
 };
 
 type UsePaginationReturn = PaginationBuilderResult & {
@@ -15,6 +15,8 @@ type UsePaginationReturn = PaginationBuilderResult & {
   prev: () => void;
   setPage: (page: number) => void;
   goTo: (page: number) => void;
+  hasNext: boolean;
+  hasPrev: boolean;
 };
 
 export const usePagination = ({
@@ -35,13 +37,14 @@ export const usePagination = ({
     });
   }, [total, currentPage, pageSize, siblingCount, boundaryCount]);
 
-  const next = useCallback(() => {
-    const maxPage = pagination.totalPages;
+  const maxPage = pagination.totalPages;
 
+  // SAFE NAVIGATION (no duplicate logic, no +1/-1 chaos)
+  const next = useCallback(() => {
     if (currentPage < maxPage) {
       onPageChange(currentPage + 1);
     }
-  }, [currentPage, pagination.totalPages, onPageChange]);
+  }, [currentPage, maxPage, onPageChange]);
 
   const prev = useCallback(() => {
     if (currentPage > 1) {
@@ -51,24 +54,27 @@ export const usePagination = ({
 
   const setPage = useCallback(
     (page: number) => {
-      const safePage = Math.max(1, Math.min(page, pagination.totalPages));
+      const safePage = Math.max(1, Math.min(page, maxPage));
       onPageChange(safePage);
     },
-    [pagination.totalPages, onPageChange],
+    [maxPage, onPageChange],
   );
 
   const goTo = useCallback(
     (page: number | string) => {
       if (page === '...') return;
 
-      const safePage = Math.max(
-        1,
-        Math.min(Number(page), pagination.totalPages),
-      );
+      const num = Number(page);
+      if (Number.isNaN(num)) return;
+
+      const safePage = Math.max(1, Math.min(num, maxPage));
       onPageChange(safePage);
     },
-    [pagination.totalPages, onPageChange],
+    [maxPage, onPageChange],
   );
+
+  const hasNext = currentPage < maxPage;
+  const hasPrev = currentPage > 1;
 
   return {
     ...pagination,
@@ -76,5 +82,7 @@ export const usePagination = ({
     prev,
     setPage,
     goTo,
+    hasNext,
+    hasPrev,
   };
 };

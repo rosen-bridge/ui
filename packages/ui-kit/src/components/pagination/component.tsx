@@ -1,4 +1,4 @@
-import React, { ComponentType, useState } from 'react';
+import React, { useState } from 'react';
 
 import { ListSubheader, Menu, MenuItem } from '@mui/material';
 
@@ -25,13 +25,13 @@ export type PaginationOwnProps = {
 
 export type PaginationBaseProp = ElementBaseProps<'div', PaginationOwnProps>;
 
-export type PaginationOverriddenProps = OverridableType<
+export type PaginationProps = OverridableType<
   PaginationBaseProp,
   PaginationOverrides,
   never
 >;
 
-export const Pagination = (props: PaginationOverriddenProps) => {
+export const Pagination = (props: PaginationProps) => {
   const {
     defaultPageIndex = 0,
     defaultPageSize = 10,
@@ -42,11 +42,8 @@ export const Pagination = (props: PaginationOverriddenProps) => {
     pageSizeOptions = [10, 25, 100],
     onPageIndexChange,
     onPageSizeChange,
+    ...rest
   } = useConfig('Pagination', props);
-
-  const isControlled = pageIndex !== undefined;
-
-  const isPageSizeControlled = pageSize !== undefined;
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -54,21 +51,19 @@ export const Pagination = (props: PaginationOverriddenProps) => {
 
   const [internalPageSize, setInternalPageSize] = useState(defaultPageSize);
 
-  const menuOpen = Boolean(anchorEl);
+  const currentPageIndex = pageIndex ?? internalPageIndex;
 
-  const currentPageIndex = isControlled ? pageIndex! : internalPageIndex;
+  const pageSizeCurrent = pageSize ?? internalPageSize;
 
-  const pageSizeCurrent = isPageSizeControlled ? pageSize! : internalPageSize;
-
-  const setPageIndexSafe = (page: number) => {
-    if (!isControlled) {
+  const handlePageChange = (page: number) => {
+    if (pageIndex === undefined) {
       setInternalPageIndex(page);
     }
     onPageIndexChange?.(page);
   };
 
-  const setPageSizeSafe = (size: number) => {
-    if (!isPageSizeControlled) {
+  const handlePageSize = (size: number) => {
+    if (pageSize === undefined) {
       setInternalPageSize(size);
     }
     onPageSizeChange?.(size);
@@ -78,30 +73,25 @@ export const Pagination = (props: PaginationOverriddenProps) => {
     total,
     currentPage: currentPageIndex + 1,
     pageSize: pageSizeCurrent,
-    onPageChange: (page) => setPageIndexSafe(page - 1),
+    onPageChange: (page) => handlePageChange(page - 1),
   });
 
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+  const openMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const closeMenu = () => setAnchorEl(null);
 
   const handleSelect = (size: number) => {
-    setPageSizeSafe(size);
+    handlePageSize(size);
 
-    if (!isControlled) {
-      setInternalPageIndex(0);
-    }
-    onPageIndexChange?.(0);
+    handlePageChange(0);
 
-    handleMenuClose();
+    closeMenu();
   };
 
   return (
-    <div className="RosenPagination-root">
+    <div {...rest}>
       <Typography
         variant="body2"
         color="text-secondary"
@@ -121,7 +111,7 @@ export const Pagination = (props: PaginationOverriddenProps) => {
           size="small"
           data-action="prev"
           onClick={pagination.prev}
-          disabled={disabled}
+          disabled={disabled || !pagination.hasPrev}
         >
           <Icon name="AngleLeft" />
         </IconButton>
@@ -147,7 +137,7 @@ export const Pagination = (props: PaginationOverriddenProps) => {
           size="small"
           data-action="next"
           onClick={pagination.next}
-          disabled={disabled}
+          disabled={disabled || !pagination.hasNext}
         >
           <Icon name="AngleRight" />
         </IconButton>
@@ -161,7 +151,7 @@ export const Pagination = (props: PaginationOverriddenProps) => {
             disabled={disabled}
             size="small"
             className="RosenPagination-button"
-            onClick={handleMenuOpen}
+            onClick={openMenu}
           >
             <Typography color="text-secondary" variant="body2">
               Items per page: {pageSizeCurrent}
@@ -186,11 +176,15 @@ export const Pagination = (props: PaginationOverriddenProps) => {
 
           <Menu
             anchorEl={anchorEl}
-            open={menuOpen}
-            onClose={handleMenuClose}
+            open={Boolean(anchorEl)}
+            onClose={closeMenu}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            PaperProps={{ className: 'RosenPagination-menuPaper' }}
+            slotProps={{
+              paper: {
+                className: 'RosenPagination-menuPaper',
+              },
+            }}
             disablePortal
           >
             <ListSubheader className="RosenPagination-menuHeader">
@@ -216,5 +210,3 @@ export const Pagination = (props: PaginationOverriddenProps) => {
 };
 
 Pagination.displayName = 'Pagination';
-
-export type PaginationProps = ComponentType<typeof Pagination>;
