@@ -4,6 +4,7 @@ import { CircularProgress, Typography, IconButton } from '@mui/material';
 import { ExclamationCircle, InfoCircle } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
+import { useSnackbar } from '../../hooks';
 import { Avatar } from './Avatar';
 import { Network } from './display';
 import { Divider } from './Divider';
@@ -26,17 +27,46 @@ type VersionApp = {
 
 export type AppInfoProps = {
   children?: React.ReactNode;
-  versions?: VersionApp[];
-  networks?: NetworkHeight[];
   loading?: boolean;
+  resolver?: () => Promise<{
+    networks?: NetworkHeight[];
+    versions?: VersionApp[];
+  }>;
 };
-export const AppInfo = ({
-  children,
-  loading,
-  networks,
-  versions,
-}: AppInfoProps) => {
+
+export const AppInfo = ({ children, resolver }: AppInfoProps) => {
   const [open, setOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const [versions, setVersions] = useState<VersionApp[]>();
+
+  const [networks, setNetworks] = useState<NetworkHeight[]>();
+
+  const { openSnackbar } = useSnackbar();
+
+  const handleClick = async () => {
+    if (!resolver) {
+      setOpen(true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const result = await resolver();
+
+      setVersions(result.versions);
+      setNetworks(result.networks);
+
+      setOpen(true);
+    } catch {
+      openSnackbar('Failed to load app information', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <EnhancedDialog
@@ -101,7 +131,7 @@ export const AppInfo = ({
       <IconButton
         disabled={loading}
         sx={{ padding: '12px', color: 'inherit' }}
-        onClick={() => setOpen(!open)}
+        onClick={handleClick}
       >
         {loading ? (
           <CircularProgress size={24} color="inherit" />
