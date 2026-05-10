@@ -137,13 +137,14 @@ index af50c40..d8d0141 100644
        .then(() => { if (callback) { callback() } }) // maybe should emit something here
        .catch(() => { if (callback) { callback() } }) // maybe should emit something here
 diff --git a/node_modules/winston-loki/src/requests.js b/node_modules/winston-loki/src/requests.js
-index 6ada7bc..4a17a14 100644
+index 6ada7bc..7603c65 100644
 --- a/node_modules/winston-loki/src/requests.js
 +++ b/node_modules/winston-loki/src/requests.js
-@@ -1,6 +1,24 @@
+@@ -1,7 +1,35 @@
  const http = require('http')
  const https = require('https')
- 
++const util = require('util')
++
 +// Arsalan >>>
 +const isMoreLokiLogEnabled = () => {
 +  const raw = process.env.MORE_LOKI_LOG
@@ -159,39 +160,148 @@ index 6ada7bc..4a17a14 100644
 +    second: '2-digit'
 +  })
 +}
++
++const safeInspect = obj => {
++  try {
++    return util.inspect(obj, { depth: 3, breakLength: 140, maxArrayLength: 50 })
++  } catch (_e) {
++    return '[uninspectable]'
++  }
++}
 +// Arsalan <<<
 +
-+
+ 
  const post = async (lokiUrl, contentType, headers = {}, data = '', timeout, httpAgent, httpsAgent) => {
++  
    // Construct a buffer from the data string to have deterministic data size
    const dataBuffer = Buffer.from(data, 'utf8')
-@@ -31,11 +49,33 @@ const post = async (lokiUrl, contentType, headers = {}, data = '', timeout, http
+ 
+@@ -30,12 +58,131 @@ const post = async (lokiUrl, contentType, headers = {}, data = '', timeout, http
+     // Construct the request
      const req = lib.request(options, res => {
        let resData = ''
-       res.on('data', _data => (resData += _data))
+-      res.on('data', _data => (resData += _data))
 -      res.on('end', () => resolve(resData))
++      
++      res.on('data', _data => {
++        resData += _data
 +
-+// Arsalan >>>
-+      res.on('end', () => {
 +        if (isMoreLokiLogEnabled()) {
-+          console.log(`ergo-log: [winston-loki ${nowTime()}] loki response`, {
++          try {
++            const isBuffer = Buffer.isBuffer(_data)
++            const length = isBuffer ? _data.length : String(_data).length
++            console.log(
++              `ergo-log1: [winston-loki ${nowTime()}] res data`,
++              JSON.stringify({
++                url: lokiUrl.toString(),
++                type: isBuffer ? 'buffer' : typeof _data,
++                length
++              })
++            )
++          } catch (_e) {}
++        }
++      })
++
++      // Arsalan >>>
++      // IncomingMessage is a Readable stream; log its key stream events.
++      if (isMoreLokiLogEnabled()) {
++        try {
++          const resInfo = () => ({
 +            url: lokiUrl.toString(),
 +            statusCode: res.statusCode,
 +            statusMessage: res.statusMessage,
 +            headers: res.headers,
-+            body: resData
++            httpVersion: res.httpVersion,
++            complete: res.complete,
++            aborted: res.aborted,
++            readableEnded: res.readableEnded,
++            destroyed: res.destroyed,
++            resInspect: safeInspect(res)
 +          })
++
++          res.on('close', () => console.log(`ergo-log2: [winston-loki ${nowTime()}] res close`, JSON.stringify(resInfo())))
++          res.on('pause', () => console.log(`ergo-log3: [winston-loki ${nowTime()}] res pause`, JSON.stringify(resInfo())))
++          res.on('readable', () => console.log(`ergo-log4: [winston-loki ${nowTime()}] res readable`, JSON.stringify(resInfo())))
++          res.on('resume', () => console.log(`ergo-log5: [winston-loki ${nowTime()}] res resume`, JSON.stringify(resInfo())))
++          res.on('error', err =>
++            console.log(
++              `ergo-log6: [winston-loki ${nowTime()}] res error`,
++              JSON.stringify({
++                ...resInfo(),
++                error: String(err && err.stack ? err.stack : err)
++              })
++            )
++          )
++        } catch (_e) {}
++      }
++      // Arsalan <<<
++
++// Arsalan >>>
++      res.on('end', () => {
++        if (isMoreLokiLogEnabled()) {
++          try {
++            console.log(`ergo-log7: [winston-loki ${nowTime()}] loki response`, JSON.stringify({
++              url: lokiUrl.toString(),
++              statusCode: res.statusCode,
++              statusMessage: res.statusMessage,
++              headers: res.headers,
++              body: resData,
++              resInspect: safeInspect(res)
++            }))
++          } catch (_e) {}
 +        }
 +        resolve(resData)
 +      })
 +// Arsalan <<<
++    })
++
++    // Arsalan >>>
++    // 3xx (e.g. 302) is NOT an error in Node's http/https client.
++    // It arrives via the "response" event (same event that triggers the callback above).
++    req.on('response', res => {
++      if (!isMoreLokiLogEnabled()) return
++      try {
++        console.log(
++          `ergo-log8: [winston-loki ${nowTime()}] req response event 3xx`,
++          JSON.stringify({
++            url: lokiUrl.toString(),
++            statusCode: res.statusCode,
++            statusMessage: res.statusMessage,
++            location: res.headers && res.headers.location,
++            headers: res.headers
++          })
++        )
++      } catch (_e) {}
      })
++    // Arsalan <<<
++
++    //req.on()
++
++    // Arsalan >>>
++    // There is no single "all events" event in Node's EventEmitter.
++    // To observe everything, we wrap emit() and log each emitted event.
++    const logAllReqEvents = (eventName, eventArgs) => {
++      if (!isMoreLokiLogEnabled()) return
++      try {
++        console.log(
++          `ergo-log9: [winston-loki ${nowTime()}] req event`,
++          JSON.stringify({ eventName, eventArgs })
++        )
++      } catch (_e) {}
++    }
++
++    const originalEmit = req.emit.bind(req)
++    req.emit = function (eventName, ...eventArgs) {
++      logAllReqEvents(eventName, eventArgs)
++      return originalEmit(eventName, ...eventArgs)
++    }
++    // Arsalan <<<
  
      // Error listener
      req.on('error', error => {
 +// Arsalan >>>
 +      if (isMoreLokiLogEnabled()) {
-+        console.log(`ergo-log: [winston-loki ${nowTime()}] loki request error`, {
++        console.log(`ergo-log10: [winston-loki ${nowTime()}] loki request error`, {
 +          url: lokiUrl.toString(),
 +          error: String(error && error.stack ? error.stack : error)
 +        })
