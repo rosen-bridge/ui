@@ -8,6 +8,18 @@ const nextConfig = {
     unoptimized: true,
   },
   output: 'export',
+  webpack: function (config) {
+    config.experiments = {
+      ...config.experiments,
+      asyncWebAssembly: true,
+      syncWebAssembly: true,
+      layers: true,
+    };
+    // Required for `output: 'export'` — ensures the .wasm file lands in
+    // the static assets output (so Next's static export copies it into out/).
+    config.output.webassemblyModuleFilename = 'static/wasm/[modulehash].wasm';
+    return config;
+  },
   typescript: {
     ignoreBuildErrors: true,
   },
