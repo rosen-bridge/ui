@@ -10,6 +10,7 @@ import { Icon, IconProps } from '../icon';
 import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
+import { useToast } from '../../hooks';
 import { Divider } from './Divider';
 
 type NetworkHeight = {
@@ -25,17 +26,49 @@ type VersionApp = {
 
 export type AppInfoProps = {
   children?: React.ReactNode;
-  versions?: VersionApp[];
-  networks?: NetworkHeight[];
   loading?: boolean;
+  resolver?: () => Promise<{
+    networks?: NetworkHeight[];
+    versions?: VersionApp[];
+  }>;
 };
-export const AppInfo = ({
-  children,
-  loading,
-  networks,
-  versions,
-}: AppInfoProps) => {
+
+export const AppInfo = ({ children, resolver }: AppInfoProps) => {
   const [open, setOpen] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  const [versions, setVersions] = useState<VersionApp[]>();
+
+  const [networks, setNetworks] = useState<NetworkHeight[]>();
+
+  const toast = useToast();
+
+  const handleClick = async () => {
+    if (!resolver) {
+      setOpen(true);
+      return;
+    }
+
+    try {
+      setLoading(true);
+
+      const result = await resolver();
+
+      setVersions(result.versions);
+      setNetworks(result.networks);
+
+      setOpen(true);
+    } catch {
+      toast.add({
+        type: 'error',
+        description: 'Failed to load app information'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
       <Dialog
@@ -95,7 +128,7 @@ export const AppInfo = ({
         color="inherit"
         disabled={loading}
         loading={loading}
-        onClick={() => setOpen(!open)}
+        onClick={handleClick}
       >
         <Icon name="InfoCircle" />
       </IconButton>

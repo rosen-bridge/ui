@@ -1,34 +1,31 @@
-import { useMemo } from 'react';
-
 import { AppInfo, IconProps } from '@rosen-bridge/ui-kit';
-
-import { useInfo } from '@/hooks';
+import { fetcher } from '@rosen-ui/swr-helpers';
 
 import packageJson from '../../package.json';
 
 export const VersionConfig = () => {
-  const { data: info, isLoading } = useInfo();
-
-  const versions = useMemo(() => {
-    const result = [
-      {
-        label: 'Guard',
-        value: info?.versions.app,
+  const onFetch = async () => {
+    const info = await fetcher(['/info', undefined, 'get']);
+    return {
+      versions: [
+        {
+          label: 'Guard',
+          value: info?.versions.app,
         icon: 'ShieldCheck' as IconProps['name'],
-      },
-      {
-        label: 'UI',
-        value: packageJson.version,
+        },
+        {
+          label: 'UI',
+          value: packageJson.version,
         icon: 'Swatchbook' as IconProps['name'],
-      },
-      {
-        label: 'Contract',
-        value: info?.versions.contract,
-        icon: 'FileAlt' as IconProps['name'],
-      },
-    ];
-    return result;
-  }, [info]);
+        },
+        {
+          label: 'Contract',
+          value: info?.versions.contract,
+          icon: 'FileAlt' as IconProps['name'],
+        },
+      ],
+    };
+  };
 
-  return <AppInfo versions={versions} loading={isLoading} />;
+  return <AppInfo resolver={onFetch} />;
 };

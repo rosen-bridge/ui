@@ -26,7 +26,7 @@
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.3",
     "moment": "^2.29.4",
-    "next": "^15.5.12",
+    "next": "^15.5.18",
     "react": "^19.2.4",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^19.2.4",
