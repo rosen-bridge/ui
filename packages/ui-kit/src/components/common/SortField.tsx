@@ -14,7 +14,8 @@ import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
 import { Typography } from '../typography';
-import { Divider } from './Divider';
+import { Divider } from '@/components';
+
 
 const Root = styled(Card)(({ theme }) => ({
   display: 'flex',

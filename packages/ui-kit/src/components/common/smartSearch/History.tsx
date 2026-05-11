@@ -22,10 +22,10 @@ import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
 import { Truncate } from '../../truncate';
-import { Divider } from '../Divider';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
+import { Divider } from '@/components';
 
 type Item = {
   bookmark: boolean;

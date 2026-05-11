@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ListSubheader, Menu, MenuItem } from '@mui/material';
 
-import { Button, Icon, IconButton, Typography } from '@/components';
+import { Button, Divider, Icon, IconButton, Typography } from '@/components';
 import { useConfig, usePagination } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
@@ -144,8 +144,7 @@ export const Pagination = (props: PaginationProps) => {
       </div>
 
       <div className="RosenPagination-actions">
-        <div className="RosenPagination-divider" />
-
+        <Divider orientation="vertical" />
         <div className="RosenPagination-actionsInner">
           <Button
             disabled={disabled}

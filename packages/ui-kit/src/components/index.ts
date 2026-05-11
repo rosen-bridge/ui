@@ -29,6 +29,7 @@ export * from './columns';
 export * from './connector';
 export * from './copyButton';
 export * from './dateTime';
+export * from './divider';
 export * from './dialog';
 export * from './dialogContent';
 export * from './dialogDescription';

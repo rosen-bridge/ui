@@ -73,6 +73,7 @@ import {
   ViewToggleProps,
   PaginationProps,
   VirtualScrollProps,
+  DividerProps,
 } from '@/components';
 
 export type Components = {
@@ -103,6 +104,7 @@ export type Components = {
   CopyButton: CopyButtonProps;
   DateTime: DateTimeProps;
   Dialog: DialogProps;
+  Divider: DividerProps;
   DialogContent: DialogContentProps;
   DialogDescription: DialogDescriptionProps;
   DialogFooter: DialogFooterProps;

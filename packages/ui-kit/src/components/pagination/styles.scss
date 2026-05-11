@@ -101,16 +101,12 @@
   position: relative;
   flex: 0 0 auto;
 
-  .RosenPagination-divider {
+  > .RosenDivider {
     display: none;
 
     @container (max-width: 864px) {
       display: block;
-
-      width: 1px;
       height: 24px;
-      background-color: var(--rosen-palette-neutral-light);
-
       align-self: center;
     }
   }
