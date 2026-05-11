@@ -27,7 +27,7 @@ const Layout = ({
   const props = useResponsive<StackProps>({
     mobile: {
       direction: 'column',
-      align: 'TODO',
+      // align: 'TODO',
     },
     laptop: {
       direction: 'row',

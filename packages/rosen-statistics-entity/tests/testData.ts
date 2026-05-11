@@ -10,6 +10,7 @@ import {
   BridgeFeeEntity,
   BridgeMetricRecord,
   MetricEntity,
+  BridgedAmountEntity,
 } from '../lib';
 
 /**
@@ -1242,6 +1243,47 @@ export const bridgeMetricsActionTestData = {
     },
   },
 
+  getLastBridgeAmountWithMultipleRecords: {
+    bridgeAmountRepo: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 100,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 150,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 4,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 200,
+      },
+    ] as BridgedAmountEntity[],
+    expectedRecord: {
+      fromChain: 'ergo',
+      amount: 15.25,
+      day: 4,
+      week: 1,
+      month: 1,
+      year: 2024,
+      lastProcessedHeight: 200,
+    },
+  },
+
   /**
    * Scenario: Get first event timestamp with multiple events
    */
@@ -1376,6 +1418,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100',
         bridgeFee: '100000000', // 1 token with 8 decimals (1 * 10^8)
         sourceChainTokenId: 'token-1',
         sourceChainHeight: 50,
@@ -1386,6 +1429,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'cardano',
+        amount: '200',
         bridgeFee: '2000000', // 2 tokens with 6 decimals (2 * 10^6)
         sourceChainTokenId: 'token-2',
         sourceChainHeight: 150,
@@ -1396,6 +1440,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromChain: 'ethereum',
+        amount: '300',
         bridgeFee: '3000000000000000000', // 3 tokens with 18 decimals (3 * 10^18)
         sourceChainTokenId: 'token-3',
         sourceChainHeight: 250,
@@ -1406,6 +1451,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event4',
         fromChain: 'bitcoin',
+        amount: '400',
         bridgeFee: '1', // 1 token with 0 decimals (1)
         sourceChainTokenId: 'token-4',
         sourceChainHeight: 350,
@@ -1417,6 +1463,7 @@ export const bridgeMetricsActionTestData = {
     expectedEvents: [
       {
         fromChain: 'ergo',
+        bridgeAmount: '100',
         bridgeFee: '100000000',
         tokenId: 'token-1',
         eventHeight: 50,
@@ -1429,6 +1476,7 @@ export const bridgeMetricsActionTestData = {
       },
       {
         fromChain: 'cardano',
+        bridgeAmount: '200',
         bridgeFee: '2000000',
         tokenId: 'token-2',
         eventHeight: 150,
@@ -1475,6 +1523,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100',
         bridgeFee: '100000000',
         sourceChainTokenId: 'token-1',
         sourceChainHeight: 50,
@@ -1485,6 +1534,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'ergo',
+        amount: '200',
         bridgeFee: '200000000',
         sourceChainTokenId: 'token-1',
         sourceChainHeight: 150,
@@ -1496,6 +1546,7 @@ export const bridgeMetricsActionTestData = {
     expectedEvents: [
       {
         fromChain: 'ergo',
+        bridgeAmount: '100',
         bridgeFee: '100000000',
         tokenId: 'token-1',
         eventHeight: 50,
@@ -1582,6 +1633,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event1',
         fromChain: 'ergo',
+        amount: '100',
         bridgeFee: '100000000', // 1 token with 8 decimals
         sourceChainTokenId: 'token-1',
         sourceChainHeight: 50,
@@ -1592,6 +1644,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event2',
         fromChain: 'cardano',
+        amount: '200',
         bridgeFee: '2000000', // 2 tokens with 6 decimals
         sourceChainTokenId: 'token-2',
         sourceChainHeight: 150,
@@ -1602,6 +1655,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event3',
         fromChain: 'ethereum',
+        amount: '300',
         bridgeFee: '3000000000000000000', // 3 tokens with 18 decimals
         sourceChainTokenId: 'token-3',
         sourceChainHeight: 250,
@@ -1612,6 +1666,7 @@ export const bridgeMetricsActionTestData = {
       createEventTrigger({
         eventId: 'event4',
         fromChain: 'bitcoin',
+        amount: '400',
         bridgeFee: '5', // 5 tokens with 0 decimals
         sourceChainTokenId: 'token-4',
         sourceChainHeight: 350,
@@ -1623,6 +1678,7 @@ export const bridgeMetricsActionTestData = {
     expectedEvents: [
       {
         fromChain: 'ergo',
+        bridgeAmount: '100',
         bridgeFee: '100000000',
         tokenId: 'token-1',
         eventHeight: 50,
@@ -1635,6 +1691,7 @@ export const bridgeMetricsActionTestData = {
       },
       {
         fromChain: 'cardano',
+        bridgeAmount: '200',
         bridgeFee: '2000000',
         tokenId: 'token-2',
         eventHeight: 150,
@@ -1647,6 +1704,7 @@ export const bridgeMetricsActionTestData = {
       },
       {
         fromChain: 'ethereum',
+        bridgeAmount: '300',
         bridgeFee: '3000000000000000000',
         tokenId: 'token-3',
         eventHeight: 250,
@@ -1659,6 +1717,7 @@ export const bridgeMetricsActionTestData = {
       },
       {
         fromChain: 'bitcoin',
+        bridgeAmount: '400',
         bridgeFee: '5',
         tokenId: 'token-4',
         eventHeight: 350,
@@ -1673,7 +1732,7 @@ export const bridgeMetricsActionTestData = {
   },
 
   /**
-   * Scenario: Upsert bridge fees - new groups
+   * Scenario: save bridge fees - new groups
    */
   saveBridgeFeesNewGroups: {
     aggregatedBridgeFees: [
@@ -1721,7 +1780,55 @@ export const bridgeMetricsActionTestData = {
   },
 
   /**
-   * Scenario: Upsert bridge fees - update existing total
+   * Scenario: save bridge amount - new groups
+   */
+  saveBridgeAmountNewGroups: {
+    aggregatedBridgeAmount: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 120,
+      },
+    ] as BridgeMetricRecord[],
+    totalCount: '31.25',
+    expectedBridgeAmount: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 120,
+      },
+    ],
+    expectedMetricValue: '31.25',
+  },
+
+  /**
+   * Scenario: save bridge fees - update existing total
    */
   saveBridgeFeesUpdateExisting: {
     aggregatedBridgeFees: [
@@ -1776,7 +1883,62 @@ export const bridgeMetricsActionTestData = {
   },
 
   /**
-   * Scenario: Upsert bridge fees - multiple groups with different dates
+   * Scenario: save bridge amount - update existing total
+   */
+  saveBridgeAmountUpdateExisting: {
+    aggregatedBridgeAmount: [
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 125,
+      },
+    ] as BridgeMetricRecord[],
+    totalCount: '25.25',
+    existingBridgeAmount: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+    ] as BridgeFeeEntity[],
+    existingMetric: {
+      key: METRIC_KEYS.TOTAL_BRIDGE_AMOUNT_USD,
+      value: '10.5',
+      updatedAt: 1000,
+    } as MetricEntity,
+    expectedBridgeAmount: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 125,
+      },
+    ],
+    expectedMetricValue: '25.25',
+  },
+
+  /**
+   * Scenario: save bridge fees - multiple groups with different dates
    */
   saveBridgeFeesDifferentDates: {
     aggregatedBridgeFees: [
@@ -1810,6 +1972,72 @@ export const bridgeMetricsActionTestData = {
     ] as BridgeMetricRecord[],
     totalCount: '46.5',
     expectedBridgeFees: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 210,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 4,
+        week: 2,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 310,
+      },
+    ],
+    expectedMetricValue: '46.5',
+  },
+
+  /**
+   * Scenario: save bridge amount - multiple groups with different dates
+   */
+  saveBridgeAmountDifferentDates: {
+    aggregatedBridgeAmount: [
+      {
+        fromChain: 'ergo',
+        amount: 10.5,
+        day: 2,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 110,
+      },
+      {
+        fromChain: 'ergo',
+        amount: 15.25,
+        day: 3,
+        week: 1,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 210,
+      },
+      {
+        fromChain: 'cardano',
+        amount: 20.75,
+        day: 4,
+        week: 2,
+        month: 1,
+        year: 2024,
+        lastProcessedHeight: 310,
+      },
+    ] as BridgeMetricRecord[],
+    totalCount: '46.5',
+    expectedBridgeAmount: [
       {
         fromChain: 'ergo',
         amount: 10.5,

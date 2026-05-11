@@ -11,6 +11,7 @@ export interface BridgeMetricRecord {
 export interface BridgeEventData {
   fromChain: string;
   bridgeFee: string;
+  bridgeAmount: string;
   tokenId: string;
   timestamp: number;
   height: number;

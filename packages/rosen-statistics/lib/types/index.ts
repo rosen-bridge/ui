@@ -1,5 +1,6 @@
 export {
-  AggregatedBridgeFeeData,
-  BridgeFeeCalculationResult,
-} from './bridgeFee';
+  AggregatedBridgeData,
+  BridgeDataCalculationResult,
+  MappedBridgeEventData,
+} from './bridgeData';
 export { WatcherCountConfig, WatcherCountResult } from './watcherCount';
