@@ -1,5 +1,17 @@
 # @rosen-bridge/watcher-app
 
+## 4.2.0
+
+### Minor Changes
+
+- Refactor `AppInfo` to control data fetching based on user interaction, prevent unnecessary requests, and improve loading and error state handling
+
+### Patch Changes
+
+- Upgrade Next.js to 15.5.18 and fix security vulnerabilities
+- Update dependencies
+  - @rosen-bridge/ui-kit@5.5.0
+
 ## 4.1.0
 
 ### Minor Changes
