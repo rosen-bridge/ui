@@ -20,6 +20,7 @@ import {
   WatcherCountEntity,
   migrations as statisticsMigrations,
   BridgeFeeEntity,
+  BridgedAmountEntity,
 } from '../lib';
 
 export const createDatabase = async () => {
@@ -35,6 +36,7 @@ export const createDatabase = async () => {
       UserEventEntity,
       WatcherCountEntity,
       BridgeFeeEntity,
+      BridgedAmountEntity,
       BlockEntity,
     ],
     migrations: [

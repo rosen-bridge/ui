@@ -5,6 +5,7 @@ export {
   userEventMetric,
   watcherCountMetric,
   bridgeFeeMetric,
+  bridgeAmountMetric,
 } from './jobs';
 export { WatcherCountConfig } from './types';
 export { NodeBoxFetcher } from './fetchers';
