@@ -1,23 +1,29 @@
-import { ReactNode, useCallback, useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-import { styled } from '@mui/material';
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
 
-const Viewport = styled('div')(() => ({
-  overflow: 'hidden',
-  flexGrow: 1,
-  cursor: 'grab',
-  scrollSnapType: 'none',
-  overscrollBehavior: 'none',
-  WebkitOverflowScrolling: 'auto',
-}));
+import './styles.scss';
 
-const Content = styled('div')(() => ({}));
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface VirtualScrollOverrides {}
 
-export type VirtualScrollProps = {
-  children?: ReactNode;
-};
+export type VirtualScrollOwnProps = {};
 
-export const VirtualScroll = ({ children }: VirtualScrollProps) => {
+export type VirtualScrollBaseProps = ElementBaseProps<
+  'div',
+  VirtualScrollOwnProps
+>;
+
+export type VirtualScrollProps = OverridableType<
+  VirtualScrollBaseProps,
+  VirtualScrollOverrides,
+  never
+>;
+
+export const VirtualScroll = (props: VirtualScrollProps) => {
+  const { children, ...rest } = useConfig('VirtualScroll', props);
+
   const containerRef = useRef<HTMLDivElement>(null);
 
   const isDragging = useRef(false);
@@ -120,12 +126,15 @@ export const VirtualScroll = ({ children }: VirtualScrollProps) => {
   }, [handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
   return (
-    <Viewport
+    <div
       ref={containerRef}
       onMouseDown={(event) => startDrag(event.pageX)}
       onTouchStart={(event) => startDrag(event.touches[0].pageX)}
+      {...rest}
     >
-      <Content>{children}</Content>
-    </Viewport>
+      <div className="RosenVirtualScroll-content">{children}</div>
+    </div>
   );
 };
+
+VirtualScroll.displayName = 'VirtualScroll';

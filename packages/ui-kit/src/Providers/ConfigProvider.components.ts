@@ -72,6 +72,7 @@ import {
   TypographyProps,
   ViewToggleProps,
   PaginationProps,
+  VirtualScrollProps,
 } from '@/components';
 
 export type Components = {
@@ -129,6 +130,7 @@ export type Components = {
   Skeleton: SkeletonProps;
   Stack: StackProps;
   SubmitButton: SubmitButtonProps;
+  virtualScroll: VirtualScrollProps;
   TableGrid: TableGridProps;
   TableGridBody: TableGridBodyProps;
   TableGridBodyDetails: TableGridBodyDetailsProps;

@@ -1,0 +1,8 @@
+.RosenVirtualScroll {
+  overflow: hidden;
+  flex-grow: 1;
+  cursor: grab;
+  scroll-snap-type: none;
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: auto;
+}
