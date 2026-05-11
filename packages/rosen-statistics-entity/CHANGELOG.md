@@ -1,5 +1,11 @@
 # @rosen-ui/rosen-statistics-entity
 
+## 0.4.0
+
+### Minor Changes
+
+- Update BridgeMetricsAction action
+
 ## 0.3.0
 
 ### Minor Changes

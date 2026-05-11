@@ -1,5 +1,11 @@
 # @rosen-bridge/ui-kit
 
+## 5.5.0
+
+### Minor Changes
+
+- Refactor `AppInfo` to control data fetching based on user interaction, prevent unnecessary requests, and improve loading and error state handling
+
 ## 5.4.0
 
 ### Minor Changes
