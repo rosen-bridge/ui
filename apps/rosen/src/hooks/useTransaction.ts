@@ -3,10 +3,10 @@ import React from 'react';
 
 import { RosenChainToken } from '@rosen-bridge/tokens';
 import { useSnackbar } from '@rosen-bridge/ui-kit';
-import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
+// import { InsufficientAssetsError } from '@rosen-network/base/dist/handleUncoveredAssets';
 import { getNonDecimalString, getTxURL } from '@rosen-ui/utils';
 import {
-  UserDeniedTransactionSignatureError,
+  // UserDeniedTransactionSignatureError,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
 import * as Sentry from '@sentry/nextjs';
@@ -110,9 +110,9 @@ export const useTransaction = () => {
         () => JSON.stringify(serializeError(error), null, 2),
       );
 
-      if (error instanceof InsufficientAssetsError) return;
+      // if (error instanceof InsufficientAssetsError) return;
 
-      if (error instanceof UserDeniedTransactionSignatureError) return;
+      // if (error instanceof UserDeniedTransactionSignatureError) return;
 
       Sentry.withScope((scope) => {
         scope.setTag('feature', 'transaction');
