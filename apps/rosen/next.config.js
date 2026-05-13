@@ -66,10 +66,10 @@ module.exports = withSentryConfig(module.exports, {
   silent: !process.env.CI,
   widenClientFileUpload: true,
   tunnelRoute: '/monitoring',
-  debug: false,
   webpack: {
+    automaticVercelMonitors: true,
     treeshake: {
-      removeDebugLogging: false,
+      removeDebugLogging: true,
     },
   },
 });
