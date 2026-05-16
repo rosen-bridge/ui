@@ -178,6 +178,28 @@ const stripFiroExtraPayload = (txHex: string) => {
  * @param bridgeFee
  * @returns
  */
+/**
+ * builds a firo: payment URI with amount and op_return metadata
+ * @param address - lock address
+ * @param amount - amount in FIRO (decimal string)
+ * @param opReturnData - hex-encoded OP_RETURN data
+ */
+export const buildPaymentUri = (
+  address: string,
+  amount: string,
+  opReturnData: string,
+): string => {
+  return `firo:${address}?amount=${amount}&op_return=${opReturnData}`;
+};
+
+/**
+ * generates metadata for lock transaction
+ * @param toChain
+ * @param toAddress
+ * @param networkFee
+ * @param bridgeFee
+ * @returns
+ */
 export const generateOpReturnData = async (
   toChain: Network,
   toAddress: string,
