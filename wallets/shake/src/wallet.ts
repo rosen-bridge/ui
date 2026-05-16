@@ -27,35 +27,12 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
 
   private wallet: ShakeWalletAPI | null = null;
 
+  private get api() {
+    return window.shake!;
+  }
+
   performConnect = async (): Promise<void> => {
-    if (!window.shake) {
-      throw new Error(
-        'Shake Wallet not found. Please install Shake Wallet from the Chrome Web Store.',
-      );
-    }
-
-    if (await this.isConnected()) return;
-
-    try {
-      this.wallet = await window.shake.connect();
-
-      const address = await this.wallet.getAddress();
-      if (!address) {
-        throw new Error('Unable to get wallet address from Shake Wallet');
-      }
-    } catch (error) {
-      this.wallet = null;
-      if (error instanceof Error) {
-        if (
-          error.message.includes('rejected') ||
-          error.message.includes('denied')
-        ) {
-          throw new UserDeniedTransactionSignatureError(this.name);
-        }
-        throw new Error(`Failed to connect to Shake Wallet: ${error.message}`);
-      }
-      throw new Error('Failed to connect to Shake Wallet: Unknown error');
-    }
+    this.wallet = await this.api.connect();
   };
 
   performDisconnect = async (): Promise<void> => {
@@ -63,47 +40,30 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
   };
 
   fetchAddress = async (): Promise<string | undefined> => {
-    if (!this.wallet) {
-      return undefined;
-    }
-
-    return await this.wallet.getAddress();
+    return await this.wallet?.getAddress();
   };
 
-  fetchBalance = async (): Promise<string> => {
-    if (!this.wallet) {
-      return '0';
-    }
+  fetchBalance = async (): Promise<string | undefined> => {
+    const balance = await this.wallet?.getBalance();
 
-    const balance = await this.wallet.getBalance();
-
-    return balance.confirmed.toString();
+    return balance?.confirmed.toString();
   };
 
   isAvailable = (): boolean => {
-    return !!window.shake;
+    return typeof window !== 'undefined' && !!window.shake;
   };
 
   hasConnection = async (): Promise<boolean> => {
-    try {
-      return this.wallet !== null && !!(await this.fetchAddress());
-    } catch {
+    if (!this.wallet || (await this.api.isLocked())) {
       return false;
     }
+
+    return !!(await this.fetchAddress());
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
-    if (
-      !this.currentNetwork ||
-      !(this.currentNetwork instanceof HandshakeNetwork)
-    ) {
+    if (!(this.currentNetwork instanceof HandshakeNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
-    }
-
-    if (!this.wallet) {
-      throw new Error(
-        'Wallet not connected. Please connect to Shake Wallet first.',
-      );
     }
 
     try {
@@ -121,7 +81,7 @@ export class ShakeWallet extends Wallet<ShakeWalletConfig> {
         NETWORKS.handshake.key,
       ).amount;
 
-      const result = await this.wallet.sendRosenBridgeData({
+      const result = await this.wallet!.sendRosenBridgeData({
         receiver: params.lockAddress,
         amount: Number(unwrappedAmount),
         data: rosenDataHex,

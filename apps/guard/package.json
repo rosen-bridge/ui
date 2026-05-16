@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/guard-app",
-  "version": "4.1.0",
+  "version": "4.2.0",
   "private": true,
   "repository": {
     "type": "git",
@@ -21,12 +21,12 @@
   },
   "dependencies": {
     "@rosen-bridge/icons": "^3.6.0",
-    "@rosen-bridge/ui-kit": "^5.4.0",
+    "@rosen-bridge/ui-kit": "^5.5.0",
     "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.3",
     "moment": "^2.29.4",
-    "next": "^15.5.12",
+    "next": "^15.5.18",
     "react": "^19.2.4",
     "react-apexcharts": "^1.4.0",
     "react-dom": "^19.2.4",

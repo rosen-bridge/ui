@@ -1,6 +1,6 @@
 {
   "name": "@rosen-ui/rosen-statistics-entity",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "Rosen statistics entity and migrations",
   "repository": {
