@@ -217,11 +217,13 @@ export const getAddressUtxos = async (
   const rpcUtxos = await callFiroRpc<Array<FiroRpcUtxo>>('getaddressutxos', [
     { addresses: [address] },
   ]);
-  return rpcUtxos.map((utxo) => ({
-    txId: utxo.txid,
-    index: utxo.outputIndex,
-    value: BigInt(utxo.satoshis),
-  }));
+  return rpcUtxos
+    .filter((utxo) => utxo.height > 0)
+    .map((utxo) => ({
+      txId: utxo.txid,
+      index: utxo.outputIndex,
+      value: BigInt(utxo.satoshis),
+    }));
 };
 
 /**
@@ -256,7 +258,7 @@ export const getFeeRatio = async (): Promise<number> => {
   ]).catch(() => undefined);
   if (smartFee?.feerate && smartFee.feerate >= 0) {
     // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(smartFee.feerate)) / 1024;
+    return Number(firoToSatoshis(smartFee.feerate)) / 1000;
   }
 
   const feeEstimate = await callFiroRpc<number>('estimatefee', [
@@ -264,7 +266,7 @@ export const getFeeRatio = async (): Promise<number> => {
   ]).catch(() => undefined);
   if (feeEstimate && feeEstimate >= 0) {
     // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(feeEstimate)) / 1024;
+    return Number(firoToSatoshis(feeEstimate)) / 1000;
   }
 
   const networkInfo = await callFiroRpc<FiroRpcNetworkInfo>(
@@ -272,7 +274,7 @@ export const getFeeRatio = async (): Promise<number> => {
   ).catch(() => undefined);
   if (networkInfo?.relayfee && networkInfo.relayfee >= 0) {
     // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(networkInfo.relayfee)) / 1024;
+    return Number(firoToSatoshis(networkInfo.relayfee)) / 1000;
   }
 
   throw Error('Firo fee estimate is not available');
