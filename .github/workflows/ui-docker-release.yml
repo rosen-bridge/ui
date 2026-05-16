@@ -80,7 +80,7 @@ jobs:
         uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}
+          images: ghcr.io/${{ github.repository_owner }}/ui-${{ matrix.apps }}
 
       - name: Build and push by digest
         id: build
@@ -91,7 +91,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          outputs: type=image,name=ghcr.io/rosen-bridge/ui-${{ matrix.apps }},push-by-digest=true,name-canonical=true,push=true
+          outputs: type=image,name=ghcr.io/${{ github.repository_owner }}/ui-${{ matrix.apps }},push-by-digest=true,name-canonical=true,push=true
           target: ${{ matrix.apps }}
 
       - name: Export digest file
@@ -137,7 +137,7 @@ jobs:
         uses: docker/metadata-action@v5
         id: meta
         with:
-          images: ghcr.io/rosen-bridge/ui-${{ matrix.apps }}
+          images: ghcr.io/${{ github.repository_owner }}/ui-${{ matrix.apps }}
           tags: |
             type=match,pattern=\d+\.\d+\.\d+,enable=${{ github.event_name == 'release' }}
             type=raw,value=dev,enable=${{ github.event_name == 'push' }}
@@ -156,4 +156,4 @@ jobs:
         run: |
           docker buildx imagetools create \
             $(printf ' -t %s' $TAGS) \
-            $(printf 'ghcr.io/rosen-bridge/ui-${{ matrix.apps }}@sha256:%s ' *)
+            $(printf 'ghcr.io/${{ github.repository_owner }}/ui-${{ matrix.apps }}@sha256:%s ' *)

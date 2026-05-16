@@ -1,4 +1,4 @@
-FROM nginx:1.25 AS watcher
+FROM nginx:stable AS watcher
 LABEL maintainer="rosen-bridge team <team@rosen.tech>"
 LABEL description="Docker image for the front-end of watcher owned by rosen-bridge organization."
 LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
@@ -9,7 +9,7 @@ ENV SERVICE_NAME=service
 ENV SERVICE_PORT=3000
 ENTRYPOINT ["bash", "entrypoint.sh"]
 
-FROM nginx:1.25 AS guard
+FROM nginx:stable AS guard
 LABEL maintainer="rosen-bridge team <team@rosen.tech>"
 LABEL description="Docker image for the front-end of guard owned by rosen-bridge organization."
 LABEL org.label-schema.vcs-url="https://github.com/rosen-bridge/ui"
