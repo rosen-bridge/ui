@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { NextRequest } from 'next/server';
 
+import * as Sentry from '@sentry/nextjs';
 import { ValidationResult } from 'joi';
 
 export class AccessDeniedError extends Error {
@@ -59,6 +60,22 @@ export const withValidation =
       if (error instanceof AccessDeniedError) {
         return Response.json({ error: error.message }, { status: 403 });
       }
+
+      Sentry.withScope((scope) => {
+        scope.setTag('layer', 'api-route');
+
+        scope.setContext('request', {
+          url: request.url,
+          method: request.method,
+        });
+
+        scope.setContext('validation', {
+          value,
+        });
+
+        Sentry.captureException(error);
+      });
+
       if (error instanceof Error) {
         return Response.json(error.message, { status: 500 });
       }
