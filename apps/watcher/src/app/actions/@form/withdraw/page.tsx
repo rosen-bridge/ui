@@ -20,7 +20,6 @@ import {
   TextField,
   useApiKey,
   ApiKeyModalWarning,
-  Link,
   Stack,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS, TOKEN_NAME_PLACEHOLDER } from '@rosen-ui/constants';
@@ -145,12 +144,11 @@ const WithdrawForm = () => {
           message: (
             <>
               Withdrawal is successful. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? ''}
-              >
-                {response.txId}
-              </Link>
+              <Id
+                id={response.txId}
+                indicator="middle"
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
+              />
               ] to be confirmed.
             </>
           ),

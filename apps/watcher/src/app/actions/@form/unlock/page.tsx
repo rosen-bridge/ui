@@ -1,12 +1,12 @@
 'use client';
 
-import Link from 'next/link';
 import { useMemo, useState, useEffect, ReactNode } from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
 
 import {
   AlertCard,
   AlertProps,
+  Id,
   SubmitButton,
   useApiKey,
   ApiKeyModalWarning,
@@ -133,12 +133,11 @@ const UnlockForm = () => {
           message: (
             <>
               Unlock operation is in progress. Wait for tx [
-              <Link
-                target="_blank"
-                href={getTxURL(NETWORKS.ergo.key, response.txId) ?? '/'}
-              >
-                {response.txId}
-              </Link>
+              <Id
+                id={response.txId}
+                indicator="middle"
+                href={getTxURL(NETWORKS.ergo.key, response.txId)}
+              />
               ] to be confirmed by some blocks.
             </>
           ),
