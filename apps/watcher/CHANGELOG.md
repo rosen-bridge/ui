@@ -1,5 +1,11 @@
 # @rosen-bridge/watcher-app
 
+## 4.2.1
+
+### Patch Changes
+
+- Update nginx base image in Docker files to fix CVE-2026-42945
+
 ## 4.2.0
 
 ### Minor Changes
