@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
-
 import { Button } from '@mui/material';
+
+import { Icon, IconProps } from '@/components';
 
 import { useIsMobile, isLegacyTheme, useFramework } from '../../../hooks';
 import { alpha, styled } from '../../../styling';
 import { Badge } from '../../base';
-import { SvgIcon } from '../SvgIcon';
 
 const NavigationButtonBase = styled(Button)(({ theme }) => ({
   'flexDirection': 'column',
@@ -102,7 +101,7 @@ const NavigationButtonIndicator = styled('div', {
 
 export type NavigationButtonProps = {
   label: string;
-  icon: ReactNode;
+  icon: IconProps['name'];
   path: string;
   disabled?: boolean;
   badge?: string;
@@ -133,7 +132,7 @@ export const NavigationButton = ({
 
   const isMobile = useIsMobile();
 
-  let startIcon = <SvgIcon>{icon}</SvgIcon>;
+  let startIcon = <Icon name={icon} />;
 
   if (badge)
     startIcon = (

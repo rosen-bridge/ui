@@ -17,8 +17,7 @@ import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
 
 import { TokenMapProvider } from '../hooks';
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
+import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -43,11 +42,13 @@ export const App = ({ children }: PropsWithChildren) => {
             router.push(href as unknown as Route, { scroll: false }),
         }}
       >
-        <UIKitProvider>
-          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-            <TokenMapProvider>{children}</TokenMapProvider>
-          </AppBase>
-        </UIKitProvider>
+        <TokenMapProvider>
+          <UIKitProvider>
+            <AppBase sidebar={<Sidebar />} theme={theme}>
+              {children}
+            </AppBase>
+          </UIKitProvider>
+        </TokenMapProvider>
       </FrameworkProvider>
     </NoSsr>
   );

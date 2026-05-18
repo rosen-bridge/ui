@@ -1,11 +1,39 @@
 import { PropsWithChildren, useMemo } from 'react';
 
-import { ConfigProvider, type ConfigContextType } from '@rosen-bridge/ui-kit';
+import * as AllIcons from '@rosen-bridge/icons';
+import {
+  ConfigProvider,
+  type ConfigContextType,
+  type DefaultColor,
+} from '@rosen-bridge/ui-kit';
 
-declare module '@rosen-bridge/ui-kit' {}
+import { Actions } from './app/Actions';
 
-const getUiKitConfig: () => ConfigContextType = () => ({
-  components: {},
+declare module '@rosen-bridge/ui-kit' {
+  interface ColorOverrides extends Record<DefaultColor, true> {
+    UNLISTED: false;
+  }
+
+  interface IconOverrides {
+    name: Exclude<keyof typeof AllIcons, 'TOKENS'>;
+  }
+}
+
+export const getUiKitConfig: () => ConfigContextType = () => ({
+  components: {
+    Icon: {
+      defaultProps: {
+        icons: Object.fromEntries(
+          Object.entries(AllIcons).filter(([key]) => key !== 'TOKENS'),
+        ),
+      },
+    },
+    PageHeading: {
+      defaultProps: {
+        actions: <Actions />,
+      },
+    },
+  },
 });
 
 export const UIKitProvider = ({ children }: PropsWithChildren) => {

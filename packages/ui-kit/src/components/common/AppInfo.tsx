@@ -5,6 +5,7 @@ import { ExclamationCircle, InfoCircle } from '@rosen-bridge/icons';
 import { Network as NetworkType } from '@rosen-ui/types';
 
 import { useSnackbar } from '../../hooks';
+import { Icon, IconProps } from '../icon';
 import { Avatar } from './Avatar';
 import { Network } from './display';
 import { Divider } from './Divider';
@@ -22,7 +23,7 @@ type NetworkHeight = {
 type VersionApp = {
   label?: string;
   value?: string;
-  icon: React.ReactNode;
+  icon: IconProps['name'];
 };
 
 export type AppInfoProps = {
@@ -92,11 +93,11 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
             </Divider>
             {versions && (
               <>
-                {versions.map(({ label, icon: Icon, value }) => (
+                {versions.map(({ label, icon, value }) => (
                   <Stack key={label} direction="row" justify="between">
                     <Stack direction="row" spacing={1} align="center">
                       <Avatar size="32px" background="neutral.contrastText">
-                        <SvgIcon size="medium">{Icon}</SvgIcon>
+                        <Icon name={icon} size="medium" />
                       </Avatar>
                       <Typography noWrap variant="body1">
                         {label}
