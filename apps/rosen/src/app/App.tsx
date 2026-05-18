@@ -4,6 +4,7 @@
  * FIXME: import NoSsr from ui-kit
  * local:ergo/rosen-bridge/ui#193
  */
+import { Route } from 'next';
 import NextImage from 'next/image';
 import NextLink from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -13,6 +14,7 @@ import { NoSsr } from '@mui/material';
 import { App as AppBase, FrameworkProvider } from '@rosen-bridge/ui-kit';
 
 import { theme } from '@/theme/theme';
+import { UIKitProvider } from '@/uiKitProvider';
 
 import { TokenMapProvider } from '../hooks';
 import { SideBar } from './SideBar';
@@ -29,18 +31,23 @@ export const App = ({ children }: PropsWithChildren) => {
     <NoSsr>
       <FrameworkProvider
         components={{
-          Anchor: (props) => <NextLink {...props} />,
+          Anchor: ({ href, ...props }) => (
+            <NextLink href={href as unknown as Route} {...props} />
+          ),
           Image: (props) => <NextImage {...props} />,
         }}
         router={{
           pathname,
           search: searchParams.toString(),
-          push: (href: string) => router.push(href, { scroll: false }),
+          push: (href: string) =>
+            router.push(href as unknown as Route, { scroll: false }),
         }}
       >
-        <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
-          <TokenMapProvider>{children}</TokenMapProvider>
-        </AppBase>
+        <UIKitProvider>
+          <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
+            <TokenMapProvider>{children}</TokenMapProvider>
+          </AppBase>
+        </UIKitProvider>
       </FrameworkProvider>
     </NoSsr>
   );
