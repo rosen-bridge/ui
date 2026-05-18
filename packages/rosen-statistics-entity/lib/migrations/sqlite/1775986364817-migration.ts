@@ -53,7 +53,7 @@ export class Migration1775986364817 implements MigrationInterface {
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
             ALTER TABLE "bridged_amount_entity"
-                RENAME TO "temporary_bridge_amount_entity"
+                RENAME TO "temporary_bridged_amount_entity"
         `);
     await queryRunner.query(`
             CREATE TABLE "bridged_amount_entity" (

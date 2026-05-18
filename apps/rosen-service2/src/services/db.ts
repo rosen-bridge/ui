@@ -17,14 +17,11 @@ export class DBService extends AbstractDBService {
       this.logger.debug('Initializing data source');
       await this.dataSource.initialize();
       this.logger.debug('data source initialized');
-
-      this.logger.debug('running data source migrations');
-      await this.dataSource.runMigrations();
-      this.logger.debug('data source migrations completed');
     } catch (e) {
       this.logger.error(
         `Something went wrong while starting the DBService: ${e}`,
       );
+      return false;
     }
     this.setStatus(ServiceStatus.dormant);
     return true;
@@ -79,7 +76,18 @@ export class DBService extends AbstractDBService {
   protected dependencies: Dependency[] = [];
 
   protected start = async (): Promise<boolean> => {
-    this.setStatus(ServiceStatus.running);
+    this.setStatus(ServiceStatus.started);
+    try {
+      this.logger.debug('running data source migrations');
+      await this.dataSource.runMigrations();
+      this.logger.debug('data source migrations completed');
+      this.setStatus(ServiceStatus.running);
+    } catch (e) {
+      this.logger.error(
+        `Something went wrong while starting the DBService: ${e}`,
+      );
+      return false;
+    }
 
     return true;
   };
