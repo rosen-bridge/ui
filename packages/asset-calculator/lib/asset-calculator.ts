@@ -1,11 +1,11 @@
-import { DummyLogger, AbstractLogger } from '@rosen-bridge/abstract-logger';
+import { AbstractLogger, DummyLogger } from '@rosen-bridge/abstract-logger';
 import { DataSource } from '@rosen-bridge/extended-typeorm';
 import JsonBigInt from '@rosen-bridge/json-bigint';
 import {
-  TokenMap,
-  RosenChainToken,
-  NATIVE_TOKEN,
   NATIVE_RESIDENCY,
+  NATIVE_TOKEN,
+  RosenChainToken,
+  TokenMap,
 } from '@rosen-bridge/tokens';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
@@ -18,6 +18,7 @@ import { CardanoCalculator } from './calculator/chains/cardano-calculator';
 import { DogeCalculator } from './calculator/chains/doge-calculator';
 import { ErgoCalculator } from './calculator/chains/ergo-calculator';
 import { EvmCalculator } from './calculator/chains/evm-calculator';
+import { HandshakeCalculator } from './calculator/chains/handshake-calculator';
 import { BridgedAssetModel } from './database/bridgedAsset/BridgedAssetModel';
 import { LockedAssetEntity } from './database/lockedAsset/LockedAssetEntity';
 import { LockedAssetModel } from './database/lockedAsset/LockedAssetModel';
@@ -29,6 +30,7 @@ import {
   DogeCalculatorInterface,
   ErgoCalculatorInterface,
   EvmCalculatorInterface,
+  HandshakeCalculatorInterface,
 } from './interfaces';
 
 class AssetCalculator {
@@ -49,6 +51,7 @@ class AssetCalculator {
     ethereumCalculator: EvmCalculatorInterface,
     binanceCalculator: EvmCalculatorInterface,
     dogeCalculator: DogeCalculatorInterface,
+    handshakeCalculator: HandshakeCalculatorInterface,
     dataSource: DataSource,
     protected readonly logger: AbstractLogger = new DummyLogger(),
   ) {
@@ -101,6 +104,12 @@ class AssetCalculator {
       dogeCalculator.blockcypherUrl,
       logger.child('dogeCalculator'),
     );
+    const handshakeAssetCalculator = new HandshakeCalculator(
+      this.tokens,
+      handshakeCalculator.addresses,
+      handshakeCalculator.rpcUrl,
+      logger.child('handshakeCalculator'),
+    );
     this.calculatorMap.set(NETWORKS.ergo.key, ergoAssetCalculator);
     this.calculatorMap.set(NETWORKS.cardano.key, cardanoAssetCalculator);
     this.calculatorMap.set(NETWORKS.bitcoin.key, bitcoinAssetCalculator);
@@ -111,6 +120,7 @@ class AssetCalculator {
     this.calculatorMap.set(NETWORKS.ethereum.key, ethereumAssetCalculator);
     this.calculatorMap.set(NETWORKS.binance.key, binanceAssetCalculator);
     this.calculatorMap.set(NETWORKS.doge.key, dogeAssetCalculator);
+    this.calculatorMap.set(NETWORKS.handshake.key, handshakeAssetCalculator);
     this.bridgedAssetModel = new BridgedAssetModel(
       dataSource,
       logger.child('bridgedAssetModel'),

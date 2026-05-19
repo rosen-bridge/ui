@@ -9,6 +9,7 @@ const baseAddressURLs: { [key in Network]: string } = {
   [NETWORKS['bitcoin-runes'].key]: 'https://uniscan.cc/address',
   [NETWORKS.ethereum.key]: 'https://etherscan.io/address',
   [NETWORKS.doge.key]: 'https://blockexplorer.one/dogecoin/mainnet/address',
+  [NETWORKS.handshake.key]: 'https://e.hnsfans.com/address',
 };
 
 export const getAddressUrl = (

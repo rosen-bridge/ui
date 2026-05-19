@@ -1,5 +1,6 @@
 import './base';
 
+export * from './shake';
 export * from './eternl';
 export * from './lace';
 export * from './metaMask';

@@ -24,12 +24,19 @@ const config: KnipConfig = {
   ignoreBinaries: ['typeorm'],
   ignore: ['**/node_modules/', '**/dist/', '**/.next/'],
   ignoreDependencies: [
+    '@emotion/react',
+    '@emotion/styled',
     '@mui/material',
     '@next/eslint-plugin-next',
     '@types/moment',
     '@vitest/runner',
+    'eslint',
     'eslint-config-next',
+    'husky',
+    'lint-staged',
     'pg',
+    'prettier',
+    'react-dom',
   ],
 };
 
