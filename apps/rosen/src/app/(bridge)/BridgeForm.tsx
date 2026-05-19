@@ -55,7 +55,7 @@ export const BridgeForm = () => {
   const { sources, availableSources, availableTargets, availableTokens } =
     useNetwork();
 
-  const { isLoading, raw: balanceRaw } = useBalance();
+  const { isLoading, raw: balanceRaw, amount: balanceAmount } = useBalance();
 
   const { error, isLoading: isMaxLoading, raw, load } = useMaxTransfer();
 
@@ -277,17 +277,19 @@ export const BridgeForm = () => {
         helperText={errors.amount?.message?.toString()}
         InputProps={{
           disableUnderline: true,
-          endAdornment: tokenField.value && selectedWallet && (
-            <UseAllAmount
-              disabled={!addressField.value || !!errors?.walletAddress}
-              error={!!error}
-              loading={isLoading || isMaxLoading}
-              value={balanceRaw}
-              unit={(tokenValue as RosenChainToken)?.name}
-              onClick={handleSelectMax}
-              onRetry={load}
-            />
-          ),
+          endAdornment: tokenField.value &&
+            selectedWallet &&
+            balanceAmount >= 0n && (
+              <UseAllAmount
+                disabled={!addressField.value || !!errors?.walletAddress}
+                error={!!error}
+                loading={isLoading || isMaxLoading}
+                value={balanceRaw}
+                unit={(tokenValue as RosenChainToken)?.name}
+                onClick={handleSelectMax}
+                onRetry={load}
+              />
+            ),
         }}
         inputProps={{
           'style': { fontSize: '2rem' },

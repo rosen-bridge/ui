@@ -80,7 +80,14 @@ export const useTransaction = () => {
         lockAddress: selectedSource.lockAddress,
       };
 
-      const txId = await selectedWallet.transfer(parameters);
+      const result = await selectedWallet.transfer(parameters);
+
+      const isQrCode = result.startsWith('qrcode:');
+
+      if (isQrCode) {
+        setIsSubmitting(false);
+        return result;
+      }
 
       openSnackbar(
         React.createElement('div', undefined, [
@@ -88,7 +95,7 @@ export const useTransaction = () => {
           React.createElement(
             'a',
             {
-              href: getTxURL(sourceValue, txId),
+              href: getTxURL(sourceValue, result),
               target: '_blank',
               style: {
                 color: 'inherit',
