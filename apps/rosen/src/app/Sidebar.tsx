@@ -10,9 +10,6 @@ import {
 
 import { Actions } from './Actions';
 
-/**
- * render sidebar log and navigaiton buttons
- */
 export const Sidebar = () => {
   return (
     <AppBar
