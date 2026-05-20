@@ -6,7 +6,7 @@ import {
 import { CardanoKoiosScanner } from '@rosen-bridge/cardano-scanner';
 import { ErgoScanner } from '@rosen-bridge/ergo-scanner';
 import { EvmRpcScanner } from '@rosen-bridge/evm-scanner';
-import { FiroRpcScanner } from '@rosen-bridge/firo-scanner';
+import { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
 
 import { handleError } from '../utils';
 import { startBinanceScanner } from './chains/binance';
@@ -26,7 +26,7 @@ let bitcoinScanner: BitcoinRpcScanner;
 let ethereumScanner: EvmRpcScanner;
 let binanceScanner: EvmRpcScanner;
 let dogeScanner: DogeRpcScanner;
-let firoScanner: FiroRpcScanner;
+let firoScanner: FiroElectrumXScanner;
 
 /**
  * start all scanners and register their extractors
