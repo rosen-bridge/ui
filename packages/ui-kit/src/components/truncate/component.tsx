@@ -1,9 +1,9 @@
 import { Slot } from '@radix-ui/react-slot';
 
-import { Tooltip, TooltipProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { Tooltip, TooltipProps } from '../tooltip';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

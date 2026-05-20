@@ -9,13 +9,13 @@ import {
 
 import { Button, Card, styled } from '@mui/material';
 
+import { Divider } from '@/components';
+
 import { ListItemText, ListSubheader, Menu, MenuItem } from '../base';
 import { Icon } from '../icon';
 import { IconButton } from '../iconButton';
 import { Stack } from '../stack';
 import { Typography } from '../typography';
-import { Divider } from '@/components';
-
 
 const Root = styled(Card)(({ theme }) => ({
   display: 'flex',

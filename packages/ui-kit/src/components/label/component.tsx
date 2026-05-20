@@ -1,7 +1,8 @@
-import { InfoIcon, Typography } from '@/components';
 import { useConfig } from '@/hooks';
 import { Color, ElementBaseProps, OverridableType } from '@/types';
 
+import { InfoIcon } from '../infoIcon';
+import { Typography } from '../typography';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

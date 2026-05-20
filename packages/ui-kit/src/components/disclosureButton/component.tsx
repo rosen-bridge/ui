@@ -11,7 +11,6 @@ type UseDisclosureReturn = ReturnType<typeof useDisclosure>;
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DisclosureButtonOverrides {}
 
- 
 export type DisclosureButtonOwnProps = {
   disabled?: boolean;
   disclosure: UseDisclosureReturn;

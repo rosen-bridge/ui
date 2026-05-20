@@ -202,7 +202,10 @@ export const SubmitButton = () => {
                   <Stack spacing={2}>
                     <Stack align="center" spacing={2}>
                       <Typography variant="subtitle1">
-                        <Amount value={amountValue || 0} unit={tokenInfo?.name} />
+                        <Amount
+                          value={amountValue || 0}
+                          unit={tokenInfo?.name}
+                        />
                       </Typography>
                       {source && target && (
                         <Connector

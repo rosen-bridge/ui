@@ -2,11 +2,11 @@ import { FC, SVGAttributes, useMemo } from 'react';
 
 import * as Icons from '@rosen-bridge/icons';
 
-import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
 import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
 
+import { Skeleton } from '../skeleton';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
