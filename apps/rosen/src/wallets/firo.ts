@@ -1,4 +1,4 @@
-import { FiroWallet } from '@rosen-ui/firo-wallet';
+import { FiroWallet } from '@rosen-ui/firo';
 
 import { firo } from '@/networks';
 import { getTokenMap } from '@/tokenMap/getClientTokenMap';
