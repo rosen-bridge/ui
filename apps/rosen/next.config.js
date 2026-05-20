@@ -2,6 +2,7 @@
 const path = require('path');
 
 const nextConfig = {
+  typedRoutes: true,
   outputFileTracingIncludes: {
     /**
      * Transfer the 'configs' directory to the production build to ensure

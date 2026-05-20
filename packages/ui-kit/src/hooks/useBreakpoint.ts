@@ -1,4 +1,4 @@
-import { Breakpoint } from '@mui/material';
+import { Breakpoint } from '@/types';
 
 import { useMediaQuery } from './useMediaQuery';
 import { useTheme } from './useTheme';

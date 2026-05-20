@@ -15,7 +15,9 @@ export type InjectOverridesProps<P> = {
    * <MyComponent someProp="default" overrides={{ mobile: { someProp: "small" }, laptop: { someProp: "large" } }} />
    * On laptop, someProp will be "large".
    */
-  overrides?: Partial<Record<Breakpoint, Partial<P>>>;
+  overrides?: Partial<
+    Record<'mobile' | 'tablet' | 'laptop' | 'desktop', Partial<P>>
+  >;
 } & P;
 
 /**
