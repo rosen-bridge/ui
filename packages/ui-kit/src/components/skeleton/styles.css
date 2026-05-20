@@ -1,6 +1,7 @@
 .RosenSkeleton {
-  // TODO
-  // height: 1.2em;
+  /* TODO */
+  /* height: 1.2em; */
+
   display: block;
   background-color: var(--rosen-palette-Skeleton-bg);
   transform-origin: 0 55%;
@@ -34,14 +35,17 @@
 }
 
 .RosenSkeleton[data-variant='text'] {
-  border-radius: 4px; // in config
+  /* in config */
+  border-radius: 4px;
+
   transform: scale(1, 0.6);
-  // TODO
-  // border-radius: 16px / 26.7px;
-  // margin-top: 0;
-  // margin-bottom: 0;
-  // height: auto;
-  // transform-origin: 0 55%;
+
+  /* TODO */
+  /* border-radius: 16px / 26.7px; */
+  /* margin-top: 0; */
+  /* margin-bottom: 0; */
+  /* height: auto; */
+  /* transform-origin: 0 55%; */
 }
 
 @keyframes shimmer {

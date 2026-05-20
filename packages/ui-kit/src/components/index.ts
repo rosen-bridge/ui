@@ -1,4 +1,4 @@
-import './index.scss';
+import './index.css';
 
 export * from './base';
 export * from './common';

@@ -7,7 +7,7 @@ import { useConfig } from '@/hooks';
 import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor, toCSSUnit } from '@/utils';
 
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface IconOverrides {}

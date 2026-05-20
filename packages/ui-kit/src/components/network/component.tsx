@@ -5,7 +5,7 @@ import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
 import { Logo } from './logo';
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface NetworkOverrides {}

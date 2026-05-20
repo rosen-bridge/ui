@@ -3,7 +3,7 @@ import { Collapsible as CollapsibleBaseUI } from '@base-ui/react/collapsible';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CollapsibleOverrides {}

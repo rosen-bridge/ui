@@ -4,7 +4,7 @@ import { useConfig } from '@/hooks';
 import { ElementBaseProps, Gap, OverridableType, Width } from '@/types';
 import { toCSSUnit } from '@/utils';
 
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ColumnsOverrides {}
@@ -61,7 +61,7 @@ export const Columns = (props: ColumnsProps) => {
       columnCount: count || 'auto',
       ...style,
     }),
-    [style],
+    [count, gap, style, width],
   );
 
   return <div data-rule={!!rule} style={styles} {...rest} />;

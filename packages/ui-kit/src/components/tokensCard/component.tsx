@@ -51,8 +51,9 @@ export const TokensCard = (props: TokensCardProps) => {
             <Button
               variant="text"
               size="medium"
-              target="_blank"
-              href={href}
+              // TODO
+              // target="_blank"
+              // href={href}
               endIcon={<Icon name="AngleRight" />}
             >
               See All

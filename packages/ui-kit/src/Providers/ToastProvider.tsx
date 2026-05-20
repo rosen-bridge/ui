@@ -4,7 +4,7 @@ import { Toast } from '@base-ui/react/toast';
 
 import { Alert, AlertProps, CopyButton } from '@/components';
 
-import './ToastProvider.scss';
+import './ToastProvider.css';
 
 export type ToastProviderProps = {
   children?: ReactNode;

@@ -6,7 +6,7 @@ import { Button, Divider, Icon, IconButton, Typography } from '@/components';
 import { useConfig, usePagination } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PaginationOverrides {}

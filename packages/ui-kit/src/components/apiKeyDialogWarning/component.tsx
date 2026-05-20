@@ -39,16 +39,17 @@ export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
     <div style={styles} {...rest}>
       <Alert
         severity="warning"
-        sx={{
-          '@container (max-width: 480px)': {
-            'display': 'grid',
-            'gridTemplateColumns': 'auto 1fr',
-            '.MuiAlert-action': {
-              gridColumn: '2',
-              gridRow: '2',
-            },
-          },
-        }}
+        // TODO
+        // sx={{
+        //   '@container (max-width: 480px)': {
+        //     'display': 'grid',
+        //     'gridTemplateColumns': 'auto 1fr',
+        //     '.MuiAlert-action': {
+        //       gridColumn: '2',
+        //       gridRow: '2',
+        //     },
+        //   },
+        // }}
         action={
           <Button size="small" onClick={() => setIsOpen(true)}>
             SET API KEY

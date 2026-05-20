@@ -3,7 +3,7 @@ import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { Collapsible, Icon, IconButton, IconProps } from '@/components';
 import { OverridableType, ElementBaseProps } from '@/types';
 
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AlertOverrides {}

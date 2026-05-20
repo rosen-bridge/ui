@@ -124,13 +124,14 @@ export const HealthParamCard = ({
         {value?.details && (
           <Alert
             variant="filled"
-            sx={{
-              bgcolor: colors.alertBackground,
-              color: colors.alert,
-              mt: 2,
-              wordBreak: 'normal',
-              overflowWrap: 'break-word',
-            }}
+            // TODO
+            // sx={{
+            //   bgcolor: colors.alertBackground,
+            //   color: colors.alert,
+            //   mt: 2,
+            //   wordBreak: 'normal',
+            //   overflowWrap: 'break-word',
+            // }}
           >
             {value.details}
           </Alert>
