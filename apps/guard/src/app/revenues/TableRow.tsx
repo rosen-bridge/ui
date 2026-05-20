@@ -9,10 +9,33 @@ import {
   TableRow,
 } from '@rosen-bridge/ui-kit';
 import { NETWORKS } from '@rosen-ui/constants';
-import { getTxURL } from '@rosen-ui/utils';
+import { getDecimalString, getTxURL } from '@rosen-ui/utils';
 
 import { useInfo } from '@/hooks';
-import { Revenue } from '@/types/api';
+import { ApiInfoResponse, Revenue } from '@/types/api';
+
+const getEmissionAmount = (
+  info: ApiInfoResponse | undefined,
+  row: RowProps,
+) => {
+  if (!info) return;
+
+  const revenues = row.revenues.filter(
+    (revenue) =>
+      revenue.revenueType === 'emission' &&
+      (revenue.data.tokenId === info?.rsnTokenId ||
+        revenue.data.tokenId === info?.emissionTokenId),
+  );
+
+  const amount = revenues.reduce(
+    (sum, revenue) => sum + revenue.data.amount,
+    0,
+  );
+
+  const decimals = revenues.at(0)?.data.decimals;
+
+  return getDecimalString(amount, decimals);
+};
 
 interface RowProps extends Revenue {
   isLoading?: boolean;
@@ -209,16 +232,8 @@ export const MobileRow: FC<RowProps> = (props) => {
             <EnhancedTableCell>Emission (RSN)</EnhancedTableCell>
             <EnhancedTableCell>
               <Amount
-                value={
-                  row.revenues.find(
-                    (revenue) =>
-                      revenue.revenueType === 'emission' &&
-                      (revenue.data.tokenId === info?.rsnTokenId ||
-                        revenue.data.tokenId === info?.emissionTokenId),
-                  )?.data.amount
-                }
+                value={getEmissionAmount(info, row)}
                 fallback="0"
-                decimal={row.lockToken.decimals}
                 loading={isInfoLoading}
               />
             </EnhancedTableCell>
@@ -309,16 +324,8 @@ export const TabletRow: FC<RowProps> = (props) => {
       </EnhancedTableCell>
       <EnhancedTableCell style={rowStyles} align="center">
         <Amount
-          value={row.revenues
-            .filter(
-              (revenue) =>
-                revenue.revenueType === 'emission' &&
-                (revenue.data.tokenId === info?.rsnTokenId ||
-                  revenue.data.tokenId === info?.emissionTokenId),
-            )
-            .reduce((sum, revenue) => sum + revenue.data.amount, 0)}
+          value={getEmissionAmount(info, row)}
           fallback="0"
-          decimal={row.lockToken.decimals}
           loading={isInfoLoading}
         />
       </EnhancedTableCell>

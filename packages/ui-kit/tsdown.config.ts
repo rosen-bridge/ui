@@ -10,7 +10,6 @@ export default defineConfig({
     onlyAllowBundle: false,
   },
   css: {
-    transformer: 'postcss',
     postcss: {
       plugins: [autoprefixer()],
     },
