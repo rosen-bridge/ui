@@ -15,7 +15,22 @@ import {
 
 import { AppProps } from '../components';
 
+export { createTheme, styled } from '@mui/material';
+
 declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    laptop: true;
+    tablet: true;
+    mobile: true;
+    desktop: true;
+
+    xs: false;
+    sm: false;
+    md: false;
+    lg: false;
+    xl: false;
+  }
+
   interface TypeBackground {
     shadow: string;
   }
@@ -41,6 +56,7 @@ declare module '@mui/material/styles' {
   }
 
   interface PaletteOptions {
+    background?: Partial<TypeBackground>;
     neutral?: Partial<TypeNeutral>;
   }
 
@@ -62,6 +78,10 @@ declare module '@mui/material/styles' {
     RosenNavigationBar?: {
       styleOverrides?: ComponentsOverrides<Theme>['RosenNavigationBar'];
     };
+  }
+
+  interface Shape {
+    borderRadius: number;
   }
 }
 

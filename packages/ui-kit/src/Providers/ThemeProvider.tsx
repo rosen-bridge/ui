@@ -1,7 +1,10 @@
-import React, { createContext, useState } from 'react';
+import { ReactNode, createContext, useMemo, useState } from 'react';
 
 import { Theme, useMediaQuery } from '@mui/material';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme,
+} from '@mui/material/styles';
 
 export const ThemeTogglerContext = createContext({
   mode: 'light',
@@ -9,13 +12,11 @@ export const ThemeTogglerContext = createContext({
 });
 
 export interface ThemeProviderProps {
-  children: React.ReactNode;
-  theme:
-    | Theme
-    | {
-        light: Theme;
-        dark: Theme;
-      };
+  children: ReactNode;
+  theme: {
+    light: Theme;
+    dark: Theme;
+  };
 }
 
 export const ThemeProvider = ({
@@ -43,9 +44,19 @@ export const ThemeProvider = ({
     window.localStorage.setItem('rosen:theme', nextMode);
   };
 
+  const final = useMemo(() => {
+    document.body.setAttribute('data-theme', theme.palette.mode);
+    return createTheme({
+      cssVariables: {
+        cssVarPrefix: 'rosen',
+      },
+      ...theme,
+    });
+  }, [theme]);
+
   return (
     <ThemeTogglerContext.Provider value={{ mode, toggle }}>
-      <MuiThemeProvider theme={theme}>{children}</MuiThemeProvider>
+      <MuiThemeProvider theme={final}>{children}</MuiThemeProvider>
     </ThemeTogglerContext.Provider>
   );
 };
