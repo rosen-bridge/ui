@@ -1,5 +1,5 @@
 ---
-'@rosen-ui/firo-wallet': minor
+'@rosen-ui/firo': minor
 ---
 
-Introduce the `@rosen-ui/firo-wallet` package, providing browser-extension wallet support for Firo.
+Introduce the Firo wallet package with QR-based payment support via ElectrumX.

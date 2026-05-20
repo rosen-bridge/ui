@@ -1,12 +1,13 @@
 import { FiroNetwork } from '@rosen-network/firo/dist/client';
+import { buildPaymentUri } from '@rosen-network/firo';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
 import {
   UnsupportedChainError,
-  UserDeniedTransactionSignatureError,
   Wallet,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
+import { RosenChainToken } from '@rosen-bridge/tokens';
 
 import { ICON } from './icon';
 import { FiroWalletConfig } from './types';
@@ -24,41 +25,30 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
 
   supportedChains: Network[] = [NETWORKS.firo.key];
 
-  private get api() {
-    return window.firo;
-  }
+  performConnect = async (): Promise<void> => {};
 
-  performConnect = async (): Promise<void> => {
-    if (await this.isConnected()) return;
-    await this.api.connect();
-  };
-
-  performDisconnect = async (): Promise<void> => {
-    await this.api.disconnect();
-  };
+  performDisconnect = async (): Promise<void> => {};
 
   fetchAddress = async (): Promise<string | undefined> => {
-    return (await this.api.getConnectionStatus()).selectedWalletAddress;
+    return 'N/A';
   };
 
-  fetchBalance = async (): Promise<string> => {
-    return (await this.api.getBalance()).balance;
+  fetchBalance = async (token: RosenChainToken): Promise<number> => {
+    return 10 ** token.decimals * -1;
   };
 
   isAvailable = (): boolean => {
-    return typeof window.firo !== 'undefined' && !!window.firo;
+    return true;
   };
 
   hasConnection = async (): Promise<boolean> => {
-    return (await this.api.getConnectionStatus()).isConnected;
+    return true;
   };
 
   performTransfer = async (params: WalletTransferParams): Promise<string> => {
     if (!(this.currentNetwork instanceof FiroNetwork)) {
       throw new UnsupportedChainError(this.name, this.currentChain);
     }
-
-    const userAddress = await this.getAddress();
 
     const opReturnData = await this.currentNetwork.generateOpReturnData(
       params.toChain,
@@ -67,22 +57,12 @@ export class FiroWallet extends Wallet<FiroWalletConfig> {
       params.bridgeFee.toString(),
     );
 
-    const psbtData = await this.currentNetwork.generateUnsignedTx(
-      params.lockAddress,
-      userAddress,
-      params.amount,
+    const uri = buildPaymentUri(
+      this.currentNetwork.lockAddress,
+      params.amount.toString(),
       opReturnData,
-      params.token,
     );
 
-    try {
-      return await this.api.signAndBroadcastTransaction({
-        rawTx: psbtData.psbt.hex,
-        indexes: Array.from(Array(psbtData.inputSize).keys()),
-        signOnly: false,
-      });
-    } catch (error) {
-      throw new UserDeniedTransactionSignatureError(this.name, error);
-    }
+    return 'qrcode:' + uri;
   };
 }
