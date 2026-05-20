@@ -81,10 +81,9 @@ firo:
     rwt:
   initialHeight:
   explorerUrl: https://explorer.firo.org
-  rpc:
-    url:
-    username:
-    password:
+  electrumx:
+    host: 127.0.0.1
+    port: 50001
 ethereum:
   addresses:
     lock:

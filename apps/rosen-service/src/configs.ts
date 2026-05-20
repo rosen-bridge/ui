@@ -157,9 +157,8 @@ const getConfig = () => {
           rwt: nodeConfig.get<string>('firo.tokens.rwt'),
         },
         explorerUrl: nodeConfig.get<string>('firo.explorerUrl'),
-        rpcUrl: nodeConfig.get<string>('firo.rpc.url'),
-        rpcUsername: getOptionalString('firo.rpc.username'),
-        rpcPassword: getOptionalString('firo.rpc.password'),
+        electrumxHost: nodeConfig.get<string>('firo.electrumx.host'),
+        electrumxPort: nodeConfig.get<number>('firo.electrumx.port'),
       },
       postgres: {
         url: nodeConfig.get<string>('postgres.url'),

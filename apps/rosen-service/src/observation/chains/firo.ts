@@ -1,6 +1,6 @@
 import { DefaultLogger } from '@rosen-bridge/abstract-logger';
-import { FiroRpcObservationExtractor } from '@rosen-bridge/firo-observation-extractor';
-import { FiroRpcScanner } from '@rosen-bridge/firo-scanner';
+import { FiroObservationExtractor } from '@rosen-bridge/firo-observation-extractor';
+import { FiroElectrumXScanner } from '@rosen-bridge/firo-scanner';
 
 import config from '../../configs';
 import dataSource from '../../data-source';
@@ -13,13 +13,13 @@ const logger = DefaultLogger.getInstance().child(import.meta.url);
  * register an observation extractor for the provided scanner
  * @param scanner
  */
-export const registerFiroExtractor = async (scanner: FiroRpcScanner) => {
+export const registerFiroExtractor = async (scanner: FiroElectrumXScanner) => {
   try {
-    const observationExtractor = new FiroRpcObservationExtractor(
+    const observationExtractor = new FiroObservationExtractor(
       config.firo.addresses.lock,
       dataSource,
       await getTokenMap(),
-      logger.child('firoRpcObservationExtractor'),
+      logger.child('firoObservationExtractor'),
     );
 
     await scanner.registerExtractor(observationExtractor);

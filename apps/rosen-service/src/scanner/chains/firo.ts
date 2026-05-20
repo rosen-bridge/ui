@@ -4,8 +4,8 @@ import {
   NetworkConnectorManager,
 } from '@rosen-bridge/abstract-scanner';
 import {
-  FiroRpcNetwork,
-  FiroRpcScanner,
+  FiroElectrumXNetwork,
+  FiroElectrumXScanner,
   FiroRpcTransaction,
 } from '@rosen-bridge/firo-scanner';
 
@@ -34,15 +34,10 @@ export const createFiroNetworkConnectorManager = () => {
     );
 
   networkConnectorManager.addConnector(
-    new FiroRpcNetwork(
-      config.firo.rpcUrl,
+    new FiroElectrumXNetwork(
+      config.firo.electrumxHost,
+      config.firo.electrumxPort,
       SCANNER_API_TIMEOUT * 1000,
-      config.firo.rpcUsername && config.firo.rpcPassword
-        ? {
-            username: config.firo.rpcUsername,
-            password: config.firo.rpcPassword,
-          }
-        : undefined,
     ),
   );
 
@@ -55,7 +50,7 @@ export const createFiroNetworkConnectorManager = () => {
  */
 export const startFiroScanner = async () => {
   try {
-    const scanner = new FiroRpcScanner({
+    const scanner = new FiroElectrumXScanner({
       dataSource,
       initialHeight: config.firo.initialHeight,
       logger: scannerLogger,

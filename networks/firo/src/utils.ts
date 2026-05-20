@@ -1,3 +1,6 @@
+import { createHash } from 'crypto';
+import * as net from 'net';
+
 import { encodeAddress } from '@rosen-bridge/address-codec';
 import {
   CalculateFee,
@@ -6,7 +9,6 @@ import {
 } from '@rosen-network/base';
 import { NETWORKS } from '@rosen-ui/constants';
 import { Network } from '@rosen-ui/types';
-import Axios from 'axios';
 import { Psbt, address } from 'bitcoinjs-lib';
 
 import {
@@ -17,31 +19,137 @@ import {
   FIRO_OUTPUT_SIZE,
   FIRO_NETWORK,
 } from './constants';
-import type {
-  FiroRpcBalance,
-  FiroRpcNetworkInfo,
-  FiroRpcResponse,
-  FiroRpcSmartFee,
-  FiroRpcUtxo,
-  FiroUtxo,
-} from './types';
+import type { FiroUtxo } from './types';
 
-const FIRO_DECIMALS = 100000000;
+// Base58 alphabet (Bitcoin/Firo style)
+const BASE58_ALPHABET =
+  '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz';
 
-const getFiroRpcUrl = () => {
-  const rpcUrl = process.env.FIRO_RPC_API;
-  if (!rpcUrl) throw Error('FIRO_RPC_API is not set');
-  return rpcUrl.replace(/\/+$/, '');
+// ─── Configuration ───────────────────────────────────────────────────────
+
+const getElectrumxHost = () => {
+  const host = process.env.FIRO_ELECTRUMX_HOST;
+  if (!host) throw Error('FIRO_ELECTRUMX_HOST is not set');
+  return host;
 };
 
-const firoToSatoshis = (value: number | string): bigint => {
-  if (typeof value === 'number' || value.toLowerCase().includes('e')) {
-    return BigInt(Math.round(Number(value) * FIRO_DECIMALS));
+const getElectrumxPort = () => {
+  const port = process.env.FIRO_ELECTRUMX_PORT;
+  if (!port) throw Error('FIRO_ELECTRUMX_PORT is not set');
+  return parseInt(port, 10);
+};
+
+// ─── Base58 / scripthash ────────────────────────────────────────────────
+
+function base58Decode(encoded: string): Buffer {
+  // Count leading '1' characters (each encodes a zero byte)
+  let leadingZeros = 0;
+  for (const char of encoded) {
+    if (char === '1') leadingZeros++;
+    else break;
   }
 
-  const [integer, fraction = ''] = value.split('.');
-  return BigInt(`${integer}${fraction.padEnd(8, '0').slice(0, 8)}`);
+  let big = 0n;
+  for (const c of encoded) {
+    const digit = BASE58_ALPHABET.indexOf(c);
+    if (digit < 0) throw new Error(`Invalid base58 character: ${c}`);
+    big = big * 58n + BigInt(digit);
+  }
+
+  const hex = big.toString(16);
+  const paddedHex = (hex.length % 2 === 0 ? '' : '0') + hex;
+  const fullHex = '00'.repeat(leadingZeros) + paddedHex;
+  return Buffer.from(fullHex, 'hex');
+}
+
+function addressToScripthash(address: string): string {
+  const decoded = base58Decode(address);
+  // Skip version byte, extract 20-byte pubkey hash, skip 4-byte checksum
+  const pubkeyHash = decoded.subarray(1, 21);
+  // Build P2PKH script: OP_DUP OP_HASH160 <20 bytes> OP_EQUALVERIFY OP_CHECKSIG
+  const script = Buffer.concat([
+    Buffer.from([0x76, 0xa9, 0x14]),
+    pubkeyHash,
+    Buffer.from([0x88, 0xac]),
+  ]);
+  const scripthash = createHash('sha256').update(script).digest().reverse();
+  return scripthash.toString('hex');
+}
+
+// ─── ElectrumX TCP ───────────────────────────────────────────────────────
+
+const callElectrumX = async <T>(
+  method: string,
+  params: Array<unknown> = [],
+): Promise<T> => {
+  const host = getElectrumxHost();
+  const port = getElectrumxPort();
+
+  return new Promise((resolve, reject) => {
+    const socket = net.createConnection(port, host);
+    let buffer = '';
+
+    const timer = setTimeout(() => {
+      socket.destroy();
+      reject(new Error(`ElectrumX request timeout [${method}]`));
+    }, 30000);
+
+    socket.on('data', (data: Buffer) => {
+      buffer += data.toString('utf-8');
+      const lines = buffer.split('\n');
+      buffer = lines.pop() || '';
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const response = JSON.parse(line);
+          if (response.id === 1) {
+            clearTimeout(timer);
+            socket.destroy();
+            if (response.error) {
+              reject(
+                new Error(
+                  `ElectrumX error: ${response.error.message || JSON.stringify(response.error)}`,
+                ),
+              );
+            } else {
+              resolve(response.result as T);
+            }
+          }
+        } catch {
+          // ignore parse errors
+        }
+      }
+    });
+
+    socket.on('error', (err: Error) => {
+      clearTimeout(timer);
+      reject(err);
+    });
+
+    socket.once('connect', () => {
+      // Send server.version handshake
+      socket.write(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: 0,
+          method: 'server.version',
+          params: ['rosen-ui', '1.4'],
+        }) + '\n',
+      );
+      // Send the actual request
+      socket.write(
+        JSON.stringify({
+          jsonrpc: '2.0',
+          id: 1,
+          method,
+          params,
+        }) + '\n',
+      );
+    });
+  });
 };
+
+// ─── Transaction parsing helpers ─────────────────────────────────────────
 
 const readCompactSize = (buffer: Buffer, offset: number) => {
   const first = buffer[offset];
@@ -63,32 +171,6 @@ const readCompactSize = (buffer: Buffer, offset: number) => {
     throw Error('Unsupported Firo transaction field size');
   }
   return { value: Number(value), size: 9 };
-};
-
-const callFiroRpc = async <T>(
-  method: string,
-  params: Array<unknown> = [],
-): Promise<T> => {
-  const rpcUrl = getFiroRpcUrl();
-
-  const res = await Axios.post<FiroRpcResponse<T>>(
-    rpcUrl,
-    {
-      jsonrpc: '1.0',
-      id: 'rosen-ui',
-      method,
-      params,
-    },
-    {
-      headers: { 'Content-Type': 'application/json' },
-    },
-  );
-
-  if (res.data.error) {
-    throw Error(`Firo RPC ${method} failed: ${res.data.error.message}`);
-  }
-
-  return res.data.result;
 };
 
 const assertBytes = (buffer: Buffer, offset: number, size: number) => {
@@ -170,14 +252,8 @@ const stripFiroExtraPayload = (txHex: string) => {
   return buffer.subarray(0, offset).toString('hex');
 };
 
-/**
- * generates metadata for lock transaction
- * @param toChain
- * @param toAddress
- * @param networkFee
- * @param bridgeFee
- * @returns
- */
+// ─── Network operations ──────────────────────────────────────────────────
+
 /**
  * builds a firo: payment URI with amount and op_return metadata
  * @param address - lock address
@@ -229,77 +305,76 @@ export const generateOpReturnData = async (
 };
 
 /**
- * gets utxos by address from Firo RPC
+ * gets utxos by address from ElectrumX
  * @param address
  * @returns
  */
 export const getAddressUtxos = async (
   address: string,
 ): Promise<Array<FiroUtxo>> => {
-  const rpcUtxos = await callFiroRpc<Array<FiroRpcUtxo>>('getaddressutxos', [
-    { addresses: [address] },
-  ]);
-  return rpcUtxos
+  const scripthash = addressToScripthash(address);
+  const utxos = await callElectrumX<
+    Array<{
+      tx_hash: string;
+      tx_pos: number;
+      height: number;
+      value: number;
+    }>
+  >('blockchain.scripthash.listunspent', [scripthash]);
+
+  return utxos
     .filter((utxo) => utxo.height > 0)
     .map((utxo) => ({
-      txId: utxo.txid,
-      index: utxo.outputIndex,
-      value: BigInt(utxo.satoshis),
+      txId: utxo.tx_hash,
+      index: utxo.tx_pos,
+      value: BigInt(utxo.value),
     }));
 };
 
 /**
- * gets tx hex by txId from Firo RPC
+ * gets tx hex by txId from ElectrumX
  * @param txId
  * @returns
  */
 export const getTxHex = async (txId: string): Promise<string> => {
-  const txHex = await callFiroRpc<string>('getrawtransaction', [txId, false]);
+  const txHex = await callElectrumX<string>('blockchain.transaction.get', [
+    txId,
+  ]);
   return stripFiroExtraPayload(txHex);
 };
 
 /**
- * gets address Firo balance from Firo RPC
+ * gets address Firo balance from ElectrumX
  * @param address
  * @returns this is a UNWRAPPED-VALUE amount
  */
 export const getAddressBalance = async (address: string): Promise<bigint> => {
-  const balance = await callFiroRpc<FiroRpcBalance>('getaddressbalance', [
-    { addresses: [address] },
-  ]);
-  return BigInt(balance.balance);
+  const scripthash = addressToScripthash(address);
+  const balance = await callElectrumX<{ confirmed: number; unconfirmed: number }>(
+    'blockchain.scripthash.get_balance',
+    [scripthash],
+  );
+  return BigInt(balance.confirmed);
 };
 
 /**
- * gets current fee ratio of the network from Firo RPC
- * @returns
+ * gets current fee ratio of the network from ElectrumX
+ * @returns fee ratio in satoshis per byte
  */
 export const getFeeRatio = async (): Promise<number> => {
-  const smartFee = await callFiroRpc<FiroRpcSmartFee>('estimatesmartfee', [
+  const feeRate = await callElectrumX<number>('blockchain.estimatefee', [
     CONFIRMATION_TARGET,
-  ]).catch(() => undefined);
-  if (smartFee?.feerate && smartFee.feerate >= 0) {
-    // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(smartFee.feerate)) / 1000;
+  ]);
+
+  if (feeRate <= 0) {
+    // Fallback if estimatefee returns -1 or 0
+    return 1;
   }
 
-  const feeEstimate = await callFiroRpc<number>('estimatefee', [
-    CONFIRMATION_TARGET,
-  ]).catch(() => undefined);
-  if (feeEstimate && feeEstimate >= 0) {
-    // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(feeEstimate)) / 1000;
-  }
-
-  const networkInfo = await callFiroRpc<FiroRpcNetworkInfo>(
-    'getnetworkinfo',
-  ).catch(() => undefined);
-  if (networkInfo?.relayfee && networkInfo.relayfee >= 0) {
-    // Convert satoshis per KB to satoshis per byte
-    return Number(firoToSatoshis(networkInfo.relayfee)) / 1000;
-  }
-
-  throw Error('Firo fee estimate is not available');
+  // ElectrumX returns BTC/kB, convert to satoshis/byte
+  const feeSatoshis = Math.ceil(feeRate * 100000000);
+  const feePerByte = Math.ceil(feeSatoshis / 1000);
+  return feePerByte;
 };
 
 /**
@@ -333,7 +408,7 @@ export const estimateTxSize = (
 };
 
 /**
- * submits a transaction to Firo RPC
+ * submits a transaction to ElectrumX
  * @param serializedPsbt psbt in base64 or hex format
  * @param encoding psbt encoding ('base64' or 'hex')
  */
@@ -348,7 +423,7 @@ export const submitTransaction = async (
   psbt.finalizeAllInputs();
   const txHex = psbt.extractTransaction().toHex();
 
-  return callFiroRpc<string>('sendrawtransaction', [txHex]);
+  return callElectrumX<string>('blockchain.transaction.broadcast', [txHex]);
 };
 
 export const isValidAddress = (addr: string) => {
@@ -362,7 +437,11 @@ export const isValidAddress = (addr: string) => {
 };
 
 export const getHeight = async (): Promise<number> => {
-  return callFiroRpc<number>('getblockcount');
+  const result = await callElectrumX<{ height: number }>(
+    'blockchain.headers.subscribe',
+    [],
+  );
+  return result.height;
 };
 
 export const calculateFee: CalculateFee = calculateFeeCreator(
