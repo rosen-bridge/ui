@@ -1,7 +1,7 @@
-import { Icon, IconProps } from '@/components';
 import { useConfig, useIsDarkMode, useThemeToggler } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { Icon, IconProps } from '../icon';
 import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
