@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react';
 
-import { Alert, ApiKeyDialog, Button } from '@/components';
+import { Alert } from '@mui/material';
+
 import { useApiKey, useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { ApiKeyDialog } from '../apiKeyDialog';
+import { Button } from '../button';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogWarningOverrides {}
@@ -39,17 +43,16 @@ export const ApiKeyDialogWarning = (props: ApiKeyDialogWarningProps) => {
     <div style={styles} {...rest}>
       <Alert
         severity="warning"
-        // TODO
-        // sx={{
-        //   '@container (max-width: 480px)': {
-        //     'display': 'grid',
-        //     'gridTemplateColumns': 'auto 1fr',
-        //     '.MuiAlert-action': {
-        //       gridColumn: '2',
-        //       gridRow: '2',
-        //     },
-        //   },
-        // }}
+        sx={{
+          '@container (max-width: 480px)': {
+            'display': 'grid',
+            'gridTemplateColumns': 'auto 1fr',
+            '.MuiAlert-action': {
+              gridColumn: '2',
+              gridRow: '2',
+            },
+          },
+        }}
         action={
           <Button size="small" onClick={() => setIsOpen(true)}>
             SET API KEY

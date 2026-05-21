@@ -1,7 +1,7 @@
-import { Typography, TypographyProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { Typography, TypographyProps } from '../typography';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

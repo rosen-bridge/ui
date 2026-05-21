@@ -1,9 +1,11 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Collapsible, Icon, IconButton, IconProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
 
+import { Collapsible } from '../collapsible';
+import { Icon, IconProps } from '../icon';
+import { IconButton } from '../iconButton';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

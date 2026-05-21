@@ -1,19 +1,15 @@
 import { useState } from 'react';
 
-import {
-  Skeleton,
-  QrCodeDialog,
-  CopyButton,
-  Icon,
-  IconButton,
-  Tooltip,
-  TooltipProps,
-  Typography,
-  TypographyProps,
-} from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { CopyButton } from '../copyButton';
+import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
+import { QrCodeDialog } from '../qrCodeDialog';
+import { Skeleton } from '../skeleton';
+import { Tooltip, TooltipProps } from '../tooltip';
+import { Typography, TypographyProps } from '../typography';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

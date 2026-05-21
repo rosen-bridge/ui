@@ -2,10 +2,11 @@ import { ReactNode } from 'react';
 
 import { Dialog as DialogBaseUI } from '@base-ui/react/dialog';
 
-import { CloseButton, CloseButtonProps, Icon, IconProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { CloseButton, CloseButtonProps } from '../closeButton';
+import { Icon, IconProps } from '../icon';
 import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
