@@ -1,0 +1,86 @@
+import { useMemo } from 'react';
+
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
+import { calculateRelativeTime } from '@/utils';
+
+import { Skeleton } from '../skeleton';
+import { Typography } from '../typography';
+import './styles.css';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface RelativeTimeOverrides {}
+
+export type RelativeTimeOwnProps = {
+  /**
+   * Optional flag to show loading state.
+   */
+  loading?: boolean;
+
+  /**
+   * The target time to compare with the current time.
+   */
+  value?: Date | number;
+};
+
+export type RelativeTimeBaseProps = ElementBaseProps<
+  'div',
+  RelativeTimeOwnProps
+>;
+
+export type RelativeTimeProps = OverridableType<
+  RelativeTimeBaseProps,
+  RelativeTimeOverrides,
+  never
+>;
+
+/**
+ * A lightweight component to display relative time based on a given timestamp.
+ */
+export const RelativeTime = (props: RelativeTimeProps) => {
+  const { loading, value, ...rest } = useConfig('RelativeTime', props);
+
+  const { prefix, number, unit, suffix, displayText } = useMemo(
+    () => calculateRelativeTime(value),
+    [value],
+  );
+
+  return (
+    <div {...rest}>
+      {loading && <Skeleton attached />}
+      {displayText ? (
+        <Typography color="text-secondary" variant="body2">
+          {displayText}
+        </Typography>
+      ) : (
+        <>
+          {prefix && (
+            <Typography color="text-secondary" variant="body2">
+              {prefix}
+            </Typography>
+          )}
+          <Typography
+            color="text-primary"
+            sx={{
+              fontSize: '18px',
+            }}
+          >
+            {number}
+          </Typography>
+          {unit && (
+            <Typography color="text-secondary" variant="body2">
+              {unit}
+            </Typography>
+          )}
+          {suffix && (
+            <Typography color="text-secondary" variant="body2">
+              {suffix}
+            </Typography>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
+RelativeTime.displayName = 'RelativeTime';

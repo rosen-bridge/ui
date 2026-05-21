@@ -1,0 +1,76 @@
+.RosenLabel {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.RosenLabel[data-orientation='horizontal'] {
+  flex-direction: row;
+  align-items: center;
+  gap: calc(var(--rosen-spacing) * 2);
+}
+
+.RosenLabel[data-orientation='vertical'] {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.RosenLabel-header {
+  display: flex;
+  align-items: center;
+  gap: calc(var(--rosen-spacing) * 1);
+}
+
+.RosenLabel[data-dense='false'] {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.RosenLabel[data-dense='true'] {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.RosenLabel[data-inset='true'] .RosenLabel-header {
+  position: relative;
+  padding-left: 24px;
+}
+
+.RosenLabel[data-inset='true'] .RosenLabel-header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  height: 100%;
+  width: 12px;
+  border-style: dashed;
+  border-image: initial;
+  border-width: 0px 0px 1px 1px;
+  border-bottom-left-radius: 6px;
+  border-color: rgba(0, 0, 0, 0.12);
+  transform: translateY(-50%);
+  margin-left: var(--rosen-spacing);
+}
+
+.RosenLabel-content {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.RosenLabel[data-orientation='horizontal'] .RosenLabel-content {
+  height: unset;
+  flex-grow: 1;
+  align-self: center;
+  justify-content: end;
+}
+
+.RosenLabel[data-orientation='vertical'] .RosenLabel-content {
+  height: 2em;
+  flex-grow: 0;
+  align-self: stretch;
+  justify-content: flex-start;
+}
