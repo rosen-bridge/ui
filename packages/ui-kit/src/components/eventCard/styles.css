@@ -1,0 +1,18 @@
+.RosenEventCard-body {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--rosen-spacing) * 1);
+}
+
+.RosenEventCard-header {
+  display: flex;
+  flex-direction: row;
+  gap: var(--rosen-spacing);
+}
+
+.RosenEventCard-footer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-size: 12px;
+}
