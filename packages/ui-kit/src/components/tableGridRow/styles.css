@@ -1,0 +1,8 @@
+.RosenTableGridRow {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  padding: var(--rosen-spacing) 0;
+  background-color: var(--rosen-palette-background-paper);
+  border-radius: var(--rosen-shape-borderRadius);
+}
