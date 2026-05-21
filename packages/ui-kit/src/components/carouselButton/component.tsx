@@ -1,6 +1,9 @@
-import { Icon, IconButton, IconProps, useCarousel } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { useCarousel } from '../carousel';
+import { Icon, IconProps } from '../icon';
+import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CarouselButtonOverrides {}

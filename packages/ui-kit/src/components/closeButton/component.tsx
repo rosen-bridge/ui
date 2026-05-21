@@ -1,6 +1,8 @@
-import { Icon, IconButton, IconProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { Icon, IconProps } from '../icon';
+import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CloseButtonOverrides {}

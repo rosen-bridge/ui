@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 
-import { Chip, ChipProps, IconProps } from '@/components';
+import { Chip, ChipProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
+import { IconProps } from '../icon';
 import { STATUS_MAP } from './constants';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

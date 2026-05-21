@@ -1,23 +1,16 @@
-import {
-  Amount,
-  AmountProps,
-  Columns,
-  EventStatus,
-  EventStatusProps,
-  Identifier,
-  IdentifierProps,
-  Label,
-  LabelGroup,
-  Network,
-  NetworkProps,
-  RelativeTime,
-  RelativeTimeProps,
-  Token,
-  TokenProps,
-  Typography,
-} from '@/components';
+import { Amount, AmountProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { Columns } from '../columns';
+import { EventStatus, EventStatusProps } from '../eventStatus';
+import { Identifier, IdentifierProps } from '../identifier';
+import { Label } from '../label';
+import { LabelGroup } from '../labelGroup';
+import { Network, NetworkProps } from '../network';
+import { RelativeTime, RelativeTimeProps } from '../relativeTime';
+import { Token, TokenProps } from '../token';
+import { Typography } from '../typography';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface EventDetailsOverrides {}
