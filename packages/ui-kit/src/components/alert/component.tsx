@@ -1,6 +1,7 @@
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Collapsible, Icon, IconButton, IconProps } from '@/components';
+import { useConfig } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
 
 import './styles.css';
@@ -21,16 +22,18 @@ export type AlertBaseProps = ElementBaseProps<'div', AlertOwnProps>;
 
 export type AlertProps = OverridableType<AlertBaseProps, AlertOverrides, never>;
 
-export const Alert = ({
-  action,
-  children,
-  dismissible,
-  severity = 'info',
-  timeout,
-  variant = 'standard',
-  onClose,
-  ...rest
-}: AlertProps) => {
+export const Alert = (props: AlertProps) => {
+  const {
+    action,
+    children,
+    dismissible,
+    severity = 'info',
+    timeout,
+    variant = 'standard',
+    onClose,
+    ...rest
+  } = useConfig('Alert', props);
+
   const [open, setOpen] = useState(true);
 
   const icon = useMemo<IconProps['name']>(() => {
