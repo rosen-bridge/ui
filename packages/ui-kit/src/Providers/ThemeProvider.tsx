@@ -1,8 +1,10 @@
 import { ReactNode, createContext, useMemo, useState } from 'react';
 
 import { Theme, useMediaQuery } from '@mui/material';
-import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
-import { createTheme } from '@mui/material/styles';
+import {
+  ThemeProvider as MuiThemeProvider,
+  createTheme,
+} from '@mui/material/styles';
 
 export const ThemeTogglerContext = createContext({
   mode: 'light',

@@ -9,7 +9,7 @@
   gap: var(--rosen-spacing);
 }
 
-// TODO: make it better
+/* TODO: make it better */
 .RosenViewToggle button.active {
   background: var(--rosen-palette-primary-main);
   svg {

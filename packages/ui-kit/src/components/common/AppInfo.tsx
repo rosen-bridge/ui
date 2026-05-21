@@ -3,15 +3,20 @@ import React, { useState } from 'react';
 import { Typography } from '@mui/material';
 import { Network as NetworkType } from '@rosen-ui/types';
 
-import { Dialog, DialogContent, DialogHeader, DialogTitle, Divider } from '@/components';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  Divider,
+} from '@/components';
 
+import { useToast } from '../../hooks';
 import { Avatar } from '../avatar';
 import { Icon, IconProps } from '../icon';
 import { IconButton } from '../iconButton';
 import { Network } from '../network';
 import { Stack } from '../stack';
-import { useToast } from '../../hooks';
-
 
 type NetworkHeight = {
   network: NetworkType;
@@ -62,7 +67,7 @@ export const AppInfo = ({ children, resolver }: AppInfoProps) => {
     } catch {
       toast.add({
         type: 'error',
-        description: 'Failed to load app information'
+        description: 'Failed to load app information',
       });
     } finally {
       setLoading(false);

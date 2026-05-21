@@ -1,8 +1,9 @@
 import { CSSProperties } from 'react';
 
-import { Button } from '@/components';
 import { useConfig, useResponsive } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { Button } from '../button';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface SubmitButtonOverrides {}

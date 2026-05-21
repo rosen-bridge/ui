@@ -1,8 +1,9 @@
-import { Icon, Tooltip, TooltipProps } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.scss';
+import { Icon } from '../icon';
+import { Tooltip, TooltipProps } from '../tooltip';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface InfoIconOverrides {}

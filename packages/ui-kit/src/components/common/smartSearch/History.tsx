@@ -10,6 +10,8 @@ import {
 
 import { ClickAwayListener } from '@mui/material';
 
+import { Divider } from '@/components';
+
 import { useBreakpoint } from '../../../hooks';
 import {
   List,
@@ -25,7 +27,6 @@ import { Truncate } from '../../truncate';
 import { Popup } from './Popup';
 import { Filter, Selected } from './types';
 import { parseFilter } from './utils';
-import { Divider } from '@/components';
 
 type Item = {
   bookmark: boolean;

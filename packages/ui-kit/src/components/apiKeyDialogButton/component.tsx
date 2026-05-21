@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
-import { ApiKeyDialog, Icon, IconButton } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { ApiKeyDialog } from '../apiKeyDialog';
+import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogButtonOverrides {}

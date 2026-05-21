@@ -1,9 +1,10 @@
 // TODO: use ToggleButton button and add slots
-import { Icon, IconButton } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.scss';
+import { Icon } from '../icon';
+import { IconButton } from '../iconButton';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ViewToggleOverrides {}

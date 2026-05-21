@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 
 import { Avatar as AvatarMUI, SxProps, Theme } from '@mui/material';
 
-import { Skeleton } from '@/components';
 import { useConfig } from '@/hooks';
 import { Color, ElementBaseProps, OverridableType } from '@/types';
 import { toCSSColor } from '@/utils';
+
+import { Skeleton } from '../skeleton';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AvatarOverrides {}

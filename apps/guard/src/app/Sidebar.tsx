@@ -9,9 +9,6 @@ import {
 
 import { Actions } from './Actions';
 
-/**
- * render sidebar log and navigation buttons
- */
 export const Sidebar = () => {
   return (
     <AppBar

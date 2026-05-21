@@ -1,5 +1,12 @@
 # @rosen-ui/data-source
 
+## 0.2.5
+
+### Patch Changes
+
+- Update dependencies
+  - @rosen-ui/rosen-statistics-entity@0.4.0
+
 ## 0.2.4
 
 ### Patch Changes

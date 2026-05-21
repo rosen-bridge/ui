@@ -11,12 +11,12 @@ export const VersionConfig = () => {
         {
           label: 'Guard',
           value: info?.versions.app,
-        icon: 'ShieldCheck' as IconProps['name'],
+          icon: 'ShieldCheck' as IconProps['name'],
         },
         {
           label: 'UI',
           value: packageJson.version,
-        icon: 'Swatchbook' as IconProps['name'],
+          icon: 'Swatchbook' as IconProps['name'],
         },
         {
           label: 'Contract',

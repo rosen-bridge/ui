@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
 
-import { Typography } from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.scss';
+import { Typography } from '../typography';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface PageHeadingOverrides {}

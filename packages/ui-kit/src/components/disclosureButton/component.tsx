@@ -4,14 +4,13 @@ import { Icon, IconButton } from '@/components';
 import { useDisclosure, useTransition } from '@/hooks';
 import { OverridableType, ElementBaseProps } from '@/types';
 
-import './styles.scss';
+import './styles.css';
 
 type UseDisclosureReturn = ReturnType<typeof useDisclosure>;
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface DisclosureButtonOverrides {}
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export type DisclosureButtonOwnProps = {
   disabled?: boolean;
   disclosure: UseDisclosureReturn;
@@ -65,7 +64,7 @@ export const DisclosureButton = ({
     return () => {
       stop();
     };
-  }, [disclosure.state]);
+  }, [disclosure.state, enter, leave, stop]);
 
   return (
     <IconButton

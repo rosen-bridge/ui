@@ -57,7 +57,7 @@
     gap: calc(var(--rosen-spacing) * 1);
 
     button {
-      //TODO
+      /* TODO */
       width: 32px;
       height: 32px;
       border: none;

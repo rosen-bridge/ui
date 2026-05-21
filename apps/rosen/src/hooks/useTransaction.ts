@@ -9,9 +9,8 @@ import {
   UserDeniedTransactionSignatureError,
   WalletTransferParams,
 } from '@rosen-ui/wallet-api';
+import * as Sentry from '@sentry/nextjs';
 import { serializeError } from 'serialize-error';
-
-import { logger } from '@/actions';
 
 import { useNetwork } from './useNetwork';
 import { useTokenMap } from './useTokenMap';
@@ -80,7 +79,14 @@ export const useTransaction = () => {
         lockAddress: selectedSource.lockAddress,
       };
 
-      const txId = await selectedWallet.transfer(parameters);
+      const result = await selectedWallet.transfer(parameters);
+
+      const isQrCode = result.startsWith('qrcode:');
+
+      if (isQrCode) {
+        setIsSubmitting(false);
+        return result;
+      }
 
       toast.add({
         type: 'success',
@@ -89,7 +95,7 @@ export const useTransaction = () => {
           React.createElement(
             'a',
             {
-              href: getTxURL(sourceValue, txId),
+              href: getTxURL(sourceValue, result),
               target: '_blank',
               style: {
                 color: 'inherit',
@@ -114,15 +120,14 @@ export const useTransaction = () => {
 
       if (error instanceof UserDeniedTransactionSignatureError) return;
 
-      logger(
-        `${selectedWallet.name}:transfer`,
-        parameters,
-        serializeError(error),
-      )
-        .then(() => {})
-        .catch((error) => {
-          console.log('Failed to send log to Discord', error);
-        });
+      Sentry.withScope((scope) => {
+        scope.setTag('feature', 'transaction');
+        scope.setTag('wallet', selectedWallet.name);
+
+        scope.setContext('transaction', { parameters: parameters });
+
+        Sentry.captureException(error);
+      });
     } finally {
       setIsSubmitting(false);
     }

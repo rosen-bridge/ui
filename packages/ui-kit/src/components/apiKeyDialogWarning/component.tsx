@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react';
 
-import { Alert, ApiKeyDialog, Button } from '@/components';
+import { Alert } from '@mui/material';
+
 import { useApiKey, useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { ApiKeyDialog } from '../apiKeyDialog';
+import { Button } from '../button';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ApiKeyDialogWarningOverrides {}

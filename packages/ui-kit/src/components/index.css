@@ -10,7 +10,6 @@
   --rosen-palette-warning: var(--rosen-palette-warning-main);
 }
 
-
 .dropdown {
   padding: 6px;
   width: 160px;
@@ -19,52 +18,57 @@
 }
 
 /* enter initial */
-.dropdown[data-animation="enter"] {
+.dropdown[data-animation='enter'] {
   opacity: 0;
   transform: translateY(-10px);
 }
 
 /* entering */
-.dropdown[data-animation="entering"] {
+.dropdown[data-animation='entering'] {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 300ms ease, transform 300ms ease;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
 }
 
 /* entered */
-.dropdown[data-animation="entered"] {
+.dropdown[data-animation='entered'] {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* exit initial */
-.dropdown[data-animation="exit"] {
+.dropdown[data-animation='exit'] {
   opacity: 1;
   transform: translateY(0);
 }
 
 /* exiting */
-.dropdown[data-animation="exiting"] {
+.dropdown[data-animation='exiting'] {
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 300ms ease, transform 300ms ease;
+  transition:
+    opacity 300ms ease,
+    transform 300ms ease;
 }
 
 /* exited */
-.dropdown[data-animation="exited"] {
+.dropdown[data-animation='exited'] {
   opacity: 0;
   transform: translateY(-10px);
 }
 
-
-// ============ Dropdown ============
+/* // ============ Dropdown ============ */
 .Dropdown {
   width: 150px;
   padding: 1px;
   border-radius: 16px;
-  transition: opacity 700ms ease, transform 700ms ease;
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
 
-  // Open animation
+  /* // Open animation */
   &[data-animation='open'][data-state='start'] {
     opacity: 0;
     transform: translateY(-1px);
@@ -92,7 +96,7 @@
     background-color: #cfcfcf;
   }
 
-  // Close animation
+  /* // Close animation */
   &[data-animation='close'][data-state='start'] {
     opacity: 1;
     transform: translateY(-8px);
@@ -117,8 +121,7 @@
     visibility: hidden;
   }
 
-
-  // Error animation
+  /* // Error animation */
   &[data-animation='error'][data-state='start'] {
     opacity: 1;
     transform: scale(1);
@@ -127,7 +130,6 @@
   &[data-animation='error'][data-state='running'] {
     opacity: 1;
     transform: scale(3);
-
   }
 
   &[data-animation='error'][data-state='end'] {

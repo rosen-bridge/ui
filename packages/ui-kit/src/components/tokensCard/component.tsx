@@ -1,17 +1,16 @@
 import { Network, TokenInfoWithColdAmount } from '@rosen-ui/types';
 
-import {
-  Button,
-  Card,
-  CardAction,
-  CardBody,
-  CardHeader,
-  CardTitle,
-  Icon,
-  TokensList,
-} from '@/components';
 import { useConfig } from '@/hooks';
 import { ElementBaseProps, OverridableType } from '@/types';
+
+import { Button } from '../button';
+import { Card } from '../card';
+import { CardAction } from '../cardAction';
+import { CardBody } from '../cardBody';
+import { CardHeader } from '../cardHeader';
+import { CardTitle } from '../cardTitle';
+import { Icon } from '../icon';
+import { TokensList } from '../tokensList';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface TokensCardOverrides {}
@@ -51,8 +50,9 @@ export const TokensCard = (props: TokensCardProps) => {
             <Button
               variant="text"
               size="medium"
-              target="_blank"
-              href={href}
+              // TODO
+              // target="_blank"
+              // href={href}
               endIcon={<Icon name="AngleRight" />}
             >
               See All

@@ -1,6 +1,6 @@
 {
   "name": "@rosen-bridge/ui-kit",
-  "version": "5.4.0",
+  "version": "5.5.0",
   "private": true,
   "description": "ui kit for Rosen projects",
   "repository": {
@@ -35,7 +35,6 @@
     "@mui/material": "^7.3.9",
     "@radix-ui/react-slot": "^1.2.4",
     "@rosen-bridge/icons": "^3.6.0",
-    "@rosen-ui/constants": "^1.0.0",
     "@rosen-ui/swr-helpers": "^0.2.2",
     "@rosen-ui/utils": "^1.0.3",
     "embla-carousel-react": "^8.5.2",
@@ -46,16 +45,15 @@
   },
   "devDependencies": {
     "@rosen-ui/types": "^0.5.0",
-    "@tsdown/css": "^0.21.0",
-    "autoprefixer": "^10.4.27",
-    "sass": "^1.98.0",
-    "tsdown": "^0.21.0"
+    "@tsdown/css": "^0.22.0",
+    "autoprefixer": "^10.5.0",
+    "tsdown": "^0.22.0"
   },
   "peerDependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "react": "^19.2.4",
-    "react-dom": "^19.2.4",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
     "swr": "^2.4.1"
   },
   "engines": {

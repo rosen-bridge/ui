@@ -12,6 +12,7 @@ import { NoSsr } from '@mui/material';
 import { App as AppBase, FrameworkProvider } from '@rosen-bridge/ui-kit';
 
 import { theme } from '@/theme/theme';
+import { UIKitProvider } from '@/uiKitProvider';
 
 import { TokenMapProvider } from '../hooks';
 import { UIKitProvider } from '../uiKitProvider';

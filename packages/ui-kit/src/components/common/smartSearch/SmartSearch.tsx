@@ -15,7 +15,6 @@ import { Divider, VirtualScroll } from '@/components';
 import { CloseButton } from '../../closeButton';
 import { Icon } from '../../icon';
 import { IconButton } from '../../iconButton';
-
 import { Chips } from './Chips';
 import { History, HistoryRef } from './History';
 import { Picker } from './Picker';

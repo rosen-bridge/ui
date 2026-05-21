@@ -30,7 +30,6 @@ const config: KnipConfig = {
     '@vitest/runner',
     'eslint-config-next',
     'pg',
-    'sass',
   ],
 };
 

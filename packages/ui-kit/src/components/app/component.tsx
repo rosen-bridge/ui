@@ -5,7 +5,7 @@ import { useBreakpoint, useConfig } from '@/hooks';
 import { ThemeProvider, ThemeProviderProps, ToastProvider } from '@/Providers';
 import { ElementBaseProps, OverridableType } from '@/types';
 
-import './styles.scss';
+import './styles.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface AppOverrides {}
