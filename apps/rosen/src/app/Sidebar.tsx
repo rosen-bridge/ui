@@ -2,61 +2,51 @@ import Link from 'next/link';
 import React from 'react';
 
 import {
-  Archway,
-  BitcoinCircle,
-  Dashboard,
-  Exchange,
-  Headphones,
-} from '@rosen-bridge/icons';
-import {
   AppBar,
   AppLogo,
   NavigationBar,
   NavigationButton,
 } from '@rosen-bridge/ui-kit';
 
-import { VersionConfig } from './VersionConfig';
+import { Actions } from './Actions';
 
-/**
- * render sidebar log and navigaiton buttons
- */
-export const SideBar = () => {
+export const Sidebar = () => {
   return (
     <AppBar
       logo={
-        <Link href="/">
+        <Link href="/" style={{ display: 'flex' }}>
           <AppLogo />
         </Link>
       }
-      versions={<VersionConfig />}
-      navigationBar={
+      links={
         <NavigationBar>
-          <NavigationButton icon={<Archway />} label="Bridge" path="/" />
+          <NavigationButton icon="Archway" label="Bridge" path="/" />
           <NavigationButton
             badge="Beta"
-            icon={<Exchange />}
+            icon="Exchange"
             label="Events"
             path="/events"
           />
           <NavigationButton
-            icon={<BitcoinCircle />}
+            icon="BitcoinCircle"
             label="Assets"
             path="/assets"
           />
           <NavigationButton
             disabled={true}
-            icon={<Headphones />}
+            icon="Headphones"
             label="Support"
             path="/support"
           />
           <NavigationButton
             disabled={true}
-            icon={<Dashboard />}
+            icon="Dashboard"
             label="Dashboard"
             path="/dashboard"
           />
         </NavigationBar>
       }
+      actions={<Actions sidebar />}
     />
   );
 };

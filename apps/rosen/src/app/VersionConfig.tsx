@@ -1,5 +1,4 @@
-import { FileAlt, Swatchbook } from '@rosen-bridge/icons';
-import { AppInfo } from '@rosen-bridge/ui-kit';
+import { AppInfo, IconProps } from '@rosen-bridge/ui-kit';
 import { fetcher } from '@rosen-ui/swr-helpers';
 
 import { CONTRACT_VERSION } from '../../configs';
@@ -14,12 +13,12 @@ export const VersionConfig = () => {
         {
           label: 'UI',
           value: packageJson.version,
-          icon: <Swatchbook />,
+          icon: 'Swatchbook' as IconProps['name'],
         },
         {
           label: 'Contract',
           value: CONTRACT_VERSION,
-          icon: <FileAlt />,
+          icon: 'FileAlt' as IconProps['name'],
         },
       ],
       networks: info,

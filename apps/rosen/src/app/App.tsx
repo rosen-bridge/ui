@@ -17,8 +17,7 @@ import { theme } from '@/theme/theme';
 import { UIKitProvider } from '@/uiKitProvider';
 
 import { TokenMapProvider } from '../hooks';
-import { SideBar } from './SideBar';
-import { Toolbar } from './Toolbar';
+import { Sidebar } from './Sidebar';
 
 export const App = ({ children }: PropsWithChildren) => {
   const pathname = usePathname();
@@ -45,7 +44,7 @@ export const App = ({ children }: PropsWithChildren) => {
       >
         <TokenMapProvider>
           <UIKitProvider>
-            <AppBase sideBar={<SideBar />} theme={theme} toolbar={<Toolbar />}>
+            <AppBase sidebar={<Sidebar />} theme={theme}>
               {children}
             </AppBase>
           </UIKitProvider>
