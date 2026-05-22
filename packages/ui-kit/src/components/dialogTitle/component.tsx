@@ -1,0 +1,28 @@
+import { useConfig } from '@/hooks';
+import { ElementBaseProps, OverridableType } from '@/types';
+
+import { Typography, TypographyProps } from '../typography';
+
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+export interface DialogTitleOverrides {}
+
+export type DialogTitleOwnProps = TypographyProps & {};
+
+export type DialogTitleBaseProps = ElementBaseProps<
+  typeof Typography,
+  DialogTitleOwnProps
+>;
+
+export type DialogTitleProps = OverridableType<
+  DialogTitleBaseProps,
+  DialogTitleOverrides,
+  never
+>;
+
+export const DialogTitle = (props: DialogTitleProps) => {
+  const { ...rest } = useConfig('DialogTitle', props);
+
+  return <Typography component="h2" {...rest} />;
+};
+
+DialogTitle.displayName = 'DialogTitle';

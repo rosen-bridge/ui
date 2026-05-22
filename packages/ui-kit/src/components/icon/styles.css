@@ -1,0 +1,15 @@
+.RosenIcon {
+  --rosen-icon-size-small: 1.25rem;
+  --rosen-icon-size-medium: 1.5rem;
+  --rosen-icon-size-large: 2.1875rem;
+}
+
+.RosenIcon {
+  user-select: none;
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  fill: var(--rosen-icon-color, currentColor);
+  flex-shrink: 0;
+  font-size: var(--rosen-icon-size, medium);
+}
